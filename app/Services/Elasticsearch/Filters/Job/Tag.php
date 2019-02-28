@@ -9,13 +9,13 @@ use Coyote\Services\Elasticsearch\QueryBuilderInterface;
 class Tag extends Terms implements DslInterface
 {
     /**
-     * @var array
+     * @var string[]
      */
     protected $tags = [];
 
     /**
      * Tags constructor.
-     * @param array $tags
+     * @param string[]|string $tags
      */
     public function __construct($tags = [])
     {
@@ -23,7 +23,7 @@ class Tag extends Terms implements DslInterface
     }
 
     /**
-     * @param $tag
+     * @param string[]|string $tag
      * @return $this
      */
     public function addTag($tag)

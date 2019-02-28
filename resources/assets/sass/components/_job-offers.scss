@@ -96,6 +96,18 @@
     &:last-child {
       border-bottom: none;
     }
+
+    img {
+      width: 50px;
+      height: 50px;
+      position: relative;
+
+      @include img-placeholder('/img/logo-gray.png', 50px, 50px);
+
+      @media screen and (max-width: $screen-lg) {
+        display: none;
+      }
+    }
   }
 
   .media-link {
@@ -124,14 +136,6 @@
 
     a {
       color: inherit;
-    }
-  }
-
-  img {
-    width: 50px;
-
-    @media screen and (max-width: $screen-lg) {
-      display: none;
     }
   }
 

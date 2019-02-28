@@ -1,9 +1,6 @@
 {% extends 'job.base' %}
-{%- block title -%}
-    {% if request().route().getName() == 'job.my' %}
-        Moje oferty ::
-    {% endif %}
 
+{%- block title -%}
     Praca
 
     {% if firm %}
@@ -14,12 +11,12 @@
         {{ request('q') }}
     {% endif %}
 
-    {% if selected.tags %}
-        {{ selected.tags|join(', ') }}
+    {% if input.tags %}
+        {{ input.tags|join(', ') }}
     {% endif %}
 
-    {% if selected.cities %}
-        {{ selected.cities|join(', ') }}
+    {% if input.locations %}
+        {{ input.locations|join(', ') }}
     {% endif %}
 
     {{ parent() }}
@@ -27,224 +24,194 @@
 {% block description %}Praca dla programistów. Pracodawco: umieść u nas swoją ofertę pracy - już od 0,75 zł za dzień. Znajdź u nas pracownika wśród 50 000 programistów.{% endblock %}
 {% block keywords %}programowanie, praca, C#, Java, programista, HTML, CSS, webdesign, JavaScript, jQuery, C, C++, webmastering{% endblock %}
 
+{% import 'components.widgets' as widgets %}
+
 {% block container %}
-    {{ modals.alert('Błąd podczas dodawania tagów. Sprawdź proszę czy nazwa tagu jest prawidłowa.') }}
-
-    <div id="job-main-content" class="row">
-        <aside id="box-filter" class="col-lg-2 hidden-md hidden-sm hidden-xs">
-            {{ form_open({'url': route('job.home'), 'method': 'get', 'class': 'form-horizontal'}) }}
-            {{ form_hidden('q', input_get('q')) }}
-
-            <h5><i class="fa fa-cog fa-fw"></i> Języki programowania</h5>
-
-            {% if aggregations.tags|length > 0 %}
-                <ul class="list-group list-group-language {{ selected.tags ? 'filtered' }}">
-                    {% for tag, count in aggregations.tags %}
-                        <li class="list-group-item">
-                            {{ form_checkbox('tag[]', tag, tag in selected.tags) }}
-
-                            <a href="{{ route('job.tag', [tag|url_encode]) }}">
-                                {% if tags[tag] is defined %}
-                                    <img src="{{ logo(tags[tag].logo) }}">
-                                {% endif %}
-
-                                <span>{{ tags[tag].real_name|default(tag) }}</span>
-                            </a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>--</p>
-            {% endif %}
-
-            <h5><i class="fa fa-map-marker fa-fw"></i> Lokalizacja</h5>
-
-            {% if aggregations.remote[100] is not null %}
-                <ul class="list-group list-group-city">
-                    <li class="list-group-item">
-                        {{ form_checkbox('remote', 1, selected.remote) }}
-
-                        <a href="{{ route('job.remote') }}">
-                            <span>100% pracy zdalnej</span>
-                            <small>({{ declination(aggregations.remote[100], declinationOffers) }})</small>
-                        </a>
-                    </li>
-                </ul>
-
-                {{ form_hidden('remote_range', 100) }}
-            {% endif %}
-
-            {% if aggregations.cities|length > 0 %}
-                <ul class="list-group list-group-city">
-                    {% for city, count in aggregations.cities %}
-                        <li class="list-group-item">
-                            {{ form_checkbox('city[]', city, city in selected.cities) }}
-
-                            <a href="{{ route('job.city', [city|capitalize]) }}">
-                                <span>{{ city|capitalize }}</span>
-                                <small>({{ declination(count, declinationOffers) }})</small>
-                            </a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>--</p>
-            {% endif %}
-
-            <h5><i class="fa fa-leaf fa-fw"></i> Wynagrodzenie</h5>
-
-            <div class="form-group row">
-                <label for="salary-input" class="col-xs-1 control-label">od</label>
-
-                <div class="col-xs-4">
-                    {{ form_text('salary', request('salary'), {'id': 'salary-input', 'class': 'input-sm form-control'}) }}
-                </div>
-                <div class="col-xs-5" style="padding-left: 0">
-                    {{ form_select('currency', currency_list, request('currency'), {'class': 'input-sm form-control'}) }}
-                </div>
-            </div>
-
-            <div class="form-group row form-search">
-                <div class="col-xs-6">
-                    <button type="submit" class="btn btn-sm btn-primary">Szukaj</button>
-                </div>
-                <div class="col-xs-6">
-                    <a href="{{ route('job.home') }}" class="pull-right btn-reset"><i class="fa fa-remove"></i> Wyczyść filtr</a>
-                </div>
-            </div>
-
-            {{ form_close() }}
-        </aside>
-
-        <main class="col-lg-10 col-md-12">
-            <nav class="pull-left">
-                {{ pagination|raw }}
-            </nav>
-
-            <div class="pull-right">
-                <a id="btn-editor" class="btn btn-sm btn-default btn-outline" data-toggle="tooltip" data-placement="top" title="Ustawienie preferencji"><i class="fa fa-fw fa-cog"></i></a>
-
-                {% if subscribes|length %}
-                    <div class="dropdown" style="display: inline">
-                        <button class="btn btn-sm btn-default btn-outline dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            <i class="fa fa-star fa-fw"></i>
-                        </button>
-
-                        <ul class="dropdown-menu">
-                            {% for subscribe in subscribes %}
-                                <li>{{ link_to_route('job.offer', subscribe.title, [subscribe.id, subscribe.slug]) }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
-
-                {% if user('id') %}
-                    {% if request().route().getName() == 'job.my' %}
-                        {% set route = route('job.home') %}
-                        {% set title = 'Pokaż wszystkie oferty' %}
-                    {% else %}
-                        {% set route = route('job.my') %}
-                        {% set title = 'Pokaż tylko moje oferty' %}
-                    {% endif %}
-
-                    <a href="{{ route }}" class="btn btn-sm btn-primary btn-outline" data-toggle="tooltip" data-placement="top" title="{{ title }}"><i class="fa fa-fw fa-user"></i></a>
-                {% endif %}
-            </div>
-
-            <div class="clearfix"></div>
-
-            <section class="panel panel-wrapper margin-sm-top">
-                <div id="box-jobs" class="panel-body">
-                    <ul id="sort" class="hidden-xs">
-                        <li>{{ link_to(app.request.path() ~ '?' ~ http_build_query(input_get()|merge({sort: '_score', order: 'desc'})), 'Trafność', {class: 'sort' ~ (sort == '_score' ? ' desc')}) }}</li>
-                        <li>{{ link_to(app.request.path() ~ '?' ~ http_build_query(input_get()|merge({sort: 'boost_at', order: 'desc'})), 'Data dodania', {class: 'sort' ~ (sort == 'boost_at' ? ' desc')}) }}</li>
-                        <li>{{ link_to(app.request.path() ~ '?' ~ http_build_query(input_get()|merge({sort: 'salary', order: 'desc'})), 'Wynagrodzenie', {class: 'sort' ~ (sort == 'salary' ? ' desc')}) }}</li>
-                    </ul>
-
-                    <a href="{{ route('job.submit') }}?revalidate=1" class="btn btn-primary btn-sm pull-right visible-xs visible-sm" style="margin-top: 6px; margin-bottom: 10px" title="Dodaj ofertę pracy">Dodaj ofertę pracy</a>
-
-                    <div class="clearfix"></div>
-
-                    {% if premium_listing|length > 0 %}
-                        {% include 'job.partials.listing' with {
-                            listing: premium_listing,
-                            show_label: true
-                        } %}
-                    {% endif %}
-
-                    {% include 'job.partials.listing' with {
-                        listing: listing,
-                        show_highlight: true
-                    } %}
-                </div>
-            </section>
-
-            <nav>
-                {{ pagination|raw }}
-            </nav>
-        </main>
-    </div>
-
-    {{ form_open({'url': route('job.preferences'), 'id': 'form-preferences'}) }}
-        <div class="modal fade" id="editor" tabindex="-1" role="dialog" aria-labelledby="editor-modal" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Ustawienia preferencji</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group" data-column="city">
-                            <label>Interesuje mnie praca w miejscowościach...</label>
-                            {#{{ form_input('search', 'city', preferences.city, {class: 'form-control', placeholder: 'Np. Wrocław, Warszawa'}) }}#}
-                            <input type="search" name="city" class="form-control" placeholder="Np. Wrocław, Warszawa" value="{{ preferences.city }}">
-
-                            <span class="help-block">Nazwy miejscowości rozdzielone przecinkiem</span>
-
-                            <div class="checkbox">
-                                {{ form_checkbox('is_remote', 1, preferences.is_remote, {id: 'is-remote'}) }}
-
-                                <label for="is-remote">
-                                    Oferty z możliwą pracą zdalną
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="form-group" data-column="tags">
-                            <label>Interesują mnie technologie</label>
-
-                            <input type="text" name="tags" class="form-control" placeholder="Np. .net, c#" id="tags" value="{{ preferences.tags|join(', ') }}">
-
-                            <span class="help-block"></span>
-                        </div>
-
-                        <div class="form-group" data-column="salary">
-                            <label>Minimalne wynagrodzenie</label>
-
+    <div id="page-job">
+        <div class="row">
+            <form method="get" ref="searchForm" action="{{ form_url }}" @submit.prevent="search">
+                <div class="col-md-9">
+                    <div class="panel panel-default search-form margin-md-top">
+                        <div class="panel-body">
                             <div class="row">
-                                <div class="col-xs-2" style="padding-right: 0">
-                                    {{ form_text('salary', preferences.salary, {class: 'form-control'}) }}
+                                <div class="form-group col-sm-6 col-xs-12">
+                                    <i class="fa fa-fw fa-search"></i>
+
+                                    <input v-model="input.q" ref="q" name="q" type="search" class="form-control" placeholder="Szukaj po tytule, nazwie firmy">
                                 </div>
 
-                                <div class="col-xs-2">
-                                    {{ form_select('currency_id', currency_list, preferences.currency_id, {class: 'form-control'}) }}
+                                <div class="form-group col-sm-4 col-xs-12">
+                                    <i class="fa fa-fw fa-map-marker"></i>
+
+                                    <input v-model="input.city" ref="city" name="city" type="search" class="form-control" placeholder="Nazwa miejscowości" autocomplete="off">
+                                </div>
+
+                                <div class="form-group col-sm-2 col-xs-12">
+                                    <button class="btn btn-primary btn-search" type="submit">
+                                        <i class="fa fa-search"></i> Szukaj
+                                    </button>
                                 </div>
                             </div>
+                        </div>
 
-                            <span class="help-block"></span>
+                        <div class="panel-footer">
+                            <ul  class="nav nav-pills">
+                                <li role="presentation" class="active"><a href="#location" role="tab" data-toggle="tab">Lokalizacja</a></li>
+                                <li role="presentation"><a href="#tech" role="tab" data-toggle="tab">Technologia</a></li>
+                                <li role="presentation"><a href="#compensation" role="tab" data-toggle="tab">Wynagrodzenie</a></li>
+                            </ul>
+
+                            <div class="tab-content">
+                                <div id="location" class="tab-pane active filters">
+                                    <ul v-cloak class="list-group list-group-tech">
+                                        <li class="list-group-item">
+                                            <input type="hidden" name="remote" :checked="input.remote">
+
+                                            <a @click.prevent="toggleRemote" href="javascript:">
+                                                <i class="fa fa-fw fa-wifi" :class="{'text-primary': input.remote !== null}"></i>
+
+                                                Praca zdalna
+                                            </a>
+                                        </li>
+
+                                        <li v-for="(location, index) in locations" :key="index" class="list-group-item">
+                                            <input type="hidden" name="locations[]" :value="location" :checked="includesLocation(location)">
+
+                                            <a @click.prevent="toggleLocation(location)" href="javascript:" :class="{'disabled': input.locations.length && !includesLocation(location)}">
+                                                ${ location|capitalize }
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div id="tech" class="tab-pane filters">
+                                    <ul class="list-group list-group-tech">
+                                        <li v-for="tag in tags" :key="tag.id" class="list-group-item">
+                                            <input type="hidden" name="tags[]" :value="tag.name" :checked="includesTag(tag.name)">
+
+                                            <a @click.prevent="toggleTag(tag.name)" :href="tag.url" :class="{'disabled': input.tags.length && !includesTag(tag.name)}">
+                                                <img :alt="tag.name" :src="tag.logo">
+
+                                                ${ tag.real_name || tag.name }
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div id="compensation" class="tab-pane filters">
+                                    <div class="form-inline">
+                                        <div class="form-group">
+                                            <strong>od:</strong>
+
+                                            <input v-model="input.salary" type="text" class="form-control input-sm">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <select v-model="defaultCurrency" name="currency" class="form-control input-sm">
+                                                <option v-for="(currency, index) in currencies" :key="index" :value="index">
+                                                    ${ currency }
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
-                        <button type="submit" class="btn btn-primary danger" data-submit-state="Zapisywanie...">Zapisz</button>
+
+                    <div class="row margin-md-bottom">
+                        <div class="col-xs-12">
+                            <div class="pull-right">
+                                Sortuj według
+
+                                <select v-model="defaultSort" @change="search" name="sort" class="form-control input-inline input-sm margin-sm-left" style="width: auto">
+                                    <option value="boost_at">Data dodania</option>
+                                    <option value="_score">Trafność</option>
+                                    <option value="salary">Wynagrodzenie</option>
+                                </select>
+                            </div>
+
+                            <div class="clearfix"></div>
+                        </div>
                     </div>
                 </div>
+            </form>
+
+            <div class="col-md-3 hidden-sm hidden-xs">
+                <section id="post-offer">
+                    <h4>Dla pracodawców</h4>
+
+                    <span class="edge">
+                        <a href="{{ route('job.submit') }}?revalidate=1" class="btn btn-primary">Dodaj ofertę pracy</a>
+                    </span>
+
+                    <p><a href="{{ route('job.business') }}">Już od 30 zł / 40 dni!</a></p>
+                </section>
             </div>
         </div>
-    {{ form_close() }}
+
+        <div class="row">
+            <div class="col-md-9">
+                <vue-job v-for="(job, index) in jobs.data" :job="job" :key="job.id" :order="index"></vue-job>
+
+                <div v-cloak v-if="jobs.data.length === 0" class="empty-result padding-sm">
+                    <p>
+                        Nie znaleźliśmy ofert, które spełniają Twoje kryteria.<br>
+                        <a href="{{ route('job.home') }}">Zobacz wszystkie oferty</a>, a być może znajdziesz coś dla siebie!
+                    </p>
+                </div>
+
+                <vue-pagination :current-page="jobs.meta.current_page" :total-pages="jobs.meta.last_page" @change="changePage"></vue-pagination>
+            </div>
+
+            <div class="col-md-3" style="margin-top: -35px">
+                <section v-cloak v-if="published.length" class="box sidebar-job-offers">
+                    <h4><i class="fa fa-fw fa-user-secret"></i> Moje ogłoszenia</h4>
+
+                    <div id="panel-published" class="panel panel-default">
+                        <div class="panel-body">
+                            <vue-job-tiny v-for="job in published" :job="job" :key="job.id"></vue-job-tiny>
+                        </div>
+                    </div>
+                </section>
+
+                <section v-cloak v-if="subscribed.length" class="box sidebar-job-offers">
+                    <h4><i class="fa fa-fw fa-heart"></i> Ulubione ogłoszenia</h4>
+
+                    <div id="panel-subscribed" class="panel panel-default">
+                        <div class="panel-body">
+                            <vue-job-tiny v-for="job in subscribedStore" :job="job" :key="job.id"></vue-job-tiny>
+                        </div>
+                    </div>
+                </section>
+
+                {{ render_block('job_ads') }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    {{ widgets.vue() }}
+
+    <script type="text/javascript">
+        var data = {
+            jobs: {{ jobs|json_encode|raw }},
+            tags: {{ tags|json_encode|raw }},
+            locations: {{ locations|json_encode|raw }},
+            input: {{ input|json_encode|raw }},
+            default: {{ default|json_encode|raw }},
+            currencies: {{ currencies|json_encode|raw }},
+            subscribed: {{ subscribed|json_encode|raw }},
+            published: {{ published|json_encode|raw }},
+            hiddenOnMobile: true
+        }
+    </script>
 {% endblock %}
 
 {% block fixed %}
-    {% include 'job.partials.header' %}
 
     {{ parent() }}
 

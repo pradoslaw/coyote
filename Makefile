@@ -1,7 +1,7 @@
 .PHONY: all update-repo dependency-install file-permission migration seed assets-dev assets-production
 
-install: dependency-install dump-autoload file-permission migration seed install-assets assets-production cache-config
-install-dev: dependency-install dump-autoload file-permission migration seed install-assets assets-dev
+install: dependency-install dump-autoload file-permission migration seed install-assets assets-production cache-config key-generate
+install-dev: dependency-install dump-autoload file-permission migration seed install-assets assets-dev key-generate
 install-vagrant: dependency-install dump-autoload file-permission migration seed
 update: update-repo dependency-install dump-autoload migration assets-production cache-config
 update-dev: update-repo dependency-install dump-autoload migration assets-dev
@@ -45,3 +45,11 @@ dump-autoload:
 cache-config:
 	php artisan config:cache
 	php artisan route:cache
+
+key-generate:
+	php artisan key:generate
+
+install-es:
+	php artisan es:create
+	php artisan es:mapping
+	php artisan es:index

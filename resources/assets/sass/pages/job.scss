@@ -74,6 +74,35 @@
   }
 }
 
+.location {
+  display: inline;
+  font-size: 92%;
+  color: $text-muted;
+
+  a {
+    color: inherit;
+  }
+
+  ul {
+    list-style: none;
+    display: inline;
+    margin: 0;
+    padding: 0;
+
+    li {
+      display: inline;
+
+      &:after {
+        content: ', ';
+      }
+
+      &:last-child:after {
+        content: '';
+      }
+    }
+  }
+}
+
 // Border around buttons
 // ---------------------------
 

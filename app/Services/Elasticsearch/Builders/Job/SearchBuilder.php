@@ -19,6 +19,7 @@ class SearchBuilder extends QueryBuilder
 {
     const PER_PAGE = 15;
     const DEFAULT_SORT = 'boost_at';
+    const SCORE = '_score';
 
     /**
      * @var Filters\Job\City
@@ -194,8 +195,12 @@ class SearchBuilder extends QueryBuilder
             $this->city->addCity($this->request->get('city'));
         }
 
-        if ($this->request->filled('tag')) {
-            $this->tag->addTag($this->request->get('tag'));
+        if ($this->request->filled('locations')) {
+            $this->city->addCity($this->request->get('locations'));
+        }
+
+        if ($this->request->filled('tags')) {
+            $this->tag->addTag($this->request->get('tags'));
         }
 
         if ($this->request->filled('salary')) {
@@ -216,6 +221,7 @@ class SearchBuilder extends QueryBuilder
         $this->setupAggregations();
 
         $this->size(self::PER_PAGE * (max(0, (int) $this->request->get('page', 1) - 1)), self::PER_PAGE);
+        $this->source(['id']);
 
         return parent::build();
     }
@@ -239,8 +245,6 @@ class SearchBuilder extends QueryBuilder
     protected function setupAggregations()
     {
         $this->aggs(new Aggs\Job\Location());
-        $this->aggs(new Aggs\Job\Remote());
-        $this->aggs(new Aggs\Job\Tag($this->languages));
         $this->aggs(new Aggs\Job\TopSpot());
     }
 }

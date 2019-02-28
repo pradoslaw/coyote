@@ -87,24 +87,29 @@
   }
 }
 
-@each $name, $paddingX, $paddingY in (tag-clouds-xs, 1px, 4px), (tag-clouds-sm, 1px, 6px) {
-  .#{$name} {
-    > li {
-      > a,
-      > span {
-        padding: $paddingX $paddingY;
+@mixin tag-variant($paddingX, $paddingY, $thumbnailWidth) {
+  > li {
+    > a,
+    > span {
+      padding: $paddingX $paddingY;
+
+      img {
+        width: $thumbnailWidth;
       }
     }
   }
 }
 
 .tag-clouds-md {
-  > li {
-    > a,
-    > span {
-      font-size: 11px;
-    }
-  }
+  @include tag-variant(4px, 7px, 12px);
+}
+
+.tag-clouds-sm {
+  @include tag-variant(1px, 6px, 12px);
+}
+
+.tag-clouds-xs {
+  @include tag-variant(1px, 4px, 10px);
 }
 
 .tag-clouds-skills {

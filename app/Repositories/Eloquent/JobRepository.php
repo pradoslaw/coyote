@@ -28,35 +28,45 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
     /**
      * @inheritdoc
      */
-    public function count()
+    public function findManyWithOrder(array $ids)
     {
-        return $this->applyCriteria(function () {
-            return $this->model->count();
-        });
+        $values = [];
+
+        foreach ($ids as $key => $id) {
+            $values[] = "($id,$key)";
+        }
+
+        $this->applyCriteria();
+
+        $result = $this
+            ->model
+            ->addSelect('jobs.*')
+            ->join($this->raw('(VALUES ' . implode(',', $values) . ') AS x (id, ordering)'), 'jobs.id', '=', 'x.id')
+            ->orderBy('x.ordering')
+            ->get();
+
+        $this->resetModel();
+
+        return $result;
     }
 
     /**
      * @inheritdoc
      */
-    public function countCityOffers(string $city)
+    public function getPublished($userId)
     {
-        return $this->applyCriteria(function () use ($city) {
-            return $this
-                ->model
-                ->join('job_locations', 'jobs.id', '=', 'job_locations.job_id')
-                ->where('city', $city)
-                ->count();
-        });
-    }
+        $this->applyCriteria();
 
-    /**
-     * @inheritdoc
-     */
-    public function counterUserOffers(int $userId)
-    {
-        return (int) $this->applyCriteria(function () use ($userId) {
-            return $this->model->forUser($userId)->count();
-        });
+        $result = $this
+            ->model
+            ->select('jobs.*')
+            ->where('jobs.user_id', $userId)
+            ->orderBy('jobs.id', 'DESC')
+            ->get();
+
+        $this->resetModel();
+
+        return $result;
     }
 
     /**
@@ -68,14 +78,10 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
 
         $result = $this
             ->model
-            ->select(['jobs.*', 'firms.name AS firm.name', 'firms.logo AS firm.logo', 'currencies.name AS currency_name'])
+            ->select(['jobs.*'])
             ->join('job_subscribers', function (JoinClause $join) use ($userId) {
-                $join->on('job_id', '=', 'jobs.id')->on('job_subscribers.user_id', '=', $this->raw($userId));
+                $join->on('job_subscribers.job_id', '=', 'jobs.id')->on('job_subscribers.user_id', '=', $this->raw($userId));
             })
-            ->leftJoin('firms', 'firms.id', '=', 'firm_id')
-            ->join('currencies', 'currencies.id', '=', 'currency_id')
-            ->with('locations')
-            ->with('tags')
             ->get();
 
         $this->resetModel();
@@ -146,25 +152,6 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
             ->whereNull('deleted_at')
             ->orderBy('job_subscribers.id', 'DESC')
             ->paginate();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getMyOffers($userId)
-    {
-        $this->applyCriteria();
-
-        $result = $this
-            ->model
-            ->select(['jobs.*', 'firms.name AS firm_name'])
-            ->leftJoin('firms', 'firms.id', '=', 'firm_id')
-            ->where('jobs.user_id', $userId)
-            ->get();
-
-        $this->resetModel();
-
-        return $result;
     }
 
     /**
