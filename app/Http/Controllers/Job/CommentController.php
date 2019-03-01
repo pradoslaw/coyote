@@ -40,28 +40,28 @@ class CommentController extends Controller
         $this->transaction(function () use ($comment, $job, $dispatcher) {
             $comment->save();
 
-            if ($comment->wasRecentlyCreated) {
-                $subscribers = $job
-                    ->subscribers()
-                    ->with('user')
-                    ->get()
-                    ->pluck('user') // get all job's subscribers
-                    ->push($job->user) // push job's author
-                    ->exceptUser($this->auth); // exclude current logged user
-
-                $dispatcher->send($subscribers, new CommentedNotification($comment));
-
-                if ($comment->parent_id && $comment->user_id !== $comment->parent->user_id) {
-                    $comment->parent->notify(new RepliedNotification($comment));
-                }
-            }
-
             stream(
                 $comment->wasRecentlyCreated ? Stream_Create::class : Stream_Update::class,
                 (new Stream_Comment())->map($job, $comment),
                 (new Stream_Job())->map($job)
             );
         });
+
+        if ($comment->wasRecentlyCreated) {
+            $subscribers = $job
+                ->subscribers()
+                ->with('user')
+                ->get()
+                ->pluck('user') // get all job's subscribers
+                ->push($job->user) // push job's author
+                ->exceptUser($this->auth); // exclude current logged user
+
+            $dispatcher->send($subscribers, new CommentedNotification($comment));
+
+            if ($comment->parent_id && $comment->user_id !== $comment->parent->user_id) {
+                $comment->parent->notify(new RepliedNotification($comment));
+            }
+        }
 
         CommentResource::withoutWrapping();
         CommentResource::$job = $job;
