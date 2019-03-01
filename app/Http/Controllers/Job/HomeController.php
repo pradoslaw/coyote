@@ -137,7 +137,7 @@ class HomeController extends BaseController
 
         $jobs = [];
 
-        if ($source->count()) {
+        if (count($source)) {
             $premium = $result->getAggregationHits('premium_listing', true);
             $premium = array_first($premium); // only one premium at the top
 
