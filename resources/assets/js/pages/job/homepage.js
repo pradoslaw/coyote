@@ -31,8 +31,8 @@ new Vue({
             this.input = e.state.input;
         };
 
-        Ps.initialize(document.querySelector('#panel-published'));
-        Ps.initialize(document.querySelector('#panel-subscribed'));
+        this.initScrollbar(document.querySelector('#panel-published'));
+        this.initScrollbar(document.querySelector('#panel-subscribed'));
     },
     filters: {
         capitalize: function (value) {
@@ -113,6 +113,12 @@ new Vue({
 
         includesTag (tag) {
             return this.input.tags.includes(tag);
+        },
+
+        initScrollbar (container) {
+            if (container) {
+                Ps.initialize(container);
+            }
         }
     },
     computed: {
