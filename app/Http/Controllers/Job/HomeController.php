@@ -17,6 +17,7 @@ use Coyote\Tag;
 use Illuminate\Http\Request;
 use Coyote\Currency;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
 class HomeController extends BaseController
@@ -182,6 +183,7 @@ class HomeController extends BaseController
 
         $data = [
             'input'             => $input,
+            'url'               => $this->fullUrl($this->request->except('json')),
 
             'default'           => [
                 'sort'                  => $defaultSort,
@@ -230,5 +232,16 @@ class HomeController extends BaseController
         }
 
         return JobResource::collection($this->job->getPublished($this->userId))->toArray($this->request);
+    }
+
+    /**
+     * @param array $query
+     * @return string
+     */
+    private function fullUrl(array $query): string
+    {
+        $question = $this->request->getBaseUrl() . $this->request->getPathInfo() === '/' ? '/?' : '?';
+
+        return $this->request->url() . (count($query) ? ($question . Arr::query($query)) : '');
     }
 }

@@ -93,14 +93,15 @@ new Vue({
                 currency: this.input.currency,
                 remote: this.input.remote,
                 remote_range: this.input.remote_range,
-                locations: this.input.locations
+                locations: this.input.locations,
+                json: 1 // add json param to distinguish JSON url from "normal" request
             };
 
             axios.get(this.$refs.searchForm.action, {params: input})
                 .then(response => {
                     this.jobs = response.data.jobs;
 
-                    window.history.pushState(response.data, '', response.request.responseURL);
+                    window.history.pushState(response.data, '', response.data.url);
                 })
                 .catch(error => {
                     console.log(error);
