@@ -125,6 +125,10 @@ header.navbar-default {
 #mobile-menu {
   margin-right: 0;
 
+  > div {
+    margin-bottom: 10px;
+  }
+
   .divider {
     @include nav-divider(darken($gray-lighter, 10%));
   }
@@ -431,8 +435,8 @@ header.navbar-default {
   .navbar-fixed-top {
     position: absolute;
   }
-  
-  /* ukrywamy przyklejona sciezke podstrony, na ktorej sie znajdujemy */  
+
+  /* ukrywamy przyklejona sciezke podstrony, na ktorej sie znajdujemy */
   body .breadcrumb[id] {
 	display: none;
   }
