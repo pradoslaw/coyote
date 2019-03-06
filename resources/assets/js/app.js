@@ -6,6 +6,8 @@ import 'core-js/modules/es6.function.bind';
 import 'core-js/modules/es6.string.starts-with';
 // JS's findIndex() -- support for IE and old Opera
 import 'core-js/modules/es6.array.find-index';
+// JS's includes -- support for old browsers
+import 'core-js/modules/es7.array.includes';
 
 import {RealtimeFactory} from './libs/realtime.js';
 import './components/dropdown.js';
@@ -26,8 +28,7 @@ import Router from './libs/router';
 import Prism from 'prismjs';
 
 window.ws = RealtimeFactory();
-// Prism.highlightAll();
-//
+
 import './components/notifications.js';
 import './components/pm.js';
 
