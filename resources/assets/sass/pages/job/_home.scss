@@ -1,14 +1,18 @@
 
 .panel-job {
-  .media-object {
-    width: 100px;
-    height: 100px;
-    position: relative;
-
-    @include img-placeholder('/img/logo-gray.png', 100px, 100px);
+  > .panel-body {
+    padding: 10px 15px;
   }
 
-  .padding-sm-bottom {
+  .media-object {
+    width: 95px;
+    height: 95px;
+    position: relative;
+
+    @include img-placeholder('/img/logo-gray.png', 95px, 95px);
+  }
+
+  .padding-xs-bottom {
     border-bottom: 1px solid $border-color;
     clear: left;
   }
