@@ -91,25 +91,24 @@
   .nav-pills {
     box-shadow: none;
 
-    > li.active > a {
-      border-bottom-width: 1px;
-    }
+    @media screen and (min-width: $screen-xs) {
+      li {
+        a:after {
+          @include font-awesome($fa-var-angle-up);
 
-    i {
-      font-size: 15px;
-      padding-left: 5px;
-    }
+          font-size: 15px;
+          padding-left: 5px;
+          top: 8px;
+        }
 
-    li > a:after {
-      @include font-awesome($fa-var-angle-up);
+        &.active > a {
+          border-bottom-width: 1px;
 
-      font-size: 15px;
-      padding-left: 5px;
-      top: 8px;
-    }
-
-    li.active > a:after {
-      content: $fa-var-angle-down;
+          &:after {
+            content: $fa-var-angle-down;
+          }
+        }
+      }
     }
   }
 
