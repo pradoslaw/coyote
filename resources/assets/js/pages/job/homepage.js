@@ -17,10 +17,10 @@ new Vue({
     },
     data: window.data,
     store,
-    created: function () {
+    created () {
         store.state.subscriptions.subscribed = window.data.subscribed;
     },
-    mounted: function () {
+    mounted () {
         axios.defaults.headers.common['X-CSRF-TOKEN'] = Config.csrfToken();
 
         this.$refs.q.addEventListener('search', this.search);
@@ -35,20 +35,20 @@ new Vue({
         this.initScrollbar(document.querySelector('#panel-subscribed'));
     },
     filters: {
-        capitalize: function (value) {
+        capitalize (value) {
             return value.charAt(0).toUpperCase() + value.slice(1);
         }
     },
     methods: {
-        toggleTag: function (tag) {
+        toggleTag (tag) {
             this.toggle(this.input.tags, tag);
         },
 
-        toggleLocation: function (location) {
+        toggleLocation (location) {
             this.toggle(this.input.locations, location);
         },
 
-        toggle: function (input, item) {
+        toggle (input, item) {
             const index = input.indexOf(item);
 
             if (index > -1) {
@@ -61,7 +61,7 @@ new Vue({
             this.search();
         },
 
-        toggleRemote: function () {
+        toggleRemote () {
             if (this.input.remote) {
                 this.input.remote = null;
             }
@@ -73,7 +73,7 @@ new Vue({
             this.search();
         },
 
-        changePage: function (page) {
+        changePage (page) {
             this.jobs.meta.current_page = page;
             this.input.page = page;
 
@@ -82,7 +82,7 @@ new Vue({
             window.scrollTo(0,0);
         },
 
-        search: function () {
+        search () {
             const input = {
                 q: this.input.q,
                 city: this.input.city,
@@ -124,19 +124,19 @@ new Vue({
     },
     computed: {
         defaultSort: {
-            get: function () {
+            get () {
                 return this.input.sort ? this.input.sort : this.default.sort;
             },
-            set: function (value) {
+            set (value) {
                 this.input.sort = value;
             }
         },
 
         defaultCurrency: {
-            get: function () {
+            get () {
                 return this.input.currency ? this.input.currency : this.default.currency;
             },
-            set: function (value) {
+            set (value) {
                 this.input.currency = value;
             }
         },

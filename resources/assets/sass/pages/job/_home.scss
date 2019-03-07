@@ -90,26 +90,6 @@
 
   .nav-pills {
     box-shadow: none;
-
-    @media screen and (min-width: $screen-xs) {
-      li {
-        a:after {
-          @include font-awesome($fa-var-angle-up);
-
-          font-size: 15px;
-          padding-left: 5px;
-          top: 8px;
-        }
-
-        &.active > a {
-          border-bottom-width: 1px;
-
-          &:after {
-            content: $fa-var-angle-down;
-          }
-        }
-      }
-    }
   }
 
   .search-form {
@@ -143,6 +123,40 @@
       width: 100%;
 
       @include text-overflow;
+    }
+  }
+
+  @media screen and (max-width: $screen-xs) {
+    .col-location,
+    .col-search {
+      display: none;
+    }
+
+    .form-open {
+      .col-search,
+      .col-location {
+        display: block;
+      }
+    }
+  }
+
+  @media screen and (min-width: $screen-xs) {
+    .nav-pills > li {
+      a:after {
+        @include font-awesome($fa-var-angle-up);
+
+        font-size: 15px;
+        padding-left: 5px;
+        top: 8px;
+      }
+
+      &.active > a {
+        border-bottom-width: 1px;
+
+        &:after {
+          content: $fa-var-angle-down;
+        }
+      }
     }
   }
 }

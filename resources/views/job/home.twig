@@ -29,7 +29,7 @@
 {% block container %}
     <div id="page-job">
         <div class="row">
-            <form method="get" ref="searchForm" action="{{ form_url }}" @submit.prevent="search">
+            <form method="get" ref="searchForm" action="{{ form_url }}" @submit.prevent="search" :class="{'form-open': isFormOpen}">
                 <div class="col-md-9">
                     <div class="panel panel-default search-form margin-md-top">
                         <div class="panel-body">
@@ -37,16 +37,16 @@
                                 <div class="form-group col-sm-6 col-xs-12">
                                     <i class="fa fa-fw fa-search"></i>
 
-                                    <input v-model="input.q" ref="q" name="q" type="search" class="form-control" placeholder="Szukaj po tytule, nazwie firmy">
+                                    <input v-model="input.q" @focus="isFormOpen = true" ref="q" name="q" type="search" class="form-control" placeholder="Szukaj po tytule, nazwie firmy">
                                 </div>
 
-                                <div class="form-group col-sm-4 col-xs-12">
+                                <div class="form-group col-sm-4 col-xs-12 col-location">
                                     <i class="fa fa-fw fa-map-marker"></i>
 
                                     <input v-model="input.city" ref="city" name="city" type="search" class="form-control" placeholder="Nazwa miejscowości" autocomplete="off">
                                 </div>
 
-                                <div class="form-group col-sm-2 col-xs-12">
+                                <div class="form-group col-sm-2 col-xs-12 col-search">
                                     <button class="btn btn-primary btn-search" type="submit">
                                         <i class="fa fa-search"></i> Szukaj
                                     </button>
@@ -206,7 +206,7 @@
             currencies: {{ currencies|json_encode|raw }},
             subscribed: {{ subscribed|json_encode|raw }},
             published: {{ published|json_encode|raw }},
-            hiddenOnMobile: true
+            isFormOpen: false
         }
     </script>
 {% endblock %}
