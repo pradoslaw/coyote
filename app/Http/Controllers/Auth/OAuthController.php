@@ -59,7 +59,7 @@ class OAuthController extends Controller
         if (!$user) {
             $user = $this->user->findByEmail($oauth->getEmail());
 
-            if ($user !== null && $user->provider === null) {
+            if ($user !== null) {
                 // merge with existing user account
                 $user->provider = $provider;
                 $user->provider_id = $oauth->getId();
