@@ -96,8 +96,6 @@ class OAuthController extends Controller
                     'guest_id' => $this->request->session()->get('guest_id')
                 ]);
             }
-
-            stream(Stream_Create::class, new Stream_Person($user->toArray()));
         }
 
         if ($user->is_blocked || !$user->is_active) {
@@ -105,6 +103,11 @@ class OAuthController extends Controller
         }
 
         auth()->login($user, true);
+
+        if ($user->wasRecentlyCreated) {
+            stream(Stream_Create::class, new Stream_Person($user->toArray()));
+        }
+
         stream(Stream_Login::class);
 
         return redirect()->intended(route('home'));
