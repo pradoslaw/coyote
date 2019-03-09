@@ -18,7 +18,7 @@ class GroupForm extends Form
             ])
             ->add('description', 'text', [
                 'label' => 'Opis',
-                'rules' => 'sometimes|string',
+                'rules' => 'nullable|string',
                 'help' => 'Krótki opis grupy.'
             ])
             ->add('partner', 'checkbox', [

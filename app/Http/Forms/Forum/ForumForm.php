@@ -56,7 +56,7 @@ class ForumForm extends Form
             ])
             ->add('url', 'text', [
                 'label' => 'Przekierowanie do strony WWW',
-                'rules' => 'sometimes|url',
+                'rules' => 'nullable|url',
                 'help' => 'Jeżeli ustawisz to pole, po wejściu na forum, użytkownik będzie przekierowywane pod ten URL.'
             ])
             ->add('section', 'text', [

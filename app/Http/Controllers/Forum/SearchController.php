@@ -35,10 +35,10 @@ class SearchController extends BaseController
             $forumsId = array_keys($forumList);
             // we have to make sure user is not trying to search in category without access
             $this->validate($request, [
-                'f' => 'sometimes|int|in:' . implode(',', $forumsId),
-                'page' => 'sometimes|int',
-                'sort' => 'sometimes|in:_score,id',
-                'order' => 'sometimes|in:asc,desc'
+                'f' => 'nullable|int|in:' . implode(',', $forumsId),
+                'page' => 'nullable|int',
+                'sort' => 'nullable|in:_score,id',
+                'order' => 'nullable|in:asc,desc'
             ]);
 
             // we need to limit results to given categories...

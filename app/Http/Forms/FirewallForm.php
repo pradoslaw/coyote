@@ -53,7 +53,7 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
     {
         $this
             ->add('name', 'text', [
-                'rules' => 'sometimes|string|username|user_exist',
+                'rules' => 'nullable|string|username|user_exist',
                 'label' => 'Nazwa użytkownika',
                 'attr' => [
                     'id' => 'username',
@@ -62,7 +62,7 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
             ])
             ->add('ip', 'text', [
                 'label' => 'IP',
-                'rules' => 'sometimes|string|min:2|max:100',
+                'rules' => 'nullable|string|min:2|max:100',
                 'help' => 'IP może zawierać znak *'
             ])
             ->add('fingerprint', 'text', [

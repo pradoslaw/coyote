@@ -34,7 +34,7 @@ class BlockForm extends Form implements ValidatesWhenSubmitted
             ->add('max_reputation', 'text', [
                 'label' => 'Wyświetlaj tylko użytkownikom z reputacją od 0 do...',
                 'help' => 'Blok ten nie będzie wyświetlany użytkownikom, którzy posiadają więcej niż N punktów reputacji',
-                'rules' => 'sometimes|integer|min:1',
+                'rules' => 'nullable|integer|min:1',
                 'attr' => [
                     'style' => 'width: 50px'
                 ]

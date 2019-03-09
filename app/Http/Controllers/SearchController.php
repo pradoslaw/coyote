@@ -52,7 +52,7 @@ class SearchController extends Controller
         if ($this->request->filled('type')) {
             $validator = $this->getValidationFactory()->make(
                 $this->request->toArray(),
-                ['type' => 'sometimes|in:' . $types]
+                ['type' => 'nullable|in:' . $types]
             );
 
             if (!$validator->fails()) {

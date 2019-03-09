@@ -21,7 +21,7 @@ class ConfirmRequest extends FormRequest
                 $this->existsRule(),
                 'unique:users,email,NULL,id,is_confirm,1'
             ],
-            'name'  => 'sometimes|username|exists:users'
+            'name'  => 'nullable|username|exists:users'
         ];
     }
 
