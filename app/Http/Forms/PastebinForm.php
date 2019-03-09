@@ -29,13 +29,13 @@ class PastebinForm extends Form implements ValidatesWhenSubmitted
                 'choices' => $this->getModeList(),
                 'label' => 'Kolorowanie składni',
                 'empty_value' => '--',
-                'rules' => 'sometimes|in:' . implode(',', array_keys($this->getModeList()))
+                'rules' => 'nullable|in:' . implode(',', array_keys($this->getModeList()))
             ])
             ->add('expires', 'select', [
                 'choices' => $this->getExpiresList(),
                 'label' => 'Wygaśnie',
                 'empty_value' => 'Nigdy',
-                'rules' => 'sometimes|in:' . implode(',', array_keys($this->getExpiresList())),
+                'rules' => 'nullable|in:' . implode(',', array_keys($this->getExpiresList())),
                 'value' => 72,
                 'help' => 'Po upływie tego czasu, ten wpis zostanie automatycznie usunięty.'
             ])

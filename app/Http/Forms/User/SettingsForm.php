@@ -45,7 +45,7 @@ class SettingsForm extends Form
 
         if ($groupList) {
             $this->add('group_id', 'select', [
-                'rules' => 'sometimes|integer|exists:group_users,group_id,user_id,' . $userId,
+                'rules' => 'nullable|integer|exists:group_users,group_id,user_id,' . $userId,
                 'label' => 'Domyślna grupa',
                 'help' => 'Nazwa grupy będzie wyświetlana pod avatarem, np. na forum.',
                 'choices' => $groupList,
@@ -59,7 +59,7 @@ class SettingsForm extends Form
                 'choices' => User::dateFormatList()
             ])
             ->add('website', 'text', [
-                'rules'  => 'url|reputation:50',
+                'rules'  => 'nullable|url|reputation:50',
                 'label' => 'Strona WWW',
                 'help' => 'Strona domowa, blog, portfolio itp.'
             ])
@@ -81,19 +81,19 @@ class SettingsForm extends Form
                 'label' => 'Nazwa firmy',
             ])
             ->add('position', 'text', [
-                'rules' => 'string|max:100',
+                'rules' => 'nullable|string|max:100',
                 'label' => 'Stanowisko',
                 'attr' => [
                     'placeholder' => 'Np. Junior Java Developer'
                 ]
             ])
             ->add('github', 'text', [
-                'rules' => 'string|max:200',
+                'rules' => 'nullable|string|max:200',
                 'label' => 'Konto Github',
                 'help' => 'Nazwa użytkownika lub link do konta Github.'
             ])
             ->add('bio', 'textarea', [
-                'rules' => 'string|max:500',
+                'rules' => 'nullable|string|max:500',
                 'label' => 'O sobie',
                 'help' => 'W tym polu możesz zamieścić krótką informację o sobie, czym się zajmujesz, co cię interesuje. Ta informacja zostanie wyświetlona na Twoim profilu.',
                 'attr' => [
@@ -101,14 +101,14 @@ class SettingsForm extends Form
                 ]
             ])
             ->add('birthyear', 'select', [
-                'rules' => 'sometimes|integer|between:1950,' . (date('Y') - 1),
+                'rules' => 'nullable|integer|between:1950,' . (date('Y') - 1),
                 'label' => 'Rok urodzenia',
                 'help' => 'Na podstawie roku urodzenia, w Twoim profilu będzie widoczny Twój wiek.',
                 'choices' => User::birthYearList(),
                 'empty_value' => '--'
             ])
             ->add('location', 'text', [
-                'rules' => 'string|max:50',
+                'rules' => 'nullable|string|max:50',
                 'label' => 'Miejsce zamieszkania',
                 'attr' => [
                     'placeholder' => 'Nazwa miejscowości'
@@ -123,7 +123,7 @@ class SettingsForm extends Form
                 'label' => 'Pokazuj sygnaturki użytkowników'
             ])
             ->add('sig', 'textarea', [
-                'rules' => 'string|max:499|spam_link:50',
+                'rules' => 'nullable|string|max:499|spam_link:50',
                 'label' => 'Sygnatura',
                 'help' => 'Podpis będzie widoczny przy każdym Twoim poście. Uwaga! Użytkownicy posiadający mniej niż 50 punktów reputacji nie mogą umieszczać linków w tym polu.',
                 'attr' => [

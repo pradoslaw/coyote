@@ -68,7 +68,7 @@ class FlagController extends Controller
             'url'           => 'required|string',
             'metadata'      => 'required',
             'type_id'       => 'integer|exists:flag_types,id',
-            'text'          => 'string',
+            'text'          => 'nullable|string',
             '_token'        => 'throttle'
         ];
 

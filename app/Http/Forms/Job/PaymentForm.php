@@ -37,7 +37,7 @@ class PaymentForm extends Form
             ->add('name', 'text', [
                 'label' => 'Nazwa (jaka widnieje na karcie kredytowej)',
                 'help' => 'Np. imię i nazwisko. Maksymalnie 32 znaki.',
-                'rules' => 'bail|string|max:32',
+                'rules' => 'bail|nullable|string|max:32',
                 'attr' => [
                     'v-model' => 'form.name'
                 ]
@@ -45,7 +45,7 @@ class PaymentForm extends Form
             ->add('number', 'text', [
                 'label' => 'Numer karty kredytowej lub debetowej',
                 'help' => 'Nie martw się. Numer karty nie będzie przechowywany na naszym serwerze.',
-                'rules' => 'bail|string|cc_number',
+                'rules' => 'bail|nullable|string|cc_number',
                 'attr' => [
                     'id' => 'credit-card',
                     'v-model' => 'form.number'
@@ -72,7 +72,7 @@ class PaymentForm extends Form
             ->add('cvc', 'text', [
                 'label' => 'Kod zabezpieczeń (CVC)',
                 'help' => '3 ostatnie cyfry na odwrocie karty.',
-                'rules' => 'bail|cc_cvc:number',
+                'rules' => 'bail|nullable|cc_cvc:number',
                 'attr' => [
                     'id' => 'cvc',
                     'v-model' => 'form.cvc'
@@ -86,7 +86,10 @@ class PaymentForm extends Form
                 ]
             ])
             ->add('coupon', 'text', [
-                'rules' => Rule::exists('coupons', 'code')->whereNull('deleted_at'),
+                'rules' => [
+                    'nullable',
+                    Rule::exists('coupons', 'code')->whereNull('deleted_at')
+                ],
                 'label' => 'Masz kod promocyjny?',
                 'attr' => [
                     'class' => 'input-sm',

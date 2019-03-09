@@ -135,15 +135,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
                 $model->guest_id = (string) Uuid::uuid4();
             }
         });
-
-        static::saving(function (User $model) {
-            // jezeli nie wypelniono tych kolumn - ustawiamy na null
-            foreach (['group_id', 'birthyear', 'website', 'location', 'sig', 'bio'] as $column) {
-                if (empty($model->{$column})) {
-                    $model->{$column} = null;
-                }
-            }
-        });
     }
 
     /**

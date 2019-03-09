@@ -37,26 +37,26 @@ class InvoiceForm extends Form
         $this
             ->add('name', 'text', [
                 'label' => 'Nazwa firmy',
-                'rules' => 'string|max:200|required_with:enable_invoice'
+                'rules' => 'bail|required_with:enable_invoice|nullable|string|max:200'
             ])
             ->add('vat_id', 'text', [
                 'label' => 'NIP (opcjonalnie)',
-                'rules' => 'string|max:20',
+                'rules' => 'nullable|string|max:20',
                 'attr' => [
                     '@keydown' => 'calculate',
                     'v-model' => 'form.invoice.vat_id'
                 ]
             ])
             ->add('address', 'text', [
-                'rules' => 'string|required_with:enable_invoice|max:200',
+                'rules' => 'bail|required_with:enable_invoice|nullable|string|max:200',
                 'label' => 'Adres',
             ])
             ->add('city', 'text', [
-                'rules' => 'string|required_with:enable_invoice|max:200',
+                'rules' => 'bail|required_with:enable_invoice|nullable|string|max:200',
                 'label' => 'Miejscowość',
             ])
             ->add('postal_code', 'text', [
-                'rules' => 'string|required_with:enable_invoice|max:30',
+                'rules' => 'bail|required_with:enable_invoice|nullable|string|max:30',
                 'label' => 'Kod pocztowy',
             ])
             ->add('country_id', 'select', [

@@ -103,10 +103,10 @@ class SpamValidator
     }
 
     /**
-     * @param string $text
+     * @param string|null $text
      * @return bool
      */
-    private function isContainUrl(string $text): bool
+    private function isContainUrl(?string $text): bool
     {
         if (trim($text) === '') {
             return false;

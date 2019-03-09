@@ -6,7 +6,7 @@ use Coyote\Services\FormBuilder\Form;
 
 class PollForm extends Form
 {
-    const RULE_TITLE           = 'string|max:100';
+    const RULE_TITLE           = 'nullable|string|max:100';
     // @todo dodac walidator sprawdzajacy liczbe (oraz dlugosc) linii
     // @todo musimy pisac "poll.title" jezeli ten formularz jest dzieckiem. reguly powinny byc zmieniane
     // przez klase Form

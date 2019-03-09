@@ -173,7 +173,7 @@ class JobForm extends Form
                 ]
             ])
             ->add('seniority_id', 'select', [
-                'rules' => 'integer',
+                'rules' => 'nullable|integer',
                 'label' => 'Staż pracy',
                 'choices' => Job::getSeniorityList(),
                 'empty_value' => '--',
@@ -186,7 +186,7 @@ class JobForm extends Form
                 'choices' => $this->country->pluck('name', 'id')
             ])
             ->add('city', 'text', [
-                'rules' => 'string|city',
+                'rules' => 'nullable|string|city',
                 'attr' => [
                     'placeholder' => 'Np. Wrocław, Warszawa'
                 ]
@@ -211,14 +211,14 @@ class JobForm extends Form
                 ]
             ])
             ->add('salary_from', 'text', [
-                'rules' => 'integer',
+                'rules' => 'nullable|integer',
                 'help' => 'Podanie tych informacji nie jest obowiązkowe, ale dzięki temu Twoja oferta zainteresuje więcej osób. Obiecujemy!',
                 'attr' => [
                     'class' => 'input-inline'
                 ]
             ])
             ->add('salary_to', 'text', [
-                'rules' => 'integer',
+                'rules' => 'nullable|integer',
                 'attr' => [
                     'class' => 'input-inline'
                 ]
@@ -282,16 +282,16 @@ class JobForm extends Form
                 ]
             ])
             ->add('recruitment', 'textarea', [
-                'rules' => 'required_if:enable_apply,0|string',
+                'rules' => 'required_if:enable_apply,0|nullable|string',
                 'style' => 'height: 40px'
             ])
             ->add('email', 'email', [
                 'label' => 'Email',
-                'rules' => 'sometimes|required|email',
+                'rules' => 'required_if:enable_apply,1|email',
                 'help' => 'Adres e-mail nie będzie widoczny dla osób postronnych.'
             ])
             ->add('phone', 'tel', [
-                'rules' => 'sometimes|string|max:50',
+                'rules' => 'nullable|string|max:50',
                 'label' => 'Numer telefonu',
                 'help' => 'Wpisz swój numer telefonu, a wyślemy Ci powiadomienie o nadesłanej aplikacji.',
                 'attr' => [

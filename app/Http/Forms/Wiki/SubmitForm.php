@@ -64,12 +64,12 @@ class SubmitForm extends Form
                 'label' => 'Tytuł'
             ])
             ->add('long_title', 'text', [
-                'rules' => 'string|max:200',
+                'rules' => 'nullable|string|max:200',
                 'label' => 'Rozszerzony tytuł',
                 'help' => 'Rozszerzony tytuł będzie widoczny na pasku tytułu w przeglądarce.'
             ])
             ->add('excerpt', 'textarea', [
-                'rules' => 'string|max:500',
+                'rules' => 'nullable|string|max:500',
                 'label' => 'Skrócony opis artykułu',
                 'help' => 'Maksymalnie 500 znaków.',
                 'attr' => [
@@ -89,7 +89,7 @@ class SubmitForm extends Form
                 ]
             ])
             ->add('comment', 'text', [
-                'rules' => 'string|max:255',
+                'rules' => 'nullable|string|max:255',
                 'label' => 'Opis zmian'
             ])
             ->add('attachments', 'collection', [
