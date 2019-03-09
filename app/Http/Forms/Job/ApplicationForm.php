@@ -93,7 +93,7 @@ class ApplicationForm extends Form implements ValidatesWhenSubmitted
                 'label' => 'Imię i nazwisko'
             ])
             ->add('phone', 'text', [
-                'rules'  => 'string|max:50',
+                'rules'  => 'nullable|string|max:50',
                 'label' => 'Numer telefonu',
                 'help' => 'Podanie numeru telefonu nie jest obowiązkowe, ale pozwoli na szybki kontakt.'
             ])
@@ -109,7 +109,7 @@ class ApplicationForm extends Form implements ValidatesWhenSubmitted
                 'template' => 'uploader'
             ])
             ->add('github', 'text', [
-                'rules' => 'string|max:200',
+                'rules' => 'nullable|string|max:200',
                 'label' => 'Konto Github',
                 'help' => 'Nazwa użytkownika lub link do konta Github.',
                 'row_attr' => [

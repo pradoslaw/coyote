@@ -77,7 +77,7 @@ class SettingsForm extends Form
                 'help' => 'Pasek menu będzie zawsze widoczny podczas przewijania okna.'
             ])
             ->add('firm', 'text', [
-                'rules' => 'string|max:100',
+                'rules' => 'nullable|string|max:100',
                 'label' => 'Nazwa firmy',
             ])
             ->add('position', 'text', [
