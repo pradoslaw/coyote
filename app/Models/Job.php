@@ -270,13 +270,6 @@ class Job extends Model
         parent::boot();
 
         static::saving(function (Job $model) {
-            // nullable column
-            foreach (['firm_id', 'salary_from', 'salary_to', 'remote_range', 'seniority_id'] as $column) {
-                if (empty($model->{$column})) {
-                    $model->{$column} = null;
-                }
-            }
-
             $model->score = $model->getScore();
 
             // field must not be null
