@@ -16,7 +16,7 @@ class ChangeDescriptionInJobsTable extends Migration
     public function up()
     {
         $this->schema->table('jobs', function (Blueprint $table) {
-            $table->string('description')->nullable()->change();
+            $table->text('description')->nullable()->change();
         });
     }
 
@@ -28,7 +28,7 @@ class ChangeDescriptionInJobsTable extends Migration
     public function down()
     {
         $this->schema->table('jobs', function (Blueprint $table) {
-            $table->string('description')->change();
+            $table->text('description')->change();
         });
     }
 }
