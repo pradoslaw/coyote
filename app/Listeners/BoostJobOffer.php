@@ -3,7 +3,6 @@
 namespace Coyote\Listeners;
 
 use Carbon\Carbon;
-use Coyote\Events\JobWasSaved;
 use Coyote\Events\PaymentPaid;
 use Coyote\Notifications\SuccessfulPaymentNotification;
 use Coyote\Payment;
@@ -14,6 +13,11 @@ use Coyote\Services\Invoice\Pdf as InvoicePdf;
 
 class BoostJobOffer implements ShouldQueue
 {
+    /**
+     * @var int
+     */
+    public $delay = 30;
+
     /**
      * @var InvoiceEnumerator
      */
