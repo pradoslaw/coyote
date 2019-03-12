@@ -236,7 +236,7 @@ class PostForm extends Form
 
         if ($this->userId !== null) {
             $this->add('subscribe', 'checkbox', [
-                'rules' => 'boolean',
+                'rules' => 'nullable|boolean',
                 'label' => 'Obserwuj wątek',
                 'value' => $this->isSubscribed()
             ]);
