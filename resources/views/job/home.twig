@@ -34,16 +34,34 @@
                     <div class="panel panel-default search-form margin-md-top">
                         <div class="panel-body">
                             <div class="row">
-                                <div class="form-group col-sm-6 col-xs-12">
+                                <div class="form-group col-sm-4 col-xs-12">
                                     <i class="fa fa-fw fa-search"></i>
 
                                     <input v-model="input.q" @focus="isFormOpen = true" ref="q" name="q" type="search" class="form-control" placeholder="Szukaj po tytule, nazwie firmy">
+
+                                    <a href="#">
+                                        <i class="fa fa-angle-up"></i>
+                                    </a>
                                 </div>
 
                                 <div class="form-group col-sm-4 col-xs-12 col-location">
                                     <i class="fa fa-fw fa-map-marker"></i>
 
                                     <input v-model="input.city" ref="city" name="city" type="search" class="form-control" placeholder="Nazwa miejscowości" autocomplete="off">
+
+                                    <a href="#">
+                                        <i class="fa fa-angle-down"></i>
+                                    </a>
+                                </div>
+
+                                <div class="form-group col-sm-2">
+                                    <i class="fa fa-fw fa-credit-card"></i>
+
+                                    <input v-model="input.salary" placeholder="> 0 zł" type="text" class="form-control">
+
+                                    <a href="#">
+                                        <i class="fa fa-angle-down"></i>
+                                    </a>
                                 </div>
 
                                 <div class="form-group col-sm-2 col-xs-12 col-search">
@@ -55,64 +73,58 @@
                         </div>
 
                         <div class="panel-footer">
-                            <ul  class="nav nav-pills">
-                                <li role="presentation" class="active"><a href="#location" role="tab" data-toggle="tab">Lokalizacja</a></li>
-                                <li role="presentation"><a href="#tech" role="tab" data-toggle="tab">Technologia</a></li>
-                                <li role="presentation"><a href="#compensation" role="tab" data-toggle="tab">Wynagrodzenie</a></li>
-                            </ul>
+                            <div v-show="selectedTab == 'tech'" class="filters">
+                                <ul class="list-group list-group-tech">
+                                    <li v-for="tag in tags" :key="tag.id" class="list-group-item">
+                                        <input type="hidden" name="tags[]" :value="tag.name" :checked="includesTag(tag.name)">
 
-                            <div class="tab-content">
-                                <div id="location" class="tab-pane active filters">
-                                    <ul v-cloak class="list-group list-group-tech">
-                                        <li class="list-group-item">
-                                            <input type="hidden" name="remote" :checked="input.remote">
+                                        <a @click.prevent="toggleTag(tag.name)" :href="tag.url" :class="{'disabled': input.tags.length && !includesTag(tag.name)}">
+                                            <img :alt="tag.name" :src="tag.logo">
 
-                                            <a @click.prevent="toggleRemote" href="javascript:">
-                                                <i class="fa fa-fw fa-wifi" :class="{'text-primary': input.remote !== null}"></i>
+                                            ${ tag.real_name || tag.name }
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
 
-                                                Praca zdalna
-                                            </a>
-                                        </li>
+                            <div v-show="selectedTab == 'locations'" class="active filters">
+                                <ul v-cloak class="list-group list-group-tech">
+                                    <li class="list-group-item">
+                                        <input type="hidden" name="remote" :checked="input.remote">
 
-                                        <li v-for="(location, index) in locations" :key="index" class="list-group-item">
-                                            <input type="hidden" name="locations[]" :value="location" :checked="includesLocation(location)">
+                                        <a @click.prevent="toggleRemote" href="javascript:">
+                                            <i class="fa fa-fw fa-wifi" :class="{'text-primary': input.remote !== null}"></i>
 
-                                            <a @click.prevent="toggleLocation(location)" href="javascript:" :class="{'disabled': input.locations.length && !includesLocation(location)}">
-                                                ${ location|capitalize }
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
+                                            Praca zdalna
+                                        </a>
+                                    </li>
 
-                                <div id="tech" class="tab-pane filters">
-                                    <ul class="list-group list-group-tech">
-                                        <li v-for="tag in tags" :key="tag.id" class="list-group-item">
-                                            <input type="hidden" name="tags[]" :value="tag.name" :checked="includesTag(tag.name)">
+                                    <li v-for="(location, index) in locations" :key="index" class="list-group-item">
+                                        <input type="hidden" name="locations[]" :value="location" :checked="includesLocation(location)">
 
-                                            <a @click.prevent="toggleTag(tag.name)" :href="tag.url" :class="{'disabled': input.tags.length && !includesTag(tag.name)}">
-                                                <img :alt="tag.name" :src="tag.logo">
+                                        <a @click.prevent="toggleLocation(location)" href="javascript:" :class="{'disabled': input.locations.length && !includesLocation(location)}">
+                                            ${ location|capitalize }
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
 
-                                                ${ tag.real_name || tag.name }
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
 
-                                <div id="compensation" class="tab-pane filters">
-                                    <div class="form-inline">
-                                        <div class="form-group">
-                                            <strong>od:</strong>
 
-                                            <input v-model="input.salary" type="text" class="form-control input-sm">
-                                        </div>
+                            <div v-show="selectedTab == 'salary'" class="filters">
+                                <div class="form-inline">
+                                    {#<div class="form-group">#}
+                                        {#<strong>od:</strong>#}
 
-                                        <div class="form-group">
-                                            <select v-model="defaultCurrency" name="currency" class="form-control input-sm">
-                                                <option v-for="(currency, index) in currencies" :key="index" :value="index">
-                                                    ${ currency }
-                                                </option>
-                                            </select>
-                                        </div>
+                                        {#<input v-model="input.salary" type="text" class="form-control input-sm">#}
+                                    {#</div>#}
+
+                                    <div class="form-group">
+                                        <select v-model="defaultCurrency" name="currency" class="form-control input-sm">
+                                            <option v-for="(currency, index) in currencies" :key="index" :value="index">
+                                                ${ currency }
+                                            </option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -224,7 +236,8 @@
             currencies: {{ currencies|json_encode|raw }},
             subscribed: {{ subscribed|json_encode|raw }},
             published: {{ published|json_encode|raw }},
-            isFormOpen: false
+            isFormOpen: false,
+            selectedTab: 'tech'
         }
     </script>
 {% endblock %}
