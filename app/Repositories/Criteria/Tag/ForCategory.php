@@ -28,7 +28,11 @@ class ForCategory extends Criteria
     public function apply($model, Repository $repository)
     {
         return $model
+            ->select('tags.*')
             ->where('category_id', $this->categoryId)
-            ->orderByRaw('(SELECT COUNT(*) FROM job_tags WHERE tag_id = tags.id) DESC');
+            ->whereNotNull('logo')
+            ->join('job_tags', 'job_tags.tag_id', '=', 'tags.id')
+            ->groupBy('tags.id')
+            ->orderByRaw('COUNT(*) DESC');
     }
 }
