@@ -107,11 +107,7 @@
         padding-left: 30px;
       }
 
-      .fa-search,
-      .fa-map-marker,
-      .fa-credit-card,
-      .fa-angle-down,
-      .fa-angle-up {
+      .fa-input {
         position: absolute;
         font-size: 16px;
         color: lighten($gray-light, 10%);
@@ -121,7 +117,6 @@
       .fa-angle-down, .fa-angle-up {
         right: 5px;
       }
-
     }
 
     .form-group {

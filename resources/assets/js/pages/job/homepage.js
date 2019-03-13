@@ -120,6 +120,19 @@ new Vue({
             if (container) {
                 Ps.initialize(container);
             }
+        },
+
+        isTabSelected (tab) {
+            return this.selectedTab === tab;
+        },
+
+        selectTab (tab) {
+            this.selectedTab = tab;
+            this.isFormOpen = true;
+        },
+
+        getTabDropdownClass (tab) {
+            return {'fa-angle-up': this.selectedTab !== tab, 'fa-angle-down': this.selectedTab === tab};
         }
     },
     computed: {
