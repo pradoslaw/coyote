@@ -92,6 +92,43 @@
   }
 }
 
+.job-search-form {
+  display: flex;
+  flex-flow: row nowrap;
+
+  > .input-item {
+    position: relative;
+    margin-left: 15px;
+    padding-right: 15px;
+
+    &.keyword-search,
+    &.location-search {
+      border-right: 1px solid $border-color;
+    }
+
+    &.keyword-search {
+      margin-left: 0;
+    }
+
+    .fa-icon {
+      position: absolute;
+      font-size: 16px;
+      color: lighten($gray-light, 10%);
+      top: 7px;
+    }
+
+    .fa-angle-down, .fa-angle-up {
+      right: 5px;
+    }
+
+    .form-control {
+      border: none;
+      box-shadow: none;
+      padding-left: 30px;
+    }
+  }
+}
+
 #page-job {
   .filters {
     padding: 5px 0 5px 0;
@@ -101,32 +138,12 @@
     .panel-body {
       padding: 10px;
 
-      .form-control {
-        border: none;
-        box-shadow: none;
-        padding-left: 30px;
-      }
 
-      .fa-input {
-        position: absolute;
-        font-size: 16px;
-        color: lighten($gray-light, 10%);
-        top: 7px;
-      }
 
-      .fa-angle-down, .fa-angle-up {
-        right: 5px;
-      }
+
     }
 
-    .form-group {
-      margin-bottom: 0;
 
-      &:nth-child(1),
-      &:nth-child(2) {
-        border-right: 1px solid $border-color;
-      }
-    }
 
     button[type=submit] {
       font-size: $font-size-small;
@@ -136,13 +153,7 @@
     }
 
 
-    .fa-search,
-    .fa-map-marker,
-    .fa-money {
 
-      top: 7px;
-
-    }
 
     .panel-footer {
       position: relative;

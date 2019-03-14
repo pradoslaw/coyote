@@ -33,9 +33,10 @@
                 <div class="col-md-9">
                     <div class="panel panel-default search-form margin-md-top">
                         <div class="panel-body">
-                            <div class="row">
-                                <div class="form-group col-sm-4 col-xs-12">
-                                    <i class="fa fa-fw fa-search fa-input"></i>
+
+                            <div class="job-search-form">
+                                <div class="input-item keyword-search">
+                                    <i class="fa fa-fw fa-search fa-icon"></i>
 
                                     <input
                                         v-model="input.q"
@@ -51,12 +52,12 @@
                                     >
 
                                     <a @click="selectTab('tech')" href="javascript:">
-                                        <i class="fa fa-input" :class="getTabDropdownClass('tech')"></i>
+                                        <i class="fa fa-icon" :class="getTabDropdownClass('tech')"></i>
                                     </a>
                                 </div>
 
-                                <div class="form-group col-sm-4 col-xs-12 col-location">
-                                    <i class="fa fa-fw fa-map-marker fa-input"></i>
+                                <div class="input-item location-search">
+                                    <i class="fa fa-fw fa-map-marker fa-icon"></i>
 
                                     <input
                                         v-model="input.city"
@@ -71,12 +72,12 @@
                                     >
 
                                     <a @click="selectTab('location')" href="javascript:">
-                                        <i class="fa fa-input" :class="getTabDropdownClass('location')"></i>
+                                        <i class="fa fa-icon" :class="getTabDropdownClass('location')"></i>
                                     </a>
                                 </div>
 
-                                <div class="form-group col-sm-2">
-                                    <i class="fa fa-fw fa-credit-card fa-input"></i>
+                                <div class="input-item">
+                                    <i class="fa fa-fw fa-credit-card fa-icon"></i>
 
                                     <input
                                         v-model="input.salary"
@@ -88,13 +89,13 @@
                                     >
 
                                     <a @click="selectTab('salary')" href="javascript:">
-                                        <i class="fa fa-input" :class="getTabDropdownClass('salary')"></i>
+                                        <i class="fa fa-icon" :class="getTabDropdownClass('salary')"></i>
                                     </a>
                                 </div>
 
-                                <div class="form-group col-sm-2 col-xs-12 col-search">
+                                <div class="input-item">
                                     <button class="btn btn-primary btn-search" type="submit">
-                                        <i class="fa fa-search"></i> Szukaj
+                                        <i class="fa fa-search"></i>
                                     </button>
                                 </div>
                             </div>
