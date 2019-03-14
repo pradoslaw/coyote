@@ -65,7 +65,7 @@ class OAuthController extends Controller
                 $user->provider_id = $oauth->getId();
                 $user->save();
             } else {
-                $name = $oauth->getName() ?: $oauth->getNickName();
+                $name = trim($oauth->getName() ?: $oauth->getNickName());
 
                 // it's important to check login name using case insensitive...
                 if ($this->user->findByName($name)) {
