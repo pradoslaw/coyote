@@ -67,7 +67,7 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
             ])
             ->add('fingerprint', 'text', [
                 'label' => 'Fingerprint',
-                'rules' => 'sometimes|string|max:255'
+                'rules' => 'nullable|string|max:255'
             ])
             ->add('reason', 'textarea', [
                 'label' => 'Powód',
