@@ -101,31 +101,51 @@
     margin-left: 15px;
     padding-right: 15px;
 
-    &.keyword-search,
-    &.location-search {
-      border-right: 1px solid $border-color;
-    }
-
     &.keyword-search {
       margin-left: 0;
     }
 
-    .fa-icon {
-      position: absolute;
-      font-size: 16px;
-      color: lighten($gray-light, 10%);
-      top: 7px;
+    &.keyword-search,
+    &.location-search {
+      border-right: 1px solid $border-color;
+      flex-basis: 35%;
     }
 
-    .fa-angle-down, .fa-angle-up {
-      right: 5px;
+    &.salary-search {
+      flex-basis: 20%;
     }
 
-    .form-control {
-      border: none;
-      box-shadow: none;
-      padding-left: 30px;
+    &.button-search {
+      flex-basis: 10%;
+      padding-right: 0;
     }
+
+    &.extended {
+      flex-basis: 50%;
+      transition: all 300ms cubic-bezier(.25, .46, .45, .94);
+      transition-delay: .1s;
+    }
+  }
+
+  .fa-icon {
+    position: absolute;
+    font-size: 16px;
+    color: lighten($gray-light, 10%);
+    top: 7px;
+  }
+
+  .fa-angle-down, .fa-angle-up {
+    right: 5px;
+  }
+
+  button[type=submit] {
+    width: 100%;
+  }
+
+  .form-control {
+    border: none;
+    box-shadow: none;
+    padding-left: 30px;
   }
 }
 
@@ -145,12 +165,6 @@
 
 
 
-    button[type=submit] {
-      font-size: $font-size-small;
-      width: 100%;
-
-      @include text-overflow;
-    }
 
 
 

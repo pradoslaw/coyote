@@ -35,7 +35,7 @@
                         <div class="panel-body">
 
                             <div class="job-search-form">
-                                <div class="input-item keyword-search">
+                                <div class="input-item keyword-search" :class="{'extended': selectedTab === 'tech'}">
                                     <i class="fa fa-fw fa-search fa-icon"></i>
 
                                     <input
@@ -56,7 +56,7 @@
                                     </a>
                                 </div>
 
-                                <div class="input-item location-search">
+                                <div class="input-item location-search" :class="{'extended': selectedTab === 'location'}">
                                     <i class="fa fa-fw fa-map-marker fa-icon"></i>
 
                                     <input
@@ -64,7 +64,6 @@
                                         @focus="selectTab('location')"
                                         tabindex="2"
                                         ref="city"
-                                        name="city"
                                         type="search"
                                         class="form-control"
                                         placeholder="Nazwa miejscowości"
@@ -76,7 +75,7 @@
                                     </a>
                                 </div>
 
-                                <div class="input-item">
+                                <div class="input-item salary-search">
                                     <i class="fa fa-fw fa-credit-card fa-icon"></i>
 
                                     <input
@@ -93,7 +92,7 @@
                                     </a>
                                 </div>
 
-                                <div class="input-item">
+                                <div class="input-item button-search">
                                     <button class="btn btn-primary btn-search" type="submit">
                                         <i class="fa fa-search"></i>
                                     </button>
