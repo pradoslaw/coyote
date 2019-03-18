@@ -38,6 +38,12 @@
                                 <div class="input-item keyword-search" :class="{'extended': selectedTab === 'tech'}">
                                     <i class="fa fa-fw fa-search fa-icon"></i>
 
+                                    <ul class="list-group list-group-tech inline">
+                                        <li v-for="tag in input.tags" class="list-group-item">
+                                            <a @click.prevent="toggleTag(tag)" href="javascript:"> ${ tag }</a>
+                                        </li>
+                                    </ul>
+
                                     <input
                                         v-model="input.q"
                                         @focus="selectTab('tech')"
@@ -58,6 +64,16 @@
 
                                 <div class="input-item location-search" :class="{'extended': selectedTab === 'location'}">
                                     <i class="fa fa-fw fa-map-marker fa-icon"></i>
+
+                                    <ul class="list-group list-group-tech inline">
+                                        <li v-if="input.remote" class="list-group-item">
+                                            <a @click.prevent="toggleRemote" href="javascript:">Praca zdalna</a>
+                                        </li>
+
+                                        <li v-for="location in input.locations" class="list-group-item">
+                                            <a @click.prevent="toggleLocation(location)" href="javascript:"> ${ location|capitalize }</a>
+                                        </li>
+                                    </ul>
 
                                     <input
                                         v-model="input.city"
@@ -140,13 +156,8 @@
 
                             <div v-show="isTabSelected('salary')" class="filters">
                                 <div class="form-inline">
-                                    {#<div class="form-group">#}
-                                        {#<strong>od:</strong>#}
-
-                                        {#<input v-model="input.salary" type="text" class="form-control input-sm">#}
-                                    {#</div>#}
-
                                     <div class="form-group">
+                                        <strong>waluta: </strong>
                                         <select v-model="defaultCurrency" name="currency" class="form-control input-sm">
                                             <option v-for="(currency, index) in currencies" :key="index" :value="index">
                                                 ${ currency }
