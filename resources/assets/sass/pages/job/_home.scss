@@ -112,41 +112,12 @@
     padding-right: 15px;
     display: flex;
 
-    &.active {
-      &:after,
-      &:before {
-        bottom: -11px;
-        left: 11px;
-        border: solid transparent;
-        content: " ";
-        height: 0;
-        width: 0;
-        position: absolute;
-        pointer-events: none;
-      }
-
-      &:after {
-        border-color: rgba(245, 245, 245, 0);
-        border-bottom-color: #f5f5f5;
-        border-width: 6px;
-        margin-left: -6px;
-      }
-
-      &:before {
-        border-color: rgba(221, 221, 221, 0);
-        border-bottom-color: #ddd;
-        border-width: 7px;
-        margin-left: -7px;
-      }
-    }
-
     &.keyword-search {
       margin-left: 0;
     }
 
     &.keyword-search,
     &.location-search {
-      border-right: 1px solid $border-color;
       flex-basis: 35%;
     }
 
@@ -157,12 +128,6 @@
     &.button-search {
       flex-basis: 10%;
       padding-right: 0;
-    }
-
-    &.extended {
-      flex-basis: 50%;
-      transition: all 300ms cubic-bezier(.25, .46, .45, .94);
-      transition-delay: .1s;
     }
   }
 
@@ -186,33 +151,61 @@
     box-shadow: none;
     flex: 1 1 auto;
   }
-}
 
-#page-job {
-  .filters {
-    padding: 5px 0 5px 0;
+  @media screen and (min-width :$screen-sm) {
+    &.extended {
+      flex-basis: 50%;
+      transition: all 300ms cubic-bezier(.25, .46, .45, .94);
+      transition-delay: .1s;
+
+      &:after,
+      &:before {
+        bottom: -11px;
+        left: 11px;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      &:after {
+        border-color: rgba(245, 245, 245, 0);
+        border-bottom-color: #f5f5f5;
+        border-width: 6px;
+        margin-left: -6px;
+      }
+
+      &:before {
+        border-color: rgba(221, 221, 221, 0);
+        border-bottom-color: #ddd;
+        border-width: 7px;
+        margin-left: -7px;
+      }
+    }
+
+    > .input-item {
+      &.keyword-search,
+      &.location-search {
+        border-right: 1px solid $border-color;
+      }
+    }
   }
 
-  .search-form {
-    .panel-body {
-      padding: 10px;
+  @media screen and (max-width: $screen-sm) {
+    flex-flow: column nowrap;
 
-
-
-
+    > .input-item {
+      margin-left: 0;
     }
+  }
+}
 
-
-
-
-
-
-
-    .panel-footer {
-      position: relative;
-
-
-    }
+.job-filter-form {
+  .filters {
+    padding: 5px 0 5px 0;
   }
 
   .btn-salary {
@@ -222,17 +215,13 @@
     display: block;
   }
 
-  @media screen and (max-width: $screen-xs) {
-    .col-location,
-    .col-search {
-      display: none;
+  @media screen and (max-width: $screen-sm) {
+    .filters {
+      position: relative;
     }
 
-    .form-open {
-      .col-search,
-      .col-location {
-        display: block;
-      }
+    .list-group-tech {
+      white-space: nowrap;
     }
   }
 }

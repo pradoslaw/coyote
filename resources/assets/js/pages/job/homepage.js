@@ -31,8 +31,11 @@ new Vue({
             this.input = e.state.input;
         };
 
-        this.initScrollbar(document.querySelector('#panel-published'));
-        this.initScrollbar(document.querySelector('#panel-subscribed'));
+        this.initYScrollbar(document.querySelector('#panel-published'));
+        this.initYScrollbar(document.querySelector('#panel-subscribed'));
+
+        this.initXScrollbar(document.querySelector('#filter-location'));
+        this.initXScrollbar(document.querySelector('#filter-tech'));
     },
     filters: {
         capitalize (value) {
@@ -116,9 +119,17 @@ new Vue({
             return this.input.tags.includes(tag);
         },
 
-        initScrollbar (container) {
+        initYScrollbar (container) {
             if (container) {
                 Ps.initialize(container);
+            }
+        },
+
+        initXScrollbar (container) {
+            if (container) {
+                Ps.initialize(container, { suppressScrollY: true });
+
+                window.addEventListener('resize', () => Ps.update(container));
             }
         },
 

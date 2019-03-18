@@ -34,7 +34,7 @@ a.user-deleted {
 // -------------
 
 [v-cloak] {
-  display: none;
+  display: none !important;
 }
 
 // Definition. Backward compatible.
