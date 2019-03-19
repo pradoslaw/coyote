@@ -139,7 +139,6 @@ new Vue({
 
         selectTab (tab) {
             this.selectedTab = tab;
-            this.isFormOpen = true;
         },
 
         getTabDropdownClass (tab) {

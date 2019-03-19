@@ -29,7 +29,7 @@
 {% block container %}
     <div id="page-job">
         <div class="row">
-            <form method="get" ref="searchForm" action="{{ form_url }}" @submit.prevent="search" :class="{'form-open': isFormOpen}" autocomplete="off">
+            <form method="get" ref="searchForm" action="{{ form_url }}" @submit.prevent="search" autocomplete="off">
                 <div class="col-md-9">
                     <div class="panel panel-default margin-md-top">
                         <div class="job-search-form panel-body">
@@ -95,7 +95,7 @@
                                 <input
                                     v-model="input.salary"
                                     @focus="selectTab('salary')"
-                                    placeholder="> 0 zł"
+                                    :placeholder="'> 0 ' + currencies[defaultCurrency].symbol"
                                     type="text"
                                     class="form-control"
                                     tabindex="3"
@@ -155,9 +155,10 @@
                                 <div class="form-inline">
                                     <div class="form-group">
                                         <strong>waluta: </strong>
+
                                         <select v-model="defaultCurrency" name="currency" class="form-control input-sm">
-                                            <option v-for="(currency, index) in currencies" :key="index" :value="index">
-                                                ${ currency }
+                                            <option v-for="currency in currencies" :key="currency.id" :value="currency.id">
+                                                ${ currency.name + ' (' + currency.symbol + ')' }
                                             </option>
                                         </select>
                                     </div>
@@ -271,7 +272,6 @@
             currencies: {{ currencies|json_encode|raw }},
             subscribed: {{ subscribed|json_encode|raw }},
             published: {{ published|json_encode|raw }},
-            isFormOpen: false,
             selectedTab: 'tech'
         }
     </script>
