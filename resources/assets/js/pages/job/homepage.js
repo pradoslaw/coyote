@@ -100,6 +100,7 @@ new Vue({
             axios.get(this.$refs.searchForm.action, {params: input})
                 .then(response => {
                     this.jobs = response.data.jobs;
+                    this.defaults = response.data.defaults;
 
                     window.history.pushState(response.data, '', response.data.url);
                 })
@@ -125,7 +126,7 @@ new Vue({
     computed: {
         defaultSort: {
             get () {
-                return this.input.sort ? this.input.sort : this.default.sort;
+                return this.input.sort ? this.input.sort : this.defaults.sort;
             },
             set (value) {
                 this.input.sort = value;
@@ -134,7 +135,7 @@ new Vue({
 
         defaultCurrency: {
             get () {
-                return this.input.currency ? this.input.currency : this.default.currency;
+                return this.input.currency ? this.input.currency : this.defaults.currency;
             },
             set (value) {
                 this.input.currency = value;

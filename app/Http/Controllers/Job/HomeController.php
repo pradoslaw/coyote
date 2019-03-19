@@ -185,7 +185,7 @@ class HomeController extends BaseController
             'input'             => $input,
             'url'               => $this->fullUrl($this->request->except('json')),
 
-            'default'           => [
+            'defaults'           => [
                 'sort'                  => $defaultSort,
                 'currency'              => Currency::PLN
             ],
