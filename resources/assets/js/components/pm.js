@@ -52,8 +52,10 @@ class Pm
         let items = this._dropdown.find('ul');
 
         if ($('li', items).length <= 1) {
-            $.get($(e.currentTarget).data('url'), html => {
-                items.html(html);
+            $.ajax({
+                url: $(e.currentTarget).data('url'),
+                success: html => items.html(html),
+                cache: false
             });
         }
 

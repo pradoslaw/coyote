@@ -125,30 +125,34 @@ class Notifications
         if ($('li', items).length <= 1) {
             $('<li><i class="fa fa-spin fa-spinner"></i></li>').appendTo(items);
 
-            $.get(url, (json) => {
-                items.html(json.html);
-                this.store(json.unread);
+            $.ajax({
+                url: url,
+                cache: false,
+                success: json => {
+                    items.html(json.html);
+                    this.store(json.unread);
 
-                // default max height of alerts area
-                let maxHeight = 420;
+                    // default max height of alerts area
+                    let maxHeight = 420;
 
-                if (parseInt(Session.getItem('box-notify-h'))) {
-                    // min height is 190px. max height is (one item height * number of items)
-                    maxHeight = Math.min(items.height(), Math.max(190, parseInt(Session.getItem('box-notify-h'))));
+                    if (parseInt(Session.getItem('box-notify-h'))) {
+                        // min height is 190px. max height is (one item height * number of items)
+                        maxHeight = Math.min(items.height(), Math.max(190, parseInt(Session.getItem('box-notify-h'))));
+                    }
+
+                    this._modal.css('max-height', maxHeight); // max wysokosc obszaru powiadomien
+
+                    // on mobile devices width must be set on 100%
+                    if (parseInt(Session.getItem('box-notify-w'))  && $(window).width() > 768) {
+                        this._dropdown.width(parseInt(Session.getItem('box-notify-w')));
+                    }
+
+                    require.ensure([], (require) => {
+                        require('perfect-scrollbar/jquery')($);
+
+                        this._modal.perfectScrollbar({suppressScrollX: true}).on('ps-y-reach-end', {url: url}, this._onScroll);
+                    });
                 }
-
-                this._modal.css('max-height', maxHeight); // max wysokosc obszaru powiadomien
-
-                // on mobile devices width must be set on 100%
-                if (parseInt(Session.getItem('box-notify-w'))  && $(window).width() > 768) {
-                    this._dropdown.width(parseInt(Session.getItem('box-notify-w')));
-                }
-
-                require.ensure([], (require) => {
-                    require('perfect-scrollbar/jquery')($);
-
-                    this._modal.perfectScrollbar({suppressScrollX: true}).on('ps-y-reach-end', {url: url}, this._onScroll);
-                });
             });
         }
 
@@ -257,15 +261,19 @@ $(function () {
 
     setInterval(() => {
         // send ping request to the server just to extend session cookie lifetime.
-        $.get(Config.get('ping'), token => {
-            $('meta[name="csrf-token"]').attr('content', token);
-            $(':hidden[name="_token"]').val(token);
+        $.ajax({
+            url: Config.get('ping'),
+            cache: false,
+            success: token => {
+                $('meta[name="csrf-token"]').attr('content', token);
+                $(':hidden[name="_token"]').val(token);
 
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': token
-                }
-            });
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': token
+                    }
+                });
+            }
         });
     }, Config.get('ping_interval') * 60 * 1000);
 });
