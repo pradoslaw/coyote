@@ -53,6 +53,15 @@
   list-style: none;
   margin: 0;
 
+  &.inline {
+    display: flex;
+    align-items: center;
+
+    .list-group-item a:hover:after {
+      @include remove-overlay();
+    }
+  }
+
   .list-group-item {
     display: inline-block;
     border-radius: $border-radius-large;
@@ -67,6 +76,7 @@
       display: block;
       padding: 5px;
       text-decoration: none;
+      white-space: nowrap;
 
       &.disabled {
         opacity: .7;
@@ -78,7 +88,7 @@
     }
 
     img {
-      width: 20px;
+      width: 18px;
     }
 
     input[type=checkbox] {
@@ -92,80 +102,125 @@
   }
 }
 
-#page-job {
-  .filters {
-    padding: 15px 0 5px 0;
-  }
+.job-search-form {
+  display: flex;
+  flex-flow: row nowrap;
+  padding: 10px;
 
-  .nav-pills {
-    box-shadow: none;
-  }
+  > .input-item {
+    position: relative;
+    margin-left: 15px;
+    padding-right: 15px;
+    display: flex;
 
-  .search-form {
-    .panel-body {
-      padding: 10px;
-
-      .form-control {
-        border: none;
-        box-shadow: none;
-        padding-left: 30px;
-      }
-
-      .fa-fw {
-        position: absolute;
-        font-size: 16px;
-        top: 7px;
-        color: lighten($gray-light, 10%);
-      }
+    &.keyword-search {
+      margin-left: 0;
     }
 
-    .form-group {
-      margin-bottom: 0;
+    &.keyword-search,
+    &.location-search {
+      flex-basis: 35%;
+    }
 
-      &:first-child {
+    &.salary-search {
+      flex-basis: 20%;
+    }
+
+    &.button-search {
+      flex-basis: 10%;
+      padding-right: 0;
+    }
+
+    &.extended {
+      @media screen and (min-width: $screen-sm) {
+        flex-basis: 50%;
+        transition: all 300ms cubic-bezier(.25, .46, .45, .94);
+        transition-delay: .1s;
+
+        &:after,
+        &:before {
+          bottom: -11px;
+          left: 11px;
+          border: solid transparent;
+          content: " ";
+          height: 0;
+          width: 0;
+          position: absolute;
+          pointer-events: none;
+          z-index: 1;
+        }
+
+        &:after {
+          border-color: rgba(245, 245, 245, 0);
+          border-bottom-color: #f5f5f5;
+          border-width: 6px;
+          margin-left: -6px;
+        }
+
+        &:before {
+          border-color: rgba(221, 221, 221, 0);
+          border-bottom-color: #ddd;
+          border-width: 7px;
+          margin-left: -7px;
+        }
+      }
+    }
+  }
+
+  .fa-icon {
+    font-size: 16px;
+    color: lighten($gray-light, 10%);
+    padding-top: 7px;
+    flex: 0 0 auto;
+  }
+
+  .fa-angle-down, .fa-angle-up {
+    right: 5px;
+  }
+
+  button[type=submit] {
+    width: 100%;
+  }
+
+  .form-control {
+    border: none;
+    box-shadow: none;
+    flex: 1 1 auto;
+  }
+
+  @media screen and (min-width: $screen-sm) {
+    > .input-item {
+      &.keyword-search,
+      &.location-search {
         border-right: 1px solid $border-color;
       }
     }
-
-    button[type=submit] {
-      font-size: $font-size-small;
-      width: 100%;
-
-      @include text-overflow;
-    }
   }
 
-  @media screen and (max-width: $screen-xs) {
-    .col-location,
-    .col-search {
-      display: none;
-    }
+  @media screen and (max-width: $screen-sm) {
+    flex-flow: column nowrap;
 
-    .form-open {
-      .col-search,
-      .col-location {
-        display: block;
-      }
+    > .input-item {
+      margin-left: 0;
     }
   }
+}
 
-  @media screen and (min-width: $screen-xs) {
-    .nav-pills > li {
-      a:after {
-        @include font-awesome($fa-var-angle-up);
+.job-filter-form {
+  .btn-salary {
+    border: 1px solid $border-color;
+    background: #f5f5f5;
+    text-align: center;
+    display: block;
+  }
 
-        font-size: 15px;
-        padding-left: 5px;
-        top: 8px;
-      }
+  @media screen and (max-width: $screen-sm) {
+    .filters {
+      position: relative;
+    }
 
-      &.active > a {
-        border-bottom-width: 1px;
-
-        &:after {
-          content: $fa-var-angle-down;
-        }
-      }
+    .list-group-tech {
+      white-space: nowrap;
     }
   }
 }
@@ -176,12 +231,11 @@
     max-height: 400px;
 }
 
-
 // Post offer button (for employers)
 // -----------------------------------------------------------
 
 #post-offer {
-  margin-top: 55px;
+  margin-top: 35px;
   margin-left: 17%;
 
   h4 {
@@ -212,7 +266,6 @@
   95% { transform: rotate(-5deg); }
   100% { transform: rotate(0deg); }
 }
-
 
 
 #clients {

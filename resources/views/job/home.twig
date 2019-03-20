@@ -29,90 +29,138 @@
 {% block container %}
     <div id="page-job">
         <div class="row">
-            <form method="get" ref="searchForm" action="{{ form_url }}" @submit.prevent="search" :class="{'form-open': isFormOpen}">
+            <form method="get" ref="searchForm" action="{{ form_url }}" @submit.prevent="search" autocomplete="off">
                 <div class="col-md-9">
-                    <div class="panel panel-default search-form margin-md-top">
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="form-group col-sm-6 col-xs-12">
-                                    <i class="fa fa-fw fa-search"></i>
+                    <div class="panel panel-default margin-md-top">
+                        <div class="job-search-form panel-body">
+                            <div class="input-item keyword-search" :class="{'extended': selectedTab === 'tech'}">
+                                <i class="fa fa-fw fa-search fa-icon"></i>
 
-                                    <input v-model="input.q" @focus="isFormOpen = true" ref="q" name="q" type="search" class="form-control" placeholder="Szukaj po tytule, nazwie firmy">
-                                </div>
+                                <ul v-cloak class="list-group list-group-tech inline">
+                                    <li v-for="tag in input.tags" class="list-group-item">
+                                        <a @click.prevent="toggleTag(tag)" href="javascript:"> ${ tag }</a>
+                                    </li>
+                                </ul>
 
-                                <div class="form-group col-sm-4 col-xs-12 col-location">
-                                    <i class="fa fa-fw fa-map-marker"></i>
+                                <input
+                                    v-model="input.q"
+                                    @focus="selectTab('tech')"
+                                    tabindex="1"
+                                    ref="q"
+                                    name="q"
+                                    type="search"
+                                    class="form-control"
+                                    placeholder="Szukaj po tytule, nazwie firmy"
+                                    autocomplete="off"
+                                    autofocus
+                                >
 
-                                    <input v-model="input.city" ref="city" name="city" type="search" class="form-control" placeholder="Nazwa miejscowości" autocomplete="off">
-                                </div>
+                                <a @click="selectTab('tech')" href="javascript:">
+                                    <i class="fa fa-icon" :class="getTabDropdownClass('tech')"></i>
+                                </a>
+                            </div>
 
-                                <div class="form-group col-sm-2 col-xs-12 col-search">
-                                    <button class="btn btn-primary btn-search" type="submit">
-                                        <i class="fa fa-search"></i> Szukaj
-                                    </button>
-                                </div>
+                            <div class="input-item location-search" :class="{'extended': selectedTab === 'location'}">
+                                <i class="fa fa-fw fa-map-marker fa-icon"></i>
+
+                                <ul v-cloak class="list-group list-group-tech inline">
+                                    <li v-if="input.remote" class="list-group-item">
+                                        <a @click.prevent="toggleRemote" href="javascript:">Praca zdalna</a>
+                                    </li>
+
+                                    <li v-for="location in input.locations" class="list-group-item">
+                                        <a @click.prevent="toggleLocation(location)" href="javascript:"> ${ location|capitalize }</a>
+                                    </li>
+                                </ul>
+
+                                <input
+                                    v-model="input.city"
+                                    @focus="selectTab('location')"
+                                    tabindex="2"
+                                    ref="city"
+                                    type="search"
+                                    class="form-control"
+                                    placeholder="Nazwa miejscowości"
+                                    autocomplete="off"
+                                >
+
+                                <a @click="selectTab('location')" href="javascript:">
+                                    <i class="fa fa-icon" :class="getTabDropdownClass('location')"></i>
+                                </a>
+                            </div>
+
+                            <div class="input-item salary-search" :class="{'extended': selectedTab === 'salary'}">
+                                <i class="fa fa-fw fa-credit-card fa-icon"></i>
+
+                                <input
+                                    v-model="input.salary"
+                                    @focus="selectTab('salary')"
+                                    :placeholder="'> 0 ' + currencies[defaultCurrency].symbol"
+                                    type="text"
+                                    class="form-control"
+                                    tabindex="3"
+                                >
+
+                                <a @click="selectTab('salary')" href="javascript:">
+                                    <i class="fa fa-icon" :class="getTabDropdownClass('salary')"></i>
+                                </a>
+                            </div>
+
+                            <div class="input-item button-search hidden-sm hidden-xs">
+                                <button tabindex="4" class="btn btn-primary btn-search" type="submit">
+                                    <i class="fa fa-search"></i>
+                                </button>
                             </div>
                         </div>
 
-                        <div class="panel-footer">
-                            <ul  class="nav nav-pills">
-                                <li role="presentation" class="active"><a href="#location" role="tab" data-toggle="tab">Lokalizacja</a></li>
-                                <li role="presentation"><a href="#tech" role="tab" data-toggle="tab">Technologia</a></li>
-                                <li role="presentation"><a href="#compensation" role="tab" data-toggle="tab">Wynagrodzenie</a></li>
-                            </ul>
+                        <div v-cloak class="job-filter-form panel-footer">
+                            <div id="filter-tech" v-show="isTabSelected('tech')" class="filters">
+                                <ul class="list-group list-group-tech">
+                                    <li v-for="tag in tags" :key="tag.id" class="list-group-item">
+                                        <input type="hidden" name="tags[]" :value="tag.name" :checked="includesTag(tag.name)">
 
-                            <div class="tab-content">
-                                <div id="location" class="tab-pane active filters">
-                                    <ul v-cloak class="list-group list-group-tech">
-                                        <li class="list-group-item">
-                                            <input type="hidden" name="remote" :checked="input.remote">
+                                        <a @click.prevent="toggleTag(tag.name)" :href="tag.url" :class="{'disabled': input.tags.length && !includesTag(tag.name)}">
+                                            <img :alt="tag.name" :src="tag.logo">
 
-                                            <a @click.prevent="toggleRemote" href="javascript:">
-                                                <i class="fa fa-fw fa-wifi" :class="{'text-primary': input.remote !== null}"></i>
+                                            ${ tag.real_name || tag.name }
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
 
-                                                Praca zdalna
-                                            </a>
-                                        </li>
+                            <div id="filter-location" v-show="isTabSelected('location')" class="filters">
+                                <ul class="list-group list-group-tech">
+                                    <li class="list-group-item">
+                                        <input type="hidden" name="remote" :checked="input.remote">
 
-                                        <li v-for="(location, index) in locations" :key="index" class="list-group-item">
-                                            <input type="hidden" name="locations[]" :value="location" :checked="includesLocation(location)">
+                                        <a @click.prevent="toggleRemote" href="javascript:">
+                                            <i class="fa fa-fw fa-wifi" :class="{'text-primary': input.remote !== null}"></i>
 
-                                            <a @click.prevent="toggleLocation(location)" href="javascript:" :class="{'disabled': input.locations.length && !includesLocation(location)}">
-                                                ${ location|capitalize }
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
+                                            Praca zdalna
+                                        </a>
+                                    </li>
 
-                                <div id="tech" class="tab-pane filters">
-                                    <ul class="list-group list-group-tech">
-                                        <li v-for="tag in tags" :key="tag.id" class="list-group-item">
-                                            <input type="hidden" name="tags[]" :value="tag.name" :checked="includesTag(tag.name)">
+                                    <li v-for="(location, index) in locations" :key="index" class="list-group-item">
+                                        <input type="hidden" name="locations[]" :value="location" :checked="includesLocation(location)">
 
-                                            <a @click.prevent="toggleTag(tag.name)" :href="tag.url" :class="{'disabled': input.tags.length && !includesTag(tag.name)}">
-                                                <img :alt="tag.name" :src="tag.logo">
+                                        <a @click.prevent="toggleLocation(location)" href="javascript:" :class="{'disabled': input.locations.length && !includesLocation(location)}">
+                                            ${ location|capitalize }
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
 
-                                                ${ tag.real_name || tag.name }
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
 
-                                <div id="compensation" class="tab-pane filters">
-                                    <div class="form-inline">
-                                        <div class="form-group">
-                                            <strong>od:</strong>
+                            <div v-show="isTabSelected('salary')" class="filters">
+                                <div class="form-inline">
+                                    <div class="form-group">
+                                        <strong>waluta: </strong>
 
-                                            <input v-model="input.salary" type="text" class="form-control input-sm">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <select v-model="defaultCurrency" name="currency" class="form-control input-sm">
-                                                <option v-for="(currency, index) in currencies" :key="index" :value="index">
-                                                    ${ currency }
-                                                </option>
-                                            </select>
-                                        </div>
+                                        <select v-model="defaultCurrency" name="currency" class="form-control input-sm">
+                                            <option v-for="currency in currencies" :key="currency.id" :value="currency.id">
+                                                ${ currency.name + ' (' + currency.symbol + ')' }
+                                            </option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -203,7 +251,7 @@
                     </div>
                 </section>
 
-                {{ render_block('job_ads') }}
+                {#{{ render_block('job_ads') }}#}
             </div>
         </div>
     </div>
@@ -224,7 +272,7 @@
             currencies: {{ currencies|json_encode|raw }},
             subscribed: {{ subscribed|json_encode|raw }},
             published: {{ published|json_encode|raw }},
-            isFormOpen: false
+            selectedTab: 'tech'
         }
     </script>
 {% endblock %}
