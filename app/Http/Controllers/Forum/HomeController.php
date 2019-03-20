@@ -121,7 +121,7 @@ class HomeController extends BaseController
         $parser = app('parser.post');
         $parser->cache->setEnable(false);
 
-        return response($parser->parse($request->get('text')));
+        return response($parser->parse((string) $request->get('text')));
     }
 
     /**

@@ -148,7 +148,7 @@ class PmController extends BaseController
      */
     public function preview(Request $request)
     {
-        return response($this->getParser()->parse($request->get('text')));
+        return response($this->getParser()->parse((string) $request->get('text')));
     }
 
     /**
