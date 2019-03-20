@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $url
  * @property string $guid
  * @property \Carbon\Carbon $read_at
- * @property bool $is_marked
+ * @property bool $is_clicked
  * @property Notification\Sender[] $senders
  */
 class Notification extends Model

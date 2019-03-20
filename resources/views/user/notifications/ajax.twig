@@ -1,6 +1,6 @@
 {% if notifications|length > 0 %}
     {% for notification in notifications %}
-        <li class="{{ (notification.read_at and notification.read_at|timestamp < session_created_at) or notification.is_marked ? '' : 'unread' }}">
+        <li class="{{ (notification.read_at and notification.read_at|timestamp < session_created_at) or notification.is_clicked ? '' : 'unread' }}">
             <a href="{{ notification.url ? url(notification.url) : 'javascript:' }}" title="{{ notification.headline }}" data-url="{{ route('user.notifications.url', [notification.guid]) }}">
                 <img src="{{ user_photo(notification.user.photo) }}">
 

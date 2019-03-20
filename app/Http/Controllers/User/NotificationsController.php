@@ -130,7 +130,7 @@ class NotificationsController extends BaseController
             ]);
         }
 
-        $this->notification->where('user_id', $this->userId)->update(['is_marked' => true]);
+        $this->notification->where('user_id', $this->userId)->update(['is_clicked' => true]);
     }
 
     /**
@@ -140,10 +140,10 @@ class NotificationsController extends BaseController
     public function url(string $guid)
     {
         /** @var \Coyote\Notification $notification */
-        $notification = $this->notification->findBy('guid', $guid, ['id', 'url', 'read_at', 'is_marked']);
+        $notification = $this->notification->findBy('guid', $guid, ['id', 'url', 'read_at', 'is_clicked']);
         abort_if($notification === null, 404);
 
-        $notification->is_marked = true;
+        $notification->is_clicked = true;
 
         if (!$notification->read_at) {
             $notification->read_at = Carbon\Carbon::now();
