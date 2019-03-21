@@ -196,11 +196,11 @@ class SearchBuilder extends QueryBuilder
         }
 
         if ($this->request->filled('locations')) {
-            $this->city->addCity($this->request->get('locations'));
+            $this->city->addCity(array_filter($this->request->get('locations')));
         }
 
         if ($this->request->filled('tags')) {
-            $this->tag->addTag($this->request->get('tags'));
+            $this->tag->addTag(array_filter($this->request->get('tags')));
         }
 
         if ($this->request->filled('salary')) {
