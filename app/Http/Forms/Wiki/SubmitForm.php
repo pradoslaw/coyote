@@ -11,7 +11,7 @@ class SubmitForm extends Form
 {
     use TreeListTrait;
 
-    const RULE_PARENT_ID = 'sometimes|int|exists:wiki_paths,path_id';
+    const RULE_PARENT_ID = 'nullable|int|exists:wiki_paths,path_id';
 
     /**
      * @var string
