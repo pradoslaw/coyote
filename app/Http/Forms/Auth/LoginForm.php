@@ -59,8 +59,11 @@ class LoginForm extends Form
         $validator = $this->makeValidatorInstance($factory);
 
         $validator->after(function ($validator) {
+            $isEmail = filter_var($this->request->get('name'), FILTER_VALIDATE_EMAIL);
+            $method = $isEmail ? 'findByEmail' : 'findByName';
+
             /** @var \Coyote\User $result */
-            $result = $this->userRepository->findByName($this->request->get('name'));
+            $result = $this->userRepository->$method($this->request->get('name'));
 
             if (!$result) {
                 $validator->errors()->add('name', trans('validation.user_exist'));
@@ -74,7 +77,7 @@ class LoginForm extends Form
                 }
 
                 // case insensitive login
-                if ($result->name !== $this->request->input('name')) {
+                if (!$isEmail && ($result->name !== $this->request->input('name'))) {
                     $this->request->merge(['name' => $result->name]);
                 }
             }

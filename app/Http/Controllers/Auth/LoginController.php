@@ -149,13 +149,13 @@ class LoginController extends Controller
         return back();
     }
 
-    /**
-     * Get the login username to be used by the controller.
-     *
-     * @return string
-     */
-    public function username()
+    protected function credentials(Request $request)
     {
-        return 'name';
+        $field = filter_var($request->input('name'), FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
+
+        return [
+            $field => $request->input('name'),
+            'password' => $request->input('password'),
+        ];
     }
 }
