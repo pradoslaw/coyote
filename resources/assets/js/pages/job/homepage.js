@@ -100,6 +100,8 @@ new Vue({
                 json: 1 // add json param to distinguish JSON url from "normal" request
             };
 
+            this.skeleton = true;
+
             axios.get(this.$refs.searchForm.action, {params: input})
                 .then(response => {
                     this.jobs = response.data.jobs;
@@ -109,6 +111,9 @@ new Vue({
                 })
                 .catch(error => {
                     console.log(error);
+                })
+                .then(() => {
+                    this.skeleton = false;
                 });
         },
 
