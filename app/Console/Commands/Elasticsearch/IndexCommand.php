@@ -17,7 +17,7 @@ class IndexCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'es:index {--model=}';
+    protected $signature = 'es:index {--model=} {--force}';
 
     /**
      * The console command description.
@@ -56,7 +56,7 @@ class IndexCommand extends Command
      */
     public function handle()
     {
-        if ($this->confirm('Do you want to index data in Elasticsearch?', true)) {
+        if ($this->option('force') || $this->confirm('Do you want to index data in Elasticsearch?', true)) {
             $this->dispatch();
             $this->info('Done.');
         }
