@@ -43,7 +43,7 @@ class SearchController extends Controller
      */
     private function search()
     {
-        if (!$this->request->exists('q')) {
+        if (!$this->request->filled('q')) {
             return [];
         }
 
