@@ -1,7 +1,7 @@
-.PHONY: all update-repo dependency-install file-permission migration seed assets-dev assets-production
+.PHONY: all update-repo dependency-install file-permission migration seed assets-dev assets-production install-es
 
-install: dependency-install dump-autoload file-permission migration seed install-assets assets-production cache-config key-generate
-install-dev: dependency-install dump-autoload file-permission migration seed install-assets assets-dev key-generate
+install: dependency-install dump-autoload file-permission migration seed install-assets assets-production cache-config key-generate install-es
+install-dev: dependency-install dump-autoload file-permission migration seed install-assets assets-dev key-generate install-es
 install-vagrant: dependency-install dump-autoload file-permission migration seed
 update: update-repo dependency-install dump-autoload migration assets-production cache-config
 update-dev: update-repo dependency-install dump-autoload migration assets-dev
