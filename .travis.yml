@@ -9,52 +9,37 @@ cache:
     - vendor
     - yarn
 
-services:
-  - postgresql
-  - mongodb
-  - redis-server
-
-addons:
-  postgresql: "9.6"
-  apt:
-    packages:
-      - oracle-java9-set-default
-
-env:
-  - NODE_RELEASE=8.x
-
 before_install:
-  - cp .env.testing .env
-  - sudo rm -rf ~/.nvm
-  - curl -sL "https://deb.nodesource.com/setup_${NODE_RELEASE}" | sudo -E bash -
-  - sudo apt-get install -y nodejs
-  - curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.1.2.deb && sudo dpkg -i --force-confnew elasticsearch-5.1.2.deb && sudo service elasticsearch restart
-  - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
-  - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-  - echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-  - sudo apt-get update
-  - sudo apt-get install -y yarn
+  - curl -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
+  - chmod +x ~/docker-compose
+  - sudo mv ~/docker-compose /usr/local/bin/docker-compose
+  - cp .env.default .env
 
 install:
-  - composer install
+  - docker-compose build
+  - docker-compose up -d
+  - docker-compose ps
+  - docker-compose exec php make install
 
-before_script:
-  - sudo yarn install
-  - psql -c 'create database coyote_test;' -U postgres
-  - cp tests/acceptance.suite.yml.travis tests/acceptance.suite.yml
-  - php artisan migrate --seed --quiet
-  - php vendor/bin/codecept build
-  - make file-permission
-  - make assets-production
-  - phantomjs --webdriver=4444 2>&1 >/dev/null &
-  - sleep 5
-  - php -S 127.0.0.1:8000 -t public/ 2>&1 >/dev/null &
-  - php artisan es:create --force
-  - php artisan es:mapping --force
-  - sleep 5
+#before_script:
+#  - sudo yarn install
+#  - psql -c 'create database coyote_test;' -U postgres
+#  - cp tests/acceptance.suite.yml.travis tests/acceptance.suite.yml
+#  - php artisan migrate --seed --quiet
+#  - php vendor/bin/codecept build
+#  - make file-permission
+#  - make assets-production
+#  - phantomjs --webdriver=4444 2>&1 >/dev/null &
+#  - sleep 5
+#  - php -S 127.0.0.1:8000 -t public/ 2>&1 >/dev/null &
+#  - php artisan es:create --force
+#  - php artisan es:mapping --force
+#  - sleep 5
 
-script: php vendor/bin/codecept run
+#script: php vendor/bin/codecept run
 
 after_script:
+  - docker-compose stop
+  - docker-compose rm -f
   - cat $TRAVIS_BUILD_DIR/storage/logs/*.log
   - cat $TRAVIS_BUILD_DIR/tests/_output/*.html
