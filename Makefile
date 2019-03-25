@@ -50,6 +50,6 @@ key-generate:
 	php artisan key:generate
 
 install-es:
-	php artisan es:create
-	php artisan es:mapping
-	php artisan es:index
+	php artisan es:create --force
+	php artisan es:mapping --force
+	php artisan es:index --force
