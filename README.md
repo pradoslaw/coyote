@@ -8,24 +8,8 @@ Coyote to nazwa systemu obsługującego serwis 4programmers.net.
 
 ## Wymagania
 
-* PHP 7
-    * php-gd
-    * php-mcrypt
-    * php-curl
-    * php-mbstring
-    * php-pgsql
-    * php-xml
-* PostgreSQL >= 9.4
-* composer
-* node.js
-* npm
-* git
-* Redis
-* Elasticsearch 5.0
-
-### Zalecane
-
-* Supervisor
+* Docker
+* docker-compose
 
 ## Instalacja
 
