@@ -55,9 +55,9 @@ services:
     ports:
       - 8025:8025
 
-  selenium:
-    image: selenium/standalone-chrome-debug
-    volumes:
-      - /dev/shm:/dev/shm
+  phantomjs:
+    image: wernight/phantomjs
     ports:
-      - 4444:4444
+      - 8910:8910
+    tty: true
+    command: phantomjs --webdriver=8910

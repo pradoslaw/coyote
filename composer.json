@@ -65,7 +65,8 @@
         "symfony/css-selector": "4.2.*",
         "symfony/dom-crawler": "4.2.*",
         "mockery/mockery": "^1.0",
-        "codeception/mockery-module": "^0.2.3"
+        "codeception/mockery-module": "^0.2.3",
+        "laravel/dusk": "^5.0"
     },
     "autoload": {
         "classmap": [
@@ -81,9 +82,9 @@
         ]
     },
     "autoload-dev": {
-        "classmap": [
-
-        ]
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
     },
     "scripts": {
         "post-install-cmd": [

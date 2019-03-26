@@ -18,7 +18,7 @@ Coyote to nazwa systemu obsługującego serwis 4programmers.net.
 7. `sudo docker-compose up -d`
 8. `sudo docker-compose exec php make install-dev`
 
-Strona jest dostępna w przeglądarce pod adresem: `175.0.0.10:8880`
+Strona jest dostępna w przeglądarce pod adresem: `localhost:8880`
 
 ## Testowanie
 
