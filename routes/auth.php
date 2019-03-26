@@ -22,3 +22,6 @@ $this->post('password/reset', 'Auth\ResetPasswordController@reset');
 
 $this->get('OAuth/{provider}/Login', ['uses' => 'Auth\OAuthController@login'])->name('oauth');
 $this->get('OAuth/{provider}/Callback', 'Auth\OAuthController@callback');
+
+$this->get('token', ['uses' => 'User\SessionTokenController@generateToken']);
+
