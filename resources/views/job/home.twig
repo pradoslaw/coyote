@@ -119,7 +119,7 @@
                                     <li v-for="tag in tags" :key="tag.id" class="list-group-item">
                                         <input type="hidden" name="tags[]" :value="tag.name" :checked="includesTag(tag.name)">
 
-                                        <a @click.prevent="toggleTag(tag.name)" :href="tag.url" :class="{'disabled': input.tags.length && !includesTag(tag.name)}">
+                                        <a @click.prevent="toggleTag(tag.name)" :href="tag.url" :class="{'disabled': input.tags.length && includesTag(tag.name)}">
                                             <img :alt="tag.name" :src="tag.logo">
 
                                             ${ tag.real_name || tag.name }
@@ -143,7 +143,7 @@
                                     <li v-for="(location, index) in locations" :key="index" class="list-group-item">
                                         <input type="hidden" name="locations[]" :value="location" :checked="includesLocation(location)">
 
-                                        <a @click.prevent="toggleLocation(location)" href="javascript:" :class="{'disabled': input.locations.length && !includesLocation(location)}">
+                                        <a @click.prevent="toggleLocation(location)" href="javascript:" :class="{'disabled': input.locations.length && includesLocation(location)}">
                                             ${ location|capitalize }
                                         </a>
                                     </li>
@@ -156,7 +156,7 @@
                                     <div class="form-group form-group-salary">
                                         <strong>waluta: </strong>
 
-                                        <select v-model="defaultCurrency" name="currency" class="form-control input-sm">
+                                        <select v-model="defaultCurrency" name="currency" class="form-control input-sm" style="height: 27px">
                                             <option v-for="currency in currencies" :key="currency.id" :value="currency.id">
                                                 ${ currency.name + ' (' + currency.symbol + ')' }
                                             </option>
