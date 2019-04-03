@@ -204,7 +204,7 @@ class SearchBuilder extends QueryBuilder
         }
 
         if ($this->request->filled('salary')) {
-            $this->addSalaryFilter((int) $this->request->get('salary'), (int) $this->request->get('currency'));
+            $this->addSalaryFilter(filter_var($this->request->get('salary'), FILTER_SANITIZE_NUMBER_INT), (int) $this->request->get('currency'));
         }
 
         if ($this->request->filled('remote')) {
