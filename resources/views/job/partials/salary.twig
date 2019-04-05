@@ -3,7 +3,9 @@
 {% set net_label = net_label|default(false) %}
 
 <strong class="text-primary">
-    {% if salary_from and salary_to %}
+    {% if salary_from == salary_to %}
+        {{ salary_from }}
+    {% elseif salary_from and salary_to %}
         {{ salary_from }} - {{ salary_to }}
     {% elseif salary_from %}
         od {{ salary_from }}

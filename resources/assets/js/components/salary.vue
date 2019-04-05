@@ -1,7 +1,11 @@
 <template>
     <p class="salary" :class="options.class">
         <strong class="text-primary">
-            <template v-if="salary_from && salary_to">
+            <template v-if="salary_from === salary_to">
+                {{ salary_from }}
+            </template>
+
+            <template v-else-if="salary_from && salary_to">
                 {{ salary_from }} - {{ salary_to }}
             </template>
 
