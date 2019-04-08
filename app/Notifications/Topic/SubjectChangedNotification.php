@@ -31,7 +31,7 @@ class SubjectChangedNotification extends AbstractNotification
      * @param User $user
      * @return array
      */
-    public function toDatabase(User $user)
+    public function toDatabase($user)
     {
         return [
             'object_id'     => $this->objectId(),

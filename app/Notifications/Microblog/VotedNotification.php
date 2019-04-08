@@ -41,7 +41,7 @@ class VotedNotification extends AbstractNotification
      * @param User $user
      * @return array
      */
-    public function toDatabase(User $user)
+    public function toDatabase($user)
     {
         $url = $this->microblog->parent_id
             ? UrlBuilder::microblogComment($this->microblog->parent, $this->microblog->id)
