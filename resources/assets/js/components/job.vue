@@ -18,7 +18,7 @@
                         :salary_to="job.salary_to"
                         :currency_symbol="job.currency_symbol"
                         :rate="job.rate"
-                        :isGross="job.is_gross"
+                        :is_gross="job.is_gross"
                         :options="{'class': 'pull-right'}"
                     >
                     </vue-salary>
