@@ -74,9 +74,23 @@ class OfferController extends Controller
             'payment'           => $this->userId === $job->user_id ? $job->getUnpaidPayment() : null,
             // tags along with grouped category
             'tags'              => $job->tags()->orderBy('priority', 'DESC')->with('category')->get()->groupCategory(),
-            'comments'          => $comments->toArray($this->request)
+            'comments'          => $comments->toArray($this->request),
+            'applications'      => $this->applications($job)
         ])->with(
             compact('job', 'flag', 'mlt')
         );
+    }
+
+    /**
+     * @param Job $job
+     * @return array|\Illuminate\Support\Collection
+     */
+    private function applications(Job $job)
+    {
+        if ($this->userId !== $job->user_id) {
+            return [];
+        }
+
+        return $job->applications()->get();
     }
 }

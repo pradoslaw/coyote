@@ -3,16 +3,21 @@
 namespace Coyote\Notifications\Job;
 
 use Coyote\Job;
+use Coyote\Services\Notification\DatabaseChannel;
+use Coyote\Services\Notification\NotificationInterface;
+use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Notification;
 use NotificationChannels\Twilio\TwilioChannel;
 use NotificationChannels\Twilio\TwilioSmsMessage;
 
-class ApplicationSentNotification extends Notification implements ShouldQueue
+class ApplicationSentNotification extends Notification implements ShouldQueue, NotificationInterface
 {
     use Queueable;
+
+    const ID = \Coyote\Notification::JOB_APPLICATION;
 
     /**
      * @var Job\Application
@@ -33,7 +38,7 @@ class ApplicationSentNotification extends Notification implements ShouldQueue
      */
     public function via(Job $job)
     {
-        $channels = ['mail'];
+        $channels = ['mail', DatabaseChannel::class];
 
         if (!empty($job->phone)) {
             $channels[] = TwilioChannel::class;
@@ -82,5 +87,50 @@ class ApplicationSentNotification extends Notification implements ShouldQueue
         }
 
         return $message;
+    }
+
+
+    /**
+     * @param Job $job
+     * @return array
+     */
+    public function toDatabase($job)
+    {
+        return [
+            'object_id'     => $this->objectId(),
+            'user_id'       => $job->user_id,
+            'type_id'       => static::ID,
+            'subject'       => $this->application->job->title,
+            'excerpt'       => null,
+            'url'           => UrlBuilder::job($this->application->job),
+            'guid'          => $this->id
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    public function objectId()
+    {
+        return substr(md5(uniqid()), 16); // uniq ID for each notification. notification won't be grouped
+    }
+
+    /**
+     * @return array
+     */
+    public function sender()
+    {
+        return [
+            'name' => $this->application->name,
+            'user_id' => null
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    protected function notificationUrl()
+    {
+        return route('user.notifications.url', [$this->id]);
     }
 }
