@@ -23,9 +23,6 @@ new Vue({
     mounted () {
         axios.defaults.headers.common['X-CSRF-TOKEN'] = Config.csrfToken();
 
-        this.$refs.q.addEventListener('search', this.search);
-        this.$refs.city.addEventListener('search', this.search);
-
         window.onpopstate = e => {
             this.jobs = e.state.jobs;
             this.input = e.state.input;
@@ -80,18 +77,17 @@ new Vue({
             this.jobs.meta.current_page = page;
             this.input.page = page;
 
-            this.search();
+            this.search(page);
 
             window.scrollTo(0,0);
         },
 
-        search () {
-            const input = {
+        search (page = null) {
+            let input = {
                 q: this.input.q,
                 city: this.input.city,
                 tags: this.input.tags,
                 sort: this.input.sort,
-                page: this.input.page,
                 salary: this.input.salary,
                 currency: this.input.currency,
                 remote: this.input.remote,
@@ -101,6 +97,10 @@ new Vue({
             };
 
             this.skeleton = true;
+
+            if (page !== null && !isNaN(page)) {
+                input = Object.assign({ page }, input);
+            }
 
             axios.get(this.$refs.searchForm.action, {params: input})
                 .then(response => {
