@@ -80,10 +80,8 @@ class ApplicationSentNotification extends Notification implements ShouldQueue, N
 
         if ($this->application->cv) {
             $path = realpath(storage_path('app/cv/' . $this->application->cv));
-            $filename = basename($path);
 
-            $name = explode('_', $filename, 2)[1];
-            $message->attach($path, ['as' => $name]);
+            $message->attach($path, ['as' => $this->application->realFilename()]);
         }
 
         return $message;
