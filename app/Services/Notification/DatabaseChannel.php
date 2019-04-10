@@ -2,18 +2,21 @@
 
 namespace Coyote\Services\Notification;
 
+use Coyote\User;
+
 class DatabaseChannel
 {
     /**
      * Send the given notification.
      *
-     * @param  \Coyote\User  $user
-     * @param  Notification  $notification
+     * @param  mixed  $notifiable
+     * @param  NotificationInterface  $notification
      * @return void
      */
-    public function send($user, Notification $notification)
+    public function send($notifiable, NotificationInterface $notification)
     {
-        $data = $notification->toDatabase($user);
+        $data = $notification->toDatabase($notifiable);
+        $user = $this->getUser($notifiable);
 
         $result = $user->getUnreadNotification($notification->objectId());
 
@@ -23,5 +26,22 @@ class DatabaseChannel
         }
 
         $result->senders()->create($notification->sender());
+    }
+
+    /**
+     * @param $notifiable
+     * @return mixed
+     */
+    private function getUser($notifiable)
+    {
+        if ($notifiable instanceof User) {
+            return $notifiable;
+        }
+
+        if (method_exists($notifiable, 'user')) {
+            return $notifiable->user;
+        }
+
+        throw new \InvalidArgumentException("Notifiable must have user() method.");
     }
 }

@@ -50,4 +50,12 @@ class Application extends Model
     {
         return $this->belongsTo('Coyote\Job');
     }
+
+    /**
+     * @return mixed
+     */
+    public function realFilename()
+    {
+        return explode('_', $this->cv, 2)[1];
+    }
 }

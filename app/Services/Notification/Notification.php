@@ -6,30 +6,12 @@ use Coyote\User;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Notifications\Notification as BaseNotification;
 
-abstract class Notification extends BaseNotification
+abstract class Notification extends BaseNotification implements NotificationInterface
 {
     /**
      * @var string|null
      */
     protected $broadcastChannel;
-
-    /**
-     * @param User $user
-     * @return array
-     */
-    abstract public function toDatabase(User $user);
-
-    /**
-     * @return array
-     */
-    abstract public function sender();
-
-    /**
-     * Unique ID for this type of notification. This can be useful for grouping notifications of the same type.
-     *
-     * @return string
-     */
-    abstract public function objectId();
 
     /**
      * Get the notification's delivery channels.

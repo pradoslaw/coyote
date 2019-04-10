@@ -148,12 +148,20 @@ class NotificationTypesTableSeeder extends Seeder
             'is_public' => false
         ]);
         Type::forceCreate(['id' => Notification::JOB_COMMENT,
-            'name' => '...o komenarzu w obserwowanej ofercie pracy',
+            'name' => '...o komentarzu w obserwowanej ofercie pracy',
             'headline' => 'Dodano komentarz do obserwowanej oferty pracy',
             'category' => 'Praca',
             'profile' => true,
             'email' => true,
             'is_public' => true
+        ]);
+        Type::forceCreate(['id' => Notification::JOB_APPLICATION,
+            'name' => '...o aplikacji w ofercie pracy',
+            'headline' => '{sender} wysłał aplikacje w ogłoszeniu',
+            'category' => 'Praca',
+            'profile' => true,
+            'email' => true,
+            'is_public' => false
         ]);
     }
 }

@@ -11,6 +11,8 @@
 {% block keywords %}{{ keywords(job.description)|join(',') }}{% endblock %}
 {% block logo %}{{ job.firm.logo ? logo(job.firm.logo, true) : secure_asset('img/apple-touch.png') }}{% endblock %}
 
+{% set is_author = job.enable_apply and job.user_id == auth_user().id %}
+
 {% block container %}
     <div class="row margin-md-top">
         <div class="col-xs-12">
@@ -22,6 +24,13 @@
                 <div class="alert alert-warning">
                     To ogłoszenie wygasło w dniu <strong>{{ job.deadline_at|format_date }}</strong>.
                 </div>
+            {% endif %}
+
+            {% if is_author %}
+                <ul class="nav nav-tabs margin-md-bottom">
+                    <li class="active"><a href="#offer" role="tab" data-toggle="tab">Ogłoszenie</a></li>
+                    <li><a href="#applications" role="tab" data-toggle="tab">Kandydaci <small>({{ applications|length }})</small></a></li>
+                </ul>
             {% endif %}
 
             <div class="job-navlinks padding-xs">
@@ -42,8 +51,16 @@
                 </div>
             {% endif %}
 
-            <div class="panel panel-default">
-                {% include 'job.partials.offer' %}
+            <div class="tab-content">
+                <div id="offer" class="panel panel-default tab-pane active">
+                    {% include 'job.partials.offer' %}
+                </div>
+
+                {% if is_author %}
+                    <div id="applications" class="panel panel-default tab-pane">
+                        {% include 'job.partials.applications' %}
+                    </div>
+                {% endif %}
             </div>
 
             {% include 'job.partials.comments' %}

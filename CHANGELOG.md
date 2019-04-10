@@ -16,6 +16,8 @@
 - Ustawienie sortowania nie jest zapamiętywane (domyślnie sortowanie zawsze po dacie)
 - W przypadku wyszukiwania, ustawienie sortowania na "Trafność" zamiast "Data dodania"
 - Nowy wygląd strony głównej
+- Możliwość ściągnięcia CV bezpośrednio ze strony z ofertą
+- Powiadomienie o nowej kandydaturze na dane stanowisko, nie tylko poprzez e-mail
 
 ## 2.2
 

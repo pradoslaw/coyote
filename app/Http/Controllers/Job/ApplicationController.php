@@ -9,6 +9,7 @@ use Coyote\Job;
 use Coyote\Notifications\Job\ApplicationConfirmationNotification;
 use Coyote\Notifications\Job\ApplicationSentNotification;
 use Coyote\Services\UrlBuilder\UrlBuilder;
+use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Http\Request;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Objects\Job as Stream_Job;
@@ -119,5 +120,21 @@ class ApplicationController extends Controller
             'filename' => $filename,
             'name' => $request->file('cv')->getClientOriginalName()
         ]);
+    }
+
+    /**
+     * @param FilesystemManager $filesystem
+     * @param Job $job
+     * @param $id
+     * @return mixed
+     */
+    public function downloadApplication(FilesystemManager $filesystem, Job $job, $id)
+    {
+        abort_if($job->user_id !== $this->userId, 403);
+
+        /** @var \Coyote\Job\Application $application */
+        $application = $job->applications()->find($id);
+
+        return $filesystem->disk('local')->download('cv/' . $application->cv, $application->realFilename());
     }
 }

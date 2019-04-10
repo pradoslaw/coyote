@@ -57,7 +57,7 @@ class PmCreatedNotification extends Notification implements ShouldQueue, ShouldB
      * @param User $user
      * @return array
      */
-    public function toDatabase(User $user)
+    public function toDatabase($user)
     {
         $excerpt = excerpt($this->text);
 
