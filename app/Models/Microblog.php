@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property Microblog[] $comments
  * @property Tag[] $tags
  * @property User $user
+ * @property Microblog[] $children
  */
 class Microblog extends Model
 {
@@ -213,6 +214,14 @@ class Microblog extends Model
     public function parent()
     {
         return $this->hasOne('Coyote\Microblog', 'id', 'parent_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function children()
+    {
+        return $this->hasMany(Microblog::class, 'parent_id', 'id');
     }
 
     /**
