@@ -81,4 +81,8 @@ return [
         'auth_token'    => env('TWILIO_AUTH_TOKEN'),
         'from'          => env('TWILIO_FROM'), // optional
     ],
+
+    'api' => [
+        'host'          => env('API_HOST')
+    ]
 ];

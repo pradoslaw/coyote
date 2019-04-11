@@ -13,6 +13,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return MicroblogResource::collection(Microblog::with('children')->paginate());
+        $data = Microblog::with(['children.user:id,name,photo', 'user:id,name,photo'])->whereNull('parent_id')->orderBy('id', 'DESC')->paginate();
+
+        return MicroblogResource::collection($data);
     }
 }

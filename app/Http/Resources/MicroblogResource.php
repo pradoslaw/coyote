@@ -2,8 +2,18 @@
 
 namespace Coyote\Http\Resources;
 
+use Carbon\Carbon;
+use Coyote\Microblog;
+use Coyote\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property string $html
+ * @property User $user
+ * @property Microblog[] $children
+ */
 class MicroblogResource extends JsonResource
 {
     /**
@@ -14,13 +24,16 @@ class MicroblogResource extends JsonResource
      */
     public function toArray($request)
     {
-        $only = $this->resource->only(['id', 'user_id', 'votes', 'created_at', 'updated_at']);
+        $only = $this->resource->only(['id', 'votes']);
 
         return array_merge(
             $only,
             [
-                'html' => $this->resource->html,
-                'children' => MicroblogResource::collection($this->resource->children)
+                'created_at'    => $this->created_at->toIso8601String(),
+                'updated_at'    => $this->created_at->toIso8601String(),
+                'html'          => $this->html,
+                'children'      => MicroblogResource::collection($this->children),
+                'user'          => UserResource::make($this->user)
             ]
         );
     }
