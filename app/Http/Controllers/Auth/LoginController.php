@@ -94,8 +94,6 @@ class LoginController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return void
-     *
-     * @throws \Illuminate\Validation\ValidationException
      */
     protected function validateLogin(Request $request)
     {
@@ -114,6 +112,14 @@ class LoginController extends Controller
         return $this->guard()->attempt(
             $this->credentials($request), true
         );
+    }
+
+    /**
+     * @return string
+     */
+    public function username()
+    {
+        return 'name';
     }
 
     /**
@@ -149,6 +155,10 @@ class LoginController extends Controller
         return back();
     }
 
+    /**
+     * @param Request $request
+     * @return array
+     */
     protected function credentials(Request $request)
     {
         $field = filter_var($request->input('name'), FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
