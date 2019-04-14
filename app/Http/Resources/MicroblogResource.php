@@ -12,7 +12,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property Carbon $updated_at
  * @property string $html
  * @property User $user
- * @property Microblog[] $children
+ * @property Microblog[] $comments
  */
 class MicroblogResource extends JsonResource
 {
@@ -32,7 +32,7 @@ class MicroblogResource extends JsonResource
                 'created_at'    => $this->created_at->toIso8601String(),
                 'updated_at'    => $this->created_at->toIso8601String(),
                 'html'          => $this->html,
-                'children'      => MicroblogResource::collection($this->children),
+                'comments'      => $this->comments ? MicroblogResource::collection($this->comments) : [],
                 'user'          => UserResource::make($this->user)
             ]
         );
