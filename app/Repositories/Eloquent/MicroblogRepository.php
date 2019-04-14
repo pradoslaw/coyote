@@ -20,34 +20,13 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     }
 
     /**
-     * @param $id
-     * @param array $columns
-     * @return mixed
-     */
-    public function findOrFail($id, $columns = ['*'])
-    {
-        $result = $this->prepare()->findOrFail($id, $columns);
-
-        return $result;
-    }
-
-    /**
-     * @param integer $perPage
-     * @return \Illuminate\Pagination\LengthAwarePaginator
+     * @inheritdoc
      */
     public function paginate($perPage = 10)
     {
-        $this->applyCriteria();
-        $result = $this->prepare()
-                ->whereNull('parent_id')
-                ->orderBy('microblogs.is_sponsored', 'DESC')
-                ->orderBy('microblogs.id', 'DESC')
-                ->paginate($perPage);
-
-        // zostawiamy jedynie 2 ostatnie komentarze
-        $result = $this->slice($result);
-
-        return $result;
+        return $this->applyCriteria(function () use ($perPage) {
+            return $this->whereNull('parent_id')->paginate($perPage);
+        });
     }
 
     /**
@@ -56,22 +35,21 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
      *
      * @param int $limit
      * @return mixed
+     * @throws
      */
     public function take($limit)
     {
+        $this->applyCriteria();
+
         $result = $this
-            ->prepare()
             ->whereNull('parent_id')
             ->where(function (Builder $builder) {
                 return $builder->where('votes', '>=', 2)->orWhere('bonus', '>', 0);
             })
-            ->orderBy('microblogs.is_sponsored', 'DESC')
-            ->orderBy('microblogs.score', 'DESC')
             ->take($limit)
             ->get();
 
-        // zostawiamy jedynie 2 ostatnie komentarze
-        $result = $this->slice($result);
+        $this->resetModel();
 
         return $result;
     }
@@ -84,12 +62,14 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
      */
     public function takePopular($limit)
     {
-        $result = $this->prepare(false)
-                ->whereNull('parent_id')
-                ->where('microblogs.created_at', '>=', Carbon::now()->subWeek())
-                ->orderBy('microblogs.score', 'DESC')
-                ->take($limit)
-                ->get();
+        $result = $this
+            ->whereNull('parent_id')
+            ->select(['microblogs.*', 'users.name', 'users.is_active', 'users.is_blocked', 'users.photo'])
+            ->join('users', 'users.id', '=', 'user_id')
+            ->where('microblogs.created_at', '>=', Carbon::now()->subWeek())
+            ->orderBy('microblogs.score', 'DESC')
+            ->take($limit)
+            ->get();
 
         return $result;
     }
@@ -102,7 +82,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
      */
     public function getComments($parentId)
     {
-        return $this->prepare(false)->whereIn('parent_id', $parentId)->orderBy('id')->get();
+        return $this->whereIn('parent_id', $parentId)->orderBy('id')->get();
     }
 
     /**
@@ -120,72 +100,6 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     public function countForUser($userId)
     {
         return $userId ? $this->model->whereNull('parent_id')->where('user_id', $userId)->count() : null;
-    }
-
-    /**
-     * @param bool $withComments
-     * @return mixed
-     */
-    private function prepare($withComments = true)
-    {
-        $columns = ['microblogs.*', 'users.name', 'is_active', 'is_blocked', 'photo'];
-        $columnThumb = 'mv.id AS thumbs_on';
-        $columnWatch = 'mw.user_id AS subscribe_on';
-
-        $userId = $this->app['auth']->id() ? $this->raw($this->app['auth']->id()) : null;
-        $with = [];
-
-        if ($withComments) {
-            $with['comments'] = function ($sql) use ($columns, $userId, $columnThumb) {
-                $sql->join('users', 'users.id', '=', 'user_id')->orderBy('id', 'ASC');
-
-                if ($userId) {
-                    $sql->leftJoin('microblog_votes AS mv', function ($join) use ($userId) {
-                        $join->on('mv.microblog_id', '=', 'microblogs.id')
-                            ->where('mv.user_id', '=', $userId);
-                    });
-
-                    $columns = array_merge($columns, [$columnThumb]);
-                }
-
-                $sql->select($columns);
-            };
-        }
-
-        if ($userId) {
-            $columns = array_merge($columns, [$columnThumb, $columnWatch]);
-        }
-
-        $query = $this->model->select($columns)->with($with)->join('users', 'users.id', '=', 'user_id');
-
-        if ($userId) {
-            $query->leftJoin('microblog_votes AS mv', function ($join) use ($userId) {
-                $join->on('mv.microblog_id', '=', 'microblogs.id')
-                    ->where('mv.user_id', '=', $userId);
-            })
-            ->leftJoin('microblog_subscribers AS mw', function ($join) use ($userId) {
-                $join->on('mw.microblog_id', '=', 'microblogs.id')
-                    ->where('mw.user_id', '=', $userId);
-            });
-        }
-
-        return $query;
-    }
-
-    /**
-     * Zostawia jedynie 2 ostatnie komentarze do wpisu
-     *
-     * @param $microblogs
-     * @return mixed
-     */
-    private function slice($microblogs)
-    {
-        foreach ($microblogs as &$microblog) {
-            $microblog->comments_count = $microblog->comments->count();
-            $microblog->comments = $microblog->comments->slice(-2, 2);
-        }
-
-        return $microblogs;
     }
 
     /**
