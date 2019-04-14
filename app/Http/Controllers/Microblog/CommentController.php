@@ -6,6 +6,7 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Requests\MicroblogRequest;
 use Coyote\Notifications\Microblog\UserMentionedNotification;
 use Coyote\Notifications\Microblog\SubmittedNotification;
+use Coyote\Repositories\Criteria\Microblog\LoadComments;
 use Coyote\Services\Parser\Helpers\Login as LoginHelper;
 use Coyote\Services\Parser\Helpers\Hash as HashHelper;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
@@ -159,6 +160,8 @@ class CommentController extends Controller
      */
     public function show($id)
     {
+        $this->microblog->pushCriteria(new LoadComments($this->userId));
+
         $comments = $this->microblog->getComments([$id])->slice(0, -2);
 
         return view('microblog.partials.comments', ['microblog' => ['id' => $id], 'comments' => $comments]);

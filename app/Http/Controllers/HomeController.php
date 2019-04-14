@@ -135,7 +135,7 @@ class HomeController extends Controller
         $this->microblog->pushCriteria(new LoadComments($this->userId));
         $this->microblog->pushCriteria(new OrderByScore());
 
-        return $this->microblog->take(5);
+        return $this->slice($this->microblog->take(5));
     }
 
     /**
@@ -202,5 +202,21 @@ class HomeController extends Controller
         }
 
         return $parent->children()->latest()->limit(1)->first(['path', 'title', 'excerpt']);
+    }
+
+    /**
+     * Zostawia jedynie 2 ostatnie komentarze do wpisu
+     *
+     * @param $microblogs
+     * @return mixed
+     */
+    private function slice($microblogs)
+    {
+        foreach ($microblogs as &$microblog) {
+            $microblog->comments_count = $microblog->comments->count();
+            $microblog->comments = $microblog->comments->slice(-2, 2);
+        }
+
+        return $microblogs;
     }
 }

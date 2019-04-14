@@ -82,7 +82,9 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
      */
     public function getComments($parentId)
     {
-        return $this->whereIn('parent_id', $parentId)->orderBy('id')->get();
+        return $this->applyCriteria(function () use ($parentId) {
+            return $this->whereIn('parent_id', $parentId)->orderBy('id')->get();
+        });
     }
 
     /**
