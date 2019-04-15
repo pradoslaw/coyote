@@ -2,6 +2,7 @@
 
 namespace Coyote\Http;
 
+use Coyote\Http\Middleware\ForceRootUrl;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -39,7 +40,8 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:60,1',
             'bindings',
-            'bindings.default'
+            'bindings.default',
+            ForceRootUrl::class
         ],
     ];
 

@@ -5,7 +5,9 @@ namespace Coyote\Http\Controllers\Microblog;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\CacheFactory;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
+use Coyote\Repositories\Criteria\Microblog\LoadComments;
 use Coyote\Repositories\Criteria\Microblog\OnlyMine;
+use Coyote\Repositories\Criteria\Microblog\OrderById;
 use Coyote\Repositories\Criteria\Microblog\WithTag;
 
 class HomeController extends Controller
@@ -33,7 +35,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $microblogs = $this->microblog->paginate(10);
+        $this->microblog->pushCriteria(new LoadComments($this->userId));
+        $this->microblog->pushCriteria(new OrderById());
+
+        $microblogs = $this->slice($this->microblog->paginate(10));
         $this->microblog->resetCriteria();
 
         // let's cache microblog tags. we don't need to run this query every time
@@ -74,5 +79,41 @@ class HomeController extends Controller
 
         $this->microblog->pushCriteria(new OnlyMine($this->userId));
         return $this->index();
+    }
+
+    /**
+     * @param $id
+     * @return \Illuminate\View\View
+     */
+    public function show($id)
+    {
+        $this->microblog->pushCriteria(new LoadComments($this->userId));
+
+        /** @var \Coyote\Microblog $microblog */
+        $microblog = $this->microblog->findOrFail($id);
+        abort_if(!is_null($microblog->parent_id), 404);
+
+        $excerpt = excerpt($microblog->html);
+
+        $this->breadcrumb->push('Mikroblog', route('microblog.home'));
+        $this->breadcrumb->push($excerpt, route('microblog.view', [$microblog->id]));
+
+        return $this->view('microblog.view')->with(['microblog' => $microblog, 'excerpt' => $excerpt]);
+    }
+
+    /**
+     * Zostawia jedynie 2 ostatnie komentarze do wpisu
+     *
+     * @param $microblogs
+     * @return mixed
+     */
+    private function slice($microblogs)
+    {
+        foreach ($microblogs as &$microblog) {
+            $microblog->comments_count = $microblog->comments->count();
+            $microblog->comments = $microblog->comments->slice(-2, 2);
+        }
+
+        return $microblogs;
     }
 }

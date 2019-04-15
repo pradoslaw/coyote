@@ -10,7 +10,7 @@ $this->group(['namespace' => 'Microblog', 'prefix' => 'Mikroblogi', 'as' => 'mic
     $this->get('Upload', 'SubmitController@thumbnail');
     $this->post('Upload', ['uses' => 'SubmitController@upload', 'as' => 'upload', 'middleware' => 'auth']);
     $this->post('Paste', ['uses' => 'SubmitController@paste', 'as' => 'paste', 'middleware' => 'auth']);
-    $this->get('View/{id}', ['uses' => 'ViewController@index', 'as' => 'view']);
+    $this->get('View/{id}', ['uses' => 'HomeController@show', 'as' => 'view']);
     $this->post('Vote/{microblog}', ['uses' => 'VoteController@post', 'as' => 'vote']);
     $this->get('Vote/{microblog}', ['uses' => 'VoteController@voters', 'as' => 'voters']);
     $this->post('Subscribe/{microblog}', ['uses' => 'SubscribeController@post', 'as' => 'subscribe', 'middleware' => 'auth']);
