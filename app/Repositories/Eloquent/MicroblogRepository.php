@@ -25,7 +25,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     public function paginate($perPage = 10)
     {
         return $this->applyCriteria(function () use ($perPage) {
-            return $this->whereNull('parent_id')->paginate($perPage);
+            return $this->model->whereNull('parent_id')->paginate($perPage);
         });
     }
 
@@ -42,6 +42,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
         $this->applyCriteria();
 
         $result = $this
+            ->model
             ->whereNull('parent_id')
             ->where(function (Builder $builder) {
                 return $builder->where('votes', '>=', 2)->orWhere('bonus', '>', 0);
@@ -63,6 +64,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     public function takePopular($limit)
     {
         $result = $this
+            ->model
             ->whereNull('parent_id')
             ->select(['microblogs.*', 'users.name', 'users.is_active', 'users.is_blocked', 'users.photo'])
             ->join('users', 'users.id', '=', 'user_id')
@@ -83,7 +85,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     public function getComments($parentId)
     {
         return $this->applyCriteria(function () use ($parentId) {
-            return $this->whereIn('parent_id', $parentId)->orderBy('id')->get();
+            return $this->model->whereIn('parent_id', $parentId)->orderBy('id')->get();
         });
     }
 
