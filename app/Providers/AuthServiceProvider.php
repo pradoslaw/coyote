@@ -23,6 +23,7 @@ use Coyote\Wiki;
 use Illuminate\Cache\CacheManager;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Laravel\Passport\Passport;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -98,6 +99,8 @@ class AuthServiceProvider extends ServiceProvider
                 return $permissions[$ability] ?? false;
             });
         }
+
+        Passport::routes();
     }
 
     /**

@@ -55,7 +55,8 @@
         "erusev/parsedown": "^1.7",
         "laravel-notification-channels/twilio": "^2.0",
         "filp/whoops": "^2.3",
-        "fideloper/proxy": "^4.0"
+        "fideloper/proxy": "^4.0",
+        "laravel/passport": "^7.2"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.5",

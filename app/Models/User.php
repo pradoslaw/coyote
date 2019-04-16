@@ -13,6 +13,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Notifications\RoutesNotifications;
+use Laravel\Passport\HasApiTokens;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -60,7 +61,7 @@ use Ramsey\Uuid\Uuid;
  */
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
-    use Authenticatable, Authorizable, CanResetPassword, RoutesNotifications;
+    use Authenticatable, Authorizable, CanResetPassword, RoutesNotifications, HasApiTokens;
 
     /**
      * The database table used by the model.
