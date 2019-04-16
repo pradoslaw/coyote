@@ -90,7 +90,8 @@ class SubmitForm extends Form
             ])
             ->add('comment', 'text', [
                 'rules' => 'nullable|string|max:255',
-                'label' => 'Opis zmian'
+                'label' => 'Opis zmian',
+                'help' => 'Maksymalnie 255 znaków.',
             ])
             ->add('attachments', 'collection', [
                 'template' => 'attachments',
