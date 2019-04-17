@@ -81,19 +81,20 @@ class ApplicationController extends Controller
     {
         $data = $form->all() + ['guest_id' => $this->guestId];
 
-        $this->transaction(function () use ($job, $form, $data) {
+        $application = $this->transaction(function () use ($job, $form, $data) {
             $target = (new Stream_Job)->map($job);
 
             /** @var \Coyote\Job\Application $application */
             $application = $job->applications()->create($data);
-
             $this->setSetting('job.application', $form->get('remember')->isChecked() ? $form->toJson() : '');
 
-            $job->notify((new ApplicationSentNotification($application))->delay(10));
-            $application->notify(new ApplicationConfirmationNotification());
-
             stream(Stream_Create::class, new Stream_Application(['displayName' => $data['name']]), $target);
+
+            return $application;
         });
+
+        $job->notify(new ApplicationSentNotification($application));
+        $application->notify(new ApplicationConfirmationNotification());
 
         return redirect()
             ->route('job.offer', [$job->id, $job->slug])
