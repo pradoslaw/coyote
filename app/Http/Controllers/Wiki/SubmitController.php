@@ -63,17 +63,11 @@ class SubmitController extends BaseController
         $form->validate();
 
         $request = $form->getRequest();
+        $subscribers = $wiki->subscribers()->with('user')->get()->pluck('user');
 
-        $this->transaction(function () use ($wiki, $request, $dispatcher) {
+        $this->transaction(function () use ($wiki, $request, $subscribers) {
             $subscribe = auth()->user()->allow_subscribe && !$wiki->wasUserInvolved($this->userId);
             $this->wiki->save($wiki, $request);
-
-            $subscribers = $wiki->subscribers()->with('user')->get()->pluck('user');
-
-            $dispatcher->send(
-                $subscribers->exceptUser($this->auth),
-                new ContentChangedNotification($wiki)
-            );
 
             // we DO NOT want to add another row into the table. we MUST check whether user is already
             // on subscribers list or not.
@@ -88,6 +82,11 @@ class SubmitController extends BaseController
                 (new Stream_Wiki())->map($wiki)
             );
         });
+
+        $dispatcher->send(
+            $subscribers->exceptUser($this->auth),
+            new ContentChangedNotification($wiki)
+        );
 
         // add to elasticsearch index and pages table...
         event(new WikiWasSaved($wiki));
