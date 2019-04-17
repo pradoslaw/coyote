@@ -173,7 +173,7 @@ class Microblog extends Model
      */
     public function comments()
     {
-        return $this->hasMany('Coyote\Microblog', 'parent_id', 'id');
+        return $this->hasMany('Coyote\Microblog', 'parent_id', 'id')->orderBy('microblogs.id', 'ASC');
     }
 
     /**

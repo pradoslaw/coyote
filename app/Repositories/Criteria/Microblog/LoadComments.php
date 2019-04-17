@@ -34,8 +34,7 @@ class LoadComments extends Criteria
             ->join('users', 'users.id', '=', 'user_id')
             ->with(['comments' => function ($builder) {
                 $builder->select(['microblogs.*', 'users.name', 'users.is_active', 'users.is_blocked', 'photo'])
-                    ->join('users', 'users.id', '=', 'user_id')
-                    ->orderBy('microblogs.id', 'ASC');
+                    ->join('users', 'users.id', '=', 'user_id');
 
                 $this->includeVoters($builder);
                 $this->includeSubscribers($builder);
