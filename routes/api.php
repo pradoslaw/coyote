@@ -7,7 +7,7 @@ $this->domain('api.' . ltrim(config('session.domain'), '.'))->group(function () 
     $this->get('users/{user}', ['uses' => 'User\UserApiController@get']);
 });
 
-$this->domain(config('services.api.host'))->group(function () {
-    $this->get('microblog', ['uses' => 'Api\Microblog\HomeController@index']);
+$this->domain(config('services.api.host'))->prefix('v1')->group(function () {
+    $this->get('microblogs', ['uses' => 'Api\Microblog\HomeController@index']);
 });
 
