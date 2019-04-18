@@ -32,8 +32,8 @@
                             <small class="pull-right">{{ notification.created_at|format_date }}</small>
                         </header>
 
-                        <h3><a href="{{ url }}">{{ notification.subject|raw }}</a></h3>
-                        <p class="excerpt"><a href="{{ url }}">{{ notification.excerpt|raw }}</a></p>
+                        <h3><a href="{{ url }}">{{ notification.subject }}</a></h3>
+                        <p class="excerpt"><a href="{{ url }}">{{ notification.excerpt }}</a></p>
                     </div>
                 </div>
             {% else %}
