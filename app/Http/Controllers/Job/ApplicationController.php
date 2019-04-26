@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Objects\Job as Stream_Job;
 use Coyote\Services\Stream\Objects\Application as Stream_Application;
+use Illuminate\Support\Str;
 
 class ApplicationController extends Controller
 {
@@ -31,7 +32,7 @@ class ApplicationController extends Controller
 
                 return $next($request);
             },
-            ['except' => 'upload']
+            ['except' => ['upload', 'downloadApplication']]
         );
     }
 
@@ -114,7 +115,7 @@ class ApplicationController extends Controller
             'cv'             => 'max:' . (5 * 1024) . '|mimes:pdf,doc,docx,rtf'
         ]);
 
-        $filename = uniqid() . '_' . $request->file('cv')->getClientOriginalName();
+        $filename = uniqid() . '_' . Str::ascii($request->file('cv')->getClientOriginalName());
         $request->file('cv')->storeAs('cv', $filename, 'local');
 
         return response()->json([
