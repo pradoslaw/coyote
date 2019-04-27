@@ -5,6 +5,8 @@ namespace Coyote\Http\Controllers\Microblog;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Notifications\Microblog\VotedNotification;
 use Coyote\Services\UrlBuilder\UrlBuilder;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use Coyote\Services\Stream\Activities\Vote as Stream_Vote;
 use Coyote\Services\Stream\Objects\Microblog as Stream_Microblog;
@@ -27,14 +29,14 @@ class VoteController extends Controller
     public function post($microblog, Request $request)
     {
         if (auth()->guest()) {
-            return response()->json(['error' => 'Musisz być zalogowany, aby oddać ten głos.'], 500);
+            throw new AuthenticationException('Musisz być zalogowany, aby oddać ten głos.');
         }
 
         /** @var \Coyote\Microblog\Vote $vote */
         $vote = $microblog->voters()->forUser($this->userId)->first();
 
         if (!config('app.debug') && $this->userId === $microblog->user_id) {
-            return response()->json(['error' => 'Nie możesz głosować na wpisy swojego autorstwa.'], 500);
+            throw new AuthorizationException('Nie możesz głosować na wpisy swojego autorstwa.');
         }
 
         $vote = $this->transaction(function () use ($vote, $microblog, $request) {

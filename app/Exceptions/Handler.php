@@ -10,7 +10,6 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
 use Symfony\Component\Debug\Exception\FlattenException;
@@ -50,17 +49,17 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $e)
     {
-        if ($this->shouldReport($e)) {
-            // log input data and url for further analyse
-            logger()->error('+', ['url' => request()->url(), 'input' => request()->all(), 'ip' => request()->ip()]);
-
-            if (app()->environment('production')) {
-                // send report to sentry
-                app('sentry')->captureException($e);
-            }
+        if ($this->shouldReport($e) && app()->environment('production')) {
+            // send report to sentry
+            app('sentry')->captureException($e);
         }
 
         parent::report($e);
+    }
+
+    protected function context()
+    {
+        return array_merge(parent::context(), ['url' => request()->url(), 'ip' => request()->ip()]);
     }
 
     /**
@@ -72,41 +71,9 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        // error handler to AJAX request
-        if ($request->isXmlHttpRequest()) { // moze lepiej bedzie uzyc wantsJson()?
-            $statusCode = 500;
-
-            if ($this->isHttpException($e)) {
-                $statusCode = $e->getStatusCode();
-            }
-
-            if ($e instanceof HttpResponseException) {
-                return parent::render($request, $e);
-            } elseif ($e instanceof ValidationException) {
-//            if ($e instanceof ValidationException && $e->getResponse()) {
-                return response()->json($e->validator->errors(), $statusCode);
-            } elseif ($e instanceof TokenMismatchException) {
-                return $this->renderTokenMismatchException($request, $e);
-            }
-
-            $response = [
-                'error' => 'Przepraszamy, ale coś poszło nie tak. Prosimy o kontakt z administratorem.'
-            ];
-
-            if (config('app.debug')) {
-                $response['exception'] = get_class($e);
-                $response['message'] = $e->getMessage();
-                $response['trace'] = $e->getTrace();
-            }
-
-            return response()->json($response, $statusCode);
-        }
-
-        if ($e instanceof ForbiddenException) {
-            return $this->renderForbiddenException($e);
-        } elseif ($e instanceof TokenMismatchException) {
+        if ($e instanceof TokenMismatchException) {
             return $this->renderTokenMismatchException($request, $e);
-        } elseif (($e instanceof HttpException && $e->getStatusCode() === 404) || $e instanceof ModelNotFoundException) {
+        } elseif (!$request->expectsJson() && (($e instanceof HttpException && $e->getStatusCode() === 404) || $e instanceof ModelNotFoundException)) {
             return $this->renderHttpErrorException($request, $e);
         }
 
@@ -120,9 +87,9 @@ class Handler extends ExceptionHandler
      */
     protected function renderTokenMismatchException(Request $request, $e)
     {
-        if ($request->isXmlHttpRequest()) {
+        if ($request->expectsJson()) {
             return response()->json(
-                ['error' => 'Twoja sesja wygasła. Proszę odświeżyć stronę i spróbować ponownie.'],
+                ['message' => 'Twoja sesja wygasła. Proszę odświeżyć stronę i spróbować ponownie.'],
                 $this->isHttpException($e) ? $e->getStatusCode() : 500
             );
         }
@@ -130,15 +97,6 @@ class Handler extends ExceptionHandler
         return redirect($request->fullUrl())
             ->withInput($request->except('_token'))
             ->with('error', 'Wygląda na to, że nie wysłałeś tego formularza przez dłuższy czas. Spróbuj ponownie!');
-    }
-
-    /**
-     * @param ForbiddenException $e
-     * @return \Illuminate\Http\Response
-     */
-    protected function renderForbiddenException(ForbiddenException $e)
-    {
-        return response()->view('errors.forbidden', $e->firewall->toArray(), 401);
     }
 
     /**
@@ -178,7 +136,7 @@ class Handler extends ExceptionHandler
      * Get the html response content.
      *
      * @param  \Exception  $e
-     * @throws \FlattenException
+     * @throws FlattenException
      * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function convertExceptionToResponse(Exception $e)
@@ -191,21 +149,5 @@ class Handler extends ExceptionHandler
 
         // on production site, we MUST render "nice" error page
         return SymfonyResponse::create(view('errors.500')->render(), $e->getStatusCode(), $e->getHeaders());
-    }
-
-    /**
-     * Convert an authentication exception into a response.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Illuminate\Auth\AuthenticationException  $exception
-     * @return \Illuminate\Http\Response
-     */
-    protected function unauthenticated($request, AuthenticationException $exception)
-    {
-        if ($request->expectsJson()) {
-            return response()->json(['error' => 'Unauthenticated.'], 401);
-        }
-
-        return redirect()->guest('login');
     }
 }

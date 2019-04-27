@@ -8,10 +8,11 @@ $(function () {
     $(document).ajaxError(function(event, jqxhr) {
         var error;
 
-        if (typeof jqxhr.responseJSON.error !== 'undefined') {
-            error = jqxhr.responseJSON.error;
-        } else if (typeof jqxhr.responseJSON.text !== 'undefined') {
-            error = jqxhr.responseJSON.text;
+        if (typeof jqxhr.responseJSON.errors !== 'undefined') {
+            let keys = Object.keys(jqxhr.responseJSON.errors);
+            error = jqxhr.responseJSON.errors[keys[0]][0];
+        } else if (typeof jqxhr.responseJSON.message !== 'undefined') {
+            error = jqxhr.responseJSON.message;
         }
 
         if (error) {
