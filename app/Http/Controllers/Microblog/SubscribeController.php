@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
+use Illuminate\Auth\AuthenticationException;
 
 /**
  * Class SubscribeController
@@ -15,11 +16,12 @@ class SubscribeController extends Controller
      *
      * @param \Coyote\Microblog $microblog
      * @return \Illuminate\Http\JsonResponse
+     * @throws AuthenticationException
      */
     public function post($microblog)
     {
         if (auth()->guest()) {
-            return response()->json(['error' => 'Musisz być zalogowany, aby móc obserwować ten wpis.'], 500);
+            throw new AuthenticationException('Musisz być zalogowany, aby móc obserwować ten wpis.');
         }
 
         $subscriber = $microblog->subscribers()->forUser($this->userId)->first();
