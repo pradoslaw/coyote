@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
+use Illuminate\Validation\ValidationException;
 
 abstract class FormRequest
 {
@@ -291,9 +292,7 @@ abstract class FormRequest
      */
     protected function failedValidation(Validator $validator)
     {
-        throw new HttpResponseException($this->response(
-            $this->formatErrors($validator)
-        ));
+        throw (new ValidationException($validator))->redirectTo($this->getRedirectUrl());
     }
 
     /**
