@@ -4,6 +4,7 @@ namespace Coyote\Http\Middleware;
 
 use Closure;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 
@@ -35,7 +36,7 @@ class PostSubmitResponse
         // is this a quick edit (via ajax)?
         // we need to be sure, that response is really instance of Response class.
         // if there is an error, $response will be instance of JsonResponse.
-        if ($request->ajax()) {
+        if ($request->ajax() && !($response instanceof JsonResponse)) {
             $post = $response->getOriginalContent();
             $data = ['post' => ['text' => $post->html, 'attachments' => $post->attachments()->get()]];
 

@@ -1,5 +1,6 @@
 import declination from '../../components/declination';
 import preventDuplicate from '../../components/prevent-duplicate';
+import Dialog from "../../libs/dialog";
 
 $(function () {
     'use strict';
@@ -32,9 +33,20 @@ $(function () {
         window.location.href = $(this).data('url') + '?perPage=' + $(this).val();
     });
 
-    function error(text) {
-        $('#alert').modal('show').find('.modal-body').text(text);
-    }
+    $(document).ajaxError(function(event, jqxhr) {
+        let message;
+
+        if (typeof jqxhr.responseJSON.errors !== 'undefined') {
+            let keys = Object.keys(jqxhr.responseJSON.errors);
+            message = jqxhr.responseJSON.errors[keys[0]][0];
+        } else if (typeof jqxhr.responseJSON.message !== 'undefined') {
+            message = jqxhr.responseJSON.message;
+        }
+
+        if (message) {
+            $('#alert').modal('show').find('.modal-body').text(message);
+        }
+    });
 
     /**
      * Restore deleted post
@@ -72,11 +84,6 @@ $(function () {
 
             $this.find('span').text($this.parent().hasClass('on') ? 'Zakończ obserwację' : 'Obserwuj');
             $this.find('small').text('(' + count + ' ' + declination(count, ['obserwujący', 'obserwujących', 'obserwujących']) + ')');
-        })
-        .error(function(event) {
-            if (typeof event.responseJSON.error !== 'undefined') {
-                error(event.responseJSON.error);
-            }
         });
 
         return false;
@@ -88,11 +95,6 @@ $(function () {
         $.post($this.attr('href'), function() {
             $this.parent().toggleClass('on');
             $this.text($this.parent().hasClass('on') ? 'Odblokuj wątek' : 'Zablokuj wątek');
-        })
-        .error(function(event) {
-            if (typeof event.responseJSON.error !== 'undefined') {
-                error(event.responseJSON.error);
-            }
         });
 
         return false;
@@ -258,11 +260,6 @@ $(function () {
             $.post($(this).attr('href'), json => {
                 $(this).toggleClass('on');
                 $(this).prev().text(json.count);
-            })
-            .error(event => {
-                if (typeof event.responseJSON.error !== 'undefined') {
-                    error(event.responseJSON.error);
-                }
             });
         });
 
@@ -274,11 +271,6 @@ $(function () {
             $.post($(this).attr('href'), () => {
                 $(this).toggleClass('on');
                 $('.vote-accept').not(this).removeClass('on');
-            })
-            .error(function(event) {
-                if (typeof event.responseJSON.error !== 'undefined') {
-                    error(event.responseJSON.error);
-                }
             });
         });
 
@@ -324,14 +316,6 @@ $(function () {
         .always(function() {
             $('button', $form).removeAttr('disabled').text('Zapisz komentarz');
             $('textarea', $form).removeAttr('readonly');
-        })
-        .error(function(event, jqxhr) {
-            if (typeof event.responseJSON.text !== 'undefined') {
-                error(event.responseJSON.text);
-            }
-            else if (typeof event.responseJSON.error !== 'undefined') {
-                error(event.responseJSON.error);
-            }
         });
 
         return false;
@@ -347,11 +331,6 @@ $(function () {
                 $('#modal-comment-delete').modal('hide');
 
                 $this.parent().remove();
-            })
-            .error(function(event) {
-                if (typeof event.responseJSON.error !== 'undefined') {
-                    error(event.responseJSON.error);
-                }
             });
         });
 
@@ -423,19 +402,6 @@ $(function () {
                 });
 
                 $this.addClass('active');
-            })
-            .error(function(event) {
-                if (typeof event.responseJSON !== 'undefined') {
-                    if (typeof event.responseJSON.text !== 'undefined') {
-                        error(event.responseJSON.text);
-                    }
-                    else if (typeof event.responseJSON.error !== 'undefined') {
-                        error(event.responseJSON.error);
-                    }
-                }
-                else if (typeof event.responseText !== 'undefined') {
-                    error(event.responseText);
-                }
             });
         } else {
             $post.html(posts[$this.data('post-id')]);
@@ -458,15 +424,9 @@ $(function () {
 
             Prism.highlightAll();
         })
-        .error(function(event) {
+        .always(function() {
             $('button[type=submit]', $form).removeAttr('disabled').text('Zapisz');
             $('textarea', $form).removeAttr('readonly');
-
-            if (typeof event.responseJSON.error !== 'undefined') {
-                error(event.responseJSON.error);
-            } else if (typeof event.responseJSON.text !== 'undefined') {
-                error(event.responseJSON.text);
-            }
         });
 
         return false;

@@ -61,7 +61,7 @@ class CommentController extends Controller
      */
     public function save(Request $request, Dispatcher $dispatcher, $id = null)
     {
-        $this->validate(request(), [
+        $this->validate($request, [
             'text'          => 'required|string|max:580',
             'post_id'       => 'required|integer|exists:posts,id'
         ]);
