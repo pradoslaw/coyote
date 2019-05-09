@@ -8,33 +8,36 @@ use Coyote\Services\Stream\Activities\Reject as Stream_Reject;
 use Coyote\Services\Stream\Objects\Post as Stream_Post;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Services\UrlBuilder\UrlBuilder;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 
 class AcceptController extends BaseController
 {
     /**
      * @param \Coyote\Post $post
      * @return \Illuminate\Http\JsonResponse
+     * @throws AuthenticationException|AuthorizationException
      */
     public function index($post)
     {
         if (auth()->guest()) {
-            return response()->json(['error' => 'Musisz być zalogowany, aby zaakceptować ten post.'], 401);
+            throw new AuthenticationException('Musisz być zalogowany, aby zaakceptować ten post.');
         }
 
         // post belongs to this topic:
         $topic = $post->topic;
 
         if ($this->auth->cannot('write', $topic)) {
-            return response()->json(['error' => 'Wątek jest zablokowany.'], 403);
+            throw new AuthorizationException('Wątek jest zablokowany.');
         }
 
         $forum = $topic->forum;
         if ($this->auth->cannot('write', $forum)) {
-            return response()->json(['error' => 'Forum jest zablokowane.'], 403);
+            throw new AuthorizationException('Forum jest zablokowane.');
         }
 
         if ($this->auth->cannot('update', $forum) && $topic->firstPost()->value('user_id') !== $this->userId) {
-            return response()->json(['error' => 'Możesz zaakceptować post tylko we własnym wątku.'], 403);
+            throw new AuthorizationException('Możesz zaakceptować post tylko we własnym wątku.');
         }
 
         $this->transaction(function () use ($topic, $post, $forum) {
