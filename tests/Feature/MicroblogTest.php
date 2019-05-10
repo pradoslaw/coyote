@@ -15,7 +15,6 @@ class MicroblogTest extends TestCase
         $user = factory(User::class)->create();
 
         $response = $this->actingAs($user)->json('POST', '/Mikroblogi/Edit', ['text' => '']);
-
         $response->assertStatus(422);
     }
 

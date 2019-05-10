@@ -23,19 +23,8 @@ install:
   - docker-compose exec php make install
 
 before_script:
-#  - sudo yarn install
-#  - psql -c 'create database coyote_test;' -U postgres
-#  - cp tests/acceptance.suite.yml.travis tests/acceptance.suite.yml
-#  - php artisan migrate --seed --quiet
   - docker-compose exec php php vendor/bin/codecept build
-#  - make file-permission
-#  - make assets-production
-#  - phantomjs --webdriver=4444 2>&1 >/dev/null &
-#  - sleep 5
-#  - php -S 127.0.0.1:8000 -t public/ 2>&1 >/dev/null &
-#  - php artisan es:create --force
-#  - php artisan es:mapping --force
-#  - sleep 5
+  - docker-compose exec php php artisan config:clear
 
 script:
   - docker-compose exec php php vendor/bin/codecept run
