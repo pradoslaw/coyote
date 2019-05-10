@@ -37,7 +37,9 @@ before_script:
 #  - php artisan es:mapping --force
 #  - sleep 5
 
-script: docker-compose exec php php vendor/bin/codecept run
+script:
+  - docker-compose exec php php vendor/bin/codecept run
+  - docker-compose exec php php vendor/bin/phpunit
 
 after_script:
   - docker-compose stop
