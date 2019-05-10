@@ -4,7 +4,7 @@ services:
   db:
     image: postgres
     volumes:
-      - ./.data/pgsql:/var/lib/postgresql/data:z
+      - postgres:/var/lib/postgresql/data:z
     environment:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
@@ -29,7 +29,7 @@ services:
   nginx:
     image: nginx:latest
     volumes:
-      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/coyote.conf
+      - ./docker/nginx/:/etc/nginx/conf.d/
       - ./.data/logs/nginx:/var/log/nginx:z
     working_dir: /var/www
     volumes_from:
@@ -61,3 +61,6 @@ services:
       - 8910:8910
     tty: true
     command: phantomjs --webdriver=8910
+
+volumes:
+  postgres:
