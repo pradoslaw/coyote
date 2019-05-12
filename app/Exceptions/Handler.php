@@ -4,12 +4,9 @@ namespace Coyote\Exceptions;
 
 use Coyote\Repositories\Contracts\PageRepositoryInterface;
 use Exception;
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
 use Symfony\Component\Debug\Exception\FlattenException;
