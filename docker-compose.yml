@@ -55,12 +55,12 @@ services:
     ports:
       - 8025:8025
 
-  phantomjs:
-    image: wernight/phantomjs
-    ports:
-      - 8910:8910
-    tty: true
-    command: phantomjs --webdriver=8910
+  selenium:
+    image: selenium/standalone-chrome:3.11.0-antimony
+    depends_on:
+      - nginx
+    volumes:
+      - /dev/shm:/dev/shm
 
 volumes:
   postgres:
