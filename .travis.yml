@@ -13,7 +13,7 @@ before_install:
   - curl -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
   - chmod +x ~/docker-compose
   - sudo mv ~/docker-compose /usr/local/bin/docker-compose
-  - cp .env.default .env
+  - cp .env.testing .env
 
 install:
   - sudo service postgresql stop
@@ -29,6 +29,7 @@ before_script:
 script:
   - docker-compose exec php php vendor/bin/codecept run
   - docker-compose exec php php vendor/bin/phpunit
+  - docker-compose exec php php artisan dusk
 
 after_script:
   - docker-compose stop
