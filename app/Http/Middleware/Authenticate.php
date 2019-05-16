@@ -2,42 +2,18 @@
 
 namespace Coyote\Http\Middleware;
 
-use Closure;
-use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Http\Request;
+use Illuminate\Auth\Middleware\Authenticate as BaseAuthenticate;
 
-class Authenticate extends AbstractMiddleware
+class Authenticate extends BaseAuthenticate
 {
     /**
-     * The Guard implementation.
+     * Get the path the user should be redirected to when they are not authenticated.
      *
-     * @var Guard
+     * @param  \Illuminate\Http\Request  $request
+     * @return string
      */
-    protected $auth;
-
-    /**
-     * Create a new filter instance.
-     *
-     * @param  Guard $auth
-     */
-    public function __construct(Guard $auth)
+    protected function redirectTo($request)
     {
-        $this->auth = $auth;
-    }
-
-    /**
-     * Handle an incoming request.
-     *
-     * @param  Request $request
-     * @param  Closure $next
-     * @return mixed
-     */
-    public function handle($request, Closure $next)
-    {
-        if ($this->auth->guest()) {
-            return $this->login($request);
-        }
-
-        return $next($request);
+        return route('login');
     }
 }

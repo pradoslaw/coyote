@@ -101,7 +101,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      *
      * @var array
      */
-    protected $hidden = ['password', 'remember_token', 'email'];
+    protected $hidden = ['password', 'remember_token', 'email', 'salt', 'provider_id', 'provider', 'guest_id'];
 
     /**
      * @var string
