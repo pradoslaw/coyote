@@ -8,7 +8,7 @@
                     let form = $(this).closest('form');
                     let isDisabled = form.find(':submit').attr('disabled') === 'disabled';
 
-                    if (e.ctrlKey && !isDisabled) {
+                    if ((e.ctrlKey || e.metaKey) && !isDisabled) {
                         form.submit();
                     }
                 }
