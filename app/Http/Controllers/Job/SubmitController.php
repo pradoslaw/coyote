@@ -95,7 +95,8 @@ class SubmitController extends Controller
             'firm'              => $job->firm,
             // is plan is still going on?
             'is_plan_ongoing'   => $job->is_publish,
-            'plans'             => $this->plan->active()->toJson()
+            'plans'             => $this->plan->active()->toJson(),
+            'locations'         => $job->locations()->count() ? $job->locations->toArray() : [(new Job\Location())->toArray()]
         ]);
     }
 

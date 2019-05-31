@@ -269,6 +269,14 @@ new Vue({
             this.$nextTick(function () {
                 $('i[data-toggle="tooltip"]').tooltip();
             });
+        },
+
+        addLocation () {
+            this.locations.push({});
+        },
+
+        removeLocation (location) {
+            this.locations.splice(this.locations.indexOf(location), 1);
         }
     },
     computed: {

@@ -48,12 +48,16 @@
                         <div class="form-group form-group-border" :class="{'has-error': isInvalid(['city'])}">
                             <label class="control-label">Lokalizacja</label>
 
-                            <div class="row">
-                                <div class="col-sm-2">
-                                    {{ form_widget(form.country_id) }}
-                                </div>
-                                <div class="col-sm-7" style="padding-left: 0">
-                                    {{ form_widget(form.city) }}
+                            <div v-for="location in locations" class="row margin-sm-bottom">
+                                <div class="col-sm-12">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <a href="javascript:" @click="addLocation"><i class="fa fa-fw fa-plus-circle"></i></a>
+                                            <a href="javascript:" @click="removeLocation(location)" v-if="locations.length > 1"><i class="fa fa-fw fa-minus-circle text-danger disabled"></i></a>
+                                        </div>
+
+                                        <input ref="autocomplete" type="text" class="form-control" name="city[]" :value="location.city" placeholder="Np. Warszawa, al. Jerozolimskie 3">
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
@@ -246,6 +250,7 @@
     <script>
         var data = {
             job: {{ job|raw }},
+            locations: {{ locations|json_encode|raw }},
             tags: {{ form.tags.value|raw }},
             features: {{ form.features.value|raw }},
             errors: {{ form_errors|raw }},
