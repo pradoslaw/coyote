@@ -27,6 +27,11 @@ class Location extends Model
     protected $fillable = ['job_id', 'city', 'latitude', 'longitude'];
 
     /**
+     * @var array
+     */
+    protected $attributes = ['city' => '', 'latitude' => null, 'longitude' => null];
+
+    /**
      * @var bool
      */
     public $timestamps = false;

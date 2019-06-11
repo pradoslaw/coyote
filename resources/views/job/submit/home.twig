@@ -53,10 +53,22 @@
                                     <div class="input-group">
                                         <div class="input-group-addon">
                                             <a href="javascript:" @click="addLocation"><i class="fa fa-fw fa-plus-circle"></i></a>
-                                            <a href="javascript:" @click="removeLocation(location)" v-if="locations.length > 1"><i class="fa fa-fw fa-minus-circle text-danger disabled"></i></a>
+                                            <a href="javascript:" @click="removeLocation(location)" v-if="locations.length > 1"><i class="fa fa-fw fa-minus-circle text-danger"></i></a>
                                         </div>
 
-                                        <input ref="autocomplete" type="text" class="form-control" name="city[]" :value="location.city" placeholder="Np. Warszawa, al. Jerozolimskie 3">
+                                        <input type="hidden" name="longitude[]" :value="location.longitude">
+                                        <input type="hidden" name="latitude[]" :value="location.latitude">
+
+                                        <vue-google-place
+                                            ref="address"
+                                            id="map"
+                                            classname="form-control"
+                                            placeholder="Please type your address"
+                                            v-on:placechanged="getAddressData"
+                                        >
+                                        </vue-google-place>
+
+{#                                        <input ref="autocomplete" type="text" class="form-control" name="city[]" :value="location.city" placeholder="Np. Warszawa, al. Jerozolimskie 3">#}
                                     </div>
                                 </div>
                             </div>
@@ -263,6 +275,7 @@
 
     {{ widgets.vue() }}
     <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script src="//maps.googleapis.com/maps/api/js?key={{ config('services.google-maps.key') }}&sensor=false"></script>
     <script src="{{ asset('js/jquery-ui.js') }}"></script>
     <script src="{{ cdn('js/job-submit.js') }}"></script>
 

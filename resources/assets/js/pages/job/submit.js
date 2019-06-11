@@ -6,6 +6,7 @@ import VueThumbnail from '../../components/thumbnail.vue';
 import VuePricing from '../../components/pricing.vue';
 import VueTagsDropdown from '../../components/tags-dropdown.vue';
 import VueTagsSkill from '../../components/tag-skill.vue';
+import VueGooglePlace from '../../components/google-place.vue';
 import 'chosen-js';
 import 'intl-tel-input';
 
@@ -35,6 +36,7 @@ Vue.component('vue-thumbnail', VueThumbnail);
 Vue.component('vue-pricing', VuePricing);
 Vue.component('vue-tags-dropdown', VueTagsDropdown);
 Vue.component('vue-tag-skill', VueTagsSkill);
+Vue.component('vue-google-place', VueGooglePlace);
 
 new Vue({
     el: '.submit-form',
@@ -45,7 +47,7 @@ new Vue({
 
         this.marker = null;
 
-        if (typeof google !== 'undefined') {
+        if (typeof google !== 'undefined' && this.firm) {
             this.map = new Map();
 
             if (this.firm.latitude && this.firm.longitude) {
@@ -277,6 +279,11 @@ new Vue({
 
         removeLocation (location) {
             this.locations.splice(this.locations.indexOf(location), 1);
+        },
+
+        getAddressData: function (addressData, placeResultData, id) {
+            console.log(addressData);
+            // this.address = addressData;
         }
     },
     computed: {
