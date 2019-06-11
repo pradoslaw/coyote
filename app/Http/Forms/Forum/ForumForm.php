@@ -39,7 +39,7 @@ class ForumForm extends Form
             ])
             ->add('title', 'text', [
                 'label' => 'Rozszerzony tytuł',
-                'rules' => 'string|max:200'
+                'rules' => 'nullable|string|max:200'
             ])
             ->add('slug', 'text', [
                 'label' => 'Ścieżka',
@@ -61,7 +61,7 @@ class ForumForm extends Form
             ])
             ->add('section', 'text', [
                 'label' => 'Nazwa sekcji',
-                'rules' => 'string|max:50'
+                'rules' => 'nullable|string|max:50'
             ])
             ->add('is_locked', 'checkbox', [
                 'label' => 'Forum zablokowane'
