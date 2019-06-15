@@ -61,7 +61,7 @@ class ForumController extends BaseController
         $this->validate($request, [
             'forum.*.is_hidden'       => 'int',
             'forum.*.order'           => 'int',
-            'forum.*.section'         => 'string|max:50'
+            'forum.*.section'         => 'nullable|string|max:50'
         ]);
 
         $this->transaction(function () use ($request) {

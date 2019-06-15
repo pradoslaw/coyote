@@ -1,10 +1,10 @@
-.PHONY: all update-repo dependency-install file-permission migration seed assets-dev assets-production install-es
+.PHONY: all update-repo dependency-install file-permission migration seed assets-dev assets-production install-es install-passport
 
-install: dependency-install dump-autoload file-permission migration seed install-assets assets-production cache-config key-generate install-es
-install-dev: dependency-install dump-autoload file-permission migration seed install-assets assets-dev key-generate install-es
-install-vagrant: dependency-install dump-autoload file-permission migration seed
-update: update-repo dependency-install dump-autoload migration assets-production cache-config
-update-dev: update-repo dependency-install dump-autoload migration assets-dev
+install: dependency-install file-permission migration seed install-assets assets-production cache-config key-generate install-es install-passport
+install-dev: dependency-install file-permission migration seed install-assets assets-dev key-generate install-es install-passport
+install-vagrant: dependency-install file-permission migration seed
+update: update-repo dependency-install migration assets-production cache-config
+update-dev: update-repo dependency-install migration assets-dev
 
 help:
 	@echo 'make install -- download dependencies and install'
@@ -39,9 +39,6 @@ assets-production:
 assets-dev:
 	yarn run dev
 
-dump-autoload:
-	php artisan clear-compiled
-
 cache-config:
 	php artisan config:cache
 	php artisan route:cache
@@ -53,3 +50,6 @@ install-es:
 	php artisan es:create --force
 	php artisan es:mapping --force
 	php artisan es:index --force
+
+install-passport:
+	php artisan passport:install

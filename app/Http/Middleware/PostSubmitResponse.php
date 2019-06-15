@@ -36,7 +36,7 @@ class PostSubmitResponse
         // is this a quick edit (via ajax)?
         // we need to be sure, that response is really instance of Response class.
         // if there is an error, $response will be instance of JsonResponse.
-        if ($request->ajax() && !($response instanceof JsonResponse)) {
+        if ($request->ajax() && $response->getStatusCode() === 200) {
             $post = $response->getOriginalContent();
             $data = ['post' => ['text' => $post->html, 'attachments' => $post->attachments()->get()]];
 

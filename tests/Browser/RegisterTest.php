@@ -20,7 +20,7 @@ class RegisterTest extends DuskTestCase
             $faker = Factory::create();
 
             $browser->visit('/Register')
-                    ->type('name', $faker->name)
+                    ->type('name', $faker->userName)
                     ->type('email', $faker->email)
                     ->type('password', $password = $faker->password)
                     ->type('password_confirmation', $password)

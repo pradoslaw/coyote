@@ -165,6 +165,8 @@
                                     }
                                 })
                                     .error(function(e) {
+                                        e.preventDefault();
+
                                         // do nothing
                                         return false;
                                     });

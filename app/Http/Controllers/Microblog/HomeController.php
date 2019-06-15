@@ -95,7 +95,6 @@ class HomeController extends Controller
 
         $excerpt = excerpt($microblog->html);
 
-        $this->breadcrumb->push('Mikroblog', route('microblog.home'));
         $this->breadcrumb->push($excerpt, route('microblog.view', [$microblog->id]));
 
         return $this->view('microblog.view')->with(['microblog' => $microblog, 'excerpt' => $excerpt]);

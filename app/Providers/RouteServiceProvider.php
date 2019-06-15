@@ -139,7 +139,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapApiRoutes()
     {
         $this->router->group([
-            'namespace' => $this->namespace, 'middleware' => 'api',
+            'namespace' => $this->namespace, 'middleware' => 'api', 'domain' => !$this->app->runningUnitTests() ? config('services.api.host') : ''
         ], function () {
             require base_path('routes/api.php');
         });
