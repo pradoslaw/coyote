@@ -63,7 +63,7 @@ class BoostJobOffer implements ShouldQueue
             $event->payment->starts_at = Carbon::now();
             $event->payment->ends_at = Carbon::now()->addDays($event->payment->days);
 
-            if ($event->payment->coupon_id) {
+            if ($event->payment->coupon) {
                 $event->payment->coupon->delete();
             }
 
