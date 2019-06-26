@@ -74,3 +74,6 @@ tremorhub.com, mb9eo-oqsbf, RESELLER, 1a4e959a1b50034a
 triplelift.com, 6006, DIRECT
 pubmatic.com, 158262, RESELLER, 5d62403b186f2ace
 rubiconproject.com, 20568, DIRECT, 0bfd66d529a55807
+rubiconproject.com, 20130, RESELLER, 0bfd66d529a55807
+yieldlab.net, 227224, RESELLER
+yieldlab.net, 8633311, RESELLER
