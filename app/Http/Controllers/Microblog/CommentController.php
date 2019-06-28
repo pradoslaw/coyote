@@ -162,7 +162,7 @@ class CommentController extends Controller
     {
         $this->microblog->pushCriteria(new LoadComments($this->userId));
 
-        $comments = $this->microblog->getComments([$id])->slice(0, -2);
+        $comments = $this->microblog->getComments([$id]);
 
         return view('microblog.partials.comments', ['microblog' => ['id' => $id], 'comments' => $comments]);
     }

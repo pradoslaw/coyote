@@ -260,7 +260,7 @@ $(function () {
             $this.text('Proszę czekać...');
 
             $.get($this.attr('href'), function(html) {
-                $this.parent().replaceWith(html);
+                $this.parent().parent().replaceWith(html);
             });
 
             return false;

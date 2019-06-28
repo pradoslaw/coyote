@@ -50,16 +50,18 @@
 
                     <div class="microblog-comments margin-sm-top">
 
-                        {% if microblog.comments_count > microblog.comments|length %}
-                            <div class="show-all">
-                                {% set total_comments = microblog.comments_count - microblog.comments|length %}
-                                <a href="{{ route('microblog.comment.show', [microblog.id]) }}">Zobacz {{ declination(total_comments, ['pozostały', 'pozostałe', 'pozostałe'], true) }} {{ declination(total_comments, ['komentarz', 'komentarze', 'komentarzy']) }}</a>
-                            </div>
-                        {% endif %}
+                        <div class="microblog-comments-container">
+                            {% if microblog.comments_count > microblog.comments|length %}
+                                <div class="show-all">
+                                    {% set total_comments = microblog.comments_count - microblog.comments|length %}
+                                    <a href="{{ route('microblog.comment.show', [microblog.id]) }}">Zobacz {{ declination(total_comments, ['pozostały', 'pozostałe', 'pozostałe'], true) }} {{ declination(total_comments, ['komentarz', 'komentarze', 'komentarzy']) }}</a>
+                                </div>
+                            {% endif %}
 
-                        {% for comment in microblog.comments %}
-                            {% include 'microblog.partials.comment' with {'comment': comment} %}
-                        {% endfor %}
+                            {% for comment in microblog.comments %}
+                                {% include 'microblog.partials.comment' with {'comment': comment} %}
+                            {% endfor %}
+                        </div>
 
                         {% if auth_check() %}
                             <form class="comment-form" method="POST" action="{{ route('microblog.comment.save') }}">
