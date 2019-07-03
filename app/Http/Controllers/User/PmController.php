@@ -159,7 +159,7 @@ class PmController extends BaseController
     {
         $validator = $this->getValidationFactory()->make($request->all(), [
             'recipient'          => 'required|user_exist',
-            'text'               => 'required',
+            'text'               => 'required|spam_foreign:1',
             'root_id'            => 'nullable|exists:pm'
         ]);
 
