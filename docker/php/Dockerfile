@@ -27,5 +27,5 @@ RUN echo Europe/Warsaw >/etc/timezone && \
     ln -sf /usr/share/zoneinfo/Europe/Warsaw /etc/localtime && \
     dpkg-reconfigure -f noninteractive tzdata
 
-RUN chown -R www-data:www-data /var/www/
-USER www-data
+#RUN chown -R www-data:www-data /var/www/
+#USER www-data
