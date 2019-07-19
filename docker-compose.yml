@@ -26,6 +26,13 @@ services:
       REDIS_HOST: ${REDIS_HOST}
       ELASTICSEARCH_HOST: ${ELASTICSEARCH_HOST}
 
+  node:
+    image: node:8.15-slim
+    tty: true
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+
   nginx:
     image: nginx:latest
     volumes:
