@@ -1,7 +1,4 @@
 sudo: true
-language: php
-php:
-  - 7.2
 
 cache:
   directories:

@@ -1,4 +1,4 @@
-FROM php:7.2-fpm
+FROM php:7.3-fpm-stretch
 
 LABEL maintainer="4programmers.net <support@4programmers.net>"
 
@@ -9,7 +9,8 @@ RUN apt-get update -yqq && apt-get install -y \
     libmcrypt-dev \
     libpq-dev \
     locales \
-    zlib1g-dev \
+    libzip-dev \
+#    zlib1g-dev \
     libfreetype6-dev \
     libpng-dev \
     gnupg \
