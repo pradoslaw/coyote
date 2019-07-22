@@ -19,11 +19,12 @@ install:
   - docker-compose ps
   - docker-compose exec php composer install
   - docker-compose exec php php artisan migrate --seed
-  - docker-compose exec php php artisan es:create
-  - docker-compose exec php php artisan es:mapping
-  - docker-compose exec php php artisan es:index
+  - docker-compose exec php php artisan es:create --force
+  - docker-compose exec php php artisan es:mapping --force
+  - docker-compose exec php php artisan es:index --force
   - docker-compose exec node yarn install
   - docker-compose exec node yarn prod
+  - docker-compose exec php php artisan passport:install
 
 before_script:
   - docker-compose exec php php vendor/bin/codecept build
