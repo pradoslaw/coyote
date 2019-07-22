@@ -27,5 +27,9 @@ RUN echo Europe/Warsaw >/etc/timezone && \
     ln -sf /usr/share/zoneinfo/Europe/Warsaw /etc/localtime && \
     dpkg-reconfigure -f noninteractive tzdata
 
-#RUN chown -R www-data:www-data /var/www/
-#USER www-data
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
+RUN curl -sS http://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+
+RUN echo "deb http://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+
+RUN apt-get update && apt-get install -qq -y nodejs yarn && apt-get remove --purge --auto-remove -y
