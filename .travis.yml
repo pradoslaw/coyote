@@ -19,9 +19,9 @@ install:
   - docker-compose ps
   - docker-compose exec php composer install
   - docker-compose exec php php artisan migrate --seed
-  - docker-compose exec php php es:create
-  - docker-compose exec php php es:mapping
-  - docker-compose exec php php es:index
+  - docker-compose exec php php artisan es:create
+  - docker-compose exec php php artisan es:mapping
+  - docker-compose exec php php artisan es:index
   - docker-compose exec node yarn install
   - docker-compose exec node yarn prod
 
