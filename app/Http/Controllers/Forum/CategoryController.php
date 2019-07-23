@@ -49,6 +49,7 @@ class CategoryController extends BaseController
             ->appends($request->except('page'));
 
         $topics = $personalizer->markUnreadTopics($topics);
+        $flags = [];
 
         // we need to get an information about flagged topics. that's how moderators can notice
         // that's something's wrong with posts.

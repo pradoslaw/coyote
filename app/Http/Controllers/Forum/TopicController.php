@@ -136,7 +136,7 @@ class TopicController extends BaseController
 
         $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->slug, $topic->id, $topic->slug]));
 
-        $flags = $activities = [];
+        $flags = $activities = $adminForumList = $reasonList = [];
 
         if ($this->gate->allows('delete', $forum) || $this->gate->allows('move', $forum)) {
             $reasonList = Reason::pluck('name', 'id')->toArray();

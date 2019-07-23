@@ -52,6 +52,7 @@ class OfferController extends Controller
         }
 
         $job->addReferer(url()->previous());
+        $flag = null;
 
         if ($this->getGateFactory()->allows('job-delete')) {
             $flag = $this->getFlagFactory()->takeForJob($job->id);
