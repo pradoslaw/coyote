@@ -13,9 +13,7 @@ services:
       - 5432:5432
 
   php:
-    build:
-      context: ./
-      dockerfile: ./docker/php/Dockerfile
+    image: 4programmers/php-node
     working_dir: /var/www
     volumes:
       - ./:/var/www
