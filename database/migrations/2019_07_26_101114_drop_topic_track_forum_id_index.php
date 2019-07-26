@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
@@ -18,7 +17,6 @@ class DropTopicTrackForumIdIndex extends Migration
         $this->schema->table('topic_track', function (Blueprint $table) {
             $table->dropIndex('topic_track_forum_id_index');
         });
-
     }
 
     /**
