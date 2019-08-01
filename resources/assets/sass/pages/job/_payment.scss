@@ -69,39 +69,39 @@ select[name=country_id] {
   height: 42px;
 
   &.mtransfer {
-    background-position: -275px -215px;
+    background-position: -275px -225px;
     width: 111px;
   }
 
   &.ipko {
     width: 129px;
-    background-position: 0 -183px;
+    background-position: 0 -194px;
   }
 
-  &.wbk {
-    background-position: -125px -355px;
-    width: 106px;
-    height: 35px;
+  &.santander {
+    background-position: -159px -420px;
+    width: 128px;
+    height: 42px;
   }
 
   &.pekao {
-    background-position: -130px -97px;
+    background-position: -140px -105px;
     width: 129px;
   }
 
   &.millenium {
-    background-position: -245px -269px;
+    background-position: -245px -279px;
     width: 124px;
     height: 35px;
   }
 
   &.alior {
-    background-position: -405px -251px;
+    background-position: -414px -260px;
     width: 76px;
   }
 
   &.inteligo {
-    background-position: -130px -183px;
+    background-position: -136px -190px;
     width: 129px;
     height: 42px;
   }
@@ -112,73 +112,79 @@ select[name=country_id] {
   }
 
   &.t-mobile {
-    background-position: -405px -43px;
+    background-position: -411px -53px;
     width: 86px;
   }
 
   &.deutsche-bank {
-    background-position: -275px 0;
+    background-position: -284px -8px;
     width: 129px;
   }
 
   &.eurobank {
-    background-position: -130px -54px;
+    background-position: -141px -64px;
     width: 129px;
   }
 
   &.citi {
-    background-position: -405px -86px;
+    background-position: -411px -97px;
     width: 82px;
   }
 
   &.getin {
-    background-position: -131px 0;
+    background-position: -140px 0;
     width: 143px;
   }
 
   &.bgz {
-    background-position: 0 -355px;
+    background-position: -8px -362px;
     width: 124px;
     height: 35px;
   }
 
   &.bos {
-    background-position: -132px -225px;
+    background-position: -141px -236px;
     width: 129px;
   }
 
-  &.r-przelew {
-    background-position: -275px -43px;
-    width: 128px;
-  }
-
   &.pocztowy-24 {
-    background-position: -105px -312px;
+    background-position: -114px -321px;
     width: 104px;
   }
 
   &.bps {
-    background-position: -405px 0;
+    background-position: -415px -10px;
     width: 100px;
   }
 
   &.volkswagen-bank {
-    background-position: 0 -96px;
+    background-position: -8px -105px;
     width: 129px;
   }
 
   &.noble {
-    background-position: -275px -129px;
+    background-position: -284px -139px;
     width: 120px;
   }
 
   &.plus {
-    background-position: -405px -129px;
+    background-position: -415px -138px;
     width: 96px;
     height: 35px;
   }
 
   &.ing {
-    background-position: -248px -171px;
+    background-position: -258px -180px;
+  }
+
+  &.nest {
+    background-position: -281px -420px;
+    width: 96px;
+  }
+
+  &.blik {
+    width: 121px;
+    height: 56px;
+    background-position: -18px -427px;
   }
 }
