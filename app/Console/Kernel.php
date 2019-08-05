@@ -59,7 +59,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('coyote:counter')->everyFiveMinutes();
+        $schedule->command('coyote:counter')->everyFiveMinutes()->withoutOverlapping();
         $schedule->command('job:purge')->hourly();
         $schedule->command('job:boost')->dailyAt('07:00:00');
         $schedule->command('session:purge')->everyMinute()->withoutOverlapping();
