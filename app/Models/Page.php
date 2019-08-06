@@ -7,6 +7,7 @@ use Coyote\Page\Visit;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * @property int $id
  * @property int $content_id
  * @property string $content_type
  * @property string $path
