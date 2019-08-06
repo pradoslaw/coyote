@@ -90,7 +90,7 @@ class PurgeViewsCommand extends Command
      */
     private function commit($page, $hits)
     {
-        $keys = array_map('serialize',  $hits->toArray());
+        $keys = array_map('serialize', $hits->toArray());
         // remove keys before processing any further. any other process will not process those hits simultaneously
         $this->redis->srem('hits', $keys);
 
