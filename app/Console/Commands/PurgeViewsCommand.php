@@ -61,9 +61,7 @@ class PurgeViewsCommand extends Command
     }
 
     /**
-     * Execute the command.
-     *
-     * @return void
+     * @throws \Exception
      */
     public function handle()
     {
@@ -77,33 +75,56 @@ class PurgeViewsCommand extends Command
         // hits as groupped collection
         $pages = collect(array_map('unserialize', $keys))->groupBy('path');
 
-        $this->db->transaction(function () use ($pages, $keys) {
-            foreach ($pages as $path => $hits) {
-                /** @var \Coyote\Page $page */
-                $page = $this->page->findByPath('/' . $path);
+        foreach ($pages as $path => $hits) {
+            /** @var \Coyote\Page $page */
+            $page = $this->page->findByPath('/' . $path);
 
-                if (!empty($page->id)) {
-                    $content = $page->content()->getResults();
-
-                    if ($content) {
-                        $content->timestamps = false;
-                        $content->increment('views', count($hits));
-
-                        $this->registerVisit($page, $hits);
-                        $this->registerTags($page, $hits);
-
-                        $this->info('Added ' . count($hits) . ' views to: ' . $path);
-                    }
-                }
-            }
-
-            $this->redis->srem('hits', $keys);
-        });
+            $this->commit($page, $hits);
+        }
     }
 
     /**
      * @param \Coyote\Page $page
-     * @param array[] $hits
+     * @param \Illuminate\Support\Collection $hits
+     * @throws \Exception
+     */
+    private function commit($page, $hits)
+    {
+        $keys = array_map('serialize',  $hits->toArray());
+        // remove keys before processing any further. any other process will not process those hits simultaneously
+        $this->redis->srem('hits', $keys);
+
+        if (empty($page->id)) {
+            return;
+        }
+
+        $content = $page->content()->getResults();
+
+        if (!$content) {
+            return;
+        }
+
+        try {
+            $this->db->beginTransaction();
+
+            $content->timestamps = false;
+            $content->increment('views', count($hits));
+
+            $this->registerVisit($page, $hits);
+            $this->registerTags($page, $hits);
+
+            $this->db->commit();
+        } catch (\Exception $e) {
+            $this->db->rollBack();
+
+            // add those keys to the set again if transaction fails
+            $this->redis->sadd('hits', $keys);
+        }
+    }
+
+    /**
+     * @param \Coyote\Page $page
+     * @param \Illuminate\Support\Collection $hits
      */
     private function registerVisit($page, $hits)
     {
@@ -126,7 +147,7 @@ class PurgeViewsCommand extends Command
 
     /**
      * @param \Coyote\Page $page
-     * @param array[] $hits
+     * @param \Illuminate\Support\Collection $hits
      */
     private function registerTags($page, $hits)
     {
