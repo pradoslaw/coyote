@@ -63,9 +63,7 @@ class PurgeSessionsCommand extends Command
     }
 
     /**
-     * Execute the console command.
-     *
-     * @return void
+     * @throws \Throwable
      */
     public function handle()
     {
@@ -73,24 +71,24 @@ class PurgeSessionsCommand extends Command
         // convert minutes to seconds
         $lifetime = config('session.lifetime') * 60;
 
-        $this->db->transaction(function () use ($result, $lifetime) {
-            $values = [];
+        $values = [];
 
-            foreach ($result as $session) {
-                if ($session->expired($lifetime)) {
-                    $this->signout($session);
-                } else {
-                    $this->extend($session);
+        foreach ($result as $session) {
+            if ($session->expired($lifetime)) {
+                $this->signout($session);
+            } else {
+                $this->extend($session);
 
-                    $path = str_limit($session->path, 999, '');
+                $path = str_limit($session->path, 999, '');
 
-                    $values[] = array_merge(
-                        array_only($session->toArray(), ['id', 'user_id', 'robot']),
-                        ['path' => mb_strtolower($path)]
-                    );
-                }
+                $values[] = array_merge(
+                    array_only($session->toArray(), ['id', 'user_id', 'robot']),
+                    ['path' => mb_strtolower($path)]
+                );
             }
+        }
 
+        $this->db->transaction(function () use ($lifetime, $values) {
             $this->db->unprepared('DELETE FROM sessions');
 
             // make a copy of sessions in postgres for faster calculations (number of visitors for give page etc.)
