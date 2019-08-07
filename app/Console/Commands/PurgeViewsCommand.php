@@ -95,7 +95,7 @@ class PurgeViewsCommand extends Command
         $this->redis->srem('hits', $keys);
 
         if (empty($page->id)) {
-            return;
+            return; // hits to non-existing page will be lost
         }
 
         $content = $page->content()->getResults();
@@ -114,6 +114,8 @@ class PurgeViewsCommand extends Command
             $this->registerTags($page, $hits);
 
             $this->db->commit();
+
+            $this->info('Added ' . count($hits) . ' views to: ' . $page->path);
         } catch (\Exception $e) {
             $this->db->rollBack();
 
