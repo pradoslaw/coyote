@@ -110,8 +110,9 @@ class PurgeViewsCommand extends Command
             $content->timestamps = false;
             $content->increment('views', count($hits));
 
-            $this->registerVisit($page, $hits);
-            $this->registerTags($page, $hits);
+            //tymczasowo wylaczone
+//            $this->registerVisit($page, $hits);
+//            $this->registerTags($page, $hits);
 
             $this->db->commit();
 
