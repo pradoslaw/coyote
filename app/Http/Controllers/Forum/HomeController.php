@@ -287,6 +287,8 @@ class HomeController extends BaseController
      */
     private function render($topics)
     {
+        $flags = [];
+
         // we need to get an information about flagged topics. that's how moderators can notice
         // that's something's wrong with posts.
         if ($topics->total() && $this->getGateFactory()->allows('forum-delete')) {
