@@ -29,7 +29,7 @@ class SearchController extends BaseController
         $forumList = (new TreeBuilder())->listById($this->forum->list()); // forum id as key
 
         $users = [];
-        $response = $highlights = null;
+        $response = $highlights = $pagination = null;
 
         if ($request->filled('q')) {
             $forumsId = array_keys($forumList);

@@ -49,7 +49,7 @@ class SubmitController extends BaseController
             $form->get('parent_id')->setValue($parent->id);
         }
 
-        return $this->view('wiki.submit')->with(compact('form', 'wiki'));
+        return $this->view('wiki.submit')->with(compact('form'));
     }
 
     /**
