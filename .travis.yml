@@ -17,8 +17,8 @@ install:
   - docker-compose build
   - docker-compose up -d
   - docker-compose ps
-  - docker-compose exec php make install
   - docker logs coyote_db_1
+  - docker-compose exec php make install
 
 before_script:
   - docker-compose exec php php vendor/bin/codecept build
