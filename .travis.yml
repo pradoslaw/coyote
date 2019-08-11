@@ -15,7 +15,6 @@ before_install:
 install:
   - sudo service postgresql stop
   - rm -rf /var/lib/postgresql/data
-  - ls /var/lib/postgresql
   - docker-compose build
   - docker-compose up -d
   - docker-compose ps
