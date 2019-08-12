@@ -14,6 +14,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property int $id
  * @property string $slug
  * @property Carbon $boost_at
+ * @property Carbon $created_at
  * @property Job\Location[] $locations
  * @property Tag[] $tags
  * @property \Coyote\Firm $firm
@@ -41,7 +42,8 @@ class JobResource extends JsonResource
         $only = $this->resource->only('id', 'title', 'firm', 'is_remote', 'remote_range', 'score', 'subscribe_on', 'comments_count', 'is_highlight', 'is_on_top', 'is_gross');
 
         return array_merge($only, [
-            'url'         => UrlBuilder::job($this->resource),
+            'url'         => UrlBuilder::job($this->resource, true),
+            'created_at'  => format_date($this->created_at),
             'boost_at'    => format_date($this->boost_at),
             'is_new'      => carbon($this->boost_at)->diffInDays(Carbon::now()) <= 2,
             'salary_from' => $this->money($this->salary_from),
