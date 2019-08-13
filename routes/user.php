@@ -60,6 +60,9 @@ $this->group(['namespace' => 'User', 'prefix' => 'User', 'middleware' => 'auth',
     $this->get('Forum', ['uses' => 'ForumController@index', 'as' => 'forum']);
     $this->post('Forum', 'ForumController@save');
     $this->post('Forum/Restore', ['uses' => 'ForumController@restore', 'as' => 'forum.restore']);
+
+    $this->get('DeleteAccount', ['uses' => 'DeleteAccountController@index', 'as' => 'delete']);
+    $this->post('DeleteAccount', ['uses' => 'DeleteAccountController@delete']);
 });
 
 // wizytowka usera. komponent ktory pojawia sie po naprowadzenia kursora nad login usera

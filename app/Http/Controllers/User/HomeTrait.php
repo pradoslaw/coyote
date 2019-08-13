@@ -50,6 +50,12 @@ trait HomeTrait
                 'route' => 'user.accepts',
                 'icon' => 'fa-check',
                 'label' => 'Zaakceptowane odpowiedzi'
+            ],
+            [
+                'id' => 'btn-remove',
+                'route' => 'user.delete',
+                'icon' => 'fa-remove',
+                'label' => 'Usuń konto'
             ]
         ];
 
