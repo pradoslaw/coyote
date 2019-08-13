@@ -53,20 +53,13 @@ class ReputationRepository extends Repository implements ReputationRepositoryInt
         $dt = new Carbon('-1 year');
         $interval = $dt->diffInMonths(new Carbon());
 
-        $sub = $this
-            ->model
-            ->select(['created_at', 'value'])
-            ->whereRaw("user_id = $userId")
-            ->whereRaw("created_at >= '$dt'")
-            ->orderBy('id')
-            ->toSql();
-
         $sql = $this
             ->model
             ->selectRaw(
                 'extract(MONTH FROM created_at) AS month, extract(YEAR FROM created_at) AS year, SUM(value) AS value'
             )
-            ->from($this->raw("($sub) AS t"))
+            ->whereRaw("user_id = $userId")
+            ->whereRaw("created_at >= '$dt'")
             ->groupBy('year')
             ->groupBy('month')
             ->orderBy('year')
