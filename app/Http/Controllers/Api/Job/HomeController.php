@@ -6,6 +6,7 @@ use Coyote\Http\Resources\JobResource;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Repositories\Criteria\EagerLoadingWithCount;
+use Coyote\Repositories\Criteria\Job\OnlyPublished;
 use Coyote\Repositories\Criteria\Job\PriorDeadline;
 use Coyote\Repositories\Criteria\Sort;
 use Illuminate\Routing\Controller;
@@ -23,6 +24,7 @@ class HomeController extends Controller
         $job->pushCriteria($eagerCriteria);
         $job->pushCriteria(new EagerLoadingWithCount(['comments']));
         $job->pushCriteria(new PriorDeadline());
+        $job->pushCriteria(new OnlyPublished());
         $job->pushCriteria(new Sort('jobs.id', Sort::DESC));
 
         $job->applyCriteria();

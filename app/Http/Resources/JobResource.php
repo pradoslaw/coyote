@@ -43,7 +43,7 @@ class JobResource extends JsonResource
 
         return array_merge($only, [
             'url'         => UrlBuilder::job($this->resource, true),
-            'created_at'  => format_date($this->created_at),
+            'created_at'  => format_date($this->created_at, false),
             'boost_at'    => format_date($this->boost_at),
             'is_new'      => carbon($this->boost_at)->diffInDays(Carbon::now()) <= 2,
             'salary_from' => $this->money($this->salary_from),
@@ -67,8 +67,8 @@ class JobResource extends JsonResource
      * @param float|null $number
      * @return string|null
      */
-    private function money(?float $number): ?string
+    private function money(?float $number): ?float
     {
-        return $number ? number_format($this->resource->monthlySalary($number), 0, '', ' ') : null;
+        return $number ? $this->resource->monthlySalary($number) : null;
     }
 }

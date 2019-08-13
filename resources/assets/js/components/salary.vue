@@ -2,19 +2,19 @@
     <p class="salary" :class="options.class">
         <strong class="text-primary">
             <template v-if="salary_from === salary_to">
-                {{ salary_from }}
+                {{ toLocale(salary_from) }}
             </template>
 
             <template v-else-if="salary_from && salary_to">
-                {{ salary_from }} - {{ salary_to }}
+                {{ toLocale(salary_from) }} - {{ toLocale(salary_to) }}
             </template>
 
             <template v-else-if="salary_from">
-                od {{ salary_from }}
+                od {{ toLocale(salary_from) }}
             </template>
 
             <template v-else-if="salary_to">
-                do {{ salary_to }}
+                do {{ toLocale(salary_to) }}
             </template>
 
             <template v-if="salary_from || salary_to">
@@ -31,10 +31,10 @@
     export default {
         props: {
             salary_from: {
-                type: String
+                type: Number
             },
             salary_to: {
-                type: String
+                type: Number
             },
             currency_symbol: {
                 type: String
@@ -50,6 +50,17 @@
                 default: () => {
                     return {};
                 }
+            }
+        },
+        methods: {
+            toLocale(number) {
+                console.log(number);
+                if (number !== null) {
+                    // ugly fix: polish locale use space separator but not with values lower than 10000 (don't know why)
+                    return number.toLocaleString('en-US').replace(',', ' ');
+                }
+
+                return  number;
             }
         }
     }
