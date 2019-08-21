@@ -61,11 +61,10 @@ class JobResource extends JsonResource
                 'enabled'       => $this->is_remote,
                 'url'           => route('job.remote')
             ],
-
+            'text'        => $this->description,
             'firm'        => $this->firm ? new FirmResource($this->firm) : (object) ['logo' => '', 'name' => ''],
 
             $this->mergeWhen($this->resource->relationLoaded('features'), [
-                'text'          => $this->description,
                 'recruitment'   => $this->recruitment,
                 'features'      => FeatureResource::collection($this->features)
             ])
