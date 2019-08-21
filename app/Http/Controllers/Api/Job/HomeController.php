@@ -19,9 +19,7 @@ class HomeController extends Controller
      */
     public function index(JobRepository $job)
     {
-        $eagerCriteria = new EagerLoading(['firm:id,name,slug,logo', 'locations', 'tags', 'currency']);
-
-        $job->pushCriteria($eagerCriteria);
+        $job->pushCriteria(new EagerLoading(['firm:id,name,slug,logo', 'locations', 'tags', 'currency']));
         $job->pushCriteria(new EagerLoadingWithCount(['comments']));
         $job->pushCriteria(new PriorDeadline());
         $job->pushCriteria(new OnlyPublished());
@@ -30,7 +28,7 @@ class HomeController extends Controller
         $job->applyCriteria();
 
         $data = $job->paginate();
-
+//dd($data);
         return JobResource::collection($data);
     }
 }

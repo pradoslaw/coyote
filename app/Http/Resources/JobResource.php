@@ -26,6 +26,9 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property int $score
  * @property bool $is_remote
  * @property int $remote_range
+ * @property string $description
+ * @property string $recruitment
+ * @property \Coyote\Job\Feature[] $features
  */
 class JobResource extends JsonResource
 {
@@ -59,7 +62,13 @@ class JobResource extends JsonResource
                 'url'           => route('job.remote')
             ],
 
-            'firm'        => $this->firm ? new FirmResource($this->firm) : (object) ['logo' => '', 'name' => '']
+            'firm'        => $this->firm ? new FirmResource($this->firm) : (object) ['logo' => '', 'name' => ''],
+
+            $this->mergeWhen($this->resource->relationLoaded('features'), [
+                'text'          => $this->description,
+                'recruitment'   => $this->recruitment,
+                'features'      => FeatureResource::collection($this->features)
+            ])
         ]);
     }
 
