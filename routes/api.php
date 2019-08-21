@@ -12,3 +12,8 @@ $this->prefix('v1')->group(function () {
     $this->get('user', ['uses' => 'Api\UserController@index', 'middleware' => 'auth:api']);
 });
 
+$this->get('{any}', function ($any = null) {
+    return redirect($any, 301);
+})
+->where('any', '.*');
+
