@@ -28,7 +28,7 @@ class HomeController extends Controller
         $job->applyCriteria();
 
         $data = $job->paginate();
-//dd($data);
+
         return JobResource::collection($data);
     }
 }
