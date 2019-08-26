@@ -56,7 +56,8 @@ class CreateIndexCommand extends Command
                                         "type" => "word_delimiter",
                                         "type_table" => [
                                             "# => ALPHANUM",
-                                            "+ => ALPHANUM"
+                                            "+ => ALPHANUM",
+                                            "_ => ALPHANUM"
                                         ]
                                     ]
                                 ],
