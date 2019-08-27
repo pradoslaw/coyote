@@ -57,12 +57,4 @@ class Page extends Model
     {
         return $this->hasMany(Stat::class);
     }
-
-    /**
-     * @param string $path
-     */
-    public function setPathAttribute($path)
-    {
-        $this->attributes['path'] = urldecode($path);
-    }
 }

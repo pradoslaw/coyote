@@ -105,7 +105,7 @@ class Sitemap
         $this->sites[] = [
             'loc' => $url,
             'lastmod' => $dateTime,
-            'priority' => $priority
+            'priority' => number_format($priority, 1)
         ];
 
         return $this;
