@@ -97,7 +97,6 @@ class Sitemap
     /**
      * @param string $url
      * @param string $dateTime
-     * @param float $priority
      * @return $this
      */
     public function add(string $url, string $dateTime)
