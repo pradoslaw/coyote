@@ -245,7 +245,7 @@ return [
         Jenssegers\Agent\AgentServiceProvider::class,
         // Pakiet Laravel Grid do budowania tabel oraz filtrowania i sortowania
         Boduch\Grid\GridServiceProvider::class,
-        // sentry, raportowanie bugow
+        // kursy wymiany walut
         Swap\Laravel\SwapServiceProvider::class,
         // Wyslanie SMS po wyslanej aplikacji na dana oferte pracy
         NotificationChannels\Twilio\TwilioProvider::class
