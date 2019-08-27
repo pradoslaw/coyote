@@ -100,12 +100,11 @@ class Sitemap
      * @param float $priority
      * @return $this
      */
-    public function add($url, $dateTime, $priority)
+    public function add(string $url, string $dateTime)
     {
         $this->sites[] = [
             'loc' => $url,
-            'lastmod' => $dateTime,
-            'priority' => number_format($priority, 1)
+            'lastmod' => $dateTime
         ];
 
         return $this;
