@@ -8,12 +8,12 @@ use Illuminate\Routing\Controller;
 class PermanentRedirectController extends Controller
 {
     /**
-     * @param $any
+     * @param string $path
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function redirect($any, Request $request)
+    public function redirect($path, Request $request)
     {
-        return redirect($any . ($request->getQueryString() ? ('?' . $request->getQueryString()) : ''), 301);
+        return redirect($path . ($request->getQueryString() ? ('?' . $request->getQueryString()) : ''), 301);
     }
 }
