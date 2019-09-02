@@ -64,7 +64,7 @@
                                             id="map"
                                             classname="form-control"
                                             placeholder="Please type your address"
-                                            v-on:placechanged="getAddressData"
+{#                                            v-on:placechanged="getAddressData"#}
                                         >
                                         </vue-google-place>
 
@@ -275,7 +275,7 @@
 
     {{ widgets.vue() }}
     <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
-    <script src="//maps.googleapis.com/maps/api/js?key={{ config('services.google-maps.key') }}&sensor=false"></script>
+    <script src="//maps.googleapis.com/maps/api/js?key={{ config('services.google-maps.key') }}&sensor=false&libraries=places"></script>
     <script src="{{ asset('js/jquery-ui.js') }}"></script>
     <script src="{{ cdn('js/job-submit.js') }}"></script>
 
