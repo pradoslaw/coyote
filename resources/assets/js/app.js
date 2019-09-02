@@ -27,6 +27,8 @@ import Config from './libs/config';
 import Router from './libs/router';
 import Prism from 'prismjs';
 
+Prism.highlightAll();
+
 window.ws = RealtimeFactory();
 
 import './components/notifications.js';
