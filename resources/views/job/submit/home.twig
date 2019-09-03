@@ -58,17 +58,9 @@
 
                                         <input type="hidden" name="longitude[]" :value="location.longitude">
                                         <input type="hidden" name="latitude[]" :value="location.latitude">
+                                        <input type="hidden" name="label[]" :value="location.label">
 
-                                        <vue-google-place
-                                            ref="address"
-                                            id="map"
-                                            classname="form-control"
-                                            placeholder="Please type your address"
-{#                                            v-on:placechanged="getAddressData"#}
-                                        >
-                                        </vue-google-place>
-
-{#                                        <input ref="autocomplete" type="text" class="form-control" name="city[]" :value="location.city" placeholder="Np. Warszawa, al. Jerozolimskie 3">#}
+                                        <vue-google-place @change="getAddressData(location, ...arguments)"></vue-google-place>
                                     </div>
                                 </div>
                             </div>

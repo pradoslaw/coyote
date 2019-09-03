@@ -281,9 +281,9 @@ new Vue({
             this.locations.splice(this.locations.indexOf(location), 1);
         },
 
-        getAddressData: function (addressData, placeResultData, id) {
-            console.log(addressData);
-            // this.address = addressData;
+        getAddressData (location, data) {
+            location = data;
+            console.log(location);
         }
     },
     computed: {
