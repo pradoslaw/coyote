@@ -339,7 +339,8 @@ class JobForm extends Form
                 'rules' => [
                     'required',
                     'int',
-                    Rule::exists('plans', 'id')->where('is_active', 1)
+                    Rule::exists('plans', 'id')->where('is_active', 1),
+
                 ],
                 'attr' => [
                     'id' => 'plan_id',

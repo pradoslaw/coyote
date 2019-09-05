@@ -7,8 +7,15 @@ import VuePricing from '../../components/pricing.vue';
 import VueTagsDropdown from '../../components/tags-dropdown.vue';
 import VueTagsSkill from '../../components/tag-skill.vue';
 import VueGooglePlace from '../../components/google-place.vue';
+import VueText from '../../components/forms/text.vue';
+import VueSelect from '../../components/forms/select.vue';
+import VueCheckbox from '../../components/forms/checkbox.vue';
+import VueTextarea from '../../components/forms/textarea.vue';
+import VueRadio from '../../components/forms/radio.vue';
 import 'chosen-js';
-import 'intl-tel-input';
+import axios from "axios";
+import store from "../../store";
+import Config from "../../libs/config";
 
 /**
  * Cast data from bool to int to properly display radio buttons (0 and 1 instade of true and false).
@@ -37,6 +44,11 @@ Vue.component('vue-pricing', VuePricing);
 Vue.component('vue-tags-dropdown', VueTagsDropdown);
 Vue.component('vue-tag-skill', VueTagsSkill);
 Vue.component('vue-google-place', VueGooglePlace);
+Vue.component('vue-text', VueText);
+Vue.component('vue-select', VueSelect);
+Vue.component('vue-checkbox', VueCheckbox);
+Vue.component('vue-textarea', VueTextarea);
+Vue.component('vue-radio', VueRadio);
 
 new Vue({
     el: '.submit-form',
@@ -81,8 +93,22 @@ new Vue({
         $('#industries').chosen({
             placeholder_text_multiple: 'Wybierz z listy'
         });
+
+        axios.defaults.headers.common['X-CSRF-TOKEN'] = Config.csrfToken();
     },
     methods: {
+        submitForm () {
+            axios.post(this.$refs.submitForm.action, new FormData(this.$refs.submitForm))
+                .then(response => {
+
+                })
+                .catch(error => {
+                    let errors = error.response.data.errors;
+
+
+                });
+        },
+
         /**
          * Add tag after clicking on suggestion tag.
          *
@@ -281,9 +307,8 @@ new Vue({
             this.locations.splice(this.locations.indexOf(location), 1);
         },
 
-        getAddressData (location, data) {
+        setAddress (location, data) {
             location = data;
-            console.log(location);
         }
     },
     computed: {
@@ -340,28 +365,5 @@ $(() => {
      */
     $('.btn-save').on('click', () => {
         $('input[name="done"]').val(1);
-    });
-
-    require.ensure([], require => {
-        require('intl-tel-input/build/js/utils');
-
-        $('input[type="tel"]').intlTelInput({
-            preferredCountries: ['pl'],
-            separateDialCode: true,
-            nationalMode: true,
-            initialCountry: 'auto',
-            geoIpLookup: function (callback) {
-                $.getJSON('//geo-ip.io/1.0/ip/?callback=?', {}, function (json) {
-                    callback(json.country_code.toLowerCase());
-                });
-            },
-        });
-
-        $('.submit-form').submit(function () {
-            let input = $('input[type="tel"]');
-            let number = input.intlTelInput('getNumber');
-
-            input.val(number.length > 3 ? number : null);
-        });
     });
 });

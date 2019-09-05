@@ -2,11 +2,13 @@
 
 namespace Coyote\Http\Controllers\Job;
 
+use Coyote\Currency;
 use Coyote\Events\JobWasSaved;
 use Coyote\Firm;
 use Coyote\Firm\Benefit;
 use Coyote\Http\Forms\Job\FirmForm;
 use Coyote\Http\Forms\Job\JobForm;
+use Coyote\Http\Requests\Job\JobRequest;
 use Coyote\Http\Resources\Firm as FirmResource;
 use Coyote\Job;
 use Coyote\Http\Controllers\Controller;
@@ -73,7 +75,7 @@ class SubmitController extends Controller
             $job = $draft->get(Job::class);
         } else {
             $job = $this->job->findOrNew($id);
-            abort_if($job->exists && $job->is_expired, 404);
+//            abort_if($job->exists && $job->is_expired, 404);
 
             $job = $loader->init($job);
         }
@@ -81,22 +83,27 @@ class SubmitController extends Controller
         $this->authorize('update', $job);
         $this->authorize('update', $job->firm);
 
-        $form = $this->createForm(JobForm::class, $job);
+//        $job->load(['tags', 'features']);
+//        dd($job->toJson());
         $draft->put(Job::class, $job);
 
         $this->breadcrumb($job);
 
         return $this->view('job.submit.home', [
             'popular_tags'      => $this->job->getPopularTags(),
-            'form'              => $form,
-            'form_errors'       => $form->errors() ? $form->errors()->toJson() : '[]',
-            'job'               => $form->toJson(),
+            'job'               => $job->toJson(),
             // firm information (in order to show firm nam on the button)
             'firm'              => $job->firm,
             // is plan is still going on?
             'is_plan_ongoing'   => $job->is_publish,
             'plans'             => $this->plan->active()->toJson(),
-            'locations'         => $job->locations()->count() ? $job->locations->toArray() : [(new Job\Location())->toArray()]
+            'locations'         => $job->locations()->count() ? $job->locations->toArray() : [(new Job\Location())->toArray()],
+            'seniority'         => Job::getSeniorityList(),
+            'remote_range'      => Job::getRemoteRangeList(),
+            'currencies'        => Currency::getCurrenciesList(),
+            'taxes'             => Job::getTaxList(),
+            'rates'             => Job::getRatesList(),
+            'employments'       => Job::getEmploymentList()
         ]);
     }
 
@@ -105,20 +112,17 @@ class SubmitController extends Controller
      * @param Draft $draft
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postIndex(Request $request, Draft $draft)
+    public function postIndex(JobRequest $request, Draft $draft)
     {
         /** @var \Coyote\Job $job */
         $job = clone $draft->get(Job::class);
 
-        $form = $this->createForm(JobForm::class, $job);
-        $form->validate();
-
         // only fillable columns! we don't want to set fields like "city" or "tags" because they don't really exists in db.
-        $job->fill($form->all());
+        $job->fill($request->all());
 
         $draft->put(Job::class, $job);
 
-        return $this->next($request, $draft, redirect()->route('job.submit.firm'));
+        return $this->next($request, route('job.submit.firm'));
     }
 
     /**
@@ -315,14 +319,13 @@ class SubmitController extends Controller
 
     /**
      * @param Request $request
-     * @param Draft $draft
      * @param \Illuminate\Http\RedirectResponse $next
      * @return \Illuminate\Http\RedirectResponse
      */
-    private function next(Request $request, Draft $draft, $next)
+    private function next(Request $request, $next)
     {
         if ($request->get('done')) {
-            return $this->save($draft);
+            return route('job.submit.save');
         }
 
         return $next;

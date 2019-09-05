@@ -10,7 +10,7 @@
             autocomplete.addListener('place_changed', () => {
                 let place = autocomplete.getPlace();
 
-                this.$emit('change', {latitude: place.geometry.location.lat, longitude: place.geometry.location.lng, label: place.formatted_address});
+                this.$emit('change', {latitude: place.geometry.location.lat(), longitude: place.geometry.location.lng(), city: place.formatted_address});
             });
         }
     }

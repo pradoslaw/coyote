@@ -126,7 +126,12 @@ class Job extends Model
     protected $attributes = [
         'enable_apply'      => true,
         'is_remote'         => false,
-        'title'             => ''
+        'title'             => '',
+        'remote_range'      => 100,
+        'currency_id'       => Currency::PLN,
+        'is_gross'          => self::NET,
+        'rate_id'           => self::MONTH,
+        'employment_id'     => 1
     ];
 
     /**
@@ -137,7 +142,7 @@ class Job extends Model
     protected $casts = [
         'is_remote'         => 'boolean',
         'is_boost'          => 'boolean',
-        'is_gross'          => 'boolean',
+        'is_gross'          => 'int',
         'is_publish'        => 'boolean',
         'is_ads'            => 'boolean',
         'is_highlight'      => 'boolean',
