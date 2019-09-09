@@ -4,6 +4,7 @@ namespace Coyote\Http\Requests\Job;
 
 use Coyote\Job;
 use Coyote\Services\Job\Draft;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -31,9 +32,8 @@ class JobRequest extends FormRequest
         $job = $draft->get(Job::class);
 
         return [
-            'text' => 'min:2|max:60',
+            'title' => 'min:2|max:60',
             'seniority_id' => 'nullable|integer',
-//            'country_id' => 'required|integer',
             'is_remote' => 'bool',
             'remote_range' => 'integer|min:10|max:100',
             'salary_from' => 'nullable|integer',
@@ -42,8 +42,8 @@ class JobRequest extends FormRequest
             'currency_id' => 'required|integer',
             'rate_id' => 'required|integer',
             'employment_id' => 'required|integer',
-            'recruitment' => 'required_if:enable_apply,0|nullable|string',
-            'email' => 'required_if:enable_apply,1|email',
+            'recruitment' => 'required_if:enable_apply,false|nullable|string',
+            'email' => 'required_if:enable_apply,true|email',
             'plan_id' => [
                 'bail',
                 Rule::requiredIf(function () use ($job) {
@@ -52,7 +52,21 @@ class JobRequest extends FormRequest
 
                 'int',
                 Rule::exists('plans', 'id')->where('is_active', 1),
-            ]
+            ],
+            'features.*.id' => 'required|int',
+            'features.*.name' => 'string|max:100',
+            'features.*.is_checked' => 'bool',
+            'tags.*.name' => 'max:50|tag',
+            'tags.*.priority' => 'required|int|min:0|max:2'
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        if ($validator->getMessageBag()->has('tags.*')) {
+            $validator->getMessageBag()->add('tags', $validator->getMessageBag()->first('tags.*'));
+        }
+
+        parent::failedValidation($validator);
     }
 }

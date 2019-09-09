@@ -2,6 +2,7 @@ import '../../plugins/uploader';
 import initTinymce from '../../libs/tinymce';
 import Dialog from '../../libs/dialog';
 import Map from '../../libs/map';
+import Vue from 'vue';
 import VueThumbnail from '../../components/thumbnail.vue';
 import VuePricing from '../../components/pricing.vue';
 import VueTagsDropdown from '../../components/tags-dropdown.vue';
@@ -12,32 +13,10 @@ import VueSelect from '../../components/forms/select.vue';
 import VueCheckbox from '../../components/forms/checkbox.vue';
 import VueTextarea from '../../components/forms/textarea.vue';
 import VueRadio from '../../components/forms/radio.vue';
+import VueError from '../../components/forms/error.vue';
 import 'chosen-js';
 import axios from "axios";
-import store from "../../store";
 import Config from "../../libs/config";
-
-/**
- * Cast data from bool to int to properly display radio buttons (0 and 1 instade of true and false).
- *
- * @param data
- * @return {*}
- */
-function toInt(data) {
-    for (let item in data) {
-        if (data.hasOwnProperty(item)) {
-            if (typeof(data[item]) === 'boolean') {
-                data[item] = +data[item];
-            }
-
-            if (typeof(data[item]) === 'object') {
-                data[item] = toInt(data[item]);
-            }
-        }
-    }
-
-    return data;
-}
 
 Vue.component('vue-thumbnail', VueThumbnail);
 Vue.component('vue-pricing', VuePricing);
@@ -49,11 +28,12 @@ Vue.component('vue-select', VueSelect);
 Vue.component('vue-checkbox', VueCheckbox);
 Vue.component('vue-textarea', VueTextarea);
 Vue.component('vue-radio', VueRadio);
+Vue.component('vue-error', VueError);
 
 new Vue({
     el: '.submit-form',
     delimiters: ['${', '}'],
-    data: toInt(window.data),
+    data: window.data,
     mounted: function () {
         initTinymce();
 
@@ -100,12 +80,10 @@ new Vue({
         submitForm () {
             axios.post(this.$refs.submitForm.action, new FormData(this.$refs.submitForm))
                 .then(response => {
-
+                    console.log(response);
                 })
                 .catch(error => {
-                    let errors = error.response.data.errors;
-
-
+                    this.errors = error.response.data.errors;
                 });
         },
 

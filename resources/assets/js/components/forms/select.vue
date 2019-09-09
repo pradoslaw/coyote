@@ -1,6 +1,6 @@
 <template>
     <select :name="name" v-model="valueLocal" class="form-control">
-        <option v-if="placeholder">{{ placeholder }}</option>
+        <option v-if="placeholder" :value="null">{{ placeholder }}</option>
 
         <option v-for="(value, key) in options" :value="key">
             {{ value }}
@@ -30,7 +30,7 @@
         computed: {
             valueLocal: {
                 get: function () {
-                    return this.value ? this.value : this.placeholder;
+                    return this.value !== undefined ? this.value : null;
                 },
                 set: function (value) {
                     this.$emit('update:value', value);

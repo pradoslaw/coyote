@@ -101,7 +101,7 @@ class SubmitController extends Controller
             'seniority'         => Job::getSeniorityList(),
             'remote_range'      => Job::getRemoteRangeList(),
             'currencies'        => Currency::getCurrenciesList(),
-            'taxes'             => Job::getTaxList(),
+            'taxes'             => (object) Job::getTaxList(),
             'rates'             => Job::getRatesList(),
             'employments'       => Job::getEmploymentList()
         ]);

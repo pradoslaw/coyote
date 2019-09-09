@@ -1,5 +1,5 @@
 <template>
-    <input :name="name" type="checkbox" v-model="valueLocal" :value="checkedValue">
+    <input :name="name" type="checkbox" v-model="valueLocal" :true-value="checkedValue">
 </template>
 
 <script>
