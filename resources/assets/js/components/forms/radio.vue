@@ -13,7 +13,7 @@
                 type: [String, Number, Boolean]
             },
             checkedValue: {
-                type: [String, Number],
+                type: [String, Number, Boolean],
                 require: false
             }
         },

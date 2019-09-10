@@ -19,12 +19,12 @@
                 </p>
 
                 <form
-                @submit.prevent="submitForm"
-                ref="submitForm"
-                method="post"
-                action="{{ route('job.submit') }}"
-                v-cloak
-            >
+                    @submit.prevent="submitForm"
+                    ref="submitForm"
+                    method="post"
+                    action="{{ route('job.submit') }}"
+                    v-cloak
+                >
                 {% if not is_plan_ongoing %}
                     <input type="hidden" name="plan_id" v-model="job.plan_id">
 

@@ -14,6 +14,7 @@ use Coyote\Job;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Notifications\Job\CreatedNotification;
 use Coyote\Repositories\Contracts\FirmRepositoryInterface as FirmRepository;
+use Coyote\Repositories\Contracts\IndustryRepositoryInterface;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Repositories\Contracts\PlanRepositoryInterface as PlanRepository;
 use Coyote\Repositories\Criteria\EagerLoading;
@@ -83,8 +84,8 @@ class SubmitController extends Controller
         $this->authorize('update', $job);
         $this->authorize('update', $job->firm);
 
-//        $job->load(['tags', 'features']);
-//        dd($job->toJson());
+        $job->load(['tags', 'features']);
+
         $draft->put(Job::class, $job);
 
         $this->breadcrumb($job);
@@ -129,7 +130,7 @@ class SubmitController extends Controller
      * @param Draft $draft
      * @return \Illuminate\View\View
      */
-    public function getFirm(Draft $draft)
+    public function getFirm(Draft $draft, IndustryRepositoryInterface $industry)
     {
         /** @var \Coyote\Job $job */
         $job = clone $draft->get(Job::class);
@@ -141,16 +142,15 @@ class SubmitController extends Controller
 
         $this->breadcrumb($job);
 
-        $form = $this->createForm(FirmForm::class, $job->firm);
-
         return $this->view('job.submit.firm')->with([
-            'job'               => $job,
-            'firm'              => $form->toJson(),
+            'job'               => $job->toJson(),
+            'firm'              => $job->firm->toJson(),
             'firms'             => $firms,
-            'form'              => $form,
-            'form_errors'       => $form->errors() ? $form->errors()->toJson() : '[]',
-            'benefits'          => $form->get('benefits')->getChildrenValues(),
+            'benefits'          => $job->firm->benefits->pluck('name')->toArray(),
             'default_benefits'  => Benefit::getBenefitsList(), // default benefits,
+            'employees'         => Firm::getEmployeesList(),
+            'founded'           => Firm::getFoundedList(),
+            'industries'        => $industry->getAlphabeticalList()
         ]);
     }
 

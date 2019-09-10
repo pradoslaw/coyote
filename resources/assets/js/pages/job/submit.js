@@ -80,7 +80,7 @@ new Vue({
         submitForm () {
             axios.post(this.$refs.submitForm.action, new FormData(this.$refs.submitForm))
                 .then(response => {
-                    console.log(response);
+                    window.location.href = response.data;
                 })
                 .catch(error => {
                     this.errors = error.response.data.errors;
@@ -290,8 +290,17 @@ new Vue({
         }
     },
     computed: {
-        address: function () {
-            return String((this.firm.street || '') + ' ' + (this.firm.house || '') + ' ' + (this.firm.postcode || '') +  ' ' + (this.firm.city || '')).trim();
+        address: {
+            get: function () {
+                return String((this.firm.street || '') + ' ' + (this.firm.house || '') + ' ' + (this.firm.postcode || '') + ' ' + (this.firm.city || '')).trim();
+            },
+            set: function () {
+                //
+            }
+        },
+
+        gallery () {
+            return this.firm.gallery.length ? this.firm.gallery : {'file': ''};
         }
     },
     watch: {

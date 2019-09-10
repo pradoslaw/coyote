@@ -34,16 +34,16 @@
                 type: String
             }
         },
-        data: function() {
+        data () {
             return {
                 isPending: false
             }
         },
         methods: {
-            openDialog: function () {
+            openDialog () {
                 this.$refs.input.click();
             },
-            upload: function () {
+            upload () {
                 let form = new FormData();
                 form.append('photo', this.$refs.input.files[0]);
 
@@ -69,7 +69,7 @@
                     }
                 }, 'json');
             },
-            remove: function () {
+            remove () {
                 this.$emit('delete', this.file);
             }
         }

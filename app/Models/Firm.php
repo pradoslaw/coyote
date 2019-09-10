@@ -71,6 +71,14 @@ class Firm extends Model
         'is_agency' => false
     ];
 
+    protected $casts = [
+        'is_agency' => 'bool'
+    ];
+
+    protected $appends = [
+        'is_private'
+    ];
+
     /**
      * Do not change default value. It is set to FALSE on purpose.
      *

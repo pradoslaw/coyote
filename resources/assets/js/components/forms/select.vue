@@ -16,7 +16,7 @@
                 require: true
             },
             value: {
-                type: [String, Number]
+                type: [String, Number, Array]
             },
             options: {
                 type: [Object, Array],
