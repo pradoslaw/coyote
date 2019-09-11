@@ -38,6 +38,7 @@ new Vue({
         initTinymce();
 
         this.marker = null;
+        this.job.enable_apply = +this.job.enable_apply;
 
         if (typeof google !== 'undefined' && this.firm) {
             this.map = new Map();
@@ -123,23 +124,23 @@ new Vue({
             return limit - String(model !== null ? model : '').length;
         },
         toggleBenefit: function (item) {
-            let index = this.benefits.indexOf(item);
+            let index = this.firm.benefits.indexOf(item);
 
             if (index === -1) {
-                this.benefits.push(item);
+                this.firm.benefits.push(item);
             } else {
-                this.benefits.splice(index, 1);
+                this.firm.benefits.splice(index, 1);
             }
         },
         addBenefit: function (e) {
             if (e.target.value.trim()) {
-                this.benefits.push(e.target.value);
+                this.firm.benefits.push(e.target.value);
             }
 
             e.target.value = '';
         },
         removeBenefit: function (benefit) {
-            this.benefits.splice(this.benefits.indexOf(benefit), 1);
+            this.firm.benefits.splice(this.firm.benefits.indexOf(benefit), 1);
         },
         updateBenefit: function () {},
         /**
@@ -179,7 +180,7 @@ new Vue({
             let index = this.firms.findIndex(element => element.id == firmId);
 
             this.firm = this.firms[index];
-            this.firm.is_private = +false; // must be the number - not bool
+            this.firm.is_private = false;
 
             this.benefits = this.firm.benefits;
 
@@ -300,21 +301,21 @@ new Vue({
         },
 
         gallery () {
-            return this.firm.gallery.length ? this.firm.gallery : {'file': ''};
+            return this.firm.gallery && this.firm.gallery.length ? this.firm.gallery : {'file': ''};
         }
     },
     watch: {
-        'job.enable_apply': function (flag) {
-            if (Boolean(parseInt(flag))) {
-                tinymce.get('recruitment').hide();
-
-                $('#recruitment').attr('disabled', 'disabled').hide();
-            } else {
-                tinymce.get('recruitment').show();
-
-                $('#recruitment').removeAttr('disabled');
-            }
-        },
+        // 'job.enable_apply': function (flag) {
+        //     if (Boolean(parseInt(flag))) {
+        //         tinymce.get('recruitment').hide();
+        //
+        //         $('#recruitment').attr('disabled', 'disabled').hide();
+        //     } else {
+        //         tinymce.get('recruitment').show();
+        //
+        //         $('#recruitment').removeAttr('disabled');
+        //     }
+        // },
         'firm.is_private': function (flag) {
             if (!Boolean(parseInt(flag))) {
                 google.maps.event.trigger(map, 'resize');

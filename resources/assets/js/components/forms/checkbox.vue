@@ -1,5 +1,5 @@
 <template>
-    <input :name="name" type="checkbox" v-model="valueLocal" :true-value="checkedValue">
+    <input :name="name" type="checkbox" v-model="valueLocal" :value="checkedValue">
 </template>
 
 <script>
@@ -13,7 +13,6 @@
                 type: [String, Number, Boolean]
             },
             checkedValue: {
-                type: [String, Number],
                 require: false,
                 default: 1
             }

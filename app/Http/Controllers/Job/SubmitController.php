@@ -6,8 +6,7 @@ use Coyote\Currency;
 use Coyote\Events\JobWasSaved;
 use Coyote\Firm;
 use Coyote\Firm\Benefit;
-use Coyote\Http\Forms\Job\FirmForm;
-use Coyote\Http\Forms\Job\JobForm;
+use Coyote\Http\Requests\Job\FirmRequest;
 use Coyote\Http\Requests\Job\JobRequest;
 use Coyote\Http\Resources\Firm as FirmResource;
 use Coyote\Job;
@@ -144,9 +143,8 @@ class SubmitController extends Controller
 
         return $this->view('job.submit.firm')->with([
             'job'               => $job->toJson(),
-            'firm'              => $job->firm->toJson(),
+            'firm'              => json_encode((new FirmResource($job->firm))->toArray($this->request)),
             'firms'             => $firms,
-            'benefits'          => $job->firm->benefits->pluck('name')->toArray(),
             'default_benefits'  => Benefit::getBenefitsList(), // default benefits,
             'employees'         => Firm::getEmployeesList(),
             'founded'           => Firm::getFoundedList(),
@@ -159,13 +157,10 @@ class SubmitController extends Controller
      * @param Draft $draft
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function postFirm(Request $request, Draft $draft)
+    public function postFirm(FirmRequest $request, Draft $draft)
     {
         /** @var \Coyote\Job $job */
         $job = $draft->get(Job::class);
-
-        $form = $this->createForm(FirmForm::class, $job->firm);
-        $form->validate();
 
         if ($job->firm->exists) {
             // syncOriginalAttribute() is important if user changes firm
@@ -174,7 +169,7 @@ class SubmitController extends Controller
 
         $draft->put(Job::class, $job);
 
-        return $this->next($request, $draft, redirect()->route('job.submit.preview'));
+        return $this->next($request, route('job.submit.preview'));
     }
 
     /**

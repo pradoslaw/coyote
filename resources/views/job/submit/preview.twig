@@ -40,7 +40,8 @@
 
     <script>
         var data = {
-            firm: {{ firm|raw }}
+            firm: {{ firm|raw }},
+            job: {{ job|json_encode|raw }}
         };
     </script>
 

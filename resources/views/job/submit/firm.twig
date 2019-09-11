@@ -104,7 +104,7 @@
                             <div class="form-group-border form-group">
                                 <div class="form-group">
                                     <div class="radio">
-                                        <vue-radio id="is_agency_0" class="is_agency" :value.sync="firm.is_agency" :checked-value="false"></vue-radio>
+                                        <vue-radio id="is_agency_0" class="is_agency" name="is_agency" :value.sync="firm.is_agency" :checked-value="false"></vue-radio>
 
                                         <label for="is_agency_0">Bezpośredni pracodawca</label>
                                     </div>
@@ -112,7 +112,7 @@
 
                                 <div class="form-group">
                                     <div class="radio">
-                                        <vue-radio id="is_agency_1" class="is_agency" :value.sync="firm.is_agency" :checked-value="true"></vue-radio>
+                                        <vue-radio id="is_agency_1" class="is_agency" name="is_agency" :value.sync="firm.is_agency" :checked-value="true"></vue-radio>
 
                                         <label for="is_agency_1">Agencja pośrednictwa / IT outsourcing</label>
                                     </div>
@@ -232,13 +232,13 @@
 
                                 <ol class="benefits list-group">
 
-                                    <li class="list-group-item col-sm-6 clickable" v-for="benefit in default_benefits" :class="{checked: benefits.indexOf(benefit) > -1}" @click="toggleBenefit(benefit)">
-                                        <i class="fa fa-fw " :class="{'fa-check': benefits.indexOf(benefit) > -1, 'fa-remove': benefits.indexOf(benefit) === -1}"></i> ${ benefit }
+                                    <li class="list-group-item col-sm-6 clickable" v-for="benefit in default_benefits" :class="{checked: firm.benefits.indexOf(benefit) > -1}" @click="toggleBenefit(benefit)">
+                                        <i class="fa fa-fw " :class="{'fa-check': firm.benefits.indexOf(benefit) > -1, 'fa-remove': firm.benefits.indexOf(benefit) === -1}"></i> ${ benefit }
 
-                                        <input type="checkbox" name="benefits[]" :value="benefit" :checked="benefits.indexOf(benefit) > -1">
+                                        <input type="checkbox" name="benefits[]" :value="benefit" :checked="firm.benefits.indexOf(benefit) > -1">
                                     </li>
 
-                                    <li class="list-group-item col-xs-6 checked" v-for="benefit in benefits" v-if="default_benefits.indexOf(benefit) === -1">
+                                    <li class="list-group-item col-xs-6 checked" v-for="benefit in firm.benefits" v-if="default_benefits.indexOf(benefit) === -1">
                                         <i class="fa fa-fw fa-check"></i>
 
                                         <input type="text" name="benefits[]" :value="benefit" class="form-control input-sm" @keydown.enter.prevent="updateBenefit">
@@ -257,8 +257,8 @@
                             <div id="form-navigation" class="form-group">
                                 <a href="{{ route('job.submit') }}" class="btn btn-default pull-left"><i class="fa fa-angle-left"></i> Podstawowe informacje</a>
 
-                                <button type="submit" class="btn btn-primary pull-right" data-submit-state="Proszę czekać...">Podgląd <i class="fa fa-angle-right"></i></button>
-                                <button type="submit" class="btn btn-danger pull-right btn-save margin-sm-right" data-submit-state="Proszę czekać..."><i class="fa fa-save"></i> Zapisz i zakończ</button>
+                                <button type="submit" class="btn btn-primary pull-right">Podgląd <i class="fa fa-angle-right"></i></button>
+                                <button type="submit" class="btn btn-danger pull-right btn-save margin-sm-right"><i class="fa fa-save"></i> Zapisz i zakończ</button>
                             </div>
                         </div>
                     </div>
@@ -288,7 +288,7 @@
         var data = {
             job: {{ job|raw }},
             default_benefits: {{ default_benefits|json_encode|raw }},
-            benefits: {{ benefits|json_encode|raw }},
+            {#benefits: {{ benefits|json_encode|raw }},#}
             firm: {{ firm|raw }},
             firms: {{ firms|raw }},
             errors: {},

@@ -187,10 +187,10 @@
                         <div class="form-group" :class="{'has-error': isInvalid(['email'])}">
                             <div class="form-group">
                                 <div class="radio">
-                                    <vue-radio id="enable_apply_1" name="enable_apply" :value.sync="job.enable_apply" :checked-value="true"></vue-radio>
+                                    <vue-radio id="enable_apply_1" name="enable_apply" :value.sync="job.enable_apply" checked-value="1"></vue-radio>
 
                                     <label for="enable_apply_1">
-                                        Zezwól na wysyłanie CV poprzez serwis 4programmers.net
+                                        Zezwól na wysyłanie CV poprzez serwis 4programmers.net ${ job.enable_apply }
                                     </label>
                                 </div>
                             </div>
@@ -208,7 +208,7 @@
                         <div class="form-group" :class="{'has-error': isInvalid(['recruitment'])}">
                             <div class="form-group">
                                 <div class="radio">
-                                    <vue-radio id="enable_apply_0" name="enable_apply" :value.sync="job.enable_apply" :checked-value="false"></vue-radio>
+                                    <vue-radio id="enable_apply_0" name="enable_apply" :value.sync="job.enable_apply" checked-value="0"></vue-radio>
 
                                     <label for="enable_apply_0">
                                         ...lub podaj informacje w jaki sposób kandydaci mogą aplikować na to stanowisko

@@ -148,7 +148,8 @@ class Job extends Model
         'is_highlight'      => 'boolean',
         'is_on_top'         => 'boolean',
         'plan_id'           => 'int',
-        'score'             => 'int'
+        'score'             => 'int',
+        'enable_apply'      => 'boolean'
     ];
 
     /**
@@ -655,7 +656,7 @@ class Job extends Model
 
         // maximum offered salary
         $salary = $this->monthlySalary(max($this->salary_from, $this->salary_to));
-        $body = array_except($body, ['deleted_at', 'features']);
+        $body = array_except($body, ['deleted_at', 'features', 'enable_apply']);
 
         $locations = [];
 
