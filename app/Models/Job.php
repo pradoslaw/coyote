@@ -606,6 +606,28 @@ class Job extends Model
         }
     }
 
+    public function setTags($tags)
+    {
+        $this->tags->flush();
+
+        foreach ($tags as $tag) {
+            $pivot = $this->tags()->newPivot(['priority' => $tag['priority']]);
+            $model = (new Tag($tag))->setRelation('pivot', $pivot);
+
+            $this->tags->add($model);
+        }
+    }
+
+    public function setPlanIdAttribute($value)
+    {
+        // set default deadline_at date time, only if offer was not publish yet.
+        if (!$this->is_publish) {
+            $this->attributes['plan_id'] = $value;
+
+            $this->deadline_at = Carbon::now()->addDays($this->plan->length);
+        }
+    }
+
     /**
      * @return Payment
      */

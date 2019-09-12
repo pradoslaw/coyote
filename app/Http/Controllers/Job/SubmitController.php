@@ -83,8 +83,6 @@ class SubmitController extends Controller
         $this->authorize('update', $job);
         $this->authorize('update', $job->firm);
 
-        $job->load(['tags', 'features']);
-
         $draft->put(Job::class, $job);
 
         $this->breadcrumb($job);
@@ -119,6 +117,15 @@ class SubmitController extends Controller
 
         // only fillable columns! we don't want to set fields like "city" or "tags" because they don't really exists in db.
         $job->fill($request->all());
+
+
+//        $job->locations->flush();
+//        $job->features->flush();
+
+        $job->setTags($request->get('tags'));
+
+
+
 
         $draft->put(Job::class, $job);
 

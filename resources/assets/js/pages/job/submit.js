@@ -94,9 +94,9 @@ new Vue({
          * @param {String} name
          */
         addTag: function (name) {
-            this.tags.push({name: name, pivot: {priority: 1}});
+            this.job.tags.push({name: name, pivot: {priority: 1}});
             // fetch only tag name
-            let pluck = this.tags.map(item => item.name);
+            let pluck = this.job.tags.map(item => item.name);
 
             // request suggestions
             $.get(this.suggestionUrl, {t: pluck}, result => {
@@ -109,11 +109,11 @@ new Vue({
             this.addTag(name);
         },
         onTagDelete: function (name) {
-            let index = this.tags.findIndex(el => {
+            let index = this.job.tags.findIndex(el => {
                 return el.name === name;
             });
 
-            this.tags.splice(index, 1);
+            this.job.tags.splice(index, 1);
         },
         isInvalid: function (fields) {
             return Object.keys(this.errors).findIndex(element => fields.indexOf(element) > -1) > -1;
