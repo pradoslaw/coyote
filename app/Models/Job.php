@@ -115,7 +115,9 @@ class Job extends Model
         'phone',
         'enable_apply',
         'seniority_id',
-        'plan_id'
+        'plan_id',
+        'tags',
+        'features'
     ];
 
     /**
@@ -574,39 +576,26 @@ class Job extends Model
     }
 
     /**
-     * @param int $userId
-     */
-    public function setDefaultUserId($userId)
-    {
-        if (empty($this->user_id)) {
-            $this->user_id = $userId;
-        }
-    }
-
-    /**
      * @param mixed $features
      */
-    public function setDefaultFeatures($features)
+    public function setFeaturesAttribute($features)
     {
-        if (!count($this->features)) {
-            foreach ($features as $feature) {
-                $pivot = $this->features()->newPivot(['checked' => $feature->checked, 'value' => $feature->value]);
-                $this->features->add($feature->setRelation('pivot', $pivot));
-            }
+        $this->features->flush();
+
+        foreach ($features as $feature) {
+            $checked = (int) $feature['checked'];
+
+            $pivot = $this->features()->newPivot([
+                'checked'       => $checked,
+                'value'         => $checked ? ($feature['value'] ?? null) : null
+            ]);
+
+            $model = Feature::findOrNew($feature['id'])->setRelation('pivot', $pivot);
+            $this->features->add($model);
         }
     }
 
-    /**
-     * @param int $planId
-     */
-    public function setDefaultPlanId($planId)
-    {
-        if (empty($this->plan_id)) {
-            $this->plan_id = $planId;
-        }
-    }
-
-    public function setTags($tags)
+    public function setTagsAttribute($tags)
     {
         $this->tags->flush();
 

@@ -61,10 +61,12 @@ class Loader
         $job->load(['tags', 'features', 'locations', 'country']);
         $job->firm->load(['benefits', 'gallery', 'industries']);
 
-        $job->setDefaultUserId($this->auth->id());
-        $job->setDefaultFeatures($this->job->getDefaultFeatures($this->auth->id()));
-        $job->setDefaultPlanId($this->plan->getDefaultId());
-        $job->email = $this->auth->user()->email;
+        if (!$job->exists) {
+            $job->user_id = $this->auth->id();
+            $job->plan_id = $this->plan->getDefaultId();
+            $job->email = $this->auth->user()->email;
+            $job->setAttribute('features', $this->job->getDefaultFeatures($this->auth->id()));
+        }
 
         return $job;
     }

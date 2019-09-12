@@ -55,6 +55,7 @@ class JobRequest extends FormRequest
             ],
             'features.*.id' => 'required|int',
             'features.*.name' => 'string|max:100',
+            'features.*.value' => 'nullable|string|max:100',
             'features.*.is_checked' => 'bool',
             'tags.*.name' => 'max:50|tag',
             'tags.*.priority' => 'required|int|min:0|max:2'

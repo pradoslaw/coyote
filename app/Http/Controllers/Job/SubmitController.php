@@ -120,10 +120,6 @@ class SubmitController extends Controller
 
 
 //        $job->locations->flush();
-//        $job->features->flush();
-
-        $job->setTags($request->get('tags'));
-
 
 
 
@@ -140,7 +136,7 @@ class SubmitController extends Controller
     {
         /** @var \Coyote\Job $job */
         $job = clone $draft->get(Job::class);
-
+//dd($job);
         // get all firms assigned to user...
         $this->firm->pushCriteria(new EagerLoading(['benefits', 'industries', 'gallery']));
 
