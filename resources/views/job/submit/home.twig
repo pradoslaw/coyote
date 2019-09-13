@@ -66,19 +66,20 @@
                         <div class="form-group form-group-border" :class="{'has-error': isInvalid(['city'])}">
                             <label class="control-label">Lokalizacja</label>
 
-                            <div v-for="location in locations" class="row margin-sm-bottom">
+                            <div v-for="(location, index) in job.locations" class="row margin-sm-bottom">
                                 <div class="col-sm-12">
                                     <div class="input-group">
                                         <div class="input-group-addon">
                                             <a href="javascript:" @click="addLocation"><i class="fa fa-fw fa-plus-circle"></i></a>
-                                            <a href="javascript:" @click="removeLocation(location)" v-if="locations.length > 1"><i class="fa fa-fw fa-minus-circle text-danger"></i></a>
+                                            <a href="javascript:" @click="removeLocation(location)" v-if="job.locations.length > 1"><i class="fa fa-fw fa-minus-circle text-danger"></i></a>
                                         </div>
 
-                                        <input type="hidden" name="longitude[]" :value="location.longitude">
-                                        <input type="hidden" name="latitude[]" :value="location.latitude">
-                                        <input type="hidden" name="city[]" :value="location.city">
+                                        <input type="hidden" :name="'locations[' + index + '][longitude]'" :value="location.longitude">
+                                        <input type="hidden" :name="'locations[' + index + '][latitude]'" :value="location.latitude">
+                                        <input type="hidden" :name="'locations[' + index + '][address]'" :value="location.address">
+                                        <input type="hidden" :name="'locations[' + index + '][city]'" :value="location.city">
 
-                                        <vue-google-place @change="setAddress(location, ...arguments)"></vue-google-place>
+                                        <vue-google-place @change="setAddress(index, ...arguments)"></vue-google-place>
                                     </div>
                                 </div>
                             </div>
@@ -293,9 +294,6 @@
     <script>
         var data = {
             job: {{ job|raw }},
-            locations: {{ locations|json_encode|raw }},
-            {#tags: {{ job.tags|raw }},#}
-            {#features: {{ job.features|raw }},#}
             errors: {},
             plans: {{ plans|raw }},
             popular_tags: {{ popular_tags|json_encode|raw }},

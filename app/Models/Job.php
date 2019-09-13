@@ -117,7 +117,8 @@ class Job extends Model
         'seniority_id',
         'plan_id',
         'tags',
-        'features'
+        'features',
+        'locations'
     ];
 
     /**
@@ -560,14 +561,6 @@ class Job extends Model
     }
 
     /**
-     * @return mixed
-     */
-    public function getCityAttribute()
-    {
-        return $this->locations->implode('city', ', ');
-    }
-
-    /**
      * @return string
      */
     public function getCurrencySymbolAttribute()
@@ -604,6 +597,15 @@ class Job extends Model
             $model = (new Tag($tag))->setRelation('pivot', $pivot);
 
             $this->tags->add($model);
+        }
+    }
+
+    public function setLocationsAttribute($locations)
+    {
+        $this->locations->flush();
+
+        foreach ($locations as $location) {
+            $this->locations->add(new Job\Location($location));
         }
     }
 

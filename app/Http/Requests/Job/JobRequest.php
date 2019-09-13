@@ -58,7 +58,12 @@ class JobRequest extends FormRequest
             'features.*.value' => 'nullable|string|max:100',
             'features.*.is_checked' => 'bool',
             'tags.*.name' => 'max:50|tag',
-            'tags.*.priority' => 'required|int|min:0|max:2'
+            'tags.*.priority' => 'required|int|min:0|max:2',
+            'locations.*.city' => 'string|max:255',
+            'locations.*.address' => 'string|max:255',
+            'locations.*.country' => 'string',
+            'locations.*.latitude' => 'numeric',
+            'locations.*.longitude' => 'numeric'
         ];
     }
 

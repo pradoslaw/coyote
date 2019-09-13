@@ -68,6 +68,10 @@ class Loader
             $job->setAttribute('features', $this->job->getDefaultFeatures($this->auth->id()));
         }
 
+        if (!count($job->locations)) {
+            $job->locations->add(new Job\Location());
+        }
+
         return $job;
     }
 }

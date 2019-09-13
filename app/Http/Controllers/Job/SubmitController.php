@@ -95,7 +95,6 @@ class SubmitController extends Controller
             // is plan is still going on?
             'is_plan_ongoing'   => $job->is_publish,
             'plans'             => $this->plan->active()->toJson(),
-            'locations'         => $job->locations()->count() ? $job->locations->toArray() : [(new Job\Location())->toArray()],
             'seniority'         => Job::getSeniorityList(),
             'remote_range'      => Job::getRemoteRangeList(),
             'currencies'        => Currency::getCurrenciesList(),
@@ -114,14 +113,11 @@ class SubmitController extends Controller
     {
         /** @var \Coyote\Job $job */
         $job = clone $draft->get(Job::class);
-
+//dd($request->all());
         // only fillable columns! we don't want to set fields like "city" or "tags" because they don't really exists in db.
         $job->fill($request->all());
 
-
-//        $job->locations->flush();
-
-
+//        dd($job);
 
         $draft->put(Job::class, $job);
 

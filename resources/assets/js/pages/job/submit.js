@@ -279,15 +279,15 @@ new Vue({
         },
 
         addLocation () {
-            this.locations.push({});
+            this.job.locations.push({});
         },
 
         removeLocation (location) {
-            this.locations.splice(this.locations.indexOf(location), 1);
+            this.job.locations.splice(this.job.locations.indexOf(location), 1);
         },
 
-        setAddress (location, data) {
-            location = data;
+        setAddress (index, data) {
+            this.$set(this.job.locations, index, data);
         }
     },
     computed: {
