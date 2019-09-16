@@ -1,5 +1,5 @@
 import '../../plugins/uploader';
-import initTinymce from '../../libs/tinymce';
+import tinymce from '../../libs/tinymce';
 import Dialog from '../../libs/dialog';
 import Map from '../../libs/map';
 import Vue from 'vue';
@@ -11,32 +11,31 @@ import VueGooglePlace from '../../components/google-place.vue';
 import VueText from '../../components/forms/text.vue';
 import VueSelect from '../../components/forms/select.vue';
 import VueCheckbox from '../../components/forms/checkbox.vue';
-import VueTextarea from '../../components/forms/textarea.vue';
 import VueRadio from '../../components/forms/radio.vue';
 import VueError from '../../components/forms/error.vue';
+import Editor from '@tinymce/tinymce-vue';
 import 'chosen-js';
 import axios from "axios";
 import Config from "../../libs/config";
-
-Vue.component('vue-thumbnail', VueThumbnail);
-Vue.component('vue-pricing', VuePricing);
-Vue.component('vue-tags-dropdown', VueTagsDropdown);
-Vue.component('vue-tag-skill', VueTagsSkill);
-Vue.component('vue-google-place', VueGooglePlace);
-Vue.component('vue-text', VueText);
-Vue.component('vue-select', VueSelect);
-Vue.component('vue-checkbox', VueCheckbox);
-Vue.component('vue-textarea', VueTextarea);
-Vue.component('vue-radio', VueRadio);
-Vue.component('vue-error', VueError);
 
 new Vue({
     el: '.submit-form',
     delimiters: ['${', '}'],
     data: window.data,
-    mounted: function () {
-        initTinymce();
-
+    components: {
+        'vue-tinymce': Editor,
+        'vue-thumbnail': VueThumbnail,
+        'vue-pricing': VuePricing,
+        'vue-tags-dropdown': VueTagsDropdown,
+        'vue-tag-skill': VueTagsSkill,
+        'vue-google-place': VueGooglePlace,
+        'vue-text': VueText,
+        'vue-select': VueSelect,
+        'vue-checkbox': VueCheckbox,
+        'vue-radio': VueRadio,
+        'vue-error': VueError
+    },
+    mounted () {
         this.marker = null;
         this.job.enable_apply = +this.job.enable_apply;
 
@@ -93,37 +92,38 @@ new Vue({
          *
          * @param {String} name
          */
-        addTag: function (name) {
+        addTag (name) {
             this.job.tags.push({name: name, pivot: {priority: 1}});
             // fetch only tag name
             let pluck = this.job.tags.map(item => item.name);
 
             // request suggestions
-            $.get(this.suggestionUrl, {t: pluck}, result => {
-                this.suggestions = result;
-            });
+            axios.get(this.suggestionUrl, {params: {t: pluck}})
+                .then(response => {
+                    this.suggestions = response.data;
+                });
 
             this._initTooltip();
         },
-        onTagChange: function (name) {
+        onTagChange (name) {
             this.addTag(name);
         },
-        onTagDelete: function (name) {
+        onTagDelete (name) {
             let index = this.job.tags.findIndex(el => {
                 return el.name === name;
             });
 
             this.job.tags.splice(index, 1);
         },
-        isInvalid: function (fields) {
+        isInvalid (fields) {
             return Object.keys(this.errors).findIndex(element => fields.indexOf(element) > -1) > -1;
         },
-        charCounter: function (item, limit) {
+        charCounter (item, limit) {
             let model = item.split('.').reduce((o, i) => o[i], this);
 
             return limit - String(model !== null ? model : '').length;
         },
-        toggleBenefit: function (item) {
+        toggleBenefit (item) {
             let index = this.firm.benefits.indexOf(item);
 
             if (index === -1) {
@@ -177,7 +177,7 @@ new Vue({
             dialog.show();
         },
         selectFirm: function (firmId) {
-            let index = this.firms.findIndex(element => element.id == firmId);
+            let index = this.firms.findIndex(element => element.id === firmId);
 
             this.firm = this.firms[index];
             this.firm.is_private = false;
@@ -185,7 +185,8 @@ new Vue({
             this.benefits = this.firm.benefits;
 
             // text can not be NULL
-            tinymce.get('description').setContent(this.firm.description === null ? '' : this.firm.description);
+            // tinymce.get('description').setContent(this.firm.description === null ? '' : this.firm.description);
+            this.firm.description = this.firm.description === null ? '' : this.firm.description;
             $('#industries').trigger('chosen:updated');
         },
         changeFirm: function () {
@@ -236,7 +237,8 @@ new Vue({
             };
 
             this.benefits = [];
-            tinymce.get('description').setContent(''); // new firm - empty description
+            this.firm.description = '';
+            // tinymce.get('description').setContent(''); // new firm - empty description
 
             $('#industries').trigger('chosen:updated');
         },
@@ -302,20 +304,15 @@ new Vue({
 
         gallery () {
             return this.firm.gallery && this.firm.gallery.length ? this.firm.gallery : {'file': ''};
+        },
+
+        tinymce: {
+            get: function () {
+                return tinymce;
+            }
         }
     },
     watch: {
-        // 'job.enable_apply': function (flag) {
-        //     if (Boolean(parseInt(flag))) {
-        //         tinymce.get('recruitment').hide();
-        //
-        //         $('#recruitment').attr('disabled', 'disabled').hide();
-        //     } else {
-        //         tinymce.get('recruitment').show();
-        //
-        //         $('#recruitment').removeAttr('disabled');
-        //     }
-        // },
         'firm.is_private': function (flag) {
             if (!Boolean(parseInt(flag))) {
                 google.maps.event.trigger(map, 'resize');

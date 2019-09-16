@@ -156,8 +156,10 @@
                         <div class="form-group-border form-group">
                             <label class="control-label">Opis oferty (opcjonalnie)</label>
 
-                            <vue-textarea name="description" :value.sync="job.description"></vue-textarea>
+                            <vue-tinymce v-model="job.description" :init="tinymce"></vue-tinymce>
                             <span class="help-block">Miejsce na szczegółowy opis oferty. Pole to jednak nie jest wymagane.</span>
+
+                            <input type="hidden" name="description" v-model="job.description">
                         </div>
 
                         <div class="form-group form-group-border">
@@ -198,7 +200,7 @@
 
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <vue-text name="email" :value.sync="job.email" :disabled="!job.enable_apply"></vue-text>
+                                    <vue-text name="email" :value.sync="job.email" :disabled="job.enable_apply == 0"></vue-text>
                                     <span class="help-block">Adres e-mail nie będzie widoczny dla osób postronnych.</span>
 
                                     <vue-error :message="errors.email"></vue-error>
@@ -218,7 +220,9 @@
                             </div>
 
                             <div v-show="job.enable_apply == 0">
-                                <vue-textarea name="recruitment" :value.sync="job.recruitment"></vue-textarea>
+                                <vue-tinymce v-model="job.recruitment" :init="tinymce"></vue-tinymce>
+
+                                <input type="hidden" name="recruitment" v-model="job.recruitment">
 
                                 <vue-error :message="errors.recruitment"></vue-error>
                             </div>

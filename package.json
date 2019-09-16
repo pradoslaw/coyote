@@ -6,6 +6,7 @@
     "watch": "yarn webpack --watch --config webpack.dev.js"
   },
   "dependencies": {
+    "@tinymce/tinymce-vue": "^3.0.1",
     "awesome-bootstrap-checkbox": "0.3.7",
     "axios": "^0.18.0",
     "babel-core": "^6.26.3",
