@@ -20,6 +20,8 @@ use GuzzleHttp\Client as HttpClient;
 
 class PaymentController extends Controller
 {
+    private const ERROR = 'error';
+
     /**
      * @var InvoiceGenerator
      */
@@ -230,6 +232,33 @@ class PaymentController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function payment3DSecure(Request $request, PaymentRepository $payment)
+    {
+        $salt        = config('services.paylane.salt');
+        $status      = $request->input('status');
+        $description = $request->input('description');
+        $amount      = $request->input('amount');
+        $currency    = $request->input('currency');
+        $hash        = $request->input('hash');
+
+        $id = '';
+        if ($status !== self::ERROR) {
+            $id = $request->input('id_3dsecure_auth');
+        }
+
+        $calcHash = sha1("{$salt}|{$status}|{$description}|{$amount}|{$currency}|{$id}");
+        abort_if($calcHash !== $hash, 500, "Error, wrong hash");
+
+        $payment = $payment->findOrFail($description);
+        abort_if($payment === null, 404);
+
+        return $this->successfulTransaction($payment);
+    }
+
+    /**
      * Card transaction was successful. Reindex and return to the offer
      *
      * @param Payment $payment
@@ -263,12 +292,11 @@ class PaymentController extends Controller
     {
         $client = new \PayLaneRestClient(config('services.paylane.username'), config('services.paylane.password'));
 
-        /** @var array $result */
-        $result = $client->cardSale([
+        $params = [
             'sale' => [
                 'amount'            => number_format($payment->invoice->grossPrice(), 2, '.', ''),
                 'currency'          => 'PLN',
-                'description'       => sprintf('%s - %s', $payment->plan->name, $payment->id)
+                'description'       => $payment->id
             ],
             'customer' => [
                 'name'              => $this->request->input('name'),
@@ -281,8 +309,12 @@ class PaymentController extends Controller
                 'expiration_month'  => sprintf('%02d', $this->request->input('exp_month')),
                 'expiration_year'   => $this->request->input('exp_year'),
                 'card_code'         => $this->request->input('cvc'),
-            ]
-        ]);
+            ],
+            'back_url'              => route('job.payment.3dsecure')
+        ];
+
+        /** @var array $result */
+        $result = $client->checkCard3DSecure($params);
 
         if (!$result['success']) {
             $error = $result['error'];
@@ -291,7 +323,14 @@ class PaymentController extends Controller
             throw new PaymentFailedException($error['error_description'], $error['error_number']);
         }
 
+        if ($result['is_card_enrolled']) {
+            return redirect()->to($result['redirect_url']);
+        } else {
+            $result = $client->saleBy3DSecureAuthorization(['id_3dsecure_auth' => $result['id_3dsecure_auth']]);
+        }
+
         logger()->debug('Successfully payment', ['result' => $result]);
+
         return $this->successfulTransaction($payment);
     }
 

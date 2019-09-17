@@ -61,7 +61,8 @@ return [
 
     'paylane' => [
         'username'      => env('PAYLANE_USERNAME'),
-        'password'      => env('PAYLANE_PASSWORD')
+        'password'      => env('PAYLANE_PASSWORD'),
+        'salt'          => env('PAYLANE_SALT')
     ],
 
     'p24' => [

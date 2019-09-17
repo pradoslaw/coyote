@@ -310,7 +310,7 @@ class JobPostingCest
         $I->uncheckOption('enable_invoice');
 
         $I->fillField('name', 'Jan Kowalski');
-        $I->fillField('number', '5555555555554444');
+        $I->fillField('number', '4012001038443335');
         $I->fillField('cvc', '123');
 
         $I->click('Zapłać i zapisz');
@@ -361,7 +361,7 @@ class JobPostingCest
         $I->seeCurrentRouteIs('job.payment');
 
         $I->fillField('name', 'Jan Kowalski');
-        $I->fillField('number', '5555555555554444');
+        $I->fillField('number', '4012001038443335');
         $I->fillField('cvc', '123');
 
         $country = $I->grabRecord(\Coyote\Country::class, ['code' => 'GB']);
@@ -421,7 +421,7 @@ class JobPostingCest
         $I->uncheckOption('enable_invoice');
 
         $I->fillField('name', 'Jan Kowalski');
-        $I->fillField('number', '5555555555554444');
+        $I->fillField('number', '4012001038443335');
         $I->fillField('cvc', '123');
         $I->fillField('coupon', $coupon->code);
         $I->fillField('price', 26.7);
@@ -524,7 +524,7 @@ class JobPostingCest
         $I->seeFormErrorMessage('number', 'Wprowadzony numer karty jest nieprawidłowy.');
         $I->seeFormErrorMessage('cvc', 'Wprowadzony kod CVC jest nieprawidłowy.');
 
-        $I->fillField('number', '4111111111111111');
+        $I->fillField('number', '4012001038443335');
         $I->click('Zapłać i zapisz');
 
         $I->seeCurrentRouteIs('job.offer');

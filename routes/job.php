@@ -67,6 +67,11 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
         'as' => 'payment.status'
     ]);
 
+    $this->any('Payment/3DSecure', [
+        'uses' => 'PaymentController@payment3DSecure',
+        'as' => 'payment.3dsecure'
+    ]);
+
     $this->get('Payment/{payment}', [
         'uses' => 'PaymentController@index',
         'as' => 'payment',
