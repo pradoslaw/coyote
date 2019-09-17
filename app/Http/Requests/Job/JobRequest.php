@@ -59,11 +59,11 @@ class JobRequest extends FormRequest
             'features.*.is_checked' => 'bool',
             'tags.*.name' => 'max:50|tag',
             'tags.*.priority' => 'required|int|min:0|max:2',
-            'locations.*.city' => 'string|max:255',
-            'locations.*.address' => 'string|max:255',
-            'locations.*.country' => 'string',
-            'locations.*.latitude' => 'numeric',
-            'locations.*.longitude' => 'numeric'
+            'locations.*.city' => 'nullable|string|max:255',
+            'locations.*.address' => 'nullable|string|max:255',
+            'locations.*.country' => 'nullable|string',
+            'locations.*.latitude' => 'nullable|numeric',
+            'locations.*.longitude' => 'nullable|numeric'
         ];
     }
 
