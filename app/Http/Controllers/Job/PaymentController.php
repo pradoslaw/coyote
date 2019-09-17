@@ -233,6 +233,7 @@ class PaymentController extends Controller
 
     /**
      * @param Request $request
+     * @param PaymentRepository $payment
      * @return \Illuminate\Http\RedirectResponse
      */
     public function payment3DSecure(Request $request, PaymentRepository $payment)
