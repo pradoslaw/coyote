@@ -54,7 +54,10 @@ class Firm extends Model
         'latitude',
         'longitude',
         'is_private',
-        'youtube_url'
+        'youtube_url',
+        'industries',
+        'gallery',
+        'benefits'
     ];
 
     /**
@@ -72,7 +75,8 @@ class Firm extends Model
     ];
 
     protected $casts = [
-        'is_agency' => 'bool'
+        'is_agency' => 'bool',
+        'is_private' => 'bool'
     ];
 
     protected $appends = [
@@ -199,7 +203,7 @@ class Firm extends Model
      */
     public function setIsPrivateAttribute($flag)
     {
-        $this->isPrivate = $flag;
+        $this->isPrivate = (bool) $flag;
     }
 
     /**
@@ -210,6 +214,63 @@ class Firm extends Model
         return $this->isPrivate;
     }
 
+    public function setYoutubeUrlAttribute($value)
+    {
+        $this->attributes['youtube_url'] = $this->getEmbedUrl($value);
+    }
+
+    public function setBenefitsAttribute($benefits)
+    {
+        $benefits = array_filter(array_unique(array_map('trim', $benefits)));
+
+        $models = [];
+
+        foreach ($benefits as $benefit) {
+            $models[] = new Firm\Benefit(['name' => $benefit]);
+        }
+
+        // call macro and replace collection items
+        $this->benefits->replace($models);
+    }
+
+    public function setGalleryAttribute($gallery)
+    {
+        $models = [];
+
+        foreach ($gallery as $photo) {
+            if (!empty($photo)) {
+                $models[] = new Firm\Gallery(['file' => $photo]);
+            }
+        }
+
+        // call macro and replace collection items
+        $this->gallery->replace($models);
+    }
+
+    public function setIndustriesAttribute($industries)
+    {
+        $models = [];
+
+        foreach ((array) $industries as $industry) {
+            $models[] = new Industry(['id' => $industry]);
+        }
+
+        $this->industries->replace($models);
+    }
+
+    public function setIsAgencyAttribute($flag)
+    {
+        $this->attributes['is_agency'] = $flag;
+
+        if ($flag) {
+            foreach (['employees', 'founded', 'headline', 'latitude', 'longitude', 'country_id', 'street', 'city', 'house', 'postcode'] as $column) {
+                $this->{$column} = null;
+            }
+
+            $this->benefits->flush();
+        }
+    }
+
     /**
      * @param int $userId
      */
@@ -218,5 +279,26 @@ class Firm extends Model
         if (empty($this->user_id)) {
             $this->user_id = $userId;
         }
+    }
+
+    /**
+     * @param string $url
+     * @return string
+     */
+    private function getEmbedUrl($url)
+    {
+        if (empty($url)) {
+            return '';
+        }
+
+        $components = parse_url($url);
+
+        if (empty($components['query'])) {
+            return $url;
+        }
+
+        parse_str($components['query'], $query);
+
+        return 'https://www.youtube.com/embed/' . $query['v'];
     }
 }

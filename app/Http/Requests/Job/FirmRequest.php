@@ -25,9 +25,9 @@ class FirmRequest extends FormRequest
     {
         return [
             'id' => 'nullable|integer',
-//            'is_private' => 'boolean',
+            'is_private' => 'bool',
             'name' => 'required_if:is_private,0|max:60',
-//            'is_agency' => 'boolean',
+            'is_agency' => 'bool',
             'website' => 'nullable|url',
             'logo' => 'nullable|string',
             'description' => 'nullable|string',

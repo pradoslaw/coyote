@@ -113,11 +113,9 @@ class SubmitController extends Controller
     {
         /** @var \Coyote\Job $job */
         $job = clone $draft->get(Job::class);
-//dd($request->all());
+
         // only fillable columns! we don't want to set fields like "city" or "tags" because they don't really exists in db.
         $job->fill($request->all());
-
-//        dd($job);
 
         $draft->put(Job::class, $job);
 
@@ -132,7 +130,7 @@ class SubmitController extends Controller
     {
         /** @var \Coyote\Job $job */
         $job = clone $draft->get(Job::class);
-//dd($job);
+
         // get all firms assigned to user...
         $this->firm->pushCriteria(new EagerLoading(['benefits', 'industries', 'gallery']));
 
@@ -160,6 +158,18 @@ class SubmitController extends Controller
     {
         /** @var \Coyote\Job $job */
         $job = $draft->get(Job::class);
+
+        $job->firm->fill($request->all());
+
+        // new firm has empty ID.
+        if (empty($request->input('id'))) {
+            $job->firm->exists = false;
+
+            unset($job->firm->id);
+        } else {
+            // assign firm id. id is not fillable - that's why we must set it directly.
+            $job->firm->id = (int) $request->input('id');
+        }
 
         if ($job->firm->exists) {
             // syncOriginalAttribute() is important if user changes firm

@@ -38,6 +38,8 @@ new Vue({
     mounted () {
         this.marker = null;
         this.job.enable_apply = +this.job.enable_apply;
+        // this.firm.is_agency = +this.firm.is_agency;
+        // this.firm.is_private = +this.firm.is_private;
 
         if (typeof google !== 'undefined' && this.firm) {
             this.map = new Map();
@@ -309,6 +311,24 @@ new Vue({
         tinymce: {
             get: function () {
                 return tinymce;
+            }
+        },
+
+        isPrivate: {
+            get () {
+                return +this.firm.is_private;
+            },
+            set (val) {
+                this.firm.is_private = val;
+            }
+        },
+
+        isAgency: {
+            get () {
+                return +this.firm.is_agency;
+            },
+            set (val) {
+                this.firm.is_agency = val;
             }
         }
     },
