@@ -7,10 +7,9 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class Firm extends JsonResource
 {
     /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array
+     * @throws \Exception
      */
     public function toArray($request)
     {
@@ -25,6 +24,10 @@ class Firm extends JsonResource
         ]);
     }
 
+    /**
+     * @param \Coyote\Firm $firm
+     * @return array
+     */
     private function gallery($firm)
     {
         $result = [];

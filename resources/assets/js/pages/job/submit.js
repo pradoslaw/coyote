@@ -113,9 +113,7 @@ new Vue({
             this.addTag(name);
         },
         onTagDelete (name) {
-            let index = this.job.tags.findIndex(el => {
-                return el.name === name;
-            });
+            let index = this.job.tags.findIndex(el => el.name === name);
 
             this.job.tags.splice(index, 1);
         },
@@ -136,23 +134,23 @@ new Vue({
                 this.firm.benefits.splice(index, 1);
             }
         },
-        addBenefit: function (e) {
+        addBenefit (e) {
             if (e.target.value.trim()) {
                 this.firm.benefits.push(e.target.value);
             }
 
             e.target.value = '';
         },
-        removeBenefit: function (benefit) {
+        removeBenefit (benefit) {
             this.firm.benefits.splice(this.firm.benefits.indexOf(benefit), 1);
         },
-        updateBenefit: function () {},
+        updateBenefit () {},
         /**
          * Enable/disable feature for this offer.
          *
          * @param feature
          */
-        toggleFeature: function (feature) {
+        toggleFeature (feature) {
             feature.pivot.checked = +!feature.pivot.checked;
         },
         addFirm () {
@@ -180,20 +178,18 @@ new Vue({
 
             dialog.show();
         },
-        selectFirm: function (firmId) {
+        selectFirm (firmId) {
             let index = this.firms.findIndex(element => element.id === firmId);
 
             this.firm = this.firms[index];
             this.firm.is_private = false;
-
-            this.benefits = this.firm.benefits;
 
             // text can not be NULL
             // tinymce.get('description').setContent(this.firm.description === null ? '' : this.firm.description);
             this.firm.description = this.firm.description === null ? '' : this.firm.description;
             $('#industries').trigger('chosen:updated');
         },
-        changeFirm: function () {
+        changeFirm () {
             if (!this.firm.name) {
                 return;
             }
@@ -251,7 +247,7 @@ new Vue({
 
             $('#industries').trigger('chosen:updated');
         },
-        changeAddress: function (e) {
+        changeAddress (e) {
             let val = e.target.value.trim();
 
             if (val.length) {
@@ -269,21 +265,21 @@ new Vue({
                 this._setupMarker();
             }
         },
-        _setupMarker: function () {
+        _setupMarker () {
             this.map.removeMarker(this.marker);
             this.marker = this.map.addMarker(this.firm.latitude, this.firm.longitude);
         },
-        onThumbnailUploaded: function (file) {
+        onThumbnailUploaded (file) {
             this.firm.gallery.splice(this.firm.gallery.length - 1, 0, file);
         },
-        onThumbnailDeleted: function (file) {
+        onThumbnailDeleted (file) {
             let index = this.firm.gallery.findIndex(photo => photo.file === file);
 
             if (index > -1) {
                 this.firm.gallery.splice(index, 1);
             }
         },
-        _initTooltip: function () {
+        _initTooltip () {
             this.$nextTick(function () {
                 $('i[data-toggle="tooltip"]').tooltip();
             });
@@ -312,10 +308,8 @@ new Vue({
             return this.firm.gallery && this.firm.gallery.length ? this.firm.gallery : {'file': ''};
         },
 
-        tinymceOptions: {
-            get () {
-                return tinymce;
-            }
+        tinymceOptions () {
+            return tinymce;
         },
 
         isPrivate: {

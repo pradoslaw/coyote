@@ -9,6 +9,7 @@ use Coyote\Firm\Benefit;
 use Coyote\Http\Requests\Job\FirmRequest;
 use Coyote\Http\Requests\Job\JobRequest;
 use Coyote\Http\Resources\Firm as FirmResource;
+use Coyote\Http\Resources\JobFormResource;
 use Coyote\Job;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Notifications\Job\CreatedNotification;
@@ -89,7 +90,7 @@ class SubmitController extends Controller
 
         return $this->view('job.submit.home', [
             'popular_tags'      => $this->job->getPopularTags(),
-            'job'               => $job->toJson(),
+            'job'               => new JobFormResource($job),
             // firm information (in order to show firm nam on the button)
             'firm'              => $job->firm,
             // is plan is still going on?
@@ -134,13 +135,13 @@ class SubmitController extends Controller
         // get all firms assigned to user...
         $this->firm->pushCriteria(new EagerLoading(['benefits', 'industries', 'gallery']));
 
-        $firms = json_encode(FirmResource::collection($this->firm->findAllBy('user_id', $job->user_id))->toArray($this->request));
+        $firms = FirmResource::collection($this->firm->findAllBy('user_id', $job->user_id));
 
         $this->breadcrumb($job);
 
         return $this->view('job.submit.firm')->with([
-            'job'               => $job->toJson(),
-            'firm'              => json_encode((new FirmResource($job->firm))->toArray($this->request)),
+            'job'               => $job,
+            'firm'              => new FirmResource($job->firm),
             'firms'             => $firms,
             'default_benefits'  => Benefit::getBenefitsList(), // default benefits,
             'employees'         => Firm::getEmployeesList(),

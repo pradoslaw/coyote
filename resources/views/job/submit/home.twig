@@ -74,8 +74,10 @@
 
                                         <input type="hidden" :name="'locations[' + index + '][longitude]'" :value="location.longitude">
                                         <input type="hidden" :name="'locations[' + index + '][latitude]'" :value="location.latitude">
-                                        <input type="hidden" :name="'locations[' + index + '][address]'" :value="location.address">
+                                        <input type="hidden" :name="'locations[' + index + '][street]'" :value="location.street">
+                                        <input type="hidden" :name="'locations[' + index + '][street_number]'" :value="location.street_number">
                                         <input type="hidden" :name="'locations[' + index + '][city]'" :value="location.city">
+                                        <input type="hidden" :name="'locations[' + index + '][country]'" :value="location.country">
 
                                         <vue-google-place @change="setAddress(index, ...arguments)"></vue-google-place>
                                     </div>
@@ -295,7 +297,7 @@
 
     <script>
         var data = {
-            job: {{ job|raw }},
+            job: {{ job|json_encode|raw }},
             errors: {},
             plans: {{ plans|raw }},
             popular_tags: {{ popular_tags|json_encode|raw }},

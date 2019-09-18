@@ -15,7 +15,7 @@
                 place.address_components.forEach(item => {
                     switch (item.types[0]) {
                         case 'data':
-                            address.street_number = item.long_name;
+                            data.street_number = item.long_name;
                             break;
                         case 'route':
                             data.street = item.long_name;
@@ -25,15 +25,13 @@
                             data.city = item.long_name;
                             break;
                         case 'postal_code':
-                            data.post_code = item.long_name;
+                            data.postcode = item.long_name;
                             break;
                         case 'country':
                             data.country = item.long_name;
                             break;
                     }
                 });
-
-                data.address = `${data.street} ${data.street_number}`.trim();
 
                 this.$emit('change', data);
             });

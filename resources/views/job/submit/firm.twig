@@ -287,10 +287,10 @@
 
     <script>
         var data = {
-            job: {{ job|raw }},
+            job: {{ job|json_encode|raw }},
             default_benefits: {{ default_benefits|json_encode|raw }},
-            firm: {{ firm|raw }},
-            firms: {{ firms|raw }},
+            firm: {{ firm|json_encode|raw }},
+            firms: {{ firms|json_encode|raw }},
             errors: {},
             employees: {{ employees|json_encode|raw }},
             founded: {{ founded|json_encode|raw }},

@@ -58,7 +58,7 @@ class Loader
             $job->firm()->associate($firm);
         }
 
-        $job->load(['tags', 'features', 'locations', 'country']);
+        $job->load(['tags', 'features', 'locations.country']);
         $job->firm->load(['benefits', 'gallery', 'industries']);
 
         if (!$job->exists) {

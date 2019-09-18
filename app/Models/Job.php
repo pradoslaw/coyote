@@ -26,7 +26,6 @@ use Illuminate\Notifications\RoutesNotifications;
  * @property bool $is_expired
  * @property int $salary_from
  * @property int $salary_to
- * @property int $country_id
  * @property int $currency_id
  * @property int $is_remote
  * @property int $remote_range
@@ -104,7 +103,6 @@ class Job extends Model
         'is_remote',
         'is_gross',
         'remote_range',
-        'country_id',
         'salary_from',
         'salary_to',
         'currency_id',
@@ -475,14 +473,6 @@ class Job extends Model
     public function user()
     {
         return $this->belongsTo('Coyote\User');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function country()
-    {
-        return $this->belongsTo('Coyote\Country');
     }
 
     /**
