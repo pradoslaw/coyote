@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Country $country
  * @property string $street
  * @property string $street_number
+ * @property string $label
  */
 class Location extends Model
 {
@@ -70,5 +71,10 @@ class Location extends Model
     public function setCountryAttribute($country)
     {
         $this->country()->associate((new Country())->where('name', $country)->first());
+    }
+
+    public function getLabelAttribute()
+    {
+        return implode(' ', array_filter([$this->street, $this->street_number, $this->city]));
     }
 }

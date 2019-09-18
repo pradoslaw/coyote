@@ -61,7 +61,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group form-group-border" :class="{'has-error': isInvalid(['city'])}">
+                        <div class="form-group form-group-border">
                             <label class="control-label">Lokalizacja</label>
 
                             <div v-for="(location, index) in job.locations" class="row margin-sm-bottom">
@@ -79,7 +79,7 @@
                                         <input type="hidden" :name="'locations[' + index + '][city]'" :value="location.city">
                                         <input type="hidden" :name="'locations[' + index + '][country]'" :value="location.country">
 
-                                        <vue-google-place @change="setAddress(index, ...arguments)"></vue-google-place>
+                                        <vue-google-place @change="setAddress(index, ...arguments)" :label="location.label"></vue-google-place>
                                     </div>
                                 </div>
                             </div>

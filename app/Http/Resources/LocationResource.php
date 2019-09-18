@@ -9,6 +9,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property string $city
  * @property string $street
  * @property string $street_number
+ * @property string $label
  * @property Country $country
  */
 class LocationResource extends JsonResource
@@ -28,7 +29,8 @@ class LocationResource extends JsonResource
             'street_number' => $this->street_number,
 
             $this->mergeWhen($this->resource->relationLoaded('country'), [
-                'country'   => $this->country->name
+                'country'   => $this->country->name,
+                'label'     => $this->label
             ])
         ];
     }

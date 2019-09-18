@@ -176,7 +176,13 @@
                                     <div class="col-sm-2" v-for="photo in gallery">
                                         <input type="hidden" name="gallery[]" :value="photo.file">
 
-                                        <vue-thumbnail :url="photo.url" :file="photo.file" upload-url="{{ route('firm.gallery') }}" @upload="onThumbnailUploaded" @delete="onThumbnailDeleted"></vue-thumbnail>
+                                        <vue-thumbnail
+                                            :url="photo.url"
+                                            :file="photo.file"
+                                            upload-url="{{ route('firm.gallery') }}"
+                                            @upload="onThumbnailUploaded"
+                                            @delete="onThumbnailDeleted">
+                                        </vue-thumbnail>
                                     </div>
                                 </div>
                             </div>

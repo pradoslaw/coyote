@@ -1,9 +1,14 @@
 <template>
-    <input ref="autocomplete" autocomplete="off" class="form-control" placeholder="Np. Warszawa, al. Jerozolimskie 3" type="text"/>
+    <input ref="autocomplete" :value="label" autocomplete="off" class="form-control" placeholder="Np. Warszawa, al. Jerozolimskie 3" type="text"/>
 </template>
 
 <script>
     export default {
+        props: {
+            label: {
+                type: String
+            }
+        },
         mounted() {
             const autocomplete = new google.maps.places.Autocomplete(this.$refs.autocomplete, {types: ['geocode']});
 

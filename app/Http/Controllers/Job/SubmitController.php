@@ -125,6 +125,7 @@ class SubmitController extends Controller
 
     /**
      * @param Draft $draft
+     * @param IndustryRepositoryInterface $industry
      * @return \Illuminate\View\View
      */
     public function getFirm(Draft $draft, IndustryRepositoryInterface $industry)
