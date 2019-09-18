@@ -14,9 +14,7 @@
             {% include 'job.submit.partials.loader' %}
 
             <div class="submit-form">
-                <p v-if="Object.keys(errors).length" class="alert alert-danger" v-cloak>
-                    Formularz zawiera błędy. Sprawdź poprawność wprowadzonych danych i spróbuj ponownie.
-                </p>
+                {% include 'job.submit.partials.error_message' %}
 
                 <form
                     @submit.prevent="submitForm"
@@ -156,7 +154,7 @@
                         <div class="form-group-border form-group">
                             <label class="control-label">Opis oferty (opcjonalnie)</label>
 
-                            <vue-tinymce v-model="job.description" :init="tinymce"></vue-tinymce>
+                            <vue-tinymce v-model="job.description" :init="tinymceOptions"></vue-tinymce>
                             <span class="help-block">Miejsce na szczegółowy opis oferty. Pole to jednak nie jest wymagane.</span>
 
                             <input type="hidden" name="description" v-model="job.description">
@@ -220,7 +218,7 @@
                             </div>
 
                             <div v-show="job.enable_apply == 0">
-                                <vue-tinymce v-model="job.recruitment" :init="tinymce"></vue-tinymce>
+                                <vue-tinymce v-model="job.recruitment" :init="tinymceOptions"></vue-tinymce>
 
                                 <input type="hidden" name="recruitment" v-model="job.recruitment">
 
@@ -302,7 +300,7 @@
             plans: {{ plans|raw }},
             popular_tags: {{ popular_tags|json_encode|raw }},
             suggestions: [],
-            suggestionUrl: '{{ route('job.tag.suggestions') }}',
+            suggestion_url: '{{ route('job.tag.suggestions') }}',
             seniority: {{ seniority|json_encode|raw }},
             remote_range: {{ remote_range|json_encode|raw }},
             currencies: {{ currencies|json_encode|raw }},

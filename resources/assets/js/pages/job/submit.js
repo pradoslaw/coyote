@@ -86,6 +86,8 @@ new Vue({
                 })
                 .catch(error => {
                     this.errors = error.response.data.errors;
+
+                    window.location.href = '#top';
                 });
         },
 
@@ -100,7 +102,7 @@ new Vue({
             let pluck = this.job.tags.map(item => item.name);
 
             // request suggestions
-            axios.get(this.suggestionUrl, {params: {t: pluck}})
+            axios.get(this.suggestion_url, {params: {t: pluck}})
                 .then(response => {
                     this.suggestions = response.data;
                 });
@@ -153,7 +155,7 @@ new Vue({
         toggleFeature: function (feature) {
             feature.pivot.checked = +!feature.pivot.checked;
         },
-        addFirm: function () {
+        addFirm () {
             let dialog = new Dialog({
                 title: 'Dodanie nowej firmy',
                 message: 'Czy na pewno chcesz dodać nową firme i przypisać ją do tego ogłoszenia?',
@@ -220,27 +222,32 @@ new Vue({
 
             dialog.show();
         },
-        _newFirm: function () {
-            this.firm = {
-                'id': null,
-                'name': null,
-                'headline': '',
-                'logo': null,
-                'thumbnail': null,
-                'description': null,
-                'website': null,
-                'is_private': +false,
-                'is_agency': +false,
-                'employees': null,
-                'founded': null,
-                'vat_id': null,
-                'youtube_url': null,
-                'gallery': [{file: ''}]
-            };
-
-            this.benefits = [];
-            this.firm.description = '';
-            // tinymce.get('description').setContent(''); // new firm - empty description
+        _newFirm () {
+            this.firm = Object.assign(this.firm, {
+                id: null,
+                name: '',
+                logo: null,
+                thumbnail: null,
+                description: '',
+                website: null,
+                is_private: false,
+                is_agency: false,
+                employees: null,
+                founded: null,
+                vat_id: null,
+                youtube_url: null,
+                gallery: [{file: ''}],
+                benefits: [],
+                industries: [],
+                latitude: null,
+                longitude: null,
+                country: null,
+                street: null,
+                postcode: null,
+                city: null,
+                house: null,
+                country_id: null
+            });
 
             $('#industries').trigger('chosen:updated');
         },
@@ -296,11 +303,8 @@ new Vue({
     },
     computed: {
         address: {
-            get: function () {
+            get () {
                 return String((this.firm.street || '') + ' ' + (this.firm.house || '') + ' ' + (this.firm.postcode || '') + ' ' + (this.firm.city || '')).trim();
-            },
-            set: function () {
-                //
             }
         },
 
@@ -308,8 +312,8 @@ new Vue({
             return this.firm.gallery && this.firm.gallery.length ? this.firm.gallery : {'file': ''};
         },
 
-        tinymce: {
-            get: function () {
+        tinymceOptions: {
+            get () {
                 return tinymce;
             }
         },
