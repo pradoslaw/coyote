@@ -29,6 +29,15 @@
 
                     <input type="hidden" name="id" v-model="firm.id">
 
+                    <vue-modal ref="add-firm-modal">
+                        Czy na pewno chcesz dodać nową firme i przypisać ją do tego ogłoszenia?
+
+                        <template slot="buttons">
+                            <button @click="$refs['add-firm-modal'].close()" type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
+                            <button @click="_newFirm" type="button" class="btn btn-primary danger">Tak</button>
+                        </template>
+                    </vue-modal>
+
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             Informacje o firmie
@@ -134,20 +143,6 @@
                                             @upload="addLogo"
                                             @delete="removeLogo">
                                         </vue-thumbnail>
-
-{#                                        <div class="img-placeholder img-thumbnail" v-show="!firm.logo">#}
-{#                                            <img src="{{ cdn('img/logo-gray.png') }}">#}
-{#                                        </div>#}
-
-{#                                        <div class="img-container img-thumbnail" v-show="firm.logo">#}
-{#                                            <img :src="firm.thumbnail">#}
-
-{#                                            <div id="btn-delete-photo" class="btn-flush">#}
-{#                                                <i class="fa fa-remove fa-2x"></i>#}
-{#                                            </div>#}
-{#                                        </div>#}
-
-{#                                        <a id="btn-change-photo" href="{{ route('firm.logo') }}" class="btn btn-xs btn-upload"><i class="fa fa-upload"></i> Zmień</a>#}
                                     </div>
                                 </div>
                             </div>

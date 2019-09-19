@@ -1,6 +1,5 @@
 import '../../plugins/uploader';
 import tinymce from '../../libs/tinymce';
-import Dialog from '../../libs/dialog';
 import Map from '../../libs/map';
 import Vue from 'vue';
 import VueThumbnail from '../../components/thumbnail.vue';
@@ -13,6 +12,7 @@ import VueSelect from '../../components/forms/select.vue';
 import VueCheckbox from '../../components/forms/checkbox.vue';
 import VueRadio from '../../components/forms/radio.vue';
 import VueError from '../../components/forms/error.vue';
+import VueModal from '../../components/modal.vue';
 import Editor from '@tinymce/tinymce-vue';
 import 'chosen-js';
 import axios from "axios";
@@ -33,7 +33,8 @@ new Vue({
         'vue-select': VueSelect,
         'vue-checkbox': VueCheckbox,
         'vue-radio': VueRadio,
-        'vue-error': VueError
+        'vue-error': VueError,
+        'vue-modal': VueModal
     },
     mounted () {
         this.marker = null;
@@ -136,29 +137,7 @@ new Vue({
             feature.pivot.checked = +!feature.pivot.checked;
         },
         addFirm () {
-            let dialog = new Dialog({
-                title: 'Dodanie nowej firmy',
-                message: 'Czy na pewno chcesz dodać nową firme i przypisać ją do tego ogłoszenia?',
-                buttons: [{
-                    label: 'Anuluj',
-                    attr: {
-                        'class': 'btn btn-default',
-                        'type': 'button',
-                        'data-dismiss': 'modal'
-                    }
-                }, {
-                    label: 'Tak',
-                    attr: {
-                        'class': 'btn btn-primary'
-                    },
-                    onClick: () => {
-                        this._newFirm();
-                        dialog.close();
-                    }
-                }]
-            });
-
-            dialog.show();
+            this.$refs['add-firm-modal'].open();
         },
         selectFirm (firmId) {
             let index = this.firms.findIndex(element => element.id === firmId);
@@ -171,40 +150,14 @@ new Vue({
             this.firm.description = this.firm.description === null ? '' : this.firm.description;
             $('#industries').trigger('chosen:updated');
         },
-        changeFirm () {
-            if (!this.firm.name) {
-                return;
-            }
 
-            let dialog = new Dialog({
-                title: 'Zmiana nazwy firmy?',
-                message: 'Zamierzasz edytować nazwę tej firmy. Weź pod uwagę, że zmieniona nazwa będzie wyświetlana przy wszystkich Twoich ofertach. Czy może chcesz dodać nową firmę?',
-                buttons: [{
-                    label: 'Jest OK, chce tylko zmienić nazwę',
-                    attr: {
-                        'class': 'btn btn-default',
-                        'type': 'button',
-                        'data-dismiss': 'modal'
-                    }
-                }, {
-                    label: 'Tak, chcę dodać nową firmę',
-                    attr: {
-                        'class': 'btn btn-primary'
-                    },
-                    onClick: () => {
-                        this._newFirm();
-                        dialog.close();
-                    }
-                }]
-            });
-
-            dialog.show();
-        },
         _newFirm () {
+            this.$refs['add-firm-modal'].close();
+
             this.firm = Object.assign(this.firm, {
                 id: null,
                 name: '',
-                logo: null,
+                logo: {filename: null, url: null},
                 thumbnail: null,
                 description: '',
                 website: null,
