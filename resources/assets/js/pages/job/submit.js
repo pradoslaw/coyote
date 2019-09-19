@@ -92,31 +92,34 @@ new Vue({
 
             this._initTooltip();
         },
-        onTagChange (name) {
-            this.addTag(name);
-        },
-        onTagDelete (name) {
+
+        removeTag (name) {
             let index = this.job.tags.findIndex(el => el.name === name);
 
             this.job.tags.splice(index, 1);
         },
+
         isInvalid (fields) {
             return Object.keys(this.errors).findIndex(element => fields.indexOf(element) > -1) > -1;
         },
+
         charCounter (item, limit) {
             let model = item.split('.').reduce((o, i) => o[i], this);
 
             return limit - String(model !== null ? model : '').length;
         },
+
         toggleBenefit (item) {
             let index = this.firm.benefits.indexOf(item);
 
             if (index === -1) {
                 this.firm.benefits.push(item);
-            } else {
+            }
+            else {
                 this.firm.benefits.splice(index, 1);
             }
         },
+
         addBenefit (e) {
             if (e.target.value.trim()) {
                 this.firm.benefits.push(e.target.value);
@@ -124,10 +127,11 @@ new Vue({
 
             e.target.value = '';
         },
+
         removeBenefit (benefit) {
             this.firm.benefits.splice(this.firm.benefits.indexOf(benefit), 1);
         },
-        updateBenefit () {},
+
         /**
          * Enable/disable feature for this offer.
          *
@@ -136,9 +140,11 @@ new Vue({
         toggleFeature (feature) {
             feature.pivot.checked = +!feature.pivot.checked;
         },
+
         addFirm () {
             this.$refs['add-firm-modal'].open();
         },
+
         selectFirm (firmId) {
             let index = this.firms.findIndex(element => element.id === firmId);
 
@@ -182,6 +188,7 @@ new Vue({
 
             $('#industries').trigger('chosen:updated');
         },
+
         changeAddress (e) {
             let val = e.target.value.trim();
 
@@ -200,20 +207,24 @@ new Vue({
                 this._setupMarker();
             }
         },
+
         _setupMarker () {
             this.map.removeMarker(this.marker);
             this.marker = this.map.addMarker(this.firm.latitude, this.firm.longitude);
         },
-        onThumbnailUploaded (file) {
+
+        addPhoto (file) {
             this.firm.gallery.splice(this.firm.gallery.length - 1, 0, file);
         },
-        onThumbnailDeleted (file) {
+
+        removePhoto (file) {
             let index = this.firm.gallery.findIndex(photo => photo.file === file);
 
             if (index > -1) {
                 this.firm.gallery.splice(index, 1);
             }
         },
+
         _initTooltip () {
             this.$nextTick(function () {
                 $('i[data-toggle="tooltip"]').tooltip();

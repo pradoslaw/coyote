@@ -153,7 +153,7 @@
                                 <vue-text name="website" :value.sync="firm.website"></vue-text>
 
                                 <span class="help-block">Firmowa strona WWW. Będzie ona wyświetlana przy ofercie.</span>
-                                <vue-error :mesage="errors.website"></vue-error>
+                                <vue-error :message="errors.website"></vue-error>
                             </div>
 
                             <div class="form-group">
@@ -171,7 +171,7 @@
                                 <input type="hidden" name="description" v-model="firm.description"></input>
 
                                 <span class="help-block">Czym zajmuje się firma, w jakich branżach działa oraz jakie technologie wykorzystuje?</span>
-                                <vue-error :mesage="errors.description"></vue-error>
+                                <vue-error :message="errors.description"></vue-error>
                             </div>
 
                             <div class="form-group form-group-border" v-show="isAgency == 0">
@@ -185,8 +185,8 @@
                                             :url="photo.url"
                                             :file="photo.file"
                                             upload-url="{{ route('firm.gallery') }}"
-                                            @upload="onThumbnailUploaded"
-                                            @delete="onThumbnailDeleted">
+                                            @upload="addPhoto"
+                                            @delete="removePhoto">
                                         </vue-thumbnail>
                                     </div>
                                 </div>
@@ -195,10 +195,10 @@
                             <div class="form-group-border form-group"  :class="{'has-error': isInvalid(['youtube_url'])}">
                                 <label class="control-label">Nagranie wideo w Youtube</label>
 
-                                <vue-text name="website" :value.sync="firm.youtube_url"></vue-text>
+                                <vue-text name="youtube_url" :value.sync="firm.youtube_url"></vue-text>
 
                                 <span class="help-block">Film promujący firmę będzie wyświetlany pod ogłoszeniem o pracę.</span>
-                                <vue-error :mesage="errors.youtube_url"></vue-error>
+                                <vue-error :message="errors.youtube_url"></vue-error>
                             </div>
 
                             <div class="form-group">
@@ -253,7 +253,7 @@
                                     <li class="list-group-item col-xs-6 checked" v-for="benefit in firm.benefits" v-if="default_benefits.indexOf(benefit) === -1">
                                         <i class="fa fa-fw fa-check"></i>
 
-                                        <input type="text" name="benefits[]" :value="benefit" class="form-control input-sm" @keydown.enter.prevent="updateBenefit">
+                                        <input type="text" name="benefits[]" :value="benefit" class="form-control input-sm" @keydown.enter.prevent="">
                                         <button class="btn btn-default btn-xs btn-delete" title="Usuń tę pozycję" @click.prevent="removeBenefit(benefit)"><i class="fa fa-minus-circle text-danger"></i></button>
                                     </li>
 
@@ -278,18 +278,6 @@
                 </form>
             </div>
         </main>
-
-        <aside class="col-lg-3 hidden-md hidden-sm hidden-xs">
-            <div id="hint-container">
-                <div id="hint-headline" class="sidebar-hint" style="display: none;">
-                    <h4>Motto lub nagłówek</h4>
-
-                    <p>
-                        Opcjonalna informacja, która opisuje Twoją firmę. To zdanie będzie wyświetlane przy opisie firmy pod ofertą.
-                    </p>
-                </div>
-            </div>
-        </aside>
     </div>
 {% endblock %}
 
