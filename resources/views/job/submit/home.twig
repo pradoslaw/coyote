@@ -190,7 +190,7 @@
                         <div class="form-group" :class="{'has-error': isInvalid(['email'])}">
                             <div class="form-group">
                                 <div class="radio">
-                                    <vue-radio id="enable_apply_1" name="enable_apply" :value.sync="job.enable_apply" checked-value="1"></vue-radio>
+                                    <vue-radio id="enable_apply_1" name="enable_apply" :value.sync="enableApply" checked-value="1"></vue-radio>
 
                                     <label for="enable_apply_1">
                                         Zezwól na wysyłanie CV poprzez serwis 4programmers.net
@@ -200,7 +200,7 @@
 
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <vue-text name="email" :value.sync="job.email" :disabled="job.enable_apply == 0"></vue-text>
+                                    <vue-text name="email" :value.sync="job.email" :disabled="enableApply == 0"></vue-text>
                                     <span class="help-block">Adres e-mail nie będzie widoczny dla osób postronnych.</span>
 
                                     <vue-error :message="errors.email"></vue-error>
@@ -211,7 +211,7 @@
                         <div class="form-group" :class="{'has-error': isInvalid(['recruitment'])}">
                             <div class="form-group">
                                 <div class="radio">
-                                    <vue-radio id="enable_apply_0" name="enable_apply" :value.sync="job.enable_apply" checked-value="0"></vue-radio>
+                                    <vue-radio id="enable_apply_0" name="enable_apply" :value.sync="enableApply" checked-value="0"></vue-radio>
 
                                     <label for="enable_apply_0">
                                         ...lub podaj informacje w jaki sposób kandydaci mogą aplikować na to stanowisko
@@ -219,7 +219,7 @@
                                 </div>
                             </div>
 
-                            <div v-show="job.enable_apply == 0">
+                            <div v-show="enableApply == 0">
                                 <vue-tinymce v-model="job.recruitment" :init="tinymceOptions"></vue-tinymce>
 
                                 <input type="hidden" name="recruitment" v-model="job.recruitment">

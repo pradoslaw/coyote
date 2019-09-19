@@ -16,11 +16,16 @@
         </a>
 
         <input type="file" ref="input" @change="upload">
+
+        <vue-modal ref="error">
+            {{ error }}
+        </vue-modal>
     </div>
 </template>
 
 <script>
-    import Dialog from '../libs/dialog';
+    import axios from 'axios';
+    import VueModal from './modal.vue';
 
     export default {
         props: {
@@ -32,43 +37,47 @@
             },
             uploadUrl: {
                 type: String
+            },
+            name: {
+                type: String,
+                default: 'photo'
             }
+        },
+        components: {
+            'vue-modal': VueModal
         },
         data () {
             return {
-                isPending: false
+                isPending: false,
+                error: null
             }
         },
         methods: {
             openDialog () {
                 this.$refs.input.click();
             },
+
             upload () {
                 let form = new FormData();
-                form.append('photo', this.$refs.input.files[0]);
+                form.append(this.name, this.$refs.input.files[0]);
 
                 this.isPending = true;
 
-                $.ajax({
-                    url: this.uploadUrl,
-                    type: 'POST',
-                    data: form,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    success: (result) => {
-                        this.$emit('upload', result);
-                    },
-                    complete: () => {
+                axios.post(this.uploadUrl, form)
+                    .then(response => {
+                        this.$emit('upload', response.data);
+                    })
+                    .catch(error => {
+                        this.error = error.response.data.message;
+
+                        this.$refs.error.open();
+
+                    })
+                    .finally(() => {
                         this.isPending = false;
-                    },
-                    error: function (err) {
-                        if (typeof err.responseJSON !== 'undefined') {
-                            Dialog.alert({message: err.responseJSON.photo[0]}).show();
-                        }
-                    }
-                }, 'json');
+                    });
             },
+
             remove () {
                 this.$emit('delete', this.file);
             }

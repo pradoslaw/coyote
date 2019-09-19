@@ -13,6 +13,7 @@ class SubmitController extends Controller
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function logo(Request $request)
     {
@@ -23,8 +24,8 @@ class SubmitController extends Controller
         $media = $this->getMediaFactory()->make('logo')->upload($request->file('logo'));
 
         return response()->json([
-            'url' => (string) $media->url(),
-            'name' => $media->getFilename()
+            'url'       => (string) $media->url(),
+            'filename'  => $media->getFilename()
         ]);
     }
 }

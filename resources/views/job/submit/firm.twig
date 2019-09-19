@@ -123,21 +123,31 @@
 
                                 <div class="row">
                                     <div class="col-sm-2">
-                                        <input type="hidden" name="logo" v-model="firm.logo">
 
-                                        <div class="img-placeholder img-thumbnail" v-show="!firm.logo">
-                                            <img src="{{ cdn('img/logo-gray.png') }}">
-                                        </div>
+                                        <input type="hidden" name="logo" v-model="firm.logo.filename">
 
-                                        <div class="img-container img-thumbnail" v-show="firm.logo">
-                                            <img :src="firm.thumbnail">
+                                        <vue-thumbnail
+                                            :url="firm.logo.url"
+                                            :file="firm.logo.filename"
+                                            name="logo"
+                                            upload-url="{{ route('firm.logo') }}"
+                                            @upload="addLogo"
+                                            @delete="removeLogo">
+                                        </vue-thumbnail>
 
-                                            <div id="btn-delete-photo" class="btn-flush">
-                                                <i class="fa fa-remove fa-2x"></i>
-                                            </div>
-                                        </div>
+{#                                        <div class="img-placeholder img-thumbnail" v-show="!firm.logo">#}
+{#                                            <img src="{{ cdn('img/logo-gray.png') }}">#}
+{#                                        </div>#}
 
-                                        <a id="btn-change-photo" href="{{ route('firm.logo') }}" class="btn btn-xs btn-upload"><i class="fa fa-upload"></i> Zmień</a>
+{#                                        <div class="img-container img-thumbnail" v-show="firm.logo">#}
+{#                                            <img :src="firm.thumbnail">#}
+
+{#                                            <div id="btn-delete-photo" class="btn-flush">#}
+{#                                                <i class="fa fa-remove fa-2x"></i>#}
+{#                                            </div>#}
+{#                                        </div>#}
+
+{#                                        <a id="btn-change-photo" href="{{ route('firm.logo') }}" class="btn btn-xs btn-upload"><i class="fa fa-upload"></i> Zmień</a>#}
                                     </div>
                                 </div>
                             </div>
@@ -199,14 +209,14 @@
                             <div class="form-group">
                                 <label class="control-label">Liczba pracowników w firmie</label>
 
-                                <vue-select name="employees" :options="employees" :value.sync="job.employees" placeholder="--"></vue-select>
+                                <vue-select name="employees" :options="employees" :value.sync="firm.employees" placeholder="--"></vue-select>
                                 <span class="help-block">Pozwala ocenić jak duża jest firma. Czy jest to korporacja, czy mała rodzinna firma?</span>
                             </div>
 
                             <div class="form-group-border form-group">
                                 <label class="control-label">Rok powstania</label>
 
-                                <vue-select name="founded" :options="founded" :value.sync="job.founded" placeholder="--"></vue-select>
+                                <vue-select name="founded" :options="founded" :value.sync="firm.founded" placeholder="--"></vue-select>
                                 <span class="help-block">Pozwala ocenić jak duża jest firma. Czy jest to korporacja, czy mała rodzinna firma?</span>
                             </div>
 

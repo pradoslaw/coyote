@@ -37,9 +37,6 @@ new Vue({
     },
     mounted () {
         this.marker = null;
-        this.job.enable_apply = +this.job.enable_apply;
-        // this.firm.is_agency = +this.firm.is_agency;
-        // this.firm.is_private = +this.firm.is_private;
 
         if (typeof google !== 'undefined' && this.firm) {
             this.map = new Map();
@@ -53,21 +50,6 @@ new Vue({
                 this._setupMarker();
             });
         }
-
-        // ugly hack to initialize jquery fn after dom is loaded
-        $(() => {
-            $.uploader({
-                input: 'logo',
-                onChanged: data => {
-                    this.firm.thumbnail = $('.img-container > img').attr('src');
-                    this.firm.logo = data.name;
-                },
-                onDeleted: () => {
-                    this.firm.logo = null;
-                    this.firm.thumbnail = null;
-                }
-            });
-        });
 
         $('[v-loader]').remove();
         this._initTooltip();
@@ -295,13 +277,19 @@ new Vue({
 
         setAddress (index, data) {
             this.$set(this.job.locations, index, data);
+        },
+
+        addLogo (result) {
+            this.firm.logo = result;
+        },
+
+        removeLogo () {
+            this.firm.logo = {url: null, filename: null};
         }
     },
     computed: {
-        address: {
-            get () {
-                return String((this.firm.street || '') + ' ' + (this.firm.house || '') + ' ' + (this.firm.postcode || '') + ' ' + (this.firm.city || '')).trim();
-            }
+        address () {
+            return String((this.firm.street || '') + ' ' + (this.firm.house || '') + ' ' + (this.firm.postcode || '') + ' ' + (this.firm.city || '')).trim();
         },
 
         gallery () {
@@ -327,6 +315,15 @@ new Vue({
             },
             set (val) {
                 this.firm.is_agency = val;
+            }
+        },
+
+        enableApply: {
+            get () {
+                return +this.job.enable_apply;
+            },
+            set (val) {
+                this.job.enable_apply = val;
             }
         }
     },

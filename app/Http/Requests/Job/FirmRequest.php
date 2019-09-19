@@ -40,8 +40,6 @@ class FirmRequest extends FormRequest
             'city' => 'nullable|string|max:255',
             'postcode' => 'nullable|string|max:50',
             'house' => 'nullable|string|max:50',
-
-
         ];
     }
 

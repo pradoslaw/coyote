@@ -16,11 +16,14 @@ class Firm extends JsonResource
         $data = array_except(parent::toArray($request), ['benefits']);
 
         return array_merge($data, [
-            'thumbnail'     => $this->resource->logo->getFilename() ? (string) $this->resource->logo->url() : cdn('img/logo-gray.png'),
-            'logo'          => $this->resource->getOriginal('logo'),
             'benefits'      => $this->resource->benefits->pluck('name')->toArray(),
             'industries'    => $this->resource->industries->pluck('id')->toArray(),
-            'gallery'       => $this->gallery($this->resource)
+            'gallery'       => $this->gallery($this->resource),
+
+            'logo'          => [
+                'url'       => $this->resource->logo->getFilename() ? (string) $this->resource->logo->url() : null,
+                'filename'  => $this->resource->logo->getFilename()
+            ]
         ]);
     }
 
