@@ -229,10 +229,14 @@
                         </div>
 
                         <div id="form-navigation" class="form-group">
-                            <button type="submit" class="btn btn-primary pull-right">Informacje o firmie <i class="fa fa-angle-right"></i></button>
+                            <vue-button :disabled="isSubmitting" type="submit" class="btn btn-primary pull-right">
+                                Informacje o firmie <i class="fa fa-angle-right"></i>
+                            </vue-button>
 
                             {% if not firm.is_private and firm.name %}
-                                <button type="submit" class="btn btn-danger pull-right btn-save margin-sm-right" title="Zapisz tę ofertę"><i class="fa fa-save"></i> Zapisz jako {{ firm.name[:38] }}</button>
+                                <vue-button :disabled="isSubmitting" type="submit" class="btn btn-danger pull-right btn-save margin-sm-right" title="Zapisz tę ofertę">
+                                    <i class="fa fa-save"></i> Zapisz jako {{ firm.name[:38] }}
+                                </vue-button>
                             {% endif %}
                         </div>
                     </div>
@@ -315,7 +319,6 @@
     {{ widgets.vue() }}
     <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
     <script src="//maps.googleapis.com/maps/api/js?key={{ config('services.google-maps.key') }}&sensor=false&libraries=places"></script>
-    <script src="{{ asset('js/jquery-ui.js') }}"></script>
     <script src="{{ cdn('js/job-submit.js') }}"></script>
 
     {% include 'job.submit.partials.navigation' %}

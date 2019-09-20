@@ -269,12 +269,11 @@
                             <div id="form-navigation" class="form-group">
                                 <a href="{{ route('job.submit') }}" class="btn btn-default pull-left"><i class="fa fa-angle-left"></i> Podstawowe informacje</a>
 
-                                <button type="submit" class="btn btn-primary pull-right">Podgląd <i class="fa fa-angle-right"></i></button>
-                                <button type="submit" class="btn btn-danger pull-right btn-save margin-sm-right"><i class="fa fa-save"></i> Zapisz i zakończ</button>
+                                <vue-button type="submit" :disabled="isSubmitting" class="btn btn-primary pull-right">Podgląd <i class="fa fa-angle-right"></i></vue-button>
+                                <vue-button type="submit" :disabled="isSubmitting" class="btn btn-danger pull-right btn-save margin-sm-right"><i class="fa fa-save"></i> Zapisz i zakończ</vue-button>
                             </div>
                         </div>
                     </div>
-
                 </form>
             </div>
         </main>

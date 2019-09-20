@@ -126,7 +126,7 @@
         components: {
             'vue-modal': VueModal
         },
-        data: function () {
+        data () {
             return {
                 isEditing: false,
                 isReplying: false,
@@ -134,7 +134,7 @@
             }
         },
         methods: {
-            edit: function () {
+            edit () {
                 this.isEditing = !this.isEditing;
 
                 if (this.isEditing) {
@@ -144,7 +144,7 @@
                 }
             },
 
-            reply: function () {
+            reply () {
                 this.isReplying = !this.isReplying;
 
                 if (this.isReplying) {
@@ -154,11 +154,11 @@
                 }
             },
 
-            removeConfirm: function () {
+            removeConfirm () {
                 this.$refs.confirm.open();
             },
 
-            remove: function () {
+            remove () {
                 this.$refs.confirm.close();
 
                 axios.delete(this.comment.route.delete).then(() => {
@@ -166,7 +166,7 @@
                 });
             },
 
-            updateForm: function () {
+            updateForm () {
                 axios.post(this.$refs.updateForm.action, new FormData(this.$refs.updateForm))
                     .then(response => {
                         this.$store.commit('comments/update', response.data);
@@ -177,7 +177,7 @@
                     });
             },
 
-            replyForm: function () {
+            replyForm () {
                 axios.post(this.$refs.replyForm.action, new FormData(this.$refs.replyForm))
                     .then(response => {
                         this.$store.commit('comments/reply', response.data);
@@ -190,7 +190,7 @@
                     });
             },
 
-            scrollIntoView: function (data) {
+            scrollIntoView (data) {
                 this.$nextTick(function() {
                     let el = document.getElementById(`comment-${data.id}`);
                     el.scrollIntoView(true);
@@ -199,7 +199,7 @@
                 });
             },
 
-            _showError: function (error) {
+            _showError (error) {
                 let errors = error.response.data.errors;
 
                 this.error = errors[Object.keys(errors)[0]][0];

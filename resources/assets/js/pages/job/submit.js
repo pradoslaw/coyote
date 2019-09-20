@@ -12,6 +12,7 @@ import VueSelect from '../../components/forms/select.vue';
 import VueCheckbox from '../../components/forms/checkbox.vue';
 import VueRadio from '../../components/forms/radio.vue';
 import VueError from '../../components/forms/error.vue';
+import VueButton from '../../components/forms/button.vue';
 import VueModal from '../../components/modal.vue';
 import Editor from '@tinymce/tinymce-vue';
 import 'chosen-js';
@@ -21,7 +22,9 @@ import Config from "../../libs/config";
 new Vue({
     el: '.submit-form',
     delimiters: ['${', '}'],
-    data: window.data,
+    data: Object.assign(window.data, {
+        isSubmitting: false
+    }),
     components: {
         'vue-tinymce': Editor,
         'vue-thumbnail': VueThumbnail,
@@ -34,10 +37,13 @@ new Vue({
         'vue-checkbox': VueCheckbox,
         'vue-radio': VueRadio,
         'vue-error': VueError,
-        'vue-modal': VueModal
+        'vue-modal': VueModal,
+        'vue-button': VueButton
     },
+
     mounted () {
         this.marker = null;
+
 
         if (typeof google !== 'undefined' && this.firm) {
             this.map = new Map();
@@ -63,6 +69,8 @@ new Vue({
     },
     methods: {
         submitForm () {
+            this.isSubmitting = true;
+
             axios.post(this.$refs.submitForm.action, new FormData(this.$refs.submitForm))
                 .then(response => {
                     window.location.href = response.data;
@@ -71,6 +79,9 @@ new Vue({
                     this.errors = error.response.data.errors;
 
                     window.location.href = '#top';
+                })
+                .finally(() => {
+                    this.isSubmitting = false;
                 });
         },
 
