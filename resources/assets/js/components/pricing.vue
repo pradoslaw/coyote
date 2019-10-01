@@ -19,7 +19,7 @@
                 <li><div><strong>3x podbicie</strong> ogłoszenia <i class="fa fa-question-circle" data-toggle="tooltip" title="W okresie promowania oferty, 3 razy podbijemy Twoje ogłoszenie na górę listy. Dzięki temu więcej ludzi będzie mogło je zobaczyć."></i></div></li>
             </ul>
 
-            <div class="plan" v-for="plan in plans" :class="{'selected': vModel == plan.id}">
+            <div class="plan" v-for="plan in plans" :class="{'selected': valueLocal == plan.id}">
                 <div class="plan-header" @click="changePlan(plan.id)">
                     <h4 class="plan-name">Ogłoszenie<br><strong>{{ plan.name }}</strong></h4>
 
@@ -32,8 +32,8 @@
                         <li v-for="n in 5"><i class="fa fa-fw" :class="{'fa-check-circle': plan.benefits.length >= n, 'text-primary': plan.benefits.length >= n, 'fa-remove': plan.benefits.length < n, 'text-muted': plan.benefits.length < n}"></i></li>
 
                         <li class="feature-button">
-                            <button class="btn btn-default" v-if="vModel != plan.id" @click.prevent="changePlan(plan.id)">Wybierz</button>
-                            <span class="text-primary" v-if="vModel == plan.id"><i class="fa fa-check-circle-o fa-fw text-primary"></i> Wybrano</span>
+                            <button class="btn btn-default" v-if="valueLocal != plan.id" @click.prevent="changePlan(plan.id)">Wybierz</button>
+                            <span class="text-primary" v-if="valueLocal == plan.id"><i class="fa fa-check-circle-o fa-fw text-primary"></i> Wybrano</span>
                         </li>
                     </ul>
                 </div>
@@ -57,12 +57,14 @@
 </template>
 
 <script>
+    import { default as mixins } from './mixins/form';
+
     export default {
         props: {
             plans: {
                 type: Array
             },
-            vModel: {
+            value: {
                 type: Number
             },
             email: {
@@ -70,15 +72,11 @@
             }
         },
         methods: {
-            changePlan: function (planId) {
-                this.vModel = planId;
+            changePlan (planId) {
+                this.valueLocal = planId;
             }
         },
-        watch: {
-            vModel: function() {
-                this.$emit('update:vModel', this.vModel);
-            }
-        }
+        mixins: [ mixins ]
     }
 
 </script>

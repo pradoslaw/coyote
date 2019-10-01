@@ -39,7 +39,7 @@
 
             <h2 class="text-center margin-lg-top margin-lg-bottom">Dajemy Ci do dyspozycji 3 atrakcyjne plany taryfowe. <strong>Już od 30 zł!</strong></h2>
 
-            <vue-pricing :plans="plans" :v-model.sync="default_plan.id" email="{{ config('mail.from.address') }}"></vue-pricing>
+            <vue-pricing :plans="plans" :value.sync="default_plan.id" email="{{ config('mail.from.address') }}"></vue-pricing>
 
             <h2 class="text-center margin-lg-top margin-lg-bottom">Co zyskujesz dodając ogłoszenie na 4programmers.net?</h2>
 

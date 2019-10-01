@@ -3,6 +3,8 @@
 </template>
 
 <script>
+    import { default as mixins } from '../mixins/form';
+
     export default {
         props: {
             name: {
@@ -16,15 +18,6 @@
                 require: false
             }
         },
-        computed: {
-            valueLocal: {
-                get: function () {
-                    return this.value;
-                },
-                set: function (value) {
-                    this.$emit('update:value', value);
-                }
-            }
-        }
+        mixins: [ mixins ]
     };
 </script>
