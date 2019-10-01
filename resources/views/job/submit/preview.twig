@@ -20,7 +20,7 @@
             {{ form_open({'url': route('job.submit.save'), 'class': 'submit-form'}) }}
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <div id="form-navigation" class="form-group">
+                    <div id="form-navbar" class="form-group">
                         <a href="{{ route('job.submit.firm') }}" class="btn btn-default pull-left"><i class="fa fa-angle-left"></i> Informacje o firmie</a>
                         <button type="submit" class="btn btn-primary pull-right" data-submit-state="Zapisywanie...">Opublikuj <i class="fa fa-angle-right"></i></button>
                     </div>
@@ -50,6 +50,5 @@
     <script src="//maps.googleapis.com/maps/api/js?key={{ config('services.google-maps.key') }}&sensor=false"></script>
     <script src="{{ cdn('js/job-submit.js') }}"></script>
 
-    {% include 'job.submit.partials.navigation' %}
     {% include 'job.submit.partials.chat' %}
 {% endblock %}

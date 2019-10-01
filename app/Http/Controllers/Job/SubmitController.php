@@ -120,7 +120,7 @@ class SubmitController extends Controller
 
         $draft->put(Job::class, $job);
 
-        return $this->next($request, route('job.submit.firm'));
+        return $this->next($request, $draft, route('job.submit.firm'));
     }
 
     /**
@@ -180,7 +180,7 @@ class SubmitController extends Controller
 
         $draft->put(Job::class, $job);
 
-        return $this->next($request, route('job.submit.preview'));
+        return $this->next($request, $draft, route('job.submit.preview'));
     }
 
     /**
@@ -325,13 +325,15 @@ class SubmitController extends Controller
 
     /**
      * @param Request $request
-     * @param \Illuminate\Http\RedirectResponse $next
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Draft $draft
+     * @param string $next
+     * @return string
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    private function next(Request $request, $next)
+    private function next(Request $request, Draft $draft, $next)
     {
         if ($request->get('done')) {
-            return route('job.submit.save');
+            return $this->save($draft)->getTargetUrl();
         }
 
         return $next;

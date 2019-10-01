@@ -86,15 +86,15 @@ $font-size-control-label: 15px;
 // Fixed navigation bar with "next", "previous" buttons
 // ---------------------------------------------------------
 
-#form-navbar-fixed {
+#form-navbar.fixed {
   background-color: $body-bg;
   border-top: 2px solid $border-color;
   position: fixed;
   bottom: 0;
+  left: 0;
   width: 100%;
   padding: 10px 0;
   z-index: 1000;
-  display: none;
 }
 
 // Container for offer's tags

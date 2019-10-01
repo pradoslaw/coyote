@@ -33,7 +33,7 @@
                 <input type="hidden" name="firm_id" v-model="job.firm_id">
                 <input type="hidden" name="slug" v-model="job.slug">
 
-                <input type="hidden" name="done" value="0">
+                <input type="hidden" name="done" v-model="isDone">
 
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -228,16 +228,20 @@
                             </div>
                         </div>
 
-                        <div id="form-navigation" class="form-group">
-                            <vue-button :disabled="isSubmitting" type="submit" class="btn btn-primary pull-right">
-                                Informacje o firmie <i class="fa fa-angle-right"></i>
-                            </vue-button>
+                        <div id="form-navbar" :class="{'fixed': showFormNavbar}">
+                            <div class="row max-width">
+                                <div class="col-12-md" :class="{'col-lg-9': showFormNavbar}">
+                                    <vue-button :disabled="isSubmitting" type="submit" class="btn btn-primary pull-right">
+                                        Informacje o firmie <i class="fa fa-angle-right"></i>
+                                    </vue-button>
 
-                            {% if not firm.is_private and firm.name %}
-                                <vue-button :disabled="isSubmitting" type="submit" class="btn btn-danger pull-right btn-save margin-sm-right" title="Zapisz tę ofertę">
-                                    <i class="fa fa-save"></i> Zapisz jako {{ firm.name[:38] }}
-                                </vue-button>
-                            {% endif %}
+                                    {% if not firm.is_private and firm.name %}
+                                        <vue-button :disabled="isSubmitting" type="submit" class="btn btn-danger pull-right btn-save margin-sm-right" title="Zapisz tę ofertę" @click.native="isDone = 1">
+                                            <i class="fa fa-save"></i> Zapisz jako {{ firm.name[:38] }}
+                                        </vue-button>
+                                    {% endif %}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -292,8 +296,6 @@
 
         </aside>
     </div>
-
-    {{ modals.alert('Podany tag nie jest prawidłowy.') }}
 {% endblock %}
 
 {% block body %}
@@ -321,6 +323,5 @@
     <script src="//maps.googleapis.com/maps/api/js?key={{ config('services.google-maps.key') }}&sensor=false&libraries=places"></script>
     <script src="{{ cdn('js/job-submit.js') }}"></script>
 
-    {% include 'job.submit.partials.navigation' %}
     {% include 'job.submit.partials.chat' %}
 {% endblock %}

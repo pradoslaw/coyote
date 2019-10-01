@@ -22,9 +22,7 @@ import Config from "../../libs/config";
 new Vue({
     el: '.submit-form',
     delimiters: ['${', '}'],
-    data: Object.assign(window.data, {
-        isSubmitting: false
-    }),
+    data: Object.assign(window.data, {isSubmitting: false, isDone: 0, showFormNavbar: false}),
     components: {
         'vue-tinymce': Editor,
         'vue-thumbnail': VueThumbnail,
@@ -43,7 +41,9 @@ new Vue({
 
     mounted () {
         this.marker = null;
+        this.calculateOffset();
 
+        window.addEventListener('scroll', this.handleScroll);
 
         if (typeof google !== 'undefined' && this.firm) {
             this.map = new Map();
@@ -67,22 +67,28 @@ new Vue({
 
         axios.defaults.headers.common['X-CSRF-TOKEN'] = Config.csrfToken();
     },
+    destroyed () {
+        window.removeEventListener('scroll', this.handleScroll);
+    },
     methods: {
         submitForm () {
             this.isSubmitting = true;
 
-            axios.post(this.$refs.submitForm.action, new FormData(this.$refs.submitForm))
-                .then(response => {
-                    window.location.href = response.data;
-                })
-                .catch(error => {
-                    this.errors = error.response.data.errors;
+            // nextTick() is required in order to reload data in the form before calling FormData() to aggregate inputs
+            this.$nextTick(() => {
+                axios.post(this.$refs.submitForm.action, new FormData(this.$refs.submitForm))
+                    .then(response => {
+                        window.location.href = response.data;
+                    })
+                    .catch(error => {
+                        this.errors = error.response.data.errors;
 
-                    window.location.href = '#top';
-                })
-                .finally(() => {
-                    this.isSubmitting = false;
-                });
+                        window.location.href = '#top';
+                    })
+                    .finally(() => {
+                        this.isSubmitting = false;
+                    });
+            });
         },
 
         /**
@@ -260,6 +266,14 @@ new Vue({
 
         removeLogo () {
             this.firm.logo = {url: null, filename: null};
+        },
+
+        handleScroll () {
+            this.showFormNavbar = (window.scrollY + window.innerHeight < this.initFormOffset);
+        },
+
+        calculateOffset () {
+            this.initFormOffset = document.getElementById('form-navbar').offsetTop;
         }
     },
     computed: {
@@ -275,6 +289,7 @@ new Vue({
             return tinymce;
         },
 
+        // @todo refaktoring?
         isPrivate: {
             get () {
                 return +this.firm.is_private;
@@ -303,42 +318,18 @@ new Vue({
         }
     },
     watch: {
-        'firm.is_private': function (flag) {
+        'firm.is_private' (flag) {
             if (!Boolean(parseInt(flag))) {
                 google.maps.event.trigger(map, 'resize');
             }
+        },
+
+        'firm.is_agency' () {
+            this.showFormNavbar = false;
+
+            this.$nextTick(() => {
+                this.calculateOffset();
+            });
         }
     }
-});
-
-$(() => {
-    'use strict';
-
-    let navigation = $('#form-navigation');
-    let fixed = $('#form-navbar-fixed');
-
-    $('#form-navigation-container')
-        .html(navigation.html())
-        .on('click', ':submit', () => $('.submit-form').submit())
-        .on('click', 'button[data-submit-state]', e => $(e.currentTarget).attr('disabled', 'disabled').text($(e.currentTarget).data('submit-state')));
-
-    if (navigation.length) {
-        $(window).scroll(() => {
-            let bottom = $(window).scrollTop() + $(window).height();
-
-            if (bottom > navigation.offset().top) {
-                fixed.fadeOut();
-            }
-            else {
-                fixed.show();
-            }
-        }).trigger('scroll');
-    }
-
-    /**
-     * Save and exit button
-     */
-    $('.btn-save').on('click', () => {
-        $('input[name="done"]').val(1);
-    });
 });

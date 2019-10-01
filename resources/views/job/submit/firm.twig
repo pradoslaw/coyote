@@ -28,6 +28,7 @@
                 >
 
                     <input type="hidden" name="id" v-model="firm.id">
+                    <input type="hidden" name="done" v-model="isDone">
 
                     <vue-modal ref="add-firm-modal">
                         Czy na pewno chcesz dodać nową firme i przypisać ją do tego ogłoszenia?
@@ -64,8 +65,8 @@
                             <div class="form-group" v-show="isPrivate == 1">
                                 <a href="{{ route('job.submit') }}" class="btn btn-default pull-left"><i class="fa fa-angle-left"></i> Podstawowe informacje</a>
 
-                                <button type="submit" class="btn btn-primary pull-right" data-submit-state="Proszę czekać...">Podgląd <i class="fa fa-angle-right"></i></button>
-                                <button type="submit" class="btn btn-danger pull-right btn-save margin-sm-right" data-submit-state="Proszę czekać..."><i class="fa fa-save"></i> Zapisz i zakończ</button>
+                                <vue-button type="submit" :disabled="isSubmitting" class="btn btn-primary pull-right">Podgląd <i class="fa fa-angle-right"></i></vue-button>
+                                <vue-button type="submit" :disabled="isSubmitting" class="btn btn-danger pull-right btn-save margin-sm-right" @click.native="isDone = 1"><i class="fa fa-save"></i> Zapisz i zakończ</vue-button>
                             </div>
                         </div>
 
@@ -266,11 +267,15 @@
                                 <div class="clearfix"></div>
                             </div>
 
-                            <div id="form-navigation" class="form-group">
-                                <a href="{{ route('job.submit') }}" class="btn btn-default pull-left"><i class="fa fa-angle-left"></i> Podstawowe informacje</a>
+                            <div id="form-navbar" :class="{'fixed': showFormNavbar}">
+                                <div class="row max-width">
+                                    <div class="col-12-md" :class="{'col-lg-9': showFormNavbar}">
+                                        <a href="{{ route('job.submit') }}" class="btn btn-default pull-left"><i class="fa fa-angle-left"></i> Podstawowe informacje</a>
 
-                                <vue-button type="submit" :disabled="isSubmitting" class="btn btn-primary pull-right">Podgląd <i class="fa fa-angle-right"></i></vue-button>
-                                <vue-button type="submit" :disabled="isSubmitting" class="btn btn-danger pull-right btn-save margin-sm-right"><i class="fa fa-save"></i> Zapisz i zakończ</vue-button>
+                                        <vue-button type="submit" :disabled="isSubmitting" class="btn btn-primary pull-right">Podgląd <i class="fa fa-angle-right"></i></vue-button>
+                                        <vue-button type="submit" :disabled="isSubmitting" class="btn btn-danger pull-right btn-save margin-sm-right" @click.native="isDone = 1"><i class="fa fa-save"></i> Zapisz i zakończ</vue-button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -302,6 +307,5 @@
 
     <script src="{{ cdn('js/job-submit.js') }}"></script>
 
-    {% include 'job.submit.partials.navigation' %}
     {% include 'job.submit.partials.chat' %}
 {% endblock %}
