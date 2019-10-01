@@ -258,17 +258,23 @@ class Firm extends Model
         $this->industries->replace($models);
     }
 
-    public function setIsAgencyAttribute($flag)
+    /**
+     * @param array $attributes
+     * @return $this|Model
+     */
+    public function fill(array $attributes)
     {
-        $this->attributes['is_agency'] = $flag;
+        parent::fill($attributes);
 
-        if ($flag) {
-            foreach (['employees', 'founded', 'headline', 'latitude', 'longitude', 'country_id', 'street', 'city', 'house', 'postcode'] as $column) {
+        if ($this->is_agency) {
+            foreach (['headline', 'latitude', 'longitude', 'country_id', 'street', 'city', 'house', 'postcode'] as $column) {
                 $this->{$column} = null;
             }
 
             $this->benefits->flush();
         }
+
+        return $this;
     }
 
     /**
