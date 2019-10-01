@@ -57,7 +57,8 @@ class Firm extends Model
         'youtube_url',
         'industries',
         'gallery',
-        'benefits'
+        'benefits',
+        'country'
     ];
 
     /**
@@ -95,7 +96,7 @@ class Firm extends Model
         parent::boot();
 
         static::saving(function ($model) {
-            foreach (['latitude', 'longitude', 'founded', 'employees', 'headline', 'description', 'latitude', 'longitude', 'country_id', 'street', 'city', 'house', 'postcode', 'youtube_url'] as $column) {
+            foreach (['latitude', 'longitude', 'founded', 'employees', 'description', 'latitude', 'longitude', 'country_id', 'street', 'city', 'house', 'postcode', 'youtube_url'] as $column) {
                 if (empty($model->{$column})) {
                     $model->{$column} = null;
                 }
@@ -256,6 +257,16 @@ class Firm extends Model
         }
 
         $this->industries->replace($models);
+    }
+
+    /**
+     * @param string $country
+     */
+    public function setCountryAttribute($country)
+    {
+        if ($country) {
+            $this->setAttribute('country_id', (new Country())->where('name', $country)->value('id'));
+        }
     }
 
     /**
