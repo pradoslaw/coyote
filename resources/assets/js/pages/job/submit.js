@@ -257,6 +257,8 @@ new Vue({
         },
 
         setAddress (index, data) {
+            data.label = [data.street, data.street_number, data.city].filter(item => item !== null).join(' ');
+
             this.$set(this.job.locations, index, data);
         },
 
