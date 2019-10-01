@@ -1,8 +1,8 @@
-import initTinymce from '../../libs/tinymce';
+import { default as tinyConfig } from '../../libs/tinymce';
 import Dialog from '../../libs/dialog';
 
 $(function() {
-    initTinymce();
+    tinymce.init(tinyConfig);
 
     let form = $('<form />', {method: 'post', 'action': $('#uploader').data('upload-url')});
     $('<input />', {type: 'file', name: 'cv', id: 'input-file', style: 'visibility: hidden; height: 0'}).appendTo(form);
