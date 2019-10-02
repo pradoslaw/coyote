@@ -594,7 +594,8 @@ class Job extends Model
     {
         $this->locations->flush();
 
-        foreach ($locations as $location) {
+        // remove empty locations before adding...
+        foreach (array_filter(array_map('array_filter', $locations)) as $location) {
             $this->locations->add(new Job\Location($location));
         }
     }

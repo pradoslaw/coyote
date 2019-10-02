@@ -93,7 +93,7 @@
       display: inline;
 
       &:after {
-        content: ', ';
+        content: ' • ';
       }
 
       &:last-child:after {

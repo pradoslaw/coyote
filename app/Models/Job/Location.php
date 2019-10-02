@@ -73,8 +73,11 @@ class Location extends Model
         $this->country()->associate((new Country())->where('name', $country)->first());
     }
 
+    /**
+     * @return string
+     */
     public function getLabelAttribute()
     {
-        return implode(' ', array_filter([$this->street, $this->street_number, $this->city]));
+        return implode(', ', array_filter([trim($this->street . ' ' . $this->street_number), $this->city]));
     }
 }

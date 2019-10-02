@@ -25,9 +25,8 @@
                 <ul class="metadata list-inline location">
                     <li title="Lokalizacja">
                         <i class="fa fa-map-marker"></i>
-                        {{ job.country.name }}
 
-                        {% include 'job.partials.location' with {'locations': job.locations.pluck('city')} %}
+                        {% include 'job.partials.location' with {'locations': job.locations} %}
                     </li>
                 </ul>
             </section>

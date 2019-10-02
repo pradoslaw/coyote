@@ -1,5 +1,5 @@
 <template>
-    <input ref="autocomplete" :value="label" autocomplete="off" class="form-control" placeholder="Np. Warszawa, al. Jerozolimskie 3" type="text"/>
+    <input ref="autocomplete" :value="label" autocomplete="off" class="form-control" placeholder="Np. Warszawa, al. Jerozolimskie 3" type="text" @keydown.enter.prevent=""/>
 </template>
 
 <script>
@@ -15,11 +15,15 @@
             autocomplete.addListener('place_changed', () => {
                 let place = autocomplete.getPlace();
 
+                if (!place.geometry) {
+                    return;
+                }
+
                 let data = {latitude: place.geometry.location.lat(), longitude: place.geometry.location.lng()};
 
                 place.address_components.forEach(item => {
                     switch (item.types[0]) {
-                        case 'data':
+                        case 'street_number':
                             data.street_number = item.long_name;
                             break;
                         case 'route':
