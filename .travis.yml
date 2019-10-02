@@ -29,7 +29,7 @@ before_script:
 script:
   - docker-compose exec php php vendor/bin/codecept run
   - docker-compose exec php php vendor/bin/phpunit
-#  - docker-compose exec php php artisan dusk
+  - docker-compose exec php php artisan dusk
 
 after_script:
   - docker-compose stop

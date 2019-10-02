@@ -205,13 +205,10 @@ class JobPostingTest extends DuskTestCase
             $browser->loginAs($user);
             $fake = Factory::create();
 
-            $plan = Plan::where('name', 'Standard')->first();
-
             $browser->visit('/Praca/Submit')
                 ->resize(1920, 1080)
                 ->type('title', $title = $fake->title)
                 ->press('Wybierz')
-//                ->value('input[name=plan_id]', $plan->id)
                 ->press('Informacje o firmie')
                 ->waitForLocation('/Praca/Submit/Firm')
                 ->radio('is_private', 1)
