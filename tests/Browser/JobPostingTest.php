@@ -2,8 +2,11 @@
 
 namespace Tests\Browser;
 
+use Coyote\Country;
 use Coyote\Currency;
 use Coyote\Firm;
+use Coyote\Job;
+use Coyote\Payment;
 use Coyote\Plan;
 use Coyote\User;
 use Laravel\Dusk\Browser;
@@ -146,6 +149,92 @@ class JobPostingTest extends DuskTestCase
                 ->waitForText('Powrót do ogłoszenia')
                 ->clickLink('Powrót do ogłoszenia')
                 ->assertDontSee($firm->name);
+        });
+    }
+
+    public function testCreateJobOfferWithErrors()
+    {
+        $user = factory(User::class)->create();
+
+        $this->browse(function (Browser $browser) use ($user) {
+            $browser->loginAs($user);
+            $fake = Factory::create();
+
+            $browser->visit('/Praca/Submit')
+                ->resize(1920, 1080)
+                ->assertInputValue('email', $user->email)
+                ->press('Informacje o firmie')
+                ->waitForText('Formularz zawiera błędy. Sprawdź poprawność wprowadzonych danych i spróbuj ponownie.')
+                ->assertSee('Tytuł jest zbyt krótki. Musi mieć minimum 3 znaku długości.')
+                ->type('title', $fake->title)
+                ->press('Informacje o firmie')
+                ->waitForLocation('/Praca/Submit/Firm')
+                ->press('Zapisz i zakończ')
+                ->waitForText('Nazwa firmy jest wymagana.');
+        });
+    }
+
+    public function testQuickCreateJobOffer()
+    {
+        $user = factory(User::class)->create();
+        /** @var Firm $firm */
+        $firm = factory(Firm::class)->create(['user_id' => $user->id]);
+
+        $firm->benefits()->create(['name' => 'Game-boy']);
+        $firm->benefits()->create(['name' => 'TV']);
+
+        $this->browse(function (Browser $browser) use ($user, $firm) {
+            $browser->loginAs($user);
+            $fake = Factory::create();
+
+            $browser->visit('/Praca/Submit')
+                ->resize(1920, 1080)
+                ->type('title', $title = $fake->title)
+                ->press("Zapisz jako $firm->name")
+                ->waitForText('Powrót do ogłoszenia')
+                ->clickLink('Powrót do ogłoszenia')
+                ->assertSeeIn('.media-heading', $title);
+        });
+    }
+
+    public function testCreatePremiumOfferWithoutInvoice()
+    {
+        $user = factory(User::class)->create();
+
+        $this->browse(function (Browser $browser) use ($user) {
+            $browser->loginAs($user);
+            $fake = Factory::create();
+
+            $plan = Plan::where('name', 'Standard')->first();
+
+            $browser->visit('/Praca/Submit')
+                ->resize(1920, 1080)
+                ->type('title', $title = $fake->title)
+                ->press('Wybierz')
+//                ->value('input[name=plan_id]', $plan->id)
+                ->press('Informacje o firmie')
+                ->waitForLocation('/Praca/Submit/Firm')
+                ->radio('is_private', 1)
+                ->press('Zapisz i zakończ')
+                ->waitForText('Płatność poprzez bezpieczne połączenie')
+                ->assertSelected('invoice[country_id]', Country::where('name', 'Polska')->value('id'))
+                ->uncheck('enable_invoice')
+                ->type('number', '4012001038443335')
+                ->type('name', 'Jan Kowalski')
+                ->type('cvc', '123')
+                ->press('Zapłać i zapisz')
+                ->assertSee('Dziękujemy! Płatność została zaksięgowana. Za chwilę dostaniesz potwierdzenie na adres e-mail.');
+
+            /** @var Job $job */
+            $job = Job::where('title', $title)->where('is_publish', 1)->first();
+            $payment = $job->payments()->first();
+
+            $this->assertEquals($title, $job->title);
+            $this->assertEquals(Payment::PAID, $payment->status_id);
+            $this->assertEquals(40, $payment->days);
+            $this->assertTrue($job->is_publish);
+            $this->assertNull($payment->invoice->country_id);
+            $this->assertEquals(30, $payment->invoice->items()->first()->price);
         });
     }
 }
