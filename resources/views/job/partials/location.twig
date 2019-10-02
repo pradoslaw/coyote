@@ -1,10 +1,10 @@
 {% set data = {} %}
-{% set separator = separator is defined ? separator : true %}
 {% set linkable = linkable is defined ? linkable : true %}
 
 {% for location in locations %}
     {% if location.city %}
-        {% set data = data|merge(linkable ? [link_to_route('job.city', location.label, [location.city], {'title': 'Znajdź oferty z miasta ' ~ location.city})] : [location.label]) %}
+        {% set label = location.label ?: location.city %}
+        {% set data = data|merge(linkable ? [link_to_route('job.city', label, [location.city], {'title': 'Znajdź oferty z miasta ' ~ location.city})] : [label]) %}
     {% endif %}
 {% endfor %}
 
