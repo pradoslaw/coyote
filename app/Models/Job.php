@@ -143,7 +143,7 @@ class Job extends Model
     protected $casts = [
         'is_remote'         => 'boolean',
         'is_boost'          => 'boolean',
-        'is_gross'          => 'int',
+        'is_gross'          => 'boolean',
         'is_publish'        => 'boolean',
         'is_ads'            => 'boolean',
         'is_highlight'      => 'boolean',

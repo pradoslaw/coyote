@@ -260,7 +260,7 @@ new Vue({
             const strip = (value) => value !== null ? value : '';
 
             data.label = [(`${strip(data.street)} ${strip(data.street_number)}`).trim(), data.city]
-                .filter(item => item != null) // != operator
+                .filter(item => item !== '') // != operator
                 .join(', ');
 
             this.$set(this.job.locations, index, data);

@@ -76,7 +76,7 @@ class SubmitController extends Controller
             $job = $draft->get(Job::class);
         } else {
             $job = $this->job->findOrNew($id);
-//            abort_if($job->exists && $job->is_expired, 404);
+            abort_if($job->exists && $job->is_expired, 404);
 
             $job = $loader->init($job);
         }
