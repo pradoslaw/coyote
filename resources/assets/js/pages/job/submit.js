@@ -257,7 +257,7 @@ new Vue({
         },
 
         setAddress (index, data) {
-            const strip = (value) => value !== null ? value : '';
+            const strip = (value) => value !== undefined ? value : '';
 
             data.label = [(`${strip(data.street)} ${strip(data.street_number)}`).trim(), data.city]
                 .filter(item => item !== '') // != operator
