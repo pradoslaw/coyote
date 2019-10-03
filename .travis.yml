@@ -15,11 +15,11 @@ before_install:
 install:
   - sudo service postgresql stop
   - rm -rf /var/lib/postgresql/data
-  - sudo chown -R www-data:www-data $TRAVIS_BUILD_DIR
   - docker-compose build
   - docker-compose up -d
   - docker-compose ps
-  - docker-compose exec --user=www-data:www-data php make install
+  - docker-compose exec php make install
+  - sudo chown -R www-data:www-data $TRAVIS_BUILD_DIR
 
 before_script:
   - docker-compose exec php php vendor/bin/codecept build
@@ -29,7 +29,7 @@ before_script:
 script:
 #  - docker-compose exec php php vendor/bin/codecept run
 #  - docker-compose exec php php vendor/bin/phpunit
-  - docker-compose exec php curl http://nginx
+#  - docker-compose exec php curl http://nginx
   - docker-compose exec --user=www-data:www-data php ls -lsa storage/logs
   - docker-compose exec --user=www-data:www-data php php artisan dusk
 
