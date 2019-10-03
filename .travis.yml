@@ -19,7 +19,7 @@ install:
   - docker-compose build
   - docker-compose up -d
   - docker-compose ps
-  - docker-compose exec php make install
+  - docker-compose exec -user=www-data:www-data php make install
 
 before_script:
   - docker-compose exec php php vendor/bin/codecept build
@@ -30,7 +30,7 @@ script:
 #  - docker-compose exec php php vendor/bin/codecept run
 #  - docker-compose exec php php vendor/bin/phpunit
   - docker-compose exec php curl http://nginx
-  - docker-compose exec --user=www-data:www-data php ls -lsa storage/
+  - docker-compose exec --user=www-data:www-data php ls -lsa storage/logs
   - docker-compose exec --user=www-data:www-data php php artisan dusk
 
 after_script:
