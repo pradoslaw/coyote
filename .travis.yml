@@ -28,13 +28,8 @@ before_script:
 
 script:
   - sudo chmod 0777 storage/logs/*.log
-    #  - docker-compose exec --user=www-data:www-data php rm -f storage/logs/elasticsearch.log
-  - docker-compose exec --user=www-data:www-data php ls -lsa storage/logs
-  - docker-compose exec --user=www-data:www-data php ls -lsa storage/framework
   - docker-compose exec --user=www-data:www-data php php vendor/bin/codecept run
   - docker-compose exec --user=www-data:www-data php php vendor/bin/phpunit
-
-
   - docker-compose exec --user=www-data:www-data php php artisan dusk
 
 after_script:
