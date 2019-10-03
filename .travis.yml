@@ -19,7 +19,7 @@ install:
   - docker-compose build
   - docker-compose up -d
   - docker-compose ps
-  - docker-compose exec -user=www-data:www-data php make install
+  - docker-compose exec --user=www-data:www-data php make install
 
 before_script:
   - docker-compose exec php php vendor/bin/codecept build
