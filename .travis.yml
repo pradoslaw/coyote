@@ -30,7 +30,7 @@ script:
 #  - docker-compose exec php php vendor/bin/codecept run
 #  - docker-compose exec php php vendor/bin/phpunit
   - docker-compose exec php curl http://nginx
-  - docker-compose exec php php artisan dusk
+  - docker-compose exec --user=www-data:www-data php php artisan dusk
 
 after_script:
   - docker-compose stop
