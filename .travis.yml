@@ -22,17 +22,18 @@ install:
   - sudo chown -R www-data:www-data $TRAVIS_BUILD_DIR
 
 before_script:
-  - docker-compose exec php php vendor/bin/codecept build
+  - docker-compose exec --user=www-data:www-data php php vendor/bin/codecept build
   - docker-compose exec php php artisan config:clear
   - docker-compose exec php php artisan route:clear
 
 script:
-  - docker-compose exec php php vendor/bin/codecept run
-  - docker-compose exec php php vendor/bin/phpunit
+  - docker-compose exec --user=www-data:www-data php php vendor/bin/codecept run
+  - docker-compose exec --user=www-data:www-data php php vendor/bin/phpunit
 #  - docker-compose exec php curl http://nginx
   - sudo chmod 0777 storage/logs/*.log
 #  - docker-compose exec --user=www-data:www-data php rm -f storage/logs/elasticsearch.log
   - docker-compose exec --user=www-data:www-data php ls -lsa storage/logs
+  - docker-compose exec --user=www-data:www-data php ls -lsa storage/framework
   - docker-compose exec --user=www-data:www-data php php artisan dusk
 
 after_script:
