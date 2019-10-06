@@ -8,6 +8,11 @@ use Tests\TestCase;
 
 class LoginTest extends TestCase
 {
+    public function testLogin()
+    {
+
+    }
+
     public function testApiLogin()
     {
         $password = Hash::make('123');
