@@ -50,6 +50,7 @@ class SettingsController extends BaseController
         $form->validate();
 
         $request = $form->getRequest();
+        logger()->debug($form->all());
         // we use forceFill() to fill fields that are NOT in $fillable model's array.
         // we can do that because $form->all() returns only fields in form. $request->all() returns
         // all fields in HTTP POST so it's not secure.
