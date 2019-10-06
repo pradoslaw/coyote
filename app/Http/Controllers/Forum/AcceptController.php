@@ -89,7 +89,7 @@ class AcceptController extends BaseController
                 $reputation->setUrl($url);
 
                 // before we add reputation points we need to be sure that user does not accept his own post
-                if ($post->user_id !== null && $post->user_id !== $this->userId) {
+                if ($post->user && $post->user_id !== $this->userId) {
                     if ($forum->enable_reputation) {
                         // increase reputation points for author
                         $reputation->setPositive(true)->setPostId($post->id)->setUserId($post->user_id)->save();

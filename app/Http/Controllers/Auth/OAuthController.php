@@ -89,7 +89,6 @@ class OAuthController extends Controller
                     'name' => $name,
                     'email' => $oauth->getEmail(),
                     'photo' => $filename,
-                    'is_active' => 1,
                     'is_confirm' => 1,
                     'provider' => $provider,
                     'provider_id' => $oauth->getId(),
@@ -98,7 +97,7 @@ class OAuthController extends Controller
             }
         }
 
-        if ($user->is_blocked || !$user->is_active) {
+        if ($user->is_blocked) {
             return redirect()->route('login', ['error' => 'Konto zostało zablokowane.']);
         }
 

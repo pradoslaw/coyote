@@ -8,6 +8,7 @@ use Coyote\Services\Stream\Actor;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Validation\Rule;
 
 class ForgotPasswordController extends Controller
 {
@@ -55,7 +56,12 @@ class ForgotPasswordController extends Controller
     {
         $this->validate($request, [
             // check if email exists (case sensitive) because sendResetLink() is also case sensitive
-            'email'                     => 'required|email|exists:users|email_confirmed'
+            'email'                     => [
+                'required',
+                'email',
+                Rule::exists('users')->whereNull('deleted_at'),
+                'email_confirmed'
+            ]
         ]);
 
         // We will send the password reset link to this user. Once we have attempted
@@ -63,7 +69,7 @@ class ForgotPasswordController extends Controller
         // need to show to the user. Finally, we'll send out a proper response.
         $response = $this->broker()->sendResetLink(
             // aby wygenerowac link konto musi byc aktywne oraz e-mail musi byc wczesniej potwierdzony
-            $request->only('email') + ['is_active' => 1, 'is_confirm' => 1]
+            $request->only('email') + ['is_confirm' => 1]
         );
 
         if ($response === Password::RESET_LINK_SENT) {

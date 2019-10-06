@@ -1,16 +1,15 @@
 <?php
 
-namespace Coyote\Repositories\Criteria\Wiki;
+namespace Coyote\Repositories\Criteria;
 
 use Coyote\Repositories\Contracts\RepositoryInterface as Repository;
-use Coyote\Repositories\Criteria\Criteria;
 
 class WithTrashed extends Criteria
 {
     /**
      * @param \Illuminate\Database\Eloquent\Builder $model
      * @param Repository $repository
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function apply($model, Repository $repository)
     {

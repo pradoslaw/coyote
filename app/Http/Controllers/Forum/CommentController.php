@@ -76,10 +76,7 @@ class CommentController extends Controller
         } else {
             $this->authorize('update', [$this->comment, $this->forum]);
 
-            $user = app(UserRepositoryInterface::class)->find(
-                $this->comment->user_id,
-                ['id', 'name', 'is_blocked', 'is_active', 'photo']
-            );
+            $user = $this->comment->user()->withTrashed()->first(['id', 'name', 'is_blocked', 'deleted_at']);
             $data = $request->only(['text']);
 
             $activity = Stream_Update::class;

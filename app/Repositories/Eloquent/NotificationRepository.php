@@ -91,7 +91,7 @@ class NotificationRepository extends Repository implements NotificationRepositor
                             $this->raw('COALESCE(users.name, notification_senders.name) AS name'),
                             'photo',
                             'is_blocked',
-                            'is_active'
+                            $this->raw('users.deleted_at IS NULL AS is_active')
                         ])
                         ->orderBy('notification_senders.id');
                 }])
@@ -119,7 +119,7 @@ class NotificationRepository extends Repository implements NotificationRepositor
                 'notification_types.name',
                 'notification_types.category',
                 'users.email AS user_email',
-                'is_active',
+                'users.deleted_at IS NULL AS is_active',
                 'is_blocked',
                 'is_confirm'
             ])

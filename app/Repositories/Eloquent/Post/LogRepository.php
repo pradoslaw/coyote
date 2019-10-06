@@ -46,7 +46,7 @@ class LogRepository extends Repository implements LogRepositoryInterface
                 'post_log.*',
                 'posts.user_name',
                 'users.name AS author_name',
-                'users.is_active',
+                $this->raw('users.deleted_at IS NULL AS is_active'),
                 'users.is_blocked',
                 'users.is_online'
             ])

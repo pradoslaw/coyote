@@ -28,8 +28,7 @@ class DeleteAccountController extends BaseController
             'password' => ['required', app(PasswordRule::class)]
         ]);
 
-        $this->auth->is_active = false;
-        $this->auth->save();
+        $this->auth->delete();
 
         $request->session()->flash('success', 'Konto zostało prawidłowo usunięte.');
 

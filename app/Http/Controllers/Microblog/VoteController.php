@@ -71,7 +71,7 @@ class VoteController extends Controller
             return $vote;
         });
 
-        if ($vote->wasRecentlyCreated) {
+        if ($vote->wasRecentlyCreated && $microblog->user) {
             $microblog->user->notify(new VotedNotification($vote));
         }
 

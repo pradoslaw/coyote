@@ -4,7 +4,7 @@ namespace Coyote\Http\Middleware;
 
 use Closure;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
-use Coyote\Repositories\Criteria\Wiki\WithTrashed;
+use Coyote\Repositories\Criteria\WithTrashed;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Http\Request;
 

@@ -91,7 +91,7 @@ class PmRepository extends Repository implements PmRepositoryInterface
                     'pm_text.created_at',
                     'users.id AS user_id',
                     'name',
-                    'is_active',
+                    $this->raw('users.deleted_at IS NULL AS is_active'),
                     'is_blocked',
                     'photo'
                 ])
@@ -173,7 +173,7 @@ class PmRepository extends Repository implements PmRepositoryInterface
                 'pm_text.text',
                 'pm_text.created_at',
                 'name',
-                'is_active',
+                $this->raw('users.deleted_at IS NULL AS is_active'),
                 'is_blocked',
                 'photo'
             ])

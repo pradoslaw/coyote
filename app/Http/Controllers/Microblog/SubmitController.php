@@ -8,6 +8,7 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\MediaFactory;
 use Coyote\Http\Requests\MicroblogRequest;
 use Coyote\Notifications\Microblog\UserMentionedNotification;
+use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Services\Parser\Helpers\Login as LoginHelper;
 use Coyote\Services\Parser\Helpers\Hash as HashHelper;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
@@ -51,6 +52,8 @@ class SubmitController extends Controller
      */
     public function save(MicroblogRequest $request, Dispatcher $dispatcher, $microblog)
     {
+        $this->user->pushCriteria(new WithTrashed());
+
         $data = $request->only(['text']);
 
         if (!$microblog->exists) {
@@ -59,7 +62,7 @@ class SubmitController extends Controller
         } else {
             $this->authorize('update', $microblog);
 
-            $user = $this->user->find($microblog->user_id, ['id', 'name', 'is_blocked', 'is_active', 'photo']);
+            $user = $this->user->find($microblog->user_id, ['id', 'name', 'is_blocked', 'deleted_at', 'photo']);
         }
 
         if ($request->filled('thumbnail') || count($microblog->media) > 0) {

@@ -66,7 +66,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
         $result = $this
             ->model
             ->whereNull('parent_id')
-            ->select(['microblogs.*', 'users.name', 'users.is_active', 'users.is_blocked', 'users.photo'])
+            ->select(['microblogs.*', 'users.name', $this->raw('users.deleted_at IS NULL AS is_active'), 'users.is_blocked', 'users.photo'])
             ->join('users', 'users.id', '=', 'user_id')
             ->where('microblogs.created_at', '>=', Carbon::now()->subWeek())
             ->orderBy('microblogs.score', 'DESC')

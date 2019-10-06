@@ -54,7 +54,7 @@ class PageRepository extends Repository implements PageRepositoryInterface
     {
         return $this
             ->model
-            ->select(['page_visits.*', 'users.name AS user_name', 'users.is_active', 'users.is_blocked'])
+            ->select(['page_visits.*', 'users.name AS user_name', $this->raw('users.deleted_at IS NULL AS is_active'), 'users.is_blocked'])
             ->join('page_visits', 'page_visits.page_id', '=', 'pages.id')
             ->join('users', 'users.id', '=', 'user_id')
             ->where('pages.id', $pageId)

@@ -21,8 +21,9 @@ trait HelperTrait
             ],
             $data
         );
-        $id = $this->haveRecord('users', array_merge($data, ['password' => bcrypt($data['password'])]));
-        return User::find($id);
+        User::unguard();
+
+        return $this->haveRecord(User::class, array_merge($data, ['password' => bcrypt($data['password'])]));
     }
 
     public function createForum($attributes = [])
