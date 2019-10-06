@@ -269,7 +269,7 @@ class HomeController extends BaseController
 
         $paginator = $this
             ->topic
-            ->paginate(
+            ->lengthAwarePagination(
                 $this->userId,
                 $this->guestId,
                 'topics.last_post_id',

@@ -25,7 +25,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
     /**
      * @inheritdoc
      */
-    public function paginate($userId, string $guestId, $order = 'topics.last_post_id', $direction = 'DESC', $perPage = 20)
+    public function lengthAwarePagination($userId, ?string $guestId, $order = 'topics.last_post_id', $direction = 'DESC', $perPage = 20)
     {
         $this->applyCriteria();
 

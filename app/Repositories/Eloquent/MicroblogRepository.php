@@ -22,7 +22,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     /**
      * @inheritdoc
      */
-    public function paginate($perPage = 10)
+    public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
         return $this->applyCriteria(function () use ($perPage) {
             return $this->model->whereNull('parent_id')->paginate($perPage);

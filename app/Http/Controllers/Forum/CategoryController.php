@@ -39,7 +39,7 @@ class CategoryController extends BaseController
         // get topics according to given criteria
         $topics = $this
             ->topic
-            ->paginate(
+            ->lengthAwarePagination(
                 $this->userId,
                 $this->guestId,
                 'topics.last_post_id',
