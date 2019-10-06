@@ -69,8 +69,8 @@ $this->group(
 
 
         $this->get('Users', 'UsersController@index')->name('users');
-        $this->get('Users/Save/{user}', 'UsersController@edit')->name('users.save');
-        $this->post('Users/Save/{user}', 'UsersController@save');
+        $this->get('Users/Save/{user_trashed}', 'UsersController@edit')->name('users.save');
+        $this->post('Users/Save/{user_trashed}', 'UsersController@save');
 
         $this->get('Firewall', 'FirewallController@index')->name('firewall');
         $this->get('Firewall/Save/{firewall?}', 'FirewallController@edit')->name('firewall.save');

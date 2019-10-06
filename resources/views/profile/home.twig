@@ -8,7 +8,7 @@
 
     <div class="row">
         <div class="col-md-9">
-            {% if user.is_blocked or not user.is_active %}
+            {% if user.is_blocked %}
                 <div class="alert alert-danger">
                     Konto tego użytkownika zostało zablokowane.
                 </div>
@@ -139,7 +139,7 @@
                 </li>
 
                 {% if can('adm-access') %}
-                    {% if not user.is_blocked and user.is_active and user.id != user('id') %}
+                    {% if not user.is_blocked and user.id != user('id') %}
                         <li>
                             <a href="{{ route('adm.firewall.save') }}?user={{ user.id }}"><i class="fa fa-ban fa-fw"></i> Zablokuj tego użytkownika</a>
                         </li>

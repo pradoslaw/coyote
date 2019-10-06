@@ -6,6 +6,7 @@ use Coyote\Http\Forms\User\AdminForm;
 use Coyote\Http\Grids\Adm\UsersGrid;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Boduch\Grid\Source\EloquentSource;
+use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Services\Stream\Activities\Update;
 use Coyote\Services\Stream\Objects\Person;
 use Coyote\Events\UserWasSaved;
@@ -33,6 +34,9 @@ class UsersController extends BaseController
      */
     public function index()
     {
+        $this->user->pushCriteria(new WithTrashed());
+        $this->user->applyCriteria();
+
         $grid = $this->gridBuilder()->createGrid(UsersGrid::class);
         $grid->setSource(new EloquentSource($this->user->newQuery()));
 

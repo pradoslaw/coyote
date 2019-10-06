@@ -9,7 +9,7 @@ use Coyote\Http\Factories\FlagFactory;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Post\WithSubscribers;
-use Coyote\Repositories\Criteria\Post\WithTrashed;
+use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Repositories\Criteria\Post\WithTrashedInfo;
 use Coyote\Services\Elasticsearch\Builders\Forum\MoreLikeThisBuilder;
 use Coyote\Services\Forum\TreeBuilder;

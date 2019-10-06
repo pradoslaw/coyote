@@ -63,7 +63,7 @@ class ForgotPasswordController extends Controller
         // need to show to the user. Finally, we'll send out a proper response.
         $response = $this->broker()->sendResetLink(
             // aby wygenerowac link konto musi byc aktywne oraz e-mail musi byc wczesniej potwierdzony
-            $request->only('email') + ['is_active' => 1, 'is_confirm' => 1]
+            $request->only('email') + ['is_confirm' => 1]
         );
 
         if ($response === Password::RESET_LINK_SENT) {

@@ -56,8 +56,8 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
                 'posts.user_name AS anonymous_name',
                 'users.name AS user_name',
                 'users.photo',
-                'is_active',
-                'is_confirm'
+                $this->raw('users.deleted_at IS NULL AS is_active'),
+                'users.is_confirm'
             ])
             ->leftJoin('posts', 'posts.id', '=', 'forums.last_post_id')
             ->leftJoin('users', 'users.id', '=', 'posts.user_id')

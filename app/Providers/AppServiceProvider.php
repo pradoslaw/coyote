@@ -130,8 +130,8 @@ class AppServiceProvider extends ServiceProvider
                 return $this;
             }
 
-            return $this->filter(function (User $user) use ($auth) {
-                return $user->id !== $auth->id;
+            return $this->filter(function ($user) use ($auth) {
+                return $user !== null && $user->id !== $auth->id;
             });
         });
 

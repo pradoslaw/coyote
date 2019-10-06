@@ -5,6 +5,7 @@ namespace Coyote\Repositories\Criteria\Microblog;
 use Coyote\Repositories\Criteria\Criteria;
 use Coyote\Repositories\Contracts\RepositoryInterface as Repository;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Expression;
 
 class LoadComments extends Criteria
 {
@@ -30,10 +31,10 @@ class LoadComments extends Criteria
     public function apply($model, Repository $repository)
     {
         $model = $model
-            ->select(['microblogs.*', 'users.name', 'users.is_active', 'users.is_blocked', 'photo'])
+            ->select(['microblogs.*', 'users.name', new Expression('users.deleted_at IS NULL AS is_active'), 'users.is_blocked', 'photo'])
             ->join('users', 'users.id', '=', 'user_id')
             ->with(['comments' => function ($builder) {
-                $builder->select(['microblogs.*', 'users.name', 'users.is_active', 'users.is_blocked', 'photo'])
+                $builder->select(['microblogs.*', 'users.name', new Expression('users.deleted_at IS NULL AS is_active'), 'users.is_blocked', 'photo'])
                     ->join('users', 'users.id', '=', 'user_id');
 
                 $this->includeVoters($builder);

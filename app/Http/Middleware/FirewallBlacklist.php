@@ -42,7 +42,6 @@ class FirewallBlacklist
         $this->handleFirewallRules($request);
 
         if ($this->auth->check()) {
-            $this->handleDeactivatedUsers();
             $this->handleIpAccess($request);
         }
 
@@ -59,16 +58,6 @@ class FirewallBlacklist
 
         if ($firewall !== null) {
             throw new ForbiddenException($firewall);
-        }
-    }
-
-    /**
-     * Logout user if account has been deactivated
-     */
-    protected function handleDeactivatedUsers()
-    {
-        if (!$this->getUser()->is_active) {
-            $this->auth->logout();
         }
     }
 
