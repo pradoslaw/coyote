@@ -256,6 +256,19 @@ class PaymentController extends Controller
         $payment = $payment->findOrFail($description);
         abort_if($payment === null, 404);
 
+        $client = new \PayLaneRestClient(config('services.paylane.username'), config('services.paylane.password'));
+
+        $this->handlePayment(function () use ($client, $id) {
+            $result = $client->saleBy3DSecureAuthorization(['id_3dsecure_auth' => $id]);
+
+            if (!$result['success']) {
+                $error = $result['error'];
+                logger()->error(var_export($result, true));
+
+                throw new PaymentFailedException($error['error_description'], $error['error_number']);
+            }
+        });
+
         return $this->successfulTransaction($payment);
     }
 
