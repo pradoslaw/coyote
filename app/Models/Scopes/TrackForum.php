@@ -27,6 +27,5 @@ trait TrackForum
                         ->on('forum_track.guest_id', '=', new Str($guestId));
                 });
         });
-
     }
 }
