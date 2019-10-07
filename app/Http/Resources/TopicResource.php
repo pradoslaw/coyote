@@ -41,7 +41,7 @@ class TopicResource extends JsonResource
             $only,
             [
                 'locked_at'     => $this->locked_at ? $this->locked_at->toIso8601String() : null,
-                'url'           => UrlBuilder::topic($this->resource),
+                'url'           => url(UrlBuilder::topic($this->resource)),
                 'forum'         => [
                     'id'        => $this->forum->id,
                     'name'      => $this->forum->name,
