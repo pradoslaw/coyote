@@ -11,6 +11,8 @@ $this->prefix('v1')->group(function () {
     $this->post('login', ['uses' => 'Api\LoginController@login']);
     $this->get('user', ['uses' => 'Api\UserController@index', 'middleware' => 'auth:api']);
     $this->get('topics', ['uses' => 'Api\TopicsController@index']);
+    $this->get('posts', ['uses' => 'Api\PostsController@index']);
+    $this->get('posts/{id}', ['uses' => 'Api\PostsController@show']);
 });
 
 $this->get('/', ['uses' => 'Api\HomeController@index']);
