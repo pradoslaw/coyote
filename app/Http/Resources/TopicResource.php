@@ -13,6 +13,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @property Carbon $locked_at
+ * @property Carbon $created_at
+ * @property Carbon $last_post_created_at
  * @property string $html
  * @property User $user
  * @property Forum $forum
@@ -20,6 +22,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property Post $lastPost
  * @property Microblog[] $comments
  * @property Tag[] $tags
+ * @property \Coyote\Topic\Track[] $tracks
  */
 class TopicResource extends JsonResource
 {
@@ -32,23 +35,23 @@ class TopicResource extends JsonResource
     public function toArray($request)
     {
         $only = $this->resource->only(['id', 'subject', 'score', 'views', 'replies', 'is_sticky', 'is_locked']);
-        $posts = collect();
-
-        $posts->push($this->firstPost);
-        $posts->push($this->lastPost);
 
         return array_merge(
             $only,
             [
-                'locked_at'     => $this->locked_at ? $this->locked_at->toIso8601String() : null,
-                'url'           => url(UrlBuilder::topic($this->resource)),
+                'locked_at'             => $this->locked_at ? $this->locked_at->toIso8601String() : null,
+                'created_at'            => $this->created_at->toIso8601String(),
+                'last_post_created_at'  => $this->last_post_created_at->toIso8601String(),
+                'url'                   => url(UrlBuilder::topic($this->resource)),
                 'forum'         => [
                     'id'        => $this->forum->id,
                     'name'      => $this->forum->name,
                     'slug'      => $this->forum->slug
                 ],
-                'posts'         => PostResource::collection($posts),
-                'tags'          => TagResource::collection($this->tags)
+                'tags'                  => TagResource::collection($this->tags),
+                'read_at'               => $this->when($this->resource->relationLoaded('tracks'), function () {
+                    return max($this->tracks->first()->marked_at ?? 0, $this->forum->tracks->first()->marked_at ?? 0);
+                })
             ]
         );
     }

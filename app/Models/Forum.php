@@ -30,6 +30,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $section
  * @property string $url
  * @property Forum $parent
+ * @property Forum\Track[] $tracks
  */
 class Forum extends Model
 {

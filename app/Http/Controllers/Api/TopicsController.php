@@ -6,6 +6,7 @@ use Coyote\Http\Resources\TopicResource;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Repositories\Criteria\Sort;
+use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Contracts\Auth\Factory as Auth;
@@ -20,21 +21,20 @@ class TopicsController extends Controller
      */
     public function index(TopicRepositoryInterface $topic, Auth $auth, Request $request)
     {
+        $validator = validator($request->all(), [
+            'sort'          => 'nullable|in:id,last_post_id',
+            'order'         => 'nullable|in:asc,desc'
+        ]);
+
+        if ($validator->fails()) {
+            return response($validator->errors(), 422);
+        }
+
         $user = $auth->guard('api')->user();
         $guestId = $user->guest_id ?? null;
 
-        $postRelation = function ($builder) {
-            return $builder
-                ->select('id', 'created_at', 'user_name', 'user_id')
-                ->with(['user' => function ($query) {
-                    return $query->select(['id', 'name', 'photo'])->withTrashed();
-                }]);
-        };
-
         $topic->pushCriteria(new Sort($request->input('sort', 'id'), Sort::DESC));
-
         $topic->pushCriteria(new EagerLoading(['tags']));
-        $topic->pushCriteria(new EagerLoading(['firstPost' => $postRelation, 'lastPost' => $postRelation]));
 
         if ($guestId) {
             $topic->pushCriteria(new EagerLoading(['tracks' => function ($builder) use ($guestId) {
@@ -53,6 +53,8 @@ class TopicsController extends Controller
 
             return $builder;
         }]));
+
+        $topic->pushCriteria(new OnlyThoseWithAccess($user));
 
         $paginate = $topic->paginate();
 
