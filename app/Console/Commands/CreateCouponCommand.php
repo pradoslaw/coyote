@@ -12,7 +12,7 @@ class CreateCouponCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'coupon:create {--count=} {--amount=}';
+    protected $signature = 'coupon:create {--count=} {--amount=} {--user=}';
 
     /**
      * The console command description.
@@ -44,7 +44,9 @@ class CreateCouponCommand extends Command
     public function handle()
     {
         for ($i = 0; $i < $this->option('count'); $i++) {
-            $this->coupon->create(['code' => $code = str_random(5), 'amount' => $this->option('amount')]);
+            $this->coupon->create(
+                ['code' => $code = str_random(5), 'amount' => $this->option('amount'), 'user_id' => $this->hasOption('user') ? $this->option('user') : null]
+            );
 
             $this->line($code);
         }
