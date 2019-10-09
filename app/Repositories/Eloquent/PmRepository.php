@@ -38,7 +38,7 @@ class PmRepository extends Repository implements PmRepositoryInterface
      * @param int $perPage
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */
-    public function paginate($userId, $perPage = 10)
+    public function lengthAwarePaginate($userId, $perPage = 10)
     {
         $count = $this->model
                 ->selectRaw('COUNT(*)')

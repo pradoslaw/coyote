@@ -61,7 +61,7 @@ class PmController extends BaseController
     {
         $this->breadcrumb->push('Wiadomości prywatne', route('user.pm'));
 
-        $pm = $this->pm->paginate($this->userId);
+        $pm = $this->pm->lengthAwarePaginate($this->userId);
         $parser = $this->getParser();
 
         foreach ($pm as &$row) {

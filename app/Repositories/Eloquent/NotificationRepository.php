@@ -28,7 +28,7 @@ class NotificationRepository extends Repository implements NotificationRepositor
      * @param int $perPage
      * @return mixed
      */
-    public function paginate($userId, $perPage = 20)
+    public function lengthAwarePaginate($userId, $perPage = 20)
     {
         return $this->prepare($userId)->paginate($perPage);
     }

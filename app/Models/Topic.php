@@ -227,6 +227,14 @@ class Topic extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function lastPost()
+    {
+        return $this->hasOne('Coyote\Post', 'id', 'last_post_id');
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function poll()
