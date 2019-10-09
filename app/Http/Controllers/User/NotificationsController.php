@@ -49,7 +49,7 @@ class NotificationsController extends BaseController
     {
         $this->breadcrumb->push('Powiadomienia', route('user.notifications'));
 
-        $pagination = $this->notification->paginate($this->userId);
+        $pagination = $this->notification->lengthAwarePaginate($this->userId);
         // mark as read
         $this->mark($pagination);
 

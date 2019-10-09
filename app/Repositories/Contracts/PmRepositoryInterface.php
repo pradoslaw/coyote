@@ -20,7 +20,7 @@ interface PmRepositoryInterface extends RepositoryInterface
      * @param int $perPage
      * @return LengthAwarePaginator
      */
-    public function paginate($userId, $perPage = 10);
+    public function lengthAwarePaginate($userId, $perPage = 10);
 
     /**
      * Gets conversation

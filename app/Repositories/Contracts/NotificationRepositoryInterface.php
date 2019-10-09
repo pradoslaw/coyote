@@ -12,7 +12,7 @@ interface NotificationRepositoryInterface extends RepositoryInterface
      * @param int $perPage
      * @return mixed
      */
-    public function paginate($userId, $perPage = 20);
+    public function lengthAwarePaginate($userId, $perPage = 20);
 
     /**
      * @param int $userId
