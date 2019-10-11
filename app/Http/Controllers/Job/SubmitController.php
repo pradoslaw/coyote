@@ -300,10 +300,9 @@ class SubmitController extends Controller
             $job->user->notify(new CreatedNotification($job));
         }
 
-        $paymentUuid = $job->getPaymentUuid();
-        if ($paymentUuid !== null) {
+        if (!$job->is_publish && ($unpaidPayment = $job->getUnpaidPayment()) !== null) {
             return redirect()
-                ->route('job.payment', [$paymentUuid])
+                ->route('job.payment', [$unpaidPayment])
                 ->with('success', 'Oferta została dodana, lecz nie jest jeszcze promowana. Uzupełnij poniższy formularz, aby zakończyć.');
         }
 

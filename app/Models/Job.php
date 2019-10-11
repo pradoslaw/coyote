@@ -619,14 +619,6 @@ class Job extends Model
     }
 
     /**
-     * @return string|null
-     */
-    public function getPaymentUuid()
-    {
-        return $this->payments()->where('status_id', Payment::NEW)->orderBy('created_at', 'DESC')->first(['id']);
-    }
-
-    /**
      * @param string $url
      */
     public function addReferer($url)
