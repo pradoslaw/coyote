@@ -133,6 +133,11 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
+        // user already logged out (maybe double click)?
+        if (empty($this->auth)) {
+            return $this->traitLogout($request);
+        }
+
         $this->auth->ip = $request->ip();
         // metoda browser() nie jest dostepna dla testow funkcjonalnych
         $this->auth->browser = $request->browser();
