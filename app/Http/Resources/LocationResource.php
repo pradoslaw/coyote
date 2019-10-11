@@ -27,11 +27,11 @@ class LocationResource extends JsonResource
             'city'          => $this->city,
             'street'        => $this->street,
             'street_number' => $this->street_number,
+            'label'         => $this->label,
 
-            $this->mergeWhen($this->resource->relationLoaded('country'), [
-                'country'   => $this->country->name,
-                'label'     => $this->label
-            ])
+            'country'       => $this->when($this->resource->relationLoaded('country'), function () {
+                return $this->country->name;
+            })
         ];
     }
 }

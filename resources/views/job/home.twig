@@ -93,7 +93,7 @@
                                 <i class="fa fa-fw fa-credit-card fa-icon"></i>
 
                                 <input
-                                    v-model="input.salary"
+                                    v-model.number="input.salary"
                                     @focus="selectTab('salary')"
                                     :placeholder="'> 0 ' + currencies[defaultCurrency].symbol"
                                     type="text"
