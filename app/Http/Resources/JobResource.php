@@ -63,12 +63,10 @@ class JobResource extends JsonResource
             ],
             'text'        => $this->description,
             'firm'        => $this->firm ? new FirmResource($this->firm) : (object) ['logo' => '', 'name' => ''],
+            'recruitment' => $this->recruitment,
 
-            $this->mergeWhen($this->resource->relationLoaded('features'), function () {
-                return [
-                    'recruitment'   => $this->recruitment,
-                    'features'      => FeatureResource::collection($this->features)
-                ];
+            'features'    => $this->whenLoaded('features', function () {
+                return FeatureResource::collection($this->features);
             })
         ]);
     }

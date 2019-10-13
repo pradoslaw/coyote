@@ -8,6 +8,10 @@ $this->prefix('v1')->group(function () {
     $this->get('microblogs', ['uses' => 'Api\Microblog\HomeController@index']);
     $this->get('jobs', ['uses' => 'Api\Job\HomeController@index']);
     $this->get('jobs/{id}', ['uses' => 'Api\Job\OfferController@index']);
+    $this->put('jobs/{job}', ['uses' => 'Api\Job\HomeController@save']);
+//    $this->put('jobs/{job}', ['uses' => 'Api\Job\OfferController@save', 'middleware' => 'auth:api']);
+//    $this->post('jobs', ['uses' => 'Api\Job\HomeController@save']);
+    $this->post('jobs', ['uses' => 'Api\Job\HomeController@save', 'middleware' => 'auth:api']);
     $this->post('login', ['uses' => 'Api\LoginController@login']);
     $this->get('user', ['uses' => 'Api\UserController@index', 'middleware' => 'auth:api']);
     $this->get('topics', ['uses' => 'Api\TopicsController@index']);
