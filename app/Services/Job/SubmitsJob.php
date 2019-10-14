@@ -105,8 +105,7 @@ trait SubmitsJob
 
             if ($job->firm->is_private) {
                 $job->firm()->dissociate();
-                // firm name is required to save firm
-            } elseif ($job->firm->name) {
+            } elseif ($job->firm->name) { // firm name is required to save firm
                 // user might click on "add new firm" button in form. make sure user_id is set up.
                 $job->firm->setDefaultUserId($job->user_id);
 
