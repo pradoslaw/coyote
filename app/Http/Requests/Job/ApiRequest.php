@@ -54,7 +54,22 @@ class ApiRequest extends FormRequest
             'locations.*.address' => 'nullable|string|max:255',
             'locations.*.country' => 'nullable|string',
             'locations.*.latitude' => 'nullable|numeric',
-            'locations.*.longitude' => 'nullable|numeric'
+            'locations.*.longitude' => 'nullable|numeric',
+
+            'firm.name' => 'nullable|string|max:60',
+            'firm.is_agency' => 'bool',
+            'firm.website' => 'nullable|url',
+            'firm.logo' => 'nullable|url',
+            'firm.description' => 'nullable|string',
+            'firm.employees' => 'nullable|integer',
+            'firm.founded' => 'nullable|integer',
+            'firm.youtube_url' => 'nullable|string|max:255|url|host:youtube.com,youtu.be',
+            'firm.latitude' => 'nullable|numeric',
+            'firm.longitude' => 'nullable|numeric',
+            'firm.street' => 'nullable|string|max:255',
+            'firm.city' => 'nullable|string|max:255',
+            'firm.postcode' => 'nullable|string|max:50',
+            'firm.house' => 'nullable|string|max:50',
         ];
     }
 
