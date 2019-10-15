@@ -504,7 +504,20 @@ class Job extends Model
      */
     public function commentsWithChildren()
     {
-        return $this->comments()->whereNull('parent_id')->orderBy('id', 'DESC')->with('children.user:id,name,photo', 'user:id,name,photo');
+        return $this
+            ->comments()
+            ->whereNull('parent_id')
+            ->orderBy('id', 'DESC')
+            ->with([
+                'children' => function ($builder) {
+                    return $builder->with(['user' => function ($query) {
+                        return $query->select(['id', 'name', 'photo'])->withTrashed();
+                    }]);
+                },
+                'user' => function ($builder) {
+                    return $builder->select(['id', 'name', 'photo'])->withTrashed();
+                }
+            ]);
     }
 
     /**
