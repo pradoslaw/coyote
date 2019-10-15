@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Http\Controllers\Api\Job;
+namespace Coyote\Http\Controllers\Api;
 
 use Illuminate\Http\Resources\Json\Resource;
 use Coyote\Http\Requests\Job\ApiRequest;

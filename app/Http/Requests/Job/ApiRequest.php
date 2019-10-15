@@ -36,7 +36,7 @@ class ApiRequest extends FormRequest
             'currency_id' => 'integer',
             'rate_id' => 'integer',
             'employment_id' => 'integer',
-            'text' => 'string',
+            'description' => 'string',
             'recruitment' => 'nullable|string',
             'email' => 'nullable|email',
             'plan_id' => [
@@ -44,10 +44,10 @@ class ApiRequest extends FormRequest
                 'int',
                 Rule::exists('plans', 'id')->where('is_active', 1),
             ],
-//            'features.*.id' => 'required|int',
-//            'features.*.name' => 'string|max:100',
-//            'features.*.value' => 'nullable|string|max:100',
-//            'features.*.is_checked' => 'bool',
+            'features.*.id' => 'required|int',
+            'features.*.name' => 'string|max:100',
+            'features.*.value' => 'nullable|string|max:100',
+            'features.*.is_checked' => 'bool',
             'tags.*.name' => 'string|max:50|tag',
             'tags.*.priority' => 'required|int|min:0|max:2',
             'locations.*.city' => 'nullable|string|max:255',
@@ -86,7 +86,7 @@ class ApiRequest extends FormRequest
 
             $user = $this->user('api');
             $coupon = $this->container[CouponRepositoryInterface::class];
-
+var_dump($coupon->where('user_id', $user->id)->count());exit;
             return $coupon->where('user_id', $user->id)->count() > 0;
         });
 

@@ -7,9 +7,9 @@ $this->get('users/{user}', ['uses' => 'User\UserApiController@get']);
 $this->prefix('v1')->group(function () {
     $this->get('microblogs', ['uses' => 'Api\Microblog\HomeController@index']);
     $this->get('jobs', ['uses' => 'Api\JobsController@index']);
-    $this->get('jobs/{id}', ['uses' => 'Api\JobsController@show']);
+    $this->get('jobs/{job}', ['uses' => 'Api\JobsController@show']);
     $this->put('jobs/{job}', ['uses' => 'Api\JobsController@save', 'middleware' => 'auth:api']);
-    $this->post('jobs', ['uses' => 'Api\Job\HomeController@save', 'middleware' => 'auth:api']);
+    $this->post('jobs', ['uses' => 'Api\JobsController@save', 'middleware' => 'auth:api']);
     $this->post('login', ['uses' => 'Api\LoginController@login']);
     $this->get('user', ['uses' => 'Api\UserController@index', 'middleware' => 'auth:api']);
     $this->get('topics', ['uses' => 'Api\TopicsController@index']);
