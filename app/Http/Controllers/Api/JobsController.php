@@ -2,6 +2,8 @@
 
 namespace Coyote\Http\Controllers\Api;
 
+use Coyote\Events\PaymentPaid;
+use Coyote\Repositories\Contracts\CouponRepositoryInterface as CouponRepository;
 use Illuminate\Http\Resources\Json\Resource;
 use Coyote\Http\Requests\Job\ApiRequest;
 use Coyote\Http\Resources\JobResource;
@@ -59,10 +61,11 @@ class JobsController extends Controller
      * @param Job $job
      * @param ApiRequest $request
      * @param Auth $auth
+     * @param $repository CouponRepository
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function save(Job $job, ApiRequest $request, Auth $auth)
+    public function save(Job $job, ApiRequest $request, Auth $auth, CouponRepository $repository)
     {
         $user = $auth->guard('api')->user();
 
@@ -81,6 +84,17 @@ class JobsController extends Controller
         }
 
         $this->saveInTransaction($job, $user);
+
+        if ($payment = $this->getUnpaidPayment($job)) {
+            $coupon = $repository->findCoupon($user->id, $job->plan->gross_price);
+
+            $payment->coupon_id = $coupon->id;
+            $payment->save();
+
+            $coupon->delete();
+
+            event(new PaymentPaid($payment));
+        }
 
         return response(new JobResource($job), $job->wasRecentlyCreated ? 201 : 200);
     }

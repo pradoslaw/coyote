@@ -2,7 +2,9 @@
 
 namespace Coyote\Http\Requests\Job;
 
-use Coyote\Repositories\Contracts\CouponRepositoryInterface;
+use Coyote\Repositories\Contracts\CouponRepositoryInterface as CouponRepository;
+use Coyote\Repositories\Contracts\PlanRepositoryInterface as PlanRepository;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -15,7 +17,24 @@ class ApiRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        if ($this->route('job') !== null) {
+            return true;
+        }
+
+        $user = $this->user('api');
+
+        /** @var \Coyote\Plan $plan */
+        $plan = $this->has('plan_id') ? $this->plan()->find($this->input('plan_id')) : $this->plan()->findBy('is_default', true);
+
+        return $this->coupon()->findCoupon($user->id, $plan->gross_price) !== null;
+    }
+
+    /**
+     * @throws AuthorizationException
+     */
+    protected function failedAuthorization()
+    {
+        throw new AuthorizationException('No sufficient funds to post this job offer.');
     }
 
     /**
@@ -73,23 +92,13 @@ class ApiRequest extends FormRequest
         ];
     }
 
-    protected function getValidatorInstance()
+    private function plan(): PlanRepository
     {
-        $validator = parent::getValidatorInstance();
+        return $this->container[PlanRepository::class];
+    }
 
-        $validator->after(function () {
-            $job = $this->route('job');
-
-            if ($job !== null) {
-                return true;
-            }
-
-            $user = $this->user('api');
-            $coupon = $this->container[CouponRepositoryInterface::class];
-var_dump($coupon->where('user_id', $user->id)->count());exit;
-            return $coupon->where('user_id', $user->id)->count() > 0;
-        });
-
-        return $validator;
+    private function coupon(): CouponRepository
+    {
+        return $this->container[CouponRepository::class];
     }
 }

@@ -5,6 +5,7 @@ namespace Coyote\Services\Job;
 use Coyote\Events\JobWasSaved;
 use Coyote\Job;
 use Coyote\Notifications\Job\CreatedNotification;
+use Coyote\Payment;
 use Coyote\Repositories\Contracts\FirmRepositoryInterface as FirmRepository;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Repositories\Contracts\PlanRepositoryInterface as PlanRepository;
@@ -143,5 +144,14 @@ trait SubmitsJob
         if ($job->wasRecentlyCreated) {
             $job->user->notify(new CreatedNotification($job));
         }
+    }
+
+    /**
+     * @param Job $job
+     * @return Payment|null
+     */
+    protected function getUnpaidPayment(Job $job): ?Payment
+    {
+        return !$job->is_publish ? $job->getUnpaidPayment() : null;
     }
 }
