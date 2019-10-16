@@ -55,6 +55,7 @@ class JobResource extends JsonResource
             'locations'   => LocationResource::collection($this->locations),
             'tags'        => TagResource::collection($this->tags->sortByDesc('pivot.priority')),
             'is_medal'    => $this->score >= 150,
+            'currency'      => $this->currency->name,
             'currency_symbol' => $this->currency->symbol,
             'remote'      => [
                 'range'         => $this->remote_range,

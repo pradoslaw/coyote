@@ -1,0 +1,177 @@
+openapi: 3.0.0
+info:
+  title: '4programmers.net API'
+  version: '1.0'
+servers:
+  - url: http://api.4p.local:8880/v1
+    description: Production server
+paths:
+  /jobs:
+    get:
+      parameters:
+        - name: page
+          in: query
+          description: 'Page number'
+          required: false
+      responses:
+        200:
+          description: 'A list with all jobs'
+    post:
+      security:
+        - bearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/JobBody'
+      responses:
+        201:
+          description: 'Newly created job'
+        422:
+          description: 'Validation errors'
+        401:
+          description: 'No sufficient funds to post this job offer.'
+
+
+components:
+  requestBodies:
+    JobBody:
+      description: A JSON object containing job information
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - title
+            $ref: '#/components/schemas/Job'
+
+  schemas:
+    Job:
+      type: object
+      properties:
+        title:
+          type: string
+        salary_from:
+          type: integer
+          format: int32
+          minimum: 1
+          default: null
+        salary_to:
+          type: integer
+          format: int32
+          minimum: 1
+          default: null
+        salary_rate:
+          type: enum
+          enum: ["hourly", "weekly", "monthly", "yearly"]
+          default: "monthly"
+        is_remote:
+          type: boolean
+          default: false
+        remote_range:
+          type: integer
+          minimum: 10
+          maximum: 100
+        is_gross:
+          type: boolean
+          default: false
+        description:
+          type: string
+        recruitment:
+          type: string
+          description: "Additional recruitment information"
+        email:
+          type: string
+          format: email
+        currency:
+          type: enum
+          enum: ["PLN", "USD", "EUR", "GBP", "CHF"]
+          default: "PLN"
+        plan:
+          type: enum
+          enum: ["standard", "plus", "premium"]
+          default: "plus"
+        seniority:
+          type: enum
+          enum: ["student", "junior", "mid", "senior", "lead", "manager"]
+        employment:
+          type: enum
+          enum: ["employment", "mandatory", "b2b"]
+          default: "employment"
+        locations:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/Location'
+        tags:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/Tag'
+        firm:
+          nullable: true
+          $ref: '#/components/schemas/Firm'
+
+    Firm:
+      type: object
+      properties:
+        name:
+          type: string
+        is_agency:
+          type: boolean
+          default: false
+        website:
+          type: string
+        logo:
+          type: string
+          description: "Full URL to logo image"
+        description:
+          type: string
+        youtube_url:
+          type: string
+        latitude:
+          type: number
+          format: float
+        longitude:
+          type: number
+          format: float
+        street:
+          type: string
+        city:
+          type: string
+        postcode:
+          type: string
+        house:
+          type: string
+
+    Location:
+      type: object
+      properties:
+        city:
+          type: string
+          maxLength: 255
+        address:
+          type: string
+          maxLength: 255
+        country:
+          type: string
+        latitude:
+          type: number
+          format: float
+        longitude:
+          type: number
+          format: float
+
+    Tag:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 50
+        priority:
+          type: integer
+          minimum: 0
+          maximum: 2
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer

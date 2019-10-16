@@ -64,7 +64,7 @@ trait SubmitsJob
 
         if (!$job->exists) {
             $job->user_id = $user->id;
-            $job->plan_id = $this->plan->getDefaultId();
+            $job->plan_id = $this->plan->findDefault()->id;
             $job->email = $user->email;
             $job->setAttribute('features', $this->job->getDefaultFeatures($user->id));
         }
@@ -80,7 +80,7 @@ trait SubmitsJob
      * @param Job $job
      * @param User $user
      */
-    protected function saveInTransaction(Job $job, User $user)
+    protected function saveWithTransaction(Job $job, User $user)
     {
         $tags = [];
         if (count($job->tags)) {

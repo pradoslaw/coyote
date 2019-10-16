@@ -214,10 +214,10 @@ class SubmitController extends Controller
 
         $this->authorize('update', $job);
 
-        $this->saveInTransaction($job, $this->auth);
+        $this->saveWithTransaction($job, $this->auth);
         $draft->forget();
 
-        if (!$job->is_publish && ($unpaidPayment = $job->getUnpaidPayment()) !== null) {
+        if ($unpaidPayment = $this->getUnpaidPayment($job)) {
             return redirect()
                 ->route('job.payment', [$unpaidPayment])
                 ->with('success', 'Oferta została dodana, lecz nie jest jeszcze promowana. Uzupełnij poniższy formularz, aby zakończyć.');

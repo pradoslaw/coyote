@@ -3,6 +3,7 @@
 namespace Coyote\Http\Requests\Job;
 
 use Coyote\Repositories\Contracts\CouponRepositoryInterface as CouponRepository;
+use Coyote\Repositories\Contracts\CurrencyRepositoryInterface;
 use Coyote\Repositories\Contracts\PlanRepositoryInterface as PlanRepository;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Http\FormRequest;
@@ -24,7 +25,7 @@ class ApiRequest extends FormRequest
         $user = $this->user('api');
 
         /** @var \Coyote\Plan $plan */
-        $plan = $this->has('plan_id') ? $this->plan()->find($this->input('plan_id')) : $this->plan()->findBy('is_default', true);
+        $plan = $this->plan()->findDefault($this->input('plan'));
 
         return $this->coupon()->findCoupon($user->id, $plan->gross_price) !== null;
     }
@@ -46,22 +47,36 @@ class ApiRequest extends FormRequest
     {
         return [
             'title' => 'required|string|min:2|max:60',
-            'seniority_id' => 'nullable|integer',
+            'seniority' => [
+                'nullable',
+                'string',
+                Rule::in(['student', 'junior', 'mid', 'senior', 'lead', 'manager']) // @todo przeniesc do slownika
+            ],
             'is_remote' => 'bool',
             'remote_range' => 'integer|min:10|max:100',
-            'salary_from' => 'nullable|integer',
-            'salary_to' => 'nullable|integer',
+            'salary_from' => 'nullable|integer|min:1',
+            'salary_to' => 'nullable|integer|min:1',
+            'salary_rate' => [
+                'string',
+                Rule::in(['hourly', 'monthly', 'weekly', 'yearly'])  // @todo przeniesc do slownika albo do stalej
+            ],
             'is_gross' => 'boolean',
-            'currency_id' => 'integer',
-            'rate_id' => 'integer',
-            'employment_id' => 'integer',
+            'currency' => [
+                'string',
+                Rule::in($this->currencies())
+            ],
+            'employment' => [
+                'nullable',
+                'string',
+                Rule::in(['mandatory', 'employment', 'b2b'])
+            ],
             'description' => 'string',
             'recruitment' => 'nullable|string',
             'email' => 'nullable|email',
-            'plan_id' => [
+            'plans' => [
                 'bail',
-                'int',
-                Rule::exists('plans', 'id')->where('is_active', 1),
+                'string',
+                Rule::in(array_map('strtolower', $this->plan()->where('is_active', 1)->pluck('name')->toArray()))
             ],
             'features.*.id' => 'required|int',
             'features.*.name' => 'string|max:100',
@@ -100,5 +115,12 @@ class ApiRequest extends FormRequest
     private function coupon(): CouponRepository
     {
         return $this->container[CouponRepository::class];
+    }
+
+    private function currencies(): array
+    {
+        $currency = $this->container[CurrencyRepositoryInterface::class];
+
+        return $currency->pluck('name');
     }
 }

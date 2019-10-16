@@ -82,6 +82,10 @@ class Job extends Model
     const NET             = 0;
     const GROSS           = 1;
 
+    const EMPLOYMENT      = 1;
+    const MANDATORY       = 2;
+    const B2B             = 4;
+
     /**
      * Filling each field adds points to job offer score.
      */
@@ -116,7 +120,13 @@ class Job extends Model
         'plan_id',
         'tags',
         'features',
-        'locations'
+        'locations',
+
+        'currency',
+        'plan',
+        'salary_rate',
+        'seniority',
+        'employment'
     ];
 
     /**
@@ -310,7 +320,7 @@ class Job extends Model
      */
     public static function getEmploymentList()
     {
-        return [1 => 'Umowa o pracę', 2 => 'Umowa zlecenie', 3 => 'Umowa o dzieło', 4 => 'Kontrakt'];
+        return [self::EMPLOYMENT => 'Umowa o pracę', self::MANDATORY => 'Umowa zlecenie', 3 => 'Umowa o dzieło', self::B2B => 'Kontrakt'];
     }
 
     /**
@@ -535,6 +545,16 @@ class Job extends Model
     }
 
     /**
+     * Set monthly rate as string
+     *
+     * @param string $value
+     */
+    public function setSalaryRateAttribute($value)
+    {
+        $this->attributes['rate_id'] = ['hourly' => self::HOUR, 'weekly' => self::WEEK, 'monthly' => self::MONTH, 'yearly' => self::YEAR][$value];
+    }
+
+    /**
      * @return int
      */
     public function getDeadlineAttribute()
@@ -608,6 +628,31 @@ class Job extends Model
 
             $this->deadline_at = Carbon::now()->addDays($this->plan->length);
         }
+    }
+
+    public function setCurrencyAttribute($currency)
+    {
+        $this->attributes['currency_id'] = Currency::where('name', $currency)->value('id');
+    }
+
+    public function setSeniorityAttribute($seniority)
+    {
+        $this->attributes['seniority_id'] = ['student' => self::STUDENT, 'junior' => self::JUNIOR, 'mid' => self::MID, 'senior' => self::SENIOR, 'lead' => self::LEAD, 'manager' => self::MANAGER][$seniority];
+    }
+
+    public function setEmploymentAttribute($employment)
+    {
+        $this->attributes['employment_id'] = ['employment' => self::EMPLOYMENT, 'mandatory' => self::MANAGER, 'b2b' => self::B2B][$employment];
+    }
+
+    /**
+     * Set plan as name
+     *
+     * @param string $plan
+     */
+    public function setPlanAttribute($plan)
+    {
+        $this->plan_id = Plan::where('is_active', 1)->whereRaw('LOWER(name) = ?', $plan)->value('id');
     }
 
     /**
