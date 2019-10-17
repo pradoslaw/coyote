@@ -11,6 +11,7 @@ use Coyote\Http\Resources\Firm as FirmResource;
 use Coyote\Http\Resources\JobFormResource;
 use Coyote\Job;
 use Coyote\Http\Controllers\Controller;
+use Coyote\Notifications\Job\CreatedNotification;
 use Coyote\Repositories\Contracts\FirmRepositoryInterface as FirmRepository;
 use Coyote\Repositories\Contracts\IndustryRepositoryInterface;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
@@ -215,6 +216,11 @@ class SubmitController extends Controller
         $this->authorize('update', $job);
 
         $this->saveWithTransaction($job, $this->auth);
+
+        if ($job->wasRecentlyCreated) {
+            $job->user->notify(new CreatedNotification($job));
+        }
+
         $draft->forget();
 
         if ($unpaidPayment = $this->getUnpaidPayment($job)) {

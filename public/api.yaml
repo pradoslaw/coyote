@@ -6,16 +6,28 @@ servers:
   - url: http://api.4p.local:8880/v1
     description: Production server
 paths:
-  /jobs:
-    get:
-      parameters:
-        - name: page
-          in: query
-          description: 'Page number'
-          required: false
+  /login:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - password
+              properties:
+                name:
+                  type: string
+                password:
+                  type: string
+                  format: password
       responses:
         200:
-          description: 'A list with all jobs'
+          description: "Login token"
+        422:
+          description: "Validation errors"
+  /jobs:
     post:
       security:
         - bearerAuth: []
@@ -23,11 +35,13 @@ paths:
         $ref: '#/components/requestBodies/JobBody'
       responses:
         201:
-          description: 'Newly created job'
+          description: "Job successfully created"
+        200:
+          description: "Job successfully updated"
         422:
-          description: 'Validation errors'
+          description: "Validation errors"
         401:
-          description: 'No sufficient funds to post this job offer.'
+          description: "No sufficient funds to post this job offer"
 
 
 components:
@@ -73,11 +87,14 @@ components:
         is_gross:
           type: boolean
           default: false
+          description: "Determines if salary is gross or net"
         description:
           type: string
+          nullable: true
         recruitment:
           type: string
           description: "Additional recruitment information"
+          nullable: true
         email:
           type: string
           format: email
@@ -115,32 +132,44 @@ components:
       properties:
         name:
           type: string
+          description: "Only firm nam is required if you want to add next job offer assigned to the same firm"
         is_agency:
           type: boolean
           default: false
         website:
           type: string
+          nullable: true
         logo:
           type: string
-          description: "Full URL to logo image"
+          format: byte
+          description: "Logo as base64 encoded string"
+          nullable: true
         description:
           type: string
+          nullable: true
         youtube_url:
           type: string
+          nullable: true
         latitude:
           type: number
           format: float
+          nullable: true
         longitude:
           type: number
           format: float
+          nullable: true
         street:
           type: string
+          nullable: true
         city:
           type: string
+          nullable: true
         postcode:
           type: string
+          nullable: true
         house:
           type: string
+          nullable: true
 
     Location:
       type: object
@@ -156,9 +185,11 @@ components:
         latitude:
           type: number
           format: float
+          nullable: true
         longitude:
           type: number
           format: float
+          nullable: true
 
     Tag:
       type: object
@@ -170,6 +201,8 @@ components:
           type: integer
           minimum: 0
           maximum: 2
+          default: 1
+          description: "0 - nice to have, 1 - intermediate level, 2 - advance"
 
   securitySchemes:
     bearerAuth:

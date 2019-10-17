@@ -5,6 +5,7 @@ namespace Coyote\Http\Requests\Job;
 use Coyote\Repositories\Contracts\CouponRepositoryInterface as CouponRepository;
 use Coyote\Repositories\Contracts\CurrencyRepositoryInterface;
 use Coyote\Repositories\Contracts\PlanRepositoryInterface as PlanRepository;
+use Coyote\Rules\Base64Image;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -47,29 +48,15 @@ class ApiRequest extends FormRequest
     {
         return [
             'title' => 'required|string|min:2|max:60',
-            'seniority' => [
-                'nullable',
-                'string',
-                Rule::in(['student', 'junior', 'mid', 'senior', 'lead', 'manager']) // @todo przeniesc do slownika
-            ],
+            'seniority' => ['nullable', 'string', Rule::in(['student', 'junior', 'mid', 'senior', 'lead', 'manager'])], // @todo przeniesc do slownika
             'is_remote' => 'bool',
             'remote_range' => 'integer|min:10|max:100',
             'salary_from' => 'nullable|integer|min:1',
             'salary_to' => 'nullable|integer|min:1',
-            'salary_rate' => [
-                'string',
-                Rule::in(['hourly', 'monthly', 'weekly', 'yearly'])  // @todo przeniesc do slownika albo do stalej
-            ],
+            'salary_rate' => ['string', Rule::in(['hourly', 'monthly', 'weekly', 'yearly'])],  // @todo przeniesc do slownika albo do stalej
             'is_gross' => 'boolean',
-            'currency' => [
-                'string',
-                Rule::in($this->currencies())
-            ],
-            'employment' => [
-                'nullable',
-                'string',
-                Rule::in(['mandatory', 'employment', 'b2b'])
-            ],
+            'currency' => ['string', Rule::in($this->availableCurrencies())],
+            'employment' => ['nullable', 'string', Rule::in(['mandatory', 'employment', 'b2b'])],
             'description' => 'string',
             'recruitment' => 'nullable|string',
             'email' => 'nullable|email',
@@ -83,7 +70,7 @@ class ApiRequest extends FormRequest
             'features.*.value' => 'nullable|string|max:100',
             'features.*.is_checked' => 'bool',
             'tags.*.name' => 'string|max:50|tag',
-            'tags.*.priority' => 'required|int|min:0|max:2',
+            'tags.*.priority' => 'int|min:0|max:2',
             'locations.*.city' => 'nullable|string|max:255',
             'locations.*.address' => 'nullable|string|max:255',
             'locations.*.country' => 'nullable|string',
@@ -93,7 +80,7 @@ class ApiRequest extends FormRequest
             'firm.name' => 'nullable|string|max:60',
             'firm.is_agency' => 'bool',
             'firm.website' => 'nullable|url',
-            'firm.logo' => 'nullable|url',
+            'firm.logo' => ['nullable', new Base64Image()],
             'firm.description' => 'nullable|string',
             'firm.employees' => 'nullable|integer',
             'firm.founded' => 'nullable|integer',
@@ -117,10 +104,13 @@ class ApiRequest extends FormRequest
         return $this->container[CouponRepository::class];
     }
 
-    private function currencies(): array
+    private function currency(): CurrencyRepositoryInterface
     {
-        $currency = $this->container[CurrencyRepositoryInterface::class];
+        return $this->container[CurrencyRepositoryInterface::class];
+    }
 
-        return $currency->pluck('name');
+    private function availableCurrencies(): array
+    {
+        return $this->currency()->pluck('name');
     }
 }

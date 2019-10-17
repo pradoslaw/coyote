@@ -140,10 +140,6 @@ trait SubmitsJob
 
             return $job;
         });
-
-        if ($job->wasRecentlyCreated) {
-            $job->user->notify(new CreatedNotification($job));
-        }
     }
 
     /**

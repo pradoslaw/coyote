@@ -56,6 +56,5 @@ class JobApiTest extends TestCase
 
         $this->assertEquals(403, $response->getStatusCode());
         $response->assertJsonFragment(['message' => 'No sufficient funds to post this job offer.']);
-
     }
 }

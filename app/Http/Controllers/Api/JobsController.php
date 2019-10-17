@@ -3,7 +3,7 @@
 namespace Coyote\Http\Controllers\Api;
 
 use Coyote\Events\PaymentPaid;
-use Coyote\Plan;
+use Coyote\Http\Factories\MediaFactory;
 use Coyote\Repositories\Contracts\CouponRepositoryInterface as CouponRepository;
 use Illuminate\Http\Resources\Json\Resource;
 use Coyote\Http\Requests\Job\ApiRequest;
@@ -20,25 +20,10 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Routing\Controller;
 use Illuminate\Contracts\Auth\Factory as Auth;
 
-/**
- * @OA\Info(title="My First API", version="0.1")
- */
 class JobsController extends Controller
 {
-    use AuthorizesRequests, SubmitsJob;
+    use AuthorizesRequests, SubmitsJob, MediaFactory;
 
-    /**
-     * @OA\Get(
-     *     path="/v1/jobs",
-     *     @OA\Parameter(
-     *         name="page",
-     *         in="query",
-     *         description="Page number",
-     *         required=false
-     *     ),
-     *     @OA\Response(response="200", description="A list with all jobs")
-     * )
-     */
     /**
      * @param JobRepository $job
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
@@ -74,19 +59,6 @@ class JobsController extends Controller
     }
 
     /**
-     * @OA\Post(
-     *     path="/v1/jobs",
-     *     @OA\Parameter(
-     *         name="title",
-     *         in="query",
-     *         description="Page number",
-     *         required=false
-     *     ),
-     *     @OA\Response(response="201", description="Newly created job"),
-     *     @OA\Response(response="422", description="Validation errors")
-     * )
-     */
-    /**
      * @param Job $job
      * @param ApiRequest $request
      * @param Auth $auth
@@ -109,6 +81,12 @@ class JobsController extends Controller
             $firm = $this->firm->loadFirm($user->id, $request->input('firm.name'));
 
             $firm->fill($request->input('firm'));
+
+            if ($request->has('firm.logo')) {
+                $media = $this->getMediaFactory()->make('logo')->put(base64_decode($request->input('firm.logo')));
+                $firm->logo = $media->getFilename();
+            }
+
             $job->firm()->associate($firm);
         }
 
@@ -121,8 +99,6 @@ class JobsController extends Controller
 
             $payment->coupon_id = $coupon->id;
             $payment->save();
-
-            $coupon->delete();
 
             event(new PaymentPaid($payment));
         }

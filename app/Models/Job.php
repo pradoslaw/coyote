@@ -603,7 +603,7 @@ class Job extends Model
         $this->tags->flush();
 
         foreach ($tags as $tag) {
-            $pivot = $this->tags()->newPivot(['priority' => $tag['priority']]);
+            $pivot = $this->tags()->newPivot(['priority' => $tag['priority'] ?? 1]);
             $model = (new Tag($tag))->setRelation('pivot', $pivot);
 
             $this->tags->add($model);
