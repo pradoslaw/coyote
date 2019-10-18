@@ -100,7 +100,6 @@ class Job extends Model
     protected $fillable = [
         'title',
         'description',
-        'requirements',
         'recruitment',
         'is_remote',
         'is_gross',
@@ -654,6 +653,13 @@ class Job extends Model
     public function setEmploymentAttribute($employment)
     {
         $this->attributes['employment_id'] = ['employment' => self::EMPLOYMENT, 'mandatory' => self::MANAGER, 'b2b' => self::B2B][$employment];
+    }
+
+    public function setRecruitmentAttribute($recruitment)
+    {
+        if (!empty($recruitment)) {
+            $this->attributes['enable_apply'] = false;
+        }
     }
 
     /**

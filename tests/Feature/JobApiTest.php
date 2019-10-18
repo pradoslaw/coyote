@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Coyote\Coupon;
 use Coyote\Firm;
+use Coyote\Job;
 use Coyote\User;
 use Faker\Factory;
 use Tests\TestCase;
@@ -37,6 +38,7 @@ class JobApiTest extends TestCase
             'plan' => 'standard',
             'seniority' => 'lead',
             'employment' => 'mandatory',
+            'recruitment' => $this->faker->url,
             'locations' => [
                 [
                     'city' => 'Wrocław',
@@ -53,6 +55,11 @@ class JobApiTest extends TestCase
         $response->assertJsonFragment(['title' => $data['title'], 'currency' => 'USD']);
 
         $this->assertNotNull(Coupon::withTrashed()->find($coupon->id)->deleted_at);
+
+        $result = json_decode($response->getContent(), true);
+        $job = Job::find($result['id']);
+
+        $this->assertFalse($job->enable_apply);
     }
 
     public function testSubmitWithAlreadyCreatedFirm()
