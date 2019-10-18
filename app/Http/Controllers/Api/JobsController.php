@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Api;
 
 use Coyote\Events\PaymentPaid;
 use Coyote\Http\Factories\MediaFactory;
+use Coyote\Http\Resources\JobApiResource;
 use Coyote\Repositories\Contracts\CouponRepositoryInterface as CouponRepository;
 use Illuminate\Http\Resources\Json\Resource;
 use Coyote\Http\Requests\Job\ApiRequest;
@@ -103,6 +104,6 @@ class JobsController extends Controller
             event(new PaymentPaid($payment));
         }
 
-        return response(new JobResource($job), $job->wasRecentlyCreated ? 201 : 200);
+        return response(new JobApiResource($job), $job->wasRecentlyCreated ? 201 : 200);
     }
 }

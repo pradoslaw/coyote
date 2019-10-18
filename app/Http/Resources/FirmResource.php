@@ -24,7 +24,8 @@ class FirmResource extends JsonResource
         return [
             'name'          => $this->name,
             'logo'          => (string) $this->logo->url(),
-            'url'           => route('job.firm', $this->slug)
+            'url'           => route('job.firm', $this->slug),
+            'website'       => $this->website
         ];
     }
 }

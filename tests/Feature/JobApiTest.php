@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Coyote\Coupon;
+use Coyote\Firm;
 use Coyote\User;
 use Faker\Factory;
 use Tests\TestCase;
@@ -41,9 +42,30 @@ class JobApiTest extends TestCase
         $response = $this->json('POST', '/v1/jobs', $data, ['Authorization' => 'Bearer ' . $this->token, 'Accept' => 'application/json']);
 
         $this->assertEquals(201, $response->getStatusCode());
-        $response->assertJsonFragment(['title' => $data['title'], 'currency' => 'USD', 'currency_symbol' => '$']);
+        $response->assertJsonFragment(['title' => $data['title'], 'currency' => 'USD']);
 
         $this->assertNotNull(Coupon::withTrashed()->find($coupon->id)->deleted_at);
+    }
+
+    public function testSubmitWithAlreadyCreatedFirm()
+    {
+        Coupon::create(['amount' => 57, 'code' => str_random(), 'user_id' => $this->user->id]);
+        $firm = factory(Firm::class)->create(['user_id' => $this->user->id]);
+
+        $data = [
+            'title' => $this->faker->sentence,
+            'firm' => [
+                'name' => $firm->name
+            ]
+        ];
+
+        $response = $this->json('POST', '/v1/jobs', $data, ['Authorization' => 'Bearer ' . $this->token, 'Accept' => 'application/json']);
+        $this->assertEquals(201, $response->getStatusCode());
+
+        $result = json_decode($response->getContent(), true);
+
+        $this->assertEquals($result['firm']['name'], $firm->name);
+        $this->assertEquals($result['firm']['website'], $firm->website);
     }
 
     public function testNotEnoughFunds()
