@@ -2,9 +2,7 @@
 
 namespace Coyote\Http\Requests\Job;
 
-use Coyote\Job;
 use Coyote\Repositories\Contracts\CouponRepositoryInterface as CouponRepository;
-use Coyote\Repositories\Contracts\CurrencyRepositoryInterface;
 use Coyote\Repositories\Contracts\PlanRepositoryInterface as PlanRepository;
 use Coyote\Rules\Base64Image;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -48,16 +46,16 @@ class ApiRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|string|min:2|max:60',
-            'seniority' => ['nullable', 'string', Rule::in([Job::STUDENT, Job::JUNIOR, Job::MID, Job::SENIOR, Job::LEAD, Job::MANAGER])],
-            'is_remote' => 'bool',
-            'remote_range' => 'integer|min:10|max:100',
-            'salary_from' => 'nullable|integer|min:1',
-            'salary_to' => 'nullable|integer|min:1',
-            'rate' => ['nullable', 'string', Rule::in([Job::HOURLY, Job::MONTHLY, Job::WEEKLY, Job::YEARLY])],
-            'is_gross' => 'boolean',
-            'currency' => ['string', Rule::in($this->availableCurrencies())],
-            'employment' => ['nullable', 'string', Rule::in([Job::MANDATORY, Job::EMPLOYMENT, Job::B2B])],
+            'title' => JobRequest::TITLE_RULE,
+            'seniority' => JobRequest::seniorityRule(),
+            'is_remote' => JobRequest::IS_REMOTE_RULE,
+            'remote_range' => JobRequest::REMOTE_RANGE_RULE,
+            'salary_from' => JobRequest::SALARY_FROM_RULE,
+            'salary_to' => JobRequest::SALARY_TO_RULE,
+            'rate' => JobRequest::rateRule(),
+            'is_gross' => JobRequest::IS_GROSS_RULE,
+            'currency' => JobRequest::currencyRule(),
+            'employment' => JobRequest::employmentRule(),
             'description' => 'string',
             'recruitment' => 'nullable|string',
             'email' => 'nullable|email',
@@ -70,29 +68,29 @@ class ApiRequest extends FormRequest
             'features.*.name' => 'string|max:100',
             'features.*.value' => 'nullable|string|max:100',
             'features.*.is_checked' => 'bool',
-            'tags.*.name' => 'string|max:50|tag',
-            'tags.*.priority' => 'int|min:0|max:2',
-            'locations.*.city' => 'nullable|string|max:255',
-            'locations.*.street' => 'nullable|string|max:255',
-            'locations.*.street_number' => 'nullable|string|max:50',
-            'locations.*.country' => 'nullable|string',
-            'locations.*.latitude' => 'nullable|numeric',
-            'locations.*.longitude' => 'nullable|numeric',
+            'tags.*.name' => JobRequest::TAG_NAME_RULE,
+            'tags.*.priority' => JobRequest::TAG_PRIORITY_RULE,
+            'locations.*.city' => JobRequest::LOCATION_CITY,
+            'locations.*.street' => JobRequest::LOCATION_STREET,
+            'locations.*.street_number' => JobRequest::LOCATION_STREET_NUMBER,
+            'locations.*.country' => JobRequest::LOCATION_COUNTRY,
+            'locations.*.latitude' => JobRequest::LOCATION_LATITUDE,
+            'locations.*.longitude' => JobRequest::LOCATION_LONGITUDE,
 
             'firm.name' => 'nullable|string|max:60',
-            'firm.is_agency' => 'bool',
-            'firm.website' => 'nullable|url',
+            'firm.is_agency' => FirmRequest::IS_AGENCY,
+            'firm.website' => FirmRequest::WEBSITE,
             'firm.logo' => ['nullable', new Base64Image()],
-            'firm.description' => 'nullable|string',
+            'firm.description' => FirmRequest::DESCRIPTION,
             'firm.employees' => 'nullable|integer',
             'firm.founded' => 'nullable|integer',
-            'firm.youtube_url' => 'nullable|string|max:255|url|host:youtube.com,youtu.be',
-            'firm.latitude' => 'nullable|numeric',
-            'firm.longitude' => 'nullable|numeric',
-            'firm.street' => 'nullable|string|max:255',
-            'firm.city' => 'nullable|string|max:255',
+            'firm.youtube_url' => FirmRequest::YOUTUBE_URL,
+            'firm.latitude' => JobRequest::LOCATION_LATITUDE,
+            'firm.longitude' => JobRequest::LOCATION_LONGITUDE,
+            'firm.street' => JobRequest::LOCATION_STREET,
+            'firm.city' => JobRequest::LOCATION_CITY,
             'firm.postcode' => 'nullable|string|max:50',
-            'firm.street_number' => 'nullable|string|max:50',
+            'firm.street_number' => JobRequest::LOCATION_STREET_NUMBER,
         ];
     }
 
@@ -104,15 +102,5 @@ class ApiRequest extends FormRequest
     private function coupon(): CouponRepository
     {
         return $this->container[CouponRepository::class];
-    }
-
-    private function currency(): CurrencyRepositoryInterface
-    {
-        return $this->container[CurrencyRepositoryInterface::class];
-    }
-
-    private function availableCurrencies(): array
-    {
-        return $this->currency()->pluck('name');
     }
 }
