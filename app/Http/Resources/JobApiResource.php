@@ -22,7 +22,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property float $salary_from
  * @property float $salary_to
  * @property Currency $currency
- * @property int $rate_id
+ * @property string $rate
  * @property bool $is_highlight
  * @property int $score
  * @property bool $is_remote

@@ -242,8 +242,8 @@ input[name=deadline] {
 }
 
 select[name=currency_id],
-select[name=rate_id],
-select[name=employment_id],
+select[name=rate],
+select[name=employment],
 select[name=employees],
 select[name=founded],
 select[name=is_gross] {

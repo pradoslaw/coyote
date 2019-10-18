@@ -33,15 +33,15 @@ class JobRequest extends FormRequest
 
         return [
             'title' => 'min:2|max:60',
-            'seniority_id' => 'nullable|integer',
+            'seniority' => 'nullable|string',
             'is_remote' => 'bool',
             'remote_range' => 'integer|min:10|max:100',
             'salary_from' => 'nullable|integer',
             'salary_to' => 'nullable|integer',
             'is_gross' => 'required|boolean',
             'currency_id' => 'required|integer',
-            'rate_id' => 'required|integer',
-            'employment_id' => 'required|integer',
+            'rate' => 'required|string',
+            'employment' => 'required|integer',
             'recruitment' => 'required_if:enable_apply,false|nullable|string',
             'email' => 'required_if:enable_apply,true|email',
             'plan_id' => [

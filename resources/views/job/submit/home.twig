@@ -56,7 +56,7 @@
                                 <div class="col-sm-2 form-group">
                                     <label class="control-label">Staż pracy</label>
 
-                                    <vue-select name="seniority_id" :value.sync="job.seniority_id" :options="seniority" placeholder="--"></vue-select>
+                                    <vue-select name="seniority" :value.sync="job.seniority" :options="seniority" placeholder="--"></vue-select>
                                </div>
                             </div>
                         </div>
@@ -108,8 +108,8 @@
                                 <vue-select name="currency_id" class="input-inline" :options="currencies" :value.sync="job.currency_id"></vue-select>
 
                                 <vue-select name="is_gross" class="input-inline" :options="taxes" :value.sync="job.is_gross"></vue-select>
-                                <vue-select name="rate_id" class="input-inline" :options="rates" :value.sync="job.rate_id"></vue-select>
-                                <vue-select name="employment_id" class="input-inline" :options="employments" :value.sync="job.employment_id"></vue-select>
+                                <vue-select name="rate" class="input-inline" :options="rates" :value.sync="job.rate"></vue-select>
+                                <vue-select name="employment" class="input-inline" :options="employments" :value.sync="job.employment"></vue-select>
 
                                 <span class="help-block">Podanie tych informacji nie jest obowiązkowe, ale dzięki temu Twoja oferta zainteresuje więcej osób. Obiecujemy!</span>
 

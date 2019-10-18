@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Requests\Job;
 
+use Coyote\Job;
 use Coyote\Repositories\Contracts\CouponRepositoryInterface as CouponRepository;
 use Coyote\Repositories\Contracts\CurrencyRepositoryInterface;
 use Coyote\Repositories\Contracts\PlanRepositoryInterface as PlanRepository;
@@ -48,15 +49,15 @@ class ApiRequest extends FormRequest
     {
         return [
             'title' => 'required|string|min:2|max:60',
-            'seniority' => ['nullable', 'string', Rule::in(['student', 'junior', 'mid', 'senior', 'lead', 'manager'])], // @todo przeniesc do slownika
+            'seniority' => ['nullable', 'string', Rule::in([Job::STUDENT, Job::JUNIOR, Job::MID, Job::SENIOR, Job::LEAD, Job::MANAGER])],
             'is_remote' => 'bool',
             'remote_range' => 'integer|min:10|max:100',
             'salary_from' => 'nullable|integer|min:1',
             'salary_to' => 'nullable|integer|min:1',
-            'rate' => ['nullable', 'string', Rule::in(['hourly', 'monthly', 'weekly', 'yearly'])],  // @todo przeniesc do slownika albo do stalej
+            'rate' => ['nullable', 'string', Rule::in([Job::HOURLY, Job::MONTHLY, Job::WEEKLY, Job::YEARLY])],
             'is_gross' => 'boolean',
             'currency' => ['string', Rule::in($this->availableCurrencies())],
-            'employment' => ['nullable', 'string', Rule::in(['mandatory', 'employment', 'b2b'])],
+            'employment' => ['nullable', 'string', Rule::in([Job::MANDATORY, Job::EMPLOYMENT, Job::B2B])],
             'description' => 'string',
             'recruitment' => 'nullable|string',
             'email' => 'nullable|email',

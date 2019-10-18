@@ -30,9 +30,9 @@ use Illuminate\Notifications\RoutesNotifications;
  * @property int $remote_range
  * @property int $enable_apply
  * @property int $visits
- * @property int $rate_id
+ * @property string $rate
  * @property bool $is_gross
- * @property int $employment_id
+ * @property string $employment
  * @property int $views
  * @property float $score
  * @property float $rank
@@ -40,7 +40,6 @@ use Illuminate\Notifications\RoutesNotifications;
  * @property string $title
  * @property string $description
  * @property string $recruitment
- * @property string $requirements
  * @property string $email
  * @property string $phone
  * @property User $user
@@ -65,30 +64,31 @@ class Job extends Model
         getIndexBody as parentGetIndexBody;
     }
 
-    const MONTH           = 1;
-    const YEAR            = 2;
-    const WEEK            = 3;
-    const HOUR            = 4;
+    const MONTHLY           = 'monthly';
+    const YEARLY            = 'yearly';
+    const WEEKLY            = 'weekly';
+    const HOURLY            = 'hourly';
 
-    const STUDENT         = 1;
-    const JUNIOR          = 2;
-    const MID             = 3;
-    const SENIOR          = 4;
-    const LEAD            = 5;
-    const MANAGER         = 6;
+    const STUDENT           = 'student';
+    const JUNIOR            = 'junior';
+    const MID               = 'mid';
+    const SENIOR            = 'senior';
+    const LEAD              = 'lead';
+    const MANAGER           = 'manager';
 
     const NET             = 0;
     const GROSS           = 1;
 
-    const EMPLOYMENT      = 1;
-    const MANDATORY       = 2;
-    const B2B             = 4;
+    const EMPLOYMENT      = 'employment';
+    const MANDATORY       = 'mandatory';
+    const CONTRACT        = 'contract';
+    const B2B             = 'b2b';
 
     /**
      * Filling each field adds points to job offer score.
      */
     const SCORE_CONFIG = [
-        'job'             => ['salary_from' => 25, 'salary_to' => 25, 'city' => 15, 'seniority_id' => 5],
+        'job'             => ['salary_from' => 25, 'salary_to' => 25, 'city' => 15, 'seniority' => 5],
         'firm'            => ['name' => 15, 'logo' => 5, 'website' => 1, 'description' => 5]
     ];
 
@@ -107,13 +107,13 @@ class Job extends Model
         'salary_from',
         'salary_to',
         'currency_id',
-        'rate_id',
-        'employment_id',
+        'rate',
+        'employment',
         'deadline_at',
         'email',
         'phone',
         'enable_apply',
-        'seniority_id',
+        'seniority',
         'plan_id',
         'tags',
         'features',
@@ -121,9 +121,6 @@ class Job extends Model
 
         'currency',
         'plan',
-        'rate',
-        'seniority',
-        'employment'
     ];
 
     /**
@@ -138,8 +135,8 @@ class Job extends Model
         'remote_range'      => 100,
         'currency_id'       => Currency::PLN,
         'is_gross'          => self::NET,
-        'rate_id'           => self::MONTH,
-        'employment_id'     => 1
+        'rate'              => self::MONTHLY,
+        'employment'        => self::EMPLOYMENT
     ];
 
     /**
@@ -301,7 +298,7 @@ class Job extends Model
      */
     public static function getRatesList()
     {
-        return [self::MONTH => 'miesięcznie', self::YEAR => 'rocznie', self::WEEK => 'tygodniowo', self::HOUR => 'godzinowo'];
+        return trans('common.rate');
     }
 
     /**
@@ -309,7 +306,7 @@ class Job extends Model
      */
     public static function getTaxList()
     {
-        return [self::NET => 'netto', self::GROSS => 'brutto'];
+        return trans('common.tax');
     }
 
     /**
@@ -317,7 +314,7 @@ class Job extends Model
      */
     public static function getEmploymentList()
     {
-        return [self::EMPLOYMENT => 'Umowa o pracę', self::MANDATORY => 'Umowa zlecenie', 3 => 'Umowa o dzieło', self::B2B => 'Kontrakt'];
+        return trans('common.employment');
     }
 
     /**
@@ -325,7 +322,7 @@ class Job extends Model
      */
     public static function getSeniorityList()
     {
-        return [self::STUDENT => 'Stażysta', self::JUNIOR => 'Junior', self::MID => 'Mid-Level', self::SENIOR => 'Senior', self::LEAD => 'Lead', self::MANAGER => 'Manager'];
+        return trans('common.seniority');
     }
 
     /**
@@ -555,16 +552,6 @@ class Job extends Model
     }
 
     /**
-     * Set monthly rate as string
-     *
-     * @param string $value
-     */
-    public function setRateAttribute($value)
-    {
-        $this->attributes['rate_id'] = ['hourly' => self::HOUR, 'weekly' => self::WEEK, 'monthly' => self::MONTH, 'yearly' => self::YEAR][$value];
-    }
-
-    /**
      * @return int
      */
     public function getDeadlineAttribute()
@@ -643,16 +630,6 @@ class Job extends Model
     public function setCurrencyAttribute($currency)
     {
         $this->attributes['currency_id'] = Currency::where('name', $currency)->value('id');
-    }
-
-    public function setSeniorityAttribute($seniority)
-    {
-        $this->attributes['seniority_id'] = ['student' => self::STUDENT, 'junior' => self::JUNIOR, 'mid' => self::MID, 'senior' => self::SENIOR, 'lead' => self::LEAD, 'manager' => self::MANAGER][$seniority];
-    }
-
-    public function setEmploymentAttribute($employment)
-    {
-        $this->attributes['employment_id'] = ['employment' => self::EMPLOYMENT, 'mandatory' => self::MANAGER, 'b2b' => self::B2B][$employment];
     }
 
     public function setRecruitmentAttribute($recruitment)
@@ -770,16 +747,16 @@ class Job extends Model
      */
     public function monthlySalary($salary)
     {
-        if (empty($salary) || $this->rate_id === self::MONTH) {
+        if (empty($salary) || $this->rate === self::MONTHLY) {
             return $salary;
         }
 
         // we need to calculate monthly salary in order to sorting data by salary
-        if ($this->rate_id == self::YEAR) {
+        if ($this->rate == self::YEARLY) {
             $salary = round($salary / 12);
-        } elseif ($this->rate_id == self::WEEK) {
+        } elseif ($this->rate == self::WEEKLY) {
             $salary = round($salary * 4);
-        } elseif ($this->rate_id == self::HOUR) {
+        } elseif ($this->rate == self::HOURLY) {
             $salary = round($salary * 8 * 5 * 4);
         }
 
