@@ -30,7 +30,7 @@ class JobApiTest extends TestCase
         $coupon = Coupon::create(['amount' => 30, 'code' => str_random(), 'user_id' => $this->user->id]);
 
         $data = [
-            'title' => $this->faker->sentence,
+            'title' => $this->faker->text(60),
             'salary_from' => 3000,
             'salary_to' => 5000,
             'rate' => 'weekly',
@@ -69,7 +69,7 @@ class JobApiTest extends TestCase
         $firm = factory(Firm::class)->create(['user_id' => $this->user->id]);
 
         $data = [
-            'title' => $this->faker->sentence,
+            'title' => $this->faker->text(255),
             'firm' => [
                 'name' => $firm->name
             ]
