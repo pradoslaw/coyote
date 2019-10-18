@@ -91,7 +91,7 @@ class ApiRequest extends FormRequest
             'firm.street' => 'nullable|string|max:255',
             'firm.city' => 'nullable|string|max:255',
             'firm.postcode' => 'nullable|string|max:50',
-            'firm.house' => 'nullable|string|max:50',
+            'firm.street_number' => 'nullable|string|max:50',
         ];
     }
 

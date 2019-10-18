@@ -136,6 +136,7 @@ components:
         is_agency:
           type: boolean
           default: false
+          description: "Determines if firm is recruitment agency or not"
         website:
           type: string
           nullable: true
@@ -161,16 +162,19 @@ components:
         street:
           type: string
           nullable: true
+        street_number:
+          type: string
+          maxLength: 50
+          nullable: true
         city:
           type: string
           nullable: true
-        postcode:
+        country:
           type: string
           nullable: true
-        house:
+          description: "Two letter ISO country code"
+        postcode:
           type: string
-          street_number: true
-          maxLength: 50
           nullable: true
 
     Location:
@@ -187,6 +191,7 @@ components:
           maxLength: 50
         country:
           type: string
+          description: "Two letter ISO country code"
         latitude:
           type: number
           format: float

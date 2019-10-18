@@ -43,7 +43,7 @@ class JobApiResource extends JsonResource
      */
     public function toArray($request)
     {
-        $only = $this->resource->only('id', 'title', 'is_remote', 'remote_range', 'comments_count', 'is_gross');
+        $only = $this->resource->only('id', 'title', 'is_remote', 'remote_range', 'is_gross');
 
         return array_merge($only, [
             'url'         => UrlBuilder::job($this->resource, true),
