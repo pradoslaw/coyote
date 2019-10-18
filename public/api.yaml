@@ -3,9 +3,9 @@ info:
   title: '4programmers.net API'
   version: '1.0'
 servers:
-  - url: http://api.4programmers.net/v1
+  - url: https://api.4programmers.net/v1
     description: Production server
-  - url: http://api.dev.4programmers.info/v1
+  - url: https://api.dev.4programmers.info/v1
     description: Stagging server
 paths:
   /login:
