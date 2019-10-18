@@ -48,11 +48,6 @@ class JobRequest extends FormRequest
         return ['nullable', 'string', Rule::in([Job::HOURLY, Job::MONTHLY, Job::WEEKLY, Job::YEARLY])];
     }
 
-    public static function currencyRule()
-    {
-        return ['string', Rule::in(self::availableCurrencies())];
-    }
-
     public static function employmentRule()
     {
         return ['nullable', 'string', Rule::in([Job::MANDATORY, Job::EMPLOYMENT, Job::B2B])];
@@ -77,7 +72,7 @@ class JobRequest extends FormRequest
             'salary_from' => self::SALARY_FROM_RULE,
             'salary_to' => self::SALARY_TO_RULE,
             'is_gross' => self::IS_GROSS_RULE,
-            'currency_id' => self::currencyRule(),
+            'currency_id' => ['required', 'int', 'exists:currencies,id'],
             'rate' => self::rateRule(),
             'employment' => self::employmentRule(),
             'recruitment' => 'required_if:enable_apply,false|nullable|string',
@@ -113,15 +108,5 @@ class JobRequest extends FormRequest
         }
 
         parent::failedValidation($validator);
-    }
-
-    private static function currency(): CurrencyRepositoryInterface
-    {
-        return app(CurrencyRepositoryInterface::class);
-    }
-
-    private static function availableCurrencies(): array
-    {
-        return self::currency()->pluck('name');
     }
 }

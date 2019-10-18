@@ -50,6 +50,7 @@ class JobApiTest extends TestCase
         ];
 
         $response = $this->json('POST', '/v1/jobs', $data, ['Authorization' => 'Bearer ' . $this->token, 'Accept' => 'application/json']);
+        var_dump($response->getContent());
 
         $this->assertEquals(201, $response->getStatusCode());
         $response->assertJsonFragment(['title' => $data['title'], 'currency' => 'USD']);

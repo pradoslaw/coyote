@@ -3,6 +3,7 @@
 namespace Coyote\Http\Requests\Job;
 
 use Coyote\Repositories\Contracts\CouponRepositoryInterface as CouponRepository;
+use Coyote\Repositories\Contracts\CurrencyRepositoryInterface;
 use Coyote\Repositories\Contracts\PlanRepositoryInterface as PlanRepository;
 use Coyote\Rules\Base64Image;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -54,7 +55,7 @@ class ApiRequest extends FormRequest
             'salary_to' => JobRequest::SALARY_TO_RULE,
             'rate' => JobRequest::rateRule(),
             'is_gross' => JobRequest::IS_GROSS_RULE,
-            'currency' => JobRequest::currencyRule(),
+            'currency' => 'nullable|string|exists:currencies,name',
             'employment' => JobRequest::employmentRule(),
             'description' => 'string',
             'recruitment' => 'nullable|string',
@@ -102,5 +103,15 @@ class ApiRequest extends FormRequest
     private function coupon(): CouponRepository
     {
         return $this->container[CouponRepository::class];
+    }
+
+    private function currency(): CurrencyRepositoryInterface
+    {
+        return app(CurrencyRepositoryInterface::class);
+    }
+
+    private function availableCurrencies(): array
+    {
+        return self::currency()->pluck('name');
     }
 }

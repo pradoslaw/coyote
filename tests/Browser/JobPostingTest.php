@@ -165,7 +165,7 @@ class JobPostingTest extends DuskTestCase
                 ->assertInputValue('email', $user->email)
                 ->press('Informacje o firmie')
                 ->waitForText('Formularz zawiera błędy. Sprawdź poprawność wprowadzonych danych i spróbuj ponownie.')
-                ->assertSee('Tytuł jest zbyt krótki. Musi mieć minimum 3 znaku długości.')
+                ->assertSee('Tytuł jest wymagany.')
                 ->type('title', $fake->title)
                 ->press('Informacje o firmie')
                 ->waitForLocation('/Praca/Submit/Firm')
