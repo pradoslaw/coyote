@@ -50,17 +50,32 @@ class JobApiTest extends TestCase
         ];
 
         $response = $this->json('POST', '/v1/jobs', $data, ['Authorization' => 'Bearer ' . $this->token, 'Accept' => 'application/json']);
-        var_dump($response->getContent());
 
         $this->assertEquals(201, $response->getStatusCode());
-        $response->assertJsonFragment(['title' => $data['title'], 'currency' => 'USD']);
+        $response->assertJsonFragment([
+            'title' => $data['title'],
+            'currency' => $data['currency'],
+            'salary_from' => $data['salary_from'],
+            'salary_to' => $data['salary_to'],
+            'rate' => $data['rate'],
+            'employment' => $data['employment'],
+            'seniority' => $data['seniority'],
+            'is_gross' => false,
+            'is_remote' => false,
+            'firm' => null
+        ]);
 
         $this->assertNotNull(Coupon::withTrashed()->find($coupon->id)->deleted_at);
 
         $result = json_decode($response->getContent(), true);
+        /** @var Job $job */
         $job = Job::find($result['id']);
 
         $this->assertFalse($job->enable_apply);
+        $this->assertEquals($job->seniority, $data['seniority']);
+        $this->assertEquals($job->employment, $data['employment']);
+        $this->assertEquals($job->rate, $data['rate']);
+
     }
 
     public function testSubmitWithAlreadyCreatedFirm()
@@ -69,7 +84,7 @@ class JobApiTest extends TestCase
         $firm = factory(Firm::class)->create(['user_id' => $this->user->id]);
 
         $data = [
-            'title' => $this->faker->text(255),
+            'title' => $this->faker->text(60),
             'firm' => [
                 'name' => $firm->name
             ]
