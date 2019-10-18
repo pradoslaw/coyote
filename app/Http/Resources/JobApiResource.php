@@ -60,5 +60,4 @@ class JobApiResource extends JsonResource
             })
         ]);
     }
-
 }
