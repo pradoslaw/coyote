@@ -3,7 +3,6 @@
 namespace Coyote\Http\Requests\Job;
 
 use Coyote\Job;
-use Coyote\Repositories\Contracts\CurrencyRepositoryInterface;
 use Coyote\Services\Job\Draft;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
