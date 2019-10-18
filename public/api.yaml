@@ -73,7 +73,7 @@ components:
           format: int32
           minimum: 1
           default: null
-        salary_rate:
+        rate:
           type: enum
           enum: ["hourly", "weekly", "monthly", "yearly"]
           default: "monthly"
@@ -169,6 +169,8 @@ components:
           nullable: true
         house:
           type: string
+          street_number: true
+          maxLength: 50
           nullable: true
 
     Location:
@@ -177,9 +179,12 @@ components:
         city:
           type: string
           maxLength: 255
-        address:
+        street:
           type: string
           maxLength: 255
+        street_number:
+          type: string
+          maxLength: 50
         country:
           type: string
         latitude:

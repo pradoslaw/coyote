@@ -32,11 +32,19 @@ class JobApiTest extends TestCase
             'title' => $this->faker->title,
             'salary_from' => 3000,
             'salary_to' => 5000,
-            'salary_rate' => 'weekly',
+            'rate' => 'weekly',
             'currency' => 'USD',
             'plan' => 'standard',
             'seniority' => 'lead',
-            'employment' => 'mandatory'
+            'employment' => 'mandatory',
+            'locations' => [
+                [
+                    'city' => 'Wrocław',
+                    'street' => 'Rynek',
+                    'street_number' => '23',
+                    'country' => 'PL'
+                ]
+            ]
         ];
 
         $response = $this->json('POST', '/v1/jobs', $data, ['Authorization' => 'Bearer ' . $this->token, 'Accept' => 'application/json']);

@@ -124,7 +124,7 @@ class Job extends Model
 
         'currency',
         'plan',
-        'salary_rate',
+        'rate',
         'seniority',
         'employment'
     ];
@@ -549,7 +549,7 @@ class Job extends Model
      *
      * @param string $value
      */
-    public function setSalaryRateAttribute($value)
+    public function setRateAttribute($value)
     {
         $this->attributes['rate_id'] = ['hourly' => self::HOUR, 'weekly' => self::WEEK, 'monthly' => self::MONTH, 'yearly' => self::YEAR][$value];
     }

@@ -53,7 +53,7 @@ class ApiRequest extends FormRequest
             'remote_range' => 'integer|min:10|max:100',
             'salary_from' => 'nullable|integer|min:1',
             'salary_to' => 'nullable|integer|min:1',
-            'salary_rate' => ['string', Rule::in(['hourly', 'monthly', 'weekly', 'yearly'])],  // @todo przeniesc do slownika albo do stalej
+            'rate' => ['nullable', 'string', Rule::in(['hourly', 'monthly', 'weekly', 'yearly'])],  // @todo przeniesc do slownika albo do stalej
             'is_gross' => 'boolean',
             'currency' => ['string', Rule::in($this->availableCurrencies())],
             'employment' => ['nullable', 'string', Rule::in(['mandatory', 'employment', 'b2b'])],
@@ -72,7 +72,8 @@ class ApiRequest extends FormRequest
             'tags.*.name' => 'string|max:50|tag',
             'tags.*.priority' => 'int|min:0|max:2',
             'locations.*.city' => 'nullable|string|max:255',
-            'locations.*.address' => 'nullable|string|max:255',
+            'locations.*.street' => 'nullable|string|max:255',
+            'locations.*.street_number' => 'nullable|string|max:50',
             'locations.*.country' => 'nullable|string',
             'locations.*.latitude' => 'nullable|numeric',
             'locations.*.longitude' => 'nullable|numeric',
