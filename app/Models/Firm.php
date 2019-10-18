@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $name
  * @property string $city
  * @property string $street
- * @property string $house
+ * @property string $street_number
  * @property string $postcode
  * @property string $website
  * @property string $description
@@ -49,7 +49,7 @@ class Firm extends Model
         'country_id',
         'city',
         'street',
-        'house',
+        'street_number',
         'postcode',
         'latitude',
         'longitude',
@@ -96,7 +96,7 @@ class Firm extends Model
         parent::boot();
 
         static::saving(function ($model) {
-            foreach (['latitude', 'longitude', 'founded', 'employees', 'description', 'latitude', 'longitude', 'country_id', 'street', 'city', 'house', 'postcode', 'youtube_url'] as $column) {
+            foreach (['latitude', 'longitude', 'founded', 'employees', 'description', 'latitude', 'longitude', 'country_id', 'street', 'city', 'street_number', 'postcode', 'youtube_url'] as $column) {
                 if (empty($model->{$column})) {
                     $model->{$column} = null;
                 }
@@ -265,7 +265,7 @@ class Firm extends Model
     public function setCountryAttribute($country)
     {
         if ($country) {
-            $this->setAttribute('country_id', (new Country())->where('name', $country)->value('id'));
+            $this->setAttribute('country_id', (new Country())->where('name', $country)->orWhere('code', $country)->value('id'));
         }
     }
 
@@ -278,7 +278,7 @@ class Firm extends Model
         parent::fill($attributes);
 
         if ($this->is_agency) {
-            foreach (['headline', 'latitude', 'longitude', 'country_id', 'street', 'city', 'house', 'postcode'] as $column) {
+            foreach (['headline', 'latitude', 'longitude', 'country_id', 'street', 'city', 'street_number', 'postcode'] as $column) {
                 $this->{$column} = null;
             }
 

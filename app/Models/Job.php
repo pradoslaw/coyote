@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use Coyote\Job\Comment;
 use Coyote\Job\Location;
 use Coyote\Job\Subscriber;
-use Coyote\Models\Job\Refer;
 use Coyote\Models\Scopes\ForUser;
 use Coyote\Services\Elasticsearch\CharFilters\JobFilter;
 use Coyote\Services\Eloquent\HasMany;
@@ -50,7 +49,6 @@ use Illuminate\Notifications\RoutesNotifications;
  * @property Location[] $locations
  * @property Currency[] $currency
  * @property Feature[] $features
- * @property Refer[] $refers
  * @property int $plan_id
  * @property bool $is_boost
  * @property bool $is_publish

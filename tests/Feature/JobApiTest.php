@@ -29,7 +29,7 @@ class JobApiTest extends TestCase
         $coupon = Coupon::create(['amount' => 30, 'code' => str_random(), 'user_id' => $this->user->id]);
 
         $data = [
-            'title' => $this->faker->title,
+            'title' => $this->faker->sentence,
             'salary_from' => 3000,
             'salary_to' => 5000,
             'rate' => 'weekly',
