@@ -70,7 +70,7 @@ class Location extends Model
      */
     public function setCountryAttribute($country)
     {
-        $this->country()->associate((new Country())->where('name', $country)->first());
+        $this->country()->associate((new Country())->where('name', $country)->orWhere('code', $country)->first());
     }
 
     /**

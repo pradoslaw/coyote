@@ -39,7 +39,7 @@ class FirmRequest extends FormRequest
             'street' => 'nullable|string|max:255',
             'city' => 'nullable|string|max:255',
             'postcode' => 'nullable|string|max:50',
-            'house' => 'nullable|string|max:50',
+            'street_number' => 'nullable|string|max:50',
         ];
     }
 

@@ -62,7 +62,7 @@ class Map {
             street: null,
             postcode: null,
             address: null,
-            house: null
+            street_number: null
         };
 
         if (status === google.maps.GeocoderStatus.OK) {
@@ -91,7 +91,7 @@ class Map {
                         data.street = component.long_name;
                     }
                     if (!data.street_number && component.types.indexOf('street_number') > -1) {
-                        data.house = component.long_name;
+                        data.street_number = component.long_name;
                     }
                 }
             }

@@ -199,7 +199,7 @@ new Vue({
                 street: null,
                 postcode: null,
                 city: null,
-                house: null,
+                street_number: null,
                 country_id: null
             });
 
@@ -217,7 +217,7 @@ new Vue({
                 });
             }
             else {
-                ['longitude', 'latitude', 'country', 'city', 'street', 'postcode'].forEach(field => {
+                ['longitude', 'latitude', 'country', 'city', 'street', 'street_number', 'postcode'].forEach(field => {
                     this.firm[field] = null;
                 });
 
@@ -284,7 +284,7 @@ new Vue({
     },
     computed: {
         address () {
-            return String((this.firm.street || '') + ' ' + (this.firm.house || '') + ' ' + (this.firm.postcode || '') + ' ' + (this.firm.city || '')).trim();
+            return String((this.firm.street || '') + ' ' + (this.firm.street_number || '') + ' ' + (this.firm.postcode || '') + ' ' + (this.firm.city || '')).trim();
         },
 
         gallery () {

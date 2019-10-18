@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property string $description
  * @property float $price
+ * @property float $gross_price
  * @property float $vat_rate
  * @property int $currency_id
  * @property bool $is_active
@@ -34,5 +35,10 @@ class Plan extends Model
     public function currency()
     {
         return $this->hasOne(Currency::class);
+    }
+
+    public function getGrossPriceAttribute()
+    {
+        return $this->price * $this->vat_rate;
     }
 }

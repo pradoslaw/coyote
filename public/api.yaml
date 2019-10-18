@@ -1,0 +1,222 @@
+openapi: 3.0.0
+info:
+  title: '4programmers.net API'
+  version: '1.0'
+servers:
+  - url: http://api.4programmers.net/v1
+    description: Production server
+  - url: http://api.dev.4programmers.info/v1
+    description: Stagging server
+paths:
+  /login:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - password
+              properties:
+                name:
+                  type: string
+                password:
+                  type: string
+                  format: password
+      responses:
+        200:
+          description: "Login token"
+        422:
+          description: "Validation errors"
+  /jobs:
+    post:
+      security:
+        - bearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/JobBody'
+      responses:
+        201:
+          description: "Job successfully created"
+        200:
+          description: "Job successfully updated"
+        422:
+          description: "Validation errors"
+        401:
+          description: "No sufficient funds to post this job offer"
+
+
+components:
+  requestBodies:
+    JobBody:
+      description: A JSON object containing job information
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - title
+            $ref: '#/components/schemas/Job'
+
+  schemas:
+    Job:
+      type: object
+      properties:
+        title:
+          type: string
+        salary_from:
+          type: integer
+          format: int32
+          minimum: 1
+          default: null
+        salary_to:
+          type: integer
+          format: int32
+          minimum: 1
+          default: null
+        rate:
+          type: enum
+          enum: ["hourly", "weekly", "monthly", "yearly"]
+          default: "monthly"
+        is_remote:
+          type: boolean
+          default: false
+        remote_range:
+          type: integer
+          minimum: 10
+          maximum: 100
+        is_gross:
+          type: boolean
+          default: false
+          description: "Determines if salary is gross or net"
+        description:
+          type: string
+          nullable: true
+        recruitment:
+          type: string
+          description: "Additional recruitment information"
+          nullable: true
+        email:
+          type: string
+          format: email
+        currency:
+          type: enum
+          enum: ["PLN", "USD", "EUR", "GBP", "CHF"]
+          default: "PLN"
+        plan:
+          type: enum
+          enum: ["standard", "plus", "premium"]
+          default: "plus"
+        seniority:
+          type: enum
+          enum: ["student", "junior", "mid", "senior", "lead", "manager"]
+        employment:
+          type: enum
+          enum: ["employment", "mandatory", "b2b"]
+          default: "employment"
+        locations:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/Location'
+        tags:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/Tag'
+        firm:
+          nullable: true
+          $ref: '#/components/schemas/Firm'
+
+    Firm:
+      type: object
+      properties:
+        name:
+          type: string
+          description: "Only firm nam is required if you want to add next job offer assigned to the same firm"
+        is_agency:
+          type: boolean
+          default: false
+          description: "Determines if firm is recruitment agency or not"
+        website:
+          type: string
+          nullable: true
+        logo:
+          type: string
+          format: byte
+          description: "Logo as base64 encoded string"
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        youtube_url:
+          type: string
+          nullable: true
+        latitude:
+          type: number
+          format: float
+          nullable: true
+        longitude:
+          type: number
+          format: float
+          nullable: true
+        street:
+          type: string
+          nullable: true
+        street_number:
+          type: string
+          maxLength: 50
+          nullable: true
+        city:
+          type: string
+          nullable: true
+        country:
+          type: string
+          nullable: true
+          description: "Two letter ISO country code"
+        postcode:
+          type: string
+          nullable: true
+
+    Location:
+      type: object
+      properties:
+        city:
+          type: string
+          maxLength: 255
+        street:
+          type: string
+          maxLength: 255
+        street_number:
+          type: string
+          maxLength: 50
+        country:
+          type: string
+          description: "Two letter ISO country code"
+        latitude:
+          type: number
+          format: float
+          nullable: true
+        longitude:
+          type: number
+          format: float
+          nullable: true
+
+    Tag:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 50
+        priority:
+          type: integer
+          minimum: 0
+          maximum: 2
+          default: 1
+          description: "0 - nice to have, 1 - intermediate level, 2 - advance"
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer

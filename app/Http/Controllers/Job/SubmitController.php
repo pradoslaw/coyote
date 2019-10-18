@@ -3,7 +3,6 @@
 namespace Coyote\Http\Controllers\Job;
 
 use Coyote\Currency;
-use Coyote\Events\JobWasSaved;
 use Coyote\Firm;
 use Coyote\Firm\Benefit;
 use Coyote\Http\Requests\Job\FirmRequest;
@@ -19,29 +18,13 @@ use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Repositories\Contracts\PlanRepositoryInterface as PlanRepository;
 use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Services\Job\Draft;
-use Coyote\Services\Job\Loader;
+use Coyote\Services\Job\SubmitsJob;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Http\Request;
-use Coyote\Services\Stream\Objects\Job as Stream_Job;
-use Coyote\Services\Stream\Activities\Create as Stream_Create;
-use Coyote\Services\Stream\Activities\Update as Stream_Update;
 
 class SubmitController extends Controller
 {
-    /**
-     * @var JobRepository
-     */
-    private $job;
-
-    /**
-     * @var FirmRepository
-     */
-    private $firm;
-
-    /**
-     * @var PlanRepository
-     */
-    private $plan;
+    use SubmitsJob;
 
     /**
      * @param JobRepository $job
@@ -55,8 +38,6 @@ class SubmitController extends Controller
         $this->middleware('job.forget');
         $this->middleware('job.session', ['except' => ['getIndex']]);
 
-        $this->breadcrumb->push('Praca', route('job.home'));
-
         $this->job = $job;
         $this->firm = $firm;
         $this->plan = $plan;
@@ -64,11 +45,10 @@ class SubmitController extends Controller
 
     /**
      * @param Draft $draft
-     * @param Loader $loader
      * @param int $id
      * @return \Illuminate\View\View
      */
-    public function getIndex(Draft $draft, Loader $loader, $id = null)
+    public function getIndex(Draft $draft, $id = null)
     {
         /** @var \Coyote\Job $job */
         if ($id === null && $draft->has(Job::class)) {
@@ -78,7 +58,7 @@ class SubmitController extends Controller
             $job = $this->job->findOrNew($id);
             abort_if($job->exists && $job->is_expired, 404);
 
-            $job = $loader->init($job);
+            $job = $this->loadDefaults($job, $this->auth);
         }
 
         $this->authorize('update', $job);
@@ -235,72 +215,15 @@ class SubmitController extends Controller
 
         $this->authorize('update', $job);
 
-        $tags = [];
-        if (count($job->tags)) {
-            $order = 0;
-
-            foreach ($job->tags as $tag) {
-                $model = $tag->firstOrCreate(['name' => $tag->name]);
-
-                $tags[$model->id] = [
-                    'priority'  => $tag->pivot->priority ?? 0,
-                    'order'     => ++$order
-                ];
-            }
-        }
-
-        $features = [];
-        foreach ($job->features as $feature) {
-            $features[$feature->id] = $feature->pivot->toArray();
-        }
-
-        $this->transaction(function () use (&$job, $draft, $tags, $features) {
-            $activity = $job->id ? Stream_Update::class : Stream_Create::class;
-
-            if ($job->firm->is_private) {
-                $job->firm()->dissociate();
-            // firm name is required to save firm
-            } elseif ($job->firm->name) {
-                // user might click on "add new firm" button in form. make sure user_id is set up.
-                $job->firm->setDefaultUserId($this->userId);
-
-                $this->authorize('update', $job->firm);
-
-                // fist, we need to save firm because firm might not exist.
-                $job->firm->save();
-
-                // reassociate job with firm. user could change firm, that's why we have to do it again.
-                $job->firm()->associate($job->firm);
-                // remove old benefits and save new ones.
-                $job->firm->benefits()->push($job->firm->benefits);
-                // sync industries
-                $job->firm->industries()->sync($job->firm->industries);
-                $job->firm->gallery()->push($job->firm->gallery);
-            }
-
-            $job->save();
-            $job->locations()->push($job->locations);
-
-            $job->tags()->sync($tags);
-            $job->features()->sync($features);
-
-            if ($job->wasRecentlyCreated || !$job->is_publish) {
-                $job->payments()->create(['plan_id' => $job->plan_id, 'days' => $job->plan->length]);
-            }
-
-            stream($activity, (new Stream_Job)->map($job));
-            $draft->forget();
-
-            event(new JobWasSaved($job)); // we don't queue listeners for this event
-
-            return $job;
-        });
+        $this->saveWithTransaction($job, $this->auth);
 
         if ($job->wasRecentlyCreated) {
             $job->user->notify(new CreatedNotification($job));
         }
 
-        if (!$job->is_publish && ($unpaidPayment = $job->getUnpaidPayment()) !== null) {
+        $draft->forget();
+
+        if ($unpaidPayment = $this->getUnpaidPayment($job)) {
             return redirect()
                 ->route('job.payment', [$unpaidPayment])
                 ->with('success', 'Oferta została dodana, lecz nie jest jeszcze promowana. Uzupełnij poniższy formularz, aby zakończyć.');
@@ -314,6 +237,8 @@ class SubmitController extends Controller
      */
     private function breadcrumb($job)
     {
+        $this->breadcrumb->push('Praca', route('job.home'));
+
         if (empty($job['id'])) {
             $this->breadcrumb->push('Wystaw ofertę pracy', route('job.submit'));
         } else {

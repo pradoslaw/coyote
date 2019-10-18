@@ -16,11 +16,19 @@ class PlanRepository extends Repository implements PlanRepositoryInterface
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
-    public function getDefaultId(): int
+    public function findDefault(string $name = null): ?Plan
     {
-        return (int) $this->model->select('id')->where('is_default', 1)->value('id');
+        return $this
+            ->model
+            ->when($name, function ($builder) use ($name) {
+                return $builder->whereRaw('LOWER(name) = ?', strtolower($name));
+            })
+            ->when(!$name, function ($builder) {
+                return $builder->where('is_default', 1);
+            })
+            ->first();
     }
 
     /**
