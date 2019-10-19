@@ -39,6 +39,7 @@ class JobApiTest extends TestCase
             'seniority' => 'lead',
             'employment' => 'mandatory',
             'recruitment' => $this->faker->url,
+            'is_gross' => true,
             'locations' => [
                 [
                     'city' => 'Wrocław',
@@ -60,7 +61,7 @@ class JobApiTest extends TestCase
             'rate' => $data['rate'],
             'employment' => $data['employment'],
             'seniority' => $data['seniority'],
-            'is_gross' => false,
+            'is_gross' => true,
             'is_remote' => false,
             'firm' => null
         ]);
@@ -76,6 +77,34 @@ class JobApiTest extends TestCase
         $this->assertEquals($job->employment, $data['employment']);
         $this->assertEquals($job->rate, $data['rate']);
 
+    }
+
+    public function testSubmitWithFirm()
+    {
+        $coupon = Coupon::create(['amount' => 30, 'code' => str_random(), 'user_id' => $this->user->id]);
+
+        $data = [
+            'title' => $this->faker->text(60),
+            'plan' => 'standard',
+            'firm' => [
+                'name' => $this->faker->company
+            ]
+        ];
+
+        $response = $this->json('POST', '/v1/jobs', $data, ['Authorization' => 'Bearer ' . $this->token, 'Accept' => 'application/json']);
+        $this->assertEquals(201, $response->getStatusCode());
+
+        $response->assertJsonFragment([
+            'title' => $data['title'],
+            'currency' => 'PLN',
+            'salary_from' => null,
+            'salary_to' => null,
+            'rate' => 'monthly',
+            'employment' => 'employment',
+            'seniority' => null,
+            'is_gross' => false,
+            'is_remote' => false
+        ]);
     }
 
     public function testSubmitWithAlreadyCreatedFirm()
