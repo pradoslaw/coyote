@@ -118,7 +118,7 @@ components:
           maximum: 100
           nullable: true
           default: 100
-          desciprion: "If remote work is possible, you can specify its range. 100% is completely remote work"
+          description: "If remote work is possible, you can specify its range. 100% is completely remote work"
         is_gross:
           type: boolean
           default: false
@@ -246,7 +246,7 @@ components:
         name:
           type: string
           maxLength: 50
-          description: "Only lower case and \-\.#,\+ characters allowed"
+          description: "Only lower case and \\-\\.#,\\+ characters allowed"
         priority:
           type: integer
           minimum: 0
