@@ -160,7 +160,7 @@
                             <div class="form-group">
                                 <label class="control-label">Branża</label>
 
-                                <vue-select id="industries" name="industries" :options="industries" :value.sync="firm.industries" multiple="multiple"></vue-select>
+                                <vue-select id="industries" name="industries[]" :options="industries" :value.sync="firm.industries" multiple="multiple"></vue-select>
                                 <span class="help-block">Możesz wybrać jedną lub kilka branż w których działa firma.</span>
                             </div>
 
