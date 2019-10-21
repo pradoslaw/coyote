@@ -220,6 +220,10 @@ class SubmitController extends Controller
         app(Connection::class)->transaction(function () use ($job, $draft) {
             $this->prepareAndSave($job, $this->auth);
 
+            if ($job->wasRecentlyCreated || !$job->is_publish) {
+                $job->payments()->create(['plan_id' => $job->plan_id, 'days' => $job->plan->length]);
+            }
+
             event(new JobWasSaved($job)); // we don't queue listeners for this event
 
             $draft->forget();
