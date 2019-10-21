@@ -49,7 +49,7 @@ class JobRequest extends FormRequest
 
     public static function employmentRule()
     {
-        return ['nullable', 'string', Rule::in([Job::MANDATORY, Job::EMPLOYMENT, Job::B2B])];
+        return ['nullable', 'string', Rule::in([Job::MANDATORY, Job::EMPLOYMENT, Job::B2B, Job::CONTRACT])];
     }
 
     /**
