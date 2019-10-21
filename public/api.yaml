@@ -84,10 +84,10 @@ components:
             type: object
             required:
               - title
-            $ref: '#/components/schemas/Job'
+            $ref: '#/components/schemas/JobSchema'
 
   schemas:
-    Job:
+    JobSchema:
       type: object
       properties:
         title:
@@ -97,15 +97,18 @@ components:
           format: int32
           minimum: 1
           default: null
+          description: "Minimum salary for this position"
         salary_to:
           type: integer
           format: int32
           minimum: 1
           default: null
+          description: "Maximum salary for this position"
         rate:
           type: enum
           enum: ["hourly", "weekly", "monthly", "yearly"]
           default: "monthly"
+          description: "Salary rate"
         is_remote:
           type: boolean
           default: false
@@ -113,6 +116,9 @@ components:
           type: integer
           minimum: 10
           maximum: 100
+          nullable: true
+          default: 100
+          desciprion: "If remote work is possible, you can specify its range. 100% is completely remote work"
         is_gross:
           type: boolean
           default: false
@@ -120,9 +126,10 @@ components:
         description:
           type: string
           nullable: true
+          description: "Can contain basic HTML like: b,strong,i,em,u,a[href|title|data-user-id|class],p,br,ul,ol[start],li,span[style|title],img[width|height|alt|src|title],sub,sup,pre,code[class],div,kbd,h1,h2,h3,h4,h5,h6,blockquote,del,table[summary|class],thead,tbody,tr,th[abbr],td[abbr],hr,dfn,var,samp"
         recruitment:
           type: string
-          description: "Additional recruitment information"
+          description: "Additional recruitment information. For example URL to external recruitment service"
           nullable: true
         email:
           type: string
@@ -138,6 +145,7 @@ components:
         seniority:
           type: enum
           enum: ["student", "junior", "mid", "senior", "lead", "manager"]
+          nullable: true
         employment:
           type: enum
           enum: ["employment", "mandatory", "b2b"]
@@ -146,26 +154,27 @@ components:
           type: array
           nullable: true
           items:
-            $ref: '#/components/schemas/Location'
+            $ref: '#/components/schemas/LocationSchema'
         tags:
           type: array
           nullable: true
+          description: "Requirements as tags. For example: C#, Python etc."
           items:
-            $ref: '#/components/schemas/Tag'
+            $ref: '#/components/schemas/TagSchema'
         firm:
           nullable: true
-          $ref: '#/components/schemas/Firm'
+          $ref: '#/components/schemas/FirmSchema'
 
-    Firm:
+    FirmSchema:
       type: object
       properties:
         name:
           type: string
-          description: "Only firm nam is required if you want to add next job offer assigned to the same firm"
+          description: "When adding another job offer, you do not have to provide all the information about the company. All you need is a name and the company will be assigned to the job"
         is_agency:
           type: boolean
           default: false
-          description: "Determines if firm is recruitment agency or not"
+          description: "Determines if firm is a recruitment agency or not"
         website:
           type: string
           nullable: true
@@ -177,6 +186,7 @@ components:
         description:
           type: string
           nullable: true
+          description: "Can contain basic HTML like: b,strong,i,em,u,a[href|title|data-user-id|class],p,br,ul,ol[start],li,span[style|title],img[width|height|alt|src|title],sub,sup,pre,code[class],div,kbd,h1,h2,h3,h4,h5,h6,blockquote,del,table[summary|class],thead,tbody,tr,th[abbr],td[abbr],hr,dfn,var,samp"
         youtube_url:
           type: string
           nullable: true
@@ -206,7 +216,7 @@ components:
           type: string
           nullable: true
 
-    Location:
+    LocationSchema:
       type: object
       properties:
         city:
@@ -230,12 +240,13 @@ components:
           format: float
           nullable: true
 
-    Tag:
+    TagSchema:
       type: object
       properties:
         name:
           type: string
           maxLength: 50
+          description: "Only lower case and \-\.#,\+ characters allowed"
         priority:
           type: integer
           minimum: 0

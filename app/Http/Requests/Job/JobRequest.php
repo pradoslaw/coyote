@@ -10,12 +10,12 @@ use Illuminate\Validation\Rule;
 
 class JobRequest extends FormRequest
 {
-    const TITLE_RULE = 'required|string|min:2|max:60';
-    const IS_REMOTE_RULE = 'bool';
-    const REMOTE_RANGE_RULE = 'integer|min:10|max:100';
-    const SALARY_FROM_RULE = 'nullable|integer|min:1';
-    const SALARY_TO_RULE = 'nullable|integer|min:1|gt:salary_from';
-    const IS_GROSS_RULE = 'boolean';
+    const TITLE = 'required|string|min:2|max:60';
+    const IS_REMOTE = 'bool';
+    const REMOTE_RANGE = 'integer|min:10|max:100';
+    const SALARY_FROM = 'nullable|integer|min:1';
+    const SALARY_TO = 'nullable|integer|min:1|gt:salary_from';
+    const IS_GROSS = 'boolean';
 
     const LOCATION_CITY = 'nullable|string|max:255';
     const LOCATION_STREET = 'nullable|string|max:255';
@@ -24,8 +24,8 @@ class JobRequest extends FormRequest
     const LOCATION_LATITUDE = 'nullable|numeric';
     const LOCATION_LONGITUDE = 'nullable|numeric';
 
-    const TAG_NAME_RULE = 'max:50|tag';
-    const TAG_PRIORITY_RULE = 'required|int|min:0|max:2';
+    const TAG_NAME = 'max:50|tag';
+    const TAG_PRIORITY = 'nullable|int|min:0|max:2';
 
     /**
      * Determine if the user is authorized to make this request.
@@ -64,13 +64,13 @@ class JobRequest extends FormRequest
         $job = $draft->get(Job::class);
 
         return [
-            'title' => self::TITLE_RULE,
+            'title' => self::TITLE,
             'seniority' => self::seniorityRule(),
-            'is_remote' => self::IS_REMOTE_RULE,
-            'remote_range' => self::REMOTE_RANGE_RULE,
-            'salary_from' => self::SALARY_FROM_RULE,
-            'salary_to' => self::SALARY_TO_RULE,
-            'is_gross' => self::IS_GROSS_RULE,
+            'is_remote' => self::IS_REMOTE,
+            'remote_range' => self::REMOTE_RANGE,
+            'salary_from' => self::SALARY_FROM,
+            'salary_to' => self::SALARY_TO,
+            'is_gross' => self::IS_GROSS,
             'currency_id' => ['required', 'int', 'exists:currencies,id'],
             'rate' => self::rateRule(),
             'employment' => self::employmentRule(),
@@ -89,8 +89,8 @@ class JobRequest extends FormRequest
             'features.*.name' => 'string|max:100',
             'features.*.value' => 'nullable|string|max:100',
             'features.*.is_checked' => 'bool',
-            'tags.*.name' => self::TAG_NAME_RULE,
-            'tags.*.priority' => self::TAG_PRIORITY_RULE,
+            'tags.*.name' => self::TAG_NAME,
+            'tags.*.priority' => self::TAG_PRIORITY,
             'locations.*.city' => self::LOCATION_CITY,
             'locations.*.street' => self::LOCATION_STREET,
             'locations.*.street_number' => self::LOCATION_STREET_NUMBER,
