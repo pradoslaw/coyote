@@ -6,6 +6,7 @@ use Coyote\Events\PaymentPaid;
 use Coyote\Http\Factories\MediaFactory;
 use Coyote\Http\Resources\JobApiResource;
 use Coyote\Repositories\Contracts\CouponRepositoryInterface as CouponRepository;
+use Illuminate\Database\Connection;
 use Illuminate\Http\Resources\Json\Resource;
 use Coyote\Http\Requests\Job\ApiRequest;
 use Coyote\Http\Resources\JobResource;
@@ -93,14 +94,17 @@ class JobsController extends Controller
 
         $job->load('plan'); // reload plan relation as it might has changed
 
-        $this->saveWithTransaction($job, $user);
+        app(Connection::class)->transaction(function () use ($job, $repository, $user) {
+            $this->prepareAndSave($job, $user);
+
+            if ($job->wasRecentlyCreated || !$job->is_publish) {
+                $coupon = $repository->findCoupon($user->id, $job->plan->gross_price);
+
+                $job->payments()->create(['plan_id' => $job->plan_id, 'days' => $job->plan->length, 'coupon_id' => $coupon->id]);
+            }
+        });
 
         if ($payment = $this->getUnpaidPayment($job)) {
-            $coupon = $repository->findCoupon($user->id, $job->plan->gross_price);
-
-            $payment->coupon_id = $coupon->id;
-            $payment->save();
-
             event(new PaymentPaid($payment));
         }
 

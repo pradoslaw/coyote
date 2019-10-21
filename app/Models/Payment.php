@@ -35,7 +35,7 @@ class Payment extends Model
     /**
      * @var array
      */
-    protected $fillable = ['plan_id', 'status_id', 'days', 'starts_at', 'ends_at'];
+    protected $fillable = ['plan_id', 'status_id', 'days', 'starts_at', 'ends_at', 'coupon_id'];
 
     /**
      * @var array

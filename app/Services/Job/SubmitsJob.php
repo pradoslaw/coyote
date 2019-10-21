@@ -79,8 +79,9 @@ trait SubmitsJob
     /**
      * @param Job $job
      * @param User $user
+     * @return Job
      */
-    protected function saveWithTransaction(Job $job, User $user)
+    protected function prepareAndSave(Job $job, User $user)
     {
         $tags = [];
         if (count($job->tags)) {
@@ -101,45 +102,37 @@ trait SubmitsJob
             $features[$feature->id] = $feature->pivot->toArray();
         }
 
-        app(Connection::class)->transaction(function () use ($job, $tags, $features, $user) {
-            $activity = $job->id ? Stream_Update::class : Stream_Create::class;
+        $activity = $job->id ? Stream_Update::class : Stream_Create::class;
 
-            if (!$job->firm || $job->firm->is_private) {
-                $job->firm()->dissociate();
-            } elseif ($job->firm->name) { // firm name is required to save firm
-                // user might click on "add new firm" button in form. make sure user_id is set up.
-                $job->firm->setDefaultUserId($job->user_id);
+        if (!$job->firm || $job->firm->is_private) {
+            $job->firm()->dissociate();
+        } elseif ($job->firm->name) { // firm name is required to save firm
+            // user might click on "add new firm" button in form. make sure user_id is set up.
+            $job->firm->setDefaultUserId($job->user_id);
 
-                $this->authorizeForUser($user, 'update', $job->firm);
+            $this->authorizeForUser($user, 'update', $job->firm);
 
-                // fist, we need to save firm because firm might not exist.
-                $job->firm->save();
+            // fist, we need to save firm because firm might not exist.
+            $job->firm->save();
 
-                // reassociate job with firm. user could change firm, that's why we have to do it again.
-                $job->firm()->associate($job->firm);
-                // remove old benefits and save new ones.
-                $job->firm->benefits()->push($job->firm->benefits);
-                // sync industries
-                $job->firm->industries()->sync($job->firm->industries);
-                $job->firm->gallery()->push($job->firm->gallery);
-            }
+            // reassociate job with firm. user could change firm, that's why we have to do it again.
+            $job->firm()->associate($job->firm);
+            // remove old benefits and save new ones.
+            $job->firm->benefits()->push($job->firm->benefits);
+            // sync industries
+            $job->firm->industries()->sync($job->firm->industries);
+            $job->firm->gallery()->push($job->firm->gallery);
+        }
 
-            $job->save();
-            $job->locations()->push($job->locations);
+        $job->save();
+        $job->locations()->push($job->locations);
 
-            $job->tags()->sync($tags);
-            $job->features()->sync($features);
+        $job->tags()->sync($tags);
+        $job->features()->sync($features);
 
-            if ($job->wasRecentlyCreated || !$job->is_publish) {
-                $job->payments()->create(['plan_id' => $job->plan_id, 'days' => $job->plan->length]);
-            }
+        stream($activity, (new Stream_Job)->map($job));
 
-            stream($activity, (new Stream_Job)->map($job));
-
-            event(new JobWasSaved($job)); // we don't queue listeners for this event
-
-            return $job;
-        });
+        return $job;
     }
 
     /**

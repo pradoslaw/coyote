@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\Job;
 
 use Coyote\Currency;
+use Coyote\Events\JobWasSaved;
 use Coyote\Firm;
 use Coyote\Firm\Benefit;
 use Coyote\Http\Requests\Job\FirmRequest;
@@ -20,6 +21,7 @@ use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Services\Job\Draft;
 use Coyote\Services\Job\SubmitsJob;
 use Coyote\Services\UrlBuilder\UrlBuilder;
+use Illuminate\Database\Connection;
 use Illuminate\Http\Request;
 
 class SubmitController extends Controller
@@ -215,13 +217,17 @@ class SubmitController extends Controller
 
         $this->authorize('update', $job);
 
-        $this->saveWithTransaction($job, $this->auth);
+        app(Connection::class)->transaction(function () use ($job, $draft) {
+            $this->prepareAndSave($job, $this->auth);
+
+            event(new JobWasSaved($job)); // we don't queue listeners for this event
+
+            $draft->forget();
+        });
 
         if ($job->wasRecentlyCreated) {
             $job->user->notify(new CreatedNotification($job));
         }
-
-        $draft->forget();
 
         if ($unpaidPayment = $this->getUnpaidPayment($job)) {
             return redirect()
