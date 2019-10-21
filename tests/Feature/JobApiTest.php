@@ -114,6 +114,9 @@ class JobApiTest extends TestCase
 
         $data = [
             'title' => $this->faker->text(60),
+            'tags' => [
+                ['name' => 'php']
+            ],
             'firm' => [
                 'name' => $firm->name
             ]
@@ -126,6 +129,16 @@ class JobApiTest extends TestCase
 
         $this->assertEquals($result['firm']['name'], $firm->name);
         $this->assertEquals($result['firm']['website'], $firm->website);
+        $this->assertEquals($result['tags'][0]['name'], 'php');
+
+        $data = [
+            'title' => $data['title']
+        ];
+
+        $response = $this->json('PUT', '/v1/jobs/' . $result['id'], $data, ['Authorization' => 'Bearer ' . $this->token, 'Accept' => 'application/json']);
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $response->assertJsonFragment(['title' => $data['title'], 'firm' => [], 'tags' => []]);
     }
 
     public function testNotEnoughFunds()

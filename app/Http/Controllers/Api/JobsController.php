@@ -77,7 +77,7 @@ class JobsController extends Controller
 
         $this->authorizeForUser($user, 'update', $job);
 
-        $job->fill($request->all());
+        $job->fill(array_merge(['tags' => [], 'locations' => []], $request->all()));
 
         if ($request->has('firm.name')) {
             $firm = $this->firm->loadFirm($user->id, $request->input('firm.name'));
