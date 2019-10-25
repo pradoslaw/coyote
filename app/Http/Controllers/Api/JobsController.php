@@ -32,7 +32,7 @@ class JobsController extends Controller
      */
     public function index()
     {
-        $this->job->pushCriteria(new EagerLoading(['firm:id,name,slug,logo', 'locations', 'tags', 'currency']));
+        $this->job->pushCriteria(new EagerLoading(['firm', 'locations', 'tags', 'currency']));
         $this->job->pushCriteria(new EagerLoadingWithCount(['comments']));
         $this->job->pushCriteria(new PriorDeadline());
         $this->job->pushCriteria(new OnlyPublished());
@@ -53,7 +53,7 @@ class JobsController extends Controller
     {
         Resource::withoutWrapping();
 
-        $this->job->pushCriteria(new EagerLoading(['firm:id,name,slug,logo', 'locations', 'tags', 'currency']));
+        $this->job->pushCriteria(new EagerLoading(['firm', 'locations', 'tags', 'currency']));
         $this->job->pushCriteria(new EagerLoading('features'));
         $this->job->pushCriteria(new EagerLoadingWithCount(['comments']));
 
