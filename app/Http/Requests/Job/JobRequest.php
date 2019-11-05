@@ -14,7 +14,7 @@ class JobRequest extends FormRequest
     const IS_REMOTE = 'bool';
     const REMOTE_RANGE = 'integer|min:10|max:100';
     const SALARY_FROM = 'nullable|integer|min:1';
-    const SALARY_TO = 'nullable|integer|min:1|gt:salary_from';
+    const SALARY_TO = 'nullable|integer|min:1';
     const IS_GROSS = 'boolean';
 
     const LOCATION_CITY = 'nullable|string|max:255';
