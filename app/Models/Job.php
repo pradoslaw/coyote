@@ -638,6 +638,8 @@ class Job extends Model
         if (!empty($recruitment)) {
             $this->attributes['enable_apply'] = false;
         }
+        
+        $this->attributes['recruitment'] = $recruitment;
     }
 
     /**
