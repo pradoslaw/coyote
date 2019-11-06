@@ -96,8 +96,6 @@ class SubmitController extends Controller
     {
         /** @var \Coyote\Job $job */
         $job = clone $draft->get(Job::class);
-
-        // only fillable columns! we don't want to set fields like "city" or "tags" because they don't really exists in db.
         $job->fill($request->all());
 
         $draft->put(Job::class, $job);
