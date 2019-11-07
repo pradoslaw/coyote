@@ -13,21 +13,21 @@ use Coyote\Repositories\Contracts\PlanRepositoryInterface as PlanRepository;
 class RenewController extends Controller
 {
     use SubmitsJob;
-    
+
     /**
      * @param JobRepository $job
      * @param FirmRepository $firm
      * @param PlanRepository $plan
      */
     public function __construct(JobRepository $job, FirmRepository $firm, PlanRepository $plan)
-    {        
+    {
         parent::__construct();
-        
+
         $this->job = $job;
         $this->firm = $firm;
         $this->plan = $plan;
     }
-    
+
     /**
      * @param Job $job
      * @param Draft $draft
