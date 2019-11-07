@@ -141,7 +141,7 @@ class SubmitController extends Controller
         /** @var \Coyote\Job $job */
         $job = $draft->get(Job::class);
 
-        $job->firm->fill($request->all());
+        $job->firm->fill(array_merge(['industries' => []], $request->all()));
 
         // new firm has empty ID.
         if (empty($request->input('id'))) {
