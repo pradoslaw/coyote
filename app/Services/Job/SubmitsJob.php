@@ -38,7 +38,7 @@ trait SubmitsJob
      * @param PlanRepository $plan
      */
     public function __construct(JobRepository $job, FirmRepository $firm, PlanRepository $plan)
-    {        
+    {
         $this->job = $job;
         $this->firm = $firm;
         $this->plan = $plan;
