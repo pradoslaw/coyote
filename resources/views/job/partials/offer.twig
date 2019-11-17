@@ -213,7 +213,9 @@
 
             {% if job.firm.longitude and job.firm.latitude %}
                 <div id="map">
-                    <vue-map style="height: 100%" lat="{{ job.firm.latitude }}" lng="{{ job.firm.longitude }}"></vue-map>
+                    <vue-map style="height: 100%" lat="{{ job.firm.latitude }}" lng="{{ job.firm.longitude }}">
+                        <vue-marker lat="{{ job.firm.latitude }}" lng="{{ job.firm.longitude }}"></vue-marker>
+                    </vue-map>
                 </div>
             {% endif %}
 

@@ -7,6 +7,7 @@ import VuePrompt from '../../components/prompt.vue';
 import axios from 'axios';
 import store from '../../store';
 import VueMap from '../../components/google-maps/map.vue';
+import VueMarker from '../../components/google-maps/marker.vue';
 
 Vue.use(VueTextareaAutosize);
 
@@ -60,5 +61,6 @@ new Vue({
     delimiters: ['${', '}'],
     components: {
         'vue-map': VueMap,
+        'vue-marker': VueMarker
     }
 });
