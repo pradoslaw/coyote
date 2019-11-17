@@ -1,6 +1,6 @@
 import '../../plugins/uploader';
 import tinymce from '../../libs/tinymce';
-import Map from '../../libs/map';
+import Geocoder from '../../libs/geocoder';
 import Vue from 'vue';
 import VueThumbnail from '../../components/thumbnail.vue';
 import VuePricing from '../../components/pricing.vue';
@@ -14,6 +14,8 @@ import VueRadio from '../../components/forms/radio.vue';
 import VueError from '../../components/forms/error.vue';
 import VueButton from '../../components/forms/button.vue';
 import VueModal from '../../components/modal.vue';
+import VueMap from '../../components/google-maps/map.vue';
+import VueMarker from '../../components/google-maps/marker.vue';
 import Editor from '@tinymce/tinymce-vue';
 import 'chosen-js';
 import axios from "axios";
@@ -36,7 +38,9 @@ new Vue({
         'vue-radio': VueRadio,
         'vue-error': VueError,
         'vue-modal': VueModal,
-        'vue-button': VueButton
+        'vue-button': VueButton,
+        'vue-map': VueMap,
+        'vue-marker': VueMarker
     },
 
     mounted () {
@@ -44,19 +48,6 @@ new Vue({
 
         this.calculateOffset();
         window.addEventListener('scroll', this.handleScroll);
-
-        if (typeof google !== 'undefined' && this.firm) {
-            this.map = new Map();
-
-            if (this.firm.latitude && this.firm.longitude) {
-                this._setupMarker();
-            }
-
-            this.map.setupGeocodeOnMapClick(result => {
-                this.firm = Object.assign(this.firm, result);
-                this._setupMarker();
-            });
-        }
 
         $('[v-loader]').remove();
         this._initTooltip();
@@ -212,27 +203,27 @@ new Vue({
         },
 
         changeAddress (e) {
-            let val = e.target.value.trim();
+            const val = e.target.value.trim();
+            const geocoder = new Geocoder();
 
             if (val.length) {
-                this.map.geocode(val, result => {
+                geocoder.geocode(val, result => {
                     this.firm = Object.assign(this.firm, result);
-
-                    this._setupMarker(); // must be inside closure
                 });
             }
             else {
                 ['longitude', 'latitude', 'country', 'city', 'street', 'street_number', 'postcode'].forEach(field => {
                     this.firm[field] = null;
                 });
-
-                this._setupMarker();
             }
         },
 
-        _setupMarker () {
-            this.map.removeMarker(this.marker);
-            this.marker = this.map.addMarker(this.firm.latitude, this.firm.longitude);
+        geocode (latlng) {
+            const geocoder = new Geocoder();
+
+            geocoder.reverseGeocode(latlng, result => {
+                this.firm = Object.assign(this.firm, result);
+            });
         },
 
         addPhoto (file) {
@@ -265,7 +256,7 @@ new Vue({
             const strip = (value) => value !== undefined ? value : '';
 
             data.label = [(`${strip(data.street)} ${strip(data.street_number)}`).trim(), data.city, data.country]
-                .filter(item => item !== '') // != operator
+                .filter(item => item !== '')
                 .join(', ');
 
             this.$set(this.job.locations, index, data);
@@ -326,7 +317,9 @@ new Vue({
             set (val) {
                 this.job.enable_apply = val;
             }
-        }
+        },
+
+
     },
     watch: {
         'firm.is_private' (flag) {

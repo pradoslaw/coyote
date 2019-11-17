@@ -1,14 +1,7 @@
 
-class Map {
-    constructor(container = 'map') {
-        let mapOptions = {
-            zoom: 6,
-            center: new google.maps.LatLng(51.919438, 19.14513599999998),
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-
+class Geocoder {
+    constructor() {
         this._geocoder = new google.maps.Geocoder();
-        this._map = new google.maps.Map(document.getElementById(container), mapOptions);
     }
 
     geocode(address, cb) {
@@ -20,35 +13,6 @@ class Map {
     reverseGeocode(coordinates, cb) {
         this._geocoder.geocode({'latLng': coordinates}, (result, status) => {
             cb(this._geocodeResult(result, status));
-        });
-    }
-
-    addMarker(latitude, longitude) {
-        if (!latitude || !longitude) {
-            return null;
-        }
-
-        let coordinates = new google.maps.LatLng(latitude, longitude);
-
-        let marker = new google.maps.Marker({
-            map: this._map,
-            position: coordinates
-        });
-
-        this._map.setCenter(coordinates);
-
-        return marker;
-    }
-
-    removeMarker(marker) {
-        if (marker !== null) {
-            marker.setMap(null);
-        }
-    }
-
-    setupGeocodeOnMapClick(cb) {
-        google.maps.event.addListener(this._map, 'click', e => {
-            this.reverseGeocode(e.latLng, cb);
         });
     }
 
@@ -101,4 +65,4 @@ class Map {
     }
 }
 
-export default Map;
+export default Geocoder;

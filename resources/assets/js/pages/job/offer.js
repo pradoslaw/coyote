@@ -6,6 +6,8 @@ import VueTextareaAutosize from 'vue-textarea-autosize';
 import VuePrompt from '../../components/prompt.vue';
 import axios from 'axios';
 import store from '../../store';
+import VueMap from '../../components/google-maps/map.vue';
+import VueMarker from '../../components/google-maps/marker.vue';
 
 Vue.use(VueTextareaAutosize);
 
@@ -51,5 +53,14 @@ new Vue({
         comments () {
             return store.state.comments.comments;
         }
+    }
+});
+
+new Vue({
+    el: '#map',
+    delimiters: ['${', '}'],
+    components: {
+        'vue-map': VueMap,
+        'vue-marker': VueMarker
     }
 });

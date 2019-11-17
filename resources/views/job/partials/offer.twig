@@ -212,7 +212,11 @@
             {% endif %}
 
             {% if job.firm.longitude and job.firm.latitude %}
-                <div id="map" style="height: 250px"></div>
+                <div id="map">
+                    <vue-map style="height: 100%" latitude="{{ job.firm.latitude }}" longitude="{{ job.firm.longitude }}">
+                        <vue-marker latitude="{{ job.firm.latitude }}" longitude="{{ job.firm.longitude }}"></vue-marker>
+                    </vue-map>
+                </div>
             {% endif %}
 
             {% if not job.is_expired %}
