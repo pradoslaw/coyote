@@ -317,7 +317,9 @@ new Vue({
             set (val) {
                 this.job.enable_apply = val;
             }
-        }
+        },
+
+
     },
     watch: {
         'firm.is_private' (flag) {

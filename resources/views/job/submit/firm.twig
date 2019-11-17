@@ -237,7 +237,7 @@
                                 <vue-error :message="errors.address"></vue-error>
 
                                 <div id="map">
-                                    <vue-map @click="geocode" style="height: 100%" :latitude="firm.latitude" :longitude="firm.longitude">
+                                    <vue-map @click="geocode" style="height: 100%" :latitude="firm.latitude || 51.919438" :longitude="firm.longitude || 19.145135999">
                                         <vue-marker :latitude="firm.latitude" :longitude="firm.longitude"></vue-marker>
                                     </vue-map>
                                 </div>
