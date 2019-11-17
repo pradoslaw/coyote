@@ -45,7 +45,7 @@
     "vue-textarea-autosize": "^1.0.4",
     "vuex": "^3.1.0",
     "webpack": "4.28.4",
-    "webpack-bundle-analyzer": "^3.0.3",
+    "webpack-bundle-analyzer": "^3.3.2",
     "webpack-cli": "^3.2.1",
     "webpack-concat-plugin": "^3.0.0",
     "webpack-manifest-plugin": "^2.0.4",
