@@ -53,12 +53,7 @@ paths:
             application/json:
               schema:
                 type: object
-        200:
-          description: "Job successfully updated"
-          content:
-            application/json:
-              schema:
-                type: object
+                $ref: '#/components/schemas/JobSchema'
         422:
           description: "Validation errors"
           content:
@@ -72,6 +67,32 @@ paths:
               schema:
                 type: object
 
+  /jobs/{id}:
+    put:
+      parameters:
+        - name: id
+          required: true
+          in: "path"
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/JobBody'
+      responses:
+        200:
+          description: "Job successfully updated"
+          content:
+            application/json:
+              schema:
+                type: object
+        422:
+          description: "Validation errors"
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/JobSchema'
 
 components:
   requestBodies:

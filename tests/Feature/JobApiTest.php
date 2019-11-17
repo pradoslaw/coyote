@@ -76,12 +76,12 @@ class JobApiTest extends TestCase
         $this->assertEquals($job->seniority, $data['seniority']);
         $this->assertEquals($job->employment, $data['employment']);
         $this->assertEquals($job->rate, $data['rate']);
-
+        $this->assertTrue($job->is_publish);
     }
 
     public function testSubmitWithFirm()
     {
-        $coupon = Coupon::create(['amount' => 30, 'code' => str_random(), 'user_id' => $this->user->id]);
+        Coupon::create(['amount' => 30, 'code' => str_random(), 'user_id' => $this->user->id]);
 
         $data = [
             'title' => $this->faker->text(60),
