@@ -41,8 +41,8 @@ new Vue({
 
     mounted () {
         this.marker = null;
-        this.calculateOffset();
 
+        this.calculateOffset();
         window.addEventListener('scroll', this.handleScroll);
 
         if (typeof google !== 'undefined' && this.firm) {
@@ -261,7 +261,7 @@ new Vue({
             this.job.locations.splice(this.job.locations.indexOf(location), 1);
         },
 
-        setAddress (index, data) {
+        formatAddress (index, data) {
             const strip = (value) => value !== undefined ? value : '';
 
             data.label = [(`${strip(data.street)} ${strip(data.street_number)}`).trim(), data.city, data.country]

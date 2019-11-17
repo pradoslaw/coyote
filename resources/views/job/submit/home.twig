@@ -79,7 +79,7 @@
                                         <input type="hidden" :name="'locations[' + index + '][city]'" :value="location.city">
                                         <input type="hidden" :name="'locations[' + index + '][country]'" :value="location.country">
 
-                                        <vue-google-place @change="setAddress(index, ...arguments)" :label="location.label"></vue-google-place>
+                                        <vue-google-place @change="formatAddress(index, ...arguments)" :label="location.label"></vue-google-place>
                                     </div>
                                 </div>
                             </div>
