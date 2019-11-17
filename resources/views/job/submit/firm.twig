@@ -236,7 +236,11 @@
 
                                 <vue-error :message="errors.address"></vue-error>
 
-                                <div id="map"></div>
+                                <div id="map">
+                                    <vue-map @click="geocode" style="height: 100%" :latitude="firm.latitude" :longitude="firm.longitude">
+                                        <vue-marker :latitude="firm.latitude" :longitude="firm.longitude"></vue-marker>
+                                    </vue-map>
+                                </div>
                             </div>
 
                             <div class="form-group form-group-border" v-show="isAgency == 0">
