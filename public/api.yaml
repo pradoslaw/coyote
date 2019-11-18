@@ -68,6 +68,21 @@ paths:
                 type: object
 
   /jobs/{id}:
+    get:
+      parameters:
+        - name: id
+          required: true
+          in: "path"
+          schema:
+            type: integer
+      responses:
+        200:
+          description: "Job object"
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/JobSchema'
     put:
       parameters:
         - name: id

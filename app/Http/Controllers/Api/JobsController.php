@@ -47,7 +47,7 @@ class JobsController extends Controller
 
     /**
      * @param Job $job
-     * @return JobResource
+     * @return JobApiResource
      */
     public function show(Job $job)
     {
@@ -57,7 +57,7 @@ class JobsController extends Controller
         $this->job->pushCriteria(new EagerLoading('features'));
         $this->job->pushCriteria(new EagerLoadingWithCount(['comments']));
 
-        return new JobResource($job);
+        return new JobApiResource($job);
     }
 
     /**
