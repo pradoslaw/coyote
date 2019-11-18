@@ -11,7 +11,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // so far... redirect to homepage
-        return redirect()->route('home');
+        return view('swagger');
     }
 }
