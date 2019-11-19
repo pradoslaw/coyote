@@ -18,5 +18,8 @@ class ChangePaymentStatus
     {
         $event->payment->status_id = Payment::PENDING;
         $event->payment->save();
+
+        // payment is done. remove any pending payments (if any...)
+        $event->payment->job->payments()->where('status_id', Payment::NEW)->delete();
     }
 }
