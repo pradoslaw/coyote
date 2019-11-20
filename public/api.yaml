@@ -40,6 +40,42 @@ paths:
                 properties:
                   message:
                     type: string
+  /microblogs:
+    get:
+      responses:
+        200:
+          description: "Microblogs objects"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      $ref: '#/components/schemas/MicroblogSchema'
+                  meta:
+                    type: object
+                    $ref: '#/components/schemas/Meta'
+
+  /microblogs/{id}:
+    get:
+      parameters:
+        - name: id
+          required: true
+          in: "path"
+          schema:
+            type: integer
+      responses:
+        200:
+          description: "Microblog object"
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/MicroblogSchema'
+
   /jobs:
     post:
       security:
@@ -289,6 +325,62 @@ components:
           maximum: 2
           default: 1
           description: "0 - nice to have, 1 - intermediate level, 2 - advance"
+
+    MicroblogSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+        votes:
+          type: integer
+        created_at:
+          type: string
+          format: "datetime"
+        updated_at:
+          type: string
+          format: "datetime"
+        html:
+          type: string
+        comments:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/MicroblogSchema'
+        user:
+          type: object
+          properties:
+            id:
+              type: integer
+              required: true
+            name:
+              type: string
+              required: true
+            photo:
+              type: string
+
+    Meta:
+      type: object
+      properties:
+        current_page:
+          type: integer
+          minimum: 1
+        from:
+          type: integer
+          minimum: 1
+        last_page:
+          type: integer
+          minimum: 1
+        path:
+          type: string
+        per_page:
+          type: integer
+        to:
+          type: integer
+          minimum: 1
+        total:
+          type: integer
+          minimum: 1
+
 
   securitySchemes:
     bearerAuth:
