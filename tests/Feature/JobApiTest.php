@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Coyote\Coupon;
 use Coyote\Firm;
 use Coyote\Job;
+use Coyote\Payment;
 use Coyote\User;
 use Faker\Factory;
 use Tests\TestCase;
@@ -77,6 +78,9 @@ class JobApiTest extends TestCase
         $this->assertEquals($job->employment, $data['employment']);
         $this->assertEquals($job->rate, $data['rate']);
         $this->assertTrue($job->is_publish);
+
+        $payment = $job->payments->first();
+        $this->assertEquals(Payment::PAID, $payment->status_id);
     }
 
     public function testSubmitWithFirm()

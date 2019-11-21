@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Api;
 
+use Coyote\Events\JobWasSaved;
 use Coyote\Events\PaymentPaid;
 use Coyote\Http\Factories\MediaFactory;
 use Coyote\Http\Resources\JobApiResource;
@@ -102,6 +103,8 @@ class JobsController extends Controller
 
                 $job->payments()->create(['plan_id' => $job->plan_id, 'days' => $job->plan->length, 'coupon_id' => $coupon->id]);
             }
+
+            event(new JobWasSaved($job)); // we don't queue listeners for this event
         });
 
         if ($payment = $this->getUnpaidPayment($job)) {
