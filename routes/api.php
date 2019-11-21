@@ -5,7 +5,9 @@ $this->any('token/verify', ['uses' => 'User\SessionTokenController@verifyToken']
 $this->get('users/{user}', ['uses' => 'User\UserApiController@get']);
 
 $this->prefix('v1')->group(function () {
-    $this->get('microblogs', ['uses' => 'Api\Microblog\HomeController@index']);
+    $this->get('microblogs', ['uses' => 'Api\MicroblogsController@index']);
+    $this->get('microblogs/{microblog}', ['uses' => 'Api\MicroblogsController@show']);
+
     $this->get('jobs', ['uses' => 'Api\JobsController@index']);
     $this->get('jobs/{job}', ['uses' => 'Api\JobsController@show']);
     $this->put('jobs/{job}', ['uses' => 'Api\JobsController@save', 'middleware' => 'auth:api']);
