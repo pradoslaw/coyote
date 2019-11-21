@@ -28,7 +28,6 @@ class MicroblogsController extends Controller
     }
 
     /**
-     * @param MicroblogRepository $microblog
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index()

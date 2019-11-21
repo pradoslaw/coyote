@@ -7,12 +7,12 @@ use Coyote\Repositories\Contracts\RepositoryInterface as Repository;
 class EagerLoading extends Criteria
 {
     /**
-     * @var string|\string[]
+     * @var string|string[]|array
      */
     private $relations;
 
     /**
-     * @param string|string[] $relations
+     * @param string|string[]|array $relations
      */
     public function __construct($relations)
     {
