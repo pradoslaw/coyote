@@ -58,6 +58,8 @@
                                 <li {{ forms.attr(item.attr) }}>
                                     <a href="{{ item.url }}">{{ item.title|raw }}</a>
 
+                                    {{ item.afterHTML|raw }}
+
                                     {% if item.hasChildren() %}
                                         <ul class="dropdown-menu left">
                                             {% for children in item.children() %}

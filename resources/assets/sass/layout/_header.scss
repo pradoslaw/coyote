@@ -202,6 +202,35 @@ header.navbar-default {
   }
 }
 
+.dropdown-group {
+  white-space: nowrap;
+  padding: 5px 10px;
+
+  .dropdown-group-title {
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #464646;
+    border-bottom: 1px solid $border-color;
+    padding-bottom: 5px;
+  }
+
+  .dropdown-group-col {
+    display: table-cell;
+    padding: 10px;
+  }
+
+  li > a {
+    color: $dropdown-link-color;
+    padding: 3px 0;
+    display: block;
+
+    &:hover {
+      text-decoration: none;
+      color: $brand-primary;
+    }
+  }
+}
+
 // logout button
 .btn-sign-out {
   border: none;
@@ -438,6 +467,6 @@ header.navbar-default {
 
   /* ukrywamy przyklejona sciezke podstrony, na ktorej sie znajdujemy */
   body .breadcrumb[id] {
-	display: none;
+    display: none;
   }
 }

@@ -90,12 +90,10 @@ class ViewServiceProvider extends ServiceProvider
             $repository->pushCriteria(new AccordingToUserOrder($userId));
             $repository->applyCriteria();
 
-            $categories = $repository->select(['name', 'slug'])->whereNull('parent_id')->get()->toArray();
+            $categories = $repository->select(['name', 'slug', 'forums.section'])->whereNull('parent_id')->get();
+            $rendered = view('components.dropdown-group', ['sections' => $this->groupBySections($categories)])->render();
 
-            foreach ($categories as $forum) {
-                /** @var array $forum */
-                $builder->forum->add($forum['name'], route('forum.category', [$forum['slug']]));
-            }
+            $builder->forum->after($rendered);
 
             return $builder;
         });
@@ -112,5 +110,25 @@ class ViewServiceProvider extends ServiceProvider
         }
 
         return $builder;
+    }
+
+    public function groupBySections($categories)
+    {
+        $name = null;
+        $sections = [];
+
+        foreach ($categories as $category) {
+            if ($name === null || ($category->section !== $name && $category->section)) {
+                $name = $category->section;
+            }
+
+            if (!isset($sections[$name])) {
+                $sections[$name] = [];
+            }
+
+            array_push($sections[$name], $category);
+        }
+
+        return $sections;
     }
 }
