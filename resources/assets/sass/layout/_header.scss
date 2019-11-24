@@ -212,6 +212,9 @@ header.navbar-default {
     color: #464646;
     border-bottom: 1px solid $border-color;
     padding-bottom: 5px;
+
+    @include text-overflow;
+    max-width: 200px;
   }
 
   .dropdown-group-col {
