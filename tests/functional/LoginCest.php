@@ -16,7 +16,7 @@ class LoginCest
 
         $I->amOnPage('/');
         $I->seeAuthentication();
-        $I->see('Joe Doe', '.dropdown-username');
+        $I->see('Joe Doe', '.profile-name');
     }
 
     public function testLoginAsUserUsingEmail(FunctionalTester $I)
@@ -32,7 +32,7 @@ class LoginCest
 
         $I->amOnPage('/');
         $I->seeAuthentication();
-        $I->see($user->name, '.dropdown-username');
+        $I->see($user->name, '.profile-name');
     }
 
     public function testLoginAsUserUsingNotVerifiedEmail(FunctionalTester $I)
