@@ -64,7 +64,7 @@ trait SubmitsJob
 
         if (!$job->exists) {
             $job->user_id = $user->id;
-            $job->plan_id = $this->plan->findDefault()->id;
+            $job->plan_id = request('default_plan') ?? $this->plan->findDefault()->id;
             $job->email = $user->email;
             $job->setAttribute('features', $this->job->getDefaultFeatures($user->id));
         }
