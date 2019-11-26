@@ -7,24 +7,21 @@ interface SettingRepositoryInterface extends RepositoryInterface
     /**
      * @param $name
      * @param $value
-     * @param $userId
-     * @param $sessionId
+     * @param $guestId
      */
-    public function setItem($name, $value, $userId, $sessionId);
+    public function setItem($name, $value, $guestId);
 
     /**
      * @param $name
-     * @param $userId
-     * @param $sessionId
+     * @param $guestId
      * @param null $default
      * @return null|static
      */
-    public function getItem($name, $userId, $sessionId, $default = null);
+    public function getItem($name, $guestId, $default = null);
 
     /**
-     * @param $userId
-     * @param $sessionId
+     * @param $guestId
      * @return array
      */
-    public function getAll($userId, $sessionId);
+    public function getAll($guestId);
 }

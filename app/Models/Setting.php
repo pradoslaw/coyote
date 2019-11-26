@@ -11,7 +11,7 @@ class Setting extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'value', 'user_id', 'session_id'];
+    protected $fillable = ['name', 'value', 'user_id', 'guest_id'];
 
     /**
      * @var string

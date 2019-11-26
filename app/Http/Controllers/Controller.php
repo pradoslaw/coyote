@@ -87,6 +87,7 @@ abstract class Controller extends BaseController
     /**
      * @param string $name
      * @param $value
+     * @return string
      */
     protected function setSetting($name, $value)
     {
@@ -98,7 +99,7 @@ abstract class Controller extends BaseController
             $this->settings = [];
         }
 
-        app('setting')->setItem($name, $value, $this->userId, $this->guestId);
+        app('setting')->setItem($name, $value, $this->guestId);
 
         return $this->settings[$name] = $value;
     }
@@ -111,7 +112,7 @@ abstract class Controller extends BaseController
     protected function getSettings()
     {
         if (is_null($this->settings)) {
-            $this->settings = app('setting')->getAll($this->userId, $this->guestId);
+            $this->settings = app('setting')->getAll($this->guestId);
         }
 
         return $this->settings;
