@@ -27,9 +27,14 @@ class ViewServiceProvider extends ServiceProvider
             $this->registerPublicData();
             $this->registerWebSocket();
 
+            $userId = $this->app['request']->user()->id ?? null;
+            $sessionId = $this->app['session']->get('guest_id');
+
             $view->with([
                 '__public' => json_encode($this->app['request']->attributes->all()),
-                '__master_menu' => $this->buildMasterMenu()
+                '__master_menu' => $this->buildMasterMenu(),
+
+                '__dark_theme' => $this->app['setting']->getItem('dark.theme', $userId, $sessionId)
             ]);
         });
     }

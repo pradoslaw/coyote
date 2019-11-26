@@ -36,12 +36,12 @@
         {% import 'components.forms' as forms %}
 
         <div id="container-fluid">
-            <header class="nav navbar-default{{ auth_guest() or user('allow_sticky_header') ? ' navbar-fixed-top' }}">
-                <div id="navbar-border-top"></div>
+            <header class="nav navbar-header {{ auth_guest() or user('allow_sticky_header') ? ' navbar-fixed-top' }} {{ __dark_theme ? 'navbar-dark' }}">
+                <div class="navbar-border-top"></div>
 
                 <div class="max-width">
                     <div class="clearfix">
-                        <button type="button" class="navbar-toggle margin-sm-left" data-toggle="collapse" data-target="#mobile-menu">
+                        <button type="button" class="navbar-toggle margin-sm-left" data-toggle="collapse" data-target=".nav-mobile">
                             <span class="sr-only">Toggle navigation</span>
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
@@ -49,11 +49,10 @@
                         </button>
 
                         <a class="navbar-brand" rel="home" href="{{ route('home') }}" title="4programmers.net - Strona główna">
-                            <img id="logo" src="{{ cdn('img/logo.png') }}" class="hidden-md hidden-sm hidden-xs">
-                            <img src="{{ cdn('img/logo-mobile.png') }}" class="visible-md visible-sm visible-xs">
+                            <img src="{{ cdn('img/logo-mobile.png') }}">
                         </a>
 
-                        <ul id="desktop-menu" class="nav navbar-nav hidden-xs">
+                        <ul class="nav nav-desktop navbar-nav hidden-xs">
                             {% for item in __master_menu.roots() %}
                                 <li {{ forms.attr(item.attr) }}>
                                     <a href="{{ item.url }}">{{ item.title|raw }}</a>
@@ -73,30 +72,28 @@
                             {% endfor %}
                         </ul>
 
-                        <form id="navbar-header-search" action="{{ search_url|default(route('search')) }}" class="navbar-form navbar-right hidden-sm hidden-xs" role="search">
+                        <form action="{{ search_url|default(route('search')) }}" class="navbar-form navbar-header-search navbar-right hidden-sm hidden-xs" role="search">
                             <div class="form-group">
                                 <div class="input-group">
                                     <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}">
 
                                     <span class="input-group-btn">
-
-                                    <button class="btn btn-link">
-                                        <i class="fa fa-search"></i>
-                                    </button>
-                                </span>
+                                        <button class="btn btn-link">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </span>
                                 </div>
                             </div>
                         </form>
 
                         {% if auth_check()  %}
-                            <div class="navbar-right dropdown avatar hidden-xs">
+                            <div class="navbar-right dropdown nav-avatar hidden-xs">
                                 <a href="javascript:" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                     <img src="{{ user_photo(user('photo')) }}" class="img-thumbnail" style="width: 35px">
-                                    <span class="caret"></span>
                                 </a>
 
-                                <ul id="dropdown-user" class="dropdown-menu right">
-                                    <li class="dropdown-username"><a class="dropdown-userhome" href="{{ route('user.home') }}">{{ user('name')  }}</a></li>
+                                <ul class="dropdown-menu right">
+                                    <li><a class="profile-name" href="{{ route('user.home') }}">{{ user('name')  }}</a></li>
                                     <li class="divider"></li>
                                     <li><a href="{{ route('user.pm') }}"><i class="fa fa-envelope fa-fw"></i> Wiadomości</a></li>
                                     <li><a href="{{ route('user.settings') }}"><i class="fa fa-cog fa-fw"></i> Ustawienia</a></li>
@@ -108,6 +105,13 @@
                                     {% endif %}
 
                                     <li class="divider"></li>
+
+                                    <li>
+                                        <a href="javascript:" class="js-change-menu">Nowe menu <sup class="label label-new">Beta</sup></a>
+                                    </li>
+
+                                    <li class="divider"></li>
+
                                     <li>
                                         {{ form_open({url: route('logout')}) }}
                                             <button type="submit" class="btn-sign-out"><i class="fa fa-sign-out fa-fw"></i> Wyloguj</button>
@@ -116,7 +120,7 @@
                                 </ul>
                             </div>
 
-                            <ul class="nav navbar-nav pull-right">
+                            <ul class="nav nav-auth navbar-nav pull-right">
                                 <li id="btn-alerts" class="btn-alerts">
                                     <a href="{{ route('user.notifications') }}" data-url="{{ route('user.notifications.ajax') }}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                         {% if user('notifications_unread') %}
@@ -126,7 +130,7 @@
                                         <i class="fa fa-bell fa-fw"></i>
                                     </a>
 
-                                    <div id="dropdown-alerts" class="dropdown-menu right">
+                                    <div id="dropdown-alerts" class="dropdown-alerts dropdown-menu right">
                                         <div class="dropdown-header">
                                             <a title="Przejdź do listy powiadomień" href="{{ route('user.notifications') }}">Powiadomienia</a>
 
@@ -151,7 +155,7 @@
                                         <i class="fa fa-envelope fa-fw"></i>
                                     </a>
 
-                                    <div id="dropdown-messages" class="dropdown-menu right">
+                                    <div id="dropdown-messages" class="dropdown-menu dropdown-messages right">
                                         <div class="dropdown-header">
                                             <a title="Przejdź do listy wiadomości" href="{{ route('user.pm') }}">Wiadomości</a>
 
@@ -168,49 +172,61 @@
                                 </li>
                             </ul>
                         {% else %}
-                            <a class="btn btn-primary btn-sm navbar-right navbar-btn btn-register" href="{{ route('register') }}"><i class="fa fa-sign-in"></i> Utwórz konto</a>
-                            <a class="btn btn-default btn-sm navbar-right navbar-btn" href="{{ route('login') }}">Logowanie</a>
+                            <a class="btn btn-sm navbar-right navbar-btn btn-register hidden-xs" href="{{ route('register') }}"><i class="fa fa-sign-in"></i> Utwórz konto</a>
+                            <a class="btn-sm navbar-right navbar-btn btn-login hidden-xs" href="{{ route('login') }}">Logowanie</a>
                         {% endif %}
                     </div>
 
                     <div class="visible-xs">
-                        <div id="mobile-menu" class="collapse navbar-collapse nav navbar-nav">
+                        <ul class="collapse navbar-collapse nav navbar-nav nav-mobile">
                             {% for item in __master_menu.roots() %}
-                                <div {{ forms.attr(item.attr) }}>
+                                <li {{ forms.attr(item.attr) }}>
                                     <a href="{{ item.url }}">{{ item.title|raw }}</a>
-                                </div>
+                                </li>
                             {% endfor %}
 
-                            <div class="divider"></div>
+                            <li class="divider"></li>
 
                             {% if auth_check() %}
-                                <div><a href="{{ route('user.settings') }}"><i class="fa fa-cog fa-fw"></i> Ustawienia</a></div>
-                                <div><a href="{{ route('profile', [user('id')]) }}"><i class="fa fa-user fa-fw"></i> Profil</a></div>
+                                <li><a href="{{ route('user.settings') }}"><i class="fa fa-cog fa-fw"></i> Ustawienia</a></li>
+                                <li><a href="{{ route('profile', [user('id')]) }}"><i class="fa fa-user fa-fw"></i> Profil</a></li>
 
                                 {% if can('adm-access') %}
-                                    <div><a href="{{ route('adm.home') }}"><i class="fa fa-user-secret fa-fw"></i> Panel administracyjny</a></div>
+                                    <li><a href="{{ route('adm.home') }}"><i class="fa fa-user-secret fa-fw"></i> Panel administracyjny</a></li>
                                 {% endif %}
 
-                                {{ form_open({url: route('logout')}) }}
-                                    <div><button type="submit" class="btn-sign-out"><i class="fa fa-sign-out fa-fw"></i> Wyloguj</button></div>
-                                {{ form_close() }}
+                                <li class="divider"></li>
+
+                                <li>
+                                    <a href="javascript:" class="js-change-menu">Nowe menu <sup class="label label-new">Beta</sup></a>
+                                </li>
+
+                                <li class="divider"></li>
+
+                                <li>
+                                    {{ form_open({url: route('logout')}) }}
+                                        <button type="submit" class="btn-sign-out"><i class="fa fa-sign-out fa-fw"></i> Wyloguj</button>
+                                    {{ form_close() }}
+                                </li>
                             {% else %}
-                                <div class="row">
+                                <li class="row">
                                     <div class="col-xs-6">
-                                        <a class="btn btn-primary btn-xs" href="{{ route('register') }}"><i class="fa fa-sign-in"></i> Utwórz konto</a>
+                                        <a class="btn btn-register btn-xs" href="{{ route('register') }}"><i class="fa fa-sign-in"></i> Utwórz konto</a>
                                     </div>
                                     <div class="col-xs-6">
-                                        <a class="btn btn-default btn-xs" href="{{ route('login') }}">Logowanie</a>
+                                        <a class="btn-login btn-xs visible-xs-block text-center" href="{{ route('login') }}">Logowanie</a>
                                     </div>
-                                </div>
+                                </li>
                             {% endif %}
 
-                            <div class="divider"></div>
+                            <li class="divider"></li>
 
-                            <form action="{{ search_url|default(route('search')) }}" role="search">
-                                <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}" class="form-control input-sm">
-                            </form>
-                        </div>
+                            <li>
+                                <form action="{{ search_url|default(route('search')) }}" role="search">
+                                    <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}" class="form-control input-sm">
+                                </form>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </header>

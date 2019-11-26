@@ -3,6 +3,11 @@
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
   font-size: $font-size-small;
   top: 116%;
+
+   > li > a {
+     padding: 5px 20px;
+     font-size: 13px;
+   }
 }
 
 .dropdown-menu.right {
