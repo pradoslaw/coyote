@@ -59,7 +59,8 @@ class SettingRepository extends Repository implements SettingRepositoryInterface
      */
     public function getAll($guestId)
     {
-        return $this->where('guest_id', $guestId)
+        return $this->model
+                    ->where('guest_id', $guestId)
                     ->pluck('value', 'name')
                     ->toArray();
     }
