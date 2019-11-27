@@ -95,7 +95,7 @@ class ViewServiceProvider extends ServiceProvider
             $repository->applyCriteria();
 
             $categories = $repository->select(['name', 'slug', 'forums.section'])->whereNull('parent_id')->get();
-            $rendered = view('components.dropdown-group', ['sections' => $this->groupBySections($categories)])->render();
+            $rendered = view('components.mega-menu', ['sections' => $this->groupBySections($categories)])->render();
 
             $builder->forum->after($rendered);
 
