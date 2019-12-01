@@ -88,8 +88,8 @@
 
                         {% if auth_check()  %}
                             <div class="navbar-right dropdown nav-avatar hidden-xs">
-                                <a href="javascript:" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                    <img src="{{ user_photo(user('photo')) }}" class="img-thumbnail" style="width: 35px">
+                                <a href="javascript:" class="dropdown-toggle img-thumbnail" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="width: 35px">
+                                    <img src="{{ user_photo(user('photo')) }}" style="width: 100%">
                                 </a>
 
                                 <ul class="dropdown-menu right">

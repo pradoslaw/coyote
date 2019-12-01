@@ -167,7 +167,7 @@ body.fixed-top {
       border: 1px solid $input-border;
       color: $gray-light;
       width: 180px;
-      line-height: 20px;
+      line-height: 22px;
     }
 
     .input-group-btn {
@@ -192,6 +192,10 @@ body.fixed-top {
     &:hover {
       text-decoration: none;
     }
+  }
+
+  img {
+    background-color: #fff;
   }
 }
 
@@ -343,7 +347,7 @@ body.fixed-top {
 
   .nav-avatar {
     .img-thumbnail {
-      background-color: #717171;
+      background-color: #717171 !important;
       border: none;
     }
   }
@@ -369,6 +373,22 @@ body.fixed-top {
 
     &:after, &:before {
       border: none;
+    }
+  }
+
+  .navbar-header-search {
+    input {
+      border: none;
+      background-color: $gray-light;
+      color: var(--header-color);
+
+      &::placeholder {
+        color: inherit;
+      }
+    }
+
+    .input-group-btn button {
+      color: var(--header-color);
     }
   }
 }
