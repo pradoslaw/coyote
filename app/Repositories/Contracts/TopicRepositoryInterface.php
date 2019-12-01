@@ -27,7 +27,14 @@ interface TopicRepositoryInterface extends RepositoryInterface
      * @param string $guestId
      * @return mixed
      */
-    public function isUnread($forumId, $markTime, $guestId);
+    public function countUnread($forumId, $markTime, $guestId);
+
+    /**
+     * @param int $forumId
+     * @param string $guestId
+     * @return mixed
+     */
+    public function flushRead(int $forumId, string $guestId);
 
     /**
      * @param int $limit

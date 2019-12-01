@@ -3,6 +3,7 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Repositories\Contracts\SubscribableInterface;
+use Coyote\Topic\Track;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -106,7 +107,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
     /**
      * @inheritdoc
      */
-    public function isUnread($forumId, $markTime, $guestId)
+    public function countUnread($forumId, $markTime, $guestId)
     {
         $sql = $this->toSql(
             $this
@@ -125,6 +126,14 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
             ->withTrashed()
             ->whereNull('topic_track.id')
             ->count();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function flushRead(int $forumId, string $guestId)
+    {
+        return Track::where('forum_id', $forumId)->where('guest_id', $guestId)->delete();
     }
 
     /**

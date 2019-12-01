@@ -2,9 +2,12 @@
 
 namespace Coyote;
 
+use Carbon\Carbon;
 use Coyote\Forum\Access;
+use Coyote\Forum\Track as Forum_Track;
 use Coyote\Models\Scopes\TrackForum;
 use Coyote\Models\Scopes\TrackTopic;
+use Coyote\Topic\Track as Topic_Track;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -172,6 +175,21 @@ class Forum extends Model
     public function markTime($guestId)
     {
         return $this->tracks()->select('marked_at')->where('guest_id', $guestId)->value('marked_at');
+    }
+
+    /**
+     * Mark forum as read
+     *
+     * @param $forumId
+     * @param $guestId
+     */
+    public function markAsRead($guestId)
+    {
+        // builds data to update
+        $attributes = ['guest_id' => $guestId];
+
+        // execute a query...
+        $this->tracks()->updateOrCreate($attributes, $attributes + ['marked_at' => Carbon::now()]);
     }
 
     /**

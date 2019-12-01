@@ -200,25 +200,4 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
                 ->whereNull('tags.deleted_at')
             ->groupBy('name');
     }
-
-    /**
-     * Mark forum as read
-     *
-     * @param $forumId
-     * @param $guestId
-     */
-    public function markAsRead($forumId, $guestId)
-    {
-        // builds data to update
-        $attributes = ['forum_id' => $forumId, 'guest_id' => $guestId];
-        // execute a query...
-        Forum_Track::updateOrCreate($attributes, $attributes + ['marked_at' => $this->raw('NOW()'), 'forum_id' => $forumId]);
-        $track = new Topic_Track();
-
-        foreach ($attributes as $key => $value) {
-            $track = $track->where($key, $value);
-        }
-
-        $track->delete();
-    }
 }

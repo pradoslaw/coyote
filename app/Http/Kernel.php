@@ -68,7 +68,7 @@ class Kernel extends HttpKernel
         'job.session'   => Middleware\VerifyJobSession::class,
         'job.forget'    => Middleware\ForgetJobDraft::class,
         'job.redirect'  => Middleware\PermanentRedirect::class,
-        'topic.scroll'  => Middleware\ScrollToPost::class,
+        'topic.scroll'  => Middleware\RedirectToPost::class,
         'post.response' => Middleware\PostSubmitResponse::class,
         'comment.access' => Middleware\CommentAccess::class,
         'wiki.access'   => Middleware\WikiAccess::class,

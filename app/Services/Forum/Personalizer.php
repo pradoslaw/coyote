@@ -2,32 +2,24 @@
 
 namespace Coyote\Services\Forum;
 
-use Carbon\Carbon;
-use Coyote\Repositories\Contracts\GuestRepositoryInterface as GuestRepository;
+use Coyote\Services\Session\Guest;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
 class Personalizer
 {
     /**
-     * @var GuestRepository
+     * @var Guest
      */
-    protected $guest;
+    private $guest;
 
     /**
-     * @var Request
+     * Personalizer constructor.
+     * @param Guest $guest
      */
-    protected $request;
-
-    /**
-     * @param GuestRepository $guest
-     * @param Request $request
-     */
-    public function __construct(GuestRepository $guest, Request $request)
+    public function __construct(Guest $guest)
     {
         $this->guest = $guest;
-        $this->request = $request;
     }
 
     /**
@@ -38,7 +30,7 @@ class Personalizer
     {
         foreach ($paginator->items() as &$topic) {
             if (empty($topic->forum_marked_at)) {
-                $topic->forum_marked_at = $this->getDefaultDateTime();
+                $topic->forum_marked_at = $this->guest->guessVisit();
             }
 
             /*
@@ -65,7 +57,7 @@ class Personalizer
         // loop for each category
         foreach ($categories as &$row) {
             if (empty($row->forum_marked_at)) {
-                $row->forum_marked_at = $this->getDefaultDateTime();
+                $row->forum_marked_at = $this->guest->guessVisit();
             }
 
             // are there any new posts (since I last marked category as read)?
@@ -75,28 +67,5 @@ class Personalizer
         }
 
         return $categories;
-    }
-
-    /**
-     * @return Carbon
-     */
-    public function getDefaultDateTime(): Carbon
-    {
-        static $createdAt;
-
-        if (!empty($createdAt)) {
-            return $createdAt;
-        }
-
-        $createdAt = $this->guest->createdAt(
-            $this->request->session()->get('user_id'),
-            $this->request->session()->get('guest_id')
-        );
-
-        if ($createdAt === null) {
-            $createdAt = Carbon::createFromTimestamp($this->request->session()->get('created_at'));
-        }
-
-        return $createdAt;
     }
 }

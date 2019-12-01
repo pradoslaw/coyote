@@ -39,12 +39,4 @@ interface ForumRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function getTagsWeight(array $tags);
-
-    /**
-     * Mark forum as read
-     *
-     * @param $forumId
-     * @param $guestId
-     */
-    public function markAsRead($forumId, $guestId);
 }
