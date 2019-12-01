@@ -185,11 +185,14 @@ class Forum extends Model
      */
     public function markAsRead($guestId)
     {
-        // builds data to update
-        $attributes = ['guest_id' => $guestId];
+        $markTime = Carbon::now();
 
-        // execute a query...
-        $this->tracks()->updateOrCreate($attributes, $attributes + ['marked_at' => Carbon::now()]);
+        $sql = "INSERT INTO forum_track (forum_id, guest_id, marked_at) 
+                VALUES(?, ?, ?)
+                ON CONFLICT ON CONSTRAINT forum_track_forum_id_guest_id_unique DO 
+                UPDATE SET marked_at = ?";
+
+        $this->getConnection()->statement($sql, [$this->id, $guestId, $markTime, $markTime]);
     }
 
     /**
