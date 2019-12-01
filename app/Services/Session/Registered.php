@@ -4,6 +4,7 @@ namespace Coyote\Services\Session;
 
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Repositories\Criteria\User\InSession;
+use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Session;
 use Illuminate\Support\Collection;
 
@@ -34,6 +35,8 @@ class Registered
 
         // include group name and only few columns in query
         $this->user->pushCriteria(new InSession());
+        $this->user->pushCriteria(new WithTrashed());
+
         $result = $this->user->findMany($registered->pluck('user_id')->toArray());
 
         foreach ($result as $row) {

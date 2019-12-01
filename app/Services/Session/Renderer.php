@@ -12,7 +12,7 @@ use Illuminate\Support\Collection;
 /**
  * Generuje widok przedstawiajacy liste osob na danej stronie z podzialem na boty, zalogowane osoby itp
  */
-class Viewers
+class Renderer
 {
     const USER = 'Użytkownik';
     const ROBOT = 'Robot';

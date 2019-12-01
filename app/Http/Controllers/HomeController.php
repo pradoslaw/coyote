@@ -14,7 +14,7 @@ use Coyote\Repositories\Criteria\Microblog\LoadComments;
 use Coyote\Repositories\Criteria\Microblog\OrderByScore;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess as OnlyThoseTopicsWithAccess;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess as OnlyThoseForumsWithAccess;
-use Coyote\Services\Session\Viewers;
+use Coyote\Services\Session\Renderer;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class HomeController extends Controller
@@ -189,8 +189,8 @@ class HomeController extends Controller
      */
     private function getViewers()
     {
-        /** @var Viewers $viewers */
-        $viewers = app(Viewers::class);
+        /** @var Renderer $viewers */
+        $viewers = app(Renderer::class);
         return $viewers->render();
     }
 
