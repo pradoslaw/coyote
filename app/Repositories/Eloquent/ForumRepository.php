@@ -4,8 +4,6 @@ namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Repositories\Contracts\Forum\OrderRepositoryInterface;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface;
-use Coyote\Forum\Track as Forum_Track;
-use Coyote\Topic\Track as Topic_Track;
 use Coyote\Topic;
 use Coyote\Forum;
 use Illuminate\Container\Container as App;
