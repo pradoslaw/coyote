@@ -18,7 +18,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property \Coyote\Topic $topic
  * @property \Coyote\Forum $forum
  */
-class Activity extends JsonResource
+class ActivityResource extends JsonResource
 {
     /**
      * @param \Illuminate\Http\Request $request

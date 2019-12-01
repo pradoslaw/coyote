@@ -5,7 +5,7 @@ namespace Coyote\Http\Resources;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Coyote\Services\Declination\Declination;
 
-class Notification extends JsonResource
+class NotificationResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

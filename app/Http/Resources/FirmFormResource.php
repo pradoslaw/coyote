@@ -4,7 +4,7 @@ namespace Coyote\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class Firm extends JsonResource
+class FirmFormResource extends JsonResource
 {
     /**
      * @param \Illuminate\Http\Request $request

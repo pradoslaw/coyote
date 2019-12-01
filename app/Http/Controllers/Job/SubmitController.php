@@ -8,7 +8,7 @@ use Coyote\Firm;
 use Coyote\Firm\Benefit;
 use Coyote\Http\Requests\Job\FirmRequest;
 use Coyote\Http\Requests\Job\JobRequest;
-use Coyote\Http\Resources\Firm as FirmResource;
+use Coyote\Http\Resources\FirmFormResource as FirmResource;
 use Coyote\Http\Resources\JobFormResource;
 use Coyote\Job;
 use Coyote\Http\Controllers\Controller;

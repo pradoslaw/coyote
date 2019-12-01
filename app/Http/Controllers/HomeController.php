@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Controllers;
 
-use Coyote\Http\Resources\Activity as ActivityResource;
+use Coyote\Http\Resources\ActivityResource as ActivityResource;
 use Coyote\Repositories\Contracts\ActivityRepositoryInterface as ActivityRepository;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface as ReputationRepository;
