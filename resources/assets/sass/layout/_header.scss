@@ -25,7 +25,7 @@ body.fixed-top {
   --header-font-family: "Horatio", "Open Sans", Arial, sans-serif;
   --header-font-size: 17px;
   --header-navbar-bg: #454545;
-  --header-color: #fafafa;
+  --header-color: #eee;
   --header-hover-color: #80a41a;
   --header-active-bg: #454545;
   --header-group-link-color: #9d9d9d; // $gray-lighter
@@ -354,7 +354,7 @@ body.fixed-top {
 
   .nav-auth > li {
     > a {
-      color: #fff;
+      color: var(--header-color);
 
       &:hover {
         color: $brand-primary;
