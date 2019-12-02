@@ -19,6 +19,54 @@
     {% include "forum.partials.top" %}
 
     <main id="mainbar">
+        <h2 style="margin: 0 0 5px 0; font-size: 14px;">Podstawy programowania</h2>
+
+        <section class="panel panel-default panel-forum2">
+            <div class="panel-body">
+                {% for i in 1..2 %}
+                <div class="media" >
+                    <div class="media-left" style="vertical-align: middle">
+                        <i class="fa fa-2x fa-comment-o"></i>
+                    </div>
+
+                    <div class="media-body padding-xs-left">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h3 class="media-heading" style="font-size: 15px"><a href="#">Algorytmy i struktury danych</a></h3>
+
+                                <p style="margin: 0">Dział zawierający nieco trudniejsze zagadnienia programistyczne. Tutaj można również dyskutować o algorytmach oraz strukturach danych.</p>
+                            </div>
+
+                            <div class="col-sm-2 text-right" style="font-size: 12px; vertical-align: middle">
+                                <span title="Liczba wątków" class="visible-lg-block"><strong>2 482</strong> <small class="text-muted">wątki</small></span>
+                                <span title="Liczba postów" class="visible-lg-block"><strong>14 348</strong> <small class="text-muted">postów</small></span>
+                            </div>
+
+                            <div class="col-sm-4" style="vertical-align: middle">
+
+
+                                <img src="/img/avatar.png" class="img-thumbnail pull-left margin-sm-right" style="width: 40px">
+
+                                <p style="margin: 1px">
+                                    <a rel="nofollow" title="Przejdź do pierwszego nieczytanego postu" class="btn-view " href="http://4p.local:8880/Forum/Newbie/49-iusto_quidem_sapiente_neque?view=unread"></a>
+
+                                    <a title="Iusto quidem sapiente neque." href="http://4p.local:8880/Forum/Newbie/49-iusto_quidem_sapiente_neque?p=197#id197">Iusto quidem sapiente neque.</a>
+                                </p>
+                                <p style="margin: 1px">
+                                    <span class="timestamp" data-timestamp="1574920475" title="2019-11-28 05:54">2019-11-28 05:54,</span>
+
+                                    <a href="http://4p.local:8880/Profile/20" data-user-id="20">bald</a>
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+
         {% block mainbar %}
             {% for name, forums in sections %}
                 {% include 'forum.partials.section' %}

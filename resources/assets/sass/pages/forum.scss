@@ -10,6 +10,30 @@
 @import "../components/search";
 @import "../components/who-is-online";
 
+.panel-forum2 {
+  .panel-body {
+    padding: 0;
+  }
+
+  .media {
+    padding: 10px 20px;
+    margin: 0;
+    border-bottom: 1px solid $border-color;
+    //padding-bottom: 15px;
+
+    &:nth-child(even) {
+      background-color: #fafafa;
+    }
+
+    &:last-child {
+      border-bottom: none;
+      //padding-bottom: 0;
+    }
+  }
+
+
+}
+
 #index {
   position: relative;
   margin-top: 20px;

@@ -1,5 +1,9 @@
 @charset "UTF-8";
 
+.panel-default {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07);
+}
+
 .box {
   > h4 {
     position: relative;
