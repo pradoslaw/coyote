@@ -131,6 +131,11 @@ body.fixed-top {
 
   padding-left: 10px;
   padding-right: 10px;
+
+  &:focus,
+  &:hover {
+    background-color: inherit;
+  }
 }
 
 .nav-mobile {
@@ -575,7 +580,7 @@ body.fixed-top {
 }
 
 /* Za malo miejsca w pionie, by wyswietlac przyklejony navbar */
-@media (min-aspect-ratio: 18/3) {
+@media screen and (max-width: $screen-sm) {
   /* zostawiamy navbar na gorze strony */
   .navbar-fixed-top {
     position: absolute;
