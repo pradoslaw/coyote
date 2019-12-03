@@ -22,8 +22,8 @@ body.fixed-top {
 }
 
 .navbar-dark {
-  --header-font-family: "Horatio", "Open Sans", Arial, sans-serif;
-  --header-font-size: 17px;
+  --header-font-family: "Open Sans", Arial, sans-serif;
+  --header-font-size: 13px;
   --header-navbar-bg: #454545;
   --header-color: #eee;
   --header-hover-color: #80a41a;
@@ -395,6 +395,10 @@ body.fixed-top {
     .input-group-btn button {
       color: var(--header-color);
     }
+  }
+
+  .nav-desktop > li > a {
+    font-weight: bold;
   }
 }
 
