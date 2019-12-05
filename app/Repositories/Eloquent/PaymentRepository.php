@@ -25,7 +25,7 @@ class PaymentRepository extends Repository implements PaymentRepositoryInterface
     {
         return $this
             ->model
-            ->select(['days', 'job_id', 'ends_at'])
+            ->select(['days', 'job_id', 'ends_at', 'plan_id'])
             ->where('ends_at', '>', Carbon::now())
             ->with(['job' => function (BelongsTo $builder) {
                 // shouldn't laravel do this for us? anyway, no deleted offers!
