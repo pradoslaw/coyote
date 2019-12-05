@@ -18,52 +18,85 @@
 
     {% include "forum.partials.top" %}
 
-    <main id="mainbar">
-        <h2 style="margin: 0 0 5px 0; font-size: 14px;">Podstawy programowania</h2>
+    <main id="mainbar" class="margin-sm-top">
+        <h2 style="margin: 0 0 10px 0; font-size: 14px; color: #646466; padding-left: 5px"><i class="fa fa-caret-down"></i> Podstawy programowania</h2>
 
-        <section class="panel panel-default panel-forum2">
-            <div class="panel-body">
-                {% for i in 1..2 %}
-                <div class="media" >
-                    <div class="media-left" style="vertical-align: middle">
-                        <i class="fa fa-2x fa-comment-o"></i>
-                    </div>
-
-                    <div class="media-body padding-xs-left">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <h3 class="media-heading" style="font-size: 15px"><a href="#">Algorytmy i struktury danych</a></h3>
-
-                                <p style="margin: 0">Dział zawierający nieco trudniejsze zagadnienia programistyczne. Tutaj można również dyskutować o algorytmach oraz strukturach danych.</p>
-                            </div>
-
-                            <div class="col-sm-2 text-right" style="font-size: 12px; vertical-align: middle">
-                                <span title="Liczba wątków" class="visible-lg-block"><strong>2 482</strong> <small class="text-muted">wątki</small></span>
-                                <span title="Liczba postów" class="visible-lg-block"><strong>14 348</strong> <small class="text-muted">postów</small></span>
-                            </div>
-
-                            <div class="col-sm-4" style="vertical-align: middle">
+        <section class="panel panel-default panel-categories">
+            {% for i in 1..1 %}
+                <div class="panel-body">
 
 
-                                <img src="/img/avatar.png" class="img-thumbnail pull-left margin-sm-right" style="width: 40px">
 
-                                <p style="margin: 1px">
-                                    <a rel="nofollow" title="Przejdź do pierwszego nieczytanego postu" class="btn-view " href="http://4p.local:8880/Forum/Newbie/49-iusto_quidem_sapiente_neque?view=unread"></a>
+                    <div class="row">
+                        <div class="col-lg-6 col-xs-12 col-sm-6">
+                            <h3 style="font-size: 120%; margin: 0 0 4px 0"><a href="#">Newbie</a></h3>
 
-                                    <a title="Iusto quidem sapiente neque." href="http://4p.local:8880/Forum/Newbie/49-iusto_quidem_sapiente_neque?p=197#id197">Iusto quidem sapiente neque.</a>
-                                </p>
-                                <p style="margin: 1px">
-                                    <span class="timestamp" data-timestamp="1574920475" title="2019-11-28 05:54">2019-11-28 05:54,</span>
+                            <p style="margin: 0" class="hidden-sm hidden-xs hidden-md">
+                                Tutaj możesz zadawać pytania o podstawy programowania, nie narażając się, że Twój temat zostanie skasowany z powodu niskiego poziomu merytorycznego.
+                            </p>
 
-                                    <a href="http://4p.local:8880/Profile/20" data-user-id="20">bald</a>
-                                </p>
+                            {#                            <p style="margin: 0" class="hidden-sm hidden-xs">Dział zawierający nieco trudniejsze zagadnienia programistyczne. Tutaj można również dyskutować o algorytmach oraz strukturach danych.</p>#}
+                        </div>
+
+                        <div class="col-lg-2 col-xs-12 col-sm-6 col-lg-stat">
+                            <div class="row">
+                                <div class="col-lg-12 col-xs-6 counter">
+                                    <strong>2 482</strong> <small class="text-muted text-wide-spacing">wątki</small>
+                                </div>
+
+                                <div class="col-lg-12 col-xs-6 counter">
+                                    <strong>14 348</strong> <small class="text-muted text-wide-spacing">postów</small>
+                                </div>
                             </div>
                         </div>
 
+                        <div class="col-lg-4 col-xs-12 col-sm-12">
+                            <div class="media">
+                                <div class="media-left hidden-xs">
+                                    <a href="https://4programmers.net/Profile/101450">
+                                        <img class="media-object img-thumbnail" src="https://4programmers.net/uploads/photo/5d/5d0bd98d38299.png" style="width: 38px; height: 38px;" alt="">
+                                    </a>
+                                </div>
+                                <div class="media-body">
+                                    <p style="margin-bottom: 2px"><a href="https://4programmers.net/Profile/101450">CoffeBreaker</a> w <a href="https://4programmers.net/Forum/Python/333531-drzewo_bst_z_laczem_do_rodzica_petla?p=1637396#id1637396">Drzewo BST z łączem do rodzica - pętla</a></p>
+                                    <small class="text-muted">1 minuta temu</small>
+
+                                    <div class="pull-right hidden-lg" style="color: #757575; font-size: 13px; border-left: 1px solid #ddd; padding-left: 10px; margin-left: 15px; margin-top: -9px;">
+                                        <i class="fa fa-check-square-o"></i>
+                                        <i class="fa fa-heart margin-sm-left"></i>
+                                        {#                                        <i class="fa fa-caret-up"></i>#}
+                                        {#                                        <i class="fa fa-caret-down"></i>#}
+                                    </div>
+
+                                    <ul class="tag-clouds tag-clouds-md pull-right hidden-lg">
+                                        <li>
+                                            <a href="https://4programmers.net/Praca/Technologia/c%23" title="Znajdź oferty zawierające c#"><img alt="c#" src="https://4programmers.net/uploads/logo/59/59f9f83fcd1ef.png">
+                                                C#
+                                            </a>
+                                        </li>
+
+                                        <li><a href="https://4programmers.net/Praca/Technologia/python" title="Znajdź oferty zawierające python"><img alt="python" src="https://4programmers.net/uploads/logo/59/59f9f8605fd1e.png">
+
+                                                Python
+                                            </a></li>
+                                    </ul>
+
+
+
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
+
+
+
+
+
                 </div>
-                {% endfor %}
-            </div>
+
+
+            {% endfor %}
         </section>
 
 
