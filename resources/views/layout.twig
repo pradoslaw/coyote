@@ -33,7 +33,8 @@
         {{ render_region('body') }}
 
         {% block body %}
-        {% import 'components.forms' as forms %}
+            {% import 'components.forms' as forms %}
+            {% import 'components.widgets' as widgets %}
 
         <div id="container-fluid">
             <header class="nav navbar-header {{ auth_guest() or user('allow_sticky_header') ? ' navbar-fixed-top' }} {{ __dark_theme ? 'navbar-dark' }}">
@@ -120,31 +121,11 @@
                                 </ul>
                             </div>
 
-                            <ul class="nav nav-auth navbar-nav pull-right">
-                                <li id="btn-alerts" class="btn-alerts">
-                                    <a href="{{ route('user.notifications') }}" data-url="{{ route('user.notifications.ajax') }}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        {% if user('notifications_unread') %}
-                                            <span class="badge">{{ user('notifications_unread') }}</span>
-                                        {% endif %}
+                            <ul id="nav-auth" class="nav nav-auth navbar-nav pull-right">
+{#                                <li id="btn-notifications" class="btn-alerts">#}
 
-                                        <i class="fas fa-bell fa-fw"></i>
-                                    </a>
-
-                                    <div id="dropdown-alerts" class="dropdown-alerts dropdown-menu right">
-                                        <div class="dropdown-header">
-                                            <a title="Przejdź do listy powiadomień" href="{{ route('user.notifications') }}">Powiadomienia</a>
-
-                                            <a id="btn-mark-read" title="Oznacz jako przeczytane" href="{{ route('user.notifications.mark') }}">
-                                                <i class="far fa-calendar-check"></i>
-                                            </a>
-                                        </div>
-                                        <div class="dropdown-modal">
-                                            <ul>
-
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </li>
+{#                                </li>#}
+{#                                <vue-notifications counter="{{ user('notification_unread') }}"></vue-notifications>#}
 
                                 <li id="btn-messages" class="btn-messages">
                                     <a href="{{ route('user.pm') }}" data-url="{{ route('user.pm.ajax') }}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -297,6 +278,8 @@
                 </div>
             </footer>
         </div>
+
+        {{ widgets.vue() }}
 
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
         <script src="{{ cdn('js/runtime.js') }}"></script>

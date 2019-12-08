@@ -9,7 +9,6 @@ import 'core-js/modules/es6.array.find-index';
 // JS's includes -- support for old browsers
 import 'core-js/modules/es7.array.includes';
 
-import {RealtimeFactory} from './libs/realtime.js';
 import './components/dropdown.js';
 import './components/scrolltop.js';
 import './components/breadcrumb.js';
@@ -19,6 +18,8 @@ import './components/date.js';
 import './components/vcard.js';
 import './components/popover.js';
 import './components/flag.js';
+import './components/notifications.js';
+import './components/pm.js';
 import './plugins/geo-ip';
 import './plugins/auto-complete';
 import './bootstrap';
@@ -29,10 +30,7 @@ import Prism from 'prismjs';
 
 Prism.highlightAll();
 
-window.ws = RealtimeFactory();
 
-import './components/notifications.js';
-import './components/pm.js';
 
 $(function () {
     'use strict';

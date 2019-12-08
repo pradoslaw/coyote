@@ -63,12 +63,12 @@ class Pm
     }
 }
 
-$(function() {
-    let pm = new Pm();
-
-    ws.on('pm', data => {
-        DesktopNotifications.doNotify(data.senderName, data.excerpt, '#top');
-
-        pm.set(pm.get() + 1);
-    });
-});
+// $(function() {
+//     let pm = new Pm();
+//
+//     ws.on('pm', data => {
+//         DesktopNotifications.doNotify(data.senderName, data.excerpt, '#top');
+//
+//         pm.set(pm.get() + 1);
+//     });
+// });

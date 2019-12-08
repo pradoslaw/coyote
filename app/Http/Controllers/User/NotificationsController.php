@@ -99,15 +99,10 @@ class NotificationsController extends BaseController
         // format notification's headline
         $notifications = array_filter(NotificationResource::collection($notifications)->toArray($this->request));
 
-        $view = view('user.notifications.ajax', [
-            'notifications'        => $notifications,
-            'session_created_at'   => $this->request->session()->get('created_at')
-        ]);
-
         return response()->json([
-            'html'      => $view->render(),
-            'unread'    => $unread,
-            'count'     => count($notifications)
+            'unread'            => $unread,
+            'notifications'     => $notifications,
+            'count'             => count($notifications)
         ]);
     }
 
