@@ -1,0 +1,13 @@
+version: '3.1'
+
+services:
+  db:
+    image: postgres:11-alpine
+    volumes:
+      - ./docker/postgres/postgresql.auto.conf:/var/lib/postgresql/data/postgresql.auto.conf
+
+  nginx:
+    ports:
+      - 80:80
+
+

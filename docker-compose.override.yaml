@@ -1,0 +1,22 @@
+version: '3.1'
+
+services:
+  db:
+    ports:
+      - 5432:5432
+
+  nginx:
+    ports:
+      - 8880:80
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - 8025:8025
+
+  selenium:
+    image: selenium/standalone-chrome:3.11.0-antimony
+    depends_on:
+      - nginx
+    volumes:
+      - /dev/shm:/dev/shm
