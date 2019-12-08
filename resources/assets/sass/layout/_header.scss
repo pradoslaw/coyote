@@ -80,30 +80,32 @@ body.fixed-top {
 // Glowne menu aplikacji. Po naprowadzeniu kursora myszy nad pozycja pokazujemy liste podmenu
 // ---------------------------------------------------------------------------------------
 
+%menu-link {
+  color: var(--header-color);
+  font-family: var(--header-font-family);
+  font-size: var(--header-font-size);
+  display: block;
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    color: var(--header-hover-color);
+    background-color: var(--header-active-bg);
+  }
+}
+
 .nav-desktop {
   // temporary arrow
   position: relative;
-
-  > .active > a {
-    &,
-    &:hover,
-    &:focus {
-      color: var(--header-hover-color);
-      background-color: var(--header-active-bg);
-    }
-  }
-
-  &:before {
-    position: absolute;
-    top: -5px;
-    left: 135px;
-    width: 20px;
-    height: 29px;
-    background: url('/img/arrow.png') no-repeat;
-    z-index: 100;
-  }
+  list-style-type: none;
+  float: left;
+  margin: 0;
+  padding: 0;
 
   > li {
+    display: inline-block;
+    position: relative;
+
     // show dropdown menu on hover
     &:hover .dropdown-menu {
       display: block;
@@ -111,36 +113,34 @@ body.fixed-top {
     }
 
     > a {
-      &:hover,
-      &:focus {
-        color: var(--header-hover-color);
-        background-color: var(--header-active-bg);
-      }
+      @extend %menu-link;
+
+      padding: 16px 10px;
     }
   }
-}
 
-// @todo ojoj, do refaktoryzacji
-.nav-desktop > li > a,
-.nav-mobile > li > a,
-.nav-mobile > li button,
-.nav-mobile > li form {
-  color: var(--header-color);
-  font-family: var(--header-font-family);
-  font-size: var(--header-font-size);
-
-  padding-left: 10px;
-  padding-right: 10px;
-
-  &:focus,
-  &:hover {
-    background-color: inherit;
+  &:before {
+    position: absolute;
+    content: '';
+    top: -5px;
+    left: 135px;
+    width: 20px;
+    height: 29px;
+    background: url('/img/arrow.png') no-repeat;
+    z-index: 100;
   }
 }
 
 .nav-mobile {
+  list-style-type: none;
   // usuniecie niepotrzebnego marginesu na urzadzeniach mobilnych
   margin-top: 0;
+
+  > li > a {
+    @extend %menu-link;
+
+    padding: 5px 0;
+  }
 
   .divider {
     @include nav-divider(darken($gray-lighter, 10%));
@@ -157,7 +157,7 @@ body.fixed-top {
   }
 }
 
-.navbar-header-search {
+.nav-search {
   background: url('/img/main-menu-separator.png') no-repeat 0 100%;
   padding-left: 20px;
   margin-left: 20px;
@@ -244,7 +244,7 @@ body.fixed-top {
 }
 
 .btn-register {
-  margin-left: 10px;
+  margin-left: 0;
   color: var(--header-color);
   border: 1px solid var(--header-color);
 
@@ -335,7 +335,6 @@ body.fixed-top {
 
   .divider {
     background-color: $gray-light;
-    margin: 8px;
   }
 
   .mega-menu {
@@ -381,7 +380,7 @@ body.fixed-top {
     }
   }
 
-  .navbar-header-search {
+  .nav-search {
     input {
       border: none;
       background-color: $gray-light;

@@ -52,7 +52,7 @@
                             <img id="logo" src="{{ cdn('img/logo-mobile.png') }}">
                         </a>
 
-                        <ul class="nav nav-desktop navbar-nav hidden-xs">
+                        <ul class="nav-desktop hidden-xs">
                             {% for item in __master_menu.roots() %}
                                 <li {{ forms.attr(item.attr) }}>
                                     <a href="{{ item.url }}">{{ item.title|raw }}</a>
@@ -72,7 +72,7 @@
                             {% endfor %}
                         </ul>
 
-                        <form action="{{ search_url|default(route('search')) }}" class="navbar-form navbar-header-search navbar-right hidden-sm hidden-xs" role="search">
+                        <form action="{{ search_url|default(route('search')) }}" class="navbar-form nav-search navbar-right hidden-sm hidden-xs" role="search">
                             <div class="form-group">
                                 <div class="input-group">
                                     <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}">
@@ -178,7 +178,7 @@
                     </div>
 
                     <div class="visible-xs">
-                        <ul class="collapse navbar-collapse nav navbar-nav nav-mobile">
+                        <ul class="collapse navbar-collapse nav-mobile">
                             {% for item in __master_menu.roots() %}
                                 <li {{ forms.attr(item.attr) }}>
                                     <a href="{{ item.url }}">{{ item.title|raw }}</a>
