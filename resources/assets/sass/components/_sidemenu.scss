@@ -1,6 +1,5 @@
 @charset "UTF-8";
 
-// @todo Do refaktoryzacji. Ikony CSS ustawiamy tutaj w pliku CSS ale lepiej to zrobic wprost w kodzie HTML
 .side-menu {
   margin: 0 0 30px 0;
   padding: 0;
@@ -15,7 +14,7 @@
       color: $gray-dark;
       cursor: pointer;
       display: block;
-      padding: 8px 0 8px 28px;
+      padding: 8px 0 8px 5px;
       text-shadow: 1px 1px #FFF;
       font-weight: bold;
       font-size: 12px;
@@ -43,10 +42,6 @@
       }
     }
 
-    &:before {
-      opacity: .8;
-    }
-
     &:last-child {
       border-bottom: none;
     }
@@ -54,21 +49,13 @@
     &:hover:before {
       opacity: 1;
     }
-
-    &:before {
-      font-family: FontAwesome;
-      position: absolute;
-      left: 3px;
-      top: 4px;
-      font-size: 17px;
-    }
   }
 
-  .on:hover {
-    i {
-      color: lighten($alt-link-hover-color, 5%);
-    }
-  }
+  //.on:hover {
+  //  i {
+  //    color: lighten($alt-link-hover-color, 5%);
+  //  }
+  //}
 }
 
 
@@ -76,25 +63,18 @@
 // ------------------------------------------------
 
 .btn-subscribe {
-  .fa-star-o {
-    display: inline-block;
-  }
-
-  .fa-star {
-    display: none;
-  }
-}
-
-.btn-subscribe.on {
-  .fa-star-o {
+  .fas.fa-star {
     display: none;
   }
 
-  .fa-star {
-    display: inline-block;
-  }
+  &.on {
+    .far.fa-star {
+      display: none;
+    }
 
-  i {
-    color: lighten($alt-link-hover-color, 5%);
+    .fas.fa-star {
+      display: inline-block;
+      color: lighten($alt-link-hover-color, 5%);
+    }
   }
 }

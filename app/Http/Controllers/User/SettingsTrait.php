@@ -36,13 +36,13 @@ trait SettingsTrait
             [
                 'id' => 'btn-favorites',
                 'route' => 'user.notifications.settings',
-                'icon' => 'fa-bell-o',
+                'icon' => 'fa-bell',
                 'label' => 'Ustawienia powiadomień'
             ],
             [
                 'id' => 'btn-profiles',
                 'route' => 'user.forum',
-                'icon' => 'fa-comments-o',
+                'icon' => 'fa-comments',
                 'label' => 'Personalizacja forum'
             ]
         ];

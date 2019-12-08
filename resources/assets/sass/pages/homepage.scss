@@ -1,6 +1,5 @@
 @charset "UTF-8";
-@import "../vendor/font-awesome/variables";
-@import "../vendor/bootstrap/variables";
+@import "~@fortawesome/fontawesome-free/scss/variables";
 @import "../helpers/mixins";
 @import "../helpers/variables";
 @import "../components/microblog";
@@ -255,7 +254,7 @@
       top: 8px;
 
       &:after {
-        font-family: FontAwesome;
+        font-family: 'Font Awesome 5 Free';
         display: block;
         margin-top: 1px;
         text-align: center;
@@ -268,19 +267,20 @@
     }
 
     span.microblog:after {
-      content: $fa-var-male;
+      content: fa-content($fa-var-male);
     }
 
     span.comment:after {
-      content: $fa-var-comments;
+      content: fa-content($fa-var-comments);
     }
 
     span.topic:after {
-      content: $fa-var-file-o;
+      content: fa-content($fa-var-file);
+      font-weight: 400;
     }
 
     span.post:after {
-      content: $fa-var-file-text;
+      content: fa-content($fa-var-file-alt);
     }
 
     @media screen and (max-width: $screen-sm) {

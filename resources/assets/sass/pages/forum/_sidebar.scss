@@ -55,66 +55,74 @@
   }
 }
 
-.btn-mark-read:before {
-  content: $fa-var-check-square-o;
-}
 
-.btn-atom:before {
-  content: $fa-var-rss-square;
-}
 
 .btn-back:before {
   content: $fa-var-undo;
 }
 
-.btn-diff:before {
-  content: $fa-var-random;
-}
 
 #btn-setting:before {
   content: $fa-var-cog;
 }
 
-#btn-log:before {
-  content: $fa-var-pie-chart;
-}
 
 #btn-edit-subject:before {
-  content: $fa-var-pencil;
+  content: $fa-var-pencil-alt;
 }
 
-#btn-lock:before {
-  content: $fa-var-lock;
-}
-
-#btn-lock.on:before {
-  content: $fa-var-unlock;
-}
-
-#btn-move:before {
-  content: $fa-var-arrow-circle-right;
-}
 
 #btn-status:before {
-  content: $fa-var-sticky-note-o;
+  content: $fa-var-sticky-note;
+  font-weight: 400;
 }
 
-.btn-watch:before {
-  content: $fa-var-star-o;
+#btn-lock {
+  .fa-unlock {
+    display: none;
+  }
+
+  &.on {
+    .fa-unlock {
+      display: inline;
+    }
+
+    .fa-lock {
+      display: none;
+    }
+  }
 }
 
-.btn-watch.on:before {
-  content: $fa-var-star;
-  color: lighten($alt-link-hover-color, 5%);
+.btn-watch {
+  .fas.fa-star {
+    display: none;
+  }
+
+  .far.fa-star {
+    display: inline-block;
+  }
+
+  &.on {
+    .fas.fa-star {
+      display: inline-block;
+      color: lighten($alt-link-hover-color, 5%);
+    }
+
+    .far.fa-star {
+      display: none;
+    }
+  }
+
+  a:active,
+  a:focus {
+    text-decoration: none;
+  }
+
+  small {
+    color: $gray-light;
+  }
 }
 
-.btn-watch a:active, a:focus {
-  text-decoration: none;
-}
-
-.btn-watch small {
-  color: $gray-light;
-}
 
 // Licznik watkow w danym dziale
 // ----------------------------------

@@ -6,9 +6,9 @@
 
     <div id="box-my-tags" class="box">
         <h4 class="border">
-            <i class="fa fa-tag fa-fw"></i> Moje tagi
+            <i class="fas fa-tag fa-fw"></i> Moje tagi
 
-            <a href="javascript:" class="btn btn-default btn-xs pull-right btn-settings"><i class="fa fa-cog"></i></a>
+            <a href="javascript:" class="btn btn-default btn-xs pull-right btn-settings"><i class="fas fa-cog"></i></a>
         </h4>
 
         {% if tags.user %}
@@ -34,7 +34,7 @@
     </div>
 
     <div id="box-popular-tags" class="box">
-        <h4 class="border"><i class="fa fa-tag fa-fw"></i> Popularne tagi</h4>
+        <h4 class="border"><i class="fas fa-tag fa-fw"></i> Popularne tagi</h4>
 
         {% include 'forum.partials.tags' with {'tags': tags.popular} %}
     </div>

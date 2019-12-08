@@ -1,7 +1,7 @@
 @charset "UTF-8";
 @import "../helpers/mixins";
 @import "../helpers/variables";
-@import "../vendor/font-awesome/variables";
+@import "~@fortawesome/fontawesome-free/scss/variables";
 @import "../vendor/bootstrap/variables";
 @import "../components/sidemenu";
 @import "../components/related";

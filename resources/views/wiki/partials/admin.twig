@@ -1,28 +1,28 @@
 {% if can('wiki-admin') %}
     {% if not wiki.deleted_at %}
         <li>
-            <a href="#modal-delete" data-toggle="modal"><i class="fa fa-fw fa-remove"></i> Usuń stronę</a>
+            <a href="#modal-delete" data-toggle="modal"><i class="fas fa-fw fa-times"></i> Usuń stronę</a>
         </li>
         {% if categories|length > 1 %}
             <li>
-                <a href="#modal-unlink" data-toggle="modal" title="Artykuł nie zostanie usunięty, a jedynie jego kopia"><i class="fa fa-fw fa-chain-broken"></i> Usuń tylko tę kopię strony</a>
+                <a href="#modal-unlink" data-toggle="modal" title="Artykuł nie zostanie usunięty, a jedynie jego kopia"><i class="fas fa-fw fa-chain-broken"></i> Usuń tylko tę kopię strony</a>
             </li>
         {% endif %}
         <li>
-            <a href="{{ route('wiki.purge', [wiki.id]) }}"><i class="fa fa-fw fa-trash-o"></i> Usuń cache</a>
+            <a href="{{ route('wiki.purge', [wiki.id]) }}"><i class="far fa-fw fa-trash-alt"></i> Usuń cache</a>
         </li>
         <li>
-            <a href="{{ route('wiki.clone', [wiki.id]) }}"><i class="fa fa-fw fa-clone"></i> Utwórz kopię</a>
+            <a href="{{ route('wiki.clone', [wiki.id]) }}"><i class="far fa-fw fa-clone"></i> Utwórz kopię</a>
         </li>
         <li>
-            <a href="{{ route('wiki.move', [wiki.id]) }}"><i class="fa fa-fw fa-arrows"></i> Przenieś stronę</a>
+            <a href="{{ route('wiki.move', [wiki.id]) }}"><i class="fas fa-fw fa-arrow-alt-circle-right"></i> Przenieś stronę</a>
         </li>
         <li>
-            <a href="{{ route('wiki.submit') }}?parentId={{ wiki.id }}"><i class="fa fa-fw fa-plus"></i> Utwórz podstronę</a>
+            <a href="{{ route('wiki.submit') }}?parentId={{ wiki.id }}"><i class="fas fa-fw fa-plus"></i> Utwórz podstronę</a>
         </li>
     {% else %}
         <li>
-            <a href="#modal-restore" data-toggle="modal"><i class="fa fa-fw fa-rotate-left"></i> Przywróć usuniętą wersję</a>
+            <a href="#modal-restore" data-toggle="modal"><i class="fas fa-fw fa-undo"></i> Przywróć usuniętą wersję</a>
         </li>
     {% endif %}
 {% endif %}

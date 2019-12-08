@@ -11,7 +11,7 @@
 
                 <p>
                     {% if item.folder == constant('Coyote\\Pm::SENTBOX') %}
-                        {{ item.read_at ? '<i class="fa fa-check" style="font-size: 10px"></i> '|raw : 'Ty: ' }}
+                        {{ item.read_at ? '<i class="fas fa-check" style="font-size: 10px"></i> '|raw : 'Ty: ' }}
                     {% endif %}
 
                     {{ excerpt(item.text, 50)|default('(kliknij, aby przeczytać)') }}

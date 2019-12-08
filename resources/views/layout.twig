@@ -79,7 +79,7 @@
 
                                     <span class="input-group-btn">
                                         <button class="btn btn-link">
-                                            <i class="fa fa-search"></i>
+                                            <i class="fas fa-search"></i>
                                         </button>
                                     </span>
                                 </div>
@@ -95,13 +95,13 @@
                                 <ul class="dropdown-menu right">
                                     <li><a class="profile-name" href="{{ route('user.home') }}">{{ user('name')  }}</a></li>
                                     <li class="divider"></li>
-                                    <li><a href="{{ route('user.pm') }}"><i class="fa fa-envelope fa-fw"></i> Wiadomości</a></li>
-                                    <li><a href="{{ route('user.settings') }}"><i class="fa fa-cog fa-fw"></i> Ustawienia</a></li>
-                                    <li><a href="{{ route('profile', [user('id')]) }}"><i class="fa fa-user fa-fw"></i> Profil</a></li>
-                                    <li><a href="{{ url('Pomoc') }}"><i class="fa fa-info-circle fa-fw"></i> Pomoc</a></li>
+                                    <li><a href="{{ route('user.pm') }}"><i class="fas fa-envelope fa-fw"></i> Wiadomości</a></li>
+                                    <li><a href="{{ route('user.settings') }}"><i class="fas fa-cog fa-fw"></i> Ustawienia</a></li>
+                                    <li><a href="{{ route('profile', [user('id')]) }}"><i class="fas fa-user fa-fw"></i> Profil</a></li>
+                                    <li><a href="{{ url('Pomoc') }}"><i class="fas fa-info-circle fa-fw"></i> Pomoc</a></li>
 
                                     {% if can('adm-access') %}
-                                        <li><a href="{{ route('adm.home') }}"><i class="fa fa-user-secret fa-fw"></i> Panel administracyjny</a></li>
+                                        <li><a href="{{ route('adm.home') }}"><i class="fas fa-user-secret fa-fw"></i> Panel administracyjny</a></li>
                                     {% endif %}
 
                                     <li class="divider"></li>
@@ -114,7 +114,7 @@
 
                                     <li>
                                         {{ form_open({url: route('logout')}) }}
-                                            <button type="submit" class="btn-sign-out"><i class="fa fa-sign-out fa-fw"></i> Wyloguj</button>
+                                            <button type="submit" class="btn-sign-out"><i class="fas fa-sign-out-alt fa-fw"></i> Wyloguj</button>
                                         {{ form_close() }}
                                     </li>
                                 </ul>
@@ -127,7 +127,7 @@
                                             <span class="badge">{{ user('notifications_unread') }}</span>
                                         {% endif %}
 
-                                        <i class="fa fa-bell fa-fw"></i>
+                                        <i class="fas fa-bell fa-fw"></i>
                                     </a>
 
                                     <div id="dropdown-alerts" class="dropdown-alerts dropdown-menu right">
@@ -135,7 +135,7 @@
                                             <a title="Przejdź do listy powiadomień" href="{{ route('user.notifications') }}">Powiadomienia</a>
 
                                             <a id="btn-mark-read" title="Oznacz jako przeczytane" href="{{ route('user.notifications.mark') }}">
-                                                <i class="fa fa-calendar-check-o"></i>
+                                                <i class="far fa-calendar-check"></i>
                                             </a>
                                         </div>
                                         <div class="dropdown-modal">
@@ -152,7 +152,7 @@
                                             <span class="badge">{{ user('pm_unread') }}</span>
                                         {% endif %}
 
-                                        <i class="fa fa-envelope fa-fw"></i>
+                                        <i class="fas fa-envelope fa-fw"></i>
                                     </a>
 
                                     <div id="dropdown-messages" class="dropdown-menu dropdown-messages right">
@@ -165,14 +165,14 @@
                                         </div>
                                         <div class="dropdown-modal">
                                             <ul>
-                                                <li><i class="fa fa-spin fa-spinner"></i></li>
+                                                <li><i class="fas fa-spin fa-spinner"></i></li>
                                             </ul>
                                         </div>
                                     </div>
                                 </li>
                             </ul>
                         {% else %}
-                            <a class="btn btn-sm navbar-right navbar-btn btn-register hidden-xs" href="{{ route('register') }}"><i class="fa fa-sign-in"></i> Utwórz konto</a>
+                            <a class="btn btn-sm navbar-right navbar-btn btn-register hidden-xs" href="{{ route('register') }}"><i class="fas fa-sign-in"></i> Utwórz konto</a>
                             <a class="btn-sm navbar-right navbar-btn btn-login hidden-xs" href="{{ route('login') }}">Logowanie</a>
                         {% endif %}
                     </div>
@@ -188,11 +188,11 @@
                             <li class="divider"></li>
 
                             {% if auth_check() %}
-                                <li><a href="{{ route('user.settings') }}"><i class="fa fa-cog fa-fw"></i> Ustawienia</a></li>
-                                <li><a href="{{ route('profile', [user('id')]) }}"><i class="fa fa-user fa-fw"></i> Profil</a></li>
+                                <li><a href="{{ route('user.settings') }}"><i class="fas fa-cog fa-fw"></i> Ustawienia</a></li>
+                                <li><a href="{{ route('profile', [user('id')]) }}"><i class="fas fa-user fa-fw"></i> Profil</a></li>
 
                                 {% if can('adm-access') %}
-                                    <li><a href="{{ route('adm.home') }}"><i class="fa fa-user-secret fa-fw"></i> Panel administracyjny</a></li>
+                                    <li><a href="{{ route('adm.home') }}"><i class="fas fa-user-secret fa-fw"></i> Panel administracyjny</a></li>
                                 {% endif %}
 
                                 <li class="divider"></li>
@@ -205,13 +205,13 @@
 
                                 <li>
                                     {{ form_open({url: route('logout')}) }}
-                                        <button type="submit" class="btn-sign-out"><i class="fa fa-sign-out fa-fw"></i> Wyloguj</button>
+                                        <button type="submit" class="btn-sign-out"><i class="fas fa-sign-out-alt fa-fw"></i> Wyloguj</button>
                                     {{ form_close() }}
                                 </li>
                             {% else %}
                                 <li class="row">
                                     <div class="col-xs-6">
-                                        <a class="btn btn-register btn-xs" href="{{ route('register') }}"><i class="fa fa-sign-in"></i> Utwórz konto</a>
+                                        <a class="btn btn-register btn-xs" href="{{ route('register') }}"><i class="fas fa-sign-in"></i> Utwórz konto</a>
                                     </div>
                                     <div class="col-xs-6">
                                         <a class="btn-login btn-xs visible-xs-block text-center" href="{{ route('login') }}">Logowanie</a>
@@ -242,7 +242,7 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="alert alert-success margin-md-top">
-                                        <i class="fa fa-check"></i>
+                                        <i class="fas fa-check"></i>
 
                                         {{ session_get('success') }}
                                     </div>
@@ -254,7 +254,7 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="alert alert-danger margin-md-top">
-                                        <i class="fa fa-exclamation-triangle"></i>
+                                        <i class="fas fa-exclamation-triangle"></i>
 
                                         {{ session_get('error') }}
                                     </div>
@@ -283,7 +283,7 @@
                 <div id="footer-inner">
                     {{ render_block('footer') }}
 
-                    <a href="#top" class="back-to-top" title="Powrót na górę"><i class="fa fa-angle-up"></i></a>
+                    <a href="#top" class="back-to-top" title="Powrót na górę"><i class="fas fa-angle-up"></i></a>
                 </div>
 
                 <div id="footer-copyright">

@@ -18,13 +18,13 @@ trait HomeTrait
             [
                 'id' => 'btn-notifies',
                 'route' => 'user.notifications',
-                'icon' => 'fa-bell-o',
+                'icon' => 'fa-bell',
                 'label' => 'Powiadomienia'
             ],
             [
                 'id' => 'btn-pm',
                 'route' => 'user.pm',
-                'icon' => 'fa-envelope-o',
+                'icon' => 'fa-envelope',
                 'label' => 'Wiadomości prywatne'
             ],
             [
@@ -42,7 +42,7 @@ trait HomeTrait
             [
                 'id' => 'btn-stats',
                 'route' => 'user.stats',
-                'icon' => 'fa-area-chart',
+                'icon' => 'fa-chart-bar',
                 'label' => 'Statystyki moich postów'
             ],
             [
@@ -54,7 +54,7 @@ trait HomeTrait
             [
                 'id' => 'btn-remove',
                 'route' => 'user.delete',
-                'icon' => 'fa-remove',
+                'icon' => 'fa-times',
                 'label' => 'Usuń konto'
             ]
         ];

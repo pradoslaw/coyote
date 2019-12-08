@@ -1,6 +1,6 @@
 <template>
     <div v-if="remote.enabled || locations.length > 0" class="location">
-        <i class="fa fa-map-marker"></i>
+        <i class="fas fa-map-marker-alt"></i>
 
         <ul>
             <li v-for="location in locations">

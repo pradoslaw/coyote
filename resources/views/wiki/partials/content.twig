@@ -26,21 +26,21 @@
                 {% block metadata %}
                     <ul class="metadata list-inline">
                         <li title="Data opublikowania" class="date" itemprop="datePublished" content="{{ wiki.created_at|iso_8601 }}">
-                            <i class="fa fa-calendar"></i>
+                            <i class="far fa-calendar-alt"></i>
                             {{ wiki.created_at }}
                         </li>
                         <li title="Data ostatniej zmiany" class="edit-date" itemprop="dateModified" content="{{ wiki.updated_at|iso_8601 }}">
-                            <i class="fa fa-calendar-o"></i>
+                            <i class="far fa-calendar"></i>
                             {{ wiki.updated_at }}
                         </li>
                         <li class="comment">
                             <a href="#box-comment" title="Zobacz komentarze" itemprop="interactionCount" value="UserComments:{{ wiki.comments|length }}">
-                                <i class="fa fa-comments"></i>
+                                <i class="fas fa-comments"></i>
                                 {{ declination(wiki.comments|length, ['komentarz', 'komentarze', 'komentarzy']) }}
                             </a>
                         </li>
                         <li class="counter" itemprop="interactionCount" value="UserPageVisits:{{ wiki.views }}">
-                            <i class="fa fa-eye"></i>
+                            <i class="far fa-eye"></i>
                             {{ declination(wiki.views, ['odsłona', 'odsłony', 'odsłon']) }}
                         </li>
                     </ul>

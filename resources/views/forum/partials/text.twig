@@ -4,7 +4,7 @@
     <ul class="list-unstyled list-attachments">
         {% for attachment in post.attachments %}
             <li>
-                <i class="fa fa-download"></i>
+                <i class="fas fa-download"></i>
 
                 <a href="{{ route('forum.download', [attachment.id]) }}">{{ attachment.name }}</a>
                 <small>({{ (attachment.size / 1024 / 1024)|round(2) }} MB) - <em>ściągnięć: {{ attachment.count }}</em></small>

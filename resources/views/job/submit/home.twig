@@ -68,8 +68,8 @@
                                 <div class="col-sm-12">
                                     <div class="input-group">
                                         <div class="input-group-addon">
-                                            <a href="javascript:" @click="addLocation"><i class="fa fa-fw fa-plus-circle"></i></a>
-                                            <a href="javascript:" @click="removeLocation(location)" v-if="job.locations.length > 1"><i class="fa fa-fw fa-minus-circle text-danger"></i></a>
+                                            <a href="javascript:" @click="addLocation"><i class="fas fa-fw fa-plus-circle"></i></a>
+                                            <a href="javascript:" @click="removeLocation(location)" v-if="job.locations.length > 1"><i class="fas fa-fw fa-minus-circle text-danger"></i></a>
                                         </div>
 
                                         <input type="hidden" :name="'locations[' + index + '][longitude]'" :value="location.longitude">
@@ -169,7 +169,7 @@
                                 <li class="list-group-item col-md-12 col-lg-6" v-for="(feature, index) in job.features" :class="{checked: feature.pivot.checked}">
                                     <div class="form-group">
                                         <div class="col-xs-7 control-label" @click="toggleFeature(feature)">
-                                            <i class="fa fa-fw " :class="{'fa-check': feature.pivot.checked, 'fa-remove': !feature.pivot.checked}"></i>
+                                            <i class="fas fa-fw " :class="{'fa-check': feature.pivot.checked, 'fa-times': !feature.pivot.checked}"></i>
 
                                             ${ feature.name }
                                         </div>
@@ -232,12 +232,12 @@
                             <div class="row max-width">
                                 <div class="col-12-md" :class="{'col-lg-9': showFormNavbar}">
                                     <vue-button :disabled="isSubmitting" type="submit" class="btn btn-primary pull-right">
-                                        Informacje o firmie <i class="fa fa-angle-right"></i>
+                                        Informacje o firmie <i class="fas fa-angle-right"></i>
                                     </vue-button>
 
                                     {% if not firm.is_private and firm.name %}
                                         <vue-button :disabled="isSubmitting" type="submit" class="btn btn-danger pull-right btn-save margin-sm-right" title="Zapisz tę ofertę" @click.native="isDone = 1">
-                                            <i class="fa fa-save"></i> Zapisz jako {{ firm.name[:38] }}
+                                            <i class="fas fa-save"></i> Zapisz jako {{ firm.name[:38] }}
                                         </vue-button>
                                     {% endif %}
                                 </div>
@@ -261,10 +261,10 @@
 
                     <h4 class="margin-md-top">Możliwe opcje promowania oferty pracy</h4>
 
-                    <p><i class="fa fa-check fa-fw"></i> Ogłoszenie wyświetlane nad tymi darmowymi.</p>
-                    <p><i class="fa fa-check fa-fw"></i> Reklama na stronie głównej oraz forum.</p>
-                    <p><i class="fa fa-check fa-fw"></i> Podświetlenie oferty.</p>
-                    <p><i class="fa fa-check fa-fw"></i> 3x podbicie oferty.</p>
+                    <p><i class="fas fa-check fa-fw"></i> Ogłoszenie wyświetlane nad tymi darmowymi.</p>
+                    <p><i class="fas fa-check fa-fw"></i> Reklama na stronie głównej oraz forum.</p>
+                    <p><i class="fas fa-check fa-fw"></i> Podświetlenie oferty.</p>
+                    <p><i class="fas fa-check fa-fw"></i> 3x podbicie oferty.</p>
 
                     <h4 class="margin-md-top">Formy płatności</h4>
 

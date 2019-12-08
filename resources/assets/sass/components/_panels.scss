@@ -91,23 +91,24 @@
 
     &:after {
       position: absolute;
-      font-family: FontAwesome;
+      font-family: 'Font Awesome 5 Free';
       right: 9px;
       font-size: 14px;
+      font-weight: 900;
     }
   }
 
   .asc {
     &:after {
-      content: $fa-var-sort-asc;
-      top: 6px;
+      content: fa-content($fa-var-sort-down);
+      top: 2px;
     }
   }
 
   .desc {
     &:after {
-      content: $fa-var-sort-desc;
-      top: 0;
+      content: fa-content($fa-var-sort-up);
+      top: 7px;
     }
   }
 }

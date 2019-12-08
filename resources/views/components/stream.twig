@@ -14,13 +14,13 @@
             </li>
 
             <li class="text-muted" title="{{ activity.ip }}">
-                <i class="fa fa-fw fa-laptop bubble" title="{{ activity.ip }}"></i>
+                <i class="fas fa-fw fa-laptop bubble" title="{{ activity.ip }}"></i>
                 <a title="Kliknij, aby wyszukać" class="bubble" href="{{ route('adm.stream', {ip: activity.ip}) }}">{{ activity.ip }}</a>
             </li>
 
             {% if activity.browser %}
                 <li class="text-muted" title="{{ activity.browser }}">
-                    <i class="fa fa-fw fa-globe bubble" title="{{ activity.browser }}"></i>
+                    <i class="fas fa-fw fa-globe bubble" title="{{ activity.browser }}"></i>
 
                     <a title="Kliknij, aby wyszukać" class="bubble" href="{{ route('adm.stream', {browser: activity.browser}) }}">{{ activity.agent.browser }}, {{ activity.agent.platform }}</a>
                 </li>
@@ -28,7 +28,7 @@
 
             {% if activity.fingerprint %}
                 <li class="text-muted">
-                    <i class="fa fa-fw fa-info bubble" title="{{ activity.fingerprint }}"></i>
+                    <i class="fas fa-fw fa-info bubble" title="{{ activity.fingerprint }}"></i>
 
                     <a title="Kliknij, aby wyszukać" class="bubble" href="{{ route('adm.stream', {fingerprint: activity.fingerprint}) }}">{{ activity.fingerprint[0:2] }} ... {{ activity.fingerprint[-2:2] }}</a>
                 </li>

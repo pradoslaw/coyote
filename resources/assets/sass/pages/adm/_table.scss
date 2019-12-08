@@ -13,7 +13,7 @@
   }
 
   &:before {
-    font-family: FontAwesome;
+    font-family: 'Font Awesome 5 Free';
     float: right;
     content: $fa-var-sort;
   }
@@ -21,13 +21,13 @@
 
 .table th a.sort.asc {
   &:before {
-    content: $fa-var-sort-asc;
+    content: $fa-var-sort-down;
   }
 }
 
 .table th a.sort.desc {
   &:before {
-    content: $fa-var-sort-desc;
+    content: $fa-var-sort-up;
   }
 }
 

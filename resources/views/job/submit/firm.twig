@@ -63,10 +63,10 @@
                             </div>
 
                             <div class="form-group" v-show="isPrivate == 1">
-                                <a href="{{ route('job.submit') }}" class="btn btn-default pull-left"><i class="fa fa-angle-left"></i> Podstawowe informacje</a>
+                                <a href="{{ route('job.submit') }}" class="btn btn-default pull-left"><i class="fas fa-angle-left"></i> Podstawowe informacje</a>
 
-                                <vue-button type="submit" :disabled="isSubmitting" class="btn btn-primary pull-right">Podgląd <i class="fa fa-angle-right"></i></vue-button>
-                                <vue-button type="submit" :disabled="isSubmitting" class="btn btn-danger pull-right btn-save margin-sm-right" @click.native="isDone = 1"><i class="fa fa-save"></i> Zapisz i zakończ</vue-button>
+                                <vue-button type="submit" :disabled="isSubmitting" class="btn btn-primary pull-right">Podgląd <i class="fas fa-angle-right"></i></vue-button>
+                                <vue-button type="submit" :disabled="isSubmitting" class="btn btn-danger pull-right btn-save margin-sm-right" @click.native="isDone = 1"><i class="fas fa-save"></i> Zapisz i zakończ</vue-button>
                             </div>
                         </div>
 
@@ -101,7 +101,7 @@
                                     <vue-text name="name" :value.sync="firm.name"></vue-text>
 
                                     <div class="input-group-addon">
-                                        <a href="javascript:" @click="addFirm" title="Dodaj nową firmę"><i class="fa fa-plus"></i></a>
+                                        <a href="javascript:" @click="addFirm" title="Dodaj nową firmę"><i class="fas fa-plus"></i></a>
                                     </div>
                                 </div>
 
@@ -250,20 +250,20 @@
                                 <ol class="benefits list-group">
 
                                     <li class="list-group-item col-sm-6 clickable" v-for="benefit in default_benefits" :class="{checked: firm.benefits.indexOf(benefit) > -1}" @click="toggleBenefit(benefit)">
-                                        <i class="fa fa-fw " :class="{'fa-check': firm.benefits.indexOf(benefit) > -1, 'fa-remove': firm.benefits.indexOf(benefit) === -1}"></i> ${ benefit }
+                                        <i class="fas fa-fw " :class="{'fa-check': firm.benefits.indexOf(benefit) > -1, 'fa-times': firm.benefits.indexOf(benefit) === -1}"></i> ${ benefit }
 
                                         <input type="checkbox" name="benefits[]" :value="benefit" :checked="firm.benefits.indexOf(benefit) > -1">
                                     </li>
 
                                     <li class="list-group-item col-xs-6 checked" v-for="benefit in firm.benefits" v-if="default_benefits.indexOf(benefit) === -1">
-                                        <i class="fa fa-fw fa-check"></i>
+                                        <i class="fas fa-fw fa-check"></i>
 
                                         <input type="text" name="benefits[]" :value="benefit" class="form-control input-sm" @keydown.enter.prevent="">
-                                        <button class="btn btn-default btn-xs btn-delete" title="Usuń tę pozycję" @click.prevent="removeBenefit(benefit)"><i class="fa fa-minus-circle text-danger"></i></button>
+                                        <button class="btn btn-default btn-xs btn-delete" title="Usuń tę pozycję" @click.prevent="removeBenefit(benefit)"><i class="fas fa-minus-circle text-danger"></i></button>
                                     </li>
 
                                     <li class="list-group-item col-xs-6 checked">
-                                        <i class="fa fa-fw fa-check"></i>
+                                        <i class="fas fa-fw fa-check"></i>
                                         <input type="text" name="benefits[]" class="form-control input-sm" @keydown.enter.prevent="addBenefit" placeholder="Naciśnij Enter, aby dodać">
                                     </li>
                                 </ol>
@@ -274,10 +274,10 @@
                             <div id="form-navbar" :class="{'fixed': showFormNavbar}">
                                 <div class="row max-width">
                                     <div class="col-12-md" :class="{'col-lg-9': showFormNavbar}">
-                                        <a href="{{ route('job.submit') }}" class="btn btn-default pull-left"><i class="fa fa-angle-left"></i> Podstawowe informacje</a>
+                                        <a href="{{ route('job.submit') }}" class="btn btn-default pull-left"><i class="fas fa-angle-left"></i> Podstawowe informacje</a>
 
-                                        <vue-button type="submit" :disabled="isSubmitting" class="btn btn-primary pull-right">Podgląd <i class="fa fa-angle-right"></i></vue-button>
-                                        <vue-button type="submit" :disabled="isSubmitting" class="btn btn-danger pull-right btn-save margin-sm-right" @click.native="isDone = 1"><i class="fa fa-save"></i> Zapisz i zakończ</vue-button>
+                                        <vue-button type="submit" :disabled="isSubmitting" class="btn btn-primary pull-right">Podgląd <i class="fas fa-angle-right"></i></vue-button>
+                                        <vue-button type="submit" :disabled="isSubmitting" class="btn btn-danger pull-right btn-save margin-sm-right" @click.native="isDone = 1"><i class="fas fa-save"></i> Zapisz i zakończ</vue-button>
                                     </div>
                                 </div>
                             </div>

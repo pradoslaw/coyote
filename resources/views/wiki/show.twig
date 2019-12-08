@@ -10,7 +10,7 @@
 
             {% if categories|length > 0 %}
                 <div class="wiki-categories">
-                    <i class="fa fa-folder-open text-warning"></i>
+                    <i class="fas fa-folder-open text-warning"></i>
 
                     {% for category in categories %}
                         <a class="btn btn-sm btn-warning" title="Strona znajduje się w kategorii: {{ category.title }}" href="{{ url(category.path) }}">{{ category.title }}</a>
@@ -35,28 +35,28 @@
                 <li>
                     {% set labels = ['Usuń z ulubionych', 'Dodaj do ulubionych'] %}
                     <a class="btn-subscribe {{ subscribed ? 'on' }}" href="{{ route('wiki.subscribe', [wiki.id]) }}" data-off="{{ labels[0] }}" data-on="{{ labels[1] }}" title="Obserwując tę stronę będziesz otrzymywał powiadomienia o jej zmianach">
-                        <i class="fa fa-fw fa-star-o"></i>
-                        <i class="fa fa-fw fa-star"></i>
+                        <i class="fas fa-fw fa-star"></i>
+                        <i class="far fa-fw fa-star"></i>
 
                         <span>{{ labels[not subscribed] }}</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('wiki.log', [wiki.id]) }}"><i class="fa fa-fw fa-history"></i> Historia i autorzy</a>
+                    <a href="{{ route('wiki.log', [wiki.id]) }}"><i class="fas fa-fw fa-history"></i> Historia i autorzy</a>
                 </li>
 
                 {% include 'wiki.partials.admin' %}
 
                 {% if auth_check() %}
                     <li>
-                        <a class="btn-report" href="{{ route('flag') }}" data-url="/{{ wiki.path }}" data-metadata="{{ {'wiki_id': wiki.id, 'permission': 'wiki-admin'}|encrypt }}"><i class="fa fa-fw fa-flag"></i> Zgłoś naruszenie</a>
+                        <a class="btn-report" href="{{ route('flag') }}" data-url="/{{ wiki.path }}" data-metadata="{{ {'wiki_id': wiki.id, 'permission': 'wiki-admin'}|encrypt }}"><i class="fas fa-fw fa-flag"></i> Zgłoś naruszenie</a>
                     </li>
                 {% endif %}
             </ul>
 
             {% if author.bio %}
                 <section id="box-author" class="box">
-                    <h4 class="border"><i class="fa fa-male fa-fw"></i> O autorze</h4>
+                    <h4 class="border"><i class="fas fa-male fa-fw"></i> O autorze</h4>
 
                     <div class="media">
                         <div class="media-left">
@@ -75,7 +75,7 @@
 
             {% if authors|length > 0 %}
                 <section id="box-authors" class="box">
-                    <h4 class="border"><i class="fa fa-users fa-fw"></i> Stronę współtworzą</h4>
+                    <h4 class="border"><i class="fas fa-users fa-fw"></i> Stronę współtworzą</h4>
 
                     <ul>
                         {% for author in authors %}

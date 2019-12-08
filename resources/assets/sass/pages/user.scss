@@ -4,7 +4,7 @@
 @import "../helpers/mixins";
 @import "../components/sidemenu";
 @import "../components/metadata";
-@import "../vendor/font-awesome/variables";
+@import "~@fortawesome/fontawesome-free/scss/variables";
 
 #user-nav-tabs {
   margin: 20px 0;
@@ -303,8 +303,9 @@
     width: 1.28571429em;
 
     &:before {
-      font-family: FontAwesome;
-      content: $fa-var-star-o;
+      font-family: 'Font Awesome 5 Free';
+      content: $fa-var-star;
+      font-weight: 400;
     }
 
     &:hover {

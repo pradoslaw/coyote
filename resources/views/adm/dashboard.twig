@@ -9,9 +9,9 @@
                 {% for label, checked in checklist %}
                     <li class="list-group-item">
                         {% if checked %}
-                            <i class="fa fa-check text-success fa-fw"></i>
+                            <i class="fas fa-check text-success fa-fw"></i>
                         {% else %}
-                            <i class="fa fa-remove text-danger fa-fw"></i>
+                            <i class="fas fa-times text-danger fa-fw"></i>
                         {% endif %}
 
                         <span>{{ label|raw }}</span>

@@ -24,7 +24,7 @@
 
                 <ul class="metadata list-inline location">
                     <li title="Lokalizacja">
-                        <i class="fa fa-map-marker"></i>
+                        <i class="fas fa-map-marker-alt"></i>
 
                         {% include 'job.partials.location' with {'locations': job.locations} %}
                     </li>
@@ -33,7 +33,7 @@
 
             <ul class="about-items list-group row">
                 <li class="list-group-item col-sm-6">
-                    <i class="fa fa-fw fa-handshake-o"></i>
+                    <i class="far fa-fw fa-handshake"></i>
 
                     <p>
                         <strong>{{ employment_list[job.employment] }}</strong>
@@ -43,7 +43,7 @@
 
                 {% if job.seniority %}
                     <li class="list-group-item col-sm-6">
-                        <i class="fa fa-fw fa-area-chart"></i>
+                        <i class="fas fa-fw fa-chart-line"></i>
 
                         <p>
                             <strong>{{ seniority_list[job.seniority] }}</strong>
@@ -54,7 +54,7 @@
 
                 {% if job.firm.employees %}
                     <li class="list-group-item col-sm-6">
-                        <i class="fa fa-fw fa-users fa-fw"></i>
+                        <i class="fas fa-fw fa-users fa-fw"></i>
 
                         <p>
                             <strong>{{ employees_list[job.firm.employees] }} pracowników</strong>
@@ -65,7 +65,7 @@
 
                 {% if job.firm.industries|length > 0 %}
                     <li class="list-group-item col-sm-6">
-                        <i class="fa fa-industry fa-fw"></i>
+                        <i class="fas fa-industry fa-fw"></i>
 
                         <p>
                             <strong>{{ job.firm.industries.pluck('name')|join(', ') }}</strong>
@@ -76,7 +76,7 @@
 
                 {% if job.firm.founded %}
                     <li class="list-group-item col-sm-6">
-                        <i class="fa fa-calendar-o fa-fw"></i>
+                        <i class="far fa-calendar fa-fw"></i>
 
                         <p>
                             <strong>{{ job.firm.founded }}</strong>
@@ -87,7 +87,7 @@
 
                 {% if job.firm.website %}
                     <li class="list-group-item col-sm-6">
-                        <i class="fa fa-link fa-fw"></i>
+                        <i class="fas fa-link fa-fw"></i>
 
                         <p>
                             <strong><a href="{{ job.firm.website }}">{{ job.firm.website }}</a></strong>
@@ -114,12 +114,12 @@
                                             {% set tooltip = ['mile widziane', 'średnio zaawansowany', 'zaawansowany'][tag.pivot.priority] %}
 
                                             {% for i in 0..tag.pivot.priority %}
-                                                <i class="fa fa-circle text-primary" title="{{ tooltip }}"></i>
+                                                <i class="fas fa-circle text-primary" title="{{ tooltip }}"></i>
                                             {% endfor %}
 
                                             {% if tag.pivot.priority < 2 %}
                                                 {% for i in 0..max(0, 1 - tag.pivot.priority) %}
-                                                    <i class="fa fa-circle text-muted" title="{{ tooltip }}"></i>
+                                                    <i class="fas fa-circle text-muted" title="{{ tooltip }}"></i>
                                                 {% endfor %}
                                             {% endif %}
                                         </li>
@@ -148,7 +148,7 @@
                     <ul class="features list-group row">
                         {% for feature in job.features %}
                             <li class="list-group-item col-xs-12 col-sm-6 {{ feature.pivot.checked ? 'checked' }}">
-                                <i class="fa fa-fw {{ feature.pivot.checked ? 'fa-check' : 'fa-remove' }}"></i> {{ feature.name }}
+                                <i class="fas fa-fw {{ feature.pivot.checked ? 'fa-check' : 'fa-times' }}"></i> {{ feature.name }}
 
                                 {% if feature.pivot.value %}
                                     <small class="text-muted"> ― {{ feature.pivot.value }}</small>
@@ -165,7 +165,7 @@
 
                     <ul class="benefits list-group row">
                         {% for benefit in job.firm.benefits %}
-                            <li class="list-group-item col-xs-12 col-sm-6 checked"><i class="fa fa-check fa-fw"></i> {{ benefit.name }}</li>
+                            <li class="list-group-item col-xs-12 col-sm-6 checked"><i class="fas fa-check fa-fw"></i> {{ benefit.name }}</li>
                         {% endfor %}
                     </ul>
                 </section>

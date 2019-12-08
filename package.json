@@ -54,5 +54,8 @@
   "main": "index.js",
   "repository": "https://github.com/adam-boduch/coyote.git",
   "author": "adam-boduch <adam@boduch.net>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.11.2"
+  }
 }

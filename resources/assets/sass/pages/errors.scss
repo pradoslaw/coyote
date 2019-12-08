@@ -2,7 +2,7 @@
 @import "../helpers/variables";
 @import "../helpers/mixins";
 @import "../components/sidemenu";
-@import "../vendor/font-awesome/variables";
+@import "~@fortawesome/fontawesome-free/scss/variables";
 
 #page-404 {
   .list-unstyled {
