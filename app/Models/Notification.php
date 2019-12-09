@@ -54,6 +54,16 @@ class Notification extends Model
     public $timestamps = false;
 
     /**
+     * @var string
+     */
+    protected $dateFormat = 'Y-m-d H:i:se';
+
+    /**
+     * @var array
+     */
+    protected $dates = ['created_at', 'read_at'];
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
     public function type()

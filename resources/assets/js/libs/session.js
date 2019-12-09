@@ -10,6 +10,7 @@ class Session
                 localStorage.setItem(key, value);
             }
             catch (e) {
+                console.error(e);
             }
         }
     }
@@ -22,6 +23,7 @@ class Session
                 value = localStorage.getItem(key);
             }
             catch (e) {
+                console.error(e);
             }
         }
 
@@ -40,6 +42,7 @@ class Session
                 window.addEventListener('storage', callback, true);
             }
             catch (e) {
+                console.error(e);
             }
         }
     }

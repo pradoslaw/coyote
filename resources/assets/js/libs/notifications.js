@@ -16,7 +16,7 @@ class DesktopNotifications
 
     static doNotify(title, body, url) {
         if (this.isAllowed()) {
-            let notification = new Notification(title, {body: body, tag: url, icon: _config.cdn + '/img/favicon.png'});
+            let notification = new Notification(title, {body: body, tag: url, icon: '/img/favicon.png'});
 
             notification.onshow = () => setTimeout(() => notification.close(), 5000);
             notification.onclick = function() {

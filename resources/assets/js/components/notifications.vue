@@ -10,14 +10,17 @@
             <div class="dropdown-header">
                 <a title="Przejdź do listy powiadomień" href="/User/Notifications">Powiadomienia</a>
 
-                <a @click.prevent="asRead" title="Oznacz jako przeczytane" href="/User/Notifications/Mark">
+                <a @click.prevent="markAllAsRead" title="Oznacz jako przeczytane" href="/User/Notifications/Mark">
                     <i class="far fa-calendar-check"></i>
                 </a>
             </div>
             <div class="dropdown-modal">
                 <ul>
                     <li v-for="notification in notifications" :class="{'unread': ! notification.is_read}">
-                        <a @click.prevent="showNotification(notification)" :href="notification.url" :title="notification.headline">
+                        <a @click.prevent="showNotification(notification)"
+                           @mousedown="markAsRead(notification)"
+                           :href="notification.url"
+                           :title="notification.headline">
                             <img :src="notification.photo">
 
                             <div>
@@ -31,7 +34,7 @@
                             </div>
                         </a>
 
-                        <a @click.prevent="deleteNotification(notification)" class="btn-delete-alert" title="Usuń">
+                        <a @click.stop="deleteNotification(notification)" href="javascript:" class="btn-delete-alert" title="Usuń">
                             <i class="fas fa-times"></i>
                         </a>
                     </li>
@@ -63,14 +66,14 @@
         mounted() {
             axios.defaults.headers.common['X-CSRF-TOKEN'] = Config.csrfToken();
 
-            this.startPing();
+            this.keepSessionAlive();
             this.listenForNotification();
 
             this.title = document.title;
         },
 
         beforeDestroy() {
-            this.stopPing();
+            this.stopSessionAlive();
         },
 
         methods: {
@@ -80,6 +83,7 @@
                 if (this.$refs.dropdown.style.display === 'none') {
                     axios.get('/User/Notifications/Ajax').then(result => {
                         this.notifications = result.data.notifications;
+                        this.counter = result.data.unread;
                     });
                 }
             },
@@ -91,10 +95,12 @@
             deleteNotification(notification) {
                 axios.post(`/User/Notifications/Delete/${notification.id}`);
 
-                notification = {};
+                const index = this.notifications.findIndex(item => item.id === notification.id);
+
+                this.$delete(this.notifications, index);
             },
 
-            asRead() {
+            markAllAsRead() {
                 axios.post('/User/Notifications/Mark');
 
                 this.notifications.forEach(notification => {
@@ -102,10 +108,14 @@
                 });
             },
 
+            markAsRead(notification) {
+                notification.is_read = true;
+            },
+
             listenForNotification() {
-                Session.addListener(function (e) {
+                Session.addListener(e => {
                     if (e.key === 'notifications' && e.newValue !== this.counter) {
-                        this.counter = e.newValue;
+                        this.counter = parseInt(e.newValue);
                     }
                 });
 
@@ -113,40 +123,40 @@
                     this.counter += 1;
 
                     DesktopNotifications.doNotify(data.headline, data.subject, data.url);
-
-                    // ugly hack to firefox: store counter in session storage with a lille bit of delay.
-                    // if we have two open tabs both with websocket connection, then each tab will receive it's own
-                    // notification. saving counter in local storage will call session listener (see above).
-                    // make a long story short: without setTimeout() one notification will be shown as two if user
-                    // has two open tabs.
-                    setTimeout(() => Session.setItem('notifications', this.counter), 500);
                 });
             },
 
-            setFavIcon(path) {
+            setIcon(path) {
                 const icon = document.querySelector('head link[rel="shortcut icon"]');
 
-                icon.innerHTML = path;
+                icon.href = path;
             },
 
-            startPing() {
-                // this.pinger = setInterval(() => axios.get('/ping'), 30000);
+            setTitle(title) {
+                document.title = title;
             },
 
-            stopPing() {
-                // clearInterval(this.pinger);
+            keepSessionAlive() {
+                this.pinger = setInterval(() => axios.get('/ping'), 30000);
+            },
+
+            stopSessionAlive() {
+                clearInterval(this.pinger);
             },
         },
 
         watch: {
-            counter(value) {
+            counter: function(value) {
                 if (value > 0) {
-                    this.setFavIcon(`/img/xicon/favicon${Math.min(this.counter, 6)}.png`);
+                    this.setIcon(`/img/xicon/favicon${Math.min(this.counter, 6)}.png`);
+                    this.setTitle(`(${this.counter}) ${this.title}`);
                 }
                 else {
-                    document.title = this.title;
-                    this.setFavIcon('/img/favicon.png');
+                    this.setTitle(this.title);
+                    this.setIcon('/img/favicon.png');
                 }
+
+                Session.setItem('notifications', value)
             }
         }
     }

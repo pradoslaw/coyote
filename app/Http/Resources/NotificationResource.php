@@ -6,7 +6,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Coyote\Services\Declination\Declination;
 
 /**
- * @property string $read_at
+ * @property \Carbon\Carbon $read_at
  * @property bool $is_clicked
  */
 class NotificationResource extends JsonResource
@@ -22,7 +22,7 @@ class NotificationResource extends JsonResource
         $only = array_only($this->resource->toArray(), ['subject', 'excerpt', 'id', 'url', 'guid']);
 
         return array_merge($only, [
-            'is_read'       => $this->is_clicked || ($this->read_at && $this->read_at < $request->session()->get('created_at')),
+            'is_read'       => $this->is_clicked || ($this->read_at && $this->read_at->timestamp < $request->session()->get('created_at')),
 
             'headline'      => $this->getHeadline(),
             'created_at'    => format_date($this->resource->created_at)
