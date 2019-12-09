@@ -88,3 +88,4 @@ volumes:
 
 networks:
   coyote:
+    name: coyote
