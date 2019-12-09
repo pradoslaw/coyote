@@ -4,7 +4,7 @@ namespace Coyote\Http\Controllers\User;
 
 use Coyote\Notification;
 use Coyote\Repositories\Contracts\NotificationRepositoryInterface as NotificationRepository;
-use Coyote\Http\Resources\NotificationResource as NotificationResource;
+use Coyote\Http\Resources\NotificationResource;
 use Illuminate\Http\Request;
 use Carbon;
 

@@ -43,7 +43,7 @@ class ViewServiceProvider extends ServiceProvider
         if (config('services.ws.host') && $this->app['request']->user()) {
             $this->app['request']->attributes->set(
                 'ws',
-                config('services.ws.host') . (config('services.ws.port') ? ':' . config('services.ws.port') : '')
+                config('services.ws.proxy', config('services.ws.host')) . (config('services.ws.port') ? ':' . config('services.ws.port') : '')
             );
         }
     }
@@ -53,13 +53,18 @@ class ViewServiceProvider extends ServiceProvider
         $this->app['request']->attributes->add([
             'public'        => route('home'),
             'cdn'           => config('app.cdn') ? ('//' . config('app.cdn')) : route('home'),
-            'ping'          => route('ping', [], false),
-            'ping_interval' => config('session.lifetime') - 5 // every 10 minutes
+            'ping_interval' => config('session.lifetime') - 5, // every 10 minutes
+            'notifications_unread' => 0,
+            'pm_unread'     => 0
         ]);
 
         if (!empty($this->app['request']->user())) {
+            $user = $this->app['request']->user();
+
             $this->app['request']->attributes->add([
-                'token' => app(Encrypter::class)->encrypt('user:' . $this->app['request']->user()->id . '|' . time())
+                'token' => app(Encrypter::class)->encrypt('user:' . $user->id . '|' . time()),
+                'notifications_unread' => $user->notifications_unread,
+                'pm_unread' => $user->pm_unread
             ]);
         }
     }

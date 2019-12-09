@@ -6,7 +6,7 @@
             <i class="fas fa-bell fa-fw"></i>
         </a>
 
-        <div v-show="isOpen" class="dropdown-alerts dropdown-menu right">
+        <div ref="dropdown" v-show="isOpen" class="dropdown-alerts dropdown-menu right">
             <div class="dropdown-header">
                 <a title="Przejdź do listy powiadomień" href="/User/Notifications">Powiadomienia</a>
 
@@ -16,7 +16,7 @@
             </div>
             <div class="dropdown-modal">
                 <ul>
-                    <li v-for="notification in notifications" :class="{'unread': notification.is_unread}">
+                    <li v-for="notification in notifications" :class="{'unread': ! notification.is_read}">
                         <a @click.prevent="showNotification(notification)" :href="notification.url" :title="notification.headline">
                             <img :src="notification.photo">
 
@@ -75,13 +75,13 @@
 
         methods: {
             loadNotifications() {
-                // this.isOpen = ! this.isOpen;
+                DesktopNotifications.requestPermission();
 
-                // if (this.isOpen) {
+                if (this.$refs.dropdown.style.display === 'none') {
                     axios.get('/User/Notifications/Ajax').then(result => {
                         this.notifications = result.data.notifications;
                     });
-                // }
+                }
             },
 
             showNotification(notification) {
@@ -98,20 +98,8 @@
                 axios.post('/User/Notifications/Mark');
 
                 this.notifications.forEach(notification => {
-                    notification.is_unread = false;
+                    notification.is_read = true;
                 });
-            },
-
-            startPing() {
-                this.pinger = setInterval(this.ping, 18000);
-            },
-
-            stopPing() {
-                clearInterval(this.pinger);
-            },
-
-            ping() {
-                axios.get('/ping');
             },
 
             listenForNotification() {
@@ -139,7 +127,15 @@
                 const icon = document.querySelector('head link[rel="shortcut icon"]');
 
                 icon.innerHTML = path;
-            }
+            },
+
+            startPing() {
+                // this.pinger = setInterval(() => axios.get('/ping'), 30000);
+            },
+
+            stopPing() {
+                // clearInterval(this.pinger);
+            },
         },
 
         watch: {

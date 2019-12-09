@@ -22,7 +22,7 @@ class NotificationResource extends JsonResource
         $only = array_only($this->resource->toArray(), ['subject', 'excerpt', 'id', 'url', 'guid']);
 
         return array_merge($only, [
-            'is_unread'      => $this->read_at && $this->read_at > $request->session()->get('created_at') || ! $this->is_clicked,
+            'is_read'       => $this->is_clicked || ($this->read_at && $this->read_at < $request->session()->get('created_at')),
 
             'headline'      => $this->getHeadline(),
             'created_at'    => format_date($this->resource->created_at)
