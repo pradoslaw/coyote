@@ -1,4 +1,4 @@
-version: '3.1'
+version: '3.5'
 
 services:
   db:
@@ -9,6 +9,8 @@ services:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_DATABASE}
+    networks:
+      - coyote
 
   php:
     image: 4programmers/php-node
@@ -21,6 +23,8 @@ services:
       DB_HOST: db
       REDIS_HOST: ${REDIS_HOST}
       ELASTICSEARCH_HOST: ${ELASTICSEARCH_HOST}
+    networks:
+      - coyote
 
   nginx:
     image: nginx:latest
@@ -30,9 +34,13 @@ services:
     working_dir: /var/www
     depends_on:
       - php
+    networks:
+      - coyote
 
   redis:
     image: redis:latest
+    networks:
+      - coyote
 
   elasticsearch:
     image: elasticsearch:5.6.14
@@ -43,6 +51,8 @@ services:
         - elasticsearch:/usr/share/elasticsearch/data
     environment:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    networks:
+      - coyote
 
   minio:
     image: minio/minio
@@ -54,6 +64,8 @@ services:
       MINIO_ACCESS_KEY: minio
       MINIO_SECRET_KEY: minio123
     command: server /data
+    networks:
+      - coyote
 
   createbuckets:
     image: minio/mc
@@ -66,8 +78,14 @@ services:
       /usr/bin/mc policy set download minio/coyote;
       exit 0;
       "
+    networks:
+      - coyote
 
 volumes:
   postgres:
   elasticsearch:
   minio:
+
+networks:
+  coyote:
+    name: custom_network
