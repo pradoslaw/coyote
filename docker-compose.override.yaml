@@ -13,6 +13,8 @@ services:
     image: mailhog/mailhog
     ports:
       - 8025:8025
+    networks:
+      - coyote
 
   selenium:
     image: selenium/standalone-chrome:3.11.0-antimony
@@ -20,3 +22,5 @@ services:
       - nginx
     volumes:
       - /dev/shm:/dev/shm
+    networks:
+      - coyote

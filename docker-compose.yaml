@@ -88,4 +88,3 @@ volumes:
 
 networks:
   coyote:
-    name: custom_network
