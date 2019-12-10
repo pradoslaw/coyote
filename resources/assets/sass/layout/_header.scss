@@ -470,88 +470,22 @@ body.fixed-top {
   background-color: #fff;
   max-height: 420px;
 
-  ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
+  .ps__rail-y {
+    right: 0 !important;
+    left: auto !important;
+    z-index: 10;
+  }
 
-    li {
-      padding: 0 6px;
-      border-bottom: 1px solid $body-bg;
-      clear: both;
-      overflow: hidden;
-      position: relative;
+  a:hover, a:focus {
+    text-decoration: none;
+  }
 
-      a {
-        display: block;
-        padding: 7px 0;
-        position: relative;
+  .notification {
+    padding: 0 6px;
+    border-bottom: 1px solid $body-bg;
+    position: relative; // we need this to position remove button in notification
 
-        &:hover, &:focus {
-          text-decoration: none;
-        }
-
-        img {
-          width: 35px;
-          float: left;
-          vertical-align: middle;
-          margin-right: 6px;
-        }
-
-        div {
-          overflow: hidden;
-        }
-
-        header {
-          overflow: hidden;
-          white-space: nowrap;
-
-          h4 {
-            color: $gray-light;
-            float: left;
-            font-size: 11px;
-            max-width: 70%;
-            margin: 0;
-            @include text-overflow();
-            font-family: Arial, sans-serif;
-          }
-
-          small {
-            float: right;
-            color: $gray-light;
-            font-size: 10px;
-            max-width: 29%;
-          }
-        }
-
-        h3 {
-          font-size: 100%;
-          clear: both;
-          margin: 1px 0;
-          font-weight: bold;
-          font-family: Arial, sans-serif;
-          color: $brand-primary;
-
-          @include text-overflow();
-        }
-
-        p {
-          padding-right: 3px;
-          margin: 0;
-          color: $gray;
-        }
-      }
-
-      .btn-delete-alert {
-        position: absolute;
-        right: 6px;
-        top: 13px;
-        padding: 6px;
-        display: none;
-      }
-    }
-
-    li:hover {
+    &:hover {
       background-color: $body-bg;
 
       .btn-delete-alert {
@@ -559,7 +493,7 @@ body.fixed-top {
       }
     }
 
-    li.unread {
+    &.unread {
       background-color: $unread-bg;
 
       &:hover {
@@ -567,15 +501,68 @@ body.fixed-top {
       }
     }
   }
+
+  img {
+    width: 35px;
+    vertical-align: middle;
+  }
+
+  .notification-link {
+    display: block;
+    padding: 7px 0;
+    position: relative;
+  }
+
+  .btn-delete-alert {
+    position: absolute;
+    right: 6px;
+    top: 13px;
+    padding: 6px;
+    display: none;
+  }
+
+  .media-body {
+    header {
+      overflow: hidden;
+      white-space: nowrap;
+
+      h4 {
+        color: $gray-light;
+        float: left;
+        font-size: 11px;
+        max-width: 70%;
+        margin: 0;
+        @include text-overflow();
+        font-family: Arial, sans-serif;
+      }
+
+      small {
+        float: right;
+        color: $gray-light;
+        font-size: 10px;
+        max-width: 29%;
+      }
+    }
+
+    h3 {
+      font-size: 100%;
+      clear: both;
+      margin: 1px 0;
+      font-weight: bold;
+      font-family: Arial, sans-serif;
+      color: $brand-primary;
+
+      @include text-overflow();
+    }
+
+    p {
+      padding-right: 3px;
+      margin: 0;
+      color: $gray;
+    }
+  }
 }
 
-#btn-mark-read {
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  float: right;
-  opacity: .7;
-}
 
 #btn-write-message {
   float: right;

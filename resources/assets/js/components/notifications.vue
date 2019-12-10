@@ -1,5 +1,5 @@
 <template>
-    <li :class="{'open': isOpen}" class="btn-alerts">
+    <li :class="{'open': isOpen}">
         <a @click.prevent="loadNotifications" href="/User/Notifications" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
             <span v-show="counter > 0" class="badge">{{ counter }}</span>
 
@@ -10,21 +10,21 @@
             <div class="dropdown-header">
                 <a title="Przejdź do listy powiadomień" href="/User/Notifications">Powiadomienia</a>
 
-                <a @click.prevent="markAllAsRead" title="Oznacz jako przeczytane" href="/User/Notifications/Mark">
+                <a @click.prevent="markAllAsRead" title="Oznacz jako przeczytane" href="/User/Notifications/Mark" class="pull-right">
                     <i class="far fa-calendar-check"></i>
                 </a>
             </div>
 
             <perfect-scrollbar class="dropdown-modal" :options="{wheelPropagation: false}" @ps-y-reach-end="loadMoreNotifications">
-                <ul>
-                    <li v-for="notification in notifications" :class="{'unread': ! notification.is_read}">
-                        <a @click.prevent="showNotification(notification)"
-                           @mousedown="markAsRead(notification)"
-                           :href="notification.url"
-                           :title="notification.headline">
-                            <img :src="notification.photo">
+                <div v-for="notification in notifications" :class="{'unread': ! notification.is_read}" class="notification">
+                    <a @click.prevent="showNotification(notification)" @mousedown="markAsRead(notification)" :href="notification.url" :title="notification.headline" class="notification-link">
+                        <div class="media">
+                            <div class="media-left">
+                                <img src="/img/avatar.png">
+                                <!--                            <img :src="notification.photo">-->
+                            </div>
 
-                            <div>
+                            <div class="media-body">
                                 <header>
                                     <h4>{{ notification.headline }}</h4>
                                     <small>{{ notification.created_at }}</small>
@@ -33,13 +33,13 @@
                                 <h3>{{ notification.subject }}</h3>
                                 <p>{{ notification.excerpt }}</p>
                             </div>
-                        </a>
+                        </div>
+                    </a>
 
-                        <a @click.stop="deleteNotification(notification)" href="javascript:" class="btn-delete-alert" title="Usuń">
-                            <i class="fas fa-times"></i>
-                        </a>
-                    </li>
-                </ul>
+                    <a @click.stop="deleteNotification(notification)" href="javascript:" class="btn-delete-alert" title="Usuń">
+                        <i class="fas fa-times"></i>
+                    </a>
+                </div>
             </perfect-scrollbar>
         </div>
     </li>

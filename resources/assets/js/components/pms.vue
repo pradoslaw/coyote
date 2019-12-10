@@ -1,5 +1,5 @@
 <template>
-    <li :class="{'open': isOpen}" class="btn-messages">
+    <li :class="{'open': isOpen}">
         <a @click.prevent="loadPms" href="/User/Pm" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
             <span v-show="counter > 0" class="badge">{{ counter }}</span>
 
@@ -16,10 +16,14 @@
             </div>
 
             <perfect-scrollbar class="dropdown-modal" :options="{wheelPropagation: false}">
-                <ul>
-                    <li v-for="item in pm" :title="pm.text" :class="{'unread': ! item.read_at}">
-                        <a :href="item.url">
-                            <div>
+                <div v-for="item in pm" :title="pm.text" :class="{'unread': ! item.read_at}" class="notification">
+                    <a :href="item.url" class="notification-link">
+                        <div class="media">
+                            <div class="media-left">
+
+                            </div>
+
+                            <div class="media-body">
                                 <header>
                                     <h4>{{ item.name }}</h4>
                                     <small>{{ item.created_at }}</small>
@@ -34,9 +38,9 @@
                                     {{ item.text }}
                                 </p>
                             </div>
-                        </a>
-                    </li>
-                </ul>
+                        </div>
+                    </a>
+                </div>
             </perfect-scrollbar>
         </div>
     </li>
