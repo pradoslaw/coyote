@@ -504,7 +504,10 @@ body.fixed-top {
 
   img {
     width: 35px;
-    vertical-align: middle;
+    min-height: 35px;
+    position: relative;
+
+    @include img-placeholder('/img/avatar.png', 35px, 35px);
   }
 
   .notification-link {
@@ -519,6 +522,12 @@ body.fixed-top {
     top: 13px;
     padding: 6px;
     display: none;
+  }
+
+  .btn-write-message {
+    float: right;
+    font-size: 11px;
+    font-weight: normal;;
   }
 
   .media-body {
@@ -564,11 +573,6 @@ body.fixed-top {
 }
 
 
-#btn-write-message {
-  float: right;
-  font-size: 11px;
-  font-weight: normal;;
-}
 
 /* Za malo miejsca w pionie, by wyswietlac przyklejony navbar */
 @media screen and (max-width: $screen-sm) {

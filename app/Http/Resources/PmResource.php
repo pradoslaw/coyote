@@ -8,6 +8,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property string $text
  * @property int $id
  * @property \Carbon\Carbon $created_at
+ * @property string $photo
  */
 class PmResource extends JsonResource
 {
@@ -19,12 +20,13 @@ class PmResource extends JsonResource
      */
     public function toArray($request)
     {
-        $only = $this->resource->only(['id', 'photo', 'read_at', 'folder', 'name']);
+        $only = $this->resource->only(['id', 'read_at', 'folder', 'name']);
 
         return array_merge($only, [
             'url'                   => route('user.pm.show', [$this->id]),
             'created_at'            => format_date($this->created_at),
-            'text'                  => excerpt($this->text, 50)
+            'text'                  => excerpt($this->text, 50),
+            'photo'                 => (string) $this->photo
         ]);
     }
 }

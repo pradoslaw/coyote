@@ -10,7 +10,7 @@
             <div class="dropdown-header">
                 <a title="Przejdź do listy wiadomości" href="/User/Pm">Wiadomości</a>
 
-                <a id="btn-write-message"  href="/User/Pm/Submit">
+                <a class="btn-write-message"  href="/User/Pm/Submit">
                     Wyślij wiadomość
                 </a>
             </div>
@@ -20,7 +20,7 @@
                     <a :href="item.url" class="notification-link">
                         <div class="media">
                             <div class="media-left">
-
+                                <img class="media-object" :src="item.photo">
                             </div>
 
                             <div class="media-body">

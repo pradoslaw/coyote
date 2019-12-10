@@ -8,6 +8,7 @@ use Coyote\Services\Declination\Declination;
 /**
  * @property \Carbon\Carbon $read_at
  * @property bool $is_clicked
+ * @property \Coyote\User $user
  */
 class NotificationResource extends JsonResource
 {
@@ -25,7 +26,8 @@ class NotificationResource extends JsonResource
             'is_read'       => $this->is_clicked || ($this->read_at && $this->read_at->timestamp < $request->session()->get('created_at')),
 
             'headline'      => $this->getHeadline(),
-            'created_at'    => format_date($this->resource->created_at)
+            'created_at'    => format_date($this->resource->created_at),
+            'photo'         => (string) $this->user->photo
         ]);
     }
 
