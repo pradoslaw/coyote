@@ -58,8 +58,7 @@ class NotificationsController extends BaseController
         );
 
         return $this->view('user.notifications.home', [
-            'pagination'          => $pagination,
-            'session_created_at'  => $this->request->session()->get('created_at')
+            'pagination'          => $pagination
         ]);
     }
 

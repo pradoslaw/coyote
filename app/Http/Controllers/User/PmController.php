@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\User;
 
 use Coyote\Http\Factories\MediaFactory;
+use Coyote\Http\Resources\PmResource;
 use Coyote\Notifications\PmCreatedNotification;
 use Coyote\Repositories\Contracts\NotificationRepositoryInterface as NotificationRepository;
 use Coyote\Repositories\Contracts\PmRepositoryInterface as PmRepository;
@@ -117,7 +118,7 @@ class PmController extends BaseController
     /**
      * Get last 10 conversations
      *
-     * @return \Illuminate\View\View
+     * @return \Illuminate\Http\JsonResponse
      */
     public function ajax()
     {
@@ -128,7 +129,9 @@ class PmController extends BaseController
             $row->text = $parser->parse($row->text);
         }
 
-        return view('user.pm.ajax')->with(compact('pm'));
+        return response()->json([
+            'pm' => PmResource::collection($pm)->toArray($this->request)
+        ]);
     }
 
     /**

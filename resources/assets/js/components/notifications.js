@@ -1,5 +1,3 @@
-import DesktopNotifications from '../libs/notifications';
-import Session from '../libs/session';
 import Config from '../libs/config';
 import Vue from 'vue';
 import VueNotification from '../components/notifications.vue';

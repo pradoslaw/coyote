@@ -122,35 +122,6 @@
                             </div>
 
                             <ul id="nav-auth" class="nav nav-auth navbar-nav pull-right">
-{#                                <li id="btn-notifications" class="btn-alerts">#}
-
-{#                                </li>#}
-{#                                <vue-notifications counter="{{ user('notification_unread') }}"></vue-notifications>#}
-
-                                <li id="btn-messages" class="btn-messages">
-                                    <a href="{{ route('user.pm') }}" data-url="{{ route('user.pm.ajax') }}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        {% if user('pm_unread') %}
-                                            <span class="badge">{{ user('pm_unread') }}</span>
-                                        {% endif %}
-
-                                        <i class="fas fa-envelope fa-fw"></i>
-                                    </a>
-
-                                    <div id="dropdown-messages" class="dropdown-menu dropdown-messages right">
-                                        <div class="dropdown-header">
-                                            <a title="Przejdź do listy wiadomości" href="{{ route('user.pm') }}">Wiadomości</a>
-
-                                            <a id="btn-write-message" href="{{ route('user.pm.submit') }}">
-                                                Wyślij wiadomość
-                                            </a>
-                                        </div>
-                                        <div class="dropdown-modal">
-                                            <ul>
-                                                <li><i class="fas fa-spin fa-spinner"></i></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </li>
                             </ul>
                         {% else %}
                             <a class="btn btn-sm navbar-right navbar-btn btn-register hidden-xs" href="{{ route('register') }}"><i class="fas fa-sign-in"></i> Utwórz konto</a>

@@ -19,7 +19,7 @@ class NotificationResource extends JsonResource
      */
     public function toArray($request)
     {
-        $only = array_only($this->resource->toArray(), ['subject', 'excerpt', 'id', 'url', 'guid']);
+        $only = $this->resource->only(['subject', 'excerpt', 'id', 'url', 'guid']);
 
         return array_merge($only, [
             'is_read'       => $this->is_clicked || ($this->read_at && $this->read_at->timestamp < $request->session()->get('created_at')),

@@ -1,74 +1,12 @@
-import DesktopNotifications from '../libs/notifications';
+import Config from '../libs/config';
+import Vue from 'vue';
+import VuePm from '../components/pms.vue';
 
-class Pm
-{
-    constructor() {
-        this._self = $('#btn-messages');
-        this._dropdown = $('#dropdown-messages');
+const PmWrapper = Vue.extend(Object.assign(VuePm, {props: {counter: {default: Config.get('pm_unread')}}}));
 
-        this._self.find('a[data-toggle="dropdown"]').click(this._onDropdownClick.bind(this));
-    }
+const wrapper = new PmWrapper().$mount();
+const el = document.getElementById('nav-auth');
 
-    /**
-     * Get pm counter
-     *
-     * @returns {Number|number}
-     */
-    get() {
-        return parseInt(this._self.find('.badge').text()) || 0;
-    }
-
-    /**
-     * Set unread pm counter.
-     *
-     * @param value
-     */
-    set(value) {
-        this._setBadge(value);
-    }
-
-    /**
-     * Update counter badge.
-     *
-     * @param value
-     * @private
-     */
-    _setBadge(value) {
-        let badge = $('.badge', this._self);
-
-        if (parseInt(value) === 0) {
-            badge.remove();
-        }
-        else {
-            if (!badge.length) {
-                $('> a:first', this._self).prepend(`<span class="badge">${value}</span>`);
-            } else {
-                badge.text(value);
-            }
-        }
-    }
-
-    _onDropdownClick(e) {
-        let items = this._dropdown.find('ul');
-
-        if ($('li', items).length <= 1) {
-            $.ajax({
-                url: $(e.currentTarget).data('url'),
-                success: html => items.html(html),
-                cache: false
-            });
-        }
-
-        e.preventDefault();
-    }
+if (el !== null) {
+    el.appendChild(wrapper.$el);
 }
-
-// $(function() {
-//     let pm = new Pm();
-//
-//     ws.on('pm', data => {
-//         DesktopNotifications.doNotify(data.senderName, data.excerpt, '#top');
-//
-//         pm.set(pm.get() + 1);
-//     });
-// });
