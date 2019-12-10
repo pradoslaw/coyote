@@ -14,7 +14,8 @@
                     <i class="far fa-calendar-check"></i>
                 </a>
             </div>
-            <div class="dropdown-modal">
+
+            <perfect-scrollbar class="dropdown-modal" :options="{wheelPropagation: false}" @ps-y-reach-end="loadMoreNotifications">
                 <ul>
                     <li v-for="notification in notifications" :class="{'unread': ! notification.is_read}">
                         <a @click.prevent="showNotification(notification)"
@@ -39,7 +40,7 @@
                         </a>
                     </li>
                 </ul>
-            </div>
+            </perfect-scrollbar>
         </div>
     </li>
 </template>
@@ -50,8 +51,12 @@
     import Session from '../libs/session';
     import axios from 'axios';
     import Config from "../libs/config";
+    import { PerfectScrollbar } from 'vue2-perfect-scrollbar';
 
     export default {
+        components: {
+            PerfectScrollbar
+        },
         props: {
             counter: {
                 type: Number
@@ -60,7 +65,8 @@
         data() {
             return {
                 isOpen: false,
-                notifications: []
+                notifications: [],
+                offset: 0
             }
         },
         mounted() {
@@ -84,8 +90,26 @@
                     axios.get('/User/Notifications/Ajax').then(result => {
                         this.notifications = result.data.notifications;
                         this.counter = result.data.unread;
+                        this.offset = result.data.offset;
                     });
                 }
+            },
+
+            loadMoreNotifications() {
+                if (this.isOngoing) {
+                    return;
+                }
+
+                this.isOngoing = true;
+
+                axios.get('/User/Notifications/Ajax', {params: {offset: this.offset}})
+                    .then(result => {
+                        this.notifications = Object.assign(this.notifications, result.data.notifications);
+                        this.offset = result.data.offset;
+                    })
+                    .finally(() => {
+                        this.isOngoing = false;
+                    });
             },
 
             showNotification(notification) {

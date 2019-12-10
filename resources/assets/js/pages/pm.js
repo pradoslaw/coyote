@@ -1,6 +1,7 @@
 import 'jquery-color-animation/jquery.animate-colors';
 import Dialog from '../libs/dialog';
 import Config from '../libs/config';
+import PerfectScrollbar from 'perfect-scrollbar';
 
 $(function() {
     $('textarea[name="text"]').each(function() {
@@ -8,32 +9,30 @@ $(function() {
     });
 
     $('#wrap').each(function() {
-        require.ensure([], (require) => {
-            require('perfect-scrollbar/jquery')($);
+        const container = document.getElementById('wrap');
+        new PerfectScrollbar(container);
 
-            let overview = $('#overview');
-            let pending = false;
+        let overview = $('#overview');
+        let pending = false;
 
-            $(this)
-                .perfectScrollbar()
-                .scrollTop(overview.outerHeight())
-                .on('ps-y-reach-start', () => {
-                    if (pending === true) {
-                        return;
-                    }
+        $(this).scrollTop(overview.outerHeight());
 
-                    pending = true;
-                    $.get(Config.get('infinity_url'), {offset: $('.media', overview).length}, html => {
-                        overview.prepend(html);
+        container.addEventListener('ps-y-reach-start', () => {
+            if (pending === true) {
+                return;
+            }
 
-                        // jezeli nie ma wiecej wiadomosci, to ajax nie bedzie kolejny raz wyslany
-                        if ($.trim(html) === '') {
-                            $(this).off('ps-y-reach-start');
-                        }
+            pending = true;
+            $.get(Config.get('infinity_url'), {offset: $('.media', overview).length}, html => {
+                overview.prepend(html);
 
-                        pending = false;
-                    });
-                });
+                // jezeli nie ma wiecej wiadomosci, to ajax nie bedzie kolejny raz wyslany
+                if ($.trim(html) === '') {
+                    $(this).off('ps-y-reach-start');
+                }
+
+                pending = false;
+            });
         });
     })
     .on('mouseenter', '.unread', (e) => {

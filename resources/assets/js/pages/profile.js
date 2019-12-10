@@ -1,26 +1,24 @@
 import Config from '../libs/config';
+import PerfectScrollbar from 'perfect-scrollbar';
 
 $(function() {
-    $('#wrap').each(function() {
-        require.ensure([], (require) => {
-            require('perfect-scrollbar/jquery')($);
+    const container = document.getElementById('wrap');
+    const ps = new PerfectScrollbar(container);
 
-            let pending = false;
+    let pending = false;
 
-            $(this).perfectScrollbar().on('ps-y-reach-end', function() {
-                if (pending) {
-                    return;
-                }
+    container.addEventListener('ps-y-reach-end', function() {
+        if (pending) {
+            return;
+        }
 
-                let offset = $('#reputation').find('.reputation-item').length;
-                pending = true;
+        let offset = $('#reputation').find('.reputation-item').length;
+        pending = true;
 
-                $.get(Config.get('reputation_url'), {offset: offset}, function(html) {
-                    $('#reputation').append(html);
+        $.get(Config.get('reputation_url'), {offset: offset}, function(html) {
+            $('#reputation').append(html);
 
-                    pending = false;
-                });
-            });
+            pending = false;
         });
     });
 });

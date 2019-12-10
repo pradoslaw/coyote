@@ -5,7 +5,7 @@ import VueJobTiny from '../../components/job-tiny.vue';
 import VuePagination from '../../components/pagination.vue';
 import axios from 'axios';
 import store from '../../store';
-import * as Ps from 'perfect-scrollbar';
+import PerfectScrollbar from 'perfect-scrollbar';
 
 new Vue({
     el: '#page-job',
@@ -30,7 +30,7 @@ new Vue({
 
         this.initYScrollbar(document.querySelector('#panel-published'));
         this.initYScrollbar(document.querySelector('#panel-subscribed'));
-
+        //
         this.initXScrollbar(document.querySelector('#filter-location'));
         this.initXScrollbar(document.querySelector('#filter-tech'));
     },
@@ -127,15 +127,16 @@ new Vue({
 
         initYScrollbar (container) {
             if (container) {
-                Ps.initialize(container);
+                // Ps.initialize(container);
+                new PerfectScrollbar(container);
             }
         },
 
         initXScrollbar (container) {
             if (container) {
-                Ps.initialize(container, { suppressScrollY: true });
+                const ps = new PerfectScrollbar(container,  { suppressScrollY: true });
 
-                window.addEventListener('resize', () => Ps.update(container));
+                window.addEventListener('resize', () => ps.update());
             }
         },
 

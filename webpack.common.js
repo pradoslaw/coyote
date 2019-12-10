@@ -85,6 +85,9 @@ module.exports = {
             }
         }
     },
+    resolve: {
+        mainFields: ['main', 'module']
+    },
     context: path.join(__dirname, 'resources/assets'),
     entry: {
         app: './js/app.js',

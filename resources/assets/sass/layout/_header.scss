@@ -468,6 +468,7 @@ body.fixed-top {
 .dropdown-modal {
   position: relative;
   background-color: #fff;
+  max-height: 420px;
 
   ul {
     list-style-type: none;

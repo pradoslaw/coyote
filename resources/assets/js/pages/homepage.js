@@ -1,9 +1,7 @@
-$(function () {
-    require.ensure([], (require) => {
-        require('perfect-scrollbar/jquery')($);
+import PerfectScrollbar from 'perfect-scrollbar';
 
-        $('#stream').perfectScrollbar({suppressScrollX: true});
-    });
+$(function () {
+    new PerfectScrollbar(document.getElementById('stream'));
 
     let tabs = {'forum': $('#forum-tabs').find('a'), 'reputation': $('#reputation-tabs').find('a')};
 

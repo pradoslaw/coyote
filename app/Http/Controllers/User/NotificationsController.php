@@ -102,7 +102,7 @@ class NotificationsController extends BaseController
         return response()->json([
             'unread'            => $unread,
             'notifications'     => $notifications,
-            'count'             => count($notifications)
+            'offset'            => count($notifications)
         ]);
     }
 
