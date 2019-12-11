@@ -1,6 +1,5 @@
 {% extends 'job.base' %}
 
-{% import 'components.widgets' as widgets %}
 {% block title %}Podgląd{{ parent() }}{% endblock %}
 
 {% block container %}
@@ -45,7 +44,6 @@
         };
     </script>
 
-    {{ widgets.vue() }}
     <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
     <script src="//maps.googleapis.com/maps/api/js?key={{ config('services.google-maps.key') }}&sensor=false"></script>
     <script src="{{ cdn('js/job-submit.js') }}"></script>

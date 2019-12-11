@@ -24,8 +24,6 @@
 {% block description %}Praca dla programistów. Pracodawco: umieść u nas swoją ofertę pracy - już od 0,75 zł za dzień. Znajdź u nas pracownika wśród 50 000 programistów.{% endblock %}
 {% block keywords %}programowanie, praca, C#, Java, programista, HTML, CSS, webdesign, JavaScript, jQuery, C, C++, webmastering{% endblock %}
 
-{% import 'components.widgets' as widgets %}
-
 {% block container %}
     <div id="page-job">
         <div class="row">
@@ -261,8 +259,6 @@
 
 {% block body %}
     {{ parent() }}
-
-    {{ widgets.vue() }}
 
     <script type="text/javascript">
         var data = {

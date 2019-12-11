@@ -1,6 +1,5 @@
 {% extends 'layout' %}
 
-{% import 'components.widgets' as widgets %}
 {% block title %}Płatność{{ parent() }}{% endblock %}
 
 {% block breadcrumb %}{% endblock %}
@@ -31,9 +30,6 @@
 {% endblock %}
 
 {% block body %}
-    {# nie usuwac odwolania do vue #}
-    {{ widgets.vue() }}
-
     {{ parent() }}
 
     <script>

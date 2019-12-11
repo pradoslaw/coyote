@@ -1,7 +1,5 @@
 {% extends 'job.base' %}
 
-{% import 'components.widgets' as widgets %}
-
 {% set page_title = job.title ~ ' ' ~ (job.firm.id and not job.firm.is_agency ? '@ ' ~ job.firm.name) %}
 
 {% block title %}{{ page_title }} :: praca dla programistów {{ parent() }}{% endblock %}
@@ -128,8 +126,6 @@
 {% endblock %}
 
 {% block body %}
-    {{ widgets.vue() }}
-
     <script>
         var data = {
             authId: {{ user('id') ?: 'null' }},

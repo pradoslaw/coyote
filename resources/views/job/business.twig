@@ -1,7 +1,5 @@
 {% extends 'job.base' %}
 
-{% import 'components.widgets' as widgets %}
-
 {% block title %}Nasza oferta :: Praca {{ parent() }}{% endblock %}
 
 {% set submit_url = "'" ~ route('job.submit') ~ "?revalidate=1&default_plan=' + default_plan.id" %}
@@ -135,8 +133,6 @@
             default_plan: {{ default_plan|raw }}
         };
     </script>
-
-    {{ widgets.vue() }}
 
     {% include 'job.submit.partials.chat' %}
 {% endblock %}
