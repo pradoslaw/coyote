@@ -123,6 +123,7 @@ input[placeholder] {
 .btn-thumbs.thumbs-on:before {
   color: $brand-primary;
   content: $fa-var-thumbs-up;
+  font-weight: 900;
 }
 
 .subscribe-on:before {
