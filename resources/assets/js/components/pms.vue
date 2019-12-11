@@ -88,7 +88,7 @@
                     this.counter += 1;
                     this.isOpen = false;
 
-                    DesktopNotifications.doNotify(data.senderName, data.excerpt, '#top');
+                    DesktopNotifications.doNotify('', data.text, data.url);
                 });
             },
         },

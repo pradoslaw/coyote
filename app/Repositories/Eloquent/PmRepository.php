@@ -167,7 +167,7 @@ class PmRepository extends Repository implements PmRepositoryInterface
             ->model
             ->select([
                 'm.id',
-                'm.author_id',
+                'author_id',
                 'm.folder',
                 'm.read_at',
                 'pm_text.text',

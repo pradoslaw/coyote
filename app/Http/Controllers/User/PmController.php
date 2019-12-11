@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\User;
 
+use Coyote\Events\PmCreated;
 use Coyote\Http\Factories\MediaFactory;
 use Coyote\Http\Resources\PmResource;
 use Coyote\Notifications\PmCreatedNotification;
@@ -178,6 +179,8 @@ class PmController extends BaseController
         $pm = $this->transaction(function () use ($request, $recipient) {
             return $this->pm->submit($this->auth, $request->all() + ['author_id' => $recipient->id]);
         });
+
+        event(new PmCreated($pm));
 
         $recipient->notify(new PmCreatedNotification($pm));
 
