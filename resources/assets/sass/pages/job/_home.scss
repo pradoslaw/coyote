@@ -18,7 +18,10 @@
   .media-object {
     position: relative;
 
-    @include img-placeholder('/img/logo-gray.png', 95px, 95px);
+    img {
+      width: 100%;
+      height: 100%;
+    }
   }
 
   .padding-xs-bottom {

@@ -5,7 +5,11 @@
         <div class="panel-body">
             <div class="media">
                 <div class="media-left hidden-xs">
-                    <a :href="job.url"><img :alt="job.firm.logo ? job.firm.name : ''" class="media-object margin-sm-right" :src="job.firm.logo"></a>
+                    <a :href="job.url">
+                        <object :data="job.firm.logo || '//'" type="image/png" class="media-object margin-sm-right" >
+                            <img src="/img/logo-gray.png" :alt="job.firm.logo ? job.firm.name : ''">
+                        </object>
+                    </a>
                 </div>
 
                 <div class="media-body">

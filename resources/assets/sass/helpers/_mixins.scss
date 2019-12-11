@@ -47,7 +47,7 @@
 }
 
 @mixin img-placeholder($image, $width, $height) {
-  &:after {
+  &::after {
     content: '';
     display: block;
     position: absolute;
