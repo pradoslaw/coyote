@@ -65,7 +65,8 @@
             return {
                 isOpen: false,
                 notifications: [],
-                offset: 0
+                offset: 0,
+                sessionTimeout: 4 * 60 * 1000
             }
         },
         mounted() {
@@ -144,6 +145,7 @@
 
                 ws.on('Illuminate\\Notifications\\Events\\BroadcastNotificationCreated', data => {
                     this.counter += 1;
+                    this.isOpen = false;
 
                     DesktopNotifications.doNotify(data.headline, data.subject, data.url);
                 });
@@ -160,7 +162,7 @@
             },
 
             keepSessionAlive() {
-                this.pinger = setInterval(() => axios.get('/ping'), 30000);
+                this.pinger = setInterval(() => axios.get('/ping'), this.sessionTimeout);
             },
 
             stopSessionAlive() {
@@ -169,7 +171,7 @@
         },
 
         watch: {
-            counter: function(value) {
+            counter (value) {
                 if (value > 0) {
                     this.setIcon(`/img/xicon/favicon${Math.min(this.counter, 6)}.png`);
                     this.setTitle(`(${this.counter}) ${this.title}`);

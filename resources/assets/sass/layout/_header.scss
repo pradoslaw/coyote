@@ -440,7 +440,6 @@ body.fixed-top {
 
     a {
       color: $gray-light;
-      float: left;
     }
   }
 
@@ -524,12 +523,6 @@ body.fixed-top {
     display: none;
   }
 
-  .btn-write-message {
-    float: right;
-    font-size: 11px;
-    font-weight: normal;;
-  }
-
   .media-body {
     header {
       overflow: hidden;
@@ -572,7 +565,11 @@ body.fixed-top {
   }
 }
 
-
+.btn-write-message {
+  float: right;
+  font-size: 11px;
+  font-weight: normal;;
+}
 
 /* Za malo miejsca w pionie, by wyswietlac przyklejony navbar */
 @media screen and (max-width: $screen-sm) {

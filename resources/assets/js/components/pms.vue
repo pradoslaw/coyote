@@ -86,6 +86,7 @@
             listenForPm() {
                 ws.on('pm', data => {
                     this.counter += 1;
+                    this.isOpen = false;
 
                     DesktopNotifications.doNotify(data.senderName, data.excerpt, '#top');
                 });
