@@ -58,11 +58,11 @@
     import Session from '../libs/session';
     import axios from 'axios';
     import Config from "../libs/config";
-    import { PerfectScrollbar } from 'vue2-perfect-scrollbar';
+    import { default as PerfectScrollbar } from '../components/perfect-scrollbar';
 
     export default {
         components: {
-            PerfectScrollbar
+            'perfect-scrollbar': PerfectScrollbar
         },
         props: {
             counter: {
