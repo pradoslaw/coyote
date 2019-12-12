@@ -36,6 +36,11 @@ class JobApiResource extends JsonResource
     use MediaFactory;
 
     /**
+     * @var \Coyote\Services\Parser\Factories\JobFactory
+     */
+    public static $parser;
+
+    /**
      * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -44,7 +49,7 @@ class JobApiResource extends JsonResource
     public function toArray($request)
     {
         $only = $this->resource->only(
-            'id', 'salary_from', 'salary_to', 'title', 'is_remote', 'remote_range', 'is_gross', 'description', 'recruitment', 'rate', 'employment', 'seniority')
+            'id', 'salary_from', 'salary_to', 'title', 'is_remote', 'remote_range', 'is_gross', 'rate', 'employment', 'seniority')
         ;
 
         return array_merge($only, [
@@ -56,6 +61,8 @@ class JobApiResource extends JsonResource
             'tags'        => TagResource::collection($this->tags->sortByDesc('pivot.priority')),
             'currency'    => $this->currency->name,
             'firm'        => new FirmResource($this->firm),
+            'description' => self::$parser->parse((string) $this->description), // argument must be a string
+            'recruitment' => self::$parser->parse((string) $this->recruitment),
 
             'features'    => $this->whenLoaded('features', function () {
                 return FeatureResource::collection($this->features);
