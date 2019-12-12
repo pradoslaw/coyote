@@ -45,6 +45,8 @@
                         <i class="fas fa-times"></i>
                     </a>
                 </div>
+
+                <div class="text-center" v-if="Array.isArray(notifications) && notifications.length === 0">Brak powiadomień.</div>
             </perfect-scrollbar>
         </div>
     </li>

@@ -9,7 +9,6 @@ const PmWrapper = Vue.extend(Object.assign(VuePm, {props: {counter: {default: Co
 const el = document.getElementById('nav-auth');
 
 if (el !== null) {
-
     el.appendChild(new NotificationWrapper().$mount().$el);
     el.appendChild(new PmWrapper().$mount().$el);
 }

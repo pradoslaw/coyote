@@ -16,7 +16,7 @@
             </div>
 
             <perfect-scrollbar class="dropdown-modal" :options="{wheelPropagation: false}">
-                <div v-if="notifications === null" class="text-center">
+                <div v-if="pm === null" class="text-center">
                     <i class="fas fa-spinner fa-spin"></i>
                 </div>
 
@@ -24,7 +24,7 @@
                     <a :href="item.url" class="notification-link">
                         <div class="media">
                             <div class="media-left">
-                                <object class="media-object" :data="item.photo || '//'">
+                                <object class="media-object" :data="item.photo || '//'" type="image/png">
                                     <img src="/img/avatar.png">
                                 </object>
                             </div>
@@ -47,6 +47,8 @@
                         </div>
                     </a>
                 </div>
+
+                <div class="text-center" v-if="Array.isArray(pm) && pm.length === 0">Brak wiadomości prywatnych.</div>
             </perfect-scrollbar>
         </div>
     </li>
@@ -85,6 +87,7 @@
                 if (this.$refs.dropdown.style.display === 'none') {
                     axios.get('/User/Pm/Ajax').then(result => {
                         this.pm = result.data.pm;
+                        console.log(this.pm);
                     });
                 }
             },
