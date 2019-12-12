@@ -12,6 +12,9 @@ use Tests\TestCase;
 
 class JobApiTest extends TestCase
 {
+    /**
+     * @var User
+     */
     private $user;
     private $token;
     private $faker;
@@ -24,6 +27,20 @@ class JobApiTest extends TestCase
         $this->token = $this->user->createToken('4programmers.net')->accessToken;
 
         $this->faker = Factory::create();
+    }
+
+    public function testGetSingleJob()
+    {
+        $job = factory(Job::class)->create(['user_id' => $this->user->id]);
+
+        $response = $this->get('/v1/jobs/' . $job->id, ['Accept' => 'application/json', 'Content-type' => 'application/json']);
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $response->assertJsonFragment([
+            'title' => $job->title,
+            'salary_from' => $job->salary_from,
+            'salary_to' => $job->salary_to
+        ]);
     }
 
     public function testSubmitSuccessful()

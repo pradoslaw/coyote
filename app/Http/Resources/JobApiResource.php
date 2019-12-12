@@ -61,12 +61,25 @@ class JobApiResource extends JsonResource
             'tags'        => TagResource::collection($this->tags->sortByDesc('pivot.priority')),
             'currency'    => $this->currency->name,
             'firm'        => new FirmResource($this->firm),
-            'description' => self::$parser->parse((string) $this->description), // argument must be a string
-            'recruitment' => self::$parser->parse((string) $this->recruitment),
+            'description' => $this->parse((string) $this->description), // argument must be a string
+            'recruitment' => $this->parse((string) $this->recruitment),
 
             'features'    => $this->whenLoaded('features', function () {
                 return FeatureResource::collection($this->features);
             })
         ]);
+    }
+
+    /**
+     * @param string $text
+     * @return string
+     */
+    private function parse(string $text): string
+    {
+        if (!self::$parser) {
+            self::$parser = app('parser.job');
+        }
+
+        return self::$parser->parse($text);
     }
 }

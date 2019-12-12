@@ -43,8 +43,6 @@ class JobsController extends Controller
 
         $data = $this->job->paginate();
 
-        JobApiResource::$parser = app('parser.job');
-
         return JobApiResource::collection($data);
     }
 
@@ -59,8 +57,6 @@ class JobsController extends Controller
         $this->job->pushCriteria(new EagerLoading(['firm', 'locations', 'tags', 'currency']));
         $this->job->pushCriteria(new EagerLoading('features'));
         $this->job->pushCriteria(new EagerLoadingWithCount(['comments']));
-
-        JobApiResource::$parser = app('parser.job');
 
         return new JobApiResource($job);
     }
