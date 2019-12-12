@@ -102,7 +102,7 @@
       @include font-awesome($fa-var-user);
       color: $link-color-darker;
       left: 0;
-      font-weight: normal;
+      font-weight: 900;
     }
 
     @include link-color-darker;
@@ -491,7 +491,7 @@ blockquote {
       &:before {
         @include font-awesome($fa-var-external-link-alt);
         left: 0;
-        top: 2px;
+        font-weight: 900;
       }
     }
   }
