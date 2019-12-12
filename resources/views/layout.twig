@@ -41,6 +41,9 @@
                 <div class="navbar-border-top"></div>
 
                 <div class="max-width">
+                    {{ form_open({url: route('logout'), name: 'logout-form'}) }}
+                    {{ form_close() }}
+
                     <div class="clearfix">
                         <button type="button" class="navbar-toggle margin-sm-left" data-toggle="collapse" data-target=".nav-mobile">
                             <span class="sr-only">Toggle navigation</span>
@@ -114,9 +117,7 @@
                                     <li class="divider"></li>
 
                                     <li>
-                                        {{ form_open({url: route('logout')}) }}
-                                            <button type="submit" class="btn-sign-out"><i class="fas fa-sign-out-alt fa-fw"></i> Wyloguj</button>
-                                        {{ form_close() }}
+                                        <a href="javascript:" onclick="document['logout-form'].submit()" class="btn-sign-out"><i class="fas fa-sign-out-alt fa-fw"></i> Wyloguj</a>
                                     </li>
                                 </ul>
                             </div>
@@ -156,9 +157,7 @@
                                 <li class="divider"></li>
 
                                 <li>
-                                    {{ form_open({url: route('logout')}) }}
-                                        <button type="submit" class="btn-sign-out"><i class="fas fa-sign-out-alt fa-fw"></i> Wyloguj</button>
-                                    {{ form_close() }}
+                                    <a href="javascript:" onclick="document['logout-form'].submit()" class="btn-sign-out"><i class="fas fa-sign-out-alt fa-fw"></i> Wyloguj</a>
                                 </li>
                             {% else %}
                                 <li class="row">

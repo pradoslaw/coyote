@@ -407,20 +407,6 @@ body.fixed-top {
 
 ////////////////////////////////////////////////////////////////
 
-// logout button
-.btn-sign-out {
-  border: none;
-  background: none;
-  width: 100%;
-  text-align: left;
-  padding: 5px 20px;
-  font-size: 13px;
-
-  &:focus, &:active {
-    outline: none;
-  }
-}
-
 .dropdown-messages, .dropdown-alerts {
   top: 100%;
   width: 420px;
