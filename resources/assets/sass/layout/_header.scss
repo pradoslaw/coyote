@@ -501,12 +501,13 @@ body.fixed-top {
     }
   }
 
-  img {
+  .media-object {
     width: 35px;
     min-height: 35px;
-    position: relative;
 
-    @include img-placeholder('/img/avatar.png', 35px, 35px);
+    img {
+      width: 100%;
+    }
   }
 
   .notification-link {

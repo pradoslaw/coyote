@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Resources;
 
+use Coyote\Services\Media\Factory;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Coyote\Services\Declination\Declination;
 
@@ -15,7 +16,7 @@ class NotificationResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     public function toArray($request)
@@ -23,12 +24,21 @@ class NotificationResource extends JsonResource
         $only = $this->resource->only(['subject', 'excerpt', 'id', 'url', 'guid']);
 
         return array_merge($only, [
-            'is_read'       => $this->is_clicked || ($this->read_at && $this->read_at->timestamp < $request->session()->get('created_at')),
+            'is_read' => $this->is_clicked || ($this->read_at && $this->read_at->timestamp < $request->session()->get('created_at')),
 
-            'headline'      => $this->getHeadline(),
-            'created_at'    => format_date($this->resource->created_at),
-            'photo'         => (string) $this->user->photo
+            'headline' => $this->getHeadline(),
+            'created_at' => format_date($this->resource->created_at),
+            'photo' => $this->getMediaUrl($this->user->photo)
         ]);
+    }
+
+    /**
+     * @param string|null $filename
+     * @return string
+     */
+    private function getMediaUrl(?string $filename): string
+    {
+        return $filename ? app(Factory::class)->make('photo', ['file_name' => $filename])->url() : '';
     }
 
     /**

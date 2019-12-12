@@ -20,7 +20,9 @@
                     <a :href="item.url" class="notification-link">
                         <div class="media">
                             <div class="media-left">
-                                <img class="media-object" :src="item.photo">
+                                <object class="media-object" :data="item.photo || '//'">
+                                    <img src="/img/avatar.png">
+                                </object>
                             </div>
 
                             <div class="media-body">

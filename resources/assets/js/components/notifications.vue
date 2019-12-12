@@ -20,7 +20,9 @@
                     <a @click.prevent="showNotification(notification)" @mousedown="markAsRead(notification)" :href="notification.url" :title="notification.headline" class="notification-link">
                         <div class="media">
                             <div class="media-left">
-                                <img class="media-object" :src="notification.photo">
+                                <object class="media-object" :data="notification.photo || '//'" type="image/png">
+                                    <img src="/img/avatar.png">
+                                </object>
                             </div>
 
                             <div class="media-body">
