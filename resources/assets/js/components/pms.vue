@@ -16,6 +16,10 @@
             </div>
 
             <perfect-scrollbar class="dropdown-modal" :options="{wheelPropagation: false}">
+                <div v-if="notifications === null" class="text-center">
+                    <i class="fas fa-spinner fa-spin"></i>
+                </div>
+
                 <div v-for="item in pm" :title="pm.text" :class="{'unread': ! item.read_at}" class="notification">
                     <a :href="item.url" class="notification-link">
                         <div class="media">
@@ -68,7 +72,7 @@
             return {
                 SENTBOX: 2,
                 isOpen: false,
-                pm: []
+                pm: null // initial value must be null to show fa-spinner
             }
         },
         mounted() {

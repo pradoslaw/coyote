@@ -16,6 +16,10 @@
             </div>
 
             <perfect-scrollbar class="dropdown-modal" :options="{wheelPropagation: false}" @ps-y-reach-end="loadMoreNotifications">
+                <div v-if="notifications === null" class="text-center">
+                    <i class="fas fa-spinner fa-spin"></i>
+                </div>
+
                 <div v-for="notification in notifications" :class="{'unread': ! notification.is_read}" class="notification">
                     <a @click.prevent="showNotification(notification)" @mousedown="markAsRead(notification)" :href="notification.url" :title="notification.headline" class="notification-link">
                         <div class="media">
@@ -66,7 +70,7 @@
         data() {
             return {
                 isOpen: false,
-                notifications: [],
+                notifications: null, // initial value must be null to show fa-spinner
                 offset: 0,
                 sessionTimeout: 4 * 60 * 1000
             }
