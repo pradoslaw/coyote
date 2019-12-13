@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Resources;
 
+use Coyote\Pm;
 use Coyote\Services\Media\Factory;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -9,7 +10,9 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property string $text
  * @property int $id
  * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $read_at
  * @property \Coyote\User $author
+ * @property int $folder
  */
 class PmResource extends JsonResource
 {
@@ -21,13 +24,14 @@ class PmResource extends JsonResource
      */
     public function toArray($request)
     {
-        $only = $this->resource->only(['id', 'read_at', 'folder', 'name']);
+        $only = $this->resource->only(['id', 'folder', 'name']);
 
         return array_merge($only, [
             'url'                   => route('user.pm.show', [$this->id]),
             'created_at'            => format_date($this->created_at),
             'text'                  => excerpt($this->text, 50),
-            'photo'                 => $this->photo ? $this->getMediaUrl($this->photo) : ''
+            'photo'                 => $this->photo ? $this->getMediaUrl($this->photo) : '',
+            'read_at'               => $this->folder == Pm::SENTBOX ? true : $this->read_at
         ]);
     }
 
