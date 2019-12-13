@@ -8,6 +8,10 @@ import 'core-js/modules/es6.string.starts-with';
 import 'core-js/modules/es6.array.find-index';
 // JS's includes -- support for old browsers
 import 'core-js/modules/es7.array.includes';
+// Object.assign -- support for old browsers
+import 'core-js/modules/es6.object.assign';
+// array forEach -- support for old browsers
+import 'core-js/modules/es6.array.for-each';
 
 import './components/dropdown.js';
 import './components/scrolltop.js';
