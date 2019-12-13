@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Resources;
 
+use Coyote\Services\Media\Factory;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -26,7 +27,16 @@ class PmResource extends JsonResource
             'url'                   => route('user.pm.show', [$this->id]),
             'created_at'            => format_date($this->created_at),
             'text'                  => excerpt($this->text, 50),
-            'photo'                 => $this->photo ?: (string) $this->author->photo // todo: refaktoryzacja wiadomosci prywatnych
+            'photo'                 => $this->photo ? $this->getMediaUrl($this->photo) : ''
         ]);
+    }
+
+    /**
+     * @param string|null $filename
+     * @return string
+     */
+    private function getMediaUrl(?string $filename): string
+    {
+        return $filename ? app(Factory::class)->make('photo', ['file_name' => $filename])->url() : '';
     }
 }

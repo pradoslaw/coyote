@@ -180,7 +180,7 @@ class PmController extends BaseController
             return $this->pm->submit($this->auth, $request->all() + ['author_id' => $recipient->id]);
         });
 
-        event(new PmCreated($pm));
+//        event(new PmCreated($pm));
 
         $recipient->notify(new PmCreatedNotification($pm));
 
