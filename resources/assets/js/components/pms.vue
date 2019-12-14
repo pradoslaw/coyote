@@ -1,6 +1,6 @@
 <template>
-    <li :class="{'open': isOpen}">
-        <a @click.prevent="loadPms" href="/User/Pm" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+    <li :class="{'open': isOpen}" v-on-clickaway="hideDropdown">
+        <a @click.prevent="loadPms" href="/User/Pm" role="button" aria-haspopup="true" aria-expanded="false">
             <span v-show="counter > 0" class="badge">{{ counter }}</span>
 
             <i class="fas fa-envelope fa-fw"></i>
@@ -60,8 +60,10 @@
     import axios from 'axios';
     import Config from '../libs/config';
     import { default as PerfectScrollbar } from '../components/perfect-scrollbar';
+    import { mixin as clickaway } from 'vue-clickaway';
 
     export default {
+        mixins: [ clickaway ],
         components: {
             'perfect-scrollbar': PerfectScrollbar
         },
@@ -84,12 +86,17 @@
         },
         methods: {
             loadPms() {
-                if (this.$refs.dropdown.style.display === 'none') {
+                this.isOpen = !this.isOpen;
+
+                if (this.pm === null) {
                     axios.get('/User/Pm/Ajax').then(result => {
                         this.pm = result.data.pm;
-                        console.log(this.pm);
                     });
                 }
+            },
+
+            hideDropdown() {
+                this.isOpen = false;
             },
 
             listenForPm() {

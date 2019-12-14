@@ -1,5 +1,5 @@
 <template>
-    <li :class="{'open': isOpen}" v-on-clickaway="hideDropdown" >
+    <li :class="{'open': isOpen}" v-on-clickaway="hideDropdown">
         <a @click.prevent="loadNotifications" href="/User/Notifications" role="button" aria-haspopup="true" aria-expanded="false">
             <span v-show="counter > 0" class="badge">{{ counter }}</span>
 
