@@ -53,7 +53,7 @@ class CreatedNotification extends Notification implements ShouldQueue
             'subject'       => $this->job->title,
             'excerpt'       => 'Ogłoszenie zostało dodane i oczekuje na płatność',
             'url'           => UrlBuilder::job($this->job),
-            'guid'          => $this->id
+            'id'            => $this->id
         ];
     }
 

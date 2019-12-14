@@ -96,7 +96,7 @@ class NotificationRepository extends Repository implements NotificationRepositor
                         ->orderBy('notification_senders.id');
                 }])
                 ->join('notification_types', 'notification_types.id', '=', 'type_id')
-                ->orderBy('notifications.id', 'DESC');
+                ->orderBy('notifications.created_at', 'DESC');
     }
 
     /**

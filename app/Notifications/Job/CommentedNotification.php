@@ -44,7 +44,7 @@ class CommentedNotification extends Notification implements ShouldQueue, ShouldB
             'subject'       => $this->comment->job->title,
             'excerpt'       => excerpt($this->comment->html),
             'url'           => UrlBuilder::jobComment($this->comment->job, $this->comment->id),
-            'guid'          => $this->id
+            'id'            => $this->id
         ];
     }
 

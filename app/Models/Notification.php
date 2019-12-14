@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $subject
  * @property string $excerpt
  * @property string $url
- * @property string $guid
  * @property \Carbon\Carbon $read_at
  * @property bool $is_clicked
  * @property Notification\Sender[] $senders
@@ -46,12 +45,17 @@ class Notification extends Model
      *
      * @var array
      */
-    protected $fillable = ['type_id', 'user_id', 'subject', 'excerpt', 'url', 'object_id', 'guid'];
+    protected $fillable = ['id', 'type_id', 'user_id', 'subject', 'excerpt', 'url', 'object_id'];
 
     /**
      * @var bool
      */
     public $timestamps = false;
+
+    /**
+     * @var bool
+     */
+    public $incrementing = false;
 
     /**
      * @var string

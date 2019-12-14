@@ -128,13 +128,13 @@ class NotificationsController extends BaseController
     }
 
     /**
-     * @param string $guid
+     * @param string $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function url(string $guid)
+    public function url(string $id)
     {
         /** @var \Coyote\Notification $notification */
-        $notification = $this->notification->findBy('guid', $guid, ['id', 'url', 'read_at', 'is_clicked']);
+        $notification = $this->notification->find($id, ['id', 'url', 'read_at', 'is_clicked']);
         abort_if($notification === null, 404);
 
         $notification->is_clicked = true;

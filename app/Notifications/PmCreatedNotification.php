@@ -68,7 +68,7 @@ class PmCreatedNotification extends Notification implements ShouldQueue, ShouldB
             'subject'       => $excerpt,
             'excerpt'       => $excerpt,
             'url'           => route('user.pm.show', [$this->pm->id - 1], false),
-            'guid'          => $this->id
+            'id'            => $this->id
         ];
     }
 

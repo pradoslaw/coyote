@@ -101,7 +101,7 @@ class ApplicationSentNotification extends Notification implements ShouldQueue, N
             'subject'       => $this->application->job->title,
             'excerpt'       => null,
             'url'           => UrlBuilder::job($this->application->job),
-            'guid'          => $this->id
+            'id'            => $this->id
         ];
     }
 

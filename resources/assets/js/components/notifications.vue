@@ -121,7 +121,7 @@
             },
 
             showNotification(notification) {
-                window.location.href = `/notification/${notification.guid}`;
+                window.location.href = `/notification/${notification.id}`;
             },
 
             deleteNotification(notification) {
