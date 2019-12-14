@@ -17,6 +17,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class PmResource extends JsonResource
 {
     /**
+     * @var \Coyote\Services\Parser\Factories\PmFactory
+     */
+    private static $parser = null;
+
+    /**
      * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -29,18 +34,22 @@ class PmResource extends JsonResource
         return array_merge($only, [
             'url'                   => route('user.pm.show', [$this->id]),
             'created_at'            => format_date($this->created_at),
-            'text'                  => excerpt($this->text, 50),
-            'photo'                 => $this->photo ? $this->getMediaUrl($this->photo) : '',
-            'read_at'               => $this->folder == Pm::SENTBOX ? true : $this->read_at
+            'text'                  => excerpt($this->parse($this->text), 50),
+            'read_at'               => $this->folder == Pm::SENTBOX ? true : $this->read_at,
+            'user'                  => new UserResource($this->author)
         ]);
     }
 
     /**
-     * @param string|null $filename
+     * @param string $text
      * @return string
      */
-    private function getMediaUrl(?string $filename): string
+    private function parse(string $text): string
     {
-        return $filename ? app(Factory::class)->make('photo', ['file_name' => $filename])->url() : '';
+        if (self::$parser === null) {
+            self::$parser = app('parser.pm');
+        }
+
+        return self::$parser->parse($text);
     }
 }

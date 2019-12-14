@@ -106,8 +106,6 @@ class PmController extends BaseController
             }
         }
 
-        event(new PmCreated($row));
-
         if ($request->ajax()) {
             return view('user.pm.infinite')->with('talk', $talk);
         }
@@ -125,12 +123,7 @@ class PmController extends BaseController
      */
     public function ajax()
     {
-        $parser = $this->getParser();
-
-        $pm = $this->pm->takeForUser($this->userId);
-        foreach ($pm as &$row) {
-            $row->text = $parser->parse($row->text);
-        }
+        $pm = $this->pm->groupByAuthor($this->userId);
 
         return response()->json([
             'pm' => PmResource::collection($pm)->toArray($this->request)

@@ -1,16 +1,16 @@
 <div class="media {{ not item.read_at and item.folder == constant('Coyote\\Pm::INBOX') ? 'unread' }}">
     <div class="media-left">
-        <a href="{{ route('profile', [link_to_profile ? item.user_id : item.author_id]) }}">
-            <img class="media-object" src="{{ user_photo(item.photo) }}" style="width: 50px; height: 50px;" alt="{{ item.name }}">
+        <a href="{{ route('profile', [item.author_id]) }}">
+            <img class="media-object" src="{{ user_photo(item.author.photo) }}" style="width: 50px; height: 50px;" alt="{{ item.author.name }}">
         </a>
     </div>
     <div class="media-body">
         <small class="pull-right">{{ item.created_at|format_date }}</small>
         <h3 class="media-heading">
             {% if link_to_profile %}
-                {{ link_to_profile(item.user_id, item.name, item.is_active, item.is_blocked) }}
+                {{ link_to_profile(item.author_id, item.author.name, item.author.deleted_at, item.author.is_blocked) }}
             {% else %}
-                <a href="{{ route('user.pm.show', [item.id]) }}">{{ item.name }}</a>
+                <a href="{{ route('user.pm.show', [item.id]) }}">{{ item.author.name }}</a>
             {% endif %}
         </h3>
 

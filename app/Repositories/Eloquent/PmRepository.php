@@ -28,7 +28,7 @@ class PmRepository extends Repository implements PmRepositoryInterface
      * @param int $limit
      * @return mixed
      */
-    public function takeForUser($userId, $limit = 10)
+    public function groupByAuthor($userId, $limit = 10)
     {
         return $this->prepare($userId)->limit($limit)->get();
     }
@@ -172,14 +172,17 @@ class PmRepository extends Repository implements PmRepositoryInterface
                 'm.read_at',
                 'pm_text.text',
                 'pm_text.created_at',
-                'name',
-                $this->raw('users.deleted_at IS NULL AS is_active'),
-                'is_blocked',
-                'photo'
+//                'name',
+//                $this->raw('users.deleted_at IS NULL AS is_active'),
+//                'is_blocked',
+//                'photo'
             ])
             ->from($this->raw('(' . $this->toSql($this->subSql($userId)) . ') AS m'))
             ->join('pm_text', 'pm_text.id', '=', 'text_id')
-            ->join('users', 'users.id', '=', 'author_id')
+            ->with(['author' => function ($builder) {
+                return $builder->select(['id', 'name', 'photo', 'is_blocked', 'deleted_at'])->withTrashed();
+            }])
+//            ->join('users', 'users.id', '=', 'author_id')
             ->orderBy('m.id', 'DESC');
     }
 

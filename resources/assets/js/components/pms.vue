@@ -24,14 +24,14 @@
                     <a :href="item.url" class="notification-link">
                         <div class="media">
                             <div class="media-left">
-                                <object class="media-object" :data="item.photo || '//'" type="image/png">
+                                <object class="media-object" :data="item.user.photo || '//'" type="image/png">
                                     <img src="/img/avatar.png">
                                 </object>
                             </div>
 
                             <div class="media-body">
                                 <header>
-                                    <h4>{{ item.name }}</h4>
+                                    <h4>{{ item.user.name }}</h4>
                                     <small>{{ item.created_at }}</small>
                                 </header>
 
@@ -100,9 +100,10 @@
             },
 
             listenForPm() {
-                ws.on('pm', data => {
+                ws.on('Coyote\\Events\\PmCreated', data => {
                     this.counter += 1;
                     this.isOpen = false;
+                    this.pm = null;
 
                     DesktopNotifications.doNotify('', data.text, data.url);
                 });
