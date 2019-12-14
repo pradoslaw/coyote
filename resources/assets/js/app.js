@@ -12,6 +12,8 @@ import 'core-js/modules/es7.array.includes';
 import 'core-js/modules/es6.object.assign';
 // array forEach -- support for old browsers
 import 'core-js/modules/es6.array.for-each';
+// array isArray -- support for old browser
+import 'core-js/modules/es6.array.is-array';
 
 import './components/dropdown.js';
 import './components/scrolltop.js';

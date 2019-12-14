@@ -70,7 +70,7 @@ abstract class AbstractNotification extends Notification implements ShouldQueue,
             'headline'  => $this->getMailSubject(),
             'subject'   => excerpt($this->microblog->html),
             'url'       => $this->notificationUrl(),
-            'photo'     => $this->notifier->photo,
+            'photo'     => $this->notifier->photo->url(),
             'is_read'   => false,
             'created_at'=> format_date(Carbon::now())
         ]);

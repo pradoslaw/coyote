@@ -1,6 +1,6 @@
 <template>
-    <li :class="{'open': isOpen}">
-        <a @click.prevent="loadNotifications" href="/User/Notifications" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+    <li :class="{'open': isOpen}" v-on-clickaway="hideDropdown" >
+        <a @click.prevent="loadNotifications" href="/User/Notifications" role="button" aria-haspopup="true" aria-expanded="false">
             <span v-show="counter > 0" class="badge">{{ counter }}</span>
 
             <i class="fas fa-bell fa-fw"></i>
@@ -10,12 +10,12 @@
             <div class="dropdown-header">
                 <a title="Przejdź do listy powiadomień" href="/User/Notifications">Powiadomienia</a>
 
-                <a @click.prevent="markAllAsRead" title="Oznacz jako przeczytane" href="/User/Notifications/Mark" class="pull-right">
+                <a @click.stop="markAllAsRead" title="Oznacz jako przeczytane" href="javascript:" class="pull-right">
                     <i class="far fa-calendar-check"></i>
                 </a>
             </div>
 
-            <perfect-scrollbar class="dropdown-modal" :options="{wheelPropagation: false}" @ps-y-reach-end="loadMoreNotifications">
+            <perfect-scrollbar ref="scrollbar" class="dropdown-modal" :options="{wheelPropagation: false}">
                 <div v-if="notifications === null" class="text-center">
                     <i class="fas fa-spinner fa-spin"></i>
                 </div>
@@ -59,8 +59,10 @@
     import axios from 'axios';
     import Config from "../libs/config";
     import { default as PerfectScrollbar } from '../components/perfect-scrollbar';
+    import { mixin as clickaway } from 'vue-clickaway';
 
     export default {
+        mixins: [ clickaway ],
         components: {
             'perfect-scrollbar': PerfectScrollbar
         },
@@ -93,12 +95,15 @@
         methods: {
             loadNotifications() {
                 DesktopNotifications.requestPermission();
+                this.isOpen = !this.isOpen;
 
-                if (this.$refs.dropdown.style.display === 'none') {
+                if (this.notifications === null) {
                     axios.get('/User/Notifications/Ajax').then(result => {
                         this.notifications = result.data.notifications;
                         this.counter = result.data.unread;
                         this.offset = result.data.offset;
+
+                        this.$refs.scrollbar.$refs.container.addEventListener('ps-y-reach-end', this.loadMoreNotifications);
                     });
                 }
             },
@@ -112,7 +117,7 @@
 
                 axios.get('/User/Notifications/Ajax', {params: {offset: this.offset}})
                     .then(result => {
-                        this.notifications = Object.assign(this.notifications, result.data.notifications);
+                        this.notifications = this.notifications.concat(result.data.notifications);
                         this.offset = result.data.offset;
                     })
                     .finally(() => {
@@ -144,6 +149,17 @@
                 notification.is_read = true;
             },
 
+            hideDropdown() {
+                this.isOpen = false;
+            },
+
+            resetNotifications() {
+                this.$refs.scrollbar.$refs.container.removeEventListener('ps-y-reach-end', this.loadMoreNotifications);
+                this.isOpen = false;
+                this.notifications = null; // reset notifications list. user needs to click again to get all notifications from server
+                this.offset = 0;
+            },
+
             listenForNotification() {
                 Session.addListener(e => {
                     if (e.key === 'notifications' && e.newValue !== this.counter) {
@@ -153,7 +169,7 @@
 
                 ws.on('Illuminate\\Notifications\\Events\\BroadcastNotificationCreated', data => {
                     this.counter += 1;
-                    this.isOpen = false;
+                    this.resetNotifications();
 
                     DesktopNotifications.doNotify(data.headline, data.subject, data.url);
                 });

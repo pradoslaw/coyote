@@ -91,8 +91,9 @@ class NotificationsController extends BaseController
     public function ajax(Request $request)
     {
         $unread = $this->auth->notifications_unread;
+        $offset = $request->query('offset', 0);
 
-        $notifications = $this->notification->takeForUser($this->userId, max(10, $unread), $request->query('offset', 0));
+        $notifications = $this->notification->takeForUser($this->userId, max(10, $unread), $offset);
         $unread -= $this->mark($notifications);
 
         // format notification's headline
@@ -101,7 +102,7 @@ class NotificationsController extends BaseController
         return response()->json([
             'unread'            => $unread,
             'notifications'     => $notifications,
-            'offset'            => count($notifications)
+            'offset'            => count($notifications) + $offset
         ]);
     }
 
