@@ -4,8 +4,8 @@ namespace Coyote\Events;
 
 use Coyote\Http\Resources\PmResource;
 use Coyote\Pm;
+use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -34,7 +34,7 @@ class PmCreated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PresenceChannel('user:' . $this->pm->author_id);
+        return new Channel('user:' . $this->pm->author_id);
     }
 
     /**
@@ -42,6 +42,7 @@ class PmCreated implements ShouldBroadcast
      */
     public function broadcastWith()
     {
+//        dd((new PmResource($this->pm))->toArray(request()));
         return (new PmResource($this->pm))->toArray(request());
     }
 }
