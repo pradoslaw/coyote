@@ -2,10 +2,13 @@
 
 namespace Coyote\Pm;
 
+use Coyote\WithoutUpdatedAt;
 use Illuminate\Database\Eloquent\Model;
 
 class Text extends Model
 {
+    use WithoutUpdatedAt;
+
     /**
      * @var string
      */
@@ -19,7 +22,12 @@ class Text extends Model
     protected $fillable = ['text'];
 
     /**
-     * @var bool
+     * @var array
      */
-    public $timestamps = false;
+    public $dates = ['created_at'];
+
+    /**
+     * @var string
+     */
+    protected $dateFormat = 'Y-m-d H:i:se';
 }

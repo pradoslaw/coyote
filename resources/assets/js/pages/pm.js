@@ -1,15 +1,33 @@
 import 'jquery-color-animation/jquery.animate-colors';
-import Dialog from '../libs/dialog';
+import axios from 'axios';
 import Config from '../libs/config';
 import store from '../store';
 import Vue from 'vue';
 import PerfectScrollbar from '../components/perfect-scrollbar';
 import VuePm from '../components/pm/message.vue';
+import VueTextareaAutosize from 'vue-textarea-autosize';
+import VuePrompt from '../components/prompt.vue';
+import VueButton from '../components/forms/button.vue';
+
+Vue.use(VueTextareaAutosize);
 
 new Vue({
   el: '#app',
   delimiters: ['${', '}'],
-  components: {'perfect-scrollbar': PerfectScrollbar, 'vue-pm': VuePm},
+  components: {
+    'perfect-scrollbar': PerfectScrollbar,
+    'vue-pm': VuePm,
+    'vue-prompt': VuePrompt,
+    'vue-button': VueButton
+  },
+  data() {
+    return {
+      recipient: window.data.recipient,
+      text: '',
+      isProcessing: false,
+      errorMessage: null
+    };
+  },
   store,
   created() {
     // fill vuex with data passed from controller to view
@@ -19,6 +37,26 @@ new Vue({
     const overview = document.getElementById('overview');
 
     document.getElementById('wrap').scrollTop = overview.clientHeight;
+  },
+  methods: {
+    sendMessage() {
+      this.isProcessing = true;
+
+      axios.post('/User/Pm/Submit', {recipient: this.recipient, text: this.text})
+        .then(result => {
+          store.commit('messages/add', result.data);
+
+          this.error = null;
+        })
+        .catch(err => {
+          let errors = err.response.data.errors;
+
+          this.errorMessage = errors[Object.keys(errors)[0]][0];
+        })
+        .finally(() => {
+          this.isProcessing = false;
+        });
+    }
   },
   computed: {
     messages() {

@@ -31,7 +31,7 @@ class Pm extends Model
      *
      * @var array
      */
-    protected $fillable = ['root_id', 'user_id', 'author_id', 'text_id', 'folder'];
+    protected $fillable = ['user_id', 'author_id', 'text_id', 'folder'];
 
     /**
      * @var bool

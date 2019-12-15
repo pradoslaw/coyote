@@ -2,10 +2,12 @@
 
 namespace Coyote\Http\Controllers\User;
 
+use Carbon\Carbon;
 use Coyote\Events\PmCreated;
 use Coyote\Http\Factories\MediaFactory;
 use Coyote\Http\Resources\PmResource;
 use Coyote\Notifications\PmCreatedNotification;
+use Coyote\Pm;
 use Coyote\Repositories\Contracts\NotificationRepositoryInterface as NotificationRepository;
 use Coyote\Repositories\Contracts\PmRepositoryInterface as PmRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
@@ -48,12 +50,6 @@ class PmController extends BaseController
         $this->user = $user;
         $this->notification = $notification;
         $this->pm = $pm;
-
-        $this->middleware(function (Request $request, $next) {
-            $request->attributes->set('preview_url', route('user.pm.preview'));
-
-            return $next($request);
-        });
     }
 
     /**
@@ -84,30 +80,27 @@ class PmController extends BaseController
     {
         $this->breadcrumb->push('Wiadomości prywatne', route('user.pm'));
 
-        $pm = $this->pm->findOrFail($id, ['user_id', 'author_id', 'root_id', 'id']);
+        $pm = $this->pm->findOrFail($id, ['user_id', 'author_id', 'id']);
         $this->authorize('show', $pm);
 
         $talk = $this->pm->talk($this->userId, $pm->author_id, 10, (int) $request->query('offset', 0));
 
         $messages = PmResource::collection($talk)->toArray($this->request);
-//        dd($messages);
-//        $parser = $this->getParser();
-//
-//        foreach ($talk as &$row) {
-//            $row['text'] = $parser->parse($row['text']);
-//
-//            // we have to mark this message as read
-//            if (!$row['read_at'] && $row['folder'] == \Coyote\Pm::INBOX) {
-//                // database trigger will decrease pm counter in "users" table.
-//                $this->pm->markAsRead($row['text_id']);
-//                $this->auth->pm_unread--;
-//
-//                // IF we have unread alert that is connected with that message... then we also have to mark it as read
+
+        foreach ($talk as &$row) {
+            // we have to mark this message as read
+            if (!$row->read_at && $row->folder == Pm::INBOX) {
+                // database trigger will decrease pm counter in "users" table.
+                $this->pm->markAsRead($row->text_id);
+
+                $this->auth->pm_unread--;
+
+                // IF we have unread alert that is connected with that message... then we also have to mark it as read
 //                if ($this->auth->notifications_unread) {
 //                    $this->notification->markAsReadByUrl($this->userId, route('user.pm.show', [$row['id']], false));
 //                }
-//            }
-//        }
+            }
+        }
 //
 //        if ($request->ajax()) {
 //            return view('user.pm.infinite')->with('talk', $talk);
@@ -155,14 +148,14 @@ class PmController extends BaseController
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return PmResource
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function save(Request $request)
     {
         $validator = $this->getValidationFactory()->make($request->all(), [
             'recipient'          => 'required|user_exist',
             'text'               => 'required|spam_foreign:1',
-            'root_id'            => 'nullable|exists:pm'
         ]);
 
         $validator->after(function (Validator $validator) use ($request) {
@@ -182,29 +175,20 @@ class PmController extends BaseController
 
         $recipient->notify(new PmCreatedNotification($pm));
 
-        // redirect to sent message...
-        return redirect()->route('user.pm.show', [$pm->id])->with('success', 'Wiadomość została wysłana');
+        PmResource::withoutWrapping();
+
+        return new PmResource($pm);
     }
 
     /**
-     * @param int $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Pm $pm
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function delete($id)
+    public function delete(Pm $pm)
     {
-        $pm = $this->pm->findOrFail($id, ['id', 'user_id', 'author_id']);
         $this->authorize('show', $pm);
 
-        return $this->transaction(function () use ($pm) {
-            $pm->delete();
-
-            $redirect = redirect();
-            $to = $this->pm->findWhere(['author_id' => $pm->author_id, 'user_id' => $this->userId], ['id']);
-
-            $redirect = $to->count() ? $redirect->route('user.pm.show', [$to->first()->id]) : $redirect->route('user.pm');
-
-            return $redirect->with('success', 'Wiadomość poprawnie usunięta');
-        });
+        $pm->delete();
     }
 
     /**

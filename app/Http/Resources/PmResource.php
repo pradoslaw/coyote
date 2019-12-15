@@ -4,6 +4,7 @@ namespace Coyote\Http\Resources;
 
 use Coyote\Pm;
 use Coyote\Services\Media\Factory;
+use Coyote\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -29,12 +30,15 @@ class PmResource extends JsonResource
      */
     public function toArray($request)
     {
-        $only = $this->resource->only(['id', 'folder', 'name']);
+        $only = $this->resource->only(['id', 'folder']);
+
+        $text = $this->parse($this->text instanceof Pm\Text ? $this->text->text : $this->text);
 
         return array_merge($only, [
             'url'                   => route('user.pm.show', [$this->id]),
             'created_at'            => format_date($this->created_at),
-            'text'                  => excerpt($this->parse($this->text), 50),
+            'excerpt'               => excerpt($text, 50),
+            'text'                  => $text,
             'read_at'               => $this->read_at ? format_date($this->read_at) : null,
             'user'                  => new UserResource($this->author)
         ]);

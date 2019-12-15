@@ -11,7 +11,7 @@ const mutations = {
         state.messages = messages;
     },
 
-    push (state, payload) {
+    add (state, payload) {
         state.messages.push(payload);
     },
 

@@ -20,7 +20,7 @@
               <span v-else>Ty: </span>
             </template>
 
-            {{ message.text }}
+            {{ message.excerpt }}
           </p>
         </div>
       </div>

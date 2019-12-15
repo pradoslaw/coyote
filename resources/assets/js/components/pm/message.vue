@@ -18,7 +18,7 @@
         <i class="fas fa-times"></i>
       </a>
 
-      <div class="pm-text">{{ message.text }}</div>
+      <div class="pm-text" v-html="message.text"></div>
 
       <small v-if="last && message.folder === SENTBOX && message.read_at" class="text-muted"><i class="fas fa-check"></i> Przeczytano, {{ message.read_at }}</small>
     </div>
