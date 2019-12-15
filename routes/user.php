@@ -21,12 +21,12 @@ $this->group(['namespace' => 'User', 'prefix' => 'User', 'middleware' => 'auth',
     $this->post('Notifications/Delete/{uuid}', ['uses' => 'NotificationsController@delete', 'as' => 'notifications.delete']);
 
     $this->get('Pm', ['uses' => 'PmController@index', 'as' => 'pm']);
-    $this->get('Pm/Show/{id}', ['uses' => 'PmController@show', 'as' => 'pm.show']);
+    $this->get('Pm/Show/{pm}', ['uses' => 'PmController@show', 'as' => 'pm.show']);
     $this->get('Pm/Submit', ['uses' => 'PmController@submit', 'as' => 'pm.submit']);
     $this->post('Pm/Submit', 'PmController@save');
-    $this->delete('Pm/Mark/{id}', ['uses' => 'PmController@markASRead', 'as' => 'pm.mark']);
-    $this->delete('Pm/Delete/{id}', ['uses' => 'PmController@delete', 'as' => 'pm.delete']);
-    $this->post('Pm/Trash/{id}', ['uses' => 'PmController@trash', 'as' => 'pm.trash']);
+    $this->post('Pm/Mark/{pm}', ['uses' => 'PmController@markASRead', 'as' => 'pm.mark']);
+    $this->delete('Pm/Delete/{pm}', ['uses' => 'PmController@delete', 'as' => 'pm.delete']);
+    $this->post('Pm/Trash/{pm}', ['uses' => 'PmController@trash', 'as' => 'pm.trash']);
     $this->post('Pm/Preview', ['uses' => 'PmController@preview', 'as' => 'pm.preview']);
     $this->get('Pm/Ajax', ['uses' => 'PmController@ajax', 'as' => 'pm.ajax']);
     $this->post('Pm/Paste', ['uses' => 'PmController@paste', 'as' => 'pm.paste']);

@@ -63,9 +63,7 @@
         } else {
           this.$refs.confirm.close();
 
-          axios.delete(`/User/Pm/Delete/${this.message.id}`).then(() => {
-            this.$store.commit('messages/remove', this.message);
-          });
+          this.$store.dispatch('messages/remove', this.message);
         }
       },
 
@@ -74,10 +72,8 @@
           return;
         }
 
-        this.message.read_at = new Date;
-
-        axios.delete(`/User/Pm/Mark/${this.message.id}`).then(() => {
-          this.$store.commit('messages/remove', this.message);
+        this.$store.dispatch('messages/mark', this.message).then(() => {
+          this.$store.commit('inbox/decrement');
         });
       }
     },

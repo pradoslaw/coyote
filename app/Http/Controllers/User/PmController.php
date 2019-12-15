@@ -2,7 +2,6 @@
 
 namespace Coyote\Http\Controllers\User;
 
-use Carbon\Carbon;
 use Coyote\Events\PmCreated;
 use Coyote\Http\Factories\MediaFactory;
 use Coyote\Http\Requests\PmRequest;
@@ -12,7 +11,6 @@ use Coyote\Pm;
 use Coyote\Repositories\Contracts\NotificationRepositoryInterface as NotificationRepository;
 use Coyote\Repositories\Contracts\PmRepositoryInterface as PmRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
-use Illuminate\Validation\Validator;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 
@@ -71,31 +69,23 @@ class PmController extends BaseController
     }
 
     /**
-     * Show conversation
-     *
-     * @param int $id
+     * @param Pm $pm
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function show($id, Request $request)
+    public function show(Pm $pm, Request $request)
     {
         $this->breadcrumb->push('Wiadomości prywatne', route('user.pm'));
 
-        $pm = $this->pm->findOrFail($id, ['user_id', 'author_id', 'id']);
         $this->authorize('show', $pm);
 
         $talk = $this->pm->talk($this->userId, $pm->author_id, 10, (int) $request->query('offset', 0));
 
-        $messages = PmResource::collection($talk)->toArray($this->request);
-
-//
-//        if ($request->ajax()) {
-//            return view('user.pm.infinite')->with('talk', $talk);
-//        }
-//
-//        $this->request->attributes->set('infinity_url', route('user.pm.show', [$id]));
+        $messages = PmResource::collection($talk);
 
         $recipient = $this->user->find($pm->author_id, ['id', 'name']);
+
         return $this->view('user.pm.show')->with(compact('pm', 'messages', 'recipient'));
     }
 
@@ -109,7 +99,7 @@ class PmController extends BaseController
         $pm = $this->pm->groupByAuthor($this->userId);
 
         return response()->json([
-            'pm' => PmResource::collection($pm)->toArray($this->request)
+            'pm' => PmResource::collection($pm)
         ]);
     }
 
@@ -134,9 +124,8 @@ class PmController extends BaseController
     }
 
     /**
-     * @param Request $request
+     * @param PmRequest $request
      * @return PmResource
-     * @throws \Illuminate\Validation\ValidationException
      */
     public function save(PmRequest $request)
     {

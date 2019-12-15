@@ -32,10 +32,11 @@ import './bootstrap';
 import Config from './libs/config';
 import Router from './libs/router';
 import Prism from 'prismjs';
+import axios from 'axios';
 
 Prism.highlightAll();
 
-
+axios.defaults.headers.common['X-CSRF-TOKEN'] = Config.csrfToken();
 
 $(function () {
     'use strict';

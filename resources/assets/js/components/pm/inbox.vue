@@ -1,7 +1,7 @@
 <template>
   <li :class="{'open': isOpen}" v-on-clickaway="hideDropdown">
     <a @click.prevent="loadMessages" href="/User/Pm" role="button" aria-haspopup="true" aria-expanded="false">
-      <span v-show="counter > 0" class="badge">{{ counter }}</span>
+      <span v-show="count > 0" class="badge">{{ count }}</span>
 
       <i class="fas fa-envelope fa-fw"></i>
     </a>
@@ -32,6 +32,7 @@
   import DesktopNotifications from '../../libs/notifications';
   import {default as ws} from '../../libs/realtime.js';
   import axios from 'axios';
+  import store from '../../store';
   import Config from '../../libs/config';
   import {default as PerfectScrollbar} from '../perfect-scrollbar';
   import {mixin as clickaway} from 'vue-clickaway';
@@ -43,30 +44,21 @@
       'perfect-scrollbar': PerfectScrollbar,
       'vue-message': VueMessage
     },
-    props: {
-      counter: {
-        type: Number
-      }
-    },
+    store,
     data() {
       return {
-        isOpen: false,
-        messages: null // initial value must be null to show fa-spinner
+        isOpen: false
       }
     },
     mounted() {
-      axios.defaults.headers.common['X-CSRF-TOKEN'] = Config.csrfToken();
-
       this.listenForMessages();
     },
     methods: {
       loadMessages() {
         this.isOpen = !this.isOpen;
 
-        if (this.messages === null) {
-          axios.get('/User/Pm/Ajax').then(result => {
-            this.messages = result.data.pm;
-          });
+        if (this.$store.getters['inbox/isEmpty']) {
+          this.$store.dispatch('inbox/get');
         }
       },
 
@@ -76,13 +68,22 @@
 
       listenForMessages() {
         ws.on('Coyote\\Events\\PmCreated', data => {
-          this.counter += 1;
+          this.$store.commit('inbox/increment');
+          this.$store.commit('inbox/reset');
+
           this.isOpen = false;
-          this.messages = null;
 
           DesktopNotifications.doNotify(data.user.name, data.excerpt, data.url);
         });
       },
+    },
+    computed: {
+      messages() {
+        return this.$store.state.inbox.messages;
+      },
+      count() {
+        return this.$store.state.inbox.count;
+      }
     }
   };
 </script>
