@@ -88,32 +88,35 @@ class PmController extends BaseController
         $this->authorize('show', $pm);
 
         $talk = $this->pm->talk($this->userId, $pm->author_id, 10, (int) $request->query('offset', 0));
-        $parser = $this->getParser();
 
-        foreach ($talk as &$row) {
-            $row['text'] = $parser->parse($row['text']);
-
-            // we have to mark this message as read
-            if (!$row['read_at'] && $row['folder'] == \Coyote\Pm::INBOX) {
-                // database trigger will decrease pm counter in "users" table.
-                $this->pm->markAsRead($row['text_id']);
-                $this->auth->pm_unread--;
-
-                // IF we have unread alert that is connected with that message... then we also have to mark it as read
-                if ($this->auth->notifications_unread) {
-                    $this->notification->markAsReadByUrl($this->userId, route('user.pm.show', [$row['id']], false));
-                }
-            }
-        }
-
-        if ($request->ajax()) {
-            return view('user.pm.infinite')->with('talk', $talk);
-        }
-
-        $this->request->attributes->set('infinity_url', route('user.pm.show', [$id]));
+        $messages = PmResource::collection($talk)->toArray($this->request);
+//        dd($messages);
+//        $parser = $this->getParser();
+//
+//        foreach ($talk as &$row) {
+//            $row['text'] = $parser->parse($row['text']);
+//
+//            // we have to mark this message as read
+//            if (!$row['read_at'] && $row['folder'] == \Coyote\Pm::INBOX) {
+//                // database trigger will decrease pm counter in "users" table.
+//                $this->pm->markAsRead($row['text_id']);
+//                $this->auth->pm_unread--;
+//
+//                // IF we have unread alert that is connected with that message... then we also have to mark it as read
+//                if ($this->auth->notifications_unread) {
+//                    $this->notification->markAsReadByUrl($this->userId, route('user.pm.show', [$row['id']], false));
+//                }
+//            }
+//        }
+//
+//        if ($request->ajax()) {
+//            return view('user.pm.infinite')->with('talk', $talk);
+//        }
+//
+//        $this->request->attributes->set('infinity_url', route('user.pm.show', [$id]));
 
         $recipient = $this->user->find($pm->author_id, ['name']);
-        return $this->view('user.pm.show')->with(compact('pm', 'talk', 'recipient'));
+        return $this->view('user.pm.show')->with(compact('pm', 'messages', 'recipient'));
     }
 
     /**

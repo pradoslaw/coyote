@@ -35,7 +35,7 @@ class PmResource extends JsonResource
             'url'                   => route('user.pm.show', [$this->id]),
             'created_at'            => format_date($this->created_at),
             'text'                  => excerpt($this->parse($this->text), 50),
-            'read_at'               => $this->folder == Pm::SENTBOX ? true : $this->read_at,
+            'read_at'               => $this->read_at ? format_date($this->read_at) : null,
             'user'                  => new UserResource($this->author)
         ]);
     }

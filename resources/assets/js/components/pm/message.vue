@@ -1,0 +1,78 @@
+<template>
+  <div class="media" :class="{'unread': ! isRead}">
+    <div class="media-left">
+      <a v-profile="message.user.id">
+        <object :data="message.user.photo" type="image/png" class="media-object" style="width: 50px; height: 50px;">
+          <img src="/img/avatar.png" :alt="message.user.name">
+        </object>
+      </a>
+    </div>
+    <div class="media-body">
+      <small class="pull-right">{{ message.created_at }}</small>
+
+      <h3 class="media-heading">
+        {{ message.user.name }}
+      </h3>
+
+      <a @click="deleteMessage(true)" class="btn-delete-pm pull-right text-danger" href="javascript:" title="Usuń">
+        <i class="fas fa-times"></i>
+      </a>
+
+      <div class="pm-text">{{ message.text }}</div>
+
+      <small v-if="last && message.folder === SENTBOX && message.read_at" class="text-muted"><i class="fas fa-check"></i> Przeczytano, {{ message.read_at }}</small>
+    </div>
+
+    <vue-modal ref="confirm">
+      Czy na pewno chcesz usunąć tę wiadomość?
+
+      <template slot="buttons">
+        <button @click="$refs.confirm.close()" type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
+        <button @click="deleteMessage(false)" type="submit" class="btn btn-danger danger">Tak, usuń</button>
+      </template>
+    </vue-modal>
+  </div>
+</template>
+
+<script>
+  import { default as mixins } from '../mixins/user';
+  import axios from 'axios';
+  import VueModal from '../modal.vue';
+
+  export default {
+    mixins: [ mixins ],
+    components: {'vue-modal': VueModal},
+    props: {
+      message: {
+        type: Object
+      },
+      last: {
+        type: Boolean,
+        default: false
+      }
+    },
+    data() {
+      return {
+        SENTBOX: 2
+      }
+    },
+    methods: {
+      deleteMessage(confirm) {
+        if (confirm) {
+          this.$refs.confirm.open();
+        } else {
+          this.$refs.confirm.close();
+
+          axios.delete(`/User/Pm/Delete/${this.message.id}`).then(() => {
+            this.$store.commit('messages/remove', this.message);
+          });
+        }
+      }
+    },
+    computed: {
+      isRead() {
+        return this.message.folder !== this.SENTBOX ? (this.message.read_at !== null) : true;
+      }
+    }
+  }
+</script>

@@ -42,7 +42,6 @@ class PmCreated implements ShouldBroadcast
      */
     public function broadcastWith()
     {
-//        dd((new PmResource($this->pm))->toArray(request()));
         return (new PmResource($this->pm))->toArray(request());
     }
 }

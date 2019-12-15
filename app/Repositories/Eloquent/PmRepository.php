@@ -74,9 +74,12 @@ class PmRepository extends Repository implements PmRepositoryInterface
     {
         $builder = $this
             ->model->select([
-                'pm.*',
+                'pm.id',
+                'pm.text_id',
+                'pm.folder',
+                'pm.read_at',
                 $this->raw(
-                    sprintf('(CASE WHEN folder = %d THEN user_id ELSE author_id END) AS host_id', Pm::SENTBOX)
+                    sprintf('(CASE WHEN folder = %d THEN user_id ELSE author_id END) AS author_id', Pm::SENTBOX)
                 )
             ])
             ->where('user_id', $userId)
@@ -89,19 +92,23 @@ class PmRepository extends Repository implements PmRepositoryInterface
                     'pm.*',
                     'pm_text.text',
                     'pm_text.created_at',
-                    'users.id AS user_id',
-                    'name',
-                    $this->raw('users.deleted_at IS NULL AS is_active'),
-                    'is_blocked',
-                    'photo'
+                    'pm.author_id'
+//                    'users.id AS user_id',
+//                    'name',
+//                    $this->raw('users.deleted_at IS NULL AS is_active'),
+//                    'is_blocked',
+//                    'photo'
                 ])
                 ->from($this->raw('(' . $this->toSql($builder) . ') AS pm'))
                 ->join('pm_text', 'pm_text.id', '=', 'text_id')
-                ->leftJoin('users', 'users.id', '=', 'host_id')
+//                ->leftJoin('users', 'users.id', '=', 'host_id')
+                ->with(['author' => function ($builder) {
+                    return $builder->select(['id', 'name', 'photo', 'is_blocked', 'deleted_at'])->withTrashed();
+                }])
                 ->orderBy('pm.id', 'DESC')
                 ->get();
 
-        return $result->reverse();
+        return $result->reverse()->values();
     }
 
     /**
@@ -171,18 +178,13 @@ class PmRepository extends Repository implements PmRepositoryInterface
                 'm.folder',
                 'm.read_at',
                 'pm_text.text',
-                'pm_text.created_at',
-//                'name',
-//                $this->raw('users.deleted_at IS NULL AS is_active'),
-//                'is_blocked',
-//                'photo'
+                'pm_text.created_at'
             ])
             ->from($this->raw('(' . $this->toSql($this->subSql($userId)) . ') AS m'))
             ->join('pm_text', 'pm_text.id', '=', 'text_id')
             ->with(['author' => function ($builder) {
                 return $builder->select(['id', 'name', 'photo', 'is_blocked', 'deleted_at'])->withTrashed();
             }])
-//            ->join('users', 'users.id', '=', 'author_id')
             ->orderBy('m.id', 'DESC');
     }
 
