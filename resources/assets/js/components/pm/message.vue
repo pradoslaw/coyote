@@ -75,6 +75,10 @@
         }
 
         this.message.read_at = new Date;
+
+        axios.delete(`/User/Pm/Mark/${this.message.id}`).then(() => {
+          this.$store.commit('messages/remove', this.message);
+        });
       }
     },
     computed: {

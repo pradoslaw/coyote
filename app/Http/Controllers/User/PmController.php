@@ -88,20 +88,6 @@ class PmController extends BaseController
 
         $messages = PmResource::collection($talk)->toArray($this->request);
 
-        foreach ($talk as &$row) {
-            // we have to mark this message as read
-            if (!$row->read_at && $row->folder == Pm::INBOX) {
-                // database trigger will decrease pm counter in "users" table.
-                $this->pm->markAsRead($row->text_id);
-
-                $this->auth->pm_unread--;
-
-                // IF we have unread alert that is connected with that message... then we also have to mark it as read
-//                if ($this->auth->notifications_unread) {
-//                    $this->notification->markAsReadByUrl($this->userId, route('user.pm.show', [$row['id']], false));
-//                }
-            }
-        }
 //
 //        if ($request->ajax()) {
 //            return view('user.pm.infinite')->with('talk', $talk);
@@ -178,6 +164,25 @@ class PmController extends BaseController
         $this->authorize('show', $pm);
 
         $pm->delete();
+    }
+
+    /**
+     * @param Pm $pm
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function markAsRead(Pm $pm)
+    {
+        $this->authorize('show', $pm);
+
+        if (!$pm->read_at) {
+            // database trigger will decrease pm counter in "users" table.
+            $this->pm->markAsRead($pm->text_id);
+
+            // IF we have unread alert that is connected with that message... then we also have to mark it as read
+//                if ($this->auth->notifications_unread) {
+//                    $this->notification->markAsReadByUrl($this->userId, route('user.pm.show', [$row['id']], false));
+//                }
+        }
     }
 
     /**

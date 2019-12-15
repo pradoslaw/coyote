@@ -57,7 +57,7 @@
     mounted() {
       axios.defaults.headers.common['X-CSRF-TOKEN'] = Config.csrfToken();
 
-      this.listenForPm();
+      this.listenForMessages();
     },
     methods: {
       loadMessages() {
@@ -74,13 +74,13 @@
         this.isOpen = false;
       },
 
-      listenForPm() {
+      listenForMessages() {
         ws.on('Coyote\\Events\\PmCreated', data => {
           this.counter += 1;
           this.isOpen = false;
           this.messages = null;
 
-          DesktopNotifications.doNotify('', data.text, data.url);
+          DesktopNotifications.doNotify(data.user.name, data.excerpt, data.url);
         });
       },
     }
