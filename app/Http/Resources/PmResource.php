@@ -40,7 +40,7 @@ class PmResource extends JsonResource
             'excerpt'               => excerpt($text, 50),
             'text'                  => $text,
             'read_at'               => $this->read_at ? format_date($this->read_at) : null,
-            'user'                  => new UserResource($this->author)
+            'user'                  => new UserResource($this->user)
         ]);
     }
 

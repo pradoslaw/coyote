@@ -1,5 +1,5 @@
 <template>
-  <div :title="message.text" :class="{'unread': ! isRead}" class="notification">
+  <div :title="message.excerpt" :class="{'unread': ! isRead}" class="notification">
     <a :href="message.url" class="notification-link">
       <div class="media">
         <div class="media-left">

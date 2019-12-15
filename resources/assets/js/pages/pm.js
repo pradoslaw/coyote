@@ -1,4 +1,3 @@
-import 'jquery-color-animation/jquery.animate-colors';
 import axios from 'axios';
 import Config from '../libs/config';
 import store from '../store';
@@ -8,6 +7,8 @@ import VuePm from '../components/pm/message.vue';
 import VueTextareaAutosize from 'vue-textarea-autosize';
 import VuePrompt from '../components/prompt.vue';
 import VueButton from '../components/forms/button.vue';
+import {default as ws} from '../libs/realtime.js';
+import DesktopNotifications from "../libs/notifications";
 
 Vue.use(VueTextareaAutosize);
 
@@ -34,17 +35,26 @@ new Vue({
     store.commit('messages/init', window.data.messages);
   },
   mounted() {
-    const overview = document.getElementById('overview');
-
-    document.getElementById('wrap').scrollTop = overview.clientHeight;
+    this.listenForMessage();
+    this.scrollToBottom();
   },
   methods: {
+    scrollToBottom() {
+      const overview = document.getElementById('overview');
+
+      document.getElementById('wrap').scrollTop = overview.clientHeight;
+    },
+
     sendMessage() {
       this.isProcessing = true;
 
-      axios.post('/User/Pm/Submit', {recipient: this.recipient, text: this.text})
+      axios.post('/User/Pm/Submit', {recipient: this.recipient.name, text: this.text})
         .then(result => {
           store.commit('messages/add', result.data);
+
+          this.$nextTick(() => {
+            this.scrollToBottom();
+          });
 
           this.error = null;
         })
@@ -56,6 +66,20 @@ new Vue({
         .finally(() => {
           this.isProcessing = false;
         });
+    },
+
+    listenForMessage() {
+      ws.on('Coyote\\Events\\PmCreated', data => {
+        console.log(data);
+
+        if (data.user.id === this.recipient.id) {
+          store.commit('messages/add', data);
+
+          this.$nextTick(() => {
+            this.scrollToBottom();
+          });
+        }
+      });
     }
   },
   computed: {

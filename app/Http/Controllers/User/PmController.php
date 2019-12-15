@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers\User;
 use Carbon\Carbon;
 use Coyote\Events\PmCreated;
 use Coyote\Http\Factories\MediaFactory;
+use Coyote\Http\Requests\PmRequest;
 use Coyote\Http\Resources\PmResource;
 use Coyote\Notifications\PmCreatedNotification;
 use Coyote\Pm;
@@ -108,7 +109,7 @@ class PmController extends BaseController
 //
 //        $this->request->attributes->set('infinity_url', route('user.pm.show', [$id]));
 
-        $recipient = $this->user->find($pm->author_id, ['name']);
+        $recipient = $this->user->find($pm->author_id, ['id', 'name']);
         return $this->view('user.pm.show')->with(compact('pm', 'messages', 'recipient'));
     }
 
@@ -151,33 +152,21 @@ class PmController extends BaseController
      * @return PmResource
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function save(Request $request)
+    public function save(PmRequest $request)
     {
-        $validator = $this->getValidationFactory()->make($request->all(), [
-            'recipient'          => 'required|user_exist',
-            'text'               => 'required|spam_foreign:1',
-        ]);
-
-        $validator->after(function (Validator $validator) use ($request) {
-            if (mb_strtolower($request->get('recipient')) === mb_strtolower($this->auth->name)) {
-                $validator->errors()->add('recipient', trans('validation.custom.recipient.different'));
-            }
-        });
-
-        $this->validateWith($validator);
         $recipient = $this->user->findByName($request->get('recipient'));
 
         $pm = $this->transaction(function () use ($request, $recipient) {
             return $this->pm->submit($this->auth, $request->all() + ['author_id' => $recipient->id]);
         });
 
-        event(new PmCreated($pm));
+        event(new PmCreated($pm[Pm::INBOX]));
 
-        $recipient->notify(new PmCreatedNotification($pm));
+        $recipient->notify(new PmCreatedNotification($pm[Pm::INBOX]));
 
         PmResource::withoutWrapping();
 
-        return new PmResource($pm);
+        return new PmResource($pm[Pm::SENTBOX]);
     }
 
     /**

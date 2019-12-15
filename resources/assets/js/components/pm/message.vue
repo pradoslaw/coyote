@@ -1,5 +1,5 @@
 <template>
-  <div class="media" :class="{'unread': ! isRead}">
+  <div class="media" :class="{'unread': ! isRead}" @mouseenter.once="asRead">
     <div class="media-left">
       <a v-profile="message.user.id">
         <object :data="message.user.photo" type="image/png" class="media-object" style="width: 50px; height: 50px;">
@@ -67,6 +67,14 @@
             this.$store.commit('messages/remove', this.message);
           });
         }
+      },
+
+      asRead() {
+        if (this.isRead) {
+          return;
+        }
+
+        this.message.read_at = new Date;
       }
     },
     computed: {

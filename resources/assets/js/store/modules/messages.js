@@ -2,10 +2,6 @@ const state = {
     messages: []
 };
 
-// const getters = {
-//     exists: state => (payload) => state.subscribed.findIndex(item => item.id === payload.id)
-// };
-
 const mutations = {
     init (state, messages) {
         state.messages = messages;
@@ -23,7 +19,6 @@ const mutations = {
 
 export default {
     namespaced: true,
-    // getters,
     state,
     mutations,
 };

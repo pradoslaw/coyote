@@ -66,7 +66,7 @@
   <script>
     var data = {
       messages: {{ messages|json_encode|raw }},
-      recipient: '{{ recipient.name }}'
+      recipient: {{ recipient|json_encode|raw }}
     };
   </script>
 

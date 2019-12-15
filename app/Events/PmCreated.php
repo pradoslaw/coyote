@@ -34,7 +34,7 @@ class PmCreated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('user:' . $this->pm->author_id);
+        return new Channel('user:' . $this->pm->user_id);
     }
 
     /**
@@ -42,6 +42,8 @@ class PmCreated implements ShouldBroadcast
      */
     public function broadcastWith()
     {
+        $this->pm->setRelation('user', $this->pm->author);
+
         return (new PmResource($this->pm))->toArray(request());
     }
 }

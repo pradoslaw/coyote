@@ -80,7 +80,7 @@ class PmRepository extends Repository implements PmRepositoryInterface
                 'pm.folder',
                 'pm.read_at',
                 $this->raw(
-                    sprintf('(CASE WHEN folder = %d THEN user_id ELSE author_id END) AS author_id', Pm::SENTBOX)
+                    sprintf('(CASE WHEN folder = %d THEN user_id ELSE author_id END) AS user_id', Pm::SENTBOX)
                 )
             ])
             ->where('user_id', $userId)
@@ -93,11 +93,11 @@ class PmRepository extends Repository implements PmRepositoryInterface
             'pm.*',
             'pm_text.text',
             'pm_text.created_at',
-            'pm.author_id'
+            'pm.user_id'
         ])
         ->from($this->raw('(' . $this->toSql($builder) . ') AS pm'))
         ->join('pm_text', 'pm_text.id', '=', 'text_id')
-        ->with(['author' => function ($builder) {
+        ->with(['user' => function ($builder) {
             return $builder->select(['id', 'name', 'photo', 'is_blocked', 'deleted_at'])->withTrashed();
         }])
         ->orderBy('pm.id', 'DESC')
@@ -109,7 +109,7 @@ class PmRepository extends Repository implements PmRepositoryInterface
     /**
      * @param User $user
      * @param array $payload
-     * @return mixed
+     * @return Pm[]
      */
     public function submit(User $user, array $payload)
     {
@@ -119,11 +119,13 @@ class PmRepository extends Repository implements PmRepositoryInterface
             'text_id' => $text->id
         ];
 
-        // we need to create two records. one for recipient and one for message author
-        $this->model->create($fill + ['user_id' => $payload['author_id'], 'author_id' => $user->id, 'folder' => Pm::INBOX]);
-        $pm = $this->model->create($fill + ['user_id' => $user->id, 'author_id' => $payload['author_id'], 'folder' => Pm::SENTBOX]);
+        $result = [];
 
-        return $pm;
+        // we need to create two records. one for recipient and one for message author
+        $result[Pm::INBOX] = $this->model->create($fill + ['user_id' => $payload['author_id'], 'author_id' => $user->id, 'folder' => Pm::INBOX]);
+        $result[Pm::SENTBOX] = $this->model->create($fill + ['user_id' => $user->id, 'author_id' => $payload['author_id'], 'folder' => Pm::SENTBOX]);
+
+        return $result;
     }
 
     /**
@@ -157,7 +159,7 @@ class PmRepository extends Repository implements PmRepositoryInterface
             ->model
             ->select([
                 'm.id',
-                'author_id',
+                'author_id AS user_id',
                 'm.folder',
                 'm.read_at',
                 'pm_text.text',
@@ -165,7 +167,7 @@ class PmRepository extends Repository implements PmRepositoryInterface
             ])
             ->from($this->raw('(' . $this->toSql($this->subSql($userId)) . ') AS m'))
             ->join('pm_text', 'pm_text.id', '=', 'text_id')
-            ->with(['author' => function ($builder) {
+            ->with(['user' => function ($builder) {
                 return $builder->select(['id', 'name', 'photo', 'is_blocked', 'deleted_at'])->withTrashed();
             }])
             ->orderBy('m.id', 'DESC');
