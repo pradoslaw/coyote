@@ -29,7 +29,8 @@
             <vue-prompt source="{{ route('user.prompt') }}">
               <textarea-autosize
                 placeholder="Kliknij, aby odpowiedzieć"
-                v-clipboard="'/User/Pm/Paste'"
+                v-clipboard:success="insertToTextarea"
+                v-clipboard:error="showError"
                 name="text"
                 class="form-control"
                 ref="textarea"
@@ -41,8 +42,6 @@
                 tabindex="1"
               ></textarea-autosize>
             </vue-prompt>
-
-            {#          <textarea name="text" class="form-control" rows="2" placeholder="Kliknij, aby odpowiedzieć" data-paste-url="{{ route('user.pm.paste') }}" data-prompt-url="{{ route('user.prompt') }}">{{ input_old('text') }}</textarea>#}
           </div>
           <div role="tabpanel" class="tab-pane" id="preview"></div>
         </div>
@@ -55,6 +54,8 @@
         <vue-button :disabled="isProcessing" @click.native="sendMessage" class="btn btn-primary btn-sm">Wyślij</vue-button>
       </div>
     </div>
+
+    <vue-modal ref="error">Nie można dodać załącznika. Prosimy o kontakt w celu zgłoszenia tego błędu.</vue-modal>
   </div>
 {% endblock %}
 

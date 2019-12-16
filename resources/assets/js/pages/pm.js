@@ -7,9 +7,11 @@ import VuePrompt from '../components/prompt.vue';
 import VueButton from '../components/forms/button.vue';
 import {default as ws} from '../libs/realtime.js';
 import VueClipboard from '../plugins/clipboard.js';
+import VueModal from '../components/modal.vue';
+import Textarea from "../libs/textarea";
 
 Vue.use(VueTextareaAutosize);
-Vue.use(VueClipboard);
+Vue.use(VueClipboard, {url: '/User/Pm/Paste'});
 
 new Vue({
   el: '#app',
@@ -18,7 +20,8 @@ new Vue({
     'perfect-scrollbar': PerfectScrollbar,
     'vue-pm': VuePm,
     'vue-prompt': VuePrompt,
-    'vue-button': VueButton
+    'vue-button': VueButton,
+    'vue-modal': VueModal
   },
   data() {
     return {
@@ -64,6 +67,17 @@ new Vue({
         .finally(() => {
           this.isProcessing = false;
         });
+    },
+
+    insertToTextarea(file) {
+      const textarea = new Textarea(this.$refs.textarea.$el);
+
+      textarea.insertAtCaret('', '', '![' + file.name + '](' + file.url + ')');
+      this.text = textarea.textarea.value;
+    },
+
+    showError() {
+      this.$refs.error.open();
     },
 
     listenForMessage() {

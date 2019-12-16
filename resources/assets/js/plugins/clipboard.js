@@ -1,16 +1,19 @@
 import axios from 'axios';
-import Textarea from "../libs/textarea";
 
 export default {
-  install(Vue) {
-    let url;
-    let input;
+  install(Vue, options) {
+    if (!options.url) {
+      throw Error('No clipboard URL was provided.');
+    }
+
+    let successCallback, errorCallback;
+    let textarea;
 
     const upload = (base64) => {
-      input.readonly = 'readonly';
+      textarea.readonly = 'readonly';
 
       const overlay = document.createElement('div');
-      const rect = input.getBoundingClientRect();
+      const rect = textarea.getBoundingClientRect();
 
       overlay.id = 'ajax-loader';
       overlay.innerHTML = '<i class="fa fa-cog fa-spin"></i>';
@@ -21,16 +24,17 @@ export default {
 
       document.body.append(overlay);
 
-      axios.post(url, base64, {'Content-Type': 'application/x-www-form-urlencoded'})
+      axios.post(options.url, base64, {'Content-Type': 'application/x-www-form-urlencoded'})
         .then(response => {
-          const textarea = new Textarea(input);
-
-          textarea.insertAtCaret('', '', '![' + response.data.name + '](' + response.data.url + ')');
+          successCallback(response.data);
         })
         .finally(() => {
-          input.removeAttribute('readonly');
+          textarea.removeAttribute('readonly');
 
           overlay.remove();
+        })
+        .catch(err => {
+          errorCallback(err);
         });
     };
 
@@ -63,10 +67,20 @@ export default {
 
     Vue.directive('clipboard', {
       bind(el, binding) {
-        input = el;
-        url = binding.value;
 
-        el.addEventListener('paste', handler);
+        switch (binding.arg) {
+          case 'success':
+            successCallback = binding.value;
+            textarea = el;
+
+            el.addEventListener('paste', handler);
+
+            break;
+
+          case 'error':
+            errorCallback = binding.value;
+            break;
+        }
       },
 
       unbind(el) {
