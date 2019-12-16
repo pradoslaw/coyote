@@ -75,14 +75,12 @@
             return {
                 isOpen: false,
                 notifications: null, // initial value must be null to show fa-spinner
-                offset: 0,
-                sessionTimeout: 4 * 60 * 1000
+                offset: 0
             }
         },
         mounted() {
             axios.defaults.headers.common['X-CSRF-TOKEN'] = Config.csrfToken();
 
-            this.keepSessionAlive();
             this.listenForNotification();
 
             this.title = document.title;
@@ -183,15 +181,7 @@
 
             setTitle(title) {
                 document.title = title;
-            },
-
-            keepSessionAlive() {
-                this.pinger = setInterval(() => axios.get('/ping'), this.sessionTimeout);
-            },
-
-            stopSessionAlive() {
-                clearInterval(this.pinger);
-            },
+            }
         },
 
         watch: {
