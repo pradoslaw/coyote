@@ -29,6 +29,7 @@
             <vue-prompt source="{{ route('user.prompt') }}">
               <textarea-autosize
                 placeholder="Kliknij, aby odpowiedzieć"
+                v-clipboard="'/User/Pm/Paste'"
                 name="text"
                 class="form-control"
                 ref="textarea"

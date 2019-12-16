@@ -6,8 +6,10 @@ import VueTextareaAutosize from 'vue-textarea-autosize';
 import VuePrompt from '../components/prompt.vue';
 import VueButton from '../components/forms/button.vue';
 import {default as ws} from '../libs/realtime.js';
+import VueClipboard from '../plugins/clipboard.js';
 
 Vue.use(VueTextareaAutosize);
+Vue.use(VueClipboard);
 
 new Vue({
   el: '#app',
