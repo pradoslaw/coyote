@@ -4,6 +4,7 @@ import comments from './modules/comments';
 import subscriptions from './modules/subscriptions';
 import messages from './modules/messages';
 import inbox from './modules/inbox';
+import notifications from './modules/notifications';
 
 Vue.use(Vuex);
 
@@ -12,6 +13,7 @@ export default new Vuex.Store({
     comments,
     subscriptions,
     messages,
-    inbox
+    inbox,
+    notifications
   }
 });
