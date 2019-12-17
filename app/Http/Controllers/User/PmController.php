@@ -90,11 +90,22 @@ class PmController extends BaseController
     }
 
     /**
+     * @param Request $request
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public function infinity(Request $request)
+    {
+        $talk = $this->pm->talk($this->userId, (int) $request->input('author_id'), 10, (int) $request->query('offset', 0));
+
+        return PmResource::collection($talk);
+    }
+
+    /**
      * Get last 10 conversations
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function ajax()
+    public function inbox()
     {
         $pm = $this->pm->groupByAuthor($this->userId);
 

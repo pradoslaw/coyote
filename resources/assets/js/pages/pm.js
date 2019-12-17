@@ -41,6 +41,8 @@ new Vue({
   mounted() {
     this.listenForMessage();
     this.scrollToBottom();
+
+    this.$refs.scrollbar.$refs.container.addEventListener('ps-y-reach-start', this.loadMore);
   },
   methods: {
     scrollToBottom() {
@@ -97,6 +99,14 @@ new Vue({
     showPreview() {
       axios.post('/User/Pm/Preview', {text: this.text}).then((response) => {
         this.previewHtml = response.data;
+      });
+    },
+
+    loadMore() {
+      store.dispatch('messages/loadMore', this.recipient.id).then(response => {
+        if (!response.data.data.length) {
+          this.$refs.scrollbar.$refs.container.removeEventListener('ps-y-reach-start', this.loadMore);
+        }
       });
     }
   },

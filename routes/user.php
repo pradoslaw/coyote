@@ -28,8 +28,9 @@ $this->group(['namespace' => 'User', 'prefix' => 'User', 'middleware' => 'auth',
     $this->delete('Pm/Delete/{pm}', ['uses' => 'PmController@delete', 'as' => 'pm.delete']);
     $this->post('Pm/Trash/{pm}', ['uses' => 'PmController@trash', 'as' => 'pm.trash']);
     $this->post('Pm/Preview', ['uses' => 'PmController@preview', 'as' => 'pm.preview']);
-    $this->get('Pm/Ajax', ['uses' => 'PmController@ajax', 'as' => 'pm.ajax']);
+    $this->get('Pm/Ajax', ['uses' => 'PmController@inbox', 'as' => 'pm.ajax']);
     $this->post('Pm/Paste', ['uses' => 'PmController@paste', 'as' => 'pm.paste']);
+    $this->get('Pm/Infinity', ['uses' => 'PmController@infinity', 'as' => 'pm.infinity']);
 
     $this->get('Favorites', ['uses' => 'FavoritesController@index', 'as' => 'favorites']);
     $this->get('Favorites/Forum', ['uses' => 'FavoritesController@forum', 'as' => 'favorites.forum']);
