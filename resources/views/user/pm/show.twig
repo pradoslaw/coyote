@@ -19,7 +19,7 @@
       <div class="col-md-12" :class="{'has-error': errorMessage}">
         <ul class="nav nav-tabs">
           <li role="presentation" class="active"><a href="#body" aria-controls="body" role="tab" data-toggle="tab">Treść</a></li>
-          <li role="presentation"><a href="#preview" aria-controls="preview" role="tab" data-toggle="tab">Podgląd</a></li>
+          <li role="presentation"><a href="#preview" aria-controls="preview" role="tab" data-toggle="tab" @click="showPreview">Podgląd</a></li>
         </ul>
 
         <div class="tab-content">
@@ -43,7 +43,7 @@
               ></textarea-autosize>
             </vue-prompt>
           </div>
-          <div role="tabpanel" class="tab-pane" id="preview"></div>
+          <div role="tabpanel" class="tab-pane" id="preview" v-html="previewHtml"></div>
         </div>
 
         <span v-cloak v-if="errorMessage" class="help-block">${ errorMessage }</span>

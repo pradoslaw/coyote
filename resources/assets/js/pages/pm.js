@@ -9,6 +9,7 @@ import {default as ws} from '../libs/realtime.js';
 import VueClipboard from '../plugins/clipboard.js';
 import VueModal from '../components/modal.vue';
 import Textarea from "../libs/textarea";
+import axios from 'axios';
 
 Vue.use(VueTextareaAutosize);
 Vue.use(VueClipboard, {url: '/User/Pm/Paste'});
@@ -28,7 +29,8 @@ new Vue({
       recipient: window.data.recipient,
       text: '',
       isProcessing: false,
-      errorMessage: null
+      errorMessage: null,
+      previewHtml: null
     };
   },
   store,
@@ -89,6 +91,12 @@ new Vue({
             this.scrollToBottom();
           });
         }
+      });
+    },
+
+    showPreview() {
+      axios.post('/User/Pm/Preview', {text: this.text}).then((response) => {
+        this.previewHtml = response.data;
       });
     }
   },
