@@ -21,14 +21,17 @@ class NotificationResource extends JsonResource
      */
     public function toArray($request)
     {
+        $senders = $this->resource->senders->unique('name');
+        $user = $senders->first();
+
         $only = $this->resource->only(['subject', 'excerpt', 'id', 'url']);
 
         return array_merge($only, [
             'is_read' => $this->is_clicked || ($this->read_at && $this->read_at->timestamp < $request->session()->get('created_at')),
 
-            'headline' => $this->getHeadline(),
+            'headline' => $this->getHeadline($user, $senders),
             'created_at' => format_date($this->resource->created_at),
-            'photo' => $this->getMediaUrl($this->user->photo)
+            'photo' => $this->getMediaUrl($user->photo)
         ]);
     }
 
@@ -42,23 +45,22 @@ class NotificationResource extends JsonResource
     }
 
     /**
+     * @param mixed $user
+     * @param \Illuminate\Support\Collection $senders
      * @return string
      */
-    private function getHeadline(): string
+    private function getHeadline($user, $senders): string
     {
-        $senders = $this->resource->senders->unique('name');
-
-        $this->resource->user = $senders->first();
         $count = $senders->count();
 
         if ($count === 0) {
             return ''; // no senders? return empty notification
         } elseif ($count === 2) {
-            $sender = $this->resource->user->name . ' (oraz ' . $senders->last()->name . ')';
+            $sender = $user->name . ' (oraz ' . $senders->last()->name . ')';
         } elseif ($count > 2) {
-            $sender = $this->resource->user->name . ' (oraz ' . Declination::format($count, ['osoba', 'osoby', 'osób']) . ')';
+            $sender = $user->name . ' (oraz ' . Declination::format($count, ['osoba', 'osoby', 'osób']) . ')';
         } else {
-            $sender = $this->resource->user->name;
+            $sender = $user->name;
         }
 
         return str_replace('{sender}', $sender, $this->resource->headline);
