@@ -4,6 +4,7 @@ import PerfectScrollbar from '../components/perfect-scrollbar';
 import VuePm from '../components/pm/message.vue';
 import VueTextareaAutosize from 'vue-textarea-autosize';
 import VuePrompt from '../components/prompt.vue';
+import VueToolbar from '../components/toolbar.vue';
 import VueButton from '../components/forms/button.vue';
 import {default as ws} from '../libs/realtime.js';
 import VueClipboard from '../plugins/clipboard.js';
@@ -22,7 +23,8 @@ new Vue({
     'vue-pm': VuePm,
     'vue-prompt': VuePrompt,
     'vue-button': VueButton,
-    'vue-modal': VueModal
+    'vue-modal': VueModal,
+    'vue-toolbar': VueToolbar
   },
   data() {
     return {
@@ -77,7 +79,7 @@ new Vue({
       const textarea = new Textarea(this.$refs.textarea.$el);
 
       textarea.insertAtCaret('', '', '![' + file.name + '](' + file.url + ')');
-      this.text = textarea.textarea.value;
+      this.updateModel(textarea.textarea.value);
     },
 
     showError() {
@@ -108,6 +110,10 @@ new Vue({
           this.$refs.scrollbar.$refs.container.removeEventListener('ps-y-reach-start', this.loadMore);
         }
       });
+    },
+
+    updateModel(value) {
+      this.text = value;
     }
   },
   computed: {
