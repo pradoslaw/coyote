@@ -21,7 +21,7 @@
                 </div>
 
                 <div v-for="notification in notifications" :class="{'unread': ! notification.is_read}" class="notification">
-                    <a @click.prevent="showNotification(notification)" @mousedown="markAsRead(notification)" :href="notification.url" :title="notification.headline" class="notification-link">
+                    <a @click.prevent="showNotification(notification)" @mousedown="openInTab(notification)" :href="notification.url" :title="notification.headline" class="notification-link">
                         <div class="media">
                             <div class="media-left">
                                 <object class="media-object" :data="notification.photo || '//'" type="image/png">
@@ -127,6 +127,11 @@
                 window.location.href = `/notification/${notification.id}`;
             },
 
+            openInTab(notification) {
+                notification.is_read = true;
+                notification.url = `/notification/${notification.id}`;
+            },
+
             deleteNotification(notification) {
                 axios.post(`/User/Notifications/Delete/${notification.id}`);
 
@@ -141,10 +146,6 @@
                 this.notifications.forEach(notification => {
                     notification.is_read = true;
                 });
-            },
-
-            markAsRead(notification) {
-                notification.is_read = true;
             },
 
             hideDropdown() {
