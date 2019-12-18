@@ -15,7 +15,7 @@ Vue.use(VueTextareaAutosize);
 Vue.use(VueClipboard, {url: '/User/Pm/Paste'});
 
 new Vue({
-  el: '#app',
+  el: '#app-pm',
   delimiters: ['${', '}'],
   components: {
     'perfect-scrollbar': PerfectScrollbar,

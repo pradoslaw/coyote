@@ -120,7 +120,7 @@
   }
 }
 
-#box-alerts, #box-pm {
+#box-alerts, #app-pm {
   .media {
     border-bottom: 1px solid $border-color;
     padding: 8px 0;
@@ -197,20 +197,24 @@
   }
 }
 
-#box-pm {
+#app-pm {
   .media {
     small {
       color: $gray-light;
       font-size: 10px;
     }
 
-    .pm-text {
-      padding: 0 20px 0 0;
-      color: $gray;
-    }
-
     .media-heading a {
       text-decoration: none;
+    }
+  }
+
+  .pm-text {
+    padding: 0 20px 0 0;
+    color: $gray;
+
+    img {
+      max-width: 100%;
     }
   }
 
@@ -283,7 +287,7 @@
 
 // nie chcemy aby zakladki na bialym tle mialy szare tlo. chodzi tutaj o zakladki formularza pisania
 // nowej wiadomosci (umozliwiajace przelaczenie sie w tryb edycji oraz podgladu)
-#box-pm {
+#app-pm {
   .nav-tabs {
     > li.active {
       > a {

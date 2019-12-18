@@ -2,61 +2,59 @@
 {% set page_name = 'Rozmowa z ' ~ recipient.name %}
 
 {% block pm %}
-  <div id="app">
-    <perfect-scrollbar id="wrap" ref="scrollbar">
-      <div id="overview">
-        <vue-pm
-          v-for="(message, index) in messages"
-          :message="message"
-          :key="message.id"
-          :last="index + 1 === messages.length"
-        >
-        </vue-pm>
-      </div>
-    </perfect-scrollbar>
+  <perfect-scrollbar id="wrap" ref="scrollbar">
+    <div id="overview">
+      <vue-pm
+        v-for="(message, index) in messages"
+        :message="message"
+        :key="message.id"
+        :last="index + 1 === messages.length"
+      >
+      </vue-pm>
+    </div>
+  </perfect-scrollbar>
 
-    <div class="row margin-sm-bottom">
-      <div class="col-md-12" :class="{'has-error': errorMessage}">
-        <ul class="nav nav-tabs">
-          <li role="presentation" class="active"><a href="#body" aria-controls="body" role="tab" data-toggle="tab">Treść</a></li>
-          <li role="presentation"><a href="#preview" aria-controls="preview" role="tab" data-toggle="tab" @click="showPreview">Podgląd</a></li>
-        </ul>
+  <div class="row margin-sm-bottom">
+    <div class="col-md-12" :class="{'has-error': errorMessage}">
+      <ul class="nav nav-tabs">
+        <li role="presentation" class="active"><a href="#body" aria-controls="body" role="tab" data-toggle="tab">Treść</a></li>
+        <li role="presentation"><a href="#preview" aria-controls="preview" role="tab" data-toggle="tab" @click="showPreview">Podgląd</a></li>
+      </ul>
 
-        <div class="tab-content">
-          <div role="tabpanel" class="tab-pane active" id="body">
-            {% include 'components.toolbar' %}
+      <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="body">
+          {% include 'components.toolbar' %}
 
-            <vue-prompt source="{{ route('user.prompt') }}">
-              <textarea-autosize
-                placeholder="Kliknij, aby odpowiedzieć"
-                v-clipboard:success="insertToTextarea"
-                v-clipboard:error="showError"
-                name="text"
-                class="form-control"
-                ref="textarea"
-                v-model="text"
-                :min-height="40"
-                :max-height="350"
-                @keydown.native.ctrl.enter="sendMessage"
-                rows="2"
-                tabindex="1"
-              ></textarea-autosize>
-            </vue-prompt>
-          </div>
-          <div role="tabpanel" class="tab-pane" id="preview" v-html="previewHtml"></div>
+          <vue-prompt source="{{ route('user.prompt') }}">
+            <textarea-autosize
+              placeholder="Kliknij, aby odpowiedzieć"
+              v-clipboard:success="insertToTextarea"
+              v-clipboard:error="showError"
+              name="text"
+              class="form-control"
+              ref="textarea"
+              v-model="text"
+              :min-height="40"
+              :max-height="350"
+              @keydown.native.ctrl.enter="sendMessage"
+              rows="2"
+              tabindex="1"
+            ></textarea-autosize>
+          </vue-prompt>
         </div>
-
-        <span v-cloak v-if="errorMessage" class="help-block">${ errorMessage }</span>
+        <div role="tabpanel" class="tab-pane" id="preview" v-html="previewHtml"></div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <vue-button :disabled="isProcessing" @click.native="sendMessage" class="btn btn-primary btn-sm">Wyślij</vue-button>
-      </div>
-    </div>
 
-    <vue-modal ref="error">Nie można dodać załącznika. Prosimy o kontakt w celu zgłoszenia tego błędu.</vue-modal>
+      <span v-cloak v-if="errorMessage" class="help-block">${ errorMessage }</span>
+    </div>
   </div>
+  <div class="row">
+    <div class="col-md-12">
+      <vue-button :disabled="isProcessing" @click.native="sendMessage" class="btn btn-primary btn-sm">Wyślij</vue-button>
+    </div>
+  </div>
+
+  <vue-modal ref="error">Nie można dodać załącznika. Prosimy o kontakt w celu zgłoszenia tego błędu.</vue-modal>
 {% endblock %}
 
 {% block body %}
