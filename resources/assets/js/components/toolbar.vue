@@ -23,14 +23,13 @@
 
           <div id="select-menu" class="btn-group" :class="{'open': isDropdownShown}">
             <button @click="insertAtCaret('```<br>', '<br>```')" type="button" class="btn btn-sm btn-default" title="Kod źródłowy"><i class="fas fa-code fa-fw"></i></button>
-            <button @click="toggleDropdown" type="button" class="btn btn-sm btn-default" aria-haspopup="true" aria-expanded="false">
+            <button @click="toggleDropdown" type="button" class="btn btn-sm btn-default dropdown-toggle" aria-haspopup="true" aria-expanded="false">
               <span class="caret"></span>
             </button>
-{{searchText}}
-            <div v-show="isDropdownShown" class="dropdown-menu select-menu">
-<!--            <div v-if="isDropdownShown" v-on-clickaway="isDropdownShown = false" class="dropdown-menu select-menu">-->
+
+            <div v-if="isDropdownShown" v-on-clickaway="hideDropdown" class="dropdown-menu select-menu">
               <div class="select-menu-search">
-                <input v-model="searchText" type="text" class="form-control input-sm" placeholder="Filtruj..." autocomplete="off">
+                <input v-model="searchText" @keyup.esc="hideDropdown" ref="search" type="text" class="form-control input-sm" placeholder="Filtruj..." autocomplete="off">
               </div>
               <div class="select-menu-wrapper">
                 <ul class="list-unstyled">
@@ -140,7 +139,7 @@
         el: null,
         textarea: null,
         languages,
-        searchText: null,
+        searchText: '',
         isDropdownShown: false
       }
     },
@@ -151,6 +150,7 @@
     methods: {
       insertAtCaret(startsWith, endsWith) {
         this.textarea.insertAtCaret(startsWith.replace(/<br>/g, "\n"), endsWith.replace(/<br>/g, "\n"), this.textarea.isSelected() ? this.textarea.getSelection() : '');
+        this.hideDropdown();
 
         this.$emit('update', this.el.value);
       },
@@ -163,17 +163,29 @@
 
       toggleDropdown() {
         this.isDropdownShown = !this.isDropdownShown;
+
+        if (this.isDropdownShown) {
+          this.$nextTick(() => {
+
+            this.$refs.search.focus();
+          });
+        }
+      },
+
+      hideDropdown() {
+        this.isDropdownShown = false;
       }
     },
     computed: {
       filteredValue() {
-        return Object.keys(this.languages)
-          .filter(language => language.toLowerCase().indexOf(this.searchText) > -1)
-        .reduce((obj, key) => {
-          obj[key] = this.languages[key];
+        return Object
+          .keys(this.languages)
+          .filter(language => language.toLowerCase().startsWith(this.searchText))
+          .reduce((obj, key) => {
+            obj[key] = this.languages[key];
 
-          return obj;
-        }, {});
+            return obj;
+          }, {});
       }
     }
   }
