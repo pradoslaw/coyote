@@ -209,6 +209,15 @@
     }
   }
 
+  .media-object {
+    width: 50px;
+    height: 50px;
+
+    img {
+      width: 100%;
+    }
+  }
+
   .pm-text {
     padding: 0 20px 0 0;
     color: $gray;

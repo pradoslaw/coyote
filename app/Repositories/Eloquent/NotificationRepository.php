@@ -59,15 +59,16 @@ class NotificationRepository extends Repository implements NotificationRepositor
      * Find notification by url and mark it as read
      *
      * @param int $userId
-     * @param string $url
+     * @param mixed $url
      */
-    public function markAsReadByUrl($userId, $url)
+    public function markAsReadByModel($userId, $model)
     {
         $this
             ->model
             ->where('user_id', $userId)
             ->whereNull('read_at')
-            ->where('url', $url)
+            ->where('content_id', $model->id)
+            ->where('content_type', class_basename($model))
             ->update(['read_at' => Carbon::now()]);
     }
 

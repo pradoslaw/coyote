@@ -4,51 +4,35 @@
 {% import 'components.forms' as forms %}
 
 {% block pm %}
-    {{ form_open({'url': route('user.pm.submit'), 'method': 'POST', 'class': 'form-horizontal'}) }}
+  <div class="row">
+    <div class="col-md-12 margin-md-bottom" :class="{'has-error': 'recipient' in errors}">
+      <input
+        type="text"
+        name="recipient"
+        v-model="recipient.name"
+        class="form-control"
+        placeholder="Odbiorca..."
+        data-prompt-url="{{ route('user.prompt') }}"
+        id="recipient"
+        tabindex="1"
+        autofocus
+      >
 
-    <div class="form-group">
-        <div class="col-md-12 {{ errors.has('recipient') > 0 ? 'has-error' }}">
-            {{ form_text('recipient', input_old('recipient', request().get('to')), {'data-prompt-url': route('user.prompt'), class: 'form-control', placeholder: 'Odbiorca...', id: 'recipient', tabindex: 1, autofocus: 'autofocus'}) }}
-
-            {% if errors.first('recipient') %}
-                <span class="help-block">{{ errors.first('recipient') }}</span>
-            {% endif %}
-        </div>
+      <span v-cloak v-if="'recipient' in errors" class="help-block">${ errors.recipient[0] }</span>
     </div>
-    <div class="form-group">
-        <div class="col-md-12 {{ errors.has('text') > 0 ? 'has-error' }}">
-            <ul class="nav nav-tabs">
-                <li role="presentation" class="active"><a href="#body" aria-controls="body" role="tab" data-toggle="tab">Treść</a></li>
-                <li role="presentation"><a href="#preview" aria-controls="preview" role="tab" data-toggle="tab">Podgląd</a></li>
-            </ul>
+  </div>
 
-            <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="body">
-                    {% include 'components.toolbar' %}
+  {% include 'user.pm.partials.form' %}
 
-                    <textarea name="text" class="form-control" rows="5" data-paste-url="{{ route('user.pm.paste') }}" data-prompt-url="{{ route('user.prompt') }}" tabindex="2">{{ input_old('text') }}</textarea>
-                </div>
-                <div role="tabpanel" class="tab-pane" id="preview"></div>
-            </div>
-
-            {% if errors.first('text') %}
-                <span class="help-block">{{ errors.first('text') }}</span>
-            {% endif %}
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-12">
-            <button type="submit" class="btn btn-primary btn-sm" data-submit-state="Wysyłanie..." tabindex="3">
-                Wyślij
-            </button>
-        </div>
-    </div>
-    {{ form_close() }}
 {% endblock %}
 
 {% block body %}
-    {{ parent() }}
+  <script>
+    var data = {
+      recipient: {{ recipient|json_encode|raw }},
+      messages: []
+    };
+  </script>
 
-    <script src="{{ cdn('js/posting.js') }}"></script>
-    <script src="{{ cdn('js/wikieditor.js') }}"></script>
+  {{ parent() }}
 {% endblock %}

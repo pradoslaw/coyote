@@ -2,7 +2,7 @@
   <div class="media" :class="{'unread': ! isRead}" @mouseenter.once="asRead">
     <div class="media-left">
       <a v-profile="message.user.id">
-        <object :data="message.user.photo" type="image/png" class="media-object" style="width: 50px; height: 50px;">
+        <object :data="message.user.photo || '//'" type="image/png" class="media-object">
           <img src="/img/avatar.png" :alt="message.user.name">
         </object>
       </a>

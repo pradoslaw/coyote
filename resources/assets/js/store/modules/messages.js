@@ -35,6 +35,8 @@ const actions = {
   add ({ commit }, data) {
     return axios.post('/User/Pm/Submit', data).then(response => {
       commit('add', response.data);
+
+      return response;
     });
   },
 

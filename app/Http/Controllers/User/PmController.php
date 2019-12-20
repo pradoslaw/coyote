@@ -49,6 +49,8 @@ class PmController extends BaseController
         $this->user = $user;
         $this->notification = $notification;
         $this->pm = $pm;
+
+        $this->breadcrumb->push('Wiadomości prywatne', route('user.pm'));
     }
 
     /**
@@ -56,8 +58,6 @@ class PmController extends BaseController
      */
     public function index()
     {
-        $this->breadcrumb->push('Wiadomości prywatne', route('user.pm'));
-
         $pm = $this->pm->lengthAwarePaginate($this->userId);
         $parser = $this->getParser();
 
@@ -76,8 +76,6 @@ class PmController extends BaseController
      */
     public function show(Pm $pm, Request $request)
     {
-        $this->breadcrumb->push('Wiadomości prywatne', route('user.pm'));
-
         $this->authorize('show', $pm);
 
         $talk = $this->pm->talk($this->userId, $pm->author_id, 10, (int) $request->query('offset', 0));
@@ -117,12 +115,13 @@ class PmController extends BaseController
     /**
      * @return \Illuminate\View\View
      */
-    public function submit()
+    public function submit(Request $request)
     {
-        $this->breadcrumb->push('Wiadomości prywatne', route('user.pm'));
         $this->breadcrumb->push('Napisz wiadomość', route('user.pm.submit'));
 
-        return $this->view('user.pm.submit');
+        return $this->view('user.pm.submit', [
+            'recipient' => $request->has('to') ? $this->user->find((int) $this->request->input('to')) : new \stdClass()
+        ]);
     }
 
     /**
@@ -179,9 +178,9 @@ class PmController extends BaseController
             $this->pm->markAsRead($pm->text_id);
 
             // IF we have unread alert that is connected with that message... then we also have to mark it as read
-//                if ($this->auth->notifications_unread) {
-//                    $this->notification->markAsReadByUrl($this->userId, route('user.pm.show', [$row['id']], false));
-//                }
+            if ($this->auth->notifications_unread) {
+                $this->notification->markAsReadByModel($this->userId, $pm);
+            }
         }
     }
 

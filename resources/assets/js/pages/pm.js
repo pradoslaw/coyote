@@ -31,7 +31,7 @@ new Vue({
       recipient: window.data.recipient,
       text: '',
       isProcessing: false,
-      errorMessage: null,
+      errors: {},
       previewHtml: null
     };
   },
@@ -44,31 +44,38 @@ new Vue({
     this.listenForMessage();
     this.scrollToBottom();
 
-    this.$refs.scrollbar.$refs.container.addEventListener('ps-y-reach-start', this.loadMore);
+    if ('scrollbar' in this.$refs) {
+      this.$refs.scrollbar.$refs.container.addEventListener('ps-y-reach-start', this.loadMore);
+    }
   },
   methods: {
     scrollToBottom() {
       const overview = document.getElementById('overview');
 
-      document.getElementById('wrap').scrollTop = overview.clientHeight;
+      if (overview) {
+        document.getElementById('wrap').scrollTop = overview.clientHeight;
+      }
     },
 
     sendMessage() {
       this.isProcessing = true;
 
       store.dispatch('messages/add', {recipient: this.recipient.name, text: this.text})
-        .then(() => {
+        .then((response) => {
           this.$nextTick(() => {
             this.scrollToBottom();
           });
 
-          this.error = null;
+          this.errors = {};
           this.text = null;
+
+          // force redirect if new message was created
+          if (!('scrollbar' in this.$refs)) {
+            window.location.href = `/User/Pm/Show/${response.data.id}`;
+          }
         })
         .catch(err => {
-          let errors = err.response.data.errors;
-
-          this.errorMessage = errors[Object.keys(errors)[0]][0];
+          this.errors = err.response.data.errors;
         })
         .finally(() => {
           this.isProcessing = false;
