@@ -245,12 +245,11 @@ body.fixed-top {
 
 .btn-register {
   margin-left: 0;
-  color: var(--header-color);
-  border: 1px solid var(--header-color);
+  background-color: $brand-primary;
+  color: #fff;
 
   &:hover, &:focus {
-    color: $brand-primary;
-    border-color: $brand-primary;
+    color: #fff;
   }
 }
 
