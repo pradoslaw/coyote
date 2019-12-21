@@ -54,7 +54,7 @@
       },
       clickableText: {
         type: Boolean,
-        default: true
+        default: false
       }
     },
     data() {
@@ -69,12 +69,12 @@
         } else {
           this.$refs.confirm.close();
 
-          this.$store.dispatch('messages/remove', this.message);
+          this.$store.dispatch(`messages/${this.clickableText ? 'trash': 'remove' }`, this.message);
         }
       },
 
       asRead() {
-        if (this.isRead) {
+        if (this.isRead || this.clickableText) {
           return;
         }
 

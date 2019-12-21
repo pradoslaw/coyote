@@ -3,15 +3,17 @@ import axios from "axios";
 const state = {
   messages: [],
   offset: 0,
-  totalPages: 0,
-  currentPage: 0
+  currentPage: 0,
+  total: 0,
+  perPage: 0
 };
 
 const mutations = {
-  init(state, { messages, totalPages, currentPage }) {
+  init(state, { messages, total, currentPage, perPage }) {
     state.messages = messages;
-    state.totalPages = totalPages;
     state.currentPage = currentPage;
+    state.total = total;
+    state.perPage = perPage;
     state.offset = messages.length;
   },
 
@@ -50,6 +52,14 @@ const actions = {
     });
   },
 
+  trash ({ commit, state }, message) {
+    return axios.delete(`/User/Pm/Trash/${message.user.id}`).then(() => {
+      commit('remove', message);
+
+      state.total -= 1;
+    });
+  },
+
   mark ({ commit }, message) {
     message.read_at = new Date();
 
@@ -66,7 +76,7 @@ const actions = {
 
   paginate ({ commit }, page) {
     return axios.get('/User/Pm', {params: {page}}).then(response => {
-      commit('init', {messages: response.data.messages, totalPages: response.data.total_pages, currentPage: response.data.current_page});
+      commit('init', {messages: response.data.messages, total: response.data.total, currentPage: response.data.current_page, perPage: response.data.per_page});
 
       return response;
     });

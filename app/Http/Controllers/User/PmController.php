@@ -64,7 +64,8 @@ class PmController extends BaseController
 
         $result = [
             'messages' => $messages->toArray($this->request),
-            'total_pages' => ceil($pm->total() / $pm->perPage()),
+            'per_page' => $pm->perPage(),
+            'total' => $pm->total(),
             'current_page' => $pm->currentPage(),
         ];
 
@@ -127,7 +128,7 @@ class PmController extends BaseController
         $this->breadcrumb->push('Napisz wiadomość', route('user.pm.submit'));
 
         return $this->view('user.pm.submit', [
-            'recipient' => $request->has('to') ? $this->user->find((int) $this->request->input('to')) : new \stdClass()
+            'recipient' => $request->has('to') ? $this->user->findByName($this->request->input('to')) : new \stdClass()
         ]);
     }
 
@@ -193,16 +194,13 @@ class PmController extends BaseController
 
     /**
      * @param int $authorId
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function trash($authorId)
     {
         $pm = $this->pm->findWhere(['user_id' => $this->userId, 'author_id' => $authorId]);
         abort_if($pm->count() == 0, 404);
 
-//        $this->pm->trash($this->userId, $authorId);
-
-        return redirect()->route('user.pm')->with('success', 'Wątek został bezpowrotnie usunięty.');
+        $this->pm->trash($this->userId, $authorId);
     }
 
     /**

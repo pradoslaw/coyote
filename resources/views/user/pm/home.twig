@@ -5,14 +5,17 @@
     <vue-pagination :total-pages="totalPages" :current-page="currentPage" @change="changePage"></vue-pagination>
   </nav>
 
-  <vue-pm
-    v-for="(message, index) in messages"
-    :message="message"
-    :key="message.id"
-    :last="index + 1 === messages.length"
-    :clickable-text="true"
-  >
-  </vue-pm>
+  <template v-if="messages.length">
+    <vue-pm
+      v-for="(message, index) in messages"
+      :message="message"
+      :key="message.id"
+      :last="false"
+      :clickable-text="true"
+    >
+    </vue-pm>
+  </template>
+  <div v-cloak v-else class="text-center">Brak wiadomości prywatnych.</div>
 
   <nav class="text-center">
     <vue-pagination :total-pages="totalPages" :current-page="currentPage" @change="changePage"></vue-pagination>
@@ -24,8 +27,9 @@
     var data = {
       messages: {{ messages|json_encode|raw }},
       recipient: {},
-      totalPages: {{ total_pages }},
-      currentPage: {{ current_page }}
+      per_page: {{ per_page }},
+      total: {{ total }},
+      current_page: {{ current_page }}
     };
   </script>
 
