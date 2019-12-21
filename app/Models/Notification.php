@@ -45,7 +45,7 @@ class Notification extends Model
      *
      * @var array
      */
-    protected $fillable = ['id', 'type_id', 'user_id', 'subject', 'excerpt', 'url', 'object_id'];
+    protected $fillable = ['id', 'type_id', 'user_id', 'subject', 'excerpt', 'url', 'object_id', 'content_id', 'content_type'];
 
     /**
      * @var bool

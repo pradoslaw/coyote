@@ -11,14 +11,16 @@
       <small class="pull-right">{{ message.created_at }}</small>
 
       <h3 class="media-heading">
-        {{ message.user.name }}
+        <a v-if="clickableText" :href="'/User/Pm/Show/' + message.id">{{ message.user.name }}</a>
+        <template v-else>{{ message.user.name }}</template>
       </h3>
 
       <a @click="deleteMessage(true)" class="btn-delete-pm pull-right text-danger" href="javascript:" title="Usuń">
         <i class="fas fa-times"></i>
       </a>
 
-      <div class="pm-text" v-html="message.text"></div>
+      <a v-if="clickableText" :href="'/User/Pm/Show/' + message.id" class="excerpt">{{ message.excerpt ? message.excerpt : '(kliknij, aby przeczytać)' }}</a>
+      <div v-else class="pm-text" v-html="message.text"></div>
 
       <small v-if="last && message.folder === SENTBOX && message.read_at" class="text-muted"><i class="fas fa-check"></i> Przeczytano, {{ message.read_at }}</small>
     </div>
@@ -49,6 +51,10 @@
       last: {
         type: Boolean,
         default: false
+      },
+      clickableText: {
+        type: Boolean,
+        default: true
       }
     },
     data() {
@@ -80,6 +86,10 @@
     computed: {
       isRead() {
         return this.message.folder !== this.SENTBOX ? (this.message.read_at !== null) : true;
+      },
+
+      excerpt() {
+        return this.clickableText ? (message.excerpt ? message.excerpt : '(kliknij, aby przeczytać') : message.text
       }
     }
   }

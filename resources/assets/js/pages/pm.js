@@ -1,4 +1,5 @@
 import store from '../store';
+import { mapState } from 'vuex';
 import Vue from 'vue';
 import PerfectScrollbar from '../components/perfect-scrollbar';
 import VuePm from '../components/pm/message.vue';
@@ -9,123 +10,150 @@ import VueButton from '../components/forms/button.vue';
 import {default as ws} from '../libs/realtime.js';
 import VueClipboard from '../plugins/clipboard.js';
 import VueModal from '../components/modal.vue';
+import VuePagination from '../components/pagination.vue';
 import Textarea from "../libs/textarea";
 import axios from 'axios';
 
 Vue.use(VueTextareaAutosize);
 Vue.use(VueClipboard, {url: '/User/Pm/Paste'});
 
-new Vue({
-  el: '#app-pm',
-  delimiters: ['${', '}'],
-  components: {
-    'perfect-scrollbar': PerfectScrollbar,
-    'vue-pm': VuePm,
-    'vue-prompt': VuePrompt,
-    'vue-button': VueButton,
-    'vue-modal': VueModal,
-    'vue-toolbar': VueToolbar
-  },
-  data() {
-    return {
-      recipient: window.data.recipient,
-      text: '',
-      isProcessing: false,
-      errors: {},
-      previewHtml: null
-    };
-  },
-  store,
-  created() {
-    // fill vuex with data passed from controller to view
-    store.commit('messages/init', window.data.messages);
-  },
-  mounted() {
-    this.listenForMessage();
-    this.scrollToBottom();
 
-    if ('scrollbar' in this.$refs) {
-      this.$refs.scrollbar.$refs.container.addEventListener('ps-y-reach-start', this.loadMore);
-    }
-  },
-  methods: {
-    scrollToBottom() {
-      const overview = document.getElementById('overview');
+  new Vue({
+    el: '#app-pm',
+    delimiters: ['${', '}'],
+    components: {
+      'perfect-scrollbar': PerfectScrollbar,
+      'vue-pm': VuePm,
+      'vue-prompt': VuePrompt,
+      'vue-button': VueButton,
+      'vue-modal': VueModal,
+      'vue-toolbar': VueToolbar,
+      'vue-pagination': VuePagination
+    },
+    data() {
+      return {
+        recipient: window.data.recipient,
+        text: '',
+        isProcessing: false,
+        errors: {},
+        previewHtml: null,
+        // totalPages: window.data.total_pages,
+        // currentPage: window.data.current_page
+      };
+    },
+    store,
+    created() {
+      // fill vuex with data passed from controller to view
+      store.commit('messages/init', {messages: window.data.messages, totalPages: window.data.totalPages, currentPage: window.data.currentPage});
+      // store.commit('messages/init', window.data);
+    },
+    mounted() {
+      this.listenForMessage();
+      this.scrollToBottom();
 
-      if (overview) {
-        document.getElementById('wrap').scrollTop = overview.clientHeight;
+      if ('scrollbar' in this.$refs) {
+        this.$refs.scrollbar.$refs.container.addEventListener('ps-y-reach-start', this.loadMore);
       }
     },
+    methods: {
+      scrollToBottom() {
+        const overview = document.getElementById('overview');
 
-    sendMessage() {
-      this.isProcessing = true;
+        if (overview) {
+          document.getElementById('wrap').scrollTop = overview.clientHeight;
+        }
+      },
 
-      store.dispatch('messages/add', {recipient: this.recipient.name, text: this.text})
-        .then((response) => {
-          this.$nextTick(() => {
-            this.scrollToBottom();
+      sendMessage() {
+        this.isProcessing = true;
+
+        store.dispatch('messages/add', {recipient: this.recipient.name, text: this.text})
+          .then(response => {
+            this.$nextTick(() => {
+              this.scrollToBottom();
+            });
+
+            this.errors = {};
+            this.text = null;
+
+            // force redirect if new message was created
+            if (!('scrollbar' in this.$refs)) {
+              window.location.href = `/User/Pm/Show/${response.data.id}`;
+            }
+          })
+          .catch(err => {
+            this.errors = err.response.data.errors;
+          })
+          .finally(() => {
+            this.isProcessing = false;
           });
+      },
 
-          this.errors = {};
-          this.text = null;
+      insertToTextarea(file) {
+        const textarea = new Textarea(this.$refs.textarea.$el);
 
-          // force redirect if new message was created
-          if (!('scrollbar' in this.$refs)) {
-            window.location.href = `/User/Pm/Show/${response.data.id}`;
+        textarea.insertAtCaret('', '', '![' + file.name + '](' + file.url + ')');
+        this.updateModel(textarea.textarea.value);
+      },
+
+      showError() {
+        this.$refs.error.open();
+      },
+
+      listenForMessage() {
+        ws.on('Coyote\\Events\\PmCreated', data => {
+          if (data.user.id === this.recipient.id) {
+            store.commit('messages/add', data);
+
+            this.$nextTick(() => {
+              this.scrollToBottom();
+            });
           }
-        })
-        .catch(err => {
-          this.errors = err.response.data.errors;
-        })
-        .finally(() => {
-          this.isProcessing = false;
         });
+      },
+
+      showPreview() {
+        axios.post('/User/Pm/Preview', {text: this.text}).then((response) => {
+          this.previewHtml = response.data;
+
+          Prism.highlightAll();
+        });
+      },
+
+      loadMore() {
+        store.dispatch('messages/loadMore', this.recipient.id).then(response => {
+          if (!response.data.data.length) {
+            this.$refs.scrollbar.$refs.container.removeEventListener('ps-y-reach-start', this.loadMore);
+          }
+        });
+      },
+
+      updateModel(value) {
+        this.text = value;
+      },
+
+      changePage(page) {
+        store.dispatch('messages/paginate', page).then(() => {
+
+        });
+      }
     },
-
-    insertToTextarea(file) {
-      const textarea = new Textarea(this.$refs.textarea.$el);
-
-      textarea.insertAtCaret('', '', '![' + file.name + '](' + file.url + ')');
-      this.updateModel(textarea.textarea.value);
-    },
-
-    showError() {
-      this.$refs.error.open();
-    },
-
-    listenForMessage() {
-      ws.on('Coyote\\Events\\PmCreated', data => {
-        if (data.user.id === this.recipient.id) {
-          store.commit('messages/add', data);
-
-          this.$nextTick(() => {
-            this.scrollToBottom();
-          });
-        }
-      });
-    },
-
-    showPreview() {
-      axios.post('/User/Pm/Preview', {text: this.text}).then((response) => {
-        this.previewHtml = response.data;
-      });
-    },
-
-    loadMore() {
-      store.dispatch('messages/loadMore', this.recipient.id).then(response => {
-        if (!response.data.data.length) {
-          this.$refs.scrollbar.$refs.container.removeEventListener('ps-y-reach-start', this.loadMore);
-        }
-      });
-    },
-
-    updateModel(value) {
-      this.text = value;
-    }
-  },
-  computed: {
-    messages() {
-      return store.state.messages.messages;
-    }
-  }
-});
+    computed: mapState('messages', [
+      'messages',
+      'totalPages',
+      'currentPage'
+    ])
+    // computed: {
+    //   messages() {
+    //     return store.state.messages.messages;
+    //   },
+    //
+    //   totalPages() {
+    //     return store.state.messages.totatPages;
+    //   },
+    //
+    //   currentPage() {
+    //     return store.state.messages.currentPage;
+    //   }
+    // }
+  });

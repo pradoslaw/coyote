@@ -101,7 +101,7 @@ $(function () {
   .on('/Adm/Mailing', () => {
     require('./libs/tinymce').default();
   })
-  .on(['/User/Pm/Submit', '/User/Pm/Show/*'], () => {
+  .on(['/User/Pm/Submit', '/User/Pm/Show/*', '/User/Pm'], () => {
     require('./pages/pm');
   });
 

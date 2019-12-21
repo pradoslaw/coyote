@@ -2,12 +2,16 @@ import axios from "axios";
 
 const state = {
   messages: [],
-  offset: 0
+  offset: 0,
+  totalPages: 0,
+  currentPage: 0
 };
 
 const mutations = {
-  init(state, messages) {
+  init(state, { messages, totalPages, currentPage }) {
     state.messages = messages;
+    state.totalPages = totalPages;
+    state.currentPage = currentPage;
     state.offset = messages.length;
   },
 
@@ -55,6 +59,14 @@ const actions = {
   loadMore ({ state, commit }, authorId) {
     return axios.get('/User/Pm/Infinity', {params: {author_id: authorId, offset: state.offset}}).then(response => {
       commit('merge', response.data.data);
+
+      return response;
+    });
+  },
+
+  paginate ({ commit }, page) {
+    return axios.get('/User/Pm', {params: {page}}).then(response => {
+      commit('init', {messages: response.data.messages, totalPages: response.data.total_pages, currentPage: response.data.current_page});
 
       return response;
     });

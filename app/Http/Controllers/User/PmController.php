@@ -54,18 +54,25 @@ class PmController extends BaseController
     }
 
     /**
-     * @return \Illuminate\View\View
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
         $pm = $this->pm->lengthAwarePaginate($this->userId);
-        $parser = $this->getParser();
+        $messages = PmResource::collection(collect($pm->items()));
 
-        foreach ($pm as &$row) {
-            $row->text = $parser->parse($row->text);
+        $result = [
+            'messages' => $messages->toArray($this->request),
+            'total_pages' => ceil($pm->total() / $pm->perPage()),
+            'current_page' => $pm->currentPage(),
+        ];
+
+        if ($request->wantsJson()) {
+            return response()->json($result);
         }
 
-        return $this->view('user.pm.home')->with(compact('pm'));
+        return $this->view('user.pm.home')->with($result);
     }
 
     /**
@@ -193,7 +200,7 @@ class PmController extends BaseController
         $pm = $this->pm->findWhere(['user_id' => $this->userId, 'author_id' => $authorId]);
         abort_if($pm->count() == 0, 404);
 
-        $this->pm->trash($this->userId, $authorId);
+//        $this->pm->trash($this->userId, $authorId);
 
         return redirect()->route('user.pm')->with('success', 'Wątek został bezpowrotnie usunięty.');
     }
