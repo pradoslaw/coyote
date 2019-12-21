@@ -1,77 +1,142 @@
-import 'jquery-color-animation/jquery.animate-colors';
-import Dialog from '../libs/dialog';
-import Config from '../libs/config';
-import PerfectScrollbar from 'perfect-scrollbar';
+import store from '../store';
+import { mapState } from 'vuex';
+import Vue from 'vue';
+import PerfectScrollbar from '../components/perfect-scrollbar';
+import VuePm from '../components/pm/message.vue';
+import VueTextareaAutosize from 'vue-textarea-autosize';
+import VuePrompt from '../components/prompt.vue';
+import VueToolbar from '../components/toolbar.vue';
+import VueButton from '../components/forms/button.vue';
+import {default as ws} from '../libs/realtime.js';
+import VueClipboard from '../plugins/clipboard.js';
+import VueModal from '../components/modal.vue';
+import VuePagination from '../components/pagination.vue';
+import Textarea from "../libs/textarea";
+import axios from 'axios';
 
-$(function() {
-    $('textarea[name="text"]').each(function() {
-        $(this).wikiEditor().prompt().fastSubmit().autogrow().pasteImage();
-    });
+Vue.use(VueTextareaAutosize);
+Vue.use(VueClipboard, {url: '/User/Pm/Paste'});
 
-    $('#wrap').each(function() {
-        const container = document.getElementById('wrap');
-        new PerfectScrollbar(container);
+new Vue({
+  el: '#app-pm',
+  delimiters: ['${', '}'],
+  components: {
+    'perfect-scrollbar': PerfectScrollbar,
+    'vue-pm': VuePm,
+    'vue-prompt': VuePrompt,
+    'vue-button': VueButton,
+    'vue-modal': VueModal,
+    'vue-toolbar': VueToolbar,
+    'vue-pagination': VuePagination
+  },
+  data() {
+    return {
+      recipient: window.data.recipient,
+      text: '',
+      isProcessing: false,
+      errors: {},
+      previewHtml: null
+    };
+  },
+  store,
+  created() {
+    // fill vuex with data passed from controller to view
+    store.commit('messages/init', {messages: window.data.messages, total: window.data.total, per_page: window.data.per_page, currentPage: window.data.current_page});
+  },
+  mounted() {
+    this.listenForMessage();
+    this.scrollToBottom();
 
-        let overview = $('#overview');
-        let pending = false;
+    if ('scrollbar' in this.$refs) {
+      this.$refs.scrollbar.$refs.container.addEventListener('ps-y-reach-start', this.loadMore);
+    }
+  },
+  methods: {
+    scrollToBottom() {
+      const overview = document.getElementById('overview');
 
-        $(this).scrollTop(overview.outerHeight());
+      if (overview) {
+        document.getElementById('wrap').scrollTop = overview.clientHeight;
+      }
+    },
 
-        container.addEventListener('ps-y-reach-start', () => {
-            if (pending === true) {
-                return;
-            }
+    sendMessage() {
+      this.isProcessing = true;
 
-            pending = true;
-            $.get(Config.get('infinity_url'), {offset: $('.media', overview).length}, html => {
-                overview.prepend(html);
+      store.dispatch('messages/add', {recipient: this.recipient.name, text: this.text})
+        .then(response => {
+          this.$nextTick(() => {
+            this.scrollToBottom();
+          });
 
-                // jezeli nie ma wiecej wiadomosci, to ajax nie bedzie kolejny raz wyslany
-                if ($.trim(html) === '') {
-                    $(this).off('ps-y-reach-start');
-                }
+          this.errors = {};
+          this.text = null;
 
-                pending = false;
-            });
+          // force redirect if new message was created
+          if (!('scrollbar' in this.$refs)) {
+            window.location.href = `/User/Pm/Show/${response.data.id}`;
+          }
+        })
+        .catch(err => {
+          this.errors = err.response.data.errors;
+        })
+        .finally(() => {
+          this.isProcessing = false;
         });
-    })
-    .on('mouseenter', '.unread', (e) => {
-        $(e.currentTarget).off('mouseenter');
-        $(e.currentTarget).animate({backgroundColor: '#fff'});
-    });
+    },
 
-    $('#recipient').each(function() {
-        $(this).autocomplete({
-            url: $(this).data('prompt-url')
-        });
-    });
+    insertToTextarea(file) {
+      const textarea = new Textarea(this.$refs.textarea.$el);
 
-    $('.btn-delete-pm').click(function() {
-        Dialog
-            .confirm({
-                message: $(this).data('confirm'),
-                form: {
-                    attr: {
-                        action: $(this).attr('href'),
-                        method: 'post'
-                    },
-                    csrfToken: Config.csrfToken()
-                }}
-            )
-            .show();
+      textarea.insertAtCaret('', '', '![' + file.name + '](' + file.url + ')');
+      this.updateModel(textarea.textarea.value);
+    },
 
-        return false;
-    });
+    showError() {
+      this.$refs.error.open();
+    },
 
-    $('#box-pm a[data-toggle="tab"]').click(function(e) {
-        if ($(e.target).attr('aria-controls') == 'preview') {
-            $('#preview').html('<i class="fa fa-spinner fa-spin fa-2x"></i>');
+    listenForMessage() {
+      ws.on('Coyote\\Events\\PmCreated', data => {
+        if (data.user.id === this.recipient.id) {
+          store.commit('messages/add', data);
 
-            $.post(Config.get('preview_url'), {'text': $('textarea[name="text"]').val()}, html => {
-                $('#preview').html(html);
-
-                Prism.highlightAll();
-            });
+          this.$nextTick(() => {
+            this.scrollToBottom();
+          });
         }
-    });
+      });
+    },
+
+    showPreview() {
+      axios.post('/User/Pm/Preview', {text: this.text}).then((response) => {
+        this.previewHtml = response.data;
+
+        Prism.highlightAll();
+      });
+    },
+
+    loadMore() {
+      store.dispatch('messages/loadMore', this.recipient.id).then(response => {
+        if (!response.data.data.length) {
+          this.$refs.scrollbar.$refs.container.removeEventListener('ps-y-reach-start', this.loadMore);
+        }
+      });
+    },
+
+    updateModel(value) {
+      this.text = value;
+    },
+
+    changePage(page) {
+      store.dispatch('messages/paginate', page);
+    }
+  },
+  computed: {
+    totalPages() {
+      return Math.ceil(this.total / this.perPage);
+    },
+
+    ...mapState('messages', ['messages', 'currentPage', 'total', 'perPage'])
+  }
 });

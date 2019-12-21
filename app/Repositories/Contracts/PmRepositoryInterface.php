@@ -13,7 +13,7 @@ interface PmRepositoryInterface extends RepositoryInterface
      * @param int $limit
      * @return mixed
      */
-    public function takeForUser($userId, $limit = 10);
+    public function groupByAuthor($userId, $limit = 10);
 
     /**
      * @param int $userId

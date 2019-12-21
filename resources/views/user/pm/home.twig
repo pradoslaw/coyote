@@ -1,23 +1,37 @@
 {% extends 'user.pm.base' %}
 
 {% block pm %}
-    <nav class="text-center">
-        {{ pm.render()|raw }}
-    </nav>
+  <nav class="text-center">
+    <vue-pagination :total-pages="totalPages" :current-page="currentPage" @change="changePage"></vue-pagination>
+  </nav>
 
-    {% for item in pm %}
-        {% include 'user.pm.message' with {
-            content: '<p class="excerpt"><a href="' ~ route('user.pm.show', [item.id]) ~ '">' ~ excerpt(item.text, 255)|default('(kliknij, aby przeczytać)')|e ~ '</a></p>',
-            delete_link: route('user.pm.trash', [item.author_id]),
-            link_to_profile: false,
-            show_marked_date: false,
-            confirm_message: 'Czy na pewno usunąć całą konwersację z tym użytkownikiem? Tej operacji nie będzie można cofnąć.'
-        } %}
-    {% else %}
-        <p class="alert alert-warning">Brak wiadomości prywatnych.</p>
-    {% endfor %}
+  <template v-if="messages.length">
+    <vue-pm
+      v-for="(message, index) in messages"
+      :message="message"
+      :key="message.id"
+      :last="false"
+      :clickable-text="true"
+    >
+    </vue-pm>
+  </template>
+  <div v-cloak v-else class="text-center">Brak wiadomości prywatnych.</div>
 
-    <nav class="text-center">
-        {{ pm.render()|raw }}
-    </nav>
+  <nav class="text-center">
+    <vue-pagination :total-pages="totalPages" :current-page="currentPage" @change="changePage"></vue-pagination>
+  </nav>
+{% endblock %}
+
+{% block body %}
+  <script>
+    var data = {
+      messages: {{ messages|json_encode|raw }},
+      recipient: {},
+      per_page: {{ per_page }},
+      total: {{ total }},
+      current_page: {{ current_page }}
+    };
+  </script>
+
+  {{ parent() }}
 {% endblock %}

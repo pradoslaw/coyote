@@ -35,7 +35,7 @@ interface NotificationRepositoryInterface extends RepositoryInterface
      * @param int $userId
      * @param string $url
      */
-    public function markAsReadByUrl($userId, $url);
+    public function markAsReadByModel($userId, $url);
 
     /**
      * Gets notification settings for given user

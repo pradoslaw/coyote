@@ -65,7 +65,7 @@ class NotificationTest extends \Codeception\TestCase\Test
         $repository = app(\Coyote\Repositories\Contracts\PmRepositoryInterface::class);
         $pm = $repository->submit($this->sender, ['author_id' => $this->recipient->id, 'text' => $text]);
 
-        $notification = new \Coyote\Notifications\PmCreatedNotification($pm);
+        $notification = new \Coyote\Notifications\PmCreatedNotification($pm[\Coyote\Pm::INBOX]);
         $message = $notification->toBroadcast();
 
         $this->tester->assertEquals($this->sender->name . ' przesyła Ci nową wiadomość', $message->data['headline']);
