@@ -121,7 +121,8 @@ class PmController extends BaseController
     }
 
     /**
-     * @return \Illuminate\View\View
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function submit(Request $request)
     {

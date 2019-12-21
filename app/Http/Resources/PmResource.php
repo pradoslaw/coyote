@@ -3,8 +3,6 @@
 namespace Coyote\Http\Resources;
 
 use Coyote\Pm;
-use Coyote\Services\Media\Factory;
-use Coyote\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**

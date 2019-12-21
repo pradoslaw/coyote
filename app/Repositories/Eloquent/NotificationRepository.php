@@ -5,8 +5,6 @@ namespace Coyote\Repositories\Eloquent;
 use Carbon\Carbon;
 use Coyote\Notification;
 use Coyote\Notification\Setting;
-use Coyote\Notification\Sender;
-use Coyote\Notification\Type;
 use Coyote\Repositories\Contracts\NotificationRepositoryInterface;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -59,7 +57,7 @@ class NotificationRepository extends Repository implements NotificationRepositor
      * Find notification by url and mark it as read
      *
      * @param int $userId
-     * @param mixed $url
+     * @param mixed $model
      */
     public function markAsReadByModel($userId, $model)
     {
