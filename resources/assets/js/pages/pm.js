@@ -41,7 +41,7 @@ new Vue({
   store,
   created() {
     // fill vuex with data passed from controller to view
-    store.commit('messages/init', {messages: window.data.messages, total: window.data.total, per_page: window.data.per_page, currentPage: window.data.current_page});
+    store.commit('messages/init', {messages: window.data.messages, total: window.data.total, perPage: window.data.per_page, currentPage: window.data.current_page});
   },
   mounted() {
     this.listenForMessage();
