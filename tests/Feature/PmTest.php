@@ -8,6 +8,7 @@ use Coyote\Repositories\Contracts\PmRepositoryInterface;
 use Coyote\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
+use Faker\Factory;
 
 class PmTest extends TestCase
 {
@@ -74,5 +75,39 @@ class PmTest extends TestCase
 
         $pm[Pm::SENTBOX]->delete();
         $this->assertDatabaseMissing('pm_text', ['id' => $pm[Pm::SENTBOX]->text_id]);
+    }
+
+    public function testWriteMessage()
+    {
+        $faker = Factory::create();
+
+        $response = $this->actingAs($this->user)->post(
+            '/User/Pm/Submit',
+            ['text' => $text = $faker->text, 'recipient' => $this->author->name],
+            ['Accept' => 'application/json']);
+
+        $response
+            ->assertStatus(201)
+            ->assertSeeText($text);
+    }
+
+    public function testWriteMessageWithoutRecipient()
+    {
+        $faker = Factory::create();
+
+        $response = $this->actingAs($this->user)->post('/User/Pm/Submit', ['text' => $text = $faker->text], ['Accept' => 'application/json']);
+
+        $response
+            ->assertJsonValidationErrors(['recipient']);
+    }
+
+    public function testWriteMessageToMyself()
+    {
+        $faker = Factory::create();
+
+        $response = $this->actingAs($this->user)->post('/User/Pm/Submit', ['text' => $text = $faker->text, 'recipient' => $this->user->name], ['Accept' => 'application/json']);
+
+        $response
+            ->assertJsonValidationErrors(['recipient']);
     }
 }

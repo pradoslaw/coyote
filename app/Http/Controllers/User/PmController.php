@@ -147,7 +147,7 @@ class PmController extends BaseController
      */
     public function save(PmRequest $request)
     {
-        $recipient = $this->user->findByName($request->get('recipient'));
+        $recipient = $this->user->findByName($request->input('recipient'));
 
         $pm = $this->transaction(function () use ($request, $recipient) {
             return $this->pm->submit($this->auth, $request->all() + ['author_id' => $recipient->id]);
