@@ -34,6 +34,34 @@ RUN cp /usr/share/zoneinfo/Europe/Brussels /etc/localtime
 RUN echo "Europe/Warsaw" >  /etc/timezone
 
 RUN apk add yarn
-RUN addgroup www-data www-data
 
-USER www-data:www-data
+ARG UID=1000
+ARG GID=1000
+
+ENV php_conf /usr/local/etc/php-fpm.conf
+ENV fpm_conf /usr/local/etc/php-fpm.d/www.conf
+ENV php_vars /usr/local/etc/php/conf.d/docker-vars.ini
+
+RUN addgroup -g ${GID} -S nginx
+RUN adduser -u ${UID} -D -S -h /var/cache/nginx -s /sbin/nologin -G nginx nginx
+
+RUN echo "cgi.fix_pathinfo=0" > ${php_vars} &&\
+    echo "upload_max_filesize = 100M"  >> ${php_vars} &&\
+    echo "post_max_size = 100M"  >> ${php_vars} &&\
+    echo "variables_order = \"EGPCS\""  >> ${php_vars} && \
+    echo "memory_limit = 128M"  >> ${php_vars} && \
+    sed -i \
+        -e "s/;catch_workers_output\s*=\s*yes/catch_workers_output = yes/g" \
+        -e "s/pm.max_children = 5/pm.max_children = 4/g" \
+        -e "s/pm.start_servers = 2/pm.start_servers = 3/g" \
+        -e "s/pm.min_spare_servers = 1/pm.min_spare_servers = 2/g" \
+        -e "s/pm.max_spare_servers = 3/pm.max_spare_servers = 4/g" \
+        -e "s/;pm.max_requests = 500/pm.max_requests = 200/g" \
+        -e "s/user = www-data/user = nginx/g" \
+        -e "s/group = www-data/group = nginx/g" \
+        -e "s/;listen.mode = 0660/listen.mode = 0666/g" \
+        -e "s/;listen.owner = www-data/listen.owner = nginx/g" \
+        -e "s/;listen.group = www-data/listen.group = nginx/g" \
+        -e "s/^;clear_env = no$/clear_env = no/" \
+        ${fpm_conf}
+

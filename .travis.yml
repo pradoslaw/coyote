@@ -7,10 +7,12 @@ cache:
     - yarn
 
 before_install:
-  - curl -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
-  - chmod +x ~/docker-compose
-  - sudo mv ~/docker-compose /usr/local/bin/docker-compose
+#  - curl -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
+#  - chmod +x ~/docker-compose
+#  - sudo mv ~/docker-compose /usr/local/bin/docker-compose
   - cp .env.testing .env
+  - chmod -R 0777 bootstrap/cache
+  - chmod -R 0777 storage
 
 install:
   - sudo service postgresql stop
@@ -19,18 +21,19 @@ install:
   - docker-compose up -d
   - docker-compose ps
   - docker-compose exec php make install
-  - sudo chown -R www-data:www-data $TRAVIS_BUILD_DIR
+#  - sudo chown -R www-data:www-data $TRAVIS_BUILD_DIR
+  - sudo ls -lsa $TRAVIS_BUILD_DIR
 
 before_script:
-  - docker-compose exec --user=www-data:www-data php php vendor/bin/codecept build
+  - docker-compose exec php php vendor/bin/codecept build
   - docker-compose exec php php artisan config:clear
   - docker-compose exec php php artisan route:clear
 
 script:
   - sudo chmod 0777 storage/logs/*.log
-  - docker-compose exec --user=www-data:www-data php php vendor/bin/codecept run
-  - docker-compose exec --user=www-data:www-data php php vendor/bin/phpunit
-  - docker-compose exec --user=www-data:www-data php php artisan dusk
+  - docker-compose exec php php vendor/bin/codecept run
+  - docker-compose exec php php vendor/bin/phpunit
+  - docker-compose exec php php artisan dusk
 
 after_script:
   - docker-compose stop
