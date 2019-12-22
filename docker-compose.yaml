@@ -6,14 +6,14 @@ services:
     volumes:
       - postgres:/var/lib/postgresql/data:z
     environment:
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD:
+      POSTGRES_DB: coyote
     networks:
       - coyote
 
   php:
-    image: 4programmers/php-node
+    image: 4programmers/php-node:latest
     working_dir: /var/www
     volumes:
       - ./:/var/www
@@ -21,8 +21,9 @@ services:
     environment:
       DB_PORT: 5432
       DB_HOST: db
-      REDIS_HOST: ${REDIS_HOST}
-      ELASTICSEARCH_HOST: ${ELASTICSEARCH_HOST}
+
+#      REDIS_HOST: ${REDIS_HOST}
+#      ELASTICSEARCH_HOST: ${ELASTICSEARCH_HOST}
     networks:
       - coyote
 
