@@ -33,12 +33,11 @@
   import DesktopNotifications from '../../libs/notifications';
   import {default as ws} from '../../libs/realtime.js';
   import Session from '../../libs/session';
-  import axios from 'axios';
   import store from '../../store';
-  import Config from "../../libs/config";
   import {default as PerfectScrollbar} from '../perfect-scrollbar';
   import {mixin as clickaway} from 'vue-clickaway';
   import VueNotification from './notification.vue';
+  import { mapState } from 'vuex';
 
   export default {
     mixins: [clickaway],
@@ -50,21 +49,13 @@
     data() {
       return {
         isOpen: false,
-        offset: 0,
-        sessionTimeout: 4 * 60 * 1000
+        offset: 0
       }
     },
     mounted() {
-      axios.defaults.headers.common['X-CSRF-TOKEN'] = Config.csrfToken();
-
-      this.keepSessionAlive();
       this.listenForNotification();
 
       this.title = document.title;
-    },
-
-    beforeDestroy() {
-      this.stopSessionAlive();
     },
 
     methods: {
@@ -121,19 +112,11 @@
 
       setTitle(title) {
         document.title = title;
-      },
-
-      keepSessionAlive() {
-        this.pinger = setInterval(() => axios.get('/ping'), this.sessionTimeout);
-      },
-
-      stopSessionAlive() {
-        clearInterval(this.pinger);
-      },
+      }
     },
 
     watch: {
-      counter(value) {
+      count(value) {
         if (value > 0) {
           this.setIcon(`/img/xicon/favicon${Math.min(this.count, 6)}.png`);
           this.setTitle(`(${this.count}) ${this.title}`);
@@ -146,13 +129,6 @@
       }
     },
 
-    computed: {
-      notifications() {
-        return this.$store.state.notifications.notifications;
-      },
-      count() {
-        return this.$store.state.notifications.count;
-      }
-    }
+    computed: mapState('notifications', ['notifications', 'count'])
   }
 </script>

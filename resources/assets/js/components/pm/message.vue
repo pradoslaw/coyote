@@ -38,7 +38,6 @@
 
 <script>
   import { default as mixins } from '../mixins/user';
-  import axios from 'axios';
   import VueModal from '../modal.vue';
 
   export default {

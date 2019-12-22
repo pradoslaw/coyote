@@ -18,7 +18,9 @@
                 <div class="media {{ notification.is_read ? '' : 'unread' }}">
                     <div class="media-left">
                         <a href="{{ route('profile', [notification.user.user_id]) }}">
-                            <img class="media-object" src="{{ notification.photo }}" style="width: 49px; height: 49px;" alt="{{ notification.user.name }}" title="{{ notification.user.name }}">
+                            <object class="media-object" data="{{ notification.photo|default('//') }}" style="width: 49px; height: 49px;" title="{{ notification.user.name }}" type="image/png">
+                              <img src="/img/avatar.png" style="width: 100%">
+                            </object>
                         </a>
                     </div>
                     <div class="media-body">

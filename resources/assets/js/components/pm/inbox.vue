@@ -31,12 +31,11 @@
 <script>
   import DesktopNotifications from '../../libs/notifications';
   import {default as ws} from '../../libs/realtime.js';
-  import axios from 'axios';
   import store from '../../store';
-  import Config from '../../libs/config';
   import {default as PerfectScrollbar} from '../perfect-scrollbar';
   import {mixin as clickaway} from 'vue-clickaway';
   import VueMessage from './message-compact.vue';
+  import {mapState} from "vuex";
 
   export default {
     mixins: [clickaway],
@@ -77,13 +76,6 @@
         });
       },
     },
-    computed: {
-      messages() {
-        return this.$store.state.inbox.messages;
-      },
-      count() {
-        return this.$store.state.inbox.count;
-      }
-    }
+    computed: mapState('inbox', ['messages', 'count'])
   };
 </script>
