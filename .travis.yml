@@ -31,6 +31,7 @@ script:
 #  - sudo chmod 0777 storage/logs/*.log
   - docker-compose exec php php vendor/bin/codecept run
   - docker-compose exec php php vendor/bin/phpunit
+  - ls -lsa storage/logs/
   - docker-compose exec php php artisan dusk
 
 after_script:
