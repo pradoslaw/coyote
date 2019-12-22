@@ -30,7 +30,7 @@ RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-png-dir
 RUN curl --insecure https://getcomposer.org/composer.phar -o /usr/bin/composer && chmod +x /usr/bin/composer
 
 RUN apk add tzdata
-RUN cp /usr/share/zoneinfo/Europe/Brussels /etc/localtime
+RUN cp /usr/share/zoneinfo/Europe/Warsaw /etc/localtime
 RUN echo "Europe/Warsaw" >  /etc/timezone
 
 RUN apk add yarn
