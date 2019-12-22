@@ -13,7 +13,9 @@
 /public/uploads/*
 /public/manifest.json
 /resources/images/*
+/tests
 .idea_modules/
+.idea/
 .git/
 .docker/
 .data/
@@ -24,3 +26,4 @@
 .editorconfig
 .gitignore
 .gitattributes
+
