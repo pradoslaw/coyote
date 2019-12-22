@@ -19,8 +19,6 @@ install:
   - docker-compose ps
   - docker-compose exec php make install
   - sudo chown -R nginx:nginx $TRAVIS_BUILD_DIR
-#  - sudo chmod -R 0777 storage bootstrap/cache public
-#  - mkdir public/uploads
   - ls -lsa $TRAVIS_BUILD_DIR
 
 before_script:
@@ -30,8 +28,8 @@ before_script:
 
 script:
 #  - sudo chmod 0777 storage/logs/*.log
-#  - docker-compose exec php php vendor/bin/codecept run
-#  - docker-compose exec php php vendor/bin/phpunit
+  - docker-compose exec php php vendor/bin/codecept run
+  - docker-compose exec php php vendor/bin/phpunit
   - docker-compose exec php php artisan dusk
 
 after_script:

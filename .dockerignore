@@ -11,6 +11,7 @@
 /public/js/*
 /public/build/*
 /public/uploads/*
+/public/manifest.json
 /resources/images/*
 .idea_modules/
 .git/
