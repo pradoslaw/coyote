@@ -11,14 +11,40 @@
 @import "../components/who-is-online";
 
 .panel-categories {
+
+
+  .wrap {
+    overflow: hidden;
+  }
+
   .media {
     font-size: 12px;
+  }
+
+  h3 {
+    font-size: 120%;
+    margin: 0 0 4px 0;
+  }
+
+  .fa-poll-h {
+    margin-right: 10px;
+    font-size: 3em;
+  }
+
+  .fa-new {
+    //color: $unread-bg-hover;
+    color: $alt-link-hover-color;
   }
 
   .col-lg-stat {
     white-space: nowrap;
   }
 
+  .description {
+    margin: 0;
+  }
+
+  // desktop
   @media screen and (min-width: $screen-lg) {
     .col-lg-stat {
       text-align: right;
@@ -26,9 +52,13 @@
       padding-top: 3px;
     }
 
-
+    > .panel-body > .row {
+      display: flex;
+      align-items: center;
+    }
   }
 
+  // mobile
   @media screen and (max-width: $screen-lg) {
     .media {
       border-top: 1px solid $border-color;
@@ -50,12 +80,12 @@
     box-shadow: 0 2px 2px rgba(0,0,0,.1);
   }
 
-  .ico {
-    display: block;
-    height: 26px;
-    width: 31px;
-    background: 4px -221px url(/img/sprites.png) no-repeat;
-  }
+  //.ico {
+  //  display: block;
+  //  height: 26px;
+  //  width: 31px;
+  //  background: 4px -221px url(/img/sprites.png) no-repeat;
+  //}
 
   .new {
     border-left: 2px solid $alt-link-hover-color;
