@@ -28,9 +28,9 @@ before_script:
   - docker-compose exec php php artisan route:clear
 
 script:
-  - sudo chown nginx:nginx storage/logs/*.log
   - docker-compose exec php php vendor/bin/codecept run
   - docker-compose exec php php vendor/bin/phpunit
+  - sudo chown nginx:nginx storage/logs/*.log
   - ls -lsa storage/logs/
   - docker-compose exec php php artisan dusk
 
