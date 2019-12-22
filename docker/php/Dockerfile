@@ -2,7 +2,6 @@ FROM php:7.3-fpm-alpine
 
 LABEL maintainer="4programmers.net <support@4programmers.net>"
 
-#RUN usermod -u 1000 www-data
 WORKDIR /var/www
 
 RUN apk update && apk add --no-cache \
@@ -35,3 +34,6 @@ RUN cp /usr/share/zoneinfo/Europe/Brussels /etc/localtime
 RUN echo "Europe/Warsaw" >  /etc/timezone
 
 RUN apk add yarn
+RUN addgroup www-data www-data
+
+USER www-data:www-data
