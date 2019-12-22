@@ -7,8 +7,8 @@ cache:
     - yarn
 
 before_install:
-  - sudo addgroup -g 1000 -S nginx
-  - sudo adduser -u 1000 -D -S -h /var/cache/nginx -s /sbin/nologin -G nginx nginx
+  - sudo addgroup --gid 1000 nginx
+  - sudo useradd --uid 1000 -g nginx nginx
   - cp .env.testing .env
 
 install:
