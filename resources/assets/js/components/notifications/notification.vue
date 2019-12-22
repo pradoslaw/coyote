@@ -42,6 +42,8 @@
       },
 
       markAsRead(notification) {
+        notification.url = `/notification/${notification.id}`;
+
         this.$store.commit('notifications/mark', notification);
       },
 
