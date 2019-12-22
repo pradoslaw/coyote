@@ -13,7 +13,7 @@
             </nav>
 
             {% for notification in pagination %}
-                {% set url = route('user.notifications.url', [notification.guid]) ~ '#' ~ notification.url %}
+                {% set url = route('user.notifications.url', [notification.id]) %}
 
                 <div class="media {{ notification.is_read ? '' : 'unread' }}">
                     <div class="media-left">
