@@ -23,22 +23,19 @@ install:
   - ls -lsa $TRAVIS_BUILD_DIR
 
 before_script:
-  - docker-compose exec php php vendor/bin/codecept build
-  - docker-compose exec php php artisan config:clear
-  - docker-compose exec php php artisan route:clear
+  - docker-compose exec --user=nginx:nginx php php vendor/bin/codecept build
+  - docker-compose exec --user=nginx:nginx php php artisan config:clear
+  - docker-compose exec --user=nginx:nginx php php artisan route:clear
 
 script:
-  - docker-compose exec php php vendor/bin/codecept run
-  - docker-compose exec php php vendor/bin/phpunit
+  - docker-compose exec --user=nginx:nginx php php vendor/bin/codecept run
+  - docker-compose exec --user=nginx:nginx php php vendor/bin/phpunit
 #  - sudo chown nginx:nginx storage/logs/*.log
 #  - sudo chmod 0777 storage/logs/*.log
   - sudo rm -rf storage/logs/*.log
   - ls -lsa storage/framework/views
   - sudo rm -rf storage/framework/views
-  - ls -lsa storage/logs/
-  - ls -lsa public/
-  - ls -lsa
-  - docker-compose exec php php artisan dusk
+  - docker-compose exec --user=nginx:nginx php php artisan dusk
 
 after_script:
   - docker-compose stop
