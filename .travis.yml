@@ -8,9 +8,10 @@ cache:
 
 before_install:
   - cp .env.testing .env
-  - chmod -R ug+rwx storage bootstrap/cache public
+  - chmod -R 0777 storage bootstrap/cache public
   - mkdir public/uploads
-  - ls -lsa public/
+  - ls -lsa $TRAVIS_BUILD_DIR
+  - id -u
 
 install:
   - sudo service postgresql stop
