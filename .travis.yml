@@ -8,7 +8,7 @@ cache:
 
 before_install:
   - cp .env.testing .env
-  - chmod -R ug+rwx storage bootstrap/cache
+  - chmod -R ug+rwx storage bootstrap/cache public
 
 install:
   - sudo service postgresql stop
