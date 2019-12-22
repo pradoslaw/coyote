@@ -34,6 +34,8 @@ script:
 #  - sudo chmod 0777 storage/logs/*.log
   - sudo rm -rf storage/logs/*.log
   - ls -lsa storage/logs/
+  - ls -lsa public/
+  - ls -lsa
   - docker-compose exec php php artisan dusk
 
 after_script:
