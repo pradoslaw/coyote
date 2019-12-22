@@ -33,6 +33,8 @@ script:
 #  - sudo chown nginx:nginx storage/logs/*.log
 #  - sudo chmod 0777 storage/logs/*.log
   - sudo rm -rf storage/logs/*.log
+  - ls -lsa storage/framework/views
+  - sudo rm -rf storage/framework/views
   - ls -lsa storage/logs/
   - ls -lsa public/
   - ls -lsa
