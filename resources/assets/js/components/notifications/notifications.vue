@@ -48,8 +48,7 @@
     store,
     data() {
       return {
-        isOpen: false,
-        offset: 0
+        isOpen: false
       }
     },
     mounted() {
@@ -97,8 +96,8 @@
         });
 
         ws.on('Illuminate\\Notifications\\Events\\BroadcastNotificationCreated', data => {
-          this.$store.commit('notifications/increment');
           this.resetNotifications();
+          this.$store.commit('notifications/increment');
 
           DesktopNotifications.doNotify(data.headline, data.subject, data.url);
         });
@@ -125,7 +124,7 @@
           this.setIcon('/img/favicon.png');
         }
 
-        Session.setItem('notifications', value)
+        Session.setItem('notifications', value);
       }
     },
 

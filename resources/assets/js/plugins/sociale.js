@@ -9,7 +9,7 @@ const el = document.getElementById('nav-auth');
 
 if (el !== null) {
   store.commit('inbox/init', Config.get('pm_unread'));
-  store.commit('notifications/init', {notifications: null, count: Config.get('notifications_unread'), offset: 0});
+  store.commit('notifications/init', {notifications: null, count: Config.get('notifications_unread')});
 
   const NotificationWrapper = Vue.extend(VueNotification);
   const PmWrapper = Vue.extend(VuePm);

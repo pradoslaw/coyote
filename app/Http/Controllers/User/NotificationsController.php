@@ -100,9 +100,8 @@ class NotificationsController extends BaseController
         $notifications = array_filter(NotificationResource::collection($notifications)->toArray($this->request));
 
         return response()->json([
-            'unread'            => $unread,
-            'notifications'     => $notifications,
-            'offset'            => count($notifications) + $offset
+            'count'             => $unread,
+            'notifications'     => $notifications
         ]);
     }
 

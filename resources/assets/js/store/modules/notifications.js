@@ -12,11 +12,10 @@ const getters = {
 };
 
 const mutations = {
-  init (state, { notifications, count, offset }) {
+  init (state, { notifications, count }) {
     state.notifications = Array.isArray(state.notifications) ? state.notifications.concat(notifications) : notifications;
-
     state.count = count;
-    state.offset = offset;
+    state.offset = notifications !== null ? state.notifications.length : 0;
   },
 
   remove(state, notification) {
