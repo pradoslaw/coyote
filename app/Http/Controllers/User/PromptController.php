@@ -21,8 +21,8 @@ class PromptController extends Controller
 
         $result = $user->lookupName($request['q']);
 
-        if ($request->has('json')) {
-            return PromptResource::collection($result)->toArray($request);
+        if ($request->wantsJson()) {
+            return PromptResource::collection($result);
         }
 
         return view('components.prompt')->with('users', $result);

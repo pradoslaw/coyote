@@ -6,17 +6,7 @@
 {% block pm %}
   <div class="row">
     <div class="col-md-12 margin-md-bottom" :class="{'has-error': 'recipient' in errors}">
-      <input
-        type="text"
-        name="recipient"
-        v-model="recipient.name"
-        class="form-control"
-        placeholder="Odbiorca..."
-        data-prompt-url="{{ route('user.prompt') }}"
-        id="recipient"
-        tabindex="1"
-        autofocus
-      >
+      <vue-autocomplete ref="autocomplete" :items="items" :v-model="recipient.name" placeholder="Odbiorca..."  @change="lookupName" @select="selectName"></vue-autocomplete>
 
       <span v-cloak v-if="'recipient' in errors" class="help-block">${ errors.recipient[0] }</span>
     </div>

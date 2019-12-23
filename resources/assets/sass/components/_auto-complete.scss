@@ -16,7 +16,9 @@
     cursor: pointer;
     color: gray;
 
-    img {
+    // deprecated. use <object>
+    > img,
+    object {
       vertical-align: middle;
       margin-right: 5px;
       width: 16px;
@@ -34,6 +36,10 @@
         background: url('/img/avatar.png');
         background-size: 16px 16px;
       }
+    }
+
+    object {
+      display: inline-block;
     }
 
     b {

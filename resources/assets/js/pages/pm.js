@@ -11,6 +11,7 @@ import {default as ws} from '../libs/realtime.js';
 import VueClipboard from '../plugins/clipboard.js';
 import VueModal from '../components/modal.vue';
 import VuePagination from '../components/pagination.vue';
+import VueAutocomplete from '../components/autocomplete.vue';
 import Textarea from "../libs/textarea";
 import axios from 'axios';
 
@@ -27,7 +28,8 @@ new Vue({
     'vue-button': VueButton,
     'vue-modal': VueModal,
     'vue-toolbar': VueToolbar,
-    'vue-pagination': VuePagination
+    'vue-pagination': VuePagination,
+    'vue-autocomplete': VueAutocomplete
   },
   data() {
     return {
@@ -35,7 +37,8 @@ new Vue({
       text: '',
       isProcessing: false,
       errors: {},
-      previewHtml: null
+      previewHtml: null,
+      items: []
     };
   },
   store,
@@ -131,6 +134,17 @@ new Vue({
 
     changePage(page) {
       store.dispatch('messages/paginate', page);
+    },
+
+    lookupName(name) {
+      axios.get('/User/Prompt', {params: {q: name}}).then(response => {
+        this.items = response.data.data;
+        this.$refs.autocomplete.toggleDropdown(this.items.length);
+      });
+    },
+
+    selectName(item) {
+      this.recipient.name = item.name;
     }
   },
   computed: {
