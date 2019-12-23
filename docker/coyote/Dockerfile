@@ -21,7 +21,8 @@ COPY . .
 
 RUN composer dump-autoload --no-scripts --no-dev --optimize
 # clear cache
-RUN composer clearcache && yarn cache clean && rm -rf /var/www/.composer && rm -rf /root/.composer && rm -rf  /usr/local/share/.cache/yarn/
+RUN composer clearcache && yarn cache clean
+RUN rm -rf /var/www/.composer && rm -rf /root/.composer && rm -rf  /usr/local/share/.cache/yarn/
 
 RUN chown -R nginx:nginx /var/www
 RUN chmod 0775 -R storage/
