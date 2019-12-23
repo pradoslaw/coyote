@@ -9,7 +9,6 @@
 /bootstrap/cache/*
 /public/css/*
 /public/js/*
-/public/build/*
 /public/uploads/*
 /public/manifest.json
 /resources/images/*
