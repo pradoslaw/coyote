@@ -71,6 +71,7 @@ new Vue({
 
           this.errors = {};
           this.text = null;
+          this.previewHtml = null;
 
           // force redirect if new message was created
           if (!('scrollbar' in this.$refs)) {
