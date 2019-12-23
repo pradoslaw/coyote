@@ -12,7 +12,7 @@
 
       <h3 class="media-heading">
         <a v-if="clickableText" :href="'/User/Pm/Show/' + message.id">{{ message.user.name }}</a>
-        <template v-else>{{ message.user.name }}</template>
+        <a v-else v-profile="message.user.id">{{ message.user.name }}</a>
       </h3>
 
       <a @click="deleteMessage(true)" class="btn-delete-pm pull-right text-danger" href="javascript:" title="Usuń">
