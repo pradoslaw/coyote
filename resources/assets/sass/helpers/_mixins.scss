@@ -76,6 +76,7 @@
   color: #fff;
   text-shadow: none;
   font-size: $font-size-large;
+  font-weight: 900;
 
   @include font-awesome($fa-var-times);
 }
