@@ -5,38 +5,28 @@
       class="form-control"
       :id="id"
       :placeholder="placeholder"
+      :tabindex="tabindex"
       autocomplete="off"
       v-model="valueLocal"
       @click="emitFocus"
       @focus="emitFocus"
-      @keyup.up.prevent="goUp"
-      @keyup.down.prevent="goDown"
-      @keyup.esc="hideDropdown"
-      @keydown.enter.prevent="selectItem"
+      @keyup.up.prevent="$refs.dropdown.goUp"
+      @keyup.down.prevent="$refs.dropdown.goDown"
+      @keyup.esc="$refs.dropdown.hideDropdown"
+      @keydown.enter.prevent="changeItem"
     >
 
-    <ol ref="dropdown" class="auto-complete" style="width: 100%" v-show="isDropdownShown">
-      <li v-for="(item, index) in items" :key="index" :class="{'hover': index === selectedIndex}" @click="selectItem" @mouseover="hoverItem(index)">
-
-        <slot name="item" :item="item">
-          <object :data="item.photo || '//'" type="image/png">
-            <img src="/img/avatar.png" style="width: 100%">
-          </object>
-
-          <span>{{ item.name }}</span>
-
-          <small v-if="item.group" class="label label-default">{{ item.group }}</small>
-        </slot>
-      </li>
-    </ol>
+    <vue-dropdown ref="dropdown" :items="items" @select="selectItem"></vue-dropdown>
   </div>
 </template>
 
 <script>
   import { default as mixins } from '../mixins/form';
+  import VueDropdown from './dropdown.vue';
 
   export default {
     mixins: [ mixins ],
+    components: { 'vue-dropdown': VueDropdown },
     props: {
       items: {
         type: Array,
@@ -51,85 +41,30 @@
       value: {
         type: String,
         default: ''
+      },
+      tabindex: {
+        type: Number
       }
-    },
-    data() {
-      return {
-        isDropdownShown: false,
-        selectedIndex: -1
-      }
-    },
-    mounted() {
-      document.body.addEventListener('click', event => {
-        if (!(this.$el === event.target || this.$el.contains(event.target))) {
-          this.isDropdownShown = false;
-        }
-      });
     },
     methods: {
       emitFocus() {
         this.$emit('focus');
       },
 
-      goDown() {
-        this.isDropdownShown = true;
-
-        this.changeIndex(++this.selectedIndex);
+      selectItem(item) {
+        this.$emit('select', item);
       },
 
-      goUp() {
-        this.changeIndex(--this.selectedIndex);
-      },
+      changeItem() {
+        const selected = this.$refs.dropdown.getSelected();
 
-      changeIndex(index) {
-        const length = this.items.length;
-
-        if (length > 0) {
-          if (index >= length) {
-            index = 0;
-          }
-          else if (index < 0) {
-            index = length - 1;
-          }
-
-          this.selectedIndex = index;
-          this.adjustScrollbar();
+        if (selected) {
+          this.$emit('select', selected);
         }
-      },
-
-      adjustScrollbar() {
-        let dropdown = this.$refs['dropdown'];
-
-        if (dropdown.children.length) {
-          dropdown.scrollTop = this.hoverItem * dropdown.children[0].offsetHeight;
-        }
-      },
-
-      selectItem() {
-        if (this.selectedIndex > -1) {
-          this.$emit('select', this.items[this.selectedIndex]);
-        }
-
-        this.hideDropdown();
-      },
-
-      // inputChange(e) {
-      //   if (e.key !== 'Enter') {
-      //     this.$emit('change', this.vModel);
-      //   }
-      // },
-
-      hoverItem(index) {
-        this.selectedIndex = index;
       },
 
       toggleDropdown(flag) {
-        this.isDropdownShown = flag;
-      },
-
-      hideDropdown() {
-        this.isDropdownShown = false;
-        this.selectedIndex = -1;
+        this.$refs.dropdown.toggleDropdown(flag);
       }
     }
   }

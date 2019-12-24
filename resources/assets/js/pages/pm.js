@@ -137,6 +137,10 @@ new Vue({
     },
 
     lookupName(name) {
+      if (name.trim() === '') {
+        return;
+      }
+
       axios.get('/User/Prompt', {params: {q: name}}).then(response => {
         this.items = response.data.data;
         this.$refs.autocomplete.toggleDropdown(this.items.length > 0 && this.items[0].name.toLowerCase() !== name.toLowerCase());
