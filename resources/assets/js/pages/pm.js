@@ -96,6 +96,10 @@ new Vue({
       this.updateModel(textarea.textarea.value);
     },
 
+    onChange(e) {
+      this.updateModel(e.target.value);
+    },
+
     showError() {
       this.$refs.error.open();
     },
@@ -105,9 +109,7 @@ new Vue({
         if (data.user.id === this.recipient.id) {
           store.commit('messages/add', data);
 
-          this.$nextTick(() => {
-            this.scrollToBottom();
-          });
+          this.$nextTick(() => this.scrollToBottom());
         }
       });
     },
