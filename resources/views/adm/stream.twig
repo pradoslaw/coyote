@@ -47,14 +47,6 @@
 
     <script>
         $(function () {
-            $('input[name="actor_displayName"]').focus(function() {
-                $(this).autocomplete({
-                    url: '{{ route('user.prompt') }}'
-                });
-
-                $(this).unbind('focus');
-            });
-
             $('a[class~="bubble"],i[class~="bubble"]').tooltip();
 
             $(document).on('click mousedown', '#stream-filter-form .dropdown-menu', function (e) {

@@ -26,7 +26,6 @@ import './components/popover.js';
 import './components/flag.js';
 import './plugins/sociale.js';
 import './plugins/geo-ip';
-import './plugins/auto-complete';
 import './bootstrap';
 
 import Config from './libs/config';
