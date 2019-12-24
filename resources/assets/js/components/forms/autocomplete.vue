@@ -3,6 +3,7 @@
     <input
       type="text"
       class="form-control"
+      autofocus
       :id="id"
       :placeholder="placeholder"
       :tabindex="tabindex"
@@ -61,6 +62,8 @@
         if (selected) {
           this.$emit('select', selected);
         }
+
+        this.toggleDropdown(false);
       },
 
       toggleDropdown(flag) {
