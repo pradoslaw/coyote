@@ -4,8 +4,8 @@ import Vue from 'vue';
 import PerfectScrollbar from '../components/perfect-scrollbar';
 import VuePm from '../components/pm/message.vue';
 import VueTextareaAutosize from 'vue-textarea-autosize';
-import VuePrompt from '../components/prompt.vue';
-import VueToolbar from '../components/toolbar.vue';
+import VuePrompt from '../components/forms/prompt.vue';
+import VueToolbar from '../components/forms/toolbar.vue';
 import VueButton from '../components/forms/button.vue';
 import {default as ws} from '../libs/realtime.js';
 import VueClipboard from '../plugins/clipboard.js';
@@ -143,7 +143,10 @@ new Vue({
 
       axios.get('/User/Prompt', {params: {q: name}}).then(response => {
         this.items = response.data.data;
-        this.$refs.autocomplete.toggleDropdown(this.items.length > 0 && this.items[0].name.toLowerCase() !== name.toLowerCase());
+
+        if (this.items.length === 1 && this.items[0].name.toLowerCase() === name.toLowerCase()) {
+          this.items = [];
+        }
       });
     },
 

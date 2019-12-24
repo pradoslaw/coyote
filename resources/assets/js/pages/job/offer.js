@@ -3,7 +3,7 @@ import Config from '../../libs/config';
 import VueComment from '../../components/comment.vue';
 import VueModal from '../../components/modal.vue';
 import VueTextareaAutosize from 'vue-textarea-autosize';
-import VuePrompt from '../../components/prompt.vue';
+import VuePrompt from '../../components/forms/prompt.vue';
 import axios from 'axios';
 import store from '../../store';
 import VueMap from '../../components/google-maps/map.vue';

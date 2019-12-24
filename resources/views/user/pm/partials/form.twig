@@ -7,23 +7,25 @@
 
     <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" id="body">
+
+        <vue-toolbar @update="updateModel" :input="() => $refs.textarea.$el"></vue-toolbar>
+
         <vue-prompt source="{{ route('user.prompt') }}">
-          <vue-toolbar @update="updateModel">
-            <textarea-autosize
-              placeholder="Kliknij, aby odpowiedzieć"
-              v-clipboard:success="insertToTextarea"
-              v-clipboard:error="showError"
-              name="text"
-              class="form-control"
-              ref="textarea"
-              v-model="text"
-              :min-height="40"
-              :max-height="350"
-              @keydown.native.ctrl.enter="sendMessage"
-              rows="2"
-              tabindex="1"
-            ></textarea-autosize>
-          </vue-toolbar>
+          <textarea-autosize
+            placeholder="Kliknij, aby odpowiedzieć"
+            v-clipboard:success="insertToTextarea"
+            v-clipboard:error="showError"
+            name="text"
+            class="form-control"
+            ref="textarea"
+            v-model="text"
+            :min-height="40"
+            :max-height="350"
+            @keydown.native.ctrl.enter="sendMessage"
+            rows="2"
+            tabindex="1"
+          ></textarea-autosize>
+
         </vue-prompt>
       </div>
 

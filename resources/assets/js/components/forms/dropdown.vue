@@ -97,6 +97,11 @@
       getSelected() {
         return this.selectedIndex > -1 ? this.items[this.selectedIndex] : null;
       }
+    },
+    watch: {
+      items(items) {
+        this.toggleDropdown(items.length);
+      }
     }
   }
 </script>

@@ -45,6 +45,10 @@ class Textarea {
     isSelected() {
         return (this.textarea.selectionEnd - this.textarea.selectionStart) > 0;
     }
+
+    get value() {
+      return this.textarea.value;
+    }
 }
 
 export default Textarea;

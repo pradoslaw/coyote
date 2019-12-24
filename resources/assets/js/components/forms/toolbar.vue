@@ -123,20 +123,22 @@
         </div>
       </div>
     </div>
-
-    <slot></slot>
   </div>
 </template>
 
 <script>
-  import { default as Textarea, languages } from '../libs/textarea';
-  import {mixin as clickaway} from 'vue-clickaway';
+  import { default as Textarea, languages } from '../../libs/textarea';
+  import { mixin as clickaway } from 'vue-clickaway';
 
   export default {
     mixins: [clickaway],
+    props: {
+      input: {
+          type: Function
+      }
+    },
     data() {
       return {
-        el: null,
         textarea: null,
         languages,
         searchText: '',
@@ -144,31 +146,27 @@
       }
     },
     mounted() {
-      this.el = this.$slots.default[0].elm;
-      this.textarea = new Textarea(this.$slots.default[0].elm);
+      this.textarea = new Textarea(this.input());
     },
     methods: {
       insertAtCaret(startsWith, endsWith) {
         this.textarea.insertAtCaret(startsWith.replace(/<br>/g, "\n"), endsWith.replace(/<br>/g, "\n"), this.textarea.isSelected() ? this.textarea.getSelection() : '');
         this.hideDropdown();
 
-        this.$emit('update', this.el.value);
+        this.$emit('update', this.textarea.value);
       },
 
       insertCitation() {
         this.textarea.insertAtCaret('> ', '', this.textarea.getSelection().replace(/\r\n/g, "\n").replace(/\n/g, "\n> "));
 
-        this.$emit('update', this.el.value);
+        this.$emit('update', this.textarea.value);
       },
 
       toggleDropdown() {
         this.isDropdownShown = !this.isDropdownShown;
 
         if (this.isDropdownShown) {
-          this.$nextTick(() => {
-
-            this.$refs.search.focus();
-          });
+          this.$nextTick(() => this.$refs.search.focus());
         }
       },
 
