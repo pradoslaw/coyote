@@ -11,7 +11,7 @@ import {default as ws} from '../libs/realtime.js';
 import VueClipboard from '../plugins/clipboard.js';
 import VueModal from '../components/modal.vue';
 import VuePagination from '../components/pagination.vue';
-import VueAutocomplete from '../components/autocomplete.vue';
+import VueAutocomplete from '../components/forms/autocomplete.vue';
 import Textarea from "../libs/textarea";
 import axios from 'axios';
 
@@ -139,12 +139,17 @@ new Vue({
     lookupName(name) {
       axios.get('/User/Prompt', {params: {q: name}}).then(response => {
         this.items = response.data.data;
-        this.$refs.autocomplete.toggleDropdown(this.items.length);
+        this.$refs.autocomplete.toggleDropdown(this.items.length > 0 && this.items[0].name.toLowerCase() !== name.toLowerCase());
       });
     },
 
     selectName(item) {
-      this.recipient.name = item.name;
+      this.$set(this.recipient, 'name', item.name);
+    }
+  },
+  watch: {
+    'recipient.name' (value) {
+      this.lookupName(value);
     }
   },
   computed: {

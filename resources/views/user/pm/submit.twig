@@ -6,7 +6,7 @@
 {% block pm %}
   <div class="row">
     <div class="col-md-12 margin-md-bottom" :class="{'has-error': 'recipient' in errors}">
-      <vue-autocomplete ref="autocomplete" :items="items" :v-model="recipient.name" placeholder="Odbiorca..."  @change="lookupName" @select="selectName"></vue-autocomplete>
+      <vue-autocomplete ref="autocomplete" :items="items" :value.sync="recipient.name" placeholder="Odbiorca..."  @update="lookupName" @select="selectName"></vue-autocomplete>
 
       <span v-cloak v-if="'recipient' in errors" class="help-block">${ errors.recipient[0] }</span>
     </div>

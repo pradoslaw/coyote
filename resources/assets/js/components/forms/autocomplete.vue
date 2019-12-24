@@ -6,18 +6,17 @@
       :id="id"
       :placeholder="placeholder"
       autocomplete="off"
-      v-model="vModel"
+      v-model="valueLocal"
       @click="emitFocus"
       @focus="emitFocus"
       @keyup.up.prevent="goUp"
       @keyup.down.prevent="goDown"
       @keyup.esc="hideDropdown"
-      @keyup="inputChange"
       @keydown.enter.prevent="selectItem"
     >
 
     <ol ref="dropdown" class="auto-complete" style="width: 100%" v-show="isDropdownShown">
-      <li v-for="(item, index) in items" :key="index" :class="{'hover': index === hoverIndex}" @click="selectItem" @mouseover="hoverItem(index)">
+      <li v-for="(item, index) in items" :key="index" :class="{'hover': index === selectedIndex}" @click="selectItem" @mouseover="hoverItem(index)">
 
         <slot name="item" :item="item">
           <object :data="item.photo || '//'" type="image/png">
@@ -34,7 +33,10 @@
 </template>
 
 <script>
+  import { default as mixins } from '../mixins/form';
+
   export default {
+    mixins: [ mixins ],
     props: {
       items: {
         type: Array,
@@ -45,13 +47,16 @@
       },
       id: {
         type: String
+      },
+      value: {
+        type: String,
+        default: ''
       }
     },
     data() {
       return {
         isDropdownShown: false,
-        hoverIndex: -1,
-        vModel: ''
+        selectedIndex: -1
       }
     },
     mounted() {
@@ -69,19 +74,27 @@
       goDown() {
         this.isDropdownShown = true;
 
-        if (this.hoverIndex < this.items.length - 1) {
-          this.hoverIndex += 1;
-        }
-
-        this.adjustScrollbar();
+        this.changeIndex(++this.selectedIndex);
       },
 
       goUp() {
-        if (this.hoverIndex > 0) {
-          this.hoverIndex -= 1;
-        }
+        this.changeIndex(--this.selectedIndex);
+      },
 
-        this.adjustScrollbar();
+      changeIndex(index) {
+        const length = this.items.length;
+
+        if (length > 0) {
+          if (index >= length) {
+            index = 0;
+          }
+          else if (index < 0) {
+            index = length - 1;
+          }
+
+          this.selectedIndex = index;
+          this.adjustScrollbar();
+        }
       },
 
       adjustScrollbar() {
@@ -93,21 +106,21 @@
       },
 
       selectItem() {
-        if (this.hoverIndex > -1) {
-          this.$emit('select', this.items[this.hoverIndex]);
+        if (this.selectedIndex > -1) {
+          this.$emit('select', this.items[this.selectedIndex]);
         }
 
         this.hideDropdown();
       },
 
-      inputChange(e) {
-        if (e.key !== 'Enter') {
-          this.$emit('change', this.vModel);
-        }
-      },
+      // inputChange(e) {
+      //   if (e.key !== 'Enter') {
+      //     this.$emit('change', this.vModel);
+      //   }
+      // },
 
       hoverItem(index) {
-        this.hoverIndex = index;
+        this.selectedIndex = index;
       },
 
       toggleDropdown(flag) {
@@ -116,8 +129,7 @@
 
       hideDropdown() {
         this.isDropdownShown = false;
-        this.vModel = '';
-        this.hoverIndex = -1;
+        this.selectedIndex = -1;
       }
     }
   }
