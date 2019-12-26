@@ -1,5 +1,5 @@
 {% extends 'user.pm.base' %}
-{% set page_name = 'Rozmowa z ' ~ recipient.name %}
+{% set page_name = recipient.name ? 'Rozmowa z ' ~ recipient.name : 'Nowa wiadomość' %}
 
 {% block pm %}
   <div v-if="!messages.length" class="row">
@@ -18,7 +18,7 @@
     </div>
   </div>
 
-  <perfect-scrollbar id="wrap" ref="scrollbar">
+  <perfect-scrollbar v-if="messages.length" id="wrap" ref="scrollbar">
     <div id="overview" @mouseenter.once="markAllAsRead">
       <vue-pm
         v-for="(message, index) in messages"

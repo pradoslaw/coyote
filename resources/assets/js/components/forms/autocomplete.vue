@@ -54,6 +54,7 @@
 
       selectItem(item) {
         this.$emit('select', item);
+        this.toggleDropdown(false);
       },
 
       changeItem() {

@@ -18,6 +18,8 @@ import axios from 'axios';
 Vue.use(VueTextareaAutosize);
 Vue.use(VueClipboard, {url: '/User/Pm/Paste'});
 
+const INBOX = 1;
+
 new Vue({
   el: '#app-pm',
   delimiters: ['${', '}'],
@@ -69,15 +71,15 @@ new Vue({
 
       store.dispatch('messages/add', {recipient: this.recipient.name, text: this.text})
         .then(() => {
-          this.$nextTick(() => this.scrollToBottom());
-
           this.errors = {};
           this.text = null;
           this.previewHtml = null;
 
           if (wasRecentlyCreated) {
-            store.dispatch('messages/loadMore');
+            this.loadMore();
           }
+
+          this.$nextTick(() => this.scrollToBottom());
         })
         .catch(err => this.errors = err.response.data.errors)
         .finally(() => this.isProcessing = false);
@@ -133,7 +135,7 @@ new Vue({
     },
 
     lookupName(name) {
-      if (name.trim() === '') {
+      if (!name.trim().length) {
         return;
       }
 
@@ -147,12 +149,13 @@ new Vue({
     },
 
     selectName(item) {
-      this.$set(this.recipient, 'name', item.name);
+      this.recipient = item;
+      console.log(this.recipient);
     },
 
     markAllAsRead() {
       this.messages
-        .filter(message => message.read_at === null)
+        .filter(message => message.read_at === null && message.folder === INBOX)
         .forEach(message => {
           store.commit('messages/mark', message);
           store.commit('inbox/decrement');
@@ -160,8 +163,12 @@ new Vue({
     }
   },
   watch: {
-    'recipient.name' (value) {
-      this.lookupName(value);
+    'recipient.name' (newValue, oldValue) {
+      if (newValue && oldValue && newValue.toLowerCase() === oldValue.toLowerCase()) {
+        return;
+      }
+
+      this.lookupName(newValue);
     }
   },
   computed: {

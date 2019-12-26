@@ -19,6 +19,7 @@ const mutations = {
 
   add(state, message) {
     state.messages.push(message);
+    state.offset += 1;
   },
 
   merge(state, messages) {
@@ -34,6 +35,7 @@ const mutations = {
     const index = state.messages.findIndex(item => item.id === message.id);
 
     state.messages.splice(index, 1);
+    state.offset -= 1;
   },
 
   mark(state, message) {
