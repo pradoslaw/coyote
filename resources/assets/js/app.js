@@ -29,22 +29,16 @@ import './plugins/geo-ip';
 import './bootstrap';
 
 import Config from './libs/config';
+import { default as setToken } from './libs/csrf';
 import Router from './libs/router';
 import Prism from 'prismjs';
-import axios from 'axios';
 
 Prism.highlightAll();
-
-axios.defaults.headers.common['X-CSRF-TOKEN'] = Config.csrfToken();
 
 $(function () {
   'use strict';
 
-  $.ajaxSetup({
-    headers: {
-      'X-CSRF-TOKEN': Config.csrfToken()
-    }
-  });
+  setToken(Config.csrfToken());
 
   let r = new Router();
 
