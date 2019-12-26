@@ -81,12 +81,8 @@ new Vue({
             window.location.href = `/User/Pm/Show/${response.data.id}`;
           }
         })
-        .catch(err => {
-          this.errors = err.response.data.errors;
-        })
-        .finally(() => {
-          this.isProcessing = false;
-        });
+        .catch(err => this.errors = err.response.data.errors)
+        .finally(() => this.isProcessing = false);
     },
 
     insertToTextarea(file) {
@@ -154,6 +150,10 @@ new Vue({
 
     selectName(item) {
       this.$set(this.recipient, 'name', item.name);
+    },
+
+    markAllAsRead() {
+      this.messages.forEach(message => message.is_read = true);
     }
   },
   watch: {

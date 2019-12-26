@@ -87,10 +87,13 @@ class PmController extends BaseController
         $this->authorize('show', $pm);
 
         $talk = $this->pm->talk($this->userId, $pm->author_id, 10, (int) $request->query('offset', 0));
-
         $messages = PmResource::collection($talk);
 
         $recipient = $this->user->find($pm->author_id, ['id', 'name']);
+
+        foreach ($talk as $row) {
+            $this->markAsRead($row);
+        }
 
         return $this->view('user.pm.show')->with(compact('pm', 'messages', 'recipient'));
     }

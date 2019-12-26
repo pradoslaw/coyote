@@ -77,9 +77,7 @@
           return;
         }
 
-        this.$store.dispatch('messages/mark', this.message).then(() => {
-          this.$store.commit('inbox/decrement');
-        });
+        this.$store.dispatch('messages/mark', this.message).then(() => this.$store.commit('inbox/decrement'));
       }
     },
     computed: {

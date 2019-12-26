@@ -3,7 +3,7 @@
 
 {% block pm %}
   <perfect-scrollbar id="wrap" ref="scrollbar">
-    <div id="overview">
+    <div id="overview" @mouseenter.once="markAllAsRead">
       <vue-pm
         v-for="(message, index) in messages"
         :message="message"
