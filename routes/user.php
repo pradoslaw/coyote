@@ -24,7 +24,7 @@ $this->group(['namespace' => 'User', 'prefix' => 'User', 'middleware' => 'auth',
     $this->get('Pm/Show/{pm}', ['uses' => 'PmController@show', 'as' => 'pm.show']);
     $this->get('Pm/Submit', ['uses' => 'PmController@submit', 'as' => 'pm.submit']);
     $this->post('Pm/Submit', 'PmController@save');
-    $this->post('Pm/Mark/{pm}', ['uses' => 'PmController@markASRead', 'as' => 'pm.mark']);
+    $this->post('Pm/Mark/{pm}', ['uses' => 'PmController@mark', 'as' => 'pm.mark']);
     $this->delete('Pm/Delete/{pm}', ['uses' => 'PmController@delete', 'as' => 'pm.delete']);
     $this->delete('Pm/Trash/{id}', ['uses' => 'PmController@trash', 'as' => 'pm.trash']);
     $this->post('Pm/Preview', ['uses' => 'PmController@preview', 'as' => 'pm.preview']);

@@ -92,7 +92,9 @@ class PmController extends BaseController
         $recipient = $this->user->find($pm->author_id, ['id', 'name']);
 
         foreach ($talk as $row) {
-            $this->markAsRead($row);
+            if ($row->folder === Pm::INBOX) {
+                $this->markAsRead($row);
+            }
         }
 
         return $this->view('user.pm.show')->with(compact('pm', 'messages', 'recipient'));
@@ -131,8 +133,9 @@ class PmController extends BaseController
     {
         $this->breadcrumb->push('Napisz wiadomość', route('user.pm.submit'));
 
-        return $this->view('user.pm.submit', [
-            'recipient' => $request->has('to') ? $this->user->findByName($this->request->input('to')) : new \stdClass()
+        return $this->view('user.pm.show', [
+            'recipient' => $request->has('to') ? $this->user->findByName($this->request->input('to')) : new \stdClass(),
+            'messages' => []
         ]);
     }
 
@@ -181,19 +184,32 @@ class PmController extends BaseController
      * @param Pm $pm
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function markAsRead(Pm $pm)
+    public function mark(Pm $pm)
     {
         $this->authorize('show', $pm);
 
-        if (!$pm->read_at) {
-            // database trigger will decrease pm counter in "users" table.
-            $this->pm->markAsRead($pm->text_id);
+        $this->markAsRead($pm);
+    }
 
-            // IF we have unread alert that is connected with that message... then we also have to mark it as read
-            if ($this->auth->notifications_unread) {
-                $this->notification->markAsReadByModel($this->userId, $pm);
-            }
+    /**
+     * @param Pm $pm
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    private function markAsRead(Pm $pm)
+    {
+        if ($pm->read_at) {
+            return;
         }
+
+        // database trigger will decrease pm counter in "users" table.
+        $this->pm->markAsRead($pm->text_id);
+
+        // IF we have unread alert that is connected with that message... then we also have to mark it as read
+        if ($this->auth->notifications_unread) {
+            $this->notification->markAsReadByModel($this->userId, $pm);
+        }
+
+        $this->request->attributes->set('pm_unread', --$this->auth->pm_unread);
     }
 
     /**

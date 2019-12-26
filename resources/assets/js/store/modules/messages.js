@@ -34,7 +34,11 @@ const mutations = {
     const index = state.messages.findIndex(item => item.id === message.id);
 
     state.messages.splice(index, 1);
-  }
+  },
+
+  mark (state, message) {
+    message.read_at = new Date();
+  },
 };
 
 const actions = {
@@ -61,7 +65,7 @@ const actions = {
   },
 
   mark ({ commit }, message) {
-    message.read_at = new Date();
+    commit('mark', message);
 
     return axios.post(`/User/Pm/Mark/${message.id}`);
   },

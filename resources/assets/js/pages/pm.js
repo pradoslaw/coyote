@@ -65,20 +65,18 @@ new Vue({
 
     sendMessage() {
       this.isProcessing = true;
+      const wasRecentlyCreated = this.messages.length === 0;
 
       store.dispatch('messages/add', {recipient: this.recipient.name, text: this.text})
-        .then(response => {
-          this.$nextTick(() => {
-            this.scrollToBottom();
-          });
+        .then(() => {
+          this.$nextTick(() => this.scrollToBottom());
 
           this.errors = {};
           this.text = null;
           this.previewHtml = null;
 
-          // force redirect if new message was created
-          if (!('scrollbar' in this.$refs)) {
-            window.location.href = `/User/Pm/Show/${response.data.id}`;
+          if (wasRecentlyCreated) {
+            store.dispatch('messages/loadMore');
           }
         })
         .catch(err => this.errors = err.response.data.errors)
@@ -153,7 +151,12 @@ new Vue({
     },
 
     markAllAsRead() {
-      this.messages.forEach(message => message.is_read = true);
+      this.messages
+        .filter(message => !message.is_read)
+        .forEach(message => {
+          store.commit('messages/mark', message);
+          store.commit('inbox/decrement');
+      });
     }
   },
   watch: {
