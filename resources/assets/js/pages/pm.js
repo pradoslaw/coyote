@@ -152,7 +152,7 @@ new Vue({
 
     markAllAsRead() {
       this.messages
-        .filter(message => !message.is_read)
+        .filter(message => message.read_at === null)
         .forEach(message => {
           store.commit('messages/mark', message);
           store.commit('inbox/decrement');

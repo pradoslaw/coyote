@@ -36,7 +36,7 @@ const mutations = {
     state.messages.splice(index, 1);
   },
 
-  mark (state, message) {
+  mark(state, message) {
     message.read_at = new Date();
   },
 };
