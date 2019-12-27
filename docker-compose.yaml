@@ -3,6 +3,8 @@ version: '3.5'
 services:
   db:
     image: postgres:11-alpine
+    ports:
+      - 5432:5432
     volumes:
       - postgres:/var/lib/postgresql/data:z
     environment:
@@ -29,6 +31,8 @@ services:
 
   nginx:
     image: nginx:latest
+    ports:
+      - 8880:80
     volumes:
       - ./docker/nginx/:/etc/nginx/conf.d/
       - ./:/var/www
@@ -59,12 +63,26 @@ services:
     image: minio/minio
     volumes:
       - minio:/data
-#    ports:
-#      - "9000:9000"
     environment:
       MINIO_ACCESS_KEY: minio
       MINIO_SECRET_KEY: minio123
     command: server /data
+    networks:
+      - coyote
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - 8025:8025
+    networks:
+      - coyote
+
+  selenium:
+    image: selenium/standalone-chrome:3.11.0-antimony
+    depends_on:
+      - nginx
+    volumes:
+      - /dev/shm:/dev/shm
     networks:
       - coyote
 
