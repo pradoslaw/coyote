@@ -33,15 +33,19 @@
         {{ render_region('body') }}
 
         {% block body %}
-        {% import 'components.forms' as forms %}
+            {% import 'components.forms' as forms %}
+            {% import 'components.widgets' as widgets %}
 
         <div id="container-fluid">
-            <header class="nav navbar-default{{ auth_guest() or user('allow_sticky_header') ? ' navbar-fixed-top' }}">
-                <div id="navbar-border-top"></div>
+            <header class="nav navbar-header {{ auth_guest() or user('allow_sticky_header') ? ' navbar-fixed-top' }} {{ __dark_theme ? 'navbar-dark' }}">
+                <div class="navbar-border-top"></div>
 
                 <div class="max-width">
+                    {{ form_open({url: route('logout'), name: 'logout-form'}) }}
+                    {{ form_close() }}
+
                     <div class="clearfix">
-                        <button type="button" class="navbar-toggle margin-sm-left" data-toggle="collapse" data-target="#mobile-menu">
+                        <button type="button" class="navbar-toggle margin-sm-left" data-toggle="collapse" data-target=".nav-mobile">
                             <span class="sr-only">Toggle navigation</span>
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
@@ -49,14 +53,15 @@
                         </button>
 
                         <a class="navbar-brand" rel="home" href="{{ route('home') }}" title="4programmers.net - Strona główna">
-                            <img id="logo" src="{{ cdn('img/logo.png') }}" class="hidden-md hidden-sm hidden-xs">
-                            <img id="logo-mobile" src="{{ cdn('img/logo-mobile.png') }}" class="visible-md visible-sm visible-xs">
+                            <img id="logo" src="{{ cdn('img/logo-mobile.png') }}">
                         </a>
 
-                        <ul id="desktop-menu" class="nav navbar-nav hidden-xs">
+                        <ul class="nav-desktop hidden-xs">
                             {% for item in __master_menu.roots() %}
                                 <li {{ forms.attr(item.attr) }}>
                                     <a href="{{ item.url }}">{{ item.title|raw }}</a>
+
+                                    {{ item.afterHTML|raw }}
 
                                     {% if item.hasChildren() %}
                                         <ul class="dropdown-menu left">
@@ -71,144 +76,108 @@
                             {% endfor %}
                         </ul>
 
-                        <form id="navbar-header-search" action="{{ search_url|default(route('search')) }}" class="navbar-form navbar-right hidden-sm hidden-xs" role="search">
+                        <form action="{{ search_url|default(route('search')) }}" class="navbar-form nav-search navbar-right hidden-sm hidden-xs" role="search">
                             <div class="form-group">
                                 <div class="input-group">
                                     <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}">
 
                                     <span class="input-group-btn">
-
-                                    <button class="btn btn-link">
-                                        <i class="fa fa-search"></i>
-                                    </button>
-                                </span>
+                                        <button class="btn btn-link">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </span>
                                 </div>
                             </div>
                         </form>
 
                         {% if auth_check()  %}
-                            <div class="navbar-right dropdown avatar hidden-xs">
-                                <a href="javascript:" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                    <img src="{{ user_photo(user('photo')) }}" class="img-thumbnail" style="width: 35px">
-                                    <span class="caret"></span>
+                            <div class="navbar-right dropdown nav-avatar hidden-xs">
+                                <a href="javascript:" class="dropdown-toggle img-thumbnail" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="width: 35px">
+                                    <img src="{{ user_photo(user('photo')) }}" style="width: 100%">
                                 </a>
 
-                                <ul id="dropdown-user" class="dropdown-menu right">
-                                    <li class="dropdown-username"><a class="dropdown-userhome" href="{{ route('user.home') }}">{{ user('name')  }}</a></li>
+                                <ul class="dropdown-menu right">
+                                    <li><a class="profile-name" href="{{ route('user.home') }}">{{ user('name')  }}</a></li>
                                     <li class="divider"></li>
-                                    <li><a href="{{ route('user.pm') }}"><i class="fa fa-envelope fa-fw"></i> Wiadomości</a></li>
-                                    <li><a href="{{ route('user.settings') }}"><i class="fa fa-cog fa-fw"></i> Ustawienia</a></li>
-                                    <li><a href="{{ route('profile', [user('id')]) }}"><i class="fa fa-user fa-fw"></i> Profil</a></li>
-                                    <li><a href="{{ url('Pomoc') }}"><i class="fa fa-info-circle fa-fw"></i> Pomoc</a></li>
+                                    <li><a href="{{ route('user.pm') }}"><i class="fas fa-envelope fa-fw"></i> Wiadomości</a></li>
+                                    <li><a href="{{ route('user.settings') }}"><i class="fas fa-cog fa-fw"></i> Ustawienia</a></li>
+                                    <li><a href="{{ route('profile', [user('id')]) }}"><i class="fas fa-user fa-fw"></i> Profil</a></li>
+                                    <li><a href="{{ url('Pomoc') }}"><i class="fas fa-info-circle fa-fw"></i> Pomoc</a></li>
 
                                     {% if can('adm-access') %}
-                                        <li><a href="{{ route('adm.home') }}"><i class="fa fa-user-secret fa-fw"></i> Panel administracyjny</a></li>
+                                        <li><a href="{{ route('adm.home') }}"><i class="fas fa-user-secret fa-fw"></i> Panel administracyjny</a></li>
                                     {% endif %}
 
                                     <li class="divider"></li>
+
                                     <li>
-                                        {{ form_open({url: route('logout')}) }}
-                                            <button type="submit" class="btn-sign-out"><i class="fa fa-sign-out fa-fw"></i> Wyloguj</button>
-                                        {{ form_close() }}
+                                        <a href="javascript:" class="js-change-menu">Nowe menu <sup class="label label-new">Beta</sup></a>
+                                    </li>
+
+                                    <li class="divider"></li>
+
+                                    <li>
+                                        <a href="javascript:" onclick="document['logout-form'].submit()" class="btn-sign-out"><i class="fas fa-sign-out-alt fa-fw"></i> Wyloguj</a>
                                     </li>
                                 </ul>
                             </div>
 
-                            <ul class="nav navbar-nav pull-right">
-                                <li id="btn-alerts" class="btn-alerts">
-                                    <a href="{{ route('user.notifications') }}" data-url="{{ route('user.notifications.ajax') }}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        {% if user('notifications_unread') %}
-                                            <span class="badge">{{ user('notifications_unread') }}</span>
-                                        {% endif %}
-
-                                        <i class="fa fa-bell fa-fw"></i>
-                                    </a>
-
-                                    <div id="dropdown-alerts" class="dropdown-menu right">
-                                        <div class="dropdown-header">
-                                            <a title="Przejdź do listy powiadomień" href="{{ route('user.notifications') }}">Powiadomienia</a>
-
-                                            <a id="btn-mark-read" title="Oznacz jako przeczytane" href="{{ route('user.notifications.mark') }}">
-                                                <i class="fa fa-calendar-check-o"></i>
-                                            </a>
-                                        </div>
-                                        <div class="dropdown-modal">
-                                            <ul>
-
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </li>
-
-                                <li id="btn-messages" class="btn-messages">
-                                    <a href="{{ route('user.pm') }}" data-url="{{ route('user.pm.ajax') }}" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        {% if user('pm_unread') %}
-                                            <span class="badge">{{ user('pm_unread') }}</span>
-                                        {% endif %}
-
-                                        <i class="fa fa-envelope fa-fw"></i>
-                                    </a>
-
-                                    <div id="dropdown-messages" class="dropdown-menu right">
-                                        <div class="dropdown-header">
-                                            <a title="Przejdź do listy wiadomości" href="{{ route('user.pm') }}">Wiadomości</a>
-
-                                            <a id="btn-write-message" href="{{ route('user.pm.submit') }}">
-                                                Wyślij wiadomość
-                                            </a>
-                                        </div>
-                                        <div class="dropdown-modal">
-                                            <ul>
-                                                <li><i class="fa fa-spin fa-spinner"></i></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </li>
+                            <ul id="nav-auth" class="nav nav-auth navbar-nav pull-right">
                             </ul>
                         {% else %}
-                            <a class="btn btn-primary btn-sm navbar-right navbar-btn btn-register" href="{{ route('register') }}"><i class="fa fa-sign-in"></i> Utwórz konto</a>
-                            <a class="btn btn-default btn-sm navbar-right navbar-btn" href="{{ route('login') }}">Logowanie</a>
+                            <a class="btn btn-sm navbar-right navbar-btn btn-register hidden-xs" href="{{ route('register') }}"><i class="fas fa-sign-in"></i> Utwórz konto</a>
+                            <a class="btn-sm navbar-right navbar-btn btn-login hidden-xs" href="{{ route('login') }}">Logowanie</a>
                         {% endif %}
                     </div>
 
                     <div class="visible-xs">
-                        <div id="mobile-menu" class="collapse navbar-collapse nav navbar-nav">
+                        <ul class="collapse navbar-collapse nav-mobile">
                             {% for item in __master_menu.roots() %}
-                                <div {{ forms.attr(item.attr) }}>
+                                <li {{ forms.attr(item.attr) }}>
                                     <a href="{{ item.url }}">{{ item.title|raw }}</a>
-                                </div>
+                                </li>
                             {% endfor %}
 
-                            <div class="divider"></div>
+                            <li class="divider"></li>
 
                             {% if auth_check() %}
-                                <div><a href="{{ route('user.settings') }}"><i class="fa fa-cog fa-fw"></i> Ustawienia</a></div>
-                                <div><a href="{{ route('profile', [user('id')]) }}"><i class="fa fa-user fa-fw"></i> Profil</a></div>
+                                <li><a href="{{ route('user.settings') }}"><i class="fas fa-cog fa-fw"></i> Ustawienia</a></li>
+                                <li><a href="{{ route('profile', [user('id')]) }}"><i class="fas fa-user fa-fw"></i> Profil</a></li>
 
                                 {% if can('adm-access') %}
-                                    <div><a href="{{ route('adm.home') }}"><i class="fa fa-user-secret fa-fw"></i> Panel administracyjny</a></div>
+                                    <li><a href="{{ route('adm.home') }}"><i class="fas fa-user-secret fa-fw"></i> Panel administracyjny</a></li>
                                 {% endif %}
 
-                                {{ form_open({url: route('logout')}) }}
-                                    <div><button type="submit" class="btn-sign-out"><i class="fa fa-sign-out fa-fw"></i> Wyloguj</button></div>
-                                {{ form_close() }}
+                                <li class="divider"></li>
+
+                                <li>
+                                    <a href="javascript:" class="js-change-menu">Nowe menu <sup class="label label-new">Beta</sup></a>
+                                </li>
+
+                                <li class="divider"></li>
+
+                                <li>
+                                    <a href="javascript:" onclick="document['logout-form'].submit()" class="btn-sign-out"><i class="fas fa-sign-out-alt fa-fw"></i> Wyloguj</a>
+                                </li>
                             {% else %}
-                                <div class="row">
+                                <li class="row">
                                     <div class="col-xs-6">
-                                        <a class="btn btn-primary btn-xs" href="{{ route('register') }}"><i class="fa fa-sign-in"></i> Utwórz konto</a>
+                                        <a class="btn btn-register btn-xs" href="{{ route('register') }}"><i class="fas fa-sign-in"></i> Utwórz konto</a>
                                     </div>
                                     <div class="col-xs-6">
-                                        <a class="btn btn-default btn-xs" href="{{ route('login') }}">Logowanie</a>
+                                        <a class="btn-login btn-xs visible-xs-block text-center" href="{{ route('login') }}">Logowanie</a>
                                     </div>
-                                </div>
+                                </li>
                             {% endif %}
 
-                            <div class="divider"></div>
+                            <li class="divider"></li>
 
-                            <form action="{{ search_url|default(route('search')) }}" role="search">
-                                <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}" class="form-control input-sm">
-                            </form>
-                        </div>
+                            <li>
+                                <form action="{{ search_url|default(route('search')) }}" role="search">
+                                    <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}" class="form-control input-sm">
+                                </form>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </header>
@@ -224,7 +193,7 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="alert alert-success margin-md-top">
-                                        <i class="fa fa-check"></i>
+                                        <i class="fas fa-check"></i>
 
                                         {{ session_get('success') }}
                                     </div>
@@ -236,7 +205,7 @@
                             <div class="row">
                                 <div class="col-xs-12">
                                     <div class="alert alert-danger margin-md-top">
-                                        <i class="fa fa-exclamation-triangle"></i>
+                                        <i class="fas fa-exclamation-triangle"></i>
 
                                         {{ session_get('error') }}
                                     </div>
@@ -265,7 +234,7 @@
                 <div id="footer-inner">
                     {{ render_block('footer') }}
 
-                    <a href="#top" class="back-to-top" title="Powrót na górę"><i class="fa fa-angle-up"></i></a>
+                    <a href="#top" class="back-to-top" title="Powrót na górę"><i class="fas fa-angle-up"></i></a>
                 </div>
 
                 <div id="footer-copyright">
@@ -279,6 +248,8 @@
                 </div>
             </footer>
         </div>
+
+        {{ widgets.vue() }}
 
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
         <script src="{{ cdn('js/runtime.js') }}"></script>

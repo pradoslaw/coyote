@@ -28,7 +28,11 @@ class ShowController extends BaseController
         $wiki->text = $this->getParser()->parse((string) $wiki->text);
 
         $parser = app('parser.wiki');
-        $wiki->load('comments.user');
+        $wiki->load(['comments' => function ($query) {
+            return $query->with(['user' => function ($query) {
+                return $query->withTrashed();
+            }]);
+        }]);
 
         foreach ($wiki->comments as &$comment) {
             /** @var \Coyote\Wiki\Comment $comment */

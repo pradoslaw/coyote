@@ -80,7 +80,8 @@ input[placeholder] {
   }
 
   &:before {
-    @include font-awesome($fa-var-arrow-circle-o-right);
+    @include font-awesome($fa-var-arrow-alt-circle-right);
+    font-weight: 400;
     left: 0;
   }
 }
@@ -93,7 +94,7 @@ input[placeholder] {
   position: relative;
 
   &:before {
-    font-family: FontAwesome;
+    font-family: 'Font Awesome 5 Free';
     position: absolute;
     left: 5px;
     color: $text-color;
@@ -106,25 +107,30 @@ input[placeholder] {
 }
 
 .btn-thumbs:before {
-  content: $fa-var-thumbs-o-up;
+  content: fa-content($fa-var-thumbs-up);
 }
 
 .btn-subscribe:before {
-  content: $fa-var-bell-o;
+  content: fa-content($fa-var-bell);
+  font-weight: 400;
 }
 
 .btn-reply:before {
-  content: $fa-var-comment-o;
+  content: fa-content($fa-var-comment);
+  font-weight: 400;
 }
 
 .btn-thumbs.thumbs-on:before {
   color: $brand-primary;
   content: $fa-var-thumbs-up;
+  font-weight: 900;
 }
 
 .subscribe-on:before {
   color: $brand-primary;
-  content: $fa-var-bell;
+  content: fa-content($fa-var-bell);
+  font-weight: 900;
+
 }
 
 // Comments block

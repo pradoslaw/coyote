@@ -11,7 +11,7 @@
                 <p>
                     <span class="employer">{{ job.firm.name }}</span>
 
-                    <vue-location :locations="job.locations" :remote="job.remote" :clickable="false"></vue-location>
+                    <vue-location :locations="job.locations" :remote="job.remote" :clickable="false" :shortened="true"></vue-location>
                 </p>
 
                 <p>

@@ -67,6 +67,11 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
         'as' => 'payment.status'
     ]);
 
+    $this->any('Payment/3DSecure', [
+        'uses' => 'PaymentController@payment3DSecure',
+        'as' => 'payment.3dsecure'
+    ]);
+
     $this->get('Payment/{payment}', [
         'uses' => 'PaymentController@index',
         'as' => 'payment',
@@ -81,7 +86,7 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
     ]);
 
     $this->get('Coupon/Validate', ['uses' => 'CouponController@validateCode', 'as' => 'coupon']);
-    $this->get('Renew/{job}', ['uses' => 'RenewController@index', 'as' => 'renew']);
+    $this->get('Renew/{job}', ['uses' => 'RenewController@index', 'as' => 'renew', 'middleware' => 'auth']);
 
     $this->get('Oferta', ['uses' => 'BusinessController@show', 'as' => 'business']);
     $this->post('Comment/{job}/{id?}', ['uses' => 'CommentController@save', 'as' => 'comment']);

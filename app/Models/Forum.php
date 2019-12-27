@@ -2,9 +2,12 @@
 
 namespace Coyote;
 
+use Carbon\Carbon;
 use Coyote\Forum\Access;
+use Coyote\Forum\Track as Forum_Track;
 use Coyote\Models\Scopes\TrackForum;
 use Coyote\Models\Scopes\TrackTopic;
+use Coyote\Topic\Track as Topic_Track;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -30,6 +33,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $section
  * @property string $url
  * @property Forum $parent
+ * @property Forum\Track[] $tracks
  */
 class Forum extends Model
 {
@@ -171,6 +175,24 @@ class Forum extends Model
     public function markTime($guestId)
     {
         return $this->tracks()->select('marked_at')->where('guest_id', $guestId)->value('marked_at');
+    }
+
+    /**
+     * Mark forum as read
+     *
+     * @param $forumId
+     * @param $guestId
+     */
+    public function markAsRead($guestId)
+    {
+        $markTime = Carbon::now();
+
+        $sql = "INSERT INTO forum_track (forum_id, guest_id, marked_at) 
+                VALUES(?, ?, ?)
+                ON CONFLICT ON CONSTRAINT forum_track_forum_id_guest_id_unique DO 
+                UPDATE SET marked_at = ?";
+
+        $this->getConnection()->statement($sql, [$this->id, $guestId, $markTime, $markTime]);
     }
 
     /**

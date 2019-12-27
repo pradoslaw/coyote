@@ -227,6 +227,14 @@ class Topic extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function lastPost()
+    {
+        return $this->hasOne('Coyote\Post', 'id', 'last_post_id');
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function poll()
@@ -290,20 +298,12 @@ class Topic extends Model
      */
     public function markAsRead($markTime, $guestId)
     {
-        // builds data to update
-        $attributes = ['guest_id' => $guestId];
-        // execute a query...
+        $sql = "INSERT INTO topic_track (topic_id, forum_id, guest_id, marked_at) 
+                VALUES(?, ?, ?, ?)
+                ON CONFLICT ON CONSTRAINT topic_track_topic_id_guest_id_unique DO 
+                UPDATE SET marked_at = ?";
 
-        try {
-            $this->tracks()->updateOrCreate(
-                $attributes,
-                array_merge($attributes, ['marked_at' => $markTime, 'forum_id' => $this->forum_id])
-            );
-        } catch (QueryException $e) {
-            // bardzo rzadko zdarza sie, ze wystapi tutaj wyjatek duplicated entry. uzytkownik moze otworzyc
-            // dana strone 2x i zostanie wygenerowane 2x zapytanie INSERT
-            logger()->debug($e);
-        }
+        $this->getConnection()->statement($sql, [$this->id, $this->forum_id, $guestId, $markTime, $markTime]);
     }
 
     /**

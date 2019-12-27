@@ -40,11 +40,10 @@
             <div class="box">
                 <ul class="side-menu">
                     <li class="btn-mark-read">
-                        <a title="Oznacz kategorie jako przeczytane" href="{{ route('forum.category.mark', [forum.slug]) }}" data-category="forum-sidebar-buttons">Oznacz jako przeczytane</a>
+                        <a title="Oznacz kategorie jako przeczytane" href="{{ route('forum.category.mark', [forum.slug]) }}" data-category="forum-sidebar-buttons">
+                            <i class="far fa-check-square fa-fw"></i> Oznacz jako przeczytane
+                        </a>
                     </li>
-                    {#<li class="btn-atom">#}
-                        {#<a href="#" title="Wyświetl najnowsze wątki w formacie atom" data-category="forum-sidebar-buttons" data-value="atom">Pobierz w formacie Atom</a>#}
-                    {#</li>#}
                 </ul>
             </div>
         {% endblock %}

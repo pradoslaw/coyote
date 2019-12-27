@@ -2,21 +2,20 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
-use Coyote\Forum;
 use Coyote\Forum\Reason;
 use Coyote\Http\Factories\CacheFactory;
 use Coyote\Http\Factories\FlagFactory;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Post\WithSubscribers;
-use Coyote\Repositories\Criteria\Post\WithTrashed;
+use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Repositories\Criteria\Post\WithTrashedInfo;
 use Coyote\Services\Elasticsearch\Builders\Forum\MoreLikeThisBuilder;
+use Coyote\Services\Forum\Tracker;
 use Coyote\Services\Forum\TreeBuilder;
 use Coyote\Services\Parser\Parsers\ParserInterface;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Coyote\Topic;
 
 class TopicController extends BaseController
 {
@@ -107,25 +106,11 @@ class TopicController extends BaseController
 
         stop_measure('Parsing...');
 
-        $postsId = $posts->pluck('id')->toArray();
-        $dateTimeString = $posts->last()->created_at->toDateTimeString();
+        $postIds = $posts->pluck('id')->toArray();
+        $dateTime = $posts->last()->created_at;
 
-        if ($markTime[Topic::class] < $dateTimeString && $markTime[Forum::class] < $dateTimeString) {
-            // mark topic as read. the date MUST be data of last post on this page
-            $topic->markAsRead($dateTimeString, $this->guestId);
-            $isUnread = true;
-
-            if ($markTime[Forum::class] < $dateTimeString) {
-                $isUnread = $this->topic->isUnread(
-                    $forum->id,
-                    $markTime[Forum::class],
-                    $this->guestId
-                );
-            }
-
-            if (!$isUnread) {
-                $this->forum->markAsRead($forum->id, $this->guestId);
-            }
+        if ($markTime < $dateTime) {
+            Tracker::make($topic)->asRead($this->guestId, $dateTime);
         }
 
         // create forum list for current user (according to user's privileges)
@@ -142,7 +127,7 @@ class TopicController extends BaseController
             $reasonList = Reason::pluck('name', 'id')->toArray();
 
             if ($this->gate->allows('delete', $forum)) {
-                $flags = $this->getFlags($postsId);
+                $flags = $this->getFlags($postIds);
             }
 
             $this->forum->skipCriteria(true);
@@ -155,7 +140,7 @@ class TopicController extends BaseController
             'forum.topic',
             compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'adminForumList', 'reasonList', 'form', 'mlt', 'flags')
         )->with([
-            'markTime'      => $markTime[Topic::class] ? $markTime[Topic::class] : $markTime[Forum::class],
+            'markTime'      => $markTime,
             'subscribers'   => $this->userId ? $topic->subscribers()->pluck('topic_id', 'user_id') : [],
             'author_id'     => $posts[0]->user_id
         ]);
@@ -226,15 +211,8 @@ class TopicController extends BaseController
      */
     public function mark($topic)
     {
-        // pobranie daty i godziny ostatniego razy gdy uzytkownik przeczytal to forum
-        $forumMarkTime = $topic->forum->markTime($this->guestId);
+        $tracker = Tracker::make($topic);
 
-        // mark topic as read
-        $topic->markAsRead($topic->last_post_created_at, $this->guestId);
-        $isUnread = $this->topic->isUnread($topic->forum_id, $forumMarkTime, $this->guestId);
-
-        if (!$isUnread) {
-            $this->forum->markAsRead($topic->forum_id, $this->guestId);
-        }
+        $tracker->asRead($this->guestId, $topic->last_post_created_at);
     }
 }

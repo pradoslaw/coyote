@@ -1,18 +1,14 @@
 {% set data = {} %}
-{% set separator = separator is defined ? separator : true %}
 {% set linkable = linkable is defined ? linkable : true %}
 
-{% for city in locations %}
-    {% if city %}
-        {% set data = data|merge(linkable ? [link_to_route('job.city', city, [city], {'title': 'Znajdź oferty z miasta ' ~ city})] : [city]) %}
+{% for location in locations %}
+    {% if location.city %}
+        {% set label = location.label ?: location.city %}
+        {% set data = data|merge(linkable ? [link_to_route('job.city', label, [location.city], {'title': 'Znajdź oferty z miasta ' ~ location.city})] : [label]) %}
     {% endif %}
 {% endfor %}
 
-{% if separator and (data|length > 0 or job.is_remote) %}
-    &nbsp;•&nbsp;
-{% endif %}
-
-{{ data|join(', ')|raw }}
+{{ data|join(' • ')|raw }}
 
 {% if job.is_remote %}
     {% set label = job.remote_range ? "(#{job.remote_range}% pracy zdalnej)" : '(praca zdalna)' %}

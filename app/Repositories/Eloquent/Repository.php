@@ -332,6 +332,24 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
     }
 
     /**
+     * @param null $perPage
+     * @param array $columns
+     * @param string $pageName
+     * @param null $page
+     * @return mixed
+     * @throws \Exception
+     */
+    public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
+    {
+        $this->applyCriteria();
+
+        $paginator = $this->model->paginate($perPage, $columns, $pageName, $page);
+        $this->resetModel();
+
+        return $paginator;
+    }
+
+    /**
      * @inheritdoc
      */
     public function last()

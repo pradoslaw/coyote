@@ -1,0 +1,190 @@
+<template>
+  <div>
+    <div id="wiki-toolbar" class="row">
+      <div class="col-md-12">
+        <div class="btn-group" role="group" aria-label="...">
+          <button @click="insertAtCaret('**', '**')" type="button" class="btn btn-sm btn-default" title="Pogrubienie"><i class="fas fa-bold fa-fw"></i></button>
+          <button @click="insertAtCaret('*', '*')" type="button" class="btn btn-sm btn-default" title="Kursywa"><i class="fas fa-italic fa-fw"></i></button>
+          <button @click="insertAtCaret('<u>', '</u>')" type="button" class="btn btn-sm btn-default" title="Przekreślenie"><i class="fas fa-underline fa-fw"></i></button>
+          <button @click="insertAtCaret('`', '`')" type="button" class="btn btn-sm btn-default" title="Instrukcja kodu"><i class="fas fa-text-width fa-fw"></i></button>
+        </div>
+
+        <div class="btn-group" role="group">
+          <button @click="insertAtCaret('<br>', '## ')" type="button" class="btn btn-sm btn-default" data-open="<br>" data-close="## " title="Nagłówek h2"><i class="fas fa-heading fa-fw"></i></button>
+        </div>
+
+        <div class="btn-group" role="group">
+          <button @click="insertAtCaret('<br>', '*')" type="button" class="btn btn-sm btn-default" title="Wypunktowanie"><i class="fas fa-list-ul fa-fw"></i></button>
+          <button @click="insertAtCaret('<br>', '1. ')" type="button" class="btn btn-sm btn-default" title="Numerowanie"><i class="fas fa-list-ol fa-fw"></i></button>
+          <button @click="insertAtCaret('![title', '](http://)')" type="button" class="btn btn-sm btn-default" title="Obraz"><i class="fas fa-image fa-fw"></i></button>
+          <button @click="insertAtCaret('[', '](http://)')" type="button" class="btn btn-sm btn-default" title="Link"><i class="fas fa-link fa-fw"></i></button>
+          <button @click="insertAtCaret('<br>Nagłówek 1 | Nagłówek 2<br>---------------- | -------------------<br>Kolumna1 | Kolumna 2<br>', '')" type="button" class="btn btn-sm btn-default" title="Tabela"><i class="fas fa-table fa-fw"></i></button>
+          <button @click="insertCitation" type="button" class="btn btn-sm btn-default btn-quote" title="Wstaw cytat"><i class="fas fa-quote-left fa-fw"></i></button>
+
+          <div id="select-menu" class="btn-group" :class="{'open': isDropdownShown}">
+            <button @click="insertAtCaret('```<br>', '<br>```')" type="button" class="btn btn-sm btn-default" title="Kod źródłowy"><i class="fas fa-code fa-fw"></i></button>
+            <button @click="toggleDropdown" type="button" class="btn btn-sm btn-default dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+              <span class="caret"></span>
+            </button>
+
+            <div v-if="isDropdownShown" v-on-clickaway="hideDropdown" class="dropdown-menu select-menu">
+              <div class="select-menu-search">
+                <input v-model="searchText" @keyup.esc="hideDropdown" ref="search" type="text" class="form-control input-sm" placeholder="Filtruj..." autocomplete="off">
+              </div>
+              <div class="select-menu-wrapper">
+                <ul class="list-unstyled">
+                  <li v-for="(value, key) in filteredValue">
+                    <a @click="insertAtCaret('```' + key + '<br>', '<br>```<br>')">{{ value }}</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-sm btn-default pull-right" data-toggle="collapse" data-target="#wiki-help" aria-expanded="false" aria-controls="wiki-help"><i class="fas fa-question fa-fw"></i></button>
+      </div>
+    </div>
+
+    <div id="wiki-help" class="row collapse">
+      <div class="col-md-12">
+        <div class="panel panel-info">
+          <div class="panel-heading">Pomoc</div>
+          <div class="panel-body">
+            <h2>Pogrubienie, kursywa...</h2>
+
+            <p>Możesz używać pogrubienia czy kursywy, aby usprawnić czytelność tekstu: <code>**to jest pogrubienie**</code>, a to
+              <code>*kursywa*</code>.
+            </p>
+
+            <h2>Kod źródłowy</h2>
+
+            <p>Wszelkie jednolinijkowe instrukcje języka programowania (fragmenty kodu) powinny być zawarte pomiędzy obrócone
+              apostrofy
+              lub podwójny cudzysłów, czyli: <code>`kod instrukcji języka programowania`</code>.</p>
+
+            <p><code>```</code> umożliwia kolorowanie większych fragmentów kodu. Możemy nadać nazwę języka
+              programowania,
+              aby system użył konkretnych ustawień kolorowania składnii:
+              <br/><br/>
+              <code>
+                ```javascript<br/>
+                &nbsp;&nbsp;document.write('Hello World');<br/>
+                ```<br/>
+              </code></p>
+
+            <h2>Nagłówki</h2>
+
+            <p>
+              <code>## Nagłówek 2</code><br/>
+              <code>### Nagłówek 3</code><br/>
+              <code>#### Nagłówek 4</code>
+            </p>
+
+            <h2>Wypunktowanie i numerowanie</h2>
+
+            <p>Możliwe jest tworzenie listy numerowanych oraz wypunktowanych. Wystarczy, że pierwszym znakiem linii będzie
+              <code>*</code> lub <code>1. </code></p>
+
+            <p>
+              <code>1. Lista numerowana</code><br/>
+              <code>2. Lista numerowana</code><br/>
+            </p>
+            <p></p>
+            <p>
+              <code>* Lista wypunktowana</code><br/>
+              <code>* Lista wypunktowana</code><br/>
+              <code>** Lista wypunktowana (drugi poziom)</code><br/>
+            </p>
+
+            <h2>Linki</h2>
+
+            <p>URL umieszczony w tekście zostanie przez system automatycznie wykryty i zamieniony na znacznik <code>
+              &lt;a&gt;</code>.<br/>
+              Jeżeli chcesz, możesz samodzielnie sformatować link: <code>&lt;a href="http://4programmers.net">kliknij tutaj&lt;/a&gt;</code>
+            </p>
+
+            <p>Możesz umieścić odnośnik do wewnętrznej podstrony, używając następującej składnii: <code>[[Delphi/Kompendium]]</code>
+              lub <code>[[Delphi/Kompendium|kliknij, aby przejść do kompendium]]</code></p>
+
+            <h2>Znaczniki HTML</h2>
+
+            <p>Dozwolone jest używanie podstawowych znaczników HTML: &lt;a&gt;, &lt;b&gt;, &lt;i&gt;, &lt;del&gt;, &lt;strong&gt;,
+              &lt;tt&gt;, &lt;dfn&gt;, &lt;ins&gt;, &lt;pre&gt;, &lt;blockquote&gt;, &lt;hr&gt;, &lt;sub&gt;, &lt;sup&gt;, &lt;img&gt;</p>
+
+            <h2>Indeks górny oraz dolny</h2>
+
+            <p>Przykład: wpisując <code>m&lt;sub&gt;2&lt;/sub&gt;,, i m&lt;sup&gt;2&lt;/sup&gt;</code> otrzymasz: m<sub>2</sub> i m<sup>2</sup>.</p>
+
+            <h2>Składnia Tex</h2>
+
+            <p><code>&lt;tex&gt;arcctg(x) = argtan(\frac{1}{x}) = arcsin(\frac{1}{\sqrt{1+x^2}})&lt;/tex&gt;</code></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import { default as Textarea, languages } from '../../libs/textarea';
+  import { mixin as clickaway } from 'vue-clickaway';
+
+  export default {
+    mixins: [clickaway],
+    props: {
+      input: {
+          type: Function
+      }
+    },
+    data() {
+      return {
+        textarea: null,
+        languages,
+        searchText: '',
+        isDropdownShown: false
+      }
+    },
+    mounted() {
+      this.textarea = new Textarea(this.input());
+    },
+    methods: {
+      insertAtCaret(startsWith, endsWith) {
+        this.textarea.insertAtCaret(startsWith.replace(/<br>/g, "\n"), endsWith.replace(/<br>/g, "\n"), this.textarea.isSelected() ? this.textarea.getSelection() : '');
+        this.hideDropdown();
+
+        this.$emit('update', this.textarea.value);
+      },
+
+      insertCitation() {
+        this.textarea.insertAtCaret('> ', '', this.textarea.getSelection().replace(/\r\n/g, "\n").replace(/\n/g, "\n> "));
+
+        this.$emit('update', this.textarea.value);
+      },
+
+      toggleDropdown() {
+        this.isDropdownShown = !this.isDropdownShown;
+
+        if (this.isDropdownShown) {
+          this.$nextTick(() => this.$refs.search.focus());
+        }
+      },
+
+      hideDropdown() {
+        this.isDropdownShown = false;
+      }
+    },
+    computed: {
+      filteredValue() {
+        return Object
+          .keys(this.languages)
+          .filter(language => language.toLowerCase().startsWith(this.searchText))
+          .reduce((obj, key) => {
+            obj[key] = this.languages[key];
+
+            return obj;
+          }, {});
+      }
+    }
+  }
+</script>

@@ -28,7 +28,7 @@ $(function () {
     // if navbar class navbar-fixed-top class, we must scroll to appropriate page element according to
     // window.location.hash.
     if ('onhashchange' in window) {
-        let header = $('header.navbar-default.navbar-fixed-top');
+        let header = $('header.navbar-header.navbar-fixed-top');
 
         if (header.length) {
             $(window).bind('hashchange', () => {

@@ -4,8 +4,6 @@ namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Repositories\Contracts\Forum\OrderRepositoryInterface;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface;
-use Coyote\Forum\Track as Forum_Track;
-use Coyote\Topic\Track as Topic_Track;
 use Coyote\Topic;
 use Coyote\Forum;
 use Illuminate\Container\Container as App;
@@ -56,8 +54,8 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
                 'posts.user_name AS anonymous_name',
                 'users.name AS user_name',
                 'users.photo',
-                'is_active',
-                'is_confirm'
+                $this->raw('users.deleted_at IS NULL AS is_active'),
+                'users.is_confirm'
             ])
             ->leftJoin('posts', 'posts.id', '=', 'forums.last_post_id')
             ->leftJoin('users', 'users.id', '=', 'posts.user_id')
@@ -199,26 +197,5 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
                 ->whereNull('topics.deleted_at')
                 ->whereNull('tags.deleted_at')
             ->groupBy('name');
-    }
-
-    /**
-     * Mark forum as read
-     *
-     * @param $forumId
-     * @param $guestId
-     */
-    public function markAsRead($forumId, $guestId)
-    {
-        // builds data to update
-        $attributes = ['forum_id' => $forumId, 'guest_id' => $guestId];
-        // execute a query...
-        Forum_Track::updateOrCreate($attributes, $attributes + ['marked_at' => $this->raw('NOW()'), 'forum_id' => $forumId]);
-        $track = new Topic_Track();
-
-        foreach ($attributes as $key => $value) {
-            $track = $track->where($key, $value);
-        }
-
-        $track->delete();
     }
 }

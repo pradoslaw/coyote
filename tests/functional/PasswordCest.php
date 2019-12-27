@@ -71,12 +71,15 @@ class PasswordCest
 
     public function tryToRemindPasswordOfNotActiveUser(FunctionalTester $I)
     {
-        $user = $I->createUser(['is_confirm' => 1, 'is_active' => 0]);
+        $user = $I->createUser(['is_confirm' => 1]);
+
+        $user->deleted_at = \Carbon\Carbon::now();
+        $user->save();
 
         $I->amOnPage('/Password');
         $I->fillField('email', $user->email);
         $I->click('button[type=submit]');
-        $I->see('Użytkownik o podanym adresie e-mail nie istnieje lub został usunięty.');
+        $I->see('Podany adres e-mail nie istnieje.');
     }
 }
 

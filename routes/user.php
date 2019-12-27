@@ -18,17 +18,19 @@ $this->group(['namespace' => 'User', 'prefix' => 'User', 'middleware' => 'auth',
     $this->post('Notifications/Settings', 'NotificationsController@save');
     $this->get('Notifications/Ajax', ['uses' => 'NotificationsController@ajax', 'as' => 'notifications.ajax']);
     $this->post('Notifications/Mark', ['uses' => 'NotificationsController@markAsRead', 'as' => 'notifications.mark']);
-    $this->post('Notifications/Delete/{id}', ['uses' => 'NotificationsController@delete', 'as' => 'notifications.delete']);
+    $this->delete('Notifications/Delete/{uuid}', ['uses' => 'NotificationsController@delete', 'as' => 'notifications.delete']);
 
     $this->get('Pm', ['uses' => 'PmController@index', 'as' => 'pm']);
-    $this->get('Pm/Show/{id}', ['uses' => 'PmController@show', 'as' => 'pm.show']);
+    $this->get('Pm/Show/{pm}', ['uses' => 'PmController@show', 'as' => 'pm.show']);
     $this->get('Pm/Submit', ['uses' => 'PmController@submit', 'as' => 'pm.submit']);
     $this->post('Pm/Submit', 'PmController@save');
-    $this->post('Pm/Delete/{id}', ['uses' => 'PmController@delete', 'as' => 'pm.delete']);
-    $this->post('Pm/Trash/{id}', ['uses' => 'PmController@trash', 'as' => 'pm.trash']);
+    $this->post('Pm/Mark/{pm}', ['uses' => 'PmController@mark', 'as' => 'pm.mark']);
+    $this->delete('Pm/Delete/{pm}', ['uses' => 'PmController@delete', 'as' => 'pm.delete']);
+    $this->delete('Pm/Trash/{id}', ['uses' => 'PmController@trash', 'as' => 'pm.trash']);
     $this->post('Pm/Preview', ['uses' => 'PmController@preview', 'as' => 'pm.preview']);
-    $this->get('Pm/Ajax', ['uses' => 'PmController@ajax', 'as' => 'pm.ajax']);
+    $this->get('Pm/Ajax', ['uses' => 'PmController@inbox', 'as' => 'pm.ajax']);
     $this->post('Pm/Paste', ['uses' => 'PmController@paste', 'as' => 'pm.paste']);
+    $this->get('Pm/Infinity', ['uses' => 'PmController@infinity', 'as' => 'pm.infinity']);
 
     $this->get('Favorites', ['uses' => 'FavoritesController@index', 'as' => 'favorites']);
     $this->get('Favorites/Forum', ['uses' => 'FavoritesController@forum', 'as' => 'favorites.forum']);
@@ -74,6 +76,5 @@ $this->get('User/Prompt', ['uses' => 'User\PromptController@index', 'as' => 'use
 $this->post('User/Settings/Ajax', ['uses' => 'User\SettingsController@ajax', 'as' => 'user.settings.ajax']);
 
 // przekierowanie do wlasciwego alertu po guid.
-$this->get('alert/{guid}', ['uses' => 'User\NotificationsController@url']);
-$this->get('notification/{guid}', ['uses' => 'User\NotificationsController@url'])->name('user.notifications.url');
+$this->get('notification/{uuid}', ['uses' => 'User\NotificationsController@url'])->name('user.notifications.url');
 $this->get('ping', ['uses' => 'User\PingController@index'])->name('ping');

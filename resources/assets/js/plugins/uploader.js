@@ -44,9 +44,10 @@ $(function() {
                     setup.changeButton.removeAttr('disabled');
                 },
                 error: function (err) {
-                    let keys = Object.keys(err.responseJSON);
+                    let errors = err.responseJSON.errors;
+                    let error = errors[Object.keys(errors)[0]][0];
 
-                    Dialog.alert({message: err.responseJSON[keys[0]][0]}).show();
+                    Dialog.alert({message: error}).show();
                 }
             }, 'json');
         });

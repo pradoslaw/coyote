@@ -5,22 +5,40 @@ namespace Coyote\Http\Controllers\Job;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Job;
 use Coyote\Services\Job\Draft;
-use Coyote\Services\Job\Loader;
+use Coyote\Services\Job\SubmitsJob;
+use Coyote\Repositories\Contracts\FirmRepositoryInterface as FirmRepository;
+use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
+use Coyote\Repositories\Contracts\PlanRepositoryInterface as PlanRepository;
 
 class RenewController extends Controller
 {
+    use SubmitsJob;
+
     /**
-     * @param Loader $loader
+     * @param JobRepository $job
+     * @param FirmRepository $firm
+     * @param PlanRepository $plan
+     */
+    public function __construct(JobRepository $job, FirmRepository $firm, PlanRepository $plan)
+    {
+        parent::__construct();
+
+        $this->job = $job;
+        $this->firm = $firm;
+        $this->plan = $plan;
+    }
+
+    /**
      * @param Job $job
      * @param Draft $draft
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function index(Loader $loader, Job $job, Draft $draft)
+    public function index(Job $job, Draft $draft)
     {
         abort_unless($job->is_expired, 404);
 
-        $job = $loader->init($job);
+        $job = $this->loadDefaults($job, $this->auth);
 
         unset($job->id);
         $job->exists = false; // new job offer

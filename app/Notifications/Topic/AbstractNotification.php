@@ -124,7 +124,7 @@ abstract class AbstractNotification extends Notification implements ShouldQueue,
             'subject'       => $this->topic->subject,
             'excerpt'       => $this->getReasonName(),
             'url'           => UrlBuilder::topic($this->topic),
-            'guid'          => $this->id
+            'id'            => $this->id
         ];
     }
 

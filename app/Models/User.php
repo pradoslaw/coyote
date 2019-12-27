@@ -2,12 +2,14 @@
 
 namespace Coyote;
 
+use Carbon\Carbon;
 use Coyote\Notifications\ResetPasswordNotification;
 use Coyote\Services\Media\Photo;
 use Coyote\Services\Media\Factory as MediaFactory;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
@@ -19,7 +21,6 @@ use Ramsey\Uuid\Uuid;
 /**
  * @property int $id
  * @property string $guest_id
- * @property bool $is_active
  * @property bool $is_confirm
  * @property bool $is_blocked
  * @property int $group_id
@@ -43,6 +44,7 @@ use Ramsey\Uuid\Uuid;
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  * @property \Carbon\Carbon $visited_at
+ * @property \Carbon\Carbon $deleted_at
  * @property string $date_format
  * @property string $timezone
  * @property string $ip
@@ -61,7 +63,7 @@ use Ramsey\Uuid\Uuid;
  */
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
-    use Authenticatable, Authorizable, CanResetPassword, RoutesNotifications, HasApiTokens;
+    use Authenticatable, Authorizable, CanResetPassword, RoutesNotifications, HasApiTokens, SoftDeletes;
 
     /**
      * The database table used by the model.
@@ -111,7 +113,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     /**
      * @var array
      */
-    protected $dates = ['created_at', 'updated_at', 'visited_at'];
+    protected $dates = ['created_at', 'updated_at', 'visited_at', 'deleted_at'];
 
     /**
      * @var array
@@ -123,7 +125,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'allow_subscribe' => 'int',
         'allow_sticky_header' => 'int',
         'is_confirm' => 'int',
-        'is_active' => 'int',
         'is_online' => 'int'
     ];
 
@@ -262,12 +263,22 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->attributes['photo'];
     }
 
+    public function setIsActiveAttribute($value)
+    {
+        $this->setAttribute('deleted_at', !$value ? Carbon::now() : null);
+    }
+
+    public function getIsActiveAttribute()
+    {
+        return $this->deleted_at === null;
+    }
+
     /**
      * @return bool
      */
     public function canReceiveEmail(): bool
     {
-        return $this->email && $this->is_active && $this->is_confirm && !$this->is_blocked;
+        return $this->email && !$this->deleted_at && $this->is_confirm && !$this->is_blocked;
     }
 
     /**

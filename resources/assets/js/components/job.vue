@@ -5,7 +5,11 @@
         <div class="panel-body">
             <div class="media">
                 <div class="media-left hidden-xs">
-                    <a :href="job.url"><img :alt="job.firm.logo ? job.firm.name : ''" class="media-object margin-sm-right" :src="job.firm.logo"></a>
+                    <a :href="job.url">
+                        <object :data="job.firm.logo || '//'" type="image/png" class="media-object margin-sm-right" >
+                            <img src="/img/logo-gray.png" :alt="job.firm.logo ? job.firm.name : ''">
+                        </object>
+                    </a>
                 </div>
 
                 <div class="media-body">
@@ -43,8 +47,8 @@
                     </ul>
 
                     <ul class="list-inline job-options margin-sm-top">
-                        <li><a @click="subscribe()" href="javascript:"><i :class="{'fa-heart on': isSubscribed, 'fa-heart-o': !isSubscribed}" class="fa fa-fw"></i> Ulubiona</a></li>
-                        <li><a :href="job.url + '#comments'"><i class="fa fa-fw fa-comments-o"></i> {{ job.comments_count }} {{ commentsDeclination }}</a></li>
+                        <li><a @click="subscribe()" href="javascript:"><i :class="{'fas fa-heart on': isSubscribed, 'far fa-heart': !isSubscribed}" class="fa-fw"></i> Ulubiona</a></li>
+                        <li><a :href="job.url + '#comments'"><i class="far fa-fw fa-comment"></i> {{ job.comments_count }} {{ commentsDeclination }}</a></li>
                         <!--<li><a href="#"><i class="fa fa-fw fa-share"></i> Udostępnij</a></li>-->
                     </ul>
 

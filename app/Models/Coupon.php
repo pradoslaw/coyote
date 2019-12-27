@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $int
  * @property string $code
  * @property int $amount
+ * @property int $user_id
  */
 class Coupon extends Model
 {
@@ -19,7 +20,7 @@ class Coupon extends Model
      *
      * @var array
      */
-    protected $fillable = ['code', 'amount'];
+    protected $fillable = ['code', 'amount', 'user_id'];
 
     /**
      * @var array

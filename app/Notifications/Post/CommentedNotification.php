@@ -39,7 +39,7 @@ class CommentedNotification extends AbstractNotification
             'subject'       => $this->post->topic->subject,
             'excerpt'       => excerpt($this->comment->html),
             'url'           => UrlBuilder::postComment($this->comment),
-            'guid'          => $this->id
+            'id'            => $this->id
         ];
     }
 

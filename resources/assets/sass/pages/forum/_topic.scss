@@ -102,7 +102,7 @@
       @include font-awesome($fa-var-user);
       color: $link-color-darker;
       left: 0;
-      font-weight: normal;
+      font-weight: 900;
     }
 
     @include link-color-darker;
@@ -330,7 +330,7 @@
 }
 
 .vote-up {
-  .fa-thumbs-up {
+  .fas.fa-thumbs-up {
     display: none;
   }
 }
@@ -338,11 +338,11 @@
 .vote-up.on {
   color: $brand-primary;
 
-  .fa-thumbs-up {
+  .fas.fa-thumbs-up {
     display: inline-block;
   }
 
-  .fa-thumbs-o-up {
+  .far.fa-thumbs-up {
     display: none;
   }
 }
@@ -489,9 +489,9 @@ blockquote {
       font-family: Helvetica, sans-serif;
 
       &:before {
-        @include font-awesome($fa-var-external-link);
+        @include font-awesome($fa-var-external-link-alt);
         left: 0;
-        top: 2px;
+        font-weight: 900;
       }
     }
   }

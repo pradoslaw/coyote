@@ -18,10 +18,6 @@
                 }
             })
             .trigger('change');
-
-            $('#username').autocomplete({
-                url: '{{ route('user.prompt') }}'
-            });
         });
     </script>
 {% endblock %}

@@ -24,6 +24,6 @@
     <small class="text-muted">netto</small>
 {% endif %}
 
-{% if job.rate_id > 1 and rate_label %}
-    <small class="text-muted">/ {{ rates_list[job.rate_id] }}</small>
+{% if job.rate != constant('Coyote\\Job::MONTHLY') and rate_label %}
+    <small class="text-muted">/ {{ rates_list[job.rate] }}</small>
 {% endif %}

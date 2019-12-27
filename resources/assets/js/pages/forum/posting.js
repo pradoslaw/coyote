@@ -94,7 +94,7 @@ $(function () {
 
         $.post($this.attr('href'), function() {
             $this.parent().toggleClass('on');
-            $this.text($this.parent().hasClass('on') ? 'Odblokuj wątek' : 'Zablokuj wątek');
+            $this.children('span').text($this.parent().hasClass('on') ? 'Odblokuj wątek' : 'Zablokuj wątek');
         });
 
         return false;

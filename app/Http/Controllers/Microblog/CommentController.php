@@ -7,6 +7,7 @@ use Coyote\Http\Requests\MicroblogRequest;
 use Coyote\Notifications\Microblog\UserMentionedNotification;
 use Coyote\Notifications\Microblog\SubmittedNotification;
 use Coyote\Repositories\Criteria\Microblog\LoadComments;
+use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Services\Parser\Helpers\Login as LoginHelper;
 use Coyote\Services\Parser\Helpers\Hash as HashHelper;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
@@ -53,13 +54,15 @@ class CommentController extends Controller
      */
     public function save(MicroblogRequest $request, Dispatcher $dispatcher, $microblog)
     {
+        $this->user->pushCriteria(new WithTrashed());
+
         if (!$microblog->exists) {
             $user = $this->auth;
             $data = $request->only(['text', 'parent_id']) + ['user_id' => $user->id];
         } else {
             $this->authorize('update', $microblog);
 
-            $user = $this->user->find($microblog->user_id, ['id', 'name', 'is_blocked', 'is_active', 'photo']);
+            $user = $this->user->find($microblog->user_id, ['id', 'name', 'is_blocked', 'deleted_at', 'photo']);
             $data = $request->only(['text']);
         }
 

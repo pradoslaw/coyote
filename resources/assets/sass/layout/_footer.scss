@@ -42,7 +42,7 @@ footer {
 }
 
 #footer-inner {
-  background-color: #454545;
+  background-color: $header-navbar-bg-color;
   overflow: hidden;
   padding: 17px 0 21px;
 
@@ -57,17 +57,17 @@ footer {
   }
 
   h6 {
-    color: #f2f2f2;
+    color: $gray-lighter;
     text-transform: uppercase;
+
+    a {
+      color: inherit;
+    }
   }
 
   a {
     font-size: $font-size-small;
-    color: #969696;
-  }
-
-  h6 a {
-    color: #f2f2f2;
+    color: lighten($gray-light, 15%);
   }
 
   .col-md-2 {
@@ -79,7 +79,7 @@ footer {
   }
 
   .footer-bubble {
-    background-color: #717171;
+    background-color: $gray-light;
     border-radius: 20px;
     padding: 10px 20px;
     position: relative;
@@ -150,11 +150,11 @@ footer {
 
 #footer-copyright {
   font-size: 11px;
-  color: #7f7f7f;
+  color: $gray-light;
   padding: 10px 0;
 
   a {
-    color: #7f7f7f;
+    color: inherit;
   }
 
   .logo {

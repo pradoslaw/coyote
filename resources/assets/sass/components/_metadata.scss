@@ -9,7 +9,7 @@
 
   i {
     color: $gray;
-    font-size: $font-size-base + 1;
+    font-size: $font-size-base - 1;
   }
 
   a {
@@ -22,18 +22,18 @@
     &:first-child {
       padding-left: 0;
     }
+  }
 
-    @media screen and (max-width: $screen-xs) {
+  @media screen and (max-width: $screen-xs) {
+    margin-bottom: 0;
+    margin-top: 0;
+
+    li {
       display: block !important;
       font-size: 90%;
       margin-bottom: 10px;
       padding-left: 0;
       padding-right: 0;
     }
-  }
-
-  @media screen and (max-width: $screen-xs) {
-    margin-bottom: 0;
-    margin-top: 0;
   }
 }

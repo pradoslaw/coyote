@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use Coyote\Job\Comment;
 use Coyote\Job\Location;
 use Coyote\Job\Subscriber;
-use Coyote\Models\Job\Refer;
 use Coyote\Models\Scopes\ForUser;
 use Coyote\Services\Elasticsearch\CharFilters\JobFilter;
 use Coyote\Services\Eloquent\HasMany;
@@ -26,15 +25,15 @@ use Illuminate\Notifications\RoutesNotifications;
  * @property bool $is_expired
  * @property int $salary_from
  * @property int $salary_to
- * @property int $country_id
  * @property int $currency_id
  * @property int $is_remote
  * @property int $remote_range
  * @property int $enable_apply
  * @property int $visits
- * @property int $rate_id
+ * @property string $rate
  * @property bool $is_gross
- * @property int $employment_id
+ * @property string $employment
+ * @property string $seniority
  * @property int $views
  * @property float $score
  * @property float $rank
@@ -42,7 +41,6 @@ use Illuminate\Notifications\RoutesNotifications;
  * @property string $title
  * @property string $description
  * @property string $recruitment
- * @property string $requirements
  * @property string $email
  * @property string $phone
  * @property User $user
@@ -51,7 +49,6 @@ use Illuminate\Notifications\RoutesNotifications;
  * @property Location[] $locations
  * @property Currency[] $currency
  * @property Feature[] $features
- * @property Refer[] $refers
  * @property int $plan_id
  * @property bool $is_boost
  * @property bool $is_publish
@@ -68,26 +65,31 @@ class Job extends Model
         getIndexBody as parentGetIndexBody;
     }
 
-    const MONTH           = 1;
-    const YEAR            = 2;
-    const WEEK            = 3;
-    const HOUR            = 4;
+    const MONTHLY           = 'monthly';
+    const YEARLY            = 'yearly';
+    const WEEKLY            = 'weekly';
+    const HOURLY            = 'hourly';
 
-    const STUDENT         = 1;
-    const JUNIOR          = 2;
-    const MID             = 3;
-    const SENIOR          = 4;
-    const LEAD            = 5;
-    const MANAGER         = 6;
+    const STUDENT           = 'student';
+    const JUNIOR            = 'junior';
+    const MID               = 'mid';
+    const SENIOR            = 'senior';
+    const LEAD              = 'lead';
+    const MANAGER           = 'manager';
 
     const NET             = 0;
     const GROSS           = 1;
+
+    const EMPLOYMENT      = 'employment';
+    const MANDATORY       = 'mandatory';
+    const CONTRACT        = 'contract';
+    const B2B             = 'b2b';
 
     /**
      * Filling each field adds points to job offer score.
      */
     const SCORE_CONFIG = [
-        'job'             => ['salary_from' => 25, 'salary_to' => 25, 'city' => 15, 'seniority_id' => 5],
+        'job'             => ['salary_from' => 25, 'salary_to' => 25, 'city' => 15, 'seniority' => 5],
         'firm'            => ['name' => 15, 'logo' => 5, 'website' => 1, 'description' => 5]
     ];
 
@@ -99,23 +101,27 @@ class Job extends Model
     protected $fillable = [
         'title',
         'description',
-        'requirements',
         'recruitment',
         'is_remote',
         'is_gross',
         'remote_range',
-        'country_id',
         'salary_from',
         'salary_to',
         'currency_id',
-        'rate_id',
-        'employment_id',
+        'rate',
+        'employment',
         'deadline_at',
         'email',
         'phone',
         'enable_apply',
-        'seniority_id',
-        'plan_id'
+        'seniority',
+        'plan_id',
+        'tags',
+        'features',
+        'locations',
+
+        'currency',
+        'plan',
     ];
 
     /**
@@ -126,7 +132,12 @@ class Job extends Model
     protected $attributes = [
         'enable_apply'      => true,
         'is_remote'         => false,
-        'title'             => ''
+        'title'             => '',
+        'remote_range'      => 100,
+        'currency_id'       => Currency::PLN,
+        'is_gross'          => self::NET,
+        'rate'              => self::MONTHLY,
+        'employment'        => self::EMPLOYMENT
     ];
 
     /**
@@ -143,7 +154,8 @@ class Job extends Model
         'is_highlight'      => 'boolean',
         'is_on_top'         => 'boolean',
         'plan_id'           => 'int',
-        'score'             => 'int'
+        'score'             => 'int',
+        'enable_apply'      => 'boolean'
     ];
 
     /**
@@ -287,7 +299,7 @@ class Job extends Model
      */
     public static function getRatesList()
     {
-        return [self::MONTH => 'miesięcznie', self::YEAR => 'rocznie', self::WEEK => 'tygodniowo', self::HOUR => 'godzinowo'];
+        return trans('common.rate');
     }
 
     /**
@@ -295,7 +307,7 @@ class Job extends Model
      */
     public static function getTaxList()
     {
-        return [self::NET => 'netto', self::GROSS => 'brutto'];
+        return trans('common.tax');
     }
 
     /**
@@ -303,7 +315,7 @@ class Job extends Model
      */
     public static function getEmploymentList()
     {
-        return [1 => 'Umowa o pracę', 2 => 'Umowa zlecenie', 3 => 'Umowa o dzieło', 4 => 'Kontrakt'];
+        return trans('common.employment');
     }
 
     /**
@@ -311,7 +323,7 @@ class Job extends Model
      */
     public static function getSeniorityList()
     {
-        return [self::STUDENT => 'Stażysta', self::JUNIOR => 'Junior', self::MID => 'Mid-Level', self::SENIOR => 'Senior', self::LEAD => 'Lead', self::MANAGER => 'Manager'];
+        return trans('common.seniority');
     }
 
     /**
@@ -469,14 +481,6 @@ class Job extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function country()
-    {
-        return $this->belongsTo('Coyote\Country');
-    }
-
-    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function payments()
@@ -505,7 +509,20 @@ class Job extends Model
      */
     public function commentsWithChildren()
     {
-        return $this->comments()->whereNull('parent_id')->orderBy('id', 'DESC')->with('children.user:id,name,photo', 'user:id,name,photo');
+        return $this
+            ->comments()
+            ->whereNull('parent_id')
+            ->orderBy('id', 'DESC')
+            ->with([
+                'children' => function ($builder) {
+                    return $builder->with(['user' => function ($query) {
+                        return $query->select(['id', 'name', 'photo'])->withTrashed();
+                    }]);
+                },
+                'user' => function ($builder) {
+                    return $builder->select(['id', 'name', 'photo'])->withTrashed();
+                }
+            ]);
     }
 
     /**
@@ -552,14 +569,6 @@ class Job extends Model
     }
 
     /**
-     * @return mixed
-     */
-    public function getCityAttribute()
-    {
-        return $this->locations->implode('city', ', ');
-    }
-
-    /**
      * @return string
      */
     public function getCurrencySymbolAttribute()
@@ -568,36 +577,79 @@ class Job extends Model
     }
 
     /**
-     * @param int $userId
-     */
-    public function setDefaultUserId($userId)
-    {
-        if (empty($this->user_id)) {
-            $this->user_id = $userId;
-        }
-    }
-
-    /**
      * @param mixed $features
      */
-    public function setDefaultFeatures($features)
+    public function setFeaturesAttribute($features)
     {
-        if (!count($this->features)) {
-            foreach ($features as $feature) {
-                $pivot = $this->features()->newPivot(['checked' => $feature->checked, 'value' => $feature->value]);
-                $this->features->add($feature->setRelation('pivot', $pivot));
-            }
+        $this->features->flush();
+
+        foreach ($features as $feature) {
+            $checked = (int) $feature['checked'];
+
+            $pivot = $this->features()->newPivot([
+                'checked'       => $checked,
+                'value'         => $checked ? ($feature['value'] ?? null) : null
+            ]);
+
+            $model = Feature::findOrNew($feature['id'])->setRelation('pivot', $pivot);
+            $this->features->add($model);
         }
     }
 
-    /**
-     * @param int $planId
-     */
-    public function setDefaultPlanId($planId)
+    public function setTagsAttribute($tags)
     {
-        if (empty($this->plan_id)) {
-            $this->plan_id = $planId;
+        $this->tags->flush();
+
+        foreach ($tags as $tag) {
+            $pivot = $this->tags()->newPivot(['priority' => $tag['priority'] ?? 1]);
+            $model = (new Tag($tag))->setRelation('pivot', $pivot);
+
+            $this->tags->add($model);
         }
+    }
+
+    public function setLocationsAttribute($locations)
+    {
+        $this->locations->flush();
+
+        // remove empty locations before adding...
+        foreach (array_filter(array_map('array_filter', $locations)) as $location) {
+            $this->locations->add(new Job\Location($location));
+        }
+    }
+
+    public function setPlanIdAttribute($value)
+    {
+        // set default deadline_at date time, only if offer was not publish yet.
+        if (!$this->is_publish) {
+            $this->attributes['plan_id'] = $value;
+
+            $this->deadline_at = Carbon::now()->addDays($this->plan->length);
+        }
+    }
+
+    public function setCurrencyAttribute($currency)
+    {
+        $this->attributes['currency_id'] = Currency::where('name', $currency)->value('id');
+    }
+
+    public function setRecruitmentAttribute($recruitment)
+    {
+        if (!empty($recruitment)) {
+            $this->attributes['enable_apply'] = false;
+        }
+        
+        $this->attributes['recruitment'] = $recruitment;
+    }
+
+    /**
+     * Set plan as name
+     *
+     * @param string $plan
+     */
+    public function setPlanAttribute($plan)
+    {
+        $this->plan_id = Plan::where('is_active', 1)->whereRaw('LOWER(name) = ?', $plan)->value('id');
     }
 
     /**
@@ -606,14 +658,6 @@ class Job extends Model
     public function getUnpaidPayment()
     {
         return $this->payments()->where('status_id', Payment::NEW)->orderBy('created_at', 'DESC')->first();
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getPaymentUuid()
-    {
-        return $this->payments()->where('status_id', Payment::NEW)->orderBy('created_at', 'DESC')->first(['id']);
     }
 
     /**
@@ -650,7 +694,7 @@ class Job extends Model
 
         // maximum offered salary
         $salary = $this->monthlySalary(max($this->salary_from, $this->salary_to));
-        $body = array_except($body, ['deleted_at', 'features']);
+        $body = array_except($body, ['deleted_at', 'features', 'enable_apply']);
 
         $locations = [];
 
@@ -706,16 +750,16 @@ class Job extends Model
      */
     public function monthlySalary($salary)
     {
-        if (empty($salary) || $this->rate_id === self::MONTH) {
+        if (empty($salary) || $this->rate === self::MONTHLY) {
             return $salary;
         }
 
         // we need to calculate monthly salary in order to sorting data by salary
-        if ($this->rate_id == self::YEAR) {
+        if ($this->rate == self::YEARLY) {
             $salary = round($salary / 12);
-        } elseif ($this->rate_id == self::WEEK) {
+        } elseif ($this->rate == self::WEEKLY) {
             $salary = round($salary * 4);
-        } elseif ($this->rate_id == self::HOUR) {
+        } elseif ($this->rate == self::HOURLY) {
             $salary = round($salary * 8 * 5 * 4);
         }
 

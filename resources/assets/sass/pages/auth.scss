@@ -2,7 +2,7 @@
 @import "../helpers/variables";
 @import "../vendor/bootstrap/variables";
 @import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/gradients";
-@import "../vendor/font-awesome/variables";
+@import "~@fortawesome/fontawesome-free/scss/variables";
 @import "../helpers/mixins";
 
 .btn-google, .btn-fb, .btn-github {
@@ -100,6 +100,7 @@ $github-color: #60b044;
       top: 0;
       left: 0;
       color: $border-color;
+      font-weight: 900;
     }
   }
 }

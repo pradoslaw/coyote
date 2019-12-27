@@ -1,0 +1,431 @@
+openapi: 3.0.0
+info:
+  title: '4programmers.net API'
+  version: '1.0'
+  description: "This is 4programmers.net OpenAPI documentation."
+servers:
+  - url: https://api.4programmers.net/v1
+    description: Production server
+  - url: http://api.dev.4programmers.info/v1
+    description: Stagging server
+paths:
+  /login:
+    post:
+      summary: "Login to retrieve authorization token"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - password
+              properties:
+                name:
+                  type: string
+                password:
+                  type: string
+                  format: password
+      responses:
+        200:
+          description: "Login token"
+          content:
+            application/json:
+              schema:
+                type: object
+        422:
+          description: "Validation errors"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /microblogs:
+    get:
+      summary: "Get all microblogs with pagination"
+      tags:
+        - "microblog"
+      parameters:
+        - name: page
+          required: false
+          in: "query"
+          schema:
+            type: integer
+      responses:
+        200:
+          description: "Microblogs objects"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      $ref: '#/components/schemas/MicroblogSchema'
+                  meta:
+                    type: object
+                    $ref: '#/components/schemas/Meta'
+
+  /microblogs/{id}:
+    get:
+      summary: "Get microblog by ID"
+      tags:
+        - "microblog"
+      parameters:
+        - name: id
+          required: true
+          in: "path"
+          schema:
+            type: integer
+      responses:
+        200:
+          description: "Microblog object"
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/MicroblogSchema'
+
+  /jobs:
+    get:
+      summary: "Get all job offers with pagination"
+      tags:
+        - "job"
+      responses:
+        200:
+          description: "Job objects"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      $ref: '#/components/schemas/JobSchema'
+                  meta:
+                    type: object
+                    $ref: '#/components/schemas/Meta'
+    post:
+      summary: "Create job offer"
+      tags:
+        - "job"
+      security:
+        - bearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/JobBody'
+      responses:
+        201:
+          description: "Job successfully created"
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/JobSchema'
+        422:
+          description: "Validation errors"
+          content:
+            application/json:
+              schema:
+                type: object
+        401:
+          description: "No sufficient funds to post this job offer"
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /jobs/{id}:
+    get:
+      summary: "Get job offer by ID"
+      tags:
+        - "job"
+      parameters:
+        - name: id
+          required: true
+          in: "path"
+          schema:
+            type: integer
+      responses:
+        200:
+          description: "Job object"
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/JobSchema'
+    put:
+      summary: "Update existing job offer"
+      tags:
+        - "job"
+      parameters:
+        - name: id
+          required: true
+          in: "path"
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/JobBody'
+      responses:
+        200:
+          description: "Job successfully updated"
+          content:
+            application/json:
+              schema:
+                type: object
+        422:
+          description: "Validation errors"
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/JobSchema'
+
+components:
+  requestBodies:
+    JobBody:
+      description: A JSON object containing job information
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - title
+            $ref: '#/components/schemas/JobSchema'
+
+  schemas:
+    JobSchema:
+      type: object
+      properties:
+        title:
+          type: string
+        salary_from:
+          type: integer
+          format: int32
+          minimum: 1
+          default: null
+          description: "Minimum salary for this position"
+        salary_to:
+          type: integer
+          format: int32
+          minimum: 1
+          default: null
+          description: "Maximum salary for this position"
+        rate:
+          type: enum
+          enum: ["hourly", "weekly", "monthly", "yearly"]
+          default: "monthly"
+          description: "Salary rate"
+        is_remote:
+          type: boolean
+          default: false
+        remote_range:
+          type: integer
+          minimum: 10
+          maximum: 100
+          nullable: true
+          default: 100
+          description: "If remote work is possible, you can specify its range. 100% is completely remote work"
+        is_gross:
+          type: boolean
+          default: false
+          description: "Determines if salary is gross or net"
+        description:
+          type: string
+          nullable: true
+          description: "Can contain basic HTML like: b,strong,i,em,u,a[href|title|data-user-id|class],p,br,ul,ol[start],li,span[style|title],img[width|height|alt|src|title],sub,sup,pre,code[class],div,kbd,h1,h2,h3,h4,h5,h6,blockquote,del,table[summary|class],thead,tbody,tr,th[abbr],td[abbr],hr,dfn,var,samp"
+        recruitment:
+          type: string
+          description: "Additional recruitment information. For example URL to external recruitment service"
+          nullable: true
+        email:
+          type: string
+          format: email
+        currency:
+          type: enum
+          enum: ["PLN", "USD", "EUR", "GBP", "CHF"]
+          default: "PLN"
+        plan:
+          type: enum
+          enum: ["standard", "plus", "premium"]
+          default: "plus"
+        seniority:
+          type: enum
+          enum: ["student", "junior", "mid", "senior", "lead", "manager"]
+          nullable: true
+        employment:
+          type: enum
+          enum: ["employment", "mandatory", "b2b"]
+          default: "employment"
+        locations:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/LocationSchema'
+        tags:
+          type: array
+          nullable: true
+          description: "Requirements as tags. For example: C#, Python etc."
+          items:
+            $ref: '#/components/schemas/TagSchema'
+        firm:
+          nullable: true
+          $ref: '#/components/schemas/FirmSchema'
+
+    FirmSchema:
+      type: object
+      properties:
+        name:
+          type: string
+          description: "When adding another job offer, you do not have to provide all the information about the company. All you need is a name and the company will be assigned to the job"
+        is_agency:
+          type: boolean
+          default: false
+          description: "Determines if firm is a recruitment agency or not"
+        website:
+          type: string
+          nullable: true
+        logo:
+          type: string
+          format: byte
+          description: "Logo as base64 encoded string"
+          nullable: true
+        description:
+          type: string
+          nullable: true
+          description: "Can contain basic HTML like: b,strong,i,em,u,a[href|title|data-user-id|class],p,br,ul,ol[start],li,span[style|title],img[width|height|alt|src|title],sub,sup,pre,code[class],div,kbd,h1,h2,h3,h4,h5,h6,blockquote,del,table[summary|class],thead,tbody,tr,th[abbr],td[abbr],hr,dfn,var,samp"
+        youtube_url:
+          type: string
+          nullable: true
+        latitude:
+          type: number
+          format: float
+          nullable: true
+        longitude:
+          type: number
+          format: float
+          nullable: true
+        street:
+          type: string
+          nullable: true
+        street_number:
+          type: string
+          maxLength: 50
+          nullable: true
+        city:
+          type: string
+          nullable: true
+        country:
+          type: string
+          nullable: true
+          description: "Two letter ISO country code"
+        postcode:
+          type: string
+          nullable: true
+
+    LocationSchema:
+      type: object
+      properties:
+        city:
+          type: string
+          maxLength: 255
+        street:
+          type: string
+          maxLength: 255
+        street_number:
+          type: string
+          maxLength: 50
+        country:
+          type: string
+          description: "Two letter ISO country code"
+        latitude:
+          type: number
+          format: float
+          nullable: true
+        longitude:
+          type: number
+          format: float
+          nullable: true
+
+    TagSchema:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 50
+          description: "Only lower case and \\-\\.#,\\+ characters allowed"
+        priority:
+          type: integer
+          minimum: 0
+          maximum: 2
+          default: 1
+          description: "0 - nice to have, 1 - intermediate level, 2 - advance"
+
+    MicroblogSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+        votes:
+          type: integer
+        created_at:
+          type: string
+          format: "datetime"
+        updated_at:
+          type: string
+          format: "datetime"
+        html:
+          type: string
+        comments:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/MicroblogSchema'
+        user:
+          type: object
+          properties:
+            id:
+              type: integer
+              required: true
+            name:
+              type: string
+              required: true
+            photo:
+              type: string
+
+    Meta:
+      type: object
+      properties:
+        current_page:
+          type: integer
+          minimum: 1
+        from:
+          type: integer
+          minimum: 1
+        last_page:
+          type: integer
+          minimum: 1
+        path:
+          type: string
+        per_page:
+          type: integer
+        to:
+          type: integer
+          minimum: 1
+        total:
+          type: integer
+          minimum: 1
+
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer

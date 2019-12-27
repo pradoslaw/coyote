@@ -1,0 +1,110 @@
+version: '3.5'
+
+services:
+  db:
+    image: postgres:11-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres:/var/lib/postgresql/data:z
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD:
+      POSTGRES_DB: coyote
+    networks:
+      - coyote
+
+  php:
+    image: 4programmers/php-node:latest
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - ./docker/php/coyote.ini:/usr/local/etc/php/conf.d/coyote.ini
+    environment:
+      DB_PORT: 5432
+      DB_HOST: db
+
+#      REDIS_HOST: ${REDIS_HOST}
+#      ELASTICSEARCH_HOST: ${ELASTICSEARCH_HOST}
+    networks:
+      - coyote
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - 8880:80
+    volumes:
+      - ./docker/nginx/:/etc/nginx/conf.d/
+      - ./:/var/www
+    working_dir: /var/www
+    depends_on:
+      - php
+    networks:
+      - coyote
+
+  redis:
+    image: redis:latest
+    networks:
+      - coyote
+
+  elasticsearch:
+    image: elasticsearch:5.6.14
+    ports:
+      - 9200:9200
+#    mem_limit: 1g
+    volumes:
+        - elasticsearch:/usr/share/elasticsearch/data
+    environment:
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    networks:
+      - coyote
+
+  minio:
+    image: minio/minio
+    volumes:
+      - minio:/data
+    environment:
+      MINIO_ACCESS_KEY: minio
+      MINIO_SECRET_KEY: minio123
+    command: server /data
+    networks:
+      - coyote
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - 8025:8025
+    networks:
+      - coyote
+
+  selenium:
+    image: selenium/standalone-chrome:3.11.0-antimony
+    depends_on:
+      - nginx
+    volumes:
+      - /dev/shm:/dev/shm
+    networks:
+      - coyote
+
+  createbuckets:
+    image: minio/mc
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc config host add minio http://minio:9000 minio minio123 --api s3v4;
+      /usr/bin/mc mb minio/coyote;
+      /usr/bin/mc policy set public minio/coyote;
+      exit 0;
+      "
+    networks:
+      - coyote
+
+volumes:
+  postgres:
+  elasticsearch:
+  minio:
+
+networks:
+  coyote:
+    name: coyote

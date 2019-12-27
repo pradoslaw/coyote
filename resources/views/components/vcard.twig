@@ -20,20 +20,20 @@
             <div class="media-body">
                 <ul class="list-inline">
                     <li title="Ostatnia wizyta: {{ visited_at }}">
-                        <i class="fa fa-sign-in fa-fw"></i> {{ visited_at }}
+                        <i class="fas fa-sign-in-alt fa-fw"></i> {{ visited_at }}
                     </li>
                     <li title="Data rejestracji: {{ created_at }}">
-                        <i class="fa fa-user-plus fa-fw"></i>
+                        <i class="fas fa-user-plus fa-fw"></i>
                         {{ created_at }}
                     </li>
                     <li title="Liczba postów: {{ user.posts }}">
-                        <i class="fa fa-comments-o fa-fw"></i>
+                        <i class="far fa-comments fa-fw"></i>
                         {{ declination(user.posts, ['post', 'posty', 'postów']) }}
                     </li>
                 </ul>
 
                 <div class="box-reputation">
-                    <h6><i class="fa fa-line-chart"></i> Reputacja</h6>
+                    <h6><i class="fas fa-chart-line"></i> Reputacja</h6>
 
                     <div class="progress">
                         <div class="progress-bar" role="progressbar" aria-valuenow="{{ rank.percentage }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ rank.percentage }}%;">
@@ -50,20 +50,20 @@
 
                 <div class="box-buttons">
                     <a href="{{ route('forum.user', [user.id]) }}" title="Znajdź posty użytkownika" class="btn btn-xs btn-default">
-                        <i class="fa fa-search fa-fw"></i>
+                        <i class="fas fa-search fa-fw"></i>
                     </a>
 
                     <a href="{{ route('user.pm.submit', {to: user.name}) }}" title="Napisz wiadomość do tego użytkownika" class="btn btn-xs btn-default">
-                        <i class="fa fa-envelope fa-fw"></i>
+                        <i class="fas fa-envelope fa-fw"></i>
                     </a>
 
                     {% if can('adm-access') %}
                         <a href="{{ route('adm.firewall.save') }}?user={{ user.id }}" title="Zablokuj tego użytkownika" class="btn btn-xs btn-default pull-right">
-                            <i class="fa fa-ban fa-fw"></i>
+                            <i class="fas fa-ban fa-fw"></i>
                         </a>
 
                         <a href="{{ route('adm.users.save', [user.id]) }}" title="Przejdź do panelu administracyjnego" class="btn btn-xs btn-default pull-right">
-                            <i class="fa fa-cogs fa-fw"></i>
+                            <i class="fas fa-cogs fa-fw"></i>
                         </a>
                     {% endif %}
                 </div>

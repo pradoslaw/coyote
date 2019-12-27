@@ -77,7 +77,7 @@ class User extends Twig_Extension
         if (is_array($user)) {
             $userId     = isset($user['user_id']) ? $user['user_id'] : $user['id'];
             $name       = isset($user['user_name']) ? $user['user_name'] : $user['name'];
-            $isActive   = $user['is_active'];
+            $isActive   = !$user['deleted_at'];
             $isBlocked  = $user['is_blocked'];
         } else {
             $userId     = array_shift($args);
@@ -90,6 +90,7 @@ class User extends Twig_Extension
         if ($isBlocked || !$isActive) {
             $attributes['class'] = 'user-deleted';
         }
+
         return link_to_route('profile', $name, $userId, $attributes);
     }
 

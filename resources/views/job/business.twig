@@ -1,7 +1,5 @@
 {% extends 'job.base' %}
 
-{% import 'components.widgets' as widgets %}
-
 {% block title %}Nasza oferta :: Praca {{ parent() }}{% endblock %}
 
 {% set submit_url = "'" ~ route('job.submit') ~ "?revalidate=1&default_plan=' + default_plan.id" %}
@@ -13,25 +11,25 @@
 
             <div class="business-features row margin-lg-top margin-lg-bottom">
                 <div class="col-xs-3 text-center">
-                    <i class="fa fa-users text-primary"></i>
+                    <i class="fas fa-users text-primary"></i>
 
                     <h4 class="margin-sm-top">Aktywna społeczność ponad <br><strong>250 000 programistów</strong></h4>
                 </div>
 
                 <div class="col-xs-3 text-center">
-                    <i class="fa fa-graduation-cap text-primary"></i>
+                    <i class="fas fa-graduation-cap text-primary"></i>
 
                     <h4 class="margin-sm-top">Najbardziej merytoryczne forum IT w kraju</h4>
                 </div>
 
                 <div class="col-xs-3 text-center">
-                    <i class="fa fa-mouse-pointer text-primary"></i>
+                    <i class="fas fa-mouse-pointer text-primary"></i>
 
                     <h4 class="margin-sm-top">Średnio ponad <strong>1.5 miliona</strong> odsłon miesięcznie</h4>
                 </div>
 
                 <div class="col-xs-3 text-center">
-                    <i class="fa fa-comments text-primary"></i>
+                    <i class="fas fa-comments text-primary"></i>
 
                     <h4 class="margin-sm-top">Miejsce wymiany wiedzy już <br><strong>od 2000 roku</strong></h4>
                 </div>
@@ -39,61 +37,61 @@
 
             <h2 class="text-center margin-lg-top margin-lg-bottom">Dajemy Ci do dyspozycji 3 atrakcyjne plany taryfowe. <strong>Już od 30 zł!</strong></h2>
 
-            <vue-pricing :plans="plans" :v-model.sync="default_plan.id" email="{{ config('mail.from.address') }}"></vue-pricing>
+            <vue-pricing :plans="plans" :value.sync="default_plan.id" email="{{ config('mail.from.address') }}"></vue-pricing>
 
             <h2 class="text-center margin-lg-top margin-lg-bottom">Co zyskujesz dodając ogłoszenie na 4programmers.net?</h2>
 
             <ul class="business-benefits list-group row">
                 <li class="list-group-item col-xs-4">
-                    <i class="fa fa-check-circle fa-2x fa text-primary"></i>
+                    <i class="fas fa-check-circle fa-2x fas text-primary"></i>
 
                     <span>Prosty, uniwersalny szablon ofert</span>
                 </li>
 
                 <li class="list-group-item col-xs-4">
-                    <i class="fa fa-check-circle fa-2x fa text-primary"></i>
+                    <i class="fas fa-check-circle fa-2x fas text-primary"></i>
 
                     <span>Bardzo konkurencyjne ceny w 3 pakietach</span>
                 </li>
 
                 <li class="list-group-item col-xs-4">
-                    <i class="fa fa-check-circle fa-2x fa text-primary"></i>
+                    <i class="fas fa-check-circle fa-2x fas text-primary"></i>
 
                     <span>Jasno określasz swoje widełki wynagrodzenia</span>
                 </li>
 
                 <li class="list-group-item col-xs-4">
-                    <i class="fa fa-check-circle fa-2x fa text-primary"></i>
+                    <i class="fas fa-check-circle fa-2x fas text-primary"></i>
 
                     <span>Grupa kandydatów wyłącznie z branży IT</span>
                 </li>
 
                 <li class="list-group-item col-xs-4">
-                    <i class="fa fa-check-circle fa-2x fa text-primary"></i>
+                    <i class="fas fa-check-circle fa-2x fas text-primary"></i>
 
                     <span>Korzystasz z szybkich i wygodnych form płatności</span>
                 </li>
 
                 <li class="list-group-item col-xs-4">
-                    <i class="fa fa-check-circle fa-2x fa text-primary"></i>
+                    <i class="fas fa-check-circle fa-2x fas text-primary"></i>
 
                     <span>Procentowo deklarujesz ilość pracy zdalnej</span>
                 </li>
 
                 <li class="list-group-item col-xs-4">
-                    <i class="fa fa-check-circle fa-2x fa text-primary"></i>
+                    <i class="fas fa-check-circle fa-2x fas text-primary"></i>
 
                     <span>Ciekawe opcje wyróżniania oferty</span>
                 </li>
 
                 <li class="list-group-item col-xs-4">
-                    <i class="fa fa-check-circle fa-2x fa text-primary"></i>
+                    <i class="fas fa-check-circle fa-2x fas text-primary"></i>
 
                     <span>Budujesz pozytywny wizerunek pracodawcy</span>
                 </li>
 
                 <li class="list-group-item col-xs-4">
-                    <i class="fa fa-check-circle fa-2x fa text-primary"></i>
+                    <i class="fas fa-check-circle fa-2x fas text-primary"></i>
 
                     <span>Możesz dodawać zdjęcia do Twoich ogłoszeń</span>
                 </li>
@@ -135,8 +133,6 @@
             default_plan: {{ default_plan|raw }}
         };
     </script>
-
-    {{ widgets.vue() }}
 
     {% include 'job.submit.partials.chat' %}
 {% endblock %}

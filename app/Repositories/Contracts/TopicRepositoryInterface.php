@@ -17,7 +17,7 @@ interface TopicRepositoryInterface extends RepositoryInterface
      * @param int $perPage
      * @return \Illuminate\Pagination\LengthAwarePaginator
      */
-    public function paginate($userId, string $guestId, $order = 'topics.last_post_id', $direction = 'DESC', $perPage = 20);
+    public function lengthAwarePagination($userId, string $guestId, $order = 'topics.last_post_id', $direction = 'DESC', $perPage = 20);
 
     /**
      * Is there any unread topic in this category?
@@ -27,7 +27,14 @@ interface TopicRepositoryInterface extends RepositoryInterface
      * @param string $guestId
      * @return mixed
      */
-    public function isUnread($forumId, $markTime, $guestId);
+    public function countUnread($forumId, $markTime, $guestId);
+
+    /**
+     * @param int $forumId
+     * @param string $guestId
+     * @return mixed
+     */
+    public function flushRead(int $forumId, string $guestId);
 
     /**
      * @param int $limit

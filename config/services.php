@@ -7,7 +7,8 @@ return [
 
     'ws'        => [
         'host'          => env('WS_HOST'),
-        'port'          => env('WS_PORT')
+        'port'          => env('WS_PORT'),
+        'proxy'         => env('WS_PROXY')
     ],
 
     // Elasticsearch host and port. In most cases default values will be suitable.
@@ -61,7 +62,8 @@ return [
 
     'paylane' => [
         'username'      => env('PAYLANE_USERNAME'),
-        'password'      => env('PAYLANE_PASSWORD')
+        'password'      => env('PAYLANE_PASSWORD'),
+        'salt'          => env('PAYLANE_SALT')
     ],
 
     'p24' => [

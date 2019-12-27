@@ -130,7 +130,7 @@ class HomeController extends BaseController
 
         ///////////////////////////////////////////////////////////////////
 
-        $eagerCriteria = new EagerLoading(['firm:id,name,slug,logo', 'locations', 'tags', 'currency']);
+        $eagerCriteria = new EagerLoading(['firm', 'locations', 'tags', 'currency']);
 
         $this->job->pushCriteria($eagerCriteria);
         $this->job->pushCriteria(new EagerLoadingWithCount(['comments']));

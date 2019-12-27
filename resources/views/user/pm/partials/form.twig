@@ -1,0 +1,45 @@
+<div class="row margin-sm-bottom">
+  <div class="col-md-12" :class="{'has-error': 'text' in errors}">
+    <ul class="nav nav-tabs">
+      <li role="presentation" class="active"><a href="#body" aria-controls="body" role="tab" data-toggle="tab">Treść</a></li>
+      <li role="presentation"><a href="#preview" aria-controls="preview" role="tab" data-toggle="tab" @click="showPreview">Podgląd</a></li>
+    </ul>
+
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="body">
+
+        <vue-toolbar @update="updateModel" :input="() => $refs.textarea.$el"></vue-toolbar>
+
+        <vue-prompt source="{{ route('user.prompt') }}">
+          <textarea-autosize
+            placeholder="Kliknij, aby odpowiedzieć"
+            v-clipboard:success="insertToTextarea"
+            v-clipboard:error="showError"
+            name="text"
+            class="form-control"
+            ref="textarea"
+            v-model="text"
+            :min-height="40"
+            :max-height="350"
+            @keydown.native.ctrl.enter="sendMessage"
+            @change.native="onChange"
+            rows="2"
+            tabindex="1"
+          ></textarea-autosize>
+
+        </vue-prompt>
+      </div>
+
+      <div role="tabpanel" class="tab-pane" id="preview" v-html="previewHtml"></div>
+    </div>
+
+    <span v-cloak v-if="'text' in errors" class="help-block">${ errors.text[0] }</span>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <vue-button :disabled="isProcessing" @click.native="sendMessage" class="btn btn-primary btn-sm">Wyślij</vue-button>
+  </div>
+</div>
+
+<vue-modal v-cloak ref="error">Nie można dodać załącznika. Prosimy o kontakt w celu zgłoszenia tego błędu.</vue-modal>

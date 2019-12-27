@@ -24,4 +24,14 @@ class Track extends Model
      * @var array
      */
     public $timestamps = false;
+
+    /**
+     * @var string
+     */
+    protected $dateFormat = 'Y-m-d H:i:se';
+
+    /**
+     * @var array
+     */
+    public $dates = ['marked_at'];
 }

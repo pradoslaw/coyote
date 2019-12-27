@@ -1,77 +1,53 @@
 import '../../plugins/uploader';
-import initTinymce from '../../libs/tinymce';
-import Dialog from '../../libs/dialog';
-import Map from '../../libs/map';
+import tinymce from '../../libs/tinymce';
+import Geocoder from '../../libs/geocoder';
+import Vue from 'vue';
 import VueThumbnail from '../../components/thumbnail.vue';
 import VuePricing from '../../components/pricing.vue';
 import VueTagsDropdown from '../../components/tags-dropdown.vue';
 import VueTagsSkill from '../../components/tag-skill.vue';
+import VueGooglePlace from '../../components/google-place.vue';
+import VueText from '../../components/forms/text.vue';
+import VueSelect from '../../components/forms/select.vue';
+import VueCheckbox from '../../components/forms/checkbox.vue';
+import VueRadio from '../../components/forms/radio.vue';
+import VueError from '../../components/forms/error.vue';
+import VueButton from '../../components/forms/button.vue';
+import VueModal from '../../components/modal.vue';
+import VueMap from '../../components/google-maps/map.vue';
+import VueMarker from '../../components/google-maps/marker.vue';
+import Editor from '@tinymce/tinymce-vue';
 import 'chosen-js';
-import 'intl-tel-input';
-
-/**
- * Cast data from bool to int to properly display radio buttons (0 and 1 instade of true and false).
- *
- * @param data
- * @return {*}
- */
-function toInt(data) {
-    for (let item in data) {
-        if (data.hasOwnProperty(item)) {
-            if (typeof(data[item]) === 'boolean') {
-                data[item] = +data[item];
-            }
-
-            if (typeof(data[item]) === 'object') {
-                data[item] = toInt(data[item]);
-            }
-        }
-    }
-
-    return data;
-}
-
-Vue.component('vue-thumbnail', VueThumbnail);
-Vue.component('vue-pricing', VuePricing);
-Vue.component('vue-tags-dropdown', VueTagsDropdown);
-Vue.component('vue-tag-skill', VueTagsSkill);
+import axios from "axios";
+import Config from "../../libs/config";
 
 new Vue({
     el: '.submit-form',
     delimiters: ['${', '}'],
-    data: toInt(window.data),
-    mounted: function () {
-        initTinymce();
+    data: Object.assign(window.data, {isSubmitting: false, isDone: 0, showFormNavbar: false}),
+    components: {
+        'vue-tinymce': Editor,
+        'vue-thumbnail': VueThumbnail,
+        'vue-pricing': VuePricing,
+        'vue-tags-dropdown': VueTagsDropdown,
+        'vue-tag-skill': VueTagsSkill,
+        'vue-google-place': VueGooglePlace,
+        'vue-text': VueText,
+        'vue-select': VueSelect,
+        'vue-checkbox': VueCheckbox,
+        'vue-radio': VueRadio,
+        'vue-error': VueError,
+        'vue-modal': VueModal,
+        'vue-button': VueButton,
+        'vue-map': VueMap,
+        'vue-marker': VueMarker
+    },
 
+    mounted () {
         this.marker = null;
 
-        if (typeof google !== 'undefined') {
-            this.map = new Map();
-
-            if (this.firm.latitude && this.firm.longitude) {
-                this._setupMarker();
-            }
-
-            this.map.setupGeocodeOnMapClick(result => {
-                this.firm = Object.assign(this.firm, result);
-                this._setupMarker();
-            });
-        }
-
-        // ugly hack to initialize jquery fn after dom is loaded
-        $(() => {
-            $.uploader({
-                input: 'logo',
-                onChanged: data => {
-                    this.firm.thumbnail = $('.img-container > img').attr('src');
-                    this.firm.logo = data.name;
-                },
-                onDeleted: () => {
-                    this.firm.logo = null;
-                    this.firm.thumbnail = null;
-                }
-            });
-        });
+        this.calculateOffset();
+        window.addEventListener('scroll', this.handleScroll);
 
         $('[v-loader]').remove();
         this._initTooltip();
@@ -79,274 +55,285 @@ new Vue({
         $('#industries').chosen({
             placeholder_text_multiple: 'Wybierz z listy'
         });
+
+        axios.defaults.headers.common['X-CSRF-TOKEN'] = Config.csrfToken();
+    },
+    destroyed () {
+        window.removeEventListener('scroll', this.handleScroll);
     },
     methods: {
+        submitForm () {
+            this.isSubmitting = true;
+
+            // nextTick() is required in order to reload data in the form before calling FormData() to aggregate inputs
+            this.$nextTick(() => {
+                axios.post(this.$refs.submitForm.action, new FormData(this.$refs.submitForm))
+                    .then(response => {
+                        window.location.href = response.data;
+                    })
+                    .catch(error => {
+                        this.errors = error.response.data.errors;
+
+                        window.location.href = '#top';
+                    })
+                    .finally(() => {
+                        this.isSubmitting = false;
+                    });
+            });
+        },
+
         /**
          * Add tag after clicking on suggestion tag.
          *
          * @param {String} name
          */
-        addTag: function (name) {
-            this.tags.push({name: name, pivot: {priority: 1}});
+        addTag (name) {
+            this.job.tags.push({name: name, pivot: {priority: 1}});
             // fetch only tag name
-            let pluck = this.tags.map(item => item.name);
+            let pluck = this.job.tags.map(item => item.name);
 
             // request suggestions
-            $.get(this.suggestionUrl, {t: pluck}, result => {
-                this.suggestions = result;
-            });
+            axios.get(this.suggestion_url, {params: {t: pluck}})
+                .then(response => {
+                    this.suggestions = response.data;
+                });
 
             this._initTooltip();
         },
-        onTagChange: function (name) {
-            this.addTag(name);
-        },
-        onTagDelete: function (name) {
-            let index = this.tags.findIndex(el => {
-                return el.name === name;
-            });
 
-            this.tags.splice(index, 1);
+        removeTag (name) {
+            let index = this.job.tags.findIndex(el => el.name === name);
+
+            this.job.tags.splice(index, 1);
         },
-        isInvalid: function (fields) {
+
+        isInvalid (fields) {
             return Object.keys(this.errors).findIndex(element => fields.indexOf(element) > -1) > -1;
         },
-        charCounter: function (item, limit) {
+
+        charCounter (item, limit) {
             let model = item.split('.').reduce((o, i) => o[i], this);
 
             return limit - String(model !== null ? model : '').length;
         },
-        toggleBenefit: function (item) {
-            let index = this.benefits.indexOf(item);
+
+        toggleBenefit (item) {
+            let index = this.firm.benefits.indexOf(item);
 
             if (index === -1) {
-                this.benefits.push(item);
-            } else {
-                this.benefits.splice(index, 1);
+                this.firm.benefits.push(item);
+            }
+            else {
+                this.firm.benefits.splice(index, 1);
             }
         },
-        addBenefit: function (e) {
+
+        addBenefit (e) {
             if (e.target.value.trim()) {
-                this.benefits.push(e.target.value);
+                this.firm.benefits.push(e.target.value);
             }
 
             e.target.value = '';
         },
-        removeBenefit: function (benefit) {
-            this.benefits.splice(this.benefits.indexOf(benefit), 1);
+
+        removeBenefit (benefit) {
+            this.firm.benefits.splice(this.firm.benefits.indexOf(benefit), 1);
         },
-        updateBenefit: function () {},
+
         /**
          * Enable/disable feature for this offer.
          *
          * @param feature
          */
-        toggleFeature: function (feature) {
+        toggleFeature (feature) {
             feature.pivot.checked = +!feature.pivot.checked;
         },
-        addFirm: function () {
-            let dialog = new Dialog({
-                title: 'Dodanie nowej firmy',
-                message: 'Czy na pewno chcesz dodać nową firme i przypisać ją do tego ogłoszenia?',
-                buttons: [{
-                    label: 'Anuluj',
-                    attr: {
-                        'class': 'btn btn-default',
-                        'type': 'button',
-                        'data-dismiss': 'modal'
-                    }
-                }, {
-                    label: 'Tak',
-                    attr: {
-                        'class': 'btn btn-primary'
-                    },
-                    onClick: () => {
-                        this._newFirm();
-                        dialog.close();
-                    }
-                }]
-            });
 
-            dialog.show();
+        addFirm () {
+            this.$refs['add-firm-modal'].open();
         },
-        selectFirm: function (firmId) {
-            let index = this.firms.findIndex(element => element.id == firmId);
+
+        selectFirm (firmId) {
+            let index = this.firms.findIndex(element => element.id === firmId);
 
             this.firm = this.firms[index];
-            this.firm.is_private = +false; // must be the number - not bool
-
-            this.benefits = this.firm.benefits;
+            this.firm.is_private = false;
 
             // text can not be NULL
-            tinymce.get('description').setContent(this.firm.description === null ? '' : this.firm.description);
-            $('#industries').trigger('chosen:updated');
-        },
-        changeFirm: function () {
-            if (!this.firm.name) {
-                return;
-            }
+            // tinymce.get('description').setContent(this.firm.description === null ? '' : this.firm.description);
+            this.firm.description = this.firm.description === null ? '' : this.firm.description;
 
-            let dialog = new Dialog({
-                title: 'Zmiana nazwy firmy?',
-                message: 'Zamierzasz edytować nazwę tej firmy. Weź pod uwagę, że zmieniona nazwa będzie wyświetlana przy wszystkich Twoich ofertach. Czy może chcesz dodać nową firmę?',
-                buttons: [{
-                    label: 'Jest OK, chce tylko zmienić nazwę',
-                    attr: {
-                        'class': 'btn btn-default',
-                        'type': 'button',
-                        'data-dismiss': 'modal'
-                    }
-                }, {
-                    label: 'Tak, chcę dodać nową firmę',
-                    attr: {
-                        'class': 'btn btn-primary'
-                    },
-                    onClick: () => {
-                        this._newFirm();
-                        dialog.close();
-                    }
-                }]
+            this.$nextTick(() => {
+                $('#industries').trigger('chosen:updated');
+            });
+        },
+
+        _newFirm () {
+            this.$refs['add-firm-modal'].close();
+
+            this.firm = Object.assign(this.firm, {
+                id: null,
+                name: '',
+                logo: {filename: null, url: null},
+                thumbnail: null,
+                description: '',
+                website: null,
+                is_private: false,
+                is_agency: false,
+                employees: null,
+                founded: null,
+                vat_id: null,
+                youtube_url: null,
+                gallery: [{file: ''}],
+                benefits: [],
+                industries: [],
+                latitude: null,
+                longitude: null,
+                country: null,
+                street: null,
+                postcode: null,
+                city: null,
+                street_number: null,
+                country_id: null
             });
 
-            dialog.show();
+            this.$nextTick(() => {
+                $('#industries').trigger('chosen:updated');
+            });
         },
-        _newFirm: function () {
-            this.firm = {
-                'id': null,
-                'name': null,
-                'headline': '',
-                'logo': null,
-                'thumbnail': null,
-                'description': null,
-                'website': null,
-                'is_private': +false,
-                'is_agency': +false,
-                'employees': null,
-                'founded': null,
-                'vat_id': null,
-                'youtube_url': null,
-                'gallery': [{file: ''}]
-            };
 
-            this.benefits = [];
-            tinymce.get('description').setContent(''); // new firm - empty description
-
-            $('#industries').trigger('chosen:updated');
-        },
-        changeAddress: function (e) {
-            let val = e.target.value.trim();
+        changeAddress (e) {
+            const val = e.target.value.trim();
+            const geocoder = new Geocoder();
 
             if (val.length) {
-                this.map.geocode(val, result => {
+                geocoder.geocode(val, result => {
                     this.firm = Object.assign(this.firm, result);
-
-                    this._setupMarker(); // must be inside closure
                 });
             }
             else {
-                ['longitude', 'latitude', 'country', 'city', 'street', 'postcode'].forEach(field => {
+                ['longitude', 'latitude', 'country', 'city', 'street', 'street_number', 'postcode'].forEach(field => {
                     this.firm[field] = null;
                 });
-
-                this._setupMarker();
             }
         },
-        _setupMarker: function () {
-            this.map.removeMarker(this.marker);
-            this.marker = this.map.addMarker(this.firm.latitude, this.firm.longitude);
+
+        geocode (latlng) {
+            const geocoder = new Geocoder();
+
+            geocoder.reverseGeocode(latlng, result => {
+                this.firm = Object.assign(this.firm, result);
+            });
         },
-        onThumbnailUploaded: function (file) {
+
+        addPhoto (file) {
             this.firm.gallery.splice(this.firm.gallery.length - 1, 0, file);
         },
-        onThumbnailDeleted: function (file) {
+
+        removePhoto (file) {
             let index = this.firm.gallery.findIndex(photo => photo.file === file);
 
             if (index > -1) {
                 this.firm.gallery.splice(index, 1);
             }
         },
-        _initTooltip: function () {
+
+        _initTooltip () {
             this.$nextTick(function () {
                 $('i[data-toggle="tooltip"]').tooltip();
             });
+        },
+
+        addLocation () {
+            this.job.locations.push({});
+        },
+
+        removeLocation (location) {
+            this.job.locations.splice(this.job.locations.indexOf(location), 1);
+        },
+
+        formatAddress (index, data) {
+            const strip = (value) => value !== undefined ? value : '';
+
+            data.label = [(`${strip(data.street)} ${strip(data.street_number)}`).trim(), data.city, data.country]
+                .filter(item => item !== '')
+                .join(', ');
+
+            this.$set(this.job.locations, index, data);
+        },
+
+        addLogo (result) {
+            this.firm.logo = result;
+        },
+
+        removeLogo () {
+            this.firm.logo = {url: null, filename: null};
+        },
+
+        handleScroll () {
+            this.showFormNavbar = (window.scrollY + window.innerHeight < this.initFormOffset);
+        },
+
+        calculateOffset () {
+            this.initFormOffset = document.getElementById('form-navbar').offsetTop;
         }
     },
     computed: {
-        address: function () {
-            return String((this.firm.street || '') + ' ' + (this.firm.house || '') + ' ' + (this.firm.postcode || '') +  ' ' + (this.firm.city || '')).trim();
-        }
-    },
-    watch: {
-        'job.enable_apply': function (flag) {
-            if (Boolean(parseInt(flag))) {
-                tinymce.get('recruitment').hide();
+        address () {
+            return String((this.firm.street || '') + ' ' + (this.firm.street_number || '') + ' ' + (this.firm.postcode || '') + ' ' + (this.firm.city || '')).trim();
+        },
 
-                $('#recruitment').attr('disabled', 'disabled').hide();
-            } else {
-                tinymce.get('recruitment').show();
+        gallery () {
+            return this.firm.gallery && this.firm.gallery.length ? this.firm.gallery : {'file': ''};
+        },
 
-                $('#recruitment').removeAttr('disabled');
+        tinymceOptions () {
+            return tinymce;
+        },
+
+        // @todo refaktoring?
+        isPrivate: {
+            get () {
+                return +this.firm.is_private;
+            },
+            set (val) {
+                this.firm.is_private = val;
             }
         },
-        'firm.is_private': function (flag) {
+
+        isAgency: {
+            get () {
+                return +this.firm.is_agency;
+            },
+            set (val) {
+                this.firm.is_agency = val;
+            }
+        },
+
+        enableApply: {
+            get () {
+                return +this.job.enable_apply;
+            },
+            set (val) {
+                this.job.enable_apply = val;
+            }
+        },
+
+
+    },
+    watch: {
+        'firm.is_private' (flag) {
             if (!Boolean(parseInt(flag))) {
                 google.maps.event.trigger(map, 'resize');
             }
+        },
+
+        'firm.is_agency' () {
+            this.showFormNavbar = false;
+
+            this.$nextTick(() => {
+                this.calculateOffset();
+            });
         }
     }
-});
-
-$(() => {
-    'use strict';
-
-    let navigation = $('#form-navigation');
-    let fixed = $('#form-navbar-fixed');
-
-    $('#form-navigation-container')
-        .html(navigation.html())
-        .on('click', ':submit', () => $('.submit-form').submit())
-        .on('click', 'button[data-submit-state]', e => $(e.currentTarget).attr('disabled', 'disabled').text($(e.currentTarget).data('submit-state')));
-
-    if (navigation.length) {
-        $(window).scroll(() => {
-            let bottom = $(window).scrollTop() + $(window).height();
-
-            if (bottom > navigation.offset().top) {
-                fixed.fadeOut();
-            }
-            else {
-                fixed.show();
-            }
-        }).trigger('scroll');
-    }
-
-    /**
-     * Save and exit button
-     */
-    $('.btn-save').on('click', () => {
-        $('input[name="done"]').val(1);
-    });
-
-    require.ensure([], require => {
-        require('intl-tel-input/build/js/utils');
-
-        $('input[type="tel"]').intlTelInput({
-            preferredCountries: ['pl'],
-            separateDialCode: true,
-            nationalMode: true,
-            initialCountry: 'auto',
-            geoIpLookup: function (callback) {
-                $.getJSON('//geo-ip.io/1.0/ip/?callback=?', {}, function (json) {
-                    callback(json.country_code.toLowerCase());
-                });
-            },
-        });
-
-        $('.submit-form').submit(function () {
-            let input = $('input[type="tel"]');
-            let number = input.intlTelInput('getNumber');
-
-            input.val(number.length > 3 ? number : null);
-        });
-    });
 });

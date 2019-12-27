@@ -16,7 +16,6 @@ use Coyote\Listeners\IndexCategory;
 use Coyote\Listeners\IndexStream;
 use Coyote\Listeners\LogSentMessage;
 use Coyote\Listeners\MicroblogListener;
-use Coyote\Listeners\SaveLocationsInJobPreferences;
 use Coyote\Listeners\SendLockoutEmail;
 use Coyote\Listeners\SendSuccessfulLoginEmail;
 use Coyote\Listeners\SetupLoginDate;
@@ -39,7 +38,7 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        UserWasSaved::class => [FlushUserCache::class, SaveLocationsInJobPreferences::class],
+        UserWasSaved::class => [FlushUserCache::class],
         Lockout::class => [SendLockoutEmail::class],
         FirewallWasSaved::class => [FlushFirewallCache::class],
         FirewallWasDeleted::class => [FlushFirewallCache::class],

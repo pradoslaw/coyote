@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int $id
- * @property string $root_id
  * @property int $user_id
  * @property int $author_id
  * @property int $text_id
@@ -15,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Text $text
  * @property User $author
  * @property User $user
+ * @property \Carbon\Carbon $read_at
  */
 class Pm extends Model
 {
@@ -31,7 +31,7 @@ class Pm extends Model
      *
      * @var array
      */
-    protected $fillable = ['root_id', 'user_id', 'author_id', 'text_id', 'folder'];
+    protected $fillable = ['user_id', 'author_id', 'text_id', 'folder'];
 
     /**
      * @var bool

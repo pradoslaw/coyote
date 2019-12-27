@@ -54,7 +54,7 @@ class VoteController extends BaseController
                 ]);
                 $post->score++;
 
-                if ($post->user_id !== null) {
+                if ($post->user) {
                     // send notification to the user
                     $post->user->notify(new VotedNotification($this->auth, $post));
                 }

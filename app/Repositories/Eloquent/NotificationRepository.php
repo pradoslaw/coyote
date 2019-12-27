@@ -5,8 +5,6 @@ namespace Coyote\Repositories\Eloquent;
 use Carbon\Carbon;
 use Coyote\Notification;
 use Coyote\Notification\Setting;
-use Coyote\Notification\Sender;
-use Coyote\Notification\Type;
 use Coyote\Repositories\Contracts\NotificationRepositoryInterface;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -28,7 +26,7 @@ class NotificationRepository extends Repository implements NotificationRepositor
      * @param int $perPage
      * @return mixed
      */
-    public function paginate($userId, $perPage = 20)
+    public function lengthAwarePaginate($userId, $perPage = 20)
     {
         return $this->prepare($userId)->paginate($perPage);
     }
@@ -59,15 +57,16 @@ class NotificationRepository extends Repository implements NotificationRepositor
      * Find notification by url and mark it as read
      *
      * @param int $userId
-     * @param string $url
+     * @param mixed $model
      */
-    public function markAsReadByUrl($userId, $url)
+    public function markAsReadByModel($userId, $model)
     {
         $this
             ->model
             ->where('user_id', $userId)
             ->whereNull('read_at')
-            ->where('url', $url)
+            ->where('content_id', $model->id)
+            ->where('content_type', class_basename($model))
             ->update(['read_at' => Carbon::now()]);
     }
 
@@ -91,12 +90,12 @@ class NotificationRepository extends Repository implements NotificationRepositor
                             $this->raw('COALESCE(users.name, notification_senders.name) AS name'),
                             'photo',
                             'is_blocked',
-                            'is_active'
+                            $this->raw('users.deleted_at IS NULL AS is_active')
                         ])
                         ->orderBy('notification_senders.id');
                 }])
                 ->join('notification_types', 'notification_types.id', '=', 'type_id')
-                ->orderBy('notifications.id', 'DESC');
+                ->orderBy('notifications.created_at', 'DESC');
     }
 
     /**
@@ -119,7 +118,7 @@ class NotificationRepository extends Repository implements NotificationRepositor
                 'notification_types.name',
                 'notification_types.category',
                 'users.email AS user_email',
-                'is_active',
+                $this->raw('users.deleted_at IS NULL AS is_active'),
                 'is_blocked',
                 'is_confirm'
             ])

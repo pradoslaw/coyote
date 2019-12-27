@@ -7,7 +7,7 @@ use Coyote\Services\Session\Registered;
 use Illuminate\Database\Connection;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
-use Coyote\Services\Session\Viewers;
+use Coyote\Services\Session\Renderer;
 use Coyote\Services\Session\Handler;
 
 class SessionServiceProvider extends ServiceProvider
@@ -24,7 +24,7 @@ class SessionServiceProvider extends ServiceProvider
         });
 
         $this->app->bind('session.viewers', function ($app) {
-            return new Viewers(
+            return new Renderer(
                 $app[Connection::class],
                 $app[Registered::class],
                 $app[Request::class]

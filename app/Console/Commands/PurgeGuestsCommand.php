@@ -43,8 +43,8 @@ class PurgeGuestsCommand extends Command
      */
     public function handle()
     {
-        $this->db->delete("DELETE FROM topic_track USING guests WHERE guests.id = topic_track.guest_id AND topic_track.marked_at < NOW() - INTERVAL '2 weeks' AND guests.user_id IS NULL AND topic_track.user_id IS NULL");
-        $this->db->delete("DELETE FROM forum_track USING guests WHERE guests.id = forum_track.guest_id AND forum_track.marked_at < NOW() - INTERVAL '2 weeks' AND guests.user_id IS NULL AND forum_track.user_id IS NULL");
+        $this->db->delete("DELETE FROM topic_track USING guests WHERE guests.id = topic_track.guest_id AND topic_track.marked_at < NOW() - INTERVAL '2 weeks' AND guests.user_id IS NULL");
+        $this->db->delete("DELETE FROM forum_track USING guests WHERE guests.id = forum_track.guest_id AND forum_track.marked_at < NOW() - INTERVAL '2 weeks' AND guests.user_id IS NULL");
         $this->db->delete("DELETE FROM guests WHERE user_id IS NULL AND updated_at < NOW()  - INTERVAL '2 weeks'");
 
         $this->info('Done.');

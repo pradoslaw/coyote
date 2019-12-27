@@ -24,39 +24,28 @@ class SettingRepository extends Repository implements SettingRepositoryInterface
     }
 
     /**
-     * @param $name
-     * @param $value
-     * @param $userId
-     * @param $sessionId
+     * @inheritDoc
      */
-    public function setItem($name, $value, $userId, $sessionId)
+    public function setItem($name, $value, $guestId)
     {
-        $model = $this->model;
-        $where = $this->build(['name' => $name, 'user_id' => $userId, 'session_id' => $sessionId]);
-
-        foreach ($where as $field => $val) {
-            $model = $model->where($field, $val);
-        }
-
-        $sql = $model->update(['value' => $value]);
+        $sql = $this->model->where('name', $name)->where('guest_id', $guestId)->update(['value' => $value]);
 
         if (!$sql) {
             $this->model->create(
-                $this->build(['name' => $name, 'value' => $value, 'user_id' => $userId, 'session_id' => $sessionId])
+                $this->build(['name' => $name, 'value' => $value, 'guest_id' => $guestId])
             );
         }
     }
 
     /**
      * @param $name
-     * @param $userId
-     * @param $sessionId
+     * @param $guestId
      * @param null $default
      * @return string
      */
-    public function getItem($name, $userId, $sessionId, $default = null)
+    public function getItem($name, $guestId, $default = null)
     {
-        $result = $this->findWhere($this->build(['name' => $name, 'user_id' => $userId, 'session_id' => $sessionId]));
+        $result = $this->findWhere(['name' => $name, 'guest_id' => $guestId]);
 
         if (count($result)) {
             return (string) $result->pluck('value')[0];
@@ -66,13 +55,12 @@ class SettingRepository extends Repository implements SettingRepositoryInterface
     }
 
     /**
-     * @param $userId
-     * @param $sessionId
-     * @return array
+     * @inheritDoc
      */
-    public function getAll($userId, $sessionId)
+    public function getAll($guestId)
     {
-        return $this->findWhere($this->build(['user_id' => $userId, 'session_id' => $sessionId]))
+        return $this->model
+                    ->where('guest_id', $guestId)
                     ->pluck('value', 'name')
                     ->toArray();
     }

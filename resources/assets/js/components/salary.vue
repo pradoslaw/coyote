@@ -54,7 +54,6 @@
         },
         methods: {
             toLocale(number) {
-                console.log(number);
                 if (number !== null) {
                     // ugly fix: polish locale use space separator but not with values lower than 10000 (don't know why)
                     return number.toLocaleString('en-US').replace(',', ' ');

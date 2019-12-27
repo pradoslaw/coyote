@@ -1,7 +1,7 @@
 @charset "UTF-8";
 @import "../helpers/variables";
 @import "../helpers/mixins";
-@import "../vendor/font-awesome/variables";
+@import "~@fortawesome/fontawesome-free/scss/variables";
 @import "../components/progress-bars";
 @import "../components/metadata";
 @import "../components/sidemenu";
@@ -9,11 +9,6 @@
 
 #user-nav-tabs {
   margin: 20px 0;
-}
-
-// w menu bocznym profilu uzytkownika, zmniejszamy wciecie
-.side-menu li a {
-  padding-left: 2px;
 }
 
 #profile {

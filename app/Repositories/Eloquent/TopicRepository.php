@@ -3,6 +3,7 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Repositories\Contracts\SubscribableInterface;
+use Coyote\Topic\Track;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -25,7 +26,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
     /**
      * @inheritdoc
      */
-    public function paginate($userId, string $guestId, $order = 'topics.last_post_id', $direction = 'DESC', $perPage = 20)
+    public function lengthAwarePagination($userId, string $guestId, $order = 'topics.last_post_id', $direction = 'DESC', $perPage = 20)
     {
         $this->applyCriteria();
 
@@ -64,11 +65,11 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
                 'last.user_name AS last_user_name',
                 'author.id AS author_id',
                 'author.name AS author_name',
-                'author.is_active AS author_is_active',
+                $this->raw('author.deleted_at IS NULL AS author_is_active'),
                 'author.is_blocked AS author_is_blocked',
                 'poster.id AS poster_id',
                 'poster.name AS poster_name',
-                'poster.is_active AS poster_is_active',
+                $this->raw('poster.deleted_at IS NULL AS poster_is_active'),
                 'poster.is_blocked AS poster_is_blocked',
                 'poster.photo AS poster_photo',
                 'forums.slug AS forum_slug',
@@ -106,7 +107,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
     /**
      * @inheritdoc
      */
-    public function isUnread($forumId, $markTime, $guestId)
+    public function countUnread($forumId, $markTime, $guestId)
     {
         $sql = $this->toSql(
             $this
@@ -125,6 +126,14 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
             ->withTrashed()
             ->whereNull('topic_track.id')
             ->count();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function flushRead(int $forumId, string $guestId)
+    {
+        return Track::where('forum_id', $forumId)->where('guest_id', $guestId)->delete();
     }
 
     /**

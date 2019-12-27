@@ -13,11 +13,11 @@
 
                 <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="comment-menu">
                     {% if can('update', comment) %}
-                        <li><a href="javascript:" class="btn-sm-edit" data-id="{{ comment.id }}"><i class="fa fa-edit fa-fw"></i> Edytuj</a></li>
+                        <li><a href="javascript:" class="btn-sm-edit" data-id="{{ comment.id }}"><i class="fas fa-edit fa-fw"></i> Edytuj</a></li>
                     {% endif %}
 
                     {% if can('delete', comment) %}
-                        <li><a href="{{ route('microblog.comment.delete', [comment.id]) }}" class="btn-sm-remove" data-id="{{ comment.id }}"><i class="fa fa-remove fa-fw"></i> Usuń</a></li>
+                        <li><a href="{{ route('microblog.comment.delete', [comment.id]) }}" class="btn-sm-remove" data-id="{{ comment.id }}"><i class="fas fa-times fa-fw"></i> Usuń</a></li>
                     {% endif %}
                 </ul>
             </div>
@@ -25,7 +25,7 @@
 
         {{ form_open({url: route('microblog.comment.save', [comment.id]), class: 'write-content margin-md-right', style: 'display: none'}) }}
             <textarea name="text" placeholder="Napisz komentarz... (Ctrl+Enter aby wysłać)" class="form-control" data-prompt-url="{{ route('user.prompt') }}" rows="1">{{ comment.text }}</textarea>
-            <button type="submit" class="btn btn-xs btn-submit" title="Zapisz (Ctrl+Enter)"><i class="fa fa-fw fa-share-square-o"></i></button>
+            <button type="submit" class="btn btn-xs btn-submit" title="Zapisz (Ctrl+Enter)"><i class="far fa-fw fa-share-square"></i></button>
         {{ form_close() }}
 
         <div class="comment-body">

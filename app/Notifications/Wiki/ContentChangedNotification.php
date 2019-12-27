@@ -64,7 +64,7 @@ class ContentChangedNotification extends Notification implements ShouldBroadcast
             'subject'       => $this->wiki->title,
             'excerpt'       => excerpt($this->wiki->excerpt),
             'url'           => UrlBuilder::wiki($this->wiki),
-            'guid'          => $this->id
+            'id'            => $this->id
         ];
     }
 

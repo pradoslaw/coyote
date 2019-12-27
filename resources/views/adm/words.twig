@@ -5,7 +5,7 @@
     {{ form_open({url: route('adm.words.save'), method: 'post', id: 'app'}) }}
         <p>
             <button class="btn btn-default" @click.prevent="addRow">
-                <i class="fa fa-plus"></i>
+                <i class="fas fa-plus"></i>
                 Dodaj nowy
             </button>
 
@@ -28,7 +28,7 @@
                     <td><input type="text" v-model="row.replacement" class="form-control" name="replacement[]"></td>
                     <td>
                         <button class="btn btn-xs btn-danger" @click.prevent="removeRow(row)">
-                            <i class="fa fa-fw fa-trash-o"></i>
+                            <i class="far fa-fw fa-trash-alt"></i>
                         </button>
                     </td>
                 </tr>

@@ -40,7 +40,7 @@ class SubjectChangedNotification extends AbstractNotification
             'subject'       => $this->topic->subject,
             'excerpt'       => $this->originalSubject,
             'url'           => UrlBuilder::topic($this->topic),
-            'guid'          => $this->id
+            'id'            => $this->id
         ];
     }
 

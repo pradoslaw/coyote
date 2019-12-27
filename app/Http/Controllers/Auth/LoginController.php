@@ -12,12 +12,12 @@ use Coyote\Services\Stream\Activities\Login as Stream_Login;
 use Coyote\Services\Stream\Activities\Logout as Stream_Logout;
 use Coyote\Services\Stream\Activities\Throttle as Stream_Throttle;
 use Coyote\Services\Stream\Actor;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
     use AuthenticatesUsers{
         logout as traitLogout;
-        sendFailedLoginResponse as traitSendFailedLoginResponse;
     }
 
     protected $redirectTo = '/';
@@ -35,6 +35,7 @@ class LoginController extends Controller
     public function __construct()
     {
         parent::__construct();
+
         $this->middleware('guest', ['except' => 'logout']);
     }
 
@@ -86,7 +87,9 @@ class LoginController extends Controller
         // put failed action to activity stream
         stream((new Stream_Throttle(new Actor()))->setLogin($request->input($this->username())));
 
-        $this->traitSendFailedLoginResponse($request);
+        throw ValidationException::withMessages([
+            'password' => [trans('auth.failed')],
+        ]);
     }
 
     /**
@@ -130,6 +133,11 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
+        // user already logged out (maybe double click)?
+        if (empty($this->auth)) {
+            return $this->traitLogout($request);
+        }
+
         $this->auth->ip = $request->ip();
         // metoda browser() nie jest dostepna dla testow funkcjonalnych
         $this->auth->browser = $request->browser();

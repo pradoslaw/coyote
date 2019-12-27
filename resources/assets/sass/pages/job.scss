@@ -1,9 +1,8 @@
 @charset "UTF-8";
 @import "../helpers/mixins";
 @import "../helpers/variables";
-@import "../vendor/font-awesome/variables";
+@import "~@fortawesome/fontawesome-free/scss/variables";
 @import "../vendor/bootstrap/variables";
-@import "../vendor/intl-tel-input";
 @import "../components/sidemenu";
 @import "../components/search";
 @import "../components/metadata";
@@ -22,7 +21,7 @@
     font-size: 14px;
 
     i {
-      &.fa-remove {
+      &.fa-times {
         color: #ddd;
       }
     }
@@ -93,7 +92,7 @@
       display: inline;
 
       &:after {
-        content: ', ';
+        content: ' • ';
       }
 
       &:last-child:after {

@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Coyote\Repositories\Contracts\GuestRepositoryInterface as GuestRepository;
 use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
+use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Session;
 use Illuminate\Console\Command;
 use Illuminate\Database\Connection as Db;
@@ -71,6 +72,8 @@ class PurgeSessionsCommand extends Command
         // convert minutes to seconds
         $lifetime = config('session.lifetime') * 60;
 
+        $this->user->pushCriteria(new WithTrashed());
+
         $values = [];
 
         foreach ($result as $session) {
@@ -96,6 +99,7 @@ class PurgeSessionsCommand extends Command
             $this->session->gc($lifetime);
         });
 
+        $this->user->resetCriteria();
         $this->info('Session purged.');
     }
 

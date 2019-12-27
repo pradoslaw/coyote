@@ -13,14 +13,14 @@ interface PmRepositoryInterface extends RepositoryInterface
      * @param int $limit
      * @return mixed
      */
-    public function takeForUser($userId, $limit = 10);
+    public function groupByAuthor($userId, $limit = 10);
 
     /**
      * @param int $userId
      * @param int $perPage
      * @return LengthAwarePaginator
      */
-    public function paginate($userId, $perPage = 10);
+    public function lengthAwarePaginate($userId, $perPage = 10);
 
     /**
      * Gets conversation

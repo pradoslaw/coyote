@@ -18,36 +18,36 @@
                         <img src="{{ user_photo(user('photo')) }}">
 
                         <a href="{{ route('user.photo.delete') }}" id="btn-delete-photo">
-                            <i class="fa fa-remove fa-2x"></i>
+                            <i class="fas fa-times fa-2x"></i>
                         </a>
                     </div>
 
-                    <a id="btn-change-photo" href="{{ route('user.photo.upload') }}" class="btn btn-xs btn-upload"><i class="fa fa-upload"></i> Zmień</a>
+                    <a id="btn-change-photo" href="{{ route('user.photo.upload') }}" class="btn btn-xs btn-upload"><i class="fas fa-upload"></i> Zmień</a>
                 </div>
 
                 <div class="media-body">
                     <div class="col-sm-11" style="padding-left: 20px">
                         <ul class="metadata list-inline">
                             <li title="Ostatnia wizyta">
-                                <i class="fa fa-sign-in fa-fw"></i>
+                                <i class="fas fa-sign-in-alt fa-fw"></i>
                                 {{ user('visited_at')|format_date }}
                             </li>
                             <li title="Twoje aktualne IP">
-                                <i class="fa fa-home fa-fw"></i>
+                                <i class="fas fa-home fa-fw"></i>
                                 {{ ip }}
                             </li>
                             <li title="Data rejestracji">
-                                <i class="fa fa-user-plus fa-fw"></i>
+                                <i class="fas fa-user-plus fa-fw"></i>
                                 {{ user('created_at')|format_date }}
                             </li>
                             <li title="Liczba wizyt">
-                                <i class="fa fa-eye fa-fw"></i>
+                                <i class="far fa-eye fa-fw"></i>
                                 {{ user('visits')|number_format(0, ',', ' ') }}
                             </li>
                         </ul>
 
                         <div class="box-reputation">
-                            <h5><i class="fa fa-line-chart"></i> Twoja reputacja</h5>
+                            <h5><i class="fas fa-chart-line"></i> Twoja reputacja</h5>
 
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar" aria-valuenow="{{ rank.percentage }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ rank.percentage }}%;">
@@ -73,15 +73,15 @@
         {% for session in sessions %}
             <div class="row">
                 <div class="col-xs-5">
-                    <i class="fa fa-user"></i>
+                    <i class="fas fa-user"></i>
                     {{ session.ip }}
                 </div>
                 <div class="col-xs-4">
-                    <i class="fa fa-clock-o"></i>
+                    <i class="far fa-clock"></i>
                     {{ session.updated_at|format_date }}
                 </div>
                 <div class="col-xs-3">
-                    <i class="fa fa-{{ session.agent.browser|lower }}"></i>
+                    <i class="fab fa-{{ session.agent.browser|lower }}"></i>
                     {{ session.agent.browser }}
                 </div>
             </div>

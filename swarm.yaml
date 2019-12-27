@@ -1,0 +1,92 @@
+version: '3.5'
+
+services:
+  db:
+    image: postgres:11-alpine
+    volumes:
+#      - ./docker/postgres/postgresql.auto.conf:/var/lib/postgresql/data/postgresql.auto.conf
+      - postgres:/var/lib/postgresql/data:z
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD:
+      POSTGRES_DB: coyote
+    networks:
+      - coyote-swarm
+
+  php:
+    image: 4programmers/coyote:latest
+    build:
+      context: .
+      dockerfile: docker/coyote/Dockerfile
+      cache_from:
+        - 4programmers/coyote:latest
+    volumes:
+      - codebase:/var/www
+    environment:
+      DB_PORT: 5432
+      DB_HOST: db
+      DB_DATABASE: coyote
+      DB_USERNAME: coyote
+      DB_PASSWORD:
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_KEY: "base64:mxXTLiTXOcsKZ+u6OoYVaZFNYAwM91nmbzrdEV+mUfE="
+      ELASTICSEARCH_HOST: elasticsearch
+      REDIS_HOST: redis
+      BROADCAST_DRIVER: redis
+      CACHE_DRIVER: redis
+      QUEUE_DRIVER: redis
+
+    networks:
+      - coyote-swarm
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - codebase:/var/www/
+      - ./docker/nginx/:/etc/nginx/conf.d/
+    ports:
+      - 80:80
+    depends_on:
+      - php
+    networks:
+      - coyote-swarm
+
+  redis:
+    image: redis:latest
+    networks:
+      - coyote-swarm
+
+  elasticsearch:
+    image: elasticsearch:5.6.14
+    ports:
+      - 9200:9200
+    #    mem_limit: 1g
+    volumes:
+      - elasticsearch:/usr/share/elasticsearch/data
+    environment:
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    networks:
+      - coyote-swarm
+
+  minio:
+    image: minio/minio
+    volumes:
+      - minio:/data
+    environment:
+      MINIO_ACCESS_KEY: minio
+      MINIO_SECRET_KEY: minio123
+    command: server /data
+    networks:
+      - coyote-swarm
+
+
+volumes:
+  postgres:
+  elasticsearch:
+  minio:
+  codebase:
+
+networks:
+  coyote-swarm:
+    name: coyote-swarm

@@ -44,11 +44,11 @@ class PmCreatedNotification extends Notification implements ShouldQueue, ShouldB
     public function toMail()
     {
         return (new MailMessage)
-            ->subject(sprintf('Masz nową wiadomość od: %s', $this->pm->user->name))
+            ->subject(sprintf('Masz nową wiadomość od: %s', $this->pm->author->name))
             ->view('emails.notifications.pm', [
                 'text' => $this->text,
-                'sender' => $this->pm->user->name,
-                'url' => route('user.pm.show', [$this->pm->id - 1], false)
+                'sender' => $this->pm->author->name,
+                'url' => route('user.pm.show', [$this->pm->id], false)
             ]
         );
     }
@@ -67,8 +67,10 @@ class PmCreatedNotification extends Notification implements ShouldQueue, ShouldB
             'type_id'       => static::ID,
             'subject'       => $excerpt,
             'excerpt'       => $excerpt,
-            'url'           => route('user.pm.show', [$this->pm->id - 1], false),
-            'guid'          => $this->id
+            'url'           => route('user.pm.show', [$this->pm->id], false),
+            'id'            => $this->id,
+            'content_id'    => $this->pm->id,
+            'content_type'  => class_basename($this->pm)
         ];
     }
 
@@ -78,7 +80,7 @@ class PmCreatedNotification extends Notification implements ShouldQueue, ShouldB
     public function toBroadcast()
     {
         return new BroadcastMessage([
-            'headline'  => $this->pm->user->name . ' przesyła Ci nową wiadomość',
+            'headline'  => $this->pm->author->name . ' przesyła Ci nową wiadomość',
             'subject'   => excerpt($this->text),
             'url'       => $this->notificationUrl()
         ]);
@@ -100,8 +102,8 @@ class PmCreatedNotification extends Notification implements ShouldQueue, ShouldB
     public function sender()
     {
         return [
-            'user_id'       => $this->pm->user_id,
-            'name'          => $this->pm->user->name
+            'user_id'       => $this->pm->author_id,
+            'name'          => $this->pm->author->name
         ];
     }
 }

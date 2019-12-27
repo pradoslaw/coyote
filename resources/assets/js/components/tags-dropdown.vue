@@ -131,7 +131,7 @@
                 this.hoverIndex = -1;
 
                 return this.tags.filter(tag => {
-                    return this.vModel === '' || tag.startsWith(this.vModel);
+                    return this.vModel === '' || tag.startsWith(this.vModel.toLowerCase());
                 });
             }
         }

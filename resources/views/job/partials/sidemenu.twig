@@ -20,7 +20,7 @@
                 </div>
 
                 <div class="col-xlg-6">
-                    <a class="btn btn-refer" href="{{ route('job.refer', [job]) }}"><i class="fa fa-retweet"></i> Poleć znajomemu</a>
+                    <a class="btn btn-refer" href="{{ route('job.refer', [job]) }}"><i class="fas fa-retweet"></i> Poleć znajomemu</a>
                 </div>
             </div>
         </div>
@@ -30,7 +30,7 @@
         <div class="col-xs-12">
             <h3>Dodatkowe pytania?</h3>
 
-            <i class="fa fa-info-circle fa-2x pull-left"></i>
+            <i class="fas fa-info-circle fa-2x pull-left"></i>
 
             <div class="pull-left margin-xs-left">
                 <a href="#comments" style="font-size: 15px" class="text-muted">Zadaj pytanie dotyczace tego ogłoszenia</a>
@@ -43,8 +43,8 @@
     <li>
         {% set labels = ['Usuń z ulubionych', 'Dodaj do ulubionych'] %}
         <a class="btn-subscribe {{ subscribed ? 'on' }}" href="{{ route('job.subscribe', [job.id]) }}" data-off="{{ labels[0] }}" data-on="{{ labels[1] }}">
-            <i class="fa fa-fw fa-star-o"></i>
-            <i class="fa fa-fw fa-star"></i>
+            <i class="far fa-fw fa-star"></i>
+            <i class="fas fa-fw fa-star"></i>
 
             <span>{{ labels[not subscribed] }}</span>
         </a>
@@ -53,31 +53,31 @@
     {% if not job.is_expired and can('update', job) %}
         <li>
             <a class="btn-edit" href="{{ route('job.submit', [job.id]) }}">
-                <i class="fa fa-fw fa-edit"></i>
+                <i class="fas fa-fw fa-edit"></i>
                 Edycja oferty
             </a>
         </li>
     {% endif %}
 
     <li>
-        <a class="btn-add" href="{{ route('job.submit') }}?revalidate=1"><i class="fa fa-fw fa-pencil"></i> Dodaj ofertę pracy</a>
+        <a class="btn-add" href="{{ route('job.submit') }}?revalidate=1"><i class="fas fa-fw fa-pencil-alt"></i> Dodaj ofertę pracy</a>
     </li>
 
     {% if can('delete', job) %}
         <li>
-            <a class="btn-delete" href="#modal-delete" data-toggle="modal"><i class="fa fa-fw fa-remove"></i> Usuń tę ofertę pracy</a>
+            <a class="btn-delete" href="#modal-delete" data-toggle="modal"><i class="fas fa-fw fa-times"></i> Usuń tę ofertę pracy</a>
         </li>
     {% endif %}
 
     {% if can('job-delete') %}
         <li>
-            <a class="btn-move" href="{{ route('job.move', [job.id]) }}"><i class="fa fa-fw fa-arrow-circle-right"></i> Przenieś na forum</a>
+            <a class="btn-move" href="{{ route('job.move', [job.id]) }}"><i class="fas fa-fw fa-arrow-circle-right"></i> Przenieś na forum</a>
         </li>
     {% endif %}
 
     {% if auth_check() %}
         <li>
-            <a class="btn-report" href="{{ route('flag') }}" data-url="{{ route('job.offer', [job.id, job.slug], false) }}" data-metadata="{{ {'job_id': job.id, 'permission': 'job-delete'}|encrypt }}"><i class="fa fa-fw fa-flag"></i> Zgłoś naruszenie</a>
+            <a class="btn-report" href="{{ route('flag') }}" data-url="{{ route('job.offer', [job.id, job.slug], false) }}" data-metadata="{{ {'job_id': job.id, 'permission': 'job-delete'}|encrypt }}"><i class="fas fa-fw fa-flag"></i> Zgłoś naruszenie</a>
         </li>
     {% endif %}
 </ul>

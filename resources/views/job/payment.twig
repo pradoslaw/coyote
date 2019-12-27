@@ -1,5 +1,4 @@
 {% extends 'job.base' %}
-{% import 'components.widgets' as widgets %}
 
 {% block title %}Płatność{{ parent() }}{% endblock %}
 
@@ -17,7 +16,7 @@
         <main class="col-md-9">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i class="fa fa-lock fa-fw"></i> Płatność poprzez bezpieczne połączenie
+                    <i class="fas fa-lock fa-fw"></i> Płatność poprzez bezpieczne połączenie
                 </div>
                 <div class="panel-body" v-show="grossPrice > 0">
                     <div class="row">
@@ -43,7 +42,7 @@
                                         <img src="{{ cdn('img/mbank.png') }}" class="margin-xs-right">
                                         <img src="{{ cdn('img/pekao.png') }}" class="margin-xs-right">
 
-                                        <i class="fa fa-ellipsis-h"></i>
+                                        <i class="fas fa-ellipsis-h"></i>
                                     </a>
                                 </li>
                             </ul>
@@ -160,14 +159,14 @@
                     </div>
 
                     <div id="form-navigation" class="form-group">
-                        <a href="{{ route('job.offer', [payment.job.id, payment.job.slug]) }}" class="btn btn-default pull-left"><i class="fa fa-angle-left"></i> Powrót do ogłoszenia</a>
+                        <a href="{{ route('job.offer', [payment.job.id, payment.job.slug]) }}" class="btn btn-default pull-left"><i class="fas fa-angle-left"></i> Powrót do ogłoszenia</a>
 
-                        <button type="submit" id="submit" class="btn btn-primary pull-right" data-submit-state="Realizacja płatności...">Zapłać i zapisz <i class="fa fa-angle-right"></i></button>
+                        <button type="submit" id="submit" class="btn btn-primary pull-right" data-submit-state="Realizacja płatności...">Zapłać i zapisz <i class="fas fa-angle-right"></i></button>
                     </div>
                 </div>
 
                 <div class="panel-body" v-show="grossPrice == 0">
-                    <h1 class="text-center"><i class="fa fa-check text-primary"></i> Płatność nie jest wymagana</h1>
+                    <h1 class="text-center"><i class="fas fa-check text-primary"></i> Płatność nie jest wymagana</h1>
 
                     <div class="form-group text-center margin-md-top">
                         <button type="submit" class="btn btn-primary btn-lg" data-submit-state="Zapisywanie...">Zapisz i zakończ</button>
@@ -227,8 +226,8 @@
 
                     <div v-show="!coupon.code && show_coupon === false">
                         <span class="fa-stack">
-                            <i class="fa fa-circle-o fa-stack-2x"></i>
-                            <i class="fa fa-dollar fa-stack-1x"></i>
+                            <i class="far fa-circle fa-stack-2x"></i>
+                            <i class="fas fa-dollar-sign fa-stack-1x"></i>
                         </span>
 
                         <a @click="show_coupon = true;" style="text-decoration: underline; font-size: 14px; cursor: pointer">Masz kupon rabatowy?</a>
@@ -305,6 +304,4 @@
             ]
         };
     </script>
-
-    {{ widgets.vue() }}
 {% endblock %}

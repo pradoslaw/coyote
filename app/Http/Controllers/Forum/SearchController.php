@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Services\Elasticsearch\Builders\Forum\SearchBuilder;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Services\Forum\TreeBuilder;
@@ -49,7 +50,9 @@ class SearchController extends BaseController
 
             if ($response->total() > 0) {
                 $usersId = $response->keyBy('_source.user_id')->keys();
-                $users = $user->whereIn('id', array_map('intval', $usersId->toArray()))->get()->keyBy('id');
+
+                $user->pushCriteria(new WithTrashed());
+                $users = $user->findMany(array_map('intval', $usersId->toArray()))->keyBy('id');
             }
 
             $this->breadcrumb->push('Wyniki wyszukiwania', $request->fullUrl());

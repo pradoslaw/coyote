@@ -7,7 +7,7 @@ use Coyote\Forum;
 use Coyote\Http\Forms\Forum\PostForm;
 use Coyote\Post;
 use Coyote\Repositories\Contracts\PostRepositoryInterface;
-use Coyote\Repositories\Criteria\Post\WithTrashed;
+use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Topic;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -66,7 +66,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
 
         $sql->load(['comments' => function ($sub) {
             $sub->select([
-                'post_comments.*', 'name', 'is_active', 'is_blocked'
+                'post_comments.*', 'name', $this->raw('users.deleted_at IS NULL AS is_active'), 'is_blocked'
             ])->join('users', 'users.id', '=', 'user_id')->orderBy('id');
         }]);
         $sql->load('attachments');
@@ -442,7 +442,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
                 'posts.*',
                 'author.name AS author_name',
                 'author.photo',
-                'author.is_active',
+                $this->raw('author.deleted_at IS NULL AS is_active'),
                 'author.is_blocked',
                 'author.is_online',
                 'author.sig',
@@ -454,7 +454,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
                 'author.created_at AS author_created_at',
                 'author.visited_at AS author_visited_at',
                 'editor.name AS editor_name',
-                'editor.is_active AS editor_is_active',
+                $this->raw('editor.deleted_at IS NULL AS editor_is_active'),
                 'editor.is_blocked AS editor_is_blocked',
                 'groups.name AS group_name',
                 'pa.user_id AS accept_on'

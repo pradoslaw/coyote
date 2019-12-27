@@ -17,9 +17,9 @@
                                 <p>{{ log.file }} [{{ log.line }}]</p>
 
                                 <ul class="list-inline">
-                                    <li><small class="text-muted"><i class="fa fa-desktop"></i> <a title="Zobacz aktywność tego adresu IP" href="{{ route('adm.stream', {ip: log.ip}) }}">{{ log.ip }}</a></small></li>
-                                    <li><small class="text-muted"><i class="fa fa-anchor"></i> <a href="{{ log.url }}">{{ log.url }}</a></small></li>
-                                    <li><small class="text-muted"><i class="fa fa-calendar"></i> {{ log.date }}</small></li>
+                                    <li><small class="text-muted"><i class="fas fa-desktop"></i> <a title="Zobacz aktywność tego adresu IP" href="{{ route('adm.stream', {ip: log.ip}) }}">{{ log.ip }}</a></small></li>
+                                    <li><small class="text-muted"><i class="fas fa-anchor"></i> <a href="{{ log.url }}">{{ log.url }}</a></small></li>
+                                    <li><small class="text-muted"><i class="fas fa-calendar-alt"></i> {{ log.date }}</small></li>
                                 </ul>
 
                                 <code class="collapse" id="log-{{ loop.index }}">

@@ -1,57 +1,45 @@
 {% extends 'user.pm.base' %}
-{% set page_name = 'Rozmowa z ' ~ recipient.name %}
+{% set page_name = recipient.name ? 'Rozmowa z ' ~ recipient.name : 'Nowa wiadomość' %}
 
 {% block pm %}
-    <div id="wrap">
-        <div id="overview">
-            {% for item in talk %}
-                {% include 'user.pm.message' with {
-                    content: '<div class="pm-text">' ~ item.text ~ '</div>',
-                    delete_link: route('user.pm.delete', item.id),
-                    link_to_profile: true,
-                    show_marked_date: true,
-                    confirm_message: 'Czy na pewno usunąć tę wiadomość? Tej operacji nie będzie można cofnąć.'
-                } %}
-            {% endfor %}
-        </div>
-    </div>
+  <div v-if="!messages.length" class="row">
+    <div class="col-md-12 margin-md-bottom" :class="{'has-error': 'recipient' in errors}">
+      <vue-autocomplete
+        ref="autocomplete"
+        :tabindex="1"
+        :items="items"
+        :value.sync="recipient.name"
+        placeholder="Odbiorca..."
+        @update="lookupName"
+        @select="selectName"
+      ></vue-autocomplete>
 
-    {{ form_open({'url': route('user.pm.submit'), 'method': 'POST', 'class': 'form-horizontal'}) }}
-    {{ form_hidden('root_id', pm.root_id) }}
-    {{ form_hidden('recipient', recipient.name) }}
-    <div class="form-group">
-        <div class="col-md-12 {{ errors.has('text') > 0 ? 'has-error' }}">
-            <ul class="nav nav-tabs">
-                <li role="presentation" class="active"><a href="#body" aria-controls="body" role="tab" data-toggle="tab">Treść</a></li>
-                <li role="presentation"><a href="#preview" aria-controls="preview" role="tab" data-toggle="tab">Podgląd</a></li>
-            </ul>
-
-            <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="body">
-                    {% include 'components.toolbar' %}
-                    <textarea name="text" class="form-control" rows="2" placeholder="Kliknij, aby odpowiedzieć" data-paste-url="{{ route('user.pm.paste') }}" data-prompt-url="{{ route('user.prompt') }}">{{ input_old('text') }}</textarea>
-                </div>
-                <div role="tabpanel" class="tab-pane" id="preview"></div>
-            </div>
-
-            {% if errors.first('text') %}
-                <span class="help-block">{{ errors.first('text') }}</span>
-            {% endif %}
-        </div>
+      <span v-cloak v-if="'recipient' in errors" class="help-block">${ errors.recipient[0] }</span>
     </div>
-    <div class="form-group">
-        <div class="col-md-12">
-            <button type="submit" class="btn btn-primary btn-sm" data-submit-state="Wysyłanie...">
-                Wyślij
-            </button>
-        </div>
+  </div>
+
+  <perfect-scrollbar v-if="messages.length" id="wrap" ref="scrollbar">
+    <div id="overview" @mouseenter.once="markAllAsRead">
+      <vue-pm
+        v-for="(message, index) in messages"
+        :message="message"
+        :key="message.id"
+        :last="index + 1 === messages.length"
+      >
+      </vue-pm>
     </div>
-    {{ form_close() }}
+  </perfect-scrollbar>
+
+  {% include 'user.pm.partials.form' %}
 {% endblock %}
 
 {% block body %}
-    {{ parent() }}
+  <script>
+    var data = {
+      messages: {{ messages|json_encode|raw }},
+      recipient: {{ recipient|json_encode|raw }}
+    };
+  </script>
 
-    <script src="{{ cdn('js/posting.js') }}"></script>
-    <script src="{{ cdn('js/wikieditor.js') }}"></script>
+  {{ parent() }}
 {% endblock %}

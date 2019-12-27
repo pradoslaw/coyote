@@ -65,7 +65,7 @@ class MoveController extends BaseController
             /** @var \Coyote\Post $post */
             $post = $this->post->find($topic->first_post_id, ['user_id']);
 
-            if ($post->user_id !== null) {
+            if ($post->user !== null) {
                 $post->user->notify(
                     (new MovedNotification($this->auth, $topic))
                         ->setReasonText($reason->description)

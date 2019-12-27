@@ -24,8 +24,6 @@
 {% block description %}Praca dla programistów. Pracodawco: umieść u nas swoją ofertę pracy - już od 0,75 zł za dzień. Znajdź u nas pracownika wśród 50 000 programistów.{% endblock %}
 {% block keywords %}programowanie, praca, C#, Java, programista, HTML, CSS, webdesign, JavaScript, jQuery, C, C++, webmastering{% endblock %}
 
-{% import 'components.widgets' as widgets %}
-
 {% block container %}
     <div id="page-job">
         <div class="row">
@@ -34,7 +32,7 @@
                     <div class="panel panel-default margin-md-top">
                         <div class="job-search-form panel-body">
                             <div class="input-item keyword-search" :class="{'extended': selectedTab === 'tech'}">
-                                <i class="fa fa-fw fa-search fa-icon"></i>
+                                <i class="fas fa-fw fa-search fa-icon"></i>
 
                                 <ul v-cloak class="list-group list-group-tech inline">
                                     <li v-for="tag in input.tags" class="list-group-item">
@@ -56,12 +54,12 @@
                                 >
 
                                 <a @click="selectTab('tech')" href="javascript:">
-                                    <i class="fa fa-icon" :class="getTabDropdownClass('tech')"></i>
+                                    <i class="fas fa-icon" :class="getTabDropdownClass('tech')"></i>
                                 </a>
                             </div>
 
                             <div class="input-item location-search" :class="{'extended': selectedTab === 'location'}">
-                                <i class="fa fa-fw fa-map-marker fa-icon"></i>
+                                <i class="fas fa-fw fa-map-marker-alt fa-icon"></i>
 
                                 <ul v-cloak class="list-group list-group-tech inline">
                                     <li v-if="input.remote" class="list-group-item">
@@ -85,15 +83,15 @@
                                 >
 
                                 <a @click="selectTab('location')" href="javascript:">
-                                    <i class="fa fa-icon" :class="getTabDropdownClass('location')"></i>
+                                    <i class="fas fa-icon" :class="getTabDropdownClass('location')"></i>
                                 </a>
                             </div>
 
                             <div class="input-item salary-search" :class="{'extended': selectedTab === 'salary'}">
-                                <i class="fa fa-fw fa-credit-card fa-icon"></i>
+                                <i class="far fa-fw fa-credit-card fa-icon"></i>
 
                                 <input
-                                    v-model="input.salary"
+                                    v-model.number="input.salary"
                                     @focus="selectTab('salary')"
                                     :placeholder="'> 0 ' + currencies[defaultCurrency].symbol"
                                     type="text"
@@ -102,13 +100,13 @@
                                 >
 
                                 <a @click="selectTab('salary')" href="javascript:">
-                                    <i class="fa fa-icon" :class="getTabDropdownClass('salary')"></i>
+                                    <i class="fas fa-icon" :class="getTabDropdownClass('salary')"></i>
                                 </a>
                             </div>
 
                             <div class="input-item button-search hidden-sm hidden-xs">
                                 <button tabindex="4" class="btn btn-primary btn-search" type="submit">
-                                    <i class="fa fa-search"></i>
+                                    <i class="fas fa-search"></i>
                                 </button>
                             </div>
                         </div>
@@ -134,7 +132,7 @@
                                         <input type="hidden" name="remote" :checked="input.remote">
 
                                         <a @click.prevent="toggleRemote" href="javascript:">
-                                            <i class="fa fa-fw fa-wifi" :class="{'text-primary': input.remote !== null}"></i>
+                                            <i class="fas fa-fw fa-wifi" :class="{'text-primary': input.remote !== null}"></i>
 
                                             Praca zdalna
                                         </a>
@@ -234,7 +232,7 @@
 
             <div class="col-md-3" style="margin-top: -35px">
                 <section v-cloak v-show="published.length" class="box sidebar-offers">
-                    <h4><i class="fa fa-fw fa-user-secret"></i> Moje ogłoszenia</h4>
+                    <h4><i class="fas fa-fw fa-user-secret"></i> Moje ogłoszenia</h4>
 
                     <div id="panel-published" class="panel panel-default">
                         <div class="panel-body">
@@ -244,7 +242,7 @@
                 </section>
 
                 <section v-cloak v-show="subscribed.length" class="box sidebar-offers">
-                    <h4><i class="fa fa-fw fa-heart"></i> Ulubione ogłoszenia</h4>
+                    <h4><i class="fas fa-fw fa-heart"></i> Ulubione ogłoszenia</h4>
 
                     <div id="panel-subscribed" class="panel panel-default">
                         <div class="panel-body">
@@ -261,8 +259,6 @@
 
 {% block body %}
     {{ parent() }}
-
-    {{ widgets.vue() }}
 
     <script type="text/javascript">
         var data = {

@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $name
  * @property string $city
  * @property string $street
- * @property string $house
+ * @property string $street_number
  * @property string $postcode
  * @property string $website
  * @property string $description
@@ -49,12 +49,16 @@ class Firm extends Model
         'country_id',
         'city',
         'street',
-        'house',
+        'street_number',
         'postcode',
         'latitude',
         'longitude',
         'is_private',
-        'youtube_url'
+        'youtube_url',
+        'industries',
+        'gallery',
+        'benefits',
+        'country'
     ];
 
     /**
@@ -71,6 +75,15 @@ class Firm extends Model
         'is_agency' => false
     ];
 
+    protected $casts = [
+        'is_agency' => 'bool',
+        'is_private' => 'bool'
+    ];
+
+    protected $appends = [
+        'is_private'
+    ];
+
     /**
      * Do not change default value. It is set to FALSE on purpose.
      *
@@ -83,7 +96,7 @@ class Firm extends Model
         parent::boot();
 
         static::saving(function ($model) {
-            foreach (['latitude', 'longitude', 'founded', 'employees', 'headline', 'description', 'latitude', 'longitude', 'country_id', 'street', 'city', 'house', 'postcode', 'youtube_url'] as $column) {
+            foreach (['latitude', 'longitude', 'founded', 'employees', 'description', 'latitude', 'longitude', 'country_id', 'street', 'city', 'street_number', 'postcode', 'youtube_url'] as $column) {
                 if (empty($model->{$column})) {
                     $model->{$column} = null;
                 }
@@ -191,7 +204,7 @@ class Firm extends Model
      */
     public function setIsPrivateAttribute($flag)
     {
-        $this->isPrivate = $flag;
+        $this->isPrivate = (bool) $flag;
     }
 
     /**
@@ -202,6 +215,79 @@ class Firm extends Model
         return $this->isPrivate;
     }
 
+    public function setYoutubeUrlAttribute($value)
+    {
+        $this->attributes['youtube_url'] = $this->getEmbedUrl($value);
+    }
+
+    public function setBenefitsAttribute($benefits)
+    {
+        $benefits = array_filter(array_unique(array_map('trim', $benefits)));
+
+        $models = [];
+
+        foreach ($benefits as $benefit) {
+            $models[] = new Firm\Benefit(['name' => $benefit]);
+        }
+
+        // call macro and replace collection items
+        $this->benefits->replace($models);
+    }
+
+    public function setGalleryAttribute($gallery)
+    {
+        $models = [];
+
+        foreach ($gallery as $photo) {
+            if (!empty($photo)) {
+                $models[] = new Firm\Gallery(['file' => $photo]);
+            }
+        }
+
+        // call macro and replace collection items
+        $this->gallery->replace($models);
+    }
+
+    public function setIndustriesAttribute($industries)
+    {
+        $models = [];
+
+        foreach ((array) $industries as $industry) {
+            $models[] = new Industry(['id' => $industry]);
+        }
+
+        $this->industries->replace($models);
+    }
+
+    /**
+     * @param string $country
+     */
+    public function setCountryAttribute($country)
+    {
+        if ($country) {
+            $this->setAttribute('country_id', (new Country())->where('name', $country)->orWhere('code', $country)->value('id'));
+        }
+    }
+
+    /**
+     * @param array $attributes
+     * @return $this|Model
+     */
+    public function fill(array $attributes)
+    {
+        parent::fill($attributes);
+
+        if ($this->is_agency) {
+            foreach (['headline', 'latitude', 'longitude', 'country_id', 'street', 'city', 'street_number', 'postcode'] as $column) {
+                $this->{$column} = null;
+            }
+
+            $this->benefits->flush();
+        }
+
+        return $this;
+    }
+
     /**
      * @param int $userId
      */
@@ -210,5 +296,26 @@ class Firm extends Model
         if (empty($this->user_id)) {
             $this->user_id = $userId;
         }
+    }
+
+    /**
+     * @param string $url
+     * @return string
+     */
+    private function getEmbedUrl($url)
+    {
+        if (empty($url)) {
+            return '';
+        }
+
+        $components = parse_url($url);
+
+        if (empty($components['query'])) {
+            return $url;
+        }
+
+        parse_str($components['query'], $query);
+
+        return 'https://www.youtube.com/embed/' . $query['v'];
     }
 }

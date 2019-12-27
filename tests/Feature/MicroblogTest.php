@@ -48,4 +48,14 @@ class MicroblogTest extends TestCase
 
         $response->assertSeeText($text);
     }
+
+    public function testSimpleRequest()
+    {
+        $microblog = factory(Microblog::class)->create();
+        $response = $this->json('GET', '/v1/microblogs');
+
+        $response
+            ->assertStatus(200)
+            ->assertSeeText($microblog->text);
+    }
 }

@@ -25,15 +25,17 @@ function getDiffSecond(remote) {
 }
 
 let countTime = function () {
-    $('.timestamp[data-timestamp]').each(function() {
-        let timestamp = $(this).attr('data-timestamp');
+    let dates = document.querySelectorAll('.timestamp[data-timestamp]');
+
+    dates.forEach(date => {
+        let timestamp = date.getAttribute('data-timestamp');
 
         if (getDiffMinute(timestamp) < 60) {
             if (getDiffSecond(timestamp) >= 60) {
-                $(this).text(getDiffMinute(timestamp) + ' ' + declination(getDiffMinute(timestamp), ['minuta', 'minuty', 'minut']) + ' temu');
+                date.textContent = getDiffMinute(timestamp) + ' ' + declination(getDiffMinute(timestamp), ['minuta', 'minuty', 'minut']) + ' temu';
             }
             else {
-                $(this).text(getDiffSecond(timestamp) + ' ' + declination(getDiffSecond(timestamp), ['sekunda', 'sekundy', 'sekund']) + ' temu');
+                date.textContent = getDiffSecond(timestamp) + ' ' + declination(getDiffSecond(timestamp), ['sekunda', 'sekundy', 'sekund']) + ' temu';
             }
         }
         else {
@@ -43,11 +45,11 @@ let countTime = function () {
             let spanDate = new Date(timestamp * 1000);
             let spanValue = spanDate.asInteger();
 
-            if (spanValue == currValue) {
-                $(this).text('dziś, ' + spanDate.getHour() + ':' + spanDate.getMinute());
+            if (spanValue === currValue) {
+                date.textContent = 'dziś, ' + spanDate.getHour() + ':' + spanDate.getMinute();
             }
-            else if (spanValue == currValue - 1) {
-                $(this).text('wczoraj, ' + spanDate.getHour() + ':' + spanDate.getMinute());
+            else if (spanValue === currValue - 1) {
+                date.textContent = 'wczoraj, ' + spanDate.getHour() + ':' + spanDate.getMinute();
             }
         }
     });

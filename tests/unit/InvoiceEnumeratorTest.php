@@ -53,6 +53,6 @@ class InvoiceEnumeratorTest extends \Codeception\TestCase\Test
 
     private function format($date, $seq)
     {
-        return sprintf('%02d%d%d-%d', $date->year, $date->month, $date->day, $seq);
+        return sprintf('%02d%02d%02d-%d', $date->year, $date->month, $date->day, $seq);
     }
 }

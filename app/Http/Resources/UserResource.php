@@ -17,6 +17,8 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
-        return array_merge($this->resource->toArray(), ['photo' => (string) $this->photo->url(true)]);
+        $only = $this->resource->only(['id', 'name', 'deleted_at', 'is_blocked']);
+
+        return array_merge($only, ['photo' => (string) $this->photo->url()]);
     }
 }

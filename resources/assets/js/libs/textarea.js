@@ -45,6 +45,57 @@ class Textarea {
     isSelected() {
         return (this.textarea.selectionEnd - this.textarea.selectionStart) > 0;
     }
+
+    get value() {
+      return this.textarea.value;
+    }
 }
 
 export default Textarea;
+export const languages = {
+  'actionscript': 'ActionScript',
+  'ada': 'ADA',
+  'asm': 'Asm',
+  'bash': 'Bash',
+  'brainfuck': 'BrainFuck',
+  'c': 'C',
+  'cpp': 'C++',
+  'csharp': 'C#',
+  'clojure': 'Clojure',
+  'css': 'CSS',
+  'delphi': 'Delphi',
+  'diff': 'Diff',
+  'elixir': 'Elixir',
+  'fsharp': 'F#',
+  'fortan': 'Fortran',
+  'groovy': 'Groovy',
+  'go': 'Go',
+  'graphql': 'GraphQL',
+  'haskell': 'Haskell',
+  'html': 'HTML',
+  'ini': 'INI',
+  'java': 'Java',
+  'javascript': 'JavaScript',
+  'julia': 'Julia',
+  'kotlin': 'Kotlin',
+  'latex': 'LaTeX',
+  'lisp': 'Lisp',
+  'lua': 'Lua',
+  'matlab': 'Matlab',
+  'pascal': 'Pascal',
+  'perl': 'Perl',
+  'php': 'PHP',
+  'plsql': 'PL/SQL',
+  'prolog': 'Prolog',
+  'python': 'Python',
+  'r': 'R',
+  'ruby': 'Ruby',
+  'rust': 'Rust',
+  'scala': 'Scala',
+  'smalltalk': 'Smalltalk',
+  'sql': 'SQL',
+  'twig': 'Twig',
+  'visual-basic': 'Visual Basic',
+  'xml': 'XML',
+  'yaml': 'Yaml'
+};

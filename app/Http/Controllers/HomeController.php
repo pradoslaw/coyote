@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Controllers;
 
-use Coyote\Http\Resources\Activity as ActivityResource;
+use Coyote\Http\Resources\ActivityResource as ActivityResource;
 use Coyote\Repositories\Contracts\ActivityRepositoryInterface as ActivityRepository;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface as ReputationRepository;
@@ -14,7 +14,7 @@ use Coyote\Repositories\Criteria\Microblog\LoadComments;
 use Coyote\Repositories\Criteria\Microblog\OrderByScore;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess as OnlyThoseTopicsWithAccess;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess as OnlyThoseForumsWithAccess;
-use Coyote\Services\Session\Viewers;
+use Coyote\Services\Session\Renderer;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class HomeController extends Controller
@@ -170,8 +170,12 @@ class HomeController extends Controller
         $this->activity->pushCriteria(new OnlyThoseForumsWithAccess($this->auth));
         $this->activity->pushCriteria(new SkipHiddenCategories($this->userId));
 
-        $this->activity->pushCriteria(new EagerLoading(['user', 'topic', 'content', 'forum']));
+        $this->activity->pushCriteria(new EagerLoading(['topic', 'content', 'forum']));
         $this->activity->pushCriteria(new EagerLoading(['topic' => function (BelongsTo $query) {
+            $query->withTrashed();
+        }]));
+
+        $this->activity->pushCriteria(new EagerLoading(['user' => function (BelongsTo $query) {
             $query->withTrashed();
         }]));
 
@@ -185,8 +189,8 @@ class HomeController extends Controller
      */
     private function getViewers()
     {
-        /** @var Viewers $viewers */
-        $viewers = app(Viewers::class);
+        /** @var Renderer $viewers */
+        $viewers = app(Renderer::class);
         return $viewers->render();
     }
 

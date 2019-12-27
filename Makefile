@@ -2,7 +2,6 @@
 
 install: dependency-install file-permission migration seed install-assets assets-production cache-config key-generate install-es install-passport
 install-dev: dependency-install file-permission migration seed install-assets assets-dev key-generate install-es install-passport
-install-vagrant: dependency-install file-permission migration seed
 update: update-repo dependency-install migration assets-production cache-config
 update-dev: update-repo dependency-install migration assets-dev
 
@@ -20,9 +19,8 @@ dependency-install:
 	composer install
 
 file-permission:
-	chmod -R 777 storage/
-	chmod 777 bootstrap/cache/
-	chmod 777 public/build
+	chmod -R 775 storage/
+	chmod 775 bootstrap/cache/
 
 migration:
 	php artisan migrate --force

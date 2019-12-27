@@ -14,17 +14,17 @@
 
                                 <ul class="metadata list-inline">
                                     <li title="Data opublikowania" class="date" itemprop="datePublished" content="{{ child.created_at|iso_8601 }}">
-                                        <i class="fa fa-calendar"></i>
+                                        <i class="far fa-calendar-alt"></i>
                                         {{ child.created_at }}
                                     </li>
                                     <li class="comment">
                                         <a href="{{ url(child.path) }}#box-comment" title="Zobacz komentarze" itemprop="interactionCount" value="UserComments:{{ child.comments }}">
-                                            <i class="fa fa-comments"></i>
+                                            <i class="fas fa-comments"></i>
                                             {{ declination(child.comments|length, ['komentarz', 'komentarze', 'komentarzy']) }}
                                         </a>
                                     </li>
                                     <li class="counter" itemprop="interactionCount" value="UserPageVisits:{{ child.views }}">
-                                        <i class="fa fa-eye"></i>
+                                        <i class="far fa-eye"></i>
                                         {{ declination(child.views, ['odsłona', 'odsłony', 'odsłon']) }}
                                     </li>
                                 </ul>

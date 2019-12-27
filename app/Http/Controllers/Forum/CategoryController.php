@@ -39,7 +39,7 @@ class CategoryController extends BaseController
         // get topics according to given criteria
         $topics = $this
             ->topic
-            ->paginate(
+            ->lengthAwarePagination(
                 $this->userId,
                 $this->guestId,
                 'topics.last_post_id',
@@ -66,15 +66,18 @@ class CategoryController extends BaseController
     }
 
     /**
-     * @param $forum
+     * @param \Coyote\Forum $forum
      */
     public function mark($forum)
     {
-        $this->forum->markAsRead($forum->id, $this->guestId);
+        $forum->markAsRead($this->guestId);
+        $this->topic->flushRead($forum->id, $this->guestId);
+
         $forums = $this->forum->where('parent_id', $forum->id)->get();
 
         foreach ($forums as $forum) {
-            $this->forum->markAsRead($forum->id, $this->guestId);
+            $forum->markAsRead($this->guestId);
+            $this->topic->flushRead($forum->id, $this->guestId);
         }
     }
 

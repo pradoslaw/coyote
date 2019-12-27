@@ -1,6 +1,5 @@
 {% extends 'job.base' %}
 
-{% import 'components.widgets' as widgets %}
 {% block title %}Podgląd{{ parent() }}{% endblock %}
 
 {% block container %}
@@ -20,9 +19,9 @@
             {{ form_open({'url': route('job.submit.save'), 'class': 'submit-form'}) }}
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <div id="form-navigation" class="form-group">
-                        <a href="{{ route('job.submit.firm') }}" class="btn btn-default pull-left"><i class="fa fa-angle-left"></i> Informacje o firmie</a>
-                        <button type="submit" class="btn btn-primary pull-right" data-submit-state="Zapisywanie...">Opublikuj <i class="fa fa-angle-right"></i></button>
+                    <div id="form-navbar" class="form-group">
+                        <a href="{{ route('job.submit.firm') }}" class="btn btn-default pull-left"><i class="fas fa-angle-left"></i> Informacje o firmie</a>
+                        <button type="submit" class="btn btn-primary pull-right" data-submit-state="Zapisywanie...">Opublikuj <i class="fas fa-angle-right"></i></button>
                     </div>
                 </div>
             </div>
@@ -40,15 +39,14 @@
 
     <script>
         var data = {
-            firm: {{ firm|raw }}
+            firm: {{ firm|raw }},
+            job: {{ job|json_encode|raw }}
         };
     </script>
 
-    {{ widgets.vue() }}
     <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
     <script src="//maps.googleapis.com/maps/api/js?key={{ config('services.google-maps.key') }}&sensor=false"></script>
     <script src="{{ cdn('js/job-submit.js') }}"></script>
 
-    {% include 'job.submit.partials.navigation' %}
     {% include 'job.submit.partials.chat' %}
 {% endblock %}

@@ -99,7 +99,7 @@
                 .error(function(e) {
                     var result = e.responseJSON;
 
-                    $('.modal-body').text(result[Object.keys(result)[0]]);
+                    $('.modal-body').text(result.errors[Object.keys(result.errors)[0]]);
                     $('#alert').modal('show');
                 });
 

@@ -92,7 +92,7 @@ class ConfirmCest
 
     public function changeUserEmailWhenCurrentEmailIsConfirmed(FunctionalTester $I)
     {
-        $user = $I->createUser(['is_confirm' => 1, 'allow_smilies' => 1]);
+        $user = $I->createUser(['is_confirm' => 1, 'allow_smilies' => 1, 'allow_count' => 1, 'allow_sticky_header' => 1, 'allow_sig' => 1, 'allow_subscribe' => 1, 'sig' => '']);
         $I->amLoggedAs($user);
 
         $I->seeAuthentication();

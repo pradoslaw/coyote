@@ -63,7 +63,7 @@
                             </nav>
 
                             <a id="btn-goto" class="btn pull-right" href="javascript:">
-                                <i class="fa fa-arrow-circle-right"></i>
+                                <i class="fas fa-arrow-circle-right"></i>
                             </a>
 
                             {{ form_select('forum', forumList, forum.slug, {'class': 'pull-right', 'id': 'sel-forum-list', 'data-url': route('forum.home')}) }}
@@ -135,6 +135,9 @@
                     {% if auth_check() %}
                         <li class="btn-watch {{ subscribers[user('id')] is defined ? 'on' }}">
                             <a href="{{ route('forum.topic.subscribe', [topic.id]) }}" data-category="forum-sidebar-buttons">
+                                <i class="far fa-star fa-fw"></i>
+                                <i class="fas fa-star fa-fw"></i>
+
                                 <span>
                                     {% if subscribers[user('id')] is not defined %}
                                         Obserwuj wątek
@@ -150,30 +153,48 @@
                         </li>
                     {% endif %}
 
-                    {#<li class="btn-atom">#}
-                        {#<a href="#" title="Wyświetl najnowsze wątki w formacie atom" data-category="forum-sidebar-buttons" data-value="atom">Pobierz w formacie Atom</a>#}
-                    {#</li>#}
-
                     {% if can('update', forum) %}
-                        <li id="btn-log"><a href="{{ route('forum.stream', [topic.id]) }}" title="Zobacz dziennik zdarzeń" data-category="forum-sidebar-buttons" data-value="log">Dziennik zdarzeń</a></li>
-                        <li id="btn-edit-subject"><a href="javascript:" title="Kliknij, aby szybko zmienić tytuł wątku" data-category="forum-sidebar-buttons" data-value="subject">Zmień tytuł</a></li>
+                        <li id="btn-log">
+                            <a href="{{ route('forum.stream', [topic.id]) }}" title="Zobacz dziennik zdarzeń" data-category="forum-sidebar-buttons" data-value="log">
+                                <i class="fa fa-chart-pie fa-fw"></i>
+
+                                Dziennik zdarzeń
+                            </a>
+                        </li>
+
+                        <li id="btn-edit-subject">
+                            <a href="javascript:" title="Kliknij, aby szybko zmienić tytuł wątku" data-category="forum-sidebar-buttons" data-value="subject">
+                                <i class="fa fa-pencil-alt fa-fw"></i>
+
+                                Zmień tytuł
+                            </a>
+                        </li>
                     {% endif %}
 
                     {% if can('lock', forum) %}
                         <li id="btn-lock" {{ topic.is_locked ? 'class="on"' }}>
                             <a href="{{ route('forum.lock', [topic.id]) }}" title="Kliknij, aby zablokować wątek" data-category="forum-sidebar-buttons" data-value="lock">
-                                {% if topic.is_locked %}
-                                    Odblokuj wątek
-                                {% else %}
-                                    Zablokuj wątek
-                                {% endif %}
+                                <i class="fa fa-lock fa-fw"></i>
+                                <i class="fa fa-unlock fa-fw"></i>
+
+                                <span>
+                                    {% if topic.is_locked %}
+                                        Odblokuj wątek
+                                    {% else %}
+                                        Zablokuj wątek
+                                    {% endif %}
+                                </span>
                             </a>
                         </li>
                     {% endif %}
 
                     {% if can('move', forum) %}
                         <li id="btn-move">
-                            <a title="Przenieść ten temat do innej kategorii forum" href="#collapse-sub" data-category="forum-sidebar-buttons" data-value="move" data-toggle="collapse">Przenieś wątek</a>
+                            <a title="Przenieść ten temat do innej kategorii forum" href="#collapse-sub" data-category="forum-sidebar-buttons" data-value="move" data-toggle="collapse">
+                                <i class="fa fa-arrow-circle-right fa-fw"></i>
+
+                                Przenieś wątek
+                            </a>
 
                             <ul id="collapse-sub" class="collapse">
                                 {% for slug, name in adminForumList %}
@@ -197,7 +218,7 @@
         {% block related %}
             {% if mlt|length > 0 %}
                 <section id="box-related" class="box related">
-                    <h4 class="border"><i class="fa fa-eye fa-fw"></i> Strony pokrewne</h4>
+                    <h4 class="border"><i class="far fa-eye fa-fw"></i> Strony pokrewne</h4>
 
                     <div>
                         <ul>

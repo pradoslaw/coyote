@@ -2,16 +2,26 @@
 
 namespace Tests\Feature;
 
+use Coyote\User;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class LoginTest extends TestCase
 {
+    public function testLogin()
+    {
+
+    }
+
     public function testApiLogin()
     {
-        $response = $this->json('POST', '/v1/login', ['name' => 'admin', 'password' => '1234']);
+        $password = Hash::make('123');
+        $user = factory(User::class)->create(['password' => $password]);
+
+        $response = $this->json('POST', '/v1/login', ['name' => $user->name, 'password' => '1234']);
         $response->assertJsonValidationErrors(['name']);
 
-        $response = $this->json('POST', '/v1/login', ['name' => 'admin', 'password' => '123']);
+        $response = $this->json('POST', '/v1/login', ['name' => $user->name, 'password' => '123']);
         $this->assertEquals(200, $response->getStatusCode());
 
         $bearer = $response->getContent();
@@ -19,6 +29,6 @@ class LoginTest extends TestCase
         $this->json('GET', '/v1/user')->assertStatus(401);
 
         $response = $this->json('GET', '/v1/user', [], ['Authorization' => 'Bearer ' . $bearer]);
-        $response->assertJson(['name' => 'admin']);
+        $response->assertJson(['name' => $user->name]);
     }
 }

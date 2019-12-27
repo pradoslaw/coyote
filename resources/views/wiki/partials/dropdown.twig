@@ -6,10 +6,10 @@
 
         <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="comment-menu">
             <li role="presentation">
-                <a href="{{ route('wiki.submit', [wiki.id]) }}" title="Kliknij, aby edytować tę stronę"><i class="fa fa-edit fa-fw"></i> Edycja</a>
+                <a href="{{ route('wiki.submit', [wiki.id]) }}" title="Kliknij, aby edytować tę stronę"><i class="fas fa-edit fa-fw"></i> Edycja</a>
             </li>
             <li>
-                <a href="{{ route('wiki.log', [wiki.id]) }}"><i class="fa fa-fw fa-history"></i> Historia i autorzy</a>
+                <a href="{{ route('wiki.log', [wiki.id]) }}"><i class="fas fa-fw fa-history"></i> Historia i autorzy</a>
             </li>
 
             {% include 'wiki.partials.admin' %}

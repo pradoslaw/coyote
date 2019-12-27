@@ -13,7 +13,7 @@
 
                         <ul class="dropdown-menu dropdown-menu-right">
                             <li><a @click="edit" href="javascript:" class="btn-edit" :data-id="comment.id"><i class="fa fa-edit fa-fw"></i> Edytuj</a></li>
-                            <li><a @click="removeConfirm" href="javascript:" :data-target="'#modal-confirm' + comment.id" data-toggle="modal"><i class="fa fa-remove fa-fw"></i> Usuń</a></li>
+                            <li><a @click="deleteComment(true)" href="javascript:" :data-target="'#modal-confirm' + comment.id" data-toggle="modal"><i class="fa fa-remove fa-fw"></i> Usuń</a></li>
                         </ul>
                     </div>
 
@@ -110,107 +110,106 @@
 
             <template slot="buttons">
                 <button @click="$refs.confirm.close()" type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
-                <button @click="remove" type="submit" class="btn btn-danger danger">Tak, usuń</button>
+                <button @click="deleteComment(false)" type="submit" class="btn btn-danger danger">Tak, usuń</button>
             </template>
         </vue-modal>
     </div>
 </template>
 
 <script>
-    import axios from 'axios';
-    import VueModal from './modal.vue';
+  import axios from 'axios';
+  import VueModal from './modal.vue';
 
-    export default {
-        name: 'vue-comment', // required with recursive component
-        props: ['comment', 'nested'],
-        components: {
-            'vue-modal': VueModal
-        },
-        data: function () {
-            return {
-                isEditing: false,
-                isReplying: false,
-                error: ''
-            }
-        },
-        methods: {
-            edit: function () {
-                this.isEditing = !this.isEditing;
+  export default {
+    name: 'vue-comment', // required with recursive component
+    props: ['comment', 'nested'],
+    components: {
+      'vue-modal': VueModal
+    },
+    data() {
+      return {
+        isEditing: false,
+        isReplying: false,
+        error: ''
+      }
+    },
+    methods: {
+      edit() {
+        this.isEditing = !this.isEditing;
 
-                if (this.isEditing) {
-                    this.$nextTick(function () {
-                        this.$refs.submitText.$el.focus();
-                    })
-                }
-            },
-
-            reply: function () {
-                this.isReplying = !this.isReplying;
-
-                if (this.isReplying) {
-                    this.$nextTick(function() {
-                        this.$refs.replyText.$el.focus();
-                    });
-                }
-            },
-
-            removeConfirm: function () {
-                this.$refs.confirm.open();
-            },
-
-            remove: function () {
-                this.$refs.confirm.close();
-
-                axios.delete(this.comment.route.delete).then(() => {
-                    this.$store.commit('comments/remove', this.comment);
-                });
-            },
-
-            updateForm: function () {
-                axios.post(this.$refs.updateForm.action, new FormData(this.$refs.updateForm))
-                    .then(response => {
-                        this.$store.commit('comments/update', response.data);
-                        this.isEditing = false;
-                    })
-                    .catch(function (error) {
-                        this._showError(error);
-                    });
-            },
-
-            replyForm: function () {
-                axios.post(this.$refs.replyForm.action, new FormData(this.$refs.replyForm))
-                    .then(response => {
-                        this.$store.commit('comments/reply', response.data);
-                        this.isReplying = false;
-
-                        this.scrollIntoView(response.data);
-                    })
-                    .catch(error => {
-                        this._showError(error);
-                    });
-            },
-
-            scrollIntoView: function (data) {
-                this.$nextTick(function() {
-                    let el = document.getElementById(`comment-${data.id}`);
-                    el.scrollIntoView(true);
-
-                    window.scrollBy(0, -100);
-                });
-            },
-
-            _showError: function (error) {
-                let errors = error.response.data.errors;
-
-                this.error = errors[Object.keys(errors)[0]][0];
-                this.$refs.error.open();
-            }
-        },
-        computed: {
-            parentId () {
-                return this.comment.parent_id ? this.comment.parent_id : this.comment.id;
-            }
+        if (this.isEditing) {
+          this.$nextTick(function () {
+            this.$refs.submitText.$el.focus();
+          })
         }
-    }
+      },
 
+      reply() {
+        this.isReplying = !this.isReplying;
+
+        if (this.isReplying) {
+          this.$nextTick(function () {
+            this.$refs.replyText.$el.focus();
+          });
+        }
+      },
+
+      deleteComment(confirm) {
+        if (confirm) {
+          this.$refs.confirm.open();
+        } else {
+          this.$refs.confirm.close();
+
+          axios.delete(this.comment.route.delete).then(() => {
+            this.$store.commit('comments/remove', this.comment);
+          });
+        }
+      },
+
+      updateForm() {
+        axios.post(this.$refs.updateForm.action, new FormData(this.$refs.updateForm))
+          .then(response => {
+            this.$store.commit('comments/update', response.data);
+            this.isEditing = false;
+          })
+          .catch(function (error) {
+            this._showError(error);
+          });
+      },
+
+      replyForm() {
+        axios.post(this.$refs.replyForm.action, new FormData(this.$refs.replyForm))
+          .then(response => {
+            this.$store.commit('comments/reply', response.data);
+            this.isReplying = false;
+
+            this.scrollIntoView(response.data);
+          })
+          .catch(error => {
+            this._showError(error);
+          });
+      },
+
+      scrollIntoView(data) {
+        this.$nextTick(function () {
+          let el = document.getElementById(`comment-${data.id}`);
+          el.scrollIntoView(true);
+
+          window.scrollBy(0, -100);
+        });
+      },
+
+      _showError(error) {
+        let errors = error.response.data.errors;
+
+        this.error = errors[Object.keys(errors)[0]][0];
+        this.$refs.error.open();
+      }
+    },
+    computed: {
+      parentId() {
+        return this.comment.parent_id ? this.comment.parent_id : this.comment.id;
+      }
+    }
+  }
 </script>

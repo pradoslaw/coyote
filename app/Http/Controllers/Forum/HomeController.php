@@ -250,8 +250,10 @@ class HomeController extends BaseController
     {
         $forums = $this->forum->all(['id']);
 
+        /** @var \Coyote\Forum $forum */
         foreach ($forums as $forum) {
-            $this->forum->markAsRead($forum->id, $this->guestId);
+            $forum->markAsRead($this->guestId);
+            $this->topic->flushRead($forum->id, $this->guestId);
         }
     }
 
@@ -269,7 +271,7 @@ class HomeController extends BaseController
 
         $paginator = $this
             ->topic
-            ->paginate(
+            ->lengthAwarePagination(
                 $this->userId,
                 $this->guestId,
                 'topics.last_post_id',

@@ -4,7 +4,7 @@
 @import "../helpers/mixins";
 @import "../components/sidemenu";
 @import "../components/metadata";
-@import "../vendor/font-awesome/variables";
+@import "~@fortawesome/fontawesome-free/scss/variables";
 
 #user-nav-tabs {
   margin: 20px 0;
@@ -120,11 +120,12 @@
   }
 }
 
-#box-alerts, #box-pm {
+#box-alerts, #app-pm {
   .media {
     border-bottom: 1px solid $border-color;
     padding: 8px 0;
     margin-top: 0;
+    background: transparent;
 
     &:last-child {
       border-bottom: none;
@@ -132,6 +133,7 @@
 
     &.unread {
       background-color: $unread-bg;
+      transition: 1s;
 
       &:hover {
         background-color: $unread-bg-hover;
@@ -173,14 +175,9 @@
     font-size: 13px;
   }
 
-  p.excerpt {
+  .excerpt {
     margin: 0;
     color: $gray;
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
   }
 }
 
@@ -195,16 +192,12 @@
   }
 }
 
-#box-pm {
+#app-pm {
   .media {
     small {
       color: $gray-light;
       font-size: 10px;
-    }
-
-    .pm-text {
-      padding: 0 20px 0 0;
-      color: $gray;
+      display: block;
     }
 
     .media-heading a {
@@ -212,8 +205,30 @@
     }
   }
 
-  p.excerpt {
+  .media-object {
+    width: 50px;
+    height: 50px;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .pm-text {
+    padding: 0 20px 0 0;
+    color: $gray;
+
+    img {
+      max-width: 100%;
+    }
+  }
+
+  .excerpt {
     margin-right: 15px !important;
+
+    &:hover {
+      text-decoration: none;
+    }
   }
 
   @media screen and (max-width: $screen-xs) {
@@ -229,7 +244,6 @@
   margin-bottom: 10px;
   position: relative;
   max-height: 400px;
-  overflow: hidden;
 }
 
 #overview {
@@ -282,7 +296,7 @@
 
 // nie chcemy aby zakladki na bialym tle mialy szare tlo. chodzi tutaj o zakladki formularza pisania
 // nowej wiadomosci (umozliwiajace przelaczenie sie w tryb edycji oraz podgladu)
-#box-pm {
+#app-pm {
   .nav-tabs {
     > li.active {
       > a {
@@ -303,8 +317,9 @@
     width: 1.28571429em;
 
     &:before {
-      font-family: FontAwesome;
-      content: $fa-var-star-o;
+      font-family: 'Font Awesome 5 Free';
+      content: $fa-var-star;
+      font-weight: 400;
     }
 
     &:hover {

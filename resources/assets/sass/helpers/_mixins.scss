@@ -7,8 +7,8 @@
 
 @mixin font-awesome($icon) {
   position: absolute;
-  font-family: FontAwesome;
-  content: $icon;
+  font-family: 'Font Awesome 5 Free';
+  content: fa-content($icon);
 }
 
 @mixin break-word() {
@@ -47,7 +47,7 @@
 }
 
 @mixin img-placeholder($image, $width, $height) {
-  &:after {
+  &::after {
     content: '';
     display: block;
     position: absolute;
@@ -76,6 +76,7 @@
   color: #fff;
   text-shadow: none;
   font-size: $font-size-large;
+  font-weight: 900;
 
-  @include font-awesome($fa-var-remove);
+  @include font-awesome($fa-var-times);
 }

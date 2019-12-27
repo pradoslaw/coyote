@@ -6,6 +6,10 @@ use Coyote\Services\Media\SerializeClass;
 use Illuminate\Database\Eloquent\Model;
 use Coyote\Services\Media\Factory as MediaFactory;
 
+/**
+ * @property string $file
+ * @property string $url
+ */
 class Gallery extends Model
 {
     use SerializeClass;

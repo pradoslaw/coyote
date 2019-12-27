@@ -2,6 +2,7 @@
 
 use Coyote\Notification;
 use Coyote\User;
+use Ramsey\Uuid\Uuid;
 
 class NotificationTest extends \Codeception\TestCase\Test
 {
@@ -64,7 +65,7 @@ class NotificationTest extends \Codeception\TestCase\Test
         $repository = app(\Coyote\Repositories\Contracts\PmRepositoryInterface::class);
         $pm = $repository->submit($this->sender, ['author_id' => $this->recipient->id, 'text' => $text]);
 
-        $notification = new \Coyote\Notifications\PmCreatedNotification($pm);
+        $notification = new \Coyote\Notifications\PmCreatedNotification($pm[\Coyote\Pm::INBOX]);
         $message = $notification->toBroadcast();
 
         $this->tester->assertEquals($this->sender->name . ' przesyła Ci nową wiadomość', $message->data['headline']);
@@ -153,6 +154,7 @@ class NotificationTest extends \Codeception\TestCase\Test
         $objectId = rand(100, 9999);
 
         $notification = Notification::create([
+            'id' => Uuid::uuid4(),
             'type_id' => Notification::MICROBLOG_LOGIN,
             'user_id' => $this->user->id,
             'subject' => 'Lorem ipsum',

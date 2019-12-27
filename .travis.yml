@@ -7,9 +7,8 @@ cache:
     - yarn
 
 before_install:
-  - curl -L https://github.com/docker/compose/releases/download/1.19.0/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
-  - chmod +x ~/docker-compose
-  - sudo mv ~/docker-compose /usr/local/bin/docker-compose
+  - sudo addgroup --gid 1000 nginx
+  - sudo useradd --uid 1000 -g nginx nginx
   - cp .env.testing .env
 
 install:
@@ -18,21 +17,28 @@ install:
   - docker-compose build
   - docker-compose up -d
   - docker-compose ps
-  - docker logs coyote_db_1
   - docker-compose exec php make install
+  - mkdir public/uploads
+  - sudo chown -R nginx:nginx $TRAVIS_BUILD_DIR
 
 before_script:
-  - docker-compose exec php php vendor/bin/codecept build
-  - docker-compose exec php php artisan config:clear
-  - docker-compose exec php php artisan route:clear
+  - docker-compose exec --user=nginx:nginx php php vendor/bin/codecept build
+  - docker-compose exec --user=nginx:nginx php php artisan config:clear
+  - docker-compose exec --user=nginx:nginx php php artisan route:clear
 
 script:
-  - docker-compose exec php php vendor/bin/codecept run
-  - docker-compose exec php php vendor/bin/phpunit
-#  - docker-compose exec php php artisan dusk
+  - docker-compose exec --user=nginx:nginx php php vendor/bin/codecept run
+  - docker-compose exec --user=nginx:nginx php php vendor/bin/phpunit
+  - docker-compose exec --user=nginx:nginx php php artisan dusk
 
 after_script:
   - docker-compose stop
   - docker-compose rm -f
   - cat $TRAVIS_BUILD_DIR/storage/logs/*.log
   - cat $TRAVIS_BUILD_DIR/tests/_output/*.html
+  - cat $TRAVIS_BUILD_DIR/tests/Browser/console/*.*
+
+after_success:
+  - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+  - docker build -f docker/coyote/Dockerfile -t 4programmers/coyote:latest .
+  - docker push 4programmers/coyote:latest

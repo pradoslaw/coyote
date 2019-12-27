@@ -4,7 +4,7 @@ namespace Coyote\Http\Controllers\User;
 
 use Coyote\Notification;
 use Coyote\Repositories\Contracts\NotificationRepositoryInterface as NotificationRepository;
-use Coyote\Http\Resources\Notification as NotificationResource;
+use Coyote\Http\Resources\NotificationResource;
 use Illuminate\Http\Request;
 use Carbon;
 
@@ -49,7 +49,7 @@ class NotificationsController extends BaseController
     {
         $this->breadcrumb->push('Powiadomienia', route('user.notifications'));
 
-        $pagination = $this->notification->paginate($this->userId);
+        $pagination = $this->notification->lengthAwarePaginate($this->userId);
         // mark as read
         $this->mark($pagination);
 
@@ -58,8 +58,7 @@ class NotificationsController extends BaseController
         );
 
         return $this->view('user.notifications.home', [
-            'pagination'          => $pagination,
-            'session_created_at'  => $this->request->session()->get('created_at')
+            'pagination'          => $pagination
         ]);
     }
 
@@ -92,22 +91,17 @@ class NotificationsController extends BaseController
     public function ajax(Request $request)
     {
         $unread = $this->auth->notifications_unread;
+        $offset = $request->query('offset', 0);
 
-        $notifications = $this->notification->takeForUser($this->userId, max(10, $unread), $request->query('offset', 0));
+        $notifications = $this->notification->takeForUser($this->userId, max(10, $unread), $offset);
         $unread -= $this->mark($notifications);
 
         // format notification's headline
         $notifications = array_filter(NotificationResource::collection($notifications)->toArray($this->request));
 
-        $view = view('user.notifications.ajax', [
-            'notifications'        => $notifications,
-            'session_created_at'   => $this->request->session()->get('created_at')
-        ]);
-
         return response()->json([
-            'html'      => $view->render(),
-            'unread'    => $unread,
-            'count'     => count($notifications)
+            'count'             => $unread,
+            'notifications'     => $notifications
         ]);
     }
 
@@ -134,13 +128,13 @@ class NotificationsController extends BaseController
     }
 
     /**
-     * @param string $guid
+     * @param string $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function url(string $guid)
+    public function url(string $id)
     {
         /** @var \Coyote\Notification $notification */
-        $notification = $this->notification->findBy('guid', $guid, ['id', 'url', 'read_at', 'is_clicked']);
+        $notification = $this->notification->find($id, ['id', 'url', 'read_at', 'is_clicked']);
         abort_if($notification === null, 404);
 
         $notification->is_clicked = true;

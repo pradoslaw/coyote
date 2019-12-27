@@ -68,7 +68,7 @@ class LoginForm extends Form
             if (!$result) {
                 $validator->errors()->add('name', trans('validation.user_exist'));
             } else {
-                if (!$result->is_active || $result->is_blocked) {
+                if ($result->is_blocked) {
                     $validator->errors()->add('name', trans('validation.user_active'));
                 }
 

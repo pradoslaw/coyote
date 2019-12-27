@@ -13,8 +13,7 @@
 
                     <small class="text-muted">
                         {% include 'job.partials.location' with {
-                            locations: job.locations.pluck('city'),
-                            separator: job.firm is not null,
+                            locations: job.locations,
                             linkable: false
                         } %}
                     </small>

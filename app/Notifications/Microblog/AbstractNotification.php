@@ -2,6 +2,7 @@
 
 namespace Coyote\Notifications\Microblog;
 
+use Carbon\Carbon;
 use Coyote\Microblog;
 use Coyote\Services\Notification\Notification;
 use Coyote\User;
@@ -65,9 +66,13 @@ abstract class AbstractNotification extends Notification implements ShouldQueue,
     public function toBroadcast()
     {
         return new BroadcastMessage([
+            'id'        => $this->id,
             'headline'  => $this->getMailSubject(),
             'subject'   => excerpt($this->microblog->html),
-            'url'       => $this->notificationUrl()
+            'url'       => $this->notificationUrl(),
+            'photo'     => $this->notifier->photo->url(),
+            'is_read'   => false,
+            'created_at'=> format_date(Carbon::now())
         ]);
     }
 

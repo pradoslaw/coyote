@@ -8,5 +8,8 @@ $factory->define(\Coyote\Post::class, function (Faker $faker) {
         'ip' => $ip = $faker->ipv4,
         'host' => $ip,
         'browser' => $faker->userAgent,
+        'user_name' => $faker->userName,
+        'created_at' => \Carbon\Carbon::now(),
+        'updated_at' => \Carbon\Carbon::now()
     ];
 });

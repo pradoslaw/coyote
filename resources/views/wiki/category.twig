@@ -5,7 +5,7 @@
 {% block container %}
     <div class="box">
         <ul class="nav nav-panel">
-            <li role="presentation" class="active"><a href="{{ url(wiki.path) }}"><i class="fa fa-paragraph"></i></a></li>
+            <li role="presentation" class="active"><a href="{{ url(wiki.path) }}"><i class="fas fa-paragraph"></i></a></li>
 
             {% if can('wiki-admin') or not wiki.is_locked %}
                 <li role="presentation">

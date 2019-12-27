@@ -67,7 +67,7 @@
 
                             {% if topic.post_accept_id %}
                                 <a rel="nofollow" title="Zobacz zaakceptowaną odpowiedź" class="btn-accepted" href="{{ url }}?p={{ topic.post_accept_id }}#id{{ topic.post_accept_id }}">
-                                    <i class="fa fa-check"></i>
+                                    <i class="fas fa-check"></i>
                                 </a>
                             {% endif %}
 
@@ -76,14 +76,14 @@
 
                                 {% if topic.score %}
                                     <span class="badge badge-success score hidden-xs" title="Liczba głosów oddanych na ten wątek">
-                                        <i class="fa fa-fire"></i>
+                                        <i class="fas fa-fire"></i>
                                         {{ topic.score }}
                                     </span>
                                 {% endif %}
 
                                 {% if flags[topic.id] is defined %}
                                     <a href="{{ flags[topic.id] }}" title="Przejdź do raportowanego postu">
-                                        <i class="fa fa-fire"></i>
+                                        <i class="fas fa-fire"></i>
                                     </a>
                                 {% endif %}
                             </h5>
@@ -165,7 +165,7 @@
 
                         {% if forumList is defined %}
                             <a class="btn pull-right" href="javascript:" id="btn-goto">
-                                <i class="fa fa-arrow-circle-right"></i>
+                                <i class="fas fa-arrow-circle-right"></i>
                             </a>
 
                             {{ form_select('forum', forumList, forum.slug, {'class': 'pull-right', 'id': 'sel-forum-list', 'data-url': route('forum.home')}) }}

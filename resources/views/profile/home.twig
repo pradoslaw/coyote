@@ -8,7 +8,7 @@
 
     <div class="row">
         <div class="col-md-9">
-            {% if user.is_blocked or not user.is_active %}
+            {% if user.is_blocked %}
                 <div class="alert alert-danger">
                     Konto tego użytkownika zostało zablokowane.
                 </div>
@@ -22,7 +22,7 @@
                             <img src="{{ user_photo(user.photo) }}" class="img-thumbnail">
 
                             <a class="btn btn-default btn-sm btn-pm" href="{{ route('user.pm.submit') }}?to={{ user.name }}">
-                                <i class="fa fa-envelope"></i> Wiadomość
+                                <i class="fas fa-envelope"></i> Wiadomość
                             </a>
                         </div>
 
@@ -42,7 +42,7 @@
 
                                 {% if user.location %}
                                     <li class="location">
-                                        <i class="fa fa-map-marker fa-fw"></i>
+                                        <i class="fas fa-map-marker-alt fa-fw"></i>
                                         {{ user.location }}
                                     </li>
                                 {% endif %}
@@ -51,34 +51,34 @@
                             <ol class="metadata list-inline">
                                 {% if user.website %}
                                     <li title="Strona WWW">
-                                        <i class="fa fa-globe fa-fw"></i>
+                                        <i class="fas fa-globe fa-fw"></i>
                                         <a href="{{ user.website }}">{{ user.website }}</a>
                                     </li>
                                 {% endif %}
                                 {% if user.github %}
                                     <li title="Link do konta Github">
-                                        <i class="fa fa-github fa-fw"></i>
+                                        <i class="fab fa-github fa-fw"></i>
                                         <a href="{{ user.github }}">{{ github(user.github) }}</a>
                                     </li>
                                 {% endif %}
                                 {% if user.visited_at %}
                                     <li title="Ostatnia wizyta">
-                                        <i class="fa fa-sign-in fa-fw"></i>
+                                        <i class="fas fa-sign-in-alt fa-fw"></i>
                                         {{ user.visited_at|format_date }}
                                     </li>
                                 {% endif %}
                                 <li title="Data rejestracji">
-                                    <i class="fa fa-user-plus fa-fw"></i>
+                                    <i class="fas fa-user-plus fa-fw"></i>
                                     {{ user.created_at|format_date }}
                                 </li>
                                 <li title="Liczba wizyt">
-                                    <i class="fa fa-eye fa-fw"></i>
+                                    <i class="far fa-eye fa-fw"></i>
                                     {{ user.visits|number_format(0, ',', ' ') }} wizyt
                                 </li>
 
                                 {% if user.birthyear %}
                                     <li title="Wiek">
-                                        <i class="fa fa-calendar fa-fw"></i>
+                                        <i class="fas fa-calendar-alt fa-fw"></i>
                                         {{ "now"|date("Y") - user.birthyear }} lat
                                     </li>
                                 {% endif %}
@@ -130,23 +130,23 @@
             <ul class="side-menu">
                 {% if user.id != user('id') %}
                     <li>
-                        <a href="{{ route('user.pm.submit', {to: user.name}) }}"><i class="fa fa-fw fa-envelope"></i> Wyślij wiadomość</a>
+                        <a href="{{ route('user.pm.submit', {to: user.name}) }}"><i class="fas fa-fw fa-envelope"></i> Wyślij wiadomość</a>
                     </li>
                 {% endif %}
 
                 <li>
-                    <a href="{{ route('forum.user', [user.id]) }}"><i class="fa fa-fw fa-search"></i> Znajdź posty użytkownika</a>
+                    <a href="{{ route('forum.user', [user.id]) }}"><i class="fas fa-fw fa-search"></i> Znajdź posty użytkownika</a>
                 </li>
 
                 {% if can('adm-access') %}
-                    {% if not user.is_blocked and user.is_active and user.id != user('id') %}
+                    {% if not user.is_blocked and user.id != user('id') %}
                         <li>
-                            <a href="{{ route('adm.firewall.save') }}?user={{ user.id }}"><i class="fa fa-ban fa-fw"></i> Zablokuj tego użytkownika</a>
+                            <a href="{{ route('adm.firewall.save') }}?user={{ user.id }}"><i class="fas fa-ban fa-fw"></i> Zablokuj tego użytkownika</a>
                         </li>
                     {% endif %}
 
                     <li>
-                        <a href="{{ route('adm.users.save', [user.id]) }}"><i class="fa fa-cogs fa-fw"></i> Przejdź do panelu administracyjnego</a>
+                        <a href="{{ route('adm.users.save', [user.id]) }}"><i class="fas fa-cogs fa-fw"></i> Przejdź do panelu administracyjnego</a>
                     </li>
                 {% endif %}
             </ul>

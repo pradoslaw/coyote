@@ -20,6 +20,6 @@ class LogController extends BaseController
             ->paginate()
             ->appends($request->except('page'));
 
-        return $this->view('adm.log')->with(compact('files', 'logs'));
+        return $this->view('adm.log')->with(compact('logs'));
     }
 }

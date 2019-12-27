@@ -13,23 +13,20 @@
             </nav>
 
             {% for notification in pagination %}
-                {% if head_date != notification.created_at|date('d F Y') %}
-                    <h2>{{ notification.created_at|date('d F Y') }}</h2>
-                    {% set head_date = notification.created_at|date('d F Y') %}
-                {% endif %}
+                {% set url = route('user.notifications.url', [notification.id]) %}
 
-                {% set url = route('user.notifications.url', [notification.guid]) ~ '#' ~ notification.url %}
-
-                <div class="media {{ (notification.read_at and notification.read_at|timestamp < session_created_at) or notification.is_clicked ? '' : 'unread' }}">
+                <div class="media {{ notification.is_read ? '' : 'unread' }}">
                     <div class="media-left">
                         <a href="{{ route('profile', [notification.user.user_id]) }}">
-                            <img class="media-object" src="{{ user_photo(notification.user.photo) }}" style="width: 49px; height: 49px;" alt="{{ notification.user.name }}" title="{{ notification.user.name }}">
+                            <object class="media-object" data="{{ notification.photo|default('//') }}" style="width: 49px; height: 49px;" title="{{ notification.user.name }}" type="image/png">
+                              <img src="/img/avatar.png" style="width: 100%">
+                            </object>
                         </a>
                     </div>
                     <div class="media-body">
                         <header>
                             <h4 class="pull-left"><a href="{{ url }}">{{ notification.headline }}</a></h4>
-                            <small class="pull-right">{{ notification.created_at|format_date }}</small>
+                            <small class="pull-right">{{ notification.created_at }}</small>
                         </header>
 
                         <h3><a href="{{ url }}">{{ notification.subject }}</a></h3>

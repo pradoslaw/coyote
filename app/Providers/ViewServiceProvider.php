@@ -27,9 +27,13 @@ class ViewServiceProvider extends ServiceProvider
             $this->registerPublicData();
             $this->registerWebSocket();
 
+            $guestId = $this->app['session']->get('guest_id');
+
             $view->with([
                 '__public' => json_encode($this->app['request']->attributes->all()),
-                '__master_menu' => $this->buildMasterMenu()
+                '__master_menu' => $this->buildMasterMenu(),
+
+                '__dark_theme' => $this->app['setting']->getItem('dark.theme', $guestId)
             ]);
         });
     }
@@ -39,7 +43,7 @@ class ViewServiceProvider extends ServiceProvider
         if (config('services.ws.host') && $this->app['request']->user()) {
             $this->app['request']->attributes->set(
                 'ws',
-                config('services.ws.host') . (config('services.ws.port') ? ':' . config('services.ws.port') : '')
+                (config('services.ws.proxy') ?: config('services.ws.host')) . (config('services.ws.port') ? ':' . config('services.ws.port') : '')
             );
         }
     }
@@ -49,13 +53,18 @@ class ViewServiceProvider extends ServiceProvider
         $this->app['request']->attributes->add([
             'public'        => route('home'),
             'cdn'           => config('app.cdn') ? ('//' . config('app.cdn')) : route('home'),
-            'ping'          => route('ping', [], false),
-            'ping_interval' => config('session.lifetime') - 5 // every 10 minutes
+            'ping_interval' => config('session.lifetime') - 5, // every 10 minutes
+            'notifications_unread' => 0,
+            'pm_unread'     => 0
         ]);
 
         if (!empty($this->app['request']->user())) {
+            $user = $this->app['request']->user();
+
             $this->app['request']->attributes->add([
-                'token' => app(Encrypter::class)->encrypt('user:' . $this->app['request']->user()->id . '|' . time())
+                'token' => app(Encrypter::class)->encrypt('user:' . $user->id . '|' . time()),
+                'notifications_unread' => $user->notifications_unread,
+                'pm_unread' => $user->pm_unread
             ]);
         }
     }
@@ -90,12 +99,10 @@ class ViewServiceProvider extends ServiceProvider
             $repository->pushCriteria(new AccordingToUserOrder($userId));
             $repository->applyCriteria();
 
-            $categories = $repository->select(['name', 'slug'])->whereNull('parent_id')->get()->toArray();
+            $categories = $repository->select(['name', 'slug', 'forums.section'])->whereNull('parent_id')->get();
+            $rendered = view('components.mega-menu', ['sections' => $this->groupBySections($categories)])->render();
 
-            foreach ($categories as $forum) {
-                /** @var array $forum */
-                $builder->forum->add($forum['name'], route('forum.category', [$forum['slug']]));
-            }
+            $builder->forum->after($rendered);
 
             return $builder;
         });
@@ -112,5 +119,25 @@ class ViewServiceProvider extends ServiceProvider
         }
 
         return $builder;
+    }
+
+    public function groupBySections($categories)
+    {
+        $name = null;
+        $sections = [];
+
+        foreach ($categories as $category) {
+            if ($name === null || ($category->section !== $name && $category->section)) {
+                $name = $category->section;
+            }
+
+            if (!isset($sections[$name])) {
+                $sections[$name] = [];
+            }
+
+            array_push($sections[$name], $category);
+        }
+
+        return $sections;
     }
 }

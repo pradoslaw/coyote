@@ -88,7 +88,8 @@
     font-size: 12px;
 
     &:before {
-      @include font-awesome($fa-var-file-o);
+      @include font-awesome($fa-var-file);
+      font-weight: 400;
       font-size: 10px;
       left: 0;
       top: 0;
@@ -158,18 +159,19 @@
   .btn-watch-sm {
     opacity: .3;
     float: right;
-    width: 16px;
-    height: 16px;
-    font-size: 16px;
-    margin: 8px 5px 0 0;
+    width: 14px;
+    height: 14px;
+    font-size: 14px;
+    margin: 9px 5px 0 0;
     position: relative;
     display: inline-block;
 
     &:after {
       position: absolute;
       left: 0;
-      font-family: FontAwesome;
-      content: $fa-var-star-o;
+      font-family: 'Font Awesome 5 Free';
+      content: fa-content($fa-var-star);
+      font-weight: 400;
     }
   }
 
@@ -177,8 +179,9 @@
     opacity: 1;
 
     &:after {
-      content: $fa-var-star;
+      content: fa-content($fa-var-star);
       color: lighten($alt-link-hover-color, 5%);
+      font-weight: 900;
     }
   }
 }

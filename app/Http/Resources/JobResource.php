@@ -21,7 +21,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property float $salary_from
  * @property float $salary_to
  * @property Currency $currency
- * @property int $rate_id
+ * @property string $rate
  * @property bool $is_highlight
  * @property int $score
  * @property bool $is_remote
@@ -42,7 +42,7 @@ class JobResource extends JsonResource
      */
     public function toArray($request)
     {
-        $only = $this->resource->only('id', 'title', 'firm', 'is_remote', 'remote_range', 'score', 'subscribe_on', 'comments_count', 'is_highlight', 'is_on_top', 'is_gross');
+        $only = $this->resource->only('id', 'title', 'is_remote', 'remote_range', 'score', 'subscribe_on', 'comments_count', 'is_highlight', 'is_on_top', 'is_publish', 'is_gross');
 
         return array_merge($only, [
             'url'         => UrlBuilder::job($this->resource, true),
@@ -51,10 +51,11 @@ class JobResource extends JsonResource
             'is_new'      => carbon($this->boost_at)->diffInDays(Carbon::now()) <= 2,
             'salary_from' => $this->money($this->salary_from),
             'salary_to'   => $this->money($this->salary_to),
-            'rate_label'  => Job::getRatesList()[$this->rate_id] ?? null,
+            'rate_label'  => Job::getRatesList()[$this->rate] ?? null,
             'locations'   => LocationResource::collection($this->locations),
             'tags'        => TagResource::collection($this->tags->sortByDesc('pivot.priority')),
             'is_medal'    => $this->score >= 150,
+            'currency'      => $this->currency->name,
             'currency_symbol' => $this->currency->symbol,
             'remote'      => [
                 'range'         => $this->remote_range,
@@ -63,11 +64,11 @@ class JobResource extends JsonResource
             ],
             'text'        => $this->description,
             'firm'        => $this->firm ? new FirmResource($this->firm) : (object) ['logo' => '', 'name' => ''],
+            'recruitment' => $this->recruitment,
 
-            $this->mergeWhen($this->resource->relationLoaded('features'), [
-                'recruitment'   => $this->recruitment,
-                'features'      => FeatureResource::collection($this->features)
-            ])
+            'features'    => $this->whenLoaded('features', function () {
+                return FeatureResource::collection($this->features);
+            })
         ]);
     }
 

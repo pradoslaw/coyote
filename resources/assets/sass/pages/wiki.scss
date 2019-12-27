@@ -2,7 +2,6 @@
 @import "../helpers/variables";
 @import "../helpers/mixins";
 @import "../vendor/bootstrap/variables";
-@import "../vendor/font-awesome/variables";
 @import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/text-overflow";
 @import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/image";
 @import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/table-row";
@@ -10,6 +9,7 @@
 @import "../components/related";
 @import "../components/sidemenu";
 @import "../components/metadata";
+@import "~@fortawesome/fontawesome-free/scss/variables";
 
 // Styl dla linkow do stron, ktore nie istnieja
 // ----------------------------------------------
@@ -60,9 +60,8 @@
       @include text-overflow();
 
       &:before {
-        font-family: FontAwesome;
-        content: $fa-var-folder-open-o;
-        position: absolute;
+        @include font-awesome($fa-var-folder-open);
+        font-weight: 400;
         left: 0;
       }
 
@@ -98,7 +97,7 @@
       position: relative;
 
       &:before {
-        font-family: FontAwesome;
+        font-family: 'Font Awesome 5 Free';
         position: absolute;
         left: 0;
       }
@@ -106,15 +105,16 @@
   }
 
   .date:before {
-    content: $fa-var-calendar;
+    content: fa-content($fa-var-calendar);
   }
 
   .comments:before {
-    content: $fa-var-comments;
+    content: fa-content($fa-var-comments);
   }
 
   .views:before {
-    content: $fa-var-lightbulb-o;
+    content: fa-content($fa-var-lightbulb);
+    font-weight: 400;
   }
 }
 
@@ -192,12 +192,6 @@ article > header {
 
 #box-maintain {
   margin: 13px 0 20px 0;
-}
-
-.side-menu {
-  li a {
-    padding-left: 2px;
-  }
 }
 
 // Wyswietlanie informacji o autorze

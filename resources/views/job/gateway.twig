@@ -1,13 +1,12 @@
 {% extends 'layout' %}
 
-{% import 'components.widgets' as widgets %}
 {% block title %}Płatność{{ parent() }}{% endblock %}
 
 {% block breadcrumb %}{% endblock %}
 
 {% block container %}
     <div class="loading text-center margin-lg">
-        <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+        <i class="fas fa-spinner fa-pulse fa-3x fa-fw"></i>
         <span class="sr-only">Loading...</span>
     </div>
 
@@ -31,9 +30,6 @@
 {% endblock %}
 
 {% block body %}
-    {# nie usuwac odwolania do vue #}
-    {{ widgets.vue() }}
-
     {{ parent() }}
 
     <script>

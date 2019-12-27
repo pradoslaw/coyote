@@ -10,11 +10,13 @@ use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface;
 use Coyote\Repositories\Contracts\PastebinRepositoryInterface;
 use Coyote\Repositories\Contracts\PaymentRepositoryInterface;
+use Coyote\Repositories\Contracts\PmRepositoryInterface;
 use Coyote\Repositories\Contracts\PostRepositoryInterface;
 use Coyote\Repositories\Contracts\TagRepositoryInterface;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface;
+use Coyote\User;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Routing\Router;
 
@@ -52,6 +54,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->router->pattern('user', '[0-9]+');
         $this->router->pattern('post', '[0-9]+');
         $this->router->pattern('job', '[0-9]+');
+        $this->router->pattern('pm', '[0-9]+');
         $this->router->pattern('payment', '[0-9a-z\-]+');
 
         $this->router->pattern('forum', '[A-Za-ząęśćłźżóń\-\_\/\.\+]+');
@@ -73,9 +76,15 @@ class RouteServiceProvider extends ServiceProvider
         $this->router->model('job', JobRepositoryInterface::class);
         $this->router->model('payment', PaymentRepositoryInterface::class);
         $this->router->model('tag', TagRepositoryInterface::class);
+        $this->router->model('pm', PmRepositoryInterface::class);
 
         $this->router->bind('forum', function ($slug) {
             return $this->app->make(ForumRepositoryInterface::class, [$this->app])->where('slug', $slug)->firstOrFail();
+        });
+
+        $this->router->bind('user_trashed', function ($id) {
+            // we use model insteade of repository to avoid putting global criteria to all methods in repository
+            return User::withTrashed()->findOrFail($id);
         });
 
         parent::boot();

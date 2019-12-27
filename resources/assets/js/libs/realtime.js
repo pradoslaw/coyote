@@ -94,17 +94,25 @@ class Realtime {
     }
 }
 
-export function RealtimeFactory() {
-    let realtime = new Realtime(Config.get('ws'), Config.get('token'));
+class RealtimeFactory {
+    constructor() {
+        if (!RealtimeFactory.instance) {
+            let realtime = new Realtime(Config.get('ws'), Config.get('token'));
 
-    // response to the heartbeat event
-    realtime.on('hb', function(data, handler) {
-        handler.send(data);
-    });
+            // response to the heartbeat event
+            realtime.on('hb', function (data, handler) {
+                handler.send(data);
+            });
 
-    realtime.on('exit', function() {
-        realtime.disconnect();
-    });
+            realtime.on('exit', function () {
+                realtime.disconnect();
+            });
 
-    return realtime;
+            RealtimeFactory.instance = realtime;
+        }
+
+        return RealtimeFactory.instance;
+    }
 }
+
+export default new RealtimeFactory();

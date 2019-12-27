@@ -1,66 +1,67 @@
 {
-  "presets": [
-    "env"
-  ],
-  "plugins": [
-    [
-      "prismjs",
-      {
-        "languages": [
-          "markup",
-          "css",
-          "clike",
-          "javascript",
-          "ada",
-          "bash",
-          "basic",
-          "batch",
-          "brainfuck",
-          "c",
-          "asm6502",
-          "csharp",
-          "cpp",
-          "fsharp",
-          "clojure",
-          "diff",
-          "docker",
-          "elixir",
-          "erlang",
-          "go",
-          "graphql",
-          "groovy",
-          "haskell",
-          "ini",
-          "java",
-          "julia",
-          "kotlin",
-          "latex",
-          "less",
-          "lisp",
-          "lua",
-          "markdown",
-          "fortran",
-          "matlab",
-          "pascal",
-          "perl",
-          "php",
-          "python",
-          "r",
-          "ruby",
-          "rust",
-          "scala",
-          "sql",
-          "prolog",
-          "plsql",
-          "twig",
-          "yaml",
-          "visual-basic"
-        ],
-        "plugins": [
-          "line-numbers"
-        ],
-        "css": false
-      }
+    "presets": [
+        "env"
+    ],
+    "plugins": [
+        "transform-object-rest-spread",
+        [
+            "prismjs",
+            {
+                "languages": [
+                    "markup",
+                    "css",
+                    "clike",
+                    "javascript",
+                    "ada",
+                    "bash",
+                    "basic",
+                    "batch",
+                    "brainfuck",
+                    "c",
+                    "asm6502",
+                    "csharp",
+                    "cpp",
+                    "fsharp",
+                    "clojure",
+                    "diff",
+                    "docker",
+                    "elixir",
+                    "erlang",
+                    "go",
+                    "graphql",
+                    "groovy",
+                    "haskell",
+                    "ini",
+                    "java",
+                    "julia",
+                    "kotlin",
+                    "latex",
+                    "less",
+                    "lisp",
+                    "lua",
+                    "markdown",
+                    "fortran",
+                    "matlab",
+                    "pascal",
+                    "perl",
+                    "php",
+                    "python",
+                    "r",
+                    "ruby",
+                    "rust",
+                    "scala",
+                    "sql",
+                    "prolog",
+                    "plsql",
+                    "twig",
+                    "yaml",
+                    "visual-basic"
+                ],
+                "plugins": [
+                    "line-numbers"
+                ],
+                "css": false
+            }
+        ]
     ]
-  ]
 }

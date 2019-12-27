@@ -86,15 +86,15 @@ $font-size-control-label: 15px;
 // Fixed navigation bar with "next", "previous" buttons
 // ---------------------------------------------------------
 
-#form-navbar-fixed {
+#form-navbar.fixed {
   background-color: $body-bg;
   border-top: 2px solid $border-color;
   position: fixed;
   bottom: 0;
+  left: 0;
   width: 100%;
   padding: 10px 0;
   z-index: 1000;
-  display: none;
 }
 
 // Container for offer's tags
@@ -149,7 +149,7 @@ $font-size-control-label: 15px;
       .btn-delete {
         position: absolute;
         top: 15px;
-        right: 40px;
+        right: 50px;
         border: 0;
       }
     }
@@ -242,8 +242,8 @@ input[name=deadline] {
 }
 
 select[name=currency_id],
-select[name=rate_id],
-select[name=employment_id],
+select[name=rate],
+select[name=employment],
 select[name=employees],
 select[name=founded],
 select[name=is_gross] {

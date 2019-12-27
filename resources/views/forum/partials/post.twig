@@ -15,7 +15,7 @@
     {% if post.deleted_at %}
         <div class="post-delete">
             <a href="#post-{{ post.id }}" data-toggle="collapse">
-                <i class="fa fa-warning"></i>
+                <i class="fas fa-warning"></i>
 
                 Post usunięty przez {{ post.deleter_name }} dnia {{ post.deleted_at|format_date }}.
 
@@ -98,17 +98,17 @@
 
                     {% if not post.deleted_at %}
                         <a class="vote-up {{ post.vote_on ? 'on' }}" href="{{ route('forum.post.vote', [post.id]) }}" title="Kliknij, jeżeli post jest wartościowy (kliknij ponownie, aby cofnąć)">
-                            <i class="fa fa-thumbs-o-up fa-fw"></i>
-                            <i class="fa fa-thumbs-up fa-fw"></i>
+                            <i class="far fa-thumbs-up fa-fw"></i>
+                            <i class="fas fa-thumbs-up fa-fw"></i>
                         </a>
 
                         {% if (auth_check() and user('id') == posts[0].user_id or can('update', forum)) and index > 0 %}
                             <a class="vote-accept {{ post.accept_on ? 'on' }}" href="{{ route('forum.post.accept', [post.id]) }}" title="Kliknij, aby ustawić tę odpowiedź jako zaakceptowaną (kliknij ponownie, aby cofnąć)">
-                                <i class="fa fa-check fa-fw"></i>
+                                <i class="fas fa-check fa-fw"></i>
                             </a>
                         {% elseif post.accept_on %}
                             <a class="vote-accept on">
-                                <i class="fa fa-check-circle-o fa-fw"></i>
+                                <i class="fas fa-check fa-fw"></i>
                             </a>
                         {% endif %}
                     {% endif %}
@@ -134,7 +134,7 @@
                     <div class="edit-info">
                         <strong>
                             <a class="btn-history" {{ can('update', forum) ? ('title="Zobacz historię zmian tego postu" href="' ~ route('forum.post.log', [post.id]) ~ '"')|raw}}>
-                                <i class="fa fa-external-link"></i>
+                                <i class="fas fa-external-link-alt"></i>
                             </a>
 
                             edytowany {{ post.edit_count }}x, ostatnio: {{ link_to_profile(post.editor_id, post.editor_name, post.editor_is_active, post.editor_is_blocked) }},
@@ -146,7 +146,7 @@
                 <div class="comments">
                     {% if post.comments|length > 6 %}
                         <a href="javascript:" class="btn-show-all">
-                            <i class="fa fa-comments"></i>
+                            <i class="fas fa-comments"></i>
                             Pokaż {{ declination(post.comments|length - 5, ['pozostały', 'pozostałe', 'pozostałe'], true) }} {{ post.comments|length - 5 }} {{ declination(post.comments|length - 5, ['komentarz', 'komentarze', 'komentarzy'], true) }}
                         </a>
                     {% endif %}
@@ -166,16 +166,16 @@
                 {% if (can('merge', forum) or can('adm-access')) %}
                     <div class="dropdown pull-right">
                         <button class="btn btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Więcej...">
-                            <i class="fa fa-fw fa-ellipsis-h"></i>
+                            <i class="fas fa-fw fa-ellipsis-h"></i>
                         </button>
 
                         <ul class="dropdown-menu dropdown-menu-right">
                             {% if not post.deleted_at and can('merge', forum) and post.id != topic.first_post_id %}
-                                <li><a href="{{ route('forum.post.merge', [post.id]) }}" class="btn-merge"><i class="fa fa-compress fa-fw"></i> Połącz z poprzednim</a></li>
+                                <li><a href="{{ route('forum.post.merge', [post.id]) }}" class="btn-merge"><i class="fas fa-compress fa-fw"></i> Połącz z poprzednim</a></li>
                             {% endif %}
 
                             {% if can('adm-access') %}
-                                <li><a href="{{ route('adm.firewall.save') }}?user={{ post.user_id }}&ip={{ post.ip }}"><i class="fa fa-ban fa-fw"></i> Zablokuj użytkownika</a> </li>
+                                <li><a href="{{ route('adm.firewall.save') }}?user={{ post.user_id }}&ip={{ post.ip }}"><i class="fas fa-ban fa-fw"></i> Zablokuj użytkownika</a> </li>
                             {% endif %}
                         </ul>
                     </div>
@@ -184,26 +184,26 @@
                 {% if not post.deleted_at %}
                     {% if auth_check() %}
                         <a data-toggle="tooltip" data-placement="top" title="Powiadamiaj o nowych komentarzach do postu" data-category="postLinks" data-action="subscribe" href="{{ route('forum.post.subscribe', [post.id]) }}" data-post-id="{{ post.id }}" class="btn btn-xs btn-sub {{ post.subscribe_on ? 'active' }}">
-                            <i class="fa fa-bell-o"></i>
+                            <i class="far fa-bell"></i>
                             <span class="hidden-xs">Obserwuj</span>
                         </a>
                     {% endif %}
 
                     <a data-toggle="tooltip" data-placement="top" title="Udostępnij link do tego postu" data-category="postLinks" data-action="share" href="{{ route('forum.share', [post.id]) }}" class="btn btn-xs btn-share">
-                        <i class="fa fa-share-alt"></i>
+                        <i class="fas fa-share-alt"></i>
                         <span class="hidden-xs">Udostępnij</span>
                     </a>
 
                     {% if auth_check() %}
                         {% if is_writeable %}
                             <a data-toggle="collapse" data-placement="top" title="Napisz komentarz do postu" data-category="postLinks" data-action="comment" class="btn btn-xs btn-comment" href="#form-{{ post.id }}">
-                                <i class="fa fa-comment-o"></i>
+                                <i class="far fa-comment"></i>
                                 <span class="hidden-xs">Komentuj</span>
                             </a>
                         {% endif %}
 
                         <a data-toggle="tooltip" data-placement="top" title="Zgłoś naruszenie w tym poście" data-category="postLinks" data-action="report" rel="nofollow" class="btn btn-xs btn-report" href="{{ route('flag') }}" data-url="{{ url }}" data-metadata="{{ {'post_id': post.id, 'topic_id': topic.id, 'forum_id': topic.forum_id, 'permission': 'delete'}|encrypt }}">
-                            <i class="fa fa-flag"></i>
+                            <i class="fas fa-flag"></i>
                             <span class="hidden-xs">Raportuj</span>
                         </a>
                     {% endif %}
@@ -213,24 +213,24 @@
                 {% if is_writeable %}
                     {% if not post.deleted_at %}
                         <a data-toggle="tooltip" data-placement="top" title="Odpowiedz cytując ten post" data-category="postLinks" data-action="quote" rel="nofollow" href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}?quote={{ post.id }}" class="btn btn-xs btn-quote">
-                            <i class="fa fa-quote-right"></i>
+                            <i class="fas fa-quote-right"></i>
                             <span class="hidden-xs">Odpowiedz</span>
                         </a>
 
                         <a data-toggle="tooltip" data-placement="top" title="Dodaj ten post jako cytat w formularzu odpowiedzi" data-category="postLinks" data-action="multi-quote" rel="nofollow" class="btn btn-xs btn-multi-quote" data-post-id="{{ post.id }}" data-topic-id="{{ topic.id }}">
-                            <i class="fa fa-plus"></i>
+                            <i class="fas fa-plus"></i>
                         </a>
                     {% endif %}
 
                     {% if can('delete', post) or can('delete', forum) %}
                         {% if post.deleted_at %}
                             <a data-toggle="tooltip" data-placement="top" title="Przywróć ten post" data-category="postLinks" data-action="restore" href="{{ route('forum.post.restore', [post.id]) }}" class="btn btn-xs btn-res">
-                                <i class="fa fa-undo"></i>
+                                <i class="fas fa-undo"></i>
                                 <span class="hidden-xs">Przywróć</span>
                             </a>
                         {% else %}
                             <a data-toggle="tooltip" data-placement="top" title="Usuń ten post" data-category="postLinks" data-action="delete" href="{{ route('forum.post.delete', [post.id]) }}" class="btn btn-xs btn-del">
-                                <i class="fa fa-remove"></i>
+                                <i class="fas fa-times"></i>
                                 <span class="hidden-xs">Usuń</span>
                             </a>
                         {% endif %}
@@ -238,11 +238,11 @@
 
                     {% if can('update', post) and not post.deleted_at %}
                         <a href="{{ route('forum.post.submit', [forum.slug, topic.id, post.id]) }}" data-toggle="tooltip" data-placement="top" title="Edytuj ten post" data-category="postLinks" data-action="edit" class="btn btn-xs btn-edit">
-                            <i class="fa fa-pencil"></i>
+                            <i class="fas fa-pencil-alt"></i>
                             <span class="hidden-xs">Edytuj</span>
                         </a>
                         <a href="{{ route('forum.post.edit', [forum.slug, topic.id, post.id]) }}" data-toggle="tooltip" data-placement="top" title="Włącz/wyłącz szybką edycję postu" data-category="postLinks" data-action="fastEdit" data-post-id="{{ post.id }}" class="btn btn-xs btn-fast-edit">
-                            <i class="fa fa-pencil-square-o"></i>
+                            <i class="fas fa-edit"></i>
                             <span class="hidden-xs">Szybka edycja</span>
                         </a>
                     {% endif %}

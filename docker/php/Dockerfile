@@ -1,35 +1,67 @@
-FROM php:7.3-fpm-stretch
+FROM php:7.3-fpm-alpine
 
 LABEL maintainer="4programmers.net <support@4programmers.net>"
 
-RUN usermod -u 1000 www-data
 WORKDIR /var/www
 
-RUN apt-get update -yqq && apt-get install -y \
+RUN apk update && apk add --no-cache \
+    curl \
+    bash \
+    openssh-client \
     libmcrypt-dev \
-    libpq-dev \
-    locales \
+    libpq \
     libzip-dev \
-#    zlib1g-dev \
-    libfreetype6-dev \
+    freetype-dev \
+    libcurl \
+    libzip-dev \
+    bzip2-dev \
+    libjpeg-turbo-dev \
+    postgresql-dev \
+    freetype-dev \
     libpng-dev \
     gnupg \
     libxml2-dev \
-    zip
+    zip \
+    make
 
-RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-png-dir=/usr/include/ \
-    && docker-php-ext-install -j$(nproc) pgsql gd soap pdo_pgsql mbstring zip
+RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-png-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-install -j$(nproc) pgsql gd soap pdo_pgsql mbstring zip opcache iconv
 
-RUN locale-gen en_US.utf8 pl_PL.utf8 de_DE.utf8
 RUN curl --insecure https://getcomposer.org/composer.phar -o /usr/bin/composer && chmod +x /usr/bin/composer
 
-RUN echo Europe/Warsaw >/etc/timezone && \
-    ln -sf /usr/share/zoneinfo/Europe/Warsaw /etc/localtime && \
-    dpkg-reconfigure -f noninteractive tzdata
+RUN apk add tzdata
+RUN cp /usr/share/zoneinfo/Europe/Warsaw /etc/localtime
+RUN echo "Europe/Warsaw" >  /etc/timezone
 
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
-RUN curl -sS http://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+RUN apk add yarn
 
-RUN echo "deb http://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+ARG UID=1000
+ARG GID=1000
 
-RUN apt-get update && apt-get install -qq -y nodejs yarn && apt-get remove --purge --auto-remove -y
+ENV php_conf /usr/local/etc/php-fpm.conf
+ENV fpm_conf /usr/local/etc/php-fpm.d/www.conf
+ENV php_vars /usr/local/etc/php/conf.d/docker-vars.ini
+
+RUN addgroup -g ${GID} -S nginx
+RUN adduser -u ${UID} -D -S -h /var/cache/nginx -s /sbin/nologin -G nginx nginx
+
+RUN echo "cgi.fix_pathinfo=0" > ${php_vars} &&\
+    echo "upload_max_filesize = 100M"  >> ${php_vars} &&\
+    echo "post_max_size = 100M"  >> ${php_vars} &&\
+    echo "variables_order = \"EGPCS\""  >> ${php_vars} && \
+    echo "memory_limit = 128M"  >> ${php_vars} && \
+    sed -i \
+        -e "s/;catch_workers_output\s*=\s*yes/catch_workers_output = yes/g" \
+        -e "s/pm.max_children = 5/pm.max_children = 4/g" \
+        -e "s/pm.start_servers = 2/pm.start_servers = 3/g" \
+        -e "s/pm.min_spare_servers = 1/pm.min_spare_servers = 2/g" \
+        -e "s/pm.max_spare_servers = 3/pm.max_spare_servers = 4/g" \
+        -e "s/;pm.max_requests = 500/pm.max_requests = 200/g" \
+        -e "s/user = www-data/user = nginx/g" \
+        -e "s/group = www-data/group = nginx/g" \
+        -e "s/;listen.mode = 0660/listen.mode = 0666/g" \
+        -e "s/;listen.owner = www-data/listen.owner = nginx/g" \
+        -e "s/;listen.group = www-data/listen.group = nginx/g" \
+        -e "s/^;clear_env = no$/clear_env = no/" \
+        ${fpm_conf}
+

@@ -8,46 +8,45 @@ body.fixed-top {
   padding-top: $header-height;
 }
 
-// Gorny, zielony pasek wyswietlany na samej gorze ekranu
-// --------------------------------------------------------------
-
-#navbar-border-top {
-  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAJ0lEQVQIW2Ps3MD5n0+AlQEEPn34zcA4/QDffxADBEASmALIWkCqAPDNEnJoA/jxAAAAAElFTkSuQmCC');
-  border-bottom: 1px solid #888;
-  height: 5px;
+.navbar-fixed-top .navbar-collapse {
+  max-height: initial; // fit height to content in mobile menu
 }
 
-// Pasek narzedziowy z menu oraz logo
-// -------------------------------------------------------
-
-.navbar-nav {
-  margin: 0;
+:root {
+  --header-font-family: "Open Sans", Arial, sans-serif;
+  --header-font-size: 13px;
+  --header-navbar-bg: url('/img/background.png') repeat;
+  --header-color: #3c3c3c;
+  --header-hover-color: #454545;
+  --header-active-bg: #e7e7e7;
 }
 
-.navbar-collapse {
-  margin: ($navbar-padding-vertical / 2) 0;
+.navbar-dark {
+  --header-font-family: "Open Sans", Arial, sans-serif;
+  --header-font-size: 13px;
+  --header-navbar-bg: #454545;
+  --header-color: #eee;
+  --header-hover-color: #80a41a;
+  --header-active-bg: #454545;
+  --header-group-link-color: #9d9d9d; // $gray-lighter
 }
 
-header.navbar-default {
-  background: url('/img/background.png') repeat;
+.navbar-header {
+  background: var(--header-navbar-bg);
   border-bottom: 1px solid lighten($border-color, 2%);
+  float: none; // set menu to 100% of window width
+
+  // Gorny, zielony pasek wyswietlany na samej gorze ekranu
+  // --------------------------------------------------------------
+  .navbar-border-top {
+    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAJ0lEQVQIW2Ps3MD5n0+AlQEEPn34zcA4/QDffxADBEASmALIWkCqAPDNEnJoA/jxAAAAAElFTkSuQmCC');
+    border-bottom: 1px solid #888;
+    height: 5px;
+  }
 
   // dzieki temu menu jest bardziej wyposrodkowane w pionie
   .navbar-brand {
     padding-top: 10px;
-  }
-
-  .avatar {
-    margin-top: 9px;
-    margin-left: 20px;
-
-    a {
-      color: $gray;
-
-      &:hover {
-        text-decoration: none;
-      }
-    }
   }
 
   .badge {
@@ -72,61 +71,75 @@ header.navbar-default {
     }
   }
 
-  .btn-alerts, .btn-messages {
-    float: left;
+  // there is no space between navbar and menu
+  .dropdown-menu {
+    margin: 0;
+  }
+}
+
+// Glowne menu aplikacji. Po naprowadzeniu kursora myszy nad pozycja pokazujemy liste podmenu
+// ---------------------------------------------------------------------------------------
+
+%menu-link {
+  color: var(--header-color);
+  font-family: var(--header-font-family);
+  font-size: var(--header-font-size);
+  display: block;
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    color: var(--header-hover-color);
+    background-color: var(--header-active-bg);
+  }
+}
+
+.nav-desktop {
+  // temporary arrow
+  position: relative;
+  list-style-type: none;
+  float: left;
+  margin: 0;
+  padding: 0;
+
+  > li {
+    display: inline-block;
+    position: relative;
+
+    // show dropdown menu on hover
+    &:hover .dropdown-menu {
+      display: block;
+      top: 100%;
+    }
 
     > a {
-      padding: 19px 9px 13px 9px;
-      color: $gray-light !important;
+      @extend %menu-link;
 
-      i {
-        font-size: 14px;
-      }
-
-      > .badge {
-        top: 8px;
-        right: -1px;
-      }
-
-      @media screen and (max-width: $screen-sm) {
-        display: inline-block;
-      }
-    }
-
-    .dropdown-modal {
-      // nim zaladuje sie JS - pretty scrollbar, lista powiadomien wyjezdza poza okno, dlatego
-      // dodalem overflow: hidden
-      overflow: hidden;
-    }
-
-    @media screen and (max-width: $screen-sm) {
-      // na urzedzeniach mobilnych okno powiadomien oraz wiadomosci prywatnych musi byc rozciagniete na cala szerokosc
-      position: static;
+      padding: 16px 10px;
     }
   }
 
-  .btn-register {
-    margin-left: 10px;
+  &:before {
+    position: absolute;
+    content: '';
+    top: -5px;
+    left: 135px;
+    width: 20px;
+    height: 29px;
+    background: url('/img/arrow.png') no-repeat;
+    z-index: 100;
   }
 }
 
-#desktop-menu > li > a,
-#mobile-menu > div > a,
-#mobile-menu > form > div > button {
-  color: #3C3C3C;
-  font-family: "Open Sans", Arial, sans-serif;
-  font-size: 13px;
+.nav-mobile {
+  list-style-type: none;
+  // usuniecie niepotrzebnego marginesu na urzadzeniach mobilnych
+  margin-top: 0;
 
-  &:hover {
-    color: $brand-primary;
-  }
-}
+  > li > a {
+    @extend %menu-link;
 
-#mobile-menu {
-  margin-right: 0;
-
-  > div {
-    margin-bottom: 10px;
+    padding: 5px 0;
   }
 
   .divider {
@@ -138,15 +151,13 @@ header.navbar-default {
   }
 
   .btn-sign-out {
-    padding: 0;
-
     &:hover {
       text-decoration: underline;
     }
   }
 }
 
-#navbar-header-search {
+.nav-search {
   background: url('/img/main-menu-separator.png') no-repeat 0 100%;
   padding-left: 20px;
   margin-left: 20px;
@@ -158,11 +169,10 @@ header.navbar-default {
     input {
       border-radius: 3px;
       padding: 5px 30px 5px 5px;
-      margin-top: 2px;
       border: 1px solid $input-border;
-      box-shadow: inset 0 1px 2px rgba(0,0,0,0.075);
       color: $gray-light;
       width: 180px;
+      line-height: 22px;
     }
 
     .input-group-btn {
@@ -177,65 +187,246 @@ header.navbar-default {
   }
 }
 
-// Glowne menu aplikacji. Po naprowadzeniu kursora myszy nad pozycja pokazujemy liste podmenu
-// ---------------------------------------------------------------------------------------
+.nav-avatar {
+  margin-top: 9px;
+  margin-left: 20px;
 
-#desktop-menu {
-  // temporary arrow
-  position: relative;
-
-  &:before {
-    position: absolute;
-    top: -5px;
-    left: 154px;
-    width: 20px;
-    height: 29px;
-    background: url('/img/arrow.png') no-repeat;
-    z-index: 100;
-  }
-}
-
-#desktop-menu > li:hover {
-  .dropdown-menu {
-    display: block;
-    top: 100%;
-  }
-}
-
-// logout button
-.btn-sign-out {
-  border: none;
-  background: none;
-  width: 100%;
-  text-align: left;
-
-  &:focus, &:active {
-    outline: none;
-  }
-}
-
-#dropdown-user {
-  right: 13px;
-
-  > li > a,
-  .btn-sign-out {
-    padding: 5px 20px 5px 8px;
+  a {
+    color: $gray;
 
     &:hover {
-      background-color: $dropdown-link-hover-bg;
+      text-decoration: none;
+    }
+  }
+
+  img {
+    background-color: #fff;
+  }
+}
+
+// Notifications and private messages button
+// ------------------------------------------
+.nav-auth {
+  margin:0;
+}
+
+.nav-auth > li {
+  float: left;
+
+  > a {
+    padding: 19px 9px 13px 9px;
+    color: $gray-light;
+
+    i {
+      font-size: 14px;
+    }
+
+    > .badge {
+      top: 8px;
+      right: -1px;
+    }
+
+    @media screen and (max-width: $screen-sm) {
+      display: inline-block;
+    }
+  }
+
+  .dropdown-modal {
+    // nim zaladuje sie JS - pretty scrollbar, lista powiadomien wyjezdza poza okno, dlatego
+    // dodalem overflow: hidden
+    overflow: hidden;
+  }
+
+  @media screen and (max-width: $screen-sm) {
+    // na urzedzeniach mobilnych okno powiadomien oraz wiadomosci prywatnych musi byc rozciagniete na cala szerokosc
+    position: static;
+  }
+}
+
+.btn-register {
+  margin-left: 0;
+  background-color: $brand-primary;
+  color: #fff;
+
+  &:hover, &:focus {
+    color: #fff;
+  }
+}
+
+.btn-login {
+  color: var(--header-color);
+
+  &:hover, &:focus {
+    color: $brand-primary;
+  }
+}
+
+.profile-name {
+  font-weight: bold !important;
+
+  &:hover {
+    background-color: transparent !important;
+  }
+}
+
+.mega-menu {
+  white-space: nowrap;
+  padding: 5px 10px;
+
+  .mega-menu-title {
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #464646;
+    padding-bottom: 5px;
+
+    @include text-overflow;
+    max-width: 9vw;
+  }
+
+  .mega-menu-body {
+    display: table-cell;
+    padding: 10px;
+    border-right: 1px solid $border-color;
+
+    &:last-child {
+      border-right: none;
+    }
+  }
+
+  li > a {
+    color: var(--header-group-link-color);
+    padding: 3px 0;
+    display: block;
+
+    &:hover {
+      text-decoration: none;
+      color: $brand-primary;
     }
   }
 }
 
-#dropdown-messages, #dropdown-alerts {
+// tymczasowy blok na "czarnej" skorki
+
+.navbar-dark {
+  .dropdown-menu:not(.dropdown-alerts):not(.dropdown-messages) {
+    background-color: $header-navbar-bg-color;
+    border-radius: 0 0 $border-radius-small $border-radius-small;
+    box-shadow: 0 2px 2px rgba(0,0,0,.2), inset 0 4px 10px rgba(0,0,0,0.15);
+    border: none;
+
+    > li > a,
+    .btn-sign-out {
+      color: lighten($gray-light, 15%);
+
+      &:hover,
+      &:focus {
+        color: #CACACA;
+        background-color: #717171;
+      }
+    }
+
+    &:after, &:before {
+      border: none;
+    }
+  }
+
+  /////
+
+  .divider {
+    background-color: $gray-light;
+  }
+
+  .mega-menu {
+    .mega-menu-title {
+      color: $gray-lighter;
+      border-bottom: none;
+      font-weight: normal;
+    }
+
+    .mega-menu-body {
+      border-right-color: #575757;
+    }
+  }
+
+  .nav-avatar {
+    .img-thumbnail {
+      background-color: #717171 !important;
+      border: none;
+    }
+  }
+
+  .nav-auth > li {
+    > a {
+      color: var(--header-color);
+
+      &:hover {
+        color: $brand-primary;
+        background: transparent;
+      }
+    }
+
+    &.open > a {
+      color: var(--header-navbar-bg);
+      background-color: #fafafa;
+    }
+  }
+
+  .dropdown-alerts, .dropdown-messages {
+    border-top: 0;
+
+    &:after, &:before {
+      border: none;
+    }
+  }
+
+  .nav-search {
+    input {
+      border: none;
+      background-color: $gray-light;
+      color: var(--header-color);
+
+      &::placeholder {
+        color: inherit;
+      }
+    }
+
+    .input-group-btn button {
+      color: var(--header-color);
+    }
+  }
+
+  .nav-desktop > li > a {
+    font-weight: bold;
+  }
+}
+
+.navbar-toggle .icon-bar {
+  background-color: var(--header-color);
+}
+
+////////////////////////////////////////////////////////////////
+
+.dropdown-messages, .dropdown-alerts {
+  top: 100%;
   width: 420px;
   padding: 0;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
-  position: absolute;
-
+  position: absolute !important;
   right: 0;
   left: auto;
+
+  .dropdown-header {
+    background-color: #f8f8f8;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    overflow: hidden;
+    padding: 10px !important;
+
+    a {
+      color: $gray-light;
+    }
+  }
 
   &:after {
     border-bottom-color: #f8f8f8;
@@ -248,7 +439,6 @@ header.navbar-default {
 
     left: 0;
     width: 100%;
-    top: $header-height;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 
@@ -259,127 +449,27 @@ header.navbar-default {
   }
 }
 
-.dropdown-username {
-  padding: 7px 10px 4px 10px;
-}
-
-.dropdown-userhome {
-  font-weight: bold !important;
-  color: $gray-light !important;
-  padding: 0 !important;
-
-  &:hover {
-    background-color: transparent !important;
-  }
-}
-
-.dropdown-header {
-  @extend .dropdown-username;
-
-  background-color: #f8f8f8;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-  overflow: hidden;
-
-  a {
-    color: $gray-light;
-    float: left;
-  }
-}
-
 .dropdown-modal {
-  // zakomentowalem ponizsze linie ze wzgledu na problem z pluginem perfect-scrollbar. w przypadku
-  // odkomentowanych linii przy uaktywnieniu pluginu powstawal margines ktory znikal po najechaniu kursora
-  // myszy nad menu
-  //overflow-y: auto;
-  //overflow-x: hidden;
-  // zakomentowane aby poprawnie wyswietlaja sie lista wiadomosci prywatnych
-  //max-height: 390px;
   position: relative;
   background-color: #fff;
+  max-height: 420px;
 
-  ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
+  .ps__rail-y {
+    right: 0 !important;
+    left: auto !important;
+    z-index: 10;
+  }
 
-    li {
-      padding: 0 6px;
-      border-bottom: 1px solid $body-bg;
-      clear: both;
-      overflow: hidden;
-      position: relative;
+  a:hover, a:focus {
+    text-decoration: none;
+  }
 
-      a {
-        display: block;
-        padding: 7px 0;
-        position: relative;
+  .notification {
+    padding: 0 6px;
+    border-bottom: 1px solid $body-bg;
+    position: relative; // we need this to position remove button in notification
 
-        &:hover, &:focus {
-          text-decoration: none;
-        }
-
-        img {
-          width: 35px;
-          float: left;
-          vertical-align: middle;
-          margin-right: 6px;
-        }
-
-        div {
-          overflow: hidden;
-        }
-
-        header {
-          overflow: hidden;
-          white-space: nowrap;
-
-          h4 {
-            color: $gray-light;
-            float: left;
-            font-size: 11px;
-            max-width: 70%;
-            margin: 0;
-            @include text-overflow();
-            font-family: Arial, sans-serif;
-          }
-
-          small {
-            float: right;
-            color: $gray-light;
-            font-size: 10px;
-            max-width: 29%;
-          }
-        }
-
-        h3 {
-          font-size: 100%;
-          clear: both;
-          margin: 1px 0;
-          font-weight: bold;
-          font-family: Arial, sans-serif;
-          color: $brand-primary;
-
-          @include text-overflow();
-        }
-
-        p {
-          padding-right: 3px;
-          margin: 0;
-          color: $gray;
-        }
-      }
-
-      .btn-delete-alert {
-        position: absolute;
-        right: 6px;
-        top: 13px;
-        padding: 6px;
-        display: none;
-      }
-    }
-
-    li:hover {
+    &:hover {
       background-color: $body-bg;
 
       .btn-delete-alert {
@@ -387,7 +477,7 @@ header.navbar-default {
       }
     }
 
-    li.unread {
+    &.unread {
       background-color: $unread-bg;
 
       &:hover {
@@ -395,42 +485,80 @@ header.navbar-default {
       }
     }
   }
+
+  .media-object {
+    width: 35px;
+    min-height: 35px;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .notification-link {
+    display: block;
+    padding: 7px 0;
+    position: relative;
+  }
+
+  .btn-delete-alert {
+    position: absolute;
+    right: 6px;
+    top: 13px;
+    padding: 6px;
+    display: none;
+  }
+
+  .media-body {
+    header {
+      overflow: hidden;
+      white-space: nowrap;
+
+      h4 {
+        color: $gray-light;
+        float: left;
+        font-size: 11px;
+        max-width: 70%;
+        margin: 0;
+        @include text-overflow();
+        font-family: Arial, sans-serif;
+      }
+
+      small {
+        float: right;
+        color: $gray-light;
+        font-size: 10px;
+        max-width: 29%;
+      }
+    }
+
+    h3 {
+      font-size: 100%;
+      clear: both;
+      margin: 1px 0;
+      font-weight: bold;
+      font-family: Arial, sans-serif;
+      color: $brand-primary;
+
+      @include text-overflow();
+    }
+
+    p {
+      padding-right: 3px;
+      margin: 0;
+      color: $gray;
+    }
+  }
 }
 
-#btn-mark-read {
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  float: right;
-  opacity: .7;
-}
-
-#btn-write-message {
+.btn-write-message {
   float: right;
   font-size: 11px;
   font-weight: normal;;
 }
 
-.ui-resizable-s {
-  height: 7px;
-  width: 100%;
-  background: #f8f8f8 url('/img/resizer.png') no-repeat 50%;
-  cursor: s-resize;
-}
-
-.ui-resizable-e {
-  cursor: e-resize;
-  width: 7px;
-  right: -5px;
-  top: 0;
-  height: 100%;
-  position: absolute;
-  display: block;
-}
-
 /* Za malo miejsca w pionie, by wyswietlac przyklejony navbar */
-@media (min-aspect-ratio: 18/3) {
-
+@media screen and (max-width: $screen-sm) {
   /* zostawiamy navbar na gorze strony */
   .navbar-fixed-top {
     position: absolute;
@@ -438,6 +566,6 @@ header.navbar-default {
 
   /* ukrywamy przyklejona sciezke podstrony, na ktorej sie znajdujemy */
   body .breadcrumb[id] {
-	display: none;
+    display: none;
   }
 }

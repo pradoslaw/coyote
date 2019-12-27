@@ -7,13 +7,13 @@
     {% if is_writeable %}
         {% if can('update', comment, forum) %}
             <a href="{{ route('forum.comment.save', [comment.id]) }}" title="Edytuj ten komentarz" class="btn-comment-edit">
-                <i class="fa fa-pencil"></i>
+                <i class="fas fa-pencil-alt"></i>
             </a>
         {% endif %}
 
         {% if can('delete', comment, forum) %}
             <a href="{{ route('forum.comment.delete', [comment.id]) }}" title="Usuń ten komentarz" class="btn-comment-del">
-                <i class="fa fa-remove"></i>
+                <i class="fas fa-times"></i>
             </a>
         {% endif %}
     {% endif %}

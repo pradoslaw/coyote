@@ -71,7 +71,7 @@ class DeletedNotification extends AbstractNotification
             'subject'       => $this->post->topic->subject,
             'excerpt'       => $this->getReasonName(),
             'url'           => UrlBuilder::post($this->post),
-            'guid'          => $this->id
+            'id'            => $this->id
         ];
     }
 

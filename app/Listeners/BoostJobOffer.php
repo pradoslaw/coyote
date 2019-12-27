@@ -70,7 +70,7 @@ class BoostJobOffer implements ShouldQueue
             $event->payment->save();
 
             foreach ($event->payment->plan->benefits as $benefit) {
-                if ($benefit !== 'is_extended_publish') {
+                if ($benefit !== 'is_social') { // column is_social does not exist in table
                     $event->payment->job->{$benefit} = true;
                 }
             }
@@ -78,9 +78,6 @@ class BoostJobOffer implements ShouldQueue
             $event->payment->job->boost_at = Carbon::now();
             $event->payment->job->deadline_at = max($event->payment->job->deadline_at, $event->payment->ends_at);
             $event->payment->job->save();
-
-            // payment is done. remove any pending payments (if any...)
-            $event->payment->job->payments()->where('status_id', Payment::NEW)->delete();
 
             // index job offer
             $event->payment->job->putToIndex();

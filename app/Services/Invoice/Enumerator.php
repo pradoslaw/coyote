@@ -45,6 +45,6 @@ class Enumerator
      */
     private function formatNumber(int $seq, Carbon $date): string
     {
-        return sprintf('%02d%d%d-%d', $date->year, $date->month, $date->day, $seq);
+        return sprintf('%02d%02d%02d-%d', $date->year, $date->month, $date->day, $seq);
     }
 }
