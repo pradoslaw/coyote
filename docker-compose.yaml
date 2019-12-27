@@ -94,7 +94,7 @@ services:
       /bin/sh -c "
       /usr/bin/mc config host add minio http://minio:9000 minio minio123 --api s3v4;
       /usr/bin/mc mb minio/coyote;
-      /usr/bin/mc policy set download minio/coyote;
+      /usr/bin/mc policy set public minio/coyote;
       exit 0;
       "
     networks:
