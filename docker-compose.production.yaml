@@ -3,8 +3,9 @@ version: '3.5'
 services:
   db:
     image: postgres:11-alpine
-#    volumes:
+    volumes:
 #      - ./docker/postgres/postgresql.auto.conf:/var/lib/postgresql/data/postgresql.auto.conf
+      - postgres:/var/lib/postgresql/data:z
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD:
@@ -25,7 +26,7 @@ services:
       DB_PORT: 5432
       DB_HOST: db
       DB_DATABASE: coyote
-      DB_USERNAME: postgres
+      DB_USERNAME: coyote
       DB_PASSWORD:
       APP_ENV: local
       APP_DEBUG: "true"
