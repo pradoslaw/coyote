@@ -1,6 +1,5 @@
 /vendor
 /node_modules
-/storage/app/*
 /storage/logs/*
 /storage/debugbar/*
 /storage/framework/cache/data/*
@@ -25,4 +24,10 @@
 .editorconfig
 .gitignore
 .gitattributes
-
+.codeception.yml
+CHANGELOD.md
+LICENSE
+phpunit.xml
+phpspec.yml
+.styleci.yml
+.travis.yml
