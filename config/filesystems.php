@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('FILESYSTEM_DRIVER', 'public'),
+    'default' => 'public',
 
     /*
     |--------------------------------------------------------------------------
@@ -41,33 +41,39 @@ return [
     */
 
     'disks'   => [
-
-        'local'     => [
-            'driver' => 'local',
-            'root'   => storage_path() . '/app',
-        ],
-        'public'     => [
+        'public_fs'     => [
             'driver' => 'local',
             'root'   => public_path() . '/uploads',
         ],
-        'log'        => [
+        'local_fs'        => [
             'driver' => 'local',
-            'root'   => storage_path() . '/logs'
+            'root'   => storage_path() . '/app'
         ],
-        'app'        => [
-            'driver' => 'local',
-            'root'   => app_path()
-        ],
-        's3'        => [
+
+        'local'     => [
             'driver' => 's3',
             'use_path_style_endpoint' => true,
             'key' => env('AWS_ACCESS_KEY_ID'),
             'secret' => env('AWS_SECRET_ACCESS_KEY'),
             'region' => 'us-east-1',
-            'bucket' => env('AWS_BUCKET'),
+            'bucket' => 'local',
+            'endpoint' => env('MINIO_ENDPOINT'),
+            'disable_asserts' => true
+        ],
+        'public'     => [
+            'driver' => 's3',
+            'use_path_style_endpoint' => true,
+            'key' => env('AWS_ACCESS_KEY_ID'),
+            'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            'region' => 'us-east-1',
+            'bucket' => 'public',
             'endpoint' => env('MINIO_ENDPOINT'),
             'disable_asserts' => true,
             'url' => env('AWS_URL')
+        ],
+        'log'        => [
+            'driver' => 'local',
+            'root'   => storage_path() . '/logs'
         ]
     ],
 

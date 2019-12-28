@@ -62,7 +62,7 @@ class Url
 
             $image = $this->imageManager->make($this->file->get());
 
-            $this->file->getFilesystem()->put($this->file->path($thumbnailPath), $image->filter($filter)->encode(), 'public');
+            $this->file->getFilesystem()->put($this->file->path($thumbnailPath), $image->filter($filter)->encode());
         }
 
         return $this->file->getFilesystem()->url($thumbnailPath);
@@ -99,6 +99,7 @@ class Url
     protected function thumbnailPath($template)
     {
         $pathinfo = pathinfo($this->file->relative());
+
         return $pathinfo['dirname'] . '/' . $pathinfo['filename'] . '-' . $template . '.' . $pathinfo['extension'];
     }
 }

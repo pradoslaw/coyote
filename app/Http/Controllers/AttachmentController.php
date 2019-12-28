@@ -4,7 +4,6 @@ namespace Coyote\Http\Controllers;
 
 use Coyote\Http\Factories\MediaFactory;
 use Coyote\Http\Forms\AttachmentForm;
-use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 use Illuminate\Http\Request;
 
 abstract class AttachmentController extends Controller
@@ -54,11 +53,10 @@ abstract class AttachmentController extends Controller
         $this->validateWith($validator);
 
         $media = $this->getMediaFactory()->make('attachment')->put(file_get_contents('data://' . substr($input, 7)));
-        $mime = MimeTypeGuesser::getInstance();
 
         $attachment = $this->create([
             'size' => $media->size(),
-            'mime' => $mime->guess($media->path()),
+            'mime' => $media->getMime(),
             'file' => $media->getFilename(),
             'name' => $media->getName()
         ]);

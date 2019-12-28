@@ -93,8 +93,9 @@ services:
     entrypoint: >
       /bin/sh -c "
       /usr/bin/mc config host add minio http://minio:9000 minio minio123 --api s3v4;
-      /usr/bin/mc mb minio/coyote;
-      /usr/bin/mc policy set public minio/coyote;
+      /usr/bin/mc mb minio/public;
+      /usr/bin/mc mb minio/local;
+      /usr/bin/mc policy set public minio/public;
       exit 0;
       "
     networks:

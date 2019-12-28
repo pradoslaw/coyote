@@ -10,6 +10,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Storage;
 use NotificationChannels\Twilio\TwilioChannel;
 use NotificationChannels\Twilio\TwilioSmsMessage;
 
@@ -79,9 +80,9 @@ class ApplicationSentNotification extends Notification implements ShouldQueue, N
             ]);
 
         if ($this->application->cv) {
-            $path = realpath(storage_path('app/cv/' . $this->application->cv));
+            $data = Storage::disk('local')->get('cv/' . $this->application->cv);
 
-            $message->attach($path, ['as' => $this->application->realFilename()]);
+            $message->attachData($data, $this->application->realFilename());
         }
 
         return $message;
