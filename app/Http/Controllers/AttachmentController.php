@@ -26,13 +26,12 @@ abstract class AttachmentController extends Controller
         )]);
 
         $media = $this->getMediaFactory()->make('attachment')->upload($request->file('attachment'));
-        $mime = MimeTypeGuesser::getInstance();
 
         $attachment = $this->create([
             'size' => $media->size(),
             'file' => $media->getFilename(),
             'name' => $media->getName(),
-            'mime' => $mime->guess($media->path())
+            'mime' => $media->getMime()
         ]);
 
         return $this->renderForm($attachment);

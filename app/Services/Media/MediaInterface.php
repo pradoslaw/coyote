@@ -73,7 +73,7 @@ interface MediaInterface
     public function isImage();
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function root();
+    public function getMime(): ?string;
 }

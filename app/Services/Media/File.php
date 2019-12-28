@@ -6,6 +6,7 @@ use Illuminate\Contracts\Filesystem\Filesystem;
 use Intervention\Image\Filters\FilterInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Intervention\Image\ImageManager;
+use Symfony\Component\Mime\MimeTypes;
 
 abstract class File implements MediaInterface
 {
@@ -51,6 +52,11 @@ abstract class File implements MediaInterface
         if (empty($this->directory)) {
             $this->directory = strtolower(class_basename($this));
         }
+    }
+
+    public function getFilesystem()
+    {
+        return $this->filesystem;
     }
 
     /**
@@ -121,7 +127,7 @@ abstract class File implements MediaInterface
      */
     public function path($filename = null)
     {
-        return $this->root() . '/' . ($filename ?: $this->relative());
+        return ($filename ?: $this->relative());
     }
 
     /**
@@ -149,7 +155,7 @@ abstract class File implements MediaInterface
         $this->setName($uploadedFile->getClientOriginalName());
         $this->setFilename($this->getUniqueName($uploadedFile->getClientOriginalExtension()));
 
-        $this->filesystem->put($this->relative(), file_get_contents($uploadedFile->getRealPath()));
+        $this->filesystem->put($this->relative(), file_get_contents($uploadedFile->getRealPath()), 'public');
 
         return $this;
     }
@@ -163,7 +169,7 @@ abstract class File implements MediaInterface
         $this->setName($this->getHumanName('png'));
         $this->setFilename($this->getUniqueName('png'));
 
-        $this->filesystem->put($this->relative(), $content);
+        $this->filesystem->put($this->relative(), $content, 'public');
 
         return $this;
     }
@@ -187,20 +193,21 @@ abstract class File implements MediaInterface
     }
 
     /**
-     * @return string
-     */
-    public function root()
-    {
-        $default = config('filesystems.default');
-        return config("filesystems.disks.$default.root");
-    }
-
-    /**
      * @return bool
      */
     public function isImage()
     {
         return in_array(pathinfo($this->getFilename(), PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getMime(): ?string
+    {
+        $mimes = (new MimeTypes())->getMimeTypes(pathinfo($this->getFilename(), PATHINFO_EXTENSION));
+
+        return $mimes[0] ?? null;
     }
 
     /**
