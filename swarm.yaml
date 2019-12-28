@@ -97,7 +97,7 @@ services:
     environment:
       - GRAYLOG_PASSWORD_SECRET=somepasswordpepper
       - GRAYLOG_ROOT_PASSWORD_SHA2=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
-      - GRAYLOG_HTTP_EXTERNAL_URI=http://beta.4programmers.net:29000/
+      - GRAYLOG_HTTP_EXTERNAL_URI=http://beta.4programmers.info:29000/
     networks:
       - coyote
     depends_on:
@@ -110,8 +110,11 @@ services:
       - 12201:12201
       - 12201:12201/udp
 
-#  fluentbit:
-#    image: fluent/fluent-bit:latest
+  fluentbit:
+    image: fluent/fluent-bit:latest
+    volumes:
+      - ./docker/fluent-bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+      - /var/lib/docker/containers:/var/lib/docker/containers
 
   websocket:
     image: 4programmers/websocket:latest
@@ -130,6 +133,8 @@ volumes:
   elasticsearch:
   minio:
   codebase:
+  mongo:
+  graylog:
 
 networks:
   coyote:
