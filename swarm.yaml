@@ -4,14 +4,14 @@ services:
   db:
     image: postgres:11-alpine
     volumes:
-#      - ./docker/postgres/postgresql.auto.conf:/var/lib/postgresql/data/postgresql.auto.conf
+      - ./docker/postgres/postgresql.auto.conf:/var/lib/postgresql/data/postgresql.auto.conf
       - postgres:/var/lib/postgresql/data:z
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD:
       POSTGRES_DB: coyote
     networks:
-      - coyote-swarm
+      - coyote
 
   php:
     image: 4programmers/coyote:latest
@@ -38,7 +38,7 @@ services:
       QUEUE_DRIVER: redis
 
     networks:
-      - coyote-swarm
+      - coyote
 
   nginx:
     image: nginx:latest
@@ -50,24 +50,31 @@ services:
     depends_on:
       - php
     networks:
-      - coyote-swarm
+      - coyote
 
   redis:
     image: redis:latest
     networks:
-      - coyote-swarm
+      - coyote
 
   elasticsearch:
     image: elasticsearch:5.6.14
     ports:
       - 9200:9200
-    #    mem_limit: 1g
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      deploy:
+        resources:
+          limits:
+            memory: 1g
     volumes:
       - elasticsearch:/usr/share/elasticsearch/data
     environment:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     networks:
-      - coyote-swarm
+      - coyote
 
   minio:
     image: minio/minio
@@ -78,7 +85,7 @@ services:
       MINIO_SECRET_KEY: minio123
     command: server /data
     networks:
-      - coyote-swarm
+      - coyote
 
 
 volumes:
@@ -88,5 +95,5 @@ volumes:
   codebase:
 
 networks:
-  coyote-swarm:
-    name: coyote-swarm
+  coyote:
+    name: coyote
