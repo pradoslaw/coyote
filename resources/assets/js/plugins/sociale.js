@@ -24,7 +24,7 @@ const sessionHandler = () => {
 };
 
 const keepSessionAlive = () => {
-  return setInterval(() => sessionHandler, 4 * 60 * 1000);
+  return setInterval(sessionHandler, 4 * 60 * 1000);
 };
 
 let timer = keepSessionAlive();
