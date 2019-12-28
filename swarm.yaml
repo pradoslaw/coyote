@@ -61,14 +61,10 @@ services:
     image: elasticsearch:5.6.14
     ports:
       - 9200:9200
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-      deploy:
-        resources:
-          limits:
-            memory: 1g
+    deploy:
+      resources:
+        limits:
+          memory: 1g
     volumes:
       - elasticsearch:/usr/share/elasticsearch/data
     environment:
@@ -87,6 +83,47 @@ services:
     networks:
       - coyote
 
+  mongo:
+    image: mongo:3
+    volumes:
+      - mongo:/data/db
+    networks:
+      - coyote
+
+  graylog:
+    image: graylog/graylog:3.1
+    volumes:
+      - graylog:/usr/share/graylog/data/journal
+    environment:
+      - GRAYLOG_PASSWORD_SECRET=somepasswordpepper
+      - GRAYLOG_ROOT_PASSWORD_SHA2=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+      - GRAYLOG_HTTP_EXTERNAL_URI=http://beta.4programmers.net:29000/
+    networks:
+      - coyote
+    depends_on:
+      - mongo
+      - elasticsearch
+    ports:
+      - 29000:9000
+      - 1514:1514
+      - 1514:1514/udp
+      - 12201:12201
+      - 12201:12201/udp
+
+#  fluentbit:
+#    image: fluent/fluent-bit:latest
+
+  websocket:
+    image: 4programmers/websocket:latest
+    networks:
+      - coyote
+    tty: true
+    environment:
+      PORT: "8888"
+      REDIS_HOST: "redis"
+      APP_KEY: "base64:mxXTLiTXOcsKZ+u6OoYVaZFNYAwM91nmbzrdEV+mUfE="
+    ports:
+      - 8888:8888
 
 volumes:
   postgres:
