@@ -3,10 +3,6 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/adam-boduch/geshi"
-        },
-        {
-            "type": "vcs",
             "url": "https://github.com/chrisboulton/php-diff"
         }
     ],
@@ -42,7 +38,6 @@
         "intervention/image": "^2.4",
         "intervention/imagecache": "^2.3",
         "jenssegers/agent": "^2.3",
-        "laravel-notification-channels/twilio": "^2.0",
         "laravel/framework": "5.7.*",
         "laravel/passport": "^7.2",
         "laravel/socialite": "^3.0",

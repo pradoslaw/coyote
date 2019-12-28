@@ -246,9 +246,7 @@ return [
         // Pakiet Laravel Grid do budowania tabel oraz filtrowania i sortowania
         Boduch\Grid\GridServiceProvider::class,
         // kursy wymiany walut
-        Swap\Laravel\SwapServiceProvider::class,
-        // Wyslanie SMS po wyslanej aplikacji na dana oferte pracy
-        NotificationChannels\Twilio\TwilioProvider::class
+        Swap\Laravel\SwapServiceProvider::class
     ],
     /*
     |--------------------------------------------------------------------------

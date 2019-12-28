@@ -10,8 +10,6 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
-use NotificationChannels\Twilio\TwilioChannel;
-use NotificationChannels\Twilio\TwilioSmsMessage;
 
 class ApplicationSentNotification extends Notification implements ShouldQueue, NotificationInterface
 {
@@ -33,35 +31,11 @@ class ApplicationSentNotification extends Notification implements ShouldQueue, N
     }
 
     /**
-     * @param Job $job
      * @return array
      */
-    public function via(Job $job)
+    public function via()
     {
-        $channels = ['mail', DatabaseChannel::class];
-
-        if (!empty($job->phone)) {
-            $channels[] = TwilioChannel::class;
-        }
-
-        return $channels;
-    }
-
-    /**
-     * @param Job $job
-     * @return TwilioSmsMessage
-     */
-    public function toTwilio(Job $job)
-    {
-        return (new TwilioSmsMessage())
-            ->content(
-                sprintf(
-                    '%s wysłał swoją aplikację w odpowiedzi na ogłoszenie "%s". Pozdrawiamy, %s',
-                    $this->application->name,
-                    $job->title,
-                    config('app.name')
-                )
-            );
+        return ['mail', DatabaseChannel::class];
     }
 
     /**
