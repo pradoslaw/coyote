@@ -24,14 +24,14 @@ return [
     'default_index' => 'coyote',
 
     /*
-    | Default log location
+    | Default log locationK
     */
     'logPath' => storage_path('logs/elasticsearch.log'),
 
     /*
     | Default log level
     */
-    'logLevel' => \Monolog\Logger::INFO,
+    'logLevel' => \Monolog\Logger::WARNING,
 
     'stopwords' => ['a', 'an', 'and', 'are', 'as', 'at', 'be', 'but', 'by', 'for', 'if', 'in', 'into', 'is', 'it',
         'no', 'not', 'of', 'on', 'or', 's', 'such', 't', 'that', 'the', 'their', 'then', 'there', 'these', 'they', 'this',
