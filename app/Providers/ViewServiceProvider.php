@@ -13,7 +13,6 @@ use Lavary\Menu\Builder;
 use Lavary\Menu\Menu;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key;
-use Illuminate\Contracts\Encryption\Encrypter;
 
 class ViewServiceProvider extends ServiceProvider
 {
@@ -65,8 +64,7 @@ class ViewServiceProvider extends ServiceProvider
             $user = $this->app['request']->user();
 
             $this->app['request']->attributes->add([
-                'token' => app(Encrypter::class)->encrypt('user:' . $user->id . '|' . time()),
-//                'token' => $this->getJWtToken($user),
+                'token' => $this->getJWtToken($user),
                 'notifications_unread' => $user->notifications_unread,
                 'pm_unread' => $user->pm_unread
             ]);
