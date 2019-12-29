@@ -3,8 +3,10 @@ version: '3.5'
 services:
   db:
     image: postgres:11-alpine
+    ports:
+      - 5432:5432
     volumes:
-#      - ./docker/postgres/postgresql.auto.conf:/var/lib/postgresql/data/postgresql.auto.conf
+      - ./docker/postgres/postgresql.auto.conf:/var/lib/postgresql/data/postgresql.auto.conf
       - postgres:/var/lib/postgresql/data:z
     environment:
       POSTGRES_USER: coyote
@@ -160,8 +162,10 @@ services:
       - minio:/data
     environment:
       MINIO_ACCESS_KEY: minio
-      MINIO_SECRET_KEY: minio123
+      MINIO_SECRET_KEY_FILE: /run/secrets/AWS_SECRET_ACCESS_KEY
     command: server /data
+    secrets:
+      - AWS_SECRET_ACCESS_KEY
     networks:
       - coyote
 
