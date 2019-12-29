@@ -4,17 +4,16 @@ services:
   db:
     image: postgres:11-alpine
     volumes:
-      - ./docker/postgres/postgresql.auto.conf:/var/lib/postgresql/data/postgresql.auto.conf
+#      - ./docker/postgres/postgresql.auto.conf:/var/lib/postgresql/data/postgresql.auto.conf
       - postgres:/var/lib/postgresql/data:z
     environment:
-      POSTGRES_USER: postgres
-#      POSTGRES_PASSWORD:
-      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+      POSTGRES_USER: coyote
+      POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
       POSTGRES_DB: coyote
     networks:
       - coyote
     secrets:
-      - postgres_password
+      - POSTGRES_PASSWORD
 
   php:
     image: 4programmers/coyote:latest
@@ -26,20 +25,92 @@ services:
     volumes:
       - codebase:/var/www
     environment:
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_KEY: /run/secrets/APP_KEY
+#      APP_KEY: "base64:mxXTLiTXOcsKZ+u6OoYVaZFNYAwM91nmbzrdEV+mUfE="
+      APP_URL: https://4programmers.net
+      API_HOST: api.4programmers.net
+
+      SESSION_DOMAIN: ".4programmers.net"
+
       DB_PORT: 5432
       DB_HOST: db
       DB_DATABASE: coyote
       DB_USERNAME: coyote
-      DB_PASSWORD:
-      APP_ENV: local
-      APP_DEBUG: "true"
-      APP_KEY: "base64:mxXTLiTXOcsKZ+u6OoYVaZFNYAwM91nmbzrdEV+mUfE="
+      DB_PASSWORD: /run/secrets/POSTGRES_PASSWORD
+
       ELASTICSEARCH_HOST: elasticsearch
       REDIS_HOST: redis
       BROADCAST_DRIVER: redis
       CACHE_DRIVER: redis
       QUEUE_DRIVER: redis
 
+      AWS_ACCESS_KEY_ID: minio
+      AWS_SECRET_ACCESS_KEY: /run/secrets/AWS_SECRET_ACCESS_KEY
+      AWS_URL: /run/secrets/AWS_URL
+      MINIO_ENDPOINT: http://minio:9000/
+
+      WS_HOST: app
+      WS_PORT: 8880
+      WS_PROXY: /run/secrets/WS_PROXY
+
+      MAIL_DRIVER: mailgun
+      MAILGUN_DOMAIN: mg.4programmers.net
+      MAILGUN_SECRET: /run/secrets/MAILGUN_SECRET
+
+      SENTRY_DSN: /run/secrets/SENTRY_DSN
+
+      RECAPTCHA_KEY: /run/secrets/RECAPTCHA_KEY
+      RECAPTCHA_SECRET: /run/secrets/RECAPTCHA_SECRET
+
+      P24_CLIENT_ID: /run/secrets/P24_CLIENT_ID
+      P24_SALT: /run/secrets/P24_SALT
+      P24_PAYMENT_URL: "https://secure.przelewy24.pl/trnDirect"
+      P24_VERIFY_URL: "https://secure.przelewy24.pl/trnVerify"
+
+      PAYLANE_USERNAME: /run/secrets/PAYLANE_USERNAME
+      PAYLANE_PASSWORD: /run/secrets/PAYLANE_PASSWORD
+      PAYLANE_SALT: /run/secrets/PAYLANE_SALT
+
+      GITHUB_CLIENT_ID: /run/secrets/GITHUB_CLIENT_ID
+      GITHUB_SECRET_ID: /run/secrets/GITHUB_SECRET_ID
+      GITHUB_REDIRECT: "https://4programmers.net/OAuth/Github/Callback"
+
+      GOOGLE_CLIENT_ID: /run/secrets/GOOGLE_CLIENT_ID
+      GOOGLE_SECRET_ID: /run/secrets/GOOGLE_SECRET_ID
+      GOOGLE_REDIRECT: "https://4programmers.net/OAuth/Google/Callback"
+
+      FACEBOOK_CLIENT_ID: /run/secrets/FACEBOOK_CLIENT_ID
+      FACEBOOK_SECRET_ID: /run/secrets/FACEBOOK_SECRET_ID
+      FACEBOOK_REDIRECT: "https://4programmers.net/OAuth/Facebook/Callback"
+
+      VENDOR_NAME: "4programmers.net Ltd"
+      VENDOR_ADDRESS: "International House 776-778 Barking Road"
+      VENDOR_POSTAL_CODE: "E13 9PJ"
+      VENDOR_CITY: "London"
+      VENDOR_COUNTRY: "United Kingdom"
+    secrets:
+      - APP_KEY
+      - POSTGRES_PASSWORD
+      - AWS_SECRET_ACCESS_KEY
+      - AWS_URL
+      - WS_PROXY
+      - MAILGUN_SECRET
+      - SENTRY_DSN
+      - RECAPTCHA_KEY
+      - RECAPTCHA_SECRET
+      - P24_CLIENT_ID
+      - P24_SALT
+      - PAYLANE_USERNAME
+      - PAYLANE_PASSWORD
+      - PAYLANE_SALT
+      - GITHUB_CLIENT_ID
+      - GITHUB_SECRET_ID
+      - GOOGLE_CLIENT_ID
+      - GOOGLE_SECRET_ID
+      - FACEBOOK_CLIENT_ID
+      - FACEBOOK_SECRET_ID
     networks:
       - coyote
 
@@ -138,6 +209,8 @@ services:
       PORT: "8888"
       REDIS_HOST: "redis"
       APP_KEY: "base64:mxXTLiTXOcsKZ+u6OoYVaZFNYAwM91nmbzrdEV+mUfE="
+    secrets:
+      - APP_KEY
     ports:
       - 8888:8888
 
@@ -154,5 +227,43 @@ networks:
     name: coyote
 
 secrets:
-  postgres_password:
+  APP_KEY:
+    external: true
+  POSTGRES_PASSWORD:
+    external: true
+  AWS_SECRET_ACCESS_KEY:
+    external: true
+  AWS_URL:
+    external: true
+  WS_PROXY:
+    external: true
+  MAILGUN_SECRET:
+    external: true
+  SENTRY_DSN:
+    external: true
+  RECAPTCHA_KEY:
+    external: true
+  RECAPTCHA_SECRET:
+    external: true
+  P24_CLIENT_ID:
+    external: true
+  P24_SALT:
+    external: true
+  PAYLANE_USERNAME:
+    external: true
+  PAYLANE_PASSWORD:
+    external: true
+  PAYLANE_SALT:
+    external: true
+  GITHUB_CLIENT_ID:
+    external: true
+  GITHUB_SECRET_ID:
+    external: true
+  GOOGLE_CLIENT_ID:
+    external: true
+  GOOGLE_SECRET_ID:
+    external: true
+  FACEBOOK_CLIENT_ID:
+    external: true
+  FACEBOOK_SECRET_ID:
     external: true

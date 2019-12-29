@@ -38,7 +38,7 @@ after_script:
   - cat $TRAVIS_BUILD_DIR/tests/_output/*.html
   - cat $TRAVIS_BUILD_DIR/tests/Browser/console/*.*
 
-after_success:
-  - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-  - docker build -f docker/coyote/Dockerfile -t 4programmers/coyote:latest .
-  - docker push 4programmers/coyote:latest
+#after_success:
+#  - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+#  - docker build -f docker/coyote/Dockerfile -t 4programmers/coyote:latest .
+#  - docker push 4programmers/coyote:latest
