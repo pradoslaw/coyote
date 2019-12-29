@@ -3,7 +3,9 @@
 function docker_secret(string $name): Closure
 {
     return function () use ($name) {
-        return trim(file_get_contents('/run/secrets/' . $name));
+        $path = '/run/secrets/' . $name;
+
+        return file_exists($path) ? trim(file_get_contents($path)) : null;
     };
 }
 
