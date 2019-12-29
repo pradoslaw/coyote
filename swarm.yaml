@@ -8,10 +8,13 @@ services:
       - postgres:/var/lib/postgresql/data:z
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD:
+#      POSTGRES_PASSWORD:
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
       POSTGRES_DB: coyote
     networks:
       - coyote
+    secrets:
+      - postgres_password
 
   php:
     image: 4programmers/coyote:latest
@@ -39,6 +42,14 @@ services:
 
     networks:
       - coyote
+
+  worker:
+    image: 4programmers/coyote:latest
+    networks:
+      - coyote
+    volumes:
+      - ./:/var/www
+    command: php artisan queue:listen --delay=5 -n redis
 
   nginx:
     image: nginx:latest
@@ -111,10 +122,12 @@ services:
       - 12201:12201/udp
 
   fluentbit:
-    image: fluent/fluent-bit:latest
+    image: fluent/fluent-bit:1.3-debug
     volumes:
       - ./docker/fluent-bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
-      - /var/lib/docker/containers:/var/lib/docker/containers
+      - /var/lib/docker/containers:/var/log/containers
+    networks:
+      - coyote
 
   websocket:
     image: 4programmers/websocket:latest
@@ -139,3 +152,7 @@ volumes:
 networks:
   coyote:
     name: coyote
+
+secrets:
+  postgres_password:
+    external: true
