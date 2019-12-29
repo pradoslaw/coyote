@@ -1,5 +1,12 @@
 <?php
 
+function docker_secret(string $name): Closure
+{
+    return function () use ($name) {
+        return trim(file_get_contents('/run/secrets/' . $name));
+    };
+}
+
 /**
  * Removes all html tags
  *
