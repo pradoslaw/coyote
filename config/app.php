@@ -46,7 +46,7 @@ return [
     |
     */
 
-    'url'             => env('APP_URL', docker_secret('APP_URL')),
+    'url'             => env('APP_URL', docker_secret('APP_URL_FILE')),
     'asset_url'       => env('ASSET_URL', null),
 
     /*
@@ -122,7 +122,7 @@ return [
     |
     */
 
-    'key'             => env('APP_KEY', docker_secret('APP_KEY')),
+    'key'             => env('APP_KEY', docker_secret('APP_KEY_FILE')),
     'cipher'          => 'AES-256-CBC',
 
     /*

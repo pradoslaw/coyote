@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'dsn' => env('SENTRY_DSN', docker_secret('SENTRY_DSN')),
+    'dsn' => env('SENTRY_DSN', docker_secret('SENTRY_DSN_FILE')),
 
     // capture release as git sha
     // 'release' => trim(exec('git log --pretty="%h" -n1 HEAD')),

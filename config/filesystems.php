@@ -61,13 +61,13 @@ return [
         's3'        => [
             'driver' => 's3',
             'use_path_style_endpoint' => true,
-            'key' => env('AWS_ACCESS_KEY_ID', docker_secret('AWS_ACCESS_KEY')),
-            'secret' => env('AWS_SECRET_ACCESS_KEY', docker_secret('AWS_SECRET_ACCESS_KEY')),
+            'key' => env('AWS_ACCESS_KEY_ID', docker_secret('AWS_ACCESS_KEY_FILE')),
+            'secret' => env('AWS_SECRET_ACCESS_KEY', docker_secret('AWS_SECRET_ACCESS_KEY_FILE')),
             'region' => 'us-east-1',
             'bucket' => env('AWS_BUCKET'),
-            'endpoint' => env('MINIO_ENDPOINT', docker_secret('MINIO_ENDPOINT')),
+            'endpoint' => env('MINIO_ENDPOINT', docker_secret('MINIO_ENDPOINT_FILE')),
             'disable_asserts' => true,
-            'url' => env('AWS_URL', docker_secret('AWS_URL'))
+            'url' => env('AWS_URL', docker_secret('AWS_URL_FILE'))
         ]
     ],
 
