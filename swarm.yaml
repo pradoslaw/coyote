@@ -26,12 +26,10 @@ services:
         - 4programmers/coyote:latest
     volumes:
       - codebase:/var/www
-#    command: ["/bin/sh", "-c", "cp -rp /app/. /var/www"]
     environment:
       APP_ENV: local
       APP_DEBUG: "true"
       APP_KEY_FILE: /run/secrets/APP_KEY_FILE
-#      APP_KEY: "base64:mxXTLiTXOcsKZ+u6OoYVaZFNYAwM91nmbzrdEV+mUfE="
       APP_URL: https://4programmers.net
       API_HOST: api.4programmers.net
 
