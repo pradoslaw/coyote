@@ -25,7 +25,7 @@
 .gitignore
 .gitattributes
 .codeception.yml
-CHANGELOD.md
+CHANGELOG.md
 LICENSE
 phpunit.xml
 phpspec.yml

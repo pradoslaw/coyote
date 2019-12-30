@@ -27,3 +27,8 @@ RUN rm -rf /app/.composer && rm -rf /root/.composer && rm -rf  /usr/local/share/
 RUN chown -R nginx:nginx /app
 RUN chmod 0775 -R storage/
 RUN chmod 0775 bootstrap/cache/
+
+ADD ./docker/coyote/start.sh /start.sh
+RUN chmod 755 /start.sh
+
+CMD ["/start.sh"]
