@@ -180,8 +180,7 @@ services:
     volumes:
       - graylog:/usr/share/graylog/data/journal
     environment:
-      - GRAYLOG_PASSWORD_SECRET=somepasswordpepper
-      - GRAYLOG_ROOT_PASSWORD_SHA2=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+      - GRAYLOG_ROOT_PASSWORD_SHA2_FILE=/run/secrets/GRAYLOG_ROOT_PASSWORD_SHA2_FILE
       - GRAYLOG_HTTP_EXTERNAL_URI=https://4programmers.dev:29000/
     networks:
       - coyote
