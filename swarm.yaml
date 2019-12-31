@@ -30,10 +30,10 @@ services:
       APP_ENV: local
       APP_DEBUG: "true"
       APP_KEY_FILE: /run/secrets/APP_KEY_FILE
-      APP_URL: https://4programmers.net
-      API_HOST: api.4programmers.net
+      APP_URL: https://4programmers.dev
+      API_HOST: api.4programmers.dev
 
-      SESSION_DOMAIN: ".4programmers.net"
+      SESSION_DOMAIN: ".4programmers.dev"
 
       DB_PORT: 5432
       DB_HOST: db
@@ -49,7 +49,7 @@ services:
 
       AWS_ACCESS_KEY_ID: minio
       AWS_SECRET_ACCESS_KEY_FILE: /run/secrets/AWS_SECRET_ACCESS_KEY_FILE
-      AWS_URL_FILE: /run/secrets/AWS_URL_FILE
+      AWS_URL_FILE: https://4programmers.dev/uploads/
       MINIO_ENDPOINT: http://minio:9000/
 
       WS_HOST: app
@@ -182,7 +182,7 @@ services:
     environment:
       - GRAYLOG_PASSWORD_SECRET=somepasswordpepper
       - GRAYLOG_ROOT_PASSWORD_SHA2=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
-      - GRAYLOG_HTTP_EXTERNAL_URI=http://beta.4programmers.info:29000/
+      - GRAYLOG_HTTP_EXTERNAL_URI=https://4programmers.dev:29000/
     networks:
       - coyote
     depends_on:
@@ -211,7 +211,7 @@ services:
     environment:
       PORT: "8888"
       REDIS_HOST: "redis"
-      APP_KEY: "base64:mxXTLiTXOcsKZ+u6OoYVaZFNYAwM91nmbzrdEV+mUfE="
+      APP_KEY_FILE: /run/secrets/APP_KEY_FILE
     secrets:
       - APP_KEY_FILE
     ports:
