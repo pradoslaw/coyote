@@ -54,10 +54,10 @@ services:
 
       WS_HOST: app
       WS_PORT: 8880
-      WS_PROXY_FILE: /run/secrets/WS_PROXY_FILE
+      WS_PROXY_FILE: https://ws.4programmers.dev
 
       MAIL_DRIVER: mailgun
-      MAILGUN_DOMAIN: mg.4programmers.net
+      MAILGUN_DOMAIN: mg.4programmers.dev
       MAILGUN_SECRET_FILE: /run/secrets/MAILGUN_SECRET_FILE
 
       SENTRY_DSN_FILE: /run/secrets/SENTRY_DSN_FILE
@@ -96,7 +96,6 @@ services:
       - POSTGRES_PASSWORD_FILE
       - AWS_SECRET_ACCESS_KEY_FILE
       - AWS_URL_FILE
-      - WS_PROXY_FILE
       - MAILGUN_SECRET_FILE
       - SENTRY_DSN_FILE
       - RECAPTCHA_KEY_FILE
@@ -122,6 +121,35 @@ services:
     volumes:
       - ./:/var/www
     command: php artisan queue:listen --delay=5 -n redis
+    environment:
+      APP_ENV: local
+      APP_DEBUG: "false"
+      APP_KEY_FILE: /run/secrets/APP_KEY_FILE
+      APP_URL: https://4programmers.dev
+
+      DB_PORT: 5432
+      DB_HOST: db
+      DB_DATABASE: coyote
+      DB_USERNAME: coyote
+      DB_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD_FILE
+
+      ELASTICSEARCH_HOST: elasticsearch
+      REDIS_HOST: redis
+      BROADCAST_DRIVER: redis
+      CACHE_DRIVER: redis
+      QUEUE_DRIVER: redis
+
+      MAIL_DRIVER: mailgun
+      MAILGUN_DOMAIN: mg.4programmers.dev
+      MAILGUN_SECRET_FILE: /run/secrets/MAILGUN_SECRET_FILE
+
+      SENTRY_DSN_FILE: /run/secrets/SENTRY_DSN_FILE
+
+      VENDOR_NAME: "4programmers.net Ltd"
+      VENDOR_ADDRESS: "International House 776-778 Barking Road"
+      VENDOR_POSTAL_CODE: "E13 9PJ"
+      VENDOR_CITY: "London"
+      VENDOR_COUNTRY: "United Kingdom"
 
   nginx:
     image: nginx:latest

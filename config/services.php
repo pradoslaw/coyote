@@ -8,7 +8,7 @@ return [
     'ws'        => [
         'host'          => env('WS_HOST'),
         'port'          => env('WS_PORT'),
-        'proxy'         => env('WS_PROXY', docker_secret('WS_PROXY_FILE'))
+        'proxy'         => env('WS_PROXY')
     ],
 
     // Elasticsearch host and port. In most cases default values will be suitable.
