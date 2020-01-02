@@ -93,19 +93,16 @@
 
       listenForNotification() {
         Session.addListener(e => {
-          if (e.key === 'notifications' && e.newValue !== this.count) {
+          if (e.key === 'notifications' && e.newValue < this.count) {
             this.$store.commit('notifications/count', parseInt(e.newValue));
           }
         });
 
         ws.on('Illuminate\\Notifications\\Events\\BroadcastNotificationCreated', data => {
           this.resetNotifications();
-          this.$store.commit('notifications/increment'); // first, change local counter
 
-          // every open tab receives this event and that will cause count increments.
-          // however we must synchronize this counter with local storage. let's add 100ms delay
-          // because we don't what run local storage listener in this case.
-          setTimeout(this.syncCount, 100);
+          this.$store.commit('notifications/increment');
+          this.syncCount();
 
           DesktopNotifications.doNotify(data.headline, data.subject, data.url);
         });
