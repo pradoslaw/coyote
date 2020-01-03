@@ -297,3 +297,6 @@ secrets:
     external: true
   FACEBOOK_SECRET_ID_FILE:
     external: true
+  GRAYLOG_ROOT_PASSWORD_SHA2_FILE:
+    external: true
+
