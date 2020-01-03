@@ -206,6 +206,8 @@ services:
     volumes:
       - graylog:/usr/share/graylog/data/journal
     environment:
+      - GRAYLOG_PASSWORD_SECRET_FILE=/run/secrets/GRAYLOG_PASSWORD_SECRET_FILE
+#      - GRAYLOG_ROOT_PASSWORD_SHA2=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
       - GRAYLOG_ROOT_PASSWORD_SHA2_FILE=/run/secrets/GRAYLOG_ROOT_PASSWORD_SHA2_FILE
       - GRAYLOG_HTTP_EXTERNAL_URI=https://graylog.4programmers.dev/
     networks:
@@ -215,6 +217,7 @@ services:
       - elasticsearch
     secrets:
       - GRAYLOG_ROOT_PASSWORD_SHA2_FILE
+      - GRAYLOG_PASSWORD_SECRET_FILE
     ports:
       - 29000:9000
       - 1514:1514
@@ -298,5 +301,7 @@ secrets:
   FACEBOOK_SECRET_ID_FILE:
     external: true
   GRAYLOG_ROOT_PASSWORD_SHA2_FILE:
+    external: true
+  GRAYLOG_PASSWORD_SECRET_FILE:
     external: true
 
