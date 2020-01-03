@@ -52,9 +52,8 @@ services:
       AWS_URL_FILE: https://4programmers.dev/uploads/
       MINIO_ENDPOINT: http://minio:9000/
 
-      WS_HOST: app
-      WS_PORT: 8880
-      WS_PROXY_FILE: https://ws.4programmers.dev
+      WS_HOST: ws.4programmers.dev
+      WS_PORT: 80
 
       MAIL_DRIVER: mailgun
       MAILGUN_DOMAIN: mg.4programmers.dev
