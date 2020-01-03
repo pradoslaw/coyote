@@ -7,8 +7,7 @@ return [
 
     'ws'        => [
         'host'          => env('WS_HOST'),
-        'port'          => env('WS_PORT'),
-        'proxy'         => env('WS_PROXY')
+        'port'          => env('WS_PORT')
     ],
 
     // Elasticsearch host and port. In most cases default values will be suitable.

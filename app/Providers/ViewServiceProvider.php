@@ -45,7 +45,7 @@ class ViewServiceProvider extends ServiceProvider
         if (config('services.ws.host') && $this->app['request']->user()) {
             $this->app['request']->attributes->set(
                 'ws',
-                (config('services.ws.proxy') ?: config('services.ws.host')) . (config('services.ws.port') ? ':' . config('services.ws.port') : '')
+                config('services.ws.host') . (config('services.ws.port') ? ':' . config('services.ws.port') : '')
             );
         }
     }
