@@ -207,7 +207,7 @@ services:
       - graylog:/usr/share/graylog/data/journal
     environment:
       - GRAYLOG_ROOT_PASSWORD_SHA2_FILE=/run/secrets/GRAYLOG_ROOT_PASSWORD_SHA2_FILE
-      - GRAYLOG_HTTP_EXTERNAL_URI=https://4programmers.dev:29000/
+      - GRAYLOG_HTTP_EXTERNAL_URI=https://graylog.4programmers.dev/
     networks:
       - coyote
     depends_on:
