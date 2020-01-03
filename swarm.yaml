@@ -213,6 +213,8 @@ services:
     depends_on:
       - mongo
       - elasticsearch
+    secrets:
+      - GRAYLOG_ROOT_PASSWORD_SHA2_FILE
     ports:
       - 29000:9000
       - 1514:1514
