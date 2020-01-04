@@ -114,6 +114,8 @@ services:
       - GOOGLE_SECRET_ID_FILE
       - FACEBOOK_CLIENT_ID_FILE
       - FACEBOOK_SECRET_ID_FILE
+    deploy:
+      replicas: 2
     networks:
       - coyote
     logging:
@@ -128,6 +130,8 @@ services:
     volumes:
       - ./:/var/www
     command: php artisan queue:listen --delay=5 -n redis
+    deploy:
+      replicas: 2
     environment:
       APP_ENV: local
       APP_DEBUG: "false"
