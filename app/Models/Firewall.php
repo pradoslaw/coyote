@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $updated_at
  * @property string $ip
  * @property string $fingerprint
+ * @property \Coyote\User $user
  */
 class Firewall extends Model
 {
@@ -42,4 +43,9 @@ class Firewall extends Model
      * @var string
      */
     protected $dateFormat = 'Y-m-d H:i:se';
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
