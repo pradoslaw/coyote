@@ -16,6 +16,10 @@ services:
       - coyote
     secrets:
       - POSTGRES_PASSWORD_FILE
+    logging:
+      driver: "json-file"
+      options:
+        tag: postgres
 
   php:
     image: 4programmers/coyote:latest
@@ -112,6 +116,10 @@ services:
       - FACEBOOK_SECRET_ID_FILE
     networks:
       - coyote
+    logging:
+      driver: "json-file"
+      options:
+        tag: php
 
   worker:
     image: 4programmers/coyote:latest
@@ -161,6 +169,10 @@ services:
       - php
     networks:
       - coyote
+    logging:
+      driver: "json-file"
+      options:
+        tag: nginx
 
   redis:
     image: redis:latest
@@ -181,6 +193,10 @@ services:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     networks:
       - coyote
+    logging:
+      driver: "json-file"
+      options:
+        tag: elasticsearch
 
   minio:
     image: minio/minio
@@ -195,6 +211,10 @@ services:
       - AWS_SECRET_ACCESS_KEY_FILE
     networks:
       - coyote
+    logging:
+      driver: "json-file"
+      options:
+        tag: minio
 
   mongo:
     image: mongo:3
