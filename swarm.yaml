@@ -286,11 +286,9 @@ secrets:
     external: true
   AWS_ACCESS_KEY_ID_FILE:
     external: true
-  AWS_ACCESS_KEY_FILE:
+  AWS_SECRET_ACCESS_KEY_FILE:
     external: true
   POSTGRES_PASSWORD_FILE:
-    external: true
-  AWS_SECRET_ACCESS_KEY_FILE:
     external: true
   AWS_URL_FILE:
     external: true
