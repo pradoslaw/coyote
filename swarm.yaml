@@ -47,7 +47,7 @@ services:
       CACHE_DRIVER: redis
       QUEUE_DRIVER: redis
 
-      AWS_ACCESS_KEY_ID: minio
+      AWS_ACCESS_KEY_ID: /run/secrets/AWS_ACCESS_KEY_ID_FILE
       AWS_SECRET_ACCESS_KEY_FILE: /run/secrets/AWS_SECRET_ACCESS_KEY_FILE
       AWS_URL_FILE: https://4programmers.dev/uploads/
       MINIO_ENDPOINT: http://minio:9000/
@@ -92,6 +92,7 @@ services:
     secrets:
       - APP_KEY_FILE
       - POSTGRES_PASSWORD_FILE
+      - AWS_ACCESS_KEY_ID_FILE
       - AWS_SECRET_ACCESS_KEY_FILE
       - AWS_URL_FILE
       - MAILGUN_SECRET_FILE
@@ -186,10 +187,11 @@ services:
     volumes:
       - minio:/data
     environment:
-      MINIO_ACCESS_KEY: minio
-      MINIO_SECRET_KEY_FILE: /run/secrets/AWS_SECRET_ACCESS_KEY_FILE
+      - MINIO_ACCESS_KEY_FILE=AWS_ACCESS_KEY_ID_FILE
+      - MINIO_SECRET_KEY_FILE=AWS_SECRET_ACCESS_KEY_FILE
     command: server /data
     secrets:
+      - AWS_ACCESS_KEY_ID_FILE
       - AWS_SECRET_ACCESS_KEY_FILE
     networks:
       - coyote
@@ -261,6 +263,10 @@ networks:
 
 secrets:
   APP_KEY_FILE:
+    external: true
+  AWS_ACCESS_KEY_ID_FILE:
+    external: true
+  AWS_ACCESS_KEY_FILE:
     external: true
   POSTGRES_PASSWORD_FILE:
     external: true
