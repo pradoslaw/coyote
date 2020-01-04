@@ -211,6 +211,16 @@ services:
       - AWS_SECRET_ACCESS_KEY_FILE
     networks:
       - coyote
+    deploy:
+      restart_policy:
+        delay: 10s
+        max_attempts: 10
+        window: 60s
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
     logging:
       driver: "json-file"
       options:
