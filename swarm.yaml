@@ -187,14 +187,10 @@ services:
     image: elasticsearch:5.6.14
     ports:
       - 9200:9200
-    deploy:
-      resources:
-        limits:
-          memory: 3g
     volumes:
       - elasticsearch:/usr/share/elasticsearch/data
     environment:
-      - "ES_JAVA_OPTS=-Xms2h -Xmx2g"
+      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
     networks:
       - coyote
     logging:
