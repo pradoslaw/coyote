@@ -129,7 +129,7 @@ services:
       - coyote
     volumes:
       - ./:/var/www
-    command: php artisan queue:listen --delay=5 -n redis
+    command: php artisan queue:work --delay=5 -n redis
     deploy:
       replicas: 2
     environment:
@@ -150,6 +150,11 @@ services:
       CACHE_DRIVER: redis
       QUEUE_DRIVER: redis
 
+      AWS_ACCESS_KEY_ID_FILE: /run/secrets/AWS_ACCESS_KEY_ID_FILE
+      AWS_SECRET_ACCESS_KEY_FILE: /run/secrets/AWS_SECRET_ACCESS_KEY_FILE
+      AWS_URL: https://4programmers.dev/uploads/
+      MINIO_ENDPOINT: http://minio:9000/
+
       MAIL_DRIVER: mailgun
       MAILGUN_DOMAIN: mg.4programmers.dev
       MAILGUN_SECRET_FILE: /run/secrets/MAILGUN_SECRET_FILE
@@ -161,6 +166,14 @@ services:
       VENDOR_POSTAL_CODE: "E13 9PJ"
       VENDOR_CITY: "London"
       VENDOR_COUNTRY: "United Kingdom"
+    secrets:
+      - APP_KEY_FILE
+      - POSTGRES_PASSWORD_FILE
+      - AWS_ACCESS_KEY_ID_FILE
+      - AWS_SECRET_ACCESS_KEY_FILE
+      - AWS_URL_FILE
+      - MAILGUN_SECRET_FILE
+      - SENTRY_DSN_FILE
     logging:
       driver: "json-file"
       options:
