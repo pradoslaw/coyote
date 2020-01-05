@@ -190,11 +190,11 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1g
+          memory: 3g
     volumes:
       - elasticsearch:/usr/share/elasticsearch/data
     environment:
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms2h -Xmx2g"
     networks:
       - coyote
     logging:
@@ -256,8 +256,6 @@ services:
       - GRAYLOG_PASSWORD_SECRET_FILE
     ports:
       - 29000:9000
-      - 1514:1514
-      - 1514:1514/udp
       - 12201:12201
       - 12201:12201/udp
 
