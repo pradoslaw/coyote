@@ -56,7 +56,7 @@ class Url
 
         $thumbnailPath = $this->thumbnailPath($template);
 
-        if (!file_exists($this->file->path($thumbnailPath))) {
+        if (!$this->file->getFilesystem()->exists($thumbnailPath)) {
             $class = config("imagecache.templates.$template");
             $filter = new $class;
 
