@@ -53,7 +53,7 @@ services:
 
       AWS_ACCESS_KEY_ID_FILE: /run/secrets/AWS_ACCESS_KEY_ID_FILE
       AWS_SECRET_ACCESS_KEY_FILE: /run/secrets/AWS_SECRET_ACCESS_KEY_FILE
-      AWS_URL_FILE: https://4programmers.dev/uploads/
+      AWS_URL: https://4programmers.dev/uploads/
       MINIO_ENDPOINT: http://minio:9000/
 
       WS_HOST: ws.4programmers.dev
