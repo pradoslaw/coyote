@@ -180,7 +180,7 @@ services:
         tag: worker
 
   nginx:
-    image: nginx:latest
+    image: nginx:1.17
     volumes:
       - codebase:/var/www/
       - ./docker/nginx/:/etc/nginx/conf.d/
@@ -197,6 +197,7 @@ services:
 
   redis:
     image: redis:5
+    command: redis-server --appendonly no --save
     networks:
       - coyote
 
