@@ -51,7 +51,7 @@ services:
       CACHE_DRIVER: redis
       QUEUE_DRIVER: redis
 
-      AWS_ACCESS_KEY_ID: /run/secrets/AWS_ACCESS_KEY_ID_FILE
+      AWS_ACCESS_KEY_ID_FILE: /run/secrets/AWS_ACCESS_KEY_ID_FILE
       AWS_SECRET_ACCESS_KEY_FILE: /run/secrets/AWS_SECRET_ACCESS_KEY_FILE
       AWS_URL_FILE: https://4programmers.dev/uploads/
       MINIO_ENDPOINT: http://minio:9000/

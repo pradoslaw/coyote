@@ -53,7 +53,7 @@ return [
         'local'     => [
             'driver' => 's3',
             'use_path_style_endpoint' => true,
-            'key' => env('AWS_ACCESS_KEY_ID', docker_secret('AWS_ACCESS_KEY_FILE')),
+            'key' => env('AWS_ACCESS_KEY_ID', docker_secret('AWS_ACCESS_KEY_ID_FILE')),
             'secret' => env('AWS_SECRET_ACCESS_KEY', docker_secret('AWS_SECRET_ACCESS_KEY_FILE')),
             'region' => 'us-east-1',
             'bucket' => 'local',
@@ -63,7 +63,7 @@ return [
         'public'     => [
             'driver' => 's3',
             'use_path_style_endpoint' => true,
-            'key' => env('AWS_ACCESS_KEY_ID', docker_secret('AWS_ACCESS_KEY_FILE')),
+            'key' => env('AWS_ACCESS_KEY_ID', docker_secret('AWS_ACCESS_KEY_ID_FILE')),
             'secret' => env('AWS_SECRET_ACCESS_KEY', docker_secret('AWS_SECRET_ACCESS_KEY_FILE')),
             'region' => 'us-east-1',
             'bucket' => 'public',
