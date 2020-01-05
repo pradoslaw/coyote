@@ -67,7 +67,13 @@ return [
             'bucket' => env('AWS_BUCKET'),
             'endpoint' => env('MINIO_ENDPOINT', docker_secret('MINIO_ENDPOINT_FILE')),
             'disable_asserts' => true,
-            'url' => env('AWS_URL', docker_secret('AWS_URL_FILE'))
+            'url' => env('AWS_URL', docker_secret('AWS_URL_FILE')),
+
+            'cache' => [
+                'store' => 'redis',
+                'expire' => 600,
+                'prefix' => 's3',
+            ],
         ]
     ],
 
