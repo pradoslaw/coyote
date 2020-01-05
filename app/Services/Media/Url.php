@@ -60,11 +60,12 @@ class Url
             $class = config("imagecache.templates.$template");
             $filter = new $class;
 
-            $image = $this->imageManager->make($this->file->path());
-            $image->filter($filter)->save($this->file->path($thumbnailPath));
+            $image = $this->imageManager->make($this->file->get());
+
+            $this->file->getFilesystem()->put($this->file->path($thumbnailPath), $image->filter($filter)->encode());
         }
 
-        return cdn($this->publicPath() . '/' . $thumbnailPath);
+        return $this->file->getFilesystem()->url($thumbnailPath);
     }
 
     /**
@@ -73,14 +74,6 @@ class Url
     public function __toString()
     {
         return $this->makeUrl();
-    }
-
-    /**
-     * @return string
-     */
-    protected function publicPath()
-    {
-        return implode('/', array_diff(explode('/', $this->file->root()), explode('/', public_path())));
     }
 
     /**
@@ -96,7 +89,7 @@ class Url
             return $this->file->getDownloadUrl();
         }
 
-        return cdn($this->publicPath() . '/' . $this->file->relative(), $this->secure);
+        return $this->file->getFilesystem()->url($this->file->path());
     }
 
     /**
@@ -106,6 +99,7 @@ class Url
     protected function thumbnailPath($template)
     {
         $pathinfo = pathinfo($this->file->relative());
+
         return $pathinfo['dirname'] . '/' . $pathinfo['filename'] . '-' . $template . '.' . $pathinfo['extension'];
     }
 }

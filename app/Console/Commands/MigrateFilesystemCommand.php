@@ -44,13 +44,13 @@ class MigrateFilesystemCommand extends Command
 
     private function migratePublic()
     {
-        $files = Storage::disk('public')->files('', true);
+        $files = Storage::disk('public_fs')->files('', true);
         $bar = $this->output->createProgressBar(count($files));
 
         $bar->start();
 
         foreach ($files as $file) {
-            Storage::disk('s3')->put($file, Storage::disk('public')->get($file), 'public');
+            Storage::disk('public')->put($file, Storage::disk('public_fs')->get($file));
 
             $bar->advance();
         }
@@ -60,13 +60,13 @@ class MigrateFilesystemCommand extends Command
 
     private function migrateLocal()
     {
-        $files = Storage::disk('local')->files('', true);
+        $files = Storage::disk('local_fs')->files('', true);
         $bar = $this->output->createProgressBar(count($files));
 
         $bar->start();
 
         foreach ($files as $file) {
-            Storage::disk('s3')->put($file, Storage::disk('local')->get($file));
+            Storage::disk('local')->put($file, Storage::disk('local_fs')->get($file));
 
             $bar->advance();
         }

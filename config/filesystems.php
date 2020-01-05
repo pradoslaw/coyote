@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('FILESYSTEM_DRIVER', 'public'),
+    'default' => 'public',
 
     /*
     |--------------------------------------------------------------------------
@@ -41,30 +41,32 @@ return [
     */
 
     'disks'   => [
-
-        'local'     => [
-            'driver' => 'local',
-            'root'   => storage_path() . '/app',
-        ],
-        'public'     => [
+        'public_fs'     => [
             'driver' => 'local',
             'root'   => public_path() . '/uploads',
         ],
-        'log'        => [
+        'local_fs'        => [
             'driver' => 'local',
-            'root'   => storage_path() . '/logs'
+            'root'   => storage_path() . '/app'
         ],
-        'app'        => [
-            'driver' => 'local',
-            'root'   => app_path()
+
+        'local'     => [
+            'driver' => 's3',
+            'use_path_style_endpoint' => true,
+            'key' => env('AWS_ACCESS_KEY_ID'),
+            'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            'region' => 'us-east-1',
+            'bucket' => 'local',
+            'endpoint' => env('MINIO_ENDPOINT'),
+            'disable_asserts' => true
         ],
-        's3'        => [
+        'public'     => [
             'driver' => 's3',
             'use_path_style_endpoint' => true,
             'key' => env('AWS_ACCESS_KEY_ID', docker_secret('AWS_ACCESS_KEY_FILE')),
             'secret' => env('AWS_SECRET_ACCESS_KEY', docker_secret('AWS_SECRET_ACCESS_KEY_FILE')),
             'region' => 'us-east-1',
-            'bucket' => env('AWS_BUCKET'),
+            'bucket' => 'public',
             'endpoint' => env('MINIO_ENDPOINT', docker_secret('MINIO_ENDPOINT_FILE')),
             'disable_asserts' => true,
             'url' => env('AWS_URL', docker_secret('AWS_URL_FILE')),
@@ -73,7 +75,12 @@ return [
                 'store' => 'redis',
                 'expire' => 600,
                 'prefix' => 's3',
-            ],
+            ]
+        ],
+        'log'        => [
+            'driver' => 'local',
+            'root'   => storage_path() . '/logs'
+
         ]
     ],
 

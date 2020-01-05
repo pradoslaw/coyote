@@ -37,7 +37,6 @@ return [
     |
     */
     'src_dirs' => [
-        public_path('storage/attachment')
     ],
 
     /*
