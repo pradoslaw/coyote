@@ -204,14 +204,16 @@ return [
          */
         Coyote\Providers\RepositoryServiceProvider::class,
         Coyote\Providers\AppServiceProvider::class,
+
         Coyote\Providers\ConfigServiceProvider::class,
+
+        // Obsluga sesji przez Coyote (nadpisujemy domyslny driver)
+        Coyote\Providers\SessionServiceProvider::class,
         Coyote\Providers\EventServiceProvider::class,
         Coyote\Providers\RouteServiceProvider::class,
         Coyote\Providers\ViewServiceProvider::class,
         Coyote\Providers\AuthServiceProvider::class,
         Coyote\Providers\BroadcastServiceProvider::class,
-        // Obsluga sesji przez Coyote (nadpisujemy domyslny driver)
-        Coyote\Providers\SessionServiceProvider::class,
         // mozliwosc wczytania gotowych "scenariuszy" parsowania elementow strony, takich jak
         // mikroblogi, czy forum. w takim scenariuszu zaladowane sa odpowiednie klasy
         // do parsowania tekstu w zaleznosci od tego, czy mamy do czynienia z postem, komentarzem itd
@@ -224,8 +226,6 @@ return [
         Coyote\Providers\GeoIpServiceProvider::class,
         // Google maps geocoder
         Coyote\Providers\GeocoderServiceProvider::class,
-        // Serwis do tworzenia miniatur (logo, zdjecie)
-        Coyote\Providers\ThumbnailServiceProvider::class,
         // Uploadowanie zalacznikow, zdjec oraz generowanie URL do tychze plikow
         Coyote\Providers\MediaServiceProvider::class,
         // Przegladarnie logow laravela w panelu administracyjnym

@@ -128,23 +128,4 @@ class Handler extends ExceptionHandler
 
         return $page !== null && $page->path !== $path ? $page->path : null;
     }
-
-    /**
-     * Get the html response content.
-     *
-     * @param  \Exception  $e
-     * @throws FlattenException
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    protected function convertExceptionToResponse(Exception $e)
-    {
-        if (config('app.debug')) {
-            return parent::convertExceptionToResponse($e);
-        }
-
-        $e = FlattenException::create($e);
-
-        // on production site, we MUST render "nice" error page
-        return SymfonyResponse::create(view('errors.500')->render(), $e->getStatusCode(), $e->getHeaders());
-    }
 }
