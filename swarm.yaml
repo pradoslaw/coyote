@@ -196,7 +196,7 @@ services:
         tag: nginx
 
   redis:
-    image: redis:latest
+    image: redis:5
     networks:
       - coyote
 
@@ -290,7 +290,6 @@ services:
     environment:
       PORT: "8888"
       REDIS_HOST: "redis"
-      APP_KEY_FILE: /run/secrets/APP_KEY_FILE
     secrets:
       - APP_KEY_FILE
     ports:

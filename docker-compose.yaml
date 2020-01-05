@@ -37,7 +37,7 @@ services:
       - coyote
 
   redis:
-    image: redis:latest
+    image: redis:5
     networks:
       - coyote
 
