@@ -53,11 +53,11 @@ return [
         'local'     => [
             'driver' => 's3',
             'use_path_style_endpoint' => true,
-            'key' => env('AWS_ACCESS_KEY_ID'),
-            'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            'key' => env('AWS_ACCESS_KEY_ID', docker_secret('AWS_ACCESS_KEY_FILE')),
+            'secret' => env('AWS_SECRET_ACCESS_KEY', docker_secret('AWS_SECRET_ACCESS_KEY_FILE')),
             'region' => 'us-east-1',
             'bucket' => 'local',
-            'endpoint' => env('MINIO_ENDPOINT'),
+            'endpoint' => env('MINIO_ENDPOINT', docker_secret('MINIO_ENDPOINT_FILE')),
             'disable_asserts' => true
         ],
         'public'     => [
@@ -80,7 +80,6 @@ return [
         'log'        => [
             'driver' => 'local',
             'root'   => storage_path() . '/logs'
-
         ]
     ],
 
