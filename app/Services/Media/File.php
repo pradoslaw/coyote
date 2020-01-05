@@ -246,10 +246,12 @@ abstract class File implements MediaInterface
      */
     protected function applyFilter(FilterInterface $filter)
     {
-        $image = $this->imageManager->make($this->path());
-        $image->filter($filter);
+        $image = $this->imageManager->make($this->get());
 
-        return $image->save($this->path());
+        // save new image
+        $this->filesystem->put($this->path(), $image->filter($filter)->encode());
+
+        return $image;
     }
 
     /**
