@@ -85,10 +85,6 @@ class Url
             return ''; // because __toString() requires string value
         }
 
-        if ($this->file->getDownloadUrl() && !$this->file->isImage()) {
-            return $this->file->getDownloadUrl();
-        }
-
         return $this->file->getFilesystem()->url($this->file->path());
     }
 

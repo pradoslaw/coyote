@@ -33,11 +33,6 @@ abstract class File implements MediaInterface
     /**
      * @var string
      */
-    protected $downloadUrl;
-
-    /**
-     * @var string
-     */
     protected $filename;
 
     /**
@@ -89,25 +84,6 @@ abstract class File implements MediaInterface
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDownloadUrl()
-    {
-        return $this->downloadUrl;
-    }
-
-    /**
-     * @param string $downloadUrl
-     * @return $this
-     */
-    public function setDownloadUrl($downloadUrl)
-    {
-        $this->downloadUrl = $downloadUrl;
-
-        return $this;
     }
 
     /**
