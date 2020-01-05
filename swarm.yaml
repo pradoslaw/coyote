@@ -129,7 +129,7 @@ services:
       - coyote
     volumes:
       - ./:/var/www
-    command: php artisan queue:work --delay=5 -n redis
+    command: php artisan queue:work --delay=5 --tries=3 -n redis
     deploy:
       replicas: 2
     environment:
