@@ -76,7 +76,7 @@ class Microblog extends Model
             "format" => "yyyy-MM-dd HH:mm:ss"
         ],
         "text" => [
-            "type" => "string",
+            "type" => "text",
             "analyzer" => "default_analyzer"
         ]
     ];

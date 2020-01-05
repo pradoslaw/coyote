@@ -181,7 +181,7 @@ class Job extends Model
             "type" => "nested",
             "properties" => [
                 "city" => [
-                    "type" => "string",
+                    "type" => "text",
                     "analyzer" => "keyword_asciifolding_analyzer",
                     "fields" => [
                         "original" => ["type" => "text", "analyzer" => "keyword_analyzer", "fielddata" => true]

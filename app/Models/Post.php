@@ -68,31 +68,31 @@ class Post extends Model
             "type" => "string",
             "fields" => [
                 "tag" => [
-                    "type" => "string"
+                    "type" => "text"
                 ],
 
                 // original value (case sensitive)
                 "tag_original" => [
-                    "type" => "string",
+                    "type" => "text",
                     "index" => "not_analyzed"
                 ]
             ]
         ],
         "text" => [
-            "type" => "string",
+            "type" => "text",
             "analyzer" => "default_analyzer"
         ],
         "user_name" => [
-            "type" => "string",
+            "type" => "text",
             // ability to search case insensitive
             "analyzer" => "keyword_analyzer"
         ],
         "ip" => [
-            "type" => "string",
+            "type" => "text",
             "index" => "not_analyzed"
         ],
         "host" => [
-            "type" => "string",
+            "type" => "text",
             "index" => "not_analyzed"
         ],
         "created_at" => [

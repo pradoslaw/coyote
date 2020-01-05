@@ -76,13 +76,13 @@ class Topic extends Model
         "posts" => [
             "properties" => [
                 "text" => [
-                    "type" => "string",
+                    "type" => "text",
                     "analyzer" => "stopwords_analyzer"
                 ]
             ]
         ],
         "subject" => [
-            "type" => "string",
+            "type" => "text",
             "analyzer" => "default_analyzer"
         ],
         "created_at" => [
