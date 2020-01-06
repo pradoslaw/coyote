@@ -1,5 +1,94 @@
 version: '3.5'
 
+x-env:
+  &env
+  APP_ENV: production
+  APP_DEBUG: "false"
+  APP_KEY_FILE: /run/secrets/APP_KEY_FILE
+  APP_URL: https://4programmers.net
+  API_HOST: api.4programmers.net
+
+  SESSION_DOMAIN: ".4programmers.net"
+
+  DB_PORT: 5432
+  DB_HOST: db
+  DB_DATABASE: coyote
+  DB_USERNAME: coyote
+  DB_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD_FILE
+
+  ELASTICSEARCH_HOST: elasticsearch
+  REDIS_HOST: redis
+  BROADCAST_DRIVER: redis
+  CACHE_DRIVER: redis
+  QUEUE_DRIVER: redis
+  LOG_CHANNEL: gelf
+
+  AWS_ACCESS_KEY_ID_FILE: /run/secrets/AWS_ACCESS_KEY_ID_FILE
+  AWS_SECRET_ACCESS_KEY_FILE: /run/secrets/AWS_SECRET_ACCESS_KEY_FILE
+  AWS_URL: https://4programmers.net/uploads/
+  MINIO_ENDPOINT: http://minio:9000/
+
+  WS_HOST: ws.4programmers.net
+
+  MAIL_DRIVER: mailgun
+  MAILGUN_DOMAIN: mg.4programmers.net
+  MAILGUN_SECRET_FILE: /run/secrets/MAILGUN_SECRET_FILE
+
+  SENTRY_DSN_FILE: /run/secrets/SENTRY_DSN_FILE
+
+  RECAPTCHA_KEY_FILE: /run/secrets/RECAPTCHA_KEY_FILE
+  RECAPTCHA_SECRET_FILE: /run/secrets/RECAPTCHA_SECRET_FILE
+
+  P24_CLIENT_ID_FILE: /run/secrets/P24_CLIENT_ID_FILE
+  P24_SALT_FILE: /run/secrets/P24_SALT_FILE
+  P24_PAYMENT_URL: "https://secure.przelewy24.pl/trnDirect"
+  P24_VERIFY_URL: "https://secure.przelewy24.pl/trnVerify"
+
+  PAYLANE_USERNAME_FILE: /run/secrets/PAYLANE_USERNAME_FILE
+  PAYLANE_PASSWORD_FILE: /run/secrets/PAYLANE_PASSWORD_FILE
+  PAYLANE_SALT_FILE: /run/secrets/PAYLANE_SALT_FILE
+
+  GITHUB_CLIENT_ID_FILE: /run/secrets/GITHUB_CLIENT_ID_FILE
+  GITHUB_SECRET_ID_FILE: /run/secrets/GITHUB_SECRET_ID_FILE
+  GITHUB_REDIRECT: "https://4programmers.net/OAuth/Github/Callback"
+
+  GOOGLE_CLIENT_ID_FILE: /run/secrets/GOOGLE_CLIENT_ID_FILE
+  GOOGLE_SECRET_ID_FILE: /run/secrets/GOOGLE_SECRET_ID_FILE
+  GOOGLE_REDIRECT: "https://4programmers.net/OAuth/Google/Callback"
+
+  FACEBOOK_CLIENT_ID_FILE: /run/secrets/FACEBOOK_CLIENT_ID_FILE
+  FACEBOOK_SECRET_ID_FILE: /run/secrets/FACEBOOK_SECRET_ID_FILE
+  FACEBOOK_REDIRECT: "https://4programmers.net/OAuth/Facebook/Callback"
+
+  VENDOR_NAME: "4programmers.net Ltd"
+  VENDOR_ADDRESS: "International House 776-778 Barking Road"
+  VENDOR_POSTAL_CODE: "E13 9PJ"
+  VENDOR_CITY: "London"
+  VENDOR_COUNTRY: "United Kingdom"
+
+x-secrets:
+  &secrets
+  - APP_KEY_FILE
+  - POSTGRES_PASSWORD_FILE
+  - AWS_ACCESS_KEY_ID_FILE
+  - AWS_SECRET_ACCESS_KEY_FILE
+  - AWS_URL_FILE
+  - MAILGUN_SECRET_FILE
+  - SENTRY_DSN_FILE
+  - RECAPTCHA_KEY_FILE
+  - RECAPTCHA_SECRET_FILE
+  - P24_CLIENT_ID_FILE
+  - P24_SALT_FILE
+  - PAYLANE_USERNAME_FILE
+  - PAYLANE_PASSWORD_FILE
+  - PAYLANE_SALT_FILE
+  - GITHUB_CLIENT_ID_FILE
+  - GITHUB_SECRET_ID_FILE
+  - GOOGLE_CLIENT_ID_FILE
+  - GOOGLE_SECRET_ID_FILE
+  - FACEBOOK_CLIENT_ID_FILE
+  - FACEBOOK_SECRET_ID_FILE
+
 services:
   db:
     image: postgres:11-alpine
@@ -30,90 +119,8 @@ services:
         - 4programmers/coyote:latest
     volumes:
       - codebase:/var/www
-    environment:
-      APP_ENV: production
-      APP_DEBUG: "false"
-      APP_KEY_FILE: /run/secrets/APP_KEY_FILE
-      APP_URL: https://4programmers.net
-      API_HOST: api.4programmers.net
-
-      SESSION_DOMAIN: ".4programmers.net"
-
-      DB_PORT: 5432
-      DB_HOST: db
-      DB_DATABASE: coyote
-      DB_USERNAME: coyote
-      DB_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD_FILE
-
-      ELASTICSEARCH_HOST: elasticsearch
-      REDIS_HOST: redis
-      BROADCAST_DRIVER: redis
-      CACHE_DRIVER: redis
-      QUEUE_DRIVER: redis
-
-      AWS_ACCESS_KEY_ID_FILE: /run/secrets/AWS_ACCESS_KEY_ID_FILE
-      AWS_SECRET_ACCESS_KEY_FILE: /run/secrets/AWS_SECRET_ACCESS_KEY_FILE
-      AWS_URL: https://4programmers.net/uploads/
-      MINIO_ENDPOINT: http://minio:9000/
-
-      WS_HOST: ws.4programmers.net
-
-      MAIL_DRIVER: mailgun
-      MAILGUN_DOMAIN: mg.4programmers.net
-      MAILGUN_SECRET_FILE: /run/secrets/MAILGUN_SECRET_FILE
-
-      SENTRY_DSN_FILE: /run/secrets/SENTRY_DSN_FILE
-
-      RECAPTCHA_KEY_FILE: /run/secrets/RECAPTCHA_KEY_FILE
-      RECAPTCHA_SECRET_FILE: /run/secrets/RECAPTCHA_SECRET_FILE
-
-      P24_CLIENT_ID_FILE: /run/secrets/P24_CLIENT_ID_FILE
-      P24_SALT_FILE: /run/secrets/P24_SALT_FILE
-      P24_PAYMENT_URL: "https://secure.przelewy24.pl/trnDirect"
-      P24_VERIFY_URL: "https://secure.przelewy24.pl/trnVerify"
-
-      PAYLANE_USERNAME_FILE: /run/secrets/PAYLANE_USERNAME_FILE
-      PAYLANE_PASSWORD_FILE: /run/secrets/PAYLANE_PASSWORD_FILE
-      PAYLANE_SALT_FILE: /run/secrets/PAYLANE_SALT_FILE
-
-      GITHUB_CLIENT_ID_FILE: /run/secrets/GITHUB_CLIENT_ID_FILE
-      GITHUB_SECRET_ID_FILE: /run/secrets/GITHUB_SECRET_ID_FILE
-      GITHUB_REDIRECT: "https://4programmers.net/OAuth/Github/Callback"
-
-      GOOGLE_CLIENT_ID_FILE: /run/secrets/GOOGLE_CLIENT_ID_FILE
-      GOOGLE_SECRET_ID_FILE: /run/secrets/GOOGLE_SECRET_ID_FILE
-      GOOGLE_REDIRECT: "https://4programmers.net/OAuth/Google/Callback"
-
-      FACEBOOK_CLIENT_ID_FILE: /run/secrets/FACEBOOK_CLIENT_ID_FILE
-      FACEBOOK_SECRET_ID_FILE: /run/secrets/FACEBOOK_SECRET_ID_FILE
-      FACEBOOK_REDIRECT: "https://4programmers.net/OAuth/Facebook/Callback"
-
-      VENDOR_NAME: "4programmers.net Ltd"
-      VENDOR_ADDRESS: "International House 776-778 Barking Road"
-      VENDOR_POSTAL_CODE: "E13 9PJ"
-      VENDOR_CITY: "London"
-      VENDOR_COUNTRY: "United Kingdom"
-    secrets:
-      - APP_KEY_FILE
-      - POSTGRES_PASSWORD_FILE
-      - AWS_ACCESS_KEY_ID_FILE
-      - AWS_SECRET_ACCESS_KEY_FILE
-      - AWS_URL_FILE
-      - MAILGUN_SECRET_FILE
-      - SENTRY_DSN_FILE
-      - RECAPTCHA_KEY_FILE
-      - RECAPTCHA_SECRET_FILE
-      - P24_CLIENT_ID_FILE
-      - P24_SALT_FILE
-      - PAYLANE_USERNAME_FILE
-      - PAYLANE_PASSWORD_FILE
-      - PAYLANE_SALT_FILE
-      - GITHUB_CLIENT_ID_FILE
-      - GITHUB_SECRET_ID_FILE
-      - GOOGLE_CLIENT_ID_FILE
-      - GOOGLE_SECRET_ID_FILE
-      - FACEBOOK_CLIENT_ID_FILE
-      - FACEBOOK_SECRET_ID_FILE
+    environment: *env
+    secrets: *secrets
     deploy:
       replicas: 2
     networks:
@@ -127,57 +134,27 @@ services:
     image: 4programmers/coyote:latest
     networks:
       - coyote
-    volumes:
-      - ./:/var/www
     command: php artisan queue:work --delay=5 --tries=3 -n redis
     deploy:
       replicas: 2
-    environment:
-      APP_ENV: production
-      APP_DEBUG: "false"
-      APP_KEY_FILE: /run/secrets/APP_KEY_FILE
-      APP_URL: https://4programmers.net
-
-      DB_PORT: 5432
-      DB_HOST: db
-      DB_DATABASE: coyote
-      DB_USERNAME: coyote
-      DB_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD_FILE
-
-      ELASTICSEARCH_HOST: elasticsearch
-      REDIS_HOST: redis
-      BROADCAST_DRIVER: redis
-      CACHE_DRIVER: redis
-      QUEUE_DRIVER: redis
-
-      AWS_ACCESS_KEY_ID_FILE: /run/secrets/AWS_ACCESS_KEY_ID_FILE
-      AWS_SECRET_ACCESS_KEY_FILE: /run/secrets/AWS_SECRET_ACCESS_KEY_FILE
-      AWS_URL: https://4programmers.net/uploads/
-      MINIO_ENDPOINT: http://minio:9000/
-
-      MAIL_DRIVER: mailgun
-      MAILGUN_DOMAIN: mg.4programmers.net
-      MAILGUN_SECRET_FILE: /run/secrets/MAILGUN_SECRET_FILE
-
-      SENTRY_DSN_FILE: /run/secrets/SENTRY_DSN_FILE
-
-      VENDOR_NAME: "4programmers.net Ltd"
-      VENDOR_ADDRESS: "International House 776-778 Barking Road"
-      VENDOR_POSTAL_CODE: "E13 9PJ"
-      VENDOR_CITY: "London"
-      VENDOR_COUNTRY: "United Kingdom"
-    secrets:
-      - APP_KEY_FILE
-      - POSTGRES_PASSWORD_FILE
-      - AWS_ACCESS_KEY_ID_FILE
-      - AWS_SECRET_ACCESS_KEY_FILE
-      - AWS_URL_FILE
-      - MAILGUN_SECRET_FILE
-      - SENTRY_DSN_FILE
+    environment: *env
+    secrets: *secrets
     logging:
       driver: "json-file"
       options:
         tag: worker
+
+  cron:
+    image: 4programmers/coyote:latest
+    entrypoint: crond -f -l 8
+    environment: *env
+    secrets: *secrets
+    networks:
+      - coyote
+    logging:
+      driver: "json-file"
+      options:
+        tag: cron
 
   nginx:
     image: nginx:1.17
@@ -261,7 +238,7 @@ services:
       - GRAYLOG_PASSWORD_SECRET_FILE=/run/secrets/GRAYLOG_PASSWORD_SECRET_FILE
 #      - GRAYLOG_ROOT_PASSWORD_SHA2=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
       - GRAYLOG_ROOT_PASSWORD_SHA2_FILE=/run/secrets/GRAYLOG_ROOT_PASSWORD_SHA2_FILE
-      - GRAYLOG_HTTP_EXTERNAL_URI=https://graylog.4programmers.net/
+      - GRAYLOG_HTTP_EXTERNAL_URI=https://graylog.4programmers.dev/
     networks:
       - coyote
     depends_on:
