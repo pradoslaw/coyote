@@ -1,0 +1,2 @@
+* * * * * /usr/local/bin/php /var/www/artisan schedule:run  2>&1
+# empty line

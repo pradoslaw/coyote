@@ -19,7 +19,15 @@ services:
     working_dir: /var/www
     volumes:
       - ./:/var/www
-      - ./docker/php/coyote.ini:/usr/local/etc/php/conf.d/coyote.ini
+    networks:
+      - coyote
+
+  cron:
+    image: 4programmers/coyote:latest
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    entrypoint: crond -f -l 8
     networks:
       - coyote
 

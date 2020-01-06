@@ -31,4 +31,6 @@ RUN chmod 0775 bootstrap/cache/
 ADD ./docker/coyote/start.sh /start.sh
 RUN chmod 755 /start.sh
 
+COPY ./docker/coyote/cron /etc/crontabs/root
+
 CMD ["/start.sh"]
