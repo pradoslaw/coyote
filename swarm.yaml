@@ -31,13 +31,13 @@ services:
     volumes:
       - codebase:/var/www
     environment:
-      APP_ENV: local
-      APP_DEBUG: "true"
+      APP_ENV: production
+      APP_DEBUG: "false"
       APP_KEY_FILE: /run/secrets/APP_KEY_FILE
-      APP_URL: https://4programmers.dev
-      API_HOST: api.4programmers.dev
+      APP_URL: https://4programmers.net
+      API_HOST: api.4programmers.net
 
-      SESSION_DOMAIN: ".4programmers.dev"
+      SESSION_DOMAIN: ".4programmers.net"
 
       DB_PORT: 5432
       DB_HOST: db
@@ -53,13 +53,13 @@ services:
 
       AWS_ACCESS_KEY_ID_FILE: /run/secrets/AWS_ACCESS_KEY_ID_FILE
       AWS_SECRET_ACCESS_KEY_FILE: /run/secrets/AWS_SECRET_ACCESS_KEY_FILE
-      AWS_URL: https://4programmers.dev/uploads/
+      AWS_URL: https://4programmers.net/uploads/
       MINIO_ENDPOINT: http://minio:9000/
 
-      WS_HOST: ws.4programmers.dev
+      WS_HOST: ws.4programmers.net
 
       MAIL_DRIVER: mailgun
-      MAILGUN_DOMAIN: mg.4programmers.dev
+      MAILGUN_DOMAIN: mg.4programmers.net
       MAILGUN_SECRET_FILE: /run/secrets/MAILGUN_SECRET_FILE
 
       SENTRY_DSN_FILE: /run/secrets/SENTRY_DSN_FILE
@@ -136,7 +136,7 @@ services:
       APP_ENV: production
       APP_DEBUG: "false"
       APP_KEY_FILE: /run/secrets/APP_KEY_FILE
-      APP_URL: https://4programmers.dev
+      APP_URL: https://4programmers.net
 
       DB_PORT: 5432
       DB_HOST: db
@@ -152,11 +152,11 @@ services:
 
       AWS_ACCESS_KEY_ID_FILE: /run/secrets/AWS_ACCESS_KEY_ID_FILE
       AWS_SECRET_ACCESS_KEY_FILE: /run/secrets/AWS_SECRET_ACCESS_KEY_FILE
-      AWS_URL: https://4programmers.dev/uploads/
+      AWS_URL: https://4programmers.net/uploads/
       MINIO_ENDPOINT: http://minio:9000/
 
       MAIL_DRIVER: mailgun
-      MAILGUN_DOMAIN: mg.4programmers.dev
+      MAILGUN_DOMAIN: mg.4programmers.net
       MAILGUN_SECRET_FILE: /run/secrets/MAILGUN_SECRET_FILE
 
       SENTRY_DSN_FILE: /run/secrets/SENTRY_DSN_FILE
@@ -261,7 +261,7 @@ services:
       - GRAYLOG_PASSWORD_SECRET_FILE=/run/secrets/GRAYLOG_PASSWORD_SECRET_FILE
 #      - GRAYLOG_ROOT_PASSWORD_SHA2=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
       - GRAYLOG_ROOT_PASSWORD_SHA2_FILE=/run/secrets/GRAYLOG_ROOT_PASSWORD_SHA2_FILE
-      - GRAYLOG_HTTP_EXTERNAL_URI=https://graylog.4programmers.dev/
+      - GRAYLOG_HTTP_EXTERNAL_URI=https://graylog.4programmers.net/
     networks:
       - coyote
     depends_on:
