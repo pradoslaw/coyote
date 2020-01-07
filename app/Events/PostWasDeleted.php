@@ -21,6 +21,6 @@ class PostWasDeleted extends Event
      */
     public function __construct(Post $post)
     {
-        $this->post = $post->toArray();
+        $this->post = array_only($post->toArray(), ['id']);
     }
 }

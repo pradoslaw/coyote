@@ -51,12 +51,21 @@ new Vue({
   mounted() {
     this.listenForMessage();
     this.scrollToBottom();
-
-    if ('scrollbar' in this.$refs) {
-      this.$refs.scrollbar.$refs.container.addEventListener('ps-y-reach-start', this.loadMore);
-    }
+    this.addScrollbarEvent();
   },
   methods: {
+    addScrollbarEvent() {
+      if ('scrollbar' in this.$refs) {
+        this.$refs.scrollbar.$refs.container.addEventListener('ps-y-reach-start', this.loadMore);
+      }
+    },
+
+    removeScrollbarEvent() {
+      if ('scrollbar' in this.$refs) {
+        this.$refs.scrollbar.$refs.container.removeEventListener('ps-y-reach-start', this.loadMore);
+      }
+    },
+
     scrollToBottom() {
       const overview = document.getElementById('overview');
 
@@ -67,17 +76,12 @@ new Vue({
 
     sendMessage() {
       this.isProcessing = true;
-      const wasRecentlyCreated = this.messages.length === 0;
 
       store.dispatch('messages/add', {recipient: this.recipient.name, text: this.text})
         .then(() => {
           this.errors = {};
           this.text = null;
           this.previewHtml = null;
-
-          if (wasRecentlyCreated) {
-            this.loadMore();
-          }
 
           this.$nextTick(() => this.scrollToBottom());
         })
@@ -119,10 +123,12 @@ new Vue({
     },
 
     loadMore() {
-      store.dispatch('messages/loadMore', this.recipient.id).then(response => {
+      return store.dispatch('messages/loadMore', this.recipient.id).then(response => {
         if (!response.data.data.length) {
-          this.$refs.scrollbar.$refs.container.removeEventListener('ps-y-reach-start', this.loadMore);
+          this.removeScrollbarEvent();
         }
+
+        return response;
       });
     },
 
@@ -150,7 +156,15 @@ new Vue({
 
     selectName(item) {
       this.recipient = item;
-      console.log(this.recipient);
+
+      store.commit('messages/reset');
+      this.removeScrollbarEvent();
+
+      this.loadMore().then(() => this.$nextTick(() => {
+          this.scrollToBottom();
+          this.addScrollbarEvent();
+        })
+      );
     },
 
     markAllAsRead() {

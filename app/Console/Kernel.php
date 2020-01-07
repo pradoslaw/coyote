@@ -11,7 +11,7 @@ use Coyote\Console\Commands\Elasticsearch\CreateMappingCommand;
 use Coyote\Console\Commands\Elasticsearch\DropIndexCommand;
 use Coyote\Console\Commands\Elasticsearch\IndexCommand;
 use Coyote\Console\Commands\FlushCacheCommand;
-use Coyote\Console\Commands\MigrateStreamsCommand;
+use Coyote\Console\Commands\MigrateFilesystemCommand;
 use Coyote\Console\Commands\PurgeFirewallCommand;
 use Coyote\Console\Commands\PurgeGuestsCommand;
 use Coyote\Console\Commands\PurgeJobsCommand;
@@ -19,8 +19,6 @@ use Coyote\Console\Commands\PurgePastebinCommand;
 use Coyote\Console\Commands\PurgeSessionsCommand;
 use Coyote\Console\Commands\PurgeViewsCommand;
 use Coyote\Console\Commands\ResendApplicationCommand;
-use Coyote\Console\Commands\SetupFirmSlugCommand;
-use Coyote\Console\Commands\SetupPredictionsCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -48,7 +46,7 @@ class Kernel extends ConsoleKernel
         CreateCouponCommand::class,
         PurgeGuestsCommand::class,
         ResendApplicationCommand::class,
-        MigrateStreamsCommand::class
+        MigrateFilesystemCommand::class
     ];
 
     /**

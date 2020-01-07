@@ -2,7 +2,7 @@
 {% set page_name = recipient.name ? 'Rozmowa z ' ~ recipient.name : 'Nowa wiadomość' %}
 
 {% block pm %}
-  <div v-if="!messages.length" class="row">
+  <div v-if="!messages.length"  class="row">
     <div class="col-md-12 margin-md-bottom" :class="{'has-error': 'recipient' in errors}">
       <vue-autocomplete
         ref="autocomplete"
@@ -10,7 +10,6 @@
         :items="items"
         :value.sync="recipient.name"
         placeholder="Odbiorca..."
-        @update="lookupName"
         @select="selectName"
       ></vue-autocomplete>
 

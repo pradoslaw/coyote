@@ -237,15 +237,26 @@ class PmController extends BaseController
 
         $this->validateWith($validator);
 
+        // put to s3
         $media = $this->getMediaFactory()->make('screenshot')->put(file_get_contents('data://' . substr($input, 7)));
-        $mime = MimeTypeGuesser::getInstance();
+
+        $filesystem = app('filesystem')->disk('local_fs');
+        $mime = null;
+
+        try {
+            $filesystem->put($media->getFilename(), $media->get());
+
+            $mime = (MimeTypeGuesser::getInstance())->guess(storage_path('app/' . $media->getFilename()));
+        } finally {
+            $filesystem->delete($media->getFilename());
+        }
 
         return response()->json([
             'size'      => $media->size(),
             'suffix'    => 'png',
             'name'      => $media->getName(),
             'file'      => $media->getFilename(),
-            'mime'      => $mime->guess($media->path()),
+            'mime'      => $mime,
             'url'       => (string) $media->url()
         ]);
     }

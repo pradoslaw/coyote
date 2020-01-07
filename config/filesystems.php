@@ -41,39 +41,46 @@ return [
     */
 
     'disks'   => [
-
-        'local'     => [
-            'driver' => 'local',
-            'root'   => storage_path() . '/app',
-        ],
-        'public'     => [
+        'public_fs'     => [
             'driver' => 'local',
             'root'   => public_path() . '/uploads',
+        ],
+        'local_fs'        => [
+            'driver' => 'local',
+            'root'   => storage_path() . '/app'
+        ],
+
+        'local'     => [
+            'driver' => 's3',
+            'use_path_style_endpoint' => true,
+            'key' => env('AWS_ACCESS_KEY_ID', docker_secret('AWS_ACCESS_KEY_ID_FILE')),
+            'secret' => env('AWS_SECRET_ACCESS_KEY', docker_secret('AWS_SECRET_ACCESS_KEY_FILE')),
+            'region' => 'us-east-1',
+            'bucket' => 'local',
+            'endpoint' => env('MINIO_ENDPOINT', docker_secret('MINIO_ENDPOINT_FILE')),
+            'disable_asserts' => true
+        ],
+        'public'     => [
+            'driver' => 's3',
+            'use_path_style_endpoint' => true,
+            'key' => env('AWS_ACCESS_KEY_ID', docker_secret('AWS_ACCESS_KEY_ID_FILE')),
+            'secret' => env('AWS_SECRET_ACCESS_KEY', docker_secret('AWS_SECRET_ACCESS_KEY_FILE')),
+            'region' => 'us-east-1',
+            'bucket' => 'public',
+            'endpoint' => env('MINIO_ENDPOINT', docker_secret('MINIO_ENDPOINT_FILE')),
+            'disable_asserts' => true,
+            'url' => env('AWS_URL', docker_secret('AWS_URL_FILE')),
+
+            'cache' => [
+                'store' => 'redis',
+                'expire' => 600,
+                'prefix' => 's3',
+            ]
         ],
         'log'        => [
             'driver' => 'local',
             'root'   => storage_path() . '/logs'
-        ],
-        'app'        => [
-            'driver' => 'local',
-            'root'   => app_path()
-        ],
-        's3'        => [
-            'driver' => 's3',
-            'key'    => 'your-key',
-            'secret' => 'your-secret',
-            'region' => 'your-region',
-            'bucket' => 'your-bucket',
-        ],
-        'rackspace' => [
-            'driver'    => 'rackspace',
-            'username'  => 'your-username',
-            'key'       => 'your-key',
-            'container' => 'your-container',
-            'endpoint'  => 'https://identity.api.rackspacecloud.com/v2.0/',
-            'region'    => 'IAD',
-        ],
-
+        ]
     ],
 
     /*

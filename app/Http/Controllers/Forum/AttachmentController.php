@@ -50,15 +50,7 @@ class AttachmentController extends BaseAttachmentController
         $isImage = $attachment->file->isImage();
         $headers = $this->getHeaders($attachment->name, $attachment->mime, $isImage, $attachment->size);
 
-        return $isImage ? response()->make(
-            $attachment->file->get(),
-            200,
-            $headers
-        ) : response()->download(
-            $attachment->file->path(),
-            $attachment->name,
-            $headers
-        );
+        return response()->make($attachment->file->get(), 200, $headers);
     }
 
     /**

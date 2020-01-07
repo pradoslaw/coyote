@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'driver'     => env('MAIL_DRIVER', 'smtp'),
+    'driver'     => env('MAIL_DRIVER', docker_secret('MAIL_DRIVER_FILE')),
     /*
     |--------------------------------------------------------------------------
     | SMTP Host Address

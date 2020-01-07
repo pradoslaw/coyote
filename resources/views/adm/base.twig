@@ -89,6 +89,10 @@
     {{ modals.confirm('Czy na pewno usunąć?', 'Czy usunąć ten wpis?', 'modal-delete') }}
     {{ form_close() }}
 
+    {% import 'components.widgets' as widgets %}
+
+    {{ widgets.vue() }}
+
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script src="{{ cdn('js/runtime.js') }}"></script>
     <script src="{{ cdn('js/app.js') }}"></script>

@@ -1,13 +1,13 @@
 FROM 4programmers/php-node:latest as backend
 
-WORKDIR /var/www
+WORKDIR /app
 
-COPY package.json yarn.lock .babelrc webpack.common.js webpack.dev.js webpack.prod.js /var/www/
+COPY package.json yarn.lock .babelrc webpack.common.js webpack.dev.js webpack.prod.js /app/
 RUN yarn install
 
-COPY webpack.common.js webpack.dev.js webpack.prod.js /var/www/
-COPY resources/assets /var/www/resources/assets
-COPY public /var/www/public
+COPY webpack.common.js webpack.dev.js webpack.prod.js /app/
+COPY resources/assets /app/resources/assets
+COPY public /app/public
 
 RUN yarn run prod
 
@@ -22,8 +22,15 @@ COPY . .
 RUN composer dump-autoload --no-scripts --no-dev --optimize
 # clear cache
 RUN composer clearcache && yarn cache clean
-RUN rm -rf /var/www/.composer && rm -rf /root/.composer && rm -rf  /usr/local/share/.cache/yarn/
+RUN rm -rf /app/.composer && rm -rf /root/.composer && rm -rf  /usr/local/share/.cache/yarn/
 
-RUN chown -R nginx:nginx /var/www
+RUN chown -R nginx:nginx /app
 RUN chmod 0775 -R storage/
 RUN chmod 0775 bootstrap/cache/
+
+ADD ./docker/coyote/start.sh /start.sh
+RUN chmod 755 /start.sh
+
+COPY ./docker/coyote/cron /etc/crontabs/root
+
+CMD ["/start.sh"]

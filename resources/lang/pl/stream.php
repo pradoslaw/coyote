@@ -53,7 +53,7 @@ return [
         'wiki'              => ':actor :verb :object :title',
         'person'            => ':actor :verb :object',
         'person:confirm'    => ':actor potwierdził adres e-mail',
-        'firewall'          => ':actor :verb :object',
+        'firewall'          => ':actor :verb :object dla :user',
         'unknown'           => ':actor :verb',
         'unknown:throttle'  => 'Nieudane logowanie na konto :login',
         'unknown:forgot'    => 'Żądanie przywrócenia hasła do konta :email',

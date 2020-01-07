@@ -33,7 +33,7 @@ class Factory
         }
 
         return $this->setDefaultOptions(
-            new $class($this->app['filesystem']->disk('public'), $this->app['image']),
+            new $class($this->app['filesystem']->disk(config('filesystems.default')), $this->app['image']),
             $options
         );
     }

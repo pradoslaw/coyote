@@ -17,6 +17,14 @@ const mutations = {
     state.offset = messages.length;
   },
 
+  reset(state) {
+    state.messages = [];
+    state.offset = 0;
+    state.currentPage = 0;
+    state.total = 0;
+    state.perPage = 0;
+  },
+
   add(state, message) {
     state.messages.push(message);
     state.offset += 1;

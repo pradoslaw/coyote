@@ -46,7 +46,7 @@ return [
     |
     */
 
-    'url'             => env('APP_URL', 'http://localhost'),
+    'url'             => env('APP_URL', docker_secret('APP_URL_FILE')),
     'asset_url'       => env('ASSET_URL', null),
 
     /*
@@ -122,7 +122,7 @@ return [
     |
     */
 
-    'key'             => env('APP_KEY', 'base64:OQUTZfp+RR6GX5fYVUJyASDSAeZPSK3kbEifXRC5CMCY='),
+    'key'             => env('APP_KEY', docker_secret('APP_KEY_FILE')),
     'cipher'          => 'AES-256-CBC',
 
     /*
@@ -204,14 +204,16 @@ return [
          */
         Coyote\Providers\RepositoryServiceProvider::class,
         Coyote\Providers\AppServiceProvider::class,
+
         Coyote\Providers\ConfigServiceProvider::class,
+
+        // Obsluga sesji przez Coyote (nadpisujemy domyslny driver)
+        Coyote\Providers\SessionServiceProvider::class,
         Coyote\Providers\EventServiceProvider::class,
         Coyote\Providers\RouteServiceProvider::class,
         Coyote\Providers\ViewServiceProvider::class,
         Coyote\Providers\AuthServiceProvider::class,
         Coyote\Providers\BroadcastServiceProvider::class,
-        // Obsluga sesji przez Coyote (nadpisujemy domyslny driver)
-        Coyote\Providers\SessionServiceProvider::class,
         // mozliwosc wczytania gotowych "scenariuszy" parsowania elementow strony, takich jak
         // mikroblogi, czy forum. w takim scenariuszu zaladowane sa odpowiednie klasy
         // do parsowania tekstu w zaleznosci od tego, czy mamy do czynienia z postem, komentarzem itd
@@ -224,8 +226,6 @@ return [
         Coyote\Providers\GeoIpServiceProvider::class,
         // Google maps geocoder
         Coyote\Providers\GeocoderServiceProvider::class,
-        // Serwis do tworzenia miniatur (logo, zdjecie)
-        Coyote\Providers\ThumbnailServiceProvider::class,
         // Uploadowanie zalacznikow, zdjec oraz generowanie URL do tychze plikow
         Coyote\Providers\MediaServiceProvider::class,
         // Przegladarnie logow laravela w panelu administracyjnym
@@ -246,9 +246,7 @@ return [
         // Pakiet Laravel Grid do budowania tabel oraz filtrowania i sortowania
         Boduch\Grid\GridServiceProvider::class,
         // kursy wymiany walut
-        Swap\Laravel\SwapServiceProvider::class,
-        // Wyslanie SMS po wyslanej aplikacji na dana oferte pracy
-        NotificationChannels\Twilio\TwilioProvider::class
+        Swap\Laravel\SwapServiceProvider::class
     ],
     /*
     |--------------------------------------------------------------------------

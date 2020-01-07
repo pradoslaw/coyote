@@ -60,16 +60,6 @@ return [
             'level' => 'critical',
         ],
 
-        'papertrail' => [
-            'driver' => 'monolog',
-            'level' => 'debug',
-            'handler' => SyslogUdpHandler::class,
-            'handler_with' => [
-                'host' => env('PAPERTRAIL_URL'),
-                'port' => env('PAPERTRAIL_PORT'),
-            ],
-        ],
-
         'stderr' => [
             'driver' => 'monolog',
             'handler' => StreamHandler::class,
@@ -87,6 +77,19 @@ return [
         'errorlog' => [
             'driver' => 'errorlog',
             'level' => 'debug',
+        ],
+
+        'gelf' => [
+            'driver' => 'custom',
+
+            'via' => \Hedii\LaravelGelfLogger\GelfLoggerFactory::class,
+
+            'processors' => [
+                \Hedii\LaravelGelfLogger\Processors\NullStringProcessor::class,
+            ],
+
+            'host' => 'graylog',
+            'port' => 12201
         ],
     ],
 

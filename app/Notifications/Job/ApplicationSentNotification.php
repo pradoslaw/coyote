@@ -10,6 +10,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Storage;
 use NotificationChannels\Twilio\TwilioChannel;
 use NotificationChannels\Twilio\TwilioSmsMessage;
 
@@ -33,35 +34,11 @@ class ApplicationSentNotification extends Notification implements ShouldQueue, N
     }
 
     /**
-     * @param Job $job
      * @return array
      */
-    public function via(Job $job)
+    public function via()
     {
-        $channels = ['mail', DatabaseChannel::class];
-
-        if (!empty($job->phone)) {
-            $channels[] = TwilioChannel::class;
-        }
-
-        return $channels;
-    }
-
-    /**
-     * @param Job $job
-     * @return TwilioSmsMessage
-     */
-    public function toTwilio(Job $job)
-    {
-        return (new TwilioSmsMessage())
-            ->content(
-                sprintf(
-                    '%s wysłał swoją aplikację w odpowiedzi na ogłoszenie "%s". Pozdrawiamy, %s',
-                    $this->application->name,
-                    $job->title,
-                    config('app.name')
-                )
-            );
+        return ['mail', DatabaseChannel::class];
     }
 
     /**
@@ -79,9 +56,9 @@ class ApplicationSentNotification extends Notification implements ShouldQueue, N
             ]);
 
         if ($this->application->cv) {
-            $path = realpath(storage_path('app/cv/' . $this->application->cv));
+            $data = Storage::disk('local')->get('cv/' . $this->application->cv);
 
-            $message->attach($path, ['as' => $this->application->realFilename()]);
+            $message->attachData($data, $this->application->realFilename());
         }
 
         return $message;

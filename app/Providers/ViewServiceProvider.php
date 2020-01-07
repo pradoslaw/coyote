@@ -3,14 +3,16 @@
 namespace Coyote\Providers;
 
 use Coyote\Http\Factories\CacheFactory;
+use Coyote\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Contracts\Encryption\Encrypter;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface;
 use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Lavary\Menu\Builder;
 use Lavary\Menu\Menu;
+use Lcobucci\JWT\Signer\Hmac\Sha256;
+use Lcobucci\JWT\Signer\Key;
 
 class ViewServiceProvider extends ServiceProvider
 {
@@ -43,7 +45,7 @@ class ViewServiceProvider extends ServiceProvider
         if (config('services.ws.host') && $this->app['request']->user()) {
             $this->app['request']->attributes->set(
                 'ws',
-                (config('services.ws.proxy') ?: config('services.ws.host')) . (config('services.ws.port') ? ':' . config('services.ws.port') : '')
+                config('services.ws.host') . (config('services.ws.port') ? ':' . config('services.ws.port') : '')
             );
         }
     }
@@ -62,11 +64,29 @@ class ViewServiceProvider extends ServiceProvider
             $user = $this->app['request']->user();
 
             $this->app['request']->attributes->add([
-                'token' => app(Encrypter::class)->encrypt('user:' . $user->id . '|' . time()),
+                'token' => $this->getJWtToken($user),
                 'notifications_unread' => $user->notifications_unread,
                 'pm_unread' => $user->pm_unread
             ]);
         }
+    }
+
+    /**
+     * @param User $user
+     * @return string
+     */
+    private function getJWtToken(User $user): string
+    {
+        $signer = new Sha256();
+        $time = time();
+
+        $token = (new \Lcobucci\JWT\Builder())
+            ->issuedAt($time)
+            ->expiresAt($time + 172800) // 2 days
+            ->withClaim('channel', "user:$user->id")
+            ->getToken($signer, new Key(config('app.key')));
+
+        return (string) $token;
     }
 
     private function buildMasterMenu()

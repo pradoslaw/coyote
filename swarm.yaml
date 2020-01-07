@@ -1,17 +1,114 @@
 version: '3.5'
 
+x-env:
+  &env
+  APP_ENV: production
+  APP_DEBUG: "false"
+  APP_KEY_FILE: /run/secrets/APP_KEY_FILE
+  APP_URL: https://4programmers.net
+  API_HOST: api.4programmers.net
+
+  SESSION_DOMAIN: ".4programmers.net"
+
+  DB_PORT: 5432
+  DB_HOST: db
+  DB_DATABASE: coyote
+  DB_USERNAME: coyote
+  DB_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD_FILE
+
+  ELASTICSEARCH_HOST: elasticsearch
+  REDIS_HOST: redis
+  BROADCAST_DRIVER: redis
+  CACHE_DRIVER: redis
+  QUEUE_DRIVER: redis
+  LOG_CHANNEL: gelf
+
+  AWS_ACCESS_KEY_ID_FILE: /run/secrets/AWS_ACCESS_KEY_ID_FILE
+  AWS_SECRET_ACCESS_KEY_FILE: /run/secrets/AWS_SECRET_ACCESS_KEY_FILE
+  AWS_URL: https://4programmers.net/uploads/
+  MINIO_ENDPOINT: http://minio:9000/
+
+  WS_HOST: ws.4programmers.net
+
+  MAIL_DRIVER: mailgun
+  MAILGUN_DOMAIN: mg.4programmers.net
+  MAILGUN_SECRET_FILE: /run/secrets/MAILGUN_SECRET_FILE
+
+  SENTRY_DSN_FILE: /run/secrets/SENTRY_DSN_FILE
+
+  RECAPTCHA_KEY_FILE: /run/secrets/RECAPTCHA_KEY_FILE
+  RECAPTCHA_SECRET_FILE: /run/secrets/RECAPTCHA_SECRET_FILE
+
+  P24_CLIENT_ID_FILE: /run/secrets/P24_CLIENT_ID_FILE
+  P24_SALT_FILE: /run/secrets/P24_SALT_FILE
+  P24_PAYMENT_URL: "https://secure.przelewy24.pl/trnDirect"
+  P24_VERIFY_URL: "https://secure.przelewy24.pl/trnVerify"
+
+  PAYLANE_USERNAME_FILE: /run/secrets/PAYLANE_USERNAME_FILE
+  PAYLANE_PASSWORD_FILE: /run/secrets/PAYLANE_PASSWORD_FILE
+  PAYLANE_SALT_FILE: /run/secrets/PAYLANE_SALT_FILE
+
+  GITHUB_CLIENT_ID_FILE: /run/secrets/GITHUB_CLIENT_ID_FILE
+  GITHUB_SECRET_ID_FILE: /run/secrets/GITHUB_SECRET_ID_FILE
+  GITHUB_REDIRECT: "https://4programmers.net/OAuth/Github/Callback"
+
+  GOOGLE_CLIENT_ID_FILE: /run/secrets/GOOGLE_CLIENT_ID_FILE
+  GOOGLE_SECRET_ID_FILE: /run/secrets/GOOGLE_SECRET_ID_FILE
+  GOOGLE_REDIRECT: "https://4programmers.net/OAuth/Google/Callback"
+
+  FACEBOOK_CLIENT_ID_FILE: /run/secrets/FACEBOOK_CLIENT_ID_FILE
+  FACEBOOK_SECRET_ID_FILE: /run/secrets/FACEBOOK_SECRET_ID_FILE
+  FACEBOOK_REDIRECT: "https://4programmers.net/OAuth/Facebook/Callback"
+
+  VENDOR_NAME: "4programmers.net Ltd"
+  VENDOR_ADDRESS: "International House 776-778 Barking Road"
+  VENDOR_POSTAL_CODE: "E13 9PJ"
+  VENDOR_CITY: "London"
+  VENDOR_COUNTRY: "United Kingdom"
+
+x-secrets:
+  &secrets
+  - APP_KEY_FILE
+  - POSTGRES_PASSWORD_FILE
+  - AWS_ACCESS_KEY_ID_FILE
+  - AWS_SECRET_ACCESS_KEY_FILE
+  - AWS_URL_FILE
+  - MAILGUN_SECRET_FILE
+  - SENTRY_DSN_FILE
+  - RECAPTCHA_KEY_FILE
+  - RECAPTCHA_SECRET_FILE
+  - P24_CLIENT_ID_FILE
+  - P24_SALT_FILE
+  - PAYLANE_USERNAME_FILE
+  - PAYLANE_PASSWORD_FILE
+  - PAYLANE_SALT_FILE
+  - GITHUB_CLIENT_ID_FILE
+  - GITHUB_SECRET_ID_FILE
+  - GOOGLE_CLIENT_ID_FILE
+  - GOOGLE_SECRET_ID_FILE
+  - FACEBOOK_CLIENT_ID_FILE
+  - FACEBOOK_SECRET_ID_FILE
+
 services:
   db:
     image: postgres:11-alpine
+    ports:
+      - 5432:5432
     volumes:
-#      - ./docker/postgres/postgresql.auto.conf:/var/lib/postgresql/data/postgresql.auto.conf
+      - ./docker/postgres/postgresql.auto.conf:/var/lib/postgresql/data/postgresql.auto.conf
       - postgres:/var/lib/postgresql/data:z
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD:
+      POSTGRES_USER: coyote
+      POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD_FILE
       POSTGRES_DB: coyote
     networks:
-      - coyote-swarm
+      - coyote
+    secrets:
+      - POSTGRES_PASSWORD_FILE
+    logging:
+      driver: "json-file"
+      options:
+        tag: postgres
 
   php:
     image: 4programmers/coyote:latest
@@ -22,26 +119,47 @@ services:
         - 4programmers/coyote:latest
     volumes:
       - codebase:/var/www
-    environment:
-      DB_PORT: 5432
-      DB_HOST: db
-      DB_DATABASE: coyote
-      DB_USERNAME: coyote
-      DB_PASSWORD:
-      APP_ENV: local
-      APP_DEBUG: "true"
-      APP_KEY: "base64:mxXTLiTXOcsKZ+u6OoYVaZFNYAwM91nmbzrdEV+mUfE="
-      ELASTICSEARCH_HOST: elasticsearch
-      REDIS_HOST: redis
-      BROADCAST_DRIVER: redis
-      CACHE_DRIVER: redis
-      QUEUE_DRIVER: redis
-
+    environment: *env
+    secrets: *secrets
+    deploy:
+      replicas: 2
     networks:
-      - coyote-swarm
+      - coyote
+    logging:
+      driver: "json-file"
+      options:
+        tag: php
+
+  worker:
+    image: 4programmers/coyote:latest
+    networks:
+      - coyote
+    command: php artisan queue:work --delay=5 --tries=3 -n redis
+    deploy:
+      replicas: 2
+    environment: *env
+    secrets: *secrets
+    logging:
+      driver: "json-file"
+      options:
+        tag: worker
+
+  cron:
+    image: 4programmers/coyote:latest
+    entrypoint: crond -f -l 8
+    environment: *env
+    secrets: *secrets
+    volumes:
+      - codebase:/var/www
+    networks:
+      - coyote
+    logging:
+      driver: "json-file"
+      options:
+        tag: cron
 
   nginx:
-    image: nginx:latest
+    image: nginx:1.17
     volumes:
       - codebase:/var/www/
       - ./docker/nginx/:/etc/nginx/conf.d/
@@ -50,43 +168,170 @@ services:
     depends_on:
       - php
     networks:
-      - coyote-swarm
+      - coyote
+    logging:
+      driver: "json-file"
+      options:
+        tag: nginx
 
   redis:
-    image: redis:latest
+    image: redis:5
+    command: redis-server --appendonly no --save
     networks:
-      - coyote-swarm
+      - coyote
 
   elasticsearch:
     image: elasticsearch:5.6.14
     ports:
       - 9200:9200
-    #    mem_limit: 1g
     volumes:
       - elasticsearch:/usr/share/elasticsearch/data
     environment:
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
     networks:
-      - coyote-swarm
+      - coyote
+    logging:
+      driver: "json-file"
+      options:
+        tag: elasticsearch
 
   minio:
-    image: minio/minio
+    image: minio/minio:RELEASE.2020-01-03T19-12-21Z
     volumes:
       - minio:/data
     environment:
-      MINIO_ACCESS_KEY: minio
-      MINIO_SECRET_KEY: minio123
+      - MINIO_ACCESS_KEY_FILE=AWS_ACCESS_KEY_ID_FILE
+      - MINIO_SECRET_KEY_FILE=AWS_SECRET_ACCESS_KEY_FILE
     command: server /data
+    secrets:
+      - AWS_ACCESS_KEY_ID_FILE
+      - AWS_SECRET_ACCESS_KEY_FILE
     networks:
-      - coyote-swarm
+      - coyote
+    deploy:
+      restart_policy:
+        delay: 10s
+        max_attempts: 10
+        window: 60s
+    ports:
+      - 39000:9000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        tag: minio
 
+  mongo:
+    image: mongo:3
+    volumes:
+      - mongo:/data/db
+    networks:
+      - coyote
+
+  graylog:
+    image: graylog/graylog:3.1
+    volumes:
+      - graylog:/usr/share/graylog/data/journal
+    environment:
+      - GRAYLOG_PASSWORD_SECRET_FILE=/run/secrets/GRAYLOG_PASSWORD_SECRET_FILE
+#      - GRAYLOG_ROOT_PASSWORD_SHA2=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+      - GRAYLOG_ROOT_PASSWORD_SHA2_FILE=/run/secrets/GRAYLOG_ROOT_PASSWORD_SHA2_FILE
+      - GRAYLOG_HTTP_EXTERNAL_URI=https://graylog.4programmers.dev/
+    networks:
+      - coyote
+    depends_on:
+      - mongo
+      - elasticsearch
+    secrets:
+      - GRAYLOG_ROOT_PASSWORD_SHA2_FILE
+      - GRAYLOG_PASSWORD_SECRET_FILE
+#    ports:
+#      - 29000:9000
+#      - 12201:12201
+#      - 12201:12201/udp
+
+  fluentbit:
+    image: fluent/fluent-bit:1.3-debug
+    volumes:
+      - ./docker/fluent-bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+      - /var/lib/docker/containers:/var/log/containers
+    networks:
+      - coyote
+
+  websocket:
+    image: 4programmers/websocket:latest
+    networks:
+      - coyote
+    tty: true
+    environment:
+      PORT: "8888"
+      REDIS_HOST: "redis"
+    secrets:
+      - APP_KEY_FILE
+    ports:
+      - 8888:8888
 
 volumes:
   postgres:
   elasticsearch:
   minio:
   codebase:
+  mongo:
+  graylog:
 
 networks:
-  coyote-swarm:
-    name: coyote-swarm
+  coyote:
+    name: coyote
+
+secrets:
+  APP_KEY_FILE:
+    external: true
+  AWS_ACCESS_KEY_ID_FILE:
+    external: true
+  AWS_SECRET_ACCESS_KEY_FILE:
+    external: true
+  POSTGRES_PASSWORD_FILE:
+    external: true
+  AWS_URL_FILE:
+    external: true
+  WS_PROXY_FILE:
+    external: true
+  MAILGUN_SECRET_FILE:
+    external: true
+  SENTRY_DSN_FILE:
+    external: true
+  RECAPTCHA_KEY_FILE:
+    external: true
+  RECAPTCHA_SECRET_FILE:
+    external: true
+  P24_CLIENT_ID_FILE:
+    external: true
+  P24_SALT_FILE:
+    external: true
+  PAYLANE_USERNAME_FILE:
+    external: true
+  PAYLANE_PASSWORD_FILE:
+    external: true
+  PAYLANE_SALT_FILE:
+    external: true
+  GITHUB_CLIENT_ID_FILE:
+    external: true
+  GITHUB_SECRET_ID_FILE:
+    external: true
+  GOOGLE_CLIENT_ID_FILE:
+    external: true
+  GOOGLE_SECRET_ID_FILE:
+    external: true
+  FACEBOOK_CLIENT_ID_FILE:
+    external: true
+  FACEBOOK_SECRET_ID_FILE:
+    external: true
+  GRAYLOG_ROOT_PASSWORD_SHA2_FILE:
+    external: true
+  GRAYLOG_PASSWORD_SECRET_FILE:
+    external: true
+

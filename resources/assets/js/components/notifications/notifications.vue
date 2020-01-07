@@ -52,6 +52,7 @@
       }
     },
     mounted() {
+      this.syncCount();
       this.listenForNotification();
 
       this.title = document.title;
@@ -65,6 +66,8 @@
         if (this.$store.getters['notifications/isEmpty']) {
           this.$store.dispatch('notifications/get').then(() => {
             this.$refs.scrollbar.$refs.container.addEventListener('ps-y-reach-end', this.loadMoreNotifications);
+
+            this.syncCount();
           });
         }
       },
@@ -90,14 +93,16 @@
 
       listenForNotification() {
         Session.addListener(e => {
-          if (e.key === 'notifications' && e.newValue !== this.counter) {
+          if (e.key === 'notifications' && e.newValue < this.count) {
             this.$store.commit('notifications/count', parseInt(e.newValue));
           }
         });
 
         ws.on('Illuminate\\Notifications\\Events\\BroadcastNotificationCreated', data => {
           this.resetNotifications();
+
           this.$store.commit('notifications/increment');
+          this.syncCount();
 
           DesktopNotifications.doNotify(data.headline, data.subject, data.url);
         });
@@ -111,6 +116,10 @@
 
       setTitle(title) {
         document.title = title;
+      },
+
+      syncCount() {
+        Session.setItem('notifications', this.count);
       }
     },
 
@@ -123,8 +132,6 @@
           this.setTitle(this.title);
           this.setIcon('/img/favicon.png');
         }
-
-        Session.setItem('notifications', value);
       }
     },
 
