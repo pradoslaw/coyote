@@ -9,8 +9,8 @@ class AttachmentController extends BaseAttachmentController
 {
     /**
      * @param \Coyote\Wiki $wiki
-     * @param $id
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @param int $id
+     * @return \Illuminate\Http\Response
      */
     public function download($wiki, $id)
     {
@@ -19,11 +19,7 @@ class AttachmentController extends BaseAttachmentController
 
         $headers = $this->getHeaders($attachment->name, $attachment->mime, false, $attachment->size);
 
-        return response()->download(
-            $attachment->file->path(),
-            $attachment->name,
-            $headers
-        );
+        return response()->make($attachment->file->get(), 200, $headers);
     }
 
     /**
