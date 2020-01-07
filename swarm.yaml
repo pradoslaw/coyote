@@ -149,6 +149,8 @@ services:
     entrypoint: crond -f -l 8
     environment: *env
     secrets: *secrets
+    volumes:
+      - codebase:/var/www
     networks:
       - coyote
     logging:
