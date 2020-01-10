@@ -7,12 +7,16 @@ use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Repositories\Criteria\Sort;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
+use Coyote\Topic;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Contracts\Auth\Factory as Auth;
 
 class TopicsController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * @param TopicRepositoryInterface $topic
      * @param Auth $auth
@@ -59,5 +63,21 @@ class TopicsController extends Controller
         $paginate = $topic->paginate();
 
         return TopicResource::collection($paginate);
+    }
+
+    /**
+     * @param Topic $topic
+     * @return TopicResource
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function show(Topic $topic)
+    {
+        $this->authorize('access', $topic->forum);
+
+        $topic->load(['tags']);
+
+        TopicResource::withoutWrapping();
+
+        return new TopicResource($topic);
     }
 }
