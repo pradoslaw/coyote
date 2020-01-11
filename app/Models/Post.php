@@ -283,7 +283,7 @@ class Post extends Model
         $body = array_except($body, ['deleted_at', 'edit_count', 'editor_id', 'delete_reason', 'deleter_id', 'user']);
 
         if ($topic['first_post_id'] == $body['id']) {
-            $body['tags'] = $topic->tags()->pluck('name');
+            $body['tags'] = $this->topic->tags()->pluck('name');
         }
 
         return array_merge($body, [
