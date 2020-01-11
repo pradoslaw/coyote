@@ -17,7 +17,7 @@ $this->prefix('v1')->group(function () {
     $this->get('topics', ['uses' => 'Api\TopicsController@index']);
     $this->get('topics/{topic}', ['uses' => 'Api\TopicsController@show']);
     $this->get('posts', ['uses' => 'Api\PostsController@index']);
-    $this->get('posts/{id}', ['uses' => 'Api\PostsController@show']);
+    $this->get('posts/{post}', ['uses' => 'Api\PostsController@show']);
 });
 
 $this->get('/', ['uses' => 'Api\HomeController@index']);

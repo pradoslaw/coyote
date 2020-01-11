@@ -45,7 +45,7 @@ class TopicsController extends Controller
         $user = $auth->guard('api')->user();
         $guestId = $user->guest_id ?? null;
 
-        $topic->pushCriteria(new Sort($request->input('sort', 'id'), Sort::DESC));
+        $topic->pushCriteria(new Sort($request->input('sort', 'id'), $request->input('order', Sort::DESC)));
         $topic->pushCriteria(new EagerLoading(['tags']));
 
         if ($guestId) {

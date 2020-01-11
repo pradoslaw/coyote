@@ -43,6 +43,24 @@ class TopicApiTest extends TestCase
         $this->topic = factory(Topic::class)->create(['forum_id' => $this->forum->id]);
     }
 
+    public function testShowAllTopics()
+    {
+        $request = $this->get('/v1/topics', ['Accept' => 'application/json']);
+
+        $data = $request->decodeResponseJson('data');
+        $this->assertNotEquals($data[0]['subject'], $this->topic->subject);
+    }
+
+    public function testShowAllTopicsAuthorized()
+    {
+        $this->actingAs($this->user, 'api');
+
+        $request = $this->get('/v1/topics', ['Accept' => 'application/json']);
+        $data = $request->decodeResponseJson('data');
+
+        $this->assertEquals($data[0]['subject'], $this->topic->subject);
+    }
+
     public function testShowTopicWhenAuthorized()
     {
         $request = $this->get('/v1/topics/' . $this->topic->id, ['Accept' => 'application/json']);
@@ -51,7 +69,7 @@ class TopicApiTest extends TestCase
 
         $this->actingAs($this->user, 'api');
 
-        $request = $this->get('/v1/topics/' . $this->topic->id);
+        $request = $this->get('/v1/topics/' . $this->topic->id, ['Accept' => 'application/json']);
 
         $request->assertJsonFragment([
             'subject' => $this->topic->subject,
