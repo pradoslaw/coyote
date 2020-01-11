@@ -32,6 +32,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Forum $parent
  * @property Forum\Track[] $tracks
  * @property bool $is_prohibited
+ * @property Post $post
  */
 class Forum extends Model
 {
@@ -60,7 +61,7 @@ class Forum extends Model
     /**
      * @var array
      */
-    protected $casts = ['redirects' => 'int'];
+    protected $casts = ['redirects' => 'int', 'is_locked' => 'bool'];
 
     /**
      * @var bool
@@ -132,6 +133,14 @@ class Forum extends Model
     public function parent()
     {
         return $this->hasOne('Coyote\Forum', 'id', 'parent_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function post()
+    {
+        return $this->hasOne(Post::class, 'id', 'last_post_id');
     }
 
     /**

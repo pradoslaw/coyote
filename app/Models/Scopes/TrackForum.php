@@ -13,11 +13,15 @@ trait TrackForum
      * Scope a query to only given user id.
      *
      * @param Builder $builder
-     * @param string $guestId
+     * @param string|null $guestId
      * @return Builder
      */
-    public function scopeTrackForum(Builder $builder, string $guestId)
+    public function scopeTrackForum(Builder $builder, ?string $guestId)
     {
+        if ($guestId === null) {
+            return $builder;
+        }
+
         return $builder
             ->addSelect(['forum_track.marked_at AS forum_marked_at'])
             ->leftJoin('forum_track', function (JoinClause $join) use ($guestId) {

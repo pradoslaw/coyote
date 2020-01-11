@@ -12,11 +12,15 @@ trait TrackTopic
      * Scope a query to only given user id.
      *
      * @param Builder $builder
-     * @param string $guestId
+     * @param string|null $guestId
      * @return Builder
      */
-    public function scopeTrackTopic(Builder $builder, string $guestId)
+    public function scopeTrackTopic(Builder $builder, ?string $guestId)
     {
+        if ($guestId === null) {
+            return $builder;
+        }
+
         return $builder
             ->addSelect(['topic_track.marked_at AS topic_marked_at'])
             ->leftJoin('topic_track', function (JoinClause $join) use ($guestId) {

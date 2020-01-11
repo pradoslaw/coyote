@@ -8,6 +8,8 @@ use Coyote\Topic;
 use Coyote\Forum;
 use Illuminate\Container\Container as App;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\JoinClause;
 
 class ForumRepository extends Repository implements ForumRepositoryInterface
@@ -42,26 +44,46 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     {
         $this->applyCriteria();
 
+//        $result = $this
+//            ->model
+//            ->select([
+//                'forums.*',
+//                'subject',
+//                'topics.id AS topic_id',
+//                'topics.slug AS topic_slug',
+//                'posts.user_id',
+//                'posts.created_at',
+//                'posts.user_name AS anonymous_name',
+//                'users.name AS user_name',
+//                'users.photo',
+//                $this->raw('users.deleted_at IS NULL AS is_active'),
+//                'users.is_confirm'
+//            ])
+//            ->leftJoin('posts', 'posts.id', '=', 'forums.last_post_id')
+//            ->leftJoin('users', 'users.id', '=', 'posts.user_id')
+//            ->leftJoin('topics', 'topics.id', '=', 'posts.topic_id')
+//            ->trackForum($guestId)
+//            ->trackTopic($guestId)
+//            ->when($parentId, function (Builder $builder) use ($parentId) {
+//                return $builder->where('parent_id', $parentId);
+//            })
+//            ->get();
+
         $result = $this
             ->model
-            ->select([
-                'forums.*',
-                'subject',
-                'topics.id AS topic_id',
-                'topics.slug AS topic_slug',
-                'posts.user_id',
-                'posts.created_at',
-                'posts.user_name AS anonymous_name',
-                'users.name AS user_name',
-                'users.photo',
-                $this->raw('users.deleted_at IS NULL AS is_active'),
-                'users.is_confirm'
-            ])
-            ->leftJoin('posts', 'posts.id', '=', 'forums.last_post_id')
-            ->leftJoin('users', 'users.id', '=', 'posts.user_id')
-            ->leftJoin('topics', 'topics.id', '=', 'posts.topic_id')
             ->trackForum($guestId)
-            ->trackTopic($guestId)
+            ->with(['post' => function (HasOne $builder) use ($guestId) {
+                return $builder
+                    ->select(['id', 'user_id', 'topic_id', 'forum_id', 'user_name', 'created_at', 'text'])
+                    ->with([
+                        'topic' => function (BelongsTo $builder) use ($guestId) {
+                            return $builder->trackTopic($guestId);
+                        },
+                        'user' => function (BelongsTo $builder) {
+                            return $builder->select(['id', 'name', 'deleted_at', 'is_blocked', 'photo'])->withTrashed();
+                        }
+                    ]);
+            }])
             ->when($parentId, function (Builder $builder) use ($parentId) {
                 return $builder->where('parent_id', $parentId);
             })

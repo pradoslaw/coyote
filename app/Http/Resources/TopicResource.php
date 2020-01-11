@@ -48,7 +48,7 @@ class TopicResource extends JsonResource
                     'name'      => $this->forum->name,
                     'slug'      => $this->forum->slug
                 ],
-                'tags'                  => TagResource::collection($this->tags),
+                'tags'                  => TagResource::collection($this->whenLoaded('tags')),
 //@todo dodac date przeczytania watku
 //                'read_at'               => $this->when($this->resource->relationLoaded('tracks'), function () {
 //                    return max($this->tracks->first()->marked_at ?? 0, $this->forum->tracks->first()->marked_at ?? 0);
