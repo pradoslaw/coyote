@@ -516,11 +516,11 @@ class Job extends Model
             ->with([
                 'children' => function ($builder) {
                     return $builder->with(['user' => function ($query) {
-                        return $query->select(['id', 'name', 'photo'])->withTrashed();
+                        return $query->select(['id', 'name', 'photo', 'deleted_at', 'is_blocked'])->withTrashed();
                     }]);
                 },
                 'user' => function ($builder) {
-                    return $builder->select(['id', 'name', 'photo'])->withTrashed();
+                    return $builder->select(['id', 'name', 'photo', 'deleted_at', 'is_blocked'])->withTrashed();
                 }
             ]);
     }
@@ -638,7 +638,7 @@ class Job extends Model
         if (!empty($recruitment)) {
             $this->attributes['enable_apply'] = false;
         }
-        
+
         $this->attributes['recruitment'] = $recruitment;
     }
 

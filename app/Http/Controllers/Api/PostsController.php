@@ -74,7 +74,7 @@ class PostsController extends Controller
 
         $post->load(['comments' => function ($builder) {
             return $builder->with(['user' => function ($query) {
-                return $query->select(['id', 'name', 'photo'])->withTrashed();
+                return $query->select(['id', 'name', 'photo', 'deleted_at', 'is_blocked'])->withTrashed();
             }]);
         }]);
 
