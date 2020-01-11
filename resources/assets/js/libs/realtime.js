@@ -22,97 +22,101 @@ const MAX_RETRIES = 50;
 const PATH = '/realtime';
 
 class Realtime {
-    constructor(host, token) {
-        this._host = host;
-        this._token = token;
-        this._callbacks = {};
-        this._retries = 0;
-        this._isConnected = false;
+  constructor(host, token) {
+    this._host = host;
+    this._token = token;
+    this._callbacks = {};
+    this._retries = 0;
+    this._isConnected = false;
 
-        if (this._isSupported() && this._host) {
-            this.connect();
-        }
+    if (this._isSupported() && this._host) {
+      this.connect();
+    }
+  }
+
+  on(event, fn) {
+    (this._callbacks[event] = this._callbacks[event] || []).push(fn);
+    return this;
+  }
+
+  whisper(event, data) {
+    this._handler.send(JSON.stringify({event, data}));
+  }
+
+  _emit(event, data, handler) {
+    if (this._callbacks[event]) {
+      let callbacks = this._callbacks[event].slice(0);
+
+      for (let i = 0, len = callbacks.length; i < len; ++i) {
+        callbacks[i].apply(this, [data, handler]);
+      }
     }
 
-    on(event, fn) {
-        (this._callbacks[event] = this._callbacks[event] || []).push(fn);
-        return this;
-    }
+    return this;
+  }
 
-    _emit(event, data, handler) {
-        if (this._callbacks[event]) {
-            let callbacks = this._callbacks[event].slice(0);
+  connect() {
+    this._handler = new WebSocket(
+      (window.location.protocol === 'https:' ? 'wss' : 'ws') + '://' + this._host + PATH + '?token=' + this._token
+    );
 
-            for (let i = 0, len = callbacks.length; i < len; ++i) {
-                callbacks[i].apply(this, [data, handler]);
-            }
-        }
+    this._handler.onopen = () => {
+      this._retries = 0;
+      this._isConnected = true;
+    };
 
-        return this;
-    }
+    this._handler.onmessage = e => {
+      let data = JSON.parse(e.data);
 
-    connect() {
-        this._handler = new WebSocket(
-            (window.location.protocol === 'https:' ? 'wss' : 'ws') + '://' + this._host + PATH + '?token=' + this._token
-        );
+      if (data.event) {
+        this._emit(data.event, data.data, this._handler);
+      }
+    };
 
-        this._handler.onopen = () => {
-            this._retries = 0;
-            this._isConnected = true;
-        };
+    this._handler.onclose = () => {
+      this._isConnected = false;
 
-        this._handler.onmessage = e => {
-            let data = JSON.parse(e.data);
+      if (++this._retries < MAX_RETRIES) {
+        setTimeout(() => this.connect(), DEFAULT_INTERVAL * this._retries);
+      }
+    };
+  }
 
-            if (data.event) {
-                this._emit(data.event, data.data, this._handler);
-            }
-        };
+  disconnect() {
+    this._retries = MAX_RETRIES + 1;
+    this._isConnected = false;
 
-        this._handler.onclose = () => {
-            this._isConnected = false;
+    this._handler.close();
+  }
 
-            if (++this._retries < MAX_RETRIES) {
-                setTimeout(() => this.connect(), DEFAULT_INTERVAL * this._retries);
-            }
-        };
-    }
+  get isConnected() {
+    return this._isConnected;
+  }
 
-    disconnect() {
-        this._retries = MAX_RETRIES + 1;
-        this._isConnected = false;
-
-        this._handler.close();
-    }
-
-    get isConnected() {
-        return this._isConnected;
-    }
-
-    _isSupported() {
-        return ('WebSocket' in window && window.WebSocket !== null);
-    }
+  _isSupported() {
+    return ('WebSocket' in window && window.WebSocket !== null);
+  }
 }
 
 class RealtimeFactory {
-    constructor() {
-        if (!RealtimeFactory.instance) {
-            let realtime = new Realtime(Config.get('ws'), Config.get('token'));
+  constructor() {
+    if (!RealtimeFactory.instance) {
+      let realtime = new Realtime(Config.get('ws'), Config.get('token'));
 
-            // response to the heartbeat event
-            realtime.on('hb', function (data, handler) {
-                handler.send(data);
-            });
+      // response to the heartbeat event
+      realtime.on('hb', function (data, handler) {
+        handler.send(data);
+      });
 
-            realtime.on('exit', function () {
-                realtime.disconnect();
-            });
+      realtime.on('exit', function () {
+        realtime.disconnect();
+      });
 
-            RealtimeFactory.instance = realtime;
-        }
-
-        return RealtimeFactory.instance;
+      RealtimeFactory.instance = realtime;
     }
+
+    return RealtimeFactory.instance;
+  }
 }
 
 export default new RealtimeFactory();

@@ -141,6 +141,8 @@ new Vue({
 
     updateModel(value) {
       this.text = value;
+
+      ws.whisper('typing', {recipient: this.recipient});
     },
 
     changePage(page) {
