@@ -36,11 +36,12 @@ class Realtime {
 
   on(event, fn) {
     (this._callbacks[event] = this._callbacks[event] || []).push(fn);
+
     return this;
   }
 
-  whisper(event, data) {
-    this._handler.send(JSON.stringify({event, data}));
+  whisper(channel, event, data) {
+    this._handler.send(JSON.stringify({channel, event: `client-${event}`, data}));
   }
 
   _emit(event, data, handler) {
@@ -105,7 +106,7 @@ class RealtimeFactory {
 
       // response to the heartbeat event
       realtime.on('hb', function (data, handler) {
-        handler.send(data);
+        handler.send(JSON.stringify({event: 'hb', data: 'hb'}));
       });
 
       realtime.on('exit', function () {
