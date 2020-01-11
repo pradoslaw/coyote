@@ -298,9 +298,9 @@ class Topic extends Model
      */
     public function markAsRead($markTime, $guestId)
     {
-        $sql = "INSERT INTO topic_track (topic_id, forum_id, guest_id, marked_at) 
+        $sql = "INSERT INTO topic_track (topic_id, forum_id, guest_id, marked_at)
                 VALUES(?, ?, ?, ?)
-                ON CONFLICT ON CONSTRAINT topic_track_topic_id_guest_id_unique DO 
+                ON CONFLICT ON CONSTRAINT topic_track_topic_id_guest_id_unique DO
                 UPDATE SET marked_at = ?";
 
         $this->getConnection()->statement($sql, [$this->id, $this->forum_id, $guestId, $markTime, $markTime]);
@@ -370,7 +370,7 @@ class Topic extends Model
 
         return array_merge($body, [
             'posts' => $posts,
-            'forum' => $this->forum()->first(['name', 'slug'])
+            'forum' => $this->forum->only(['name', 'slug'])
         ]);
     }
 }

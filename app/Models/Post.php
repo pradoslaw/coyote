@@ -269,21 +269,26 @@ class Post extends Model
      */
     protected function getIndexBody()
     {
+        // topic removed? skip indexing
+        if (!$this->topic) {
+            return [];
+        }
+
         $this->setCharFilter(PostFilter::class);
         $body = $this->parentGetIndexBody();
 
         // additionally index few fields from topics table...
-        $topic = $this->topic()->withTrashed()->first(['subject', 'slug', 'forum_id', 'id', 'first_post_id']);
+        $topic = $this->topic->only(['subject', 'slug', 'forum_id', 'id', 'first_post_id']);
         // we need to index every field from posts except:
-        $body = array_except($body, ['deleted_at', 'edit_count', 'editor_id', 'delete_reason', 'deleter_id']);
+        $body = array_except($body, ['deleted_at', 'edit_count', 'editor_id', 'delete_reason', 'deleter_id', 'user']);
 
-        if ($topic->first_post_id == $body['id']) {
+        if ($topic['first_post_id'] == $body['id']) {
             $body['tags'] = $topic->tags()->pluck('name');
         }
 
         return array_merge($body, [
             'topic' => $topic,
-            'forum' => $this->forum()->first(['name', 'slug'])
+            'forum' => $this->forum->only(['name', 'slug'])
         ]);
     }
 }

@@ -26,13 +26,11 @@ trait Searchable
         $params = $this->getParams();
         $params['body'] = $this->filterData($this->getIndexBody());
 
-        try {
-            return $this->getClient()->index($params);
-        } catch (\Exception $e) {
-            logger()->error($params);
-
-            throw $e;
+        if (empty($params['body'])) {
+            return null;
         }
+
+        return $this->getClient()->index($params);
     }
 
     /**

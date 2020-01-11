@@ -107,7 +107,7 @@ class ConfirmController extends Controller
         // potwierdzajac adres email, uzytkownik moze nie byc zalogowany. przekazujemy wiec model User
         // jako aktora aby zapisal sie w bazie danych.
         stream(
-            new Stream_Confirm(new Stream_Actor($user), new Stream_Person(array_only($user->toArray(), ['id', 'name'])))
+            new Stream_Confirm(new Stream_Actor($user), new Stream_Person($user))
         );
 
         return redirect()->route('home')->with('success', 'Adres e-mail został pozytywnie potwierdzony.');
