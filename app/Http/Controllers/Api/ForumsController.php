@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Api;
 
+use Coyote\Http\Resources\ForumCollection;
 use Coyote\Http\Resources\ForumResource;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Illuminate\Routing\Controller;
@@ -20,7 +21,6 @@ class ForumsController extends Controller
 
         debugbar()->stopMeasure('foo');
 
-        return ForumResource::collection($result);
-
+        return new ForumCollection($result);
     }
 }
