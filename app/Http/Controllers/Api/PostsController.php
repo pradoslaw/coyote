@@ -86,7 +86,7 @@ class PostsController extends Controller
     private function includeUser(): array
     {
         return ['user' => function ($builder) {
-            return $builder->select(['id', 'name', 'photo'])->withTrashed();
+            return $builder->select(['id', 'name', 'photo', 'deleted_at', 'is_blocked'])->withTrashed();
         }];
     }
 }

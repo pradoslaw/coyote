@@ -125,7 +125,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'allow_subscribe' => 'int',
         'allow_sticky_header' => 'int',
         'is_confirm' => 'int',
-        'is_online' => 'int'
+        'is_online' => 'int',
+        'is_blocked' => 'bool'
     ];
 
     public static function boot()

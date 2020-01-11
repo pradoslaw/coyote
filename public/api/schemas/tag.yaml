@@ -1,0 +1,12 @@
+type: object
+properties:
+  name:
+    type: string
+    maxLength: 50
+    description: "Only lower case and \\-\\.#,\\+ characters allowed"
+  priority:
+    type: integer
+    minimum: 0
+    maximum: 2
+    default: 1
+    description: "0 - nice to have, 1 - intermediate level, 2 - advance"

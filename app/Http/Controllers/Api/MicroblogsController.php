@@ -62,12 +62,12 @@ class MicroblogsController extends Controller
             'comments' => function (HasMany $query) {
                 return $query->with([
                     'user' => function (BelongsTo $query) {
-                        return $query->select(['id', 'name', 'photo'])->withTrashed();
+                        return $query->select(['id', 'name', 'photo', 'is_blocked', 'deleted_at'])->withTrashed();
                     }
                 ]);
             },
             'user' => function (BelongsTo $query) {
-                return $query->select(['id', 'name', 'photo'])->withTrashed();
+                return $query->select(['id', 'name', 'photo', 'is_blocked', 'deleted_at'])->withTrashed();
             }
         ];
     }

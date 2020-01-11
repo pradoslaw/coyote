@@ -31,7 +31,7 @@ class PostResource extends JsonResource
         return array_merge($only, [
             'created_at'    => $this->created_at->toIso8601String(),
             'user'          => UserResource::make($this->user),
-            'text'          => $this->html,
+            'html'          => $this->html,
             'url'           => url(UrlBuilder::post($this->resource)),
 
             'comments'      => PostCommentResource::collection($this->whenLoaded('comments'))

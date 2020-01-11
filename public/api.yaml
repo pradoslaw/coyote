@@ -65,7 +65,7 @@ paths:
                     type: array
                     items:
                       type: object
-                      $ref: '#/components/schemas/MicroblogSchema'
+                      $ref: './api/schemas/microblog.yaml'
                   meta:
                     type: object
                     $ref: '#/components/schemas/Meta'
@@ -88,7 +88,7 @@ paths:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/MicroblogSchema'
+                $ref: './api/schemas/microblog.yaml'
 
   /jobs:
     get:
@@ -107,7 +107,7 @@ paths:
                     type: array
                     items:
                       type: object
-                      $ref: '#/components/schemas/JobSchema'
+                      $ref: './api/schemas/job.yaml'
                   meta:
                     type: object
                     $ref: '#/components/schemas/Meta'
@@ -126,7 +126,7 @@ paths:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/JobSchema'
+                $ref: './api/schemas/job.yaml'
         422:
           description: "Validation errors"
           content:
@@ -158,7 +158,7 @@ paths:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/JobSchema'
+                $ref: './api/schemas/job.yaml'
     put:
       summary: "Update existing job offer"
       tags:
@@ -186,7 +186,64 @@ paths:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/JobSchema'
+                $ref: './api/schemas/job.yaml'
+
+  /topics:
+    get:
+      summary: "Get list of all topics"
+      tags:
+        - forum
+      parameters:
+        - name: sort
+          required: false
+          in: query
+          description: "Default sort by last topic ID."
+          schema:
+            type: string
+            enum: [id, last_post_id]
+        - name: order
+          required: false
+          in: query
+          description: "Default sort order is DESC."
+          schema:
+            type: string
+            enum: [asc, desc]
+      responses:
+        200:
+          description: "Topic object"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      $ref: './api/schemas/topic.yaml'
+                  meta:
+                    type: object
+                    $ref: '#/components/schemas/Meta'
+  /topics/{id}:
+    get:
+      summary: "Get topic by ID"
+      tags:
+        - forum
+      parameters:
+        - name: id
+          required: true
+          in: "path"
+          schema:
+            type: integer
+      responses:
+        200:
+          description: "Topic object"
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: './api/schemas/topic.yaml'
+
 
 components:
   requestBodies:
@@ -199,207 +256,29 @@ components:
             type: object
             required:
               - title
-            $ref: '#/components/schemas/JobSchema'
+            $ref: './api/schemas/job.yaml'
 
   schemas:
     JobSchema:
-      type: object
-      properties:
-        title:
-          type: string
-        salary_from:
-          type: integer
-          format: int32
-          minimum: 1
-          default: null
-          description: "Minimum salary for this position"
-        salary_to:
-          type: integer
-          format: int32
-          minimum: 1
-          default: null
-          description: "Maximum salary for this position"
-        rate:
-          type: enum
-          enum: ["hourly", "weekly", "monthly", "yearly"]
-          default: "monthly"
-          description: "Salary rate"
-        is_remote:
-          type: boolean
-          default: false
-        remote_range:
-          type: integer
-          minimum: 10
-          maximum: 100
-          nullable: true
-          default: 100
-          description: "If remote work is possible, you can specify its range. 100% is completely remote work"
-        is_gross:
-          type: boolean
-          default: false
-          description: "Determines if salary is gross or net"
-        description:
-          type: string
-          nullable: true
-          description: "Can contain basic HTML like: b,strong,i,em,u,a[href|title|data-user-id|class],p,br,ul,ol[start],li,span[style|title],img[width|height|alt|src|title],sub,sup,pre,code[class],div,kbd,h1,h2,h3,h4,h5,h6,blockquote,del,table[summary|class],thead,tbody,tr,th[abbr],td[abbr],hr,dfn,var,samp"
-        recruitment:
-          type: string
-          description: "Additional recruitment information. For example URL to external recruitment service"
-          nullable: true
-        email:
-          type: string
-          format: email
-        currency:
-          type: enum
-          enum: ["PLN", "USD", "EUR", "GBP", "CHF"]
-          default: "PLN"
-        plan:
-          type: enum
-          enum: ["standard", "plus", "premium"]
-          default: "plus"
-        seniority:
-          type: enum
-          enum: ["student", "junior", "mid", "senior", "lead", "manager"]
-          nullable: true
-        employment:
-          type: enum
-          enum: ["employment", "mandatory", "b2b"]
-          default: "employment"
-        locations:
-          type: array
-          nullable: true
-          items:
-            $ref: '#/components/schemas/LocationSchema'
-        tags:
-          type: array
-          nullable: true
-          description: "Requirements as tags. For example: C#, Python etc."
-          items:
-            $ref: '#/components/schemas/TagSchema'
-        firm:
-          nullable: true
-          $ref: '#/components/schemas/FirmSchema'
+      $ref: './api/schemas/job.yaml'
 
     FirmSchema:
-      type: object
-      properties:
-        name:
-          type: string
-          description: "When adding another job offer, you do not have to provide all the information about the company. All you need is a name and the company will be assigned to the job"
-        is_agency:
-          type: boolean
-          default: false
-          description: "Determines if firm is a recruitment agency or not"
-        website:
-          type: string
-          nullable: true
-        logo:
-          type: string
-          format: byte
-          description: "Logo as base64 encoded string"
-          nullable: true
-        description:
-          type: string
-          nullable: true
-          description: "Can contain basic HTML like: b,strong,i,em,u,a[href|title|data-user-id|class],p,br,ul,ol[start],li,span[style|title],img[width|height|alt|src|title],sub,sup,pre,code[class],div,kbd,h1,h2,h3,h4,h5,h6,blockquote,del,table[summary|class],thead,tbody,tr,th[abbr],td[abbr],hr,dfn,var,samp"
-        youtube_url:
-          type: string
-          nullable: true
-        latitude:
-          type: number
-          format: float
-          nullable: true
-        longitude:
-          type: number
-          format: float
-          nullable: true
-        street:
-          type: string
-          nullable: true
-        street_number:
-          type: string
-          maxLength: 50
-          nullable: true
-        city:
-          type: string
-          nullable: true
-        country:
-          type: string
-          nullable: true
-          description: "Two letter ISO country code"
-        postcode:
-          type: string
-          nullable: true
+      $ref: './api/schemas/firm.yaml'
 
     LocationSchema:
-      type: object
-      properties:
-        city:
-          type: string
-          maxLength: 255
-        street:
-          type: string
-          maxLength: 255
-        street_number:
-          type: string
-          maxLength: 50
-        country:
-          type: string
-          description: "Two letter ISO country code"
-        latitude:
-          type: number
-          format: float
-          nullable: true
-        longitude:
-          type: number
-          format: float
-          nullable: true
+      $ref: './api/schemas/location.yaml'
 
     TagSchema:
-      type: object
-      properties:
-        name:
-          type: string
-          maxLength: 50
-          description: "Only lower case and \\-\\.#,\\+ characters allowed"
-        priority:
-          type: integer
-          minimum: 0
-          maximum: 2
-          default: 1
-          description: "0 - nice to have, 1 - intermediate level, 2 - advance"
+      $ref: './api/schemas/tag.yaml'
 
     MicroblogSchema:
-      type: object
-      properties:
-        id:
-          type: integer
-        votes:
-          type: integer
-        created_at:
-          type: string
-          format: "datetime"
-        updated_at:
-          type: string
-          format: "datetime"
-        html:
-          type: string
-        comments:
-          type: array
-          items:
-            type: object
-            $ref: '#/components/schemas/MicroblogSchema'
-        user:
-          type: object
-          properties:
-            id:
-              type: integer
-              required: true
-            name:
-              type: string
-              required: true
-            photo:
-              type: string
+      $ref: './api/schemas/microblog.yaml'
+
+    TopicSchema:
+      $ref: './api/schemas/topic.yaml'
+
+    PostSchema:
+      $ref: './api/schemas/post.yaml'
 
     Meta:
       type: object
