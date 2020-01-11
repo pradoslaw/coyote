@@ -26,7 +26,7 @@ class TagResource extends JsonResource
      */
     public function toArray($request)
     {
-        $callback = self::$url instanceof \Closure ? self::$url : function($name) {
+        $callback = self::$url instanceof \Closure ? self::$url : function ($name) {
             return route('job.tag', [urlencode($name)]);
         };
 
