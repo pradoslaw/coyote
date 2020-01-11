@@ -20,7 +20,7 @@ class TopicsController extends Controller
 
     public function __construct()
     {
-        TagResource::$url = function($name) {
+        TagResource::$url = function ($name) {
             return route('forum.tag', [urlencode($name)]);
         };
     }
