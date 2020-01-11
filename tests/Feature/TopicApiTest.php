@@ -53,7 +53,6 @@ class TopicApiTest extends TestCase
 
         $request = $this->get('/v1/topics/' . $this->topic->id);
 
-
         $request->assertJsonFragment([
             'subject' => $this->topic->subject,
             'forum' => [

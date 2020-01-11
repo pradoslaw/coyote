@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Api;
 
+use Coyote\Http\Resources\TagResource;
 use Coyote\Http\Resources\TopicResource;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 use Coyote\Repositories\Criteria\EagerLoading;
@@ -16,6 +17,13 @@ use Illuminate\Contracts\Auth\Factory as Auth;
 class TopicsController extends Controller
 {
     use AuthorizesRequests;
+
+    public function __construct()
+    {
+        TagResource::$url = function($name) {
+            return route('forum.tag', [urlencode($name)]);
+        };
+    }
 
     /**
      * @param TopicRepositoryInterface $topic
