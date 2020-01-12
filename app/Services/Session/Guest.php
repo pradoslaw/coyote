@@ -29,6 +29,7 @@ class Guest
     }
 
     /**
+     * @deprecated
      * @return Carbon
      */
     public function guessVisit(): Carbon

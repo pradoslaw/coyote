@@ -199,7 +199,7 @@ class Forum extends Model
      */
     public function markAsRead($guestId)
     {
-        $markTime = Carbon::now();
+        $markTime = Carbon::now('UTC');
 
         $sql = "INSERT INTO forum_track (forum_id, guest_id, marked_at)
                 VALUES(?, ?, ?)

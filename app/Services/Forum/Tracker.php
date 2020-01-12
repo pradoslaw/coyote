@@ -3,8 +3,8 @@
 namespace Coyote\Services\Forum;
 
 use Carbon\Carbon;
+use Coyote\Repositories\Contracts\GuestRepositoryInterface as GuestRepository;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
-use Coyote\Services\Session\Guest;
 use Coyote\Topic;
 
 class Tracker
@@ -20,16 +20,16 @@ class Tracker
     private $repository;
 
     /**
-     * @var Guest
+     * @var GuestRepository
      */
     private $guest;
 
     /**
      * @param Topic $topic
      * @param TopicRepository $repository
-     * @param Guest $guest
+     * @param GuestRepository $guest
      */
-    public function __construct(Topic $topic, TopicRepository $repository, Guest $guest)
+    public function __construct(Topic $topic, TopicRepository $repository, GuestRepository $guest)
     {
         $this->topic = $topic;
         $this->guest = $guest;
@@ -60,7 +60,7 @@ class Tracker
         }
 
         if (empty($markTime)) {
-            $markTime = $this->guest->guessVisit();
+            $markTime = $this->guessVisit($guestId);
         }
 
         return $markTime;
@@ -72,7 +72,7 @@ class Tracker
      */
     public function isRead(string $guestId): bool
     {
-        return $this->topic->last_post_created_at > $this->getMarkTime($guestId);
+        return $this->topic->last_post_created_at >= $this->getMarkTime($guestId);
     }
 
     /**
@@ -87,12 +87,12 @@ class Tracker
             return;
         }
 
-        $markTime = $this->topic->forum->markTime($guestId);
+        $this->topic->forum->loadMarkTime($guestId);
 
         // are there any unread topics in this category?
         $unread = $this->repository->countUnread(
             $this->topic->forum->id,
-            $markTime,
+            $this->topic->forum->read_at,
             $guestId
         );
 
@@ -100,5 +100,24 @@ class Tracker
             $this->topic->forum->markAsRead($guestId);
             $this->repository->flushRead($this->topic->forum->id, $guestId);
         }
+    }
+
+    private function guessVisit(string $guestId): Carbon
+    {
+        static $createdAt;
+
+        if (!empty($createdAt)) {
+            return $createdAt;
+        }
+
+        $result = $this->guest->find($guestId, ['created_at']);
+
+        if ($result === null) {
+            $createdAt = Carbon::now();
+        } else {
+            $createdAt = $result->created_at;
+        }
+
+        return $createdAt;
     }
 }

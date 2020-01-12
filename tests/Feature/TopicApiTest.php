@@ -2,8 +2,10 @@
 
 namespace Tests\Feature;
 
+use Carbon\Carbon;
 use Coyote\Forum;
 use Coyote\Group;
+use Coyote\Services\Forum\Tracker;
 use Coyote\Topic;
 use Coyote\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -48,7 +50,10 @@ class TopicApiTest extends TestCase
         $request = $this->get('/v1/topics', ['Accept' => 'application/json']);
 
         $data = $request->decodeResponseJson('data');
-        $this->assertNotEquals($data[0]['subject'], $this->topic->subject);
+
+        $this->assertNotEquals($this->topic->subject, $data[0]['subject']);
+        $this->assertNull($data[0]['read_at']);
+        $this->assertFalse($data[0]['is_read']);
     }
 
     public function testShowAllTopicsAuthorized()
@@ -58,7 +63,9 @@ class TopicApiTest extends TestCase
         $request = $this->get('/v1/topics', ['Accept' => 'application/json']);
         $data = $request->decodeResponseJson('data');
 
-        $this->assertEquals($data[0]['subject'], $this->topic->subject);
+        $this->assertEquals($this->topic->subject, $data[0]['subject']);
+        $this->assertNull($data[0]['read_at']);
+        $this->assertFalse($data[0]['is_read']);
     }
 
     public function testShowTopicWhenAuthorized()
@@ -73,11 +80,38 @@ class TopicApiTest extends TestCase
 
         $request->assertJsonFragment([
             'subject' => $this->topic->subject,
+            'read_at' => null,
+            'is_read' => false,
             'forum' => [
                 'id' => $this->forum->id,
                 'name' => $this->forum->name,
                 'slug' => $this->forum->slug
             ]
         ]);
+    }
+
+    public function testMarkAsRead()
+    {
+        $this->actingAs($this->user, 'api');
+
+        Tracker::make($this->topic)->asRead($this->user->guest_id, $this->topic->last_post_created_at);
+
+        $request = $this->get('/v1/topics/' . $this->topic->id, ['Accept' => 'application/json']);
+        $data = $request->decodeResponseJson();
+
+        $this->assertTrue($data['is_read']);
+    }
+
+    public function testShowAllTopicsWithMarkedAsRead()
+    {
+        $this->actingAs($this->user, 'api');
+
+        Tracker::make($this->topic)->asRead($this->user->guest_id, $this->topic->last_post_created_at);
+
+        $request = $this->get('/v1/topics', ['Accept' => 'application/json']);
+        $data = $request->decodeResponseJson('data');
+
+        $this->assertEquals($this->topic->subject, $data[0]['subject']);
+        $this->assertTrue($data[0]['is_read']);
     }
 }

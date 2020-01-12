@@ -77,6 +77,6 @@ class TopicResource extends JsonResource
      */
     private function isRead(): bool
     {
-        return Tracker::make($this->resource)->isRead($this->guestId);
+        return $this->guestId ? Tracker::make($this->resource)->isRead($this->guestId) : false;
     }
 }

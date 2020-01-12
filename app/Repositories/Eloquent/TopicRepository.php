@@ -122,7 +122,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
         return $this
             ->model
             ->from($this->raw("($sql) AS topics"))
-            ->trackTopic($guestId)
+            ->loadTopicMarkTime($guestId)
             ->withTrashed()
             ->whereNull('topic_track.id')
             ->count();
