@@ -50,11 +50,6 @@ class CreateIndexCommand extends Command
                 'settings' => [
                     "index" => [
                         "analysis" => [
-                            "char_filter" => [
-                                "strip_html" => [
-                                    "type" => "html_strip"
-                                ]
-                            ],
                             "filter" => [
                                 "common_words_filter" => [
                                     "type" => "stop",
@@ -85,21 +80,13 @@ class CreateIndexCommand extends Command
                                 ],
                                 "stopwords_analyzer" => [
                                     "tokenizer" => "whitespace",
-                                    "char_filter" => ["strip_html"],
                                     "filter" => [
                                         "lowercase",
                                         "common_words_filter",
                                         "keep_symbols_filter",
                                         "asciifolding"
                                     ]
-                                ],
-//                                    "default_analyzer" => [
-//                                        "tokenizer" => "whitespace",
-//                                        "filter" => [
-//                                            "lowercase",
-//                                            "keep_symbols_filter"
-//                                        ]
-//                                    ]
+                                ]
                             ]
                         ]
                     ]
@@ -107,7 +94,7 @@ class CreateIndexCommand extends Command
                 'mappings' => [
                     '_doc' => [
                         'properties' => [
-                            "type" => [
+                            "model" => [
                                 "type" => "keyword"
                             ],
                             "created_at" => [
@@ -126,7 +113,15 @@ class CreateIndexCommand extends Command
                                 "type" => "date",
                                 "format" => "yyyy-MM-dd HH:mm:ss"
                             ],
-                            "text" => [
+                            "html" => [
+                                "type" => "text",
+                                "analyzer" => "stopwords_analyzer"
+                            ],
+                            "description" => [
+                                "type" => "text",
+                                "analyzer" => "stopwords_analyzer"
+                            ],
+                            "requirements" => [
                                 "type" => "text",
                                 "analyzer" => "stopwords_analyzer"
                             ],
@@ -138,7 +133,7 @@ class CreateIndexCommand extends Command
                                 "type" => "boolean"
                             ],
                             "ip" => [
-                                "type" => "text",
+                                "type" => "ip",
 //                                    "index" => "not_analyzed"
                             ],
                             "host" => [
