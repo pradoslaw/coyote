@@ -26,7 +26,7 @@
         "barryvdh/laravel-debugbar": "^3.2",
         "chrisboulton/php-diff": "dev-master",
         "doctrine/dbal": "^2.5",
-        "elasticsearch/elasticsearch": "~5.0",
+        "elasticsearch/elasticsearch": "~6.7",
         "erusev/parsedown": "^1.7",
         "ezyang/htmlpurifier": "^4.7",
         "fideloper/proxy": "^4.0",

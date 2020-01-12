@@ -7,7 +7,6 @@ use Coyote\Console\Commands\CreateCouponCommand;
 use Coyote\Console\Commands\CreateSitemapCommand;
 use Coyote\Console\Commands\CurrencyExchangeCommand;
 use Coyote\Console\Commands\Elasticsearch\CreateIndexCommand;
-use Coyote\Console\Commands\Elasticsearch\CreateMappingCommand;
 use Coyote\Console\Commands\Elasticsearch\DropIndexCommand;
 use Coyote\Console\Commands\Elasticsearch\IndexCommand;
 use Coyote\Console\Commands\FlushCacheCommand;
@@ -39,7 +38,6 @@ class Kernel extends ConsoleKernel
         CreateSitemapCommand::class,
         FlushCacheCommand::class,
         CurrencyExchangeCommand::class,
-        CreateMappingCommand::class,
         CreateIndexCommand::class,
         DropIndexCommand::class,
         IndexCommand::class,

@@ -69,7 +69,7 @@ class SearchController extends Controller
 
         $params = [
             'index'     => config('elasticsearch.default_index'),
-            'type'      => $types,
+            'type'      => '_doc',
             'body'      => $body
         ];
 

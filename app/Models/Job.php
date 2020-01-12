@@ -694,7 +694,7 @@ class Job extends Model
 
         // maximum offered salary
         $salary = $this->monthlySalary(max($this->salary_from, $this->salary_to));
-        $body = array_except($body, ['deleted_at', 'features', 'enable_apply', 'user']);
+        $body = array_only($body, ['id', 'created_at', 'deadline_at', 'firm_id', 'is_remote']);
 
         $locations = [];
 
@@ -721,8 +721,12 @@ class Job extends Model
         }
 
         $body = array_merge($body, [
+            'title'             => htmlspecialchars($this->title),
+            'description'       => $this->stripTags($this->description),
+            'recruitment'       => $this->stripTags($this->recruitment),
+
             // score must be int
-            'score'             => (int) $body['score'],
+            'score'             => (int) $this->score,
             'locations'         => $locations,
             'salary'            => $salary,
             'salary_from'       => $this->monthlySalary($this->salary_from),
@@ -731,7 +735,7 @@ class Job extends Model
             'currency_symbol'   => $this->currency()->value('symbol'),
             // higher tag's priorities first
             'tags'              => $this->tags()->get(['name', 'priority'])->sortByDesc('pivot.priority')->pluck('name')->toArray(),
-            //            // index null instead of 100 is job is not remote
+            // index null instead of 100 is job is not remote
             'remote_range'      => $this->is_remote ? $this->remote_range : null
         ]);
 
@@ -742,6 +746,15 @@ class Job extends Model
         }
 
         return $body;
+    }
+
+    private function stripTags($value)
+    {
+        // w oferach pracy, edytor tinymce nie dodaje znaku nowej linii. zamiast tego mamy <br />. zamieniamy
+        // na znak nowej linii aby poprawnie zindeksowac tekst w elasticsearch. w przeciwnym przypadku
+        // teks foo<br />bar po przepuszczeniu przez stripHtml() zostalby zamieniony na foobar co niepoprawnie
+        // zostaloby zindeksowane jako jeden wyraz
+        return strip_tags(str_replace(['<br />', '<br>'], "\n", $value));
     }
 
     /**

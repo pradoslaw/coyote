@@ -33,7 +33,7 @@ class MixedBuilder extends QueryBuilder
     {
         $fields = [
             'subject^2',
-            'text',
+            'html',
             'title^2',
             'long_title',
             'posts.text',
@@ -49,7 +49,7 @@ class MixedBuilder extends QueryBuilder
             ->must(new OnlyThoseWithAccess($this->request->attributes->get('forum_id')))
             ->sort(new Sort($this->request->get('sort', '_score'), $this->request->get('order', 'desc')))
             ->highlight(
-                new Highlight(['subject', 'text', 'title', 'long_title', 'excerpt', 'description', 'requirements'])
+                new Highlight(['subject', 'html', 'title', 'long_title', 'excerpt', 'description', 'requirements'])
             )
             ->size(($this->request->input('page', 1) - 1) * self::PER_PAGE, self::PER_PAGE);
 

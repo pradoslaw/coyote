@@ -61,25 +61,7 @@ class Microblog extends Model
      */
     protected $attributes = ['votes' => 0];
 
-    /**
-     * Elasticsearch type mapping
-     *
-     * @var array
-     */
-    protected $mapping = [
-        "created_at" => [
-            "type" => "date",
-            "format" => "yyyy-MM-dd HH:mm:ss"
-        ],
-        "updated_at" => [
-            "type" => "date",
-            "format" => "yyyy-MM-dd HH:mm:ss"
-        ],
-        "text" => [
-            "type" => "text",
-            "analyzer" => "default_analyzer"
-        ]
-    ];
+    protected $appends = ['html'];
 
     /**
      * Html version of the entry.
@@ -239,10 +221,9 @@ class Microblog extends Model
      */
     protected function getIndexBody()
     {
-        $this->setCharFilter(MicroblogFilter::class);
-        $body = $this->parentGetIndexBody();
+        $body = array_only($this->parentGetIndexBody(), ['id', 'created_at', 'updated_at', 'html']);
+        $body['html'] = strip_tags($body['html']);
 
-        // we need to index every field from topics except:
-        return array_only($body, ['id', 'created_at', 'updated_at', 'text']);
+        return $body;
     }
 }
