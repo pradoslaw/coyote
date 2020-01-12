@@ -1,0 +1,41 @@
+type: object
+properties:
+  id:
+    type: integer
+  subject:
+    type: string
+  score:
+    type: number
+    format: float
+  views:
+    type: integer
+    minimum: 0
+  replies:
+    type: integer
+    minimum: 0
+  is_sticky:
+    type: boolean
+  is_locked:
+    type: boolean
+  first_post_id:
+    type: integer
+  last_post_id:
+    type: integer
+  created_at:
+    type: string
+    format: "datetime"
+  locked_at:
+    type: string
+    format: "datetime"
+    nullable: true
+  last_post_created_at:
+    type: string
+    format: "datetime"
+  url:
+    type: string
+  tags:
+    type: array
+    nullable: true
+    description: "Tags assigned to topic. For example: C#, Python etc."
+    items:
+      $ref: './tag.yaml'

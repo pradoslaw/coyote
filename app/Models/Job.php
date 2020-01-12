@@ -516,11 +516,11 @@ class Job extends Model
             ->with([
                 'children' => function ($builder) {
                     return $builder->with(['user' => function ($query) {
-                        return $query->select(['id', 'name', 'photo'])->withTrashed();
+                        return $query->select(['id', 'name', 'photo', 'deleted_at', 'is_blocked'])->withTrashed();
                     }]);
                 },
                 'user' => function ($builder) {
-                    return $builder->select(['id', 'name', 'photo'])->withTrashed();
+                    return $builder->select(['id', 'name', 'photo', 'deleted_at', 'is_blocked'])->withTrashed();
                 }
             ]);
     }
@@ -638,7 +638,7 @@ class Job extends Model
         if (!empty($recruitment)) {
             $this->attributes['enable_apply'] = false;
         }
-        
+
         $this->attributes['recruitment'] = $recruitment;
     }
 
@@ -694,7 +694,7 @@ class Job extends Model
 
         // maximum offered salary
         $salary = $this->monthlySalary(max($this->salary_from, $this->salary_to));
-        $body = array_except($body, ['deleted_at', 'features', 'enable_apply']);
+        $body = array_except($body, ['deleted_at', 'features', 'enable_apply', 'user']);
 
         $locations = [];
 

@@ -104,7 +104,7 @@ class OAuthController extends Controller
         auth()->login($user, true);
 
         if ($user->wasRecentlyCreated) {
-            stream(Stream_Create::class, new Stream_Person($user->toArray()));
+            stream(Stream_Create::class, new Stream_Person($user));
         }
 
         stream(Stream_Login::class);

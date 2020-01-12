@@ -34,7 +34,7 @@ class TopicResource extends JsonResource
      */
     public function toArray($request)
     {
-        $only = $this->resource->only(['id', 'subject', 'score', 'views', 'replies', 'is_sticky', 'is_locked']);
+        $only = $this->resource->only(['id', 'subject', 'score', 'views', 'replies', 'is_sticky', 'is_locked', 'first_post_id', 'last_post_id']);
 
         return array_merge(
             $only,
@@ -49,9 +49,10 @@ class TopicResource extends JsonResource
                     'slug'      => $this->forum->slug
                 ],
                 'tags'                  => TagResource::collection($this->tags),
-                'read_at'               => $this->when($this->resource->relationLoaded('tracks'), function () {
-                    return max($this->tracks->first()->marked_at ?? 0, $this->forum->tracks->first()->marked_at ?? 0);
-                })
+//@todo dodac date przeczytania watku
+//                'read_at'               => $this->when($this->resource->relationLoaded('tracks'), function () {
+//                    return max($this->tracks->first()->marked_at ?? 0, $this->forum->tracks->first()->marked_at ?? 0);
+//                })
             ]
         );
     }

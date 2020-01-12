@@ -2,6 +2,8 @@
 
 namespace Coyote\Services\Stream\Objects;
 
+use Coyote\User;
+
 class Person extends ObjectAbstract
 {
     /**
@@ -10,21 +12,23 @@ class Person extends ObjectAbstract
     public $image;
 
     /**
-     * @param array $data
+     * Person constructor.
+     * @param User|null $user
      */
-    public function __construct(array $data = [])
+    public function __construct(User $user = null)
     {
-        if (empty($data)) {
-            $data = auth()->user()->toArray();
+        if (empty($user)) {
+            $user = auth()->user();
         }
 
-        $this->id = $data['id'];
-        $this->displayName = $data['name'];
+        $this->id = $user->id;
+        $this->displayName = $user->name;
         $this->url = route('profile', [$this->id], false);
 
-        if (!empty($data['photo'])) {
-            $this->image = $data['photo'];
+        if (!empty($user->photo)) {
+            $this->image = $user->photo ? (string) $user->photo : null;
         }
-        parent::__construct($data);
+
+        parent::__construct($user->only(['ip', 'browser']));
     }
 }

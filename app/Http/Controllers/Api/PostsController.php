@@ -3,17 +3,20 @@
 namespace Coyote\Http\Controllers\Api;
 
 use Coyote\Http\Resources\PostResource;
+use Coyote\Post;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Sort;
-use Illuminate\Contracts\Auth\Access\Gate;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Contracts\Auth\Factory as Auth;
 
 class PostsController extends Controller
 {
+    use AuthorizesRequests;
+
     /**
      * @var \Coyote\User
      */
@@ -50,7 +53,7 @@ class PostsController extends Controller
 
         $this->post->pushCriteria(new Sort('id', $request->input('order', Sort::DESC)));
 
-        $this->includeUser();
+        $this->post->pushCriteria(new EagerLoading($this->includeUser()));
         $this->post->pushCriteria(new OnlyThoseWithAccess($this->user));
 
         $paginate = $this->post->paginate();
@@ -59,33 +62,31 @@ class PostsController extends Controller
     }
 
     /**
-     * @param Gate $gate
-     * @param int $id
-     * @return PostResource|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @param Post $post
+     * @return PostResource
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function show(Gate $gate, int $id)
+    public function show(Post $post)
     {
-        $this->includeUser();
+        $this->authorize('access', $post->forum);
 
-        $this->post->pushCriteria(new EagerLoading(['comments' => function ($builder) {
+        $post->load($this->includeUser());
+
+        $post->load(['comments' => function ($builder) {
             return $builder->with(['user' => function ($query) {
-                return $query->select(['id', 'name', 'photo'])->withTrashed();
+                return $query->select(['id', 'name', 'photo', 'deleted_at', 'is_blocked'])->withTrashed();
             }]);
-        }]));
+        }]);
 
-        $post = $this->post->findOrFail($id);
-
-        if ($gate->forUser($this->user)->denies('access', $post->forum)) {
-            return response('Unauthorized.', 401);
-        }
+        PostResource::withoutWrapping();
 
         return new PostResource($post);
     }
 
-    private function includeUser()
+    private function includeUser(): array
     {
-        $this->post->pushCriteria(new EagerLoading(['user' => function ($builder) {
-            return $builder->select(['id', 'name', 'photo'])->withTrashed();
-        }]));
+        return ['user' => function ($builder) {
+            return $builder->select(['id', 'name', 'photo', 'deleted_at', 'is_blocked'])->withTrashed();
+        }];
     }
 }

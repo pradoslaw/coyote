@@ -1,0 +1,76 @@
+type: object
+properties:
+  title:
+    type: string
+  salary_from:
+    type: integer
+    format: int32
+    minimum: 1
+    default: null
+    description: "Minimum salary for this position"
+  salary_to:
+    type: integer
+    format: int32
+    minimum: 1
+    default: null
+    description: "Maximum salary for this position"
+  rate:
+    type: enum
+    enum: ["hourly", "weekly", "monthly", "yearly"]
+    default: "monthly"
+    description: "Salary rate"
+  is_remote:
+    type: boolean
+    default: false
+  remote_range:
+    type: integer
+    minimum: 10
+    maximum: 100
+    nullable: true
+    default: 100
+    description: "If remote work is possible, you can specify its range. 100% is completely remote work"
+  is_gross:
+    type: boolean
+    default: false
+    description: "Determines if salary is gross or net"
+  description:
+    type: string
+    nullable: true
+    description: "Can contain basic HTML like: b,strong,i,em,u,a[href|title|data-user-id|class],p,br,ul,ol[start],li,span[style|title],img[width|height|alt|src|title],sub,sup,pre,code[class],div,kbd,h1,h2,h3,h4,h5,h6,blockquote,del,table[summary|class],thead,tbody,tr,th[abbr],td[abbr],hr,dfn,var,samp"
+  recruitment:
+    type: string
+    description: "Additional recruitment information. For example URL to external recruitment service"
+    nullable: true
+  email:
+    type: string
+    format: email
+  currency:
+    type: enum
+    enum: ["PLN", "USD", "EUR", "GBP", "CHF"]
+    default: "PLN"
+  plan:
+    type: enum
+    enum: ["standard", "plus", "premium"]
+    default: "plus"
+  seniority:
+    type: enum
+    enum: ["student", "junior", "mid", "senior", "lead", "manager"]
+    nullable: true
+  employment:
+    type: enum
+    enum: ["employment", "mandatory", "b2b"]
+    default: "employment"
+  locations:
+    type: array
+    nullable: true
+    items:
+      $ref: './location.yaml'
+  tags:
+    type: array
+    nullable: true
+    description: "Requirements as tags. For example: C#, Python etc."
+    items:
+      $ref: './tag.yaml'
+  firm:
+    nullable: true
+    $ref: './firm.yaml'

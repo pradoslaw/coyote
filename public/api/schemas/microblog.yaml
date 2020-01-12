@@ -1,0 +1,53 @@
+type: object
+properties:
+  id:
+    type: integer
+  votes:
+    type: integer
+  created_at:
+    type: string
+    format: "datetime"
+  updated_at:
+    type: string
+    format: "datetime"
+  html:
+    type: string
+  comments:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+        votes:
+          type: integer
+        created_at:
+          type: string
+          format: "datetime"
+        updated_at:
+          type: string
+          format: "datetime"
+        html:
+          type: string
+        user:
+          type: object
+          properties:
+            id:
+              type: integer
+              required: true
+            name:
+              type: string
+              required: true
+            photo:
+              type: string
+  user:
+    type: object
+    properties:
+      id:
+        type: integer
+        required: true
+      name:
+        type: string
+        required: true
+      photo:
+        type: string

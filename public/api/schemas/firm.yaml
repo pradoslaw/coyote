@@ -1,0 +1,49 @@
+type: object
+properties:
+  name:
+    type: string
+    description: "When adding another job offer, you do not have to provide all the information about the company. All you need is a name and the company will be assigned to the job"
+  is_agency:
+    type: boolean
+    default: false
+    description: "Determines if firm is a recruitment agency or not"
+  website:
+    type: string
+    nullable: true
+  logo:
+    type: string
+    format: byte
+    description: "Logo as base64 encoded string"
+    nullable: true
+  description:
+    type: string
+    nullable: true
+    description: "Can contain basic HTML like: b,strong,i,em,u,a[href|title|data-user-id|class],p,br,ul,ol[start],li,span[style|title],img[width|height|alt|src|title],sub,sup,pre,code[class],div,kbd,h1,h2,h3,h4,h5,h6,blockquote,del,table[summary|class],thead,tbody,tr,th[abbr],td[abbr],hr,dfn,var,samp"
+  youtube_url:
+    type: string
+    nullable: true
+  latitude:
+    type: number
+    format: float
+    nullable: true
+  longitude:
+    type: number
+    format: float
+    nullable: true
+  street:
+    type: string
+    nullable: true
+  street_number:
+    type: string
+    maxLength: 50
+    nullable: true
+  city:
+    type: string
+    nullable: true
+  country:
+    type: string
+    nullable: true
+    description: "Two letter ISO country code"
+  postcode:
+    type: string
+    nullable: true

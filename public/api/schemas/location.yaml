@@ -1,0 +1,22 @@
+type: object
+properties:
+  city:
+    type: string
+    maxLength: 255
+  street:
+    type: string
+    maxLength: 255
+  street_number:
+    type: string
+    maxLength: 50
+  country:
+    type: string
+    description: "Two letter ISO country code"
+  latitude:
+    type: number
+    format: float
+    nullable: true
+  longitude:
+    type: number
+    format: float
+    nullable: true
