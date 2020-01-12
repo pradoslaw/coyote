@@ -128,6 +128,9 @@ new Vue({
           this.removeScrollbarEvent();
         }
 
+        // scroll area by 1px because we don't want to run ps-y-reach-start event in circle
+        document.getElementById('wrap').scrollTop = 1;
+
         return response;
       });
     },
