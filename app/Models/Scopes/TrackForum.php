@@ -4,7 +4,6 @@ namespace Coyote\Models\Scopes;
 
 use Coyote\Str;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Query\Expression;
 use Illuminate\Database\Query\JoinClause;
 
 trait TrackForum
@@ -16,7 +15,7 @@ trait TrackForum
      * @param string|null $guestId
      * @return Builder
      */
-    public function scopeTrackForum(Builder $builder, ?string $guestId)
+    public function scopeLoadForumMarkTime(Builder $builder, ?string $guestId)
     {
         if ($guestId === null) {
             return $builder;

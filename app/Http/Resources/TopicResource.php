@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Coyote\Forum;
 use Coyote\Microblog;
 use Coyote\Post;
+use Coyote\Services\Forum\Tracker;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Tag;
 use Coyote\User;
@@ -22,10 +23,26 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property Post $lastPost
  * @property Microblog[] $comments
  * @property Tag[] $tags
- * @property \Coyote\Topic\Track[] $tracks
+ * @property \Carbon\Carbon $read_at
  */
 class TopicResource extends JsonResource
 {
+    /**
+     * @var string|null
+     */
+    private $guestId;
+
+    /**
+     * @param string|null $guestId
+     * @return $this
+     */
+    public function setGuestId(?string $guestId)
+    {
+        $this->guestId = $guestId;
+
+        return $this;
+    }
+
     /**
      * Transform the resource into an array.
      *
@@ -43,17 +60,23 @@ class TopicResource extends JsonResource
                 'created_at'            => $this->created_at->toIso8601String(),
                 'last_post_created_at'  => $this->last_post_created_at->toIso8601String(),
                 'url'                   => url(UrlBuilder::topic($this->resource)),
+                'read_at'               => $this->read_at ? $this->read_at->toIso8601String() : null,
+                'is_read'               => $this->isRead(),
                 'forum'         => [
                     'id'        => $this->forum->id,
                     'name'      => $this->forum->name,
                     'slug'      => $this->forum->slug
                 ],
-                'tags'                  => TagResource::collection($this->whenLoaded('tags')),
-//@todo dodac date przeczytania watku
-//                'read_at'               => $this->when($this->resource->relationLoaded('tracks'), function () {
-//                    return max($this->tracks->first()->marked_at ?? 0, $this->forum->tracks->first()->marked_at ?? 0);
-//                })
+                'tags'                  => TagResource::collection($this->whenLoaded('tags'))
             ]
         );
+    }
+
+    /**
+     * @return bool
+     */
+    private function isRead(): bool
+    {
+        return Tracker::make($this->resource)->isRead($this->guestId);
     }
 }

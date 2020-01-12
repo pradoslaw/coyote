@@ -23,24 +23,23 @@ class ForumCollection extends ResourceCollection
     public function toArray($request)
     {
         $categories = parent::toArray($request);
-        return $categories;
 
-//        $parents = $this->nested($categories);
+        $parents = $this->nested($categories);
 
-//        foreach ($parents as &$parent) {
-//            if (isset($parent->children)) {
-//                foreach ($parent->children as $child) {
-//                    $parent->topics += $child->topics;
-//                    $parent->posts += $child->posts;
-//
-//                    // created_at contains last post's created date.
-//                    if ($child->created_at > $parent->created_at) {
-//                        $parent->last_post_id = $child->last_post_id;
-//                        $parent->post = $child->post;
-//                    }
-//                }
-//            }
-//        }
+        foreach ($parents as &$parent) {
+            if (isset($parent->children)) {
+                foreach ($parent->children as $child) {
+                    $parent->topics += $child->topics;
+                    $parent->posts += $child->posts;
+
+                    // created_at contains last post's created date.
+                    if ($child->created_at > $parent->created_at) {
+                        $parent->last_post_id = $child->last_post_id;
+                        $parent->post = $child->post;
+                    }
+                }
+            }
+        }
 
         return $parents->toArray();
     }

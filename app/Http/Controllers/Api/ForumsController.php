@@ -3,7 +3,6 @@
 namespace Coyote\Http\Controllers\Api;
 
 use Coyote\Http\Resources\ForumCollection;
-use Coyote\Http\Resources\ForumResource;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
@@ -25,9 +24,10 @@ class ForumsController extends Controller
         debugbar()->startMeasure('foo');
 
         $result = $forum->categories($guestId);
+        $data = new ForumCollection($result);
 
         debugbar()->stopMeasure('foo');
 
-        return new ForumCollection($result);
+        return $data;
     }
 }

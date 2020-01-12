@@ -15,7 +15,7 @@ trait TrackTopic
      * @param string|null $guestId
      * @return Builder
      */
-    public function scopeTrackTopic(Builder $builder, ?string $guestId)
+    public function scopeLoadTopicMarkTime(Builder $builder, ?string $guestId)
     {
         if ($guestId === null) {
             return $builder;

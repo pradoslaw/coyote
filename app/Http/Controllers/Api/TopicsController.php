@@ -3,12 +3,16 @@
 namespace Coyote\Http\Controllers\Api;
 
 use Coyote\Http\Resources\TagResource;
+use Coyote\Http\Resources\TopicCollection;
 use Coyote\Http\Resources\TopicResource;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Repositories\Criteria\Sort;
+use Coyote\Repositories\Criteria\Topic\LoadMarkTime;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
 use Coyote\Topic;
+use Coyote\User;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -18,20 +22,35 @@ class TopicsController extends Controller
 {
     use AuthorizesRequests;
 
-    public function __construct()
+    /**
+     * @var User
+     */
+    private $user;
+
+    /**
+     * @var string|null
+     */
+    private $guestId;
+
+    /**
+     * @param Auth $auth
+     */
+    public function __construct(Auth $auth)
     {
         TagResource::$url = function ($name) {
             return route('forum.tag', [urlencode($name)]);
         };
+
+        $this->user = $auth->guard('api')->user();
+        $this->guestId = $this->user->guest_id ?? null;
     }
 
     /**
      * @param TopicRepositoryInterface $topic
-     * @param Auth $auth
      * @param Request $request
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return TopicCollection|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function index(TopicRepositoryInterface $topic, Auth $auth, Request $request)
+    public function index(TopicRepositoryInterface $topic, Request $request)
     {
         $validator = validator($request->all(), [
             'sort'          => 'nullable|in:id,last_post_id',
@@ -42,35 +61,18 @@ class TopicsController extends Controller
             return response($validator->errors(), 422);
         }
 
-        $user = $auth->guard('api')->user();
-        $guestId = $user->guest_id ?? null;
-
         $topic->pushCriteria(new Sort($request->input('sort', 'id'), $request->input('order', Sort::DESC)));
         $topic->pushCriteria(new EagerLoading(['tags']));
-
-        if ($guestId) {
-            $topic->pushCriteria(new EagerLoading(['tracks' => function ($builder) use ($guestId) {
-                return $builder->where('guest_id', '=', $guestId);
-            }]));
-        }
-
-        $topic->pushCriteria(new EagerLoading(['forum' => function ($builder) use ($guestId) {
-            $builder->select('id', 'name', 'slug');
-
-            if ($guestId) {
-                $builder->with(['tracks' => function ($query) use ($guestId) {
-                    return $query->where('guest_id', '=', $guestId);
-                }]);
-            }
-
-            return $builder;
+        $topic->pushCriteria(new LoadMarkTime($this->guestId));
+        $topic->pushCriteria(new EagerLoading(['forum' => function (BelongsTo $builder) {
+            return $builder->select('forums.id', 'forums.name', 'forums.slug')->loadForumMarkTime($this->guestId);
         }]));
 
-        $topic->pushCriteria(new OnlyThoseWithAccess($user));
+        $topic->pushCriteria(new OnlyThoseWithAccess($this->user));
 
         $paginate = $topic->paginate();
 
-        return TopicResource::collection($paginate);
+        return (new TopicCollection($paginate))->setGuestId($this->guestId);
     }
 
     /**
@@ -80,12 +82,17 @@ class TopicsController extends Controller
      */
     public function show(Topic $topic)
     {
-        $this->authorize('access', $topic->forum);
+        $topic
+            ->loadMarkTime($this->guestId)
+            ->load(['tags'])
+            ->load(['forum' => function ($builder) {
+                return $builder->select('forums.id', 'forums.name', 'forums.slug')->loadForumMarkTime($this->guestId);
+            }]);
 
-        $topic->load(['tags']);
+        $this->authorize('access', $topic->forum);
 
         TopicResource::withoutWrapping();
 
-        return new TopicResource($topic);
+        return (new TopicResource($topic))->setGuestId($this->guestId);
     }
 }

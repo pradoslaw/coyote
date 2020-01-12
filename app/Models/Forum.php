@@ -33,10 +33,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property Forum\Track[] $tracks
  * @property bool $is_prohibited
  * @property Post $post
+ * @property \Carbon\Carbon $read_at
  */
 class Forum extends Model
 {
-    use TrackTopic, TrackForum;
+    use TrackForum;
 
     /**
      * The attributes that are mass assignable.
@@ -62,6 +63,16 @@ class Forum extends Model
      * @var array
      */
     protected $casts = ['redirects' => 'int', 'is_locked' => 'bool'];
+
+    /**
+     * @var array
+     */
+    protected $dates = ['read_at'];
+
+    /**
+     * @var string
+     */
+    protected $dateFormat = 'Y-m-d H:i:se';
 
     /**
      * @var bool
@@ -168,12 +179,16 @@ class Forum extends Model
     }
 
     /**
-     * @param string $guestId
-     * @return mixed
+     * @param string|null $guestId
+     * @return $this
      */
-    public function markTime($guestId)
+    public function loadMarkTime(?string $guestId)
     {
-        return $this->tracks()->select('marked_at')->where('guest_id', $guestId)->value('marked_at');
+        if ($guestId !== null && !array_key_exists('read_at', $this->attributes)) {
+            $this->attributes['read_at'] = $this->tracks()->select('marked_at')->where('guest_id', $guestId)->value('marked_at');
+        }
+
+        return $this;
     }
 
     /**

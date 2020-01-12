@@ -51,10 +51,12 @@ class Tracker
      */
     public function getMarkTime(string $guestId): Carbon
     {
-        $markTime = $this->topic->markTime($guestId);
+        $this->topic->loadMarkTime($guestId);
+        $markTime = $this->topic->read_at;
 
         if (empty($markTime)) {
-            $markTime = $this->topic->forum->markTime($guestId);
+            $this->topic->forum->loadMarkTime($guestId);
+            $markTime = $this->topic->forum->read_at;
         }
 
         if (empty($markTime)) {
@@ -62,6 +64,15 @@ class Tracker
         }
 
         return $markTime;
+    }
+
+    /**
+     * @param string $guestId
+     * @return bool
+     */
+    public function isRead(string $guestId): bool
+    {
+        return $this->topic->last_post_created_at > $this->getMarkTime($guestId);
     }
 
     /**

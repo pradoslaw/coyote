@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Resources;
 
+use Carbon\Carbon;
 use Coyote\Post;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -21,11 +22,13 @@ class ForumResource extends JsonResource
     {
         $only = array_except(
             parent::toArray($request),
-            ['order', 'require_tag', 'enable_prune', 'enable_reputation', 'enable_anonymous', 'prune_days', 'prune_last', 'post', 'redirects']
+            ['order', 'require_tag', 'enable_prune', 'enable_reputation', 'enable_anonymous', 'prune_days', 'prune_last', 'post', 'redirects', 'last_post_id']
         );
 
         return array_merge($only, [
             'url' => url(UrlBuilder::forum($this->resource)),
+            'read_at' => $this->read_at ? Carbon::parse($this->read_at)->toIso8601String() : null,
+            'is_read' => $this->whenLoaded('post') && $this->read_at > $this->post->created_at,
 
             $this->mergeWhen($this->whenLoaded('post'), function () {
                 // set relation to avoid unnecessary db request in UrlBuilder
