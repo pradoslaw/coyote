@@ -88,6 +88,11 @@ return [
                 \Hedii\LaravelGelfLogger\Processors\NullStringProcessor::class,
             ],
 
+            // This optional option determines the channel name sent with the
+            // message in the 'facility' field. Default is equal to app.env
+            // configuration value
+            'name' => 'coyote',
+
             'host' => 'graylog',
             'port' => 12201
         ],
