@@ -23,7 +23,7 @@ trait TrackForum
         }
 
         return $builder
-            ->addSelect(['forum_track.marked_at AS forum_marked_at'])
+            ->addSelect(['forum_track.marked_at AS read_at'])
             ->leftJoin('forum_track', function (JoinClause $join) use ($guestId) {
                 $join
                     ->on('forum_track.forum_id', '=', 'forums.id')

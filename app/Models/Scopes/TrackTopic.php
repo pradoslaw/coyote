@@ -22,7 +22,7 @@ trait TrackTopic
         }
 
         return $builder
-            ->addSelect(['topic_track.marked_at AS topic_marked_at'])
+            ->addSelect(['topic_track.marked_at AS read_at'])
             ->leftJoin('topic_track', function (JoinClause $join) use ($guestId) {
                 $join
                     ->on('topic_track.topic_id', '=', 'topics.id')

@@ -21,7 +21,7 @@ class ForumResource extends JsonResource
     {
         $only = array_except(
             parent::toArray($request),
-            ['order', 'require_tag', 'enable_prune', 'enable_reputation', 'enable_anonymous', 'prune_days', 'prune_last', 'post']
+            ['order', 'require_tag', 'enable_prune', 'enable_reputation', 'enable_anonymous', 'prune_days', 'prune_last', 'post', 'redirects']
         );
 
         return array_merge($only, [
@@ -41,7 +41,8 @@ class ForumResource extends JsonResource
                     ],
                     'topic' => [
                         'id'            => $this->post->topic->id,
-                        'subject'       => $this->post->topic->subject
+                        'subject'       => $this->post->topic->subject,
+                        'read_at'       => $this->post->topic->read_at
                     ]
                 ];
             })
