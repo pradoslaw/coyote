@@ -38,74 +38,183 @@ class CreateIndexCommand extends Command
     {
         $index = config('elasticsearch.default_index');
 
-        if ($this->option('force') || $this->confirm("Do you want to create index $index in Elasticsearch?", true)) {
-            $client = app('elasticsearch');
+        if (!$this->option('force') && !$this->confirm("Do you want to create index $index in Elasticsearch?", true)) {
+            return;
+        }
 
-            $params = [
-                'index' => $index,
-                'body' => [
-                    'settings' => [
-                        "index" => [
-                            "analysis" => [
-                                "filter" => [
-                                    "common_words_filter" => [
-                                        "type" => "stop",
-                                        "stopwords" => config('elasticsearch.stopwords')
-                                    ],
-                                    "keep_symbols_filter" => [
-                                        "type" => "word_delimiter",
-                                        "type_table" => [
-                                            "# => ALPHANUM",
-                                            "+ => ALPHANUM",
-                                            "_ => ALPHANUM"
-                                        ]
-                                    ]
+        $client = app('elasticsearch');
+
+        $params = [
+            'index' => $index,
+            'body' => [
+                'settings' => [
+                    "index" => [
+                        "analysis" => [
+                            "char_filter" => [
+                                "strip_html" => [
+                                    "type" => "html_strip"
+                                ]
+                            ],
+                            "filter" => [
+                                "common_words_filter" => [
+                                    "type" => "stop",
+                                    "stopwords" => config('elasticsearch.stopwords')
                                 ],
-                                "analyzer" => [
-                                    // just like keyword type except lowercase filter
-                                    "keyword_analyzer" => [
-                                        "tokenizer" => "keyword",
-                                        "filter" => "lowercase"
-                                    ],
-                                    // used to index city names
-                                    "keyword_asciifolding_analyzer" => [
-                                        "tokenizer" => "keyword",
-                                        "filter" => [
-                                            "lowercase",
-                                            "asciifolding"
-                                        ]
-                                    ],
-                                    "stopwords_analyzer" => [
-                                        "tokenizer" => "whitespace",
-                                        "filter" => [
-                                            "lowercase",
-                                            "common_words_filter",
-                                            "keep_symbols_filter"
-                                        ]
-                                    ],
-                                    "default_analyzer" => [
-                                        "tokenizer" => "whitespace",
-                                        "filter" => [
-                                            "lowercase",
-                                            "keep_symbols_filter"
-                                        ]
+                                "keep_symbols_filter" => [
+                                    "type" => "word_delimiter",
+                                    "type_table" => [
+                                        "# => ALPHANUM",
+                                        "+ => ALPHANUM",
+                                        "_ => ALPHANUM"
                                     ]
                                 ]
+                            ],
+                            "analyzer" => [
+                                // just like keyword type except lowercase filter
+                                "keyword_analyzer" => [
+                                    "tokenizer" => "keyword",
+                                    "filter" => "lowercase"
+                                ],
+                                // used to index city names
+                                "keyword_asciifolding_analyzer" => [
+                                    "tokenizer" => "keyword",
+                                    "filter" => [
+                                        "lowercase",
+                                        "asciifolding"
+                                    ]
+                                ],
+                                "stopwords_analyzer" => [
+                                    "tokenizer" => "whitespace",
+                                    "char_filter" => ["strip_html"],
+                                    "filter" => [
+                                        "lowercase",
+                                        "common_words_filter",
+                                        "keep_symbols_filter",
+                                        "asciifolding"
+                                    ]
+                                ],
+//                                    "default_analyzer" => [
+//                                        "tokenizer" => "whitespace",
+//                                        "filter" => [
+//                                            "lowercase",
+//                                            "keep_symbols_filter"
+//                                        ]
+//                                    ]
                             ]
                         ]
                     ]
+                ],
+                'mappings' => [
+                    '_doc' => [
+                        'properties' => [
+                            "type" => [
+                                "type" => "keyword"
+                            ],
+                            "created_at" => [
+                                "type" => "date",
+                                "format" => "yyyy-MM-dd HH:mm:ss"
+                            ],
+                            "updated_at" => [
+                                "type" => "date",
+                                "format" => "yyyy-MM-dd HH:mm:ss"
+                            ],
+                            "deadline_at" => [
+                                "type" => "date",
+                                "format" => "yyyy-MM-dd HH:mm:ss"
+                            ],
+                            "boost_at" => [
+                                "type" => "date",
+                                "format" => "yyyy-MM-dd HH:mm:ss"
+                            ],
+                            "text" => [
+                                "type" => "text",
+                                "analyzer" => "stopwords_analyzer"
+                            ],
+                            "title" => [
+                                "type" => "text",
+                                "analyzer" => "stopwords_analyzer"
+                            ],
+                            "is_remote" => [
+                                "type" => "boolean"
+                            ],
+                            "ip" => [
+                                "type" => "text",
+//                                    "index" => "not_analyzed"
+                            ],
+                            "host" => [
+                                "type" => "text",
+//                                    "index" => "not_analyzed"
+                            ],
+                            "tags" => [
+                                "type" => "text",
+                                "fields" => [
+                                    "original" => ["type" => "keyword"]
+                                ]
+                            ],
+                            "salary" => [
+                                "type" => "float"
+                            ],
+                            "is_boost" => [
+                                "type" => "boolean"
+                            ],
+                            "is_publish" => [
+                                "type" => "boolean"
+                            ],
+                            "is_ads" => [
+                                "type" => "boolean"
+                            ],
+                            "is_on_top" => [
+                                "type" => "boolean"
+                            ],
+                            "is_highlight" => [
+                                "type" => "boolean"
+                            ],
+                            "locations" => [
+                                "type" => "nested",
+                                "properties" => [
+                                    "city" => [
+                                        "type" => "text",
+                                        "analyzer" => "keyword_asciifolding_analyzer",
+                                        "fields" => [
+                                            "original" => ["type" => "text", "analyzer" => "keyword_analyzer", "fielddata" => true]
+                                        ]
+                                    ],
+                                    "coordinates" => [
+                                        "type" => "geo_point"
+                                    ]
+                                ]
+                            ],
+                            "firm" => [
+                                "type" => "object",
+                                "properties" => [
+                                    "name" => [
+                                        "type" => "text",
+                                        "analyzer" => "stopwords_analyzer",
+                                        "fields" => [
+                                            // filtrujemy firmy po tym polu
+                                            "original" => ["type" => "text", "analyzer" => "keyword_analyzer", "fielddata" => true]
+                                        ]
+                                    ],
+                                    "slug" => [
+                                        "type" => "text",
+                                        "analyzer" => "keyword_analyzer"
+                                    ]
+                                ]
+                            ],
+                        ]
+                    ]
                 ]
-            ];
+            ]
+        ];
 
-            if ($client->indices()->exists(['index' => $index])) {
-                $client->indices()->close(['index' => $index]);
-                $client->indices()->putSettings($params);
-                $client->indices()->open(['index' => $index]);
-            } else {
-                $client->indices()->create($params);
-            }
-
-            $this->info('Done.');
+        if ($client->indices()->exists(['index' => $index])) {
+            $client->indices()->close(['index' => $index]);
+            $client->indices()->putSettings($params);
+            $client->indices()->open(['index' => $index]);
+        } else {
+            $client->indices()->create($params);
         }
+
+        $this->info('Done.');
     }
 }
