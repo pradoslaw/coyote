@@ -149,9 +149,15 @@ class QueryBuilder implements QueryBuilderInterface
     public function build()
     {
         foreach ($this->bool as $context => $stock) {
+
             foreach ($stock as $item) {
-                /** @var DslInterface $item */
-                $this->body['query']['bool'][$context][] = $item->apply($this);
+                $result = $item->apply($this);
+
+                // cast to array to check if is empty stdClass. es6+ throw exceptions with empty object occurs
+                if (!empty((array) $result)) {
+                    /** @var DslInterface $item */
+                    $this->body['query']['bool'][$context][] = $result;
+                }
             }
         }
 

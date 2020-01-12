@@ -2,7 +2,6 @@
 
 namespace Coyote;
 
-use Coyote\Services\Elasticsearch\CharFilters\MicroblogFilter;
 use Coyote\Services\Media\Factory as MediaFactory;
 use Coyote\Services\Media\MediaInterface;
 use Illuminate\Database\Eloquent\Model;

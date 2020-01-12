@@ -7,7 +7,6 @@ use Coyote\Job\Comment;
 use Coyote\Job\Location;
 use Coyote\Job\Subscriber;
 use Coyote\Models\Scopes\ForUser;
-use Coyote\Services\Elasticsearch\CharFilters\JobFilter;
 use Coyote\Services\Eloquent\HasMany;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -689,12 +688,11 @@ class Job extends Model
      */
     protected function getIndexBody()
     {
-        $this->setCharFilter(JobFilter::class);
         $body = $this->parentGetIndexBody();
 
         // maximum offered salary
         $salary = $this->monthlySalary(max($this->salary_from, $this->salary_to));
-        $body = array_only($body, ['id', 'created_at', 'deadline_at', 'firm_id', 'is_remote']);
+        $body = array_only($body, ['id', 'slug', 'created_at', 'updated_at', 'deadline_at', 'firm_id', 'is_remote']);
 
         $locations = [];
 

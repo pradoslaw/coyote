@@ -11,11 +11,6 @@ use Illuminate\Contracts\Support\Arrayable;
 trait Searchable
 {
     /**
-     * @var string
-     */
-    protected $charFilter;
-
-    /**
      * Index data in elasticsearch
      *
      * @return mixed
@@ -68,14 +63,6 @@ trait Searchable
     }
 
     /**
-     * @param string $filter
-     */
-    public function setCharFilter(string $filter)
-    {
-        $this->charFilter = $filter;
-    }
-
-    /**
      * @param array $body
      * @return array
      */
@@ -116,20 +103,6 @@ trait Searchable
     }
 
     /**
-     * Get model's mapping
-     *
-     * @return array
-     */
-    protected function getMapping()
-    {
-        return [
-            $this->getTable() => [
-                'properties' => $this->mapping
-            ]
-        ];
-    }
-
-    /**
      * Basic elasticsearch params
      *
      * @return array
@@ -149,31 +122,6 @@ trait Searchable
     }
 
     /**
-     * Convert model to array
-     *
-     * @param mixed $data
-     * @return array
-     */
-    protected function filterData($data)
-    {
-        if ($data instanceof Arrayable) {
-            $data = $data->toArray();
-        }
-
-        foreach ($data as &$value) {
-            if (is_object($value) && $data instanceof Arrayable) {
-                $value = $this->filterData($value);
-            }
-        }
-
-        if ($this->charFilter) {
-            $data = $this->getCharFilter()->filter($data);
-        }
-
-        return $data;
-    }
-
-    /**
      * Get client instance
      *
      * @return \Elasticsearch\Client
@@ -181,14 +129,6 @@ trait Searchable
     protected function getClient()
     {
         return app('elasticsearch');
-    }
-
-    /**
-     * @return CharFilterInteface
-     */
-    protected function getCharFilter(): CharFilterInteface
-    {
-        return app($this->charFilter);
     }
 
     /**
