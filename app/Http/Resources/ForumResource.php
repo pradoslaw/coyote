@@ -9,6 +9,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @property Post $post
+ * @property \Carbon\Carbon $read_at
  */
 class ForumResource extends JsonResource
 {
@@ -27,7 +28,7 @@ class ForumResource extends JsonResource
 
         return array_merge($only, [
             'url' => url(UrlBuilder::forum($this->resource)),
-            'read_at' => $this->read_at ? Carbon::parse($this->read_at)->toIso8601String() : null,
+            'read_at' => $this->read_at ? $this->read_at->toIso8601String() : null,
             'is_read' => $this->whenLoaded('post') && $this->read_at > $this->post->created_at,
 
             $this->mergeWhen($this->whenLoaded('post'), function () {
@@ -50,5 +51,10 @@ class ForumResource extends JsonResource
                 ];
             })
         ]);
+    }
+
+    private function isForumRead(): bool
+    {
+
     }
 }
