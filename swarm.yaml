@@ -234,12 +234,10 @@ services:
 
   graylog:
     image: graylog/graylog:3.1
-    volumes:
-      - graylog:/usr/share/graylog/data/journal
     environment:
       - GRAYLOG_PASSWORD_SECRET_FILE=/run/secrets/GRAYLOG_PASSWORD_SECRET_FILE
 #      - GRAYLOG_ROOT_PASSWORD_SHA2=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
-      - GRAYLOG_ROOT_PASSWORD_SHA2_FILE=/run/secrets/GRAYLOG_ROOT_PASSWORD_SHA2_FILE
+      - GRAYLOG_ROOT_PASSWORD_SHA2__FILE=/run/secrets/GRAYLOG_ROOT_PASSWORD_SHA2_FILE
       - GRAYLOG_HTTP_EXTERNAL_URI=https://graylog.4programmers.dev/
     networks:
       - coyote
