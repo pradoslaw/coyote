@@ -27,7 +27,7 @@ trait Searchable
 
         $body['model'] = str_singular($this->getTable());
         $params['body'] = $body;
-//dd($params);
+
         return $this->getClient()->index($params);
     }
 
