@@ -47,7 +47,6 @@ class MixedBuilder extends QueryBuilder
             'long_title',
             'posts.text',
             'excerpt',
-            'title',
             'description',
             'recruitment'
         ];

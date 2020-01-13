@@ -96,7 +96,7 @@ class SearchController extends Controller
         return app(Menu::class)->make('tabs', function (Builder $menu) {
             $menu->add('Wszystko', route('search', ['q' => $this->request->input('q')]));
 
-            foreach (['Forum' => 'topics', 'Praca' => 'jobs', 'Mikroblog' => 'microblogs', 'Kompendium' => 'wiki'] as $label => $type) {
+            foreach (['Forum' => MixedBuilder::TOPIC, 'Praca' => MixedBuilder::JOB, 'Mikroblog' => MixedBuilder::MICROBLOG, 'Kompendium' => MixedBuilder::WIKI] as $label => $type) {
                 $menu->add($label, $this->route($type))->data('type', $type);
             }
         })
