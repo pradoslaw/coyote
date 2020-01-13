@@ -692,15 +692,15 @@ class Job extends Model
 
         // maximum offered salary
         $salary = $this->monthlySalary(max($this->salary_from, $this->salary_to));
-        $body = array_only($body, ['id', 'slug', 'created_at', 'updated_at', 'deadline_at', 'firm_id', 'is_remote']);
+        $body = array_only($body, ['id', 'slug', 'created_at', 'updated_at', 'boost_at', 'deadline_at', 'firm_id', 'is_remote']);
 
         $locations = [];
 
         // We need to transform locations to format acceptable by elasticsearch.
         // I'm talking here about the coordinates
         /** @var \Coyote\Job\Location $location */
-        foreach ($this->locations()->get(['city', 'longitude', 'latitude']) as $location) {
-            $nested = ['city' => $location->city];
+        foreach ($this->locations()->get() as $location) {
+            $nested = ['city' => $location->city, 'label' => $location->label];
 
             if ($location->latitude && $location->longitude) {
                 $nested['coordinates'] = [

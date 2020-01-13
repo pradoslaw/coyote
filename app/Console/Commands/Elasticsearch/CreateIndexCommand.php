@@ -167,6 +167,10 @@ class CreateIndexCommand extends Command
                             "locations" => [
                                 "type" => "nested",
                                 "properties" => [
+                                    "label" => [
+                                        "type" => "text",
+                                        "analyzer" => "stopwords_analyzer"
+                                    ],
                                     "city" => [
                                         "type" => "text",
                                         "analyzer" => "keyword_asciifolding_analyzer",

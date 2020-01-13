@@ -73,17 +73,8 @@ class City extends Filter implements DslInterface
             'nested' => [
                 'path' => 'locations',
                 'query' => [
-                    'bool' => [
-                        'must' => [
-                            'terms' => [
-                                'locations.city' => array_map(
-                                    function ($city) {
-                                        return Str::ascii(mb_strtolower($city));
-                                    },
-                                    $this->cities
-                                )
-                            ]
-                        ]
+                    'match' => [
+                        'locations.label' => implode(' ', $this->cities)
                     ]
                 ]
             ]
