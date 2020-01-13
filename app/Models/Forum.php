@@ -4,11 +4,8 @@ namespace Coyote;
 
 use Carbon\Carbon;
 use Coyote\Forum\Access;
-use Coyote\Forum\Track as Forum_Track;
 use Coyote\Models\Scopes\TrackForum;
 use Coyote\Models\Scopes\TrackTopic;
-use Coyote\Topic\Track as Topic_Track;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -137,14 +134,6 @@ class Forum extends Model
     }
 
     /**
-     * @param string $name
-     */
-    public function setNameAttribute($name)
-    {
-        $this->attributes['name'] = $name;
-    }
-
-    /**
      * Checks ability for specified forum and user id
      *
      * @param string $name
@@ -187,28 +176,12 @@ class Forum extends Model
     {
         $markTime = Carbon::now();
 
-        $sql = "INSERT INTO forum_track (forum_id, guest_id, marked_at) 
+        $sql = "INSERT INTO forum_track (forum_id, guest_id, marked_at)
                 VALUES(?, ?, ?)
-                ON CONFLICT ON CONSTRAINT forum_track_forum_id_guest_id_unique DO 
+                ON CONFLICT ON CONSTRAINT forum_track_forum_id_guest_id_unique DO
                 UPDATE SET marked_at = ?";
 
         $this->getConnection()->statement($sql, [$this->id, $guestId, $markTime, $markTime]);
-    }
-
-    /**
-     * Scope a query to only given user id.
-     *
-     * @param Builder $builder
-     * @param array $columns
-     * @return Builder
-     */
-    public function scopeLateSelect(Builder $builder, $columns)
-    {
-        $builder->withGlobalScope('lateSelect', function (Builder $builder) use ($columns) {
-            return $builder->addSelect($columns);
-        });
-
-        return $builder;
     }
 
     /**
@@ -217,23 +190,5 @@ class Forum extends Model
     public function getRouteKeyName()
     {
         return 'slug';
-    }
-
-    /**
-     * @return mixed
-     */
-    protected function getUsersWithAccess()
-    {
-        static $usersId = null;
-
-        if (is_null($usersId)) {
-            $usersId = $this->access()
-                            ->select('user_id')
-                            ->join('group_users', 'group_users.group_id', '=', 'forum_access.group_id')
-                            ->pluck('user_id')
-                            ->toArray();
-        }
-
-        return $usersId;
     }
 }

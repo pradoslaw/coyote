@@ -30,7 +30,7 @@ class AccordingToUserOrder extends Criteria
     {
         if ($this->userId !== null) {
             // add this select just before query is executed
-            $model->lateSelect($repository->raw(
+            $model->addSelect($repository->raw(
                 'CASE WHEN forum_orders."section" IS NOT NULL THEN forum_orders."section" ELSE forums."section" END AS section'
             ))
             ->leftJoin('forum_orders', function (JoinClause $join) use ($repository) {
