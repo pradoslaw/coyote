@@ -271,7 +271,10 @@ $(function () {
             require.ensure([], (require) => {
                 require('ekko-lightbox/dist/ekko-lightbox');
 
-                $(this).ekkoLightbox();
+                $(this).ekkoLightbox({
+                  left_arrow_class: '.fa .fa-angle-left .ekko-lightbox-prev',
+                  right_arrow_class: '.fa .fa-angle-right .ekko-lightbox-next',
+                });
             });
         })
         .on('click', '.read-more', function()
