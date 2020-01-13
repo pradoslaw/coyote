@@ -113,7 +113,7 @@ class CreateIndexCommand extends Command
                                 "type" => "date",
                                 "format" => "yyyy-MM-dd HH:mm:ss"
                             ],
-                            "html" => [
+                            "text" => [
                                 "type" => "text",
                                 "analyzer" => "stopwords_analyzer"
                             ],
@@ -134,11 +134,18 @@ class CreateIndexCommand extends Command
                             ],
                             "ip" => [
                                 "type" => "ip",
-//                                    "index" => "not_analyzed"
                             ],
                             "host" => [
                                 "type" => "text",
-//                                    "index" => "not_analyzed"
+                                "analyzer" => "keyword"
+                            ],
+                            "browser" => [
+                                "type" => "text",
+                                "analyzer" => "keyword"
+                            ],
+                            "fingerprint" => [
+                                "type" => "text",
+                                "analyzer" => "keyword"
                             ],
                             "tags" => [
                                 "type" => "text",
@@ -201,6 +208,33 @@ class CreateIndexCommand extends Command
                                     ]
                                 ]
                             ],
+                            "actor" => [
+                                "type" => "object",
+                                "properties" => [
+                                    "displayName" => [
+                                        "type" => "text",
+                                        // ability to search case insensitive
+                                        "analyzer" => "keyword_analyzer"
+                                    ]
+                                ]
+                            ],
+                            "posts" => [
+                                "properties" => [
+                                    "text" => [
+                                        "type" => "text",
+                                        "analyzer" => "stopwords_analyzer"
+                                    ]
+                                ]
+                            ],
+                            "subject" => [
+                                "type" => "text",
+                                "analyzer" => "stopwords_analyzer"
+                            ],
+                            "user_name" => [
+                                "type" => "text",
+                                // ability to search case insensitive
+                                "analyzer" => "keyword_analyzer"
+                            ]
                         ]
                     ]
                 ]

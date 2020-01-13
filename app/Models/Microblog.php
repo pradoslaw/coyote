@@ -60,8 +60,6 @@ class Microblog extends Model
      */
     protected $attributes = ['votes' => 0];
 
-    protected $appends = ['html'];
-
     /**
      * Html version of the entry.
      *
@@ -220,8 +218,8 @@ class Microblog extends Model
      */
     protected function getIndexBody()
     {
-        $body = array_only($this->parentGetIndexBody(), ['id', 'created_at', 'updated_at', 'html']);
-        $body['html'] = strip_tags($body['html']);
+        $body = array_only($this->parentGetIndexBody(), ['id', 'created_at', 'updated_at']);
+        $body['text'] = strip_tags($this->getHtmlAttribute());
 
         return $body;
     }

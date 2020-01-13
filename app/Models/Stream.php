@@ -37,38 +37,4 @@ class Stream extends Model
         'login',
         'email'
     ];
-
-    /**
-     * Elasticsearch type mapping
-     *
-     * @var array
-     */
-    protected $mapping = [
-        "actor" => [
-            "type" => "object",
-            "properties" => [
-                "displayName" => [
-                    "type" => "string",
-                    // ability to search case insensitive
-                    "analyzer" => "keyword_analyzer"
-                ]
-            ]
-        ],
-        "ip" => [
-            "type" => "string",
-            "index" => "not_analyzed"
-        ],
-        "browser" => [
-            "type" => "text",
-            "index" => "not_analyzed"
-        ],
-        "fingerprint" => [
-            "type" => "string",
-            "index" => "not_analyzed"
-        ],
-        "created_at" => [
-            "type" => "date",
-            "format" => "yyyy-MM-dd HH:mm:ss"
-        ]
-    ];
 }

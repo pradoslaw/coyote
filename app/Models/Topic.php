@@ -67,34 +67,6 @@ class Topic extends Model
      */
     protected $hidden = ['tags'];
 
-    /**
-     * Elasticsearch type mapping
-     *
-     * @var array
-     */
-    protected $mapping = [
-        "posts" => [
-            "properties" => [
-                "text" => [
-                    "type" => "text",
-                    "analyzer" => "stopwords_analyzer"
-                ]
-            ]
-        ],
-        "subject" => [
-            "type" => "text",
-            "analyzer" => "default_analyzer"
-        ],
-        "created_at" => [
-            "type" => "date",
-            "format" => "yyyy-MM-dd HH:mm:ss"
-        ],
-        "updated_at" => [
-            "type" => "date",
-            "format" => "yyyy-MM-dd HH:mm:ss"
-        ],
-    ];
-
     protected $dates = ['created_at', 'updated_at', 'deleted_at', 'last_post_created_at', 'moved_at', 'locked_at'];
 
     public static function boot()
@@ -353,24 +325,20 @@ class Topic extends Model
      */
     protected function getIndexBody()
     {
-        $this->setCharFilter(TopicFilter::class);
         $body = $this->parentGetIndexBody();
 
         // we need to index every field from topics except:
-        $body = array_except(
-            $body,
-            ['deleted_at', 'first_post_id', 'last_post_id', 'is_sticky', 'is_announcement', 'poll_id', 'prev_forum_id', 'moved_at', 'locked_at', 'moved_by', 'locked_by']
-        );
-
+        $body = array_only($body, ['id', 'subject', 'slug', 'updated_at']);
         $posts = [];
 
         foreach ($this->posts()->get(['text']) as $post) {
-            $posts[] = ['text' => $post->text];
+            $posts[] = ['text' => strip_tags($post->html)];
         }
 
         return array_merge($body, [
-            'posts' => $posts,
-            'forum' => $this->forum->only(['name', 'slug'])
+            'posts'     => $posts,
+            'subject'   => htmlspecialchars($this->subject),
+            'forum'     => $this->forum->only(['name', 'slug'])
         ]);
     }
 }
