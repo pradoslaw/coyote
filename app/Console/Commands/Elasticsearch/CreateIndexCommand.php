@@ -171,6 +171,7 @@ class CreateIndexCommand extends Command
                                         "type" => "text",
                                         "analyzer" => "keyword_asciifolding_analyzer",
                                         "fields" => [
+                                            // aggregate city by this field.
                                             "original" => ["type" => "text", "analyzer" => "keyword_analyzer", "fielddata" => true]
                                         ]
                                     ],
