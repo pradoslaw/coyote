@@ -318,8 +318,8 @@
 
     &:before {
       font-family: 'Font Awesome 5 Free';
-      content: $fa-var-star;
       font-weight: 400;
+      content: fa-content($fa-var-star);
     }
 
     &:hover {
@@ -337,7 +337,7 @@
 
   .rate.marked {
     &:before {
-      content: $fa-var-star;
+      font-weight: 900;
     }
   }
 
