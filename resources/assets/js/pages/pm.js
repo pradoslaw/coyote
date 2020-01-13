@@ -40,7 +40,8 @@ new Vue({
       isProcessing: false,
       errors: {},
       previewHtml: null,
-      items: []
+      items: [],
+      tab: 'body'
     };
   },
   store,
@@ -84,6 +85,7 @@ new Vue({
           this.previewHtml = null;
 
           this.$nextTick(() => this.scrollToBottom());
+          this.tab = 'body';
         })
         .catch(err => this.errors = err.response.data.errors)
         .finally(() => this.isProcessing = false);
@@ -115,6 +117,8 @@ new Vue({
     },
 
     showPreview() {
+      this.tab = 'preview';
+
       axios.post('/User/Pm/Preview', {text: this.text}).then((response) => {
         this.previewHtml = response.data;
 
