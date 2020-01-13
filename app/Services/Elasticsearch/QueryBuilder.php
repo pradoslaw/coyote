@@ -149,7 +149,6 @@ class QueryBuilder implements QueryBuilderInterface
     public function build()
     {
         foreach ($this->bool as $context => $stock) {
-
             foreach ($stock as $item) {
                 $result = $item->apply($this);
 
