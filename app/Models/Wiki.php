@@ -230,7 +230,7 @@ class Wiki extends Model
             return $this->html;
         }
 
-        return $this->html = app('parser.wiki')->parse($this->text);
+        return $this->html = app('parser.wiki')->parse($this->text ?? '');
     }
 
     /**

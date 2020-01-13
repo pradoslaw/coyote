@@ -47,19 +47,6 @@ class SearchController extends Controller
             return [];
         }
 
-        $types = 'topics,microblogs,wiki,jobs';
-
-        if ($this->request->filled('type')) {
-            $validator = $this->getValidationFactory()->make(
-                $this->request->toArray(),
-                ['type' => 'nullable|in:' . $types]
-            );
-
-            if (!$validator->fails()) {
-                $types = $this->request->input('type');
-            }
-        }
-
         // search only in allowed forum categories
         $this->forum->pushCriteria(new OnlyThoseWithAccess($this->auth));
         $this->request->attributes->set('forum_id', $this->forum->pluck('id'));
