@@ -22,6 +22,8 @@ class RegisterTest extends DuskTestCase
                     ->type('password_confirmation', $password)
                     ->press('Utwórz konto')
                     ->assertPathIs('/User');
+
+            $browser->logout();
         });
     }
 
