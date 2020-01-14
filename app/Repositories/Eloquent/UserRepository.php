@@ -123,9 +123,9 @@ class UserRepository extends Repository implements UserRepositoryInterface
     }
 
     /**
-     * @param $field
-     * @param $value
-     * @return \Illuminate\Database\Query\Builder
+     * @param string $field
+     * @param string $value
+     * @return UserRepository
      */
     protected function getQueryBuilder($field, $value)
     {
