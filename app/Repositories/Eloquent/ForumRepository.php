@@ -78,7 +78,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
                     ->select(['id', 'user_id', 'topic_id', 'forum_id', 'user_name', 'created_at'])
                     ->with([
                         'topic' => function (BelongsTo $builder) use ($guestId) {
-                            return $builder->select(['topics.id', 'subject', 'topics.forum_id'])->withTopicMarkTime($guestId);
+                            return $builder->select(['topics.id', 'subject', 'topics.forum_id', 'last_post_created_at'])->withTopicMarkTime($guestId);
                         },
                         'user' => function (BelongsTo $builder) {
                             return $builder->select(['id', 'name', 'deleted_at', 'is_blocked', 'photo'])->withTrashed();

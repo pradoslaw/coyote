@@ -88,7 +88,6 @@ class Tracker
      */
     public function isRead(): bool
     {
-//        dd($this->getMarkTime(), $this->model->last_post_created_at);
         return $this->getMarkTime() >= $this->model->last_post_created_at;
     }
 

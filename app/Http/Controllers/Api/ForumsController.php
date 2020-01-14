@@ -23,16 +23,16 @@ class ForumsController extends Controller
         $forum->pushCriteria(new OnlyThoseWithAccess($user));
         $forum->pushCriteria(new AccordingToUserOrder($user->id ?? null));
 
-        $result = $forum->categories($guestId);
+        $result = $forum
+            ->categories($guestId)
+            ->map(function (Forum $forum) use ($guestId) {
+                $post = $forum->post;
 
-        $result->map(function (Forum $forum) use ($guestId) {
-            $post = $forum->post;
-
-            if ($post) {
-                $post->topic->setRelation('forum', $forum);
-                $post->setRelation('topic', Tracker::make($post->topic, $guestId));
-            }
-        });
+                if ($post) {
+                    $post->topic->setRelation('forum', $forum);
+                    $post->setRelation('topic', Tracker::make($post->topic, $guestId));
+                }
+            });
 
         return new ForumCollection($result);
     }

@@ -55,6 +55,6 @@ class ForumResource extends JsonResource
 
     private function isRead(): bool
     {
-        return $this->whenLoaded('post') && $this->post->created_at > $this->read_at;
+        return $this->whenLoaded('post') ? $this->read_at > $this->post->created_at : true;
     }
 }
