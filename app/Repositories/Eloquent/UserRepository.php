@@ -129,19 +129,21 @@ class UserRepository extends Repository implements UserRepositoryInterface
      */
     protected function getQueryBuilder($field, $value)
     {
-        return $this
-            ->model
-            ->select([
-                'id',
-                'name',
-                'photo',
-                'email',
-                'deleted_at',
-                'is_blocked',
-                'is_confirm',
-                'alert_failure',
-                'access_ip'
-            ])
-            ->whereRaw("LOWER($field) = ?", [mb_strtolower($value)]);
+        return $this->applyCriteria(function () use ($field, $value) {
+            return $this
+                ->model
+                ->select([
+                    'id',
+                    'name',
+                    'photo',
+                    'email',
+                    'deleted_at',
+                    'is_blocked',
+                    'is_confirm',
+                    'alert_failure',
+                    'access_ip'
+                ])
+                ->whereRaw("LOWER($field) = ?", [mb_strtolower($value)]);
+        });
     }
 }
