@@ -28,6 +28,6 @@ class LoadMarkTime extends Criteria
      */
     public function apply($model, Repository $repository)
     {
-        return $model->select('topics.*')->loadTopicMarkTime($this->guestId);
+        return $model->select('topics.*')->withTopicMarkTime($this->guestId);
     }
 }

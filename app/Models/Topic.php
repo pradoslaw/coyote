@@ -254,15 +254,15 @@ class Topic extends Model
 
     /**
      * @param string|null $guestId
-     * @return $this
+     * @return mixed
      */
-    public function loadMarkTime(?string $guestId)
+    public function markTime(?string $guestId)
     {
         if ($guestId !== null && !array_key_exists('read_at', $this->attributes)) {
             $this->attributes['read_at'] = $this->tracks()->select('marked_at')->where('guest_id', $guestId)->value('marked_at');
         }
 
-        return $this;
+        return $this->read_at;
     }
 
     /**

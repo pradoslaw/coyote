@@ -3,13 +3,13 @@
 namespace Coyote\Http\Controllers\Api;
 
 use Coyote\Http\Resources\TagResource;
-use Coyote\Http\Resources\TopicCollection;
 use Coyote\Http\Resources\TopicResource;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Repositories\Criteria\Sort;
 use Coyote\Repositories\Criteria\Topic\LoadMarkTime;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
+use Coyote\Services\Forum\Tracker;
 use Coyote\Topic;
 use Coyote\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -48,7 +48,7 @@ class TopicsController extends Controller
     /**
      * @param TopicRepositoryInterface $topic
      * @param Request $request
-     * @return TopicCollection|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Resources\Json\AnonymousResourceCollection|\Illuminate\Http\Response
      */
     public function index(TopicRepositoryInterface $topic, Request $request)
     {
@@ -65,14 +65,23 @@ class TopicsController extends Controller
         $topic->pushCriteria(new EagerLoading(['tags']));
         $topic->pushCriteria(new LoadMarkTime($this->guestId));
         $topic->pushCriteria(new EagerLoading(['forum' => function (BelongsTo $builder) {
-            return $builder->select('forums.id', 'forums.name', 'forums.slug')->loadForumMarkTime($this->guestId);
+            return $builder->select('forums.id', 'forums.name', 'forums.slug')->withForumMarkTime($this->guestId);
         }]));
 
         $topic->pushCriteria(new OnlyThoseWithAccess($this->user));
 
+        /** @var \Illuminate\Pagination\LengthAwarePaginator $paginate */
         $paginate = $topic->paginate();
 
-        return (new TopicCollection($paginate))->setGuestId($this->guestId);
+        $paginate->setCollection(
+            $paginate
+                ->getCollection()
+                ->map(function ($model) {
+                    return Tracker::make($model, $this->guestId);
+                })
+        );
+
+        return TopicResource::collection($paginate);
     }
 
     /**
@@ -83,16 +92,16 @@ class TopicsController extends Controller
     public function show(Topic $topic)
     {
         $topic
-            ->loadMarkTime($this->guestId)
             ->load(['tags'])
             ->load(['forum' => function ($builder) {
-                return $builder->select('forums.id', 'forums.name', 'forums.slug')->loadForumMarkTime($this->guestId);
+                return $builder->select('forums.id', 'forums.name', 'forums.slug')->withForumMarkTime($this->guestId);
             }]);
 
         $this->authorize('access', $topic->forum);
+        $topic->markTime($this->guestId);
 
         TopicResource::withoutWrapping();
 
-        return (new TopicResource($topic))->setGuestId($this->guestId);
+        return new TopicResource(Tracker::make($topic, $this->guestId));
     }
 }

@@ -2,10 +2,12 @@
 
 namespace Coyote\Http\Controllers\Api;
 
+use Coyote\Forum;
 use Coyote\Http\Resources\ForumCollection;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
+use Coyote\Services\Forum\Tracker;
 use Illuminate\Routing\Controller;
 use Illuminate\Contracts\Auth\Factory as Auth;
 
@@ -21,13 +23,17 @@ class ForumsController extends Controller
         $forum->pushCriteria(new OnlyThoseWithAccess($user));
         $forum->pushCriteria(new AccordingToUserOrder($user->id ?? null));
 
-        debugbar()->startMeasure('foo');
-
         $result = $forum->categories($guestId);
-        $data = new ForumCollection($result);
 
-        debugbar()->stopMeasure('foo');
+        $result->map(function (Forum $forum) use ($guestId) {
+            $post = $forum->post;
 
-        return $data;
+            if ($post) {
+                $post->topic->setRelation('forum', $forum);
+                $post->setRelation('topic', Tracker::make($post->topic, $guestId));
+            }
+        });
+
+        return new ForumCollection($result);
     }
 }

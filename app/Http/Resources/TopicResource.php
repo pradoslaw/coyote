@@ -24,25 +24,10 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property Microblog[] $comments
  * @property Tag[] $tags
  * @property \Carbon\Carbon $read_at
+ * @method bool isRead()
  */
 class TopicResource extends JsonResource
 {
-    /**
-     * @var string|null
-     */
-    private $guestId;
-
-    /**
-     * @param string|null $guestId
-     * @return $this
-     */
-    public function setGuestId(?string $guestId)
-    {
-        $this->guestId = $guestId;
-
-        return $this;
-    }
-
     /**
      * Transform the resource into an array.
      *
@@ -59,7 +44,7 @@ class TopicResource extends JsonResource
                 'locked_at'             => $this->locked_at ? $this->locked_at->toIso8601String() : null,
                 'created_at'            => $this->created_at->toIso8601String(),
                 'last_post_created_at'  => $this->last_post_created_at->toIso8601String(),
-                'url'                   => url(UrlBuilder::topic($this->resource)),
+                'url'                   => url(UrlBuilder::topic($this->resource->getModel())),
                 'read_at'               => $this->read_at ? $this->read_at->toIso8601String() : null,
                 'is_read'               => $this->isRead(),
                 'forum'         => [
@@ -70,13 +55,5 @@ class TopicResource extends JsonResource
                 'tags'                  => TagResource::collection($this->whenLoaded('tags'))
             ]
         );
-    }
-
-    /**
-     * @return bool
-     */
-    private function isRead(): bool
-    {
-        return $this->guestId ? Tracker::make($this->resource)->isRead($this->guestId) : false;
     }
 }

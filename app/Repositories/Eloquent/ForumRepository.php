@@ -72,13 +72,13 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
         $result = $this
             ->model
             ->select('forums.*')
-            ->loadForumMarkTime($guestId)
+            ->withForumMarkTime($guestId)
             ->with(['post' => function (HasOne $builder) use ($guestId) {
                 return $builder
                     ->select(['id', 'user_id', 'topic_id', 'forum_id', 'user_name', 'created_at'])
                     ->with([
                         'topic' => function (BelongsTo $builder) use ($guestId) {
-                            return $builder->select(['topics.id', 'subject', 'topics.forum_id'])->loadTopicMarkTime($guestId);
+                            return $builder->select(['topics.id', 'subject', 'topics.forum_id'])->withTopicMarkTime($guestId);
                         },
                         'user' => function (BelongsTo $builder) {
                             return $builder->select(['id', 'name', 'deleted_at', 'is_blocked', 'photo'])->withTrashed();

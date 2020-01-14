@@ -3,16 +3,23 @@
 namespace Coyote\Services\Forum;
 
 use Carbon\Carbon;
-use Coyote\Repositories\Contracts\GuestRepositoryInterface as GuestRepository;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Topic;
+use Illuminate\Support\Traits\ForwardsCalls;
 
 class Tracker
 {
+    use ForwardsCalls;
+
     /**
      * @var Topic
      */
-    private $topic;
+    private $model;
+
+    /**
+     * @var string|null
+     */
+    private $guestId;
 
     /**
      * @var TopicRepository
@@ -20,104 +27,116 @@ class Tracker
     private $repository;
 
     /**
-     * @var GuestRepository
-     */
-    private $guest;
-
-    /**
-     * @param Topic $topic
-     * @param TopicRepository $repository
-     * @param GuestRepository $guest
-     */
-    public function __construct(Topic $topic, TopicRepository $repository, GuestRepository $guest)
-    {
-        $this->topic = $topic;
-        $this->guest = $guest;
-        $this->repository = $repository;
-    }
-
-    /**
-     * @param Topic $topic
+     * @param Topic $model
+     * @param string|null $guestId
      * @return static
      */
-    public static function make(Topic $topic): self
+    public static function make(Topic $model, ?string $guestId): self
     {
-        return app(static::class, ['topic' => $topic]);
+        return (new self($model, $guestId))->setRepository(app(TopicRepository::class));
     }
 
     /**
-     * @param string $guestId
+     * @param Topic $model
+     * @param string|null $guestId
+     */
+    public function __construct(Topic $model, ?string $guestId)
+    {
+        $this->model = $model;
+        $this->guestId = $guestId;
+    }
+
+    /**
+     * @return Topic
+     */
+    public function getModel(): Topic
+    {
+        return $this->model;
+    }
+
+    /**
+     * @param TopicRepository $repository
+     * @return $this
+     */
+    public function setRepository(TopicRepository $repository)
+    {
+        $this->repository = $repository;
+
+        return $this;
+    }
+
+    /**
      * @return Carbon
      */
-    public function getMarkTime(string $guestId): Carbon
+    public function getMarkTime(): Carbon
     {
-        $this->topic->loadMarkTime($guestId);
-        $markTime = $this->topic->read_at;
+        $markTime = $this->model->markTime($this->guestId);
 
         if (empty($markTime)) {
-            $this->topic->forum->loadMarkTime($guestId);
-            $markTime = $this->topic->forum->read_at;
+            $markTime = $this->model->forum->markTime($this->guestId);
         }
 
         if (empty($markTime)) {
-            $markTime = $this->guessVisit($guestId);
+            $markTime = now('UTC');
         }
 
         return $markTime;
     }
 
     /**
-     * @param string $guestId
      * @return bool
      */
-    public function isRead(string $guestId): bool
+    public function isRead(): bool
     {
-        return $this->topic->last_post_created_at >= $this->getMarkTime($guestId);
+//        dd($this->getMarkTime(), $this->model->last_post_created_at);
+        return $this->getMarkTime() >= $this->model->last_post_created_at;
     }
 
     /**
-     * @param string $guestId
      * @param $date
      */
-    public function asRead(string $guestId, $date)
+    public function asRead($date)
     {
-        $this->topic->markAsRead($date, $guestId);
+        $this->model->markAsRead($date, $this->guestId);
 
-        if ($this->topic->last_post_created_at > $date) {
+        if ($this->model->last_post_created_at > $date) {
             return;
         }
 
-        $this->topic->forum->loadMarkTime($guestId);
-
         // are there any unread topics in this category?
         $unread = $this->repository->countUnread(
-            $this->topic->forum->id,
-            $this->topic->forum->read_at,
-            $guestId
+            $this->model->forum->id,
+            $this->model->forum->markTime($this->guestId),
+            $this->guestId
         );
 
         if (!$unread) {
-            $this->topic->forum->markAsRead($guestId);
-            $this->repository->flushRead($this->topic->forum->id, $guestId);
+            $this->model->forum->markAsRead($this->guestId);
+            // remove all unnecessary records from topic_track table
+            $this->repository->flushRead($this->model->forum->id, $this->guestId);
         }
     }
 
-    private function guessVisit(string $guestId): Carbon
+    /**
+     * Dynamically get properties from the underlying model.
+     *
+     * @param  string  $key
+     * @return mixed
+     */
+    public function __get($key)
     {
-        static $createdAt;
+        return $this->model->{$key};
+    }
 
-        if (!empty($createdAt)) {
-            return $createdAt;
-        }
-
-        $result = $this->guest->find($guestId, ['created_at']);
-
-        if ($result === null) {
-            $createdAt = Carbon::now();
-        } else {
-            $createdAt = $result->created_at;
-        }
-
-        return $createdAt;
+    /**
+     * Dynamically pass method calls to the underlying model.
+     *
+     * @param  string  $method
+     * @param  array  $parameters
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+        return $this->forwardCallTo($this->model, $method, $parameters);
     }
 }

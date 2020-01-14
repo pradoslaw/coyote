@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Carbon\Carbon;
 use Coyote\Forum;
+use Coyote\Guest;
 use Coyote\Post;
 use Coyote\Services\Forum\Tracker;
 use Coyote\Topic;
@@ -17,35 +18,56 @@ class TrackerTest extends TestCase
 
     private $forum;
     private $guestId;
+    private $faker;
 
     public function setUp()
     {
         parent::setUp();
 
-        $faker = Faker\Factory::create();
+        $this->faker = Faker\Factory::create();
 
         $this->forum = factory(Forum::class)->create();
-        $this->guestId = $faker->uuid;
+        $this->guestId = $this->faker->uuid;
 
         $this->app['request']->setLaravelSession(app('session.store'));
 
         session()->put('created_at', Carbon::now()->timestamp);
     }
 
-    public function testGetMarkTimeWithJustRegisteredUser()
+    public function testIsReadWithOldTopic()
     {
         $topic = factory(Topic::class)->create(['forum_id' => $this->forum->id]);
-        $post = factory(Post::class)->create(['forum_id' => $this->forum->id, 'topic_id' => $topic->id, 'created_at' => Carbon::now()->subMinute(1)]);
+        factory(Post::class)->create(['forum_id' => $this->forum->id, 'topic_id' => $topic->id, 'created_at' => Carbon::now()->subMinute(5)]);
 
-        $marker = Tracker::make($topic);
+        $topic->refresh(); // refresh from db after submitting new post
+
+        $marker = Tracker::make($topic, $this->faker->uuid);
+
+        // post is NOT new
+        $this->assertTrue($marker->isRead());
+    }
+
+    public function testIsReadWithNewlyRegisteredUser()
+    {
+        $topic = factory(Topic::class)->create(['forum_id' => $this->forum->id]);
+        factory(Post::class)->create(['forum_id' => $this->forum->id, 'topic_id' => $topic->id, 'created_at' => Carbon::now()->subMinute(5)]);
+
+        $topic->refresh(); // refresh from db after submitting new post
+
+        $marker = Tracker::make($topic, null);
+
+        // post is NOT new
+        $this->assertTrue($marker->isRead());
+
+        Guest::forceCreate(['id' => $this->guestId, 'created_at' => now(), 'updated_at' => now()]);
+
+        factory(Post::class)->create(['forum_id' => $this->forum->id, 'topic_id' => $topic->id, 'created_at' => Carbon::now()->addMinute(1)]);
+        $topic->refresh(); // refresh from db after submitting new post
+
+        $marker = Tracker::make($topic, $this->guestId);
 
         // is post new
-        $this->assertTrue($marker->getMarkTime($this->guestId) > $post->created_at);
-
-        $post = factory(Post::class)->create(['forum_id' => $this->forum->id, 'topic_id' => $topic->id, 'created_at' => Carbon::now()->addMinute(1)]);
-
-        // is post new
-        $this->assertTrue($post->created_at > $marker->getMarkTime($this->guestId));
+        $this->assertFalse($marker->isRead());
     }
 
     public function testMarkAsReadWithOnlyOneTopic()
@@ -53,8 +75,10 @@ class TrackerTest extends TestCase
         $topic = factory(Topic::class)->create(['forum_id' => $this->forum->id]);
         factory(Post::class)->create(['forum_id' => $this->forum->id, 'topic_id' => $topic->id, 'created_at' => Carbon::now()->subMinute(1)]);
 
-        $tracker = Tracker::make($topic);
-        $tracker->asRead($this->guestId, Carbon::now());
+        $topic->refresh(); // refresh from db after submitting new post
+
+        $tracker = Tracker::make($topic, $this->guestId);
+        $tracker->asRead($topic->last_post_created_at);
 
         $this->assertDatabaseHas('forum_track', ['forum_id' => $this->forum->id, 'guest_id' => $this->guestId]);
     }
@@ -64,11 +88,15 @@ class TrackerTest extends TestCase
         $topic = factory(Topic::class)->create(['forum_id' => $this->forum->id]);
         factory(Post::class)->create(['forum_id' => $this->forum->id, 'topic_id' => $topic->id, 'created_at' => Carbon::now()->subMinute(1)]);
 
+        $topic->refresh(); // refresh from db after submitting new post
+
         $topic = factory(Topic::class)->create(['forum_id' => $this->forum->id]);
         factory(Post::class)->create(['forum_id' => $this->forum->id, 'topic_id' => $topic->id, 'created_at' => Carbon::now()->subMinute(1)]);
 
-        $tracker = Tracker::make($topic);
-        $tracker->asRead($this->guestId, Carbon::now());
+        $topic->refresh(); // refresh from db after submitting new post
+
+        $tracker = Tracker::make($topic, $this->guestId);
+        $tracker->asRead($topic->last_post_created_at);
 
         $this->assertDatabaseHas('topic_track', ['forum_id' => $this->forum->id, 'topic_id' => $topic->id, 'guest_id' => $this->guestId]);
     }
@@ -78,11 +106,15 @@ class TrackerTest extends TestCase
         $topic = factory(Topic::class)->create(['forum_id' => $this->forum->id, 'deleted_at' => Carbon::now()]);
         factory(Post::class)->create(['forum_id' => $this->forum->id, 'topic_id' => $topic->id, 'created_at' => Carbon::now()->subMinute(1), 'deleted_at' => Carbon::now()]);
 
+        $topic->refresh(); // refresh from db after submitting new post
+
         $topic = factory(Topic::class)->create(['forum_id' => $this->forum->id]);
         factory(Post::class)->create(['forum_id' => $this->forum->id, 'topic_id' => $topic->id, 'created_at' => Carbon::now()->subMinute(1)]);
 
-        $tracker = Tracker::make($topic);
-        $tracker->asRead($this->guestId, Carbon::now());
+        $topic->refresh(); // refresh from db after submitting new post
+
+        $tracker = Tracker::make($topic, $this->guestId);
+        $tracker->asRead($topic->last_post_created_at);
 
         $this->assertDatabaseHas('forum_track', ['forum_id' => $this->forum->id, 'guest_id' => $this->guestId]);
     }

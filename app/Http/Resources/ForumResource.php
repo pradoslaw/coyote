@@ -2,7 +2,6 @@
 
 namespace Coyote\Http\Resources;
 
-use Carbon\Carbon;
 use Coyote\Post;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -29,7 +28,7 @@ class ForumResource extends JsonResource
         return array_merge($only, [
             'url' => url(UrlBuilder::forum($this->resource)),
             'read_at' => $this->read_at ? $this->read_at->toIso8601String() : null,
-            'is_read' => $this->whenLoaded('post') && $this->read_at > $this->post->created_at,
+            'is_read' => $this->isRead(),
 
             $this->mergeWhen($this->whenLoaded('post'), function () {
                 // set relation to avoid unnecessary db request in UrlBuilder
@@ -46,15 +45,16 @@ class ForumResource extends JsonResource
                     'topic' => [
                         'id'            => $this->post->topic->id,
                         'subject'       => $this->post->topic->subject,
-                        'read_at'       => $this->post->topic->read_at
+                        'read_at'       => $this->post->topic->read_at ? $this->post->topic->read_at->toIso8601String() : null,
+                        'is_read'       => $this->post->topic->isRead()
                     ]
                 ];
             })
         ]);
     }
 
-    private function isForumRead(): bool
+    private function isRead(): bool
     {
-
+        return $this->whenLoaded('post') && $this->post->created_at > $this->read_at;
     }
 }
