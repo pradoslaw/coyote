@@ -116,7 +116,7 @@ class TopicController extends BaseController
         $dateTime = $posts->last()->created_at;
 
         if ($markTime < $dateTime) {
-            Tracker::make($topic)->asRead($this->guestId, $dateTime);
+            Tracker::make($topic, $this->guestId)->asRead($dateTime);
         }
 
         // create forum list for current user (according to user's privileges)
@@ -217,8 +217,8 @@ class TopicController extends BaseController
      */
     public function mark($topic)
     {
-        $tracker = Tracker::make($topic);
+        $tracker = Tracker::make($topic, $this->guestId);
 
-        $tracker->asRead($this->guestId, $topic->last_post_created_at);
+        $tracker->asRead($topic->last_post_created_at);
     }
 }

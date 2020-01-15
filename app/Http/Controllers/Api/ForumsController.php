@@ -32,6 +32,8 @@ class ForumsController extends Controller
                     $post->topic->setRelation('forum', $forum);
                     $post->setRelation('topic', Tracker::make($post->topic, $guestId));
                 }
+
+                return $forum;
             });
 
         return new ForumCollection($result);

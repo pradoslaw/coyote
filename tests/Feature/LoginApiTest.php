@@ -6,13 +6,8 @@ use Coyote\User;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
-class LoginTest extends TestCase
+class LoginApiTest extends TestCase
 {
-    public function testLogin()
-    {
-
-    }
-
     public function testApiLogin()
     {
         $password = Hash::make('123');
