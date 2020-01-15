@@ -73,6 +73,8 @@ class JobsController extends Controller
     {
         $user = $auth->guard('api')->user();
 
+        JobApiResource::$parser = app('parser.job');
+
         $job = $this->loadDefaults($job, $user);
         $job->firm()->dissociate(); // default setting with API: firm is not assigned to the job
 
