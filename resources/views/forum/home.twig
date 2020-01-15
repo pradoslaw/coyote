@@ -104,11 +104,11 @@
     </section>
 
 
-    {% block mainbar %}
-      {% for name, forums in sections %}
-        {% include 'forum.partials.section' %}
-      {% endfor %}
-    {% endblock %}
+{#    {% block mainbar %}#}
+{#      {% for name, forums in sections %}#}
+{#        {% include 'forum.partials.section' %}#}
+{#      {% endfor %}#}
+{#    {% endblock %}#}
 
     {{ viewers|raw }}
   </main>
@@ -133,4 +133,14 @@
       </div>
     {% endblock %}
   {% endembed %}
+{% endblock %}
+
+{% block body %}
+  {{ parent() }}
+
+  <script>
+    var data = {
+      forums: {{ forums|json_encode|raw }}
+    }
+  </script>
 {% endblock %}

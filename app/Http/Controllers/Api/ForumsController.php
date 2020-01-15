@@ -13,6 +13,11 @@ use Illuminate\Contracts\Auth\Factory as Auth;
 
 class ForumsController extends Controller
 {
+    /**
+     * @param ForumRepository $forum
+     * @param Auth $auth
+     * @return ForumCollection
+     */
     public function index(ForumRepository $forum, Auth $auth)
     {
         ForumCollection::withoutWrapping();

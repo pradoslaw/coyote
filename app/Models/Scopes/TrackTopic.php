@@ -13,16 +13,17 @@ trait TrackTopic
      *
      * @param Builder $builder
      * @param string|null $guestId
+     * @param string $alias
      * @return Builder
      */
-    public function scopeWithTopicMarkTime(Builder $builder, ?string $guestId)
+    public function scopeWithTopicMarkTime(Builder $builder, ?string $guestId, string $alias = 'read_at')
     {
         if ($guestId === null) {
             return $builder;
         }
 
         return $builder
-            ->addSelect(['topic_track.marked_at AS read_at'])
+            ->addSelect(["topic_track.marked_at AS $alias"])
             ->leftJoin('topic_track', function (JoinClause $join) use ($guestId) {
                 $join
                     ->on('topic_track.topic_id', '=', 'topics.id')

@@ -14,16 +14,17 @@ trait TrackForum
      *
      * @param Builder $builder
      * @param string|null $guestId
+     * @param string $alias
      * @return Builder
      */
-    public function scopeWithForumMarkTime(Builder $builder, ?string $guestId)
+    public function scopeWithForumMarkTime(Builder $builder, ?string $guestId, string $alias = 'read_at')
     {
         if ($guestId === null) {
             return $builder;
         }
 
         return $builder
-            ->addSelect(new Expression('COALESCE(forum_track.marked_at, guests.updated_at) AS read_at'))
+            ->addSelect(new Expression("COALESCE(forum_track.marked_at, guests.updated_at) AS $alias"))
             ->leftJoin('forum_track', function (JoinClause $join) use ($guestId) {
                 $join
                     ->on('forum_track.forum_id', '=', 'forums.id')

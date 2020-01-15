@@ -2,8 +2,10 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Forum;
 use Coyote\Http\Factories\FlagFactory;
 use Coyote\Http\Factories\GateFactory;
+use Coyote\Http\Resources\ForumCollection;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
@@ -15,6 +17,7 @@ use Coyote\Repositories\Criteria\Topic\Subscribes;
 use Coyote\Repositories\Criteria\Topic\Unanswered;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Topic\WithTags;
+use Coyote\Services\Forum\Tracker;
 use Coyote\Services\Forum\TreeBuilder;
 use Coyote\Services\Forum\Personalizer;
 use Illuminate\Http\Request;
@@ -130,18 +133,28 @@ class HomeController extends BaseController
     public function categories()
     {
         $this->pushForumCriteria();
+
         // execute query: get all categories that user can has access
-        $sections = $this->forum->categories($this->guestId);
-        // establish forum's marked date
-        $sections = $this->personalizer->markUnreadCategories($sections);
+        $forums = $this->forum
+            ->categories($this->guestId)
+            ->map(function (Forum $forum) {
+                $post = $forum->post;
 
-        $treeBuilder = new TreeBuilder();
-        $sections = $treeBuilder->sections($sections);
+                if ($post) {
+                    $post->topic->setRelation('forum', $forum);
+                    $post->setRelation('topic', Tracker::make($post->topic, $this->guestId));
+                }
 
+                return $forum;
+            });
+
+
+        $forums = new ForumCollection($forums);
         // get categories collapse
-        $collapse = $this->collapse();
+//        $collapse = $this->collapse();
 
-        return $this->view('forum.home')->with(compact('sections', 'collapse'));
+        return $this->view('forum.home')->with(compact('forums'));
+//        return $this->view('forum.home')->with(compact('forums', 'collapse'));
     }
 
     /**
