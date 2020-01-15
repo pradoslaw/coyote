@@ -43,7 +43,7 @@ abstract class Notification extends BaseNotification implements NotificationInte
         $channels = [];
         $this->broadcastChannel = null;
 
-        $settings = $user->notificationSettings()->where('type_id', static::ID)->first();
+        $settings = $user->notificationSettings->where('type_id', static::ID)->first();
 
         if (empty($settings)) {
             return $channels;

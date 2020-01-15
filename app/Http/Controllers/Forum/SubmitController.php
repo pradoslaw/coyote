@@ -110,7 +110,7 @@ class SubmitController extends BaseController
         });
 
         if ($post->wasRecentlyCreated) {
-            $subscribers = $topic->subscribers()->with('user')->get()->pluck('user')->exceptUser($this->auth);
+            $subscribers = $topic->subscribers()->with('user.notificationSettings')->get()->pluck('user')->exceptUser($this->auth);
 
             $dispatcher->send(
                 $subscribers,
