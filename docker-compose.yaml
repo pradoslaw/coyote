@@ -55,7 +55,7 @@ services:
     ports:
       - 9200:9200
     volumes:
-        - elasticsearch6:/usr/share/elasticsearch/data
+        - elasticsearch:/usr/share/elasticsearch/data
     environment:
       - "discovery.type=single-node"
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
@@ -140,7 +140,7 @@ services:
 
 volumes:
   postgres:
-  elasticsearch6:
+  elasticsearch:
   minio:
   mongo:
   graylog:

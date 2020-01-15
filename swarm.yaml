@@ -183,12 +183,13 @@ services:
       - coyote
 
   elasticsearch:
-    image: elasticsearch:5.6.14
+    image: elasticsearch:6.8.6
     ports:
       - 9200:9200
     volumes:
-      - elasticsearch:/usr/share/elasticsearch/data
+      - elasticsearch6:/usr/share/elasticsearch/data
     environment:
+      - "discovery.type=single-node"
       - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
     networks:
       - coyote
@@ -274,7 +275,7 @@ services:
 
 volumes:
   postgres:
-  elasticsearch:
+  elasticsearch6:
   minio:
   codebase:
   mongo:

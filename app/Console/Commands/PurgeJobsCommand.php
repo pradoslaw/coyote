@@ -61,11 +61,12 @@ class PurgeJobsCommand extends Command
         $this->elasticsearch = app('elasticsearch');
         $this->params = [
             'index' => config('elasticsearch.default_index'),
-            'type'  => 'jobs',
+            'type'  => '_doc',
             'body'  => [
                 'query' => [
                     'bool' => [
                         'must' => [
+                            ['term' => ['model' => 'job']],
                             ['range' => ['deadline_at' => ['lt' => 'now']]]
                         ]
                     ]
@@ -87,7 +88,7 @@ class PurgeJobsCommand extends Command
 
         foreach ($result as $hit) {
             $this->elasticsearch->delete(
-                ['id' => $hit['id'], 'index' => config('elasticsearch.default_index'), 'type' => 'jobs']
+                ['id' => "job_$hit[id]", 'index' => config('elasticsearch.default_index'), 'type' => '_doc']
             );
 
             $user = $this->user->find($hit['user_id'], ['name', 'email']);

@@ -37,7 +37,7 @@ class UpdateJobOffers extends Job implements ShouldQueue
 
         $params = [
             'index' => config('elasticsearch.default_index'),
-            'type' => 'jobs'
+            'type' => '_doc'
         ];
 
         $job->pushCriteria(new PriorDeadline());
@@ -49,7 +49,7 @@ class UpdateJobOffers extends Job implements ShouldQueue
 
         foreach ($result as $row) {
             $client->update(array_merge($params, [
-                'id' => $row['id'],
+                'id' => "job_$row[id]",
                 'body' => [
                     'doc' => [
                         'firm' => [
