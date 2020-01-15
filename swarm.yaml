@@ -119,7 +119,9 @@ services:
         - 4programmers/coyote:latest
     volumes:
       - codebase:/var/www
-    environment: *env
+    environment:
+      <<: *env
+      DB_MIGRATE: "true"
     secrets: *secrets
     deploy:
       replicas: 2
