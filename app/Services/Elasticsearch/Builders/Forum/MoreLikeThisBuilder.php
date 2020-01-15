@@ -3,6 +3,7 @@
 namespace Coyote\Services\Elasticsearch\Builders\Forum;
 
 use Coyote\Services\Elasticsearch\Filters\Post\OnlyThoseWithAccess;
+use Coyote\Services\Elasticsearch\Filters\Term;
 use Coyote\Services\Elasticsearch\MoreLikeThis;
 use Coyote\Services\Elasticsearch\QueryBuilder;
 use Coyote\Topic;
@@ -37,11 +38,12 @@ class MoreLikeThisBuilder extends QueryBuilder
         $mlt = new MoreLikeThis(['subject', 'posts.text']);
         $mlt->addDoc([
             '_index'    => config('elasticsearch.default_index'),
-            '_type'     => 'topics',
-            '_id'       => $this->topic->id
+            '_type'     => '_doc',
+            '_id'       => "topic_{$this->topic->id}"
         ]);
 
         $this->must($mlt);
+        $this->must(new Term('model', 'topic'));
         $this->must(new OnlyThoseWithAccess($this->forumId));
         // we need only those fields to save in cache
         $this->source(['id', 'subject', 'slug', 'updated_at', 'forum.*']);

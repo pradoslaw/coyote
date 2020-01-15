@@ -51,13 +51,23 @@ services:
       - coyote
 
   elasticsearch:
-    image: elasticsearch:5.6.14
+    image: elasticsearch:6.8.6
     ports:
       - 9200:9200
     volumes:
-        - elasticsearch:/usr/share/elasticsearch/data
+        - elasticsearch6:/usr/share/elasticsearch/data
     environment:
+      - "discovery.type=single-node"
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    networks:
+      - coyote
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.8.6
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
     networks:
       - coyote
 
@@ -130,7 +140,7 @@ services:
 
 volumes:
   postgres:
-  elasticsearch:
+  elasticsearch6:
   minio:
   mongo:
   graylog:

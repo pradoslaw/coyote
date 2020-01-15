@@ -3,15 +3,24 @@
 namespace Coyote\Services\Elasticsearch\Builders;
 
 use Coyote\Services\Elasticsearch\Filters\Post\OnlyThoseWithAccess;
+use Coyote\Services\Elasticsearch\Filters\Terms;
 use Coyote\Services\Elasticsearch\QueryBuilder;
 use Coyote\Services\Elasticsearch\QueryString;
 use Coyote\Services\Elasticsearch\Sort;
 use Coyote\Services\Elasticsearch\Highlight;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class MixedBuilder extends QueryBuilder
 {
     const PER_PAGE = 10;
+
+    const TOPIC = 'topic';
+    const MICROBLOG = 'microblog';
+    const WIKI = 'wiki';
+    const JOB = 'job';
+
+    private const DEFAULT = [self::TOPIC, self::MICROBLOG, self::WIKI, self::JOB];
 
     /**
      * @var Request
@@ -38,13 +47,22 @@ class MixedBuilder extends QueryBuilder
             'long_title',
             'posts.text',
             'excerpt',
-            'title',
             'description',
-            'requirements',
             'recruitment'
         ];
 
+        $models = self::DEFAULT;
+
+        if ($this->request->filled('type')) {
+            $validator = validator($this->request->toArray(), ['type' => 'nullable', Rule::in(self::DEFAULT)]);
+
+            if (!$validator->fails()) {
+                $models = $this->request->input('type');
+            }
+        }
+
         $this
+            ->must(new Terms('model', $models))
             ->must(new QueryString(preg_quote($this->request->input('q'), '/:'), $fields))
             ->must(new OnlyThoseWithAccess($this->request->attributes->get('forum_id')))
             ->sort(new Sort($this->request->get('sort', '_score'), $this->request->get('order', 'desc')))

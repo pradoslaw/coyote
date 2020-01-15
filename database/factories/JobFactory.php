@@ -6,6 +6,8 @@ $factory->define(\Coyote\Job::class, function (Faker $faker) {
     return [
         'title' => $faker->jobTitle,
         'description' => $faker->text(2000),
-        'deadline_at' => \Carbon\Carbon::now()->addDay(40)
+        'deadline_at' => \Carbon\Carbon::now()->addDay(40),
+        'is_publish' => true,
+        'boost_at' => \Carbon\Carbon::now()
     ];
 });

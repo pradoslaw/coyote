@@ -11,11 +11,6 @@ use Illuminate\Contracts\Support\Arrayable;
 trait Searchable
 {
     /**
-     * @var string
-     */
-    protected $charFilter;
-
-    /**
      * Index data in elasticsearch
      *
      * @return mixed
@@ -24,11 +19,14 @@ trait Searchable
     public function putToIndex()
     {
         $params = $this->getParams();
-        $params['body'] = $this->filterData($this->getIndexBody());
+        $body = $this->getIndexBody();
 
-        if (empty($params['body'])) {
+        if (empty($body)) {
             return null;
         }
+
+        $body['model'] = str_singular($this->getTable());
+        $params['body'] = $body;
 
         return $this->getClient()->index($params);
     }
@@ -62,29 +60,6 @@ trait Searchable
     public function search(QueryBuilderInterface $queryBuilder)
     {
         return new ResultSet($this->performSearch($queryBuilder->build()));
-    }
-
-    /**
-     * Put mapping to elasticsearch's type
-     */
-    public function putMapping()
-    {
-        $mapping = $this->getMapping();
-
-        if (!empty($mapping)) {
-            $params = $this->getParams();
-            $params['body'] = $mapping;
-
-            $this->getClient()->indices()->putMapping($params);
-        }
-    }
-
-    /**
-     * @param string $filter
-     */
-    public function setCharFilter(string $filter)
-    {
-        $this->charFilter = $filter;
     }
 
     /**
@@ -128,20 +103,6 @@ trait Searchable
     }
 
     /**
-     * Get model's mapping
-     *
-     * @return array
-     */
-    protected function getMapping()
-    {
-        return [
-            $this->getTable() => [
-                'properties' => $this->mapping
-            ]
-        ];
-    }
-
-    /**
      * Basic elasticsearch params
      *
      * @return array
@@ -150,39 +111,14 @@ trait Searchable
     {
         $params = [
             'index'     => $this->getIndexName(),
-            'type'      => $this->getTable()
+            'type'      => '_doc'
         ];
 
         if ($this->getKey()) {
-            $params['id'] = $this->getKey();
+            $params['id'] = str_singular($this->getTable()) . '_' . $this->getKey();
         }
 
         return $params;
-    }
-
-    /**
-     * Convert model to array
-     *
-     * @param mixed $data
-     * @return array
-     */
-    protected function filterData($data)
-    {
-        if ($data instanceof Arrayable) {
-            $data = $data->toArray();
-        }
-
-        foreach ($data as &$value) {
-            if (is_object($value) && $data instanceof Arrayable) {
-                $value = $this->filterData($value);
-            }
-        }
-
-        if ($this->charFilter) {
-            $data = $this->getCharFilter()->filter($data);
-        }
-
-        return $data;
     }
 
     /**
@@ -193,14 +129,6 @@ trait Searchable
     protected function getClient()
     {
         return app('elasticsearch');
-    }
-
-    /**
-     * @return CharFilterInteface
-     */
-    protected function getCharFilter(): CharFilterInteface
-    {
-        return app($this->charFilter);
     }
 
     /**

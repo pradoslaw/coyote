@@ -38,74 +38,217 @@ class CreateIndexCommand extends Command
     {
         $index = config('elasticsearch.default_index');
 
-        if ($this->option('force') || $this->confirm("Do you want to create index $index in Elasticsearch?", true)) {
-            $client = app('elasticsearch');
+        if (!$this->option('force') && !$this->confirm("Do you want to create index $index in Elasticsearch?", true)) {
+            return;
+        }
 
-            $params = [
-                'index' => $index,
-                'body' => [
-                    'settings' => [
-                        "index" => [
-                            "analysis" => [
-                                "filter" => [
-                                    "common_words_filter" => [
-                                        "type" => "stop",
-                                        "stopwords" => config('elasticsearch.stopwords')
-                                    ],
-                                    "keep_symbols_filter" => [
-                                        "type" => "word_delimiter",
-                                        "type_table" => [
-                                            "# => ALPHANUM",
-                                            "+ => ALPHANUM",
-                                            "_ => ALPHANUM"
-                                        ]
+        $client = app('elasticsearch');
+
+        $params = [
+            'index' => $index,
+            'body' => [
+                'settings' => [
+                    "index" => [
+                        "analysis" => [
+                            "filter" => [
+                                "common_words_filter" => [
+                                    "type" => "stop",
+                                    "stopwords" => config('elasticsearch.stopwords')
+                                ],
+                                "keep_symbols_filter" => [
+                                    "type" => "word_delimiter",
+                                    "type_table" => [
+                                        "# => ALPHANUM",
+                                        "+ => ALPHANUM",
+                                        "_ => ALPHANUM"
+                                    ]
+                                ]
+                            ],
+                            "analyzer" => [
+                                // just like keyword type except lowercase filter
+                                "keyword_analyzer" => [
+                                    "tokenizer" => "keyword",
+                                    "filter" => "lowercase"
+                                ],
+                                // used to index city names
+                                "keyword_asciifolding_analyzer" => [
+                                    "tokenizer" => "keyword",
+                                    "filter" => [
+                                        "lowercase",
+                                        "asciifolding"
                                     ]
                                 ],
-                                "analyzer" => [
-                                    // just like keyword type except lowercase filter
-                                    "keyword_analyzer" => [
-                                        "tokenizer" => "keyword",
-                                        "filter" => "lowercase"
-                                    ],
-                                    // used to index city names
-                                    "keyword_asciifolding_analyzer" => [
-                                        "tokenizer" => "keyword",
-                                        "filter" => [
-                                            "lowercase",
-                                            "asciifolding"
-                                        ]
-                                    ],
-                                    "stopwords_analyzer" => [
-                                        "tokenizer" => "whitespace",
-                                        "filter" => [
-                                            "lowercase",
-                                            "common_words_filter",
-                                            "keep_symbols_filter"
-                                        ]
-                                    ],
-                                    "default_analyzer" => [
-                                        "tokenizer" => "whitespace",
-                                        "filter" => [
-                                            "lowercase",
-                                            "keep_symbols_filter"
-                                        ]
+                                "stopwords_analyzer" => [
+                                    "tokenizer" => "whitespace",
+                                    "filter" => [
+                                        "lowercase",
+                                        "common_words_filter",
+                                        "keep_symbols_filter",
+                                        "asciifolding"
                                     ]
                                 ]
                             ]
                         ]
                     ]
+                ],
+                'mappings' => [
+                    '_doc' => [
+                        'properties' => [
+                            "model" => [
+                                "type" => "keyword"
+                            ],
+                            "created_at" => [
+                                "type" => "date",
+                                "format" => "yyyy-MM-dd HH:mm:ss"
+                            ],
+                            "updated_at" => [
+                                "type" => "date",
+                                "format" => "yyyy-MM-dd HH:mm:ss"
+                            ],
+                            "deadline_at" => [
+                                "type" => "date",
+                                "format" => "yyyy-MM-dd HH:mm:ss"
+                            ],
+                            "boost_at" => [
+                                "type" => "date",
+                                "format" => "yyyy-MM-dd HH:mm:ss"
+                            ],
+                            "text" => [
+                                "type" => "text",
+                                "analyzer" => "stopwords_analyzer"
+                            ],
+                            "description" => [
+                                "type" => "text",
+                                "analyzer" => "stopwords_analyzer"
+                            ],
+                            "requirements" => [
+                                "type" => "text",
+                                "analyzer" => "stopwords_analyzer"
+                            ],
+                            "title" => [
+                                "type" => "text",
+                                "analyzer" => "stopwords_analyzer"
+                            ],
+                            "is_remote" => [
+                                "type" => "boolean"
+                            ],
+                            "ip" => [
+                                "type" => "ip",
+                            ],
+                            "host" => [
+                                "type" => "text",
+                                "analyzer" => "keyword"
+                            ],
+                            "browser" => [
+                                "type" => "text",
+                                "analyzer" => "keyword"
+                            ],
+                            "fingerprint" => [
+                                "type" => "text",
+                                "analyzer" => "keyword"
+                            ],
+                            "tags" => [
+                                "type" => "text",
+                                "fields" => [
+                                    "original" => ["type" => "keyword"]
+                                ]
+                            ],
+                            "salary" => [
+                                "type" => "float"
+                            ],
+                            "is_boost" => [
+                                "type" => "boolean"
+                            ],
+                            "is_publish" => [
+                                "type" => "boolean"
+                            ],
+                            "is_ads" => [
+                                "type" => "boolean"
+                            ],
+                            "is_on_top" => [
+                                "type" => "boolean"
+                            ],
+                            "is_highlight" => [
+                                "type" => "boolean"
+                            ],
+                            "locations" => [
+                                "type" => "nested",
+                                "properties" => [
+                                    "label" => [
+                                        "type" => "text",
+                                        "analyzer" => "stopwords_analyzer"
+                                    ],
+                                    "city" => [
+                                        "type" => "text",
+                                        "analyzer" => "keyword_asciifolding_analyzer",
+                                        "fields" => [
+                                            // aggregate city by this field.
+                                            "original" => ["type" => "text", "analyzer" => "keyword_analyzer", "fielddata" => true]
+                                        ]
+                                    ],
+                                    "coordinates" => [
+                                        "type" => "geo_point"
+                                    ]
+                                ]
+                            ],
+                            "firm" => [
+                                "type" => "object",
+                                "properties" => [
+                                    "name" => [
+                                        "type" => "text",
+                                        "analyzer" => "stopwords_analyzer",
+                                        "fields" => [
+                                            // filtrujemy firmy po tym polu
+                                            "original" => ["type" => "text", "analyzer" => "keyword_analyzer", "fielddata" => true]
+                                        ]
+                                    ],
+                                    "slug" => [
+                                        "type" => "text",
+                                        "analyzer" => "keyword_analyzer"
+                                    ]
+                                ]
+                            ],
+                            "actor" => [
+                                "type" => "object",
+                                "properties" => [
+                                    "displayName" => [
+                                        "type" => "text",
+                                        // ability to search case insensitive
+                                        "analyzer" => "keyword_analyzer"
+                                    ]
+                                ]
+                            ],
+                            "posts" => [
+                                "properties" => [
+                                    "text" => [
+                                        "type" => "text",
+                                        "analyzer" => "stopwords_analyzer"
+                                    ]
+                                ]
+                            ],
+                            "subject" => [
+                                "type" => "text",
+                                "analyzer" => "stopwords_analyzer"
+                            ],
+                            "user_name" => [
+                                "type" => "text",
+                                // ability to search case insensitive
+                                "analyzer" => "keyword_analyzer"
+                            ]
+                        ]
+                    ]
                 ]
-            ];
+            ]
+        ];
 
-            if ($client->indices()->exists(['index' => $index])) {
-                $client->indices()->close(['index' => $index]);
-                $client->indices()->putSettings($params);
-                $client->indices()->open(['index' => $index]);
-            } else {
-                $client->indices()->create($params);
-            }
-
-            $this->info('Done.');
+        if ($client->indices()->exists(['index' => $index])) {
+            $client->indices()->close(['index' => $index]);
+            $client->indices()->putSettings($params);
+            $client->indices()->open(['index' => $index]);
+        } else {
+            $client->indices()->create($params);
         }
+
+        $this->info('Done.');
     }
 }

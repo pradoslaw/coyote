@@ -178,11 +178,13 @@ class SearchBuilder extends QueryBuilder
      */
     public function build()
     {
+        $this->must(new Filters\Term('model', 'job'));
+
         if ($this->request->filled('q')) {
             $this->must(
                 new MultiMatch(
                     $this->request->get('q'),
-                    ['title^3', 'description', 'requirements', 'recruitment', 'tags^2', 'firm.name']
+                    ['title^3', 'description', 'recruitment', 'tags^2', 'firm.name']
                 )
             );
         } else {

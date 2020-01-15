@@ -59,53 +59,6 @@ class Post extends Model
     protected $dates = ['created_at', 'updated_at'];
 
     /**
-     * Elasticsearch type mapping
-     *
-     * @var array
-     */
-    protected $mapping = [
-        "tags" => [
-            "type" => "string",
-            "fields" => [
-                "tag" => [
-                    "type" => "string"
-                ],
-
-                // original value (case sensitive)
-                "tag_original" => [
-                    "type" => "string",
-                    "index" => "not_analyzed"
-                ]
-            ]
-        ],
-        "text" => [
-            "type" => "string",
-            "analyzer" => "default_analyzer"
-        ],
-        "user_name" => [
-            "type" => "string",
-            // ability to search case insensitive
-            "analyzer" => "keyword_analyzer"
-        ],
-        "ip" => [
-            "type" => "string",
-            "index" => "not_analyzed"
-        ],
-        "host" => [
-            "type" => "string",
-            "index" => "not_analyzed"
-        ],
-        "created_at" => [
-            "type" => "date",
-            "format" => "yyyy-MM-dd HH:mm:ss"
-        ],
-        "updated_at" => [
-            "type" => "date",
-            "format" => "yyyy-MM-dd HH:mm:ss"
-        ],
-    ];
-
-    /**
      * Html version of the post.
      *
      * @var null|string
@@ -274,11 +227,12 @@ class Post extends Model
             return [];
         }
 
-        $this->setCharFilter(PostFilter::class);
         $body = $this->parentGetIndexBody();
 
         // additionally index few fields from topics table...
         $topic = $this->topic->only(['subject', 'slug', 'forum_id', 'id', 'first_post_id']);
+        $topic['subject'] = htmlspecialchars($topic['subject']);
+
         // we need to index every field from posts except:
         $body = array_except($body, ['deleted_at', 'edit_count', 'editor_id', 'delete_reason', 'deleter_id', 'user']);
 
@@ -286,9 +240,15 @@ class Post extends Model
             $body['tags'] = $this->topic->tags()->pluck('name');
         }
 
+        $body['text'] = strip_tags($this->getHtmlAttribute());
+
+        if (empty($body['ip'])) {
+            unset($body['ip']);
+        }
+
         return array_merge($body, [
-            'topic' => $topic,
-            'forum' => $this->forum->only(['name', 'slug'])
+            'topic'     => $topic,
+            'forum'     => $this->forum->only(['name', 'slug'])
         ]);
     }
 }
