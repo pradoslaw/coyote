@@ -2,7 +2,6 @@
 
 namespace Coyote;
 
-use Coyote\Services\Elasticsearch\CharFilters\WikiFilter;
 use Coyote\Wiki\Page as Wiki_Page;
 use Coyote\Wiki\Subscriber;
 use Illuminate\Database\Eloquent\Model;

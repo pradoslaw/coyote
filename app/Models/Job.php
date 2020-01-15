@@ -746,6 +746,10 @@ class Job extends Model
         return $body;
     }
 
+    /**
+     * @param string $value
+     * @return string
+     */
     private function stripTags($value)
     {
         // w oferach pracy, edytor tinymce nie dodaje znaku nowej linii. zamiast tego mamy <br />. zamieniamy

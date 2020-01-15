@@ -2,14 +2,26 @@
 
 namespace Coyote;
 
-use Coyote\Services\Elasticsearch\CharFilters\CharFilterInteface;
 use Coyote\Services\Elasticsearch\QueryBuilderInterface;
 use Coyote\Services\Elasticsearch\ResultSet;
 use Elasticsearch\Common\Exceptions\Missing404Exception;
-use Illuminate\Contracts\Support\Arrayable;
 
 trait Searchable
 {
+    /**
+     * Get the table associated with the model.
+     *
+     * @return string
+     */
+    abstract public function getTable();
+
+    /**
+     * Get the value of the model's primary key.
+     *
+     * @return mixed
+     */
+    abstract public function getKey();
+
     /**
      * Index data in elasticsearch
      *

@@ -5,13 +5,11 @@ namespace Coyote;
 use Carbon\Carbon;
 use Coyote\Models\Scopes\TrackForum;
 use Coyote\Models\Scopes\TrackTopic;
-use Coyote\Services\Elasticsearch\CharFilters\TopicFilter;
 use Coyote\Topic\Subscriber;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Coyote\Models\Scopes\Sortable;
 use Illuminate\Database\Query\Builder;
-use Illuminate\Database\QueryException;
 
 /**
  * @property int $id
