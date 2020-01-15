@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use Coyote\Forum;
 use Coyote\Microblog;
 use Coyote\Post;
-use Coyote\Services\Forum\Tracker;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Tag;
 use Coyote\User;
@@ -45,7 +44,6 @@ class TopicResource extends JsonResource
                 'created_at'            => $this->created_at->toIso8601String(),
                 'last_post_created_at'  => $this->last_post_created_at->toIso8601String(),
                 'url'                   => url(UrlBuilder::topic($this->resource->getModel())),
-                'read_at'               => $this->read_at ? $this->read_at->toIso8601String() : null,
                 'is_read'               => $this->isRead(),
                 'forum'         => [
                     'id'        => $this->forum->id,

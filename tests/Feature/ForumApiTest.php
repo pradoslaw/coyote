@@ -22,7 +22,6 @@ class ForumApiTest extends TestCase
         $data = $request->decodeResponseJson();
 
         $this->assertEquals($forum->name, $data[0]['name']);
-        $this->assertNull($data[0]['read_at']);
         $this->assertTrue($data[0]['is_read']);
     }
 
@@ -58,9 +57,26 @@ class ForumApiTest extends TestCase
         $this->assertEquals($forum->name, $data[0]['name']);
         $this->assertEquals($topic->subject, $data[0]['topic']['subject']);
         $this->assertFalse($data[0]['topic']['is_read']);
-        $this->assertNull($data[0]['topic']['read_at']);
         $this->assertFalse($data[0]['is_read']);
-        $this->assertNotNull($data[0]['read_at']); // it contains date from guests table
+    }
 
+    public function testMarkCategoryAsRead()
+    {
+        $user = factory(User::class)->create();
+
+        Guest::forceCreate(['id' => $user->guest_id, 'updated_at' => now()->subMinute(5)]);
+
+        $forum = factory(Forum::class)->create(['order' => 0]);
+        $topic = factory(Topic::class)->create(['forum_id' => $forum->id]);
+
+        Forum\Track::forceCreate(['forum_id' => $forum->id, 'guest_id' => $user->guest_id, 'marked_at' => $topic->last_post_created_at]);
+
+        $this->actingAs($user, 'api');
+
+        $request = $this->get('/v1/forums', ['Accept' => 'application/json']);
+        $data = $request->decodeResponseJson();
+
+        $this->assertTrue($data[0]['topic']['is_read']);
+        $this->assertTrue($data[0]['is_read']);
     }
 }

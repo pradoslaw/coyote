@@ -27,7 +27,6 @@ class ForumResource extends JsonResource
 
         return array_merge($only, [
             'url' => url(UrlBuilder::forum($this->resource)),
-            'read_at' => $this->read_at ? $this->read_at->toIso8601String() : null,
             'is_read' => $this->isRead(),
 
             $this->mergeWhen($this->whenLoaded('post'), function () {
@@ -55,6 +54,6 @@ class ForumResource extends JsonResource
 
     private function isRead(): bool
     {
-        return $this->whenLoaded('post') ? $this->read_at > $this->post->created_at : true;
+        return $this->whenLoaded('post') ? $this->read_at >= $this->post->created_at : true;
     }
 }

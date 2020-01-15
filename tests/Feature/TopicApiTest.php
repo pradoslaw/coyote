@@ -49,7 +49,6 @@ class TopicApiTest extends TestCase
         $data = $request->decodeResponseJson('data');
 
         $this->assertNotEquals($this->topic->subject, $data[0]['subject']);
-        $this->assertNull($data[0]['read_at']);
         $this->assertTrue($data[0]['is_read']);
     }
 
@@ -61,7 +60,6 @@ class TopicApiTest extends TestCase
         $data = $request->decodeResponseJson('data');
 
         $this->assertEquals($this->topic->subject, $data[0]['subject']);
-        $this->assertNull($data[0]['read_at']);
         $this->assertTrue($data[0]['is_read']);
     }
 
@@ -77,8 +75,6 @@ class TopicApiTest extends TestCase
 
         $request->assertJsonFragment([
             'subject' => $this->topic->subject,
-            'read_at' => null,
-            'is_read' => true,
             'forum' => [
                 'id' => $this->forum->id,
                 'name' => $this->forum->name,
