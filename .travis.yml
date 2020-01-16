@@ -42,3 +42,6 @@ after_success:
   - test $TRAVIS_BRANCH = "master" && test $TRAVIS_PULL_REQUEST = "false" && docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
   - test $TRAVIS_BRANCH = "master" && test $TRAVIS_PULL_REQUEST = "false" && docker build -f docker/coyote/Dockerfile -t 4programmers/coyote:latest .
   - test $TRAVIS_BRANCH = "master" && test $TRAVIS_PULL_REQUEST = "false" && docker push 4programmers/coyote:latest
+
+after_failure:
+  - docker-compose logs db
