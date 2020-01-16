@@ -33,9 +33,10 @@ class InvoiceEnumeratorTest extends \Codeception\TestCase\Test
         $invoice = $this->tester->haveRecord(\Coyote\Invoice::class, ['name' => $faker->company, 'user_id' => $this->user->id]);
 
         $this->enumerator->enumerate($invoice);
-        $date = \Carbon\Carbon::today();
+        $date = \Carbon\Carbon::now();
 
         $this->assertEquals($this->format($date, 1), $invoice->number);
+        $this->assertEquals($date->hour, $invoice->created_at->hour);
     }
 
     public function testEnumerateMultipleInvoice()
