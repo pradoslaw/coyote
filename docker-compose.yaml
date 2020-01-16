@@ -7,11 +7,11 @@ services:
       - 5432:5432
     volumes:
       - postgres:/var/lib/postgresql/data:z
-      - ./docker/postgres/postgresql.dev.conf:/var/lib/postgresql/data/postgresql.auto.conf
     environment:
       POSTGRES_USER: coyote
       POSTGRES_PASSWORD:
       POSTGRES_DB: coyote
+      TZ: "Europe/Warsaw"
     networks:
       - coyote
 
