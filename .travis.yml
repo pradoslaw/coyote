@@ -17,6 +17,7 @@ install:
   - docker-compose build
   - docker-compose up -d
   - docker-compose ps
+  - docker-compose logs db
   - docker-compose exec php make install
   - mkdir public/uploads
   - sudo chown -R nginx:nginx $TRAVIS_BUILD_DIR
