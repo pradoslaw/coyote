@@ -4,41 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "51b40ef2a3039b334f7aeaf39b0d6d0c",
+    "content-hash": "46d7a6f0a592313d15fbd19eb9b6530b",
     "packages": [
-        {
-            "name": "adam-boduch/geshi",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/adam-boduch/geshi.git",
-                "reference": "8b21b320217c291c6454b18738494fa6178988f5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/adam-boduch/geshi/zipball/8b21b320217c291c6454b18738494fa6178988f5",
-                "reference": "8b21b320217c291c6454b18738494fa6178988f5",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">5.3.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Boduch\\Geshi\\": "src/"
-                }
-            },
-            "license": [
-                "GPL-2.0"
-            ],
-            "description": "GeSHi - Generic Syntax Highlighter. This is a port of GeSHi project code found on SourceForge.",
-            "support": {
-                "source": "https://github.com/adam-boduch/geshi/tree/master",
-                "issues": "https://github.com/adam-boduch/geshi/issues"
-            },
-            "time": "2018-04-06T04:54:37+00:00"
-        },
         {
             "name": "adam-boduch/laravel-grid",
             "version": "dev-master",
@@ -4207,56 +4174,6 @@
             ],
             "description": "PayLane REST Client for PHP",
             "time": "2016-08-24T09:27:26+00:00"
-        },
-        {
-            "name": "pda/pheanstalk",
-            "version": "v3.2.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/pda/pheanstalk.git",
-                "reference": "57b6e76f1b06ca798e739a8dee92c2dac04fd170"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/pda/pheanstalk/zipball/57b6e76f1b06ca798e739a8dee92c2dac04fd170",
-                "reference": "57b6e76f1b06ca798e739a8dee92c2dac04fd170",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.1-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Pheanstalk\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Paul Annesley",
-                    "email": "paul@annesley.cc",
-                    "homepage": "http://paul.annesley.cc/",
-                    "role": "Developer"
-                }
-            ],
-            "description": "PHP client for beanstalkd queue",
-            "homepage": "https://github.com/pda/pheanstalk",
-            "keywords": [
-                "beanstalkd"
-            ],
-            "time": "2018-09-19T12:16:28+00:00"
         },
         {
             "name": "php-http/client-common",
@@ -10315,7 +10232,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "adam-boduch/geshi": 20,
         "adam-boduch/laravel-grid": 20,
         "chrisboulton/php-diff": 20,
         "mpdf/mpdf": 20
