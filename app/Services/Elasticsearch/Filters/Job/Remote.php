@@ -12,6 +12,6 @@ class Remote extends Term implements DslInterface
      */
     public function __construct()
     {
-        parent::__construct('is_remote', 1);
+        parent::__construct('is_remote', true);
     }
 }
