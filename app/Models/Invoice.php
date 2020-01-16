@@ -31,7 +31,7 @@ class Invoice extends Model
     /**
      * @var array
      */
-    protected $dates = ['created_at'];
+    protected $dates = ['created_at', 'updated_at'];
 
     /**
      * @var string
