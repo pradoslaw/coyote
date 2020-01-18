@@ -12,8 +12,12 @@
 
 .section-name {
   margin: 0 0 10px 0;
-  font-size: 14px;
   padding-left: 2px;
+
+  h2 {
+    font-size: 14px;
+    margin: 0;
+  }
 
   a {
     color: inherit;
@@ -59,14 +63,12 @@
     margin-right: 10px;
     font-size: 18px;
     color: $brand-primary;
-    border: 1px solid $brand-primary;
     border-radius: 50%;
     padding: 5px;
   }
 
   .fa-comments.new {
     color: $alt-link-hover-color;
-    border-color: $alt-link-hover-color;
   }
 
   .col-lg-stat {

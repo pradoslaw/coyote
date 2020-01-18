@@ -1,15 +1,31 @@
 <template>
   <div class="section margin-md-top">
-    <h2 class="section-name">
-      <a href="javascript:" @click="isCollapse = ! isCollapse">
-        <i :class="[isCollapse ? 'fa-plus-square': 'fa-minus-square']" class="far"></i>  {{ name }}
-      </a>
+    <div class="section-name">
+      <h2 class="pull-left">
+        <a href="javascript:" @click="isCollapse = ! isCollapse">
+          <i :class="[isCollapse ? 'fa-plus-square': 'fa-minus-square']" class="far"></i>  {{ name }}
+        </a>
+      </h2>
 
-      <a href="#" class="panel-cog pull-right"><i class="fas fa-cogs"></i></a>
-    </h2>
+      <div class="dropdown pull-right">
+        <a href="javascript:" @click="isDropdown = ! isDropdown" class="panel-cog"><i class="fas fa-cogs"></i></a>
+
+        <ul v-show="isDropdown" class="dropdown-menu">
+          <li v-for="category in categories">
+            <a href="javascript:">
+              <i class="fa fa-check"></i>
+
+              {{ category.name }}
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="clearfix"></div>
+    </div>
 
     <section v-if="!isCollapse" v-for="(category, index) in categories" class="panel panel-default panel-categories">
-      <div class="panel-body new">
+      <div :class="{'new': !category.is_read}" class="panel-body">
         <div class="row">
           <div class="col-lg-7 col-xs-12 col-sm-6 col-main">
             <i :class="{'new': !category.is_read}" class="far fa-comments fa-2x pull-left visible-lg"></i>
@@ -91,7 +107,8 @@
     },
     data() {
       return {
-        isCollapse: false
+        isCollapse: false,
+        isDropdown: false
       }
     },
     methods: {
