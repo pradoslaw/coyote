@@ -71,7 +71,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
 
         $result = $this
             ->model
-            ->select('forums.*')
+            ->addSelect('forums.*')
             ->withForumMarkTime($guestId)
             ->with(['post' => function (HasOne $builder) use ($guestId) {
                 return $builder
@@ -130,7 +130,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     public function list()
     {
         return $this->applyCriteria(function () {
-            return $this->model->select('forums.id', 'name', 'slug', 'parent_id')->orderBy('forums.order')->get();
+            return $this->model->addSelect('forums.id', 'name', 'slug', 'parent_id')->get();
         });
     }
 

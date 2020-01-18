@@ -18,7 +18,6 @@ use Coyote\Repositories\Criteria\Topic\Unanswered;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Topic\WithTags;
 use Coyote\Services\Forum\Tracker;
-use Coyote\Services\Forum\TreeBuilder;
 use Coyote\Services\Forum\Personalizer;
 use Illuminate\Http\Request;
 use Lavary\Menu\Item;

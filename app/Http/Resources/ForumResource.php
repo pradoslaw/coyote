@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Resources;
 
+use Carbon\Carbon;
 use Coyote\Post;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -9,6 +10,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * @property Post $post
  * @property \Carbon\Carbon $read_at
+ * @property int $order
  */
 class ForumResource extends JsonResource
 {
@@ -28,6 +30,7 @@ class ForumResource extends JsonResource
         return array_merge($only, [
             'url' => url(UrlBuilder::forum($this->resource)),
             'is_read' => $this->isRead(),
+            'order' => $this->custom_order ?? $this->order,
 
             $this->mergeWhen($this->whenLoaded('post'), function () {
                 // set relation to avoid unnecessary db request in UrlBuilder
