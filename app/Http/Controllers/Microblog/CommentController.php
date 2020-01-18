@@ -104,7 +104,7 @@ class CommentController extends Controller
         if ($microblog->wasRecentlyCreated) {
             $subscribers = $microblog->parent
                 ->subscribers()
-                ->with('user')
+                ->with('user.notificationSettings')
                 ->get()
                 ->pluck('user')
                 ->exceptUser($this->auth);

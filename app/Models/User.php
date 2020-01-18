@@ -60,6 +60,7 @@ use Ramsey\Uuid\Uuid;
  * @property \Coyote\Services\Media\MediaInterface $photo
  * @property bool $is_online
  * @property bool $alert_login
+ * @property \Coyote\Notification\Setting $notificationSettings[]
  */
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {

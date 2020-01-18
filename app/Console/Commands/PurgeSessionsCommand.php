@@ -77,17 +77,21 @@ class PurgeSessionsCommand extends Command
         $values = [];
 
         foreach ($result as $session) {
-            if ($session->expired($lifetime)) {
-                $this->signout($session);
-            } else {
-                $this->extend($session);
+            try {
+                if ($session->expired($lifetime)) {
+                    $this->signout($session);
+                } else {
+                    $this->extend($session);
 
-                $path = str_limit($session->path, 999, '');
+                    $path = str_limit($session->path, 999, '');
 
-                $values[] = array_merge(
-                    array_only($session->toArray(), ['id', 'user_id', 'robot']),
-                    ['path' => mb_strtolower($path)]
-                );
+                    $values[] = array_merge(
+                        array_only($session->toArray(), ['id', 'user_id', 'robot']),
+                        ['path' => mb_strtolower($path)]
+                    );
+                }
+            } catch (\Exception $e) {
+                logger()->error($e);
             }
         }
 

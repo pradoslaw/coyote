@@ -30,8 +30,8 @@ class MoreLikeThisBuilder extends QueryBuilder
         $mlt = new MoreLikeThis(['title', 'description', 'tags']);
         $mlt->addDoc([
             '_index'        => config('elasticsearch.default_index'),
-            '_type'         => 'jobs',
-            '_id'           => $this->job->id
+            '_type'         => '_doc',
+            '_id'           => "job_{$this->job->id}"
         ]);
 
         $this->must($mlt);

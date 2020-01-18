@@ -39,6 +39,8 @@ class Registered
 
         $result = $this->user->findMany($registered->pluck('user_id')->toArray());
 
+        $this->user->resetCriteria();
+
         foreach ($result as $row) {
             foreach ($collection as &$item) {
                 if ($row->user_id == $item['user_id']) {

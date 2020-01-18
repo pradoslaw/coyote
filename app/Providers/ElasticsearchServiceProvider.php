@@ -24,14 +24,14 @@ class ElasticsearchServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('elasticsearch', function ($app) {
-            $logger = ClientBuilder::defaultLogger(
-                $app['config']->get('elasticsearch.logPath'),
-                $app['config']->get('elasticsearch.logLevel')
-            );
+//            $logger = ClientBuilder::defaultLogger(
+//                $app['config']->get('elasticsearch.logPath'),
+//                $app['config']->get('elasticsearch.logLevel')
+//            );
 
             return ClientBuilder::create()
                 ->setHosts($app['config']->get('elasticsearch.hosts'))
-                ->setLogger($logger)
+//                ->setLogger($logger)
                 ->build();
         });
 

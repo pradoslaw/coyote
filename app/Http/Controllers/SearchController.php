@@ -47,19 +47,6 @@ class SearchController extends Controller
             return [];
         }
 
-        $types = 'topics,microblogs,wiki,jobs';
-
-        if ($this->request->filled('type')) {
-            $validator = $this->getValidationFactory()->make(
-                $this->request->toArray(),
-                ['type' => 'nullable|in:' . $types]
-            );
-
-            if (!$validator->fails()) {
-                $types = $this->request->input('type');
-            }
-        }
-
         // search only in allowed forum categories
         $this->forum->pushCriteria(new OnlyThoseWithAccess($this->auth));
         $this->request->attributes->set('forum_id', $this->forum->pluck('id'));
@@ -69,7 +56,7 @@ class SearchController extends Controller
 
         $params = [
             'index'     => config('elasticsearch.default_index'),
-            'type'      => $types,
+            'type'      => '_doc',
             'body'      => $body
         ];
 
@@ -109,7 +96,7 @@ class SearchController extends Controller
         return app(Menu::class)->make('tabs', function (Builder $menu) {
             $menu->add('Wszystko', route('search', ['q' => $this->request->input('q')]));
 
-            foreach (['Forum' => 'topics', 'Praca' => 'jobs', 'Mikroblog' => 'microblogs', 'Kompendium' => 'wiki'] as $label => $type) {
+            foreach (['Forum' => MixedBuilder::TOPIC, 'Praca' => MixedBuilder::JOB, 'Mikroblog' => MixedBuilder::MICROBLOG, 'Kompendium' => MixedBuilder::WIKI] as $label => $type) {
                 $menu->add($label, $this->route($type))->data('type', $type);
             }
         })

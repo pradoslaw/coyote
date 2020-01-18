@@ -7,7 +7,6 @@ use Coyote\Job\Comment;
 use Coyote\Job\Location;
 use Coyote\Job\Subscriber;
 use Coyote\Models\Scopes\ForUser;
-use Coyote\Services\Elasticsearch\CharFilters\JobFilter;
 use Coyote\Services\Eloquent\HasMany;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -181,7 +180,7 @@ class Job extends Model
             "type" => "nested",
             "properties" => [
                 "city" => [
-                    "type" => "string",
+                    "type" => "text",
                     "analyzer" => "keyword_asciifolding_analyzer",
                     "fields" => [
                         "original" => ["type" => "text", "analyzer" => "keyword_analyzer", "fielddata" => true]
@@ -689,20 +688,19 @@ class Job extends Model
      */
     protected function getIndexBody()
     {
-        $this->setCharFilter(JobFilter::class);
         $body = $this->parentGetIndexBody();
 
         // maximum offered salary
         $salary = $this->monthlySalary(max($this->salary_from, $this->salary_to));
-        $body = array_except($body, ['deleted_at', 'features', 'enable_apply', 'user']);
+        $body = array_only($body, ['id', 'slug', 'created_at', 'updated_at', 'boost_at', 'deadline_at', 'firm_id', 'is_remote', 'is_ads']);
 
         $locations = [];
 
         // We need to transform locations to format acceptable by elasticsearch.
         // I'm talking here about the coordinates
         /** @var \Coyote\Job\Location $location */
-        foreach ($this->locations()->get(['city', 'longitude', 'latitude']) as $location) {
-            $nested = ['city' => $location->city];
+        foreach ($this->locations()->get() as $location) {
+            $nested = ['city' => $location->city, 'label' => $location->label];
 
             if ($location->latitude && $location->longitude) {
                 $nested['coordinates'] = [
@@ -721,8 +719,12 @@ class Job extends Model
         }
 
         $body = array_merge($body, [
+            'title'             => htmlspecialchars($this->title),
+            'description'       => $this->stripTags($this->description),
+            'recruitment'       => $this->stripTags($this->recruitment),
+
             // score must be int
-            'score'             => (int) $body['score'],
+            'score'             => (int) $this->score,
             'locations'         => $locations,
             'salary'            => $salary,
             'salary_from'       => $this->monthlySalary($this->salary_from),
@@ -731,7 +733,7 @@ class Job extends Model
             'currency_symbol'   => $this->currency()->value('symbol'),
             // higher tag's priorities first
             'tags'              => $this->tags()->get(['name', 'priority'])->sortByDesc('pivot.priority')->pluck('name')->toArray(),
-            //            // index null instead of 100 is job is not remote
+            // index null instead of 100 is job is not remote
             'remote_range'      => $this->is_remote ? $this->remote_range : null
         ]);
 
@@ -742,6 +744,19 @@ class Job extends Model
         }
 
         return $body;
+    }
+
+    /**
+     * @param string $value
+     * @return string
+     */
+    private function stripTags($value)
+    {
+        // w oferach pracy, edytor tinymce nie dodaje znaku nowej linii. zamiast tego mamy <br />. zamieniamy
+        // na znak nowej linii aby poprawnie zindeksowac tekst w elasticsearch. w przeciwnym przypadku
+        // teks foo<br />bar po przepuszczeniu przez stripHtml() zostalby zamieniony na foobar co niepoprawnie
+        // zostaloby zindeksowane jako jeden wyraz
+        return strip_tags(str_replace(['<br />', '<br>'], "\n", $value));
     }
 
     /**

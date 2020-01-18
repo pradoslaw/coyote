@@ -48,6 +48,7 @@ class SearchBuilder extends QueryBuilder
      */
     public function build()
     {
+        $this->must(new Term('model', 'post'));
         $this->must(new OnlyThoseWithAccess($this->forumsId));
         $this->sort(new Sort($this->request->get('sort', '_score'), $this->request->get('order', 'desc')));
         $this->highlight(new Highlight(['topic.subject', 'text', 'tags']));

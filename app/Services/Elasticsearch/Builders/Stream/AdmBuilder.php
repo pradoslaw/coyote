@@ -34,8 +34,10 @@ class AdmBuilder extends QueryBuilder
         $this->buildSort();
         $this->buildSize();
 
+        $this->must(new Term('model', 'stream'));
+
         if ($this->request->filled('text')) {
-            $this->must(new MultiMatch($this->request->input('text'), ['_all', ]));
+            $this->must(new MultiMatch($this->request->input('text'), []));
         }
 
         foreach (['ip', 'browser', 'fingerprint'] as $inputKey) {

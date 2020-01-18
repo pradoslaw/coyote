@@ -95,7 +95,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./docker/postgres/postgresql.auto.conf:/var/lib/postgresql/data/postgresql.auto.conf
+      - ./docker/postgres/postgresql.prod.conf:/var/lib/postgresql/data/postgresql.auto.conf
       - postgres:/var/lib/postgresql/data:z
     environment:
       POSTGRES_USER: coyote
@@ -119,7 +119,9 @@ services:
         - 4programmers/coyote:latest
     volumes:
       - codebase:/var/www
-    environment: *env
+    environment:
+      <<: *env
+      DB_MIGRATE: "true"
     secrets: *secrets
     deploy:
       replicas: 2
@@ -181,12 +183,13 @@ services:
       - coyote
 
   elasticsearch:
-    image: elasticsearch:5.6.14
+    image: elasticsearch:6.8.6
     ports:
       - 9200:9200
     volumes:
-      - elasticsearch:/usr/share/elasticsearch/data
+      - elasticsearch6:/usr/share/elasticsearch/data
     environment:
+      - "discovery.type=single-node"
       - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
     networks:
       - coyote
@@ -272,7 +275,7 @@ services:
 
 volumes:
   postgres:
-  elasticsearch:
+  elasticsearch6:
   minio:
   codebase:
   mongo:

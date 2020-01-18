@@ -168,9 +168,14 @@ class AppServiceProvider extends ServiceProvider
                 return '';
             }
 
+            $start = microtime(true);
+
             if (empty($this->clientHost)) {
                 $this->clientHost = gethostbyaddr($this->ip());
             }
+
+            $stop = microtime(true);
+            logger()->debug("Host lookup time: " . ($stop - $start) . "ms");
 
             return $this->clientHost;
         });

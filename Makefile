@@ -46,7 +46,6 @@ key-generate:
 
 install-es:
 	php artisan es:create --force
-	php artisan es:mapping --force
 	php artisan es:index --force
 
 install-passport:

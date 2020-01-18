@@ -5,13 +5,11 @@ namespace Coyote;
 use Carbon\Carbon;
 use Coyote\Models\Scopes\TrackForum;
 use Coyote\Models\Scopes\TrackTopic;
-use Coyote\Services\Elasticsearch\CharFilters\TopicFilter;
 use Coyote\Topic\Subscriber;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Coyote\Models\Scopes\Sortable;
 use Illuminate\Database\Query\Builder;
-use Illuminate\Database\QueryException;
 
 /**
  * @property int $id
@@ -66,34 +64,6 @@ class Topic extends Model
      * @var array
      */
     protected $hidden = ['tags'];
-
-    /**
-     * Elasticsearch type mapping
-     *
-     * @var array
-     */
-    protected $mapping = [
-        "posts" => [
-            "properties" => [
-                "text" => [
-                    "type" => "string",
-                    "analyzer" => "stopwords_analyzer"
-                ]
-            ]
-        ],
-        "subject" => [
-            "type" => "string",
-            "analyzer" => "default_analyzer"
-        ],
-        "created_at" => [
-            "type" => "date",
-            "format" => "yyyy-MM-dd HH:mm:ss"
-        ],
-        "updated_at" => [
-            "type" => "date",
-            "format" => "yyyy-MM-dd HH:mm:ss"
-        ],
-    ];
 
     protected $dates = ['created_at', 'updated_at', 'deleted_at', 'last_post_created_at', 'moved_at', 'locked_at'];
 
@@ -353,24 +323,20 @@ class Topic extends Model
      */
     protected function getIndexBody()
     {
-        $this->setCharFilter(TopicFilter::class);
         $body = $this->parentGetIndexBody();
 
         // we need to index every field from topics except:
-        $body = array_except(
-            $body,
-            ['deleted_at', 'first_post_id', 'last_post_id', 'is_sticky', 'is_announcement', 'poll_id', 'prev_forum_id', 'moved_at', 'locked_at', 'moved_by', 'locked_by']
-        );
-
+        $body = array_only($body, ['id', 'subject', 'slug', 'updated_at']);
         $posts = [];
 
         foreach ($this->posts()->get(['text']) as $post) {
-            $posts[] = ['text' => $post->text];
+            $posts[] = ['text' => strip_tags($post->html)];
         }
 
         return array_merge($body, [
-            'posts' => $posts,
-            'forum' => $this->forum->only(['name', 'slug'])
+            'posts'     => $posts,
+            'subject'   => htmlspecialchars($this->subject),
+            'forum'     => $this->forum->only(['name', 'slug'])
         ]);
     }
 }

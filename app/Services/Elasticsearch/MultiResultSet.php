@@ -13,7 +13,7 @@ class MultiResultSet extends ResultSet
         $result = [];
 
         foreach ($hits as $hit) {
-            $className = __NAMESPACE__ . '\\Normalizers\\' . ucfirst(camel_case(str_singular($hit['_type'])));
+            $className = __NAMESPACE__ . '\\Normalizers\\' . ucfirst(camel_case($hit['_source']['model']));
 
             if (class_exists($className)) {
                 $result[] = new $className($hit);

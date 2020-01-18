@@ -24,6 +24,7 @@ class AdBuilder extends SearchBuilder
     {
         // only premium offers
         $this->must(new Term('is_ads', true));
+        $this->must(new Term('model', 'job'));
 
         $this->score(new Random());
         $this->size(0, 4);

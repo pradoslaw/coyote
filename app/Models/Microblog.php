@@ -2,7 +2,6 @@
 
 namespace Coyote;
 
-use Coyote\Services\Elasticsearch\CharFilters\MicroblogFilter;
 use Coyote\Services\Media\Factory as MediaFactory;
 use Coyote\Services\Media\MediaInterface;
 use Illuminate\Database\Eloquent\Model;
@@ -60,26 +59,6 @@ class Microblog extends Model
      * @var array
      */
     protected $attributes = ['votes' => 0];
-
-    /**
-     * Elasticsearch type mapping
-     *
-     * @var array
-     */
-    protected $mapping = [
-        "created_at" => [
-            "type" => "date",
-            "format" => "yyyy-MM-dd HH:mm:ss"
-        ],
-        "updated_at" => [
-            "type" => "date",
-            "format" => "yyyy-MM-dd HH:mm:ss"
-        ],
-        "text" => [
-            "type" => "string",
-            "analyzer" => "default_analyzer"
-        ]
-    ];
 
     /**
      * Html version of the entry.
@@ -239,10 +218,9 @@ class Microblog extends Model
      */
     protected function getIndexBody()
     {
-        $this->setCharFilter(MicroblogFilter::class);
-        $body = $this->parentGetIndexBody();
+        $body = array_only($this->parentGetIndexBody(), ['id', 'created_at', 'updated_at']);
+        $body['text'] = strip_tags($this->getHtmlAttribute());
 
-        // we need to index every field from topics except:
-        return array_only($body, ['id', 'created_at', 'updated_at', 'text']);
+        return $body;
     }
 }

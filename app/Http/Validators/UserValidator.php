@@ -3,6 +3,7 @@
 namespace Coyote\Http\Validators;
 
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
+use Coyote\Repositories\Criteria\WithTrashed;
 
 /**
  * Class UserValidator
@@ -45,7 +46,12 @@ class UserValidator
      */
     public function validateUnique($attribute, $value, $parameters)
     {
-        return $this->validateBy('name', $value, (int) ($parameters[0] ?? null));
+        $this->user->pushCriteria(new WithTrashed());
+
+        $result = $this->validateBy('name', $value, (int) ($parameters[0] ?? null));
+        $this->user->resetCriteria();
+
+        return $result;
     }
 
     /**
@@ -71,10 +77,6 @@ class UserValidator
         // @see https://github.com/adam-boduch/coyote/issues/354
         $user = $this->user->{'findBy' . ucfirst($column)}(mb_strtolower($value));
 
-        if ($user !== null && $userId !== $user->id) {
-            return false;
-        }
-
-        return true;
+        return ($user !== null && $userId !== $user->id) ? false : true;
     }
 }
