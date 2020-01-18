@@ -44,7 +44,6 @@ class ForumResource extends JsonResource
                     'topic' => [
                         'id'            => $this->post->topic->id,
                         'subject'       => $this->post->topic->subject,
-                        'read_at'       => $this->post->topic->read_at ? $this->post->topic->read_at->toIso8601String() : null,
                         'is_read'       => $this->post->topic->isRead()
                     ]
                 ];

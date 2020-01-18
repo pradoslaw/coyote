@@ -19,17 +19,20 @@
   {% include "forum.partials.top" %}
 
   <main id="mainbar" class="margin-sm-top">
-    <h2 style="margin: 0 0 10px 0; font-size: 14px; color: #646466; padding-left: 5px"><i class="fa fa-caret-down"></i>
-      Podstawy programowania</h2>
+    <h2 style="margin: 0 0 10px 0; font-size: 14px; color: #646466; padding-left: 2px">
+      <i class="far fa-minus-square"></i>  Podstawy programowania
+
+      <a href="#" class="panel-cog pull-right"><i class="fas fa-cogs"></i></a>
+    </h2>
 
     <section class="panel panel-default panel-categories">
       {% for i in 1..2 %}
-        <div class="panel-body">
+        <div class="panel-body new">
 
 
           <div class="row">
             <div class="col-lg-6 col-xs-12 col-sm-6">
-              <i class="fa fa-poll-h fa-2x pull-left visible-lg fa-new"></i>
+              <i class="fa fa-poll-h fa-2x pull-left visible-lg new"></i>
 
               <div class="wrap">
                 <h3><a href="#">Newbie</a></h3>
@@ -63,31 +66,32 @@
                   </a>
                 </div>
                 <div class="media-body">
-                  <p style="margin-bottom: 2px"><a href="https://4programmers.net/Profile/101450">CoffeBreaker</a> w
-                    <a href="https://4programmers.net/Forum/Python/333531-drzewo_bst_z_laczem_do_rodzica_petla?p=1637396#id1637396">Drzewo
-                      BST z łączem do rodzica - pętla</a></p>
-                  <small class="text-muted">1 minuta temu</small>
+                  <p style="margin-bottom: 3px">
+                    <a href="https://4programmers.net/Forum/Python/333531-drzewo_bst_z_laczem_do_rodzica_petla?p=1637396#id1637396">Drzewo  BST z łączem do rodzica - pętla</a>
+                  </p>
 
-                  <div class="pull-right" style="color: #757575; font-size: 13px; border-left: 1px solid #ddd; padding-left: 10px; margin-left: 15px; margin-top: -9px;">
-                    <i class="fa fa-check-square-o"></i>
-                    <i class="fa fa-heart margin-sm-left"></i>
-                    {#                                        <i class="fa fa-caret-up"></i>#}
-                    {#                                        <i class="fa fa-caret-down"></i>#}
+                  <small class="text-muted">1 minuta temu</small>, <a href="https://4programmers.net/Profile/101450">CoffeBreaker</a>
+
+                  <div class="toolbox">
+                    <a href="#"><i class="far fa-eye"></i></a>
+
+                    <a href="#"><i class="fas fa-caret-up"></i></a>
+                    <a href="#"><i class="fas fa-caret-down"></i></a>
                   </div>
 
-{#                  <ul class="tag-clouds tag-clouds-md pull-right hidden-lg">#}
-{#                    <li>#}
-{#                      <a href="https://4programmers.net/Praca/Technologia/c%23" title="Znajdź oferty zawierające c#"><img alt="c#" src="https://4programmers.net/uploads/logo/59/59f9f83fcd1ef.png">#}
-{#                        C##}
-{#                      </a>#}
-{#                    </li>#}
+                  {#                  <ul class="tag-clouds tag-clouds-md pull-right hidden-lg">#}
+                  {#                    <li>#}
+                  {#                      <a href="https://4programmers.net/Praca/Technologia/c%23" title="Znajdź oferty zawierające c#"><img alt="c#" src="https://4programmers.net/uploads/logo/59/59f9f83fcd1ef.png">#}
+                  {#                        C##}
+                  {#                      </a>#}
+                  {#                    </li>#}
 
-{#                    <li>#}
-{#                      <a href="https://4programmers.net/Praca/Technologia/python" title="Znajdź oferty zawierające python"><img alt="python" src="https://4programmers.net/uploads/logo/59/59f9f8605fd1e.png">#}
+                  {#                    <li>#}
+                  {#                      <a href="https://4programmers.net/Praca/Technologia/python" title="Znajdź oferty zawierające python"><img alt="python" src="https://4programmers.net/uploads/logo/59/59f9f8605fd1e.png">#}
 
-{#                        Python#}
-{#                      </a></li>#}
-{#                  </ul>#}
+                  {#                        Python#}
+                  {#                      </a></li>#}
+                  {#                  </ul>#}
 
 
                 </div>
@@ -104,11 +108,11 @@
     </section>
 
 
-{#    {% block mainbar %}#}
-{#      {% for name, forums in sections %}#}
-{#        {% include 'forum.partials.section' %}#}
-{#      {% endfor %}#}
-{#    {% endblock %}#}
+    {#    {% block mainbar %}#}
+    {#      {% for name, forums in sections %}#}
+    {#        {% include 'forum.partials.section' %}#}
+    {#      {% endfor %}#}
+    {#    {% endblock %}#}
 
     {{ viewers|raw }}
   </main>

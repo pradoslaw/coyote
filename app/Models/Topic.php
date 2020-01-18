@@ -66,7 +66,7 @@ class Topic extends Model
      */
     protected $hidden = ['tags'];
 
-    protected $dates = ['created_at', 'updated_at', 'deleted_at', 'last_post_created_at', 'moved_at', 'locked_at'];
+    protected $dates = ['created_at', 'updated_at', 'deleted_at', 'last_post_created_at', 'moved_at', 'locked_at', 'read_at'];
 
     public static function boot()
     {

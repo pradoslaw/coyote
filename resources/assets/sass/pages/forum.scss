@@ -10,6 +10,13 @@
 @import "../components/search";
 @import "../components/who-is-online";
 
+.panel-cog {
+  color: $gray-light;
+  font-size: 80%;
+  margin-right: 5px;
+  margin-top: 5px;
+}
+
 .panel-categories {
 
 
@@ -28,10 +35,11 @@
 
   .fa-poll-h {
     margin-right: 10px;
-    font-size: 3em;
+    font-size: 20px;
+    color: $brand-primary;
   }
 
-  .fa-new {
+  .fa.new {
     //color: $unread-bg-hover;
     color: $alt-link-hover-color;
   }
@@ -42,6 +50,24 @@
 
   .description {
     margin: 0;
+    font-size: 12px;
+  }
+
+  .toolbox {
+    float: right;
+    color: #757575;
+    font-size: 14px;
+    display: none;
+
+    a {
+      padding-left: 2px;
+      padding-right: 2px;
+      color: inherit;
+    }
+    //border-left: 1px solid #ddd;
+    //padding-left: 10px;
+    //margin-left: 15px;
+    //margin-top: -9px;
   }
 
   // desktop
@@ -60,6 +86,10 @@
 
   // mobile
   @media screen and (max-width: $screen-lg) {
+    .panel-body.new {
+      border-left: 2px solid $alt-link-hover-color;
+    }
+
     .media {
       border-top: 1px solid $border-color;
       margin-top: 5px;
@@ -68,6 +98,11 @@
 
     .col-lg-stat {
       padding-top: 3px;
+    }
+
+    .toolbox {
+      display: block;
+      margin-top: -9px;
     }
   }
 
@@ -87,10 +122,6 @@
   //  background: 4px -221px url(/img/sprites.png) no-repeat;
   //}
 
-  .new {
-    border-left: 2px solid $alt-link-hover-color;
-  }
-
   .panel-body {
     border-bottom: 1px solid $border-color;
 
@@ -100,6 +131,12 @@
 
     &:last-child {
       border-bottom: none;
+    }
+
+    &:hover {
+      .toolbox {
+        display: block;
+      }
     }
   }
 }
