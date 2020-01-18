@@ -1,12 +1,14 @@
 <template>
-  <div class="section">
+  <div class="section margin-md-top">
     <h2 class="section-name">
-      <a href="#"><i class="far fa-minus-square"></i>  {{ name }}</a>
+      <a href="javascript:" @click="isCollapse = ! isCollapse">
+        <i :class="[isCollapse ? 'fa-plus-square': 'fa-minus-square']" class="far"></i>  {{ name }}
+      </a>
 
       <a href="#" class="panel-cog pull-right"><i class="fas fa-cogs"></i></a>
     </h2>
 
-    <section v-for="category in categories" class="panel panel-default panel-categories">
+    <section v-if="!isCollapse" v-for="(category, index) in categories" class="panel panel-default panel-categories">
       <div class="panel-body new">
         <div class="row">
           <div class="col-lg-7 col-xs-12 col-sm-6 col-main">
@@ -52,10 +54,10 @@
                 <small class="text-muted"><vue-timeago :datetime="category.post.created_at"></vue-timeago></small>, <a v-profile="category.post.user.id">{{ category.post.user.name }}</a>
 
                 <div class="toolbox">
-                  <a href="#"><i class="far fa-eye"></i></a>
+                  <a href="javascript:" @click="asRead(category)"><i class="far fa-eye"></i></a>
 
-                  <a href="#"><i class="fas fa-caret-up"></i></a>
-                  <a href="#"><i class="fas fa-caret-down"></i></a>
+                  <a href="javascript:" @click="up(category, index)"><i class="fas fa-caret-up"></i></a>
+                  <a href="javascript:" @click="down(category, index)"><i class="fas fa-caret-down"></i></a>
                 </div>
               </div>
             </div>
@@ -86,6 +88,40 @@
       categories: {
         type: Array
       }
+    },
+    data() {
+      return {
+        isCollapse: false
+      }
+    },
+    methods: {
+      asRead(category) {
+        category.is_read = true;
+      },
+
+      up(category, index) {
+        let aboveIndex = this._findIndex(category.order - 1, category.section);
+console.log(aboveIndex);
+
+        if (aboveIndex > -1) {
+          this.$emit('order', {index: index, order: category.order - 1});
+          this.$emit('order', {index: aboveIndex, order: this.categories[aboveIndex].order + 1});
+        }
+      },
+
+      down(category, index) {
+        let beyondIndex = this._findIndex(category.order + 1, category.section);
+
+        if (beyondIndex > -1) {
+          this.$emit('order', {index: index, order: category.order + 1});
+          this.$emit('order', {index: beyondIndex, order: this.categories[beyondIndex].order - 1});
+        }
+      },
+
+      _findIndex(order, section) {
+        return this.categories.findIndex(value => value.order === order && value.section === section);
+      }
+
     }
   }
 </script>

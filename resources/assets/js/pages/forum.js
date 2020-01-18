@@ -19,23 +19,29 @@ new Vue({
   },
   mounted() {
   },
+  methods: {
+    setOrder({index, order}) {
+      this.$set(this.forums, index, Object.assign(this.forums[index], {order}));
+
+      // console.log(this.forums);
+    }
+  },
   computed: {
     sections() {
       return Object.values(
         this
-        .forums
-        .reduce((acc, forum) => {
-          if (!acc[forum.section]) {
-            acc[forum.section] = {name: forum.section, order: forum.order, categories: []};
-          }
+          .forums
+          .sort((a, b) => (a.order < b.order ? -1 : 1))
+          .reduce((acc, forum) => {
+            if (!acc[forum.section]) {
+              acc[forum.section] = {name: forum.section, order: forum.order, categories: []};
+            }
 
-          acc[forum.section].categories.push(forum);
+            acc[forum.section].categories.push(forum);
 
-          return acc;
-        }, {}))
-        .sort((a, b) => {
-          return (a.order < b.order ? -1 : 1);
-        });
+            return acc;
+          }, {})
+        ).sort((a, b) => (a.order < b.order ? -1 : 1)); // sort sections
     }
   }
 });
