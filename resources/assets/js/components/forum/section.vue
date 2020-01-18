@@ -56,8 +56,8 @@
                 <div class="toolbox">
                   <a href="javascript:" @click="asRead(category)"><i class="far fa-eye"></i></a>
 
-                  <a href="javascript:" @click="up(category, index)"><i class="fas fa-caret-up"></i></a>
-                  <a href="javascript:" @click="down(category, index)"><i class="fas fa-caret-down"></i></a>
+                  <a href="javascript:" @click="up(category)"><i class="fas fa-caret-up"></i></a>
+                  <a href="javascript:" @click="down(category)"><i class="fas fa-caret-down"></i></a>
                 </div>
               </div>
             </div>
@@ -99,22 +99,21 @@
         category.is_read = true;
       },
 
-      up(category, index) {
+      up(category) {
         let aboveIndex = this._findIndex(category.order - 1, category.section);
-console.log(aboveIndex);
 
         if (aboveIndex > -1) {
-          this.$emit('order', {index: index, order: category.order - 1});
-          this.$emit('order', {index: aboveIndex, order: this.categories[aboveIndex].order + 1});
+          this.$emit('order', {id: category.id, order: category.order - 1});
+          this.$emit('order', {id: this.categories[aboveIndex].id, order: this.categories[aboveIndex].order + 1});
         }
       },
 
-      down(category, index) {
+      down(category) {
         let beyondIndex = this._findIndex(category.order + 1, category.section);
 
         if (beyondIndex > -1) {
-          this.$emit('order', {index: index, order: category.order + 1});
-          this.$emit('order', {index: beyondIndex, order: this.categories[beyondIndex].order - 1});
+          this.$emit('order', {id: category.id, order: category.order + 1});
+          this.$emit('order', {id: this.categories[beyondIndex].id, order: this.categories[beyondIndex].order - 1});
         }
       },
 

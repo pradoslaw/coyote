@@ -20,7 +20,9 @@ new Vue({
   mounted() {
   },
   methods: {
-    setOrder({index, order}) {
+    setOrder({id, order}) {
+      const index = this.forums.findIndex(value => value.id === id);
+
       this.$set(this.forums, index, Object.assign(this.forums[index], {order}));
 
       // console.log(this.forums);
@@ -31,7 +33,7 @@ new Vue({
       return Object.values(
         this
           .forums
-          .sort((a, b) => (a.order < b.order ? -1 : 1))
+          .sort((a, b) => a.order < b.order ? -1 : 1)
           .reduce((acc, forum) => {
             if (!acc[forum.section]) {
               acc[forum.section] = {name: forum.section, order: forum.order, categories: []};
@@ -41,7 +43,7 @@ new Vue({
 
             return acc;
           }, {})
-        ).sort((a, b) => (a.order < b.order ? -1 : 1)); // sort sections
+        ).sort((a, b) => a.order < b.order ? -1 : 1); // sort sections
     }
   }
 });
