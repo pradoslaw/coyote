@@ -138,14 +138,14 @@ $(function () {
     /**
      * Mark category/topic as read by clicking on it
      */
-    // $('.new').click(function() {
-    //     $(this).addClass('normal').removeClass('new');
-    //     $(this).parent().next().find('.btn-view').removeClass('unread');
-    //
-    //     $.post($(this).attr('href'));
-    //
-    //     return false;
-    // });
+    $('.ico.new').click(function() {
+        $(this).addClass('normal').removeClass('new');
+        $(this).parent().next().find('.btn-view').removeClass('unread');
+
+        $.post($(this).attr('href'));
+
+        return false;
+    });
 
     /**
      * Subscribe/unsubscribe topic (from topics list)
