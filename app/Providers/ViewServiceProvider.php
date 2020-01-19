@@ -119,7 +119,7 @@ class ViewServiceProvider extends ServiceProvider
             $repository->pushCriteria(new AccordingToUserOrder($userId, true));
             $repository->applyCriteria();
 
-            $categories = $repository->select(['name', 'slug', 'forums.section'])->whereNull('parent_id')->get();
+            $categories = $repository->addSelect(['name', 'slug', 'forums.section'])->whereNull('parent_id')->get();
             $rendered = view('components.mega-menu', ['sections' => $this->groupBySections($categories)])->render();
 
             $builder->forum->after($rendered);

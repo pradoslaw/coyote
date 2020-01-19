@@ -108,7 +108,13 @@ class CategoryController extends BaseController
         $this->validate($request, ['forums.*.order' => 'required|int', 'forums.*.id' => 'required|int']);
         $this->pushForumCriteria();
 
-        $categories = $this->forum->categories($this->guestId);
+        $categories = $this
+            ->forum
+            ->categories($this->guestId)
+            ->filter(function ($item) {
+               return $item->parent_id === null;
+            });
+
         $result = [];
 
         foreach ($categories as &$category) {
