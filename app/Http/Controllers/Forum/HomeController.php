@@ -2,7 +2,6 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
-use Coyote\Forum;
 use Coyote\Http\Factories\FlagFactory;
 use Coyote\Http\Factories\GateFactory;
 use Coyote\Http\Resources\ForumCollection;
@@ -17,7 +16,6 @@ use Coyote\Repositories\Criteria\Topic\Subscribes;
 use Coyote\Repositories\Criteria\Topic\Unanswered;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Topic\WithTags;
-use Coyote\Services\Forum\Tracker;
 use Coyote\Services\Forum\Personalizer;
 use Illuminate\Http\Request;
 use Lavary\Menu\Item;
@@ -35,6 +33,8 @@ class HomeController extends BaseController
 
     /**
      * @var Personalizer
+     *
+     * @deprecated
      */
     private $personalizer;
 
@@ -136,17 +136,7 @@ class HomeController extends BaseController
         // execute query: get all categories that user can has access
         $forums = $this->forum
             ->categories($this->guestId)
-            ->map(function (Forum $forum) {
-                $post = $forum->post;
-
-                if ($post) {
-                    $post->topic->setRelation('forum', $forum);
-                    $post->setRelation('topic', Tracker::make($post->topic, $this->guestId));
-                }
-
-                return $forum;
-            });
-
+            ->mapCategory($this->guestId);
 
         $forums = new ForumCollection($forums);
         // get categories collapse

@@ -3,10 +3,12 @@
 namespace Coyote\Providers;
 
 use Coyote\Repositories\Contracts\GuestRepositoryInterface;
+use Coyote\Forum;
 use Coyote\Services\FormBuilder\FormBuilder;
 use Coyote\Services\FormBuilder\FormInterface;
 use Coyote\Services\FormBuilder\ValidatesWhenSubmitted;
 use Coyote\Services\Guest;
+use Coyote\Services\Forum\Tracker;
 use Coyote\Services\Invoice;
 use Coyote\User;
 use Illuminate\Support\Collection;
@@ -144,6 +146,19 @@ class AppServiceProvider extends ServiceProvider
 
             return $this->filter(function (User $user) use ($others) {
                 return ! $others->contains('id', $user->id);
+            });
+        });
+
+        Collection::macro('mapCategory', function ($guestId) {
+            return $this->map(function (Forum $forum) use ($guestId) {
+                $post = $forum->post;
+
+                if ($post) {
+                    $post->topic->setRelation('forum', $forum);
+                    $post->setRelation('topic', Tracker::make($post->topic, $guestId));
+                }
+
+                return $forum;
             });
         });
 
