@@ -99,7 +99,7 @@ abstract class Controller extends BaseController
             $this->settings = [];
         }
 
-        app('setting')->setItem($name, $value, $this->guestId);
+        app('setting')->setSetting($name, $value, $this->guestId);
 
         return $this->settings[$name] = $value;
     }
@@ -112,7 +112,7 @@ abstract class Controller extends BaseController
     protected function getSettings()
     {
         if (is_null($this->settings)) {
-            $this->settings = app('setting')->getAll($this->guestId);
+            $this->settings = app('setting')->getSettings($this->guestId);
         }
 
         return $this->settings;

@@ -35,7 +35,7 @@ class ViewServiceProvider extends ServiceProvider
                 '__public' => json_encode($this->app['request']->attributes->all()),
                 '__master_menu' => $this->buildMasterMenu(),
 
-                '__dark_theme' => $this->app['setting']->getItem('dark.theme', $guestId)
+                '__dark_theme' => $this->app['setting']->getSettings($guestId)['dark.theme'] ?? false
             ]);
         });
     }

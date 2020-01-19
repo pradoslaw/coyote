@@ -18,6 +18,31 @@ class GuestRepository extends Repository implements GuestRepositoryInterface
     }
 
     /**
+     * @inheritDoc
+     */
+    public function setSetting(string $name, string $value, string $guestId)
+    {
+        $value = $this->raw(sprintf('settings || \'{"%s": "%s"}\'', $name, $value));
+        $sql = $this->model->where('id', $guestId)->update(['settings' => $value]);
+
+        if (!$sql) {
+            $this->model->create(['id' => $guestId, 'settings' => $value]);
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getSettings(string $guestId)
+    {
+        return $this
+            ->model
+            ->select('settings')
+            ->where('id', $guestId)
+            ->value('settings');
+    }
+
+    /**
      * @inheritdoc
      */
     public function save(Session $session)
