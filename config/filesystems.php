@@ -76,10 +76,6 @@ return [
                 'expire' => 600,
                 'prefix' => 's3',
             ]
-        ],
-        'log'        => [
-            'driver' => 'local',
-            'root'   => storage_path() . '/logs'
         ]
     ],
 

@@ -3,6 +3,7 @@
 namespace Coyote\Providers;
 
 use Coyote\Http\Factories\CacheFactory;
+use Coyote\Services\Guest;
 use Coyote\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\ServiceProvider;
@@ -29,13 +30,12 @@ class ViewServiceProvider extends ServiceProvider
             $this->registerPublicData();
             $this->registerWebSocket();
 
-            $guestId = $this->app['session']->get('guest_id');
-
             $view->with([
                 '__public' => json_encode($this->app['request']->attributes->all()),
                 '__master_menu' => $this->buildMasterMenu(),
 
-                '__dark_theme' => $this->app['setting']->getItem('dark.theme', $guestId)
+                // temporary code
+                '__dark_theme' => $this->app[Guest::class]->getSetting('dark.theme', false)
             ]);
         });
     }

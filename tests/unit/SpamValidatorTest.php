@@ -31,21 +31,6 @@ class SpamValidatorTest extends \Codeception\TestCase\Test
         $this->assertTrue($validator->validateSpamLink([], 'foo@bar.net', [1]));
     }
 
-    public function testValidateBlacklistHost()
-    {
-        $validator = $this->buildValidatorInstance('5.172.255.186');
-        $this->assertFalse($validator->validateBlacklistHost()); // not allowed
-
-        $validator = $this->buildValidatorInstance('37.248.163.212');
-        $this->assertFalse($validator->validateBlacklistHost()); // not allowed
-
-        $validator = $this->buildValidatorInstance('79.123.67.56');
-        $this->assertTrue($validator->validateBlacklistHost()); // allowed
-
-        $validator = $this->buildValidatorInstance('37.109.33.137', true);
-        $this->assertTrue($validator->validateBlacklistHost()); // allowed
-    }
-
     private function buildValidatorInstance($ip, $authorized = false)
     {
         $request = Mockery::mock(\Illuminate\Http\Request::class);

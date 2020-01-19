@@ -18,7 +18,7 @@ class Guest extends Model
      *
      * @var array
      */
-    protected $fillable = ['id', 'user_id', 'interests'];
+    protected $fillable = ['id', 'user_id', 'interests', 'settings'];
 
     /**
      * @var string
@@ -28,7 +28,7 @@ class Guest extends Model
     /**
      * @var array
      */
-    protected $casts = ['interests' => 'json'];
+    protected $casts = ['interests' => 'json', 'settings' => 'json'];
 
     /**
      * @var bool

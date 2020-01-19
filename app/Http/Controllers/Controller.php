@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers;
 use Coyote\Http\Factories\CacheFactory;
 use Coyote\Http\Factories\GateFactory;
 use Coyote\Services\Breadcrumb\Breadcrumb;
+use Coyote\Services\Guest;
 use Illuminate\Database\Connection;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Http\Request;
@@ -91,17 +92,7 @@ abstract class Controller extends BaseController
      */
     protected function setSetting($name, $value)
     {
-        if ($this->getSetting($name) === $value) {
-            return $value;
-        }
-
-        if (!is_array($this->settings)) {
-            $this->settings = [];
-        }
-
-        app('setting')->setItem($name, $value, $this->guestId);
-
-        return $this->settings[$name] = $value;
+        return app(Guest::class)->setSetting($name, $value);
     }
 
     /**
@@ -111,11 +102,7 @@ abstract class Controller extends BaseController
      */
     protected function getSettings()
     {
-        if (is_null($this->settings)) {
-            $this->settings = app('setting')->getAll($this->guestId);
-        }
-
-        return $this->settings;
+        return app(Guest::class)->getSettings();
     }
 
     /**
@@ -125,7 +112,7 @@ abstract class Controller extends BaseController
      */
     protected function getSetting($name, $default = null)
     {
-        return isset($this->getSettings()[$name]) ? $this->settings[$name] : $default;
+        return app(Guest::class)->getSetting($name, $default);
     }
 
     /**

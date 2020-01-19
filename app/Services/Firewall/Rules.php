@@ -123,7 +123,7 @@ class Rules
     {
         return unserialize(
             $this->cache->rememberForever(self::CACHE_KEY, function () {
-                return serialize($this->repository->all()->toArray());
+                return serialize($this->repository->all()->only(['id', 'user_id', 'ip', 'fingerprint']));
             })
         );
     }
@@ -136,6 +136,6 @@ class Rules
      */
     private function make(array $firewall): Firewall
     {
-        return (new Firewall)->forceFill($firewall); // forceFill to set ID
+        return Firewall::find($firewall['id']);
     }
 }
