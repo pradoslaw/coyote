@@ -45,7 +45,7 @@ class Guest
      * @param $value
      * @return string
      */
-    protected function setSetting($name, $value)
+    public function setSetting($name, $value)
     {
         if ($this->getSetting($name) === $value) {
             return $value;
