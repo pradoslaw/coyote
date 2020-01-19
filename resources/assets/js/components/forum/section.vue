@@ -7,13 +7,13 @@
         </a>
       </h2>
 
-      <div class="dropdown pull-right">
+      <div :class="{'open': isDropdown}" v-on-clickaway="hideDropdown" class="dropdown pull-right">
         <a href="javascript:" @click="isDropdown = ! isDropdown" class="panel-cog"><i class="fas fa-cogs"></i></a>
 
-        <ul v-show="isDropdown" class="dropdown-menu">
+        <ul class="dropdown-menu">
           <li v-for="category in categories">
-            <a href="javascript:">
-              <i class="fa fa-check"></i>
+            <a href="javascript:" @click="toggleCategory(category)">
+              <i :class="{'fa-check': !category.is_hidden}" class="fa"></i>
 
               {{ category.name }}
             </a>
@@ -24,7 +24,7 @@
       <div class="clearfix"></div>
     </div>
 
-    <section v-if="!isCollapse" v-for="(category, index) in categories" class="panel panel-default panel-categories">
+    <section v-if="!isCollapse && !category.is_hidden" v-for="(category, index) in categories" class="panel panel-default panel-categories">
       <div :class="{'new': !category.is_read}" class="panel-body">
         <div class="row">
           <div class="col-lg-7 col-xs-12 col-sm-6 col-main">
@@ -87,11 +87,12 @@
 <script>
   import { default as mixins } from '../mixins/user';
   import VueTimeago from '../../plugins/timeago';
+  import { mixin as clickaway } from 'vue-clickaway';
 
   Vue.use(VueTimeago);
 
   export default {
-    mixins: [ mixins ],
+    mixins: [ mixins, clickaway ],
     props: {
       name: {
         type: String,
@@ -112,6 +113,14 @@
       }
     },
     methods: {
+      toggleCategory(category) {
+        category.is_hidden = ! category.is_hidden;
+      },
+
+      hideDropdown() {
+        this.isDropdown = false;
+      },
+
       asRead(category) {
         category.is_read = true;
       },
