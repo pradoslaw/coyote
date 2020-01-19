@@ -116,7 +116,7 @@ class ViewServiceProvider extends ServiceProvider
             $repository->skipCriteria(false);
 
             $repository->pushCriteria(new OnlyThoseWithAccess($this->app['request']->user()));
-            $repository->pushCriteria(new AccordingToUserOrder($userId));
+            $repository->pushCriteria(new AccordingToUserOrder($userId, true));
             $repository->applyCriteria();
 
             $categories = $repository->select(['name', 'slug', 'forums.section'])->whereNull('parent_id')->get();

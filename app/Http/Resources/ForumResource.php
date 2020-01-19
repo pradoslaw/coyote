@@ -2,7 +2,6 @@
 
 namespace Coyote\Http\Resources;
 
-use Carbon\Carbon;
 use Coyote\Post;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -31,6 +30,7 @@ class ForumResource extends JsonResource
             'url' => url(UrlBuilder::forum($this->resource)),
             'is_read' => $this->isRead(),
             'order' => $this->custom_order ?? $this->order,
+            'is_hidden' => $this->is_hidden ?? false,
 
             $this->mergeWhen($this->whenLoaded('post'), function () {
                 // set relation to avoid unnecessary db request in UrlBuilder
