@@ -52,17 +52,6 @@ class BaseController extends Controller
             $menu->add('Cenzura', ['route' => 'adm.words'])->prepend($fa('fa-bolt fa-fw'));
             $menu->add('Bloki statyczne', ['route' => 'adm.blocks'])->prepend($fa('fa-columns fa-fw'));
 
-            $log = $menu->add('Logi', ['route' => 'adm.log'])->prepend($fa('fa-file fa-fw'));
-            $log->link->attr(['data-toggle' => "collapse", 'aria-expanded' => "false", 'aria-controls' => "menu-log"]);
-            $log->link->href('#menu-log');
-
-            $logViewer = $this->getLogViewer();
-            $files = $logViewer->getFiles();
-
-            foreach ($files as $file) {
-                $log->add($file, route('adm.log', ['file' => $file]));
-            }
-
             $menu->add('Faktury i płatności', ['route' => 'adm.payments'])->prepend($fa('fa-shopping-cart fa-fw'))->data('permission', 'adm-payment');
             $menu->add('Tagi', ['route' => 'adm.tags'])->prepend($fa('fa-tag fa-fw'));
             $menu->add('Mailing', ['route' => 'adm.mailing'])->prepend($fa('fa-envelope fa-fw'));
@@ -90,14 +79,6 @@ class BaseController extends Controller
     protected function getMenuFactory()
     {
         return app(Menu::class);
-    }
-
-    /**
-     * @return \Coyote\Services\LogViewer\LogViewer
-     */
-    protected function getLogViewer()
-    {
-        return app('log-viewer');
     }
 
     /**

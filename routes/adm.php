@@ -80,7 +80,6 @@ $this->group(
         $this->get('Stream', 'StreamController@index')->name('stream');
 
         $this->get('Flag', 'FlagController@index')->name('flag');
-        $this->get('Log', 'LogController@index')->name('log');
 
         $this->get('Groups', ['uses' => 'GroupsController@index', 'middleware' => 'can:adm-group'])->name('groups');
 
