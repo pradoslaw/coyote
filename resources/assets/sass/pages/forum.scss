@@ -59,15 +59,15 @@
     margin: 0 0 4px 0;
   }
 
-  .fa-comments {
+  .logo {
     margin-right: 10px;
     font-size: 18px;
     color: $brand-primary;
-    border-radius: 50%;
+    //border-radius: 50%;
     padding: 5px;
   }
 
-  .fa-comments.new {
+  .logo.new {
     color: $alt-link-hover-color;
   }
 
@@ -85,6 +85,7 @@
     color: #757575;
     font-size: 14px;
     display: none;
+    margin-top: -1px;
 
     a {
       padding-left: 2px;

@@ -28,7 +28,7 @@
       <div :class="{'new': !category.is_read}" class="panel-body">
         <div class="row">
           <div class="col-lg-7 col-xs-12 col-sm-6 col-main">
-            <i :class="{'new': !category.is_read}" class="far fa-comments fa-2x pull-left visible-lg"></i>
+            <i :class="{'new': !category.is_read}" class="logo far fa-comments pull-left visible-lg"></i>
 
             <div class="wrap">
               <h3><a :href="category.url">{{ category.name }}</a></h3>

@@ -1,0 +1,39 @@
+$devicon-font-path:        "/fonts/devicon" !default;
+
+@font-face {
+  font-family: 'devicon';
+  src: url('#{$devicon-font-path}/devicon.woff?-hdf3wh') format('woff'),
+  url('#{$devicon-font-path}/devicon.ttf?-hdf3wh') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="devicon-"], [class*=" devicon-"] {
+  font-family: 'devicon';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.devicon-php:before {
+  content: "\eb71";
+}
+
+.devicon-python:before {
+  content: "\eb89";
+}
+
+.devicon-java:before {
+  content: "\e842";
+}
+
+.devicon-javascript:before {
+  content: "\e845";
+}
