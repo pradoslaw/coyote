@@ -3,10 +3,10 @@
 namespace Coyote\Providers;
 
 use Coyote\Repositories\Contracts\GuestRepositoryInterface;
-use Coyote\Repositories\Contracts\SettingRepositoryInterface;
 use Coyote\Services\FormBuilder\FormBuilder;
 use Coyote\Services\FormBuilder\FormInterface;
 use Coyote\Services\FormBuilder\ValidatesWhenSubmitted;
+use Coyote\Services\Guest;
 use Coyote\Services\Invoice;
 use Coyote\User;
 use Illuminate\Support\Collection;
@@ -87,8 +87,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('setting', function ($app) {
-            return new $app[GuestRepositoryInterface::class]($app);
+        $this->app->singleton(Guest::class, function ($app) {
+            return (new Guest($app[GuestRepositoryInterface::class]))->setGuestId($app['session.store']->get('guest_id'));
         });
 
         $this->app->singleton('form.builder', function ($app) {
