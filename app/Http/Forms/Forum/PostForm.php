@@ -21,7 +21,7 @@ class PostForm extends Form
     const RULE_USER_NAME            = 'required|string|min:2|max:27';
     const RULE_USER_UNIQUE          = 'unique:users,name';
     const RULE_SUBJECT              = 'sometimes|required|min:3|max:200|spam_chinese:1';
-    const RULE_TEXT                 = 'required|spam_chinese:1|spam_foreign:1|spam_blacklist';
+    const RULE_TEXT                 = 'required|spam_chinese:1|spam_foreign:1';
     const RULE_STICKY               = 'nullable|bool';
     const RULE_TAGS                 = 'array|max:5';
     const RULE_TAG                  = 'max:25|tag|tag_creation:2';

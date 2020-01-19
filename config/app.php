@@ -127,16 +127,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Disallowed hosts
-    |--------------------------------------------------------------------------
-    |
-    | Hosts used by validator. Users using that hosts can't publish posts without registration.
-    |
-    */
-    'blacklist_host' => ['a2mobile.pl', 'free.aero2.net.pl', 'plus.pl'],
-
-    /*
-    |--------------------------------------------------------------------------
     | Logging Configuration
     |--------------------------------------------------------------------------
     |
@@ -228,8 +218,6 @@ return [
         Coyote\Providers\GeocoderServiceProvider::class,
         // Uploadowanie zalacznikow, zdjec oraz generowanie URL do tychze plikow
         Coyote\Providers\MediaServiceProvider::class,
-        // Przegladarnie logow laravela w panelu administracyjnym
-        Coyote\Providers\LogViewerProvider::class,
         // Generowanie mapy strony
         Coyote\Providers\SitemapProvider::class,
 

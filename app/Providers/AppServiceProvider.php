@@ -39,7 +39,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app['validator']->extend('spam_link', 'Coyote\Http\Validators\SpamValidator@validateSpamLink');
         $this->app['validator']->extend('spam_chinese', 'Coyote\Http\Validators\SpamValidator@validateSpamChinese');
         $this->app['validator']->extend('spam_foreign', 'Coyote\Http\Validators\SpamValidator@validateSpamForeignLink');
-        $this->app['validator']->extend('spam_blacklist', 'Coyote\Http\Validators\SpamValidator@validateBlacklistHost');
         $this->app['validator']->extend('tag', 'Coyote\Http\Validators\TagValidator@validateTag');
         $this->app['validator']->extend('tag_creation', 'Coyote\Http\Validators\TagValidator@validateTagCreation');
         $this->app['validator']->extend('throttle', 'Coyote\Http\Validators\ThrottleValidator@validateThrottle');
