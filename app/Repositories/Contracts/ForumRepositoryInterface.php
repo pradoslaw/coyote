@@ -18,9 +18,14 @@ interface ForumRepositoryInterface extends RepositoryInterface
 
     /**
      * @param int $userId
-     * @return mixed
+     * @param array $data
      */
-    public function categoriesOrder($userId);
+    public function saveOrder($userId, array $data);
+
+    /**
+     * @param int $userId
+     */
+    public function deleteOrder($userId);
 
     /**
      * Sort a list of categories that can be shown in a <select>

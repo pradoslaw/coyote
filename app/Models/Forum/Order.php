@@ -14,7 +14,7 @@ class Order extends Model
      *
      * @var array
      */
-    protected $fillable = ['forum_id', 'user_id', 'section', 'is_hidden', 'order'];
+    protected $fillable = ['forum_id', 'user_id', 'is_hidden', 'order'];
 
     /**
      * The database table used by the model.

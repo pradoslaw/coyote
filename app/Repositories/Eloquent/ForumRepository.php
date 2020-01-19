@@ -44,31 +44,6 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     {
         $this->applyCriteria();
 
-//        $result = $this
-//            ->model
-//            ->select([
-//                'forums.*',
-//                'subject',
-//                'topics.id AS topic_id',
-//                'topics.slug AS topic_slug',
-//                'posts.user_id',
-//                'posts.created_at',
-//                'posts.user_name AS anonymous_name',
-//                'users.name AS user_name',
-//                'users.photo',
-//                $this->raw('users.deleted_at IS NULL AS is_active'),
-//                'users.is_confirm'
-//            ])
-//            ->leftJoin('posts', 'posts.id', '=', 'forums.last_post_id')
-//            ->leftJoin('users', 'users.id', '=', 'posts.user_id')
-//            ->leftJoin('topics', 'topics.id', '=', 'posts.topic_id')
-//            ->trackForum($guestId)
-//            ->trackTopic($guestId)
-//            ->when($parentId, function (Builder $builder) use ($parentId) {
-//                return $builder->where('parent_id', $parentId);
-//            })
-//            ->get();
-
         $result = $this
             ->model
             ->addSelect('forums.*')
@@ -96,32 +71,27 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     }
 
     /**
-     * @param int $userId
-     * @return mixed
+     * @inheritdoc
      */
-    public function categoriesOrder($userId)
+    public function saveOrder($userId, array $data)
     {
-        $this->applyCriteria();
+        $this->deleteOrder($userId);
 
-        $sql = $this
-            ->model
-            ->select([
-                'forums.*',
-                'forum_orders.is_hidden',
-                $this->raw('CASE WHEN forum_orders.section IS NOT NULL THEN forum_orders.section ELSE forums.section END')
-            ])
-            ->leftJoin('forum_orders', function (JoinClause $join) use ($userId) {
-                $join->on('forum_orders.forum_id', '=', 'forums.id')
-                        ->on('forum_orders.user_id', '=', $this->raw($userId));
-            })
-            ->whereNull('parent_id')
-            ->orderByRaw('(CASE WHEN forum_orders.order IS NOT NULL THEN forum_orders.order ELSE forums.order END)');
+        Forum\Order::insert(
+            array_map(
+                function ($item) use ($userId) {
+                    return $item + ['user_id' => $userId];
+                },
+                $data)
+        );
+    }
 
-        $parents = $sql->get();
-
-        $this->resetModel();
-
-        return $parents;
+    /**
+     * @inheritdoc
+     */
+    public function deleteOrder($userId)
+    {
+        Forum\Order::where('user_id', $userId)->delete();
     }
 
     /**

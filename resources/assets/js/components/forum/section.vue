@@ -129,8 +129,10 @@
         let aboveIndex = this._findIndex(category.order - 1, category.section);
 
         if (aboveIndex > -1) {
-          this.$emit('order', {id: category.id, order: category.order - 1});
-          this.$emit('order', {id: this.categories[aboveIndex].id, order: this.categories[aboveIndex].order + 1});
+          category.order -= 1;
+          this.categories[aboveIndex].order += 1;
+
+          this.$emit('order', [category, this.categories[aboveIndex]]);
         }
       },
 
@@ -138,15 +140,16 @@
         let beyondIndex = this._findIndex(category.order + 1, category.section);
 
         if (beyondIndex > -1) {
-          this.$emit('order', {id: category.id, order: category.order + 1});
-          this.$emit('order', {id: this.categories[beyondIndex].id, order: this.categories[beyondIndex].order - 1});
+          category.order += 1;
+          this.categories[beyondIndex].order -= 1;
+
+          this.$emit('order', [category, this.categories[beyondIndex]]);
         }
       },
 
       _findIndex(order, section) {
         return this.categories.findIndex(value => value.order === order && value.section === section);
       }
-
     }
   }
 </script>

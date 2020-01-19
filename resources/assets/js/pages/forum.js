@@ -9,6 +9,7 @@ import 'bootstrap-sass/assets/javascripts/bootstrap/popover';
 
 import VueSection from '../components/forum/section.vue';
 import Vue from "vue";
+import axios from 'axios';
 
 new Vue({
   el: '#page-forum',
@@ -20,12 +21,17 @@ new Vue({
   mounted() {
   },
   methods: {
-    setOrder({id, order}) {
-      const index = this.forums.findIndex(value => value.id === id);
+    saveOrder(forums) {
+      forums.forEach(forum => {
+        let index = this.forums.findIndex(value => value.id === forum.id);
 
-      this.$set(this.forums, index, Object.assign(this.forums[index], {order}));
+        this.$set(this.forums, index, Object.assign(this.forums[index], {order: forum.order}));
+      });
 
-      // console.log(this.forums);
+      axios.post(`/Forum/Order`, {input: forums.map(obj => {
+        return  {'id': obj.id, 'order': obj.order};
+      })});
+
     }
   },
   computed: {

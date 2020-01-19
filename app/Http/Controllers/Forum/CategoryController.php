@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Events\UserWasSaved;
 use Coyote\Http\Factories\FlagFactory;
 use Coyote\Repositories\Criteria\Topic\BelongsToForum;
 use Coyote\Repositories\Criteria\Topic\StickyGoesFirst;
@@ -96,5 +97,34 @@ class CategoryController extends BaseController
 
         $collapse[$forum->id] = (int) $request->input('flag');
         $this->setSetting('forum.collapse', serialize($collapse));
+    }
+
+    /**
+     * @param Request $request
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function order(Request $request)
+    {
+        $this->validate($request, ['forums.*.order' => 'required|int', 'forums.*.id' => 'required|int']);
+        $this->pushForumCriteria();
+
+        $categories = $this->forum->categories($this->guestId);
+        $result = [];
+
+        foreach ($categories as &$category) {
+            foreach ($request->input('input') as $input) {
+                if ($category->id === $input['id']) {
+                    $category->order = $input['order'];
+                }
+            }
+
+            $result[] = $category->only(['order']) + ['forum_id' => $category->id, 'is_hidden' => $category->is_hidden ?? false];
+        }
+
+        $this->transaction(function () use ($result) {
+            $this->forum->saveOrder($this->userId, $result);
+        });
+
+        event(new UserWasSaved($this->auth));
     }
 }

@@ -183,6 +183,9 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
         ]
     ]);
 
+    // change category order
+    $this->post('Order', ['uses' => 'CategoryController@order', 'as' => 'order']);
+
     // skrocony link do posta
     $this->get('{id}', ['uses' => 'ShareController@index', 'as' => 'share']);
 });
