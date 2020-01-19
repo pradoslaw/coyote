@@ -378,7 +378,7 @@ $(function () {
     initForm($('.microblog-submit'));
 
     $(window).load(function() {
-        $('.microblog-wrapper').each(function() {
+        $('.microblog-wrapper.microblog-wrapper-wrap').each(function() {
             if ($(this).height() > 305) {
                 // aby zadzialal max-height, nalezy ustawic display: block. domyslnie natomiast microblog-texts
                 // posiada selektor: display: table, aby zadzialalo zawieranie dlugich linii tekstu
