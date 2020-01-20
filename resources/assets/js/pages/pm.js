@@ -142,7 +142,7 @@ new Vue({
     updateModel(value) {
       this.text = value;
 
-      ws.whisper('typing', {recipient: this.recipient});
+      ws.whisper(`user:${this.recipient.id}`, 'typing', {recipient: this.recipient});
     },
 
     changePage(page) {
