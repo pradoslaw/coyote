@@ -29,6 +29,10 @@
     </div>
   </perfect-scrollbar>
 
+  <div v-cloak class="typing">
+    <div v-if="isTyping" class="small padding-xs-top"><small><i class="far fa-comment-dots"></i> <em>${ recipient.name } pisze...</em></small></div>
+  </div>
+
   {% include 'user.pm.partials.form' %}
 {% endblock %}
 
@@ -36,7 +40,8 @@
   <script>
     var data = {
       messages: {{ messages|json_encode|raw }},
-      recipient: {{ recipient|json_encode|raw }}
+      recipient: {{ recipient|json_encode|raw }},
+      sender: {{ {id: user('id'), name: user('name')}|json_encode|raw  }}
     };
   </script>
 
