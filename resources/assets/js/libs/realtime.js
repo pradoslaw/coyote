@@ -106,7 +106,7 @@ class RealtimeFactory {
 
       // response to the heartbeat event
       realtime.on('hb', function (data, handler) {
-        handler.send(JSON.stringify({event: 'hb', data: 'hb'}));
+        handler.send(data);
       });
 
       realtime.on('exit', function () {

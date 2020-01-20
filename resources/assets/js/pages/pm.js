@@ -36,12 +36,14 @@ new Vue({
   data() {
     return {
       recipient: window.data.recipient,
+      sender: window.data.sender,
       text: '',
       isProcessing: false,
       errors: {},
       previewHtml: null,
       items: [],
-      tab: 'body'
+      tab: 'body',
+      isTyping: false
     };
   },
   store,
@@ -51,6 +53,7 @@ new Vue({
   },
   mounted() {
     this.listenForMessage();
+    this.listenForTyping();
     this.scrollToBottom();
     this.addScrollbarEvent();
   },
@@ -91,6 +94,10 @@ new Vue({
         .finally(() => this.isProcessing = false);
     },
 
+    typing() {
+      ws.whisper(`user:${this.recipient.id}`, 'typing', {recipient: this.sender});
+    },
+
     insertToTextarea(file) {
       const textarea = new Textarea(this.$refs.textarea.$el);
 
@@ -113,6 +120,22 @@ new Vue({
 
           this.$nextTick(() => this.scrollToBottom());
         }
+      });
+    },
+
+    listenForTyping() {
+      this.timer = null;
+
+      ws.on('client-typing', data => {
+        if (this.recipient.id !== data.recipient.id) {
+          return;
+        }
+
+        this.isTyping = true;
+
+        clearTimeout(this.timer);
+
+        this.timer = setTimeout(() => this.isTyping = false, 5000);
       });
     },
 
@@ -141,8 +164,6 @@ new Vue({
 
     updateModel(value) {
       this.text = value;
-
-      ws.whisper(`user:${this.recipient.id}`, 'typing', {recipient: this.recipient});
     },
 
     changePage(page) {
