@@ -135,7 +135,7 @@ new Vue({
 
         clearTimeout(this.timer);
 
-        this.timer = setTimeout(() => this.isTyping = false, 1500);
+        this.timer = setTimeout(() => this.isTyping = false, 1000);
       });
     },
 
