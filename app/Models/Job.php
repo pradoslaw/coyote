@@ -692,7 +692,7 @@ class Job extends Model
 
         // maximum offered salary
         $salary = $this->monthlySalary(max($this->salary_from, $this->salary_to));
-        $body = array_only($body, ['id', 'slug', 'created_at', 'updated_at', 'boost_at', 'deadline_at', 'firm_id', 'is_remote', 'is_ads']);
+        $body = array_only($body, ['id', 'slug', 'created_at', 'updated_at', 'boost_at', 'deadline_at', 'firm_id', 'is_remote', 'is_ads', 'user_id']);
 
         $locations = [];
 
