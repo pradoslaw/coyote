@@ -95,7 +95,7 @@ new Vue({
     },
 
     typing() {
-      ws.whisper(`user:${this.recipient.id}`, 'typing', {recipient: this.sender});
+      ws.whisper(`user:${this.recipient.id}`, 'pm-typing', {recipient: this.sender});
     },
 
     insertToTextarea(file) {
@@ -126,7 +126,7 @@ new Vue({
     listenForTyping() {
       this.timer = null;
 
-      ws.on('client-typing', data => {
+      ws.on('pm-typing', data => {
         if (this.recipient.id !== data.recipient.id) {
           return;
         }
@@ -135,7 +135,7 @@ new Vue({
 
         clearTimeout(this.timer);
 
-        this.timer = setTimeout(() => this.isTyping = false, 5000);
+        this.timer = setTimeout(() => this.isTyping = false, 1500);
       });
     },
 

@@ -41,7 +41,7 @@ class Realtime {
   }
 
   whisper(channel, event, data) {
-    this._handler.send(JSON.stringify({channel, event: `client-${event}`, data}));
+    this._handler.send(JSON.stringify({channel, event, data}));
   }
 
   _emit(event, data, handler) {
@@ -105,13 +105,8 @@ class RealtimeFactory {
       let realtime = new Realtime(Config.get('ws'), Config.get('token'));
 
       // response to the heartbeat event
-      realtime.on('hb', function (data, handler) {
-        handler.send(data);
-      });
-
-      realtime.on('exit', function () {
-        realtime.disconnect();
-      });
+      realtime.on('hb', (data, handler) => handler.send(data));
+      realtime.on('exit', () => realtime.disconnect());
 
       RealtimeFactory.instance = realtime;
     }
