@@ -272,6 +272,10 @@ services:
       REDIS_HOST: "redis"
     secrets:
       - APP_KEY_FILE
+    logging:
+      driver: "json-file"
+      options:
+        tag: websocket
 
 volumes:
   postgres:
