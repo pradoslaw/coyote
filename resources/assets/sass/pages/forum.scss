@@ -25,6 +25,18 @@
   }
 }
 
+@media screen and (min-width: $screen-lg) {
+  .section {
+    background-color: $panel-footer-bg;
+    padding: 10px 0 0 0;
+    border: 1px solid $panel-default-border;
+  }
+
+  .section-name {
+    margin: 0 10px 10px 10px;
+  }
+}
+
 .panel-cog {
   color: $gray-light;
   font-size: 80%;
@@ -33,8 +45,6 @@
 }
 
 .panel-categories {
-  margin-bottom: 10px;
-
   .col-main {
     display: flex;
     align-items: center;
@@ -100,6 +110,11 @@
 
   // desktop
   @media screen and (min-width: $screen-lg) {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    margin-bottom: 0;
+
     .col-lg-stat {
       text-align: right;
       font-size: 12px;
@@ -114,6 +129,8 @@
 
   // mobile
   @media screen and (max-width: $screen-lg) {
+    margin-bottom: 10px;
+
     .panel-body.new {
       border-left: 2px solid $alt-link-hover-color;
     }
@@ -156,9 +173,9 @@
   .panel-body {
     border-bottom: 1px solid $border-color;
 
-    //&:nth-child(even) {
-    //  background-color: #fafafa;
-    //}
+    &:nth-child(even) {
+      background-color: #fafafa;
+    }
 
     &:last-child {
       border-bottom: none;

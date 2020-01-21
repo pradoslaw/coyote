@@ -24,8 +24,8 @@
       <div class="clearfix"></div>
     </div>
 
-    <section v-if="!isCollapse && !category.is_hidden" v-for="(category, index) in categories" class="panel panel-default panel-categories">
-      <div :class="{'new': !category.is_read}" class="panel-body">
+    <section v-if="!isCollapse" class="panel panel-default panel-categories">
+      <div v-for="category in categories" v-if="!category.is_hidden" :class="{'new': !category.is_read}" class="panel-body">
         <div class="row">
           <div class="col-lg-7 col-xs-12 col-sm-6 col-main">
             <i :class="{'new': !category.is_read}" class="logo far fa-comments pull-left visible-lg"></i>
