@@ -22,7 +22,7 @@ class GuestRepository extends Repository implements GuestRepositoryInterface
      */
     public function setSetting(string $name, string $value, string $guestId)
     {
-        $raw = $this->raw(sprintf('settings || \'{"%s": "%s"}\'', $name, $value));
+        $raw = $this->raw(sprintf('settings || \'{"%s": "%s"}\'', $name, addslashes($value)));
         $sql = $this->model->where('id', $guestId)->update(['settings' => $raw]);
 
         if (!$sql) {

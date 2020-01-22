@@ -54,38 +54,6 @@ class Wiki extends Model
     protected $dates = ['created_at', 'updated_at'];
 
     /**
-     * Elasticsearch type mapping
-     *
-     * @var array
-     */
-    protected $mapping = [
-        "title" => [
-            "type" => "text",
-            "analyzer" => "default_analyzer"
-        ],
-        "long_title" => [
-            "type" => "text",
-            "analyzer" => "default_analyzer"
-        ],
-        "text" => [
-            "type" => "text",
-            "analyzer" => "default_analyzer"
-        ],
-        "excerpt" => [
-            "type" => "text",
-            "analyzer" => "default_analyzer"
-        ],
-        "created_at" => [
-            "type" => "date",
-            "format" => "yyyy-MM-dd HH:mm:ss"
-        ],
-        "updated_at" => [
-            "type" => "date",
-            "format" => "yyyy-MM-dd HH:mm:ss"
-        ],
-    ];
-
-    /**
      * Html version of the post.
      *
      * @var null|string

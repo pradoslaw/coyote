@@ -258,18 +258,18 @@ class PaymentController extends Controller
 
         $client = new \PayLaneRestClient(config('services.paylane.username'), config('services.paylane.password'));
 
-        $this->handlePayment(function () use ($client, $id) {
+        return $this->handlePayment(function () use ($client, $id, $payment) {
             $result = $client->saleBy3DSecureAuthorization(['id_3dsecure_auth' => $id]);
 
             if (!$result['success']) {
                 $error = $result['error'];
                 logger()->error(var_export($result, true));
 
-                throw new PaymentFailedException($error['error_description'], $error['error_number']);
+                throw (new PaymentFailedException($error['error_description'], $error['error_number']))->setPayment($payment);
             }
-        });
 
-        return $this->successfulTransaction($payment);
+            return $this->successfulTransaction($payment);
+        });
     }
 
     /**
@@ -391,7 +391,11 @@ class PaymentController extends Controller
      */
     private function handlePaymentException($exception, $message)
     {
-        $back = back()->withInput()->with('error', $message);
+        $back = $exception instanceof PaymentFailedException && $exception->payment instanceof Payment
+                ? redirect()->route('job.payment', [$exception->payment])
+                    : back()->withInput();
+
+        $back->with('error', $message);
 
         // remove sensitive data
         $this->request->merge(['number' => '***', 'cvc' => '***']);

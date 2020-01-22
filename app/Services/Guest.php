@@ -17,9 +17,11 @@ class Guest
     private $guestId;
 
     /**
+     * Default value is null. It means we have to retrieve settings from db. Once settings are retrieved from db, this will be an empty array.
+     *
      * @var array
      */
-    private $settings;
+    private $settings = null;
 
     /**
      * @param GuestRepository $guest
@@ -30,10 +32,10 @@ class Guest
     }
 
     /**
-     * @param string $guestId
+     * @param string|null $guestId Can be nullable in case of error
      * @return $this
      */
-    public function setGuestId(string $guestId): self
+    public function setGuestId(?string $guestId): self
     {
         $this->guestId = $guestId;
 
@@ -45,19 +47,23 @@ class Guest
      * @param $value
      * @return string
      */
-    protected function setSetting($name, $value)
+    public function setSetting($name, $value)
     {
         if ($this->getSetting($name) === $value) {
             return $value;
         }
 
-        if (!is_array($this->settings)) {
-            $this->settings = [];
+//        if (!is_array($this->settings)) {
+//            $this->settings = [];
+//        }
+
+        $this->settings[$name] = $value;
+
+        if ($this->guestId) {
+            $this->guest->setSetting($name, $value, $this->guestId);
         }
 
-        $this->guest->setSetting($name, $value, $this->guestId);
-
-        return $this->settings[$name] = $value;
+        return $value;
     }
 
     /**
@@ -67,6 +73,10 @@ class Guest
      */
     public function getSettings()
     {
+        if (!$this->guestId) {
+            return [];
+        }
+
         if (is_null($this->settings)) {
             $this->settings = $this->guest->getSettings($this->guestId);
         }
