@@ -33,7 +33,7 @@ const timeago = (timestamp) => {
     return getDiffSecond(timestamp) + ' ' + declination(getDiffSecond(timestamp), ['sekunda', 'sekundy', 'sekund']) + ' temu';
   }
 
-  let currDate = new Date((new Date().getTime()));
+  let currDate = new Date();
   let currValue = currDate.asInteger();
 
   let spanDate = new Date(timestamp * 1000);

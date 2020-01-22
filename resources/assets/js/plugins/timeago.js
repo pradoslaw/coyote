@@ -1,14 +1,7 @@
-import toNow from 'date-fns/formatDistanceToNow';
 import format from 'date-fns/format';
-import differenceInHours from 'date-fns/differenceInHours';
-
-const locales = {
-  pl: require('date-fns/locale/pl')
-};
+import timeago from '../components/date';
 
 export const createTimeago = (options = {}) => {
-  const locale = options.locale || 'en';
-
   return {
     name,
     props: {
@@ -44,9 +37,9 @@ export const createTimeago = (options = {}) => {
       return h(
         'time',
         {
-          // attrs: {
-          //   title: this.datetime === null ? '' : format(this.datetime, this.format)
-          // }
+          attrs: {
+            title: this.datetime === null ? '' : format(new Date(this.datetime), this.format)
+          }
         },
         [this.timeago]
       );
@@ -54,18 +47,14 @@ export const createTimeago = (options = {}) => {
 
     methods: {
       getTimeago () {
-        // const now = new Date();
-        // const then = new Date(this.datetime);
-        // const hours = differenceInHours(now, then);
+        if (!this.datetime) {
+          return;
+        }
 
-        // return this.datetime;
-        return format(new Date(this.datetime), this.format);
+        const date = new Date(this.datetime);
+        const value = timeago(date.getTime() / 1000);
 
-
-          // return toNow(this.datetime, {locale: locales[locale || 'en'], includeSeconds: true, addSuffix: true});
-
-
-
+        return value ? value : format(date, this.format);
       },
 
       startUpdater() {
