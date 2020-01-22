@@ -62,6 +62,12 @@ class TopicController extends BaseController
             $page = $this->post->getPage(min(2147483647, (int) $request->get('p')), $topic->id, $perPage);
         }
 
+        // show posts of last page if page parameter is higher than pages count
+        $lastPage = max((int) ceil($replies / $perPage), 1);
+        if ($page > $lastPage) {
+            $page = $lastPage;
+        }
+
         // build "more like this" block. it's important to send elasticsearch query before
         // send SQL query to database because search() method exists only in Model and not Builder class.
         $mlt = $this->getCacheFactory()->remember('mlt-post:' . $topic->id, 60 * 24, function () use ($topic) {
