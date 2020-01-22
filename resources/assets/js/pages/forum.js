@@ -21,17 +21,22 @@ new Vue({
   mounted() {
   },
   methods: {
-    saveOrder(forums) {
-      forums.forEach(forum => {
-        let index = this.forums.findIndex(value => value.id === forum.id);
+    saveOrder(categories) {
+      categories.forEach(category => {
+        const index = this.forums.findIndex(value => value.id === category.id);
 
-        this.$set(this.forums, index, Object.assign(this.forums[index], {order: forum.order}));
+        this.$set(this.forums, index, Object.assign(this.forums[index], {order: category.order}));
       });
 
-      axios.post(`/Forum/Order`, {input: forums.map(obj => {
-        return  {'id': obj.id, 'order': obj.order};
-      })});
+      axios.post('/Forum/Setup', categories.map(category => this._pluck(category)));
+    },
 
+    toggle(category) {
+      axios.post('/Forum/Setup', [ this._pluck(category) ]);
+    },
+
+    _pluck(category) {
+      return (({ id, is_hidden, order }) => ({ id, is_hidden, order }))(category);
     }
   },
   computed: {

@@ -2,7 +2,7 @@
   <div class="section margin-md-top">
     <div class="section-name">
       <h2 class="pull-left">
-        <a href="javascript:" @click="isCollapse = ! isCollapse">
+        <a href="javascript:" @click="collapse">
           <i :class="[isCollapse ? 'fa-plus-square': 'fa-minus-square']" class="far"></i>  {{ name }}
         </a>
       </h2>
@@ -70,10 +70,10 @@
                 <small class="text-muted"><vue-timeago :datetime="category.post.created_at"></vue-timeago></small>, <a v-profile="category.post.user.id">{{ category.post.user.name }}</a>
 
                 <div class="toolbox">
-                  <a href="javascript:" @click="asRead(category)"><i class="far fa-eye"></i></a>
+                  <a href="javascript:" title="Oznacz jako przeczytane" @click="asRead(category)"><i class="far fa-eye"></i></a>
 
-                  <a href="javascript:" @click="up(category)"><i class="fas fa-caret-up"></i></a>
-                  <a href="javascript:" @click="down(category)"><i class="fas fa-caret-down"></i></a>
+                  <a href="javascript:" title="Przesuń w górę" @click="up(category)"><i class="fas fa-caret-up"></i></a>
+                  <a href="javascript:" title="Przesuń w dół" @click="down(category)"><i class="fas fa-caret-down"></i></a>
                 </div>
               </div>
             </div>
@@ -115,6 +115,12 @@
     methods: {
       toggleCategory(category) {
         category.is_hidden = ! category.is_hidden;
+
+        this.$emit('toggle', category);
+      },
+
+      collapse() {
+        this.isCollapse = ! this.isCollapse;
       },
 
       hideDropdown() {

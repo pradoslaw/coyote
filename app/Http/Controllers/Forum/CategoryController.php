@@ -88,7 +88,7 @@ class CategoryController extends BaseController
      * @param \Coyote\Forum $forum
      * @param Request $request
      */
-    public function section($forum, Request $request)
+    public function collapseSection($forum, Request $request)
     {
         $collapse = $this->getSetting('forum.collapse');
         if ($collapse !== null) {
@@ -103,24 +103,26 @@ class CategoryController extends BaseController
      * @param Request $request
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function order(Request $request)
+    public function setup(Request $request)
     {
-        $this->validate($request, ['forums.*.order' => 'required|int', 'forums.*.id' => 'required|int']);
-        $this->pushForumCriteria();
+        $this->validate($request, ['*.order' => 'required|int', '*.id' => 'required|int']);
 
-        $categories = $this
-            ->forum
-            ->categories($this->guestId)
-            ->filter(function ($item) {
-               return $item->parent_id === null;
-            });
+        $categories = $this->withCriteria(function () {
+            return $this->forum
+                        ->categories($this->guestId)
+                        ->filter(function ($item) {
+                            return $item->parent_id === null;
+                        });
+        });
 
+        $input = $request->input();
         $result = [];
 
         foreach ($categories as &$category) {
-            foreach ($request->input('input') as $input) {
-                if ($category->id === $input['id']) {
-                    $category->order = $input['order'];
+            foreach ($input as $row) {
+                if ($category->id === $row['id']) {
+                    $category->order = $row['order'];
+                    $category->is_hidden = $row['is_hidden'];
                 }
             }
 
@@ -128,7 +130,7 @@ class CategoryController extends BaseController
         }
 
         $this->transaction(function () use ($result) {
-            $this->forum->saveOrder($this->userId, $result);
+            $this->forum->setup($this->userId, $result);
         });
 
         event(new UserWasSaved($this->auth));

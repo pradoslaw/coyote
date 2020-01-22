@@ -73,7 +73,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function saveOrder($userId, array $data)
+    public function setup($userId, array $data)
     {
         $this->deleteOrder($userId);
 
@@ -89,7 +89,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function deleteOrder($userId)
+    public function deleteSetup($userId)
     {
         Forum\Order::where('user_id', $userId)->delete();
     }

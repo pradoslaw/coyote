@@ -88,7 +88,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
         'middleware' => 'can:access,forum'
     ]);
 
-    $this->post('{forum}/Section', ['uses' => 'CategoryController@section', 'as' => 'section']);
+
 
     // obserwowanie danego watku na forum
     $this->post('Topic/Subscribe/{topic}', [
@@ -184,7 +184,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     ]);
 
     // change category order
-    $this->post('Order', ['uses' => 'CategoryController@order', 'as' => 'order']);
+    $this->post('Setup', ['uses' => 'CategoryController@setup']);
 
     // skrocony link do posta
     $this->get('{id}', ['uses' => 'ShareController@index', 'as' => 'share']);
