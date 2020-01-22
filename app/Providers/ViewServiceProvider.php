@@ -54,8 +54,6 @@ class ViewServiceProvider extends ServiceProvider
     {
         $this->app['request']->attributes->add([
             'public'        => route('home'),
-            'cdn'           => config('app.cdn') ? ('//' . config('app.cdn')) : route('home'),
-            'ping_interval' => config('session.lifetime') - 5, // every 10 minutes
             'notifications_unread' => 0,
             'pm_unread'     => 0
         ]);
@@ -64,9 +62,11 @@ class ViewServiceProvider extends ServiceProvider
             $user = $this->app['request']->user();
 
             $this->app['request']->attributes->add([
-                'token' => $this->getJWtToken($user),
-                'notifications_unread' => $user->notifications_unread,
-                'pm_unread' => $user->pm_unread
+                'id'                    => $user->id,
+                'date_format'           => str_replace('%', '', $user->date_format),
+                'token'                 => $this->getJWtToken($user),
+                'notifications_unread'  => $user->notifications_unread,
+                'pm_unread'             => $user->pm_unread
             ]);
         }
     }

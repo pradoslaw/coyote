@@ -1,9 +1,11 @@
 import format from 'date-fns/format';
 import timeago from '../components/date';
+import store from '../store';
 
 export const createTimeago = (options = {}) => {
   return {
     name,
+    store,
     props: {
       datetime: {
         required: true
@@ -15,13 +17,13 @@ export const createTimeago = (options = {}) => {
 
       format: {
         type: String,
-        default: 'yyyy-MM-dd HH:mm'
+        default: store.getters['user/dateFormat']('yyyy-MM-dd HH:mm')
       }
     },
 
     data() {
       return {
-        timeago: this.getTimeago()
+        timeago: this.getTimeago(),
       };
     },
 
@@ -34,6 +36,7 @@ export const createTimeago = (options = {}) => {
     },
 
     render(h) {
+      console.log(this.format);
       return h(
         'time',
         {

@@ -7,7 +7,7 @@
         </a>
       </h2>
 
-      <div :class="{'open': isDropdown}" v-on-clickaway="hideDropdown" class="dropdown pull-right">
+      <div v-if="isAuthorized" :class="{'open': isDropdown}" v-on-clickaway="hideDropdown" class="dropdown pull-right">
         <a href="javascript:" @click="isDropdown = ! isDropdown" class="panel-cog"><i class="fas fa-cogs"></i></a>
 
         <ul class="dropdown-menu">
@@ -72,8 +72,8 @@
                 <div class="toolbox">
                   <a href="javascript:" title="Oznacz jako przeczytane" @click="asRead(category)"><i class="far fa-eye"></i></a>
 
-                  <a href="javascript:" title="Przesuń w górę" @click="up(category)"><i class="fas fa-caret-up"></i></a>
-                  <a href="javascript:" title="Przesuń w dół" @click="down(category)"><i class="fas fa-caret-down"></i></a>
+                  <a v-if="isAuthorized" href="javascript:" title="Przesuń w górę" @click="up(category)"><i class="fas fa-caret-up"></i></a>
+                  <a v-if="isAuthorized" href="javascript:" title="Przesuń w dół" @click="down(category)"><i class="fas fa-caret-down"></i></a>
                 </div>
               </div>
             </div>
@@ -88,11 +88,14 @@
   import { default as mixins } from '../mixins/user';
   import VueTimeago from '../../plugins/timeago';
   import { mixin as clickaway } from 'vue-clickaway';
+  import store from '../../store';
+  import { mapGetters } from "vuex";
 
   Vue.use(VueTimeago);
 
   export default {
     mixins: [ mixins, clickaway ],
+    store,
     props: {
       name: {
         type: String,
@@ -156,6 +159,7 @@
       _findIndex(order, section) {
         return this.categories.findIndex(value => value.order === order && value.section === section);
       }
-    }
+    },
+    computed: mapGetters('user', ['isAuthorized'])
   }
 </script>

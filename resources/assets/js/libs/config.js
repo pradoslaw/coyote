@@ -1,4 +1,4 @@
-let Config = {
+const Config = {
 
   /**
    * Get config value.
@@ -9,16 +9,6 @@ let Config = {
    */
   get: function (name, _default = null) {
     return name in _config ? _config[name] : _default;
-  },
-
-  /**
-   * Get link to CDN url.
-   *
-   * @param {string} url
-   * @return {string}
-   */
-  cdn: function (url) {
-    return this.get('cdn') + url.startsWith('/') ? url : ('/' + url);
   },
 
   /**

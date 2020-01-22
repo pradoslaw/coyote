@@ -15,6 +15,7 @@ import 'core-js/modules/es6.array.for-each';
 // array isArray -- support for old browser
 import 'core-js/modules/es6.array.is-array';
 
+import './store';
 import './components/dropdown.js';
 import './components/scrolltop.js';
 import './components/breadcrumb.js';
@@ -43,36 +44,16 @@ $(function () {
   let r = new Router();
 
   r.on('/User', () => {
-    require.ensure([],
-      require => {
-        require('./pages/user');
-      },
-      'user'
-    );
+    require.ensure([], require => require('./pages/user'), 'user');
   })
   .on('/Praca/Application/*', () => {
-    require.ensure([],
-      require => {
-        require('./pages/job/application');
-      },
-      'application'
-    );
+    require.ensure([], require => require('./pages/job/application'), 'application');
   })
   .on('/Praca/Payment/*', () => {
-    require.ensure([],
-      require => {
-        require('./pages/job/payment');
-      },
-      'payment'
-    );
+    require.ensure([], require => require('./pages/job/payment'), 'payment');
   })
   .on('/Praca/Oferta', () => {
-    require.ensure([],
-      require => {
-        require('./pages/job/business');
-      },
-      'business'
-    );
+    require.ensure([], require => require('./pages/job/business'), 'business');
   })
   .on(['/Praca', '/Praca/Miasto/*', '/Praca/Technologia/*', '/Praca/Zdalna', '/Praca/Firma/*'], () => {
     require('./pages/job/homepage');
