@@ -2,9 +2,6 @@
 
 namespace Coyote\Repositories\Contracts;
 
-/**
- * @property \Coyote\Repositories\Contracts\Forum\OrderRepositoryInterface $order
- */
 interface ForumRepositoryInterface extends RepositoryInterface
 {
     /**
@@ -26,6 +23,12 @@ interface ForumRepositoryInterface extends RepositoryInterface
      * @param int $userId
      */
     public function deleteSetup($userId);
+
+    /**
+     * @param int|null $userId
+     * @return array
+     */
+    public function findHiddenIds($userId);
 
     /**
      * Sort a list of categories that can be shown in a <select>

@@ -2,33 +2,15 @@
 
 namespace Coyote\Repositories\Eloquent;
 
-use Coyote\Repositories\Contracts\Forum\OrderRepositoryInterface;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface;
 use Coyote\Topic;
 use Coyote\Forum;
-use Illuminate\Container\Container as App;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Query\JoinClause;
 
 class ForumRepository extends Repository implements ForumRepositoryInterface
 {
-    /**
-     * @var OrderRepositoryInterface
-     */
-    public $order;
-
-    /**
-     * @inheritdoc
-     */
-    public function __construct(App $app)
-    {
-        parent::__construct($app);
-
-        $this->order = $this->app[OrderRepositoryInterface::class];
-    }
-
     /**
      * @return string
      */
@@ -75,7 +57,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
      */
     public function setup($userId, array $data)
     {
-        $this->deleteOrder($userId);
+        $this->deleteSetup($userId);
 
         Forum\Order::insert(
             array_map(
@@ -92,6 +74,28 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     public function deleteSetup($userId)
     {
         Forum\Order::where('user_id', $userId)->delete();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function findHiddenIds($userId)
+    {
+        if ($userId === null) {
+            return [];
+        }
+
+        $result = $this
+            ->model
+            ->select(['forum_id', 'forums.id AS child_forum_id'])
+            ->where('user_id', $userId)
+            ->where('is_hidden', 1)
+            ->rightJoin('forum_orders', 'parent_id', '=', 'forum_orders.forum_id')
+            ->get();
+
+        return array_filter(array_unique(
+            array_merge($result->pluck('forum_id')->toArray(), $result->pluck('child_forum_id')->toArray())
+        ));
     }
 
     /**

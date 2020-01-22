@@ -4,6 +4,9 @@ namespace Coyote\Services\Forum;
 
 use Illuminate\Support\Collection;
 
+/**
+ * @deprecated
+ */
 class TreeBuilder
 {
     /**

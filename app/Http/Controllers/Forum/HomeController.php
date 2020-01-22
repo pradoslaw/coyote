@@ -131,19 +131,17 @@ class HomeController extends BaseController
      */
     public function categories()
     {
-        $this->pushForumCriteria();
-
         // execute query: get all categories that user can has access
-        $forums = $this->forum
-            ->categories($this->guestId)
-            ->mapCategory($this->guestId);
+        $forums = $this->withCriteria(function () {
+            return $this
+                ->forum
+                ->categories($this->guestId)
+                ->mapCategory($this->guestId);
+        });
 
         $forums = new ForumCollection($forums);
-        // get categories collapse
-//        $collapse = $this->collapse();
 
         return $this->view('forum.home')->with(compact('forums'));
-//        return $this->view('forum.home')->with(compact('forums', 'collapse'));
     }
 
     /**
@@ -268,7 +266,7 @@ class HomeController extends BaseController
 
         // if someone wants to find all user's topics, we can't hide those from our hidden categories.
         if (strpos($this->request->route()->getActionName(), '@user') === false) {
-            $this->topic->pushCriteria(new SkipForum($this->forum->order->findHiddenIds($this->userId)));
+            $this->topic->pushCriteria(new SkipForum($this->forum->findHiddenIds($this->userId)));
         }
 
         $paginator = $this
