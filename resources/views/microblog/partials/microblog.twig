@@ -33,7 +33,7 @@
                         &bull; <small class="text-muted" style="font-size: 11px">Sponsorowane</small>
                     {% endif %}
 
-                    <div class="microblog-wrapper">
+                    <div class="microblog-wrapper {{ not microblogDetailsPage ? 'microblog-wrapper-wrap' }}">
                         <div class="microblog-text">
                             {% include 'microblog.partials.text' %}
                         </div>
