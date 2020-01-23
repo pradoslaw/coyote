@@ -72,8 +72,8 @@
                 <div class="toolbox">
                   <a href="javascript:" title="Oznacz jako przeczytane" @click="asRead(category)"><i class="far fa-eye"></i></a>
 
-                  <a v-if="isAuthorized" :class="{'disabled': index === 0}" href="javascript:" title="Przesuń w górę" @click="up(category)"><i class="fas fa-caret-up"></i></a>
-                  <a v-if="isAuthorized" :class="{'disabled': index === categories.length - 1}" href="javascript:" title="Przesuń w dół" @click="down(category)"><i class="fas fa-caret-down"></i></a>
+                  <a v-if="isAuthorized" :class="{'disabled': isBeginning(index)}" title="Przesuń w górę" @click="up(category)"><i class="fas fa-caret-up"></i></a>
+                  <a v-if="isAuthorized" :class="{'disabled': isEnding(index)}" title="Przesuń w dół" @click="down(category)"><i class="fas fa-caret-down"></i></a>
                 </div>
               </div>
             </div>
@@ -156,6 +156,31 @@
 
           this.$emit('order', [category, this.categories[beyondIndex]]);
         }
+      },
+
+      isBeginning(index) {
+        let result = true;
+
+        while (index > 0) {
+          if (!this.categories[--index].is_hidden) {
+            result = false;
+          }
+        }
+
+        return result;
+      },
+
+      isEnding(index) {
+        let result = true;
+        const length = this.categories.length - 1;
+
+        while (index < length) {
+          if (!this.categories[++index].is_hidden) {
+            result = false;
+          }
+        }
+
+        return result;
       },
 
       _findIndex(order, section) {
