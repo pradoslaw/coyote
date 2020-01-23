@@ -42,7 +42,7 @@ export const createTimeago = (options = {}) => {
         'time',
         {
           attrs: {
-            title: this.datetime === null ? '' : format(new Date(this.datetime), this.format)
+            title: this.datetime === null ? '' : format(new Date(this.datetime), this.format, { locale })
           }
         },
         [this.timeago]
