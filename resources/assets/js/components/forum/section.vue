@@ -42,12 +42,12 @@
           <div class="col-lg-1 col-xs-12 col-sm-6 col-lg-stat">
             <div class="row">
               <div class="col-lg-12 col-xs-6 counter">
-                <strong>{{ category.topics }}</strong>
+                <strong>{{ category.topics | number }}</strong>
                 <small class="text-muted text-wide-spacing">wątki</small>
               </div>
 
               <div class="col-lg-12 col-xs-6 counter">
-                <strong>{{ category.posts }}</strong>
+                <strong>{{ category.posts | number }}</strong>
                 <small class="text-muted text-wide-spacing">postów</small>
               </div>
             </div>

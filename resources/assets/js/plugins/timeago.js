@@ -2,6 +2,8 @@ import format from 'date-fns/format';
 import timeago from '../libs/timeago';
 import store from '../store';
 
+const locale = require('date-fns/locale/pl').default;
+
 export const createTimeago = (options = {}) => {
   return {
     name,
@@ -56,7 +58,7 @@ export const createTimeago = (options = {}) => {
         const date = new Date(this.datetime);
         const value = timeago(date.getTime() / 1000);
 
-        return value ? value : format(date, this.format);
+        return value ? value : format(date, this.format, { locale });
       },
 
       startUpdater() {
