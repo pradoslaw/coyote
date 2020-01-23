@@ -26,8 +26,9 @@
         :name="section.name"
         :order="section.order"
         :categories="section.categories"
-        @order="saveOrder"
+        @order="setup"
         @toggle="toggle"
+        @mark="asRead"
       ></vue-section>
     {% endblock %}
 

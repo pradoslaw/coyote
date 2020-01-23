@@ -88,8 +88,6 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
         'middleware' => 'can:access,forum'
     ]);
 
-
-
     // obserwowanie danego watku na forum
     $this->post('Topic/Subscribe/{topic}', [
         'uses' => 'TopicController@subscribe',

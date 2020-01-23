@@ -10,6 +10,12 @@
 @import "../components/search";
 @import "../components/who-is-online";
 
+.section {
+  .panel-categories:nth-child(odd) {
+    background-color: #fafafa;
+  }
+}
+
 .section-name {
   margin: 0 0 10px 0;
   padding-left: 2px;
@@ -73,7 +79,6 @@
     margin-right: 10px;
     font-size: 18px;
     color: $brand-primary;
-    //border-radius: 50%;
     padding: 5px;
   }
 
@@ -102,10 +107,11 @@
       padding-right: 2px;
       color: inherit;
     }
-    //border-left: 1px solid #ddd;
-    //padding-left: 10px;
-    //margin-left: 15px;
-    //margin-top: -9px;
+
+    .disabled {
+      cursor: not-allowed;
+      opacity: .5;
+    }
   }
 
   // desktop
@@ -186,12 +192,6 @@
         display: block;
       }
     }
-  }
-}
-
-.section {
-  .panel-categories:nth-child(odd) {
-    background-color: #fafafa;
   }
 }
 

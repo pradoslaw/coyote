@@ -25,7 +25,7 @@
     </div>
 
     <section v-if="!isCollapse" class="panel panel-default panel-categories">
-      <div v-for="category in categories" v-if="!category.is_hidden" :class="{'new': !category.is_read}" class="panel-body">
+      <div v-for="(category, index) in categories" v-if="!category.is_hidden" :class="{'new': !category.is_read}" class="panel-body">
         <div class="row">
           <div class="col-lg-7 col-xs-12 col-sm-6 col-main">
             <i :class="{'new': !category.is_read}" class="logo far fa-comments pull-left visible-lg"></i>
@@ -72,8 +72,8 @@
                 <div class="toolbox">
                   <a href="javascript:" title="Oznacz jako przeczytane" @click="asRead(category)"><i class="far fa-eye"></i></a>
 
-                  <a v-if="isAuthorized" href="javascript:" title="Przesuń w górę" @click="up(category)"><i class="fas fa-caret-up"></i></a>
-                  <a v-if="isAuthorized" href="javascript:" title="Przesuń w dół" @click="down(category)"><i class="fas fa-caret-down"></i></a>
+                  <a v-if="isAuthorized" :class="{'disabled': index === 0}" href="javascript:" title="Przesuń w górę" @click="up(category)"><i class="fas fa-caret-up"></i></a>
+                  <a v-if="isAuthorized" :class="{'disabled': index === categories.length - 1}" href="javascript:" title="Przesuń w dół" @click="down(category)"><i class="fas fa-caret-down"></i></a>
                 </div>
               </div>
             </div>
@@ -132,6 +132,8 @@
 
       asRead(category) {
         category.is_read = true;
+
+        this.$emit('mark', category);
       },
 
       up(category) {

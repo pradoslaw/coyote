@@ -6,7 +6,6 @@ import '../pages/forum/posting';
 import '../pages/forum/sidebar';
 import '../pages/forum/tags';
 import 'bootstrap-sass/assets/javascripts/bootstrap/popover';
-
 import VueSection from '../components/forum/section.vue';
 import Vue from "vue";
 import axios from 'axios';
@@ -21,7 +20,7 @@ new Vue({
   mounted() {
   },
   methods: {
-    saveOrder(categories) {
+    setup(categories) {
       categories.forEach(category => {
         const index = this.forums.findIndex(value => value.id === category.id);
 
@@ -33,6 +32,10 @@ new Vue({
 
     toggle(category) {
       axios.post('/Forum/Setup', [ this._pluck(category) ]);
+    },
+
+    asRead(category) {
+      axios.post(`/Forum/${category.slug}/Mark`);
     },
 
     _pluck(category) {
