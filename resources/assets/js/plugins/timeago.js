@@ -36,7 +36,6 @@ export const createTimeago = (options = {}) => {
     },
 
     render(h) {
-      console.log(this.format);
       return h(
         'time',
         {
