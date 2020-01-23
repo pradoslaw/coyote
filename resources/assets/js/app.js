@@ -21,7 +21,7 @@ import './components/scrolltop.js';
 import './components/breadcrumb.js';
 import './components/navbar-toggle.js';
 import './components/state.js';
-import './components/date.js';
+import './libs/timeago.js';
 import './components/vcard.js';
 import './components/popover.js';
 import './components/flag.js';

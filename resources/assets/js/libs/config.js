@@ -1,3 +1,7 @@
+/**
+ * @deprecated
+ * @type {{csrfToken(): string, get: (function(string, *=): *)}}
+ */
 const Config = {
 
   /**

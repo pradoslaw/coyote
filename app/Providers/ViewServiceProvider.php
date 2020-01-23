@@ -63,12 +63,30 @@ class ViewServiceProvider extends ServiceProvider
 
             $this->app['request']->attributes->add([
                 'id'                    => $user->id,
-                'date_format'           => str_replace('%', '', $user->date_format),
+                'date_format'           => $this->mapFormat($user->date_format),
                 'token'                 => $this->getJWtToken($user),
                 'notifications_unread'  => $user->notifications_unread,
                 'pm_unread'             => $user->pm_unread
             ]);
         }
+    }
+
+    /**
+     * @param string $format
+     * @return string
+     */
+    private function mapFormat(string $format): string
+    {
+        $values = [
+            'dd-MM-yyyy HH:mm',
+            'yyyy-MM-dd HH:mm',
+            'MM/dd/yy HH:mm',
+            'dd-MM-yy HH:mm',
+            'dd MMM yy HH:mm',
+            'dd MMMM yyyy HH:mm'
+        ];
+
+        return array_combine(array_keys(User::dateFormatList()), $values)[$format];
     }
 
     /**

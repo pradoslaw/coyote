@@ -1,5 +1,5 @@
 import format from 'date-fns/format';
-import timeago from '../components/date';
+import timeago from '../libs/timeago';
 import store from '../store';
 
 export const createTimeago = (options = {}) => {
@@ -68,6 +68,7 @@ export const createTimeago = (options = {}) => {
       stopUpdater() {
         if (this.updater) {
           clearInterval(this.updater);
+
           this.updater = null;
         }
       },
