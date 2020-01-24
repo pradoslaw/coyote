@@ -27,15 +27,25 @@ class ForumCollection extends ResourceCollection
         $parents = $this->nested($categories);
 
         foreach ($parents as &$parent) {
-            if (isset($parent->children)) {
-                foreach ($parent->children as $child) {
-                    $parent->topics += $child->topics;
-                    $parent->posts += $child->posts;
+
+            if (isset($parent['children'])) {
+                foreach ($parent['children'] as $child) {
+                    $parent['topics'] += $child['topics'];
+                    $parent['posts'] += $child['posts'];
+
+                    if (!isset($child[0])) {
+                        continue;
+                    }
+
+                    $post = &$child[0]->data['post'];
+                    $topic = &$child[0]->data['topic'];
 
                     // created_at contains last post's created date.
-                    if ($child->created_at > $parent->created_at) {
-                        $parent->last_post_id = $child->last_post_id;
-                        $parent->post = $child->post;
+                    if ($post['created_at'] > $parent[0]->data['post']['created_at']) {
+                        $parent[0]->data['post'] = $post;
+                        $parent[0]->data['topic'] = $topic;
+                        $parent['is_read'] = $child['is_read'];
+
                     }
                 }
             }

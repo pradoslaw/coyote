@@ -47,7 +47,8 @@ class ForumResource extends JsonResource
                     'topic' => [
                         'id'            => $this->post->topic->id,
                         'subject'       => $this->post->topic->subject,
-                        'is_read'       => $this->post->topic->isRead()
+                        'is_read'       => $this->post->topic->isRead(),
+                        'url'           => url(UrlBuilder::topic($this->post->topic->getModel()))
                     ]
                 ];
             })

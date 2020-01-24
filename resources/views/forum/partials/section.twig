@@ -4,7 +4,7 @@
     <div class="panel-body">
         <h2 class="pull-left">{{ name }}</h2>
 
-        <a class="pull-right toggle {{ not collapse[forums[0].id] ? 'in' }}" data-toggle="collapse" href="#{{ forums[0].id }}" aria-expanded="true" data-ajax="{{ route('forum.section', [forums[0].slug]) }}">
+        <a class="pull-right toggle {{ not collapse[forums[0].id] ? 'in' }}" data-toggle="collapse" href="#{{ forums[0].id }}" aria-expanded="true">
             <i class="far fa-minus-square"></i>
             <i class="far fa-plus-square"></i>
         </a>

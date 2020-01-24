@@ -36,6 +36,14 @@
               <p class="description hidden-sm hidden-xs hidden-md">
                 {{ category.description }}
               </p>
+
+              <ul v-if="category.children" class="list-unstyled list-inline list-sub hidden-sm hidden-xs hidden-md">
+                <li v-for="children in category.children">
+                  <i :class="{'far fa-file': category.is_read, 'fas fa-file new': !category.is_read}"></i>
+
+                  <a :href="children.url">{{ children.name }}</a>
+                </li>
+              </ul>
             </div>
           </div>
 
@@ -64,7 +72,7 @@
               </div>
               <div class="media-body">
                 <p class="subject">
-                  <a :href="category.post.url">{{ category.topic.subject }}</a>
+                  <a :href="category.topic.url + '?view=unread'">{{ category.topic.subject }}</a>
                 </p>
 
                 <small class="text-muted"><vue-timeago :datetime="category.post.created_at"></vue-timeago></small>, <a v-profile="category.post.user.id">{{ category.post.user.name }}</a>
