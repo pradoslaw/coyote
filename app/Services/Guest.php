@@ -69,6 +69,10 @@ class Guest
         return $this->getSettings()[$name] ?? $default;
     }
 
+    /**
+     * @param $name
+     * @return mixed|null
+     */
     public function __get($name)
     {
         $this->load();
@@ -78,12 +82,14 @@ class Guest
 
     protected function load()
     {
-        if (is_null($this->model)) {
-            $this->model = Model::findOrNew($this->guestId, ['id', 'settings', 'created_at']);
+        if (!is_null($this->model)) {
+            return;
+        }
 
-            if (!$this->model->exists) {
-                $this->model->id = $this->guestId;
-            }
+        $this->model = Model::findOrNew($this->guestId, ['id', 'settings', 'created_at']);
+
+        if (!$this->model->exists) {
+            $this->model->id = $this->guestId;
         }
     }
 }
