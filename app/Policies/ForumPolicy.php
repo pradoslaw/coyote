@@ -101,6 +101,10 @@ class ForumPolicy
      */
     public function access(?User $user, Forum $forum): bool
     {
+        if (!$forum->is_prohibited) {
+            return true;
+        }
+
         $groups = $forum->groups()->get()->pluck('id')->toArray();
 
         if (empty($groups)) {

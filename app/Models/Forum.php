@@ -31,6 +31,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $url
  * @property Forum $parent
  * @property Forum\Track[] $tracks
+ * @property bool $is_prohibited
  */
 class Forum extends Model
 {

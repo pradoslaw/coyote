@@ -74,10 +74,13 @@ class CategoriesController extends BaseController
         $forum->fill($form->all());
 
         $this->transaction(function () use ($form, $forum) {
+            $groups = (array) $form->get('access')->getValue();
+
+            $forum->is_prohibited = count($groups);
             $forum->save();
             $forum->access()->delete();
 
-            foreach ((array) $form->get('access')->getValue() as $groupId) {
+            foreach ($groups as $groupId) {
                 $forum->access()->create(['group_id' => $groupId]);
             }
 

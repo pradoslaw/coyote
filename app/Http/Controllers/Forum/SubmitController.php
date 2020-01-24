@@ -111,11 +111,15 @@ class SubmitController extends BaseController
 
         if ($post->wasRecentlyCreated) {
             $subscribers = $topic->subscribers()->with('user.notificationSettings')->get()->pluck('user')->exceptUser($this->auth);
+            $notification = (new SubmittedNotification($this->auth, $post))->setSender($request->get('user_name'));
 
-            $dispatcher->send(
-                $subscribers,
-                (new SubmittedNotification($this->auth, $post))->setSender($request->get('user_name'))
-            );
+            dispatch(function () use ($subscribers, $notification) {
+                // we can't serialize $dispatcher, that's why we need to create new instance inside closure
+                app(Dispatcher::class)->send(
+                    $subscribers,
+                    $notification
+                );
+            });
 
             // get id of users that were mentioned in the text
             $usersId = (new LoginHelper())->grab($post->html);
