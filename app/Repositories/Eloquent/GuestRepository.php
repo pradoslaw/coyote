@@ -24,7 +24,7 @@ class GuestRepository extends Repository implements GuestRepositoryInterface
     {
         /** @var Guest $guest */
         $guest = $this->model->findOrNew($guestId);
-        $guest->setSetting($name,  $value);
+        $guest->setSetting($name, $value);
         $guest->id = $guestId;
 
         $guest->save();
