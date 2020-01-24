@@ -18,31 +18,6 @@ class GuestRepository extends Repository implements GuestRepositoryInterface
     }
 
     /**
-     * @inheritDoc
-     */
-    public function setSetting(string $name, string $value, string $guestId)
-    {
-        /** @var Guest $guest */
-        $guest = $this->model->findOrNew($guestId);
-        $guest->setSetting($name, $value);
-        $guest->id = $guestId;
-
-        $guest->save();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getSettings(string $guestId)
-    {
-        return $this
-            ->model
-            ->select('settings')
-            ->where('id', $guestId)
-            ->value('settings');
-    }
-
-    /**
      * @inheritdoc
      */
     public function save(Session $session)

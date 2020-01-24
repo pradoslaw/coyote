@@ -2,15 +2,10 @@
 
 namespace Coyote\Services;
 
-use Coyote\Repositories\Contracts\GuestRepositoryInterface as GuestRepository;
+use Coyote\Guest as Model;
 
 class Guest
 {
-    /**
-     * @var GuestRepository
-     */
-    private $guest;
-
     /**
      * @var string
      */
@@ -19,27 +14,16 @@ class Guest
     /**
      * Default value is null. It means we have to retrieve settings from db. Once settings are retrieved from db, this will be an empty array.
      *
-     * @var array
+     * @var \Coyote\Guest|null
      */
-    private $settings = null;
+    protected $model = null;
 
     /**
-     * @param GuestRepository $guest
+     * @param string|null $guestId
      */
-    public function __construct(GuestRepository $guest)
-    {
-        $this->guest = $guest;
-    }
-
-    /**
-     * @param string|null $guestId Can be nullable in case of error
-     * @return $this
-     */
-    public function setGuestId(?string $guestId): self
+    public function __construct(?string $guestId)
     {
         $this->guestId = $guestId;
-
-        return $this;
     }
 
     /**
@@ -53,15 +37,8 @@ class Guest
             return $value;
         }
 
-//        if (!is_array($this->settings)) {
-//            $this->settings = [];
-//        }
-
-        $this->settings[$name] = $value;
-
-        if ($this->guestId) {
-            $this->guest->setSetting($name, $value, $this->guestId);
-        }
+        $this->model->setSetting($name, $value);
+        $this->model->save();
 
         return $value;
     }
@@ -77,11 +54,15 @@ class Guest
             return [];
         }
 
-        if (is_null($this->settings)) {
-            $this->settings = $this->guest->getSettings($this->guestId);
+        if (is_null($this->model)) {
+            $this->model = Model::findOrNew($this->guestId, ['id', 'settings', 'created_at']);
+
+            if (!$this->model->exists) {
+                $this->model->id = $this->guestId;
+            }
         }
 
-        return $this->settings;
+        return $this->model->settings;
     }
 
     /**
@@ -91,6 +72,6 @@ class Guest
      */
     public function getSetting($name, $default = null)
     {
-        return isset($this->getSettings()[$name]) ? $this->settings[$name] : $default;
+        return $this->getSettings()[$name] ?? $default;
     }
 }

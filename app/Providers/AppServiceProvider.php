@@ -2,7 +2,6 @@
 
 namespace Coyote\Providers;
 
-use Coyote\Repositories\Contracts\GuestRepositoryInterface;
 use Coyote\Forum;
 use Coyote\Services\FormBuilder\FormBuilder;
 use Coyote\Services\FormBuilder\FormInterface;
@@ -90,7 +89,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(Guest::class, function ($app) {
-            return (new Guest($app[GuestRepositoryInterface::class]))->setGuestId($app['session.store']->get('guest_id'));
+            return new Guest($app['session.store']->get('guest_id'));
         });
 
         $this->app->singleton('form.builder', function ($app) {
