@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  * @property mixed interests
+ * @property array $settings
  */
 class Guest extends Model
 {
@@ -34,4 +35,16 @@ class Guest extends Model
      * @var bool
      */
     public $incrementing = false;
+
+    /**
+     * @param string $name
+     * @param string $value
+     */
+    public function setSetting(string $name, string $value)
+    {
+        $settings = $this->settings;
+        $settings[$name] = $value;
+
+        $this->settings = $settings;
+    }
 }

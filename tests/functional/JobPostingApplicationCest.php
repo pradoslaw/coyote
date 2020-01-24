@@ -43,7 +43,6 @@ class JobPostingApplicationCest
         $I->seeInField('email', $email);
         $I->seeOptionIsSelected('salary', 'od 1000 zł m-c');
         $I->seeOptionIsSelected('dismissal_period', '3 dni robocze');
-
     }
 
     public function submitApplication(FunctionalTester $I)
@@ -54,14 +53,29 @@ class JobPostingApplicationCest
 
         $I->amOnRoute('job.application', [$this->job->id]);
 
-        $I->fillField('email', $fake->email);
+        $I->fillField('email', $fakeEmail = $fake->email);
         $I->fillField('name', $fake->name);
         $I->fillField('phone', $fake->phoneNumber);
+        $I->fillField('text', '"Lorem" \'ipsum\'');
         $I->selectOption('salary', 'od 1000 zł m-c');
         $I->selectOption('dismissal_period', '3 dni robocze');
+        $I->checkOption('#remember');
 
         $I->click('Zapisz');
 
         $I->seeCurrentRouteIs('job.offer');
+
+        \Coyote\Job::unguard();
+        $this->job = $I->haveRecord(\Coyote\Job::class, [
+            'title' => $fake->title,
+            'description' => $fake->text(),
+            'user_id' => $this->user->id,
+            'deadline_at' => \Carbon\Carbon::now()->addDay(1),
+            'email' => $fake->email
+        ]);
+
+        $I->amOnRoute('job.application', [$this->job->id]);
+
+        $I->seeInField('email', $fakeEmail);
     }
 }
