@@ -224,6 +224,7 @@
 #index {
   position: relative;
   margin-top: 20px;
+  padding-right: 20%;
 
   > h1 {
     margin-top: 0;
@@ -236,10 +237,6 @@
       }
     }
   }
-}
-
-#index {
-  padding-right: 20%;
 
   @media screen and (max-width: $screen-lg) {
     padding-right: 0;

@@ -13,11 +13,11 @@ import axios from 'axios';
 new Vue({
   el: '#page-forum',
   delimiters: ['${', '}'],
-  data: window.data,
+  data: {
+    forums: window.forums
+  },
   components: {
     'vue-section': VueSection
-  },
-  mounted() {
   },
   methods: {
     setup(categories) {

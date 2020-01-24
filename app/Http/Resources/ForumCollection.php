@@ -9,11 +9,27 @@ use Illuminate\Support\Collection;
 class ForumCollection extends ResourceCollection
 {
     /**
+     * @var int|null
+     */
+    protected $parentId;
+
+    /**
      * The resource that this resource collects.
      *
      * @var string
      */
     public $collects = ForumResource::class;
+
+    /**
+     * @param int $parentId
+     * @return $this
+     */
+    public function setParentId(int $parentId)
+    {
+        $this->parentId = $parentId;
+
+        return $this;
+    }
 
     /**
      * Transform the resource collection into an array.
@@ -25,7 +41,7 @@ class ForumCollection extends ResourceCollection
     {
         $categories = parent::toArray($request);
 
-        return $this->nested($categories);
+        return $this->nested($categories, $this->parentId);
     }
 
     /**
@@ -83,7 +99,10 @@ class ForumCollection extends ResourceCollection
 
         // there's no posts in main category
         if (!isset($parent[0]->data)) {
-            $parent[0] = new MergeValue(['post' => ['created_at' => '']]);
+            $parent[0] = new MergeValue(['post' => $post, 'topic' => $topic]);
+            $parent['is_read'] = $child['is_read'];
+
+            return $parent;
         }
 
         // created_at contains last post's created date.

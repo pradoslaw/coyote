@@ -6,46 +6,61 @@
 {% import 'components.forms' as forms %}
 
 {% block content %}
-    <h1>{{ link_to_route('forum.category', forum.title|default(forum.name), [forum.slug]) }}</h1>
+  <h1>{{ link_to_route('forum.category', forum.title|default(forum.name), [forum.slug]) }}</h1>
 
-    <nav>
-        {{ topics.render()|raw }}
-    </nav>
+  <nav>
+    {{ topics.render()|raw }}
+  </nav>
 
-    {% include "forum.partials.top" %}
+  {% include "forum.partials.top" %}
 
-    <main class="mainbar">
-        {% for name, forums in sections %}
-            {% include 'forum.partials.section' %}
-        {% endfor %}
+  <main id="page-forum" class="mainbar">
+    <vue-section
+      v-for="(section, index) in sections"
+      :key="index"
+      :name="section.name"
+      :order="section.order"
+      :categories="section.categories"
+      @order="setup"
+      @toggle="toggle"
+      @mark="asRead"
+    ></vue-section>
 
-        {% include 'forum.partials.topics' %}
+    {% include 'forum.partials.topics' %}
 
-        <section class="row">
-            <div class="col-xs-12">
-                <div class="pull-right">
-                    Liczba wątków na stronę
-                    {% include 'forum.partials.per_page' with {perPage: topics.perPage()} %}
-                </div>
-            </div>
-        </section>
+    <section class="row">
+      <div class="col-xs-12">
+        <div class="pull-right">
+          Liczba wątków na stronę
+          {% include 'forum.partials.per_page' with {perPage: topics.perPage()} %}
+        </div>
+      </div>
+    </section>
 
-        {{ viewers|raw }}
-    </main>
+    {{ viewers|raw }}
+  </main>
 
-    {% embed "forum.partials.sidebar.twig" %}
-        {% block side_menu %}
-            {% include 'forum.partials.post_count' %}
+  {% embed "forum.partials.sidebar.twig" %}
+    {% block side_menu %}
+      {% include 'forum.partials.post_count' %}
 
-            <div class="box">
-                <ul class="side-menu">
-                    <li class="btn-mark-read">
-                        <a title="Oznacz kategorie jako przeczytane" href="{{ route('forum.category.mark', [forum.slug]) }}" data-category="forum-sidebar-buttons">
-                            <i class="far fa-check-square fa-fw"></i> Oznacz jako przeczytane
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        {% endblock %}
-    {% endembed %}
+      <div class="box">
+        <ul class="side-menu">
+          <li class="btn-mark-read">
+            <a title="Oznacz kategorie jako przeczytane" href="{{ route('forum.category.mark', [forum.slug]) }}" data-category="forum-sidebar-buttons">
+              <i class="far fa-check-square fa-fw"></i> Oznacz jako przeczytane
+            </a>
+          </li>
+        </ul>
+      </div>
+    {% endblock %}
+  {% endembed %}
+{% endblock %}
+
+{% block body %}
+  <script>
+    var forums = {{ forums|json_encode|raw }};
+  </script>
+
+  {{ parent() }}
 {% endblock %}

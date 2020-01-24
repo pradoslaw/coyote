@@ -7,7 +7,7 @@
         </a>
       </h2>
 
-      <div v-if="isAuthorized" :class="{'open': isDropdown}" v-on-clickaway="hideDropdown" class="dropdown pull-right">
+      <div v-if="isAuthorized && !categories[0].parent_id" :class="{'open': isDropdown}" v-on-clickaway="hideDropdown" class="dropdown pull-right">
         <a href="javascript:" @click="isDropdown = ! isDropdown" class="panel-cog"><i class="fas fa-cogs"></i></a>
 
         <ul class="dropdown-menu">
@@ -107,7 +107,7 @@
     props: {
       name: {
         type: String,
-        required: true
+        required: false // <-- subcategories might not have section name
       },
       order: {
         type: Number,

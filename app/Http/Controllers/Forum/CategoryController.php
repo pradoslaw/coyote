@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Events\UserWasSaved;
 use Coyote\Http\Factories\FlagFactory;
+use Coyote\Http\Resources\ForumCollection;
 use Coyote\Repositories\Criteria\Topic\BelongsToForum;
 use Coyote\Repositories\Criteria\Topic\StickyGoesFirst;
 use Coyote\Services\Forum\TreeBuilder;
@@ -27,12 +28,12 @@ class CategoryController extends BaseController
         $this->pushForumCriteria();
         $forumList = $treeBuilder->listBySlug($this->forum->list());
 
-        // execute query: get all subcategories that user can has access to
-        $sections = $this->forum->categories($this->guestId, $forum->id);
-        // mark unread categories
-        $sections = $personalizer->markUnreadCategories($sections);
+        $forums = $this
+            ->forum
+            ->categories($this->guestId, $forum->id)
+            ->mapCategory($this->guestId);
 
-        $sections = $treeBuilder->sections($sections, $forum->id);
+        $forums = (new ForumCollection($forums))->setParentId($forum->id);
 
         // display topics for this category
         $this->topic->pushCriteria(new BelongsToForum($forum->id));
@@ -62,7 +63,7 @@ class CategoryController extends BaseController
         $postsPerPage = $this->postsPerPage($this->request);
 
         return $this->view('forum.category')->with(
-            compact('forumList', 'forum', 'topics', 'sections', 'collapse', 'flags', 'postsPerPage')
+            compact('forumList', 'forum', 'topics', 'forums', 'collapse', 'flags', 'postsPerPage')
         );
     }
 
