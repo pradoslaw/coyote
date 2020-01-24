@@ -62,7 +62,7 @@
           </div>
 
           <div class="col-lg-4 col-xs-12 col-sm-12">
-            <div class="media">
+            <div v-if="category.post" class="media">
               <div class="media-left hidden-xs">
                 <a v-profile="category.post.user.id">
                   <object :data="category.post.user.photo || '//'" type="image/png" class="media-object img-thumbnail">
