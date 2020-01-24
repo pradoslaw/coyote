@@ -4,6 +4,7 @@ namespace Coyote\Services\Forum;
 
 use Carbon\Carbon;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
+use Coyote\Services\Guest;
 use Coyote\Topic;
 use Illuminate\Support\Traits\ForwardsCalls;
 
@@ -77,7 +78,9 @@ class Tracker
         }
 
         if (empty($markTime)) {
-            $markTime = now('UTC');
+            $guest = app(Guest::class);
+
+            $markTime = $guest->created_at ?? now('UTC');
         }
 
         return $markTime;

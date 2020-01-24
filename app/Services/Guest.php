@@ -54,13 +54,7 @@ class Guest
             return [];
         }
 
-        if (is_null($this->model)) {
-            $this->model = Model::findOrNew($this->guestId, ['id', 'settings', 'created_at']);
-
-            if (!$this->model->exists) {
-                $this->model->id = $this->guestId;
-            }
-        }
+        $this->load();
 
         return $this->model->settings;
     }
@@ -73,5 +67,23 @@ class Guest
     public function getSetting($name, $default = null)
     {
         return $this->getSettings()[$name] ?? $default;
+    }
+
+    public function __get($name)
+    {
+        $this->load();
+
+        return $this->model->$name ?? null;
+    }
+
+    protected function load()
+    {
+        if (is_null($this->model)) {
+            $this->model = Model::findOrNew($this->guestId, ['id', 'settings', 'created_at']);
+
+            if (!$this->model->exists) {
+                $this->model->id = $this->guestId;
+            }
+        }
     }
 }
