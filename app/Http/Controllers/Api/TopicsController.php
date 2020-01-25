@@ -97,7 +97,7 @@ class TopicsController extends Controller
                 return $builder->select('forums.id', 'forums.name', 'forums.slug', 'is_prohibited')->withForumMarkTime($this->guestId);
             }]);
 
-        $this->authorize('access', $topic->forum);
+        $this->authorizeForUser($this->user, 'access', $topic->forum);
         $topic->markTime($this->guestId);
 
         TopicResource::withoutWrapping();

@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Coyote\Forum;
-use Coyote\Group;
 use Coyote\Guest;
 use Coyote\Post;
 use Coyote\Services\Forum\Tracker;
@@ -92,11 +91,9 @@ class TopicApiTest extends TestCase
 
     public function testMarkAsRead()
     {
-        $this->actingAs($this->user, 'api');
-
         Tracker::make($this->topic, $this->user->guest_id)->asRead($this->topic->last_post_created_at);
 
-        $request = $this->get('/v1/topics/' . $this->topic->id, ['Accept' => 'application/json']);
+        $request = $this->get('/v1/topics/' . $this->topic->id, ['Accept' => 'application/json', 'Authorization' => 'Bearer ' . $this->token]);
         $data = $request->decodeResponseJson();
 
         $this->assertTrue($data['is_read']);
@@ -104,11 +101,9 @@ class TopicApiTest extends TestCase
 
     public function testShowAllTopicsWithMarkedAsRead()
     {
-        $this->actingAs($this->user, 'api');
-
         Tracker::make($this->topic, $this->user->guest_id)->asRead($this->topic->last_post_created_at);
 
-        $request = $this->get('/v1/topics', ['Accept' => 'application/json']);
+        $request = $this->get('/v1/topics', ['Accept' => 'application/json', 'Authorization' => 'Bearer ' . $this->token]);
         $data = $request->decodeResponseJson('data');
 
         $this->assertEquals($this->topic->subject, $data[0]['subject']);
@@ -119,12 +114,10 @@ class TopicApiTest extends TestCase
     {
         Guest::forceCreate(['id' => $this->user->guest_id, 'updated_at' => now()->subMinute(5)]);
 
-        $this->actingAs($this->user, 'api');
-
         $topic = factory(Topic::class)->create(['forum_id' => $this->forum->id]);
         factory(Post::class)->create(['topic_id' => $topic->id, 'forum_id' => $this->forum->id, 'created_at' => now()]);
 
-        $request = $this->get('/v1/topics/' . $this->topic->id, ['Accept' => 'application/json']);
+        $request = $this->get('/v1/topics/' . $this->topic->id, ['Accept' => 'application/json', 'Authorization' => 'Bearer ' . $this->token]);
         $data = $request->decodeResponseJson();
 
         $this->assertFalse($data['is_read']);
