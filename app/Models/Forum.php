@@ -60,7 +60,7 @@ class Forum extends Model
     /**
      * @var array
      */
-    protected $casts = ['redirects' => 'int'];
+    protected $casts = ['redirects' => 'int', 'is_prohibited' => 'bool'];
 
     /**
      * @var bool
