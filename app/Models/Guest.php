@@ -2,6 +2,7 @@
 
 namespace Coyote;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -46,5 +47,23 @@ class Guest extends Model
         $settings[$name] = $value;
 
         $this->settings = $settings;
+    }
+
+    /**
+     * @param Session $session
+     */
+    public function saveWithSession(Session $session)
+    {
+        $this->updated_at = Carbon::createFromTimestamp($session->updatedAt);
+        // @todo mozna sprawdzac czy w tabeli users nie ma usera o guest_id = $session->guestId
+        // dzieki temu ta kolumna bedzie zawsze wskazywala na prawidlowego usera
+        $this->user_id = $session->userId;
+
+        if (!$this->exists) {
+            $this->id = $session->guestId;
+            $this->created_at = Carbon::createFromTimestamp($session->createdAt);
+        }
+
+        $this->save();
     }
 }

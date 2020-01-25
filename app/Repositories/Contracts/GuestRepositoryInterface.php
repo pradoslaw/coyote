@@ -2,12 +2,10 @@
 
 namespace Coyote\Repositories\Contracts;
 
-use Coyote\Session;
-
+/**
+ * @deprecated
+ */
 interface GuestRepositoryInterface extends RepositoryInterface
 {
-    /**
-     * @param Session $session
-     */
-    public function save(Session $session);
+    //
 }
