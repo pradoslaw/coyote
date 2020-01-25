@@ -68,7 +68,7 @@ class PostsController extends Controller
      */
     public function show(Post $post)
     {
-        $this->authorize('access', $post->forum);
+        $this->authorizeForUser($this->user, 'access', $post->forum);
 
         $post->load($this->includeUser());
 
