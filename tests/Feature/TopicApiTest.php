@@ -31,6 +31,11 @@ class TopicApiTest extends TestCase
      */
     private $topic;
 
+    /**
+     * @var string
+     */
+    private $token;
+
     public function setUp()
     {
         parent::setUp();
@@ -41,6 +46,8 @@ class TopicApiTest extends TestCase
 
         $this->forum->access()->create(['group_id' => $this->user->groups()->first()->id]);
         $this->topic = factory(Topic::class)->create(['forum_id' => $this->forum->id]);
+
+        $this->token = $this->user->createToken('4programmers.net')->accessToken;
     }
 
     public function testShowAllTopics()
@@ -55,24 +62,23 @@ class TopicApiTest extends TestCase
 
     public function testShowAllTopicsAuthorized()
     {
-        $this->actingAs($this->user, 'api');
-
-        $request = $this->get('/v1/topics', ['Accept' => 'application/json']);
+        $request = $this->get('/v1/topics', ['Accept' => 'application/json', 'Authorization' => 'Bearer ' . $this->token]);
         $data = $request->decodeResponseJson('data');
 
         $this->assertEquals($this->topic->subject, $data[0]['subject']);
         $this->assertTrue($data[0]['is_read']);
     }
 
-    public function testShowTopicWhenAuthorized()
+    public function testShowForbiddenWhenUnauthorized()
     {
         $request = $this->get('/v1/topics/' . $this->topic->id, ['Accept' => 'application/json']);
 
         $request->assertForbidden();
+    }
 
-        $this->actingAs($this->user, 'api');
-
-        $request = $this->get('/v1/topics/' . $this->topic->id, ['Accept' => 'application/json']);
+    public function testShowTopicWhenAuthorized()
+    {
+        $request = $this->get('/v1/topics/' . $this->topic->id, ['Accept' => 'application/json', 'Authorization' => 'Bearer ' . $this->token]);
 
         $request->assertJsonFragment([
             'subject' => $this->topic->subject,
