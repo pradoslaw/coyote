@@ -101,7 +101,8 @@ class ForumPolicy
      */
     public function access(?User $user, Forum $forum): bool
     {
-        if (!$forum->is_prohibited) {
+        // field must be present in model
+        if ($forum->is_prohibited === false) {
             return true;
         }
 

@@ -55,7 +55,7 @@ class ForumCollectionTest extends TestCase
         $this->assertEquals(1, $result[$parent->id]['topics']);
         $this->assertEquals(1, $result[$parent->id]['posts']);
 
-        $this->assertEquals(1, $child2['topics']);
-        $this->assertEquals(1, $child2['posts']);
+        $this->assertEquals(1, $children[1]['topics']);
+        $this->assertEquals(1, $children[1]['posts']);
     }
 }

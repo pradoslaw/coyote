@@ -65,7 +65,7 @@ class TopicsController extends Controller
         $topic->pushCriteria(new EagerLoading(['tags']));
         $topic->pushCriteria(new LoadMarkTime($this->guestId));
         $topic->pushCriteria(new EagerLoading(['forum' => function (BelongsTo $builder) {
-            return $builder->select('forums.id', 'forums.name', 'forums.slug')->withForumMarkTime($this->guestId);
+            return $builder->select('forums.id', 'forums.name', 'forums.slug', 'is_prohibited')->withForumMarkTime($this->guestId);
         }]));
 
         $topic->pushCriteria(new OnlyThoseWithAccess($this->user));
@@ -94,7 +94,7 @@ class TopicsController extends Controller
         $topic
             ->load(['tags'])
             ->load(['forum' => function ($builder) {
-                return $builder->select('forums.id', 'forums.name', 'forums.slug')->withForumMarkTime($this->guestId);
+                return $builder->select('forums.id', 'forums.name', 'forums.slug', 'is_prohibited')->withForumMarkTime($this->guestId);
             }]);
 
         $this->authorize('access', $topic->forum);

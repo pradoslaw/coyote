@@ -38,7 +38,8 @@ class TopicApiTest extends TestCase
         $this->user = $this->createUserWithGroup();
 
         $this->forum = factory(Forum::class)->create(['is_prohibited' => true]);
-        $this->forum->access()->create(['group_id' => $this->user->group()->first()->id]);
+
+        $this->forum->access()->create(['group_id' => $this->user->groups()->first()->id]);
         $this->topic = factory(Topic::class)->create(['forum_id' => $this->forum->id]);
     }
 
