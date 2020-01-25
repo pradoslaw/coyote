@@ -28,7 +28,8 @@
       <div v-for="(category, index) in categories" v-if="!category.is_hidden" :class="{'new': !category.is_read}" class="panel-body">
         <div class="row">
           <div class="col-lg-7 col-xs-12 col-sm-6 col-main">
-            <i :class="{'new': !category.is_read}" class="logo far fa-comments pull-left visible-lg"></i>
+            <i v-if="category.is_locked" class="logo fa fa-lock pull-left visible-lg"></i>
+            <i v-else :class="{'new': !category.is_read}" class="logo far fa-comments pull-left visible-lg"></i>
 
             <div class="wrap">
               <h3><a :href="category.url">{{ category.name }}</a></h3>
@@ -47,7 +48,11 @@
             </div>
           </div>
 
-          <div class="col-lg-1 col-xs-12 col-sm-6 col-lg-stat">
+          <div v-if="category.is_redirected" class="col-lg-5 col-xs-12 col-sm-6 text-center">
+            Liczba przekierowań: {{ category.redirects }}
+          </div>
+
+          <div v-if="!category.is_redirected" class="col-lg-1 col-xs-12 col-sm-6 col-lg-stat">
             <div class="row">
               <div class="col-lg-12 col-xs-6 counter">
                 <strong>{{ category.topics | number }}</strong>
@@ -61,7 +66,7 @@
             </div>
           </div>
 
-          <div class="col-lg-4 col-xs-12 col-sm-12">
+          <div v-if="!category.is_redirected" class="col-lg-4 col-xs-12 col-sm-12">
             <div v-if="category.post" class="media">
               <div class="media-left hidden-xs">
                 <a v-profile="category.post.user.id">

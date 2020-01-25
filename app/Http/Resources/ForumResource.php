@@ -10,6 +10,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property Post $post
  * @property \Carbon\Carbon $read_at
  * @property int $order
+ * @property string $url
  */
 class ForumResource extends JsonResource
 {
@@ -23,7 +24,7 @@ class ForumResource extends JsonResource
     {
         $only = array_except(
             parent::toArray($request),
-            ['order', 'require_tag', 'enable_prune', 'enable_reputation', 'enable_anonymous', 'prune_days', 'prune_last', 'post', 'redirects', 'last_post_id']
+            ['order', 'require_tag', 'enable_prune', 'enable_reputation', 'enable_anonymous', 'prune_days', 'prune_last', 'post', 'last_post_id']
         );
 
         return array_merge($only, [
@@ -31,6 +32,7 @@ class ForumResource extends JsonResource
             'is_read' => $this->isRead(),
             'order' => $this->custom_order ?? $this->order,
             'is_hidden' => $this->is_hidden ?? false,
+            'is_redirected' => $this->url,
 
             $this->mergeWhen($this->whenLoaded('post'), function () {
                 // set relation to avoid unnecessary db request in UrlBuilder
