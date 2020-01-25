@@ -57,16 +57,18 @@ class ForumCollection extends ResourceCollection
         $parents = $categories->where('parent_id', $parentId)->keyBy('id');
 
         // extract only children categories
-        $children = $categories
+        $childrenGroup = $categories
             ->filter(function ($item) use ($parentId) {
                 return $item['parent_id'] != $parentId;
             })
-            ->keyBy('parent_id');
+            ->groupBy('parent_id');
 
         // we merge children with parent element
-        foreach ($children as $parentId => $child) {
-            if (!empty($parents[$parentId])) {
-                $parents[$parentId] = $this->mergeChildren($parents[$parentId], $child);
+        foreach ($childrenGroup as $parentId => $children) {
+            foreach ($children as $child) {
+                if (!empty($parents[$parentId])) {
+                    $parents[$parentId] = $this->mergeChildren($parents[$parentId], $child);
+                }
             }
         }
 
