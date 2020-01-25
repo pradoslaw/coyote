@@ -74,6 +74,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $table = 'users';
 
     /**
+     * @var array
+     */
+    protected $attributes = ['date_format' => '%Y-%m-%d %H:%M'];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
