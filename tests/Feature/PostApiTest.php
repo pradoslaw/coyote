@@ -44,7 +44,7 @@ class PostApiTest extends TestCase
         $group = factory(Group::class)->create();
         $group->users()->attach($this->user->id);
 
-        $this->forum = factory(Forum::class)->create();
+        $this->forum = factory(Forum::class)->create(['is_prohibited' => true]);
         $this->forum->access()->create(['group_id' => $group->id]);
         $this->topic = factory(Topic::class)->create(['forum_id' => $this->forum->id]);
         $this->post = factory(Post::class)->create(['forum_id' => $this->forum->id, 'topic_id' => $this->topic->id]);
