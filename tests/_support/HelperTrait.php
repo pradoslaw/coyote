@@ -33,7 +33,8 @@ trait HelperTrait
         $data = [
             'name' => $name = $fake->name,
             'slug' => str_slug($name),
-            'description' => $fake->text
+            'description' => $fake->text,
+            'is_prohibited' => 0
         ];
 
         return \Coyote\Forum::forceCreate(array_merge($data, $attributes));

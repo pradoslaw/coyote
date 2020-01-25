@@ -175,6 +175,7 @@ class PermissionTest extends \Codeception\TestCase\Test
         $this->tester->haveRecord(\Coyote\Forum\Access::class, ['forum_id' => $forum->id, 'group_id' => $admins->id]);
 
         $forum->is_prohibited = true;
+        $forum->save();
 
         $this->assertFalse($user->can('access', $forum));
         $this->assertFalse(\Illuminate\Support\Facades\Gate::allows('access', $forum));
