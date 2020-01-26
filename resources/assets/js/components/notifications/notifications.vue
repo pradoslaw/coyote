@@ -11,7 +11,7 @@
         <a title="Przejdź do listy powiadomień" href="/User/Notifications">Powiadomienia</a>
 
         <div class="pull-right">
-          <a @click.stop="openAll" title="Otwórz wszystkie" href="javascript:" style="margin-right: 5px;">
+          <a @click.stop="openAll" title="Otwórz nowe w nowej karcie" href="javascript:" class="margin-xs-right">
             <i class="fas fa-external-link-alt"></i>
           </a>
 
@@ -87,16 +87,11 @@
       },
 
       openAll() {
-        const bodyHandler = document.querySelector('body');
+        const newNotifications = this.notifications.filter(notification => !notification.is_read);
 
-        this.notifications.map(notification => {
-          const tempHandler = document.createElement('a');
-          tempHandler.setAttribute('target', '_blank');
-          tempHandler.setAttribute('href', notification.url);
-
-          bodyHandler.append(tempHandler);
-          tempHandler.click();
-          tempHandler.remove();
+        newNotifications.forEach(notification => {
+          this.$store.commit('notifications/mark', notification);
+          window.open(notification.url);
         });
       },
 
