@@ -80,11 +80,23 @@
     font-size: 18px;
     color: $brand-primary;
     padding: 5px;
+    position: relative;
+
+    b {
+      width: 10px;
+      height: 10px;
+      background-color: #d7661c;
+      border-radius: 50%;
+      position: absolute;
+      bottom: 2px;
+      right: 0;
+      border: 2px solid #fff;
+    }
   }
 
-  .logo.new {
-    color: $alt-link-hover-color;
-  }
+  //.logo.new {
+  //  color: $alt-link-hover-color;
+  //}
 
   .col-lg-stat {
     white-space: nowrap;

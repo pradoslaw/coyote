@@ -28,8 +28,13 @@
       <div v-for="(category, index) in categories" v-if="!category.is_hidden" :class="{'new': !category.is_read}" class="panel-body">
         <div class="row">
           <div class="col-lg-7 col-xs-12 col-sm-6 col-main">
-            <i v-if="category.is_locked" class="logo fa fa-lock pull-left visible-lg"></i>
-            <i v-else :class="{'new': !category.is_read}" class="logo far fa-comments pull-left visible-lg"></i>
+            <i v-if="category.is_locked" class="logo fas fa-lock pull-left visible-lg"></i>
+<!--            <i v-else :class="['new': !category.is_read]" class="logo far fa-comments pull-left visible-lg"></i>-->
+            <a v-else @click="asRead(category)" href="javascript:" title="Oznacz jako przeczytane">
+              <i :class="className(category.name)" class="logo far fa-comments pull-left visible-lg">
+                <b v-if="!category.is_read"></b>
+              </i>
+            </a>
 
             <div class="wrap">
               <h3><a :href="category.url">{{ category.name }}</a></h3>
@@ -194,6 +199,10 @@
         }
 
         return result;
+      },
+
+      className(name) {
+        return 'logo-' + name.toLowerCase().replace(' ', '_');
       },
 
       _findIndex(order, section) {
