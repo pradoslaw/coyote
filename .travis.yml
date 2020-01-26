@@ -28,9 +28,9 @@ before_script:
   - docker-compose exec --user=nginx:nginx php php artisan route:clear
 
 script:
-  - docker-compose exec --user=nginx:nginx php php vendor/bin/codecept run
+#  - docker-compose exec --user=nginx:nginx php php vendor/bin/codecept run
   - docker-compose exec --user=nginx:nginx php php vendor/bin/phpunit
-  - docker-compose exec --user=nginx:nginx php php artisan dusk
+#  - docker-compose exec --user=nginx:nginx php php artisan dusk
 
 after_script:
   - docker-compose stop
