@@ -31,5 +31,10 @@ class QueryParserTest extends \Codeception\TestCase\Test
         $parser = new \Coyote\Services\Elasticsearch\QueryParser('user:"admin adminski"', $this->keywords);
         $this->assertArrayHasKey('user', $filters = $parser->getFilters());
         $this->assertEquals('admin adminski', $filters['user']);
+
+        $parser = new \Coyote\Services\Elasticsearch\QueryParser('user:"test"test', $this->keywords);
+        $this->assertArrayHasKey('user', $filters = $parser->getFilters());
+        $this->assertEquals('test', $filters['user']);
+        $this->assertEquals('test', $parser->getFilteredQuery());
     }
 }

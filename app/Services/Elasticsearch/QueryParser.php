@@ -108,36 +108,15 @@ class QueryParser
      */
     protected function parse()
     {
-        $segments = preg_split("/[\s,]+/", $this->inputQuery, -1);
-        $unset = [];
+        preg_match('/(user|ip)\:\"?([0-9a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ._ -]{1,})\"?/', $this->inputQuery, $matches);
 
-        foreach ($segments as $index => $segment) {
-            if (strpos($segment, ':') !== false) {
-                list($name, $value) = explode(':', $segment, 2);
-
-                if (in_array($name, $this->allowedKeywords)) {
-                    $unset[] = $index;
-
-                    if (strlen($value) >= 1 && $value{0} === '"' && substr($value, -1) !== '"') {
-                        for ($i = $index + 1, $count = count($segments); $i <= $count; $i++) {
-                            $value .= ' ' . $segments[$i];
-                            $unset[] = $i;
-
-                            if (substr($segments[$i], -1) === '"') {
-                                break;
-                            }
-                        }
-                    }
-
-                    $this->filters[$name] = trim($value, '"');
-                }
-            }
+        if (empty($matches)) {
+            return;
         }
 
-        foreach ($unset as $idx) {
-            unset($segments[$idx]);
-        }
+        list($original, $key, $value) = $matches;
 
-        $this->filteredQuery = implode(' ', $segments);
+        $this->filteredQuery = str_replace($original, '', $this->inputQuery);
+        $this->filters[$key] = trim($value, '"');
     }
 }
