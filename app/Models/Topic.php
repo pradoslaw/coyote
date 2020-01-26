@@ -268,7 +268,7 @@ class Topic extends Model
     /**
      * Mark topic as read
      *
-     * @param string $markTime
+     * @param \Carbon\Carbon $markTime
      * @param string $guestId
      */
     public function markAsRead($markTime, $guestId)

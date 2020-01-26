@@ -91,7 +91,6 @@ class Tracker
      */
     public function isRead(): bool
     {
-        var_dump($this->getMarkTime(),$this->model->last_post_created_at);
         return $this->getMarkTime() >= $this->model->last_post_created_at;
     }
 
@@ -114,7 +113,7 @@ class Tracker
         );
 
         if (!$unread) {
-            $this->model->forum->markAsRead($this->guestId);
+            $this->model->forum->markAsRead($date, $this->guestId);
             // remove all unnecessary records from topic_track table
             $this->repository->flushRead($this->model->forum->id, $this->guestId);
         }
