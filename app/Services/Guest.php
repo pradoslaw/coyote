@@ -2,6 +2,7 @@
 
 namespace Coyote\Services;
 
+use Carbon\Carbon;
 use Coyote\Guest as Model;
 
 /**
@@ -24,11 +25,35 @@ class Guest
     protected $model = null;
 
     /**
+     * @var Carbon
+     */
+    private $defaultSessionTime;
+
+    /**
      * @param string|null $guestId
      */
     public function __construct(?string $guestId)
     {
         $this->guestId = $guestId;
+    }
+
+    /**
+     * @param Carbon $defaultSessionTime
+     * @return $this
+     */
+    public function setDefaultSessionTime(Carbon $defaultSessionTime): self
+    {
+        $this->defaultSessionTime = $defaultSessionTime;
+
+        return $this;
+    }
+
+    /**
+     * @return Carbon
+     */
+    public function getDefaultSessionTime(): Carbon
+    {
+        return $this->defaultSessionTime ?? Carbon::now('utc');
     }
 
     /**

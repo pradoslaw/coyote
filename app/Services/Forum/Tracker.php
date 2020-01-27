@@ -77,7 +77,7 @@ class Tracker
         }
 
         if (empty($markTime)) {
-            $markTime = $this->guest->updated_at ?? now('UTC');
+            $markTime = $this->guest->updated_at ?? $this->guest->getDefaultSessionTime();
         }
 
         return $markTime;

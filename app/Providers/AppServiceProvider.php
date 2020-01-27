@@ -2,6 +2,7 @@
 
 namespace Coyote\Providers;
 
+use Carbon\Carbon;
 use Coyote\Forum;
 use Coyote\Services\FormBuilder\FormBuilder;
 use Coyote\Services\FormBuilder\FormInterface;
@@ -89,7 +90,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(Guest::class, function ($app) {
-            return new Guest($app['session.store']->get('guest_id'));
+            return (new Guest($app['session.store']->get('guest_id')))->setDefaultSessionTime(Carbon::createFromTimestamp($app['session.store']->get('created_at')));
         });
 
         $this->app->singleton('form.builder', function ($app) {

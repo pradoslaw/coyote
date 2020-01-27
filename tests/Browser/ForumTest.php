@@ -11,6 +11,8 @@ class ForumTest extends DuskTestCase
     {
         $forum = $this->createForum(['is_locked' => true]);
 
+        $this->assertTrue($forum->is_locked);
+
         $this->browse(function (Browser $browser) use ($forum) {
             try {
                 $browser

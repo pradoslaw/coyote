@@ -32,7 +32,7 @@ class ForumsController extends Controller
         $this->user = $auth->guard('api')->user();
         $this->guestId = $this->user->guest_id ?? null;
 
-        $app->singleton(Guest::class, function ()  {
+        $app->singleton(Guest::class, function () {
             return new Guest($this->guestId);
         });
     }
