@@ -18,9 +18,9 @@ class Tracker
     private $model;
 
     /**
-     * @var string|null
+     * @var Guest
      */
-    private $guestId;
+    private $guest;
 
     /**
      * @var TopicRepository
@@ -29,22 +29,21 @@ class Tracker
 
     /**
      * @param Topic $model
-     * @param string|null $guestId
      * @return static
      */
-    public static function make(Topic $model, ?string $guestId): self
+    public static function make(Topic $model): self
     {
-        return (new self($model, $guestId))->setRepository(app(TopicRepository::class));
+        return app(static::class, ['model' => $model])->setRepository(app(TopicRepository::class));
     }
 
     /**
      * @param Topic $model
-     * @param string|null $guestId
+     * @param Guest $guest
      */
-    public function __construct(Topic $model, ?string $guestId)
+    public function __construct(Topic $model, Guest $guest)
     {
         $this->model = $model;
-        $this->guestId = $guestId;
+        $this->guest = $guest;
     }
 
     /**
@@ -71,16 +70,14 @@ class Tracker
      */
     public function getMarkTime(): Carbon
     {
-        $markTime = $this->model->markTime($this->guestId);
+        $markTime = $this->model->markTime($this->guest->id);
 
         if (empty($markTime)) {
-            $markTime = $this->model->forum->markTime($this->guestId);
+            $markTime = $this->model->forum->markTime($this->guest->id);
         }
 
         if (empty($markTime)) {
-            $guest = app(Guest::class);
-
-            $markTime = $guest->created_at ?? now('UTC');
+            $markTime = $this->guest->created_at ?? now('UTC');
         }
 
         return $markTime;
@@ -99,7 +96,7 @@ class Tracker
      */
     public function asRead($date)
     {
-        $this->model->markAsRead($date, $this->guestId);
+        $this->model->markAsRead($date, $this->guest->id);
 
         if ($this->model->last_post_created_at > $date) {
             return;
@@ -108,14 +105,14 @@ class Tracker
         // are there any unread topics in this category?
         $unread = $this->repository->countUnread(
             $this->model->forum->id,
-            $this->model->forum->markTime($this->guestId),
-            $this->guestId
+            $this->model->forum->markTime($this->guest->id),
+            $this->guest->id
         );
 
         if (!$unread) {
-            $this->model->forum->markAsRead($date, $this->guestId);
+            $this->model->forum->markAsRead($date, $this->guest->id);
             // remove all unnecessary records from topic_track table
-            $this->repository->flushRead($this->model->forum->id, $this->guestId);
+            $this->repository->flushRead($this->model->forum->id, $this->guest->id);
         }
     }
 

@@ -149,12 +149,12 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Collection::macro('mapCategory', function ($guestId) {
-            return $this->map(function (Forum $forum) use ($guestId) {
+            return $this->map(function (Forum $forum) {
                 $post = $forum->post;
 
                 if ($post) {
                     $post->topic->setRelation('forum', $forum);
-                    $post->setRelation('topic', Tracker::make($post->topic, $guestId));
+                    $post->setRelation('topic', Tracker::make($post->topic));
                 }
 
                 return $forum;

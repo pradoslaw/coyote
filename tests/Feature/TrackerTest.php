@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Coyote\Forum;
 use Coyote\Guest;
 use Coyote\Post;
+use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 use Coyote\Services\Forum\Tracker;
 use Coyote\Topic;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -41,7 +42,7 @@ class TrackerTest extends TestCase
 
         $topic->refresh(); // refresh from db after submitting new post
 
-        $marker = Tracker::make($topic, $this->faker->uuid);
+        $marker = $this->factory($topic, $this->faker->uuid);
 
         // post is NOT new
         $this->assertTrue($marker->isRead());
@@ -54,7 +55,7 @@ class TrackerTest extends TestCase
 
         $topic->refresh(); // refresh from db after submitting new post
 
-        $marker = Tracker::make($topic, null);
+        $marker = $this->factory($topic, null);
 
         // post is NOT new
         $this->assertTrue($marker->isRead());
@@ -64,7 +65,7 @@ class TrackerTest extends TestCase
         factory(Post::class)->create(['forum_id' => $this->forum->id, 'topic_id' => $topic->id, 'created_at' => Carbon::now()->addMinute(1)]);
         $topic->refresh(); // refresh from db after submitting new post
 
-        $marker = Tracker::make($topic, $this->guestId);
+        $marker = $this->factory($topic, $this->guestId);
 
         // is post new
         $this->assertFalse($marker->isRead());
@@ -77,7 +78,7 @@ class TrackerTest extends TestCase
 
         $topic->refresh(); // refresh from db after submitting new post
 
-        $tracker = Tracker::make($topic, $this->guestId);
+        $tracker = $this->factory($topic, $this->guestId);
         $tracker->asRead($topic->last_post_created_at);
 
         $this->assertDatabaseHas('forum_track', ['forum_id' => $this->forum->id, 'guest_id' => $this->guestId]);
@@ -95,7 +96,7 @@ class TrackerTest extends TestCase
 
         $topic->refresh(); // refresh from db after submitting new post
 
-        $tracker = Tracker::make($topic, $this->guestId);
+        $tracker = $this->factory($topic, $this->guestId);
         $tracker->asRead($topic->last_post_created_at);
 
         $this->assertDatabaseHas('topic_track', ['forum_id' => $this->forum->id, 'topic_id' => $topic->id, 'guest_id' => $this->guestId]);
@@ -113,9 +114,16 @@ class TrackerTest extends TestCase
 
         $topic->refresh(); // refresh from db after submitting new post
 
-        $tracker = Tracker::make($topic, $this->guestId);
+        $tracker = $this->factory($topic, $this->guestId);
         $tracker->asRead($topic->last_post_created_at);
 
         $this->assertDatabaseHas('forum_track', ['forum_id' => $this->forum->id, 'guest_id' => $this->guestId]);
+    }
+
+    private function factory(Topic $model, ?string $guestId)
+    {
+        $guest = new \Coyote\Services\Guest($guestId);
+
+        return (new Tracker($model, $guest))->setRepository(app(TopicRepositoryInterface::class));
     }
 }

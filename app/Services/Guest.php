@@ -4,6 +4,10 @@ namespace Coyote\Services;
 
 use Coyote\Guest as Model;
 
+/**
+ * @property int $id
+ * @property \Carbon\Carbon $created_at
+ */
 class Guest
 {
     /**

@@ -3,9 +3,10 @@
 namespace Tests\Feature;
 
 use Coyote\Forum;
-use Coyote\Guest;
 use Coyote\Post;
+use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 use Coyote\Services\Forum\Tracker;
+use Coyote\Services\Guest;
 use Coyote\Topic;
 use Coyote\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -89,7 +90,7 @@ class TopicApiTest extends TestCase
 
     public function testMarkAsRead()
     {
-        Tracker::make($this->topic, $this->user->guest_id)->asRead($this->topic->last_post_created_at);
+        $this->factory($this->topic)->asRead($this->topic->last_post_created_at);
 
         $request = $this->get('/v1/topics/' . $this->topic->id, ['Accept' => 'application/json', 'Authorization' => 'Bearer ' . $this->token]);
         $data = $request->decodeResponseJson();
@@ -99,7 +100,7 @@ class TopicApiTest extends TestCase
 
     public function testShowAllTopicsWithMarkedAsRead()
     {
-        Tracker::make($this->topic, $this->user->guest_id)->asRead($this->topic->last_post_created_at);
+        $this->factory($this->topic)->asRead($this->topic->last_post_created_at);
 
         $request = $this->get('/v1/topics', ['Accept' => 'application/json', 'Authorization' => 'Bearer ' . $this->token]);
         $data = $request->decodeResponseJson('data');
@@ -110,7 +111,7 @@ class TopicApiTest extends TestCase
 
     public function testShowTopicAsNew()
     {
-        Guest::forceCreate(['id' => $this->user->guest_id, 'updated_at' => now()->subMinute(5)]);
+        \Coyote\Guest::forceCreate(['id' => $this->user->guest_id, 'updated_at' => now()->subMinute(5)]);
 
         $topic = factory(Topic::class)->create(['forum_id' => $this->forum->id]);
         factory(Post::class)->create(['topic_id' => $topic->id, 'forum_id' => $this->forum->id, 'created_at' => now()]);
@@ -119,5 +120,12 @@ class TopicApiTest extends TestCase
         $data = $request->decodeResponseJson();
 
         $this->assertFalse($data['is_read']);
+    }
+
+    private function factory(Topic $model)
+    {
+        $guest = new Guest($this->user->guest_id);
+
+        return (new Tracker($model, $guest))->setRepository(app(TopicRepositoryInterface::class));
     }
 }
