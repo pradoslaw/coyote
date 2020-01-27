@@ -1,6 +1,6 @@
 <template>
   <div :class="{'unread': ! notification.is_read}" class="notification">
-    <a @click.prevent="showNotification(notification)" @mousedown="markAsRead(notification)" :href="notification.url" :title="notification.headline" class="notification-link">
+    <a @click="showNotification(notification)" @mousedown="markAsRead(notification)" :href="notification.url" :title="notification.headline" class="notification-link">
       <div class="media">
         <div class="media-left">
           <object class="media-object" :data="notification.photo || '//'" type="image/png">

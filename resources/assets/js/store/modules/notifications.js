@@ -8,7 +8,8 @@ const state = {
 };
 
 const getters = {
-  isEmpty: state => state.notifications === null
+  isEmpty: state => state.notifications === null,
+  unreadNotifications: state => state.notifications === null ? [] : state.notifications.filter(notification => !notification.is_read)
 };
 
 const mutations = {
