@@ -32,7 +32,7 @@ class ForumResource extends JsonResource
             'is_read' => $this->isRead(),
             'order' => $this->custom_order ?? $this->order,
             'is_hidden' => $this->is_hidden ?? false,
-            'is_redirected' => $this->url,
+            'is_redirected' => $this->url !== null,
 
             $this->mergeWhen($this->whenLoaded('post'), function () {
                 // set relation to avoid unnecessary db request in UrlBuilder
@@ -59,6 +59,6 @@ class ForumResource extends JsonResource
 
     private function isRead(): bool
     {
-        return $this->whenLoaded('post') ? $this->read_at >= $this->post->created_at : true;
+        return $this->whenLoaded('post') && $this->read_at ? $this->read_at >= $this->post->created_at : true;
     }
 }

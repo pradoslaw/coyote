@@ -148,7 +148,7 @@ class AppServiceProvider extends ServiceProvider
             });
         });
 
-        Collection::macro('mapCategory', function ($guestId) {
+        Collection::macro('mapCategory', function () {
             return $this->map(function (Forum $forum) {
                 $post = $forum->post;
 

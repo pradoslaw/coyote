@@ -7,6 +7,7 @@ use Coyote\Guest as Model;
 /**
  * @property int $id
  * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
  */
 class Guest
 {
@@ -90,7 +91,7 @@ class Guest
             return;
         }
 
-        $this->model = Model::findOrNew($this->guestId, ['id', 'settings', 'created_at']);
+        $this->model = Model::findOrNew($this->guestId, ['id', 'settings', 'created_at', 'updated_at']);
 
         if (!$this->model->exists) {
             $this->model->id = $this->guestId;

@@ -130,17 +130,16 @@ class HomeController extends BaseController
      */
     public function categories()
     {
-        start_measure('foo');
         // execute query: get all categories that user can has access
         $forums = $this->withCriteria(function () {
             return $this
                 ->forum
                 ->categories($this->guestId)
-                ->mapCategory($this->guestId);
+                ->mapCategory();
         });
 
         $forums = new ForumCollection($forums);
-stop_measure('foo');
+
         return $this->view('forum.home')->with(compact('forums'));
     }
 

@@ -14,9 +14,21 @@ class ForumApiTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function testShowAllAccessCategoriesAsAnonymousUser()
+    public function testShowAllAccessCategoriesAsAnonymousUserWithEmptyCategory()
     {
         $forum = factory(Forum::class)->create(['order' => 0]);
+
+        $request = $this->get('/v1/forums', ['Accept' => 'application/json']);
+        $data = $request->decodeResponseJson();
+
+        $this->assertEquals($forum->name, $data[0]['name']);
+        $this->assertTrue($data[0]['is_read']);
+    }
+
+    public function testShowAllAccessCategoriesAsAnonymousUserWithNonEmptyCategory()
+    {
+        $forum = factory(Forum::class)->create(['order' => 0]);
+        factory(Topic::class)->create(['forum_id' => $forum->id]);
 
         $request = $this->get('/v1/forums', ['Accept' => 'application/json']);
         $data = $request->decodeResponseJson();
@@ -49,9 +61,9 @@ class ForumApiTest extends TestCase
         $forum = factory(Forum::class)->create(['order' => 0]);
         $topic = factory(Topic::class)->create(['forum_id' => $forum->id]);
 
-        $this->actingAs($user, 'api');
+        $token = $user->createToken('4programmers.net')->accessToken;
 
-        $request = $this->get('/v1/forums', ['Accept' => 'application/json']);
+        $request = $this->get('/v1/forums', ['Accept' => 'application/json', 'Authorization' => 'Bearer ' . $token]);
         $data = $request->decodeResponseJson();
 
         $this->assertEquals($forum->name, $data[0]['name']);
