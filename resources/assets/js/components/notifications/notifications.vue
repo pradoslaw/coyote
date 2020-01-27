@@ -10,9 +10,15 @@
       <div class="dropdown-header">
         <a title="Przejdź do listy powiadomień" href="/User/Notifications">Powiadomienia</a>
 
-        <a @click.stop="markAllAsRead" title="Oznacz jako przeczytane" href="javascript:" class="pull-right">
-          <i class="far fa-calendar-check"></i>
-        </a>
+        <div class="pull-right">
+          <a v-if="unreadNotifications.length > 0" @click="openAll" title="Otwórz nowe w nowej karcie" href="javascript:" class="margin-xs-right">
+            <i class="fas fa-external-link-alt"></i>
+          </a>
+
+          <a @click="markAllAsRead" title="Oznacz jako przeczytane" href="javascript:">
+            <i class="far fa-calendar-check"></i>
+          </a>
+        </div>
       </div>
 
       <perfect-scrollbar ref="scrollbar" class="dropdown-modal" :options="{wheelPropagation: false}">
@@ -37,7 +43,7 @@
   import {default as PerfectScrollbar} from '../perfect-scrollbar';
   import {mixin as clickaway} from 'vue-clickaway';
   import VueNotification from './notification.vue';
-  import { mapState } from 'vuex';
+  import { mapState, mapGetters } from 'vuex';
 
   export default {
     mixins: [clickaway],
@@ -80,15 +86,23 @@
         this.$store.dispatch('notifications/markAll');
       },
 
+      openAll() {
+        this.unreadNotifications.forEach(notification => {
+          window.open(`/notification/${notification.id}`);
+
+          this.$store.commit('notifications/mark', notification);
+        });
+      },
+
       hideDropdown() {
         this.isOpen = false;
       },
 
       resetNotifications() {
-        this.$refs.scrollbar.$refs.container.removeEventListener('ps-y-reach-end', this.loadMoreNotifications);
         this.isOpen = false;
-
         this.$store.commit('notifications/reset');
+
+        this.$refs.scrollbar.$refs.container.removeEventListener('ps-y-reach-end', this.loadMoreNotifications);
       },
 
       listenForNotification() {
@@ -135,6 +149,10 @@
       }
     },
 
-    computed: mapState('notifications', ['notifications', 'count'])
+    computed: {
+      ...mapState('notifications', ['notifications', 'count']),
+      ...mapGetters('notifications', ['unreadNotifications'])
+
+    }
   }
 </script>

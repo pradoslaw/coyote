@@ -86,6 +86,8 @@ class ForumCest
 
         $I->haveRecord(\Coyote\Group\User::class, ['group_id' => $group->id, 'user_id' => $adminUser->id]);
         $I->haveRecord(\Coyote\Forum\Access::class, ['forum_id' => $forum->id, 'group_id' => $group->id]);
+        $forum->is_prohibited = true;
+        $forum->save();
 
         $I->click('Zapisz');
 

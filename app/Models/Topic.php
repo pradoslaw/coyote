@@ -326,7 +326,7 @@ class Topic extends Model
         $body = $this->parentGetIndexBody();
 
         // we need to index every field from topics except:
-        $body = array_only($body, ['id', 'subject', 'slug', 'updated_at']);
+        $body = array_only($body, ['id', 'forum_id', 'subject', 'slug', 'updated_at']);
         $posts = [];
 
         foreach ($this->posts()->get(['text']) as $post) {

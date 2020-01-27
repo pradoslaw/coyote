@@ -9,6 +9,7 @@ use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Repositories\Criteria\Sort;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
 use Coyote\Topic;
+use Coyote\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -18,8 +19,19 @@ class TopicsController extends Controller
 {
     use AuthorizesRequests;
 
-    public function __construct()
+    /**
+     * @var User
+     */
+    private $user;
+
+    /**
+     * TopicsController constructor.
+     * @param Auth $auth
+     */
+    public function __construct(Auth $auth)
     {
+        $this->user = $auth->guard('api')->user();
+
         TagResource::$url = function ($name) {
             return route('forum.tag', [urlencode($name)]);
         };
@@ -31,7 +43,7 @@ class TopicsController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index(TopicRepositoryInterface $topic, Auth $auth, Request $request)
+    public function index(TopicRepositoryInterface $topic, Request $request)
     {
         $validator = validator($request->all(), [
             'sort'          => 'nullable|in:id,last_post_id',
@@ -42,8 +54,7 @@ class TopicsController extends Controller
             return response($validator->errors(), 422);
         }
 
-        $user = $auth->guard('api')->user();
-        $guestId = $user->guest_id ?? null;
+        $guestId = $this->user->guest_id ?? null;
 
         $topic->pushCriteria(new Sort($request->input('sort', 'id'), $request->input('order', Sort::DESC)));
         $topic->pushCriteria(new EagerLoading(['tags']));
@@ -66,7 +77,7 @@ class TopicsController extends Controller
             return $builder;
         }]));
 
-        $topic->pushCriteria(new OnlyThoseWithAccess($user));
+        $topic->pushCriteria(new OnlyThoseWithAccess($this->user));
 
         $paginate = $topic->paginate();
 
@@ -80,7 +91,7 @@ class TopicsController extends Controller
      */
     public function show(Topic $topic)
     {
-        $this->authorize('access', $topic->forum);
+        $this->authorizeForUser($this->user, 'access', $topic->forum);
 
         $topic->load(['tags']);
 
