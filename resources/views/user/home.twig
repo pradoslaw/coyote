@@ -67,26 +67,26 @@
         </div>
     </div>
 
-    <h2 class="hidden-xs">Aktywne sesje</h2>
+{#    <h2 class="hidden-xs">Aktywne sesje</h2>#}
 
-    <div id="box-sessions" class="panel panel-default hidden-xs">
-        {% for session in sessions %}
-            <div class="row">
-                <div class="col-xs-5">
-                    <i class="fas fa-user"></i>
-                    {{ session.ip }}
-                </div>
-                <div class="col-xs-4">
-                    <i class="far fa-clock"></i>
-                    {{ session.updated_at|format_date }}
-                </div>
-                <div class="col-xs-3">
-                    <i class="fab fa-{{ session.agent.browser|lower }}"></i>
-                    {{ session.agent.browser }}
-                </div>
-            </div>
-        {% endfor %}
-    </div>
+{#    <div id="box-sessions" class="panel panel-default hidden-xs">#}
+{#        {% for session in sessions %}#}
+{#            <div class="row">#}
+{#                <div class="col-xs-5">#}
+{#                    <i class="fas fa-user"></i>#}
+{#                    {{ session.ip }}#}
+{#                </div>#}
+{#                <div class="col-xs-4">#}
+{#                    <i class="far fa-clock"></i>#}
+{#                    {{ session.updated_at|format_date }}#}
+{#                </div>#}
+{#                <div class="col-xs-3">#}
+{#                    <i class="fab fa-{{ session.agent.browser|lower }}"></i>#}
+{#                    {{ session.agent.browser }}#}
+{#                </div>#}
+{#            </div>#}
+{#        {% endfor %}#}
+{#    </div>#}
 
     {#<h2>Komunikaty</h2>#}
 

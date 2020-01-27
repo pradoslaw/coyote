@@ -21,21 +21,21 @@ class HomeController extends BaseController
      */
     public function index(UserRepository $user, SessionRepository $session)
     {
-        $sessions = $session->all()->where('user_id', $this->userId);
-
-        foreach ($sessions as &$row) {
-            $agent = new Agent();
-            $agent->setUserAgent($row['browser']);
-
-            $row['agent'] = $agent;
-            $row['updated_at'] = Carbon::createFromTimestamp($row['updated_at']);
-        }
+//        $sessions = $session->all()->where('user_id', $this->userId);
+//
+//        foreach ($sessions as &$row) {
+//            $agent = new Agent();
+//            $agent->setUserAgent($row['browser']);
+//
+//            $row['agent'] = $agent;
+//            $row['updated_at'] = Carbon::createFromTimestamp($row['updated_at']);
+//        }
 
         return $this->view('user.home', [
             'rank'                  => $user->rank($this->userId),
             'total_users'           => $user->countUsersWithReputation(),
             'ip'                    => request()->ip(),
-            'sessions'              => $sessions
+//            'sessions'              => $sessions
         ]);
     }
 
