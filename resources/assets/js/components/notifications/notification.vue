@@ -1,6 +1,6 @@
 <template>
   <div :class="{'unread': ! notification.is_read}" class="notification">
-    <a @click="showNotification(notification)" @mousedown="markAsRead(notification)" :href="notification.url" :title="notification.headline" class="notification-link">
+    <a @mousedown="markAsRead(notification)" :href="notification.url" :title="notification.headline" class="notification-link">
       <div class="media">
         <div class="media-left">
           <object class="media-object" :data="notification.photo || '//'" type="image/png">
@@ -37,10 +37,6 @@
     },
     store,
     methods: {
-      showNotification(notification) {
-        window.location.href = `/notification/${notification.id}`;
-      },
-
       markAsRead(notification) {
         notification.url = `/notification/${notification.id}`;
 
