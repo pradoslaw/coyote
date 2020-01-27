@@ -6,12 +6,11 @@
       <i class="fas fa-bell fa-fw"></i>
     </a>
 
-    <div ref="dropdown" v-if="isOpen" class="dropdown-alerts dropdown-menu right">
+    <div ref="dropdown" v-show="isOpen" class="dropdown-alerts dropdown-menu right">
       <div class="dropdown-header">
         <a title="Przejdź do listy powiadomień" href="/User/Notifications">Powiadomienia</a>
 
         <div class="pull-right">
-<!--          <a @click="openAll" title="Otwórz nowe w nowej karcie" href="javascript:" class="margin-xs-right">-->
           <a v-if="unreadNotifications.length > 0" @click="openAll" title="Otwórz nowe w nowej karcie" href="javascript:" class="margin-xs-right">
             <i class="fas fa-external-link-alt"></i>
           </a>
@@ -100,10 +99,10 @@
       },
 
       resetNotifications() {
-        this.$refs.scrollbar.$refs.container.removeEventListener('ps-y-reach-end', this.loadMoreNotifications);
         this.isOpen = false;
-
         this.$store.commit('notifications/reset');
+
+        this.$refs.scrollbar.$refs.container.removeEventListener('ps-y-reach-end', this.loadMoreNotifications);
       },
 
       listenForNotification() {
