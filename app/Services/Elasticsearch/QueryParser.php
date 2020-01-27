@@ -111,7 +111,7 @@ class QueryParser
         preg_match('/(user|ip)\:\"?([0-9a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ._ -]{1,})\"?/', $this->inputQuery, $matches);
 
         if (empty($matches)) {
-            return;
+            return $this->filteredQuery = $this->inputQuery;
         }
 
         list($original, $key, $value) = $matches;

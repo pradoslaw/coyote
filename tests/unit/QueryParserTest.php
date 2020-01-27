@@ -37,4 +37,10 @@ class QueryParserTest extends \Codeception\TestCase\Test
         $this->assertEquals('test', $filters['user']);
         $this->assertEquals('test', $parser->getFilteredQuery());
     }
+
+    public function testParseRegularQuery()
+    {
+        $parser = new \Coyote\Services\Elasticsearch\QueryParser('foo', $this->keywords);
+        $this->assertEquals('foo', $parser->getFilteredQuery());
+    }
 }
