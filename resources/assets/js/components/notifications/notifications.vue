@@ -10,9 +10,15 @@
       <div class="dropdown-header">
         <a title="Przejdź do listy powiadomień" href="/User/Notifications">Powiadomienia</a>
 
-        <a @click.stop="markAllAsRead" title="Oznacz jako przeczytane" href="javascript:" class="pull-right">
-          <i class="far fa-calendar-check"></i>
-        </a>
+        <div class="pull-right">
+          <a @click.stop="openAll" title="Otwórz nowe w nowej karcie" href="javascript:" class="margin-xs-right">
+            <i class="fas fa-external-link-alt"></i>
+          </a>
+
+          <a @click.stop="markAllAsRead" title="Oznacz jako przeczytane" href="javascript:">
+            <i class="far fa-calendar-check"></i>
+          </a>
+        </div>
       </div>
 
       <perfect-scrollbar ref="scrollbar" class="dropdown-modal" :options="{wheelPropagation: false}">
@@ -78,6 +84,15 @@
 
       markAllAsRead() {
         this.$store.dispatch('notifications/markAll');
+      },
+
+      openAll() {
+        const newNotifications = this.notifications.filter(notification => !notification.is_read);
+
+        newNotifications.forEach(notification => {
+          this.$store.commit('notifications/mark', notification);
+          window.open(notification.url);
+        });
       },
 
       hideDropdown() {
