@@ -3,7 +3,7 @@
 use Faker\Generator as Faker;
 
 $factory->define(\Coyote\Forum::class, function (Faker $faker) {
-    $name = $faker->text(10);
+    $name = $faker->word;
 
     return [
         'name' => $name,
