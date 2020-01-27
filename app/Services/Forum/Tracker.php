@@ -105,7 +105,7 @@ class Tracker
         // are there any unread topics in this category?
         $unread = $this->repository->countUnread(
             $this->model->forum->id,
-            $this->model->forum->markTime($this->guest->id),
+            $this->getMarkTime(),
             $this->guest->id
         );
 
