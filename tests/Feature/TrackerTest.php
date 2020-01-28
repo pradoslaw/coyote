@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Carbon\Carbon;
 use Coyote\Forum;
 use Coyote\Guest;
+use Coyote\Http\Resources\ForumResource;
 use Coyote\Post;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 use Coyote\Services\Forum\Tracker;
@@ -17,6 +18,9 @@ class TrackerTest extends TestCase
 {
     use DatabaseTransactions;
 
+    /**
+     * @var Forum
+     */
     private $forum;
     private $guestId;
     private $faker;
@@ -86,17 +90,21 @@ class TrackerTest extends TestCase
 
     public function testMarkAsReadWithMultipleTopics()
     {
+        Guest::create(['id' => $this->guestId, 'updated_at' => $now = now()]);
+
         $topic1 = factory(Topic::class)->create(['forum_id' => $this->forum->id]);
-        factory(Post::class)->create(['forum_id' => $this->forum->id, 'topic_id' => $topic1->id, 'created_at' => Carbon::now()->subMinute(2)]);
+        factory(Post::class)->create(['forum_id' => $this->forum->id, 'topic_id' => $topic1->id, 'created_at' => Carbon::now()->addMinute(2)]);
 
         $topic1->refresh(); // refresh from db after submitting new post
 
         $topic2 = factory(Topic::class)->create(['forum_id' => $this->forum->id]);
-        factory(Post::class)->create(['forum_id' => $this->forum->id, 'topic_id' => $topic2->id, 'created_at' => Carbon::now()->subMinute(1)]);
+        factory(Post::class)->create(['forum_id' => $this->forum->id, 'topic_id' => $topic2->id, 'created_at' => Carbon::now()->addMinute(1)]);
 
         $topic2->refresh(); // refresh from db after submitting new post
 
         $tracker = $this->factory($topic2, $this->guestId);
+        $this->assertFalse($tracker->isRead());
+
         $tracker->asRead($topic2->last_post_created_at);
 
         $this->assertTrue($tracker->isRead());
@@ -107,7 +115,20 @@ class TrackerTest extends TestCase
 
         $this->assertFalse($tracker->isRead());
 
-//        $this->assertDatabaseHas('topic_track', ['forum_id' => $this->forum->id, 'topic_id' => $topic2->id, 'guest_id' => $this->guestId]);
+        $this->assertDatabaseHas('topic_track', ['forum_id' => $this->forum->id, 'topic_id' => $topic2->id, 'guest_id' => $this->guestId]);
+        $this->assertDatabaseMissing('topic_track', ['forum_id' => $this->forum->id, 'topic_id' => $topic1->id, 'guest_id' => $this->guestId]);
+
+        $this->forum->refresh();
+        $this->forum->read_at = $now;
+
+        $this->forum->load('post.topic');
+        $this->forum->post->setRelation('topic', $this->factory($this->forum->post->topic, $this->guestId));
+
+        $resource = new ForumResource($this->forum);
+        $forum = $resource->toArray($this->app['request']);
+
+        $this->assertFalse($forum['is_read']);
+        $this->assertTrue($forum[0]->data['topic']['is_read']);
     }
 
     public function testMarkAsReadWithDeletedTopics()

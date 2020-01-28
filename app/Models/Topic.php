@@ -279,6 +279,7 @@ class Topic extends Model
                 UPDATE SET marked_at = ?";
 
         $this->getConnection()->statement($sql, [$this->id, $this->forum_id, $guestId, $markTime, $markTime]);
+        $this->read_at = $markTime;
     }
 
     /**
