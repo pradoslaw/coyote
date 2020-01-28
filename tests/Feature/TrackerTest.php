@@ -86,20 +86,28 @@ class TrackerTest extends TestCase
 
     public function testMarkAsReadWithMultipleTopics()
     {
-        $topic = factory(Topic::class)->create(['forum_id' => $this->forum->id]);
-        factory(Post::class)->create(['forum_id' => $this->forum->id, 'topic_id' => $topic->id, 'created_at' => Carbon::now()->subMinute(1)]);
+        $topic1 = factory(Topic::class)->create(['forum_id' => $this->forum->id]);
+        factory(Post::class)->create(['forum_id' => $this->forum->id, 'topic_id' => $topic1->id, 'created_at' => Carbon::now()->subMinute(2)]);
 
-        $topic->refresh(); // refresh from db after submitting new post
+        $topic1->refresh(); // refresh from db after submitting new post
 
-        $topic = factory(Topic::class)->create(['forum_id' => $this->forum->id]);
-        factory(Post::class)->create(['forum_id' => $this->forum->id, 'topic_id' => $topic->id, 'created_at' => Carbon::now()->subMinute(1)]);
+        $topic2 = factory(Topic::class)->create(['forum_id' => $this->forum->id]);
+        factory(Post::class)->create(['forum_id' => $this->forum->id, 'topic_id' => $topic2->id, 'created_at' => Carbon::now()->subMinute(1)]);
 
-        $topic->refresh(); // refresh from db after submitting new post
+        $topic2->refresh(); // refresh from db after submitting new post
 
-        $tracker = $this->factory($topic, $this->guestId);
-        $tracker->asRead($topic->last_post_created_at);
+        $tracker = $this->factory($topic2, $this->guestId);
+        $tracker->asRead($topic2->last_post_created_at);
 
-        $this->assertDatabaseHas('topic_track', ['forum_id' => $this->forum->id, 'topic_id' => $topic->id, 'guest_id' => $this->guestId]);
+        $this->assertTrue($tracker->isRead());
+
+        /////////////////
+
+        $tracker = $this->factory($topic1, $this->guestId);
+
+        $this->assertFalse($tracker->isRead());
+
+//        $this->assertDatabaseHas('topic_track', ['forum_id' => $this->forum->id, 'topic_id' => $topic2->id, 'guest_id' => $this->guestId]);
     }
 
     public function testMarkAsReadWithDeletedTopics()

@@ -75,6 +75,7 @@ class ForumApiTest extends TestCase
     public function testMarkCategoryAsRead()
     {
         $user = factory(User::class)->create();
+        $token = $user->createToken('4programmers.net')->accessToken;
 
         Guest::forceCreate(['id' => $user->guest_id, 'updated_at' => now()->subMinute(5)]);
 
@@ -83,9 +84,7 @@ class ForumApiTest extends TestCase
 
         Forum\Track::forceCreate(['forum_id' => $forum->id, 'guest_id' => $user->guest_id, 'marked_at' => $topic->last_post_created_at]);
 
-        $this->actingAs($user, 'api');
-
-        $request = $this->get('/v1/forums', ['Accept' => 'application/json']);
+        $request = $this->get('/v1/forums', ['Accept' => 'application/json', 'Authorization' => 'Bearer ' . $token]);
         $data = $request->decodeResponseJson();
 
         $this->assertTrue($data[0]['topic']['is_read']);
