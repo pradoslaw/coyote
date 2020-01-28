@@ -20,8 +20,8 @@ services:
     working_dir: /var/www
     environment:
       - ENABLE_XDEBUG=1
-      - XDEBUG_CONFIG="remote_host=192.168.0.159"
-      - PHP_IDE_CONFIG="serverName=NameUsedInPhpStormServerConfig"
+      - XDEBUG_HOST="192.168.0.159"
+      - XDEBUG_PORT=9001
     volumes:
       - ./:/var/www
     networks:
