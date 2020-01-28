@@ -241,7 +241,7 @@ class HomeController extends BaseController
 
         /** @var \Coyote\Forum $forum */
         foreach ($forums as $forum) {
-            $forum->markAsRead($this->guestId);
+            $forum->markAsRead(now(), $this->guestId);
             $this->topic->flushRead($forum->id, $this->guestId);
         }
     }

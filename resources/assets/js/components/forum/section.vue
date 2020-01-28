@@ -151,6 +151,10 @@
       asRead(category) {
         category.is_read = true;
 
+        if (category.children) {
+          category.children.forEach(child => child.is_read = true);
+        }
+
         this.$emit('mark', category);
       },
 

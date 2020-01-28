@@ -98,6 +98,7 @@ class Tracker
     {
         $this->model->markAsRead($date, $this->guest->id);
 
+        // are there any new posts in topic? it's common that there is more pages in topic. further code is unnecessary
         if ($this->model->last_post_created_at > $date) {
             return;
         }
