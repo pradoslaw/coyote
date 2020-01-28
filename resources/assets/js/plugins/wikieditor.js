@@ -41,7 +41,9 @@ import { default as Textarea, languages } from '../libs/textarea';
             });
 
             $('#select-menu', toolbar).on('shown.bs.dropdown', function() {
-                $('.select-menu-search input').focus();
+                setTimeout(function () {
+                  $('.select-menu-search input').focus();
+                }, 0);
             });
         });
     };
