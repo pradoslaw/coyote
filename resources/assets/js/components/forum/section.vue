@@ -29,7 +29,7 @@
         <div class="row">
           <div class="col-lg-7 col-xs-12 col-sm-6 col-main">
             <i v-if="category.is_locked" class="logo fas fa-lock pull-left visible-lg"></i>
-            <a v-else :href="category.url" title="Oznacz jako przeczytane">
+            <a v-else :href="category.url">
               <i :class="className(category.name)" class="logo far fa-comments pull-left visible-lg">
                 <b v-if="!category.is_read"></b>
               </i>
@@ -167,7 +167,7 @@
       },
 
       className(name) {
-        return 'logo-' + name.toLowerCase().replace(' ', '_');
+        return 'logo-' + name.toLowerCase().replace(/[^\x00-\x7F]/g, "");
       },
 
       ...mapActions('forums', ['mark', 'toggle', 'up', 'down'])

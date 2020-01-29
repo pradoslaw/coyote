@@ -1,0 +1,573 @@
+$sprites: (
+    'amazonwebservices-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-amazonwebservices-original-fragment",
+    'android-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-android-original-fragment",
+    'angularjs-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-angularjs-original-fragment",
+    'apache-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-apache-original-fragment",
+    'appcelerator-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-appcelerator-original-fragment",
+    'apple-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-apple-original-fragment",
+    'atom-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-atom-original-fragment",
+    'babel-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-babel-original-fragment",
+    'backbonejs-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-backbonejs-original-fragment",
+    'behance-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-behance-original-fragment",
+    'bitbucket-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-bitbucket-original-fragment",
+    'bower-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-bower-original-fragment",
+    'c-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-c-original-fragment",
+    'cakephp-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-cakephp-original-fragment",
+    'ceylon-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-ceylon-original-fragment",
+    'chrome-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-chrome-original-fragment",
+    'coffeescript-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-coffeescript-original-fragment",
+    'confluence-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-confluence-original-fragment",
+    'couchdb-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-couchdb-original-fragment",
+    'cplusplus-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-cplusplus-original-fragment",
+    'csharp-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-csharp-original-fragment",
+    'css3-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-css3-original-fragment",
+    'd3js-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-d3js-original-fragment",
+    'debian-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-debian-original-fragment",
+    'devicon-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-devicon-original-fragment",
+    'django-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-django-original-fragment",
+    'docker-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-docker-original-fragment",
+    'doctrine-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-doctrine-original-fragment",
+    'dot-net-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-dot-net-original-fragment",
+    'drupal-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-drupal-original-fragment",
+    'electron-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-electron-original-fragment",
+    'elm-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-elm-original-fragment",
+    'erlang-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-erlang-original-fragment",
+    'express-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-express-original-fragment",
+    'facebook-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-facebook-original-fragment",
+    'firefox-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-firefox-original-fragment",
+    'foundation-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-foundation-original-fragment",
+    'gimp-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-gimp-original-fragment",
+    'git-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-git-original-fragment",
+    'github-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-github-original-fragment",
+    'gitlab-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-gitlab-original-fragment",
+    'go-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-go-original-fragment",
+    'google-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-google-original-fragment",
+    'grunt-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-grunt-original-fragment",
+    'handlebars-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-handlebars-original-fragment",
+    'heroku-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-heroku-original-fragment",
+    'html5-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-html5-original-fragment",
+    'ie10-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-ie10-original-fragment",
+    'inkscape-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-inkscape-original-fragment",
+    'intellij-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-intellij-original-fragment",
+    'ionic-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-ionic-original-fragment",
+    'java-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-java-original-fragment",
+    'javascript-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-javascript-original-fragment",
+    'jeet-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-jeet-original-fragment",
+    'jetbrains-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-jetbrains-original-fragment",
+    'jquery-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-jquery-original-fragment",
+    'krakenjs-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-krakenjs-original-fragment",
+    'linkedin-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-linkedin-original-fragment",
+    'linux-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-linux-original-fragment",
+    'meteor-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-meteor-original-fragment",
+    'mongodb-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-mongodb-original-fragment",
+    'moodle-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-moodle-original-fragment",
+    'mysql-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-mysql-original-fragment",
+    'nginx-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-nginx-original-fragment",
+    'nodejs-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-nodejs-original-fragment",
+    'nodewebkit-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-nodewebkit-original-fragment",
+    'oracle-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-oracle-original-fragment",
+    'php-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-php-original-fragment",
+    'phpstorm-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-phpstorm-original-fragment",
+    'postgresql-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-postgresql-original-fragment",
+    'pycharm-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-pycharm-original-fragment",
+    'python-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-python-original-fragment",
+    'react-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-react-original-fragment",
+    'redhat-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-redhat-original-fragment",
+    'redis-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-redis-original-fragment",
+    'redux-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-redux-original-fragment",
+    'ruby-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-ruby-original-fragment",
+    'rubymine-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-rubymine-original-fragment",
+    'safari-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-safari-original-fragment",
+    'sass-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-sass-original-fragment",
+    'sequelize-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-sequelize-original-fragment",
+    'sketch-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-sketch-original-fragment",
+    'slack-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-slack-original-fragment",
+    'sourcetree-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-sourcetree-original-fragment",
+    'ssh-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-ssh-original-fragment",
+    'stylus-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-stylus-original-fragment",
+    'swift-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-swift-original-fragment",
+    'symfony-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-symfony-original-fragment",
+    'tomcat-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-tomcat-original-fragment",
+    'twitter-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-twitter-original-fragment",
+    'typescript-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-typescript-original-fragment",
+    'vagrant-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-vagrant-original-fragment",
+    'vim-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-vim-original-fragment",
+    'vuejs-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-vuejs-original-fragment",
+    'webpack-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-webpack-original-fragment",
+    'webstorm-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-webstorm-original-fragment",
+    'windows8-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-windows8-original-fragment",
+    'wordpress-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-wordpress-original-fragment",
+    'yarn-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-yarn-original-fragment",
+    'yii-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-yii-original-fragment",
+    'yunohost-original': "/img/sprites-65e2f5d19d572e27.svg#sprite-yunohost-original-fragment"
+);
+
+$sizes: (
+    'amazonwebservices-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'android-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'angularjs-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'apache-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'appcelerator-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'apple-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'atom-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'babel-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'backbonejs-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'behance-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'bitbucket-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'bower-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'c-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'cakephp-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'ceylon-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'chrome-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'coffeescript-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'confluence-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'couchdb-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'cplusplus-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'csharp-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'css3-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'd3js-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'debian-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'devicon-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'django-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'docker-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'doctrine-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'dot-net-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'drupal-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'electron-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'elm-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'erlang-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'express-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'facebook-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'firefox-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'foundation-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'gimp-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'git-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'github-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'gitlab-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'go-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'google-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'grunt-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'handlebars-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'heroku-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'html5-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'ie10-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'inkscape-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'intellij-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'ionic-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'java-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'javascript-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'jeet-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'jetbrains-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'jquery-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'krakenjs-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'linkedin-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'linux-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'meteor-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'mongodb-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'moodle-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'mysql-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'nginx-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'nodejs-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'nodewebkit-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'oracle-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'php-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'phpstorm-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'postgresql-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'pycharm-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'python-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'react-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'redhat-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'redis-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'redux-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'ruby-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'rubymine-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'safari-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'sass-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'sequelize-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'sketch-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'slack-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'sourcetree-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'ssh-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'stylus-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'swift-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'symfony-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'tomcat-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'twitter-original': (
+        'width': 126.24px,
+        'height': 102.59px
+    ),
+    'typescript-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'vagrant-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'vim-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'vuejs-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'webpack-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'webstorm-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'windows8-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'wordpress-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'yarn-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'yii-original': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'yunohost-original': (
+        'width': 128px,
+        'height': 128px
+    )
+);
+
+$variables: (
+    /* EMPTY */
+);
+
+// https://github.com/waldemarfm/sass-svg-uri/blob/v1.0.0/_svg-uri.scss
+@function sprite-str-replace($string, $search, $replace: '') {
+    $index: str-index($string, $search);
+
+    @if type-of($replace) == 'null' {
+        $replace: '';
+    }
+
+    @if ( $index ) {
+        @return str-slice($string, 1, $index - 1) + $replace + sprite-str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+    }
+
+    @return $string;
+}
+
+@function sprite-svg-uri($value) {
+    $encoded: '';
+    $slice: 2000;
+    $index: 0;
+
+    @for $i from 1 through ceil(str-length($value) / $slice) {
+        $chunk: str-slice($value, $index, $index + $slice - 1);
+        $chunk: sprite-str-replace($chunk, '"', "'");
+        $chunk: sprite-str-replace($chunk, '<', '%3C');
+        $chunk: sprite-str-replace($chunk, '>', '%3E');
+        $chunk: sprite-str-replace($chunk, '&', '%26');
+        $chunk: sprite-str-replace($chunk, '#', '%23');
+        $encoded: #{$encoded}#{$chunk};
+        $index: $index + $slice;
+    }
+
+    @return $encoded;
+}
+
+@mixin sprite($name, $user-variables: (), $include-size: false) {
+    $sprite: map-get($sprites, $name);
+
+    // Inject variables
+    $default-variables: map-get($variables, $name);
+    @if type-of($default-variables) == 'map' {
+        @each $key, $value in map-merge($default-variables, $user-variables) {
+            @if ( not map-has-key($default-variables, $key) ) {
+                @warn 'Sprite \'#{$name}\' does not support variable named \'#{$key}\'';
+            }
+
+            $sprite: sprite-str-replace($sprite, '___#{$key}___', sprite-svg-uri(quote(#{$value})));
+        }
+    } @else if type-of($user-variables) == 'map' {
+        @warn 'Sprite \'#{$name}\' does not contain any variables';
+    }
+
+    background: url($sprite) center no-repeat;
+
+    @if $include-size {
+        $size: map-get($sizes, $name);
+        background-size: map-get($size, width) map-get($size, height);
+    }
+}

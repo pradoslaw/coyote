@@ -1,0 +1,27 @@
+
+.logo-python,
+.logo-php,
+.logo-java {
+  &:before {
+    content: "";
+  }
+
+  width: 30px;
+  height: 30px;
+}
+
+.logo-python {
+  @include sprite('python-original');
+}
+
+.logo-php {
+  @include sprite('php-original');
+}
+
+.logo-java {
+  @include sprite('java-original');
+}
+
+.logo-javascript {
+  @include sprite('javascript-original');
+}
