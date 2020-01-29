@@ -48,6 +48,7 @@ class ForumCollectionTest extends TestCase
         $children = $result[$parent->id]['children'];
 
         $this->assertEquals(2, count($children));
+        var_dump($children, $child1, $child2);
 
         $this->assertEquals($child1->name, $children[0]['name']);
         $this->assertEquals($child2->name, $children[1]['name']);
