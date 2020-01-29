@@ -10,7 +10,7 @@
 @import "../components/search";
 @import "../components/who-is-online";
 
-.section {
+.panel-section {
   .panel-categories:nth-child(odd) {
     background-color: #fafafa;
   }
@@ -31,8 +31,9 @@
   }
 }
 
+// desktop
 @media screen and (min-width: $screen-lg) {
-  .section {
+  .panel-section {
     background-color: $panel-footer-bg;
     padding: 10px 0 0 0;
     border: 1px solid $panel-default-border;
@@ -40,6 +41,13 @@
 
   .section-name {
     margin: 0 10px 10px 10px;
+  }
+}
+
+// mobile
+@media screen and (max-width: $screen-lg) {
+  .panel-section {
+    background-color: transparent;
   }
 }
 
@@ -51,6 +59,8 @@
 }
 
 .panel-categories {
+  margin-bottom: 0;
+
   .col-main {
     display: flex;
     align-items: center;
@@ -93,10 +103,6 @@
       border: 2px solid #fff;
     }
   }
-
-  //.logo.new {
-  //  color: $alt-link-hover-color;
-  //}
 
   .col-lg-stat {
     white-space: nowrap;
@@ -148,8 +154,6 @@
 
   // mobile
   @media screen and (max-width: $screen-lg) {
-    margin-bottom: 10px;
-
     .panel-body.new {
       border-left: 2px solid $alt-link-hover-color;
     }

@@ -11,7 +11,7 @@ import Vue from "vue";
 import store from '../store';
 
 new Vue({
-  el: '#page-forum',
+  el: '#js-forum',
   delimiters: ['${', '}'],
   store,
   components: {
@@ -45,7 +45,7 @@ new Vue({
 });
 
 new Vue({
-  el: '#page-sidebar',
+  el: '#js-sidebar',
   delimiters: ['${', '}'],
   store,
   methods: {

@@ -18,7 +18,7 @@
 
   {% include "forum.partials.top" %}
 
-  <main id="page-forum" class="mainbar">
+  <main id="js-forum" class="mainbar">
     {% block mainbar %}
       <vue-section
         v-for="(section, index) in sections"
@@ -36,7 +36,7 @@
     {% block side_menu %}
       {% include 'forum.partials.post_count' %}
 
-      <div id="page-sidebar">
+      <div id="js-sidebar">
         <ul class="side-menu">
           <li>
             <a @click="markAll" title="Oznacz kategorie jako przeczytane">

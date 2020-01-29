@@ -1,5 +1,5 @@
 <template>
-  <div class="section margin-md-bottom">
+  <div class="panel-section panel">
     <div class="section-name">
       <h2 class="pull-left">
         <a href="javascript:" @click="collapse">
