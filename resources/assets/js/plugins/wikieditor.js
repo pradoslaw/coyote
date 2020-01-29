@@ -9,6 +9,7 @@ import { default as Textarea, languages } from '../libs/textarea';
             let el          = new Textarea(textarea[0]);
             let toolbar     = $('#wiki-toolbar');
             let select      = $('.select-menu-wrapper', toolbar).find('ul');
+            let langMenuOpen = false;
 
             $.each(languages, function(key, value) {
                 select.append('<li><a data-open="```' + key + '<br>" data-close="<br>```" title="Kod źródłowy: ' + value + '">' + value + '</a></li>');
@@ -44,7 +45,92 @@ import { default as Textarea, languages } from '../libs/textarea';
                 setTimeout(function () {
                   $('.select-menu-search input').focus();
                 }, 0);
+                langMenuOpen = true;
+            }).on('hidden.bs.dropdown', function () {
+                langMenuOpen = false;
             });
+
+            const langNavigator = (e) => {
+                if (langMenuOpen) {
+                    switch (e.keyCode) {
+                        case 13: {
+                          insertActiveLang(e);
+                        }break;
+                        case 38: {
+                          markNextLangActive();
+                        }break;
+                        case 40: {
+                          markPrevLangActive();
+                        }break;
+                    }
+                }
+            };
+
+            const langDropdownMenu = toolbar.find('#select-menu .select-menu');
+            const langScrollableContent = langDropdownMenu.find('.select-menu-wrapper');
+
+            langDropdownMenu.on('mouseenter', () => {
+              unMarkActiveLang();
+            });
+
+            const getActiveLangNode = () => {
+              return langDropdownMenu.find('a.active');
+            };
+
+            const unMarkActiveLang = () => {
+              const activeNode = getActiveLangNode();
+
+              if (activeNode) {
+                activeNode.removeClass('active');
+              }
+            };
+
+            const insertActiveLang = (e) => {
+              const activeNode = getActiveLangNode();
+
+              if (activeNode) {
+                e.preventDefault();
+                activeNode.removeClass('active').trigger('click');
+              }
+            };
+
+            const markPrevLangActive = () => {
+              const activeNode = getActiveLangNode();
+
+              if (activeNode.length > 0) {
+                activeNode.closest('li').next().find('a').addClass('active');
+                activeNode.removeClass('active');
+              } else {
+                langDropdownMenu.find('a').first().addClass('active');
+              }
+
+              scrollToActiveLang();
+            };
+
+            const markNextLangActive = () => {
+              const activeNode = getActiveLangNode();
+
+              if (activeNode.length > 0) {
+                activeNode.closest('li').prev().find('a').addClass('active');
+                activeNode.removeClass('active');
+              } else {
+                langDropdownMenu.find('a').last().addClass('active');
+              }
+
+              scrollToActiveLang();
+            };
+
+            const scrollToActiveLang = () => {
+              const activeNode = getActiveLangNode();
+
+              if (activeNode.length > 0) {
+                const parentNode = activeNode.closest('li');
+
+                langScrollableContent.scrollTop(parentNode.index() * parentNode.height());
+              }
+            };
+
+            $(document).on('keydown', langNavigator);
         });
     };
 })(jQuery);
