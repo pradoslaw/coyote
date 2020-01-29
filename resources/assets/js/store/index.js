@@ -5,6 +5,7 @@ import subscriptions from './modules/subscriptions';
 import messages from './modules/messages';
 import inbox from './modules/inbox';
 import notifications from './modules/notifications';
+import forums from './modules/forums';
 import user from './modules/user';
 
 Vue.use(Vuex);
@@ -16,6 +17,7 @@ export default new Vuex.Store({
     messages,
     inbox,
     notifications,
+    forums,
     user
   }
 });

@@ -8,41 +8,23 @@ import '../pages/forum/tags';
 import 'bootstrap-sass/assets/javascripts/bootstrap/popover';
 import VueSection from '../components/forum/section.vue';
 import Vue from "vue";
-import axios from 'axios';
+import store from '../store';
 
 new Vue({
   el: '#page-forum',
   delimiters: ['${', '}'],
-  data: {
-    forums: window.forums
-  },
+  store,
   components: {
     'vue-section': VueSection
   },
-  methods: {
-    setup(categories) {
-      categories.forEach(category => {
-        const index = this.forums.findIndex(value => value.id === category.id);
-
-        this.$set(this.forums, index, Object.assign(this.forums[index], {order: category.order}));
-      });
-
-      axios.post('/Forum/Setup', categories.map(category => this._pluck(category)));
-    },
-
-    toggle(category) {
-      axios.post('/Forum/Setup', [ this._pluck(category) ]);
-    },
-
-    asRead(category) {
-      axios.post(`/Forum/${category.slug}/Mark`);
-    },
-
-    _pluck(category) {
-      return (({ id, is_hidden, order }) => ({ id, is_hidden, order }))(category);
-    }
+  created() {
+    store.commit('forums/init', window.forums);
   },
   computed: {
+    forums() {
+      return store.state.forums.categories;
+    },
+
     sections() {
       return Object.values(
         this
@@ -61,3 +43,10 @@ new Vue({
     }
   }
 });
+
+// new Vue({
+//   el: '#page-forum',
+//   delimiters: ['${', '}'],
+//   methods: {
+//   }
+// });

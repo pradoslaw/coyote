@@ -26,9 +26,6 @@
         :name="section.name"
         :order="section.order"
         :categories="section.categories"
-        @order="setup"
-        @toggle="toggle"
-        @mark="asRead"
       ></vue-section>
     {% endblock %}
 
@@ -39,7 +36,7 @@
     {% block side_menu %}
       {% include 'forum.partials.post_count' %}
 
-      <div class="box">
+      <div id="page-sidebar" class="box">
         <ul class="side-menu">
           <li class="btn-mark-read">
             <a title="Oznacz kategorie jako przeczytane" href="{{ route('forum.mark') }}">

@@ -12,7 +12,7 @@
 
         <ul class="dropdown-menu">
           <li v-for="category in categories">
-            <a href="javascript:" @click="toggleCategory(category)">
+            <a href="javascript:" @click="toggle(category)">
               <i :class="{'fa-check': !category.is_hidden}" class="fa"></i>
 
               {{ category.name }}
@@ -29,8 +29,7 @@
         <div class="row">
           <div class="col-lg-7 col-xs-12 col-sm-6 col-main">
             <i v-if="category.is_locked" class="logo fas fa-lock pull-left visible-lg"></i>
-<!--            <i v-else :class="['new': !category.is_read]" class="logo far fa-comments pull-left visible-lg"></i>-->
-            <a v-else @click="asRead(category)" href="javascript:" title="Oznacz jako przeczytane">
+            <a v-else :href="category.url" title="Oznacz jako przeczytane">
               <i :class="className(category.name)" class="logo far fa-comments pull-left visible-lg">
                 <b v-if="!category.is_read"></b>
               </i>
@@ -88,7 +87,7 @@
                 <small class="text-muted"><vue-timeago :datetime="category.post.created_at"></vue-timeago></small>, <a v-profile="category.post.user.id">{{ category.post.user.name }}</a>
 
                 <div class="toolbox">
-                  <a href="javascript:" title="Oznacz jako przeczytane" @click="asRead(category)"><i class="far fa-eye"></i></a>
+                  <a href="javascript:" title="Oznacz jako przeczytane" @click="mark(category)"><i class="far fa-eye"></i></a>
 
                   <a v-if="isAuthorized" :class="{'disabled': isBeginning(index)}" title="Przesuń w górę" @click="up(category)"><i class="fas fa-caret-up"></i></a>
                   <a v-if="isAuthorized" :class="{'disabled': isEnding(index)}" title="Przesuń w dół" @click="down(category)"><i class="fas fa-caret-down"></i></a>
@@ -107,7 +106,7 @@
   import VueTimeago from '../../plugins/timeago';
   import { mixin as clickaway } from 'vue-clickaway';
   import store from '../../store';
-  import { mapGetters } from "vuex";
+  import { mapGetters, mapActions } from "vuex";
 
   Vue.use(VueTimeago);
 
@@ -134,50 +133,12 @@
       }
     },
     methods: {
-      toggleCategory(category) {
-        category.is_hidden = ! category.is_hidden;
-
-        this.$emit('toggle', category);
-      },
-
       collapse() {
         this.isCollapse = ! this.isCollapse;
       },
 
       hideDropdown() {
         this.isDropdown = false;
-      },
-
-      asRead(category) {
-        category.is_read = true;
-
-        if (category.children) {
-          category.children.forEach(child => child.is_read = true);
-        }
-
-        this.$emit('mark', category);
-      },
-
-      up(category) {
-        let aboveIndex = this._findIndex(category.order - 1, category.section);
-
-        if (aboveIndex > -1) {
-          category.order -= 1;
-          this.categories[aboveIndex].order += 1;
-
-          this.$emit('order', [category, this.categories[aboveIndex]]);
-        }
-      },
-
-      down(category) {
-        let beyondIndex = this._findIndex(category.order + 1, category.section);
-
-        if (beyondIndex > -1) {
-          category.order += 1;
-          this.categories[beyondIndex].order -= 1;
-
-          this.$emit('order', [category, this.categories[beyondIndex]]);
-        }
       },
 
       isBeginning(index) {
@@ -209,9 +170,7 @@
         return 'logo-' + name.toLowerCase().replace(' ', '_');
       },
 
-      _findIndex(order, section) {
-        return this.categories.findIndex(value => value.order === order && value.section === section);
-      }
+      ...mapActions('forums', ['mark', 'toggle', 'up', 'down'])
     },
     computed: mapGetters('user', ['isAuthorized'])
   }
