@@ -36,14 +36,14 @@
     {% block side_menu %}
       {% include 'forum.partials.post_count' %}
 
-      <div id="page-sidebar" class="box">
+      <div id="page-sidebar">
         <ul class="side-menu">
-          <li class="btn-mark-read">
-            <a title="Oznacz kategorie jako przeczytane" href="{{ route('forum.mark') }}">
+          <li>
+            <a @click="markAll" title="Oznacz kategorie jako przeczytane">
               <i class="far fa-check-square fa-fw"></i> Oznacz jako przeczytane
             </a>
           </li>
-          <li id="btn-setting">
+          <li>
             <a title="Zmień kolejność wyświetlanych kategorii" href="{{ route('user.forum') }}">
               <i class="fas fa-cog fa-fw"></i> Personalizacja forum
             </a>

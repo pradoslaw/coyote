@@ -47,6 +47,12 @@ const actions = {
     axios.post(`/Forum/${category.slug}/Mark`);
   },
 
+  markAll({ state, commit }) {
+    axios.post('/Forum/Mark');
+
+    state.categories.forEach(category => commit('mark', category));
+  },
+
   up({ getters, state }, category) {
     let aboveIndex = getters.findIndex(category.order - 1, category.section);
 

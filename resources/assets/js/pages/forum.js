@@ -44,9 +44,13 @@ new Vue({
   }
 });
 
-// new Vue({
-//   el: '#page-forum',
-//   delimiters: ['${', '}'],
-//   methods: {
-//   }
-// });
+new Vue({
+  el: '#page-sidebar',
+  delimiters: ['${', '}'],
+  store,
+  methods: {
+    markAll() {
+      store.dispatch('forums/markAll');
+    }
+  }
+});
