@@ -27,7 +27,7 @@ class AddIndexToSessionLogTable extends Migration
     public function down()
     {
         $this->schema->table('session_log', function (Blueprint $table) {
-            $table->dropIndex('session_log_updated_at_index');
+//            $table->dropIndex('session_log_updated_at_index');
         });
     }
 }
