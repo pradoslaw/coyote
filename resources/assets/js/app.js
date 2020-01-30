@@ -14,6 +14,8 @@ import 'core-js/modules/es6.object.assign';
 import 'core-js/modules/es6.array.for-each';
 // array isArray -- support for old browser
 import 'core-js/modules/es6.array.is-array';
+import 'core-js/modules/es6.array.from';
+
 
 import './store';
 import './components/dropdown.js';

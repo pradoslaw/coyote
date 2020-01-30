@@ -49,14 +49,14 @@ const timeago = (timestamp) => {
 };
 
 const countTime = () => {
-  let dates = document.querySelectorAll('.timestamp[data-timestamp]');
+  // use Array.from to convert NodeList[] to Array. Next we can use polyfill to simulate Array.forEach on older browsers
+  let dates = Array.from(document.querySelectorAll('.timestamp[data-timestamp]'));
 
   dates.forEach(date => {
     const timestamp = date.getAttribute('data-timestamp');
     const value = timeago(timestamp);
 
     if (value) {
-
       date.textContent = value;
     }
   });
