@@ -14,16 +14,13 @@
 
   {% include "forum.partials.top" %}
 
-  <main id="page-forum" class="mainbar">
+  <main id="js-forum" class="mainbar">
     <vue-section
       v-for="(section, index) in sections"
       :key="index"
       :name="section.name"
       :order="section.order"
       :categories="section.categories"
-      @order="setup"
-      @toggle="toggle"
-      @mark="asRead"
     ></vue-section>
 
     {% include 'forum.partials.topics' %}
