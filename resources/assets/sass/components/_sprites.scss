@@ -1,14 +1,20 @@
 $sprites: (
-    'logo-python': "/img/sprites-56cd8e452f05f393.svg#sprite-logo-python-fragment",
-    'logo-php': "/img/sprites-56cd8e452f05f393.svg#sprite-logo-php-fragment",
-    'logo-java': "/img/sprites-56cd8e452f05f393.svg#sprite-logo-java-fragment",
-    'logo-javascript': "/img/sprites-56cd8e452f05f393.svg#sprite-logo-javascript-fragment"
+    'logo-notext': "/img/sprites-1d4e2fb4db9c5599.svg#sprite-logo-notext-fragment",
+    'logo-php': "/img/sprites-1d4e2fb4db9c5599.svg#sprite-logo-php-fragment",
+    'logo-java': "/img/sprites-1d4e2fb4db9c5599.svg#sprite-logo-java-fragment",
+    'logo-javascript': "/img/sprites-1d4e2fb4db9c5599.svg#sprite-logo-javascript-fragment",
+    'logo-cpp': "/img/sprites-1d4e2fb4db9c5599.svg#sprite-logo-cpp-fragment",
+    'logo-csharp': "/img/sprites-1d4e2fb4db9c5599.svg#sprite-logo-csharp-fragment",
+    'logo-css': "/img/sprites-1d4e2fb4db9c5599.svg#sprite-logo-css-fragment",
+    'logo-android': "/img/sprites-1d4e2fb4db9c5599.svg#sprite-logo-android-fragment",
+    'logo-lazarus': "/img/sprites-1d4e2fb4db9c5599.svg#sprite-logo-lazarus-fragment",
+    'logo-postgresql': "/img/sprites-1d4e2fb4db9c5599.svg#sprite-logo-postgresql-fragment"
 );
 
 $sizes: (
-    'logo-python': (
-        'width': 110.421px,
-        'height': 109.846px
+    'logo-notext': (
+        'width': 110.4211px,
+        'height': 109.8461px
     ),
     'logo-php': (
         'width': 711.201px,
@@ -19,6 +25,30 @@ $sizes: (
         'height': 128px
     ),
     'logo-javascript': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'logo-cpp': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'logo-csharp': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'logo-css': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'logo-android': (
+        'width': 128px,
+        'height': 128px
+    ),
+    'logo-lazarus': (
+        'width': 64px,
+        'height': 64px
+    ),
+    'logo-postgresql': (
         'width': 128px,
         'height': 128px
     )

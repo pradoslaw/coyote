@@ -167,7 +167,7 @@
       },
 
       className(name) {
-        return 'logo-' + name.toLowerCase().replace(/[^\x00-\x7F]/g, "");
+        return 'logo-' + name.toLowerCase().replace(/[^a-z]/g, "");
       },
 
       ...mapActions('forums', ['mark', 'toggle', 'up', 'down'])

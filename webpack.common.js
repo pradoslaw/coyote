@@ -139,12 +139,16 @@ module.exports = {
     }),
 
     new SVGSpritemapPlugin([
-      // 'node_modules/devicon/icons/**/*-original.svg',
-      'resources/images/logos/logo-python.svg',
+      // 'resources/images/logos/logo-python.svg',
       'resources/images/logos/logo-php.svg',
       'resources/images/logos/logo-java.svg',
       'resources/images/logos/logo-javascript.svg',
-
+      'resources/images/logos/logo-cpp.svg',
+      'resources/images/logos/logo-csharp.svg',
+      'resources/images/logos/logo-css.svg',
+      'resources/images/logos/logo-android.svg',
+      'resources/images/logos/logo-lazarus.svg',
+      'resources/images/logos/logo-postgresql.svg',
       ], {
       output: {
         filename: 'img/sprites-[contenthash].svg',
@@ -155,44 +159,6 @@ module.exports = {
           sizes: false
         },
         svgo: false
-      //   svgo: {
-      //     cleanupAttrs: false,
-      //     inlineStyles: false,
-      //     removeDoctype: false,
-      //     removeXMLProcInst: false,
-      //     removeComments: false,
-      //     removeMetadata: false,
-      //     removeTitle: false,
-      //     removeDesc: false,
-      //     removeUselessDefs: false,
-      //     removeEditorsNSData: false,
-      //     removeEmptyAttrs: false,
-      //     removeHiddenElems: false,
-      //
-      //     convertColors: false,
-      //     convertPathData: false,
-      //
-      //     removeEmptyText: false,
-      //     removeEmptyContainers: false,
-      //     removeViewBox: false,
-      //     cleanupEnableBackground: false,
-      //     minifyStyles: false,
-      //     convertStyleToAttrs: false,
-      //     convertTransform: false,
-      //     removeUnknownsAndDefaults: false,
-      //     removeNonInheritableGroupAttrs: false,
-      //     removeUselessStrokeAndFill: false,
-      //     removeUnusedNS: false,
-      //     cleanupIDs: false,
-      //     cleanupNumericValues: false,
-      //     moveElemsAttrsToGroup: false,
-      //     moveGroupAttrsToElems: false,
-      //     collapseGroups: false,
-      //     mergePaths: false,
-      //     convertShapeToPath: false,
-      //     convertEllipseToCircle: false,
-      //     sortDefsChildren: false
-      //   }
       },
       sprite: {
         generate: {
