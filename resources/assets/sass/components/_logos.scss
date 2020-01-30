@@ -12,17 +12,18 @@
 }
 
 .logo-python {
-  @include sprite('python-original');
+  @include sprite('logo-python');
 }
 
 .logo-php {
-  @include sprite('php-original');
+  @include sprite('logo-php');
+  height: 20px; // different proportion
 }
 
 .logo-java {
-  @include sprite('java-original');
+  @include sprite('logo-java');
 }
 
 .logo-javascript {
-  @include sprite('javascript-original');
+  @include sprite('logo-javascript');
 }
