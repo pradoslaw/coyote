@@ -57,10 +57,10 @@ import { default as Textarea, languages } from '../libs/textarea';
                           insertActiveLang(e);
                         }break;
                         case 38: {
-                          markNextLangActive();
+                          markPrevLangActive();
                         }break;
                         case 40: {
-                          markPrevLangActive();
+                          markNextLangActive();
                         }break;
                     }
                 }
@@ -94,11 +94,18 @@ import { default as Textarea, languages } from '../libs/textarea';
               }
             };
 
-            const markPrevLangActive = () => {
+            const markNextLangActive = () => {
               const activeNode = getActiveLangNode();
 
               if (activeNode.length > 0) {
-                activeNode.closest('li').next().find('a').addClass('active');
+                const nextActiveNode = activeNode.closest('li').next().find('a');
+
+                if (nextActiveNode.length > 0) {
+                  nextActiveNode.addClass('active');
+                } else {
+                  langDropdownMenu.find('a').first().addClass('active');
+                }
+
                 activeNode.removeClass('active');
               } else {
                 langDropdownMenu.find('a').first().addClass('active');
@@ -107,11 +114,18 @@ import { default as Textarea, languages } from '../libs/textarea';
               scrollToActiveLang();
             };
 
-            const markNextLangActive = () => {
+            const markPrevLangActive = () => {
               const activeNode = getActiveLangNode();
 
               if (activeNode.length > 0) {
-                activeNode.closest('li').prev().find('a').addClass('active');
+                const prevActiveNode = activeNode.closest('li').prev().find('a');
+
+                if (prevActiveNode.length > 0) {
+                  prevActiveNode.addClass('active');
+                } else {
+                  langDropdownMenu.find('a').last().addClass('active');
+                }
+
                 activeNode.removeClass('active');
               } else {
                 langDropdownMenu.find('a').last().addClass('active');
@@ -126,7 +140,7 @@ import { default as Textarea, languages } from '../libs/textarea';
               if (activeNode.length > 0) {
                 const parentNode = activeNode.closest('li');
 
-                langScrollableContent.scrollTop(parentNode.index() * parentNode.height());
+                langScrollableContent.scrollTop(parentNode.index() * parentNode[0].offsetHeight);
               }
             };
 
