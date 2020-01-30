@@ -14,7 +14,7 @@ class ForumCollectionTest extends TestCase
     use DatabaseTransactions;
 
     /**
-     * @var \Illuminate\Foundation\Application|mixed
+     * @var ForumRepositoryInterface
      */
     private $repository;
 
@@ -33,9 +33,16 @@ class ForumCollectionTest extends TestCase
 
         $this->createTopic($child2->id);
 
+        $child1->refresh();
+        $child2->refresh();
+
+        $this->assertEquals(1, $child1->order);
+        $this->assertEquals(2, $child2->order);
+
         $faker = Faker\Factory::create();
+
         $guestId = $faker->uuid;
-        $forums = $this->repository->categories($guestId)->mapCategory($guestId);
+        $forums = $this->repository->categories($guestId)->mapCategory();
 
         $collection = new ForumCollection($forums);
         $result = $collection->toArray(request());
@@ -48,7 +55,10 @@ class ForumCollectionTest extends TestCase
         $children = $result[$parent->id]['children'];
 
         $this->assertEquals(2, count($children));
-        var_dump($children, $child1, $child2);
+        $this->assertEquals(1, $children[0]['order']);
+        $this->assertEquals(2, $children[1]['order']);
+
+//        var_dump($children, $child1, $child2);
 
         $this->assertEquals($child1->name, $children[0]['name']);
         $this->assertEquals($child2->name, $children[1]['name']);

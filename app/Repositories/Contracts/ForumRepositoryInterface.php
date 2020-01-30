@@ -5,7 +5,7 @@ namespace Coyote\Repositories\Contracts;
 interface ForumRepositoryInterface extends RepositoryInterface
 {
     /**
-     * Gets categories grouped by sections. You need to pass either $userId or $sessionId (for anonymous users)
+     * Gets categories grouped by sections.
      *
      * @param string $guestId
      * @param null|int $parentId
