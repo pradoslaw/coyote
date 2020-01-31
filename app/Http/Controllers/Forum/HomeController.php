@@ -138,7 +138,7 @@ class HomeController extends BaseController
                 ->mapCategory();
         });
 
-        $forums = new ForumCollection($forums);
+        $forums = ForumCollection::factory($forums);
 
         return $this->view('forum.home')->with(compact('forums'));
     }

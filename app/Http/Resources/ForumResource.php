@@ -3,6 +3,7 @@
 namespace Coyote\Http\Resources;
 
 use Coyote\Post;
+use Coyote\Services\Guest;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -14,6 +15,22 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class ForumResource extends JsonResource
 {
+    /**
+     * @var Guest
+     */
+    protected $guest;
+
+    /**
+     * @param Guest|null $guest
+     * @return $this
+     */
+    public function setGuest(?Guest $guest)
+    {
+        $this->guest = $guest;
+
+        return $this;
+    }
+
     /**
      * Transform the resource into an array.
      *
@@ -59,6 +76,14 @@ class ForumResource extends JsonResource
 
     private function isRead(): bool
     {
-        return $this->whenLoaded('post') && $this->read_at ? $this->read_at >= $this->post->created_at : true;
+        if (!$this->whenLoaded('post')) {
+            return true;
+        }
+
+        if (!$this->read_at) {
+            return $this->guest !== null ? $this->guest->getDefaultSessionTime() > $this->post->created_at : true;
+        }
+
+        return $this->read_at >= $this->post->created_at;
     }
 }

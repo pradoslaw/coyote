@@ -33,7 +33,7 @@ class CategoryController extends BaseController
             ->categories($this->guestId, $forum->id)
             ->mapCategory($this->guestId);
 
-        $forums = (new ForumCollection($forums))->setParentId($forum->id);
+        $forums = ForumCollection::factory($forums)->setParentId($forum->id);
 
         // display topics for this category
         $this->topic->pushCriteria(new BelongsToForum($forum->id));

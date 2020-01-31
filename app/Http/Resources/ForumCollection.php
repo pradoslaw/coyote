@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Resources;
 
+use Coyote\Services\Guest;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Resources\MergeValue;
 use Illuminate\Support\Collection;
@@ -14,11 +15,25 @@ class ForumCollection extends ResourceCollection
     protected $parentId;
 
     /**
+     * @var Guest|null
+     */
+    protected $guest;
+
+    /**
      * The resource that this resource collects.
      *
      * @var string
      */
     public $collects = ForumResource::class;
+
+    /**
+     * @param $collection
+     * @return ForumCollection
+     */
+    public static function factory($collection)
+    {
+        return (new self($collection))->setGuest(app(Guest::class));
+    }
 
     /**
      * @param int $parentId
@@ -32,6 +47,17 @@ class ForumCollection extends ResourceCollection
     }
 
     /**
+     * @param Guest|null $guest
+     * @return $this
+     */
+    public function setGuest(?Guest $guest)
+    {
+        $this->guest = $guest;
+
+        return $this;
+    }
+
+    /**
      * Transform the resource collection into an array.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -39,7 +65,11 @@ class ForumCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        $categories = parent::toArray($request);
+        $categories = $this->collection->map(function (ForumResource $resource) use ($request) {
+            return $resource->setGuest($this->guest)->toArray($request);
+        })->toArray();
+
+//        $categories = parent::toArray($request);
 
         return $this->nested($categories, $this->parentId);
     }
