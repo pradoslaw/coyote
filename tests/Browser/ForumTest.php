@@ -36,7 +36,7 @@ class ForumTest extends DuskTestCase
             try {
                 $browser
                     ->visit('/Forum')
-                    ->assertDontSee($forum->name)
+                    ->assertDontSeeIn('h3', $forum->name)
                     ->visit('/Forum/' . $forum->slug)
                     ->assertSee('401')
                     ->loginAs($user)
