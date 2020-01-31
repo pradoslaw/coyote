@@ -15,6 +15,8 @@ import 'core-js/modules/es6.array.for-each';
 // array isArray -- support for old browser
 import 'core-js/modules/es6.array.is-array';
 import 'core-js/modules/es6.array.from';
+// vue.js Object.values
+import 'core-js/modules/es7.object.values';
 
 
 import './store';
