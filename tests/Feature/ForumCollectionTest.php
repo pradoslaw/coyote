@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Coyote\Forum;
 use Coyote\Http\Resources\ForumCollection;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface;
+use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Faker;
@@ -42,6 +43,8 @@ class ForumCollectionTest extends TestCase
         $faker = Faker\Factory::create();
 
         $guestId = $faker->uuid;
+
+        $this->repository->pushCriteria(new AccordingToUserOrder(null));
         $forums = $this->repository->categories($guestId)->mapCategory();
 
         $collection = new ForumCollection($forums);
