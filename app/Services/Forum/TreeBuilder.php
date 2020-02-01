@@ -4,6 +4,9 @@ namespace Coyote\Services\Forum;
 
 use Illuminate\Support\Collection;
 
+/**
+ * @deprecated
+ */
 class TreeBuilder
 {
     /**
@@ -31,22 +34,22 @@ class TreeBuilder
 
                     // created_at contains last post's created date.
                     if ($child->created_at > $parent->created_at) {
-                        if ($child->forum_unread) {
-                            $parent->forum_unread = true;
-                        }
+//                        if ($child->forum_unread) {
+//                            $parent->forum_unread = true;
+//                        }
 
                         $parent->last_post_id = $child->last_post_id;
-                        $parent->topic_unread = $child->topic_unread;
+//                        $parent->topic_unread = $child->topic_unread;
                         $parent->created_at = $child->created_at;
                         $parent->user_id = $child->user_id;
-                        $parent->photo = $child->photo;
-                        $parent->is_active = $child->is_active;
-                        $parent->is_confirm = $child->is_confirm;
-                        $parent->user_name = $child->user_name;
-                        $parent->anonymous_name = $child->anonymous_name;
-                        $parent->subject = $child->subject;
-                        $parent->topic_slug = $child->topic_slug;
-                        $parent->route = $child->route;
+//                        $parent->photo = $child->photo;
+//                        $parent->is_active = $child->is_active;
+//                        $parent->is_confirm = $child->is_confirm;
+//                        $parent->user_name = $child->user_name;
+//                        $parent->anonymous_name = $child->anonymous_name;
+//                        $parent->subject = $child->subject;
+//                        $parent->topic_slug = $child->topic_slug;
+//                        $parent->route = $child->route;
                     }
                 }
             }

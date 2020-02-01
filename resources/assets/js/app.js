@@ -14,13 +14,18 @@ import 'core-js/modules/es6.object.assign';
 import 'core-js/modules/es6.array.for-each';
 // array isArray -- support for old browser
 import 'core-js/modules/es6.array.is-array';
+import 'core-js/modules/es6.array.from';
+// vue.js Object.values
+import 'core-js/modules/es7.object.values';
 
+
+import './store';
 import './components/dropdown.js';
 import './components/scrolltop.js';
 import './components/breadcrumb.js';
 import './components/navbar-toggle.js';
 import './components/state.js';
-import './components/date.js';
+import './libs/timeago.js';
 import './components/vcard.js';
 import './components/popover.js';
 import './components/flag.js';
@@ -43,36 +48,16 @@ $(function () {
   let r = new Router();
 
   r.on('/User', () => {
-    require.ensure([],
-      require => {
-        require('./pages/user');
-      },
-      'user'
-    );
+    require.ensure([], require => require('./pages/user'), 'user');
   })
   .on('/Praca/Application/*', () => {
-    require.ensure([],
-      require => {
-        require('./pages/job/application');
-      },
-      'application'
-    );
+    require.ensure([], require => require('./pages/job/application'), 'application');
   })
   .on('/Praca/Payment/*', () => {
-    require.ensure([],
-      require => {
-        require('./pages/job/payment');
-      },
-      'payment'
-    );
+    require.ensure([], require => require('./pages/job/payment'), 'payment');
   })
   .on('/Praca/Oferta', () => {
-    require.ensure([],
-      require => {
-        require('./pages/job/business');
-      },
-      'business'
-    );
+    require.ensure([], require => require('./pages/job/business'), 'business');
   })
   .on(['/Praca', '/Praca/Miasto/*', '/Praca/Technologia/*', '/Praca/Zdalna', '/Praca/Firma/*'], () => {
     require('./pages/job/homepage');

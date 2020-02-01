@@ -4,20 +4,18 @@ namespace Coyote\Services\Forum;
 
 use Carbon\Carbon;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
-use Coyote\Services\Session\Guest;
+use Coyote\Services\Guest;
 use Coyote\Topic;
+use Illuminate\Support\Traits\ForwardsCalls;
 
 class Tracker
 {
+    use ForwardsCalls;
+
     /**
      * @var Topic
      */
-    private $topic;
-
-    /**
-     * @var TopicRepository
-     */
-    private $repository;
+    private $model;
 
     /**
      * @var Guest
@@ -25,69 +23,120 @@ class Tracker
     private $guest;
 
     /**
-     * @param Topic $topic
-     * @param TopicRepository $repository
-     * @param Guest $guest
+     * @var TopicRepository
      */
-    public function __construct(Topic $topic, TopicRepository $repository, Guest $guest)
-    {
-        $this->topic = $topic;
-        $this->guest = $guest;
-        $this->repository = $repository;
-    }
+    private $repository;
 
     /**
-     * @param Topic $topic
+     * @param Topic $model
      * @return static
      */
-    public static function make(Topic $topic): self
+    public static function make(Topic $model): self
     {
-        return app(static::class, ['topic' => $topic]);
+        return app(static::class, ['model' => $model])->setRepository(app(TopicRepository::class));
     }
 
     /**
-     * @param string $guestId
+     * @param Topic $model
+     * @param Guest $guest
+     */
+    public function __construct(Topic $model, Guest $guest)
+    {
+        $this->model = $model;
+        $this->guest = $guest;
+    }
+
+    /**
+     * @return Topic
+     */
+    public function getModel(): Topic
+    {
+        return $this->model;
+    }
+
+    /**
+     * @param TopicRepository $repository
+     * @return $this
+     */
+    public function setRepository(TopicRepository $repository)
+    {
+        $this->repository = $repository;
+
+        return $this;
+    }
+
+    /**
      * @return Carbon
      */
-    public function getMarkTime(string $guestId): Carbon
+    public function getMarkTime(): Carbon
     {
-        $markTime = $this->topic->markTime($guestId);
+        $markTime = $this->model->markTime($this->guest->id);
 
         if (empty($markTime)) {
-            $markTime = $this->topic->forum->markTime($guestId);
+            $markTime = $this->model->forum->markTime($this->guest->id);
         }
 
         if (empty($markTime)) {
-            $markTime = $this->guest->guessVisit();
+            $markTime = $this->guest->updated_at ?? $this->guest->getDefaultSessionTime();
         }
 
         return $markTime;
     }
 
     /**
-     * @param string $guestId
+     * @return bool
+     */
+    public function isRead(): bool
+    {
+        return $this->getMarkTime() >= $this->model->last_post_created_at;
+    }
+
+    /**
      * @param $date
      */
-    public function asRead(string $guestId, $date)
+    public function asRead($date)
     {
-        $this->topic->markAsRead($date, $guestId);
+        $this->model->markAsRead($date, $this->guest->id);
 
-        if ($this->topic->last_post_created_at > $date) {
+        // are there any new posts in topic? it's common that there is more pages in topic. further code is unnecessary
+        if ($this->model->last_post_created_at > $date) {
             return;
         }
 
-        $markTime = $this->topic->forum->markTime($guestId);
-
         // are there any unread topics in this category?
         $unread = $this->repository->countUnread(
-            $this->topic->forum->id,
-            $markTime,
-            $guestId
+            $this->model->forum->id,
+            $this->getMarkTime(),
+            $this->guest->id
         );
 
         if (!$unread) {
-            $this->topic->forum->markAsRead($guestId);
-            $this->repository->flushRead($this->topic->forum->id, $guestId);
+            $this->model->forum->markAsRead($date, $this->guest->id);
+            // remove all unnecessary records from topic_track table
+            $this->repository->flushRead($this->model->forum->id, $this->guest->id);
         }
+    }
+
+    /**
+     * Dynamically get properties from the underlying model.
+     *
+     * @param  string  $key
+     * @return mixed
+     */
+    public function __get($key)
+    {
+        return $this->model->{$key};
+    }
+
+    /**
+     * Dynamically pass method calls to the underlying model.
+     *
+     * @param  string  $method
+     * @param  array  $parameters
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+        return $this->forwardCallTo($this->model, $method, $parameters);
     }
 }

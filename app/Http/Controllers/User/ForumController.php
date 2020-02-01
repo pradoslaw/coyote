@@ -4,7 +4,7 @@ namespace Coyote\Http\Controllers\User;
 
 use Coyote\Events\UserWasSaved;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
-use Coyote\Repositories\Contracts\Forum\OrderRepositoryInterface as OrderRepository;
+use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
 use Coyote\Services\Forum\TreeBuilder;
 use Illuminate\Http\Request;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
@@ -19,21 +19,13 @@ class ForumController extends BaseController
     private $forum;
 
     /**
-     * @var OrderRepository
-     */
-    private $order;
-
-    /**
-     * ForumController constructor.
      * @param ForumRepository $forum
-     * @param OrderRepository $order
      */
-    public function __construct(ForumRepository $forum, OrderRepository $order)
+    public function __construct(ForumRepository $forum)
     {
         parent::__construct();
 
         $this->forum = $forum;
-        $this->order = $order;
     }
 
     /**
@@ -44,7 +36,9 @@ class ForumController extends BaseController
         $this->breadcrumb->push('Personalizacja forum', route('user.forum'));
 
         $this->forum->pushCriteria(new OnlyThoseWithAccess(auth()->user()));
-        $sections = $this->forum->categoriesOrder($this->userId);
+        $this->forum->pushCriteria(new AccordingToUserOrder($this->userId));
+
+        $sections = $this->forum->categories($this->guestId);
 
         $treeBuilder = new TreeBuilder();
 
@@ -65,7 +59,8 @@ class ForumController extends BaseController
         ]);
 
         $this->transaction(function () use ($request) {
-            $this->order->saveForUser($this->userId, $request->input('forum'));
+            $this->forum->setup($this->userId, $request->input('forum'));
+
             event(new UserWasSaved($this->auth));
         });
     }
@@ -76,7 +71,8 @@ class ForumController extends BaseController
     public function restore()
     {
         $this->transaction(function () {
-            $this->order->deleteForUser($this->userId);
+            $this->forum->deleteSetup($this->userId);
+
             event(new UserWasSaved($this->auth));
         });
 

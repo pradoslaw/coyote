@@ -14,7 +14,6 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     $this->get('Tag/Validate', ['uses' => 'TagController@valid', 'as' => 'tag.validate']);
     $this->get('Categories', ['uses' => 'HomeController@categories', 'as' => 'categories']);
     $this->get('All', ['uses' => 'HomeController@all', 'as' => 'all']);
-    $this->get('Unanswered', ['uses' => 'HomeController@unanswered', 'as' => 'unanswered']);
     $this->get('Mine', ['uses' => 'HomeController@mine', 'as' => 'mine', 'middleware' => 'auth']);
     $this->get('Subscribes', ['uses' => 'HomeController@subscribes', 'as' => 'subscribes', 'middleware' => 'auth']);
     $this->get('User/{id}', ['uses' => 'HomeController@user', 'as' => 'user']);
@@ -87,8 +86,6 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
         'as' => 'category.mark',
         'middleware' => 'can:access,forum'
     ]);
-
-    $this->post('{forum}/Section', ['uses' => 'CategoryController@section', 'as' => 'section']);
 
     // obserwowanie danego watku na forum
     $this->post('Topic/Subscribe/{topic}', [
@@ -182,6 +179,9 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
             'auth', 'can:access,forum'
         ]
     ]);
+
+    // change category order
+    $this->post('Setup', ['uses' => 'CategoryController@setup', 'middleware' => 'auth']);
 
     // skrocony link do posta
     $this->get('{id}', ['uses' => 'ShareController@index', 'as' => 'share']);

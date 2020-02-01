@@ -82,8 +82,8 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
             ->join('posts AS last', 'last.id', '=', 'topics.last_post_id')
             ->leftJoin('users AS author', 'author.id', '=', 'first.user_id')
             ->leftJoin('users AS poster', 'poster.id', '=', 'last.user_id')
-            ->trackForum($guestId)
-            ->trackTopic($guestId)
+            ->withForumMarkTime($guestId, 'forum_marked_at')
+            ->withTopicMarkTime($guestId, 'topic_marked_at')
             ->leftJoin('post_accepts AS pa', 'pa.topic_id', '=', 'topics.id')
             ->with(['tags', 'forum'])
             ->orderBy('topics.ordering')
@@ -122,7 +122,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
         return $this
             ->model
             ->from($this->raw("($sql) AS topics"))
-            ->trackTopic($guestId)
+            ->withTopicMarkTime($guestId)
             ->withTrashed()
             ->whereNull('topic_track.id')
             ->count();

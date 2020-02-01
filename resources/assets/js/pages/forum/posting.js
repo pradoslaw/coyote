@@ -19,14 +19,6 @@ $(function () {
     });
 
     /**
-     * Collapse forum category
-     */
-    $('.toggle[data-toggle="collapse"]').click(function() {
-        $.post($(this).data('ajax'), {flag: +$(this).hasClass('in')});
-        $(this).toggleClass('in');
-    });
-
-    /**
      * Change limit of posts/topics shown on one page
      */
     $('select[name="perPage"]').change(function() {
@@ -138,7 +130,7 @@ $(function () {
     /**
      * Mark category/topic as read by clicking on it
      */
-    $('.new').click(function() {
+    $('.ico.new').click(function() {
         $(this).addClass('normal').removeClass('new');
         $(this).parent().next().find('.btn-view').removeClass('unread');
 

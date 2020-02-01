@@ -22,7 +22,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property Post $lastPost
  * @property Microblog[] $comments
  * @property Tag[] $tags
- * @property \Coyote\Topic\Track[] $tracks
+ * @property \Carbon\Carbon $read_at
+ * @method bool isRead()
  */
 class TopicResource extends JsonResource
 {
@@ -42,17 +43,14 @@ class TopicResource extends JsonResource
                 'locked_at'             => $this->locked_at ? $this->locked_at->toIso8601String() : null,
                 'created_at'            => $this->created_at->toIso8601String(),
                 'last_post_created_at'  => $this->last_post_created_at->toIso8601String(),
-                'url'                   => url(UrlBuilder::topic($this->resource)),
+                'url'                   => url(UrlBuilder::topic($this->resource->getModel())),
+                'is_read'               => $this->isRead(),
                 'forum'         => [
                     'id'        => $this->forum->id,
                     'name'      => $this->forum->name,
                     'slug'      => $this->forum->slug
                 ],
-                'tags'                  => TagResource::collection($this->tags),
-//@todo dodac date przeczytania watku
-//                'read_at'               => $this->when($this->resource->relationLoaded('tracks'), function () {
-//                    return max($this->tracks->first()->marked_at ?? 0, $this->forum->tracks->first()->marked_at ?? 0);
-//                })
+                'tags'                  => TagResource::collection($this->whenLoaded('tags'))
             ]
         );
     }

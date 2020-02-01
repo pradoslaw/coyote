@@ -23,7 +23,8 @@ class ForumsTableSeeder extends Seeder
         $parent = Coyote\Forum::create([
             'name' => 'Python',
             'slug' => 'Python',
-            'description' => 'Forum o Pythonie.'
+            'description' => 'Forum o Pythonie.',
+            'section' => 'Podstawy programowania'
         ]);
 
         event(new \Coyote\Events\ForumWasSaved($parent));
@@ -42,7 +43,8 @@ class ForumsTableSeeder extends Seeder
             'name' => 'Dla zaawansowanych',
             'slug' => 'Python/Dla_zaawansowanych',
             'description' => 'Forum o Pythonie dla zaawansowanych',
-            'parent_id' => $parent->id
+            'parent_id' => $parent->id,
+            'section' => 'Podkategorie'
         ]);
 
         event(new \Coyote\Events\ForumWasSaved($row));

@@ -37,6 +37,7 @@ use Illuminate\Database\Query\Builder;
  * @property int $locker_id
  * @property \Carbon\Carbon $moved_at
  * @property \Carbon\Carbon $locked_at
+ * @property \Carbon\Carbon $read_at
  */
 class Topic extends Model
 {
@@ -65,7 +66,7 @@ class Topic extends Model
      */
     protected $hidden = ['tags'];
 
-    protected $dates = ['created_at', 'updated_at', 'deleted_at', 'last_post_created_at', 'moved_at', 'locked_at'];
+    protected $dates = ['created_at', 'updated_at', 'deleted_at', 'last_post_created_at', 'moved_at', 'locked_at', 'read_at'];
 
     public static function boot()
     {
@@ -252,18 +253,22 @@ class Topic extends Model
     }
 
     /**
-     * @param string $guestId
+     * @param string|null $guestId
      * @return mixed
      */
-    public function markTime($guestId)
+    public function markTime(?string $guestId)
     {
-        return $this->tracks()->select('marked_at')->where('guest_id', $guestId)->value('marked_at');
+        if ($guestId !== null && !array_key_exists('read_at', $this->attributes)) {
+            $this->attributes['read_at'] = $this->tracks()->select('marked_at')->where('guest_id', $guestId)->value('marked_at');
+        }
+
+        return $this->read_at;
     }
 
     /**
      * Mark topic as read
      *
-     * @param string $markTime
+     * @param \Carbon\Carbon $markTime
      * @param string $guestId
      */
     public function markAsRead($markTime, $guestId)
@@ -274,6 +279,7 @@ class Topic extends Model
                 UPDATE SET marked_at = ?";
 
         $this->getConnection()->statement($sql, [$this->id, $this->forum_id, $guestId, $markTime, $markTime]);
+        $this->read_at = $markTime;
     }
 
     /**

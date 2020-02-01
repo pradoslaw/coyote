@@ -5,5 +5,11 @@ export default {
         el.href = `/Profile/${binding.value}`;
       }
     }
+  },
+
+  filters: {
+    number(value) {
+      return value.toLocaleString();
+    }
   }
 };

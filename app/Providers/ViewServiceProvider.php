@@ -54,8 +54,6 @@ class ViewServiceProvider extends ServiceProvider
     {
         $this->app['request']->attributes->add([
             'public'        => route('home'),
-            'cdn'           => config('app.cdn') ? ('//' . config('app.cdn')) : route('home'),
-            'ping_interval' => config('session.lifetime') - 5, // every 10 minutes
             'notifications_unread' => 0,
             'pm_unread'     => 0
         ]);
@@ -64,11 +62,31 @@ class ViewServiceProvider extends ServiceProvider
             $user = $this->app['request']->user();
 
             $this->app['request']->attributes->add([
-                'token' => $this->getJWtToken($user),
-                'notifications_unread' => $user->notifications_unread,
-                'pm_unread' => $user->pm_unread
+                'id'                    => $user->id,
+                'date_format'           => $this->mapFormat($user->date_format),
+                'token'                 => $this->getJWtToken($user),
+                'notifications_unread'  => $user->notifications_unread,
+                'pm_unread'             => $user->pm_unread
             ]);
         }
+    }
+
+    /**
+     * @param string $format
+     * @return string
+     */
+    private function mapFormat(string $format): string
+    {
+        $values = [
+            'dd-MM-yyyy HH:mm',
+            'yyyy-MM-dd HH:mm',
+            'MM/dd/yy HH:mm',
+            'dd-MM-yy HH:mm',
+            'dd MMM yy HH:mm',
+            'dd MMMM yyyy HH:mm'
+        ];
+
+        return array_combine(array_keys(User::dateFormatList()), $values)[$format];
     }
 
     /**
@@ -116,10 +134,10 @@ class ViewServiceProvider extends ServiceProvider
             $repository->skipCriteria(false);
 
             $repository->pushCriteria(new OnlyThoseWithAccess($this->app['request']->user()));
-            $repository->pushCriteria(new AccordingToUserOrder($userId));
+            $repository->pushCriteria(new AccordingToUserOrder($userId, true));
             $repository->applyCriteria();
 
-            $categories = $repository->select(['name', 'slug', 'forums.section'])->whereNull('parent_id')->get();
+            $categories = $repository->addSelect(['name', 'slug', 'forums.section'])->whereNull('parent_id')->get();
             $rendered = view('components.mega-menu', ['sections' => $this->groupBySections($categories)])->render();
 
             $builder->forum->after($rendered);

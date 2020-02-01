@@ -1,8 +1,10 @@
+
+
 <section class="panel panel-wrapper">
     <div class="panel-body">
         <h2 class="pull-left">{{ name }}</h2>
 
-        <a class="pull-right toggle {{ not collapse[forums[0].id] ? 'in' }}" data-toggle="collapse" href="#{{ forums[0].id }}" aria-expanded="true" data-ajax="{{ route('forum.section', [forums[0].slug]) }}">
+        <a class="pull-right toggle {{ not collapse[forums[0].id] ? 'in' }}" data-toggle="collapse" href="#{{ forums[0].id }}" aria-expanded="true">
             <i class="far fa-minus-square"></i>
             <i class="far fa-plus-square"></i>
         </a>
@@ -93,3 +95,9 @@
         </div>
     </div>
 </section>
+<script>
+    import Select from "../../../assets/js/components/forms/select";
+    export default {
+        components: {Select}
+    }
+</script>

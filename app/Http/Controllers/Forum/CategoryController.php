@@ -2,7 +2,9 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Events\UserWasSaved;
 use Coyote\Http\Factories\FlagFactory;
+use Coyote\Http\Resources\ForumCollection;
 use Coyote\Repositories\Criteria\Topic\BelongsToForum;
 use Coyote\Repositories\Criteria\Topic\StickyGoesFirst;
 use Coyote\Services\Forum\TreeBuilder;
@@ -26,12 +28,12 @@ class CategoryController extends BaseController
         $this->pushForumCriteria();
         $forumList = $treeBuilder->listBySlug($this->forum->list());
 
-        // execute query: get all subcategories that user can has access to
-        $sections = $this->forum->categories($this->guestId, $forum->id);
-        // mark unread categories
-        $sections = $personalizer->markUnreadCategories($sections);
+        $forums = $this
+            ->forum
+            ->categories($this->guestId, $forum->id)
+            ->mapCategory($this->guestId);
 
-        $sections = $treeBuilder->sections($sections, $forum->id);
+        $forums = ForumCollection::factory($forums)->setParentId($forum->id);
 
         // display topics for this category
         $this->topic->pushCriteria(new BelongsToForum($forum->id));
@@ -61,7 +63,7 @@ class CategoryController extends BaseController
         $postsPerPage = $this->postsPerPage($this->request);
 
         return $this->view('forum.category')->with(
-            compact('forumList', 'forum', 'topics', 'sections', 'collapse', 'flags', 'postsPerPage')
+            compact('forumList', 'forum', 'topics', 'forums', 'collapse', 'flags', 'postsPerPage')
         );
     }
 
@@ -70,13 +72,13 @@ class CategoryController extends BaseController
      */
     public function mark($forum)
     {
-        $forum->markAsRead($this->guestId);
+        $forum->markAsRead(now(), $this->guestId);
         $this->topic->flushRead($forum->id, $this->guestId);
 
         $forums = $this->forum->where('parent_id', $forum->id)->get();
 
         foreach ($forums as $forum) {
-            $forum->markAsRead($this->guestId);
+            $forum->markAsRead(now(), $this->guestId);
             $this->topic->flushRead($forum->id, $this->guestId);
         }
     }
@@ -87,7 +89,7 @@ class CategoryController extends BaseController
      * @param \Coyote\Forum $forum
      * @param Request $request
      */
-    public function section($forum, Request $request)
+    public function collapseSection($forum, Request $request)
     {
         $collapse = $this->getSetting('forum.collapse');
         if ($collapse !== null) {
@@ -96,5 +98,43 @@ class CategoryController extends BaseController
 
         $collapse[$forum->id] = (int) $request->input('flag');
         $this->setSetting('forum.collapse', serialize($collapse));
+    }
+
+    /**
+     * @param Request $request
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function setup(Request $request)
+    {
+        $this->validate($request, ['*.order' => 'required|int', '*.id' => 'required|int']);
+
+        $categories = $this->withCriteria(function () {
+            return $this
+                ->forum
+                ->categories($this->guestId)
+                ->filter(function ($item) {
+                    return $item->parent_id === null;
+                });
+        });
+
+        $input = $request->input();
+        $result = [];
+
+        foreach ($categories as &$category) {
+            foreach ($input as $row) {
+                if ($category->id === $row['id']) {
+                    $category->order = $row['order'];
+                    $category->is_hidden = $row['is_hidden'];
+                }
+            }
+
+            $result[] = $category->only(['order']) + ['forum_id' => $category->id, 'is_hidden' => $category->is_hidden ?? false];
+        }
+
+        $this->transaction(function () use ($result) {
+            $this->forum->setup($this->userId, $result);
+        });
+
+        event(new UserWasSaved($this->auth));
     }
 }

@@ -32,10 +32,12 @@ use Illuminate\Database\Eloquent\Model;
  * @property Forum $parent
  * @property Forum\Track[] $tracks
  * @property bool $is_prohibited
+ * @property Post $post
+ * @property \Carbon\Carbon $read_at
  */
 class Forum extends Model
 {
-    use TrackTopic, TrackForum;
+    use TrackForum;
 
     /**
      * The attributes that are mass assignable.
@@ -60,7 +62,17 @@ class Forum extends Model
     /**
      * @var array
      */
-    protected $casts = ['redirects' => 'int', 'is_prohibited' => 'bool'];
+    protected $casts = ['redirects' => 'int', 'is_locked' => 'bool', 'is_prohibited' => 'bool'];
+
+    /**
+     * @var array
+     */
+    protected $dates = ['read_at'];
+
+    /**
+     * @var string
+     */
+    protected $dateFormat = 'Y-m-d H:i:se';
 
     /**
      * @var bool
@@ -135,6 +147,14 @@ class Forum extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function post()
+    {
+        return $this->hasOne(Post::class, 'id', 'last_post_id');
+    }
+
+    /**
      * Checks ability for specified forum and user id
      *
      * @param string $name
@@ -159,24 +179,26 @@ class Forum extends Model
     }
 
     /**
-     * @param string $guestId
+     * @param string|null $guestId
      * @return mixed
      */
-    public function markTime($guestId)
+    public function markTime(?string $guestId)
     {
-        return $this->tracks()->select('marked_at')->where('guest_id', $guestId)->value('marked_at');
+        if ($guestId !== null && !array_key_exists('read_at', $this->attributes)) {
+            $this->attributes['read_at'] = $this->tracks()->select('marked_at')->where('guest_id', $guestId)->value('marked_at');
+        }
+
+        return $this->read_at;
     }
 
     /**
      * Mark forum as read
      *
-     * @param $forumId
+     * @param \Carbon\Carbon $markTime
      * @param $guestId
      */
-    public function markAsRead($guestId)
+    public function markAsRead($markTime, $guestId)
     {
-        $markTime = Carbon::now();
-
         $sql = "INSERT INTO forum_track (forum_id, guest_id, marked_at)
                 VALUES(?, ?, ?)
                 ON CONFLICT ON CONSTRAINT forum_track_forum_id_guest_id_unique DO

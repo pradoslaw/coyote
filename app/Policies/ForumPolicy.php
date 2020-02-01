@@ -101,14 +101,9 @@ class ForumPolicy
      */
     public function access(?User $user, Forum $forum): bool
     {
+        // field must be present in model
         if ($forum->is_prohibited === false) {
             return true;
-        }
-
-        // if access to this category is restricted to some groups, it's logical that guest user
-        // does not belong to any group.
-        if ($user === null) {
-            return false;
         }
 
         $groups = $forum->groups()->get()->pluck('id')->toArray();
@@ -117,6 +112,11 @@ class ForumPolicy
             return true;
         }
 
+        // if access to this category is restricted to some groups, it's logical that guest user
+        // does not belong to any group.
+        if ($user === null) {
+            return false;
+        }
 
         foreach ($user->groups()->get() as $group) {
             if (in_array($group->id, $groups)) {

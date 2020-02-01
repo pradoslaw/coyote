@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Factories\FlagFactory;
 use Coyote\Http\Factories\GateFactory;
+use Coyote\Http\Resources\ForumCollection;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
@@ -12,10 +13,8 @@ use Coyote\Repositories\Criteria\Topic\OnlyMine;
 use Coyote\Repositories\Criteria\Topic\SkipForum;
 use Coyote\Repositories\Criteria\Topic\SkipLockedCategories;
 use Coyote\Repositories\Criteria\Topic\Subscribes;
-use Coyote\Repositories\Criteria\Topic\Unanswered;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Topic\WithTags;
-use Coyote\Services\Forum\TreeBuilder;
 use Coyote\Services\Forum\Personalizer;
 use Illuminate\Http\Request;
 use Lavary\Menu\Item;
@@ -33,6 +32,8 @@ class HomeController extends BaseController
 
     /**
      * @var Personalizer
+     *
+     * @deprecated
      */
     private $personalizer;
 
@@ -71,7 +72,7 @@ class HomeController extends BaseController
             // currently selected tab
             list(, $suffix) = explode('.', $request->route()->getName());
 
-            if (in_array($suffix, ['categories', 'all', 'unanswered', 'subscribes', 'mine', 'interesting'])) {
+            if (in_array($suffix, ['categories', 'all', 'subscribes', 'mine', 'interesting'])) {
                 $this->setSetting('forum.tab', $suffix);
             }
 
@@ -129,19 +130,17 @@ class HomeController extends BaseController
      */
     public function categories()
     {
-        $this->pushForumCriteria();
         // execute query: get all categories that user can has access
-        $sections = $this->forum->categories($this->guestId);
-        // establish forum's marked date
-        $sections = $this->personalizer->markUnreadCategories($sections);
+        $forums = $this->withCriteria(function () {
+            return $this
+                ->forum
+                ->categories($this->guestId)
+                ->mapCategory();
+        });
 
-        $treeBuilder = new TreeBuilder();
-        $sections = $treeBuilder->sections($sections);
+        $forums = ForumCollection::factory($forums);
 
-        // get categories collapse
-        $collapse = $this->collapse();
-
-        return $this->view('forum.home')->with(compact('sections', 'collapse'));
+        return $this->view('forum.home')->with(compact('forums'));
     }
 
     /**
@@ -150,16 +149,6 @@ class HomeController extends BaseController
     public function all()
     {
         $this->topic->pushCriteria(new SkipLockedCategories());
-
-        return $this->loadAndRender();
-    }
-
-    /**
-     * @return \Illuminate\View\View
-     */
-    public function unanswered()
-    {
-        $this->topic->pushCriteria(new Unanswered());
 
         return $this->loadAndRender();
     }
@@ -252,7 +241,7 @@ class HomeController extends BaseController
 
         /** @var \Coyote\Forum $forum */
         foreach ($forums as $forum) {
-            $forum->markAsRead($this->guestId);
+            $forum->markAsRead(now(), $this->guestId);
             $this->topic->flushRead($forum->id, $this->guestId);
         }
     }
@@ -266,7 +255,7 @@ class HomeController extends BaseController
 
         // if someone wants to find all user's topics, we can't hide those from our hidden categories.
         if (strpos($this->request->route()->getActionName(), '@user') === false) {
-            $this->topic->pushCriteria(new SkipForum($this->forum->order->findHiddenIds($this->userId)));
+            $this->topic->pushCriteria(new SkipForum($this->forum->findHiddenIds($this->userId)));
         }
 
         $paginator = $this

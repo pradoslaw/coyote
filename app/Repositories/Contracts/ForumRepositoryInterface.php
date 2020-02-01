@@ -2,13 +2,10 @@
 
 namespace Coyote\Repositories\Contracts;
 
-/**
- * @property \Coyote\Repositories\Contracts\Forum\OrderRepositoryInterface $order
- */
 interface ForumRepositoryInterface extends RepositoryInterface
 {
     /**
-     * Gets categories grouped by sections. You need to pass either $userId or $sessionId (for anonymous users)
+     * Gets categories grouped by sections.
      *
      * @param string $guestId
      * @param null|int $parentId
@@ -18,9 +15,20 @@ interface ForumRepositoryInterface extends RepositoryInterface
 
     /**
      * @param int $userId
-     * @return mixed
+     * @param array $data
      */
-    public function categoriesOrder($userId);
+    public function setup($userId, array $data);
+
+    /**
+     * @param int $userId
+     */
+    public function deleteSetup($userId);
+
+    /**
+     * @param int|null $userId
+     * @return array
+     */
+    public function findHiddenIds($userId);
 
     /**
      * Sort a list of categories that can be shown in a <select>

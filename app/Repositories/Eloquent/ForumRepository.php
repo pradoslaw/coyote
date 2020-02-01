@@ -2,31 +2,15 @@
 
 namespace Coyote\Repositories\Eloquent;
 
-use Coyote\Repositories\Contracts\Forum\OrderRepositoryInterface;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface;
 use Coyote\Topic;
 use Coyote\Forum;
-use Illuminate\Container\Container as App;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Query\JoinClause;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class ForumRepository extends Repository implements ForumRepositoryInterface
 {
-    /**
-     * @var OrderRepositoryInterface
-     */
-    public $order;
-
-    /**
-     * @inheritdoc
-     */
-    public function __construct(App $app)
-    {
-        parent::__construct($app);
-
-        $this->order = $this->app[OrderRepositoryInterface::class];
-    }
-
     /**
      * @return string
      */
@@ -44,24 +28,20 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
 
         $result = $this
             ->model
-            ->select([
-                'forums.*',
-                'subject',
-                'topics.id AS topic_id',
-                'topics.slug AS topic_slug',
-                'posts.user_id',
-                'posts.created_at',
-                'posts.user_name AS anonymous_name',
-                'users.name AS user_name',
-                'users.photo',
-                $this->raw('users.deleted_at IS NULL AS is_active'),
-                'users.is_confirm'
-            ])
-            ->leftJoin('posts', 'posts.id', '=', 'forums.last_post_id')
-            ->leftJoin('users', 'users.id', '=', 'posts.user_id')
-            ->leftJoin('topics', 'topics.id', '=', 'posts.topic_id')
-            ->trackForum($guestId)
-            ->trackTopic($guestId)
+            ->addSelect('forums.*')
+            ->withForumMarkTime($guestId)
+            ->with(['post' => function (HasOne $builder) use ($guestId) {
+                return $builder
+                    ->select(['id', 'user_id', 'topic_id', 'forum_id', 'user_name', 'created_at'])
+                    ->with([
+                        'topic' => function (BelongsTo $builder) use ($guestId) {
+                            return $builder->select(['topics.id', 'subject', 'slug', 'topics.forum_id', 'last_post_created_at'])->withTopicMarkTime($guestId);
+                        },
+                        'user' => function (BelongsTo $builder) {
+                            return $builder->select(['id', 'name', 'deleted_at', 'is_blocked', 'photo'])->withTrashed();
+                        }
+                    ]);
+            }])
             ->when($parentId, function (Builder $builder) use ($parentId) {
                 return $builder->where('parent_id', $parentId);
             })
@@ -73,32 +53,49 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     }
 
     /**
-     * @param int $userId
-     * @return mixed
+     * @inheritdoc
      */
-    public function categoriesOrder($userId)
+    public function setup($userId, array $data)
     {
-        $this->applyCriteria();
+        $this->deleteSetup($userId);
 
-        $sql = $this
+        Forum\Order::insert(
+            array_map(
+                function ($item) use ($userId) {
+                    return $item + ['user_id' => $userId];
+                },
+                $data)
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function deleteSetup($userId)
+    {
+        Forum\Order::where('user_id', $userId)->delete();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function findHiddenIds($userId)
+    {
+        if ($userId === null) {
+            return [];
+        }
+
+        $result = $this
             ->model
-            ->select([
-                'forums.*',
-                'forum_orders.is_hidden',
-                $this->raw('CASE WHEN forum_orders.section IS NOT NULL THEN forum_orders.section ELSE forums.section END')
-            ])
-            ->leftJoin('forum_orders', function (JoinClause $join) use ($userId) {
-                $join->on('forum_orders.forum_id', '=', 'forums.id')
-                        ->on('forum_orders.user_id', '=', $this->raw($userId));
-            })
-            ->whereNull('parent_id')
-            ->orderByRaw('(CASE WHEN forum_orders.order IS NOT NULL THEN forum_orders.order ELSE forums.order END)');
+            ->select(['forum_id', 'forums.id AS child_forum_id'])
+            ->where('user_id', $userId)
+            ->where('is_hidden', 1)
+            ->rightJoin('forum_orders', 'parent_id', '=', 'forum_orders.forum_id')
+            ->get();
 
-        $parents = $sql->get();
-
-        $this->resetModel();
-
-        return $parents;
+        return array_filter(array_unique(
+            array_merge($result->pluck('forum_id')->toArray(), $result->pluck('child_forum_id')->toArray())
+        ));
     }
 
     /**
@@ -107,7 +104,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     public function list()
     {
         return $this->applyCriteria(function () {
-            return $this->model->select('forums.id', 'name', 'slug', 'parent_id')->orderBy('forums.order')->get();
+            return $this->model->addSelect('forums.id', 'name', 'slug', 'parent_id')->get();
         });
     }
 

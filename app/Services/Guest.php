@@ -2,15 +2,16 @@
 
 namespace Coyote\Services;
 
-use Coyote\Repositories\Contracts\GuestRepositoryInterface as GuestRepository;
+use Carbon\Carbon;
+use Coyote\Guest as Model;
 
+/**
+ * @property int $id
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ */
 class Guest
 {
-    /**
-     * @var GuestRepository
-     */
-    private $guest;
-
     /**
      * @var string
      */
@@ -19,27 +20,40 @@ class Guest
     /**
      * Default value is null. It means we have to retrieve settings from db. Once settings are retrieved from db, this will be an empty array.
      *
-     * @var array
+     * @var \Coyote\Guest|null
      */
-    private $settings = null;
+    protected $model = null;
 
     /**
-     * @param GuestRepository $guest
+     * @var Carbon
      */
-    public function __construct(GuestRepository $guest)
+    private $defaultSessionTime;
+
+    /**
+     * @param string|null $guestId
+     */
+    public function __construct(?string $guestId)
     {
-        $this->guest = $guest;
+        $this->guestId = $guestId;
     }
 
     /**
-     * @param string|null $guestId Can be nullable in case of error
+     * @param Carbon $defaultSessionTime
      * @return $this
      */
-    public function setGuestId(?string $guestId): self
+    public function setDefaultSessionTime(Carbon $defaultSessionTime): self
     {
-        $this->guestId = $guestId;
+        $this->defaultSessionTime = $defaultSessionTime;
 
         return $this;
+    }
+
+    /**
+     * @return Carbon
+     */
+    public function getDefaultSessionTime(): Carbon
+    {
+        return $this->defaultSessionTime ?? Carbon::now('utc');
     }
 
     /**
@@ -53,15 +67,8 @@ class Guest
             return $value;
         }
 
-//        if (!is_array($this->settings)) {
-//            $this->settings = [];
-//        }
-
-        $this->settings[$name] = $value;
-
-        if ($this->guestId) {
-            $this->guest->setSetting($name, $value, $this->guestId);
-        }
+        $this->model->setSetting($name, $value);
+        $this->model->save();
 
         return $value;
     }
@@ -77,11 +84,9 @@ class Guest
             return [];
         }
 
-        if (is_null($this->settings)) {
-            $this->settings = $this->guest->getSettings($this->guestId);
-        }
+        $this->load();
 
-        return $this->settings;
+        return $this->model->settings;
     }
 
     /**
@@ -91,6 +96,30 @@ class Guest
      */
     public function getSetting($name, $default = null)
     {
-        return isset($this->getSettings()[$name]) ? $this->settings[$name] : $default;
+        return $this->getSettings()[$name] ?? $default;
+    }
+
+    /**
+     * @param $name
+     * @return mixed|null
+     */
+    public function __get($name)
+    {
+        $this->load();
+
+        return $this->model->$name ?? null;
+    }
+
+    protected function load()
+    {
+        if (!is_null($this->model)) {
+            return;
+        }
+
+        $this->model = Model::findOrNew($this->guestId, ['id', 'settings', 'created_at', 'updated_at']);
+
+        if (!$this->model->exists) {
+            $this->model->id = $this->guestId;
+        }
     }
 }

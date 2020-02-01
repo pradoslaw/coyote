@@ -3,7 +3,10 @@
 namespace Tests\Feature;
 
 use Coyote\Forum;
-use Coyote\Group;
+use Coyote\Post;
+use Coyote\Repositories\Contracts\TopicRepositoryInterface;
+use Coyote\Services\Forum\Tracker;
+use Coyote\Services\Guest;
 use Coyote\Topic;
 use Coyote\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -37,14 +40,9 @@ class TopicApiTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = factory(User::class)->create();
+        $this->user = $this->createUserWithGroup();
 
-        /** @var Group $group */
-        $group = factory(Group::class)->create();
-        $group->users()->attach($this->user->id);
-
-        $this->forum = factory(Forum::class)->create(['is_prohibited' => true]);
-        $this->forum->access()->create(['group_id' => $group->id]);
+        $this->forum = $this->createForum([], $this->user->groups()->first()->id);
         $this->topic = factory(Topic::class)->create(['forum_id' => $this->forum->id]);
 
         $this->token = $this->user->createToken('4programmers.net')->accessToken;
@@ -55,7 +53,9 @@ class TopicApiTest extends TestCase
         $request = $this->get('/v1/topics', ['Accept' => 'application/json']);
 
         $data = $request->decodeResponseJson('data');
-        $this->assertNotEquals($data[0]['subject'], $this->topic->subject);
+
+        $this->assertNotEquals($this->topic->subject, $data[0]['subject']);
+        $this->assertTrue($data[0]['is_read']);
     }
 
     public function testShowAllTopicsAuthorized()
@@ -63,7 +63,8 @@ class TopicApiTest extends TestCase
         $request = $this->get('/v1/topics', ['Accept' => 'application/json', 'Authorization' => 'Bearer ' . $this->token]);
         $data = $request->decodeResponseJson('data');
 
-        $this->assertEquals($data[0]['subject'], $this->topic->subject);
+        $this->assertEquals($this->topic->subject, $data[0]['subject']);
+        $this->assertTrue($data[0]['is_read']);
     }
 
     public function testShowForbiddenWhenUnauthorized()
@@ -85,5 +86,46 @@ class TopicApiTest extends TestCase
                 'slug' => $this->forum->slug
             ]
         ]);
+    }
+
+    public function testMarkAsRead()
+    {
+        $this->factory($this->topic)->asRead($this->topic->last_post_created_at);
+
+        $request = $this->get('/v1/topics/' . $this->topic->id, ['Accept' => 'application/json', 'Authorization' => 'Bearer ' . $this->token]);
+        $data = $request->decodeResponseJson();
+
+        $this->assertTrue($data['is_read']);
+    }
+
+    public function testShowAllTopicsWithMarkedAsRead()
+    {
+        $this->factory($this->topic)->asRead($this->topic->last_post_created_at);
+
+        $request = $this->get('/v1/topics', ['Accept' => 'application/json', 'Authorization' => 'Bearer ' . $this->token]);
+        $data = $request->decodeResponseJson('data');
+
+        $this->assertEquals($this->topic->subject, $data[0]['subject']);
+        $this->assertTrue($data[0]['is_read']);
+    }
+
+    public function testShowTopicAsNew()
+    {
+        \Coyote\Guest::forceCreate(['id' => $this->user->guest_id, 'updated_at' => now()->subMinute(5)]);
+
+        $topic = factory(Topic::class)->create(['forum_id' => $this->forum->id]);
+        factory(Post::class)->create(['topic_id' => $topic->id, 'forum_id' => $this->forum->id, 'created_at' => now()]);
+
+        $request = $this->get('/v1/topics/' . $this->topic->id, ['Accept' => 'application/json', 'Authorization' => 'Bearer ' . $this->token]);
+        $data = $request->decodeResponseJson();
+
+        $this->assertFalse($data['is_read']);
+    }
+
+    private function factory(Topic $model)
+    {
+        $guest = new Guest($this->user->guest_id);
+
+        return (new Tracker($model, $guest))->setRepository(app(TopicRepositoryInterface::class));
     }
 }

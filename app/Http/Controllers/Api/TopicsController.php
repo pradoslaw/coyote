@@ -4,12 +4,16 @@ namespace Coyote\Http\Controllers\Api;
 
 use Coyote\Http\Resources\TagResource;
 use Coyote\Http\Resources\TopicResource;
-use Coyote\Repositories\Contracts\TopicRepositoryInterface;
+use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Repositories\Criteria\Sort;
+use Coyote\Repositories\Criteria\Topic\LoadMarkTime;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
+use Coyote\Services\Forum\Tracker;
+use Coyote\Services\Guest;
 use Coyote\Topic;
 use Coyote\User;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -25,25 +29,34 @@ class TopicsController extends Controller
     private $user;
 
     /**
-     * TopicsController constructor.
+     * @var TopicRepository
+     */
+    private $repository;
+
+    /**
+     * @var string|null
+     */
+    private $guestId;
+
+    /**
      * @param Auth $auth
      */
-    public function __construct(Auth $auth)
+    public function __construct(Auth $auth, TopicRepository $repository)
     {
-        $this->user = $auth->guard('api')->user();
-
         TagResource::$url = function ($name) {
             return route('forum.tag', [urlencode($name)]);
         };
+
+        $this->repository = $repository;
+        $this->user = $auth->guard('api')->user();
+        $this->guestId = $this->user->guest_id ?? null;
     }
 
     /**
-     * @param TopicRepositoryInterface $topic
-     * @param Auth $auth
      * @param Request $request
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Resources\Json\AnonymousResourceCollection|\Illuminate\Http\Response
      */
-    public function index(TopicRepositoryInterface $topic, Request $request)
+    public function index(Request $request)
     {
         $validator = validator($request->all(), [
             'sort'          => 'nullable|in:id,last_post_id',
@@ -54,32 +67,28 @@ class TopicsController extends Controller
             return response($validator->errors(), 422);
         }
 
-        $guestId = $this->user->guest_id ?? null;
-
-        $topic->pushCriteria(new Sort($request->input('sort', 'id'), $request->input('order', Sort::DESC)));
-        $topic->pushCriteria(new EagerLoading(['tags']));
-
-        if ($guestId) {
-            $topic->pushCriteria(new EagerLoading(['tracks' => function ($builder) use ($guestId) {
-                return $builder->where('guest_id', '=', $guestId);
-            }]));
-        }
-
-        $topic->pushCriteria(new EagerLoading(['forum' => function ($builder) use ($guestId) {
-            $builder->select('id', 'name', 'slug');
-
-            if ($guestId) {
-                $builder->with(['tracks' => function ($query) use ($guestId) {
-                    return $query->where('guest_id', '=', $guestId);
-                }]);
-            }
-
-            return $builder;
+        $this->repository->pushCriteria(new Sort($request->input('sort', 'id'), $request->input('order', Sort::DESC)));
+        $this->repository->pushCriteria(new EagerLoading(['tags']));
+        $this->repository->pushCriteria(new LoadMarkTime($this->guestId));
+        $this->repository->pushCriteria(new EagerLoading(['forum' => function (BelongsTo $builder) {
+            return $builder->select('forums.id', 'forums.name', 'forums.slug', 'is_prohibited')->withForumMarkTime($this->guestId);
         }]));
 
-        $topic->pushCriteria(new OnlyThoseWithAccess($this->user));
+        $this->repository->pushCriteria(new OnlyThoseWithAccess($this->user));
 
-        $paginate = $topic->paginate();
+        /** @var \Illuminate\Pagination\LengthAwarePaginator $paginate */
+        $paginate = $this->repository->paginate();
+
+        $guest = new Guest($this->guestId);
+        $repository = $this->repository;
+
+        $paginate->setCollection(
+            $paginate
+                ->getCollection()
+                ->map(function ($model) use ($guest, $repository) {
+                    return (new Tracker($model, $guest))->setRepository($repository);
+                })
+        );
 
         return TopicResource::collection($paginate);
     }
@@ -91,12 +100,19 @@ class TopicsController extends Controller
      */
     public function show(Topic $topic)
     {
-        $this->authorizeForUser($this->user, 'access', $topic->forum);
+        $topic
+            ->load(['tags'])
+            ->load(['forum' => function ($builder) {
+                return $builder->select('forums.id', 'forums.name', 'forums.slug', 'is_prohibited')->withForumMarkTime($this->guestId);
+            }]);
 
-        $topic->load(['tags']);
+        $this->authorizeForUser($this->user, 'access', $topic->forum);
+        $topic->markTime($this->guestId);
+
+        $guest = new Guest($this->guestId);
 
         TopicResource::withoutWrapping();
 
-        return new TopicResource($topic);
+        return new TopicResource((new Tracker($topic, $guest))->setRepository($this->repository));
     }
 }

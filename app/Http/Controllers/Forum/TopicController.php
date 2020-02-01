@@ -13,6 +13,7 @@ use Coyote\Repositories\Criteria\Post\WithTrashedInfo;
 use Coyote\Services\Elasticsearch\Builders\Forum\MoreLikeThisBuilder;
 use Coyote\Services\Forum\Tracker;
 use Coyote\Services\Forum\TreeBuilder;
+use Coyote\Services\Guest;
 use Coyote\Services\Parser\Parsers\ParserInterface;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -116,7 +117,7 @@ class TopicController extends BaseController
         $dateTime = $posts->last()->created_at;
 
         if ($markTime < $dateTime) {
-            Tracker::make($topic)->asRead($this->guestId, $dateTime);
+            Tracker::make($topic)->asRead($dateTime);
         }
 
         // create forum list for current user (according to user's privileges)
@@ -219,6 +220,6 @@ class TopicController extends BaseController
     {
         $tracker = Tracker::make($topic);
 
-        $tracker->asRead($this->guestId, $topic->last_post_created_at);
+        $tracker->asRead($topic->last_post_created_at);
     }
 }

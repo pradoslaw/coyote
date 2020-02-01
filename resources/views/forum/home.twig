@@ -1,6 +1,6 @@
 {% extends 'forum.base' %}
 {% block title %}
-    {{ title ? title ~ ' :: ' }}Forum dyskusyjne dla programistów{{ parent() }}
+  {{ title ? title ~ ' :: ' }}Forum dyskusyjne dla programistów{{ parent() }}
 {% endblock %}
 {% block description %}Ponad pół miliona postów na forum. Programowanie w językach C/C++, Java, C#, Delphi, PHP, a także na temat projektowania stron WWW. Wspieramy początkujących w nauce programowania.{% endblock %}
 {% block keywords %}C/C++, C#, Delphi, PHP, WWW, webdesign, webmaster, SQL, .NET, PHP, MySQL, Oracle, PostgreSQL, algorytmy, programowanie{% endblock %}
@@ -8,44 +8,56 @@
 {% import 'components.forms' as forms %}
 
 {% block content %}
-    <ul class="nav nav-tabs">
-        {% for item in tabs.roots() %}
-            <li {{ forms.attr(item.attr) }}>
-                <a href="{{ item.url }}">{{ item.title|raw }}</a>
-            </li>
-        {% endfor %}
-    </ul>
+  <ul class="nav nav-tabs">
+    {% for item in tabs.roots() %}
+      <li {{ forms.attr(item.attr) }}>
+        <a href="{{ item.url }}">{{ item.title|raw }}</a>
+      </li>
+    {% endfor %}
+  </ul>
 
-    {% include "forum.partials.top" %}
+  {% include "forum.partials.top" %}
 
-    <main id="mainbar">
-        {% block mainbar %}
-            {% for name, forums in sections %}
-                {% include 'forum.partials.section' %}
-            {% endfor %}
-        {% endblock %}
+  <main id="js-forum" class="mainbar">
+    {% block mainbar %}
+      <vue-section
+        v-for="(section, index) in sections"
+        :key="index"
+        :name="section.name"
+        :order="section.order"
+        :categories="section.categories"
+      ></vue-section>
+    {% endblock %}
 
-        {{ viewers|raw }}
-    </main>
+    {{ viewers|raw }}
+  </main>
 
-    {% embed 'forum.partials.sidebar' %}
-        {% block side_menu %}
-            {% include 'forum.partials.post_count' %}
+  {% embed 'forum.partials.sidebar' %}
+    {% block side_menu %}
+      {% include 'forum.partials.post_count' %}
 
-            <div class="box">
-                <ul class="side-menu">
-                    <li class="btn-mark-read">
-                        <a title="Oznacz kategorie jako przeczytane" href="{{ route('forum.mark') }}" data-category="forum-sidebar-buttons">
-                            <i class="far fa-check-square fa-fw"></i> Oznacz jako przeczytane
-                        </a>
-                    </li>
-                    <li id="btn-setting">
-                        <a title="Zmień kolejność wyświetlanych kategorii" href="{{ route('user.forum') }}" data-category="forum-sidebar-buttons" data-value="setting">
-                            <i class="fas fa-cog fa-fw"></i> Personalizacja forum
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        {% endblock %}
-    {% endembed %}
+      <div id="js-sidebar">
+        <ul class="side-menu">
+          <li>
+            <a @click="markAll" title="Oznacz kategorie jako przeczytane">
+              <i class="far fa-check-square fa-fw"></i> Oznacz jako przeczytane
+            </a>
+          </li>
+          <li>
+            <a title="Zmień kolejność wyświetlanych kategorii" href="{{ route('user.forum') }}">
+              <i class="fas fa-cog fa-fw"></i> Personalizacja forum
+            </a>
+          </li>
+        </ul>
+      </div>
+    {% endblock %}
+  {% endembed %}
+{% endblock %}
+
+{% block body %}
+  <script>
+    var forums = {{ forums|json_encode|raw }};
+  </script>
+
+  {{ parent() }}
 {% endblock %}

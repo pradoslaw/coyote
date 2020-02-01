@@ -91,11 +91,21 @@ abstract class BaseController extends Controller
 
     /**
      * Applies repository criteria
+     *
+     * @deprecated
      */
     protected function pushForumCriteria()
     {
         $this->forum->pushCriteria(new OnlyThoseWithAccess($this->auth));
         $this->forum->pushCriteria(new AccordingToUserOrder($this->userId));
+    }
+
+    protected function withCriteria(\Closure $closure)
+    {
+        $this->forum->pushCriteria(new OnlyThoseWithAccess($this->auth));
+        $this->forum->pushCriteria(new AccordingToUserOrder($this->userId));
+
+        return $closure();
     }
 
     /**

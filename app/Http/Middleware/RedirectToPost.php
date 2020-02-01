@@ -41,7 +41,7 @@ class RedirectToPost
         $topic->forum()->associate($forum);
 
         $tracker = Tracker::make($topic);
-        $markTime = $tracker->getMarkTime($request->session()->get('guest_id'));
+        $markTime = $tracker->getMarkTime();
 
         $request->attributes->set('mark_time', $markTime);
 

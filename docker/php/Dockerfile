@@ -19,13 +19,20 @@ RUN apk update && apk add --no-cache \
     postgresql-dev \
     freetype-dev \
     libpng-dev \
+    libc-dev \
+    linux-headers \
+    zlib-dev \
     gnupg \
     libxml2-dev \
     zip \
-    make
+    make \
+    autoconf \
+    gcc
 
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-png-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) pgsql gd soap pdo_pgsql mbstring zip opcache iconv
+
+RUN pecl install xdebug
 
 RUN curl --insecure https://getcomposer.org/composer.phar -o /usr/bin/composer && chmod +x /usr/bin/composer
 

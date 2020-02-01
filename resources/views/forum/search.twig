@@ -12,7 +12,7 @@
 {% block content %}
     {% include "forum.partials.top" %}
 
-    <main id="mainbar">
+    <main class="mainbar">
         <div class="row">
             <div id="box-search" class="col-md-7 col-sm-12 col-xs-12">
                 {{ form_open({'method': 'GET', 'role': 'form', 'url': route('forum.search'), 'class': 'form-inline edge', 'id': 'box-search'}) }}

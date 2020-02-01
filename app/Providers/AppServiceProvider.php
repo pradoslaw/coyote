@@ -2,11 +2,13 @@
 
 namespace Coyote\Providers;
 
-use Coyote\Repositories\Contracts\GuestRepositoryInterface;
+use Carbon\Carbon;
+use Coyote\Forum;
 use Coyote\Services\FormBuilder\FormBuilder;
 use Coyote\Services\FormBuilder\FormInterface;
 use Coyote\Services\FormBuilder\ValidatesWhenSubmitted;
 use Coyote\Services\Guest;
+use Coyote\Services\Forum\Tracker;
 use Coyote\Services\Invoice;
 use Coyote\User;
 use Illuminate\Support\Collection;
@@ -88,7 +90,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(Guest::class, function ($app) {
-            return (new Guest($app[GuestRepositoryInterface::class]))->setGuestId($app['session.store']->get('guest_id'));
+            return (new Guest($app['session.store']->get('guest_id')))->setDefaultSessionTime(Carbon::createFromTimestamp($app['session.store']->get('created_at')));
         });
 
         $this->app->singleton('form.builder', function ($app) {
@@ -144,6 +146,19 @@ class AppServiceProvider extends ServiceProvider
 
             return $this->filter(function (User $user) use ($others) {
                 return ! $others->contains('id', $user->id);
+            });
+        });
+
+        Collection::macro('mapCategory', function () {
+            return $this->map(function (Forum $forum) {
+                $post = $forum->post;
+
+                if ($post) {
+                    $post->topic->setRelation('forum', $forum);
+                    $post->setRelation('topic', Tracker::make($post->topic));
+                }
+
+                return $forum;
             });
         });
 
