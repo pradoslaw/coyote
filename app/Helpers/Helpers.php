@@ -21,7 +21,7 @@ function plain($value)
 }
 
 /**
- * @param $value
+ * @param null|string $value
  * @param int $limit
  * @return string
  */
@@ -117,7 +117,7 @@ function manifest($path)
 
     if (!array_key_exists($path, $manifest)) {
         throw new Exception(
-            "Unable to locate webpack mix file: {$path}. Please check your ".
+            "Unable to locate webpack mix file: {$path}. Please check your " .
             'webpack.mix.js output paths and try again.'
         );
     }
@@ -128,7 +128,7 @@ function manifest($path)
 /**
  * Uppercase first character of each word
  *
- * @param $string
+ * @param string $string
  * @return string
  */
 function capitalize($string)

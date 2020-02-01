@@ -90,7 +90,7 @@ class SubmitController extends Controller
     /**
      * @param Request $request
      * @param Draft $draft
-     * @return \Illuminate\Http\RedirectResponse
+     * @return string
      */
     public function postIndex(JobRequest $request, Draft $draft)
     {
@@ -134,7 +134,7 @@ class SubmitController extends Controller
     /**
      * @param Request $request
      * @param Draft $draft
-     * @return \Illuminate\Http\RedirectResponse
+     * @return string
      */
     public function postFirm(FirmRequest $request, Draft $draft)
     {

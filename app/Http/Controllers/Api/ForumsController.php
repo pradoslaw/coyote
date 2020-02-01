@@ -39,7 +39,6 @@ class ForumsController extends Controller
 
     /**
      * @param ForumRepository $forum
-     * @param Auth $auth
      * @return ForumCollection
      */
     public function index(ForumRepository $forum)

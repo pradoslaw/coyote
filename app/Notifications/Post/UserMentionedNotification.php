@@ -11,7 +11,7 @@ class UserMentionedNotification extends SubmittedNotification
      */
     protected function getMailSubject(): string
     {
-        return $this->getSender(). ' wspomniał o Tobie w poście na forum';
+        return $this->getSender() . ' wspomniał o Tobie w poście na forum';
     }
 
     /**

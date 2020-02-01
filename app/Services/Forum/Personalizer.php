@@ -4,7 +4,6 @@ namespace Coyote\Services\Forum;
 
 use Coyote\Services\Session\Guest;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 
 class Personalizer
 {

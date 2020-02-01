@@ -79,7 +79,7 @@ class Handler extends ExceptionHandler
 
     /**
      * @param Request $request
-     * @param $e
+     * @param TokenMismatchException $e
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     protected function renderTokenMismatchException(Request $request, $e)
@@ -98,7 +98,7 @@ class Handler extends ExceptionHandler
 
     /**
      * @param Request $request
-     * @param HttpException|ModelNotFoundException $e
+     * @param Exception $e
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|SymfonyResponse
      */
     protected function renderHttpErrorException(Request $request, $e)

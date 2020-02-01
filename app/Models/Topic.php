@@ -254,7 +254,7 @@ class Topic extends Model
 
     /**
      * @param string|null $guestId
-     * @return mixed
+     * @return Carbon
      */
     public function markTime(?string $guestId)
     {
@@ -296,7 +296,7 @@ class Topic extends Model
     }
 
     /**
-     * @return float
+     * @return integer
      */
     public function getRank()
     {

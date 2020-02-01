@@ -177,7 +177,7 @@ class PmRepository extends Repository implements PmRepositoryInterface
      * Returns subquery
      *
      * @param int $userId
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     private function subSql($userId)
     {

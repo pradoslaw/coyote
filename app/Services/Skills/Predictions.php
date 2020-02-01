@@ -82,7 +82,7 @@ class Predictions
     }
 
     /**
-     * @return \Coyote\Tag[]|null
+     * @return null|\Illuminate\Support\Collection
      */
     private function getUserPopularTags()
     {

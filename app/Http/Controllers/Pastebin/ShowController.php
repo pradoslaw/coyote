@@ -25,7 +25,7 @@ class ShowController extends Controller
 
     /**
      * @param \Coyote\Pastebin $pastebin
-     * @return mixed
+     * @return \Illuminate\View\View
      */
     public function index($pastebin)
     {

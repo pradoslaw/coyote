@@ -88,7 +88,7 @@ class ConfirmController extends Controller
      * Potwierdzenie adresu e-mail poprzez link aktywacyjny znajdujacy sie w mailu
      *
      * @param Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function email(Request $request)
     {

@@ -82,7 +82,6 @@ class FlagCreatedNotification extends Notification implements ShouldQueue, Shoul
     }
 
     /**
-     * @param \Coyote\User $user
      * @return BroadcastMessage
      */
     public function toBroadcast()

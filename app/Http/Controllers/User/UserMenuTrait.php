@@ -12,7 +12,7 @@ use Lavary\Menu\Menu;
 trait UserMenuTrait
 {
     /**
-     * @return mixed
+     * @return string
      */
     public function getUserMenu()
     {

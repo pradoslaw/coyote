@@ -18,7 +18,7 @@ class Misc extends Twig_Extension
     }
 
     /**
-     * @return array
+     * @return Twig_SimpleFunction[]
      */
     public function getFunctions()
     {
@@ -33,7 +33,7 @@ class Misc extends Twig_Extension
     }
 
     /**
-     * @return array
+     * @return Twig_SimpleFilter[]
      */
     public function getFilters()
     {

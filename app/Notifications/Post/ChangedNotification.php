@@ -33,6 +33,6 @@ class ChangedNotification extends SubmittedNotification
      */
     protected function getMailSubject(): string
     {
-        return $this->getSender(). ' zmodyfikował post, który obserwujesz';
+        return $this->getSender() . ' zmodyfikował post, który obserwujesz';
     }
 }

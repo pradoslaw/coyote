@@ -51,7 +51,7 @@ class VotedNotification extends AbstractNotification
             'object_id'     => $this->objectId(),
             'user_id'       => $user->id,
             'type_id'       => static::ID,
-            'subject'       => excerpt($this->microblog->parent_id ? $this->microblog->parent->html : $this->microblog->html),  // original excerpt of parent entry
+            'subject'       => excerpt($this->microblog->parent_id ? $this->microblog->parent->html : $this->microblog->html), // original excerpt of parent entry
             'excerpt'       => excerpt($this->microblog->html),
             'url'           => $url,
             'id'            => $this->id

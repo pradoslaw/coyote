@@ -3,7 +3,6 @@
 namespace Coyote;
 
 use Coyote\Post\Subscriber;
-use Coyote\Services\Elasticsearch\CharFilters\PostFilter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
