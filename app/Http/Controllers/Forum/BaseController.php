@@ -100,10 +100,10 @@ abstract class BaseController extends Controller
         $this->forum->pushCriteria(new AccordingToUserOrder($this->userId));
     }
 
-    protected function withCriteria(\Closure $closure)
+    protected function withCriteria(\Closure $closure, bool $ignoreHidden = false)
     {
         $this->forum->pushCriteria(new OnlyThoseWithAccess($this->auth));
-        $this->forum->pushCriteria(new AccordingToUserOrder($this->userId));
+        $this->forum->pushCriteria(new AccordingToUserOrder($this->userId, $ignoreHidden));
 
         return $closure();
     }

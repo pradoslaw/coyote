@@ -121,10 +121,11 @@ class TopicController extends BaseController
         }
 
         // create forum list for current user (according to user's privileges)
-        $this->pushForumCriteria();
-
         $treeBuilder = new TreeBuilder();
-        $forumList = $treeBuilder->listBySlug($this->forum->list());
+
+        $forumList = $this->withCriteria(function () use ($treeBuilder) {
+            return $treeBuilder->listBySlug($this->forum->list());
+        }, true);
 
         $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->slug, $topic->id, $topic->slug]));
 
