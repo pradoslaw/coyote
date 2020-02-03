@@ -103,10 +103,12 @@ class Tracker
             return;
         }
 
+        $markTime = $this->model->forum->markTime($this->guest->id);
+
         // are there any unread topics in this category?
         $unread = $this->repository->countUnread(
             $this->model->forum->id,
-            $this->getMarkTime(),
+            $markTime,
             $this->guest->id
         );
 
