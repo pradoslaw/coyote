@@ -19,6 +19,7 @@ use Coyote\Currency;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class HomeController extends BaseController
 {
@@ -73,7 +74,7 @@ class HomeController extends BaseController
      */
     public function tag($name)
     {
-        $this->builder->tag->addTag($name);
+        $this->builder->tag->addTag(Str::lower($name));
 
         return $this->load();
     }
