@@ -14,7 +14,7 @@ new Vue({
   el: '#js-forum',
   delimiters: ['${', '}'],
   store,
-  data: { collapse },
+  data: { collapse: 'collapse' in window ? collapse : {} },
   components: {
     'vue-section': VueSection
   },
