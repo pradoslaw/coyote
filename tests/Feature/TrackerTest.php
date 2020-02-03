@@ -109,6 +109,15 @@ class TrackerTest extends TestCase
 
         $this->assertTrue($tracker->isRead());
 
+        // new post in topic
+        factory(Post::class)->create(['topic_id' => $topic2->id, 'forum_id' => $this->forum->id, 'created_at' => Carbon::now()->addSeconds(65)]);
+        $topic2->refresh(); // refresh from db after submitting new post
+
+        $tracker = $this->factory($topic2, $this->guestId);
+        $this->assertFalse($tracker->isRead());
+
+        $tracker->asRead($topic2->last_post_created_at);
+
         /////////////////
 
         $tracker = $this->factory($topic1, $this->guestId);
