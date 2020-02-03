@@ -72,13 +72,13 @@ class CategoryController extends BaseController
      */
     public function mark($forum)
     {
-        $forum->markAsRead(now(), $this->guestId);
+        $forum->markAsRead($this->guestId);
         $this->topic->flushRead($forum->id, $this->guestId);
 
         $forums = $this->forum->where('parent_id', $forum->id)->get();
 
         foreach ($forums as $forum) {
-            $forum->markAsRead(now(), $this->guestId);
+            $forum->markAsRead($this->guestId);
             $this->topic->flushRead($forum->id, $this->guestId);
         }
     }

@@ -103,9 +103,10 @@ class Tracker
             return;
         }
 
+        // then, we have to get the date when user marked this category as read for the last time.
         $markTime = $this->model->forum->markTime($this->guest->id);
 
-        // are there any unread topics in this category?
+        // are there any unread topics in this category since last marked?
         $unread = $this->repository->countUnread(
             $this->model->forum->id,
             $markTime,
@@ -113,7 +114,7 @@ class Tracker
         );
 
         if (!$unread) {
-            $this->model->forum->markAsRead($date, $this->guest->id);
+            $this->model->forum->markAsRead($this->guest->id);
             // remove all unnecessary records from topic_track table
             $this->repository->flushRead($this->model->forum->id, $this->guest->id);
         }

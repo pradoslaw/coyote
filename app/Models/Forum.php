@@ -194,11 +194,12 @@ class Forum extends Model
     /**
      * Mark forum as read
      *
-     * @param \Carbon\Carbon $markTime
      * @param $guestId
      */
-    public function markAsRead($markTime, $guestId)
+    public function markAsRead($guestId)
     {
+        $markTime = now();
+
         $sql = "INSERT INTO forum_track (forum_id, guest_id, marked_at)
                 VALUES(?, ?, ?)
                 ON CONFLICT ON CONSTRAINT forum_track_forum_id_guest_id_unique DO
