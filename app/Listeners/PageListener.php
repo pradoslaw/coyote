@@ -176,7 +176,7 @@ class PageListener implements ShouldQueue
             'content_type'  => Wiki::class,
         ], [
             'title'         => $event->wiki->title,
-            'path'          => UrlBuilder::wiki($event->wiki)
+            'path'          => urldecode(UrlBuilder::wiki($event->wiki))
         ]);
     }
 
