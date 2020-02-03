@@ -103,7 +103,7 @@ class HomeController extends Controller
     /**
      * Zostawia jedynie 2 ostatnie komentarze do wpisu
      *
-     * @param $microblogs
+     * @param \Illuminate\Pagination\LengthAwarePaginator $microblogs
      * @return mixed
      */
     private function slice($microblogs)

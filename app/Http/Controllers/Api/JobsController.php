@@ -10,7 +10,6 @@ use Coyote\Repositories\Contracts\CouponRepositoryInterface as CouponRepository;
 use Illuminate\Database\Connection;
 use Illuminate\Http\Resources\Json\Resource;
 use Coyote\Http\Requests\Job\ApiRequest;
-use Coyote\Http\Resources\JobResource;
 use Coyote\Job;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Repositories\Criteria\EagerLoading;
@@ -28,7 +27,6 @@ class JobsController extends Controller
     use AuthorizesRequests, SubmitsJob, MediaFactory;
 
     /**
-     * @param JobRepository $job
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index()

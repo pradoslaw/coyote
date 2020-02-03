@@ -13,7 +13,6 @@ use Coyote\Repositories\Criteria\Post\WithTrashedInfo;
 use Coyote\Services\Elasticsearch\Builders\Forum\MoreLikeThisBuilder;
 use Coyote\Services\Forum\Tracker;
 use Coyote\Services\Forum\TreeBuilder;
-use Coyote\Services\Guest;
 use Coyote\Services\Parser\Parsers\ParserInterface;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;

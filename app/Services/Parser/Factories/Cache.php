@@ -35,7 +35,7 @@ class Cache
      * Additional cache id parameter makes content unique. This is useful if we have like two identical comments
      * but we want to parse and cache them differently.
      *
-     * @param mixed $id
+     * @param string $id
      * @return $this
      */
     public function setId($id)

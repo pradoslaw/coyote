@@ -18,7 +18,6 @@ use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Objects\Microblog as Stream_Microblog;
 use Coyote\Services\Stream\Objects\Comment as Stream_Comment;
 use Illuminate\Contracts\Notifications\Dispatcher;
-use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {

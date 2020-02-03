@@ -2,9 +2,7 @@
 
 namespace Coyote\Services\Job;
 
-use Coyote\Events\JobWasSaved;
 use Coyote\Job;
-use Coyote\Notifications\Job\CreatedNotification;
 use Coyote\Payment;
 use Coyote\Repositories\Contracts\FirmRepositoryInterface as FirmRepository;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
@@ -13,7 +11,6 @@ use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Objects\Job as Stream_Job;
 use Coyote\User;
-use Illuminate\Database\Connection;
 
 trait SubmitsJob
 {

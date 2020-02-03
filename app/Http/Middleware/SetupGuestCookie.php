@@ -18,7 +18,7 @@ class SetupGuestCookie
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \Closure $next
-     * @return mixed
+     * @return \Illuminate\Http\Response
      */
     public function handle(Request $request, Closure $next)
     {

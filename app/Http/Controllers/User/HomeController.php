@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use Coyote\Http\Factories\MediaFactory;
 use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
-use Coyote\Services\Session\Registered;
 use Illuminate\Http\Request;
 use Jenssegers\Agent\Agent;
 

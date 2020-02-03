@@ -27,7 +27,7 @@ class ExpiredNotification extends Notification
     /**
      * Get the notification's delivery channels.
      *
-     * @return array
+     * @return string[]
      */
     public function via()
     {

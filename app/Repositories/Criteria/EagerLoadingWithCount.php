@@ -12,7 +12,7 @@ class EagerLoadingWithCount extends Criteria
     private $relations;
 
     /**
-     * @param string|string[] $relations
+     * @param string[] $relations
      */
     public function __construct($relations)
     {

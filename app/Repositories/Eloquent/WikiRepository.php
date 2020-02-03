@@ -23,7 +23,7 @@ class WikiRepository extends Repository implements WikiRepositoryInterface, Subs
 
     /**
      * @param string $path
-     * @return mixed
+     * @return WikiRepository
      */
     public function findByPath($path)
     {
@@ -291,7 +291,7 @@ class WikiRepository extends Repository implements WikiRepositoryInterface, Subs
     /**
      * @param int $wikiId
      * @param int $pathId
-     * @return \Coyote\Wiki\Path
+     * @return Wiki\Page
      */
     public function clone($wikiId, $pathId)
     {
@@ -413,8 +413,9 @@ class WikiRepository extends Repository implements WikiRepositoryInterface, Subs
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @param array ...$args
+     * @param integer $args
      * @return \Illuminate\Database\Query\Expression
      */
     private function rawFunction($name, ...$args)

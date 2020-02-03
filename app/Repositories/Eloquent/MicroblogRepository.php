@@ -80,7 +80,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
      * Pobranie komentarzy od danego wpisu w mikroblogu
      *
      * @param array $parentId
-     * @return mixed
+     * @return MicroblogRepository
      */
     public function getComments($parentId)
     {

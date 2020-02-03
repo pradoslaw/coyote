@@ -25,7 +25,7 @@ trait Searchable
     /**
      * Index data in elasticsearch
      *
-     * @return mixed
+     * @return null|callable
      * @throws \Exception
      */
     public function putToIndex()
@@ -48,7 +48,7 @@ trait Searchable
      *
      * @throws Missing404Exception,
      * @throws \Exception
-     * @return mixed
+     * @return callable
      */
     public function deleteFromIndex()
     {
