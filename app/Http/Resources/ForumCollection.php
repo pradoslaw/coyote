@@ -65,11 +65,12 @@ class ForumCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        $categories = $this->collection->map(function (ForumResource $resource) use ($request) {
-            return $resource->setGuest($this->guest)->toArray($request);
-        })->toArray();
-
-//        $categories = parent::toArray($request);
+        $categories = $this
+            ->collection
+            ->map(function (ForumResource $resource) use ($request) {
+                return $resource->setGuest($this->guest)->toArray($request);
+            })
+            ->toArray();
 
         return $this->nested($categories, $this->parentId);
     }
@@ -141,7 +142,11 @@ class ForumCollection extends ResourceCollection
         if ($post['created_at'] > $parent[0]->data['post']['created_at']) {
             $parent[0]->data['post'] = $post;
             $parent[0]->data['topic'] = $topic;
-            $parent['is_read'] = $child['is_read'];
+
+            // there are new topics in child category. parent category also has to be mark as unread
+            if (!$child['is_read']) {
+                $parent['is_read'] = false;
+            }
         }
 
         return $parent;

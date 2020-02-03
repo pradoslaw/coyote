@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Coyote\Forum;
 use Coyote\Http\Resources\ForumCollection;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface;
+use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
 use Coyote\Services\Forum\Tracker;
 use Coyote\Services\Guest;
@@ -133,6 +134,45 @@ class ForumCollectionTest extends TestCase
         $result = $this->getCategories($guestId, $guest);
 
         $this->assertFalse($result[$parent->id]['is_read']);
+    }
+
+    public function testCategoryUnreadWithChildren()
+    {
+        $parent = factory(Forum::class)->create();
+        $child1 = factory(Forum::class)->create(['parent_id' => $parent->id]);
+
+        $parentTopic = $this->createTopic($parent->id);
+        $childTopic = $this->createTopic($child1->id);
+
+        $parent->refresh();
+        $child1->refresh();
+
+        $faker = Faker\Factory::create();
+
+        $guestId = $faker->uuid;
+        $now = now()->subMinute(5);
+
+        \Coyote\Guest::forceCreate(['id' => $guestId, 'created_at' => $now, 'updated_at' => $now]);
+
+        $guest = new Guest($guestId);
+
+        $tracker = new Tracker($childTopic, $guest);
+        $tracker->setRepository(app(TopicRepositoryInterface::class));
+        $tracker->asRead($childTopic->last_post_created_at);
+
+        $result = $this->getCategories($guestId, $guest);
+
+        $this->assertFalse($result[$parent->id]['is_read']);
+        $this->assertTrue($result[$parent->id]['children'][0]['is_read']);
+
+        $tracker = new Tracker($parentTopic, $guest);
+        $tracker->setRepository(app(TopicRepositoryInterface::class));
+        $tracker->asRead($parentTopic->last_post_created_at);
+
+        $result = $this->getCategories($guestId, $guest);
+
+        $this->assertTrue($result[$parent->id]['is_read']);
+        $this->assertTrue($result[$parent->id]['children'][0]['is_read']);
     }
 
     private function getCategories($guestId, $guest = null)
