@@ -87,16 +87,15 @@ class CategoryController extends BaseController
      * Set category visibility
      *
      * @param \Coyote\Forum $forum
-     * @param Request $request
      */
-    public function collapseSection($forum, Request $request)
+    public function collapseSection($forum)
     {
         $collapse = $this->getSetting('forum.collapse');
         if ($collapse !== null) {
             $collapse = unserialize($collapse);
         }
 
-        $collapse[$forum->id] = (int) $request->input('flag');
+        $collapse[$forum->id] = (int) !($collapse[$forum->id] ?? false);
         $this->setSetting('forum.collapse', serialize($collapse));
     }
 

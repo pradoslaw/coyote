@@ -26,6 +26,8 @@
         :name="section.name"
         :order="section.order"
         :categories="section.categories"
+        :is-collapse="section.isCollapse"
+        @collapse="changeCollapse"
       ></vue-section>
     {% endblock %}
 
@@ -57,6 +59,7 @@
 {% block body %}
   <script>
     var forums = {{ forums|json_encode|raw }};
+    var collapse = {{ collapse|json_encode|raw }};
   </script>
 
   {{ parent() }}

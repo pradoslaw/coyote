@@ -182,6 +182,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
 
     // change category order
     $this->post('Setup', ['uses' => 'CategoryController@setup', 'middleware' => 'auth']);
+    $this->post('{forum}/Collapse', ['uses' => 'CategoryController@collapseSection', 'as' => 'section']);
 
     // skrocony link do posta
     $this->get('{id}', ['uses' => 'ShareController@index', 'as' => 'share']);

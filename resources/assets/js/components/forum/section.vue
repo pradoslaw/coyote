@@ -124,17 +124,21 @@
       },
       categories: {
         type: Array
+      },
+      isCollapse: {
+        type: Boolean,
+        default: false
       }
     },
     data() {
       return {
-        isCollapse: false,
         isDropdown: false
       }
     },
     methods: {
       collapse() {
-        this.isCollapse = ! this.isCollapse;
+        store.dispatch('forums/collapse', this.categories[0]);
+        this.$emit('collapse', this.categories[0].id);
       },
 
       hideDropdown() {

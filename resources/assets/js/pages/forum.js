@@ -14,11 +14,17 @@ new Vue({
   el: '#js-forum',
   delimiters: ['${', '}'],
   store,
+  data: { collapse },
   components: {
     'vue-section': VueSection
   },
   created() {
     store.commit('forums/init', window.forums);
+  },
+  methods: {
+    changeCollapse(id) {
+      this.collapse[id] = !(!!(this.collapse[id] || 0));
+    }
   },
   computed: {
     forums() {
@@ -32,7 +38,7 @@ new Vue({
           .sort((a, b) => a.order < b.order ? -1 : 1)
           .reduce((acc, forum) => {
             if (!acc[forum.section]) {
-              acc[forum.section] = {name: forum.section, order: forum.order, categories: []};
+              acc[forum.section] = {name: forum.section, order: forum.order, categories: [], isCollapse: !!(this.collapse[forum.id] || 0)};
             }
 
             acc[forum.section].categories.push(forum);

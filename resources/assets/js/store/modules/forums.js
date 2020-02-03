@@ -41,6 +41,10 @@ const actions = {
     axios.post('/Forum/Setup', [ pluck(category) ]);
   },
 
+  collapse({ commit }, category) {
+    axios.post(`/Forum/${category.slug}/Collapse`);
+  },
+
   mark({ commit }, category) {
     commit('mark', category);
 

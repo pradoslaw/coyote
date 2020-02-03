@@ -139,8 +139,9 @@ class HomeController extends BaseController
         });
 
         $forums = ForumCollection::factory($forums);
+        $collapse = $this->collapse();
 
-        return $this->view('forum.home')->with(compact('forums'));
+        return $this->view('forum.home')->with(compact('forums', 'collapse'));
     }
 
     /**
