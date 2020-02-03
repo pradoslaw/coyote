@@ -5,11 +5,15 @@
 - Rezygnacja z MongoDB na rzecz PostgreSQL + Elasticsearch
 - Upgrade do Webpack 4, rezygnacja z Gulp
 - Rezygnacja z Geshi na rzecz Prism
+- Przepisanie wiadomości prywatnych na Vue.js
+- Wiadomości prywatne w formie czatu
 
 **Forum**
 - Zapisywanie informacji o powodzie usunięcia postów, w tabeli posts
 - Zapisywanie informacji o dacie przeniesienia/zablokowania wątku, w tabeli topics
 - Na stronie głównej, ostatnia aktywność na forum prezentuje tylko wątki z kategorii, które nie są przez danego użytkownika niewidoczne
+- Przepisanie strony głównej na Vue.js
+- Możliwość ukrywania kategorii oraz ich przesuwania z poziomu strony głównej
 
 **Praca**
 - Możliwość komentowania ofert pracy
@@ -18,6 +22,7 @@
 - Nowy wygląd strony głównej
 - Możliwość ściągnięcia CV bezpośrednio ze strony z ofertą
 - Powiadomienie o nowej kandydaturze na dane stanowisko, nie tylko poprzez e-mail
+- Komentarze do ofert pracy
 
 ## 2.2
 
@@ -54,7 +59,7 @@
 - Upgrade do Laravel 5.3
 - Usunięcie bowera na rzecz npm
 - Webpack + babel zamiast samego babela
-- Znacznik `<u>` jest ponownie dozwolony przez parser 
+- Znacznik `<u>` jest ponownie dozwolony przez parser
 - Zmiana sposobu wyświetlania listy użytkowników online (https://github.com/adam-boduch/coyote/issues/174)
 - Obsługa sesji poprzez Redis
 - Zmiana sposobu autentyfikacji użytkownika na serwerze WebSocket: cookie z ID sesji zamiast tokena
