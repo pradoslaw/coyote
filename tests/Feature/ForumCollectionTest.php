@@ -33,8 +33,9 @@ class ForumCollectionTest extends TestCase
     public function testCollectForumWithChildren()
     {
         $parent = factory(Forum::class)->create();
-        $child1 = factory(Forum::class)->create(['parent_id' => $parent->id]);
-        $child2 = factory(Forum::class)->create(['parent_id' => $parent->id]);
+        $child2 = factory(Forum::class)->create(['parent_id' => $parent->id, 'order' => 2]);
+        $child1 = factory(Forum::class)->create(['parent_id' => $parent->id, 'order' => 1]);
+
 
         $this->createTopic($child2->id);
 
@@ -50,6 +51,11 @@ class ForumCollectionTest extends TestCase
 
         $this->repository->pushCriteria(new AccordingToUserOrder(null));
         $forums = $this->repository->categories($guestId)->mapCategory();
+
+        $result = collect($forums)->keyBy('id');
+
+        $this->assertEquals(1, $result[$child1->id]['order']);
+        $this->assertEquals(2, $result[$child2->id]['order']);
 
         $collection = new ForumCollection($forums);
         $result = $collection->toArray(request());

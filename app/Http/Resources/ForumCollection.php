@@ -92,6 +92,7 @@ class ForumCollection extends ResourceCollection
             ->filter(function ($item) use ($parentId) {
                 return $item['parent_id'] != $parentId;
             })
+            ->sortBy('order')
             ->groupBy('parent_id');
 
         // we merge children with parent element
