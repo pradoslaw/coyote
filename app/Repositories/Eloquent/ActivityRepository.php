@@ -4,6 +4,8 @@ namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Activity;
 use Coyote\Repositories\Contracts\ActivityRepositoryInterface;
+use Coyote\Repositories\Criteria\EagerLoading;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ActivityRepository extends Repository implements ActivityRepositoryInterface
 {
@@ -21,7 +23,14 @@ class ActivityRepository extends Repository implements ActivityRepositoryInterfa
     public function latest(int $limit)
     {
         return $this->applyCriteria(function () use ($limit) {
-            return $this->model->select()->latest()->limit($limit)->get();
+            return $this
+                ->model
+                ->select()
+                ->join('forums', 'forums.id', '=', 'forum_id')
+                ->with(['topic', 'content', 'forum', 'user'])
+                ->latest()
+                ->limit($limit)
+                ->get();
         });
     }
 }

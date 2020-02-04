@@ -171,15 +171,6 @@ class HomeController extends Controller
         $this->activity->pushCriteria(new OnlyThoseForumsWithAccess($this->auth));
         $this->activity->pushCriteria(new SkipHiddenCategories($this->userId));
 
-        $this->activity->pushCriteria(new EagerLoading(['topic', 'content', 'forum']));
-        $this->activity->pushCriteria(new EagerLoading(['topic' => function (BelongsTo $query) {
-            $query->withTrashed();
-        }]));
-
-        $this->activity->pushCriteria(new EagerLoading(['user' => function (BelongsTo $query) {
-            $query->withTrashed();
-        }]));
-
         $result = $this->activity->latest(20);
 
         return ActivityResource::collection($result)->toArray($this->request);
