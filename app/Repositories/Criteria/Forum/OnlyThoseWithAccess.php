@@ -46,8 +46,16 @@ class OnlyThoseWithAccess extends Criteria
      */
     protected function applyNested($model, Repository $repository, $column)
     {
-        return $model->whereNested(function (Builder $sub) use ($repository, $column) {
-            $sub->where('forums.is_prohibited', false);
+        return $model->whereNested(function (Builder $sub) use ($repository, $model, $column) {
+            if ($this->hasJoinForumTable($model)) {
+                $sub->where('forums.is_prohibited', false);
+            } else {
+                $sub->whereNotExists(function (Builder $sub) use ($repository, $column) {
+                    return $sub->select('forum_id')
+                        ->from('forum_access')
+                        ->where('forum_access.forum_id', '=', $repository->raw($column));
+                });
+            }
 
             if (!empty($this->groupsId)) {
                 $sub->orWhereExists(function (Builder $sub) use ($repository, $column) {
@@ -58,5 +66,23 @@ class OnlyThoseWithAccess extends Criteria
                 });
             }
         });
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $model
+     * @return bool
+     */
+    private function hasJoinForumTable($model): bool
+    {
+        $builder = $model->getQuery();
+
+        /** @var \Illuminate\Database\Query\JoinClause $join */
+        foreach ((array) $builder->joins as $join) {
+            if ($join->table === 'forums') {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

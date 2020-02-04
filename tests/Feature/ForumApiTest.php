@@ -41,7 +41,7 @@ class ForumApiTest extends TestCase
     {
         $user = $this->createUserWithGroup();
 
-        $restricted = factory(Forum::class)->create(['order' => 0]);
+        $restricted = factory(Forum::class)->create(['order' => 0, 'is_prohibited' => true]);
         $restricted->access()->create(['group_id' => $user->groups()->first()->id]);
 
         factory(Forum::class)->create(['order' => 1]);
