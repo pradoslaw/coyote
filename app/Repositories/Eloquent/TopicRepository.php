@@ -109,23 +109,20 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
      */
     public function countUnread($forumId, $markTime, $guestId)
     {
-        $sql = $this->toSql(
-            $this
-                ->model
-                ->select(['topics.id'])
-                ->where('topics.forum_id', $forumId)
-                ->when($markTime, function (Builder $builder) use ($markTime) {
-                    return $builder->where('last_post_created_at', '>', $markTime);
-                })
-        );
-
         return $this
             ->model
-            ->from($this->raw("($sql) AS topics"))
-            ->withTopicMarkTime($guestId)
-            ->withTrashed()
-            ->whereNull('topic_track.id')
-            ->count();
+            ->where('topics.forum_id', $forumId)
+            ->when($markTime, function (Builder $builder) use ($markTime) {
+                return $builder->where('last_post_created_at', '>', $markTime);
+            })
+            ->whereNotIn('topics.id', function ($builder) use ($guestId) {
+                return $builder
+                    ->select('topic_track.topic_id')
+                    ->from('topic_track')
+                    ->whereColumn('topic_track.topic_id', 'topics.id')
+                    ->where('topic_track.guest_id', $guestId);
+            })
+            ->exists();
     }
 
     /**

@@ -25,7 +25,7 @@ interface TopicRepositoryInterface extends RepositoryInterface
      * @param int $forumId
      * @param string $markTime
      * @param string $guestId
-     * @return mixed
+     * @return bool
      */
     public function countUnread($forumId, $markTime, $guestId);
 
