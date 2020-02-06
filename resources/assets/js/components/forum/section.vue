@@ -44,7 +44,7 @@
 
               <ul v-if="category.children" class="list-unstyled list-inline list-sub hidden-sm hidden-xs hidden-md">
                 <li v-for="children in category.children">
-                  <i :class="{'new': !children.is_read}" class="far fa-file"></i>
+                  <i :class="{'fas new': !children.is_read, 'far': children.is_read}" class="fa-file"></i>
 
                   <a :href="children.url">{{ children.name }}</a>
                 </li>
