@@ -84,15 +84,7 @@ footer {
     padding: 10px 20px;
     position: relative;
     max-width: 280px;
-
-    &:after {
-      position: absolute;
-      display: block;
-      content: '';
-      background: url('/img/bubble-footer-bottom.png') no-repeat;
-      width: 44px;
-      height: 35px;
-    }
+    margin: 35px auto;
 
     ol {
       margin: 11px 0;
