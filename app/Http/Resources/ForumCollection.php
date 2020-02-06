@@ -145,11 +145,6 @@ class ForumCollection extends ResourceCollection
             $parent[0]->data['topic'] = $topic;
         }
 
-        // there are new topics in child category. parent category also has to be mark as unread
-        if (!$child['is_read']) {
-            $parent['is_read'] = false;
-        }
-
         return $parent;
     }
 }
