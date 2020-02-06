@@ -23,7 +23,7 @@ new Vue({
   },
   methods: {
     changeCollapse(id) {
-      this.collapse[id] = !(!!(this.collapse[id] || 0));
+      this.$set(this.collapse, id, !(!!(this.collapse[id])));
     }
   },
   computed: {
@@ -38,7 +38,7 @@ new Vue({
           .sort((a, b) => a.order < b.order ? -1 : 1)
           .reduce((acc, forum) => {
             if (!acc[forum.section]) {
-              acc[forum.section] = {name: forum.section, order: forum.order, categories: [], isCollapse: !!(this.collapse[forum.id] || 0)};
+              acc[forum.section] = {name: forum.section, order: forum.order, categories: [], isCollapse: !!(this.collapse[forum.id])};
             }
 
             acc[forum.section].categories.push(forum);
