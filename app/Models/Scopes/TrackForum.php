@@ -24,7 +24,7 @@ trait TrackForum
         }
 
         return $builder
-            ->addSelect(new Expression("COALESCE(forum_track.marked_at, guests.updated_at) AS $alias"))
+            ->addSelect(new Expression("COALESCE(forum_track.marked_at, guests.created_at) AS $alias"))
             ->leftJoin('forum_track', function (JoinClause $join) use ($guestId) {
                 $join
                     ->on('forum_track.forum_id', '=', 'forums.id')

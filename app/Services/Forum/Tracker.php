@@ -77,7 +77,7 @@ class Tracker
         }
 
         if (empty($markTime)) {
-            $markTime = $this->guest->updated_at ?? $this->guest->getDefaultSessionTime();
+            $markTime = $this->guest->created_at ?? $this->guest->getDefaultSessionTime();
         }
 
         return $markTime;

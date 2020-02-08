@@ -19,9 +19,9 @@ services:
     image: 4programmers/coyote:latest
     working_dir: /var/www
     environment:
-      - ENABLE_XDEBUG=1
-      - XDEBUG_HOST="192.168.0.159"
-      - XDEBUG_PORT=9001
+      - ENABLE_XDEBUG=$ENABLE_XDEBUG
+      - XDEBUG_HOST=$XDEBUG_HOST
+      - XDEBUG_PORT=$XDEBUG_PORT
     volumes:
       - ./:/var/www
     networks:
