@@ -7,7 +7,7 @@
 }
 
 .nav > li > a {
-  @media screen and (max-width: $screen-xs) {
+  @include media-breakpoint-down(xs) {
     padding: 5px;
     font-size: 12px;
   }
@@ -114,7 +114,6 @@
 
   > li > a {
     color: $gray-light;
-    font-size: $font-size-base - 1px;
   }
 
   > li.active > a {

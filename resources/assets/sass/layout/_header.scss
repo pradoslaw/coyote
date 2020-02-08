@@ -1,5 +1,4 @@
 @charset "UTF-8";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/nav-divider";
 
 $header-height: 56px;
 
@@ -66,7 +65,7 @@ body.fixed-top {
     right: -10px;
     z-index: 1;
 
-    @media screen and (max-width: $screen-sm) {
+    @include media-breakpoint-down(sm) {
       display: none;
     }
   }
@@ -226,7 +225,7 @@ body.fixed-top {
       right: -1px;
     }
 
-    @media screen and (max-width: $screen-sm) {
+    @include media-breakpoint-down(sm) {
       display: inline-block;
     }
   }
@@ -237,7 +236,7 @@ body.fixed-top {
     overflow: hidden;
   }
 
-  @media screen and (max-width: $screen-sm) {
+  @include media-breakpoint-down(sm) {
     // na urzedzeniach mobilnych okno powiadomien oraz wiadomosci prywatnych musi byc rozciagniete na cala szerokosc
     position: static;
   }
@@ -432,7 +431,7 @@ body.fixed-top {
     border-bottom-color: #f8f8f8;
   }
 
-  @media (max-width: $grid-float-breakpoint-max) {
+  @media (max-width: $container-max-widths[sm]) {
     background-color: transparent;
     border: 1px solid $border-color;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
@@ -558,7 +557,7 @@ body.fixed-top {
 }
 
 /* Za malo miejsca w pionie, by wyswietlac przyklejony navbar */
-@media screen and (max-width: $screen-sm) {
+@include media-breakpoint-down(sm) {
   /* zostawiamy navbar na gorze strony */
   .navbar-fixed-top {
     position: absolute;

@@ -1,11 +1,11 @@
 @charset "UTF-8";
 
 .btn-primary {
-  background: $btn-primary-bg;
+  background: $brand-primary;
   border-color: $brand-primary;
 
   &:focus, &:active, &:active:focus, &:hover {
-    background-color: $btn-primary-bg;
+    background-color: $brand-primary;
     border-color: $brand-primary;
   }
 
@@ -15,11 +15,11 @@
 }
 
 .btn-default {
-  @include gradient-vertical(#fff, #f6f6f6);
+  @include bg-gradient-variant(#fff, #f6f6f6);
 }
 
 .btn-warning {
-  @include gradient-vertical(lighten($brand-warning, 5%), $brand-warning);
+  @include bg-gradient-variant(lighten($brand-warning, 5%), $brand-warning);
 }
 
 .btn-outline {

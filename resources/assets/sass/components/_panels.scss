@@ -117,7 +117,7 @@
   }
 }
 
-@media screen and (max-width: $screen-sm) {
+@include media-breakpoint-down(sm)  {
   .panel-body {
     padding: 10px;
   }

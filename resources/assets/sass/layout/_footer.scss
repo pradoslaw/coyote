@@ -8,7 +8,7 @@ footer {
   padding: 10px 0;
 
   ul.breadcrumb {
-    @media screen and (min-width: $screen-sm) {
+    @include media-breakpoint-up(sm) {
       background: url('/img/home-white.png') no-repeat 0 3px;
       padding: 2px 0 2px 22px;
     }
@@ -100,7 +100,7 @@ footer {
     }
 
     // gdy rozdzielczosc jest mniejsza - chowamy chmurke
-    @media screen and (max-width: $screen-md) {
+    @include media-breakpoint-up(md) {
       background: none;
       padding: 0;
 

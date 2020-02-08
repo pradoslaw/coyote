@@ -63,7 +63,7 @@
     }
   }
 
-  @media screen and (min-width: $screen-xs) {
+  @include media-breakpoint-only(xs) {
     // selektory sa tutaj rozbite specjalnie
     background-image: url("/img/sad-face.png");
     background-repeat: no-repeat;

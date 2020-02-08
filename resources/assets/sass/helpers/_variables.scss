@@ -1,10 +1,9 @@
 @charset "UTF-8";
-@import "../vendor/bootstrap/variables";
 
 // nieco ciemniszy kolor linkow (w sytuacji gdy wiele linkow jest obok siebie domyslny kolor jest zbyt jasny)
 // -------------------------------------------------------------------------------------------------------
 
-$link-color-darker:         darken($brand-primary, 10%);
+$link-color-darker:         darken($primary, 10%);
 
 // alternatywny kolor linkow uzywany po naprowadzeniu kursora myszy nad link
 // uzywany w niewielu sytuacjach w kontrascie do koloru zielonego dominujacego w serwisie
@@ -17,7 +16,7 @@ $header-navbar-bg-color:    #454545;
 // obramowanie elementow typu "boksy" (tabele, div itp)
 // ---------------------------------------------------
 
-$border-color:              $panel-inner-border;
+$border-color:              #ddd;
 
 // kolor naglowka <h4> znajdujacego sie w elemencie .box (elementy sekcji)
 $box-header-color:          #646466;

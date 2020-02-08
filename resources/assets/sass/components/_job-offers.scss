@@ -104,7 +104,7 @@
 
       @include img-placeholder('/img/logo-gray.png', 50px, 50px);
 
-      @media screen and (max-width: $screen-lg) {
+      @include media-breakpoint-down(lg) {
         display: none;
       }
     }
@@ -131,7 +131,7 @@
   }
 
   p {
-    font-size: $font-size-small - 1px;
+    font-size: $font-size-small - 1rem;
     margin: 3px 0;
 
     a {

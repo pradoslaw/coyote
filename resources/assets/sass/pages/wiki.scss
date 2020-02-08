@@ -1,15 +1,15 @@
 @charset "UTF-8";
-@import "../helpers/variables";
-@import "../helpers/mixins";
-@import "../vendor/bootstrap/variables";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/text-overflow";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/image";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/table-row";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/tables";
-@import "../components/related";
-@import "../components/sidemenu";
-@import "../components/metadata";
-@import "~@fortawesome/fontawesome-free/scss/variables";
+//@import "../helpers/variables";
+//@import "../helpers/mixins";
+//@import "../vendor/bootstrap/variables";
+//@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/text-overflow";
+//@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/image";
+//@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/table-row";
+//@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/tables";
+//@import "../components/related";
+//@import "../components/sidemenu";
+//@import "../components/metadata";
+//@import "~@fortawesome/fontawesome-free/scss/variables";
 
 // Styl dla linkow do stron, ktore nie istnieja
 // ----------------------------------------------
@@ -37,7 +37,7 @@
   width: 52.1%;
   float: right;
 
-  @media screen and (max-width: $screen-xs) {
+  @include media-breakpoint-down(xs) {
     background: none;
     float: none;
     width: 100%;
@@ -125,7 +125,7 @@ article > header {
   h1 {
     margin-top: 0;
 
-    @media screen and (max-width: $screen-sm) {
+    @include media-breakpoint-down(sm) {
       font-size: 120%;
     }
   }
@@ -173,14 +173,12 @@ article > header {
 // --------------------
 
 .text-body {
-  font-size: $font-size-medium;
-
-  @media screen and (max-width: $screen-sm) {
+  @include media-breakpoint-down(sm) {
     font-size: $font-size-small;
   }
 
   img:not(.img-smile) {
-    @include img-responsive;
+    @include img-fluid;
   }
 
   @include link-color-darker;
@@ -212,7 +210,7 @@ article > header {
   }
 
   .img-thumbnail {
-    @media screen and (max-width: $screen-md) {
+    @include media-breakpoint-up(md) {
       display: none;
     }
   }
@@ -349,7 +347,7 @@ article > header {
   .btn-warning {
     padding: 4px;
     font-weight: bold;
-    box-shadow: 1px 1px $btn-warning-border;
+    box-shadow: 1px 1px $alert-warning-border;
     margin: 0 5px;
   }
 }
@@ -368,7 +366,7 @@ article > header {
     font-size: 110%;
   }
 
-  @media screen and (max-width: $screen-sm) {
+  @include media-breakpoint-down(sm) {
     .media-heading {
       font-size: 110%;
     }

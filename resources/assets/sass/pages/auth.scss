@@ -1,9 +1,9 @@
 @charset "UTF-8";
-@import "../helpers/variables";
-@import "../vendor/bootstrap/variables";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/gradients";
-@import "~@fortawesome/fontawesome-free/scss/variables";
-@import "../helpers/mixins";
+//@import "../helpers/variables";
+//@import "../vendor/bootstrap/variables";
+//@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/gradients";
+//@import "~@fortawesome/fontawesome-free/scss/variables";
+//@import "../helpers/mixins";
 
 .btn-google, .btn-fb, .btn-github {
   width: 100%;
@@ -50,10 +50,10 @@ $github-color: #60b044;
   @include socialize(#ccc);
   color: $gray;
   border: 1px solid #ccc;
-  @include gradient-vertical(#fff, #f6f6f6);
+  @include gradient-y(#fff, #f6f6f6);
 
   &:hover {
-    @include gradient-vertical(#f6f6f6, #fff);
+    @include gradient-y(#f6f6f6, #fff);
   }
 }
 

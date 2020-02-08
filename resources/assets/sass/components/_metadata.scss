@@ -24,7 +24,7 @@
     }
   }
 
-  @media screen and (max-width: $screen-xs) {
+  @include media-breakpoint-down(xs) {
     margin-bottom: 0;
     margin-top: 0;
 

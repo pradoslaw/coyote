@@ -1,8 +1,8 @@
 @charset "UTF-8";
-@import "../vendor/bootstrap/variables";
-@import "~@fortawesome/fontawesome-free/scss/variables";
-@import "../vendor/flatpickr";
-@import "../helpers/variables";
+//@import "../vendor/bootstrap/variables";
+//@import "~@fortawesome/fontawesome-free/scss/variables";
+//@import "../vendor/flatpickr";
+//@import "../helpers/variables";
 
 html {
   // relative is required to contain the absolute sidebar
@@ -40,7 +40,7 @@ body.fixed-top {
 
 abbr {
   cursor: help;
-  border-bottom: 1px dotted $abbr-border-color;
+  border-bottom: 1px dotted $gray-light;
 }
 
 // Login forum

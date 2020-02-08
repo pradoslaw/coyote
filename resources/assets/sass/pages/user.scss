@@ -1,10 +1,10 @@
 @charset "UTF-8";
 
-@import "../helpers/variables";
-@import "../helpers/mixins";
-@import "../components/sidemenu";
-@import "../components/metadata";
-@import "~@fortawesome/fontawesome-free/scss/variables";
+//@import "../helpers/variables";
+//@import "../helpers/mixins";
+//@import "../components/sidemenu";
+//@import "../components/metadata";
+//@import "~@fortawesome/fontawesome-free/scss/variables";
 
 #user-nav-tabs {
   margin: 20px 0;
@@ -38,7 +38,7 @@
   .progress {
     width: 50%;
 
-    @media screen and (max-width: $screen-sm) {
+    @include media-breakpoint-down(sm) {
       width: 100%;
     }
   }
@@ -144,7 +144,7 @@
       }
     }
 
-    @media screen and (max-width: $screen-sm) {
+    @include media-breakpoint-down(sm) {
       .media-left {
         display: none;
       }
@@ -235,7 +235,7 @@
     }
   }
 
-  @media screen and (max-width: $screen-xs) {
+  @include media-breakpoint-down(xs) {
     .pm-text, .excerpt {
       font-size: $font-size-small;
     }

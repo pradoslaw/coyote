@@ -3,7 +3,7 @@
   margin-top: 15px;
 
   .btn-sm {
-    @include gradient-vertical(#f6f6f6, #ddd);
+    @include gradient-y(#f6f6f6, #ddd);
   }
 
   // Alert informujacy o tym, ze obslugujemy markdown
@@ -14,7 +14,7 @@
     right: 65px;
   }
 
-  @media screen and (max-width: $screen-xs) {
+  @include media-breakpoint-down(xs) {
     > div {
       display: none;
     }

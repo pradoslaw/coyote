@@ -40,10 +40,10 @@
 }
 
 .pagination-xs {
-  @include pagination-size($padding-small-vertical, $padding-small-horizontal, ceil(($font-size-base * 0.78)), $line-height-small, $border-radius-small);
+  @include pagination-size(5px, 10px, ceil(($font-size-base * 0.78)), $line-height-sm, $border-radius-small);
 }
 
-@media screen and (max-width: $screen-sm) {
+@include media-breakpoint-down(sm)  {
   .pagination {
     font-size: $font-size-small;
 

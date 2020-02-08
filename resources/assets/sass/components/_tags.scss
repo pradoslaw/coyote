@@ -53,7 +53,7 @@
     }
   }
 
-  @media screen and (max-width: $screen-xs) {
+  @include media-breakpoint-down(xs) {
     > li {
       >a,
       >span {

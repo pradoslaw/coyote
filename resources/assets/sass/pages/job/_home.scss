@@ -135,7 +135,7 @@
     }
 
     &.extended {
-      @media screen and (min-width: $screen-sm) {
+      @include media-breakpoint-up(sm) {
         //flex-basis: 50%;
         //transition: all 300ms cubic-bezier(.25, .46, .45, .94);
         //transition-delay: .1s;
@@ -191,7 +191,7 @@
     flex: 1 1 auto;
   }
 
-  @media screen and (min-width: $screen-sm) {
+  @include media-breakpoint-up(sm) {
     > .input-item {
       &.keyword-search,
       &.location-search {
@@ -200,7 +200,7 @@
     }
   }
 
-  @media screen and (max-width: $screen-sm) {
+  @include media-breakpoint-down(sm) {
     flex-flow: column nowrap;
 
     > .input-item {
@@ -217,13 +217,13 @@
     display: block;
   }
 
-  @media screen and (min-width: $screen-sm) {
+  @include media-breakpoint-up(sm) {
     .form-group-salary {
       float: right;
     }
   }
 
-  @media screen and (max-width: $screen-sm) {
+  @include media-breakpoint-down(sm) {
     .filters {
       position: relative;
     }

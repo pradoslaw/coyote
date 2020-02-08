@@ -1,11 +1,10 @@
 @charset "UTF-8";
-@import "../../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/image";
 
 #job-offer {
   .media-body {
     padding: 0 20px;
 
-    @media screen and (max-width: $screen-sm) {
+    @include media-breakpoint-down(sm) {
       padding: 0 5px;
     }
 
@@ -31,7 +30,7 @@
   .media-object {
     width: 70px;
 
-    @media screen and (max-width: $screen-sm) {
+    @include media-breakpoint-down(sm) {
       display: none;
     }
   }
@@ -40,7 +39,7 @@
     font-size: 22px;
     margin-bottom: 10px;
 
-    @media screen and (max-width: $screen-sm) {
+    @include media-breakpoint-down(sm) {
       font-size: $font-size-large;
     }
   }
@@ -98,7 +97,7 @@
   .text {
     font-size: $font-size-medium;
 
-    @media screen and (max-width: $screen-sm) {
+    @include media-breakpoint-down(sm) {
       font-size: $font-size-small;
     }
 
@@ -117,7 +116,7 @@
 .metadata.location {
   border-top: 0;
 
-  @media screen and (min-width: $screen-sm) {
+  @include media-breakpoint-up(sm) {
     display: inline;
   }
 }
