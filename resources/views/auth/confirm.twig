@@ -9,7 +9,7 @@
             Potwierdź adres e-mail, aby otrzymywać powiadomienia
         </div>
         <div class="card-body">
-            {{ form_open({'method': 'POST', 'role': 'form', 'url': url('Confirm'), 'class': 'form-horizontal'}) }}
+            {{ form_open({'method': 'POST', 'role': 'form', 'url': url('Confirm')}) }}
             {{ form_hidden('token', token) }}
             {{ forms.text('email', 'E-mail', input_old('email', user('email'))) }}
 

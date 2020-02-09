@@ -26,14 +26,14 @@
         </div>
     {% endif %}
 
-    <div id="post-{{ post.id }}" class="post-body {{ post.deleted_at ? 'deleted' }} {{ (index == 0 or post.deleted_at) ? 'collapse' }} {{ (paginate.currentPage() > 1 and index == 0) or post.deleted_at ? '' : 'in' }}">
+    <div id="post-{{ post.id }}" class="post-body {{ post.deleted_at ? 'deleted' }} {{ (index == 0 or post.deleted_at) ? 'collapse' }} {{ (paginate.currentPage() > 1 and index == 0) or post.deleted_at ? '' : 'show' }}">
 
         <div class="row">
-            <div class="col-sm-2 hidden-xs col-user">
+            <div class="col-sm-2 d-none d-sm-block col-user">
                 {{ _self.render_name(post, author_id) }}
             </div>
 
-            <div class="col-sm-10 col-xs-12 col-time">
+            <div class="col-sm-10 col-12 col-time">
                 <a title="Link do tego postu" id="id{{ post.id }}" class="post-link {{ post.created_at > markTime ? 'unread' }}" href="{{ url }}"></a>
 
                 <span class="timestamp" title="{{ post.created_at|format_date(false) }}" data-timestamp="{{ post.created_at|timestamp }}">{{ post.created_at|format_date }}</span>
@@ -43,8 +43,8 @@
                 {% endif %}
             </div>
         </div>
-        <div class="row visible-xs">
-            <div class="col-xs-12 col-user">
+        <div class="row d-block d-sm-none">
+            <div class="col-12 col-user">
                 {{ _self.render_name(post, author_id) }}
             </div>
         </div>
@@ -87,7 +87,7 @@
                 {% endif %}
             </div>
 
-            <div class="col-sm-10 col-xs-12 col-body">
+            <div class="col-sm-10 col-12 col-body">
 
                 {% for flag in flags[post.id] %}
                     {% include 'components.flag' %}
@@ -161,8 +161,8 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-2 hidden-xs col-bottom" style="height: 32px"></div>
-            <div class="col-sm-10 col-xs-12 col-bottom">
+            <div class="col-sm-2 d-none d-sm-block col-bottom" style="height: 32px"></div>
+            <div class="col-sm-10 col-12 col-bottom">
                 {% if (can('merge', forum) or can('adm-access')) %}
                     <div class="dropdown float-right">
                         <button class="btn btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Więcej...">
@@ -250,7 +250,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-end col-xs-12"></div>
+            <div class="col-end col-12"></div>
         </div>
     </div>
 

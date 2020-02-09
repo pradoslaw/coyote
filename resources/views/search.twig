@@ -7,10 +7,10 @@
 
 {% block container %}
     <div class="row">
-        <div id="box-search" class="col-md-7 col-sm-12 col-xs-12">
+        <div id="box-search" class="col-md-7 col-sm-12 col-12">
             {{ form_open({method: 'GET', role: 'form', url: route('search'), class: 'form-inline edge', id: 'box-search'}) }}
 
-            <div class="form-group input-keywords col-sm-10 col-xs-12">
+            <div class="form-group input-keywords col-sm-10 col-12">
                 <div class="col-content">
                     {{ form_input('search', 'q', input_get('q'), {'class': 'form-control', 'placeholder': 'Słowa kluczowe'}) }}
                 </div>
@@ -26,7 +26,7 @@
     </div>
 
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-12">
             {% if input_get('q') %}
                 {{ tabs.asUl({class: 'nav nav-tabs'})|raw }}
             {% endif %}
@@ -41,7 +41,7 @@
             {% elseif total > 0 %}
 
                 <div class="row">
-                    <div class="col-xs-12 text-muted" style="margin-top: 10px">
+                    <div class="col-12 text-muted" style="margin-top: 10px">
                         Wyniki <strong>{{ pagination.firstItem() }} - {{ pagination.lastItem() }}</strong> z <strong>{{ total }}</strong> znalezione w czasie <strong>{{ took }} ms.</strong>
                     </div>
                 </div>

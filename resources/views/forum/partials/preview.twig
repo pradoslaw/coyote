@@ -8,7 +8,7 @@
                 <div class="post">
                     <div class="post-body">
                         <div class="row">
-                            <div class="col-xs-2 col-user">
+                            <div class="col-2 col-user">
                                 <h5 class="online" title="Użytkownik jest online">
                                     {% if auth_check() %}
                                         {{ link_to_profile(user('id'), user('name'), true, false) }}
@@ -18,7 +18,7 @@
                                 </h5>
                             </div>
 
-                            <div class="col-xs-10 col-time">
+                            <div class="col-10 col-time">
                                 <a title="Link do tego postu" class="post-link" href="javascript:"></a>
 
                                 <span class="timestamp" title="{{ 'now'|format_date(false) }}">{{ 'now'|format_date }}</span>
@@ -26,7 +26,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-xs-2 col-user hidden-xss">
+                            <div class="col-2 col-user hidden-xss">
                                 {% if auth_check() %}
                                     <div class="avatar">
                                         <img class="img-fluid" src="{{ user_photo(user('photo')) }}" {{ not user('photo') ? 'style="max-width: 75px"' }}>
@@ -56,7 +56,7 @@
                                     {% endif %}
                                 {% endif %}
                             </div>
-                            <div class="col-xs-10 col-body">
+                            <div class="col-10 col-body">
                                 <div class="post-content">
 
                                 </div>

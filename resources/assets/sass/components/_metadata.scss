@@ -1,5 +1,12 @@
 @charset "UTF-8";
 
+.list-inline-bullet {
+  .list-inline-item:not(:last-child):after {
+    content: "●";
+    margin-left: $list-inline-padding + .1rem;
+  }
+}
+
 .metadata {
   color: $gray-light;
   margin: 10px 0 12px 2px;

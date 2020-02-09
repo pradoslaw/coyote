@@ -1,5 +1,5 @@
 <template>
-    <div v-if="remote.enabled || locations.length > 0" class="location">
+    <div v-if="remote.enabled || locations.length > 0" class="location d-inline text-muted">
         <i class="fas fa-map-marker-alt"></i>
 
         <ul>

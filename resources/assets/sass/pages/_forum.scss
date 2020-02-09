@@ -32,7 +32,7 @@
 }
 
 // desktop
-@include media-breakpoint-only(lg) {
+@include media-breakpoint-up(lg) {
   .card-section {
     background-color: $panel-footer-bg;
     padding: 10px 0 0 0;
@@ -66,18 +66,18 @@
     align-items: center;
   }
 
-  .subject {
-    margin-bottom: 3px;
-
-    @include text-overflow;
-  }
+  //.subject {
+  //  margin-bottom: 3px;
+  //
+  //  @include text-overflow;
+  //}
 
   .wrap {
     overflow: hidden;
   }
 
   .media {
-    font-size: 12px;
+    font-size: .75rem;
   }
 
   h3 {
@@ -135,7 +135,7 @@
   }
 
   // desktop
-  @include media-breakpoint-only(lg) {
+  @include media-breakpoint-up(lg) {
     border-radius: 0;
     border-left: none;
     border-right: none;
@@ -188,8 +188,8 @@
     }
   }
 
-  .media {
-    display: flex; // this is required to support text-overflow in topics' title
+  .media-body {
+    overflow: hidden; // this is required to support text-overflow in topics' title
   }
 
   .card-body {

@@ -1,9 +1,4 @@
 @charset "UTF-8";
-//@import "../helpers/variables";
-//@import "../vendor/bootstrap/variables";
-//@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/gradients";
-//@import "~@fortawesome/fontawesome-free/scss/variables";
-//@import "../helpers/mixins";
 
 .btn-google, .btn-fb, .btn-github {
   width: 100%;
@@ -74,19 +69,9 @@ $github-color: #60b044;
       border-top: 1px solid $gray-lighter;
     }
   }
-
-  h1 {
-    display: none;
-  }
 }
 
 #box-login-sidebar, #box-register-sidebar {
-  > div {
-    padding: 40px;
-  }
-
-  border-left: 1px solid $border-color;
-
   blockquote {
     font-style: italic;
     padding: 0 0 0 30px;
@@ -106,10 +91,6 @@ $github-color: #60b044;
 }
 
 #box-register-sidebar {
-  > div {
-    padding-top: 0;
-  }
-
   h2 {
     font-size: $font-size-large;
     margin-bottom: 20px;

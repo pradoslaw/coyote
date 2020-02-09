@@ -173,7 +173,7 @@ $(function () {
      */
     $('.btn-share').one('click', function() {
         let url = $(this).attr('href');
-        let $input = $('<input type="text" class="form-control input-sm" style="width: 300px" value="' + url + '" readonly />');
+        let $input = $('<input type="text" class="form-control form-control-sm" style="width: 300px" value="' + url + '" readonly />');
 
         $input.click(function() {
             this.select();

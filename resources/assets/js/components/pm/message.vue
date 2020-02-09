@@ -8,14 +8,14 @@
       </a>
     </div>
     <div class="media-body">
-      <small class="pull-right">{{ message.created_at }}</small>
+      <small class="float-right">{{ message.created_at }}</small>
 
       <h3 class="media-heading">
         <a v-if="clickableText" :href="'/User/Pm/Show/' + message.id">{{ message.user.name }}</a>
         <a v-else v-profile="message.user.id">{{ message.user.name }}</a>
       </h3>
 
-      <a @click="deleteMessage(true)" class="btn-delete-pm pull-right text-danger" href="javascript:" title="Usuń">
+      <a @click="deleteMessage(true)" class="btn-delete-pm float-right text-danger" href="javascript:" title="Usuń">
         <i class="fas fa-times"></i>
       </a>
 

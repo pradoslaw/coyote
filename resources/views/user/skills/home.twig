@@ -19,7 +19,7 @@
             {{ form_widget(form.rate, {type: 'hidden', value: 0}) }}
 
             <div class="form-group">
-                <div class="col-sm-9 col-md-10 col-lg-11 col-xs-8">
+                <div class="col-sm-9 col-md-10 col-lg-11 col-8">
                     {{ form_widget(form.name) }}
 
                     <div class="alert alert-warning alert-popover top hidden-xs hidden-sm" data-id="skills">
@@ -30,7 +30,7 @@
                         Umiejętności będą widoczne na Twoim profilu.
                     </div>
                 </div>
-                <div class="col-sm-3 col-md-2 col-lg-1 col-xs-4">
+                <div class="col-sm-3 col-md-2 col-lg-1 col-4">
                     <button type="submit" class="btn btn-primary">
                         Dodaj
                     </button>
@@ -38,7 +38,7 @@
             </div>
 
             <div class="form-group">
-                <div class="rate-container col-xs-12">
+                <div class="rate-container col-12">
                     {% for label in rate_labels %}
                         <a class="rate rate-large" title="{{ label }}"></a>
                     {% endfor %}

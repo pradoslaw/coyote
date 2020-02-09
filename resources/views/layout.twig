@@ -77,30 +77,28 @@
                     <img src="{{ user_photo(user('photo')) }}" style="width: 100%">
                   </a>
 
-                  <ul class="dropdown-menu right">
-                    <li><a class="profile-name" href="{{ route('user.home') }}">{{ user('name') }}</a></li>
+                  <div class="dropdown-menu right">
+                    <a class="dropdown-item profile-name" href="{{ route('user.home') }}">{{ user('name') }}</a>
+
                     <li class="dropdown-divider"></li>
-                    <li><a href="{{ route('user.pm') }}"><i class="fas fa-envelope fa-fw"></i> Wiadomości</a></li>
-                    <li><a href="{{ route('user.settings') }}"><i class="fas fa-cog fa-fw"></i> Ustawienia</a></li>
-                    <li><a href="{{ route('profile', [user('id')]) }}"><i class="fas fa-user fa-fw"></i> Profil</a></li>
-                    <li><a href="{{ url('Pomoc') }}"><i class="fas fa-info-circle fa-fw"></i> Pomoc</a></li>
+
+                    <a class="dropdown-item" href="{{ route('user.pm') }}"><i class="fas fa-envelope fa-fw"></i> Wiadomości</a>
+                    <a class="dropdown-item" href="{{ route('user.settings') }}"><i class="fas fa-cog fa-fw"></i> Ustawienia</a>
+                    <a class="dropdown-item" href="{{ route('profile', [user('id')]) }}"><i class="fas fa-user fa-fw"></i> Profil</a>
+                    <a class="dropdown-item" href="{{ url('Pomoc') }}"><i class="fas fa-info-circle fa-fw"></i> Pomoc</a>
 
                     {% if can('adm-access') %}
-                      <li><a href="{{ route('adm.home') }}"><i class="fas fa-user-secret fa-fw"></i> Panel administracyjny</a></li>
+                      <a class="dropdown-item" href="{{ route('adm.home') }}"><i class="fas fa-user-secret fa-fw"></i> Panel administracyjny</a>
                     {% endif %}
 
-                    <li class="dropdown-divider"></li>
+                    <div class="dropdown-divider"></div>
 
-                    <li>
-                      <a href="javascript:" class="js-change-menu">Nowe menu <sup class="label label-new">Beta</sup></a>
-                    </li>
+                    <a href="javascript:" class="dropdown-item js-change-menu">Nowe menu <sup class="label label-new">Beta</sup></a>
 
-                    <li class="dropdown-divider"></li>
+                    <div class="dropdown-divider"></div>
 
-                    <li>
-                      <a href="javascript:" onclick="document['logout-form'].submit()" class="btn-sign-out"><i class="fas fa-sign-out-alt fa-fw"></i> Wyloguj</a>
-                    </li>
-                  </ul>
+                    <a href="javascript:" onclick="document['logout-form'].submit()" class="dropdown-item btn-sign-out"><i class="fas fa-sign-out-alt fa-fw"></i> Wyloguj</a>
+                  </div>
                 </div>
               {% else %}
                 <a class="btn btn-sm d-inline-block btn-register hidden-xs" href="{{ route('register') }}"><i class="fas fa-sign-in"></i> Utwórz konto</a>
@@ -135,7 +133,7 @@
 
 {#            </div>#}
 
-            <div class="visible-xs">
+            <div class="d-block d-sm-none">
               <ul class="collapse navbar-collapse nav-mobile">
                 {% for item in __master_menu.roots() %}
                   <li {{ forms.attr(item.attr) }}>
@@ -166,11 +164,11 @@
                   </li>
                 {% else %}
                   <li class="row">
-                    <div class="col-xs-6">
+                    <div class="col-6">
                       <a class="btn btn-register btn-sm" href="{{ route('register') }}"><i class="fas fa-sign-in"></i> Utwórz konto</a>
                     </div>
-                    <div class="col-xs-6">
-                      <a class="btn-login btn-sm visible-xs-block text-center" href="{{ route('login') }}">Logowanie</a>
+                    <div class="col-6">
+                      <a class="btn-login btn-sm d-block d-sm-none text-center" href="{{ route('login') }}">Logowanie</a>
                     </div>
                   </li>
                 {% endif %}
@@ -179,7 +177,7 @@
 
                 <li>
                   <form action="{{ search_url|default(route('search')) }}" role="search">
-                    <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}" class="form-control input-sm">
+                    <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}" class="form-control form-control-sm">
                   </form>
                 </li>
               </ul>

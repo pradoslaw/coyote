@@ -29,7 +29,7 @@
 
             <div v-if="isDropdownShown" v-on-clickaway="hideDropdown" class="dropdown-menu select-menu">
               <div class="select-menu-search">
-                <input v-model="searchText" @keyup.esc="hideDropdown" ref="search" type="text" class="form-control input-sm" placeholder="Filtruj..." autocomplete="off">
+                <input v-model="searchText" @keyup.esc="hideDropdown" ref="search" type="text" class="form-control form-control-sm" placeholder="Filtruj..." autocomplete="off">
               </div>
               <div class="select-menu-wrapper">
                 <ul class="list-unstyled">
@@ -42,15 +42,15 @@
           </div>
         </div>
 
-        <button type="button" class="btn btn-sm btn-default pull-right" data-toggle="collapse" data-target="#wiki-help" aria-expanded="false" aria-controls="wiki-help"><i class="fas fa-question fa-fw"></i></button>
+        <button type="button" class="btn btn-sm btn-default float-right" data-toggle="collapse" data-target="#wiki-help" aria-expanded="false" aria-controls="wiki-help"><i class="fas fa-question fa-fw"></i></button>
       </div>
     </div>
 
     <div id="wiki-help" class="row collapse">
       <div class="col-md-12">
-        <div class="panel panel-info">
-          <div class="panel-heading">Pomoc</div>
-          <div class="panel-body">
+        <div class="card card-info">
+          <div class="card-heading">Pomoc</div>
+          <div class="card-body">
             <h2>Pogrubienie, kursywa...</h2>
 
             <p>Możesz używać pogrubienia czy kursywy, aby usprawnić czytelność tekstu: <code>**to jest pogrubienie**</code>, a to

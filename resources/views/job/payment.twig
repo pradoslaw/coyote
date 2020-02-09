@@ -67,11 +67,11 @@
                                                 <label class="control-label">Data ważności karty *</label>
 
                                                 <div class="row">
-                                                    <div class="col-xs-7" style="padding-right: 0">
+                                                    <div class="col-7" style="padding-right: 0">
                                                         {{ form_widget(form.exp_month) }}
                                                         {{ form_error(form.exp_month) }}
                                                     </div>
-                                                    <div class="col-xs-5">
+                                                    <div class="col-5">
                                                         {{ form_widget(form.exp_year) }}
                                                         {{ form_error(form.exp_year) }}
                                                     </div>
@@ -107,7 +107,7 @@
 
                             {# v-if instade of v-show. remove invoice inputs from form if price == 0 #}
                             <div class="row" v-if="grossPrice > 0">
-                                <div class="col-xs-12">
+                                <div class="col-12">
                                     <div class="well well-sm">
                                         <div class="checkbox margin-none">
                                             {{ form_widget(form.enable_invoice) }}
@@ -131,10 +131,10 @@
                                         {{ form_label(form.invoice.children.vat_id) }}
 
                                         <div class="row">
-                                            <div class="col-xs-4" style="padding-right: 0">
+                                            <div class="col-4 pr-0">
                                                 {{ form_widget(form.invoice.children.country_id) }}
                                             </div>
-                                            <div class="col-xs-8">
+                                            <div class="col-8">
                                                 {{ form_widget(form.invoice.children.vat_id) }}
                                             </div>
                                         </div>

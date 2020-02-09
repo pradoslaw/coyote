@@ -94,6 +94,7 @@
     position: relative;
     font-family: Arial, sans-serif;
     color: $gray;
+    font-size: 0.85rem;
 
     &:before {
       @include font-awesome($fa-var-user);

@@ -20,6 +20,6 @@ class Honeypot extends Field
         $this->setRules('max:0');
         $this->setLabel('Email (ponownie)');
         $this->setAttr(['placeholder' => 'Pozostaw to pole puste!']);
-        $this->setRowAttr(['class' => 'hidden']);
+        $this->setRowAttr(['class' => 'd-none']);
     }
 }

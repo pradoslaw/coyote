@@ -4,76 +4,80 @@
 {% import 'components.forms' as forms %}
 
 {% block container %}
-    <div class="row" style="margin-top: 25px">
+  <div class="row margin-lg-top">
+    <div class="col-10 mx-auto">
+      <div class="row">
+        <div id="box-register" class="col-sm-7">
 
-        <div class="col-xs-10 col-xs-offset-1">
-            <div id="box-register" class="col-sm-5">
-                <h1>Darmowa rejestracja - stwórz swój profil</h1>
+          <div class="row">
+            <div class="col-10">
+              {% include 'auth.oauth' %}
 
-                {% include 'auth.oauth' %}
-
-                {# ten kod jest tutaj na potrzeby pluginu socialize. przekazuje on w GET komunikat bledu #}
-                {# niestety z jakiegos powodu nie mozna tego komunikatu przekazac w sesji #}
-                {% if request().has('error') %}
-                    <div class="alert alert-danger">
-                        {{ request().get('error') }}
-                    </div>
-                {% endif %}
-
-                {{ form_start(form) }}
-                {{ form_row(form.name) }}
-                {{ form_row(form.password) }}
-                {{ form_row(form.password_confirmation) }}
-                {{ form_row(form.email) }}
-                {{ form_row(form.email_confirmation) }}
-                {{ form_row(form.submit) }}
-
-                {{ form_end(form) }}
-
-                <p class="text-center text-muted margin-md-top margin-md-bottom"><small>Tworząc konto akceptujesz nasz <a href="/Regulamin">Regulamin</a> oraz <a href="/Polityka_prywatności">Politykę prywatności</a>.</small></p>
-            </div>
-
-            <div id="box-register-sidebar" class="col-sm-5 col-sm-offset-2 hidden-xs">
-                <div>
-                    <blockquote>Rejestracja zajmuje tylko kilka sekund i jest darmowa. Pozwoli Ci to aktywnie korzystać z naszego serwisu</blockquote>
-
-                    <h2>Korzyści wynikające z rejestracji konta</h2>
-
-                    <ul class="list-unstyled">
-                        <li>Możliwość edycji oraz pisania artykułów</li>
-                        <li>Obserwowanie wątków na forum</li>
-                        <li>Śledzenie zmian w artykułach czy komentarzach</li>
-                        <li>System szeregu powiadomień o aktywności na stronie</li>
-                        <li>Pisanie własnego mikrobloga</li>
-                    </ul>
+              {# ten kod jest tutaj na potrzeby pluginu socialize. przekazuje on w GET komunikat bledu #}
+              {# niestety z jakiegos powodu nie mozna tego komunikatu przekazac w sesji #}
+              {% if request().has('error') %}
+                <div class="alert alert-danger">
+                  {{ request().get('error') }}
                 </div>
+              {% endif %}
+
+              {{ form_start(form) }}
+              {{ form_row(form.name) }}
+              {{ form_row(form.password) }}
+              {{ form_row(form.password_confirmation) }}
+              {{ form_row(form.email) }}
+              {{ form_row(form.email_confirmation) }}
+              {{ form_row(form.submit) }}
+
+              {{ form_end(form) }}
+
+              <p class="text-center text-muted margin-md-top margin-md-bottom">
+                <small>Tworząc konto akceptujesz nasz <a href="/Regulamin">Regulamin</a> oraz <a href="/Polityka_prywatności">Politykę prywatności</a>.</small>
+              </p>
             </div>
+          </div>
         </div>
+
+        <div id="box-register-sidebar" class="col-sm-5 d-sm-none d-md-block p-5 border-left">
+          <blockquote>Rejestracja zajmuje tylko kilka sekund i jest darmowa. Pozwoli Ci to aktywnie korzystać z naszego serwisu</blockquote>
+
+          <h2>Korzyści wynikające z rejestracji konta</h2>
+
+          <ul class="list-unstyled">
+            <li>Możliwość edycji oraz pisania artykułów</li>
+            <li>Obserwowanie wątków na forum</li>
+            <li>Śledzenie zmian w artykułach czy komentarzach</li>
+            <li>System szeregu powiadomień o aktywności na stronie</li>
+            <li>Pisanie własnego mikrobloga</li>
+          </ul>
+        </div>
+      </div>
     </div>
+  </div>
 {% endblock %}
 
 {% block head %}
-    {{ parent() }}
+  {{ parent() }}
 
-    <script src="https://www.google.com/recaptcha/api.js"></script>
+  <script src="https://www.google.com/recaptcha/api.js"></script>
 {% endblock %}
 
 {% block body %}
-    {{ parent() }}
+  {{ parent() }}
 
-    <script type="text/javascript">
-        function onSubmit(token) {
-            $('#register-form').find(':submit').disable();
-            document.getElementById("register-form").submit();
-        }
+  <script type="text/javascript">
+    function onSubmit(token) {
+      $('#register-form').find(':submit').disable();
+      document.getElementById("register-form").submit();
+    }
 
-        $(function() {
-            $('#box-register').find('form').append('<input style="display: none" type="checkbox" name="human" value="1" checked="checked">');
+    $(function () {
+      $('#box-register').find('form').append('<input style="display: none" type="checkbox" name="human" value="1" checked="checked">');
 
-            $('.btn-github, .btn-google, .btn-fb').click(function() {
-                $(this).text('Logowanie...');
-                window.location.href = $(this).data('url');
-            });
-        });
-    </script>
+      $('.btn-github, .btn-google, .btn-fb').click(function () {
+        $(this).text('Logowanie...');
+        window.location.href = $(this).data('url');
+      });
+    });
+  </script>
 {% endblock %}

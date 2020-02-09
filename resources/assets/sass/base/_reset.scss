@@ -49,3 +49,7 @@ dfn {
     font-size: $font-size-large;
   }
 }
+
+dd {
+  margin-bottom: 0; // tags on topics list can't have margin
+}

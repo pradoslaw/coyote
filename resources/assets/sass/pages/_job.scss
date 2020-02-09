@@ -1,9 +1,4 @@
 @charset "UTF-8";
-//@import "../helpers/mixins";
-//@import "../helpers/variables";
-//@import "~@fortawesome/fontawesome-free/scss/variables";
-//@import "../vendor/bootstrap/variables";
-
 @import "job/home";
 @import "job/submit";
 @import "job/payment";
@@ -72,8 +67,6 @@
 }
 
 .location {
-  display: inline;
-  font-size: 92%;
   color: $text-muted;
 
   a {

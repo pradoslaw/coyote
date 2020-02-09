@@ -14,7 +14,7 @@
 
     <div class="box-poll">
         <div class="row">
-            <div class="col-xs-12">
+            <div class="col-12">
                 <strong>{{ topic.poll.title }}</strong>
 
                 {% if topic.poll.max_items > 1 %}
@@ -67,7 +67,7 @@
 
         {% if is_voteable %}
             <div class="row">
-                <div class="col-xs-12">
+                <div class="col-12">
                     {{ form_submit('Głosuj', {class: 'btn btn-sm btn-primary', disabled: 'disabled', 'data-submit-state': 'Proszę czekać...'}) }}
                 </div>
             </div>
@@ -75,7 +75,7 @@
 
         {% if expired %}
             <div class="row">
-                <div class="col-xs-12">
+                <div class="col-12">
                     <p><em>Ankieta wygasła {{ topic.poll.expiredAt()|format_date }}</em></p>
                 </div>
             </div>

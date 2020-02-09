@@ -41,9 +41,9 @@
             {{ form_row(form.user_name) }}
 
             <div id="text-area" class="row">
-                <div class="col-xs-12">
+                <div class="col-12">
                     <ul class="nav nav-tabs">
-                        <li class="nav-item"><a class="nav-link" href="#body" role="tab" data-toggle="tab">Treść</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="#body" role="tab" data-toggle="tab">Treść</a></li>
                         <li class="nav-item"><a class="nav-link" href="#attachments" role="tab" data-toggle="tab">Załączniki</a></li>
 
                         {% if form.poll is not null %}
@@ -73,7 +73,7 @@
         </div>
 
         <aside class="col-sm-3">
-            <div id="hint-subject" class="sidebar-hint" style="display: block;">
+            <div id="hint-subject" class="sidebar-hint d-block">
                 <h4>Jak tytułować wątki</h4>
 
                 <p>► Staraj się nadawać wątkom znaczące tematy!</p>

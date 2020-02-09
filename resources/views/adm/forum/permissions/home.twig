@@ -7,7 +7,7 @@
             {{ form_open({url: route('adm.forum.permissions.save'), method: 'get', class: 'form-inline'}) }}
             <div class="form-group">
                 <label>Wybierz kategorię</label>
-                {{ form_select('id', {'': '--'} + categoriesList, input_get('id'), {'class': 'form-control input-sm'}) }}
+                {{ form_select('id', {'': '--'} + categoriesList, input_get('id'), {'class': 'form-control form-control-sm'}) }}
             </div>
 
             {{ form_submit('Wybierz', {class: 'btn btn-primary btn-sm'}) }}

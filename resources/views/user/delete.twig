@@ -12,7 +12,7 @@
                 <strong>Uwaga!</strong> Ta operacja spowoduje bezpowrotne usunięcie Twojego konta. Czy jesteś pewien, że chcesz kontynuować?
             </div>
 
-            {{ form_open({'method': 'POST', 'role': 'form', 'url': route('user.delete'), 'class': 'form-horizontal'}) }}
+            {{ form_open({'method': 'POST', 'role': 'form', 'url': route('user.delete')}) }}
 
             {{ forms.password('password', 'Hasło', '', {}, 'Hasło musi mieć min. 3 znaki długości') }}
 

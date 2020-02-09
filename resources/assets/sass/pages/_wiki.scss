@@ -281,26 +281,24 @@ article > header {
   color: $gray-light;
   position: relative;
 
-  .list-inline {
-    font-size: 11px;
-
-    a {
-      color: $gray-light;
-    }
-
-    li {
-      padding-right: 0;
-    }
-
-    li:after {
-      content: "●";
-      margin-left: 5px;
-    }
-
-    li:last-child:after {
-      content: "\00a0 ";
-    }
-  }
+  //.list-inline {
+  //  a {
+  //    color: $gray-light;
+  //  }
+  //
+  //  li {
+  //    padding-right: 0;
+  //  }
+  //
+  //  li:after {
+  //    content: "●";
+  //    margin-left: 5px;
+  //  }
+  //
+  //  li:last-child:after {
+  //    content: "\00a0 ";
+  //  }
+  //}
 
   &:after, &:before {
     right: 100%;

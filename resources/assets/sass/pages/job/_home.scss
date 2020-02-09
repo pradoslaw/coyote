@@ -36,7 +36,7 @@
   .job-options {
     margin-bottom: 0;
     color: $text-muted;
-    font-size: $font-size-small - 1;
+    font-size: 11px;
 
     a {
       color: inherit;
@@ -276,29 +276,6 @@
   100% { transform: rotate(0deg); }
 }
 
-
-#clients {
-  //background-color: $header-footer-color;
-  //border-top: 1px solid $header-footer-border;
-  padding: 20px 0 25px 0;
-
-  .img-responsive {
-    @include grayscale;
-
-    &:hover {
-      filter: url("data:image/svg+xml;utf8,&lt;svg xmlns=\'http://www.w3.org/2000/svg\'&gt;&lt;filter id=\'grayscale\'&gt;&lt;feColorMatrix type=\'matrix\' values=\'1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 1 0\'/&gt;&lt;/filter&gt;&lt;/svg&gt;#grayscale");
-      -webkit-filter: grayscale(0%);
-    }
-
-    height: 35px;
-  }
-
-  h4 {
-    margin-top: 0;
-    margin-bottom: 25px;
-  }
-}
-
 .medal {
   margin-left: 8px;
   margin-top: 0;
@@ -312,7 +289,7 @@
 // ---------------------------
 
 .top-spot-badge {
-  background-color: theme-color-level("warning", $alert-bg-level);
+  background-color: theme-color-level("danger", $alert-bg-level);
   position: absolute;
   color: theme-color-level("warning", $alert-color-level);
   font-size: 11px;

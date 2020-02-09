@@ -15,16 +15,16 @@
                 </p>
             {% endif %}
 
-            {{ form_open({'method': 'POST', 'role': 'form', 'url': route('user.notifications.settings'), 'class': 'form-horizontal'}) }}
+            {{ form_open({'method': 'POST', 'role': 'form', 'url': route('user.notifications.settings')}) }}
 
             <div class="row">
-                <div class="col-xs-8">
+                <div class="col-8">
                     <strong>Powiadamiaj o...</strong>
                 </div>
-                <div class="col-xs-2">
+                <div class="col-2">
                     <strong>Informacja w profilu</strong>
                 </div>
-                <div class="col-xs-2">
+                <div class="col-2">
                     <strong>Informacja na e-mail</strong>
                 </div>
             </div>
@@ -32,7 +32,7 @@
             {% for category, settings in groups %}
                 {% if category %}
                     <div class="row">
-                        <div class="col-xs-12">
+                        <div class="col-12">
                             <strong>{{ category }}</strong>
                         </div>
                     </div>
@@ -40,10 +40,10 @@
 
                 {% for setting in settings %}
                     <div class="row">
-                        <div class="col-xs-8">
+                        <div class="col-8">
                             {{ setting.name }}
                         </div>
-                        <div class="col-xs-2">
+                        <div class="col-2">
                             {{ form_hidden('settings[' ~ setting.id ~ '][profile]', 0) }}
 
                             <div class="checkbox">
@@ -55,7 +55,7 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="col-xs-2">
+                        <div class="col-2">
                             {{ form_hidden('settings[' ~ setting.id ~ '][email]', 0) }}
 
                             <div class="checkbox">
@@ -72,7 +72,7 @@
             {% endfor %}
 
             <div class="row">
-                <div class="col-xs-12">
+                <div class="col-12">
                     <button type="submit" class="btn btn-primary" data-submit-state="Zapisywanie...">
                         Zapisz zmiany
                     </button>

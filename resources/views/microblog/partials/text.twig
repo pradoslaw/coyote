@@ -3,7 +3,7 @@
 {% if microblog.media|length > 0 %}
     <div class="thumbnails row">
         {% for media in microblog.media %}
-            <div class="col-xs-6 col-md-3">
+            <div class="col-6 col-md-3">
                 <a href="{{ media.url() }}" class="thumbnail" data-toggle="lightbox" data-gallery="gallery-{{ microblog.id }}">
                     <img src="{{ thumbnail(media) }}">
                 </a>

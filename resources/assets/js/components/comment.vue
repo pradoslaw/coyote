@@ -1,119 +1,123 @@
 <template>
-    <div :id="'comment-' + comment.id" class="comment">
-        <div class="media" :class="{author: comment.is_author}">
-                <div class="media-left">
-                    <img :src="comment.user.photo" class="img-thumbnail media-object">
-                </div>
+  <div :id="'comment-' + comment.id" class="comment">
+    <div class="media" :class="{author: comment.is_author}">
+      <div class="mr-2">
+        <img :src="comment.user.photo" class="img-thumbnail media-object">
+      </div>
 
-                <div class="media-body">
-                    <div class="dropdown pull-right" v-if="comment.editable">
-                        <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="caret"></span>
-                        </button>
+      <div class="media-body">
+        <div class="dropdown float-right" v-if="comment.editable">
+          <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="caret"></span>
+          </button>
 
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <li><a @click="edit" href="javascript:" class="btn-edit" :data-id="comment.id"><i class="fa fa-edit fa-fw"></i> Edytuj</a></li>
-                            <li><a @click="deleteComment(true)" href="javascript:" :data-target="'#modal-confirm' + comment.id" data-toggle="modal"><i class="fa fa-remove fa-fw"></i> Usuń</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="media-heading">
-                        <h5>
-                            <a v-if="comment.user_id" :href="comment.user.profile" :data-user-id="comment.user.id">{{ comment.user.name }}</a>
-                            <span v-else>{{ comment.user.name }}</span>
-                        </h5>
-
-                        <h6><a :href="'#comment-' + comment.id" class="text-muted timestamp" :data-timestamp="comment.timestamp">{{ comment.created_at }}</a></h6>
-                    </div>
-
-                    <div class="margin-sm-top margin-sm-bottom" v-if="!isEditing" v-html="comment.html">
-                        {{ comment.html }}
-                    </div>
-
-                    <div class="margin-sm-top" v-if="isEditing">
-                        <form method="post" :action="comment.route.edit" ref="updateForm" @submit.prevent="updateForm">
-                            <div class="form-group">
-                                <textarea-autosize
-                                    name="text"
-                                    class="form-control"
-                                    ref="submitText"
-                                    v-model="comment.text"
-                                    :min-height="40"
-                                    :max-height="350"
-                                    @keydown.native.ctrl.enter="updateForm"
-                                    rows="1"
-                                    tabindex="1"
-                                ></textarea-autosize>
-                            </div>
-
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary btn-sm pull-right margin-xs-left">Zapisz</button>
-                                <button type="button" class="btn btn-danger btn-sm pull-right" @click="isEditing = false">Anuluj</button>
-                            </div>
-
-                            <div class="clearfix"></div>
-                        </form>
-                    </div>
-
-                    <ul class="list-inline">
-                        <li><a @click="reply" href="javascript:" class="text-muted">Odpowiedz</a></li>
-                        <li><a :href="comment.route.flag" :data-url="comment.flag.url" :data-metadata="comment.flag.metadata" class="btn-report text-muted">Zgłoś</a></li>
-                    </ul>
-                </div>
-            </div>
-
-        <div class="comment">
-            <div class="media" v-if="isReplying">
-                <form method="post" :action="comment.route.reply" @submit.prevent="replyForm" ref="replyForm">
-                    <input type="hidden" name="parent_id" :value="parentId">
-
-                    <div class="form-group">
-                        <textarea-autosize
-                            name="text"
-                            class="form-control"
-                            ref="replyText"
-                            :min-height="40"
-                            :max-height="350"
-                            @keydown.native.ctrl.enter="replyForm"
-                            rows="1"
-                            tabindex="1"
-                        ></textarea-autosize>
-                    </div>
-
-                    <div class="row">
-                        <div class="form-group col-sm-6">
-                            <input v-if="$store.state.authId === null" type="text" name="email" class="form-control" placeholder="Adres e-mail" tabindex="2">
-                        </div>
-
-                        <div class="form-group col-sm-6">
-                            <button type="submit" class="btn btn-primary btn-sm pull-right margin-xs-left" title="Ctrl+Enter aby opublikować">Zapisz</button>
-                            <button type="button" class="btn btn-danger btn-sm pull-right" @click="isReplying = false">Anuluj</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
+          <div class="dropdown-menu dropdown-menu-right">
+            <a @click="edit" href="javascript:" class="btn-edit dropdown-item" :data-id="comment.id"><i class="fa fa-edit fa-fw"></i> Edytuj</a>
+            <a @click="deleteComment(true)" class="dropdown-item" href="javascript:" :data-target="'#modal-confirm' + comment.id" data-toggle="modal"><i class="fa fa-remove fa-fw"></i> Usuń</a>
+          </div>
         </div>
 
-        <vue-comment
-            v-for="child in comment.children"
-            :comment="child"
-            :key="child.id"
-            :nested="true"
-        ></vue-comment>
+        <h5>
+          <a v-if="comment.user_id" :href="comment.user.profile" :data-user-id="comment.user.id">{{ comment.user.name }}</a>
+          <span v-else>{{ comment.user.name }}</span>
+        </h5>
 
-        <vue-modal ref="error">
-            {{ error }}
-        </vue-modal>
+        <h6><a :href="'#comment-' + comment.id" class="text-muted timestamp" :data-timestamp="comment.timestamp">{{ comment.created_at }}</a></h6>
 
-        <vue-modal ref="confirm">
-            Czy na pewno chcesz usunąć ten komentarz?
+        <div class="margin-sm-top margin-sm-bottom" v-if="!isEditing" v-html="comment.html">
+          {{ comment.html }}
+        </div>
 
-            <template slot="buttons">
-                <button @click="$refs.confirm.close()" type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
-                <button @click="deleteComment(false)" type="submit" class="btn btn-danger danger">Tak, usuń</button>
-            </template>
-        </vue-modal>
+        <div class="margin-sm-top" v-if="isEditing">
+          <form method="post" :action="comment.route.edit" ref="updateForm" @submit.prevent="updateForm">
+            <div class="form-group">
+              <textarea-autosize
+                name="text"
+                class="form-control"
+                ref="submitText"
+                v-model="comment.text"
+                :min-height="40"
+                :max-height="350"
+                @keydown.native.ctrl.enter="updateForm"
+                rows="1"
+                tabindex="1"
+              ></textarea-autosize>
+            </div>
+
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary btn-sm float-right margin-xs-left">Zapisz</button>
+              <button type="button" class="btn btn-danger btn-sm float-right" @click="isEditing = false">Anuluj</button>
+            </div>
+
+            <div class="clearfix"></div>
+          </form>
+        </div>
+
+        <ul class="list-inline list-inline-bullet">
+          <li class="list-inline-item"><a @click="reply" href="javascript:" class="text-muted">Odpowiedz</a></li>
+          <li class="list-inline-item">
+            <a :href="comment.route.flag" :data-url="comment.flag.url" :data-metadata="comment.flag.metadata" class="btn-report text-muted">Zgłoś</a>
+          </li>
+        </ul>
+      </div>
     </div>
+
+    <div class="comment">
+      <div v-if="isReplying">
+        <form method="post" :action="comment.route.reply" @submit.prevent="replyForm" ref="replyForm">
+          <input type="hidden" name="parent_id" :value="parentId">
+
+          <div class="form-group">
+            <textarea-autosize
+              name="text"
+              class="form-control"
+              ref="replyText"
+              :min-height="40"
+              :max-height="350"
+              @keydown.native.ctrl.enter="replyForm"
+              rows="1"
+              tabindex="1"
+            ></textarea-autosize>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-sm-6">
+              <input v-if="$store.state.authId === null" type="text" name="email" class="form-control" placeholder="Adres e-mail" tabindex="2">
+            </div>
+
+            <div class="form-group col-sm-6">
+              <button type="submit" class="btn btn-primary btn-sm float-right margin-xs-left" title="Ctrl+Enter aby opublikować">
+                Zapisz
+              </button>
+              <button type="button" class="btn btn-danger btn-sm float-right" @click="isReplying = false">Anuluj
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <vue-comment
+      v-for="child in comment.children"
+      :comment="child"
+      :key="child.id"
+      :nested="true"
+    ></vue-comment>
+
+    <vue-modal ref="error">
+      {{ error }}
+    </vue-modal>
+
+    <vue-modal ref="confirm">
+      Czy na pewno chcesz usunąć ten komentarz?
+
+      <template slot="buttons">
+        <button @click="$refs.confirm.close()" type="button" class="btn btn-default" data-dismiss="modal">Anuluj
+        </button>
+        <button @click="deleteComment(false)" type="submit" class="btn btn-danger danger">Tak, usuń</button>
+      </template>
+    </vue-modal>
+  </div>
 </template>
 
 <script>

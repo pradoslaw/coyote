@@ -9,7 +9,7 @@
             Formularz odzyskiwania hasła
         </div>
         <div class="card-body">
-            {{ form_open({'method': 'POST', 'role': 'form', 'url': url('password/reset'), 'class': 'form-horizontal'}) }}
+            {{ form_open({'method': 'POST', 'role': 'form', 'url': url('password/reset')}) }}
             {{ form_hidden('token', token) }}
             {{ forms.text('email', 'E-mail', input_old('email', request('email')), {}, 'Proszę podać swój adres e-mail oraz nowe hasło do konta.') }}
             {{ forms.password('password', 'Hasło', '') }}

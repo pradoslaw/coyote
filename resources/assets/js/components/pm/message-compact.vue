@@ -2,11 +2,9 @@
   <div :title="message.excerpt" :class="{'unread': ! isRead}" class="notification">
     <a :href="message.url" class="notification-link">
       <div class="media">
-        <div class="media-left">
-          <object class="media-object" :data="message.user.photo || '//'" type="image/png">
-            <img src="/img/avatar.png">
-          </object>
-        </div>
+        <object class="media-object mr-2" :data="message.user.photo || '//'" type="image/png">
+          <img src="/img/avatar.png">
+        </object>
 
         <div class="media-body">
           <header>

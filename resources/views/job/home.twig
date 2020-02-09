@@ -128,7 +128,7 @@
               </div>
 
               <div id="filter-location" v-show="isTabSelected('location')" class="filters">
-                <ul class="list-group list-group-tech">
+                <ul class="list-group list-group-horizontal list-group-tech">
                   <li class="list-group-item">
                     <input type="hidden" name="remote" :checked="input.remote">
 
@@ -155,7 +155,7 @@
                   <div class="form-group form-group-salary">
                     <strong>waluta: </strong>
 
-                    <select v-model="defaultCurrency" name="currency" class="form-control input-sm" style="height: 27px">
+                    <select v-model="defaultCurrency" name="currency" class="form-control form-control-sm" style="height: 27px">
                       <option v-for="currency in currencies" :key="currency.id" :value="currency.id">
                         ${ currency.name + ' (' + currency.symbol + ')' }
                       </option>
@@ -173,7 +173,7 @@
               <div class="float-right">
                 Sortuj według
 
-                <select v-model="defaultSort" @change="search" name="sort" class="form-control input-inline input-sm margin-sm-left" style="width: auto">
+                <select v-model="defaultSort" @change="search" name="sort" class="form-control input-inline form-control-sm margin-sm-left" style="width: auto">
                   <option value="boost_at">Data dodania</option>
                   <option value="_score">Trafność</option>
                   <option value="salary">Wynagrodzenie</option>
@@ -276,43 +276,4 @@
       skeleton: false
     }
   </script>
-{% endblock %}
-
-{% block fixed %}
-
-  {{ parent() }}
-
-  <div id="clients" class="hidden-sm hidden-xs">
-    <div class="row max-width">
-      <div class="col-xs-12">
-        <h4>Z naszych usług korzystali...</h4>
-
-        <div class="row">
-          <div class="col-sm-2 col-xs-4">
-            <img src="{{ cdn('img/logo/wp.png') }}" class="img-fluid">
-          </div>
-
-          <div class="col-sm-2 col-xs-4">
-            <img src="{{ cdn('img/logo/gazeta.png') }}" class="img-fluid">
-          </div>
-
-          <div class="col-sm-2 col-xs-4">
-            <img src="{{ cdn('img/logo/allegro.png') }}" class="img-fluid">
-          </div>
-
-          <div class="col-sm-2 col-xs-4">
-            <img src="{{ cdn('img/logo/nsn.png') }}" class="img-fluid" style="height: 25px">
-          </div>
-
-          <div class="col-sm-2 col-xs-4">
-            <img src="{{ cdn('img/logo/pgs-software.png') }}" class="img-fluid">
-          </div>
-
-          <div class="col-sm-2 col-xs-4">
-            <img src="{{ cdn('img/logo/microsoft.png') }}" class="img-fluid" style="height: 25px">
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 {% endblock %}

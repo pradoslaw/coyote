@@ -4,54 +4,56 @@
 {% import 'components.forms' as forms %}
 
 {% block container %}
-    <div class="row margin-lg-top">
-        <div class="col-xs-10 col-xs-offset-1">
-            <div id="box-login" class="col-sm-5">
-                <h1>Logowanie do systemu</h1>
+  <div class="row margin-lg-top">
+    <div class="col-10 mx-auto">
+      <div class="row">
+        <div id="box-login" class="col-sm-7">
+          <div class="row">
+            <div class="col-10">
+              {% include 'auth.oauth' %}
 
-                {% include 'auth.oauth' %}
-
-                {# ten kod jest tutaj na potrzeby pluginu socialize. przekazuje on w GET komunikat bledu #}
-                {# niestety z jakiegos powodu nie mozna tego komunikatu przekazac w sesji #}
-                {% if request().has('error') %}
-                    <div class="alert alert-danger">
-                        {{ request().get('error') }}
-                    </div>
-                {% endif %}
-
-                {{ form_start(form) }}
-                    {{ form_row(form.name) }}
-                    {{ form_row(form.password) }}
-
-                    <div class="form-group">
-                        {{ form_widget(form.submit) }}
-
-                        <a href="{{ url('Password') }}" style="margin-left: 15px">Zapomniałeś hasła?</a>
-                    </div>
-                {{ form_end() }}
-            </div>
-
-            <div id="box-login-sidebar" class="col-sm-5 col-sm-offset-2 hidden-xs">
-                <div>
-                    <h2>Nie masz konta?</h2>
-
-                    <blockquote>Rejestracja zajmuje tylko kilka sekund i jest darmowa. Pozwoli Ci to aktywnie korzystać z naszego serwisu</blockquote>
-                    <a class="btn btn-secondary" href="{{ route('register') }}"><i class="fas fa-sign-in"></i> Utwórz konto za darmo</a>
+              {# ten kod jest tutaj na potrzeby pluginu socialize. przekazuje on w GET komunikat bledu #}
+              {# niestety z jakiegos powodu nie mozna tego komunikatu przekazac w sesji #}
+              {% if request().has('error') %}
+                <div class="alert alert-danger">
+                  {{ request().get('error') }}
                 </div>
+              {% endif %}
+
+              {{ form_start(form) }}
+              {{ form_row(form.name) }}
+              {{ form_row(form.password) }}
+
+              <div class="form-group">
+                {{ form_widget(form.submit) }}
+
+                <a href="{{ url('Password') }}" style="margin-left: 15px">Zapomniałeś hasła?</a>
+              </div>
+              {{ form_end() }}
             </div>
+          </div>
         </div>
+
+        <div id="box-login-sidebar" class="col-sm-5 d-sm-none d-md-block p-5 border-left">
+          <h2>Nie masz konta?</h2>
+
+          <blockquote>Rejestracja zajmuje tylko kilka sekund i jest darmowa. Pozwoli Ci to aktywnie korzystać z naszego serwisu</blockquote>
+          <a class="btn btn-secondary" href="{{ route('register') }}"><i class="fas fa-sign-in"></i> Utwórz konto za darmo</a>
+        </div>
+      </div>
     </div>
+  </div>
 {% endblock %}
 
 {% block body %}
-    {{ parent() }}
+  {{ parent() }}
 
-    <script type="text/javascript">
-        $(function() {
-            $('.btn-github, .btn-google, .btn-fb').click(function() {
-                $(this).text('Logowanie...');
-                window.location.href = $(this).data('url');
-            });
-        });
-    </script>
+  <script type="text/javascript">
+    $(function () {
+      $('.btn-github, .btn-google, .btn-fb').click(function () {
+        $(this).text('Logowanie...');
+        window.location.href = $(this).data('url');
+      });
+    });
+  </script>
 {% endblock %}

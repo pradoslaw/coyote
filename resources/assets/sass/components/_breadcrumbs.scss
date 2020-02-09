@@ -4,10 +4,8 @@ ul.breadcrumb {
   background: none;
   padding: 10px 0;
 
-  li {
-    a {
-      color: #626262;
-    }
+  li a {
+    color: #626262;
   }
 
   .breadcrumb-item + .breadcrumb-item {

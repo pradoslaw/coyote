@@ -33,7 +33,7 @@
                             <p class="hidden-xs">{{ forum.description }}</p>
 
                             {% if not forum.url %}
-                                <ul class="list-stats list-inline visible-xs visible-sm">
+                                <ul class="list-stats list-inline d-block d-sm-none">
                                     <li class="list-inline-item">Wątków: <strong>{{ forum.topics|number_format(0, ',', ' ') }}</strong></li>
                                     <li class="list-inline-item">Postów: <strong>{{ forum.posts|number_format(0, ',', ' ') }}</strong></li>
                                 </ul>

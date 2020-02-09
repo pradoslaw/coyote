@@ -83,12 +83,12 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-xs-12">
+                                <div class="col-12">
                                     <div class="checkbox">
                                         <vue-checkbox id="is_remote" name="is_remote" :value.sync="job.is_remote"></vue-checkbox>
                                         <label for="is_remote">Możliwa praca zdalna w zakresie</label>
 
-                                        <vue-select name="remote_range" :options="remote_range" :value.sync="job.remote_range" class="input-sm input-inline" style="width: 100px"></vue-select>
+                                        <vue-select name="remote_range" :options="remote_range" :value.sync="job.remote_range" class="form-control-sm input-inline" style="width: 100px"></vue-select>
                                     </div>
                                 </div>
                             </div>
@@ -164,10 +164,10 @@
                         <div class="form-group form-group-border">
                             <label>Narzędzia oraz metodologia pracy</label>
 
-                            <ol class="features list-group clearfix form-horizontal">
+                            <ol class="features list-group clearfix">
                                 <li class="list-group-item col-md-12 col-lg-6" v-for="(feature, index) in job.features" :class="{checked: feature.pivot.checked}">
                                     <div class="form-group">
-                                        <div class="col-xs-7 control-label" @click="toggleFeature(feature)">
+                                        <div class="col-7 control-label" @click="toggleFeature(feature)">
                                             <i class="fas fa-fw " :class="{'fa-check': feature.pivot.checked, 'fa-times': !feature.pivot.checked}"></i>
 
                                             ${ feature.name }
@@ -178,8 +178,8 @@
                                         <input type="hidden" :name="'features[' + index + '][default]'" :value="feature.default">
                                         <input type="hidden" :name="'features[' + index + '][checked]'" :value="feature.pivot.checked">
 
-                                        <div class="col-xs-5" v-show="feature.pivot.checked && feature.default">
-                                            <input type="text" class="form-control input-sm" :placeholder="feature.default" :name="'features[' + index + '][value]'" v-model="feature.pivot.value">
+                                        <div class="col-5" v-show="feature.pivot.checked && feature.default">
+                                            <input type="text" class="form-control form-control-sm" :placeholder="feature.default" :name="'features[' + index + '][value]'" v-model="feature.pivot.value">
                                         </div>
                                     </div>
                                 </li>
