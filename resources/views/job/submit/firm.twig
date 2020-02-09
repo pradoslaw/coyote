@@ -33,16 +33,16 @@
                         Czy na pewno chcesz dodać nową firme i przypisać ją do tego ogłoszenia?
 
                         <template slot="buttons">
-                            <button @click="$refs['add-firm-modal'].close()" type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
+                            <button @click="$refs['add-firm-modal'].close()" type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
                             <button @click="_newFirm" type="button" class="btn btn-primary danger">Tak</button>
                         </template>
                     </vue-modal>
 
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
+                    <div class="card card-default">
+                        <div class="card-heading">
                             Informacje o firmie
                         </div>
-                        <div class="panel-body">
+                        <div class="card-body">
                             <div class="form-group">
                                 <div class="form-group">
                                     <div class="radio">
@@ -62,10 +62,10 @@
                             </div>
 
                             <div class="form-group" v-show="isPrivate == 1">
-                                <a href="{{ route('job.submit') }}" class="btn btn-default pull-left"><i class="fas fa-angle-left"></i> Podstawowe informacje</a>
+                                <a href="{{ route('job.submit') }}" class="btn btn-secondary float-left"><i class="fas fa-angle-left"></i> Podstawowe informacje</a>
 
-                                <vue-button type="submit" :disabled="isSubmitting" class="btn btn-primary pull-right">Podgląd <i class="fas fa-angle-right"></i></vue-button>
-                                <vue-button type="submit" :disabled="isSubmitting" class="btn btn-danger pull-right btn-save margin-sm-right" @click.native="isDone = 1"><i class="fas fa-save"></i> Zapisz i zakończ</vue-button>
+                                <vue-button type="submit" :disabled="isSubmitting" class="btn btn-primary float-right">Podgląd <i class="fas fa-angle-right"></i></vue-button>
+                                <vue-button type="submit" :disabled="isSubmitting" class="btn btn-danger float-right btn-save margin-sm-right" @click.native="isDone = 1"><i class="fas fa-save"></i> Zapisz i zakończ</vue-button>
                             </div>
                         </div>
 
@@ -80,19 +80,19 @@
                                         <p>${ item.headline }</p>
                                     </td>
                                     <td class="text-center" style="vertical-align: middle">
-                                        <a href="javascript:" @click="selectFirm(item.id)" class="btn btn-sm text-center btn-firm" :class="[item.id == firm.id ? 'btn-primary' : 'btn-default']">Wybierz</a>
+                                        <a href="javascript:" @click="selectFirm(item.id)" class="btn btn-sm text-center btn-firm" :class="[item.id == firm.id ? 'btn-primary' : 'btn-secondary']">Wybierz</a>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
 
-                    <div id="box-edit-firm" class="panel panel-default" v-show="isPrivate == 0">
-                        <div class="panel-heading">
+                    <div id="box-edit-firm" class="card card-default" v-show="isPrivate == 0">
+                        <div class="card-heading">
                             Dane firmy
                         </div>
 
-                        <div class="panel-body">
+                        <div class="card-body">
                             <div class="form-group form-group-border" :class="{'has-error': isInvalid(['name'])}">
                                 <label class="control-label">Nazwa firmy</label>
 
@@ -258,7 +258,7 @@
                                         <i class="fas fa-fw fa-check"></i>
 
                                         <input type="text" name="benefits[]" :value="benefit" class="form-control input-sm" @keydown.enter.prevent="">
-                                        <button class="btn btn-default btn-xs btn-delete" title="Usuń tę pozycję" @click.prevent="removeBenefit(benefit)"><i class="fas fa-minus-circle text-danger"></i></button>
+                                        <button class="btn btn-secondary btn-sm btn-delete" title="Usuń tę pozycję" @click.prevent="removeBenefit(benefit)"><i class="fas fa-minus-circle text-danger"></i></button>
                                     </li>
 
                                     <li class="list-group-item col-xs-6 checked">
@@ -273,10 +273,10 @@
                             <div id="form-navbar" :class="{'fixed': showFormNavbar}">
                                 <div class="row max-width">
                                     <div class="col-12-md" :class="{'col-lg-9': showFormNavbar}">
-                                        <a href="{{ route('job.submit') }}" class="btn btn-default pull-left"><i class="fas fa-angle-left"></i> Podstawowe informacje</a>
+                                        <a href="{{ route('job.submit') }}" class="btn btn-secondary float-left"><i class="fas fa-angle-left"></i> Podstawowe informacje</a>
 
-                                        <vue-button type="submit" :disabled="isSubmitting" class="btn btn-primary pull-right">Podgląd <i class="fas fa-angle-right"></i></vue-button>
-                                        <vue-button type="submit" :disabled="isSubmitting" class="btn btn-danger pull-right btn-save margin-sm-right" @click.native="isDone = 1"><i class="fas fa-save"></i> Zapisz i zakończ</vue-button>
+                                        <vue-button type="submit" :disabled="isSubmitting" class="btn btn-primary float-right">Podgląd <i class="fas fa-angle-right"></i></vue-button>
+                                        <vue-button type="submit" :disabled="isSubmitting" class="btn btn-danger float-right btn-save margin-sm-right" @click.native="isDone = 1"><i class="fas fa-save"></i> Zapisz i zakończ</vue-button>
                                     </div>
                                 </div>
                             </div>

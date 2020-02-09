@@ -9,17 +9,17 @@
         <p>{{ activity.headline|raw }}</p>
 
         <ul class="list-inline">
-            <li class="text-muted" title="{{ activity.created_at }}">
+            <li class="text-muted list-inline-item" title="{{ activity.created_at }}">
                 {{ activity.created_at|format_date }}
             </li>
 
-            <li class="text-muted" title="{{ activity.ip }}">
+            <li class="text-muted  list-inline-item" title="{{ activity.ip }}">
                 <i class="fas fa-fw fa-laptop bubble" title="{{ activity.ip }}"></i>
                 <a title="Kliknij, aby wyszukać" class="bubble" href="{{ route('adm.stream', {ip: activity.ip}) }}">{{ activity.ip }}</a>
             </li>
 
             {% if activity.browser %}
-                <li class="text-muted" title="{{ activity.browser }}">
+                <li class="text-muted  list-inline-item" title="{{ activity.browser }}">
                     <i class="fas fa-fw fa-globe bubble" title="{{ activity.browser }}"></i>
 
                     <a title="Kliknij, aby wyszukać" class="bubble" href="{{ route('adm.stream', {browser: activity.browser}) }}">{{ activity.agent.browser }}, {{ activity.agent.platform }}</a>
@@ -27,7 +27,7 @@
             {% endif %}
 
             {% if activity.fingerprint %}
-                <li class="text-muted">
+                <li class="text-muted  list-inline-item">
                     <i class="fas fa-fw fa-info bubble" title="{{ activity.fingerprint }}"></i>
 
                     <a title="Kliknij, aby wyszukać" class="bubble" href="{{ route('adm.stream', {fingerprint: activity.fingerprint}) }}">{{ activity.fingerprint[0:2] }} ... {{ activity.fingerprint[-2:2] }}</a>

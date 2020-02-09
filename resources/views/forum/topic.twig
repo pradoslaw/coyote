@@ -41,13 +41,13 @@
 
         {% include 'forum.partials.poll' %}
 
-        <section class="panel panel-wrapper">
-            <div class="panel-body">
+        <section class="card card-wrapper">
+            <div class="card-body">
 
                 <div class="table-forum margin-xs-top">
                     {% if not is_locked or is_writeable %}
-                        <a href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}" class="btn btn-primary btn-sm pull-right" style="margin-left: 15px">Odpowiedz</a>
-                        <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm pull-right">Nowy wątek</a>
+                        <a href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}" class="btn btn-primary btn-sm float-right" style="margin-left: 15px">Odpowiedz</a>
+                        <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm float-right">Nowy wątek</a>
                     {% endif %}
 
                     <div class="clearfix"></div>
@@ -58,25 +58,25 @@
 
                     <div class="post" id="last-post">
                         <div class="col-footer-nav">
-                            <nav class="pull-left">
+                            <nav class="float-left">
                                 {{ paginate|raw }}
                             </nav>
 
-                            <a id="btn-goto" class="btn pull-right" href="javascript:">
+                            <a id="btn-goto" class="btn float-right" href="javascript:">
                                 <i class="fas fa-arrow-circle-right"></i>
                             </a>
 
-                            {{ form_select('forum', forumList, forum.slug, {'class': 'pull-right', 'id': 'sel-forum-list', 'data-url': route('forum.home')}) }}
+                            {{ form_select('forum', forumList, forum.slug, {'class': 'float-right', 'id': 'sel-forum-list', 'data-url': route('forum.home')}) }}
 
                             <div class="clearfix"></div>
                         </div>
                     </div>
 
                     {% if not is_locked or is_writeable %}
-                        <a href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}" class="btn btn-primary btn-sm pull-right" style="margin-left: 15px">Odpowiedz</a>
+                        <a href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}" class="btn btn-primary btn-sm float-right" style="margin-left: 15px">Odpowiedz</a>
 
                         {% if auth_check() and not too_old %}
-                            <a href="javascript:" id="btn-fast-reply" class="btn btn-primary btn-sm pull-right">Szybka odpowiedź</a>
+                            <a href="javascript:" id="btn-fast-reply" class="btn btn-primary btn-sm float-right">Szybka odpowiedź</a>
                         {% endif %}
                     {% endif %}
                 </div>
@@ -90,9 +90,9 @@
                         <div class="form-group">
                             <div class="col-md-12">
                                 <ul class="nav nav-tabs">
-                                    <li role="presentation" class="active"><a href="#body" aria-controls="body" role="tab" data-toggle="tab">Treść</a></li>
-                                    <li role="presentation"><a href="#attachments" aria-controls="attachments" role="tab" data-toggle="tab">Załączniki</a></li>
-                                    <li role="presentation"><a href="#preview" aria-controls="preview" role="tab" data-toggle="tab" data-url="{{ route('forum.preview') }}">Podgląd</a></li>
+                                    <li class="nav-item"><a class="nav-link active" href="#body" role="tab" data-toggle="tab">Treść</a></li>
+                                    <li class="nav-item"><a href="#attachments" role="tab" data-toggle="tab">Załączniki</a></li>
+                                    <li class="nav-item"><a href="#preview" role="tab" data-toggle="tab" data-url="{{ route('forum.preview') }}">Podgląd</a></li>
                                 </ul>
 
                                 <div class="tab-content">
@@ -106,7 +106,7 @@
 
                         <div class="form-group">
                             <div class="col-md-12">
-                                {{ form_widget(form.submit, {attr: {class: 'pull-right'}}) }}
+                                {{ form_widget(form.submit, {attr: {class: 'float-right'}}) }}
                             </div>
                         </div>
                     </div>
@@ -118,7 +118,7 @@
 
         <section class="row">
             <div class="col-xs-12">
-                <div class="pull-right">
+                <div class="float-right">
                     Liczba odpowiedzi na stronę
                     {% include 'forum.partials.per_page' with {perPage: paginate.perPage()} %}
                 </div>
@@ -258,7 +258,7 @@
                             {% endif %}
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
                             <button type="submit" class="btn btn-danger danger" data-submit-state="Usuwanie...">Tak, usuń</button>
                         </div>
                     </div>
@@ -281,7 +281,7 @@
                                 {{ form_select('reason', {0: '-- Wybierz --'} + reasonList, 0, {'class': 'form-control input-sm'}) }}
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
                                 <button type="submit" class="btn btn-danger danger" data-submit-state="Przenoszenie...">Tak, przenieś</button>
                             </div>
                         </div>
@@ -305,7 +305,7 @@
                             {{ form_text('subject', topic.subject, {'class': 'form-control', 'required': 'required'}) }}
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
                             <button type="submit" class="btn btn-danger danger" data-submit-state="Wysyłanie...">Zmień tytuł</button>
                         </div>
                     </div>

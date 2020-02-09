@@ -43,14 +43,14 @@
             <div id="text-area" class="row">
                 <div class="col-xs-12">
                     <ul class="nav nav-tabs">
-                        <li role="presentation" class="active"><a href="#body" aria-controls="body" role="tab" data-toggle="tab">Treść</a></li>
-                        <li role="presentation"><a href="#attachments" aria-controls="attachments" role="tab" data-toggle="tab">Załączniki</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#body" role="tab" data-toggle="tab">Treść</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#attachments" role="tab" data-toggle="tab">Załączniki</a></li>
 
                         {% if form.poll is not null %}
-                            <li role="presentation"><a href="#poll" aria-controls="poll" role="tab" data-toggle="tab">Ankieta</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#poll" role="tab" data-toggle="tab">Ankieta</a></li>
                         {% endif %}
 
-                        <li role="presentation"><a href="#preview" aria-controls="preview" role="tab" data-toggle="tab" data-url="{{ route('forum.preview') }}">Podgląd</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#preview" role="tab" data-toggle="tab" data-url="{{ route('forum.preview') }}">Podgląd</a></li>
                     </ul>
 
                     <div class="tab-content">

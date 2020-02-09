@@ -129,7 +129,7 @@
 
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <a href="{{ route('adm.payments') }}" class="btn btn-default">Powrót</a>
+                <a href="{{ route('adm.payments') }}" class="btn btn-secondary">Powrót</a>
 
                 {% if payment.status_id != constant('Coyote\\Payment::PAID') and payment.invoice_id %}
                     <a href="{{ route('adm.payments.paid', [payment.id]) }}" class="btn btn-primary">Ustaw jako opłacone</a>

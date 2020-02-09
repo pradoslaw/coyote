@@ -2,11 +2,11 @@
     <i class="fas fa-arrows"></i>
     <strong>{{ item.name }}</strong>
 
-    <a href="{{ route('user.skills.delete', [item.id]) }}" class="btn-delete pull-right text-danger" data-id="{{ item.id }}">
+    <a href="{{ route('user.skills.delete', [item.id]) }}" class="btn-delete float-right text-danger" data-id="{{ item.id }}">
         <i class="fas fa-times" title="Usuń"></i>
     </a>
 
-    <span class="pull-right" style="margin-right: 10px">
+    <span class="float-right" style="margin-right: 10px">
         {% for i in 1..6 %}
             <span class="rate {{ i <= item.rate ? 'marked' }}"></span>
         {% endfor %}

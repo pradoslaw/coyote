@@ -34,11 +34,11 @@
 
                 <input type="hidden" name="done" v-model="isDone">
 
-                <div class="panel panel-default">
-                    <div class="panel-heading">
+                <div class="card card-default">
+                    <div class="card-heading">
                         Podstawowe informacje
                     </div>
-                    <div class="panel-body">
+                    <div class="card-body">
 
                         <div class="form-group form-group-border">
                             <div class="row">
@@ -146,12 +146,12 @@
                     </div>
                 </div>
 
-                <div class="panel panel-default">
-                    <div class="panel-heading">
+                <div class="card card-default">
+                    <div class="card-heading">
                         Szczegółowe informacje
                     </div>
 
-                    <div class="panel-body">
+                    <div class="card-body">
                         <div class="form-group-border form-group">
                             <label class="control-label">Opis oferty (opcjonalnie)</label>
 
@@ -230,12 +230,12 @@
                         <div id="form-navbar" :class="{'fixed': showFormNavbar}">
                             <div class="row max-width">
                                 <div class="col-12-md" :class="{'col-lg-9': showFormNavbar}">
-                                    <vue-button :disabled="isSubmitting" type="submit" class="btn btn-primary pull-right">
+                                    <vue-button :disabled="isSubmitting" type="submit" class="btn btn-primary float-right">
                                         Informacje o firmie <i class="fas fa-angle-right"></i>
                                     </vue-button>
 
                                     {% if not firm.is_private and firm.name %}
-                                        <vue-button :disabled="isSubmitting" type="submit" class="btn btn-danger pull-right btn-save margin-sm-right" title="Zapisz tę ofertę" @click.native="isDone = 1">
+                                        <vue-button :disabled="isSubmitting" type="submit" class="btn btn-danger float-right btn-save margin-sm-right" title="Zapisz tę ofertę" @click.native="isDone = 1">
                                             <i class="fas fa-save"></i> Zapisz jako {{ firm.name[:38] }}
                                         </vue-button>
                                     {% endif %}

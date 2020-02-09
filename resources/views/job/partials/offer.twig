@@ -1,6 +1,6 @@
 {% set preview = preview|default(false) %}
 
-<div id="job-offer" class="panel-body">
+<div id="job-offer" class="card-body">
     <div class="media">
         {% if job.firm.logo %}
             <div class="media-left hidden-xxs">
@@ -17,13 +17,13 @@
                 {% endif %}
 
                 {% if job.salary_from or job.salary_to %}
-                    <p class="salary pull-right">
+                    <p class="salary float-right">
                         {% include 'job.partials.salary' with {net_label: true, rate_label: true} %}
                     </p>
                 {% endif %}
 
                 <ul class="metadata list-inline location">
-                    <li title="Lokalizacja">
+                    <li class="list-inline-item" title="Lokalizacja">
                         <i class="fas fa-map-marker-alt"></i>
 
                         {% include 'job.partials.location' with {'locations': job.locations} %}

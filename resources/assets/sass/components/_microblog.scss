@@ -1,6 +1,4 @@
 @charset "UTF-8";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/gradients";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/image";
 
 input[placeholder] {
   text-overflow: ellipsis;
@@ -51,7 +49,7 @@ input[placeholder] {
 
   // emoticons are NOT responsive
   img:not(.img-smile) {
-    @include img-responsive();
+    @include img-fluid();
   }
 
   > .thumbnails {
@@ -102,7 +100,7 @@ input[placeholder] {
 
   &:hover {
     border: 1px solid $border-color;
-    @include gradient-vertical(#fff, $gray-lighter);
+    @include gradient-y(#fff, $gray-lighter);
   }
 }
 

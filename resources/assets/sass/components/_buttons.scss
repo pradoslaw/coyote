@@ -1,5 +1,9 @@
 @charset "UTF-8";
 
+.btn-xs {
+  padding: 0.1rem 0.3rem;
+}
+
 .btn-primary {
   background: $brand-primary;
   border-color: $brand-primary;
@@ -14,8 +18,15 @@
   }
 }
 
-.btn-default {
-  @include bg-gradient-variant(#fff, #f6f6f6);
+@include bg-gradient-variant('.btn-secondary', #f6f6f6);
+
+.btn-secondary {
+  border: 1px solid $border-color;
+  color: $text-color;
+
+  &:hover, &:focus {
+    color: inherit;
+  }
 }
 
 .btn-warning {

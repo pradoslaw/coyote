@@ -6,8 +6,8 @@
 {% block content %}
     <h2>Ostatnia wizyta</h2>
 
-    <div class="panel panel-default">
-        <div class="panel-body">
+    <div class="card card-default">
+        <div class="card-body">
 
             <div class="form-horizontal">
                 <div class="form-group-sm">
@@ -43,8 +43,8 @@
 
     <h2>Ustawienia bezpieczeństwa</h2>
 
-    <div id="box-security" class="panel panel-default">
-        <div class="panel-body">
+    <div id="box-security" class="card card-default">
+        <div class="card-body">
             {{ form_open({'method': 'POST', 'role': 'form', 'url': route('user.security'), 'class': 'form-horizontal'}) }}
 
             {{ forms.checkbox('alert_login', 'Chce otrzymywać wiadomość e-mail o udanym logowaniu na moje konto', 1, user('alert_login')) }}

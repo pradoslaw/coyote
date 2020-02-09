@@ -4,8 +4,8 @@
 {% block content %}
     <h2>Powiadomienia</h2>
 
-    <div id="box-alerts" class="panel panel-default">
-        <div class="panel-body">
+    <div id="box-alerts" class="card card-default">
+        <div class="card-body">
             {% set head_date = '' %}
 
             <nav class="text-center">
@@ -25,8 +25,8 @@
                     </div>
                     <div class="media-body">
                         <header>
-                            <h4 class="pull-left"><a href="{{ url }}">{{ notification.headline }}</a></h4>
-                            <small class="pull-right">{{ notification.created_at }}</small>
+                            <h4 class="float-left"><a href="{{ url }}">{{ notification.headline }}</a></h4>
+                            <small class="float-right">{{ notification.created_at }}</small>
                         </header>
 
                         <h3><a href="{{ url }}">{{ notification.subject }}</a></h3>

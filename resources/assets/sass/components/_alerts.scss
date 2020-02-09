@@ -104,7 +104,7 @@ $arrow-size: 8px;
 }
 
 .alert.top:after {
-  border-bottom-color: $warning;
+  border-bottom-color: $alert-warning-border;
   border-width: $arrow-size;
   margin-left: -$arrow-size;
 }

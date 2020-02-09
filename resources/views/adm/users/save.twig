@@ -4,15 +4,15 @@
 {% block container %}
     {{ form_start(form) }}
 
-    <ul class="nav nav-panel" role="tablist">
+    <ul class="nav nav-card" role="tablist">
         <li role="presentation" class="active"><a href="#settings" role="tab" data-toggle="tab">Ustawienia</a></li>
         <li role="presentation"><a href="#skills" role="tab" data-toggle="tab">Umiejętności</a></li>
         <li role="presentation"><a href="#groups" role="tab" data-toggle="tab">Grupy użytkownika</a></li>
     </ul>
 
 
-    <div class="panel panel-default tab-content">
-        <div id="settings" class="panel-body tab-pane active">
+    <div class="card card-default tab-content">
+        <div id="settings" class="card-body tab-pane active">
             {{ form_row(form.name) }}
             {{ form_row(form.email) }}
             {{ form_row(form.group_id) }}
@@ -36,12 +36,12 @@
             {{ form_row(form.submit) }}
         </div>
 
-        <div id="skills" class="panel-body tab-pane">
+        <div id="skills" class="card-body tab-pane">
             {{ form_row(form.skills) }}
             {{ form_row(form.submit) }}
         </div>
 
-        <div id="groups" class="panel-body tab-pane">
+        <div id="groups" class="card-body tab-pane">
             {{ form_row(form.groups) }}
             {{ form_row(form.submit) }}
         </div>

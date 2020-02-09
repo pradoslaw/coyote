@@ -1,5 +1,5 @@
-<section class="panel panel-wrapper">
-    <div class="panel-body">
+<section class="card card-wrapper">
+    <div class="card-body">
         <div id="box-topics" class="table-forum">
             <ul id="sort" class="hidden-xs">
                 <li>{{ sortable('last', 'Ostatni post', ['last', 'desc']) }}</li>
@@ -11,7 +11,7 @@
             </ul>
 
             {% if forum is defined and not forum.is_locked %}
-                <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm pull-right" style="margin-top: 6px; margin-bottom: 10px">Nowy wątek</a>
+                <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm float-right" style="margin-top: 6px; margin-bottom: 10px">Nowy wątek</a>
             {% endif %}
             <div class="clearfix"></div>
 
@@ -38,7 +38,7 @@
                                 {% set class = 'announcement' %}
                             {% endif %}
 
-                            <a {{ topic.unread ? ('href="' ~ route('forum.topic.mark', [topic.id]) ~ '"')|raw }} title="{{ title }}" class="center-block ico {{ class }} {{ topic.unread ? 'new' : 'normal' }}"></a>
+                            <a {{ topic.unread ? ('href="' ~ route('forum.topic.mark', [topic.id]) ~ '"')|raw }} title="{{ title }}" class="mx-auto ico {{ class }} {{ topic.unread ? 'new' : 'normal' }}"></a>
                         </td>
                         <td class="col-subject">
                             {% set replies_real = (can('delete', topic.forum) ? topic.replies_real : topic.replies) %}
@@ -89,7 +89,7 @@
                             </h5>
 
                             {% if topic.tags %}
-                                <ul class="tag-clouds tag-clouds-sm pull-right" style="clear: both">
+                                <ul class="tag-clouds tag-clouds-sm float-right" style="clear: both">
                                     {% for tag in topic.tags %}
                                         <li {{ loop.index0 >= 3 ? 'class="hidden"' }}><a href="{{ route('forum.tag', [tag.name|url_encode]) }}" data-tag="{{ tag.name }}">{{ tag.name }}</a></li>
                                     {% endfor %}
@@ -159,16 +159,16 @@
 
                 <tr>
                     <td colspan="4" class="col-footer-nav">
-                        <nav class="pull-left">
+                        <nav class="float-left">
                             {{ topics.render()|raw }}
                         </nav>
 
                         {% if forumList is defined %}
-                            <a class="btn pull-right" href="javascript:" id="btn-goto">
+                            <a class="btn float-right" href="javascript:" id="btn-goto">
                                 <i class="fas fa-arrow-circle-right"></i>
                             </a>
 
-                            {{ form_select('forum', forumList, forum.slug, {'class': 'pull-right', 'id': 'sel-forum-list', 'data-url': route('forum.home')}) }}
+                            {{ form_select('forum', forumList, forum.slug, {'class': 'float-right', 'id': 'sel-forum-list', 'data-url': route('forum.home')}) }}
                         {% endif %}
                     </td>
                 </tr>
@@ -176,7 +176,7 @@
         </div>
 
         {% if topics.count() > 10 and forum is defined and not forum.is_locked %}
-            <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm pull-right">Nowy wątek</a>
+            <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm float-right">Nowy wątek</a>
         {% endif %}
     </div>
 </section>

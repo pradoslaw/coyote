@@ -34,6 +34,11 @@
 @import "components/sprites";
 @import "components/logos";
 @import "components/related";
+@import "components/microblog";
+
+@import "components/sidemenu";
+@import "components/search";
+@import "components/metadata";
 @import "layout/header";
 @import "layout/footer";
 @import "layout/grid";
@@ -49,6 +54,7 @@
 @import "pages/wiki";
 @import "pages/forum";
 @import "pages/microblog";
+@import "pages/job";
 
 @import "~perfect-scrollbar/css/perfect-scrollbar";
 //@import "~awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.scss";

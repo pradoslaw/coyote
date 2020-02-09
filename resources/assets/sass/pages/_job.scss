@@ -1,11 +1,9 @@
 @charset "UTF-8";
-@import "../helpers/mixins";
-@import "../helpers/variables";
-@import "~@fortawesome/fontawesome-free/scss/variables";
-@import "../vendor/bootstrap/variables";
-@import "../components/sidemenu";
-@import "../components/search";
-@import "../components/metadata";
+//@import "../helpers/mixins";
+//@import "../helpers/variables";
+//@import "~@fortawesome/fontawesome-free/scss/variables";
+//@import "../vendor/bootstrap/variables";
+
 @import "job/home";
 @import "job/submit";
 @import "job/payment";
@@ -123,12 +121,3 @@ img[src*="logo-gray"] {
 // --------------------------------
 
 @import "job/offer";
-
-// Maksymalna wielkosc czcionki klasy .lead wykorzystywana w sekcji "Ustaw swoja lokalizacje"
-// -------------------------------------------------------------------------------------------
-
-.lead {
-  @media (min-width: $screen-sm-min) {
-    font-size: ($font-size-base * 1.15);
-  }
-}

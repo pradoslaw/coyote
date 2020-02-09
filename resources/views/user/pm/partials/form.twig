@@ -1,8 +1,8 @@
 <div class="row margin-sm-bottom">
   <div class="col-md-12" :class="{'has-error': 'text' in errors}">
     <ul class="nav nav-tabs">
-      <li role="presentation" :class="{'active': tab === 'body'}"><a href="javascript:" aria-controls="body" role="tab" @click="tab = 'body'">Treść</a></li>
-      <li role="presentation" :class="{'active': tab === 'preview'}"><a href="javascript:" aria-controls="preview" role="tab" @click="showPreview">Podgląd</a></li>
+      <li class="nav-item"><a :class="{'active': tab === 'body'}" class="nav-link" href="javascript:" role="tab" @click="tab = 'body'">Treść</a></li>
+      <li class="nav-item" ><a :class="{'active': tab === 'preview'}" class="nav-link" href="javascript:" role="tab" @click="showPreview">Podgląd</a></li>
     </ul>
 
     <div class="tab-content">

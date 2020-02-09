@@ -26,7 +26,7 @@
         <aside class="col-sm-3">
             {% if not wiki.deleted_at and (can('wiki-admin') or not wiki.is_locked) %}
                 <section id="box-maintain">
-                    <a href="{{ route('wiki.submit', [wiki.id]) }}" class="btn btn-sm btn-default" title="Kliknij, aby edytować ten artykuł">Edycja {{ wiki.is_locked ? ' (strona zablokowana)' }}</a>
+                    <a href="{{ route('wiki.submit', [wiki.id]) }}" class="btn btn-sm btn-secondary" title="Kliknij, aby edytować ten artykuł">Edycja {{ wiki.is_locked ? ' (strona zablokowana)' }}</a>
                     <a href="{{ route('wiki.submit') }}?parentId={{ wiki.id }}" class="btn btn-sm btn-primary" title="Dodaj nową stronę w tej kategorii">Nowa strona</a>
                 </section>
             {% endif %}

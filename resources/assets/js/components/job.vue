@@ -13,7 +13,7 @@
                 </div>
 
                 <div class="media-body">
-                    <h4 class="media-heading pull-left"><a :href="job.url">{{ job.title }}</a></h4>
+                    <h4 class="media-heading float-left"><a :href="job.url">{{ job.title }}</a></h4>
 
                     <a v-if="job.is_medal" :href="job.url" class="medal hidden-xs" title="Oferta na medal. To odznaczenie przyznawane jest ofertom, które zawierają szczegółowe informacje o pracy"></a>
 

@@ -1,11 +1,5 @@
 {% extends 'layout' %}
 
-{% block head %}
-    {{ parent() }}
-
-    <link rel="stylesheet" href="{{ cdn('css/adm.css') }}">
-{% endblock %}
-
 {% import 'components.modals' as modals %}
 
 {% block body %}
@@ -14,7 +8,7 @@
 
         <aside id="adm-menu" class="navbar-default">
             <a class="navbar-brand" rel="home" href="{{ route('home') }}" title="4programmers.net - Strona główna">
-                <img id="logo" src="{{ cdn('img/logo.png') }}" class="img-responsive">
+                <img id="logo" src="{{ cdn('img/logo.png') }}" class="img-fluid">
             </a>
 
             <div class="clearfix"></div>
@@ -25,7 +19,7 @@
                 <h3>{{ user('name') }}</h3>
 
                 <ol class="list-inline">
-                    <li><a href="{{ route('adm.exit') }}">Wyloguj z panelu</a></li>
+                    <li class="list-inline-item"><a href="{{ route('adm.exit') }}">Wyloguj z panelu</a></li>
                 </ol>
             </div>
 
@@ -54,7 +48,7 @@
         <main id="wrapper">
             <div id="adm-header" class="row">
                 <div class="col-xs-12">
-                    <a id="sidebar-toggle" href="javascript:" class="btn btn-default" title="">
+                    <a id="sidebar-toggle" href="javascript:" class="btn btn-secondary" title="">
                         <i class="fas fa-bars"></i>
                     </a>
                 </div>
@@ -75,9 +69,9 @@
             {% endif %}
 
             {% block container %}
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        {% block panel %}
+                <div class="card card-default">
+                    <div class="card-body">
+                        {% block card %}
                         {% endblock %}
                     </div>
                 </div>

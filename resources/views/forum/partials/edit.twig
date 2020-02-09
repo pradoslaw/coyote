@@ -15,8 +15,8 @@
     {{ form_widget(form.subscribe, {type: 'hidden'}) }}
     {{ form_widget(form.is_sticky, {type: 'hidden'}) }}
     {{ form_widget(form.text, {attr: {rows: 3, tabindex: 1}}) }}
-    {{ form_widget(form.submit, {attr: {title: 'Kliknij, aby wysłać (Ctrl+Enter)', class: 'btn-xs pull-right', tabindex: 2}}) }}
+    {{ form_widget(form.submit, {attr: {title: 'Kliknij, aby wysłać (Ctrl+Enter)', class: 'btn-sm float-right', tabindex: 2}}) }}
 
-    <button class="btn btn-xs btn-danger pull-right btn-reset margin-sm-right">Anuluj</button>
+    <button class="btn btn-sm btn-danger float-right btn-reset margin-sm-right">Anuluj</button>
     {{ form_end() }}
 {% endspaceless %}

@@ -14,14 +14,14 @@
                 </div>
             {% endif %}
 
-            <div id="profile" class="panel panel-default">
-                <div class="panel-body">
+            <div id="profile" class="card card-default">
+                <div class="card-body">
 
                     <div class="media">
                         <div class="media-left user-photo">
                             <img src="{{ user_photo(user.photo) }}" class="img-thumbnail">
 
-                            <a class="btn btn-default btn-sm btn-pm" href="{{ route('user.pm.submit') }}?to={{ user.name }}">
+                            <a class="btn btn-secondary btn-sm btn-pm" href="{{ route('user.pm.submit') }}?to={{ user.name }}">
                                 <i class="fas fa-envelope"></i> Wiadomość
                             </a>
                         </div>
@@ -31,7 +31,7 @@
 
                             <ol class="list-inline">
                                 {% if user.position %}
-                                    <li class="position">
+                                    <li class="position list-inline-item">
                                         {{ user.position }}
 
                                         {% if user.firm %}
@@ -41,7 +41,7 @@
                                 {% endif %}
 
                                 {% if user.location %}
-                                    <li class="location">
+                                    <li class="location list-inline-item">
                                         <i class="fas fa-map-marker-alt fa-fw"></i>
                                         {{ user.location }}
                                     </li>
@@ -50,34 +50,34 @@
 
                             <ol class="metadata list-inline">
                                 {% if user.website %}
-                                    <li title="Strona WWW">
+                                    <li class="list-inline-item" title="Strona WWW">
                                         <i class="fas fa-globe fa-fw"></i>
                                         <a href="{{ user.website }}">{{ user.website }}</a>
                                     </li>
                                 {% endif %}
                                 {% if user.github %}
-                                    <li title="Link do konta Github">
+                                    <li class="list-inline-item" title="Link do konta Github">
                                         <i class="fab fa-github fa-fw"></i>
                                         <a href="{{ user.github }}">{{ github(user.github) }}</a>
                                     </li>
                                 {% endif %}
                                 {% if user.visited_at %}
-                                    <li title="Ostatnia wizyta">
+                                    <li class="list-inline-item" title="Ostatnia wizyta">
                                         <i class="fas fa-sign-in-alt fa-fw"></i>
                                         {{ user.visited_at|format_date }}
                                     </li>
                                 {% endif %}
-                                <li title="Data rejestracji">
+                                <li class="list-inline-item" title="Data rejestracji">
                                     <i class="fas fa-user-plus fa-fw"></i>
                                     {{ user.created_at|format_date }}
                                 </li>
-                                <li title="Liczba wizyt">
+                                <li class="list-inline-item" title="Liczba wizyt">
                                     <i class="far fa-eye fa-fw"></i>
                                     {{ user.visits|number_format(0, ',', ' ') }} wizyt
                                 </li>
 
                                 {% if user.birthyear %}
-                                    <li title="Wiek">
+                                    <li class="list-inline-item" title="Wiek">
                                         <i class="fas fa-calendar-alt fa-fw"></i>
                                         {{ "now"|date("Y") - user.birthyear }} lat
                                     </li>

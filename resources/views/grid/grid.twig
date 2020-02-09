@@ -2,14 +2,14 @@
 
     {% block header %}
         {% if create_button or button %}
-            <div class="pull-left">
+            <div class="float-left">
                 <p>
                     {{ create_button|raw }}
                     {{ button|raw }}
                 </p>
             </div>
 
-            <div class="pull-right">{{ pagination|raw }}</div>
+            <div class="float-right">{{ pagination|raw }}</div>
         {% else %}
             {{ pagination|raw }}
         {% endif %}
@@ -50,7 +50,7 @@
 
     {% block footer %}
         {% if create_button or button %}
-            <div class="pull-right">{{ pagination|raw }}</div>
+            <div class="float-right">{{ pagination|raw }}</div>
         {% else %}
             {{ pagination|raw }}
         {% endif %}

@@ -9,10 +9,6 @@
   margin: 0 0 20px 0;
 }
 
-#microblog {
-  margin-top: 20px;
-}
-
 #box-popular-tags {
   margin-top: 13px;
 }
@@ -20,7 +16,6 @@
 #box-popular-entries {
   > .media {
     border-bottom: 1px solid $border-color;
-    padding-bottom: 15px;
 
     &:last-child {
       border-bottom: none;
@@ -38,8 +33,7 @@
   }
 
   .media-heading {
-    margin-left: 5px;
-    margin-right: 5px;
+    font-size: .8rem;
 
     a {
       color: $gray-darker;

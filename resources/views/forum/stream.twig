@@ -9,13 +9,13 @@
     <h1>{{ link_to(back_url, topic.subject) }}</h1>
 
     <main class="mainbar">
-        <ul class="nav nav-panel" style="margin-bottom: 0" role="tablist">
+        <ul class="nav nav-card" style="margin-bottom: 0" role="tablist">
             <li role="presentation" class="active"><a href="#stream" role="tab" data-toggle="tab">Aktywność użytkowników</a></li>
             <li role="presentation"><a href="#visits" role="tab" data-toggle="tab">Wizyty</a></li>
         </ul>
 
-        <div class="panel panel-default tab-content">
-            <div id="stream" role="tabpanel" class="panel-body tab-pane active">
+        <div class="card card-default tab-content">
+            <div id="stream" role="tabpanel" class="card-body tab-pane active">
                 <nav class="text-center">{{ paginator.render()|raw }}</nav>
 
                 <div class="stream">
@@ -27,7 +27,7 @@
                 <nav class="text-center">{{ paginator.render()|raw }}</nav>
             </div>
 
-            <div id="visits" role="tabpanel" class="panel-body tab-pane">
+            <div id="visits" role="tabpanel" class="card-body tab-pane">
 
                 <table class="table table-striped table-bordered">
                     <thead>

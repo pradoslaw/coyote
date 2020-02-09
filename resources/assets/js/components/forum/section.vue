@@ -1,7 +1,7 @@
 <template>
   <div class="panel-section panel">
     <div class="section-name">
-      <h2 class="pull-left">
+      <h2 class="float-left">
         <a href="javascript:" @click="collapse">
           <i :class="[isCollapse ? 'fa-plus-square': 'fa-minus-square']" class="far"></i>  {{ name }}
         </a>
@@ -28,9 +28,9 @@
       <div v-for="(category, index) in categories" v-if="!category.is_hidden" :class="{'new': !category.is_read}" class="panel-body">
         <div class="row">
           <div class="col-lg-7 col-xs-12 col-sm-6 col-main">
-            <i v-if="category.is_locked" class="logo fas fa-lock pull-left visible-lg"></i>
+            <i v-if="category.is_locked" class="logo fas fa-lock float-left visible-lg"></i>
             <a v-else :href="category.url">
-              <i :class="className(category.name)" class="logo far fa-comments pull-left visible-lg">
+              <i :class="className(category.name)" class="logo far fa-comments float-left visible-lg">
                 <b v-if="!category.is_read"></b>
               </i>
             </a>

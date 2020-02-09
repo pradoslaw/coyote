@@ -1,6 +1,6 @@
 <article id="entry-{{ microblog.id }}" class="microblog">
-    <div class="panel panel-default">
-        <div class="panel-body">
+    <div class="card card-default">
+        <div class="card-body">
             <div class="media">
                 <div class="media-left hidden-xs" style="padding-right: 15px">
                     <a href="{{ route('profile', [microblog.user_id]) }}">
@@ -9,20 +9,18 @@
                 </div>
                 <div class="media-body">
                     {% if can('update', microblog) or can('delete', microblog) %}
-                        <div class="dropdown pull-right">
-                            <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="microblog-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="caret"></span>
-                            </button>
+                        <div class="dropdown float-right">
+                            <button class="btn btn-secondary btn-xs dropdown-toggle" type="button" id="microblog-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
 
-                            <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="microblog-menu">
+                            <div class="dropdown-menu dropdown-menu-right">
                                 {% if can('update', microblog) %}
-                                    <li><a href="{{ route('microblog.save', [microblog.id]) }}" class="btn-edit" data-id="{{ microblog.id }}"><i class="fas fa-edit fa-fw"></i> Edytuj</a></li>
+                                    <a class="dropdown-item btn-edit" href="{{ route('microblog.save', [microblog.id]) }}" data-id="{{ microblog.id }}"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
                                 {% endif %}
 
                                 {% if can('delete', microblog) %}
-                                    <li><a href="{{ route('microblog.delete', [microblog.id]) }}" class="btn-remove" data-id="{{ microblog.id }}"><i class="fas fa-times fa-fw"></i> Usuń</a></li>
+                                    <a class="dropdown-item btn-remove" href="{{ route('microblog.delete', [microblog.id]) }}" data-id="{{ microblog.id }}"><i class="fas fa-times fa-fw"></i> Usuń</a>
                                 {% endif %}
-                            </ul>
+                            </div>
                         </div>
                     {% endif %}
 
@@ -68,7 +66,7 @@
                         {% if auth_check() %}
                             <form class="comment-form" method="POST" action="{{ route('microblog.comment.save') }}">
                                 <div class="media media-darker">
-                                    <div class="media-left">
+                                    <div class="mr-2">
                                         <a href="{{ route('profile', user('id')) }}">
                                             <img class="media-object" src="{{ user_photo(user('photo')) }}" style="width: 32px; height: 32px">
                                         </a>
@@ -78,7 +76,7 @@
 
                                         <div class="write-content">
                                             <textarea name="text" placeholder="Napisz komentarz... (Ctrl+Enter aby wysłać)" class="form-control" data-prompt-url="{{ route('user.prompt') }}" rows="1"></textarea>
-                                            <button type="submit" class="btn btn-xs btn-submit" title="Zapisz (Ctrl+Enter)"><i class="far fa-fw fa-share-square"></i></button>
+                                            <button type="submit" class="btn btn-sm btn-submit" title="Zapisz (Ctrl+Enter)"><i class="far fa-fw fa-share-square"></i></button>
                                         </div>
                                     </div>
                                 </div>

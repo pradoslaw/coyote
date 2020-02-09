@@ -1,6 +1,6 @@
 
-.panel-job {
-  > .panel-body {
+.card-job {
+  > .card-body {
     padding: 10px 15px;
   }
 
@@ -234,8 +234,8 @@
   }
 }
 
-#panel-subscribed,
-#panel-published {
+#card-subscribed,
+#card-published {
     position: relative;
     max-height: 400px;
 }
@@ -312,9 +312,9 @@
 // ---------------------------
 
 .top-spot-badge {
-  background-color: $state-warning-border;
+  background-color: theme-color-level("warning", $alert-bg-level);
   position: absolute;
-  color: $state-warning-text;
+  color: theme-color-level("warning", $alert-color-level);
   font-size: 11px;
   font-weight: normal;
   margin-left: -7px;
@@ -328,7 +328,7 @@
     content: "";
     border-style: solid;
     border-width: 0 7px 8px 0;
-    border-color: transparent $state-warning-text transparent transparent;
+    border-color: transparent theme-color-level("warning", $alert-color-level) transparent transparent;
     left: 0;
     top: 16px;
     position: absolute;

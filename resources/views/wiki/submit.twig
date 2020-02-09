@@ -24,11 +24,11 @@
                 </p>
             {% endif %}
 
-            <div class="panel panel-default">
-                <div class="panel-heading">
+            <div class="card card-default">
+                <div class="card-heading">
                     Zarządzanie stroną
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     {{ form_start(form) }}
 
                     {{ form_row(form.title) }}
@@ -40,9 +40,9 @@
                     <div class="row form-group">
                         <div class="col-xs-12">
                             <ul class="nav nav-tabs">
-                                <li role="presentation" class="active"><a href="#body" aria-controls="body" role="tab" data-toggle="tab">Treść</a></li>
-                                <li role="presentation"><a href="#attachments" aria-controls="attachments" role="tab" data-toggle="tab">Załączniki</a></li>
-                                <li role="presentation"><a href="#preview" aria-controls="preview" role="tab" data-toggle="tab">Podgląd</a></li>
+                                <li class="nav-item"><a class="nav-link active" href="#body" role="tab" data-toggle="tab">Treść</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#attachments" role="tab" data-toggle="tab">Załączniki</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#preview" role="tab" data-toggle="tab">Podgląd</a></li>
                             </ul>
 
                             <div class="tab-content">

@@ -1,316 +1,318 @@
 {% extends 'job.base' %}
 
 {%- block title -%}
-    Praca dla programistów
+  Praca dla programistów
 
-    {% if firm %}
-        w firmie {{ firm }}
-    {% endif %}
+  {% if firm %}
+    w firmie {{ firm }}
+  {% endif %}
 
-    {% if request('q') %}
-        {{ request('q') }}
-    {% endif %}
+  {% if request('q') %}
+    {{ request('q') }}
+  {% endif %}
 
-    {% if input.tags %}
-        {{ input.tags|join(', ') }}
-    {% endif %}
+  {% if input.tags %}
+    {{ input.tags|join(', ') }}
+  {% endif %}
 
-    {% if input.locations %}
-        {{ input.locations|join(', ') }}
-    {% endif %}
+  {% if input.locations %}
+    {{ input.locations|join(', ') }}
+  {% endif %}
 
-    {{ parent() }}
+  {{ parent() }}
 {%- endblock -%}
 {% block description %}Praca dla programistów. Pracodawco: umieść u nas swoją ofertę pracy - już od 0,75 zł za dzień. Znajdź u nas pracownika wśród 50 000 programistów.{% endblock %}
 {% block keywords %}programowanie, praca, C#, Java, programista, HTML, CSS, webdesign, JavaScript, jQuery, C, C++, webmastering{% endblock %}
 
 {% block container %}
-    <div id="page-job">
-        <div class="row">
-            <form method="get" ref="searchForm" action="{{ form_url }}" @submit.prevent="search" autocomplete="off">
-                <div class="col-md-9">
-                    <div class="panel panel-default margin-md-top">
-                        <div class="job-search-form panel-body">
-                            <div class="input-item keyword-search" :class="{'extended': selectedTab === 'tech'}">
-                                <i class="fas fa-fw fa-search fa-icon"></i>
+  <div id="page-job">
+    <div class="row">
 
-                                <ul v-cloak class="list-group list-group-tech inline">
-                                    <li v-for="tag in input.tags" class="list-group-item">
-                                        <a @click.prevent="toggleTag(tag)" href="javascript:"> ${ tag }</a>
-                                    </li>
-                                </ul>
+      <div class="col-md-9">
+        <form method="get" ref="searchForm" action="{{ form_url }}" @submit.prevent="search" autocomplete="off">
+          <div class="card card-default margin-md-top">
+            <div class="job-search-form card-body">
+              <div class="input-item keyword-search" :class="{'extended': selectedTab === 'tech'}">
+                <i class="fas fa-fw fa-search fa-icon"></i>
 
-                                <input
-                                    v-model="input.q"
-                                    @focus="selectTab('tech')"
-                                    tabindex="1"
-                                    ref="q"
-                                    name="q"
-                                    type="search"
-                                    class="form-control"
-                                    placeholder="Szukaj po tytule, nazwie firmy"
-                                    autocomplete="off"
-                                    autofocus
-                                >
+                <ul v-cloak class="list-group list-group-tech inline">
+                  <li v-for="tag in input.tags" class="list-group-item">
+                    <a @click.prevent="toggleTag(tag)" href="javascript:"> ${ tag }</a>
+                  </li>
+                </ul>
 
-                                <a @click="selectTab('tech')" href="javascript:">
-                                    <i class="fas fa-icon" :class="getTabDropdownClass('tech')"></i>
-                                </a>
-                            </div>
+                <input
+                  v-model="input.q"
+                  @focus="selectTab('tech')"
+                  tabindex="1"
+                  ref="q"
+                  name="q"
+                  type="search"
+                  class="form-control"
+                  placeholder="Szukaj po tytule, nazwie firmy"
+                  autocomplete="off"
+                  autofocus
+                >
 
-                            <div class="input-item location-search" :class="{'extended': selectedTab === 'location'}">
-                                <i class="fas fa-fw fa-map-marker-alt fa-icon"></i>
+                <a @click="selectTab('tech')" href="javascript:">
+                  <i class="fas fa-icon" :class="getTabDropdownClass('tech')"></i>
+                </a>
+              </div>
 
-                                <ul v-cloak class="list-group list-group-tech inline">
-                                    <li v-if="input.remote" class="list-group-item">
-                                        <a @click.prevent="toggleRemote" href="javascript:">Praca zdalna</a>
-                                    </li>
+              <div class="input-item location-search" :class="{'extended': selectedTab === 'location'}">
+                <i class="fas fa-fw fa-map-marker-alt fa-icon"></i>
 
-                                    <li v-for="location in input.locations" class="list-group-item">
-                                        <a @click.prevent="toggleLocation(location)" href="javascript:"> ${ location|capitalize }</a>
-                                    </li>
-                                </ul>
+                <ul v-cloak class="list-group list-group-tech inline">
+                  <li v-if="input.remote" class="list-group-item">
+                    <a @click.prevent="toggleRemote" href="javascript:">Praca zdalna</a>
+                  </li>
 
-                                <input
-                                    v-model="input.city"
-                                    @focus="selectTab('location')"
-                                    tabindex="2"
-                                    ref="city"
-                                    type="search"
-                                    class="form-control"
-                                    placeholder="Nazwa miejscowości"
-                                    autocomplete="off"
-                                >
+                  <li v-for="location in input.locations" class="list-group-item">
+                    <a @click.prevent="toggleLocation(location)" href="javascript:"> ${ location|capitalize }</a>
+                  </li>
+                </ul>
 
-                                <a @click="selectTab('location')" href="javascript:">
-                                    <i class="fas fa-icon" :class="getTabDropdownClass('location')"></i>
-                                </a>
-                            </div>
+                <input
+                  v-model="input.city"
+                  @focus="selectTab('location')"
+                  tabindex="2"
+                  ref="city"
+                  type="search"
+                  class="form-control"
+                  placeholder="Nazwa miejscowości"
+                  autocomplete="off"
+                >
 
-                            <div class="input-item salary-search" :class="{'extended': selectedTab === 'salary'}">
-                                <i class="far fa-fw fa-credit-card fa-icon"></i>
+                <a @click="selectTab('location')" href="javascript:">
+                  <i class="fas fa-icon" :class="getTabDropdownClass('location')"></i>
+                </a>
+              </div>
 
-                                <input
-                                    v-model.number="input.salary"
-                                    @focus="selectTab('salary')"
-                                    :placeholder="'> 0 ' + currencies[defaultCurrency].symbol"
-                                    type="text"
-                                    class="form-control"
-                                    tabindex="3"
-                                >
+              <div class="input-item salary-search" :class="{'extended': selectedTab === 'salary'}">
+                <i class="far fa-fw fa-credit-card fa-icon"></i>
 
-                                <a @click="selectTab('salary')" href="javascript:">
-                                    <i class="fas fa-icon" :class="getTabDropdownClass('salary')"></i>
-                                </a>
-                            </div>
+                <input
+                  v-model.number="input.salary"
+                  @focus="selectTab('salary')"
+                  :placeholder="'> 0 ' + currencies[defaultCurrency].symbol"
+                  type="text"
+                  class="form-control"
+                  tabindex="3"
+                >
 
-                            <div class="input-item button-search hidden-sm hidden-xs">
-                                <button tabindex="4" class="btn btn-primary btn-search" type="submit">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                        </div>
+                <a @click="selectTab('salary')" href="javascript:">
+                  <i class="fas fa-icon" :class="getTabDropdownClass('salary')"></i>
+                </a>
+              </div>
 
-                        <div v-cloak class="job-filter-form panel-footer">
-                            <div id="filter-tech" v-show="isTabSelected('tech')" class="filters">
-                                <ul class="list-group list-group-tech">
-                                    <li v-for="tag in tags" :key="tag.id" class="list-group-item">
-                                        <input type="hidden" name="tags[]" :value="tag.name" :checked="includesTag(tag.name)">
+              <div class="input-item button-search hidden-sm hidden-xs">
+                <button tabindex="4" class="btn btn-primary btn-search" type="submit">
+                  <i class="fas fa-search"></i>
+                </button>
+              </div>
+            </div>
 
-                                        <a @click.prevent="toggleTag(tag.name)" :href="tag.url" :class="{'disabled': input.tags.length && includesTag(tag.name)}">
-                                            <img :alt="tag.name" :src="tag.logo">
+            <div v-cloak class="job-filter-form card-footer">
+              <div id="filter-tech" v-show="isTabSelected('tech')" class="filters">
+                <ul class="list-group list-group-horizontal list-group-tech">
+                  <li v-for="tag in tags" :key="tag.id" class="list-group-item">
+                    <input type="hidden" name="tags[]" :value="tag.name" :checked="includesTag(tag.name)">
 
-                                            ${ tag.real_name || tag.name }
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
+                    <a @click.prevent="toggleTag(tag.name)" :href="tag.url" :class="{'disabled': input.tags.length && includesTag(tag.name)}">
+                      <img :alt="tag.name" :src="tag.logo">
 
-                            <div id="filter-location" v-show="isTabSelected('location')" class="filters">
-                                <ul class="list-group list-group-tech">
-                                    <li class="list-group-item">
-                                        <input type="hidden" name="remote" :checked="input.remote">
+                      ${ tag.real_name || tag.name }
+                    </a>
+                  </li>
+                </ul>
+              </div>
 
-                                        <a @click.prevent="toggleRemote" href="javascript:">
-                                            <i class="fas fa-fw fa-wifi" :class="{'text-primary': input.remote !== null}"></i>
+              <div id="filter-location" v-show="isTabSelected('location')" class="filters">
+                <ul class="list-group list-group-tech">
+                  <li class="list-group-item">
+                    <input type="hidden" name="remote" :checked="input.remote">
 
-                                            Praca zdalna
-                                        </a>
-                                    </li>
+                    <a @click.prevent="toggleRemote" href="javascript:">
+                      <i class="fas fa-fw fa-wifi" :class="{'text-primary': input.remote !== null}"></i>
 
-                                    <li v-for="(location, index) in locations" :key="index" class="list-group-item">
-                                        <input type="hidden" name="locations[]" :value="location" :checked="includesLocation(location)">
+                      Praca zdalna
+                    </a>
+                  </li>
 
-                                        <a @click.prevent="toggleLocation(location)" href="javascript:" :class="{'disabled': input.locations.length && includesLocation(location)}">
-                                            ${ location|capitalize }
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
+                  <li v-for="(location, index) in locations" :key="index" class="list-group-item">
+                    <input type="hidden" name="locations[]" :value="location" :checked="includesLocation(location)">
+
+                    <a @click.prevent="toggleLocation(location)" href="javascript:" :class="{'disabled': input.locations.length && includesLocation(location)}">
+                      ${ location|capitalize }
+                    </a>
+                  </li>
+                </ul>
+              </div>
 
 
-                            <div v-show="isTabSelected('salary')" class="filters">
-                                <div class="form-inline">
-                                    <div class="form-group form-group-salary">
-                                        <strong>waluta: </strong>
+              <div v-show="isTabSelected('salary')" class="filters">
+                <div class="form-inline">
+                  <div class="form-group form-group-salary">
+                    <strong>waluta: </strong>
 
-                                        <select v-model="defaultCurrency" name="currency" class="form-control input-sm" style="height: 27px">
-                                            <option v-for="currency in currencies" :key="currency.id" :value="currency.id">
-                                                ${ currency.name + ' (' + currency.symbol + ')' }
-                                            </option>
-                                        </select>
-                                    </div>
+                    <select v-model="defaultCurrency" name="currency" class="form-control input-sm" style="height: 27px">
+                      <option v-for="currency in currencies" :key="currency.id" :value="currency.id">
+                        ${ currency.name + ' (' + currency.symbol + ')' }
+                      </option>
+                    </select>
+                  </div>
 
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row margin-md-bottom">
-                        <div class="col-xs-12">
-                            <div class="pull-right">
-                                Sortuj według
-
-                                <select v-model="defaultSort" @change="search" name="sort" class="form-control input-inline input-sm margin-sm-left" style="width: auto">
-                                    <option value="boost_at">Data dodania</option>
-                                    <option value="_score">Trafność</option>
-                                    <option value="salary">Wynagrodzenie</option>
-                                </select>
-                            </div>
-
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
+                  <div class="clearfix"></div>
                 </div>
-            </form>
+              </div>
+            </div>
+          </div>
 
-            <div class="col-md-3 hidden-sm hidden-xs">
-                <section id="post-offer">
-                    <h4>Dla pracodawców</h4>
+          <div class="row margin-md-bottom">
+            <div class="col-12">
+              <div class="float-right">
+                Sortuj według
 
-                    <span class="edge">
+                <select v-model="defaultSort" @change="search" name="sort" class="form-control input-inline input-sm margin-sm-left" style="width: auto">
+                  <option value="boost_at">Data dodania</option>
+                  <option value="_score">Trafność</option>
+                  <option value="salary">Wynagrodzenie</option>
+                </select>
+              </div>
+
+              <div class="clearfix"></div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+
+      <div class="col-md-3 hidden-sm hidden-xs">
+        <section id="post-offer">
+          <h4>Dla pracodawców</h4>
+
+          <span class="edge">
                         <a href="{{ route('job.submit') }}?revalidate=1" class="btn btn-primary">Dodaj ofertę pracy</a>
                     </span>
 
-                    <p><a href="{{ route('job.business') }}">Już od 30 zł / 40 dni!</a></p>
-                </section>
-            </div>
-        </div>
+          <p><a href="{{ route('job.business') }}">Już od 30 zł / 40 dni!</a></p>
+        </section>
+      </div>
+    </div>
 
-        <div class="row">
-            <div class="col-md-9">
-                {% for i in 0..4 %}
-                    <div v-if="skeleton" class="panel panel-default panel-job margin-md-bottom">
-                        <div class="panel-body">
-                            <div class="media">
-                                <div class="media-left">
-                                    <div class="skeleton skeleton-media"></div>
-                                </div>
-
-                                <div class="media-body">
-                                    <div class="media-heading">
-                                        <h4 class="skeleton skeleton-header"></h4>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-
-                <vue-job v-for="(job, index) in jobs.data" :job="job" :key="job.id" :order="index"></vue-job>
-
-                <div v-cloak v-if="jobs.data.length === 0" class="empty-result padding-sm">
-                    <p>
-                        Nie znaleźliśmy ofert, które spełniają Twoje kryteria.<br>
-                        <a href="{{ route('job.home') }}">Zobacz wszystkie oferty</a>, a być może znajdziesz coś dla siebie!
-                    </p>
+    <div class="row">
+      <div class="col-md-9">
+        {% for i in 0..4 %}
+          <div v-if="skeleton" class="card card-default card-job margin-md-bottom">
+            <div class="card-body">
+              <div class="media">
+                <div class="media-left">
+                  <div class="skeleton skeleton-media"></div>
                 </div>
 
-                <vue-pagination :current-page="jobs.meta.current_page" :total-pages="jobs.meta.last_page" @change="changePage"></vue-pagination>
+                <div class="media-body">
+                  <div class="media-heading">
+                    <h4 class="skeleton skeleton-header"></h4>
+                  </div>
+                </div>
+              </div>
             </div>
+          </div>
+        {% endfor %}
 
-            <div class="col-md-3" style="margin-top: -35px">
-                <section v-cloak v-show="published.length" class="box sidebar-offers">
-                    <h4><i class="fas fa-fw fa-user-secret"></i> Moje ogłoszenia</h4>
+        <vue-job v-for="(job, index) in jobs.data" :job="job" :key="job.id" :order="index"></vue-job>
 
-                    <div id="panel-published" class="panel panel-default">
-                        <div class="panel-body">
-                            <vue-job-tiny v-for="job in published" :job="job" :key="job.id"></vue-job-tiny>
-                        </div>
-                    </div>
-                </section>
-
-                <section v-cloak v-show="subscribed.length" class="box sidebar-offers">
-                    <h4><i class="fas fa-fw fa-heart"></i> Ulubione ogłoszenia</h4>
-
-                    <div id="panel-subscribed" class="panel panel-default">
-                        <div class="panel-body">
-                            <vue-job-tiny v-for="job in subscribedStore" :job="job" :key="job.id"></vue-job-tiny>
-                        </div>
-                    </div>
-                </section>
-
-                {{ render_block('job_ads') }}
-            </div>
+        <div v-cloak v-if="jobs.data.length === 0" class="empty-result padding-sm">
+          <p>
+            Nie znaleźliśmy ofert, które spełniają Twoje kryteria.<br>
+            <a href="{{ route('job.home') }}">Zobacz wszystkie oferty</a>, a być może znajdziesz coś dla siebie!
+          </p>
         </div>
+
+        <vue-pagination :current-page="jobs.meta.current_page" :total-pages="jobs.meta.last_page" @change="changePage"></vue-pagination>
+      </div>
+
+      <div class="col-md-3" style="margin-top: -35px">
+        <section v-cloak v-show="published.length" class="box sidebar-offers">
+          <h4><i class="fas fa-fw fa-user-secret"></i> Moje ogłoszenia</h4>
+
+          <div id="card-published" class="card card-default">
+            <div class="card-body">
+              <vue-job-tiny v-for="job in published" :job="job" :key="job.id"></vue-job-tiny>
+            </div>
+          </div>
+        </section>
+
+        <section v-cloak v-show="subscribed.length" class="box sidebar-offers">
+          <h4><i class="fas fa-fw fa-heart"></i> Ulubione ogłoszenia</h4>
+
+          <div id="card-subscribed" class="card card-default">
+            <div class="card-body">
+              <vue-job-tiny v-for="job in subscribedStore" :job="job" :key="job.id"></vue-job-tiny>
+            </div>
+          </div>
+        </section>
+
+        {{ render_block('job_ads') }}
+      </div>
     </div>
+  </div>
 {% endblock %}
 
 {% block body %}
-    {{ parent() }}
+  {{ parent() }}
 
-    <script type="text/javascript">
-        var data = {
-            jobs: {{ jobs|json_encode|raw }},
-            tags: {{ tags|json_encode|raw }},
-            locations: {{ locations|json_encode|raw }},
-            input: {{ input|json_encode|raw }},
-            defaults: {{ defaults|json_encode|raw }},
-            currencies: {{ currencies|json_encode|raw }},
-            subscribed: {{ subscribed|json_encode|raw }},
-            published: {{ published|json_encode|raw }},
-            selectedTab: 'tech',
-            skeleton: false
-        }
-    </script>
+  <script type="text/javascript">
+    var data = {
+      jobs: {{ jobs|json_encode|raw }},
+      tags: {{ tags|json_encode|raw }},
+      locations: {{ locations|json_encode|raw }},
+      input: {{ input|json_encode|raw }},
+      defaults: {{ defaults|json_encode|raw }},
+      currencies: {{ currencies|json_encode|raw }},
+      subscribed: {{ subscribed|json_encode|raw }},
+      published: {{ published|json_encode|raw }},
+      selectedTab: 'tech',
+      skeleton: false
+    }
+  </script>
 {% endblock %}
 
 {% block fixed %}
 
-    {{ parent() }}
+  {{ parent() }}
 
-    <div id="clients" class="hidden-sm hidden-xs">
-        <div class="row max-width">
-            <div class="col-xs-12">
-                <h4>Z naszych usług korzystali...</h4>
+  <div id="clients" class="hidden-sm hidden-xs">
+    <div class="row max-width">
+      <div class="col-xs-12">
+        <h4>Z naszych usług korzystali...</h4>
 
-                <div class="row">
-                    <div class="col-sm-2 col-xs-4">
-                        <img src="{{ cdn('img/logo/wp.png') }}" class="img-responsive">
-                    </div>
+        <div class="row">
+          <div class="col-sm-2 col-xs-4">
+            <img src="{{ cdn('img/logo/wp.png') }}" class="img-fluid">
+          </div>
 
-                    <div class="col-sm-2 col-xs-4">
-                        <img src="{{ cdn('img/logo/gazeta.png') }}" class="img-responsive">
-                    </div>
+          <div class="col-sm-2 col-xs-4">
+            <img src="{{ cdn('img/logo/gazeta.png') }}" class="img-fluid">
+          </div>
 
-                    <div class="col-sm-2 col-xs-4">
-                        <img src="{{ cdn('img/logo/allegro.png') }}" class="img-responsive">
-                    </div>
+          <div class="col-sm-2 col-xs-4">
+            <img src="{{ cdn('img/logo/allegro.png') }}" class="img-fluid">
+          </div>
 
-                    <div class="col-sm-2 col-xs-4">
-                        <img src="{{ cdn('img/logo/nsn.png') }}" class="img-responsive" style="height: 25px">
-                    </div>
+          <div class="col-sm-2 col-xs-4">
+            <img src="{{ cdn('img/logo/nsn.png') }}" class="img-fluid" style="height: 25px">
+          </div>
 
-                    <div class="col-sm-2 col-xs-4">
-                        <img src="{{ cdn('img/logo/pgs-software.png') }}" class="img-responsive">
-                    </div>
+          <div class="col-sm-2 col-xs-4">
+            <img src="{{ cdn('img/logo/pgs-software.png') }}" class="img-fluid">
+          </div>
 
-                    <div class="col-sm-2 col-xs-4">
-                        <img src="{{ cdn('img/logo/microsoft.png') }}" class="img-responsive" style="height: 25px">
-                    </div>
-                </div>
-            </div>
+          <div class="col-sm-2 col-xs-4">
+            <img src="{{ cdn('img/logo/microsoft.png') }}" class="img-fluid" style="height: 25px">
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 {% endblock %}

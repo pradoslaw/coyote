@@ -7,21 +7,21 @@
         <main class="col-lg-9 col-12-md">
             {% include 'job.submit.partials.indicator' with {'current': 3} %}
 
-            <div class="panel panel-default">
-                <div class="panel-heading">
+            <div class="card card-default">
+                <div class="card-heading">
                     Podgląd
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     {% include 'job.partials.offer' with {'preview': true} %}
                 </div>
             </div>
 
             {{ form_open({'url': route('job.submit.save'), 'class': 'submit-form'}) }}
-            <div class="panel panel-default">
-                <div class="panel-body">
+            <div class="card card-default">
+                <div class="card-body">
                     <div id="form-navbar" class="form-group">
-                        <a href="{{ route('job.submit.firm') }}" class="btn btn-default pull-left"><i class="fas fa-angle-left"></i> Informacje o firmie</a>
-                        <button type="submit" class="btn btn-primary pull-right" data-submit-state="Zapisywanie...">Opublikuj <i class="fas fa-angle-right"></i></button>
+                        <a href="{{ route('job.submit.firm') }}" class="btn btn-secondary float-left"><i class="fas fa-angle-left"></i> Informacje o firmie</a>
+                        <button type="submit" class="btn btn-primary float-right" data-submit-state="Zapisywanie...">Opublikuj <i class="fas fa-angle-right"></i></button>
                     </div>
                 </div>
             </div>

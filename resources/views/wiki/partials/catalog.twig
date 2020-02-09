@@ -11,12 +11,12 @@
 
         {#<div class="clearfix"></div>#}
 
-        <div class="panel panel-transparent">
-            <div class="panel-body">
+        <div class="card card-transparent">
+            <div class="card-body">
 
                 {% if folders|length > 0 %}
-                    <div id="folder" class="panel">
-                        <div class="panel-body">
+                    <div id="folder" class="card">
+                        <div class="card-body">
                             <ol class="list-group">
                                 {% for wiki in folders %}
                                     <li class="list-group-item col-sm-4">
@@ -35,8 +35,8 @@
                 <div class="row">
                     {% for child in children %}
                         <div class="col-md-6">
-                            <div class="panel panel-default panel-catalog">
-                                <div class="panel-body">
+                            <div class="card card-default card-catalog">
+                                <div class="card-body">
                                     <div class="media">
                                         <div class="media-left">
                                             <a href="{{ route('profile', [child.user_id]) }}" title="Autor: {{ child.user_name }}">
@@ -47,9 +47,9 @@
                                             <h4 class="media-heading"><a href="{{ url(child.path) }}">{{ child.title }}</a></h4>
 
                                             <ul class="list-inline">
-                                                <li class="date" title="{{ child.created_at|format_date(false) }}">{{ child.created_at|format_date }}</li>
-                                                <li class="comments">{{ declination(child.comments, ['komentarz', 'komentarzy', 'komentarzy']) }}</li>
-                                                <li class="views">{{ declination(child.views, ['odsłona', 'odsłony', 'odsłon']) }}</li>
+                                                <li class="date list-inline-item" title="{{ child.created_at|format_date(false) }}">{{ child.created_at|format_date }}</li>
+                                                <li class="comments list-inline-item">{{ declination(child.comments, ['komentarz', 'komentarzy', 'komentarzy']) }}</li>
+                                                <li class="views list-inline-item">{{ declination(child.views, ['odsłona', 'odsłony', 'odsłon']) }}</li>
                                             </ul>
                                         </div>
                                     </div>

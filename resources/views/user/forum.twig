@@ -6,13 +6,13 @@
 {% block content %}
     <h2>Personalizacja forum</h2>
 
-    <div class="panel panel-default">
+    <div class="card card-default">
         {{ form_open({url: route('user.forum'), id: 'submit-form'}) }}
-            <div id="sortable" class="panel-body">
+            <div id="sortable" class="card-body">
 
                 {% for name, forums in sections %}
-                    <section class="panel panel-wrapper">
-                        <div class="panel-body">
+                    <section class="card card-wrapper">
+                        <div class="card-body">
                             <h2><i class="fas fa-arrows"></i> {{ name }}</h2>
 
                             <ul class="table-forum list-unstyled">
@@ -29,7 +29,7 @@
                                         {{ form_hidden('forum[' ~ forum.id ~ '][order]', forum.order, {class: 'order'}) }}
                                         {{ form_hidden('forum[' ~ forum.id ~ '][is_hidden]', is_hidden, {class: 'is_hidden'}) }}
 
-                                        <a href="javascript:" class="btn-hide pull-right" title="Pokaż lub ukryj kategorię forum">
+                                        <a href="javascript:" class="btn-hide float-right" title="Pokaż lub ukryj kategorię forum">
                                             <i class="fas fa-lock"></i>
                                             <i class="fas fa-unlock"></i>
                                         </a>
@@ -43,7 +43,7 @@
         {{ form_close() }}
 
         {{ form_open({url: route('user.forum.restore'), id: 'restore-form'}) }}
-            <div class="panel-body">
+            <div class="card-body">
                 {{ form_button('Przywróć domyślne ustawienia', {class: 'btn btn-danger', id: 'btn-restore', 'data-toggle': 'modal', 'data-target': '#confirm'}) }}
             </div>
         {{ form_close() }}

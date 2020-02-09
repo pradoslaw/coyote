@@ -10,8 +10,8 @@
 //@import "../components/search";
 //@import "../components/who-is-online";
 
-.panel-section {
-  .panel-categories:nth-child(odd) {
+.card-section {
+  .card-categories:nth-child(odd) {
     background-color: #fafafa;
   }
 }
@@ -33,7 +33,7 @@
 
 // desktop
 @include media-breakpoint-only(lg) {
-  .panel-section {
+  .card-section {
     background-color: $panel-footer-bg;
     padding: 10px 0 0 0;
     border: 1px solid $border-color;
@@ -46,19 +46,19 @@
 
 // mobile
 @include media-breakpoint-down(lg) {
-  .panel-section {
+  .card-section {
     background-color: transparent;
   }
 }
 
-.panel-cog {
+.card-cog {
   color: $gray-light;
   font-size: 80%;
   margin-right: 5px;
   margin-top: 5px;
 }
 
-.panel-categories {
+.card-categories {
   margin-bottom: 0;
 
   .col-main {
@@ -147,7 +147,7 @@
       padding-top: 3px;
     }
 
-    > .panel-body > .row {
+    > .card-body > .row {
       display: flex;
       align-items: center;
     }
@@ -155,7 +155,7 @@
 
   // mobile
   @include media-breakpoint-down(lg) {
-    .panel-body.new {
+    .card-body.new {
       border-left: 2px solid $alt-link-hover-color;
     }
 
@@ -192,7 +192,7 @@
     display: flex; // this is required to support text-overflow in topics' title
   }
 
-  .panel-body {
+  .card-body {
     padding: 10px 15px;
     border-bottom: 1px solid $border-color;
 
@@ -276,8 +276,8 @@
   margin: 5px 0 0 0;
 }
 
-.panel-wrapper {
-  .panel-body {
+.card-wrapper {
+  .card-body {
     .toggle {
       color: $gray-dark;
       margin: 2px 2px 0 0;

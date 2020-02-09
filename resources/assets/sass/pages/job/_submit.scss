@@ -1,6 +1,4 @@
 @charset "UTF-8";
-@import "../../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/jumbotron";
-@import "../../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/gradients";
 @import "../../vendor/chosen";
 @import "../../components/affix";
 @import "../../components/thumbnail";
@@ -114,7 +112,7 @@ $font-size-control-label: 15px;
 // --------------------------------------------
 
 .submit-form {
-  .panel-heading {
+  .card-heading {
     font-size: $font-size-large;
   }
 

@@ -10,13 +10,13 @@
 #hire-me {
   // Default border color
   // -----------------------
-  .panel-default {
+  .card-default {
     border: 2px solid $brand-primary;
   }
 
   // Default headline background
   // -----------------
-  .panel-heading {
+  .card-heading {
     text-align: center;
     background-color: $brand-primary;
     background-image: url('/img/escheresque.png');
@@ -41,7 +41,7 @@
     }
   }
 
-  .panel-body {
+  .card-body {
     padding: 10px;
   }
 
@@ -62,10 +62,10 @@
   // custom language styles
   @each $name, $color in (java, #5484a4), (javascript, #E0C536), (csharp, #873B89), (php, #AABDD6), (python, #447C9C), (cpp, #649CD3), (c, #ACBCCC) {
     > .#{$name} {
-      > .panel-default {
+      > .card-default {
         border: 2px solid $color;
 
-        .panel-heading {
+        .card-heading {
           background-color: $color;
         }
       }

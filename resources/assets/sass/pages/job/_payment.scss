@@ -13,14 +13,14 @@
 // Payment summary
 // ------------------
 
-.panel-review {
-  > .panel-body {
+.card-review {
+  > .card-body {
     strong {
       font-size: 14px;
     }
   }
 
-  > .panel-footer {
+  > .card-footer {
     span {
       font-size: $font-size-large;
       display: block;

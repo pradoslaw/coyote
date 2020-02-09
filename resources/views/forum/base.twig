@@ -2,12 +2,6 @@
 {% set search_url = route('forum.search') %}
 {% set search_placeholder = 'Szukaj na forum...' %}
 
-{% block head %}
-    {{ parent() }}
-
-    <link rel="stylesheet" href="{{ cdn('css/forum.css') }}">
-{% endblock %}
-
 {% block body %}
     {{ parent() }}
 

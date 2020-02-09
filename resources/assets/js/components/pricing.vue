@@ -50,9 +50,9 @@
             <h3>Potrzebujesz kilku ogłoszeń?</h3>
 
             <div class="custom-plan-container">
-                <i class="fa fa-info-circle fa-2x pull-left"></i>
+                <i class="fa fa-info-circle fa-2x float-left"></i>
 
-                <div class="pull-left margin-xs-left custom-plan-info">
+                <div class="float-left margin-xs-left custom-plan-info">
                     Napisz do nas na adres:<br>
                     <a :href="'mailto:' + email + '?subject=Interesuje mnie pakiet ogłoszeń. Proszę o przesłanie szczegółów'">{{ email }}</a>
                 </div>

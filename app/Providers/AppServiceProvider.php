@@ -75,7 +75,6 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->registerMacros();
-        Paginator::useBootstrapThree();
     }
 
     /**

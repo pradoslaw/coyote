@@ -11,8 +11,8 @@
             <section id="box-forum" class="box">
                 <h4><i class="fas fa-star fa-fw"></i> Co nowego na forum?</h4>
 
-                <div class="panel panel-forum">
-                    <div class="panel-body">
+                <div class="card card-forum">
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-lg-6">
                                 <ul id="forum-tabs" class="nav nav-pills">
@@ -33,7 +33,7 @@
                                                     <div class="col-sm-10 col-xs-12">
                                                         <a title="[{{ topic.last_post_created_at|format_date }}] {{ topic.subject }}" href="{{ route('forum.topic', [topic.forum_slug, topic.id, topic.slug]) }}?view=unread" class="title" data-category="homepage-forum-headline" data-action="newest">{{ topic.subject }}</a>
                                                         <a href="{{ route('forum.category', [topic.forum_slug]) }}" class="category">{{ topic.name }}</a>
-                                                        <small class="pull-right">{{ topic.last_post_created_at|format_date }}</small>
+                                                        <small class="float-right">{{ topic.last_post_created_at|format_date }}</small>
                                                     </div>
                                                 </div>
                                             {% endfor %}
@@ -49,7 +49,7 @@
                                                     <div class="col-sm-10 col-xs-12">
                                                         <a title="[{{ topic.last_post_created_at|format_date }}] {{ topic.subject }}" href="{{ route('forum.topic', [topic.forum_slug, topic.id, topic.slug]) }}?view=unread" class="title" data-category="homepage-forum-headline" data-action="newest">{{ topic.subject }}</a>
                                                         <a href="{{ route('forum.category', [topic.forum_slug]) }}" class="category">{{ topic.name }}</a>
-                                                        <small class="pull-right">{{ topic.last_post_created_at|format_date }}</small>
+                                                        <small class="float-right">{{ topic.last_post_created_at|format_date }}</small>
                                                     </div>
                                                 </div>
                                             {% endfor %}
@@ -65,7 +65,7 @@
                                                     <div class="col-sm-10 col-xs-12">
                                                         <a title="[{{ topic.last_post_created_at|format_date }}] {{ topic.subject }}" href="{{ route('forum.topic', [topic.forum_slug, topic.id, topic.slug]) }}?view=unread" class="title" data-category="homepage-forum-headline" data-action="newest">{{ topic.subject }}</a>
                                                         <a href="{{ route('forum.category', [topic.forum_slug]) }}" class="category">{{ topic.name }}</a>
-                                                        <small class="pull-right">{{ topic.last_post_created_at|format_date }}</small>
+                                                        <small class="float-right">{{ topic.last_post_created_at|format_date }}</small>
                                                     </div>
                                                 </div>
                                             {% endfor %}
@@ -118,15 +118,15 @@
             <section id="box-reputation" class="box">
                 <h4><i class="fas fa-star fa-fw"></i> Reputacja użytkowników</h4>
 
-                <ul id="reputation-tabs" class="nav nav-panel">
+                <ul id="reputation-tabs" class="nav nav-card">
                     <li role="presentation" {{ settings['homepage.reputation'] == 0 ? 'class="active"' }}><a href="#month" role="tab" data-toggle="tab">W tym miesiącu</a></li>
                     <li role="presentation" {{ settings['homepage.reputation'] == 1 ? 'class="active"' }}><a href="#year" role="tab" data-toggle="tab">W tym roku</a></li>
                     <li role="presentation" {{ settings['homepage.reputation'] == 2 ? 'class="active"' }}><a href="#total" role="tab" data-toggle="tab">Ogólnie</a></li>
                 </ul>
 
-                <div class="panel panel-default tab-content">
+                <div class="card card-default tab-content">
                     {% for key, mode in reputation %}
-                        <div id="{{ key }}" role="tabpanel" class="panel-body tab-pane {{ settings['homepage.reputation'] == loop.index0 ? 'active' }}">
+                        <div id="{{ key }}" role="tabpanel" class="card-body tab-pane {{ settings['homepage.reputation'] == loop.index0 ? 'active' }}">
                             {% for item in mode %}
                                 <div class="media">
                                     <div class="media-left">
@@ -158,10 +158,10 @@
 
             {% if patronage %}
                 <section id="box-patronage" class="box">
-                    <div class="panel panel-patronage">
+                    <div class="card card-patronage">
                         <h3><a title="4programmers.net patronuje wydarzeniom ze świata IT!" href="{{ url('Patronat') }}" data-category="Patronage" data-value="Logo">Patronujemy</a></h3>
 
-                        <div class="panel-body">
+                        <div class="card-body">
                             <h4><a href="{{ url(patronage.path) }}">{{ patronage.title }}</a></h4>
 
                             <div class="patronage-content">
@@ -180,8 +180,8 @@
 
             <section id="box-whats-new" class="box">
 
-                <div class="panel panel-news">
-                    <div class="panel-body">
+                <div class="card card-news">
+                    <div class="card-body">
                         <h5><a title="Zobacz zmiany w serwisie 4programmers.net" href="{{ url('Blog') }}">Nowości w serwisie</a></h5>
 
                         <ul>

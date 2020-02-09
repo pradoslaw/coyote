@@ -7,7 +7,7 @@
 </div>
 
 <div class="row submit-area">
-    <div class="col-xs-12">
+    <div class="col-12">
         <div class="row thumbnails">
             {% for media in microblog.media %}
                 <div class="col-sm-2">
@@ -29,18 +29,18 @@
                 <a class="alert-link" href="https://guides.github.com/features/mastering-markdown/">Markdown</a> jest obsługiwany. Ctrl+V wkleja obraz ze schowka (Firefox oraz Chrome).
             </div>
 
-            <div class="col-xs-6">
-                <button title="Kliknij, aby dodać zdjęcie" class="btn btn-default btn-sm" type="button" id="btn-upload">
+            <div class="col-6">
+                <button title="Kliknij, aby dodać zdjęcie" class="btn btn-secondary btn-sm" type="button" id="btn-upload">
                     <i class="fas fa-camera"></i>
                 </button>
             </div>
-            <div class="col-xs-6">
-                <button title="Kliknij, aby wysłać (Ctrl+Enter)" class="btn btn-sm btn-primary pull-right" tabindex="2" type="submit">
+            <div class="col-6">
+                <button title="Kliknij, aby wysłać (Ctrl+Enter)" class="btn btn-sm btn-primary float-right" tabindex="2" type="submit">
                     Zapisz
                 </button>
 
                 {% if microblog.id is defined %}
-                    <button data-id="{{ microblog.id }}" title="Anuluj (Esc)" class="btn btn-sm btn-cancel btn-danger pull-right" style="margin-right: 10px" tabindex="3">
+                    <button data-id="{{ microblog.id }}" title="Anuluj (Esc)" class="btn btn-sm btn-cancel btn-danger float-right" style="margin-right: 10px" tabindex="3">
                         Anuluj
                     </button>
                 {% endif %}

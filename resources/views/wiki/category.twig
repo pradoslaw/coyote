@@ -4,7 +4,7 @@
 
 {% block container %}
     <div class="box">
-        <ul class="nav nav-panel">
+        <ul class="nav nav-card">
             <li role="presentation" class="active"><a href="{{ url(wiki.path) }}"><i class="fas fa-paragraph"></i></a></li>
 
             {% if can('wiki-admin') or not wiki.is_locked %}
@@ -27,14 +27,12 @@
             <li role="presentation"><a href="{{ route('wiki.log', [wiki.id]) }}">Historia i autorzy</a></li>
         </ul>
 
-        <div class="panel panel-default">
-            <div class="panel-body">
+        <div class="card card-default">
+            <div class="card-body">
                 <article>
                     {% if can('wiki-admin') %}
-                        <div class="dropdown pull-right">
-                            <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="comment-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="caret"></span>
-                            </button>
+                        <div class="dropdown float-right">
+                            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="comment-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
 
                             <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="comment-menu">
                                 {% include 'wiki.partials.admin' %}

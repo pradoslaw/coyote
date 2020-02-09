@@ -6,7 +6,7 @@
 {% block content %}
     <h2>Ulubione i obserwowane strony</h2>
 
-    <ul class="nav nav-panel">
+    <ul class="nav nav-card">
         {% for tab in tabs.roots() %}
             <li {{ forms.attr(tab.attr) }}>
                 <a href="{{ tab.url }}">{{ tab.title|raw }}</a>
@@ -14,8 +14,8 @@
         {% endfor %}
     </ul>
 
-    <div class="panel panel-default">
-        <div class="panel-body">
+    <div class="card card-default">
+        <div class="card-body">
             <nav>{{ paginate|raw }}</nav>
 
             <table class="table table-striped">

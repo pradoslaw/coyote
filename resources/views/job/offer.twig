@@ -32,8 +32,8 @@
 
             {% if is_author %}
                 <ul class="nav nav-tabs margin-md-bottom">
-                    <li class="active"><a href="#offer" role="tab" data-toggle="tab">Ogłoszenie</a></li>
-                    <li><a href="#applications" role="tab" data-toggle="tab">Kandydaci <small>({{ applications|length }})</small></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#offer" role="tab" data-toggle="tab">Ogłoszenie</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#applications" role="tab" data-toggle="tab">Kandydaci <small>({{ applications|length }})</small></a></li>
                 </ul>
             {% endif %}
 
@@ -56,12 +56,12 @@
             {% endif %}
 
             <div class="tab-content">
-                <div id="offer" class="panel panel-default tab-pane active">
+                <div id="offer" class="card card-default tab-pane active">
                     {% include 'job.partials.offer' %}
                 </div>
 
                 {% if is_author %}
-                    <div id="applications" class="panel panel-default tab-pane">
+                    <div id="applications" class="card card-default tab-pane">
                         {% include 'job.partials.applications' %}
                     </div>
                 {% endif %}
@@ -77,8 +77,8 @@
                 <section id="box-job-firm" class="box">
                     <h4><i class="fas fa-info-circle fa-fw"></i> Informacje o ofercie</h4>
 
-                    <div class="panel panel-default">
-                        <div class="panel-body">
+                    <div class="card card-default">
+                        <div class="card-body">
                             <ul class="list-unstyled">
                                 <li title="Data opublikowania">
                                     <i class="fas fa-calendar-alt fa-fw"></i>
@@ -113,8 +113,8 @@
                 <section class="box sidebar-offers">
                     <h4><i class="fas fa-star fa-fw"></i> Podobne oferty</h4>
 
-                    <div class="panel panel-default">
-                        <div class="panel-body">
+                    <div class="card card-default">
+                        <div class="card-body">
                             {% include 'components.jobs' with {'jobs': mlt} %}
                         </div>
                     </div>

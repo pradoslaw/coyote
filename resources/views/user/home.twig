@@ -4,8 +4,8 @@
 {% block content %}
     <h2>Start</h2>
 
-    <div id="box-start" class="panel panel-default">
-        <div class="panel-body">
+    <div id="box-start" class="card card-default">
+        <div class="card-body">
 
             <div class="media">
                 <div class="media-left hidden-xs">
@@ -22,25 +22,25 @@
                         </a>
                     </div>
 
-                    <a id="btn-change-photo" href="{{ route('user.photo.upload') }}" class="btn btn-xs btn-upload"><i class="fas fa-upload"></i> Zmień</a>
+                    <a id="btn-change-photo" href="{{ route('user.photo.upload') }}" class="btn btn-sm btn-upload"><i class="fas fa-upload"></i> Zmień</a>
                 </div>
 
                 <div class="media-body">
                     <div class="col-sm-11" style="padding-left: 20px">
                         <ul class="metadata list-inline">
-                            <li title="Ostatnia wizyta">
+                            <li class="list-inline-item" title="Ostatnia wizyta">
                                 <i class="fas fa-sign-in-alt fa-fw"></i>
                                 {{ user('visited_at')|format_date }}
                             </li>
-                            <li title="Twoje aktualne IP">
+                            <li class="list-inline-item" title="Twoje aktualne IP">
                                 <i class="fas fa-home fa-fw"></i>
                                 {{ ip }}
                             </li>
-                            <li title="Data rejestracji">
+                            <li class="list-inline-item" title="Data rejestracji">
                                 <i class="fas fa-user-plus fa-fw"></i>
                                 {{ user('created_at')|format_date }}
                             </li>
-                            <li title="Liczba wizyt">
+                            <li class="list-inline-item" title="Liczba wizyt">
                                 <i class="far fa-eye fa-fw"></i>
                                 {{ user('visits')|number_format(0, ',', ' ') }}
                             </li>
@@ -69,7 +69,7 @@
 
 {#    <h2 class="hidden-xs">Aktywne sesje</h2>#}
 
-{#    <div id="box-sessions" class="panel panel-default hidden-xs">#}
+{#    <div id="box-sessions" class="card card-default hidden-xs">#}
 {#        {% for session in sessions %}#}
 {#            <div class="row">#}
 {#                <div class="col-xs-5">#}
@@ -90,8 +90,8 @@
 
     {#<h2>Komunikaty</h2>#}
 
-    {#<div id="box-infobox" class="panel panel-default">#}
-        {#<div class="panel-body">#}
+    {#<div id="box-infobox" class="card card-default">#}
+        {#<div class="card-body">#}
             {#Augue? Odio a rhoncus elit elementum sit tristique aliquet rhoncus in? Elementum urna. Dis tincidunt cum elit elementum nec. Porta proin dapibus dignissim pulvinar porta pulvinar! Mid purus habitasse cras platea in, auctor, cursus, amet natoque! Nascetur hac phasellus, elementum lorem, in. Enim pid, vut, elit! Risus elementum, habitasse enim mid? Ut purus elementum, tristique urna enim in dapibus rhoncus rhoncus vel dolor sociis mus enim, lectus ut. Diam rhoncus duis pulvinar? Ac quis ut velit. Non placerat? Habitasse porttitor, enim purus! Eros lectus rhoncus tempor dictumst, eros, pellentesque ut et dictumst ridiculus! In urna pellentesque aliquam, aenean, mauris vut ultrices adipiscing, ridiculus vut, et montes in in urna, vut scelerisque tincidunt. Ac platea scelerisque pellentesque! A lectus nisi mattis.#}
 
             {#<nav>#}

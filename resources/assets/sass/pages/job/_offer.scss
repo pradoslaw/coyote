@@ -95,14 +95,14 @@
   // Offer description (or company description)
   // ----------------------------------------------------
   .text {
-    font-size: $font-size-medium;
+    font-size: $font-size-lg;
 
     @include media-breakpoint-down(sm) {
       font-size: $font-size-small;
     }
 
     img:not(.img-smile) {
-      @include img-responsive;
+      @include img-fluid;
     }
 
     @include adjust-list-padding;
@@ -167,7 +167,7 @@
     li {
       padding: 5px 0;
       color: $gray;
-      font-size: $font-size-base - 1px;
+      font-size: $font-size-base - 0.1rem;
 
       a {
         color: inherit;
@@ -175,7 +175,7 @@
 
       i {
         margin-right: 4px;
-        font-size: $font-size-base + 1;
+        font-size: $font-size-base + 0.1rem;
       }
     }
   }

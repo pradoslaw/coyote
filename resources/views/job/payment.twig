@@ -14,11 +14,11 @@
         {{ form_widget(form.payment_method) }}
 
         <main class="col-md-9">
-            <div class="panel panel-default">
-                <div class="panel-heading">
+            <div class="card card-default">
+                <div class="card-heading">
                     <i class="fas fa-lock fa-fw"></i> Płatność poprzez bezpieczne połączenie
                 </div>
-                <div class="panel-body" v-show="grossPrice > 0">
+                <div class="card-body" v-show="grossPrice > 0">
                     <div class="row">
                         <div class="col-lg-4" style="z-index: 1">
                             <ul class="nav nav-left nav-stacked">
@@ -49,8 +49,8 @@
                         </div>
 
                         <div class="col-lg-8 col-md-12">
-                            <div class="panel panel-default">
-                                <div id="card" v-show="form.payment_method === 'card'" class="panel-body">
+                            <div class="card card-default">
+                                <div id="card" v-show="form.payment_method === 'card'" class="card-body">
                                     {{ form_widget(form.price) }}
                                     {{ form_row(form.name) }}
 
@@ -92,7 +92,7 @@
                                     </div>
                                 </div>
 
-                                <div id="transfer" v-show="form.payment_method === 'transfer'" class="panel-body">
+                                <div id="transfer" v-show="form.payment_method === 'transfer'" class="card-body">
                                     <div class="row">
                                         <p class="has-error text-center">{{ form_error(form.transfer_method) }}</p>
 
@@ -159,13 +159,13 @@
                     </div>
 
                     <div id="form-navigation" class="form-group">
-                        <a href="{{ route('job.offer', [payment.job.id, payment.job.slug]) }}" class="btn btn-default pull-left"><i class="fas fa-angle-left"></i> Powrót do ogłoszenia</a>
+                        <a href="{{ route('job.offer', [payment.job.id, payment.job.slug]) }}" class="btn btn-secondary float-left"><i class="fas fa-angle-left"></i> Powrót do ogłoszenia</a>
 
-                        <button type="submit" id="submit" class="btn btn-primary pull-right" data-submit-state="Realizacja płatności...">Zapłać i zapisz <i class="fas fa-angle-right"></i></button>
+                        <button type="submit" id="submit" class="btn btn-primary float-right" data-submit-state="Realizacja płatności...">Zapłać i zapisz <i class="fas fa-angle-right"></i></button>
                     </div>
                 </div>
 
-                <div class="panel-body" v-show="grossPrice == 0">
+                <div class="card-body" v-show="grossPrice == 0">
                     <h1 class="text-center"><i class="fas fa-check text-primary"></i> Płatność nie jest wymagana</h1>
 
                     <div class="form-group text-center margin-md-top">
@@ -176,35 +176,35 @@
         </main>
 
         <aside class="col-md-3">
-            <div class="panel panel-default panel-review" v-cloak>
-                <div class="panel-heading">
+            <div class="card card-default card-review" v-cloak>
+                <div class="card-heading">
                     Twoja płatność obejmuje
                 </div>
 
-                <div class="panel-body">
+                <div class="card-body">
                     <div class="margin-xs-top margin-xs-bottom clearfix">
-                        <div class="pull-left">
+                        <div class="float-left">
                             Publikacja ogłoszenia ({{ payment.days }} dni)
                         </div>
-                        <div class="pull-right text-right">
+                        <div class="float-right text-right">
                             ${ netPrice } zł
                         </div>
                     </div>
 
                     <div class="margin-xs-top margin-xs-bottom clearfix" v-if="coupon.amount > 0">
-                        <div class="pull-left">
+                        <div class="float-left">
                             Rabat
                         </div>
-                        <div class="pull-right text-right">
+                        <div class="float-right text-right">
                             ${ coupon.amount } zł
                         </div>
                     </div>
 
                     {#<div class="margin-xs-top margin-xs-bottom clearfix">#}
-                        {#<div class="pull-left">#}
+                        {#<div class="float-left">#}
                             {#VAT (${ percentageVatRate }%)#}
                         {#</div>#}
-                        {#<div class="pull-right">#}
+                        {#<div class="float-right">#}
                             {#${ vatPrice } zł#}
                         {#</div>#}
                     {#</div>#}
@@ -212,10 +212,10 @@
                     <hr>
 
                     <div class="clearfix">
-                        <div class="pull-left">
+                        <div class="float-left">
                             <strong>Suma:</strong>
                         </div>
-                        <div class="pull-right">
+                        <div class="float-right">
                             <strong>${ grossPrice } zł</strong>
                         </div>
                     </div>
@@ -236,12 +236,12 @@
                     {{ form_row(form.coupon) }}
                 </div>
 
-                <div class="panel-footer">
+                <div class="card-footer">
                     <div class="clearfix">
-                        <div class="pull-left">
+                        <div class="float-left">
                             <span>Do zapłaty:</span>
                         </div>
-                        <div class="pull-right">
+                        <div class="float-right">
                             <span>${ grossPrice } zł</span>
                         </div>
                     </div>

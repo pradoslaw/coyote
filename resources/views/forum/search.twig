@@ -40,8 +40,8 @@
         {% if response %}
             {{ pagination|raw }}
 
-            <section id="box-search-results" class="panel panel-wrapper">
-                <div class="panel-body">
+            <section id="box-search-results" class="card card-wrapper">
+                <div class="card-body">
                     <ul id="sort" class="hidden-xs">
                         <li>{{ sortable('_score', 'Trafność', ['_score', 'desc']) }}</li>
                         <li>{{ sortable('id', 'Data utworzenia', ['_score', 'desc']) }}</li>

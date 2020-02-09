@@ -93,7 +93,7 @@
 {% macro submit_delete(label, delete_url) %}
     <div class="form-group">
         <div class="col-md-10 col-md-offset-2">
-            <a class="btn btn-default" href="javascript:window.history.back()"><i class="fas fa-undo"></i> Powrót</a>
+            <a class="btn btn-secondary" href="javascript:window.history.back()"><i class="fas fa-undo"></i> Powrót</a>
             <input type="submit" value="{{ label }}" class="btn btn-primary">
 
             {% if delete_url %}
@@ -106,7 +106,7 @@
 {% macro back(url) %}
     <div class="form-group">
         <div class="col-sm-10 col-sm-offset-2">
-            <a class="btn btn-default" href="{{ url ? url : 'javascript:window.history.back()' }}"><i class="fas fa-undo"></i> Powrót</a>
+            <a class="btn btn-secondary" href="{{ url ? url : 'javascript:window.history.back()' }}"><i class="fas fa-undo"></i> Powrót</a>
         </div>
     </div>
 {% endmacro %}

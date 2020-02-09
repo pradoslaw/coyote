@@ -1,6 +1,10 @@
 @charset "UTF-8";
 
-.panel-default {
+.card {
+  margin-bottom: 18px; // backward compatibility. in bootstrap 3 panel have margin-bottom
+}
+
+.card-default {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07);
 }
 
@@ -14,8 +18,7 @@
       color: inherit;
     }
 
-    &.border {
-      border-bottom: 1px solid $box-border-color;
+    &.border-bottom {
       padding: 0 0 10px 0;
       box-shadow: 0 2px 0 #FFF;
     }
@@ -27,18 +30,18 @@
 }
 
 // przezroczyste tlo. dodano jedynie obramowanie.  np. w mikroblogach czy na stronie kategorii tekstow
-.panel-transparent {
+.card-transparent {
   background-color: transparent;
   border: 1px solid $border-color;
 }
 
 // panel wykorzystywany np. na forum czy w panelu usera.
-.panel-wrapper {
+.card-wrapper {
   box-shadow: inset 1px 1px #FFF;
   background-color: #e2e7e1;
   border: 1px solid #c7c7c7;
 
-  > .panel-body {
+  > .card-body {
     padding: 4px 10px 8px 10px;
 
     > h2 {
@@ -50,7 +53,7 @@
   }
 }
 
-.panel-forum {
+.card-forum {
   background-color: $panel-footer-bg;
   border: 1px solid $border-color;
 }
@@ -118,7 +121,7 @@
 }
 
 @include media-breakpoint-down(sm)  {
-  .panel-body {
+  .card-body {
     padding: 10px;
   }
 }

@@ -6,6 +6,7 @@ footer {
 
 #footer-top {
   padding: 10px 0;
+  position: relative;
 
   ul.breadcrumb {
     @include media-breakpoint-up(sm) {
@@ -36,7 +37,7 @@ footer {
   width: 39px;
   height: 53px;
   background: url('/img/facebook-image.png') no-repeat;
-  top: -10px;
+  top: 0;
   right: 50px;
   z-index: 1;
 }
@@ -48,7 +49,7 @@ footer {
 
   ul {
     list-style-type: none;
-    margin: 0;
+    margin: 0 0 0 15px;
     padding-left: 3px;
 
     li {
@@ -100,7 +101,7 @@ footer {
     }
 
     // gdy rozdzielczosc jest mniejsza - chowamy chmurke
-    @include media-breakpoint-up(md) {
+    @include media-breakpoint-down(md) {
       background: none;
       padding: 0;
 
