@@ -1,6 +1,6 @@
 <template>
   <div :class="{'highlight': job.is_highlight}" class="card card-default card-job margin-md-bottom">
-    <span v-if="order === 0 && job.is_on_top" class="label top-spot-badge hidden-xs">Promowane</span>
+    <span v-if="order === 0 && job.is_on_top" class="label top-spot-badge d-none d-sm-block">Promowane</span>
 
     <div class="card-body">
       <div class="media">
@@ -15,7 +15,7 @@
         <div class="media-body">
           <h4 class="float-left"><a :href="job.url">{{ job.title }}</a></h4>
 
-          <a v-if="job.is_medal" :href="job.url" class="medal hidden-xs" title="Oferta na medal. To odznaczenie przyznawane jest ofertom, które zawierają szczegółowe informacje o pracy"></a>
+          <a v-if="job.is_medal" :href="job.url" class="medal d-none d-sm-block" title="Oferta na medal. To odznaczenie przyznawane jest ofertom, które zawierają szczegółowe informacje o pracy"></a>
 
           <vue-salary
             :salary_from="job.salary_from"

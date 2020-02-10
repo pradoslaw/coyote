@@ -23,10 +23,6 @@
   }
 }
 
-#catalog {
-  margin-top: 20px;
-}
-
 // Style zwiazane ze strona prezentujaca kategorie danego tekstu. Zawiera m.in. liste artykulow
 // ----------------------------------------------------------------------------------------------
 
@@ -86,36 +82,36 @@
     }
   }
 
-  .list-inline {
-    font-size: 11px;
-    margin: 10px 0 0 2px;
-
-    li {
-      margin-right: 20px;
-      padding: 1px 0 2px 15px;
-      color: $gray-light;
-      position: relative;
-
-      &:before {
-        font-family: 'Font Awesome 5 Free';
-        position: absolute;
-        left: 0;
-      }
-    }
-  }
-
-  .date:before {
-    content: fa-content($fa-var-calendar);
-  }
-
-  .comments:before {
-    content: fa-content($fa-var-comments);
-  }
-
-  .views:before {
-    content: fa-content($fa-var-lightbulb);
-    font-weight: 400;
-  }
+  //.list-inline {
+  //  font-size: 11px;
+  //  margin: 10px 0 0 2px;
+  //
+  //  li {
+  //    margin-right: 20px;
+  //    padding: 1px 0 2px 15px;
+  //    color: $gray-light;
+  //    position: relative;
+  //
+  //    &:before {
+  //      font-family: 'Font Awesome 5 Free';
+  //      position: absolute;
+  //      left: 0;
+  //    }
+  //  }
+  //}
+  //
+  //.date:before {
+  //  content: fa-content($fa-var-calendar);
+  //}
+  //
+  //.comments:before {
+  //  content: fa-content($fa-var-comments);
+  //}
+  //
+  //.views:before {
+  //  content: fa-content($fa-var-lightbulb);
+  //  font-weight: 400;
+  //}
 }
 
 // Wyswietlanie tresci artykulu
@@ -139,24 +135,6 @@ article > header {
     }
   }
 }
-
-.box-header {
-  font-size: $font-size-base;
-  margin: 0;
-
-  a {
-    color: $gray;
-  }
-
-  span {
-    color: $brand-primary;
-  }
-
-  a:last-child {
-    font-weight: bold;
-  }
-}
-
 
 // Zajawka artykulu
 // --------------------
@@ -198,19 +176,21 @@ article > header {
 #box-author {
   blockquote {
     border: none;
-    font-size: 14px;
+    font-size: 1.05rem;
     position: relative;
     padding: 0 0 0 25px;
+    margin: 0;
 
     &:before {
       @include font-awesome($fa-var-quote-left);
       left: 0;
+      font-weight: 900;
       color: $gray-light;
     }
   }
 
   .img-thumbnail {
-    @include media-breakpoint-up(md) {
+    @include media-breakpoint-down(md) {
       display: none;
     }
   }
@@ -220,8 +200,6 @@ article > header {
 // -----------------------------------------------------
 
 #box-authors {
-  margin: 40px 0 20px 0;
-
   ul {
     list-style-type: none;
     margin: 0;
@@ -280,25 +258,6 @@ article > header {
 .comment {
   color: $gray-light;
   position: relative;
-
-  //.list-inline {
-  //  a {
-  //    color: $gray-light;
-  //  }
-  //
-  //  li {
-  //    padding-right: 0;
-  //  }
-  //
-  //  li:after {
-  //    content: "●";
-  //    margin-left: 5px;
-  //  }
-  //
-  //  li:last-child:after {
-  //    content: "\00a0 ";
-  //  }
-  //}
 
   &:after, &:before {
     right: 100%;

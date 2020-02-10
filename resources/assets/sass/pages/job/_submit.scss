@@ -116,7 +116,7 @@ $font-size-control-label: 15px;
     font-size: $font-size-large;
   }
 
-  .control-label, .checkbox label {
+  .col-form-label, .checkbox label {
     color: $gray;
   }
 
@@ -162,7 +162,7 @@ $font-size-control-label: 15px;
       margin-left: 10px;
     }
 
-    .control-label {
+    .col-form-label {
       text-align: left;
     }
   }

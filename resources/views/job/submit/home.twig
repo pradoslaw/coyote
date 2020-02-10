@@ -43,7 +43,7 @@
                         <div class="form-group form-group-border">
                             <div class="row">
                                 <div class="col-sm-9 form-group"  :class="{'has-error': isInvalid(['title'])}">
-                                    <label class="control-label">Tytuł oferty <em>*</em></label>
+                                    <label class="col-form-label">Tytuł oferty <em>*</em></label>
 
                                     <vue-text name="title" :value.sync="job.title" placeholder="Np. Senior Java Developer" maxlength="60"></vue-text>
 
@@ -53,7 +53,7 @@
                                 </div>
 
                                 <div class="col-sm-2 form-group">
-                                    <label class="control-label">Staż pracy</label>
+                                    <label class="col-form-label">Staż pracy</label>
 
                                     <vue-select name="seniority" :value.sync="job.seniority" :options="seniority" placeholder="--"></vue-select>
                                </div>
@@ -61,7 +61,7 @@
                         </div>
 
                         <div class="form-group form-group-border">
-                            <label class="control-label">Lokalizacja</label>
+                            <label class="col-form-label">Lokalizacja</label>
 
                             <div v-for="(location, index) in job.locations" class="row margin-sm-bottom">
                                 <div class="col-sm-12">
@@ -95,7 +95,7 @@
                         </div>
 
                         <div class="form-group form-group-border" :class="{'has-error': isInvalid(['salary_from', 'salary_to'])}">
-                            <label class="control-label">Ofertowane wynagrodzenie netto i forma zatrudnienia</label>
+                            <label class="col-form-label">Ofertowane wynagrodzenie netto i forma zatrudnienia</label>
 
                             <div>
                                 od
@@ -118,7 +118,7 @@
                         </div>
 
                         <div class="form-group" :class="{'has-error': errors.tags != null}">
-                            <label class="control-label">Kluczowe technologie (wymagane lub mile widziane)</label>
+                            <label class="col-form-label">Kluczowe technologie (wymagane lub mile widziane)</label>
 
                             <vue-tags-dropdown id="tag" :tags="popular_tags" @change="addTag"></vue-tags-dropdown>
 
@@ -153,7 +153,7 @@
 
                     <div class="card-body">
                         <div class="form-group-border form-group">
-                            <label class="control-label">Opis oferty (opcjonalnie)</label>
+                            <label class="col-form-label">Opis oferty (opcjonalnie)</label>
 
                             <vue-tinymce v-model="job.description" :init="tinymceOptions"></vue-tinymce>
                             <span class="help-block">Miejsce na szczegółowy opis oferty. Pole to jednak nie jest wymagane.</span>
@@ -167,7 +167,7 @@
                             <ol class="features list-group clearfix">
                                 <li class="list-group-item col-md-12 col-lg-6" v-for="(feature, index) in job.features" :class="{checked: feature.pivot.checked}">
                                     <div class="form-group">
-                                        <div class="col-7 control-label" @click="toggleFeature(feature)">
+                                        <div class="col-7 col-form-label" @click="toggleFeature(feature)">
                                             <i class="fas fa-fw " :class="{'fa-check': feature.pivot.checked, 'fa-times': !feature.pivot.checked}"></i>
 
                                             ${ feature.name }

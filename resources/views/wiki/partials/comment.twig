@@ -1,7 +1,7 @@
 {% import 'components.modals' as modals %}
 
 <div class="row" id="comment-{{ comment.id }}">
-    <div class="col-sm-1 hidden-xs">
+    <div class="col-sm-1 d-none d-sm-block">
         <a href="{{ route('profile', [comment.user.id]) }}">
             <img src="{{ user_photo(comment.user.photo) }}" class="img-thumbnail">
         </a>

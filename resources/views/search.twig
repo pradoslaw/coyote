@@ -16,7 +16,7 @@
                 </div>
             </div>
 
-            <div class="form-group col-sm-2 hidden-xs">
+            <div class="form-group col-sm-2 d-none d-sm-block">
                 <button class="btn btn-primary btn-search" type="submit">
                     <i class="fas fa-search"></i> <span class="hidden-xxs">Szukaj</span>
                 </button>
@@ -32,7 +32,7 @@
             {% endif %}
 
             {% if input_get('q') and total == 0 %}
-                <div class="well well-sm empty-result">
+                <div class="card card-body bg-light p-2 empty-result">
                     <p>
                         Nie znaleźliśmy stron, które spełniają Twoje kryteria wyszukiwania.<br>
                         <a href="{{ route('home') }}">Wejdź na naszą stronę główną</a>, a być może znajdziesz coś dla Ciebie!

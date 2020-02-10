@@ -1,9 +1,4 @@
 @charset "UTF-8";
-//@import "~@fortawesome/fontawesome-free/scss/variables";
-//@import "../helpers/mixins";
-//@import "../helpers/variables";
-//@import "../components/microblog";
-//@import "../components/who-is-online";
 
 #hire-me {
   margin-top: 35px;
@@ -12,14 +7,14 @@
 #box-reputation {
   margin-top: 10px;
 
-  .media-heading {
-    margin-bottom: 3px;
-
-    a {
-      color: $gray-dark;
-      font-size: 14px;
-    }
-  }
+  //.media-heading {
+  //  margin-bottom: 3px;
+  //
+  //  a {
+  //    color: $gray-dark;
+  //    font-size: 14px;
+  //  }
+  //}
 
   img {
     border-radius: 4px;
@@ -236,12 +231,15 @@
   }
 
   .media {
-    display: flex;
     padding: 0 0 0 20px;
     font-size: 11px;
     text-shadow: 1px 1px #fff;
     position: relative;
     overflow: visible;
+
+    &:not(:first-child) {
+      margin-top: 15px;
+    }
 
     span {
       box-shadow: 0 1px 2px #CCC;

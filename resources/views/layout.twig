@@ -48,7 +48,7 @@
               <img src="{{ cdn('img/logo-mobile.png') }}">
             </a>
 
-            <ul class="nav-desktop hidden-xs">
+            <ul class="nav-desktop d-none d-sm-block">
               {% for item in __master_menu.roots() %}
                 <li {{ forms.attr(item.attr) }}>
                   <a href="{{ item.url }}">{{ item.title|raw }}</a>
@@ -56,13 +56,13 @@
                   {{ item.afterHTML|raw }}
 
                   {% if item.hasChildren() %}
-                    <ul class="dropdown-menu left">
+                    <div class="dropdown-menu left">
                       {% for children in item.children() %}
-                        <li>
-                          <a href="{{ children.url }}">{{ children.title }}</a>
-                        </li>
+
+                          <a class="dropdown-item" href="{{ children.url }}">{{ children.title }}</a>
+
                       {% endfor %}
-                    </ul>
+                    </div>
                   {% endif %}
                 </li>
               {% endfor %}
@@ -72,7 +72,7 @@
               {% if auth_check() %}
                 <ul id="nav-auth" class="nav-auth list-inline d-inline-block"></ul>
 
-                <div class="dropdown nav-avatar hidden-xs d-inline-block">
+                <div class="dropdown nav-avatar d-none d-sm-inline-block">
                   <a href="javascript:" class="dropdown-toggle img-thumbnail d-block" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="width: 35px">
                     <img src="{{ user_photo(user('photo')) }}" style="width: 100%">
                   </a>
@@ -93,7 +93,7 @@
 
                     <div class="dropdown-divider"></div>
 
-                    <a href="javascript:" class="dropdown-item js-change-menu">Nowe menu <sup class="label label-new">Beta</sup></a>
+                    <a href="javascript:" class="dropdown-item js-change-menu">Nowe menu <sup class="badge-pill label-new">Beta</sup></a>
 
                     <div class="dropdown-divider"></div>
 
@@ -101,11 +101,11 @@
                   </div>
                 </div>
               {% else %}
-                <a class="btn btn-sm d-inline-block btn-register hidden-xs" href="{{ route('register') }}"><i class="fas fa-sign-in"></i> Utwórz konto</a>
-                <a class="btn btn-sm d-inline-block btn-login hidden-xs" href="{{ route('login') }}">Logowanie</a>
+                <a class="btn btn-sm d-inline-block btn-register d-none d-sm-block" href="{{ route('register') }}"><i class="fas fa-sign-in"></i> Utwórz konto</a>
+                <a class="btn btn-sm d-inline-block btn-login d-none d-sm-block" href="{{ route('login') }}">Logowanie</a>
               {% endif %}
 
-              <form action="{{ search_url|default(route('search')) }}" class="nav-search d-inline-block hidden-sm hidden-xs" role="search">
+              <form action="{{ search_url|default(route('search')) }}" class="nav-search d-none d-sm-inline-block d-md-inline-block" role="search">
                 <div class="input-group">
                   <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}">
 

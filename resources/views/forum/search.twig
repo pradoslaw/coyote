@@ -42,7 +42,7 @@
 
             <section id="box-search-results" class="card card-wrapper">
                 <div class="card-body">
-                    <ul id="sort" class="hidden-xs">
+                    <ul id="sort" class="d-none d-sm-block">
                         <li>{{ sortable('_score', 'Trafność', ['_score', 'desc']) }}</li>
                         <li>{{ sortable('id', 'Data utworzenia', ['_score', 'desc']) }}</li>
                     </ul>
@@ -69,29 +69,29 @@
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-2 col-user hidden-xs">
-                                        <p class="hidden-xs">
+                                    <div class="col-2 col-user d-none d-sm-block">
+                                        <p class="d-none d-sm-block">
                                             <strong>Data:</strong>
                                             <small>{{ post.created_at|format_date }}</small>
                                         </p>
 
-                                        <p class="hidden-xs">
+                                        <p class="d-none d-sm-block">
                                             <strong>Kategoria:</strong>
                                             <small>{{ link_to_route('forum.category', post.forum.name, [post.forum.slug]) }}</small>
                                         </p>
 
                                         {% if can('forum-update') %}
-                                            <p class="hidden-xs">
+                                            <p class="d-none d-sm-block">
                                                 <strong>IP:</strong>
                                                 <small>{{ post.ip }}</small>
                                             </p>
 
-                                            <p class="hidden-xs">
+                                            <p class="d-none d-sm-block">
                                                 <strong>Host:</strong>
                                                 <small title="{{ post.host }}">{{ post.host }}</small>
                                             </p>
 
-                                            <p class="hidden-xs">
+                                            <p class="d-none d-sm-block">
                                                 <strong>Przeglądarka:</strong>
                                                 <small title="{{ post.browser }}">{{ post.browser }}</small>
                                             </p>
@@ -163,7 +163,7 @@
 {% block body %}
     {{ parent() }}
 
-    <div class="alert alert-warning alert-popover top hidden-xs hidden-sm" data-id="forum-search" data-containment="#box-search input[name=q]">
+    <div class="alert alert-warning alert-popover top d-none d-sm-block hidden-sm" data-id="forum-search" data-containment="#box-search input[name=q]">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close" title="Kliknij, aby zamknąć"><span aria-hidden="true">&times;</span></button>
         <strong>Wskazówka:</strong> Możesz zawęzić wyniki do postów danego użytkownika wpisując <em>user:"nazwa użytkownika"</em>
     </div>

@@ -1,16 +1,16 @@
 {% if related|length > 0 %}
-    <section class="related box">
-        <h4 class="border"><i class="fas fa-thumb-tack fa-fw"></i> Strony powiązane</h4>
+  <section class="related box">
+    <h4 class="border-bottom"><i class="fas fa-thumbtack fa-fw"></i> Strony powiązane</h4>
 
-        <ul>
-            {% for item in related %}
-                <li>
-                    <a href="{{ url(item.path) }}" title="{{ item.title }}">
-                        <strong>{{ item.title }}</strong>
-                        <small>{{ item.updated_at|format_date }}</small>
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
-    </section>
+    <ul>
+      {% for item in related %}
+        <li>
+          <a href="{{ url(item.path) }}" title="{{ item.title }}">
+            <strong>{{ item.title }}</strong>
+            <small>{{ item.updated_at|format_date }}</small>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
 {% endif %}

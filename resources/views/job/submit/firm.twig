@@ -94,7 +94,7 @@
 
                         <div class="card-body">
                             <div class="form-group form-group-border" :class="{'has-error': isInvalid(['name'])}">
-                                <label class="control-label">Nazwa firmy</label>
+                                <label class="col-form-label">Nazwa firmy</label>
 
                                 <div class="input-group">
                                     <vue-text name="name" :value.sync="firm.name"></vue-text>
@@ -128,7 +128,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="control-label">Logo</label>
+                                <label class="col-form-label">Logo</label>
 
                                 <div class="row">
                                     <div class="col-sm-2">
@@ -148,7 +148,7 @@
                             </div>
 
                             <div class="form-group-border form-group"  :class="{'has-error': isInvalid(['website'])}">
-                                <label class="control-label">Strona WWW</label>
+                                <label class="col-form-label">Strona WWW</label>
 
                                 <vue-text name="website" :value.sync="firm.website"></vue-text>
 
@@ -157,14 +157,14 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="control-label">Branża</label>
+                                <label class="col-form-label">Branża</label>
 
                                 <vue-select id="industries" name="industries[]" :options="industries" :value.sync="firm.industries" multiple="multiple"></vue-select>
                                 <span class="help-block">Możesz wybrać jedną lub kilka branż w których działa firma.</span>
                             </div>
 
                             <div class="form-group-border form-group"  :class="{'has-error': isInvalid(['description'])}">
-                                <label class="control-label">Opis firmy</label>
+                                <label class="col-form-label">Opis firmy</label>
 
                                 <vue-tinymce v-model="firm.description" :init="tinymceOptions"></vue-tinymce>
 
@@ -175,7 +175,7 @@
                             </div>
 
                             <div class="form-group form-group-border" v-show="isAgency == 0">
-                                <label class="control-label">Dodaj zdjęcia</label>
+                                <label class="col-form-label">Dodaj zdjęcia</label>
 
                                 <div class="row">
                                     <div class="col-sm-2" v-for="photo in gallery">
@@ -193,7 +193,7 @@
                             </div>
 
                             <div class="form-group-border form-group"  :class="{'has-error': isInvalid(['youtube_url'])}">
-                                <label class="control-label">Nagranie wideo w Youtube</label>
+                                <label class="col-form-label">Nagranie wideo w Youtube</label>
 
                                 <vue-text name="youtube_url" :value.sync="firm.youtube_url"></vue-text>
 
@@ -202,14 +202,14 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="control-label">Liczba pracowników w firmie</label>
+                                <label class="col-form-label">Liczba pracowników w firmie</label>
 
                                 <vue-select name="employees" :options="employees" :value.sync="firm.employees" placeholder="--"></vue-select>
                                 <span class="help-block">Pozwala ocenić jak duża jest firma. Czy jest to korporacja, czy mała rodzinna firma?</span>
                             </div>
 
                             <div class="form-group-border form-group">
-                                <label class="control-label">Rok powstania</label>
+                                <label class="col-form-label">Rok powstania</label>
 
                                 <vue-select name="founded" :options="founded" :value.sync="firm.founded" placeholder="--"></vue-select>
                                 <span class="help-block">Pozwala ocenić jak duża jest firma. Czy jest to korporacja, czy mała rodzinna firma?</span>
@@ -217,7 +217,7 @@
 
 
                             <div class="form-group form-group-border" v-show="isAgency == 0">
-                                <label class="control-label">Adres</label>
+                                <label class="col-form-label">Adres</label>
 
                                 <vue-text id="address" :value.sync="address" @keydown.native.enter.prevent="changeAddress"></vue-text>
 
@@ -243,7 +243,7 @@
                             </div>
 
                             <div class="form-group form-group-border" v-show="isAgency == 0">
-                                <label class="control-label">Benefity</label>
+                                <label class="col-form-label">Benefity</label>
                                 <span class="help-block">Kliknij na wybraną pozycję, aby zaznaczyć benefity jakie oferuje Twoja firma. Jeżeli nie ma go na liście, możesz dodać nową pozycję wpisując ją w polu poniżej.</span>
 
                                 <ol class="benefits list-group">

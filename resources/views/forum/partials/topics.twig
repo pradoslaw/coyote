@@ -1,7 +1,7 @@
 <section class="card card-wrapper">
     <div class="card-body">
         <div id="box-topics" class="table-forum">
-            <ul id="sort" class="hidden-xs">
+            <ul id="sort" class="d-none d-sm-block">
                 <li>{{ sortable('last', 'Ostatni post', ['last', 'desc']) }}</li>
                 <li>{{ sortable('id', 'Data utworzenia', ['last', 'desc']) }}</li>
                 <li>{{ sortable('replies', 'Odpowiedzi', ['last', 'desc']) }}</li>
@@ -46,7 +46,7 @@
                             {% if replies_real > postsPerPage %}
                                 {% set pages = (replies_real / postsPerPage)|round(0, 'ceil') %}
 
-                                <dl class="topic-pagination hidden-xs">
+                                <dl class="topic-pagination d-none d-sm-block">
                                     <dd>
                                         <a href="{{ url }}?page=1">1</a>
 
@@ -75,7 +75,7 @@
                                 <a title="{{ topic.subject }}" href="{{ url ~ (user_id is defined ? ('?p=' ~ topic.posts[0].id ~ '#id' ~ topic.posts[0].id)) }}">{{ topic.subject }}</a>
 
                                 {% if topic.score %}
-                                    <span class="badge badge-success score hidden-xs" title="Liczba głosów oddanych na ten wątek">
+                                    <span class="badge badge-success score d-none d-sm-block" title="Liczba głosów oddanych na ten wątek">
                                         <i class="fas fa-fire"></i>
                                         {{ topic.score }}
                                     </span>
@@ -108,12 +108,12 @@
                         </td>
 
                         {% if forum is not defined %}
-                            <td class="col-category hidden-xs">
+                            <td class="col-category d-none d-sm-block">
                                 {{ link_to_route('forum.category', topic.forum_name, [topic.forum_slug]) }}
                             </td>
                         {% endif %}
 
-                        <td class="col-views hidden-xs">
+                        <td class="col-views d-none d-sm-block">
                             <p title="Liczba odpowiedzi">
                                 <strong>{{ topic.replies|number_format(0, '', ' ') }}</strong>
 
@@ -127,7 +127,7 @@
                                 <small>{{ declination(topic.views, ['wyświetlenie', 'wyświetlenia', 'wyświetleń'], true) }}</small>
                             </p>
                         </td>
-                        <td class="col-last-post hidden-xs">
+                        <td class="col-last-post d-none d-sm-block">
                             {% if auth_check() %}
                                 <a title="Obserwuj wątek" href="{{ route('forum.topic.subscribe', [topic.id]) }}" class="btn-watch-sm {{ topic.subscribe_on ? 'on' }}"></a>
                             {% endif %}

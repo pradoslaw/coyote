@@ -26,30 +26,30 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-2 col-user hidden-xss">
+                            <div class="col-2 col-user d-none d-sm-blocks">
                                 {% if auth_check() %}
                                     <div class="avatar">
                                         <img class="img-fluid" src="{{ user_photo(user('photo')) }}" {{ not user('photo') ? 'style="max-width: 75px"' }}>
                                     </div>
 
-                                    <p class="hidden-xs">
+                                    <p class="d-none d-sm-block">
                                         <strong>Rejestracja:</strong>
                                         <small>{{ user('created_at')|format_date }}</small>
                                     </p>
-                                    <p class="hidden-xs">
+                                    <p class="d-none d-sm-block">
                                         <strong>Ostatnio:</strong>
                                         <small>{{ 'now'|format_date }}</small>
                                     </p>
 
                                     {% if user('location') %}
-                                        <p class="hidden-xs">
+                                        <p class="d-none d-sm-block">
                                             <strong>Lokalizacja:</strong>
                                             <small>{{ user('location') }}</small>
                                         </p>
                                     {% endif %}
 
                                     {% if user('allow_count') %}
-                                        <p class="hidden-xs">
+                                        <p class="d-none d-sm-block">
                                             <strong>Postów:</strong>
                                             <small>{{ user('posts')|number_format }}</small>
                                         </p>

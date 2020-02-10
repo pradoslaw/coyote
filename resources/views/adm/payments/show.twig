@@ -4,7 +4,7 @@
 {% block panel %}
     <div>
         <div class="form-group">
-            <label class="col-sm-2 control-label">Data</label>
+            <label class="col-sm-2 col-form-label">Data</label>
 
             <div class="col-sm-10">
                 <p class="form-control-static">{{ payment.created_at|format_date }}</p>
@@ -12,7 +12,7 @@
         </div>
 
         <div class="form-group">
-            <label class="col-sm-2 control-label">Status</label>
+            <label class="col-sm-2 col-form-label">Status</label>
 
             <div class="col-sm-10">
                 <p class="form-control-static">{{ payment_list[payment.status_id] }}</p>
@@ -20,7 +20,7 @@
         </div>
 
         <div class="form-group">
-            <label class="col-sm-2 control-label">Ilość dni</label>
+            <label class="col-sm-2 col-form-label">Ilość dni</label>
 
             <div class="col-sm-10">
                 <p class="form-control-static">{{ payment.days }}</p>
@@ -28,7 +28,7 @@
         </div>
 
         <div class="form-group">
-            <label class="col-sm-2 control-label">Początek promowania</label>
+            <label class="col-sm-2 col-form-label">Początek promowania</label>
 
             <div class="col-sm-10">
                 <p class="form-control-static">{{ payment.starts_at ? payment.starts_at|format_date : '--' }}</p>
@@ -36,7 +36,7 @@
         </div>
 
         <div class="form-group">
-            <label class="col-sm-2 control-label">Zakończenie promowania</label>
+            <label class="col-sm-2 col-form-label">Zakończenie promowania</label>
 
             <div class="col-sm-10">
                 <p class="form-control-static">{{ payment.ends_at ? payment.ends_at|format_date : '--' }}</p>
@@ -44,7 +44,7 @@
         </div>
 
         <div class="form-group">
-            <label class="col-sm-2 control-label">Nr faktury</label>
+            <label class="col-sm-2 col-form-label">Nr faktury</label>
 
             <div class="col-sm-10">
                 <p class="form-control-static">{{ payment.invoice.number|default('--') }}</p>
@@ -52,7 +52,7 @@
         </div>
 
         <div class="form-group">
-            <label class="col-sm-2 control-label">Data wystawienia faktury</label>
+            <label class="col-sm-2 col-form-label">Data wystawienia faktury</label>
 
             <div class="col-sm-10">
                 <p class="form-control-static"><u>{{ payment.invoice.number ? payment.invoice.created_at|format_date : '--' }}</u></p>
@@ -60,7 +60,7 @@
         </div>
 
         <div class="form-group">
-            <label class="col-sm-2 control-label">Data opłacenia faktury</label>
+            <label class="col-sm-2 col-form-label">Data opłacenia faktury</label>
 
             <div class="col-sm-10">
                 <p class="form-control-static">{{ payment.invoice.number ? payment.invoice.updated_at|format_date : '--' }}</p>
@@ -68,7 +68,7 @@
         </div>
 
         <div class="form-group">
-            <label class="col-sm-2 control-label">Nazwa firmy</label>
+            <label class="col-sm-2 col-form-label">Nazwa firmy</label>
 
             <div class="col-sm-10">
                 <p class="form-control-static">{{ payment.invoice.name|default('--') }}</p>
@@ -76,7 +76,7 @@
         </div>
 
         <div class="form-group">
-            <label class="col-sm-2 control-label">NIP</label>
+            <label class="col-sm-2 col-form-label">NIP</label>
 
             <div class="col-sm-10">
                 <p class="form-control-static">{{ payment.invoice.country.code ~ payment.invoice.vat_id|default('--') }}</p>
@@ -84,7 +84,7 @@
         </div>
 
         <div class="form-group">
-            <label class="col-sm-2 control-label">Adres</label>
+            <label class="col-sm-2 col-form-label">Adres</label>
 
             <div class="col-sm-10">
                 <p class="form-control-static">{{ payment.invoice.address|default('--') ~ ' ' ~ payment.invoice.postal_code ~ ' ' ~ payment.invoice.city }}</p>
@@ -92,7 +92,7 @@
         </div>
 
         <div class="form-group">
-            <label class="col-sm-2 control-label">Pakiet</label>
+            <label class="col-sm-2 col-form-label">Pakiet</label>
 
             <div class="col-sm-10">
                 <p class="form-control-static">{{ payment.plan.name }}</p>
@@ -101,7 +101,7 @@
 
         {% if payment.invoice_id %}
             <div class="form-group">
-                <label class="col-sm-2 control-label">Kwota netto</label>
+                <label class="col-sm-2 col-form-label">Kwota netto</label>
 
                 <div class="col-sm-10">
                     <p class="form-control-static">{{ payment.invoice.net_price }} {{ payment.invoice.currency.symbol }}</p>
@@ -111,7 +111,7 @@
 
         {% if payment.coupon_id %}
             <div class="form-group">
-                <label class="col-sm-2 control-label">Rabat</label>
+                <label class="col-sm-2 col-form-label">Rabat</label>
 
                 <div class="col-sm-10">
                     <p class="form-control-static">{{ payment.coupon.amount }} {{ payment.invoice.currency.symbol }}</p>
@@ -120,7 +120,7 @@
         {% endif %}
 
         <div class="form-group">
-            <label class="col-sm-2 control-label">Użytkownik</label>
+            <label class="col-sm-2 col-form-label">Użytkownik</label>
 
             <div class="col-sm-10">
                 <p class="form-control-static">{{ payment.job.user.name }} ({{ payment.job.user.email }})</p>

@@ -2,10 +2,12 @@
 
 .stream {
   .media {
-    border-bottom: 1px solid $border-color;
+    &:not(:first-child) {
+      margin-top: $card-spacer-y;
+    }
 
-    &:last-child {
-      border-bottom: 0;
+    &:not(:last-child) {
+      border-bottom: 1px solid $border-color;
     }
 
     p {
@@ -13,22 +15,8 @@
       font-size: $font-size-small;
     }
 
-    .text-muted {
-      font-size: 85%;
-
-      a {
-        color: inherit;
-      }
-    }
-
     .media-body {
-      padding-bottom: 10px;
-    }
-
-    .well {
-      font-size: $font-size-small;
-      margin-top: 10px;
-      margin-bottom: 5px;
+      padding-bottom: $card-spacer-y;
     }
   }
 }

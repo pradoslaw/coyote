@@ -11,28 +11,28 @@
 
             <div>
                 <div class="form-group-sm">
-                    <label class="col-md-4 control-label">Data i czas</label>
+                    <label class="col-md-4 col-form-label">Data i czas</label>
                     <div class="col-md-6">
                         <p class="form-control-static">{{ user('visited_at')|format_date }}</p>
                     </div>
                 </div>
 
                 <div class="form-group-sm">
-                    <label class="col-md-4 control-label">Adres IP</label>
+                    <label class="col-md-4 col-form-label">Adres IP</label>
                     <div class="col-md-6">
                         <p class="form-control-static">{{ user('ip') }}</p>
                     </div>
                 </div>
 
                 <div class="form-group-sm">
-                    <label class="col-md-4 control-label">Przeglądarka</label>
+                    <label class="col-md-4 col-form-label">Przeglądarka</label>
                     <div class="col-md-8">
                         <p class="form-control-static">{{ user('browser') }}</p>
                     </div>
                 </div>
 
                 <div class="form-group-sm">
-                    <label class="col-md-4 control-label">Liczba wizyt</label>
+                    <label class="col-md-4 col-form-label">Liczba wizyt</label>
                     <div class="col-md-6">
                         <p class="form-control-static">{{ user('visits')|number_format(0, ' ', ' ') }}</p>
                     </div>
@@ -51,7 +51,7 @@
             {{ forms.checkbox('alert_failure', 'Chce otrzymywać wiadomość e-mail o nieudanej próbie logowania na moje konto', 1, user('alert_failure')) }}
 
             <div class="form-group">
-                <label class="col-md-4 control-label">Dostęp z adresów IP</label>
+                <label class="col-md-4 col-form-label">Dostęp z adresów IP</label>
                 <div class="col-md-6">
                     {% set index = 0 %}
 

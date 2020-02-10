@@ -37,22 +37,22 @@
 
                             <div class="row">
                                 <div class="col-2 col-user hidden-xss">
-                                    <p class="hidden-xs">
+                                    <p class="d-none d-sm-block">
                                         <strong>Data:</strong>
                                         <small>{{ log.created_at|format_date }}</small>
                                     </p>
 
-                                    <p class="hidden-xs">
+                                    <p class="d-none d-sm-block">
                                         <strong>IP:</strong>
                                         <small>{{ log.ip }}</small>
                                     </p>
 
-                                    <p class="hidden-xs">
+                                    <p class="d-none d-sm-block">
                                         <strong>Host:</strong>
                                         <small title="{{ log.host }}">{{ log.host }}</small>
                                     </p>
 
-                                    <p class="hidden-xs">
+                                    <p class="d-none d-sm-block">
                                         <strong>Przeglądarka:</strong>
                                         <small title="{{ log.browser }}">{{ log.browser }}</small>
                                     </p>
@@ -79,7 +79,7 @@
                                     <div class="col-10 col-bottom">
                                         <a data-toggle="tooltip" data-placement="top" title="Cofnij do tej wersji" data-category="postLinks" data-action="rollback" href="{{ route('forum.post.rollback', [post.id, log.id]) }}" class="btn btn-sm btn-rollback">
                                             <i class="fas fa-undo"></i>
-                                            <span class="hidden-xs">Cofnij do tej wersji</span>
+                                            <span class="d-none d-sm-block">Cofnij do tej wersji</span>
                                         </a>
                                     </div>
                                 </div>

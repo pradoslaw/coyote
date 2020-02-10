@@ -250,32 +250,6 @@ input[placeholder] {
       display: inline;
       margin-right: 3px;
     }
-
-    // Links with number of votes and comment's date
-    // -----------------------------------------------------
-
-    .list-inline {
-      color: $gray-light;
-      font-size: 11px;
-      margin: 1px 0 0 0;
-
-      a {
-        color: $gray-light;
-      }
-
-      li {
-        padding-left: 0;
-      }
-
-      li:after {
-        content: "●";
-        margin-left: 5px;
-      }
-
-      li:last-child:after {
-        content: "\00a0 ";
-      }
-    }
   }
 
   // Submit button and textarea within .write-content class

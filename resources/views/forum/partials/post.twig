@@ -49,10 +49,10 @@
             </div>
         </div>
 
-        <div class="row hidden-xs hidden-sm hidden-md hidden-lg"></div>
+        <div class="row d-block d-lg-none d-xl-block"></div>
 
         <div class="row">
-            <div class="col-sm-2 col-user hidden-xs">
+            <div class="col-sm-2 col-user d-none d-sm-block">
                 {% if post.user_id %}
                     <div class="avatar">
                         <img class="img-fluid" src="{{ user_photo(post.photo) }}" {{ not post.photo ? 'style="max-width: 75px"' }}>
@@ -62,24 +62,24 @@
                         <span class="label label-default">{{ post.group_name }}</span>
                     {% endif %}
 
-                    <p class="hidden-xs">
+                    <p class="d-none d-sm-block">
                         <strong>Rejestracja:</strong>
                         <small>{{ post.author_created_at|diff_for_humans }}</small>
                     </p>
-                    <p class="hidden-xs">
+                    <p class="d-none d-sm-block">
                         <strong>Ostatnio:</strong>
                         <small>{{ post.author_visited_at|diff_for_humans }}</small>
                     </p>
 
                     {% if post.location %}
-                        <p class="hidden-xs">
+                        <p class="d-none d-sm-block">
                             <strong>Lokalizacja:</strong>
                             <small>{{ post.location }}</small>
                         </p>
                     {% endif %}
 
                     {% if post.allow_count and user('allow_count') %}
-                        <p class="hidden-xs">
+                        <p class="d-none d-sm-block">
                             <strong>Postów:</strong>
                             <small><a title="Znajdź posty tego użytkownika" href="{{ route('forum.user', [post.user_id]) }}" style="text-decoration: underline">{{ post.author_posts|number_format }}</a></small>
                         </p>
@@ -185,26 +185,26 @@
                     {% if auth_check() %}
                         <a data-toggle="tooltip" data-placement="top" title="Powiadamiaj o nowych komentarzach do postu" data-category="postLinks" data-action="subscribe" href="{{ route('forum.post.subscribe', [post.id]) }}" data-post-id="{{ post.id }}" class="btn btn-sm btn-sub {{ post.subscribe_on ? 'active' }}">
                             <i class="far fa-bell"></i>
-                            <span class="hidden-xs">Obserwuj</span>
+                            <span class="d-none d-sm-block">Obserwuj</span>
                         </a>
                     {% endif %}
 
                     <a data-toggle="tooltip" data-placement="top" title="Udostępnij link do tego postu" data-category="postLinks" data-action="share" href="{{ route('forum.share', [post.id]) }}" class="btn btn-sm btn-share">
                         <i class="fas fa-share-alt"></i>
-                        <span class="hidden-xs">Udostępnij</span>
+                        <span class="d-none d-sm-block">Udostępnij</span>
                     </a>
 
                     {% if auth_check() %}
                         {% if is_writeable %}
                             <a data-toggle="collapse" data-placement="top" title="Napisz komentarz do postu" data-category="postLinks" data-action="comment" class="btn btn-sm btn-comment" href="#form-{{ post.id }}">
                                 <i class="far fa-comment"></i>
-                                <span class="hidden-xs">Komentuj</span>
+                                <span class="d-none d-sm-block">Komentuj</span>
                             </a>
                         {% endif %}
 
                         <a data-toggle="tooltip" data-placement="top" title="Zgłoś naruszenie w tym poście" data-category="postLinks" data-action="report" rel="nofollow" class="btn btn-sm btn-report" href="{{ route('flag') }}" data-url="{{ url }}" data-metadata="{{ {'post_id': post.id, 'topic_id': topic.id, 'forum_id': topic.forum_id, 'permission': 'delete'}|encrypt }}">
                             <i class="fas fa-flag"></i>
-                            <span class="hidden-xs">Raportuj</span>
+                            <span class="d-none d-sm-block">Raportuj</span>
                         </a>
                     {% endif %}
                 {% endif %}
@@ -214,7 +214,7 @@
                     {% if not post.deleted_at %}
                         <a data-toggle="tooltip" data-placement="top" title="Odpowiedz cytując ten post" data-category="postLinks" data-action="quote" rel="nofollow" href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}?quote={{ post.id }}" class="btn btn-sm btn-quote">
                             <i class="fas fa-quote-right"></i>
-                            <span class="hidden-xs">Odpowiedz</span>
+                            <span class="d-none d-sm-block">Odpowiedz</span>
                         </a>
 
                         <a data-toggle="tooltip" data-placement="top" title="Dodaj ten post jako cytat w formularzu odpowiedzi" data-category="postLinks" data-action="multi-quote" rel="nofollow" class="btn btn-sm btn-multi-quote" data-post-id="{{ post.id }}" data-topic-id="{{ topic.id }}">
@@ -226,12 +226,12 @@
                         {% if post.deleted_at %}
                             <a data-toggle="tooltip" data-placement="top" title="Przywróć ten post" data-category="postLinks" data-action="restore" href="{{ route('forum.post.restore', [post.id]) }}" class="btn btn-sm btn-res">
                                 <i class="fas fa-undo"></i>
-                                <span class="hidden-xs">Przywróć</span>
+                                <span class="d-none d-sm-block">Przywróć</span>
                             </a>
                         {% else %}
                             <a data-toggle="tooltip" data-placement="top" title="Usuń ten post" data-category="postLinks" data-action="delete" href="{{ route('forum.post.delete', [post.id]) }}" class="btn btn-sm btn-del">
                                 <i class="fas fa-times"></i>
-                                <span class="hidden-xs">Usuń</span>
+                                <span class="d-none d-sm-block">Usuń</span>
                             </a>
                         {% endif %}
                     {% endif %}
@@ -239,11 +239,11 @@
                     {% if can('update', post) and not post.deleted_at %}
                         <a href="{{ route('forum.post.submit', [forum.slug, topic.id, post.id]) }}" data-toggle="tooltip" data-placement="top" title="Edytuj ten post" data-category="postLinks" data-action="edit" class="btn btn-sm btn-edit">
                             <i class="fas fa-pencil-alt"></i>
-                            <span class="hidden-xs">Edytuj</span>
+                            <span class="d-none d-sm-block">Edytuj</span>
                         </a>
                         <a href="{{ route('forum.post.edit', [forum.slug, topic.id, post.id]) }}" data-toggle="tooltip" data-placement="top" title="Włącz/wyłącz szybką edycję postu" data-category="postLinks" data-action="fastEdit" data-post-id="{{ post.id }}" class="btn btn-sm btn-fast-edit">
                             <i class="fas fa-edit"></i>
-                            <span class="hidden-xs">Szybka edycja</span>
+                            <span class="d-none d-sm-block">Szybka edycja</span>
                         </a>
                     {% endif %}
                 {% endif %}

@@ -64,7 +64,7 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-sm-7 {{ errors.has('exp_month') ? 'has-error' }}">
-                                                <label class="control-label">Data ważności karty *</label>
+                                                <label class="col-form-label">Data ważności karty *</label>
 
                                                 <div class="row">
                                                     <div class="col-7" style="padding-right: 0">
@@ -108,7 +108,7 @@
                             {# v-if instade of v-show. remove invoice inputs from form if price == 0 #}
                             <div class="row" v-if="grossPrice > 0">
                                 <div class="col-12">
-                                    <div class="well well-sm">
+                                    <div class="card card-body bg-light p-2">
                                         <div class="checkbox margin-none">
                                             {{ form_widget(form.enable_invoice) }}
 

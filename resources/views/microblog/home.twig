@@ -24,7 +24,7 @@
           <div class="card card-default">
             <div class="card-body">
               <div class="media">
-                <div class="media-left hidden-xs" style="padding-right: 15px">
+                <div class="mr-3 d-none d-sm-block">
                   <a href="{{ route('profile', [user('id')]) }}">
                     <img class="media-object img-thumbnail" src="{{ user_photo(user('photo')) }}" style="width: 50px; height: 50px;" alt="">
                   </a>
@@ -38,7 +38,7 @@
         </form>
       {% endif %}
 
-      <nav class="mx-auto text-center">
+      <nav class="mt-3 mb-3 d-flex justify-content-center">
         {{ pagination|raw }}
       </nav>
 
@@ -46,10 +46,9 @@
         {% include "microblog.partials.microblog" %}
       {% endfor %}
 
-      <div class="text-center">
+      <div class="mt-3 mb-3 d-flex justify-content-center">
         {{ pagination|raw }}
       </div>
-
     </div>
 
     <aside class="col-md-3">

@@ -16,7 +16,7 @@
 
   // Default headline background
   // -----------------
-  .card-heading {
+  .card-header {
     text-align: center;
     background-color: $brand-primary;
     background-image: url('/img/escheresque.png');
@@ -65,7 +65,7 @@
       > .card-default {
         border: 2px solid $color;
 
-        .card-heading {
+        .card-header {
           background-color: $color;
         }
       }

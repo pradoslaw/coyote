@@ -8,7 +8,7 @@
 
 {% macro element(html, label, error, attr, help) %}
     <div class="form-group {{ error ? 'has-error' }}" {{ _self.attr(attr) }}>
-        <label class="col-md-4 control-label">{{ label }}</label>
+        <label class="col-md-4 col-form-label">{{ label }}</label>
         <div class="col-md-6">
             {{ html|raw }}
 

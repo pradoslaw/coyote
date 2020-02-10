@@ -36,11 +36,11 @@
             <div class="wrap">
               <h3><a :href="category.url">{{ category.name }}</a></h3>
 
-              <p class="description hidden-sm hidden-xs hidden-md">
+              <p class="description d-none d-md-block d-lg-block">
                 {{ category.description }}
               </p>
 
-              <ul v-if="category.children" class="list-inline list-sub hidden-sm hidden-xs hidden-md">
+              <ul v-if="category.children" class="list-inline list-sub d-none d-md-block d-lg-block">
                 <li v-for="children in category.children" class="list-inline-item">
                   <i :class="{'fas new': !children.is_read, 'far': children.is_read}" class="fa-file"></i>
 
@@ -71,7 +71,7 @@
           <div v-if="!category.is_redirected" class="col-lg-4 col-12 col-sm-12">
             <div v-if="category.post" class="media">
 
-              <a v-profile="category.post.user.id" class="mr-2 hidden-xs">
+              <a v-profile="category.post.user.id" class="mr-2 d-none d-sm-block">
                 <object :data="category.post.user.photo || '//'" type="image/png" class="d-inline-block img-thumbnail">
                   <img src="/img/avatar.png" :alt="category.post.user.name">
                 </object>

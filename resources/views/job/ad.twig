@@ -1,6 +1,6 @@
 <section class="box sidebar-offers {{ major_tag ? major_tag.name|replace({'.': '-', '#': 'sharp', 'c++': 'cpp'})|trim('.') }}">
     <div class="card card-default">
-        <div class="card-heading">
+        <div class="card-header">
             <h4><a href="{{ route('job.home') }}" title="Szukaj pracy jako programista">Szukaj pracy {{ (major_tag ? (' w ' ~ (major_tag.getOriginal('logo') ? ('<img src="' ~ logo(major_tag.logo) ~ '">') : major_tag.real_name|default(major_tag.name))))|raw }}</a></h4>
         </div>
         <div class="card-body">

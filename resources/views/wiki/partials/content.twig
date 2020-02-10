@@ -1,62 +1,62 @@
 <div class="card card-default" style="margin-top: 13px">
-    <div class="card-heading">
-        <h2 class="box-header">
-            {% for parent in parents %}
-                <a title="{{ parent.long_title|default(parent.title) }}" href="{{ url(parent.path) }}">{{ parent.title }}</a>
+  <div class="card-header">
+    <strong>
+      {% for parent in parents %}
+        <a class="text-body" title="{{ parent.long_title|default(parent.title) }}" href="{{ url(parent.path) }}">{{ parent.title }}</a>
 
-                {% if not loop.last %}
-                    <span class="hidden-xs">»</span>
-                {% endif %}
-            {% endfor %}
-        </h2>
-    </div>
+        {% if not loop.last %}
+          <span class="d-none d-sm-block">»</span>
+        {% endif %}
+      {% endfor %}
+    </strong>
+  </div>
 
-    <div class="card-body">
-        <article itemscope itemtype="http://schema.org/Article">
-            {% block dropdown %}{% endblock %}
+  <div class="card-body">
+    <article itemscope itemtype="http://schema.org/Article">
+      {% block dropdown %}{% endblock %}
 
-            <header>
-                <h1 itemprop="name"><a href="{{ url(wiki.path) }}">{{ wiki.long_title ?: wiki.title }}</a></h1>
-                {% block author %}
-                    {% if author %}
-                        <h5>{{ link_to_profile(author) }}</h5>
-                    {% endif %}
-                {% endblock %}
+      <header>
+        <h1 itemprop="name"><a href="{{ url(wiki.path) }}">{{ wiki.long_title ?: wiki.title }}</a></h1>
+        {% block author %}
+          {% if author %}
+            <h5>{{ link_to_profile(author) }}</h5>
+          {% endif %}
+        {% endblock %}
 
-                {% block metadata %}
-                    <ul class="metadata list-inline">
-                        <li title="Data opublikowania" class="date list-inline-item" itemprop="datePublished" content="{{ wiki.created_at|iso_8601 }}">
-                            <i class="far fa-calendar-alt"></i>
-                            {{ wiki.created_at }}
-                        </li>
-                        <li title="Data ostatniej zmiany" class="edit-date list-inline-item" itemprop="dateModified" content="{{ wiki.updated_at|iso_8601 }}">
-                            <i class="far fa-calendar"></i>
-                            {{ wiki.updated_at }}
-                        </li>
-                        <li class="comment list-inline-item">
-                            <a href="#box-comment" title="Zobacz komentarze" itemprop="interactionCount" value="UserComments:{{ wiki.comments|length }}">
-                                <i class="fas fa-comments"></i>
-                                {{ declination(wiki.comments|length, ['komentarz', 'komentarze', 'komentarzy']) }}
-                            </a>
-                        </li>
-                        <li class="counter list-inline-item" itemprop="interactionCount" value="UserPageVisits:{{ wiki.views }}">
-                            <i class="far fa-eye"></i>
-                            {{ declination(wiki.views, ['odsłona', 'odsłony', 'odsłon']) }}
-                        </li>
-                    </ul>
-                {% endblock %}
-            </header>
+        {% block metadata %}
+          <ul class="metadata list-inline">
+            <li title="Data opublikowania" class="date list-inline-item" itemprop="datePublished" content="{{ wiki.created_at|iso_8601 }}">
+              <i class="far fa-calendar-alt"></i>
+              {{ wiki.created_at }}
+            </li>
+            <li title="Data ostatniej zmiany" class="edit-date list-inline-item" itemprop="dateModified" content="{{ wiki.updated_at|iso_8601 }}">
+              <i class="far fa-calendar"></i>
+              {{ wiki.updated_at }}
+            </li>
+            <li class="comment list-inline-item">
+              <a href="#box-comment" title="Zobacz komentarze" itemprop="interactionCount" value="UserComments:{{ wiki.comments|length }}">
+                <i class="fas fa-comments"></i>
+                {{ declination(wiki.comments|length, ['komentarz', 'komentarze', 'komentarzy']) }}
+              </a>
+            </li>
+            <li class="counter list-inline-item" itemprop="interactionCount" value="UserPageVisits:{{ wiki.views }}">
+              <i class="far fa-eye"></i>
+              {{ declination(wiki.views, ['odsłona', 'odsłony', 'odsłon']) }}
+            </li>
+          </ul>
+        {% endblock %}
+      </header>
 
-            {% if wiki.excerpt %}
-                <p><strong>{{ wiki.excerpt }}</strong></p>
-                <p class="text-excerpt text-center"><strong>***</strong></p>
-            {% endif %}
+      {% if wiki.excerpt %}
+        <p><strong>{{ wiki.excerpt }}</strong></p>
+        <p class="text-excerpt text-center"><strong>***</strong></p>
+      {% endif %}
 
-            <div class="text-body" itemprop="articleBody">
-                {{ wiki.text|raw }}
-            </div>
+      <div class="text-body" itemprop="articleBody">
+        {{ wiki.text|raw }}
+      </div>
 
-            {{ render_region('wiki_footer') }}
-        </article>
-    </div>
+      {{ render_region('wiki_footer') }}
+    </article>
+  </div>
 </div>
