@@ -282,8 +282,6 @@
   img:not(.img-smile) {
     @include img-fluid;
   }
-
-  @include adjust-list-padding;
 }
 
 .list-attachments {

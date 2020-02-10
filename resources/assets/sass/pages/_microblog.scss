@@ -125,7 +125,6 @@ input[placeholder] {
   position: relative;
 
   @include break-word;
-  @include adjust-list-padding;
   @include link-color-darker;
 
   // emoticons are NOT responsive

@@ -182,7 +182,9 @@ module.exports = {
         format: 'fragment',
         filename: path.join(__dirname, 'resources/assets/sass/components/_sprites.scss')
       }
-    })
+    }),
+
+
     //
     // new BundleAnalyzerPlugin()
   ]

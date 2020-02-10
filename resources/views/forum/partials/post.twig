@@ -59,7 +59,7 @@
                     </div>
 
                     {% if post.group_name %}
-                        <span class="label label-default">{{ post.group_name }}</span>
+                        <span class="badge-secondary label-default">{{ post.group_name }}</span>
                     {% endif %}
 
                     <p class="d-none d-sm-block">
@@ -185,26 +185,26 @@
                     {% if auth_check() %}
                         <a data-toggle="tooltip" data-placement="top" title="Powiadamiaj o nowych komentarzach do postu" data-category="postLinks" data-action="subscribe" href="{{ route('forum.post.subscribe', [post.id]) }}" data-post-id="{{ post.id }}" class="btn btn-sm btn-sub {{ post.subscribe_on ? 'active' }}">
                             <i class="far fa-bell"></i>
-                            <span class="d-none d-sm-block">Obserwuj</span>
+                            <span class="d-none d-sm-inline">Obserwuj</span>
                         </a>
                     {% endif %}
 
                     <a data-toggle="tooltip" data-placement="top" title="Udostępnij link do tego postu" data-category="postLinks" data-action="share" href="{{ route('forum.share', [post.id]) }}" class="btn btn-sm btn-share">
                         <i class="fas fa-share-alt"></i>
-                        <span class="d-none d-sm-block">Udostępnij</span>
+                        <span class="d-none d-sm-inline">Udostępnij</span>
                     </a>
 
                     {% if auth_check() %}
                         {% if is_writeable %}
                             <a data-toggle="collapse" data-placement="top" title="Napisz komentarz do postu" data-category="postLinks" data-action="comment" class="btn btn-sm btn-comment" href="#form-{{ post.id }}">
                                 <i class="far fa-comment"></i>
-                                <span class="d-none d-sm-block">Komentuj</span>
+                                <span class="d-none d-sm-inline">Komentuj</span>
                             </a>
                         {% endif %}
 
                         <a data-toggle="tooltip" data-placement="top" title="Zgłoś naruszenie w tym poście" data-category="postLinks" data-action="report" rel="nofollow" class="btn btn-sm btn-report" href="{{ route('flag') }}" data-url="{{ url }}" data-metadata="{{ {'post_id': post.id, 'topic_id': topic.id, 'forum_id': topic.forum_id, 'permission': 'delete'}|encrypt }}">
                             <i class="fas fa-flag"></i>
-                            <span class="d-none d-sm-block">Raportuj</span>
+                            <span class="d-none d-sm-inline">Raportuj</span>
                         </a>
                     {% endif %}
                 {% endif %}
@@ -214,7 +214,7 @@
                     {% if not post.deleted_at %}
                         <a data-toggle="tooltip" data-placement="top" title="Odpowiedz cytując ten post" data-category="postLinks" data-action="quote" rel="nofollow" href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}?quote={{ post.id }}" class="btn btn-sm btn-quote">
                             <i class="fas fa-quote-right"></i>
-                            <span class="d-none d-sm-block">Odpowiedz</span>
+                            <span class="d-none d-sm-inline">Odpowiedz</span>
                         </a>
 
                         <a data-toggle="tooltip" data-placement="top" title="Dodaj ten post jako cytat w formularzu odpowiedzi" data-category="postLinks" data-action="multi-quote" rel="nofollow" class="btn btn-sm btn-multi-quote" data-post-id="{{ post.id }}" data-topic-id="{{ topic.id }}">
@@ -226,12 +226,12 @@
                         {% if post.deleted_at %}
                             <a data-toggle="tooltip" data-placement="top" title="Przywróć ten post" data-category="postLinks" data-action="restore" href="{{ route('forum.post.restore', [post.id]) }}" class="btn btn-sm btn-res">
                                 <i class="fas fa-undo"></i>
-                                <span class="d-none d-sm-block">Przywróć</span>
+                                <span class="d-none d-sm-inline">Przywróć</span>
                             </a>
                         {% else %}
                             <a data-toggle="tooltip" data-placement="top" title="Usuń ten post" data-category="postLinks" data-action="delete" href="{{ route('forum.post.delete', [post.id]) }}" class="btn btn-sm btn-del">
                                 <i class="fas fa-times"></i>
-                                <span class="d-none d-sm-block">Usuń</span>
+                                <span class="d-none d-sm-inline">Usuń</span>
                             </a>
                         {% endif %}
                     {% endif %}
@@ -239,11 +239,11 @@
                     {% if can('update', post) and not post.deleted_at %}
                         <a href="{{ route('forum.post.submit', [forum.slug, topic.id, post.id]) }}" data-toggle="tooltip" data-placement="top" title="Edytuj ten post" data-category="postLinks" data-action="edit" class="btn btn-sm btn-edit">
                             <i class="fas fa-pencil-alt"></i>
-                            <span class="d-none d-sm-block">Edytuj</span>
+                            <span class="d-none d-sm-inline">Edytuj</span>
                         </a>
                         <a href="{{ route('forum.post.edit', [forum.slug, topic.id, post.id]) }}" data-toggle="tooltip" data-placement="top" title="Włącz/wyłącz szybką edycję postu" data-category="postLinks" data-action="fastEdit" data-post-id="{{ post.id }}" class="btn btn-sm btn-fast-edit">
                             <i class="fas fa-edit"></i>
-                            <span class="d-none d-sm-block">Szybka edycja</span>
+                            <span class="d-none d-sm-inline">Szybka edycja</span>
                         </a>
                     {% endif %}
                 {% endif %}
