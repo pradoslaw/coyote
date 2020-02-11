@@ -26,9 +26,9 @@
       <div v-for="(category, index) in categories" v-if="!category.is_hidden" :class="{'new': !category.is_read}" class="card-body">
         <div class="row">
           <div class="col-lg-7 col-12 col-sm-6 col-main">
-            <i v-if="category.is_locked" class="logo fas fa-lock float-left visible-lg"></i>
+            <i v-if="category.is_locked" class="logo fas fa-lock float-left d-none d-lg-block"></i>
             <a v-else :href="category.url">
-              <i :class="className(category.name)" class="logo far fa-comments float-left visible-lg">
+              <i :class="className(category.name)" class="logo far fa-comments float-left d-none d-lg-block">
                 <b v-if="!category.is_read"></b>
               </i>
             </a>

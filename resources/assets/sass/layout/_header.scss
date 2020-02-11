@@ -57,6 +57,7 @@ body.padding-top {
     overflow: inherit;
     text-overflow: inherit;
     max-width: 100%;
+    color: #fff;
   }
 
   .badge.new {
@@ -220,13 +221,14 @@ body.padding-top {
     padding: 15px 9px;
     display: block;
     color: $gray-light;
+    position: relative;
 
     i {
       font-size: 14px;
     }
 
     > .badge {
-      top: 8px;
+      top: 5px;
       right: -1px;
     }
 
@@ -437,15 +439,18 @@ body.padding-top {
     border-bottom-color: #f8f8f8;
   }
 
-  @media (max-width: $container-max-widths[sm]) {
+  @include media-breakpoint-down(sm) {
     background-color: transparent;
     border: 1px solid $border-color;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
 
     left: 0;
     width: 100%;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
+    border-radius: 0;
+
+    .dropdown-header {
+      border-radius: 0;
+    }
 
     // DO NOT show triangle above menu (only for mobile devices)
     &:after, &:before {
@@ -470,7 +475,6 @@ body.padding-top {
   }
 
   .notification {
-    padding: 0 6px;
     border-bottom: 1px solid $body-bg;
     position: relative; // we need this to position remove button in notification
 
@@ -493,7 +497,7 @@ body.padding-top {
 
   .media-object {
     width: 35px;
-    min-height: 35px;
+    height: 35px;
 
     img {
       width: 100%;
@@ -502,8 +506,7 @@ body.padding-top {
 
   .notification-link {
     display: block;
-    padding: 7px 0;
-    position: relative;
+    padding: 7px 6px;
   }
 
   .btn-delete-alert {
@@ -516,9 +519,6 @@ body.padding-top {
 
   .media-body {
     header {
-      overflow: hidden;
-      white-space: nowrap;
-
       h4 {
         color: $gray-light;
         float: left;
@@ -533,7 +533,6 @@ body.padding-top {
         float: right;
         color: $gray-light;
         font-size: 10px;
-        max-width: 29%;
       }
     }
 
@@ -544,14 +543,13 @@ body.padding-top {
       font-weight: bold;
       font-family: Arial, sans-serif;
       color: $brand-primary;
-
-      @include text-overflow();
     }
 
     p {
       padding-right: 3px;
       margin: 0;
       color: $gray;
+      clear: both;
     }
   }
 }

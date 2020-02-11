@@ -7,12 +7,12 @@
         </object>
 
         <div class="media-body">
-          <header>
+          <header class="text-truncate">
             <h4>{{ message.user.name }}</h4>
             <small>{{ message.created_at }}</small>
           </header>
 
-          <p>
+          <p class="text-truncate">
             <template v-if="message.folder === SENTBOX">
               <i v-if="message.read_at" class="fas fa-check"></i>
               <span v-else>Ty: </span>

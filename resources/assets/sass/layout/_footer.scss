@@ -71,11 +71,19 @@ footer {
     color: lighten($gray-light, 15%);
   }
 
-  .col-md-2 {
-    border-left: 1px solid #575757;
+  @include media-breakpoint-up('md') {
 
-    &:first-child {
-      border-left: none;
+
+    .col-md-2 {
+      border-left: 1px solid #575757;
+
+      &:first-child {
+        border-left: none;
+
+        ul {
+          margin-left: 0;
+        }
+      }
     }
   }
 
@@ -98,21 +106,6 @@ footer {
           color: #CACACA;
         }
       }
-    }
-
-    // gdy rozdzielczosc jest mniejsza - chowamy chmurke
-    @include media-breakpoint-down(md) {
-      background: none;
-      padding: 0;
-
-      &:after {
-        display: none;
-      }
-
-      ol {
-        margin: 0;
-      }
-
     }
   }
 

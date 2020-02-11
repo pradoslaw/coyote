@@ -6,14 +6,14 @@
           <img src="/img/avatar.png">
         </object>
 
-        <div class="media-body">
+        <div class="media-body text-truncate">
           <header>
             <h4>{{ notification.headline }}</h4>
             <small>{{ notification.created_at }}</small>
           </header>
 
-          <h3>{{ notification.subject }}</h3>
-          <p>{{ notification.excerpt }}</p>
+          <h3 class="text-truncate">{{ notification.subject }}</h3>
+          <p class="text-truncate">{{ notification.excerpt }}</p>
         </div>
       </div>
     </a>

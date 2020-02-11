@@ -1,32 +1,16 @@
 .page-link,
 .page-item.disabled > .page-link {
-  background-color: #ddd;
-  color: $text-color;
-  border: none;
   border-radius: 5px;
   margin: 0 2px;
-  padding: 5px 8pt;
 }
 
 .page-item.active > .page-link {
-  background-color: $gray-dark;
-  color: #fff;
   font-weight: bold;
 }
 
-//.pagination-xs {
-//  @include pagination-size(5px, 10px, ceil(($font-size-base * 0.78)), $line-height-sm, $border-radius-small);
-//}
-
-//@include media-breakpoint-down(sm)  {
-//  .pagination {
-//    font-size: $font-size-small;
-//
-//    > li > a,
-//    > li > span,
-//    > .disabled > span {
-//      padding: 4px 7px;
-//      font-size: 11px;
-//    }
-//  }
-//}
+@include media-breakpoint-down(sm)  {
+  .page-link {
+    font-size: $font-size-small;
+    padding: $pagination-padding-y-sm - .1rem $pagination-padding-x-sm - .1rem;
+  }
+}

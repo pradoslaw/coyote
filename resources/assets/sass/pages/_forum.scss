@@ -1,14 +1,4 @@
 @charset "UTF-8";
-//@import "../helpers/mixins";
-//@import "../helpers/variables";
-//@import "~@fortawesome/fontawesome-free/scss/variables";
-//@import "../vendor/bootstrap/variables";
-//@import "../components/sidemenu";
-//@import "../components/related";
-//@import "../components/stream";
-//@import "../components/affix";
-//@import "../components/search";
-//@import "../components/who-is-online";
 
 .card-section {
   .card-categories:nth-child(odd) {
@@ -36,7 +26,7 @@
   .card-section {
     background-color: $panel-footer-bg;
     padding: 10px 0 0 0;
-    border: 1px solid $border-color;
+    //border: 1px solid $border-color;
   }
 
   .section-name {
@@ -48,6 +38,7 @@
 @include media-breakpoint-down(lg) {
   .card-section {
     background-color: transparent;
+    border: none;
   }
 }
 

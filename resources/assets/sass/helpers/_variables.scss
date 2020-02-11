@@ -1,5 +1,8 @@
 @charset "UTF-8";
 
+// DEPRECATED!!!
+////////////////
+
 // nieco ciemniszy kolor linkow (w sytuacji gdy wiele linkow jest obok siebie domyslny kolor jest zbyt jasny)
 // -------------------------------------------------------------------------------------------------------
 
@@ -13,10 +16,7 @@ $alt-link-hover-color:      #d7661c;
 
 $header-navbar-bg-color:    #454545;
 
-// obramowanie elementow typu "boksy" (tabele, div itp)
-// ---------------------------------------------------
 
-$border-color:              #ddd;
 
 // kolor naglowka <h4> znajdujacego sie w elemencie .box (elementy sekcji)
 $box-header-color:          #646466;

@@ -1,9 +1,9 @@
 <div class="row container-xxl no-gutters">
     <div class="col-12">
-        <ul class="breadcrumb text-nowrap text-truncate">
+        <ul class="breadcrumb text-truncate">
             <li class="breadcrumb-item">
                 <a href="{{ route('home') }}" class="d-block d-sm-none"><i class="fas fa-home"></i></a>
-                <a href="{{ route('home') }}" class="d-sm-none d-md-inline-block">{{ config_get('app.name') }}</a>
+                <a href="{{ route('home') }}" class="d-none d-sm-inline-block">{{ config_get('app.name') }}</a>
             </li>
 
             {% for breadcrumb in breadcrumbs %}

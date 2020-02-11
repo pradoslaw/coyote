@@ -36,11 +36,11 @@
       {% import 'components.forms' as forms %}
       {% import 'components.widgets' as widgets %}
 
-      <div class="container-fluid px-0">
+      <div class="container-fluid">
         <header class="navbar-header {{ auth_guest() or user('allow_sticky_header') ? ' fixed-top' }} {{ __dark_theme ? 'navbar-dark' }}">
           <div class="navbar-border-top"></div>
 
-          <div class="header-root container-xxl">
+          <div class="header-root container-xxl pl-2 pr-2 pl-xl-0 pr-xl-0">
             {{ form_open({url: route('logout'), name: 'logout-form'}) }}
             {{ form_close() }}
 
@@ -105,7 +105,7 @@
                 <a class="btn btn-sm d-inline-block btn-login d-none d-sm-block" href="{{ route('login') }}">Logowanie</a>
               {% endif %}
 
-              <form action="{{ search_url|default(route('search')) }}" class="nav-search d-none d-sm-inline-block d-md-inline-block" role="search">
+              <form action="{{ search_url|default(route('search')) }}" class="nav-search d-none d-md-inline-block" role="search">
                 <div class="input-group">
                   <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}">
 
@@ -116,25 +116,14 @@
                   </span>
                 </div>
               </form>
+
+              <button class="navbar-toggler d-inline-block d-sm-none" type="button" data-toggle="collapse" data-target="#nav-mobile">
+                <i class="fa fa-bars"></i>
+              </button>
             </div>
 
-{#            <div class="clearfix">#}
-{#              <button type="button" class="navbar-toggle margin-sm-left" data-toggle="collapse" data-target=".nav-mobile">#}
-{#                <span class="sr-only">Toggle navigation</span>#}
-{#                <span class="icon-bar"></span>#}
-{#                <span class="icon-bar"></span>#}
-{#                <span class="icon-bar"></span>#}
-{#              </button>#}
-
-
-
-
-
-
-{#            </div>#}
-
-            <div class="d-block d-sm-none">
-              <ul class="collapse navbar-collapse nav-mobile">
+            <div id="nav-mobile" class="collapse navbar-collapse">
+              <ul class="nav-mobile">
                 {% for item in __master_menu.roots() %}
                   <li {{ forms.attr(item.attr) }}>
                     <a href="{{ item.url }}">{{ item.title|raw }}</a>
@@ -154,7 +143,7 @@
                   <li class="dropdown-divider"></li>
 
                   <li>
-                    <a href="javascript:" class="js-change-menu">Nowe menu <sup class="label label-new">Beta</sup></a>
+                    <a href="javascript:" class="js-change-menu">Nowe menu <sup class="badge label-new">Beta</sup></a>
                   </li>
 
                   <li class="dropdown-divider"></li>
@@ -188,7 +177,7 @@
         {{ breadcrumb|raw }}
 
         <noscript>
-          <div class="row max-width">
+          <div class="row">
             <div class="col-xs">
               <div class="alert alert-danger">
                 4programmers.net works best with JavaScript enabled!
@@ -197,72 +186,69 @@
           </div>
         </noscript>
 
-
         {{ render_region('header') }}
 
         {% block fixed %}
           <div class="container-xxl no-gutters">
-{#            <div class="col-md">#}
-              {% if session_has('success') %}
-                <div class="row">
-                  <div class="col-xs">
-                    <div class="alert alert-success margin-md-top">
-                      <i class="fas fa-check"></i>
+            {% if session_has('success') %}
+              <div class="row">
+                <div class="col-xs">
+                  <div class="alert alert-success margin-md-top">
+                    <i class="fas fa-check"></i>
 
-                      {{ session_get('success') }}
-                    </div>
+                    {{ session_get('success') }}
                   </div>
                 </div>
-              {% endif %}
+              </div>
+            {% endif %}
 
-              {% if session_has('error') %}
-                <div class="row">
-                  <div class="col-xs">
-                    <div class="alert alert-danger margin-md-top">
-                      <i class="fas fa-exclamation-triangle"></i>
+            {% if session_has('error') %}
+              <div class="row">
+                <div class="col-xs">
+                  <div class="alert alert-danger margin-md-top">
+                    <i class="fas fa-exclamation-triangle"></i>
 
-                      {{ session_get('error') }}
-                    </div>
+                    {{ session_get('error') }}
                   </div>
                 </div>
-              {% endif %}
+              </div>
+            {% endif %}
 
-              {% block container %}
+            {% block container %}
 
-              {% endblock %}
-{#            </div>#}
+            {% endblock %}
           </div>
         {% endblock %}
-
-        <footer class="no-gutters">
-          <div id="footer-top">
-            <div class="row max-width">
-              <div class="col-xs">
-                <a href="https://www.facebook.com/4programmers.net" id="facebook-button" title="Zobacz nasz profil na facebooku!"></a>
-              </div>
-            </div>
-
-            {{ breadcrumb|raw }}
-          </div>
-
-          <div id="footer-inner">
-            {{ render_block('footer') }}
-
-            <a href="#top" class="back-to-top" title="Powrót na górę"><i class="fas fa-angle-up"></i></a>
-          </div>
-
-          <div id="footer-copyright">
-            <div class="row container-xxl no-gutters">
-              <div class="col-lg">
-                <div class="float-left">Copyright © 2000-{{ 'now'|date('Y') }} <a title="4programmers.net -- programowanie" class="logo" href="http://4programmers.net/">4programmers.net
-                    - programowanie i tworzenie stron WWW</a></div>
-
-                <div class="float-right">Coyote {{ config('app.version') }}: {{ timer() }}</div>
-              </div>
-            </div>
-          </div>
-        </footer>
       </div>
+
+      <footer class="no-gutters">
+        <div id="footer-top" class="pl-2 pr-2 pl-xl-0 pr-xl-0">
+          <div class="row">
+            <div class="col-xs">
+              <a href="https://www.facebook.com/4programmers.net" id="facebook-button" title="Zobacz nasz profil na facebooku!"></a>
+            </div>
+          </div>
+
+          {{ breadcrumb|raw }}
+        </div>
+
+        <div id="footer-inner">
+          {{ render_block('footer') }}
+
+          <a href="#top" class="back-to-top" title="Powrót na górę"><i class="fas fa-angle-up"></i></a>
+        </div>
+
+        <div id="footer-copyright">
+          <div class="row container-xxl no-gutters">
+            <div class="col-lg pl-2 pr-2 pl-xl-0 pr-xl-0">
+              <div class="float-left">Copyright © 2000-{{ 'now'|date('Y') }} <a title="4programmers.net -- programowanie" class="logo" href="http://4programmers.net/">4programmers.net
+                  - programowanie i tworzenie stron WWW</a></div>
+
+              <div class="float-right">Coyote {{ config('app.version') }}: {{ timer() }}</div>
+            </div>
+          </div>
+        </div>
+      </footer>
 
       {{ widgets.vue() }}
 

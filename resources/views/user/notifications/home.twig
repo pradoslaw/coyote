@@ -2,44 +2,44 @@
 {% block title %}Powiadomienia {{ parent() }}{% endblock %}
 
 {% block content %}
-    <h2>Powiadomienia</h2>
+  <h2>Powiadomienia</h2>
 
-    <div id="box-alerts" class="card card-default">
-        <div class="card-body">
-            {% set head_date = '' %}
+  <div id="box-alerts" class="card card-default">
+    <div class="card-body">
+      {% set head_date = '' %}
 
-            <nav class="text-center">
-                {{ pagination.render()|raw }}
-            </nav>
+      <nav class="mt-3 mb-3 d-flex justify-content-center">
+        {{ pagination.render()|raw }}
+      </nav>
 
-            {% for notification in pagination %}
-                {% set url = route('user.notifications.url', [notification.id]) %}
+      {% for notification in pagination %}
+        {% set url = route('user.notifications.url', [notification.id]) %}
 
-                <div class="media {{ notification.is_read ? '' : 'unread' }}">
-                    <div class="media-left">
-                        <a href="{{ route('profile', [notification.user.user_id]) }}">
-                            <object class="media-object" data="{{ notification.photo|default('//') }}" style="width: 49px; height: 49px;" title="{{ notification.user.name }}" type="image/png">
-                              <img src="/img/avatar.png" style="width: 100%">
-                            </object>
-                        </a>
-                    </div>
-                    <div class="media-body">
-                        <header>
-                            <h4 class="float-left"><a href="{{ url }}">{{ notification.headline }}</a></h4>
-                            <small class="float-right">{{ notification.created_at }}</small>
-                        </header>
+        <div class="media {{ notification.is_read ? '' : 'unread' }}">
+          <div class="d-none d-sm-block mr-2" style="width: 49px; height: 49px;" >
+            <a href="{{ route('profile', [notification.user.user_id]) }}">
+              <object data="{{ notification.photo|default('//') }}" title="{{ notification.user.name }}" type="image/png">
+                <img src="/img/avatar.png" style="max-width: 100%">
+              </object>
+            </a>
+          </div>
+          <div class="media-body">
+            <header>
+              <h4 class="float-left"><a href="{{ url }}">{{ notification.headline }}</a></h4>
+              <small class="float-right">{{ notification.created_at }}</small>
+            </header>
 
-                        <h3><a href="{{ url }}">{{ notification.subject }}</a></h3>
-                        <p class="excerpt"><a href="{{ url }}">{{ notification.excerpt }}</a></p>
-                    </div>
-                </div>
-            {% else %}
-                <p class="alert alert-info">Brak powiadomień.</p>
-            {% endfor %}
-
-            <nav class="text-center">
-                {{ pagination.render()|raw }}
-            </nav>
+            <h3><a href="{{ url }}">{{ notification.subject }}</a></h3>
+            <p class="excerpt"><a href="{{ url }}">{{ notification.excerpt }}</a></p>
+          </div>
         </div>
+      {% else %}
+        <p class="alert alert-info">Brak powiadomień.</p>
+      {% endfor %}
+
+      <nav class="mt-3 mb-3 d-flex justify-content-center">
+        {{ pagination.render()|raw }}
+      </nav>
     </div>
+  </div>
 {% endblock %}

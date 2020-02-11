@@ -3,6 +3,7 @@ ul.breadcrumb {
   margin: 0;
   background: none;
   padding: 10px 0;
+  flex-wrap: nowrap;
 
   li a {
     color: #626262;
