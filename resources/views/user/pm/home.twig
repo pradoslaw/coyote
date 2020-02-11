@@ -1,7 +1,7 @@
 {% extends 'user.pm.base' %}
 
 {% block pm %}
-  <nav class="text-center">
+  <nav class="d-flex justify-content-center mt-2 mb-2">
     <vue-pagination :total-pages="totalPages" :current-page="currentPage" @change="changePage"></vue-pagination>
   </nav>
 
@@ -17,7 +17,7 @@
   </template>
   <div v-cloak v-else class="text-center">Brak wiadomości prywatnych.</div>
 
-  <nav class="text-center">
+  <nav class="d-flex justify-content-center mt-2 mb-2">
     <vue-pagination :total-pages="totalPages" :current-page="currentPage" @change="changePage"></vue-pagination>
   </nav>
 {% endblock %}

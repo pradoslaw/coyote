@@ -54,14 +54,14 @@
                                     {{ form_widget(form.price) }}
                                     {{ form_row(form.name) }}
 
-                                    <div class="form-group form-group-border credit-card-container has-feedback {{ errors.has('number') ? 'has-error' }}">
+                                    <div class="form-group row form-group-border credit-card-container has-feedback {{ errors.has('number') ? 'has-error' }}">
                                         {{ form_label(form.number) }}
 
                                         {{ form_widget(form.number) }}
                                         {{ form_error(form.number) }}
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="form-group row">
                                         <div class="row">
                                             <div class="col-sm-7 {{ errors.has('exp_month') ? 'has-error' }}">
                                                 <label class="col-form-label">Data ważności karty *</label>
@@ -79,7 +79,7 @@
                                             </div>
 
                                             <div class="col-sm-5">
-                                                <div class="form-group has-feedback {{ errors.has('cvc') ? 'has-error' }}">
+                                                <div class="form-group row has-feedback {{ errors.has('cvc') ? 'has-error' }}">
                                                     {{ form_label(form.cvc) }}
 
                                                     <img src="{{ cdn('img/cvc.png') }}" class="cvc">
@@ -158,7 +158,7 @@
                         </div>
                     </div>
 
-                    <div id="form-navigation" class="form-group">
+                    <div id="form-navigation" class="form-group row">
                         <a href="{{ route('job.offer', [payment.job.id, payment.job.slug]) }}" class="btn btn-secondary float-left"><i class="fas fa-angle-left"></i> Powrót do ogłoszenia</a>
 
                         <button type="submit" id="submit" class="btn btn-primary float-right" data-submit-state="Realizacja płatności...">Zapłać i zapisz <i class="fas fa-angle-right"></i></button>
@@ -168,7 +168,7 @@
                 <div class="card-body" v-show="grossPrice == 0">
                     <h1 class="text-center"><i class="fas fa-check text-primary"></i> Płatność nie jest wymagana</h1>
 
-                    <div class="form-group text-center margin-md-top">
+                    <div class="form-group row text-center margin-md-top">
                         <button type="submit" class="btn btn-primary btn-lg" data-submit-state="Zapisywanie...">Zapisz i zakończ</button>
                     </div>
                 </div>

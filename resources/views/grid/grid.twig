@@ -1,58 +1,56 @@
 <div class="grid">
 
-    {% block header %}
-        {% if create_button or button %}
-            <div class="float-left">
-                <p>
-                    {{ create_button|raw }}
-                    {{ button|raw }}
-                </p>
-            </div>
+  {% block header %}
+    {% if create_button or button %}
+      <div class="float-left">
+        <p>
+          {{ create_button|raw }}
+          {{ button|raw }}
+        </p>
+      </div>
+    {% endif %}
 
-            <div class="float-right">{{ pagination|raw }}</div>
-        {% else %}
-            {{ pagination|raw }}
+    <div class="d-flex justify-content-center mt-2 mb-2">{{ pagination|raw }}</div>
+  {% endblock %}
+
+  {% block table %}
+    {{ form_open({id: 'filter-form', url: form_url, method: http_method|default('get')}) }}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          {% for column in columns %}
+            {{ grid_column(column) }}
+          {% endfor %}
+        </tr>
+        {% if is_filterable %}
+          <tr>
+            {% for column in columns %}
+              {{ grid_filter(column) }}
+            {% endfor %}
+          </tr>
         {% endif %}
-    {% endblock %}
-
-    {% block table %}
-        {{ form_open({id: 'filter-form', url: form_url, method: http_method|default('get')}) }}
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        {% for column in columns %}
-                            {{ grid_column(column) }}
-                        {% endfor %}
-                    </tr>
-                    {% if is_filterable %}
-                        <tr>
-                            {% for column in columns %}
-                                {{ grid_filter(column) }}
-                            {% endfor %}
-                        </tr>
-                    {% endif %}
-                </thead>
-                <tbody>
-                    {% for row in rows %}
-                        {{ grid_row(row) }}
-                    {% else %}
-                        <tr>
-                            {{ grid_empty(grid) }}
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-
-            {{ submit_button|raw }}
-            <input type="submit" style="visibility: hidden; height: 1px; width: 1px" />
-        {{ form_close() }}
-    {% endblock %}
-
-    {% block footer %}
-        {% if create_button or button %}
-            <div class="float-right">{{ pagination|raw }}</div>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+          {{ grid_row(row) }}
         {% else %}
-            {{ pagination|raw }}
-        {% endif %}
-    {% endblock %}
+          <tr>
+            {{ grid_empty(grid) }}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {{ submit_button|raw }}
+    <input type="submit" style="visibility: hidden; height: 1px; width: 1px"/>
+    {{ form_close() }}
+  {% endblock %}
+
+  {% block footer %}
+    {% if create_button or button %}
+      <div class="float-right">{{ pagination|raw }}</div>
+    {% endif %}
+
+    <div class="d-flex justify-content-center mt-2 mb-2">{{ pagination|raw }}</div>
+  {% endblock %}
 </div>

@@ -5,136 +5,136 @@
 {% import 'components.modals' as modals %}
 
 {% block content %}
-    <h2>Umiejętności</h2>
+  <h2>Umiejętności</h2>
 
-    <div id="box-skills" class="card card-default">
-        <div class="card-body">
-            <div class="list-group">
-                {% for item in skills %}
-                    {% include 'user.skills.list' %}
-                {% endfor %}
-            </div>
+  <div id="box-skills" class="card card-default">
+    <div class="card-body">
+      <div class="list-group">
+        {% for item in skills %}
+          {% include 'user.skills.list' %}
+        {% endfor %}
+      </div>
 
-            {{ form_start(form) }}
-            {{ form_widget(form.rate, {type: 'hidden', value: 0}) }}
+      {{ form_start(form) }}
+      {{ form_widget(form.rate, {type: 'hidden', value: 0}) }}
 
-            <div class="form-group">
-                <div class="col-sm-9 col-md-10 col-lg-11 col-8">
-                    {{ form_widget(form.name) }}
+      <div class="form-group row mt-4">
+        <div class="col">
+          {{ form_widget(form.name) }}
 
-                    <div class="alert alert-warning alert-popover top hidden-xs hidden-sm" data-id="skills">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close" title="Kliknij, aby zamknąć">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+          <div class="alert alert-warning alert-popover top hidden-xs hidden-sm" data-id="skills">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" title="Kliknij, aby zamknąć">
+              <span aria-hidden="true">&times;</span>
+            </button>
 
-                        Umiejętności będą widoczne na Twoim profilu.
-                    </div>
-                </div>
-                <div class="col-sm-3 col-md-2 col-lg-1 col-4">
-                    <button type="submit" class="btn btn-primary">
-                        Dodaj
-                    </button>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="rate-container col-12">
-                    {% for label in rate_labels %}
-                        <a class="rate rate-large" title="{{ label }}"></a>
-                    {% endfor %}
-                </div>
-            </div>
-
-            {{ form_end(form) }}
+            Umiejętności będą widoczne na Twoim profilu.
+          </div>
         </div>
-    </div>
+        <div class="col">
+          <button type="submit" class="btn btn-primary">
+            Dodaj
+          </button>
+        </div>
+      </div>
 
-    {{ modals.alert('') }}
-    {{ modals.confirm('Czy chcesz usunąć te umiejętność ze swojej listy?') }}
+      <div class="form-group row">
+        <div class="rate-container col-12">
+          {% for label in rate_labels %}
+            <a class="rate rate-large" title="{{ label }}"></a>
+          {% endfor %}
+        </div>
+      </div>
+
+      {{ form_end(form) }}
+    </div>
+  </div>
+
+  {{ modals.alert('') }}
+  {{ modals.confirm('Czy chcesz usunąć te umiejętność ze swojej listy?') }}
 {% endblock %}
 
 {% block body %}
-    {{ parent() }}
+  {{ parent() }}
 
-    <script src="{{ asset('js/jquery-ui.js') }}"></script>
-    <script>
-        $(function() {
-            var container = $('.rate-container');
-            var rates = $('.rate', container);
-            rates.tooltip({'trigger': 'hover'});
+  <script src="{{ asset('js/jquery-ui.js') }}"></script>
+  <script>
+    $(function () {
+      var container = $('.rate-container');
+      var rates = $('.rate', container);
+      rates.tooltip({'trigger': 'hover'});
 
-            rates.hover(function() {
-                var rate = rates.index(this);
-                $('.rate:lt(' + rate + '), .rate:eq(' + rate + ')', container).addClass('marked');
-                $('.rate:gt(' + rate + ')', container).removeClass('marked');
-            })
-            .click(function() {
-                $(':hidden[name=rate]').val(rates.index(this) + 1);
-            });
-
-            container.mouseleave(function() {
-                var rate = $(':hidden[name=rate]').val() - 1;
-                $('.rate', container).removeClass('marked');
-
-                if (rate > -1) {
-                    $('.rate:lt(' + rate + '), .rate:eq(' + rate + ')', container).addClass('marked');
-                }
-            });
-
-            $('#rate-form').submit(function() {
-                var $form = $(this);
-                $(':submit', $form).attr('disabled', 'disabled');
-
-                $.post($form.attr('action'), $form.serialize(), function(html) {
-                    $('.list-group').append(html);
-
-                    $('input[name="name"]', $form).val('');
-                    $('input[name="rate"]', $form).val(0);
-
-                    rates.removeClass('.mark');
-                })
-                .always(function() {
-                    $(':submit', $form).removeAttr('disabled');
-                })
-                .error(function(e) {
-                    var result = e.responseJSON;
-
-                    $('.modal-body').text(result.errors[Object.keys(result.errors)[0]]);
-                    $('#alert').modal('show');
-                });
-
-                return false;
-            });
-
-            $('#box-skills').on('click', '.btn-delete', function() {
-                var $this = $(this);
-
-                $('#confirm').modal('show').one('click', '.danger', function() {
-                    $.post($this.attr('href'), function() {
-                        $this.parent().fadeOut(500, function() {
-                            $(this).remove();
-                        });
-                    });
-
-                    $('#confirm').modal('hide');
-                });
-
-                return false;
-            });
-
-            $('.list-group').sortable({
-                update: function() {
-                    var order = {};
-
-                    $('.list-group-item').each(function(index) {
-                        order[$(this).data('id')] = index;
-                    });
-
-                    $.post('{{ route('user.skills.order') }}', {'order': order});
-                }
-            });
-
+      rates.hover(function () {
+        var rate = rates.index(this);
+        $('.rate:lt(' + rate + '), .rate:eq(' + rate + ')', container).addClass('marked');
+        $('.rate:gt(' + rate + ')', container).removeClass('marked');
+      })
+        .click(function () {
+          $(':hidden[name=rate]').val(rates.index(this) + 1);
         });
-    </script>
+
+      container.mouseleave(function () {
+        var rate = $(':hidden[name=rate]').val() - 1;
+        $('.rate', container).removeClass('marked');
+
+        if (rate > -1) {
+          $('.rate:lt(' + rate + '), .rate:eq(' + rate + ')', container).addClass('marked');
+        }
+      });
+
+      $('#rate-form').submit(function () {
+        var $form = $(this);
+        $(':submit', $form).attr('disabled', 'disabled');
+
+        $.post($form.attr('action'), $form.serialize(), function (html) {
+          $('.list-group').append(html);
+
+          $('input[name="name"]', $form).val('');
+          $('input[name="rate"]', $form).val(0);
+
+          rates.removeClass('.mark');
+        })
+          .always(function () {
+            $(':submit', $form).removeAttr('disabled');
+          })
+          .error(function (e) {
+            var result = e.responseJSON;
+
+            $('.modal-body').text(result.errors[Object.keys(result.errors)[0]]);
+            $('#alert').modal('show');
+          });
+
+        return false;
+      });
+
+      $('#box-skills').on('click', '.btn-delete', function () {
+        var $this = $(this);
+
+        $('#confirm').modal('show').one('click', '.danger', function () {
+          $.post($this.attr('href'), function () {
+            $this.parent().fadeOut(500, function () {
+              $(this).remove();
+            });
+          });
+
+          $('#confirm').modal('hide');
+        });
+
+        return false;
+      });
+
+      $('.list-group').sortable({
+        update: function () {
+          var order = {};
+
+          $('.list-group-item').each(function (index) {
+            order[$(this).data('id')] = index;
+          });
+
+          $.post('{{ route('user.skills.order') }}', {'order': order});
+        }
+      });
+
+    });
+  </script>
 
 {% endblock %}

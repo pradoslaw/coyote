@@ -33,13 +33,13 @@
                             </div>
 
                             <div class="row" v-show="textFocused">
-                                <div class="form-group col-sm-6">
+                                <div class="col-sm-6">
                                     {% if user('id') == null %}
                                         <input v-model="defaultEmail" type="text" name="email" class="form-control" placeholder="Adres e-mail" tabindex="2">
                                     {% endif %}
                                 </div>
 
-                                <div class="form-group col-sm-6">
+                                <div class="col-sm-6">
                                     <button type="submit" class="btn btn-primary btn-sm float-right" tabindex="3" title="Ctrl+Enter aby opublikować">Zapisz</button>
                                 </div>
                             </div>

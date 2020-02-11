@@ -7,7 +7,7 @@
 {% endmacro %}
 
 {% macro element(html, label, error, attr, help) %}
-    <div class="form-group {{ error ? 'has-error' }}" {{ _self.attr(attr) }}>
+    <div class="form-group row {{ error ? 'has-error' }}" {{ _self.attr(attr) }}>
         <label class="col-md-4 col-form-label">{{ label }}</label>
         <div class="col-md-6">
             {{ html|raw }}
@@ -22,7 +22,7 @@
 {% endmacro %}
 
 {% macro inline(html, label, error, help) %}
-    <div class="form-group {{ error ? 'has-error' }}">
+    <div class="form-group row {{ error ? 'has-error' }}">
         <label>{{ label }}</label>
 
         {{ html|raw }}
@@ -56,7 +56,7 @@
         {{ form_hidden(name, 0) }}
     {% endif %}
 
-    <div class="form-group {{ error ? 'has-error' }}" {{ _self.attr(attr) }}>
+    <div class="form-group row {{ error ? 'has-error' }}" {{ _self.attr(attr) }}>
 
         {% if not attr.id %}
             {% set attr = {'id': 'id' ~ random()} %}
@@ -81,7 +81,7 @@
 {% endmacro %}
 
 {% macro submit(value, state) %}
-    <div class="form-group">
+    <div class="form-group row">
         <div class="col-md-6 col-md-offset-4">
             <button type="submit" class="btn btn-primary" style="margin-right: 15px;" data-submit-state="{{ state|default(value) }}">
                 {{ value }}
@@ -91,7 +91,7 @@
 {% endmacro %}
 
 {% macro submit_delete(label, delete_url) %}
-    <div class="form-group">
+    <div class="form-group row">
         <div class="col-md-10 col-md-offset-2">
             <a class="btn btn-secondary" href="javascript:window.history.back()"><i class="fas fa-undo"></i> Powrót</a>
             <input type="submit" value="{{ label }}" class="btn btn-primary">
@@ -104,7 +104,7 @@
 {% endmacro %}
 
 {% macro back(url) %}
-    <div class="form-group">
+    <div class="form-group row">
         <div class="col-sm-10 col-sm-offset-2">
             <a class="btn btn-secondary" href="{{ url ? url : 'javascript:window.history.back()' }}"><i class="fas fa-undo"></i> Powrót</a>
         </div>

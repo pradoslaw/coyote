@@ -30,7 +30,7 @@
 
         <div class="margin-sm-top" v-if="isEditing">
           <form method="post" :action="comment.route.edit" ref="updateForm" @submit.prevent="updateForm">
-            <div class="form-group">
+            <div class="form-group row">
               <textarea-autosize
                 name="text"
                 class="form-control"
@@ -44,7 +44,7 @@
               ></textarea-autosize>
             </div>
 
-            <div class="form-group">
+            <div class="form-group row">
               <button type="submit" class="btn btn-primary btn-sm float-right margin-xs-left">Zapisz</button>
               <button type="button" class="btn btn-danger btn-sm float-right" @click="isEditing = false">Anuluj</button>
             </div>
@@ -53,7 +53,7 @@
           </form>
         </div>
 
-        <ul class="list-inline list-inline-bullet">
+        <ul class="list-inline list-inline-bullet mb-0">
           <li class="list-inline-item"><a @click="reply" href="javascript:" class="text-muted">Odpowiedz</a></li>
           <li class="list-inline-item">
             <a :href="comment.route.flag" :data-url="comment.flag.url" :data-metadata="comment.flag.metadata" class="btn-report text-muted">Zgłoś</a>

@@ -16,7 +16,7 @@
 
     <div class="card card-default">
         <div class="card-body">
-            <nav>{{ paginate|raw }}</nav>
+            <nav class="d-flex justify-content-center mt-2 mb-2">{{ paginate|raw }}</nav>
 
             <table class="table table-striped">
                 <thead>
@@ -30,7 +30,7 @@
                 </tbody>
             </table>
 
-            <nav>{{ paginate|raw }}</nav>
+            <nav class="d-flex justify-content-center mt-2 mb-2">{{ paginate|raw }}</nav>
         </div>
     </div>
 {% endblock %}

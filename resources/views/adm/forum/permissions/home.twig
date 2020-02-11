@@ -5,7 +5,7 @@
     <div class="card card-default">
         <div class="card-body">
             {{ form_open({url: route('adm.forum.permissions.save'), method: 'get', class: 'form-inline'}) }}
-            <div class="form-group">
+            <div class="form-group row">
                 <label>Wybierz kategorię</label>
                 {{ form_select('id', {'': '--'} + categoriesList, input_get('id'), {'class': 'form-control form-control-sm'}) }}
             </div>

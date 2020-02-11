@@ -1,6 +1,6 @@
 {% import 'components.forms' as forms %}
 
-<div {{ forms.attr(row_attr|merge({class: (row_attr.class|default('') ~ ' form-group ' ~ (error ? ' has-error'))|trim})) }}>
+<div {{ forms.attr(row_attr|merge({class: (row_attr.class|default('') ~ ' form-group row' ~ (error ? ' has-error'))|trim})) }}>
     {% if label %}
         {% block label %}{{ include(theme ~ '.label') }}{% endblock %}
     {% endif %}

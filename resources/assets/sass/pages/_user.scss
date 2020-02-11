@@ -172,7 +172,7 @@
     margin: 3px 0;
     font-weight: 700;
     color: $brand-primary;
-    font-family: Arial,sans-serif;
+    font-family: Arial, sans-serif;
   }
 
   h2 {
@@ -212,6 +212,7 @@
   .media-object {
     width: 50px;
     height: 50px;
+    display: block;
 
     img {
       width: 100%;
@@ -301,14 +302,12 @@
 // nowej wiadomosci (umozliwiajace przelaczenie sie w tryb edycji oraz podgladu)
 #app-pm {
   .nav-tabs {
-    > li.active {
-      > a {
-        &,
-        &:focus,
-        &:hover {
-          background-color: transparent;
-          border-bottom-color: #fff;
-        }
+    .nav-link.active {
+      &,
+      &:focus,
+      &:hover {
+        background-color: transparent;
+        border-bottom-color: #fff;
       }
     }
   }

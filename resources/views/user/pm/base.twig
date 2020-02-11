@@ -5,9 +5,9 @@
 {% block content %}
     <h2>{{ page_name }}</h2>
 
-    <ul class="nav nav-card">
-        <li role="presentation" {{ parent != 'user.pm.submit' ? 'class="active"' }}><a href="{{ route('user.pm') }}">Wiadomości ({{ user('pm_unread') }}/{{ user('pm') }})</a></li>
-        <li role="presentation" {{ parent == 'user.pm.submit' ? 'class="active"' }}><a href="{{ route('user.pm.submit') }}">Napisz wiadomość</a></li>
+    <ul class="nav nav-panel">
+        <li class="nav-item {{ parent != 'user.pm.submit' ? 'active' }}"><a href="{{ route('user.pm') }}">Wiadomości ({{ user('pm_unread') }}/{{ user('pm') }})</a></li>
+        <li class="nav-item {{ parent == 'user.pm.submit' ? 'active' }}"><a href="{{ route('user.pm.submit') }}">Napisz wiadomość</a></li>
     </ul>
 
     <div id="app-pm" class="card card-default">

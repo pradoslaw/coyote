@@ -1,16 +1,16 @@
 <template>
   <div class="media" :class="{'unread': ! isRead}" @mouseenter.once="asRead">
-    <div class="media-left">
-      <a v-profile="message.user.id">
-        <object :data="message.user.photo || '//'" type="image/png" class="media-object">
+
+      <a v-profile="message.user.id" class="d-inline-block">
+        <object :data="message.user.photo || '//'" type="image/png" class="media-object mr-2">
           <img src="/img/avatar.png" :alt="message.user.name">
         </object>
       </a>
-    </div>
+
     <div class="media-body">
       <small class="float-right">{{ message.created_at }}</small>
 
-      <h3 class="media-heading">
+      <h3>
         <a v-if="clickableText" :href="'/User/Pm/Show/' + message.id">{{ message.user.name }}</a>
         <a v-else v-profile="message.user.id">{{ message.user.name }}</a>
       </h3>

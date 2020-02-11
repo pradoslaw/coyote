@@ -101,8 +101,8 @@
                   </div>
                 </div>
               {% else %}
-                <a class="btn btn-sm d-inline-block btn-register d-none d-sm-block" href="{{ route('register') }}"><i class="fas fa-sign-in"></i> Utwórz konto</a>
-                <a class="btn btn-sm d-inline-block btn-login d-none d-sm-block" href="{{ route('login') }}">Logowanie</a>
+                <a class="btn btn-sm btn-register d-none d-sm-inline-block" href="{{ route('register') }}"><i class="fas fa-sign-in"></i> Utwórz konto</a>
+                <a class="btn btn-sm btn-login d-none d-sm-inline-block" href="{{ route('login') }}">Logowanie</a>
               {% endif %}
 
               <form action="{{ search_url|default(route('search')) }}" class="nav-search d-none d-md-inline-block" role="search">
