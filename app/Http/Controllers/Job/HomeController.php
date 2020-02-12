@@ -191,7 +191,7 @@ class HomeController extends BaseController
                 'currency'              => Currency::PLN
             ],
 
-            'locations'         => $result->getAggregationCount("global.locations.locations_city_original")->slice(0, 10),
+            'locations'         => $result->getAggregationCount("global.locations.locations_city_original")->slice(0, 10)->filter(),
             'tags'              => TagResource::collection($tags)->toArray($this->request),
             'jobs'              => json_decode((new JobCollection($pagination))->response()->getContent()),
             'subscribed'        => $this->getSubscribed(),
