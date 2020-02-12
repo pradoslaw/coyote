@@ -36,144 +36,148 @@
       {% import 'components.forms' as forms %}
       {% import 'components.widgets' as widgets %}
 
-      <div class="container-fluid">
-        <header class="navbar-header {{ auth_guest() or user('allow_sticky_header') ? ' fixed-top' }} {{ __dark_theme ? 'navbar-dark' }}">
-          <div class="navbar-border-top"></div>
+      <header class="container-fluid navbar-header {{ auth_guest() or user('allow_sticky_header') ? ' fixed-top' }} {{ __dark_theme ? 'navbar-dark' }}">
+        <div class="navbar-border-top row"></div>
 
-          <div class="header-root container-xxl pl-2 pr-2 pl-xl-0 pr-xl-0">
-            {{ form_open({url: route('logout'), name: 'logout-form'}) }}
-            {{ form_close() }}
+        {{ form_open({url: route('logout'), name: 'logout-form'}) }}
+        {{ form_close() }}
 
-            <a rel="home" class="nav-logo" href="{{ route('home') }}" title="4programmers.net - Strona główna">
-              <img src="{{ cdn('img/logo-mobile.png') }}">
-            </a>
+        <div class="row">
+          <div class="col-12">
+            <div class="container-xxl d-flex align-items-center">
+              <a rel="home" class="nav-logo" href="{{ route('home') }}" title="4programmers.net - Strona główna">
+                <img src="{{ cdn('img/logo-mobile.png') }}">
+              </a>
 
-            <ul class="nav-desktop d-none d-sm-block">
-              {% for item in __master_menu.roots() %}
-                <li {{ forms.attr(item.attr) }}>
-                  <a href="{{ item.url }}">{{ item.title|raw }}</a>
+              <ul class="nav-desktop d-none d-sm-block">
+                {% for item in __master_menu.roots() %}
+                  <li {{ forms.attr(item.attr) }}>
+                    <a href="{{ item.url }}">{{ item.title|raw }}</a>
 
-                  {{ item.afterHTML|raw }}
+                    {{ item.afterHTML|raw }}
 
-                  {% if item.hasChildren() %}
-                    <div class="dropdown-menu left">
-                      {% for children in item.children() %}
+                    {% if item.hasChildren() %}
+                      <div class="dropdown-menu left">
+                        {% for children in item.children() %}
 
                           <a class="dropdown-item" href="{{ children.url }}">{{ children.title }}</a>
 
-                      {% endfor %}
-                    </div>
-                  {% endif %}
-                </li>
-              {% endfor %}
-            </ul>
-
-            <div style="margin-left: auto">
-              {% if auth_check() %}
-                <ul id="nav-auth" class="nav-auth list-inline d-inline-block"></ul>
-
-                <div class="dropdown nav-avatar d-none d-sm-inline-block">
-                  <a href="javascript:" class="dropdown-toggle img-thumbnail d-block" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="width: 35px">
-                    <img src="{{ user_photo(user('photo')) }}" style="width: 100%">
-                  </a>
-
-                  <div class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item profile-name" href="{{ route('user.home') }}">{{ user('name') }}</a>
-
-                    <li class="dropdown-divider"></li>
-
-                    <a class="dropdown-item" href="{{ route('user.pm') }}"><i class="fas fa-envelope fa-fw"></i> Wiadomości</a>
-                    <a class="dropdown-item" href="{{ route('user.settings') }}"><i class="fas fa-cog fa-fw"></i> Ustawienia</a>
-                    <a class="dropdown-item" href="{{ route('profile', [user('id')]) }}"><i class="fas fa-user fa-fw"></i> Profil</a>
-                    <a class="dropdown-item" href="{{ url('Pomoc') }}"><i class="fas fa-info-circle fa-fw"></i> Pomoc</a>
-
-                    {% if can('adm-access') %}
-                      <a class="dropdown-item" href="{{ route('adm.home') }}"><i class="fas fa-user-secret fa-fw"></i> Panel administracyjny</a>
+                        {% endfor %}
+                      </div>
                     {% endif %}
+                  </li>
+                {% endfor %}
+              </ul>
 
-                    <div class="dropdown-divider"></div>
+              <div class="ml-auto">
+                {% if auth_check() %}
+                  <ul id="nav-auth" class="nav-auth list-inline d-inline-block"></ul>
 
-                    <a href="javascript:" class="dropdown-item js-change-menu" style="position: relative">Nowe menu <sup class="badge badge-pill label-new">Beta</sup></a>
+                  <div class="dropdown nav-avatar d-none d-sm-inline-block">
+                    <a href="javascript:" class="dropdown-toggle img-thumbnail d-block" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="width: 35px">
+                      <img src="{{ user_photo(user('photo')) }}" style="width: 100%">
+                    </a>
 
-                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-menu dropdown-menu-right">
+                      <a class="dropdown-item profile-name" href="{{ route('user.home') }}">{{ user('name') }}</a>
 
-                    <a href="javascript:" onclick="document['logout-form'].submit()" class="dropdown-item btn-sign-out"><i class="fas fa-sign-out-alt fa-fw"></i> Wyloguj</a>
+                      <li class="dropdown-divider"></li>
+
+                      <a class="dropdown-item" href="{{ route('user.pm') }}"><i class="fas fa-envelope fa-fw"></i> Wiadomości</a>
+                      <a class="dropdown-item" href="{{ route('user.settings') }}"><i class="fas fa-cog fa-fw"></i> Ustawienia</a>
+                      <a class="dropdown-item" href="{{ route('profile', [user('id')]) }}"><i class="fas fa-user fa-fw"></i> Profil</a>
+                      <a class="dropdown-item" href="{{ url('Pomoc') }}"><i class="fas fa-info-circle fa-fw"></i> Pomoc</a>
+
+                      {% if can('adm-access') %}
+                        <a class="dropdown-item" href="{{ route('adm.home') }}"><i class="fas fa-user-secret fa-fw"></i> Panel administracyjny</a>
+                      {% endif %}
+
+                      <div class="dropdown-divider"></div>
+
+                      <a href="javascript:" class="dropdown-item js-change-menu" style="position: relative">Nowe menu <sup class="badge badge-pill label-new">Beta</sup></a>
+
+                      <div class="dropdown-divider"></div>
+
+                      <a href="javascript:" onclick="document['logout-form'].submit()" class="dropdown-item btn-sign-out"><i class="fas fa-sign-out-alt fa-fw"></i> Wyloguj</a>
+                    </div>
                   </div>
-                </div>
-              {% else %}
-                <a class="btn btn-sm btn-register d-none d-sm-inline-block" href="{{ route('register') }}"><i class="fas fa-sign-in"></i> Utwórz konto</a>
-                <a class="btn btn-sm btn-login d-none d-sm-inline-block" href="{{ route('login') }}">Logowanie</a>
-              {% endif %}
+                {% else %}
+                  <a class="btn btn-sm btn-register d-none d-sm-inline-block" href="{{ route('register') }}"><i class="fas fa-sign-in"></i> Utwórz konto</a>
+                  <a class="btn btn-sm btn-login d-none d-sm-inline-block" href="{{ route('login') }}">Logowanie</a>
+                {% endif %}
 
-              <form action="{{ search_url|default(route('search')) }}" class="nav-search d-none d-md-inline-block" role="search">
-                <div class="input-group">
-                  <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}">
+                <form action="{{ search_url|default(route('search')) }}" class="nav-search d-none d-md-inline-block" role="search">
+                  <div class="input-group">
+                    <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}">
 
-                  <span class="input-group-btn">
+                    <span class="input-group-btn">
                     <button class="btn btn-link">
                         <i class="fas fa-search"></i>
                     </button>
                   </span>
-                </div>
-              </form>
+                  </div>
+                </form>
 
-              <button class="navbar-toggler d-inline-block d-sm-none" type="button" data-toggle="collapse" data-target="#nav-mobile">
-                <i class="fa fa-bars"></i>
-              </button>
-            </div>
+                <button class="navbar-toggler d-inline-block d-sm-none" type="button" data-toggle="collapse" data-target="#nav-mobile">
+                  <i class="fa fa-bars"></i>
+                </button>
+              </div>
 
-            <div id="nav-mobile" class="collapse navbar-collapse">
-              <ul class="nav-mobile">
-                {% for item in __master_menu.roots() %}
-                  <li {{ forms.attr(item.attr) }}>
-                    <a href="{{ item.url }}">{{ item.title|raw }}</a>
-                  </li>
-                {% endfor %}
+              <div id="nav-mobile" class="collapse navbar-collapse">
+                <ul class="nav-mobile">
+                  {% for item in __master_menu.roots() %}
+                    <li {{ forms.attr(item.attr) }}>
+                      <a href="{{ item.url }}">{{ item.title|raw }}</a>
+                    </li>
+                  {% endfor %}
 
-                <li class="dropdown-divider"></li>
+                  <li class="dropdown-divider"></li>
 
-                {% if auth_check() %}
-                  <li><a href="{{ route('user.settings') }}"><i class="fas fa-cog fa-fw"></i> Ustawienia</a></li>
-                  <li><a href="{{ route('profile', [user('id')]) }}"><i class="fas fa-user fa-fw"></i> Profil</a></li>
+                  {% if auth_check() %}
+                    <li><a href="{{ route('user.settings') }}"><i class="fas fa-cog fa-fw"></i> Ustawienia</a></li>
+                    <li><a href="{{ route('profile', [user('id')]) }}"><i class="fas fa-user fa-fw"></i> Profil</a></li>
 
-                  {% if can('adm-access') %}
-                    <li><a href="{{ route('adm.home') }}"><i class="fas fa-user-secret fa-fw"></i> Panel administracyjny</a></li>
+                    {% if can('adm-access') %}
+                      <li><a href="{{ route('adm.home') }}"><i class="fas fa-user-secret fa-fw"></i> Panel administracyjny</a></li>
+                    {% endif %}
+
+                    <li class="dropdown-divider"></li>
+
+                    <li>
+                      <a href="javascript:" class="js-change-menu">Nowe menu <sup class="badge label-new">Beta</sup></a>
+                    </li>
+
+                    <li class="dropdown-divider"></li>
+
+                    <li>
+                      <a href="javascript:" onclick="document['logout-form'].submit()" class="btn-sign-out"><i class="fas fa-sign-out-alt fa-fw"></i> Wyloguj</a>
+                    </li>
+                  {% else %}
+                    <li class="row">
+                      <div class="col-6">
+                        <a class="btn btn-register btn-sm" href="{{ route('register') }}"><i class="fas fa-sign-in"></i> Utwórz konto</a>
+                      </div>
+                      <div class="col-6">
+                        <a class="btn-login btn-sm d-block d-sm-none text-center" href="{{ route('login') }}">Logowanie</a>
+                      </div>
+                    </li>
                   {% endif %}
 
                   <li class="dropdown-divider"></li>
 
                   <li>
-                    <a href="javascript:" class="js-change-menu">Nowe menu <sup class="badge label-new">Beta</sup></a>
+                    <form action="{{ search_url|default(route('search')) }}" role="search">
+                      <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}" class="form-control form-control-sm">
+                    </form>
                   </li>
-
-                  <li class="dropdown-divider"></li>
-
-                  <li>
-                    <a href="javascript:" onclick="document['logout-form'].submit()" class="btn-sign-out"><i class="fas fa-sign-out-alt fa-fw"></i> Wyloguj</a>
-                  </li>
-                {% else %}
-                  <li class="row">
-                    <div class="col-6">
-                      <a class="btn btn-register btn-sm" href="{{ route('register') }}"><i class="fas fa-sign-in"></i> Utwórz konto</a>
-                    </div>
-                    <div class="col-6">
-                      <a class="btn-login btn-sm d-block d-sm-none text-center" href="{{ route('login') }}">Logowanie</a>
-                    </div>
-                  </li>
-                {% endif %}
-
-                <li class="dropdown-divider"></li>
-
-                <li>
-                  <form action="{{ search_url|default(route('search')) }}" role="search">
-                    <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}" class="form-control form-control-sm">
-                  </form>
-                </li>
-              </ul>
+                </ul>
+              </div>
             </div>
           </div>
-        </header>
+        </div>
+      </header>
 
+      <div class="container-fluid">
         {{ breadcrumb|raw }}
 
         <noscript>
@@ -189,7 +193,7 @@
         {{ render_region('header') }}
 
         {% block fixed %}
-          <div class="container-xxl no-gutters">
+          <div class="container-xxl">
             {% if session_has('success') %}
               <div class="row">
                 <div class="col-xs">
@@ -221,31 +225,29 @@
         {% endblock %}
       </div>
 
-      <footer class="no-gutters">
-        <div id="footer-top" class="pl-2 pr-2 pl-xl-0 pr-xl-0">
-          <div class="row">
-            <div class="col-xs">
-              <a href="https://www.facebook.com/4programmers.net" id="facebook-button" title="Zobacz nasz profil na facebooku!"></a>
-            </div>
-          </div>
+      <footer class="container-fluid">
+        <div id="footer-top">
+          <a href="https://www.facebook.com/4programmers.net" id="facebook-button" title="Zobacz nasz profil na facebooku!"></a>
 
           {{ breadcrumb|raw }}
         </div>
 
-        <div id="footer-inner">
-          {{ render_block('footer') }}
+        <div id="footer-inner" class="row">
+          <div class="col-12">
+            <div class="container-xxl">
+              {{ render_block('footer') }}
+            </div>
+          </div>
 
           <a href="#top" class="back-to-top" title="Powrót na górę"><i class="fas fa-angle-up"></i></a>
         </div>
 
         <div id="footer-copyright">
           <div class="row container-xxl no-gutters">
-            <div class="col-lg pl-2 pr-2 pl-xl-0 pr-xl-0">
-              <div class="float-left">Copyright © 2000-{{ 'now'|date('Y') }} <a title="4programmers.net -- programowanie" class="logo" href="http://4programmers.net/">4programmers.net
-                  - programowanie i tworzenie stron WWW</a></div>
+            <div class="float-left">Copyright © 2000-{{ 'now'|date('Y') }} <a title="4programmers.net -- programowanie" class="logo" href="http://4programmers.net/">4programmers.net
+                - programowanie i tworzenie stron WWW</a></div>
 
-              <div class="float-right">Coyote {{ config('app.version') }}: {{ timer() }}</div>
-            </div>
+            <div class="float-right">Coyote {{ config('app.version') }}: {{ timer() }}</div>
           </div>
         </div>
       </footer>

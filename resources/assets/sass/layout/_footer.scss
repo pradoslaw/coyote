@@ -49,7 +49,7 @@ footer {
 
   ul {
     list-style-type: none;
-    margin: 0 0 0 15px;
+
     padding-left: 3px;
 
     li {
@@ -72,8 +72,6 @@ footer {
   }
 
   @include media-breakpoint-up('md') {
-
-
     .col-md-2 {
       border-left: 1px solid #575757;
 
@@ -84,6 +82,10 @@ footer {
           margin-left: 0;
         }
       }
+    }
+
+    ul {
+      margin: 0 0 0 15px;
     }
   }
 

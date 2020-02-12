@@ -6,10 +6,10 @@ $header-height: 56px;
 body.padding-top {
   padding-top: $header-height;
 }
-
-.navbar-fixed-top .navbar-collapse {
-  max-height: initial; // fit height to content in mobile menu
-}
+//
+//.navbar-fixed-top .navbar-collapse {
+//  max-height: initial; // fit height to content in mobile menu
+//}
 
 :root {
   --header-font-family: "Open Sans", Arial, sans-serif;
@@ -28,11 +28,6 @@ body.padding-top {
   --header-hover-color: #80a41a;
   --header-active-bg: #454545;
   --header-group-link-color: #9d9d9d; // $gray-lighter
-}
-
-.header-root {
-  display: flex;
-  align-items: center;
 }
 
 .navbar-header {
