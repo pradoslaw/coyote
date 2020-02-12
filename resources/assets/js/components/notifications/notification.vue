@@ -1,6 +1,6 @@
 <template>
   <div :class="{'unread': ! notification.is_read}" class="notification">
-    <a @mousedown="markAsRead(notification)" :href="notification.url" :title="notification.headline" class="notification-link">
+    <a @mousedown="markAsRead(notification)" @touchstart="markAsRead(notification)" :href="notification.url" :title="notification.headline" class="notification-link">
       <div class="media">
         <div class="media-left">
           <object class="media-object" :data="notification.photo || '//'" type="image/png">
