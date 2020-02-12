@@ -6,7 +6,6 @@ use Coyote\Repositories\Contracts\PmRepositoryInterface;
 use Coyote\Pm;
 use Coyote\User;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Carbon\Carbon;
 
 /**
  * Class PmRepository
@@ -135,7 +134,7 @@ class PmRepository extends Repository implements PmRepositoryInterface
      */
     public function markAsRead($textId)
     {
-        $this->model->where('text_id', $textId)->update(['read_at' => Carbon::now('UTC')]);
+        $this->model->where('text_id', $textId)->update(['read_at' => now()]);
     }
 
     /**
