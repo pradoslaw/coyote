@@ -13,9 +13,9 @@
             {{ html|raw }}
 
             {% if error %}
-            <span class="help-block">{{ error }}</span>
+            <span class="form-text text-muted">{{ error }}</span>
             {% elseif help %}
-            <span class="help-block">{{ help }}</span>
+            <span class="form-text text-muted">{{ help }}</span>
             {% endif %}
         </div>
     </div>
@@ -28,9 +28,9 @@
         {{ html|raw }}
 
         {% if error %}
-            <span class="help-block">{{ error }}</span>
+            <span class="form-text text-muted">{{ error }}</span>
         {% elseif help %}
-            <span class="help-block">{{ help }}</span>
+            <span class="form-text text-muted">{{ help }}</span>
         {% endif %}
     </div>
 {% endmacro %}
@@ -72,7 +72,7 @@
             </div>
 
             {% if session_get('errors').has(name) %}
-                <span class="help-block">{{ session_get('errors').first(name) }}</span>
+                <span class="form-text text-muted">{{ session_get('errors').first(name) }}</span>
             {% elseif help %}
                 <span class="help-box">{{ help }}</span>
             {% endif %}

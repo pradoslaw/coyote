@@ -34,7 +34,7 @@
       <div :class="{'active': tab === 'preview'}" role="tabpanel" class="tab-pane" id="preview" v-html="previewHtml"></div>
     </div>
 
-    <span v-cloak v-if="'text' in errors" class="help-block">${ errors.text[0] }</span>
+    <span v-cloak v-if="'text' in errors" class="form-text text-muted">${ errors.text[0] }</span>
   </div>
 </div>
 <div class="row">

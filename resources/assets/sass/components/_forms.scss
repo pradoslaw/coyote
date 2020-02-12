@@ -1,5 +1,9 @@
 @include media-breakpoint-down(sm) {
-  .form-control, .col-form-label, .checkbox {
+  .col-form-label, .checkbox {
     font-size: $font-size-small;
   }
+}
+
+.col-form-label {
+  font-weight: bold;
 }

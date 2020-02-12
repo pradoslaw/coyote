@@ -120,11 +120,11 @@
       <section id="box-reputation" class="box">
         <h4><i class="fas fa-star fa-fw"></i> Reputacja użytkowników</h4>
 
-        <ul id="reputation-tabs" class="nav nav-panel">
-          <li role="presentation" {{ settings['homepage.reputation'] == 0 ? 'class="active"' }}><a href="#month" role="tab" data-toggle="tab">W tym miesiącu</a></li>
-          <li role="presentation" {{ settings['homepage.reputation'] == 1 ? 'class="active"' }}><a href="#year" role="tab" data-toggle="tab">W tym roku</a></li>
-          <li role="presentation" {{ settings['homepage.reputation'] == 2 ? 'class="active"' }}><a href="#total" role="tab" data-toggle="tab">Ogólnie</a></li>
-        </ul>
+        <div id="reputation-tabs" class="nav nav-panel">
+          <a role="tab" data-toggle="tab" href="#month" class="nav-item {{ settings['homepage.reputation'] == 0 ? 'active' }}"><span>W tym miesiącu</span></a>
+          <a role="tab" data-toggle="tab" href="#year" class="nav-item {{ settings['homepage.reputation'] == 1 ? 'active' }}"><span>W tym roku</span></a>
+          <a role="tab" data-toggle="tab" href="#total" class="nav-item {{ settings['homepage.reputation'] == 2 ? 'active' }}"><span>Ogólnie</span></a>
+        </div>
 
         <div class="card card-default tab-content">
           {% for key, mode in reputation %}

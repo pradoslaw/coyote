@@ -1,5 +1,5 @@
 <template>
-    <span v-if="message" class="help-block">{{ errorMessage }}</span>
+    <span v-if="message" class="form-text text-muted">{{ errorMessage }}</span>
 </template>
 
 <script>

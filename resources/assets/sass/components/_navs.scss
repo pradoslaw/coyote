@@ -24,7 +24,7 @@
   overflow: hidden;
   font-family: 'Open Sans', Arial, sans-serif;
 
-  li {
+  .nav-item {
     border: 1px solid $border-color;
     background: #D1D1D1;
     background: -o-linear-gradient(top, #ececec 50%, #d1d1d1 100%);
@@ -43,6 +43,7 @@
     padding: 0 20px;
     cursor: pointer;
     font-size: 11px;
+    text-decoration: none;
 
     &:first-child {
       margin: 0;
@@ -81,7 +82,7 @@
       }
     }
 
-    a {
+    span {
       color: $gray;
       padding: 0;
 

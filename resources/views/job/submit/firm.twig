@@ -104,7 +104,7 @@
                                     </div>
                                 </div>
 
-                                <span class="help-block">Podając nazwę firmy, oferta staje się bardziej wiarygodna i wartościowa.</span>
+                                <span class="form-text text-muted">Podając nazwę firmy, oferta staje się bardziej wiarygodna i wartościowa.</span>
 
                                 <vue-error :message="errors.name"></vue-error>
                             </div>
@@ -152,7 +152,7 @@
 
                                 <vue-text name="website" :value.sync="firm.website"></vue-text>
 
-                                <span class="help-block">Firmowa strona WWW. Będzie ona wyświetlana przy ofercie.</span>
+                                <span class="form-text text-muted">Firmowa strona WWW. Będzie ona wyświetlana przy ofercie.</span>
                                 <vue-error :message="errors.website"></vue-error>
                             </div>
 
@@ -160,7 +160,7 @@
                                 <label class="col-form-label">Branża</label>
 
                                 <vue-select id="industries" name="industries[]" :options="industries" :value.sync="firm.industries" multiple="multiple"></vue-select>
-                                <span class="help-block">Możesz wybrać jedną lub kilka branż w których działa firma.</span>
+                                <span class="form-text text-muted">Możesz wybrać jedną lub kilka branż w których działa firma.</span>
                             </div>
 
                             <div class="form-group-border form-group"  :class="{'has-error': isInvalid(['description'])}">
@@ -170,7 +170,7 @@
 
                                 <input type="hidden" name="description" v-model="firm.description"></input>
 
-                                <span class="help-block">Czym zajmuje się firma, w jakich branżach działa oraz jakie technologie wykorzystuje?</span>
+                                <span class="form-text text-muted">Czym zajmuje się firma, w jakich branżach działa oraz jakie technologie wykorzystuje?</span>
                                 <vue-error :message="errors.description"></vue-error>
                             </div>
 
@@ -197,7 +197,7 @@
 
                                 <vue-text name="youtube_url" :value.sync="firm.youtube_url"></vue-text>
 
-                                <span class="help-block">Film promujący firmę będzie wyświetlany pod ogłoszeniem o pracę.</span>
+                                <span class="form-text text-muted">Film promujący firmę będzie wyświetlany pod ogłoszeniem o pracę.</span>
                                 <vue-error :message="errors.youtube_url"></vue-error>
                             </div>
 
@@ -205,14 +205,14 @@
                                 <label class="col-form-label">Liczba pracowników w firmie</label>
 
                                 <vue-select name="employees" :options="employees" :value.sync="firm.employees" placeholder="--"></vue-select>
-                                <span class="help-block">Pozwala ocenić jak duża jest firma. Czy jest to korporacja, czy mała rodzinna firma?</span>
+                                <span class="form-text text-muted">Pozwala ocenić jak duża jest firma. Czy jest to korporacja, czy mała rodzinna firma?</span>
                             </div>
 
                             <div class="form-group-border form-group">
                                 <label class="col-form-label">Rok powstania</label>
 
                                 <vue-select name="founded" :options="founded" :value.sync="firm.founded" placeholder="--"></vue-select>
-                                <span class="help-block">Pozwala ocenić jak duża jest firma. Czy jest to korporacja, czy mała rodzinna firma?</span>
+                                <span class="form-text text-muted">Pozwala ocenić jak duża jest firma. Czy jest to korporacja, czy mała rodzinna firma?</span>
                             </div>
 
 
@@ -221,7 +221,7 @@
 
                                 <vue-text id="address" :value.sync="address" @keydown.native.enter.prevent="changeAddress"></vue-text>
 
-                                <span class="help-block">Wpisz adres i naciśnij Enter lub kliknij na mapę. Adres firmy będzie wyświetlany przy ofercie.</span>
+                                <span class="form-text text-muted">Wpisz adres i naciśnij Enter lub kliknij na mapę. Adres firmy będzie wyświetlany przy ofercie.</span>
 
                                 <input type="hidden" name="latitude" v-model="firm.latitude">
                                 <input type="hidden" name="longitude" v-model="firm.longitude">
@@ -244,7 +244,7 @@
 
                             <div class="form-group form-group-border" v-show="isAgency == 0">
                                 <label class="col-form-label">Benefity</label>
-                                <span class="help-block">Kliknij na wybraną pozycję, aby zaznaczyć benefity jakie oferuje Twoja firma. Jeżeli nie ma go na liście, możesz dodać nową pozycję wpisując ją w polu poniżej.</span>
+                                <span class="form-text text-muted">Kliknij na wybraną pozycję, aby zaznaczyć benefity jakie oferuje Twoja firma. Jeżeli nie ma go na liście, możesz dodać nową pozycję wpisując ją w polu poniżej.</span>
 
                                 <ol class="benefits list-group">
 

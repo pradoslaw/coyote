@@ -9,10 +9,10 @@
     <h1>{{ link_to(back_url, topic.subject) }}</h1>
 
     <main class="mainbar">
-        <ul class="nav nav-panel" style="margin-bottom: 0" role="tablist">
-            <li role="presentation" class="active"><a href="#stream" role="tab" data-toggle="tab">Aktywność użytkowników</a></li>
-            <li role="presentation"><a href="#visits" role="tab" data-toggle="tab">Wizyty</a></li>
-        </ul>
+        <nav class="nav nav-panel mb-0">
+            <a href="#stream" role="tab" data-toggle="tab" class="active"><span>Aktywność użytkowników</span></a>
+            <a href="#visits" role="tab" data-toggle="tab"><span>Wizyty</span></a>
+        </nav>
 
         <div class="card card-default tab-content">
             <div id="stream" role="tabpanel" class="card-body tab-pane active">

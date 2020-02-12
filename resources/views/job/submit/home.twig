@@ -47,7 +47,7 @@
 
                                     <vue-text name="title" :value.sync="job.title" placeholder="Np. Senior Java Developer" maxlength="60"></vue-text>
 
-                                    <span class="help-block">Pozostało <strong>${ charCounter('job.title', 60) }</strong> znaków</span>
+                                    <span class="form-text text-muted">Pozostało <strong>${ charCounter('job.title', 60) }</strong> znaków</span>
 
                                     <vue-error :message="errors.title"></vue-error>
                                 </div>
@@ -110,7 +110,7 @@
                                 <vue-select name="rate" class="input-inline" :options="rates" :value.sync="job.rate"></vue-select>
                                 <vue-select name="employment" class="input-inline" :options="employments" :value.sync="job.employment"></vue-select>
 
-                                <span class="help-block">Podanie tych informacji nie jest obowiązkowe, ale dzięki temu Twoja oferta zainteresuje więcej osób. Obiecujemy!</span>
+                                <span class="form-text text-muted">Podanie tych informacji nie jest obowiązkowe, ale dzięki temu Twoja oferta zainteresuje więcej osób. Obiecujemy!</span>
 
                                 <vue-error :message="errors.salary_from"></vue-error>
                                 <vue-error :message="errors.salary_to"></vue-error>
@@ -122,9 +122,9 @@
 
                             <vue-tags-dropdown id="tag" :tags="popular_tags" @change="addTag"></vue-tags-dropdown>
 
-                            <span class="help-block" v-if="errors.tags != null">${ errors.tags[0] }</span>
-                            <span class="help-block" v-else-if="suggestions.length === 0">Wybierz z listy lub wpisz nazwę języka/technologii i naciśnij Enter, aby dodać wymaganie.</span>
-                            <span class="help-block" v-else-if="suggestions.length > 0">
+                            <span class="form-text text-muted" v-if="errors.tags != null">${ errors.tags[0] }</span>
+                            <span class="form-text text-muted" v-else-if="suggestions.length === 0">Wybierz z listy lub wpisz nazwę języka/technologii i naciśnij Enter, aby dodać wymaganie.</span>
+                            <span class="form-text text-muted" v-else-if="suggestions.length > 0">
                                 Podpowiedź:
 
                                 <template v-for="(suggestion, index) in suggestions">
@@ -156,7 +156,7 @@
                             <label class="col-form-label">Opis oferty (opcjonalnie)</label>
 
                             <vue-tinymce v-model="job.description" :init="tinymceOptions"></vue-tinymce>
-                            <span class="help-block">Miejsce na szczegółowy opis oferty. Pole to jednak nie jest wymagane.</span>
+                            <span class="form-text text-muted">Miejsce na szczegółowy opis oferty. Pole to jednak nie jest wymagane.</span>
 
                             <input type="hidden" name="description" v-model="job.description">
                         </div>
@@ -200,7 +200,7 @@
                             <div class="row">
                                 <div class="col-sm-6">
                                     <vue-text name="email" :value.sync="job.email" :disabled="enableApply == 0"></vue-text>
-                                    <span class="help-block">Adres e-mail nie będzie widoczny dla osób postronnych.</span>
+                                    <span class="form-text text-muted">Adres e-mail nie będzie widoczny dla osób postronnych.</span>
 
                                     <vue-error :message="errors.email"></vue-error>
                                 </div>

@@ -5,10 +5,10 @@
 {% block content %}
     <h2>{{ page_name }}</h2>
 
-    <ul class="nav nav-panel">
-        <li class="nav-item {{ parent != 'user.pm.submit' ? 'active' }}"><a href="{{ route('user.pm') }}">Wiadomości ({{ user('pm_unread') }}/{{ user('pm') }})</a></li>
-        <li class="nav-item {{ parent == 'user.pm.submit' ? 'active' }}"><a href="{{ route('user.pm.submit') }}">Napisz wiadomość</a></li>
-    </ul>
+    <nav class="nav nav-panel">
+        <a href="{{ route('user.pm') }}" class="nav-item {{ parent != 'user.pm.submit' ? 'active' }}"><span>Wiadomości ({{ user('pm_unread') }}/{{ user('pm') }})</span></a>
+        <a href="{{ route('user.pm.submit') }}" class="nav-item {{ parent == 'user.pm.submit' ? 'active' }}"><span>Napisz wiadomość</span></a>
+    </nav>
 
     <div id="app-pm" class="card card-default">
         <div class="card-body">
