@@ -92,7 +92,7 @@ $arrow-size: 8px;
 }
 
 .alert.right:after {
-  border-left-color: $warning;
+  border-left-color: theme-color-level('warning', $alert-bg-level);
   border-width: $arrow-size;
   margin-top: -$arrow-size;
 }
@@ -104,7 +104,7 @@ $arrow-size: 8px;
 }
 
 .alert.top:after {
-  border-bottom-color: $alert-warning-border;
+  border-bottom-color: theme-color-level('warning', $alert-bg-level);
   border-width: $arrow-size;
   margin-left: -$arrow-size;
 }
@@ -116,7 +116,7 @@ $arrow-size: 8px;
 }
 
 .alert.bottom:after {
-  border-top-color: $warning;
+  border-top-color: theme-color-level('warning', $alert-bg-level);
   border-width: $arrow-size;
   margin-left: -$arrow-size;
 }

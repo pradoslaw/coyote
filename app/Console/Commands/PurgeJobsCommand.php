@@ -91,7 +91,7 @@ class PurgeJobsCommand extends Command
                 ['id' => "job_$hit[id]", 'index' => config('elasticsearch.default_index'), 'type' => '_doc']
             );
 
-            $user = $this->user->find($hit['user_id'], ['name', 'email']);
+            $user = $this->user->find($hit['user_id'] ?? null, ['name', 'email']);
 
             if ($user !== null && $user->email) {
                 $job = $this->job->find($hit['id']);

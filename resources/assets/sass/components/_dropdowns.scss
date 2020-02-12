@@ -10,7 +10,7 @@
    }
 }
 
-.dropdown-menu.right {
+.dropdown-menu.dropdown-menu-right {
   &:after, &:before {
     bottom: 100%;
     border: solid transparent;
@@ -34,8 +34,8 @@
   }
 }
 
-.dropdown-menu.left {
-  @extend .dropdown-menu.right;
+.dropdown-menu.dropdown-menu-left {
+  @extend .dropdown-menu.dropdown-menu-right;
 
   &:after {
     left: 10px;

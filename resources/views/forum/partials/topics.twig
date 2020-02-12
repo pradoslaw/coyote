@@ -75,7 +75,7 @@
                                 <a title="{{ topic.subject }}" href="{{ url ~ (user_id is defined ? ('?p=' ~ topic.posts[0].id ~ '#id' ~ topic.posts[0].id)) }}">{{ topic.subject }}</a>
 
                                 {% if topic.score %}
-                                    <span class="badge badge-success score d-none d-sm-block" title="Liczba głosów oddanych na ten wątek">
+                                    <span class="badge badge-success score d-none d-sm-inline" title="Liczba głosów oddanych na ten wątek">
                                         <i class="fas fa-fire"></i>
                                         {{ topic.score }}
                                     </span>
@@ -113,7 +113,7 @@
                             </td>
                         {% endif %}
 
-                        <td class="col-views d-none d-sm-block">
+                        <td class="col-views d-none d-sm-table-cell">
                             <p title="Liczba odpowiedzi">
                                 <strong>{{ topic.replies|number_format(0, '', ' ') }}</strong>
 
@@ -127,17 +127,17 @@
                                 <small>{{ declination(topic.views, ['wyświetlenie', 'wyświetlenia', 'wyświetleń'], true) }}</small>
                             </p>
                         </td>
-                        <td class="col-last-post d-none d-sm-block">
+                        <td class="col-last-post d-none d-sm-table-cell">
                             {% if auth_check() %}
                                 <a title="Obserwuj wątek" href="{{ route('forum.topic.subscribe', [topic.id]) }}" class="btn-watch-sm {{ topic.subscribe_on ? 'on' }}"></a>
                             {% endif %}
 
                             {% if topic.poster_id %}
-                                <a href="{{ route('profile', [topic.poster_id]) }}" class="hidden-sm hidden-xs">
+                                <a href="{{ route('profile', [topic.poster_id]) }}" class="d-none d-md-inline">
                                     <img class="img-thumbnail" src="{{ user_photo(topic.poster_photo) }}">
                                 </a>
                             {% else %}
-                                <img class="img-thumbnail hidden-sm hidden-xs" src="{{ cdn('img/avatar.png') }}">
+                                <img class="img-thumbnail d-none d-md-inline" src="{{ cdn('img/avatar.png') }}">
                             {% endif %}
 
                             <span class="timestamp" data-timestamp="{{ topic.last_created_at|timestamp }}" title="{{ topic.last_created_at|format_date(false) }}">{{ topic.last_created_at|format_date }}</span><br>

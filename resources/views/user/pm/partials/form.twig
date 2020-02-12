@@ -1,5 +1,5 @@
 <div class="row margin-sm-bottom">
-  <div class="col-md-12" :class="{'has-error': 'text' in errors}">
+  <div class="col-12" :class="{'has-error': 'text' in errors}">
     <ul class="nav nav-tabs">
       <li class="nav-item"><a :class="{'active': tab === 'body'}" class="nav-link" href="javascript:" role="tab" @click="tab = 'body'">Treść</a></li>
       <li class="nav-item" ><a :class="{'active': tab === 'preview'}" class="nav-link" href="javascript:" role="tab" @click="showPreview">Podgląd</a></li>
@@ -38,7 +38,7 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-md-12">
+  <div class="col-12">
     <vue-button :disabled="isProcessing" @click.native="sendMessage" class="btn btn-primary btn-sm">Wyślij</vue-button>
   </div>
 </div>

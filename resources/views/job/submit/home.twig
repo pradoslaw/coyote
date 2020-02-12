@@ -165,7 +165,7 @@
                             <label>Narzędzia oraz metodologia pracy</label>
 
                             <ol class="features list-group clearfix">
-                                <li class="list-group-item col-md-12 col-lg-6" v-for="(feature, index) in job.features" :class="{checked: feature.pivot.checked}">
+                                <li class="list-group-item col-12 col-lg-6" v-for="(feature, index) in job.features" :class="{checked: feature.pivot.checked}">
                                     <div class="form-group">
                                         <div class="col-7 col-form-label" @click="toggleFeature(feature)">
                                             <i class="fas fa-fw " :class="{'fa-check': feature.pivot.checked, 'fa-times': !feature.pivot.checked}"></i>

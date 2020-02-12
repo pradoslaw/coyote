@@ -8,12 +8,12 @@
 
     <div id="vcard-content">
         <div class="media">
-            <div class="media-left">
+            <div class="mr-2">
                 <img src="{{ user_photo(user.photo) }}" class="img-thumbnail">
                 <span class="status {{ user.is_online ?: 'offline' }}">{{ user.is_online ? 'Online' : 'Offline' }}</span>
 
                 {% if user.group.name %}
-                    <span class="label label-default">{{ user.group.name }}</span>
+                    <span class="badge badge-secondary label-default">{{ user.group.name }}</span>
                 {% endif %}
             </div>
 

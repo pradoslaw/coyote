@@ -109,7 +109,7 @@
 
   h5.offline {
     &:before {
-      color: $gray-light;
+      color: $gray-300;
     }
   }
 }
@@ -376,7 +376,7 @@ div.tooltip-inner {
 .comments {
   margin: 15px 0 5px 25px;
   font-family: Tahoma,sans-serif;
-  font-size: $font-size-small - 0.2rem;
+  font-size: .7rem;
   padding-right: 50px;
 
   @include link-color-darker;
