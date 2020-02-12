@@ -22,6 +22,7 @@ $h1-font-size:                $font-size-base * 2;
 $h4-font-size:                $font-size-base * 1.4;
 $small-font-size:             92%; // bootstrap 3 backward compatibility
 
+
 $badge-border-radius:         10px;
 $badge-font-size:             100%;
 $badge-padding-y:             3px;
@@ -41,6 +42,8 @@ $pagination-active-bg:        $gray-dark;
 $pagination-padding-y:        .3rem;
 $pagination-padding-x:        .5rem;
 
+$dropdown-link-active-color:        inherit;
+$dropdown-link-active-bg:           inherit;
 
 $custom-control-indicator-checked-color:    $text-color;
 $custom-control-indicator-checked-bg: #fff;
