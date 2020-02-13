@@ -5,7 +5,8 @@ $warning: #D98D0D;
 $danger: #d9534f;
 
 $body-bg: #fafafa;
-$text-color: #333;
+$text-color: #333; // @deprecated
+$body-color: #333;
 
 $gray: #555;
 $gray-light: #777;

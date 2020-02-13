@@ -1,15 +1,15 @@
 @charset "UTF-8";
 
 .card-section {
+  background-color: transparent;
+  border: none;
+
   .card-categories:nth-child(odd) {
     background-color: #fafafa;
   }
 }
 
 .section-name {
-  margin: 0 0 10px 0;
-  padding-left: 2px;
-
   h2 {
     font-size: 14px;
     margin: 0;
@@ -25,28 +25,17 @@
 @include media-breakpoint-up(lg) {
   .card-section {
     background-color: $panel-footer-bg;
-    padding: 10px 0 0 0;
-    //border: 1px solid $border-color;
+    border: 1px solid $border-color;
   }
 
-  .section-name {
-    margin: 0 10px 10px 10px;
-  }
 }
 
-// mobile
-@include media-breakpoint-down(lg) {
-  .card-section {
-    background-color: transparent;
-    border: none;
-  }
-}
 
 .card-cog {
   color: $gray-light;
   font-size: 80%;
-  margin-right: 5px;
-  margin-top: 5px;
+  //margin-right: 5px;
+  //margin-top: 5px;
 }
 
 .card-categories {
@@ -134,7 +123,6 @@
 
     .col-lg-stat {
       text-align: right;
-      font-size: 12px;
       padding-top: 3px;
     }
 
@@ -145,7 +133,7 @@
   }
 
   // mobile
-  @include media-breakpoint-down(lg) {
+  @include media-breakpoint-down(md) {
     .card-body.new {
       border-left: 2px solid $alt-link-hover-color;
     }
