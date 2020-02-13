@@ -4,28 +4,28 @@
 
 {% block container %}
     <div class="box">
-        <ul class="nav nav-card">
-            <li role="presentation" class="active"><a href="{{ url(wiki.path) }}"><i class="fas fa-paragraph"></i></a></li>
+        <div class="nav nav-panel">
+            <a href="{{ url(wiki.path) }}" class="nav-item active"><span><i class="fas fa-paragraph"></i></span></a>
 
             {% if can('wiki-admin') or not wiki.is_locked %}
-                <li role="presentation">
-                    <a href="{{ route('wiki.submit', [wiki.id]) }}" title="Kliknij, aby edytować ten artykuł">
+                <a class="nav-item" href="{{ route('wiki.submit', [wiki.id]) }}" title="Kliknij, aby edytować ten artykuł">
+                    <span>
                         Edycja
                         {% if wiki.is_locked %}
                             (strona zablokowana)
                         {% endif %}
-                    </a>
-                </li>
+                    </span>
+                </a>
             {% endif %}
 
-            <li role="presentation"><a href="{{ route('wiki.submit') }}?parentId={{ wiki.id }}" title="Dodaj nową stronę w tej kategorii">Napisz nowy artykuł w tym dziale</a></li>
-            <li role="presentation">
+            <a class="nav-item" href="{{ route('wiki.submit') }}?parentId={{ wiki.id }}" title="Dodaj nową stronę w tej kategorii"><span>Napisz nowy artykuł w tym dziale</span></a>
+            <a class="nav-item" href="{{ route('wiki.subscribe', [wiki.id]) }}" class="btn-subscribe {{ subscribed ? 'on' }}" data-off="{{ labels[0] }}" data-on="{{ labels[1] }}" title="Obserwując tę stronę będziesz otrzymywał powiadomienia o jej zmianach">
                 {% set labels = ['Usuń z ulubionych', 'Dodaj do ulubionych'] %}
-                <a href="{{ route('wiki.subscribe', [wiki.id]) }}" class="btn-subscribe {{ subscribed ? 'on' }}" data-off="{{ labels[0] }}" data-on="{{ labels[1] }}" title="Obserwując tę stronę będziesz otrzymywał powiadomienia o jej zmianach"><span>{{ labels[not subscribed] }}</span></a>
-            </li>
+                <span >{{ labels[not subscribed] }}</span>
+            </a>
 
-            <li role="presentation"><a href="{{ route('wiki.log', [wiki.id]) }}">Historia i autorzy</a></li>
-        </ul>
+            <a class="nav-item" href="{{ route('wiki.log', [wiki.id]) }}"><span>Historia i autorzy</span></a>
+        </div>
 
         <div class="card card-default">
             <div class="card-body">

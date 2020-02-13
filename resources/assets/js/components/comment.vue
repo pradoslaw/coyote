@@ -7,7 +7,7 @@
 
       <div class="media-body">
         <div class="dropdown float-right" v-if="comment.editable">
-          <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <button class="btn btn-secondary btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <span class="caret"></span>
           </button>
 
@@ -112,7 +112,7 @@
       Czy na pewno chcesz usunąć ten komentarz?
 
       <template slot="buttons">
-        <button @click="$refs.confirm.close()" type="button" class="btn btn-default" data-dismiss="modal">Anuluj
+        <button @click="$refs.confirm.close()" type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj
         </button>
         <button @click="deleteComment(false)" type="submit" class="btn btn-danger danger">Tak, usuń</button>
       </template>

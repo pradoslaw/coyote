@@ -29,7 +29,7 @@
       Czy na pewno chcesz usunąć tę wiadomość?
 
       <template slot="buttons">
-        <button @click="$refs.confirm.close()" type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
+        <button @click="$refs.confirm.close()" type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
         <button @click="deleteMessage(false)" type="submit" class="btn btn-danger danger">Tak, usuń</button>
       </template>
     </vue-modal>

@@ -127,11 +127,7 @@ body.padding-top {
 }
 
 .nav-mobile {
-  list-style-type: none;
-  // usuniecie niepotrzebnego marginesu na urzadzeniach mobilnych
-  margin-top: 0;
-
-  > li > a {
+  .dropdown-link {
     @extend %menu-link;
 
     padding: 5px 0;
@@ -139,10 +135,6 @@ body.padding-top {
 
   .divider {
     @include nav-divider(darken($gray-lighter, 10%));
-  }
-
-  .btn {
-    display: block;
   }
 
   .btn-sign-out {

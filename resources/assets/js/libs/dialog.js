@@ -207,7 +207,7 @@ class Dialog {
             buttons: [{
                 label: 'OK',
                 attr: {
-                    'class': 'btn btn-default',
+                    'class': 'btn btn-secondary',
                     'type': 'button',
                     'data-dismiss': 'modal'
                 }
@@ -227,7 +227,7 @@ class Dialog {
             buttons: [{
                 label: 'Anuluj',
                 attr: {
-                    'class': 'btn btn-default',
+                    'class': 'btn btn-secondary',
                     'type': 'button',
                     'data-dismiss': 'modal'
                 }

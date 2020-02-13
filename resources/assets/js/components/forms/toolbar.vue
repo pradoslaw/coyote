@@ -3,27 +3,27 @@
     <div id="wiki-toolbar" class="row">
       <div class="col-md-12">
         <div class="btn-group" role="group" aria-label="...">
-          <button @click="insertAtCaret('**', '**')" type="button" class="btn btn-sm btn-default" title="Pogrubienie"><i class="fas fa-bold fa-fw"></i></button>
-          <button @click="insertAtCaret('*', '*')" type="button" class="btn btn-sm btn-default" title="Kursywa"><i class="fas fa-italic fa-fw"></i></button>
-          <button @click="insertAtCaret('<u>', '</u>')" type="button" class="btn btn-sm btn-default" title="Przekreślenie"><i class="fas fa-underline fa-fw"></i></button>
-          <button @click="insertAtCaret('`', '`')" type="button" class="btn btn-sm btn-default" title="Instrukcja kodu"><i class="fas fa-text-width fa-fw"></i></button>
+          <button @click="insertAtCaret('**', '**')" type="button" class="btn btn-sm btn-secondary" title="Pogrubienie"><i class="fas fa-bold fa-fw"></i></button>
+          <button @click="insertAtCaret('*', '*')" type="button" class="btn btn-sm btn-secondary" title="Kursywa"><i class="fas fa-italic fa-fw"></i></button>
+          <button @click="insertAtCaret('<u>', '</u>')" type="button" class="btn btn-sm btn-secondary" title="Przekreślenie"><i class="fas fa-underline fa-fw"></i></button>
+          <button @click="insertAtCaret('`', '`')" type="button" class="btn btn-sm btn-secondary" title="Instrukcja kodu"><i class="fas fa-text-width fa-fw"></i></button>
         </div>
 
         <div class="btn-group" role="group">
-          <button @click="insertAtCaret('<br>', '## ')" type="button" class="btn btn-sm btn-default" data-open="<br>" data-close="## " title="Nagłówek h2"><i class="fas fa-heading fa-fw"></i></button>
+          <button @click="insertAtCaret('<br>', '## ')" type="button" class="btn btn-sm btn-secondary" data-open="<br>" data-close="## " title="Nagłówek h2"><i class="fas fa-heading fa-fw"></i></button>
         </div>
 
         <div class="btn-group" role="group">
-          <button @click="insertAtCaret('<br>', '*')" type="button" class="btn btn-sm btn-default" title="Wypunktowanie"><i class="fas fa-list-ul fa-fw"></i></button>
-          <button @click="insertAtCaret('<br>', '1. ')" type="button" class="btn btn-sm btn-default" title="Numerowanie"><i class="fas fa-list-ol fa-fw"></i></button>
-          <button @click="insertAtCaret('![title', '](http://)')" type="button" class="btn btn-sm btn-default" title="Obraz"><i class="fas fa-image fa-fw"></i></button>
-          <button @click="insertAtCaret('[', '](http://)')" type="button" class="btn btn-sm btn-default" title="Link"><i class="fas fa-link fa-fw"></i></button>
-          <button @click="insertAtCaret('<br>Nagłówek 1 | Nagłówek 2<br>---------------- | -------------------<br>Kolumna1 | Kolumna 2<br>', '')" type="button" class="btn btn-sm btn-default" title="Tabela"><i class="fas fa-table fa-fw"></i></button>
-          <button @click="insertCitation" type="button" class="btn btn-sm btn-default btn-quote" title="Wstaw cytat"><i class="fas fa-quote-left fa-fw"></i></button>
+          <button @click="insertAtCaret('<br>', '*')" type="button" class="btn btn-sm btn-secondary" title="Wypunktowanie"><i class="fas fa-list-ul fa-fw"></i></button>
+          <button @click="insertAtCaret('<br>', '1. ')" type="button" class="btn btn-sm btn-secondary" title="Numerowanie"><i class="fas fa-list-ol fa-fw"></i></button>
+          <button @click="insertAtCaret('![title', '](http://)')" type="button" class="btn btn-sm btn-secondary" title="Obraz"><i class="fas fa-image fa-fw"></i></button>
+          <button @click="insertAtCaret('[', '](http://)')" type="button" class="btn btn-sm btn-secondary" title="Link"><i class="fas fa-link fa-fw"></i></button>
+          <button @click="insertAtCaret('<br>Nagłówek 1 | Nagłówek 2<br>---------------- | -------------------<br>Kolumna1 | Kolumna 2<br>', '')" type="button" class="btn btn-sm btn-secondary" title="Tabela"><i class="fas fa-table fa-fw"></i></button>
+          <button @click="insertCitation" type="button" class="btn btn-sm btn-secondary btn-quote" title="Wstaw cytat"><i class="fas fa-quote-left fa-fw"></i></button>
 
           <div id="select-menu" class="btn-group" :class="{'open': isDropdownShown}">
-            <button @click="insertAtCaret('```<br>', '<br>```')" type="button" class="btn btn-sm btn-default" title="Kod źródłowy"><i class="fas fa-code fa-fw"></i></button>
-            <button @click="toggleDropdown" type="button" class="btn btn-sm btn-default dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+            <button @click="insertAtCaret('```<br>', '<br>```')" type="button" class="btn btn-sm btn-secondary" title="Kod źródłowy"><i class="fas fa-code fa-fw"></i></button>
+            <button @click="toggleDropdown" type="button" class="btn btn-sm btn-secondary dropdown-toggle" aria-haspopup="true" aria-expanded="false">
               <span class="caret"></span>
             </button>
 
@@ -42,7 +42,7 @@
           </div>
         </div>
 
-        <button type="button" class="btn btn-sm btn-default float-right" data-toggle="collapse" data-target="#wiki-help" aria-expanded="false" aria-controls="wiki-help"><i class="fas fa-question fa-fw"></i></button>
+        <button type="button" class="btn btn-sm btn-secondary float-right" data-toggle="collapse" data-target="#wiki-help" aria-expanded="false" aria-controls="wiki-help"><i class="fas fa-question fa-fw"></i></button>
       </div>
     </div>
 

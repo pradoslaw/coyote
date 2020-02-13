@@ -44,7 +44,7 @@
 
         <div class="row">
           <div class="col-12">
-            <div class="container-xxl d-flex align-items-center">
+            <div class="container-xxl d-flex align-items-center flex-wrap">
               <a rel="home" class="nav-logo" href="{{ route('home') }}" title="4programmers.net - Strona główna">
                 <img src="{{ cdn('img/logo-mobile.png') }}">
               </a>
@@ -118,59 +118,49 @@
                   </div>
                 </form>
 
-                <button class="navbar-toggler d-inline-block d-sm-none" type="button" data-toggle="collapse" data-target="#nav-mobile">
+                <button class="navbar-toggler d-inline-block d-sm-none" type="button" data-toggle="collapse" data-target="#js-nav-mobile">
                   <i class="fa fa-bars"></i>
                 </button>
               </div>
 
-              <div id="nav-mobile" class="collapse navbar-collapse">
-                <ul class="nav-mobile">
-                  {% for item in __master_menu.roots() %}
-                    <li {{ forms.attr(item.attr) }}>
-                      <a href="{{ item.url }}">{{ item.title|raw }}</a>
-                    </li>
-                  {% endfor %}
+              <div id="js-nav-mobile" class="collapse navbar-collapse nav-mobile pd-3 pb-3">
+                {% for item in __master_menu.roots() %}
+                    <a class="dropdown-link" href="{{ item.url }}">{{ item.title|raw }}</a>
+                {% endfor %}
 
-                  <li class="dropdown-divider"></li>
+                <div class="dropdown-divider"></div>
 
-                  {% if auth_check() %}
-                    <li><a href="{{ route('user.settings') }}"><i class="fas fa-cog fa-fw"></i> Ustawienia</a></li>
-                    <li><a href="{{ route('profile', [user('id')]) }}"><i class="fas fa-user fa-fw"></i> Profil</a></li>
+                {% if auth_check() %}
+                  <a class="dropdown-link" href="{{ route('user.settings') }}"><i class="fas fa-cog fa-fw"></i> Ustawienia</a>
+                  <a class="dropdown-link" href="{{ route('profile', [user('id')]) }}"><i class="fas fa-user fa-fw"></i> Profil</a>
 
-                    {% if can('adm-access') %}
-                      <li><a href="{{ route('adm.home') }}"><i class="fas fa-user-secret fa-fw"></i> Panel administracyjny</a></li>
-                    {% endif %}
-
-                    <li class="dropdown-divider"></li>
-
-                    <li>
-                      <a href="javascript:" class="js-change-menu">Nowe menu <sup class="badge label-new">Beta</sup></a>
-                    </li>
-
-                    <li class="dropdown-divider"></li>
-
-                    <li>
-                      <a href="javascript:" onclick="document['logout-form'].submit()" class="btn-sign-out"><i class="fas fa-sign-out-alt fa-fw"></i> Wyloguj</a>
-                    </li>
-                  {% else %}
-                    <li class="row">
-                      <div class="col-6">
-                        <a class="btn btn-register btn-sm" href="{{ route('register') }}"><i class="fas fa-sign-in"></i> Utwórz konto</a>
-                      </div>
-                      <div class="col-6">
-                        <a class="btn-login btn-sm d-block d-sm-none text-center" href="{{ route('login') }}">Logowanie</a>
-                      </div>
-                    </li>
+                  {% if can('adm-access') %}
+                    <a class="dropdown-link" href="{{ route('adm.home') }}"><i class="fas fa-user-secret fa-fw"></i> Panel administracyjny</a>
                   {% endif %}
 
-                  <li class="dropdown-divider"></li>
+                  <div class="dropdown-divider"></div>
 
-                  <li>
-                    <form action="{{ search_url|default(route('search')) }}" role="search">
-                      <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}" class="form-control form-control-sm">
-                    </form>
-                  </li>
-                </ul>
+                  <a href="javascript:" class="dropdown-link js-change-menu">Nowe menu <sup class="badge badge-pill label-new">Beta</sup></a>
+
+                  <div class="dropdown-divider"></div>
+
+                  <a href="javascript:" onclick="document['logout-form'].submit()" class="dropdown-link btn-sign-out"><i class="fas fa-sign-out-alt fa-fw"></i> Wyloguj</a>
+                {% else %}
+                  <div class="row">
+                    <div class="col-6">
+                      <a class="btn d-block btn-register btn-sm" href="{{ route('register') }}"><i class="fas fa-sign-in"></i> Utwórz konto</a>
+                    </div>
+                    <div class="col-6">
+                      <a class="btn-login d-block btn-sm d-block d-sm-none text-center" href="{{ route('login') }}">Logowanie</a>
+                    </div>
+                  </div>
+                {% endif %}
+
+                <div class="dropdown-divider"></div>
+
+                <form action="{{ search_url|default(route('search')) }}" role="search">
+                  <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}" class="form-control form-control-sm">
+                </form>
               </div>
             </div>
           </div>

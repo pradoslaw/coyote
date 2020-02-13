@@ -64,7 +64,7 @@ $(function() {
                 buttons: [{
                     label: 'Anuluj',
                     attr: {
-                        'class': 'btn btn-default',
+                        'class': 'btn btn-secondary',
                         'type': 'button',
                         'data-dismiss': 'modal'
                     }

@@ -13,19 +13,19 @@
                     <div class="dropdown float-right">
                         <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="comment-menu-{{ comment.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
 
-                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="comment-menu-{{ comment.id }}">
-                            <li class="dropdown-item"><a href="javascript:" class="btn-edit" data-id="{{ comment.id }}"><i class="fas fa-edit fa-fw"></i> Edytuj</a></li>
-                            <li class="dropdown-item"><a href="javascript:" data-target="#modal-confirm-{{ comment.id }}" data-toggle="modal"><i class="fas fa-times fa-fw"></i> Usuń</a></li>
-                        </ul>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="comment-menu-{{ comment.id }}">
+                            <a class="dropdown-item btn-edit" href="javascript:" data-id="{{ comment.id }}"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
+                            <a class="dropdown-item" href="javascript:" data-target="#modal-confirm-{{ comment.id }}" data-toggle="modal"><i class="fas fa-times fa-fw"></i> Usuń</a>
+                        </div>
                     </div>
                 {% endif %}
 
-                <ul class="list-inline">
-                    <li class="list-inline-item">
+                <ul class="list-inline list-inline-bullet">
+                    <li class="list-inline-item text-muted">
                         {{ link_to_profile(comment.user) }}
                     </li>
                     <li class="list-inline-item">
-                        <a href="#comment-{{ comment.id }}" class="timestamp" data-timestamp="{{ comment.created_at|timestamp }}">{{ comment.created_at|format_date }}</a>
+                        <a href="#comment-{{ comment.id }}" class="timestamp text-muted" data-timestamp="{{ comment.created_at|timestamp }}">{{ comment.created_at|format_date }}</a>
                     </li>
                 </ul>
 
