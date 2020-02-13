@@ -49,7 +49,7 @@
                 <img src="{{ cdn('img/logo-mobile.png') }}">
               </a>
 
-              <ul class="nav-desktop d-none d-sm-block">
+              <ul class="nav-desktop d-none d-md-block">
                 {% for item in __master_menu.roots() %}
                   <li {{ forms.attr(item.attr) }}>
                     <a href="{{ item.url }}">{{ item.title|raw }}</a>
@@ -73,7 +73,7 @@
                 {% if auth_check() %}
                   <ul id="nav-auth" class="nav-auth list-inline d-inline-block"></ul>
 
-                  <div class="dropdown nav-avatar d-none d-sm-inline-block">
+                  <div class="dropdown nav-avatar d-none d-md-inline-block">
                     <a href="javascript:" class="dropdown-toggle img-thumbnail d-block" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="width: 35px">
                       <img src="{{ user_photo(user('photo')) }}" style="width: 100%">
                     </a>
@@ -106,7 +106,7 @@
                   <a class="btn btn-sm btn-login d-none d-sm-inline-block" href="{{ route('login') }}">Logowanie</a>
                 {% endif %}
 
-                <form action="{{ search_url|default(route('search')) }}" class="nav-search d-none d-md-inline-block" role="search">
+                <form action="{{ search_url|default(route('search')) }}" class="nav-search d-none d-lg-inline-block" role="search">
                   <div class="input-group">
                     <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}">
 
@@ -118,7 +118,7 @@
                   </div>
                 </form>
 
-                <button class="navbar-toggler d-inline-block d-sm-none" type="button" data-toggle="collapse" data-target="#js-nav-mobile">
+                <button class="navbar-toggler d-inline-block d-md-none" type="button" data-toggle="collapse" data-target="#js-nav-mobile">
                   <i class="fa fa-bars"></i>
                 </button>
               </div>

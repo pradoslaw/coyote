@@ -36,7 +36,7 @@
             <div class="wrap">
               <h3><a :href="category.url">{{ category.name }}</a></h3>
 
-              <p class="description d-none d-md-block d-lg-block">
+              <p class="description d-none d-lg-block">
                 {{ category.description }}
               </p>
 
