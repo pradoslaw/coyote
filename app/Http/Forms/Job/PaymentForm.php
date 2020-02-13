@@ -97,7 +97,7 @@ class PaymentForm extends Form
                     'autocomplete' => 'off'
                 ],
                 'row_attr' => [
-                    'v-show' => 'coupon.code || show_coupon === true'
+                    'v-show' => 'coupon.code || show_coupon === true',
                 ]
             ])
             ->add('transfer_method', 'hidden', [

@@ -122,19 +122,7 @@ $font-size-control-label: 15px;
 
   .form-text {
     font-size: $font-size-small;
-  }
-
-  .form-group-border {
-    border-bottom: 1px solid $border-color;
-
-    &:last-child {
-      border-bottom: none;
-    }
-
-    // nested .form-group
-    .form-group {
-      margin-bottom: 0;
-    }
+    margin-bottom: .4rem;
   }
 
   .benefits,
