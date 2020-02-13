@@ -135,7 +135,7 @@
     }
 
     &.extended {
-      @include media-breakpoint-up(sm) {
+      @include media-breakpoint-up(md) {
         //flex-basis: 50%;
         //transition: all 300ms cubic-bezier(.25, .46, .45, .94);
         //transition-delay: .1s;

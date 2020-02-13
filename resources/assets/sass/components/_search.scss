@@ -63,7 +63,7 @@
     }
   }
 
-  @include media-breakpoint-only(xs) {
+  @include media-breakpoint-up(md) {
     // selektory sa tutaj rozbite specjalnie
     background-image: url("/img/sad-face.png");
     background-repeat: no-repeat;
