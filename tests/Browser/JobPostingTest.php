@@ -37,11 +37,11 @@ class JobPostingTest extends DuskTestCase
                 ->type('salary_to', $salaryTo = $fake->numberBetween(1000, 2000))
                 ->select('currency_id', Currency::CHF)
                 ->type('email', $fake->email)
-//                ->select('employment_id', 1)
                 ->assertDontSee('Zapisz i zakończ')
                 ->press('Informacje o firmie')
                 ->waitForLocation('/Praca/Submit/Firm')
-                ->radio('is_private', 1)
+                ->click('label[for="is_private_1"]')
+                ->scrollTo('#footer-top')
                 ->press('Podgląd')
                 ->waitForLocation('/Praca/Submit/Preview')
                 ->press('Opublikuj')
@@ -60,7 +60,7 @@ class JobPostingTest extends DuskTestCase
         $this->browse(function (Browser $browser) use ($fake) {
             $browser->loginAs(User::first());
 
-            $plan = Plan::where('is_default', 1)->first();
+            $plan = Plan::where('name', 'Premium')->first();
 
             $browser->visit('/Praca/Submit')
                 ->resize(1920, 1080)
@@ -71,7 +71,7 @@ class JobPostingTest extends DuskTestCase
                 ->press('Informacje o firmie')
                 ->waitForLocation('/Praca/Submit/Firm')
                 ->assertRadioSelected('is_private', 0)
-                ->radio('is_agency', 0)
+                ->click('label[for="is_agency_0"]')
                 ->assertSee('Benefity')
                 ->type('name', $firm = $fake->name)
                 ->type('website', $website = 'http://4programmers.net')
@@ -80,6 +80,7 @@ class JobPostingTest extends DuskTestCase
                 ->value('input[name=city]', 'Wrocław')
                 ->assertValue('input[name=country]', 'Polska')
                 ->type('youtube_url', 'https://www.youtube.com/watch?v=fz2OUoJpR7k')
+                ->scrollTo('#footer-top')
                 ->press('Podgląd')
                 ->waitForLocation('/Praca/Submit/Preview')
                 ->press('Opublikuj')
@@ -115,6 +116,7 @@ class JobPostingTest extends DuskTestCase
                 ->value('input[name=id]', '')
                 ->type('website', $website = 'http://4programmers.net')
                 ->type('name', 'New firm')
+                ->scrollTo('#footer-top')
                 ->press('Podgląd')
                 ->waitForLocation('/Praca/Submit/Preview')
                 ->assertSeeIn('.employer', 'New firm')
@@ -144,7 +146,7 @@ class JobPostingTest extends DuskTestCase
                 ->type('email', $fake->email)
                 ->press('Informacje o firmie')
                 ->waitForLocation('/Praca/Submit/Firm')
-                ->radio('is_private', 1)
+                ->click('label[for="is_private_1"]')
                 ->press('Zapisz i zakończ')
                 ->waitForText('Powrót do ogłoszenia')
                 ->clickLink('Powrót do ogłoszenia')
@@ -211,7 +213,7 @@ class JobPostingTest extends DuskTestCase
                 ->press('Wybierz')
                 ->press('Informacje o firmie')
                 ->waitForLocation('/Praca/Submit/Firm')
-                ->radio('is_private', 1)
+                ->click('label[for="is_private_1"]')
                 ->press('Zapisz i zakończ')
                 ->waitForText('Płatność poprzez bezpieczne połączenie')
                 ->assertSelected('invoice[country_id]', Country::where('name', 'Polska')->value('id'))

@@ -273,7 +273,7 @@
 
               <div id="form-navbar" :class="{'fixed': showFormNavbar}">
                 <div class="row">
-                  <div class="col-12" :class="{'col-lg-9': showFormNavbar}">
+                  <div class="col-12 offset-lg-1" :class="{'col-lg-8': showFormNavbar}">
                     <a href="{{ route('job.submit') }}" class="btn btn-secondary float-left"><i class="fas fa-angle-left"></i> Podstawowe informacje</a>
 
                     <vue-button type="submit" :disabled="isSubmitting" class="btn btn-primary float-right">Podgląd <i class="fas fa-angle-right"></i></vue-button>

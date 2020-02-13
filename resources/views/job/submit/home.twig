@@ -40,23 +40,21 @@
             </div>
             <div class="card-body">
 
-              <div class="form-group border-bottom">
-                <div class="row">
-                  <div class="col-sm-9 form-group">
-                    <label class="col-form-label">Tytuł oferty <em>*</em></label>
+              <div class="form-row border-bottom">
+                <div class="col-sm-9 form-group">
+                  <label class="col-form-label">Tytuł oferty <em>*</em></label>
 
-                    <vue-text name="title" :value.sync="job.title" placeholder="Np. Senior Java Developer" maxlength="60" :is-invalid="isInvalid(['title'])"></vue-text>
+                  <vue-text name="title" :value.sync="job.title" placeholder="Np. Senior Java Developer" maxlength="60" :is-invalid="isInvalid(['title'])"></vue-text>
 
-                    <span class="form-text text-muted">Pozostało <strong>${ charCounter('job.title', 60) }</strong> znaków</span>
+                  <span class="form-text text-muted">Pozostało <strong>${ charCounter('job.title', 60) }</strong> znaków</span>
 
-                    <vue-error :message="errors.title"></vue-error>
-                  </div>
+                  <vue-error :message="errors.title"></vue-error>
+                </div>
 
-                  <div class="col-sm-2 form-group">
-                    <label class="col-form-label">Staż pracy</label>
+                <div class="col-sm-3 form-group">
+                  <label class="col-form-label">Staż pracy</label>
 
-                    <vue-select name="seniority" :value.sync="job.seniority" :options="seniority" placeholder="--"></vue-select>
-                  </div>
+                  <vue-select name="seniority" :value.sync="job.seniority" :options="seniority" placeholder="--"></vue-select>
                 </div>
               </div>
 

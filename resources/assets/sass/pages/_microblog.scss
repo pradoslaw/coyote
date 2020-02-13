@@ -201,7 +201,7 @@ input[placeholder] {
     .comment-body {
       @include break-word;
 
-      width: calc(100% - 20px);
+      width: calc(100% - 22px);
 
       img:not(.img-smile) {
         display: block;
