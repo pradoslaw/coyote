@@ -1,72 +1,69 @@
 {% extends 'layout' %}
 
 {% block title %}
-    {{ input_get('q') ? input_get('q') ~ ' :: ' }} Szukaj
-    {{ parent() }}
+  {{ input_get('q') ? input_get('q') ~ ' :: ' }} Szukaj
+  {{ parent() }}
 {% endblock %}
 
 {% block container %}
-    <div class="row">
-        <div id="box-search" class="col-md-7 col-sm-12 col-12">
-            {{ form_open({method: 'GET', role: 'form', url: route('search'), class: 'form-inline edge', id: 'box-search'}) }}
+  {{ form_open({method: 'GET', role: 'form', url: route('search')}) }}
 
-            <div class="form-group input-keywords col-sm-10 col-12">
-                <div class="col-content">
-                    {{ form_input('search', 'q', input_get('q'), {'class': 'form-control', 'placeholder': 'Słowa kluczowe'}) }}
-                </div>
-            </div>
-
-            <div class="form-group col-sm-2 d-none d-sm-block">
-                <button class="btn btn-primary btn-search" type="submit">
-                    <i class="fas fa-search"></i> <span class="hidden-xxs">Szukaj</span>
-                </button>
-            </div>
-            {{ form_close() }}
+  <div class="row justify-content-center mb-2">
+    <div class="col-md-7 col-12 mt-4">
+      <div class="form-row ">
+        <div class="input-keywords col-sm-10 col-12">
+          {{ form_input('search', 'q', input_get('q'), {'class': 'form-control', 'placeholder': 'Słowa kluczowe'}) }}
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col-12">
-            {% if input_get('q') %}
-                {{ tabs.asUl({class: 'nav nav-tabs'})|raw }}
-            {% endif %}
-
-            {% if input_get('q') and total == 0 %}
-                <div class="card card-body bg-light p-2 empty-result">
-                    <p>
-                        Nie znaleźliśmy stron, które spełniają Twoje kryteria wyszukiwania.<br>
-                        <a href="{{ route('home') }}">Wejdź na naszą stronę główną</a>, a być może znajdziesz coś dla Ciebie!
-                    </p>
-                </div>
-            {% elseif total > 0 %}
-
-                <div class="row">
-                    <div class="col-12 text-muted" style="margin-top: 10px">
-                        Wyniki <strong>{{ pagination.firstItem() }} - {{ pagination.lastItem() }}</strong> z <strong>{{ total }}</strong> znalezione w czasie <strong>{{ took }} ms.</strong>
-                    </div>
-                </div>
-
-                <ul id="search-results" class="list-unstyled">
-                    <li>
-                        {% for hit in hits %}
-                            <h2><a href="{{ hit.url }}">{{ hit.title|raw }}</a></h2>
-                            <p>{{ hit.excerpt|raw }}</p>
-
-                            <a href="{{ hit.url }}">{{ hit.url }} <small>[{{ hit.updated_at|format_date }}]</small></a>
-                        {% endfor %}
-                    </li>
-                </ul>
-
-                <nav class="text-center">
-                    {{ pagination|raw }}
-                </nav>
-            {% endif %}
+        <div class="col-sm-2 d-none d-sm-block">
+          <button class="ml-1 btn btn-primary btn-search" type="submit">
+            <i class="fas fa-search"></i> <span class="d-none d-sm-inline-block">Szukaj</span>
+          </button>
         </div>
+      </div>
     </div>
-{% endblock %}
+  </div>
 
-{% block head %}
-    {{ parent() }}
+  {{ form_close() }}
 
-    <link rel="stylesheet" href="{{ cdn('css/search.css') }}">
+  <div class="row">
+    <div class="col-12">
+      {% if input_get('q') %}
+        {{ tabs.asUl({class: 'nav nav-tabs'})|raw }}
+      {% endif %}
+
+      {% if input_get('q') and total == 0 %}
+        <div class="card card-body bg-light p-2 empty-result mt-4">
+          <p>
+            Nie znaleźliśmy stron, które spełniają Twoje kryteria wyszukiwania.<br>
+            <a href="{{ route('home') }}">Wejdź na naszą stronę główną</a>, a być może znajdziesz coś dla Ciebie!
+          </p>
+        </div>
+      {% elseif total > 0 %}
+
+        <div class="row">
+          <div class="col-12 text-muted mt-3">
+            Wyniki <strong>{{ pagination.firstItem() }} - {{ pagination.lastItem() }}</strong> z <strong>{{ total }}</strong> znalezione w czasie <strong>{{ took }} ms.</strong>
+          </div>
+        </div>
+
+        <ul id="search-results" class="list-unstyled">
+          <li>
+            {% for hit in hits %}
+              <h2 class="mt-4 mb-3"><a href="{{ hit.url }}">{{ hit.title|raw }}</a></h2>
+              <p class="mb-1">{{ hit.excerpt|raw }}</p>
+
+              <a href="{{ hit.url }}" class="text-truncate">{{ hit.url }}
+                <small class="text-muted">[{{ hit.updated_at|format_date }}]</small>
+              </a>
+            {% endfor %}
+          </li>
+        </ul>
+
+        <nav class="d-flex justify-content-center mt-2 mb-2">
+          {{ pagination|raw }}
+        </nav>
+      {% endif %}
+    </div>
+  </div>
 {% endblock %}

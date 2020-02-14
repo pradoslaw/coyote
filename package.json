@@ -7,7 +7,6 @@
   },
   "dependencies": {
     "@tinymce/tinymce-vue": "^3.0.1",
-    "awesome-bootstrap-checkbox": "^0.3.7",
     "axios": "^0.18.1",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
@@ -22,7 +21,6 @@
     "clean-webpack-plugin": "^1.0.0",
     "css-loader": "^2.1.0",
     "date-fns": "^2.9.0",
-    "devicon": "^2.2.0",
     "ekko-lightbox": "^4.0.0",
     "file-loader": "^4.3.0",
     "flatpickr": "^2.6.3",

@@ -184,7 +184,7 @@ $(function () {
             'content': $input,
             'title': '',
             'container': 'body'
-        }).tooltip('destroy');
+        });
     })
     .click(function() {
         $(this).popover('show');
@@ -555,7 +555,7 @@ $(function () {
             }
 
             object.addClass('highlight').css('background-color', '#FFDCA5');
-            $('#container-fluid').one('mousemove', function () {
+            $('body').one('mousemove', function () {
                 object.animate({backgroundColor: color}, 1500, function() {
                     $(this).removeClass('highlight');
                 });

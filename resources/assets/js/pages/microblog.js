@@ -401,7 +401,7 @@ $(function () {
                 }
 
                 object.css('background-color', '#FFDCA5');
-                $('#container-fluid').one('mousemove', function () {
+                $('body').one('mousemove', function () {
                     object.animate({backgroundColor: '#FFF'}, 1500);
                 });
             }

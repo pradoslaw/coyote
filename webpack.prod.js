@@ -35,11 +35,17 @@ module.exports = merge(common, {
         'tag',
         'boolean',
         'number',
-        'constant'
+        'constant',
+        'tooltip',
+        'bs-tooltip-top',
+        'bs-popover-top',
+        'show',
+        'fade'
       ],
       whitelistPatterns: [
         /^logo/,
         /^language/,
+        /^popover/,
       ],
       whitelistPatternsChildren: [
         /hire-me$/

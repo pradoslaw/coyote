@@ -606,11 +606,6 @@ atob@^2.1.2:
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
-awesome-bootstrap-checkbox@^0.3.7:
-  version "0.3.7"
-  resolved "https://registry.yarnpkg.com/awesome-bootstrap-checkbox/-/awesome-bootstrap-checkbox-0.3.7.tgz#b112973ee6d5bff40ab217c420185c470251d0e2"
-  integrity sha1-sRKXPubVv/QKshfEIBhcRwJR0OI=
-
 aws-sign2@~0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/aws-sign2/-/aws-sign2-0.7.0.tgz#b46e890934a9591f2d2f6f86d7e6a9f1b3fe76a8"
@@ -2245,11 +2240,6 @@ detect-indent@^4.0.0:
   integrity sha1-920GQ1LN9Docts5hnE7jqUdd4gg=
   dependencies:
     repeating "^2.0.0"
-
-devicon@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/devicon/-/devicon-2.2.0.tgz#a19ddc9410f7294fbbe0825fe6259c80681cdb15"
-  integrity sha512-u7l8jBcLiaEm5mWHSDTDBPxoAzB9a4YjHiBDIOAVApL0m+eatz3WXNO1eAr8E5QBYzLJtlyIRFEBVtX7xQMhwA==
 
 diffie-hellman@^5.0.0:
   version "5.0.3"
