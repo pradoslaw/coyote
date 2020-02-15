@@ -9,7 +9,7 @@
   animation: none;
   direction: ltr;
   border: 0;
-  font-size: $font-size-small;
+  font-size: $font-size-sm;
   line-height: 24px;
   border-radius: 5px;
   position: absolute;
@@ -396,9 +396,9 @@
     }
   }
   &.selected, &.startRange, &.endRange, &.selected:focus, &.startRange:focus, &.endRange:focus, &.selected:hover, &.startRange:hover, &.endRange:hover, &.selected.prevMonthDay, &.startRange.prevMonthDay, &.endRange.prevMonthDay, &.selected.nextMonthDay, &.startRange.nextMonthDay, &.endRange.nextMonthDay {
-    background: $brand-primary;
+    background: $primary;
     color: #fff;
-    border-color: $brand-primary;
+    border-color: $primary;
   }
   &.selected.startRange, &.startRange.startRange, &.endRange.startRange {
     border-radius: 50px 0 0 50px;

@@ -3,20 +3,20 @@
 .stream {
   .media {
     &:not(:first-child) {
-      margin-top: $card-spacer-y;
+      margin-top: .75rem;
     }
 
     &:not(:last-child) {
-      border-bottom: 1px solid $border-color;
+      border-bottom: 1px solid $card-border-color;
     }
 
     p {
       margin-bottom: 2px;
-      font-size: $font-size-small;
+      font-size: $font-size-sm;
     }
 
     .media-body {
-      padding-bottom: $card-spacer-y;
+      padding-bottom: .75rem;
     }
   }
 }

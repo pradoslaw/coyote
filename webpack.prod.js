@@ -40,7 +40,13 @@ module.exports = merge(common, {
         'bs-tooltip-top',
         'bs-popover-top',
         'show',
-        'fade'
+        'fade',
+        'fa-desktop',
+        'fa-newspaper',
+        'fa-bolt',
+        'fa-column',
+        'fa-shopping-cart',
+        'fa-envelope'
       ],
       whitelistPatterns: [
         /^logo/,

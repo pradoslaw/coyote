@@ -2,22 +2,22 @@
 {% block title %}Strona główna {{ parent() }}{% endblock %}
 
 {% block container %}
-    <div class="card card-default">
-        <div class="card-heading">Status systemu</div>
-        <div class="card-body">
-            <ul class="list-group">
-                {% for label, checked in checklist %}
-                    <li class="list-group-item">
-                        {% if checked %}
-                            <i class="fas fa-check text-success fa-fw"></i>
-                        {% else %}
-                            <i class="fas fa-times text-danger fa-fw"></i>
-                        {% endif %}
+  <div class="card card-default">
+    <div class="card-header">Status systemu</div>
+    <div class="card-body">
+      <ul class="list-group">
+        {% for label, checked in checklist %}
+          <li class="list-group-item">
+            {% if checked %}
+              <i class="fas fa-check text-success fa-fw"></i>
+            {% else %}
+              <i class="fas fa-times text-danger fa-fw"></i>
+            {% endif %}
 
-                        <span>{{ label|raw }}</span>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
+            <span>{{ label|raw }}</span>
+          </li>
+        {% endfor %}
+      </ul>
     </div>
+  </div>
 {% endblock %}

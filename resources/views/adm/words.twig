@@ -1,7 +1,7 @@
 {% extends 'adm.base' %}
 {% block title %}Cenzura {{ parent() }}{% endblock %}
 
-{% block panel %}
+{% block card %}
     {{ form_open({url: route('adm.words.save'), method: 'post', id: 'app'}) }}
         <p>
             <button class="btn btn-secondary" @click.prevent="addRow">

@@ -113,7 +113,7 @@ module.exports = {
     // help: './sass/pages/help.scss',
     // 'user-panel': './sass/pages/user.scss',
     // errors: './sass/pages/errors.scss',
-    // adm: './sass/pages/adm.scss',
+    adm: './sass/pages/adm.scss',
     // search: './sass/pages/search.scss'
   },
   plugins: [
