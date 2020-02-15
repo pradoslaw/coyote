@@ -8,7 +8,6 @@
       <div class="media-body">
         <div class="dropdown float-right" v-if="comment.editable">
           <button class="btn btn-secondary btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="caret"></span>
           </button>
 
           <div class="dropdown-menu dropdown-menu-right">
@@ -55,7 +54,7 @@
 
         <ul class="list-inline list-inline-bullet mb-0">
           <li class="list-inline-item"><a @click="reply" href="javascript:" class="text-muted">Odpowiedz</a></li>
-          <li class="list-inline-item">
+          <li v-if="$store.getters['user/isAuthorized']" class="list-inline-item">
             <a :href="comment.route.flag" :data-url="comment.flag.url" :data-metadata="comment.flag.metadata" class="btn-report text-muted">Zgłoś</a>
           </li>
         </ul>
@@ -82,7 +81,7 @@
 
           <div class="row">
             <div class="form-group col-sm-6">
-              <input v-if="$store.state.authId === null" type="text" name="email" class="form-control" placeholder="Adres e-mail" tabindex="2">
+              <input v-if="!$store.getters['user/isAuthorized']" type="text" name="email" class="form-control" placeholder="Adres e-mail" tabindex="2">
             </div>
 
             <div class="form-group col-sm-6">
