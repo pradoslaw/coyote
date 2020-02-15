@@ -48,7 +48,8 @@ module.exports = merge(common, {
         /^popover/,
       ],
       whitelistPatternsChildren: [
-        /hire-me$/
+        /hire-me$/,
+        /dropdown-menu/
       ]
     })
   ]
