@@ -318,7 +318,7 @@ $(function () {
                 $(':input', $form).attr('disabled', 'disabled');
 
                 $.post($form.attr('action'), data, function(html) {
-                    $(html).hide().insertAfter('nav.text-center').fadeIn(900);
+                    $(html).hide().insertAfter('nav.justify-content-center').fadeIn(900);
                     $('textarea', $form).val('').trigger('keydown');
                     $('.thumbnails', $form).html('');
                 })
