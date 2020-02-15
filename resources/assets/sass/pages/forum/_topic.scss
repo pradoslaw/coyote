@@ -103,6 +103,12 @@
       font-weight: 900;
     }
 
+    .badge {
+      font-size: 90%;
+      margin-top: -2px;
+      margin-bottom: -2px;
+    }
+
     @include link-color-darker;
     @include text-overflow;
   }
@@ -376,7 +382,7 @@ div.tooltip-inner {
 .comments {
   margin: 15px 0 5px 25px;
   font-family: Tahoma,sans-serif;
-  font-size: .7rem;
+  font-size: 100%;
   padding-right: 50px;
 
   @include link-color-darker;
@@ -389,7 +395,7 @@ div.tooltip-inner {
 
   > div {
     border-bottom: 1px dotted $border-color;
-    padding: 5px 0 5px 10px;
+    padding: 5px 0 5px 0;
     margin-top: 1px;
     position: relative;
     word-wrap: break-word;
@@ -400,15 +406,12 @@ div.tooltip-inner {
 
     &:before {
       content: "▪";
-      left: 0;
-      position: absolute;
     }
 
     // Topic's author
     // -----------------
 
-    .badge-creator {
-      font-size: $font-size-small - 0.2rem;
+    .badge-primary {
       font-weight: normal;
       padding: 1px 5px;
       margin-top: -1px;

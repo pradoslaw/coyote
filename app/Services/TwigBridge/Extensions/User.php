@@ -124,6 +124,6 @@ class User extends Twig_Extension
             return $html;
         }
 
-        return '<span class="badge badge-creator">' . $html . '</span>';
+        return '<span class="badge badge-primary">' . $html . '</span>';
     }
 }

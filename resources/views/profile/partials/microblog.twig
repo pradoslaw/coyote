@@ -1,6 +1,6 @@
-<section id="microblog" class="box">
+<section id="microblog">
     {% if microblogs is not empty %}
-        <div class="text-center">
+        <div class="d-flex justify-content-center mt-3 mb-3">
             {{ pagination|raw }}
         </div>
 
@@ -8,7 +8,7 @@
             {% include "microblog.partials.microblog" %}
         {% endfor %}
 
-        <div class="text-center">
+        <div class="d-flex justify-content-center mt-3 mb-3">
             {{ pagination|raw }}
         </div>
     {% else %}

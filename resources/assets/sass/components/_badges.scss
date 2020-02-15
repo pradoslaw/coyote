@@ -1,15 +1,13 @@
-.badge-creator,
-.badge-success {
-  background-color: $brand-primary;
+.badge {
+  color: #fff;
 
   > a {
-    color: #fff !important;
+    color: inherit !important;
   }
 }
 
 .badge-secondary {
   background-color: $gray-light;
-  color: #fff;
 }
 
 .label-new {

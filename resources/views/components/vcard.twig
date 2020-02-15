@@ -13,7 +13,7 @@
                 <span class="status {{ user.is_online ?: 'offline' }}">{{ user.is_online ? 'Online' : 'Offline' }}</span>
 
                 {% if user.group.name %}
-                    <span class="badge badge-secondary label-default">{{ user.group.name }}</span>
+                    <span class="badge badge-secondary">{{ user.group.name }}</span>
                 {% endif %}
             </div>
 

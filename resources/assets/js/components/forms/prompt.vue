@@ -1,13 +1,15 @@
 <template>
-  <div style="position: relative">
+  <div class="position-relative">
     <slot></slot>
 
     <vue-dropdown ref="dropdown" :items="items" @select="selectItem"></vue-dropdown>
+    <vue-error :message="errors"></vue-error>
   </div>
 </template>
 
 <script>
   import VueDropdown from './dropdown.vue';
+  import VueError from './error.vue';
   import axios from 'axios';
 
   const ESC = 27;
@@ -16,8 +18,16 @@
   const DOWN = 40;
 
   export default {
-    components: { 'vue-dropdown': VueDropdown },
-    props: ['source'],
+    components: { 'vue-dropdown': VueDropdown, 'vue-error': VueError },
+    props: {
+      source: {
+        type: String
+      },
+      errors: {
+        type: Array,
+        default: () => []
+      }
+    },
     data() {
       return {
         input: null,

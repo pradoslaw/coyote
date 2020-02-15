@@ -33,7 +33,7 @@
             <vue-location :locations="job.locations" :remote="job.remote"></vue-location>
           </p>
 
-          <span v-if="job.is_new" class="label label-new float-right margin-sm-top">Nowe</span>
+          <span v-if="job.is_new" class="badge label-new float-right margin-sm-top">Nowe</span>
           <small v-else class="text-muted float-right">{{ job.boost_at }}</small>
 
           <ul class="tag-clouds tag-clouds-sm tag-clouds-skills margin-md-top">

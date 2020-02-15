@@ -121,8 +121,11 @@
     <section class="row">
       <div class="col-12">
         <div class="float-right">
-          Liczba odpowiedzi na stronę
-          {% include 'forum.partials.per_page' with {perPage: paginate.perPage()} %}
+          <div class="form-inline">
+            <label class="mr-1">Liczba odpowiedzi na stronę</label>
+
+            {% include 'forum.partials.per_page' with {perPage: paginate.perPage()} %}
+          </div>
         </div>
       </div>
     </section>
@@ -141,12 +144,12 @@
                 <i class="fas fa-star fa-fw"></i>
 
                 <span>
-                                    {% if subscribers[user('id')] is not defined %}
-                                      Obserwuj wątek
-                                    {% else %}
-                                      Zakończ obserwację
-                                    {% endif %}
-                                </span>
+                    {% if subscribers[user('id')] is not defined %}
+                      Obserwuj wątek
+                    {% else %}
+                      Zakończ obserwację
+                    {% endif %}
+                </span>
 
                 {% if subscribers.count() > 0 %}
                   <small>({{ declination(subscribers.count(), ['obserwujący', 'obserwujących', 'obserwujących']) }})</small>
