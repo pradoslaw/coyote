@@ -22,7 +22,7 @@
       </div>
     {% endif %}
 
-    {{ form_open({url: route('microblog.comment.save', [comment.id]), class: 'write-content margin-md-right', style: 'display: none'}) }}
+    {{ form_open({url: route('microblog.comment.save', [comment.id]), class: 'write-content mr-4', style: 'display: none'}) }}
     <textarea name="text" placeholder="Napisz komentarz... (Ctrl+Enter aby wysłać)" class="form-control" data-prompt-url="{{ route('user.prompt') }}" rows="1">{{ comment.text }}</textarea>
     <button type="submit" class="btn btn-sm btn-submit" title="Zapisz (Ctrl+Enter)"><i class="far fa-fw fa-share-square"></i></button>
     {{ form_close() }}

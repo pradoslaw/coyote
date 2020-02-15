@@ -1,84 +1,84 @@
 {% if user.posts > 0 %}
-    <div id="box-posts" class="box">
+  <div class="box mt-4">
 
-        <div class="card card-default">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <canvas id="pie-chart"></canvas>
-                    </div>
+    <div class="card card-default">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-6">
+            <canvas id="pie-chart"></canvas>
+          </div>
 
-                    <div class="col-sm-6">
-                        <ul id="box-stats" class="list-group row">
-                            <li class="list-group-item col-sm-6">Postów: <strong>{{ user.posts }}</strong></li>
-                            <li class="list-group-item col-sm-6">Komentarzy: <strong>{{ comments }}</strong></li>
-                            <li class="list-group-item col-sm-6">Głosów oddanych: <strong>{{ given_votes }}</strong></li>
-                            <li class="list-group-item col-sm-6">Głosów otrzymanych: <strong>{{ received_votes }}</strong></li>
-                        </ul>
+          <div class="col-sm-6">
+            <ul id="box-stats" class="list-group row">
+              <li class="list-group-item col-sm-6">Postów: <strong>{{ user.posts }}</strong></li>
+              <li class="list-group-item col-sm-6">Komentarzy: <strong>{{ comments }}</strong></li>
+              <li class="list-group-item col-sm-6">Głosów oddanych: <strong>{{ given_votes }}</strong></li>
+              <li class="list-group-item col-sm-6">Głosów otrzymanych: <strong>{{ received_votes }}</strong></li>
+            </ul>
 
-                        <canvas id="line-chart"></canvas>
-                    </div>
-                </div>
-            </div>
+            <canvas id="line-chart"></canvas>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 
-    <script>
+  <script>
 
-        new Chart(document.getElementById("pie-chart"), {
-            type: 'pie',
-            data: {
-                labels: [
-                    {% for name, count in pie %}
-                    '{{ name }}',
-                    {% endfor %}
-                ],
-                datasets: [{
-                    data: [
-                        {% for name, count in pie %}
-                        {{ count }},
-                        {% endfor %}
-                    ],
-                    backgroundColor: [
-                        'rgba(255, 159, 64, 0.7)',
-                        'rgba(128, 164, 26, 0.7)',
-                        'rgba(91, 192, 222, 0.7)',
-                        'rgba(217, 141, 13, 0.7)',
-                        'rgba(92, 184, 92, 0.7)',
-                        'rgba(217, 83, 79, 0.7)',
-                        'rgba(100, 100, 102, 0.7)',
-                        'rgba(255, 159, 64, 0.2)',
-                        'rgba(128, 164, 26, 0.2)',
-                        'rgba(91, 192, 222, 0.2)'
-                    ]
-                }]
-            },
-            options: {
-                responsive: true,
-            }
-        });
+    new Chart(document.getElementById("pie-chart"), {
+      type: 'pie',
+      data: {
+        labels: [
+          {% for name, count in pie %}
+          '{{ name }}',
+          {% endfor %}
+        ],
+        datasets: [{
+          data: [
+            {% for name, count in pie %}
+            {{ count }},
+            {% endfor %}
+          ],
+          backgroundColor: [
+            'rgba(255, 159, 64, 0.7)',
+            'rgba(128, 164, 26, 0.7)',
+            'rgba(91, 192, 222, 0.7)',
+            'rgba(217, 141, 13, 0.7)',
+            'rgba(92, 184, 92, 0.7)',
+            'rgba(217, 83, 79, 0.7)',
+            'rgba(100, 100, 102, 0.7)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(128, 164, 26, 0.2)',
+            'rgba(91, 192, 222, 0.2)'
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+      }
+    });
 
-        new Chart(document.getElementById("line-chart"), {
-            type: 'line',
-            data: {
-                labels: [
-                    {% for item in line %}
-                    '{{ item.label }}',
-                    {% endfor %}
-                ],
-                datasets: [{
-                    label: 'Liczba postów',
-                    data: [
-                        {% for item in line %}
-                        {{ item.count }},
-                        {% endfor %}
-                    ],
-                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
-                    borderColor: 'rgba(255, 159, 64, 1)',
-                    borderWidth: 1
-                }]
-            }
-        });
+    new Chart(document.getElementById("line-chart"), {
+      type: 'line',
+      data: {
+        labels: [
+          {% for item in line %}
+          '{{ item.label }}',
+          {% endfor %}
+        ],
+        datasets: [{
+          label: 'Liczba postów',
+          data: [
+            {% for item in line %}
+            {{ item.count }},
+            {% endfor %}
+          ],
+          backgroundColor: 'rgba(255, 159, 64, 0.2)',
+          borderColor: 'rgba(255, 159, 64, 1)',
+          borderWidth: 1
+        }]
+      }
+    });
 
-    </script>
+  </script>
 {% endif %}

@@ -46,7 +46,7 @@ $(function () {
                     $this.next('.btn-subscribe:not(.subscribe-on)').click(); // po doceneniu wpisu automatycznie go obserwujemy
                 }
 
-                $this.toggleClass('thumbs-on').tooltip('destroy').removeAttr('data-original-title');
+                $this.toggleClass('thumbs-on').removeAttr('data-original-title');
             })
             .complete(function () {
                 $this.removeAttr('disabled');

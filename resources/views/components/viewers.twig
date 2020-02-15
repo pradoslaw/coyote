@@ -3,7 +3,7 @@
 
     {% for name, users in groups %}
         {% if users|length > 0 %}
-            <p><strong>{{ name }}:</strong> {{ users|join(', ')|raw }}</p>
+            <p class="mb-1"><strong>{{ name }}:</strong> {{ users|join(', ')|raw }}</p>
         {% endif %}
     {% endfor %}
 </section>

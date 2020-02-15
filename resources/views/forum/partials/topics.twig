@@ -75,7 +75,7 @@
                                 <a title="{{ topic.subject }}" href="{{ url ~ (user_id is defined ? ('?p=' ~ topic.posts[0].id ~ '#id' ~ topic.posts[0].id)) }}">{{ topic.subject }}</a>
 
                                 {% if topic.score %}
-                                    <span class="badge badge-success score d-none d-sm-inline" title="Liczba głosów oddanych na ten wątek">
+                                    <span class="badge badge-primary score d-none d-sm-inline" title="Liczba głosów oddanych na ten wątek">
                                         <i class="fas fa-fire"></i>
                                         {{ topic.score }}
                                     </span>
@@ -108,7 +108,7 @@
                         </td>
 
                         {% if forum is not defined %}
-                            <td class="col-category d-none d-sm-block">
+                            <td class="col-category d-none d-sm-table-cell">
                                 {{ link_to_route('forum.category', topic.forum_name, [topic.forum_slug]) }}
                             </td>
                         {% endif %}

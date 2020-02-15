@@ -8,13 +8,7 @@
 {% import 'components.forms' as forms %}
 
 {% block content %}
-  <ul class="nav nav-tabs">
-    {% for item in tabs.roots() %}
-      <li {{ forms.attr(item.attr) }}>
-        <a href="{{ item.url }}">{{ item.title|raw }}</a>
-      </li>
-    {% endfor %}
-  </ul>
+  {{ tabs.asUl({'class': 'nav nav-tabs mb-0'})|raw }}
 
   {% include "forum.partials.top" %}
 

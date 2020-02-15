@@ -44,10 +44,10 @@ return [
     // _ na poczatku gdyz ten plugin korzysta z metody share() klasy View, a nazwa "forum" moze
     // wchodzic w konflikt z innymi zmiennymi przekazywanymi do twiga
     '_forum' => [
-        'Kategorie' => ['route' => 'forum.categories', 'rel' => 'nofollow'],
-        'Wszystkie' => ['route' => 'forum.all'],
+        'Kategorie' => ['route' => 'forum.categories', 'class' => 'nav-item'],
+        'Wszystkie' => ['route' => 'forum.all', 'class' => 'nav-item'],
         'Obserwowane' => ['route' => 'forum.subscribes', 'data' => ['role' => true]],
-        'Moje' => ['route' => 'forum.mine', 'data' => ['role' => true], 'title' => 'Wątki w których brałem udział'],
-        'Moje tagi' => ['route' => 'forum.interesting', 'title' => 'Wątki zawierające moje tagi']
+        'Moje' => ['route' => 'forum.mine', 'class' => 'nav-item', 'data' => ['role' => true], 'title' => 'Wątki w których brałem udział'],
+        'Moje tagi' => ['route' => 'forum.interesting', 'class' => 'nav-item', 'title' => 'Wątki zawierające moje tagi']
     ]
 ];

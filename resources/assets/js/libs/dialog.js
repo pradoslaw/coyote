@@ -92,14 +92,14 @@ class Dialog {
      */
     close() {
         this._modal.modal('hide');
-        this.destroy();
+        // this.destroy();
     }
 
     /**
      * Remove modal from DOM.
      */
     destroy() {
-        this._modal.remove();
+        this._modal.modal('dispose');
     }
 
     /**
