@@ -53,7 +53,7 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
     {
         $this
             ->add('name', 'text', [
-                'rules' => 'nullable|string|username|user_exist',
+                'rules' => 'nullable|string|user_exist',
                 'label' => 'Nazwa użytkownika',
                 'attr' => [
                     'id' => 'username',
