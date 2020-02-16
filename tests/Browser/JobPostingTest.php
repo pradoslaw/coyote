@@ -174,6 +174,7 @@ class JobPostingTest extends DuskTestCase
                 ->scrollTo('#footer-top')
                 ->press('Informacje o firmie')
                 ->waitForLocation('/Praca/Submit/Firm')
+                ->scrollTo('#footer-top')
                 ->press('Zapisz i zakończ')
                 ->waitForText('Nazwa firmy jest wymagana.');
         });
