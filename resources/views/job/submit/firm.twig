@@ -103,11 +103,11 @@
                   <div class="input-group-append">
                     <a class="input-group-text text-decoration-none" href="javascript:" @click="addFirm" title="Dodaj nową firmę"><i class="fas fa-plus"></i></a>
                   </div>
+
+                  <vue-error :message="errors.name"></vue-error>
                 </div>
 
                 <span class="form-text text-muted">Podając nazwę firmy, oferta staje się bardziej wiarygodna i wartościowa.</span>
-
-                <vue-error :message="errors.name"></vue-error>
               </div>
 
               <div class="border-bottom form-group">
