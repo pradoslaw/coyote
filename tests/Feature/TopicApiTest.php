@@ -111,7 +111,7 @@ class TopicApiTest extends TestCase
 
     public function testShowTopicAsNew()
     {
-        \Coyote\Guest::forceCreate(['id' => $this->user->guest_id, 'updated_at' => now()->subMinute(5)]);
+        \Coyote\Guest::forceCreate(['id' => $this->user->guest_id, 'created_at' => now()->subMinute(5)]);
 
         $topic = factory(Topic::class)->create(['forum_id' => $this->forum->id]);
         factory(Post::class)->create(['topic_id' => $topic->id, 'forum_id' => $this->forum->id, 'created_at' => now()]);

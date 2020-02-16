@@ -27,13 +27,13 @@ class ConfirmCest
         $I->amOnPage('Confirm');
         $I->fillField('email', $user->email);
         $I->click('Wyślij e-mail z linkiem aktywacyjnym');
-        $I->see('Na podany adres e-mail został wysłany link aktywacyjny.');
+        $I->seeInSource('Na podany adres e-mail został wysłany link aktywacyjny.');
 
         $I->seeRecord('actkeys', ['user_id' => $user->id]);
         $row = $I->grabRecord('actkeys', ['user_id' => $user->id]);
 
         $I->amOnPage("/Confirm/Email?id=" . $user->id . "&actkey=" . $row['actkey']);
-        $I->see('Adres e-mail został pozytywnie potwierdzony');
+        $I->seeInSource('Adres e-mail został pozytywnie potwierdzony');
         $I->dontSeeRecord('actkeys', ['actkey' => $row['actkey'], 'user_id' => $user->id]);
     }
 
@@ -105,7 +105,7 @@ class ConfirmCest
         $I->click('Zapisz');
 
         $I->seeInField('email', $user->email);
-        $I->see('Na adres ' . $newEmail . ' wysłaliśmy link umożliwiający zmianę adresu e-mail.');
+        $I->seeInSource('Na adres ' . $newEmail . ' wysłaliśmy link umożliwiający zmianę adresu e-mail.');
     }
 
     // nie wiem czemu ten test wywala sie na travisie :( kiedys dzialalo

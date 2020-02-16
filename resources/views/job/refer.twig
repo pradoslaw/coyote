@@ -10,7 +10,7 @@
                 <div class="card-body">
                     <h1 class="media-heading">{{ link_to_route('job.offer', job.title, [job.id, job.slug]) }}</h1>
 
-                    {{ form_start(form) }}
+                    {{ form_start(form, {id: 'form'}) }}
                     {{ form_row(form.friend_email) }}
                     {{ form_row(form.friend_email_confirmation) }}
                     {{ form_row(form.friend_name) }}

@@ -29,8 +29,9 @@ class JobReferCest
     public function tryToSubmitApplicationWithErrors(FunctionalTester $I)
     {
         $I->amOnRoute('job.refer', [$this->job->id]);
+        $I->see('E-mail kandydata');
 
-        $I->submitForm('.form-horizontal', [ ]);
+        $I->submitForm('.card-body form', [ ]);
 
         $I->seeFormErrorMessage('name');
         $I->seeFormErrorMessage('email');
@@ -46,7 +47,7 @@ class JobReferCest
 
         $I->amOnRoute('job.refer', [$this->job->id]);
 
-        $I->submitForm('.form-horizontal', [
+        $I->submitForm('.card-body form', [
             'name' => $name = $fake->name,
             'email' => $email = $fake->email,
             'friend_name' => $friendName = $fake->name,

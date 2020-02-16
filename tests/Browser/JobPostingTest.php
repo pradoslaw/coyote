@@ -192,6 +192,7 @@ class JobPostingTest extends DuskTestCase
             $browser->visit('/Praca/Submit')
                 ->resize(1920, 1080)
                 ->type('title', $title = $fake->title)
+                ->scrollTo('#footer-top')
                 ->press("Zapisz jako $firm->name")
                 ->waitForText('Powrót do ogłoszenia')
                 ->clickLink('Powrót do ogłoszenia')

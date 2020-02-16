@@ -36,7 +36,7 @@
 {% endmacro %}
 
 {% macro text(name, label, value, attr, help) %}
-    {{ _self.element(form_text(name, value, {'class': 'form-control' ~ session_get('errors').first(name) ? ' is-invalid'}), label, session_get('errors').first(name), attr, help) }}
+    {{ _self.element(form_text(name, value, {'class': 'form-control' ~ (session_get('errors').first(name) ? ' is-invalid')}), label, session_get('errors').first(name), attr, help) }}
 {% endmacro %}
 
 {% macro password(name, label, value, attr, help) %}

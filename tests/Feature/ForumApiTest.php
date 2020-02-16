@@ -56,7 +56,7 @@ class ForumApiTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        Guest::forceCreate(['id' => $user->guest_id, 'updated_at' => now()->subMinute(5)]);
+        Guest::forceCreate(['id' => $user->guest_id, 'created_at' => now()->subMinute(5)]);
 
         $forum = factory(Forum::class)->create(['order' => 0]);
         $topic = factory(Topic::class)->create(['forum_id' => $forum->id]);
@@ -77,7 +77,7 @@ class ForumApiTest extends TestCase
         $user = factory(User::class)->create();
         $token = $user->createToken('4programmers.net')->accessToken;
 
-        Guest::forceCreate(['id' => $user->guest_id, 'updated_at' => now()->subMinute(5)]);
+        Guest::forceCreate(['id' => $user->guest_id, 'created_at' => now()->subMinute(5)]);
 
         $forum = factory(Forum::class)->create(['order' => 0]);
         $topic = factory(Topic::class)->create(['forum_id' => $forum->id]);
