@@ -1,4 +1,7 @@
-import 'bootstrap-sass/assets/javascripts/bootstrap/tooltip';
-import 'bootstrap-sass/assets/javascripts/bootstrap/collapse';
-import 'bootstrap-sass/assets/javascripts/bootstrap/modal';
-import 'bootstrap-sass/assets/javascripts/bootstrap/tab';
+import 'bootstrap/js/src/popover';
+import 'bootstrap/js/src/tooltip';
+import 'bootstrap/js/src/collapse';
+import 'bootstrap/js/src/dropdown';
+import 'bootstrap/js/src/modal';
+import 'bootstrap/js/src/tab';
+

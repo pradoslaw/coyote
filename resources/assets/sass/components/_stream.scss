@@ -2,33 +2,21 @@
 
 .stream {
   .media {
-    border-bottom: 1px solid $border-color;
+    &:not(:first-child) {
+      margin-top: .75rem;
+    }
 
-    &:last-child {
-      border-bottom: 0;
+    &:not(:last-child) {
+      border-bottom: 1px solid $card-border-color;
     }
 
     p {
       margin-bottom: 2px;
-      font-size: $font-size-small;
-    }
-
-    .text-muted {
-      font-size: 85%;
-
-      a {
-        color: inherit;
-      }
+      font-size: $font-size-sm;
     }
 
     .media-body {
-      padding-bottom: 10px;
-    }
-
-    .well {
-      font-size: $font-size-small;
-      margin-top: 10px;
-      margin-bottom: 5px;
+      padding-bottom: .75rem;
     }
   }
 }

@@ -3,17 +3,16 @@
 
 {% block pm %}
   <div v-if="!messages.length"  class="row">
-    <div class="col-md-12 margin-md-bottom" :class="{'has-error': 'recipient' in errors}">
+    <div class="col-12">
       <vue-autocomplete
         ref="autocomplete"
         :tabindex="1"
         :items="items"
         :value.sync="recipient.name"
+        :errors="errors.recipient"
         placeholder="Odbiorca..."
         @select="selectName"
       ></vue-autocomplete>
-
-      <span v-cloak v-if="'recipient' in errors" class="help-block">${ errors.recipient[0] }</span>
     </div>
   </div>
 

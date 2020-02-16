@@ -9,7 +9,7 @@ services:
       - postgres:/var/lib/postgresql/data:z
     environment:
       POSTGRES_USER: coyote
-      POSTGRES_PASSWORD:
+      POSTGRES_PASSWORD: coyote
       POSTGRES_DB: coyote
       TZ: "Europe/Warsaw"
     networks:

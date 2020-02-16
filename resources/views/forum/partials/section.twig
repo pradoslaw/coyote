@@ -1,10 +1,10 @@
 
 
-<section class="panel panel-wrapper">
-    <div class="panel-body">
-        <h2 class="pull-left">{{ name }}</h2>
+<section class="card card-wrapper">
+    <div class="card-body">
+        <h2 class="float-left">{{ name }}</h2>
 
-        <a class="pull-right toggle {{ not collapse[forums[0].id] ? 'in' }}" data-toggle="collapse" href="#{{ forums[0].id }}" aria-expanded="true">
+        <a class="float-right toggle {{ not collapse[forums[0].id] ? 'in' }}" data-toggle="collapse" href="#{{ forums[0].id }}" aria-expanded="true">
             <i class="far fa-minus-square"></i>
             <i class="far fa-plus-square"></i>
         </a>
@@ -30,12 +30,12 @@
                         <td class="col-forum-description">
                             <h3><a title="{{ forum.name }}" data-category="Forum-Name" href="{{ route('forum.category', [forum.slug]) }}">{{ forum.name }}</a></h3>
 
-                            <p class="hidden-xs">{{ forum.description }}</p>
+                            <p class="d-none d-sm-block">{{ forum.description }}</p>
 
                             {% if not forum.url %}
-                                <ul class="list-stats list-inline visible-xs visible-sm">
-                                    <li>Wątków: <strong>{{ forum.topics|number_format(0, ',', ' ') }}</strong></li>
-                                    <li>Postów: <strong>{{ forum.posts|number_format(0, ',', ' ') }}</strong></li>
+                                <ul class="list-stats list-inline d-block d-sm-none">
+                                    <li class="list-inline-item">Wątków: <strong>{{ forum.topics|number_format(0, ',', ' ') }}</strong></li>
+                                    <li class="list-inline-item">Postów: <strong>{{ forum.posts|number_format(0, ',', ' ') }}</strong></li>
                                 </ul>
                             {% endif %}
 
@@ -49,7 +49,7 @@
                                 </ul>
                             {% endif %}
                         </td>
-                        <td class="col-stats hidden-sm hidden-xs">
+                        <td class="col-stats d-block d-sm-none d-md-block">
                             {% if not forum.url %}
                                 <p title="Liczba wątków"><strong>{{ forum.topics|number_format(0, ',', ' ') }}</strong> <small>{{ declination(forum.topics, ['wątek', 'wątki', 'wątków'], true) }}</small></p>
                                 <p title="Liczba postów"><strong>{{ forum.posts|number_format(0, ',', ' ') }}</strong> <small>{{ declination(forum.posts, ['post', 'posty', 'postów'], true) }}</small></p>

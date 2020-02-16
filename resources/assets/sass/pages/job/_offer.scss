@@ -1,11 +1,10 @@
 @charset "UTF-8";
-@import "../../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/image";
 
 #job-offer {
   .media-body {
     padding: 0 20px;
 
-    @media screen and (max-width: $screen-sm) {
+    @include media-breakpoint-down(sm) {
       padding: 0 5px;
     }
 
@@ -31,7 +30,7 @@
   .media-object {
     width: 70px;
 
-    @media screen and (max-width: $screen-sm) {
+    @include media-breakpoint-down(sm) {
       display: none;
     }
   }
@@ -40,7 +39,7 @@
     font-size: 22px;
     margin-bottom: 10px;
 
-    @media screen and (max-width: $screen-sm) {
+    @include media-breakpoint-down(sm) {
       font-size: $font-size-large;
     }
   }
@@ -96,17 +95,16 @@
   // Offer description (or company description)
   // ----------------------------------------------------
   .text {
-    font-size: $font-size-medium;
+    font-size: $font-size-lg;
 
-    @media screen and (max-width: $screen-sm) {
+    @include media-breakpoint-down(sm) {
       font-size: $font-size-small;
     }
 
     img:not(.img-smile) {
-      @include img-responsive;
+      @include img-fluid;
     }
 
-    @include adjust-list-padding;
     @include link-color-darker;
   }
 }
@@ -117,7 +115,7 @@
 .metadata.location {
   border-top: 0;
 
-  @media screen and (min-width: $screen-sm) {
+  @include media-breakpoint-up(sm) {
     display: inline;
   }
 }
@@ -128,39 +126,6 @@
   }
 }
 
-#box-action-bar {
-  border: 1px solid $border-color;
-  border-radius: $border-radius-base;
-  overflow: hidden;
-
-  .col-xlg-6 {
-    padding: 15px 10px;
-
-    &:first-child {
-      @media screen and (min-width: $screen-xlg) {
-        border-right: 1px solid $border-color;
-      }
-
-      @media screen and (max-width: $screen-xlg) {
-        border-bottom: 1px solid $border-color;
-      }
-    }
-  }
-
-  .btn {
-    width: 100%;
-  }
-
-  .btn-refer {
-    border: 1px solid $brand-primary;
-    color: $brand-primary;
-
-    &:hover {
-      background-color: lighten($brand-primary, 50%);
-    }
-  }
-}
-
 #box-job-firm {
   ul {
     margin-bottom: 0;
@@ -168,7 +133,7 @@
     li {
       padding: 5px 0;
       color: $gray;
-      font-size: $font-size-base - 1px;
+      font-size: $font-size-base - 0.1rem;
 
       a {
         color: inherit;
@@ -176,7 +141,7 @@
 
       i {
         margin-right: 4px;
-        font-size: $font-size-base + 1;
+        font-size: $font-size-base + 0.1rem;
       }
     }
   }
@@ -254,6 +219,7 @@
 
       .media-body {
         border-bottom: 1px solid $border-color;
+        padding-bottom: 10px;
       }
 
       &.author {
@@ -264,25 +230,6 @@
 
     &:last-child .media-body {
       border-bottom: none;
-    }
-  }
-
-  .list-inline {
-    margin-left: 0;
-    color: $text-muted;
-
-    li {
-      padding-left: 0;
-      padding-right: 5px;
-
-      &:after {
-        content: "●";
-        margin-left: 8px;
-      }
-
-      &:last-child:after {
-        content: '';
-      }
     }
   }
 

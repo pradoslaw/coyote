@@ -5,7 +5,7 @@
 
 {% block container %}
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-12">
             <h1>Pastebin - wklej swój kod!</h1>
         </div>
     </div>
@@ -13,7 +13,7 @@
     <div class="row">
         <div class="col-sm-2">
             <section id="box-related" class="box related">
-                <h4 class="border"><i class="far fa-eye fa-fw"></i> Ostatnie wpisy</h4>
+                <h4 class="border-bottom"><i class="far fa-eye fa-fw"></i> Ostatnie wpisy</h4>
 
                 <div>
                     <ul>
@@ -42,8 +42,8 @@
             {{ form_row(form.expires) }}
             {{ form_row(form.human_email) }}
 
-            <div class="form-group">
-                <label class="col-md-6 col-md-offset-4">
+            <div class="form-group row">
+                <label class="col-md-6 offset-md-4">
                     {{ form_widget(form.submit) }}
                     {{ form_widget(form.del) }}
                 </label>
@@ -57,12 +57,6 @@
         {{ modals.confirm('Czy na pewno chcesz usunąć?', 'Usuwanie wpisu') }}
         {{ form_close() }}
     {% endif %}
-{% endblock %}
-
-{% block head %}
-    {{ parent() }}
-
-    <link rel="stylesheet" href="{{ cdn('css/pastebin.css') }}">
 {% endblock %}
 
 {% block body %}

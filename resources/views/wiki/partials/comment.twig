@@ -1,33 +1,31 @@
 {% import 'components.modals' as modals %}
 
 <div class="row" id="comment-{{ comment.id }}">
-    <div class="col-sm-1 hidden-xs">
+    <div class="col-sm-1 d-none d-sm-block">
         <a href="{{ route('profile', [comment.user.id]) }}">
             <img src="{{ user_photo(comment.user.photo) }}" class="img-thumbnail">
         </a>
     </div>
     <div class="col-sm-11">
-        <div class="panel panel-transparent">
-            <div class="panel-body comment">
+        <div class="card card-transparent">
+            <div class="card-body comment">
                 {% if can('wiki-admin') or comment.user_id == user('id') %}
-                    <div class="dropdown pull-right">
-                        <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="comment-menu-{{ comment.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="caret"></span>
-                        </button>
+                    <div class="dropdown float-right">
+                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="comment-menu-{{ comment.id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
 
-                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="comment-menu-{{ comment.id }}">
-                            <li><a href="javascript:" class="btn-edit" data-id="{{ comment.id }}"><i class="fas fa-edit fa-fw"></i> Edytuj</a></li>
-                            <li><a href="javascript:" data-target="#modal-confirm-{{ comment.id }}" data-toggle="modal"><i class="fas fa-times fa-fw"></i> Usuń</a></li>
-                        </ul>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="comment-menu-{{ comment.id }}">
+                            <a class="dropdown-item btn-edit" href="javascript:" data-id="{{ comment.id }}"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
+                            <a class="dropdown-item" href="javascript:" data-target="#modal-confirm-{{ comment.id }}" data-toggle="modal"><i class="fas fa-times fa-fw"></i> Usuń</a>
+                        </div>
                     </div>
                 {% endif %}
 
-                <ul class="list-inline">
-                    <li>
+                <ul class="list-inline list-inline-bullet">
+                    <li class="list-inline-item text-muted">
                         {{ link_to_profile(comment.user) }}
                     </li>
-                    <li>
-                        <a href="#comment-{{ comment.id }}" class="timestamp" data-timestamp="{{ comment.created_at|timestamp }}">{{ comment.created_at|format_date }}</a>
+                    <li class="list-inline-item">
+                        <a href="#comment-{{ comment.id }}" class="timestamp text-muted" data-timestamp="{{ comment.created_at|timestamp }}">{{ comment.created_at|format_date }}</a>
                     </li>
                 </ul>
 

@@ -1,5 +1,5 @@
 <div role="tabpanel" class="tab-pane" id="attachments">
-    <div class="panel panel-default">
+    <div class="card card-default">
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -20,7 +20,7 @@
                 {% endfor %}
             </tbody>
         </table>
-        <div class="panel-footer">
+        <div class="card-footer">
             <p class="text-muted"><small>Każdy załącznik może zawierać maksymalnie <strong>{{ config_get('filesystems.upload_max_size') }}MB</strong>. Dostępne rozszerzenia: <strong>{{ config_get('filesystems.upload_mimes')|split(',')|join(', ') }}</strong></small></p>
 
             <input class="input-file" type="file" name="attachment" style="visibility: hidden; height: 1px">

@@ -94,22 +94,27 @@ module.exports = {
   entry: {
     app: './js/app.js',
     posting: './js/posting.js',
-    microblog: ['./js/pages/microblog.js', './sass/pages/microblog.scss'],
-    forum: ['./js/pages/forum.js', './sass/pages/forum.scss'],
-    wiki: ['./js/pages/wiki.js', './sass/pages/wiki.scss'],
-    job: ['./js/pages/job.js', './sass/pages/job.scss'],
-    homepage: ['./js/pages/homepage.js', './sass/pages/homepage.scss'],
-    profile: ['./js/pages/profile.js', './sass/pages/profile.scss'],
+    microblog: ['./js/pages/microblog.js'],
+    // microblog: ['./js/pages/microblog.js', './sass/pages/microblog.scss'],
+    forum: ['./js/pages/forum.js'],
+    // forum: ['./js/pages/forum.js', './sass/pages/forum.scss'],
+    wiki: ['./js/pages/wiki.js'],
+    // wiki: ['./js/pages/wiki.js', './sass/pages/wiki.scss'],
+    // job: ['./js/pages/job.js', './sass/pages/job.scss'],
+    job: ['./js/pages/job.js'],
+    homepage: ['./js/pages/homepage.js'],
+    // homepage: ['./js/pages/homepage.js', './sass/pages/homepage.scss'],
+    profile: ['./js/pages/profile.js'],
+    // profile: ['./js/pages/profile.js', './sass/pages/profile.scss'],
     'job-submit': './js/pages/job/submit.js',
     wikieditor: './js/plugins/wikieditor.js',
     main: './sass/main.scss',
-    auth: './sass/pages/auth.scss',
-    help: './sass/pages/help.scss',
-    'user-panel': './sass/pages/user.scss',
-    errors: './sass/pages/errors.scss',
-    pastebin: './sass/pages/pastebin.scss',
+    // auth: './sass/pages/auth.scss',
+    // help: './sass/pages/help.scss',
+    // 'user-panel': './sass/pages/user.scss',
+    // errors: './sass/pages/errors.scss',
     adm: './sass/pages/adm.scss',
-    search: './sass/pages/search.scss'
+    // search: './sass/pages/search.scss'
   },
   plugins: [
     new CleanWebpackPlugin(['public/js/*.*', 'public/css/*.*'], {}),
@@ -177,7 +182,9 @@ module.exports = {
         format: 'fragment',
         filename: path.join(__dirname, 'resources/assets/sass/components/_sprites.scss')
       }
-    })
+    }),
+
+
     //
     // new BundleAnalyzerPlugin()
   ]

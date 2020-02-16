@@ -1,5 +1,9 @@
-@media screen and (max-width: $screen-sm) {
-  .form-control, .control-label, .checkbox {
+@include media-breakpoint-down(sm) {
+  .col-form-label, .checkbox {
     font-size: $font-size-small;
   }
+}
+
+.col-form-label {
+  font-weight: bold;
 }

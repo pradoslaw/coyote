@@ -1,3 +1,8 @@
+##2.4
+
+**Ogólne**
+- Migracja do Bootstrap 4
+
 ##2.3
 
 **Ogólne**

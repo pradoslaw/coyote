@@ -1,6 +1,4 @@
 @charset "UTF-8";
-@import "../../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/jumbotron";
-@import "../../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/gradients";
 @import "../../vendor/chosen";
 @import "../../components/affix";
 @import "../../components/thumbnail";
@@ -114,29 +112,17 @@ $font-size-control-label: 15px;
 // --------------------------------------------
 
 .submit-form {
-  .panel-heading {
+  .card-heading {
     font-size: $font-size-large;
   }
 
-  .control-label, .checkbox label {
+  .col-form-label, .checkbox label {
     color: $gray;
   }
 
-  .help-block {
+  .form-text {
     font-size: $font-size-small;
-  }
-
-  .form-group-border {
-    border-bottom: 1px solid $border-color;
-
-    &:last-child {
-      border-bottom: none;
-    }
-
-    // nested .form-group
-    .form-group {
-      margin-bottom: 0;
-    }
+    margin-bottom: .4rem;
   }
 
   .benefits,
@@ -164,7 +150,7 @@ $font-size-control-label: 15px;
       margin-left: 10px;
     }
 
-    .control-label {
+    .col-form-label {
       text-align: left;
     }
   }

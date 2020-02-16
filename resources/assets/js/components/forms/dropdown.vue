@@ -1,15 +1,15 @@
 <template>
-  <ol ref="dropdown" class="auto-complete" style="width: 100%" v-show="isDropdownShown">
+  <ol ref="dropdown" class="auto-complete w-100" v-show="isDropdownShown">
     <li v-for="(item, index) in items" :key="index" :class="{'hover': index === selectedIndex}" @click="selectItem" @mouseover="hoverItem(index)">
 
       <slot name="item" :item="item">
         <object :data="item.photo || '//'" type="image/png">
-          <img src="/img/avatar.png" style="width: 100%">
+          <img src="/img/avatar.png" class="w-100">
         </object>
 
         <span>{{ item.name }}</span>
 
-        <small v-if="item.group" class="label label-default">{{ item.group }}</small>
+        <small v-if="item.group" class="badge badge-secondary">{{ item.group }}</small>
       </slot>
     </li>
   </ol>

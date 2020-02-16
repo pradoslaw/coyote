@@ -1,57 +1,16 @@
-.pagination {
-  font-size: ceil(($font-size-base * 0.78));
-}
-
-.pagination > li > a,
-.pagination > li > span,
-.pagination > .disabled > span,
-.pager > li > a,
-.pager > li > span,
-.pager > .disabled > span {
-  background-color: #ddd;
-  color: $text-color;
-  border: none;
+.page-link,
+.page-item.disabled > .page-link {
   border-radius: 5px;
   margin: 0 2px;
-  padding: 5px 8pt;
-
-  &:first-child, &:last-child {
-    border-radius: 5px;
-  }
-
-  &:hover {
-    background-color: $border-color;
-  }
 }
 
-.pagination {
-  // element aktywny (aktualna strona)
-  > .active {
-    > span {
-      background-color: $gray-dark;
-      color: #fff;
-      font-weight: bold;
-
-      &:hover {
-        background-color: $gray-dark;
-      }
-    }
-  }
+.page-item.active > .page-link {
+  font-weight: bold;
 }
 
-.pagination-xs {
-  @include pagination-size($padding-small-vertical, $padding-small-horizontal, ceil(($font-size-base * 0.78)), $line-height-small, $border-radius-small);
-}
-
-@media screen and (max-width: $screen-sm) {
-  .pagination {
+@include media-breakpoint-down(sm)  {
+  .page-link {
     font-size: $font-size-small;
-
-    > li > a,
-    > li > span,
-    > .disabled > span {
-      padding: 4px 7px;
-      font-size: 11px;
-    }
+    padding: $pagination-padding-y-sm - .1rem $pagination-padding-x-sm - .1rem;
   }
 }

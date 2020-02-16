@@ -1,25 +1,15 @@
 @charset "UTF-8";
-@import "../helpers/mixins";
-@import "../helpers/variables";
-@import "~@fortawesome/fontawesome-free/scss/variables";
-@import "../vendor/bootstrap/variables";
-@import "../components/sidemenu";
-@import "../components/related";
-@import "../components/stream";
-@import "../components/affix";
-@import "../components/search";
-@import "../components/who-is-online";
 
-.panel-section {
-  .panel-categories:nth-child(odd) {
+.card-section {
+  background-color: transparent;
+  border: none;
+
+  .card-categories:nth-child(odd) {
     background-color: #fafafa;
   }
 }
 
 .section-name {
-  margin: 0 0 10px 0;
-  padding-left: 2px;
-
   h2 {
     font-size: 14px;
     margin: 0;
@@ -32,33 +22,23 @@
 }
 
 // desktop
-@media screen and (min-width: $screen-lg) {
-  .panel-section {
+@include media-breakpoint-up(lg) {
+  .card-section {
     background-color: $panel-footer-bg;
-    padding: 10px 0 0 0;
-    border: 1px solid $panel-default-border;
+    border: 1px solid $border-color;
   }
 
-  .section-name {
-    margin: 0 10px 10px 10px;
-  }
 }
 
-// mobile
-@media screen and (max-width: $screen-lg) {
-  .panel-section {
-    background-color: transparent;
-  }
-}
 
-.panel-cog {
+.card-cog {
   color: $gray-light;
   font-size: 80%;
-  margin-right: 5px;
-  margin-top: 5px;
+  //margin-right: 5px;
+  //margin-top: 5px;
 }
 
-.panel-categories {
+.card-categories {
   margin-bottom: 0;
 
   .col-main {
@@ -66,18 +46,18 @@
     align-items: center;
   }
 
-  .subject {
-    margin-bottom: 3px;
-
-    @include text-overflow;
-  }
+  //.subject {
+  //  margin-bottom: 3px;
+  //
+  //  @include text-overflow;
+  //}
 
   .wrap {
     overflow: hidden;
   }
 
   .media {
-    font-size: 12px;
+    font-size: .75rem;
   }
 
   h3 {
@@ -135,7 +115,7 @@
   }
 
   // desktop
-  @media screen and (min-width: $screen-lg) {
+  @include media-breakpoint-up(lg) {
     border-radius: 0;
     border-left: none;
     border-right: none;
@@ -143,19 +123,18 @@
 
     .col-lg-stat {
       text-align: right;
-      font-size: 12px;
       padding-top: 3px;
     }
 
-    > .panel-body > .row {
+    > .card-body > .row {
       display: flex;
       align-items: center;
     }
   }
 
   // mobile
-  @media screen and (max-width: $screen-lg) {
-    .panel-body.new {
+  @include media-breakpoint-down(md) {
+    .card-body.new {
       border-left: 2px solid $alt-link-hover-color;
     }
 
@@ -188,11 +167,11 @@
     }
   }
 
-  .media {
-    display: flex; // this is required to support text-overflow in topics' title
+  .media-body {
+    overflow: hidden; // this is required to support text-overflow in topics' title
   }
 
-  .panel-body {
+  .card-body {
     padding: 10px 15px;
     border-bottom: 1px solid $border-color;
 
@@ -246,7 +225,7 @@
     margin-top: 0;
   }
 
-  @media screen and (max-width: $screen-xs) {
+  @include media-breakpoint-down(xs) {
     .nav-tabs {
       li:nth-child(3), li:nth-child(4), li:nth-child(5) {
         display: none;
@@ -254,7 +233,7 @@
     }
   }
 
-  @media screen and (max-width: $screen-lg) {
+  @include media-breakpoint-down(lg) {
     padding-right: 0;
   }
 }
@@ -276,8 +255,8 @@
   margin: 5px 0 0 0;
 }
 
-.panel-wrapper {
-  .panel-body {
+.card-wrapper {
+  .card-body {
     .toggle {
       color: $gray-dark;
       margin: 2px 2px 0 0;

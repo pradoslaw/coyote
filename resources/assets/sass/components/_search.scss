@@ -30,10 +30,6 @@
       width: 100%;
       border-radius: $border-radius-small;
     }
-
-    .col-content {
-      padding-right: 5px;
-    }
   }
 
   .input-keywords:before {
@@ -63,7 +59,7 @@
     }
   }
 
-  @media screen and (min-width: $screen-xs) {
+  @include media-breakpoint-up(md) {
     // selektory sa tutaj rozbite specjalnie
     background-image: url("/img/sad-face.png");
     background-repeat: no-repeat;

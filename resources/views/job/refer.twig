@@ -6,19 +6,19 @@
 {% block container %}
     <div class="row" style="margin-top: 20px">
         <div class="col-md-9">
-            <div class="panel panel-default">
-                <div class="panel-body">
+            <div class="card card-default">
+                <div class="card-body">
                     <h1 class="media-heading">{{ link_to_route('job.offer', job.title, [job.id, job.slug]) }}</h1>
 
-                    {{ form_start(form) }}
+                    {{ form_start(form, {id: 'form'}) }}
                     {{ form_row(form.friend_email) }}
                     {{ form_row(form.friend_email_confirmation) }}
                     {{ form_row(form.friend_name) }}
                     {{ form_row(form.email) }}
                     {{ form_row(form.name) }}
 
-                    <div class="form-group">
-                        <div class="col-md-6 col-md-offset-4">
+                    <div class="form-group row">
+                        <div class="col-md-6 offset-md-4">
                             <small class="text-muted">Wysyłając formularz zgadzasz się na udostępnienie potencjalnemu pracodawcy danych swoich oraz kandaydata.</small>
                         </div>
                     </div>

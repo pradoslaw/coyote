@@ -16,12 +16,12 @@
   }
 
   tr.flagged td {
-    background-color: $alert-danger-bg;
-    color: $alert-danger-text;
-    border-bottom-color: $alert-danger-border;
+    background-color: theme-color-level("danger", $alert-bg-level);
+    color: $danger;
+    border-bottom-color: theme-color-level("danger", $alert-border-level);
 
     a {
-      color: $alert-danger-text;
+      color: inherit;
     }
   }
 }
@@ -76,7 +76,7 @@
     margin: 0;
     @include text-overflow();
     font-family: $font-family-base;
-    font-size: $font-size-base + 1px;
+    font-size: $font-size-base + 0.1rem;
     line-height: 120%;
   }
 
@@ -118,7 +118,7 @@
   // w ich miejscu na chrome pozostawial puste (biale miejsce). dziwne, ale kolumna .col-subject mimo, ze mie
   // miala ustalonej szerokosci, nie dopasowywala sie do szerokosci tabeli. ponizsza instrukcja powoduje
   // poszerzenie do 100% szerokosci kolumny
-  @media screen and (max-width: $screen-sm) {
+  @include media-breakpoint-down(sm) {
     width: 100%;
   }
 }
@@ -142,7 +142,7 @@
 .col-last-post {
   width: 22%;
   min-width: 120px;
-  font-size: $font-size-base - 1px;
+  font-size: $font-size-base - .05rem;
 
   .img-thumbnail {
     float: left;
@@ -150,7 +150,7 @@
     width: 30px;
     height: 30px;
 
-    @media  screen and (min-width: $screen-lg)  {
+    @include media-breakpoint-only(lg) {
       width: 35px;
       height: 35px;
     }

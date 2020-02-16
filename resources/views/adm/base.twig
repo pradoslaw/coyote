@@ -1,129 +1,131 @@
 {% extends 'layout' %}
 
-{% block head %}
-    {{ parent() }}
-
-    <link rel="stylesheet" href="{{ cdn('css/adm.css') }}">
-{% endblock %}
-
 {% import 'components.modals' as modals %}
 
 {% block body %}
-    <div id="container-fluid">
-        <div id="navbar-border-top" class="navbar-fixed-top"></div>
+  <div id="container-fluid">
+    <div id="navbar-border-top" class="navbar-fixed-top"></div>
 
-        <aside id="adm-menu" class="navbar-default">
-            <a class="navbar-brand" rel="home" href="{{ route('home') }}" title="4programmers.net - Strona główna">
-                <img id="logo" src="{{ cdn('img/logo.png') }}" class="img-responsive">
-            </a>
+    <aside id="adm-menu" class="navbar-default">
+      <a class="navbar-brand" rel="home" href="{{ route('home') }}" title="4programmers.net - Strona główna">
+        <img id="logo" src="{{ cdn('img/logo.png') }}" class="img-fluid">
+      </a>
 
-            <div class="clearfix"></div>
+      <div class="clearfix"></div>
 
-            <div id="box-user">
-                <img src="{{ user_photo(user('photo')) }}" class="img-thumbnail">
+      <div id="box-user">
+        <img src="{{ user_photo(user('photo')) }}" class="img-thumbnail">
 
-                <h3>{{ user('name') }}</h3>
+        <h3>{{ user('name') }}</h3>
 
-                <ol class="list-inline">
-                    <li><a href="{{ route('adm.exit') }}">Wyloguj z panelu</a></li>
-                </ol>
-            </div>
+        <ol class="list-inline">
+          <li class="list-inline-item"><a href="{{ route('adm.exit') }}">Wyloguj z panelu</a></li>
+        </ol>
+      </div>
 
-            <ul class="list-unstyled navbar-nav">
+      <ul class="list-unstyled navbar-nav">
 
-                {% import 'components.forms' as forms %}
+        {% import 'components.forms' as forms %}
 
-                {% for item in menu.roots() %}
-                    <li {{ forms.attr(item.attr) }}>
-                        <a href="{{ item.url }}" {{ forms.attr(item.link.attr) }}>{{ item.title|raw }}</a>
+        {% for item in menu.roots() %}
+          <li {{ forms.attr(item.attr) }}>
+            <a href="{{ item.url }}" {{ forms.attr(item.link.attr) }}>{{ item.title|raw }}</a>
 
-                        {% if item.hasChildren() %}
-                            <ul id="{{ item.url[1:] }}" class="list-unstyled collapse {{ item.attr['class'] == 'active' ? 'in' }}">
-                                {% for children in item.children() %}
-                                    <li>
-                                        <a href="{{ children.url }}">{{ children.title|raw }}</a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                    </li>
+            {% if item.hasChildren() %}
+              <ul id="{{ item.url[1:] }}" class="list-unstyled collapse {{ item.attr['class'] == 'active' ? 'in' }}">
+                {% for children in item.children() %}
+                  <li>
+                    <a href="{{ children.url }}">{{ children.title|raw }}</a>
+                  </li>
                 {% endfor %}
-            </ul>
-        </aside>
-
-        <main id="wrapper">
-            <div id="adm-header" class="row">
-                <div class="col-xs-12">
-                    <a id="sidebar-toggle" href="javascript:" class="btn btn-default" title="">
-                        <i class="fas fa-bars"></i>
-                    </a>
-                </div>
-            </div>
-
-            {{ breadcrumb|raw }}
-
-            {% if session_has('success') %}
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="alert alert-success">
-                            <i class="fas fa-check"></i>
-
-                            {{ session_get('success') }}
-                        </div>
-                    </div>
-                </div>
+              </ul>
             {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </aside>
 
-            {% block container %}
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        {% block panel %}
-                        {% endblock %}
-                    </div>
-                </div>
+    <main id="wrapper">
+      <div id="adm-header" class="row">
+        <div class="col-12">
+          <a id="sidebar-toggle" href="javascript:" class="btn btn-secondary" title="">
+            <i class="fas fa-bars"></i>
+          </a>
+        </div>
+      </div>
+
+      {{ breadcrumb|raw }}
+
+      {% if session_has('success') %}
+        <div class="row">
+          <div class="col-12">
+            <div class="alert alert-success">
+              <i class="fas fa-check"></i>
+
+              {{ session_get('success') }}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      {% block container %}
+        <div class="card card-default">
+          <div class="card-body">
+            {% block card %}
             {% endblock %}
-        </main>
-    </div>
+          </div>
+        </div>
+      {% endblock %}
+    </main>
+  </div>
 
-    {{ form_open({url: '#'}) }}
-    {{ modals.confirm('Czy na pewno usunąć?', 'Czy usunąć ten wpis?', 'modal-delete') }}
-    {{ form_close() }}
+  {{ form_open({url: '#'}) }}
+  {{ modals.confirm('Czy na pewno usunąć?', 'Czy usunąć ten wpis?', 'modal-delete') }}
+  {{ form_close() }}
 
-    {% import 'components.widgets' as widgets %}
+  {% import 'components.widgets' as widgets %}
 
-    {{ widgets.vue() }}
+  {{ widgets.vue() }}
 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script src="{{ cdn('js/runtime.js') }}"></script>
-    <script src="{{ cdn('js/app.js') }}"></script>
-    <script src="{{ cdn('js/common.js') }}"></script>
-    <script src="{{ cdn('js/vendor.js') }}"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+  <script src="{{ cdn('js/runtime.js') }}"></script>
+  <script src="{{ cdn('js/app.js') }}"></script>
+  <script src="{{ cdn('js/common.js') }}"></script>
+  <script src="{{ cdn('js/vendor.js') }}"></script>
 
-    <script type="text/javascript">
-        $(function() {
-            $('.collapse').on('hidden.bs.collapse show.bs.collapse', function() {
-                $(this).parent().find('.arrow').toggleClass('fa-angle-down');
-            });
+  <script type="text/javascript">
+    $(function () {
+      $('.collapse').on('hidden.bs.collapse show.bs.collapse', function () {
+        $(this).parent().find('.arrow').toggleClass('fa-angle-down');
+      });
 
-            $('#sidebar-toggle').click(function() {
-                var obj = $('#adm-menu');
-                var direction = parseInt(obj.css('left')) < 0 ? 'right' : 'left';
+      $('#sidebar-toggle').click(function () {
+        var obj = $('#adm-menu');
+        var direction = parseInt(obj.css('left')) < 0 ? 'right' : 'left';
 
-                // pokazujemy pasek boczny
-                if (direction == 'right') {
-                    obj.animate({'left': '+=220'});
-                    $('#wrapper').animate({'margin-left': '+=220'});
-                }
-                // chowamy pasek boczny
-                else {
-                    obj.animate({'left': '-=220'});
-                    $('#wrapper').animate({'margin-left': '-=220'});
-                }
-            });
+        // pokazujemy pasek boczny
+        if (direction == 'right') {
+          obj.animate({'left': '+=220'});
+          $('#wrapper').animate({'margin-left': '+=220'});
+        }
+        // chowamy pasek boczny
+        else {
+          obj.animate({'left': '-=220'});
+          $('#wrapper').animate({'margin-left': '-=220'});
+        }
+      });
 
-            $('#modal-delete').on('shown.bs.modal', function() {
-                $(this).parent().attr('action', $('button[data-toggle="modal"]').data('delete-url'));
-            });
-        });
-    </script>
+      $('#modal-delete').on('shown.bs.modal', function () {
+        $(this).parent().attr('action', $('button[data-toggle="modal"]').data('delete-url'));
+      });
+    });
+  </script>
+
+
+{% endblock %}
+
+{% block head %}
+  {{ parent() }}
+
+  <link rel="stylesheet" href="{{ cdn('css/adm.css') }}">
 {% endblock %}

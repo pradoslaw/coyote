@@ -1,10 +1,10 @@
-@media (max-width: $screen-xs) {
-  @include responsive-invisibility('.hidden-xxs');
-}
+//@include media-breakpoint-down(xs) {
+//  @include responsive-invisibility('.hidden-xxs');
+//}
 
-@media (min-width: $screen-xlg-min) {
-  @include make-grid(xlg);
-}
+//@media (min-width: $screen-xlg-min) {
+//  @include make-grid(xlg);
+//}
 
 $list: '.col-xlg-1';
 @for $i from (1 + 1) through $grid-columns {
@@ -18,4 +18,9 @@ $list: '.col-xlg-1';
   // Inner gutter via padding
   padding-left:  ceil(($grid-gutter-width / 2));
   padding-right: floor(($grid-gutter-width / 2));
+}
+
+.container-xxl {
+  max-width: 1600px;
+  margin: auto;
 }

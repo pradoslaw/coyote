@@ -26,10 +26,9 @@
     {% include 'forum.partials.topics' %}
 
     <section class="row">
-      <div class="col-xs-12">
-        <div class="pull-right">
-          Liczba wątków na stronę
-          {% include 'forum.partials.per_page' with {perPage: topics.perPage()} %}
+      <div class="col-12">
+        <div class="float-right">
+          {% include 'forum.partials.per_page' with {label: 'Liczba wątków na stronę', perPage: topics.perPage()} %}
         </div>
       </div>
     </section>

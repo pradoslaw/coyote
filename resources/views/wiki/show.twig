@@ -1,109 +1,109 @@
 {% extends 'wiki.page' %}
 
 {% block container %}
-    <div class="row">
-        <div class="col-sm-9">
-            {% include 'wiki.partials.flag' %}
+  <div class="row">
+    <div class="col-sm-9">
+      {% include 'wiki.partials.flag' %}
 
-            {% embed 'wiki.partials.content' %}
-            {% endembed %}
+      {% embed 'wiki.partials.content' %}
+      {% endembed %}
 
-            {% if categories|length > 0 %}
-                <div class="wiki-categories">
-                    <i class="fas fa-folder-open text-warning"></i>
+      {% if categories|length > 0 %}
+        <div class="wiki-categories">
+          <i class="fas fa-folder-open text-warning"></i>
 
-                    {% for category in categories %}
-                        <a class="btn btn-sm btn-warning" title="Strona znajduje się w kategorii: {{ category.title }}" href="{{ url(category.path) }}">{{ category.title }}</a>
-                    {% endfor %}
-                </div>
-            {% endif %}
-
-            {% include 'wiki.partials.catalog' %}
-
-            {% include 'wiki.partials.comments' %}
+          {% for category in categories %}
+            <a class="btn btn-sm btn-warning" title="Strona znajduje się w kategorii: {{ category.title }}" href="{{ url(category.path) }}">{{ category.title }}</a>
+          {% endfor %}
         </div>
+      {% endif %}
 
-        <aside class="col-sm-3">
-            {% if not wiki.deleted_at and (can('wiki-admin') or not wiki.is_locked) %}
-                <section id="box-maintain">
-                    <a href="{{ route('wiki.submit', [wiki.id]) }}" class="btn btn-sm btn-default" title="Kliknij, aby edytować ten artykuł">Edycja {{ wiki.is_locked ? ' (strona zablokowana)' }}</a>
-                    <a href="{{ route('wiki.submit') }}?parentId={{ wiki.id }}" class="btn btn-sm btn-primary" title="Dodaj nową stronę w tej kategorii">Nowa strona</a>
-                </section>
-            {% endif %}
+      {% include 'wiki.partials.catalog' %}
 
-            <ul class="side-menu">
-                <li>
-                    {% set labels = ['Usuń z ulubionych', 'Dodaj do ulubionych'] %}
-                    <a class="btn-subscribe {{ subscribed ? 'on' }}" href="{{ route('wiki.subscribe', [wiki.id]) }}" data-off="{{ labels[0] }}" data-on="{{ labels[1] }}" title="Obserwując tę stronę będziesz otrzymywał powiadomienia o jej zmianach">
-                        <i class="fas fa-fw fa-star"></i>
-                        <i class="far fa-fw fa-star"></i>
-
-                        <span>{{ labels[not subscribed] }}</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('wiki.log', [wiki.id]) }}"><i class="fas fa-fw fa-history"></i> Historia i autorzy</a>
-                </li>
-
-                {% include 'wiki.partials.admin' %}
-
-                {% if auth_check() %}
-                    <li>
-                        <a class="btn-report" href="{{ route('flag') }}" data-url="/{{ wiki.path }}" data-metadata="{{ {'wiki_id': wiki.id, 'permission': 'wiki-admin'}|encrypt }}"><i class="fas fa-fw fa-flag"></i> Zgłoś naruszenie</a>
-                    </li>
-                {% endif %}
-            </ul>
-
-            {% if author.bio %}
-                <section id="box-author" class="box">
-                    <h4 class="border"><i class="fas fa-male fa-fw"></i> O autorze</h4>
-
-                    <div class="media">
-                        <div class="media-left">
-                            <a href="{{ route('profile', [author.id]) }}">
-                                <img class="media-object img-thumbnail" src="{{ user_photo(author.photo) }}" style="width: 65px; height: 65px;" alt="{{ author.name }}">
-                            </a>
-                        </div>
-                        <div class="media-body">
-                            <blockquote>
-                                {{ author.bio }}
-                            </blockquote>
-                        </div>
-                    </div>
-                </section>
-            {% endif %}
-
-            {% if authors|length > 0 %}
-                <section id="box-authors" class="box">
-                    <h4 class="border"><i class="fas fa-users fa-fw"></i> Stronę współtworzą</h4>
-
-                    <ul>
-                        {% for author in authors %}
-                            <li>
-                                <a title="Udział w procesie tworzenia strony: {{ author.share }}%" href="{{ route('profile', [author.user_id]) }}" data-user-id="{{ author.user_id }}">
-                                    <small>{{ author.share|round(1) }}%</small>
-
-                                    <img src="{{ user_photo(author.photo) }}" width="24" height="24">
-
-                                    {{ author.name }}
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </section>
-
-                <div class="clearfix"></div>
-            {% endif %}
-
-            {% include 'wiki.partials.mlt' %}
-            {% include 'wiki.partials.related' %}
-
-        </aside>
+      {% include 'wiki.partials.comments' %}
     </div>
+
+    <aside class="col-sm-3">
+      {% if not wiki.deleted_at and (can('wiki-admin') or not wiki.is_locked) %}
+        <section id="box-maintain">
+          <a href="{{ route('wiki.submit', [wiki.id]) }}" class="btn btn-sm btn-secondary" title="Kliknij, aby edytować ten artykuł">Edycja {{ wiki.is_locked ? ' (strona zablokowana)' }}</a>
+          <a href="{{ route('wiki.submit') }}?parentId={{ wiki.id }}" class="btn btn-sm btn-primary" title="Dodaj nową stronę w tej kategorii">Nowa strona</a>
+        </section>
+      {% endif %}
+
+      <ul class="side-menu">
+        <li>
+          {% set labels = ['Usuń z ulubionych', 'Dodaj do ulubionych'] %}
+          <a class="btn-subscribe {{ subscribed ? 'on' }}" href="{{ route('wiki.subscribe', [wiki.id]) }}" data-off="{{ labels[0] }}" data-on="{{ labels[1] }}" title="Obserwując tę stronę będziesz otrzymywał powiadomienia o jej zmianach">
+            <i class="fas fa-fw fa-star"></i>
+            <i class="far fa-fw fa-star"></i>
+
+            <span>{{ labels[not subscribed] }}</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ route('wiki.log', [wiki.id]) }}"><i class="fas fa-fw fa-history"></i> Historia i autorzy</a>
+        </li>
+
+        {% include 'wiki.partials.admin' %}
+
+        {% if auth_check() %}
+          <li>
+            <a class="btn-report" href="{{ route('flag') }}" data-url="/{{ wiki.path }}" data-metadata="{{ {'wiki_id': wiki.id, 'permission': 'wiki-admin'}|encrypt }}"><i class="fas fa-fw fa-flag"></i>
+              Zgłoś naruszenie</a>
+          </li>
+        {% endif %}
+      </ul>
+
+      {% if author.bio %}
+        <section id="box-author" class="box">
+          <h4 class="border-bottom"><i class="fas fa-male fa-fw"></i> O autorze</h4>
+
+          <div class="media">
+            <a href="{{ route('profile', [author.id]) }}" class="mr-2">
+              <img class="media-object img-thumbnail" src="{{ user_photo(author.photo) }}" style="width: 45px; height: 45px;" alt="{{ author.name }}">
+            </a>
+
+            <div class="media-body">
+              <blockquote>
+                {{ author.bio }}
+              </blockquote>
+            </div>
+          </div>
+        </section>
+      {% endif %}
+
+      {% if authors|length > 0 %}
+        <section id="box-authors" class="box mt-3">
+          <h4 class="border-bottom"><i class="fas fa-users fa-fw"></i> Stronę współtworzą</h4>
+
+          <ul>
+            {% for author in authors %}
+              <li>
+                <a title="Udział w procesie tworzenia strony: {{ author.share }}%" href="{{ route('profile', [author.user_id]) }}" data-user-id="{{ author.user_id }}">
+                  <small>{{ author.share|round(1) }}%</small>
+
+                  <img src="{{ user_photo(author.photo) }}" width="24" height="24">
+
+                  {{ author.name }}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </section>
+
+        <div class="clearfix"></div>
+      {% endif %}
+
+      {% include 'wiki.partials.mlt' %}
+      {% include 'wiki.partials.related' %}
+
+    </aside>
+  </div>
 {% endblock %}
 
 {% block body %}
-    {{ parent() }}
+  {{ parent() }}
 
-    <script src="{{ cdn('js/posting.js') }}"></script>
+  <script src="{{ cdn('js/posting.js') }}"></script>
 {% endblock %}

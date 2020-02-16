@@ -5,18 +5,18 @@
 
 {% block wrapper %}
     {{ form_start(form) }}
-        <section class="panel panel-wrapper">
-            <div class="panel-body">
+        <section class="card card-wrapper">
+            <div class="card-body">
                 <h2>Podstawowa konfiguracja</h2>
 
-                <ul class="nav nav-panel">
-                    <li role="presentation" class="active"><a href="#basic" data-toggle="tab" role="tab">Podstawowe informacje</a></li>
-                    <li role="presentation"><a href="#carieer" data-toggle="tab" role="tab">Kariera</a></li>
-                    <li role="presentation"><a href="#forum" data-toggle="tab" role="tab">Forum</a></li>
-                </ul>
+                <div class="nav nav-panel">
+                  <a role="tab" class="nav-item active" data-toggle="tab" href="#basic"><span>Podstawowe informacje</span></a>
+                  <a role="tab" class="nav-item" data-toggle="tab" href="#carieer"><span>Kariera</span></a>
+                  <a role="tab" class="nav-item" data-toggle="tab" href="#forum"><span>Forum</span></a>
+                </div>
 
-                <div class="panel panel-default tab-content">
-                    <div class="panel-body tab-pane active" role="tabpanel" id="basic">
+                <div class="card card-default tab-content">
+                    <div class="card-body tab-pane active" role="tabpanel" id="basic">
                         {{ form_row(form.email) }}
                         {{ form_row(form.group_id) }}
                         {{ form_row(form.date_format) }}
@@ -27,7 +27,7 @@
                         {{ form_row(form.submit) }}
                     </div>
 
-                    <div class="panel-body tab-pane" role="tabpanel" id="carieer">
+                    <div class="card-body tab-pane" role="tabpanel" id="carieer">
                         {{ form_row(form.firm) }}
                         {{ form_row(form.position) }}
                         {{ form_row(form.github) }}
@@ -37,7 +37,7 @@
                         {{ form_row(form.submit) }}
                     </div>
 
-                    <div class="panel-body tab-pane" role="tabpanel" id="forum">
+                    <div class="card-body tab-pane" role="tabpanel" id="forum">
                         {{ form_row(form.allow_count) }}
                         {{ form_row(form.allow_sig) }}
                         {{ form_row(form.sig) }}

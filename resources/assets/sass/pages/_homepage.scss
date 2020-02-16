@@ -1,25 +1,7 @@
 @charset "UTF-8";
-@import "~@fortawesome/fontawesome-free/scss/variables";
-@import "../helpers/mixins";
-@import "../helpers/variables";
-@import "../components/microblog";
-@import "../components/who-is-online";
-
-#hire-me {
-  margin-top: 35px;
-}
 
 #box-reputation {
   margin-top: 10px;
-
-  .media-heading {
-    margin-bottom: 3px;
-
-    a {
-      color: $gray-dark;
-      font-size: 14px;
-    }
-  }
 
   img {
     border-radius: 4px;
@@ -97,11 +79,11 @@
   }
 }
 
-.panel-news {
+.card-news {
   background-color: #454545;
 }
 
-.panel-patronage {
+.card-patronage {
   background: url('/img/patronage-background.png') repeat-x;
   color: #7d7d7d;
   border: 1px solid $border-color;
@@ -212,7 +194,7 @@
     padding-top: 25px;
     padding-left: 2px;
 
-    @media screen and (max-width: $screen-lg) {
+    @include media-breakpoint-down(lg) {
       margin-top: 20px;
       background-position-x: 10px;
       padding-left: 15px;
@@ -229,19 +211,22 @@
     border-left: 1px solid $border-color;
     margin: 10px 0 0 10px;
 
-    @media screen and (max-width: $screen-sm) {
+    @include media-breakpoint-down(sm) {
       border-left: none;
       margin-left: 0;
     }
   }
 
   .media {
-    display: flex;
     padding: 0 0 0 20px;
     font-size: 11px;
     text-shadow: 1px 1px #fff;
     position: relative;
     overflow: visible;
+
+    &:not(:first-child) {
+      margin-top: 15px;
+    }
 
     span {
       box-shadow: 0 1px 2px #CCC;
@@ -284,7 +269,7 @@
       content: fa-content($fa-var-file-alt);
     }
 
-    @media screen and (max-width: $screen-sm) {
+    @include media-breakpoint-down(sm) {
       padding: 0;
     }
   }
@@ -354,7 +339,7 @@
     font-size: 11px;
   }
 
-  .pull-right {
+  .float-right {
     color: $gray-light;
     font-size: 10px;
   }

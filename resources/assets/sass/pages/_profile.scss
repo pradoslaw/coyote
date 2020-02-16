@@ -1,11 +1,4 @@
 @charset "UTF-8";
-@import "../helpers/variables";
-@import "../helpers/mixins";
-@import "~@fortawesome/fontawesome-free/scss/variables";
-@import "../components/progress-bars";
-@import "../components/metadata";
-@import "../components/sidemenu";
-@import "../components/search";
 
 #user-nav-tabs {
   margin: 20px 0;
@@ -20,7 +13,7 @@
       display: block;
     }
 
-    @media screen and (max-width: $screen-sm) {
+    @include media-breakpoint-down(sm) {
       display: none;
     }
   }
@@ -29,7 +22,7 @@
     margin-top: 0;
     padding-left: 4px;
 
-    @media screen and (max-width: $screen-sm) {
+    @include media-breakpoint-down(sm) {
       font-size: $font-size-large;
     }
   }
@@ -79,10 +72,6 @@
   }
 }
 
-#box-reputation, #box-posts {
-  margin-top: 22px;
-}
-
 #box-reputation {
   .chart-bar {
     border-top: 1px solid $border-color;
@@ -101,10 +90,6 @@
 
     small {
       display: block;
-    }
-
-    .well {
-      margin: 10px 0 0 0;
     }
 
     .headline {

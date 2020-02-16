@@ -20,7 +20,7 @@ import 'core-js/modules/es7.object.values';
 
 
 import './store';
-import './components/dropdown.js';
+// import './components/dropdown.js';
 import './components/scrolltop.js';
 import './components/breadcrumb.js';
 import './components/navbar-toggle.js';

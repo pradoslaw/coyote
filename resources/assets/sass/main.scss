@@ -1,10 +1,9 @@
 @charset "UTF-8";
 
 @import url("//fonts.googleapis.com/css?family=Open+Sans:400,300&subset=latin,latin-ext");
-@import "vendor/_bootstrap";
+@import "vendor/bootstrap";
 @import "vendor/font-awesome";
 @import "vendor/prism";
-@import "vendor/checkbox";
 @import "vendor/ekko-lightbox";
 
 @import "helpers/variables";
@@ -24,7 +23,6 @@
 @import "components/auto-complete";
 @import "components/wikieditor";
 @import "components/ajax";
-@import "components/labels";
 @import "components/forms";
 @import "components/tables";
 @import "components/tags";
@@ -33,9 +31,26 @@
 @import "components/skeleteon";
 @import "components/sprites";
 @import "components/logos";
+@import "components/related";
+@import "components/search";
+@import "components/search";
+@import "components/sidemenu";
+@import "components/metadata";
+@import "components/affix";
 @import "layout/header";
 @import "layout/footer";
 @import "layout/grid";
 
+@import "pages/errors";
+@import "pages/search";
+@import "pages/auth";
+@import "pages/help";
+@import "pages/user";
+@import "pages/profile";
+@import "pages/homepage";
+@import "pages/wiki";
+@import "pages/forum";
+@import "pages/microblog";
+@import "pages/job";
+
 @import "~perfect-scrollbar/css/perfect-scrollbar";
-@import "~awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.scss";

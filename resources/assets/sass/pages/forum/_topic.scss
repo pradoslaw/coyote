@@ -1,7 +1,4 @@
 @charset "UTF-8";
-@import "../../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/image";
-@import "../../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/table-row";
-@import "../../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/tables";
 
 // "Kontener" dla posta
 // --------------------------------------------------
@@ -30,8 +27,8 @@
 }
 
 .post-delete {
-  color: $alert-warning-text;
-  background-color: $alert-warning-bg;
+  color: theme-color-level("warning", $alert-color-level);
+  background-color: $warning;
   padding: 4px 10px;
   font-size: 11px;
   border-bottom: 1px solid $alert-warning-border;
@@ -79,7 +76,7 @@
       display: inline-block;
       font-weight: normal;
 
-      @media screen and (max-width: $screen-lg) {
+      @include media-breakpoint-down(lg) {
         display: block;
         width: 100%;
       }
@@ -97,6 +94,7 @@
     position: relative;
     font-family: Arial, sans-serif;
     color: $gray;
+    font-size: 0.85rem;
 
     &:before {
       @include font-awesome($fa-var-user);
@@ -105,13 +103,19 @@
       font-weight: 900;
     }
 
+    .badge {
+      font-size: 90%;
+      margin-top: -2px;
+      margin-bottom: -2px;
+    }
+
     @include link-color-darker;
     @include text-overflow;
   }
 
   h5.offline {
     &:before {
-      color: $gray-light;
+      color: $gray-300;
     }
   }
 }
@@ -163,7 +167,7 @@
   position: absolute;
   right: 0;
 
-  @media screen and (max-width: $screen-sm) {
+  @include media-breakpoint-down(sm) {
     width: 40px;
   }
 }
@@ -282,10 +286,8 @@
 
   // emoticons are NOT responsive
   img:not(.img-smile) {
-    @include img-responsive();
+    @include img-fluid;
   }
-
-  @include adjust-list-padding;
 }
 
 .list-attachments {
@@ -353,7 +355,7 @@
 
 .vote-accept {
   margin-top: 10px;
-  font-size: $font-size-large + 10px;
+  font-size: $font-size-large + 1rem;
 }
 
 .vote-accept.on {
@@ -364,13 +366,13 @@ div.tooltip-inner {
   font-size: 11px;
 }
 
-@media screen and (max-width: $screen-sm) {
+@include media-breakpoint-down(sm) {
   .vote-up, .vote-count {
     font-size: $font-size-base;
   }
 
   .vote-accept {
-    font-size: $font-size-base + 3px;
+    font-size: $font-size-base + 0.2rem;
   }
 }
 
@@ -380,7 +382,7 @@ div.tooltip-inner {
 .comments {
   margin: 15px 0 5px 25px;
   font-family: Tahoma,sans-serif;
-  font-size: $font-size-small - 1px;
+  font-size: 100%;
   padding-right: 50px;
 
   @include link-color-darker;
@@ -393,7 +395,7 @@ div.tooltip-inner {
 
   > div {
     border-bottom: 1px dotted $border-color;
-    padding: 5px 0 5px 10px;
+    padding: 5px 0 5px 0;
     margin-top: 1px;
     position: relative;
     word-wrap: break-word;
@@ -404,15 +406,12 @@ div.tooltip-inner {
 
     &:before {
       content: "▪";
-      left: 0;
-      position: absolute;
     }
 
     // Topic's author
     // -----------------
 
-    .badge-creator {
-      font-size: $font-size-small - 1px;
+    .badge-primary {
       font-weight: normal;
       padding: 1px 5px;
       margin-top: -1px;

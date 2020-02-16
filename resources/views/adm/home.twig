@@ -1,56 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Logowanie do panelu administracyjnego :: 4programmers.net</title>
+    <title>Logowanie do panelu administracyjnego :: 4programmers.net</title>
 
-        <link rel="stylesheet" href="{{ cdn('css/main.css') }}">
-        <link rel="stylesheet" href="{{ cdn('css/adm.css') }}">
+    <link rel="stylesheet" href="{{ cdn('css/main.css') }}">
 
-        <link rel="apple-touch-icon" href="{{ cdn('img/apple-touch.png') }}">
-        <link rel="shortcut icon" href="{{ cdn('img/favicon.png') }}" type="image/png">
+    <link rel="apple-touch-icon" href="{{ cdn('img/apple-touch.png') }}">
+    <link rel="shortcut icon" href="{{ cdn('img/favicon.png') }}" type="image/png">
 
-        <script type="text/javascript">var _config = {{ __public|default('{}')|raw }};</script>
+    <script type="text/javascript">var _config = {{ __public|default('{}')|raw }};</script>
 
-        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-        <script src="{{ cdn('js/app.js') }}"></script>
-    </head>
-    <body>
-        <div id="container">
-            {% import 'components/forms.twig' as forms %}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="{{ cdn('js/app.js') }}"></script>
+  </head>
+  <body>
+    <div id="container">
+      {% import 'components/forms.twig' as forms %}
 
-            <div class="row">
-                <div class="col-xs-12">
+      <div class="row no-gutters mt-5">
+        <div class="col-6 mx-auto">
+          {% if errors.any %}
+            <div class="alert alert-danger">Podano nieprawidłowe hasło.</div>
+          {% endif %}
 
-                    <div id="box-login">
-                        {% if errors.any %}
-                            <div class="alert alert-danger">Podano nieprawidłowe hasło.</div>
-                        {% endif %}
+          {{ form_open({'url': route('adm.home'), 'method': 'POST'}) }}
+          <div class="form-group">
+            {{ form_password('password', {'class': 'form-control', 'placeholder': 'Hasło', 'autofocus': 'autofocus'}) }}
+          </div>
 
-                        {{ form_open({'url': route('adm.home'), 'method': 'POST'}) }}
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="fas fa-key"></i></span>
-                                {{ form_password('password', {'class': 'form-control', 'placeholder': 'Hasło', 'autofocus': 'autofocus'}) }}
-                            </div>
-
-                            <div class="form-group"></div>
-
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-xs-12">
-                                        <button type="submit" class="btn btn-primary col-xs-12" data-submit-state="Logowanie...">
-                                            Logowanie
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        {{ form_close() }}
-                    </div>
-                </div>
-            </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary col-12" data-submit-state="Logowanie...">
+              Logowanie
+            </button>
+          </div>
+          {{ form_close() }}
         </div>
-    </body>
+      </div>
+    </div>
+  </body>
 </html>

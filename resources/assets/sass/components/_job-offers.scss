@@ -10,13 +10,13 @@
 #hire-me {
   // Default border color
   // -----------------------
-  .panel-default {
+  .card-default {
     border: 2px solid $brand-primary;
   }
 
   // Default headline background
   // -----------------
-  .panel-heading {
+  .card-header {
     text-align: center;
     background-color: $brand-primary;
     background-image: url('/img/escheresque.png');
@@ -41,15 +41,9 @@
     }
   }
 
-  .panel-body {
-    padding: 10px;
-  }
-
   .media {
     &:last-child {
       padding: 10px 0 0 0;
-      margin: 0;
-      text-align: center;
 
       a {
         color: darken($brand-primary, 10%);
@@ -62,10 +56,10 @@
   // custom language styles
   @each $name, $color in (java, #5484a4), (javascript, #E0C536), (csharp, #873B89), (php, #AABDD6), (python, #447C9C), (cpp, #649CD3), (c, #ACBCCC) {
     > .#{$name} {
-      > .panel-default {
+      > .card-default {
         border: 2px solid $color;
 
-        .panel-heading {
+        .card-header {
           background-color: $color;
         }
       }
@@ -74,44 +68,49 @@
 }
 
 .sidebar-offers {
+  .media-object {
+    width: 50px;
+    height: 50px;
+  }
+
+  .card-body {
+    padding: 10px;
+  }
+
   .media {
     margin: 0;
     border-bottom: 1px solid $border-color;
 
-    .media-left {
-      @media screen and (max-width: $screen-xlg-min) {
-        display: none;
-      }
-    }
+    //.media-left {
+    //  @media screen and (max-width: $screen-xlg-min) {
+    //    display: none;
+    //  }
+    //}
 
-    .media-left, .media-body {
-      // firm's logo
-      vertical-align: middle;
-    }
+    //.media-left, .media-body {
+    //  // firm's logo
+    //  vertical-align: middle;
+    //}
 
-    .media-heading {
-      margin-bottom: 2px;
-    }
 
     &:last-child {
       border-bottom: none;
     }
 
     img {
-      width: 50px;
-      height: 50px;
-      position: relative;
-
-      @include img-placeholder('/img/logo-gray.png', 50px, 50px);
-
-      @media screen and (max-width: $screen-lg) {
-        display: none;
-      }
+      //position: relative;
+      max-width: 100%;
+      //
+      //@include img-placeholder('/img/logo-gray.png', 50px, 50px);
+      //
+      //@include media-breakpoint-down(lg) {
+      //  display: none;
+      //}
     }
   }
 
   .media-link {
-    display: block;
+    display: flex;
     text-decoration: none;
     padding-bottom: 7px;
     padding-top: 7px;
@@ -126,12 +125,10 @@
     font-size: $font-size-base;
     font-weight: bold;
     color: $brand-primary;
-
-    @include text-overflow;
   }
 
   p {
-    font-size: $font-size-small - 1px;
+    font-size: $font-size-small;
     margin: 3px 0;
 
     a {
@@ -139,9 +136,9 @@
     }
   }
 
-  img[src*="logo-gray"] {
-    opacity: 0.7;
-  }
+  //img[src*="logo-gray"] {
+  //  opacity: 0.7;
+  //}
 
   .tag-clouds {
     > li {

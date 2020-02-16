@@ -4,12 +4,12 @@
 {% block container %}
     <div class="row" style="margin-top: 20px">
         <div class="col-md-9">
-            <div class="panel panel-default">
-                <div class="panel-body">
+            <div class="card card-default">
+                <div class="card-body">
                     <h1 class="media-heading" style="margin-bottom: 20px">{{ link_to_route('job.offer', job.title, [job.id, job.slug]) }}</h1>
 
                     {{ form_open({url: route('job.move', [job.id]), method: 'post'}) }}
-                        <div class="form-group">
+                        <div class="form-group row">
                             <label for="forum-id">Kategoria forum</label>
                             {{ form_select('forum_id', forumList, preferred.id, {id: 'forum-id', class: 'form-control'}) }}
                         </div>

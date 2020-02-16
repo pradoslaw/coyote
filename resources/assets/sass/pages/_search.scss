@@ -1,0 +1,15 @@
+@charset "UTF-8";
+
+#search-results {
+  h2 {
+    font-size: $font-size-large;
+    text-decoration: underline;
+
+    @include link-color-darker;
+  }
+
+  .highlight {
+    font-weight: bold;
+    font-style: normal;
+  }
+}

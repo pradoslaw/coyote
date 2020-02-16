@@ -1,6 +1,6 @@
 
-.panel-job {
-  > .panel-body {
+.card-job {
+  > .card-body {
     padding: 10px 15px;
   }
 
@@ -36,7 +36,7 @@
   .job-options {
     margin-bottom: 0;
     color: $text-muted;
-    font-size: $font-size-small - 1;
+    font-size: 11px;
 
     a {
       color: inherit;
@@ -135,7 +135,7 @@
     }
 
     &.extended {
-      @media screen and (min-width: $screen-sm) {
+      @include media-breakpoint-up(md) {
         //flex-basis: 50%;
         //transition: all 300ms cubic-bezier(.25, .46, .45, .94);
         //transition-delay: .1s;
@@ -191,7 +191,7 @@
     flex: 1 1 auto;
   }
 
-  @media screen and (min-width: $screen-sm) {
+  @include media-breakpoint-up(sm) {
     > .input-item {
       &.keyword-search,
       &.location-search {
@@ -200,7 +200,7 @@
     }
   }
 
-  @media screen and (max-width: $screen-sm) {
+  @include media-breakpoint-down(sm) {
     flex-flow: column nowrap;
 
     > .input-item {
@@ -217,13 +217,13 @@
     display: block;
   }
 
-  @media screen and (min-width: $screen-sm) {
+  @include media-breakpoint-up(sm) {
     .form-group-salary {
       float: right;
     }
   }
 
-  @media screen and (max-width: $screen-sm) {
+  @include media-breakpoint-down(sm) {
     .filters {
       position: relative;
     }
@@ -234,8 +234,8 @@
   }
 }
 
-#panel-subscribed,
-#panel-published {
+#card-subscribed,
+#card-published {
     position: relative;
     max-height: 400px;
 }
@@ -276,29 +276,6 @@
   100% { transform: rotate(0deg); }
 }
 
-
-#clients {
-  //background-color: $header-footer-color;
-  //border-top: 1px solid $header-footer-border;
-  padding: 20px 0 25px 0;
-
-  .img-responsive {
-    @include grayscale;
-
-    &:hover {
-      filter: url("data:image/svg+xml;utf8,&lt;svg xmlns=\'http://www.w3.org/2000/svg\'&gt;&lt;filter id=\'grayscale\'&gt;&lt;feColorMatrix type=\'matrix\' values=\'1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 1 0\'/&gt;&lt;/filter&gt;&lt;/svg&gt;#grayscale");
-      -webkit-filter: grayscale(0%);
-    }
-
-    height: 35px;
-  }
-
-  h4 {
-    margin-top: 0;
-    margin-bottom: 25px;
-  }
-}
-
 .medal {
   margin-left: 8px;
   margin-top: 0;
@@ -312,9 +289,9 @@
 // ---------------------------
 
 .top-spot-badge {
-  background-color: $state-warning-border;
+  background-color: theme-color-level("danger", $alert-bg-level);
   position: absolute;
-  color: $state-warning-text;
+  color: theme-color-level("warning", $alert-color-level);
   font-size: 11px;
   font-weight: normal;
   margin-left: -7px;
@@ -328,7 +305,7 @@
     content: "";
     border-style: solid;
     border-width: 0 7px 8px 0;
-    border-color: transparent $state-warning-text transparent transparent;
+    border-color: transparent theme-color-level("warning", $alert-color-level) transparent transparent;
     left: 0;
     top: 16px;
     position: absolute;

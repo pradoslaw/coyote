@@ -1,67 +1,66 @@
 <div id="flag">
-    {{ form_open({'method': 'POST', 'url': route('flag'), 'id': 'flag-form'}) }}
-    {{ form_hidden('url', url) }}
-    {{ form_hidden('metadata', metadata) }}
-        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="confirm-modal" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Chce zgłosić ten materiał w związku z...</h4>
-                    </div>
-                    <div class="modal-body">
-                        {% for type in types %}
-                            <div class="media">
-                                <div class="media-left">
-                                    {{ form_radio('type_id', type.id, false, {'id': 'type-' ~ type.id}) }}
-                                </div>
-                                <div class="media-body">
-                                    <strong><label for="type-{{ type.id }}" style="cursor: pointer">{{ type.name }}</label></strong>
-                                    <p>{{ type.description }}</p>
-
-                                    {% if type.name == 'Inne' %}
-                                        {{ form_textarea('text', '', {'class': 'form-control', 'rows': 3, 'style': 'display: none'}) }}
-                                    {% endif %}
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
-                        <button type="submit" class="btn btn-danger danger" data-submit-state="Wysyłanie..." disabled>Wyślij raport</button>
-                    </div>
-                </div>
-            </div>
+  {{ form_open({'method': 'POST', 'url': route('flag'), 'id': 'flag-form'}) }}
+  {{ form_hidden('url', url) }}
+  {{ form_hidden('metadata', metadata) }}
+  <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="confirm-modal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Chce zgłosić ten materiał w związku z...</h4>
         </div>
-    {{ form_close() }}
+        <div class="modal-body">
+          {% for type in types %}
+            <div class="media">
+              <div class="mr-2">
+                {{ form_radio('type_id', type.id, false, {'id': 'type-' ~ type.id}) }}
+              </div>
+              <div class="media-body">
+                <strong><label for="type-{{ type.id }}" style="cursor: pointer">{{ type.name }}</label></strong>
+                <p>{{ type.description }}</p>
 
-    <script type="text/javascript">
-        $(function() {
-            function close()
-            {
-                setTimeout(function() {
-                    $('#flag').remove();
-                }, 1000);
-            }
+                {% if type.name == 'Inne' %}
+                  {{ form_textarea('text', '', {'class': 'form-control', 'rows': 3, 'style': 'display: none'}) }}
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+          <button type="submit" class="btn btn-danger danger" data-submit-state="Wysyłanie..." disabled>Wyślij raport</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{ form_close() }}
 
-            $('#flag :radio').change(function() {
-                $('#flag :submit').removeAttr('disabled');
-                $('#flag textarea').toggle($(this).val() == 4);
-            });
+  <script type="text/javascript">
+    $(function () {
+      function close() {
+        setTimeout(function () {
+          $('#flag').remove();
+        }, 1000);
+      }
 
-            $('#flag .btn-default').click(function() {
-                close();
-            });
+      $('#flag :radio').change(function () {
+        $('#flag :submit').removeAttr('disabled');
+        $('#flag textarea').toggle($(this).val() == 4);
+      });
 
-            $('#flag-form').submit(function() {
-                $(':submit', this).attr('disabled', 'disabled').text('Wysyłanie...');
+      $('#flag .btn-secondary').click(function () {
+        close();
+      });
 
-                $.post($(this).attr('action'), $(this).serialize(), function() {
-                    $('#flag .modal').modal('hide');
-                    close();
-                });
+      $('#flag-form').submit(function () {
+        $(':submit', this).attr('disabled', 'disabled').text('Wysyłanie...');
 
-                return false;
-            });
+        $.post($(this).attr('action'), $(this).serialize(), function () {
+          $('#flag .modal').modal('hide');
+          close();
         });
-    </script>
+
+        return false;
+      });
+    });
+  </script>
 </div>

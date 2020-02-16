@@ -2,21 +2,17 @@
 {% set search_url = route('forum.search') %}
 {% set search_placeholder = 'Szukaj na forum...' %}
 
-{% block head %}
-    {{ parent() }}
-
-    <link rel="stylesheet" href="{{ cdn('css/forum.css') }}">
-{% endblock %}
-
 {% block body %}
-    {{ parent() }}
+  {{ parent() }}
 
-    <script src="{{ cdn('js/forum.js') }}"></script>
-    <script src="{{ cdn('js/posting.js') }}"></script>
+  <script src="{{ cdn('js/forum.js') }}"></script>
+  <script src="{{ cdn('js/posting.js') }}"></script>
 {% endblock %}
 
 {% block container %}
-    <div id="index">
-        {% block content %}{% endblock %}
-    </div>
+  <div id="index">
+    {% block content %}{% endblock %}
+
+    <div class="clearfix"></div>
+  </div>
 {% endblock %}

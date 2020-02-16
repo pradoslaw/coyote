@@ -33,18 +33,12 @@
             {% endif %}
 
             {% block wrapper %}
-                <section class="panel panel-wrapper">
-                    <div class="panel-body">
+                <section class="card card-wrapper">
+                    <div class="card-body">
                         {% block content %}{% endblock content %}
                     </div>
                 </section>
             {% endblock %}
         </main>
     </div>
-{% endblock %}
-
-{% block body %}
-    <link rel="stylesheet" property="stylesheet" href="{{ cdn('css/user-panel.css') }}">
-
-    {{ parent() }}
 {% endblock %}

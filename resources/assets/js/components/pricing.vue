@@ -37,7 +37,7 @@
                         </li>
 
                         <li class="feature-button">
-                            <button class="btn btn-default" v-if="valueLocal != plan.id" @click.prevent="changePlan(plan.id)">Wybierz</button>
+                            <button class="btn btn-secondary" v-if="valueLocal != plan.id" @click.prevent="changePlan(plan.id)">Wybierz</button>
                             <span class="text-primary" v-if="valueLocal == plan.id"><i class="fa fa-check-circle-o fa-fw text-primary"></i> Wybrano</span>
                         </li>
                     </ul>
@@ -50,9 +50,9 @@
             <h3>Potrzebujesz kilku ogłoszeń?</h3>
 
             <div class="custom-plan-container">
-                <i class="fa fa-info-circle fa-2x pull-left"></i>
+                <i class="fa fa-info-circle fa-2x float-left"></i>
 
-                <div class="pull-left margin-xs-left custom-plan-info">
+                <div class="float-left margin-xs-left custom-plan-info">
                     Napisz do nas na adres:<br>
                     <a :href="'mailto:' + email + '?subject=Interesuje mnie pakiet ogłoszeń. Proszę o przesłanie szczegółów'">{{ email }}</a>
                 </div>

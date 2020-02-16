@@ -1,38 +1,39 @@
 {% for job in jobs %}
-    <div class="media">
-        <a class="media-link" href="{{ route('job.offer', [job.id, job.slug]) }}" title="{{ job.title ~ (job.firm ? " @ #{job.firm.name}" )}}">
-            <div class="media-left">
-                <img class="media-object" src="{{ logo(job.firm.logo) }}" alt="{{ job.firm.name }}">
-            </div>
+  <div class="media text-truncate">
+    <a class="media-link" href="{{ route('job.offer', [job.id, job.slug]) }}" title="{{ job.title ~ (job.firm ? " @ #{job.firm.name}" ) }}">
 
-            <div class="media-body">
-                <h5 class="media-heading">{{ job.title|raw }}</h5>
+      <object data="{{ logo(job.firm.logo) }}" type="image/png" class="media-object d-none d-xl-inline-block mr-2">
+        <img alt="{{ job.firm.name }}" src="/img/logo-gray.png">
+      </object>
 
-                <p>
-                    <span class="employer">{{ job.firm.name }}</span>
+      <div class="media-body">
+        <h5 class="mb-1">{{ job.title|raw }}</h5>
 
-                    <small class="text-muted">
-                        {% include 'job.partials.location' with {
-                            locations: job.locations,
-                            linkable: false
-                        } %}
-                    </small>
-                </p>
+        <p>
+          <span class="employer">{{ job.firm.name }}</span>
 
-                <p>
-                    {% if job.salary_from or job.salary_to %}
-                        {% include 'job.partials.salary' %}
-                    {% endif %}
-                </p>
+          <small class="text-muted">
+            {% include 'job.partials.location' with {
+              locations: job.locations,
+              linkable: false
+            } %}
+          </small>
+        </p>
 
-                {% if job.tags %}
-                    <ul class="tag-clouds tag-clouds-xs">
-                        {% for tag in job.tags[0:3] %}
-                            <li><span class="{{ tag in inverse_tags ? 'inverse' }}">{{ tag }}</span></li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            </div>
-        </a>
-    </div>
+        <p>
+          {% if job.salary_from or job.salary_to %}
+            {% include 'job.partials.salary' %}
+          {% endif %}
+        </p>
+
+        {% if job.tags %}
+          <ul class="tag-clouds tag-clouds-xs">
+            {% for tag in job.tags[0:3] %}
+              <li><span class="{{ tag in inverse_tags ? 'inverse' }}">{{ tag }}</span></li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+    </a>
+  </div>
 {% endfor %}

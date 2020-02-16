@@ -2,176 +2,172 @@
 {% block title %}{{ user.name }} - Profil {{ parent() }}{% endblock %}
 
 {% block container %}
-    {% if user.id == user('id') %}
-        {{ include('user/top', {active: 'profile'}) }}
-    {% endif %}
+  {% if user.id == user('id') %}
+    {{ include('user/top', {active: 'profile'}) }}
+  {% endif %}
 
-    <div class="row">
-        <div class="col-md-9">
-            {% if user.is_blocked %}
-                <div class="alert alert-danger">
-                    Konto tego użytkownika zostało zablokowane.
-                </div>
-            {% endif %}
+  <div class="row">
+    <div class="col-md-9">
+      {% if user.is_blocked %}
+        <div class="alert alert-danger">
+          Konto tego użytkownika zostało zablokowane.
+        </div>
+      {% endif %}
 
-            <div id="profile" class="panel panel-default">
-                <div class="panel-body">
+      <div id="profile" class="card card-default">
+        <div class="card-body">
 
-                    <div class="media">
-                        <div class="media-left user-photo">
-                            <img src="{{ user_photo(user.photo) }}" class="img-thumbnail">
+          <div class="media">
+            <div class="mr-2 user-photo">
+              <img src="{{ user_photo(user.photo) }}" class="img-thumbnail">
 
-                            <a class="btn btn-default btn-sm btn-pm" href="{{ route('user.pm.submit') }}?to={{ user.name }}">
-                                <i class="fas fa-envelope"></i> Wiadomość
-                            </a>
-                        </div>
-
-                        <div class="media-body">
-                            <h1 class="media-heading">{{ user.name }}</h1>
-
-                            <ol class="list-inline">
-                                {% if user.position %}
-                                    <li class="position">
-                                        {{ user.position }}
-
-                                        {% if user.firm %}
-                                            <small>@ {{ user.firm }}</small>
-                                        {% endif %}
-                                    </li>
-                                {% endif %}
-
-                                {% if user.location %}
-                                    <li class="location">
-                                        <i class="fas fa-map-marker-alt fa-fw"></i>
-                                        {{ user.location }}
-                                    </li>
-                                {% endif %}
-                            </ol>
-
-                            <ol class="metadata list-inline">
-                                {% if user.website %}
-                                    <li title="Strona WWW">
-                                        <i class="fas fa-globe fa-fw"></i>
-                                        <a href="{{ user.website }}">{{ user.website }}</a>
-                                    </li>
-                                {% endif %}
-                                {% if user.github %}
-                                    <li title="Link do konta Github">
-                                        <i class="fab fa-github fa-fw"></i>
-                                        <a href="{{ user.github }}">{{ github(user.github) }}</a>
-                                    </li>
-                                {% endif %}
-                                {% if user.visited_at %}
-                                    <li title="Ostatnia wizyta">
-                                        <i class="fas fa-sign-in-alt fa-fw"></i>
-                                        {{ user.visited_at|format_date }}
-                                    </li>
-                                {% endif %}
-                                <li title="Data rejestracji">
-                                    <i class="fas fa-user-plus fa-fw"></i>
-                                    {{ user.created_at|format_date }}
-                                </li>
-                                <li title="Liczba wizyt">
-                                    <i class="far fa-eye fa-fw"></i>
-                                    {{ user.visits|number_format(0, ',', ' ') }} wizyt
-                                </li>
-
-                                {% if user.birthyear %}
-                                    <li title="Wiek">
-                                        <i class="fas fa-calendar-alt fa-fw"></i>
-                                        {{ "now"|date("Y") - user.birthyear }} lat
-                                    </li>
-                                {% endif %}
-                            </ol>
-
-                            {% if skills %}
-                                <ul class="tag-clouds">
-                                    {% for skill in skills %}
-                                        <li><a href="{{ route('job.tag', [skill.name|url_encode]) }}" title="Ocena umiejętności: {{ rate_labels[skill.rate - 1] }}">{{ skill.name }}</a></li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-
-                            {% if user.bio %}
-                                <div class="statement">
-                                    {{ user.bio }}
-                                </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
+              <a class="btn btn-secondary btn-sm btn-pm" href="{{ route('user.pm.submit') }}?to={{ user.name }}">
+                <i class="fas fa-envelope"></i> Wiadomość
+              </a>
             </div>
 
-            {% if user.posts > 0 %}
-                <ul class="nav nav-pills">
-                    <li role="presentation" {{ tab == 'reputation' ? 'class="active"' }}>
-                        <a title="Sprawdź wykres reputacji użytkownika" href="{{ route('profile', [user.id]) }}" role="tab">
-                            Reputacja
-                        </a>
-                    </li>
-                    <li role="presentation" {{ tab == 'post' ? 'class="active"' }}>
-                        <a title="Zobacz rozkład postów użytkownika" href="{{ route('profile', [user.id, 'Post']) }}" role="tab">
-                            Posty na forum
-                        </a>
-                    </li>
-                    <li role="presentation" {{ tab == 'microblog' ? 'class="active"' }}>
-                        <a title="Zobacz wpisy opublikowane na mikroblogu użytkownika" href="{{ route('profile', [user.id, 'Microblog']) }}" role="tab">
-                            Mikroblog
-                        </a>
-                    </li>
-                </ul>
-            {% endif %}
+            <div class="media-body">
+              <h1>{{ user.name }}</h1>
 
-            <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.min.js"></script>
+              <ol class="list-inline">
+                {% if user.position %}
+                  <li class="position list-inline-item">
+                    {{ user.position }}
 
-            {{ module|raw }}
-        </div>
-        <div class="col-md-3">
-            <ul class="side-menu">
-                {% if user.id != user('id') %}
-                    <li>
-                        <a href="{{ route('user.pm.submit', {to: user.name}) }}"><i class="fas fa-fw fa-envelope"></i> Wyślij wiadomość</a>
-                    </li>
+                    {% if user.firm %}
+                      <small>@ {{ user.firm }}</small>
+                    {% endif %}
+                  </li>
                 {% endif %}
 
-                <li>
-                    <a href="{{ route('forum.user', [user.id]) }}"><i class="fas fa-fw fa-search"></i> Znajdź posty użytkownika</a>
+                {% if user.location %}
+                  <li class="location list-inline-item">
+                    <i class="fas fa-map-marker-alt fa-fw"></i>
+                    {{ user.location }}
+                  </li>
+                {% endif %}
+              </ol>
+
+              <ol class="metadata list-inline">
+                {% if user.website %}
+                  <li class="list-inline-item" title="Strona WWW">
+                    <i class="fas fa-globe fa-fw"></i>
+                    <a href="{{ user.website }}">{{ user.website }}</a>
+                  </li>
+                {% endif %}
+                {% if user.github %}
+                  <li class="list-inline-item" title="Link do konta Github">
+                    <i class="fab fa-github fa-fw"></i>
+                    <a href="{{ user.github }}">{{ github(user.github) }}</a>
+                  </li>
+                {% endif %}
+                {% if user.visited_at %}
+                  <li class="list-inline-item" title="Ostatnia wizyta">
+                    <i class="fas fa-sign-in-alt fa-fw"></i>
+                    {{ user.visited_at|format_date }}
+                  </li>
+                {% endif %}
+                <li class="list-inline-item" title="Data rejestracji">
+                  <i class="fas fa-user-plus fa-fw"></i>
+                  {{ user.created_at|format_date }}
+                </li>
+                <li class="list-inline-item" title="Liczba wizyt">
+                  <i class="far fa-eye fa-fw"></i>
+                  {{ user.visits|number_format(0, ',', ' ') }} wizyt
                 </li>
 
-                {% if can('adm-access') %}
-                    {% if not user.is_blocked and user.id != user('id') %}
-                        <li>
-                            <a href="{{ route('adm.firewall.save') }}?user={{ user.id }}"><i class="fas fa-ban fa-fw"></i> Zablokuj tego użytkownika</a>
-                        </li>
-                    {% endif %}
-
-                    <li>
-                        <a href="{{ route('adm.users.save', [user.id]) }}"><i class="fas fa-cogs fa-fw"></i> Przejdź do panelu administracyjnego</a>
-                    </li>
+                {% if user.birthyear %}
+                  <li class="list-inline-item" title="Wiek">
+                    <i class="fas fa-calendar-alt fa-fw"></i>
+                    {{ "now"|date("Y") - user.birthyear }} lat
+                  </li>
                 {% endif %}
-            </ul>
+              </ol>
 
-            {{ render_block('job_ads') }}
+              {% if skills %}
+                <ul class="tag-clouds">
+                  {% for skill in skills %}
+                    <li><a href="{{ route('job.tag', [skill.name|url_encode]) }}" title="Ocena umiejętności: {{ rate_labels[skill.rate - 1] }}">{{ skill.name }}</a></li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+
+              {% if user.bio %}
+                <div class="statement">
+                  {{ user.bio }}
+                </div>
+              {% endif %}
+            </div>
+          </div>
         </div>
+      </div>
+
+      {% if user.posts > 0 %}
+        <div class="nav nav-pills">
+
+          <a title="Sprawdź wykres reputacji użytkownika" href="{{ route('profile', [user.id]) }}" class="nav-link {{ tab == 'reputation' ? 'active"' }}" role="tab">
+            Reputacja
+          </a>
+
+
+          <a title="Zobacz rozkład postów użytkownika" href="{{ route('profile', [user.id, 'Post']) }}" class="nav-link {{ tab == 'post' ? 'active' }}" role="tab">
+            Posty na forum
+          </a>
+
+          <a title="Zobacz wpisy opublikowane na mikroblogu użytkownika" href="{{ route('profile', [user.id, 'Microblog']) }}" class="nav-link {{ tab == 'microblog' ? 'active' }}" role="tab">
+            Mikroblog
+          </a>
+
+        </div>
+      {% endif %}
+
+      <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.2/Chart.min.js"></script>
+
+      {{ module|raw }}
     </div>
+    <div class="col-md-3">
+      <ul class="side-menu">
+        {% if user.id != user('id') %}
+          <li>
+            <a href="{{ route('user.pm.submit', {to: user.name}) }}"><i class="fas fa-fw fa-envelope"></i> Wyślij wiadomość</a>
+          </li>
+        {% endif %}
+
+        <li>
+          <a href="{{ route('forum.user', [user.id]) }}"><i class="fas fa-fw fa-search"></i> Znajdź posty użytkownika</a>
+        </li>
+
+        {% if can('adm-access') %}
+          {% if not user.is_blocked and user.id != user('id') %}
+            <li>
+              <a href="{{ route('adm.firewall.save') }}?user={{ user.id }}"><i class="fas fa-ban fa-fw"></i> Zablokuj tego użytkownika</a>
+            </li>
+          {% endif %}
+
+          <li>
+            <a href="{{ route('adm.users.save', [user.id]) }}"><i class="fas fa-cogs fa-fw"></i> Przejdź do panelu administracyjnego</a>
+          </li>
+        {% endif %}
+      </ul>
+
+      {{ render_block('job_ads') }}
+    </div>
+  </div>
 {% endblock %}
 
 {% block head %}
-    {{ parent() }}
+  {{ parent() }}
 
-    <script type="text/javascript">
-        var uploadUrl = '{{ route('microblog.upload') }}';
-    </script>
+  <script type="text/javascript">
+    var uploadUrl = '{{ route('microblog.upload') }}';
+  </script>
 {% endblock %}
 
 {% block body %}
-    <link rel="stylesheet" property="stylesheet" href="{{ cdn('css/profile.css') }}">
-    <link rel="stylesheet" property="stylesheet" href="{{ cdn('css/microblog.css') }}">
+  {{ parent() }}
 
-    {{ parent() }}
+  <script type="text/javascript" src="{{ cdn('js/posting.js') }}"></script>
+  <script type="text/javascript" src="{{ cdn('js/microblog.js') }}"></script>
 
-    <script type="text/javascript" src="{{ cdn('js/posting.js') }}"></script>
-    <script type="text/javascript" src="{{ cdn('js/microblog.js') }}"></script>
-
-    <script src="{{ cdn('js/profile.js') }}"></script>
+  <script src="{{ cdn('js/profile.js') }}"></script>
 {% endblock %}

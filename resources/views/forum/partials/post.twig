@@ -2,265 +2,265 @@
 {% set ip = post.ip ~ ' ' ~ (post.host ? '(' ~ post.host ~ ')') ~ ' ' ~ post.browser %}
 
 {% macro render_name(post, author_id) %}
-    <h5 class="{{ post.is_online ? 'online' : 'offline' }}" title="Użytkownik jest {{ post.is_online ? 'online' : 'offline' }}">
-        {% if post.user_id %}
-            {{ creator_badge(link_to_profile(post.user_id, post.author_name, post.is_active, post.is_blocked), post.user_id == author_id) }}
-        {% else %}
-            {{ post.user_name }}
-        {% endif %}
-    </h5>
+  <h5 class="{{ post.is_online ? 'online' : 'offline' }}" title="Użytkownik jest {{ post.is_online ? 'online' : 'offline' }}">
+    {% if post.user_id %}
+      {{ creator_badge(link_to_profile(post.user_id, post.author_name, post.is_active, post.is_blocked), post.user_id == author_id) }}
+    {% else %}
+      {{ post.user_name }}
+    {% endif %}
+  </h5>
 {% endmacro %}
 
 <div class="post" {{ index == 0 ? 'id="first-post"' }}>
-    {% if post.deleted_at %}
-        <div class="post-delete">
-            <a href="#post-{{ post.id }}" data-toggle="collapse">
-                <i class="fas fa-warning"></i>
+  {% if post.deleted_at %}
+    <div class="post-delete">
+      <a href="#post-{{ post.id }}" data-toggle="collapse">
+        <i class="fas fa-warning"></i>
 
-                Post usunięty przez {{ post.deleter_name }} dnia {{ post.deleted_at|format_date }}.
+        Post usunięty przez {{ post.deleter_name }} dnia {{ post.deleted_at|format_date }}.
 
-                {% if post.delete_reason %}
-                    Powód: <strong>{{ post.delete_reason }}</strong>
-                {% endif %}
-            </a>
-        </div>
-    {% endif %}
+        {% if post.delete_reason %}
+          Powód: <strong>{{ post.delete_reason }}</strong>
+        {% endif %}
+      </a>
+    </div>
+  {% endif %}
 
-    <div id="post-{{ post.id }}" class="post-body {{ post.deleted_at ? 'deleted' }} {{ (index == 0 or post.deleted_at) ? 'collapse' }} {{ (paginate.currentPage() > 1 and index == 0) or post.deleted_at ? '' : 'in' }}">
+  <div id="post-{{ post.id }}" class="post-body {{ post.deleted_at ? 'deleted' }} {{ (index == 0 or post.deleted_at) ? 'collapse' }} {{ (paginate.currentPage() > 1 and index == 0) or post.deleted_at ? '' : 'show' }}">
 
-        <div class="row">
-            <div class="col-sm-2 hidden-xs col-user">
-                {{ _self.render_name(post, author_id) }}
-            </div>
+    <div class="row">
+      <div class="col-sm-2 d-none d-sm-block col-user">
+        {{ _self.render_name(post, author_id) }}
+      </div>
 
-            <div class="col-sm-10 col-xs-12 col-time">
-                <a title="Link do tego postu" id="id{{ post.id }}" class="post-link {{ post.created_at > markTime ? 'unread' }}" href="{{ url }}"></a>
+      <div class="col-sm-10 col-12 col-time">
+        <a title="Link do tego postu" id="id{{ post.id }}" class="post-link {{ post.created_at > markTime ? 'unread' }}" href="{{ url }}"></a>
 
-                <span class="timestamp" title="{{ post.created_at|format_date(false) }}" data-timestamp="{{ post.created_at|timestamp }}">{{ post.created_at|format_date }}</span>
+        <span class="timestamp" title="{{ post.created_at|format_date(false) }}" data-timestamp="{{ post.created_at|timestamp }}">{{ post.created_at|format_date }}</span>
 
-                {% if can('update', forum) %}
-                    <small><a href="{{ route('forum.search', {'q': 'ip:' ~ post.ip}) }}" title="{{ ip }}" class="post-ip">({{ ip }})</a></small>
-                {% endif %}
-            </div>
-        </div>
-        <div class="row visible-xs">
-            <div class="col-xs-12 col-user">
-                {{ _self.render_name(post, author_id) }}
-            </div>
-        </div>
-
-        <div class="row hidden-xs hidden-sm hidden-md hidden-lg"></div>
-
-        <div class="row">
-            <div class="col-sm-2 col-user hidden-xs">
-                {% if post.user_id %}
-                    <div class="avatar">
-                        <img class="img-responsive" src="{{ user_photo(post.photo) }}" {{ not post.photo ? 'style="max-width: 75px"' }}>
-                    </div>
-
-                    {% if post.group_name %}
-                        <span class="label label-default">{{ post.group_name }}</span>
-                    {% endif %}
-
-                    <p class="hidden-xs">
-                        <strong>Rejestracja:</strong>
-                        <small>{{ post.author_created_at|diff_for_humans }}</small>
-                    </p>
-                    <p class="hidden-xs">
-                        <strong>Ostatnio:</strong>
-                        <small>{{ post.author_visited_at|diff_for_humans }}</small>
-                    </p>
-
-                    {% if post.location %}
-                        <p class="hidden-xs">
-                            <strong>Lokalizacja:</strong>
-                            <small>{{ post.location }}</small>
-                        </p>
-                    {% endif %}
-
-                    {% if post.allow_count and user('allow_count') %}
-                        <p class="hidden-xs">
-                            <strong>Postów:</strong>
-                            <small><a title="Znajdź posty tego użytkownika" href="{{ route('forum.user', [post.user_id]) }}" style="text-decoration: underline">{{ post.author_posts|number_format }}</a></small>
-                        </p>
-                    {% endif %}
-                {% endif %}
-            </div>
-
-            <div class="col-sm-10 col-xs-12 col-body">
-
-                {% for flag in flags[post.id] %}
-                    {% include 'components.flag' %}
-                {% endfor %}
-
-                <div class="col-vote">
-                    <strong class="vote-count" title="Ocena postu">{{ post.score }}</strong>
-
-                    {% if not post.deleted_at %}
-                        <a class="vote-up {{ post.vote_on ? 'on' }}" href="{{ route('forum.post.vote', [post.id]) }}" title="Kliknij, jeżeli post jest wartościowy (kliknij ponownie, aby cofnąć)">
-                            <i class="far fa-thumbs-up fa-fw"></i>
-                            <i class="fas fa-thumbs-up fa-fw"></i>
-                        </a>
-
-                        {% if (auth_check() and user('id') == posts[0].user_id or can('update', forum)) and index > 0 %}
-                            <a class="vote-accept {{ post.accept_on ? 'on' }}" href="{{ route('forum.post.accept', [post.id]) }}" title="Kliknij, aby ustawić tę odpowiedź jako zaakceptowaną (kliknij ponownie, aby cofnąć)">
-                                <i class="fas fa-check fa-fw"></i>
-                            </a>
-                        {% elseif post.accept_on %}
-                            <a class="vote-accept on">
-                                <i class="fas fa-check fa-fw"></i>
-                            </a>
-                        {% endif %}
-                    {% endif %}
-                </div>
-
-                <div class="post-content" data-post-id="{{ post.id }}">
-                    {% include 'forum.partials.text' %}
-                </div>
-
-                {% if index == 0 and topic.tags.count() %}
-                    <div class="padding-sm-top padding-sm-bottom">
-                        <ul class="tag-clouds">
-                            {% for tag in topic.tags %}
-                                <li><a href="{{ route('forum.tag', [tag.name|url_encode]) }}">{{ tag.name }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
-
-                <div class="clearfix"></div>
-
-                {% if post.edit_count %}
-                    <div class="edit-info">
-                        <strong>
-                            <a class="btn-history" {{ can('update', forum) ? ('title="Zobacz historię zmian tego postu" href="' ~ route('forum.post.log', [post.id]) ~ '"')|raw}}>
-                                <i class="fas fa-external-link-alt"></i>
-                            </a>
-
-                            edytowany {{ post.edit_count }}x, ostatnio: {{ link_to_profile(post.editor_id, post.editor_name, post.editor_is_active, post.editor_is_blocked) }},
-                        </strong>
-                        <span class="timestamp" title="{{ post.updated_at|format_date(false) }}" data-timestamp="{{ post.updated_at|timestamp }}">{{ post.updated_at|format_date }}</span>
-                    </div>
-                {% endif %}
-
-                <div class="comments">
-                    {% if post.comments|length > 6 %}
-                        <a href="javascript:" class="btn-show-all">
-                            <i class="fas fa-comments"></i>
-                            Pokaż {{ declination(post.comments|length - 5, ['pozostały', 'pozostałe', 'pozostałe'], true) }} {{ post.comments|length - 5 }} {{ declination(post.comments|length - 5, ['komentarz', 'komentarze', 'komentarzy'], true) }}
-                        </a>
-                    {% endif %}
-
-                    {% for comment in post.comments %}
-                        {% include 'forum.partials.comment' %}
-                    {% endfor %}
-
-                    {% include 'forum.partials.form' %}
-                </div>
-
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-2 hidden-xs col-bottom" style="height: 32px"></div>
-            <div class="col-sm-10 col-xs-12 col-bottom">
-                {% if (can('merge', forum) or can('adm-access')) %}
-                    <div class="dropdown pull-right">
-                        <button class="btn btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Więcej...">
-                            <i class="fas fa-fw fa-ellipsis-h"></i>
-                        </button>
-
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            {% if not post.deleted_at and can('merge', forum) and post.id != topic.first_post_id %}
-                                <li><a href="{{ route('forum.post.merge', [post.id]) }}" class="btn-merge"><i class="fas fa-compress fa-fw"></i> Połącz z poprzednim</a></li>
-                            {% endif %}
-
-                            {% if can('adm-access') %}
-                                <li><a href="{{ route('adm.firewall.save') }}?user={{ post.user_id }}&ip={{ post.ip }}"><i class="fas fa-ban fa-fw"></i> Zablokuj użytkownika</a> </li>
-                            {% endif %}
-                        </ul>
-                    </div>
-                {% endif %}
-
-                {% if not post.deleted_at %}
-                    {% if auth_check() %}
-                        <a data-toggle="tooltip" data-placement="top" title="Powiadamiaj o nowych komentarzach do postu" data-category="postLinks" data-action="subscribe" href="{{ route('forum.post.subscribe', [post.id]) }}" data-post-id="{{ post.id }}" class="btn btn-xs btn-sub {{ post.subscribe_on ? 'active' }}">
-                            <i class="far fa-bell"></i>
-                            <span class="hidden-xs">Obserwuj</span>
-                        </a>
-                    {% endif %}
-
-                    <a data-toggle="tooltip" data-placement="top" title="Udostępnij link do tego postu" data-category="postLinks" data-action="share" href="{{ route('forum.share', [post.id]) }}" class="btn btn-xs btn-share">
-                        <i class="fas fa-share-alt"></i>
-                        <span class="hidden-xs">Udostępnij</span>
-                    </a>
-
-                    {% if auth_check() %}
-                        {% if is_writeable %}
-                            <a data-toggle="collapse" data-placement="top" title="Napisz komentarz do postu" data-category="postLinks" data-action="comment" class="btn btn-xs btn-comment" href="#form-{{ post.id }}">
-                                <i class="far fa-comment"></i>
-                                <span class="hidden-xs">Komentuj</span>
-                            </a>
-                        {% endif %}
-
-                        <a data-toggle="tooltip" data-placement="top" title="Zgłoś naruszenie w tym poście" data-category="postLinks" data-action="report" rel="nofollow" class="btn btn-xs btn-report" href="{{ route('flag') }}" data-url="{{ url }}" data-metadata="{{ {'post_id': post.id, 'topic_id': topic.id, 'forum_id': topic.forum_id, 'permission': 'delete'}|encrypt }}">
-                            <i class="fas fa-flag"></i>
-                            <span class="hidden-xs">Raportuj</span>
-                        </a>
-                    {% endif %}
-                {% endif %}
-
-
-                {% if is_writeable %}
-                    {% if not post.deleted_at %}
-                        <a data-toggle="tooltip" data-placement="top" title="Odpowiedz cytując ten post" data-category="postLinks" data-action="quote" rel="nofollow" href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}?quote={{ post.id }}" class="btn btn-xs btn-quote">
-                            <i class="fas fa-quote-right"></i>
-                            <span class="hidden-xs">Odpowiedz</span>
-                        </a>
-
-                        <a data-toggle="tooltip" data-placement="top" title="Dodaj ten post jako cytat w formularzu odpowiedzi" data-category="postLinks" data-action="multi-quote" rel="nofollow" class="btn btn-xs btn-multi-quote" data-post-id="{{ post.id }}" data-topic-id="{{ topic.id }}">
-                            <i class="fas fa-plus"></i>
-                        </a>
-                    {% endif %}
-
-                    {% if can('delete', post) or can('delete', forum) %}
-                        {% if post.deleted_at %}
-                            <a data-toggle="tooltip" data-placement="top" title="Przywróć ten post" data-category="postLinks" data-action="restore" href="{{ route('forum.post.restore', [post.id]) }}" class="btn btn-xs btn-res">
-                                <i class="fas fa-undo"></i>
-                                <span class="hidden-xs">Przywróć</span>
-                            </a>
-                        {% else %}
-                            <a data-toggle="tooltip" data-placement="top" title="Usuń ten post" data-category="postLinks" data-action="delete" href="{{ route('forum.post.delete', [post.id]) }}" class="btn btn-xs btn-del">
-                                <i class="fas fa-times"></i>
-                                <span class="hidden-xs">Usuń</span>
-                            </a>
-                        {% endif %}
-                    {% endif %}
-
-                    {% if can('update', post) and not post.deleted_at %}
-                        <a href="{{ route('forum.post.submit', [forum.slug, topic.id, post.id]) }}" data-toggle="tooltip" data-placement="top" title="Edytuj ten post" data-category="postLinks" data-action="edit" class="btn btn-xs btn-edit">
-                            <i class="fas fa-pencil-alt"></i>
-                            <span class="hidden-xs">Edytuj</span>
-                        </a>
-                        <a href="{{ route('forum.post.edit', [forum.slug, topic.id, post.id]) }}" data-toggle="tooltip" data-placement="top" title="Włącz/wyłącz szybką edycję postu" data-category="postLinks" data-action="fastEdit" data-post-id="{{ post.id }}" class="btn btn-xs btn-fast-edit">
-                            <i class="fas fa-edit"></i>
-                            <span class="hidden-xs">Szybka edycja</span>
-                        </a>
-                    {% endif %}
-                {% endif %}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-end col-xs-12"></div>
-        </div>
+        {% if can('update', forum) %}
+          <small><a href="{{ route('forum.search', {'q': 'ip:' ~ post.ip}) }}" title="{{ ip }}" class="post-ip">({{ ip }})</a></small>
+        {% endif %}
+      </div>
+    </div>
+    <div class="row d-block d-sm-none">
+      <div class="col-12 col-user">
+        {{ _self.render_name(post, author_id) }}
+      </div>
     </div>
 
-    {% if index == 0 %}
-        <div id="col-toggle">
-            <a title="Pokaż/ukryj treść pytania" href="#post-{{ post.id }}" data-toggle="collapse">
-                <span></span>
-                <span></span>
-                <span></span>
+    <div class="row d-block d-lg-none d-xl-block"></div>
+
+    <div class="row">
+      <div class="col-sm-2 col-user d-none d-sm-block">
+        {% if post.user_id %}
+          <div class="avatar">
+            <img class="img-fluid" src="{{ user_photo(post.photo) }}" {{ not post.photo ? 'style="max-width: 75px"' }}>
+          </div>
+
+          {% if post.group_name %}
+            <span class="badge badge-secondary mb-1">{{ post.group_name }}</span>
+          {% endif %}
+
+          <p class="d-none d-sm-block">
+            <strong>Rejestracja:</strong>
+            <small>{{ post.author_created_at|diff_for_humans }}</small>
+          </p>
+          <p class="d-none d-sm-block">
+            <strong>Ostatnio:</strong>
+            <small>{{ post.author_visited_at|diff_for_humans }}</small>
+          </p>
+
+          {% if post.location %}
+            <p class="d-none d-sm-block">
+              <strong>Lokalizacja:</strong>
+              <small>{{ post.location }}</small>
+            </p>
+          {% endif %}
+
+          {% if post.allow_count and user('allow_count') %}
+            <p class="d-none d-sm-block">
+              <strong>Postów:</strong>
+              <small><a title="Znajdź posty tego użytkownika" href="{{ route('forum.user', [post.user_id]) }}" style="text-decoration: underline">{{ post.author_posts|number_format }}</a></small>
+            </p>
+          {% endif %}
+        {% endif %}
+      </div>
+
+      <div class="col-sm-10 col-12 col-body">
+
+        {% for flag in flags[post.id] %}
+          {% include 'components.flag' %}
+        {% endfor %}
+
+        <div class="col-vote">
+          <strong class="vote-count" title="Ocena postu">{{ post.score }}</strong>
+
+          {% if not post.deleted_at %}
+            <a class="vote-up {{ post.vote_on ? 'on' }}" href="{{ route('forum.post.vote', [post.id]) }}" title="Kliknij, jeżeli post jest wartościowy (kliknij ponownie, aby cofnąć)">
+              <i class="far fa-thumbs-up fa-fw"></i>
+              <i class="fas fa-thumbs-up fa-fw"></i>
             </a>
+
+            {% if (auth_check() and user('id') == posts[0].user_id or can('update', forum)) and index > 0 %}
+              <a class="vote-accept {{ post.accept_on ? 'on' }}" href="{{ route('forum.post.accept', [post.id]) }}" title="Kliknij, aby ustawić tę odpowiedź jako zaakceptowaną (kliknij ponownie, aby cofnąć)">
+                <i class="fas fa-check fa-fw"></i>
+              </a>
+            {% elseif post.accept_on %}
+              <a class="vote-accept on">
+                <i class="fas fa-check fa-fw"></i>
+              </a>
+            {% endif %}
+          {% endif %}
         </div>
-    {% endif %}
+
+        <div class="post-content" data-post-id="{{ post.id }}">
+          {% include 'forum.partials.text' %}
+        </div>
+
+        {% if index == 0 and topic.tags.count() %}
+          <div class="padding-sm-top padding-sm-bottom">
+            <ul class="tag-clouds">
+              {% for tag in topic.tags %}
+                <li><a href="{{ route('forum.tag', [tag.name|url_encode]) }}">{{ tag.name }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
+        <div class="clearfix"></div>
+
+        {% if post.edit_count %}
+          <div class="edit-info">
+            <strong>
+              <a class="btn-history" {{ can('update', forum) ? ('title="Zobacz historię zmian tego postu" href="' ~ route('forum.post.log', [post.id]) ~ '"')|raw }}>
+                <i class="fas fa-external-link-alt"></i>
+              </a>
+
+              edytowany {{ post.edit_count }}x, ostatnio: {{ link_to_profile(post.editor_id, post.editor_name, post.editor_is_active, post.editor_is_blocked) }},
+            </strong>
+            <span class="timestamp" title="{{ post.updated_at|format_date(false) }}" data-timestamp="{{ post.updated_at|timestamp }}">{{ post.updated_at|format_date }}</span>
+          </div>
+        {% endif %}
+
+        <div class="comments">
+          {% if post.comments|length > 6 %}
+            <a href="javascript:" class="btn-show-all">
+              <i class="fas fa-comments"></i>
+              Pokaż {{ declination(post.comments|length - 5, ['pozostały', 'pozostałe', 'pozostałe'], true) }} {{ post.comments|length - 5 }} {{ declination(post.comments|length - 5, ['komentarz', 'komentarze', 'komentarzy'], true) }}
+            </a>
+          {% endif %}
+
+          {% for comment in post.comments %}
+            {% include 'forum.partials.comment' %}
+          {% endfor %}
+
+          {% include 'forum.partials.form' %}
+        </div>
+
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2 d-none d-sm-block col-bottom"></div>
+      <div class="col-sm-10 col-12 col-bottom">
+        {% if (can('merge', forum) or can('adm-access')) %}
+          <div class="dropdown float-right">
+            <button class="btn btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Więcej...">
+              <i class="fas fa-fw fa-ellipsis-h"></i>
+            </button>
+
+            <div class="dropdown-menu dropdown-menu-right">
+              {% if not post.deleted_at and can('merge', forum) and post.id != topic.first_post_id %}
+                <a class="dropdown-item btn-merge" href="{{ route('forum.post.merge', [post.id]) }}"><i class="fas fa-compress fa-fw"></i> Połącz z poprzednim</a>
+              {% endif %}
+
+              {% if can('adm-access') %}
+                <a class="dropdown-item" href="{{ route('adm.firewall.save') }}?user={{ post.user_id }}&ip={{ post.ip }}"><i class="fas fa-ban fa-fw"></i> Zablokuj użytkownika</a>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+
+        {% if not post.deleted_at %}
+          {% if auth_check() %}
+            <a data-toggle="tooltip" data-placement="top" title="Powiadamiaj o nowych komentarzach do postu" data-category="postLinks" data-action="subscribe" href="{{ route('forum.post.subscribe', [post.id]) }}" data-post-id="{{ post.id }}" class="btn btn-xs btn-sub {{ post.subscribe_on ? 'active' }}">
+              <i class="far fa-bell"></i>
+              <span class="d-none d-sm-inline">Obserwuj</span>
+            </a>
+          {% endif %}
+
+          <a data-toggle="tooltip" data-placement="top" title="Udostępnij link do tego postu" data-category="postLinks" data-action="share" href="{{ route('forum.share', [post.id]) }}" class="btn btn-xs btn-share">
+            <i class="fas fa-share-alt"></i>
+            <span class="d-none d-sm-inline">Udostępnij</span>
+          </a>
+
+          {% if auth_check() %}
+            {% if is_writeable %}
+              <a data-toggle="collapse" data-placement="top" title="Napisz komentarz do postu" data-category="postLinks" data-action="comment" class="btn btn-xs btn-comment" href="#form-{{ post.id }}">
+                <i class="far fa-comment"></i>
+                <span class="d-none d-sm-inline">Komentuj</span>
+              </a>
+            {% endif %}
+
+            <a data-toggle="tooltip" data-placement="top" title="Zgłoś naruszenie w tym poście" data-category="postLinks" data-action="report" rel="nofollow" class="btn btn-xs btn-report" href="{{ route('flag') }}" data-url="{{ url }}" data-metadata="{{ {'post_id': post.id, 'topic_id': topic.id, 'forum_id': topic.forum_id, 'permission': 'delete'}|encrypt }}">
+              <i class="fas fa-flag"></i>
+              <span class="d-none d-sm-inline">Raportuj</span>
+            </a>
+          {% endif %}
+        {% endif %}
+
+
+        {% if is_writeable %}
+          {% if not post.deleted_at %}
+            <a data-toggle="tooltip" data-placement="top" title="Odpowiedz cytując ten post" data-category="postLinks" data-action="quote" rel="nofollow" href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}?quote={{ post.id }}" class="btn btn-xs btn-quote">
+              <i class="fas fa-quote-right"></i>
+              <span class="d-none d-sm-inline">Odpowiedz</span>
+            </a>
+
+            <a data-toggle="tooltip" data-placement="top" title="Dodaj ten post jako cytat w formularzu odpowiedzi" data-category="postLinks" data-action="multi-quote" rel="nofollow" class="btn btn-xs btn-multi-quote" data-post-id="{{ post.id }}" data-topic-id="{{ topic.id }}">
+              <i class="fas fa-plus"></i>
+            </a>
+          {% endif %}
+
+          {% if can('delete', post) or can('delete', forum) %}
+            {% if post.deleted_at %}
+              <a data-toggle="tooltip" data-placement="top" title="Przywróć ten post" data-category="postLinks" data-action="restore" href="{{ route('forum.post.restore', [post.id]) }}" class="btn btn-xs btn-res">
+                <i class="fas fa-undo"></i>
+                <span class="d-none d-sm-inline">Przywróć</span>
+              </a>
+            {% else %}
+              <a data-toggle="tooltip" data-placement="top" title="Usuń ten post" data-category="postLinks" data-action="delete" href="{{ route('forum.post.delete', [post.id]) }}" class="btn btn-xs btn-del">
+                <i class="fas fa-times"></i>
+                <span class="d-none d-sm-inline">Usuń</span>
+              </a>
+            {% endif %}
+          {% endif %}
+
+          {% if can('update', post) and not post.deleted_at %}
+            <a href="{{ route('forum.post.submit', [forum.slug, topic.id, post.id]) }}" data-toggle="tooltip" data-placement="top" title="Edytuj ten post" data-category="postLinks" data-action="edit" class="btn btn-xs btn-edit">
+              <i class="fas fa-pencil-alt"></i>
+              <span class="d-none d-sm-inline">Edytuj</span>
+            </a>
+            <a href="{{ route('forum.post.edit', [forum.slug, topic.id, post.id]) }}" data-toggle="tooltip" data-placement="top" title="Włącz/wyłącz szybką edycję postu" data-category="postLinks" data-action="fastEdit" data-post-id="{{ post.id }}" class="btn btn-xs btn-fast-edit">
+              <i class="fas fa-edit"></i>
+              <span class="d-none d-sm-inline">Szybka edycja</span>
+            </a>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-end col-12"></div>
+    </div>
+  </div>
+
+  {% if index == 0 %}
+    <div id="col-toggle">
+      <a title="Pokaż/ukryj treść pytania" href="#post-{{ post.id }}" data-toggle="collapse">
+        <span></span>
+        <span></span>
+        <span></span>
+      </a>
+    </div>
+  {% endif %}
 </div>

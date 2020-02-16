@@ -12,13 +12,13 @@
     <h1>{{ link_to_route('forum.topic', topic.subject, [forum.slug, topic.id, topic.slug]) }}</h1>
 
     <main class="mainbar">
-        <section class="panel panel-wrapper">
-            <div class="panel-body">
+        <section class="card card-wrapper">
+            <div class="card-body">
                 {% for log in logs %}
                     <div class="post">
                         <div class="post-body">
                             <div class="row">
-                                <div class="col-xs-2 col-user">
+                                <div class="col-2 col-user">
                                     <h5 class="{{ log.is_online ? 'online' : 'offline' }}" title="Użytkownik jest {{ log.is_online ? 'online' : 'offline' }}">
                                         {% if log.user_id %}
                                             {{ link_to_profile(log.user_id, log.author_name, log.is_active, log.is_blocked) }}
@@ -28,7 +28,7 @@
                                     </h5>
                                 </div>
 
-                                <div class="col-xs-10 col-time">
+                                <div class="col-10 col-time">
                                     <a title="Link do tej wersji postu" id="id{{ log.id }}" class="post-link" href="{{ url ~ '#id' ~ log.id }}"></a>
 
                                     <h5 style="display: inline"><a href="{{ url }}#id{{ log.id }}">{{ log.subject }}</a></h5>
@@ -36,29 +36,29 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-xs-2 col-user hidden-xss">
-                                    <p class="hidden-xs">
+                                <div class="col-2 col-user hidden-xss">
+                                    <p class="d-none d-sm-block">
                                         <strong>Data:</strong>
                                         <small>{{ log.created_at|format_date }}</small>
                                     </p>
 
-                                    <p class="hidden-xs">
+                                    <p class="d-none d-sm-block">
                                         <strong>IP:</strong>
                                         <small>{{ log.ip }}</small>
                                     </p>
 
-                                    <p class="hidden-xs">
+                                    <p class="d-none d-sm-block">
                                         <strong>Host:</strong>
                                         <small title="{{ log.host }}">{{ log.host }}</small>
                                     </p>
 
-                                    <p class="hidden-xs">
+                                    <p class="d-none d-sm-block">
                                         <strong>Przeglądarka:</strong>
                                         <small title="{{ log.browser }}">{{ log.browser }}</small>
                                     </p>
                                 </div>
 
-                                <div class="col-xs-10 col-body diff">
+                                <div class="col-10 col-body diff">
                                     <div class="post-content">
                                         {{ log.text|raw }}
                                     </div>
@@ -75,11 +75,11 @@
 
                             {% if not loop.first %}
                                 <div class="row">
-                                    <div class="col-xs-2 col-bottom" style="height: 32px"></div>
-                                    <div class="col-xs-10 col-bottom">
-                                        <a data-toggle="tooltip" data-placement="top" title="Cofnij do tej wersji" data-category="postLinks" data-action="rollback" href="{{ route('forum.post.rollback', [post.id, log.id]) }}" class="btn btn-xs btn-rollback">
+                                    <div class="col-2 col-bottom" style="height: 32px"></div>
+                                    <div class="col-10 col-bottom">
+                                        <a data-toggle="tooltip" data-placement="top" title="Cofnij do tej wersji" data-category="postLinks" data-action="rollback" href="{{ route('forum.post.rollback', [post.id, log.id]) }}" class="btn btn-sm btn-rollback">
                                             <i class="fas fa-undo"></i>
-                                            <span class="hidden-xs">Cofnij do tej wersji</span>
+                                            <span class="d-none d-sm-block">Cofnij do tej wersji</span>
                                         </a>
                                     </div>
                                 </div>

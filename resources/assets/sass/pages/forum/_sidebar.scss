@@ -4,7 +4,7 @@
   margin-right: -25%;
   z-index: 1000;
 
-  @media screen and (max-width: $screen-lg) {
+  @include media-breakpoint-down(lg) {
     display: none;
     position: absolute;
     z-index: 101;
@@ -17,7 +17,7 @@
     width: 45%; // na urzadzeniach mobilnych rozszerzamy to okno aby cokolwiek bylo tam widac
   }
 
-  @media screen and (max-width: $screen-xs) {
+  @include media-breakpoint-down(xs) {
     width: 65%;
   }
 }
@@ -27,7 +27,7 @@
 
 #btn-toggle-sidebar {
   position: absolute;
-  bottom: 5px;
+  top: 0;
   font-size: 18px;
   right: 0;
   color: $gray;
@@ -169,7 +169,7 @@
 }
 
 #tags-form {
-  .col-xs-2 {
+  .col-2 {
     padding: 0;
   }
 }

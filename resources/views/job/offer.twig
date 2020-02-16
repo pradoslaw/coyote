@@ -12,141 +12,142 @@
 {% set is_author = job.enable_apply and job.user_id == auth_user().id %}
 
 {% block head %}
-    {{ parent() }}
+  {{ parent() }}
 
-    <script src="//maps.googleapis.com/maps/api/js?key={{ config('services.google-maps.key') }}&sensor=false"></script>
+  <script src="//maps.googleapis.com/maps/api/js?key={{ config('services.google-maps.key') }}&sensor=false"></script>
 {% endblock %}
 
 {% block container %}
-    <div class="row margin-md-top">
-        <div class="col-xs-12">
-            {% if flag %}
-                {% include 'components.flag' %}
-            {% endif %}
+  <div class="row margin-md-top">
+    <div class="col-12">
+      {% if flag %}
+        {% include 'components.flag' %}
+      {% endif %}
 
-            {% if job.is_expired %}
-                <div class="alert alert-warning">
-                    To ogłoszenie wygasło w dniu <strong>{{ job.deadline_at|format_date }}</strong>.
-                </div>
-            {% endif %}
-
-            {% if is_author %}
-                <ul class="nav nav-tabs margin-md-bottom">
-                    <li class="active"><a href="#offer" role="tab" data-toggle="tab">Ogłoszenie</a></li>
-                    <li><a href="#applications" role="tab" data-toggle="tab">Kandydaci <small>({{ applications|length }})</small></a></li>
-                </ul>
-            {% endif %}
-
-            <div class="job-navlinks padding-xs">
-                <i class="fas fa-backward text-primary"></i> <a href="{{ previous_url ?: route('job.home') }}">Powrót do listy ofert</a>
-            </div>
+      {% if job.is_expired %}
+        <div class="alert alert-warning">
+          To ogłoszenie wygasło w dniu <strong>{{ job.deadline_at|format_date }}</strong>.
         </div>
+      {% endif %}
+
+      {% if is_author %}
+        <ul class="nav nav-tabs margin-md-bottom">
+          <li class="nav-item"><a class="nav-link active" href="#offer" role="tab" data-toggle="tab">Ogłoszenie</a></li>
+          <li class="nav-item"><a class="nav-link" href="#applications" role="tab" data-toggle="tab">Kandydaci
+              <small>({{ applications|length }})</small>
+            </a></li>
+        </ul>
+      {% endif %}
+
+      <div class="job-navlinks padding-xs">
+        <i class="fas fa-backward text-primary"></i> <a href="{{ previous_url ?: route('job.home') }}">Powrót do listy ofert</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-9">
+      {% if payment and not session_has('success') %}
+        <div class="alert alert-warning">
+          <h4><i class="fas fa-credit-card fa-fw"></i> Oczekiwanie na płatność...</h4>
+
+          <p>Ogłoszenie jest już w naszej bazie. Nie możemy jednak rozpocząć wyświetlania oferty, dopóki nie uregulujesz płatności.</p>
+
+          <a href="{{ route('job.payment', [payment.id]) }}" class="btn btn-sm alert-warning margin-sm-top">Przejdź do płatności</a>
+        </div>
+      {% endif %}
+
+      <div class="tab-content">
+        <div id="offer" class="card card-default tab-pane active">
+          {% include 'job.partials.offer' %}
+        </div>
+
+        {% if is_author %}
+          <div id="applications" class="card card-default tab-pane">
+            {% include 'job.partials.applications' %}
+          </div>
+        {% endif %}
+      </div>
+
+      {% include 'job.partials.comments' %}
     </div>
 
-    <div class="row">
-        <div class="col-md-9">
-            {% if payment and not session_has('success') %}
-                <div class="alert alert-warning">
-                    <h4><i class="fas fa-credit-card fa-fw"></i> Oczekiwanie na płatność...</h4>
+    <aside class="col-md-3">
+      {% include 'job.partials.sidemenu' %}
 
-                    <p>Ogłoszenie jest już w naszej bazie. Nie możemy jednak rozpocząć wyświetlania oferty, dopóki nie uregulujesz płatności.</p>
+      {% if can('job-update') %}
+        <section id="box-job-firm" class="box">
+          <h4><i class="fas fa-info-circle fa-fw"></i> Informacje o ofercie</h4>
 
-                    <a href="{{ route('job.payment', [payment.id]) }}" class="btn btn-sm alert-warning margin-sm-top">Przejdź do płatności</a>
-                </div>
-            {% endif %}
+          <div class="card card-default">
+            <div class="card-body">
+              <ul class="list-unstyled">
+                <li title="Data opublikowania">
+                  <i class="fas fa-calendar-alt fa-fw"></i>
+                  {{ job.boost_at|format_date }}
+                </li>
 
-            <div class="tab-content">
-                <div id="offer" class="panel panel-default tab-pane active">
-                    {% include 'job.partials.offer' %}
-                </div>
+                <li class="counter" title="Liczba odsłon">
+                  <i class="far fa-eye fa-fw"></i>
+                  {{ declination(job.views, ['odsłona', 'odsłony', 'odsłon']) }}
+                </li>
 
-                {% if is_author %}
-                    <div id="applications" class="panel panel-default tab-pane">
-                        {% include 'job.partials.applications' %}
-                    </div>
+                {% if job.enable_apply %}
+                  <li class="applications" title="Liczba osób, które aplikowały na tę ofertę. Informacja widoczna jedynie dla Ciebie.">
+                    <i class="far fa-file-pdf fa-fw"></i>
+                    {{ declination(job.applications.count(), ['aplikacja', 'aplikacje', 'aplikacji']) }}
+                  </li>
                 {% endif %}
+
+                {% if not job.is_expired %}
+                  <li title="Oferta traci ważność z dniem {{ job.deadline_at|format_date(false) }}">
+                    <i class="far fa-clock fa-fw"></i>
+                    {{ job.deadline }} dni do końca
+                  </li>
+                {% endif %}
+              </ul>
             </div>
+          </div>
+        </section>
+      {% endif %}
 
-            {% include 'job.partials.comments' %}
-        </div>
+      {% if mlt|length %}
+        <section class="box sidebar-offers">
+          <h4><i class="fas fa-star fa-fw"></i> Podobne oferty</h4>
 
-        <aside class="col-md-3">
-            {% include 'job.partials.sidemenu' %}
+          <div class="card card-default">
+            <div class="card-body">
+              {% include 'components.jobs' with {'jobs': mlt} %}
+            </div>
+          </div>
+        </section>
+      {% endif %}
 
-            {% if can('job-update') %}
-                <section id="box-job-firm" class="box">
-                    <h4><i class="fas fa-info-circle fa-fw"></i> Informacje o ofercie</h4>
-
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <ul class="list-unstyled">
-                                <li title="Data opublikowania">
-                                    <i class="fas fa-calendar-alt fa-fw"></i>
-                                    {{ job.boost_at|format_date }}
-                                </li>
-
-                                <li class="counter" title="Liczba odsłon">
-                                    <i class="far fa-eye fa-fw"></i>
-                                    {{ declination(job.views, ['odsłona', 'odsłony', 'odsłon']) }}
-                                </li>
-
-                                {% if job.enable_apply %}
-                                    <li class="applications" title="Liczba osób, które aplikowały na tę ofertę. Informacja widoczna jedynie dla Ciebie.">
-                                        <i class="far fa-file-pdf fa-fw"></i>
-                                        {{ declination(job.applications.count(), ['aplikacja', 'aplikacje', 'aplikacji']) }}
-                                    </li>
-                                {% endif %}
-
-                                {% if not job.is_expired %}
-                                    <li title="Oferta traci ważność z dniem {{ job.deadline_at|format_date(false) }}">
-                                        <i class="far fa-clock fa-fw"></i>
-                                        {{ job.deadline }} dni do końca
-                                    </li>
-                                {% endif %}
-                            </ul>
-                        </div>
-                    </div>
-                </section>
-            {% endif %}
-
-            {% if mlt|length %}
-                <section class="box sidebar-offers">
-                    <h4><i class="fas fa-star fa-fw"></i> Podobne oferty</h4>
-
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            {% include 'components.jobs' with {'jobs': mlt} %}
-                        </div>
-                    </div>
-                </section>
-            {% endif %}
-
-        </aside>
-    </div>
+    </aside>
+  </div>
 {% endblock %}
 
 {% block body %}
-    <script>
-        var data = {
-            authId: {{ user('id') ?: 'null' }},
-            comments: {{ comments|json_encode|raw }}
-        };
-    </script>
+  <script>
+    var data = {
+      comments: {{ comments|json_encode|raw }}
+    };
+  </script>
 
-    {{ parent() }}
+  {{ parent() }}
 
-    {% if user('id') == job.user_id %}
-        <div class="alert alert-warning alert-popover right hidden-xs" data-id="job-sidemenu" data-containment=".btn-edit">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close" title="Kliknij, aby zamknąć"><span aria-hidden="true">&times;</span></button>
-            Ofertę możesz edytować lub dodać kolejne ogłoszenie.
-        </div>
-    {% endif %}
+  {% if user('id') == job.user_id %}
+    <div class="alert alert-warning alert-popover right d-none d-sm-block" data-id="job-sidemenu" data-containment=".btn-edit">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close" title="Kliknij, aby zamknąć"><span aria-hidden="true">&times;</span></button>
+      Ofertę możesz edytować lub dodać kolejne ogłoszenie.
+    </div>
+  {% endif %}
 
-    <script>
-        $(function() {
-            $('.metadata li').tooltip({'container':'body'});
-        });
-    </script>
+  <script>
+    $(function () {
+      $('.metadata li').tooltip({'container': 'body'});
+    });
+  </script>
 
 {% endblock %}
 

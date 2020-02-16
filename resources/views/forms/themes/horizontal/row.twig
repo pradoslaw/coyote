@@ -1,7 +1,7 @@
 {% import 'components.forms' as forms %}
 {% set form_group_class = form_group_class|default('col-md-6') %}
 
-<div {{ forms.attr(row_attr|merge({class: (row_attr.class|default('') ~ ' form-group ' ~ (error ? ' has-error'))|trim})) }}>
+<div {{ forms.attr(row_attr|merge({class: (row_attr.class|default('') ~ ' form-group row')|trim})) }}>
     {% block label %}{{ include(theme ~ '.label') }}{% endblock %}
 
     {% block wrap %}

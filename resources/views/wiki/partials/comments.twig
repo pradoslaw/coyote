@@ -5,20 +5,20 @@
 
     {% if auth_check() %}
         <div class="row">
-            <div class="col-sm-1 hidden-xs">
+            <div class="col-sm-1 d-none d-sm-block">
                 <a href="{{ route('profile', [user('id')]) }}">
                     <img src="{{ user_photo(user('photo')) }}" class="img-thumbnail">
                 </a>
             </div>
             <div class="col-sm-11">
-                <div class="panel panel-transparent">
-                    <div class="panel-body">
+                <div class="card card-transparent">
+                    <div class="card-body">
                         {{ form_start(form) }}
 
                         <div class="form-group">
                             {{ form_widget(form.text) }}
 
-                            <div class="alert alert-warning alert-popover top hidden-xs" data-id="markdown">
+                            <div class="alert alert-warning alert-popover top d-none d-sm-block" data-id="markdown">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close" title="Kliknij, aby zamknąć"><span aria-hidden="true">&times;</span></button>
                                 Tylko podstawowe znaczniki <a class="alert-link" href="https://guides.github.com/features/mastering-markdown/">markdown</a> są obsługiwane.
                             </div>

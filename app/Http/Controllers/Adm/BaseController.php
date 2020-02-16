@@ -41,7 +41,7 @@ class BaseController extends Controller
             $forum->link->href('#menu-forum');
 
             $forum->prepend($fa('fa-comments fa-fw'));
-            $forum->append($html->tag('i', '', ['class' => 'arrow fa fa-angle-left pull-right']));
+            $forum->append($html->tag('i', '', ['class' => 'arrow fa fa-angle-left float-right']));
 
             $forum->add('Kategorie', ['route' => 'adm.forum.categories']);
             $forum->add('Uprawnienia', ['route' => 'adm.forum.permissions'])->data('permission', 'adm-group');

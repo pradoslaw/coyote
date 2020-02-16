@@ -1,1 +1,1 @@
-{{ form_select(name ~ (attr.multiple is defined ? '[]'), (empty_value ? {'': empty_value} : {}) + choices, value, attr|merge({class: (attr.class|default('') ~  ' form-control')|trim})) }}
+{{ form_select(name ~ (attr.multiple is defined ? '[]'), (empty_value ? {'': empty_value} : {}) + choices, value, attr|merge({class: (attr.class|default('') ~  ' form-control' ~ (error ? ' is-invalid'))|trim})) }}

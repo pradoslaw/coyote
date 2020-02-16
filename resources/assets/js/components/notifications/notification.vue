@@ -2,20 +2,18 @@
   <div :class="{'unread': ! notification.is_read}" class="notification">
     <a @mousedown="markAsRead(notification)" @touchstart="markAsRead(notification)" :href="notification.url" :title="notification.headline" class="notification-link">
       <div class="media">
-        <div class="media-left">
-          <object class="media-object" :data="notification.photo || '//'" type="image/png">
-            <img src="/img/avatar.png">
-          </object>
-        </div>
+        <object class="media-object mr-2" :data="notification.photo || '//'" type="image/png">
+          <img src="/img/avatar.png">
+        </object>
 
-        <div class="media-body">
+        <div class="media-body text-truncate">
           <header>
             <h4>{{ notification.headline }}</h4>
             <small>{{ notification.created_at }}</small>
           </header>
 
-          <h3>{{ notification.subject }}</h3>
-          <p>{{ notification.excerpt }}</p>
+          <h3 class="text-truncate">{{ notification.subject }}</h3>
+          <p class="text-truncate">{{ notification.excerpt }}</p>
         </div>
       </div>
     </a>

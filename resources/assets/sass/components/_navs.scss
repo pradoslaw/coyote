@@ -7,7 +7,7 @@
 }
 
 .nav > li > a {
-  @media screen and (max-width: $screen-xs) {
+  @include media-breakpoint-down(xs) {
     padding: 5px;
     font-size: 12px;
   }
@@ -24,7 +24,7 @@
   overflow: hidden;
   font-family: 'Open Sans', Arial, sans-serif;
 
-  li {
+  .nav-item {
     border: 1px solid $border-color;
     background: #D1D1D1;
     background: -o-linear-gradient(top, #ececec 50%, #d1d1d1 100%);
@@ -43,6 +43,7 @@
     padding: 0 20px;
     cursor: pointer;
     font-size: 11px;
+    text-decoration: none;
 
     &:first-child {
       margin: 0;
@@ -81,7 +82,7 @@
       }
     }
 
-    a {
+    span {
       color: $gray;
       padding: 0;
 
@@ -104,26 +105,18 @@
   }
 }
 
-.nav-panel + .panel {
+.nav-panel + .card {
   border-top-left-radius: 0;
   margin-top:             -1px;
 }
 
 .nav-tabs {
-  border-bottom: 1px solid $box-border-color;
-
   > li > a {
     color: $gray-light;
-    font-size: $font-size-base - 1px;
   }
 
-  > li.active > a {
-    &,
-    &:hover,
-    &:focus,
-    &:active {
-      border-top: 2px solid $alt-link-hover-color;
-    }
+  .nav-link.active {
+    border-top: 2px solid $alt-link-hover-color;
   }
 }
 
@@ -131,7 +124,7 @@
   border-bottom: 1px solid $box-border-color;
   box-shadow: 0 2px 0 #FFF;
 
-  a {
+  .nav-link {
     color: $gray-light;
 
     &:hover {
@@ -139,7 +132,7 @@
     }
   }
 
-  > li.active > a {
+  .nav-link.active {
     &,
     &:hover,
     &:focus,

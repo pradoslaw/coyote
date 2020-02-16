@@ -1,13 +1,13 @@
-<div class="row max-width">
-    <div class="col-xs-12">
-        <ul class="breadcrumb">
-            <li>
-                <a href="{{ route('home') }}" class="visible-xs-inline"><i class="fas fa-home"></i></a>
-                <a href="{{ route('home') }}" class="hidden-xs">{{ config_get('app.name') }}</a>
+<div class="row container-xxl no-gutters">
+    <div class="col-12">
+        <ul class="breadcrumb text-truncate">
+            <li class="breadcrumb-item">
+                <a href="{{ route('home') }}" class="d-block d-sm-none"><i class="fas fa-home"></i></a>
+                <a href="{{ route('home') }}" class="d-none d-sm-inline-block">{{ config_get('app.name') }}</a>
             </li>
 
             {% for breadcrumb in breadcrumbs %}
-                <li itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                <li class="breadcrumb-item" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
                     <a itemprop="url" href="{{ breadcrumb.url }}">
                         {% if loop.last %}
                         <strong itemprop="title">{{ breadcrumb.name }}</strong>

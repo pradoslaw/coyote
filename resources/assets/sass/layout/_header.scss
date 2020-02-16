@@ -1,16 +1,15 @@
 @charset "UTF-8";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/nav-divider";
 
 $header-height: 56px;
 
 // odstep potrzebny z uwagi na klase .navbar-fixed-top ktora powoduje iz menu jest przyklejone do gornej krawedzi
-body.fixed-top {
+body.padding-top {
   padding-top: $header-height;
 }
-
-.navbar-fixed-top .navbar-collapse {
-  max-height: initial; // fit height to content in mobile menu
-}
+//
+//.navbar-fixed-top .navbar-collapse {
+//  max-height: initial; // fit height to content in mobile menu
+//}
 
 :root {
   --header-font-family: "Open Sans", Arial, sans-serif;
@@ -44,20 +43,16 @@ body.fixed-top {
     height: 5px;
   }
 
-  // dzieki temu menu jest bardziej wyposrodkowane w pionie
-  .navbar-brand {
-    padding-top: 10px;
-  }
-
   .badge {
     position: absolute;
     background-color: #FF4A00;
-    font-size: 9px;
-    border: 1px solid #fff;
+    font-size: 10px;
+    //border: 1px solid #fff;
     border-radius: 5px;
     overflow: inherit;
     text-overflow: inherit;
     max-width: 100%;
+    color: #fff;
   }
 
   .badge.new {
@@ -66,7 +61,7 @@ body.fixed-top {
     right: -10px;
     z-index: 1;
 
-    @media screen and (max-width: $screen-sm) {
+    @include media-breakpoint-down(sm) {
       display: none;
     }
   }
@@ -98,7 +93,7 @@ body.fixed-top {
   // temporary arrow
   position: relative;
   list-style-type: none;
-  float: left;
+  //float: left;
   margin: 0;
   padding: 0;
 
@@ -132,11 +127,7 @@ body.fixed-top {
 }
 
 .nav-mobile {
-  list-style-type: none;
-  // usuniecie niepotrzebnego marginesu na urzadzeniach mobilnych
-  margin-top: 0;
-
-  > li > a {
+  .dropdown-link {
     @extend %menu-link;
 
     padding: 5px 0;
@@ -144,10 +135,6 @@ body.fixed-top {
 
   .divider {
     @include nav-divider(darken($gray-lighter, 10%));
-  }
-
-  .btn {
-    display: block;
   }
 
   .btn-sign-out {
@@ -188,7 +175,7 @@ body.fixed-top {
 }
 
 .nav-avatar {
-  margin-top: 9px;
+  //margin-top: 9px;
   margin-left: 20px;
 
   a {
@@ -202,6 +189,10 @@ body.fixed-top {
   img {
     background-color: #fff;
   }
+
+  .dropdown-toggle:after {
+    display: none;
+  }
 }
 
 // Notifications and private messages button
@@ -211,22 +202,24 @@ body.fixed-top {
 }
 
 .nav-auth > li {
-  float: left;
+  position: relative;
 
   > a {
-    padding: 19px 9px 13px 9px;
+    padding: 15px 9px;
+    display: block;
     color: $gray-light;
+    position: relative;
 
     i {
       font-size: 14px;
     }
 
     > .badge {
-      top: 8px;
+      top: 5px;
       right: -1px;
     }
 
-    @media screen and (max-width: $screen-sm) {
+    @include media-breakpoint-down(sm) {
       display: inline-block;
     }
   }
@@ -237,7 +230,7 @@ body.fixed-top {
     overflow: hidden;
   }
 
-  @media screen and (max-width: $screen-sm) {
+  @include media-breakpoint-down(sm) {
     // na urzedzeniach mobilnych okno powiadomien oraz wiadomosci prywatnych musi byc rozciagniete na cala szerokosc
     position: static;
   }
@@ -314,7 +307,7 @@ body.fixed-top {
     box-shadow: 0 2px 2px rgba(0,0,0,.2), inset 0 4px 10px rgba(0,0,0,0.15);
     border: none;
 
-    > li > a,
+    .dropdown-item,
     .btn-sign-out {
       color: lighten($gray-light, 15%);
 
@@ -332,8 +325,8 @@ body.fixed-top {
 
   /////
 
-  .divider {
-    background-color: $gray-light;
+  .dropdown-divider {
+    border-top-color: $gray-light;
   }
 
   .mega-menu {
@@ -415,6 +408,7 @@ body.fixed-top {
   position: absolute !important;
   right: 0;
   left: auto;
+  display: block;
 
   .dropdown-header {
     background-color: #f8f8f8;
@@ -432,15 +426,18 @@ body.fixed-top {
     border-bottom-color: #f8f8f8;
   }
 
-  @media (max-width: $grid-float-breakpoint-max) {
+  @include media-breakpoint-down(sm) {
     background-color: transparent;
     border: 1px solid $border-color;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
 
     left: 0;
     width: 100%;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
+    border-radius: 0;
+
+    .dropdown-header {
+      border-radius: 0;
+    }
 
     // DO NOT show triangle above menu (only for mobile devices)
     &:after, &:before {
@@ -465,7 +462,6 @@ body.fixed-top {
   }
 
   .notification {
-    padding: 0 6px;
     border-bottom: 1px solid $body-bg;
     position: relative; // we need this to position remove button in notification
 
@@ -488,7 +484,7 @@ body.fixed-top {
 
   .media-object {
     width: 35px;
-    min-height: 35px;
+    height: 35px;
 
     img {
       width: 100%;
@@ -497,8 +493,7 @@ body.fixed-top {
 
   .notification-link {
     display: block;
-    padding: 7px 0;
-    position: relative;
+    padding: 7px 6px;
   }
 
   .btn-delete-alert {
@@ -511,9 +506,6 @@ body.fixed-top {
 
   .media-body {
     header {
-      overflow: hidden;
-      white-space: nowrap;
-
       h4 {
         color: $gray-light;
         float: left;
@@ -528,7 +520,6 @@ body.fixed-top {
         float: right;
         color: $gray-light;
         font-size: 10px;
-        max-width: 29%;
       }
     }
 
@@ -539,14 +530,13 @@ body.fixed-top {
       font-weight: bold;
       font-family: Arial, sans-serif;
       color: $brand-primary;
-
-      @include text-overflow();
     }
 
     p {
       padding-right: 3px;
       margin: 0;
       color: $gray;
+      clear: both;
     }
   }
 }
@@ -558,7 +548,7 @@ body.fixed-top {
 }
 
 /* Za malo miejsca w pionie, by wyswietlac przyklejony navbar */
-@media screen and (max-width: $screen-sm) {
+@include media-breakpoint-down(sm) {
   /* zostawiamy navbar na gorze strony */
   .navbar-fixed-top {
     position: absolute;

@@ -1,25 +1,16 @@
 @charset "UTF-8";
 
-.btn-primary {
-  background: $btn-primary-bg;
-  border-color: $brand-primary;
-
-  &:focus, &:active, &:active:focus, &:hover {
-    background-color: $btn-primary-bg;
-    border-color: $brand-primary;
-  }
-
-  &:hover {
-    box-shadow: inset 0 0 2px #fff;
-  }
+.btn-xs {
+  padding: 0.1rem 0.4rem;
 }
 
-.btn-default {
-  @include gradient-vertical(#fff, #f6f6f6);
+.btn-secondary {
+  border: 1px solid $input-border;
+  background-image: linear-gradient(180deg,#fff 0,#f6f6f6);
 }
 
 .btn-warning {
-  @include gradient-vertical(lighten($brand-warning, 5%), $brand-warning);
+  @include bg-gradient-variant(lighten($brand-warning, 5%), $brand-warning);
 }
 
 .btn-outline {

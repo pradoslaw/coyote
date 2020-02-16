@@ -1,6 +1,6 @@
-<section id="microblog" class="box">
+<section id="microblog" class="mt-4">
     {% if microblogs is not empty %}
-        <div class="text-center">
+        <div class="d-flex justify-content-center mt-3 mb-3">
             {{ pagination|raw }}
         </div>
 
@@ -8,15 +8,15 @@
             {% include "microblog.partials.microblog" %}
         {% endfor %}
 
-        <div class="text-center">
+        <div class="d-flex justify-content-center mt-3 mb-3">
             {{ pagination|raw }}
         </div>
     {% else %}
-        <div class="panel panel-default">
-            <div class="panel-body">
+        <div class="card card-default">
+            <div class="card-body">
                 <div class="row">
-                    <div class="col-xs-12">
-                        <div class="well well-sm empty-result">
+                    <div class="col-12">
+                        <div class="card card-body bg-light p-2 empty-result">
                             <p>Użytkownik nie opublikował ani jednego wpisu na mikroblogu.</p>
                         </div>
                     </div>

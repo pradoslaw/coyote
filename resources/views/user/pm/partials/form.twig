@@ -1,8 +1,8 @@
 <div class="row margin-sm-bottom">
-  <div class="col-md-12" :class="{'has-error': 'text' in errors}">
+  <div class="col-12">
     <ul class="nav nav-tabs">
-      <li role="presentation" :class="{'active': tab === 'body'}"><a href="javascript:" aria-controls="body" role="tab" @click="tab = 'body'">Treść</a></li>
-      <li role="presentation" :class="{'active': tab === 'preview'}"><a href="javascript:" aria-controls="preview" role="tab" @click="showPreview">Podgląd</a></li>
+      <li class="nav-item"><a :class="{'active': tab === 'body'}" class="nav-link" href="javascript:" role="tab" @click="tab = 'body'">Treść</a></li>
+      <li class="nav-item" ><a :class="{'active': tab === 'preview'}" class="nav-link" href="javascript:" role="tab" @click="showPreview">Podgląd</a></li>
     </ul>
 
     <div class="tab-content">
@@ -10,7 +10,7 @@
 
         <vue-toolbar @update="updateModel" :input="() => $refs.textarea.$el"></vue-toolbar>
 
-        <vue-prompt source="{{ route('user.prompt') }}">
+        <vue-prompt source="{{ route('user.prompt') }}" :errors="errors.text">
           <textarea-autosize
             placeholder="Kliknij, aby odpowiedzieć"
             v-clipboard:success="insertToTextarea"
@@ -19,6 +19,7 @@
             class="form-control"
             ref="textarea"
             v-model="text"
+            :class="{'is-invalid': errors.text !== undefined}"
             :min-height="40"
             :max-height="350"
             @keydown.native.ctrl.enter="sendMessage"
@@ -33,12 +34,10 @@
 
       <div :class="{'active': tab === 'preview'}" role="tabpanel" class="tab-pane" id="preview" v-html="previewHtml"></div>
     </div>
-
-    <span v-cloak v-if="'text' in errors" class="help-block">${ errors.text[0] }</span>
   </div>
 </div>
 <div class="row">
-  <div class="col-md-12">
+  <div class="col-12">
     <vue-button :disabled="isProcessing" @click.native="sendMessage" class="btn btn-primary btn-sm">Wyślij</vue-button>
   </div>
 </div>

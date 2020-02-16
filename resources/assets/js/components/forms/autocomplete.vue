@@ -1,9 +1,10 @@
 <template>
-  <div style="position: relative">
+  <div class="position-relative">
     <input
       type="text"
       class="form-control"
       autofocus
+      :class="{'is-invalid': errors.length}"
       :id="id"
       :placeholder="placeholder"
       :tabindex="tabindex"
@@ -18,16 +19,18 @@
     >
 
     <vue-dropdown ref="dropdown" :items="items" @select="selectItem"></vue-dropdown>
+    <vue-error :message="errors"></vue-error>
   </div>
 </template>
 
 <script>
   import { default as mixins } from '../mixins/form';
   import VueDropdown from './dropdown.vue';
+  import VueError from './error.vue';
 
   export default {
     mixins: [ mixins ],
-    components: { 'vue-dropdown': VueDropdown },
+    components: { 'vue-dropdown': VueDropdown, 'vue-error': VueError },
     props: {
       items: {
         type: Array,
@@ -45,6 +48,10 @@
       },
       tabindex: {
         type: Number
+      },
+      errors: {
+        type: Array,
+        default: () => []
       }
     },
     methods: {

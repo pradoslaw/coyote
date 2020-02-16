@@ -6,9 +6,10 @@ footer {
 
 #footer-top {
   padding: 10px 0;
+  position: relative;
 
   ul.breadcrumb {
-    @media screen and (min-width: $screen-sm) {
+    @include media-breakpoint-up(sm) {
       background: url('/img/home-white.png') no-repeat 0 3px;
       padding: 2px 0 2px 22px;
     }
@@ -36,7 +37,7 @@ footer {
   width: 39px;
   height: 53px;
   background: url('/img/facebook-image.png') no-repeat;
-  top: -10px;
+  top: 0;
   right: 50px;
   z-index: 1;
 }
@@ -48,7 +49,7 @@ footer {
 
   ul {
     list-style-type: none;
-    margin: 0;
+
     padding-left: 3px;
 
     li {
@@ -70,11 +71,21 @@ footer {
     color: lighten($gray-light, 15%);
   }
 
-  .col-md-2 {
-    border-left: 1px solid #575757;
+  @include media-breakpoint-up('md') {
+    .col-md-2 {
+      border-left: 1px solid #575757;
 
-    &:first-child {
-      border-left: none;
+      &:first-child {
+        border-left: none;
+
+        ul {
+          margin-left: 0;
+        }
+      }
+    }
+
+    ul {
+      margin: 0 0 0 15px;
     }
   }
 
@@ -97,21 +108,6 @@ footer {
           color: #CACACA;
         }
       }
-    }
-
-    // gdy rozdzielczosc jest mniejsza - chowamy chmurke
-    @media screen and (max-width: $screen-md) {
-      background: none;
-      padding: 0;
-
-      &:after {
-        display: none;
-      }
-
-      ol {
-        margin: 0;
-      }
-
     }
   }
 

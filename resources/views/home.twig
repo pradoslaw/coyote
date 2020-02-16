@@ -6,217 +6,220 @@
 {% import 'components.modals' as modal %}
 
 {% block container %}
-    <div class="row" style="margin-top: 20px">
-        <main class="col-md-8">
-            <section id="box-forum" class="box">
-                <h4><i class="fas fa-star fa-fw"></i> Co nowego na forum?</h4>
-
-                <div class="panel panel-forum">
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <ul id="forum-tabs" class="nav nav-pills">
-                                    <li role="presentation" {{ settings['homepage.mode'] == 0 ? 'class="active"' }}><a title="Zobacz najciekawsze wątki na forum" href="#interesting" role="tab" data-toggle="tab">Najciekawsze</a></li>
-                                    <li role="presentation" {{ settings['homepage.mode'] == 1 ? 'class="active"' }}><a title="Zobacz najwyżej oceniane wątki w ostatnim miesiącu" href="#rated" role="tab" data-toggle="tab">Najwyżej oceniane</a></li>
-                                    <li role="presentation" {{ settings['homepage.mode'] == 2 ? 'class="active"' }}><a title="Lista najnowszych wątków na forum" href="#newest" role="tab" data-toggle="tab">Nowe wątki</a></li>
-                                </ul>
-
-                                <div id="box-forum-headline">
-                                    <div class="tab-content">
-                                        <div role="tabpanel" class="tab-pane {{ settings['homepage.mode'] == 0 ? 'active' }}" id="interesting">
-                                            {% for topic in interesting %}
-                                                <div class="row">
-                                                    <span class="col-sm-2 hidden-xs">
-                                                        <strong>{{ topic.views }}</strong>
-                                                        <small>{{ declination(topic.views, ['wyświetlenie', 'wyświetlenia', 'wyświetleń'], true) }}</small>
-                                                    </span>
-                                                    <div class="col-sm-10 col-xs-12">
-                                                        <a title="[{{ topic.last_post_created_at|format_date }}] {{ topic.subject }}" href="{{ route('forum.topic', [topic.forum_slug, topic.id, topic.slug]) }}?view=unread" class="title" data-category="homepage-forum-headline" data-action="newest">{{ topic.subject }}</a>
-                                                        <a href="{{ route('forum.category', [topic.forum_slug]) }}" class="category">{{ topic.name }}</a>
-                                                        <small class="pull-right">{{ topic.last_post_created_at|format_date }}</small>
-                                                    </div>
-                                                </div>
-                                            {% endfor %}
-                                        </div>
-
-                                        <div role="tabpanel" class="tab-pane {{ settings['homepage.mode'] == 1 ? 'active' }}" id="rated">
-                                            {% for topic in voted %}
-                                                <div class="row">
-                                                    <span class="col-sm-2 hidden-xs">
-                                                        <strong>{{ topic.score }}</strong>
-                                                        <small>{{ declination(topic.score, ['ocena', 'oceny', 'ocen'], true) }}</small>
-                                                    </span>
-                                                    <div class="col-sm-10 col-xs-12">
-                                                        <a title="[{{ topic.last_post_created_at|format_date }}] {{ topic.subject }}" href="{{ route('forum.topic', [topic.forum_slug, topic.id, topic.slug]) }}?view=unread" class="title" data-category="homepage-forum-headline" data-action="newest">{{ topic.subject }}</a>
-                                                        <a href="{{ route('forum.category', [topic.forum_slug]) }}" class="category">{{ topic.name }}</a>
-                                                        <small class="pull-right">{{ topic.last_post_created_at|format_date }}</small>
-                                                    </div>
-                                                </div>
-                                            {% endfor %}
-                                        </div>
-
-                                        <div role="tabpanel" class="tab-pane {{ settings['homepage.mode'] == 2 ? 'active' }}" id="newest">
-                                            {% for topic in newest %}
-                                                <div class="row">
-                                                    <span class="col-sm-2 hidden-xs">
-                                                        <strong>{{ topic.views }}</strong>
-                                                        <small>{{ declination(topic.views, ['wyświetlenie', 'wyświetlenia', 'wyświetleń'], true) }}</small>
-                                                    </span>
-                                                    <div class="col-sm-10 col-xs-12">
-                                                        <a title="[{{ topic.last_post_created_at|format_date }}] {{ topic.subject }}" href="{{ route('forum.topic', [topic.forum_slug, topic.id, topic.slug]) }}?view=unread" class="title" data-category="homepage-forum-headline" data-action="newest">{{ topic.subject }}</a>
-                                                        <a href="{{ route('forum.category', [topic.forum_slug]) }}" class="category">{{ topic.name }}</a>
-                                                        <small class="pull-right">{{ topic.last_post_created_at|format_date }}</small>
-                                                    </div>
-                                                </div>
-                                            {% endfor %}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div id="stream-wrapper" class="col-lg-6">
-                                <div id="stream">
-                                    <div class="overview">
-                                        {% for activity in activities %}
-                                            <div class="media">
-                                                <span class="{{ activity.object }} hidden-xs" title="{{ activity.headline|striptags|unescape }}"></span>
-
-                                                <div class="media-left hidden-xs">
-                                                    <a href="{{ route('profile', [activity.user_id]) }}">
-                                                        <img class="media-object" src="{{ user_photo(activity.user.photo) }}" style="width: 38px; height: 38px;" alt="">
-                                                    </a>
-                                                </div>
-                                                <div class="media-body">
-                                                    <p>{{ activity.headline|raw }}</p>
-                                                    <small>{{ activity.created_at|format_date }}</small>
-
-                                                    <strong>{{ activity.excerpt }}</strong>
-                                                </div>
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </section>
-
-            <section id="microblog" class="box">
-                <h4><i class="far fa-comments fa-fw"></i> <a href="{{ route('microblog.home') }}">Popularne wpisy na mikroblogu</a></h4>
-
-                {% for microblog in microblogs %}
-                    {% include "microblog.partials.microblog" %}
-                {% endfor %}
-            </section>
-        </main>
-
-        <aside class="col-md-4">
-            {{ render_block('job_ads') }}
-
-            <section id="box-reputation" class="box">
-                <h4><i class="fas fa-star fa-fw"></i> Reputacja użytkowników</h4>
-
-                <ul id="reputation-tabs" class="nav nav-panel">
-                    <li role="presentation" {{ settings['homepage.reputation'] == 0 ? 'class="active"' }}><a href="#month" role="tab" data-toggle="tab">W tym miesiącu</a></li>
-                    <li role="presentation" {{ settings['homepage.reputation'] == 1 ? 'class="active"' }}><a href="#year" role="tab" data-toggle="tab">W tym roku</a></li>
-                    <li role="presentation" {{ settings['homepage.reputation'] == 2 ? 'class="active"' }}><a href="#total" role="tab" data-toggle="tab">Ogólnie</a></li>
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="box">
+        <h4><i class="fas fa-star fa-fw"></i> Co nowego na forum?</h4>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <main class="col-md-8">
+      <section id="box-forum" class="box">
+        <div class="card card-forum">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-lg-6">
+                <ul id="forum-tabs" class="nav nav-pills">
+                  <li class="nav-item"><a class="nav-link {{ settings['homepage.mode'] == 0 ? 'active' }}" title="Zobacz najciekawsze wątki na forum" href="#interesting" role="tab" data-toggle="tab">Najciekawsze</a></li>
+                  <li class="nav-item"><a class="nav-link {{ settings['homepage.mode'] == 1 ? 'active' }}" title="Zobacz najwyżej oceniane wątki w ostatnim miesiącu" href="#rated" role="tab" data-toggle="tab">Najwyżej oceniane</a></li>                  <li class="nav-item"><a class="nav-link {{ settings['homepage.mode'] == 2 ? 'active' }}" title="Lista najnowszych wątków na forum" href="#newest" role="tab" data-toggle="tab">Nowe wątki</a></li>
                 </ul>
 
-                <div class="panel panel-default tab-content">
-                    {% for key, mode in reputation %}
-                        <div id="{{ key }}" role="tabpanel" class="panel-body tab-pane {{ settings['homepage.reputation'] == loop.index0 ? 'active' }}">
-                            {% for item in mode %}
-                                <div class="media">
-                                    <div class="media-left">
-                                        <a href="{{ route('profile', [item.id]) }}">
-                                            <img class="media-object" src="{{ user_photo(item.photo) }}" style="width: 40px; height: 40px;" alt="{{ item.name }}">
-                                        </a>
-                                    </div>
-                                    <div class="media-body">
-                                        <h4 class="media-heading"><a data-user-id="{{ item.id }}" href="{{ route('profile', [item.id]) }}">{{ item.name }}</a></h4>
+                <div id="box-forum-headline">
+                  <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane {{ settings['homepage.mode'] == 0 ? 'active' }}" id="interesting">
+                      {% for topic in interesting %}
+                        <div class="row">
+                          <span class="col-sm-2 d-none d-sm-block">
+                              <strong>{{ topic.views }}</strong>
+                              <small class="text-nowrap">{{ declination(topic.views, ['wyświetlenie', 'wyświetlenia', 'wyświetleń'], true) }}</small>
+                          </span>
 
-                                        <div class="progress">
-                                            <div class="progress-bar" role="progressbar" aria-valuenow="{{ item.percentage|round }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ item.percentage|round }}%;">
-
-                                            </div>
-
-                                            <span class="rep"><strong>{{ item.reputation|number_format(0, '', ' ') }}</strong> <small>punktów</small></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% else %}
-                                <p>
-                                    --
-                                </p>
-                            {% endfor %}
+                          <div class="col-sm-10 col-12">
+                            <a title="[{{ topic.last_post_created_at|format_date }}] {{ topic.subject }}" href="{{ route('forum.topic', [topic.forum_slug, topic.id, topic.slug]) }}?view=unread" class="title" data-category="homepage-forum-headline" data-action="newest">{{ topic.subject }}</a>
+                            <a href="{{ route('forum.category', [topic.forum_slug]) }}" class="category">{{ topic.name }}</a>
+                            <small class="float-right">{{ topic.last_post_created_at|format_date }}</small>
+                          </div>
                         </div>
+                      {% endfor %}
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane {{ settings['homepage.mode'] == 1 ? 'active' }}" id="rated">
+                      {% for topic in voted %}
+                        <div class="row">
+                          <span class="col-sm-2 d-none d-sm-block">
+                              <strong>{{ topic.score }}</strong>
+                              <small class="text-nowrap">{{ declination(topic.score, ['ocena', 'oceny', 'ocen'], true) }}</small>
+                          </span>
+
+                          <div class="col-sm-10 col-12">
+                            <a title="[{{ topic.last_post_created_at|format_date }}] {{ topic.subject }}" href="{{ route('forum.topic', [topic.forum_slug, topic.id, topic.slug]) }}?view=unread" class="title" data-category="homepage-forum-headline" data-action="newest">{{ topic.subject }}</a>
+                            <a href="{{ route('forum.category', [topic.forum_slug]) }}" class="category">{{ topic.name }}</a>
+                            <small class="float-right">{{ topic.last_post_created_at|format_date }}</small>
+                          </div>
+                        </div>
+                      {% endfor %}
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane {{ settings['homepage.mode'] == 2 ? 'active' }}" id="newest">
+                      {% for topic in newest %}
+                        <div class="row">
+                          <span class="col-sm-2 d-none d-sm-block">
+                              <strong>{{ topic.views }}</strong>
+                              <small class="text-nowrap">{{ declination(topic.views, ['wyświetlenie', 'wyświetlenia', 'wyświetleń'], true) }}</small>
+                          </span>
+
+                          <div class="col-sm-10 col-12">
+                            <a title="[{{ topic.last_post_created_at|format_date }}] {{ topic.subject }}" href="{{ route('forum.topic', [topic.forum_slug, topic.id, topic.slug]) }}?view=unread" class="title" data-category="homepage-forum-headline" data-action="newest">{{ topic.subject }}</a>
+                            <a href="{{ route('forum.category', [topic.forum_slug]) }}" class="category">{{ topic.name }}</a>
+                            <small class="float-right">{{ topic.last_post_created_at|format_date }}</small>
+                          </div>
+                        </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="stream-wrapper" class="col-lg-6">
+                <div id="stream">
+                  <div class="overview">
+                    {% for activity in activities %}
+                      <div class="media">
+                        <span class="{{ activity.object }} d-none d-sm-block" title="{{ activity.headline|striptags|unescape }}"></span>
+
+                        <div class="d-none d-sm-block mr-2">
+                          <a href="{{ route('profile', [activity.user_id]) }}">
+                            <img class="media-object" src="{{ user_photo(activity.user.photo) }}" style="width: 38px; height: 38px;" alt="">
+                          </a>
+                        </div>
+                        <div class="media-body">
+                          <p>{{ activity.headline|raw }}</p>
+                          <small>{{ activity.created_at|format_date }}</small>
+
+                          <strong>{{ activity.excerpt }}</strong>
+                        </div>
+                      </div>
                     {% endfor %}
+                  </div>
                 </div>
-            </section>
+              </div>
+            </div>
+          </div>
 
-            {% if patronage %}
-                <section id="box-patronage" class="box">
-                    <div class="panel panel-patronage">
-                        <h3><a title="4programmers.net patronuje wydarzeniom ze świata IT!" href="{{ url('Patronat') }}" data-category="Patronage" data-value="Logo">Patronujemy</a></h3>
+        </div>
+      </section>
 
-                        <div class="panel-body">
-                            <h4><a href="{{ url(patronage.path) }}">{{ patronage.title }}</a></h4>
+      <section id="microblog" class="box">
+        <h4><i class="far fa-comments fa-fw"></i> <a href="{{ route('microblog.home') }}">Popularne wpisy na mikroblogu</a></h4>
 
-                            <div class="patronage-content">
-                                <a href="{{ url(patronage.path) }}">{{ patronage.excerpt }}</a>
-                            </div>
+        {% for microblog in microblogs %}
+          {% include "microblog.partials.microblog" %}
+        {% endfor %}
+      </section>
+    </main>
 
-                            <div class="patronage-footer">
-                                <a title="4programmers.net patronuje wydarzeniom ze świata IT!" href="{{ url('Patronat') }}">
-                                    <i class="fas fa-arrow-right fa-fw"></i> Zainteresowany patronatem? Dowiedz się więcej
-                                </a>
-                            </div>
-                        </div>
+    <aside class="col-md-4">
+      {{ render_block('job_ads') }}
+
+      <section id="box-reputation" class="box">
+        <h4><i class="fas fa-star fa-fw"></i> Reputacja użytkowników</h4>
+
+        <div id="reputation-tabs" class="nav nav-panel">
+          <a role="tab" data-toggle="tab" href="#month" class="nav-item {{ settings['homepage.reputation'] == 0 ? 'active' }}"><span>W tym miesiącu</span></a>
+          <a role="tab" data-toggle="tab" href="#year" class="nav-item {{ settings['homepage.reputation'] == 1 ? 'active' }}"><span>W tym roku</span></a>
+          <a role="tab" data-toggle="tab" href="#total" class="nav-item {{ settings['homepage.reputation'] == 2 ? 'active' }}"><span>Ogólnie</span></a>
+        </div>
+
+        <div class="card card-default tab-content">
+          {% for key, mode in reputation %}
+            <div id="{{ key }}" role="tabpanel" class="card-body tab-pane {{ settings['homepage.reputation'] == loop.index0 ? 'active' }}">
+              {% for item in mode %}
+                <div class="media">
+                  <div class="mr-2">
+                    <a href="{{ route('profile', [item.id]) }}">
+                      <img class="media-object" src="{{ user_photo(item.photo) }}" style="width: 40px; height: 40px;" alt="{{ item.name }}">
+                    </a>
+                  </div>
+                  <div class="media-body">
+                    <span class="mb-1 d-block"><a data-user-id="{{ item.id }}" href="{{ route('profile', [item.id]) }}" class="text-body">{{ item.name }}</a></span>
+
+                    <div class="progress">
+                      <div class="progress-bar" role="progressbar" aria-valuenow="{{ item.percentage|round }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ item.percentage|round }}%;"></div>
+
+                      <span class="rep"><strong>{{ item.reputation|number_format(0, '', ' ') }}</strong> <small>punktów</small></span>
                     </div>
-                </section>
-            {% endif %}
-
-            <section id="box-whats-new" class="box">
-
-                <div class="panel panel-news">
-                    <div class="panel-body">
-                        <h5><a title="Zobacz zmiany w serwisie 4programmers.net" href="{{ url('Blog') }}">Nowości w serwisie</a></h5>
-
-                        <ul>
-                            {% for article in blog %}
-                                <li>
-                                    <small class="hidden-xs">{{ article.created_at|date_localized('%d %b %y') }}</small>
-
-                                    <a href="{{ url(article.path) }}" title="{{ article.long_title|default(article.title) }}">{{ article.title }}</a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
+                  </div>
                 </div>
+              {% else %}
+                <p>
+                  --
+                </p>
+              {% endfor %}
+            </div>
+          {% endfor %}
+        </div>
+      </section>
 
-            </section>
+      {% if patronage %}
+        <section id="box-patronage" class="box">
+          <div class="card card-patronage">
+            <h3><a title="4programmers.net patronuje wydarzeniom ze świata IT!" href="{{ url('Patronat') }}" data-category="Patronage" data-value="Logo">Patronujemy</a></h3>
 
-            {{ viewers|raw }}
-        </aside>
-    </div>
+            <div class="card-body">
+              <h4><a href="{{ url(patronage.path) }}">{{ patronage.title }}</a></h4>
+
+              <div class="patronage-content">
+                <a href="{{ url(patronage.path) }}">{{ patronage.excerpt }}</a>
+              </div>
+
+              <div class="patronage-footer">
+                <a title="4programmers.net patronuje wydarzeniom ze świata IT!" href="{{ url('Patronat') }}">
+                  <i class="fas fa-arrow-right fa-fw"></i> Zainteresowany patronatem? Dowiedz się więcej
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+      {% endif %}
+
+      <section id="box-whats-new" class="box">
+
+        <div class="card card-news">
+          <div class="card-body">
+            <h5><a title="Zobacz zmiany w serwisie 4programmers.net" href="{{ url('Blog') }}">Nowości w serwisie</a></h5>
+
+            <ul>
+              {% for article in blog %}
+                <li>
+                  <small class="d-none d-sm-block">{{ article.created_at|date_localized('%d %b %y') }}</small>
+
+                  <a href="{{ url(article.path) }}" title="{{ article.long_title|default(article.title) }}">{{ article.title }}</a>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+
+      </section>
+
+      {{ viewers|raw }}
+    </aside>
+  </div>
 {% endblock %}
 
 {% block head %}
-    {{ parent() }}
+  {{ parent() }}
 
-    <script type="text/javascript">
-        var uploadUrl = '{{ route('microblog.upload') }}';
-    </script>
+  <script type="text/javascript">
+    var uploadUrl = '{{ route('microblog.upload') }}';
+  </script>
 {% endblock %}
 
 {% block body %}
-    <link rel="stylesheet" property="stylesheet" href="{{ cdn('css/homepage.css') }}">
+  {{ parent() }}
 
-    {{ parent() }}
-
-    <script src="{{ cdn('js/posting.js') }}"></script>
-    <script src="{{ cdn('js/microblog.js') }}"></script>
-    <script src="{{ cdn('js/homepage.js') }}"></script>
+  <script src="{{ cdn('js/posting.js') }}"></script>
+  <script src="{{ cdn('js/microblog.js') }}"></script>
+  <script src="{{ cdn('js/homepage.js') }}"></script>
 {% endblock %}

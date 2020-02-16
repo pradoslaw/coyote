@@ -25,14 +25,14 @@ class CommentForm extends Form
             ->add('cancel', 'button', [
                 'label' => 'Anuluj',
                 'attr' => [
-                    'class' => 'btn btn-sm pull-right btn-danger btn-cancel'
+                    'class' => 'btn btn-sm float-right btn-danger btn-cancel'
                 ]
             ])
             ->add('submit', 'submit', [
                 'label' => 'Zapisz',
                 'attr' => [
                     'data-submit-state' => 'Zapisywanie...',
-                    'class' => 'btn-sm pull-right'
+                    'class' => 'btn-sm float-right'
                 ]
             ]);
     }

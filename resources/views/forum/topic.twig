@@ -11,327 +11,332 @@
 {% set too_old = diff_in_months(topic.last_post_created_at) >= 6 %}
 
 {% block content %}
-    {% if topic.locked_at %}
-        <p class="alert alert-warning">
-            Wątek zablokowany {{ topic.locked_at|format_date }} przez <a class="alert-warning" href="{{ route('profile', [topic.locker.id]) }}">{{ topic.locker.name }}</a>.
-        </p>
-    {% endif %}
+  {% if topic.locked_at %}
+    <p class="alert alert-warning">
+      Wątek zablokowany {{ topic.locked_at|format_date }} przez <a class="alert-warning" href="{{ route('profile', [topic.locker.id]) }}">{{ topic.locker.name }}</a>.
+    </p>
+  {% endif %}
 
-    {% if topic.moved_at %}
-        <p class="alert alert-warning">
-            Wątek przeniesiony {{ topic.moved_at|format_date }} z <a class="alert-link" href="{{ route('forum.category', [topic.prevForum.slug]) }}">{{ topic.prevForum.name }}</a> przez <a class="alert-link" href="{{ route('profile', [topic.mover.id]) }}">{{ topic.mover.name }}</a>.
-        </p>
-    {% endif %}
+  {% if topic.moved_at %}
+    <p class="alert alert-warning">
+      Wątek przeniesiony {{ topic.moved_at|format_date }} z
+      <a class="alert-link" href="{{ route('forum.category', [topic.prevForum.slug]) }}">{{ topic.prevForum.name }}</a> przez
+      <a class="alert-link" href="{{ route('profile', [topic.mover.id]) }}">{{ topic.mover.name }}</a>.
+    </p>
+  {% endif %}
 
-    {% if errors.first('_token') %}
-        <p class="alert alert-danger">
-            {{ errors.first('_token') }}
-        </p>
-    {% endif %}
+  {% if errors.first('_token') %}
+    <p class="alert alert-danger">
+      {{ errors.first('_token') }}
+    </p>
+  {% endif %}
 
-    <h1>{{ link_to_route('forum.topic', topic.subject, [forum.slug, topic.id, topic.slug]) }}</h1>
+  <h1>{{ link_to_route('forum.topic', topic.subject, [forum.slug, topic.id, topic.slug]) }}</h1>
 
-    <nav>
-        {{ paginate|raw }}
-    </nav>
+  <nav>
+    {{ paginate|raw }}
+  </nav>
 
-    {% include "forum.partials.top" %}
+  {% include "forum.partials.top" %}
 
-    <main class="mainbar">
+  <main class="mainbar">
 
-        {% include 'forum.partials.poll' %}
+    {% include 'forum.partials.poll' %}
 
-        <section class="panel panel-wrapper">
-            <div class="panel-body">
+    <section class="card card-wrapper">
+      <div class="card-body">
 
-                <div class="table-forum margin-xs-top">
-                    {% if not is_locked or is_writeable %}
-                        <a href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}" class="btn btn-primary btn-sm pull-right" style="margin-left: 15px">Odpowiedz</a>
-                        <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm pull-right">Nowy wątek</a>
-                    {% endif %}
+        <div class="table-forum margin-xs-top">
+          {% if not is_locked or is_writeable %}
+            <a href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}" class="btn btn-primary btn-sm float-right" style="margin-left: 15px">Odpowiedz</a>
+            <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm float-right">Nowy wątek</a>
+          {% endif %}
 
-                    <div class="clearfix"></div>
+          <div class="clearfix"></div>
 
-                    {% for post in posts %}
-                        {%  include 'forum.partials.post' with {index: loop.index0} %}
-                    {% endfor %}
+          {% for post in posts %}
+            {% include 'forum.partials.post' with {index: loop.index0} %}
+          {% endfor %}
 
-                    <div class="post" id="last-post">
-                        <div class="col-footer-nav">
-                            <nav class="pull-left">
-                                {{ paginate|raw }}
-                            </nav>
+          <div class="post" id="last-post">
+            <div class="col-footer-nav">
+              <nav class="float-left">
+                {{ paginate|raw }}
+              </nav>
 
-                            <a id="btn-goto" class="btn pull-right" href="javascript:">
-                                <i class="fas fa-arrow-circle-right"></i>
-                            </a>
+              <a id="btn-goto" class="btn float-right" href="javascript:">
+                <i class="fas fa-arrow-circle-right"></i>
+              </a>
 
-                            {{ form_select('forum', forumList, forum.slug, {'class': 'pull-right', 'id': 'sel-forum-list', 'data-url': route('forum.home')}) }}
+              {{ form_select('forum', forumList, forum.slug, {'class': 'float-right', 'id': 'sel-forum-list', 'data-url': route('forum.home')}) }}
 
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
-
-                    {% if not is_locked or is_writeable %}
-                        <a href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}" class="btn btn-primary btn-sm pull-right" style="margin-left: 15px">Odpowiedz</a>
-
-                        {% if auth_check() and not too_old %}
-                            <a href="javascript:" id="btn-fast-reply" class="btn btn-primary btn-sm pull-right">Szybka odpowiedź</a>
-                        {% endif %}
-                    {% endif %}
-                </div>
+              <div class="clearfix"></div>
             </div>
-        </section>
+          </div>
 
-        {% if is_writeable and not too_old %}
-            {{ form_start(form) }}
-                <section id="box-fast-form" class="row">
-                    <div class="col-xs-12">
-                        <div class="form-group">
-                            <div class="col-md-12">
-                                <ul class="nav nav-tabs">
-                                    <li role="presentation" class="active"><a href="#body" aria-controls="body" role="tab" data-toggle="tab">Treść</a></li>
-                                    <li role="presentation"><a href="#attachments" aria-controls="attachments" role="tab" data-toggle="tab">Załączniki</a></li>
-                                    <li role="presentation"><a href="#preview" aria-controls="preview" role="tab" data-toggle="tab" data-url="{{ route('forum.preview') }}">Podgląd</a></li>
-                                </ul>
+          {% if not is_locked or is_writeable %}
+            <a href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}" class="btn btn-primary btn-sm float-right ml-3">Odpowiedz</a>
 
-                                <div class="tab-content">
-                                    {{ form_row(form.text, {attr: {'placeholder': 'Kliknij, aby napisać szybką odpowiedź...', style: 'height: 80px'}}) }}
-                                    {{ form_row(form.attachments) }}
-
-                                    {% include 'forum.partials.preview' %}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-md-12">
-                                {{ form_widget(form.submit, {attr: {class: 'pull-right'}}) }}
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                {{ form_widget(form.subscribe, {type: 'hidden'}) }}
-            {{ form_end(form) }}
-        {% endif %}
-
-        <section class="row">
-            <div class="col-xs-12">
-                <div class="pull-right">
-                    Liczba odpowiedzi na stronę
-                    {% include 'forum.partials.per_page' with {perPage: paginate.perPage()} %}
-                </div>
-            </div>
-        </section>
-
-        {{ viewers|raw }}
-    </main>
-
-    {% embed 'forum.partials.sidebar' %}
-        {% block side_menu %}
-            <div class="box">
-                <ul class="side-menu" style="margin-top: 5px">
-                    {% if auth_check() %}
-                        <li class="btn-watch {{ subscribers[user('id')] is defined ? 'on' }}">
-                            <a href="{{ route('forum.topic.subscribe', [topic.id]) }}" data-category="forum-sidebar-buttons">
-                                <i class="far fa-star fa-fw"></i>
-                                <i class="fas fa-star fa-fw"></i>
-
-                                <span>
-                                    {% if subscribers[user('id')] is not defined %}
-                                        Obserwuj wątek
-                                    {% else %}
-                                        Zakończ obserwację
-                                    {% endif %}
-                                </span>
-
-                                {% if subscribers.count() > 0 %}
-                                    <small>({{ declination(subscribers.count(), ['obserwujący', 'obserwujących', 'obserwujących']) }})</small>
-                                {% endif %}
-                            </a>
-                        </li>
-                    {% endif %}
-
-                    {% if can('update', forum) %}
-                        <li id="btn-log">
-                            <a href="{{ route('forum.stream', [topic.id]) }}" title="Zobacz dziennik zdarzeń" data-category="forum-sidebar-buttons" data-value="log">
-                                <i class="fa fa-chart-pie fa-fw"></i>
-
-                                Dziennik zdarzeń
-                            </a>
-                        </li>
-
-                        <li id="btn-edit-subject">
-                            <a href="javascript:" title="Kliknij, aby szybko zmienić tytuł wątku" data-category="forum-sidebar-buttons" data-value="subject">
-                                <i class="fa fa-pencil-alt fa-fw"></i>
-
-                                Zmień tytuł
-                            </a>
-                        </li>
-                    {% endif %}
-
-                    {% if can('lock', forum) %}
-                        <li id="btn-lock" {{ topic.is_locked ? 'class="on"' }}>
-                            <a href="{{ route('forum.lock', [topic.id]) }}" title="Kliknij, aby zablokować wątek" data-category="forum-sidebar-buttons" data-value="lock">
-                                <i class="fa fa-lock fa-fw"></i>
-                                <i class="fa fa-unlock fa-fw"></i>
-
-                                <span>
-                                    {% if topic.is_locked %}
-                                        Odblokuj wątek
-                                    {% else %}
-                                        Zablokuj wątek
-                                    {% endif %}
-                                </span>
-                            </a>
-                        </li>
-                    {% endif %}
-
-                    {% if can('move', forum) %}
-                        <li id="btn-move">
-                            <a title="Przenieść ten temat do innej kategorii forum" href="#collapse-sub" data-category="forum-sidebar-buttons" data-value="move" data-toggle="collapse">
-                                <i class="fa fa-arrow-circle-right fa-fw"></i>
-
-                                Przenieś wątek
-                            </a>
-
-                            <ul id="collapse-sub" class="collapse">
-                                {% for slug, name in adminForumList %}
-                                    {% if slug == forum.slug %}
-                                        <li><a style="color: #ccc">{{ name|raw }}</a></li>
-                                    {% else %}
-                                        <li><a data-slug="{{ slug }}" href="javascript:">{{ name|raw }}</a></li>
-                                    {% endif %}
-                                {% endfor %}
-                            </ul>
-                        </li>
-                    {% endif %}
-
-                    {#{% if can('sticky', forum) %}#}
-                        {#<li id="btn-status"><a title="Zmień status wątku" data-category="forum-sidebar-buttons" data-value="status">Przyklej wątek</a></li>#}
-                    {#{% endif %}#}
-                </ul>
-            </div>
-        {% endblock %}
-
-        {% block related %}
-            {% if mlt|length > 0 %}
-                <section id="box-related" class="box related">
-                    <h4 class="border"><i class="far fa-eye fa-fw"></i> Strony pokrewne</h4>
-
-                    <div>
-                        <ul>
-                            {% for page in mlt %}
-                                <li>
-                                    <a data-category="forum-related" href="{{ route('forum.topic', [page.forum.slug, page.id, page.slug]) }}" title="{{ page.subject|raw }}">
-                                        <strong>{{ page.subject|raw }}</strong>
-                                        <small>{{ page.updated_at|format_date }}</small>
-                                    </a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </section>
+            {% if auth_check() and not too_old %}
+              <a href="javascript:" id="btn-fast-reply" class="btn btn-primary btn-sm float-right">Szybka odpowiedź</a>
             {% endif %}
-        {% endblock %}
-    {% endembed %}
+          {% endif %}
+        </div>
+      </div>
+    </section>
 
-    {# Nie usuwac! Tutaj beda wyswietlane ewentualne bledy AJAX #}
-    {{ modals.alert('Błąd', 'Błąd', 'alert') }}
+    {% if is_writeable and not too_old %}
+      {{ form_start(form) }}
+      <section id="box-fast-form" class="row">
+        <div class="col-12">
+          <div class="form-group row">
+            <div class="col-12">
+              <ul class="nav nav-tabs">
+                <li class="nav-item"><a class="nav-link active" href="#body" role="tab" data-toggle="tab">Treść</a></li>
+                <li class="nav-item"><a class="nav-link" href="#attachments" role="tab" data-toggle="tab">Załączniki</a></li>
+                <li class="nav-item"><a class="nav-link" href="#preview" role="tab" data-toggle="tab" data-url="{{ route('forum.preview') }}">Podgląd</a></li>
+              </ul>
 
-    {% if auth_check() %}
-        {{ modals.confirm('Komentarz zostanie usunięty. Czy na pewno chcesz to zrobić?', 'Czy chcesz usunąć?', 'modal-comment-delete') }}
+              <div class="tab-content">
+                {{ form_row(form.text, {attr: {'placeholder': 'Kliknij, aby napisać szybką odpowiedź...', style: 'height: 80px'}}) }}
+                {{ form_row(form.attachments) }}
 
-        {{ form_open({'url': '#'}) }}
-            <div class="modal fade" id="modal-post-delete" tabindex="-1" role="dialog" aria-labelledby="modal-post-delete" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Czy chcesz usunąć?</h4>
-                        </div>
-                        <div class="modal-body">
-                            <p>Post zostanie usunięty. Czy na pewno chcesz to zrobić?</p>
-
-                            {% if reasonList %}
-                                {{ form_select('reason', {0: '-- Wybierz --'} + reasonList, 0, {'class': 'form-control input-sm'}) }}
-                            {% endif %}
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
-                            <button type="submit" class="btn btn-danger danger" data-submit-state="Usuwanie...">Tak, usuń</button>
-                        </div>
-                    </div>
-                </div>
+                {% include 'forum.partials.preview' %}
+              </div>
             </div>
-        {{ form_close() }}
+          </div>
 
-        {% if can('move', forum) %}
-            {{ form_open({'url': route('forum.move', [topic.id])}) }}
-                <div class="modal fade" id="modal-move" tabindex="-1" role="dialog" aria-labelledby="modal-move" aria-hidden="true">
-                    {{ form_hidden('slug') }}
-
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Czy chcesz przenieść?</h4>
-                            </div>
-                            <div class="modal-body">
-                                <p>Czy na pewno chcesz przenieść wątek do innej kategorii?</p>
-                                {{ form_select('reason', {0: '-- Wybierz --'} + reasonList, 0, {'class': 'form-control input-sm'}) }}
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
-                                <button type="submit" class="btn btn-danger danger" data-submit-state="Przenoszenie...">Tak, przenieś</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {{ form_close() }}
-        {% endif %}
-
-        {{ modals.alert('Wystąpił błąd podczas działania programu.') }}
-    {% endif %}
-
-    {% if can('update', forum) %}
-        {{ form_open({'url': route('forum.topic.subject', [topic.id])}) }}
-            <div class="modal fade" id="modal-subject" tabindex="-1" role="dialog" aria-labelledby="modal-subject" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Zmień tytuł wątku</h4>
-                        </div>
-                        <div class="modal-body">
-                            {{ form_text('subject', topic.subject, {'class': 'form-control', 'required': 'required'}) }}
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Anuluj</button>
-                            <button type="submit" class="btn btn-danger danger" data-submit-state="Wysyłanie...">Zmień tytuł</button>
-                        </div>
-                    </div>
-                </div>
+          <div class="form-group row">
+            <div class="col-12">
+              {{ form_widget(form.submit, {attr: {class: 'float-right'}}) }}
             </div>
-        {{ form_close() }}
+          </div>
+        </div>
+      </section>
+
+      {{ form_widget(form.subscribe, {type: 'hidden'}) }}
+      {{ form_end(form) }}
     {% endif %}
 
-    {% if can('merge', forum) %}
-        {{ form_open({'url': '#'}) }}
-        {{ modals.confirm('Czy chcesz połaczyć ten post z poprzednim?', 'Czy chcesz połączyć?', 'modal-merge', 'Tak, połącz') }}
-        {{ form_close() }}
+    <section class="row">
+      <div class="col-12">
+        <div class="float-right">
+          <div class="form-inline">
+            <label class="mr-1">Liczba odpowiedzi na stronę</label>
+
+            {% include 'forum.partials.per_page' with {perPage: paginate.perPage()} %}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {{ viewers|raw }}
+  </main>
+
+  {% embed 'forum.partials.sidebar' %}
+    {% block side_menu %}
+      <div class="box">
+        <ul class="side-menu" style="margin-top: 5px">
+          {% if auth_check() %}
+            <li class="btn-watch {{ subscribers[user('id')] is defined ? 'on' }}">
+              <a href="{{ route('forum.topic.subscribe', [topic.id]) }}" data-category="forum-sidebar-buttons">
+                <i class="far fa-star fa-fw"></i>
+                <i class="fas fa-star fa-fw"></i>
+
+                <span>
+                    {% if subscribers[user('id')] is not defined %}
+                      Obserwuj wątek
+                    {% else %}
+                      Zakończ obserwację
+                    {% endif %}
+                </span>
+
+                {% if subscribers.count() > 0 %}
+                  <small>({{ declination(subscribers.count(), ['obserwujący', 'obserwujących', 'obserwujących']) }})</small>
+                {% endif %}
+              </a>
+            </li>
+          {% endif %}
+
+          {% if can('update', forum) %}
+            <li id="btn-log">
+              <a href="{{ route('forum.stream', [topic.id]) }}" title="Zobacz dziennik zdarzeń" data-category="forum-sidebar-buttons" data-value="log">
+                <i class="fa fa-chart-pie fa-fw"></i>
+
+                Dziennik zdarzeń
+              </a>
+            </li>
+
+            <li id="btn-edit-subject">
+              <a href="javascript:" title="Kliknij, aby szybko zmienić tytuł wątku" data-category="forum-sidebar-buttons" data-value="subject">
+                <i class="fa fa-pencil-alt fa-fw"></i>
+
+                Zmień tytuł
+              </a>
+            </li>
+          {% endif %}
+
+          {% if can('lock', forum) %}
+            <li id="btn-lock" {{ topic.is_locked ? 'class="on"' }}>
+              <a href="{{ route('forum.lock', [topic.id]) }}" title="Kliknij, aby zablokować wątek" data-category="forum-sidebar-buttons" data-value="lock">
+                <i class="fa fa-lock fa-fw"></i>
+                <i class="fa fa-unlock fa-fw"></i>
+
+                <span>
+                                    {% if topic.is_locked %}
+                                      Odblokuj wątek
+                                    {% else %}
+                                      Zablokuj wątek
+                                    {% endif %}
+                                </span>
+              </a>
+            </li>
+          {% endif %}
+
+          {% if can('move', forum) %}
+            <li id="btn-move">
+              <a title="Przenieść ten temat do innej kategorii forum" href="#collapse-sub" data-category="forum-sidebar-buttons" data-value="move" data-toggle="collapse">
+                <i class="fa fa-arrow-circle-right fa-fw"></i>
+
+                Przenieś wątek
+              </a>
+
+              <ul id="collapse-sub" class="collapse">
+                {% for slug, name in adminForumList %}
+                  {% if slug == forum.slug %}
+                    <li><a style="color: #ccc">{{ name|raw }}</a></li>
+                  {% else %}
+                    <li><a data-slug="{{ slug }}" href="javascript:">{{ name|raw }}</a></li>
+                  {% endif %}
+                {% endfor %}
+              </ul>
+            </li>
+          {% endif %}
+
+          {#{% if can('sticky', forum) %}#}
+          {#<li id="btn-status"><a title="Zmień status wątku" data-category="forum-sidebar-buttons" data-value="status">Przyklej wątek</a></li>#}
+          {#{% endif %}#}
+        </ul>
+      </div>
+    {% endblock %}
+
+    {% block related %}
+      {% if mlt|length > 0 %}
+        <section id="box-related" class="box related">
+          <h4 class="border-bottom"><i class="far fa-eye fa-fw"></i> Strony pokrewne</h4>
+
+          <div>
+            <ul>
+              {% for page in mlt %}
+                <li>
+                  <a data-category="forum-related" href="{{ route('forum.topic', [page.forum.slug, page.id, page.slug]) }}" title="{{ page.subject|raw }}">
+                    <strong>{{ page.subject|raw }}</strong>
+                    <small>{{ page.updated_at|format_date }}</small>
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </section>
+      {% endif %}
+    {% endblock %}
+  {% endembed %}
+
+  {# Nie usuwac! Tutaj beda wyswietlane ewentualne bledy AJAX #}
+  {{ modals.alert('Błąd', 'Błąd', 'alert') }}
+
+  {% if auth_check() %}
+    {{ modals.confirm('Komentarz zostanie usunięty. Czy na pewno chcesz to zrobić?', 'Czy chcesz usunąć?', 'modal-comment-delete') }}
+
+    {{ form_open({'url': '#'}) }}
+    <div class="modal fade" id="modal-post-delete" tabindex="-1" role="dialog" aria-labelledby="modal-post-delete" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Czy chcesz usunąć?</h4>
+          </div>
+          <div class="modal-body">
+            <p>Post zostanie usunięty. Czy na pewno chcesz to zrobić?</p>
+
+            {% if reasonList %}
+              {{ form_select('reason', {0: '-- Wybierz --'} + reasonList, 0, {'class': 'form-control form-control-sm'}) }}
+            {% endif %}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+            <button type="submit" class="btn btn-danger danger" data-submit-state="Usuwanie...">Tak, usuń</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    {{ form_close() }}
+
+    {% if can('move', forum) %}
+      {{ form_open({'url': route('forum.move', [topic.id])}) }}
+      <div class="modal fade" id="modal-move" tabindex="-1" role="dialog" aria-labelledby="modal-move" aria-hidden="true">
+        {{ form_hidden('slug') }}
+
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Czy chcesz przenieść?</h4>
+            </div>
+            <div class="modal-body">
+              <p>Czy na pewno chcesz przenieść wątek do innej kategorii?</p>
+              {{ form_select('reason', {0: '-- Wybierz --'} + reasonList, 0, {'class': 'form-control form-control-sm'}) }}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+              <button type="submit" class="btn btn-danger danger" data-submit-state="Przenoszenie...">Tak, przenieś</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {{ form_close() }}
     {% endif %}
+
+    {{ modals.alert('Wystąpił błąd podczas działania programu.') }}
+  {% endif %}
+
+  {% if can('update', forum) %}
+    {{ form_open({'url': route('forum.topic.subject', [topic.id])}) }}
+    <div class="modal fade" id="modal-subject" tabindex="-1" role="dialog" aria-labelledby="modal-subject" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Zmień tytuł wątku</h4>
+          </div>
+          <div class="modal-body">
+            {{ form_text('subject', topic.subject, {'class': 'form-control', 'required': 'required'}) }}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+            <button type="submit" class="btn btn-danger danger" data-submit-state="Wysyłanie...">Zmień tytuł</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    {{ form_close() }}
+  {% endif %}
+
+  {% if can('merge', forum) %}
+    {{ form_open({'url': '#'}) }}
+    {{ modals.confirm('Czy chcesz połaczyć ten post z poprzednim?', 'Czy chcesz połączyć?', 'modal-merge', 'Tak, połącz') }}
+    {{ form_close() }}
+  {% endif %}
 {% endblock %}
 
 {% block body %}
-    {{ parent() }}
+  {{ parent() }}
 
-    {% if auth_check() %}
-        <script type="text/javascript" src="{{ cdn('js/wikieditor.js') }}"></script>
-    {% endif %}
+  {% if auth_check() %}
+    <script type="text/javascript" src="{{ cdn('js/wikieditor.js') }}"></script>
+  {% endif %}
 
-    <script type="text/javascript">
-        $(function () {
-            $('.col-bottom a').tooltip({'trigger': 'hover'});
-            $('#submit-form').append('<input style="display: none" type="checkbox" name="human" value="1" checked="checked">');
-        });
-    </script>
+  <script type="text/javascript">
+    $(function () {
+      $('.col-bottom a').tooltip({'trigger': 'hover'});
+      $('#submit-form').append('<input style="display: none" type="checkbox" name="human" value="1" checked="checked">');
+    });
+  </script>
 {% endblock %}

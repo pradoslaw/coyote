@@ -1,9 +1,96 @@
 @charset "UTF-8";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/gradients";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins/image";
+
+.nav-tabs {
+  margin: 0 0 20px 0;
+}
+
+#box-popular-tags {
+  margin-top: 13px;
+}
+
+#box-popular-entries {
+  > .media {
+    border-bottom: 1px solid $border-color;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  p {
+    line-height: 140%;
+    padding: 10px 0 0 0;
+    font-size: 12px;
+
+    a {
+      color: $gray-light;
+    }
+  }
+
+  .media-heading {
+    font-size: .8rem;
+
+    a {
+      color: $gray-darker;
+    }
+  }
+
+  .btn-thumbs {
+    font-size: 11px;
+  }
+}
+
 
 input[placeholder] {
   text-overflow: ellipsis;
+}
+
+#microblog {
+  .btn-thumbs,
+  .btn-reply,
+  .btn-subscribe {
+    padding: 2px 7px 2px 25px;
+    color: $gray-light;
+    position: relative;
+
+    &:before {
+      font-family: 'Font Awesome 5 Free';
+      position: absolute;
+      left: 5px;
+      color: $text-color;
+    }
+
+    &:hover {
+      border: 1px solid $border-color;
+      @include gradient-y(#fff, $gray-lighter);
+    }
+  }
+
+  .btn-thumbs:before {
+    content: fa-content($fa-var-thumbs-up);
+  }
+
+  .btn-subscribe:before {
+    content: fa-content($fa-var-bell);
+    font-weight: 400;
+  }
+
+  .btn-reply:before {
+    content: fa-content($fa-var-comment);
+    font-weight: 400;
+  }
+
+  .btn-thumbs.thumbs-on:before {
+    color: $brand-primary;
+    content: $fa-var-thumbs-up;
+    font-weight: 900;
+  }
+
+  .subscribe-on:before {
+    color: $brand-primary;
+    content: fa-content($fa-var-bell);
+    font-weight: 900;
+  }
 }
 
 .microblog {
@@ -32,30 +119,25 @@ input[placeholder] {
   }
 }
 
-// zmienia kolor daty rowniez w rubryce "najpopularniejsze"
-.media-body {
-  a.timestamp {
-    font-size: 11px;
-    color: $gray-light;
-  }
-}
-
 .microblog-text {
   padding: 10px 0;
   overflow: hidden;
   position: relative;
 
   @include break-word;
-  @include adjust-list-padding;
   @include link-color-darker;
 
   // emoticons are NOT responsive
   img:not(.img-smile) {
-    @include img-responsive();
+    @include img-fluid();
   }
 
   > .thumbnails {
     margin-top: 20px;
+  }
+
+  p {
+    margin-bottom: 0;
   }
 }
 
@@ -84,53 +166,6 @@ input[placeholder] {
     font-weight: 400;
     left: 0;
   }
-}
-
-.btn-thumbs,
-.btn-reply,
-.btn-subscribe {
-  padding: 2px 7px 2px 25px;
-  color: $gray-light;
-  position: relative;
-
-  &:before {
-    font-family: 'Font Awesome 5 Free';
-    position: absolute;
-    left: 5px;
-    color: $text-color;
-  }
-
-  &:hover {
-    border: 1px solid $border-color;
-    @include gradient-vertical(#fff, $gray-lighter);
-  }
-}
-
-.btn-thumbs:before {
-  content: fa-content($fa-var-thumbs-up);
-}
-
-.btn-subscribe:before {
-  content: fa-content($fa-var-bell);
-  font-weight: 400;
-}
-
-.btn-reply:before {
-  content: fa-content($fa-var-comment);
-  font-weight: 400;
-}
-
-.btn-thumbs.thumbs-on:before {
-  color: $brand-primary;
-  content: $fa-var-thumbs-up;
-  font-weight: 900;
-}
-
-.subscribe-on:before {
-  color: $brand-primary;
-  content: fa-content($fa-var-bell);
-  font-weight: 900;
-
 }
 
 // Comments block
@@ -166,7 +201,7 @@ input[placeholder] {
     .comment-body {
       @include break-word;
 
-      width: calc(100% - 20px);
+      width: calc(100% - 22px);
 
       img:not(.img-smile) {
         display: block;
@@ -213,32 +248,6 @@ input[placeholder] {
       font-size: 13px;
       display: inline;
       margin-right: 3px;
-    }
-
-    // Links with number of votes and comment's date
-    // -----------------------------------------------------
-
-    .list-inline {
-      color: $gray-light;
-      font-size: 11px;
-      margin: 1px 0 0 0;
-
-      a {
-        color: $gray-light;
-      }
-
-      li {
-        padding-left: 0;
-      }
-
-      li:after {
-        content: "●";
-        margin-left: 5px;
-      }
-
-      li:last-child:after {
-        content: "\00a0 ";
-      }
     }
   }
 

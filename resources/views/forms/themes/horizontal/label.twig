@@ -1,4 +1,4 @@
 {% import 'components.forms' as forms %}
 {% set label_class = label_class|default('col-md-4') %}
 
-<label {{ forms.attr(label_attr|merge({class: (label_attr.class|default('') ~ ' ' ~ label_class ~ ' control-label')|trim})) }}>{{ label }}{{ required ? ' <em>*</em>' }}</label>
+<label {{ forms.attr(label_attr|merge({class: (label_attr.class|default('') ~ ' ' ~ label_class ~ ' col-form-label text-right')|trim})) }}>{{ label }}{{ required ? ' <em>*</em>' }}</label>

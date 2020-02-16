@@ -1,5 +1,5 @@
 {% extends 'forms.themes.horizontal.row' %}
-{% set form_group_offset = is_child ? '' : form_group_offset|default('col-md-offset-4') %}
+{% set form_group_offset = is_child ? '' : form_group_offset|default('offset-md-4') %}
 {% set form_group_class = form_group_class|default('col-md-6') %}
 
 {% block label %}{% endblock %}
@@ -9,10 +9,10 @@
             {{ form_hidden(name, unchecked_value) }}
         {% endif %}
 
-        <div class="checkbox">
+        <div class="custom-control custom-checkbox">
             {{ include(widget_path) }}
 
-            <label for="{{ attr.id }}">
+            <label for="{{ attr.id }}" class="custom-control-label">
                 {{ label }}
             </label>
         </div>

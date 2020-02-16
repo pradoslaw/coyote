@@ -1,10 +1,10 @@
 {% extends 'adm.base' %}
 {% block title %}Cenzura {{ parent() }}{% endblock %}
 
-{% block panel %}
+{% block card %}
     {{ form_open({url: route('adm.words.save'), method: 'post', id: 'app'}) }}
         <p>
-            <button class="btn btn-default" @click.prevent="addRow">
+            <button class="btn btn-secondary" @click.prevent="addRow">
                 <i class="fas fa-plus"></i>
                 Dodaj nowy
             </button>
@@ -27,7 +27,7 @@
                     <td><input type="text" v-model="row.word" class="form-control" name="word[]"></td>
                     <td><input type="text" v-model="row.replacement" class="form-control" name="replacement[]"></td>
                     <td>
-                        <button class="btn btn-xs btn-danger" @click.prevent="removeRow(row)">
+                        <button class="btn btn-sm btn-danger" @click.prevent="removeRow(row)">
                             <i class="far fa-fw fa-trash-alt"></i>
                         </button>
                     </td>

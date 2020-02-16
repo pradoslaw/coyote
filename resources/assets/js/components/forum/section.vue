@@ -1,36 +1,34 @@
 <template>
-  <div class="panel-section panel">
-    <div class="section-name">
-      <h2 class="pull-left">
+  <div class="card-section card pt-1">
+    <div class="section-name pb-2 pl-lg-3 pt-lg-2 pr-lg-2">
+      <h2 class="float-left">
         <a href="javascript:" @click="collapse">
           <i :class="[isCollapse ? 'fa-plus-square': 'fa-minus-square']" class="far"></i>  {{ name }}
         </a>
       </h2>
 
-      <div v-if="isAuthorized && !categories[0].parent_id" :class="{'open': isDropdown}" v-on-clickaway="hideDropdown" class="dropdown pull-right">
-        <a href="javascript:" @click="isDropdown = ! isDropdown" class="panel-cog"><i class="fas fa-cogs"></i></a>
+      <div v-if="isAuthorized && !categories[0].parent_id" :class="{'open': isDropdown}" v-on-clickaway="hideDropdown" class="dropdown float-right">
+        <a href="javascript:" @click="isDropdown = ! isDropdown" class="card-cog mt-2 mr-2"><i class="fas fa-cogs"></i></a>
 
-        <ul class="dropdown-menu">
-          <li v-for="category in categories">
-            <a href="javascript:" @click="toggle(category)">
-              <i :class="{'fa-check': !category.is_hidden}" class="fa"></i>
+        <div :class="{'d-block': isDropdown}" class="dropdown-menu">
+          <a v-for="category in categories" href="javascript:" class="dropdown-item" @click="toggle(category)">
+            <i :class="{'fa-check': !category.is_hidden}" class="fa"></i>
 
-              {{ category.name }}
-            </a>
-          </li>
-        </ul>
+            {{ category.name }}
+          </a>
+        </div>
       </div>
 
       <div class="clearfix"></div>
     </div>
 
-    <section v-if="!isCollapse" class="panel panel-default panel-categories">
-      <div v-for="(category, index) in categories" v-if="!category.is_hidden" :class="{'new': !category.is_read}" class="panel-body">
+    <section v-if="!isCollapse" class="card card-default card-categories">
+      <div v-for="(category, index) in categories" v-if="!category.is_hidden" :class="{'new': !category.is_read}" class="card-body">
         <div class="row">
-          <div class="col-lg-7 col-xs-12 col-sm-6 col-main">
-            <i v-if="category.is_locked" class="logo fas fa-lock pull-left visible-lg"></i>
+          <div class="col-lg-7 col-12 col-sm-6 col-main">
+            <i v-if="category.is_locked" class="logo fas fa-lock float-left d-none d-lg-block"></i>
             <a v-else :href="category.url">
-              <i :class="className(category.name)" class="logo far fa-comments pull-left visible-lg">
+              <i :class="className(category.name)" class="logo far fa-comments float-left d-none d-lg-block">
                 <b v-if="!category.is_read"></b>
               </i>
             </a>
@@ -38,12 +36,12 @@
             <div class="wrap">
               <h3><a :href="category.url">{{ category.name }}</a></h3>
 
-              <p class="description hidden-sm hidden-xs hidden-md">
+              <p class="description d-none d-lg-block">
                 {{ category.description }}
               </p>
 
-              <ul v-if="category.children" class="list-unstyled list-inline list-sub hidden-sm hidden-xs hidden-md">
-                <li v-for="children in category.children">
+              <ul v-if="category.children" class="list-inline list-sub d-none d-md-block d-lg-block">
+                <li v-for="children in category.children" class="list-inline-item">
                   <i :class="{'fas new': !children.is_read, 'far': children.is_read}" class="fa-file"></i>
 
                   <a :href="children.url">{{ children.name }}</a>
@@ -52,39 +50,39 @@
             </div>
           </div>
 
-          <div v-if="category.is_redirected" class="col-lg-5 col-xs-12 col-sm-6 text-center">
+          <div v-if="category.is_redirected" class="col-lg-5 col-12 col-sm-6 text-center">
             Liczba przekierowań: {{ category.redirects }}
           </div>
 
-          <div v-if="!category.is_redirected" class="col-lg-1 col-xs-12 col-sm-6 col-lg-stat">
+          <div v-if="!category.is_redirected" class="col-lg-1 col-12 col-sm-6 col-lg-stat">
             <div class="row">
-              <div class="col-lg-12 col-xs-6 counter">
+              <div class="col-lg-12 col-6 counter">
                 <strong>{{ category.topics | number }}</strong>
                 <small class="text-muted text-wide-spacing">wątki</small>
               </div>
 
-              <div class="col-lg-12 col-xs-6 counter">
+              <div class="col-lg-12 col-6 counter">
                 <strong>{{ category.posts | number }}</strong>
                 <small class="text-muted text-wide-spacing">postów</small>
               </div>
             </div>
           </div>
 
-          <div v-if="!category.is_redirected" class="col-lg-4 col-xs-12 col-sm-12">
+          <div v-if="!category.is_redirected" class="col-lg-4 col-12 col-sm-12">
             <div v-if="category.post" class="media">
-              <div class="media-left hidden-xs">
-                <a v-profile="category.post.user.id">
-                  <object :data="category.post.user.photo || '//'" type="image/png" class="media-object img-thumbnail">
-                    <img src="/img/avatar.png" :alt="category.post.user.name">
-                  </object>
-                </a>
-              </div>
+
+              <a v-profile="category.post.user.id" class="mr-2 d-none d-sm-block">
+                <object :data="category.post.user.photo || '//'" type="image/png" class="d-inline-block img-thumbnail">
+                  <img src="/img/avatar.png" :alt="category.post.user.name">
+                </object>
+              </a>
+
               <div class="media-body">
-                <p class="subject">
+                <p class="text-truncate mb-1">
                   <a :href="category.topic.url + '?view=unread'">{{ category.topic.subject }}</a>
                 </p>
 
-                <small class="text-muted"><vue-timeago :datetime="category.post.created_at"></vue-timeago></small>, <a v-profile="category.post.user.id">{{ category.post.user.name }}</a>
+                <span class="text-muted"><vue-timeago :datetime="category.post.created_at"></vue-timeago></span>, <a v-profile="category.post.user.id">{{ category.post.user.name }}</a>
 
                 <div class="toolbox">
                   <a href="javascript:" title="Oznacz jako przeczytane" @click="mark(category)"><i class="far fa-eye"></i></a>

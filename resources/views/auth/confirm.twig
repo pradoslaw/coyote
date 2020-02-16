@@ -4,12 +4,12 @@
 {% import 'components.forms' as forms %}
 
 {% block container %}
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <div class="card card-default">
+        <div class="card-header">
             Potwierdź adres e-mail, aby otrzymywać powiadomienia
         </div>
-        <div class="panel-body">
-            {{ form_open({'method': 'POST', 'role': 'form', 'url': url('Confirm'), 'class': 'form-horizontal'}) }}
+        <div class="card-body">
+            {{ form_open({'method': 'POST', 'role': 'form', 'url': url('Confirm')}) }}
             {{ form_hidden('token', token) }}
             {{ forms.text('email', 'E-mail', input_old('email', user('email'))) }}
 

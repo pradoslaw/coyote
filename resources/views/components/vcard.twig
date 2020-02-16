@@ -8,25 +8,25 @@
 
     <div id="vcard-content">
         <div class="media">
-            <div class="media-left">
+            <div class="mr-2">
                 <img src="{{ user_photo(user.photo) }}" class="img-thumbnail">
                 <span class="status {{ user.is_online ?: 'offline' }}">{{ user.is_online ? 'Online' : 'Offline' }}</span>
 
                 {% if user.group.name %}
-                    <span class="label label-default">{{ user.group.name }}</span>
+                    <span class="badge badge-secondary">{{ user.group.name }}</span>
                 {% endif %}
             </div>
 
             <div class="media-body">
                 <ul class="list-inline">
-                    <li title="Ostatnia wizyta: {{ visited_at }}">
+                    <li class="list-inline-item" title="Ostatnia wizyta: {{ visited_at }}">
                         <i class="fas fa-sign-in-alt fa-fw"></i> {{ visited_at }}
                     </li>
-                    <li title="Data rejestracji: {{ created_at }}">
+                    <li class="list-inline-item" title="Data rejestracji: {{ created_at }}">
                         <i class="fas fa-user-plus fa-fw"></i>
                         {{ created_at }}
                     </li>
-                    <li title="Liczba postów: {{ user.posts }}">
+                    <li class="list-inline-item" title="Liczba postów: {{ user.posts }}">
                         <i class="far fa-comments fa-fw"></i>
                         {{ declination(user.posts, ['post', 'posty', 'postów']) }}
                     </li>
@@ -49,20 +49,20 @@
                 </div>
 
                 <div class="box-buttons">
-                    <a href="{{ route('forum.user', [user.id]) }}" title="Znajdź posty użytkownika" class="btn btn-xs btn-default">
+                    <a href="{{ route('forum.user', [user.id]) }}" title="Znajdź posty użytkownika" class="btn btn-sm btn-secondary">
                         <i class="fas fa-search fa-fw"></i>
                     </a>
 
-                    <a href="{{ route('user.pm.submit', {to: user.name}) }}" title="Napisz wiadomość do tego użytkownika" class="btn btn-xs btn-default">
+                    <a href="{{ route('user.pm.submit', {to: user.name}) }}" title="Napisz wiadomość do tego użytkownika" class="btn btn-sm btn-secondary">
                         <i class="fas fa-envelope fa-fw"></i>
                     </a>
 
                     {% if can('adm-access') %}
-                        <a href="{{ route('adm.firewall.save') }}?user={{ user.id }}" title="Zablokuj tego użytkownika" class="btn btn-xs btn-default pull-right">
+                        <a href="{{ route('adm.firewall.save') }}?user={{ user.id }}" title="Zablokuj tego użytkownika" class="btn btn-sm btn-secondary float-right">
                             <i class="fas fa-ban fa-fw"></i>
                         </a>
 
-                        <a href="{{ route('adm.users.save', [user.id]) }}" title="Przejdź do panelu administracyjnego" class="btn btn-xs btn-default pull-right">
+                        <a href="{{ route('adm.users.save', [user.id]) }}" title="Przejdź do panelu administracyjnego" class="btn btn-sm btn-secondary float-right">
                             <i class="fas fa-cogs fa-fw"></i>
                         </a>
                     {% endif %}

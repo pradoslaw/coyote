@@ -1,11 +1,5 @@
 <div class="row">
-    <div class="col-md-12">
-        <ul id="user-nav-tabs" class="nav nav-tabs">
-            {% for item in top_menu.roots() %}
-                <li {{ forms.attr(item.attr) }}>
-                    <a href="{{ item.url }}">{{ item.title|raw }}</a>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
+  <div class="col-12">
+    {{ top_menu.asUl({'class': 'nav nav-tabs', 'id': 'user-nav-tabs'})|raw }}
+  </div>
 </div>

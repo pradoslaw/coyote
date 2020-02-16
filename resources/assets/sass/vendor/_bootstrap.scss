@@ -1,55 +1,27 @@
-/*!
- * Bootstrap v3.3.6 (http://getbootstrap.com)
- * Copyright 2011-2015 Twitter, Inc.
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
- */
 
 // Core variables and mixins
 @import "bootstrap/variables";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/mixins";
 
-// Reset and dependencies
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/normalize";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/print";
+@import "~bootstrap/scss/bootstrap";
 
-// Core CSS
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/scaffolding";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/type";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/code";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/grid";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/tables";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/forms";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/buttons";
+$font-size-small: $font-size-sm;
+$font-size-large: $font-size-lg;
 
-// Components
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/component-animations";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/dropdowns";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/button-groups";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/input-groups";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/navs";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/navbar";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/breadcrumbs";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/pagination";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/pager";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/labels";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/badges";
-//@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/jumbotron";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/thumbnails";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/alerts";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/progress-bars";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/media";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/list-group";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/panels";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/responsive-embed";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/wells";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/close";
+$border-radius-base: $border-radius;
+$border-radius-small: $border-radius-sm;
+$border-radius-large: $border-radius-lg;
 
-// Components w/ JavaScript
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/modals";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/tooltip";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/popovers";
-//@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/carousel";
+$label-success-bg: $success;
+$label-danger-bg: $danger;
+$label-warning-bg: $warning;
+$label-default-bg: $gray-light;
 
-// Utility classes
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/utilities";
-@import "../../../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/responsive-utilities";
+$brand-success: $success;
+$brand-warning: $warning;
+$brand-danger: $danger;
+$brand-primary: $primary;
+
+$border-color: $card-border-color;
+
+$alert-warning-border: theme-color-level('warning', $alert-border-level);
+$panel-footer-bg: #f5f5f5;

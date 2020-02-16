@@ -29,34 +29,27 @@
 
     {{ render_region('head') }}
   </head>
-  <body class="{{ auth_guest() or user('allow_sticky_header') ? 'fixed-top' }}">
+  <body class="{{ auth_guest() or user('allow_sticky_header') ? 'padding-top' }}">
     {{ render_region('body') }}
 
     {% block body %}
       {% import 'components.forms' as forms %}
       {% import 'components.widgets' as widgets %}
 
-      <div id="container-fluid">
-        <header class="nav navbar-header {{ auth_guest() or user('allow_sticky_header') ? ' navbar-fixed-top' }} {{ __dark_theme ? 'navbar-dark' }}">
-          <div class="navbar-border-top"></div>
+      <header class="container-fluid navbar-header {{ auth_guest() or user('allow_sticky_header') ? ' fixed-top' }} {{ __dark_theme ? 'navbar-dark' }}">
+        <div class="navbar-border-top row"></div>
 
-          <div class="max-width">
-            {{ form_open({url: route('logout'), name: 'logout-form'}) }}
-            {{ form_close() }}
+        {{ form_open({url: route('logout'), name: 'logout-form'}) }}
+        {{ form_close() }}
 
-            <div class="clearfix">
-              <button type="button" class="navbar-toggle margin-sm-left" data-toggle="collapse" data-target=".nav-mobile">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-
-              <a class="navbar-brand" rel="home" href="{{ route('home') }}" title="4programmers.net - Strona główna">
-                <img id="logo" src="{{ cdn('img/logo-mobile.png') }}">
+        <div class="row">
+          <div class="col-12">
+            <div class="container-xxl d-flex align-items-center flex-wrap">
+              <a rel="home" class="navbar-brand" href="{{ route('home') }}" title="4programmers.net - Strona główna">
+                <img src="{{ cdn('img/logo-mobile.png') }}">
               </a>
 
-              <ul class="nav-desktop hidden-xs">
+              <ul class="nav-desktop d-none d-md-block">
                 {% for item in __master_menu.roots() %}
                   <li {{ forms.attr(item.attr) }}>
                     <a href="{{ item.url }}">{{ item.title|raw }}</a>
@@ -64,129 +57,122 @@
                     {{ item.afterHTML|raw }}
 
                     {% if item.hasChildren() %}
-                      <ul class="dropdown-menu left">
+                      <div class="dropdown-menu left">
                         {% for children in item.children() %}
-                          <li>
-                            <a href="{{ children.url }}">{{ children.title }}</a>
-                          </li>
+
+                          <a class="dropdown-item" href="{{ children.url }}">{{ children.title }}</a>
+
                         {% endfor %}
-                      </ul>
+                      </div>
                     {% endif %}
                   </li>
                 {% endfor %}
               </ul>
 
-              <form action="{{ search_url|default(route('search')) }}" class="navbar-form nav-search navbar-right hidden-sm hidden-xs" role="search">
-                <div class="form-group">
+              <div class="ml-auto">
+                {% if auth_check() %}
+                  <ul id="nav-auth" class="nav-auth list-inline d-inline-block"></ul>
+
+                  <div class="dropdown nav-avatar d-none d-md-inline-block">
+                    <a href="javascript:" class="dropdown-toggle img-thumbnail d-block" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="width: 35px">
+                      <img src="{{ user_photo(user('photo')) }}" style="width: 100%">
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-right">
+                      <a class="dropdown-item profile-name" href="{{ route('user.home') }}">{{ user('name') }}</a>
+
+                      <li class="dropdown-divider"></li>
+
+                      <a class="dropdown-item" href="{{ route('user.pm') }}"><i class="fas fa-envelope fa-fw"></i> Wiadomości</a>
+                      <a class="dropdown-item" href="{{ route('user.settings') }}"><i class="fas fa-cog fa-fw"></i> Ustawienia</a>
+                      <a class="dropdown-item" href="{{ route('profile', [user('id')]) }}"><i class="fas fa-user fa-fw"></i> Profil</a>
+                      <a class="dropdown-item" href="{{ url('Pomoc') }}"><i class="fas fa-info-circle fa-fw"></i> Pomoc</a>
+
+                      {% if can('adm-access') %}
+                        <a class="dropdown-item" href="{{ route('adm.home') }}"><i class="fas fa-user-secret fa-fw"></i> Panel administracyjny</a>
+                      {% endif %}
+
+                      <div class="dropdown-divider"></div>
+
+                      <a href="javascript:" class="dropdown-item js-change-menu position-relative">Nowe menu <sup class="badge badge-pill label-new">Beta</sup></a>
+
+                      <div class="dropdown-divider"></div>
+
+                      <a href="javascript:" onclick="document['logout-form'].submit()" class="dropdown-item btn-sign-out"><i class="fas fa-sign-out-alt fa-fw"></i> Wyloguj</a>
+                    </div>
+                  </div>
+                {% else %}
+                  <a class="btn btn-sm btn-register d-none d-sm-inline-block" href="{{ route('register') }}"><i class="fas fa-sign-in"></i> Utwórz konto</a>
+                  <a class="btn btn-sm btn-login d-none d-sm-inline-block" href="{{ route('login') }}">Logowanie</a>
+                {% endif %}
+
+                <form action="{{ search_url|default(route('search')) }}" class="nav-search d-none d-lg-inline-block" role="search">
                   <div class="input-group">
                     <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}">
 
                     <span class="input-group-btn">
-                                        <button class="btn btn-link">
-                                            <i class="fas fa-search"></i>
-                                        </button>
-                                    </span>
+                    <button class="btn btn-link">
+                        <i class="fas fa-search"></i>
+                    </button>
+                  </span>
                   </div>
-                </div>
-              </form>
+                </form>
 
-              {% if auth_check() %}
-                <div class="navbar-right dropdown nav-avatar hidden-xs">
-                  <a href="javascript:" class="dropdown-toggle img-thumbnail" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="width: 35px">
-                    <img src="{{ user_photo(user('photo')) }}" style="width: 100%">
-                  </a>
+                <button class="navbar-toggler d-inline-block d-md-none" type="button" data-toggle="collapse" data-target="#js-nav-mobile">
+                  <i class="fa fa-bars"></i>
+                </button>
+              </div>
 
-                  <ul class="dropdown-menu right">
-                    <li><a class="profile-name" href="{{ route('user.home') }}">{{ user('name') }}</a></li>
-                    <li class="divider"></li>
-                    <li><a href="{{ route('user.pm') }}"><i class="fas fa-envelope fa-fw"></i> Wiadomości</a></li>
-                    <li><a href="{{ route('user.settings') }}"><i class="fas fa-cog fa-fw"></i> Ustawienia</a></li>
-                    <li><a href="{{ route('profile', [user('id')]) }}"><i class="fas fa-user fa-fw"></i> Profil</a></li>
-                    <li><a href="{{ url('Pomoc') }}"><i class="fas fa-info-circle fa-fw"></i> Pomoc</a></li>
-
-                    {% if can('adm-access') %}
-                      <li><a href="{{ route('adm.home') }}"><i class="fas fa-user-secret fa-fw"></i> Panel administracyjny</a></li>
-                    {% endif %}
-
-                    <li class="divider"></li>
-
-                    <li>
-                      <a href="javascript:" class="js-change-menu">Nowe menu <sup class="label label-new">Beta</sup></a>
-                    </li>
-
-                    <li class="divider"></li>
-
-                    <li>
-                      <a href="javascript:" onclick="document['logout-form'].submit()" class="btn-sign-out"><i class="fas fa-sign-out-alt fa-fw"></i> Wyloguj</a>
-                    </li>
-                  </ul>
-                </div>
-
-                <ul id="nav-auth" class="nav nav-auth navbar-nav pull-right">
-                </ul>
-              {% else %}
-                <a class="btn btn-sm navbar-right navbar-btn btn-register hidden-xs" href="{{ route('register') }}"><i class="fas fa-sign-in"></i> Utwórz konto</a>
-                <a class="btn-sm navbar-right navbar-btn btn-login hidden-xs" href="{{ route('login') }}">Logowanie</a>
-              {% endif %}
-            </div>
-
-            <div class="visible-xs">
-              <ul class="collapse navbar-collapse nav-mobile">
+              <div id="js-nav-mobile" class="collapse navbar-collapse nav-mobile pd-3 pb-3">
                 {% for item in __master_menu.roots() %}
-                  <li {{ forms.attr(item.attr) }}>
-                    <a href="{{ item.url }}">{{ item.title|raw }}</a>
-                  </li>
+                    <a class="dropdown-link" href="{{ item.url }}">{{ item.title|raw }}</a>
                 {% endfor %}
 
-                <li class="divider"></li>
+                <div class="dropdown-divider"></div>
 
                 {% if auth_check() %}
-                  <li><a href="{{ route('user.settings') }}"><i class="fas fa-cog fa-fw"></i> Ustawienia</a></li>
-                  <li><a href="{{ route('profile', [user('id')]) }}"><i class="fas fa-user fa-fw"></i> Profil</a></li>
+                  <a class="dropdown-link" href="{{ route('user.settings') }}"><i class="fas fa-cog fa-fw"></i> Ustawienia</a>
+                  <a class="dropdown-link" href="{{ route('profile', [user('id')]) }}"><i class="fas fa-user fa-fw"></i> Profil</a>
 
                   {% if can('adm-access') %}
-                    <li><a href="{{ route('adm.home') }}"><i class="fas fa-user-secret fa-fw"></i> Panel administracyjny</a></li>
+                    <a class="dropdown-link" href="{{ route('adm.home') }}"><i class="fas fa-user-secret fa-fw"></i> Panel administracyjny</a>
                   {% endif %}
 
-                  <li class="divider"></li>
+                  <div class="dropdown-divider"></div>
 
-                  <li>
-                    <a href="javascript:" class="js-change-menu">Nowe menu <sup class="label label-new">Beta</sup></a>
-                  </li>
+                  <a href="javascript:" class="dropdown-link js-change-menu position-relative"">Nowe menu <sup class="badge badge-pill label-new">Beta</sup></a>
 
-                  <li class="divider"></li>
+                  <div class="dropdown-divider"></div>
 
-                  <li>
-                    <a href="javascript:" onclick="document['logout-form'].submit()" class="btn-sign-out"><i class="fas fa-sign-out-alt fa-fw"></i> Wyloguj</a>
-                  </li>
+                  <a href="javascript:" onclick="document['logout-form'].submit()" class="dropdown-link btn-sign-out"><i class="fas fa-sign-out-alt fa-fw"></i> Wyloguj</a>
                 {% else %}
-                  <li class="row">
-                    <div class="col-xs-6">
-                      <a class="btn btn-register btn-xs" href="{{ route('register') }}"><i class="fas fa-sign-in"></i> Utwórz konto</a>
+                  <div class="row">
+                    <div class="col-6">
+                      <a class="btn d-block btn-register btn-sm" href="{{ route('register') }}"><i class="fas fa-sign-in"></i> Utwórz konto</a>
                     </div>
-                    <div class="col-xs-6">
-                      <a class="btn-login btn-xs visible-xs-block text-center" href="{{ route('login') }}">Logowanie</a>
+                    <div class="col-6">
+                      <a class="btn-login d-block btn-sm d-block d-sm-none text-center" href="{{ route('login') }}">Logowanie</a>
                     </div>
-                  </li>
+                  </div>
                 {% endif %}
 
-                <li class="divider"></li>
+                <div class="dropdown-divider"></div>
 
-                <li>
-                  <form action="{{ search_url|default(route('search')) }}" role="search">
-                    <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}" class="form-control input-sm">
-                  </form>
-                </li>
-              </ul>
+                <form action="{{ search_url|default(route('search')) }}" role="search">
+                  <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}" class="form-control form-control-sm">
+                </form>
+              </div>
             </div>
           </div>
-        </header>
+        </div>
+      </header>
 
+      <div class="container-fluid">
         {{ breadcrumb|raw }}
 
         <noscript>
-          <div class="row max-width">
-            <div class="col-xs-12">
+          <div class="row">
+            <div class="col-xs">
               <div class="alert alert-danger">
                 4programmers.net works best with JavaScript enabled!
               </div>
@@ -194,72 +180,66 @@
           </div>
         </noscript>
 
-
         {{ render_region('header') }}
 
         {% block fixed %}
-          <div class="row max-width">
-            <div class="col-md-12">
-              {% if session_has('success') %}
-                <div class="row">
-                  <div class="col-xs-12">
-                    <div class="alert alert-success margin-md-top">
-                      <i class="fas fa-check"></i>
+          <div class="container-xxl">
+            {% if session_has('success') %}
+              <div class="row">
+                <div class="col-12">
+                  <div class="alert alert-success margin-md-top">
+                    <i class="fas fa-check"></i>
 
-                      {{ session_get('success') }}
-                    </div>
+                    {{ session_get('success') }}
                   </div>
                 </div>
-              {% endif %}
+              </div>
+            {% endif %}
 
-              {% if session_has('error') %}
-                <div class="row">
-                  <div class="col-xs-12">
-                    <div class="alert alert-danger margin-md-top">
-                      <i class="fas fa-exclamation-triangle"></i>
+            {% if session_has('error') %}
+              <div class="row">
+                <div class="col-12">
+                  <div class="alert alert-danger margin-md-top">
+                    <i class="fas fa-exclamation-triangle"></i>
 
-                      {{ session_get('error') }}
-                    </div>
+                    {{ session_get('error') }}
                   </div>
                 </div>
-              {% endif %}
+              </div>
+            {% endif %}
 
-              {% block container %}
+            {% block container %}
 
-              {% endblock %}
-            </div>
+            {% endblock %}
           </div>
         {% endblock %}
-
-        <footer>
-          <div id="footer-top">
-            <div class="row max-width">
-              <div class="col-xs-12">
-                <a href="https://www.facebook.com/4programmers.net" id="facebook-button" title="Zobacz nasz profil na facebooku!"></a>
-              </div>
-            </div>
-
-            {{ breadcrumb|raw }}
-          </div>
-
-          <div id="footer-inner">
-            {{ render_block('footer') }}
-
-            <a href="#top" class="back-to-top" title="Powrót na górę"><i class="fas fa-angle-up"></i></a>
-          </div>
-
-          <div id="footer-copyright">
-            <div class="row max-width">
-              <div class="col-lg-12">
-                <div class="pull-left">Copyright © 2000-{{ 'now'|date('Y') }} <a title="4programmers.net -- programowanie" class="logo" href="http://4programmers.net/">4programmers.net
-                    - programowanie i tworzenie stron WWW</a></div>
-
-                <div class="pull-right">Coyote {{ config('app.version') }}: {{ timer() }}</div>
-              </div>
-            </div>
-          </div>
-        </footer>
       </div>
+
+      <footer class="container-fluid">
+        <div id="footer-top">
+          <a href="https://www.facebook.com/4programmers.net" id="facebook-button" title="Zobacz nasz profil na facebooku!"></a>
+
+          {{ breadcrumb|raw }}
+        </div>
+
+        <div id="footer-inner" class="row">
+          <div class="col-12">
+            <div class="container-xxl">
+              {{ render_block('footer') }}
+            </div>
+          </div>
+
+          <a href="#top" class="back-to-top" title="Powrót na górę"><i class="fas fa-angle-up"></i></a>
+        </div>
+
+        <div id="footer-copyright">
+          <div class="row container-xxl no-gutters">
+            <div>Copyright © 2000-{{ 'now'|date('Y') }} <a title="4programmers.net -- programowanie" class="logo" href="http://4programmers.net/">4programmers.net - programowanie i tworzenie stron WWW</a></div>
+
+            <div class="ml-auto">Coyote {{ config('app.version') }}: {{ timer() }}</div>
+          </div>
+        </div>
+      </footer>
 
       {{ widgets.vue() }}
 

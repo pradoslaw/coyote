@@ -18,17 +18,11 @@
                 <h4><i class="far fa-calendar-o"></i> Ostatnie zmiany w tekstach</h4>
             </div>
 
-            <div class="panel panel-default">
-                <div class="panel-body wiki-log">
+            <div class="card card-default">
+                <div class="card-body wiki-log">
                     {{ grid|raw }}
                 </div>
             </div>
         </div>
     </div>
-{% endblock %}
-
-{% block body %}
-    <link rel="stylesheet" property="stylesheet" href="{{ cdn('css/wiki.css') }}">
-
-    {{ parent() }}
 {% endblock %}

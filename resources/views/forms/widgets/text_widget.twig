@@ -1,1 +1,1 @@
-{{ form_text(name, value, attr|merge({class: (attr.class|default('') ~  ' form-control')|trim})) }}
+{{ form_text(name, value, attr|merge({class: (attr.class|default('') ~  ' form-control' ~ (error ? ' is-invalid'))|trim})) }}

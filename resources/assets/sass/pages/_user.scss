@@ -1,10 +1,10 @@
 @charset "UTF-8";
 
-@import "../helpers/variables";
-@import "../helpers/mixins";
-@import "../components/sidemenu";
-@import "../components/metadata";
-@import "~@fortawesome/fontawesome-free/scss/variables";
+//@import "../helpers/variables";
+//@import "../helpers/mixins";
+//@import "../components/sidemenu";
+//@import "../components/metadata";
+//@import "~@fortawesome/fontawesome-free/scss/variables";
 
 #user-nav-tabs {
   margin: 20px 0;
@@ -38,7 +38,7 @@
   .progress {
     width: 50%;
 
-    @media screen and (max-width: $screen-sm) {
+    @include media-breakpoint-down(sm) {
       width: 100%;
     }
   }
@@ -144,7 +144,7 @@
       }
     }
 
-    @media screen and (max-width: $screen-sm) {
+    @include media-breakpoint-down(sm) {
       .media-left {
         display: none;
       }
@@ -172,7 +172,7 @@
     margin: 3px 0;
     font-weight: 700;
     color: $brand-primary;
-    font-family: Arial,sans-serif;
+    font-family: Arial, sans-serif;
   }
 
   h2 {
@@ -212,6 +212,7 @@
   .media-object {
     width: 50px;
     height: 50px;
+    display: block;
 
     img {
       width: 100%;
@@ -235,7 +236,7 @@
     }
   }
 
-  @media screen and (max-width: $screen-xs) {
+  @include media-breakpoint-down(xs) {
     .pm-text, .excerpt {
       font-size: $font-size-small;
     }
@@ -301,14 +302,12 @@
 // nowej wiadomosci (umozliwiajace przelaczenie sie w tryb edycji oraz podgladu)
 #app-pm {
   .nav-tabs {
-    > li.active {
-      > a {
-        &,
-        &:focus,
-        &:hover {
-          background-color: transparent;
-          border-bottom-color: #fff;
-        }
+    .nav-link.active {
+      &,
+      &:focus,
+      &:hover {
+        background-color: transparent;
+        border-bottom-color: #fff;
       }
     }
   }

@@ -56,7 +56,10 @@ class HomeController extends BaseController
         $this->tabs = app(Menu::class)->make('_forum', function (Builder $menu) {
             foreach (config('laravel-menu._forum') as $title => $row) {
                 $data = array_pull($row, 'data');
-                $menu->add($title, $row)->data($data);
+                $item = $menu->add($title, $row);//->data($data);//->link->attr(['class' => 'nav-link']);
+
+                $item->link->attr(['class' => 'nav-link']);
+                $item->data($data);
             }
         });
 

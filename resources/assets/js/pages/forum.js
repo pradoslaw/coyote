@@ -5,7 +5,7 @@ import '../pages/forum/draft';
 import '../pages/forum/posting';
 import '../pages/forum/sidebar';
 import '../pages/forum/tags';
-import 'bootstrap-sass/assets/javascripts/bootstrap/popover';
+// import 'bootstrap/js/src/popover';
 import VueSection from '../components/forum/section.vue';
 import Vue from "vue";
 import store from '../store';

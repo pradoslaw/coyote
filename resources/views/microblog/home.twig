@@ -6,104 +6,106 @@
 {% import 'components.modals' as modal %}
 
 {% block container %}
-    <div id="microblog" class="row">
-        <div class="col-md-9">
-            <ul class="nav nav-tabs">
-                <li role="presentation" {{ route != 'microblog.mine' ? 'class="active"' }}><a href="{{ route('microblog.home') }}">Wszystkie wpisy <small>({{ count }})</small></a></li>
+  <div id="microblog" class="row mt-3">
+    <div class="col-md-9">
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link {{ route != 'microblog.mine' ? 'active' }}" href="{{ route('microblog.home') }}">Wszystkie wpisy <small>({{ count }})</small></a>
+        </li>
 
-                {% if auth_check() %}
-                    <li role="presentation" {{ route == 'microblog.mine' ? 'class="active"' }} title="Kliknij, aby zobaczyć swoje wpisy"><a href="{{ route('microblog.mine') }}">Moje <small>({{ count_user }})</small></a></li>
-                {% endif %}
-            </ul>
+        {% if auth_check() %}
+          <li role="presentation" class="nav-item" title="Kliknij, aby zobaczyć swoje wpisy">
+            <a class="nav-link {{ route == 'microblog.mine' ? 'active' }}" href="{{ route('microblog.mine') }}">Moje <small>({{ count_user }})</small></a></li>
+        {% endif %}
+      </ul>
 
-            {% if auth_check() %}
-                <form method="POST" class="microblog-submit" action="{{ route('microblog.save') }}">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <div class="media">
-                                <div class="media-left hidden-xs" style="padding-right: 15px">
-                                    <a href="{{ route('profile', [user('id')]) }}">
-                                        <img class="media-object img-thumbnail" src="{{ user_photo(user('photo')) }}" style="width: 50px; height: 50px;" alt="">
-                                    </a>
-                                </div>
-                                <div class="media-body">
-                                    {% include 'microblog.partials.form' %}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            {% endif %}
-
-            <nav class="text-center">
-                {{ pagination|raw }}
-            </nav>
-
-            {% for microblog in microblogs %}
-                {% include "microblog.partials.microblog" %}
-            {% endfor %}
-
-            <div class="text-center">
-                {{ pagination|raw }}
-            </div>
-
-        </div>
-
-        <aside class="col-md-3">
-            <div id="box-popular-tags" class="box">
-                <h4 class="border"><i class="fas fa-tag fa-fw"></i> Popularne tagi</h4>
-
-                <div class="padding-sm-top padding-sm-bottom">
-                    <ul class="tag-clouds cloud">
-                        {% for name, count in tags %}
-                            <li><a href="{{ route('microblog.tag', [name]) }}">{{ name }}</a><small>× {{ count }}</small></li>
-                        {% endfor %}
-                    </ul>
+      {% if auth_check() %}
+        <form method="POST" class="microblog-submit" action="{{ route('microblog.save') }}">
+          <div class="card card-default">
+            <div class="card-body">
+              <div class="media">
+                <div class="mr-3 d-none d-sm-block">
+                  <a href="{{ route('profile', [user('id')]) }}">
+                    <img class="media-object img-thumbnail" src="{{ user_photo(user('photo')) }}" style="width: 50px; height: 50px;" alt="">
+                  </a>
                 </div>
+                <div class="media-body">
+                  {% include 'microblog.partials.form' %}
+                </div>
+              </div>
             </div>
+          </div>
+        </form>
+      {% endif %}
 
-            <div id="box-popular-entries" class="box">
-                <h4 class="border"><i class="fas fa-star fa-fw"></i> Popularne wpisy</h4>
+      <nav class="mt-3 mb-3 d-flex justify-content-center">
+        {{ pagination|raw }}
+      </nav>
 
-                {% for microblog in popular %}
-                    <div class="media">
-                        <div class="media-body">
-                            <img class="media-object pull-left" src="{{ user_photo(microblog.photo) }}" style="width: 16px; height: 16px;" alt="">
+      {% for microblog in microblogs %}
+        {% include "microblog.partials.microblog" %}
+      {% endfor %}
 
-                            <h5 class="media-heading pull-left">
-                                {{ link_to_profile(microblog.user_id, microblog.name, microblog.is_active, microblog.is_blocked) }}
-                            </h5>
-                            • <a href="{{ route('microblog.view', [microblog.id]) }}#entry-{{ microblog.id }}" title="{{ created_at|format_date(false) }}" class="timestamp" data-timestamp="{{ microblog.created_at|timestamp }}">{{ microblog.created_at|format_date }}</a>
-
-                            <p>
-                                <a href="{{ route('microblog.view', [microblog.id]) }}">{{ excerpt(microblog.text, 200) }}</a>
-                            </p>
-
-                            <a href="{{ route('microblog.vote', [microblog.id]) }}" class="btn btn-thumbs {{ microblog.thumbs_on ? 'thumbs-on' }}" data-count="{{ microblog.votes }}" data-toggle="tooltip" data-placement="top">
-                                {{ declination(microblog.votes, ['głos', 'głosy', 'głosów']) }}
-                            </a>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-        </aside>
+      <div class="mt-3 mb-3 d-flex justify-content-center">
+        {{ pagination|raw }}
+      </div>
     </div>
+
+    <aside class="col-md-3">
+      <div id="box-popular-tags" class="box">
+        <h4 class="border-bottom"><i class="fas fa-tag fa-fw"></i> Popularne tagi</h4>
+
+        <div class="padding-sm-top padding-sm-bottom">
+          <ul class="tag-clouds cloud">
+            {% for name, count in tags %}
+              <li><a href="{{ route('microblog.tag', [name]) }}">{{ name }}</a>
+                <small>× {{ count }}</small>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+
+      <div id="box-popular-entries" class="box">
+        <h4 class="border-bottom"><i class="fas fa-star fa-fw"></i> Popularne wpisy</h4>
+
+        {% for microblog in popular %}
+          <div class="media pb-2 mb-2">
+            <div class="media-body">
+              <img class="media-object float-left mr-1" src="{{ user_photo(microblog.photo) }}" style="width: 16px; height: 16px;" alt="">
+
+              <ul class="list-inline list-inline-bullet mb-2">
+                <li class="list-inline-item">{{ link_to_profile(microblog.user_id, microblog.name, microblog.is_active, microblog.is_blocked) }}</li>
+                <li class="list-inline-item"><a href="{{ route('microblog.view', [microblog.id]) }}#entry-{{ microblog.id }}" title="{{ created_at|format_date(false) }}" class="small text-muted" data-timestamp="{{ microblog.created_at|timestamp }}">{{ microblog.created_at|format_date }}</a></li>
+              </ul>
+
+              <p>
+                <a href="{{ route('microblog.view', [microblog.id]) }}">{{ excerpt(microblog.text, 200) }}</a>
+              </p>
+
+              <a href="{{ route('microblog.vote', [microblog.id]) }}" class="btn btn-thumbs {{ microblog.thumbs_on ? 'thumbs-on' }}" data-count="{{ microblog.votes }}" data-toggle="tooltip" data-placement="top">
+                {{ declination(microblog.votes, ['głos', 'głosy', 'głosów']) }}
+              </a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </aside>
+  </div>
 {% endblock %}
 
 {% block head %}
-    {{ parent() }}
+  {{ parent() }}
 
-    <script>
-        var uploadUrl = '{{ route('microblog.upload') }}';
-    </script>
+  <script>
+    var uploadUrl = '{{ route('microblog.upload') }}';
+  </script>
 
 {% endblock %}
 
 {% block body %}
-    <link rel="stylesheet" property="stylesheet" href="{{ cdn('css/microblog.css') }}">
+  {{ parent() }}
 
-    {{ parent() }}
-
-    <script src="{{ cdn('js/microblog.js') }}"></script>
-    <script src="{{ cdn('js/posting.js') }}"></script>
+  <script src="{{ cdn('js/microblog.js') }}"></script>
+  <script src="{{ cdn('js/posting.js') }}"></script>
 {% endblock %}

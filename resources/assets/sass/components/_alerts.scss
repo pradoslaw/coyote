@@ -15,7 +15,7 @@
 
 .alert-danger {
   a {
-    color: darken($state-danger-text, 10%);
+    color: darken($danger, 10%);
     font-weight: bold;
   }
 }
@@ -80,7 +80,7 @@
 $arrow-size: 8px;
 
 .alert.left:after {
-  border-right-color: $alert-warning-bg;
+  border-right-color: $warning;
   border-width: $arrow-size;
   margin-top: -$arrow-size;
 }
@@ -92,7 +92,7 @@ $arrow-size: 8px;
 }
 
 .alert.right:after {
-  border-left-color: $alert-warning-bg;
+  border-left-color: theme-color-level('warning', $alert-bg-level);
   border-width: $arrow-size;
   margin-top: -$arrow-size;
 }
@@ -104,7 +104,7 @@ $arrow-size: 8px;
 }
 
 .alert.top:after {
-  border-bottom-color: $alert-warning-bg;
+  border-bottom-color: theme-color-level('warning', $alert-bg-level);
   border-width: $arrow-size;
   margin-left: -$arrow-size;
 }
@@ -116,7 +116,7 @@ $arrow-size: 8px;
 }
 
 .alert.bottom:after {
-  border-top-color: $alert-warning-bg;
+  border-top-color: theme-color-level('warning', $alert-bg-level);
   border-width: $arrow-size;
   margin-left: -$arrow-size;
 }

@@ -12,16 +12,8 @@ html {
   position: relative;
 }
 
-body.fixed-top {
+body.padding-top {
   padding-top: 0;
-}
-
-// override class from main.scss
-.max-width {
-  width: auto;
-  max-width: none;
-  margin-left: -15px;
-  margin-right: -15px;
 }
 
 #wrapper {
@@ -31,22 +23,17 @@ body.fixed-top {
 
 #adm-header {
   background-color: #fff;
-  border-bottom: 1px solid $border-color;
+  border-bottom: 1px solid $card-border-color;
 
-  > .col-xs-12 {
+  > .col-12 {
     padding: 10px 15px;
   }
 }
 
 abbr {
   cursor: help;
-  border-bottom: 1px dotted $abbr-border-color;
+  border-bottom: 1px dotted $gray-light;
 }
-
-// Login forum
-// --------------------
-
-@import "adm/login";
 
 // Sidebar
 // ----------------------
@@ -57,11 +44,6 @@ abbr {
 // --------------------
 
 @import "adm/table";
-
-// Tabela z logami laravela
-// ---------------------------------------------------------
-
-@import "adm/log";
 
 // Stream activity
 // -----------------------------
