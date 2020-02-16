@@ -21,7 +21,7 @@
     "clean-webpack-plugin": "^1.0.0",
     "css-loader": "^2.1.0",
     "date-fns": "^2.9.0",
-    "ekko-lightbox": "^4.0.0",
+    "ekko-lightbox": "^5.3.0",
     "file-loader": "^4.3.0",
     "flatpickr": "^2.6.3",
     "glob-all": "^3.1.0",

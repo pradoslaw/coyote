@@ -4,8 +4,8 @@
     <div class="thumbnails row">
         {% for media in microblog.media %}
             <div class="col-6 col-md-3">
-                <a href="{{ media.url() }}" class="thumbnail" data-toggle="lightbox" data-gallery="gallery-{{ microblog.id }}">
-                    <img src="{{ thumbnail(media) }}">
+                <a href="{{ media.url() }}" data-toggle="lightbox" data-gallery="gallery-{{ microblog.id }}">
+                    <img class="img-thumbnail" src="{{ thumbnail(media) }}">
                 </a>
             </div>
         {% endfor %}

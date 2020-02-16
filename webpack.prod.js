@@ -58,6 +58,7 @@ module.exports = merge(common, {
         /^tooltip/,
         /^bs-tooltip/,
         /^ps/,
+        /^ekko-lightbox/
       ]
     })
   ]
