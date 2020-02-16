@@ -74,7 +74,7 @@
             <div class="media-body">
               <img class="media-object float-left mr-1" src="{{ user_photo(microblog.photo) }}" style="width: 16px; height: 16px;" alt="">
 
-              <ul class="list-inline list-inline-bullet mb-2">
+              <ul class="list-inline list-inline-bullet-sm mb-2">
                 <li class="list-inline-item">{{ link_to_profile(microblog.user_id, microblog.name, microblog.is_active, microblog.is_blocked) }}</li>
                 <li class="list-inline-item"><a href="{{ route('microblog.view', [microblog.id]) }}#entry-{{ microblog.id }}" title="{{ created_at|format_date(false) }}" class="small text-muted" data-timestamp="{{ microblog.created_at|timestamp }}">{{ microblog.created_at|format_date }}</a></li>
               </ul>

@@ -73,3 +73,16 @@
 
   @include font-awesome($fa-var-times);
 }
+
+@mixin list-inline($name, $spacing) {
+  .#{$name} {
+    .list-inline-item:not(:last-child) {
+      margin-right: $spacing;
+
+      &:after {
+        content: "●";
+        margin-left: $spacing + .1rem;
+      }
+    }
+  }
+}

@@ -36,9 +36,8 @@ module.exports = merge(common, {
         'boolean',
         'number',
         'constant',
-        'tooltip',
-        'bs-tooltip-top',
         'bs-popover-top',
+        'modal-backdrop',
         'show',
         'fade',
         'fa-desktop',
@@ -55,7 +54,10 @@ module.exports = merge(common, {
       ],
       whitelistPatternsChildren: [
         /hire-me$/,
-        /dropdown-menu/
+        /dropdown-menu/,
+        /^tooltip/,
+        /^bs-tooltip/,
+        /^ps/,
       ]
     })
   ]

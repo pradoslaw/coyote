@@ -31,7 +31,7 @@
       <h6>{{ link_to_profile(comment.user_id, comment.name, comment.is_active, comment.is_blocked) }}</h6>
       <div class="media-content">{{ comment.html|raw }}</div>
 
-      <ul class="list-inline list-inline-bullet text-muted small m-0">
+      <ul class="list-inline list-inline-bullet-sm text-muted small m-0">
         <li class="list-inline-item">
           <a href="{{ route('microblog.view', [microblog.id]) }}#comment-{{ comment.id }}" title="{{ comment.created_at|format_date(false) }}" class="timestamp text-muted" data-timestamp="{{ comment.created_at|timestamp }}">{{ comment.created_at|format_date }}</a>
         </li>
