@@ -50,6 +50,8 @@ class MoveController extends BaseController
             // first, create object. we will save it in db.
             $object = (new Stream_Topic())->map($topic);
 
+            // save old forum id
+            $topic->prev_forum_id = $topic->forum_id;
             // then, set a new forum id
             $topic->forum_id = $forum->id;
             $topic->mover_id = $this->userId;
