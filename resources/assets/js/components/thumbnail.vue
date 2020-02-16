@@ -1,6 +1,6 @@
 <template>
   <div class="img-thumbnail editable-thumbnail">
-    <img v-if="url" :src="url">
+    <img v-if="url" :src="url" class="mw-100">
     <div v-else class="d-block bg-light img-placeholder"></div>
 
     <a v-if="url" class="flush" @click="remove">
