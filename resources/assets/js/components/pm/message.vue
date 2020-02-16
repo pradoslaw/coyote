@@ -1,5 +1,5 @@
 <template>
-  <div class="media" :class="{'unread': ! isRead}" @mouseenter.once="asRead">
+  <div class="media" :class="{'unread': ! isRead}">
 
       <a v-profile="message.user.id" class="d-inline-block">
         <object :data="message.user.photo || '//'" type="image/png" class="media-object mr-2">
@@ -70,14 +70,6 @@
 
           this.$store.dispatch(`messages/${this.clickableText ? 'trash': 'remove' }`, this.message);
         }
-      },
-
-      asRead() {
-        if (this.isRead || this.clickableText) {
-          return;
-        }
-
-        this.$store.dispatch('messages/mark', this.message).then(() => this.$store.commit('inbox/decrement'));
       }
     },
     computed: {

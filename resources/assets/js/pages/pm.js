@@ -58,6 +58,7 @@ new Vue({
     this.listenForTyping();
     this.scrollToBottom();
     this.addScrollbarEvent();
+    this.markAllAsRead();
   },
   methods: {
     addScrollbarEvent() {
@@ -120,7 +121,10 @@ new Vue({
         if (data.user.id === this.recipient.id) {
           store.commit('messages/add', data);
 
-          this.$nextTick(() => this.scrollToBottom());
+          this.$nextTick(() => {
+            this.scrollToBottom();
+            this.markAllAsRead();
+          });
         }
       });
     },
@@ -200,12 +204,18 @@ new Vue({
     },
 
     markAllAsRead() {
-      this.messages
-        .filter(message => message.read_at === null && message.folder === INBOX)
-        .forEach(message => {
-          store.commit('messages/mark', message);
-          store.commit('inbox/decrement');
-      });
+      const shouldMarkAsRead = () => Object.keys(this.recipient).length > 0;
+
+      const listener = () => {
+        this.messages
+          .filter(message => message.read_at === null && message.folder === INBOX && shouldMarkAsRead())
+          .forEach(message => {
+            store.commit('messages/mark', message);
+            store.commit('inbox/decrement');
+          });
+      };
+
+      document.getElementById('app-pm').addEventListener('mouseover', listener, {once: true});
     }
   },
   watch: {
