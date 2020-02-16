@@ -1,6 +1,6 @@
 class DesktopNotifications {
   static requestPermission() {
-    if (this._isSupported() && Notification.permission !== 'granted') {
+    if (this._isSupported() && Notification.permission === 'default') {
       Notification.requestPermission(function (status) {
         if (Notification.permission !== status) {
           Notification.permission = status;
