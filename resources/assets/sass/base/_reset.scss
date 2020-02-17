@@ -54,3 +54,8 @@ dfn {
 dd {
   margin-bottom: 0; // tags on topics list can't have margin
 }
+
+blockquote {
+  border-left: 4px solid $border-color;
+  padding: 2px 0 2px 20px;
+}
