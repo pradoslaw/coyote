@@ -30,18 +30,18 @@
                 <div class="col-sm-6">
                     {% if is_voteable %}
                         {% if topic.poll.max_items > 1 %}
-                            <div class="checkbox">
-                                {{ form_checkbox('items[]', item.id, false, {id: 'item-' ~ item.id}) }}
+                            <div class="custom-control custom-checkbox">
+                                {{ form_checkbox('items[]', item.id, false, {id: 'item-' ~ item.id, class: 'custom-control-input'}) }}
 
-                                <label for="item-{{ item.id }}">
+                                <label for="item-{{ item.id }}" class="custom-control-label">
                                     {{ item.text }}
                                 </label>
                             </div>
                         {% else %}
-                            <div class="radio">
-                                {{ form_radio('items[]', item.id, false, {id: 'item-' ~ item.id}) }}
+                            <div class="custom-control custom-radio">
+                                {{ form_radio('items[]', item.id, false, {id: 'item-' ~ item.id, class: 'custom-control-input'}) }}
 
-                                <label for="item-{{ item.id }}">
+                                <label for="item-{{ item.id }}" class="custom-control-label">
                                     {{ item.text }}
                                 </label>
                             </div>
