@@ -162,7 +162,11 @@ new Vue({
         }
 
         // scroll area by 1px because we don't want to run ps-y-reach-start event in circle
-        document.getElementById('wrap').scrollTop = 1;
+        const wrap = document.getElementById('wrap');
+
+        if (wrap) {
+          wrap.scrollTop = 1;
+        }
 
         return response;
       });
