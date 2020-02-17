@@ -6,7 +6,7 @@ COPY package.json yarn.lock .babelrc webpack.common.js webpack.dev.js webpack.pr
 RUN yarn install
 
 COPY webpack.common.js webpack.dev.js webpack.prod.js /app/
-COPY resources/assets /app/resources/assets
+COPY resources /app/resources
 COPY public /app/public
 
 RUN yarn run prod
