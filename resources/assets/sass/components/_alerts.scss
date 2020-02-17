@@ -6,7 +6,6 @@
 
   a {
     font-weight: bold;
-    //color: darken($state-warning-text, 10%);
   }
 }
 
@@ -28,13 +27,16 @@
   margin: 0;
   padding: 6px;
   font-size: 11px;
-  //@include box-shadow(0 5px 10px rgba(0,0,0,.2));
   z-index: 100;
   display: none;
 
   .close {
     font-size: 15px;
     margin-left: 6px;
+  }
+
+  @include media-breakpoint-down(sm) {
+    display: none !important; // overwrite inline style
   }
 }
 
