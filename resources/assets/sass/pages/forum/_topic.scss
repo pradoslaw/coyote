@@ -486,6 +486,7 @@ blockquote {
       position: relative;
       padding-left: 16px;
       font-family: Helvetica, sans-serif;
+      font-size: .8rem;
 
       &:before {
         @include font-awesome($fa-var-external-link-alt);
