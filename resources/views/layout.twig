@@ -57,7 +57,7 @@
                     {{ item.afterHTML|raw }}
 
                     {% if item.hasChildren() %}
-                      <div class="dropdown-menu left">
+                      <div class="dropdown-menu dropdown-menu-left">
                         {% for children in item.children() %}
 
                           <a class="dropdown-item" href="{{ children.url }}">{{ children.title }}</a>

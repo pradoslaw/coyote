@@ -6,7 +6,7 @@
       <i class="fas fa-envelope fa-fw"></i>
     </a>
 
-    <div ref="dropdown" v-show="isOpen" class="dropdown-alerts dropdown-menu right">
+    <div ref="dropdown" v-show="isOpen" class="dropdown-alerts dropdown-menu dropdown-menu-right">
       <div class="dropdown-header">
         <a title="Przejdź do listy wiadomości" href="/User/Pm">Wiadomości</a>
 
