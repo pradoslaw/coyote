@@ -13,4 +13,20 @@
     font-size: $font-size-small;
     padding: $pagination-padding-y-sm - .1rem $pagination-padding-x-sm - .1rem;
   }
+
+  .pagination {
+    > li {
+      display: none;
+    }
+
+    > li:first-child,
+    > li:last-child,
+    > li.disabled,
+    > li:nth-child(2),
+    > li:nth-child(3),
+    > li:nth-last-child(2),
+    > li.active {
+      display: inline;
+    }
+  }
 }
