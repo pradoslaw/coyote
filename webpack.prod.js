@@ -45,7 +45,12 @@ module.exports = merge(common, {
         'fa-bolt',
         'fa-column',
         'fa-shopping-cart',
-        'fa-envelope'
+        'fa-envelope',
+        'fa-map-marker',
+        'fa-star-half',
+        'fa-chart-bar',
+        'fa-wrench',
+        'fa-key'
       ],
       whitelistPatterns: [
         /^logo/,
