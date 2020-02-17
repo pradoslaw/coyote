@@ -2,7 +2,7 @@ FROM 4programmers/php-node:latest as backend
 
 WORKDIR /app
 
-COPY package.json yarn.lock .babelrc webpack.common.js webpack.dev.js webpack.prod.js /app/
+COPY package.json yarn.lock babel.config.json .browserslistrc webpack.common.js webpack.dev.js webpack.prod.js /app/
 RUN yarn install
 
 COPY webpack.common.js webpack.dev.js webpack.prod.js /app/
