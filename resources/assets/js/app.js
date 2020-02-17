@@ -1,22 +1,22 @@
 // required for IE11
-import 'core-js/fn/promise';
-// required for PhantomJS to run tests
-import 'core-js/modules/es6.function.bind';
+import 'core-js/features/promise';
+
 // JS's startsWith() -- support for IE and old Opera
-import 'core-js/modules/es6.string.starts-with';
+import 'core-js/features/string/starts-with';
 // JS's findIndex() -- support for IE and old Opera
-import 'core-js/modules/es6.array.find-index';
+import 'core-js/features/array/find-index';
 // JS's includes -- support for old browsers
-import 'core-js/modules/es7.array.includes';
+import 'core-js/features/array/includes';
 // Object.assign -- support for old browsers
-import 'core-js/modules/es6.object.assign';
+import 'core-js/features/object/assign';
 // array forEach -- support for old browsers
-import 'core-js/modules/es6.array.for-each';
+import 'core-js/features/array/for-each';
 // array isArray -- support for old browser
-import 'core-js/modules/es6.array.is-array';
-import 'core-js/modules/es6.array.from';
+import 'core-js/features/array/is-array';
+import 'core-js/features/array/from';
 // vue.js Object.values
-import 'core-js/modules/es7.object.values';
+import 'core-js/features/object/values';
+
 
 import './store';
 // import './components/dropdown.js';
