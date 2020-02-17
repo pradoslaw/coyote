@@ -2,6 +2,7 @@
 
 **Ogólne**
 - Migracja do Bootstrap 4
+- Migracja do Babel 7.x
 
 ##2.3
 
