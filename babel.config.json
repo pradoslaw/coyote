@@ -1,9 +1,17 @@
 {
     "presets": [
-        "env"
+        [
+            "@babel/preset-env",
+            {
+                "useBuiltIns": false,
+                "include": [
+
+                ]
+            }
+        ]
     ],
     "plugins": [
-        "transform-object-rest-spread",
+        ["@babel/plugin-proposal-object-rest-spread"],
         [
             "prismjs",
             {
@@ -64,4 +72,5 @@
             }
         ]
     ]
+
 }

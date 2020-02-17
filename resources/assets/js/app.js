@@ -18,7 +18,6 @@ import 'core-js/modules/es6.array.from';
 // vue.js Object.values
 import 'core-js/modules/es7.object.values';
 
-
 import './store';
 // import './components/dropdown.js';
 import './components/scrolltop.js';

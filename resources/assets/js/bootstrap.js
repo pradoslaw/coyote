@@ -1,7 +1,7 @@
-import 'bootstrap/js/src/popover';
-import 'bootstrap/js/src/tooltip';
-import 'bootstrap/js/src/collapse';
-import 'bootstrap/js/src/dropdown';
-import 'bootstrap/js/src/modal';
-import 'bootstrap/js/src/tab';
+import 'bootstrap/js/dist/popover';
+import 'bootstrap/js/dist/tooltip';
+import 'bootstrap/js/dist/collapse';
+import 'bootstrap/js/dist/dropdown';
+import 'bootstrap/js/dist/modal';
+import 'bootstrap/js/dist/tab';
 
