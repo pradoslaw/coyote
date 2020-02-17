@@ -15,7 +15,7 @@
         <div class="media-body">
           <h4 class="float-left"><a :href="job.url">{{ job.title }}</a></h4>
 
-          <a v-if="job.is_medal" :href="job.url" class="medal d-none d-sm-block" title="Oferta na medal. To odznaczenie przyznawane jest ofertom, które zawierają szczegółowe informacje o pracy"></a>
+          <a v-if="job.is_medal" :href="job.url" class="medal d-none d-sm-inline-block" title="Oferta na medal. To odznaczenie przyznawane jest ofertom, które zawierają szczegółowe informacje o pracy"></a>
 
           <vue-salary
             :salary_from="job.salary_from"
