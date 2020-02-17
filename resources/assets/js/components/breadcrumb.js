@@ -28,7 +28,7 @@ $(function () {
     // if navbar class navbar-fixed-top class, we must scroll to appropriate page element according to
     // window.location.hash.
     if ('onhashchange' in window) {
-        let header = $('header.navbar-header.navbar-fixed-top');
+        let header = $('header.navbar-header.fixed-top');
 
         if (header.length) {
             $(window).bind('hashchange', () => {
@@ -49,7 +49,7 @@ $(function () {
 
     let isMobile = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
 
-    if (!isMobile && $('header.navbar-fixed-top').length === 1) {
+    if (!isMobile && $('header.fixed-top').length === 1) {
         $(window).scroll(handler);
     }
 });
