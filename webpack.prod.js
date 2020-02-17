@@ -50,7 +50,9 @@ module.exports = merge(common, {
         'fa-star-half',
         'fa-chart-bar',
         'fa-wrench',
-        'fa-key'
+        'fa-key',
+        'pre',
+        'code'
       ],
       whitelistPatterns: [
         /^logo/,
@@ -65,7 +67,9 @@ module.exports = merge(common, {
         /^ps/,
         /^ekko-lightbox/,
         /^chosen/,
-        /^tag/
+        /^tag/,
+        /:not/,
+        /^pre/
       ]
     })
   ]
