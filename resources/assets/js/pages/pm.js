@@ -220,6 +220,7 @@ new Vue({
       };
 
       document.getElementById('app-pm').addEventListener('mouseover', listener, {once: true});
+      document.getElementById('app-pm').addEventListener('touchmove', listener, {once: true});
     }
   },
   watch: {

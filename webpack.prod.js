@@ -53,7 +53,8 @@ module.exports = merge(common, {
         'fa-key',
         'pre',
         'code',
-        'breadcrumb-fixed'
+        'breadcrumb-fixed',
+        'mention'
       ],
       whitelistPatterns: [
         /^logo/,
