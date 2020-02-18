@@ -104,7 +104,7 @@
     }
 
     .badge {
-      font-size: 90%;
+      font-size: 100%;
       margin-top: -2px;
       margin-bottom: -2px;
     }
@@ -415,6 +415,7 @@ div.tooltip-inner {
       font-weight: normal;
       padding: 1px 5px;
       margin-top: -1px;
+      font-size: 100%;
 
       > a:hover {
         text-decoration: none;
