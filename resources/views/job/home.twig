@@ -227,7 +227,9 @@
           </p>
         </div>
 
-        <vue-pagination :current-page="jobs.meta.current_page" :total-pages="jobs.meta.last_page" @change="changePage"></vue-pagination>
+        <nav class="mb-2">
+          <vue-pagination :current-page="jobs.meta.current_page" :total-pages="jobs.meta.last_page" @change="changePage"></vue-pagination>
+        </nav>
       </div>
 
       <div class="col-md-3 col-12" style="margin-top: -35px">
