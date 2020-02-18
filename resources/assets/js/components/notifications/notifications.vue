@@ -8,8 +8,6 @@
 
     <div ref="dropdown" v-show="isOpen" class="dropdown-alerts dropdown-menu dropdown-menu-right">
       <div class="dropdown-header">
-        <a title="Przejdź do listy powiadomień" href="/User/Notifications">Powiadomienia</a>
-
         <div class="float-right">
           <a v-if="unreadNotifications.length > 0" @click="openAll" title="Otwórz nowe w nowej karcie" href="javascript:" class="margin-xs-right">
             <i class="fas fa-external-link-alt"></i>
@@ -19,6 +17,8 @@
             <i class="far fa-calendar-check"></i>
           </a>
         </div>
+
+        <a title="Przejdź do listy powiadomień" href="/User/Notifications">Powiadomienia</a>
       </div>
 
       <perfect-scrollbar ref="scrollbar" class="dropdown-modal" :options="{wheelPropagation: false}">

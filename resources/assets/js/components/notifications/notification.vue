@@ -8,7 +8,7 @@
 
         <div class="media-body text-truncate">
           <header>
-            <h4>{{ notification.headline }}</h4>
+            <h4 class="text-truncate">{{ notification.headline }}</h4>
             <small>{{ notification.created_at }}</small>
           </header>
 

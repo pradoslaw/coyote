@@ -512,8 +512,7 @@ body.padding-top {
         font-size: 11px;
         max-width: 70%;
         margin: 0;
-        @include text-overflow();
-        font-family: Arial, sans-serif;
+
       }
 
       small {
@@ -524,7 +523,7 @@ body.padding-top {
     }
 
     h3 {
-      font-size: 100%;
+      font-size: .75rem;
       clear: both;
       margin: 1px 0;
       font-weight: bold;

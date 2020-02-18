@@ -8,11 +8,11 @@
 
     <div ref="dropdown" v-show="isOpen" class="dropdown-alerts dropdown-menu dropdown-menu-right">
       <div class="dropdown-header">
-        <a title="Przejdź do listy wiadomości" href="/User/Pm">Wiadomości</a>
-
         <a class="btn-write-message" href="/User/Pm/Submit">
           Wyślij wiadomość
         </a>
+
+        <a title="Przejdź do listy wiadomości" href="/User/Pm">Wiadomości</a>
       </div>
 
       <perfect-scrollbar class="dropdown-modal" :options="{wheelPropagation: false}">
