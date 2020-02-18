@@ -95,8 +95,6 @@
   // Offer description (or company description)
   // ----------------------------------------------------
   .text {
-    font-size: $font-size-lg;
-
     @include media-breakpoint-down(sm) {
       font-size: $font-size-small;
     }
