@@ -1,31 +1,31 @@
 $(function () {
     'use strict';
 
-    // let handler = function () {
-    //     if ($(window).scrollTop() > 150) {
-    //         let breadcrumb = $('#breadcrumb-fixed');
-    //         let css = {left: $('#logo').position().left, opacity: 1.0};
-    //
-    //         if (!breadcrumb.length) {
-    //             breadcrumb = $('.breadcrumb:first:visible').clone();
-    //
-    //             // breadcrumb can be empty
-    //             if ($.trim(breadcrumb.text()).length > 0) {
-    //                 breadcrumb.attr({id: 'breadcrumb-fixed'}).css(css).hide().appendTo('body');
-    //
-    //                 breadcrumb.slideDown('fast');
-    //             }
-    //         }
-    //         else {
-    //             breadcrumb.css(css);
-    //         }
-    //     }
-    //     else {
-    //         $('#breadcrumb-fixed').remove();
-    //     }
-    // };
+    let handler = function () {
+        if ($(window).scrollTop() > 150) {
+            let breadcrumb = $('#breadcrumb-fixed');
+            let css = {left: $('.navbar-brand').position().left, opacity: 1.0};
 
-    // if navbar class navbar-fixed-top class, we must scroll to appropriate page element according to
+            if (!breadcrumb.length) {
+                breadcrumb = $('.breadcrumb:first:visible').clone();
+
+                // breadcrumb can be empty
+                if ($.trim(breadcrumb.text()).length > 0) {
+                    breadcrumb.attr({id: 'breadcrumb-fixed'}).css(css).hide().appendTo('body');
+
+                    breadcrumb.slideDown('fast');
+                }
+            }
+            else {
+                breadcrumb.css(css);
+            }
+        }
+        else {
+            $('#breadcrumb-fixed').remove();
+        }
+    };
+
+    // if navbar class has fixed-top class, we must scroll to appropriate page element according to
     // window.location.hash.
     if ('onhashchange' in window) {
         let header = $('header.navbar-header.fixed-top');
@@ -47,9 +47,9 @@ $(function () {
         });
     }
 
-    // let isMobile = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
-    //
-    // if (!isMobile && $('header.fixed-top').length === 1) {
-    //     $(window).scroll(handler);
-    // }
+    let isMobile = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+
+    if (!isMobile && $('header.fixed-top').length === 1) {
+        $(window).scroll(handler);
+    }
 });
