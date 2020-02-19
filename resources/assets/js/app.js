@@ -1,6 +1,5 @@
 // required for IE11
 import 'core-js/features/promise';
-
 // JS's startsWith() -- support for IE and old Opera
 import 'core-js/features/string/starts-with';
 // JS's findIndex() -- support for IE and old Opera
@@ -16,7 +15,6 @@ import 'core-js/features/array/is-array';
 import 'core-js/features/array/from';
 // vue.js Object.values
 import 'core-js/features/object/values';
-
 
 import './store';
 // import './components/dropdown.js';
