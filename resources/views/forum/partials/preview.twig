@@ -26,7 +26,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-2 col-user d-none d-sm-blocks">
+                            <div class="col-2 col-user d-none d-sm-block">
                                 {% if auth_check() %}
                                     <div class="avatar">
                                         <img class="img-fluid" src="{{ user_photo(user('photo')) }}" {{ not user('photo') ? 'style="max-width: 75px"' }}>
