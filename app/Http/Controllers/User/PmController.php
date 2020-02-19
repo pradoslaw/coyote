@@ -86,16 +86,12 @@ class PmController extends BaseController
     {
         $this->authorize('show', $pm);
 
-        $talk = $this->pm->talk($this->userId, $pm->author_id, 10, (int) $request->query('offset', 0));
+        $talk = $this->pm->conversation($this->userId, $pm->author_id, 10, (int) $request->query('offset', 0));
         $messages = PmResource::collection($talk);
 
         $recipient = $this->user->find($pm->author_id, ['id', 'name']);
 
-        foreach ($talk as $row) {
-            if ($row->folder === Pm::INBOX) {
-                $this->markAsRead($row);
-            }
-        }
+        $this->markAllAsRead($pm->author_id);
 
         return $this->view('user.pm.show')->with(compact('pm', 'messages', 'recipient'));
     }
@@ -106,7 +102,7 @@ class PmController extends BaseController
      */
     public function infinity(Request $request)
     {
-        $talk = $this->pm->talk($this->userId, (int) $request->input('author_id'), 10, (int) $request->query('offset', 0));
+        $talk = $this->pm->conversation($this->userId, (int) $request->input('author_id'), 10, (int) $request->query('offset', 0));
 
         return PmResource::collection($talk);
     }
@@ -189,6 +185,19 @@ class PmController extends BaseController
         $this->authorize('show', $pm);
 
         $this->markAsRead($pm);
+    }
+
+    /**
+     * @param int $authorId
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    private function markAllAsRead(int $authorId)
+    {
+        $result = $this->pm->getUnreadIds($this->userId, $authorId);
+
+        foreach ($result as $pm) {
+            $this->markAsRead($pm);
+        }
     }
 
     /**

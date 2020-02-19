@@ -70,7 +70,7 @@ class PmRepository extends Repository implements PmRepositoryInterface
      * @param int $offset
      * @return mixed
      */
-    public function talk($userId, $authorId, $limit = 10, $offset = 0)
+    public function conversation($userId, $authorId, $limit = 10, $offset = 0)
     {
         $builder = $this
             ->model->select([
@@ -103,6 +103,21 @@ class PmRepository extends Repository implements PmRepositoryInterface
         ->get();
 
         return $result->reverse()->values();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getUnreadIds(int $userId, int $authorId)
+    {
+        return $this
+            ->model
+            ->select(['id', 'text_id'])
+            ->where('user_id', $userId)
+            ->where('author_id', $authorId)
+            ->where('folder', Pm::INBOX)
+            ->whereNull('read_at')
+            ->get();
     }
 
     /**

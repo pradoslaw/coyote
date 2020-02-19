@@ -2,6 +2,7 @@
 
 namespace Coyote\Repositories\Contracts;
 
+use Coyote\Pm;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 interface PmRepositoryInterface extends RepositoryInterface
@@ -31,7 +32,14 @@ interface PmRepositoryInterface extends RepositoryInterface
      * @param int $offset
      * @return mixed
      */
-    public function talk($userId, $rootId, $limit = 10, $offset = 0);
+    public function conversation($userId, $rootId, $limit = 10, $offset = 0);
+
+    /**
+     * @param int $userId
+     * @param int $authorId
+     * @return Pm[]
+     */
+    public function getUnreadIds(int $userId, int $authorId);
 
     /**
      * Submit a new message

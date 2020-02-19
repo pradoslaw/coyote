@@ -16,7 +16,7 @@ export default {
       const rect = textarea.getBoundingClientRect();
 
       overlay.id = 'ajax-loader';
-      overlay.innerHTML = '<i class="fa fa-cog fa-spin"></i>';
+      overlay.innerHTML = '<i class="fa fa-spinner fa-spin fa-fw"></i>';
       overlay.style.left = `${rect.left}px`;
       overlay.style.top = `${rect.top + document.documentElement.scrollTop}px`;
       overlay.style.width = `${rect.width}px`;
