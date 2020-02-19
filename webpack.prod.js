@@ -24,6 +24,7 @@ module.exports = merge(common, {
       whitelist: [
         'footer-bubble',
         'line-numbers',
+        'line-numbers-rows',
         'token',
         'keyword',
         'comment',
