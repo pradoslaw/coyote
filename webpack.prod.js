@@ -25,6 +25,7 @@ module.exports = merge(common, {
         'footer-bubble',
         'line-numbers',
         'token',
+        'keyword',
         'comment',
         'prolog',
         'doctype',
