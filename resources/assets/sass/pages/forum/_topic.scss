@@ -104,9 +104,10 @@
     }
 
     .badge {
-      font-size: 100%;
+      font-size: 90%;
       margin-top: -2px;
       margin-bottom: -2px;
+      padding: 1px 5px;
     }
 
     @include link-color-darker;
