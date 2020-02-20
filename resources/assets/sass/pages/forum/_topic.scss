@@ -28,7 +28,7 @@
 
 .post-delete {
   color: theme-color-level("warning", $alert-color-level);
-  background-color: $warning;
+  background-color: theme-color-level("warning", $alert-bg-level);
   padding: 4px 10px;
   font-size: 11px;
   border-bottom: 1px solid $alert-warning-border;
