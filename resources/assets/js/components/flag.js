@@ -28,7 +28,8 @@ $(function() {
                 $.post(url);
                 $this.fadeOut();
 
-                $('#modal-report').modal('hide').remove();
+                $('#modal-report').modal('dispose').remove();
+                $('.modal-backdrop').remove();
                 return false;
             });
         });
