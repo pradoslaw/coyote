@@ -1,12 +1,14 @@
 @charset "UTF-8";
 
 @import url("//fonts.googleapis.com/css?family=Open+Sans:400,300&subset=latin,latin-ext");
-@import "vendor/bootstrap";
-@import "vendor/font-awesome";
-
+// variables need to be at the top
 @import "helpers/variables";
 @import "helpers/utilities";
 @import "helpers/mixins";
+
+@import "vendor/bootstrap";
+@import "vendor/font-awesome";
+
 @import "base/reset";
 @import "components/breadcrumbs";
 @import "components/buttons";

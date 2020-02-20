@@ -1,3 +1,4 @@
+/** @deprecated */
 (function ($) {
     'use strict';
 

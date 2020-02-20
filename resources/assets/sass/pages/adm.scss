@@ -1,8 +1,8 @@
 @charset "UTF-8";
-@import "../vendor/bootstrap/variables";
+@import "../helpers/variables";
 @import "~@fortawesome/fontawesome-free/scss/variables";
 @import "../vendor/flatpickr";
-@import "../helpers/variables";
+
 
 html {
   // relative is required to contain the absolute sidebar
