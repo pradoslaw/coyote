@@ -23,7 +23,7 @@ class PaymentForm extends Form
                 '@submit.prevent' => 'submit'
             ])
             ->add('payment_method', 'hidden', [
-                'rules' => 'in:card,transfer',
+                'rules' => 'required|in:card,transfer',
                 'value' => 'card',
                 'attr' => [
                     'v-model' => 'form.payment_method'
