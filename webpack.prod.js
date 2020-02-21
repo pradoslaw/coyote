@@ -53,6 +53,8 @@ module.exports = merge(common, {
         'fa-chart-bar',
         'fa-wrench',
         'fa-key',
+        'fa-minus',
+        'fa-columns',
         'pre',
         'code',
         'breadcrumb-fixed',
