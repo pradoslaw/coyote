@@ -8,9 +8,9 @@
 
     <div id="vcard-content">
         <div class="media">
-            <div class="mr-2">
+            <div class="mr-2 avatar-panel">
                 <img src="{{ user_photo(user.photo) }}" class="img-thumbnail">
-                <span class="status {{ user.is_online ?: 'offline' }}">{{ user.is_online ? 'Online' : 'Offline' }}</span>
+                <span class="mb-1 status {{ user.is_online ?: 'offline' }}">{{ user.is_online ? 'Online' : 'Offline' }}</span>
 
                 {% if user.group.name %}
                     <span class="badge badge-secondary">{{ user.group.name }}</span>
