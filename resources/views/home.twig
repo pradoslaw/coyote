@@ -31,7 +31,7 @@
                       {% for topic in interesting %}
                         <div class="row">
                           <span class="col-sm-2 d-none d-sm-block">
-                              <strong>{{ topic.views }}</strong>
+                              <strong class="text-nowrap">{{ topic.views }}</strong>
                               <small class="text-nowrap">{{ declination(topic.views, ['wyświetlenie', 'wyświetlenia', 'wyświetleń'], true) }}</small>
                           </span>
 
@@ -48,7 +48,7 @@
                       {% for topic in voted %}
                         <div class="row">
                           <span class="col-sm-2 d-none d-sm-block">
-                              <strong>{{ topic.score }}</strong>
+                              <strong class="text-nowrap">{{ topic.score }}</strong>
                               <small class="text-nowrap">{{ declination(topic.score, ['ocena', 'oceny', 'ocen'], true) }}</small>
                           </span>
 
@@ -65,7 +65,7 @@
                       {% for topic in newest %}
                         <div class="row">
                           <span class="col-sm-2 d-none d-sm-block">
-                              <strong>{{ topic.views }}</strong>
+                              <strong class="text-nowrap">{{ topic.views }}</strong>
                               <small class="text-nowrap">{{ declination(topic.views, ['wyświetlenie', 'wyświetlenia', 'wyświetleń'], true) }}</small>
                           </span>
 
