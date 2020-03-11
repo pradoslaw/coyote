@@ -20,28 +20,38 @@ Coyote to nazwa systemu obsługującego serwis 4programmers.net.
 
 Strona jest dostępna w przeglądarce pod adresem: `localhost:8880`
 
+## Praca z kodem CSS/JS
+
+W projekcie korzystamy z yarn oraz webpack. Aby "skompilować" pliki źródłowe do postaci finalnej należy wykonać
+polecenie `sudo docker-compose exec php yarn run dev` lub `sudo docker-compose exec php yarn run prod` (na produkcji).
+
+Polecenie `sudo docker-compose exec php yarn run watch` powoduje stałe monitorowanie zmian w plikach źródłowych. Jakiekolwiek zmiany w tych plikach
+spowodują wygenerowanie nowych plików wynikowych CSS oraz JS.
+
 ## Testowanie
 
-W pisaniu testów, pomaga nam framework [Codeception](http://codeception.com/). Testy znajdują się w katalogu `tests`, który zawiera testy jednostkowe, funkcjonalne oraz akceptacyjne. Aby uruchomić testy trzeba wejść do katalogu z projektem i wykonać polecenia:
+Testy pisane są w dwóch frameworkach: codeception (legacy code) oraz laravel.
 
-1. `vendor/bin/codecept build` (tylko jednorazowo)
-2. `vendor/bin/codecept run`
+Aby uruchomić testy napisane w codeception należy wykonać polecenie:
 
-## Aktualizacja projektu
+`docker-compose exec php php vendor/bin/codecept run`
 
-`make update` (na produkcji) lub `make update-dev` (na serwerze deweloperskim)
+Aby uruchomić testy w laravel:
 
-### Konfiguracja supervisor
+`docker-compose exec php php vendor/bin/phpunit`
 
-Supervisor jest narzędziem monitorującym procesy, działającym w środowisku Linux. W Laravel dostępny jest
-mechanizm kolejkowania zadań (np. indeksowanie treści w Elasticsearch), który można uruchomić przy pomocy
+## Zadania uruchomiane w tle
 
-`php artisan queue:listen --sleep=10`
+Na serwerze produkcyjnym niektóre zadanie wykonywane są w tle. Dodawane są one do kolejki oraz wykonywane przez proces działający w tle.
+Domyślnie, na serwerze lokalnym zadania nie są dodawane do kolejki (w pliku `.env` ustawienie `QUEUE_DRIVER=sync`).
 
-Supervisor ma na celu automatyczne uruchamianie tego procesu po starcie systemu i pilnownie, aby zawsze był uruchomiony.
-Konfigurację supervisor możesz znaleźć w pliku `supervisor.conf`. Więcej informacji: https://laravel.com/docs/5.2/queues
+Jeżeli jednak chciałbyś przetestować działanie mechanizmu kolejek, ustaw wartość zmiennej środowiskowej `QUEUE_DRIVER` na `redis`.
 
-### Ustawienia crona
+Aby uruchomić mechanizm kolejek skorzystaj z następującego polecenia:
+
+`sudo docker-compose exec php php artisan queue:listen --sleep=10`
+
+## Ustawienia crona
 
 W przypadku ustawienia środowiska na `production` w pliku `.env`, konieczne będzie ustawienie crona aby wykonywać
 pewne czynności cykliczne.
