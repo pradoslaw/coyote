@@ -202,7 +202,7 @@ class TopicController extends BaseController
         $this->validate($request, ['q' => 'username']);
 
         $posts = $this->post->findAllBy('topic_id', $id, ['id', 'user_id']);
-        $posts->load('comments'); // load comments assigned to posts
+        $posts->load('comments:id,post_id,user_id'); // load comments assigned to posts
 
         $usersId = $posts->pluck('user_id')->toArray();
 
