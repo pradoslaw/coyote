@@ -1,0 +1,81 @@
+type: object
+properties:
+  id:
+    type: integer
+  parent_id:
+    type: integer
+    nullable: true
+  slug:
+    type: string
+    description: "Part of category URL"
+  title:
+    type: string
+    nullable: true
+    description: "Extended category title (good for SEO)"
+  description:
+    type: string
+  section:
+    type: string
+  url:
+    type: string
+    description: "Full category URL"
+  topics:
+    type: integer
+  posts:
+    type: integer
+  is_locked:
+    type: boolean
+    default: false
+  redirects:
+    type: integer
+    default: 0
+  is_read:
+    type: boolean
+    default: false
+    description: "Determines if category has been read for given (logged) user"
+  read_at:
+    type: string
+    format: "datetime"
+  is_prohibited:
+    type: boolean
+    default: false
+    description: "Determines if category is open to everyone"
+  order:
+    type: integer
+    description: "Category order on the list"
+  is_hidden:
+    type: boolean
+    default: false
+    description: "Determines if category should be hidden for given user"
+  is_redirected:
+    type: boolean
+    default: false
+    description: "Determines if category redirects to another url"
+  post:
+    type: object
+    properties:
+      id:
+        type: integer
+      created_at:
+        type: string
+        format: "datetime"
+      user_name:
+        type: string
+        nullable: true
+        description: "Name of anonymous user"
+      url:
+        type: string
+      user:
+        nullable: true
+        $ref: './user.yaml'
+  topic:
+    type: object
+    properties:
+      id:
+        type: integer
+      subject:
+        type: string
+      url:
+        type: string
+  children:
+    description: "Children categories"

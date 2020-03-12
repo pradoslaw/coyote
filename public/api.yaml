@@ -6,7 +6,7 @@ info:
 servers:
   - url: https://api.4programmers.net/v1
     description: Production server
-  - url: http://api.dev.4programmers.info/v1
+  - url: http://api.4programmers.dev/v1
     description: Stagging server
 paths:
   /login:
@@ -244,6 +244,21 @@ paths:
                 type: object
                 $ref: './api/schemas/topic.yaml'
 
+  /forums:
+    get:
+      summary: "Get list of all forum categories"
+      tags:
+        - forum
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: "Forum object"
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: './api/schemas/forum.yaml'
 
 components:
   requestBodies:
