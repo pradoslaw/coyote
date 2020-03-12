@@ -17,8 +17,7 @@ class Latex extends Parser implements ParserInterface
             "#<tex>(.*?)</tex>#si",
             function ($match) {
                 return sprintf(
-                    '<img src="http://%s/cgi-bin/mimetex2.cgi?%s" alt="%s">',
-                    request()->getHost(),
+                    '<img src="https://latex.codecogs.com/gif.latex?%s" alt="%s">',
                     rawurlencode($match[1]),
                     htmlspecialchars($match[1])
                 );
