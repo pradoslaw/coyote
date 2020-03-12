@@ -184,14 +184,10 @@ class HomeController extends BaseController
         abort_if(is_null($user), 404);
 
         if ($this->request->route()->getName() == 'forum.user') {
-            $this
-                ->tabs
-                ->add('Posty: ' . $user->name, [
-                    'route' => [
-                        'forum.user', $userId
-                    ]
-                ])
-                ->activate();
+            $item = $this->tabs->add('Posty: ' . $user->name, ['route' => ['forum.user', $userId], 'class' => 'nav-item']);
+
+            $item->link->attr(['class' => 'nav-link']);
+            $item->activate();
         }
 
         return $this->render($topics)->with('user_id', $userId);
