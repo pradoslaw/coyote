@@ -163,7 +163,7 @@ class Link extends Parser implements ParserInterface
             if ($host === 'youtu.be' && $path !== '') {
                 parse_str($components['query'] ?? '', $query);
 
-                $text = str_replace($match, $this->makeIframe($path, (int)$query['t'] ?? null), $text);
+                $text = str_replace($match, $this->makeIframe($path, (isSet($query['t']) && $this->timeToSeconds($query['t'])) ? $this->timeToSeconds($query['t']) : null), $text);
             }
         }
 
@@ -288,7 +288,7 @@ class Link extends Parser implements ParserInterface
         }
 
         if (!preg_match('/(\d+)m(\d+)s/', $time, $match)) {
-            return null;
+            return ((int)$time == $time) ? (int)$time : null;
         }
 
         return ($match[1] * 60) + $match[2];
@@ -299,7 +299,7 @@ class Link extends Parser implements ParserInterface
      * @param int $start
      * @return string
      */
-    private function makeIframe(string $videoId, int $start = null): string
+    private function makeIframe(string $videoId, string $start = null): string
     {
         $iframe = (string) $this->html->tag('iframe', '', [
             'src'   => 'https://youtube.com/embed/' . $videoId . ($start !== null ? "?start=$start" : ''),
