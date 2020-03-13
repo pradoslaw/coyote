@@ -163,7 +163,16 @@ class Link extends Parser implements ParserInterface
             if ($host === 'youtu.be' && $path !== '') {
                 parse_str($components['query'] ?? '', $query);
 
-                $text = str_replace($match, $this->makeIframe($path, (isSet($query['t']) && $this->timeToSeconds($query['t'])) ? $this->timeToSeconds($query['t']) : null), $text);
+                $text = str_replace(
+                    $match, 
+                    $this->makeIframe(
+                        $path, 
+                        (isSet($query['t']) && $this->timeToSeconds($query['t'])) 
+                        ? $this->timeToSeconds($query['t']) 
+                        : null
+                    ), 
+                    $text
+                );
             }
         }
 
