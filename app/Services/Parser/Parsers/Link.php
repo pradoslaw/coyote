@@ -164,13 +164,13 @@ class Link extends Parser implements ParserInterface
                 parse_str($components['query'] ?? '', $query);
 
                 $text = str_replace(
-                    $match, 
+                    $match,
                     $this->makeIframe(
-                        $path, 
-                        (isSet($query['t']) && $this->timeToSeconds($query['t'])) 
-                        ? $this->timeToSeconds($query['t']) 
-                        : null
-                    ), 
+                        $path,
+                        (isset($query['t']) && $this->timeToSeconds($query['t']))
+                            ? $this->timeToSeconds($query['t'])
+                            : null
+                    ),
                     $text
                 );
             }
@@ -296,11 +296,11 @@ class Link extends Parser implements ParserInterface
             return null;
         }
 
-        if (!preg_match('/(\d+)m(\d+)s/', $time, $match)) {
-            return ((int)$time == $time) ? (int)$time : null;
+        if (preg_match('/(\d+)m(\d+)s/', $time, $match)) {
+            return ($match[1] * 60) + $match[2];
         }
 
-        return ($match[1] * 60) + $match[2];
+        return $time;
     }
 
     /**
