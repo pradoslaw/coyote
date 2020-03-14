@@ -287,11 +287,11 @@ class Link extends Parser implements ParserInterface
             return null;
         }
 
-        if (!preg_match('/(\d+)m(\d+)s/', $time, $match)) {
-            return null;
+        if (preg_match('/(\d+)m(\d+)s/', $time, $match)) {
+            return ($match[1] * 60) + $match[2];
         }
 
-        return ($match[1] * 60) + $match[2];
+        return $time;
     }
 
     /**
@@ -299,7 +299,7 @@ class Link extends Parser implements ParserInterface
      * @param int $start
      * @return string
      */
-    private function makeIframe(string $videoId, int $start = null): string
+    private function makeIframe(string $videoId, string $start = null): string
     {
         $iframe = (string) $this->html->tag('iframe', '', [
             'src'   => 'https://youtube.com/embed/' . $videoId . ($start !== null ? "?start=$start" : ''),
