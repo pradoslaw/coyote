@@ -1,3 +1,76 @@
+<ul id="sort" class="d-none d-sm-block mt-2">
+  <li>{{ sortable('last', 'Ostatni post', ['last', 'desc']) }}</li>
+  <li>{{ sortable('id', 'Data utworzenia', ['last', 'desc']) }}</li>
+  <li>{{ sortable('replies', 'Odpowiedzi', ['last', 'desc']) }}</li>
+  <li>{{ sortable('views', 'Wyświetleń', ['last', 'desc']) }}</li>
+  <li>{{ sortable('score', 'Głosów', ['last', 'desc']) }}</li>
+  {#<li class="filter"><a href="javascript:">Filtruj</a></li>#}
+</ul>
+
+<a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm float-right" style="margin-top: 6px; margin-bottom: 10px">Nowy wątek</a>
+<div class="clearfix"></div>
+
+<div class="card card-default card-topics">
+  {% for i in 1..2 %}
+  <div class="card-body">
+    <div class="row">
+      <div class="col-lg-8 col-md-12 d-flex align-items-center">
+        <i class="fas fa-lock float-left d-none d-lg-block icon mr-3"><b></b></i>
+
+        <div class="wrap">
+          <h5 class="topic-subject text-truncate m-0"><a href="#">Bitcoin/kryptowaluty podobieństwa z realną walutą?</a></h5>
+
+          <ul class="tag-clouds tag-clouds-xs tag-clouds-skills mt-1">
+            <li><a href="#" >C++</a></li>
+            <li><a href="#" >Java</a></li>
+          </ul>
+
+{#          <p class="d-none d-lg-block mb-0 mt-1 small">#}
+{#            <span class="text-muted">wczoraj, 23:58</span>, <a href="#">Freja Draco</a>#}
+{#          </p>#}
+        </div>
+
+      </div>
+
+      <div class="col-lg-1 d-none d-lg-block small">
+        <div class="row">
+          <div class="col-lg-12 text-truncate text-right">
+            <strong>7</strong>
+            <small class="text-muted">odpowiedzi</small>
+          </div>
+
+          <div class="col-lg-12 text-nowrap text-right">
+            <strong>144</strong>
+
+            <small class="text-muted">wyświetlenia</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-12">
+        <div class="media mt-2 m-md-0">
+          <a href="#" class="mr-2 d-none d-sm-block">
+            <object data="https://4programmers.net/uploads/photo/5a/5abcd599a84dd.gif" type="image/png" class="d-inline-block img-thumbnail" style="width: 35px; height: 35px">
+              <img src="/img/avatar.png">
+            </object>
+          </a>
+
+          <div class="media-body small">
+            <span class="text-muted">wczoraj, 23:58</span>
+
+            <p class="text-truncate m-0 d-inline d-sm-block"><a href="#">Freja Draco</a></p>
+          </div>
+        </div>
+
+        <a title="Obserwuj wątek" href="#" class="btn-watch-sm">
+          <i class="far fa-star"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
 <section class="card card-wrapper">
     <div class="card-body">
         <div id="box-topics" class="table-forum">
