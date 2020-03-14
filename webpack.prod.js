@@ -58,7 +58,8 @@ module.exports = merge(common, {
         'pre',
         'code',
         'breadcrumb-fixed',
-        'mention'
+        'mention',
+        'user-deleted'
       ],
       whitelistPatterns: [
         /^logo/,
