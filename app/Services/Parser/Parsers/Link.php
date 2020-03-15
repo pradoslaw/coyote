@@ -279,7 +279,7 @@ class Link extends Parser implements ParserInterface
 
     /**
      * @param string|null $time
-     * @return null|int
+     * @return null|string
      */
     private function timeToSeconds($time)
     {
@@ -296,7 +296,7 @@ class Link extends Parser implements ParserInterface
 
     /**
      * @param string $videoId
-     * @param int $start
+     * @param string $start
      * @return string
      */
     private function makeIframe(string $videoId, string $start = null): string
@@ -315,7 +315,7 @@ class Link extends Parser implements ParserInterface
      *
      * @example http://4programmers.net/Foo/Bar => /Foo/Bar
      * @param string $url
-     * @return string|bool
+     * @return string|false
      */
     private function getPathFromInternalUrl($url)
     {
