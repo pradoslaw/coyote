@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Controllers\Api;
 
-use Coyote\Http\Resources\MicroblogResource;
+use Coyote\Http\Resources\Api\MicroblogResource;
 use Coyote\Microblog;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
 use Coyote\Repositories\Criteria\EagerLoading;

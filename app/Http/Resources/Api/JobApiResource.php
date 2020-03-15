@@ -1,10 +1,14 @@
 <?php
 
-namespace Coyote\Http\Resources;
+namespace Coyote\Http\Resources\Api;
 
 use Carbon\Carbon;
 use Coyote\Currency;
 use Coyote\Http\Factories\MediaFactory;
+use Coyote\Http\Resources\FeatureResource;
+use Coyote\Http\Resources\FirmResource;
+use Coyote\Http\Resources\LocationResource;
+use Coyote\Http\Resources\TagResource;
 use Coyote\Job;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Tag;

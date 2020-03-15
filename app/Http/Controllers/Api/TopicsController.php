@@ -3,7 +3,7 @@
 namespace Coyote\Http\Controllers\Api;
 
 use Coyote\Http\Resources\TagResource;
-use Coyote\Http\Resources\TopicResource;
+use Coyote\Http\Resources\Api\TopicResource;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Repositories\Criteria\Sort;

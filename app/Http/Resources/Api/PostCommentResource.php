@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Http\Resources;
+namespace Coyote\Http\Resources\Api;
 
 use Carbon\Carbon;
 use Coyote\Job\Comment;

@@ -4,7 +4,7 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Events\UserWasSaved;
 use Coyote\Http\Factories\FlagFactory;
-use Coyote\Http\Resources\ForumCollection;
+use Coyote\Http\Resources\Api\ForumCollection;
 use Coyote\Repositories\Criteria\Topic\BelongsToForum;
 use Coyote\Repositories\Criteria\Topic\StickyGoesFirst;
 use Coyote\Services\Forum\TreeBuilder;

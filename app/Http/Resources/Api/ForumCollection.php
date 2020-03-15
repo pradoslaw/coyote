@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Http\Resources;
+namespace Coyote\Http\Resources\Api;
 
 use Coyote\Services\Guest;
 use Illuminate\Http\Resources\Json\ResourceCollection;

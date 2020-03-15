@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Controllers\Api;
 
-use Coyote\Http\Resources\ForumCollection;
+use Coyote\Http\Resources\Api\ForumCollection;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;

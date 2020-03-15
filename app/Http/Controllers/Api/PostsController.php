@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Controllers\Api;
 
-use Coyote\Http\Resources\PostResource;
+use Coyote\Http\Resources\Api\PostResource;
 use Coyote\Post;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Coyote\Repositories\Criteria\EagerLoading;

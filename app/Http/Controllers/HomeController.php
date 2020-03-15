@@ -8,15 +8,12 @@ use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepos
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface as ReputationRepository;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
-use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Repositories\Criteria\Forum\SkipHiddenCategories;
 use Coyote\Repositories\Criteria\Microblog\LoadComments;
 use Coyote\Repositories\Criteria\Microblog\OrderByScore;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess as OnlyThoseTopicsWithAccess;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess as OnlyThoseForumsWithAccess;
 use Coyote\Services\Session\Renderer;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
 {

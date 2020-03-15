@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use Carbon\Carbon;
 use Coyote\Forum;
 use Coyote\Guest;
-use Coyote\Http\Resources\ForumResource;
+use Coyote\Http\Resources\Api\ForumResource;
 use Coyote\Post;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 use Coyote\Services\Forum\Tracker;

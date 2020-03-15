@@ -1,9 +1,10 @@
 <?php
 
-namespace Coyote\Http\Resources;
+namespace Coyote\Http\Resources\Api;
 
 use Carbon\Carbon;
 use Coyote\Forum;
+use Coyote\Http\Resources\TagResource;
 use Coyote\Microblog;
 use Coyote\Post;
 use Coyote\Services\UrlBuilder\UrlBuilder;

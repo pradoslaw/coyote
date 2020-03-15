@@ -1,7 +1,8 @@
 <?php
 
-namespace Coyote\Http\Resources;
+namespace Coyote\Http\Resources\Api;
 
+use Coyote\Http\Resources\UserResource;
 use Coyote\Post;
 use Coyote\Services\Guest;
 use Coyote\Services\UrlBuilder\UrlBuilder;

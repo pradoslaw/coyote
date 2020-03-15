@@ -4,7 +4,7 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Factories\FlagFactory;
 use Coyote\Http\Factories\GateFactory;
-use Coyote\Http\Resources\ForumCollection;
+use Coyote\Http\Resources\Api\ForumCollection;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;

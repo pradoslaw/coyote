@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use Coyote\Forum;
-use Coyote\Http\Resources\ForumCollection;
+use Coyote\Http\Resources\Api\ForumCollection;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
