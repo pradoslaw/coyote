@@ -52,6 +52,6 @@ class TagController extends BaseController
         // we don't wanna tags with "#" at the beginning
         $request->merge(['t' => ltrim($request['t'], '#')]);
 
-        $this->validate($request, ['t' => 'required|string|max:25|tag|tag_creation:2']);
+        $this->validate($request, ['t' => 'required|string|max:25|tag|tag_creation:50']);
     }
 }

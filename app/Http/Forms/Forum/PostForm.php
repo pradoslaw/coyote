@@ -24,7 +24,7 @@ class PostForm extends Form
     const RULE_TEXT                 = 'required|spam_chinese:1|spam_foreign:1';
     const RULE_STICKY               = 'nullable|bool';
     const RULE_TAGS                 = 'array|max:5';
-    const RULE_TAG                  = 'max:25|tag|tag_creation:2';
+    const RULE_TAG                  = 'max:25|tag|tag_creation:50';
     const RULE_HUMAN                = 'required';
     const RULE_THROTTLE             = 'throttle';
 
