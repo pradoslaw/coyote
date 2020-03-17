@@ -65,6 +65,7 @@ module.exports = merge(common, {
         /^logo/,
         /^language/,
         /^popover/,
+
       ],
       whitelistPatternsChildren: [
         /hire-me$/,
@@ -76,7 +77,8 @@ module.exports = merge(common, {
         /^chosen/,
         /^tag/,
         /:not/,
-        /^pre/
+        /^pre/,
+        /^flatpickr/
       ]
     })
   ]
