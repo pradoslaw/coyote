@@ -25,7 +25,10 @@ class ActivityRepository extends Repository implements ActivityRepositoryInterfa
                 ->model
                 ->select()
                 ->join('forums', 'forums.id', '=', 'forum_id')
-                ->with(['topic', 'content', 'forum'])
+                ->with(['content', 'forum'])
+                ->with(['topic' => function ($builder) {
+                    return $builder->withTrashed();
+                }])
                 ->with(['user' => function ($builder) {
                     return $builder->withTrashed();
                 }])
