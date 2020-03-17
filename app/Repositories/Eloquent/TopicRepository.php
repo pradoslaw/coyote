@@ -5,6 +5,7 @@ namespace Coyote\Repositories\Eloquent;
 use Coyote\Repositories\Contracts\SubscribableInterface;
 use Coyote\Topic\Track;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
@@ -23,11 +24,58 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
         return 'Coyote\Topic';
     }
 
+    public function lengthAwarePagination($userId, string $guestId, $order = 'topics.last_post_id', $direction = 'DESC', $perPage = 20)
+    {
+        $this->applyCriteria();
+
+        $result = $this
+            ->model
+            ->withTrashed()
+            ->select([
+                'topics.*',
+                'pa.post_id AS post_accept_id'
+            ])
+            ->with([
+                'firstPost' => function ($builder) {
+                    return $builder->select(['id', 'topic_id', 'user_id', 'created_at', 'user_name'])->with(['user' => function (BelongsTo $builder) {
+                        return $builder->select(['id', 'name', 'deleted_at', 'is_blocked', 'photo'])->withTrashed();
+                    }]);
+                },
+
+                'lastPost' => function ($builder) {
+                    return $builder->select(['id', 'topic_id', 'user_id', 'created_at', 'user_name', 'text'])->with(['user' => function (BelongsTo $builder) {
+                        return $builder->select(['id', 'name', 'deleted_at', 'is_blocked', 'photo'])->withTrashed();
+                    }]);
+                },
+                'forum' => function ($builder) use ($guestId) {
+                    return $builder->select(['forums.id', 'name', 'slug'])->withForumMarkTime($guestId, 'forum_marked_at');
+                }
+            ])
+            ->withTopicMarkTime($guestId)
+            ->leftJoin('post_accepts AS pa', 'pa.topic_id', '=', 'topics.id')
+            ->with(['tags'])
+            ->when($userId, function (Builder $builder) use ($userId) {
+                return $builder->addSelect(['ts.created_at AS subscribe_on'])
+                    ->leftJoin('topic_subscribers AS ts', function (JoinClause $join) use ($userId) {
+                        $join->on('ts.topic_id', '=', 'topics.id')->on('ts.user_id', '=', $this->raw($userId));
+                    });
+            })
+            ->sortable($order, $direction, ['id', 'last', 'replies', 'views', 'score'], ['last' => 'topics.last_post_id'])
+            ->paginate();
+//            ->get();
+
+        $this->resetModel();
+
+
+        return $result;
+    }
+
     /**
      * @inheritdoc
      */
-    public function lengthAwarePagination($userId, string $guestId, $order = 'topics.last_post_id', $direction = 'DESC', $perPage = 20)
+    public function lengthAwarePagination2($userId, string $guestId, $order = 'topics.last_post_id', $direction = 'DESC', $perPage = 20)
     {
+
         $this->applyCriteria();
 
         $pagination = $this

@@ -5,10 +5,14 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Events\UserWasSaved;
 use Coyote\Http\Factories\FlagFactory;
 use Coyote\Http\Resources\Api\ForumCollection;
+use Coyote\Http\Resources\TopicResource;
+use Coyote\Http\Resources\TopicCollection;
 use Coyote\Repositories\Criteria\Topic\BelongsToForum;
 use Coyote\Repositories\Criteria\Topic\StickyGoesFirst;
+use Coyote\Services\Forum\Tracker;
 use Coyote\Services\Forum\TreeBuilder;
 use Coyote\Services\Forum\Personalizer;
+use Coyote\Services\Guest;
 use Illuminate\Http\Request;
 
 class CategoryController extends BaseController
@@ -34,12 +38,13 @@ class CategoryController extends BaseController
             ->mapCategory($this->guestId);
 
         $forums = ForumCollection::factory($forums)->setParentId($forum->id);
+        debugbar()->startMeasure('pagination');
 
         // display topics for this category
         $this->topic->pushCriteria(new BelongsToForum($forum->id));
         $this->topic->pushCriteria(new StickyGoesFirst());
         // get topics according to given criteria
-        $topics = $this
+        $paginate = $this
             ->topic
             ->lengthAwarePagination(
                 $this->userId,
@@ -49,8 +54,23 @@ class CategoryController extends BaseController
                 $this->topicsPerPage($request)
             )
             ->appends($request->except('page'));
+        debugbar()->stopMeasure('pagination');
 
-        $topics = $personalizer->markUnreadTopics($topics);
+        $guest = new Guest($this->guestId);
+
+        // @todo przeniesc do TopicCollection? Zdublowany kod z TopicController z API
+        $paginate->setCollection(
+            $paginate
+                ->getCollection()
+                ->map(function ($model) use ($guest) {
+
+                    return (new Tracker($model, $guest))->setRepository($this->topic);
+                })
+        );
+
+        $topics = TopicResource::collection($paginate);
+
+//        $topics = $personalizer->markUnreadTopics($topics);
         $flags = [];
 
         // we need to get an information about flagged topics. that's how moderators can notice

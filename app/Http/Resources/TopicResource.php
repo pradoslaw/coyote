@@ -1,10 +1,10 @@
 <?php
 
-namespace Coyote\Http\Resources\Api;
+namespace Coyote\Http\Resources;
 
 use Carbon\Carbon;
 use Coyote\Forum;
-use Coyote\Http\Resources\TagResource;
+use Coyote\Http\Resources\Api\PostResource;
 use Coyote\Post;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Tag;
@@ -39,7 +39,6 @@ class TopicResource extends JsonResource
         return array_merge(
             $only,
             [
-                'locked_at'             => $this->locked_at ? $this->locked_at->toIso8601String() : null,
                 'created_at'            => $this->created_at->toIso8601String(),
                 'last_post_created_at'  => $this->last_post_created_at->toIso8601String(),
                 'url'                   => url(UrlBuilder::topic($this->resource->getModel())),
@@ -49,7 +48,17 @@ class TopicResource extends JsonResource
                     'name'      => $this->forum->name,
                     'slug'      => $this->forum->slug
                 ],
-                'tags'                  => TagResource::collection($this->whenLoaded('tags'))
+                'tags'                  => TagResource::collection($this->whenLoaded('tags')),
+
+                $this->mergeWhen($this->whenLoaded('firstPost') && $this->whenLoaded('lastPost'), function () {
+                    $this->firstPost->setRelation('forum', $this->resource->forum)->setRelation('topic', $this->resource);
+                    $this->lastPost->setRelation('forum', $this->resource->forum)->setRelation('topic', $this->resource);
+
+                    return [
+                        'first_post'            => new PostResource($this->firstPost),
+                        'last_post'            => new PostResource($this->lastPost),
+                    ];
+                })
             ]
         );
     }
