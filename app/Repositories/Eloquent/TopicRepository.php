@@ -30,7 +30,6 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
 
         $result = $this
             ->model
-            ->withTrashed()
             ->select([
                 'topics.*',
                 'pa.post_id AS post_accept_id'

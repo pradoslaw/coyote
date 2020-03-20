@@ -35,7 +35,7 @@ class TopicResource extends JsonResource
     public function toArray($request)
     {
         $only = $this->resource->only(['id', 'subject', 'score', 'views', 'replies', 'is_sticky', 'is_locked', 'first_post_id', 'last_post_id']);
-
+//var_dump($this->resource->is_locked);
         return array_merge(
             $only,
             [
@@ -50,12 +50,16 @@ class TopicResource extends JsonResource
                 ],
                 'tags'                  => TagResource::collection($this->whenLoaded('tags')),
 
-                $this->mergeWhen($this->whenLoaded('firstPost') && $this->whenLoaded('lastPost'), function () {
+                $this->mergeWhen($this->whenLoaded('firstPost'), function () {
                     $this->firstPost->setRelation('forum', $this->resource->forum)->setRelation('topic', $this->resource);
+
+                    return ['user' => new UserResource($this->firstPost->user)];
+                }),
+
+                $this->mergeWhen($this->whenLoaded('firstPost') && $this->whenLoaded('lastPost'), function () {
                     $this->lastPost->setRelation('forum', $this->resource->forum)->setRelation('topic', $this->resource);
 
                     return [
-                        'first_post'            => new PostResource($this->firstPost),
                         'last_post'            => new PostResource($this->lastPost),
                     ];
                 })

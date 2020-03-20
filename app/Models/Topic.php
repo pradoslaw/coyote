@@ -51,7 +51,7 @@ class Topic extends Model
      *
      * @var array
      */
-    protected $fillable = ['subject', 'slug', 'forum_id', 'is_sticky', 'is_announcement', 'poll_id'];
+    protected $fillable = ['subject', 'slug', 'forum_id', 'is_sticky', 'poll_id'];
 
     /**
      * @var string
@@ -66,6 +66,14 @@ class Topic extends Model
      */
     protected $hidden = ['tags'];
 
+    /**
+     * @var array
+     */
+    protected $casts = ['is_locked' => 'bool', 'is_sticky' => 'bool'];
+
+    /**
+     * @var array
+     */
     protected $dates = ['created_at', 'updated_at', 'deleted_at', 'last_post_created_at', 'moved_at', 'locked_at', 'read_at'];
 
     public static function boot()

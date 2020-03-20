@@ -17,7 +17,7 @@
 
   // desktop
   @include media-breakpoint-up(sm) {
-    > .card-body {
+    .card-body {
       padding: .5rem 1rem .5rem 1rem;
 
       > .row {
@@ -27,29 +27,28 @@
     }
   }
 
-
-  // @todo duplikat z .card-categories
-  .wrap {
-    overflow: hidden;
-  }
-
   .icon {
     font-size: 14px;
     //color: $link-color-darker;
     color: $brand-primary;
-    position: relative;
+  }
 
-    b {
-      width: 10px;
-      height: 10px;
+  //.icon,
+  //.img-thumbnail{
+  //  position: relative;
+
+    .not-read:after {
+      content: ' ';
+      width: 12px;
+      height: 12px;
       background-color: #d7661c;
       border-radius: 50%;
       position: absolute;
-      bottom: -5px;
-      right: -5px;
+      bottom: 2px;
+      right: 0;
       border: 2px solid #fff;
     }
-  }
+  //}
 
   .topic-subject {
     font-size: .9rem;

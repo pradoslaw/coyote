@@ -10,89 +10,24 @@
 <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm float-right" style="margin-top: 6px; margin-bottom: 10px">Nowy wątek</a>
 <div class="clearfix"></div>
 
-<div class="card card-default card-topics">
-  {% for i in 1..2 %}
-  <div class="card-body">
-    <div class="row">
-      <div class="col-lg-9 col-md-12 d-flex align-items-center">
-        <object data="https://4programmers.net/uploads/photo/5c/5c4b2fd95d0e1.png" type="image/png" class="d-none d-lg-inline-block img-thumbnail mr-3" style="width: 35px; height: 35px">
-          <img src="/img/avatar.png">
-        </object>
-{#        <i class="fas fa-lock float-left d-none d-lg-block icon mr-3"><b></b></i>#}
+<div v-for="topics in groups" class="card card-default card-topics">
 
-        <div class="w-100">
-          <h5 class="topic-subject text-truncate m-0"><a href="#">Bitcoin/kryptowaluty podobieństwa z realną walutą?</a></h5>
-
-          <div class="row no-gutters">
-
-            <a href="#" class="mt-1 mr-3 small" style="color: #555">Marooned</a>
-
-          <ul class="list-inline small text-muted mt-1 mb-0">
-            <li class="list-inline-item small">
-              <i class="fas fa-fw fa-thumbs-up text-primary"></i> 5 głosów
-            </li>
-
-            <li class="list-inline-item small">
-              <i class="fas fa-fw fa-comments text-primary"></i> 5 odpowiedzi
-            </li>
-
-            <li class="list-inline-item small">
-              <i class="far fa-fw fa-eye"></i> 1k wyświetleń
-            </li>
-          </ul>
-
-          <ul class="tag-clouds tag-clouds-xs tag-clouds-skills ml-auto">
-            <li><a href="#" >C++</a></li>
-            <li><a href="#" >Java</a></li>
-          </ul>
-          </div>
-
-{#          <p class="d-none d-lg-block mb-0 mt-1 small">#}
-{#            <span class="text-muted">wczoraj, 23:58</span>, <a href="#">Freja Draco</a>#}
-{#          </p>#}
-        </div>
-
-      </div>
-
-{#      <div class="col-lg-1 d-none d-lg-block small">#}
-{#        <div class="row">#}
-{#          <div class="col-lg-12 text-truncate text-right">#}
-{#            <strong>7</strong>#}
-{#            <small class="text-muted">odpowiedzi</small>#}
-{#          </div>#}
-
-{#          <div class="col-lg-12 text-nowrap text-right">#}
-{#            <strong>144</strong>#}
-
-{#            <small class="text-muted">wyświetlenia</small>#}
-{#          </div>#}
-{#        </div>#}
-{#      </div>#}
-
-      <div class="col-lg-3 col-md-12">
-        <div class="media m-md-0">
-          <a href="#" class="mr-2 d-none d-sm-block" style="height: 35px">
-            <object data="https://4programmers.net/uploads/photo/5a/5abcd599a84dd.gif" type="image/png" class="d-inline-block img-thumbnail" style="width: 35px; height: 35px">
-              <img src="/img/avatar.png">
-            </object>
-          </a>
-
-          <div class="media-body small">
-            <p class="text-truncate mb-0">
-              Lorem ipsum lores ...
-            </p>
-
-            <span class="text-muted">wczoraj, 23:58</span>, <a href="#">Freja Draco</a>
-          </div>
-        </div>
-
-        <a title="Obserwuj wątek" href="#" class="btn-watch-sm">
-          <i class="far fa-star"></i>
-        </a>
-      </div>
-    </div>
-  </div>
-  {% endfor %}
+  <vue-topic
+    v-for="topic in topics"
+    :key="topic.id"
+    :url="topic.url"
+    :subject="topic.subject"
+    :replies="topic.replies"
+    :views="topic.views"
+    :score="topic.score"
+    :is-read="topic.is_read"
+    :is-locked="topic.is_locked"
+    :created-at="topic.created_at"
+    :last-post="topic.last_post"
+    :user="topic.user"
+    :user-name="topic.user_name"
+    :tags="topic.tags"
+  ></vue-topic>
 </div>
 
 {#<section class="card card-wrapper">#}

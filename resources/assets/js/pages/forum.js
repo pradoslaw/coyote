@@ -7,8 +7,10 @@ import '../pages/forum/sidebar';
 import '../pages/forum/tags';
 // import 'bootstrap/js/src/popover';
 import VueSection from '../components/forum/section.vue';
+import VueTopic from '../components/forum/topic.vue';
 import Vue from "vue";
 import store from '../store';
+import {mapGetters, mapState} from "vuex";
 
 new Vue({
   el: '#js-forum',
@@ -16,10 +18,12 @@ new Vue({
   store,
   data: { collapse: 'collapse' in window ? collapse : {} },
   components: {
-    'vue-section': VueSection
+    'vue-section': VueSection,
+    'vue-topic': VueTopic
   },
   created() {
     store.commit('forums/init', window.forums);
+    store.commit('topics/init', window.topics);
   },
   methods: {
     changeCollapse(id) {
@@ -46,8 +50,27 @@ new Vue({
             return acc;
           }, {})
         ).sort((a, b) => a.order < b.order ? -1 : 1); // sort sections
-    }
-  }
+    },
+
+    groups() {
+      return this.topics.reduce((acc, item) => {
+        let index = +!item.is_sticky;
+
+        if (!acc[index]) {
+          acc[index] = [];
+        }
+
+        acc[index].push(item);
+
+        return acc;
+      }, {});
+    },
+
+
+    // ...mapState('topics', ['topics']),
+
+  },
+
 });
 
 new Vue({
