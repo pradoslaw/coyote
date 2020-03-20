@@ -10,7 +10,7 @@ import VueSection from '../components/forum/section.vue';
 import VueTopic from '../components/forum/topic.vue';
 import Vue from "vue";
 import store from '../store';
-import {mapGetters, mapState} from "vuex";
+import {mapState} from "vuex";
 
 new Vue({
   el: '#js-forum',
@@ -66,11 +66,8 @@ new Vue({
       }, {});
     },
 
-
-    // ...mapState('topics', ['topics']),
-
-  },
-
+    ...mapState('topics', ['topics'])
+  }
 });
 
 new Vue({

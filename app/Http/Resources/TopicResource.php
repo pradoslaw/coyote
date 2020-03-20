@@ -35,7 +35,7 @@ class TopicResource extends JsonResource
     public function toArray($request)
     {
         $only = $this->resource->only(['id', 'subject', 'score', 'views', 'replies', 'is_sticky', 'is_locked', 'first_post_id', 'last_post_id']);
-//var_dump($this->resource->is_locked);
+
         return array_merge(
             $only,
             [
