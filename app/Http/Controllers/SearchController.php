@@ -94,15 +94,17 @@ class SearchController extends Controller
     private function tabs()
     {
         return app(Menu::class)->make('tabs', function (Builder $menu) {
-            $menu->add('Wszystko', route('search', ['q' => $this->request->input('q')]));
+            $item = $menu->add('Wszystko', ['class' => 'nav-item', 'url' => route('search', ['q' => $this->request->input('q')])]);
+            $item->link->attr(['class' => 'nav-link']);
 
             foreach (['Forum' => MixedBuilder::TOPIC, 'Praca' => MixedBuilder::JOB, 'Mikroblog' => MixedBuilder::MICROBLOG, 'Kompendium' => MixedBuilder::WIKI] as $label => $type) {
-                $menu->add($label, $this->route($type))->data('type', $type);
+                $item = $menu->add($label, ['class' => 'nav-item', 'url' => $this->route($type)])->data('type', $type);
+                $item->link->attr(['class' => 'nav-link']);
             }
         })
         ->filter(function (Item $item) {
             if ($this->request->input('type') === $item->data('type')) {
-                $item->active();
+                $item->link->active();
             }
 
             return true;
