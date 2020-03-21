@@ -49,7 +49,7 @@
     <div id="wiki-help" class="row collapse">
       <div class="col-md-12">
         <div class="card card-info">
-          <div class="card-heading">Pomoc</div>
+          <div class="card-header">Pomoc</div>
           <div class="card-body">
             <h2>Pogrubienie, kursywa...</h2>
 
