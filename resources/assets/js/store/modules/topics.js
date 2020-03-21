@@ -26,20 +26,22 @@ const mutations = {
 };
 
 const actions = {
-  mark({ commit }, category) {
-    commit('mark', category);
+  mark({ commit }, topic) {
+    commit('mark', topic);
 
-    axios.post(`/Forum/${category.slug}/Mark`);
+    axios.post(`/Forum/Topic/Mark/${topic.id}`);
   },
 
   markAll({ state, commit }) {
-    axios.post('/Forum/Mark');
-
     state.topics.forEach(topic => commit('mark', topic));
+
+    axios.post(`/Forum/${state[0].forum.slug}/Mark`);
   },
 
   subscribe({ commit }, topic) {
     commit('subscribe', topic);
+
+    axios.post(`/Forum/Topic/Subscribe/${topic.id}`);
   }
 };
 

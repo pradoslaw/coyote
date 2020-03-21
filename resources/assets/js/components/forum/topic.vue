@@ -56,7 +56,7 @@
               </li>
 
               <li class="list-inline-item small">
-                <a @click="subscribe(topic)" class="text-decoration-none text-muted" title="Kliknij aby wł/wył obserwowanie wątku">
+                <a @click="subscribe(topic)" href="javascript:" class="text-decoration-none text-muted" title="Kliknij aby wł/wył obserwowanie wątku">
                   <i :class="{'fas text-primary': topic.is_subscribed, 'far': !topic.is_subscribed}" class="fa-fw fa-star"></i>
 
                   {{ topic.subscribers | number }} <span class="d-none d-lg-inline">{{ topic.subscribers | declination(['obserwujący', 'obserwujących', 'obserwujących']) }}</span>
