@@ -2,7 +2,7 @@
   <div class="card-body" :class="{'not-read': !topic.is_read}" >
     <div class="row">
       <div class="col-lg-9 col-md-12 d-flex align-items-center">
-        <a :class="{'not-read': !topic.is_read}" href="#" class="mr-2 i-35 d-none d-md-flex position-relative img-thumbnail align-items-center justify-content-center">
+        <a :class="{'not-read': !topic.is_read}" v-profile="topic.user.id" class="mr-2 i-35 d-none d-md-flex position-relative img-thumbnail align-items-center justify-content-center">
           <i v-if="topic.is_locked" class="fas fa-lock"></i>
           <vue-avatar v-else v-bind="topic.user" class="w-100"></vue-avatar>
         </a>
@@ -73,7 +73,7 @@
 
       <div class="col-lg-3 col-md-12 mt-1 mt-sm-2 mt-lg-0">
         <div class="media m-md-0">
-          <vue-avatar v-bind="topic.last_post.user" class="i-35 mr-2 d-none d-md-inline-block position-relative img-thumbnail"></vue-avatar>
+          <a v-profile="topic.last_post.user.id"><vue-avatar v-bind="topic.last_post.user" class="i-35 mr-2 d-none d-md-inline-block position-relative img-thumbnail"></vue-avatar></a>
 
           <div class="media-body small text-truncate">
             <p class="text-truncate mb-1 d-none d-sm-block small">

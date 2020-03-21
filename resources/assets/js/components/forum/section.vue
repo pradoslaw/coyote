@@ -26,9 +26,10 @@
       <div v-for="(category, index) in categories" v-if="!category.is_hidden" :class="{'not-read': !category.is_read}" class="card-body">
         <div class="row">
           <div class="col-lg-7 col-12 col-sm-6 d-flex align-items-center">
-            <i v-if="category.is_locked" :class="{'not-read': !category.is_read}" class="logo fas fa-lock d-none d-lg-block"></i>
-            <a v-else :href="category.url">
-              <i :class="[className(category.name), {'not-read': !category.is_read}]" class="logo far fa-comments d-none d-lg-block"></i>
+            <a :href="category.url" :class="{'not-read': !category.is_read}" class="d-none d-lg-block position-relative mr-2">
+              <i v-if="category.is_locked" class="logo fas fa-lock "></i>
+
+              <i v-else :class="[className(category.name)]" class="logo far fa-comments "></i>
             </a>
 
             <div class="overflow-hidden">
@@ -68,7 +69,7 @@
 
           <div v-if="!category.is_redirected" class="col-lg-4 col-12 col-sm-12">
             <div v-if="category.post" class="media">
-              <vue-avatar v-bind="category.post.user" class="i-38 mr-2 d-none d-sm-block"></vue-avatar>
+              <a v-profile="category.post.user.id"><vue-avatar v-bind="category.post.user" class="i-38 mr-2 d-none d-sm-block img-thumbnail"></vue-avatar></a>
 
               <div class="media-body overflow-hidden">
                 <p class="text-truncate mb-1">

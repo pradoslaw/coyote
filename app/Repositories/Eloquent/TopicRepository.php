@@ -84,7 +84,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
             $count,
             $perPage,
             $page,
-            ['path' => $page]
+            ['path' => LengthAwarePaginator::resolveCurrentPath()]
         );
     }
 
