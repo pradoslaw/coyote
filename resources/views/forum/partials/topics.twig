@@ -11,27 +11,28 @@
 <div class="clearfix"></div>
 
 <div v-for="topics in groups" class="card card-default card-topics">
-
   <vue-topic
     v-for="topic in topics"
     :key="topic.id"
-    :url="topic.url"
-    :subject="topic.subject"
-    :replies="topic.replies"
-    :views="topic.views"
-    :score="topic.score"
-    :is-read="topic.is_read"
-    :is-locked="topic.is_locked"
-    :created-at="topic.created_at"
-    :first-post-id="topic.first_post_id"
-    :last-post="topic.last_post"
-    :user="topic.user"
-    :user-name="topic.user_name"
-    :tags="topic.tags"
-    :accepted-id="topic.accepted_id"
-    :subscribe-on="topic.subscribe_on"
-    :vote-on="topic.vote_on"
-    :reply-on="topic.reply_on"
+    :topic="topic"
+{#    :url="topic.url"#}
+{#    :subject="topic.subject"#}
+{#    :replies="topic.replies"#}
+{#    :views="topic.views"#}
+{#    :score="topic.score"#}
+{#    :is-read="topic.is_read"#}
+{#    :is-locked="topic.is_locked"#}
+{#    :created-at="topic.created_at"#}
+{#    :first-post-id="topic.first_post_id"#}
+{#    :last-post="topic.last_post"#}
+{#    :user="topic.user"#}
+{#    :user-name="topic.user_name"#}
+{#    :tags="topic.tags"#}
+{#    :accepted-id="topic.accepted_id"#}
+{#    :is-subscribed="topic.is_subscribed"#}
+{#    :is-voted="topic.is_voted"#}
+{#    :is-replied="topic.is_replied"#}
+{#    :subscribers="topic.subscribers"#}
   ></vue-topic>
 </div>
 

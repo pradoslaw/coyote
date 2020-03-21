@@ -11,11 +11,21 @@ const mutations = {
 
   mark(state, topic) {
     topic.is_read = true;
+  },
+
+  subscribe(state, topic) {
+    if (topic.is_subscribed) {
+      topic.subscribers--;
+    }
+    else {
+      topic.subscribers++;
+    }
+
+    topic.is_subscribed = !topic.is_subscribed;
   }
 };
 
 const actions = {
-
   mark({ commit }, category) {
     commit('mark', category);
 
@@ -28,7 +38,9 @@ const actions = {
     state.topics.forEach(topic => commit('mark', topic));
   },
 
-
+  subscribe({ commit }, topic) {
+    commit('subscribe', topic);
+  }
 };
 
 export default {

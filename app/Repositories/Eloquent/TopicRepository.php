@@ -58,9 +58,9 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
             ->with(['tags'])
             ->when($userId, function (Builder $builder) use ($userId) {
                 return $builder->addSelect([
-                        $this->raw('CASE WHEN ts.created_at IS NULL THEN 0 ELSE 1 END AS subscribe_on'),
-                        $this->raw('CASE WHEN pv.id IS NULL THEN 0 ELSE 1 END AS vote_on'),
-                        $this->raw('CASE WHEN tu.user_id IS NULL THEN 0 ELSE 1 END AS reply_on')
+                        $this->raw('CASE WHEN ts.created_at IS NULL THEN false ELSE true END AS is_subscribed'),
+                        $this->raw('CASE WHEN pv.id IS NULL THEN false ELSE true END AS is_voted'),
+                        $this->raw('CASE WHEN tu.user_id IS NULL THEN false ELSE true END AS is_replied')
                     ])
                     ->leftJoin('topic_subscribers AS ts', function (JoinClause $join) use ($userId) {
                         $join->on('ts.topic_id', '=', 'topics.id')->on('ts.user_id', '=', $this->raw($userId));
@@ -86,8 +86,6 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
             $page,
             ['path' => $page]
         );
-
-        return $result;
     }
 
     /**

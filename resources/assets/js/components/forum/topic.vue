@@ -1,69 +1,71 @@
 <template>
-  <div class="card-body" :class="{'not-read': !isRead}" >
+  <div class="card-body" :class="{'not-read': !topic.is_read}" >
     <div class="row">
       <div class="col-lg-9 col-md-12 d-flex align-items-center">
-        <a :class="{'not-read': !isRead}" href="#" class="mr-2 i-35 d-none d-md-flex position-relative img-thumbnail align-items-center justify-content-center">
-          <i v-if="isLocked" class="fas fa-lock"></i>
-          <vue-avatar v-else v-bind="user" class="w-100"></vue-avatar>
+        <a :class="{'not-read': !topic.is_read}" href="#" class="mr-2 i-35 d-none d-md-flex position-relative img-thumbnail align-items-center justify-content-center">
+          <i v-if="topic.is_locked" class="fas fa-lock"></i>
+          <vue-avatar v-else v-bind="topic.user" class="w-100"></vue-avatar>
         </a>
 
         <div class="w-100">
           <div class="row no-gutters">
             <h5 class="topic-subject text-truncate m-0">
-              <a v-if="acceptedId" :href="url + `?p=${acceptedId}#${acceptedId}}`"><i class="fas fa-check"></i></a>
+              <a v-if="topic.accepted_id" :href="topic.url + `?p=${topic.accepted_id}#${topic.accepted_id}}`"><i class="fas fa-check"></i></a>
 
-              <a :href="url">{{ subject }}</a>
+              <a :href="topic.url">{{ topic.subject }}</a>
             </h5>
 
             <div v-if="totalPages > 1" class="ml-auto small">
               <i class="far fa-file small"></i>
 
-              <a :href="url + '?page=1'">1</a>
+              <a :href="topic.url + '?page=1'">1</a>
 
               <template v-if="totalPages > 4">
               ...
               </template>
 
-              <a v-if="totalPages === 4" :href="url + '?page=2'">2</a>
+              <a v-if="totalPages === 4" :href="topic.url + '?page=2'">2</a>
 
-              <template v-for="i in paginatorPages"><a :href="url + '?page=' + i">{{ i }}</a>&nbsp;</template>
+              <template v-for="i in paginatorPages"><a :href="topic.url + '?page=' + i">{{ i }}</a>&nbsp;</template>
             </div>
           </div>
 
           <div class="row no-gutters">
             <div class="d-none d-lg-inline mt-1 mr-3 small">
-              <a :href="url + `?p=${firstPostId}#${firstPostId}`" class="text-muted"><vue-timeago :datetime="createdAt"></vue-timeago></a>,
+              <a :href="topic.url + `?p=${topic.first_post_id}#${topic.first_post_id}`" class="text-muted"><vue-timeago :datetime="topic.created_at"></vue-timeago></a>,
 
-              <a v-if="user" v-profile="user.id" class="mt-1 text-body">{{ user.name }}</a>
-              <span v-else>{{ userName }}</span>
+              <a v-if="topic.user" v-profile="topic.user.id" class="mt-1 text-body">{{ topic.user.name }}</a>
+              <span v-else>{{ topic.user_name }}</span>
             </div>
 
             <ul class="list-inline small text-muted mt-1 mb-0">
               <li class="list-inline-item small">
-                <i :class="{'fas text-primary': voteOn, 'far': !voteOn}" class="fa-fw fa-thumbs-up"></i>
+                <i :class="{'fas text-primary': topic.is_voted, 'far': !topic.is_voted}" class="fa-fw fa-thumbs-up"></i>
 
-                {{ score | number }} <span class="d-none d-lg-inline">głosów</span>
+                {{ topic.score | number }} <span class="d-none d-lg-inline">głosów</span>
               </li>
 
               <li class="list-inline-item small">
-                <i :class="{'fas text-primary': replyOn, 'far': !replyOn}" class="fa-fw fa-comments"></i>
+                <i :class="{'fas text-primary': topic.is_replied, 'far': !topic.is_replied}" class="fa-fw fa-comments"></i>
 
-                {{ replies | number }} <span class="d-none d-lg-inline">odpowiedzi</span>
+                {{ topic.replies | number }} <span class="d-none d-lg-inline">odpowiedzi</span>
               </li>
 
               <li class="list-inline-item small">
-                <i class="far fa-fw fa-eye"></i> {{ views | number }} <span class="d-none d-lg-inline">wyświetleń</span>
+                <i class="far fa-fw fa-eye"></i> {{ topic.views | number }} <span class="d-none d-lg-inline">wyświetleń</span>
               </li>
 
               <li class="list-inline-item small">
-                <i :class="{'fas text-primary': subscribeOn, 'far': !subscribeOn}" class="fa-fw fa-star"></i>
+                <a @click="subscribe(topic)" class="text-decoration-none text-muted" title="Kliknij aby wł/wył obserwowanie wątku">
+                  <i :class="{'fas text-primary': topic.is_subscribed, 'far': !topic.is_subscribed}" class="fa-fw fa-star"></i>
 
-                0 <span class="d-none d-lg-inline">obserwuje</span>
+                  {{ topic.subscribers | number }} <span class="d-none d-lg-inline">{{ topic.subscribers | declination(['obserwujący', 'obserwujących', 'obserwujących']) }}</span>
+                </a>
               </li>
             </ul>
 
-            <ul v-if="tags.length" class="tag-clouds tag-clouds-xs tag-clouds-skills ml-auto d-none d-sm-block">
-              <li v-for="tag in tags" ><a :href="tag.url">{{ tag.name }}</a></li>
+            <ul v-if="topic.tags.length" class="tag-clouds tag-clouds-xs tag-clouds-skills ml-auto d-none d-sm-block">
+              <li v-for="tag in topic.tags" ><a :href="tag.url">{{ tag.name }}</a></li>
             </ul>
           </div>
         </div>
@@ -71,17 +73,17 @@
 
       <div class="col-lg-3 col-md-12 mt-1 mt-sm-2 mt-lg-0">
         <div class="media m-md-0">
-          <vue-avatar v-bind="lastPost.user" class="i-35 mr-2 d-none d-md-inline-block position-relative img-thumbnail"></vue-avatar>
+          <vue-avatar v-bind="topic.last_post.user" class="i-35 mr-2 d-none d-md-inline-block position-relative img-thumbnail"></vue-avatar>
 
           <div class="media-body small text-truncate">
             <p class="text-truncate mb-1 d-none d-sm-block small">
-              <a :href="url + `?p=${lastPost.id}#${lastPost.id}`" title="Zobacz ostatni post" class="text-body">{{ lastPost.excerpt }}</a>
+              <a :href="topic.url + `?p=${topic.last_post.id}#${topic.last_post.id}`" title="Zobacz ostatni post" class="text-body">{{ topic.last_post.excerpt }}</a>
             </p>
 
-            <span class="text-muted"><vue-timeago :datetime="lastPost.created_at"></vue-timeago></span>,
+            <span class="text-muted"><vue-timeago :datetime="topic.last_post.created_at"></vue-timeago></span>,
 
-            <a v-if="lastPost.user" v-profile="lastPost.user.id">{{ lastPost.user.name }}</a>
-            <span v-else>{{ lastPost.user_name }}</span>
+            <a v-if="topic.last_post.user" v-profile="topic.last_post.user.id">{{ topic.last_post.user.name }}</a>
+            <span v-else>{{ topic.last_post.user_name }}</span>
           </div>
         </div>
       </div>
@@ -103,69 +105,80 @@
     mixins: [ mixins, clickaway ],
     components: { 'vue-avatar': VueAvatar },
     props: {
-      url: {
-        type: String,
-        required: true
-      },
-      subject: {
-        type: String,
-        required: true
-      },
-      isLocked: {
-        type: Boolean
-      },
-      isRead: {
-        type: Boolean
-      },
-      score: {
-        type: Number
-      },
-      views: {
-        type: Number
-      },
-      replies: {
-        type: Number
-      },
-      tags: {
-        type: Array
-      },
-      createdAt: {
-        type: String,
-        required: true
-      },
-      firstPostId: {
-        type: Number
-      },
-      user: {
-        type: Object
-      },
-      userName: {
-        type: String
-      },
-      lastPost: {
+      topic: {
         type: Object,
-        required: true
+        require: true
       },
+      // url: {
+      //   type: String,
+      //   required: true
+      // },
+      // subject: {
+      //   type: String,
+      //   required: true
+      // },
+      // isLocked: {
+      //   type: Boolean
+      // },
+      // isRead: {
+      //   type: Boolean
+      // },
+      // score: {
+      //   type: Number
+      // },
+      // views: {
+      //   type: Number
+      // },
+      // replies: {
+      //   type: Number
+      // },
+      // tags: {
+      //   type: Array
+      // },
+      // createdAt: {
+      //   type: String,
+      //   required: true
+      // },
+      // firstPostId: {
+      //   type: Number
+      // },
+      // user: {
+      //   type: Object
+      // },
+      // userName: {
+      //   type: String
+      // },
+      // lastPost: {
+      //   type: Object,
+      //   required: true
+      // },
       postsPerPage: {
         type: Number,
         default: 10
       },
-      acceptedId: {
-        type: Number
-      },
-      subscribeOn: {
-        type: Boolean
-      },
-      voteOn: {
-        type: Boolean
-      },
-      replyOn: {
-        type: Boolean
-      }
+      // subscribers: {
+      //   type: Number,
+      //   default: 0
+      // },
+      // acceptedId: {
+      //   type: Number
+      // },
+      // isSubscribed: {
+      //   type: Boolean
+      // },
+      // isVoted: {
+      //   type: Boolean
+      // },
+      // isReplied: {
+      //   type: Boolean
+      // }
+    },
+    methods: {
+      ...mapActions('topics', ['mark', 'subscribe'])
     },
     computed: {
       totalPages() {
-        return Math.ceil(this.replies / this.postsPerPage);
+        return Math.ceil(this.topic.replies / this.postsPerPage);
       },
 
       paginatorPages() {

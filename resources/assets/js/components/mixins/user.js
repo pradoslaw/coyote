@@ -1,3 +1,5 @@
+import declination from '../../components/declination';
+
 export default {
   directives: {
     profile: {
@@ -15,6 +17,10 @@ export default {
   filters: {
     number(value) {
       return value.toLocaleString();
+    },
+
+    declination(count, set) {
+      return declination(count, set);
     }
   }
 };
