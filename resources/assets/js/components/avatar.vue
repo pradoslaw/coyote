@@ -1,11 +1,9 @@
 <template>
-  <a v-profile="id">
-    <object :data="photo || '//'" type="image/png" class="d-inline-block img-thumbnail">
-      <img src="/img/avatar.png" :alt="name" class="mw-100">
+  <object :data="photo || '//'" type="image/png">
+    <img src="/img/avatar.png" :alt="name" class="mw-100">
 
-      <slot></slot>
-    </object>
-  </a>
+    <slot></slot>
+  </object>
 </template>
 
 <script>

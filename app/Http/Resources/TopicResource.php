@@ -22,6 +22,9 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property Post $lastPost
  * @property Tag[] $tags
  * @property \Carbon\Carbon $read_at
+ * @property bool $subscribe_on
+ * @property bool $vote_on
+ * @property bool $reply_on
  * @method bool isRead()
  */
 class TopicResource extends JsonResource
@@ -34,7 +37,7 @@ class TopicResource extends JsonResource
      */
     public function toArray($request)
     {
-        $only = $this->resource->only(['id', 'subject', 'score', 'views', 'replies', 'is_sticky', 'is_locked', 'first_post_id', 'last_post_id']);
+        $only = $this->resource->only(['id', 'subject', 'score', 'views', 'replies', 'is_sticky', 'is_locked', 'first_post_id', 'last_post_id', 'accepted_id', 'subscribe_on', 'vote_on', 'reply_on']);
 
         return array_merge(
             $only,
@@ -49,15 +52,16 @@ class TopicResource extends JsonResource
                     'slug'      => $this->forum->slug
                 ],
                 'tags'                  => TagResource::collection($this->whenLoaded('tags')),
+                'subscribe_on'          => (bool) $this->subscribe_on,
+                'vote_on'               => (bool) $this->vote_on,
+                'reply_on'              => (bool) $this->reply_on,
 
-                $this->mergeWhen($this->whenLoaded('firstPost'), function () {
-                    $this->firstPost->setRelation('forum', $this->resource->forum)->setRelation('topic', $this->resource);
-
-                    return ['user' => new UserResource($this->firstPost->user)];
+                $this->mergeWhen($this->whenLoaded('user'), function () {
+                    return ['user' => new UserResource($this->user)];
                 }),
 
-                $this->mergeWhen($this->whenLoaded('firstPost') && $this->whenLoaded('lastPost'), function () {
-                    $this->lastPost->setRelation('forum', $this->resource->forum)->setRelation('topic', $this->resource);
+                $this->mergeWhen($this->whenLoaded('lastPost'), function () {
+                    $this->lastPost->setRelation('forum', $this->forum)->setRelation('topic', $this->resource);
 
                     return [
                         'last_post'            => new PostResource($this->lastPost),

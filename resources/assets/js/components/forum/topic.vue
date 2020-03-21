@@ -2,12 +2,18 @@
   <div class="card-body" :class="{'not-read': !isRead}" >
     <div class="row">
       <div class="col-lg-9 col-md-12 d-flex align-items-center">
-        <i v-if="isLocked" :class="{'not-read': !isRead}" class="fas fa-lock d-none d-md-flex img-thumbnail align-items-center justify-content-center mr-2 position-relative i-35"></i>
-        <vue-avatar v-else v-bind="user" :class="{'not-read': !isRead}" class="i-35 mr-2 d-none d-md-block position-relative"></vue-avatar>
+        <a :class="{'not-read': !isRead}" href="#" class="mr-2 i-35 d-none d-md-flex position-relative img-thumbnail align-items-center justify-content-center">
+          <i v-if="isLocked" class="fas fa-lock"></i>
+          <vue-avatar v-else v-bind="user" class="w-100"></vue-avatar>
+        </a>
 
         <div class="w-100">
           <div class="row no-gutters">
-            <h5 class="topic-subject text-truncate m-0"><a :href="url">{{ subject }}</a></h5>
+            <h5 class="topic-subject text-truncate m-0">
+              <a v-if="acceptedId" :href="url + `?p=${acceptedId}#${acceptedId}}`"><i class="fas fa-check"></i></a>
+
+              <a :href="url">{{ subject }}</a>
+            </h5>
 
             <div v-if="totalPages > 1" class="ml-auto small">
               <i class="far fa-file small"></i>
@@ -34,11 +40,15 @@
 
             <ul class="list-inline small text-muted mt-1 mb-0">
               <li class="list-inline-item small">
-                <i class="fas fa-fw fa-thumbs-up"></i> {{ score | number }} <span class="d-none d-lg-inline">głosów</span>
+                <i :class="{'fas text-primary': voteOn, 'far': !voteOn}" class="fa-fw fa-thumbs-up"></i>
+
+                {{ score | number }} <span class="d-none d-lg-inline">głosów</span>
               </li>
 
               <li class="list-inline-item small">
-                <i class="fas fa-fw fa-comments"></i> {{ replies | number }} <span class="d-none d-lg-inline">odpowiedzi</span>
+                <i :class="{'fas text-primary': replyOn, 'far': !replyOn}" class="fa-fw fa-comments"></i>
+
+                {{ replies | number }} <span class="d-none d-lg-inline">odpowiedzi</span>
               </li>
 
               <li class="list-inline-item small">
@@ -46,7 +56,9 @@
               </li>
 
               <li class="list-inline-item small">
-                <i class="far fa-fw fa-star"></i> 0 <span class="d-none d-lg-inline">obserwuje</span>
+                <i :class="{'fas text-primary': subscribeOn, 'far': !subscribeOn}" class="fa-fw fa-star"></i>
+
+                0 <span class="d-none d-lg-inline">obserwuje</span>
               </li>
             </ul>
 
@@ -59,7 +71,7 @@
 
       <div class="col-lg-3 col-md-12 mt-1 mt-sm-2 mt-lg-0">
         <div class="media m-md-0">
-          <vue-avatar v-bind="lastPost.user" class="i-35 mr-2 d-none d-md-block position-relative"></vue-avatar>
+          <vue-avatar v-bind="lastPost.user" class="i-35 mr-2 d-none d-md-inline-block position-relative img-thumbnail"></vue-avatar>
 
           <div class="media-body small text-truncate">
             <p class="text-truncate mb-1 d-none d-sm-block small">
@@ -100,8 +112,7 @@
         required: true
       },
       isLocked: {
-        type: Boolean,
-        default: false
+        type: Boolean
       },
       isRead: {
         type: Boolean
@@ -138,6 +149,18 @@
       postsPerPage: {
         type: Number,
         default: 10
+      },
+      acceptedId: {
+        type: Number
+      },
+      subscribeOn: {
+        type: Boolean
+      },
+      voteOn: {
+        type: Boolean
+      },
+      replyOn: {
+        type: Boolean
       }
     },
     computed: {

@@ -28,19 +28,21 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
     {
         $this->applyCriteria();
 
+        $count = $this->model->count();
+        $page = LengthAwarePaginator::resolveCurrentPage();
+
         $result = $this
             ->model
             ->select([
                 'topics.*',
-                'pa.post_id AS post_accept_id'
+                'pa.post_id AS accepted_id',
+                'p.user_id',
+                'p.user_name'
             ])
             ->with([
-                'firstPost' => function ($builder) {
-                    return $builder->select(['id', 'topic_id', 'user_id', 'created_at', 'user_name'])->with(['user' => function (BelongsTo $builder) {
-                        return $builder->select(['id', 'name', 'deleted_at', 'is_blocked', 'photo'])->withTrashed();
-                    }]);
+                'user' => function (BelongsTo $builder) {
+                    return $builder->select(['id', 'name', 'deleted_at', 'is_blocked', 'photo'])->withTrashed();
                 },
-
                 'lastPost' => function ($builder) {
                     return $builder->select(['id', 'topic_id', 'user_id', 'created_at', 'user_name', 'text'])->with(['user' => function (BelongsTo $builder) {
                         return $builder->select(['id', 'name', 'deleted_at', 'is_blocked', 'photo'])->withTrashed();
@@ -52,19 +54,38 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
             ])
             ->withTopicMarkTime($guestId)
             ->leftJoin('post_accepts AS pa', 'pa.topic_id', '=', 'topics.id')
+            ->join('posts AS p', 'p.id', '=', 'topics.first_post_id')
             ->with(['tags'])
             ->when($userId, function (Builder $builder) use ($userId) {
-                return $builder->addSelect(['ts.created_at AS subscribe_on'])
+                return $builder->addSelect([
+                        $this->raw('CASE WHEN ts.created_at IS NULL THEN 0 ELSE 1 END AS subscribe_on'),
+                        $this->raw('CASE WHEN pv.id IS NULL THEN 0 ELSE 1 END AS vote_on'),
+                        $this->raw('CASE WHEN tu.user_id IS NULL THEN 0 ELSE 1 END AS reply_on')
+                    ])
                     ->leftJoin('topic_subscribers AS ts', function (JoinClause $join) use ($userId) {
                         $join->on('ts.topic_id', '=', 'topics.id')->on('ts.user_id', '=', $this->raw($userId));
+                    })
+                    ->leftJoin('post_votes AS pv', function (JoinClause $join) use ($userId) {
+                        $join->on('pv.post_id', '=', 'first_post_id')->on('pv.user_id', '=', $this->raw($userId));
+                    })
+                    ->leftJoin('topic_users AS tu', function (JoinClause $join) use ($userId) {
+                        $join->on('tu.topic_id', '=', 'topics.id')->on('tu.user_id', '=', $this->raw($userId));
                     });
             })
             ->sortable($order, $direction, ['id', 'last', 'replies', 'views', 'score'], ['last' => 'topics.last_post_id'])
-            ->paginate();
-//            ->get();
+            ->limit($perPage)
+            ->offset(max(0, $page - 1) * $perPage)
+            ->get();
 
         $this->resetModel();
 
+        return new LengthAwarePaginator(
+            $result,
+            $count,
+            $perPage,
+            $page,
+            ['path' => $page]
+        );
 
         return $result;
     }
