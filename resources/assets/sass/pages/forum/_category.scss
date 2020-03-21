@@ -18,7 +18,7 @@
   // desktop
   @include media-breakpoint-up(sm) {
     .card-body {
-      padding: .5rem 1rem .5rem 1rem;
+      padding: .5rem 1rem;
 
       > .row {
         display: flex;
@@ -27,33 +27,34 @@
     }
   }
 
-  .icon {
+  // mobile
+  @include media-breakpoint-down(sm) {
+    @include card-body-not-read();
+  }
+
+  .fa-lock {
     font-size: 14px;
     color: $brand-primary;
   }
 
-  .not-read:after {
-    content: ' ';
-    width: 12px;
-    height: 12px;
-    background-color: #d7661c;
-    border-radius: 50%;
-    position: absolute;
-    bottom: 2px;
-    right: 0;
-    border: 2px solid #fff;
-  }
 
   .topic-subject {
     font-size: .9rem;
   }
 }
 
-
-
-
-
-
+i.not-read:after,
+a.not-read:after {
+  content: ' ';
+  width: 12px;
+  height: 12px;
+  background-color: #d7661c;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 2px;
+  right: 0;
+  border: 2px solid #fff;
+}
 
 
 #box-topics {

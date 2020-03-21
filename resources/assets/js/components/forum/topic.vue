@@ -1,9 +1,9 @@
 <template>
-  <div class="card-body">
+  <div class="card-body" :class="{'not-read': !isRead}" >
     <div class="row">
       <div class="col-lg-9 col-md-12 d-flex align-items-center">
-        <i v-if="isLocked" :class="{'not-read': !isRead}" :style="{width: '35px', height: '35px'}" class="fas fa-lock d-none d-sm-flex img-thumbnail align-items-center justify-content-center icon mr-2 position-relative"></i>
-        <vue-avatar v-else v-bind="user" :class="{'not-read': !isRead}"></vue-avatar>
+        <i v-if="isLocked" :class="{'not-read': !isRead}" class="fas fa-lock d-none d-md-flex img-thumbnail align-items-center justify-content-center mr-2 position-relative i-35"></i>
+        <vue-avatar v-else v-bind="user" :class="{'not-read': !isRead}" class="i-35 mr-2 d-none d-md-block position-relative"></vue-avatar>
 
         <div class="w-100">
           <div class="row no-gutters">
@@ -46,7 +46,7 @@
               </li>
 
               <li class="list-inline-item small">
-                <i class="far fa-fw fa-star"></i> <span class="d-none d-lg-inline">0 obserwuje</span>
+                <i class="far fa-fw fa-star"></i> 0 <span class="d-none d-lg-inline">obserwuje</span>
               </li>
             </ul>
 
@@ -59,7 +59,7 @@
 
       <div class="col-lg-3 col-md-12 mt-1 mt-sm-2 mt-lg-0">
         <div class="media m-md-0">
-          <vue-avatar v-bind="lastPost.user"></vue-avatar>
+          <vue-avatar v-bind="lastPost.user" class="i-35 mr-2 d-none d-md-block position-relative"></vue-avatar>
 
           <div class="media-body small text-truncate">
             <p class="text-truncate mb-1 d-none d-sm-block small">

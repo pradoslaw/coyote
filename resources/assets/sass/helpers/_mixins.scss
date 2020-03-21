@@ -1,4 +1,4 @@
-
+// @deprecated
 @mixin text-overflow() {
   overflow: hidden;
   white-space: nowrap;
@@ -39,6 +39,7 @@
   -webkit-filter: grayscale(100%); /* Chrome 19+, Safari 6+, Safari 6+ iOS */
 }
 
+// @deprecated
 @mixin img-placeholder($image, $width, $height) {
   &::after {
     content: '';
@@ -84,5 +85,11 @@
         margin-left: $spacing + .1rem;
       }
     }
+  }
+}
+
+@mixin card-body-not-read() {
+  .card-body.not-read {
+    border-left: 2px solid $alt-link-hover-color;
   }
 }

@@ -1,6 +1,6 @@
 <template>
-  <a v-profile="id" class="mr-2 d-none d-sm-block position-relative" style="height: 35px">
-    <object :data="photo || '//'" type="image/png" class="d-inline-block img-thumbnail" :style="{width: width + 'px', height: width + 'px'}">
+  <a v-profile="id">
+    <object :data="photo || '//'" type="image/png" class="d-inline-block img-thumbnail">
       <img src="/img/avatar.png" :alt="name" class="mw-100">
 
       <slot></slot>
@@ -22,10 +22,6 @@
       },
       photo: {
         type: String
-      },
-      width: {
-        type: Number,
-        default: 35
       }
     }
   }
