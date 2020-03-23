@@ -16,7 +16,11 @@ new Vue({
   el: '#js-forum',
   delimiters: ['${', '}'],
   store,
-  data: { collapse: 'collapse' in window ? window.collapse : {}, postsPerPage: window?.posts_per_page, flags: window?.flags },
+  data: {
+    collapse: window.collapse || {},
+    postsPerPage: window?.posts_per_page,
+    flags: window?.flags
+  },
   components: {
     'vue-section': VueSection,
     'vue-topic': VueTopic

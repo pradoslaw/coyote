@@ -2,9 +2,10 @@
   <div class="card-body" :class="{'not-read': !topic.is_read, 'flag': flag != null}">
     <div class="row">
       <div class="col-lg-9 col-md-12 d-flex align-items-center">
-        <a :class="{'not-read': !topic.is_read}" class="mr-2 i-35 d-none d-md-flex position-relative img-thumbnail align-items-center justify-content-center">
+        <a @click="mark(topic)" :class="{'not-read': !topic.is_read}" class="mr-2 i-35 d-none d-md-flex position-relative img-thumbnail align-items-center justify-content-center">
           <i v-if="topic.is_locked" class="fas fa-lock"></i>
-          <vue-avatar v-else v-bind="topic.user" class="w-100"></vue-avatar>
+          <i v-else class="far fa-comment"></i>
+<!--          <vue-avatar v-else v-bind="topic.user" class="w-100"></vue-avatar>-->
         </a>
 
         <div class="w-100">
@@ -14,7 +15,7 @@
 
               <a :href="topic.url">{{ topic.subject }}</a>
 
-              <a :href="flag" title="Przejdź do raportowanego postu"><i class="fa fa-fire"></i></a>
+              <a v-if="flag != null" :href="flag" title="Przejdź do raportowanego postu"><i class="fa fa-fire"></i></a>
             </h5>
 
             <div v-if="totalPages > 1" class="ml-auto small">
@@ -98,7 +99,6 @@
   import VueTimeago from '../../plugins/timeago';
   import VueAvatar from '../avatar.vue';
   import { mixin as clickaway } from 'vue-clickaway';
-  import store from '../../store';
   import { mapGetters, mapActions } from "vuex";
 
   Vue.use(VueTimeago);
@@ -111,49 +111,6 @@
         type: Object,
         require: true
       },
-      // url: {
-      //   type: String,
-      //   required: true
-      // },
-      // subject: {
-      //   type: String,
-      //   required: true
-      // },
-      // isLocked: {
-      //   type: Boolean
-      // },
-      // isRead: {
-      //   type: Boolean
-      // },
-      // score: {
-      //   type: Number
-      // },
-      // views: {
-      //   type: Number
-      // },
-      // replies: {
-      //   type: Number
-      // },
-      // tags: {
-      //   type: Array
-      // },
-      // createdAt: {
-      //   type: String,
-      //   required: true
-      // },
-      // firstPostId: {
-      //   type: Number
-      // },
-      // user: {
-      //   type: Object
-      // },
-      // userName: {
-      //   type: String
-      // },
-      // lastPost: {
-      //   type: Object,
-      //   required: true
-      // },
       postsPerPage: {
         type: Number,
         default: 10
@@ -178,10 +135,6 @@
         }
 
         return pages;
-      },
-
-      userId() {
-        return this.topic.last_post.user?.id;
       }
     }
   }
