@@ -12,6 +12,7 @@ use Coyote\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
+ * @property int $id
  * @property Carbon $locked_at
  * @property Carbon $created_at
  * @property Carbon $last_post_created_at

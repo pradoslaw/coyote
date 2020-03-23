@@ -38,7 +38,6 @@ class CategoryController extends BaseController
             ->mapCategory($this->guestId);
 
         $forums = ForumCollection::factory($forums)->setParentId($forum->id);
-        debugbar()->startMeasure('pagination');
 
         // display topics for this category
         $this->topic->pushCriteria(new BelongsToForum($forum->id));
@@ -54,30 +53,22 @@ class CategoryController extends BaseController
                 $this->topicsPerPage($request)
             )
             ->appends($request->except('page'));
-        debugbar()->stopMeasure('pagination');
 
-        $guest = new Guest($this->guestId);
-
-        // @todo przeniesc do TopicCollection? Zdublowany kod z TopicController z API
-        $paginate->setCollection(
-            $paginate
-                ->getCollection()
-                ->map(function ($model) use ($guest) {
-
-                    return (new Tracker($model, $guest))->setRepository($this->topic);
-                })
-        );
-
-        $topics = TopicResource::collection($paginate);
-
-//        $topics = $personalizer->markUnreadTopics($topics);
         $flags = [];
 
         // we need to get an information about flagged topics. that's how moderators can notice
         // that's something's wrong with posts.
-        if ($topics->total() > 0 && $this->getGateFactory()->allows('delete', $forum)) {
-            $flags = $this->getFlagFactory()->takeForTopics($topics->groupBy('id')->keys()->toArray());
+        if ($paginate->total() > 0 && $this->getGateFactory()->allows('delete', $forum)) {
+            $flags = $this->getFlagFactory()->takeForTopics($paginate->groupBy('id')->keys()->toArray());
         }
+
+        $guest = new Guest($this->guestId);
+
+        $topics = (new TopicCollection($paginate))
+            ->setGuest($guest)
+            ->setRepository($this->topic);
+
+//        $topics = $personalizer->markUnreadTopics($topics);
 
         $collapse = $this->collapse();
         $postsPerPage = $this->postsPerPage($this->request);

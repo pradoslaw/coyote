@@ -54,6 +54,7 @@
     var forums = {{ forums|json_encode|raw }};
     var topics = {{ topics|json_encode|raw }};
     var posts_per_page = {{ postsPerPage }};
+    var flags = {{ flags|json_encode|raw }};
   </script>
 
   {{ parent() }}

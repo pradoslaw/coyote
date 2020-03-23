@@ -13,6 +13,17 @@
     &:last-child {
       border-bottom: 0;
     }
+
+    // must be here. otherwise, background-color would be overwritten by :nth-children()
+    &.flag {
+      background-color: theme-color-level("danger", $alert-bg-level);
+      color: $danger;
+      border-bottom-color: theme-color-level("danger", $alert-border-level);
+
+      a {
+        color: inherit;
+      }
+    }
   }
 
   // desktop
@@ -73,23 +84,3 @@ a.not-read {
   }
 }
 
-
-#box-topics {
-  margin: 0 0 9px 0;
-
-
-
-  tr.tagged td {
-    background-color: $unread-bg;
-  }
-
-  tr.flagged td {
-    background-color: theme-color-level("danger", $alert-bg-level);
-    color: $danger;
-    border-bottom-color: theme-color-level("danger", $alert-border-level);
-
-    a {
-      color: inherit;
-    }
-  }
-}

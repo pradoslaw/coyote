@@ -18,6 +18,7 @@
     v-for="topic in topics"
     :key="topic.id"
     :topic="topic"
+    :flag="getFlag(topic.id)"
     :posts-per-page="postsPerPage"
   ></vue-topic>
 </div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="card-body" :class="{'not-read': !topic.is_read}" >
+  <div class="card-body" :class="{'not-read': !topic.is_read, 'flag': flag != null}">
     <div class="row">
       <div class="col-lg-9 col-md-12 d-flex align-items-center">
         <a :class="{'not-read': !topic.is_read}" class="mr-2 i-35 d-none d-md-flex position-relative img-thumbnail align-items-center justify-content-center">
@@ -13,6 +13,8 @@
               <a v-if="topic.accepted_id" :href="topic.url + `?p=${topic.accepted_id}#${topic.accepted_id}}`"><i class="fas fa-check"></i></a>
 
               <a :href="topic.url">{{ topic.subject }}</a>
+
+              <a :href="flag" title="Przejdź do raportowanego postu"><i class="fa fa-fire"></i></a>
             </h5>
 
             <div v-if="totalPages > 1" class="ml-auto small">
@@ -155,6 +157,9 @@
       postsPerPage: {
         type: Number,
         default: 10
+      },
+      flag: {
+        type: String
       }
     },
     methods: {
