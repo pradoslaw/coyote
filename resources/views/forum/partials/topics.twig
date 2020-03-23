@@ -7,7 +7,10 @@
   {#<li class="filter"><a href="javascript:">Filtruj</a></li>#}
 </ul>
 
-<a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm float-right" style="margin-top: 6px; margin-bottom: 10px">Nowy wątek</a>
+{% if forum is defined and not forum.is_locked %}
+  <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm float-right mt-1 mb-3">Nowy wątek</a>
+{% endif %}
+
 <div class="clearfix"></div>
 
 <div v-for="topics in groups" class="card card-default card-topics">
@@ -15,206 +18,27 @@
     v-for="topic in topics"
     :key="topic.id"
     :topic="topic"
-{#    :url="topic.url"#}
-{#    :subject="topic.subject"#}
-{#    :replies="topic.replies"#}
-{#    :views="topic.views"#}
-{#    :score="topic.score"#}
-{#    :is-read="topic.is_read"#}
-{#    :is-locked="topic.is_locked"#}
-{#    :created-at="topic.created_at"#}
-{#    :first-post-id="topic.first_post_id"#}
-{#    :last-post="topic.last_post"#}
-{#    :user="topic.user"#}
-{#    :user-name="topic.user_name"#}
-{#    :tags="topic.tags"#}
-{#    :accepted-id="topic.accepted_id"#}
-{#    :is-subscribed="topic.is_subscribed"#}
-{#    :is-voted="topic.is_voted"#}
-{#    :is-replied="topic.is_replied"#}
-{#    :subscribers="topic.subscribers"#}
+    :posts-per-page="postsPerPage"
   ></vue-topic>
 </div>
 
-{#<section class="card card-wrapper">#}
-{#    <div class="card-body">#}
-{#        <div id="box-topics" class="table-forum">#}
-{#            <ul id="sort" class="d-none d-sm-block">#}
-{#                <li>{{ sortable('last', 'Ostatni post', ['last', 'desc']) }}</li>#}
-{#                <li>{{ sortable('id', 'Data utworzenia', ['last', 'desc']) }}</li>#}
-{#                <li>{{ sortable('replies', 'Odpowiedzi', ['last', 'desc']) }}</li>#}
-{#                <li>{{ sortable('views', 'Wyświetleń', ['last', 'desc']) }}</li>#}
-{#                <li>{{ sortable('score', 'Głosów', ['last', 'desc']) }}</li>#}
-{#                #}{#<li class="filter"><a href="javascript:">Filtruj</a></li>#}
-{#            </ul>#}
+<div class="row no-gutters">
+  <div class="mr-auto">
+    {{ topics.render()|raw }}
+  </div>
 
-{#            {% if forum is defined and not forum.is_locked %}#}
-{#                <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm float-right" style="margin-top: 6px; margin-bottom: 10px">Nowy wątek</a>#}
-{#            {% endif %}#}
-{#            <div class="clearfix"></div>#}
+  {% if forumList is defined %}
+    <div class="ml-auto">
+      {{ form_select('forum', forumList, forum.slug, {'id': 'sel-forum-list', 'class': 'form-control d-inline w-auto', 'data-url': route('forum.home')}) }}
 
-{#            <table>#}
-{#                {% set previous = null %}#}
-{#                {% for topic in topics %}#}
-{#                    {% set url = route('forum.topic', [topic.forum_slug, topic.id, topic.slug]) %}#}
+      <a class="btn" href="javascript:" id="btn-goto">
+        <i class="fas fa-arrow-circle-right"></i>
+      </a>
+    </div>
+  {% endif %}
+</div>
 
-{#                    {% if forum is defined and not topic.is_sticky and previous.is_sticky %}#}
-{#                        <tr>#}
-{#                            <td colspan="4" class="sticky"></td>#}
-{#                        </tr>#}
-{#                    {% endif %}#}
-{#                    <tr {{ flags[topic.id] is defined ? 'class="flagged"' }}>#}
-{#                        <td class="col-topic-icon hidden-xxs">#}
-{#                            {% set class = '' %}#}
-{#                            {% set title = topic.unread ? 'Kliknij, aby oznaczyć jako przeczytane' %}#}
-
-{#                            {% if topic.is_locked %}#}
-{#                                {% set class = 'lock' %}#}
-{#                            {% elseif topic.is_sticky %}#}
-{#                                {% set class = 'sticky' %}#}
-{#                            {% elseif topic.is_announcement %}#}
-{#                                {% set class = 'announcement' %}#}
-{#                            {% endif %}#}
-
-{#                            <a {{ topic.unread ? ('href="' ~ route('forum.topic.mark', [topic.id]) ~ '"')|raw }} title="{{ title }}" class="mx-auto ico {{ class }} {{ topic.unread ? 'new' : 'normal' }}"></a>#}
-{#                        </td>#}
-{#                        <td class="col-subject">#}
-{#                            {% set replies_real = (can('delete', topic.forum) ? topic.replies_real : topic.replies) %}#}
-
-{#                            {% if replies_real > postsPerPage %}#}
-{#                                {% set pages = (replies_real / postsPerPage)|round(0, 'ceil') %}#}
-
-{#                                <dl class="topic-pagination d-none d-sm-block">#}
-{#                                    <dd>#}
-{#                                        <a href="{{ url }}?page=1">1</a>#}
-
-{#                                        {% if pages > 4 %}#}
-{#                                            ...#}
-{#                                        {% elseif pages == 4 %}#}
-{#                                            <a href="{{ url }}?page=2">2</a>#}
-{#                                        {% endif %}#}
-
-{#                                        {% for i in max(2, pages - 1)..pages %}#}
-{#                                            <a href="{{ url }}?page={{ i }}">{{ i }}</a>#}
-{#                                        {% endfor %}#}
-{#                                    </dd>#}
-{#                                </dl>#}
-{#                            {% endif %}#}
-
-{#                            <a rel="nofollow" title="Przejdź do pierwszego nieczytanego postu" class="btn-view {{ topic.unread ? 'unread' }}" href="{{ url }}?view=unread"></a>#}
-
-{#                            {% if topic.post_accept_id %}#}
-{#                                <a rel="nofollow" title="Zobacz zaakceptowaną odpowiedź" class="btn-accepted" href="{{ url }}?p={{ topic.post_accept_id }}#id{{ topic.post_accept_id }}">#}
-{#                                    <i class="fas fa-check"></i>#}
-{#                                </a>#}
-{#                            {% endif %}#}
-
-{#                            <h5>#}
-{#                                <a title="{{ topic.subject }}" href="{{ url ~ (user_id is defined ? ('?p=' ~ topic.posts[0].id ~ '#id' ~ topic.posts[0].id)) }}">{{ topic.subject }}</a>#}
-
-{#                                {% if topic.score %}#}
-{#                                    <span class="badge badge-primary score d-none d-sm-inline" title="Liczba głosów oddanych na ten wątek">#}
-{#                                        <i class="fas fa-fire"></i>#}
-{#                                        {{ topic.score }}#}
-{#                                    </span>#}
-{#                                {% endif %}#}
-
-{#                                {% if flags[topic.id] is defined %}#}
-{#                                    <a href="{{ flags[topic.id] }}" title="Przejdź do raportowanego postu">#}
-{#                                        <i class="fas fa-fire"></i>#}
-{#                                    </a>#}
-{#                                {% endif %}#}
-{#                            </h5>#}
-
-{#                            {% if topic.tags %}#}
-{#                                <ul class="tag-clouds tag-clouds-sm float-right" style="clear: both">#}
-{#                                    {% for tag in topic.tags %}#}
-{#                                        <li {{ loop.index0 >= 3 ? 'class="hidden"' }}><a href="{{ route('forum.tag', [tag.name|url_encode]) }}" data-tag="{{ tag.name }}">{{ tag.name }}</a></li>#}
-{#                                    {% endfor %}#}
-{#                                </ul>#}
-{#                            {% endif %}#}
-
-{#                            <strong>#}
-{#                                <span class="timestamp" data-timestamp="{{ topic.first_created_at|timestamp }}" title="{{ topic.first_created_at|format_date }}">{{ topic.first_created_at|format_date }}</span>#}
-
-{#                                {% if topic.author_id %}#}
-{#                                    {{ link_to_profile(topic.author_id, topic.author_name, topic.author_is_active, topic.author_is_blocked) }}#}
-{#                                {% else %}#}
-{#                                    {{ topic.first_user_name }}#}
-{#                                {% endif %}#}
-{#                            </strong>#}
-{#                        </td>#}
-
-{#                        {% if forum is not defined %}#}
-{#                            <td class="col-category d-none d-sm-table-cell">#}
-{#                                {{ link_to_route('forum.category', topic.forum_name, [topic.forum_slug]) }}#}
-{#                            </td>#}
-{#                        {% endif %}#}
-
-{#                        <td class="col-views d-none d-sm-table-cell">#}
-{#                            <p title="Liczba odpowiedzi">#}
-{#                                <strong>{{ topic.replies|number_format(0, '', ' ') }}</strong>#}
-
-{#                                {% if topic.replies != topic.replies_real and can('delete', forum) %}#}
-{#                                    <small class="col-replies-real">({{ topic.replies - topic.replies_real }})</small>#}
-{#                                {% endif %}#}
-{#                                <small>{{ declination(topic.replies, ['odpowiedź', 'odpowiedzi', 'odpowiedzi'], true) }}</small>#}
-{#                            </p>#}
-{#                            <p title="Liczba wyświetleń">#}
-{#                                <strong>{{ topic.views|number_format(0, '', ' ') }}</strong>#}
-{#                                <small>{{ declination(topic.views, ['wyświetlenie', 'wyświetlenia', 'wyświetleń'], true) }}</small>#}
-{#                            </p>#}
-{#                        </td>#}
-{#                        <td class="col-last-post d-none d-sm-table-cell">#}
-{#                            {% if auth_check() %}#}
-{#                                <a title="Obserwuj wątek" href="{{ route('forum.topic.subscribe', [topic.id]) }}" class="btn-watch-sm {{ topic.subscribe_on ? 'on' }}"></a>#}
-{#                            {% endif %}#}
-
-{#                            {% if topic.poster_id %}#}
-{#                                <a href="{{ route('profile', [topic.poster_id]) }}" class="d-none d-md-inline">#}
-{#                                    <img class="img-thumbnail" src="{{ user_photo(topic.poster_photo) }}">#}
-{#                                </a>#}
-{#                            {% else %}#}
-{#                                <img class="img-thumbnail d-none d-md-inline" src="{{ cdn('img/avatar.png') }}">#}
-{#                            {% endif %}#}
-
-{#                            <span class="timestamp" data-timestamp="{{ topic.last_created_at|timestamp }}" title="{{ topic.last_created_at|format_date(false) }}">{{ topic.last_created_at|format_date }}</span><br>#}
-
-{#                            {% if topic.poster_id %}#}
-{#                                {{ link_to_profile(topic.poster_id, topic.poster_name, topic.poster_is_active, topic.poster_is_blocked) }}#}
-{#                            {% else %}#}
-{#                                {{ topic.last_user_name }}#}
-{#                            {% endif %}#}
-{#                        </td>#}
-{#                    </tr>#}
-
-{#                    {% set previous = topic %}#}
-{#                {% else %}#}
-{#                    <tr>#}
-{#                        <td colspan="4" style="text-align: center">Brak wątków do wyświetlenia.</td>#}
-{#                    </tr>#}
-{#                {% endfor %}#}
-
-{#                <tr>#}
-{#                    <td colspan="4" class="col-footer-nav">#}
-{#                        <nav class="float-left">#}
-{#                            {{ topics.render()|raw }}#}
-{#                        </nav>#}
-
-{#                        {% if forumList is defined %}#}
-{#                            <a class="btn float-right" href="javascript:" id="btn-goto">#}
-{#                                <i class="fas fa-arrow-circle-right"></i>#}
-{#                            </a>#}
-
-{#                            {{ form_select('forum', forumList, forum.slug, {'class': 'float-right', 'id': 'sel-forum-list', 'data-url': route('forum.home')}) }}#}
-{#                        {% endif %}#}
-{#                    </td>#}
-{#                </tr>#}
-{#            </table>#}
-{#        </div>#}
-
-{#        {% if topics.count() > 10 and forum is defined and not forum.is_locked %}#}
-{#            <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm float-right">Nowy wątek</a>#}
-{#        {% endif %}#}
-{#    </div>#}
-{#</section>#}
+{% if topics.count() > 10 and forum is defined and not forum.is_locked %}
+  <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm float-right mt-3">Nowy wątek</a>
+  <div class="clearfix"></div>
+{% endif %}

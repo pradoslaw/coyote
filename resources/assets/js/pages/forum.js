@@ -16,14 +16,14 @@ new Vue({
   el: '#js-forum',
   delimiters: ['${', '}'],
   store,
-  data: { collapse: 'collapse' in window ? collapse : {} },
+  data: { collapse: 'collapse' in window ? window.collapse : {}, postsPerPage: window?.posts_per_page },
   components: {
     'vue-section': VueSection,
     'vue-topic': VueTopic
   },
   created() {
     store.commit('forums/init', window.forums);
-    store.commit('topics/init', window.topics);
+    store.commit('topics/init', window.topics || []);
   },
   methods: {
     changeCollapse(id) {

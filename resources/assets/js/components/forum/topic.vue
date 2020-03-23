@@ -2,7 +2,7 @@
   <div class="card-body" :class="{'not-read': !topic.is_read}" >
     <div class="row">
       <div class="col-lg-9 col-md-12 d-flex align-items-center">
-        <a :class="{'not-read': !topic.is_read}" v-profile="topic.user.id" class="mr-2 i-35 d-none d-md-flex position-relative img-thumbnail align-items-center justify-content-center">
+        <a :class="{'not-read': !topic.is_read}" class="mr-2 i-35 d-none d-md-flex position-relative img-thumbnail align-items-center justify-content-center">
           <i v-if="topic.is_locked" class="fas fa-lock"></i>
           <vue-avatar v-else v-bind="topic.user" class="w-100"></vue-avatar>
         </a>
@@ -34,24 +34,24 @@
             <div class="d-none d-lg-inline mt-1 mr-3 small">
               <a :href="topic.url + `?p=${topic.first_post_id}#${topic.first_post_id}`" class="text-muted"><vue-timeago :datetime="topic.created_at"></vue-timeago></a>,
 
-              <a v-if="topic.user" v-profile="topic.user.id" class="mt-1 text-body">{{ topic.user.name }}</a>
+              <a v-if="topic.user" v-profile="topic.user ? topic.user.id : null" class="mt-1 text-body">{{ topic.user.name }}</a>
               <span v-else>{{ topic.user_name }}</span>
             </div>
 
             <ul class="list-inline small text-muted mt-1 mb-0">
-              <li class="list-inline-item small">
+              <li class="list-inline-item small" title="Liczba głosów oddanych na ten wątek">
                 <i :class="{'fas text-primary': topic.is_voted, 'far': !topic.is_voted}" class="fa-fw fa-thumbs-up"></i>
 
                 {{ topic.score | number }} <span class="d-none d-lg-inline">głosów</span>
               </li>
 
-              <li class="list-inline-item small">
+              <li class="list-inline-item small" title="Liczba odpowiedzi">
                 <i :class="{'fas text-primary': topic.is_replied, 'far': !topic.is_replied}" class="fa-fw fa-comments"></i>
 
                 {{ topic.replies | number }} <span class="d-none d-lg-inline">odpowiedzi</span>
               </li>
 
-              <li class="list-inline-item small">
+              <li class="list-inline-item small" title="Liczba wyświetleń">
                 <i class="far fa-fw fa-eye"></i> {{ topic.views | number }} <span class="d-none d-lg-inline">wyświetleń</span>
               </li>
 
@@ -73,7 +73,7 @@
 
       <div class="col-lg-3 col-md-12 mt-1 mt-sm-2 mt-lg-0">
         <div class="media m-md-0">
-          <a v-profile="topic.last_post.user.id"><vue-avatar v-bind="topic.last_post.user" class="i-35 mr-2 d-none d-md-inline-block position-relative img-thumbnail"></vue-avatar></a>
+          <a v-profile="this.topic.last_post.user ? this.topic.last_post.user.id : null"><vue-avatar v-bind="topic.last_post.user" class="i-35 mr-2 d-none d-md-inline-block position-relative img-thumbnail"></vue-avatar></a>
 
           <div class="media-body small text-truncate">
             <p class="text-truncate mb-1 d-none d-sm-block small">
@@ -155,23 +155,7 @@
       postsPerPage: {
         type: Number,
         default: 10
-      },
-      // subscribers: {
-      //   type: Number,
-      //   default: 0
-      // },
-      // acceptedId: {
-      //   type: Number
-      // },
-      // isSubscribed: {
-      //   type: Boolean
-      // },
-      // isVoted: {
-      //   type: Boolean
-      // },
-      // isReplied: {
-      //   type: Boolean
-      // }
+      }
     },
     methods: {
       ...mapActions('topics', ['mark', 'subscribe'])
@@ -189,6 +173,10 @@
         }
 
         return pages;
+      },
+
+      userId() {
+        return this.topic.last_post.user?.id;
       }
     }
   }
