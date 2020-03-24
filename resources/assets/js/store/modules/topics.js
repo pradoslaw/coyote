@@ -13,6 +13,10 @@ const mutations = {
     topic.is_read = true;
   },
 
+  markAll(state) {
+    state.topics.forEach(topic => topic.is_read = true);
+  },
+
   subscribe(state, topic) {
     if (topic.is_subscribed) {
       topic.subscribers--;
@@ -33,7 +37,7 @@ const actions = {
   },
 
   markAll({ state, commit }) {
-    state.topics.forEach(topic => commit('mark', topic));
+    commit('markAll');
 
     axios.post(`/Forum/${state[0].forum.slug}/Mark`);
   },

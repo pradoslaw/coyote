@@ -51,7 +51,7 @@ const actions = {
     axios.post(`/Forum/${category.slug}/Mark`);
   },
 
-  markAll({ state, commit }) {
+  markAll({ state, commit, rootState }) {
     axios.post('/Forum/Mark');
 
     state.categories.forEach(category => commit('mark', category));

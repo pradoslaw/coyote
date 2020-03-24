@@ -26,7 +26,7 @@ new Vue({
     'vue-topic': VueTopic
   },
   created() {
-    store.commit('forums/init', window.forums);
+    store.commit('forums/init', window.forums || []);
     store.commit('topics/init', window.topics || []);
   },
   methods: {
@@ -83,8 +83,13 @@ new Vue({
   delimiters: ['${', '}'],
   store,
   methods: {
-    markAll() {
+    markForums() {
       store.dispatch('forums/markAll');
+      store.commit('topics/markAll');
+    },
+
+    markTopics() {
+      store.dispatch('topics/markAll');
     }
   }
 });
