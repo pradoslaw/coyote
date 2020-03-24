@@ -27,7 +27,8 @@ RUN apk update && apk add --no-cache \
     zip \
     make \
     autoconf \
-    gcc
+    gcc \
+    git
 
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-png-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) pgsql gd soap pdo_pgsql mbstring zip opcache iconv
