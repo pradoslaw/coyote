@@ -214,7 +214,7 @@ new Vue({
         this.messages
           .filter(message => message.read_at === null && message.folder === INBOX && shouldMarkAsRead())
           .forEach(message => {
-            store.commit('messages/mark', message);
+            store.dispatch('messages/mark', message);
             store.commit('inbox/decrement');
           });
       };
