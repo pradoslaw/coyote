@@ -2,6 +2,8 @@
 
 namespace Tests\Browser;
 
+use Coyote\Permission;
+use Coyote\Services\UrlBuilder\UrlBuilder;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 
@@ -24,6 +26,42 @@ class ForumTest extends DuskTestCase
             } finally {
                 $forum->delete();
             }
+        });
+    }
+
+    public function testWriteInLockedTopic()
+    {
+        $forum = $this->createForum();
+        $topic = $this->createTopic($forum->id, ['is_locked' => true]);
+        $user = $this->createUserWithGroup();
+
+        $this->browse(function (Browser $browser) use ($user, $forum, $topic) {
+
+            $browser
+                ->loginAs($user)
+                ->visit(UrlBuilder::topic($topic))
+                ->assertDontSee('Odpowiedz')
+                ->visitRoute('forum.post.submit', [$forum, $topic])
+                ->assertSee('401');
+        });
+    }
+
+    public function testWriteInLockedTopicAsAdmin()
+    {
+        $user = $this->createUserWithGroup();
+        $forum = $this->createForum([], $user->groups()->first()->id);
+
+        $forum->permissions()->create(['value' => 1, 'group_id' => $user->groups()->first()->id, 'permission_id' => Permission::where('name', 'forum-update')->get()->first()->id]);
+
+        $topic = $this->createTopic($forum->id, ['is_locked' => true]);
+
+        $this->browse(function (Browser $browser) use ($user, $forum, $topic) {
+            $browser
+                ->loginAs($user)
+                ->visit(UrlBuilder::topic($topic))
+                ->assertSee('Odpowiedz')
+                ->clickLink('Odpowiedz')
+                ->assertSee('Odpowiedz');
         });
     }
 
