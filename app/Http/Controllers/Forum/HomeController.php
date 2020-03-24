@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Http\Factories\FlagFactory;
 use Coyote\Http\Factories\GateFactory;
 use Coyote\Http\Resources\Api\ForumCollection;
+use Coyote\Http\Resources\TopicCollection;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
@@ -16,6 +17,7 @@ use Coyote\Repositories\Criteria\Topic\Subscribes;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Topic\WithTags;
 use Coyote\Services\Forum\Personalizer;
+use Coyote\Services\Guest;
 use Illuminate\Http\Request;
 use Lavary\Menu\Item;
 use Lavary\Menu\Menu;
@@ -258,7 +260,7 @@ class HomeController extends BaseController
             $this->topic->pushCriteria(new SkipForum($this->forum->findHiddenIds($this->userId)));
         }
 
-        $paginator = $this
+        $paginate = $this
             ->topic
             ->lengthAwarePagination(
                 $this->userId,
@@ -269,7 +271,13 @@ class HomeController extends BaseController
             )
             ->appends($this->request->except('page'));
 
-        return $this->personalizer->markUnreadTopics($paginator);
+        $guest = new Guest($this->guestId);
+
+        $topics = (new TopicCollection($paginate))
+            ->setGuest($guest)
+            ->setRepository($this->topic);
+
+        return $topics;
     }
 
     /**
