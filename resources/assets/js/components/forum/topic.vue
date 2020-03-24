@@ -11,7 +11,7 @@
         <div class="w-100">
           <div class="row no-gutters">
             <h5 class="topic-subject text-truncate m-0">
-              <a v-if="topic.accepted_id" :href="topic.url + `?p=${topic.accepted_id}#${topic.accepted_id}}`"><i class="fas fa-check"></i></a>
+              <a v-if="topic.accepted_id" :href="topic.url + `?p=${topic.accepted_id}#id${topic.accepted_id}}`"><i class="fas fa-check"></i></a>
 
               <small v-if="showCategoryName"><a :href="topic.forum.url" class="text-body">{{ topic.forum.name }}</a> »</small>
               <a :href="topic.url">{{ topic.subject }}</a>
@@ -36,7 +36,7 @@
 
           <div class="row no-gutters">
             <div class="d-none d-lg-inline mt-1 small" style="width: 210px">
-              <a :href="topic.url + `?p=${topic.first_post_id}#${topic.first_post_id}`" class="text-muted"><vue-timeago :datetime="topic.created_at"></vue-timeago></a>,
+              <a :href="topic.url + `?p=${topic.first_post_id}#id${topic.first_post_id}`" class="text-muted"><vue-timeago :datetime="topic.created_at"></vue-timeago></a>,
 
               <a v-if="topic.user" v-profile="topic.user ? topic.user.id : null" class="mt-1 text-body">{{ topic.user.name }}</a>
               <span v-else>{{ topic.user_name }}</span>
