@@ -81,7 +81,7 @@
 
           <div class="media-body small text-truncate">
             <p class="text-truncate mb-1 d-none d-sm-block small">
-              <a :href="topic.url + `?p=${topic.last_post.id}#${topic.last_post.id}`" title="Zobacz ostatni post" class="text-body">{{ topic.last_post.excerpt }}</a>
+              <a :href="topic.url + `?p=${topic.last_post.id}#id${topic.last_post.id}`" title="Zobacz ostatni post" class="text-body">{{ topic.last_post.excerpt }}</a>
             </p>
 
             <span class="text-muted"><vue-timeago :datetime="topic.last_post.created_at"></vue-timeago></span>,

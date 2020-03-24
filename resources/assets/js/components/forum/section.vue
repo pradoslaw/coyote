@@ -73,7 +73,7 @@
 
               <div class="media-body overflow-hidden">
                 <p class="text-truncate mb-1">
-                  <a :href="category.topic.url + '?view=unread'">{{ category.topic.subject }}</a>
+                  <a :href="category.topic.url">{{ category.topic.subject }}</a>
                 </p>
 
                 <span class="text-muted"><vue-timeago :datetime="category.post.created_at"></vue-timeago></span>, <a v-profile="category.post.user.id">{{ category.post.user.name }}</a>
