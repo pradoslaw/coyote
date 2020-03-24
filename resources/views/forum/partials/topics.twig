@@ -20,10 +20,11 @@
     :topic="topic"
     :flag="getFlag(topic.id)"
     :posts-per-page="postsPerPage"
+    :show-category-name="showCategoryName"
   ></vue-topic>
 </div>
 
-<div class="row no-gutters">
+<div class="row no-gutters mb-3">
   <div class="mr-auto">
     {{ topics.render()|raw }}
   </div>
@@ -40,6 +41,6 @@
 </div>
 
 {% if topics.count() > 10 and forum is defined and not forum.is_locked %}
-  <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm float-right mt-3">Nowy wątek</a>
+  <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm float-right">Nowy wątek</a>
   <div class="clearfix"></div>
 {% endif %}

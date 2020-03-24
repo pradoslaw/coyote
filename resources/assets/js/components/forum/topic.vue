@@ -13,6 +13,7 @@
             <h5 class="topic-subject text-truncate m-0">
               <a v-if="topic.accepted_id" :href="topic.url + `?p=${topic.accepted_id}#${topic.accepted_id}}`"><i class="fas fa-check"></i></a>
 
+              <small v-if="showCategoryName"><a :href="topic.forum.url" class="text-body">{{ topic.forum.name }}</a> »</small>
               <a :href="topic.url">{{ topic.subject }}</a>
 
               <a v-if="flag != null" :href="flag" title="Przejdź do raportowanego postu"><i class="fa fa-fire"></i></a>
@@ -117,6 +118,9 @@
       },
       flag: {
         type: String
+      },
+      showCategoryName: {
+        type: Boolean
       }
     },
     methods: {

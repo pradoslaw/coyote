@@ -18,8 +18,9 @@ new Vue({
   store,
   data: {
     collapse: window.collapse || {},
-    postsPerPage: window?.posts_per_page,
-    flags: window?.flags
+    postsPerPage: window.posts_per_page || null,
+    flags: window.flags || [],
+    showCategoryName: window.show_category_name || false
   },
   components: {
     'vue-section': VueSection,

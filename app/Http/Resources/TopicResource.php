@@ -47,7 +47,8 @@ class TopicResource extends JsonResource
                 'forum'         => [
                     'id'        => $this->forum->id,
                     'name'      => $this->forum->name,
-                    'slug'      => $this->forum->slug
+                    'slug'      => $this->forum->slug,
+                    'url'       => UrlBuilder::forum($this->forum)
                 ],
                 'tags'                  => TagResource::collection($this->whenLoaded('tags')),
 
