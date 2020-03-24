@@ -45,24 +45,24 @@
               <li class="list-inline-item small" title="Liczba głosów oddanych na ten wątek">
                 <i :class="{'fas text-primary': topic.is_voted, 'far': !topic.is_voted}" class="fa-fw fa-thumbs-up"></i>
 
-                {{ topic.score | number }} <span class="d-none d-lg-inline">głosów</span>
+                {{ topic.score | number }} <span class="d-none d-sm-inline">{{ topic.score | declination(['głos', 'głosy', 'głosów']) }}</span>
               </li>
 
               <li class="list-inline-item small" title="Liczba odpowiedzi">
                 <i :class="{'fas text-primary': topic.is_replied, 'far': !topic.is_replied}" class="fa-fw fa-comments"></i>
 
-                {{ topic.replies | number }} <span class="d-none d-lg-inline">odpowiedzi</span>
+                {{ topic.replies | number }} <span class="d-none d-sm-inline">{{ topic.replies | declination(['odpowiedź', 'odpowiedzi', 'odpowiedzi']) }}</span>
               </li>
 
               <li class="list-inline-item small" title="Liczba wyświetleń">
-                <i class="far fa-fw fa-eye"></i> {{ topic.views | number }} <span class="d-none d-lg-inline">wyświetleń</span>
+                <i class="far fa-fw fa-eye"></i> {{ topic.views | number }} <span class="d-none d-sm-inline d-md-none d-lg-inline">{{ topic.views | declination(['wyświetlenie', 'wyświetlenia', 'wyświetleń']) }}</span>
               </li>
 
               <li class="list-inline-item small">
                 <a @click="subscribe(topic)" href="javascript:" class="text-decoration-none text-muted" title="Kliknij aby wł/wył obserwowanie wątku">
                   <i :class="{'fas text-primary': topic.is_subscribed, 'far': !topic.is_subscribed}" class="fa-fw fa-star"></i>
 
-                  {{ topic.subscribers | number }} <span class="d-none d-lg-inline">{{ topic.subscribers | declination(['obserwujący', 'obserwujących', 'obserwujących']) }}</span>
+                  {{ topic.subscribers | number }} <span class="d-none d-sm-inline">{{ topic.subscribers | declination(['obserwujący', 'obserwujących', 'obserwujących']) }}</span>
                 </a>
               </li>
             </ul>

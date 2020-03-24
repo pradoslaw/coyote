@@ -57,12 +57,12 @@
             <div class="row">
               <div class="col-lg-12 col-6 counter">
                 <strong>{{ category.topics | number }}</strong>
-                <small class="text-muted text-wide-spacing">wątki</small>
+                <small class="text-muted text-wide-spacing">{{ category.topics | declination(['wątek', 'wątków', 'wątków']) }}</small>
               </div>
 
               <div class="col-lg-12 col-6 counter">
                 <strong>{{ category.posts | number }}</strong>
-                <small class="text-muted text-wide-spacing">postów</small>
+                <small class="text-muted text-wide-spacing">{{ category.posts | declination(['post', 'postów', 'postów']) }}</small>
               </div>
             </div>
           </div>
