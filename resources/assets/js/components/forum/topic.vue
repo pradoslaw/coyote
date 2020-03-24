@@ -35,7 +35,7 @@
           </div>
 
           <div class="row no-gutters">
-            <div class="d-none d-lg-inline mt-1 mr-3 small">
+            <div class="d-none d-lg-inline mt-1 small" style="width: 210px">
               <a :href="topic.url + `?p=${topic.first_post_id}#${topic.first_post_id}`" class="text-muted"><vue-timeago :datetime="topic.created_at"></vue-timeago></a>,
 
               <a v-if="topic.user" v-profile="topic.user ? topic.user.id : null" class="mt-1 text-body">{{ topic.user.name }}</a>
