@@ -123,7 +123,7 @@ class Rules
     {
         return unserialize(
             $this->cache->rememberForever(self::CACHE_KEY, function () {
-                return serialize($this->repository->all()->only(['id', 'user_id', 'ip', 'fingerprint']));
+                return serialize($this->repository->all(['id', 'user_id', 'ip', 'fingerprint'])->toArray());
             })
         );
     }

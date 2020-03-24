@@ -1,10 +1,10 @@
-{% extends 'errors.503' %}
+@extends('errors.503')
 
-{% block title %}
+@section('title')
     You are banned!
-{% endblock %}
+@endsection
 
-{% block content %}
+@section('content')
     <style>
         #panel {
             border: 1px solid #B0BEC5;
@@ -42,24 +42,24 @@
         <ul>
             <li>
                 <strong>Ban ID:</strong>
-                <span>{{ id }}</span>
+                <span>{{ $id }}</span>
             </li>
             <li>
                 <strong>IP:</strong>
-                <span>{{ ip|default('--') }}</span>
+                <span>{{ $ip ?? '--' }}</span>
             </li>
             <li>
                 <strong>Reason:</strong>
-                <span>{{ reason|default('--') }}</span>
+                <span>{{ $reason ?? '--' }}</span>
             </li>
             <li>
                 <strong>Expiration date:</strong>
-                <span>{{ expire_at|default('--') }}</span>
+                <span>{{ $expire_at ?? '--' }}</span>
             </li>
         </ul>
     </div>
 
     <div id="contact">
-        You can contact us by e-mail: <a href="mailto:support@4programmers.net?subject=Ban ID:{{ id }}">support@4programmers.net</a>
+        You can contact us by e-mail: <a href="mailto:support@4programmers.net?subject=Ban ID:{{ $id }}">support@4programmers.net</a>
     </div>
-{% endblock %}
+@endsection
