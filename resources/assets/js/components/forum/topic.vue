@@ -55,7 +55,7 @@
               </li>
 
               <li class="list-inline-item small" title="Liczba wyświetleń">
-                <i class="far fa-fw fa-eye"></i> {{ topic.views | number }} <span class="d-none d-sm-inline d-md-none d-lg-inline">{{ topic.views | declination(['wyświetlenie', 'wyświetlenia', 'wyświetleń']) }}</span>
+                <i class="far fa-fw fa-eye"></i> {{ topic.views | number }} <span class="d-none d-sm-inline">{{ topic.views | declination(['wyświetlenie', 'wyświetlenia', 'wyświetleń']) }}</span>
               </li>
 
               <li class="list-inline-item small">

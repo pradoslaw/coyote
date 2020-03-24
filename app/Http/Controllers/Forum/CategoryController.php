@@ -5,13 +5,10 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Events\UserWasSaved;
 use Coyote\Http\Factories\FlagFactory;
 use Coyote\Http\Resources\Api\ForumCollection;
-use Coyote\Http\Resources\TopicResource;
 use Coyote\Http\Resources\TopicCollection;
 use Coyote\Repositories\Criteria\Topic\BelongsToForum;
 use Coyote\Repositories\Criteria\Topic\StickyGoesFirst;
-use Coyote\Services\Forum\Tracker;
 use Coyote\Services\Forum\TreeBuilder;
-use Coyote\Services\Forum\Personalizer;
 use Coyote\Services\Guest;
 use Illuminate\Http\Request;
 
@@ -22,10 +19,9 @@ class CategoryController extends BaseController
     /**
      * @param \Coyote\Forum $forum
      * @param Request $request
-     * @param Personalizer $personalizer
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($forum, Request $request, Personalizer $personalizer)
+    public function index($forum, Request $request)
     {
         $treeBuilder = new TreeBuilder();
 
@@ -67,8 +63,6 @@ class CategoryController extends BaseController
         $topics = (new TopicCollection($paginate))
             ->setGuest($guest)
             ->setRepository($this->topic);
-
-//        $topics = $personalizer->markUnreadTopics($topics);
 
         $collapse = $this->collapse();
         $postsPerPage = $this->postsPerPage($this->request);

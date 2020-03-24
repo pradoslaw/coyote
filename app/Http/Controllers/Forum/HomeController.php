@@ -16,7 +16,6 @@ use Coyote\Repositories\Criteria\Topic\SkipLockedCategories;
 use Coyote\Repositories\Criteria\Topic\Subscribes;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Topic\WithTags;
-use Coyote\Services\Forum\Personalizer;
 use Coyote\Services\Guest;
 use Illuminate\Http\Request;
 use Lavary\Menu\Item;
@@ -33,27 +32,16 @@ class HomeController extends BaseController
     private $tabs;
 
     /**
-     * @var Personalizer
-     *
-     * @deprecated
-     */
-    private $personalizer;
-
-    /**
      * @param ForumRepository $forum
      * @param TopicRepository $topic
      * @param PostRepository $post
-     * @param Personalizer $personalizer
      */
     public function __construct(
         ForumRepository $forum,
         TopicRepository $topic,
-        PostRepository $post,
-        Personalizer $personalizer
+        PostRepository $post
     ) {
         parent::__construct($forum, $topic, $post);
-
-        $this->personalizer = $personalizer;
 
         $this->tabs = app(Menu::class)->make('_forum', function (Builder $menu) {
             foreach (config('laravel-menu._forum') as $title => $row) {
