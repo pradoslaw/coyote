@@ -1,14 +1,13 @@
 <template>
   <div class="media" :class="{'unread': ! isRead}">
-
-      <a v-profile="message.user.id" class="d-inline-block">
-        <object :data="message.user.photo || '//'" type="image/png" class="media-object mr-2">
-          <img src="/img/avatar.png" :alt="message.user.name">
-        </object>
-      </a>
+    <a v-profile="message.user.id" class="d-inline-block">
+      <object :data="message.user.photo || '//'" type="image/png" class="media-object mr-2">
+        <img src="/img/avatar.png" :alt="message.user.name">
+      </object>
+    </a>
 
     <div class="media-body">
-      <small class="float-right">{{ message.created_at }}</small>
+      <small class="float-right"><vue-timeago :datetime="message.created_at"></vue-timeago></small>
 
       <h3>
         <a v-if="clickableText" :href="'/User/Pm/Show/' + message.id">{{ message.user.name }}</a>
@@ -22,7 +21,7 @@
       <a v-if="clickableText" :href="'/User/Pm/Show/' + message.id" class="excerpt">{{ message.excerpt ? message.excerpt : '(kliknij, aby przeczytać)' }}</a>
       <div v-else class="pm-text" v-html="message.text"></div>
 
-      <small v-if="last && message.folder === SENTBOX && message.read_at" class="text-muted"><i class="fas fa-check"></i> Przeczytano, {{ message.read_at }}</small>
+      <small v-if="last && message.folder === SENTBOX && message.read_at" class="text-muted"><i class="fas fa-check"></i> Przeczytano, <vue-timeago :datetime="message.read_at"></vue-timeago></small>
     </div>
 
     <vue-modal ref="confirm">
@@ -39,6 +38,9 @@
 <script>
   import { default as mixins } from '../mixins/user';
   import VueModal from '../modal.vue';
+  import VueTimeago from '../../plugins/timeago';
+
+  Vue.use(VueTimeago);
 
   export default {
     mixins: [ mixins ],

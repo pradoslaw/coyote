@@ -34,10 +34,10 @@ class PmResource extends JsonResource
 
         return array_merge($only, [
             'url'                   => route('user.pm.show', [$this->id]),
-            'created_at'            => format_date($this->created_at),
+            'created_at'            => carbon($this->created_at)->toIso8601String(),
             'excerpt'               => excerpt($text, 50),
             'text'                  => $text,
-            'read_at'               => $this->read_at ? format_date($this->read_at) : null,
+            'read_at'               => $this->read_at ? carbon($this->read_at)->toIso8601String() : null,
             'user'                  => new UserResource($this->user)
         ]);
     }
