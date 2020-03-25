@@ -36,13 +36,18 @@ class ForumTest extends DuskTestCase
         $user = $this->createUserWithGroup();
 
         $this->browse(function (Browser $browser) use ($user, $forum, $topic) {
-
-            $browser
-                ->loginAs($user)
-                ->visit(UrlBuilder::topic($topic))
-                ->assertDontSee('Odpowiedz')
-                ->visitRoute('forum.post.submit', [$forum, $topic])
-                ->assertSee('401');
+            try {
+                $browser
+                    ->loginAs($user)
+                    ->visit(UrlBuilder::topic($topic))
+                    ->assertDontSee('Odpowiedz')
+                    ->visitRoute('forum.post.submit', [$forum, $topic])
+                    ->assertSee('401');
+            } finally {
+                $topic->delete();
+                $forum->delete();
+                $user->delete();
+            }
         });
     }
 
@@ -56,12 +61,18 @@ class ForumTest extends DuskTestCase
         $topic = $this->createTopic($forum->id, ['is_locked' => true]);
 
         $this->browse(function (Browser $browser) use ($user, $forum, $topic) {
-            $browser
-                ->loginAs($user)
-                ->visit(UrlBuilder::topic($topic))
-                ->assertSee('Odpowiedz')
-                ->clickLink('Odpowiedz')
-                ->assertSee('Odpowiedz');
+            try {
+                $browser
+                    ->loginAs($user)
+                    ->visit(UrlBuilder::topic($topic))
+                    ->assertSee('Odpowiedz')
+                    ->clickLink('Odpowiedz')
+                    ->assertSee('Odpowiedz');
+            } finally {
+                $topic->delete();
+                $forum->delete();
+                $user->delete();
+            }
         });
     }
 

@@ -69,14 +69,17 @@
 
           <div v-if="!category.is_redirected" class="col-lg-4 col-12 col-sm-12">
             <div v-if="category.post" class="media">
-              <a v-profile="category.post.user.id"><vue-avatar v-bind="category.post.user" class="i-38 mr-2 d-none d-sm-block img-thumbnail"></vue-avatar></a>
+              <a v-profile="category.post.user ? category.post.user.id : null"><vue-avatar v-bind="category.post.user" class="i-38 mr-2 d-none d-sm-block img-thumbnail"></vue-avatar></a>
 
               <div class="media-body overflow-hidden">
                 <p class="text-truncate mb-1">
                   <a :href="category.topic.url">{{ category.topic.subject }}</a>
                 </p>
 
-                <span class="text-muted"><vue-timeago :datetime="category.post.created_at"></vue-timeago></span>, <a v-profile="category.post.user.id">{{ category.post.user.name }}</a>
+                <span class="text-muted"><vue-timeago :datetime="category.post.created_at"></vue-timeago></span>,
+
+                <a v-if="category.post.user" v-profile="category.post.user.id">{{ category.post.user.name }}</a>
+                <span v-else>{{ category.post.user_name }}</span>
 
                 <div class="toolbox">
                   <a href="javascript:" title="Oznacz jako przeczytane" @click="mark(category)"><i class="far fa-eye"></i></a>
