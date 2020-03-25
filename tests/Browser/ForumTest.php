@@ -44,7 +44,7 @@ class ForumTest extends DuskTestCase
                     ->visitRoute('forum.post.submit', [$forum, $topic])
                     ->assertSee('401');
             } finally {
-                $topic->delete();
+                $topic->forceDelete();
                 $forum->delete();
                 $user->delete();
             }
@@ -69,7 +69,7 @@ class ForumTest extends DuskTestCase
                     ->clickLink('Odpowiedz')
                     ->assertSee('Odpowiedz');
             } finally {
-                $topic->delete();
+                $topic->forceDelete();
                 $forum->delete();
                 $user->delete();
             }
