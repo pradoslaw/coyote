@@ -4,6 +4,9 @@
 - Migracja do Bootstrap 4
 - Migracja do Babel 7.x
 
+**Forum**
+- Przepisanie listy wątków w danej kategorii na Vue.js
+
 ##2.3
 
 **Ogólne**
