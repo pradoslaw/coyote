@@ -111,45 +111,6 @@ $(function () {
     });
 
     /**
-     * Mark category/categories as read
-     */
-    $('.btn-mark-read a').click(function() {
-        $('.btn-view').removeClass('unread');
-        $('.ico').each(function() {
-            if ($(this).hasClass('new')) {
-                $(this).removeClass('new').addClass('normal');
-            }
-        });
-
-        $('.sub-unread').removeClass('sub-unread');
-        $.post($(this).attr('href'));
-
-        return false;
-    });
-
-    /**
-     * Mark category/topic as read by clicking on it
-     */
-    $('.ico.new').click(function() {
-        $(this).addClass('normal').removeClass('new');
-        $(this).parent().next().find('.btn-view').removeClass('unread');
-
-        $.post($(this).attr('href'));
-
-        return false;
-    });
-
-    /**
-     * Subscribe/unsubscribe topic (from topics list)
-     */
-    $('.btn-watch-sm').click(function() {
-        $(this).toggleClass('on');
-        $.post($(this).attr('href'));
-
-        return false;
-    });
-
-    /**
      * Subscribe/unsubscribe post
      */
     $('.btn-sub').click(function() {

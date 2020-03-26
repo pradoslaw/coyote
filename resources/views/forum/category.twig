@@ -25,12 +25,8 @@
 
     {% include 'forum.partials.topics' %}
 
-    <section class="row">
-      <div class="col-12">
-        <div class="float-right">
-          {% include 'forum.partials.per_page' with {label: 'Liczba wątków na stronę', perPage: topics.perPage()} %}
-        </div>
-      </div>
+    <section class="row no-gutters ml-auto mt-3">
+      {% include 'forum.partials.per_page' with {label: 'Liczba wątków na stronę', perPage: topics.perPage()} %}
     </section>
 
     {{ viewers|raw }}
@@ -40,10 +36,10 @@
     {% block side_menu %}
       {% include 'forum.partials.post_count' %}
 
-      <div class="box">
+      <div id="js-sidebar">
         <ul class="side-menu">
-          <li class="btn-mark-read">
-            <a title="Oznacz kategorie jako przeczytane" href="{{ route('forum.category.mark', [forum.slug]) }}" data-category="forum-sidebar-buttons">
+          <li>
+            <a @click="markTopics" title="Oznacz kategorie jako przeczytane">
               <i class="far fa-check-square fa-fw"></i> Oznacz jako przeczytane
             </a>
           </li>
@@ -56,6 +52,9 @@
 {% block body %}
   <script>
     var forums = {{ forums|json_encode|raw }};
+    var topics = {{ topics|json_encode|raw }};
+    var posts_per_page = {{ postsPerPage }};
+    var flags = {{ flags|json_encode|raw }};
   </script>
 
   {{ parent() }}

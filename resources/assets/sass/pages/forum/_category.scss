@@ -1,202 +1,92 @@
-#box-topics {
-  margin: 0 0 9px 0;
-
-  td.sticky {
-    background-color: #e2e7e1;
+.card-topics {
+  a {
+    color: $link-color-darker;
   }
 
-  tr:hover {
-    .btn-watch-sm {
-      opacity: 1;
+  .topic-subject {
+    font-size: .9rem;
+  }
+
+  .topic-author {
+    margin-right: .25rem;
+  }
+
+  .card-body {
+    border-bottom: 1px solid $border-color;
+
+    &:nth-child(even) {
+      background-color: #fafafa;
+    }
+
+    &:last-child {
+      border-bottom: 0;
+    }
+
+    // must be here. otherwise, background-color would be overwritten by :nth-children()
+    &.flag {
+      background-color: theme-color-level("danger", $alert-bg-level);
+      color: $danger;
+      border-bottom-color: theme-color-level("danger", $alert-border-level);
+
+      a {
+        color: inherit;
+      }
     }
   }
 
-  tr.tagged td {
-    background-color: $unread-bg;
-  }
+  // desktop
+  @include media-breakpoint-up(sm) {
+    .card-body {
+      padding: .5rem 1rem;
 
-  tr.flagged td {
-    background-color: theme-color-level("danger", $alert-bg-level);
-    color: $danger;
-    border-bottom-color: theme-color-level("danger", $alert-border-level);
-
-    a {
-      color: inherit;
-    }
-  }
-}
-
-.col-topic-icon {
-  width: 30px;
-
-  .ico {
-    display: block;
-    height: 18px;
-    width: 20px;
-    background: url('/img/sprites.png') no-repeat;
-  }
-
-  .ico.normal {
-    background-position: 0 -1277px;
-  }
-
-  .ico.new {
-    background-position: 0 -1234px;
-  }
-
-  .ico.lock {
-    background-position: 0 -1148px;
-  }
-
-  .ico.lock.new {
-    background-position: 0 -1191px;
-  }
-
-  .ico.sticky {
-    background-position: 0 -1320px;
-  }
-
-  .ico.sticky.new {
-    background-position: 0 -1363px;
-  }
-
-  .ico.announcement {
-    background-position: 0 -1062px;
-  }
-
-  .ico.announcement.new {
-    background-position: 0 -1105px;
-  }
-}
-
-.col-subject {
-  padding-bottom: 1px !important;
-
-  h5 {
-    margin: 0;
-    @include text-overflow();
-    font-family: $font-family-base;
-    font-size: $font-size-base + 0.1rem;
-    line-height: 120%;
-  }
-
-  .topic-pagination {
-    float: right;
-    margin: 0;
-    position: relative;
-    padding-left: 12px;
-    font-size: 12px;
-
-    &:before {
-      @include font-awesome($fa-var-file);
-      font-weight: 400;
-      font-size: 10px;
-      left: 0;
-      top: 0;
+      > .row {
+        align-items: center;
+      }
     }
   }
 
-  strong {
-    font-weight: normal;
-    font-size: 11px;
-    padding: 1px 0 0 0;
-    display: block;
-    clear: left;
+  @include media-breakpoint-up(xl) {
+    .topic-author {
+      width: 210px;
+    }
   }
 
-  .btn-accepted {
-    float: left;
-    margin-right: 3px;
-  }
-
-  .score {
-    font-size: 9px;
-    cursor: help;
-  }
-
-  // jako, ze na malych ekranach ukrywane sa kolumny - np. z iloscia odpowiedzi oraz z data ostatniego posta
-  // w ich miejscu na chrome pozostawial puste (biale miejsce). dziwne, ale kolumna .col-subject mimo, ze mie
-  // miala ustalonej szerokosci, nie dopasowywala sie do szerokosci tabeli. ponizsza instrukcja powoduje
-  // poszerzenie do 100% szerokosci kolumny
+  // mobile
   @include media-breakpoint-down(sm) {
+    @include card-body-not-read();
+  }
+}
+
+a.not-read {
+  &:hover:before {
+    @include font-awesome($fa-var-eye);
+
+    display: flex;
+    cursor: pointer;
+    border-radius: $border-radius;
     width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: #000;
+    opacity: 0.5;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 1rem;
+    z-index: 100;
+  }
+
+  &:after {
+    content: ' ';
+    width: 12px;
+    height: 12px;
+    background-color: #d7661c;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 2px;
+    right: 0;
+    border: 2px solid #fff;
   }
 }
 
-.col-views {
-  @extend .col-stats;
-
-  width: 110px;
-}
-
-.col-category {
-  width: 12%;
-  text-align: center;
-  font-size: $font-size-small;
-}
-
-.col-replies-real {
-  color: $brand-danger;
-}
-
-.col-last-post {
-  width: 22%;
-  min-width: 120px;
-  font-size: $font-size-base - .05rem;
-
-  .img-thumbnail {
-    float: left;
-    margin-right: 5px;
-    width: 30px;
-    height: 30px;
-
-    @include media-breakpoint-only(lg) {
-      width: 35px;
-      height: 35px;
-    }
-  }
-
-  .btn-watch-sm {
-    opacity: .3;
-    float: right;
-    width: 14px;
-    height: 14px;
-    font-size: 14px;
-    margin: 9px 5px 0 0;
-    position: relative;
-    display: inline-block;
-
-    &:after {
-      position: absolute;
-      left: 0;
-      font-family: 'Font Awesome 5 Free';
-      content: fa-content($fa-var-star);
-      font-weight: 400;
-    }
-  }
-
-  .btn-watch-sm.on {
-    opacity: 1;
-
-    &:after {
-      content: fa-content($fa-var-star);
-      color: lighten($alt-link-hover-color, 5%);
-      font-weight: 900;
-    }
-  }
-}
-
-.col-footer-nav {
-  padding: 15px 5px 15px 15px !important;
-
-  .pagination {
-    font-size: 80%;
-  }
-
-  select {
-    margin: 3px 0;
-    border: 1px solid $border-color;
-    padding: 3px;
-    border-radius: 3px;
-  }
-}

@@ -22,18 +22,17 @@
       <div class="clearfix"></div>
     </div>
 
-    <section v-if="!isCollapse" class="card card-default card-categories">
-      <div v-for="(category, index) in categories" v-if="!category.is_hidden" :class="{'new': !category.is_read}" class="card-body">
+    <section v-if="!isCollapse" class="card card-default card-categories mb-0">
+      <div v-for="(category, index) in categories" v-if="!category.is_hidden" :class="{'not-read': !category.is_read}" class="card-body">
         <div class="row">
-          <div class="col-lg-7 col-12 col-sm-6 col-main">
-            <i v-if="category.is_locked" class="logo fas fa-lock float-left d-none d-lg-block"></i>
-            <a v-else :href="category.url">
-              <i :class="className(category.name)" class="logo far fa-comments float-left d-none d-lg-block">
-                <b v-if="!category.is_read"></b>
-              </i>
+          <div class="col-lg-7 col-12 col-sm-6 d-flex align-items-center">
+            <a @click="mark(category)" :class="{'not-read': !category.is_read}" class="d-none d-lg-block position-relative mr-2">
+              <i v-if="category.is_locked" class="logo fas fa-lock "></i>
+
+              <i v-else :class="[className(category.name)]" class="logo far fa-comments "></i>
             </a>
 
-            <div class="wrap">
+            <div class="overflow-hidden">
               <h3><a :href="category.url">{{ category.name }}</a></h3>
 
               <p class="description d-none d-lg-block">
@@ -58,31 +57,29 @@
             <div class="row">
               <div class="col-lg-12 col-6 counter">
                 <strong>{{ category.topics | number }}</strong>
-                <small class="text-muted text-wide-spacing">wątki</small>
+                <small class="text-muted text-wide-spacing">{{ category.topics | declination(['wątek', 'wątków', 'wątków']) }}</small>
               </div>
 
               <div class="col-lg-12 col-6 counter">
                 <strong>{{ category.posts | number }}</strong>
-                <small class="text-muted text-wide-spacing">postów</small>
+                <small class="text-muted text-wide-spacing">{{ category.posts | declination(['post', 'postów', 'postów']) }}</small>
               </div>
             </div>
           </div>
 
           <div v-if="!category.is_redirected" class="col-lg-4 col-12 col-sm-12">
             <div v-if="category.post" class="media">
+              <a v-profile="category.post.user ? category.post.user.id : null"><vue-avatar v-bind="category.post.user" class="i-38 mr-2 d-none d-sm-block img-thumbnail"></vue-avatar></a>
 
-              <a v-profile="category.post.user.id" class="mr-2 d-none d-sm-block">
-                <object :data="category.post.user.photo || '//'" type="image/png" class="d-inline-block img-thumbnail">
-                  <img src="/img/avatar.png" :alt="category.post.user.name">
-                </object>
-              </a>
-
-              <div class="media-body">
+              <div class="media-body overflow-hidden">
                 <p class="text-truncate mb-1">
-                  <a :href="category.topic.url + '?view=unread'">{{ category.topic.subject }}</a>
+                  <a :href="category.topic.url">{{ category.topic.subject }}</a>
                 </p>
 
-                <span class="text-muted"><vue-timeago :datetime="category.post.created_at"></vue-timeago></span>, <a v-profile="category.post.user.id">{{ category.post.user.name }}</a>
+                <span class="text-muted"><vue-timeago :datetime="category.post.created_at"></vue-timeago></span>,
+
+                <a v-if="category.post.user" v-profile="category.post.user.id">{{ category.post.user.name }}</a>
+                <span v-else>{{ category.post.user_name }}</span>
 
                 <div class="toolbox">
                   <a href="javascript:" title="Oznacz jako przeczytane" @click="mark(category)"><i class="far fa-eye"></i></a>
@@ -105,11 +102,13 @@
   import { mixin as clickaway } from 'vue-clickaway';
   import store from '../../store';
   import { mapGetters, mapActions } from "vuex";
+  import VueAvatar from '../avatar.vue';
 
   Vue.use(VueTimeago);
 
   export default {
     mixins: [ mixins, clickaway ],
+    components: { 'vue-avatar': VueAvatar },
     store,
     props: {
       name: {

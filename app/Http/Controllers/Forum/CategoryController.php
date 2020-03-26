@@ -5,10 +5,11 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Events\UserWasSaved;
 use Coyote\Http\Factories\FlagFactory;
 use Coyote\Http\Resources\Api\ForumCollection;
+use Coyote\Http\Resources\TopicCollection;
 use Coyote\Repositories\Criteria\Topic\BelongsToForum;
 use Coyote\Repositories\Criteria\Topic\StickyGoesFirst;
 use Coyote\Services\Forum\TreeBuilder;
-use Coyote\Services\Forum\Personalizer;
+use Coyote\Services\Guest;
 use Illuminate\Http\Request;
 
 class CategoryController extends BaseController
@@ -18,10 +19,9 @@ class CategoryController extends BaseController
     /**
      * @param \Coyote\Forum $forum
      * @param Request $request
-     * @param Personalizer $personalizer
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($forum, Request $request, Personalizer $personalizer)
+    public function index($forum, Request $request)
     {
         $treeBuilder = new TreeBuilder();
 
@@ -39,7 +39,7 @@ class CategoryController extends BaseController
         $this->topic->pushCriteria(new BelongsToForum($forum->id));
         $this->topic->pushCriteria(new StickyGoesFirst());
         // get topics according to given criteria
-        $topics = $this
+        $paginate = $this
             ->topic
             ->lengthAwarePagination(
                 $this->userId,
@@ -50,14 +50,19 @@ class CategoryController extends BaseController
             )
             ->appends($request->except('page'));
 
-        $topics = $personalizer->markUnreadTopics($topics);
         $flags = [];
 
         // we need to get an information about flagged topics. that's how moderators can notice
         // that's something's wrong with posts.
-        if ($topics->total() > 0 && $this->getGateFactory()->allows('delete', $forum)) {
-            $flags = $this->getFlagFactory()->takeForTopics($topics->groupBy('id')->keys()->toArray());
+        if ($paginate->total() > 0 && $this->getGateFactory()->allows('delete', $forum)) {
+            $flags = $this->getFlagFactory()->takeForTopics($paginate->groupBy('id')->keys()->toArray());
         }
+
+        $guest = new Guest($this->guestId);
+
+        $topics = (new TopicCollection($paginate))
+            ->setGuest($guest)
+            ->setRepository($this->topic);
 
         $collapse = $this->collapse();
         $postsPerPage = $this->postsPerPage($this->request);

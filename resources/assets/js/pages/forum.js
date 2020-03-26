@@ -7,23 +7,36 @@ import '../pages/forum/sidebar';
 import '../pages/forum/tags';
 // import 'bootstrap/js/src/popover';
 import VueSection from '../components/forum/section.vue';
+import VueTopic from '../components/forum/topic.vue';
 import Vue from "vue";
 import store from '../store';
+import {mapState} from "vuex";
 
 new Vue({
   el: '#js-forum',
   delimiters: ['${', '}'],
   store,
-  data: { collapse: 'collapse' in window ? collapse : {} },
+  data: {
+    collapse: window.collapse || {},
+    postsPerPage: window.posts_per_page || null,
+    flags: window.flags || [],
+    showCategoryName: window.show_category_name || false
+  },
   components: {
-    'vue-section': VueSection
+    'vue-section': VueSection,
+    'vue-topic': VueTopic
   },
   created() {
-    store.commit('forums/init', window.forums);
+    store.commit('forums/init', window.forums || []);
+    store.commit('topics/init', window.topics || []);
   },
   methods: {
     changeCollapse(id) {
       this.$set(this.collapse, id, !(!!(this.collapse[id])));
+    },
+
+    getFlag(topicId) {
+      return this.flags[topicId];
     }
   },
   computed: {
@@ -46,7 +59,23 @@ new Vue({
             return acc;
           }, {})
         ).sort((a, b) => a.order < b.order ? -1 : 1); // sort sections
-    }
+    },
+
+    groups() {
+      return this.topics.reduce((acc, item) => {
+        let index = +!item.is_sticky;
+
+        if (!acc[index]) {
+          acc[index] = [];
+        }
+
+        acc[index].push(item);
+
+        return acc;
+      }, {});
+    },
+
+    ...mapState('topics', ['topics'])
   }
 });
 
@@ -55,8 +84,13 @@ new Vue({
   delimiters: ['${', '}'],
   store,
   methods: {
-    markAll() {
+    markForums() {
       store.dispatch('forums/markAll');
+      store.commit('topics/markAll');
+    },
+
+    markTopics() {
+      store.dispatch('topics/markAll');
     }
   }
 });

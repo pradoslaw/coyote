@@ -5,6 +5,7 @@ namespace Coyote\Repositories\Eloquent;
 use Coyote\Repositories\Contracts\SubscribableInterface;
 use Coyote\Topic\Track;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
@@ -23,83 +24,66 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
         return 'Coyote\Topic';
     }
 
-    /**
-     * @inheritdoc
-     */
     public function lengthAwarePagination($userId, string $guestId, $order = 'topics.last_post_id', $direction = 'DESC', $perPage = 20)
     {
         $this->applyCriteria();
 
-        $pagination = $this
-            ->model
-            ->select(['topics.id'])
-            ->sortable($order, $direction, ['id', 'last', 'replies', 'views', 'score'], ['last' => 'topics.last_post_id'])
-            ->paginate($perPage);
-
-        $values = [];
-        $pagination->pluck('id')->each(function ($item, $key) use (&$values) {
-            $values[] = "($item,$key)";
-        });
-
-        if (empty($values)) {
-            return new LengthAwarePaginator([], 0, $perPage);
-        }
-
-        $from = $this->app['db']
-            ->table('topics AS t')
-            ->select(['t.*', 'x.ordering'])
-            ->join($this->raw('(VALUES ' . implode(',', $values) . ') AS x (id, ordering)'), 't.id', '=', 'x.id')
-            ->orderBy('x.ordering')
-            ->toSql();
-
-        $this->resetModel();
+        $count = $this->model->count();
+        $page = LengthAwarePaginator::resolveCurrentPage();
 
         $result = $this
             ->model
-            ->withTrashed()
             ->select([
                 'topics.*',
-                'first.created_at AS first_created_at',
-                'first.user_name AS first_user_name',
-                'last.created_at AS last_created_at',
-                'last.user_name AS last_user_name',
-                'author.id AS author_id',
-                'author.name AS author_name',
-                $this->raw('author.deleted_at IS NULL AS author_is_active'),
-                'author.is_blocked AS author_is_blocked',
-                'poster.id AS poster_id',
-                'poster.name AS poster_name',
-                $this->raw('poster.deleted_at IS NULL AS poster_is_active'),
-                'poster.is_blocked AS poster_is_blocked',
-                'poster.photo AS poster_photo',
-                'forums.slug AS forum_slug',
-                'forums.name AS forum_name',
-                'pa.post_id AS post_accept_id'
+                'pa.post_id AS accepted_id',
+                'p.user_id',
+                'p.user_name'
             ])
-            ->from($this->raw("($from) AS topics"))
-            ->join('forums', 'forums.id', '=', 'topics.forum_id')
-            ->join('posts AS first', 'first.id', '=', 'topics.first_post_id')
-            ->join('posts AS last', 'last.id', '=', 'topics.last_post_id')
-            ->leftJoin('users AS author', 'author.id', '=', 'first.user_id')
-            ->leftJoin('users AS poster', 'poster.id', '=', 'last.user_id')
-            ->withForumMarkTime($guestId, 'forum_marked_at')
-            ->withTopicMarkTime($guestId, 'topic_marked_at')
+            ->with([
+                'user' => function (BelongsTo $builder) {
+                    return $builder->select(['id', 'name', 'deleted_at', 'is_blocked', 'photo'])->withTrashed();
+                },
+                'lastPost' => function ($builder) {
+                    return $builder->select(['id', 'topic_id', 'user_id', 'created_at', 'user_name', 'text'])->with(['user' => function (BelongsTo $builder) {
+                        return $builder->select(['id', 'name', 'deleted_at', 'is_blocked', 'photo'])->withTrashed();
+                    }]);
+                },
+                'forum' => function ($builder) use ($guestId) {
+                    return $builder->select(['forums.id', 'name', 'slug'])->withForumMarkTime($guestId, 'forum_marked_at');
+                }
+            ])
+            ->withTopicMarkTime($guestId)
             ->leftJoin('post_accepts AS pa', 'pa.topic_id', '=', 'topics.id')
-            ->with(['tags', 'forum'])
-            ->orderBy('topics.ordering')
+            ->join('posts AS p', 'p.id', '=', 'topics.first_post_id')
+            ->with(['tags'])
             ->when($userId, function (Builder $builder) use ($userId) {
-                return $builder->addSelect(['ts.created_at AS subscribe_on'])
+                return $builder->addSelect([
+                        $this->raw('CASE WHEN ts.created_at IS NULL THEN false ELSE true END AS is_subscribed'),
+                        $this->raw('CASE WHEN pv.id IS NULL THEN false ELSE true END AS is_voted'),
+                        $this->raw('CASE WHEN tu.user_id IS NULL THEN false ELSE true END AS is_replied')
+                    ])
                     ->leftJoin('topic_subscribers AS ts', function (JoinClause $join) use ($userId) {
                         $join->on('ts.topic_id', '=', 'topics.id')->on('ts.user_id', '=', $this->raw($userId));
+                    })
+                    ->leftJoin('post_votes AS pv', function (JoinClause $join) use ($userId) {
+                        $join->on('pv.post_id', '=', 'first_post_id')->on('pv.user_id', '=', $this->raw($userId));
+                    })
+                    ->leftJoin('topic_users AS tu', function (JoinClause $join) use ($userId) {
+                        $join->on('tu.topic_id', '=', 'topics.id')->on('tu.user_id', '=', $this->raw($userId));
                     });
             })
+            ->sortable($order, $direction, ['id', 'last', 'replies', 'views', 'score'], ['last' => 'topics.last_post_id'])
+            ->limit($perPage)
+            ->offset(max(0, $page - 1) * $perPage)
             ->get();
+
+        $this->resetModel();
 
         return new LengthAwarePaginator(
             $result,
-            $pagination->total(),
+            $count,
             $perPage,
-            LengthAwarePaginator::resolveCurrentPage(),
+            $page,
             ['path' => LengthAwarePaginator::resolveCurrentPath()]
         );
     }

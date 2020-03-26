@@ -45,7 +45,7 @@ class RedirectToPost
 
         $request->attributes->set('mark_time', $markTime);
 
-        if ($request->get('view') !== 'unread') {
+        if ($request->exists('p')) {
             return $next($request);
         }
 
@@ -57,8 +57,6 @@ class RedirectToPost
             if ($postId && $postId !== $topic->first_post_id) {
                 return redirect()->to($url . '?p=' . $postId . '#id' . $postId);
             }
-        } else {
-            return redirect()->to($url . '?p=' . $topic->last_post_id . '#id' . $topic->last_post_id);
         }
 
         return $next($request);

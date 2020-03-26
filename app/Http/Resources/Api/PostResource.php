@@ -12,6 +12,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property int $id
  * @property Carbon $created_at
  * @property string $user_name
+ * @property string $text
  * @property string $html
  * @property User $user
  * @property int $score
@@ -32,7 +33,8 @@ class PostResource extends JsonResource
         return array_merge($only, [
             'created_at'    => $this->created_at->toIso8601String(),
             'user'          => UserResource::make($this->user),
-            'html'          => $this->html,
+            'html'          => $this->text !== null ? $this->html : null,
+            'excerpt'       => $this->text !== null ? excerpt($this->html) : null,
             'url'           => url(UrlBuilder::post($this->resource)),
 
             'comments'      => PostCommentResource::collection($this->whenLoaded('comments'))
