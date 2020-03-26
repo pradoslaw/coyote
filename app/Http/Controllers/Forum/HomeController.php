@@ -237,7 +237,7 @@ class HomeController extends BaseController
     }
 
     /**
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @return TopicCollection
      */
     private function load()
     {
@@ -261,11 +261,9 @@ class HomeController extends BaseController
 
         $guest = new Guest($this->guestId);
 
-        $topics = (new TopicCollection($paginate))
+        return (new TopicCollection($paginate))
             ->setGuest($guest)
             ->setRepository($this->topic);
-
-        return $topics;
     }
 
     /**
