@@ -38,12 +38,6 @@ trait SettingsTrait
                 'route' => 'user.notifications.settings',
                 'icon' => 'fa-bell',
                 'label' => 'Ustawienia powiadomień'
-            ],
-            [
-                'id' => 'btn-profiles',
-                'route' => 'user.forum',
-                'icon' => 'fa-comments',
-                'label' => 'Personalizacja forum'
             ]
         ];
 

@@ -59,10 +59,6 @@ $this->group(['namespace' => 'User', 'prefix' => 'User', 'middleware' => 'auth',
     $this->get('Password', ['uses' => 'PasswordController@index', 'as' => 'password']);
     $this->post('Password', 'PasswordController@save');
 
-    $this->get('Forum', ['uses' => 'ForumController@index', 'as' => 'forum']);
-    $this->post('Forum', 'ForumController@save');
-    $this->post('Forum/Restore', ['uses' => 'ForumController@restore', 'as' => 'forum.restore']);
-
     $this->get('DeleteAccount', ['uses' => 'DeleteAccountController@index', 'as' => 'delete']);
     $this->post('DeleteAccount', ['uses' => 'DeleteAccountController@delete']);
 });

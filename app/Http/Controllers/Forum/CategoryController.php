@@ -38,6 +38,7 @@ class CategoryController extends BaseController
         // display topics for this category
         $this->topic->pushCriteria(new BelongsToForum($forum->id));
         $this->topic->pushCriteria(new StickyGoesFirst());
+
         // get topics according to given criteria
         $paginate = $this
             ->topic
