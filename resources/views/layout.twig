@@ -69,6 +69,32 @@
                 {% endfor %}
               </ul>
 
+              <form action="{{ search_url|default(route('search')) }}" class="nav-search d-none d-lg-flex flex-grow-1" role="search">
+                <div class="input-group">
+                  <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}">
+
+                  <span class="input-group-btn">
+                    <button class="btn btn-link">
+                        <i class="fas fa-search"></i>
+                    </button>
+                  </span>
+
+                  <div class="search-popover">
+                    <ul class="list-unstyled">
+                      <li class="title">Twoje wątki</li>
+
+                      <li>
+                        <a href="#">
+                          <strong class="float-left">Które firmy IT dotknął kryzys? Sprawdź tutaj.</strong>
+
+                          <small class="float-right text-muted">dziś, 20:45</small>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </form>
+
               <div class="ml-auto">
                 {% if auth_check() %}
                   <ul id="nav-auth" class="nav-auth list-inline d-inline-block"></ul>
@@ -105,18 +131,6 @@
                   <a class="btn btn-sm btn-register d-none d-sm-inline-block" href="{{ route('register') }}"><i class="fas fa-sign-in"></i> Utwórz konto</a>
                   <a class="btn btn-sm btn-login d-none d-sm-inline-block" href="{{ route('login') }}">Logowanie</a>
                 {% endif %}
-
-                <form action="{{ search_url|default(route('search')) }}" class="nav-search d-none d-lg-inline-block" role="search">
-                  <div class="input-group">
-                    <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}">
-
-                    <span class="input-group-btn">
-                    <button class="btn btn-link">
-                        <i class="fas fa-search"></i>
-                    </button>
-                  </span>
-                  </div>
-                </form>
 
                 <button class="navbar-toggler d-inline-block d-md-none" type="button" data-toggle="collapse" data-target="#js-nav-mobile">
                   <i class="fa fa-bars"></i>
