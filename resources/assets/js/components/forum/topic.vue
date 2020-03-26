@@ -100,7 +100,7 @@
   import VueTimeago from '../../plugins/timeago';
   import VueAvatar from '../avatar.vue';
   import { mixin as clickaway } from 'vue-clickaway';
-  import { mapGetters, mapActions } from "vuex";
+  import { mapActions } from "vuex";
 
   Vue.use(VueTimeago);
 
