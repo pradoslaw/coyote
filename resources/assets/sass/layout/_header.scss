@@ -145,10 +145,11 @@ body.padding-top {
 }
 
 .nav-search {
-  background: url('/img/main-menu-separator.png') no-repeat 0 100%;
+  //background: url('/img/main-menu-separator.png') no-repeat 0 100%;
   padding-left: 20px;
-  margin-left: 20px;
-  margin-right: 0;
+  padding-right: 20px;
+  //margin-left: 20px;
+  //margin-right: 0;
 
   > div {
     position: relative;
@@ -158,7 +159,7 @@ body.padding-top {
       padding: 5px 30px 5px 5px;
       border: 1px solid $input-border;
       color: $gray-light;
-      width: 180px;
+      width: 100%;
       line-height: 22px;
     }
 
@@ -171,6 +172,27 @@ body.padding-top {
     input:focus, button:focus {
       outline: none;
     }
+  }
+}
+
+.search-popover {
+  position: absolute;
+  border: 1px solid $border-color;
+  box-shadow: $dropdown-box-shadow;
+  width: 100%;
+  height: 200px;
+  background-color: #fff;
+  top: 33px;
+
+  li {
+    padding: 5px 10px;
+  }
+
+  .title {
+    color: $text-muted;
+    text-transform: uppercase;
+    font-size: .7rem;
+    font-weight: bold;
   }
 }
 
