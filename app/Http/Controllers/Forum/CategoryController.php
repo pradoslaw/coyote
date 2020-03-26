@@ -8,7 +8,8 @@ use Coyote\Http\Resources\Api\ForumCollection;
 use Coyote\Http\Resources\TopicCollection;
 use Coyote\Repositories\Criteria\Topic\BelongsToForum;
 use Coyote\Repositories\Criteria\Topic\StickyGoesFirst;
-use Coyote\Services\Forum\TreeBuilder;
+use Coyote\Services\Forum\TreeBuilder\Builder;
+use Coyote\Services\Forum\TreeBuilder\ListDecorator;
 use Coyote\Services\Guest;
 use Illuminate\Http\Request;
 
@@ -23,10 +24,9 @@ class CategoryController extends BaseController
      */
     public function index($forum, Request $request)
     {
-        $treeBuilder = new TreeBuilder();
-
         $this->pushForumCriteria();
-        $forumList = $treeBuilder->listBySlug($this->forum->list());
+
+        $forumList = (new ListDecorator(new Builder($this->forum->list())))->build();
 
         $forums = $this
             ->forum

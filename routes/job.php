@@ -56,10 +56,6 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
     $this->get('Refer/{job}', ['uses' => 'ReferController@index', 'as' => 'refer']);
     $this->post('Refer/{job}', ['uses' => 'ReferController@save']);
 
-    // move job offer
-    $this->get('Move/{job}', ['uses' => 'MoveController@index', 'as' => 'move', 'middleware' => 'can:job-delete']);
-    $this->post('Move/{job}', ['uses' => 'MoveController@move', 'middleware' => 'can:job-delete']);
-
     // Payment routes
     // -----------------------------
     $this->any('Payment/Status', [

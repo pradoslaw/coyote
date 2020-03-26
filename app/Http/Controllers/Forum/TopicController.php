@@ -12,7 +12,8 @@ use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Repositories\Criteria\Post\WithTrashedInfo;
 use Coyote\Services\Elasticsearch\Builders\Forum\MoreLikeThisBuilder;
 use Coyote\Services\Forum\Tracker;
-use Coyote\Services\Forum\TreeBuilder;
+use Coyote\Services\Forum\TreeBuilder\Builder;
+use Coyote\Services\Forum\TreeBuilder\ListDecorator;
 use Coyote\Services\Parser\Parsers\ParserInterface;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -120,10 +121,11 @@ class TopicController extends BaseController
         }
 
         // create forum list for current user (according to user's privileges)
-        $treeBuilder = new TreeBuilder();
+        $treeBuilder = new Builder($this->forum->list());
+        $treeDecorator = new ListDecorator($treeBuilder);
 
-        $forumList = $this->withCriteria(function () use ($treeBuilder) {
-            return $treeBuilder->listBySlug($this->forum->list());
+        $forumList = $this->withCriteria(function () use ($treeDecorator) {
+            return $treeDecorator->build();
         }, true);
 
         $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->slug, $topic->id, $topic->slug]));
@@ -138,7 +140,9 @@ class TopicController extends BaseController
             }
 
             $this->forum->skipCriteria(true);
-            $adminForumList = $treeBuilder->listBySlug($this->forum->list());
+
+            $treeBuilder->setForums($this->forum->list());
+            $adminForumList = $treeDecorator->build();
         }
 
         $form = $this->getForm($forum, $topic);

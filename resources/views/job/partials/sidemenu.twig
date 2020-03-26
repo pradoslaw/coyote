@@ -65,12 +65,6 @@
     </li>
   {% endif %}
 
-  {% if can('job-delete') %}
-    <li>
-      <a class="btn-move" href="{{ route('job.move', [job.id]) }}"><i class="fas fa-fw fa-arrow-circle-right"></i> Przenieś na forum</a>
-    </li>
-  {% endif %}
-
   {% if auth_check() %}
     <li>
       <a class="btn-report" href="{{ route('flag') }}" data-url="{{ route('job.offer', [job.id, job.slug], false) }}" data-metadata="{{ {'job_id': job.id, 'permission': 'job-delete'}|encrypt }}"><i class="fas fa-fw fa-flag"></i>

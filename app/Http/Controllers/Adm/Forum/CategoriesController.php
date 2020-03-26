@@ -8,7 +8,8 @@ use Coyote\Http\Controllers\Adm\BaseController;
 use Coyote\Http\Forms\Forum\ForumForm;
 use Coyote\Http\Grids\Adm\Forum\CategoriesGrid;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
-use Coyote\Services\Forum\TreeBuilder;
+use Coyote\Services\Forum\TreeBuilder\Builder;
+use Coyote\Services\Forum\TreeBuilder\FlatDecorator;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Http\Request;
 
@@ -35,12 +36,12 @@ class CategoriesController extends BaseController
      */
     public function index()
     {
-        $treeBuilder = new TreeBuilder();
+        $treeBuilder = new FlatDecorator(new Builder($this->forum->orderBy('order')->get()));
 
         $grid = $this
             ->gridBuilder()
             ->createGrid(CategoriesGrid::class)
-            ->setSource(new CollectionSource(collect($treeBuilder->flat($this->forum->orderBy('order')->get()))))
+            ->setSource(new CollectionSource(collect($treeBuilder->build())))
             ->setEnablePagination(false);
 
         return $this->view('adm.forum.categories.home')->with('grid', $grid);
