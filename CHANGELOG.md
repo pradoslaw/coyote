@@ -7,6 +7,9 @@
 **Forum**
 - Przepisanie listy wątków w danej kategorii na Vue.js
 
+**Panel użytkownika**
+- Usunięcie opcji personalizacji forum na rzecz konfiguracji bezpośrednio ze storny głównej forum
+
 ##2.3
 
 **Ogólne**
