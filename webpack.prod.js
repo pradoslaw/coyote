@@ -59,13 +59,14 @@ module.exports = merge(common, {
         'code',
         'breadcrumb-fixed',
         'mention',
-        'user-deleted'
+        'user-deleted',
+        'strikeout'
       ],
       whitelistPatterns: [
         /^logo/,
         /^language/,
         /^popover/,
-
+        /^badge/
       ],
       whitelistPatternsChildren: [
         /hire-me$/,
