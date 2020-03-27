@@ -13,7 +13,7 @@
               <a v-if="topic.accepted_id" :href="topic.url + `?p=${topic.accepted_id}#id${topic.accepted_id}`"><i class="fas fa-check"></i></a>
 
               <small v-if="showCategoryName"><a :href="topic.forum.url" class="text-body">{{ topic.forum.name }}</a> »</small>
-              <a :href="topic.url">{{ topic.subject }}</a>
+              <a :href="getUrl()">{{ topic.subject }}</a>
 
               <a v-if="flag != null" :href="flag" title="Przejdź do raportowanego postu"><i class="fa fa-fire"></i></a>
             </h5>
@@ -126,6 +126,10 @@
       }
     },
     methods: {
+      getUrl() {
+        return this.topic.is_read ? `${this.topic.url}?p=${this.topic.last_post.id}#id${this.topic.last_post.id}` : this.topic.url;
+      },
+
       ...mapActions('topics', ['mark', 'subscribe'])
     },
     computed: {

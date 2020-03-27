@@ -73,7 +73,7 @@
 
               <div class="media-body overflow-hidden">
                 <p class="text-truncate mb-1">
-                  <a :href="category.topic.url">{{ category.topic.subject }}</a>
+                  <a :href="getUrl(category)">{{ category.topic.subject }}</a>
                 </p>
 
                 <span class="text-muted"><vue-timeago :datetime="category.post.created_at"></vue-timeago></span>,
@@ -169,6 +169,10 @@
 
       className(name) {
         return 'logo-' + name.toLowerCase().replace(/[^a-z]/g, "");
+      },
+
+      getUrl(category) {
+        return category.topic.is_read ? `${category.topic.url}?p=${category.post.id}#id${category.post.id}` : category.topic.url;
       },
 
       ...mapActions('forums', ['mark', 'toggle', 'up', 'down'])
