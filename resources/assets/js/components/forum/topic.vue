@@ -42,16 +42,16 @@
             </div>
 
             <ul class="list-inline small text-muted mt-1 mb-0">
-              <li class="list-inline-item small" title="Liczba głosów oddanych na ten wątek">
-                <i :class="{'fas text-primary': topic.is_voted, 'far': !topic.is_voted}" class="fa-fw fa-thumbs-up"></i>
-
-                {{ topic.score | number }} <span class="d-none d-sm-inline">{{ topic.score | declination(['głos', 'głosy', 'głosów']) }}</span>
-              </li>
-
               <li class="list-inline-item small" title="Liczba odpowiedzi">
                 <i :class="{'fas text-primary': topic.is_replied, 'far': !topic.is_replied}" class="fa-fw fa-comments"></i>
 
                 {{ topic.replies | number }} <span class="d-none d-sm-inline">{{ topic.replies | declination(['odpowiedź', 'odpowiedzi', 'odpowiedzi']) }}</span>
+              </li>
+
+              <li class="list-inline-item small" title="Liczba głosów oddanych na ten wątek">
+                <i :class="{'fas text-primary': topic.is_voted, 'far': !topic.is_voted}" class="fa-fw fa-thumbs-up"></i>
+
+                {{ topic.score | number }} <span class="d-none d-sm-inline">{{ topic.score | declination(['głos', 'głosy', 'głosów']) }}</span>
               </li>
 
               <li class="list-inline-item small" title="Liczba wyświetleń">
