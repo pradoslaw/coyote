@@ -5,13 +5,12 @@
         <a @click="mark(topic)" :class="{'not-read': !topic.is_read}" class="mr-2 i-35 d-none d-md-flex position-relative img-thumbnail align-items-center justify-content-center">
           <i v-if="topic.is_locked" class="fas fa-lock"></i>
           <i v-else class="far fa-comment"></i>
-<!--          <vue-avatar v-else v-bind="topic.user" class="w-100"></vue-avatar>-->
         </a>
 
         <div class="w-100">
           <div class="row no-gutters">
             <h5 class="topic-subject text-truncate m-0">
-              <a v-if="topic.accepted_id" :href="topic.url + `?p=${topic.accepted_id}#id${topic.accepted_id}}`"><i class="fas fa-check"></i></a>
+              <a v-if="topic.accepted_id" :href="topic.url + `?p=${topic.accepted_id}#id${topic.accepted_id}`"><i class="fas fa-check"></i></a>
 
               <small v-if="showCategoryName"><a :href="topic.forum.url" class="text-body">{{ topic.forum.name }}</a> »</small>
               <a :href="topic.url">{{ topic.subject }}</a>

@@ -45,7 +45,7 @@ class RedirectToPost
 
         $request->attributes->set('mark_time', $markTime);
 
-        if ($request->exists('p')) {
+        if ($request->hasAny(['p', 'page'])) {
             return $next($request);
         }
 
