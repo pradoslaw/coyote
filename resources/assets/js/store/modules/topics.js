@@ -39,7 +39,7 @@ const actions = {
   markAll({ state, commit }) {
     commit('markAll');
 
-    axios.post(`/Forum/${state[0].forum.slug}/Mark`);
+    axios.post(`/Forum/${state.topics[0].forum.slug}/Mark`);
   },
 
   subscribe({ commit }, topic) {
