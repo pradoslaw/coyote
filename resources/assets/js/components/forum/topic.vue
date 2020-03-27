@@ -10,15 +10,16 @@
         <div class="w-100">
           <div class="row no-gutters">
             <h5 class="topic-subject text-truncate m-0">
+<!--              <i class="far fa-fw fa-star" style="font-size: 12px"></i>-->
               <a v-if="topic.accepted_id" :href="topic.url + `?p=${topic.accepted_id}#id${topic.accepted_id}`"><i class="fas fa-check"></i></a>
 
-              <small v-if="showCategoryName"><a :href="topic.forum.url" class="text-body">{{ topic.forum.name }}</a> »</small>
               <a :href="getUrl()">{{ topic.subject }}</a>
+              <small v-if="showCategoryName"> w <a :href="topic.forum.url" class="text-body">{{ topic.forum.name }}</a></small>
 
               <a v-if="flag != null" :href="flag" title="Przejdź do raportowanego postu"><i class="fa fa-fire"></i></a>
             </h5>
 
-            <div v-if="totalPages > 1" class="ml-auto small">
+            <div v-if="totalPages > 1" class="d-none d-sm-inline ml-2 small">
               <i class="far fa-file small"></i>
 
               <a :href="topic.url + '?page=1'">1</a>
@@ -31,44 +32,48 @@
 
               <template v-for="i in paginatorPages"><a :href="topic.url + '?page=' + i">{{ i }}</a>&nbsp;</template>
             </div>
+
+            <ul v-if="topic.tags.length" class="tag-clouds tag-clouds-xs tag-clouds-skills ml-auto d-none d-sm-block">
+              <li v-for="tag in topic.tags" ><a :href="tag.url">{{ tag.name }}</a></li>
+            </ul>
           </div>
 
-          <div class="row no-gutters">
-            <div class="topic-author d-none d-lg-inline mt-1 small text-truncate">
+          <div class="row no-gutters mt-1">
+            <div class="topic-author d-none d-lg-inline small text-truncate">
               <a :href="topic.url + `?p=${topic.first_post_id}#id${topic.first_post_id}`" class="text-muted"><vue-timeago :datetime="topic.created_at"></vue-timeago></a>,
 
               <a v-if="topic.user" v-profile="topic.user ? topic.user.id : null" class="mt-1 text-body" :title="topic.user.name">{{ topic.user.name }}</a>
               <span v-else>{{ topic.user_name }}</span>
             </div>
 
-            <ul class="list-inline small text-muted mt-1 mb-0">
+            <ul class="list-inline small text-muted mb-0 ml-lg-auto">
               <li class="list-inline-item small" title="Liczba odpowiedzi">
                 <i :class="{'fas text-primary': topic.is_replied, 'far': !topic.is_replied}" class="fa-fw fa-comments"></i>
 
-                {{ topic.replies | number }} <span class="d-none d-sm-inline">{{ topic.replies | declination(['odpowiedź', 'odpowiedzi', 'odpowiedzi']) }}</span>
+                {{ topic.replies | number }}
+<!--                <span class="d-none d-sm-inline">{{ topic.replies | declination(['odpowiedź', 'odpowiedzi', 'odpowiedzi']) }}</span>-->
               </li>
 
               <li class="list-inline-item small" title="Liczba głosów oddanych na ten wątek">
                 <i :class="{'fas text-primary': topic.is_voted, 'far': !topic.is_voted}" class="fa-fw fa-thumbs-up"></i>
 
-                {{ topic.score | number }} <span class="d-none d-sm-inline">{{ topic.score | declination(['głos', 'głosy', 'głosów']) }}</span>
+                {{ topic.score | number }}
+<!--                <span class="d-none d-sm-inline">{{ topic.score | declination(['głos', 'głosy', 'głosów']) }}</span>-->
               </li>
 
               <li class="list-inline-item small" title="Liczba wyświetleń">
-                <i class="far fa-fw fa-eye"></i> {{ topic.views | number }} <span class="d-none d-sm-inline">{{ topic.views | declination(['wyświetlenie', 'wyświetlenia', 'wyświetleń']) }}</span>
+                <i class="far fa-fw fa-eye"></i> {{ topic.views | number }}
+<!--                <span class="d-none d-sm-inline">{{ topic.views | declination(['wyświetlenie', 'wyświetlenia', 'wyświetleń']) }}</span>-->
               </li>
 
               <li class="list-inline-item small">
                 <a @click="subscribe(topic)" href="javascript:" class="text-decoration-none text-muted" title="Kliknij aby wł/wył obserwowanie wątku">
                   <i :class="{'fas text-primary': topic.is_subscribed, 'far': !topic.is_subscribed}" class="fa-fw fa-star"></i>
 
-                  {{ topic.subscribers | number }} <span class="d-none d-sm-inline">{{ topic.subscribers | declination(['obserwujący', 'obserwujących', 'obserwujących']) }}</span>
+                  {{ topic.subscribers | number }}
+<!--                  <span class="d-none d-sm-inline">{{ topic.subscribers | declination(['obserwujący', 'obserwujących', 'obserwujących']) }}</span>-->
                 </a>
               </li>
-            </ul>
-
-            <ul v-if="topic.tags.length" class="tag-clouds tag-clouds-xs tag-clouds-skills ml-auto d-none d-sm-block">
-              <li v-for="tag in topic.tags" ><a :href="tag.url">{{ tag.name }}</a></li>
             </ul>
           </div>
         </div>

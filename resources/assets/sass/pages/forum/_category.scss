@@ -7,10 +7,10 @@
     font-size: .9rem;
   }
 
-  .topic-author {
-    margin-right: .25rem;
-    max-width: 210px;
-  }
+  //.topic-author {
+  //  margin-right: .25rem;
+  //  max-width: 210px;
+  //}
 
   .card-body {
     border-bottom: 1px solid $border-color;
@@ -50,15 +50,19 @@
     }
   }
 
-  @include media-breakpoint-up(xl) {
-    .topic-author {
-      width: 210px;
-    }
-  }
+  //@include media-breakpoint-up(xl) {
+  //  .topic-author {
+  //    width: 210px;
+  //  }
+  //}
 
   // mobile
   @include media-breakpoint-down(sm) {
     @include card-body-not-read();
+  }
+
+  .tag-clouds {
+    margin-top: -5px;
   }
 }
 
