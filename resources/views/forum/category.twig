@@ -51,8 +51,9 @@
   <script>
     var forums = {{ forums|json_encode|raw }};
     var topics = {{ topics|json_encode|raw }};
-    var posts_per_page = {{ postsPerPage }};
+    var postsPerPage = {{ postsPerPage }};
     var flags = {{ flags|json_encode|raw }};
+    var groupStickyTopics = true;
   </script>
 
   {{ parent() }}

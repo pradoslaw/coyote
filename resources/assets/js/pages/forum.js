@@ -18,9 +18,10 @@ new Vue({
   store,
   data: {
     collapse: window.collapse || {},
-    postsPerPage: window.posts_per_page || null,
+    postsPerPage: window.postsPerPage || null,
     flags: window.flags || [],
-    showCategoryName: window.show_category_name || false
+    showCategoryName: window.showCategoryName || false,
+    groupStickyTopics: window.groupStickyTopics || false
   },
   components: {
     'vue-section': VueSection,
@@ -63,7 +64,7 @@ new Vue({
 
     groups() {
       return this.topics.reduce((acc, item) => {
-        let index = +!item.is_sticky;
+        let index = this.groupStickyTopics ? (+!item.is_sticky) : 0;
 
         if (!acc[index]) {
           acc[index] = [];

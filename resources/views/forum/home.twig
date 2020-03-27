@@ -47,7 +47,8 @@
   <script>
     var forums = {{ forums|json_encode|raw }};
     var collapse = {{ collapse|json_encode|raw }};
-    var show_category_name = true;
+    var showCategoryName = true;
+    var postsPerPage = {{ postsPerPage }};
   </script>
 
   {{ parent() }}
