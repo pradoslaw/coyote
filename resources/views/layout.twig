@@ -71,7 +71,7 @@
 
               <form action="{{ search_url|default(route('search')) }}" class="nav-search d-none d-lg-flex flex-grow-1" role="search">
                 <div class="input-group">
-                  <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}">
+                  <input type="text" name="q" autocomplete="off" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}">
 
                   <span class="input-group-btn">
                     <button class="btn btn-link">
@@ -80,12 +80,46 @@
                   </span>
 
                   <div class="search-popover">
+{#                    <nav class="nav nav-pills" style="margin: 5px 7px 10px 7px">#}
+{#                      <a class="nav-item nav-link active mr-2" href="#" style="padding: 5px; font-size: 90%;">Forum</a>#}
+{#                      <a class="nav-item nav-link" href="#" style="padding: 5px; font-size: 90%;">Praca</a>#}
+{#                    </nav>#}
+
                     <ul class="list-unstyled">
-                      <li class="title">Twoje wątki</li>
+                      <li class="title"><span>Twoje wątki</span></li>
 
                       <li>
                         <a href="#">
-                          <strong class="float-left">Które firmy IT dotknął kryzys? Sprawdź tutaj.</strong>
+
+                          <span class="float-left">Które firmy IT dotknął kryzys? Sprawdź tutaj.</span>
+
+                          <small class="float-right text-muted">dziś, 20:45</small>
+                        </a>
+                      </li>
+
+                      <li>
+                        <a href="#">
+                          <span class="float-left">Lorem ipsum lores.</span>
+
+                          <small class="float-right text-muted">dziś, 20:45</small>
+                        </a>
+                      </li>
+
+                      <li class="title">Twoje dyskusje</li>
+
+                      <li>
+                        <a href="#">
+                          <span class="float-left">Lorem ipsum lores.</span>
+
+                          <small class="float-right text-muted">dziś, 20:45</small>
+                        </a>
+                      </li>
+
+                      <li class="title">Obserwowane wątki</li>
+
+                      <li>
+                        <a href="#">
+                          <span class="float-left">Lorem ipsum lores.</span>
 
                           <small class="float-right text-muted">dziś, 20:45</small>
                         </a>
@@ -154,7 +188,7 @@
 
                   <div class="dropdown-divider"></div>
 
-                  <a href="javascript:" class="dropdown-link js-change-menu position-relative"">Nowe menu <sup class="badge badge-pill label-new">Beta</sup></a>
+                  <a href="javascript:" class="dropdown-link js-change-menu position-relative">Nowe menu <sup class="badge badge-pill label-new">Beta</sup></a>
 
                   <div class="dropdown-divider"></div>
 
