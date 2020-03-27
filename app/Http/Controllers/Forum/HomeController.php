@@ -237,7 +237,7 @@ class HomeController extends BaseController
     }
 
     /**
-     * @return TopicCollection
+     * @return \Illuminate\Pagination\LengthAwarePaginator
      */
     private function load()
     {
@@ -248,7 +248,7 @@ class HomeController extends BaseController
             $this->topic->pushCriteria(new SkipForum($this->forum->findHiddenIds($this->userId)));
         }
 
-        $paginate = $this
+        return $this
             ->topic
             ->lengthAwarePagination(
                 $this->userId,
@@ -258,20 +258,20 @@ class HomeController extends BaseController
                 $this->topicsPerPage($this->request)
             )
             ->appends($this->request->except('page'));
-
-        $guest = new Guest($this->guestId);
-
-        return (new TopicCollection($paginate))
-            ->setGuest($guest)
-            ->setRepository($this->topic);
     }
 
     /**
      * @param \Illuminate\Contracts\Pagination\LengthAwarePaginator $topics
      * @return \Illuminate\View\View
      */
-    private function render($topics)
+    private function render($paginate)
     {
+        $guest = new Guest($this->guestId);
+
+        $topics = (new TopicCollection($paginate))
+            ->setGuest($guest)
+            ->setRepository($this->topic);
+
         $flags = [];
 
         // we need to get an information about flagged topics. that's how moderators can notice
