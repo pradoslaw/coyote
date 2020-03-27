@@ -49,6 +49,7 @@
     var collapse = {{ collapse|json_encode|raw }};
     var showCategoryName = true;
     var postsPerPage = {{ postsPerPage|number_format }};
+    var tags = {{ tags.user|json_encode|raw }};
   </script>
 
   {{ parent() }}

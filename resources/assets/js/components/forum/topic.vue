@@ -1,5 +1,5 @@
 <template>
-  <div class="card-body" :class="{'not-read': !topic.is_read, 'flag': flag != null}">
+  <div class="card-body" :class="{'not-read': !topic.is_read, 'flagged': flag != null, 'tagged': containsUserTags}">
     <div class="row">
       <div class="col-lg-9 col-md-12 d-flex align-items-center">
         <a @click="mark(topic)" :class="{'not-read': !topic.is_read}" class="mr-2 i-35 d-none d-md-flex position-relative align-items-center justify-content-center">
@@ -118,6 +118,9 @@
       flag: {
         type: String
       },
+      tags: {
+        type: Object
+      },
       showCategoryName: {
         type: Boolean
       }
@@ -138,7 +141,17 @@
         }
 
         return pages;
-      }
+      },
+
+      containsUserTags() {
+        if (!this.topic.tags) {
+          return false;
+        }
+
+        const userTags = Object.keys(this.tags);
+
+        return this.topic.tags.filter(tag => userTags.includes(tag.name)).length > 0;
+      },
     }
   }
 </script>

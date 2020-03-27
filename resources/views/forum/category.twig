@@ -54,6 +54,7 @@
     var postsPerPage = {{ postsPerPage }};
     var flags = {{ flags|json_encode|raw }};
     var groupStickyTopics = true;
+    var tags = {{ tags.user|json_encode|raw }};
   </script>
 
   {{ parent() }}

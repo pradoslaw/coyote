@@ -24,7 +24,7 @@
     }
 
     // must be here. otherwise, background-color would be overwritten by :nth-children()
-    &.flag {
+    &.flagged {
       background-color: theme-color-level("danger", $alert-bg-level);
       color: $danger;
       border-bottom-color: theme-color-level("danger", $alert-border-level);
@@ -32,6 +32,10 @@
       a {
         color: inherit;
       }
+    }
+
+    &.tagged {
+      background-color: $unread-bg;
     }
   }
 

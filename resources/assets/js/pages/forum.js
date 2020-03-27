@@ -21,7 +21,8 @@ new Vue({
     postsPerPage: window.postsPerPage || null,
     flags: window.flags || [],
     showCategoryName: window.showCategoryName || false,
-    groupStickyTopics: window.groupStickyTopics || false
+    groupStickyTopics: window.groupStickyTopics || false,
+    tags: window.tags || {}
   },
   components: {
     'vue-section': VueSection,
