@@ -261,7 +261,7 @@ class HomeController extends BaseController
     }
 
     /**
-     * @param \Illuminate\Contracts\Pagination\LengthAwarePaginator $topics
+     * @param \Illuminate\Contracts\Pagination\LengthAwarePaginator $paginate
      * @return \Illuminate\View\View
      */
     private function render($paginate)
