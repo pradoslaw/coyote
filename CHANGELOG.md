@@ -6,6 +6,7 @@
 
 **Forum**
 - Przepisanie listy wątków w danej kategorii na Vue.js
+- Oznaczenie czy są nowe wątki, również w zablokowanych kategoriach
 
 **Panel użytkownika**
 - Usunięcie opcji personalizacji forum na rzecz konfiguracji bezpośrednio ze storny głównej forum
