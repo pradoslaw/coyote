@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Forum;
 use Coyote\Http\Controllers\Controller;
+use Coyote\Http\Resources\TagResource;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
@@ -54,6 +55,10 @@ abstract class BaseController extends Controller
 
             return $next($request);
         });
+
+        TagResource::$url = function ($name) {
+            return route('forum.tag', [urlencode($name)]);
+        };
     }
 
     /**
