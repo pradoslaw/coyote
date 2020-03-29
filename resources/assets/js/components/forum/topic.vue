@@ -127,8 +127,8 @@
       getUrl() {
         const urlFragment = id =>  `${this.topic.url}?p=${id}#id${id}`;
 
-        return this.topic.post_user_id
-          ? urlFragment(this.topic.post_user_id)
+        return this.topic.user_post_id
+          ? urlFragment(this.topic.user_post_id)
             : (this.topic.is_read ? urlFragment(this.topic.last_post.id) : this.topic.url);
       },
 
