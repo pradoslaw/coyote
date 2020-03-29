@@ -2,7 +2,7 @@
   <div class="card-body" :class="{'not-read': !topic.is_read, 'flagged': flag != null, 'tagged': containsUserTags}">
     <div class="row">
       <div :class="{'col-xl-9 col-lg-10': showCategoryName, 'col-xl-10': ! showCategoryName}" class="col-md-12 d-flex align-items-center">
-        <a @click="mark(topic)" :class="{'not-read': !topic.is_read}" class="mr-2 i-35 d-none d-md-flex position-relative align-items-center justify-content-center">
+        <a @click.left="mark" :href="getUrl()" :class="{'not-read': !topic.is_read}" class="mr-2 i-35 d-none d-md-flex position-relative align-items-center justify-content-center text-decoration-none">
           <i v-if="topic.is_sticky" class="fas fa-info"></i>
           <i v-else-if="topic.is_locked" class="fas fa-lock"></i>
           <i v-else class="far fa-comment"></i>
@@ -132,7 +132,16 @@
             : (this.topic.is_read ? urlFragment(this.topic.last_post.id) : this.topic.url);
       },
 
-      ...mapActions('topics', ['mark', 'subscribe'])
+      mark(event) {
+        if (this.topic.is_read) {
+          return;
+        }
+
+        this.$store.dispatch('topics/mark', this.topic);
+        event.preventDefault();
+      },
+
+      ...mapActions('topics', ['subscribe'])
     },
     computed: {
       totalPages() {
