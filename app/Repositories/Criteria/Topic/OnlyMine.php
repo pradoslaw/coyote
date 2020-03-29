@@ -27,6 +27,6 @@ class OnlyMine extends Criteria
      */
     public function apply($model, Repository $repository)
     {
-        return $model->forUser($this->userId);
+        return $model->fromRaw("(SELECT topics.*, topic_users.post_id AS user_post_id FROM topic_users JOIN topics on topics.id = topic_users.topic_id WHERE user_id = $this->userId) as topics");
     }
 }

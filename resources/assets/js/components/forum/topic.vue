@@ -125,7 +125,11 @@
     },
     methods: {
       getUrl() {
-        return this.topic.is_read ? `${this.topic.url}?p=${this.topic.last_post.id}#id${this.topic.last_post.id}` : this.topic.url;
+        const urlFragment = id =>  `${this.topic.url}?p=${id}#id${id}`;
+
+        return this.topic.post_user_id
+          ? urlFragment(this.topic.post_user_id)
+            : (this.topic.is_read ? urlFragment(this.topic.last_post.id) : this.topic.url);
       },
 
       ...mapActions('topics', ['mark', 'subscribe'])

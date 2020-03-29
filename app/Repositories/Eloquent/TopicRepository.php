@@ -49,7 +49,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
                     }]);
                 },
                 'forum' => function ($builder) use ($guestId) {
-                    return $builder->select(['forums.id', 'name', 'slug'])->withForumMarkTime($guestId, 'forum_marked_at');
+                    return $builder->select(['forums.id', 'name', 'slug'])->withForumMarkTime($guestId);
                 }
             ])
             ->withTopicMarkTime($guestId)

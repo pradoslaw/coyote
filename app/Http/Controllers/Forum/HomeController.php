@@ -164,12 +164,6 @@ class HomeController extends BaseController
         $this->topic->pushCriteria(new OnlyMine($userId));
         $topics = $this->load();
 
-        if ($topics->total() > 0) {
-            $topics->load(['posts' => function ($query) use ($userId) {
-                $query->where('user_id', $userId);
-            }]);
-        }
-
         $user = app(UserRepositoryInterface::class)->find($userId);
         abort_if(is_null($user), 404);
 
