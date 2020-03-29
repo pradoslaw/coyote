@@ -201,7 +201,7 @@ class PostForm extends Form
                 $this->add('is_sticky', 'checkbox', [
                     'rules' => self::RULE_STICKY,
                     'label' => 'Przyklejony',
-                    'value' => $this->topic->is_sticky
+                    'value' => (int) $this->topic->is_sticky
                 ]);
             }
         }
