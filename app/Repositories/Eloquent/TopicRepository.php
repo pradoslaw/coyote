@@ -44,7 +44,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
                     return $builder->select(['id', 'name', 'deleted_at', 'is_blocked', 'photo'])->withTrashed();
                 },
                 'lastPost' => function ($builder) {
-                    return $builder->select(['id', 'topic_id', 'user_id', 'created_at', 'user_name', 'text'])->with(['user' => function (BelongsTo $builder) {
+                    return $builder->select(['id', 'topic_id', 'user_id', 'created_at', 'user_name'])->with(['user' => function (BelongsTo $builder) {
                         return $builder->select(['id', 'name', 'deleted_at', 'is_blocked', 'photo'])->withTrashed();
                     }]);
                 },
