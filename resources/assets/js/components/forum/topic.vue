@@ -3,7 +3,8 @@
     <div class="row">
       <div :class="{'col-xl-9 col-lg-10': showCategoryName, 'col-xl-10': ! showCategoryName}" class="col-md-12 d-flex align-items-center">
         <a @click="mark(topic)" :class="{'not-read': !topic.is_read}" class="mr-2 i-35 d-none d-md-flex position-relative align-items-center justify-content-center">
-          <i v-if="topic.is_locked" class="fas fa-lock"></i>
+          <i v-if="topic.is_sticky" class="fas fa-info"></i>
+          <i v-else-if="topic.is_locked" class="fas fa-lock"></i>
           <i v-else class="far fa-comment"></i>
         </a>
 
