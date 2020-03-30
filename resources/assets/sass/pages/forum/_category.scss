@@ -5,8 +5,33 @@
     color: $link-color-darker;
   }
 
+  .topic-row {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+
+  .topic-icon {
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    flex-shrink: 0;
+
+    @extend .i-35;
+  }
+
   .topic-subject {
     font-size: .9rem;
+  }
+
+  .topic-container {
+    width: 100%;
+    min-width: 0; // @see https://medium.com/@gaurav5430/css-flex-positioning-gotchas-child-expands-to-more-than-the-width-allowed-by-the-parent-799c37428dd6
+  }
+
+  .topic-pagination {
+    font-size: $font-size-sm;
+    white-space: nowrap;
   }
 
   .card-body {
@@ -52,9 +77,10 @@
     @include card-body-not-read();
   }
 
-  .tag-clouds {
-    margin-top: -5px;
-  }
+  //.tag-clouds {
+  //  margin-top: -5px;
+  //  flex-shrink: 0;
+  //}
 
   .fa-star {
     font-size: .75rem;

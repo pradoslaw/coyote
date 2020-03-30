@@ -2,14 +2,14 @@
   <div class="card-body" :class="{'not-read': !topic.is_read, 'flagged': flag != null, 'tagged': containsUserTags}">
     <div class="row">
       <div :class="{'col-xl-9 col-lg-10': showCategoryName, 'col-xl-10': ! showCategoryName}" class="col-md-12 d-flex align-items-center">
-        <a @click.left="mark" :href="getUrl()" :class="{'not-read': !topic.is_read}" class="mr-2 i-35 d-none d-md-flex position-relative align-items-center justify-content-center text-decoration-none">
+        <a @click.left="mark" :href="getUrl()" :class="{'not-read': !topic.is_read}" class="topic-icon mr-2 d-none d-md-flex">
           <i v-if="topic.is_sticky" class="fas fa-info"></i>
           <i v-else-if="topic.is_locked" class="fas fa-lock"></i>
           <i v-else class="far fa-comment"></i>
         </a>
 
-        <div class="w-100">
-          <div class="row no-gutters">
+        <div class="topic-container">
+          <div class="topic-row">
             <h5 class="topic-subject text-truncate m-0">
               <a v-if="isAuthorized" @click="subscribe(topic)" href="javascript:" title="Kliknij aby wł/wył obserwowanie wątku">
                 <i class="fa-star fa-fw" :class="{'fas text-primary': topic.is_subscribed, 'far': !topic.is_subscribed}"></i>
@@ -23,7 +23,7 @@
               <a v-if="flag != null" :href="flag" title="Przejdź do raportowanego postu"><i class="fa fa-fire"></i></a>
             </h5>
 
-            <div v-if="totalPages > 1" class="d-none d-sm-inline ml-2 small">
+            <div v-if="totalPages > 1" class="d-none d-sm-inline ml-2 topic-pagination">
               <i class="far fa-file small"></i>
 
               <a :href="topic.url + '?page=1'">1</a>
@@ -37,20 +37,7 @@
               <template v-for="i in paginatorPages"><a :href="topic.url + '?page=' + i">{{ i }}</a>&nbsp;</template>
             </div>
 
-            <ul v-if="topic.tags.length" class="tag-clouds tag-clouds-xs tag-clouds-skills ml-auto d-none d-sm-block">
-              <li v-for="tag in topic.tags" ><a :href="tag.url">{{ tag.name }}</a></li>
-            </ul>
-          </div>
-
-          <div class="row no-gutters mt-1">
-            <div class="d-none d-lg-inline small text-truncate">
-              <a :href="topic.url + `?p=${topic.first_post_id}#id${topic.first_post_id}`" class="text-muted"><vue-timeago :datetime="topic.created_at"></vue-timeago></a>,
-
-              <a v-if="topic.user" v-profile="topic.user ? topic.user.id : null" class="mt-1 text-body" :title="topic.user.name">{{ topic.user.name }}</a>
-              <span v-else>{{ topic.user_name }}</span>
-            </div>
-
-            <ul class="list-inline small text-muted mb-0 ml-lg-auto">
+            <ul class="list-inline small text-muted mb-0 ml-auto flex-shrink-0">
               <li class="list-inline-item small" title="Liczba odpowiedzi">
                 <i :class="{'fas text-primary': topic.is_replied, 'far': !topic.is_replied}" class="fa-fw fa-comments"></i> {{ topic.replies | number }}
               </li>
@@ -62,6 +49,20 @@
               <li class="list-inline-item small" title="Liczba wyświetleń">
                 <i class="far fa-fw fa-eye"></i> {{ topic.views | number }}
               </li>
+            </ul>
+
+          </div>
+
+          <div class="row no-gutters mt-1">
+            <div class="d-none d-lg-inline small text-truncate">
+              <a :href="topic.url + `?p=${topic.first_post_id}#id${topic.first_post_id}`" class="text-muted"><vue-timeago :datetime="topic.created_at"></vue-timeago></a>,
+
+              <a v-if="topic.user" v-profile="topic.user ? topic.user.id : null" class="mt-1 text-body" :title="topic.user.name">{{ topic.user.name }}</a>
+              <span v-else>{{ topic.user_name }}</span>
+            </div>
+
+            <ul v-if="topic.tags.length" class="tag-clouds tag-clouds-xs tag-clouds-skills ml-auto d-none d-sm-block">
+              <li v-for="tag in topic.tags" ><a :href="tag.url">{{ tag.name }}</a></li>
             </ul>
           </div>
         </div>
