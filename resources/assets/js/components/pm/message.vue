@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'sequential': message.sequential}" class="media">
+  <div :class="{'sequential': message.sequential, 'unread': ! isRead}" class="media">
     <a v-if="!message.sequential" v-profile="message.user.id" class="i-45 mr-2">
       <vue-avatar :photo="message.user.photo" :name="message.user.name" class="mw-100"></vue-avatar>
     </a>
