@@ -1,11 +1,5 @@
 @charset "UTF-8";
 
-//@import "../helpers/variables";
-//@import "../helpers/mixins";
-//@import "../components/sidemenu";
-//@import "../components/metadata";
-//@import "~@fortawesome/fontawesome-free/scss/variables";
-
 #user-nav-tabs {
   margin: 20px 0;
 }
@@ -120,36 +114,8 @@
   }
 }
 
-#box-alerts, #app-pm {
-  .typing {
-    height: 30px;
-  }
-
-  .media {
-    border-bottom: 1px solid $border-color;
-    padding: 8px 0;
-    margin-top: 0;
-    background: transparent;
-
-    &:last-child {
-      border-bottom: none;
-    }
-
-    &.unread {
-      background-color: $unread-bg;
-      transition: 1s;
-
-      &:hover {
-        background-color: $unread-bg-hover;
-      }
-    }
-
-    @include media-breakpoint-down(sm) {
-      .media-left {
-        display: none;
-      }
-    }
-  }
+#box-alerts {
+  @extend #app-pm;
 
   header {
     overflow: hidden;
@@ -167,22 +133,13 @@
     }
   }
 
-  h3 {
-    font-size: 100%;
-    margin: 3px 0;
-    font-weight: 700;
-    color: $brand-primary;
-    font-family: Arial, sans-serif;
-  }
+
 
   h2 {
     font-size: 13px;
   }
 
-  .excerpt {
-    margin: 0;
-    color: $gray;
-  }
+
 }
 
 #box-alerts {
@@ -192,53 +149,6 @@
 
     &:hover {
       text-decoration: none;
-    }
-  }
-}
-
-#app-pm {
-  .media {
-    small {
-      color: $gray-light;
-      font-size: 10px;
-      display: block;
-    }
-
-    .media-heading a {
-      text-decoration: none;
-    }
-  }
-
-  .media-object {
-    width: 50px;
-    height: 50px;
-    display: block;
-
-    img {
-      width: 100%;
-    }
-  }
-
-  .pm-text {
-    padding: 0 20px 0 0;
-    color: $gray;
-
-    img {
-      max-width: 100%;
-    }
-  }
-
-  .excerpt {
-    margin-right: 15px !important;
-
-    &:hover {
-      text-decoration: none;
-    }
-  }
-
-  @include media-breakpoint-down(xs) {
-    .pm-text, .excerpt {
-      font-size: $font-size-small;
     }
   }
 }
@@ -360,63 +270,3 @@
   }
 }
 
-// Edycja kolejnosci wyswietlania kategorii forum
-@import "../pages/forum/home";
-
-#sortable {
-  h2 {
-    cursor: move;
-  }
-}
-
-ul.table-forum {
-  border: 1px solid $border-color;
-  background: #fff;
-  border-radius: 3px;
-
-  li {
-    padding: 5px;
-    border-bottom: 1px solid $border-color;
-    position: relative;
-
-    &:nth-child(even) {
-      background-color: #fafafa;
-    }
-
-    h3 > a {
-      cursor: move;
-    }
-  }
-
-  .col-forum-description {
-    p {
-      width: 90%;
-    }
-  }
-
-  .btn-hide {
-    position: absolute;
-    top: 50%;
-    right: 1%;
-    font-size: $font-size-large;
-    margin-top: -8px;
-
-    .fa-lock {
-      display: none;
-    }
-  }
-
-  .btn-hidden {
-    .fa-lock {
-      display: inline;
-    }
-
-    .fa-unlock {
-      display: none;
-    }
-
-    h3, p {
-      opacity: .5;
-    }
-  }
-}

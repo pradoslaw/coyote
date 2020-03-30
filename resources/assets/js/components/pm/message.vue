@@ -1,20 +1,20 @@
 <template>
-  <div class="media" :class="{'unread': ! isRead}">
-    <a v-profile="message.user.id" class="d-inline-block">
-      <object :data="message.user.photo || '//'" type="image/png" class="media-object mr-2">
-        <img src="/img/avatar.png" :alt="message.user.name">
-      </object>
+  <div :class="{'sequential': message.sequential}" class="media">
+    <a v-if="!message.sequential" v-profile="message.user.id" class="i-45 mr-2">
+      <vue-avatar :photo="message.user.photo" :name="message.user.name" class="mw-100"></vue-avatar>
     </a>
 
     <div class="media-body">
-      <small class="float-right"><vue-timeago :datetime="message.created_at"></vue-timeago></small>
+      <template v-if="!message.sequential">
+        <small class="float-right text-muted"><vue-timeago :datetime="message.created_at"></vue-timeago></small>
 
-      <h3>
-        <a v-if="clickableText" :href="'/User/Pm/Show/' + message.id">{{ message.user.name }}</a>
-        <a v-else v-profile="message.user.id">{{ message.user.name }}</a>
-      </h3>
+        <h3>
+          <a v-if="clickableText" :href="'/User/Pm/Show/' + message.id">{{ message.user.name }}</a>
+          <a v-else v-profile="message.user.id">{{ message.user.name }}</a>
+        </h3>
+      </template>
 
-      <a @click="deleteMessage(true)" class="btn-delete-pm float-right text-danger" href="javascript:" title="Usuń">
+      <a @click="deleteMessage(true)" class="btn-delete float-right text-danger" href="javascript:" title="Usuń">
         <i class="fas fa-times"></i>
       </a>
 
@@ -38,13 +38,14 @@
 <script>
   import { default as mixins } from '../mixins/user';
   import VueModal from '../modal.vue';
+  import VueAvatar from '../avatar.vue';
   import VueTimeago from '../../plugins/timeago';
 
   Vue.use(VueTimeago);
 
   export default {
     mixins: [ mixins ],
-    components: {'vue-modal': VueModal},
+    components: {'vue-modal': VueModal, 'vue-avatar': VueAvatar},
     props: {
       message: {
         type: Object

@@ -19,7 +19,7 @@
   <perfect-scrollbar v-if="messages.length" id="wrap" ref="scrollbar">
     <div id="overview">
       <vue-pm
-        v-for="(message, index) in messages"
+        v-for="(message, index) in sequentialMessages"
         :message="message"
         :key="message.id"
         :last="index + 1 === messages.length"

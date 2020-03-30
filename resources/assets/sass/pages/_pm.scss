@@ -1,0 +1,75 @@
+#app-pm {
+  .btn-delete {
+    display: none;
+  }
+
+  .typing {
+    height: 30px;
+  }
+
+  .media {
+    padding: 0 0 0 5px;
+    margin-top: 0;
+    background: transparent;
+
+    &.unread {
+      background-color: $unread-bg;
+      transition: 1s;
+
+      &:hover {
+        background-color: $unread-bg-hover;
+      }
+    }
+
+    small {
+      font-size: 10px;
+    }
+
+    &.sequential {
+      padding-left: 58px;
+    }
+
+    &:not(.sequential) {
+      border-top: 1px solid $border-color;
+      padding-top: 8px;
+      padding-bottom: 8px;
+    }
+
+    &:hover .btn-delete {
+      display: inline;
+    }
+  }
+
+  .media:first-child {
+    border-top: none;
+  }
+
+  .pm-text {
+    padding: 0 20px 0 0;
+    color: $gray;
+
+    p {
+      margin-bottom: 5px;
+    }
+
+    img {
+      max-width: 100%;
+    }
+  }
+
+  h3 {
+    font-size: 100%;
+    margin: 3px 0;
+    font-weight: 700;
+    color: $brand-primary;
+  }
+
+  .excerpt {
+    margin: 0 15px 0 0;
+    color: $gray;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}

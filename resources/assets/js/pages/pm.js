@@ -15,6 +15,8 @@ import VuePagination from '../components/pagination.vue';
 import VueAutocomplete from '../components/forms/autocomplete.vue';
 import Textarea from "../libs/textarea";
 import axios from 'axios';
+import differenceInMinutes from 'date-fns/differenceInMinutes';
+import parseISO from 'date-fns/parseISO';
 
 Vue.use(VueTextareaAutosize);
 Vue.use(VueClipboard, {url: '/User/Pm/Paste'});
@@ -235,6 +237,22 @@ new Vue({
   computed: {
     totalPages() {
       return Math.ceil(this.total / this.perPage);
+    },
+
+    sequentialMessages() {
+      const isSequentialMessage = (prev, current) => {
+        return prev.user.id === current.user.id && differenceInMinutes(parseISO(current.created_at), parseISO(prev.created_at)) <= 5;
+      };
+
+      return this
+        .messages
+        .map((item, index, array) => {
+          if (index > 0) {
+            item.sequential = isSequentialMessage(array[index - 1], item);
+          }
+
+          return item;
+        });
     },
 
     ...mapState('messages', ['messages', 'currentPage', 'total', 'perPage'])
