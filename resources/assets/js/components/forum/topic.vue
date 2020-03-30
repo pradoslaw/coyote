@@ -67,7 +67,7 @@
         </div>
       </div>
 
-      <div v-if="showCategoryName" class="col-xl-1 d-none d-xl-block text-center">
+      <div v-if="showCategoryName" class="col-xl-1 d-none d-xl-block text-center text-truncate">
         <a :href="topic.forum.url" class="small">{{ topic.forum.name }}</a>
       </div>
 
