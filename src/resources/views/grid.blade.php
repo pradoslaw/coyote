@@ -2,14 +2,14 @@
 
     @section('header')
         @if(isset($add_url))
-            <div class="pull-left">
+            <div class="float-left">
                 <a class="btn btn-secondary btn-add" href="{{ $add_url }}">
                     <i class="fa fa-plus"></i>
                     {{ $add_label ?: 'Nowy' }}
                 </a>
             </div>
 
-            <div class="pull-right">{{ $pagination }}</div>
+            <div class="float-right">{{ $pagination }}</div>
         @else
             {{ $pagination }}
         @endif
@@ -51,7 +51,7 @@
 
     @section('footer')
         @if(isset($add_url))
-            <div class="pull-right">{{ $pagination }}</div>
+            <div class="float-right">{{ $pagination }}</div>
         @else
             {{ $pagination }}
         @endif
