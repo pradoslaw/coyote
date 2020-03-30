@@ -14,7 +14,7 @@ class DeleteButton extends RowAction
             (string) $this->tag('i', '', ['class' => 'fa fa-trash-o']),
             [
                 'href' => $this->buildActionUrl($this->data),
-                'class' => 'btn btn-danger btn-xs',
+                'class' => 'btn btn-danger btn-sm',
                 'title' => __('Delete'),
                 'data-toggle' => 'modal'
             ]

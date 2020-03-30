@@ -12,7 +12,7 @@ class ShowButton extends RowAction
         return (string) $this->tag(
             'a',
             (string) $this->tag('i', '', ['class' => 'fa fa-eye']),
-            ['href' => $this->buildActionUrl($this->data), 'class' => 'btn btn-default btn-xs', 'title' => __('Show')]
+            ['href' => $this->buildActionUrl($this->data), 'class' => 'btn btn-secondary btn-sm', 'title' => __('Show')]
         );
     }
 }

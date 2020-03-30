@@ -53,6 +53,6 @@ class Button extends Component
      */
     protected function setDefaultAttributes(array $attributes = [])
     {
-        $this->attributes = array_merge(['class' => 'btn btn-default', 'href' => $this->url], $attributes);
+        $this->attributes = array_merge(['class' => 'btn btn-secondary', 'href' => $this->url], $attributes);
     }
 }

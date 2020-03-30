@@ -3,7 +3,7 @@
     @section('header')
         @if(isset($add_url))
             <div class="pull-left">
-                <a class="btn btn-default btn-add" href="{{ $add_url }}">
+                <a class="btn btn-secondary btn-add" href="{{ $add_url }}">
                     <i class="fa fa-plus"></i>
                     {{ $add_label ?: 'Nowy' }}
                 </a>
