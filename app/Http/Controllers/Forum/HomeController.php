@@ -152,7 +152,10 @@ class HomeController extends BaseController
      */
     public function mine()
     {
-        return $this->user($this->userId);
+        $this->topic->pushCriteria(new OnlyMine($this->userId, false));
+        $topics = $this->load();
+
+        return $this->render($topics)->with('user_id', $this->userId);
     }
 
     /**
@@ -161,7 +164,7 @@ class HomeController extends BaseController
      */
     public function user($userId)
     {
-        $this->topic->pushCriteria(new OnlyMine($userId));
+        $this->topic->pushCriteria(new OnlyMine($userId, true));
         $topics = $this->load();
 
         $user = app(UserRepositoryInterface::class)->find($userId);

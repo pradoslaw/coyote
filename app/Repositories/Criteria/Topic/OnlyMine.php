@@ -4,6 +4,8 @@ namespace Coyote\Repositories\Criteria\Topic;
 
 use Coyote\Repositories\Contracts\RepositoryInterface as Repository;
 use Coyote\Repositories\Criteria\Criteria;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Query\Expression;
 
 class OnlyMine extends Criteria
 {
@@ -13,11 +15,18 @@ class OnlyMine extends Criteria
     private $userId;
 
     /**
-     * @param $userId
+     * @var bool
      */
-    public function __construct($userId)
+    private $includePost;
+
+    /**
+     * @param int $userId
+     * @param bool $includePost
+     */
+    public function __construct(int $userId, bool $includePost = false)
     {
         $this->userId = $userId;
+        $this->includePost = $includePost;
     }
 
     /**
@@ -27,6 +36,15 @@ class OnlyMine extends Criteria
      */
     public function apply($model, Repository $repository)
     {
-        return $model->fromRaw("(SELECT topics.*, topic_users.post_id AS user_post_id FROM topic_users JOIN topics on topics.id = topic_users.topic_id WHERE user_id = $this->userId) as topics");
+        return $model->fromSub(function (Builder $builder) {
+            return $builder
+                ->select('topics.*')
+                ->from('topic_users')
+                ->join('topics', 'topics.id', '=', 'topic_users.topic_id')
+                ->where('user_id', $this->userId)
+                ->when($this->includePost, function (Builder $builder) {
+                    $builder->addSelect(new Expression('topic_users.post_id AS user_post_id'));
+                });
+        }, 'topics');
     }
 }
