@@ -55,6 +55,14 @@
   .tag-clouds {
     margin-top: -5px;
   }
+
+  .fa-star {
+    font-size: .75rem;
+
+    &:not(.text-primary) {
+      opacity: .7;
+    }
+  }
 }
 
 a.not-read {

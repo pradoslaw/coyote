@@ -11,7 +11,10 @@
         <div class="w-100">
           <div class="row no-gutters">
             <h5 class="topic-subject text-truncate m-0">
-<!--              <i class="far fa-fw fa-star" style="font-size: 12px"></i>-->
+              <a v-if="isAuthorized" @click="subscribe(topic)" href="javascript:" title="Kliknij aby wł/wył obserwowanie wątku">
+                <i class="fa-star fa-fw" :class="{'fas text-primary': topic.is_subscribed, 'far': !topic.is_subscribed}"></i>
+              </a>
+
               <a v-if="topic.accepted_id" :href="topic.url + `?p=${topic.accepted_id}#id${topic.accepted_id}`"><i class="fas fa-check"></i></a>
 
               <a :href="getUrl()" :class="{'font-weight-bold': !topic.is_read}">{{ topic.subject }}</a>
@@ -59,12 +62,6 @@
               <li class="list-inline-item small" title="Liczba wyświetleń">
                 <i class="far fa-fw fa-eye"></i> {{ topic.views | number }}
               </li>
-
-              <li class="list-inline-item small">
-                <a @click="subscribe(topic)" href="javascript:" class="text-decoration-none text-muted" title="Kliknij aby wł/wył obserwowanie wątku">
-                  <i :class="{'fas text-primary': topic.is_subscribed, 'far': !topic.is_subscribed}" class="fa-fw fa-star"></i> {{ topic.subscribers | number }}
-                </a>
-              </li>
             </ul>
           </div>
         </div>
@@ -97,7 +94,7 @@
   import VueTimeago from '../../plugins/timeago';
   import VueAvatar from '../avatar.vue';
   import { mixin as clickaway } from 'vue-clickaway';
-  import { mapActions } from "vuex";
+  import { mapActions, mapGetters } from "vuex";
 
   Vue.use(VueTimeago);
 
@@ -167,6 +164,8 @@
 
         return this.topic.tags.filter(tag => userTags.includes(tag.name)).length > 0;
       },
+
+      ...mapGetters('user', ['isAuthorized'])
     }
   }
 </script>
