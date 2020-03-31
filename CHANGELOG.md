@@ -4,6 +4,9 @@
 - Migracja do Bootstrap 4
 - Migracja do Babel 7.x
 
+**Wiadomości prywatne**
+- Łączenie wiadomości prywatnych napisanych w przeciągu 5 min
+
 **Forum**
 - Przepisanie listy wątków w danej kategorii na Vue.js
 - Oznaczenie czy są nowe wątki, również w zablokowanych kategoriach

@@ -52,25 +52,17 @@ const actions = {
     state.isOngoing = true;
 
     return axios.get('/User/Notifications/Ajax', {params: {offset: state.offset}})
-      .then(result => {
-        commit('init', result.data);
-      })
-      .finally(() => {
-        state.isOngoing = false;
-      });
+      .then(result => commit('init', result.data))
+      .finally(() => state.isOngoing = false);
   },
 
   remove ({ commit }, notification) {
-    return axios.delete(`/User/Notifications/Delete/${notification.id}`).then(() => {
-      commit('remove', notification);
-    });
+    return axios.delete(`/User/Notifications/Delete/${notification.id}`).then(() => commit('remove', notification));
   },
 
   markAll({ commit, state }) {
     return axios.post('/User/Notifications/Mark').then(() => {
-      state.notifications.forEach(notification => {
-        commit('mark', notification);
-      });
+      state.notifications.forEach(notification => commit('mark', notification));
     });
   }
 };

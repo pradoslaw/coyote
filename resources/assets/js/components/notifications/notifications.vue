@@ -9,7 +9,7 @@
     <div ref="dropdown" v-show="isOpen" class="dropdown-alerts dropdown-menu dropdown-menu-right">
       <div class="dropdown-header">
         <div class="float-right">
-          <a v-if="unreadNotifications.length > 0" @click="openAll" title="Otwórz nowe w nowej karcie" href="javascript:" class="margin-xs-right">
+          <a v-if="unreadNotifications.length > 0" @click="openAll" title="Otwórz nowe w nowej karcie" href="javascript:" class="mr-1">
             <i class="fas fa-external-link-alt"></i>
           </a>
 
@@ -28,8 +28,7 @@
 
         <vue-notification v-for="notification in notifications" :notification="notification" :key="notification.id"></vue-notification>
 
-        <div class="text-center" v-if="Array.isArray(notifications) && notifications.length === 0">Brak powiadomień.
-        </div>
+        <div class="text-center" v-if="Array.isArray(notifications) && notifications.length === 0">Brak powiadomień.</div>
       </perfect-scrollbar>
     </div>
   </li>
@@ -69,8 +68,8 @@
         DesktopNotifications.requestPermission();
         this.isOpen = !this.isOpen;
 
-        if (this.$store.getters['notifications/isEmpty']) {
-          this.$store.dispatch('notifications/get').then(() => {
+        if (this.isEmpty) {
+          this.loadMoreNotifications().then(() => {
             this.$refs.scrollbar.$refs.container.addEventListener('ps-y-reach-end', this.loadMoreNotifications);
 
             this.syncCount();
@@ -79,7 +78,11 @@
       },
 
       loadMoreNotifications() {
-        this.$store.dispatch('notifications/get');
+        if (!this.isOpen) {
+          return;
+        }
+
+        return this.$store.dispatch('notifications/get');
       },
 
       markAllAsRead() {
@@ -146,12 +149,19 @@
           this.setTitle(this.title);
           this.setIcon('/img/favicon.png');
         }
-      }
+      },
+
+      // isOpen(flag) {
+      //   if (!flag) {
+      //     this.resetNotifications();
+      //   }
+      // }
     },
 
     computed: {
       ...mapState('notifications', ['notifications', 'count']),
-      ...mapGetters('notifications', ['unreadNotifications'])
+      ...mapGetters('notifications', ['unreadNotifications', 'isEmpty']),
+      // ...mapMutations('notifications', ['reset'])
 
     }
   }
