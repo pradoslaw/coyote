@@ -5,11 +5,6 @@
     color: $link-color-darker;
   }
 
-  .topic-row {
-    display: flex;
-    flex-wrap: nowrap;
-  }
-
   .topic-icon {
     position: relative;
     align-items: center;
@@ -63,6 +58,11 @@
 
   // desktop
   @include media-breakpoint-up(sm) {
+    .topic-row {
+      display: flex;
+      flex-wrap: nowrap;
+    }
+
     .card-body {
       padding: .5rem 1rem;
 
@@ -77,15 +77,18 @@
     @include card-body-not-read();
   }
 
-  //.tag-clouds {
-  //  margin-top: -5px;
-  //  flex-shrink: 0;
-  //}
+  .tag-clouds {
+    margin-top: -4px; // same row height whether tag exists
+  }
 
   .fa-star {
     font-size: .75rem;
 
-    &:not(.text-primary) {
+    &.on {
+      color: lighten($alt-link-hover-color, 5%);
+    }
+
+    &:not(.on) {
       opacity: .7;
     }
   }

@@ -12,7 +12,7 @@
           <div class="topic-row">
             <h5 class="topic-subject text-truncate m-0">
               <a v-if="isAuthorized" @click="subscribe(topic)" href="javascript:" title="Kliknij aby wł/wył obserwowanie wątku">
-                <i class="fa-star fa-fw" :class="{'fas text-primary': topic.is_subscribed, 'far': !topic.is_subscribed}"></i>
+                <i class="fa-star fa-fw" :class="{'fas on': topic.is_subscribed, 'far': !topic.is_subscribed}"></i>
               </a>
 
               <a v-if="topic.accepted_id" :href="topic.url + `?p=${topic.accepted_id}#id${topic.accepted_id}`"><i class="fas fa-check"></i></a>
@@ -37,7 +37,7 @@
               <template v-for="i in paginatorPages"><a :href="topic.url + '?page=' + i">{{ i }}</a>&nbsp;</template>
             </div>
 
-            <ul class="list-inline small text-muted mb-0 ml-auto flex-shrink-0">
+            <ul class="list-inline small text-muted mt-1 mt-sm-0 mb-0 d-block d-sm-inline ml-sm-auto flex-sm-shrink-0">
               <li class="list-inline-item small" title="Liczba odpowiedzi">
                 <i :class="{'fas text-primary': topic.is_replied, 'far': !topic.is_replied}" class="fa-fw fa-comments"></i> {{ topic.replies | number }}
               </li>
@@ -50,7 +50,6 @@
                 <i class="far fa-fw fa-eye"></i> {{ topic.views | number }}
               </li>
             </ul>
-
           </div>
 
           <div class="row no-gutters mt-1">
@@ -61,7 +60,7 @@
               <span v-else>{{ topic.user_name }}</span>
             </div>
 
-            <ul v-if="topic.tags.length" class="tag-clouds tag-clouds-xs tag-clouds-skills ml-auto d-none d-sm-block">
+            <ul v-if="topic.tags.length" class="tag-clouds tag-clouds-xs tag-clouds-skills ml-auto d-none d-lg-block">
               <li v-for="tag in topic.tags" ><a :href="tag.url">{{ tag.name }}</a></li>
             </ul>
           </div>
@@ -72,7 +71,7 @@
         <a :href="topic.forum.url" class="small">{{ topic.forum.name }}</a>
       </div>
 
-      <div class="col-xl-2 col-lg-2 col-md-12 mt-1 mt-xl-0">
+      <div class="col-xl-2 col-lg-2 col-md-12">
         <div class="media m-md-0">
           <a v-profile="this.topic.last_post.user ? this.topic.last_post.user.id : null"><vue-avatar v-bind="topic.last_post.user" class="i-35 mr-2 d-none d-md-inline-block position-relative img-thumbnail"></vue-avatar></a>
 
