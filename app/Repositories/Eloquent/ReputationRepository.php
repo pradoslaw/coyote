@@ -73,7 +73,7 @@ class ReputationRepository extends Repository implements ReputationRepositoryInt
 
         $rowset = [];
 
-        for ($i = 0; $i <= $interval; $i++) {
+        for ($i = 0; $i < $interval; $i++) {
             $key = $dt->format('Y-m');
             $label = $dt->formatLocalized('%B %Y');
 
