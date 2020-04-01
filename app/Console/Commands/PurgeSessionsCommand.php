@@ -112,6 +112,10 @@ class PurgeSessionsCommand extends Command
         /** @var \Coyote\User $user */
         $user = $this->user->find($session->userId);
 
+        if (empty($user)) {
+            return;
+        }
+
         $user->timestamps = false;
         // update only this field:
         $user->visited_at = Carbon::createFromTimestamp($session->updatedAt);
