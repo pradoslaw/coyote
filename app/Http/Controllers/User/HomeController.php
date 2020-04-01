@@ -3,8 +3,6 @@
 namespace Coyote\Http\Controllers\User;
 
 use Carbon\Carbon;
-use Coyote\Events\FirewallWasSaved;
-use Coyote\Firewall;
 use Coyote\Http\Factories\MediaFactory;
 use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
@@ -67,14 +65,5 @@ class HomeController extends BaseController
     {
         $this->auth->photo = null;
         $this->auth->save();
-    }
-
-    public function ban()
-    {
-        $firewall = Firewall::create(['user_id' => $this->userId, 'expire_at' => now()->addMinutes(4), 'reason' => 'prima aprilis', 'moderator_id' => $this->userId]);
-
-        event(new FirewallWasSaved($firewall));
-
-        return redirect()->route('home');
     }
 }

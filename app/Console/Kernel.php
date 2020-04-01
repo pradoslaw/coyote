@@ -60,7 +60,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('job:boost')->dailyAt('07:00:00');
         $schedule->command('session:purge')->everyMinute()->withoutOverlapping();
         $schedule->command('pastebin:purge')->hourly();
-        $schedule->command('firewall:purge')->everyFiveMinutes();
+        $schedule->command('firewall:purge')->hourly();
         $schedule->command('sitemap:create')->dailyAt('03:00:00');
         $schedule->command('guest:purge')->dailyAt('04:00:00');
     }
