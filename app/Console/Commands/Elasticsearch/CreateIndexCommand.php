@@ -90,7 +90,16 @@ class CreateIndexCommand extends Command
                                         "keep_symbols_filter",
                                         "asciifolding"
                                     ]
-                                ]
+                                ],
+                                // elasticsearch completion suggestion
+                                "completion_analyzer" => [
+                                    "tokenizer" => "whitespace",
+                                    "filter" => [
+                                        "lowercase",
+                                        "keep_symbols_filter",
+                                        "asciifolding"
+                                    ]
+                                ],
                             ]
                         ]
                     ]
@@ -241,7 +250,7 @@ class CreateIndexCommand extends Command
                             ],
                             "suggest" => [
                                 "type" => "completion",
-                                "analyzer" => "stopwords_analyzer"
+                                "analyzer" => "completion_analyzer"
                             ]
                         ]
                     ]
