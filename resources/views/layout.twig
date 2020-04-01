@@ -42,9 +42,7 @@
         {{ form_open({url: route('logout'), name: 'logout-form'}) }}
         {{ form_close() }}
 
-        <div class="row">
-          <div class="col-12">
-            <div class="container-xxl d-flex align-items-center flex-wrap">
+        <div class="container-xxl d-flex align-items-center flex-wrap">
               <a rel="home" class="navbar-brand" href="{{ route('home') }}" title="4programmers.net - Strona główna">
                 <img src="{{ cdn('img/logo-mobile.png') }}">
               </a>
@@ -69,15 +67,20 @@
                 {% endfor %}
               </ul>
 
-              <form action="{{ search_url|default(route('search')) }}" class="nav-search d-none d-lg-flex flex-grow-1" role="search">
-                <div class="input-group">
-                  <input type="text" name="q" autocomplete="off" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}">
+              <div class="nav-search d-none d-lg-flex flex-grow-1">
+                <div class="search-bar search-bar-focus">
+                  <i class="fas fa-search ml-2 mr-2"></i>
 
-                  <span class="input-group-btn">
-                    <button class="btn btn-link">
-                        <i class="fas fa-search"></i>
-                    </button>
-                  </span>
+                  <form action="{{ search_url|default(route('search')) }}" role="search" class="flex-grow-1">
+
+                    <input type="text" name="q" autocomplete="off" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}">
+                  </form>
+
+{#                  <span class="input-group-btn">#}
+{#                    <button class="btn btn-link">#}
+{#                        <i class="fas fa-search"></i>#}
+{#                    </button>#}
+{#                  </span>#}
 
                   <div class="search-popover">
 {#                    <nav class="nav nav-pills" style="margin: 5px 7px 10px 7px">#}
@@ -86,20 +89,25 @@
 {#                    </nav>#}
 
                     <ul class="list-unstyled">
-                      <li class="title"><span>Twoje wątki</span></li>
+                      <li class="title">Twoje wątki</li>
 
-                      <li>
+                      <li class="hover">
                         <a href="#">
+                          <i class="fas fa-fw fa-external-link-alt small text-muted"></i>
+                          <span>Które firmy IT dotknął kryzys? Sprawdź tutaj.</span>
 
-                          <span class="float-left">Które firmy IT dotknął kryzys? Sprawdź tutaj.</span>
-
-                          <small class="float-right text-muted">dziś, 20:45</small>
+{#                          <small class="float-right text-muted">dziś, 20:45</small>#}
+                          <div class="float-right">
+                            <i class="far fa-star ml-1"></i>
+                            <i class="fas fa-search ml-1"></i>
+                          </div>
                         </a>
                       </li>
 
                       <li>
                         <a href="#">
-                          <span class="float-left">Lorem ipsum lores.</span>
+                          <i class="fas fa-fw fa-external-link-alt small text-muted"></i>
+                          <span>Lorem ipsum lores.</span>
 
                           <small class="float-right text-muted">dziś, 20:45</small>
                         </a>
@@ -109,17 +117,19 @@
 
                       <li>
                         <a href="#">
-                          <span class="float-left">Lorem ipsum lores.</span>
+                          <i class="fas fa-fw fa-external-link-alt small text-muted"></i>
+                          <span>Lorem ipsum lores.</span>
 
                           <small class="float-right text-muted">dziś, 20:45</small>
                         </a>
                       </li>
 
-                      <li class="title">Obserwowane wątki</li>
+                      <li class="title">Ostatnie wyszukiwania</li>
 
                       <li>
                         <a href="#">
-                          <span class="float-left">Lorem ipsum lores.</span>
+                          <i class="fas fa-fw fa-search small text-muted"></i>
+                          <span>Lorem ipsum lores.</span>
 
                           <small class="float-right text-muted">dziś, 20:45</small>
                         </a>
@@ -127,7 +137,7 @@
                     </ul>
                   </div>
                 </div>
-              </form>
+              </div>
 
               <div class="ml-auto">
                 {% if auth_check() %}
@@ -211,8 +221,7 @@
                 </form>
               </div>
             </div>
-          </div>
-        </div>
+
       </header>
 
       <div class="container-fluid">
