@@ -238,6 +238,10 @@ class CreateIndexCommand extends Command
                                 "type" => "text",
                                 // ability to search case insensitive
                                 "analyzer" => "keyword_analyzer"
+                            ],
+                            "suggest" => [
+                                "type" => "completion",
+                                "analyzer" => "stopwords_analyzer"
                             ]
                         ]
                     ]
