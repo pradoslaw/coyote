@@ -107,11 +107,6 @@ class TopicController extends BaseController
                 $comment->text = $parser['comment']->setUserId($comment->user_id)->parse($comment->text);
             }
 
-            if ($post->user_id) {
-                $attr = $posts->random()->only(['photo', 'author_posts', 'group_name']);
-                $post->forceFill($attr);
-            }
-
             $post->setRelation('topic', $topic);
             $post->setRelation('forum', $forum);
         }
