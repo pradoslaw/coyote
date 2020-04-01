@@ -250,7 +250,8 @@ class CreateIndexCommand extends Command
                             ],
                             "suggest" => [
                                 "type" => "completion",
-                                "analyzer" => "completion_analyzer"
+                                "analyzer" => "completion_analyzer",
+                                "preserve_position_increments" => false
                             ]
                         ]
                     ]

@@ -93,7 +93,6 @@ body.padding-top {
   // temporary arrow
   position: relative;
   list-style-type: none;
-  //float: left;
   margin: 0;
   padding: 0;
 
@@ -145,32 +144,42 @@ body.padding-top {
 }
 
 .nav-search {
-  //background: url('/img/main-menu-separator.png') no-repeat 0 100%;
   padding-left: 20px;
   padding-right: 20px;
-  //margin-left: 20px;
-  //margin-right: 0;
 
-  > div {
+  .search-bar {
+    display: flex;
+    align-items: center;
+    width: 100%;
     position: relative;
+    border-radius: 3px;
+    padding: 5px;
+    background-color: $gray-light;
+  }
+
+  .fa-search {
+    color: var(--header-color);
+  }
+
+  input {
+    padding: 0;
+    color: $gray-light;
+    width: 100%;
+    line-height: 22px;
+    outline: 0;
+    font-size: .9rem;
+  }
+
+  .search-bar-focus {
+    &.search-bar {
+      background-color: #fff;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
 
     input {
-      border-radius: 3px;
-      padding: 5px 30px 5px 5px;
-      border: 1px solid $input-border;
-      color: $gray-light;
-      width: 100%;
-      line-height: 22px;
-    }
-
-    .input-group-btn {
-      position: absolute;
-      right: 0;
-      top: 0;
-    }
-
-    input:focus, button:focus {
-      outline: none;
+      background-color: #fff !important;
+      color: $gray-700 !important;
     }
   }
 }
@@ -182,30 +191,42 @@ body.padding-top {
   width: 100%;
   height: 246px;
   background-color: #fff;
-  top: 33px;
+  left: 0;
+  top: 0;
+  margin-top: 32px;
 
   li {
-    padding: 5px 10px;
-    overflow: hidden;
+    &.hover {
+      background-color: $dropdown-link-hover-bg;
+    }
+
+    > a {
+      overflow: hidden;
+      padding: 5px 10px;
+      display: block;
+
+      &:hover {
+        text-decoration:  none;
+        color: inherit;
+      }
+    }
   }
 
   .title {
+    padding: 7px 10px;
     color: $text-muted;
     text-transform: uppercase;
     font-size: .7rem;
     font-weight: bold;
-    margin-top: 10px;
-    //background: linear-gradient(to bottom, #ffffff 47%, #b4b4b4 50%, #ffffff 52%);
-    //
-    //> span {
-    //  background: #fff;
-    //  display: inline-block;
-    //}
+  }
+
+  .fa-external-link-alt.text-muted,
+  .fa-search.text-muted {
+    font-size: .7rem;
   }
 }
 
 .nav-avatar {
-  //margin-top: 9px;
   margin-left: 20px;
 
   a {
