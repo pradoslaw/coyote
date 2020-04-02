@@ -83,41 +83,47 @@
 {#                  </span>#}
 
                   <div class="search-popover">
-{#                    <nav class="nav nav-pills" style="margin: 5px 7px 10px 7px">#}
-{#                      <a class="nav-item nav-link active mr-2" href="#" style="padding: 5px; font-size: 90%;">Forum</a>#}
-{#                      <a class="nav-item nav-link" href="#" style="padding: 5px; font-size: 90%;">Praca</a>#}
-{#                    </nav>#}
+                    <nav class="list-inline" style="margin: 10px 7px 10px 7px">
+                      <a class="list-inline-item active mr-2 text-primary" href="#" style="padding: 5px; font-size: 90%; border-bottom: 2px solid #80a41a">Forum</a>
+                      <a class="list-inline-item text-body" href="#" style="padding: 5px; font-size: 90%;">Praca</a>
+                    </nav>
 
                     <ul class="list-unstyled">
                       <li class="title">Twoje wątki</li>
 
-                      <li class="hover">
+                      <li class="hover position-relative">
                         <a href="#">
-                          <i class="fas fa-fw fa-external-link-alt small text-muted"></i>
+{#                          <i class="fas fa-fw fa-external-link-alt small text-muted"></i>#}
                           <span>Które firmy IT dotknął kryzys? Sprawdź tutaj.</span>
 
 {#                          <small class="float-right text-muted">dziś, 20:45</small>#}
-                          <div class="float-right">
-                            <i class="far fa-star ml-1"></i>
-                            <i class="fas fa-search ml-1"></i>
-                          </div>
+
                         </a>
+
+                        <div class="position-absolute" style="right: 10px;  top: 20%;">
+                          <i class="far fa-star ml-2"></i>
+                          <i class="fas fa-search ml-2"></i>
+                        </div>
                       </li>
 
                       <li>
                         <a href="#">
-                          <i class="fas fa-fw fa-external-link-alt small text-muted"></i>
+{#                          <i class="fas fa-fw fa-external-link-alt small text-muted"></i>#}
                           <span>Lorem ipsum lores.</span>
 
                           <small class="float-right text-muted">dziś, 20:45</small>
                         </a>
                       </li>
 
+                      <li class="more">
+                        <a href="#">więcej ...</a>
+                      </li>
+
                       <li class="title">Twoje dyskusje</li>
 
                       <li>
                         <a href="#">
-                          <i class="fas fa-fw fa-external-link-alt small text-muted"></i>
+{#                          <i class="fas fa-fw fa-external-link-alt small text-muted"></i>#}
                           <span>Lorem ipsum lores.</span>
 
                           <small class="float-right text-muted">dziś, 20:45</small>
@@ -128,11 +134,30 @@
 
                       <li>
                         <a href="#">
-                          <i class="fas fa-fw fa-search small text-muted"></i>
+{#                          <i class="fas fa-fw fa-search small text-muted"></i>#}
                           <span>Lorem ipsum lores.</span>
 
                           <small class="float-right text-muted">dziś, 20:45</small>
                         </a>
+                      </li>
+
+                      <li class="title">Użytkownicy</li>
+
+                      <li class="position-relative">
+                        <a href="#" class="d-flex align-content-center">
+                          <object data="https://4programmers.net/uploads/photo/4ccbfa1158d19" style="width: 16px; height: 16px" type="image/png" class="media-object mr-2"><img src="/img/avatar.png"></object>
+                          <span>Marooned</span>
+
+{#                          <small class="float-right text-muted">dziś, 20:45</small>#}
+
+
+                        </a>
+
+                        <div class="position-absolute" style="right: 10px;  top: 20%;">
+                          <i class="far fa-user ml-2"></i>
+                          <i class="far fa-comment-alt ml-2"></i>
+                          <i class="fas fa-search ml-2"></i>
+                        </div>
                       </li>
                     </ul>
                   </div>
