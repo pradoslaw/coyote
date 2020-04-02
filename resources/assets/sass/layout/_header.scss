@@ -208,8 +208,8 @@ body.padding-top {
       overflow: hidden;
       padding: 5px 10px;
       display: block;
-      color: $link-color-darker;
-      //color: $gray-700;
+      //color: $link-color-darker;
+      color: $gray-800;
 
       &:hover {
         text-decoration:  none;
@@ -219,11 +219,21 @@ body.padding-top {
   }
 
   .title {
-    padding: 7px 10px;
-    color: $gray-light;
-    text-transform: uppercase;
+    //text-transform: uppercase;
     font-size: .7rem;
-    font-weight: bold;
+    //font-weight: bold;
+
+    margin: 5px 10px;
+    //padding: 2px 0;
+    color: #777;
+    text-transform: lowercase;
+    background: linear-gradient(to bottom, #ffffff 47%, #b4b4b4 50%, #ffffff 52%);
+
+    > span {
+      background-color: #fff;
+      display: inline-block;
+      padding: 2px 10px 2px 0;
+    }
   }
 
   .more {
