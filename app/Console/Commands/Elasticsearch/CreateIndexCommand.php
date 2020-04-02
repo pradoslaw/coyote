@@ -57,6 +57,10 @@ class CreateIndexCommand extends Command
                                 ],
                                 "keep_symbols_filter" => [
                                     "type" => "word_delimiter",
+                                    "split_on_numerics" => false, // If true causes "j2se" to be three tokens; "j" "2" "se".
+                                    "preserve_original" => true, // If true includes original words in subwords: "500-42" ⇒ "500-42"
+                                    "split_on_case_change" => false, // If true causes "PowerShot" to be two tokens; ("Power-Shot" remains two parts regards).
+                                    "catenate_words" => true, // If true causes maximum runs of word parts to be catenated: "wi-fi" ⇒ "wifi". Defaults
                                     "type_table" => [
                                         "# => ALPHANUM",
                                         "+ => ALPHANUM",
