@@ -7,7 +7,7 @@
         </a>
       </h2>
 
-      <div v-if="isAuthorized && !categories[0].parent_id" :class="{'open': isDropdown}" v-on-clickaway="hideDropdown" class="dropdown float-right">
+      <div v-if="isAuthorized && !categories[0].parent_id" :class="{'open': isDropdown}" v-on-clickaway="hideDropdown" class="dropdown float-right dropleft">
         <a href="javascript:" @click="isDropdown = ! isDropdown" class="card-cog mt-2 mr-2"><i class="fas fa-cogs"></i></a>
 
         <div :class="{'d-block': isDropdown}" class="dropdown-menu">
