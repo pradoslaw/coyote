@@ -251,7 +251,18 @@ class CreateIndexCommand extends Command
                             "suggest" => [
                                 "type" => "completion",
                                 "analyzer" => "completion_analyzer",
-                                "preserve_position_increments" => false
+                                "contexts" => [
+                                    [
+                                        "name" => "model",
+                                        "type" => "category",
+                                        "path" => "model"
+                                    ],
+                                    [
+                                        "name" => "category",
+                                        "type" => "category"
+                                    ]
+                                ]
+//                                "preserve_position_increments" => false
                             ]
                         ]
                     ]
