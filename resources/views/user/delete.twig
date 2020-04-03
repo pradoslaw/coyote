@@ -4,27 +4,29 @@
 {% import 'components.forms' as forms %}
 
 {% block content %}
-    <h2>Usunięcie konta</h2>
+  <h2>Usunięcie konta</h2>
 
-    <div id="box-start" class="card card-default">
-        <div class="card-body">
-            <div class="alert alert-warning">
-                <strong>Uwaga!</strong> Ta operacja spowoduje bezpowrotne usunięcie Twojego konta. Czy jesteś pewien, że chcesz kontynuować?
-            </div>
+  <div id="box-start" class="card card-default">
+    <div class="card-body">
+      <div class="alert alert-warning">
+        <strong>Uwaga!</strong> Ta operacja spowoduje bezpowrotne usunięcie Twojego konta. Czy jesteś pewien, że chcesz kontynuować?
+      </div>
 
-            {{ form_open({'method': 'POST', 'role': 'form', 'url': route('user.delete')}) }}
+      {{ form_open({'method': 'POST', 'role': 'form', 'url': route('user.delete')}) }}
 
-            {{ forms.password('password', 'Hasło', '', {}, 'Hasło musi mieć min. 3 znaki długości') }}
+      {% if user('password') %}
+        {{ forms.password('password', 'Hasło', '', {}, 'Hasło musi mieć min. 3 znaki długości') }}
+      {% endif %}
 
-            <div class="form-group row">
-                <div class="col-12">
-                    <button type="submit" class="btn btn-danger" style="margin-right: 15px;" data-submit-state="Usuwanie....">
-                        Potwierdzam, że chce usunąć moje konto
-                    </button>
-                </div>
-            </div>
-
-            {{ form_close() }}
+      <div class="form-group row">
+        <div class="col-md-6 col-12 offset-md-4">
+          <button type="submit" class="btn btn-danger w-100" data-submit-state="Usuwanie....">
+            Potwierdzam, że chce usunąć moje konto
+          </button>
         </div>
+      </div>
+
+      {{ form_close() }}
     </div>
+  </div>
 {% endblock %}

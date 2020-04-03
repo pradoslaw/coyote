@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\User;
 
 use Coyote\Rules\PasswordRule;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class DeleteAccountController extends BaseController
 {
@@ -25,7 +26,13 @@ class DeleteAccountController extends BaseController
     public function delete(Request $request)
     {
         $this->validate($request, [
-            'password' => ['required', app(PasswordRule::class)]
+            'password' => [
+                'bail',
+                Rule::requiredIf(function () {
+                    return $this->auth->password !== null;
+                }),
+                app(PasswordRule::class)
+            ]
         ]);
 
         $this->auth->delete();
