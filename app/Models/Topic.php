@@ -215,6 +215,16 @@ class Topic extends Model
     }
 
     /**
+     * This is being used in TopicRepository
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function poll()

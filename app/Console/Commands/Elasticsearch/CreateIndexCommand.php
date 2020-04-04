@@ -112,19 +112,23 @@ class CreateIndexCommand extends Command
                             ],
                             "created_at" => [
                                 "type" => "date",
-                                "format" => "yyyy-MM-dd HH:mm:ss"
+//                                "format" => "yyyy-MM-dd HH:mm:ss"
                             ],
                             "updated_at" => [
                                 "type" => "date",
-                                "format" => "yyyy-MM-dd HH:mm:ss"
+//                                "format" => "yyyy-MM-dd HH:mm:ss"
                             ],
                             "deadline_at" => [
                                 "type" => "date",
-                                "format" => "yyyy-MM-dd HH:mm:ss"
+//                                "format" => "yyyy-MM-dd HH:mm:ss"
                             ],
                             "boost_at" => [
                                 "type" => "date",
-                                "format" => "yyyy-MM-dd HH:mm:ss"
+//                                "format" => "yyyy-MM-dd HH:mm:ss"
+                            ],
+                            "last_post_created_at" => [
+                                "type" => "date",
+//                                "format" => "yyyy-MM-dd HH:mm:ss"
                             ],
                             "text" => [
                                 "type" => "text",
