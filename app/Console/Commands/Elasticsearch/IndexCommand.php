@@ -4,6 +4,7 @@ namespace Coyote\Console\Commands\Elasticsearch;
 
 use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Coyote\Repositories\Contracts\PostRepositoryInterface;
+use Coyote\Services\Elasticsearch\Crawler\Crawler;
 use Illuminate\Console\Command;
 use Illuminate\Container\Container as App;
 use Illuminate\Database\Query\Expression;
@@ -103,10 +104,11 @@ class IndexCommand extends Command
         }
 
         $bar = $this->output->createProgressBar($builder->count());
+        $crawler = new Crawler();
 
-        $builder->chunk(10000, function ($rowset) use ($bar) {
+        $builder->chunk(20000, function ($rowset) use ($bar, $crawler) {
             foreach ($rowset as $row) {
-                $row->putToIndex();
+                $crawler->index($row);
 
                 $bar->advance();
             }
