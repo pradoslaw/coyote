@@ -75,6 +75,8 @@ class TopicResource extends JsonResource
                 ]
             ];
         }
+
+        return $result;
     }
 
     /**
@@ -90,6 +92,9 @@ class TopicResource extends JsonResource
         );
     }
 
+    /**
+     * @return array
+     */
     private function input(): array
     {
         $title = htmlspecialchars($this->subject);
@@ -102,6 +107,9 @@ class TopicResource extends JsonResource
         return $result;
     }
 
+    /**
+     * @return array
+     */
     private function categories(): array
     {
         $result = ['forum:' . $this->forum->id];

@@ -3,6 +3,7 @@
 namespace Coyote\Services\Elasticsearch\Builders\Forum;
 
 use Coyote\Http\Factories\GateFactory;
+use Coyote\Post;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Services\Elasticsearch\Filters\Post\OnlyThoseWithAccess;
 use Coyote\Services\Elasticsearch\Functions\Decay;
@@ -48,7 +49,7 @@ class SearchBuilder extends QueryBuilder
      */
     public function build()
     {
-        $this->must(new Term('model', 'post'));
+        $this->must(new Term('model', class_basename(Post::class)));
         $this->must(new OnlyThoseWithAccess($this->forumsId));
         $this->sort(new Sort($this->request->get('sort', '_score'), $this->request->get('order', 'desc')));
         $this->highlight(new Highlight(['topic.subject', 'text', 'tags']));

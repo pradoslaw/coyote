@@ -67,6 +67,10 @@ class Crawler
     /**
      * @param Model $model
      * @return JsonResource
+     *
+     * @uses \Coyote\Http\Resources\Elasticsearch\StreamResource
+     * @uses \Coyote\Http\Resources\Elasticsearch\TopicResource
+     * @uses \Coyote\Http\Resources\Elasticsearch\PostResource
      */
     protected function makeResource(Model $model): JsonResource
     {
