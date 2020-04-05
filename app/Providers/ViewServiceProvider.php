@@ -96,11 +96,10 @@ class ViewServiceProvider extends ServiceProvider
     private function getJWtToken(User $user): string
     {
         $signer = new Sha256();
-        $time = time();
 
         $token = (new \Lcobucci\JWT\Builder())
-            ->issuedAt($time)
-            ->expiresAt($time + 172800) // 2 days
+            ->issuedAt(now()->timestamp)
+            ->expiresAt(now()->addDays(7)->timestamp)
             ->withClaim('channel', "user:$user->id")
             ->getToken($signer, new Key(config('app.key')));
 
