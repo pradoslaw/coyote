@@ -9,7 +9,7 @@ import { default as setToken } from "../libs/csrf";
 let el = document.getElementById('js-searchbar');
 
 const SearchbarWrapper = Vue.extend(VueSearchbar);
-el.appendChild(new SearchbarWrapper({props: {url: el.dataset.url, query: el.dataset.query}}).$mount().$el);
+el.appendChild(new SearchbarWrapper({props: {url: el.dataset.url, value: el.dataset.value}}).$mount().$el);
 
 el = document.getElementById('nav-auth');
 

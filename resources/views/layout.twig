@@ -67,7 +67,7 @@
             {% endfor %}
           </ul>
 
-          <div id="js-searchbar" class="d-none d-lg-flex flex-grow-1" data-url="{{ search_url|default(route('search')) }}" data-query="{{ input_get('q') }}"></div>
+          <div id="js-searchbar" class="d-none d-lg-flex flex-grow-1" data-url="{{ search_url|default(route('search')) }}" data-value="{{ input_get('q') }}"></div>
 
           <div class="ml-auto">
             {% if auth_check() %}
