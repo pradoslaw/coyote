@@ -7,7 +7,7 @@
         <input
           @focus="showDropdown"
           @keyup.esc="hideDropdown"
-          :value="query"
+          v-model="value"
           type="text"
           name="q"
           autocomplete="off"
@@ -98,6 +98,7 @@
 
 <script>
   import { mixin as clickaway } from 'vue-clickaway';
+  import axios from 'axios';
 
   export default {
     mixins: [clickaway],
@@ -106,14 +107,15 @@
         type: String,
         required: true
       },
-      query: {
+      value: {
         type: String
       }
     },
     data() {
       return {
         isActive: false,
-        isDropdownVisible: false
+        isDropdownVisible: false,
+        items: []
       }
     },
     methods: {
@@ -128,6 +130,11 @@
 
       blurInput() {
         this.isActive = false;
+      }
+    },
+    watch: {
+      value: (val) => {
+        axios.get('/completion', {params: {q: val}}).then(result => this.items = result);
       }
     }
   }
