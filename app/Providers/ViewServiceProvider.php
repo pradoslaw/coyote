@@ -100,6 +100,7 @@ class ViewServiceProvider extends ServiceProvider
         $token = (new \Lcobucci\JWT\Builder())
             ->issuedAt(now()->timestamp)
             ->expiresAt(now()->addDays(7)->timestamp)
+            ->issuedBy($user->id)
             ->withClaim('channel', "user:$user->id")
             ->getToken($signer, new Key(config('app.key')));
 
