@@ -6,8 +6,7 @@
                 "debug": true,
                 "corejs": 3,
                 "useBuiltIns": false
-            },
-            "@babel/plugin-proposal-optional-chaining"
+            }
         ]
     ],
     "plugins": [
