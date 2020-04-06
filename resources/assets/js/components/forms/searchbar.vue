@@ -132,6 +132,13 @@
         this.isActive = false;
       }
     },
+    computed: {
+      context() {
+        return this.items.reduce((acc, item) => {
+          const context = item.contexts;
+        }, {});
+      }
+    },
     watch: {
       value: (val) => {
         axios.get('/completion', {params: {q: val}}).then(result => this.items = result);
