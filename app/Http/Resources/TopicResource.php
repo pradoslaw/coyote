@@ -26,6 +26,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @method bool isRead()
  * @property Post[] $posts
  * @property int $topic_last_post_id
+ * @property int $replies
+ * @property int $replies_real
  */
 class TopicResource extends JsonResource
 {
@@ -37,7 +39,7 @@ class TopicResource extends JsonResource
      */
     public function toArray($request)
     {
-        $only = $this->resource->only(['id', 'subject', 'score', 'views', 'replies', 'is_sticky', 'is_locked', 'first_post_id', 'last_post_id', 'subscribers', 'accepted_id', 'is_subscribed', 'is_voted', 'is_replied', 'user_name', 'user_post_id']);
+        $only = $this->resource->only(['id', 'subject', 'score', 'views', 'is_sticky', 'is_locked', 'first_post_id', 'last_post_id', 'subscribers', 'accepted_id', 'is_subscribed', 'is_voted', 'is_replied', 'user_name', 'user_post_id']);
 
         return array_merge(
             $only,
@@ -46,6 +48,7 @@ class TopicResource extends JsonResource
                 'last_post_created_at'  => $this->last_post_created_at->toIso8601String(),
                 'url'                   => url(UrlBuilder::topic($this->resource->getModel())),
                 'is_read'               => $this->isRead(),
+                'replies'               => $this->replies($request),
                 'forum'         => [
                     'id'        => $this->forum->id,
                     'name'      => $this->forum->name,
@@ -67,5 +70,14 @@ class TopicResource extends JsonResource
                 })
             ]
         );
+    }
+
+    /**
+     * @param  \Illuminate\Http\Request  $request
+     * @return int
+     */
+    private function replies($request): int
+    {
+        return $request->user() && $request->user()->can('delete', $this->forum) ? $this->replies_real : $this->replies;
     }
 }
