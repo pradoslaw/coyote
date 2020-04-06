@@ -22,74 +22,83 @@
 <!--        </nav>-->
 
         <ul class="list-unstyled">
-          <li class="title"><span>Twoje wątki</span></li>
+          <template v-for="(items, context) in context">
+            <li class="title"><span>{{ context }}</span></li>
 
-          <li class="hover position-relative">
-            <a href="#">
-
-              <span>Które firmy IT dotknął kryzys? Sprawdź tutaj.</span> <small style="font-size: .65rem" class="text-muted">w Forum » Off-Topic</small>
-
-
-
-            </a>
-
-            <div class="position-absolute" style="right: 10px;  top: 20%;">
-              <i class="far fa-star ml-2"></i>
-              <i class="fas fa-search ml-2"></i>
-            </div>
-          </li>
-
-          <li>
-            <a href="#">
-
-              <span>Lorem ipsum lores.</span>
-              <small style="font-size: .65rem" class="text-muted">w Forum » Off-Topic</small>
-
-            </a>
-          </li>
-
-          <li class="more">
-            <a href="#">więcej ...</a>
-          </li>
-
-          <li class="title"><span>Twoje dyskusje</span></li>
-
-          <li>
-            <a href="#">
-
-              <span>Lorem ipsum lores.</span>
+            <li v-for="item in items">
+              <a :href="item.url">
+                <span v-html="highlight(item.subject)"></span> <small style="font-size: .65rem" class="text-muted">w {{ item.forum.name }}</small>
+              </a>
+            </li>
+          </template>
 
 
-            </a>
-          </li>
+<!--          <li class="hover position-relative">-->
+<!--            <a href="#">-->
 
-          <li class="title"><span>Ostatnie wyszukiwania</span></li>
-
-          <li>
-            <a href="#">
-
-              <span>Lorem ipsum lores.</span>
+<!--              <span>Które firmy IT dotknął kryzys? Sprawdź tutaj.</span> <small style="font-size: .65rem" class="text-muted">w Forum » Off-Topic</small>-->
 
 
-            </a>
-          </li>
 
-          <li class="title"><span>Użytkownicy</span></li>
+<!--            </a>-->
 
-          <li class="position-relative">
-            <a href="#" class="d-flex align-content-center">
-              <object data="https://4programmers.net/uploads/photo/4ccbfa1158d19" style="width: 16px; height: 16px" type="image/png" class="media-object mr-2"><img src="/img/avatar.png"></object>
-              <span>Marooned</span>
+<!--            <div class="position-absolute" style="right: 10px;  top: 20%;">-->
+<!--              <i class="far fa-star ml-2"></i>-->
+<!--              <i class="fas fa-search ml-2"></i>-->
+<!--            </div>-->
+<!--          </li>-->
+
+<!--          <li>-->
+<!--            <a href="#">-->
+
+<!--              <span>Lorem ipsum lores.</span>-->
+<!--              <small style="font-size: .65rem" class="text-muted">w Forum » Off-Topic</small>-->
+
+<!--            </a>-->
+<!--          </li>-->
+
+<!--          <li class="more">-->
+<!--            <a href="#">więcej ...</a>-->
+<!--          </li>-->
+
+<!--          <li class="title"><span>Twoje dyskusje</span></li>-->
+
+<!--          <li>-->
+<!--            <a href="#">-->
+
+<!--              <span>Lorem ipsum lores.</span>-->
 
 
-            </a>
+<!--            </a>-->
+<!--          </li>-->
 
-            <div class="position-absolute" style="right: 10px;  top: 20%;">
-              <i class="far fa-user ml-2"></i>
-              <i class="far fa-comment-alt ml-2"></i>
-              <i class="fas fa-search ml-2"></i>
-            </div>
-          </li>
+<!--          <li class="title"><span>Ostatnie wyszukiwania</span></li>-->
+
+<!--          <li>-->
+<!--            <a href="#">-->
+
+<!--              <span>Lorem ipsum lores.</span>-->
+
+
+<!--            </a>-->
+<!--          </li>-->
+
+<!--          <li class="title"><span>Użytkownicy</span></li>-->
+
+<!--          <li class="position-relative">-->
+<!--            <a href="#" class="d-flex align-content-center">-->
+<!--              <object data="https://4programmers.net/uploads/photo/4ccbfa1158d19" style="width: 16px; height: 16px" type="image/png" class="media-object mr-2"><img src="/img/avatar.png"></object>-->
+<!--              <span>Marooned</span>-->
+
+
+<!--            </a>-->
+
+<!--            <div class="position-absolute" style="right: 10px;  top: 20%;">-->
+<!--              <i class="far fa-user ml-2"></i>-->
+<!--              <i class="far fa-comment-alt ml-2"></i>-->
+<!--              <i class="fas fa-search ml-2"></i>-->
+<!--            </div>-->
+<!--          </li>-->
         </ul>
       </div>
     </div>
@@ -130,18 +139,36 @@
 
       blurInput() {
         this.isActive = false;
+      },
+
+      highlight(input) {
+        const re = new RegExp(`^(${this.value})`, "i");
+
+        return input.replace(re, "<strong>$1</strong>");
       }
     },
     computed: {
       context() {
         return this.items.reduce((acc, item) => {
-          const context = item.contexts;
+          const context = item.context;
+
+          if (!acc[context]) {
+            acc[context] = [];
+          }
+
+          acc[context].push(item);
+
+          return acc;
         }, {});
       }
     },
     watch: {
-      value: (val) => {
-        axios.get('/completion', {params: {q: val}}).then(result => this.items = result);
+      value: function(val) {
+        // axios.get('/completion', {params: {q: val}}).then(response => console.log(response.data));
+        axios.get('/completion', {params: {q: val}}).then(response => {
+          console.log(response.data);
+          this.items = response.data;
+        });
       }
     }
   }
