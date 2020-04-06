@@ -24,6 +24,14 @@
   .deleted {
     opacity: .6;
   }
+
+  ins {
+    color: $green;
+  }
+
+  del {
+    color: $red;
+  }
 }
 
 .post-delete {
