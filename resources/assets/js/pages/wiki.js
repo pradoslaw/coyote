@@ -68,7 +68,7 @@ $(() => {
         var formData = new FormData($form[0]);
 
         $.ajax({
-            url: _config.upload_url,
+            url: __INITIAL_STATE.upload_url,
             type: 'POST',
             data: formData,
             cache: false,
