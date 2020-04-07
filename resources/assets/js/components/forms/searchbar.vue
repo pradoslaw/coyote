@@ -108,9 +108,11 @@
 <script>
   import { mixin as clickaway } from 'vue-clickaway';
   import axios from 'axios';
+  import store from '../../store';
 
   export default {
     mixins: [clickaway],
+    store,
     props: {
       url: {
         type: String,
@@ -145,12 +147,26 @@
         const re = new RegExp(`^(${this.value})`, "i");
 
         return input.replace(re, "<strong>$1</strong>");
+      },
+
+      getContext(item) {
+        if (item.context.startsWith('user:') && item.model === 'Topic') {
+          return 'Twoje wątki';
+        }
+        else if (item.context.startsWith('users:') && item.model === 'Topic') {
+          return 'Twoje dyskusje';
+        }
+        else if (item.context.startsWith('subscribers:')) {
+          return 'Obserwowane';
+        }
+
+        return 'Wątki na forum';
       }
     },
     computed: {
       context() {
         return this.items.reduce((acc, item) => {
-          const context = item.context;
+          const context = this.getContext(item);
 
           if (!acc[context]) {
             acc[context] = [];
@@ -165,8 +181,7 @@
     watch: {
       value: function(val) {
         // axios.get('/completion', {params: {q: val}}).then(response => console.log(response.data));
-        axios.get('/completion', {params: {q: val}}).then(response => {
-          console.log(response.data);
+        axios.get('/completion', {params: {q: val}, headers: {Authorization: `Bearer ${this.$store.state.user.token}`}}).then(response => {
           this.items = response.data;
         });
       }

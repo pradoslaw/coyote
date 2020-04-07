@@ -54,20 +54,22 @@ class ViewServiceProvider extends ServiceProvider
     {
         $this->app['request']->attributes->add([
             'public'        => route('home'),
-            'notifications_unread' => 0,
-            'pm_unread'     => 0
+            'user' => [
+                'notifications_unread' => 0,
+                'pm_unread'     => 0
+            ]
         ]);
 
         if (!empty($this->app['request']->user())) {
             $user = $this->app['request']->user();
 
-            $this->app['request']->attributes->add([
+            $this->app['request']->attributes->add(['user' => [
                 'id'                    => $user->id,
                 'date_format'           => $this->mapFormat($user->date_format),
                 'token'                 => $this->getJWtToken($user),
                 'notifications_unread'  => $user->notifications_unread,
                 'pm_unread'             => $user->pm_unread
-            ]);
+            ]]);
         }
     }
 
