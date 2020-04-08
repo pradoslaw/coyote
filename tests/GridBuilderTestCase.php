@@ -40,7 +40,7 @@ abstract class GridBuilderTestCase extends TestCase
      */
     protected $formBuilder;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -54,7 +54,7 @@ abstract class GridBuilderTestCase extends TestCase
         $this->gridHelper = new GridHelper($this->request, $this->validator, $this->view, $this->htmlBuilder, $this->formBuilder);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
     }
