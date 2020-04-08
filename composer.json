@@ -17,7 +17,8 @@
         "illuminate/view": "5.8|6.*",
         "illuminate/pagination": "5.8|6.*",
         "illuminate/validation": "5.8|6.*",
-        "laravelcollective/html": "5.8|6.*"
+        "laravelcollective/html": "5.8|6.*",
+        "laravel/helpers": "^1.1"
     },
     "require-dev": {
       "phpunit/phpunit": "~8.3",
