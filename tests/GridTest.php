@@ -61,7 +61,7 @@ class GridTest extends GridBuilderTestCase
         $this->assertInstanceOf(\Boduch\Grid\Rows::class, $rows);
         $this->assertInstanceOf(\Boduch\Grid\Row::class, $rows[0]);
 
-        $this->assertEquals("<a href=\"http://4programmers.net\">http://4programmers.net\n</a>", (string) $rows[0]->getValue('website'));
+        $this->assertEquals("<a href=\"http://4programmers.net\">http://4programmers.net</a>", (string) $rows[0]->getValue('website'));
         $this->assertEquals("<a href=\"http://4programmers.net\">1</a>", (string) $rows[0]->getValue('id'));
     }
 
