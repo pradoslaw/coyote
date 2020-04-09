@@ -25,7 +25,7 @@
           <div class="media-body">
             <header>
               <h4 class="float-left"><a href="{{ url }}">{{ notification.headline }}</a></h4>
-              <small class="float-right">{{ notification.created_at }}</small>
+              <small class="float-right">{{ notification.created_at|format_date }}</small>
             </header>
 
             <h3><a href="{{ url }}">{{ notification.subject }}</a></h3>

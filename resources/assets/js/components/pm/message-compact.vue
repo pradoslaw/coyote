@@ -9,7 +9,7 @@
         <div class="media-body">
           <header class="text-truncate">
             <h4>{{ message.user.name }}</h4>
-            <small>{{ message.created_at }}</small>
+            <small><vue-timeago :datetime="message.created_at"></vue-timeago></small>
           </header>
 
           <p class="text-truncate">
@@ -27,6 +27,10 @@
 </template>
 
 <script>
+  import VueTimeago from '../../plugins/timeago';
+
+  Vue.use(VueTimeago);
+
   export default {
     props: {
       message: {

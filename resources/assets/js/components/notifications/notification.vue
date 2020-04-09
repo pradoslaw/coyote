@@ -9,7 +9,7 @@
         <div class="media-body text-truncate">
           <header>
             <h4 class="text-truncate">{{ notification.headline }}</h4>
-            <small>{{ notification.created_at }}</small>
+            <small><vue-timeago :datetime="notification.created_at"></vue-timeago></small>
           </header>
 
           <h3 class="text-truncate">{{ notification.subject }}</h3>
@@ -26,6 +26,9 @@
 
 <script>
   import store from '../../store';
+  import VueTimeago from '../../plugins/timeago';
+
+  Vue.use(VueTimeago);
 
   export default {
     props: {
