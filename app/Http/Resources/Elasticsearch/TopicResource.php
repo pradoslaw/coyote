@@ -46,13 +46,16 @@ class TopicResource extends JsonResource
                 'subject'               => htmlspecialchars($this->subject),
                 'last_post_created_at'  => $this->last_post_created_at->toIso8601String(),
                 'url'                   => UrlBuilder::topic($this->resource->getModel()),
+                'user_id'               => $this->firstPost->user_id,
                 'forum'         => [
                     'id'        => $this->forum->id,
                     'name'      => $this->forum->name,
                     'slug'      => $this->forum->slug,
                     'url'       => UrlBuilder::forum($this->forum)
                 ],
-                'suggest'       => $this->getSuggest()
+                'suggest'       => $this->getSuggest(),
+                'participants'  => $this->users()->pluck('user_id'),
+                'subscribers'   => $this->subscribers()->pluck('user_id')
             ]
         );
     }
@@ -63,13 +66,12 @@ class TopicResource extends JsonResource
     private function getSuggest(): array
     {
         $result = [];
+        $weight = $this->weight();
 
         foreach ($this->input() as $index => $input) {
-            $weight = $this->weight();
-
             $result[] = [
                 'input' => $input,
-                'weight' => $weight - ($index * 10), // each input has lower weight
+                'weight' => max(0, $weight - ($index * 100)), // each input has lower weight
                 'contexts'  => [
                     'category'     => $this->categories()
                 ]
@@ -85,9 +87,9 @@ class TopicResource extends JsonResource
     protected function weight(): int
     {
         return round(
-            ($this->replies * 10)
+            min(1000, $this->replies * 10)
                 + ($this->score * 20)
-                    + (100 * (int) ($this->accept() !== null))
+                    + ($this->accept()->exists() ? 500 : 0)
                         + (($this->last_post_created_at->timestamp - self::BASE_TIMESTAMP) / 600000)
         );
     }
@@ -97,12 +99,18 @@ class TopicResource extends JsonResource
      */
     private function input(): array
     {
-        $title = htmlspecialchars($this->subject);
-        $result = [$title];
+        $title = htmlspecialchars(trim($this->subject));
+        $words = preg_split('/\s+/', $title);
 
-        $index = mb_strpos($title, ' ');
+        if (count($words) === 1) {
+            return [$title];
+        }
 
-        $result[] = trim(mb_substr($title, $index));
+        $result = [];
+
+        for ($i = 0; $i < 2; $i++) {
+            $result[] = implode(' ', array_slice($words, $i));
+        }
 
         return $result;
     }
@@ -118,13 +126,17 @@ class TopicResource extends JsonResource
             $result[] = 'user:' . $this->firstPost->user_id;
         }
 
-        foreach ($this->subscribers()->pluck('user_id') as $subscriber) {
-            $result[] = 'subscriber:' . $subscriber;
-        }
+        $result = array_merge($result, $this->subscribers()->pluck('user_id')->map(function ($userId) {
+                return 'subscriber:' . $userId;
+            })
+            ->toArray()
+        );
 
-        foreach ($this->users()->pluck('user_id') as $userId) {
-            $result[] = 'users:' . $userId;
-        }
+        $result = array_merge($result, $this->users()->pluck('user_id')->map(function ($userId) {
+                return 'participant:' . $userId;
+            })
+            ->toArray()
+        );
 
         return $result;
     }

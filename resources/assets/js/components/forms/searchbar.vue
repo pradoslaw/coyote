@@ -5,8 +5,10 @@
 
       <form :action="url" role="search" class="flex-grow-1">
         <input
+          ref="input"
           @focus="showDropdown"
           @keyup.esc="hideDropdown"
+          @keyup="completion"
           v-model="value"
           type="text"
           name="q"
@@ -15,7 +17,7 @@
         >
       </form>
 
-      <div v-if="isDropdownVisible" class="search-dropdown">
+      <div v-if="isDropdownVisible && this.items.length > 0" class="search-dropdown">
 <!--        <nav class="list-inline" style="margin: 10px 7px 10px 7px">-->
 <!--          <a class="list-inline-item active mr-2 text-primary" href="#" style="padding: 5px; font-size: 90%; border-bottom: 2px solid #80a41a">Forum</a>-->
 <!--          <a class="list-inline-item text-body" href="#" style="padding: 5px; font-size: 90%;">Praca</a>-->
@@ -129,6 +131,12 @@
         items: []
       }
     },
+    mounted() {
+      document.addEventListener('keydown', this.keyboardSupport);
+    },
+    beforeDestroy() {
+      document.removeEventListener('keydown', this.keyboardSupport);
+    },
     methods: {
       showDropdown() {
         this.isActive = true;
@@ -153,14 +161,33 @@
         if (item.context.startsWith('user:') && item.model === 'Topic') {
           return 'Twoje wątki';
         }
-        else if (item.context.startsWith('users:') && item.model === 'Topic') {
+        else if (item.context.startsWith('participant:') && item.model === 'Topic') {
           return 'Twoje dyskusje';
         }
-        else if (item.context.startsWith('subscribers:')) {
+        else if (item.context.startsWith('subscriber:')) {
           return 'Obserwowane';
         }
 
         return 'Wątki na forum';
+      },
+
+      completion() {
+        if (this.value.trim() === '') {
+          return;
+        }
+
+        axios.get('/completion', {params: {q: this.value}, headers: {Authorization: `Bearer ${this.$store.state.user.token}`}}).then(response => {
+          this.items = response.data;
+        });
+      },
+
+      keyboardSupport(e) {
+        if (e.keyCode === 32 && (e.ctrlKey || e.metaKey)) {
+          e.preventDefault();
+
+          this.showDropdown();
+          this.$refs.input.focus();
+        }
       }
     },
     computed: {
@@ -176,14 +203,6 @@
 
           return acc;
         }, {});
-      }
-    },
-    watch: {
-      value: function(val) {
-        // axios.get('/completion', {params: {q: val}}).then(response => console.log(response.data));
-        axios.get('/completion', {params: {q: val}, headers: {Authorization: `Bearer ${this.$store.state.user.token}`}}).then(response => {
-          this.items = response.data;
-        });
       }
     }
   }
