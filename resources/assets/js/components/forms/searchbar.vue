@@ -9,6 +9,8 @@
           @focus="showDropdown"
           @keyup.esc="hideDropdown"
           @keyup="completion"
+          @keyup.up.prevent="up"
+          @keyup.down.prevent="down"
           v-model="value"
           type="text"
           name="q"
@@ -27,7 +29,7 @@
           <template v-for="(items, context) in context">
             <li class="title"><span>{{ context }}</span></li>
 
-            <li v-for="item in items">
+            <li v-for="item in items" :class="{'hover': item.index === selectedIndex}">
               <a :href="item.url">
                 <span v-html="highlight(item.subject)"></span> <small style="font-size: .65rem" class="text-muted">w {{ item.forum.name }}</small>
               </a>
@@ -63,27 +65,7 @@
 <!--            <a href="#">więcej ...</a>-->
 <!--          </li>-->
 
-<!--          <li class="title"><span>Twoje dyskusje</span></li>-->
 
-<!--          <li>-->
-<!--            <a href="#">-->
-
-<!--              <span>Lorem ipsum lores.</span>-->
-
-
-<!--            </a>-->
-<!--          </li>-->
-
-<!--          <li class="title"><span>Ostatnie wyszukiwania</span></li>-->
-
-<!--          <li>-->
-<!--            <a href="#">-->
-
-<!--              <span>Lorem ipsum lores.</span>-->
-
-
-<!--            </a>-->
-<!--          </li>-->
 
 <!--          <li class="title"><span>Użytkownicy</span></li>-->
 
@@ -121,14 +103,16 @@
         required: true
       },
       value: {
-        type: String
+        type: String,
+        default: ''
       }
     },
     data() {
       return {
         isActive: false,
         isDropdownVisible: false,
-        items: []
+        items: [],
+        selectedIndex: -1
       }
     },
     mounted() {
@@ -149,6 +133,31 @@
 
       blurInput() {
         this.isActive = false;
+      },
+
+      down() {
+        this.isDropdownShown = true;
+
+        this.changeIndex(++this.selectedIndex);
+      },
+
+      up() {
+        this.changeIndex(--this.selectedIndex);
+      },
+
+      changeIndex(index) {
+        const length = this.items.length;
+
+        if (length > 0) {
+          if (index >= length) {
+            index = 0;
+          }
+          else if (index < 0) {
+            index = length - 1;
+          }
+
+          this.selectedIndex = index;
+        }
       },
 
       highlight(input) {
@@ -172,7 +181,7 @@
       },
 
       completion() {
-        if (this.value.trim() === '') {
+        if (this.value === undefined || this.value.trim() === '') {
           return;
         }
 
@@ -192,14 +201,14 @@
     },
     computed: {
       context() {
-        return this.items.reduce((acc, item) => {
+        return this.items.reduce((acc, item, index) => {
           const context = this.getContext(item);
 
           if (!acc[context]) {
             acc[context] = [];
           }
 
-          acc[context].push(item);
+          acc[context].push(Object.assign(item, { index }));
 
           return acc;
         }, {});
