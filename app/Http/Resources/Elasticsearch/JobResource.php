@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Resources\Elasticsearch;
 
-use Illuminate\Http\Resources\Json\JsonResource;
+use Coyote\Services\UrlBuilder\UrlBuilder;
 
 /**
  * @property \Carbon\Carbon $created_at
@@ -12,7 +12,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property \Carbon\Carbon $boost_at
  * @method monthlySalary(float $salary): float
  */
-class JobResource extends JsonResource
+class JobResource extends ElasticsearchResource
 {
     /**
      * Transform the resource into an array.
@@ -54,11 +54,13 @@ class JobResource extends JsonResource
             'title'             => htmlspecialchars($this->title),
             'description'       => $this->stripTags($this->description),
             'recruitment'       => $this->stripTags($this->recruitment),
+            'url'               => UrlBuilder::job($this->resource->getModel()),
 
             'created_at'        => $this->created_at->toIso8601String(),
             'updated_at'        => $this->updated_at->toIso8601String(),
             'boost_at'          => $this->boost_at->toIso8601String(),
             'deadline_at'       => $this->deadline_at->toIso8601String(),
+            'decay_date'        => $this->boost_at->toIso8601String(),
 
             // score must be int
             'score'             => (int) $this->score,
@@ -71,7 +73,10 @@ class JobResource extends JsonResource
             // higher tag's priorities first
             'tags'              => $this->tags()->get(['name', 'priority'])->sortByDesc('pivot.priority')->pluck('name')->toArray(),
             // index null instead of 100 is job is not remote
-            'remote_range'      => $this->is_remote ? $this->remote_range : null
+            'remote_range'      => $this->is_remote ? $this->remote_range : null,
+
+            'suggest'           => $this->getSuggest(),
+            'subscribers'       => $this->subscribers()->pluck('user_id')
         ]);
 
         if ($this->firm_id) {
@@ -81,6 +86,27 @@ class JobResource extends JsonResource
         }
 
         return $body;
+    }
+
+    protected function getDefaultSuggestTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @return int
+     */
+    protected function weight(): int
+    {
+        return round(($this->score * 20) + (($this->created_at->timestamp - self::BASE_TIMESTAMP) / 600000));
+    }
+
+    /**
+     * @return array
+     */
+    protected function categories(): array
+    {
+        return ['user:' . $this->user_id];
     }
 
     /**
