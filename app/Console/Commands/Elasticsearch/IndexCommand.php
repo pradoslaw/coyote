@@ -69,11 +69,6 @@ class IndexCommand extends Command
     private function one($model)
     {
         $className = 'Coyote\\' . ucfirst(strtolower($model));
-        $models = $this->getSuitableModels();
-
-        if (!in_array($className, $models)) {
-            $this->error("Model $className does not exist nor implement Searchable trait.");
-        }
 
         $this->index($className);
     }

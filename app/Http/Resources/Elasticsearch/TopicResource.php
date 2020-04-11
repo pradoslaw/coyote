@@ -7,7 +7,6 @@ use Coyote\Forum;
 use Coyote\Post;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\User;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @property int $id
@@ -26,10 +25,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @method \Illuminate\Database\Eloquent\Relations\HasMany users()
  * @method \Illuminate\Database\Eloquent\Relations\HasOne accept()
  */
-class TopicResource extends JsonResource
+class TopicResource extends ElasticsearchResource
 {
-    const BASE_TIMESTAMP = 946684800;
-
     /**
      * Transform the resource into an array.
      *
@@ -45,6 +42,7 @@ class TopicResource extends JsonResource
             [
                 'subject'               => htmlspecialchars($this->subject),
                 'last_post_created_at'  => $this->last_post_created_at->toIso8601String(),
+                'decay_date'            => $this->last_post_created_at->toIso8601String(),
                 'url'                   => UrlBuilder::topic($this->resource->getModel()),
                 'user_id'               => $this->firstPost->user_id,
                 'forum'         => [
@@ -60,25 +58,9 @@ class TopicResource extends JsonResource
         );
     }
 
-    /**
-     * @return array
-     */
-    private function getSuggest(): array
+    protected function getDefaultSuggestTitle(): ?string
     {
-        $result = [];
-        $weight = $this->weight();
-
-        foreach ($this->input() as $index => $input) {
-            $result[] = [
-                'input' => $input,
-                'weight' => max(0, $weight - ($index * 100)), // each input has lower weight
-                'contexts'  => [
-                    'category'     => $this->categories()
-                ]
-            ];
-        }
-
-        return $result;
+        return $this->subject;
     }
 
     /**
@@ -97,28 +79,7 @@ class TopicResource extends JsonResource
     /**
      * @return array
      */
-    private function input(): array
-    {
-        $title = htmlspecialchars(trim($this->subject));
-        $words = preg_split('/\s+/', $title);
-
-        if (count($words) === 1) {
-            return [$title];
-        }
-
-        $result = [];
-
-        for ($i = 0; $i < 2; $i++) {
-            $result[] = implode(' ', array_slice($words, $i));
-        }
-
-        return $result;
-    }
-
-    /**
-     * @return array
-     */
-    private function categories(): array
+    protected function categories(): array
     {
         $result = ['forum:' . $this->forum->id];
 
