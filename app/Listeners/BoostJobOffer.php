@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Coyote\Events\PaymentPaid;
 use Coyote\Notifications\SuccessfulPaymentNotification;
 use Coyote\Payment;
+use Coyote\Services\Elasticsearch\Crawler\Crawler;
 use Illuminate\Database\Connection;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Coyote\Services\Invoice\Enumerator as InvoiceEnumerator;
@@ -80,7 +81,7 @@ class BoostJobOffer implements ShouldQueue
             $event->payment->job->save();
 
             // index job offer
-            $event->payment->job->putToIndex();
+            (new Crawler())->index($event->payment->job);
 
             // send email with invoice
             $event->payment->job->user->notify(
