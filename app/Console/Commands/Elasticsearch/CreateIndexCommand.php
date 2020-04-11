@@ -111,24 +111,28 @@ class CreateIndexCommand extends Command
                                 "type" => "keyword"
                             ],
                             "created_at" => [
-                                "type" => "date",
-//                                "format" => "yyyy-MM-dd HH:mm:ss"
+                                "type" => "date"
                             ],
                             "updated_at" => [
-                                "type" => "date",
-//                                "format" => "yyyy-MM-dd HH:mm:ss"
+                                "type" => "date"
                             ],
                             "deadline_at" => [
                                 "type" => "date",
-//                                "format" => "yyyy-MM-dd HH:mm:ss"
                             ],
                             "boost_at" => [
                                 "type" => "date",
-//                                "format" => "yyyy-MM-dd HH:mm:ss"
+                                "copy_to" => "decay_date"
+                            ],
+                            "visited_at" => [
+                                "type" => "date",
+                                "copy_to" => "decay_date"
                             ],
                             "last_post_created_at" => [
                                 "type" => "date",
-//                                "format" => "yyyy-MM-dd HH:mm:ss"
+                                "copy_to" => "decay_date"
+                            ],
+                            "decay_date" => [
+                                "type" => "date"
                             ],
                             "text" => [
                                 "type" => "text",
@@ -248,6 +252,11 @@ class CreateIndexCommand extends Command
                                 "analyzer" => "stopwords_analyzer"
                             ],
                             "user_name" => [
+                                "type" => "text",
+                                // ability to search case insensitive
+                                "analyzer" => "keyword_analyzer"
+                            ],
+                            "name" => [
                                 "type" => "text",
                                 // ability to search case insensitive
                                 "analyzer" => "keyword_analyzer"
