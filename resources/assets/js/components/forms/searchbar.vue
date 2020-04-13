@@ -7,7 +7,7 @@
         <input
           ref="input"
           @focus="showDropdown"
-          @keyup.esc="hideDropdown"
+          @keydown.esc.prevent="hideDropdown"
           @keyup="completion"
           @keyup.up.prevent="up"
           @keyup.down.prevent="down"
@@ -21,7 +21,7 @@
         >
       </form>
 
-      <div v-if="isDropdownVisible" class="search-dropdown">
+      <div v-if="isDropdownVisible && items.length > 0" class="search-dropdown">
 <!--      <div v-if="isDropdownVisible && items.length > 0" class="search-dropdown">-->
 <!--        <nav class="list-inline" style="margin: 10px 7px 10px 7px">-->
 <!--          <a class="list-inline-item active mr-2 text-primary" href="#" style="padding: 5px; font-size: 90%; border-bottom: 2px solid #80a41a">Forum</a>-->
@@ -30,15 +30,15 @@
 
         <ul class="list-unstyled">
           <template v-for="(items, context) in contexts">
-            <li class="title"><span>{{ context }}</span></li>
+            <li class="title"><span>{{ getContextLabel(context) }}</span></li>
 
             <li v-for="(item) in items" :class="{'hover': item.index === selectedIndex}" @mouseover="hoverItem(item.index)">
               <component :is="getDecorator(item)" :item="item" :value="value"></component>
             </li>
 
-            <li v-if="contexts.length > 0" class="more">
-              <a href="#">więcej ...</a>
-            </li>
+<!--            <li v-if="contexts.length > 0" class="more">-->
+<!--              <a href="#">więcej ...</a>-->
+<!--            </li>-->
           </template>
         </ul>
       </div>
@@ -121,8 +121,8 @@
           '<a :href="item.url" class="d-flex align-content-center text-truncate">' +
             '<vue-avatar :photo="item.photo" class="i-16 mr-2"></vue-avatar> <span v-html="highlight(item.name, value)"></span>' +
             '<div class="item-options">' +
-              '<a :href="item.url" class="ml-3" title="Przejdź do profilu użytkownika"><i class="far fa-user"></i></a>' +
-              '<a :href="\'/User/Pm/Submit?to=\' + item.name" class="ml-3" title="Napisz wiadomość"><i class="far fa-comment"></i></a>' +
+              '<a :href="item.url" class="ml-3" title="Przejdź do profilu użytkownika"><i class="fas fa-user"></i></a>' +
+              '<a :href="\'/User/Pm/Submit?to=\' + item.name" class="ml-3" title="Napisz wiadomość"><i class="fas fa-comment"></i></a>' +
               '<a :href="\'/Forum/User/\' + item.id" class="ml-3" title="Znajdź posty użytkownika"><i class="fas fa-search"></i></a>' +
             '</div>' +
           '</a>'
@@ -210,8 +210,8 @@
         }
       },
 
-      getContext(item) {
-        return CONTEXTS[item.context];
+      getContextLabel(context) {
+        return CONTEXTS[context];
       },
 
       completion(event) {
@@ -219,6 +219,7 @@
           return;
         }
 
+        this.selectedIndex = -1; // reset position index after key pressed
         this.getItems();
       },
 
@@ -258,13 +259,11 @@
         let counter = 0;
 
         let categories = this.items.reduce((acc, item) => {
-          const context = this.getContext(item);
-
-          if (!acc[context]) {
-            acc[context] = [];
+          if (!acc[item.context]) {
+            acc[item.context] = [];
           }
 
-          acc[context].push(item);
+          acc[item.context].push(item);
 
           return acc;
         }, {});
