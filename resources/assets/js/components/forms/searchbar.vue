@@ -17,7 +17,7 @@
           type="search"
           name="q"
           autocomplete="off"
-          placeholder="Kliknij, aby wyszukać"
+          placeholder="Kliknij, aby wyszukać (Ctrl+spacja)"
         >
       </form>
 
@@ -87,7 +87,8 @@
           return text;
         }
 
-        const re = new RegExp(`^(${this.value})`, "i");
+        const ascii = this.value.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+        const re = new RegExp(`\\b(${this.value}|${ascii})`, "i");
 
         return text.replace(re, "<strong>$1</strong>");
       }
