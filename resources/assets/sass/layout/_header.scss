@@ -151,16 +151,29 @@ body.padding-top {
   width: 100%;
   background-color: #fff;
   left: 0;
-  top: 0;
+  top: -1px;
   margin-top: 32px;
+
+  .item-options {
+    position: absolute;
+    right: 10px;
+    display: none;
+
+    i {
+      color: $text-muted;
+    }
+  }
 
   li {
     &.hover {
       background-color: $dropdown-link-hover-bg;
+
+      .item-options {
+        display: inline;
+      }
     }
 
     > a {
-      overflow: hidden;
       padding: 5px 10px;
       display: block;
       color: $gray-800;
@@ -195,9 +208,8 @@ body.padding-top {
     }
   }
 
-  .fa-external-link-alt.text-muted,
-  .fa-search.text-muted {
-    font-size: .7rem;
+  .forum-name {
+    font-size: .65rem;
   }
 }
 
@@ -226,14 +238,14 @@ body.padding-top {
     width: 100%;
     line-height: 22px;
     outline: 0;
-    font-size: .9rem;
+    font-size: .8rem;
   }
 
   .search-bar-active {
     &.search-bar {
       background-color: #fff;
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
+      //border-bottom-left-radius: 0;
+      //border-bottom-right-radius: 0;
     }
 
     input {

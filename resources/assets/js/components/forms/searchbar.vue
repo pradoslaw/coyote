@@ -11,78 +11,35 @@
           @keyup="completion"
           @keyup.up.prevent="up"
           @keyup.down.prevent="down"
+          @keydown.enter.prevent="changePage"
+          @search="clearInput"
           v-model="value"
-          type="text"
+          type="search"
           name="q"
           autocomplete="off"
           placeholder="Kliknij, aby wyszukać"
         >
       </form>
 
-      <div v-if="isDropdownVisible && this.items.length > 0" class="search-dropdown">
+      <div v-if="isDropdownVisible" class="search-dropdown">
+<!--      <div v-if="isDropdownVisible && items.length > 0" class="search-dropdown">-->
 <!--        <nav class="list-inline" style="margin: 10px 7px 10px 7px">-->
 <!--          <a class="list-inline-item active mr-2 text-primary" href="#" style="padding: 5px; font-size: 90%; border-bottom: 2px solid #80a41a">Forum</a>-->
 <!--          <a class="list-inline-item text-body" href="#" style="padding: 5px; font-size: 90%;">Praca</a>-->
 <!--        </nav>-->
 
         <ul class="list-unstyled">
-          <template v-for="(items, context) in context">
+          <template v-for="(items, context) in contexts">
             <li class="title"><span>{{ context }}</span></li>
 
-            <li v-for="item in items" :class="{'hover': item.index === selectedIndex}">
-              <a :href="item.url">
-                <span v-html="highlight(item.subject)"></span> <small style="font-size: .65rem" class="text-muted">w {{ item.forum.name }}</small>
-              </a>
+            <li v-for="(item) in items" :class="{'hover': item.index === selectedIndex}" @mouseover="hoverItem(item.index)">
+              <component :is="getDecorator(item)" :item="item" :value="value"></component>
+            </li>
+
+            <li v-if="contexts.length > 0" class="more">
+              <a href="#">więcej ...</a>
             </li>
           </template>
-
-
-<!--          <li class="hover position-relative">-->
-<!--            <a href="#">-->
-
-<!--              <span>Które firmy IT dotknął kryzys? Sprawdź tutaj.</span> <small style="font-size: .65rem" class="text-muted">w Forum » Off-Topic</small>-->
-
-
-
-<!--            </a>-->
-
-<!--            <div class="position-absolute" style="right: 10px;  top: 20%;">-->
-<!--              <i class="far fa-star ml-2"></i>-->
-<!--              <i class="fas fa-search ml-2"></i>-->
-<!--            </div>-->
-<!--          </li>-->
-
-<!--          <li>-->
-<!--            <a href="#">-->
-
-<!--              <span>Lorem ipsum lores.</span>-->
-<!--              <small style="font-size: .65rem" class="text-muted">w Forum » Off-Topic</small>-->
-
-<!--            </a>-->
-<!--          </li>-->
-
-<!--          <li class="more">-->
-<!--            <a href="#">więcej ...</a>-->
-<!--          </li>-->
-
-
-
-<!--          <li class="title"><span>Użytkownicy</span></li>-->
-
-<!--          <li class="position-relative">-->
-<!--            <a href="#" class="d-flex align-content-center">-->
-<!--              <object data="https://4programmers.net/uploads/photo/4ccbfa1158d19" style="width: 16px; height: 16px" type="image/png" class="media-object mr-2"><img src="/img/avatar.png"></object>-->
-<!--              <span>Marooned</span>-->
-
-
-<!--            </a>-->
-
-<!--            <div class="position-absolute" style="right: 10px;  top: 20%;">-->
-<!--              <i class="far fa-user ml-2"></i>-->
-<!--              <i class="far fa-comment-alt ml-2"></i>-->
-<!--              <i class="fas fa-search ml-2"></i>-->
-<!--            </div>-->
-<!--          </li>-->
         </ul>
       </div>
     </div>
@@ -93,6 +50,85 @@
   import { mixin as clickaway } from 'vue-clickaway';
   import axios from 'axios';
   import store from '../../store';
+  import VueAvatar from '../avatar.vue';
+
+  const ESC = 27;
+  const ENTER = 13;
+  const UP = 38;
+  const DOWN = 40;
+  const SHIFT = 16;
+  const TAB = 9;
+  const CTRL = 17;
+  const ALT = 18;
+
+  const CONTEXTS = {
+    'user_topic': 'Twoje wątki',
+    'subscribed_topic': 'Obserwowane wątki',
+    'participant_topic': 'Twoje dyskusje',
+    'user_job': 'Twoje oferty pracy',
+    'subscribed_job': 'Zapisane oferty pracy',
+    'topic': 'Wątki na forum',
+    'job': 'Oferty pracy',
+    'user': 'Użytkownicy'
+  };
+
+  const decorator = {
+    props: {
+      value: {
+        type: String,
+      },
+      item: {
+        type: Object
+      }
+    },
+    methods: {
+      highlight(text) {
+        if (!this.value) {
+          return text;
+        }
+
+        const re = new RegExp(`^(${this.value})`, "i");
+
+        return text.replace(re, "<strong>$1</strong>");
+      }
+    }
+  };
+
+  const decorators = [
+    {
+      name: "Topic",
+      component: {
+        props: decorator.props,
+        methods: decorator.methods,
+        template: '<a :href="item.url" class="text-truncate"><span v-html="highlight(item.subject, value)"></span> <small class="forum-name text-muted">w {{ item.forum.name }}</small></a>'
+      }
+    },
+    {
+      name: "Job",
+      component: {
+        props: decorator.props,
+        methods: decorator.methods,
+        template: '<a :href="item.url" class="text-truncate"><span v-html="highlight(item.title, value)"></span></a>'
+      }
+    },
+    {
+      name: "User",
+      component: {
+        props: decorator.props,
+        methods: decorator.methods,
+        components: { 'vue-avatar': VueAvatar },
+        template:
+          '<a :href="item.url" class="d-flex align-content-center text-truncate">' +
+            '<vue-avatar :photo="item.photo" class="i-16 mr-2"></vue-avatar> <span v-html="highlight(item.name, value)"></span>' +
+            '<div class="item-options">' +
+              '<a :href="item.url" class="ml-3" title="Przejdź do profilu użytkownika"><i class="far fa-user"></i></a>' +
+              '<a :href="\'/User/Pm/Submit?to=\' + item.name" class="ml-3" title="Napisz wiadomość"><i class="far fa-comment"></i></a>' +
+              '<a :href="\'/Forum/User/\' + item.id" class="ml-3" title="Znajdź posty użytkownika"><i class="fas fa-search"></i></a>' +
+            '</div>' +
+          '</a>'
+      }
+    }
+  ];
 
   export default {
     mixins: [clickaway],
@@ -112,37 +148,51 @@
         isActive: false,
         isDropdownVisible: false,
         items: [],
-        selectedIndex: -1
+        selectedIndex: -1,
+        decorators
       }
     },
     mounted() {
-      document.addEventListener('keydown', this.keyboardSupport);
+      document.addEventListener('keydown', this.shortcutSupport);
     },
     beforeDestroy() {
-      document.removeEventListener('keydown', this.keyboardSupport);
+      document.removeEventListener('keydown', this.shortcutSupport);
     },
     methods: {
       showDropdown() {
         this.isActive = true;
         this.isDropdownVisible = true;
+
+        // show basic set of links for given user even if no query was provided
+        this.getItems();
       },
 
       hideDropdown() {
         this.isDropdownVisible = false;
+        this.value = '';
       },
 
       blurInput() {
         this.isActive = false;
       },
 
+      clearInput() {
+        this.value = '';
+        this.getItems();
+      },
+
       down() {
-        this.isDropdownShown = true;
+        this.isDropdownVisible = true;
 
         this.changeIndex(++this.selectedIndex);
       },
 
       up() {
         this.changeIndex(--this.selectedIndex);
+      },
+
+      hoverItem(index) {
+        this.selectedIndex = index;
       },
 
       changeIndex(index) {
@@ -160,58 +210,68 @@
         }
       },
 
-      highlight(input) {
-        const re = new RegExp(`^(${this.value})`, "i");
-
-        return input.replace(re, "<strong>$1</strong>");
-      },
-
       getContext(item) {
-        if (item.context.startsWith('user:') && item.model === 'Topic') {
-          return 'Twoje wątki';
-        }
-        else if (item.context.startsWith('participant:') && item.model === 'Topic') {
-          return 'Twoje dyskusje';
-        }
-        else if (item.context.startsWith('subscriber:')) {
-          return 'Obserwowane';
-        }
-
-        return 'Wątki na forum';
+        return CONTEXTS[item.context];
       },
 
-      completion() {
-        if (this.value === undefined || this.value.trim() === '') {
+      completion(event) {
+        if ([UP, DOWN, ESC, ENTER, SHIFT, TAB, CTRL, ALT].includes(event.keyCode)) {
           return;
         }
 
-        axios.get('/completion', {params: {q: this.value}, headers: {Authorization: `Bearer ${this.$store.state.user.token}`}}).then(response => {
+        this.getItems();
+      },
+
+      getItems() {
+        axios.get(this.getEndpoint(), {params: {q: this.value || null}, headers: {Authorization: `Bearer ${this.$store.state.user.token}`}}).then(response => {
           this.items = response.data;
+          this.isDropdownVisible = true;
         });
       },
 
-      keyboardSupport(e) {
-        if (e.keyCode === 32 && (e.ctrlKey || e.metaKey)) {
-          e.preventDefault();
+      getEndpoint() {
+        return this.value === undefined || this.value.trim() === '' ? '/completion/hub/' : '/completion/';
+      },
 
-          this.showDropdown();
+      shortcutSupport(event) {
+        if (event.keyCode === 32 && (event.ctrlKey || event.metaKey)) {
+          event.preventDefault();
+
           this.$refs.input.focus();
         }
+      },
+
+      changePage() {
+        if (this.selectedIndex === -1) {
+          return;
+        }
+
+        window.location.href = this.items.find(item => item.index === this.selectedIndex).url;
+      },
+
+      getDecorator(item) {
+        return this.decorators.find(decorator => decorator.name === item.model).component;
       }
     },
     computed: {
-      context() {
-        return this.items.reduce((acc, item, index) => {
+      contexts() {
+        let counter = 0;
+
+        let categories = this.items.reduce((acc, item) => {
           const context = this.getContext(item);
 
           if (!acc[context]) {
             acc[context] = [];
           }
 
-          acc[context].push(Object.assign(item, { index }));
+          acc[context].push(item);
 
           return acc;
         }, {});
+
+        Object.values(categories).map(category => category.map(item => item.index = counter++));
+
+        return categories;
       }
     }
   }
