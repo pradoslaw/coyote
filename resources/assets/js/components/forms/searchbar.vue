@@ -3,7 +3,7 @@
     <div :class="{'search-bar-active': isActive}" class="search-bar">
       <i class="fas fa-search ml-2 mr-2"></i>
 
-      <form :action="url" role="search" class="flex-grow-1">
+      <form :action="url" role="search" ref="search" class="flex-grow-1">
         <input
           ref="input"
           @focus="showDropdown"
@@ -11,7 +11,7 @@
           @keyup="completion"
           @keyup.up.prevent="up"
           @keyup.down.prevent="down"
-          @keydown.enter.prevent="changePage"
+          @keydown.enter.prevent="changeUrl"
           @search="clearInput"
           v-model="value"
           type="search"
@@ -29,11 +29,11 @@
 <!--        </nav>-->
 
         <ul class="list-unstyled">
-          <template v-for="(items, context) in contexts">
-            <li class="title"><span>{{ getContextLabel(context) }}</span></li>
+          <template v-for="category in categories">
+            <li class="title"><span>{{ getCategoryLabel(category) }}</span></li>
 
-            <li v-for="(item) in items" :class="{'hover': item.index === selectedIndex}" @mouseover="hoverItem(item.index)">
-              <component :is="getDecorator(item)" :item="item" :value="value"></component>
+            <li v-for="child in category.children" :class="{'hover': child.index === selectedIndex}" @mouseover="hoverItem(child.index)">
+              <component :is="makeDecorator(child)" :item="child" :value="value"></component>
             </li>
 
 <!--            <li v-if="contexts.length > 0" class="more">-->
@@ -61,15 +61,22 @@
   const CTRL = 17;
   const ALT = 18;
 
+  const MODELS = {
+    'Topic': 'Wątki na forum',
+    'Job': 'Oferty pracy',
+    'User': 'Użytkownicy'
+  };
+
   const CONTEXTS = {
-    'user_topic': 'Twoje wątki',
-    'subscribed_topic': 'Obserwowane wątki',
-    'participant_topic': 'Twoje dyskusje',
-    'user_job': 'Twoje oferty pracy',
-    'subscribed_job': 'Zapisane oferty pracy',
-    'topic': 'Wątki na forum',
-    'job': 'Oferty pracy',
-    'user': 'Użytkownicy'
+    'Topic': {
+      'user': 'Twoje wątki',
+      'subscriber': 'Obserwowane wątki',
+      'participant': 'Twoje dyskusje',
+    },
+    'Job': {
+      'user': 'Twoje oferty pracy',
+      'subscriber': 'Zapisane oferty pracy',
+    }
   };
 
   const decorator = {
@@ -99,24 +106,21 @@
     {
       name: "Topic",
       component: {
-        props: decorator.props,
-        methods: decorator.methods,
+        mixins: [ decorator ],
         template: '<a :href="item.url" class="text-truncate"><span v-html="highlight(item.subject, value)"></span> <small class="forum-name text-muted">w {{ item.forum.name }}</small></a>'
       }
     },
     {
       name: "Job",
       component: {
-        props: decorator.props,
-        methods: decorator.methods,
+        mixins: [ decorator ],
         template: '<a :href="item.url" class="text-truncate"><span v-html="highlight(item.title, value)"></span></a>'
       }
     },
     {
       name: "User",
       component: {
-        props: decorator.props,
-        methods: decorator.methods,
+        mixins: [ decorator ],
         components: { 'vue-avatar': VueAvatar },
         template:
           '<a :href="item.url" class="d-flex align-content-center text-truncate">' +
@@ -211,8 +215,8 @@
         }
       },
 
-      getContextLabel(context) {
-        return CONTEXTS[context];
+      getCategoryLabel(category) {
+        return category.context !== undefined ? CONTEXTS[category.model][category.context] : MODELS[category.model];
       },
 
       completion(event) {
@@ -243,35 +247,41 @@
         }
       },
 
-      changePage() {
+      changeUrl() {
         if (this.selectedIndex === -1) {
-          return;
+          this.$refs.search.submit();
         }
 
         window.location.href = this.items.find(item => item.index === this.selectedIndex).url;
       },
 
-      getDecorator(item) {
+      makeDecorator(item) {
         return this.decorators.find(decorator => decorator.name === item.model).component;
       }
     },
     computed: {
-      contexts() {
+      categories() {
         let counter = 0;
+        let result = {};
 
-        let categories = this.items.reduce((acc, item) => {
-          if (!acc[item.context]) {
-            acc[item.context] = [];
+        this.items.forEach(item => {
+          const key = `${item.model}-${item.context}`;
+          let model, context;
+
+          ({model, context} = item);
+
+          if (!result[key]) {
+            result[key] = {children: [], model, context}
           }
 
-          acc[item.context].push(item);
+          result[key].children.push(item);
+        });
 
-          return acc;
-        }, {});
+        return Object.values(result).map(category => {
+          category.children.map(child => Object.assign(child, { index: counter++ }));
 
-        Object.values(categories).map(category => category.map(item => item.index = counter++));
-
-        return categories;
+          return category;
+        });
       }
     }
   }
