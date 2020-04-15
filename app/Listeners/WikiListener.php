@@ -5,6 +5,7 @@ namespace Coyote\Listeners;
 use Coyote\Events\WikiWasDeleted;
 use Coyote\Events\WikiWasSaved;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
+use Coyote\Services\Elasticsearch\Crawler;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class WikiListener implements ShouldQueue
@@ -15,11 +16,18 @@ class WikiListener implements ShouldQueue
     protected $wiki;
 
     /**
-     * @param WikiRepository $wiki
+     * @var Crawler
      */
-    public function __construct(WikiRepository $wiki)
+    protected $crawler;
+
+    /**
+     * @param WikiRepository $wiki
+     * @param Crawler $crawler
+     */
+    public function __construct(WikiRepository $wiki, Crawler $crawler)
     {
         $this->wiki = $wiki;
+        $this->crawler = $crawler;
     }
 
     /**
@@ -27,21 +35,18 @@ class WikiListener implements ShouldQueue
      */
     public function onWikiSave(WikiWasSaved $event)
     {
-        $event->wiki->putToIndex();
+        $this->crawler->index($event->wiki);
     }
 
     /**
-     * Remove page from elasticsearch.
-     *
      * @param WikiWasDeleted $event
+     * @throws \Exception
      */
     public function onWikiDelete(WikiWasDeleted $event)
     {
-        try {
-            $this->wiki->withTrashed()->find($event->wiki['id'])->deleteFromIndex();
-        } catch (\Exception $e) {
-            app('log')->warning($e->getMessage());
-        }
+        $wiki = $this->wiki->withTrashed()->find($event->wiki['id']);
+
+        $this->crawler->delete($wiki);
     }
 
     /**

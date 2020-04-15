@@ -3,7 +3,7 @@
 namespace Coyote\Listeners;
 
 use Coyote\Events\StreamSaved;
-use Coyote\Services\Elasticsearch\Crawler\Crawler;
+use Coyote\Services\Elasticsearch\Crawler;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class IndexStream implements ShouldQueue

@@ -6,7 +6,7 @@ use Coyote\Events\TopicWasDeleted;
 use Coyote\Events\TopicWasMoved;
 use Coyote\Post;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
-use Coyote\Services\Elasticsearch\Crawler\Crawler;
+use Coyote\Services\Elasticsearch\Crawler;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class TopicListener implements ShouldQueue
@@ -23,11 +23,12 @@ class TopicListener implements ShouldQueue
 
     /**
      * @param TopicRepository $topic
+     * @param Crawler $crawler
      */
-    public function __construct(TopicRepository $topic)
+    public function __construct(TopicRepository $topic, Crawler $crawler)
     {
         $this->topic = $topic;
-        $this->crawler = new Crawler();
+        $this->crawler = $crawler;
     }
 
     /**

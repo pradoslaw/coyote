@@ -4,6 +4,7 @@ namespace Coyote\Console\Commands;
 
 use Carbon\Carbon;
 use Coyote\Repositories\Contracts\PaymentRepositoryInterface;
+use Coyote\Services\Elasticsearch\Crawler;
 use Illuminate\Console\Command;
 
 class BoostJobsCommand extends Command
@@ -43,6 +44,7 @@ class BoostJobsCommand extends Command
     public function handle()
     {
         $payments = $this->payment->ongoingPaymentsWithBoostBenefit();
+        $crawler = new Crawler();
 
         foreach ($payments as $payment) {
             $every = floor($payment->days / max(2, $payment->plan->boost));
@@ -54,7 +56,7 @@ class BoostJobsCommand extends Command
 
                 $this->info("Boosting {$payment->job->title}");
 
-                $payment->job->putToIndex();
+                $crawler->index($payment->job);
             }
         }
 
