@@ -5,6 +5,7 @@ namespace Coyote\Listeners;
 use Coyote\Events\MicroblogWasDeleted;
 use Coyote\Events\MicroblogWasSaved;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
+use Coyote\Services\Elasticsearch\Crawler;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class MicroblogListener implements ShouldQueue
@@ -15,11 +16,18 @@ class MicroblogListener implements ShouldQueue
     protected $microblog;
 
     /**
-     * @param MicroblogRepository $microblog
+     * @var Crawler
      */
-    public function __construct(MicroblogRepository $microblog)
+    protected $crawler;
+
+    /**
+     * @param MicroblogRepository $microblog
+     * @param Crawler $crawler
+     */
+    public function __construct(MicroblogRepository $microblog, Crawler $crawler)
     {
         $this->microblog = $microblog;
+        $this->crawler = $crawler;
     }
 
     /**
@@ -27,15 +35,18 @@ class MicroblogListener implements ShouldQueue
      */
     public function onMicroblogSave(MicroblogWasSaved $event)
     {
-        $event->microblog->putToIndex();
+        $this->crawler->index($event->microblog);
     }
 
     /**
      * @param MicroblogWasDeleted $event
+     * @throws \Exception
      */
-    public function onTopicDelete(MicroblogWasDeleted $event)
+    public function onMicroblogDelete(MicroblogWasDeleted $event)
     {
-        $this->microblog->withTrashed()->find($event->microblog['id'])->deleteFromIndex();
+        $microblog = $this->microblog->withTrashed()->find($event->microblog['id']);
+
+        $this->crawler->delete($microblog);
     }
 
     /**
@@ -52,7 +63,7 @@ class MicroblogListener implements ShouldQueue
 
         $events->listen(
             MicroblogWasDeleted::class,
-            'Coyote\Listeners\MicroblogListener@onTopicDelete'
+            'Coyote\Listeners\MicroblogListener@onMicroblogDelete'
         );
     }
 }

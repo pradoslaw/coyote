@@ -199,20 +199,4 @@ class Wiki extends Model
 
         return $this->html = app('parser.wiki')->parse($this->text ?? '');
     }
-
-    /**
-     * Default data to index in elasticsearch
-     *
-     * @return mixed
-     */
-    protected function getIndexBody()
-    {
-        $body = array_except($this->parentGetIndexBody(), ['is_locked', 'templates', 'views', 'template', 'wiki_id', 'parent_id']);
-
-        return array_merge($body, [
-            'title'     => htmlspecialchars($this->title),
-            'text'      => strip_tags($this->getHtmlAttribute()),
-            'excerpt'   => htmlspecialchars($this->excerpt)
-        ]);
-    }
 }

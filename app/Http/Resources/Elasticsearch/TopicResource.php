@@ -35,7 +35,7 @@ class TopicResource extends ElasticsearchResource
      */
     public function toArray($request)
     {
-        $only = $this->resource->only(['id', 'score', 'replies']);
+        $only = $this->resource->only(['id', 'score', 'slug', 'replies']);
 
         return array_merge(
             $only,

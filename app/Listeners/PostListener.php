@@ -5,7 +5,7 @@ namespace Coyote\Listeners;
 use Coyote\Events\PostWasDeleted;
 use Coyote\Events\PostWasSaved;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
-use Coyote\Services\Elasticsearch\Crawler\Crawler;
+use Coyote\Services\Elasticsearch\Crawler;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class PostListener implements ShouldQueue

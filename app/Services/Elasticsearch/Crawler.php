@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Services\Elasticsearch\Crawler;
+namespace Coyote\Services\Elasticsearch;
 
 use Elasticsearch\Client;
 use Elasticsearch\Common\Exceptions\Missing404Exception;

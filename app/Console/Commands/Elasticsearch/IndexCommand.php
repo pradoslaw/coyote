@@ -4,7 +4,7 @@ namespace Coyote\Console\Commands\Elasticsearch;
 
 use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Coyote\Repositories\Contracts\PostRepositoryInterface;
-use Coyote\Services\Elasticsearch\Crawler\Crawler;
+use Coyote\Services\Elasticsearch\Crawler;
 use Illuminate\Console\Command;
 use Illuminate\Container\Container as App;
 use Illuminate\Database\Query\Expression;

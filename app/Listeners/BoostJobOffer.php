@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Coyote\Events\PaymentPaid;
 use Coyote\Notifications\SuccessfulPaymentNotification;
 use Coyote\Payment;
-use Coyote\Services\Elasticsearch\Crawler\Crawler;
+use Coyote\Services\Elasticsearch\Crawler;
 use Illuminate\Database\Connection;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Coyote\Services\Invoice\Enumerator as InvoiceEnumerator;
