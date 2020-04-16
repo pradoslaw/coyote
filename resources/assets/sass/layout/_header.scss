@@ -12,22 +12,22 @@ body.padding-top {
 //}
 
 :root {
-  --header-font-family: "Open Sans", Arial, sans-serif;
-  --header-font-size: 13px;
   --header-navbar-bg: url('/img/background.png') repeat;
   --header-color: #3c3c3c;
   --header-hover-color: #454545;
   --header-active-bg: #e7e7e7;
+  --header-search-bg: #{$white};
+  --header-search-border: #ccc;
 }
 
 .navbar-dark {
-  --header-font-family: "Open Sans", Arial, sans-serif;
-  --header-font-size: 13px;
   --header-navbar-bg: #454545;
   --header-color: #eee;
-  --header-hover-color: #80a41a;
+  --header-hover-color: #{$primary};
   --header-active-bg: #454545;
-  --header-group-link-color: #9d9d9d; // $gray-lighter
+  --header-group-link-color: #{$gray-lighter};
+  --header-search-bg: #{$gray-light};
+  --header-search-border: transparent;
 }
 
 .navbar-header {
@@ -77,8 +77,6 @@ body.padding-top {
 
 %menu-link {
   color: var(--header-color);
-  font-family: var(--header-font-family);
-  font-size: var(--header-font-size);
   display: block;
   text-decoration: none;
 
@@ -214,8 +212,8 @@ body.padding-top {
 }
 
 .nav-search {
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 2rem;
+  padding-right: 2rem;
   width: 100%;
 
   .search-bar {
@@ -225,7 +223,8 @@ body.padding-top {
     position: relative;
     border-radius: 3px;
     padding: 5px;
-    background-color: $gray-light;
+    background-color: var(--header-search-bg);
+    border: 1px solid var(--header-search-border);
   }
 
   .fa-search {
@@ -233,19 +232,23 @@ body.padding-top {
   }
 
   input {
+    background-color: var(--header-search-bg);
     padding: 0;
-    color: $gray-light;
+    color: var(--header-color);
     width: 100%;
     line-height: 22px;
     outline: 0;
     font-size: .8rem;
+    border: none;
+
+    &::placeholder {
+      color: inherit;
+    }
   }
 
   .search-bar-active {
     &.search-bar {
       background-color: #fff;
-      //border-bottom-left-radius: 0;
-      //border-bottom-right-radius: 0;
     }
 
     input {
@@ -457,22 +460,6 @@ body.padding-top {
 
     &:after, &:before {
       border: none;
-    }
-  }
-
-  .nav-search {
-    input {
-      border: none;
-      background-color: $gray-light;
-      color: var(--header-color);
-
-      &::placeholder {
-        color: inherit;
-      }
-    }
-
-    .input-group-btn button {
-      color: var(--header-color);
     }
   }
 
