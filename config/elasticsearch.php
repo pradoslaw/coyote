@@ -21,7 +21,7 @@ return [
     | This is the index name that Elasticquent will use for all
     | Elasticquent models.
     */
-    'default_index' => 'coyote',
+    'default_index' =>  env('ELASTICSEARCH_INDEX', 'coyote'),
 
     /*
     | Default log locationK
