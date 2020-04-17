@@ -87,16 +87,24 @@ class TopicResource extends ElasticsearchResource
             $result[] = 'user:' . $this->firstPost->user_id;
         }
 
-        $result = array_merge($result, $this->subscribers()->pluck('user_id')->map(function ($userId) {
-                return 'subscriber:' . $userId;
-            })
-            ->toArray()
+        $result = array_merge(
+            $result,
+            $this->subscribers()
+                ->pluck('user_id')
+                ->map(function ($userId) {
+                    return 'subscriber:' . $userId;
+                })
+                ->toArray()
         );
 
-        $result = array_merge($result, $this->users()->pluck('user_id')->map(function ($userId) {
-                return 'participant:' . $userId;
-            })
-            ->toArray()
+        $result = array_merge(
+            $result,
+            $this->users()
+                ->pluck('user_id')
+                ->map(function ($userId) {
+                    return 'participant:' . $userId;
+                })
+                ->toArray()
         );
 
         return $result;

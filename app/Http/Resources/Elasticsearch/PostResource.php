@@ -38,7 +38,7 @@ class PostResource extends JsonResource
             'created_at'    => $this->created_at->toIso8601String(),
             'text'          => $this->text !== null ? strip_tags($this->html) : null,
             'url'           => UrlBuilder::post($this->resource),
-            'topic'         => array_merge($this->topic->only('subject', 'slug', 'forum_id', 'id', 'first_post_id'),  ['subject' => htmlspecialchars($this->topic->subject)]),
+            'topic'         => array_merge($this->topic->only('subject', 'slug', 'forum_id', 'id', 'first_post_id'), ['subject' => htmlspecialchars($this->topic->subject)]),
 
             'forum'         => [
                 'id'        => $this->forum->id,
