@@ -64,7 +64,8 @@
   const MODELS = {
     'Topic': 'Wątki na forum',
     'Job': 'Oferty pracy',
-    'User': 'Użytkownicy'
+    'User': 'Użytkownicy',
+    'Wiki': 'Artykuły'
   };
 
   const CONTEXTS = {
@@ -76,6 +77,11 @@
     'Job': {
       'user': 'Twoje oferty pracy',
       'subscriber': 'Zapisane oferty pracy',
+    },
+    'Wiki': {
+      'user': 'Twoje artykuły',
+      'subscriber': 'Obserwowane artykuły',
+      'participant': 'Artykuły z Twoim udziałem'
     }
   };
 
