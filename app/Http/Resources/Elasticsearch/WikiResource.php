@@ -49,7 +49,7 @@ class WikiResource extends ElasticsearchResource
      */
     protected function weight(): int
     {
-        return round(min(50000, $this->views) + (($this->created_at->timestamp - self::BASE_TIMESTAMP) / 600000));
+        return round(min(5000, $this->views) + (($this->created_at->timestamp - self::BASE_TIMESTAMP) / 600000));
     }
 
     /**
