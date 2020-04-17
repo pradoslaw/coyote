@@ -12,11 +12,11 @@ trait EsTrait
         $result = [];
 
         foreach (glob(app_path('Models/*.php')) as $filename) {
-            $name = ucfirst($filename);
-            $className = 'Coyote\\' . substr(pathinfo($filename, PATHINFO_BASENAME), 0, -4);
+            $name = ucfirst(basename($filename, '.php'));
+            $className = 'Coyote\\' . $name;
             $resource = "Coyote\\Http\\Resources\\Elasticsearch\\{$name}Resource";
 
-            if (class_exists($resource, false)) {
+            if (class_exists($resource)) {
                 $result[] = $className;
             }
         }
