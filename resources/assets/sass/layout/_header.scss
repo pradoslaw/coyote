@@ -25,7 +25,7 @@ body.padding-top {
   --header-color: #eee;
   --header-hover-color: #{$primary};
   --header-active-bg: #454545;
-  --header-group-link-color: #{$gray-lighter};
+  --header-group-link-color: #9d9d9d;
   --header-search-bg: #{$gray-light};
   --header-search-border: transparent;
 }
@@ -79,6 +79,8 @@ body.padding-top {
   color: var(--header-color);
   display: block;
   text-decoration: none;
+  font-family: "Open Sans", Arial, sans-serif;
+  font-size: .81rem;
 
   &:hover,
   &:focus {
@@ -424,7 +426,7 @@ body.padding-top {
     .mega-menu-title {
       color: $gray-lighter;
       border-bottom: none;
-      font-weight: normal;
+      font-weight: 400;
     }
 
     .mega-menu-body {
