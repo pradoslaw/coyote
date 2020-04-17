@@ -56,6 +56,8 @@
   const ENTER = 13;
   const UP = 38;
   const DOWN = 40;
+  const RIGHT = 49;
+  const LEFT = 37;
   const SHIFT = 16;
   const TAB = 9;
   const CTRL = 17;
@@ -118,6 +120,13 @@
     },
     {
       name: "Job",
+      component: {
+        mixins: [ decorator ],
+        template: '<a :href="item.url" class="text-truncate"><span v-html="highlight(item.title, value)"></span></a>'
+      }
+    },
+    {
+      name: "Wiki",
       component: {
         mixins: [ decorator ],
         template: '<a :href="item.url" class="text-truncate"><span v-html="highlight(item.title, value)"></span></a>'
@@ -226,7 +235,7 @@
       },
 
       completion(event) {
-        if ([UP, DOWN, ESC, ENTER, SHIFT, TAB, CTRL, ALT].includes(event.keyCode)) {
+        if ([UP, DOWN, ESC, ENTER, SHIFT, TAB, CTRL, ALT, LEFT, RIGHT].includes(event.keyCode)) {
           return;
         }
 
@@ -235,14 +244,21 @@
       },
 
       getItems() {
-        axios.get(this.getEndpoint(), {params: {q: this.value || null}, headers: {Authorization: `Bearer ${this.$store.state.user.token}`}}).then(response => {
+        const endpoint = this.getEndpoint();
+        let headers = this.$store.getters['user/isAuthorized'] ? {Authorization: `Bearer ${this.$store.state.user.token}`} : {};
+
+        if (!endpoint) {
+          return;
+        }
+
+        axios.get(endpoint, {params: {q: this.value || null}, headers}).then(response => {
           this.items = response.data;
           this.isDropdownVisible = true;
         });
       },
 
       getEndpoint() {
-        return this.value === undefined || this.value.trim() === '' ? '/completion/hub/' : '/completion/';
+        return this.value === undefined || this.value.trim() === '' ? (this.$store.getters['user/isAuthorized'] ? '/completion/hub/' : null) : '/completion/';
       },
 
       shortcutSupport(event) {
