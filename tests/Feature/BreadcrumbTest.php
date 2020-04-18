@@ -1,32 +1,29 @@
 <?php
 
-use Coyote\Services\Breadcrumb\Breadcrumb;
+namespace Tests\Feature;
 
-class BreadcrumbTest extends \Codeception\TestCase\Test
+use Coyote\Services\Breadcrumb\Breadcrumb;
+use Tests\TestCase;
+
+class BreadcrumbTest extends TestCase
 {
-    /**
-     * @var \UnitTester
-     */
-    protected $tester;
     /**
      * @var Breadcrumb
      */
     protected $breadcrumb;
 
-    protected function _before()
+    protected function setUp()
     {
-        $this->breadcrumb = new Breadcrumb();
-    }
+        parent::setUp();
 
-    protected function _after()
-    {
+        $this->breadcrumb = new Breadcrumb();
     }
 
     // tests
     public function testAddingElementToBreadcrumb()
     {
         $this->breadcrumb->push('Forum', '#');
-        $this->assertEquals(1, count($this->breadcrumb));
+        $this->assertCount(1, $this->breadcrumb);
     }
 
     public function testAddingMultipleElementsToBreadcrumb()
@@ -36,7 +33,7 @@ class BreadcrumbTest extends \Codeception\TestCase\Test
             'Dodaj nowy'      => '#'
         ]);
 
-        $this->assertEquals(2, count($this->breadcrumb));
+        $this->assertCount(2, $this->breadcrumb);
     }
 
     public function testRenderBreadcrumb()

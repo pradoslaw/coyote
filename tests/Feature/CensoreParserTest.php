@@ -1,27 +1,22 @@
 <?php
 
+namespace Tests\Feature;
 
-class CensoreParserTest extends \Codeception\TestCase\Test
+use Tests\TestCase;
+
+class CensoreParserTest extends TestCase
 {
-    /**
-     * @var \UnitTester
-     */
-    protected $tester;
-
     /**
      * @var \Coyote\Services\Parser\Parsers\Censore
      */
     protected $parser;
 
-    protected function _before()
+    protected function setUp()
     {
+        parent::setUp();
+
         $word = new \Coyote\Repositories\Eloquent\WordRepository(app());
         $this->parser = new \Coyote\Services\Parser\Parsers\Censore($word);
-    }
-
-    protected function _after()
-    {
-
     }
 
     public function testHashCodeTag()
