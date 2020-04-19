@@ -7,6 +7,8 @@
   },
   "dependencies": {
     "@babel/core": "^7.8.4",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-decorators": "^7.8.3",
     "@babel/plugin-proposal-object-rest-spread": "^7.8.3",
     "@babel/preset-env": "^7.8.4",
     "@babel/runtime": "^7.8.4",
@@ -40,10 +42,14 @@
     "style-loader": "^0.23.1",
     "svg-spritemap-webpack-plugin": "^3.5.3",
     "terser-webpack-plugin": "^2.3.4",
+    "ts-loader": "^7.0.0",
+    "typescript": "^3.8.3",
     "vue": "^2.5.22",
+    "vue-class-component": "^7.2.3",
     "vue-clickaway": "^2.2.2",
     "vue-loader": "14.2.3",
-    "vue-template-compiler": "^2.5",
+    "vue-property-decorator": "^8.4.1",
+    "vue-template-compiler": "^2.6",
     "vue-textarea-autosize": "^1.0.4",
     "vuex": "^3.1.0",
     "webpack": "4.28.4",
@@ -60,6 +66,7 @@
   "author": "adam-boduch <adam@boduch.net>",
   "license": "MIT",
   "devDependencies": {
-    "@fortawesome/fontawesome-free": "^5.11.2"
+    "@fortawesome/fontawesome-free": "^5.11.2",
+    "@types/vue-clickaway": "^2.2.0"
   }
 }

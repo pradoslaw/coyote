@@ -6,10 +6,11 @@
   </object>
 </template>
 
-<script>
+<script lang="js">
+  import Vue from 'vue';
   import { default as mixins } from './mixins/user';
 
-  export default {
+  export default Vue.extend({
     mixins: [ mixins ],
     props: {
       name: {
@@ -18,9 +19,8 @@
       id: {
         type: Number
       },
-      photo: {
-        type: String
-      }
+      photo: String
+
     }
-  }
+  })
 </script>
