@@ -262,7 +262,7 @@
       },
 
       shortcutSupport(event) {
-        if (event.keyCode === 32 && (event.ctrlKey || event.metaKey)) {
+        if (event.key === '/' && !/^(?:input|textarea|select|button)$/i.test(event.target.tagName)) {
           event.preventDefault();
 
           this.$refs.input.focus();
