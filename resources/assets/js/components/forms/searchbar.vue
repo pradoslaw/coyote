@@ -54,19 +54,11 @@
   import store from '../../store';
   import { Hit, Context } from '../../types/hit';
   import { Model } from '../../types/models';
+  import { SpecialKeys } from '../../types/keys';
   import Component from 'vue-class-component';
   import { Prop, PropSync, Ref } from 'vue-property-decorator';
 
-  const ESC = 27;
-  const ENTER = 13;
-  const UP = 38;
-  const DOWN = 40;
-  const RIGHT = 49;
-  const LEFT = 37;
-  const SHIFT = 16;
-  const TAB = 9;
-  const CTRL = 17;
-  const ALT = 18;
+  const SLASH = '/';
 
   type HitCategory = {[key: string]: {children: Hit[], model: string, context: string}}
 
@@ -248,12 +240,12 @@
       }
     }
 
-    getCategoryLabel(category) {
+    getCategoryLabel(category): string {
       return category.context !== undefined ? CONTEXTS[category.model][category.context] : MODELS[category.model];
     }
 
-    completion(event) {
-      if ([UP, DOWN, ESC, ENTER, SHIFT, TAB, CTRL, ALT, LEFT, RIGHT].includes(event.keyCode)) {
+    completion(event): void {
+      if (Object.values(SpecialKeys).includes(event.keyCode)) {
         return;
       }
 
@@ -261,9 +253,9 @@
       this.getItems();
     }
 
-    getItems() {
+    getItems(): void {
       const endpoint = this.getEndpoint();
-      let headers = this.$store.getters['user/isAuthorized'] ? {Authorization: `Bearer ${this.$store.state.user.token}`} : {};
+      const headers = this.$store.getters['user/isAuthorized'] ? {Authorization: `Bearer ${this.$store.state.user.token}`} : {};
 
       if (!endpoint) {
         return;
@@ -275,19 +267,19 @@
       });
     }
 
-    getEndpoint() {
+    getEndpoint(): string | null {
       return this.valueLocal.trim() === '' ? (this.$store.getters['user/isAuthorized'] ? '/completion/hub/' : null) : '/completion/';
     }
 
-    shortcutSupport(event) {
-      if (event.key === '/' && !/^(?:input|textarea|select|button)$/i.test(event.target.tagName)) {
+    shortcutSupport(event): void {
+      if (event.key === SLASH && !/^(?:input|textarea|select|button)$/i.test(event.target.tagName)) {
         event.preventDefault();
 
         (this.$refs.input as HTMLInputElement).focus();
       }
     }
 
-    changeUrl() {
+    changeUrl(): void {
       if (this.selectedIndex === -1) {
         (this.$refs.search as HTMLFormElement).submit();
       }
@@ -295,7 +287,7 @@
       window.location.href = this.items.find(item => item.index === this.selectedIndex)!.url;
     }
 
-    makeDecorator(item: Hit) {
+    makeDecorator(item: Hit): string {
       return `${item.model}Decorator`;
     }
 
