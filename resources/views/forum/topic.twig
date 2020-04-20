@@ -231,7 +231,7 @@
                 <li>
                   <a data-category="forum-related" href="{{ route('forum.topic', [page.forum.slug, page.id, page.slug]) }}" title="{{ page.subject|raw }}">
                     <strong>{{ page.subject|raw }}</strong>
-                    <small>{{ page.updated_at|format_date }}</small>
+                    <small>{{ page.created_at|format_date }}</small>
                   </a>
                 </li>
               {% endfor %}
