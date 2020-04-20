@@ -33,6 +33,7 @@ class WikiResource extends ElasticsearchResource
             'excerpt'       => htmlspecialchars($this->excerpt),
             'created_at'    => $this->created_at->toIso8601String(),
             'updated_at'    => $this->updated_at->toIso8601String(),
+            'decay_date'    => $this->updated_at->toIso8601String(),
             'suggest'       => $this->getSuggest(),
             'participants'  => $this->authors()->pluck('user_id'),
             'subscribers'   => $this->subscribers()->pluck('user_id')
