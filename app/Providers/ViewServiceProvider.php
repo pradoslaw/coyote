@@ -59,6 +59,7 @@ class ViewServiceProvider extends ServiceProvider
         ]);
 
         if (!empty($this->app['request']->user())) {
+            /** @var \Coyote\User $user */
             $user = $this->app['request']->user();
 
             $this->app['request']->attributes->add([
@@ -66,7 +67,8 @@ class ViewServiceProvider extends ServiceProvider
                 'date_format'           => $this->mapFormat($user->date_format),
                 'token'                 => $this->getJWtToken($user),
                 'notifications_unread'  => $user->notifications_unread,
-                'pm_unread'             => $user->pm_unread
+                'pm_unread'             => $user->pm_unread,
+                'created_at'            => $user->created_at->toIso8601String()
             ]);
         }
     }

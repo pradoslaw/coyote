@@ -125,9 +125,13 @@
       getUrl() {
         const urlFragment = id =>  `${this.topic.url}?p=${id}#id${id}`;
 
-        return this.topic.user_post_id
-          ? urlFragment(this.topic.user_post_id)
-            : (this.topic.is_read ? urlFragment(this.topic.last_post.id) : this.topic.url);
+        // redirect straight to specific post if this field is present
+        if (this.topic.user_post_id) {
+          return urlFragment(this.topic.user_post_id);
+        }
+
+        // redirect to last post if topic has been read by registered user.
+        return (this.topic.is_read && (this.isAuthorized && this.topic.last_post_created_at > this.$store.state.user.created_at) ? urlFragment(this.topic.last_post.id) : this.topic.url);
       },
 
       mark(event) {
