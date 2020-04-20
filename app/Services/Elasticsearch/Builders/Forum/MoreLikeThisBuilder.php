@@ -46,7 +46,7 @@ class MoreLikeThisBuilder extends QueryBuilder
         $this->must(new Term('model', 'topic'));
         $this->must(new OnlyThoseWithAccess($this->forumId));
         // we need only those fields to save in cache
-        $this->source(['id', 'subject', 'slug', 'created_at', 'forum.*']);
+        $this->source(['id', 'subject', 'slug', 'updated_at', 'forum.*']);
 
         return parent::build();
     }
