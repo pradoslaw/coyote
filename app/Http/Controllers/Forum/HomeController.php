@@ -124,12 +124,12 @@ class HomeController extends BaseController
     public function categories()
     {
         // execute query: get all categories that user can has access
-        $forums = $this->withCriteria(function () {
-            return $this
-                ->forum
-                ->categories($this->guestId)
-                ->mapCategory();
-        });
+        $this->pushForumCriteria();
+
+        $forums = $this
+            ->forum
+            ->categories($this->guestId)
+            ->mapCategory();
 
         $forums = ForumCollection::factory($forums);
         $collapse = $this->collapse();
