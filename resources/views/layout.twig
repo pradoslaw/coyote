@@ -21,7 +21,7 @@
 
       <link rel="stylesheet" href="{{ cdn('css/main.css') }}">
 
-      <script type="text/javascript">var __INITIAL_STATE = {{ __public|default('{}')|raw }};</script>
+      <script type="text/javascript">var __INITIAL_STATE = {{ __INITIAL_STATE|default('{}')|raw }};</script>
     {% endblock %}
 
     <link rel="apple-touch-icon" href="{{ asset('img/apple-touch.png') }}">

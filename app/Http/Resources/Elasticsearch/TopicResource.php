@@ -46,10 +46,11 @@ class TopicResource extends ElasticsearchResource
                 'url'                   => UrlBuilder::topic($this->resource->getModel()),
                 'user_id'               => $this->firstPost->user_id,
                 'forum'         => [
-                    'id'        => $this->forum->id,
-                    'name'      => $this->forum->name,
-                    'slug'      => $this->forum->slug,
-                    'url'       => UrlBuilder::forum($this->forum)
+                    'id'                => $this->forum->id,
+                    'name'              => $this->forum->name,
+                    'slug'              => $this->forum->slug,
+                    'is_prohibited'     => $this->forum->is_prohibited,
+                    'url'               => UrlBuilder::forum($this->forum)
                 ],
                 'suggest'       => $this->getSuggest(),
                 'participants'  => $this->users()->pluck('user_id'),
