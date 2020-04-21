@@ -130,7 +130,7 @@ class InitialStateComposer
             ->expiresAt(now()->addDays(7)->timestamp)
             ->issuedBy($user->id)
             ->withClaim('channel', "user:$user->id")
-            ->withClaim('prohibited', $this->getProhibitedForums($user))
+            ->withClaim('guarded', $this->getGuardedForums($user))
             ->getToken($signer, new Key(config('app.key')));
 
         return (string) $token;
@@ -140,7 +140,7 @@ class InitialStateComposer
      * @param User $user
      * @return array
      */
-    private function getProhibitedForums(User $user): array
+    private function getGuardedForums(User $user): array
     {
         return $this->cache->tags('forum-order')->remember('forum-order:' . $user->id, now()->addMonth(1), function () use ($user) {
             // since repository is singleton, we have to reset previously set criteria to avoid duplicated them.
