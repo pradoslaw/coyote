@@ -36,7 +36,6 @@ class ViewServiceProvider extends ServiceProvider
         });
     }
 
-
     private function buildMasterMenu()
     {
         $userId = $this->app['request']->user() ? $this->app['request']->user()->id : null;

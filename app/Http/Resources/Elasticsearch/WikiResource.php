@@ -30,6 +30,7 @@ class WikiResource extends ElasticsearchResource
             'url'           => UrlBuilder::wiki($this->resource),
             'title'         => htmlspecialchars($this->title),
             'text'          => strip_tags($this->html),
+            'user_id'       => $this->authors()->first() ? $this->authors()->first()->id : null,
             'excerpt'       => htmlspecialchars($this->excerpt),
             'created_at'    => $this->created_at->toIso8601String(),
             'updated_at'    => $this->updated_at->toIso8601String(),
@@ -50,7 +51,7 @@ class WikiResource extends ElasticsearchResource
      */
     protected function weight(): int
     {
-        return round(min(5000, $this->views) + (($this->created_at->timestamp - self::BASE_TIMESTAMP) / 600000));
+        return round(min(1000, $this->views) + (($this->created_at->timestamp - self::BASE_TIMESTAMP) / 600000));
     }
 
     /**
