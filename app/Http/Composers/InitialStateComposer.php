@@ -3,23 +3,41 @@
 namespace Coyote\Http\Composers;
 
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
-use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\User;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key;
+use Illuminate\Contracts\Cache\Repository as Cache;
 
 class InitialStateComposer
 {
+    /**
+     * @var ForumRepository
+     */
     private $forum;
+
+    /**
+     * @var Request
+     */
     private $request;
 
-    public function __construct(ForumRepository $forum, Request $request)
+    /**
+     * @var Cache
+     */
+    private $cache;
+
+    /**
+     * @param ForumRepository $forum
+     * @param Request $request
+     * @param Cache $cache
+     */
+    public function __construct(ForumRepository $forum, Request $request, Cache $cache)
     {
         $this->forum = $forum;
         $this->request = $request;
+        $this->cache = $cache;
     }
 
     /**
@@ -46,6 +64,9 @@ class InitialStateComposer
         $view->with('__INITIAL_STATE', json_encode($state));
     }
 
+    /**
+     * @return array|string[]
+     */
     private function registerWebSocket(): array
     {
         if (config('services.ws.host') && $this->request->user()) {
@@ -55,6 +76,9 @@ class InitialStateComposer
         return [];
     }
 
+    /**
+     * @return array|array[]
+     */
     private function registerUserModel(): array
     {
         if (empty($this->request->user())) {
@@ -118,8 +142,15 @@ class InitialStateComposer
      */
     private function getProhibitedForums(User $user): array
     {
-        $this->forum->pushCriteria(new OnlyThoseWithAccess($user));
+        return $this->cache->tags('forum-order')->remember('forum-order:' . $user->id, now()->addMonth(1), function () use ($user) {
+            // since repository is singleton, we have to reset previously set criteria to avoid duplicated them.
+            $this->forum->resetCriteria();
+            // make sure we don't skip criteria
+            $this->forum->skipCriteria(false);
 
-        return array_values($this->forum->findHiddenIds($user->id));
+            $this->forum->pushCriteria(new OnlyThoseWithAccess($user));
+
+            return array_values($this->forum->findHiddenIds($user->id));
+        });
     }
 }
