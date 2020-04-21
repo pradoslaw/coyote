@@ -194,7 +194,7 @@
       this.isDropdownVisible = true;
 
       // show basic set of links for given user even if no query was provided
-      this.getItems();
+      this.loadItems();
     }
 
     hideDropdown() {
@@ -208,7 +208,7 @@
 
     clearInput() {
       this.valueLocal = '';
-      this.getItems();
+      this.loadItems();
     }
 
     down() {
@@ -250,10 +250,10 @@
       }
 
       this.selectedIndex = -1; // reset position index after key pressed
-      this.getItems();
+      this.loadItems();
     }
 
-    getItems(): void {
+    loadItems(): void {
       const endpoint = this.getEndpoint();
       const headers = this.$store.getters['user/isAuthorized'] ? {Authorization: `Bearer ${this.$store.state.user.token}`} : {};
 
