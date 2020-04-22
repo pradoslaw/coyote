@@ -134,24 +134,24 @@
 
   Vue.component('TopicDecorator', {
     mixins: [ Decorator ],
-    template: '<a :href="item.url" class="text-truncate"><span v-html="highlight(item.subject, value)"></span> <small class="forum-name text-muted">w {{ item.forum.name }}</small></a>'
+    template: '<a :href="item.url" class="text-truncate" tabindex="-1"><span v-html="highlight(item.subject, value)"></span> <small class="forum-name text-muted">w {{ item.forum.name }}</small></a>'
   });
 
   Vue.component('JobDecorator', {
     mixins: [ Decorator ],
-    template: '<a :href="item.url" class="text-truncate"><span v-html="highlight(item.title, value)"></span></a>'
+    template: '<a :href="item.url" class="text-truncate" tabindex="-1"><span v-html="highlight(item.title, value)"></span></a>'
   });
 
   Vue.component('WikiDecorator', {
     mixins: [ Decorator ],
-    template: '<a :href="item.url" class="text-truncate"><span v-html="highlight(item.title, value)"></span></a>'
+    template: '<a :href="item.url" class="text-truncate" tabindex="-1"><span v-html="highlight(item.title, value)"></span></a>'
   });
 
   Vue.component('UserDecorator', {
     mixins: [ Decorator ],
     components: { 'vue-avatar': VueAvatar },
     template:
-      `<a :href="item.url" class="d-flex align-content-center text-truncate">
+      `<a :href="item.url" class="d-flex align-content-center text-truncate" tabindex="-1">
         <vue-avatar :photo="item.photo" class="i-16 mr-2"></vue-avatar> <span v-html="highlight(item.name, value)"></span>
         <div class="item-options">
           <a :href="item.url" class="ml-3" title="Przejdź do profilu użytkownika"><i class="fas fa-user"></i></a>
@@ -175,8 +175,8 @@
     @Prop(String)
     readonly url: string = '';
 
-    @PropSync('value', {default: ''})
-    valueLocal!: string;
+    @Prop()
+    value!: string;
 
     @Ref('input')
     readonly input!: HTMLInputElement;
@@ -198,8 +198,12 @@
     }
 
     hideDropdown() {
-      this.isDropdownVisible = false;
-      this.valueLocal = '';
+      if (this.isDropdownVisible) {
+        this.isDropdownVisible = false;
+      }
+      else {
+        this.value = '';
+      }
     }
 
     blurInput(): void {
@@ -207,7 +211,7 @@
     }
 
     clearInput() {
-      this.valueLocal = '';
+      this.value = '';
       this.loadItems();
     }
 
@@ -261,14 +265,14 @@
         return;
       }
 
-      axios.get(endpoint, {params: {q: this.valueLocal || null}, headers}).then(response => {
+      axios.get(endpoint, {params: {q: this.value || null}, headers}).then(response => {
         this.items = response.data;
         this.isDropdownVisible = true;
       });
     }
 
     getEndpoint(): string | null {
-      return this.valueLocal.trim() === '' ? (this.$store.getters['user/isAuthorized'] ? '/completion/hub/' : null) : '/completion/';
+      return this.value.trim() === '' ? (this.$store.getters['user/isAuthorized'] ? '/completion/hub/' : null) : '/completion/';
     }
 
     shortcutSupport(event): void {
