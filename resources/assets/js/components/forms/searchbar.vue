@@ -17,7 +17,7 @@
           type="search"
           name="q"
           autocomplete="off"
-          placeholder="Kliknij, aby wyszukać lub wpisz /"
+          placeholder="Szukaj (Shift+/)"
         >
       </form>
 
@@ -57,8 +57,6 @@
   import { SpecialKeys } from '../../types/keys';
   import Component from 'vue-class-component';
   import { Prop, Ref } from 'vue-property-decorator';
-
-  const SLASH = '/';
 
   type HitCategory = {[key: string]: {children: Hit[], model: string, context: string}}
 
@@ -244,11 +242,11 @@
       }
     }
 
-    getCategoryLabel(category): string {
+    getCategoryLabel(category: Hit): string {
       return category.context !== undefined ? CONTEXTS[category.model][category.context] : MODELS[category.model];
     }
 
-    completion(event): void {
+    completion(event: KeyboardEvent): void {
       if (Object.values(SpecialKeys).includes(event.keyCode)) {
         return;
       }
@@ -275,8 +273,9 @@
       return this.value.trim() === '' ? (this.$store.getters['user/isAuthorized'] ? '/completion/hub/' : null) : '/completion/';
     }
 
-    shortcutSupport(event): void {
-      if (event.key === SLASH && !/^(?:input|textarea|select|button)$/i.test(event.target.tagName)) {
+    shortcutSupport(event: KeyboardEvent): void {
+      console.log(event);
+      if (event.key === '?' && event.shiftKey && (!/^(?:input|textarea|select|button)$/i.test((event.target as HTMLElement).tagName))) {
         event.preventDefault();
 
         (this.$refs.input as HTMLInputElement).focus();

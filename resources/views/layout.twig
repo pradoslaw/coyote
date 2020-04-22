@@ -147,7 +147,7 @@
             <div class="dropdown-divider"></div>
 
             <form action="{{ search_url|default(route('search')) }}" role="search">
-              <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}" class="form-control form-control-sm">
+              <input type="text" name="q" autocomplete="off" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}" class="form-control form-control-sm">
             </form>
           </div>
         </div>
