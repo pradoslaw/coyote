@@ -56,7 +56,7 @@
   import { Model } from '../../types/models';
   import { SpecialKeys } from '../../types/keys';
   import Component from 'vue-class-component';
-  import { Prop, PropSync, Ref } from 'vue-property-decorator';
+  import { Prop, Ref } from 'vue-property-decorator';
 
   const SLASH = '/';
 

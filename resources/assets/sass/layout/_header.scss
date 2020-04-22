@@ -227,6 +227,17 @@ body.padding-top {
     padding: 5px;
     background-color: var(--header-search-bg);
     border: 1px solid var(--header-search-border);
+
+    // temp code
+    &:after {
+      content: 'Beta';
+      position: absolute;
+      right: 25px;
+      top: 30%;
+      text-transform: uppercase;
+      font-size: 10px;
+      color: var(--header-color);
+    }
   }
 
   .fa-search {
@@ -251,6 +262,10 @@ body.padding-top {
   .search-bar-active {
     &.search-bar {
       background-color: #fff;
+
+      &:after {
+        display: none; // temp code
+      }
     }
 
     input {
