@@ -2,6 +2,9 @@
 
 namespace Coyote\Services\Parser\Parsers;
 
+use TRegx\CleanRegex\Match\Details\Match;
+use TRegx\CleanRegex\Pattern;
+
 /**
  * Class Smilies
  */
@@ -38,15 +41,15 @@ class Smilies extends Parser implements ParserInterface
         $text = $this->hashBlock($text, ['code', 'a']);
         $text = $this->hashInline($text, 'img');
 
-        $patterns = $replacements = [];
+        $text = Pattern::inject('(?<=^|[\n \>]|\.)(@)', [array_keys($this->smilies)])
+            ->replace($text)
+            ->all()
+            ->callback(function (Match $match) {
+                $smiley = $match->get(1);
+                $link = $this->smilies[$smiley];
+                return '<img class="img-smile" alt="' . $smiley . '" title="' . $smiley . '" src="/cdn/img/smilies/' . $link . '">';
+            });
 
-        foreach ($this->smilies as $var => $value) {
-            $patterns[] = '#(?<=^|[\n \>]|\.)' . preg_quote($var, '#') . '#';
-            $replacements[] = '<img class="img-smile" alt="' . $var . '" title="' . $var . '" src="' . cdn('img/smilies/' . $value) . '">';
-        }
-        reset($this->smilies);
-
-        $text = substr(preg_replace($patterns, $replacements, ' ' . $text . ' '), 1, -1);
         $text = $this->unhash($text);
 
         return $text;
