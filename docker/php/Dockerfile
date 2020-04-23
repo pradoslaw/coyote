@@ -84,3 +84,10 @@ RUN /usr/glibc-compat/bin/localedef -i pl_PL -f UTF-8 pl_PL.UTF-8
 
 ENV LANG=pl_PL.UTF-8 \
     LANGUAGE=pl_PL.UTF-8
+
+COPY ./docker/php/cron /etc/crontabs/root
+
+ADD ./docker/php/xdebug.sh /xdebug.sh
+RUN chmod 755 /xdebug.sh
+
+CMD ["/xdebug.sh"]
