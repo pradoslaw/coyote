@@ -171,7 +171,7 @@
     selectedIndex: number = -1;
 
     @Prop(String)
-    readonly url: string = '';
+    readonly url!: string;
 
     @Prop()
     value!: string;

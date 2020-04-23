@@ -6,12 +6,12 @@ import store from '../store';
 import axios from "axios";
 import { default as setToken } from "../libs/csrf";
 
-let el = document.getElementById('js-searchbar');
+new Vue({
+  el: '#js-searchbar',
+  components: { 'vue-searchbar': VueSearchbar }
+});
 
-const SearchbarWrapper = Vue.extend(VueSearchbar);
-el.appendChild(new SearchbarWrapper({propsData: {url: el.dataset.url, value: el.dataset.value}}).$mount().$el);
-
-el = document.getElementById('nav-auth');
+const el = document.getElementById('nav-auth');
 
 if (el !== null) {
   store.commit('inbox/init', store.state.user.pm_unread);
