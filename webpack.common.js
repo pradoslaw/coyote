@@ -17,6 +17,14 @@ module.exports = {
         loader: 'vue-loader'
       },
       {
+        test: /\.tsx?$/,
+        loader: 'ts-loader',
+        exclude: /node_modules/,
+        options: {
+          appendTsSuffixTo: [/\.vue$/],
+        }
+      },
+      {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
@@ -87,7 +95,8 @@ module.exports = {
     }
   },
   resolve: {
-    mainFields: ['main', 'module']
+    mainFields: ['main', 'module'],
+    extensions: [ '.ts', '.tsx', '.js', '.vue' ]
   },
   context: path.join(__dirname, 'resources/assets'),
   entry: {

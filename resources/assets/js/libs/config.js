@@ -12,7 +12,7 @@ const Config = {
    * @return {*}
    */
   get: function (name, _default = null) {
-    return name in _config ? _config[name] : _default;
+    return name in __INITIAL_STATE ? __INITIAL_STATE[name] : _default;
   },
 
   /**

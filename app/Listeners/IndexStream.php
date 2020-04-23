@@ -3,6 +3,7 @@
 namespace Coyote\Listeners;
 
 use Coyote\Events\StreamSaved;
+use Coyote\Services\Elasticsearch\Crawler;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class IndexStream implements ShouldQueue
@@ -20,6 +21,6 @@ class IndexStream implements ShouldQueue
      */
     public function handle(StreamSaved $event)
     {
-        $event->stream->putToIndex();
+        (new Crawler())->index($event->stream);
     }
 }

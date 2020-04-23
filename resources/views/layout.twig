@@ -21,7 +21,7 @@
 
       <link rel="stylesheet" href="{{ cdn('css/main.css') }}">
 
-      <script type="text/javascript">var _config = {{ __public|default('{}')|raw }};</script>
+      <script type="text/javascript">var __INITIAL_STATE = {{ __INITIAL_STATE|default('{}')|raw }};</script>
     {% endblock %}
 
     <link rel="apple-touch-icon" href="{{ asset('img/apple-touch.png') }}">
@@ -42,129 +42,118 @@
         {{ form_open({url: route('logout'), name: 'logout-form'}) }}
         {{ form_close() }}
 
-        <div class="row">
-          <div class="col-12">
-            <div class="container-xxl d-flex align-items-center flex-wrap">
-              <a rel="home" class="navbar-brand" href="{{ route('home') }}" title="4programmers.net - Strona główna">
-                <img src="{{ cdn('img/logo-mobile.png') }}">
-              </a>
+        <div class="container-xxl d-flex align-items-center flex-wrap">
+          <a rel="home" class="navbar-brand" href="{{ route('home') }}" title="4programmers.net - Strona główna">
+            <img src="{{ cdn('img/logo-mobile.png') }}">
+          </a>
 
-              <ul class="nav-desktop d-none d-md-block">
-                {% for item in __master_menu.roots() %}
-                  <li {{ forms.attr(item.attr) }}>
-                    <a href="{{ item.url }}">{{ item.title|raw }}</a>
+          <ul class="nav-desktop d-none d-md-block">
+            {% for item in __master_menu.roots() %}
+              <li {{ forms.attr(item.attr) }}>
+                <a href="{{ item.url }}">{{ item.title|raw }}</a>
 
-                    {{ item.afterHTML|raw }}
+                {{ item.afterHTML|raw }}
 
-                    {% if item.hasChildren() %}
-                      <div class="dropdown-menu dropdown-menu-left">
-                        {% for children in item.children() %}
+                {% if item.hasChildren() %}
+                  <div class="dropdown-menu dropdown-menu-left">
+                    {% for children in item.children() %}
 
-                          <a class="dropdown-item" href="{{ children.url }}">{{ children.title }}</a>
+                      <a class="dropdown-item" href="{{ children.url }}">{{ children.title }}</a>
 
-                        {% endfor %}
-                      </div>
-                    {% endif %}
-                  </li>
-                {% endfor %}
-              </ul>
-
-              <div class="ml-auto">
-                {% if auth_check() %}
-                  <ul id="nav-auth" class="nav-auth list-inline d-inline-block"></ul>
-
-                  <div class="dropdown nav-avatar d-none d-md-inline-block">
-                    <a href="javascript:" class="dropdown-toggle img-thumbnail d-block" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="width: 35px">
-                      <img src="{{ user_photo(user('photo')) }}" style="width: 100%">
-                    </a>
-
-                    <div class="dropdown-menu dropdown-menu-right">
-                      <a class="dropdown-item profile-name" href="{{ route('user.home') }}">{{ user('name') }}</a>
-
-                      <div class="dropdown-divider"></div>
-
-                      <a class="dropdown-item" href="{{ route('user.pm') }}"><i class="fas fa-envelope fa-fw"></i> Wiadomości</a>
-                      <a class="dropdown-item" href="{{ route('user.settings') }}"><i class="fas fa-cog fa-fw"></i> Ustawienia</a>
-                      <a class="dropdown-item" href="{{ route('profile', [user('id')]) }}"><i class="fas fa-user fa-fw"></i> Profil</a>
-                      <a class="dropdown-item" href="{{ url('Pomoc') }}"><i class="fas fa-info-circle fa-fw"></i> Pomoc</a>
-
-                      {% if can('adm-access') %}
-                        <a class="dropdown-item" href="{{ route('adm.home') }}"><i class="fas fa-user-secret fa-fw"></i> Panel administracyjny</a>
-                      {% endif %}
-
-                      <div class="dropdown-divider"></div>
-
-                      <a href="javascript:" class="dropdown-item js-change-menu position-relative">Nowe menu <sup class="badge badge-pill label-new">Beta</sup></a>
-
-                      <div class="dropdown-divider"></div>
-
-                      <a href="javascript:" onclick="document['logout-form'].submit()" class="dropdown-item btn-sign-out"><i class="fas fa-sign-out-alt fa-fw"></i> Wyloguj</a>
-                    </div>
+                    {% endfor %}
                   </div>
-                {% else %}
-                  <a class="btn btn-sm btn-register d-none d-sm-inline-block" href="{{ route('register') }}"><i class="fas fa-sign-in"></i> Utwórz konto</a>
-                  <a class="btn btn-sm btn-login d-none d-sm-inline-block" href="{{ route('login') }}">Logowanie</a>
                 {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
 
-                <form action="{{ search_url|default(route('search')) }}" class="nav-search d-none d-lg-inline-block" role="search">
-                  <div class="input-group">
-                    <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}">
+          <div id="js-searchbar" class="d-none d-lg-flex flex-grow-1">
+            <vue-searchbar url="{{ search_url|default(route('search')) }}" value="{{ input_get('q') }}"></vue-searchbar>
+          </div>
 
-                    <span class="input-group-btn">
-                    <button class="btn btn-link">
-                        <i class="fas fa-search"></i>
-                    </button>
-                  </span>
-                  </div>
-                </form>
+          <div class="ml-auto">
+            {% if auth_check() %}
+              <ul id="nav-auth" class="nav-auth list-inline d-inline-block"></ul>
 
-                <button class="navbar-toggler d-inline-block d-md-none" type="button" data-toggle="collapse" data-target="#js-nav-mobile">
-                  <i class="fa fa-bars"></i>
-                </button>
-              </div>
+              <div class="dropdown nav-avatar d-none d-md-inline-block">
+                <a href="javascript:" class="dropdown-toggle img-thumbnail d-block" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="width: 35px">
+                  <img src="{{ user_photo(user('photo')) }}" style="width: 100%">
+                </a>
 
-              <div id="js-nav-mobile" class="collapse navbar-collapse nav-mobile pd-3 pb-3">
-                {% for item in __master_menu.roots() %}
-                    <a class="dropdown-link" href="{{ item.url }}">{{ item.title|raw }}</a>
-                {% endfor %}
+                <div class="dropdown-menu dropdown-menu-right">
+                  <a class="dropdown-item profile-name" href="{{ route('user.home') }}">{{ user('name') }}</a>
 
-                <div class="dropdown-divider"></div>
+                  <div class="dropdown-divider"></div>
 
-                {% if auth_check() %}
-                  <a class="dropdown-link" href="{{ route('user.settings') }}"><i class="fas fa-cog fa-fw"></i> Ustawienia</a>
-                  <a class="dropdown-link" href="{{ route('profile', [user('id')]) }}"><i class="fas fa-user fa-fw"></i> Profil</a>
+                  <a class="dropdown-item" href="{{ route('user.pm') }}"><i class="fas fa-envelope fa-fw"></i> Wiadomości</a>
+                  <a class="dropdown-item" href="{{ route('user.settings') }}"><i class="fas fa-cog fa-fw"></i> Ustawienia</a>
+                  <a class="dropdown-item" href="{{ route('profile', [user('id')]) }}"><i class="fas fa-user fa-fw"></i> Profil</a>
+                  <a class="dropdown-item" href="{{ url('Pomoc') }}"><i class="fas fa-info-circle fa-fw"></i> Pomoc</a>
 
                   {% if can('adm-access') %}
-                    <a class="dropdown-link" href="{{ route('adm.home') }}"><i class="fas fa-user-secret fa-fw"></i> Panel administracyjny</a>
+                    <a class="dropdown-item" href="{{ route('adm.home') }}"><i class="fas fa-user-secret fa-fw"></i> Panel administracyjny</a>
                   {% endif %}
 
                   <div class="dropdown-divider"></div>
 
-                  <a href="javascript:" class="dropdown-link js-change-menu position-relative"">Nowe menu <sup class="badge badge-pill label-new">Beta</sup></a>
+                  <a href="javascript:" class="dropdown-item js-change-menu position-relative">Nowe menu <sup class="badge badge-pill label-new">Beta</sup></a>
 
                   <div class="dropdown-divider"></div>
 
-                  <a href="javascript:" onclick="document['logout-form'].submit()" class="dropdown-link btn-sign-out"><i class="fas fa-sign-out-alt fa-fw"></i> Wyloguj</a>
-                {% else %}
-                  <div class="row">
-                    <div class="col-6">
-                      <a class="btn d-block btn-register btn-sm" href="{{ route('register') }}"><i class="fas fa-sign-in"></i> Utwórz konto</a>
-                    </div>
-                    <div class="col-6">
-                      <a class="btn-login d-block btn-sm d-block d-sm-none text-center" href="{{ route('login') }}">Logowanie</a>
-                    </div>
-                  </div>
-                {% endif %}
-
-                <div class="dropdown-divider"></div>
-
-                <form action="{{ search_url|default(route('search')) }}" role="search">
-                  <input type="text" name="q" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}" class="form-control form-control-sm">
-                </form>
+                  <a href="javascript:" onclick="document['logout-form'].submit()" class="dropdown-item btn-sign-out"><i class="fas fa-sign-out-alt fa-fw"></i> Wyloguj</a>
+                </div>
               </div>
-            </div>
+            {% else %}
+              <a class="btn btn-sm btn-register d-none d-sm-inline-block" href="{{ route('register') }}"><i class="fas fa-sign-in"></i> Utwórz konto</a>
+              <a class="btn btn-sm btn-login d-none d-sm-inline-block" href="{{ route('login') }}">Logowanie</a>
+            {% endif %}
+
+            <button class="navbar-toggler d-inline-block d-md-none" type="button" data-toggle="collapse" data-target="#js-nav-mobile">
+              <i class="fa fa-bars"></i>
+            </button>
+          </div>
+
+          <div id="js-nav-mobile" class="collapse navbar-collapse nav-mobile pd-3 pb-3">
+            {% for item in __master_menu.roots() %}
+              <a class="dropdown-link" href="{{ item.url }}">{{ item.title|raw }}</a>
+            {% endfor %}
+
+            <div class="dropdown-divider"></div>
+
+            {% if auth_check() %}
+              <a class="dropdown-link" href="{{ route('user.settings') }}"><i class="fas fa-cog fa-fw"></i> Ustawienia</a>
+              <a class="dropdown-link" href="{{ route('profile', [user('id')]) }}"><i class="fas fa-user fa-fw"></i> Profil</a>
+
+              {% if can('adm-access') %}
+                <a class="dropdown-link" href="{{ route('adm.home') }}"><i class="fas fa-user-secret fa-fw"></i> Panel administracyjny</a>
+              {% endif %}
+
+              <div class="dropdown-divider"></div>
+
+              <a href="javascript:" class="dropdown-link js-change-menu position-relative">Nowe menu <sup class="badge badge-pill label-new">Beta</sup></a>
+
+              <div class="dropdown-divider"></div>
+
+              <a href="javascript:" onclick="document['logout-form'].submit()" class="dropdown-link btn-sign-out"><i class="fas fa-sign-out-alt fa-fw"></i> Wyloguj</a>
+            {% else %}
+              <div class="row">
+                <div class="col-6">
+                  <a class="btn d-block btn-register btn-sm" href="{{ route('register') }}"><i class="fas fa-sign-in"></i> Utwórz konto</a>
+                </div>
+                <div class="col-6">
+                  <a class="btn-login d-block btn-sm d-block d-sm-none text-center" href="{{ route('login') }}">Logowanie</a>
+                </div>
+              </div>
+            {% endif %}
+
+            <div class="dropdown-divider"></div>
+
+            <form action="{{ search_url|default(route('search')) }}" role="search">
+              <input type="text" name="q" autocomplete="off" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}" class="form-control form-control-sm">
+            </form>
           </div>
         </div>
+
       </header>
 
       <div class="container-fluid">
@@ -234,7 +223,8 @@
 
         <div id="footer-copyright">
           <div class="row container-xxl no-gutters">
-            <div>Copyright © 2000-{{ 'now'|date('Y') }} <a title="4programmers.net -- programowanie" class="logo" href="http://4programmers.net/">4programmers.net - programowanie i tworzenie stron WWW</a></div>
+            <div>Copyright © 2000-{{ 'now'|date('Y') }} <a title="4programmers.net -- programowanie" class="logo" href="http://4programmers.net/">4programmers.net - programowanie i tworzenie stron
+                WWW</a></div>
 
             <div class="ml-auto">Coyote {{ config('app.version') }}: {{ timer() }}</div>
           </div>

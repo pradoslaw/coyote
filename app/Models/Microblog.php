@@ -210,17 +210,4 @@ class Microblog extends Model
     {
         return app(MediaFactory::class);
     }
-
-    /**
-     * Return data to index in elasticsearch
-     *
-     * @return array
-     */
-    protected function getIndexBody()
-    {
-        $body = array_only($this->parentGetIndexBody(), ['id', 'created_at', 'updated_at']);
-        $body['text'] = strip_tags($this->getHtmlAttribute());
-
-        return $body;
-    }
 }

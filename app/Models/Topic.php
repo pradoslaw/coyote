@@ -340,28 +340,4 @@ class Topic extends Model
     {
         return $this->forceFill(['rank' => $this->getRank(), 'views' => $this->views + $amount])->save();
     }
-
-    /**
-     * Return data to index in elasticsearch
-     *
-     * @return array
-     */
-    protected function getIndexBody()
-    {
-        $body = $this->parentGetIndexBody();
-
-        // we need to index every field from topics except:
-        $body = array_only($body, ['id', 'forum_id', 'subject', 'slug', 'updated_at']);
-        $posts = [];
-
-        foreach ($this->posts()->get(['text']) as $post) {
-            $posts[] = ['text' => strip_tags($post->html)];
-        }
-
-        return array_merge($body, [
-            'posts'     => $posts,
-            'subject'   => htmlspecialchars($this->subject),
-            'forum'     => $this->forum->only(['name', 'slug'])
-        ]);
-    }
 }

@@ -124,9 +124,8 @@ class TopicController extends BaseController
         $treeBuilder = new Builder($this->forum->list());
         $treeDecorator = new ListDecorator($treeBuilder);
 
-        $forumList = $this->withCriteria(function () use ($treeDecorator) {
-            return $treeDecorator->build();
-        }, true);
+        $this->pushForumCriteria(true);
+        $forumList = $treeDecorator->build();
 
         $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->slug, $topic->id, $topic->slug]));
 

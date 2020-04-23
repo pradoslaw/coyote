@@ -4,6 +4,7 @@ namespace Coyote\Console\Commands\Elasticsearch;
 
 use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Coyote\Repositories\Contracts\PostRepositoryInterface;
+use Coyote\Services\Elasticsearch\Crawler;
 use Illuminate\Console\Command;
 use Illuminate\Container\Container as App;
 use Illuminate\Database\Query\Expression;
@@ -68,11 +69,6 @@ class IndexCommand extends Command
     private function one($model)
     {
         $className = 'Coyote\\' . ucfirst(strtolower($model));
-        $models = $this->getSuitableModels();
-
-        if (!in_array($className, $models)) {
-            $this->error("Model $className does not exist nor implement Searchable trait.");
-        }
 
         $this->index($className);
     }
@@ -103,10 +99,11 @@ class IndexCommand extends Command
         }
 
         $bar = $this->output->createProgressBar($builder->count());
+        $crawler = new Crawler();
 
-        $builder->chunk(10000, function ($rowset) use ($bar) {
+        $builder->chunk(20000, function ($rowset) use ($bar, $crawler) {
             foreach ($rowset as $row) {
-                $row->putToIndex();
+                $crawler->index($row);
 
                 $bar->advance();
             }

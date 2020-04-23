@@ -569,94 +569,12 @@ class Job extends Model
     }
 
     /**
-     * @return string
-     */
-    public function routeNotificationForTwilio()
-    {
-        return $this->phone;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getIndexBody()
-    {
-        $body = $this->parentGetIndexBody();
-
-        // maximum offered salary
-        $salary = $this->monthlySalary(max($this->salary_from, $this->salary_to));
-        $body = array_only($body, ['id', 'slug', 'created_at', 'updated_at', 'boost_at', 'deadline_at', 'firm_id', 'is_remote', 'is_ads', 'user_id']);
-
-        $locations = [];
-
-        // We need to transform locations to format acceptable by elasticsearch.
-        // I'm talking here about the coordinates
-        /** @var \Coyote\Job\Location $location */
-        foreach ($this->locations()->get() as $location) {
-            $nested = ['city' => $location->city, 'label' => $location->label];
-
-            if ($location->latitude && $location->longitude) {
-                $nested['coordinates'] = [
-                    'lat' => $location->latitude,
-                    'lon' => $location->longitude
-                ];
-            }
-
-            $locations[] = $nested;
-        }
-
-        // I don't know why elasticsearch skips documents with empty locations field when we use function_score.
-        // That's why I add empty object (workaround).
-        if (empty($locations)) {
-            $locations[] = (object) [];
-        }
-
-        $body = array_merge($body, [
-            'title'             => htmlspecialchars($this->title),
-            'description'       => $this->stripTags($this->description),
-            'recruitment'       => $this->stripTags($this->recruitment),
-
-            // score must be int
-            'score'             => (int) $this->score,
-            'locations'         => $locations,
-            'salary'            => $salary,
-            'salary_from'       => $this->monthlySalary($this->salary_from),
-            'salary_to'         => $this->monthlySalary($this->salary_to),
-            // yes, we index currency name so we don't have to look it up in database during search process
-            'currency_symbol'   => $this->currency()->value('symbol'),
-            // higher tag's priorities first
-            'tags'              => $this->tags()->get(['name', 'priority'])->sortByDesc('pivot.priority')->pluck('name')->toArray(),
-            // index null instead of 100 is job is not remote
-            'remote_range'      => $this->is_remote ? $this->remote_range : null
-        ]);
-
-        if ($this->firm_id) {
-            // logo is instance of File object. casting to string returns file name.
-            // cast to (array) if firm is empty.
-            $body['firm'] = array_map('strval', (array) array_only($this->firm->toArray(), ['name', 'logo', 'slug']));
-        }
-
-        return $body;
-    }
-
-    /**
-     * @param string $value
-     * @return string
-     */
-    private function stripTags($value)
-    {
-        // w oferach pracy, edytor tinymce nie dodaje znaku nowej linii. zamiast tego mamy <br />. zamieniamy
-        // na znak nowej linii aby poprawnie zindeksowac tekst w elasticsearch. w przeciwnym przypadku
-        // teks foo<br />bar po przepuszczeniu przez stripHtml() zostalby zamieniony na foobar co niepoprawnie
-        // zostaloby zindeksowane jako jeden wyraz
-        return strip_tags(str_replace(['<br />', '<br>'], "\n", $value));
-    }
-
-    /**
      * @param float|null $salary
      * @return float|null
+     *
+     * @see \Coyote\Http\Resources\Elasticsearch\JobResource
      */
-    public function monthlySalary($salary)
+    public function monthlySalary(?float $salary): ?float
     {
         if (empty($salary) || $this->rate === self::MONTHLY) {
             return $salary;

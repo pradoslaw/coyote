@@ -6,6 +6,7 @@ use Coyote\Events\TopicWasDeleted;
 use Coyote\Events\TopicWasMoved;
 use Coyote\Post;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
+use Coyote\Services\Elasticsearch\Crawler;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class TopicListener implements ShouldQueue
@@ -16,11 +17,18 @@ class TopicListener implements ShouldQueue
     protected $topic;
 
     /**
-     * @param TopicRepository $topic
+     * @var Crawler
      */
-    public function __construct(TopicRepository $topic)
+    private $crawler;
+
+    /**
+     * @param TopicRepository $topic
+     * @param Crawler $crawler
+     */
+    public function __construct(TopicRepository $topic, Crawler $crawler)
     {
         $this->topic = $topic;
+        $this->crawler = $crawler;
     }
 
     /**
@@ -29,22 +37,23 @@ class TopicListener implements ShouldQueue
     public function onTopicMove(TopicWasMoved $event)
     {
         $event->topic->posts()->get()->each(function (Post $post) {
-            $post->putToIndex();
+            $this->crawler->index($post);
         });
 
-        $event->topic->putToIndex();
+        $this->crawler->index($event->topic);
     }
 
     /**
      * @param TopicWasDeleted $event
+     * @throws \Exception
      */
     public function onTopicDelete(TopicWasDeleted $event)
     {
         $topic = $this->topic->withTrashed()->find($event->topic['id']);
+        $this->crawler->delete($topic);
 
-        $topic->deleteFromIndex();
         $topic->posts()->withTrashed()->get()->each(function (Post $post) {
-            $post->deleteFromIndex();
+            $this->crawler->delete($post);
         });
     }
 

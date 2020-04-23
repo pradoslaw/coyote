@@ -97,20 +97,12 @@ abstract class BaseController extends Controller
     /**
      * Applies repository criteria
      *
-     * @deprecated
+     * @param bool $ignoreHidden
      */
-    protected function pushForumCriteria()
-    {
-        $this->forum->pushCriteria(new OnlyThoseWithAccess($this->auth));
-        $this->forum->pushCriteria(new AccordingToUserOrder($this->userId));
-    }
-
-    protected function withCriteria(\Closure $closure, bool $ignoreHidden = false)
+    protected function pushForumCriteria(bool $ignoreHidden = false)
     {
         $this->forum->pushCriteria(new OnlyThoseWithAccess($this->auth));
         $this->forum->pushCriteria(new AccordingToUserOrder($this->userId, $ignoreHidden));
-
-        return $closure();
     }
 
     /**

@@ -2,9 +2,9 @@
 
 namespace Coyote\Providers;
 
+use Coyote\Http\Composers\InitialStateComposer;
 use Coyote\Http\Factories\CacheFactory;
 use Coyote\Services\Guest;
-use Coyote\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\ServiceProvider;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface;
@@ -12,8 +12,6 @@ use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Lavary\Menu\Builder;
 use Lavary\Menu\Menu;
-use Lcobucci\JWT\Signer\Hmac\Sha256;
-use Lcobucci\JWT\Signer\Key;
 
 class ViewServiceProvider extends ServiceProvider
 {
@@ -26,86 +24,16 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app['view']->composer(['layout', 'adm.home'], function (View $view) {
-            $this->registerPublicData();
-            $this->registerWebSocket();
+        $this->app['view']->composer(['layout', 'adm.home'], InitialStateComposer::class);
 
+        $this->app['view']->composer('layout', function (View $view) {
             $view->with([
-                '__public' => json_encode($this->app['request']->attributes->all()),
                 '__master_menu' => $this->buildMasterMenu(),
 
                 // temporary code
                 '__dark_theme' => $this->app[Guest::class]->getSetting('dark.theme', false)
             ]);
         });
-    }
-
-    private function registerWebSocket()
-    {
-        if (config('services.ws.host') && $this->app['request']->user()) {
-            $this->app['request']->attributes->set(
-                'ws',
-                config('services.ws.host') . (config('services.ws.port') ? ':' . config('services.ws.port') : '')
-            );
-        }
-    }
-
-    private function registerPublicData()
-    {
-        $this->app['request']->attributes->add([
-            'public'        => route('home'),
-            'notifications_unread' => 0,
-            'pm_unread'     => 0
-        ]);
-
-        if (!empty($this->app['request']->user())) {
-            /** @var \Coyote\User $user */
-            $user = $this->app['request']->user();
-
-            $this->app['request']->attributes->add([
-                'id'                    => $user->id,
-                'date_format'           => $this->mapFormat($user->date_format),
-                'token'                 => $this->getJWtToken($user),
-                'notifications_unread'  => $user->notifications_unread,
-                'pm_unread'             => $user->pm_unread,
-                'created_at'            => $user->created_at->toIso8601String()
-            ]);
-        }
-    }
-
-    /**
-     * @param string $format
-     * @return string
-     */
-    private function mapFormat(string $format): string
-    {
-        $values = [
-            'dd-MM-yyyy HH:mm',
-            'yyyy-MM-dd HH:mm',
-            'MM/dd/yy HH:mm',
-            'dd-MM-yy HH:mm',
-            'dd MMM yy HH:mm',
-            'dd MMMM yyyy HH:mm'
-        ];
-
-        return array_combine(array_keys(User::dateFormatList()), $values)[$format];
-    }
-
-    /**
-     * @param User $user
-     * @return string
-     */
-    private function getJWtToken(User $user): string
-    {
-        $signer = new Sha256();
-
-        $token = (new \Lcobucci\JWT\Builder())
-            ->issuedAt(now()->timestamp)
-            ->expiresAt(now()->addDays(7)->timestamp)
-            ->withClaim('channel', "user:$user->id")
-            ->getToken($signer, new Key(config('app.key')));
-
-        return (string) $token;
     }
 
     private function buildMasterMenu()

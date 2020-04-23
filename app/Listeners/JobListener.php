@@ -7,6 +7,7 @@ use Coyote\Events\JobWasSaved;
 use Coyote\Events\PaymentPaid;
 use Coyote\Jobs\UpdateJobOffers;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
+use Coyote\Services\Elasticsearch\Crawler;
 
 // Uwaga! Tutaj specjalnie nie implementujemy interfejsu ShouldQueue poniewaz chcemy zeby usuniecie
 // czy dodanie oferty do indeksu nastapilo momentalnie.
@@ -18,11 +19,17 @@ class JobListener
     protected $job;
 
     /**
+     * @var Crawler
+     */
+    private $crawler;
+
+    /**
      * @param JobRepository $job
      */
     public function __construct(JobRepository $job)
     {
         $this->job = $job;
+        $this->crawler = new Crawler();
     }
 
     /**
@@ -31,7 +38,7 @@ class JobListener
     public function onJobSave(JobWasSaved $event)
     {
         if ($event->job->is_publish) {
-            $event->job->putToIndex();
+            $this->crawler->index($event->job);
         }
 
         // we need to update elasticsearch index by updating firm name and logo in all job offers
@@ -42,11 +49,12 @@ class JobListener
 
     /**
      * @param JobDeleting $event
+     * @throws \Exception
      */
     public function onJobDeleting(JobDeleting $event)
     {
         if ($event->job->is_publish) {
-            $event->job->deleteFromIndex();
+            $this->crawler->delete($event->job);
         }
     }
 

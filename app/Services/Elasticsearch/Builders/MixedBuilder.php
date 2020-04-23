@@ -15,10 +15,10 @@ class MixedBuilder extends QueryBuilder
 {
     const PER_PAGE = 10;
 
-    const TOPIC = 'topic';
-    const MICROBLOG = 'microblog';
-    const WIKI = 'wiki';
-    const JOB = 'job';
+    const TOPIC = 'Topic';
+    const MICROBLOG = 'Microblog';
+    const WIKI = 'Wiki';
+    const JOB = 'Job';
 
     private const DEFAULT = [self::TOPIC, self::MICROBLOG, self::WIKI, self::JOB];
 
@@ -57,7 +57,7 @@ class MixedBuilder extends QueryBuilder
             $validator = validator($this->request->toArray(), ['type' => 'nullable', Rule::in(self::DEFAULT)]);
 
             if (!$validator->fails()) {
-                $models = $this->request->input('type');
+                $models = ucfirst($this->request->input('type'));
             }
         }
 

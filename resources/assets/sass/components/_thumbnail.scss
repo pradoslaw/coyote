@@ -52,7 +52,8 @@
 $thumbnail-size: (
   35: 35px,
   38: 38px,
-  45: 45px
+  45: 45px,
+  16: 16px,
 );
 
 @each $name, $size in $thumbnail-size {

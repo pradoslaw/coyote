@@ -22,48 +22,6 @@ trait Searchable
      */
     abstract public function getKey();
 
-    /**
-     * Index data in elasticsearch
-     *
-     * @return null|callable
-     * @throws \Exception
-     */
-    public function putToIndex()
-    {
-        $params = $this->getParams();
-        $body = $this->getIndexBody();
-
-        if (empty($body)) {
-            return null;
-        }
-
-        $body['model'] = str_singular($this->getTable());
-        $params['body'] = $body;
-
-        return $this->getClient()->index($params);
-    }
-
-    /**
-     * Delete document from index
-     *
-     * @throws Missing404Exception,
-     * @throws \Exception
-     * @return callable
-     */
-    public function deleteFromIndex()
-    {
-        $result = false;
-
-        try {
-            $result = $this->getClient()->delete($this->getParams());
-        } catch (Missing404Exception $e) {
-            // ignore 404 errors...
-        } catch (\Exception $e) {
-            throw $e;
-        }
-
-        return $result;
-    }
 
     /**
      * @param QueryBuilderInterface $queryBuilder

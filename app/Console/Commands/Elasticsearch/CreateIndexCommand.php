@@ -90,7 +90,16 @@ class CreateIndexCommand extends Command
                                         "keep_symbols_filter",
                                         "asciifolding"
                                     ]
-                                ]
+                                ],
+                                // elasticsearch completion suggestion
+                                "completion_analyzer" => [
+                                    "tokenizer" => "whitespace",
+                                    "filter" => [
+                                        "lowercase",
+                                        "keep_symbols_filter",
+                                        "asciifolding"
+                                    ]
+                                ],
                             ]
                         ]
                     ]
@@ -102,20 +111,28 @@ class CreateIndexCommand extends Command
                                 "type" => "keyword"
                             ],
                             "created_at" => [
-                                "type" => "date",
-                                "format" => "yyyy-MM-dd HH:mm:ss"
+                                "type" => "date"
                             ],
                             "updated_at" => [
-                                "type" => "date",
-                                "format" => "yyyy-MM-dd HH:mm:ss"
+                                "type" => "date"
                             ],
                             "deadline_at" => [
                                 "type" => "date",
-                                "format" => "yyyy-MM-dd HH:mm:ss"
                             ],
                             "boost_at" => [
                                 "type" => "date",
-                                "format" => "yyyy-MM-dd HH:mm:ss"
+                                "copy_to" => "decay_date"
+                            ],
+                            "visited_at" => [
+                                "type" => "date",
+                                "copy_to" => "decay_date"
+                            ],
+                            "last_post_created_at" => [
+                                "type" => "date",
+                                "copy_to" => "decay_date"
+                            ],
+                            "decay_date" => [
+                                "type" => "date"
                             ],
                             "text" => [
                                 "type" => "text",
@@ -238,6 +255,27 @@ class CreateIndexCommand extends Command
                                 "type" => "text",
                                 // ability to search case insensitive
                                 "analyzer" => "keyword_analyzer"
+                            ],
+                            "name" => [
+                                "type" => "text",
+                                // ability to search case insensitive
+                                "analyzer" => "keyword_analyzer"
+                            ],
+                            "suggest" => [
+                                "type" => "completion",
+                                "analyzer" => "completion_analyzer",
+                                "contexts" => [
+                                    [
+                                        "name" => "model",
+                                        "type" => "category",
+                                        "path" => "model"
+                                    ],
+                                    [
+                                        "name" => "category",
+                                        "type" => "category"
+                                    ]
+                                ]
+//                                "preserve_position_increments" => false
                             ]
                         ]
                     ]
