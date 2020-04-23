@@ -277,7 +277,7 @@ class Topic extends Model
      */
     public function markTime(?string $guestId)
     {
-        if ($guestId !== null && !array_key_exists('read_at', $this->attributes)) {
+        if ($guestId !== null && !isset($this->attributes['read_at'])) {
             $this->attributes['read_at'] = $this->tracks()->select('marked_at')->where('guest_id', $guestId)->value('marked_at');
         }
 

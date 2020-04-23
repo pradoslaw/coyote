@@ -115,7 +115,7 @@ function manifest($path)
         $manifest = json_decode(file_get_contents($manifestPath), true);
     }
 
-    if (!array_key_exists($path, $manifest)) {
+    if (!isset($manifest[$path])) {
         throw new Exception(
             "Unable to locate webpack mix file: {$path}. Please check your " .
             'webpack.mix.js output paths and try again.'
