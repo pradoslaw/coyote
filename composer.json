@@ -50,6 +50,7 @@
         "php-http/guzzle6-adapter": "^1.1",
         "php-http/message": "^1.5",
         "predis/predis": "^1.0",
+        "rawr/t-regx": "^0.9.8",
         "rcrowe/twigbridge": "0.9.*",
         "sentry/sentry-laravel": "^1.1",
         "twig/extensions": "^1.3"
