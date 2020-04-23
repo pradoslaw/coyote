@@ -15,6 +15,13 @@ abstract class AbstractNotification extends Notification implements ShouldQueue,
     use Queueable;
 
     /**
+     * Indicate if the job should be deleted when models are missing.
+     *
+     * @var bool
+     */
+    public $deleteWhenMissingModels = true;
+
+    /**
      * @var Microblog
      */
     protected $microblog;
