@@ -274,7 +274,6 @@
     }
 
     shortcutSupport(event: KeyboardEvent): void {
-      console.log(event);
       if (event.key === '?' && event.shiftKey && (!/^(?:input|textarea|select|button)$/i.test((event.target as HTMLElement).tagName))) {
         event.preventDefault();
 
