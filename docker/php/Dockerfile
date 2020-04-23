@@ -1,4 +1,4 @@
-FROM php:7.4-fpm-alpine
+FROM php:7.3-fpm-alpine
 
 LABEL maintainer="4programmers.net <support@4programmers.net>"
 
@@ -28,10 +28,9 @@ RUN apk update && apk add --no-cache \
     make \
     autoconf \
     gcc \
-    git \
-    oniguruma-dev
+    git
 
-RUN docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
+RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-png-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) pgsql gd soap pdo_pgsql mbstring zip opcache iconv
 
 RUN pecl install xdebug
