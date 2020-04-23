@@ -26,13 +26,13 @@ class HomeController extends BaseController
             $grid = $this->grid();
 
             if (!$request->getQueryString()) {
-                $cache->put('wiki:log', $grid, 30);
+                $cache->put('wiki:log', $grid, now()->addMinutes(30));
             }
         } else {
             $grid = $cache->get('wiki:log');
         }
 
-        $categories = $cache->remember('wiki:categories', 60 * 24, function () {
+        $categories = $cache->remember('wiki:categories', now()->addDay(), function () {
             $this->wiki->pushCriteria(new BelowDepth());
             return $this->wiki->children();
         });

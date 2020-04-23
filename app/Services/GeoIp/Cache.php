@@ -6,7 +6,7 @@ use Illuminate\Contracts\Cache\Repository;
 
 class Cache
 {
-    const TTL = 60 * 24 * 30; // 30d
+    const TTL = 60 * 60 * 24 * 30; // 30d
 
     /**
      * @var GeoIp

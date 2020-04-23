@@ -6,7 +6,7 @@ use Illuminate\Contracts\Cache\Repository;
 
 class Cache
 {
-    const CACHE_TTL = 60 * 24 * 14; // 14d
+    const CACHE_TTL = 60 * 60 * 24 * 14; // 14d
 
     /**
      * @var bool

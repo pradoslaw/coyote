@@ -28,7 +28,7 @@ use Laravel\Passport\Passport;
 class AuthServiceProvider extends ServiceProvider
 {
     // cache permission for 1 month
-    const CACHE_TTL = 60 * 24 * 30;
+    const CACHE_TTL = 60 * 60 * 24 * 30;
 
     /**
      * The policy mappings for the application.

@@ -120,7 +120,7 @@ abstract class BaseController extends Controller
     protected function getTagClouds()
     {
         // let's cache tags. we don't need to run this query every time
-        return $this->getCacheFactory()->remember('forum:tags', 60 * 24, function () {
+        return $this->getCacheFactory()->remember('forum:tags', now()->addDay(), function () {
             return $this->forum->getTagsCloud();
         });
     }

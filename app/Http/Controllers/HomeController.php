@@ -85,7 +85,7 @@ class HomeController extends Controller
                 $name = substr($snake, 4);
 
                 if (in_array($name, ['reputation', 'newest', 'voted', 'interesting', 'blog', 'patronage'])) {
-                    $result[$name] = $cache->remember('homepage:' . $name, 30, function () use ($method) {
+                    $result[$name] = $cache->remember('homepage:' . $name, 30 * 60, function () use ($method) {
                         return $this->$method();
                     });
                 } else {

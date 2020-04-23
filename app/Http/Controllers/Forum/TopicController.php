@@ -72,7 +72,7 @@ class TopicController extends BaseController
 
         // build "more like this" block. it's important to send elasticsearch query before
         // send SQL query to database because search() method exists only in Model and not Builder class.
-        $mlt = $this->getCacheFactory()->remember('mlt-post:' . $topic->id, 60 * 24, function () use ($topic) {
+        $mlt = $this->getCacheFactory()->remember('mlt-post:' . $topic->id, now()->addDay(), function () use ($topic) {
             $this->forum->pushCriteria(new OnlyThoseWithAccess());
 
             $builder = new MoreLikeThisBuilder($topic, $this->forum->pluck('id'));
