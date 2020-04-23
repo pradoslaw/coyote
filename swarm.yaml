@@ -277,6 +277,22 @@ services:
       options:
         tag: websocket
 
+  node-es:
+    image: 4programmers/node-es:latest
+    networks:
+      - coyote
+    tty: true
+    environment:
+      PORT: "3500"
+      ELASTICSEARCH_HOST: "elasticsearch"
+      INDEX: "coyote"
+    secrets:
+      - APP_KEY_FILE
+    logging:
+      driver: "json-file"
+      options:
+        tag: node-es
+
 volumes:
   postgres:
   elasticsearch6:
