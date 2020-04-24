@@ -4,6 +4,7 @@ import 'core-js/features/promise';
 import 'core-js/features/string/starts-with';
 // JS's findIndex() -- support for IE and old Opera
 import 'core-js/features/array/find-index';
+import 'core-js/features/array/find';
 // JS's includes -- support for old browsers
 import 'core-js/features/array/includes';
 // Object.assign -- support for old browsers
