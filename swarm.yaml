@@ -278,7 +278,7 @@ services:
         tag: websocket
 
   node-es:
-    image: 4programmers/node-es:latest
+    image: 4programmers/coyote-es:latest
     networks:
       - coyote
     tty: true
