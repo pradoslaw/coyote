@@ -23,6 +23,14 @@ class Topic extends Normalizer
     /**
      * @return string
      */
+    public function updatedAt()
+    {
+        return $this->hit['_source']['last_post_created_at'];
+    }
+
+    /**
+     * @return string
+     */
     public function excerpt()
     {
         return isset($this->hit['highlight']['text'])
