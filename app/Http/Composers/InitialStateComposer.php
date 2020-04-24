@@ -3,6 +3,7 @@
 namespace Coyote\Http\Composers;
 
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
+use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\User;
 use Illuminate\Http\Request;
@@ -125,13 +126,14 @@ class InitialStateComposer
     private function getJWtToken(User $user): string
     {
         $signer = new Sha256();
+        $allowed = array_pluck($this->getAllowedForums($user), 'id');
 
         $token = (new \Lcobucci\JWT\Builder())
             ->issuedAt(now()->timestamp)
             ->expiresAt(now()->addDays(7)->timestamp)
             ->issuedBy($user->id)
             ->withClaim('channel', "user:$user->id")
-            ->withClaim('guarded', $this->getGuardedForums($user))
+            ->withClaim('allowed', $allowed)
             ->getToken($signer, new Key(config('app.key')));
 
         return (string) $token;
@@ -141,7 +143,7 @@ class InitialStateComposer
      * @param User $user
      * @return array
      */
-    private function getGuardedForums(User $user): array
+    private function getAllowedForums(User $user): array
     {
         return $this->cache->tags('forum-order')->remember('forum-order:' . $user->id, now()->addMonth(1), function () use ($user) {
             // since repository is singleton, we have to reset previously set criteria to avoid duplicated them.
@@ -150,8 +152,9 @@ class InitialStateComposer
             $this->forum->skipCriteria(false);
 
             $this->forum->pushCriteria(new OnlyThoseWithAccess($user));
+            $this->forum->pushCriteria(new AccordingToUserOrder($user->id, true));
 
-            return array_values($this->forum->findHiddenIds($user->id));
+            return $this->forum->list()->toArray();
         });
     }
 }
