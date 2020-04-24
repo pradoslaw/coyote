@@ -27,7 +27,7 @@ class Crawler
         $resource = $this->makeResource($model);
 
         $this->client->index(
-            array_merge_recursive($this->getDefaultParams($model), ['body' => $resource->jsonSerialize()])
+            array_merge_recursive($this->getDefaultParams($model), ['body' => array_merge($resource->jsonSerialize(), ['model' => class_basename($model)])])
         );
 
         unset($resource);
@@ -57,10 +57,7 @@ class Crawler
         return [
             'index'     => config('elasticsearch.default_index'),
             'type'      => '_doc',
-            'id'        => str_singular($model->getTable()) . '_' . $model->getKey(),
-            'body'      => [
-                'model'         => class_basename($model)
-            ]
+            'id'        => str_singular($model->getTable()) . '_' . $model->getKey()
         ];
     }
 
