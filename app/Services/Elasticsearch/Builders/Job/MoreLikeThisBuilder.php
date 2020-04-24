@@ -35,6 +35,7 @@ class MoreLikeThisBuilder extends QueryBuilder
         ]);
 
         $this->must($mlt);
+        $this->must(new Term('model', class_basename(Job::class)));
         $this->mustNot(new Term('id', $this->job->id));
 
         $this->size(0, 5);

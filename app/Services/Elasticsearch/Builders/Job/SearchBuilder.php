@@ -13,6 +13,7 @@ use Coyote\Services\Elasticsearch\QueryBuilder;
 use Coyote\Services\Elasticsearch\Filters;
 use Coyote\Services\Elasticsearch\Sort;
 use Coyote\Services\Geocoder\Location;
+use Coyote\Topic;
 use Illuminate\Http\Request;
 
 class SearchBuilder extends QueryBuilder
@@ -178,7 +179,7 @@ class SearchBuilder extends QueryBuilder
      */
     public function build()
     {
-        $this->must(new Filters\Term('model', 'job'));
+        $this->must(new Filters\Term('model', class_basename(Topic::class)));
 
         if ($this->request->filled('q')) {
             $this->must(
