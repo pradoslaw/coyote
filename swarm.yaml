@@ -286,6 +286,7 @@ services:
       PORT: "3500"
       ELASTICSEARCH_HOST: "elasticsearch"
       INDEX: "coyote"
+      APP_KEY_FILE: /run/secrets/APP_KEY_FILE
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3500/healtcheck || exit 1"]
       interval: 30s
