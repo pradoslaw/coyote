@@ -47,7 +47,7 @@ class Smilies extends Parser implements ParserInterface
             ->callback(function (Match $match) {
                 $smiley = $match->get(1);
                 $link = $this->smilies[$smiley];
-                return '<img class="img-smile" alt="' . $smiley . '" title="' . $smiley . '" src="/cdn/img/smilies/' . $link . '">';
+                return '<img class="img-smile" alt="' . $smiley . '" title="' . $smiley . '" src="/img/smilies/' . $link . '">';
             });
 
         $text = $this->unhash($text);
