@@ -63,7 +63,7 @@ class MixedBuilder extends QueryBuilder
 
         $this
             ->must(new Terms('model', $models))
-            ->must(new QueryString(preg_quote($this->request->input('q'), '/:'), $fields))
+            ->must(new QueryString(preg_quote($this->request->input('q'), '/'), $fields))
             ->must(new OnlyThoseWithAccess($this->request->attributes->get('forum_id')))
             ->sort(new Sort($this->request->get('sort', '_score'), $this->request->get('order', 'desc')))
             ->highlight(

@@ -34,7 +34,7 @@ class Censore extends Parser implements ParserInterface
         $words = [];
 
         foreach ($this->word->all() as $row) {
-            $word = '#(?<![\p{L}\p{N}_])' . str_replace('\*', '(\p{L}*?)', preg_quote($row['word'], '#')) . '(?![\p{L}\p{N}_])#iu';
+            $word = '#(?<![\p{L}\p{N}_])' . str_replace('\*', '(\p{L}*?)', preg_quote($row['word'])) . '(?![\p{L}\p{N}_])#iu';
             $words[$word] = $row['replacement'];
         }
 
