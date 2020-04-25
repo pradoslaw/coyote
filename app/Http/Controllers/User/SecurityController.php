@@ -33,7 +33,7 @@ class SecurityController extends BaseController
         $ips = [];
         
         foreach ($request->get('ips') as $element) {
-            if (preg_match('#[0-9\*]{1,3}#', $element)) {
+            if (pattern('[0-9*]{1,3}')->test($element)) {
                 $ips[] = $element;
             }
         }
