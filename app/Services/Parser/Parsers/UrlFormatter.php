@@ -1,5 +1,8 @@
 <?php
+
 namespace Coyote\Services\Parser\Parsers;
+
+use Collective\Html\HtmlBuilder;
 
 class UrlFormatter
 {
@@ -11,13 +14,16 @@ class UrlFormatter
 
     /** @var string */
     private $host;
+    /** @var HtmlBuilder */
+    private $html;
 
-    public function __construct(string $host)
+    public function __construct(string $host, HtmlBuilder $html)
     {
         $this->host = $host;
+        $this->html = $html;
     }
 
-    public function parse(string $text):string
+    public function parse(string $text): string
     {
 
         $processed = preg_replace_callback(
@@ -31,7 +37,7 @@ class UrlFormatter
 
                 $title = $this->truncate(htmlspecialchars($match[0], ENT_QUOTES, 'UTF-8', false));
 
-                return link_to($url, $title);
+                return $this->html->link($url, $title);
             },
             $text
         );
