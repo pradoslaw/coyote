@@ -102,7 +102,7 @@ class Realtime {
 class RealtimeFactory {
   constructor() {
     if (!RealtimeFactory.instance) {
-      let realtime = new Realtime(Config.get('ws'), Config.get('token'));
+      let realtime = new Realtime(Config.get('ws'), Config.get('user').token);
 
       // response to the heartbeat event
       realtime.on('hb', (data, handler) => handler.send(data));
