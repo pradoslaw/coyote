@@ -4,8 +4,10 @@ namespace Coyote;
 
 use Coyote\Services\Elasticsearch\QueryBuilderInterface;
 use Coyote\Services\Elasticsearch\ResultSet;
-use Elasticsearch\Common\Exceptions\Missing404Exception;
 
+/**
+ * @deprecated
+ */
 trait Searchable
 {
     /**

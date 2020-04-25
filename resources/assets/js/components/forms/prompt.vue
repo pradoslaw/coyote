@@ -11,11 +11,7 @@
   import VueDropdown from './dropdown.vue';
   import VueError from './error.vue';
   import axios from 'axios';
-
-  const ESC = 27;
-  const ENTER = 13;
-  const UP = 38;
-  const DOWN = 40;
+  import { SpecialKeys } from '../../types/keys.ts';
 
   export default {
     components: { 'vue-dropdown': VueDropdown, 'vue-error': VueError },
@@ -43,8 +39,8 @@
       this.input.addEventListener('keydown', this.onKeyDown);
     },
     computed: {
-      isDropdownShown() {
-        return this.$refs.dropdown.isDropdownShown;
+      isDropdownVisible() {
+        return this.$refs.dropdown.isDropdownVisible;
       }
     },
     methods: {
@@ -55,14 +51,14 @@
         const caretPosition = this.getCaretPosition();
         const startIndex = this.getUserNamePosition(caretPosition);
 
-        if (this.isDropdownShown) {
-          if (keyCode === ESC) {
+        if (this.isDropdownVisible) {
+          if (keyCode === SpecialKeys.ESC) {
             this.items = [];
-          } else if (keyCode === DOWN) {
+          } else if (keyCode === SpecialKeys.DOWN) {
             this.$refs.dropdown.goDown();
-          } else if (keyCode === UP) {
+          } else if (keyCode === SpecialKeys.UP) {
             this.$refs.dropdown.goUp();
-          } else if (keyCode === ENTER) {
+          } else if (keyCode === SpecialKeys.ENTER) {
             const item = this.$refs.dropdown.getSelected();
 
             if (item) {
@@ -70,9 +66,10 @@
             }
 
             this.$refs.dropdown.hideDropdown();
-          }
 
-          return;
+            // item was selected so there is not point to look up for user name.
+            return;
+          }
         }
 
         if (startIndex > -1) {
@@ -90,7 +87,7 @@
       },
 
       onKeyDown(e) {
-        if (this.isDropdownShown && [ESC, ENTER, UP, DOWN].indexOf(e.keyCode) !== -1) {
+        if (this.isDropdownVisible && Object.values(SpecialKeys).indexOf(e.keyCode) !== -1) {
           e.preventDefault();
         }
       },

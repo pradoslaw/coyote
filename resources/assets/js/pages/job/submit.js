@@ -6,7 +6,7 @@ import VueThumbnail from '../../components/thumbnail.vue';
 import VuePricing from '../../components/pricing.vue';
 import VueTagsDropdown from '../../components/tags-dropdown.vue';
 import VueTagsSkill from '../../components/tag-skill.vue';
-import VueGooglePlace from '../../components/google-place.vue';
+import VueGooglePlace from '../../components/google-maps/place.vue';
 import VueText from '../../components/forms/text.vue';
 import VueSelect from '../../components/forms/select.vue';
 import VueCheckbox from '../../components/forms/checkbox.vue';

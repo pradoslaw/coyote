@@ -104,7 +104,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     public function list()
     {
         return $this->applyCriteria(function () {
-            return $this->model->addSelect('forums.id', 'name', 'slug', 'parent_id')->orderBy('forums.order')->get();
+            return $this->model->addSelect('forums.id', 'name', 'slug', 'forums.section', 'parent_id')->orderBy('forums.order')->get();
         });
     }
 

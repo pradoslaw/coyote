@@ -5,12 +5,23 @@ namespace Coyote\Http\Resources\Elasticsearch;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 
 /**
+ * @property int $user_id
+ * @property int $firm_id
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  * @property \Carbon\Carbon $deleted_at
  * @property \Carbon\Carbon $deadline_at
  * @property \Carbon\Carbon $boost_at
+ * @property int $salary_from
+ * @property int $salary_to
  * @method monthlySalary(float $salary): float
+ * @property float $score
+ * @property int $is_remote
+ * @property int $remote_range
+ * @property string $slug
+ * @property string $title
+ * @property string $description
+ * @property string $recruitment
  */
 class JobResource extends ElasticsearchResource
 {

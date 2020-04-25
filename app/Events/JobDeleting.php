@@ -10,7 +10,7 @@ class JobDeleting extends Event
     use SerializesModels;
 
     /**
-     * @var array
+     * @var Job
      */
     public $job;
 

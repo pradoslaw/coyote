@@ -8,6 +8,7 @@ use Coyote\Repositories\Contracts\SubscribableInterface;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
+use Lavary\Menu\Builder;
 use Lavary\Menu\Menu;
 
 class FavoritesController extends BaseController
@@ -98,7 +99,7 @@ class FavoritesController extends BaseController
      */
     protected function getTabs()
     {
-        return app(Menu::class)->make('favorites', function ($menu) {
+        return app(Menu::class)->make('favorites', function (Builder $menu) {
             $tabs = [
                 'user.favorites.forum' => 'Wątki na forum',
                 'user.favorites.job' => 'Oferty pracy',
@@ -107,7 +108,12 @@ class FavoritesController extends BaseController
             ];
 
             foreach ($tabs as $route => $label) {
-                $menu->add($label, ['route' => $route]);
+                $item = $menu->add("<span>$label</span>", ['route' => $route]);
+                $item->link->attr(['class' => 'nav-item']);
+
+                if ($route === request()->route()->getName()) {
+                    $item->link->active();
+                }
             }
         });
     }

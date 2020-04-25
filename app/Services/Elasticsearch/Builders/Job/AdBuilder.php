@@ -2,6 +2,7 @@
 
 namespace Coyote\Services\Elasticsearch\Builders\Job;
 
+use Coyote\Job;
 use Coyote\Services\Elasticsearch\Filters\Term;
 use Coyote\Services\Elasticsearch\Functions\Random;
 use Coyote\Services\Elasticsearch\QueryBuilder;
@@ -24,7 +25,7 @@ class AdBuilder extends SearchBuilder
     {
         // only premium offers
         $this->must(new Term('is_ads', true));
-        $this->must(new Term('model', 'job'));
+        $this->must(new Term('model', class_basename(Job::class)));
 
         $this->score(new Random());
         $this->size(0, 4);

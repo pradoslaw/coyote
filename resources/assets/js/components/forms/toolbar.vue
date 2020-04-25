@@ -21,13 +21,13 @@
           <button @click="insertAtCaret('<br>Nagłówek 1 | Nagłówek 2<br>---------------- | -------------------<br>Kolumna1 | Kolumna 2<br>', '')" type="button" class="btn btn-sm btn-secondary" title="Tabela"><i class="fas fa-table fa-fw"></i></button>
           <button @click="insertCitation" type="button" class="btn btn-sm btn-secondary btn-quote" title="Wstaw cytat"><i class="fas fa-quote-left fa-fw"></i></button>
 
-          <div id="select-menu" class="btn-group" :class="{'open': isDropdownShown}">
+          <div id="select-menu" class="btn-group">
             <button @click="insertAtCaret('```<br>', '<br>```')" type="button" class="btn btn-sm btn-secondary" title="Kod źródłowy"><i class="fas fa-code fa-fw"></i></button>
             <button @click="toggleDropdown" type="button" class="btn btn-sm btn-secondary dropdown-toggle" aria-haspopup="true" aria-expanded="false">
               <span class="caret"></span>
             </button>
 
-            <div v-if="isDropdownShown" v-on-clickaway="hideDropdown" class="dropdown-menu select-menu">
+            <div :class="{'show': isDropdownVisible}" v-on-clickaway="hideDropdown" class="dropdown-menu select-menu">
               <div class="select-menu-search">
                 <input v-model="searchText" @keyup.esc="hideDropdown" ref="search" type="text" class="form-control form-control-sm" placeholder="Filtruj..." autocomplete="off">
               </div>
@@ -142,7 +142,7 @@
         textarea: null,
         languages,
         searchText: '',
-        isDropdownShown: false
+        isDropdownVisible: false
       }
     },
     mounted() {
@@ -151,7 +151,7 @@
     methods: {
       insertAtCaret(startsWith, endsWith) {
         this.textarea.insertAtCaret(startsWith.replace(/<br>/g, "\n"), endsWith.replace(/<br>/g, "\n"), this.textarea.isSelected() ? this.textarea.getSelection() : '');
-        this.hideDropdown();
+        this.isDropdownVisible = false;
 
         this.$emit('update', this.textarea.value);
       },
@@ -163,15 +163,17 @@
       },
 
       toggleDropdown() {
-        this.isDropdownShown = !this.isDropdownShown;
+        this.isDropdownVisible = !this.isDropdownVisible;
 
-        if (this.isDropdownShown) {
+        if (this.isDropdownVisible) {
           this.$nextTick(() => this.$refs.search.focus());
         }
       },
 
-      hideDropdown() {
-        this.isDropdownShown = false;
+      hideDropdown(event) {
+        if (event && !event.target.classList.contains('dropdown-toggle')) {
+          this.isDropdownVisible = false;
+        }
       }
     },
     computed: {

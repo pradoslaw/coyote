@@ -10,6 +10,6 @@ class Raw
      */
     public static function escape($query)
     {
-        return str_replace(['/', '\:'], ['\/', ':'], preg_quote($query, '+-!{}[]^~*?\\'));
+        return str_replace(['/', '\:'], ['\/', ':'], preg_quote($query));
     }
 }

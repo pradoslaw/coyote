@@ -4,33 +4,31 @@
 {% import 'components.forms' as forms %}
 
 {% block content %}
-    <h2>Ulubione i obserwowane strony</h2>
+  <h2>Ulubione i obserwowane strony</h2>
 
-    <ul class="nav nav-card">
-        {% for tab in tabs.roots() %}
-            <li {{ forms.attr(tab.attr) }}>
-                <a href="{{ tab.url }}">{{ tab.title|raw }}</a>
-            </li>
-        {% endfor %}
-    </ul>
+  <nav class="nav nav-panel nav-card">
+    {% for tab in tabs.roots() %}
+      <a href="{{ tab.url }}" {{ forms.attr(tab.link.attr) }}>{{ tab.title|raw }}</a>
+    {% endfor %}
+  </nav>
 
-    <div class="card card-default">
-        <div class="card-body">
-            <nav class="d-flex justify-content-center mt-2 mb-2">{{ paginate|raw }}</nav>
+  <div class="card card-default">
+    <div class="card-body">
+      <nav class="d-flex justify-content-center mt-2 mb-2">{{ paginate|raw }}</nav>
 
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Tytuł</th>
-                        <th>Data dodania do obserwowanych</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{ include(partial) }}
-                </tbody>
-            </table>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Tytuł</th>
+            <th>Data dodania do obserwowanych</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ include(partial) }}
+        </tbody>
+      </table>
 
-            <nav class="d-flex justify-content-center mt-2 mb-2">{{ paginate|raw }}</nav>
-        </div>
+      <nav class="d-flex justify-content-center mt-2 mb-2">{{ paginate|raw }}</nav>
     </div>
+  </div>
 {% endblock %}

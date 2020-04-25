@@ -6,6 +6,7 @@ use Coyote\Services\Elasticsearch\Filters\Term;
 use Coyote\Services\Elasticsearch\MultiMatch;
 use Coyote\Services\Elasticsearch\QueryBuilder;
 use Coyote\Services\Elasticsearch\Sort;
+use Coyote\Stream;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -34,7 +35,7 @@ class AdmBuilder extends QueryBuilder
         $this->buildSort();
         $this->buildSize();
 
-        $this->must(new Term('model', 'stream'));
+        $this->must(new Term('model', class_basename(Stream::class)));
 
         if ($this->request->filled('text')) {
             $this->must(new MultiMatch($this->request->input('text'), []));

@@ -35,7 +35,7 @@ class MoreLikeThisBuilder extends QueryBuilder
      */
     public function build()
     {
-        $mlt = new MoreLikeThis(['subject', 'posts.text']);
+        $mlt = new MoreLikeThis(['subject']);
         $mlt->addDoc([
             '_index'    => config('elasticsearch.default_index'),
             '_type'     => '_doc',
@@ -43,10 +43,10 @@ class MoreLikeThisBuilder extends QueryBuilder
         ]);
 
         $this->must($mlt);
-        $this->must(new Term('model', 'topic'));
+        $this->must(new Term('model', class_basename(Topic::class)));
         $this->must(new OnlyThoseWithAccess($this->forumId));
         // we need only those fields to save in cache
-        $this->source(['id', 'subject', 'slug', 'updated_at', 'forum.*']);
+        $this->source(['id', 'subject', 'slug', 'last_post_created_at', 'forum.*']);
 
         return parent::build();
     }
