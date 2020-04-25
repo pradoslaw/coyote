@@ -39,8 +39,8 @@
       this.input.addEventListener('keydown', this.onKeyDown);
     },
     computed: {
-      isDropdownShown() {
-        return this.$refs.dropdown.isDropdownShown;
+      isDropdownVisible() {
+        return this.$refs.dropdown.isDropdownVisible;
       }
     },
     methods: {
@@ -51,7 +51,7 @@
         const caretPosition = this.getCaretPosition();
         const startIndex = this.getUserNamePosition(caretPosition);
 
-        if (this.isDropdownShown) {
+        if (this.isDropdownVisible) {
           if (keyCode === SpecialKeys.ESC) {
             this.items = [];
           } else if (keyCode === SpecialKeys.DOWN) {
@@ -87,7 +87,7 @@
       },
 
       onKeyDown(e) {
-        if (this.isDropdownShown && Object.values(SpecialKeys).indexOf(e.keyCode) !== -1) {
+        if (this.isDropdownVisible && Object.values(SpecialKeys).indexOf(e.keyCode) !== -1) {
           e.preventDefault();
         }
       },

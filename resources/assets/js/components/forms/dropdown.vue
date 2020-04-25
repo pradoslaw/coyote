@@ -1,5 +1,5 @@
 <template>
-  <ol ref="dropdown" class="auto-complete w-100" v-show="isDropdownShown">
+  <ol ref="dropdown" class="auto-complete w-100" v-show="isDropdownVisible">
     <li v-for="(item, index) in items" :key="index" :class="{'hover': index === selectedIndex}" @click="selectItem" @mouseover="hoverItem(index)">
 
       <slot name="item" :item="item">
@@ -25,20 +25,20 @@
     },
     data() {
       return {
-        isDropdownShown: false,
+        isDropdownVisible: false,
         selectedIndex: -1
       }
     },
     mounted() {
       document.body.addEventListener('click', event => {
         if (!(this.$el === event.target || this.$el.contains(event.target))) {
-          this.isDropdownShown = false;
+          this.isDropdownVisible = false;
         }
       });
     },
     methods: {
       goDown() {
-        this.isDropdownShown = true;
+        this.isDropdownVisible = true;
 
         this.changeIndex(++this.selectedIndex);
       },
@@ -86,11 +86,11 @@
       },
 
       toggleDropdown(flag) {
-        this.isDropdownShown = flag;
+        this.isDropdownVisible = flag;
       },
 
       hideDropdown() {
-        this.isDropdownShown = false;
+        this.isDropdownVisible = false;
         this.selectedIndex = -1;
       },
 
