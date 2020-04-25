@@ -3,6 +3,8 @@
 namespace Coyote\Services\Parser\Parsers;
 
 use Collective\Html\HtmlBuilder;
+use TRegx\SafeRegex\Exception\BacktrackLimitPregException;
+use TRegx\SafeRegex\preg;
 
 class UrlFormatter
 {
@@ -25,10 +27,8 @@ class UrlFormatter
 
     public function parse(string $text): string
     {
-
-        $processed = preg_replace_callback(
-            self::REGEXP_URL,
-            function ($match) {
+        try {
+            return preg::replace_callback(self::REGEXP_URL, function ($match) {
                 $url = $match[0];
 
                 if (!preg_match('#^[\w]+?://.*?#i', $url)) {
@@ -38,19 +38,14 @@ class UrlFormatter
                 $title = $this->truncate(htmlspecialchars($match[0], ENT_QUOTES, 'UTF-8', false));
 
                 return $this->html->link($url, $title);
-            },
-            $text
-        );
-
-        // regexp posiada buga, nie parsuje poprawnie URL-i jezeli zawiera on (
-        // poki co nie mam rozwiazania na ten problem, dlatego zwracamy nieprzeprasowany tekst
-        // w przypadku bledu
-        // Dokłądniej mówiąc to nie parsuje żadnego urla w poście, jeśli przynajmniej jeden z nich ma (
-        if (preg_last_error() === PREG_NO_ERROR) {
-            return $processed;
+            }, $text);
+        } catch (BacktrackLimitPregException $exception) {
+            // regexp posiada buga, nie parsuje poprawnie URL-i jezeli zawiera on (
+            // poki co nie mam rozwiazania na ten problem, dlatego zwracamy nieprzeprasowany tekst
+            // w przypadku bledu
+            // Dokłądniej mówiąc to nie parsuje żadnego urla w poście, jeśli przynajmniej jeden z nich ma (
+            return $text;
         }
-
-        return $text;
     }
 
     private function truncate(string $text): string
