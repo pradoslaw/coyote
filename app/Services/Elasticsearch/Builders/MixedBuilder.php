@@ -5,7 +5,7 @@ namespace Coyote\Services\Elasticsearch\Builders;
 use Coyote\Services\Elasticsearch\Filters\Post\OnlyThoseWithAccess;
 use Coyote\Services\Elasticsearch\Filters\Terms;
 use Coyote\Services\Elasticsearch\QueryBuilder;
-use Coyote\Services\Elasticsearch\QueryString;
+use Coyote\Services\Elasticsearch\SimpleQueryString;
 use Coyote\Services\Elasticsearch\Sort;
 use Coyote\Services\Elasticsearch\Highlight;
 use Illuminate\Http\Request;
@@ -63,7 +63,7 @@ class MixedBuilder extends QueryBuilder
 
         $this
             ->must(new Terms('model', $models))
-            ->must(new QueryString(preg_quote($this->request->input('q'), '/'), $fields))
+            ->must(new SimpleQueryString($this->request->input('q'), $fields))
             ->must(new OnlyThoseWithAccess($this->request->attributes->get('forum_id')))
             ->sort(new Sort($this->request->get('sort', '_score'), $this->request->get('order', 'desc')))
             ->highlight(

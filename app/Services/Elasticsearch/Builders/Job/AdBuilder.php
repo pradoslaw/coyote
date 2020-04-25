@@ -6,7 +6,7 @@ use Coyote\Job;
 use Coyote\Services\Elasticsearch\Filters\Term;
 use Coyote\Services\Elasticsearch\Functions\Random;
 use Coyote\Services\Elasticsearch\QueryBuilder;
-use Coyote\Services\Elasticsearch\QueryString;
+use Coyote\Services\Elasticsearch\SimpleQueryString;
 
 class AdBuilder extends SearchBuilder
 {
@@ -15,7 +15,7 @@ class AdBuilder extends SearchBuilder
      */
     public function boostTags(array $tags)
     {
-        $this->should(new QueryString(implode(' ', $tags), ['title^4', 'tags^2', 'description'], 3));
+        $this->should(new SimpleQueryString(implode(' ', $tags), ['title^4', 'tags^2', 'description'], 3));
     }
 
     /**

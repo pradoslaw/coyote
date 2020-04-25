@@ -2,7 +2,7 @@
 
 namespace Coyote\Services\Elasticsearch;
 
-class QueryString implements DslInterface
+class SimpleQueryString implements DslInterface
 {
     /**
      * @var string
@@ -38,7 +38,7 @@ class QueryString implements DslInterface
     public function apply(QueryBuilderInterface $queryBuilder)
     {
         return [
-            'query_string' => [
+            'simple_query_string' => [
                 'query'     => $this->query,
                 'fields'    => $this->fields,
                 'boost'     => $this->boost
