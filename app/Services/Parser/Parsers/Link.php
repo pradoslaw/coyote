@@ -10,12 +10,7 @@ class Link extends Parser implements ParserInterface
     const LINK_TAG_REGEXP = "<a\s[^>]*href=(\"??)([^\" >]*?)\\1[^>]*>(.*)<\/a>";
     const LINK_INTERNAL_REGEXP = '\[\[(.*?)(\|(.*?))*\]\]';
 
-    // http://daringfireball.net/2010/07/improved_regex_for_matching_urls
-    const REGEXP_URL = '#(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’]))#u';
     const REGEXP_EMAIL = '#(^|[\n \[\]\:<>&;]|\()([a-z0-9&\-_.]+?@[\w\-]+\.(?:[\w\-\.]+\.)?[\w]+)#i';
-
-    const TITLE_LEN = 64;
-    const TITLE_DOTS = '[...]';
 
     /**
      * @var PageRepository
@@ -32,6 +27,9 @@ class Link extends Parser implements ParserInterface
      */
     private $html;
 
+    /** @var UrlFormatter */
+    private $urlParser;
+
     /**
      * Link constructor.
      *
@@ -44,6 +42,7 @@ class Link extends Parser implements ParserInterface
         $this->page = $page;
         $this->host = $host;
         $this->html = $html;
+        $this->urlParser = new UrlFormatter($host);
     }
 
     /**
@@ -91,7 +90,7 @@ class Link extends Parser implements ParserInterface
         }
 
         for ($i = 0, $count = count($matches); $i < $count; $i++) {
-            $link  = $matches[$i][2];
+            $link = $matches[$i][2];
             $title = $matches[$i][3];
             $match = $matches[$i][0];
 
@@ -217,30 +216,7 @@ class Link extends Parser implements ParserInterface
      */
     protected function parseUrl(string $text): string
     {
-        $processed = preg_replace_callback(
-            self::REGEXP_URL,
-            function ($match) {
-                $url = $match[0];
-
-                if (!preg_match('#^[\w]+?://.*?#i', $url)) {
-                    $url = 'http://' . $url;
-                }
-
-                $title = $this->truncate(htmlspecialchars($match[0], ENT_QUOTES, 'UTF-8', false));
-
-                return link_to($url, $title);
-            },
-            $text
-        );
-
-        // regexp posiada buga, nie parsuje poprawnie URL-i jezeli zawiera on (
-        // poki co nie mam rozwiazania na ten problem, dlatego zwracamy nieprzeprasowany tekst
-        // w przypadku bledu
-        if (preg_last_error() === PREG_NO_ERROR) {
-            return $processed;
-        }
-
-        return $text;
+        return $this->urlParser->parse($text);
     }
 
     /**
@@ -250,31 +226,6 @@ class Link extends Parser implements ParserInterface
     protected function parseEmail(string $text): string
     {
         return preg_replace(self::REGEXP_EMAIL, "\$1<a href=\"mailto:\$2\">$2</a>", $text);
-    }
-
-    /**
-     * @param string $text
-     * @param int $length
-     * @param string $dots
-     * @return string
-     */
-    private function truncate(string $text, int $length = self::TITLE_LEN, string $dots = self::TITLE_DOTS): string
-    {
-        if (mb_strlen($text) < $length) {
-            return $text;
-        }
-
-        if ($this->host === parse_url($text, PHP_URL_HOST)) {
-            return $text;
-        }
-
-        $padding = ($length - mb_strlen($dots)) / 2;
-
-        $result = mb_substr($text, 0, $padding);
-        $result .= $dots;
-        $result .= mb_substr($text, -$padding);
-
-        return $result;
     }
 
     /**
@@ -302,8 +253,8 @@ class Link extends Parser implements ParserInterface
     private function makeIframe(string $videoId, string $start = null): string
     {
         $iframe = (string) $this->html->tag('iframe', '', [
-            'src'   => 'https://youtube.com/embed/' . $videoId . ($start !== null ? "?start=$start" : ''),
-            'class' => 'embed-responsive-item',
+            'src'             => 'https://youtube.com/embed/' . $videoId . ($start !== null ? "?start=$start" : ''),
+            'class'           => 'embed-responsive-item',
             'allowfullscreen' => 'allowfullscreen'
         ]);
 
