@@ -20,6 +20,16 @@ Coyote to nazwa systemu obsługującego serwis 4programmers.net.
 
 Strona jest dostępna w przeglądarce pod adresem: `localhost:8880`
 
+## Konfiguracja xdebug
+
+W pliku `.env` należy dodać ustawienia xdebug:
+
+```
+ENABLE_XDEBUG=1
+XDEBUG_HOST=
+XDEBUG_PORT=
+```
+
 ## Praca z kodem CSS/JS
 
 W projekcie korzystamy z yarn oraz webpack. Aby "skompilować" pliki źródłowe do postaci finalnej należy wykonać
