@@ -42,7 +42,7 @@ class Link extends Parser implements ParserInterface
         $this->page = $page;
         $this->host = $host;
         $this->html = $html;
-        $this->urlParser = new UrlFormatter($host);
+        $this->urlParser = new UrlFormatter($host, app('html'));
     }
 
     /**
