@@ -1,8 +1,0 @@
-[program:coyote-worker]
-process_name=%(program_name)s_%(process_num)02d
-command=php /var/www/4programmers.net/artisan queue:work --sleep=3 --tries=3
-autostart=true
-autorestart=true
-numprocs=1
-redirect_stderr=true
-stdout_logfile=/var/log/supervisor/coyote-worker.log
