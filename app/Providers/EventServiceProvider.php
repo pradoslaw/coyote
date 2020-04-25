@@ -5,11 +5,13 @@ namespace Coyote\Providers;
 use Coyote\Events\FirewallWasDeleted;
 use Coyote\Events\FirewallWasSaved;
 use Coyote\Events\ForumWasSaved;
+use Coyote\Events\PostWasSaved;
 use Coyote\Events\StreamSaved;
 use Coyote\Events\SuccessfulLogin;
 use Coyote\Events\UserWasSaved;
 use Coyote\Listeners\ActivitySubscriber;
 use Coyote\Listeners\ChangeImageUrl;
+use Coyote\Listeners\DispatchPostNotifications;
 use Coyote\Listeners\FlushFirewallCache;
 use Coyote\Listeners\FlushUserCache;
 use Coyote\Listeners\IndexCategory;
@@ -46,7 +48,8 @@ class EventServiceProvider extends ServiceProvider
         Login::class => [SetupLoginDate::class],
         MessageSending::class => [ChangeImageUrl::class, LogSentMessage::class],
         ForumWasSaved::class => [IndexCategory::class],
-        StreamSaved::class => [IndexStream::class]
+        StreamSaved::class => [IndexStream::class],
+        PostWasSaved::class => [DispatchPostNotifications::class]
     ];
 
     /**

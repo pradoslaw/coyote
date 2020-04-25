@@ -9,7 +9,15 @@ class PostWasSaved extends Event
 {
     use SerializesModels;
 
+    /**
+     * @var Post
+     */
     public $post;
+
+    /**
+     * @var bool
+     */
+    public $wasRecentlyCreated;
 
     /**
      * Create a new event instance.
@@ -19,5 +27,6 @@ class PostWasSaved extends Event
     public function __construct(Post $post)
     {
         $this->post = $post;
+        $this->wasRecentlyCreated = $post->wasRecentlyCreated;
     }
 }

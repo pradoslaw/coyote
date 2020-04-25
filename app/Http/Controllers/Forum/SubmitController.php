@@ -60,13 +60,12 @@ class SubmitController extends BaseController
     /**
      * Show new post/edit form
      *
-     * @param Dispatcher $dispatcher
      * @param \Coyote\Forum $forum
      * @param \Coyote\Topic $topic
      * @param \Coyote\Post|null $post
      * @return mixed
      */
-    public function save(Dispatcher $dispatcher, $forum, $topic, $post = null)
+    public function save($forum, $topic, $post = null)
     {
         if (is_null($post)) {
             $post = $this->post->makeModel();
@@ -108,36 +107,6 @@ class SubmitController extends BaseController
 
             return $post;
         });
-
-        if ($post->wasRecentlyCreated) {
-            $subscribers = $topic->subscribers()->with('user.notificationSettings')->get()->pluck('user')->exceptUser($this->auth);
-            $notification = (new SubmittedNotification($this->auth, $post))->setSender($request->get('user_name'));
-
-            dispatch(function () use ($subscribers, $notification) {
-                // we can't serialize $dispatcher, that's why we need to create new instance inside closure
-                app(Dispatcher::class)->send(
-                    $subscribers,
-                    $notification
-                );
-            });
-
-            // get id of users that were mentioned in the text
-            $usersId = (new LoginHelper())->grab($post->html);
-
-            if (!empty($usersId)) {
-                $dispatcher->send(
-                    app(UserRepositoryInterface::class)->findMany($usersId)->exceptUser($this->auth)->exceptUsers($subscribers),
-                    (new UserMentionedNotification($this->auth, $post))->setSender($request->get('user_name'))
-                );
-            }
-        } else {
-            $subscribers = $post->subscribers()->with('user')->get()->pluck('user')->exceptUser($this->auth);
-
-            $dispatcher->send(
-                $subscribers,
-                new ChangedNotification($this->auth, $post)
-            );
-        }
 
         // fire the event. it can be used to index a content and/or add page path to "pages" table
         event(new TopicWasSaved($topic));
