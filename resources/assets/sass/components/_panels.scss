@@ -107,15 +107,15 @@
 
   .asc {
     &:after {
-      content: fa-content($fa-var-sort-down);
-      top: 2px;
+      content: fa-content($fa-var-sort-up);
+      top: 7px;
     }
   }
 
   .desc {
     &:after {
-      content: fa-content($fa-var-sort-up);
-      top: 7px;
+      content: fa-content($fa-var-sort-down);
+      top: 2px;
     }
   }
 }
