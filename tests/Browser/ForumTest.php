@@ -11,7 +11,7 @@ class ForumTest extends DuskTestCase
 {
     public function testWriteInLockedCategory()
     {
-        $forum = $this->createForum(['is_locked' => true]);
+        $forum = $this->createForum(['is_locked' => true, 'name' => 'some locked category']);
 
         $this->assertTrue($forum->is_locked);
 
