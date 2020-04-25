@@ -27,6 +27,21 @@ class UrlFormatterTest extends TestCase
     /**
      * @test
      */
+    public function shouldParseLink_htmlEntities()
+    {
+        // given
+        $formatter = new UrlFormatter('', $this->html('http://4pr.net/Forum&param'));
+
+        // when
+        $result = $formatter->parse('text 4pr.net/Forum&param text');
+
+        // then
+        $this->assertEquals('text <a>4pr.net/Forum&amp;param</a> text', $result);
+    }
+
+    /**
+     * @test
+     */
     public function shouldTruncateLongLink()
     {
         // given
@@ -69,6 +84,21 @@ class UrlFormatterTest extends TestCase
 
         // then
         $this->assertEquals('text <a>4pr.net/Forum/(text)</a> text', $result);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldHandleLinksSeparatedByAnOpenParenthesis()
+    {
+        // given
+        $formatter = new UrlFormatter('', $this->html('http://4pr.net/Forum', 2));
+
+        // when
+        $result = $formatter->parse('4pr.net/Forum(4pr.net/Forum');
+
+        // then
+        $this->assertEquals('<a>4pr.net/Forum</a>(<a>4pr.net/Forum</a>', $result);
     }
 
     /**
@@ -132,12 +162,12 @@ class UrlFormatterTest extends TestCase
         $this->assertEquals('<a>http://4pr.net/Forum/</a>(long_long_long_long_long', $result);
     }
 
-    private function html(string $expectedHref = null): HtmlBuilder
+    private function html(string $expectedHref = null, int $expectedInvocations = 1): HtmlBuilder
     {
         /** @var HtmlBuilder|MockObject $html */
         $html = $this->createMock(HtmlBuilder::class);
         $html
-            ->expects($this->once())
+            ->expects($this->exactly($expectedInvocations))
             ->method('link')
             ->will($this->returnCallback(function (string $href, string $title) use ($expectedHref): string {
                 if ($expectedHref) {
