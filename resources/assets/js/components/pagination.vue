@@ -5,14 +5,10 @@
         <span aria-hidden="true">&laquo;</span>
       </a>
     </li>
-    <li v-if="currentPage === 1 && totalPages > 0" class="page-item disabled">
-      <span class="page-link">«</span>
-    </li>
 
     <li v-for="element in slider" class="page-item" :class="{'active': element === currentPage, 'disabled': element === '...'}">
       <span v-if="element === currentPage" class="page-link">{{ element }}</span>
-      <a v-else-if="element !== '...'" href="javascript:" @click.prevent="change(element)" class="page-link">{{ element
-        }}</a>
+      <a v-else-if="element !== '...'" href="javascript:" @click.prevent="change(element)" class="page-link">{{ element }}</a>
       <span v-else class="page-link">...</span>
     </li>
 
@@ -20,9 +16,6 @@
       <a href="javascript:" class="page-link" aria-label="Next" @click.prevent="change(currentPage + 1)">
         <span aria-hidden="true">&raquo;</span>
       </a>
-    </li>
-    <li v-if="totalPages > 0 && currentPage === totalPages" class="disabled">
-      <span class="page-link">»</span>
     </li>
   </ul>
 </template>
@@ -50,10 +43,7 @@
         }
 
         const begin = [1, 2, '...'];
-
-        let end = () => {
-          return ['...', this.totalPages - 1, this.totalPages];
-        };
+        let end = () => ['...', this.totalPages - 1, this.totalPages];
 
         if (this.totalPages < (this.offset * 2) + 6) {
           return this.range(1, this.totalPages);
