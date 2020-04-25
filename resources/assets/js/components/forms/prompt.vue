@@ -70,9 +70,10 @@
             }
 
             this.$refs.dropdown.hideDropdown();
-          }
 
-          return;
+            // item was selected so there is not point to look up for user name.
+            return;
+          }
         }
 
         if (startIndex > -1) {
