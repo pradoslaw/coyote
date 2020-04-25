@@ -100,6 +100,22 @@ class UrlFormatterTest extends TestCase
         $this->assertEquals('<a>4pr.net/Forum/</a>(tex(t)', $result);
     }
 
+    /**
+     * @test
+     */
+    public function shouldHandleCatastrophicBacktracking_withUnmatchedParenthesis()
+    {
+        // given
+        $errorProneLink = 'http://4pr.net/Forum/(long_long_long_long_long';
+        $formatter = new UrlFormatter('', $this->html('http://4pr.net/Forum/'));
+
+        // when
+        $result = $formatter->parse($errorProneLink);
+
+        // then
+        $this->assertEquals('<a>http://4pr.net/Forum/</a>(long_long_long_long_long', $result);
+    }
+
     private function html(string $expectedHref = null): HtmlBuilder
     {
         /** @var HtmlBuilder|MockObject $html */
