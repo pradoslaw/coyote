@@ -19,7 +19,7 @@ module.exports = merge(common, {
     new PurgecssPlugin({
       paths: glob.sync([
         path.join(__dirname, 'resources/views/**/*.twig'),
-        path.join(__dirname, 'resources/assets/js/components/**/*.vue'),
+        path.join(__dirname, 'resources/js/components/**/*.vue'),
       ]),
       whitelist: [
         'footer-bubble',

@@ -98,7 +98,7 @@ module.exports = {
     mainFields: ['main', 'module'],
     extensions: [ '.ts', '.tsx', '.js', '.vue' ]
   },
-  context: path.join(__dirname, 'resources/assets'),
+  context: path.join(__dirname, 'resources'),
   entry: {
     app: './js/app.js',
     posting: './js/posting.js',
@@ -143,11 +143,11 @@ module.exports = {
       name: 'jquery-ui.js',
       fileName: 'js/jquery-ui.js',
       filesToConcat: [
-        '../../node_modules/jquery-ui.1.11.1/ui/core.js',
-        '../../node_modules/jquery-ui.1.11.1/ui/widget.js',
-        '../../node_modules/jquery-ui.1.11.1/ui/mouse.js',
-        '../../node_modules/jquery-ui.1.11.1/ui/resizable.js',
-        '../../node_modules/jquery-ui.1.11.1/ui/sortable.js',
+        '../node_modules/jquery-ui.1.11.1/ui/core.js',
+        '../node_modules/jquery-ui.1.11.1/ui/widget.js',
+        '../node_modules/jquery-ui.1.11.1/ui/mouse.js',
+        '../node_modules/jquery-ui.1.11.1/ui/resizable.js',
+        '../node_modules/jquery-ui.1.11.1/ui/sortable.js',
       ],
     }),
 
@@ -188,7 +188,7 @@ module.exports = {
       },
       styles: {
         format: 'fragment',
-        filename: path.join(__dirname, 'resources/assets/sass/components/_sprites.scss')
+        filename: path.join(__dirname, 'resources/sass/components/_sprites.scss')
       }
     }),
 
