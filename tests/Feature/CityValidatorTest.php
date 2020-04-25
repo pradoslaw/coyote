@@ -1,21 +1,11 @@
 <?php
 
-class CityValidatorTest extends \Codeception\TestCase\Test
+namespace Tests\Feature;
+
+use Tests\TestCase;
+
+class CityValidatorTest extends TestCase
 {
-    /**
-     * @var \UnitTester
-     */
-    protected $tester;
-
-    protected function _before()
-    {
-
-    }
-
-    protected function _after()
-    {
-    }
-
     // tests
     public function testValidateCityName()
     {

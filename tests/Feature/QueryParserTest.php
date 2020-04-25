@@ -1,15 +1,12 @@
 <?php
 
-use Coyote\Services\Parser\Parsers\Link;
-use Faker\Factory;
+namespace Tests\Feature;
 
-class QueryParserTest extends \Codeception\TestCase\Test
+use Coyote\Services\Elasticsearch\QueryParser;
+use Tests\TestCase;
+
+class QueryParserTest extends TestCase
 {
-    /**
-     * @var \UnitTester
-     */
-    protected $tester;
-
     /**
      * @var array
      */
@@ -17,22 +14,22 @@ class QueryParserTest extends \Codeception\TestCase\Test
 
     public function testParseIpQuery()
     {
-        $parser = new \Coyote\Services\Elasticsearch\QueryParser('ip:127.0.0.1', $this->keywords);
+        $parser = new QueryParser('ip:127.0.0.1', $this->keywords);
         $this->assertArrayHasKey('ip', $filters = $parser->getFilters());
         $this->assertEquals('127.0.0.1', $filters['ip']);
     }
 
     public function testParseUserQuery()
     {
-        $parser = new \Coyote\Services\Elasticsearch\QueryParser('user:admin', $this->keywords);
+        $parser = new QueryParser('user:admin', $this->keywords);
         $this->assertArrayHasKey('user', $filters = $parser->getFilters());
         $this->assertEquals('admin', $filters['user']);
 
-        $parser = new \Coyote\Services\Elasticsearch\QueryParser('user:"admin adminski"', $this->keywords);
+        $parser = new QueryParser('user:"admin adminski"', $this->keywords);
         $this->assertArrayHasKey('user', $filters = $parser->getFilters());
         $this->assertEquals('admin adminski', $filters['user']);
 
-        $parser = new \Coyote\Services\Elasticsearch\QueryParser('user:"test"test', $this->keywords);
+        $parser = new QueryParser('user:"test"test', $this->keywords);
         $this->assertArrayHasKey('user', $filters = $parser->getFilters());
         $this->assertEquals('test', $filters['user']);
         $this->assertEquals('test', $parser->getFilteredQuery());
@@ -40,7 +37,7 @@ class QueryParserTest extends \Codeception\TestCase\Test
 
     public function testParseRegularQuery()
     {
-        $parser = new \Coyote\Services\Elasticsearch\QueryParser('foo', $this->keywords);
+        $parser = new QueryParser('foo', $this->keywords);
         $this->assertEquals('foo', $parser->getFilteredQuery());
     }
 }

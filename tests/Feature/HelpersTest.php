@@ -1,20 +1,11 @@
 <?php
 
-class HelpersTest extends \Codeception\TestCase\Test
+namespace Tests\Feature;
+
+use Tests\TestCase;
+
+class HelpersTest extends TestCase
 {
-    /**
-     * @var \UnitTester
-     */
-    protected $tester;
-
-    protected function _before()
-    {
-    }
-
-    protected function _after()
-    {
-    }
-
     // tests
     public function testExcerpt()
     {

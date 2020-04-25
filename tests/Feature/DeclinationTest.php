@@ -1,33 +1,25 @@
 <?php
 
-class DeclinationTest extends \Codeception\TestCase\Test
+namespace Tests\Feature;
+
+use Coyote\Services\Declination\Declination;
+use Tests\TestCase;
+
+class DeclinationTest extends TestCase
 {
-    /**
-     * @var \UnitTester
-     */
-    protected $tester;
-
-    protected function _before()
-    {
-    }
-
-    protected function _after()
-    {
-    }
-
     private function getSeconds($value)
     {
-        return Coyote\Services\Declination\Declination::format($value, ['sekunda', 'sekundy', 'sekund']);
+        return Declination::format($value, ['sekunda', 'sekundy', 'sekund']);
     }
 
     private function getApplication($value)
     {
-        return \Coyote\Services\Declination\Declination::format($value, ['aplikacja', 'aplikacje', 'aplikacji']);
+        return Declination::format($value, ['aplikacja', 'aplikacje', 'aplikacji']);
     }
 
     private function getViews($value)
     {
-        return \Coyote\Services\Declination\Declination::format($value, ['odsłona', 'odsłony', 'odsłon']);
+        return Declination::format($value, ['odsłona', 'odsłony', 'odsłon']);
     }
 
     // tests

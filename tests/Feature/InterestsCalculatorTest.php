@@ -1,12 +1,11 @@
 <?php
 
-class InterestsCalculatorTest extends \Codeception\TestCase\Test
-{
-    /**
-     * @var \UnitTester
-     */
-    protected $tester;
+namespace Tests\Feature;
 
+use Tests\TestCase;
+
+class InterestsCalculatorTest extends TestCase
+{
     // tests
     public function testCalculateInterests()
     {

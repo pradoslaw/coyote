@@ -1,22 +1,12 @@
 <?php
 
+namespace Tests\Feature;
+
 use Coyote\User;
+use Tests\TestCase;
 
-class MacroTest extends \Codeception\TestCase\Test
+class MacroTest extends TestCase
 {
-    /**
-     * @var \UnitTester
-     */
-    protected $tester;
-
-    protected function _before()
-    {
-    }
-
-    protected function _after()
-    {
-    }
-
     // tests
     public function testExceptUsersMacro()
     {
@@ -24,9 +14,9 @@ class MacroTest extends \Codeception\TestCase\Test
 
         $result = $users->exceptUsers([(new User)->forceFill(['id' => 1])]);
 
-        $this->tester->assertEquals(2, count($result));
-        $this->tester->assertEquals(2, $result->first()->id);
-        $this->tester->assertEquals(3, $result->last()->id);
+        $this->assertEquals(2, count($result));
+        $this->assertEquals(2, $result->first()->id);
+        $this->assertEquals(3, $result->last()->id);
 
         ////////////////////////////////////////////////////////////////////
 
@@ -34,6 +24,6 @@ class MacroTest extends \Codeception\TestCase\Test
 
         $result = $users->exceptUsers([(new User)->forceFill(['id' => 1]), (new User)->forceFill(['id' => 2]), (new User)->forceFill(['id' => 3])]);
 
-        $this->tester->assertEquals(0, count($result));
+        $this->assertEquals(0, count($result));
     }
 }

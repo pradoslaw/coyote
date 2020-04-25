@@ -1,21 +1,11 @@
 <?php
 
-class GrabTest extends \Codeception\TestCase\Test
+namespace Tests\Feature;
+
+use Tests\TestCase;
+
+class GrabTest extends TestCase
 {
-    /**
-     * @var \UnitTester
-     */
-    protected $tester;
-
-    protected function _before()
-    {
-
-    }
-
-    protected function _after()
-    {
-    }
-
     // tests
     public function testParseUserName()
     {

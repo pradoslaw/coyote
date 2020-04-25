@@ -1,21 +1,19 @@
 <?php
 
+namespace Tests\Feature;
+
 use Coyote\Services\Parser\Parsers\Purifier;
+use Tests\TestCase;
 
-class PurifierTest extends \Codeception\TestCase\Test
+class PurifierTest extends TestCase
 {
-    /**
-     * @var \UnitTester
-     */
-    protected $tester;
-
     // tests
     public function testParseLinks()
     {
         $parser = new Purifier();
 
         $input = '<a href="http://www.wp.pl">http://www.wp.pl</a>';
-        $this->tester->assertEquals($input, $parser->parse($input));
+        $this->assertEquals($input, $parser->parse($input));
     }
 
     public function testParseBlockquotes()
@@ -23,7 +21,7 @@ class PurifierTest extends \Codeception\TestCase\Test
         $parser = new Purifier();
 
         $input = '<blockquote>lorem ipsum<blockquote>lorem ipsum</blockquote></blockquote>';
-        $this->tester->assertEquals($input, $parser->parse($input));
+        $this->assertEquals($input, $parser->parse($input));
     }
 
     public function testParseUnderscore()
@@ -31,6 +29,6 @@ class PurifierTest extends \Codeception\TestCase\Test
         $parser = new Purifier();
 
         $input = '<u>foo</u>';
-        $this->tester->assertEquals($input, $parser->parse($input));
+        $this->assertEquals($input, $parser->parse($input));
     }
 }

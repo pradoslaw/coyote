@@ -1,24 +1,21 @@
 <?php
 
-class GeoIpTest extends \Codeception\TestCase\Test
-{
-    /**
-     * @var \UnitTester
-     */
-    protected $tester;
+namespace Tests\Feature;
 
+use Tests\TestCase;
+
+class GeoIpTest extends TestCase
+{
     /**
      * @var \Coyote\Services\GeoIp\GeoIp
      */
     protected $geoIp;
 
-    protected function _before()
+    protected function setUp(): void
     {
-        $this->geoIp = app('geo-ip');
-    }
+        parent::setUp();
 
-    protected function _after()
-    {
+        $this->geoIp = app('geo-ip');
     }
 
     // tests
