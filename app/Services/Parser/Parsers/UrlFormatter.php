@@ -58,12 +58,12 @@ class UrlFormatter
             return $text;
         }
 
-        $padding = (self::TITLE_LEN - mb_strlen(self::TITLE_DOTS)) / 2;
+        return $this->truncateToLengthWith($text, self::TITLE_LEN, self::TITLE_DOTS);
+    }
 
-        $result = mb_substr($text, 0, $padding);
-        $result .= self::TITLE_DOTS;
-        $result .= mb_substr($text, -$padding);
-
-        return $result;
+    private function truncateToLengthWith(string $text, int $length, string $substitute): string
+    {
+        $padding = ($length - mb_strlen($substitute)) / 2;
+        return mb_substr($text, 0, $padding) . $substitute . mb_substr($text, -$padding);
     }
 }

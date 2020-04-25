@@ -43,6 +43,22 @@ class UrlFormatterTest extends TestCase
     /**
      * @test
      */
+    public function shouldNotTruncateLongLink_hostLink()
+    {
+        // given
+        $longUrl = 'https://4pr.net/g/adam-boduch/coyote/inspections/8778b728-ef73-4167-8092-424a57a8e66d';
+        $formatter = new UrlFormatter('4pr.net', $this->html($longUrl));
+
+        // when
+        $result = $formatter->parse("link: $longUrl");
+
+        // then
+        $this->assertEquals('link: <a>https://4pr.net/g/adam-boduch/coyote/inspections/8778b728-ef73-4167-8092-424a57a8e66d</a>', $result);
+    }
+
+    /**
+     * @test
+     */
     public function shouldIncludeParenthesis()
     {
         // given
