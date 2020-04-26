@@ -8,9 +8,6 @@ use Coyote\Services\Forum\UserDefined;
 use Coyote\Services\Guest;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\ServiceProvider;
-use Coyote\Repositories\Contracts\ForumRepositoryInterface;
-use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
-use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Lavary\Menu\Builder;
 use Lavary\Menu\Menu;
 
