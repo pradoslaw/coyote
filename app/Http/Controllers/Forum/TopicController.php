@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Events\TopicWasSaved;
 use Coyote\Forum\Reason;
 use Coyote\Http\Factories\CacheFactory;
 use Coyote\Http\Factories\FlagFactory;
@@ -190,6 +191,8 @@ class TopicController extends BaseController
         } else {
             $topic->subscribers()->create(['user_id' => $this->userId]);
         }
+
+        event(new TopicWasSaved($topic));
 
         return response($topic->subscribers()->count());
     }

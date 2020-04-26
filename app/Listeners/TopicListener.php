@@ -4,6 +4,7 @@ namespace Coyote\Listeners;
 
 use Coyote\Events\TopicWasDeleted;
 use Coyote\Events\TopicWasMoved;
+use Coyote\Events\TopicWasSaved;
 use Coyote\Post;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Services\Elasticsearch\Crawler;
@@ -29,6 +30,14 @@ class TopicListener implements ShouldQueue
     {
         $this->topic = $topic;
         $this->crawler = $crawler;
+    }
+
+    /**
+     * @param TopicWasSaved $event
+     */
+    public function onTopicSave(TopicWasSaved $event)
+    {
+        $this->crawler->index($event->topic);
     }
 
     /**
@@ -64,6 +73,11 @@ class TopicListener implements ShouldQueue
      */
     public function subscribe($events)
     {
+        $events->listen(
+            'Coyote\Events\TopicWasSaved',
+            'Coyote\Listeners\TopicListener@onTopicSave'
+        );
+
         $events->listen(
             'Coyote\Events\TopicWasMoved',
             'Coyote\Listeners\TopicListener@onTopicMove'

@@ -35,7 +35,6 @@ class PostListener implements ShouldQueue
     public function onPostSave(PostWasSaved $event)
     {
         $this->crawler->index($event->post);
-        $this->crawler->index($event->post->topic);
     }
 
     /**
