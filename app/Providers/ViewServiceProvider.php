@@ -4,6 +4,7 @@ namespace Coyote\Providers;
 
 use Coyote\Http\Composers\InitialStateComposer;
 use Coyote\Http\Factories\CacheFactory;
+use Coyote\Services\Forum\UserDefined;
 use Coyote\Services\Guest;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\ServiceProvider;
@@ -38,52 +39,23 @@ class ViewServiceProvider extends ServiceProvider
 
     private function buildMasterMenu()
     {
-        $userId = $this->app['request']->user() ? $this->app['request']->user()->id : null;
-
-        // cache user customized menu for 7 days
         /** @var \Lavary\Menu\Builder $builder */
-        $builder = $this->getCacheFactory()->tags('menu-for-user')->remember('menu-for-user:' . $userId, 60 * 24 * 7, function () use ($userId) {
-            $builder = app(Menu::class)->make('__master_menu___', function (Builder $menu) {
-                foreach (config('laravel-menu.__master_menu___') as $title => $data) {
-                    $children = array_pull($data, 'children');
-                    $item = $menu->add($title, $data);
+        $builder = app(Menu::class)->make('__master_menu___', function (Builder $menu) {
+            foreach (config('laravel-menu.__master_menu___') as $title => $data) {
+                $children = array_pull($data, 'children');
+                $item = $menu->add($title, $data);
 
-                    foreach ((array) $children as $key => $child) {
-                        /** @var \Lavary\Menu\Item $item */
-                        $item->add($key, $child);
-                    }
+                foreach ((array) $children as $key => $child) {
+                    /** @var \Lavary\Menu\Item $item */
+                    $item->add($key, $child);
                 }
-            });
-
-            /** @var ForumRepositoryInterface $repository */
-            $repository = app(ForumRepositoryInterface::class);
-            // since repository is singleton, we have to reset previously set criteria to avoid duplicated them.
-            $repository->resetCriteria();
-            // make sure we don't skip criteria
-            $repository->skipCriteria(false);
-
-            $repository->pushCriteria(new OnlyThoseWithAccess($this->app['request']->user()));
-            $repository->pushCriteria(new AccordingToUserOrder($userId, true));
-            $repository->applyCriteria();
-
-            $categories = $repository->addSelect(['name', 'slug', 'forums.section'])->whereNull('parent_id')->get();
-            $rendered = view('components.mega-menu', ['sections' => $this->groupBySections($categories)])->render();
-
-            $builder->forum->after($rendered);
-
-            return $builder;
+            }
         });
 
-        // ugly hack for laravel menu: remove cached "active" class from item's attribute.
-        if (true === $builder->conf('auto_activate')) {
-            foreach ($builder->all() as $item) {
-                /** @var \Lavary\Menu\Item $item */
-                $item->isActive = false;
-                $item->attr('class', '');
+        $categories = collect($this->app[UserDefined::class]->getAllowedForums($this->app['request']->user()))->where('parent_id', null);
+        $rendered = view('components.mega-menu', ['sections' => $this->groupBySections($categories)])->render();
 
-                $item->checkActivationStatus();
-            }
-        }
+        $builder->forum->after($rendered);
 
         return $builder;
     }
@@ -94,8 +66,8 @@ class ViewServiceProvider extends ServiceProvider
         $sections = [];
 
         foreach ($categories as $category) {
-            if ($name === null || ($category->section !== $name && $category->section)) {
-                $name = $category->section;
+            if ($name === null || ($category['section'] !== $name && $category['section'])) {
+                $name = $category['section'];
             }
 
             if (!isset($sections[$name])) {

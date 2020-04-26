@@ -2,43 +2,33 @@
 
 namespace Coyote\Http\Composers;
 
-use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
-use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
-use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
+use Coyote\Services\Forum\UserDefined;
 use Coyote\User;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key;
-use Illuminate\Contracts\Cache\Repository as Cache;
 
 class InitialStateComposer
 {
-    /**
-     * @var ForumRepository
-     */
-    private $forum;
-
     /**
      * @var Request
      */
     private $request;
 
     /**
-     * @var Cache
+     * @var UserDefined
      */
-    private $cache;
+    private $userDefined;
 
     /**
-     * @param ForumRepository $forum
      * @param Request $request
-     * @param Cache $cache
+     * @param UserDefined $userDefined
      */
-    public function __construct(ForumRepository $forum, Request $request, Cache $cache)
+    public function __construct(Request $request, UserDefined $userDefined)
     {
-        $this->forum = $forum;
         $this->request = $request;
-        $this->cache = $cache;
+        $this->userDefined = $userDefined;
     }
 
     /**
@@ -126,7 +116,7 @@ class InitialStateComposer
     private function getJWtToken(User $user): string
     {
         $signer = new Sha256();
-        $allowed = array_pluck($this->getAllowedForums($user), 'id');
+        $allowed = array_pluck($this->userDefined->getAllowedForums($user), 'id');
 
         $token = (new \Lcobucci\JWT\Builder())
             ->issuedAt(now()->timestamp)
@@ -137,24 +127,5 @@ class InitialStateComposer
             ->getToken($signer, new Key(config('app.key')));
 
         return (string) $token;
-    }
-
-    /**
-     * @param User $user
-     * @return array
-     */
-    private function getAllowedForums(User $user): array
-    {
-        return $this->cache->tags('forum-order')->remember('forum-order:' . $user->id, now()->addMonth(1), function () use ($user) {
-            // since repository is singleton, we have to reset previously set criteria to avoid duplicated them.
-            $this->forum->resetCriteria();
-            // make sure we don't skip criteria
-            $this->forum->skipCriteria(false);
-
-            $this->forum->pushCriteria(new OnlyThoseWithAccess($user));
-            $this->forum->pushCriteria(new AccordingToUserOrder($user->id, true));
-
-            return $this->forum->list()->toArray();
-        });
     }
 }
