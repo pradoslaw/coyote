@@ -56,7 +56,7 @@
   import { Model } from '../../types/models';
   import { SpecialKeys } from '../../types/keys';
   import Component from 'vue-class-component';
-  import { Prop, Ref } from 'vue-property-decorator';
+  import { Prop, Ref, Watch } from 'vue-property-decorator';
 
   type HitCategory = {[key: string]: {children: Hit[], model: string, context: string}}
 
@@ -178,6 +178,13 @@
 
     @Ref('input')
     readonly input!: HTMLInputElement;
+
+    @Watch('value')
+    resetItems(val: string) {
+      if (val === '') {
+        this.items = [];
+      }
+    }
 
     mounted() {
       document.addEventListener('keydown', this.shortcutSupport);
