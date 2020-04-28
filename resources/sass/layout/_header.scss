@@ -251,10 +251,6 @@ body.padding-top {
     outline: 0;
     font-size: .8rem;
     border: none;
-
-    &::placeholder {
-      color: inherit;
-    }
   }
 
   .search-bar-active {
@@ -264,11 +260,6 @@ body.padding-top {
       &:after {
         display: none; // temp code
       }
-    }
-
-    input {
-      background-color: #fff !important;
-      color: $gray-700 !important;
     }
 
     .fa-search {
@@ -480,6 +471,17 @@ body.padding-top {
 
   .nav-desktop > li > a {
     font-weight: bold;
+  }
+
+  .search-bar-active {
+    input {
+      background-color: #fff !important;
+      color: $gray-700 !important;
+    }
+  }
+
+  input::placeholder {
+    color: inherit;
   }
 }
 
