@@ -38,7 +38,7 @@ class UserDefined
     {
         $userId = $user->id ?? null;
 
-        return $this->cache->tags('forum-order')->remember('forum-order:' . $userId, now()->addMonth(1), function () use ($user, $userId) {
+        return $this->cache->tags('forum-order')->remember('forum-order:' . $userId, now()->addMonth(), function () use ($user, $userId) {
             // since repository is singleton, we have to reset previously set criteria to avoid duplicated them.
             $this->forum->resetCriteria();
             // make sure we don't skip criteria

@@ -384,7 +384,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
                 $rowset[] = array_merge($result[$key], ['label' => $label]);
             }
 
-            $dt->addMonth(1);
+            $dt->addMonth();
         }
 
         return $rowset;

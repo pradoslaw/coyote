@@ -83,7 +83,7 @@ class ReputationRepository extends Repository implements ReputationRepositoryInt
                 $rowset[] = array_merge($result[$key], ['label' => $label]);
             }
 
-            $dt->addMonth(1);
+            $dt->addMonth();
         }
 
         return $rowset;
