@@ -29,6 +29,16 @@ class ThrottleValidator
     protected $cache;
 
     /**
+     * @var int
+     */
+    private $lockoutTime;
+
+    /**
+     * @var string
+     */
+    private $key;
+
+    /**
      * @param Request $request
      * @param Cache $cache
      */
@@ -87,6 +97,7 @@ class ThrottleValidator
     protected function tooManyAttempts()
     {
         $timestamp = $this->cache->get($this->key, 0);
+
         return !($timestamp === 0 || time() - $timestamp > $this->lockoutTime);
     }
 
