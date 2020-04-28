@@ -19,7 +19,7 @@ class JobApiTest extends TestCase
     private $token;
     private $faker;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

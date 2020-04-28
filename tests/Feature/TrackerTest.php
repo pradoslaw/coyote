@@ -25,7 +25,7 @@ class TrackerTest extends TestCase
     private $guestId;
     private $faker;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

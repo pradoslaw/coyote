@@ -11,7 +11,7 @@ class CensoreParserTest extends TestCase
      */
     protected $parser;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

@@ -12,7 +12,7 @@ class BreadcrumbTest extends TestCase
      */
     protected $breadcrumb;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

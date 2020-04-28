@@ -17,7 +17,7 @@ class MarkdownTest extends TestCase
      */
     protected $markdown;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();;
 

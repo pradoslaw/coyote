@@ -18,7 +18,7 @@ class PmTest extends TestCase
     private $author;
     private $repo;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
