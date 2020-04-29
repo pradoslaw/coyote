@@ -102,7 +102,7 @@ module.exports = {
   entry: {
     app: './js/app.js',
     posting: './js/posting.js',
-    microblog: ['./js/pages/microblog.js'],
+    // microblog: ['./js/pages/microblog.js'],
     // microblog: ['./js/pages/microblog.js', './sass/pages/microblog.scss'],
     forum: ['./js/pages/forum.js'],
     // forum: ['./js/pages/forum.js', './sass/pages/forum.scss'],

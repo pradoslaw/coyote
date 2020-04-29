@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\CacheFactory;
+use Coyote\Http\Resources\Api\MicroblogResource;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
 use Coyote\Repositories\Criteria\Microblog\LoadComments;
 use Coyote\Repositories\Criteria\Microblog\OnlyMine;
@@ -97,7 +98,9 @@ class HomeController extends Controller
 
         $this->breadcrumb->push($excerpt, route('microblog.view', [$microblog->id]));
 
-        return $this->view('microblog.view')->with(['microblog' => $microblog, 'excerpt' => $excerpt]);
+        MicroblogResource::withoutWrapping();
+
+        return $this->view('microblog.view')->with(['microblog' => new MicroblogResource($microblog), 'excerpt' => $excerpt]);
     }
 
     /**

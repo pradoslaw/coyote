@@ -5,7 +5,7 @@
  * @param declinationSet
  * @returns {*}
  */
-module.exports = function declination(value, declinationSet) {
+export default function declination(value, declinationSet) {
     if (value === 1) {
         return declinationSet[0];
     }

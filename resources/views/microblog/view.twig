@@ -6,38 +6,19 @@
 {% import 'components.modals' as modal %}
 
 {% block container %}
-    <div id="microblog" class="row">
-        <div class="col-12">
-            {% include "microblog.partials.microblog" with {"microblogDetailsPage": true} %}
-        </div>
+  <div id="js-microblog" class="row">
+    <div class="col-12">
+      <vue-microblog :microblog="microblogs[0]"></vue-microblog>
     </div>
-
-    <script type="text/html" id="tmpl-thumbnail">
-        <div class="col-sm-2">
-            <a href="javascript:" class="thumbnail">
-                <img src="[[src]]">
-
-                <div class="[[class]]">
-                    <i class="[[fa]]"></i>
-                </div>
-            </a>
-        </div>
-    </script>
+  </div>
 
 {% endblock %}
 
 {% block head %}
-    {{ parent() }}
+  {{ parent() }}
 
-    <script type="text/javascript">
-        var uploadUrl = '{{ route('microblog.upload') }}';
-    </script>
-
+  <script>
+    var microblogs = [{{ microblog|json_encode|raw }}];
+  </script>
 {% endblock %}
 
-{% block body %}
-    {{ parent() }}
-
-    <script src="{{ cdn('js/microblog.js') }}"></script>
-    <script src="{{ cdn('js/posting.js') }}"></script>
-{% endblock %}

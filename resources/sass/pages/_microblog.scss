@@ -45,54 +45,6 @@ input[placeholder] {
   text-overflow: ellipsis;
 }
 
-#microblog {
-  .btn-thumbs,
-  .btn-reply,
-  .btn-subscribe {
-    padding: 2px 7px 2px 25px;
-    color: $gray-light;
-    position: relative;
-
-    &:before {
-      font-family: 'Font Awesome 5 Free';
-      position: absolute;
-      left: 5px;
-      color: $text-color;
-    }
-
-    &:hover {
-      border: 1px solid $border-color;
-      @include gradient-y(#fff, $gray-lighter);
-    }
-  }
-
-  .btn-thumbs:before {
-    content: fa-content($fa-var-thumbs-up);
-  }
-
-  .btn-subscribe:before {
-    content: fa-content($fa-var-bell);
-    font-weight: 400;
-  }
-
-  .btn-reply:before {
-    content: fa-content($fa-var-comment);
-    font-weight: 400;
-  }
-
-  .btn-thumbs.thumbs-on:before {
-    color: $brand-primary;
-    content: $fa-var-thumbs-up;
-    font-weight: 900;
-  }
-
-  .subscribe-on:before {
-    color: $brand-primary;
-    content: fa-content($fa-var-bell);
-    font-weight: 900;
-  }
-}
-
 .microblog {
   .media-heading {
     margin-bottom: 2px;
@@ -100,6 +52,19 @@ input[placeholder] {
     a {
       font-size: 16px;
       color: $link-color-darker;
+    }
+  }
+
+  .btn-thumbs,
+  .btn-reply,
+  .btn-subscribe {
+    padding: 2px 7px;
+    color: $gray-light;
+    position: relative;
+
+    &:hover {
+      border: 1px solid $border-color;
+      @include gradient-y(#fff, $gray-lighter);
     }
   }
 
