@@ -14,6 +14,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property string $html
  * @property User $user
  * @property Microblog[] $comments
+ * @property int $parent_id
  */
 class MicroblogResource extends JsonResource
 {
@@ -26,14 +27,16 @@ class MicroblogResource extends JsonResource
     public function toArray($request)
     {
         $only = $this->resource->only(['id', 'votes', 'is_voted', 'is_subscribed']);
-//dd($this->comments);
+
         return array_merge(
             $only,
             [
                 'created_at'    => $this->created_at->toIso8601String(),
                 'updated_at'    => $this->created_at->toIso8601String(),
                 'html'          => $this->html,
-                'comments'      => $this->comments ? MicroblogResource::collection($this->comments) : [],
+                'comments'      => $this->when($this->parent_id === null, function () {
+                    return $this->comments ? MicroblogResource::collection($this->comments) : [];
+                }),
                 'user'          => UserResource::make($this->user)
             ]
         );

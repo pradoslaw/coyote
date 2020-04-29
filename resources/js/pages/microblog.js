@@ -1,16 +1,19 @@
 import Vue from 'vue';
 import VueMicroblog from "../components/microblog/microblog";
+import VuePagination from '../components/pagination';
 import store from '../store';
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 new Vue({
   el: '#js-microblog',
-  components: { 'vue-microblog': VueMicroblog },
+  delimiters: ['${', '}'],
+  components: { 'vue-microblog': VueMicroblog, 'vue-pagination': VuePagination },
   store,
   created() {
-    store.commit('microblogs/init', window.microblogs);
+    store.commit('microblogs/init', window.pagination);
+    store.commit('microblogs/add', window.microblog);
   },
-  computed: mapState('microblogs', ['microblogs'])
+  computed: mapGetters('microblogs', ['microblogs', 'currentPage', 'totalPages'])
 });
 
 

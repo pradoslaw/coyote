@@ -1,13 +1,29 @@
 import axios from "axios";
-import { Microblog } from "../../types/models";
+import {Microblog, Paginator} from "../../types/models";
 
 const state = {
-  microblogs: []
+  data: [],
+  links: null,
+  meta: null
 };
 
+const getters = {
+  microblogs: state => state.data,
+  currentPage: state => state.meta.current_page,
+  totalPages: state => state.meta.total
+}
+
 const mutations = {
-  init(state, microblogs) {
-    state.microblogs = microblogs;
+  init(state, pagination: Paginator | undefined) {
+    if (pagination) {
+      state = Object.assign(state, pagination);
+    }
+  },
+
+  add(state: Paginator, microblog: Microblog | undefined) {
+    if (microblog) {
+      state.data.push(microblog);
+    }
   }
 };
 
@@ -30,6 +46,7 @@ const actions = {
 export default {
   namespaced: true,
   state,
+  getters,
   mutations,
   actions
 };

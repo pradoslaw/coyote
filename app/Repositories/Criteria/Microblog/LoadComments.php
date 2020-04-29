@@ -39,14 +39,20 @@ class LoadComments extends Criteria
                     return $builder->select(['id', 'name', 'deleted_at', 'is_blocked', 'photo'])->withTrashed();
                 },
                 'comments' => function (HasMany $builder) {
-                    $builder->select('microblogs.*')->with(['user' => function ($query) {
-                        return $query->select(['id', 'name', 'photo', 'deleted_at', 'is_blocked'])->withTrashed();
-                    }]);
+                    $builder
+                        ->select('microblogs.*')
+                        ->with(['user' => function ($query) {
+                            return $query->select(['id', 'name', 'photo', 'deleted_at', 'is_blocked'])->withTrashed();
+                        }]);
+//                        ->orderByDesc('microblogs.id')
+//                        ->skip(-2)
+//                        ->limit(2);
 
                     $this->includeVoters($builder);
                     $this->includeSubscribers($builder);
                 }
-            ]);
+            ])
+            ->withCount('comments');
 
         $this->includeVoters($model);
         $this->includeSubscribers($model);

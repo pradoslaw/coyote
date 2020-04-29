@@ -27,7 +27,7 @@
 
         <ul class="list-inline list-inline-bullet-sm text-muted small m-0">
           <li class="list-inline-item">
-            <a :href="`/Microblog/View/${$parent.microblog.id}#entry-${comment.id}`" class="text-muted">
+            <a :href="`/Mikroblogi/View/${$parent.microblog.id}#entry-${comment.id}`" class="text-muted">
               <vue-timeago :datetime="comment.created_at"></vue-timeago>
             </a>
           </li>

@@ -3,8 +3,6 @@
 {% block description %}{{ excerpt }}{% endblock %}
 {% block keywords %}{{ keywords(microblog.text)|join(',') }}{% endblock %}
 
-{% import 'components.modals' as modal %}
-
 {% block container %}
   <div id="js-microblog" class="row">
     <div class="col-12">
@@ -18,7 +16,7 @@
   {{ parent() }}
 
   <script>
-    var microblogs = [{{ microblog|json_encode|raw }}];
+    var microblog = {{ microblog|json_encode|raw }};
   </script>
 {% endblock %}
 

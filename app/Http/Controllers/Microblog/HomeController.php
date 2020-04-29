@@ -39,7 +39,7 @@ class HomeController extends Controller
         $this->microblog->pushCriteria(new LoadComments($this->userId));
         $this->microblog->pushCriteria(new OrderById());
 
-        $microblogs = $this->slice($this->microblog->paginate(10));
+        $paginator = $this->microblog->paginate(10);
         $this->microblog->resetCriteria();
 
         // let's cache microblog tags. we don't need to run this query every time
@@ -53,8 +53,7 @@ class HomeController extends Controller
         return $this->view('microblog.home', [
             'count'                     => $this->microblog->count(),
             'count_user'                => $this->microblog->countForUser($this->userId),
-            'pagination'                => $microblogs->render(),
-            'microblogs'                => $microblogs->items(),
+            'pagination'                => MicroblogResource::collection($paginator)->response()->getContent(),
             'route'                     => request()->route()->getName()
         ])->with(compact('tags', 'popular'));
     }

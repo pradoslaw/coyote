@@ -18,7 +18,7 @@
           </div>
 
           <h5 class="media-heading"><vue-user-name :user="microblog.user"></vue-user-name></h5>
-          <a :href="`/Microblog/View/${microblog.id}#entry-${microblog.id}`" class="text-muted small"><vue-timeago :datetime="microblog.created_at"></vue-timeago></a>
+          <a :href="`/Mikroblogi/View/${microblog.id}#entry-${microblog.id}`" class="text-muted small"><vue-timeago :datetime="microblog.created_at"></vue-timeago></a>
 
           <small v-if="microblog.is_sponsored" class="text-muted" style="font-size: 11px">&bull; Sponsorowane</small>
 
