@@ -2,6 +2,8 @@
 
 namespace Coyote\Repositories\Contracts;
 
+use Coyote\Repositories\Eloquent\MicroblogRepository;
+
 interface MicroblogRepositoryInterface extends RepositoryInterface
 {
     /**
@@ -32,8 +34,15 @@ interface MicroblogRepositoryInterface extends RepositoryInterface
      *
      * @param array $parentId
      * @return mixed
+     * @deprecated
      */
     public function getComments($parentId);
+
+    /**
+     * @param int[] $parentIds
+     * @return MicroblogRepository
+     */
+    public function getTopComments($parentIds);
 
     /**
      * Pobiera najpopularniejsze tagi w mikroblogach

@@ -6,6 +6,7 @@ use Coyote\Services\Media\Factory as MediaFactory;
 use Coyote\Services\Media\MediaInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Expression;
 
 /**
  * @property MediaInterface[] $media
@@ -200,7 +201,43 @@ class Microblog extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->select(['id', 'name', 'deleted_at', 'is_blocked', 'photo'])->withTrashed();
+    }
+
+    /**
+     * @param  \Illuminate\Database\Query\Builder $query
+     * @param int|null $userId
+     * @return bool|\Illuminate\Database\Query\Builder
+     */
+    public function scopeIncludeSubscribers($query, ?int $userId)
+    {
+        if (empty($userId)) {
+            return false;
+        }
+
+        return $query
+            ->addSelect(new Expression('CASE WHEN mw.user_id IS NULL THEN false ELSE true END AS is_subscribed'))
+            ->leftJoin('microblog_subscribers AS mw', function ($join) use ($userId) {
+                $join->on('mw.microblog_id', '=', 'microblogs.id')->where('mw.user_id', '=', $userId);
+            });
+    }
+
+    /**
+     * @param  \Illuminate\Database\Query\Builder $query
+     * @param int|null $userId
+     * @return bool|\Illuminate\Database\Query\Builder
+     */
+    public function scopeIncludeVoters($query, ?int $userId)
+    {
+        if (empty($userId)) {
+            return false;
+        }
+
+        return $query
+            ->addSelect(new Expression('CASE WHEN mv.id IS NULL THEN false ELSE true END AS is_voted'))
+            ->leftJoin('microblog_votes AS mv', function ($join) use ($userId) {
+                $join->on('mv.microblog_id', '=', 'microblogs.id')->where('mv.user_id', '=', $userId);
+            });
     }
 
     /**

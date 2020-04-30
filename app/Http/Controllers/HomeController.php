@@ -9,7 +9,7 @@ use Coyote\Repositories\Contracts\ReputationRepositoryInterface as ReputationRep
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
 use Coyote\Repositories\Criteria\Forum\SkipHiddenCategories;
-use Coyote\Repositories\Criteria\Microblog\LoadComments;
+use Coyote\Repositories\Criteria\Microblog\LoadUserScope;
 use Coyote\Repositories\Criteria\Microblog\OrderByScore;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess as OnlyThoseTopicsWithAccess;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess as OnlyThoseForumsWithAccess;
@@ -130,7 +130,7 @@ class HomeController extends Controller
      */
     private function getMicroblogs()
     {
-        $this->microblog->pushCriteria(new LoadComments($this->userId));
+        $this->microblog->pushCriteria(new LoadUserScope($this->userId));
         $this->microblog->pushCriteria(new OrderByScore());
 
         return $this->slice($this->microblog->take(5));

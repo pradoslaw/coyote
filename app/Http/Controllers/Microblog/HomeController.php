@@ -6,7 +6,8 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\CacheFactory;
 use Coyote\Http\Resources\Api\MicroblogResource;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
-use Coyote\Repositories\Criteria\Microblog\LoadComments;
+use Coyote\Repositories\Criteria\EagerLoading;
+use Coyote\Repositories\Criteria\Microblog\LoadUserScope;
 use Coyote\Repositories\Criteria\Microblog\OnlyMine;
 use Coyote\Repositories\Criteria\Microblog\OrderById;
 use Coyote\Repositories\Criteria\Microblog\WithTag;
@@ -36,11 +37,27 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $this->microblog->pushCriteria(new LoadComments($this->userId));
+        $this->microblog->pushCriteria(new LoadUserScope($this->userId));
         $this->microblog->pushCriteria(new OrderById());
 
         $paginator = $this->microblog->paginate(10);
         $this->microblog->resetCriteria();
+
+        $this->microblog->pushCriteria(new LoadUserScope($this->userId));
+
+        /** @var \Illuminate\Database\Eloquent\Collection $microblogs */
+        $microblogs =  $paginator->keyBy('id');
+        $comments = $this->microblog->getTopComments($microblogs->keys());
+
+        $this->microblog->resetCriteria();
+
+        foreach ($comments->groupBy('parent_id') as $relations) {
+            /** @var \Coyote\Microblog $microblog  */
+            $microblog = &$microblogs[$relations[0]->parent_id];
+            $microblog->setRelation('comments', $relations);
+        }
+
+        $paginator->setCollection($microblogs);
 
         // let's cache microblog tags. we don't need to run this query every time
         $tags = $this->getCacheFactory()->remember('microblog:tags', 30 * 60, function () {
@@ -87,7 +104,8 @@ class HomeController extends Controller
      */
     public function show($id)
     {
-        $this->microblog->pushCriteria(new LoadComments($this->userId));
+        $this->microblog->pushCriteria(new LoadUserScope($this->userId));
+        $this->microblog->pushCriteria(new EagerLoading(['comments.user']));
 
         /** @var \Coyote\Microblog $microblog */
         $microblog = $this->microblog->findOrFail($id);
@@ -100,21 +118,5 @@ class HomeController extends Controller
         MicroblogResource::withoutWrapping();
 
         return $this->view('microblog.view')->with(['microblog' => new MicroblogResource($microblog), 'excerpt' => $excerpt]);
-    }
-
-    /**
-     * Zostawia jedynie 2 ostatnie komentarze do wpisu
-     *
-     * @param \Illuminate\Pagination\LengthAwarePaginator $microblogs
-     * @return mixed
-     */
-    private function slice($microblogs)
-    {
-        foreach ($microblogs as &$microblog) {
-            $microblog->comments_count = $microblog->comments->count();
-            $microblog->comments = $microblog->comments->slice(-2, 2);
-        }
-
-        return $microblogs;
     }
 }

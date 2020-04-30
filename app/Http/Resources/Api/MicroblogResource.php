@@ -37,7 +37,10 @@ class MicroblogResource extends JsonResource
                 'comments'      => $this->when($this->parent_id === null, function () {
                     return $this->comments ? MicroblogResource::collection($this->comments) : [];
                 }),
-                'user'          => UserResource::make($this->user)
+                'user'          => UserResource::make($this->user),
+                'editable'      => $this->when($request->user(), function () use ($request) {
+                    return $request->user()->can('update', $this->resource);
+                })
             ]
         );
     }

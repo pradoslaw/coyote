@@ -9,7 +9,7 @@ use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface as ReputationRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
-use Coyote\Repositories\Criteria\Microblog\LoadComments;
+use Coyote\Repositories\Criteria\Microblog\LoadUserScope;
 use Coyote\Repositories\Criteria\Microblog\OnlyMine;
 use Coyote\Repositories\Criteria\Microblog\OrderById;
 use Coyote\Repositories\Eloquent\MicroblogRepository;
@@ -142,11 +142,11 @@ class HomeController extends Controller
     {
         $this->microblog->resetCriteria();
 
-        $this->microblog->pushCriteria(new LoadComments($this->userId));
+        $this->microblog->pushCriteria(new LoadUserScope($this->userId));
         $this->microblog->pushCriteria(new OrderById());
         $this->microblog->pushCriteria(new OnlyMine($user->id));
 
-        $microblogs = $this->microblog->paginate(10);
+        $microblogs = $this->microblog->paginateWithTopComments(10);
 
         return view('profile.partials.microblog', [
             'user'          => $user,

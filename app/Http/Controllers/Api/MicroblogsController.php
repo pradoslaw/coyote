@@ -7,8 +7,6 @@ use Coyote\Microblog;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
 use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Repositories\Criteria\Microblog\OrderById;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Routing\Controller;
 
@@ -59,16 +57,7 @@ class MicroblogsController extends Controller
     private function relations()
     {
         return [
-            'comments' => function (HasMany $query) {
-                return $query->with([
-                    'user' => function (BelongsTo $query) {
-                        return $query->select(['id', 'name', 'photo', 'is_blocked', 'deleted_at'])->withTrashed();
-                    }
-                ]);
-            },
-            'user' => function (BelongsTo $query) {
-                return $query->select(['id', 'name', 'photo', 'is_blocked', 'deleted_at'])->withTrashed();
-            }
+            'comments.user'
         ];
     }
 }

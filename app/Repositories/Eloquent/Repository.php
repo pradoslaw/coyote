@@ -339,7 +339,7 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
      * @return mixed
      * @throws \Exception
      */
-    public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
+    public function paginateWithTopComments($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
         $this->applyCriteria();
 
