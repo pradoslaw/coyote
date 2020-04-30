@@ -11,7 +11,14 @@ module.exports = merge(common, {
   optimization: {
     namedChunks: true,
     minimizer: [
-      new TerserPlugin(),
+      new TerserPlugin({
+        extractComments: false,
+        terserOptions: {
+          output: {
+            comments: false,
+          }
+        }
+      }),
       new OptimizeCSSAssetsPlugin({})
     ]
   },
