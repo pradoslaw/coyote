@@ -216,20 +216,13 @@ input[placeholder] {
     }
   }
 
-  // Submit button and textarea within .write-content class
-  // -------------------------------------------------------
-
-  .write-content {
-    position: relative;
-
-    > .btn-submit {
-      color: $gray;
-      position: absolute;
-      bottom: 2px;
-      right: 2px;
-      background: none;
-      font-size: 15px;
-    }
+  .btn-comment-submit {
+    color: $gray;
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    background: none;
+    font-size: 15px;
   }
 
   .show-all {

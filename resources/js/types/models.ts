@@ -15,15 +15,16 @@ export interface User {
 }
 
 export interface Microblog {
-  id: number;
+  id: number | null;
   votes: number;
   is_voted: boolean;
   is_subscribed: boolean;
-  created_at: Date;
-  updated_at: Date;
+  created_at: Date | null;
+  updated_at: Date | null;
   html: string;
+  text: string;
   comments: Microblog[];
-  user: User;
+  user: User | null
   editable?: boolean;
   comments_count?: number;
 }

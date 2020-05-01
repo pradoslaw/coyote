@@ -5,7 +5,6 @@
 $this->group(['namespace' => 'Microblog', 'prefix' => 'Mikroblogi', 'as' => 'microblog.'], function () {
     $this->get('/', ['uses' => 'HomeController@index', 'as' => 'home']);
     $this->post('Edit/{microblog?}', ['uses' => 'SubmitController@save', 'as' => 'save', 'middleware' => 'auth']);
-    $this->get('Edit/{microblog}', ['uses' => 'SubmitController@edit', 'middleware' => 'auth']);
 
     $this->get('Upload', 'SubmitController@thumbnail');
     $this->post('Upload', ['uses' => 'SubmitController@upload', 'as' => 'upload', 'middleware' => 'auth']);

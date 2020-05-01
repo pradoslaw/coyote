@@ -7,6 +7,7 @@ use Coyote\Events\MicroblogWasSaved;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\MediaFactory;
 use Coyote\Http\Requests\MicroblogRequest;
+use Coyote\Http\Resources\Api\MicroblogResource;
 use Coyote\Notifications\Microblog\UserMentionedNotification;
 use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Services\Parser\Helpers\Login as LoginHelper;
@@ -91,7 +92,7 @@ class SubmitController extends Controller
 
                 if ($this->auth->allow_subscribe) {
                     // enable subscribe button
-                    $microblog->subscribe_on = true;
+                    $microblog->is_subscribed = true;
                     $microblog->subscribers()->create(['user_id' => $user->id]);
                 }
             } else {
@@ -117,38 +118,9 @@ class SubmitController extends Controller
 
         event(new MicroblogWasSaved($microblog));
 
-        // do przekazania do widoku...
-        foreach (['name', 'is_blocked', 'is_active', 'photo'] as $key) {
-            $microblog->{$key} = $user->{$key};
-        }
+        MicroblogResource::withoutWrapping();
 
-        // passing html version of the entry...
-        $microblog->text = $microblog->html;
-
-        return view(!$microblog->wasRecentlyCreated ? 'microblog.partials.text' : 'microblog.partials.microblog')->with('microblog', $microblog);
-    }
-
-    /**
-     * Edycja wpisu na mikroblogu. Odeslanie formularza zawierajacego tresc + zalaczniki
-     *
-     * @param \Coyote\Microblog $microblog
-     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
-     */
-    public function edit($microblog)
-    {
-        $this->authorize('update', $microblog);
-
-        return view('microblog.partials.edit')->with('microblog', $microblog);
-    }
-
-    /**
-     * Return small piece of code (thumbnail container)
-     *
-     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
-     */
-    public function thumbnail()
-    {
-        return view('microblog.partials.thumbnail');
+        return new MicroblogResource($microblog);
     }
 
     /**

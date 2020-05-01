@@ -123,16 +123,18 @@ class CommentController extends Controller
             }
         }
 
-        foreach (['name', 'is_blocked', 'is_active', 'photo'] as $key) {
-            $microblog->{$key} = $user->{$key};
-        }
+        return (new MicroblogResource($microblog))->additional(['is_subscribed' => (bool) $isSubscribed]);
 
-        $view = view('microblog.partials.comment', ['comment' => $microblog, 'microblog' => ['id' => $microblog->parent_id]]);
-
-        return response()->json([
-            'html' => $view->render(),
-            'subscribe' => (int) $isSubscribed
-        ]);
+//        foreach (['name', 'is_blocked', 'is_active', 'photo'] as $key) {
+//            $microblog->{$key} = $user->{$key};
+//        }
+//
+//        $view = view('microblog.partials.comment', ['comment' => $microblog, 'microblog' => ['id' => $microblog->parent_id]]);
+//
+//        return response()->json([
+//            'html' => $view->render(),
+//            'subscribe' => (int) $isSubscribed
+//        ]);
     }
 
     /**

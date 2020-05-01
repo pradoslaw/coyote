@@ -26,7 +26,7 @@ class MicroblogResource extends JsonResource
      */
     public function toArray($request)
     {
-        $only = $this->resource->only(['id', 'votes', 'is_voted', 'is_subscribed', 'comments_count']);
+        $only = $this->resource->only(['id', 'votes', 'text', 'is_voted', 'is_subscribed', 'comments_count']);
 
         return array_merge(
             $only,

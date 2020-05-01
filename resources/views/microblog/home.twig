@@ -20,7 +20,7 @@
       </ul>
 
       {% if auth_check() %}
-        <form method="POST" class="microblog-submit" action="{{ route('microblog.save') }}">
+        <form method="POST" class="microblog-submit">
           <div class="card card-default">
             <div class="card-body">
               <div class="media">
@@ -30,7 +30,7 @@
                   </a>
                 </div>
                 <div class="media-body">
-                  {% include 'microblog.partials.form' %}
+                  <vue-form></vue-form>
                 </div>
               </div>
             </div>

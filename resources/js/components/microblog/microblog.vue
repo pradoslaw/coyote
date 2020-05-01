@@ -22,7 +22,7 @@
 
           <small v-if="microblog.is_sponsored" class="text-muted" style="font-size: 11px">&bull; Sponsorowane</small>
 
-          <div class="microblog-wrapper">
+          <div v-show="!isEditing" class="microblog-wrapper">
 <!--          <div class="microblog-wrapper {{ not microblogDetailsPage ? 'microblog-wrapper-wrap' }}">-->
             <div class="microblog-text">
               <div v-html="microblog.html"></div>
@@ -36,8 +36,12 @@
 <!--                </div>-->
 <!--                {% endfor %}-->
               </div>
+
+
             </div>
           </div>
+
+          <vue-form v-if="isEditing" ref="form" :microblog="microblog" class="mt-2 mb-2" @cancel="isEditing = false" @save="isEditing = false"></vue-form>
 
           <div class="microblog-footer">
             <a @click="vote(microblog)" href="javascript:" class="btn btn-thumbs" data-toggle="tooltip" data-placement="top">
@@ -72,25 +76,22 @@
               <vue-comment v-for="comment in microblog.comments" :key="comment.id" :comment="comment"></vue-comment>
             </div>
 
-<!--            {% if auth_check() %}-->
-<!--            <form class="comment-form" method="POST" action="{{ route('microblog.comment.save') }}">-->
-<!--              <div class="media media-darker">-->
-<!--                <div class="mr-2">-->
-<!--                  <a href="{{ route('profile', user('id')) }}">-->
-<!--                    <img class="media-object" src="{{ user_photo(user('photo')) }}" style="width: 32px; height: 32px">-->
-<!--                  </a>-->
-<!--                </div>-->
-<!--                <div class="media-body">-->
-<!--                  <input type="hidden" name="parent_id" value="{{ microblog.id }}">-->
+            <form v-if="isAuthorized" class="comment-form" method="POST">
+              <div class="media media-darker">
+                <div class="mr-2">
+                  <a v-profile="user.id">
+                    <vue-avatar v-bind="user" class="i-35 d-sm-block img-thumbnail"></vue-avatar>
+                  </a>
+                </div>
+                <div class="media-body position-relative">
 
-<!--                  <div class="write-content">-->
-<!--                    <textarea name="text" placeholder="Napisz komentarz... (Ctrl+Enter aby wysłać)" class="form-control" data-prompt-url="{{ route('user.prompt') }}" rows="1"></textarea>-->
-<!--                    <button type="submit" class="btn btn-sm btn-submit" title="Zapisz (Ctrl+Enter)"><i class="far fa-fw fa-share-square"></i></button>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </form>-->
-<!--            {% endif %}-->
+
+                    <textarea name="text" placeholder="Napisz komentarz... (Ctrl+Enter aby wysłać)" class="form-control" rows="1"></textarea>
+                    <button type="submit" class="btn btn-sm btn-comment-submit" title="Zapisz (Ctrl+Enter)"><i class="far fa-fw fa-share-square"></i></button>
+
+                </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>
@@ -118,6 +119,7 @@
   import VueTimeago from '../../plugins/timeago';
   import VueModal from '../modal.vue';
   import VueComment from "./comment.vue";
+  import VueForm from './form.vue';
   import { default as mixins } from '../mixins/user';
   import { Prop, Ref } from "vue-property-decorator";
   import { mapGetters, mapState, mapActions } from "vuex";
@@ -137,9 +139,13 @@
       'vue-avatar': VueAvatar,
       'vue-modal': VueModal,
       'vue-user-name': VueUserName,
-      'vue-comment': VueComment
+      'vue-comment': VueComment,
+      'vue-form': VueForm
     },
-    computed: mapGetters('user', ['isAuthorized']),
+    computed: {
+      ...mapGetters('user', ['isAuthorized']),
+      ...mapState('user', {user: state => state})
+    },
     methods: mapActions('microblogs', ['loadComments', 'vote', 'subscribe'])
   })
   export default class VueMicroblog extends Vue {
@@ -149,6 +155,9 @@
     @Ref()
     readonly confirm!: VueModal;
 
+    @Ref()
+    readonly form!: VueForm;
+
     @Prop(Object)
     microblog!: Microblog;
 
@@ -156,9 +165,10 @@
       this.isEditing = !this.isEditing;
 
       if (this.isEditing) {
-        // this.$nextTick(function () {
-        //   this.$refs.submitText.$el.focus();
-        // })
+        this.$nextTick(function () {
+          // @ts-ignore
+          this.form.$refs.textarea.$el.focus();
+        })
       }
     }
 
