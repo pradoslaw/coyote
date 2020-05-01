@@ -84,11 +84,7 @@
                   </a>
                 </div>
                 <div class="media-body position-relative">
-
-
-                    <textarea name="text" placeholder="Napisz komentarz... (Ctrl+Enter aby wysłać)" class="form-control" rows="1"></textarea>
-                    <button type="submit" class="btn btn-sm btn-comment-submit" title="Zapisz (Ctrl+Enter)"><i class="far fa-fw fa-share-square"></i></button>
-
+                  <vue-comment-form :microblog="{parent_id: microblog.id}"></vue-comment-form>
                 </div>
               </div>
             </form>
@@ -119,6 +115,7 @@
   import VueTimeago from '../../plugins/timeago';
   import VueModal from '../modal.vue';
   import VueComment from "./comment.vue";
+  import VueCommentForm from './comment-form.vue';
   import VueForm from './form.vue';
   import { default as mixins } from '../mixins/user';
   import { Prop, Ref } from "vue-property-decorator";
@@ -140,7 +137,8 @@
       'vue-modal': VueModal,
       'vue-user-name': VueUserName,
       'vue-comment': VueComment,
-      'vue-form': VueForm
+      'vue-form': VueForm,
+      'vue-comment-form': VueCommentForm
     },
     computed: {
       ...mapGetters('user', ['isAuthorized']),

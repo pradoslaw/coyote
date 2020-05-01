@@ -16,12 +16,14 @@
         </div>
       </div>
 
+      <vue-comment-form v-if="isEditing" :microblog="comment"></vue-comment-form>
+
 <!--      {{ form_open({url: route('microblog.comment.save', [comment.id]), class: 'write-content mr-4', style: 'display: none'}) }}-->
 <!--      <textarea name="text" placeholder="Napisz komentarz... (Ctrl+Enter aby wysłać)" class="form-control" data-prompt-url="{{ route('user.prompt') }}" rows="1">{{ comment.text }}</textarea>-->
 <!--      <button type="submit" class="btn btn-sm btn-submit" title="Zapisz (Ctrl+Enter)"><i class="far fa-fw fa-share-square"></i></button>-->
 <!--      {{ form_close() }}-->
 
-      <div class="comment-body">
+      <div v-if="!isEditing" class="comment-body">
         <h6><vue-user-name :user="comment.user"></vue-user-name></h6>
         <div class="media-content" v-html="comment.html"></div>
 
@@ -49,10 +51,11 @@
   import VueAvatar from '../avatar.vue';
   import VueUserName from '../user-name.vue';
   import VueTimeago from '../../plugins/timeago';
+  import VueCommentForm from "./comment-form.vue";
   import VueModal from '../modal.vue';
   import { default as mixins } from '../mixins/user';
   import { Prop, Ref } from "vue-property-decorator";
-  import { mapGetters, mapState } from "vuex";
+  import {mapActions, mapGetters, mapState} from "vuex";
   import Component from "vue-class-component";
   import { mixin as clickaway } from "vue-clickaway";
   import store from "../../store";
@@ -64,11 +67,9 @@
     name: 'comment',
     mixins: [clickaway, mixins],
     store,
-    components: { 'vue-avatar': VueAvatar, 'vue-modal': VueModal, 'vue-user-name': VueUserName },
-    computed: {
-      ...mapGetters('user', ['isAuthorized']),
-
-    }
+    components: { 'vue-avatar': VueAvatar, 'vue-modal': VueModal, 'vue-user-name': VueUserName, 'vue-comment-form': VueCommentForm },
+    computed: mapGetters('user', ['isAuthorized']),
+    methods: mapActions('microblogs', ['vote'])
   })
   export default class VueComment extends Vue {
     isEditing = false;

@@ -15,13 +15,11 @@ const getters = {
 }
 
 const mutations = {
-  init(state, pagination: Paginator | undefined) {
+  init(state, { pagination, microblog }) {
     if (pagination) {
       state = Object.assign(state, pagination);
     }
-  },
 
-  add(state: Paginator, microblog: Microblog | undefined) {
     if (microblog) {
       state.data.push(microblog);
     }
@@ -31,6 +29,13 @@ const mutations = {
     const index = state.data.findIndex(item => item.id === microblog.id);
 
     index > -1 ? Vue.set(state.data, index, microblog) : state.data.unshift(microblog);
+  },
+
+  updateComment(state, microblog: Microblog) {
+    const parentIndex = state.data.findIndex(item => item.id === microblog.parent_id);
+    const index = state.data[parentIndex].findIndex(item => item.id === microblog.id);
+
+    index > -1 ? state.data[parentIndex].comments[index] = microblog : state.data[parentIndex].comments.push(microblog);
   },
 
   setComments(state, { microblog, comments }) {
@@ -73,6 +78,10 @@ const actions = {
 
   save({ commit }, microblog: Microblog) {
     axios.post(`/Mikroblogi/Edit/${microblog.id || ''}`, microblog).then(result => commit('update', result.data));
+  },
+
+  saveComment({ commit }, microblog: Microblog) {
+    axios.post(`/Mikroblogi/Comment/${microblog.id || ''}`, microblog).then(result => commit('updateComment', result.data));
   },
 
   loadComments({ commit }, microblog: Microblog) {

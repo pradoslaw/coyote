@@ -1,6 +1,6 @@
 
 declare module 'vue-textarea-autosize' {
-  interface Vue {
+  import Vue, { PluginFunction } from "vue";
 
-  }
+  function install(): PluginFunction<any>;
 }

@@ -11,8 +11,7 @@ new Vue({
   components: { 'vue-microblog': VueMicroblog, 'vue-pagination': VuePagination, 'vue-form': VueForm },
   store,
   created() {
-    store.commit('microblogs/init', window.pagination);
-    store.commit('microblogs/add', window.microblog);
+    store.commit('microblogs/init', { pagination: window.pagination, microblog: window.microblog });
   },
   computed: mapGetters('microblogs', ['microblogs', 'currentPage', 'totalPages'])
 });

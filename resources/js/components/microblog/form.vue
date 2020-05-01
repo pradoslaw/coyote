@@ -9,7 +9,6 @@
         name="text"
         ref="textarea"
         v-model="microblog.text"
-        :class="{'is-invalid': errors.text !== undefined}"
         :min-height="40"
         :max-height="350"
         @keydown.native.ctrl.enter="save"
@@ -46,7 +45,7 @@
               Zapisz
             </vue-button>
 
-            <button v-if="microblog.id" title="Anuluj (Esc)" class="btn btn-sm btn-cancel btn-danger float-right" style="margin-right: 10px" tabindex="3">
+            <button v-if="microblog.id" @click="cancel" title="Anuluj (Esc)" class="btn btn-sm btn-cancel btn-danger float-right" style="margin-right: 10px" tabindex="3">
               Anuluj
             </button>
           </div>
@@ -61,15 +60,10 @@
   import Component from "vue-class-component";
   import { Prop, Emit } from "vue-property-decorator";
   import store from "../../store";
-
   import VueTextareaAutosize from 'vue-textarea-autosize';
   import VuePrompt from '../forms/prompt.vue';
-  import VueModal from "../modal.vue";
   import VueButton from '../forms/button.vue';
   import VueClipboard from '../../plugins/clipboard.js';
-
-
-  import { mapActions, mapGetters } from "vuex";
   import { Microblog } from "../../types/models";
 
   Vue.use(VueTextareaAutosize);
@@ -81,43 +75,32 @@
     components: {
       'vue-button': VueButton,
       'vue-prompt': VuePrompt
-    },
-    // methods: mapActions('microblogs', ['save'])
+    }
   })
   export default class VueForm extends Vue {
     errors = {};
     isProcessing = false;
 
-    @Prop(Object)
-    microblog: Microblog = {
-      id: null,
-      votes: 0,
-      is_voted: false,
-      is_subscribed: false,
-      text: '',
-      html: '',
-      created_at: null,
-      updated_at: null,
-      comments: [],
-      user: null
-    };
+    @Prop({default: {}})
+    microblog!: Microblog;
 
     @Emit()
     cancel() {
       //
     }
 
-    @Emit()
     save() {
       this.isProcessing = true;
 
-      store.dispatch('microblogs/save', this.microblog).finally(() => {
-        this.isProcessing = false;
+      store.dispatch('microblogs/save', this.microblog)
+        .then(() => this.$emit('save'))
+        .finally(() => {
+          this.isProcessing = false;
 
-        if (!this.microblog.id) {
-          this.microblog.text = '';
-        }
-      });
+          if (!this.microblog.id) {
+            this.microblog.text = '';
+          }
+        });
     }
 
     addThumbnail() {

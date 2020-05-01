@@ -16,6 +16,7 @@ export interface User {
 
 export interface Microblog {
   id: number | null;
+  parent_id?: number;
   votes: number;
   is_voted: boolean;
   is_subscribed: boolean;
