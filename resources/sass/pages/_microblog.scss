@@ -238,13 +238,6 @@ input[placeholder] {
     a {
       color: $gray;
       font-size: 12px;
-      padding-left: 15px;
-      position: relative;
-
-      &:before {
-        @include font-awesome($fa-var-comments);
-        left: 0;
-      }
 
       &:hover,
       &:focus {

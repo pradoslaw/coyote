@@ -25,6 +25,7 @@ export interface Microblog {
   comments: Microblog[];
   user: User;
   editable?: boolean;
+  comments_count?: number;
 }
 
 export interface Links {

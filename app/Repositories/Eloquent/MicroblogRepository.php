@@ -26,7 +26,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
         return $this->applyCriteria(function () use ($perPage) {
-            return $this->model->whereNull('parent_id')->with('user')->paginate($perPage);
+            return $this->model->whereNull('parent_id')->with('user')->withCount('comments')->paginate($perPage);
         });
     }
 
@@ -78,15 +78,12 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     }
 
     /**
-     * Pobranie komentarzy od danego wpisu w mikroblogu
-     *
-     * @param array $parentId
-     * @return MicroblogRepository
+     * @inheritDoc
      */
     public function getComments($parentId)
     {
         return $this->applyCriteria(function () use ($parentId) {
-            return $this->model->whereIn('parent_id', $parentId)->orderBy('id')->get();
+            return $this->model->where('parent_id', $parentId)->with('user')->orderBy('id')->get();
         });
     }
 

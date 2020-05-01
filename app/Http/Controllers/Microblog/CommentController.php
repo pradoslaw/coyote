@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Requests\MicroblogRequest;
+use Coyote\Http\Resources\Api\MicroblogResource;
 use Coyote\Notifications\Microblog\UserMentionedNotification;
 use Coyote\Notifications\Microblog\SubmittedNotification;
 use Coyote\Repositories\Criteria\Microblog\LoadUserScope;
@@ -155,17 +156,17 @@ class CommentController extends Controller
     }
 
     /**
-     * Pokaz pozostale komentarze do wpisu
-     *
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function show($id)
     {
         $this->microblog->pushCriteria(new LoadUserScope($this->userId));
 
-        $comments = $this->microblog->getComments([$id]);
+        $comments = $this->microblog->getComments($id);
 
-        return view('microblog.partials.comments', ['microblog' => ['id' => $id], 'comments' => $comments]);
+        MicroblogResource::withoutWrapping();
+
+        return MicroblogResource::collection($comments);
     }
 }

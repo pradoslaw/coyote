@@ -40,7 +40,7 @@
           </div>
 
           <div class="microblog-footer">
-            <a @click="vote(microblog.id)" href="javascript:" class="btn btn-thumbs" data-toggle="tooltip" data-placement="top">
+            <a @click="vote(microblog)" href="javascript:" class="btn btn-thumbs" data-toggle="tooltip" data-placement="top">
               <i :class="{'fas text-primary': microblog.is_voted, 'far': !microblog.is_voted}" class="fa-fw fa-thumbs-up"></i>
 
               {{ microblog.votes }} {{ microblog.votes | declination(['głos', 'głosy', 'głosów']) }}
@@ -65,12 +65,9 @@
           <div class="microblog-comments margin-sm-top">
 
             <div class="microblog-comments-container">
-<!--              {% if microblog.comments_count > microblog.comments|length %}-->
-<!--              <div class="show-all">-->
-<!--                {% set total_comments = microblog.comments_count - microblog.comments|length %}-->
-<!--                <a href="{{ route('microblog.comment.show', [microblog.id]) }}">Zobacz {{ declination(total_comments, ['pozostały', 'pozostałe', 'pozostałe'], true) }} {{ declination(total_comments, ['komentarz', 'komentarze', 'komentarzy']) }}</a>-->
-<!--              </div>-->
-<!--              {% endif %}-->
+              <div v-if="microblog.comments_count > microblog.comments.length" class="show-all">
+                <a @click="loadComments(microblog)" href="javascript:"><i class="far fa-comments"></i> Zobacz {{ totalComments | declination(['pozostały', 'pozostałe', 'pozostałe']) }} {{ totalComments }} {{ totalComments | declination(['komentarz', 'komentarze', 'komentarzy']) }}</a>
+              </div>
 
               <vue-comment v-for="comment in microblog.comments" :key="comment.id" :comment="comment"></vue-comment>
             </div>
@@ -123,7 +120,7 @@
   import VueComment from "./comment.vue";
   import { default as mixins } from '../mixins/user';
   import { Prop, Ref } from "vue-property-decorator";
-  import { mapGetters, mapState } from "vuex";
+  import { mapGetters, mapState, mapActions } from "vuex";
   import Component from "vue-class-component";
   import { mixin as clickaway } from "vue-clickaway";
   import store from "../../store";
@@ -142,18 +139,16 @@
       'vue-user-name': VueUserName,
       'vue-comment': VueComment
     },
-    computed: {
-      ...mapGetters('user', ['isAuthorized']),
-
-    }
+    computed: mapGetters('user', ['isAuthorized']),
+    methods: mapActions('microblogs', ['loadComments', 'vote', 'subscribe'])
   })
   export default class VueMicroblog extends Vue {
     isEditing = false;
+    error = '';
 
     @Ref()
     readonly confirm!: VueModal;
 
-    //
     @Prop(Object)
     microblog!: Microblog;
 
@@ -176,6 +171,10 @@
 
         store.dispatch('microblog/delete')
       }
+    }
+
+    get totalComments() {
+      return this.microblog.comments_count! - this.microblog.comments.length;
     }
 
   }

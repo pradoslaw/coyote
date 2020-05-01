@@ -2,6 +2,7 @@
 
 namespace Coyote\Repositories\Contracts;
 
+use Coyote\Microblog;
 use Coyote\Repositories\Eloquent\MicroblogRepository;
 
 interface MicroblogRepositoryInterface extends RepositoryInterface
@@ -32,15 +33,14 @@ interface MicroblogRepositoryInterface extends RepositoryInterface
     /**
      * Pobranie komentarzy od danego wpisu w mikroblogu
      *
-     * @param array $parentId
-     * @return mixed
-     * @deprecated
+     * @param int $parentId
+     * @return Microblog[]
      */
-    public function getComments($parentId);
+    public function getComments(int $parentId);
 
     /**
      * @param int[] $parentIds
-     * @return MicroblogRepository
+     * @return Microblog[]
      */
     public function getTopComments($parentIds);
 

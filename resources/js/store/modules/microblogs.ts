@@ -24,22 +24,56 @@ const mutations = {
     if (microblog) {
       state.data.push(microblog);
     }
+  },
+
+  setComments(state, { microblog, comments }) {
+    microblog.comments = comments;
+  },
+
+  subscribe(state, microblog: Microblog) {
+    microblog.is_subscribed = ! microblog.is_subscribed;
+  },
+
+  vote(state, microblog: Microblog) {
+    microblog.is_voted = ! microblog.is_voted;
+  },
+
+  updateVotes(state, { microblog, votes }) {
+    microblog.votes = votes;
   }
 };
 
 const actions = {
-  subscribe({ commit }, microblog) {
+  subscribe({ commit }, microblog: Microblog) {
+    commit('subscribe', microblog);
 
+    axios.post(`/Mikroblogi/Subscribe/${microblog.id}`);
+  },
+
+  vote({ commit }, microblog: Microblog) {
+    commit('vote', microblog);
+
+    axios.post(`/Mikroblogi/Vote/${microblog.id}`).then(result => {
+      const votes = result.data;
+
+      commit('updateVotes', { microblog, votes });
+    });
   },
 
   delete({ commit }, microblog) {
-    axios.post(`/Mikroblogi/Delete/${microblog.id}`).then(() => {
+    axios.post(`/Mikroblogi/Delete/${microblog.id}`).then(result => {
 
     });
   },
 
-  vote({ commit }, microblog) {
 
+
+  loadComments({ commit }, microblog: Microblog) {
+    axios.get(`/Mikroblogi/Comment/Show/${microblog.id}`).then(result => {
+      let comments = result.data;
+
+      commit('setComments', { microblog, comments });
+    })
   }
 };
 

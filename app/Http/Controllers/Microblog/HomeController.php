@@ -7,6 +7,7 @@ use Coyote\Http\Factories\CacheFactory;
 use Coyote\Http\Resources\Api\MicroblogResource;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
 use Coyote\Repositories\Criteria\EagerLoading;
+use Coyote\Repositories\Criteria\EagerLoadingWithCount;
 use Coyote\Repositories\Criteria\Microblog\LoadUserScope;
 use Coyote\Repositories\Criteria\Microblog\OnlyMine;
 use Coyote\Repositories\Criteria\Microblog\OrderById;
@@ -106,6 +107,7 @@ class HomeController extends Controller
     {
         $this->microblog->pushCriteria(new LoadUserScope($this->userId));
         $this->microblog->pushCriteria(new EagerLoading(['comments.user']));
+        $this->microblog->pushCriteria(new EagerLoadingWithCount(['comments']));
 
         /** @var \Coyote\Microblog $microblog */
         $microblog = $this->microblog->findOrFail($id);
