@@ -14,6 +14,11 @@ export interface User {
   photo: string;
 }
 
+export interface Media {
+  name: string;
+  url: string;
+}
+
 export interface Microblog {
   id: number | null;
   parent_id?: number;
@@ -26,6 +31,7 @@ export interface Microblog {
   text: string;
   comments: Microblog[];
   user: User | null
+  media: Media[];
   editable?: boolean;
   comments_count?: number;
 }

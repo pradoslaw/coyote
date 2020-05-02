@@ -28,16 +28,12 @@
               <div v-html="microblog.html"></div>
 
               <div v-if="microblog.media" class="thumbnails row">
-<!--                {% for media in microblog.media %}-->
-<!--                <div class="col-6 col-md-3">-->
-<!--                  <a href="{{ media.url() }}" data-toggle="lightbox" data-gallery="gallery-{{ microblog.id }}">-->
-<!--                    <img class="img-thumbnail" src="{{ thumbnail(media) }}">-->
-<!--                  </a>-->
-<!--                </div>-->
-<!--                {% endfor %}-->
+                <div v-for="media in microblog.media" class="col-6 col-md-3">
+                  <a :href="media.url" data-toggle="lightbox" :data-gallery="`gallery-${microblog.id}`">
+                    <img class="img-thumbnail" :src="media.url">
+                  </a>
+                </div>
               </div>
-
-
             </div>
           </div>
 
@@ -186,7 +182,6 @@
     get totalComments() {
       return this.microblog.comments_count! - this.microblog.comments.length;
     }
-
   }
 </script>
 

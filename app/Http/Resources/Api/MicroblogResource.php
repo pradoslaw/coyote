@@ -5,6 +5,7 @@ namespace Coyote\Http\Resources\Api;
 use Carbon\Carbon;
 use Coyote\Http\Resources\UserResource;
 use Coyote\Microblog;
+use Coyote\Services\Media\MediaInterface;
 use Coyote\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -15,6 +16,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property User $user
  * @property Microblog[] $comments
  * @property int $parent_id
+ * @property MediaInterface[] $media
  */
 class MicroblogResource extends JsonResource
 {
@@ -26,7 +28,7 @@ class MicroblogResource extends JsonResource
      */
     public function toArray($request)
     {
-        $only = $this->resource->only(['id', 'votes', 'text', 'parent_id', 'is_voted', 'is_subscribed', 'comments_count']);
+        $only = $this->resource->only(['id', 'votes', 'text', 'html', 'parent_id', 'is_voted', 'is_subscribed', 'comments_count']);
 
         return array_merge(
             $only,
@@ -38,6 +40,7 @@ class MicroblogResource extends JsonResource
                     return $this->comments ? MicroblogResource::collection($this->comments) : [];
                 }),
                 'user'          => UserResource::make($this->user),
+                'media'         => $this->resource->getOriginal('media') ? json_decode($this->resource->getOriginal('media'), true)['image'] : [],
                 'editable'      => $this->when($request->user(), function () use ($request) {
                     return $request->user()->can('update', $this->resource);
                 })

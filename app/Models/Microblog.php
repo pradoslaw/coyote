@@ -40,7 +40,7 @@ class Microblog extends Model
      *
      * @var array
      */
-    protected $fillable = ['parent_id', 'user_id', 'text'];
+    protected $fillable = ['parent_id', 'user_id', 'text', 'media'];
 
     /**
      * @var string

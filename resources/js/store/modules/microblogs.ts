@@ -1,5 +1,5 @@
 import axios from "axios";
-import {Microblog, Paginator} from "../../types/models";
+import { Microblog, Paginator, Media } from "../../types/models";
 import Vue from 'vue';
 
 const state = {
@@ -43,6 +43,18 @@ const mutations = {
 
   replaceComments(state, { microblog, comments }) {
     microblog.comments = comments;
+  },
+
+  addEmptyImage(state, microblog: Microblog) {
+    microblog.media.push({name: '', url: ''});
+  },
+
+  addImage(state, { microblog, media }) {
+    microblog.media.push(media);
+  },
+
+  deleteImage(state, { microblog, media }) {
+    microblog.media.splice(microblog.media.findIndex(item => item.name === media));
   },
 
   subscribe(state, microblog: Microblog) {

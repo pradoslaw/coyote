@@ -44,18 +44,17 @@ class SubmitController extends Controller
     }
 
     /**
-     * Publikowanie wpisu na mikroblogu
-     *
      * @param MicroblogRequest $request
      * @param Dispatcher $dispatcher
-     * @param \Coyote\Microblog $microblog
-     * @return \Illuminate\View\View
+     * @param $microblog
+     * @return MicroblogResource
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function save(MicroblogRequest $request, Dispatcher $dispatcher, $microblog)
     {
         $this->user->pushCriteria(new WithTrashed());
 
-        $data = $request->only(['text']);
+        $data = $request->only(['text', 'media']);
 
         if (!$microblog->exists) {
             $user = $this->auth;
@@ -65,17 +64,17 @@ class SubmitController extends Controller
 
             $user = $this->user->find($microblog->user_id, ['id', 'name', 'is_blocked', 'deleted_at', 'photo']);
         }
-
-        if ($request->filled('thumbnail') || count($microblog->media) > 0) {
-            /** @var \Coyote\Services\Media\MediaInterface $media */
-            foreach ($microblog->media as $media) {
-                if (!in_array($media->getFilename(), $request->get('thumbnail', []))) {
-                    $media->delete();
-                }
-            }
-
-            $microblog->media = $request->get('thumbnail');
-        }
+//
+//        if ($request->filled('thumbnail') || count($microblog->media) > 0) {
+//            /** @var \Coyote\Services\Media\MediaInterface $media */
+//            foreach ($microblog->media as $media) {
+//                if (!in_array($media->getFilename(), $request->get('thumbnail', []))) {
+//                    $media->delete();
+//                }
+//            }
+//
+//            $microblog->media = $request->get('thumbnail');
+//        }
 
         $microblog->fill($data);
 
