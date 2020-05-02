@@ -24,55 +24,48 @@
 
           <div v-show="!isEditing" class="microblog-wrapper">
 <!--          <div class="microblog-wrapper {{ not microblogDetailsPage ? 'microblog-wrapper-wrap' }}">-->
-            <div class="microblog-text">
-              <div v-html="microblog.html"></div>
+            <div v-html="microblog.html" class="break-word microblog-text"></div>
 
-              <div v-if="microblog.media" class="thumbnails row">
-                <div v-for="media in microblog.media" class="col-6 col-md-3">
-                  <a :href="media.url" data-toggle="lightbox" :data-gallery="`gallery-${microblog.id}`">
-                    <img class="img-thumbnail" :src="media.url">
-                  </a>
-                </div>
+            <div v-if="microblog.media" class="row mt-2">
+              <div v-for="media in microblog.media" class="col-6 col-md-3">
+                <a :href="media.url" data-toggle="lightbox" :data-gallery="`gallery-${microblog.id}`">
+                  <img class="img-thumbnail" :src="media.url">
+                </a>
               </div>
             </div>
           </div>
 
           <vue-form v-if="isEditing" ref="form" :microblog="microblog" class="mt-2 mb-2" @cancel="isEditing = false" @save="isEditing = false"></vue-form>
 
-          <div class="microblog-footer">
-            <a @click="vote(microblog)" href="javascript:" class="btn btn-thumbs" data-toggle="tooltip" data-placement="top">
-              <i :class="{'fas text-primary': microblog.is_voted, 'far': !microblog.is_voted}" class="fa-fw fa-thumbs-up"></i>
+          <a @click="vote(microblog)" href="javascript:" class="btn btn-thumbs" data-toggle="tooltip" data-placement="top">
+            <i :class="{'fas text-primary': microblog.is_voted, 'far': !microblog.is_voted}" class="fa-fw fa-thumbs-up"></i>
 
-              {{ microblog.votes }} {{ microblog.votes | declination(['głos', 'głosy', 'głosów']) }}
+            {{ microblog.votes }} {{ microblog.votes | declination(['głos', 'głosy', 'głosów']) }}
+          </a>
+
+          <template v-if="isAuthorized">
+            <a @click="subscribe(microblog)" href="javascript:" class="btn btn-subscribe">
+              <i :class="{'fas text-primary': microblog.is_subscribed, 'far': !microblog.is_subscribed}" class="fa-fw fa-bell"></i>
+
+              Obserwuj
             </a>
 
-            <template v-if="isAuthorized">
-              <a @click="subscribe(microblog)" href="javascript:" class="btn btn-subscribe">
-                <i :class="{'fas text-primary': microblog.is_subscribed, 'far': !microblog.is_subscribed}" class="fa-fw fa-bell"></i>
+            <a @click="comment" href="javascript:" class="btn btn-reply">
+              <i class="far fa-fw fa-comment"></i>
 
-                Obserwuj
-              </a>
+              Komentuj
+            </a>
+          </template>
 
-              <a @click="comment" href="javascript:" class="btn btn-reply">
-                <i class="far fa-fw fa-comment"></i>
-
-                Komentuj
-              </a>
-            </template>
-          </div>
-
-          <div class="microblog-comments margin-sm-top">
-
-            <div class="microblog-comments-container">
-              <div v-if="microblog.comments_count > microblog.comments.length" class="show-all">
-                <a @click="loadComments(microblog)" href="javascript:"><i class="far fa-comments"></i> Zobacz {{ totalComments | declination(['pozostały', 'pozostałe', 'pozostałe']) }} {{ totalComments }} {{ totalComments | declination(['komentarz', 'komentarze', 'komentarzy']) }}</a>
-              </div>
-
-              <vue-comment v-for="comment in microblog.comments" :key="comment.id" :comment="comment"></vue-comment>
+          <div class="microblog-comments">
+            <div v-if="microblog.comments_count > microblog.comments.length" class="show-all">
+              <a @click="loadComments(microblog)" href="javascript:"><i class="far fa-comments"></i> Zobacz {{ totalComments | declination(['pozostały', 'pozostałe', 'pozostałe']) }} {{ totalComments }} {{ totalComments | declination(['komentarz', 'komentarze', 'komentarzy']) }}</a>
             </div>
 
-            <form v-if="isAuthorized" class="comment-form" method="POST">
-              <div class="media media-darker">
+            <vue-comment v-for="comment in microblog.comments" :key="comment.id" :comment="comment"></vue-comment>
+
+            <form v-if="isAuthorized" method="POST">
+              <div class="media bg-light rounded border-top-0">
                 <div class="mr-2">
                   <a v-profile="user.id">
                     <vue-avatar v-bind="user" class="i-35 d-sm-block img-thumbnail"></vue-avatar>

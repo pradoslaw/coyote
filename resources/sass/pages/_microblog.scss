@@ -68,10 +68,6 @@ input[placeholder] {
     }
   }
 
-  .media {
-    overflow: visible;
-  }
-
   textarea {
     resize: none;
 
@@ -85,20 +81,18 @@ input[placeholder] {
   overflow: hidden;
   position: relative;
 
+  p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.break-word {
   @include break-word;
   @include link-color-darker;
 
   // emoticons are NOT responsive
   img:not(.img-smile) {
     @include img-fluid();
-  }
-
-  > .thumbnails {
-    margin-top: 20px;
-  }
-
-  p:last-child {
-    margin-bottom: 0;
   }
 }
 
@@ -133,72 +127,13 @@ input[placeholder] {
 // -------------------------
 
 .microblog-comments {
+  margin-top: 10px;
+
   // One comment
   .media {
-    border-top: 1px solid lighten($border-color, 5%);
+    border-top: 1px solid $gray-200;
     padding: 10px 5px 6px 5px;
     margin-top: 5px;
-
-    // Media form for microblog's comment
-    // ------------------------------------
-
-    &.media-darker {
-      background-color: darken($body-bg, 4%);
-      border-top: none;
-      border-radius: $border-radius-small;
-    }
-
-    .dropdown button {
-      border: none;
-    }
-
-    .media-object {
-      border: 1px solid $border-color;
-      border-radius: $border-radius-base;
-      background-color: #fff;
-      padding: 4px;
-    }
-
-    .comment-body {
-      @include break-word;
-
-      width: calc(100% - 22px);
-
-      img:not(.img-smile) {
-        display: block;
-        max-width: 100%;
-      }
-    }
-
-    // Comment text
-    // ----------------
-
-    .media-content {
-      font-size: 12px;
-      display: inline;
-
-      @include link-color-darker;
-
-      // markdown moze "produkowac" <p> w tresci komentarza. pierwsza linia komentarza musi byc na rowni
-      // z loginem stad takie dziwne zabiegi majace na celu zachowanie odstepow od paragrafow z jednoczesnym
-      // wyrownaniem pierwszego <p> wzgledem loginu
-      p:first-child {
-        display: inline;
-      }
-
-      p:nth-child(2) {
-        margin-top: 9px;
-      }
-
-      p:last-child {
-        margin-bottom: 0;
-      }
-    }
-
-    // set visible for dropdown in media-body
-    .media-body {
-      overflow: visible;
-    }
 
     // User name
     // ---------------------
@@ -209,6 +144,29 @@ input[placeholder] {
       font-size: 13px;
       display: inline;
       margin-right: 3px;
+    }
+  }
+
+  // Comment text
+  // ----------------
+
+  .comment-text {
+    font-size: 12px;
+    display: inline;
+
+    // markdown moze "produkowac" <p> w tresci komentarza. pierwsza linia komentarza musi byc na rowni
+    // z loginem stad takie dziwne zabiegi majace na celu zachowanie odstepow od paragrafow z jednoczesnym
+    // wyrownaniem pierwszego <p> wzgledem loginu
+    p:first-child {
+      display: inline;
+    }
+
+    p:nth-child(2) {
+      margin-top: 9px;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
     }
   }
 
@@ -247,50 +205,6 @@ input[placeholder] {
 
     &:focus {
       outline: none;
-    }
-  }
-
-  .submit-area {
-    border-top: 1px solid $border-color;
-    padding-top: 11px;
-  }
-
-  .btn-flush,
-  .spinner {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    vertical-align: middle;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .btn-flush {
-    display: none;
-    background-color: #000;
-    opacity: 0.5;
-    color: #fff;
-  }
-
-  .spinner {
-    color: $gray;
-    display: flex;
-  }
-
-  .thumbnail {
-    position: relative;
-
-    &:hover {
-      .btn-flush {
-        display: flex;
-      }
-    }
-
-    img {
-      height: 81px;
     }
   }
 }

@@ -9,9 +9,9 @@
     <div class="media-body d-flex">
       <vue-comment-form v-if="isEditing" :microblog="comment" ref="form" class="flex-grow-1 mr-1" @cancel="isEditing = false" @save="isEditing = false"></vue-comment-form>
 
-      <div v-if="!isEditing" class="comment-body flex-grow-1">
+      <div v-if="!isEditing" class="break-word flex-grow-1">
         <h6><vue-user-name :user="comment.user"></vue-user-name></h6>
-        <div class="media-content" v-html="comment.html"></div>
+        <div class="comment-text" v-html="comment.html"></div>
 
         <ul class="list-inline list-inline-bullet-sm text-muted small m-0">
           <li class="list-inline-item">
@@ -28,7 +28,7 @@
       </div>
 
       <div v-if="comment.editable" class="dropdown">
-        <button class="btn btn-secondary btn-xs dropdown-toggle" type="button" data-toggle="dropdown"></button>
+        <button class="btn btn-xs dropdown-toggle border-0" type="button" data-toggle="dropdown"></button>
 
         <div class="dropdown-menu dropdown-menu-right">
           <a @click="edit" class="dropdown-item btn-sm-edit" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>

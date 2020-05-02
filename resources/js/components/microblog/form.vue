@@ -17,11 +17,11 @@
       ></textarea>
     </vue-prompt>
 
-    <div class="row submit-area">
+    <div class="row border-top">
       <div class="col-12">
-        <div class="row thumbnails">
-          <div v-for="media in microblog.media" class="col-sm-2">
-<!--          <div v-for="media in microblog.media" v-show="media.url" class="col-sm-2">-->
+        <div class="row pt-4 pb-4">
+<!--          <div v-for="media in microblog.media" class="col-sm-2">-->
+          <div v-for="media in microblog.media" v-show="media.url" class="col-sm-2">
             <vue-thumbnail
               ref="thumbnail"
               :url="media.url"
@@ -109,18 +109,18 @@
 
           if (!this.microblog.id) {
             this.microblog.text = '';
+            this.microblog.media = [];
           }
         });
     }
 
     addEmptyImage() {
       if (!this.microblog.media.length || !this.microblog.media[this.microblog.media.length - 1].url) {
-        store.commit('microblogs/addEmptyImage', this.microblog);
+        store.commit('microblogs/addImage', { microblog: this.microblog, media: {url: '', name: ''} });
       }
 
       // @ts-ignore
       this.$nextTick(() => this.thumbnail[this.thumbnail.length - 1].openDialog());
-
     }
 
     addImage(media) {
@@ -129,7 +129,7 @@
     }
 
     deleteImage(name) {
-
+      store.commit('microblogs/deleteImage', { microblog: this.microblog, media: name });
     }
 
     showError() {
