@@ -7,8 +7,7 @@
     </div>
 
     <div class="media-body d-flex">
-
-      <vue-comment-form v-if="isEditing" :microblog="comment" ref="form" class="flex-grow-1 mr-1"></vue-comment-form>
+      <vue-comment-form v-if="isEditing" :microblog="comment" ref="form" class="flex-grow-1 mr-1" @cancel="isEditing = false" @save="isEditing = false"></vue-comment-form>
 
       <div v-if="!isEditing" class="comment-body flex-grow-1">
         <h6><vue-user-name :user="comment.user"></vue-user-name></h6>
@@ -82,10 +81,8 @@
       this.isEditing = !this.isEditing;
 
       if (this.isEditing) {
-        this.$nextTick(function () {
-          // @ts-ignore
-          this.form.textarea.focus();
-        })
+        // @ts-ignore
+        this.$nextTick(() => this.form.textarea.focus());
       }
     }
 

@@ -57,7 +57,7 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from "vue-class-component";
-  import { Prop, Emit } from "vue-property-decorator";
+  import {Prop, Emit, Ref} from "vue-property-decorator";
   import store from "../../store";
   import VueAutosize from '../../plugins/autosize';
   import VuePrompt from '../forms/prompt.vue';
@@ -84,6 +84,9 @@
         return {}
     }})
     microblog!: Microblog;
+
+    @Ref('textarea')
+    readonly textarea!: HTMLTextAreaElement;
 
     @Emit()
     cancel() {

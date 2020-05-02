@@ -9,7 +9,7 @@
         </div>
         <div class="media-body">
           <div v-if="microblog.editable" class="dropdown float-right">
-            <button class="btn btn-secondary btn-xs dropdown-toggle" type="button" id="microblog-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+            <button class="btn btn-secondary btn-xs dropdown-toggle" type="button" id="microblog-menu" data-toggle="dropdown"></button>
 
             <div class="dropdown-menu dropdown-menu-right">
               <a @click="edit" class="dropdown-item btn-edit" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
@@ -57,8 +57,7 @@
                 Obserwuj
               </a>
 
-              <!-- todo: klikniecie przycisku powinno ustawiac nazwer usera -->
-              <a href="javascript:" class="btn btn-reply">
+              <a @click="comment" href="javascript:" class="btn btn-reply">
                 <i class="far fa-fw fa-comment"></i>
 
                 Komentuj
@@ -84,7 +83,7 @@
                   </a>
                 </div>
                 <div class="media-body position-relative">
-                  <vue-comment-form :microblog="{parent_id: microblog.id}"></vue-comment-form>
+                  <vue-comment-form :microblog="{parent_id: microblog.id}" ref="comment-form"></vue-comment-form>
                 </div>
               </div>
             </form>
@@ -101,10 +100,6 @@
         </button>
         <button @click="deleteItem(false)" type="submit" class="btn btn-danger danger">Tak, usuń</button>
       </template>
-    </vue-modal>
-
-    <vue-modal ref="error">
-      {{ error }}
     </vue-modal>
   </div>
 </template>
@@ -148,13 +143,15 @@
   })
   export default class VueMicroblog extends Vue {
     isEditing = false;
-    error = '';
 
     @Ref()
     readonly confirm!: VueModal;
 
-    @Ref()
+    @Ref('form')
     readonly form!: VueForm;
+
+    @Ref('comment-form')
+    readonly commentForm!: VueCommentForm;
 
     @Prop(Object)
     microblog!: Microblog;
@@ -163,11 +160,16 @@
       this.isEditing = !this.isEditing;
 
       if (this.isEditing) {
-        this.$nextTick(function () {
-          // @ts-ignore
-          this.form.$refs.textarea.$el.focus();
-        })
+        // @ts-ignore
+        this.$nextTick(() => this.form.textarea.focus());
       }
+    }
+
+    comment() {
+      // @ts-ignore
+      this.commentForm.textarea.value = `@${this.microblog.user.name}: `;
+      // @ts-ignore
+      this.commentForm.textarea.focus();
     }
 
     deleteItem(confirm: number) {

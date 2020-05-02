@@ -33,12 +33,15 @@ const mutations = {
 
   updateComment(state, microblog: Microblog) {
     const parentIndex = state.data.findIndex(item => item.id === microblog.parent_id);
-    const index = state.data[parentIndex].findIndex(item => item.id === microblog.id);
+    const parent = state.data[parentIndex];
+    const index = parent.comments.findIndex(item => item.id === microblog.id);
 
-    index > -1 ? state.data[parentIndex].comments[index] = microblog : state.data[parentIndex].comments.push(microblog);
+    index > -1 ? parent.comments.splice(index, 1, microblog) : parent.comments.push(microblog);
+
+    Vue.set(state.data, parentIndex, parent);
   },
 
-  setComments(state, { microblog, comments }) {
+  replaceComments(state, { microblog, comments }) {
     microblog.comments = comments;
   },
 
@@ -80,13 +83,19 @@ const actions = {
     axios.post(`/Mikroblogi/Edit/${microblog.id || ''}`, microblog).then(result => commit('update', result.data));
   },
 
-  saveComment({ commit }, microblog: Microblog) {
-    return axios.post(`/Mikroblogi/Comment/${microblog.id || ''}`, microblog).then(result => commit('updateComment', result.data));
+  saveComment({ state, commit }, microblog: Microblog) {
+    return axios.post(`/Mikroblogi/Comment/${microblog.id || ''}`, microblog).then(result => {
+      commit('updateComment', result.data.data);
+
+      if (result.data.is_subscribed) {
+        state.data.find(item => item.id === result.data.data.parent_id).is_subscribed = true;
+      }
+    });
   },
 
   loadComments({ commit }, microblog: Microblog) {
     axios.get(`/Mikroblogi/Comment/Show/${microblog.id}`).then(result => {
-      commit('setComments', { microblog, comments: result.data });
+      commit('replaceComments', { microblog, comments: result.data });
     })
   }
 };
