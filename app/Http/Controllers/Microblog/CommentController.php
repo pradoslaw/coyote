@@ -45,12 +45,11 @@ class CommentController extends Controller
     }
 
     /**
-     * Publikowanie komentarza na mikroblogu
-     *
      * @param MicroblogRequest $request
      * @param Dispatcher $dispatcher
-     * @param \Coyote\Microblog $microblog
-     * @return \Illuminate\Http\JsonResponse
+     * @param $microblog
+     * @return MicroblogResource
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function save(MicroblogRequest $request, Dispatcher $dispatcher, $microblog)
     {

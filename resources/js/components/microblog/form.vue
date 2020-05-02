@@ -2,19 +2,18 @@
   <div class="microblog-submit">
 
     <vue-prompt source="/User/Prompt" :errors="errors.text">
-      <textarea-autosize
+      <textarea
+        v-autosize
         placeholder="Kliknij, aby dodać wpis"
         v-clipboard:success="addThumbnail"
         v-clipboard:error="showError"
         name="text"
         ref="textarea"
         v-model="microblog.text"
-        :min-height="40"
-        :max-height="350"
-        @keydown.native.ctrl.enter="save"
+        @keydown.ctrl.enter="save"
         rows="2"
         tabindex="1"
-      ></textarea-autosize>
+      ></textarea>
     </vue-prompt>
 
     <div class="row submit-area">
@@ -60,13 +59,13 @@
   import Component from "vue-class-component";
   import { Prop, Emit } from "vue-property-decorator";
   import store from "../../store";
-  import VueTextareaAutosize from 'vue-textarea-autosize';
+  import VueAutosize from '../../plugins/autosize';
   import VuePrompt from '../forms/prompt.vue';
   import VueButton from '../forms/button.vue';
   import VueClipboard from '../../plugins/clipboard.js';
   import { Microblog } from "../../types/models";
 
-  Vue.use(VueTextareaAutosize);
+  Vue.use(VueAutosize);
   Vue.use(VueClipboard, {url: '/Mikroblogi/Upload'});
 
   @Component({
@@ -81,7 +80,9 @@
     errors = {};
     isProcessing = false;
 
-    @Prop({default: {}})
+    @Prop({default() {
+        return {}
+    }})
     microblog!: Microblog;
 
     @Emit()

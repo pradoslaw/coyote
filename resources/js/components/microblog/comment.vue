@@ -6,24 +6,11 @@
       </a>
     </div>
 
-    <div class="media-body">
-      <div v-if="comment.editable" class="dropdown float-right">
-        <button class="btn btn-secondary btn-xs dropdown-toggle" type="button" id="comment-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+    <div class="media-body d-flex">
 
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="comment-menu">
-          <a @click="edit" class="dropdown-item btn-sm-edit" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
-          <a @click="deleteItem" class="dropdown-item btn-sm-remove"><i class="fas fa-times fa-fw"></i> Usuń</a>
-        </div>
-      </div>
+      <vue-comment-form v-if="isEditing" :microblog="comment" ref="form" class="flex-grow-1 mr-1"></vue-comment-form>
 
-      <vue-comment-form v-if="isEditing" :microblog="comment"></vue-comment-form>
-
-<!--      {{ form_open({url: route('microblog.comment.save', [comment.id]), class: 'write-content mr-4', style: 'display: none'}) }}-->
-<!--      <textarea name="text" placeholder="Napisz komentarz... (Ctrl+Enter aby wysłać)" class="form-control" data-prompt-url="{{ route('user.prompt') }}" rows="1">{{ comment.text }}</textarea>-->
-<!--      <button type="submit" class="btn btn-sm btn-submit" title="Zapisz (Ctrl+Enter)"><i class="far fa-fw fa-share-square"></i></button>-->
-<!--      {{ form_close() }}-->
-
-      <div v-if="!isEditing" class="comment-body">
+      <div v-if="!isEditing" class="comment-body flex-grow-1">
         <h6><vue-user-name :user="comment.user"></vue-user-name></h6>
         <div class="media-content" v-html="comment.html"></div>
 
@@ -40,10 +27,17 @@
           </li>
         </ul>
       </div>
+
+      <div v-if="comment.editable" class="dropdown">
+        <button class="btn btn-secondary btn-xs dropdown-toggle" type="button" data-toggle="dropdown"></button>
+
+        <div class="dropdown-menu dropdown-menu-right">
+          <a @click="edit" class="dropdown-item btn-sm-edit" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
+          <a @click="deleteItem" class="dropdown-item btn-sm-remove"><i class="fas fa-times fa-fw"></i> Usuń</a>
+        </div>
+      </div>
     </div>
   </div>
-
-
 </template>
 
 <script lang="ts">
@@ -77,6 +71,9 @@
     @Ref()
     readonly confirm!: VueModal;
 
+    @Ref('form')
+    readonly form!: VueCommentForm;
+
     //
     @Prop(Object)
     comment!: Microblog;
@@ -85,9 +82,10 @@
       this.isEditing = !this.isEditing;
 
       if (this.isEditing) {
-        // this.$nextTick(function () {
-        //   this.$refs.submitText.$el.focus();
-        // })
+        this.$nextTick(function () {
+          // @ts-ignore
+          this.form.textarea.focus();
+        })
       }
     }
 

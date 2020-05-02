@@ -81,7 +81,7 @@ const actions = {
   },
 
   saveComment({ commit }, microblog: Microblog) {
-    axios.post(`/Mikroblogi/Comment/${microblog.id || ''}`, microblog).then(result => commit('updateComment', result.data));
+    return axios.post(`/Mikroblogi/Comment/${microblog.id || ''}`, microblog).then(result => commit('updateComment', result.data));
   },
 
   loadComments({ commit }, microblog: Microblog) {
