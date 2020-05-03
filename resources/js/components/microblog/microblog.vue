@@ -22,19 +22,19 @@
 
           <small v-if="microblog.is_sponsored" class="text-muted small">&bull; Sponsorowane</small>
 
-          <div v-show="!isEditing" :class="{'microblog-wrap': wrapValue}">
+          <div v-show="!isEditing" :class="{'microblog-wrap': isWrapped}">
             <div v-html="microblog.html" class="break-word microblog-text"></div>
 
-            <div v-if="microblog.media" class="row mt-2 mb-2">
+            <div v-if="microblog.media.length" class="row mb-2">
               <div v-for="media in microblog.media" class="col-6 col-md-3">
                 <a :href="media.url" data-toggle="lightbox" :data-gallery="`gallery-${microblog.id}`">
                   <img class="img-thumbnail" :src="media.url">
                 </a>
               </div>
             </div>
-          </div>
 
-          <div v-if="wrapValue" @click="unwrap" class="d-block mb-3 mt-2"><a href="javascript:"><i class="fa fa-arrow-alt-circle-right"></i> Zobacz całość</a></div>
+            <div v-if="isWrapped" @click="unwrap" class="show-more"><a href="javascript:"><i class="fa fa-arrow-alt-circle-right"></i> Zobacz całość</a></div>
+          </div>
 
           <vue-form v-if="isEditing" ref="form" :microblog="microblog" class="mt-2 mb-2" @cancel="isEditing = false" @save="isEditing = false"></vue-form>
 
@@ -103,7 +103,7 @@
   import VueCommentForm from './comment-form.vue';
   import VueForm from './form.vue';
   import { default as mixins } from '../mixins/user';
-  import { Prop, PropSync, Ref } from "vue-property-decorator";
+  import { Prop, Ref } from "vue-property-decorator";
   import { mapGetters, mapState, mapActions } from "vuex";
   import Component from "vue-class-component";
   import { mixin as clickaway } from "vue-clickaway";
@@ -134,7 +134,6 @@
   export default class VueMicroblog extends Vue {
     isEditing = false;
 
-
     @Ref()
     readonly confirm!: VueModal;
 
@@ -150,7 +149,16 @@
     @Prop()
     wrap!: boolean;
 
-    wrapValue = this.wrap;
+    isWrapped = false;
+
+    mounted() {
+      const el = document.querySelector(`#entry-${this.microblog.id} .microblog-text`);
+
+      if (this.wrap && el!.clientHeight > 300) {
+        this.isWrapped = true;
+      }
+      // console.log();
+    }
 
     edit() {
       this.isEditing = !this.isEditing;
@@ -158,7 +166,7 @@
       if (this.isEditing) {
         // @ts-ignore
         this.$nextTick(() => this.form.textarea.focus());
-        this.wrapValue = false;
+        this.isWrapped = false;
       }
     }
 
@@ -170,22 +178,28 @@
     }
 
     unwrap() {
-      this.wrapValue = false;
+      this.isWrapped = false;
     }
 
-    deleteItem(confirm: number) {
+    deleteItem(confirm: boolean) {
       if (confirm) {
-        /* @ts-ignore */
-        // this.confirm.open();
+        // @ts-ignore
+        this.confirm.open();
       } else {
-        // this.confirm.close();
+        store.dispatch('microblogs/delete', this.microblog);
 
-        store.dispatch('microblog/delete')
+        // @ts-ignore
+        this.confirm.close()
       }
     }
 
     get totalComments() {
       return this.microblog.comments_count! - this.microblog.comments.length;
+    }
+
+    get shouldWrap() {
+
+      return this.isWrapped ;//&& document.querySelector(`#entry-${this.microblog.id} .microblog-text`)!.clientHeight > 300;
     }
   }
 </script>

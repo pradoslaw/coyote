@@ -13,11 +13,11 @@ $this->group(['namespace' => 'Microblog', 'prefix' => 'Mikroblogi', 'as' => 'mic
     $this->post('Vote/{microblog}', ['uses' => 'VoteController@post', 'as' => 'vote']);
     $this->get('Vote/{microblog}', ['uses' => 'VoteController@voters', 'as' => 'voters']);
     $this->post('Subscribe/{microblog}', ['uses' => 'SubscribeController@post', 'as' => 'subscribe', 'middleware' => 'auth']);
-    $this->post('Delete/{microblog}', ['uses' => 'SubmitController@delete', 'as' => 'delete', 'middleware' => 'auth']);
+    $this->delete('Delete/{microblog}', ['uses' => 'SubmitController@delete', 'as' => 'delete', 'middleware' => 'auth']);
 
     // edycja/publikacja komentarza oraz jego usuniecie
     $this->post('Comment/{microblog?}', ['uses' => 'CommentController@save', 'as' => 'comment.save', 'middleware' => 'auth']);
-    $this->post('Comment/Delete/{microblog}', ['uses' => 'CommentController@delete', 'as' => 'comment.delete', 'middleware' => 'auth']);
+    $this->delete('Comment/Delete/{microblog}', ['uses' => 'CommentController@delete', 'as' => 'comment.delete', 'middleware' => 'auth']);
     // pokaz reszte komentarzy...
     $this->get('Comment/Show/{id}', ['uses' => 'CommentController@show', 'as' => 'comment.show']);
 

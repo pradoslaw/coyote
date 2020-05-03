@@ -31,6 +31,12 @@ const mutations = {
     index > -1 ? Vue.set(state.data, index, microblog) : state.data.unshift(microblog);
   },
 
+  delete(state, microblog: Microblog) {
+    const index = state.data.findIndex(item => item.id === microblog.id);
+
+    Vue.delete(state.data, index);
+  },
+
   updateComment(state, microblog: Microblog) {
     const parentIndex = state.data.findIndex(item => item.id === microblog.parent_id);
     const parent = state.data[parentIndex];
@@ -39,10 +45,6 @@ const mutations = {
     index > -1 ? parent.comments.splice(index, 1, microblog) : parent.comments.push(microblog);
 
     Vue.set(state.data, parentIndex, parent);
-  },
-
-  replaceComments(state, { microblog, comments }) {
-    microblog.comments = comments;
   },
 
   addEmptyImage(state, microblog: Microblog) {
@@ -71,10 +73,6 @@ const mutations = {
       microblog.votes += 1;
     }
   },
-
-  // updateVotes(state, { microblog, votes }) {
-  //   microblog.votes = votes;
-  // }
 };
 
 const actions = {
@@ -90,10 +88,8 @@ const actions = {
     axios.post(`/Mikroblogi/Vote/${microblog.id}`);
   },
 
-  delete({ commit }, microblog) {
-    axios.post(`/Mikroblogi/Delete/${microblog.id}`).then(result => {
-
-    });
+  delete({ commit }, microblog: Microblog) {
+    return axios.delete(`/Mikroblogi/Delete/${microblog.id}`).then(() => commit('delete', microblog));
   },
 
   save({ commit }, microblog: Microblog) {
@@ -110,9 +106,9 @@ const actions = {
     });
   },
 
-  loadComments({ commit }, microblog: Microblog) {
+  loadComments({  }, microblog: Microblog) {
     axios.get(`/Mikroblogi/Comment/Show/${microblog.id}`).then(result => {
-      commit('replaceComments', { microblog, comments: result.data });
+      microblog.comments = result.data;
     })
   }
 };
