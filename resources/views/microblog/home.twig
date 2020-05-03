@@ -42,7 +42,7 @@
         <vue-pagination :current-page="currentPage" :total-pages="totalPages"></vue-pagination>
       </nav>
 
-      <vue-microblog v-for="microblog in microblogs" :key="microblog.id" :microblog="microblog"></vue-microblog>
+      <vue-microblog v-for="microblog in microblogs" :key="microblog.id" :microblog="microblog" :wrap="true"></vue-microblog>
 
       <div class="mt-3 mb-3 d-flex justify-content-center">
         <vue-pagination :current-page="currentPage" :total-pages="totalPages"></vue-pagination>

@@ -20,13 +20,12 @@
           <h5 class="media-heading"><vue-user-name :user="microblog.user"></vue-user-name></h5>
           <a :href="`/Mikroblogi/View/${microblog.id}#entry-${microblog.id}`" class="text-muted small"><vue-timeago :datetime="microblog.created_at"></vue-timeago></a>
 
-          <small v-if="microblog.is_sponsored" class="text-muted" style="font-size: 11px">&bull; Sponsorowane</small>
+          <small v-if="microblog.is_sponsored" class="text-muted small">&bull; Sponsorowane</small>
 
-          <div v-show="!isEditing" class="microblog-wrapper">
-<!--          <div class="microblog-wrapper {{ not microblogDetailsPage ? 'microblog-wrapper-wrap' }}">-->
+          <div v-show="!isEditing" :class="{'microblog-wrap': wrapValue}">
             <div v-html="microblog.html" class="break-word microblog-text"></div>
 
-            <div v-if="microblog.media" class="row mt-2">
+            <div v-if="microblog.media" class="row mt-2 mb-2">
               <div v-for="media in microblog.media" class="col-6 col-md-3">
                 <a :href="media.url" data-toggle="lightbox" :data-gallery="`gallery-${microblog.id}`">
                   <img class="img-thumbnail" :src="media.url">
@@ -34,6 +33,8 @@
               </div>
             </div>
           </div>
+
+          <div v-if="wrapValue" @click="unwrap" class="d-block mb-3 mt-2"><a href="javascript:"><i class="fa fa-arrow-alt-circle-right"></i> Zobacz całość</a></div>
 
           <vue-form v-if="isEditing" ref="form" :microblog="microblog" class="mt-2 mb-2" @cancel="isEditing = false" @save="isEditing = false"></vue-form>
 
@@ -102,7 +103,7 @@
   import VueCommentForm from './comment-form.vue';
   import VueForm from './form.vue';
   import { default as mixins } from '../mixins/user';
-  import { Prop, Ref } from "vue-property-decorator";
+  import { Prop, PropSync, Ref } from "vue-property-decorator";
   import { mapGetters, mapState, mapActions } from "vuex";
   import Component from "vue-class-component";
   import { mixin as clickaway } from "vue-clickaway";
@@ -133,6 +134,7 @@
   export default class VueMicroblog extends Vue {
     isEditing = false;
 
+
     @Ref()
     readonly confirm!: VueModal;
 
@@ -145,12 +147,18 @@
     @Prop(Object)
     microblog!: Microblog;
 
+    @Prop()
+    wrap!: boolean;
+
+    wrapValue = this.wrap;
+
     edit() {
       this.isEditing = !this.isEditing;
 
       if (this.isEditing) {
         // @ts-ignore
         this.$nextTick(() => this.form.textarea.focus());
+        this.wrapValue = false;
       }
     }
 
@@ -159,6 +167,10 @@
       this.commentForm.textarea.value = `@${this.microblog.user.name}: `;
       // @ts-ignore
       this.commentForm.textarea.focus();
+    }
+
+    unwrap() {
+      this.wrapValue = false;
     }
 
     deleteItem(confirm: number) {

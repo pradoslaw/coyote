@@ -96,30 +96,19 @@ input[placeholder] {
   }
 }
 
-.microblog-gradient {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 30px;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0, white 100%);
-}
-
-.read-more {
-  color: $gray;
+.microblog-wrap {
+  max-height: 300px;
+  overflow: hidden;
   position: relative;
-  padding-left: 20px;
-  margin-bottom: 20px;
-  display: inline-block;
 
-  &:hover {
-    color: inherit;
-  }
-
-  &:before {
-    @include font-awesome($fa-var-arrow-alt-circle-right);
-    font-weight: 400;
+  &:after {
+    position: absolute;
+    content: '';
+    bottom: 0;
     left: 0;
+    width: 100%;
+    height: 30px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0, white 100%);
   }
 }
 

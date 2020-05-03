@@ -17,9 +17,9 @@
       ></textarea>
     </vue-prompt>
 
-    <div class="row border-top">
+    <div class="row">
       <div class="col-12">
-        <div class="row pt-4 pb-4">
+        <div class="row pt-4 pb-4 border-top">
 <!--          <div v-for="media in microblog.media" class="col-sm-2">-->
           <div v-for="media in microblog.media" v-show="media.url" class="col-sm-2">
             <vue-thumbnail
@@ -44,7 +44,7 @@
               Zapisz
             </vue-button>
 
-            <button v-if="microblog.id" @click="cancel" title="Anuluj (Esc)" class="btn btn-sm btn-cancel btn-danger float-right" style="margin-right: 10px" tabindex="3">
+            <button v-if="microblog.id" @click="cancel" title="Anuluj (Esc)" class="btn btn-sm btn-cancel btn-danger float-right mr-2" tabindex="3">
               Anuluj
             </button>
           </div>
