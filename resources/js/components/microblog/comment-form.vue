@@ -22,11 +22,11 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from "vue-class-component";
-  import { Prop, Emit, Ref } from "vue-property-decorator";
+  import { Mixins } from "vue-property-decorator";
   import store from "../../store";
   import VueAutosize from '../../plugins/autosize';
   import VuePrompt from '../forms/prompt.vue';
-  import { Microblog } from "../../types/models";
+  import { MicroblogFormMixin } from '../mixins/microblog';
 
   Vue.use(VueAutosize);
 
@@ -37,34 +37,9 @@
       'vue-prompt': VuePrompt
     }
   })
-  export default class VueCommentForm extends Vue {
-    protected isProcessing = false;
-
-    @Prop({default() {
-      return {}
-    }})
-    microblog!: Microblog;
-
-    @Ref()
-    readonly textarea!: HTMLTextAreaElement;
-
-    @Emit()
-    cancel() {
-      //
-    }
-
+  export default class VueCommentForm extends Mixins(MicroblogFormMixin) {
     saveComment() {
-      this.isProcessing = true;
-
-      store.dispatch('microblogs/saveComment', this.microblog)
-        .then(() => {
-          this.$emit('save');
-
-          if (!this.microblog.id) {
-            this.microblog.text = '';
-          }
-        })
-        .finally(() => this.isProcessing = false);
+      this.save('microblogs/saveComment');
     }
   }
 </script>

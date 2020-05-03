@@ -6,11 +6,10 @@
         v-autosize
         placeholder="Kliknij, aby dodać wpis"
         v-clipboard:success="addImage"
-        v-clipboard:error="showError"
         name="text"
         ref="textarea"
         v-model="microblog.text"
-        @keydown.ctrl.enter="save"
+        @keydown.ctrl.enter="saveMicroblog"
         @keydown.esc="cancel"
         rows="2"
         tabindex="1"
@@ -37,7 +36,7 @@
         </button>
       </div>
       <div class="col-6">
-        <vue-button :disabled="isProcessing" @click.native.prevent="save" title="Kliknij, aby wysłać (Ctrl+Enter)" class="btn btn-sm btn-primary float-right" tabindex="2" type="submit">
+        <vue-button :disabled="isProcessing" @click.native.prevent="saveMicroblog" title="Kliknij, aby wysłać (Ctrl+Enter)" class="btn btn-sm btn-primary float-right" tabindex="2" type="submit">
           Zapisz
         </vue-button>
 
@@ -52,14 +51,14 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from "vue-class-component";
-  import {Prop, Emit, Ref} from "vue-property-decorator";
+  import { Ref, Mixins } from "vue-property-decorator";
   import store from "../../store";
   import VueAutosize from '../../plugins/autosize';
   import VuePrompt from '../forms/prompt.vue';
   import VueButton from '../forms/button.vue';
   import VueClipboard from '../../plugins/clipboard.js';
   import VueThumbnail from '../thumbnail.vue';
-  import { Microblog } from "../../types/models";
+  import { MicroblogFormMixin } from '../mixins/microblog';
 
   Vue.use(VueAutosize);
   Vue.use(VueClipboard, {url: '/Mikroblogi/Paste'});
@@ -73,40 +72,13 @@
       'vue-thumbnail': VueThumbnail
     }
   })
-  export default class VueForm extends Vue {
-    isProcessing = false;
-
-    @Prop({default() {
-        return {
-          media: []
-        }
-    }})
-    microblog!: Microblog;
-
-    @Ref('textarea')
-    readonly textarea!: HTMLTextAreaElement;
+  export default class VueForm extends Mixins(MicroblogFormMixin) {
 
     @Ref('thumbnail')
     readonly thumbnail!: VueThumbnail[];
 
-    @Emit()
-    cancel() {
-      //
-    }
-
-    save() {
-      this.isProcessing = true;
-
-      store.dispatch('microblogs/save', this.microblog)
-        .then(() => {
-          this.$emit('save');
-
-          if (!this.microblog.id) {
-            this.microblog.text = '';
-            this.microblog.media = [];
-          }
-        })
-        .finally(() => this.isProcessing = false);
+    saveMicroblog() {
+      this.save('microblogs/save');
     }
 
     addEmptyImage() {
@@ -125,10 +97,6 @@
 
     deleteImage(name) {
       store.commit('microblogs/deleteImage', { microblog: this.microblog, media: name });
-    }
-
-    showError() {
-
     }
   }
 </script>

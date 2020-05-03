@@ -57,12 +57,13 @@
   import VueCommentForm from "./comment-form.vue";
   import VueModal from '../modal.vue';
   import { default as mixins } from '../mixins/user';
-  import { Prop, Ref } from "vue-property-decorator";
-  import {mapActions, mapGetters, mapState} from "vuex";
+  import { Prop, Ref, Mixins } from "vue-property-decorator";
+  import {mapActions, mapGetters} from "vuex";
   import Component from "vue-class-component";
   import { mixin as clickaway } from "vue-clickaway";
   import store from "../../store";
   import { Microblog } from "../../types/models";
+  import { MicroblogMixin } from "../mixins/microblog";
 
   Vue.use(VueTimeago);
 
@@ -74,39 +75,16 @@
     computed: mapGetters('user', ['isAuthorized']),
     methods: mapActions('microblogs', ['vote'])
   })
-  export default class VueComment extends Vue {
-    isEditing = false;
+  export default class VueComment extends Mixins(MicroblogMixin) {
 
     @Ref()
     readonly confirm!: VueModal;
 
-    @Ref('form')
-    readonly form!: VueCommentForm;
-
-    //
     @Prop(Object)
     comment!: Microblog;
 
-    edit() {
-      this.isEditing = !this.isEditing;
-
-      if (this.isEditing) {
-        // @ts-ignore
-        this.$nextTick(() => this.form.textarea.focus());
-      }
-    }
-
     deleteItem(confirm: boolean) {
-      if (confirm) {
-        // @ts-ignore
-        this.confirm.open();
-      } else {
-        store.dispatch('microblogs/deleteComment', this.comment);
-
-        // @ts-ignore
-        this.confirm.close()
-      }
+      this.delete('microblogs/deleteComment', confirm, this.comment);
     }
-
   }
 </script>

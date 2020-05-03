@@ -103,13 +103,13 @@
   import VueCommentForm from './comment-form.vue';
   import VueForm from './form.vue';
   import { default as mixins } from '../mixins/user';
-  import { Prop, Ref } from "vue-property-decorator";
+  import { Prop, Ref, Mixins } from "vue-property-decorator";
   import { mapGetters, mapState, mapActions } from "vuex";
   import Component from "vue-class-component";
   import { mixin as clickaway } from "vue-clickaway";
   import store from "../../store";
-  import { Microblog } from "../../types/models";
   import VueUserName from "../user-name.vue";
+  import { MicroblogMixin } from "../mixins/microblog";
 
   Vue.use(VueTimeago);
 
@@ -131,41 +131,18 @@
     },
     methods: mapActions('microblogs', ['loadComments', 'vote', 'subscribe'])
   })
-  export default class VueMicroblog extends Vue {
-    isEditing = false;
-
-    @Ref()
-    readonly confirm!: VueModal;
-
-    @Ref('form')
-    readonly form!: VueForm;
-
+  export default class VueMicroblog extends Mixins(MicroblogMixin) {
     @Ref('comment-form')
     readonly commentForm!: VueCommentForm;
 
-    @Prop(Object)
-    microblog!: Microblog;
-
     @Prop()
     wrap!: boolean;
-
-    isWrapped = false;
 
     mounted() {
       const el = document.querySelector(`#entry-${this.microblog.id} .microblog-text`);
 
       if (this.wrap && el!.clientHeight > 300) {
         this.isWrapped = true;
-      }
-    }
-
-    edit() {
-      this.isEditing = !this.isEditing;
-
-      if (this.isEditing) {
-        // @ts-ignore
-        this.$nextTick(() => this.form.textarea.focus());
-        this.isWrapped = false;
       }
     }
 
@@ -181,15 +158,7 @@
     }
 
     deleteItem(confirm: boolean) {
-      if (confirm) {
-        // @ts-ignore
-        this.confirm.open();
-      } else {
-        store.dispatch('microblogs/delete', this.microblog);
-
-        // @ts-ignore
-        this.confirm.close()
-      }
+      this.delete('microblogs/delete', confirm, this.microblog);
     }
 
     get totalComments() {
