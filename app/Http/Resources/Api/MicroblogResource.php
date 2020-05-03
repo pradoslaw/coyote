@@ -36,8 +36,8 @@ class MicroblogResource extends JsonResource
                 'created_at'    => $this->created_at->toIso8601String(),
                 'updated_at'    => $this->created_at->toIso8601String(),
                 'html'          => $this->html,
-                'comments'      => $this->when($this->parent_id === null, function () {
-                    return $this->comments ? MicroblogResource::collection($this->comments) : [];
+                'comments'      => $this->when(!$this->parent_id, function () {
+                    return $this->resource->relationLoaded('comments') ? MicroblogResource::collection($this->comments) : [];
                 }),
                 'user'          => UserResource::make($this->user),
                 'media'         => $this->media(),

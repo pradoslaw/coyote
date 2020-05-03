@@ -81,9 +81,9 @@
                 <a href="{{ route('microblog.view', [microblog.id]) }}">{{ excerpt(microblog.text, 200) }}</a>
               </p>
 
-              <a href="{{ route('microblog.vote', [microblog.id]) }}" class="btn btn-thumbs {{ microblog.thumbs_on ? 'thumbs-on' }}" data-count="{{ microblog.votes }}" data-toggle="tooltip" data-placement="top">
+              <span class="btn-thumbs">
                 {{ declination(microblog.votes, ['głos', 'głosy', 'głosów']) }}
-              </a>
+              </span>
             </div>
           </div>
         {% endfor %}

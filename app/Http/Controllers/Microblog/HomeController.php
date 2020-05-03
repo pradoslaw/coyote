@@ -44,6 +44,8 @@ class HomeController extends Controller
         $paginator = $this->microblog->paginate(10);
         $this->microblog->resetCriteria();
 
+        /////////////////
+
         $this->microblog->pushCriteria(new LoadUserScope($this->userId));
 
         /** @var \Illuminate\Database\Eloquent\Collection $microblogs */
