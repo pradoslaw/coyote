@@ -15,8 +15,9 @@ export interface User {
 }
 
 export interface Media {
-  name: string;
+  thumbnail: string;
   url: string;
+  name: string;
 }
 
 export interface Microblog {

@@ -40,11 +40,26 @@ class MicroblogResource extends JsonResource
                     return $this->comments ? MicroblogResource::collection($this->comments) : [];
                 }),
                 'user'          => UserResource::make($this->user),
-                'media'         => $this->resource->getOriginal('media') ? json_decode($this->resource->getOriginal('media'), true)['image'] : [],
+                'media'         => $this->media(),
                 'editable'      => $this->when($request->user(), function () use ($request) {
                     return $request->user()->can('update', $this->resource);
                 })
             ]
         );
+    }
+
+    protected function media(): array
+    {
+        if (!$this->resource->getOriginal('media')) {
+            return [];
+        }
+
+        $result = [];
+
+        foreach ($this->media as $media) {
+            $result[] = ['thumbnail' => $media->url()->thumbnail('microblog'), 'url' => (string) $media->url(), 'name' => $media->getFilename()];
+        }
+
+        return $result;
     }
 }

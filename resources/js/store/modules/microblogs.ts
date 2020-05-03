@@ -61,7 +61,7 @@ const mutations = {
   },
 
   addEmptyImage(state, microblog: Microblog) {
-    microblog.media.push({name: '', url: ''});
+    microblog.media.push({thumbnail: '', url: '', name: ''});
   },
 
   addImage(state, { microblog, media }) {
@@ -69,7 +69,7 @@ const mutations = {
   },
 
   deleteImage(state, { microblog, media }) {
-    microblog.media.splice(microblog.media.findIndex(item => item.name === media));
+    microblog.media.splice(microblog.media.findIndex(item => item.name === media), 1);
   },
 
   subscribe(state, microblog: Microblog) {

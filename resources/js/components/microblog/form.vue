@@ -83,7 +83,7 @@
 
     addEmptyImage() {
       if (!this.microblog.media.length || !this.microblog.media[this.microblog.media.length - 1].url) {
-        store.commit('microblogs/addImage', { microblog: this.microblog, media: {url: '', name: ''} });
+        store.commit('microblogs/addImage', { microblog: this.microblog, media: {url: '', name: '', thumbnail: ''} });
       }
 
       // @ts-ignore
@@ -91,7 +91,6 @@
     }
 
     addImage(media) {
-      store.commit('microblogs/deleteImage', { microblog: this.microblog, media: '' });
       store.commit('microblogs/addImage', { microblog: this.microblog, media })
     }
 

@@ -28,7 +28,7 @@
             <div v-if="microblog.media.length" class="row mb-2">
               <div v-for="media in microblog.media" class="col-6 col-md-3">
                 <a :href="media.url" data-toggle="lightbox" :data-gallery="`gallery-${microblog.id}`">
-                  <img class="img-thumbnail" :src="media.url">
+                  <img class="img-thumbnail" :src="media.thumbnail">
                 </a>
               </div>
             </div>

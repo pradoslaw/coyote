@@ -128,7 +128,7 @@ class Microblog extends Model
             return;
         }
 
-        $this->attributes['media'] = json_encode(['image' => $media]);
+        $this->attributes['media'] = json_encode(['image' => array_values(array_filter(array_pluck($media, 'name')))]);
     }
 
     public function setHtmlAttribute($value)
