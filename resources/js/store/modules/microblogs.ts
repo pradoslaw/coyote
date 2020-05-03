@@ -9,42 +9,55 @@ const state = {
 };
 
 const getters = {
-  microblogs: state => state.data,
+  // @ts-ignore
+  microblogs: state => Object.values(state.data).sort((a, b) => a.id > b.id ? -1 : 1),
   currentPage: state => state.meta.current_page,
   totalPages: state => state.meta.total
+}
+
+const mapToObject = (data, item) => {
+  data[item.id] = item;
+
+  return data;
 }
 
 const mutations = {
   init(state, { pagination, microblog }) {
     if (pagination) {
+      pagination.data = pagination.data
+        .map(microblog => {
+          microblog.comments = microblog.comments.reduce(mapToObject, {});
+
+          return microblog;
+        })
+        .reduce(mapToObject, {});
+
       state = Object.assign(state, pagination);
     }
 
     if (microblog) {
-      state.data.push(microblog);
+      microblog.comments = microblog.comments.reduce(mapToObject, {});
+
+      state.data = {[microblog.id]: microblog};
     }
   },
 
   update(state, microblog: Microblog) {
-    const index = state.data.findIndex(item => item.id === microblog.id);
-
-    index > -1 ? Vue.set(state.data, index, microblog) : state.data.unshift(microblog);
+    Vue.set(state.data, microblog.id!, microblog)
   },
 
   delete(state, microblog: Microblog) {
-    const index = state.data.findIndex(item => item.id === microblog.id);
+    Vue.delete(state.data, microblog.id!);
+  },
 
-    Vue.delete(state.data, index);
+  deleteComment(state, microblog: Microblog) {
+    Vue.delete(state.data[microblog.parent_id!].comments, microblog.id!);
+
+    state.data[microblog.parent_id!].comments_count -= 1;
   },
 
   updateComment(state, microblog: Microblog) {
-    const parentIndex = state.data.findIndex(item => item.id === microblog.parent_id);
-    const parent = state.data[parentIndex];
-    const index = parent.comments.findIndex(item => item.id === microblog.id);
-
-    index > -1 ? parent.comments.splice(index, 1, microblog) : parent.comments.push(microblog);
-
-    Vue.set(state.data, parentIndex, parent);
+    Vue.set(state.data[microblog.parent_id!].comments, microblog.id!, microblog);
   },
 
   addEmptyImage(state, microblog: Microblog) {
@@ -92,6 +105,10 @@ const actions = {
     return axios.delete(`/Mikroblogi/Delete/${microblog.id}`).then(() => commit('delete', microblog));
   },
 
+  deleteComment({ commit }, microblog: Microblog) {
+    return axios.delete(`/Mikroblogi/Comment/Delete/${microblog.id}`).then(() => commit('deleteComment', microblog));
+  },
+
   save({ commit }, microblog: Microblog) {
     axios.post(`/Mikroblogi/Edit/${microblog.id || ''}`, microblog).then(result => commit('update', result.data));
   },
@@ -101,7 +118,7 @@ const actions = {
       commit('updateComment', result.data.data);
 
       if (result.data.is_subscribed) {
-        state.data.find(item => item.id === result.data.data.parent_id).is_subscribed = true;
+        state.data[result.data.data.parent_id].is_subscribed = true;
       }
     });
   },

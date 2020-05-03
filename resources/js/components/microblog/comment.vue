@@ -36,6 +36,16 @@
         </div>
       </div>
     </div>
+
+    <vue-modal ref="confirm">
+      Czy na pewno chcesz usunąć ten komentarz?
+
+      <template slot="buttons">
+        <button @click="$refs.confirm.close()" type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj
+        </button>
+        <button @click="deleteItem(false)" type="submit" class="btn btn-danger danger">Tak, usuń</button>
+      </template>
+    </vue-modal>
   </div>
 </template>
 
@@ -86,14 +96,15 @@
       }
     }
 
-    deleteItem(confirm: number) {
+    deleteItem(confirm: boolean) {
       if (confirm) {
-        /* @ts-ignore */
-        // this.confirm.open();
+        // @ts-ignore
+        this.confirm.open();
       } else {
-        // this.confirm.close();
+        store.dispatch('microblogs/deleteComment', this.comment);
 
-        store.dispatch('microblog/delete')
+        // @ts-ignore
+        this.confirm.close()
       }
     }
 

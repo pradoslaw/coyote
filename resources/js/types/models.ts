@@ -25,6 +25,7 @@ export interface Microblog {
   votes: number;
   is_voted: boolean;
   is_subscribed: boolean;
+  is_sponsored: boolean;
   created_at: Date | null;
   updated_at: Date | null;
   html: string;

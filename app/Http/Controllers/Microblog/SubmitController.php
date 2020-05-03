@@ -64,17 +64,6 @@ class SubmitController extends Controller
 
             $user = $this->user->find($microblog->user_id, ['id', 'name', 'is_blocked', 'deleted_at', 'photo']);
         }
-//
-//        if ($request->filled('thumbnail') || count($microblog->media) > 0) {
-//            /** @var \Coyote\Services\Media\MediaInterface $media */
-//            foreach ($microblog->media as $media) {
-//                if (!in_array($media->getFilename(), $request->get('thumbnail', []))) {
-//                    $media->delete();
-//                }
-//            }
-//
-//            $microblog->media = $request->get('thumbnail');
-//        }
 
         $microblog->fill($data);
 

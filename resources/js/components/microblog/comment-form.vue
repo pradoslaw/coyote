@@ -57,14 +57,14 @@
       this.isProcessing = true;
 
       store.dispatch('microblogs/saveComment', this.microblog)
-        .then(() => this.$emit('save'))
-        .finally(() => {
-          this.isProcessing = false;
+        .then(() => {
+          this.$emit('save');
 
           if (!this.microblog.id) {
             this.microblog.text = '';
           }
-        });
+        })
+        .finally(() => this.isProcessing = false);
     }
   }
 </script>

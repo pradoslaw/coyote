@@ -45,6 +45,19 @@ input[placeholder] {
   text-overflow: ellipsis;
 }
 
+.highlight-flash {
+  animation: flash 5s ease-in-out;
+}
+
+@keyframes flash {
+  90% {
+    background-color: #fff;
+  }
+  from {
+    background-color: $unread-bg;
+  }
+}
+
 .microblog {
   .media-heading {
     margin-bottom: 2px;
@@ -209,3 +222,5 @@ input[placeholder] {
     }
   }
 }
+
+

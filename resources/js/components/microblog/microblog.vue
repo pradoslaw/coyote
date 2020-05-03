@@ -1,5 +1,5 @@
 <template>
-  <div :id="`entry-${microblog.id}`" class="card card-default microblog">
+  <div :id="`entry-${microblog.id}`" :class="{'highlight-flash': highlight}" class="card card-default microblog">
     <div class="card-body">
       <div class="media">
         <div class="d-none d-sm-block mr-2">
@@ -59,7 +59,7 @@
           </template>
 
           <div class="microblog-comments">
-            <div v-if="microblog.comments_count > microblog.comments.length" class="show-all">
+            <div v-if="microblog.comments_count > Object.keys(microblog.comments).length" class="show-all">
               <a @click="loadComments(microblog)" href="javascript:"><i class="far fa-comments"></i> Zobacz {{ totalComments | declination(['pozostały', 'pozostałe', 'pozostałe']) }} {{ totalComments }} {{ totalComments | declination(['komentarz', 'komentarze', 'komentarzy']) }}</a>
             </div>
 
@@ -157,7 +157,6 @@
       if (this.wrap && el!.clientHeight > 300) {
         this.isWrapped = true;
       }
-      // console.log();
     }
 
     edit() {
@@ -194,12 +193,15 @@
     }
 
     get totalComments() {
-      return this.microblog.comments_count! - this.microblog.comments.length;
+      return this.microblog.comments_count! - Object.keys(this.microblog.comments).length;
     }
 
-    get shouldWrap() {
+    get anchor() {
+      return `entry-${this.microblog.id}`;
+    }
 
-      return this.isWrapped ;//&& document.querySelector(`#entry-${this.microblog.id} .microblog-text`)!.clientHeight > 300;
+    get highlight() {
+      return '#' + this.anchor === window.location.hash;
     }
   }
 </script>

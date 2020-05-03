@@ -40,7 +40,18 @@ new Vue({
   created() {
     store.commit('microblogs/init', { pagination: window.pagination, microblog: window.microblog });
   },
-  computed: mapGetters('microblogs', ['microblogs', 'currentPage', 'totalPages'])
+  methods: {
+    changePage(page) {
+      window.location.href = `${window.location.href.split('?')[0]}?page=${page}`;
+    }
+  },
+  computed: {
+    ...mapGetters('microblogs', ['microblogs', 'currentPage', 'totalPages']),
+
+    microblog() {
+      return this.microblogs[Object.keys(this.microblogs)[0]];
+    }
+  }
 });
 
 

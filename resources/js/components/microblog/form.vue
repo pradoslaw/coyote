@@ -98,15 +98,15 @@
       this.isProcessing = true;
 
       store.dispatch('microblogs/save', this.microblog)
-        .then(() => this.$emit('save'))
-        .finally(() => {
-          this.isProcessing = false;
+        .then(() => {
+          this.$emit('save');
 
           if (!this.microblog.id) {
             this.microblog.text = '';
             this.microblog.media = [];
           }
-        });
+        })
+        .finally(() => this.isProcessing = false);
     }
 
     addEmptyImage() {
