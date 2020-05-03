@@ -4,7 +4,7 @@ import VuePagination from '../components/pagination';
 import VueForm from '../components/microblog/form';
 import VueNotifications from 'vue-notification';
 import store from '../store';
-import { mapState, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 import axios from 'axios';
 
 axios.interceptors.response.use(null, err => {
@@ -38,7 +38,7 @@ new Vue({
   components: { 'vue-microblog': VueMicroblog, 'vue-pagination': VuePagination, 'vue-form': VueForm },
   store,
   created() {
-    store.commit('microblogs/init', { pagination: window.pagination, microblog: window.microblog });
+    store.commit('microblogs/init', { pagination: 'pagination' in window ? window.pagination : { data: window.microblogs } });
   },
   methods: {
     changePage(page) {

@@ -18,7 +18,7 @@
   {{ parent() }}
 
   <script>
-    var microblog = {{ microblog|json_encode|raw }};
+    var microblogs = [{{ microblog|json_encode|raw }}];
   </script>
 {% endblock %}
 

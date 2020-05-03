@@ -6,12 +6,9 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\CacheFactory;
 use Coyote\Http\Resources\Api\MicroblogResource;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
-use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Repositories\Criteria\EagerLoadingWithCount;
 use Coyote\Repositories\Criteria\Microblog\LoadUserScope;
-use Coyote\Repositories\Criteria\Microblog\OnlyMine;
-use Coyote\Repositories\Criteria\Microblog\OrderById;
-use Coyote\Repositories\Criteria\Microblog\WithTag;
+use Coyote\Services\Microblogs\Builder;
 
 class HomeController extends Controller
 {
@@ -23,44 +20,31 @@ class HomeController extends Controller
     private $microblog;
 
     /**
-     * @param MicroblogRepository $microblog
+     * @var Builder
      */
-    public function __construct(MicroblogRepository $microblog)
+    private $builder;
+
+    /**
+     * @param MicroblogRepository $microblog
+     * @param Builder $builder
+     */
+    public function __construct(MicroblogRepository $microblog, Builder $builder)
     {
         parent::__construct();
 
         $this->microblog = $microblog;
         $this->breadcrumb->push('Mikroblog', route('microblog.home'));
+
+        $this->builder = $builder;
     }
 
     /**
+     * @param Builder $builder
      * @return \Illuminate\View\View
      */
     public function index()
     {
-        $this->microblog->pushCriteria(new LoadUserScope($this->userId));
-        $this->microblog->pushCriteria(new OrderById());
-
-        $paginator = $this->microblog->paginate(10);
-        $this->microblog->resetCriteria();
-
-        /////////////////
-
-        $this->microblog->pushCriteria(new LoadUserScope($this->userId));
-
-        /** @var \Illuminate\Database\Eloquent\Collection $microblogs */
-        $microblogs =  $paginator->keyBy('id');
-        $comments = $this->microblog->getTopComments($microblogs->keys()->toArray());
-
-        $this->microblog->resetCriteria();
-
-        foreach ($comments->groupBy('parent_id') as $relations) {
-            /** @var \Coyote\Microblog $microblog  */
-            $microblog = &$microblogs[$relations[0]->parent_id];
-            $microblog->setRelation('comments', $relations);
-        }
-
-        $paginator->setCollection($microblogs);
+        $paginator = $this->builder->forUser($this->auth)->orderById()->paginate();
 
         // let's cache microblog tags. we don't need to run this query every time
         $tags = $this->getCacheFactory()->remember('microblog:tags', 30 * 60, function () {
@@ -86,7 +70,8 @@ class HomeController extends Controller
     {
         $this->breadcrumb->push('Wpisy z tagiem: ' . $tag, route('microblog.tag', [$tag]));
 
-        $this->microblog->pushCriteria(new WithTag($tag));
+        $this->builder->withTag($tag);
+
         return $this->index();
     }
 
@@ -97,7 +82,8 @@ class HomeController extends Controller
     {
         $this->breadcrumb->push('Moje wpisy', route('microblog.mine'));
 
-        $this->microblog->pushCriteria(new OnlyMine($this->userId));
+        $this->builder->onlyMine();
+
         return $this->index();
     }
 

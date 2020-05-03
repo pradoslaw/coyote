@@ -38,16 +38,15 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
      * @return mixed
      * @throws
      */
-    public function take($limit)
+    public function getPopular($limit)
     {
         $this->applyCriteria();
 
         $result = $this
             ->model
             ->whereNull('parent_id')
-            ->where(function (Builder $builder) {
-                return $builder->where('votes', '>=', 2)->orWhere('bonus', '>', 0);
-            })
+            ->with('user')
+            ->where('votes', '>=', 2)
             ->take($limit)
             ->get();
 
