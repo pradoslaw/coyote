@@ -1,5 +1,5 @@
 <template>
-  <div class="media">
+  <div :id="`comment-${comment.id}`" class="media">
     <div class="mr-2">
       <a v-profile="comment.user.id">
         <vue-avatar v-bind="comment.user" class="i-35 d-sm-block img-thumbnail"></vue-avatar>
@@ -15,12 +15,12 @@
 
         <ul class="list-inline list-inline-bullet-sm text-muted small m-0">
           <li class="list-inline-item">
-            <a :href="`/Mikroblogi/View/${$parent.microblog.id}#entry-${comment.id}`" class="text-muted">
+            <a :href="`/Mikroblogi/View/${$parent.microblog.id}#comment-${comment.id}`" class="text-muted">
               <vue-timeago :datetime="comment.created_at"></vue-timeago>
             </a>
           </li>
           <li class="list-inline-item">
-            <a @click="vote(microblog)" :class="{'thumbs-on': comment.is_voted}" class="text-muted btn-sm-thumbs" data-toggle="tooltip" data-placement="top">
+            <a @click="vote(comment)" :class="{'thumbs-on': comment.is_voted}" href="javascript:" class="text-muted btn-sm-thumbs" data-toggle="tooltip" data-placement="top">
               {{ comment.votes }} {{ comment.votes | declination(['głos', 'głosy', 'głosów']) }}
             </a>
           </li>

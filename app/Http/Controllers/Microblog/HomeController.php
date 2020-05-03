@@ -48,7 +48,7 @@ class HomeController extends Controller
 
         /** @var \Illuminate\Database\Eloquent\Collection $microblogs */
         $microblogs =  $paginator->keyBy('id');
-        $comments = $this->microblog->getTopComments($microblogs->keys());
+        $comments = $this->microblog->getTopComments($microblogs->keys()->toArray());
 
         $this->microblog->resetCriteria();
 
@@ -106,7 +106,6 @@ class HomeController extends Controller
     public function show($id)
     {
         $this->microblog->pushCriteria(new LoadUserScope($this->userId));
-        $this->microblog->pushCriteria(new EagerLoading(['comments.user']));
         $this->microblog->pushCriteria(new EagerLoadingWithCount(['comments']));
 
         /** @var \Coyote\Microblog $microblog */
@@ -114,6 +113,10 @@ class HomeController extends Controller
         abort_if(!is_null($microblog->parent_id), 404);
 
         $excerpt = excerpt($microblog->html);
+
+        $microblog->load(['comments' => function ($builder) {
+            return $builder->select('microblogs.*')->includeVoters($this->userId)->with('user');
+        }]);
 
         $this->breadcrumb->push($excerpt, route('microblog.view', [$microblog->id]));
 

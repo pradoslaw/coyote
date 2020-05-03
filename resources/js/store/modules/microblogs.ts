@@ -62,12 +62,19 @@ const mutations = {
   },
 
   vote(state, microblog: Microblog) {
-    microblog.is_voted = ! microblog.is_voted;
+    if (microblog.is_voted) {
+      microblog.is_voted = false;
+      microblog.votes -= 1;
+    }
+    else {
+      microblog.is_voted = true;
+      microblog.votes += 1;
+    }
   },
 
-  updateVotes(state, { microblog, votes }) {
-    microblog.votes = votes;
-  }
+  // updateVotes(state, { microblog, votes }) {
+  //   microblog.votes = votes;
+  // }
 };
 
 const actions = {
@@ -80,9 +87,7 @@ const actions = {
   vote({ commit }, microblog: Microblog) {
     commit('vote', microblog);
 
-    axios.post(`/Mikroblogi/Vote/${microblog.id}`).then(result => {
-      commit('updateVotes', { microblog, votes: result.data });
-    });
+    axios.post(`/Mikroblogi/Vote/${microblog.id}`);
   },
 
   delete({ commit }, microblog) {

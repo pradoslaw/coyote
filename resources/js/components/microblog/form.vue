@@ -1,7 +1,7 @@
 <template>
   <div class="microblog-submit">
 
-    <vue-prompt source="/User/Prompt">
+    <vue-prompt source="/User/Prompt" class="border-bottom">
       <textarea
         v-autosize
         placeholder="Kliknij, aby dodać wpis"
@@ -17,38 +17,33 @@
       ></textarea>
     </vue-prompt>
 
+    <div class="row pt-3 pb-3">
+      <div v-for="media in microblog.media" v-show="media.url" class="col-sm-2">
+        <vue-thumbnail
+          ref="thumbnail"
+          :url="media.url"
+          :file="media.name"
+          upload-url="/Mikroblogi/Upload"
+          @upload="addImage"
+          @delete="deleteImage">
+        </vue-thumbnail>
+      </div>
+    </div>
+
     <div class="row">
-      <div class="col-12">
-        <div class="row pt-4 pb-4 border-top">
-<!--          <div v-for="media in microblog.media" class="col-sm-2">-->
-          <div v-for="media in microblog.media" v-show="media.url" class="col-sm-2">
-            <vue-thumbnail
-              ref="thumbnail"
-              :url="media.url"
-              :file="media.name"
-              upload-url="/Mikroblogi/Upload"
-              @upload="addImage"
-              @delete="deleteImage">
-            </vue-thumbnail>
-          </div>
-        </div>
+      <div class="col-6">
+        <button @click="addEmptyImage" title="Kliknij, aby dodać zdjęcie" class="btn btn-secondary btn-sm" type="button">
+          <i class="fas fa-camera"></i>
+        </button>
+      </div>
+      <div class="col-6">
+        <vue-button :disabled="isProcessing" @click.native.prevent="save" title="Kliknij, aby wysłać (Ctrl+Enter)" class="btn btn-sm btn-primary float-right" tabindex="2" type="submit">
+          Zapisz
+        </vue-button>
 
-        <div class="row">
-          <div class="col-6">
-            <button @click="addEmptyImage" title="Kliknij, aby dodać zdjęcie" class="btn btn-secondary btn-sm" type="button">
-              <i class="fas fa-camera"></i>
-            </button>
-          </div>
-          <div class="col-6">
-            <vue-button :disabled="isProcessing" @click.native.prevent="save" title="Kliknij, aby wysłać (Ctrl+Enter)" class="btn btn-sm btn-primary float-right" tabindex="2" type="submit">
-              Zapisz
-            </vue-button>
-
-            <button v-if="microblog.id" @click="cancel" title="Anuluj (Esc)" class="btn btn-sm btn-cancel btn-danger float-right mr-2" tabindex="3">
-              Anuluj
-            </button>
-          </div>
-        </div>
+        <button v-if="microblog.id" @click="cancel" title="Anuluj (Esc)" class="btn btn-sm btn-cancel btn-danger float-right mr-2" tabindex="3">
+          Anuluj
+        </button>
       </div>
     </div>
   </div>
