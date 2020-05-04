@@ -2,14 +2,14 @@ import Vue from 'vue';
 import Config from '../../libs/config';
 import VueComment from '../../components/comment.vue';
 import VueModal from '../../components/modal.vue';
-import VueTextareaAutosize from 'vue-textarea-autosize';
+import VueAutosize from '../../plugins/autosize';
 import VuePrompt from '../../components/forms/prompt.vue';
 import axios from 'axios';
 import store from '../../store';
 import VueMap from '../../components/google-maps/map.vue';
 import VueMarker from '../../components/google-maps/marker.vue';
 
-Vue.use(VueTextareaAutosize);
+Vue.use(VueAutosize);
 
 new Vue({
   el: '#comments',
@@ -30,11 +30,8 @@ new Vue({
     // fill vuex with data passed from controller to view
     store.commit('comments/init', window.data.comments);
   },
-  mounted: function () {
-    axios.defaults.headers.common['X-CSRF-TOKEN'] = Config.csrfToken();
-  },
   methods: {
-    submitForm: function () {
+    submitForm() {
       axios.post(this.$refs.submitForm.action, new FormData(this.$refs.submitForm))
         .then(response => {
           store.commit('comments/add', response.data);

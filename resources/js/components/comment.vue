@@ -30,17 +30,16 @@
         <div class="margin-sm-top" v-if="isEditing">
           <form method="post" :action="comment.route.edit" ref="updateForm" @submit.prevent="updateForm">
             <div class="form-group row">
-              <textarea-autosize
+              <textarea
+                v-autosize
                 name="text"
                 class="form-control"
                 ref="submitText"
                 v-model="comment.text"
-                :min-height="40"
-                :max-height="350"
-                @keydown.native.ctrl.enter="updateForm"
+                @keydown.ctrl.enter="updateForm"
                 rows="1"
                 tabindex="1"
-              ></textarea-autosize>
+              ></textarea>
             </div>
 
             <div class="form-group row">
@@ -67,16 +66,15 @@
           <input type="hidden" name="parent_id" :value="parentId">
 
           <div class="form-group">
-            <textarea-autosize
+            <textarea
+              v-autosize
               name="text"
               class="form-control"
               ref="replyText"
-              :min-height="40"
-              :max-height="350"
-              @keydown.native.ctrl.enter="replyForm"
+              @keydown.ctrl.enter="replyForm"
               rows="1"
               tabindex="1"
-            ></textarea-autosize>
+            ></textarea>
           </div>
 
           <div class="row">

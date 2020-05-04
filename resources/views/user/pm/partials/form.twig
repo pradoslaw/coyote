@@ -11,8 +11,9 @@
         <vue-toolbar @update="updateModel" :input="() => $refs.textarea.$el"></vue-toolbar>
 
         <vue-prompt source="{{ route('user.prompt') }}" :errors="errors.text">
-          <textarea-autosize
+          <textarea
             placeholder="Kliknij, aby odpowiedzieć"
+            v-autosize
             v-clipboard:success="insertToTextarea"
             v-clipboard:error="showError"
             name="text"
@@ -22,12 +23,12 @@
             :class="{'is-invalid': errors.text !== undefined}"
             :min-height="40"
             :max-height="350"
-            @keydown.native.ctrl.enter="sendMessage"
-            @keyup.native="typing"
-            @change.native="onChange"
+            @keydown.ctrl.enter="sendMessage"
+            @keyup="typing"
+            @change="onChange"
             rows="2"
             tabindex="1"
-          ></textarea-autosize>
+          ></textarea>
 
         </vue-prompt>
       </div>
