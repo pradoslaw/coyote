@@ -26,9 +26,13 @@
             <div v-html="microblog.html" class="break-word microblog-text"></div>
 
             <div v-if="microblog.media.length" class="row mb-2">
-              <div v-for="media in microblog.media" class="col-6 col-md-3">
-                <a :href="media.url" data-toggle="lightbox" :data-gallery="`gallery-${microblog.id}`">
-                  <img class="img-thumbnail" :src="media.thumbnail">
+              <div
+                v-for="(image, imageIndex) in images"
+                :key="imageIndex"
+                class="col-6 col-md-3"
+              >
+                <a @click="index = imageIndex" href="javascript:">
+                  <img class="img-thumbnail" :src="image.thumb">
                 </a>
               </div>
             </div>
@@ -91,6 +95,8 @@
         <button @click="deleteItem(false)" type="submit" class="btn btn-danger danger">Tak, usuń</button>
       </template>
     </vue-modal>
+
+    <vue-gallery :items="images" :index="index" @close="index = null"></vue-gallery>
   </div>
 </template>
 
@@ -98,6 +104,7 @@
   import Vue from 'vue';
   import VueAvatar from '../avatar.vue';
   import VueTimeago from '../../plugins/timeago';
+  import VueLightbox from 'vue-cool-lightbox';
   import VueModal from '../modal.vue';
   import VueComment from "./comment.vue";
   import VueCommentForm from './comment-form.vue';
@@ -123,7 +130,8 @@
       'vue-user-name': VueUserName,
       'vue-comment': VueComment,
       'vue-form': VueForm,
-      'vue-comment-form': VueCommentForm
+      'vue-comment-form': VueCommentForm,
+      'vue-gallery': VueLightbox
     },
     computed: {
       ...mapGetters('user', ['isAuthorized']),
@@ -132,6 +140,8 @@
     methods: mapActions('microblogs', ['loadComments', 'vote', 'subscribe'])
   })
   export default class VueMicroblog extends Mixins(MicroblogMixin) {
+    private index: number | null = null;
+
     @Ref('comment-form')
     readonly commentForm!: VueCommentForm;
 
@@ -171,6 +181,12 @@
 
     get highlight() {
       return '#' + this.anchor === window.location.hash;
+    }
+
+    get images() {
+      return this.microblog.media.map(media => {
+        return {src: media.url, thumb: media.thumbnail};
+      })
     }
   }
 </script>
