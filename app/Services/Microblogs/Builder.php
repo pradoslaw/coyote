@@ -12,14 +12,28 @@ use Coyote\User;
 
 class Builder
 {
+    /**
+     * @var MicroblogRepositoryInterface
+     */
     private $microblog;
+
+    /**
+     * @var User
+     */
     private $user;
 
+    /**
+     * @param MicroblogRepositoryInterface $microblog
+     */
     public function __construct(MicroblogRepositoryInterface $microblog)
     {
         $this->microblog = $microblog;
     }
 
+    /**
+     * @param User $user
+     * @return $this
+     */
     public function forUser(User $user)
     {
         $this->user = $user;
@@ -27,6 +41,9 @@ class Builder
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function orderByScore()
     {
         $this->microblog->pushCriteria(new OrderByScore());
@@ -34,6 +51,9 @@ class Builder
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function orderById()
     {
         $this->microblog->pushCriteria(new OrderById());
@@ -41,6 +61,9 @@ class Builder
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function onlyMine()
     {
         $this->microblog->pushCriteria(new OnlyMine($this->user->id));
@@ -48,6 +71,10 @@ class Builder
         return $this;
     }
 
+    /**
+     * @param string $tag
+     * @return $this
+     */
     public function withTag(string $tag)
     {
         $this->microblog->pushCriteria(new WithTag($tag));
@@ -55,6 +82,9 @@ class Builder
         return $this;
     }
 
+    /**
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
     public function paginate()
     {
         $this->microblog->pushCriteria(new LoadUserScope($this->user->id));
@@ -73,6 +103,9 @@ class Builder
         return $paginator;
     }
 
+    /**
+     * @return \Coyote\Microblog[]
+     */
     public function popular()
     {
         $this->microblog->pushCriteria(new LoadUserScope($this->user->id));
@@ -89,6 +122,10 @@ class Builder
         return $this->mergeComments($comments, $microblogs);
     }
 
+    /**
+     * @param \Illuminate\Support\Collection $microblogs
+     * @return \Coyote\Microblog[]
+     */
     private function loadComments($microblogs)
     {
         $this->microblog->pushCriteria(new LoadUserScope($this->user->id));
@@ -96,6 +133,11 @@ class Builder
         return $this->microblog->getTopComments($microblogs->keys()->toArray());
     }
 
+    /**
+     * @param \Illuminate\Support\Collection|\Coyote\Microblog[] $comments
+     * @param \Illuminate\Support\Collection|\Coyote\Microblog[] $microblogs
+     * @return \Coyote\Microblog[]
+     */
     private function mergeComments($comments, $microblogs)
     {
         foreach ($comments->groupBy('parent_id') as $relations) {
