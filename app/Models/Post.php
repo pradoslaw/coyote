@@ -56,6 +56,13 @@ class Post extends Model
     protected $dates = ['created_at', 'updated_at'];
 
     /**
+     * Related to Laravel 5.8. deleted_at has different date format that created_at and carbon throws exception
+     *
+     * @var string[]
+     */
+    protected $casts = ['deleted_at' => 'string'];
+
+    /**
      * Html version of the post.
      *
      * @var null|string

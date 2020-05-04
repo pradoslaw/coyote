@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Path extends Model
 {
     use SoftDeletes;
-    
+
     /**
      * @var string
      */
@@ -31,6 +31,13 @@ class Path extends Model
      * @var string
      */
     protected $dateFormat = 'Y-m-d H:i:se';
+
+    /**
+     * Related to Laravel 5.8. deleted_at has different date format that created_at and carbon throws exception
+     *
+     * @var string[]
+     */
+    protected $casts = ['deleted_at' => 'string'];
 
     /**
      * @var bool

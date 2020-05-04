@@ -23,6 +23,7 @@ class ShowController extends BaseController
     {
         /** @var \Coyote\Wiki $wiki */
         $wiki = $request->attributes->get('wiki');
+        $request->attributes->remove('wiki');
 
         $author = $wiki->logs()->exists() ? $wiki->logs()->orderBy('id')->first()->user : null;
         $wiki->text = $this->getParser()->parse((string) $wiki->text);
