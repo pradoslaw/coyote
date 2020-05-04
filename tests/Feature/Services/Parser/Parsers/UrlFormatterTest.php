@@ -104,6 +104,21 @@ class UrlFormatterTest extends TestCase
     /**
      * @test
      */
+    public function shouldHandleLinksSeparatedByAnOpenParenthesis_ifItResemblesADomain()
+    {
+        // given
+        $formatter = new UrlFormatter('', $this->html('http://4pr.net/Forum', 2));
+
+        // when
+        $result = $formatter->parse('4pr.net/Forum(4pr.net/Forum');
+
+        // then
+        $this->assertEquals('<a>4pr.net/Forum</a>(<a>4pr.net/Forum</a>', $result);
+    }
+
+    /**
+     * @test
+     */
     public function shouldIncludeNestedParenthesis()
     {
         // given
