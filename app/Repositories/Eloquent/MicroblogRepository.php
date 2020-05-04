@@ -103,7 +103,6 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
                         ->from('microblogs')
                         ->whereIn('parent_id', $parentIds)
                         ->whereNull('deleted_at');
-
                 }, 'microblogs')
                 ->whereIn('microblogs.row_number', [1, 2])
                 ->orderBy('microblogs.id')
