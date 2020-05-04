@@ -8,7 +8,7 @@
   </nav>
 
   <vue-microblog v-if="microblogs.length > 0" v-for="microblog in microblogs" :key="microblog.id" :microblog="microblog" :wrap="true"></vue-microblog>
-  <div v-else class="card card-default">
+  <div v-else v-cloak class="card card-default">
     <div class="card-body">
       <div class="row">
         <div class="col-12">

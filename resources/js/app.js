@@ -80,7 +80,7 @@ $(function () {
   .on(['/User/Pm/Submit', '/User/Pm/Show/*', '/User/Pm'], () => {
     require('./pages/pm');
   })
-  .on(['/Mikroblogi', '/Mikroblogi/*'], () => require('./pages/microblog'));
+  .on(['/Mikroblogi', '/Mikroblogi/*', '/Profile/*/Microblog'], () => require('./pages/microblog'));
 
   r.resolve();
 });
