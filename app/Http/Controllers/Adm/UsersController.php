@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Adm;
 
+use Coyote\Events\UserDeleted;
 use Coyote\Http\Forms\User\AdminForm;
 use Coyote\Http\Grids\Adm\UsersGrid;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
@@ -88,7 +89,8 @@ class UsersController extends BaseController
             $user->groups()->sync((array) $data['groups']);
 
             stream(Update::class, new Person($user));
-            event(new UserWasSaved($user));
+
+            event($user->deleted_at ? new UserDeleted($user) : new UserWasSaved($user));
         });
 
         return back()->with('success', 'Zmiany zostały poprawie zapisane');

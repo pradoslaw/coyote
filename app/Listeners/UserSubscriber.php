@@ -42,7 +42,7 @@ class UserSubscriber
     {
         $crawler = new Crawler();
 
-        $event instanceof UserWasSaved ? $crawler->index($event->user) : $crawler->delete(new User($event->user));
+        $event instanceof UserWasSaved ? $crawler->index($event->user) : $crawler->delete((new User)->forceFill($event->user));
     }
 
     /**
