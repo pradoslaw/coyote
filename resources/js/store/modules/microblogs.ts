@@ -92,9 +92,7 @@ const actions = {
   vote({ commit }, microblog: Microblog) {
     commit('vote', microblog);
 
-    return axios.post(`/Mikroblogi/Vote/${microblog.id}`).catch(() => {
-      commit('vote', microblog)
-    });
+    return axios.post(`/Mikroblogi/Vote/${microblog.id}`).catch(() => commit('vote', microblog));
   },
 
   delete({ commit }, microblog: Microblog) {
