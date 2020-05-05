@@ -46,6 +46,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
             ->model
             ->whereNull('parent_id')
             ->with('user')
+            ->withCount('comments')
             ->where('votes', '>=', 2)
             ->take($limit)
             ->get();
@@ -58,6 +59,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     /**
      * Pobiera $limit najpopularniejszych wpisow z mikrobloga z ostatniego tygodnia
      *
+     * @deprecated
      * @param $limit
      * @return mixed
      */

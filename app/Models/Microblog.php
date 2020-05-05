@@ -207,12 +207,12 @@ class Microblog extends Model
     /**
      * @param  \Illuminate\Database\Query\Builder $query
      * @param int|null $userId
-     * @return bool|\Illuminate\Database\Query\Builder
+     * @return \Illuminate\Database\Query\Builder|$this
      */
     public function scopeIncludeSubscribers($query, ?int $userId)
     {
         if (empty($userId)) {
-            return false;
+            return $this;
         }
 
         return $query
@@ -225,12 +225,12 @@ class Microblog extends Model
     /**
      * @param  \Illuminate\Database\Query\Builder $query
      * @param int|null $userId
-     * @return bool|\Illuminate\Database\Query\Builder
+     * @return $this|\Illuminate\Database\Query\Builder
      */
     public function scopeIncludeVoters($query, ?int $userId)
     {
         if (empty($userId)) {
-            return false;
+            return $this;
         }
 
         return $query

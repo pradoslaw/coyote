@@ -18,7 +18,7 @@ class Builder
     private $microblog;
 
     /**
-     * @var User
+     * @var User|null
      */
     private $user;
 
@@ -31,10 +31,10 @@ class Builder
     }
 
     /**
-     * @param User $user
+     * @param User|null $user
      * @return $this
      */
-    public function forUser(User $user)
+    public function forUser(?User $user)
     {
         $this->user = $user;
 
@@ -66,7 +66,9 @@ class Builder
      */
     public function onlyMine()
     {
-        $this->microblog->pushCriteria(new OnlyMine($this->user->id));
+        if ($this->user) {
+            $this->microblog->pushCriteria(new OnlyMine($this->user->id));
+        }
 
         return $this;
     }
@@ -87,7 +89,7 @@ class Builder
      */
     public function paginate()
     {
-        $this->microblog->pushCriteria(new LoadUserScope($this->user->id));
+        $this->loadUserScope();
 
         $paginator = $this->microblog->paginate(10);
         $this->microblog->resetCriteria();
@@ -108,7 +110,7 @@ class Builder
      */
     public function popular()
     {
-        $this->microblog->pushCriteria(new LoadUserScope($this->user->id));
+        $this->loadUserScope();
 
         $result = $this->microblog->getPopular(5);
 
@@ -128,7 +130,7 @@ class Builder
      */
     private function loadComments($microblogs)
     {
-        $this->microblog->pushCriteria(new LoadUserScope($this->user->id));
+        $this->loadUserScope();
 
         return $this->microblog->getTopComments($microblogs->keys()->toArray());
     }
@@ -147,5 +149,12 @@ class Builder
         }
 
         return $microblogs;
+    }
+
+    private function loadUserScope()
+    {
+        if ($this->user) {
+            $this->microblog->pushCriteria(new LoadUserScope($this->user->id));
+        }
     }
 }
