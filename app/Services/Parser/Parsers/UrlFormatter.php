@@ -4,7 +4,6 @@ namespace Coyote\Services\Parser\Parsers;
 
 use Collective\Html\HtmlBuilder;
 use Coyote\Services\Parser\Parsers\Parentheses\ParenthesesParser;
-use Coyote\Services\Parser\Parsers\Parentheses\SymmetricParenthesesChunks;
 use TRegx\CleanRegex\Pattern;
 use TRegx\SafeRegex\preg;
 
@@ -14,7 +13,6 @@ class UrlFormatter
     // modified - removed part with parsing of parentheses, because that's
     // done by ParenthesesParser
     private const REGEXP_URL = '~\b(?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)[^\s<>]+[^\s`!(\[\]{};:\'".,<>?«»“”‘’]~i';
-    private const PARENTHESES_LEVEL = 3;
     private const TITLE_LEN = 64;
 
     /** @var string */
@@ -24,11 +22,11 @@ class UrlFormatter
     /** @var ParenthesesParser */
     private $parser;
 
-    public function __construct(string $host, HtmlBuilder $html)
+    public function __construct(string $host, HtmlBuilder $html, ParenthesesParser $parser)
     {
         $this->host = $host;
         $this->html = $html;
-        $this->parser = new ParenthesesParser(new SymmetricParenthesesChunks(), self::PARENTHESES_LEVEL);
+        $this->parser = $parser;
     }
 
     public function parse(string $text): string

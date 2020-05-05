@@ -3,6 +3,8 @@
 namespace Tests\Feature\Services\Parser\Parsers;
 
 use Collective\Html\HtmlBuilder;
+use Coyote\Services\Parser\Parsers\Parentheses\ParenthesesParser;
+use Coyote\Services\Parser\Parsers\Parentheses\SymmetricParenthesesChunks;
 use Coyote\Services\Parser\Parsers\UrlFormatter;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -15,7 +17,7 @@ class UrlFormatterTest extends TestCase
     public function shouldParseLink()
     {
         // given
-        $formatter = new UrlFormatter('', $this->htmlExpect('http://4pr.net/Forum'));
+        $formatter = new UrlFormatter('', $this->htmlExpect('http://4pr.net/Forum'), $this->parser());
 
         // when
         $result = $formatter->parse('text 4pr.net/Forum text');
@@ -30,7 +32,7 @@ class UrlFormatterTest extends TestCase
     public function shouldParseLink_htmlEntities()
     {
         // given
-        $formatter = new UrlFormatter('', $this->htmlExpect('http://4pr.net/Forum&param'));
+        $formatter = new UrlFormatter('', $this->htmlExpect('http://4pr.net/Forum&param'), $this->parser());
 
         // when
         $result = $formatter->parse('text 4pr.net/Forum&param text');
@@ -46,7 +48,7 @@ class UrlFormatterTest extends TestCase
     {
         // given
         $longUrl = 'https://scrutinizer-ci.com/g/adam-boduch/coyote/inspections/8778b728-ef73-4167-8092-424a57a8e66d';
-        $formatter = new UrlFormatter('', $this->htmlExpect($longUrl));
+        $formatter = new UrlFormatter('', $this->htmlExpect($longUrl), $this->parser());
 
         // when
         $result = $formatter->parse("link: $longUrl");
@@ -62,7 +64,7 @@ class UrlFormatterTest extends TestCase
     {
         // given
         $longUrl = 'https://4pr.net/g/adam-boduch/coyote/inspections/8778b728-ef73-4167-8092-424a57a8e66d';
-        $formatter = new UrlFormatter('4pr.net', $this->htmlExpect($longUrl));
+        $formatter = new UrlFormatter('4pr.net', $this->htmlExpect($longUrl), $this->parser());
 
         // when
         $result = $formatter->parse("link: $longUrl");
@@ -77,7 +79,7 @@ class UrlFormatterTest extends TestCase
     public function shouldIncludeParenthesis()
     {
         // given
-        $formatter = new UrlFormatter('', $this->htmlExpect('http://4pr.net/Forum/(text)'));
+        $formatter = new UrlFormatter('', $this->htmlExpect('http://4pr.net/Forum/(text)'), $this->parser());
 
         // when
         $result = $formatter->parse('text 4pr.net/Forum/(text) text');
@@ -92,7 +94,7 @@ class UrlFormatterTest extends TestCase
     public function shouldHandleLinksSeparatedByAnOpenParenthesis()
     {
         // given
-        $formatter = new UrlFormatter('', $this->html());
+        $formatter = new UrlFormatter('', $this->html(), $this->parser());
 
         // when
         $result = $formatter->parse('4pr.net/Forum(https://4pr.net/Forum');
@@ -107,7 +109,7 @@ class UrlFormatterTest extends TestCase
     public function shouldHandleLinksSeparatedByAnOpenParenthesis_ifItResemblesADomain()
     {
         // given
-        $formatter = new UrlFormatter('', $this->html());
+        $formatter = new UrlFormatter('', $this->html(), $this->parser());
 
         // when
         $result = $formatter->parse('4pr.net/Forum(4pr.net/Forum');
@@ -122,7 +124,7 @@ class UrlFormatterTest extends TestCase
     public function shouldIncludeNestedParenthesis()
     {
         // given
-        $formatter = new UrlFormatter('', $this->htmlExpect('http://4pr.net/Forum/(t(ex)t)'));
+        $formatter = new UrlFormatter('', $this->htmlExpect('http://4pr.net/Forum/(t(ex)t)'), $this->parser());
 
         // when
         $result = $formatter->parse('text 4pr.net/Forum/(t(ex)t) text');
@@ -137,7 +139,7 @@ class UrlFormatterTest extends TestCase
     public function shouldNotIncludeUnmatchedParenthesis()
     {
         // given
-        $formatter = new UrlFormatter('', $this->htmlExpect('http://4pr.net/Forum/(text)'));
+        $formatter = new UrlFormatter('', $this->htmlExpect('http://4pr.net/Forum/(text)'), $this->parser());
 
         // when
         $result = $formatter->parse('text 4pr.net/Forum/(text)( text');
@@ -152,7 +154,7 @@ class UrlFormatterTest extends TestCase
     public function shouldNotIncludeUnmatchedNestedParenthesis()
     {
         // given
-        $formatter = new UrlFormatter('', $this->htmlExpect('http://4pr.net/Forum/'));
+        $formatter = new UrlFormatter('', $this->htmlExpect('http://4pr.net/Forum/'), $this->parser());
 
         // when
         $result = $formatter->parse('4pr.net/Forum/(tex(t)');
@@ -168,7 +170,7 @@ class UrlFormatterTest extends TestCase
     {
         // given
         $errorProneLink = 'http://4pr.net/Forum/(long_long_long_long_long';
-        $formatter = new UrlFormatter('', $this->htmlExpect('http://4pr.net/Forum/'));
+        $formatter = new UrlFormatter('', $this->htmlExpect('http://4pr.net/Forum/'), $this->parser());
 
         // when
         $result = $formatter->parse($errorProneLink);
@@ -201,5 +203,10 @@ class UrlFormatterTest extends TestCase
             return "<a>$title</a>";
         }));
         return $html;
+    }
+
+    private function parser(): ParenthesesParser
+    {
+        return new ParenthesesParser(new SymmetricParenthesesChunks(), 4);
     }
 }

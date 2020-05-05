@@ -4,6 +4,8 @@ namespace Coyote\Services\Parser\Parsers;
 
 use Collective\Html\HtmlBuilder;
 use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
+use Coyote\Services\Parser\Parsers\Parentheses\ParenthesesParser;
+use Coyote\Services\Parser\Parsers\Parentheses\SymmetricParenthesesChunks;
 
 class Link extends Parser implements ParserInterface
 {
@@ -11,6 +13,8 @@ class Link extends Parser implements ParserInterface
     const LINK_INTERNAL_REGEXP = '\[\[(.*?)(\|(.*?))*\]\]';
 
     const REGEXP_EMAIL = '#(^|[\n \[\]\:<>&;]|\()([a-z0-9&\-_.]+?@[\w\-]+\.(?:[\w\-\.]+\.)?[\w]+)#i';
+
+    private const PARENTHESES_LEVEL = 3;
 
     /**
      * @var PageRepository
@@ -42,7 +46,7 @@ class Link extends Parser implements ParserInterface
         $this->page = $page;
         $this->host = $host;
         $this->html = $html;
-        $this->urlParser = new UrlFormatter($host, app('html'));
+        $this->urlParser = new UrlFormatter($host, app('html'), new ParenthesesParser(new SymmetricParenthesesChunks(), self::PARENTHESES_LEVEL));
     }
 
     /**
