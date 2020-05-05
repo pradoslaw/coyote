@@ -17,8 +17,8 @@ use Illuminate\Database\Query\Expression;
  * @property int $score
  * @property int $is_sponsored
  * @property int $bonus
- * @property string $created_at
- * @property string $updated_at
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
  * @property string $deleted_at
  * @property string $text
  * @property string $html

@@ -28,7 +28,7 @@ class MicroblogResource extends JsonResource
      */
     public function toArray($request)
     {
-        $only = $this->resource->only(['id', 'votes', 'text', 'html', 'parent_id', 'is_voted', 'is_subscribed', 'comments_count']);
+        $only = $this->resource->only(['id', 'votes', 'text', 'html', 'parent_id']);
 
         return array_merge(
             $only,
@@ -43,6 +43,9 @@ class MicroblogResource extends JsonResource
                 'media'         => $this->media(),
                 'editable'      => $this->when($request->user(), function () use ($request) {
                     return $request->user()->can('update', $this->resource);
+                }),
+                $this->mergeWhen(array_has($this->resource, ['is_voted', 'is_subscribed', 'comments_count']), function () {
+                    return $this->resource->only(['is_voted', 'is_subscribed', 'comments_count']);
                 })
             ]
         );
