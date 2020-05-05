@@ -15,28 +15,22 @@ const getters = {
   totalPages: state => state.meta.total
 }
 
-const mapToObject = (data, item) => {
-  data[item.id] = item;
-
-  return data;
-}
+Array.prototype.keyBy = function (key: string) {
+  return this.reduce((data, item) => (data[item[key]] = item, data), {});
+};
 
 const mutations = {
   init(state, { pagination, microblog }) {
     if (pagination) {
       pagination.data = pagination.data
-        .map(microblog => {
-          microblog.comments = microblog.comments.reduce(mapToObject, {});
-
-          return microblog;
-        })
-        .reduce(mapToObject, {});
+        .map(microblog => (microblog.comments = microblog.comments.keyBy('id'), microblog))
+        .keyBy('id');
 
       state = Object.assign(state, pagination);
     }
 
     if (microblog) {
-      microblog.comments = microblog.comments.reduce(mapToObject, {});
+      microblog.comments = microblog.comments.keyBy('id');
 
       state.data = {[microblog.id]: microblog};
     }
@@ -98,7 +92,9 @@ const actions = {
   vote({ commit }, microblog: Microblog) {
     commit('vote', microblog);
 
-    axios.post(`/Mikroblogi/Vote/${microblog.id}`);
+    return axios.post(`/Mikroblogi/Vote/${microblog.id}`).catch(() => {
+      commit('vote', microblog)
+    });
   },
 
   delete({ commit }, microblog: Microblog) {
@@ -110,7 +106,7 @@ const actions = {
   },
 
   save({ commit }, microblog: Microblog) {
-    axios.post(`/Mikroblogi/Edit/${microblog.id || ''}`, microblog).then(result => commit('update', result.data));
+    return axios.post(`/Mikroblogi/Edit/${microblog.id || ''}`, microblog).then(result => commit('update', result.data));
   },
 
   saveComment({ state, commit }, microblog: Microblog) {
