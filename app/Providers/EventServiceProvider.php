@@ -8,12 +8,10 @@ use Coyote\Events\ForumWasSaved;
 use Coyote\Events\PostWasSaved;
 use Coyote\Events\StreamSaved;
 use Coyote\Events\SuccessfulLogin;
-use Coyote\Events\UserWasSaved;
 use Coyote\Listeners\ActivitySubscriber;
 use Coyote\Listeners\ChangeImageUrl;
 use Coyote\Listeners\DispatchPostNotifications;
 use Coyote\Listeners\FlushFirewallCache;
-use Coyote\Listeners\FlushUserCache;
 use Coyote\Listeners\IndexCategory;
 use Coyote\Listeners\IndexStream;
 use Coyote\Listeners\LogSentMessage;
@@ -22,6 +20,7 @@ use Coyote\Listeners\SendLockoutEmail;
 use Coyote\Listeners\SendSuccessfulLoginEmail;
 use Coyote\Listeners\SetupLoginDate;
 use Coyote\Listeners\SetupWikiLinks;
+use Coyote\Listeners\UserSubscriber;
 use Coyote\Listeners\WikiListener;
 use Coyote\Listeners\PageListener;
 use Coyote\Listeners\PostListener;
@@ -40,7 +39,6 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        UserWasSaved::class => [FlushUserCache::class],
         Lockout::class => [SendLockoutEmail::class],
         FirewallWasSaved::class => [FlushFirewallCache::class],
         FirewallWasDeleted::class => [FlushFirewallCache::class],
@@ -65,7 +63,8 @@ class EventServiceProvider extends ServiceProvider
         MicroblogListener::class,
         WikiListener::class,
         SetupWikiLinks::class,
-        ActivitySubscriber::class
+        ActivitySubscriber::class,
+        UserSubscriber::class
     ];
 
     /**

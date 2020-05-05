@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\User;
 
+use Coyote\Events\UserDeleted;
 use Coyote\Rules\PasswordRule;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -35,7 +36,11 @@ class DeleteAccountController extends BaseController
             ]
         ]);
 
-        $this->auth->delete();
+        $this->transaction(function () {
+            $this->auth->delete();
+
+            event(new UserDeleted($this->auth));
+        });
 
         $request->session()->flash('success', 'Konto zostało prawidłowo usunięte.');
 

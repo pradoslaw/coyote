@@ -23,7 +23,7 @@ class UserResource extends ElasticsearchResource
         $date = $this->visited_at ?: $this->created_at;
 
         return array_merge(
-            $this->resource->only('id', 'name', 'photo'),
+            $this->resource->only('id', 'name'),
             [
                 'visited_at'    => $date->toIso8601String(),
                 'decay_date'    => $date->toIso8601String(),
