@@ -4,11 +4,14 @@ namespace Tests\Feature;
 
 use Coyote\Microblog;
 use Coyote\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Faker\Factory;
 
 class MicroblogTest extends TestCase
 {
+    use DatabaseTransactions;
+
     public function testSubmitEmpty()
     {
         $user = factory(User::class)->create();
