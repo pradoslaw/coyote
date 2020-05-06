@@ -12,7 +12,7 @@ const getters = {
   // @ts-ignore
   microblogs: state => Object.values(state.data).sort((a, b) => a.id > b.id ? -1 : 1),
   currentPage: state => state.meta.current_page,
-  totalPages: state => state.meta.total
+  totalPages: state => state.meta.last_page
 }
 
 Array.prototype.keyBy = function (key: string) {
