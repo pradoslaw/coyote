@@ -83,7 +83,7 @@ module.exports = {
         },
         // all common code across entry points
         common: {
-          test: /\.s?js$/,
+          test: /\.(s?js|vue)$/,
           minChunks: 2,
           name: "common",
           chunks: "all",
