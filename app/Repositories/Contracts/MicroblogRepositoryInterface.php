@@ -8,12 +8,6 @@ use Coyote\Repositories\Eloquent\MicroblogRepository;
 interface MicroblogRepositoryInterface extends RepositoryInterface
 {
     /**
-     * @param integer $perPage
-     * @return \Illuminate\Pagination\LengthAwarePaginator
-     */
-    public function paginate($perPage = 10);
-
-    /**
      * Pobierz X ostatnich wpisow z mikrobloga przy czym sortowane sa one wedlug oceny. Metoda
      * ta jest wykorzystywana na stronie glownej serwisu
      *

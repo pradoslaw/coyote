@@ -313,13 +313,7 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
     }
 
     /**
-     * Paginate the given query into a simple paginator.
-     *
-     * @param  int  $perPage
-     * @param  array  $columns
-     * @param  string  $pageName
-     * @param  int|null $page
-     * @return \Illuminate\Contracts\Pagination\Paginator
+     * @inheritDoc
      */
     public function simplePaginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
@@ -332,14 +326,9 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
     }
 
     /**
-     * @param null $perPage
-     * @param array $columns
-     * @param string $pageName
-     * @param null $page
-     * @return mixed
-     * @throws \Exception
+     * @inheritDoc
      */
-    public function paginateWithTopComments($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
+    public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
         $this->applyCriteria();
 
