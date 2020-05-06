@@ -110,8 +110,6 @@ module.exports = {
     // wiki: ['./js/pages/wiki.js', './sass/pages/wiki.scss'],
     // job: ['./js/pages/job.js', './sass/pages/job.scss'],
     job: ['./js/pages/job.js'],
-    homepage: ['./js/pages/homepage.js'],
-    // homepage: ['./js/pages/homepage.js', './sass/pages/homepage.scss'],
     profile: ['./js/pages/profile.js'],
     // profile: ['./js/pages/profile.js', './sass/pages/profile.scss'],
     'job-submit': './js/pages/job/submit.js',
