@@ -33,7 +33,7 @@ export class MicroblogMixin extends Vue {
       // @ts-ignore
       this.confirm.open();
     } else {
-      store.dispatch('microblogs/delete', microblog);
+      store.dispatch(action, microblog);
 
       // @ts-ignore
       this.confirm.close()
@@ -74,5 +74,4 @@ export class MicroblogFormMixin extends Vue {
       })
       .finally(() => this.isProcessing = false);
   }
-
 }

@@ -29,7 +29,7 @@ axios.interceptors.response.use(null, err => {
 
   Vue.notify({type: 'error', text: message});
 
-  return Promise.reject(error);
+  return Promise.reject(err);
 });
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
