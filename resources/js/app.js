@@ -81,6 +81,7 @@ $(function () {
     require('./pages/pm');
   })
   .on(['/Mikroblogi', '/Mikroblogi/*', '/Profile/*/Microblog'], () => require('./pages/microblog'))
+  .on(['/Profile/*'], () => require('./pages/profile'))
   .on('/', () => require('./pages/homepage'));
 
   r.resolve();

@@ -154,17 +154,3 @@
     </div>
   </div>
 {% endblock %}
-
-{% block head %}
-  {{ parent() }}
-
-  <script type="text/javascript">
-    var uploadUrl = '{{ route('microblog.upload') }}';
-  </script>
-{% endblock %}
-
-{% block body %}
-  {{ parent() }}
-
-  <script src="{{ cdn('js/profile.js') }}"></script>
-{% endblock %}
