@@ -45,6 +45,7 @@ class TopicResource extends ElasticsearchResource
                 'decay_date'            => $this->last_post_created_at->toIso8601String(),
                 'url'                   => UrlBuilder::topic($this->resource->getModel()),
                 'user_id'               => $this->firstPost->user_id,
+                'posts'                 => PostResource::collection($this->posts),
                 'forum'         => [
                     'id'                => $this->forum->id,
                     'name'              => $this->forum->name,
