@@ -95,7 +95,7 @@ class Builder
         $this->microblog->resetCriteria();
 
         /** @var \Illuminate\Database\Eloquent\Collection $microblogs */
-        $microblogs =  $paginator->keyBy('id');
+        $microblogs = $paginator->keyBy('id');
 
         $comments = $this->loadComments($microblogs);
         $microblogs = $this->mergeComments($comments, $microblogs);
@@ -117,7 +117,7 @@ class Builder
         $this->microblog->resetCriteria();
 
         /** @var \Illuminate\Database\Eloquent\Collection $microblogs */
-        $microblogs =  $result->keyBy('id');
+        $microblogs = $result->keyBy('id');
 
         $comments = $this->loadComments($microblogs);
 
@@ -136,8 +136,8 @@ class Builder
     }
 
     /**
-     * @param \Illuminate\Support\Collection|\Coyote\Microblog[] $comments
-     * @param \Illuminate\Support\Collection|\Coyote\Microblog[] $microblogs
+     * @param \Coyote\Microblog[] $comments
+     * @param \Illuminate\Database\Eloquent\Collection $microblogs
      * @return \Coyote\Microblog[]
      */
     private function mergeComments($comments, $microblogs)
