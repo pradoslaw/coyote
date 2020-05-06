@@ -4,9 +4,10 @@ namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Requests\MicroblogRequest;
+use Coyote\Http\Resources\Api\MicroblogResource;
 use Coyote\Notifications\Microblog\UserMentionedNotification;
 use Coyote\Notifications\Microblog\SubmittedNotification;
-use Coyote\Repositories\Criteria\Microblog\LoadComments;
+use Coyote\Repositories\Criteria\Microblog\LoadUserScope;
 use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Services\Parser\Helpers\Login as LoginHelper;
 use Coyote\Services\Parser\Helpers\Hash as HashHelper;
@@ -44,12 +45,11 @@ class CommentController extends Controller
     }
 
     /**
-     * Publikowanie komentarza na mikroblogu
-     *
      * @param MicroblogRequest $request
      * @param Dispatcher $dispatcher
-     * @param \Coyote\Microblog $microblog
-     * @return \Illuminate\Http\JsonResponse
+     * @param $microblog
+     * @return MicroblogResource
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function save(MicroblogRequest $request, Dispatcher $dispatcher, $microblog)
     {
@@ -122,16 +122,9 @@ class CommentController extends Controller
             }
         }
 
-        foreach (['name', 'is_blocked', 'is_active', 'photo'] as $key) {
-            $microblog->{$key} = $user->{$key};
-        }
+        MicroblogResource::withoutWrapping();
 
-        $view = view('microblog.partials.comment', ['comment' => $microblog, 'microblog' => ['id' => $microblog->parent_id]]);
-
-        return response()->json([
-            'html' => $view->render(),
-            'subscribe' => (int) $isSubscribed
-        ]);
+        return (new MicroblogResource($microblog))->additional(['is_subscribed' => (bool) $isSubscribed]);
     }
 
     /**
@@ -155,17 +148,17 @@ class CommentController extends Controller
     }
 
     /**
-     * Pokaz pozostale komentarze do wpisu
-     *
      * @param $id
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function show($id)
     {
-        $this->microblog->pushCriteria(new LoadComments($this->userId));
+        $this->microblog->pushCriteria(new LoadUserScope($this->userId));
 
-        $comments = $this->microblog->getComments([$id]);
+        $comments = $this->microblog->getComments($id);
 
-        return view('microblog.partials.comments', ['microblog' => ['id' => $id], 'comments' => $comments]);
+        MicroblogResource::withoutWrapping();
+
+        return MicroblogResource::collection($comments);
     }
 }

@@ -3,7 +3,7 @@ import { mapState } from 'vuex';
 import Vue from 'vue';
 import PerfectScrollbar from '../components/perfect-scrollbar';
 import VuePm from '../components/pm/message.vue';
-import VueTextareaAutosize from 'vue-textarea-autosize';
+import VueAutosize from '../plugins/autosize';
 import VuePrompt from '../components/forms/prompt.vue';
 import VueToolbar from '../components/forms/toolbar.vue';
 import VueButton from '../components/forms/button.vue';
@@ -18,7 +18,7 @@ import axios from 'axios';
 import differenceInMinutes from 'date-fns/differenceInMinutes';
 import parseISO from 'date-fns/parseISO';
 
-Vue.use(VueTextareaAutosize);
+Vue.use(VueAutosize);
 Vue.use(VueClipboard, {url: '/User/Pm/Paste'});
 
 const INBOX = 1;

@@ -150,6 +150,16 @@ interface RepositoryInterface
     public function simplePaginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null);
 
     /**
+     * @param int|null $perPage
+     * @param array $columns
+     * @param string $pageName
+     * @param int|null $page
+     * @return mixed
+     * @throws \Exception
+     */
+    public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null);
+
+    /**
      * Get last element.
      *
      * @return mixed

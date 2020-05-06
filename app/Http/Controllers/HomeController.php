@@ -3,16 +3,16 @@
 namespace Coyote\Http\Controllers;
 
 use Coyote\Http\Resources\ActivityResource as ActivityResource;
+use Coyote\Http\Resources\Api\MicroblogResource;
 use Coyote\Repositories\Contracts\ActivityRepositoryInterface as ActivityRepository;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface as ReputationRepository;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
 use Coyote\Repositories\Criteria\Forum\SkipHiddenCategories;
-use Coyote\Repositories\Criteria\Microblog\LoadComments;
-use Coyote\Repositories\Criteria\Microblog\OrderByScore;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess as OnlyThoseTopicsWithAccess;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess as OnlyThoseForumsWithAccess;
+use Coyote\Services\Microblogs\Builder;
 use Coyote\Services\Session\Renderer;
 
 class HomeController extends Controller
@@ -130,10 +130,14 @@ class HomeController extends Controller
      */
     private function getMicroblogs()
     {
-        $this->microblog->pushCriteria(new LoadComments($this->userId));
-        $this->microblog->pushCriteria(new OrderByScore());
+        /** @var Builder $builder */
+        $builder = app(Builder::class);
 
-        return $this->slice($this->microblog->take(5));
+        $microblogs = $builder->forUser($this->auth)->orderByScore()->popular();
+
+        MicroblogResource::withoutWrapping();
+
+        return MicroblogResource::collection($microblogs)->response()->getContent();
     }
 
     /**
@@ -195,21 +199,5 @@ class HomeController extends Controller
         }
 
         return $parent->children()->latest()->limit(1)->first(['path', 'title', 'excerpt']);
-    }
-
-    /**
-     * Zostawia jedynie 2 ostatnie komentarze do wpisu
-     *
-     * @param $microblogs
-     * @return mixed
-     */
-    private function slice($microblogs)
-    {
-        foreach ($microblogs as &$microblog) {
-            $microblog->comments_count = $microblog->comments->count();
-            $microblog->comments = $microblog->comments->slice(-2, 2);
-        }
-
-        return $microblogs;
     }
 }

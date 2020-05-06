@@ -110,12 +110,12 @@
         </div>
       </section>
 
-      <section id="microblog" class="box">
+      <section id="js-microblog" class="box">
         <h4><i class="far fa-comments fa-fw"></i> <a href="{{ route('microblog.home') }}">Popularne wpisy na mikroblogu</a></h4>
 
-        {% for microblog in microblogs %}
-          {% include "microblog.partials.microblog" %}
-        {% endfor %}
+        <vue-microblog v-for="microblog in microblogs" :key="microblog.id" :microblog="microblog" :wrap="true"></vue-microblog>
+
+        <vue-notifications position="bottom right" />
       </section>
     </main>
 
@@ -212,7 +212,7 @@
   {{ parent() }}
 
   <script type="text/javascript">
-    var uploadUrl = '{{ route('microblog.upload') }}';
+    var microblogs = {{ microblogs|raw }};
   </script>
 {% endblock %}
 
@@ -220,6 +220,5 @@
   {{ parent() }}
 
   <script src="{{ cdn('js/posting.js') }}"></script>
-  <script src="{{ cdn('js/microblog.js') }}"></script>
   <script src="{{ cdn('js/homepage.js') }}"></script>
 {% endblock %}

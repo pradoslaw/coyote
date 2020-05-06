@@ -7,6 +7,7 @@ use Coyote\Microblog;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface;
 use Coyote\Repositories\Contracts\SubscribableInterface;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Class MicroblogRepository
@@ -20,12 +21,12 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
         return $this->applyCriteria(function () use ($perPage) {
-            return $this->model->whereNull('parent_id')->paginate($perPage);
+            return $this->model->whereNull('parent_id')->with('user')->withCount('comments')->paginate($perPage);
         });
     }
 
@@ -37,16 +38,16 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
      * @return mixed
      * @throws
      */
-    public function take($limit)
+    public function getPopular($limit)
     {
         $this->applyCriteria();
 
         $result = $this
             ->model
             ->whereNull('parent_id')
-            ->where(function (Builder $builder) {
-                return $builder->where('votes', '>=', 2)->orWhere('bonus', '>', 0);
-            })
+            ->with('user')
+            ->withCount('comments')
+            ->where('votes', '>=', 2)
             ->take($limit)
             ->get();
 
@@ -58,6 +59,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     /**
      * Pobiera $limit najpopularniejszych wpisow z mikrobloga z ostatniego tygodnia
      *
+     * @deprecated
      * @param $limit
      * @return mixed
      */
@@ -77,15 +79,36 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     }
 
     /**
-     * Pobranie komentarzy od danego wpisu w mikroblogu
-     *
-     * @param array $parentId
-     * @return MicroblogRepository
+     * @inheritDoc
      */
     public function getComments($parentId)
     {
         return $this->applyCriteria(function () use ($parentId) {
-            return $this->model->whereIn('parent_id', $parentId)->orderBy('id')->get();
+            return $this->model->where('parent_id', $parentId)->with('user')->orderBy('id')->get();
+        });
+    }
+
+    /**
+     * @param int[] $parentIds
+     * @return MicroblogRepository
+     */
+    public function getTopComments($parentIds)
+    {
+        return $this->applyCriteria(function () use ($parentIds) {
+            return $this
+                ->model
+                ->with('user')
+                ->withTrashed()
+                ->fromSub(function ($builder) use ($parentIds) {
+                    return $builder
+                        ->selectRaw('*, row_number() OVER (PARTITION BY parent_id ORDER BY id DESC)')
+                        ->from('microblogs')
+                        ->whereIn('parent_id', $parentIds)
+                        ->whereNull('deleted_at');
+                }, 'microblogs')
+                ->whereIn('microblogs.row_number', [1, 2])
+                ->orderBy('microblogs.id')
+                ->get();
         });
     }
 

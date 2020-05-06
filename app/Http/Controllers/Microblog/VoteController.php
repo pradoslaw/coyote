@@ -23,7 +23,7 @@ class VoteController extends Controller
     /**
      * @param \Coyote\Microblog $microblog
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return int
      * @throws \Exception
      */
     public function post($microblog, Request $request)
@@ -75,21 +75,20 @@ class VoteController extends Controller
             $microblog->user->notify(new VotedNotification($vote));
         }
 
-        return response()->json(['count' => $microblog->voters()->count()]);
+        return $microblog->voters()->count();
     }
 
     /**
      * @param \Coyote\Microblog $microblog
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return string
      */
     public function voters($microblog)
     {
-        return response(
+        return
             $microblog->voters()
                 ->join('users', 'users.id', '=', 'user_id')
                 ->get(['users.name'])
                 ->pluck('name')
-                ->implode("\n")
-        );
+                ->toJson();
     }
 }

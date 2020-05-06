@@ -1,4 +1,26 @@
 import PerfectScrollbar from 'perfect-scrollbar';
+import Vue from "vue";
+import VueNotifications from "vue-notification";
+import VueMicroblog from "../components/microblog/microblog";
+import store from "../store";
+import {mapGetters} from "vuex";
+
+Vue.use(VueNotifications, {componentName: 'vue-notifications'});
+
+new Vue({
+  el: '#js-microblog',
+  delimiters: ['${', '}'],
+  components: { 'vue-microblog': VueMicroblog },
+  store,
+  created() {
+    store.commit('microblogs/init', { pagination: { data: window.microblogs } });
+  },
+  computed: {
+    ...mapGetters('microblogs', ['microblogs']),
+
+
+  }
+});
 
 $(function () {
     new PerfectScrollbar(document.getElementById('stream'));

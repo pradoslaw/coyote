@@ -8,6 +8,7 @@ import notifications from './modules/notifications';
 import forums from './modules/forums';
 import topics from './modules/topics';
 import user from './modules/user';
+import microblogs from './modules/microblogs';
 
 Vue.use(Vuex);
 
@@ -20,6 +21,7 @@ export default new Vuex.Store({
     notifications,
     forums,
     topics,
-    user
+    user,
+    microblogs
   }
 });

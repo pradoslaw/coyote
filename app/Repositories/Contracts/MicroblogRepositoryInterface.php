@@ -2,14 +2,11 @@
 
 namespace Coyote\Repositories\Contracts;
 
+use Coyote\Microblog;
+use Coyote\Repositories\Eloquent\MicroblogRepository;
+
 interface MicroblogRepositoryInterface extends RepositoryInterface
 {
-    /**
-     * @param integer $perPage
-     * @return \Illuminate\Pagination\LengthAwarePaginator
-     */
-    public function paginate($perPage = 10);
-
     /**
      * Pobierz X ostatnich wpisow z mikrobloga przy czym sortowane sa one wedlug oceny. Metoda
      * ta jest wykorzystywana na stronie glownej serwisu
@@ -17,7 +14,7 @@ interface MicroblogRepositoryInterface extends RepositoryInterface
      * @param int $limit
      * @return mixed
      */
-    public function take($limit);
+    public function getPopular($limit);
 
     /**
      * Pobiera $limit najpopularniejszych wpisow z mikrobloga z ostatniego tygodnia
@@ -30,10 +27,16 @@ interface MicroblogRepositoryInterface extends RepositoryInterface
     /**
      * Pobranie komentarzy od danego wpisu w mikroblogu
      *
-     * @param array $parentId
-     * @return mixed
+     * @param int $parentId
+     * @return Microblog[]
      */
-    public function getComments($parentId);
+    public function getComments(int $parentId);
+
+    /**
+     * @param int[] $parentIds
+     * @return Microblog[]
+     */
+    public function getTopComments($parentIds);
 
     /**
      * Pobiera najpopularniejsze tagi w mikroblogach

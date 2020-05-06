@@ -102,7 +102,7 @@ module.exports = {
   entry: {
     app: './js/app.js',
     posting: './js/posting.js',
-    microblog: ['./js/pages/microblog.js'],
+    // microblog: ['./js/pages/microblog.js'],
     // microblog: ['./js/pages/microblog.js', './sass/pages/microblog.scss'],
     forum: ['./js/pages/forum.js'],
     // forum: ['./js/pages/forum.js', './sass/pages/forum.scss'],
@@ -188,7 +188,7 @@ module.exports = {
       },
       styles: {
         format: 'fragment',
-        filename: path.join(__dirname, 'sass/components/_sprites.scss')
+        filename: path.join(__dirname, 'resources/sass/components/_sprites.scss')
       }
     }),
 

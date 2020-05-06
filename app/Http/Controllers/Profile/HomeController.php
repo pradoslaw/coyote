@@ -5,14 +5,13 @@ namespace Coyote\Http\Controllers\Profile;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Controllers\User\UserMenuTrait;
 use Coyote\Http\Forms\User\SkillsForm;
+use Coyote\Http\Resources\Api\MicroblogResource;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface as ReputationRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
-use Coyote\Repositories\Criteria\Microblog\LoadComments;
-use Coyote\Repositories\Criteria\Microblog\OnlyMine;
-use Coyote\Repositories\Criteria\Microblog\OrderById;
 use Coyote\Repositories\Eloquent\MicroblogRepository;
+use Coyote\Services\Microblogs\Builder;
 use Coyote\User;
 use Illuminate\Http\Request;
 
@@ -140,18 +139,14 @@ class HomeController extends Controller
      */
     private function microblog(User $user)
     {
-        $this->microblog->resetCriteria();
+        /** @var Builder $builder */
+        $builder = app(Builder::class);
 
-        $this->microblog->pushCriteria(new LoadComments($this->userId));
-        $this->microblog->pushCriteria(new OrderById());
-        $this->microblog->pushCriteria(new OnlyMine($user->id));
-
-        $microblogs = $this->microblog->paginate(10);
+        $microblogs = $builder->forUser($this->auth)->orderById()->onlyMine()->paginate();
 
         return view('profile.partials.microblog', [
             'user'          => $user,
-            'microblogs'    => $microblogs->items(),
-            'pagination'    => $microblogs->render()
+            'pagination'    => MicroblogResource::collection($microblogs)->response()->getContent()
         ]);
     }
 }

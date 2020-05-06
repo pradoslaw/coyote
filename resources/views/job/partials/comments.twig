@@ -16,19 +16,18 @@
             {{ form_open({'v-on:submit.prevent': 'submitForm', url: route('job.comment', {job: job.id}), method: 'post', ref: 'submitForm'}) }}
             <div class="form-group">
               <vue-prompt source="{{ route('user.prompt') }}">
-                <textarea-autosize
+                <textarea
+                  v-autosize
                   placeholder="Zadaj pytanie"
                   name="text"
                   class="form-control"
                   ref="textarea"
                   v-model="defaultText"
-                  :min-height="40"
-                  :max-height="350"
-                  @focus.native.once="textFocused = true"
-                  @keydown.native.ctrl.enter="submitForm"
+                  @focus.once="textFocused = true"
+                  @keydown.ctrl.enter="submitForm"
                   rows="1"
                   tabindex="1"
-                ></textarea-autosize>
+                ></textarea>
               </vue-prompt>
             </div>
 

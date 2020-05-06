@@ -45,51 +45,16 @@ input[placeholder] {
   text-overflow: ellipsis;
 }
 
-#microblog {
-  .btn-thumbs,
-  .btn-reply,
-  .btn-subscribe {
-    padding: 2px 7px 2px 25px;
-    color: $gray-light;
-    position: relative;
+.highlight-flash {
+  animation: flash 5s ease-in-out;
+}
 
-    &:before {
-      font-family: 'Font Awesome 5 Free';
-      position: absolute;
-      left: 5px;
-      color: $text-color;
-    }
-
-    &:hover {
-      border: 1px solid $border-color;
-      @include gradient-y(#fff, $gray-lighter);
-    }
+@keyframes flash {
+  90% {
+    background-color: #fff;
   }
-
-  .btn-thumbs:before {
-    content: fa-content($fa-var-thumbs-up);
-  }
-
-  .btn-subscribe:before {
-    content: fa-content($fa-var-bell);
-    font-weight: 400;
-  }
-
-  .btn-reply:before {
-    content: fa-content($fa-var-comment);
-    font-weight: 400;
-  }
-
-  .btn-thumbs.thumbs-on:before {
-    color: $brand-primary;
-    content: $fa-var-thumbs-up;
-    font-weight: 900;
-  }
-
-  .subscribe-on:before {
-    color: $brand-primary;
-    content: fa-content($fa-var-bell);
-    font-weight: 900;
+  from {
+    background-color: $unread-bg;
   }
 }
 
@@ -103,15 +68,20 @@ input[placeholder] {
     }
   }
 
-  .media {
-    overflow: visible;
+  .btn-thumbs,
+  .btn-reply,
+  .btn-subscribe {
+    padding: 2px 7px;
+    color: $gray-light;
+    position: relative;
+
+    &:hover {
+      border: 1px solid $border-color;
+      @include gradient-y(#fff, $gray-lighter);
+    }
   }
 
-  // Minimum height is 32px just like in <input> fields. Bootstrap sets height: auto to the textarea
-  // We need to set minimum height for autogrow plugin.
   textarea {
-    min-height: 32px;
-    height: 32px; // for firefox
     resize: none;
 
     // we need padding-right because of submit button next to textarea comment form
@@ -124,6 +94,12 @@ input[placeholder] {
   overflow: hidden;
   position: relative;
 
+  p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.break-word {
   @include break-word;
   @include link-color-darker;
 
@@ -131,40 +107,33 @@ input[placeholder] {
   img:not(.img-smile) {
     @include img-fluid();
   }
-
-  > .thumbnails {
-    margin-top: 20px;
-  }
-
-  p:last-child {
-    margin-bottom: 0;
-  }
 }
 
-.microblog-gradient {
+.show-more {
   position: absolute;
   bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 30px;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0, white 100%);
+  z-index: 100;
+  display: none;
 }
 
-.read-more {
-  color: $gray;
+.microblog-wrap {
+  max-height: 300px;
+  overflow: hidden;
   position: relative;
-  padding-left: 20px;
-  margin-bottom: 20px;
-  display: inline-block;
+  margin-bottom: 1rem;
 
-  &:hover {
-    color: inherit;
+  &:after {
+    position: absolute;
+    content: '';
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0, white 65%);
   }
 
-  &:before {
-    @include font-awesome($fa-var-arrow-alt-circle-right);
-    font-weight: 400;
-    left: 0;
+  .show-more {
+    display: block;
   }
 }
 
@@ -172,72 +141,13 @@ input[placeholder] {
 // -------------------------
 
 .microblog-comments {
+  margin-top: 10px;
+
   // One comment
   .media {
-    border-top: 1px solid lighten($border-color, 5%);
+    border-top: 1px solid $gray-200;
     padding: 10px 5px 6px 5px;
     margin-top: 5px;
-
-    // Media form for microblog's comment
-    // ------------------------------------
-
-    &.media-darker {
-      background-color: darken($body-bg, 4%);
-      border-top: none;
-      border-radius: $border-radius-small;
-    }
-
-    .dropdown button {
-      border: none;
-    }
-
-    .media-object {
-      border: 1px solid $border-color;
-      border-radius: $border-radius-base;
-      background-color: #fff;
-      padding: 4px;
-    }
-
-    .comment-body {
-      @include break-word;
-
-      width: calc(100% - 22px);
-
-      img:not(.img-smile) {
-        display: block;
-        max-width: 100%;
-      }
-    }
-
-    // Comment text
-    // ----------------
-
-    .media-content {
-      font-size: 12px;
-      display: inline;
-
-      @include link-color-darker;
-
-      // markdown moze "produkowac" <p> w tresci komentarza. pierwsza linia komentarza musi byc na rowni
-      // z loginem stad takie dziwne zabiegi majace na celu zachowanie odstepow od paragrafow z jednoczesnym
-      // wyrownaniem pierwszego <p> wzgledem loginu
-      p:first-child {
-        display: inline;
-      }
-
-      p:nth-child(2) {
-        margin-top: 9px;
-      }
-
-      p:last-child {
-        margin-bottom: 0;
-      }
-    }
-
-    // set visible for dropdown in media-body
-    .media-body {
-      overflow: visible;
-    }
 
     // User name
     // ---------------------
@@ -251,20 +161,36 @@ input[placeholder] {
     }
   }
 
-  // Submit button and textarea within .write-content class
-  // -------------------------------------------------------
+  // Comment text
+  // ----------------
 
-  .write-content {
-    position: relative;
+  .comment-text {
+    font-size: 12px;
+    display: inline;
 
-    > .btn-submit {
-      color: $gray;
-      position: absolute;
-      bottom: 2px;
-      right: 2px;
-      background: none;
-      font-size: 15px;
+    // markdown moze "produkowac" <p> w tresci komentarza. pierwsza linia komentarza musi byc na rowni
+    // z loginem stad takie dziwne zabiegi majace na celu zachowanie odstepow od paragrafow z jednoczesnym
+    // wyrownaniem pierwszego <p> wzgledem loginu
+    p:first-child {
+      display: inline;
     }
+
+    p:nth-child(2) {
+      margin-top: 9px;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .btn-comment-submit {
+    color: $gray;
+    position: absolute;
+    bottom: 0;
+    right: 2px;
+    background: none;
+    font-size: 15px;
   }
 
   .show-all {
@@ -273,13 +199,6 @@ input[placeholder] {
     a {
       color: $gray;
       font-size: 12px;
-      padding-left: 15px;
-      position: relative;
-
-      &:before {
-        @include font-awesome($fa-var-comments);
-        left: 0;
-      }
 
       &:hover,
       &:focus {
@@ -302,60 +221,6 @@ input[placeholder] {
       outline: none;
     }
   }
-
-  .submit-area {
-    border-top: 1px solid $border-color;
-    padding-top: 11px;
-  }
-
-  .img-thumbnail {
-    border: none;
-  }
-
-  .btn-flush,
-  .spinner {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    vertical-align: middle;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .btn-flush {
-    display: none;
-    background-color: #000;
-    opacity: 0.5;
-    color: #fff;
-  }
-
-  .spinner {
-    color: $gray;
-    display: flex;
-  }
-
-  .thumbnail {
-    position: relative;
-
-    &:hover {
-      .btn-flush {
-        display: flex;
-      }
-    }
-
-    img {
-      height: 81px;
-    }
-  }
-
-  // Komunikat informujacy o tym, ze obslugujemy markdown
-  // --------------------------------------------------------------------------
-
-  .alert-popover {
-    top: -1px;
-    left: 60px;
-  }
 }
+
+
