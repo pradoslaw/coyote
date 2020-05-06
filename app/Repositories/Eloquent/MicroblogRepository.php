@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Coyote\Microblog;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface;
 use Coyote\Repositories\Contracts\SubscribableInterface;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * Class MicroblogRepository
