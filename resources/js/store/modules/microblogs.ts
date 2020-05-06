@@ -16,7 +16,11 @@ const getters = {
 }
 
 Array.prototype.keyBy = function (key: string) {
-  return this.reduce((data, item) => (data[item[key]] = item, data), {});
+  return this.reduce((data, item) => {
+    data[item[key]] = item;
+
+    return data;
+  }, {});
 };
 
 function merge(old, cur) {
