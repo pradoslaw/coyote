@@ -40,11 +40,6 @@
   }
 }
 
-
-input[placeholder] {
-  text-overflow: ellipsis;
-}
-
 .highlight-flash {
   animation: flash 5s ease-in-out;
 }
@@ -59,6 +54,12 @@ input[placeholder] {
 }
 
 .microblog {
+  @include media-breakpoint-down(md) {
+    textarea::placeholder {
+      color: transparent;
+    }
+  }
+
   .media-heading {
     margin-bottom: 2px;
 
