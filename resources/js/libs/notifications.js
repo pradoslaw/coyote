@@ -1,4 +1,4 @@
-class DesktopNotifications {
+export default class DesktopNotifications {
   static requestPermission() {
     if (this._isSupported() && Notification.permission === 'default') {
       Notification.requestPermission(function (status) {
@@ -33,4 +33,3 @@ class DesktopNotifications {
   }
 }
 
-module.exports = DesktopNotifications;

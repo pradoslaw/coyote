@@ -1,22 +1,3 @@
-// required for IE11
-import 'core-js/features/promise';
-// JS's startsWith() -- support for IE and old Opera
-import 'core-js/features/string/starts-with';
-// JS's findIndex() -- support for IE and old Opera
-import 'core-js/features/array/find-index';
-import 'core-js/features/array/find';
-// JS's includes -- support for old browsers
-import 'core-js/features/array/includes';
-// Object.assign -- support for old browsers
-import 'core-js/features/object/assign';
-// array forEach -- support for old browsers
-import 'core-js/features/array/for-each';
-// array isArray -- support for old browser
-import 'core-js/features/array/is-array';
-import 'core-js/features/array/from';
-// vue.js Object.values
-import 'core-js/features/object/values';
-
 import './store';
 // import './components/dropdown.js';
 import './components/scrolltop.js';
