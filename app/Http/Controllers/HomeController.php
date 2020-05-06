@@ -126,7 +126,7 @@ class HomeController extends Controller
     }
 
     /**
-     * @return mixed
+     * @return string|false
      */
     private function getMicroblogs()
     {
