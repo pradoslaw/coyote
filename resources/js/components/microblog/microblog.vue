@@ -73,7 +73,7 @@
               <div class="media bg-light rounded border-top-0">
                 <div class="mr-2">
                   <a v-profile="user.id">
-                    <vue-avatar v-bind="user" class="i-35 d-sm-block img-thumbnail"></vue-avatar>
+                    <vue-avatar :photo="user.photo" :name="user.name" class="i-35 d-block img-thumbnail"></vue-avatar>
                   </a>
                 </div>
                 <div class="media-body position-relative">

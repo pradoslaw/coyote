@@ -8,10 +8,8 @@
 
 <script lang="js">
   import Vue from 'vue';
-  import { default as mixins } from './mixins/user';
 
   export default Vue.extend({
-    mixins: [ mixins ],
     props: {
       name: {
         type: String
@@ -20,7 +18,6 @@
         type: Number
       },
       photo: String
-
     }
   })
 </script>

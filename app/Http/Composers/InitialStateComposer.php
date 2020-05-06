@@ -85,7 +85,8 @@ class InitialStateComposer
                 'token'                 => $this->getJWtToken($user),
                 'notifications_unread'  => $user->notifications_unread,
                 'pm_unread'             => $user->pm_unread,
-                'created_at'            => $user->created_at->toIso8601String()
+                'created_at'            => $user->created_at->toIso8601String(),
+                'photo'                 => (string) $user->photo->url()
             ]
         ];
     }

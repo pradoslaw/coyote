@@ -2,7 +2,7 @@
   <div :id="`comment-${comment.id}`" class="media">
     <div class="mr-2">
       <a v-profile="comment.user.id">
-        <vue-avatar v-bind="comment.user" class="i-35 d-sm-block img-thumbnail"></vue-avatar>
+        <vue-avatar v-bind="comment.user" class="i-35 d-block img-thumbnail"></vue-avatar>
       </a>
     </div>
 
@@ -20,7 +20,7 @@
             </a>
           </li>
           <li class="list-inline-item">
-            <a @click="vote(comment)" :class="{'thumbs-on': comment.is_voted}" href="javascript:" class="text-muted btn-sm-thumbs" data-toggle="tooltip" data-placement="top">
+            <a @click="vote(comment)" :class="{'thumbs-on': comment.is_voted}" href="javascript:" class="text-muted btn-sm-thumbs">
               {{ comment.votes }} {{ comment.votes | declination(['głos', 'głosy', 'głosów']) }}
             </a>
           </li>
