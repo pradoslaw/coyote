@@ -239,12 +239,35 @@ class CreateIndexCommand extends Command
                                     ]
                                 ]
                             ],
+//                            "posts" => [
+//                                "properties" => [
+//                                    "text" => [
+//                                        "type" => "text",
+//                                        "analyzer" => "stopwords_analyzer"
+//                                    ]
+//                                ]
+//                            ],
                             "posts" => [
+                                "type" => "nested",
                                 "properties" => [
                                     "text" => [
                                         "type" => "text",
                                         "analyzer" => "stopwords_analyzer"
+                                    ],
+                                    "ip" => [
+                                        "type" => "ip"
                                     ]
+//                                    "city" => [
+//                                        "type" => "text",
+//                                        "analyzer" => "keyword_asciifolding_analyzer",
+//                                        "fields" => [
+//                                            // aggregate city by this field.
+//                                            "original" => ["type" => "text", "analyzer" => "keyword_analyzer", "fielddata" => true]
+//                                        ]
+//                                    ],
+//                                    "coordinates" => [
+//                                        "type" => "geo_point"
+//                                    ]
                                 ]
                             ],
                             "subject" => [
