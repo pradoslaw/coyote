@@ -82,7 +82,7 @@ class HomeController extends Controller
     {
         $this->breadcrumb->push('Moje wpisy', route('microblog.mine'));
 
-        $this->builder->onlyMine();
+        $this->builder->forUser($this->auth)->onlyMine();
 
         return $this->index();
     }
