@@ -90,7 +90,7 @@ class Microblog extends Model
     public function getScore()
     {
         $timestamp = $this->created_at ? strtotime($this->created_at) : time();
-        $log = ($this->votes || $this->bonus) ? log((int) $this->votes + (int) $this->bonus, 2) : 0;
+        $log = $this->votes ? log((int) $this->votes, 2) : 0;
 
         // magia dzieje sie tutaj :) ustalanie "mocy" danego wpisu. na tej podstawie wyswietlane
         // sa wpisy na stronie glownej. liczba glosow swiadczy o ich popularnosci

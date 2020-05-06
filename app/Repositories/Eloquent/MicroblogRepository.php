@@ -47,7 +47,9 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
             ->whereNull('parent_id')
             ->with('user')
             ->withCount('comments')
-            ->where('votes', '>=', 2)
+            ->where(function (Builder $builder) {
+                return $builder->where('votes', '>=', 2)->orWhere('is_sponsored', true);
+            })
             ->take($limit)
             ->get();
 
