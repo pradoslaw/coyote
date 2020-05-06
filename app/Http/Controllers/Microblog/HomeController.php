@@ -39,7 +39,6 @@ class HomeController extends Controller
     }
 
     /**
-     * @param Builder $builder
      * @return \Illuminate\View\View
      */
     public function index()
