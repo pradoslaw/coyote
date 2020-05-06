@@ -19,6 +19,12 @@ Array.prototype.keyBy = function (key: string) {
   return this.reduce((data, item) => (data[item[key]] = item, data), {});
 };
 
+function merge(old, cur) {
+  let { text, html } = cur; // update only text and html version
+
+  return !old ? cur : {...old, ...{text, html}}
+}
+
 const mutations = {
   init(state, { pagination, microblog }) {
     if (pagination) {
@@ -37,7 +43,7 @@ const mutations = {
   },
 
   update(state, microblog: Microblog) {
-    Vue.set(state.data, microblog.id!, microblog)
+    Vue.set(state.data, microblog.id!, merge(state.data[microblog.id!], microblog))
   },
 
   delete(state, microblog: Microblog) {
@@ -51,7 +57,9 @@ const mutations = {
   },
 
   updateComment(state, microblog: Microblog) {
-    Vue.set(state.data[microblog.parent_id!].comments, microblog.id!, microblog);
+    const comments = state.data[microblog.parent_id!].comments;
+
+    Vue.set(comments, microblog.id!, merge(comments[microblog.id!], microblog));
   },
 
   addEmptyImage(state, microblog: Microblog) {
@@ -80,6 +88,10 @@ const mutations = {
       microblog.votes += 1;
     }
   },
+
+  setVoters(state, { microblog, voters }) {
+    Vue.set(state.data, microblog.id!, {...microblog, voters});
+  }
 };
 
 const actions = {
@@ -121,6 +133,10 @@ const actions = {
     axios.get(`/Mikroblogi/Comment/Show/${microblog.id}`).then(result => {
       microblog.comments = result.data;
     })
+  },
+
+  loadVoters({ commit }, microblog: Microblog) {
+    axios.get(`/Mikroblogi/Vote/${microblog.id}`).then(result => commit('setVoters', { microblog, voters: result.data }));
   }
 };
 

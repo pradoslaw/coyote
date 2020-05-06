@@ -42,7 +42,7 @@
 
           <vue-form v-if="isEditing" ref="form" :microblog="microblog" class="mt-2 mb-2" @cancel="isEditing = false" @save="isEditing = false"></vue-form>
 
-          <a @click="vote(microblog)" href="javascript:" class="btn btn-thumbs" data-toggle="tooltip" data-placement="top">
+          <a @click="vote(microblog)" @mouseenter.once="loadVoters(microblog)" :title="voters" href="javascript:" class="btn btn-thumbs">
             <i :class="{'fas text-primary': microblog.is_voted, 'far': !microblog.is_voted}" class="fa-fw fa-thumbs-up"></i>
 
             {{ microblog.votes }} {{ microblog.votes | declination(['głos', 'głosy', 'głosów']) }}
@@ -137,7 +137,7 @@
       ...mapGetters('user', ['isAuthorized']),
       ...mapState('user', {user: state => state})
     },
-    methods: mapActions('microblogs', ['loadComments', 'vote', 'subscribe'])
+    methods: mapActions('microblogs', ['loadComments', 'vote', 'subscribe', 'loadVoters'])
   })
   export default class VueMicroblog extends Mixins(MicroblogMixin) {
     private index: number | null = null;
@@ -187,6 +187,10 @@
       return this.microblog.media.map(media => {
         return {src: media.url, thumb: media.thumbnail};
       })
+    }
+
+    get voters() {
+      return this.microblog.voters ? this.microblog.voters.join(', ') : '';
     }
   }
 </script>

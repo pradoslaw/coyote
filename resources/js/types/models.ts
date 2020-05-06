@@ -36,6 +36,7 @@ export interface Microblog {
   media: Media[];
   editable?: boolean;
   comments_count?: number;
+  voters?: string[];
 }
 
 export interface Links {
