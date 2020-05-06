@@ -3,6 +3,7 @@
 **Ogólne**
 - Migracja do Bootstrap 4
 - Migracja do Babel 7.x
+- Migracja do Laravel 5.8
 
 **Wiadomości prywatne**
 - Łączenie wiadomości prywatnych napisanych w przeciągu 5 min
@@ -13,6 +14,9 @@
 
 **Panel użytkownika**
 - Usunięcie opcji personalizacji forum na rzecz konfiguracji bezpośrednio ze storny głównej forum
+
+**Mikroblogi**
+- Przepisanie do Vue.js
 
 ##2.3
 
