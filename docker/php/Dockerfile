@@ -35,7 +35,7 @@ RUN docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-png-dir
 
 RUN pecl install xdebug
 
-RUN curl --insecure https://getcomposer.org/composer.phar -o /usr/bin/composer && chmod +x /usr/bin/composer
+RUN curl --insecure https://getcomposer.org/composer-stable.phar -o /usr/bin/composer && chmod +x /usr/bin/composer
 
 RUN apk add tzdata
 RUN cp /usr/share/zoneinfo/Europe/Warsaw /etc/localtime
