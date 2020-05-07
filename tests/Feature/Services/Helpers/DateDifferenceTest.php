@@ -8,6 +8,8 @@ use PHPUnit\Framework\TestCase;
 
 class DateDifferenceTest extends TestCase
 {
+    use TestCaronLocale;
+
     /**
      * @test
      * @dataProvider dates
@@ -16,7 +18,6 @@ class DateDifferenceTest extends TestCase
     {
         // given
         Carbon::setTestNow($now);
-        Carbon::setLocale('pl');
 
         $difference = new DateDifference('%Y-%m-%d %H:%M', true);
 
