@@ -95,6 +95,11 @@ const mutations = {
 
   setVoters(state, { microblog, voters }) {
     Vue.set(state.data, microblog.id!, {...microblog, voters});
+  },
+
+  setComments(state, { microblog, comments }) {
+    microblog.comments = comments.keyBy('id');
+    microblog.comments_count = comments.length;
   }
 };
 
@@ -133,9 +138,9 @@ const actions = {
     });
   },
 
-  loadComments({  }, microblog: Microblog) {
+  loadComments({ commit }, microblog: Microblog) {
     axios.get(`/Mikroblogi/Comment/Show/${microblog.id}`).then(result => {
-      microblog.comments = result.data;
+      commit('setComments', { microblog, comments: result.data });
     })
   },
 
