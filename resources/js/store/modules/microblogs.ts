@@ -94,6 +94,7 @@ const mutations = {
   },
 
   setVoters(state, { microblog, voters }) {
+    // voters field does not exist in object, that's why it's not reactive. we must use set() method
     Vue.set(state.data, microblog.id!, {...microblog, voters});
   },
 

@@ -16,12 +16,12 @@ axios.interceptors.response.use(null, err => {
 
       message = errors[Object.keys(errors)[0]][0];
     }
-    else {
+    else if (err.response.data.message) {
       message = err.response.data.message;
     }
-  }
-  else if (err.request) {
-    message = err.request;
+    else {
+      message = err.response.statusText;
+    }
   }
   else {
     message = err.message;
