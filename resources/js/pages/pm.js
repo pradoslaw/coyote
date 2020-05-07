@@ -104,7 +104,7 @@ new Vue({
     },
 
     insertToTextarea(file) {
-      const textarea = new Textarea(this.$refs.textarea.$el);
+      const textarea = new Textarea(this.$refs.textarea);
 
       textarea.insertAtCaret('', '', '![' + file.name + '](' + file.url + ')');
       this.updateModel(textarea.textarea.value);
