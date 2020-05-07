@@ -60,10 +60,14 @@ const mutations = {
     state.data[microblog.parent_id!].comments_count -= 1;
   },
 
-  updateComment(state, microblog: Microblog) {
-    const comments = state.data[microblog.parent_id!].comments;
+  addComment(state, { parent, comment }) {
+    Vue.set(parent.comments, comment.id, comment);
 
-    Vue.set(comments, microblog.id!, merge(comments[microblog.id!], microblog));
+    parent.comments_count += 1;
+  },
+
+  updateComment(state, { parent, comment }) {
+    Vue.set(parent.comments, comment.id!, merge(parent.comments[comment.id], comment));
   },
 
   addEmptyImage(state, microblog: Microblog) {
@@ -101,6 +105,10 @@ const mutations = {
   setComments(state, { microblog, comments }) {
     microblog.comments = comments.keyBy('id');
     microblog.comments_count = comments.length;
+  },
+
+  setSubscribed(state, microblog: Microblog) {
+    microblog.is_subscribed = true;
   }
 };
 
@@ -129,12 +137,19 @@ const actions = {
     return axios.post(`/Mikroblogi/Edit/${microblog.id || ''}`, microblog).then(result => commit('update', result.data));
   },
 
-  saveComment({ state, commit }, microblog: Microblog) {
-    return axios.post(`/Mikroblogi/Comment/${microblog.id || ''}`, microblog).then(result => {
-      commit('updateComment', result.data.data);
+  saveComment({ state, commit, getters }, comment: Microblog) {
+    return axios.post(`/Mikroblogi/Comment/${comment.id || ''}`, comment).then(result => {
+      const parent = state.data[comment.parent_id!];
 
-      if (result.data.is_subscribed) {
-        state.data[result.data.data.parent_id].is_subscribed = true;
+      if (parent.comments[comment.id!]) {
+        commit('updateComment', { parent, comment: result.data.data });
+      }
+      else {
+        commit('addComment', { parent, comment: result.data.data});
+
+        if (result.data.is_subscribed) {
+          commit('setSubscribed', parent);
+        }
       }
     });
   },
