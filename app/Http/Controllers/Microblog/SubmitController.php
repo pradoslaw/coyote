@@ -147,6 +147,7 @@ class SubmitController extends Controller
 
         return response()->json([
             'url' => (string) $media->url(),
+            'thumbnail' => $media->url()->thumbnail('microblog'),
             'name' => $media->getFilename()
         ]);
     }
@@ -170,7 +171,8 @@ class SubmitController extends Controller
 
         return response()->json([
             'name' => $media->getFilename(),
-            'url' => (string) $media->url()
+            'url' => (string) $media->url(),
+            'thumbnail' => $media->url()->thumbnail('microblog')
         ]);
     }
 }
