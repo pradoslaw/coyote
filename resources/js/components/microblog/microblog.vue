@@ -31,7 +31,7 @@
                 :key="imageIndex"
                 class="col-6 col-md-3"
               >
-                <a @click="index = imageIndex" href="javascript:">
+                <a @click.prevent="index = imageIndex" :href="image.url">
                   <img class="img-thumbnail" :src="image.thumb">
                 </a>
               </div>
@@ -185,7 +185,7 @@
 
     get images() {
       return this.microblog.media.map(media => {
-        return {src: media.url, thumb: media.thumbnail};
+        return {src: media.url, thumb: media.thumbnail, url: media.url};
       })
     }
 
