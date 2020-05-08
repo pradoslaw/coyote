@@ -1,2 +1,2 @@
-* * * * * /usr/local/bin/php -d memory_limit=4G '/var/www/artisan' 'schedule:run' > /dev/stdout
+* * * * * /usr/local/bin/php -d memory_limit=4G '/var/www/artisan' 'schedule:run' #
 # empty line
