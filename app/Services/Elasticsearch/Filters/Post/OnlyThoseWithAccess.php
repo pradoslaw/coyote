@@ -35,7 +35,7 @@ class OnlyThoseWithAccess implements DslInterface
                 'should' => [
                     [
                         'terms' => [
-                            'forum_id' => $this->forumId
+                            'forum.id' => $this->forumId
                         ]
                     ],
                     [
@@ -43,7 +43,7 @@ class OnlyThoseWithAccess implements DslInterface
                             'must_not' => [
                                 [
                                     'exists' => [
-                                        'field' => 'forum_id'
+                                        'field' => 'forum.id'
                                     ]
                                 ]
                             ]
