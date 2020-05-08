@@ -1,5 +1,7 @@
 <?php
 
+use Coyote\Services\Helper\DateDifference;
+
 function docker_secret(string $name): Closure
 {
     return function () use ($name) {
@@ -145,20 +147,8 @@ function format_date($dateTime, $diffForHumans = true)
 {
     $format = auth()->check() ? auth()->user()->date_format : '%Y-%m-%d %H:%M';
 
-    $dateTime = carbon($dateTime);
-    $now = \Carbon\Carbon::now();
-
-    if (!$diffForHumans) {
-        return $dateTime->formatLocalized($format);
-    } elseif ($dateTime->diffInHours($now) < 1) {
-        return $dateTime->diffForHumans(null, true) . ' temu';
-    } elseif ($dateTime->isToday()) {
-        return 'dziś, ' . $dateTime->format('H:i');
-    } elseif ($dateTime->isYesterday()) {
-        return 'wczoraj, ' . $dateTime->format('H:i');
-    } else {
-        return $dateTime->formatLocalized($format);
-    }
+    $diff = new DateDifference($format, $diffForHumans);
+    return $diff->format(carbon($dateTime));
 }
 
 /**
