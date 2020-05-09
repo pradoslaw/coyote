@@ -1,4 +1,4 @@
-const state = window["__INITIAL_STATE"].user;
+const state = window["__INITIAL_STATE"]?.user || {};
 
 const getters = {
   isAuthorized: state => state.id !== undefined,
