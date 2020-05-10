@@ -1,6 +1,6 @@
 <template>
-  <li :class="{'open': isOpen}" v-on-clickaway="hideDropdown">
-    <a @click.prevent="loadMessages" href="/User/Pm" role="button" aria-haspopup="true" aria-expanded="false">
+  <li :class="{'open': isOpen}" v-on-clickaway="hideDropdown" class="nav-item">
+    <a @click.prevent="loadMessages" href="/User/Pm" class="nav-link" role="button" aria-haspopup="true" aria-expanded="false">
       <span v-show="count > 0" class="badge">{{ count }}</span>
 
       <i class="fas fa-envelope fa-fw"></i>

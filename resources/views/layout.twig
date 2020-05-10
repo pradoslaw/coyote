@@ -42,7 +42,7 @@
         {{ form_open({url: route('logout'), name: 'logout-form'}) }}
         {{ form_close() }}
 
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg {{ __dark_theme ? 'bg-dark navbar-dark' : 'bg-light navbar-light' }}">
 
         <div class="container-xxl d-flex w-100 flex-wrap">
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,9 +81,9 @@
           </div>
 
           {% if auth_check() %}
-            <ul id="nav-auth" class="nav-auth order-2"></ul>
+            <ul id="nav-auth" class="nav-auth navbar-nav order-2"></ul>
 
-            <div class="dropdown nav-avatar align-items-center order-2">
+            <div class="dropdown nav-avatar order-2">
               <a href="javascript:" class="dropdown-toggle img-thumbnail d-block" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="width: 35px">
                 <img src="{{ user_photo(user('photo')) }}" style="width: 100%">
               </a>

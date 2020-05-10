@@ -73,26 +73,20 @@ body.padding-top {
       display: none;
     }
   }
-
-  // there is no space between navbar and menu
-  .dropdown-menu {
-    margin: 0;
-  }
 }
 
 .navbar-nav {
+  .dropdown-menu {
+    top: 100%;
+    margin: 0; // there is no space between navbar and menu
+  }
+
   .dropdown:hover > .dropdown-menu {
     display: block;
   }
 }
 
-.navbar-header {
-  background: var(--header-navbar-bg);
 
-  float: none; // set menu to 100% of window width
-
-
-}
 
 // Glowne menu aplikacji. Po naprowadzeniu kursora myszy nad pozycja pokazujemy liste podmenu
 // ---------------------------------------------------------------------------------------
@@ -299,6 +293,8 @@ body.padding-top {
 
 .nav-avatar {
   margin-left: 20px;
+  display: flex;
+  align-items: center; // center image vertically
 
   a {
     color: $gray;
@@ -334,7 +330,7 @@ body.padding-top {
   > a {
     padding: 0 9px;
     display: block;
-    color: $gray-light;
+    //color: $gray-light;
     position: relative;
 
     i {
@@ -427,93 +423,93 @@ body.padding-top {
 
 // tymczasowy blok na "czarnej" skorki
 
-.navbar-dark {
-  .dropdown-menu:not(.dropdown-alerts):not(.dropdown-messages) {
-    background-color: $header-navbar-bg-color;
-    border-radius: 0 0 $border-radius-small $border-radius-small;
-    box-shadow: 0 2px 2px rgba(0,0,0,.2), inset 0 4px 10px rgba(0,0,0,0.15);
-    border: none;
-
-    .dropdown-item,
-    .btn-sign-out {
-      color: lighten($gray-light, 15%);
-
-      &:hover,
-      &:focus {
-        color: #CACACA;
-        background-color: #717171;
-      }
-    }
-
-    &:after, &:before {
-      border: none;
-    }
-  }
-
-  /////
-
-  .dropdown-divider {
-    border-top-color: $gray-light;
-  }
-
-  .mega-menu {
-    .mega-menu-title {
-      color: $gray-lighter;
-      border-bottom: none;
-      font-weight: 400;
-    }
-
-    .mega-menu-body {
-      border-right-color: #575757;
-    }
-  }
-
-  .nav-avatar {
-    .img-thumbnail {
-      background-color: #717171 !important;
-      border: none;
-    }
-  }
-
-  .nav-auth > li {
-    > a {
-      color: var(--header-color);
-
-      &:hover {
-        color: $brand-primary;
-        background: transparent;
-      }
-    }
-
-    &.open > a {
-      color: var(--header-navbar-bg);
-      background-color: #fafafa;
-    }
-  }
-
-  .dropdown-alerts, .dropdown-messages {
-    border-top: 0;
-
-    &:after, &:before {
-      border: none;
-    }
-  }
-
-  .nav-desktop > li > a {
-    font-weight: bold;
-  }
-
-  .search-bar-active {
-    input {
-      background-color: #fff !important;
-      color: $gray-700 !important;
-    }
-  }
-
-  input::placeholder {
-    color: inherit;
-  }
-}
+//.navbar-dark {
+//  .dropdown-menu:not(.dropdown-alerts):not(.dropdown-messages) {
+//    background-color: $header-navbar-bg-color;
+//    border-radius: 0 0 $border-radius-small $border-radius-small;
+//    box-shadow: 0 2px 2px rgba(0,0,0,.2), inset 0 4px 10px rgba(0,0,0,0.15);
+//    border: none;
+//
+//    .dropdown-item,
+//    .btn-sign-out {
+//      color: lighten($gray-light, 15%);
+//
+//      &:hover,
+//      &:focus {
+//        color: #CACACA;
+//        background-color: #717171;
+//      }
+//    }
+//
+//    &:after, &:before {
+//      border: none;
+//    }
+//  }
+//
+//  /////
+//
+//  .dropdown-divider {
+//    border-top-color: $gray-light;
+//  }
+//
+//  .mega-menu {
+//    .mega-menu-title {
+//      color: $gray-lighter;
+//      border-bottom: none;
+//      font-weight: 400;
+//    }
+//
+//    .mega-menu-body {
+//      border-right-color: #575757;
+//    }
+//  }
+//
+//  .nav-avatar {
+//    .img-thumbnail {
+//      background-color: #717171 !important;
+//      border: none;
+//    }
+//  }
+//
+//  .nav-auth > li {
+//    > a {
+//      color: var(--header-color);
+//
+//      &:hover {
+//        color: $brand-primary;
+//        background: transparent;
+//      }
+//    }
+//
+//    &.open > a {
+//      color: var(--header-navbar-bg);
+//      background-color: #fafafa;
+//    }
+//  }
+//
+//  .dropdown-alerts, .dropdown-messages {
+//    border-top: 0;
+//
+//    &:after, &:before {
+//      border: none;
+//    }
+//  }
+//
+//  .nav-desktop > li > a {
+//    font-weight: bold;
+//  }
+//
+//  .search-bar-active {
+//    input {
+//      background-color: #fff !important;
+//      color: $gray-700 !important;
+//    }
+//  }
+//
+//  input::placeholder {
+//    color: inherit;
+//  }
+//}
 
 .navbar-toggle .icon-bar {
   background-color: var(--header-color);
@@ -672,7 +668,7 @@ body.padding-top {
 /* Za malo miejsca w pionie, by wyswietlac przyklejony navbar */
 @include media-breakpoint-down(sm) {
   /* zostawiamy navbar na gorze strony */
-  .navbar-fixed-top {
+  .fixed-top {
     position: absolute;
   }
 
