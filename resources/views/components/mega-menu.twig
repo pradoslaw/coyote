@@ -1,15 +1,17 @@
-<div class="dropdown-menu left mega-menu">
-  {% for name, categories in sections %}
-    <div class="mega-menu-body">
-      <h6 class="mega-menu-title">{{ name }}</h6>
+<div class="dropdown-container">
+  <div class="dropdown-menu dropdown-menu-left left mega-menu">
+    {% for name, categories in sections %}
+      <div class="mega-menu-body">
+        <h6 class="mega-menu-title">{{ name }}</h6>
 
-      <ul class="list-unstyled">
-        {% for category in categories %}
-          <li>
-            <a href="{{ route('forum.category', [category.slug]) }}">{{ category.name }}</a>
-          </li>
-        {% endfor %}
-      </ul>
-    </div>
-  {% endfor %}
+        <ul class="list-unstyled">
+          {% for category in categories %}
+            <li>
+              <a href="{{ route('forum.category', [category.slug]) }}">{{ category.name }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endfor %}
+  </div>
 </div>

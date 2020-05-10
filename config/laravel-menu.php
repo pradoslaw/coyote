@@ -20,12 +20,13 @@ return [
         ]
     ],
     '__master_menu___' => [
-        'Forum' => ['route' => 'forum.home'],
-        'Mikroblogi' => ['route' => 'microblog.home'],
-        'Praca' => ['route' => 'job.home'],
-        'Pastebin' => ['route' => 'pastebin.show'],
+        'Forum' => ['route' => 'forum.home', 'class' => 'nav-item dropdown'],
+        'Mikroblogi' => ['route' => 'microblog.home', 'class' => 'nav-item'],
+        'Praca' => ['route' => 'job.home', 'class' => 'nav-item'],
+        'Pastebin' => ['route' => 'pastebin.show', 'class' => 'nav-item'],
         'Kompendium' => [
             'url' => 'Kategorie',
+            'class' => 'nav-item dropdown',
             'children' => [
                 'Delphi' => ['url' => 'Delphi'],
                 'C/C++' => ['url' => 'C'],

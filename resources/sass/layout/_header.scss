@@ -6,10 +6,6 @@ $header-height: 56px;
 body.padding-top {
   padding-top: $header-height;
 }
-//
-//.navbar-fixed-top .navbar-collapse {
-//  max-height: initial; // fit height to content in mobile menu
-//}
 
 :root {
   --header-navbar-bg: url('/img/background.png') repeat;
@@ -30,45 +26,64 @@ body.padding-top {
   --header-search-border: transparent;
 }
 
-.navbar-header {
-  background: var(--header-navbar-bg);
-  border-bottom: 1px solid lighten($border-color, 2%);
-  float: none; // set menu to 100% of window width
+// Gorny, zielony pasek wyswietlany na samej gorze ekranu
+// --------------------------------------------------------------
+.navbar-border-top {
+  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAJ0lEQVQIW2Ps3MD5n0+AlQEEPn34zcA4/QDffxADBEASmALIWkCqAPDNEnJoA/jxAAAAAElFTkSuQmCC');
+  border-bottom: 1px solid #888;
+  height: 5px;
+}
 
-  // Gorny, zielony pasek wyswietlany na samej gorze ekranu
-  // --------------------------------------------------------------
-  .navbar-border-top {
-    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAJ0lEQVQIW2Ps3MD5n0+AlQEEPn34zcA4/QDffxADBEASmALIWkCqAPDNEnJoA/jxAAAAAElFTkSuQmCC');
-    border-bottom: 1px solid #888;
-    height: 5px;
-  }
+.navbar-brand {
+  margin: 0; // no default margin
+}
+
+.navbar-toggler {
+  border: 0;
+  padding: $navbar-toggler-padding-y $navbar-toggler-padding-x $navbar-toggler-padding-y 0;
+  outline: none !important;
+}
+
+.navbar {
+  border-bottom: 1px solid lighten($border-color, 2%);
 
   .badge {
     position: absolute;
     background-color: #FF4A00;
     font-size: 10px;
-    //border: 1px solid #fff;
     border-radius: 5px;
     overflow: inherit;
     text-overflow: inherit;
     max-width: 100%;
     color: #fff;
+    top: -9px;
+    right: -1px;
   }
 
-  .badge.new {
-    padding: 2px 3px;
-    top: 4px;
-    right: -10px;
-    z-index: 1;
+  .dropdown-menu {
+    margin-top: -1px; // there is no space between navbar and menu
+  }
+}
 
-    @include media-breakpoint-down(sm) {
-      display: none;
+.navbar-nav {
+  .dropdown-container {
+    display: none;
+    padding-top: 5px;
+    position: absolute;
+    top: 100%;
+
+    .dropdown-menu {
+      display: block;
+      position: static;
+
+      &:after, &:before {
+        bottom: calc(100% - 5px);
+      }
     }
   }
 
-  // there is no space between navbar and menu
-  .dropdown-menu {
-    margin: 0;
+  .dropdown:hover > .dropdown-container {
+    display: block;
   }
 }
 
@@ -86,60 +101,6 @@ body.padding-top {
   &:focus {
     color: var(--header-hover-color);
     background-color: var(--header-active-bg);
-  }
-}
-
-.nav-desktop {
-  // temporary arrow
-  position: relative;
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-
-  > li {
-    display: inline-block;
-    position: relative;
-
-    // show dropdown menu on hover
-    &:hover .dropdown-menu {
-      display: block;
-      top: 100%;
-    }
-
-    > a {
-      @extend %menu-link;
-
-      padding: 16px 10px;
-    }
-  }
-
-  &:before {
-    position: absolute;
-    content: '';
-    top: -5px;
-    left: 135px;
-    width: 20px;
-    height: 29px;
-    background: url('/img/arrow.png') no-repeat;
-    z-index: 100;
-  }
-}
-
-.nav-mobile {
-  .dropdown-link {
-    @extend %menu-link;
-
-    padding: 5px 0;
-  }
-
-  .divider {
-    @include nav-divider(darken($gray-lighter, 10%));
-  }
-
-  .btn-sign-out {
-    &:hover {
-      text-decoration: underline;
-    }
   }
 }
 
@@ -215,11 +176,14 @@ body.padding-top {
 
 .nav-search {
   width: 100%;
+  align-items: center;
+  display: flex;
 
   .search-bar {
     display: flex;
     align-items: center;
     width: 100%;
+    height: 35px;
     position: relative;
     border-radius: 3px;
     padding: 5px;
@@ -274,6 +238,8 @@ body.padding-top {
 
 .nav-avatar {
   margin-left: 20px;
+  display: flex;
+  align-items: center; // center image vertically
 
   a {
     color: $gray;
@@ -295,29 +261,27 @@ body.padding-top {
 // Notifications and private messages button
 // ------------------------------------------
 .nav-auth {
-  margin:0;
+  display: flex;
+  margin-bottom: 0;
+  margin-left: auto; // align to the right
+  padding: 0; // no default padding
+
+  flex-direction: unset !important; // overwrite .navbar-nav setting to show link next to each other
 }
 
 .nav-auth > li {
   position: relative;
+  align-items: center; // align icons in center
+  display: flex;
 
   > a {
-    padding: 15px 9px;
+    padding: 0 9px !important; // overwrite .navbar-nav setting
     display: block;
-    color: $gray-light;
     position: relative;
+    outline: none;
 
     i {
       font-size: 14px;
-    }
-
-    > .badge {
-      top: 5px;
-      right: -1px;
-    }
-
-    @include media-breakpoint-down(sm) {
-      display: inline-block;
     }
   }
 
@@ -345,7 +309,9 @@ body.padding-top {
 
 .btn-login {
   color: var(--header-color);
+}
 
+.btn-login {
   &:hover, &:focus {
     color: $brand-primary;
   }
@@ -399,7 +365,7 @@ body.padding-top {
 
 .navbar-dark {
   .dropdown-menu:not(.dropdown-alerts):not(.dropdown-messages) {
-    background-color: $header-navbar-bg-color;
+    background-color: $dark;
     border-radius: 0 0 $border-radius-small $border-radius-small;
     box-shadow: 0 2px 2px rgba(0,0,0,.2), inset 0 4px 10px rgba(0,0,0,0.15);
     border: none;
@@ -445,32 +411,12 @@ body.padding-top {
     }
   }
 
-  .nav-auth > li {
-    > a {
-      color: var(--header-color);
-
-      &:hover {
-        color: $brand-primary;
-        background: transparent;
-      }
-    }
-
-    &.open > a {
-      color: var(--header-navbar-bg);
-      background-color: #fafafa;
-    }
-  }
-
   .dropdown-alerts, .dropdown-messages {
     border-top: 0;
 
     &:after, &:before {
       border: none;
     }
-  }
-
-  .nav-desktop > li > a {
-    font-weight: bold;
   }
 
   .search-bar-active {
@@ -483,6 +429,12 @@ body.padding-top {
   input::placeholder {
     color: inherit;
   }
+
+  .nav-link {
+    font-weight: bold;
+    font-family: Open Sans,Arial,sans-serif;
+    font-size: .81rem;
+  }
 }
 
 .navbar-toggle .icon-bar {
@@ -492,7 +444,6 @@ body.padding-top {
 ////////////////////////////////////////////////////////////////
 
 .dropdown-messages, .dropdown-alerts {
-  top: 100%;
   width: 420px;
   padding: 0;
   border-top-left-radius: 4px;
@@ -522,7 +473,7 @@ body.padding-top {
     background-color: transparent;
     border: 1px solid $border-color;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
-
+    top: 100%; // no space between menu on mobile devices
     left: 0;
     width: 100%;
     border-radius: 0;
@@ -642,7 +593,7 @@ body.padding-top {
 /* Za malo miejsca w pionie, by wyswietlac przyklejony navbar */
 @include media-breakpoint-down(sm) {
   /* zostawiamy navbar na gorze strony */
-  .navbar-fixed-top {
+  .fixed-top {
     position: absolute;
   }
 
