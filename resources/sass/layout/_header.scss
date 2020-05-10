@@ -6,10 +6,6 @@ $header-height: 56px;
 body.padding-top {
   padding-top: $header-height;
 }
-//
-//.navbar-fixed-top .navbar-collapse {
-//  max-height: initial; // fit height to content in mobile menu
-//}
 
 :root {
   --header-navbar-bg: url('/img/background.png') repeat;
@@ -73,15 +69,30 @@ body.padding-top {
       display: none;
     }
   }
+
+  .dropdown-menu {
+    margin-top: -1px; // there is no space between navbar and menu
+  }
 }
 
 .navbar-nav {
-  .dropdown-menu {
+  .dropdown-container {
+    display: none;
+    padding-top: 5px;
+    position: absolute;
     top: 100%;
-    margin: 0; // there is no space between navbar and menu
+
+    .dropdown-menu {
+      display: block;
+      position: static;
+
+      &:after, &:before {
+        bottom: calc(100% - 5px);
+      }
+    }
   }
 
-  .dropdown:hover > .dropdown-menu {
+  .dropdown:hover > .dropdown-container {
     display: block;
   }
 }
@@ -428,6 +439,12 @@ body.padding-top {
   input::placeholder {
     color: inherit;
   }
+
+  .nav-link {
+    font-weight: bold;
+    font-family: Open Sans,Arial,sans-serif;
+    font-size: .81rem;
+  }
 }
 
 .navbar-toggle .icon-bar {
@@ -437,7 +454,6 @@ body.padding-top {
 ////////////////////////////////////////////////////////////////
 
 .dropdown-messages, .dropdown-alerts {
-  top: 100%;
   width: 420px;
   padding: 0;
   border-top-left-radius: 4px;
@@ -467,7 +483,7 @@ body.padding-top {
     background-color: transparent;
     border: 1px solid $border-color;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
-
+    top: 100%; // no space between menu on mobile devices
     left: 0;
     width: 100%;
     border-radius: 0;

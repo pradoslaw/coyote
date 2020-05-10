@@ -45,7 +45,7 @@
         <nav class="navbar navbar-expand-lg {{ __dark_theme ? 'bg-dark navbar-dark' : 'bg-light navbar-light' }}">
 
         <div class="container-xxl d-flex w-100 flex-wrap">
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
             <span class="navbar-toggler-icon"></span>
           </button>
 
@@ -63,12 +63,12 @@
                   {{ item.afterHTML|raw }}
 
                   {% if item.hasChildren() %}
-                    <div class="dropdown-menu dropdown-menu-left">
-                      {% for children in item.children() %}
-
-                        <a class="dropdown-item" href="{{ children.url }}">{{ children.title }}</a>
-
-                      {% endfor %}
+                    <div class="dropdown-container">
+                      <div class="dropdown-menu dropdown-menu-left">
+                        {% for children in item.children() %}
+                          <a class="dropdown-item" href="{{ children.url }}">{{ children.title }}</a>
+                        {% endfor %}
+                      </div>
                     </div>
                   {% endif %}
                 </li>
