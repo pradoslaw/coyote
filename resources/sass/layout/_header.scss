@@ -45,22 +45,11 @@ body.padding-top {
 .navbar-toggler {
   border: 0;
   padding: $navbar-toggler-padding-y $navbar-toggler-padding-x $navbar-toggler-padding-y 0;
-  outline: none;
+  outline: none !important;
 }
 
-.navbar-nav {
-  .dropdown:hover>.dropdown-menu {
-    display: block;
-  }
-  //> li {
-  //  position: relative;
-  //}
-}
-
-.navbar-header {
-  background: var(--header-navbar-bg);
+.navbar {
   border-bottom: 1px solid lighten($border-color, 2%);
-  float: none; // set menu to 100% of window width
 
   .badge {
     position: absolute;
@@ -91,6 +80,20 @@ body.padding-top {
   }
 }
 
+.navbar-nav {
+  .dropdown:hover > .dropdown-menu {
+    display: block;
+  }
+}
+
+.navbar-header {
+  background: var(--header-navbar-bg);
+
+  float: none; // set menu to 100% of window width
+
+
+}
+
 // Glowne menu aplikacji. Po naprowadzeniu kursora myszy nad pozycja pokazujemy liste podmenu
 // ---------------------------------------------------------------------------------------
 
@@ -108,59 +111,59 @@ body.padding-top {
   }
 }
 
-.nav-desktop {
-  // temporary arrow
-  position: relative;
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
+//.nav-desktop {
+//  // temporary arrow
+//  position: relative;
+//  list-style-type: none;
+//  margin: 0;
+//  padding: 0;
+//
+//  > li {
+//    display: inline-block;
+//    position: relative;
+//
+//    // show dropdown menu on hover
+//    &:hover .dropdown-menu {
+//      display: block;
+//      top: 100%;
+//    }
+//
+//    > a {
+//      @extend %menu-link;
+//
+//      padding: 16px 10px;
+//    }
+//  }
+//
+//  &:before {
+//    position: absolute;
+//    content: '';
+//    top: -5px;
+//    left: 135px;
+//    width: 20px;
+//    height: 29px;
+//    background: url('/img/arrow.png') no-repeat;
+//    z-index: 100;
+//  }
+//}
 
-  > li {
-    display: inline-block;
-    position: relative;
-
-    // show dropdown menu on hover
-    &:hover .dropdown-menu {
-      display: block;
-      top: 100%;
-    }
-
-    > a {
-      @extend %menu-link;
-
-      padding: 16px 10px;
-    }
-  }
-
-  &:before {
-    position: absolute;
-    content: '';
-    top: -5px;
-    left: 135px;
-    width: 20px;
-    height: 29px;
-    background: url('/img/arrow.png') no-repeat;
-    z-index: 100;
-  }
-}
-
-.nav-mobile {
-  .dropdown-link {
-    @extend %menu-link;
-
-    padding: 5px 0;
-  }
-
-  .divider {
-    @include nav-divider(darken($gray-lighter, 10%));
-  }
-
-  .btn-sign-out {
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-}
+//.nav-mobile {
+//  .dropdown-link {
+//    @extend %menu-link;
+//
+//    padding: 5px 0;
+//  }
+//
+//  .divider {
+//    @include nav-divider(darken($gray-lighter, 10%));
+//  }
+//
+//  .btn-sign-out {
+//    &:hover {
+//      text-decoration: underline;
+//    }
+//  }
+//}
 
 .search-dropdown {
   position: absolute;

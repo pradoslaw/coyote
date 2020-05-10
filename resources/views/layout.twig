@@ -36,8 +36,13 @@
       {% import 'components.forms' as forms %}
       {% import 'components.widgets' as widgets %}
 
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        {#        <div class="navbar-border-top row"></div>#}
+      <header class="{{ auth_guest() or user('allow_sticky_header') ? ' fixed-top' }}">
+        <div class="navbar-border-top row"></div>
+
+        {{ form_open({url: route('logout'), name: 'logout-form'}) }}
+        {{ form_close() }}
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
         <div class="container-xxl d-flex w-100 flex-wrap">
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
@@ -107,17 +112,17 @@
               </div>
             </div>
           {% else %}
-            <a class="btn btn-sm btn-register d-none d-sm-inline-block" href="{{ route('register') }}"><i class="fas fa-sign-in"></i> Utwórz konto</a>
-            <a class="btn btn-sm btn-login d-none d-sm-inline-block" href="{{ route('login') }}">Logowanie</a>
+            <div class="form-inline order-2 ml-auto">
+              <a class="btn btn-sm btn-register" href="{{ route('register') }}"><i class="fas fa-sign-in"></i> Utwórz konto</a>
+              <a class="btn btn-sm btn-login" href="{{ route('login') }}">Logowanie</a>
+            </div>
           {% endif %}
         </div>
       </nav>
-
+      </header>
       {#      <header class="container-fluid navbar-header {{ auth_guest() or user('allow_sticky_header') ? ' fixed-top' }} {{ __dark_theme ? 'navbar-dark' }}">#}
       {#              <div class="navbar-border-top row"></div>#}
 
-      {#        {{ form_open({url: route('logout'), name: 'logout-form'}) }}#}
-      {#        {{ form_close() }}#}
 
       {#        <div class="container-xxl d-flex align-items-center flex-wrap flex-md-nowrap">#}
       {#          <a rel="home" class="navbar-brand" href="{{ route('home') }}" title="4programmers.net - Strona główna">#}
