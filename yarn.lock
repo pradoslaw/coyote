@@ -3824,10 +3824,10 @@ findup-sync@3.0.0:
     micromatch "^3.0.4"
     resolve-dir "^1.0.1"
 
-flatpickr@^2.6.3:
-  version "2.6.3"
-  resolved "https://registry.yarnpkg.com/flatpickr/-/flatpickr-2.6.3.tgz#457357532deb135f3da64b425bf4435737961564"
-  integrity sha1-RXNXUy3rE189pktCW/RDVzeWFWQ=
+flatpickr@^4.6.3:
+  version "4.6.3"
+  resolved "https://registry.yarnpkg.com/flatpickr/-/flatpickr-4.6.3.tgz#15a8b76b6e34e3a072861250503a5995b9d3bc60"
+  integrity sha512-007VucCkqNOMMb9ggRLNuJowwaJcyOh4sKAFcdGfahfGc7JQbf94zSzjdBq/wVyHWUEs5o3+idhFZ0wbZMRmVQ==
 
 flatten@^1.0.2:
   version "1.0.3"

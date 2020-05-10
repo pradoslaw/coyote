@@ -23,7 +23,7 @@
         "css-loader": "^2.1.0",
         "date-fns": "^2.9.0",
         "file-loader": "^4.3.0",
-        "flatpickr": "^2.6.3",
+        "flatpickr": "^4.6.3",
         "glob-all": "^3.1.0",
         "jquery-color-animation": "^1.5.1",
         "jquery-prettytextdiff": "^1.0.4",
