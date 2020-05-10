@@ -25,6 +25,8 @@ $input-border: #ccc;
 $secondary: #f6f6f6;
 
 $navbar-dark-color:  #eee;
+$navbar-dark-hover-color: $primary;
+$navbar-padding-y: .35rem;
 
 $font-family-sans-serif:      Arial, Verdana, Helvetica, sans-serif !default;
 
@@ -75,8 +77,6 @@ $link-color-darker:         darken($primary, 10%);
 // -------------------------------------------------------------------------------------
 
 $alt-link-hover-color:      #d7661c;
-
-$header-navbar-bg-color:    #454545;
 
 // kolor naglowka <h4> znajdujacego sie w elemencie .box (elementy sekcji)
 $box-header-color:          #646466;
