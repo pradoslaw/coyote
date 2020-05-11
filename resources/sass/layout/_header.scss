@@ -71,6 +71,7 @@ body.padding-top {
     padding-top: 5px;
     position: absolute;
     top: 100%;
+    z-index: 100;
 
     .dropdown-menu {
       display: block;
