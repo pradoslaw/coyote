@@ -17,6 +17,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property Microblog[] $comments
  * @property int $parent_id
  * @property MediaInterface[] $media
+ * @property int $comments_count
  */
 class MicroblogResource extends JsonResource
 {
@@ -44,6 +45,7 @@ class MicroblogResource extends JsonResource
                 'editable'      => $this->when($request->user(), function () use ($request) {
                     return $request->user()->can('update', $this->resource);
                 }),
+                'comments_count'=> $this->when($this->comments_count, $this->comments_count),
                 $this->mergeWhen(array_has($this->resource, ['is_voted', 'is_subscribed', 'comments_count']), function () {
                     return $this->resource->only(['is_voted', 'is_subscribed', 'comments_count']);
                 })
