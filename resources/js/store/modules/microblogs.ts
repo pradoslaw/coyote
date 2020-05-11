@@ -11,9 +11,12 @@ const state = {
 const getters = {
   // @ts-ignore
   microblogs: state => Object.values(state.data).sort((a, b) => a.id > b.id ? -1 : 1),
+  exists: state => (id: number) => id in state.data,
   currentPage: state => state.meta.current_page,
   totalPages: state => state.meta.last_page
 }
+
+type ParentChild = { parent: Microblog, comment: Microblog };
 
 Array.prototype.keyBy = function (key: string) {
   return this.reduce((data, item) => {
@@ -22,12 +25,6 @@ Array.prototype.keyBy = function (key: string) {
     return data;
   }, {});
 };
-
-function merge(old, cur) {
-  let { text, html } = cur; // update only text and html version
-
-  return !old ? cur : {...old, ...{text, html}}
-}
 
 const mutations = {
   init(state, { pagination, microblog }) {
@@ -46,28 +43,36 @@ const mutations = {
     }
   },
 
+  add(state, microblog: Microblog) {
+    Vue.set(state.data, microblog.id!, microblog);
+  },
+
   update(state, microblog: Microblog) {
-    Vue.set(state.data, microblog.id!, merge(state.data[microblog.id!], microblog))
+    let { text, html } = microblog; // update only text and html version
+
+    Vue.set(state.data, microblog.id!, {...state.data[microblog.id!], ...{text, html}})
   },
 
   delete(state, microblog: Microblog) {
     Vue.delete(state.data, microblog.id!);
   },
 
+  addComment(state, { parent, comment }: ParentChild) {
+    Vue.set(parent.comments, comment.id!, comment);
+
+    parent.comments_count! += 1;
+  },
+
+  updateComment(state, { parent, comment }) {
+    let { text, html } = comment; // update only text and html version
+
+    Vue.set(parent.comments, comment.id!, {...parent.comments[comment.id], ...{text, html}});
+  },
+
   deleteComment(state, microblog: Microblog) {
     Vue.delete(state.data[microblog.parent_id!].comments, microblog.id!);
 
     state.data[microblog.parent_id!].comments_count -= 1;
-  },
-
-  addComment(state, { parent, comment }) {
-    Vue.set(parent.comments, comment.id, comment);
-
-    parent.comments_count += 1;
-  },
-
-  updateComment(state, { parent, comment }) {
-    Vue.set(parent.comments, comment.id!, merge(parent.comments[comment.id], comment));
   },
 
   addEmptyImage(state, microblog: Microblog) {
@@ -133,8 +138,10 @@ const actions = {
     return axios.delete(`/Mikroblogi/Comment/Delete/${microblog.id}`).then(() => commit('deleteComment', microblog));
   },
 
-  save({ commit }, microblog: Microblog) {
-    return axios.post(`/Mikroblogi/Edit/${microblog.id || ''}`, microblog).then(result => commit('update', result.data));
+  save({ commit, getters }, microblog: Microblog) {
+    return axios.post(`/Mikroblogi/Edit/${microblog.id || ''}`, microblog).then(result => {
+      commit(getters.exists(result.data.id) ? 'update' : 'add', result.data)
+    });
   },
 
   saveComment({ state, commit, getters }, comment: Microblog) {
