@@ -25,31 +25,23 @@ $(function () {
         }
     };
 
-    // if navbar class has fixed-top class, we must scroll to appropriate page element according to
-    // window.location.hash.
-    if ('onhashchange' in window) {
-        let header = $('.fixed-top');
+  let isMobile = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
 
-        if (header.length) {
-            $(window).bind('hashchange', () => {
-                let target = $(window.location.hash);
-
-                if (target.length) {
-                    $('html, body').animate({ scrollTop: target.offset().top - header.outerHeight() - 50 }, 0);
-                }
-            });
-        }
-
-        $(window).load(() => {
-            if (window.location.hash !== '') {
-                $(window).trigger('hashchange');
-            }
-        });
-    }
-
-    let isMobile = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
-
-    if (!isMobile && $('.fixed-top').length === 1) {
-        $(window).scroll(handler);
-    }
+  if (!isMobile && $('.fixed-top').length === 1) {
+    $(window).scroll(handler);
+  }
 });
+
+function adjustHashOffset() {
+  window.scrollTo(window.scrollX, window.scrollY - 58);
+}
+
+if (document.getElementsByClassName('fixed-top').length) {
+  window.addEventListener('hashchange', adjustHashOffset);
+
+  window.addEventListener('load', () => {
+    if (window.location.hash) {
+      adjustHashOffset();
+    }
+  });
+}
