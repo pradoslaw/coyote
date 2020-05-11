@@ -4,6 +4,7 @@ namespace Coyote\Http\Resources\Elasticsearch;
 
 /**
  * @property int $id
+ * @property int $user_id
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  * @property string $html
@@ -22,7 +23,9 @@ class MicroblogResource extends ElasticsearchResource
             'id'            => $this->id,
             'created_at'    => $this->created_at->toIso8601String(),
             'updated_at'    => $this->updated_at->toIso8601String(),
-            'text'          => strip_tags($this->html)
+            'decay_date'    => $this->created_at->toIso8601String(),
+            'text'          => strip_tags($this->html),
+            'user_id'       => $this->user_id
         ];
     }
 }
