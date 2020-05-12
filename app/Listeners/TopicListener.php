@@ -2,6 +2,10 @@
 
 namespace Coyote\Listeners;
 
+
+ini_set('memory_limit', '10G');
+set_time_limit(0);
+
 use Coyote\Events\TopicWasDeleted;
 use Coyote\Events\TopicWasMoved;
 use Coyote\Events\TopicWasSaved;
@@ -45,9 +49,9 @@ class TopicListener implements ShouldQueue
      */
     public function onTopicMove(TopicWasMoved $event)
     {
-        $event->topic->posts()->get()->each(function (Post $post) {
-            $this->crawler->index($post);
-        });
+//        $event->topic->posts()->get()->each(function (Post $post) {
+//            $this->crawler->index($post);
+//        });
 
         $this->crawler->index($event->topic);
     }
