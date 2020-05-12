@@ -41,6 +41,7 @@ class TopicResource extends ElasticsearchResource
             $only,
             [
                 'subject'               => htmlspecialchars($this->subject),
+                'created_at'            => $this->created_at->toIso8601String(),
                 'last_post_created_at'  => $this->last_post_created_at->toIso8601String(),
                 'decay_date'            => $this->last_post_created_at->toIso8601String(),
                 'url'                   => UrlBuilder::topic($this->resource->getModel()),
