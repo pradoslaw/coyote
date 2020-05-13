@@ -146,7 +146,7 @@
         text += startIndex === 1 ? ': ' : ' '; // add space at the end
 
         this.input.value = this.input.value.substr(0, startIndex) + text + this.input.value.substring(caretPosition);
-        this.input.focus();
+        this.input.focus(); // when user clics the item, we must restore focus on input
         this.input.dispatchEvent(new Event('change', {'bubbles': true}));
         this.items = []; // setting to empty array will trigger dropdown watcher
 
