@@ -67,7 +67,7 @@
               this.applySelected(item.name, startIndex, caretPosition);
             }
 
-            this.$refs.dropdown.hideDropdown();
+            this.$refs.dropdown.toggleDropdown(false);
 
             // item was selected so there is not point to look up for user name.
             return;

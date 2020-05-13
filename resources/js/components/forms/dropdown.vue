@@ -93,12 +93,6 @@
         }
       },
 
-      /** @deprecated */
-      hideDropdown() {
-        this.isDropdownVisible = false;
-        this.selectedIndex = -1;
-      },
-
       getSelected() {
         return this.selectedIndex > -1 ? this.items[this.selectedIndex] : null;
       }

@@ -14,7 +14,7 @@
       @focus="emitFocus"
       @keyup.up.prevent="$refs.dropdown.goUp"
       @keyup.down.prevent="$refs.dropdown.goDown"
-      @keyup.esc="$refs.dropdown.hideDropdown"
+      @keyup.esc="toggleDropdown(false)"
       @keydown.enter.prevent="changeItem"
     >
 
