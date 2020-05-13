@@ -78,7 +78,7 @@
           this.$emit('select', selected);
         }
 
-        this.hideDropdown();
+        this.toggleDropdown(false);
       },
 
       hoverItem(index) {
@@ -87,8 +87,13 @@
 
       toggleDropdown(flag) {
         this.isDropdownVisible = flag;
+
+        if (!flag) {
+          this.selectedIndex = -1;
+        }
       },
 
+      /** @deprecated */
       hideDropdown() {
         this.isDropdownVisible = false;
         this.selectedIndex = -1;

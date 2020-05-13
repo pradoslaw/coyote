@@ -54,6 +54,8 @@
         if (this.isDropdownVisible) {
           if (keyCode === SpecialKeys.ESC) {
             this.items = [];
+
+            return; // break the code
           } else if (keyCode === SpecialKeys.DOWN) {
             this.$refs.dropdown.goDown();
           } else if (keyCode === SpecialKeys.UP) {
@@ -93,16 +95,7 @@
       },
 
       getCaretPosition() {
-        if (this.input.selectionStart || this.input.selectionStart === 0) {
-          return this.input.selectionStart;
-        }
-        else if (document.selection) {
-          this.input.focus();
-          const sel = document.selection.createRange();
-
-          sel.moveStart('character', -this.input.value.length);
-          return (sel.text.length);
-        }
+        return this.input.selectionStart;
       },
 
       getUserNamePosition(caretPosition) {
@@ -137,7 +130,6 @@
         clearTimeout(this.timerId);
 
         this.timerId = setTimeout(() => axios.get(this.source, {params: {q: name}}).then(response => this.items = response.data.data), 200);
-
       },
 
       applySelected(text, startIndex, caretPosition) {
@@ -151,26 +143,16 @@
           text = '{' + text + '}';
         }
 
-        if (startIndex === 1) {
-          text += ': ';
-        }
+        text += startIndex === 1 ? ': ' : ' '; // add space at the end
 
         this.input.value = this.input.value.substr(0, startIndex) + text + this.input.value.substring(caretPosition);
         this.input.focus();
         this.input.dispatchEvent(new Event('change', {'bubbles': true}));
+        this.items = []; // setting to empty array will trigger dropdown watcher
 
         let caret = startIndex + text.length;
 
-        if (this.input.setSelectionRange) {
-          this.input.setSelectionRange(caret, caret);
-        } else if (this.input.createTextRange) {
-          let range = this.input.createTextRange();
-
-          range.collapse(true);
-          range.moveEnd('character', caret);
-          range.moveStart('character', caret);
-          range.select();
-        }
+        this.input.setSelectionRange(caret, caret);
       }
     }
   }
