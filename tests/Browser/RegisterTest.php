@@ -20,6 +20,7 @@ class RegisterTest extends DuskTestCase
                     ->type('email', $faker->email)
                     ->type('password', $password = $faker->password)
                     ->type('password_confirmation', $password)
+                    ->check('label[for="terms"]')
                     ->press('Utwórz konto')
                     ->assertPathIs('/User');
 
@@ -39,6 +40,7 @@ class RegisterTest extends DuskTestCase
                 ->type('email', $faker->email)
                 ->type('password', $password = $faker->password)
                 ->type('password_confirmation', $password)
+                ->check('label[for="terms"]')
                 ->press('Utwórz konto')
                 ->assertSee('Konto o podanej nazwie użytkownika już istnieje.');
         });

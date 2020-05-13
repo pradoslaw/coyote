@@ -27,13 +27,10 @@
               {{ form_row(form.password_confirmation) }}
               {{ form_row(form.email) }}
               {{ form_row(form.email_confirmation) }}
+              {{ form_row(form.terms, {label: '<small>Akceptuję <a href="/Regulamin">regulamin</a> oraz <a href="/Polityka_prywatności">politykę prywatności</a>.</small>'}) }}
               {{ form_row(form.submit) }}
 
               {{ form_end(form) }}
-
-              <p class="text-center text-muted margin-md-top margin-md-bottom">
-                <small>Tworząc konto akceptujesz nasz <a href="/Regulamin">Regulamin</a> oraz <a href="/Polityka_prywatności">Politykę prywatności</a>.</small>
-              </p>
             </div>
           </div>
         </div>

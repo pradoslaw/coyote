@@ -10,7 +10,7 @@
         {{ include(widget_path) }}
 
         <label for="{{ attr.id }}" class="custom-control-label">
-            {{ label }}
+            {{ label|raw }}
         </label>
     </div>
 {% endblock %}
