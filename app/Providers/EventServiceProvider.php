@@ -57,7 +57,6 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $subscribe = [
         PageListener::class,
-        PostListener::class,
         TopicListener::class,
         JobListener::class,
         MicroblogListener::class,
