@@ -49,10 +49,6 @@ class TopicListener implements ShouldQueue
      */
     public function onTopicMove(TopicWasMoved $event)
     {
-//        $event->topic->posts()->get()->each(function (Post $post) {
-//            $this->crawler->index($post);
-//        });
-
         $this->crawler->index($event->topic);
     }
 
@@ -64,10 +60,6 @@ class TopicListener implements ShouldQueue
     {
         $topic = $this->topic->withTrashed()->find($event->topic['id']);
         $this->crawler->delete($topic);
-
-        $topic->posts()->withTrashed()->get()->each(function (Post $post) {
-            $this->crawler->delete($post);
-        });
     }
 
     /**
