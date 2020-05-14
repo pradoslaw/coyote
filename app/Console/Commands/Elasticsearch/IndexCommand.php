@@ -88,7 +88,7 @@ class IndexCommand extends Command
         $model = $this->app->make($className);
         $this->line("Indexing $className ...");
 
-        $builder = $model->select()->orderBy('id', 'desc');
+        $builder = $model->select()->orderBy('id', 'asc');
         $objectName = get_class($model);
 
         // ugly hack for job offers...
