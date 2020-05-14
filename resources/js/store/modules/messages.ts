@@ -47,7 +47,10 @@ const mutations = {
   },
 
   mark(state, message) {
-    message.read_at = new Date();
+    const date = new Date();
+    date.setSeconds(date.getSeconds() - 1); // subtract one seconds so we can display "1 seconds ago" instade of "0 seconds ago"
+
+    message.read_at = date;
   },
 };
 
