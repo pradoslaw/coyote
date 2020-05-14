@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\User;
 
 use Coyote\Events\PmCreated;
+use Coyote\Events\PmRead;
 use Coyote\Http\Factories\MediaFactory;
 use Coyote\Http\Requests\PmRequest;
 use Coyote\Http\Resources\PmResource;
@@ -219,6 +220,12 @@ class PmController extends BaseController
         }
 
         $this->request->attributes->set('pm_unread', --$this->auth->pm_unread);
+
+        // get message from sender's sentbox so we can broadcast it as read\
+        // ugly solution :(
+        $pm = $this->pm->where('text_id', $pm->text_id)->where('folder', Pm::SENTBOX)->first();
+
+        event(new PmRead($pm));
     }
 
     /**

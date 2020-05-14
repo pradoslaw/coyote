@@ -129,6 +129,14 @@ new Vue({
           });
         }
       });
+
+      ws.on('Coyote\\Events\\PmRead', data => {
+        const message = this.messages.find(item => item.id === data.id);
+
+        if (message) {
+          store.commit('messages/mark', message);
+        }
+      });
     },
 
     listenForTyping() {

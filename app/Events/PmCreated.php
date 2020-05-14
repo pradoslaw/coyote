@@ -17,7 +17,7 @@ class PmCreated implements ShouldBroadcast
     /**
      * @var Pm
      */
-    private $pm;
+    protected $pm;
 
     /**
      * @param Pm $pm

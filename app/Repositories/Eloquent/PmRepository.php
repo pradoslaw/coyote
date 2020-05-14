@@ -73,7 +73,8 @@ class PmRepository extends Repository implements PmRepositoryInterface
     public function conversation($userId, $authorId, $limit = 10, $offset = 0)
     {
         $builder = $this
-            ->model->select([
+            ->model
+            ->select([
                 'pm.id',
                 'pm.text_id',
                 'pm.folder',
