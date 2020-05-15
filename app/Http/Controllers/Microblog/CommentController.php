@@ -100,6 +100,8 @@ class CommentController extends Controller
             stream($microblog->wasRecentlyCreated ? Stream_Create::class : Stream_Update::class, $object, $target);
         });
 
+        $subscribers = [];
+
         if ($microblog->wasRecentlyCreated) {
             $subscribers = $microblog->parent
                 ->subscribers()
@@ -109,17 +111,17 @@ class CommentController extends Controller
                 ->exceptUser($this->auth);
 
             $dispatcher->send($subscribers, new SubmittedNotification($microblog));
+        }
 
-            $helper = new LoginHelper();
-            // get id of users that were mentioned in the text
-            $usersId = $helper->grab($microblog->html);
+        $helper = new LoginHelper();
+        // get id of users that were mentioned in the text
+        $usersId = $helper->grab($microblog->html);
 
-            if (!empty($usersId)) {
-                $dispatcher->send(
-                    $this->user->findMany($usersId)->exceptUser($this->auth)->exceptUsers($subscribers),
-                    new UserMentionedNotification($microblog)
-                );
-            }
+        if (!empty($usersId)) {
+            $dispatcher->send(
+                $this->user->findMany($usersId)->exceptUser($this->auth)->exceptUsers($subscribers),
+                new UserMentionedNotification($microblog)
+            );
         }
 
         MicroblogResource::withoutWrapping();

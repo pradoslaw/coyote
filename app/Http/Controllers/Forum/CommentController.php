@@ -98,6 +98,8 @@ class CommentController extends Controller
             }
         });
 
+        $subscribers = [];
+
         if ($this->comment->wasRecentlyCreated) {
             $subscribers = $this->post->subscribers()->with('user')->get()->pluck('user')->exceptUser($this->auth);
 
@@ -105,15 +107,15 @@ class CommentController extends Controller
                 $subscribers,
                 (new CommentedNotification($this->comment))
             );
+        }
 
-            $usersId = (new LoginHelper())->grab($this->comment->html);
+        $usersId = (new LoginHelper())->grab($this->comment->html);
 
-            if (!empty($usersId)) {
-                $dispatcher->send(
-                    app(UserRepositoryInterface::class)->findMany($usersId)->exceptUser($this->auth)->exceptUsers($subscribers),
-                    new UserMentionedNotification($this->comment)
-                );
-            }
+        if (!empty($usersId)) {
+            $dispatcher->send(
+                app(UserRepositoryInterface::class)->findMany($usersId)->exceptUser($this->auth)->exceptUsers($subscribers),
+                new UserMentionedNotification($this->comment)
+            );
         }
 
         event(new CommentSaved($this->comment));
