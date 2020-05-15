@@ -5,7 +5,7 @@
         <a class="text-body" title="{{ parent.long_title|default(parent.title) }}" href="{{ url(parent.path) }}">{{ parent.title }}</a>
 
         {% if not loop.last %}
-          <span class="d-none d-sm-block">»</span>
+          <span class="d-none d-sm-inlinr">»</span>
         {% endif %}
       {% endfor %}
     </strong>
