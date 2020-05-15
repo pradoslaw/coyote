@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers;
 
 use Coyote\Http\Factories\MediaFactory;
 use Coyote\Http\Forms\AttachmentForm;
+use Coyote\Services\Media\Clipboard;
 use Illuminate\Http\Request;
 
 abstract class AttachmentController extends Controller
@@ -37,22 +38,12 @@ abstract class AttachmentController extends Controller
     }
 
     /**
-     * Paste image from clipboard
-     *
-     * @return \Illuminate\Http\JsonResponse|string
+     * @param Clipboard $clipboard
+     * @return string
      */
-    public function paste()
+    public function paste(Clipboard $clipboard)
     {
-        $input = file_get_contents("php://input");
-
-        $validator = $this->getValidationFactory()->make(
-            ['length' => strlen($input)],
-            ['length' => 'max:' . config('filesystems.upload_max_size') * 1024 * 1024]
-        );
-
-        $this->validateWith($validator);
-
-        $media = $this->getMediaFactory()->make('attachment')->put(file_get_contents('data://' . substr($input, 7)));
+        $media = $clipboard->paste('attachment');
 
         $attachment = $this->create([
             'size' => $media->size(),

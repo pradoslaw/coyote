@@ -10,6 +10,7 @@ use Coyote\Http\Requests\MicroblogRequest;
 use Coyote\Http\Resources\Api\MicroblogResource;
 use Coyote\Notifications\Microblog\UserMentionedNotification;
 use Coyote\Repositories\Criteria\WithTrashed;
+use Coyote\Services\Media\Clipboard;
 use Coyote\Services\Parser\Helpers\Login as LoginHelper;
 use Coyote\Services\Parser\Helpers\Hash as HashHelper;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
@@ -153,19 +154,12 @@ class SubmitController extends Controller
     /**
      * Paste image from clipboard
      *
+     * @param Clipboard $clipboard
      * @return \Illuminate\Http\JsonResponse
      */
-    public function paste()
+    public function paste(Clipboard $clipboard)
     {
-        $input = file_get_contents("php://input");
-
-        $validator = $this->getValidationFactory()->make(
-            ['length' => strlen($input)],
-            ['length' => 'max:' . config('filesystems.upload_max_size') * 1024 * 1024]
-        );
-
-        $this->validateWith($validator);
-        $media = $this->getMediaFactory()->make('attachment')->put(file_get_contents('data://' . substr($input, 7)));
+        $media = $clipboard->paste('attachment');
 
         return response()->json([
             'name' => $media->getFilename(),

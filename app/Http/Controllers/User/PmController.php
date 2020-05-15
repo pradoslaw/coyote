@@ -12,6 +12,7 @@ use Coyote\Pm;
 use Coyote\Repositories\Contracts\NotificationRepositoryInterface as NotificationRepository;
 use Coyote\Repositories\Contracts\PmRepositoryInterface as PmRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
+use Coyote\Services\Media\Clipboard;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 
@@ -240,21 +241,12 @@ class PmController extends BaseController
     }
 
     /**
+     * @param Clipboard $clipboard
      * @return \Illuminate\Http\JsonResponse
      */
-    public function paste()
+    public function paste(Clipboard $clipboard)
     {
-        $input = file_get_contents("php://input");
-
-        $validator = $this->getValidationFactory()->make(
-            ['length' => strlen($input)],
-            ['length' => 'max:' . config('filesystems.upload_max_size') * 1024 * 1024]
-        );
-
-        $this->validateWith($validator);
-
-        // put to s3
-        $media = $this->getMediaFactory()->make('screenshot')->put(file_get_contents('data://' . substr($input, 7)));
+        $media = $clipboard->paste();
 
         $filesystem = app('filesystem')->disk('local_fs');
         $mime = null;
