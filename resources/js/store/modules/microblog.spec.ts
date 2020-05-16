@@ -1,6 +1,8 @@
-import { mutations} from "../store";
-import {Microblog} from "../types/models";
+import store from "./microblogs";
+import {Microblog} from "../../types/models";
 const faker = require('faker');
+
+const { mutations } = store;
 
 function fake(): Microblog {
   return {

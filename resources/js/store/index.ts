@@ -12,8 +12,6 @@ import microblogs from './modules/microblogs';
 
 Vue.use(Vuex);
 
-export const mutations = microblogs.mutations;
-
 export default new Vuex.Store({
   modules: {
     comments,
