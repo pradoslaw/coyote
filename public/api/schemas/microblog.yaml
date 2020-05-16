@@ -10,8 +10,12 @@ properties:
   updated_at:
     type: string
     format: "datetime"
+  text:
+    type: string
+    description: "Raw version of microblog"
   html:
     type: string
+    description: "HTML version of microblog"
   comments:
     type: array
     items:
@@ -21,14 +25,21 @@ properties:
           type: integer
         votes:
           type: integer
+        parent_id:
+          type: integer
+          description: "ID of parent microblog"
         created_at:
           type: string
           format: "datetime"
         updated_at:
           type: string
           format: "datetime"
+        text:
+          type: string
+          description: "Raw version of comment"
         html:
           type: string
+          description: "HTML version of comment"
         user:
           type: object
           properties:
@@ -40,6 +51,14 @@ properties:
               required: true
             photo:
               type: string
+              nullable: true
+            deleted_at:
+              nullable: true
+              type: string
+              format: "datetime"
+            is_blocked:
+              type: boolean
+              default: false
   user:
     type: object
     properties:
@@ -51,3 +70,24 @@ properties:
         required: true
       photo:
         type: string
+      deleted_at:
+        nullable: true
+        type: string
+        format: "datetime"
+      is_blocked:
+        type: boolean
+        default: false
+  media:
+    type: array
+    items:
+      type: object
+      properties:
+        url:
+          type: string
+          description: "Full URL to uploaded image"
+        thumbnail:
+          type: string
+          description: "Full URL to thumbnail image"
+        name:
+          type: string
+          description: "Name of the file"
