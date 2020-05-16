@@ -4,8 +4,12 @@ namespace Coyote\Http\Controllers;
 
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
+use Coyote\Services\Elasticsearch\Api;
 use Coyote\Services\Elasticsearch\Builders\MixedBuilder;
 use Coyote\Services\Elasticsearch\MultiResultSet;
+use Coyote\Services\Elasticsearch\Search;
+use Coyote\Services\Elasticsearch\Strategies\CommonStrategy;
+use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Lavary\Menu\Builder;
 use Lavary\Menu\Item;
@@ -13,29 +17,35 @@ use Lavary\Menu\Menu;
 
 class SearchController extends Controller
 {
-    /**
-     * @var ForumRepository
-     */
-    private $forum;
+    private $api;
 
-    /**
-     * @param ForumRepository $forum
-     */
-    public function __construct(ForumRepository $forum)
+    public function __construct(Api $api)
     {
         parent::__construct();
 
-        $this->forum = $forum;
+        $this->api = $api;
     }
 
     /**
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request, Search $search)
     {
         $this->breadcrumb->push('Szukaj', route('search'));
 
-        return $this->view('search')->with('tabs', $this->tabs());
+        if ($request->exists('model')) {
+
+        } else {
+            $strategy = new CommonStrategy();
+        }
+
+        $result = $search->search($strategy);
+
+        if ($request->wantsJson()) {
+            return $result;
+        }
+
+        return $this->view('search', ['hits' => $result])->with('tabs', $this->tabs());
     }
 
     /**
@@ -76,16 +86,6 @@ class SearchController extends Controller
             'total' => $hits->total(),
             'pagination' => $pagination
         ];
-    }
-
-    /**
-     * Get client instance
-     *
-     * @return mixed
-     */
-    protected function getClient()
-    {
-        return app('elasticsearch');
     }
 
     /**
