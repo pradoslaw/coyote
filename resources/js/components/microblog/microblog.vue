@@ -49,22 +49,22 @@
           </a>
 
           <template v-if="isAuthorized">
-            <a @click="subscribe(microblog)" href="javascript:" class="btn btn-subscribe">
+            <a @click="subscribe(microblog)" href="javascript:" class="btn btn-subscribe" title="Wł/Wył obserwowanie tego wpisu">
               <i :class="{'fas text-primary': microblog.is_subscribed, 'far': !microblog.is_subscribed}" class="fa-fw fa-bell"></i>
 
-              Obserwuj
+              <span class="d-none d-sm-inline">Obserwuj</span>
             </a>
 
-            <a @click="comment" href="javascript:" class="btn btn-reply">
+            <a @click="comment" href="javascript:" class="btn btn-reply" title="Odpowiedz na ten wpis">
               <i class="far fa-fw fa-comment"></i>
 
-              Komentuj
+              <span class="d-none d-sm-inline">Komentuj</span>
             </a>
 
-            <a @click.prevent="copy" :href="microblog.url" class="btn btn-share">
+            <a @click.prevent="copy" :href="microblog.url" class="btn btn-share" title="Kopiuj link do schowka">
               <i class="far fa-share-square"></i>
 
-              Udostępnij
+              <span class="d-none d-sm-inline">Udostępnij</span>
             </a>
           </template>
 
