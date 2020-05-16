@@ -5,7 +5,7 @@
       <textarea
         v-autosize
         placeholder="Kliknij, aby dodać wpis"
-        v-clipboard:success="addImage"
+        v-paste:success="addImage"
         name="text"
         ref="textarea"
         v-model="microblog.text"
@@ -56,12 +56,12 @@
   import VueAutosize from '../../plugins/autosize';
   import VuePrompt from '../forms/prompt.vue';
   import VueButton from '../forms/button.vue';
-  import VueClipboard from '../../plugins/clipboard.js';
+  import VuePaste from '../../plugins/paste.js';
   import VueThumbnail from '../thumbnail.vue';
   import { MicroblogFormMixin } from '../mixins/microblog';
 
   Vue.use(VueAutosize);
-  Vue.use(VueClipboard, {url: '/Mikroblogi/Paste'});
+  Vue.use(VuePaste, {url: '/Mikroblogi/Paste'});
 
   @Component({
     name: 'microblog-form',

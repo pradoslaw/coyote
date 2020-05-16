@@ -31,6 +31,7 @@ export interface Microblog {
   updated_at: Date | null;
   html: string;
   text: string;
+  url: string;
   comments: Microblog[];
   user: User | null
   media: Media[];

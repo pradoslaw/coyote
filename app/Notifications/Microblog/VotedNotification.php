@@ -44,7 +44,7 @@ class VotedNotification extends AbstractNotification
     public function toDatabase($user)
     {
         $url = $this->microblog->parent_id
-            ? UrlBuilder::microblogComment($this->microblog->parent, $this->microblog->id)
+            ? UrlBuilder::microblogComment($this->microblog)
                 : UrlBuilder::microblog($this->microblog);
 
         return [

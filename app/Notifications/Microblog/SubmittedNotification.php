@@ -21,7 +21,7 @@ class SubmittedNotification extends AbstractNotification
             'type_id'       => static::ID,
             'subject'       => excerpt($this->microblog->parent->html), // original excerpt of parent entry
             'excerpt'       => excerpt($this->microblog->html),
-            'url'           => UrlBuilder::microblogComment($this->microblog->parent, $this->microblog->id),
+            'url'           => UrlBuilder::microblogComment($this->microblog),
             'id'            => $this->id
         ];
     }

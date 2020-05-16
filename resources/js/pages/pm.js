@@ -9,7 +9,7 @@ import VueToolbar from '../components/forms/toolbar.vue';
 import VueButton from '../components/forms/button.vue';
 import VueError from '../components/forms/error.vue';
 import {default as ws} from '../libs/realtime.js';
-import VueClipboard from '../plugins/clipboard.js';
+import VuePaste from '../plugins/paste.js';
 import VueModal from '../components/modal.vue';
 import VuePagination from '../components/pagination.vue';
 import VueAutocomplete from '../components/forms/autocomplete.vue';
@@ -19,7 +19,7 @@ import differenceInMinutes from 'date-fns/differenceInMinutes';
 import parseISO from 'date-fns/parseISO';
 
 Vue.use(VueAutosize);
-Vue.use(VueClipboard, {url: '/User/Pm/Paste'});
+Vue.use(VuePaste, {url: '/User/Pm/Paste'});
 
 const INBOX = 1;
 

@@ -31,7 +31,7 @@ class Comment extends ObjectAbstract
     private function microblog($microblog)
     {
         $this->id = $microblog->id;
-        $this->url = UrlBuilder::microblogComment($microblog->parent, $microblog->id);
+        $this->url = UrlBuilder::microblogComment($microblog);
         $this->displayName = excerpt($microblog->html);
     }
 

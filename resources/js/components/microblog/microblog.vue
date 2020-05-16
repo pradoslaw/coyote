@@ -18,7 +18,7 @@
           </div>
 
           <h5 class="media-heading"><vue-user-name :user="microblog.user"></vue-user-name></h5>
-          <a :href="`/Mikroblogi/View/${microblog.id}#entry-${microblog.id}`" class="text-muted small"><vue-timeago :datetime="microblog.created_at"></vue-timeago></a>
+          <a :href="microblog.url" class="text-muted small"><vue-timeago :datetime="microblog.created_at"></vue-timeago></a>
 
           <small v-if="microblog.is_sponsored" class="text-muted small">&bull; Sponsorowane</small>
 
@@ -59,6 +59,12 @@
               <i class="far fa-fw fa-comment"></i>
 
               Komentuj
+            </a>
+
+            <a @click.prevent="copy" :href="microblog.url" class="btn btn-share">
+              <i class="far fa-share-square"></i>
+
+              Udostępnij
             </a>
           </template>
 
@@ -104,6 +110,7 @@
   import Vue from 'vue';
   import VueAvatar from '../avatar.vue';
   import VueTimeago from '../../plugins/timeago';
+  import VueClipboard from '../../plugins/clipboard';
   import VueLightbox from 'vue-cool-lightbox';
   import VueModal from '../modal.vue';
   import VueComment from "./comment.vue";
@@ -119,6 +126,7 @@
   import { MicroblogMixin } from "../mixins/microblog";
 
   Vue.use(VueTimeago);
+  Vue.use(VueClipboard);
 
   @Component({
     name: 'microblog',
@@ -169,6 +177,15 @@
 
     deleteItem(confirm: boolean) {
       this.delete('microblogs/delete', confirm, this.microblog);
+    }
+
+    copy() {
+      if (this.$copy(this.microblog.url)) {
+        this.$notify({type: 'success', text: 'Link prawidłowo skopiowany do schowka.'});
+      }
+      else {
+        this.$notify({type: 'error', text: 'Nie można skopiować linku do schowka.'});
+      }
     }
 
     get totalComments() {

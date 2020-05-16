@@ -14,8 +14,8 @@
           <textarea
             placeholder="Kliknij, aby odpowiedzieć"
             v-autosize
-            v-clipboard:success="insertToTextarea"
-            v-clipboard:error="showError"
+            v-paste:success="insertToTextarea"
+            v-paste:error="showError"
             name="text"
             class="form-control"
             ref="textarea"

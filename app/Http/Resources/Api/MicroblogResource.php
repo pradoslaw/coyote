@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Coyote\Http\Resources\UserResource;
 use Coyote\Microblog;
 use Coyote\Services\Media\MediaInterface;
+use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -34,6 +35,7 @@ class MicroblogResource extends JsonResource
         return array_merge(
             $only,
             [
+                'url'           => $this->parent_id ? UrlBuilder::microblogComment($this->resource, true) : UrlBuilder::microblog($this->resource, true),
                 'created_at'    => $this->created_at->toIso8601String(),
                 'updated_at'    => $this->created_at->toIso8601String(),
                 'html'          => $this->html,
@@ -46,6 +48,7 @@ class MicroblogResource extends JsonResource
                     return $request->user()->can('update', $this->resource);
                 }),
                 'comments_count'=> $this->when($this->comments_count, $this->comments_count),
+
                 $this->mergeWhen(array_has($this->resource, ['is_voted', 'is_subscribed', 'comments_count']), function () {
                     return $this->resource->only(['is_voted', 'is_subscribed', 'comments_count']);
                 })

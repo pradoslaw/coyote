@@ -89,20 +89,21 @@ class UrlBuilder
 
     /**
      * @param Microblog $microblog
+     * @param bool $absolute
      * @return string
      */
-    public static function microblog(Microblog $microblog)
+    public static function microblog(Microblog $microblog, bool $absolute = false)
     {
-        return route('microblog.view', [$microblog->id], false);
+        return route('microblog.view', [$microblog->id], $absolute);
     }
 
     /**
-     * @param Microblog $parent
-     * @param int $commentId
+     * @param Microblog $comment
+     * @param bool $absolute
      * @return string
      */
-    public static function microblogComment(Microblog $parent, int $commentId)
+    public static function microblogComment(Microblog $comment, bool $absolute = false)
     {
-        return route('microblog.view', [$parent->id], false) . '#comment-' . $commentId;
+        return route('microblog.view', [$comment->parent_id], $absolute) . '#comment-' . $comment->id;
     }
 }

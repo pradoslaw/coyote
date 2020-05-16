@@ -65,7 +65,7 @@ export default {
       }
     };
 
-    Vue.directive('clipboard', {
+    Vue.directive('paste', {
       bind(el, binding) {
 
         switch (binding.arg) {
