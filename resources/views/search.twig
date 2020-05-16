@@ -6,31 +6,11 @@
 {% endblock %}
 
 {% block container %}
-  {{ form_open({method: 'GET', role: 'form', url: route('search')}) }}
-
-  <div class="row justify-content-center mb-2">
-    <div class="col-md-7 col-12 mt-4">
-      <div class="form-row ">
-        <div class="input-keywords col-sm-10 col-12">
-          {{ form_input('search', 'q', input_get('q'), {'class': 'form-control', 'placeholder': 'Słowa kluczowe'}) }}
-        </div>
-
-        <div class="col-sm-2 d-none d-sm-block">
-          <button class="ml-1 btn btn-primary btn-search" type="submit">
-            <i class="fas fa-search"></i> <span class="d-none d-sm-inline-block">Szukaj</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  {{ form_close() }}
 
   <div class="row">
     <div class="col-12">
-      {% if input_get('q') %}
-        {{ tabs.asUl({class: 'nav nav-tabs'})|raw }}
-      {% endif %}
+
+      {{ tabs.asUl({class: 'nav nav-tabs'})|raw }}
 
       {% if input_get('q') and total == 0 %}
         <div class="card card-body bg-light p-2 empty-result mt-4">
