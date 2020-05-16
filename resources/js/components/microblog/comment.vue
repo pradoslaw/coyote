@@ -1,5 +1,5 @@
 <template>
-  <div :id="`comment-${comment.id}`" class="media">
+  <div :id="`comment-${comment.id}`" :class="{'highlight-flash': highlight}"  class="media">
     <div class="mr-2">
       <a v-profile="comment.user.id">
         <vue-avatar v-bind="comment.user" class="i-35 d-block img-thumbnail"></vue-avatar>
@@ -85,6 +85,14 @@
 
     deleteItem(confirm: boolean) {
       this.delete('microblogs/deleteComment', confirm, this.comment);
+    }
+
+    get anchor() {
+      return `comment-${this.comment.id}`;
+    }
+
+    get highlight() {
+      return '#' + this.anchor === window.location.hash;
     }
   }
 </script>

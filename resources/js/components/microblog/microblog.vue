@@ -1,5 +1,6 @@
 <template>
-  <div :id="`entry-${microblog.id}`" :class="{'highlight-flash': highlight}" class="card card-default microblog">
+  <!-- we use below ID in mounted() method -->
+  <div :id="`entry-${microblog.id}`" class="card card-default microblog">
     <div class="card-body">
       <div class="media">
         <div class="d-none d-sm-block mr-2">
@@ -190,14 +191,6 @@
 
     get totalComments() {
       return this.microblog.comments_count! - Object.keys(this.microblog.comments).length;
-    }
-
-    get anchor() {
-      return `entry-${this.microblog.id}`;
-    }
-
-    get highlight() {
-      return '#' + this.anchor === window.location.hash;
     }
 
     get images() {
