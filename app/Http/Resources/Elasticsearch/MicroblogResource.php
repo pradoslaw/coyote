@@ -2,6 +2,8 @@
 
 namespace Coyote\Http\Resources\Elasticsearch;
 
+use Coyote\Services\UrlBuilder\UrlBuilder;
+
 /**
  * @property int $id
  * @property int $user_id
@@ -21,6 +23,7 @@ class MicroblogResource extends ElasticsearchResource
     {
         return [
             'id'            => $this->id,
+            'url'           => UrlBuilder::microblog($this->resource),
             'created_at'    => $this->created_at->toIso8601String(),
             'updated_at'    => $this->updated_at->toIso8601String(),
             'decay_date'    => $this->created_at->toIso8601String(),
