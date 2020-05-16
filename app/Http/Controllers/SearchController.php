@@ -35,7 +35,7 @@ class SearchController extends Controller
     {
         $this->breadcrumb->push('Szukaj', route('search'));
 
-        return $this->view('search', $this->search())->with('tabs', $this->tabs());
+        return $this->view('search')->with('tabs', $this->tabs());
     }
 
     /**
