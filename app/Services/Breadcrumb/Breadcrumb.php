@@ -2,13 +2,15 @@
 
 namespace Coyote\Services\Breadcrumb;
 
+use Illuminate\Contracts\Support\Arrayable;
+
 /**
  * Prosta klasa sluzaca do budowania elementu obecnego na kazdej podstronie, czyli breadcrumb
  *
  * Class Breadcrumb
  * @package Coyote
  */
-class Breadcrumb implements \Countable
+class Breadcrumb implements \Countable, Arrayable
 {
     private $breadcrumbs = [];
 
@@ -47,5 +49,13 @@ class Breadcrumb implements \Countable
     public function render()
     {
         return view('components/breadcrumb', ['breadcrumbs' => $this->breadcrumbs]);
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return $this->breadcrumbs;
     }
 }

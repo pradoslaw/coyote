@@ -3,7 +3,6 @@
 #search-results {
   h2 {
     font-size: $font-size-large;
-    text-decoration: underline;
 
     @include link-color-darker;
   }
