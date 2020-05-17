@@ -45,13 +45,15 @@ class SearchController extends Controller
 
         }
 
+        start_measure('elasticsearch');
         $hits = $search->search($strategy);
+        stop_measure('elasticsearch');
 
         if ($request->wantsJson()) {
             return $hits;
         }
 
-        return $this->view('search', ['hits' => $hits])->with('tabs', $this->tabs());
+        return $this->view('search', ['hits' => $hits, 'model' => $request->input('model')])->with('tabs', $this->tabs());
     }
 
     /**

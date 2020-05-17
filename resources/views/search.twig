@@ -58,6 +58,7 @@
   {{ parent() }}
 
   <script type="text/javascript">
+    var model = '{{ model }}';
     var hits = {{ hits|raw }};
   </script>
 {% endblock %}
