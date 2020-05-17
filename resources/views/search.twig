@@ -15,42 +15,29 @@
           <li v-for="tab in tabs" class="nav-item"><a :href="searchLink(tab.model)" :class="{active: tab.model === model}" class="nav-link">${ tab.name }</a></li>
         </ul>
 
+        <div class="dropdown">
+          <button class="btn btn-sm btn-outline-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Trafność
+          </button>
+
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#">Trafność</a>
+            <a class="dropdown-item" href="#">Data dodania</a>
+          </div>
+        </div>
+
         <p class="text-muted">Wyniki <strong>${ hits.meta.from } - ${ hits.meta.to }</strong> z <strong>${ hits.meta.total }</strong> znalezione w czasie <strong>${ hits.took } ms.</strong></p>
 
-        <component :is="getComponent()" :hits="hits.data"></component>
+        <component v-if="hits.meta.total" :is="getComponent()" :hits="hits.data"></component>
+        <div v-else class="card card-body bg-light p-2 empty-result mt-4">
+          <p>
+            Nie znaleźliśmy stron, które spełniają Twoje kryteria wyszukiwania.<br>
+            <a href="{{ route('home') }}">Wejdź na naszą stronę główną</a>, a być może znajdziesz coś dla siebie!
+          </p>
+        </div>
 
         <vue-pagination :current-page="hits.meta.current_page" :total-pages="hits.meta.last_page"></vue-pagination>
       </div>
-
-{#      {% if input_get('q') and total == 0 %}#}
-{#        <div class="card card-body bg-light p-2 empty-result mt-4">#}
-{#          <p>#}
-{#            Nie znaleźliśmy stron, które spełniają Twoje kryteria wyszukiwania.<br>#}
-{#            <a href="{{ route('home') }}">Wejdź na naszą stronę główną</a>, a być może znajdziesz coś dla siebie!#}
-{#          </p>#}
-{#        </div>#}
-{#      {% elseif total > 0 %}#}
-
-{#        <div class="row">#}
-{#          <div class="col-12 text-muted mt-3">#}
-{#            #}
-{#          </div>#}
-{#        </div>#}
-
-{#        <ul id="search-results" class="list-unstyled">#}
-{#          <li>#}
-{#            {% for hit in hits %}#}
-{#              <h2 class="mt-4 mb-3"><a href="{{ hit.url }}">{{ hit.title|raw }}</a></h2>#}
-{#              <p class="mb-1">{{ hit.excerpt|raw }}</p>#}
-
-{#              <a href="{{ hit.url }}" class="text-truncate">{{ hit.url }}#}
-{#                <small class="text-muted">[{{ hit.updated_at|format_date }}]</small>#}
-{#              </a>#}
-{#            {% endfor %}#}
-{#          </li>#}
-{#        </ul>#}
-
-
     </div>
   </div>
 {% endblock %}

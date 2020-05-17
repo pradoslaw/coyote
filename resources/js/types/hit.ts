@@ -15,6 +15,9 @@ export interface Hit {
   _score?: number;
   context?: Context;
   index?: number;
+  text?: string;
+  posts?: Post[];
+  breadcrumbs?: Breadcrumb[];
 }
 
 export interface Forum {
@@ -22,6 +25,12 @@ export interface Forum {
   name: string;
   slug: string;
   url: string;
+}
+
+export interface Post {
+  id: number;
+  created_at: Date;
+  text: string;
 }
 
 export enum Context {
@@ -34,4 +43,9 @@ export interface Hits {
   data: Hit[];
   links: Links;
   meta: Meta;
+}
+
+export interface Breadcrumb {
+  name: string;
+  url: string;
 }
