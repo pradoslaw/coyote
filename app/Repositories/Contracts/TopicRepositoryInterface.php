@@ -20,6 +20,14 @@ interface TopicRepositoryInterface extends RepositoryInterface
     public function lengthAwarePagination($userId, string $guestId, $order = 'topics.last_post_id', $direction = 'DESC', $perPage = 20);
 
     /**
+     * @param array $ids
+     * @param int|null $userId
+     * @param string $guestId
+     * @return \Coyote\Topic[]
+     */
+    public function findByIds(array $ids, ?int $userId, string $guestId);
+
+    /**
      * Is there any unread topic in this category?
      *
      * @param int $forumId

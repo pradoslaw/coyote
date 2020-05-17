@@ -2,22 +2,11 @@
 
 namespace Coyote\Services\Elasticsearch\Strategies;
 
-use Coyote\Services\Elasticsearch\Api;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class CommonStrategy implements StrategyInterface
+class CommonStrategy extends Strategy
 {
-    /**
-     * @var Api
-     */
-    protected $api;
-
-    public function setApi(Api $api): void
-    {
-        $this->api = $api;
-    }
-
     public function search(Request $request)
     {
         $hits = $this->api->search($request->input('q'));

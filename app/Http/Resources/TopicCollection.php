@@ -6,6 +6,7 @@ use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Services\Forum\Tracker;
 use Coyote\Services\Guest;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Pagination\AbstractPaginator;
 
 class TopicCollection extends ResourceCollection
 {
@@ -58,13 +59,19 @@ class TopicCollection extends ResourceCollection
      */
     public function toArray($request)
     {
+//        dd($this->collection);
+//        dd($this->resource instanceof AbstractPaginator);
         return $this
-            ->collection
-            ->map(function ($model) use ($request) {
-                $resource = (new Tracker($model, $this->guest))->setRepository($this->repository);
+            ->resource
+            ->setCollection(
+                $this
+                    ->collection
+                    ->map(function ($model) use ($request) {
+                        $resource = (new Tracker($model, $this->guest))->setRepository($this->repository);
 
-                return (new TopicResource($resource))->toArray($request);
-            })
+                        return (new TopicResource($resource))->toArray($request);
+                    })
+            )
             ->toArray();
     }
 }

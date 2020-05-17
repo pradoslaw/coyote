@@ -23,10 +23,10 @@ class Search
         $this->request = $request;
     }
 
-    public function search(StrategyInterface $strategy)
+    public function search(StrategyInterface $strategy): string
     {
         $strategy->setApi($this->api);
 
-        return $strategy->search($this->request);
+        return $strategy->search($this->request)->content();
     }
 }

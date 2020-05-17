@@ -114,7 +114,8 @@
         type: String
       },
       tags: {
-        type: Object
+        type: Object,
+        default: () => ({})
       },
       showCategoryName: {
         type: Boolean

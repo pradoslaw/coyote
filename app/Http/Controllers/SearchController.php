@@ -9,6 +9,8 @@ use Coyote\Services\Elasticsearch\Builders\MixedBuilder;
 use Coyote\Services\Elasticsearch\MultiResultSet;
 use Coyote\Services\Elasticsearch\Search;
 use Coyote\Services\Elasticsearch\Strategies\CommonStrategy;
+use Coyote\Services\Elasticsearch\Strategies\TopicStrategy;
+use Coyote\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Lavary\Menu\Builder;
@@ -33,19 +35,23 @@ class SearchController extends Controller
     {
         $this->breadcrumb->push('Szukaj', route('search'));
 
-        if ($request->exists('model')) {
+        switch ($request->input('model')) {
+            case class_basename(Topic::class):
+                $strategy = app(TopicStrategy::class);
+                break;
 
-        } else {
-            $strategy = new CommonStrategy();
+            default:
+                $strategy = new CommonStrategy();
+
         }
 
-        $result = $search->search($strategy);
+        $hits = $search->search($strategy);
 
         if ($request->wantsJson()) {
-            return $result;
+            return $hits;
         }
 
-        return $this->view('search', ['hits' => $result])->with('tabs', $this->tabs());
+        return $this->view('search', ['hits' => $hits])->with('tabs', $this->tabs());
     }
 
     /**
