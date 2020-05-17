@@ -15,11 +15,7 @@ new Vue({
   created() {
     store.commit('microblogs/init', { pagination: { data: window.microblogs } });
   },
-  computed: {
-    ...mapGetters('microblogs', ['microblogs']),
-
-
-  }
+  computed: mapGetters('microblogs', ['microblogs'])
 });
 
 $(function () {

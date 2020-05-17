@@ -63,7 +63,8 @@ $(function () {
   })
   .on(['/Mikroblogi', '/Mikroblogi/*', '/Profile/*/Microblog'], () => require('./pages/microblog'))
   .on(['/Profile/*'], () => require('./pages/profile'))
-  .on('/', () => require('./pages/homepage'));
+  .on('/', () => require('./pages/homepage'))
+  .on('/Search', () => require('./pages/search'));
 
   r.resolve();
 });
