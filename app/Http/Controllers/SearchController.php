@@ -29,7 +29,9 @@ class SearchController extends Controller
     }
 
     /**
-     * @return \Illuminate\View\View
+     * @param Request $request
+     * @param Search $search
+     * @return \Illuminate\View\View|string
      */
     public function index(Request $request, Search $search)
     {
@@ -53,7 +55,11 @@ class SearchController extends Controller
             return $hits;
         }
 
-        return $this->view('search', ['hits' => $hits, 'model' => $request->input('model')])->with('tabs', $this->tabs());
+        return $this->view('search', [
+            'hits' => $hits,
+            'model' => $request->input('model'),
+            'postsPerPage' => $this->getSetting('forum.posts_per_page', 10)
+        ]);
     }
 
     /**
