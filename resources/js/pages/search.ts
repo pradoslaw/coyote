@@ -9,6 +9,7 @@ declare global {
   interface Window {
     hits: Hits;
     model: Model;
+    postsPerPage: number;
   }
 }
 
@@ -22,11 +23,18 @@ Vue.component('vue-result-topic', {
   render: function(createElement) {
     let items: VNode[] = [];
 
-    this.hits.forEach(hit => items.push(createElement('vue-topic', {props: {topic: hit}})))
+    this.hits.forEach(hit => items.push(createElement('vue-topic', {props: {topic: hit, postsPerPage: window.postsPerPage, showCategoryName: true }})))
 
     return createElement('div', { class: 'card card-default card-topics' }, items)
   }
 })
+
+const Tabs = [
+  { name: 'Wszystko', model: '' },
+  { name: 'Forum', model: Model.Topic },
+  { name: 'Praca', model: Model.Job },
+  { name: 'Mikroblog', model: Model.Microblog },
+]
 
 new Vue({
   el: '#js-search',
@@ -41,7 +49,16 @@ new Vue({
   methods: {
     getComponent() {
       return `vue-result-${this.model.toLowerCase()}`;
+    },
+
+    searchLink(model: Model) {
+      return `/Search?model=${model}`;
+    }
+  },
+
+  computed: {
+    tabs() {
+      return Tabs;
     }
   }
-
 });

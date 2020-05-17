@@ -48,7 +48,15 @@ class TopicStrategy extends Strategy
     private function highlight(array $hits, Collection $collection): Collection
     {
         foreach ($hits as $hit) {
-            isset($collection[$hit['id']]) ? $collection[$hit['id']]->subject = $hit['subject'] : null;
+            $id = &$hit['id'];
+
+            if (isset($collection[$id])) {
+                $collection[$id]->subject = $hit['subject'];
+
+                if (isset($hit['posts'])) {
+                    $collection[$id]->user_post_id = $hit['posts'][0]['id'];
+                }
+            }
         }
 
         return $collection;

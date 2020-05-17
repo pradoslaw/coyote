@@ -10,12 +10,16 @@
   <div class="row">
     <div class="col-12">
 
-      {{ tabs.asUl({class: 'nav nav-tabs'})|raw }}
-
       <div id="js-search">
-        <vue-pagination :current-page="hits.meta.current_page" :total-pages="hits.meta.last_page"></vue-pagination>
+        <ul class="nav nav-pills mb-3">
+          <li v-for="tab in tabs" class="nav-item"><a :href="searchLink(tab.model)" :class="{active: tab.model === model}" class="nav-link">${ tab.name }</a></li>
+        </ul>
+
+        <p class="text-muted">Wyniki <strong>${ hits.meta.from } - ${ hits.meta.to }</strong> z <strong>${ hits.meta.total }</strong> znalezione w czasie <strong>${ hits.took } ms.</strong></p>
 
         <component :is="getComponent()" :hits="hits.data"></component>
+
+        <vue-pagination :current-page="hits.meta.current_page" :total-pages="hits.meta.last_page"></vue-pagination>
       </div>
 
 {#      {% if input_get('q') and total == 0 %}#}
@@ -29,7 +33,7 @@
 
 {#        <div class="row">#}
 {#          <div class="col-12 text-muted mt-3">#}
-{#            Wyniki <strong>{{ pagination.firstItem() }} - {{ pagination.lastItem() }}</strong> z <strong>{{ total }}</strong> znalezione w czasie <strong>{{ took }} ms.</strong>#}
+{#            #}
 {#          </div>#}
 {#        </div>#}
 
@@ -46,10 +50,7 @@
 {#          </li>#}
 {#        </ul>#}
 
-{#        <nav class="d-flex justify-content-center mt-2 mb-2">#}
-{#          {{ pagination|raw }}#}
-{#        </nav>#}
-{#      {% endif %}#}
+
     </div>
   </div>
 {% endblock %}
@@ -60,6 +61,7 @@
   <script type="text/javascript">
     var model = '{{ model }}';
     var hits = {{ hits|raw }};
+    var postsPerPage = {{ postsPerPage }};
   </script>
 {% endblock %}
 
