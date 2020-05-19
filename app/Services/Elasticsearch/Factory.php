@@ -46,6 +46,6 @@ class Factory
             throw new \InvalidArgumentException("Can't find $class class.");
         }
 
-        return new $class;
+        return $this->app[$class];
     }
 }

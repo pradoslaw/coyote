@@ -65,6 +65,8 @@
 
   <script type="text/javascript">
     var model = '{{ model }}';
+    var query = '{{ query|raw }}';
+    var sort = '{{ sort|raw }}';
     var hits = {{ hits|raw }};
     var postsPerPage = {{ posts_per_page }};
     var categories = {{ categories|raw }};

@@ -38,13 +38,9 @@ class Api
         $this->jwtToken = $jwtToken;
     }
 
-    public function search(string $query, string $model = null)
+    public function search(?string $query, ?string $model = null)
     {
-        $params = ['q' => $query];
-
-        if ($model) {
-            $params['model'] = class_basename($model);
-        }
+        $params = array_filter(['q' => $query, 'model' => class_basename($model)]);
 
         return $this->get('/search', $params);
     }
