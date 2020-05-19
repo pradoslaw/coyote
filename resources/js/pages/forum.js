@@ -30,7 +30,7 @@ new Vue({
   },
   created() {
     store.commit('forums/init', window.forums || []);
-    store.commit('topics/init', window.topics || []);
+    store.commit('topics/init', (window.topics?.data) || []);
   },
   methods: {
     changeCollapse(id) {
