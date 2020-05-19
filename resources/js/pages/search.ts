@@ -6,10 +6,14 @@ import store from "../store";
 import { Hit, Hits } from "../types/hit";
 import { Model } from "../types/models";
 
+type Sort = 'id' | 'date';
+
 declare global {
   interface Window {
     hits: Hits;
     model: Model;
+    query: string;
+    sort: Sort;
     postsPerPage: number;
     categories: string[];
   }
@@ -69,7 +73,13 @@ const Tabs = [
 new Vue({
   el: '#js-search',
   delimiters: ['${', '}'],
-  data: { hits: window.hits, model: window.model, categories: window.categories },
+  data: {
+    hits: window.hits,
+    model: window.model,
+    query: window.query,
+    sort: window.sort,
+    categories: window.categories
+  },
   components: { 'vue-pagination': VuePagination },
   store,
   created() {
@@ -82,7 +92,9 @@ new Vue({
     },
 
     searchLink(model: Model) {
-      return `/Search?model=${model}`;
+      let params = { q: this.query, model };
+
+      return `/Search?${new URLSearchParams(params).toString()}`;
     }
   },
 

@@ -55,6 +55,8 @@ class SearchController extends Controller
         return $this->view('search', [
             'hits'              => $hits ?? null,
             'model'             => $request->input('model'),
+            'query'             => $request->input('q'),
+            'sort'              => $request->input('sort'),
             'posts_per_page'    => $this->getSetting('forum.posts_per_page', 10),
             'categories'        => json_encode($categories)
         ]);
