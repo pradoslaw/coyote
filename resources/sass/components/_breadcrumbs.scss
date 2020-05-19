@@ -1,22 +1,14 @@
-ul.breadcrumb {
-  font-size: $font-size-small;
-  margin: 0;
-  background: none;
-  padding: 10px 0;
-  flex-wrap: nowrap;
-
-  li a {
-    color: #626262;
+.breadcrumb-item {
+  a {
+    color: $gray;
   }
 
-  .breadcrumb-item + .breadcrumb-item {
-    padding-left: 0.2rem;
-  }
+  // The separator between breadcrumbs (by default, a forward-slash: "/")
+  + .breadcrumb-item {
 
-  .breadcrumb-item + .breadcrumb-item::before {
-    content: "»";
-    padding: 0;
-    color: lighten($brand-primary, 5);
+    &::before {
+      content: "»";
+    }
   }
 }
 

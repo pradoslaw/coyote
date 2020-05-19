@@ -10,23 +10,41 @@
   <div class="row">
     <div class="col-12">
 
-      <div id="js-search">
+      {% if not hits %}
+        <div class="alert alert-danger">
+          Wystąpił błąd w połączeniu z serwrem wyszukiwarki. Prosimy spróbować ponownie za jakiś czas.
+        </div>
+      {% endif %}
+
+      <div id="js-search" v-cloak>
         <ul class="nav nav-pills mb-3">
           <li v-for="tab in tabs" class="nav-item"><a :href="searchLink(tab.model)" :class="{active: tab.model === model}" class="nav-link">${ tab.name }</a></li>
         </ul>
 
-        <div class="dropdown">
-          <button class="btn btn-sm btn-outline-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Trafność
-          </button>
-
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#">Trafność</a>
-            <a class="dropdown-item" href="#">Data dodania</a>
-          </div>
-        </div>
-
         <p class="text-muted">Wyniki <strong>${ hits.meta.from } - ${ hits.meta.to }</strong> z <strong>${ hits.meta.total }</strong> znalezione w czasie <strong>${ hits.took } ms.</strong></p>
+
+        <ul class="list-inline">
+          <li class="list-inline-item dropdown">
+            <a class="dropdown-toggle text-muted" id="dropdownMenuButton" data-toggle="dropdown">
+              Wszystkie kategorie
+            </a>
+
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a v-for="(category, id) in categories" :key="id" class="dropdown-item" href="javascript:" v-html="category"></a>
+            </div>
+          </li>
+
+          <li class="list-inline-item dropdown">
+            <a class="dropdown-toggle text-muted" id="dropdownMenuButton" data-toggle="dropdown">
+              Trafność
+            </a>
+
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="#">Trafność</a>
+              <a class="dropdown-item" href="#">Data dodania</a>
+            </div>
+          </li>
+        </ul>
 
         <component v-if="hits.meta.total" :is="getComponent()" :hits="hits.data"></component>
         <div v-else class="card card-body bg-light p-2 empty-result mt-4">
@@ -48,7 +66,8 @@
   <script type="text/javascript">
     var model = '{{ model }}';
     var hits = {{ hits|raw }};
-    var postsPerPage = {{ postsPerPage }};
+    var postsPerPage = {{ posts_per_page }};
+    var categories = {{ categories|raw }};
   </script>
 {% endblock %}
 

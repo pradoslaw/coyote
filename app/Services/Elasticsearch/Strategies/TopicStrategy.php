@@ -4,7 +4,6 @@
 namespace Coyote\Services\Elasticsearch\Strategies;
 
 use Coyote\Http\Resources\TopicCollection;
-use Coyote\Http\Resources\TopicResource;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Services\Guest;
 use Coyote\Topic;
@@ -29,10 +28,13 @@ class TopicStrategy extends Strategy
     {
         $guestId = $request->session()->get('guest_id');
 
-        $hits = $this->api->search($request->input('q'), class_basename(Topic::class));
+        $hits = $this->api->search($request->input('q'), Topic::class);
         $ids = array_pluck($hits->hits, 'id');
 
-        $result = $this->highlight($hits->hits, $this->repository->findByIds($ids, $request->user()->id ?? null, $guestId)->keyBy('id'));
+        $result = $this->highlight(
+            $hits->hits,
+            $this->repository->findByIds($ids, $request->user()->id ?? null, $guestId)->keyBy('id')
+        );
 
         $guest = new Guest($guestId);
         $paginator = new LengthAwarePaginator($result, $hits->total, 10);
