@@ -40,7 +40,13 @@ class Api
 
     public function search(string $query, string $model = null)
     {
-        return $this->get('/search', ['q' => $query, 'model' => $model]);
+        $params = ['q' => $query];
+
+        if ($model) {
+            $params['model'] = class_basename($model);
+        }
+
+        return $this->get('/search', $params);
     }
 
     protected function get(string $path, array $params = []): Hits

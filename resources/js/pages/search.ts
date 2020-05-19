@@ -11,6 +11,7 @@ declare global {
     hits: Hits;
     model: Model;
     postsPerPage: number;
+    categories: string[];
   }
 }
 
@@ -33,12 +34,11 @@ Vue.component('vue-result-common', {
         <h2 class="mt-4 mb-1"><a :href="hit.url" v-html="title(hit)"></a></h2>
         <p class="mb-1" v-html="hit.text"></p>
 
-        <a :href="hit.url" class="text-truncate">
-          <ol class="list-inline d-inline">
-            <li v-for="breadcrumb in hit.breadcrumbs" class="list-inline-item"><a :href="breadcrumb.url">{{ breadcrumb.name }}</a></li>
-          </ol>
-          <vue-timeago :datetime="hit.created_at" class="text-muted"></vue-timeago>
-        </a>
+        <ul class="breadcrumb d-inline-flex p-0">
+          <li v-for="breadcrumb in hit.breadcrumbs" class="breadcrumb-item"><a :href="breadcrumb.url">{{ breadcrumb.name }}</a></li>
+        </ul>
+
+        <vue-timeago :datetime="hit.created_at" class="text-muted"></vue-timeago>
       </li>
     </ul>`
 })
@@ -69,7 +69,7 @@ const Tabs = [
 new Vue({
   el: '#js-search',
   delimiters: ['${', '}'],
-  data: { hits: window.hits, model: window.model },
+  data: { hits: window.hits, model: window.model, categories: window.categories },
   components: { 'vue-pagination': VuePagination },
   store,
   created() {

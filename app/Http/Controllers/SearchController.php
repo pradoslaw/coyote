@@ -3,135 +3,60 @@
 namespace Coyote\Http\Controllers;
 
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
+use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
-use Coyote\Services\Elasticsearch\Api;
-use Coyote\Services\Elasticsearch\Builders\MixedBuilder;
-use Coyote\Services\Elasticsearch\MultiResultSet;
-use Coyote\Services\Elasticsearch\Search;
-use Coyote\Services\Elasticsearch\Strategies\CommonStrategy;
-use Coyote\Services\Elasticsearch\Strategies\TopicStrategy;
-use Coyote\Topic;
+use Coyote\Services\Elasticsearch\Factory;
+use Coyote\Services\Forum\TreeBuilder\ListDecorator;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Lavary\Menu\Builder;
-use Lavary\Menu\Item;
-use Lavary\Menu\Menu;
+use Coyote\Services\Forum\TreeBuilder\Builder as TreeBuilder;
 
 class SearchController extends Controller
 {
-    private $api;
+    /**
+     * @var ForumRepository
+     */
+    private $forum;
 
-    public function __construct(Api $api)
+    /**
+     * @param ForumRepository $forum
+     */
+    public function __construct(ForumRepository $forum)
     {
         parent::__construct();
 
-        $this->api = $api;
+        $this->forum = $forum;
+
+        $this->breadcrumb->push('Szukaj', route('search'));
     }
 
     /**
      * @param Request $request
-     * @param Search $search
+     * @param Factory $factory
      * @return \Illuminate\View\View|string
      */
-    public function index(Request $request, Search $search)
+    public function index(Request $request, Factory $factory)
     {
-        $this->breadcrumb->push('Szukaj', route('search'));
+        $this->forum->pushCriteria(new OnlyThoseWithAccess($this->auth));
+        $this->forum->pushCriteria(new AccordingToUserOrder($this->userId, true));
 
-        switch ($request->input('model')) {
-            case class_basename(Topic::class):
-                $strategy = app(TopicStrategy::class);
-                break;
+        $categories = (new ListDecorator(new TreeBuilder($this->forum->list())))->setKey('id')->build();
+        $strategy = $factory->make($request->input('model'));
 
-            default:
-                $strategy = new CommonStrategy();
+        try {
+            $hits = $strategy->search($request)->content();
 
-        }
+            if ($request->wantsJson()) {
+                return $hits;
+            }
+        } catch (\Exception $e) {
 
-        start_measure('elasticsearch');
-        $hits = $search->search($strategy);
-        stop_measure('elasticsearch');
-
-        if ($request->wantsJson()) {
-            return $hits;
         }
 
         return $this->view('search', [
-            'hits' => $hits,
-            'model' => $request->input('model'),
-            'postsPerPage' => $this->getSetting('forum.posts_per_page', 10)
+            'hits'              => $hits ?? null,
+            'model'             => $request->input('model'),
+            'posts_per_page'    => $this->getSetting('forum.posts_per_page', 10),
+            'categories'        => json_encode($categories)
         ]);
-    }
-
-    /**
-     * @return array
-     */
-    private function search()
-    {
-        if (!$this->request->filled('q')) {
-            return [];
-        }
-
-        // search only in allowed forum categories
-        $this->forum->pushCriteria(new OnlyThoseWithAccess($this->auth));
-        $this->request->attributes->set('forum_id', $this->forum->pluck('id'));
-
-        // build elasticsearch request
-        $body = (new MixedBuilder($this->request))->build();
-
-        $params = [
-            'index'     => config('elasticsearch.default_index'),
-            'type'      => '_doc',
-            'body'      => $body
-        ];
-
-        debugbar()->debug(json_encode($body));
-        debugbar()->startMeasure('elasticsearch');
-
-        // do the search and transform results
-        $hits = new MultiResultSet($this->getClient()->search($params));
-        debugbar()->stopMeasure('elasticsearch');
-
-        $pagination = new LengthAwarePaginator($hits, $hits->total(), 10, null, ['path' => ' ']);
-        $pagination->appends($this->request->except('page'));
-
-        return [
-            'hits' => $hits,
-            'took' => $hits->took(),
-            'total' => $hits->total(),
-            'pagination' => $pagination
-        ];
-    }
-
-    /**
-     * @return mixed
-     */
-    private function tabs()
-    {
-        return app(Menu::class)->make('tabs', function (Builder $menu) {
-            $item = $menu->add('Wszystko', ['class' => 'nav-item', 'url' => route('search', ['q' => $this->request->input('q')])]);
-            $item->link->attr(['class' => 'nav-link']);
-
-            foreach (['Forum' => MixedBuilder::TOPIC, 'Praca' => MixedBuilder::JOB, 'Mikroblog' => MixedBuilder::MICROBLOG, 'Kompendium' => MixedBuilder::WIKI] as $label => $type) {
-                $item = $menu->add($label, ['class' => 'nav-item', 'url' => $this->route($type)])->data('type', $type);
-                $item->link->attr(['class' => 'nav-link']);
-            }
-        })
-        ->filter(function (Item $item) {
-            if ($this->request->input('type') === $item->data('type')) {
-                $item->link->active();
-            }
-
-            return true;
-        });
-    }
-
-    /**
-     * @param string$type
-     * @param string $type
-     * @return string
-     */
-    private function route($type)
-    {
-        return route('search', ['type' => $type, 'q' => $this->request->input('q')]);
     }
 }

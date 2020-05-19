@@ -7,8 +7,17 @@
     @include link-color-darker;
   }
 
-  .highlight {
+  em {
     font-weight: bold;
     font-style: normal;
+  }
+
+  time {
+    padding-left: .2rem;
+
+    &:before {
+      content: '•';
+      padding-right: .2rem;
+    }
   }
 }
