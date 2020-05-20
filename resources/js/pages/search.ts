@@ -5,8 +5,9 @@ import VueTimeago from '../plugins/timeago';
 import store from "../store";
 import { Hit, Hits } from "../types/hit";
 import { Model } from "../types/models";
+import axios from 'axios';
 
-type Sort = 'id' | 'date';
+type Sort = 'score' | 'date';
 
 declare global {
   interface Window {
@@ -15,7 +16,7 @@ declare global {
     query: string;
     sort: Sort;
     postsPerPage: number;
-    categories: string[];
+    categories: number[];
   }
 }
 
@@ -78,7 +79,10 @@ new Vue({
     model: window.model,
     query: window.query,
     sort: window.sort,
-    categories: window.categories
+    categories: window.categories,
+    defaults: {
+      sort: 'score'
+    }
   },
   components: { 'vue-pagination': VuePagination },
   store,
@@ -91,16 +95,42 @@ new Vue({
       return this.model ? `vue-result-${this.model.toLowerCase()}` : 'vue-result-common';
     },
 
+    setSort(sort: Sort) {
+      this.sort = sort;
+      this.request();
+    },
+
     searchLink(model: Model) {
       let params = { q: this.query, model };
 
       return `/Search?${new URLSearchParams(params).toString()}`;
+    },
+
+    request() {
+      axios.get('/Search', {params: this.getParams()}).then(result => {
+        this.hits = result.data;
+      });
+    },
+
+    getParams() {
+      let params = { q: this.query, model: this.model, sort: this.sort };
+
+      return params;
     }
   },
 
   computed: {
     tabs() {
       return Tabs;
-    }
+    },
+
+    // getDefaultSort() {
+    //   return this.sort || this.defaults.sort;
+    // }
   }
+  // watch: {
+  //   sort() {
+  //
+  //   }
+  // }
 });

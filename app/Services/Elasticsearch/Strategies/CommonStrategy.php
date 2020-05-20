@@ -11,7 +11,7 @@ class CommonStrategy extends Strategy
 {
     public function search(Request $request): JsonResponse
     {
-        $hits = $this->api->search($request->input('q'));
+        $hits = $this->api->search($request->input('q'), null, $request->input('sort'));
 
         $paginator = new LengthAwarePaginator($hits->hits, $hits->total, 10);
 

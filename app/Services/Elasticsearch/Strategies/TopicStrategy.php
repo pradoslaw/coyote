@@ -28,7 +28,7 @@ class TopicStrategy extends Strategy
     {
         $guestId = $request->session()->get('guest_id');
 
-        $hits = $this->api->search($request->input('q'), Topic::class);
+        $hits = $this->api->search($request->input('q'), Topic::class, $request->input('sort'));
         $ids = array_pluck($hits->hits, 'id');
 
         $result = $this->highlight(

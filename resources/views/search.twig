@@ -40,8 +40,8 @@
             </a>
 
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a class="dropdown-item" href="#">Trafność</a>
-              <a class="dropdown-item" href="#">Data dodania</a>
+              <a @click="setSort('score')" class="dropdown-item" href="#">Trafność</a>
+              <a @click="setSort('date')" class="dropdown-item" href="#">Data dodania</a>
             </div>
           </li>
         </ul>
