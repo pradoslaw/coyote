@@ -9,6 +9,15 @@ import axios from 'axios';
 
 type Sort = 'score' | 'date';
 
+enum SortOptions {
+  'score' = 'Trafność',
+  'date' = 'Data'
+}
+
+type ModelType = {
+  [key in Model]: string;
+};
+
 declare global {
   interface Window {
     hits: Hits;
@@ -64,12 +73,14 @@ Vue.component('vue-result-topic', {
   }
 })
 
-const Tabs = [
-  { name: 'Wszystko', model: '' },
-  { name: 'Forum', model: Model.Topic },
-  { name: 'Praca', model: Model.Job },
-  { name: 'Mikroblog', model: Model.Microblog },
-]
+// @todo duplikat z searchbar.vue
+const FilterModels: ModelType = {
+  [Model.Topic]: 'Wątki na forum',
+  [Model.Job]: 'Oferty pracy',
+  [Model.User]: 'Użytkownicy',
+  [Model.Wiki]: 'Artykuły',
+  [Model.Microblog]: 'Mikroblogi'
+}
 
 new Vue({
   el: '#js-search',
@@ -82,7 +93,9 @@ new Vue({
     categories: window.categories,
     defaults: {
       sort: 'score'
-    }
+    },
+    sortOptions: SortOptions,
+    filterModels: FilterModels
   },
   components: { 'vue-pagination': VuePagination },
   store,
@@ -100,37 +113,44 @@ new Vue({
       this.request();
     },
 
-    searchLink(model: Model) {
-      let params = { q: this.query, model };
+    searchLink(model?: Model) {
+      let params = { ...this.requestParams, model };
 
-      return `/Search?${new URLSearchParams(params).toString()}`;
+      if (!model) {
+        delete params['model'];
+      }
+
+      return this.getUrl(params);
     },
 
     request() {
-      axios.get('/Search', {params: this.getParams()}).then(result => {
+      history.pushState(this.requestParams, '', this.getUrl(this.requestParams));
+
+      axios.get('/Search', {params: this.requestParams}).then(result => {
         this.hits = result.data;
       });
     },
 
-    getParams() {
-      let params = { q: this.query, model: this.model, sort: this.sort };
-
-      return params;
+    getUrl(params: any) {
+      return `/Search?${new URLSearchParams(params).toString()}`;
     }
   },
 
   computed: {
-    tabs() {
-      return Tabs;
+    requestParams(): any {
+      let params = { q: this.query, model: this.model, sort: this.sort };
+
+      Object.keys(params).forEach(key => {
+        if (!params[key]) {
+          delete params[key];
+        }
+      })
+
+      return params;
     },
 
-    // getDefaultSort() {
-    //   return this.sort || this.defaults.sort;
-    // }
+    defaultSort(): Sort {
+      return this.sort || this.defaults.sort;
+    }
   }
-  // watch: {
-  //   sort() {
-  //
-  //   }
-  // }
 });

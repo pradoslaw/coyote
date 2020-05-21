@@ -18,7 +18,12 @@
 
       <div id="js-search" v-cloak>
         <ul class="nav nav-pills mb-3">
-          <li v-for="tab in tabs" class="nav-item"><a :href="searchLink(tab.model)" :class="{active: tab.model === model}" class="nav-link">${ tab.name }</a></li>
+          <li class="nav-item">
+            <a :href="searchLink()" :class="{active: model === ''}" class="nav-link">Wszystkie</a>
+          </li>
+          <li v-for="(label, filterModel) in filterModels" class="nav-item">
+            <a :href="searchLink(filterModel)" :class="{active: filterModel === model}" class="nav-link">${ label }</a>
+          </li>
         </ul>
 
         <p class="text-muted">Wyniki <strong>${ hits.meta.from } - ${ hits.meta.to }</strong> z <strong>${ hits.meta.total }</strong> znalezione w czasie <strong>${ hits.took } ms.</strong></p>
@@ -36,12 +41,15 @@
 
           <li class="list-inline-item dropdown">
             <a class="dropdown-toggle text-muted" id="dropdownMenuButton" data-toggle="dropdown">
-              Trafność
+              ${ sortOptions[defaultSort] }
             </a>
 
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a @click="setSort('score')" class="dropdown-item" href="#">Trafność</a>
-              <a @click="setSort('date')" class="dropdown-item" href="#">Data dodania</a>
+              <a v-for="(label, option) in sortOptions" @click="setSort(option)" class="dropdown-item" href="#">
+                <i v-if="option === defaultSort" class="fa fa-check"></i>
+
+                ${ label }
+              </a>
             </div>
           </li>
         </ul>
