@@ -21,7 +21,7 @@
           <li class="nav-item">
             <a :href="modelUrl()" :class="{active: model === ''}" class="nav-link">Wszystkie</a>
           </li>
-          <li v-for="(label, filterModel) in filterModels" class="nav-item">
+          <li v-for="(label, filterModel) in modelOptions" class="nav-item">
             <a :href="modelUrl(filterModel)" :class="{active: filterModel === model}" class="nav-link">${ label }</a>
           </li>
         </ul>
@@ -35,7 +35,13 @@
             </a>
 
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a v-for="(category, id) in categories" :key="id" class="dropdown-item" href="javascript:" v-html="category"></a>
+              <perfect-scrollbar id="wrap">
+                <a v-for="(category, id) in forums" @click="toggleCategory(id)" :key="id" class="dropdown-item" href="javascript:">
+                  <i v-if="categories.indexOf(id) > -1" class="fa fa-check"></i>
+
+                  <span v-html="category"></span>
+                </a>
+              </perfect-scrollbar>
             </div>
           </li>
 
@@ -77,7 +83,8 @@
     var sort = '{{ sort|raw }}';
     var hits = {{ hits|raw }};
     var postsPerPage = {{ posts_per_page }};
-    var categories = {{ categories|raw }};
+    var categories = {{ categories|json_encode|raw }};
+    var forums = {{ forums|json_encode|raw }};
   </script>
 {% endblock %}
 

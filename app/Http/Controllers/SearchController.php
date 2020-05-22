@@ -39,7 +39,7 @@ class SearchController extends Controller
         $this->forum->pushCriteria(new OnlyThoseWithAccess($this->auth));
         $this->forum->pushCriteria(new AccordingToUserOrder($this->userId, true));
 
-        $categories = (new ListDecorator(new TreeBuilder($this->forum->list())))->setKey('id')->build();
+        $forums = (new ListDecorator(new TreeBuilder($this->forum->list())))->setKey('id')->build();
         $strategy = $factory->make($request->input('model'));
 
         try {
@@ -57,8 +57,9 @@ class SearchController extends Controller
             'model'             => $request->input('model'),
             'query'             => $request->input('q'),
             'sort'              => $request->input('sort'),
+            'categories'        => $request->input('categories', []),
             'posts_per_page'    => $this->getSetting('forum.posts_per_page', 10),
-            'categories'        => json_encode($categories)
+            'forums'            => $forums
         ]);
     }
 }
