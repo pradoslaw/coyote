@@ -4,11 +4,9 @@ import VuePagination from '../components/pagination.vue';
 import VueTimeago from '../plugins/timeago';
 import PerfectScrollbar from '../components/perfect-scrollbar';
 import store from "../store";
-import { Hit, Hits } from "../types/hit";
+import { Hit, Hits, Sort, SearchOptions } from "../types/hit";
 import { Model } from "../types/models";
 import axios from 'axios';
-
-type Sort = 'score' | 'date';
 
 type ModelType = {
   [key in Model]: string;
@@ -150,12 +148,14 @@ new Vue({
       const index = this.categories.indexOf(id);
 
       index > -1 ? this.categories.splice(index) : this.categories.push(id);
+
+      this.request();
     }
   },
 
   computed: {
-    requestParams(): any {
-      let params = { q: this.query, model: this.model, sort: this.sort };
+    requestParams(): SearchOptions {
+      let params = { q: this.query, model: this.model, sort: this.sort, categories: this.categories };
 
       Object.keys(params).forEach(key => {
         if (!params[key]) {
