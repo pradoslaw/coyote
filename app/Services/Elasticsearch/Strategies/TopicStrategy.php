@@ -56,7 +56,7 @@ class TopicStrategy extends Strategy
                 $collection[$id]->subject = $hit['subject'];
 
                 if (isset($hit['posts'])) {
-                    $collection[$id]->user_post_id = $hit['posts'][0]['id'];
+                    $collection[$id]->user_post_id = $hit['children'][0]['id'];
                 }
             }
         }

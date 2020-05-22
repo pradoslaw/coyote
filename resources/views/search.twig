@@ -19,10 +19,10 @@
       <div id="js-search" v-cloak>
         <ul class="nav nav-pills mb-3">
           <li class="nav-item">
-            <a :href="searchLink()" :class="{active: model === ''}" class="nav-link">Wszystkie</a>
+            <a :href="modelUrl()" :class="{active: model === ''}" class="nav-link">Wszystkie</a>
           </li>
           <li v-for="(label, filterModel) in filterModels" class="nav-item">
-            <a :href="searchLink(filterModel)" :class="{active: filterModel === model}" class="nav-link">${ label }</a>
+            <a :href="modelUrl(filterModel)" :class="{active: filterModel === model}" class="nav-link">${ label }</a>
           </li>
         </ul>
 
@@ -30,7 +30,7 @@
 
         <ul class="list-inline">
           <li class="list-inline-item dropdown">
-            <a class="dropdown-toggle text-muted" id="dropdownMenuButton" data-toggle="dropdown">
+            <a class="dropdown-toggle text-muted text-decoration-none" id="dropdownMenuButton" data-toggle="dropdown" href="javascript:">
               Wszystkie kategorie
             </a>
 
@@ -40,12 +40,12 @@
           </li>
 
           <li class="list-inline-item dropdown">
-            <a class="dropdown-toggle text-muted" id="dropdownMenuButton" data-toggle="dropdown">
+            <a class="dropdown-toggle text-muted text-decoration-none" id="dropdownMenuButton" data-toggle="dropdown" href="javascript:">
               ${ sortOptions[defaultSort] }
             </a>
 
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a v-for="(label, option) in sortOptions" @click="setSort(option)" class="dropdown-item" href="#">
+              <a v-for="(label, option) in sortOptions" @click.prevent="setSort(option)" class="dropdown-item" :href="sortUrl(option)">
                 <i v-if="option === defaultSort" class="fa fa-check"></i>
 
                 ${ label }

@@ -248,7 +248,7 @@ class CreateIndexCommand extends Command
                                     ]
                                 ]
                             ],
-                            "posts" => [
+                            "children" => [
                                 "type" => "nested",
                                 "properties" => [
                                     "id" => [
@@ -265,7 +265,7 @@ class CreateIndexCommand extends Command
                                         // ability to search case insensitive
                                         "analyzer" => "keyword_analyzer"
                                     ],
-                                    "slug" => [
+                                    "model" => [
                                         "type" => "keyword"
                                     ],
                                     "url" => [

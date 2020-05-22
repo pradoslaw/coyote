@@ -113,7 +113,7 @@ new Vue({
       this.request();
     },
 
-    searchLink(model?: Model) {
+    modelUrl(model?: Model) {
       let params = { ...this.requestParams, model };
 
       if (!model) {
@@ -121,6 +121,10 @@ new Vue({
       }
 
       return this.getUrl(params);
+    },
+
+    sortUrl(sort: Sort) {
+      return this.getUrl({ ...this.requestParams, sort });
     },
 
     request() {
