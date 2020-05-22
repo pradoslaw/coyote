@@ -25,8 +25,8 @@ class HitResource extends JsonResource
             return $result;
         }
 
-        if (!empty($this->resource['posts'])) {
-            $post = $this->resource['posts'][0];
+        if (!empty($this->resource['children'])) {
+            $post = $this->resource['children'][0];
 
             $result = array_merge($result, $post);
         }
