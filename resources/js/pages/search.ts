@@ -2,6 +2,7 @@ import Vue, { VNode } from "vue";
 import VueTopic from '../components/forum/topic.vue';
 import VuePagination from '../components/pagination.vue';
 import VueTimeago from '../plugins/timeago';
+import PerfectScrollbar from '../components/perfect-scrollbar';
 import store from "../store";
 import { Hit, Hits } from "../types/hit";
 import { Model } from "../types/models";
@@ -9,14 +10,27 @@ import axios from 'axios';
 
 type Sort = 'score' | 'date';
 
+type ModelType = {
+  [key in Model]: string;
+};
+
+type ForumType = {
+  [key: number]: string;
+};
+
 enum SortOptions {
   'score' = 'Trafność',
   'date' = 'Data'
 }
 
-type ModelType = {
-  [key in Model]: string;
-};
+// @todo duplikat z searchbar.vue
+const ModelOptions: ModelType = {
+  [Model.Topic]: 'Wątki na forum',
+  [Model.Job]: 'Oferty pracy',
+  [Model.User]: 'Użytkownicy',
+  [Model.Wiki]: 'Artykuły',
+  [Model.Microblog]: 'Mikroblogi'
+}
 
 declare global {
   interface Window {
@@ -26,6 +40,7 @@ declare global {
     sort: Sort;
     postsPerPage: number;
     categories: number[];
+    forums: ForumType[];
   }
 }
 
@@ -73,15 +88,6 @@ Vue.component('vue-result-topic', {
   }
 })
 
-// @todo duplikat z searchbar.vue
-const FilterModels: ModelType = {
-  [Model.Topic]: 'Wątki na forum',
-  [Model.Job]: 'Oferty pracy',
-  [Model.User]: 'Użytkownicy',
-  [Model.Wiki]: 'Artykuły',
-  [Model.Microblog]: 'Mikroblogi'
-}
-
 new Vue({
   el: '#js-search',
   delimiters: ['${', '}'],
@@ -91,13 +97,14 @@ new Vue({
     query: window.query,
     sort: window.sort,
     categories: window.categories,
+    forums: window.forums,
     defaults: {
       sort: 'score'
     },
     sortOptions: SortOptions,
-    filterModels: FilterModels
+    modelOptions: ModelOptions
   },
-  components: { 'vue-pagination': VuePagination },
+  components: { 'vue-pagination': VuePagination, 'perfect-scrollbar': PerfectScrollbar },
   store,
   created() {
     store.commit('topics/init', window.hits.data || []);
@@ -137,6 +144,12 @@ new Vue({
 
     getUrl(params: any) {
       return `/Search?${new URLSearchParams(params).toString()}`;
+    },
+
+    toggleCategory(id: number) {
+      const index = this.categories.indexOf(id);
+
+      index > -1 ? this.categories.splice(index) : this.categories.push(id);
     }
   },
 
