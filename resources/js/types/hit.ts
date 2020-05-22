@@ -49,3 +49,13 @@ export interface Breadcrumb {
   name: string;
   url: string;
 }
+
+export type Sort = 'score' | 'date';
+
+export interface SearchOptions {
+  query?: string;
+  userId?: number | null;
+  model?: Model | Model[];
+  categories?: number[];
+  sort?: Sort;
+}
