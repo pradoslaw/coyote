@@ -2,9 +2,11 @@
 
 namespace Coyote\Http\Controllers\Microblog;
 
+use Coyote\Events\MicroblogWasSaved;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Requests\MicroblogRequest;
 use Coyote\Http\Resources\Api\MicroblogResource;
+use Coyote\Microblog;
 use Coyote\Notifications\Microblog\UserMentionedNotification;
 use Coyote\Notifications\Microblog\SubmittedNotification;
 use Coyote\Repositories\Criteria\Microblog\LoadUserScope;
@@ -47,7 +49,7 @@ class CommentController extends Controller
     /**
      * @param MicroblogRequest $request
      * @param Dispatcher $dispatcher
-     * @param $microblog
+     * @param \Coyote\Microblog $microblog
      * @return MicroblogResource
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
@@ -124,6 +126,8 @@ class CommentController extends Controller
             );
         }
 
+        event(new MicroblogWasSaved($microblog->parent));
+
         MicroblogResource::withoutWrapping();
 
         return (new MicroblogResource($microblog))->additional(['is_subscribed' => (bool) $isSubscribed]);
@@ -132,21 +136,22 @@ class CommentController extends Controller
     /**
      * Usuniecie komentarza z mikrobloga
      *
-     * @param \Coyote\Microblog $microblog
+     * @param \Coyote\Microblog $comment
      */
-    public function delete($microblog)
+    public function delete(Microblog $comment)
     {
-        $this->authorize('delete', $microblog);
+        $this->authorize('delete', $comment);
 
-        $this->transaction(function () use ($microblog) {
-            $microblog->delete();
+        $this->transaction(function () use ($comment) {
+            $comment->delete();
 
-            $parent = $microblog->parent()->first();
-            $object = (new Stream_Comment())->map($microblog);
-            $target = (new Stream_Microblog())->map($parent);
+            $object = (new Stream_Comment())->map($comment);
+            $target = (new Stream_Microblog())->map($comment->parent);
 
             stream(Stream_Delete::class, $object, $target);
         });
+
+        event(new MicroblogWasSaved($comment->parent));
     }
 
     /**

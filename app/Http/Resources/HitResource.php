@@ -21,7 +21,7 @@ class HitResource extends JsonResource
     {
         $result = array_except($this->resource, ['forum', 'posts']) + ['breadcrumbs' => $this->breadcrumb()];
 
-        if ($this->resource['model'] !== class_basename(Topic::class)) {
+        if (!$this->resource['children']) {
             return $result;
         }
 
@@ -32,6 +32,11 @@ class HitResource extends JsonResource
         }
 
         return $result;
+    }
+
+    private function hasChildren()
+    {
+        return $this->resource['model'] !== class_basename(Topic::class);
     }
 
     private function breadcrumb()

@@ -2,12 +2,10 @@
 
 namespace Coyote\Http\Composers;
 
-use Coyote\Services\Forum\UserDefined;
+use Coyote\Services\JwtToken;
 use Coyote\User;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Lcobucci\JWT\Signer\Hmac\Sha256;
-use Lcobucci\JWT\Signer\Key;
 
 class InitialStateComposer
 {
@@ -17,18 +15,18 @@ class InitialStateComposer
     private $request;
 
     /**
-     * @var UserDefined
+     * @var JwtToken
      */
-    private $userDefined;
+    private $jwtToken;
 
     /**
      * @param Request $request
-     * @param UserDefined $userDefined
+     * @param JwtToken $jwtToken
      */
-    public function __construct(Request $request, UserDefined $userDefined)
+    public function __construct(Request $request, JwtToken $jwtToken)
     {
         $this->request = $request;
-        $this->userDefined = $userDefined;
+        $this->jwtToken = $jwtToken;
     }
 
     /**
@@ -82,7 +80,7 @@ class InitialStateComposer
             'user' => [
                 'id'                    => $user->id,
                 'date_format'           => $this->mapFormat($user->date_format),
-                'token'                 => $this->getJWtToken($user),
+                'token'                 => $this->jwtToken->token($user),
                 'notifications_unread'  => $user->notifications_unread,
                 'pm_unread'             => $user->pm_unread,
                 'created_at'            => $user->created_at->toIso8601String(),
@@ -108,25 +106,5 @@ class InitialStateComposer
         ];
 
         return array_combine(array_keys(User::dateFormatList()), $values)[$format];
-    }
-
-    /**
-     * @param User $user
-     * @return string
-     */
-    private function getJWtToken(User $user): string
-    {
-        $signer = new Sha256();
-        $allowed = array_pluck($this->userDefined->getAllowedForums($user), 'id');
-
-        $token = (new \Lcobucci\JWT\Builder())
-            ->issuedAt(now()->timestamp)
-            ->expiresAt(now()->addDays(7)->timestamp)
-            ->issuedBy($user->id)
-            ->withClaim('channel', "user:$user->id")
-            ->withClaim('allowed', $allowed)
-            ->getToken($signer, new Key(config('app.key')));
-
-        return (string) $token;
     }
 }

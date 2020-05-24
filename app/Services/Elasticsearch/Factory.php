@@ -4,7 +4,9 @@ namespace Coyote\Services\Elasticsearch;
 
 use Coyote\Services\Elasticsearch\Strategies\CommonStrategy;
 use Coyote\Services\Elasticsearch\Strategies\StrategyInterface;
+use Coyote\Services\JwtToken;
 use Illuminate\Contracts\Container\Container as App;
+use Illuminate\Http\Request;
 
 class Factory
 {
@@ -24,8 +26,17 @@ class Factory
      */
     public function make(?string $model): StrategyInterface
     {
+        /** @var JwtToken $jwtToken */
+        $jwtToken = $this->app[JwtToken::class];
+
+        /** @var Api $api */
+        $api = $this->app[Api::class];
+        $api->setJwtToken(
+            $jwtToken->token($this->app[Request::class]->user())
+        );
+
         $class = $this->getClass($model);
-        $class->setApi($this->app[Api::class]);
+        $class->setApi($api);
 
         return $class;
     }
