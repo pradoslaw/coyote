@@ -94,7 +94,7 @@
       [Context.Participant]: 'Artykuły z Twoim udziałem'
     },
     [Model.Microblog]: {
-      [Context.User]: '',
+      [Context.User]: 'Twoje wpisy na mikroblogu',
       [Context.Subscriber]: '',
       [Context.Participant]: ''
     }
@@ -143,6 +143,11 @@
   Vue.component('WikiDecorator', {
     mixins: [ Decorator ],
     template: '<a :href="item.url" class="text-truncate" tabindex="-1"><span v-html="highlight(item.title, value)"></span></a>'
+  });
+
+  Vue.component('MicroblogDecorator', {
+    mixins: [ Decorator ],
+    template: '<a :href="item.url" class="text-truncate" tabindex="-1"><span v-html="highlight(item.text, value)"></span></a>'
   });
 
   Vue.component('UserDecorator', {
