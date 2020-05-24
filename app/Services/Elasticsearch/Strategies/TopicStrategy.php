@@ -5,6 +5,7 @@ namespace Coyote\Services\Elasticsearch\Strategies;
 
 use Coyote\Http\Resources\TopicCollection;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
+use Coyote\Services\Elasticsearch\SearchOptions;
 use Coyote\Services\Guest;
 use Coyote\Topic;
 use Illuminate\Database\Eloquent\Collection;
@@ -28,7 +29,7 @@ class TopicStrategy extends Strategy
     {
         $guestId = $request->session()->get('guest_id');
 
-        $hits = $this->api->search($request->input('q'), Topic::class, $request->input('sort'));
+        $hits = $this->api->search(new SearchOptions($request, Topic::class));
         $ids = array_pluck($hits->hits, 'id');
 
         $result = $this->highlight(

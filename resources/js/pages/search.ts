@@ -12,9 +12,11 @@ type ModelType = {
   [key in Model]: string;
 };
 
-type ForumType = {
-  [key: number]: string;
-};
+interface ForumItem {
+  id: number;
+  name: string;
+  indent: boolean;
+}
 
 enum SortOptions {
   'score' = 'Trafność',
@@ -38,7 +40,7 @@ declare global {
     sort: Sort;
     postsPerPage: number;
     categories: number[];
-    forums: ForumType[];
+    forums: ForumItem[];
   }
 }
 
@@ -147,7 +149,7 @@ new Vue({
     toggleCategory(id: number) {
       const index = this.categories.indexOf(id);
 
-      index > -1 ? this.categories.splice(index) : this.categories.push(id);
+      index > -1 ? this.categories.splice(index, 1) : this.categories.push(id);
 
       this.request();
     }
@@ -168,6 +170,18 @@ new Vue({
 
     defaultSort(): Sort {
       return this.sort || this.defaults.sort;
+    },
+
+    selectedCategories(): string {
+      return this
+        .categories
+        .map(id => {
+          const index = this.forums.findIndex(forum => forum.id == id) // == because id can be string
+
+          return this.forums[index].name;
+        })
+        .splice(0, 5)
+        .join(', ');
     }
   }
 });
