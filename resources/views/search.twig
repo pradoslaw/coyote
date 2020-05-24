@@ -10,9 +10,9 @@
   <div class="row">
     <div class="col-12">
 
-      {% if not hits %}
+      {% if error %}
         <div class="alert alert-danger">
-          Wystąpił błąd w połączeniu z serwrem wyszukiwarki. Prosimy spróbować ponownie za jakiś czas.
+          {{ error }}
         </div>
       {% endif %}
 
@@ -26,20 +26,21 @@
           </li>
         </ul>
 
-        <p class="text-muted">Wyniki <strong>${ hits.meta.from } - ${ hits.meta.to }</strong> z <strong>${ hits.meta.total }</strong> znalezione w czasie <strong>${ hits.took } ms.</strong></p>
+        <p v-if="hits.meta.total" class="text-muted">Wyniki <strong>${ hits.meta.from } - ${ hits.meta.to }</strong> z <strong>${ hits.meta.total }</strong> znalezione w czasie <strong>${ hits.took } ms.</strong></p>
 
         <ul class="list-inline">
           <li class="list-inline-item dropdown">
             <a class="dropdown-toggle text-muted text-decoration-none" id="dropdownMenuButton" data-toggle="dropdown" href="javascript:">
-              Wszystkie kategorie
+              <template v-if="!categories.length">Wszystkie kategorie</template>
+              <span v-else>${ selectedCategories }</span>
             </a>
 
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <perfect-scrollbar id="wrap">
-                <a v-for="(category, id) in forums" @click="toggleCategory(id)" :key="id" class="dropdown-item" href="javascript:">
-                  <i v-if="categories.indexOf(id) > -1" class="fa fa-check"></i>
+                <a v-for="forum in forums" @click="toggleCategory(forum.id)" :key="forum.id" class="dropdown-item" href="javascript:">
+                  <i v-if="categories.indexOf(forum.id) > -1" class="fa fa-check"></i>
 
-                  <span v-html="category"></span>
+                  <span :class="{'pl-2': forum.indent}">${ forum.name }</span>
                 </a>
               </perfect-scrollbar>
             </div>
@@ -81,9 +82,9 @@
     var model = '{{ model }}';
     var query = '{{ query|raw }}';
     var sort = '{{ sort|raw }}';
-    var hits = {{ hits|raw }};
+    var hits = {{ hits|default('null')|raw }};
     var postsPerPage = {{ posts_per_page }};
-    var categories = {{ categories|json_encode|raw }};
+    var categories = {{ categories|default([])|json_encode|raw }};
     var forums = {{ forums|json_encode|raw }};
   </script>
 {% endblock %}

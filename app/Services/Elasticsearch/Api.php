@@ -2,6 +2,7 @@
 
 namespace Coyote\Services\Elasticsearch;
 
+use Coyote\Exceptions\ApiRequestException;
 use GuzzleHttp\Client;
 
 class Api
@@ -38,11 +39,9 @@ class Api
         $this->jwtToken = $jwtToken;
     }
 
-    public function search(?string $query, ?string $model = null, ?string $sort = null)
+    public function search(SearchOptions $options)
     {
-        $params = array_filter(['q' => $query, 'model' => class_basename($model), 'sort' => $sort]);
-
-        return $this->get('/search', $params);
+        return $this->get('/search', $options->getParams());
     }
 
     protected function get(string $path, array $params = []): Hits
@@ -51,6 +50,12 @@ class Api
             'base_uri'  => sprintf('http://%s:%d', $this->host, $this->port),
             'query'     => $params
         ]);
+
+        if ($response->getStatusCode() === 400) {
+            throw new ApiRequestException('Wprowadzone dane nie są poprawne.');
+        } elseif ($response->getStatusCode() === 500) {
+            throw new ApiRequestException('Nieoczekiwany błąd serwera wyszukiwarki.');
+        }
 
         $body = json_decode((string) $response->getBody(), true);
 
