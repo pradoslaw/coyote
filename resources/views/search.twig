@@ -19,10 +19,10 @@
       <div id="js-search" v-cloak>
         <ul class="nav nav-pills mb-3">
           <li class="nav-item">
-            <a :href="modelUrl()" :class="{active: model === ''}" class="nav-link">Wszystkie</a>
+            <a @click.prevent="setModel()" :href="modelUrl()" :class="{active: !model}" class="nav-link">Wszystkie</a>
           </li>
           <li v-for="(label, filterModel) in modelOptions" class="nav-item">
-            <a :href="modelUrl(filterModel)" :class="{active: filterModel === model}" class="nav-link">${ label }</a>
+            <a @click.prevent="setModel(filterModel)" :href="modelUrl(filterModel)" :class="{active: filterModel === model}" class="nav-link">${ label }</a>
           </li>
         </ul>
 

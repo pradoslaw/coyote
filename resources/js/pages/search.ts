@@ -35,7 +35,7 @@ const ModelOptions: ModelType = {
 declare global {
   interface Window {
     hits: Hits;
-    model: Model;
+    model?: Model;
     query: string;
     sort: Sort;
     postsPerPage: number;
@@ -127,11 +127,27 @@ new Vue({
       this.request();
     },
 
-    modelUrl(model?: Model) {
-      let params = { ...this.requestParams, model };
+    setModel(model?: Model) {
+      // before making a request, we must clear results list because on different tabs, data could have different format
+      this.hits.data = [];
+      this.model = model;
 
-      if (!model) {
-        delete params['model'];
+      this.request();
+    },
+
+    toggleCategory(id: number) {
+      const index = this.categories.indexOf(id);
+
+      index > -1 ? this.categories.splice(index, 1) : this.categories.push(id);
+
+      this.request();
+    },
+
+    modelUrl(model?: Model) {
+      let params = this.requestParams;
+
+      if (model) {
+        params['model'] = model;
       }
 
       return this.getUrl(params);
@@ -151,14 +167,6 @@ new Vue({
 
     getUrl(params: any) {
       return `/Search?${new URLSearchParams(params).toString()}`;
-    },
-
-    toggleCategory(id: number) {
-      const index = this.categories.indexOf(id);
-
-      index > -1 ? this.categories.splice(index, 1) : this.categories.push(id);
-
-      this.request();
     }
   },
 
