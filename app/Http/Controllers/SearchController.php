@@ -57,8 +57,8 @@ class SearchController extends Controller
 
         try {
             $this->validate($request, [
-                'q' => 'nullable|string',
-                'sort' => 'nullable|in:' . SearchOptions::DATE . ',' . SearchOptions::SCORE
+                'q'         => 'nullable|string',
+                'sort'      => 'nullable|in:' . SearchOptions::DATE . ',' . SearchOptions::SCORE
             ]);
 
             $response['hits'] = $strategy->search($request)->content();
@@ -77,7 +77,6 @@ class SearchController extends Controller
     {
         if (is_string($request->input('categories'))) {
             $value = array_filter(array_map('intval', explode(',', $request->input('categories'))));
-            dd($value);
 
             $request->replace(array_merge($request->all(), ['categories' => $value]));
         }

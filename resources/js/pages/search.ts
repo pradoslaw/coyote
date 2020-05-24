@@ -63,6 +63,13 @@ Vue.component('vue-result-common', {
         <h2 class="mt-4 mb-1"><a :href="hit.url" v-html="title(hit)"></a></h2>
         <p class="mb-1" v-html="hit.text"></p>
 
+        <ul v-if="hit.children.length" class="children mt-2 mb-2">
+          <li v-for="child in hit.children">
+            <a :href="child.url" class="text-truncate" v-html="child.text"></a>
+            <vue-timeago :datetime="child.created_at" class="text-muted"></vue-timeago>
+          </li>
+        </ul>
+
         <ul class="breadcrumb d-inline-flex p-0">
           <li v-for="breadcrumb in hit.breadcrumbs" class="breadcrumb-item"><a :href="breadcrumb.url">{{ breadcrumb.name }}</a></li>
         </ul>

@@ -21,22 +21,13 @@ class HitResource extends JsonResource
     {
         $result = array_except($this->resource, ['forum', 'posts']) + ['breadcrumbs' => $this->breadcrumb()];
 
-        if (!$this->resource['children']) {
-            return $result;
-        }
-
         if (!empty($this->resource['children'])) {
-            $post = $this->resource['children'][0];
+            $child = array_shift($result['children']);
 
-            $result = array_merge($result, $post);
+            $result = array_merge($result, $child);
         }
 
         return $result;
-    }
-
-    private function hasChildren()
-    {
-        return $this->resource['model'] !== class_basename(Topic::class);
     }
 
     private function breadcrumb()

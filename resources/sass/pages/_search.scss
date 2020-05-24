@@ -20,4 +20,11 @@
       padding-right: .2rem;
     }
   }
+
+  .children {
+    @include link-color-darker;
+
+    font-size: $font-size-sm;
+    padding-left: 1rem;
+  }
 }
