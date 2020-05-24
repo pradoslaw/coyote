@@ -2,7 +2,6 @@
 
 namespace Coyote\Services\Elasticsearch;
 
-use Coyote\Exceptions\ApiRequestException;
 use GuzzleHttp\Client;
 
 class Api
@@ -50,12 +49,6 @@ class Api
             'base_uri'  => sprintf('http://%s:%d', $this->host, $this->port),
             'query'     => $params
         ]);
-
-        if ($response->getStatusCode() === 400) {
-            throw new ApiRequestException('Wprowadzone dane nie są poprawne.');
-        } elseif ($response->getStatusCode() === 500) {
-            throw new ApiRequestException('Nieoczekiwany błąd serwera wyszukiwarki.');
-        }
 
         $body = json_decode((string) $response->getBody(), true);
 

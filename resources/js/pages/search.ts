@@ -119,7 +119,7 @@ new Vue({
 
   methods: {
     getComponent() {
-      return this.model ? `vue-result-${this.model.toLowerCase()}` : 'vue-result-common';
+      return this.model === Model.Topic ? `vue-result-${this.model.toLowerCase()}` : 'vue-result-common';
     },
 
     setSort(sort: Sort) {

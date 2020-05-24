@@ -54,7 +54,7 @@ class Factory
         $class = __NAMESPACE__ . '\\Strategies\\' . ucfirst($model) . 'Strategy';
 
         if (!class_exists($class, true)) {
-            throw new \InvalidArgumentException("Can't find $class class.");
+            return new CommonStrategy();
         }
 
         return $this->app[$class];

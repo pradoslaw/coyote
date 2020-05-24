@@ -32,7 +32,7 @@ class SearchOptions
     public function __construct(Request $request, string $model = null)
     {
         $this->query = $request->input('q');
-        $this->model = $model;
+        $this->model = $request->input('model');
         $this->categories = $request->input('categories');
         $this->sort = $request->input('sort');
     }
