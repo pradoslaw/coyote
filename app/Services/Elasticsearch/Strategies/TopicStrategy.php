@@ -29,7 +29,7 @@ class TopicStrategy extends Strategy
     {
         $guestId = $request->session()->get('guest_id');
 
-        $hits = $this->api->search(new SearchOptions($request, Topic::class));
+        $hits = $this->api->search(new SearchOptions($request));
         $ids = array_pluck($hits->hits, 'id');
 
         $result = $this->highlight(
