@@ -160,7 +160,7 @@ new Vue({
       let params = { q: this.query, model: this.model, sort: this.sort, categories: this.categories };
 
       Object.keys(params).forEach(key => {
-        if (!params[key]) {
+        if (!params[key] || (Array.isArray(params[key]) && params[key].length === 0)) {
           delete params[key];
         }
       })
