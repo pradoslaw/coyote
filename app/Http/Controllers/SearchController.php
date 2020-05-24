@@ -8,7 +8,6 @@ use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Services\Elasticsearch\Factory;
 use Coyote\Services\Elasticsearch\SearchOptions;
 use Coyote\Services\Forum\TreeBuilder\JsonDecorator;
-use Coyote\Services\Forum\TreeBuilder\ListDecorator;
 use Illuminate\Http\Request;
 use Coyote\Services\Forum\TreeBuilder\Builder as TreeBuilder;
 
