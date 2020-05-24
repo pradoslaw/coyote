@@ -17,6 +17,13 @@
 
   .topic-subject {
     font-size: .9rem;
+
+    // highligh search results
+    em {
+      background-color: $unread-bg;
+      font-style: normal;
+      font-weight: bold;
+    }
   }
 
   .topic-container {

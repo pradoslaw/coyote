@@ -8,6 +8,9 @@ use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Services\Elasticsearch\Factory;
 use Coyote\Services\Elasticsearch\SearchOptions;
 use Coyote\Services\Forum\TreeBuilder\JsonDecorator;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\ServerException;
 use Illuminate\Http\Request;
 use Coyote\Services\Forum\TreeBuilder\Builder as TreeBuilder;
 
@@ -66,8 +69,14 @@ class SearchController extends Controller
             if ($request->wantsJson()) {
                 return $response['hits'];
             }
-        } catch (\Exception $e) {
-            $response['error'] = $e->getMessage();
+        } catch (ConnectException $e) {
+            logger()->error($e);
+
+            $response['error'] = 'Brak połączenia z serwrem wyszukiwarki.';
+        } catch (ServerException | ClientException $e) {
+            logger()->error($e);
+
+            $response['error'] = 'Serwer wyszukiwarki nie może przetworzyć tego żądania.';
         }
 
         return $this->view('search', $response);
