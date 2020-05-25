@@ -37,7 +37,7 @@
       {% import 'components.widgets' as widgets %}
 
       <header class="{{ auth_guest() or user('allow_sticky_header') ? ' fixed-top' }}">
-        <div class="navbar-border-top row"></div>
+        <div class="navbar-border-top"></div>
 
         {{ form_open({url: route('logout'), name: 'logout-form'}) }}
         {{ form_close() }}
