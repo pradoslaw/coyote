@@ -2,6 +2,7 @@
 
 namespace Coyote;
 
+use Coyote\Microblog\Vote;
 use Coyote\Services\Media\Factory as MediaFactory;
 use Coyote\Services\Media\MediaInterface;
 use Illuminate\Database\Eloquent\Model;
@@ -209,7 +210,7 @@ class Microblog extends Model
      * @param int|null $userId
      * @return \Illuminate\Database\Query\Builder|$this
      */
-    public function scopeIncludeSubscribers($query, ?int $userId)
+    public function scopeIncludeIsSubscribed($query, ?int $userId)
     {
         if (empty($userId)) {
             return $this;
@@ -227,7 +228,7 @@ class Microblog extends Model
      * @param int|null $userId
      * @return $this|\Illuminate\Database\Query\Builder
      */
-    public function scopeIncludeVoters($query, ?int $userId)
+    public function scopeIncludeIsVoted($query, ?int $userId)
     {
         if (empty($userId)) {
             return $this;
@@ -238,6 +239,13 @@ class Microblog extends Model
             ->leftJoin('microblog_votes AS mv', function ($join) use ($userId) {
                 $join->on('mv.microblog_id', '=', 'microblogs.id')->where('mv.user_id', '=', $userId);
             });
+    }
+
+    public function scopeIncludeVoters($query)
+    {
+        $builder = Vote::select('name')->whereRaw('microblog_id = microblogs.id')->join('users', 'users.id', '=', 'user_id');
+
+        return $query->addSelect(new Expression(sprintf("array_to_json(array(%s)) AS voters_name", $builder->toSql())));
     }
 
     /**

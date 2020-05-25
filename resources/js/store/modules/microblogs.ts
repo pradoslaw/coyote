@@ -102,11 +102,6 @@ const mutations = {
     }
   },
 
-  setVoters(state, { microblog, voters }) {
-    // voters field does not exist in object, that's why it's not reactive. we must use set() method
-    Vue.set(state.data, microblog.id!, {...microblog, voters});
-  },
-
   setComments(state, { microblog, comments }) {
     microblog.comments = comments.keyBy('id');
     microblog.comments_count = comments.length;
@@ -165,10 +160,6 @@ const actions = {
     axios.get(`/Mikroblogi/Comment/Show/${microblog.id}`).then(result => {
       commit('setComments', { microblog, comments: result.data });
     })
-  },
-
-  loadVoters({ commit }, microblog: Microblog) {
-    axios.get(`/Mikroblogi/Vote/${microblog.id}`).then(result => commit('setVoters', { microblog, voters: result.data }));
   }
 };
 

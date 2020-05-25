@@ -4,6 +4,7 @@ namespace Coyote\Services\Microblogs;
 
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface;
 use Coyote\Repositories\Criteria\Microblog\LoadUserScope;
+use Coyote\Repositories\Criteria\Microblog\LoadVoters;
 use Coyote\Repositories\Criteria\Microblog\OnlyMine;
 use Coyote\Repositories\Criteria\Microblog\OrderById;
 use Coyote\Repositories\Criteria\Microblog\OrderByScore;
@@ -153,6 +154,8 @@ class Builder
 
     private function loadUserScope()
     {
+        $this->microblog->pushCriteria(new LoadVoters());
+
         if ($this->user) {
             $this->microblog->pushCriteria(new LoadUserScope($this->user->id));
         }

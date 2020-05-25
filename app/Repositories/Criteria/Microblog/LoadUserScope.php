@@ -30,9 +30,8 @@ class LoadUserScope extends Criteria
     public function apply($model, Repository $repository)
     {
         $model = $model
-            ->select('microblogs.*')
-            ->includeVoters($this->userId)
-            ->includeSubscribers($this->userId);
+            ->includeIsVoted($this->userId)
+            ->includeIsSubscribed($this->userId);
 
         return $model;
     }

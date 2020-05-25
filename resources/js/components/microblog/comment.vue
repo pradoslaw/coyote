@@ -20,7 +20,7 @@
             </a>
           </li>
           <li class="list-inline-item">
-            <a @click="vote(comment)" :class="{'thumbs-on': comment.is_voted}" href="javascript:" class="text-muted btn-sm-thumbs">
+            <a @click="vote(comment)" :title="comment.voters.join(', ')" :class="{'thumbs-on': comment.is_voted}" href="javascript:" class="text-muted btn-sm-thumbs">
               {{ comment.votes }} {{ comment.votes | declination(['głos', 'głosy', 'głosów']) }}
             </a>
           </li>
@@ -73,7 +73,7 @@
     store,
     components: { 'vue-avatar': VueAvatar, 'vue-modal': VueModal, 'vue-user-name': VueUserName, 'vue-comment-form': VueCommentForm },
     computed: mapGetters('user', ['isAuthorized']),
-    methods: mapActions('microblogs', ['vote'])
+    methods: mapActions('microblogs', ['vote', 'loadVoters'])
   })
   export default class VueComment extends Mixins(MicroblogMixin) {
 

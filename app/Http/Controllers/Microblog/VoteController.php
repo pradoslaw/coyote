@@ -77,18 +77,4 @@ class VoteController extends Controller
 
         return $microblog->voters()->count();
     }
-
-    /**
-     * @param \Coyote\Microblog $microblog
-     * @return string
-     */
-    public function voters($microblog)
-    {
-        return
-            $microblog->voters()
-                ->join('users', 'users.id', '=', 'user_id')
-                ->get(['users.name'])
-                ->pluck('name')
-                ->toJson();
-    }
 }

@@ -8,6 +8,7 @@ use Coyote\Http\Resources\Api\MicroblogResource;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
 use Coyote\Repositories\Criteria\EagerLoadingWithCount;
 use Coyote\Repositories\Criteria\Microblog\LoadUserScope;
+use Coyote\Repositories\Criteria\Microblog\LoadVoters;
 use Coyote\Services\Microblogs\Builder;
 
 class HomeController extends Controller
@@ -93,6 +94,7 @@ class HomeController extends Controller
     public function show($id)
     {
         $this->microblog->pushCriteria(new LoadUserScope($this->userId));
+        $this->microblog->pushCriteria(new LoadVoters());
         $this->microblog->pushCriteria(new EagerLoadingWithCount(['comments']));
 
         /** @var \Coyote\Microblog $microblog */
@@ -102,7 +104,7 @@ class HomeController extends Controller
         $excerpt = excerpt($microblog->html);
 
         $microblog->load(['comments' => function ($builder) {
-            return $builder->select('microblogs.*')->includeVoters($this->userId)->with('user');
+            return $builder->select('microblogs.*')->includeIsVoted($this->userId)->includeVoters()->with('user');
         }]);
 
         $this->breadcrumb->push($excerpt, route('microblog.view', [$microblog->id]));

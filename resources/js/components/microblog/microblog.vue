@@ -43,7 +43,7 @@
 
           <vue-form v-if="isEditing" ref="form" :microblog="microblog" class="mt-2 mb-2" @cancel="isEditing = false" @save="isEditing = false"></vue-form>
 
-          <a @click="vote(microblog)" @mouseenter.once="loadVoters(microblog)" :title="voters" href="javascript:" class="btn btn-thumbs">
+          <a @click="vote(microblog)" :title="microblog.voters.join(', ')" href="javascript:" class="btn btn-thumbs">
             <i :class="{'fas text-primary': microblog.is_voted, 'far': !microblog.is_voted}" class="fa-fw fa-thumbs-up"></i>
 
             {{ microblog.votes }} {{ microblog.votes | declination(['głos', 'głosy', 'głosów']) }}
@@ -198,10 +198,6 @@
       return this.microblog.media.map(media => {
         return {src: media.url, thumb: media.thumbnail, url: media.url};
       })
-    }
-
-    get voters() {
-      return this.microblog.voters ? this.microblog.voters.join(', ') : '';
     }
   }
 </script>
