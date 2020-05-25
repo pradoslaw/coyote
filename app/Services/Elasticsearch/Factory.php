@@ -31,9 +31,13 @@ class Factory
 
         /** @var Api $api */
         $api = $this->app[Api::class];
-        $api->setJwtToken(
-            $jwtToken->token($this->app[Request::class]->user())
-        );
+        $request = $this->app[Request::class];
+
+        if ($request->user()) {
+            $api->setJwtToken(
+                $jwtToken->token($request->user())
+            );
+        }
 
         $class = $this->getClass($model);
         $class->setApi($api);

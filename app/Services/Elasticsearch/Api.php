@@ -47,7 +47,8 @@ class Api
     {
         $response = $this->client->get($path, [
             'base_uri'  => sprintf('http://%s:%d', $this->host, $this->port),
-            'query'     => $params
+            'query'     => $params,
+            'headers'   => $this->jwtToken ? ['Authorization' => 'Bearer ' . $this->jwtToken] : []
         ]);
 
         $body = json_decode((string) $response->getBody(), true);
