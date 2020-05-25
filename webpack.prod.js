@@ -27,6 +27,7 @@ module.exports = merge(common, {
       paths: glob.sync([
         path.join(__dirname, 'resources/views/**/*.twig'),
         path.join(__dirname, 'resources/js/components/**/*.vue'),
+        path.join(__dirname, 'resources/js/**/*.ts'),
       ]),
       whitelist: [
         'footer-bubble',
