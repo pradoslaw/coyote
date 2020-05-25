@@ -2,14 +2,12 @@
 
 namespace Coyote\Listeners;
 
-
 ini_set('memory_limit', '10G');
 set_time_limit(0);
 
 use Coyote\Events\TopicWasDeleted;
 use Coyote\Events\TopicWasMoved;
 use Coyote\Events\TopicWasSaved;
-use Coyote\Post;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Services\Elasticsearch\Crawler;
 use Illuminate\Contracts\Queue\ShouldQueue;
