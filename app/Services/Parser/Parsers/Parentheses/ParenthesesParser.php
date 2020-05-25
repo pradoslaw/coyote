@@ -40,12 +40,12 @@ class ParenthesesParser
 
     public function parse(string $content): array
     {
-        $c = $this->chunks->chunk($content);
-        $c = $this->comb($c, 1);
-        $c = $this->flatMapMismatched($c);
-        $c = $this->comb($c, $this->nestLevel - 1);
-        $c = $this->squashChunks($c);
-        return $c;
+        $chunks = $this->chunks->chunk($content);
+        $chunks = $this->comb($chunks, 1);
+        $chunks = $this->flatMapMismatched($chunks);
+        $chunks = $this->comb($chunks, $this->nestLevel - 1);
+        $chunks = $this->squashChunks($chunks);
+        return $chunks;
     }
 
     private function comb(array $elements, int $iterations): array
