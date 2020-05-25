@@ -7,7 +7,6 @@ use Coyote\Http\Resources\TopicCollection;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Services\Elasticsearch\SearchOptions;
 use Coyote\Services\Guest;
-use Coyote\Topic;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -31,6 +30,10 @@ class TopicStrategy extends Strategy
 
         $hits = $this->api->search(new SearchOptions($request));
         $ids = array_pluck($hits->hits, 'id');
+
+        if (!$ids) {
+            return $this->rawResponse($hits, $request);
+        }
 
         $result = $this->highlight(
             $hits->hits,
@@ -56,7 +59,7 @@ class TopicStrategy extends Strategy
             if (isset($collection[$id])) {
                 $collection[$id]->subject = $hit['subject'];
 
-                if (isset($hit['posts'])) {
+                if (!empty($hit['children'])) {
                     $collection[$id]->user_post_id = $hit['children'][0]['id'];
                 }
             }

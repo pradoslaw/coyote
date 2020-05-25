@@ -144,10 +144,10 @@ new Vue({
     },
 
     modelUrl(model?: Model) {
-      let params = this.requestParams;
+      let params = { ...this.requestParams, model }
 
-      if (model) {
-        params['model'] = model;
+      if (!model) {
+        delete params['model'];
       }
 
       return this.getUrl(params);
