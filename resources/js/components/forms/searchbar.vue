@@ -291,6 +291,8 @@
     changeUrl(): void {
       if (this.selectedIndex === -1) {
         (this.$refs.search as HTMLFormElement).submit();
+
+        return;
       }
 
       window.location.href = this.items.find(item => item.index === this.selectedIndex)!.url;
