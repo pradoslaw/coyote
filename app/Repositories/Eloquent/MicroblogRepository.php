@@ -93,10 +93,10 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     /**
      * @inheritDoc
      */
-    public function getComments($parentsId)
+    public function getComments($parentId)
     {
-        return $this->applyCriteria(function () use ($parentsId) {
-            return $this->model->with('user')->withVoters()->whereIn('parent_id', (array) $parentsId)->orderBy('id')->get();
+        return $this->applyCriteria(function () use ($parentId) {
+            return $this->model->with('user')->withVoters()->where('parent_id', $parentId)->orderBy('id')->get();
         });
     }
 
