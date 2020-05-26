@@ -2,9 +2,9 @@
 
 namespace Coyote\Services\Microblogs;
 
+use Coyote\Microblog;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface;
 use Coyote\Repositories\Criteria\Microblog\LoadUserScope;
-use Coyote\Repositories\Criteria\Microblog\LoadVoters;
 use Coyote\Repositories\Criteria\Microblog\OnlyMine;
 use Coyote\Repositories\Criteria\Microblog\OrderById;
 use Coyote\Repositories\Criteria\Microblog\OrderByScore;
@@ -98,7 +98,7 @@ class Builder
         /** @var \Illuminate\Database\Eloquent\Collection $microblogs */
         $microblogs = $paginator->keyBy('id');
 
-        $comments = $this->loadComments($microblogs);
+        $comments = $this->loadTopComments($microblogs);
         $microblogs = $this->mergeComments($comments, $microblogs);
 
         $paginator->setCollection($microblogs);
@@ -120,20 +120,47 @@ class Builder
         /** @var \Illuminate\Database\Eloquent\Collection $microblogs */
         $microblogs = $result->keyBy('id');
 
-        $comments = $this->loadComments($microblogs);
+        $comments = $this->loadTopComments($microblogs);
 
         return $this->mergeComments($comments, $microblogs);
+    }
+
+    /**
+     * @param int $id
+     * @return Microblog
+     */
+    public function one(int $id): Microblog
+    {
+        $this->loadUserScope();
+
+        $microblog = $this->microblog->findById($id);
+
+        $comments = $this->loadComments($microblog);
+
+        $microblog->setRelation('comments', $comments);
+        $this->microblog->resetCriteria();
+
+        return $microblog;
     }
 
     /**
      * @param \Illuminate\Support\Collection $microblogs
      * @return \Coyote\Microblog[]
      */
-    private function loadComments($microblogs)
+    private function loadTopComments($microblogs)
     {
         $this->loadUserScope();
 
         return $this->microblog->getTopComments($microblogs->keys()->toArray());
+    }
+
+    /**
+     * @param Microblog $microblog
+     * @return \Coyote\Microblog[]
+     */
+    private function loadComments(Microblog $microblog)
+    {
+        return $this->microblog->getComments($microblog->id);
     }
 
     /**
@@ -154,8 +181,6 @@ class Builder
 
     private function loadUserScope()
     {
-        $this->microblog->pushCriteria(new LoadVoters());
-
         if ($this->user) {
             $this->microblog->pushCriteria(new LoadUserScope($this->user->id));
         }

@@ -25,6 +25,12 @@ interface MicroblogRepositoryInterface extends RepositoryInterface
     public function takePopular($limit);
 
     /**
+     * @param int $id
+     * @return Microblog[]
+     */
+    public function findById(int $id);
+
+    /**
      * Pobranie komentarzy od danego wpisu w mikroblogu
      *
      * @param int $parentId

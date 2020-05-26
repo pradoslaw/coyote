@@ -15,6 +15,6 @@ class LoadVoters extends Criteria
      */
     public function apply($model, Repository $repository)
     {
-        return $model->select('microblogs.*')->includeVoters();
+        return $model->withVoters();
     }
 }

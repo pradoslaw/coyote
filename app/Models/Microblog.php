@@ -5,6 +5,7 @@ namespace Coyote;
 use Coyote\Microblog\Vote;
 use Coyote\Services\Media\Factory as MediaFactory;
 use Coyote\Services\Media\MediaInterface;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Expression;
@@ -210,42 +211,49 @@ class Microblog extends Model
      * @param int|null $userId
      * @return \Illuminate\Database\Query\Builder|$this
      */
-    public function scopeIncludeIsSubscribed($query, ?int $userId)
+    public function scopeIncludeIsSubscribed(Builder $builder, ?int $userId): Builder
     {
         if (empty($userId)) {
-            return $this;
+            return $builder;
         }
 
-        return $query
+        $this->addSelectIfNull($builder);
+
+        return $builder
             ->addSelect(new Expression('CASE WHEN mw.user_id IS NULL THEN false ELSE true END AS is_subscribed'))
             ->leftJoin('microblog_subscribers AS mw', function ($join) use ($userId) {
                 $join->on('mw.microblog_id', '=', 'microblogs.id')->where('mw.user_id', '=', $userId);
             });
     }
 
-    /**
-     * @param  \Illuminate\Database\Query\Builder $query
-     * @param int|null $userId
-     * @return $this|\Illuminate\Database\Query\Builder
-     */
-    public function scopeIncludeIsVoted($query, ?int $userId)
+    public function scopeIncludeIsVoted(Builder $builder, ?int $userId): Builder
     {
         if (empty($userId)) {
-            return $this;
+            return $builder;
         }
 
-        return $query
+        $this->addSelectIfNull($builder);
+
+        return $builder
             ->addSelect(new Expression('CASE WHEN mv.id IS NULL THEN false ELSE true END AS is_voted'))
             ->leftJoin('microblog_votes AS mv', function ($join) use ($userId) {
                 $join->on('mv.microblog_id', '=', 'microblogs.id')->where('mv.user_id', '=', $userId);
             });
     }
 
-    public function scopeIncludeVoters($query)
+    public function scopeWithVoters(Builder $builder): Builder
     {
-        $builder = Vote::select('name')->whereRaw('microblog_id = microblogs.id')->join('users', 'users.id', '=', 'user_id');
 
-        return $query->addSelect(new Expression(sprintf("array_to_json(array(%s)) AS voters_name", $builder->toSql())));
+        $subQuery = $builder->getQuery()->newQuery()->select('name')->from('microblog_votes')->whereRaw('microblog_id = microblogs.id')->join('users', 'users.id', '=', 'user_id');
+
+        return $builder->selectSub(sprintf("array_to_json(array(%s))", $subQuery->toSql()), 'voters_name');
+    }
+
+    private function addSelectIfNull(Builder $builder)
+    {
+        if (is_null($builder->getQuery()->columns)) {
+            $builder->select([$builder->getQuery()->from . '.*']);
+        }
     }
 
     /**

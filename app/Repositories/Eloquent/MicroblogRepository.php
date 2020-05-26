@@ -25,7 +25,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
         return $this->applyCriteria(function () use ($perPage) {
-            return $this->model->whereNull('parent_id')->with('user')->withCount('comments')->paginate($perPage);
+            return $this->model->whereNull('parent_id')->withVoters()->with('user')->withCount('comments')->paginate($perPage);
         });
     }
 
@@ -44,6 +44,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
         $result = $this
             ->model
             ->whereNull('parent_id')
+            ->withVoters()
             ->with('user')
             ->withCount('comments')
             ->where(function (Builder $builder) {
@@ -82,10 +83,20 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     /**
      * @inheritDoc
      */
-    public function getComments($parentId)
+    public function findById(int $id)
     {
-        return $this->applyCriteria(function () use ($parentId) {
-            return $this->model->where('parent_id', $parentId)->with('user')->orderBy('id')->get();
+        return $this->applyCriteria(function () use ($id) {
+            return $this->model->with('user')->withVoters()->withCount('comments')->where('microblogs.id', $id)->firstOrFail();
+        });
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getComments($parentsId)
+    {
+        return $this->applyCriteria(function () use ($parentsId) {
+            return $this->model->with('user')->withVoters()->whereIn('parent_id', (array) $parentsId)->orderBy('id')->get();
         });
     }
 
@@ -99,6 +110,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
             return $this
                 ->model
                 ->with('user')
+                ->withVoters()
                 ->withTrashed()
                 ->fromSub(function ($builder) use ($parentIds) {
                     return $builder
