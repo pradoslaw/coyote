@@ -84,7 +84,7 @@
                   </a>
                 </div>
                 <div class="media-body position-relative">
-                  <vue-comment-form :microblog="{parent_id: microblog.id}" ref="comment-form"></vue-comment-form>
+                  <vue-comment-form :microblog="commentDefault" ref="comment-form"></vue-comment-form>
                 </div>
               </div>
             </form>
@@ -125,7 +125,8 @@
   import store from "../../store";
   import VueUserName from "../user-name.vue";
   import { MicroblogMixin } from "../mixins/microblog";
-  import VueNotification from "vue-notification"; // do not remove (support for $notify method)
+  import VueNotification from "vue-notification";
+  import {Microblog} from "../../types/models"; // do not remove (support for $notify method)
 
   Vue.use(VueTimeago);
   Vue.use(VueClipboard);
@@ -151,6 +152,10 @@
   })
   export default class VueMicroblog extends Mixins(MicroblogMixin) {
     private index: number | null = null;
+    private commentDefault = {
+      parent_id: this.microblog.id,
+      text: ''
+    }
 
     @Ref('comment-form')
     readonly commentForm!: VueCommentForm;
