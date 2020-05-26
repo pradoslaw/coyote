@@ -190,7 +190,7 @@ class UrlFormatterTest extends TestCase
                 if ($expectedHref) {
                     $this->assertEquals($expectedHref, $href, 'Failed asserting that parsed link contains expected href attribute');
                 }
-                return "<a>$title</a>";
+                return '<a>' . htmlentities($title) . '</a>'; // We're mocking HtmlBuilder and trust it will encode the title
             }));
         return $html;
     }

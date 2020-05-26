@@ -44,7 +44,7 @@ class UrlFormatter
     private function buildLink(string $url): string
     {
         if (Pattern::pcre(self::REGEXP_URL)->test($url)) {
-            return $this->html->link($this->prependSchema($url), $this->truncate($this->quoteUrl($url)));
+            return $this->html->link($this->prependSchema($url), $this->truncate($url));
         }
         return $url;
     }
@@ -72,10 +72,5 @@ class UrlFormatter
     {
         $padding = ($length - mb_strlen($substitute)) / 2;
         return mb_substr($text, 0, $padding) . $substitute . mb_substr($text, -$padding);
-    }
-
-    private function quoteUrl(string $url): string
-    {
-        return htmlspecialchars($url, ENT_QUOTES, 'UTF-8', false); // doesn't app('html') take care of this?
     }
 }
