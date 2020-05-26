@@ -1,14 +1,14 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Controllers\Microblog;
 
 use Coyote\Microblog;
 use Coyote\User;
+use Faker\Factory;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
-use Faker\Factory;
 
-class MicroblogTest extends TestCase
+class SubmitControllerTest extends TestCase
 {
     use DatabaseTransactions;
 
@@ -75,43 +75,5 @@ class MicroblogTest extends TestCase
         $response->assertStatus(403);
 
         $response->assertJson(['message' => 'This action is unauthorized.']);
-    }
-
-    public function testApiPaginate()
-    {
-        $microblog = factory(Microblog::class)->create();
-        $response = $this->json('GET', '/v1/microblogs');
-
-        $response
-            ->assertStatus(200)
-            ->assertSeeText($microblog->text);
-    }
-
-    public function testApView()
-    {
-        /** @var Microblog $microblog */
-        $microblog = factory(Microblog::class)->create();
-        $response = $this->json('GET', '/v1/microblogs/' . $microblog->id);
-
-        $response
-            ->assertStatus(200)
-            ->assertJson(array_merge(
-                    array_except($microblog->toArray(), ['user_id', 'score']),
-                    [
-                        'comments' => [],
-                        'media' => [],
-                        'created_at' => $microblog->created_at->toIso8601String(),
-                        'updated_at' => $microblog->created_at->toIso8601String(),
-                        'html' => $microblog->html,
-                        'user' => [
-                            'id' => $microblog->user->id,
-                            'name' => $microblog->user->name,
-                            'deleted_at' => null,
-                            'is_blocked' => false,
-                            'photo' => null
-                        ]
-                    ]
-                )
-            );
     }
 }

@@ -3,7 +3,6 @@
 namespace Coyote\Http\Controllers\Api;
 
 use Coyote\Http\Resources\Api\MicroblogResource;
-use Coyote\Microblog;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
 use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Repositories\Criteria\Microblog\OrderById;
@@ -39,15 +38,14 @@ class MicroblogsController extends Controller
     }
 
     /**
-     * @param Microblog $microblog
+     * @param int $id
      * @return MicroblogResource
      */
-    public function show(Microblog $microblog)
+    public function show(int $id)
     {
         Resource::withoutWrapping();
 
-        $microblog->load($this->relations());
-
+        $microblog = $this->microblog->findById($id);
         return new MicroblogResource($microblog);
     }
 

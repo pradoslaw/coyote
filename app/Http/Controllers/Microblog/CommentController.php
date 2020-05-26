@@ -8,7 +8,6 @@ use Coyote\Http\Resources\Api\MicroblogResource;
 use Coyote\Notifications\Microblog\UserMentionedNotification;
 use Coyote\Notifications\Microblog\SubmittedNotification;
 use Coyote\Repositories\Criteria\Microblog\LoadUserScope;
-use Coyote\Repositories\Criteria\Microblog\LoadVoters;
 use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Services\Parser\Helpers\Login as LoginHelper;
 use Coyote\Services\Parser\Helpers\Hash as HashHelper;
@@ -157,7 +156,6 @@ class CommentController extends Controller
     public function show($id)
     {
         $this->microblog->pushCriteria(new LoadUserScope($this->userId));
-        $this->microblog->pushCriteria(new LoadVoters());
 
         $comments = $this->microblog->getComments($id);
 

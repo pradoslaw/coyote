@@ -6,7 +6,7 @@ $this->get('users/{user}', ['uses' => 'User\UserApiController@get']);
 
 $this->prefix('v1')->group(function () {
     $this->get('microblogs', ['uses' => 'Api\MicroblogsController@index']);
-    $this->get('microblogs/{microblog}', ['uses' => 'Api\MicroblogsController@show']);
+    $this->get('microblogs/{id}', ['uses' => 'Api\MicroblogsController@show']);
 
     $this->get('jobs', ['uses' => 'Api\JobsController@index']);
     $this->get('jobs/{job}', ['uses' => 'Api\JobsController@show']);

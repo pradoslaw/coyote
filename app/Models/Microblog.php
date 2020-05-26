@@ -250,6 +250,7 @@ class Microblog extends Model
 
     public function scopeWithVoters(Builder $builder): Builder
     {
+        $this->addSelectIfNull($builder);
         $subQuery = $builder->getQuery()->newQuery()->select('name')->from('microblog_votes')->whereRaw('microblog_id = microblogs.id')->join('users', 'users.id', '=', 'user_id');
 
         return $builder->selectSub(sprintf("array_to_json(array(%s))", $subQuery->toSql()), 'voters_json');

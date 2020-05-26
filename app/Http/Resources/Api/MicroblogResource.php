@@ -49,7 +49,7 @@ class MicroblogResource extends JsonResource
                     return $request->user()->can('update', $this->resource);
                 }),
                 'comments_count'=> $this->when($this->comments_count, $this->comments_count),
-                'voters'        => $this->voters_json,
+                'voters'        => (array) $this->voters_json, // always array, event it's empty
 
                 $this->mergeWhen(array_has($this->resource, ['is_voted', 'is_subscribed']), function () {
                     return $this->resource->only(['is_voted', 'is_subscribed']);

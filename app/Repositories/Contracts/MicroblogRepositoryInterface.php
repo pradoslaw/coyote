@@ -26,7 +26,7 @@ interface MicroblogRepositoryInterface extends RepositoryInterface
 
     /**
      * @param int $id
-     * @return Microblog[]
+     * @return Microblog
      */
     public function findById(int $id);
 
