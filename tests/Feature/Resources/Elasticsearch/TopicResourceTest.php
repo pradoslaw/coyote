@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Tests\Feature;
+namespace Tests\Feature\Resources\Elasticsearch;
 
 use Carbon\Carbon;
 use Coyote\Http\Resources\Elasticsearch\TopicResource;
@@ -9,7 +9,7 @@ use Coyote\Post;
 use Coyote\Topic;
 use Tests\TestCase;
 
-class ElasticsearchTopicResourceTest extends TestCase
+class TopicResourceTest extends TestCase
 {
     public function testMapModelIntoResourceWithOneWordSubject()
     {

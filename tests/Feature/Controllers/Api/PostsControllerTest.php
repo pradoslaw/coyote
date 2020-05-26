@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Controllers\Api;
 
 use Coyote\Forum;
 use Coyote\Group;
@@ -10,7 +10,7 @@ use Coyote\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
-class PostApiTest extends TestCase
+class PostsControllerTest extends TestCase
 {
     use DatabaseTransactions;
 

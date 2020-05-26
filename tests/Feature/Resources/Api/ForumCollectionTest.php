@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Resources\Api;
 
 use Coyote\Forum;
 use Coyote\Http\Resources\Api\ForumCollection;

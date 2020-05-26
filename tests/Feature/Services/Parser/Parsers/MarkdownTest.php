@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Services\Parser\Parsers;
 
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Services\Parser\Parsers\Markdown;

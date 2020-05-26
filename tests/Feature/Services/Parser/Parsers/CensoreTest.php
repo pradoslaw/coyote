@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Services\Parser\Parsers;
 
 use Tests\TestCase;
 
-class CensoreParserTest extends TestCase
+class CensoreTest extends TestCase
 {
     /**
      * @var \Coyote\Services\Parser\Parsers\Censore

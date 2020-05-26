@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Controllers\Api;
 
 use Coyote\User;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
-class LoginApiTest extends TestCase
+class LoginControllerTest extends TestCase
 {
     public function testApiLogin()
     {

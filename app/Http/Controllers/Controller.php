@@ -4,7 +4,7 @@ namespace Coyote\Http\Controllers;
 
 use Coyote\Http\Factories\CacheFactory;
 use Coyote\Http\Factories\GateFactory;
-use Coyote\Services\Breadcrumb\Breadcrumb;
+use Coyote\Services\Breadcrumb;
 use Coyote\Services\Guest;
 use Illuminate\Database\Connection;
 use Illuminate\Foundation\Bus\DispatchesJobs;

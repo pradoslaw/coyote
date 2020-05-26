@@ -1,8 +1,8 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Services;
 
-use Coyote\Services\Breadcrumb\Breadcrumb;
+use Coyote\Services\Breadcrumb;
 use Tests\TestCase;
 
 class BreadcrumbTest extends TestCase

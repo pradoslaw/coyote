@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Services\Parser\Parsers;
 
 use Coyote\Services\Parser\Parsers\Smilies;
 use Tests\TestCase;

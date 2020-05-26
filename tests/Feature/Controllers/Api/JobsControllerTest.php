@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Controllers\Api;
 
 use Coyote\Coupon;
 use Coyote\Firm;
@@ -10,7 +10,7 @@ use Coyote\User;
 use Faker\Factory;
 use Tests\TestCase;
 
-class JobApiTest extends TestCase
+class JobsControllerTest extends TestCase
 {
     /**
      * @var User
