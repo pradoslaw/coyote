@@ -45,7 +45,7 @@ class SubmitControllerTest extends TestCase
         $this->assertGreaterThan($user->reputation, $after->reputation);
     }
 
-    public function testSubmitExisting()
+    public function testUpdate()
     {
         $fake = Factory::create();
 
@@ -60,7 +60,7 @@ class SubmitControllerTest extends TestCase
         $response->assertJsonFragment(['text' => $text]);
     }
 
-    public function testSubmitExistingUnauthorized()
+    public function testUpdateAndThrowUnauthorized()
     {
         $fake = Factory::create();
 
