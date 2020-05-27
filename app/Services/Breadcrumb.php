@@ -4,8 +4,6 @@ namespace Coyote\Services;
 
 use Illuminate\Contracts\Support\Arrayable;
 
-use Illuminate\Contracts\Support\Arrayable;
-
 /**
  * Prosta klasa sluzaca do budowania elementu obecnego na kazdej podstronie, czyli breadcrumb
  *
