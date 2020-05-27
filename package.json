@@ -7,7 +7,6 @@
     },
     "dependencies": {
         "@babel/core": "^7.8.4",
-        "@babel/plugin-transform-modules-commonjs": "^7.9.6",
         "@babel/preset-env": "^7.8.4",
         "@babel/runtime": "^7.8.4",
         "@fortawesome/fontawesome-free": "^5.11.2",
@@ -69,13 +68,10 @@
             "vue"
         ],
         "transform": {
-            "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
+            "^.+\\.js$": "babel-jest",
             "^.+\\.ts": "babel-jest",
-            ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest"
-        },
-        "transformIgnorePatterns": [
-            "<rootDir>/node_modules/"
-        ]
+            ".*\\.(vue)$": "vue-jest"
+        }
     },
     "name": "coyote",
     "version": "2.2",
@@ -84,11 +80,9 @@
     "author": "adam-boduch <adam@boduch.net>",
     "license": "MIT",
     "devDependencies": {
-        "@babel/plugin-proposal-decorators": "^7.10.0",
         "@babel/preset-typescript": "^7.9.0",
         "@types/jest": "^25.2.1",
         "@vue/test-utils": "^1.0.2",
-        "babel-core": "^7.0.0-bridge.0",
         "babel-jest": "^26.0.1",
         "faker": "^4.1.0",
         "jest": "^26.0.1",
