@@ -27,9 +27,9 @@ enum SortOptions {
 const ModelOptions: ModelType = {
   [Model.Topic]: 'Wątki na forum',
   [Model.Job]: 'Oferty pracy',
+  [Model.Microblog]: 'Mikroblogi',
   [Model.User]: 'Użytkownicy',
-  [Model.Wiki]: 'Artykuły',
-  [Model.Microblog]: 'Mikroblogi'
+  [Model.Wiki]: 'Artykuły'
 }
 
 declare global {
@@ -60,8 +60,11 @@ Vue.component('vue-result-common', {
   template: `
     <ul id="search-results" class="list-unstyled">
       <li v-for="hit in hits">
-        <h2 class="mt-4 mb-1"><a :href="hit.url" v-html="title(hit)"></a></h2>
-        <p class="mb-1" v-html="hit.text"></p>
+        <h2 class="mt-4 mb-2 text-truncate"><a :href="hit.url" v-html="title(hit)"></a></h2>
+
+        <div class="mb-2">
+          <span class="text-muted"><vue-timeago :datetime="hit.created_at"></vue-timeago></span> <span v-html="hit.text"></span>
+        </div>
 
         <ul v-if="hit.children.length" class="children mt-2 mb-2">
           <li v-for="child in hit.children">
@@ -73,8 +76,6 @@ Vue.component('vue-result-common', {
         <ul class="breadcrumb d-inline-flex p-0">
           <li v-for="breadcrumb in hit.breadcrumbs" class="breadcrumb-item"><a :href="breadcrumb.url">{{ breadcrumb.name }}</a></li>
         </ul>
-
-        <vue-timeago :datetime="hit.created_at" class="text-muted"></vue-timeago>
       </li>
     </ul>`
 })

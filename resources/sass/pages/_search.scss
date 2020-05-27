@@ -3,8 +3,9 @@
 #search-results {
   h2 {
     font-size: $font-size-large;
-
     @include link-color-darker;
+
+    max-width: 50%;
   }
 
   em {
@@ -12,19 +13,29 @@
     font-style: normal;
   }
 
-  time {
-    padding-left: .2rem;
-
-    &:before {
-      content: '•';
-      padding-right: .2rem;
-    }
-  }
+  //time {
+  //  padding-left: .2rem;
+  //
+  //  &:before {
+  //    content: '•';
+  //    padding-right: .2rem;
+  //  }
+  //}
 
   .children {
     @include link-color-darker;
 
     font-size: $font-size-sm;
     padding-left: 1rem;
+
+    li {
+
+    }
+
+    a {
+      max-width: 60%;
+      display: inline-block;
+      vertical-align: middle;
+    }
   }
 }

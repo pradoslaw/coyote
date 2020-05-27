@@ -4,7 +4,7 @@ namespace Coyote\Http\Resources;
 
 use Coyote\Job;
 use Coyote\Microblog;
-use Coyote\Services\Breadcrumb\Breadcrumb;
+use Coyote\Services\Breadcrumb;
 use Coyote\Topic;
 use Coyote\Wiki;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -21,7 +21,7 @@ class HitResource extends JsonResource
     {
         $result = array_except($this->resource, ['forum', 'posts']) + ['breadcrumbs' => $this->breadcrumb()];
 
-        if (!empty($this->resource['children'])) {
+        if (!empty($this->resource['children']) && empty($this->resource['text'])) {
             $child = array_shift($result['children']);
 
             $result = array_merge($result, $child);
