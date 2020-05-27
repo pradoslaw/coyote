@@ -125,8 +125,7 @@
   import store from "../../store";
   import VueUserName from "../user-name.vue";
   import { MicroblogMixin } from "../mixins/microblog";
-  import VueNotification from "vue-notification";
-  import {Microblog} from "../../types/models"; // do not remove (support for $notify method)
+  import VueNotification from "vue-notification"; // do not remove (support for $notify method)
 
   Vue.use(VueTimeago);
   Vue.use(VueClipboard);

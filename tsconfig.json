@@ -13,6 +13,8 @@
         // tymczasowo, na czas migracji do typescript
         "noImplicitAny": false,
         // vue-class-component
-        "experimentalDecorators":  true
+        "experimentalDecorators":  true,
+        "emitDecoratorMetadata": true,
+        "strictPropertyInitialization": false
     }
 }
