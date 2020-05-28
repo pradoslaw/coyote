@@ -80,6 +80,7 @@
     "author": "adam-boduch <adam@boduch.net>",
     "license": "MIT",
     "devDependencies": {
+        "@babel/plugin-proposal-decorators": "^7.10.1",
         "@babel/plugin-transform-modules-commonjs": "^7.10.1",
         "@babel/preset-typescript": "^7.9.0",
         "@types/jest": "^25.2.1",
