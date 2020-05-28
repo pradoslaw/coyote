@@ -119,13 +119,14 @@
       },
 
       lookupName(name) {
+        // first, remove callback. this has to be at the beginning of the function
+        clearTimeout(this.timerId);
+
         if (name.length < 2) {
           this.items = [];
 
           return;
         }
-
-        clearTimeout(this.timerId);
 
         this.timerId = setTimeout(() => axios.get(this.source, {params: {q: name}}).then(response => this.items = response.data.data), 200);
       },

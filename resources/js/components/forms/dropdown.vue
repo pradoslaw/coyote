@@ -26,7 +26,7 @@
     data() {
       return {
         isDropdownVisible: false,
-        selectedIndex: -1
+        selectedIndex: 0
       }
     },
     mounted() {
@@ -87,8 +87,6 @@
 
       toggleDropdown(flag) {
         this.isDropdownVisible = flag;
-
-        this.selectedIndex = !flag ? -1 : 0;
       },
 
       getSelected() {
@@ -96,8 +94,12 @@
       }
     },
     watch: {
-      items(items) {
-        this.toggleDropdown(items.length);
+      items(newItems, oldItems) {
+        this.toggleDropdown(Boolean(newItems.length));
+
+        if (newItems.length > 0 && newItems.length !== oldItems.length) {
+          this.selectedIndex = 0;
+        }
       }
     }
   }
