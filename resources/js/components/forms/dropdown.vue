@@ -88,9 +88,7 @@
       toggleDropdown(flag) {
         this.isDropdownVisible = flag;
 
-        if (!flag) {
-          this.selectedIndex = -1;
-        }
+        this.selectedIndex = !flag ? -1 : 0;
       },
 
       getSelected() {

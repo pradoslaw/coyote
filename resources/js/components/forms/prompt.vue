@@ -67,8 +67,6 @@
               this.applySelected(item.name, startIndex, caretPosition);
             }
 
-            this.$refs.dropdown.toggleDropdown(false);
-
             // item was selected so there is not point to look up for user name.
             return;
           }
@@ -105,7 +103,7 @@
         while (i > caretPosition - 50 && i >= 0) {
           let $val = this.input.value[i];
 
-          if ($val === ' ') {
+          if ($val === ' ' || $val === "\n") {
             break;
           }
           else if ($val === '@') {
