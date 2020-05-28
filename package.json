@@ -80,9 +80,11 @@
     "author": "adam-boduch <adam@boduch.net>",
     "license": "MIT",
     "devDependencies": {
+        "@babel/plugin-transform-modules-commonjs": "^7.10.1",
         "@babel/preset-typescript": "^7.9.0",
         "@types/jest": "^25.2.1",
         "@vue/test-utils": "^1.0.2",
+        "babel-core": "^7.0.0-bridge.0",
         "babel-jest": "^26.0.1",
         "faker": "^4.1.0",
         "jest": "^26.0.1",
