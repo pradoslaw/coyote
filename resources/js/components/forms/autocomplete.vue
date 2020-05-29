@@ -74,7 +74,6 @@
       items: []
     }),
     mounted() {
-      console.log(this.$refs);
       this.$refs.autocomplete.addEventListener('search', this.changeItem);
     },
     methods: {

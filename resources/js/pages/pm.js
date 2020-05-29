@@ -190,21 +190,10 @@ new Vue({
       store.dispatch('messages/paginate', page);
     },
 
-    lookupName(name) {
-      if (!name.trim().length) {
+    selectName(item) {
+      if (!item) {
         return;
       }
-
-      axios.get('/User/Prompt', {params: {q: name}}).then(response => {
-        this.items = response.data.data;
-
-        if (this.items.length === 1 && this.items[0].name.toLowerCase() === name.toLowerCase()) {
-          this.items = [];
-        }
-      });
-    },
-
-    selectName(item) {
       this.recipient = item;
 
       store.commit('messages/reset');
@@ -231,15 +220,6 @@ new Vue({
 
       document.getElementById('app-pm').addEventListener('mouseover', listener, {once: true});
       document.getElementById('app-pm').addEventListener('touchmove', listener, {once: true});
-    }
-  },
-  watch: {
-    'recipient.name' (newValue, oldValue) {
-      if (newValue && oldValue && newValue.toLowerCase() === oldValue.toLowerCase()) {
-        return;
-      }
-
-      this.lookupName(newValue);
     }
   },
   computed: {

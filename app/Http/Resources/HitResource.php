@@ -6,6 +6,7 @@ use Coyote\Job;
 use Coyote\Microblog;
 use Coyote\Services\Breadcrumb;
 use Coyote\Topic;
+use Coyote\User;
 use Coyote\Wiki;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -34,9 +35,9 @@ class HitResource extends JsonResource
     {
         $baseName = class_basename($this->resource['model']);
 
-        $models = [class_basename(Topic::class), class_basename(Job::class), class_basename(Wiki::class), class_basename(Microblog::class)];
-        $name = array_combine($models, ['Forum', 'Praca', 'Kompendium', 'Mikroblog']);
-        $routes = array_combine($models, [route('forum.home'), route('job.home'), url('Kompendium'), route('microblog.home')]);
+        $models = [class_basename(Topic::class), class_basename(Job::class), class_basename(Wiki::class), class_basename(Microblog::class), class_basename(User::class)];
+        $name = array_combine($models, ['Forum', 'Praca', 'Kompendium', 'Mikroblog', 'Użytkownicy']);
+        $routes = array_combine($models, [route('forum.home'), route('job.home'), url('Kompendium'), route('microblog.home'), 'javascript:']);
 
         $breadcrumb = new Breadcrumb();
         $breadcrumb->push($name[$baseName], $routes[$baseName]);
