@@ -1,7 +1,8 @@
 <template>
   <div class="position-relative">
     <input
-      type="text"
+      ref="autocomplete"
+      type="search"
       class="form-control"
       autofocus
       :class="{'is-invalid': errors.length}"
@@ -27,15 +28,12 @@
   import { default as mixins } from '../mixins/form';
   import VueDropdown from './dropdown.vue';
   import VueError from './error.vue';
+  import axios from "axios";
 
   export default {
     mixins: [ mixins ],
     components: { 'vue-dropdown': VueDropdown, 'vue-error': VueError },
     props: {
-      items: {
-        type: Array,
-        default: () => []
-      },
       placeholder: {
         type: String
       },
@@ -52,7 +50,32 @@
       errors: {
         type: Array,
         default: () => []
+      },
+      typing: {
+        type: Function,
+        default: (value) => {
+          if (!value.trim().length) {
+            return Promise.resolve([]);
+          }
+
+          return axios.get('/User/Prompt', {params: {q: value}}).then(response => {
+            let items = response.data.data;
+
+            if (items.length === 1 && items[0].name.toLowerCase() === value.toLowerCase()) {
+              items = [];
+            }
+
+            return items;
+          });
+        }
       }
+    },
+    data: () => ({
+      items: []
+    }),
+    mounted() {
+      console.log(this.$refs);
+      this.$refs.autocomplete.addEventListener('search', this.changeItem);
     },
     methods: {
       emitFocus() {
@@ -65,17 +88,22 @@
       },
 
       changeItem() {
-        const selected = this.$refs.dropdown.getSelected();
-
-        if (selected) {
-          this.$emit('select', selected);
-        }
+        this.$emit('select', this.$refs.dropdown.getSelected());
 
         this.toggleDropdown(false);
       },
 
       toggleDropdown(flag) {
         this.$refs.dropdown.toggleDropdown(flag);
+      }
+    },
+    watch: {
+      valueLocal: function (newValue, oldValue) {
+        if (newValue && oldValue && newValue.toLowerCase() === oldValue.toLowerCase()) {
+          return;
+        }
+
+        this.typing(newValue).then(items => this.items = items);
       }
     }
   }

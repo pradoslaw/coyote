@@ -61,17 +61,16 @@
           </li>
 
           <li class="list-inline-item dropdown">
-            <a class="dropdown-toggle text-muted text-decoration-none" data-toggle="dropdown" href="javascript:">
-              Autor
+            <a @click="isDropdownVisible = !isDropdownVisible" class="dropdown-toggle text-muted text-decoration-none" href="javascript:">
+              ${ this.user || 'Autor' }
             </a>
 
-            <div class="dropdown-menu vw-50">
+            <div :class="{'show': isDropdownVisible}" class="dropdown-menu" style="width: 350px">
               <form class="px-2 py-2">
                 <div class="form-group">
-                  <vue-autocomplete :items="users" :value.sync="user" placeholder="Szukaj" @select="setUser"></vue-autocomplete>
+                  <vue-autocomplete :value.sync="user" placeholder="Szukaj" @select="setUser"></vue-autocomplete>
                 </div>
               </form>
-
             </div>
           </li>
         </ul>
@@ -97,6 +96,7 @@
     var model = '{{ model }}';
     var query = '{{ query|raw }}';
     var sort = '{{ sort|raw }}';
+    var user = '{{ user }}';
     var hits = {{ hits|default('null')|raw }};
     var postsPerPage = {{ posts_per_page }};
     var categories = {{ categories|default([])|json_encode|raw }};

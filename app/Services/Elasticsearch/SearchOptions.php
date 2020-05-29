@@ -29,16 +29,22 @@ class SearchOptions
      */
     public $sort;
 
+    /**
+     * @var string|null
+     */
+    public $user;
+
     public function __construct(Request $request)
     {
         $this->query = $request->input('q');
         $this->model = $request->input('model');
         $this->categories = $request->input('categories');
+        $this->user = $request->input('user');
         $this->sort = $request->input('sort');
     }
 
     public function getParams(): array
     {
-        return array_filter(['q' => $this->query, 'model' => class_basename($this->model), 'categories' => $this->categories, 'sort' => $this->sort]);
+        return array_filter(['q' => $this->query, 'model' => class_basename($this->model), 'categories' => $this->categories, 'sort' => $this->sort, 'user' => $this->user]);
     }
 }

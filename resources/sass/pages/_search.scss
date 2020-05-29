@@ -1,9 +1,5 @@
 @charset "UTF-8";
 
-.vw-50 {
- width: 25vw;
-}
-
 #search-results {
   h2 {
     font-size: $font-size-large;
@@ -17,24 +13,11 @@
     font-style: normal;
   }
 
-  //time {
-  //  padding-left: .2rem;
-  //
-  //  &:before {
-  //    content: '•';
-  //    padding-right: .2rem;
-  //  }
-  //}
-
   .children {
     @include link-color-darker;
 
     font-size: $font-size-sm;
     padding-left: 1rem;
-
-    li {
-
-    }
 
     a {
       max-width: 60%;

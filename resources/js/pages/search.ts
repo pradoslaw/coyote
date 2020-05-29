@@ -6,8 +6,9 @@ import VueAutocomplete from '../components/forms/autocomplete.vue';
 import PerfectScrollbar from '../components/perfect-scrollbar';
 import store from "../store";
 import { Hit, Hits, Sort, SearchOptions } from "../types/hit";
-import { Model } from "../types/models";
+import {Model, User} from "../types/models";
 import axios from 'axios';
+import { mixin as clickaway } from 'vue-clickaway';
 
 type ModelType = {
   [key in Model]: string;
@@ -42,6 +43,7 @@ declare global {
     postsPerPage: number;
     categories: number[];
     forums: ForumItem[];
+    user: string;
   }
 }
 
@@ -100,6 +102,7 @@ Vue.component('vue-result-topic', {
 new Vue({
   el: '#js-search',
   delimiters: ['${', '}'],
+  mixins: [clickaway],
   data: {
     hits: window.hits,
     model: window.model,
@@ -112,8 +115,8 @@ new Vue({
     },
     sortOptions: SortOptions,
     modelOptions: ModelOptions,
-    users: [],
-    user: ''
+    user: window.user,
+    isDropdownVisible: false
   },
   components: { 'vue-pagination': VuePagination, 'perfect-scrollbar': PerfectScrollbar, 'vue-autocomplete': VueAutocomplete },
   store,
@@ -139,8 +142,10 @@ new Vue({
       this.request();
     },
 
-    setUser(user: string) {
-      this.user = user;
+    setUser(user: User) {
+      this.user = user?.name;
+
+      this.request();
     },
 
     toggleCategory(id: number) {
@@ -175,27 +180,12 @@ new Vue({
 
     getUrl(params: any) {
       return `/Search?${new URLSearchParams(params).toString()}`;
-    },
-
-    lookupName(name) {
-      if (!name.trim().length) {
-        return;
-      }
-
-      axios.get('/User/Prompt', {params: {q: name}}).then(response => {
-        this.users = response.data.data;
-        //
-        // if (this.items.length === 1 && this.items[0].name.toLowerCase() === name.toLowerCase()) {
-        //   this.items = [];
-        // }
-      });
-    },
-
+    }
   },
 
   computed: {
     requestParams(): SearchOptions {
-      let params = { q: this.query, model: this.model, sort: this.sort, categories: this.categories };
+      let params = { q: this.query, model: this.model, sort: this.sort, categories: this.categories, user: this.user };
 
       Object.keys(params).forEach(key => {
         if (!params[key] || (Array.isArray(params[key]) && params[key].length === 0)) {
@@ -221,15 +211,5 @@ new Vue({
         .splice(0, 5)
         .join(', ');
     }
-  },
-
-  watch: {
-    'user' (newValue, oldValue) {
-      // if (newValue && oldValue && newValue.toLowerCase() === oldValue.toLowerCase()) {
-      //   return;
-      // }
-
-      this.lookupName(newValue);
-    }
-  },
+  }
 });

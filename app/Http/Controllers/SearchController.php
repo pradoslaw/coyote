@@ -53,6 +53,7 @@ class SearchController extends Controller
             'model'             => $request->input('model'),
             'query'             => $request->input('q'),
             'sort'              => $request->input('sort'),
+            'user'              => $request->input('user'),
             'categories'        => $request->input('categories', []),
             'posts_per_page'    => $this->getSetting('forum.posts_per_page', 10),
             'forums'            => $forums
