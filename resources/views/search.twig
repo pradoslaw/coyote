@@ -47,16 +47,31 @@
           </li>
 
           <li class="list-inline-item dropdown">
-            <a class="dropdown-toggle text-muted text-decoration-none" id="dropdownMenuButton" data-toggle="dropdown" href="javascript:">
+            <a class="dropdown-toggle text-muted text-decoration-none" data-toggle="dropdown" href="javascript:">
               ${ sortOptions[defaultSort] }
             </a>
 
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <div class="dropdown-menu">
               <a v-for="(label, option) in sortOptions" @click.prevent="setSort(option)" class="dropdown-item" :href="sortUrl(option)">
                 <i v-if="option === defaultSort" class="fa fa-check"></i>
 
                 ${ label }
               </a>
+            </div>
+          </li>
+
+          <li class="list-inline-item dropdown">
+            <a class="dropdown-toggle text-muted text-decoration-none" data-toggle="dropdown" href="javascript:">
+              Autor
+            </a>
+
+            <div class="dropdown-menu vw-50">
+              <form class="px-2 py-2">
+                <div class="form-group">
+                  <vue-autocomplete :items="users" :value.sync="user" placeholder="Szukaj" @select="setUser"></vue-autocomplete>
+                </div>
+              </form>
+
             </div>
           </li>
         </ul>

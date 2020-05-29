@@ -2,6 +2,7 @@ import Vue, { VNode } from "vue";
 import VueTopic from '../components/forum/topic.vue';
 import VuePagination from '../components/pagination.vue';
 import VueTimeago from '../plugins/timeago';
+import VueAutocomplete from '../components/forms/autocomplete.vue';
 import PerfectScrollbar from '../components/perfect-scrollbar';
 import store from "../store";
 import { Hit, Hits, Sort, SearchOptions } from "../types/hit";
@@ -110,9 +111,11 @@ new Vue({
       sort: 'score'
     },
     sortOptions: SortOptions,
-    modelOptions: ModelOptions
+    modelOptions: ModelOptions,
+    users: [],
+    user: ''
   },
-  components: { 'vue-pagination': VuePagination, 'perfect-scrollbar': PerfectScrollbar },
+  components: { 'vue-pagination': VuePagination, 'perfect-scrollbar': PerfectScrollbar, 'vue-autocomplete': VueAutocomplete },
   store,
   created() {
     store.commit('topics/init', window.hits.data || []);
@@ -134,6 +137,10 @@ new Vue({
       this.model = model;
 
       this.request();
+    },
+
+    setUser(user: string) {
+      this.user = user;
     },
 
     toggleCategory(id: number) {
@@ -168,7 +175,22 @@ new Vue({
 
     getUrl(params: any) {
       return `/Search?${new URLSearchParams(params).toString()}`;
-    }
+    },
+
+    lookupName(name) {
+      if (!name.trim().length) {
+        return;
+      }
+
+      axios.get('/User/Prompt', {params: {q: name}}).then(response => {
+        this.users = response.data.data;
+        //
+        // if (this.items.length === 1 && this.items[0].name.toLowerCase() === name.toLowerCase()) {
+        //   this.items = [];
+        // }
+      });
+    },
+
   },
 
   computed: {
@@ -199,5 +221,15 @@ new Vue({
         .splice(0, 5)
         .join(', ');
     }
-  }
+  },
+
+  watch: {
+    'user' (newValue, oldValue) {
+      // if (newValue && oldValue && newValue.toLowerCase() === oldValue.toLowerCase()) {
+      //   return;
+      // }
+
+      this.lookupName(newValue);
+    }
+  },
 });
