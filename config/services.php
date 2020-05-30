@@ -10,6 +10,14 @@ return [
         'port'          => env('WS_PORT')
     ],
 
+    // Coyote ES microservice
+    // ------------------------------------------------------
+
+    'es'        => [
+        'host'          => env('ES_HOST', 'es'),
+        'port'          => env('ES_PORT', 3500)
+    ],
+
     // Elasticsearch host and port. In most cases default values will be suitable.
     // ---------------------------------------------------------------------------
 

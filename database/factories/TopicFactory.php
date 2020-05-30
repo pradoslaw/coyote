@@ -8,6 +8,8 @@ $factory->define(\Coyote\Topic::class, function (Faker $faker) {
     return [
         'subject' => $subject,
         'slug' => str_slug($subject, '_'),
+        'created_at' => now(),
+        'updated_at' => now(),
         'last_post_created_at' => now(),
         'forum_id' => function () {
             return \Coyote\Forum::inRandomOrder()->first()->id;

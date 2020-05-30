@@ -4,6 +4,7 @@ namespace Coyote\Providers;
 
 use Carbon\Carbon;
 use Coyote\Forum;
+use Coyote\Services\Elasticsearch\Api as EsApi;
 use Coyote\Services\FormBuilder\FormBuilder;
 use Coyote\Services\FormBuilder\FormInterface;
 use Coyote\Services\FormBuilder\ValidatesWhenSubmitted;
@@ -11,6 +12,7 @@ use Coyote\Services\Guest;
 use Coyote\Services\Forum\Tracker;
 use Coyote\Services\Invoice;
 use Coyote\User;
+use GuzzleHttp\Client;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Events\RouteMatched;
@@ -90,6 +92,10 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(Guest::class, function ($app) {
             return (new Guest($app['session.store']->get('guest_id')))->setDefaultSessionTime(Carbon::createFromTimestamp($app['session.store']->get('created_at')));
+        });
+
+        $this->app->bind(EsApi::class, function ($app) {
+            return new EsApi($app[Client::class], $app['config']['services']['es']['host'], $app['config']['services']['es']['port']);
         });
 
         $this->app->singleton('form.builder', function ($app) {

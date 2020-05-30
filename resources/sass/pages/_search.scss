@@ -3,13 +3,26 @@
 #search-results {
   h2 {
     font-size: $font-size-large;
-    text-decoration: underline;
-
     @include link-color-darker;
+
+    max-width: 50%;
   }
 
-  .highlight {
+  em {
     font-weight: bold;
     font-style: normal;
+  }
+
+  .children {
+    @include link-color-darker;
+
+    font-size: $font-size-sm;
+    padding-left: 1rem;
+
+    a {
+      max-width: 60%;
+      display: inline-block;
+      vertical-align: middle;
+    }
   }
 }

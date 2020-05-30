@@ -1,7 +1,8 @@
 <template>
   <div class="position-relative">
     <input
-      type="text"
+      ref="autocomplete"
+      type="search"
       class="form-control"
       autofocus
       :class="{'is-invalid': errors.length}"
@@ -27,15 +28,13 @@
   import { default as mixins } from '../mixins/form';
   import VueDropdown from './dropdown.vue';
   import VueError from './error.vue';
+  import store from '../../store';
 
   export default {
     mixins: [ mixins ],
+    store,
     components: { 'vue-dropdown': VueDropdown, 'vue-error': VueError },
     props: {
-      items: {
-        type: Array,
-        default: () => []
-      },
       placeholder: {
         type: String
       },
@@ -52,7 +51,19 @@
       errors: {
         type: Array,
         default: () => []
+      },
+      handler: {
+        type: Function,
+        default: (value) => {
+          return store.dispatch('prompt/request', value);
+        }
       }
+    },
+    data: () => ({
+      items: []
+    }),
+    mounted() {
+      this.$refs.autocomplete.addEventListener('search', this.changeItem);
     },
     methods: {
       emitFocus() {
@@ -65,17 +76,22 @@
       },
 
       changeItem() {
-        const selected = this.$refs.dropdown.getSelected();
-
-        if (selected) {
-          this.$emit('select', selected);
-        }
+        this.$emit('select', this.$refs.dropdown.getSelected());
 
         this.toggleDropdown(false);
       },
 
       toggleDropdown(flag) {
         this.$refs.dropdown.toggleDropdown(flag);
+      }
+    },
+    watch: {
+      valueLocal: function (newValue, oldValue) {
+        if (newValue && oldValue && newValue.toLowerCase() === oldValue.toLowerCase()) {
+          return;
+        }
+
+        this.handler(newValue).then(items => this.items = items);
       }
     }
   }

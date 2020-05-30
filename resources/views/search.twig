@@ -6,64 +6,102 @@
 {% endblock %}
 
 {% block container %}
-  {{ form_open({method: 'GET', role: 'form', url: route('search')}) }}
-
-  <div class="row justify-content-center mb-2">
-    <div class="col-md-7 col-12 mt-4">
-      <div class="form-row ">
-        <div class="input-keywords col-sm-10 col-12">
-          {{ form_input('search', 'q', input_get('q'), {'class': 'form-control', 'placeholder': 'Słowa kluczowe'}) }}
-        </div>
-
-        <div class="col-sm-2 d-none d-sm-block">
-          <button class="ml-1 btn btn-primary btn-search" type="submit">
-            <i class="fas fa-search"></i> <span class="d-none d-sm-inline-block">Szukaj</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  {{ form_close() }}
 
   <div class="row">
     <div class="col-12">
-      {% if input_get('q') %}
-        {{ tabs.asUl({class: 'nav nav-tabs'})|raw }}
+
+      {% if error %}
+        <div class="alert alert-danger">
+          {{ error }}
+        </div>
       {% endif %}
 
-      {% if input_get('q') and total == 0 %}
-        <div class="card card-body bg-light p-2 empty-result mt-4">
+      <div id="js-search" class="mb-3" v-cloak>
+        <ul class="nav nav-pills mb-3">
+          <li class="nav-item">
+            <a @click.prevent="setModel()" :href="modelUrl()" :class="{active: !model}" class="nav-link">Wszystkie</a>
+          </li>
+          <li v-for="(label, filterModel) in modelOptions" class="nav-item">
+            <a @click.prevent="setModel(filterModel)" :href="modelUrl(filterModel)" :class="{active: filterModel === model}" class="nav-link">${ label }</a>
+          </li>
+        </ul>
+
+        <p v-if="hits.meta.total" class="text-muted">Wyniki <strong>${ hits.meta.from } - ${ hits.meta.to }</strong> z <strong>${ hits.meta.total }</strong> znalezione w czasie <strong>${ hits.took } ms.</strong></p>
+
+        <ul class="list-inline">
+          <li class="list-inline-item dropdown">
+            <a class="dropdown-toggle text-muted text-decoration-none" id="dropdownMenuButton" data-toggle="dropdown" href="javascript:">
+              <template v-if="!categories.length">Wszystkie kategorie</template>
+              <span v-else>${ selectedCategories }</span>
+            </a>
+
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <perfect-scrollbar id="wrap">
+                <a v-for="forum in forums" @click="toggleCategory(forum.id)" :key="forum.id" class="dropdown-item" href="javascript:">
+                  <i v-if="categories.indexOf(forum.id) > -1" class="fa fa-check"></i>
+
+                  <span :class="{'pl-2': forum.indent}">${ forum.name }</span>
+                </a>
+              </perfect-scrollbar>
+            </div>
+          </li>
+
+          <li class="list-inline-item dropdown">
+            <a class="dropdown-toggle text-muted text-decoration-none" data-toggle="dropdown" href="javascript:">
+              ${ sortOptions[defaultSort] }
+            </a>
+
+            <div class="dropdown-menu">
+              <a v-for="(label, option) in sortOptions" @click.prevent="setSort(option)" class="dropdown-item" :href="sortUrl(option)">
+                <i v-if="option === defaultSort" class="fa fa-check"></i>
+
+                ${ label }
+              </a>
+            </div>
+          </li>
+
+          <li class="list-inline-item dropdown">
+            <a @click="isDropdownVisible = !isDropdownVisible" class="dropdown-toggle text-muted text-decoration-none" href="javascript:">
+              ${ this.user || 'Autor' }
+            </a>
+
+            <div :class="{'show': isDropdownVisible}" class="dropdown-menu" style="width: 350px">
+              <form class="px-2 py-2">
+                <div class="form-group">
+                  <vue-autocomplete :value.sync="user" placeholder="Szukaj" @select="setUser"></vue-autocomplete>
+                </div>
+              </form>
+            </div>
+          </li>
+        </ul>
+
+        <component v-if="hits.meta.total" :is="getComponent()" :hits="hits.data"></component>
+        <div v-else class="card card-body bg-light p-2 empty-result mt-4">
           <p>
             Nie znaleźliśmy stron, które spełniają Twoje kryteria wyszukiwania.<br>
             <a href="{{ route('home') }}">Wejdź na naszą stronę główną</a>, a być może znajdziesz coś dla siebie!
           </p>
         </div>
-      {% elseif total > 0 %}
 
-        <div class="row">
-          <div class="col-12 text-muted mt-3">
-            Wyniki <strong>{{ pagination.firstItem() }} - {{ pagination.lastItem() }}</strong> z <strong>{{ total }}</strong> znalezione w czasie <strong>{{ took }} ms.</strong>
-          </div>
-        </div>
-
-        <ul id="search-results" class="list-unstyled">
-          <li>
-            {% for hit in hits %}
-              <h2 class="mt-4 mb-3"><a href="{{ hit.url }}">{{ hit.title|raw }}</a></h2>
-              <p class="mb-1">{{ hit.excerpt|raw }}</p>
-
-              <a href="{{ hit.url }}" class="text-truncate">{{ hit.url }}
-                <small class="text-muted">[{{ hit.updated_at|format_date }}]</small>
-              </a>
-            {% endfor %}
-          </li>
-        </ul>
-
-        <nav class="d-flex justify-content-center mt-2 mb-2">
-          {{ pagination|raw }}
-        </nav>
-      {% endif %}
+        <vue-pagination :current-page="hits.meta.current_page" :total-pages="hits.meta.last_page" @change="setPage"></vue-pagination>
+      </div>
     </div>
   </div>
 {% endblock %}
+
+{% block head %}
+  {{ parent() }}
+
+  <script type="text/javascript">
+    var model = '{{ model }}';
+    var query = '{{ query|raw }}';
+    var sort = '{{ sort|raw }}';
+    var user = '{{ user }}';
+    var page = '{{ page }}';
+    var hits = {{ hits|default('null')|raw }};
+    var postsPerPage = {{ posts_per_page }};
+    var categories = {{ categories|default([])|json_encode|raw }};
+    var forums = {{ forums|json_encode|raw }};
+  </script>
+{% endblock %}
+

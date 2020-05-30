@@ -9,6 +9,7 @@ import forums from './modules/forums';
 import topics from './modules/topics';
 import user from './modules/user';
 import microblogs from './modules/microblogs';
+import prompt from './modules/prompt';
 
 Vue.use(Vuex);
 
@@ -22,6 +23,7 @@ export default new Vuex.Store({
     forums,
     topics,
     user,
-    microblogs
+    microblogs,
+    prompt
   }
 });

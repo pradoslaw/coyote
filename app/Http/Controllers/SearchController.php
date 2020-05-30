@@ -3,13 +3,16 @@
 namespace Coyote\Http\Controllers;
 
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
+use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
-use Coyote\Services\Elasticsearch\Builders\MixedBuilder;
-use Coyote\Services\Elasticsearch\MultiResultSet;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Lavary\Menu\Builder;
-use Lavary\Menu\Item;
-use Lavary\Menu\Menu;
+use Coyote\Services\Elasticsearch\Factory;
+use Coyote\Services\Elasticsearch\SearchOptions;
+use Coyote\Services\Forum\TreeBuilder\JsonDecorator;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\ServerException;
+use Illuminate\Http\Request;
+use Coyote\Services\Forum\TreeBuilder\Builder as TreeBuilder;
 
 class SearchController extends Controller
 {
@@ -26,98 +29,68 @@ class SearchController extends Controller
         parent::__construct();
 
         $this->forum = $forum;
-    }
 
-    /**
-     * @return \Illuminate\View\View
-     */
-    public function index()
-    {
         $this->breadcrumb->push('Szukaj', route('search'));
-
-        return $this->view('search', $this->search())->with('tabs', $this->tabs());
     }
 
     /**
-     * @return array
+     * @param Request $request
+     * @param Factory $factory
+     * @return \Illuminate\View\View|string
      */
-    private function search()
+    public function index(Request $request, Factory $factory)
     {
-        if (!$this->request->filled('q')) {
-            return [];
+        $this->forum->pushCriteria(new OnlyThoseWithAccess($this->auth));
+        $this->forum->pushCriteria(new AccordingToUserOrder($this->userId, true));
+
+        $forums = (new JsonDecorator(new TreeBuilder($this->forum->list())))->build();
+        $strategy = $factory->make($request->input('model'));
+
+        $this->formatArray($request);
+
+        $response = [
+            'hits'              => null,
+            'model'             => $request->input('model'),
+            'query'             => $request->input('q'),
+            'sort'              => $request->input('sort'),
+            'user'              => $request->input('user'),
+            'categories'        => $request->input('categories', []),
+            'page'              => $request->input('page', 1),
+            'posts_per_page'    => $this->getSetting('forum.posts_per_page', 10),
+            'forums'            => $forums
+        ];
+
+        try {
+            $this->validate($request, [
+                'q'         => 'nullable|string',
+                'sort'      => 'nullable|in:' . SearchOptions::DATE . ',' . SearchOptions::SCORE,
+                'page'      => 'nullable|integer|min:1|max:100'
+            ]);
+
+            $response['hits'] = $strategy->search($request)->content();
+
+            if ($request->wantsJson()) {
+                return $response['hits'];
+            }
+        } catch (ConnectException $e) {
+            logger()->error($e);
+
+            $response['error'] = 'Brak połączenia z serwrem wyszukiwarki.';
+        } catch (ServerException | ClientException $e) {
+            logger()->error($e);
+
+            $response['error'] = 'Serwer wyszukiwarki nie może przetworzyć tego żądania.';
         }
 
-        // search only in allowed forum categories
-        $this->forum->pushCriteria(new OnlyThoseWithAccess($this->auth));
-        $this->request->attributes->set('forum_id', $this->forum->pluck('id'));
-
-        // build elasticsearch request
-        $body = (new MixedBuilder($this->request))->build();
-
-        $params = [
-            'index'     => config('elasticsearch.default_index'),
-            'type'      => '_doc',
-            'body'      => $body
-        ];
-
-        debugbar()->debug(json_encode($body));
-        debugbar()->startMeasure('elasticsearch');
-
-        // do the search and transform results
-        $hits = new MultiResultSet($this->getClient()->search($params));
-        debugbar()->stopMeasure('elasticsearch');
-
-        $pagination = new LengthAwarePaginator($hits, $hits->total(), 10, null, ['path' => ' ']);
-        $pagination->appends($this->request->except('page'));
-
-        return [
-            'hits' => $hits,
-            'took' => $hits->took(),
-            'total' => $hits->total(),
-            'pagination' => $pagination
-        ];
+        return $this->view('search', $response);
     }
 
-    /**
-     * Get client instance
-     *
-     * @return mixed
-     */
-    protected function getClient()
+    private function formatArray(Request $request)
     {
-        return app('elasticsearch');
-    }
+        if (is_string($request->input('categories'))) {
+            $value = array_filter(array_map('intval', explode(',', $request->input('categories'))));
 
-    /**
-     * @return mixed
-     */
-    private function tabs()
-    {
-        return app(Menu::class)->make('tabs', function (Builder $menu) {
-            $item = $menu->add('Wszystko', ['class' => 'nav-item', 'url' => route('search', ['q' => $this->request->input('q')])]);
-            $item->link->attr(['class' => 'nav-link']);
-
-            foreach (['Forum' => MixedBuilder::TOPIC, 'Praca' => MixedBuilder::JOB, 'Mikroblog' => MixedBuilder::MICROBLOG, 'Kompendium' => MixedBuilder::WIKI] as $label => $type) {
-                $item = $menu->add($label, ['class' => 'nav-item', 'url' => $this->route($type)])->data('type', $type);
-                $item->link->attr(['class' => 'nav-link']);
-            }
-        })
-        ->filter(function (Item $item) {
-            if ($this->request->input('type') === $item->data('type')) {
-                $item->link->active();
-            }
-
-            return true;
-        });
-    }
-
-    /**
-     * @param string$type
-     * @param string $type
-     * @return string
-     */
-    private function route($type)
-    {
-        return route('search', ['type' => $type, 'q' => $this->request->input('q')]);
+            $request->replace(array_merge($request->all(), ['categories' => $value]));
+        }
     }
 }

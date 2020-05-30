@@ -37,6 +37,51 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
         $page = LengthAwarePaginator::resolveCurrentPage();
 
         $result = $this
+            ->getBuilder($userId, $guestId)
+            ->sortable($order, $direction, ['id', 'last', 'replies', 'views', 'score'], ['last' => 'topics.last_post_id'])
+            ->limit($perPage)
+            ->offset(max(0, $page - 1) * $perPage)
+            ->get();
+
+        $this->resetModel();
+
+        return new LengthAwarePaginator(
+            $result,
+            $count,
+            $perPage,
+            $page,
+            ['path' => LengthAwarePaginator::resolveCurrentPath()]
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findByIds(array $ids, ?int $userId, string $guestId)
+    {
+        $this->applyCriteria();
+
+        $ordering = [];
+
+        for ($i = 0; $i < count($ids); $i++) {
+            $ordering[] = "($ids[$i],$i)";
+        }
+
+        $result = $this
+            ->getBuilder($userId, $guestId)
+            ->whereIn('topics.id', $ids)
+            ->join($this->raw('(VALUES ' . implode(',', $ordering) . ') AS x (id, ordering)'), 'topics.id', '=', 'x.id')
+            ->orderBy('x.ordering')
+            ->get();
+
+        $this->resetModel();
+
+        return $result;
+    }
+
+    private function getBuilder(?int $userId, string $guestId)
+    {
+        return $this
             ->model
             ->select([
                 'topics.*',
@@ -63,34 +108,20 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
             ->with(['tags'])
             ->when($userId, function (Builder $builder) use ($userId) {
                 return $builder->addSelect([
-                        $this->raw('CASE WHEN ts.created_at IS NULL THEN false ELSE true END AS is_subscribed'),
-                        $this->raw('CASE WHEN pv.id IS NULL THEN false ELSE true END AS is_voted'),
-                        $this->raw('CASE WHEN tu.user_id IS NULL THEN false ELSE true END AS is_replied')
-                    ])
-                    ->leftJoin('topic_subscribers AS ts', function (JoinClause $join) use ($userId) {
-                        $join->on('ts.topic_id', '=', 'topics.id')->on('ts.user_id', '=', $this->raw($userId));
-                    })
-                    ->leftJoin('post_votes AS pv', function (JoinClause $join) use ($userId) {
-                        $join->on('pv.post_id', '=', 'first_post_id')->on('pv.user_id', '=', $this->raw($userId));
-                    })
-                    ->leftJoin('topic_users AS tu', function (JoinClause $join) use ($userId) {
-                        $join->on('tu.topic_id', '=', 'topics.id')->on('tu.user_id', '=', $this->raw($userId));
-                    });
-            })
-            ->sortable($order, $direction, ['id', 'last', 'replies', 'views', 'score'], ['last' => 'topics.last_post_id'])
-            ->limit($perPage)
-            ->offset(max(0, $page - 1) * $perPage)
-            ->get();
-
-        $this->resetModel();
-
-        return new LengthAwarePaginator(
-            $result,
-            $count,
-            $perPage,
-            $page,
-            ['path' => LengthAwarePaginator::resolveCurrentPath()]
-        );
+                    $this->raw('CASE WHEN ts.created_at IS NULL THEN false ELSE true END AS is_subscribed'),
+                    $this->raw('CASE WHEN pv.id IS NULL THEN false ELSE true END AS is_voted'),
+                    $this->raw('CASE WHEN tu.user_id IS NULL THEN false ELSE true END AS is_replied')
+                ])
+                ->leftJoin('topic_subscribers AS ts', function (JoinClause $join) use ($userId) {
+                    $join->on('ts.topic_id', '=', 'topics.id')->on('ts.user_id', '=', $this->raw($userId));
+                })
+                ->leftJoin('post_votes AS pv', function (JoinClause $join) use ($userId) {
+                    $join->on('pv.post_id', '=', 'first_post_id')->on('pv.user_id', '=', $this->raw($userId));
+                })
+                ->leftJoin('topic_users AS tu', function (JoinClause $join) use ($userId) {
+                    $join->on('tu.topic_id', '=', 'topics.id')->on('tu.user_id', '=', $this->raw($userId));
+                });
+            });
     }
 
     /**

@@ -107,6 +107,9 @@ class CreateIndexCommand extends Command
                 'mappings' => [
                     '_doc' => [
                         'properties' => [
+                            "id" => [
+                                "type" => "integer"
+                            ],
                             "model" => [
                                 "type" => "keyword"
                             ],
@@ -149,6 +152,12 @@ class CreateIndexCommand extends Command
                             "title" => [
                                 "type" => "text",
                                 "analyzer" => "stopwords_analyzer"
+                            ],
+                            "slug" => [
+                                "type" => "keyword"
+                            ],
+                            "url" => [
+                                "type" => "keyword"
                             ],
                             "is_remote" => [
                                 "type" => "boolean"
@@ -239,8 +248,29 @@ class CreateIndexCommand extends Command
                                     ]
                                 ]
                             ],
-                            "posts" => [
+                            "children" => [
+                                "type" => "nested",
                                 "properties" => [
+                                    "id" => [
+                                        "type" => "integer",
+                                    ],
+                                    "created_at" => [
+                                        "type" => "date"
+                                    ],
+                                    "user_id" => [
+                                        "type" => "integer"
+                                    ],
+                                    "user_name" => [
+                                        "type" => "text",
+                                        // ability to search case insensitive
+                                        "analyzer" => "keyword_analyzer"
+                                    ],
+                                    "model" => [
+                                        "type" => "keyword"
+                                    ],
+                                    "url" => [
+                                        "type" => "keyword"
+                                    ],
                                     "text" => [
                                         "type" => "text",
                                         "analyzer" => "stopwords_analyzer"
@@ -250,11 +280,6 @@ class CreateIndexCommand extends Command
                             "subject" => [
                                 "type" => "text",
                                 "analyzer" => "stopwords_analyzer"
-                            ],
-                            "user_name" => [
-                                "type" => "text",
-                                // ability to search case insensitive
-                                "analyzer" => "keyword_analyzer"
                             ],
                             "name" => [
                                 "type" => "text",
