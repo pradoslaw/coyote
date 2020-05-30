@@ -7,6 +7,7 @@ export interface Hit {
   replies: number | null;
   subject: string | null;
   title: string | null;
+  name: string | null;
   salary: number | null;
   last_post_created_at: Date | null;
   url: string;

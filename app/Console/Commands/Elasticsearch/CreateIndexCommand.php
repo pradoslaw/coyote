@@ -283,6 +283,14 @@ class CreateIndexCommand extends Command
                             ],
                             "name" => [
                                 "type" => "text",
+                                "analyzer" => "stopwords_analyzer",
+                                "fields" => [
+                                    "original" => ["type" => "text", "analyzer" => "keyword_analyzer"]
+//                                    "original" => ["type" => "text", "analyzer" => "keyword_analyzer", "fielddata" => true]
+                                ]
+                            ],
+                            "group" => [
+                                "type" => "text",
                                 // ability to search case insensitive
                                 "analyzer" => "keyword_analyzer"
                             ],

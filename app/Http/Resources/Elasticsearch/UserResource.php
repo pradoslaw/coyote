@@ -9,12 +9,11 @@ namespace Coyote\Http\Resources\Elasticsearch;
  * @property \Carbon\Carbon $created_at
  * @property \Coyote\Services\Media\MediaInterface $photo
  * @property int $reputation
+ * @property \Coyote\Group $group
  */
 class UserResource extends ElasticsearchResource
 {
     /**
-     * Transform the resource into an array.
-     *
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
@@ -29,7 +28,8 @@ class UserResource extends ElasticsearchResource
                 'decay_date'    => $date->toIso8601String(),
                 'url'           => route('profile', [$this->id], false),
                 'photo'         => ((string) $this->photo->url()) ?? null,
-                'suggest'       => $this->getSuggest()
+                'suggest'       => $this->getSuggest(),
+                'group'         => $this->group->name
             ]
         );
     }

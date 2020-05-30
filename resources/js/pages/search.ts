@@ -58,7 +58,17 @@ Vue.component('vue-result-common', {
   },
   methods: {
     title(hit: Hit) {
-      return hit.title ? hit.title : (hit.subject ? hit.subject : hit.text);
+      if (hit.title) {
+        return hit.title;
+      }
+      else if (hit.subject) {
+        return hit.subject;
+      }
+      else if (hit.name) {
+        return hit.name;
+      }
+
+      return hit.text;
     }
   },
   template: `
