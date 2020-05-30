@@ -5,10 +5,14 @@ import VueForm from '../components/microblog/form';
 import VueNotifications from 'vue-notification';
 import store from '../store';
 import { mapGetters } from 'vuex';
-import axios from 'axios';
+import axios, { Cancel } from 'axios';
 
 axios.interceptors.response.use(null, err => {
   let message = '';
+
+  if (err instanceof Cancel || (err.config.hasOwnProperty("errorHandle") &&  err.config.errorHandle === false)) {
+    return Promise.reject(err);
+  }
 
   if (err.response) {
     if (err.response.data.errors) {

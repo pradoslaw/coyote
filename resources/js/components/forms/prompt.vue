@@ -12,9 +12,11 @@
   import VueError from './error.vue';
   import axios from 'axios';
   import { SpecialKeys } from '../../types/keys.ts';
+  import store from '../../store';
 
   export default {
     components: { 'vue-dropdown': VueDropdown, 'vue-error': VueError },
+    store,
     props: {
       source: {
         type: String
@@ -119,16 +121,7 @@
       },
 
       lookupName(name) {
-        // first, remove callback. this has to be at the beginning of the function
-        clearTimeout(this.timerId);
-
-        if (name.length < 2) {
-          this.items = [];
-
-          return;
-        }
-
-        this.timerId = setTimeout(() => axios.get(this.source, {params: {q: name}}).then(response => this.items = response.data.data), 200);
+        store.dispatch('prompt/request', name).then(items => this.items = items);
       },
 
       applySelected(text, startIndex, caretPosition) {

@@ -1,4 +1,10 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
+
+declare module 'axios' {
+  interface AxiosRequestConfig {
+    errorHandle?: boolean;
+  }
+}
 
 const CancelToken = axios.CancelToken;
 
@@ -21,7 +27,7 @@ const actions = {
       return Promise.resolve([]);
     }
 
-    return axios.get('/User/Prompt', {cancelToken: state.source.token, params: {q: value}})
+    return axios.get('/User/Prompt', {cancelToken: state.source.token, params: {q: value}, errorHandle: false})
       .then(response => {
         let items = response.data.data;
 
