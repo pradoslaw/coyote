@@ -2,7 +2,7 @@
 
 namespace Coyote\Services\Elasticsearch\Strategies;
 
-use Coyote\Http\Resources\HitResource;
+use Coyote\Http\Resources\Elasticsearch\HitResource;
 use Coyote\Services\Elasticsearch\Api;
 use Coyote\Services\Elasticsearch\Hits;
 use Illuminate\Http\Request;

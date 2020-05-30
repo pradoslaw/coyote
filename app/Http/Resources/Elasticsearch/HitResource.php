@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Http\Resources;
+namespace Coyote\Http\Resources\Elasticsearch;
 
 use Coyote\Job;
 use Coyote\Microblog;
@@ -20,15 +20,24 @@ class HitResource extends JsonResource
      */
     public function toArray($request)
     {
-        $result = array_except($this->resource, ['forum', 'posts']) + ['breadcrumbs' => $this->breadcrumb()];
+        $result = array_except($this->resource, ['forum']) + ['breadcrumbs' => $this->breadcrumb()];
 
-        if (!empty($this->resource['children']) && empty($this->resource['text'])) {
+        if (!empty($this->resource['children']) && !$this->hasHighlights($this->resource['text'] ?? null)) {
             $child = array_shift($result['children']);
 
-            $result = array_merge($result, $child);
+            $result = array_merge($result, $child); // move highlighted text to parent entry
         }
 
         return $result;
+    }
+
+    private function hasHighlights(?string $text): bool
+    {
+        if (!$text) {
+            return false;
+        }
+
+        return str_contains($text, '<em>');
     }
 
     private function breadcrumb()
