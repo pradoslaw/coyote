@@ -83,7 +83,7 @@
           </p>
         </div>
 
-        <vue-pagination :current-page="hits.meta.current_page" :total-pages="hits.meta.last_page"></vue-pagination>
+        <vue-pagination :current-page="hits.meta.current_page" :total-pages="hits.meta.last_page" @change="setPage"></vue-pagination>
       </div>
     </div>
   </div>
@@ -97,6 +97,7 @@
     var query = '{{ query|raw }}';
     var sort = '{{ sort|raw }}';
     var user = '{{ user }}';
+    var page = '{{ page }}';
     var hits = {{ hits|default('null')|raw }};
     var postsPerPage = {{ posts_per_page }};
     var categories = {{ categories|default([])|json_encode|raw }};

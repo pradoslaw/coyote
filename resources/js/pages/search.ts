@@ -40,6 +40,7 @@ declare global {
     model?: Model;
     query: string;
     sort: Sort;
+    page: number;
     postsPerPage: number;
     categories: number[];
     forums: ForumItem[];
@@ -108,6 +109,7 @@ new Vue({
     model: window.model,
     query: window.query,
     sort: window.sort,
+    page: window.page,
     categories: window.categories,
     forums: window.forums,
     defaults: {
@@ -148,6 +150,13 @@ new Vue({
       this.request();
     },
 
+    setPage(page: number) {
+      this.page = page;
+
+      this.request();
+      window.scrollTo(0, 0);
+    },
+
     toggleCategory(id: number) {
       const index = this.categories.indexOf(id);
 
@@ -185,7 +194,7 @@ new Vue({
 
   computed: {
     requestParams(): SearchOptions {
-      let params = { q: this.query, model: this.model, sort: this.sort, categories: this.categories, user: this.user };
+      let params = { q: this.query, model: this.model, page: this.page, sort: this.sort, categories: this.categories, user: this.user };
 
       Object.keys(params).forEach(key => {
         if (!params[key] || (Array.isArray(params[key]) && params[key].length === 0)) {

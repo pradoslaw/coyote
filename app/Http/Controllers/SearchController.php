@@ -55,6 +55,7 @@ class SearchController extends Controller
             'sort'              => $request->input('sort'),
             'user'              => $request->input('user'),
             'categories'        => $request->input('categories', []),
+            'page'              => $request->input('page', 1),
             'posts_per_page'    => $this->getSetting('forum.posts_per_page', 10),
             'forums'            => $forums
         ];
@@ -62,7 +63,8 @@ class SearchController extends Controller
         try {
             $this->validate($request, [
                 'q'         => 'nullable|string',
-                'sort'      => 'nullable|in:' . SearchOptions::DATE . ',' . SearchOptions::SCORE
+                'sort'      => 'nullable|in:' . SearchOptions::DATE . ',' . SearchOptions::SCORE,
+                'page'      => 'nullable|integer|min:1|max:100'
             ]);
 
             $response['hits'] = $strategy->search($request)->content();

@@ -2,10 +2,13 @@
 
 namespace Coyote\Services\Elasticsearch;
 
+use Coyote\Services\Arrayable\ToArray;
 use Illuminate\Http\Request;
 
 class SearchOptions
 {
+    use ToArray;
+
     const SCORE = 'score';
     const DATE = 'date';
 
@@ -34,17 +37,26 @@ class SearchOptions
      */
     public $user;
 
+    /**
+     * @var int|null
+     */
+    public $from;
+
     public function __construct(Request $request)
     {
         $this->query = $request->input('q');
-        $this->model = $request->input('model');
+        $this->model = class_basename($request->input('model'));
         $this->categories = $request->input('categories');
         $this->user = $request->input('user');
         $this->sort = $request->input('sort');
+        $this->from = 10 * ($request->input('page', 1) - 1);
     }
 
     public function getParams(): array
     {
-        return array_filter(['q' => $this->query, 'model' => class_basename($this->model), 'categories' => $this->categories, 'sort' => $this->sort, 'user' => $this->user]);
+        $params = $this->toArray();
+        unset($params['query']);
+
+        return array_filter($params + ['q' => $this->query]);
     }
 }
