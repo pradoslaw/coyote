@@ -126,6 +126,16 @@ new Vue({
     store.commit('topics/init', window.hits.data || []);
   },
 
+  mounted() {
+    window.addEventListener('popstate', event => {
+      Object.keys(event.state).forEach(key => {
+        this[key] = event.state[key];
+      });
+
+      this.request();
+    });
+  },
+
   methods: {
     getComponent() {
       return this.model === Model.Topic ? `vue-result-${this.model.toLowerCase()}` : 'vue-result-common';
@@ -167,6 +177,7 @@ new Vue({
 
     modelUrl(model?: Model) {
       let params = { ...this.requestParams, model }
+      delete params['page'];
 
       if (!model) {
         delete params['model'];
@@ -180,10 +191,9 @@ new Vue({
     },
 
     request() {
-      history.pushState(this.requestParams, '', this.getUrl(this.requestParams));
-
       axios.get('/Search', {params: this.requestParams}).then(result => {
         this.hits = result.data;
+        history.pushState(this.requestParams, '', this.getUrl(this.requestParams));
       });
     },
 
