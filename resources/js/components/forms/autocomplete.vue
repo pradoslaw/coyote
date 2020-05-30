@@ -28,10 +28,11 @@
   import { default as mixins } from '../mixins/form';
   import VueDropdown from './dropdown.vue';
   import VueError from './error.vue';
-  import axios from "axios";
+  import store from '../../store';
 
   export default {
     mixins: [ mixins ],
+    store,
     components: { 'vue-dropdown': VueDropdown, 'vue-error': VueError },
     props: {
       placeholder: {
@@ -51,22 +52,10 @@
         type: Array,
         default: () => []
       },
-      typing: {
+      handler: {
         type: Function,
         default: (value) => {
-          if (!value.trim().length) {
-            return Promise.resolve([]);
-          }
-
-          return axios.get('/User/Prompt', {params: {q: value}}).then(response => {
-            let items = response.data.data;
-
-            if (items.length === 1 && items[0].name.toLowerCase() === value.toLowerCase()) {
-              items = [];
-            }
-
-            return items;
-          });
+          return store.dispatch('prompt/request', value);
         }
       }
     },
@@ -102,7 +91,7 @@
           return;
         }
 
-        this.typing(newValue).then(items => this.items = items);
+        this.handler(newValue).then(items => this.items = items);
       }
     }
   }
