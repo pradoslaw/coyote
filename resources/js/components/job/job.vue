@@ -70,9 +70,9 @@
 <script>
   import VueSalary from './salary.vue';
   import VueLocation from './location.vue';
-  import declination from '../components/declination';
+  import declination from '../../components/declination';
 
-  import VueModal from './modal.vue';
+  import VueModal from '../modal.vue';
 
   export default {
     props: {

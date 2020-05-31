@@ -119,7 +119,7 @@
 
 <script>
   import axios from 'axios';
-  import VueModal from './modal.vue';
+  import VueModal from '../modal.vue';
 
   export default {
     name: 'vue-comment', // required with recursive component

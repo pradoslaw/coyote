@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Config from '../../libs/config';
-import VueComment from '../../components/comment.vue';
+import VueComment from '../../components/job/comment.vue';
 import VueModal from '../../components/modal.vue';
 import VueAutosize from '../../plugins/autosize';
 import VuePrompt from '../../components/forms/prompt.vue';

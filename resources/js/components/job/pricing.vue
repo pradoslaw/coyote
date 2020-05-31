@@ -62,7 +62,7 @@
 </template>
 
 <script>
-    import { default as mixins } from './mixins/form';
+    import { default as mixins } from '../mixins/form';
 
     export default {
         props: {
