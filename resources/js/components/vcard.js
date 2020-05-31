@@ -1,56 +1,50 @@
-import Config from '../libs/config';
+import axios from 'axios';
 
-$(function () {
-    'use strict';
+let tooltipTimer;
 
-    let toolTipTimer;
+function removeVCard() {
+  const vcard = document.getElementById('vcard');
 
-    $('body').delegate('a[data-user-id]', 'mouseenter mouseleave', function (e) {
-        // jezeli link jest umieszczony w komponencie vcard - pomijamy dalsze czynnosci
-        if ($(this).parent().is('#vcard-header')) {
-            return;
-        }
+  if (vcard) {
+    vcard.remove();
+  }
+}
 
-        clearTimeout(toolTipTimer);
+function showVCard(event) {
+  clearTimeout(tooltipTimer);
 
-        if (e.type === 'mouseenter') {
-            let userId = $(this).data('user-id');
+  const el = event.target;
+  const userId = el.dataset.userId;
 
-            toolTipTimer = setTimeout(function () {
-                $.ajax({
-                    type: 'GET',
-                    url: `${Config.get('public')}/User/Vcard/${userId}`,
-                    dataType: 'html',
-                    crossDomain: true,
-                    xhrFields: {
-                        withCredentials: true
-                    },
-                    success: function (html) {
-                        $('#vcard').remove();
+  const handler = () => {
+    axios.get(`/User/Vcard/${userId}`).then(result => {
+      const container = document.createElement('div');
+      container.innerHTML = result.data;
 
-                        $(html).css({
-                            top: e.pageY + 17,
-                            left: Math.min(e.pageX + 10, $(window).width() - 450)
-                        })
-                        .appendTo('body');
-                    }
-                });
+      document.getElementsByTagName('body')[0].appendChild(container);
 
-            }, 800);
-        }
-        else if (e.type === 'mouseleave') {
-            toolTipTimer = setTimeout(function () {
-                $('#vcard').remove();
+      const vcard = document.getElementById('vcard');
 
-            }, 1500);
-        }
-    })
-    .delegate('#vcard', 'mouseenter mouseleave', function (e) {
-        if (e.type === 'mouseenter') {
-            clearTimeout(toolTipTimer);
-        }
-        else if (e.type === 'mouseleave') {
-            $('#vcard').remove();
-        }
+      vcard.style.top = `${event.pageY + 10}px`;
+      vcard.style.left = `${Math.min(event.pageX + 10, window.innerWidth - 450)}px`;
+
+      vcard.addEventListener('mouseenter', () => clearTimeout(tooltipTimer));
+      vcard.addEventListener('mouseleave', removeVCard);
     });
+  };
+
+  tooltipTimer = setTimeout(handler, 800);
+}
+
+function hideVCard() {
+  clearTimeout(tooltipTimer);
+
+  tooltipTimer = setTimeout(removeVCard, 1500);
+}
+
+const links = document.querySelectorAll('a[data-user-id]');
+
+links.forEach(link => {
+  link.addEventListener('mouseenter', showVCard);
+  link.addEventListener('mouseleave', hideVCard);
 });
