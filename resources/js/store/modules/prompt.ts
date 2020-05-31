@@ -1,10 +1,4 @@
-import axios, { AxiosRequestConfig } from "axios";
-
-declare module 'axios' {
-  interface AxiosRequestConfig {
-    errorHandle?: boolean;
-  }
-}
+import axios from "axios";
 
 const CancelToken = axios.CancelToken;
 
