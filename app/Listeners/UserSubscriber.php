@@ -5,7 +5,6 @@ namespace Coyote\Listeners;
 use Coyote\Events\UserDeleted;
 use Coyote\Events\UserWasSaved;
 use Coyote\Services\Elasticsearch\Crawler;
-use Coyote\User;
 use Illuminate\Contracts\Cache\Repository;
 
 class UserSubscriber
@@ -40,9 +39,7 @@ class UserSubscriber
      */
     public function reindex($event)
     {
-        $crawler = new Crawler();
-
-        $event instanceof UserWasSaved ? $crawler->index($event->user) : $crawler->delete((new User)->forceFill($event->user));
+        (new Crawler())->index($event->user);
     }
 
     /**

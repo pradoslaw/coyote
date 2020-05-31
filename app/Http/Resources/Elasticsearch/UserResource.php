@@ -27,6 +27,7 @@ class UserResource extends ElasticsearchResource
             [
                 'created_at'    => $this->created_at->toIso8601String(),
                 'visited_at'    => $date->toIso8601String(),
+                'deleted_at'    => $date->toIso8601String(),
                 'decay_date'    => $date->toIso8601String(),
                 'url'           => route('profile', [$this->id], false),
                 'photo'         => ((string) $this->photo->url()) ?? null,
