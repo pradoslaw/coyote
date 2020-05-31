@@ -1,5 +1,5 @@
 <template>
-  <a v-profile="user.id">{{ user.name }}</a>
+  <component :is="tagName" v-profile="user.id">{{ user.name }}</component>
 </template>
 
 <script lang="ts">
@@ -16,6 +16,10 @@
   export default class VueUserName extends Vue {
     @Prop(Object)
     user!: User;
+
+    get tagName() {
+      return this.user.is_blocked || this.user.deleted_at ? 'del' : 'a';
+    }
   }
 </script>
 
