@@ -9,6 +9,7 @@ namespace Coyote\Http\Resources\Elasticsearch;
  * @property \Carbon\Carbon $created_at
  * @property \Coyote\Services\Media\MediaInterface $photo
  * @property int $reputation
+ * @property int $group_id
  * @property \Coyote\Group $group
  */
 class UserResource extends ElasticsearchResource
@@ -30,7 +31,10 @@ class UserResource extends ElasticsearchResource
                 'url'           => route('profile', [$this->id], false),
                 'photo'         => ((string) $this->photo->url()) ?? null,
                 'suggest'       => $this->getSuggest(),
-                'group'         => $this->group->name
+
+                $this->mergeWhen($this->group_id, function () {
+                    return ['group' => $this->group->name];
+                })
             ]
         );
     }

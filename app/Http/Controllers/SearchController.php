@@ -13,6 +13,7 @@ use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\ServerException;
 use Illuminate\Http\Request;
 use Coyote\Services\Forum\TreeBuilder\Builder as TreeBuilder;
+use Illuminate\Validation\ValidationException;
 
 class SearchController extends Controller
 {
@@ -68,18 +69,20 @@ class SearchController extends Controller
             ]);
 
             $response['hits'] = $strategy->search($request)->content();
-//dd($response['hits']);
+
             if ($request->wantsJson()) {
                 return $response['hits'];
             }
-        } catch (ConnectException $e) {
-            logger()->error($e);
+        } catch (ConnectException $exception) {
+            logger()->error($exception);
 
-            $response['error'] = 'Brak połączenia z serwrem wyszukiwarki.';
-        } catch (ServerException | ClientException $e) {
-            logger()->error($e);
+            $response['error'] = 'Brak połączenia z serwerem wyszukiwarki.';
+        } catch (ServerException | ClientException $exception) {
+            logger()->error($exception);
 
             $response['error'] = 'Serwer wyszukiwarki nie może przetworzyć tego żądania.';
+        } catch (ValidationException $exception) {
+            $response['error'] = $exception->getMessage();
         }
 
         return $this->view('search', $response);
