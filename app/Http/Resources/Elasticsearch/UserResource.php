@@ -24,6 +24,7 @@ class UserResource extends ElasticsearchResource
         return array_merge(
             $this->resource->only('id', 'name'),
             [
+                'created_at'    => $this->created_at->toIso8601String(),
                 'visited_at'    => $date->toIso8601String(),
                 'decay_date'    => $date->toIso8601String(),
                 'url'           => route('profile', [$this->id], false),

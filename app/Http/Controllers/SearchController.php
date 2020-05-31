@@ -68,7 +68,7 @@ class SearchController extends Controller
             ]);
 
             $response['hits'] = $strategy->search($request)->content();
-
+//dd($response['hits']);
             if ($request->wantsJson()) {
                 return $response['hits'];
             }

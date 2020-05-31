@@ -27,7 +27,7 @@
               <span class="caret"></span>
             </button>
 
-            <div :class="{'show': isDropdownVisible}" v-on-clickaway="hideDropdown" class="dropdown-menu select-menu">
+            <vue-dropdown-menu ref="dropdown" class="dropdown-menu select-menu">
               <div class="select-menu-search">
                 <input v-model="searchText" @keyup.esc="hideDropdown" ref="search" type="text" class="form-control form-control-sm" placeholder="Filtruj..." autocomplete="off">
               </div>
@@ -38,7 +38,7 @@
                   </li>
                 </ul>
               </div>
-            </div>
+            </vue-dropdown-menu>
           </div>
         </div>
 
@@ -129,9 +129,11 @@
 <script>
   import { default as Textarea, languages } from '../../libs/textarea';
   import { mixin as clickaway } from 'vue-clickaway';
+  import VueDropdownMenu from '../dropdown-menu';
 
   export default {
     mixins: [clickaway],
+    components: { 'vue-dropdown-menu': VueDropdownMenu },
     props: {
       input: {
           type: Function
@@ -163,17 +165,12 @@
       },
 
       toggleDropdown() {
-        this.isDropdownVisible = !this.isDropdownVisible;
-
-        if (this.isDropdownVisible) {
-          this.$nextTick(() => this.$refs.search.focus());
-        }
+        this.$refs.dropdown.toggle();
+        this.$nextTick(() => this.$refs.search.focus());
       },
 
-      hideDropdown(event) {
-        if (event && !event.target.classList.contains('dropdown-toggle')) {
-          this.isDropdownVisible = false;
-        }
+      hideDropdown() {
+        this.$refs.dropdown.toggle();
       }
     },
     computed: {

@@ -3,6 +3,7 @@ import VueTopic from '../components/forum/topic.vue';
 import VuePagination from '../components/pagination.vue';
 import VueTimeago from '../plugins/timeago';
 import VueAutocomplete from '../components/forms/autocomplete.vue';
+import VueDropdownMenu from '../components/dropdown-menu.vue';
 import PerfectScrollbar from '../components/perfect-scrollbar';
 import store from "../store";
 import { Hit, Hits, Sort, SearchOptions } from "../types/hit";
@@ -130,7 +131,7 @@ new Vue({
     user: window.user,
     isDropdownVisible: false
   },
-  components: { 'vue-pagination': VuePagination, 'perfect-scrollbar': PerfectScrollbar, 'vue-autocomplete': VueAutocomplete },
+  components: { 'vue-pagination': VuePagination, 'perfect-scrollbar': PerfectScrollbar, 'vue-autocomplete': VueAutocomplete, 'vue-dropdown-menu': VueDropdownMenu },
   store,
   created() {
     store.commit('topics/init', window.hits.data || []);
@@ -167,6 +168,8 @@ new Vue({
     setUser(user: User) {
       this.user = user?.name;
 
+      // @ts-ignore
+      (this.$refs['author-menu'] as VueDropdownMenu).toggle();
       this.request();
     },
 

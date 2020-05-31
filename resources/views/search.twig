@@ -61,17 +61,17 @@
           </li>
 
           <li class="list-inline-item dropdown">
-            <a @click="isDropdownVisible = !isDropdownVisible" class="dropdown-toggle text-muted text-decoration-none" href="javascript:">
+            <a @click="$refs['author-menu'].toggle()" class="dropdown-toggle text-muted text-decoration-none" href="javascript:">
               ${ this.user || 'Autor' }
             </a>
 
-            <div :class="{'show': isDropdownVisible}" class="dropdown-menu" style="width: 350px">
+            <vue-dropdown-menu ref="author-menu" style="width: 350px">
               <form class="px-2 py-2">
                 <div class="form-group">
                   <vue-autocomplete :value.sync="user" placeholder="Szukaj" @select="setUser"></vue-autocomplete>
                 </div>
               </form>
-            </div>
+            </vue-dropdown-menu>
           </li>
         </ul>
 
