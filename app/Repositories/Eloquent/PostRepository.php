@@ -32,15 +32,13 @@ class PostRepository extends Repository implements PostRepositoryInterface
      */
     public function lengthAwarePagination(Topic $topic, int $page = 0, int $perPage = 10)
     {
-
-
         $result = $this
             ->build(function (Builder $builder) use ($topic, $page, $perPage) {
                 return $builder
                     ->where('posts.topic_id', $topic->id)
                     ->forPage($page, $perPage);
             })
-            ->with(['user', 'editor'])
+            ->with(['user:id,name,photo,posts,sig,location,created_at,visited_at,deleted_at,is_blocked,allow_smilies,allow_count,allow_sig', 'editor:id,name'])
             ->get();
 
         $paginate = new LengthAwarePaginator($result, $topic->replies, $perPage, $page, ['path' => ' ']);

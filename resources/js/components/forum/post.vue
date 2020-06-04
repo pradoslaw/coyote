@@ -35,24 +35,31 @@
 
       <div class="row">
         <div class="d-none d-lg-block col-lg-2">
-          <vue-avatar v-bind="post.user" class="post-avatar img-thumbnail"></vue-avatar>
+          <template v-if="post.user">
+            <vue-avatar v-bind="post.user" class="post-avatar img-thumbnail"></vue-avatar>
 
-          <ul class="post-stats list-unstyled">
-            <li>
-              <strong>Rejestracja:</strong>
-              <small>3 lata temu</small>
-            </li>
+            <ul class="post-stats list-unstyled">
+              <li>
+                <strong>Rejestracja:</strong>
+                <small>{{ post.user.created_at }}</small>
+              </li>
 
-            <li>
-              <strong>Ostatnio:</strong>
-              <small>5 miesięcy temu</small>
-            </li>
+              <li>
+                <strong>Ostatnio:</strong>
+                <small>{{ post.user.visited_at }}</small>
+              </li>
 
-            <li>
-              <strong>Postów:</strong>
-              <small><a title="Znajdź posty tego użytkownika" href="http://4p.local:8880/Forum/User/78200" style="text-decoration: underline">268</a></small>
-            </li>
-          </ul>
+              <li v-if="post.user.location">
+                <strong>Lokalizacja:</strong>
+                <small>{{ post.user.location }}</small>
+              </li>
+
+              <li v-if="post.user.allow_count">
+                <strong>Postów:</strong>
+                <small><a title="Znajdź posty tego użytkownika" :href="`/Forum/User/${post.user.id}`" style="text-decoration: underline">{{ post.user.posts }}</a></small>
+              </li>
+            </ul>
+          </template>
         </div>
 
         <div class="col-12 col-lg-10">

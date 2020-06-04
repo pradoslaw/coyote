@@ -12,6 +12,13 @@ export interface User {
   deleted_at?: Date;
   is_blocked: boolean;
   photo: string;
+  posts?: number;
+  created_at?: Date;
+  visited_at?: Date;
+  allow_smilies?: boolean;
+  allow_count?: boolean;
+  allow_sig?: boolean;
+  location?: string;
 }
 
 export interface Media {
