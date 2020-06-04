@@ -7,6 +7,7 @@ import inbox from './modules/inbox';
 import notifications from './modules/notifications';
 import forums from './modules/forums';
 import topics from './modules/topics';
+import posts from './modules/posts';
 import user from './modules/user';
 import microblogs from './modules/microblogs';
 import prompt from './modules/prompt';
@@ -22,6 +23,7 @@ export default new Vuex.Store({
     notifications,
     forums,
     topics,
+    posts,
     user,
     microblogs,
     prompt

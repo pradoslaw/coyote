@@ -1,5 +1,79 @@
 @charset "UTF-8";
 
+.card-post {
+  .card-body {
+    padding: 1rem;
+  }
+
+  .card-footer {
+    padding: .5rem;
+  }
+}
+
+.post-avatar {
+  margin: 5px 0;
+  display: block;
+  max-width: 75px;
+}
+
+.post-author {
+  font-size: .9rem;
+}
+
+.post-stats {
+  font-size: $font-size-sm;
+
+  li {
+    padding: 2px 0;
+  }
+
+  strong {
+    display: inline-block;
+    width: 36%;
+    font-weight: normal;
+  }
+
+  small {
+    color: $text-muted;
+  }
+}
+
+.post-vote {
+  vertical-align: top;
+  float: right;
+  line-height: 120%;
+  height: 100%;
+}
+
+.post-comments {
+  margin: 15px 0 5px 15px;
+  font-size: .75rem;
+  padding-right: 50px;
+
+  @include link-color-darker;
+
+  .btn-comment-edit, .btn-comment-del {
+    padding: 0 5px;
+    color: $gray;
+    display: none;
+  }
+}
+
+.post-comment {
+  border-top: 1px solid $border-color;
+  padding: 5px 0 5px 0;
+  margin-top: 1px;
+  word-wrap: break-word;
+
+  //&:last-child {
+  //  border-top: 1px dotted $border-color;
+  //}
+
+  &:before {
+    content: "▪";
+  }
+}
+
 // "Kontener" dla posta
 // --------------------------------------------------
 
@@ -265,7 +339,8 @@
   word-wrap: break-word;
   line-height: 139%;
   overflow: hidden;
-  padding-right: 50px;
+  padding-right: 10px;
+  margin-top: 10px;
 
   @include link-color-darker;
   @include stripped-table;
@@ -287,10 +362,6 @@
     color: $gray-light;
     font-size: 90%;
     background: transparent;
-  }
-
-  textarea {
-    margin-bottom: 5px;
   }
 
   // emoticons are NOT responsive
@@ -376,12 +447,12 @@ div.tooltip-inner {
 }
 
 @include media-breakpoint-down(sm) {
-  .vote-up, .vote-count {
-    font-size: $font-size-base;
-  }
+  //.vote-up, .vote-count {
+  //  font-size: $font-size-base;
+  //}
 
   .vote-accept {
-    font-size: $font-size-base + 0.2rem;
+    font-size: $font-size-base + 0.6rem;
   }
 }
 

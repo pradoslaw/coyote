@@ -140,7 +140,15 @@ class Post extends Model
      */
     public function user()
     {
-        return $this->belongsTo('Coyote\User');
+        return $this->belongsTo(User::class)->withTrashed();
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function editor()
+    {
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     /**

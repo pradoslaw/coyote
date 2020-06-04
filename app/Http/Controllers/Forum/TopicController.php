@@ -6,6 +6,8 @@ use Coyote\Events\TopicWasSaved;
 use Coyote\Forum\Reason;
 use Coyote\Http\Factories\CacheFactory;
 use Coyote\Http\Factories\FlagFactory;
+use Coyote\Http\Resources\PostCollection;
+use Coyote\Http\Resources\PostResource;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Post\WithSubscribers;
@@ -16,6 +18,7 @@ use Coyote\Services\Forum\Tracker;
 use Coyote\Services\Forum\TreeBuilder\Builder;
 use Coyote\Services\Forum\TreeBuilder\ListDecorator;
 use Coyote\Services\Parser\Parsers\ParserInterface;
+use Coyote\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -44,8 +47,6 @@ class TopicController extends BaseController
 
         // current page...
         $page = (int) $request->get('page');
-        // number of answers
-        $replies = $topic->replies;
         // number of posts per one page
         $perPage = $this->postsPerPage($request);
 
@@ -56,7 +57,7 @@ class TopicController extends BaseController
             $this->post->pushCriteria(new WithTrashedInfo());
 
             // user is able to see real number of posts in this topic
-            $replies = $topic->replies_real;
+            $topic->replies = $topic->replies_real;
         }
 
         // user wants to show certain post. we need to calculate page number based on post id.
@@ -65,61 +66,50 @@ class TopicController extends BaseController
         }
 
         // show posts of last page if page parameter is higher than pages count
-        $lastPage = max((int) ceil($replies / $perPage), 1);
+        $lastPage = max((int) ceil($topic->replies / $perPage), 1);
         if ($page > $lastPage) {
             $page = $lastPage;
         }
-
-        // build "more like this" block. it's important to send elasticsearch query before
-        // send SQL query to database because search() method exists only in Model and not Builder class.
-        $mlt = $this->getCacheFactory()->remember('mlt-post:' . $topic->id, now()->addDay(), function () use ($topic) {
-            $this->forum->pushCriteria(new OnlyThoseWithAccess());
-
-            $builder = new MoreLikeThisBuilder($topic, $this->forum->pluck('id'));
-
-            // search related topics
-            $mlt = $this->topic->search($builder);
-
-            // it's important to reset criteria for the further queries
-            $this->forum->resetCriteria();
-            return $mlt;
-        });
 
         $this->post->pushCriteria(new WithSubscribers($this->userId));
 
         // magic happens here. get posts for given topic (including first post for every page)
         /* @var \Illuminate\Support\Collection $posts */
-        $posts = $this->post->takeForTopic($topic->id, $topic->first_post_id, $page, $perPage);
-        $paginate = new LengthAwarePaginator($posts, $replies, $perPage, $page, ['path' => ' ']);
+        $paginate = $this->post->lengthAwarePagination($topic, $page, $perPage);
+//        dd($paginate);
 
-        start_measure('Parsing...');
-        $parser = $this->getParsers();
+//        start_measure('Parsing...');
+//        $parser = $this->getParsers();
+//
+//        /** @var \Coyote\Post $post */
+//        foreach ($posts as &$post) {
+//            // parse post or get it from cache
+//            $post->text = $parser['post']->parse($post->text);
+//
+//            if ((auth()->guest() || (auth()->check() && $this->auth->allow_sig)) && $post->sig) {
+//                $post->sig = $parser['sig']->parse($post->sig);
+//            }
+//
+//            foreach ($post->comments as &$comment) {
+//                $comment->text = $parser['comment']->setUserId($comment->user_id)->parse($comment->text);
+//            }
+//
 
-        /** @var \Coyote\Post $post */
-        foreach ($posts as &$post) {
-            // parse post or get it from cache
-            $post->text = $parser['post']->parse($post->text);
+//        }
+//
+//        stop_measure('Parsing...');
+        $dateTime = $paginate->last()->created_at;
 
-            if ((auth()->guest() || (auth()->check() && $this->auth->allow_sig)) && $post->sig) {
-                $post->sig = $parser['sig']->parse($post->sig);
-            }
-
-            foreach ($post->comments as &$comment) {
-                $comment->text = $parser['comment']->setUserId($comment->user_id)->parse($comment->text);
-            }
-
-            $post->setRelation('topic', $topic);
-            $post->setRelation('forum', $forum);
-        }
-
-        stop_measure('Parsing...');
-
-        $postIds = $posts->pluck('id')->toArray();
-        $dateTime = $posts->last()->created_at;
+        $tracker = Tracker::make($topic);
 
         if ($markTime < $dateTime) {
-            Tracker::make($topic)->asRead($dateTime);
+            $tracker->asRead($dateTime);
         }
+
+        $posts = (new PostCollection($paginate))
+            ->setTopic($topic)
+            ->setForum($forum)
+            ->setTracker($tracker);
 
         // create forum list for current user (according to user's privileges)
         $treeBuilder = new Builder($this->forum->list());
@@ -133,6 +123,7 @@ class TopicController extends BaseController
         $flags = $activities = $adminForumList = $reasonList = [];
 
         if ($this->gate->allows('delete', $forum) || $this->gate->allows('move', $forum)) {
+            $postIds = $paginate->pluck('id')->toArray();
             $reasonList = Reason::pluck('name', 'id')->toArray();
 
             if ($this->gate->allows('delete', $forum)) {
@@ -149,12 +140,31 @@ class TopicController extends BaseController
 
         return $this->view(
             'forum.topic',
-            compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'adminForumList', 'reasonList', 'form', 'mlt', 'flags')
+            compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'adminForumList', 'reasonList', 'form', 'flags')
         )->with([
-            'markTime'      => $markTime,
+            'mlt'           => $this->moreLikeThis($topic),
+//            'markTime'      => $markTime,
             'subscribers'   => $this->userId ? $topic->subscribers()->pluck('topic_id', 'user_id') : [],
-            'author_id'     => $posts[0]->user_id
+//            'author_id'     => $posts[0]->user_id
         ]);
+    }
+
+    private function moreLikeThis(Topic $topic)
+    {
+        // build "more like this" block. it's important to send elasticsearch query before
+        // send SQL query to database because search() method exists only in Model and not Builder class.
+        return $this->getCacheFactory()->remember('mlt-post:' . $topic->id, now()->addDay(), function () use ($topic) {
+            $this->forum->pushCriteria(new OnlyThoseWithAccess());
+
+            $builder = new MoreLikeThisBuilder($topic, $this->forum->pluck('id'));
+
+            // search related topics
+            $mlt = $this->topic->search($builder);
+
+            // it's important to reset criteria for the further queries
+            $this->forum->resetCriteria();
+            return $mlt;
+        });
     }
 
     /**

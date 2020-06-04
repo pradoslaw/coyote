@@ -1,16 +1,17 @@
-import 'jquery-color-animation/jquery.animate-colors';
-import 'jquery-prettytextdiff/jquery.pretty-text-diff';
-import '../plugins/tags';
-import '../pages/forum/draft';
-import '../pages/forum/posting';
-import '../pages/forum/sidebar';
-import '../pages/forum/tags';
+// import 'jquery-color-animation/jquery.animate-colors';
+// import 'jquery-prettytextdiff/jquery.pretty-text-diff';
+// import '../plugins/tags';
+// import '../pages/forum/draft';
+// import '../pages/forum/posting';
+// import '../pages/forum/sidebar';
+// import '../pages/forum/tags';
 // import 'bootstrap/js/src/popover';
 import VueSection from '../components/forum/section.vue';
 import VueTopic from '../components/forum/topic.vue';
+import VuePost from '../components/forum/post.vue';
 import Vue from "vue";
 import store from '../store';
-import {mapState} from "vuex";
+import { mapState, mapGetters } from "vuex";
 
 new Vue({
   el: '#js-forum',
@@ -96,3 +97,14 @@ new Vue({
     }
   }
 });
+
+new Vue({
+  el: '#js-post',
+  delimiters: ['${', '}'],
+  components: { 'vue-post': VuePost },
+  store,
+  created() {
+    store.commit('posts/init', { pagination: window.pagination });
+  },
+  computed: mapGetters('posts', ['posts'])
+})

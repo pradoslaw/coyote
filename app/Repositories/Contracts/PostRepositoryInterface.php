@@ -17,23 +17,14 @@ use Coyote\Poll;
 interface PostRepositoryInterface extends RepositoryInterface
 {
     /**
-     * Take first post in thread
+     * Take X posts from topic.
      *
-     * @param int $postId
-     * @return mixed
-     */
-    public function takeFirst($postId);
-
-    /**
-     * Take X posts from topic. IMPORTANT: first post of topic will be always fetched
-     *
-     * @param int $topicId
-     * @param int $postId   First post ID (in thread)
+     * @param Topic $topic
      * @param int $page
      * @param int $perPage
      * @return mixed
      */
-    public function takeForTopic($topicId, $postId, $page = 0, $perPage = 10);
+    public function lengthAwarePagination(Topic $topic, int $page = 0, int $perPage = 10);
 
     /**
      * Return page number based on ID of post

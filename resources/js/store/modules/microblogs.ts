@@ -18,13 +18,6 @@ const getters = {
 
 type ParentChild = { parent: Microblog, comment: Microblog };
 
-Array.prototype.keyBy = function (key: string) {
-  return this.reduce((data, item) => {
-    data[item[key]] = item;
-
-    return data;
-  }, {});
-};
 
 const mutations = {
   init(state, { pagination, microblog }) {

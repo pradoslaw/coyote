@@ -10,6 +10,7 @@ use Coyote\Repositories\Contracts\PostRepositoryInterface;
 use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Topic;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
  * @method string search(array $body)
@@ -27,51 +28,31 @@ class PostRepository extends Repository implements PostRepositoryInterface
     }
 
     /**
-     * Take first post in thread
-     *
-     * @param int $postId
-     * @return mixed
+     * @inheritDoc
      */
-    public function takeFirst($postId)
+    public function lengthAwarePagination(Topic $topic, int $page = 0, int $perPage = 10)
     {
-        return $this
-            ->build(function (Builder $sql) use ($postId) {
-                return $sql->where('posts.id', $postId);
-            })
-            ->first();
-    }
 
-    /**
-     * Take X posts from topic. IMPORTANT: first post of topic will always be fetched
-     *
-     * @param int $topicId
-     * @param int $postId   First post ID (in thread)
-     * @param int $page
-     * @param int $perPage
-     * @return mixed
-     */
-    public function takeForTopic($topicId, $postId, $page = 0, $perPage = 10)
-    {
-        $first = $this->takeFirst($postId);
 
-        $sql = $this
-            ->build(function (Builder $builder) use ($topicId, $postId, $page, $perPage) {
+        $result = $this
+            ->build(function (Builder $builder) use ($topic, $page, $perPage) {
                 return $builder
-                    ->where('posts.topic_id', $topicId)
-                    ->where('posts.id', '<>', $postId)
+                    ->where('posts.topic_id', $topic->id)
                     ->forPage($page, $perPage);
             })
-            ->get()
-            ->prepend($first);
+            ->with(['user', 'editor'])
+            ->get();
 
-        $sql->load(['comments' => function ($sub) {
-            $sub->select([
-                'post_comments.*', 'name', $this->raw('users.deleted_at IS NULL AS is_active'), 'is_blocked'
-            ])->join('users', 'users.id', '=', 'user_id')->orderBy('id');
-        }]);
-        $sql->load('attachments');
+        $paginate = new LengthAwarePaginator($result, $topic->replies, $perPage, $page, ['path' => ' ']);
+//
+//        $sql->load(['comments' => function ($sub) {
+//            $sub->select([
+//                'post_comments.*', 'name', $this->raw('users.deleted_at IS NULL AS is_active'), 'is_blocked'
+//            ])->join('users', 'users.id', '=', 'user_id')->orderBy('id');
+//        }]);
+//        $sql->load('attachments');
 
-        return $sql;
+        return $paginate;
     }
 
     /**
@@ -440,29 +421,29 @@ class PostRepository extends Repository implements PostRepositoryInterface
             ->model
             ->addSelect([// addSelect() instead of select() to retrieve extra columns in criteria
                 'posts.*',
-                'author.name AS author_name',
-                'author.photo',
-                $this->raw('author.deleted_at IS NULL AS is_active'),
-                'author.is_blocked',
-                'author.is_online',
-                'author.sig',
-                'author.location',
-                'author.posts AS author_posts',
-                'author.allow_sig',
-                'author.allow_smilies',
-                'author.allow_count',
-                'author.created_at AS author_created_at',
-                'author.visited_at AS author_visited_at',
-                'editor.name AS editor_name',
-                $this->raw('editor.deleted_at IS NULL AS editor_is_active'),
-                'editor.is_blocked AS editor_is_blocked',
-                'groups.name AS group_name',
+//                'author.name AS author_name',
+//                'author.photo',
+//                $this->raw('author.deleted_at IS NULL AS is_active'),
+//                'author.is_blocked',
+//                'author.is_online',
+//                'author.sig',
+//                'author.location',
+//                'author.posts AS author_posts',
+//                'author.allow_sig',
+//                'author.allow_smilies',
+//                'author.allow_count',
+//                'author.created_at AS author_created_at',
+//                'author.visited_at AS author_visited_at',
+//                'editor.name AS editor_name',
+//                $this->raw('editor.deleted_at IS NULL AS editor_is_active'),
+//                'editor.is_blocked AS editor_is_blocked',
+//                'groups.name AS group_name',
                 'pa.user_id AS accept_on'
             ])
             ->from($this->raw("($sub) AS posts"))
-            ->leftJoin('users AS author', 'author.id', '=', 'posts.user_id')
-            ->leftJoin('users AS editor', 'editor.id', '=', 'editor_id')
-            ->leftJoin('groups', 'groups.id', '=', 'author.group_id')
+//            ->leftJoin('users AS author', 'author.id', '=', 'posts.user_id')
+//            ->leftJoin('users AS editor', 'editor.id', '=', 'editor_id')
+//            ->leftJoin('groups', 'groups.id', '=', 'author.group_id')
             ->leftJoin('post_accepts AS pa', 'pa.post_id', '=', 'posts.id')
             ->orderBy('posts.created_at'); // <-- make sure that posts are in the right order!
 
