@@ -40,6 +40,30 @@ export interface Microblog {
   voters?: string[];
 }
 
+interface PostPermission {
+  write: boolean;
+  delete: boolean;
+  update: boolean;
+  merge: boolean;
+  adm_access: boolean;
+}
+
+export interface Post {
+  id: number;
+  user: User;
+  created_at: Date | null;
+  updated_at: Date | null;
+  deleted_at: Date | null;
+  text: string;
+  html: string;
+  score: number;
+  url: string;
+  is_read: boolean;
+  is_locked: boolean;
+  permissions: PostPermission;
+  ip?: string;
+}
+
 export interface Links {
   first: string;
   last: string;
