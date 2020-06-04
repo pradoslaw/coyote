@@ -77,8 +77,8 @@ class PostResource extends JsonResource
 
         return array_merge($only, [
             'created_at'    => $this->created_at->toIso8601String(),
-            'updated_at'    => $this->updated_at->toIso8601String(),
-            'deleted_at'    => $this->deleted_at ? $this->deleted_at->toIso8601String() : null,
+            'updated_at'    => $this->updated_at ? $this->updated_at->toIso8601String() : null,
+            'deleted_at'    => $this->deleted_at ? Carbon::parse($this->deleted_at)->toIso8601String() : null,
             'user'          => UserResource::make($this->user),
             'html'          => $html,
             'url'           => UrlBuilder::post($this->resource),
@@ -88,7 +88,7 @@ class PostResource extends JsonResource
             $this->mergeWhen($auth, function () use ($auth) {
                 return ['permissions' => [
                     'write'             => $auth->can('write', $this->topic) && $auth->can('write', $this->forum),
-                    'delete'            => $auth->can('delete', $this->topic) && $auth->can('delete', $this->forum),
+                    'delete'            => $auth->can('delete', $this->topic) || $auth->can('delete', $this->forum),
                     'update'            => $auth->can('update', $this->resource),
                     'merge'             => $auth->can('merge', $this->forum),
                     'adm_access'        => $auth->can('adm-access')

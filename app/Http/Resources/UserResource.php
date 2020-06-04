@@ -9,6 +9,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class UserResource extends JsonResource
 {
+    private const OPTIONALS = ['allow_sig', 'allow_count', 'allow_smilies', 'posts', 'sig', 'location', 'visited_at', 'created_at'];
+
     /**
      * Transform the resource into an array.
      *
@@ -17,8 +19,16 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
-        $only = $this->resource->only(['id', 'name', 'deleted_at', 'is_blocked']);
+        $result = array_merge(
+            $this->resource->only(['id', 'name', 'deleted_at', 'is_blocked']), ['photo' => (string) $this->photo->url() ?: null]
+        );
 
-        return array_merge($only, ['photo' => (string) $this->photo->url() ?: null]);
+        foreach (self::OPTIONALS as $value) {
+            if (isset($this->resource->$value)) {
+                $result[$value] = $this->resource->$value;
+            }
+        }
+
+        return $result;
     }
 }

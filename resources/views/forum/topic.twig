@@ -8,7 +8,6 @@
 
 {% set is_writeable = can('write', topic) and can('write', forum) %}
 {% set is_locked = topic.is_locked or forum.is_locked %}
-{% set too_old = diff_in_months(topic.last_post_created_at) >= 6 %}
 
 {% block content %}
   {% if topic.locked_at %}
@@ -31,63 +30,60 @@
     </p>
   {% endif %}
 
-  <h1>{{ link_to_route('forum.topic', topic.subject, [forum.slug, topic.id, topic.slug]) }}</h1>
-
-  <nav>
-    {{ paginate|raw }}
-  </nav>
+  <h1 class="mb-0">{{ link_to_route('forum.topic', topic.subject, [forum.slug, topic.id, topic.slug]) }}</h1>
 
   {% include "forum.partials.top" %}
 
 <main id="js-post" class="mainbar">
-  <vue-post v-for="post in posts" :key="post.id" :post="post"></vue-post>
-</main>
+  <div class="row no-gutters mb-3">
+    <div class="mr-auto">
+      {{ paginate|raw }}
+    </div>
 
-  <main class="mainbar">
+    {% if not is_locked or is_writeable %}
+      <div class="ml-auto">
+        <a href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}" class="btn btn-primary btn-sm ml-4">Odpowiedz</a>
+        <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm">Nowy wątek</a>
+      </div>
+    {% endif %}
+  </div>
+
+  <vue-post
+    v-for="post in posts"
+    :key="post.id"
+    :post="post"
+  ></vue-post>
+
+  <div class="row no-gutters mb-3">
+    <div class="mr-auto">
+      {{ paginate|raw }}
+    </div>
+
+    <div class="ml-auto">
+      {% if not is_locked or is_writeable %}
+        <a href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}" class="btn btn-primary btn-sm float-right ml-3">Odpowiedz</a>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if forumList is defined %}
+    <div class="row no-gutters">
+      <div class="ml-auto">
+        {{ form_select('forum', forumList, forum.slug, {'id': 'sel-forum-list', 'class': 'form-control d-inline w-auto', 'data-url': route('forum.home')}) }}
+
+        <a class="btn" href="javascript:" id="btn-goto">
+          <i class="fas fa-arrow-circle-right"></i>
+        </a>
+      </div>
+    </div>
+  {% endif %}
+
+  <section class="row no-gutters mt-3">
+    {% include 'forum.partials.per_page' with {label: 'Liczba odpowiedzi na stronę', perPage: paginate.perPage()} %}
+  </section>
 
 {#    {% include 'forum.partials.poll' %}#}
 
-    <section class="card card-wrapper">
-      <div class="card-body">
-
-        <div class="table-forum margin-xs-top">
-          {% if not is_locked or is_writeable %}
-            <a href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}" class="btn btn-primary btn-sm float-right" style="margin-left: 15px">Odpowiedz</a>
-            <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm float-right">Nowy wątek</a>
-          {% endif %}
-
-          <div class="clearfix"></div>
-
-{#          {% for post in posts %}#}
-{#            {% include 'forum.partials.post' with {index: loop.index0} %}#}
-{#          {% endfor %}#}
-
-          <div class="post" id="last-post">
-            <div class="col-footer-nav">
-              <nav class="float-left">
-                {{ paginate|raw }}
-              </nav>
-
-              <a id="btn-goto" class="btn float-right" href="javascript:">
-                <i class="fas fa-arrow-circle-right"></i>
-              </a>
-
-              {{ form_select('forum', forumList, forum.slug, {'class': 'float-right', 'id': 'sel-forum-list', 'data-url': route('forum.home')}) }}
-
-              <div class="clearfix"></div>
-            </div>
-          </div>
-
-          {% if not is_locked or is_writeable %}
-            <a href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}" class="btn btn-primary btn-sm float-right ml-3">Odpowiedz</a>
-
-            {% if auth_check() and not too_old %}
-              <a href="javascript:" id="btn-fast-reply" class="btn btn-primary btn-sm float-right">Szybka odpowiedź</a>
-            {% endif %}
-          {% endif %}
-        </div>
-      </div>
-    </section>
 
     {% if is_writeable and not too_old %}
       {{ form_start(form) }}
@@ -122,17 +118,7 @@
       {{ form_end(form) }}
     {% endif %}
 
-    <section class="row">
-      <div class="col-12">
-        <div class="float-right">
-          <div class="form-inline">
-            <label class="mr-1">Liczba odpowiedzi na stronę</label>
 
-            {% include 'forum.partials.per_page' with {perPage: paginate.perPage()} %}
-          </div>
-        </div>
-      </div>
-    </section>
 
     {{ viewers|raw }}
   </main>
