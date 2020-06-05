@@ -7,8 +7,8 @@
         </div>
 
         <div class="media-body">
-          <h5 class="mb-0">
-            <vue-user-name v-if="post.user" :user="post.user" class="post-author"></vue-user-name>
+          <h5 class="mb-0 post-author">
+            <vue-user-name v-if="post.user" :user="post.user"></vue-user-name>
             <span v-else>{{ post.user_name }}</span>
           </h5>
 
@@ -20,8 +20,8 @@
 
       <div class="row d-none d-lg-flex">
         <div class="col-2">
-          <h5 class="mb-0">
-            <vue-user-name v-if="post.user" :name="post.user.name" :photo="post.user.photo" :id="post.user.id" class="post-author"></vue-user-name>
+          <h5 class="mb-0 post-author">
+            <vue-user-name v-if="post.user" :user="post.user"></vue-user-name>
             <span v-else>{{ post.user_name }}</span>
           </h5>
         </div>
@@ -78,12 +78,14 @@
             </a>
           </div>
 
-          <div class="post-content" v-html="post.html"></div>
+          <div class="post-content">
+            <div v-html="post.html"></div>
 
-          <template v-if="post.user && post.user.sig">
-            <hr>
-            <footer v-html="post.user.sig"></footer>
-          </template>
+            <template v-if="post.user && post.user.sig">
+              <hr>
+              <footer v-html="post.user.sig"></footer>
+            </template>
+          </div>
 
           <div class="post-comments">
             <div class="post-comment">
