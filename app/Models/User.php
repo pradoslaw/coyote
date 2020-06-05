@@ -57,6 +57,7 @@ use Ramsey\Uuid\Uuid;
  * @property string $firm
  * @property string $position
  * @property string $access_ip
+ * @property string $sig
  * @property \Coyote\Services\Media\MediaInterface $photo
  * @property bool $is_online
  * @property bool $alert_login

@@ -3,7 +3,7 @@
     <div class="card-body">
       <div class="media d-lg-none">
         <div class="media-left mr-2">
-          <vue-avatar v-bind="post.user" class="i-35 img-thumbnail"></vue-avatar>
+          <vue-avatar :id="post.user.id" :name="post.user.name" :photo="post.user.photo" class="d-block i-35 img-thumbnail"></vue-avatar>
         </div>
 
         <div class="media-body">
@@ -20,8 +20,10 @@
 
       <div class="row d-none d-lg-flex">
         <div class="col-2">
-          <vue-user-name v-if="post.user" :user="post.user" class="post-author"></vue-user-name>
-          <span v-else>{{ post.user_name }}</span>
+          <h5 class="mb-0">
+            <vue-user-name v-if="post.user" :name="post.user.name" :photo="post.user.photo" :id="post.user.id" class="post-author"></vue-user-name>
+            <span v-else>{{ post.user_name }}</span>
+          </h5>
         </div>
 
         <div class="col-10">
@@ -41,12 +43,12 @@
             <ul class="post-stats list-unstyled">
               <li>
                 <strong>Rejestracja:</strong>
-                <small>{{ post.user.created_at }}</small>
+                <small>{{ formatDistanceToNow(post.user.created_at) }}</small>
               </li>
 
               <li>
                 <strong>Ostatnio:</strong>
-                <small>{{ post.user.visited_at }}</small>
+                <small>{{ formatDistanceToNow(post.user.visited_at) }}</small>
               </li>
 
               <li v-if="post.user.location">
@@ -77,6 +79,11 @@
           </div>
 
           <div class="post-content" v-html="post.html"></div>
+
+          <template v-if="post.user && post.user.sig">
+            <hr>
+            <footer v-html="post.user.sig"></footer>
+          </template>
 
           <div class="post-comments">
             <div class="post-comment">
@@ -168,6 +175,9 @@
   import VueTimeago from '../../plugins/timeago';
   import VueAvatar from '../avatar.vue';
   import VueUserName from "../user-name.vue";
+  import formatDistanceToNow from 'date-fns/formatDistanceToNow';
+  import { pl } from 'date-fns/locale';
+
 
   Vue.use(VueTimeago);
 
@@ -179,6 +189,10 @@
   export default class VuePost extends Vue {
     @Prop(Object)
     post!: Post;
+
+    formatDistanceToNow(date) {
+      return formatDistanceToNow(new Date(date), { locale: pl });
+    }
 
   }
 </script>

@@ -74,8 +74,10 @@ class PostCollection extends ResourceCollection
                 $this
                     ->collection
                     ->map(function (Post $post) use ($request, $parser) {
-                        // set relations to avoid N+1 SQL loading
-                        $post->setRelations(['topic' => $this->topic, 'forum' => $this->forum]);
+                        // set relations to avoid N+1 SQL loading. be aware we must use setRelation() method because setRelations() overwrites all already
+                        // assigned relations
+                        $post->setRelation('topic', $this->topic);
+                        $post->setRelation('forum', $this->forum);
 
                         return (new PostResource($post))->setTracker($this->tracker)->setSigParser($parser)->toArray($request);
                     })
