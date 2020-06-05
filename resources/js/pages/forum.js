@@ -6,6 +6,7 @@
 // import '../pages/forum/sidebar';
 // import '../pages/forum/tags';
 // import 'bootstrap/js/src/popover';
+import VueTimeago from '../plugins/timeago';
 import VueSection from '../components/forum/section.vue';
 import VueTopic from '../components/forum/topic.vue';
 import VuePost from '../components/forum/post.vue';
@@ -13,6 +14,8 @@ import VueForm from '../components/forum/form.vue';
 import Vue from "vue";
 import store from '../store';
 import { mapState, mapGetters } from "vuex";
+
+Vue.use(VueTimeago);
 
 new Vue({
   el: '#js-forum',

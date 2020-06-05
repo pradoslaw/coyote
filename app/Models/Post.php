@@ -84,7 +84,7 @@ class Post extends Model
      */
     public function comments()
     {
-        return $this->hasMany('Coyote\Post\Comment');
+        return $this->hasMany('Coyote\Post\Comment')->orderBy('id');
     }
 
     /**
