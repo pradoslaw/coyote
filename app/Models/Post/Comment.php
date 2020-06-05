@@ -29,6 +29,11 @@ class Comment extends Model
     protected $fillable = ['post_id', 'user_id', 'text'];
 
     /**
+     * @var string[]
+     */
+    protected $appends = ['html'];
+
+    /**
      * @var string
      */
     protected $dateFormat = 'Y-m-d H:i:se';
@@ -58,7 +63,7 @@ class Comment extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->select(['id', 'name', 'photo', 'is_blocked'])->withTrashed();
     }
 
     /**

@@ -1,9 +1,15 @@
 <template>
-  <div class="card card-post">
-    <div class="card-body">
+  <div :class="{'is-deleted': post.deleted_at}" class="card card-post">
+    <div v-if="post.deleted_at" class="post-delete card-body">
+      <i class="fas fa-warning"></i>
+
+      Post usunięty
+    </div>
+
+    <div :class="{'collapse': post.deleted_at}" class="card-body">
       <div class="media d-lg-none">
         <div class="media-left mr-2">
-          <vue-avatar :id="post.user.id" :name="post.user.name" :photo="post.user.photo" class="d-block i-35 img-thumbnail"></vue-avatar>
+          <vue-avatar v-if="post.user" :id="post.user.id" :name="post.user.name" :photo="post.user.photo" class="d-block i-35 img-thumbnail"></vue-avatar>
         </div>
 
         <div class="media-body">
@@ -38,7 +44,7 @@
       <div class="row">
         <div class="d-none d-lg-block col-lg-2">
           <template v-if="post.user">
-            <vue-avatar v-bind="post.user" class="post-avatar img-thumbnail"></vue-avatar>
+            <vue-avatar v-if="post.user" :id="post.user.id" :name="post.user.name" :photo="post.user.photo" class="post-avatar img-thumbnail"></vue-avatar>
 
             <ul class="post-stats list-unstyled">
               <li>
@@ -68,12 +74,12 @@
           <div class="post-vote">
             <strong class="vote-count" title="Ocena postu">{{ post.score }}</strong>
 
-            <a class="vote-up" href="javascript:" title="Kliknij, jeżeli post jest wartościowy (kliknij ponownie, aby cofnąć)">
+            <a :class="{'on': post.is_voted}" class="vote-up" href="javascript:" title="Kliknij, jeżeli post jest wartościowy (kliknij ponownie, aby cofnąć)">
               <i class="far fa-thumbs-up fa-fw"></i>
               <i class="fas fa-thumbs-up fa-fw"></i>
             </a>
 
-            <a class="vote-accept " href="javascript:" title="Kliknij, aby ustawić tę odpowiedź jako zaakceptowaną (kliknij ponownie, aby cofnąć)">
+            <a :class="{'on': post.is_accepted}" class="vote-accept " href="javascript:" title="Kliknij, aby ustawić tę odpowiedź jako zaakceptowaną (kliknij ponownie, aby cofnąć)">
               <i class="fas fa-check fa-fw"></i>
             </a>
           </div>
@@ -88,20 +94,7 @@
           </div>
 
           <div class="post-comments">
-            <div class="post-comment">
-              Polecam JavaStart - co prawda sam pewnie bym się nie pokusił, by zapłacić za niego, ale dzięki uprzejmości kolegi ze studiów miałem dostęp to kursów zakupionych przez niego. Bardzo fajnie przedstawiona wiedza <img class="img-smile" alt=":)" title=":)" src="/img/smilies/smile.gif"> -
-
-              <a href="http://4p.local:8880/Profile/85242" data-user-id="85242">Belka</a>
-              <a href="#comment-547369" class="text-muted small" data-timestamp="1573239142" title="08 November 2019, 19:52">08 November 2019, 19:52</a>
-
-              <a href="http://4p.local:8880/Forum/Comment/547369" title="Edytuj ten komentarz" class="btn-comment-edit">
-                <i class="fas fa-pencil-alt"></i>
-              </a>
-
-              <a href="http://4p.local:8880/Forum/Comment/Delete/547369" title="Usuń ten komentarz" class="btn-comment-del">
-                <i class="fas fa-times"></i>
-              </a>
-            </div>
+            <vue-comment v-for="comment in post.comments" :key="comment.id" :comment="comment"></vue-comment>
           </div>
         </div>
       </div>
@@ -174,18 +167,17 @@
   import { Prop } from "vue-property-decorator";
   import Component from "vue-class-component";
   import { Post } from '../../types/models';
-  import VueTimeago from '../../plugins/timeago';
+
   import VueAvatar from '../avatar.vue';
   import VueUserName from "../user-name.vue";
+  import VueComment from './comment.vue';
   import formatDistanceToNow from 'date-fns/formatDistanceToNow';
   import { pl } from 'date-fns/locale';
 
 
-  Vue.use(VueTimeago);
-
   @Component({
     name: 'post',
-    components: { 'vue-avatar': VueAvatar, 'vue-user-name': VueUserName },
+    components: { 'vue-avatar': VueAvatar, 'vue-user-name': VueUserName, 'vue-comment': VueComment },
     // mixins: [mixins]
   })
   export default class VuePost extends Vue {

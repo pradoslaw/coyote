@@ -56,9 +56,19 @@ interface PostPermission {
   adm_access: boolean;
 }
 
+export interface PostComment {
+  id: number;
+  created_at: Date | null;
+  updated_at: Date | null;
+  text: string;
+  html: string;
+  user: User;
+}
+
 export interface Post {
   id: number;
   user: User;
+  editor: User;
   created_at: Date | null;
   updated_at: Date | null;
   deleted_at: Date | null;
@@ -68,8 +78,12 @@ export interface Post {
   url: string;
   is_read: boolean;
   is_locked: boolean;
+  is_subscribed: boolean;
+  is_accepted: boolean;
+  is_voted: boolean;
   permissions: PostPermission;
   ip?: string;
+  comments: PostComment[];
 }
 
 export interface Links {

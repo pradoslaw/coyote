@@ -39,15 +39,11 @@ class PostRepository extends Repository implements PostRepositoryInterface
                     ->forPage($page, $perPage);
             })
             ->with(['user:id,name,photo,posts,sig,location,created_at,visited_at,deleted_at,is_blocked,allow_smilies,allow_count,allow_sig', 'editor:id,name'])
+            ->with(['comments.user'])
             ->get();
 
         $paginate = new LengthAwarePaginator($result, $topic->replies, $perPage, $page, ['path' => ' ']);
-//
-//        $sql->load(['comments' => function ($sub) {
-//            $sub->select([
-//                'post_comments.*', 'name', $this->raw('users.deleted_at IS NULL AS is_active'), 'is_blocked'
-//            ])->join('users', 'users.id', '=', 'user_id')->orderBy('id');
-//        }]);
+
 //        $sql->load('attachments');
 
         return $paginate;
@@ -436,7 +432,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
 //                $this->raw('editor.deleted_at IS NULL AS editor_is_active'),
 //                'editor.is_blocked AS editor_is_blocked',
 //                'groups.name AS group_name',
-                'pa.user_id AS accept_on'
+                'pa.user_id AS is_accepted'
             ])
             ->from($this->raw("($sub) AS posts"))
 //            ->leftJoin('users AS author', 'author.id', '=', 'posts.user_id')

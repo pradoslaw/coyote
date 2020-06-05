@@ -8,6 +8,25 @@
   .card-footer {
     padding: .5rem;
   }
+
+  // w przypadku gdy post jest usuniety wyswietlamy go na pol-przezroczystym tle
+  &.is-deleted {
+    opacity: .6;
+  }
+}
+
+.post-delete {
+  color: theme-color-level("warning", $alert-color-level);
+  background-color: theme-color-level("warning", $alert-bg-level);
+  padding: 4px 10px;
+  font-size: 11px;
+  border-bottom: 1px solid $alert-warning-border;
+
+  a {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+  }
 }
 
 .post-avatar {
@@ -51,20 +70,26 @@
   margin: 15px 0 5px 15px;
   font-size: .75rem;
   padding-right: 50px;
+  word-wrap: break-word;
 
   @include link-color-darker;
 
-  .btn-comment-edit, .btn-comment-del {
+  .btn-comment {
     padding: 0 5px;
     color: $gray;
     display: none;
+  }
+
+  &:hover {
+    .btn-comment {
+      display: inline-block;
+    }
   }
 }
 
 .post-comment {
   border-top: 1px solid $border-color;
   padding: 5px 0 5px 0;
-  margin-top: 1px;
   word-wrap: break-word;
 
   //&:last-child {
@@ -74,25 +99,17 @@
   &:before {
     content: "▪";
   }
+
+  // comment text
+  > span {
+    padding-left: 10px;
+  }
 }
 
 // "Kontener" dla posta
 // --------------------------------------------------
 
 
-.post-delete {
-  color: theme-color-level("warning", $alert-color-level);
-  background-color: theme-color-level("warning", $alert-bg-level);
-  padding: 4px 10px;
-  font-size: 11px;
-  border-bottom: 1px solid $alert-warning-border;
-
-  a {
-    display: block;
-    color: inherit;
-    text-decoration: none;
-  }
-}
 
 // klasa dodawana do tresci posta na okres podswietlania tresci
 .post-body.highlight {
@@ -344,11 +361,12 @@
 .vote-accept {
   margin-top: 10px;
   font-size: $font-size-large + 1rem;
+
+  &.on {
+    color: $brand-primary;
+  }
 }
 
-.vote-accept.on {
-  color: $brand-primary;
-}
 
 div.tooltip-inner {
   font-size: 11px;
@@ -388,13 +406,6 @@ div.tooltip-inner {
     position: relative;
     word-wrap: break-word;
 
-    &:first-child {
-      border-top: 1px dotted $border-color;
-    }
-
-    &:before {
-      content: "▪";
-    }
 
     // Topic's author
     // -----------------
@@ -437,31 +448,9 @@ div.tooltip-inner {
     }
   }
 
-  form {
-    overflow: hidden;
-  }
-
-  // dodatkowy margines dla formularza dodawania nowego komentarza (nie tego ktory edytujemy)
-  > form {
-    margin-top: 10px;
-  }
-
-  textarea {
-    padding: 4px 5px;
-    margin-bottom: 5px;
-  }
 }
 
-// Formularz szybkiej odpowiedzi
-// ----------------------------------------------------------
 
-#box-fast-form {
-  margin-bottom: 18px;
-
-  textarea {
-    height: 50px;
-  }
-}
 
 // Cytowane posty na forum
 // ----------------------------------------------------------

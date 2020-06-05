@@ -4,7 +4,6 @@ namespace Coyote\Http\Resources;
 
 use Carbon\Carbon;
 use Coyote\Forum;
-use Coyote\Http\Resources\UserResource;
 use Coyote\Services\Forum\Tracker;
 use Coyote\Services\Parser\Factories\SigFactory;
 use Coyote\Services\UrlBuilder\UrlBuilder;
@@ -95,9 +94,7 @@ class PostResource extends JsonResource
                 ]];
             }),
 
-'comments' => []
-
-//            'comments'      => PostCommentResource::collection($this->whenLoaded('comments'))
+            'comments'      => PostCommentResource::collection($this->whenLoaded('comments'))
         ]);
     }
 

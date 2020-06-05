@@ -1,9 +1,8 @@
 <?php
 
-namespace Coyote\Http\Resources\Api;
+namespace Coyote\Http\Resources;
 
 use Carbon\Carbon;
-use Coyote\Http\Resources\UserResource;
 use Coyote\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -26,11 +25,11 @@ class PostCommentResource extends JsonResource
     public function toArray($request)
     {
         return array_merge(
-            $this->resource->toArray(['id', 'text']),
+            $this->resource->toArray(['id', 'text', 'html']),
             [
                 'created_at'    => $this->created_at->toIso8601String(),
                 'updated_at'    => $this->updated_at->toIso8601String(),
-                'user'          => new UserResource($this->whenLoaded('user'))
+                'user'          => new UserResource($this->user)
             ]
         );
     }
