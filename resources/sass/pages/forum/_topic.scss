@@ -17,7 +17,7 @@
 }
 
 .post-author {
-  font-size: .9rem;
+  color: $link-color-darker;
 }
 
 .post-stats {
@@ -77,36 +77,6 @@
 // "Kontener" dla posta
 // --------------------------------------------------
 
-.post {
-  background-color: #fff;
-  border: 1px solid $border-color;
-
-  > div > div.row {
-    border-bottom: 1px solid $border-color;
-    margin: 0;
-  }
-
-  > div > div.row:nth-child(even) {
-    background-color: #fafafa;
-  }
-
-  div[class*="col-"] {
-    padding: 5px;
-  }
-
-  // w przypadku gdy post jest usuniety wyswietlamy go na pol-przezroczystym tle
-  .deleted {
-    opacity: .6;
-  }
-
-  ins {
-    color: $green;
-  }
-
-  del {
-    color: $red;
-  }
-}
 
 .post-delete {
   color: theme-color-level("warning", $alert-color-level);
@@ -129,17 +99,7 @@
   }
 }
 
-#first-post {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  border-radius: 3px;
-}
 
-#last-post {
-  border-bottom-left-radius: 3px;
-  border-bottom-right-radius: 3px;
-  margin-bottom: 10px;
-}
 
 .col-user {
   .avatar {
@@ -203,36 +163,7 @@
   }
 }
 
-.col-time {
-  font-size: 11px;
-  padding-top: 4px;
-  padding-bottom: 0;
-  @include text-overflow();
 
-  small a {
-    color: $gray-light;
-  }
-
-  .post-link {
-    color: $gray;
-    margin-right: 3px;
-    display: inline-block;
-    //background: url(/img/sprites.png) no-repeat 0 -742px;
-    background: url('/img/post.png') no-repeat 0 0;
-    background-size: 12px 12px;
-    width: 12px;
-    height: 12px;
-    vertical-align: middle;
-
-    &:focus {
-      outline: none;
-    }
-  }
-
-  .post-link.unread {
-    background-image: url('/img/post-unread.png');
-  }
-}
 
 .col-body {
   vertical-align: top;
@@ -255,28 +186,6 @@
   }
 }
 
-#col-toggle {
-  background-color: #fff;
-
-  a {
-    margin: 2px auto 2px auto;
-    display: block;
-    width: 67px;
-    height: 5px;
-
-    span {
-      display: block;
-      height: 1px;
-      border-radius: 1px;
-      background-color: $gray-light;
-    }
-
-    span + span {
-      margin-top: 1px;
-    }
-  }
-
-}
 
 // Ikony do zarzadzania pod spodem postu
 // -------------------------------------
@@ -327,9 +236,6 @@
   }
 }
 
-.col-end {
-  background-color: #dedddd;
-}
 
 // Tresc posta wraz z ikonami do glosowania, stopka czy komentarzami
 // ------------------------------------------------------------------

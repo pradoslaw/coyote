@@ -42,8 +42,9 @@
 
     {% if not is_locked or is_writeable %}
       <div class="ml-auto">
-        <a href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}" class="btn btn-primary btn-sm ml-4">Odpowiedz</a>
         <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm">Nowy wątek</a>
+        <a href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}" class="btn btn-primary btn-sm ml-2">Odpowiedz</a>
+
       </div>
     {% endif %}
   </div>

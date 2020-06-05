@@ -19,6 +19,7 @@ export interface User {
   allow_count?: boolean;
   allow_sig?: boolean;
   location?: string;
+  sig?: string;
 }
 
 export interface Media {

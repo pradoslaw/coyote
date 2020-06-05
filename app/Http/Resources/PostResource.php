@@ -70,7 +70,7 @@ class PostResource extends JsonResource
         $html = $this->text !== null ? $this->html : null;
 
         if ($this->isSignatureAllowed($request)) {
-            $html .= $this->sigParser->parse($this->user->sig);
+            $this->user->sig = $this->sigParser->parse($this->user->sig);
         }
 
         $auth = $request->user();
