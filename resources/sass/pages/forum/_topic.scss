@@ -2,7 +2,7 @@
 
 .card-post {
   .card-body {
-    padding: 1rem;
+    padding: 10px 15px;
   }
 
   .card-footer {
@@ -17,7 +17,9 @@
 }
 
 .post-author {
-  color: $link-color-darker;
+  @include link-color-darker;
+
+  font-size: 1rem;
 }
 
 .post-stats {

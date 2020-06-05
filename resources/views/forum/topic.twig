@@ -44,7 +44,6 @@
       <div class="ml-auto">
         <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm">Nowy wątek</a>
         <a href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}" class="btn btn-primary btn-sm ml-2">Odpowiedz</a>
-
       </div>
     {% endif %}
   </div>
@@ -79,46 +78,14 @@
     </div>
   {% endif %}
 
+  {# todo: wyswietlamy tylko gdy mozna pisac w tym watku #}
+  <vue-form></vue-form>
+
   <section class="row no-gutters mt-3">
     {% include 'forum.partials.per_page' with {label: 'Liczba odpowiedzi na stronę', perPage: paginate.perPage()} %}
   </section>
 
 {#    {% include 'forum.partials.poll' %}#}
-
-
-    {% if is_writeable and not too_old %}
-      {{ form_start(form) }}
-      <section id="box-fast-form" class="row">
-        <div class="col-12">
-          <div class="form-group row">
-            <div class="col-12">
-              <ul class="nav nav-tabs">
-                <li class="nav-item"><a class="nav-link active" href="#body" role="tab" data-toggle="tab">Treść</a></li>
-                <li class="nav-item"><a class="nav-link" href="#attachments" role="tab" data-toggle="tab">Załączniki</a></li>
-                <li class="nav-item"><a class="nav-link" href="#preview" role="tab" data-toggle="tab" data-url="{{ route('forum.preview') }}">Podgląd</a></li>
-              </ul>
-
-              <div class="tab-content">
-                {{ form_row(form.text, {attr: {'placeholder': 'Kliknij, aby napisać szybką odpowiedź...', style: 'height: 80px'}}) }}
-                {{ form_row(form.attachments) }}
-
-                {% include 'forum.partials.preview' %}
-              </div>
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <div class="col-12">
-              {{ form_widget(form.submit, {attr: {class: 'float-right'}}) }}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {{ form_widget(form.subscribe, {type: 'hidden'}) }}
-      {{ form_end(form) }}
-    {% endif %}
-
 
 
     {{ viewers|raw }}

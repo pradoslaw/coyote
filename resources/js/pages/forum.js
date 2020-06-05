@@ -9,6 +9,7 @@
 import VueSection from '../components/forum/section.vue';
 import VueTopic from '../components/forum/topic.vue';
 import VuePost from '../components/forum/post.vue';
+import VueForm from '../components/forum/form.vue';
 import Vue from "vue";
 import store from '../store';
 import { mapState, mapGetters } from "vuex";
@@ -101,7 +102,7 @@ new Vue({
 new Vue({
   el: '#js-post',
   delimiters: ['${', '}'],
-  components: { 'vue-post': VuePost },
+  components: { 'vue-post': VuePost, 'vue-form': VueForm },
   store,
   created() {
     store.commit('posts/init', { pagination: window.pagination });
