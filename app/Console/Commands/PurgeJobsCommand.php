@@ -66,7 +66,7 @@ class PurgeJobsCommand extends Command
                 'query' => [
                     'bool' => [
                         'must' => [
-                            ['term' => ['model' => 'job']],
+                            ['term' => ['model' => class_basename(Job::class)]],
                             ['range' => ['deadline_at' => ['lt' => 'now']]]
                         ]
                     ]
