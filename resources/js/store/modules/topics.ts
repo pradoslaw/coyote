@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Topic } from '../../types/models';
 
 const state = {
   topics: []
@@ -26,6 +27,10 @@ const mutations = {
     }
 
     topic.is_subscribed = !topic.is_subscribed;
+  },
+
+  lock(state, topic: Topic) {
+    topic.is_locked = !topic.is_locked;
   }
 };
 
@@ -46,6 +51,12 @@ const actions = {
     commit('subscribe', topic);
 
     axios.post(`/Forum/Topic/Subscribe/${topic.id}`);
+  },
+
+  lock({ commit }, topic) {
+    commit('lock', topic);
+
+    axios.post(`/Forum/Topic/Lock/${topic.id}`);
   }
 };
 
