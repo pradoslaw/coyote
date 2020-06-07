@@ -86,6 +86,10 @@ export interface Post {
   comments: PostComment[];
 }
 
+export interface Topic {
+  is_locked: boolean;
+}
+
 export interface Links {
   first: string;
   last: string;

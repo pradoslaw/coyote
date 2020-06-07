@@ -8,6 +8,7 @@ use Coyote\Http\Factories\CacheFactory;
 use Coyote\Http\Factories\FlagFactory;
 use Coyote\Http\Resources\PostCollection;
 use Coyote\Http\Resources\PostResource;
+use Coyote\Http\Resources\TopicResource;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Post\WithSubscribers;
@@ -21,6 +22,7 @@ use Coyote\Services\Parser\Parsers\ParserInterface;
 use Coyote\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Gate;
 
 class TopicController extends BaseController
 {
@@ -76,28 +78,7 @@ class TopicController extends BaseController
         // magic happens here. get posts for given topic (including first post for every page)
         /* @var \Illuminate\Support\Collection $posts */
         $paginate = $this->post->lengthAwarePagination($topic, $page, $perPage);
-//        dd($paginate);
 
-//        start_measure('Parsing...');
-//        $parser = $this->getParsers();
-//
-//        /** @var \Coyote\Post $post */
-//        foreach ($posts as &$post) {
-//            // parse post or get it from cache
-//            $post->text = $parser['post']->parse($post->text);
-//
-//            if ((auth()->guest() || (auth()->check() && $this->auth->allow_sig)) && $post->sig) {
-//                $post->sig = $parser['sig']->parse($post->sig);
-//            }
-//
-//            foreach ($post->comments as &$comment) {
-//                $comment->text = $parser['comment']->setUserId($comment->user_id)->parse($comment->text);
-//            }
-//
-
-//        }
-//
-//        stop_measure('Parsing...');
         $dateTime = $paginate->last()->created_at;
 
         $tracker = Tracker::make($topic);
@@ -136,13 +117,15 @@ class TopicController extends BaseController
             $adminForumList = $treeDecorator->build();
         }
 
-        $form = $this->getForm($forum, $topic);
 
         return $this->view(
             'forum.topic',
-            compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'adminForumList', 'reasonList', 'form', 'flags')
+//            compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'adminForumList', 'reasonList', 'form', 'flags')
+            compact('posts', 'forum', 'paginate', 'forumList', 'adminForumList', 'reasonList', 'flags')
         )->with([
             'mlt'           => $this->moreLikeThis($topic),
+            'topic'         => (new TopicResource($tracker))->resolve($request),
+            'is_writeable'  => Gate::allows('write', $forum) || Gate::allows('write', $topic),
 //            'markTime'      => $markTime,
             'subscribers'   => $this->userId ? $topic->subscribers()->pluck('topic_id', 'user_id') : [],
 //            'author_id'     => $posts[0]->user_id

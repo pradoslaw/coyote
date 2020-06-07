@@ -1,15 +1,17 @@
 {% extends 'forum.base' %}
 
+
+
 {% block title %}{{ topic.subject ~ (paginate.currentPage() > 1 ? (' - Strona ' ~ paginate.currentPage())) }}{{ parent() }}{% endblock %}
 {% block description %}{{ excerpt(posts[0].text, 100) }}{% endblock %}
 
 {% import 'components.forms' as forms %}
 {% import 'components.modals' as modals %}
 
-{% set is_writeable = can('write', topic) and can('write', forum) %}
 {% set is_locked = topic.is_locked or forum.is_locked %}
 
 {% block content %}
+
   {% if topic.locked_at %}
     <p class="alert alert-warning">
       Wątek zablokowany {{ topic.locked_at|format_date }} przez <a class="alert-warning" href="{{ route('profile', [topic.locker.id]) }}">{{ topic.locker.name }}</a>.
@@ -34,70 +36,86 @@
 
   {% include "forum.partials.top" %}
 
-<main id="js-post" class="mainbar">
-  <div class="row no-gutters mb-3">
-    <div class="mr-auto">
-      {{ paginate|raw }}
-    </div>
-
-    {% if not is_locked or is_writeable %}
-      <div class="ml-auto">
-        <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm">Nowy wątek</a>
-        <a href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}" class="btn btn-primary btn-sm ml-2">Odpowiedz</a>
+  <main id="js-post" class="mainbar">
+    <div class="row no-gutters mb-3">
+      <div class="mr-auto">
+        {{ paginate|raw }}
       </div>
-    {% endif %}
-  </div>
 
-  <vue-post
-    v-for="post in posts"
-    :key="post.id"
-    :post="post"
-  ></vue-post>
-
-  <div class="row no-gutters mb-3">
-    <div class="mr-auto">
-      {{ paginate|raw }}
-    </div>
-
-    <div class="ml-auto">
       {% if not is_locked or is_writeable %}
-        <a href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}" class="btn btn-primary btn-sm float-right ml-3">Odpowiedz</a>
+        <div class="ml-auto">
+          <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm">Nowy wątek</a>
+          <a href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}" class="btn btn-primary btn-sm ml-2">Odpowiedz</a>
+        </div>
       {% endif %}
     </div>
-  </div>
 
-  {% if forumList is defined %}
-    <div class="row no-gutters">
+    <vue-post
+      v-for="post in posts"
+      :key="post.id"
+      :post="post"
+    ></vue-post>
+
+    <div class="row no-gutters mb-3">
+      <div class="mr-auto">
+        {{ paginate|raw }}
+      </div>
+
       <div class="ml-auto">
-        {{ form_select('forum', forumList, forum.slug, {'id': 'sel-forum-list', 'class': 'form-control d-inline w-auto', 'data-url': route('forum.home')}) }}
-
-        <a class="btn" href="javascript:" id="btn-goto">
-          <i class="fas fa-arrow-circle-right"></i>
-        </a>
+        {% if not is_locked or is_writeable %}
+          <a href="{{ route('forum.post.submit', [forum.slug, topic.id]) }}" class="btn btn-primary btn-sm float-right ml-3">Odpowiedz</a>
+        {% endif %}
       </div>
     </div>
-  {% endif %}
 
-  {# todo: wyswietlamy tylko gdy mozna pisac w tym watku #}
-  <vue-form></vue-form>
+    {% if forumList is defined %}
+      <div class="row no-gutters">
+        <div class="ml-auto">
+          {{ form_select('forum', forumList, forum.slug, {'id': 'sel-forum-list', 'class': 'form-control d-inline w-auto', 'data-url': route('forum.home')}) }}
 
-  <section class="row no-gutters mt-3">
-    {% include 'forum.partials.per_page' with {label: 'Liczba odpowiedzi na stronę', perPage: paginate.perPage()} %}
-  </section>
+          <a class="btn" href="javascript:" id="btn-goto">
+            <i class="fas fa-arrow-circle-right"></i>
+          </a>
+        </div>
+      </div>
+    {% endif %}
 
-{#    {% include 'forum.partials.poll' %}#}
+    {# todo: wyswietlamy tylko gdy mozna pisac w tym watku #}
+    <vue-form></vue-form>
+
+    <section class="row no-gutters mt-3">
+      {% include 'forum.partials.per_page' with {label: 'Liczba odpowiedzi na stronę', perPage: paginate.perPage()} %}
+    </section>
+
+  {#    {% include 'forum.partials.poll' %}#}
 
 
     {{ viewers|raw }}
+
+
+    {% if can('move', forum) %}
+      <vue-modal ref="move-modal">
+        <template v-slot:title>Czy chcesz przenieść?</template>
+
+        <template v-slot:buttons>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+          <button type="submit" class="btn btn-danger danger">Tak, przenieś</button>
+        </template>
+
+        <p>Czy na pewno chcesz przenieść wątek do innej kategorii?</p>
+        {{ form_select('reason', {0: '-- Wybierz --'} + reasonList, 0, {'class': 'form-control form-control-sm'}) }}
+
+      </vue-modal>
+    {% endif %}
   </main>
 
   {% embed 'forum.partials.sidebar' %}
     {% block side_menu %}
-      <div class="box">
-        <ul class="side-menu" style="margin-top: 5px">
+      <div id="js-sidebar" class="box" v-cloak>
+        <ul class="side-menu mt-2">
           {% if auth_check() %}
             <li class="btn-watch {{ subscribers[user('id')] is defined ? 'on' }}">
-              <a href="{{ route('forum.topic.subscribe', [topic.id]) }}" data-category="forum-sidebar-buttons">
+              <a href="javascript:">
                 <i class="far fa-star fa-fw"></i>
                 <i class="fas fa-star fa-fw"></i>
 
@@ -117,16 +135,16 @@
           {% endif %}
 
           {% if can('update', forum) %}
-            <li id="btn-log">
-              <a href="{{ route('forum.stream', [topic.id]) }}" title="Zobacz dziennik zdarzeń" data-category="forum-sidebar-buttons" data-value="log">
+            <li>
+              <a href="{{ route('forum.stream', [topic.id]) }}" title="Zobacz dziennik zdarzeń">
                 <i class="fa fa-chart-pie fa-fw"></i>
 
                 Dziennik zdarzeń
               </a>
             </li>
 
-            <li id="btn-edit-subject">
-              <a href="javascript:" title="Kliknij, aby szybko zmienić tytuł wątku" data-category="forum-sidebar-buttons" data-value="subject">
+            <li>
+              <a href="javascript:" title="Kliknij, aby szybko zmienić tytuł wątku">
                 <i class="fa fa-pencil-alt fa-fw"></i>
 
                 Zmień tytuł
@@ -135,25 +153,20 @@
           {% endif %}
 
           {% if can('lock', forum) %}
-            <li id="btn-lock" {{ topic.is_locked ? 'class="on"' }}>
-              <a href="{{ route('forum.lock', [topic.id]) }}" title="Kliknij, aby zablokować wątek" data-category="forum-sidebar-buttons" data-value="lock">
-                <i class="fa fa-lock fa-fw"></i>
-                <i class="fa fa-unlock fa-fw"></i>
+            <li>
+              <a href="javascript:" @click="lock" title="Kliknij, aby zablokować wątek">
+                <i v-if="!topic.is_locked" class="fa fa-lock fa-fw"></i>
+                <i v-else class="fa fa-unlock fa-fw"></i>
 
-                <span>
-                                    {% if topic.is_locked %}
-                                      Odblokuj wątek
-                                    {% else %}
-                                      Zablokuj wątek
-                                    {% endif %}
-                                </span>
+                <span v-if="topic.is_locked">Odblokuj wątek</span>
+                <span v-else>Zablokuj wątek</span>
               </a>
             </li>
           {% endif %}
 
           {% if can('move', forum) %}
             <li id="btn-move">
-              <a title="Przenieść ten temat do innej kategorii forum" href="#collapse-sub" data-category="forum-sidebar-buttons" data-value="move" data-toggle="collapse">
+              <a title="Przenieść ten temat do innej kategorii forum" href="#collapse-sub" data-toggle="collapse">
                 <i class="fa fa-arrow-circle-right fa-fw"></i>
 
                 Przenieś wątek
@@ -170,10 +183,6 @@
               </ul>
             </li>
           {% endif %}
-
-          {#{% if can('sticky', forum) %}#}
-          {#<li id="btn-status"><a title="Zmień status wątku" data-category="forum-sidebar-buttons" data-value="status">Przyklej wątek</a></li>#}
-          {#{% endif %}#}
         </ul>
       </div>
     {% endblock %}
@@ -229,29 +238,6 @@
     </div>
     {{ form_close() }}
 
-    {% if can('move', forum) %}
-      {{ form_open({'url': route('forum.move', [topic.id])}) }}
-      <div class="modal fade" id="modal-move" tabindex="-1" role="dialog" aria-labelledby="modal-move" aria-hidden="true">
-        {{ form_hidden('slug') }}
-
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title">Czy chcesz przenieść?</h4>
-            </div>
-            <div class="modal-body">
-              <p>Czy na pewno chcesz przenieść wątek do innej kategorii?</p>
-              {{ form_select('reason', {0: '-- Wybierz --'} + reasonList, 0, {'class': 'form-control form-control-sm'}) }}
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
-              <button type="submit" class="btn btn-danger danger" data-submit-state="Przenoszenie...">Tak, przenieś</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      {{ form_close() }}
-    {% endif %}
 
     {{ modals.alert('Wystąpił błąd podczas działania programu.') }}
   {% endif %}
@@ -287,15 +273,11 @@
 {% block body %}
   <script>
     var pagination = {{ posts|json_encode|raw }};
+    var topic = {{ topic|json_encode|raw }};
   </script>
 
   {{ parent() }}
 
-
-
-{#  {% if auth_check() %}#}
-{#    <script type="text/javascript" src="{{ cdn('js/wikieditor.js') }}"></script>#}
-{#  {% endif %}#}
 
 {#  <script type="text/javascript">#}
 {#    $(function () {#}
