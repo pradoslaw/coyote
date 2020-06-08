@@ -101,11 +101,11 @@ class TopicController extends BaseController
 
         $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->slug, $topic->id, $topic->slug]));
 
-        $flags = $activities = $adminForumList = $reasonList = [];
+        $flags = $activities = $allForums = $reasons = [];
 
         if ($this->gate->allows('delete', $forum) || $this->gate->allows('move', $forum)) {
             $postIds = $paginate->pluck('id')->toArray();
-            $reasonList = Reason::pluck('name', 'id')->toArray();
+            $reasons = Reason::pluck('name', 'id')->toArray();
 
             if ($this->gate->allows('delete', $forum)) {
                 $flags = $this->getFlags($postIds);
@@ -114,21 +114,22 @@ class TopicController extends BaseController
             $this->forum->skipCriteria(true);
 
             $treeBuilder->setForums($this->forum->list());
-            $adminForumList = $treeDecorator->build();
+            $allForums = $treeDecorator->setKey('id')->build();
         }
+
+        $topic->is_subscribed = $this->userId ? $topic->subscribers()->forUser($this->userId)->exists() : false;
 
 
         return $this->view(
             'forum.topic',
 //            compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'adminForumList', 'reasonList', 'form', 'flags')
-            compact('posts', 'forum', 'paginate', 'forumList', 'adminForumList', 'reasonList', 'flags')
+            compact('posts', 'forum', 'paginate', 'forumList', 'reasons', 'flags')
         )->with([
             'mlt'           => $this->moreLikeThis($topic),
             'topic'         => (new TopicResource($tracker))->resolve($request),
-            'is_writeable'  => Gate::allows('write', $forum) || Gate::allows('write', $topic),
+            'is_writeable'  => $this->gate->allows('write', $forum) || $this->gate->allows('write', $topic),
 //            'markTime'      => $markTime,
-            'subscribers'   => $this->userId ? $topic->subscribers()->pluck('topic_id', 'user_id') : [],
-//            'author_id'     => $posts[0]->user_id
+            'all_forums'    => $allForums
         ]);
     }
 

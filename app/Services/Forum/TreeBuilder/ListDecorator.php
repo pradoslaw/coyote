@@ -4,6 +4,8 @@ namespace Coyote\Services\Forum\TreeBuilder;
 
 class ListDecorator
 {
+    private const INDENT_CHAR = '&nbsp;';
+
     /**
      * @var Builder
      */
@@ -45,7 +47,7 @@ class ListDecorator
 
             if (isset($parent->children)) {
                 foreach ($parent->children as $child) {
-                    $result[$child->{$this->key}] = str_repeat('&nbsp;', 4) . $child->name;
+                    $result[$child->{$this->key}] = str_repeat(self::INDENT_CHAR, 4) . $child->name;
                 }
             }
         }

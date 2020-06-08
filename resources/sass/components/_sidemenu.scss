@@ -77,4 +77,8 @@
       color: lighten($alt-link-hover-color, 5%);
     }
   }
+
+  small {
+    color: $gray-light;
+  }
 }

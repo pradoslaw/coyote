@@ -2,9 +2,7 @@
   <select :name="name" v-model="valueLocal" class="form-control" :class="{'is-invalid': isInvalid}">
     <option v-if="placeholder" :value="null">{{ placeholder }}</option>
 
-    <option v-for="(value, key) in options" :value="key">
-      {{ value }}
-    </option>
+    <option v-for="(value, key) in options" :value="key" v-html="value"></option>
   </select>
 </template>
 
