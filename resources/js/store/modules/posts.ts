@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Post, Paginator, Media } from "../../types/models";
+import {Post, Paginator, Media, Microblog} from "../../types/models";
 import Vue from 'vue';
 
 
@@ -22,7 +22,26 @@ const mutations = {
       // .keyBy('id');
 
     state = Object.assign(state, pagination);
+  },
+
+  vote(state, post: Post) {
+    if (post.is_voted) {
+      post.is_voted = false;
+      post.score -= 1;
+    }
+    else {
+      post.is_voted = true;
+      post.score += 1;
+    }
   }
+}
+
+const actions = {
+  vote({ commit }, post: Post) {
+    commit('vote', post);
+
+    return axios.post(`/Forum/Post/Vote/${post.id}`).catch(() => commit('vote', post));
+  },
 }
 
 export default {
@@ -30,6 +49,6 @@ export default {
   state,
   getters,
   mutations,
-  // actions
+  actions
 };
 

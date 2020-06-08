@@ -38,21 +38,12 @@ class PostCollection extends ResourceCollection
 
     /**
      * @param Topic $topic
-     * @return $this
-     */
-    public function setTopic(Topic $topic)
-    {
-        $this->topic = $topic;
-
-        return $this;
-    }
-
-    /**
      * @param Forum $forum
      * @return $this
      */
-    public function setForum(Forum $forum)
+    public function setRelations(Topic $topic, Forum $forum)
     {
+        $this->topic = $topic;
         $this->forum = $forum;
 
         return $this;

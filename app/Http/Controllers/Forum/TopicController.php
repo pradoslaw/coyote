@@ -41,6 +41,8 @@ class TopicController extends BaseController
      */
     public function index(Request $request, $forum, $topic)
     {
+        $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->slug, $topic->id, $topic->slug]));
+
         // get the topic (and forum) mark time value from middleware
         // @see \Coyote\Http\Middleware\ScrollToPost
         $markTime = $request->attributes->get('mark_time');
@@ -87,10 +89,7 @@ class TopicController extends BaseController
             $tracker->asRead($dateTime);
         }
 
-        $posts = (new PostCollection($paginate))
-            ->setTopic($topic)
-            ->setForum($forum)
-            ->setTracker($tracker);
+        $posts = (new PostCollection($paginate))->setRelations($topic, $forum)->setTracker($tracker);
 
         // create forum list for current user (according to user's privileges)
         $treeBuilder = new Builder($this->forum->list());
@@ -98,8 +97,6 @@ class TopicController extends BaseController
 
         $this->pushForumCriteria(true);
         $forumList = $treeDecorator->build();
-
-        $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->slug, $topic->id, $topic->slug]));
 
         $flags = $activities = $allForums = $reasons = [];
 
@@ -128,7 +125,6 @@ class TopicController extends BaseController
             'mlt'           => $this->moreLikeThis($topic),
             'topic'         => (new TopicResource($tracker))->resolve($request),
             'is_writeable'  => $this->gate->allows('write', $forum) || $this->gate->allows('write', $topic),
-//            'markTime'      => $markTime,
             'all_forums'    => $allForums
         ]);
     }
