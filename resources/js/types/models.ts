@@ -67,8 +67,8 @@ export interface PostComment {
 
 export interface Post {
   id: number;
-  user: User;
-  editor: User;
+  user?: User;
+  editor?: User;
   created_at: Date | null;
   updated_at: Date | null;
   deleted_at: Date | null;

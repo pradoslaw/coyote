@@ -74,7 +74,7 @@
           <div class="post-vote">
             <strong class="vote-count" title="Ocena postu">{{ post.score }}</strong>
 
-            <a :class="{'on': post.is_voted}" class="vote-up" href="javascript:" title="Kliknij, jeżeli post jest wartościowy (kliknij ponownie, aby cofnąć)">
+            <a :class="{'on': post.is_voted}" @click="vote(post)" class="vote-up" href="javascript:" title="Kliknij, jeżeli post jest wartościowy (kliknij ponownie, aby cofnąć)">
               <i class="far fa-thumbs-up fa-fw"></i>
               <i class="fas fa-thumbs-up fa-fw"></i>
             </a>
@@ -173,11 +173,13 @@
   import VueComment from './comment.vue';
   import formatDistanceToNow from 'date-fns/formatDistanceToNow';
   import { pl } from 'date-fns/locale';
+  import { mapActions } from "vuex";
 
 
   @Component({
     name: 'post',
     components: { 'vue-avatar': VueAvatar, 'vue-user-name': VueUserName, 'vue-comment': VueComment },
+    methods: mapActions('posts', ['vote'])
     // mixins: [mixins]
   })
   export default class VuePost extends Vue {
