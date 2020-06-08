@@ -17,24 +17,18 @@ class MoveController extends BaseController
     /**
      * @param Topic $topic
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Auth\Access\AuthorizationException
      * @throws \Illuminate\Validation\ValidationException
      */
     public function index(Topic $topic, Request $request)
     {
-        $rules = ['slug' => 'required|exists:forums'];
-
-        // it must be like that. only if reason has been chosen, we need to validate it.
-        if ($request->get('reason')) {
-            $rules['reason'] = 'int|exists:forum_reasons,id';
-        }
-        $this->validate($request, $rules);
+        $this->validate($request, ['id' => 'required|exists:forums', 'reason_id' => 'nullable|int|exists:forum_reasons,id']);
 
         $old = $topic->forum; // old category
 
         $this->authorize('move', $old);
-        $forum = $this->forum->findBy('slug', $request->get('slug'));
+        $forum = $this->forum->find($request->input('id'));
 
         $this->authorize('access', $forum);
 
@@ -43,8 +37,8 @@ class MoveController extends BaseController
         $this->transaction(function () use ($topic, $forum, $request) {
             $reason = new Reason();
 
-            if ($request->get('reason')) {
-                $reason = Reason::find($request->get('reason'));
+            if ($request->filled('reason_id')) {
+                $reason = Reason::find($request->get('reason_id'));
             }
 
             // first, create object. we will save it in db.
@@ -80,6 +74,8 @@ class MoveController extends BaseController
             stream(Stream_Move::class, $object, (new Stream_Forum())->map($forum));
         });
 
-        return redirect()->to(UrlBuilder::topic($topic))->with('success', 'Wątek został przeniesiony');
+        session()->flash('success', 'Wątek został przeniesiony');
+
+        return response()->json(['url' => UrlBuilder::topic($topic)]);
     }
 }

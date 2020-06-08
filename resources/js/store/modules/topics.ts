@@ -57,6 +57,10 @@ const actions = {
     commit('lock', topic);
 
     axios.post(`/Forum/Topic/Lock/${topic.id}`);
+  },
+
+  move({ commit }, { topic, forumId, reasonId }) {
+    return axios.post(`/Forum/Topic/Move/${topic.id}`, { id: forumId, reason_id: reasonId });
   }
 };
 

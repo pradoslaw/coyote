@@ -93,37 +93,6 @@
   }
 }
 
-.btn-watch {
-  .fas.fa-star {
-    display: none;
-  }
-
-  .far.fa-star {
-    display: inline-block;
-  }
-
-  &.on {
-    .fas.fa-star {
-      display: inline-block;
-      color: lighten($alt-link-hover-color, 5%);
-    }
-
-    .far.fa-star {
-      display: none;
-    }
-  }
-
-  a:active,
-  a:focus {
-    text-decoration: none;
-  }
-
-  small {
-    color: $gray-light;
-  }
-}
-
-
 // Licznik watkow w danym dziale
 // ----------------------------------
 
