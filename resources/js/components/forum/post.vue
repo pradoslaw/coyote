@@ -74,12 +74,12 @@
           <div class="post-vote">
             <strong class="vote-count" title="Ocena postu">{{ post.score }}</strong>
 
-            <a :class="{'on': post.is_voted}" @click="vote(post)" class="vote-up" href="javascript:" title="Kliknij, jeżeli post jest wartościowy (kliknij ponownie, aby cofnąć)">
+            <a v-if="!post.deleted_at" :class="{'on': post.is_voted}" @click="vote(post)" class="vote-up" href="javascript:" title="Kliknij, jeżeli post jest wartościowy (kliknij ponownie, aby cofnąć)">
               <i class="far fa-thumbs-up fa-fw"></i>
               <i class="fas fa-thumbs-up fa-fw"></i>
             </a>
 
-            <a :class="{'on': post.is_accepted}" @click="accept(post)" class="vote-accept " href="javascript:" title="Kliknij, aby ustawić tę odpowiedź jako zaakceptowaną (kliknij ponownie, aby cofnąć)">
+            <a v-if="!post.deleted_at && isAcceptAllowed" :class="{'on': post.is_accepted}" @click="accept(post)" class="vote-accept" href="javascript:" title="Kliknij, aby ustawić tę odpowiedź jako zaakceptowaną (kliknij ponownie, aby cofnąć)">
               <i class="fas fa-check fa-fw"></i>
             </a>
           </div>
@@ -163,7 +163,6 @@
     </div>
   </div>
 </template>
-
 <script lang="ts">
   import Vue from 'vue';
   import { Prop } from "vue-property-decorator";
@@ -175,18 +174,24 @@
   import VueComment from './comment.vue';
   import formatDistanceToNow from 'date-fns/formatDistanceToNow';
   import { pl } from 'date-fns/locale';
-  import { mapActions } from "vuex";
-
+  import {mapActions, mapGetters, mapState} from "vuex";
 
   @Component({
     name: 'post',
     components: { 'vue-avatar': VueAvatar, 'vue-user-name': VueUserName, 'vue-comment': VueComment },
-    methods: mapActions('posts', ['vote', 'accept', 'subscribe'])
-    // mixins: [mixins]
+    methods: mapActions('posts', ['vote', 'accept', 'subscribe']),
+    computed: {
+      ...mapState('user', {user: state => state}),
+      ...mapGetters('user', ['isAuthorized'])
+    }
+  // mixins: [mixins]
   })
   export default class VuePost extends Vue {
     @Prop(Object)
     post!: Post;
+
+    @Prop({default: false})
+    isAcceptAllowed!: boolean;
 
     formatDistanceToNow(date) {
       return formatDistanceToNow(new Date(date), { locale: pl });
@@ -194,3 +199,4 @@
 
   }
 </script>
+

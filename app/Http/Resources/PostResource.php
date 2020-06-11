@@ -65,7 +65,7 @@ class PostResource extends JsonResource
      */
     public function toArray($request)
     {
-        $only = $this->resource->only(['id', 'user_name', 'score', 'text', 'edit_count', 'is_voted', 'is_accepted', 'is_subscribed']);
+        $only = $this->resource->only(['id', 'user_name', 'score', 'text', 'edit_count', 'is_voted', 'is_accepted', 'is_subscribed', 'user_id']);
         $html = $this->text !== null ? $this->html : null;
 
         if ($this->isSignatureAllowed($request)) {

@@ -148,5 +148,21 @@ new Vue({
   created() {
     store.commit('posts/init', { pagination: window.pagination });
   },
-  computed: mapGetters('posts', ['posts'])
+  methods: {
+    isAcceptAllowed(post) {
+      if (!this.isAuthorized) {
+        return false;
+      }
+
+      const firstPost = window.pagination.data[Object.keys(window.pagination.data)[0]];
+
+      return (this.user.id === firstPost.user_id || post.permissions.update) && post.id !== firstPost.id;
+    }
+  },
+  computed: {
+    ...mapGetters('posts', ['posts']),
+    ...mapState('user', {user: state => state}),
+    ...mapGetters('user', ['isAuthorized'])
+
+  }
 })

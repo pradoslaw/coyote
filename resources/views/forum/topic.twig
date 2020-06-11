@@ -56,6 +56,7 @@
       v-for="post in posts"
       :key="post.id"
       :post="post"
+      :is-accept-allowed="isAcceptAllowed(post)"
     ></vue-post>
 
     <div class="row no-gutters mb-3">
