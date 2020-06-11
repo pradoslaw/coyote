@@ -1,35 +1,8 @@
 import store from "./posts";
-import { Post } from "../../types/models";
-const faker = require('faker');
+import { post as fake } from '../../faker';
 import axios from 'axios';
 
 const { mutations, actions } = store;
-
-function fake(): Post {
-  return {
-    comments: [],
-    created_at: new Date(),
-    deleted_at: null,
-    html: "",
-    id: faker.random.number(),
-    is_accepted: false,
-    is_locked: false,
-    is_read: false,
-    is_subscribed: false,
-    is_voted: false,
-    permissions: {
-      write: true,
-      delete: false,
-      update: false,
-      merge: false,
-      adm_access: false
-    },
-    score: 0,
-    text: "",
-    updated_at: new Date(),
-    url: "",
-  };
-}
 
 describe('posts mutation', () => {
   test('votes to a post', () => {
