@@ -11,7 +11,7 @@ function fake(): Post {
     created_at: new Date(),
     deleted_at: null,
     html: "",
-    id: 0,
+    id: faker.random.number(),
     is_accepted: false,
     is_locked: false,
     is_read: false,
@@ -32,9 +32,9 @@ function fake(): Post {
 }
 
 describe('posts mutation', () => {
-  test('vote', () => {
+  test('votes to a post', () => {
     const post = fake();
-    const state = {data: [post]};
+    const state = {data: {[post.id]: post}};
 
     expect(post.score).toEqual(0);
 
@@ -47,6 +47,44 @@ describe('posts mutation', () => {
 
     expect(post.score).toEqual(0);
     expect(post.is_voted).toBeFalsy();
+  });
+
+  test('subscribe to a post', () => {
+    const post = fake();
+    const state = {data: {[post.id]: post}};
+
+    expect(post.is_subscribed).toBeFalsy();
+
+    mutations.subscribe(state, post);
+
+    expect(post.is_subscribed).toBeTruthy();
+  });
+
+  test('accepts post', () => {
+    const post = fake();
+    const state = {data: {[post.id]: post}};
+
+    expect(post.is_accepted).toBeFalsy();
+
+    mutations.accept(state, post);
+
+    expect(post.is_accepted).toBeTruthy();
+
+    mutations.accept(state, post);
+
+    expect(post.is_accepted).toBeFalsy();
+  });
+
+  test('accepts different post', () => {
+    const postAccepted = Object.assign(fake(), {'is_accepted': true});
+    const post = fake();
+
+    const state = {data: {[postAccepted.id]: postAccepted, [post.id]: post}};
+
+    mutations.accept(state, post);
+
+    expect(post.is_accepted).toBeTruthy();
+    expect(postAccepted.is_accepted).toBeFalsy();
   });
 });
 
@@ -63,4 +101,13 @@ describe('posts actions', () => {
 
     expect(commit).toHaveBeenCalledWith("vote", post);
   })
+
+  // test('accepts answer', async () => {
+  //   const post = fake();
+  //   const commit = jest.fn();
+  //
+  //   await actions.vote({ commit }, post);
+  //
+  //   expect(commit).toHaveBeenCalledWith("vote", post);
+  // })
 });

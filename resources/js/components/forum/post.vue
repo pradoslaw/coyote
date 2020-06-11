@@ -79,7 +79,7 @@
               <i class="fas fa-thumbs-up fa-fw"></i>
             </a>
 
-            <a :class="{'on': post.is_accepted}" class="vote-accept " href="javascript:" title="Kliknij, aby ustawić tę odpowiedź jako zaakceptowaną (kliknij ponownie, aby cofnąć)">
+            <a :class="{'on': post.is_accepted}" @click="accept(post)" class="vote-accept " href="javascript:" title="Kliknij, aby ustawić tę odpowiedź jako zaakceptowaną (kliknij ponownie, aby cofnąć)">
               <i class="fas fa-check fa-fw"></i>
             </a>
           </div>
@@ -105,8 +105,10 @@
         <div class="d-none d-lg-block col-lg-2"></div>
         <div class="col-12 d-flex col-lg-10">
           <div v-if="!post.deleted_at">
-            <button class="btn btn-sm">
-              <i class="far fa-fw fa-bell"></i> <span class="d-none d-sm-inline">Obserwuj</span>
+            <button @click="subscribe(post)" class="btn btn-sm">
+              <i :class="{'fas text-primary': post.is_subscribed, 'far': !post.is_subscribed}" class="fa-fw fa-bell"></i>
+
+              <span class="d-none d-sm-inline">Obserwuj</span>
             </button>
 
             <button class="btn btn-sm">
@@ -179,7 +181,7 @@
   @Component({
     name: 'post',
     components: { 'vue-avatar': VueAvatar, 'vue-user-name': VueUserName, 'vue-comment': VueComment },
-    methods: mapActions('posts', ['vote'])
+    methods: mapActions('posts', ['vote', 'accept', 'subscribe'])
     // mixins: [mixins]
   })
   export default class VuePost extends Vue {

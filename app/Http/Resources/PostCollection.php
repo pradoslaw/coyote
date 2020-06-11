@@ -26,6 +26,13 @@ class PostCollection extends ResourceCollection
     protected $forum;
 
     /**
+     * DO NOT REMOVE! This will preserver keys from being filtered in data
+     *
+     * @var bool
+     */
+    protected $preserveKeys = true;
+
+    /**
      * @param Tracker $tracker
      * @return $this
      */
@@ -59,20 +66,21 @@ class PostCollection extends ResourceCollection
     {
         $parser = app('parser.sig');
 
+        $collection = $this
+            ->collection
+            ->map(function (Post $post) use ($request, $parser) {
+                // set relations to avoid N+1 SQL loading. be aware we must use setRelation() method because setRelations() overwrites all already
+                // assigned relations
+                $post->setRelation('topic', $this->topic);
+                $post->setRelation('forum', $this->forum);
+
+                return (new PostResource($post))->setTracker($this->tracker)->setSigParser($parser)->toArray($request);
+            })
+            ->keyBy('id');
+
         return $this
             ->resource
-            ->setCollection(
-                $this
-                    ->collection
-                    ->map(function (Post $post) use ($request, $parser) {
-                        // set relations to avoid N+1 SQL loading. be aware we must use setRelation() method because setRelations() overwrites all already
-                        // assigned relations
-                        $post->setRelation('topic', $this->topic);
-                        $post->setRelation('forum', $this->forum);
-
-                        return (new PostResource($post))->setTracker($this->tracker)->setSigParser($parser)->toArray($request);
-                    })
-            )
+            ->setCollection($collection)
             ->toArray();
     }
 }
