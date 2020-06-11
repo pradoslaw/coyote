@@ -14,12 +14,17 @@ import VueForm from '../components/forum/form.vue';
 import VueModal from '../components/modal.vue';
 import VueButton from '../components/forms/button.vue';
 import VueSelect from '../components/forms/select.vue';
+import VueNotifications from 'vue-notification';
 import Vue from "vue";
 import store from '../store';
 import { default as mixin } from '../components/mixins/user';
+import { default as axiosErrorHandler } from '../libs/axios-error-handler';
 import { mapState, mapGetters } from "vuex";
 
 Vue.use(VueTimeago);
+Vue.use(VueNotifications, {componentName: 'vue-notifications'});
+
+axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 
 new Vue({
   el: '#js-forum',
