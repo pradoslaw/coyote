@@ -65,7 +65,7 @@ class PostResource extends JsonResource
      */
     public function toArray($request)
     {
-        $only = $this->resource->only(['id', 'user_name', 'score', 'text', 'edit_count', 'is_voted']);
+        $only = $this->resource->only(['id', 'user_name', 'score', 'text', 'edit_count', 'is_voted', 'is_accepted', 'is_subscribed']);
         $html = $this->text !== null ? $this->html : null;
 
         if ($this->isSignatureAllowed($request)) {
@@ -94,7 +94,7 @@ class PostResource extends JsonResource
                 ]];
             }),
 
-            'comments'      => PostCommentResource::collection($this->whenLoaded('comments'))
+            'comments'      => PostCommentResource::collection($this->whenLoaded('comments'))->keyBy('id')
         ]);
     }
 

@@ -2,12 +2,9 @@ import axios from "axios";
 import {Post, Paginator, Media, Microblog} from "../../types/models";
 import Vue from 'vue';
 
+type PostObj = {[key: number]: Post};
 
-const state = {
-  data: [],
-  links: null,
-  meta: null
-};
+const state: { data: PostObj, links: null, meta: null } = {data: {}, links: null, meta: null}
 
 const getters = {
   posts: state => state.data
@@ -33,6 +30,28 @@ const mutations = {
       post.is_voted = true;
       post.score += 1;
     }
+  },
+
+  accept(state, post: Post) {
+    if (post.is_accepted) {
+      post.is_accepted = false;
+    }
+    else {
+      let values: Post[] = Object.values(state.data);
+
+      // user choose different option
+      for (let item of values) {
+        if (item.is_accepted) {
+          item.is_accepted = false;
+        }
+      }
+
+      post.is_accepted = true;
+    }
+  },
+
+  subscribe(state, post: Post) {
+    post.is_subscribed = !post.is_subscribed;
   }
 }
 
@@ -42,6 +61,18 @@ const actions = {
 
     return axios.post(`/Forum/Post/Vote/${post.id}`).catch(() => commit('vote', post));
   },
+
+  accept({ commit, getters }, post: Post) {
+    commit('accept', post);
+
+    return axios.post(`/Forum/Post/Accept/${post.id}`).catch(() => commit('accept', post));
+  },
+
+  subscribe({ commit }, post: Post) {
+    commit('subscribe', post);
+
+    return axios.post(`/Forum/Post/Subscribe/${post.id}`).catch(() => commit('subscribe', post));
+  }
 }
 
 export default {
