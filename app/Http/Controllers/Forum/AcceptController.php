@@ -40,6 +40,10 @@ class AcceptController extends BaseController
             throw new AuthorizationException('Możesz zaakceptować post tylko we własnym wątku.');
         }
 
+        if ($post->id === $topic->first_post_id) {
+            throw new \InvalidArgumentException('Nie można zaakceptować pierwszego postu w wątku.');
+        }
+
         $this->transaction(function () use ($topic, $post, $forum) {
             // currently accepted post (if any)
             $accepted = $topic->accept;

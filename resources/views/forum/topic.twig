@@ -37,6 +37,8 @@
   {% include "forum.partials.top" %}
 
   <main id="js-post" class="mainbar">
+
+
     <div class="row no-gutters mb-3">
       <div class="mr-auto">
         {{ paginate|raw }}
@@ -92,6 +94,7 @@
 
     {{ viewers|raw }}
 
+    <vue-notifications position="bottom right" />
   </main>
 
   {% embed 'forum.partials.sidebar' %}
