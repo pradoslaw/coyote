@@ -20,6 +20,7 @@ export interface User {
   allow_sig?: boolean;
   location?: string;
   sig?: string;
+  group?: string;
 }
 
 export interface Media {

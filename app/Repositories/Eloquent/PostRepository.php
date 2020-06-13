@@ -38,8 +38,11 @@ class PostRepository extends Repository implements PostRepositoryInterface
                     ->where('posts.topic_id', $topic->id)
                     ->forPage($page, $perPage);
             })
-            ->with(['user:id,name,photo,posts,sig,location,created_at,visited_at,deleted_at,is_blocked,allow_smilies,allow_count,allow_sig', 'editor:id,name'])
-            ->with(['comments.user'])
+            ->with(['user' => function ($builder) {
+                return $builder->select(['users.id', 'users.name', 'photo', 'posts', 'sig', 'location', 'users.created_at', 'visited_at', 'deleted_at', 'is_blocked', 'allow_smilies', 'allow_count', 'allow_sig', $this->raw('groups.name AS group')])
+                    ->leftJoin('groups', 'groups.id', 'group_id');
+            }])
+            ->with(['editor:id,name', 'comments.user'])
             ->get();
 
         $paginate = new LengthAwarePaginator($result, $topic->replies, $perPage, $page, ['path' => ' ']);
