@@ -50,6 +50,8 @@
           <template v-if="post.user">
             <vue-avatar v-if="post.user" :id="post.user.id" :name="post.user.name" :photo="post.user.photo" class="post-avatar img-thumbnail"></vue-avatar>
 
+            <span v-if="post.user.group" class="badge badge-secondary mb-1">{{ post.user.group }}</span>
+
             <ul class="post-stats list-unstyled">
               <li>
                 <strong>Rejestracja:</strong>
