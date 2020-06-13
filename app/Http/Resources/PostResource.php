@@ -26,6 +26,9 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property int $edit_count
  * @property Topic $topic
  * @property Forum $forum
+ * @property string $ip
+ * @property string $host
+ * @property string $browser
  */
 class PostResource extends JsonResource
 {
@@ -83,6 +86,10 @@ class PostResource extends JsonResource
             'url'           => UrlBuilder::post($this->resource),
             'is_read'       => $this->tracker->getMarkTime() > $this->created_at,
             'is_locked'     => $this->topic->is_locked || $this->forum->is_locked,
+
+            $this->mergeWhen($auth->can('update', $this->resource), function () {
+               return ['ip' => $this->ip . ' ' . ($this->host ? "($this->host) $this->browser" : '')];
+            }),
 
             $this->mergeWhen($auth, function () use ($auth) {
                 return ['permissions' => [
