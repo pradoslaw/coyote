@@ -20,6 +20,8 @@
 
           <a :href="post.url" class="text-muted small">
             <vue-timeago :datetime="post.created_at"></vue-timeago>
+
+            <small v-if="post.ip" :title="post.ip" class="post-ip">({{ post.ip }})</small>
           </a>
         </div>
       </div>
@@ -35,9 +37,11 @@
         <div class="col-10">
           <i class="far fa-file small"></i>
 
-          <a :href="post.url" class="text-muted small">
+          <a :href="post.url" class="small text-body">
             <vue-timeago :datetime="post.created_at"></vue-timeago>
           </a>
+
+          <small v-if="post.ip" :title="post.ip" class="text-muted">({{ post.ip }})</small>
         </div>
       </div>
 

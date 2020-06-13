@@ -30,5 +30,12 @@ describe('Regular post', () => {
 
     expect(wrapper.find('.fa-check').exists()).toBeTruthy();
   });
+
+  it('should show ip', () => {
+    const ip = '192.168.0.1';
+    const wrapper = shallowMount(VuePost, {propsData: {post: fake(), ip}});
+
+    expect(wrapper.html()).toContain(ip);
+  });
 });
 
