@@ -22,6 +22,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property string $text
  * @property string $html
  * @property User $user
+ * @property User|null $editor
  * @property int $score
  * @property int $edit_count
  * @property Topic $topic
@@ -89,6 +90,10 @@ class PostResource extends JsonResource
 
             $this->mergeWhen($auth->can('update', $this->resource), function () {
                return ['ip' => $this->ip . ' ' . ($this->host ? "($this->host) $this->browser" : '')];
+            }),
+
+            $this->mergeWhen($this->editor !== null, function () {
+                return ['editor' => UserResource::make($this->editor)];
             }),
 
             $this->mergeWhen($auth, function () use ($auth) {

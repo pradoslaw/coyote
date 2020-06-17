@@ -99,6 +99,18 @@
             </template>
           </div>
 
+          <div v-if="post.edit_count" class="edit-info">
+            <strong>
+              <a class="btn-history" :title="post.permissions.update ? 'Zobacz historię zmian tego postu' : ''" :href="post.permissions.update ? `/Forum/Post/Log/${post.id}` : ''">
+                <i class="fas fa-external-link-alt"></i>
+              </a>
+
+              edytowany {{ post.edit_count }}x, ostatnio: <vue-user-name :user="post.editor"></vue-user-name>
+            </strong>
+
+            <vue-timeago :datetime="post.updated_at"></vue-timeago>
+          </div>
+
           <div class="post-comments">
             <vue-comment v-for="comment in post.comments" :key="comment.id" :comment="comment"></vue-comment>
           </div>

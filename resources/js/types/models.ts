@@ -85,6 +85,7 @@ export interface Post {
   permissions: PostPermission;
   ip?: string;
   comments: PostComment[];
+  edit_count?: number;
 }
 
 export interface Topic {
