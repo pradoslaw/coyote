@@ -129,7 +129,7 @@
               <span class="d-none d-sm-inline">Obserwuj</span>
             </button>
 
-            <button class="btn btn-sm">
+            <button @click="copy" class="btn btn-sm">
               <i class="fas fa-fw fa-share-alt"></i> <span class="d-none d-sm-inline">Udostępnij</span>
             </button>
 
@@ -186,13 +186,15 @@
   import { Prop } from "vue-property-decorator";
   import Component from "vue-class-component";
   import { Post } from '../../types/models';
-
+  import VueClipboard from '../../plugins/clipboard';
   import VueAvatar from '../avatar.vue';
   import VueUserName from "../user-name.vue";
   import VueComment from './comment.vue';
   import formatDistanceToNow from 'date-fns/formatDistanceToNow';
   import { pl } from 'date-fns/locale';
   import {mapActions, mapGetters, mapState} from "vuex";
+
+  Vue.use(VueClipboard);
 
   @Component({
     name: 'post',
@@ -213,6 +215,15 @@
 
     formatDistanceToNow(date) {
       return formatDistanceToNow(new Date(date), { locale: pl });
+    }
+
+    copy() {
+      if (this.$copy(this.post.url)) {
+        this.$notify({type: 'success', text: 'Link prawidłowo skopiowany do schowka.'});
+      }
+      else {
+        this.$notify({type: 'error', text: 'Nie można skopiować linku do schowka.'});
+      }
     }
 
   }

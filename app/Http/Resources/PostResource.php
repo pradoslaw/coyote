@@ -84,7 +84,7 @@ class PostResource extends JsonResource
             'deleted_at'    => $this->deleted_at ? Carbon::parse($this->deleted_at)->toIso8601String() : null,
             'user'          => UserResource::make($this->user),
             'html'          => $html,
-            'url'           => UrlBuilder::post($this->resource),
+            'url'           => UrlBuilder::post($this->resource, true),
             'is_read'       => $this->tracker->getMarkTime() > $this->created_at,
             'is_locked'     => $this->topic->is_locked || $this->forum->is_locked,
 

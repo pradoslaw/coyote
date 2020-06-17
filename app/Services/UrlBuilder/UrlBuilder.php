@@ -31,11 +31,12 @@ class UrlBuilder
 
     /**
      * @param Post $post
+     * @param bool $absolute
      * @return string
      */
-    public static function post(Post $post)
+    public static function post(Post $post, bool $absolute = false)
     {
-        return route('forum.topic', [$post->forum->slug, $post->topic->id, $post->topic->slug], false) . '?p=' . $post->id . '#id' . $post->id;
+        return route('forum.topic', [$post->forum->slug, $post->topic->id, $post->topic->slug], $absolute) . '?p=' . $post->id . '#id' . $post->id;
     }
 
     /**
