@@ -34,7 +34,7 @@
           </h5>
         </div>
 
-        <div class="col-10">
+        <div class="col-10 text-truncate small">
           <i class="far fa-file small"></i>
 
           <a :href="post.url" class="small text-body">
