@@ -226,7 +226,9 @@ class PmController extends BaseController
         // ugly solution :(
         $pm = $this->pm->where('text_id', $pm->text_id)->where('folder', Pm::SENTBOX)->first();
 
-        event(new PmRead($pm));
+        if ($pm) {
+            event(new PmRead($pm));
+        }
     }
 
     /**
