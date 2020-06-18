@@ -63,7 +63,7 @@ class SubmitController extends Controller
         } else {
             $this->authorize('update', $microblog);
 
-            $user = $this->user->find($microblog->user_id, ['id', 'name', 'is_blocked', 'deleted_at', 'photo']);
+            $user = $microblog->user;
         }
 
         $microblog->fill($data);
