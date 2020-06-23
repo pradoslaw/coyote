@@ -37,7 +37,11 @@ class SubmitControllerTest extends TestCase
         $post = factory(Post::class)->make();
         $faker = Factory::create();
 
-        $response = $this->actingAs($this->user)->json('POST', "/Forum/{$this->forum->slug}/Submit", ['text' => $post->text, 'subject' => $faker->text(50)]);
+        $response = $this->actingAs($this->user)->json(
+            'POST',
+            "/Forum/{$this->forum->slug}/Submit",
+            ['text' => $post->text, 'subject' => $faker->text(50), 'is_sticky' => true, 'subscribe' => true]
+        );
 
         $response->assertJsonFragment([
             'text' => $post->text
@@ -46,7 +50,12 @@ class SubmitControllerTest extends TestCase
         $id = $response->decodeResponseJson('id');
 
         $this->assertDatabaseHas('posts', ['id' => $id]);
-        $this->assertDatabaseHas('topics', ['first_post_id' => $id]);
+        $this->assertDatabaseHas('topics', ['first_post_id' => $id, 'is_sticky' => false]);
+
+        /** @var Topic $topic */
+        $topic = Topic::where('first_post_id', $id)->first();
+
+        $this->assertTrue($topic->subscribers()->forUser($this->user->id)->exists());
     }
 
     public function testSubmitPostToExistingTopic()
@@ -126,7 +135,7 @@ class SubmitControllerTest extends TestCase
         factory(Post::class)->create(['forum_id' => $this->forum->id, 'topic_id' => $topic->id]);
         $post = factory(Post::class)->create(['user_id' => $this->user->id, 'forum_id' => $this->forum->id, 'topic_id' => $topic->id]);
 
-        $response = $this->actingAs($this->user)->json(
+        $this->actingAs($this->user)->json(
             'POST',
             "/Forum/{$this->forum->slug}/Submit/{$topic->id}/{$post->id}",
             ['text' => $text = $faker->text, 'subject' => $subject = $faker->text(100)]
@@ -143,6 +152,11 @@ class SubmitControllerTest extends TestCase
 //    }
 //
 //    public function testEditExistingPostInLockedForum()
+//    {
+//
+//    }
+
+//    public function testSubmitStickyTopic()
 //    {
 //
 //    }

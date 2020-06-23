@@ -78,7 +78,7 @@ class SubmitController extends BaseController
             $topic->forum()->associate($forum);
         }
 
-        $topic->fill($request->only('subject'));
+        $topic->fill($request->only(array_keys($request->rules())));
 
         if (!$post->exists) {
             $post->forum()->associate($forum);
@@ -107,9 +107,7 @@ class SubmitController extends BaseController
 
             $activity = $post->id ? new Stream_Update($actor) : new Stream_Create($actor);
 
-            if ($this->isSavingTopicAllowed($topic, $post)) {
-                $topic->save();
-            }
+            $topic->save();
 
             $post->topic()->associate($topic);
             $post->save();
@@ -140,11 +138,6 @@ class SubmitController extends BaseController
         PostResource::withoutWrapping();
 
         return (new PostResource($post))->setTracker($tracker)->setSigParser(app('parser.sig'));
-    }
-
-    private function isSavingTopicAllowed(Topic $topic, Post $post): bool
-    {
-        return !$topic->exists || ($topic->first_post_id === $post->id);
     }
 
     /**
