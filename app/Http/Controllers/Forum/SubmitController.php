@@ -2,15 +2,21 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Forum;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Forum\SubjectForm;
+use Coyote\Http\Requests\Forum\PostRequest;
+use Coyote\Http\Resources\PostResource;
 use Coyote\Notifications\Post\ChangedNotification;
 use Coyote\Notifications\Post\SubmittedNotification;
 use Coyote\Notifications\Post\UserMentionedNotification;
 use Coyote\Notifications\Topic\SubjectChangedNotification;
+use Coyote\Post;
 use Coyote\Repositories\Contracts\PollRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
+use Coyote\Services\Forum\Tracker;
 use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Topic;
 use Illuminate\Contracts\Notifications\Dispatcher;
 use Illuminate\Http\Request;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
@@ -58,37 +64,55 @@ class SubmitController extends BaseController
     }
 
     /**
-     * Show new post/edit form
-     *
-     * @param \Coyote\Forum $forum
-     * @param \Coyote\Topic $topic
-     * @param \Coyote\Post|null $post
-     * @return mixed
+     * @param PostRequest $request
+     * @param Forum $forum
+     * @param Topic|null $topic
+     * @param Post|null $post
+     * @return PostResource
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function save($forum, $topic, $post = null)
+    public function save(PostRequest $request, Forum $forum, ?Topic $topic, ?Post $post)
     {
-        if (is_null($post)) {
-            $post = $this->post->makeModel();
+        if (!$topic->exists) {
+            $topic = $this->topic->makeModel();
+            $topic->forum()->associate($forum);
+        }
+
+        $topic->fill($request->only('subject'));
+
+        if (!$post->exists) {
+            $post->forum()->associate($forum);
+
+            if ($this->userId) {
+                $post->user()->associate($this->auth);
+            }
+
+            $post->ip = $request->ip();
+            $post->browser = '';
+//            $post->browser = str_limit($this->request->browser(), 250);
+            $post->host = ''; // pole nie moze byc nullem
         } else {
             $this->authorize('update', [$post]);
         }
 
-        $form = $this->getForm($forum, $topic, $post);
-        $form->validate();
+        $post->fill($request->all());
 
-        $request = $form->getRequest();
-
-        $post = $this->transaction(function () use ($form, $forum, $topic, $post, $request) {
+        $post = $this->transaction(function () use ($forum, $topic, $post, $request) {
             $actor = new Stream_Actor($this->auth);
             if (auth()->guest()) {
                 $actor->displayName = $request->get('user_name');
             }
 
-            $poll = $this->savePoll($request, $topic->poll_id);
+//            $poll = $this->savePoll($request, $topic->poll_id);
 
             $activity = $post->id ? new Stream_Update($actor) : new Stream_Create($actor);
-            // saving post through repository... we need to pass few object to save relationships
-            $this->post->save($form, $this->auth, $forum, $topic, $post, $poll);
+
+            if ($this->isSavingTopicAllowed($topic, $post)) {
+                $topic->save();
+            }
+
+            $post->topic()->associate($topic);
+            $post->save();
 
             // url to the post
             $url = UrlBuilder::post($post);
@@ -103,8 +127,6 @@ class SubmitController extends BaseController
 
             stream($activity, $object, $target);
 
-            $request->attributes->set('url', $url);
-
             return $post;
         });
 
@@ -113,7 +135,16 @@ class SubmitController extends BaseController
         // add post to elasticsearch
         event(new PostWasSaved($post));
 
-        return $post;
+        $tracker = Tracker::make($topic);
+
+        PostResource::withoutWrapping();
+
+        return (new PostResource($post))->setTracker($tracker)->setSigParser(app('parser.sig'));
+    }
+
+    private function isSavingTopicAllowed(Topic $topic, Post $post): bool
+    {
+        return !$topic->exists || ($topic->first_post_id === $post->id);
     }
 
     /**
@@ -140,22 +171,6 @@ class SubmitController extends BaseController
     private function getPollRepository()
     {
         return app(PollRepositoryInterface::class);
-    }
-
-    /**
-     * Ajax request. Display edit form
-     *
-     * @param $forum
-     * @param $topic
-     * @param $post
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function edit($forum, $topic, $post)
-    {
-        $this->authorize('update', [$post]);
-        $form = $this->getForm($forum, $topic, $post);
-
-        return view('forum.partials.edit')->with('form', $form);
     }
 
     /**

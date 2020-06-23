@@ -72,7 +72,13 @@ const actions = {
     commit('subscribe', post);
 
     return axios.post(`/Forum/Post/Subscribe/${post.id}`).catch(() => commit('subscribe', post));
-  }
+  },
+
+  save({ commit, getters }, post: Post) {
+    return axios.post(`/Forum/Post/Submit/${post.id || ''}`, post).then(result => {
+      commit(getters.exists(result.data.id) ? 'update' : 'add', result.data)
+    });
+  },
 }
 
 export default {

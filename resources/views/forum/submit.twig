@@ -121,33 +121,33 @@
   {{ modal.alert('Wystąpił błąd podczas dodawania tagu.') }}
 {% endblock %}
 
-{% block body %}
-  {{ parent() }}
+{#{% block body %}#}
+{#  {{ parent() }}#}
 
-  <script src="{{ cdn('js/wikieditor.js') }}"></script>
+{#  <script src="{{ cdn('js/wikieditor.js') }}"></script>#}
 
-  <script>
-    $(function () {
-      var toolTipHints = $('#hint-subject, #hint-text, #hint-tags, #hint-user_name');
+{#  <script>#}
+{#    $(function () {#}
+{#      var toolTipHints = $('#hint-subject, #hint-text, #hint-tags, #hint-user_name');#}
 
-      $('#submit-form').delegate('input[name="subject"], textarea[name="text"], input[name="user_name"], #tags', 'focus', function () {
-        var name = typeof $(this).attr('name') == 'undefined' ? 'tags' : $(this).attr('name');
+{#      $('#submit-form').delegate('input[name="subject"], textarea[name="text"], input[name="user_name"], #tags', 'focus', function () {#}
+{#        var name = typeof $(this).attr('name') == 'undefined' ? 'tags' : $(this).attr('name');#}
 
-        if ('hint-' + name != $('.sidebar-hint:visible').attr('id')) {
-          toolTipHints.each(function () {
-            $(this).hide();
-          });
+{#        if ('hint-' + name != $('.sidebar-hint:visible').attr('id')) {#}
+{#          toolTipHints.each(function () {#}
+{#            $(this).hide();#}
+{#          });#}
 
-          $('#hint-' + name).fadeIn(1000);
-        }
-      }).append('<input style="display: none" type="checkbox" name="human" value="1" checked="checked">');
+{#          $('#hint-' + name).fadeIn(1000);#}
+{#        }#}
+{#      }).append('<input style="display: none" type="checkbox" name="human" value="1" checked="checked">');#}
 
-      $('#tags').tag({
-        validateUrl: '{{ route('forum.tag.validate') }}',
-        promptUrl: '{{ route('forum.tag.prompt') }}'
-      });
+{#      $('#tags').tag({#}
+{#        validateUrl: '{{ route('forum.tag.validate') }}',#}
+{#        promptUrl: '{{ route('forum.tag.prompt') }}'#}
+{#      });#}
 
-      $('#submit-form').find('textarea, input[type="text"]').first().focus();
-    });
-  </script>
-{% endblock %}
+{#      $('#submit-form').find('textarea, input[type="text"]').first().focus();#}
+{#    });#}
+{#  </script>#}
+{#{% endblock %}#}

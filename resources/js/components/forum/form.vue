@@ -57,5 +57,9 @@
     @Ref('post')
     readonly post!: Post;
 
+    save() {
+
+    }
+
   }
 </script>
