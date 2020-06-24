@@ -99,6 +99,7 @@ class SubmitController extends BaseController
 
         $post = $this->transaction(function () use ($forum, $topic, $post, $request) {
             $actor = new Stream_Actor($this->auth);
+
             if (auth()->guest()) {
                 $actor->displayName = $request->get('user_name');
             }
@@ -111,6 +112,10 @@ class SubmitController extends BaseController
 
             $post->topic()->associate($topic);
             $post->save();
+
+            if ($this->userId) {
+                $topic->subscribe($this->userId, $request->filled('subscribe'));
+            }
 
             // url to the post
             $url = UrlBuilder::post($post);

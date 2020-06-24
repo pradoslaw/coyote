@@ -70,6 +70,8 @@ class SubmitControllerTest extends TestCase
             'is_read' => false,
             'is_locked' => false
         ]);
+
+        $this->assertFalse($topic->subscribers()->forUser($this->user->id)->exists());
     }
 
     public function testEditExistingPostByAuthor()
