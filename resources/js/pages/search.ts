@@ -139,12 +139,18 @@ new Vue({
 
   mounted() {
     window.addEventListener('popstate', event => {
-      Object.keys(event.state).forEach(key => {
-        this[key] = event.state[key];
-      });
+      if (!event.state) {
+        return;
+      }
 
-      this.request();
+      this.resetDefaults();
+
+      Object.keys(event.state.params).forEach(key => this[key] = event.state[key]);
+
+      this.hits = event.state.hits;
     });
+
+    this.pushState();
   },
 
   methods: {
@@ -160,9 +166,21 @@ new Vue({
     setModel(model?: Model) {
       // before making a request, we must clear results list because on different tabs, data could have different format
       this.hits.data = [];
+      // reset page number
+      this.page = 0;
       this.model = model;
 
       this.request();
+    },
+
+    resetDefaults() {
+      this.hits.data = [];
+      this.page = 0;
+      this.model = undefined;
+      this.sort = 'score';
+      this.user = '';
+      this.query = '';
+      this.categories = [];
     },
 
     setUser(user: User) {
@@ -206,12 +224,17 @@ new Vue({
     request() {
       axios.get('/Search', {params: this.requestParams}).then(result => {
         this.hits = result.data;
-        history.pushState(this.requestParams, '', this.getUrl(this.requestParams));
+
+        this.pushState();
       });
     },
 
     getUrl(params: any) {
       return `/Search?${new URLSearchParams(params).toString()}`;
+    },
+
+    pushState() {
+      history.pushState({ params: this.requestParams, hits: this.hits }, '', this.getUrl(this.requestParams));
     }
   },
 
@@ -223,7 +246,11 @@ new Vue({
         if (!params[key] || (Array.isArray(params[key]) && params[key].length === 0)) {
           delete params[key];
         }
-      })
+      });
+
+      if (this.page === 1) {
+        delete params['page'];
+      }
 
       return params;
     },
