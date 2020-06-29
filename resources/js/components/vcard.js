@@ -18,6 +18,8 @@ function showVCard(event) {
 
   const handler = () => {
     axios.get(`/User/Vcard/${userId}`).then(result => {
+      removeVCard();
+
       const container = document.createElement('div');
       container.innerHTML = result.data;
 
@@ -42,9 +44,14 @@ function hideVCard() {
   tooltipTimer = setTimeout(removeVCard, 1500);
 }
 
-const links = document.querySelectorAll('a[data-user-id]');
+function bindEvents() {
+  const links = document.querySelectorAll('a[data-user-id]');
 
-links.forEach(link => {
-  link.addEventListener('mouseenter', showVCard);
-  link.addEventListener('mouseleave', hideVCard);
-});
+  links.forEach(link => {
+    link.addEventListener('mouseenter', showVCard);
+    link.addEventListener('mouseleave', hideVCard);
+  });
+}
+
+const observer = new MutationObserver(bindEvents);
+observer.observe(document.body, { attributes: true, childList: true, subtree: true });
