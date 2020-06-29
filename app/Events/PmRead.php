@@ -14,7 +14,7 @@ class PmRead extends PmCreated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('user:' . $this->pm->user_id);
+        return new Channel('user:' . $this->pm->author_id);
     }
 
     /**
@@ -24,6 +24,6 @@ class PmRead extends PmCreated implements ShouldBroadcast
     {
         $this->pm->read_at = now();
 
-        return $this->pm->only(['id', 'read_at']);
+        return $this->pm->only(['text_id', 'read_at']);
     }
 }

@@ -131,7 +131,7 @@ new Vue({
       });
 
       ws.on('Coyote\\Events\\PmRead', data => {
-        const message = this.messages.find(item => item.id === data.id);
+        const message = this.messages.find(item => item.text_id === data.text_id);
 
         if (message) {
           store.commit('messages/mark', message);

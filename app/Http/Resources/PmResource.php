@@ -28,7 +28,7 @@ class PmResource extends JsonResource
      */
     public function toArray($request)
     {
-        $only = $this->resource->only(['id', 'folder']);
+        $only = $this->resource->only(['id', 'text_id', 'folder']);
 
         $text = $this->parse($this->text instanceof Pm\Text ? $this->text->text : $this->text);
 
