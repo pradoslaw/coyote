@@ -43,8 +43,7 @@ class Kernel extends ConsoleKernel
         IndexCommand::class,
         CreateCouponCommand::class,
         PurgeGuestsCommand::class,
-        ResendApplicationCommand::class,
-        MigrateFilesystemCommand::class
+        ResendApplicationCommand::class
     ];
 
     /**
