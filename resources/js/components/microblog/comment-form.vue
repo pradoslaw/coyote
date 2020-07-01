@@ -11,6 +11,7 @@
         v-model="microblog.text"
         :disabled="isProcessing"
         @keydown.ctrl.enter="saveComment"
+        @keydown.meta.enter="saveComment"
         @keydown.esc="cancel"
       ></textarea>
 

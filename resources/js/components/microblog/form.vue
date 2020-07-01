@@ -10,6 +10,7 @@
         ref="textarea"
         v-model="microblog.text"
         @keydown.ctrl.enter="saveMicroblog"
+        @keydown.meta.enter="saveMicroblog"
         @keydown.esc="cancel"
         rows="2"
         tabindex="1"

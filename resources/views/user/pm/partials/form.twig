@@ -24,6 +24,7 @@
             :min-height="40"
             :max-height="350"
             @keydown.ctrl.enter="sendMessage"
+            @keydown.meta.enter="sendMessage"
             @keyup="typing"
             @change="onChange"
             rows="2"
