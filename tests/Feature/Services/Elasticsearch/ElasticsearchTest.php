@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Services\Elasticsearch;
 
 use Tests\TestCase;
 

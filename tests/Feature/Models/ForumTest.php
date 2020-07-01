@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Models;
 
 use Coyote\Forum;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
-class ForumModelTest extends TestCase
+class ForumTest extends TestCase
 {
     use DatabaseTransactions;
 
