@@ -10,6 +10,7 @@ use Coyote\Events\TopicWasMoved;
 use Coyote\Events\TopicWasSaved;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Services\Elasticsearch\Crawler;
+use Coyote\Topic;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class TopicListener implements ShouldQueue
@@ -56,7 +57,8 @@ class TopicListener implements ShouldQueue
      */
     public function onTopicDelete(TopicWasDeleted $event)
     {
-        $topic = $this->topic->withTrashed()->find($event->topic['id']);
+        $topic = (new Topic)->forceFill($event->topic);
+
         $this->crawler->delete($topic);
     }
 
