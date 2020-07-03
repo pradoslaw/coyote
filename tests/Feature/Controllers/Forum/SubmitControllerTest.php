@@ -129,7 +129,7 @@ class SubmitControllerTest extends TestCase
         $this->assertEquals($subject, $topic->subject);
     }
 
-    public function testTryToChangeTopicSubject()
+    public function testFailToChangeTopicSubject()
     {
         $faker = Factory::create();
         $topic = factory(Topic::class)->create(['forum_id' => $this->forum->id]);
@@ -148,15 +148,36 @@ class SubmitControllerTest extends TestCase
         $this->assertNotEquals($subject, $topic->subject);
     }
 
-//    public function testEditExistingPostInLockedTopic()
-//    {
-//
-//    }
-//
-//    public function testEditExistingPostInLockedForum()
-//    {
-//
-//    }
+    public function testEditExistingPostInLockedTopic()
+    {
+        $faker = Factory::create();
+        $topic = factory(Topic::class)->create(['forum_id' => $this->forum->id, 'is_locked' => true]);
+
+        $response = $this->actingAs($this->user)->json(
+            'POST',
+            "/Forum/{$this->forum->slug}/Submit/{$topic->id}/{$topic->first_post_id}",
+            ['text' => $text = $faker->text]
+        );
+
+        $response->assertStatus(401);
+    }
+
+    public function testEditExistingPostInLockedForum()
+    {
+        $faker = Factory::create();
+        $topic = factory(Topic::class)->create(['forum_id' => $this->forum->id]);
+
+        $this->forum->is_locked = true;
+        $this->forum->save();
+
+        $response = $this->actingAs($this->user)->json(
+            'POST',
+            "/Forum/{$this->forum->slug}/Submit/{$topic->id}/{$topic->first_post_id}",
+            ['text' => $text = $faker->text]
+        );
+
+        $response->assertStatus(401);
+    }
 
 //    public function testSubmitStickyTopic()
 //    {

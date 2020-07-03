@@ -1,24 +1,24 @@
 import axios from "axios";
-import {Post, Paginator, Media, Microblog} from "../../types/models";
+import {Post, Forum, Paginator, Media, Microblog} from "../../types/models";
 import Vue from 'vue';
 
 type PostObj = {[key: number]: Post};
 
-const state: { data: PostObj, links: null, meta: null } = {data: {}, links: null, meta: null}
+const state: { data: PostObj, links: null, meta: null, forum?: Forum } = {data: {}, links: null, meta: null}
 
 const getters = {
   posts: state => state.data
 }
 
 const mutations = {
-  init(state, { pagination }) {
+  init(state, { pagination, forum }) {
     console.log(pagination);
 
     // pagination.data = pagination.data
       // .map(post => (post.comments = post.comments.keyBy('id'), post))
       // .keyBy('id');
 
-    state = Object.assign(state, pagination);
+    state = Object.assign(state, pagination, { forum });
   },
 
   vote(state, post: Post) {
@@ -74,8 +74,8 @@ const actions = {
     return axios.post(`/Forum/Post/Subscribe/${post.id}`).catch(() => commit('subscribe', post));
   },
 
-  save({ commit, getters }, post: Post) {
-    return axios.post(`/Forum/Post/Submit/${post.id || ''}`, post).then(result => {
+  save({ commit, state, getters }, post: Post) {
+    return axios.post(`/Forum/${state.forum.slug}/Submit/${post?.id || ''}`, post).then(result => {
       commit(getters.exists(result.data.id) ? 'update' : 'add', result.data)
     });
   },

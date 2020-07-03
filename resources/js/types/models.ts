@@ -49,6 +49,12 @@ export interface Microblog {
   voters?: string[];
 }
 
+export interface Forum {
+  id: number;
+  slug: string;
+  name: string;
+}
+
 interface PostPermission {
   write: boolean;
   delete: boolean;

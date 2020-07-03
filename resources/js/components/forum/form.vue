@@ -21,7 +21,7 @@
 
     <div class="row mt-2">
       <div class="col-12">
-        <vue-button :disabled="isProcessing" class="btn btn-primary btn-sm float-right">Zapisz</vue-button>
+        <vue-button :disabled="isProcessing" class="btn btn-primary btn-sm float-right" @click.native.prevent="save">Zapisz</vue-button>
       </div>
     </div>
   </div>
@@ -58,7 +58,9 @@
     readonly post!: Post;
 
     save() {
-
+      this.isProcessing = true;
+console.log('save');
+      store.dispatch('posts/save', this.post).finally(() => this.isProcessing = false);
     }
 
   }
