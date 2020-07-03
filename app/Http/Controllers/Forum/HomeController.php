@@ -152,7 +152,10 @@ class HomeController extends BaseController
      */
     public function mine()
     {
-        $this->topic->pushCriteria(new OnlyMine($this->userId, false));
+        if ($this->userId) {
+            $this->topic->pushCriteria(new OnlyMine($this->userId, false));
+        }
+
         $topics = $this->load();
 
         return $this->render($topics)->with('user_id', $this->userId);
