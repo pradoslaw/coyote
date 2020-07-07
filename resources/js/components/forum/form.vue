@@ -11,6 +11,7 @@
     <vue-prompt source="/User/Prompt">
       <textarea
         v-autosize
+        v-model="post.text"
         name="text"
         class="form-control"
         ref="textarea"
@@ -30,7 +31,7 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from "vue-class-component";
-  import { Ref, Mixins } from "vue-property-decorator";
+  import { Ref, Mixins, Prop } from "vue-property-decorator";
   import store from "../../store";
   import VueAutosize from '../../plugins/autosize';
   import VuePrompt from '../forms/prompt.vue';
@@ -54,12 +55,16 @@
   export default class VueForm extends Vue {
     isProcessing = false;
 
-    @Ref('post')
+    @Prop({default() {
+      return {
+        text: ''
+      }
+    }})
     readonly post!: Post;
 
     save() {
       this.isProcessing = true;
-console.log('save');
+
       store.dispatch('posts/save', this.post).finally(() => this.isProcessing = false);
     }
 

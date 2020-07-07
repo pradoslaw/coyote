@@ -146,7 +146,7 @@ new Vue({
   components: { 'vue-post': VuePost, 'vue-form': VueForm },
   store,
   created() {
-    store.commit('posts/init', { pagination: window.pagination, forum: window.forum });
+    store.commit('posts/init', { pagination: window.pagination, forum: window.forum, topic: window.topic });
   },
   methods: {
     isAcceptAllowed(post) {
