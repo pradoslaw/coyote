@@ -95,7 +95,10 @@ export interface Post {
 }
 
 export interface Topic {
+  id: number;
   is_locked: boolean;
+  is_sticky?: boolean;
+  subject: string;
 }
 
 export interface Links {

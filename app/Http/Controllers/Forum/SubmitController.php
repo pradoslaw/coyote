@@ -41,26 +41,11 @@ class SubmitController extends BaseController
      * @param \Coyote\Post|null $post
      * @return \Illuminate\View\View
      */
-    public function index(Request $request, $forum, $topic, $post = null)
+    public function index($forum)
     {
-        if (!empty($topic->id)) {
-            $this->breadcrumb->push([
-                $topic->subject => route('forum.topic', [$forum->slug, $topic->id, $topic->slug]),
-                $post === null ? 'Odpowiedz' : 'Edycja' => url($request->path())
-            ]);
-        } else {
-            $this->breadcrumb->push('Nowy wątek', route('forum.topic.submit', [$forum->slug]));
-        }
+        $this->breadcrumb->push('Nowy wątek', route('forum.topic.submit', [$forum->slug]));
 
-        if (!empty($post)) {
-            // make sure user can edit this post
-            $this->authorize('update', [$post]);
-        }
-
-        $form = $this->getForm($forum, $topic, $post);
-        $form->text->setValue($form->text->getValue() ?: ($topic ? $this->getDefaultText($request, $topic) : ''));
-
-        return Controller::view('forum.submit')->with(compact('forum', 'form', 'topic', 'post'));
+        return Controller::view('forum.submit')->with(compact('forum'));
     }
 
     /**

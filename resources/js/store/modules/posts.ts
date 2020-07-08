@@ -79,9 +79,13 @@ const actions = {
     return axios.post(`/Forum/Post/Subscribe/${post.id}`).catch(() => commit('subscribe', post));
   },
 
-  save({ commit, state, getters }, post: Post) {
-    return axios.post(`/Forum/${state.forum.slug}/Submit/${state.topic?.id || ''}/${post?.id || ''}`, post).then(result => {
-      commit(getters.exists(result.data.id) ? 'update' : 'add', result.data)
+  save({ commit, state, getters }, { post, topic }: { post: Post, topic: Topic }) {
+    const input = { text: post.text, subject: topic?.subject, is_sticky: topic?.is_sticky };
+
+    return axios.post(`/Forum/${state.forum.slug}/Submit/${topic?.id || ''}/${post?.id || ''}`, input).then(result => {
+      commit(getters.exists(result.data.id) ? 'update' : 'add', result.data);
+
+      return result;
     });
   },
 }

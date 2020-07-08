@@ -1,5 +1,13 @@
 <template>
   <div>
+    <div v-if="showTitleInput" class="form-group row">
+      <label class="col-md-2 col-form-label text-right">Temat <em>*</em></label>
+
+      <div class="col-md-10">
+        <input v-model="topic.subject" tabindex="1" autofocus="autofocus" class="form-control" name="subject" type="text">
+      </div>
+    </div>
+
     <ul class="nav nav-tabs">
       <li class="nav-item"><a class="nav-link active">Treść</a></li>
       <li class="nav-item"><a class="nav-link">Załączniki</a></li>
@@ -47,7 +55,7 @@
   import VueButton from '../forms/button.vue';
   import VuePaste from '../../plugins/paste.js';
   import VueToolbar from '../../components/forms/toolbar.vue';
-  import { Post } from "../../types/models";
+  import { Post, Topic } from "../../types/models";
 
   Vue.use(VueAutosize);
   Vue.use(VuePaste, {url: '/Mikroblogi/Paste'});
@@ -67,6 +75,9 @@
     @Ref()
     readonly textarea!: HTMLTextAreaElement;
 
+    @Prop({default: false})
+    readonly showTitleInput!: boolean;
+
     @Prop({default() {
       return {
         text: ''
@@ -74,17 +85,22 @@
     }})
     readonly post!: Post;
 
+    @Prop({default() {
+      return {
+        subject: ''
+      }
+    }})
+    readonly topic!: Topic;
+
     @Emit()
-    cancel() {
-      //
-    }
+    cancel() { }
 
     save() {
       this.isProcessing = true;
 
-      store.dispatch('posts/save', this.post)
-        .then(() => {
-          this.$emit('save');
+      store.dispatch('posts/save', { post: this.post, topic: this.topic })
+        .then(result => {
+          this.$emit('save', result.data);
 
           if (!this.post.id) {
             this.post.text = '';

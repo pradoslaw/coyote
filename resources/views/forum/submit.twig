@@ -16,60 +16,11 @@
 {% import 'components.forms' as forms %}
 
 {% block container %}
-  <div id="form-wrapper" class="row">
-    <div class="col-sm-9">
-      {{ form_start(form) }}
+  <div class="row mt-4">
+    <div id="js-post" class="col-sm-9">
+      <vue-form :show-title-input="true" @save="redirectToTopic"></vue-form>
 
-      {% if diff_in_months(topic.last_post_created_at) >= 6 %}
-        <p class="alert alert-danger">
-          Ostatni post w tym wątku datowany jest na <strong>{{ topic.last_post_created_at|format_date }}</strong>.<br>
-          Problem lub informacje w nim zawarte mogą być nieaktualne. Zastanów się, czy na pewno chcesz dodać nowy post w tym wątku?
-        </p>
-      {% endif %}
-
-      {% if errors.first('_token') %}
-        <p class="alert alert-danger">
-          {{ errors.first('_token') }}
-        </p>
-      {% elseif errors.any %}
-        <p class="alert alert-danger">
-          Formularz nie jest poprawny. Proszę sprawdzić poprawność wprowadzonych danych i spróbować ponownie.
-        </p>
-      {% endif %}
-
-      {{ form_row(form.subject) }}
-      {{ form_row(form.user_name) }}
-
-      <div id="text-area" class="row">
-        <div class="col-12">
-          <ul class="nav nav-tabs">
-            <li class="nav-item"><a class="nav-link active" href="#body" role="tab" data-toggle="tab">Treść</a></li>
-            <li class="nav-item"><a class="nav-link" href="#attachments" role="tab" data-toggle="tab">Załączniki</a></li>
-
-            {% if form.poll is not null %}
-              <li class="nav-item"><a class="nav-link" href="#poll" role="tab" data-toggle="tab">Ankieta</a></li>
-            {% endif %}
-
-            <li class="nav-item"><a class="nav-link" href="#preview" role="tab" data-toggle="tab" data-url="{{ route('forum.preview') }}">Podgląd</a></li>
-          </ul>
-
-          <div class="tab-content">
-            {{ form_row(form.text) }}
-            {{ form_row(form.attachments) }}
-            {{ form_row(form.poll) }}
-
-            {% include 'forum.partials.preview' %}
-          </div>
-        </div>
-      </div>
-
-      {{ form_row(form.tags) }}
-      {{ form_row(form.is_sticky) }}
-
-      {{ form_row(form.subscribe) }}
-      {{ form_row(form.submit) }}
-
-      {{ form_end() }}
+      <vue-notifications position="bottom right" />
     </div>
 
     <aside class="col-sm-3">
@@ -115,17 +66,15 @@
       </div>
     </aside>
   </div>
-
-  {% import 'components.modals' as modal %}
-
-  {{ modal.alert('Wystąpił błąd podczas dodawania tagu.') }}
 {% endblock %}
 
-{#{% block body %}#}
-{#  {{ parent() }}#}
+{% block body %}
 
-{#  <script src="{{ cdn('js/wikieditor.js') }}"></script>#}
+  <script>
+    var forum = {{ forum|json_encode|raw }};
+  </script>
 
+  {{ parent() }}
 {#  <script>#}
 {#    $(function () {#}
 {#      var toolTipHints = $('#hint-subject, #hint-text, #hint-tags, #hint-user_name');#}
@@ -150,4 +99,4 @@
 {#      $('#submit-form').find('textarea, input[type="text"]').first().focus();#}
 {#    });#}
 {#  </script>#}
-{#{% endblock %}#}
+{% endblock %}

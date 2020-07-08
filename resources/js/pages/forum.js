@@ -157,6 +157,10 @@ new Vue({
       const firstPost = window.pagination.data[Object.keys(window.pagination.data)[0]];
 
       return (this.user.id === firstPost.user_id || post.permissions.update) && post.id !== firstPost.id;
+    },
+
+    redirectToTopic(post) {
+      window.location.href = post.url;
     }
   },
   computed: {

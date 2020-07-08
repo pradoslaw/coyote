@@ -45,22 +45,9 @@
   }
 
   .logo {
-    //margin-right: 10px;
     font-size: 18px;
     color: $brand-primary;
     padding: 5px;
-    //position: relative;
-    //
-    //b {
-    //  width: 12px;
-    //  height: 12px;
-    //  background-color: #d7661c;
-    //  border-radius: 50%;
-    //  position: absolute;
-    //  bottom: 2px;
-    //  right: 0;
-    //  border: 2px solid #fff;
-    //}
   }
 
   .col-lg-stat {
@@ -278,11 +265,6 @@
 // -----------------------------------------
 
 @import "forum/topic";
-
-// Formularz tworzenia nowego watku/edycji/odpowiadania w watku
-// -------------------------------------------------------------
-
-@import "forum/posting";
 
 // Strona wyszukiwarki forum
 // -------------------------------------------------------------
