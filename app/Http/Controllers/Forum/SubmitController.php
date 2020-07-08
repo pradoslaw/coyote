@@ -141,6 +141,7 @@ class SubmitController extends BaseController
         $tracker = Tracker::make($topic);
 
         PostResource::withoutWrapping();
+        $post->user->group = $post->user->group->name;
 
         return (new PostResource($post))->setTracker($tracker)->setSigParser(app('parser.sig'));
     }

@@ -38,6 +38,8 @@ class Post extends Model
     use SoftDeletes;
     use Searchable;
 
+    protected $attributes = ['score' => 0];
+
     /**
      * The attributes that are mass assignable.
      *
