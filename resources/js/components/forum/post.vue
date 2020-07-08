@@ -90,7 +90,7 @@
             </a>
           </div>
 
-          <div class="post-content">
+          <div v-if="!isEditing" class="post-content">
             <div v-html="post.html"></div>
 
             <template v-if="post.user && post.user.sig">
@@ -98,6 +98,8 @@
               <footer v-html="post.user.sig"></footer>
             </template>
           </div>
+
+          <vue-form v-else ref="form" :post="post" class="post-content mt-2 mb-2" @cancel="isEditing = false" @save="isEditing = false"></vue-form>
 
           <div v-if="post.edit_count" class="edit-info">
             <strong>
@@ -139,7 +141,7 @@
           </div>
 
           <div v-if="post.permissions.write" class="ml-auto">
-            <button v-if="post.permissions.update && !post.deleted_at" class="btn btn-sm">
+            <button v-if="post.permissions.update && !post.deleted_at" @click="edit" class="btn btn-sm">
               <i class="fa fa-fw fa-edit"></i> <span class="d-none d-sm-inline">Edytuj</span>
             </button>
 
@@ -183,13 +185,14 @@
 </template>
 <script lang="ts">
   import Vue from 'vue';
-  import { Prop } from "vue-property-decorator";
+  import {Prop, Ref} from "vue-property-decorator";
   import Component from "vue-class-component";
   import { Post } from '../../types/models';
   import VueClipboard from '../../plugins/clipboard';
   import VueAvatar from '../avatar.vue';
   import VueUserName from "../user-name.vue";
   import VueComment from './comment.vue';
+  import VueForm from  './form.vue';
   import formatDistanceToNow from 'date-fns/formatDistanceToNow';
   import { pl } from 'date-fns/locale';
   import {mapActions, mapGetters, mapState} from "vuex";
@@ -198,7 +201,7 @@
 
   @Component({
     name: 'post',
-    components: { 'vue-avatar': VueAvatar, 'vue-user-name': VueUserName, 'vue-comment': VueComment },
+    components: { 'vue-avatar': VueAvatar, 'vue-user-name': VueUserName, 'vue-comment': VueComment, 'vue-form': VueForm },
     methods: mapActions('posts', ['vote', 'accept', 'subscribe']),
     computed: {
       ...mapState('user', {user: state => state}),
@@ -210,8 +213,13 @@
     @Prop(Object)
     post!: Post;
 
+    protected  isEditing = false;
+
     @Prop({default: false})
     isAcceptAllowed!: boolean;
+
+    @Ref()
+    protected readonly form!: VueForm;
 
     formatDistanceToNow(date) {
       return formatDistanceToNow(new Date(date), { locale: pl });
@@ -223,6 +231,15 @@
       }
       else {
         this.$notify({type: 'error', text: 'Nie można skopiować linku do schowka.'});
+      }
+    }
+
+    edit() {
+      this.isEditing = !this.isEditing;
+
+      if (this.isEditing) {
+        // @ts-ignore
+        this.$nextTick(() => this.form.textarea.focus());
       }
     }
 

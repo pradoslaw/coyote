@@ -12,6 +12,9 @@
       <textarea
         v-autosize
         v-model="post.text"
+        @keydown.ctrl.enter="save"
+        @keydown.meta.enter="save"
+        @keydown.esc="cancel"
         name="text"
         class="form-control"
         ref="textarea"
@@ -22,7 +25,13 @@
 
     <div class="row mt-2">
       <div class="col-12">
-        <vue-button :disabled="isProcessing" class="btn btn-primary btn-sm float-right" @click.native.prevent="save">Zapisz</vue-button>
+        <vue-button :disabled="isProcessing" title="Kliknij, aby zapisać (Ctrl+Enter)" class="btn btn-primary btn-sm float-right" @click.native.prevent="save">
+          Zapisz
+        </vue-button>
+
+        <button v-if="post.id" @click="cancel" title="Anuluj (Esc)" class="btn btn-sm btn-danger float-right mr-2" tabindex="3">
+          Anuluj
+        </button>
       </div>
     </div>
   </div>
@@ -31,7 +40,7 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from "vue-class-component";
-  import { Ref, Mixins, Prop } from "vue-property-decorator";
+  import {Ref, Mixins, Prop, Emit} from "vue-property-decorator";
   import store from "../../store";
   import VueAutosize from '../../plugins/autosize';
   import VuePrompt from '../forms/prompt.vue';
@@ -55,6 +64,9 @@
   export default class VueForm extends Vue {
     isProcessing = false;
 
+    @Ref()
+    readonly textarea!: HTMLTextAreaElement;
+
     @Prop({default() {
       return {
         text: ''
@@ -62,10 +74,23 @@
     }})
     readonly post!: Post;
 
+    @Emit()
+    cancel() {
+      //
+    }
+
     save() {
       this.isProcessing = true;
 
-      store.dispatch('posts/save', this.post).finally(() => this.isProcessing = false);
+      store.dispatch('posts/save', this.post)
+        .then(() => {
+          this.$emit('save');
+
+          if (!this.post.id) {
+            this.post.text = '';
+          }
+        })
+        .finally(() => this.isProcessing = false);
     }
 
   }
