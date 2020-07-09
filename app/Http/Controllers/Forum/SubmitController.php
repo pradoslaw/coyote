@@ -108,7 +108,7 @@ class SubmitController extends BaseController
             $post->save();
 
             if ($this->userId) {
-                $topic->subscribe($this->userId, $request->filled('subscribe'));
+                $topic->subscribe($this->userId, $request->filled('is_subscribed'));
             }
 
             // url to the post
