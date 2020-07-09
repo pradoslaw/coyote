@@ -85,6 +85,12 @@ class SubmitController extends BaseController
 
         $post->fill($request->all());
 
+        if ($post->isDirty() && $post->exists) {
+            $post->fill([
+                'edit_count' => $post->edit_count + 1, 'editor_id' => $this->auth->id
+            ]);
+        }
+
         $post = $this->transaction(function () use ($forum, $topic, $post, $request) {
             $actor = new Stream_Actor($this->auth);
 
