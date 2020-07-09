@@ -99,7 +99,15 @@
             </template>
           </div>
 
-          <vue-form v-else ref="form" :post="post" class="post-content mt-2 mb-2" @cancel="isEditing = false" @save="isEditing = false"></vue-form>
+          <vue-form
+            v-else
+            ref="form"
+            :post="post"
+            class="post-content mt-2 mb-2"
+            @cancel="isEditing = false"
+            @save="isEditing = false"
+            :show-title-input="post.id === topic.first_post_id"
+          ></vue-form>
 
           <div v-if="post.edit_count" class="edit-info">
             <strong>
@@ -195,7 +203,7 @@
   import VueForm from  './form.vue';
   import formatDistanceToNow from 'date-fns/formatDistanceToNow';
   import { pl } from 'date-fns/locale';
-  import {mapActions, mapGetters, mapState} from "vuex";
+  import { mapActions, mapGetters, mapState } from "vuex";
 
   Vue.use(VueClipboard);
 
@@ -205,7 +213,8 @@
     methods: mapActions('posts', ['vote', 'accept', 'subscribe']),
     computed: {
       ...mapState('user', {user: state => state}),
-      ...mapGetters('user', ['isAuthorized'])
+      ...mapGetters('user', ['isAuthorized']),
+      ...mapState('posts', ['topic'])
     }
   // mixins: [mixins]
   })
@@ -217,6 +226,8 @@
 
     @Prop({default: false})
     isAcceptAllowed!: boolean;
+
+
 
     @Ref()
     protected readonly form!: VueForm;

@@ -63,6 +63,7 @@
   import VuePaste from '../../plugins/paste.js';
   import VueToolbar from '../../components/forms/toolbar.vue';
   import { Post, Topic } from "../../types/models";
+  import { mapActions, mapGetters, mapState } from "vuex";
 
   Vue.use(VueAutosize);
   Vue.use(VuePaste, {url: '/Mikroblogi/Paste'});
@@ -74,6 +75,9 @@
       'vue-button': VueButton,
       'vue-prompt': VuePrompt,
       'vue-toolbar': VueToolbar
+    },
+    computed: {
+      ...mapState('posts', ['topic'])
     }
   })
   export default class VueForm extends Vue {
@@ -95,12 +99,12 @@
     }})
     readonly post!: Post;
 
-    @Prop({default() {
-      return {
-        subject: ''
-      }
-    }})
-    readonly topic!: Topic;
+    // @Prop({default() {
+    //   return {
+    //     subject: ''
+    //   }
+    // }})
+    public topic!: Topic;
 
     @Emit()
     cancel() { }

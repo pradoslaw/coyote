@@ -99,6 +99,7 @@ export interface Topic {
   is_locked: boolean;
   is_sticky?: boolean;
   subject: string;
+  first_post_id?: number;
 }
 
 export interface Links {

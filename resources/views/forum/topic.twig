@@ -1,7 +1,5 @@
 {% extends 'forum.base' %}
 
-
-
 {% block title %}{{ topic.subject ~ (paginate.currentPage() > 1 ? (' - Strona ' ~ paginate.currentPage())) }}{{ parent() }}{% endblock %}
 {% block description %}{{ excerpt(posts[0].text, 100) }}{% endblock %}
 
@@ -37,8 +35,6 @@
   {% include "forum.partials.top" %}
 
   <main id="js-post" class="mainbar">
-
-
     <div class="row no-gutters mb-3">
       <div class="mr-auto">
         {{ paginate|raw }}
@@ -110,7 +106,6 @@
               <span v-else>Obserwuj wątek</span>
 
               <small v-if="topic.subscribers">(${ topic.subscribers } ${ topic.subscribers | declination(['obserwujący', 'obserwujących', 'obserwujących']) })</small>
-
             </a>
           </li>
 
@@ -197,7 +192,6 @@
         {% endif %}
       </div>
     {% endblock %}
-
 
 
     {% block related %}
