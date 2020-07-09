@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div v-if="showTitleInput" class="form-group row">
-      <label class="col-md-2 col-form-label text-right">Temat <em>*</em></label>
+    <div v-if="showTitleInput" class="form-group">
+      <label class="col-form-label">Temat <em>*</em></label>
 
-      <div class="col-md-10">
-        <input v-model="topic.subject" tabindex="1" autofocus="autofocus" class="form-control" name="subject" type="text">
-      </div>
+      <input v-model="topic.subject" tabindex="1" autofocus="autofocus" class="form-control" name="subject" type="text">
+
+      <small class="text-muted form-text">Bądź rzeczowy. Nie nadawaj wątkom jednowyrazowych tematów.</small>
     </div>
 
     <ul class="nav nav-tabs">
@@ -30,6 +30,13 @@
         tabindex="1"
       ></textarea>
     </vue-prompt>
+
+    <div v-if="showStickyCheckbox" class="form-group">
+      <div class="custom-control custom-checkbox">
+        <input v-model="topic.is_sticky" type="checkbox" class="custom-control-input" id="is-sticky">
+        <label class="custom-control-label" for="is-sticky">Przyklejony wątek</label>
+      </div>
+    </div>
 
     <div class="row mt-2">
       <div class="col-12">
@@ -77,6 +84,9 @@
 
     @Prop({default: false})
     readonly showTitleInput!: boolean;
+
+    @Prop({default: false})
+    readonly showStickyCheckbox!: boolean;
 
     @Prop({default() {
       return {

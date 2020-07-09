@@ -145,6 +145,11 @@ new Vue({
   delimiters: ['${', '}'],
   components: { 'vue-post': VuePost, 'vue-form': VueForm },
   store,
+  data() {
+    return {
+      showStickyCheckbox: window.showStickyCheckbox
+    }
+  },
   created() {
     store.commit('posts/init', { pagination: window.pagination, forum: window.forum, topic: window.topic });
   },

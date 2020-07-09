@@ -45,7 +45,10 @@ class SubmitController extends BaseController
     {
         $this->breadcrumb->push('Nowy wątek', route('forum.topic.submit', [$forum->slug]));
 
-        return Controller::view('forum.submit')->with(compact('forum'));
+        return Controller::view('forum.submit', [
+            'forum' => $forum,
+            'show_sticky_checkbox' => $this->userId ? $this->auth->can('sticky', $forum) : false
+        ]);
     }
 
     /**
