@@ -16,9 +16,15 @@
 {% import 'components.forms' as forms %}
 
 {% block container %}
-  <div class="row mt-4">
+  <div class="row mt-2 mb-4">
     <div id="js-post" class="col-sm-9">
-      <vue-form :show-title-input="true" :show-sticky-checkbox="showStickyCheckbox" @save="redirectToTopic"></vue-form>
+      <vue-form
+        :show-title-input="true"
+        :show-tags-input="true"
+        :show-sticky-checkbox="showStickyCheckbox"
+        :show-subscribe-checkbox="true"
+        @save="redirectToTopic"
+      ></vue-form>
 
       <vue-notifications position="bottom right" />
     </div>
@@ -72,7 +78,7 @@
 
   <script>
     var forum = {{ forum|json_encode|raw }};
-    var topic = {subject: ''};
+    var topic = {subject: '', is_subscribed: {{ user('allow_subscribe') }}};
     var showStickyCheckbox = {{ show_sticky_checkbox }};
   </script>
 

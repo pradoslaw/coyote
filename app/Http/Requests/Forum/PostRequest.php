@@ -48,7 +48,7 @@ class PostRequest extends FormRequest
         $rules = [
             '_token'        => self::RULE_THROTTLE . ($post->id ? ":$post->id" : ''),
             'text'          => self::RULE_TEXT,
-            'subscribe'     => self::RULE_SUBSCRIBE
+            'is_subscribed' => self::RULE_SUBSCRIBE
         ];
 
         if ($this->canChangeSubject($topic, $post)) {

@@ -31,6 +31,12 @@
       ></textarea>
     </vue-prompt>
 
+    <div v-if="showTagsInput" class="form-group">
+      <label class="col-form-label">Tagi <em>*</em></label>
+
+      <input class="form-control" name="tags" type="text">
+    </div>
+
     <div v-if="showStickyCheckbox" class="form-group">
       <div class="custom-control custom-checkbox">
         <input v-model="topic.is_sticky" type="checkbox" class="custom-control-input" id="is-sticky">
@@ -38,13 +44,20 @@
       </div>
     </div>
 
+    <div v-if="showSubscribeCheckbox" class="form-group">
+      <div class="custom-control custom-checkbox">
+        <input v-model="topic.is_subscribed" type="checkbox" class="custom-control-input" id="is-subscribed">
+        <label class="custom-control-label" for="is-subscribed">Obserwowany wątek</label>
+      </div>
+    </div>
+
     <div class="row mt-2">
       <div class="col-12">
-        <vue-button :disabled="isProcessing" title="Kliknij, aby zapisać (Ctrl+Enter)" class="btn btn-primary btn-sm float-right" @click.native.prevent="save">
+        <vue-button :disabled="isProcessing" title="Kliknij, aby zapisać (Ctrl+Enter)" class="btn btn-primary btn-sm" @click.native.prevent="save">
           Zapisz
         </vue-button>
 
-        <button v-if="post.id" @click="cancel" title="Anuluj (Esc)" class="btn btn-sm btn-danger float-right mr-2" tabindex="3">
+        <button v-if="post.id" @click="cancel" title="Anuluj (Esc)" class="btn btn-sm btn-danger mr-2" tabindex="3">
           Anuluj
         </button>
       </div>
@@ -90,7 +103,13 @@
     readonly showTitleInput!: boolean;
 
     @Prop({default: false})
+    readonly showTagsInput!: boolean;
+
+    @Prop({default: false})
     readonly showStickyCheckbox!: boolean;
+
+    @Prop({default: false})
+    readonly showSubscribeCheckbox!: boolean;
 
     @Prop({default() {
       return {

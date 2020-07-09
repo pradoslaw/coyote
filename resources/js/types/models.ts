@@ -101,6 +101,7 @@ export interface Topic {
   is_sticky?: boolean;
   subject: string;
   first_post_id?: number;
+  is_subscribed?: boolean;
 }
 
 export interface Links {
