@@ -60,6 +60,7 @@ interface PostPermission {
   delete: boolean;
   update: boolean;
   merge: boolean;
+  sticky: boolean;
   adm_access: boolean;
 }
 

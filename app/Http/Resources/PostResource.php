@@ -102,6 +102,7 @@ class PostResource extends JsonResource
                     'delete'            => $auth->can('delete', $this->topic) || $auth->can('delete', $this->forum),
                     'update'            => $auth->can('update', $this->resource),
                     'merge'             => $auth->can('merge', $this->forum),
+                    'sticky'            => $auth->can('sticky', $this->forum),
                     'adm_access'        => $auth->can('adm-access')
                 ]];
             }),

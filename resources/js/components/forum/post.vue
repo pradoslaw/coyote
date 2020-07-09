@@ -107,6 +107,7 @@
             @cancel="isEditing = false"
             @save="isEditing = false"
             :show-title-input="post.id === topic.first_post_id"
+            :show-sticky-checkbox="post.id === topic.first_post_id && post.permissions.sticky"
           ></vue-form>
 
           <div v-if="post.edit_count" class="edit-info">
