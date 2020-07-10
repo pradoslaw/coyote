@@ -190,16 +190,17 @@
           <h4>Dla pracodawców</h4>
 
           <span class="edge">
-            <a href="{{ route('job.submit') }}?revalidate=1" class="btn btn-primary">Dodaj ofertę pracy</a>
+            <a href="{{ route('job.submit') }}?revalidate=1" class="btn btn-primary">Dodaj ofertę pracy <strong>za darmo</strong></a>
           </span>
 
-          <p><a href="{{ route('job.business') }}">Już od 30 zł / 40 dni!</a></p>
+{#          <p><a href="{{ route('job.business') }}">Już od 30 zł / 40 dni!</a></p>#}
         </section>
       </div>
     </div>
 
     <div class="row">
       <div class="col-md-9 col-12">
+
         {% for i in 0..4 %}
           <div v-if="skeleton" class="card card-default card-job margin-md-bottom">
             <div class="card-body">
