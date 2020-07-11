@@ -8,6 +8,7 @@ use Coyote\Http\Resources\CommentResource;
 use Coyote\Job;
 use Coyote\Notifications\Job\CommentedNotification;
 use Coyote\Notifications\Job\RepliedNotification;
+use Coyote\Services\Stream\Actor as Stream_Actor;
 use Illuminate\Contracts\Notifications\Dispatcher;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
@@ -37,11 +38,17 @@ class CommentController extends Controller
             $model->user_id = $this->userId;
         });
 
-        $this->transaction(function () use ($comment, $job, $dispatcher) {
+
+        $actor = new Stream_Actor($this->auth);
+        if (auth()->guest()) {
+            $actor->displayName = $request->input('email');
+        }
+
+        $this->transaction(function () use ($comment, $job, $dispatcher, $actor) {
             $comment->save();
 
             stream(
-                $comment->wasRecentlyCreated ? Stream_Create::class : Stream_Update::class,
+                $comment->wasRecentlyCreated ? new Stream_Create($actor) : new Stream_Update($actor),
                 (new Stream_Comment())->map($job, $comment),
                 (new Stream_Job())->map($job)
             );
