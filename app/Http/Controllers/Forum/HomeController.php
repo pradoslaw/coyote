@@ -107,18 +107,6 @@ class HomeController extends BaseController
     }
 
     /**
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function preview(Request $request)
-    {
-        $parser = app('parser.post');
-        $parser->cache->setEnable(false);
-
-        return response($parser->parse((string) $request->get('text')));
-    }
-
-    /**
      * @return \Illuminate\View\View
      */
     public function categories()

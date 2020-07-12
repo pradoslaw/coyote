@@ -80,7 +80,7 @@ const actions = {
   },
 
   save({ commit, state, getters }, { post, topic }: { post: Post, topic: Topic }) {
-    const input = { text: post.text, subject: topic?.subject, is_sticky: topic?.is_sticky };
+    const input = { text: post.text, subject: topic?.subject, is_sticky: topic?.is_sticky, is_subscribed: topic?.is_subscribed };
 
     return axios.post(`/Forum/${state.forum.slug}/Submit/${topic?.id || ''}/${post?.id || ''}`, input).then(result => {
       commit(getters.exists(result.data.id) ? 'update' : 'add', result.data);

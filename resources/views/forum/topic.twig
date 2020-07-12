@@ -53,6 +53,7 @@
       :key="post.id"
       :post="post"
       :is-accept-allowed="isAcceptAllowed(post)"
+      @reply="reply"
     ></vue-post>
 
     <div class="row no-gutters mb-3">
@@ -79,8 +80,9 @@
       </div>
     {% endif %}
 
-    {# todo: wyswietlamy tylko gdy mozna pisac w tym watku #}
-    <vue-form></vue-form>
+    {% if not is_locked or is_writeable %}
+      <vue-form id="js-submit-form" :post="undefinedPost"></vue-form>
+    {% endif %}
 
     <section class="row no-gutters mt-3">
       {% include 'forum.partials.per_page' with {label: 'Liczba odpowiedzi na stronę', perPage: paginate.perPage()} %}

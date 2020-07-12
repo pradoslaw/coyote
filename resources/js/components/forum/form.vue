@@ -9,27 +9,36 @@
     </div>
 
     <ul class="nav nav-tabs">
-      <li class="nav-item"><a class="nav-link active">Treść</a></li>
-      <li class="nav-item"><a class="nav-link">Załączniki</a></li>
-      <li class="nav-item"><a class="nav-link">Podgląd</a></li>
+      <li class="nav-item"><a @click="switchTab('textarea')" :class="{active: activeTab === 'textarea'}" class="nav-link" href="javascript:">Treść</a></li>
+      <li class="nav-item"><a class="nav-link" href="javascript:">Załączniki</a></li>
+      <li class="nav-item"><a @click="switchTab('preview')" :class="{active: activeTab === 'preview'}" class="nav-link" href="javascript:">Podgląd</a></li>
     </ul>
 
-    <vue-toolbar :input="() => $refs.textarea"></vue-toolbar>
+    <div class="tab-content">
+      <div :class="{active: activeTab === 'textarea'}" class="tab-pane">
+        <vue-toolbar :input="() => $refs.textarea"></vue-toolbar>
 
-    <vue-prompt source="/User/Prompt">
-      <textarea
-        v-autosize
-        v-model="post.text"
-        @keydown.ctrl.enter="save"
-        @keydown.meta.enter="save"
-        @keydown.esc="cancel"
-        name="text"
-        class="form-control"
-        ref="textarea"
-        rows="2"
-        tabindex="1"
-      ></textarea>
-    </vue-prompt>
+        <vue-prompt source="/User/Prompt">
+          <textarea
+            v-autosize
+            v-model="post.text"
+            @keydown.ctrl.enter="save"
+            @keydown.meta.enter="save"
+            @keydown.esc="cancel"
+            name="text"
+            class="form-control"
+            ref="textarea"
+            rows="2"
+            tabindex="1"
+          ></textarea>
+        </vue-prompt>
+      </div>
+
+      <div :class="{active: activeTab === 'preview'}" class="tab-pane post-content">
+        <div v-html="post.html"></div>
+      </div>
+    </div>
+
 
     <div v-if="showTagsInput" class="form-group">
       <label class="col-form-label">Tagi <em>*</em></label>
@@ -68,7 +77,7 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from "vue-class-component";
-  import {Ref, Mixins, Prop, Emit} from "vue-property-decorator";
+  import { Ref, Mixins, Prop, Emit, Watch } from "vue-property-decorator";
   import store from "../../store";
   import VueAutosize from '../../plugins/autosize';
   import VuePrompt from '../forms/prompt.vue';
@@ -77,6 +86,7 @@
   import VueToolbar from '../../components/forms/toolbar.vue';
   import { Post, Topic } from "../../types/models";
   import { mapActions, mapGetters, mapState } from "vuex";
+  import axios from 'axios';
 
   Vue.use(VueAutosize);
   Vue.use(VuePaste, {url: '/Mikroblogi/Paste'});
@@ -95,6 +105,7 @@
   })
   export default class VueForm extends Vue {
     isProcessing = false;
+    activeTab = 'textarea'
 
     @Ref()
     readonly textarea!: HTMLTextAreaElement;
@@ -113,20 +124,23 @@
 
     @Prop({default() {
       return {
-        text: ''
+        text: '',
+        html: ''
       }
     }})
-    readonly post!: Post;
+    post!: Post;
 
-    // @Prop({default() {
-    //   return {
-    //     subject: ''
-    //   }
-    // }})
     public topic!: Topic;
 
     @Emit()
     cancel() { }
+
+    @Watch('activeTab')
+    onTabChanged(newValue) {
+      if (newValue === 'preview') {
+        axios.post('/Forum/Preview', {text: this.post.text}).then(result => this.post.html = result.data);
+      }
+    }
 
     save() {
       this.isProcessing = true;
@@ -140,6 +154,10 @@
           }
         })
         .finally(() => this.isProcessing = false);
+    }
+
+    switchTab(activeTab: string) {
+      this.activeTab = activeTab;
     }
 
   }

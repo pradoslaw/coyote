@@ -147,7 +147,8 @@ new Vue({
   store,
   data() {
     return {
-      showStickyCheckbox: window.showStickyCheckbox
+      showStickyCheckbox: window.showStickyCheckbox,
+      undefinedPost: { text: '', html: '' }
     }
   },
   created() {
@@ -166,6 +167,16 @@ new Vue({
 
     redirectToTopic(post) {
       window.location.href = post.url;
+    },
+
+    reply(post) {
+      let text = `> ##### [${post.user.name ? post.user.name : post.user_name} napisał(a)](/Forum/Post/${post.id}):`
+
+      text += "\n" + post.text.replace("\n", "\n> ") + "\n\n"
+
+      this.undefinedPost.text += text;
+
+      document.getElementById('js-submit-form').scrollIntoView();
     }
   },
   computed: {

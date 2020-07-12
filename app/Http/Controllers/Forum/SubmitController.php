@@ -107,7 +107,7 @@ class SubmitController extends BaseController
             $post->topic()->associate($topic);
             $post->save();
 
-            if ($this->userId) {
+            if ($topic->wasRecentlyCreated && $this->userId) {
                 $topic->subscribe($this->userId, $request->filled('is_subscribed'));
             }
 
@@ -240,44 +240,14 @@ class SubmitController extends BaseController
     }
 
     /**
-     * Format post text in case of quoting
-     *
      * @param Request $request
-     * @param \Coyote\Topic $topic
-     * @return string
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    protected function getDefaultText(Request $request, $topic)
+    public function preview(Request $request)
     {
-        $text = '';
+        $parser = app('parser.post');
+        $parser->cache->setEnable(false);
 
-        // IDs of posts that user want to quote...
-        $postsId = [];
-        $cookie = isset($_COOKIE['mqid' . $topic->id]) ? $_COOKIE['mqid' . $topic->id] : null;
-
-        if ($cookie) {
-            $postsId = array_map('intval', explode(',', $cookie));
-            // I used raw PHP function because I don't want to use laravel encryption in this case
-            setcookie('mqid' . $topic->id, null, time() - 3600, '/');
-        }
-
-        if ($request->input('quote')) {
-            $postsId[] = intval($request->input('quote'));
-        }
-
-        if (!empty($postsId)) {
-            $posts = $this->post->findPosts(array_unique($postsId), $topic->id);
-
-            // builds text with quoted posts
-            foreach ($posts as $post) {
-                $text .= '> ##### [' .
-                    ($post->name ?: $post->user_name) .
-                    ' napisał(a)](' . route('forum.share', [$post->id]) . '):';
-
-                $text .= "\n> " . str_replace("\n", "\n> ", $post->text);
-                $text .= "\n\n";
-            }
-        }
-
-        return $text;
+        return response($parser->parse((string) $request->get('text')));
     }
 }

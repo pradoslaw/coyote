@@ -164,7 +164,7 @@
               </button>
             </template>
 
-            <button v-if="!post.deleted_at" class="btn btn-sm">
+            <button v-if="!post.deleted_at" @click="$emit('reply', post)" class="btn btn-sm">
               <i class="fa fa-fw fa-quote-left"></i> <span class="d-none d-sm-inline">Odpowiedz</span>
             </button>
 

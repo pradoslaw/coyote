@@ -5,7 +5,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     // strona glowna forum
     $this->get('/', ['uses' => 'HomeController@index', 'as' => 'home']);
 
-    $this->post('Preview', ['uses' => 'HomeController@preview', 'as' => 'preview']);
+    $this->post('Preview', ['uses' => 'SubmitController@preview', 'as' => 'preview']);
 
     $this->get('Tag/{tag_name}', ['uses' => 'HomeController@tag', 'as' => 'tag']);
     $this->post('Tag/save', ['uses' => 'TagController@save', 'as' => 'tag.save']);
