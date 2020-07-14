@@ -66,7 +66,7 @@ class Emphasis extends Parser implements ParserInterface
 
         $user = $this->user->find($this->userId, ['id']);
 
-        if (!$user->can($this->ability)) {
+        if (!$user || !$user->can($this->ability)) {
             return $text;
         }
 
