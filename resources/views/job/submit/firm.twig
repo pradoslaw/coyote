@@ -258,13 +258,13 @@
                   <li class="list-group-item w-50 checked" v-for="benefit in firm.benefits" v-if="default_benefits.indexOf(benefit) === -1">
                     <i class="fas fa-fw fa-check"></i>
 
-                    <input type="text" name="benefits[]" :value="benefit" class="form-control form-control-sm" @keydown.enter.prevent="">
+                    <input type="text" name="benefits[]" maxlength="100" :value="benefit" class="form-control form-control-sm" @keydown.enter.prevent="">
                     <button class="btn btn-secondary btn-sm btn-delete" title="Usuń tę pozycję" @click.prevent="removeBenefit(benefit)"><i class="fas fa-minus-circle text-danger"></i></button>
                   </li>
 
                   <li class="list-group-item w-50 checked">
                     <i class="fas fa-fw fa-check"></i>
-                    <input type="text" name="benefits[]" class="form-control form-control-sm" @keydown.enter.prevent="addBenefit" placeholder="Naciśnij Enter, aby dodać">
+                    <input type="text" name="benefits[]" maxlength="100" class="form-control form-control-sm" @keydown.enter.prevent="addBenefit" placeholder="Naciśnij Enter, aby dodać">
                   </li>
                 </ol>
 
