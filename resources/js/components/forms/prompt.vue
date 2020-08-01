@@ -62,7 +62,7 @@
             this.$refs.dropdown.goDown();
           } else if (keyCode === SpecialKeys.UP) {
             this.$refs.dropdown.goUp();
-          } else if (keyCode === SpecialKeys.ENTER) {
+          } else if (keyCode === SpecialKeys.ENTER || keyCode === SpecialKeys.TAB) {
             const item = this.$refs.dropdown.getSelected();
 
             if (item) {
