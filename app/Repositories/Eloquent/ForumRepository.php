@@ -64,7 +64,8 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
                 function ($item) use ($userId) {
                     return $item + ['user_id' => $userId];
                 },
-                $data)
+                $data
+            )
         );
     }
 

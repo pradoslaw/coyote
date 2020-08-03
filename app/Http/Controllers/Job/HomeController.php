@@ -175,7 +175,8 @@ class HomeController extends BaseController
         });
 
         $input = array_merge(
-            $this->request->all('q', 'city', 'sort', 'salary', 'currency', 'remote_range', 'page'), [
+            $this->request->all('q', 'city', 'sort', 'salary', 'currency', 'remote_range', 'page'),
+            [
                 'tags'          => $this->builder->tag->getTags(),
                 'locations'     => $this->builder->city->getCities(),
                 'remote'        => $this->request->filled('remote') || $this->request->route()->getName() === 'job.remote' ? true : null,
