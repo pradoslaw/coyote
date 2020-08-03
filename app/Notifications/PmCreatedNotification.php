@@ -45,12 +45,14 @@ class PmCreatedNotification extends Notification implements ShouldQueue, ShouldB
     {
         return (new MailMessage)
             ->subject(sprintf('Masz nową wiadomość od: %s', $this->pm->author->name))
-            ->view('emails.notifications.pm', [
+            ->view(
+                'emails.notifications.pm',
+                [
                 'text' => $this->text,
                 'sender' => $this->pm->author->name,
                 'url' => route('user.pm.show', [$this->pm->id], false)
             ]
-        );
+            );
     }
 
     /**

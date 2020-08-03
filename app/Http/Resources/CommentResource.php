@@ -35,7 +35,8 @@ class CommentResource extends JsonResource
     public function toArray($request)
     {
         return array_merge(
-            parent::toArray($request), [
+            parent::toArray($request),
+            [
                 'timestamp'     => $this->created_at->timestamp,
                 'created_at'    => format_date($this->created_at),
                 'user'          => $this->user(),
