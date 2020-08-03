@@ -130,6 +130,13 @@
 
                         break;
 
+                    case 9:
+
+                        onSelect(0);
+                        onClick();
+
+                        break;
+
                     default:
 
                         if (userName.length >= 2) {
@@ -182,7 +189,7 @@
             }).keydown(function (e) {
                 var keyCode = e.keyCode;
 
-                if ((keyCode === 40 || keyCode === 38 || keyCode === 13 || keyCode === 27) && $ul.is(':visible')) {
+                if ((keyCode === 40 || keyCode === 38 || keyCode === 13 || keyCode === 27 || keyCode === 9) && $ul.is(':visible')) {
                     e.preventDefault();
                     return false;
                 }
