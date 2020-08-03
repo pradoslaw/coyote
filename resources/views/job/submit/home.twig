@@ -83,6 +83,8 @@
                 <div class="row">
                   <div class="col-12">
                     <div class="custom-control custom-checkbox mt-2 mb-3">
+                      <input type="hidden" name="is_remote" value="0">
+
                       <vue-checkbox id="is_remote" class="custom-control-input" name="is_remote" :value.sync="job.is_remote"></vue-checkbox>
                       <label for="is_remote" class="custom-control-label">Możliwa praca zdalna w zakresie</label>
 
