@@ -149,20 +149,12 @@
           this.setTitle(this.title);
           this.setIcon('/img/favicon.png');
         }
-      },
-
-      // isOpen(flag) {
-      //   if (!flag) {
-      //     this.resetNotifications();
-      //   }
-      // }
+      }
     },
 
     computed: {
       ...mapState('notifications', ['notifications', 'count']),
-      ...mapGetters('notifications', ['unreadNotifications', 'isEmpty']),
-      // ...mapMutations('notifications', ['reset'])
-
+      ...mapGetters('notifications', ['unreadNotifications', 'isEmpty'])
     }
   }
 </script>
