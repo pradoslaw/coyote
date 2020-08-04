@@ -4,6 +4,7 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ConcatPlugin = require('webpack-concat-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin');
 
@@ -131,6 +132,8 @@ module.exports = {
     // search: './sass/pages/search.scss'
   },
   plugins: [
+    new VueLoaderPlugin(),
+
     new CleanWebpackPlugin(['public/js/*.*', 'public/css/*.*'], {}),
     // @see https://webpack.js.org/guides/caching/#module-identifiers
     new webpack.HashedModuleIdsPlugin(),
