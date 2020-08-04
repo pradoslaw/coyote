@@ -50,6 +50,10 @@ Aby uruchomić testy w laravel:
 
 `docker-compose exec php php vendor/bin/phpunit`
 
+## Jak zgłaszać błędy bezpieczeństwa?
+
+W przypadku znalezienia błędów prosimy o zgłaszanie ich bezpośrednio na e-mail: support@4programmers.net
+
 ## Zadania uruchomiane w tle
 
 Na serwerze produkcyjnym niektóre zadanie wykonywane są w tle. Dodawane są one do kolejki oraz wykonywane przez proces działający w tle.
