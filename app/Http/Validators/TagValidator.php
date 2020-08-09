@@ -36,7 +36,7 @@ class TagValidator
      */
     public function validateTag($attribute, $value)
     {
-        return (bool) preg_match('/' . self::REGEXP . '/', trim($value));
+        return pattern(self::REGEXP)->test(trim($value));
     }
 
     /**
