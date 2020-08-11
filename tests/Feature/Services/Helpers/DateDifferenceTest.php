@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class DateDifferenceTest extends TestCase
 {
-    use TestCaronLocale;
+    use TestCarbonLocale;
 
     /**
      * @test
