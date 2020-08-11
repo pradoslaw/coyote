@@ -156,7 +156,7 @@
             </button>
 
             <template v-if="post.permissions.delete">
-              <button v-if="!post.deleted_at" class="btn btn-sm">
+              <button v-if="!post.deleted_at" @click="deletePost(true)" class="btn btn-sm">
                 <i class="fa fa-fw fa-times"></i> <span class="d-none d-sm-inline">Usuń</span>
               </button>
               <button v-else class="btn btn-sm">
@@ -229,8 +229,6 @@
     @Prop({default: false})
     isAcceptAllowed!: boolean;
 
-
-
     @Ref()
     protected readonly form!: VueForm;
 
@@ -254,6 +252,10 @@
         // @ts-ignore
         this.$nextTick(() => this.form.textarea.focus());
       }
+    }
+
+    deletePost(confirm = false) {
+      this.$store.dispatch('posts/delete', this.post);
     }
 
   }

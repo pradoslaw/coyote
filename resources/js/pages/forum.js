@@ -172,7 +172,7 @@ new Vue({
     reply(post) {
       let text = `> ##### [${post.user.name ? post.user.name : post.user_name} napisał(a)](/Forum/Post/${post.id}):`
 
-      text += "\n" + post.text.replace("\n", "\n> ") + "\n\n"
+      text += "\n" + post.text.replace(/\n/, "\n> ") + "\n\n"
 
       this.undefinedPost.text += text;
 

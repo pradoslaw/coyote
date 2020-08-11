@@ -113,7 +113,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     ]);
 
     // usuwanie posta
-    $this->post('Post/Delete/{post}', [
+    $this->delete('Post/Delete/{post}', [
         'uses' => 'DeleteController@index',
         'as' => 'post.delete',
         'middleware' => 'auth'

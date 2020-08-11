@@ -26,6 +26,10 @@ const mutations = {
     Vue.set(state.data, post.id!, {...state.data[post.id!], ...{text, html}})
   },
 
+  delete(state, post: Post) {
+    post.deleted_at = new Date();
+  },
+
   vote(state, post: Post) {
     if (post.is_voted) {
       post.is_voted = false;
@@ -88,6 +92,10 @@ const actions = {
       return result;
     });
   },
+
+  delete({ commit }, post: Post) {
+    return axios.delete(`/Forum/Post/Delete/${post.id}`).then(() => commit('delete', post));
+  }
 }
 
 export default {

@@ -26,7 +26,6 @@ class DeleteController extends BaseController
      * @param \Coyote\Post $post
      * @param Request $request
      * @param Dispatcher $dispatcher
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function index($post, Request $request, Dispatcher $dispatcher)
     {
@@ -102,7 +101,6 @@ class DeleteController extends BaseController
 
                 $url .= '?p=' . $post->id . '#id' . $post->id;
 
-                $redirect = back();
                 // fire the event. delete from search index
                 event(new PostWasDeleted($post));
 
@@ -115,9 +113,6 @@ class DeleteController extends BaseController
             }
 
             stream(Stream_Delete::class, $object, $target);
-            return $redirect->with('success', 'Post został usunięty.');
         });
-
-        return $url;
     }
 }
