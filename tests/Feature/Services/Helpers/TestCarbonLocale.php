@@ -4,7 +4,7 @@ namespace Tests\Feature\Services\Helpers;
 
 use Carbon\Carbon;
 
-trait TestCaronLocale
+trait TestCarbonLocale
 {
     /** @var string */
     private $locale;
