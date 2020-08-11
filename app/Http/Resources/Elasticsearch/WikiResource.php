@@ -69,16 +69,16 @@ class WikiResource extends ElasticsearchResource
         $result = array_merge(
             $result,
             $this->subscribers()->pluck('user_id')->map(function ($userId) {
-            return 'subscriber:' . $userId;
-        })
+                return 'subscriber:' . $userId;
+            })
             ->toArray()
         );
 
         $result = array_merge(
             $result,
             $this->authors()->pluck('user_id')->map(function ($userId) {
-            return 'participant:' . $userId;
-        })
+                return 'participant:' . $userId;
+            })
             ->toArray()
         );
 
