@@ -139,7 +139,8 @@ class TopicController extends BaseController
                 $flags = $this->getFlags($postIds);
             }
 
-            $this->forum->skipCriteria(true);
+            $this->forum->resetCriteria();
+            $this->pushForumCriteria(false);
 
             $treeBuilder->setForums($this->forum->list());
             $adminForumList = $treeDecorator->build();
