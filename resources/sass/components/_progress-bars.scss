@@ -19,12 +19,14 @@
     font-size: $font-size-small;
     color: white;
     position: absolute;
+
     &.rep {
-      top: 4px;
+      top: 11px;
       left: 10px;
     }
+
     &.rank {
-      top: 4px;
+      top: 11px;
       right: 10px;
     }
   }
