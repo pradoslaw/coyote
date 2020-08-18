@@ -1,12 +1,12 @@
 <template>
   <div :class="{'is-deleted': post.deleted_at}" class="card card-post">
-    <div v-if="post.deleted_at" class="post-delete card-body">
+    <a v-if="post.deleted_at" @click="isCollapsed = !isCollapsed" href="javascript:" class="post-delete card-body">
       <i class="fas fa-warning"></i>
 
-      Post usunięty
-    </div>
+      Post usunięty dnia <vue-timeago :datetime="post.deleted_at"></vue-timeago>
+    </a>
 
-    <div :class="{'collapse': post.deleted_at}" class="card-body">
+    <div :class="{'collapse': isCollapsed}" class="card-body">
       <div class="media d-lg-none">
         <div class="media-left mr-2">
           <vue-avatar v-if="post.user" :id="post.user.id" :name="post.user.name" :photo="post.user.photo" class="d-block i-35 img-thumbnail"></vue-avatar>
@@ -191,6 +191,16 @@
         </div>
       </div>
     </div>
+
+    <vue-modal ref="confirm">
+      Czy na pewno chcesz usunąć ten post?
+
+      <template slot="buttons">
+        <button @click="$refs.confirm.close()" type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj
+        </button>
+        <button @click="deletePost(false)" type="submit" class="btn btn-danger danger">Tak, usuń</button>
+      </template>
+    </vue-modal>
   </div>
 </template>
 <script lang="ts">
@@ -206,12 +216,13 @@
   import formatDistanceToNow from 'date-fns/formatDistanceToNow';
   import { pl } from 'date-fns/locale';
   import { mapActions, mapGetters, mapState } from "vuex";
+  import VueModal from "../modal.vue";
 
   Vue.use(VueClipboard);
 
   @Component({
     name: 'post',
-    components: { 'vue-avatar': VueAvatar, 'vue-user-name': VueUserName, 'vue-comment': VueComment, 'vue-form': VueForm },
+    components: { 'vue-avatar': VueAvatar, 'vue-user-name': VueUserName, 'vue-comment': VueComment, 'vue-form': VueForm, 'vue-modal': VueModal },
     methods: mapActions('posts', ['vote', 'accept', 'subscribe']),
     computed: {
       ...mapState('user', {user: state => state}),
@@ -224,13 +235,18 @@
     @Prop(Object)
     post!: Post;
 
-    protected  isEditing = false;
+    isCollapsed = this.post.deleted_at != null;
+
+    isEditing = false;
 
     @Prop({default: false})
     isAcceptAllowed!: boolean;
 
     @Ref()
-    protected readonly form!: VueForm;
+    readonly form!: VueForm;
+
+    @Ref()
+    readonly confirm!: VueModal;
 
     formatDistanceToNow(date) {
       return formatDistanceToNow(new Date(date), { locale: pl });
@@ -255,7 +271,15 @@
     }
 
     deletePost(confirm = false) {
-      this.$store.dispatch('posts/delete', this.post);
+      if (confirm) {
+        // @ts-ignore
+        this.confirm.open();
+      }
+      else {
+        // @ts-ignore
+        this.confirm.close();
+        this.$store.dispatch('posts/delete', this.post);
+      }
     }
 
   }

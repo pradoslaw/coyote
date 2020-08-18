@@ -45,7 +45,7 @@ class DeleteController extends BaseController
 
         $topic = &$post->topic;
 
-        $url = $this->transaction(function () use ($post, $topic, $forum, $request, $dispatcher) {
+        $this->transaction(function () use ($post, $topic, $forum, $request, $dispatcher) {
             $url = UrlBuilder::topic($topic);
 
             $reason = new Reason();
