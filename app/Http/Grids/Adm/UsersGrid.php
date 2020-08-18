@@ -49,8 +49,7 @@ class UsersGrid extends Grid
             ])
             ->addColumn('is_active', [
                 'title' => 'Aktywny',
-                'decorators' => [new Boolean()],
-                'filter' => new Select(['options' => $booleanOptions])
+                'decorators' => [new Boolean()]
             ])
             ->addColumn('is_blocked', [
                 'title' => 'Zablokowany',
