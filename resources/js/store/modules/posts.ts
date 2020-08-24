@@ -32,6 +32,9 @@ const mutations = {
 
   restore(state, post: Post) {
     post.deleted_at = null;
+
+    delete post.delete_reason;
+    delete post.deleter_name;
   },
 
   vote(state, post: Post) {

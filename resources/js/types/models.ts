@@ -77,6 +77,8 @@ export interface Post {
   id: number;
   user?: User;
   editor?: User;
+  deleter_name?: string;
+  delete_reason?: string;
   created_at: Date | null;
   updated_at: Date | null;
   deleted_at: Date | null;

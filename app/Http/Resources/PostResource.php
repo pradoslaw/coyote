@@ -21,8 +21,10 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property string $user_name
  * @property string $text
  * @property string $html
+ * @property string $delete_reason
  * @property User $user
  * @property User|null $editor
+ * @property User|null $deleter
  * @property int $score
  * @property int $edit_count
  * @property Topic $topic
@@ -69,7 +71,7 @@ class PostResource extends JsonResource
      */
     public function toArray($request)
     {
-        $only = $this->resource->only(['id', 'user_name', 'score', 'text', 'edit_count', 'is_voted', 'is_accepted', 'is_subscribed', 'user_id']);
+        $only = $this->resource->only(['id', 'user_name', 'score', 'text', 'edit_count', 'is_voted', 'is_accepted', 'is_subscribed', 'user_id', 'deleter_name', 'delete_reason']);
         $html = $this->text !== null ? $this->html : null;
 
         if ($this->isSignatureAllowed($request)) {

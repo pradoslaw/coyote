@@ -31,6 +31,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Coyote\Post\Vote[] $votes
  * @property \Coyote\Post\Comment[] $comments
  * @property \Coyote\User $user
+ * @property \Coyote\User $deleter
  * @property \Coyote\Post\Accept $accept
  */
 class Post extends Model
@@ -149,6 +150,14 @@ class Post extends Model
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function editor()
+    {
+        return $this->belongsTo(User::class)->withTrashed();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function deleter()
     {
         return $this->belongsTo(User::class)->withTrashed();
     }

@@ -3,7 +3,15 @@
     <a v-if="post.deleted_at" @click="isCollapsed = !isCollapsed" href="javascript:" class="post-delete card-body text-decoration-none">
       <i class="fas fa-warning"></i>
 
-      Post usunięty dnia <vue-timeago :datetime="post.deleted_at"></vue-timeago>
+      Post usunięty <vue-timeago :datetime="post.deleted_at"></vue-timeago>
+
+      <template v-if="post.deleter_name">
+        przez {{ post.deleter_name }}
+      </template>.
+
+      <template v-if="post.delete_reason">
+        Powód: {{ post.delete_reason }}.
+      </template>
     </a>
 
     <div :class="{'collapse': isCollapsed}" class="card-body">
