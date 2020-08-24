@@ -133,6 +133,8 @@
 
           <div class="post-comments">
             <vue-comment v-for="comment in post.comments" :key="comment.id" :comment="comment"></vue-comment>
+
+            <vue-comment-form v-if="isCommenting" :comment="commentDefault"></vue-comment-form>
           </div>
         </div>
       </div>
@@ -153,7 +155,7 @@
               <i class="fas fa-fw fa-share-alt"></i> <span class="d-none d-sm-inline">Udostępnij</span>
             </button>
 
-            <button class="btn btn-sm">
+            <button @click="comment" class="btn btn-sm">
               <i class="far fa-fw fa-comment"></i> <span class="d-none d-sm-inline">Komentuj</span>
             </button>
           </div>
@@ -222,6 +224,7 @@
   import VueUserName from "../user-name.vue";
   import VueComment from './comment.vue';
   import VueForm from  './form.vue';
+  import VueCommentForm from "./comment-form.vue";
   import VueSelect from  './../forms/select.vue';
   import formatDistanceToNow from 'date-fns/formatDistanceToNow';
   import { pl } from 'date-fns/locale';
@@ -236,6 +239,7 @@
       'vue-avatar': VueAvatar,
       'vue-user-name': VueUserName,
       'vue-comment': VueComment,
+      'vue-comment-form': VueCommentForm,
       'vue-form': VueForm,
       'vue-modal': VueModal,
       'vue-select': VueSelect
@@ -255,8 +259,13 @@
     isCollapsed = this.post.deleted_at != null;
 
     isEditing = false;
+    isCommenting = false;
 
     reasonId = null;
+
+    private commentDefault = {
+      text: ''
+    }
 
     @Prop({default: false})
     isAcceptAllowed!: boolean;
@@ -290,6 +299,10 @@
         // @ts-ignore
         this.$nextTick(() => this.form.textarea.focus());
       }
+    }
+
+    comment() {
+      this.isCommenting = !this.isCommenting;
     }
 
     deletePost(confirm = false) {
