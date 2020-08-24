@@ -53,6 +53,7 @@
       :key="post.id"
       :post="post"
       :is-accept-allowed="isAcceptAllowed(post)"
+      :reasons="reasons"
       @reply="reply"
     ></vue-post>
 

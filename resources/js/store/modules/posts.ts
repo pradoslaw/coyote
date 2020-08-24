@@ -30,6 +30,10 @@ const mutations = {
     post.deleted_at = new Date();
   },
 
+  restore(state, post: Post) {
+    post.deleted_at = null;
+  },
+
   vote(state, post: Post) {
     if (post.is_voted) {
       post.is_voted = false;
@@ -93,8 +97,12 @@ const actions = {
     });
   },
 
-  delete({ commit }, post: Post) {
-    return axios.delete(`/Forum/Post/Delete/${post.id}`).then(() => commit('delete', post));
+  delete({ commit }, { post, reasonId }: { post: Post, reasonId: number | null }) {
+    return axios.delete(`/Forum/Post/Delete/${post.id}`, { data: { reason: reasonId } }).then(() => commit('delete', post));
+  },
+
+  restore({ commit }, post: Post) {
+    return axios.post(`/Forum/Post/Restore/${post.id}`).then(() => commit('restore', post));
   }
 }
 

@@ -1,6 +1,6 @@
 <template>
   <div :class="{'is-deleted': post.deleted_at}" class="card card-post">
-    <a v-if="post.deleted_at" @click="isCollapsed = !isCollapsed" href="javascript:" class="post-delete card-body">
+    <a v-if="post.deleted_at" @click="isCollapsed = !isCollapsed" href="javascript:" class="post-delete card-body text-decoration-none">
       <i class="fas fa-warning"></i>
 
       Post usunięty dnia <vue-timeago :datetime="post.deleted_at"></vue-timeago>
@@ -159,7 +159,7 @@
               <button v-if="!post.deleted_at" @click="deletePost(true)" class="btn btn-sm">
                 <i class="fa fa-fw fa-times"></i> <span class="d-none d-sm-inline">Usuń</span>
               </button>
-              <button v-else class="btn btn-sm">
+              <button v-else class="btn btn-sm" @click="restore">
                 <i class="fa fa-fw- fa-undo"></i> <span class="d-none d-sm-inline">Przywróć</span>
               </button>
             </template>
@@ -193,11 +193,12 @@
     </div>
 
     <vue-modal ref="confirm">
-      Czy na pewno chcesz usunąć ten post?
+      Post zostanie usunięty. Czy na pewno chcesz to zrobić?
+
+      <p v-if="post.permissions.delete" class="mt-2"><vue-select name="reason_id" :options="reasons" :value.sync="reasonId" class="form-control-sm" placeholder="-- wybierz --"></vue-select></p>
 
       <template slot="buttons">
-        <button @click="$refs.confirm.close()" type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj
-        </button>
+        <button @click="$refs.confirm.close()" type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
         <button @click="deletePost(false)" type="submit" class="btn btn-danger danger">Tak, usuń</button>
       </template>
     </vue-modal>
@@ -213,6 +214,7 @@
   import VueUserName from "../user-name.vue";
   import VueComment from './comment.vue';
   import VueForm from  './form.vue';
+  import VueSelect from  './../forms/select.vue';
   import formatDistanceToNow from 'date-fns/formatDistanceToNow';
   import { pl } from 'date-fns/locale';
   import { mapActions, mapGetters, mapState } from "vuex";
@@ -222,7 +224,14 @@
 
   @Component({
     name: 'post',
-    components: { 'vue-avatar': VueAvatar, 'vue-user-name': VueUserName, 'vue-comment': VueComment, 'vue-form': VueForm, 'vue-modal': VueModal },
+    components: {
+      'vue-avatar': VueAvatar,
+      'vue-user-name': VueUserName,
+      'vue-comment': VueComment,
+      'vue-form': VueForm,
+      'vue-modal': VueModal,
+      'vue-select': VueSelect
+    },
     methods: mapActions('posts', ['vote', 'accept', 'subscribe']),
     computed: {
       ...mapState('user', {user: state => state}),
@@ -239,8 +248,13 @@
 
     isEditing = false;
 
+    reasonId = null;
+
     @Prop({default: false})
     isAcceptAllowed!: boolean;
+
+    @Prop()
+    reasons!: string[];
 
     @Ref()
     readonly form!: VueForm;
@@ -278,9 +292,15 @@
       else {
         // @ts-ignore
         this.confirm.close();
-        this.$store.dispatch('posts/delete', this.post);
+        this.$store.dispatch('posts/delete', { post: this.post, reasonId: this.reasonId }).then(() => this.isCollapsed = true);
       }
     }
+
+    restore() {
+      this.isCollapsed = false;
+      this.$store.dispatch('posts/restore', this.post);
+    }
+
 
   }
 </script>

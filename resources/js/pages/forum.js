@@ -148,7 +148,8 @@ new Vue({
   data() {
     return {
       showStickyCheckbox: window.showStickyCheckbox,
-      undefinedPost: { text: '', html: '' }
+      undefinedPost: { text: '', html: '' },
+      reasons: window.reasons
     }
   },
   created() {
