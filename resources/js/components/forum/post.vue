@@ -134,7 +134,7 @@
           <div class="post-comments">
             <vue-comment v-for="comment in post.comments" :key="comment.id" :comment="comment"></vue-comment>
 
-            <vue-comment-form v-if="isCommenting" :comment="commentDefault"></vue-comment-form>
+            <vue-comment-form v-if="isCommenting" :comment="commentDefault" @save="isCommenting = false"></vue-comment-form>
           </div>
         </div>
       </div>
@@ -264,7 +264,8 @@
     reasonId = null;
 
     private commentDefault = {
-      text: ''
+      text: '',
+      post_id: this.post.id
     }
 
     @Prop({default: false})

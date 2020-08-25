@@ -18,7 +18,7 @@
 
     <p class="text-muted float-left">Pozostało <strong>580</strong> znaków</p>
 
-    <button type="submit" class="btn btn-sm btn-primary float-right" title="Kliknij, aby wysłać (Ctrl+Enter)">Zapisz</button>
+    <vue-button :disabled="isProcessing" class="btn btn-sm btn-primary float-right" title="Kliknij, aby wysłać (Ctrl+Enter)">Zapisz</vue-button>
   </form>
 </template>
 
@@ -29,6 +29,7 @@
   import store from "../../store";
   import VueAutosize from '../../plugins/autosize';
   import VuePrompt from '../forms/prompt.vue';
+  import VueButton from '../forms/button.vue';
   import { PostComment } from "../../types/models";
 
   Vue.use(VueAutosize);
@@ -37,7 +38,8 @@
     name: 'post-comment-form',
     store,
     components: {
-      'vue-prompt': VuePrompt
+      'vue-prompt': VuePrompt,
+      'vue-button': VueButton
     }
   })
   export default class VueCommentForm extends Vue {
@@ -47,7 +49,17 @@
     isProcessing = false;
 
     saveComment() {
+      this.isProcessing = true;
 
+      store.dispatch('posts/saveComment', this.comment)
+        .then(() => {
+          this.$emit('save');
+
+          if (!this.comment.id) {
+            this.comment.text = '';
+          }
+        })
+        .finally(() => this.isProcessing = false);
     }
 
     cancel() {

@@ -66,6 +66,7 @@ interface PostPermission {
 
 export interface PostComment {
   id: number;
+  post_id: number;
   created_at: Date | null;
   updated_at: Date | null;
   text: string;

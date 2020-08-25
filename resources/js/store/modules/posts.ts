@@ -1,8 +1,9 @@
 import axios from "axios";
-import { Post, Forum, Topic } from "../../types/models";
+import {Post, Forum, Topic, PostComment, Microblog} from "../../types/models";
 import Vue from "vue";
 
 type PostObj = {[key: number]: Post};
+type ParentChild = { post: Post, comment: PostComment };
 
 const state: { data: PostObj, links: null, meta: null, forum?: Forum, topic?: Topic } = {data: {}, links: null, meta: null}
 
@@ -28,6 +29,10 @@ const mutations = {
 
   delete(state, post: Post) {
     post.deleted_at = new Date();
+  },
+
+  addComment(state, { post, comment}: ParentChild) {
+    Vue.set(post.comments, comment.id!, comment);
   },
 
   restore(state, post: Post) {
@@ -97,6 +102,14 @@ const actions = {
       commit(getters.exists(result.data.id) ? 'update' : 'add', result.data);
 
       return result;
+    });
+  },
+
+  saveComment({ state, commit, getters }, comment: PostComment) {
+    return axios.post(`/Forum/Comment/${comment.id || ''}`, comment).then(result => {
+      const post = state.data[comment.post_id!];
+
+      commit(post.comments[comment.id!] ? 'updateComment' : 'addComment', { post, comment: result.data });
     });
   },
 

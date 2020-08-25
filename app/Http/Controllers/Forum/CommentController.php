@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Events\CommentDeleted;
 use Coyote\Events\CommentSaved;
+use Coyote\Http\Resources\PostCommentResource;
 use Coyote\Notifications\Post\Comment\UserMentionedNotification;
 use Coyote\Notifications\Post\CommentedNotification;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
@@ -120,34 +121,26 @@ class CommentController extends Controller
 
         event(new CommentSaved($this->comment));
 
-        foreach (['name', 'is_blocked', 'is_active', 'photo'] as $key) {
-            $this->comment->{$key} = $user->{$key};
-        }
+        PostCommentResource::withoutWrapping();
 
-        // pass html version of comment to  twig
-        $this->comment->text = $this->comment->html;
+        return new PostCommentResource($this->comment);
 
-        // we need to pass is_writeable variable to let know that we are able to edit/delete this comment
-        return view('forum.partials.comment', [
-            'is_writeable'  => true,
-            // get topic's author id
-            'author_id'     => $this->topic->firstPost->user_id,
-            'comment'       => $this->comment,
-            'forum'         => $this->forum
-        ]);
-    }
-
-    /**
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
-     */
-    public function edit()
-    {
-        $this->authorize('update', [$this->comment, $this->forum]);
-
-        return view('forum.partials.form', [
-            'post'      => ['id' => $this->comment->post_id],
-            'comment'   => $this->comment
-        ]);
+//        foreach (['name', 'is_blocked', 'is_active', 'photo'] as $key) {
+//            $this->comment->{$key} = $user->{$key};
+//        }
+//
+//        $this->comment->text = $this->comment->html;
+//
+//
+//
+//        // we need to pass is_writeable variable to let know that we are able to edit/delete this comment
+//        return view('forum.partials.comment', [
+//            'is_writeable'  => true,
+//            // get topic's author id
+//            'author_id'     => $this->topic->firstPost->user_id,
+//            'comment'       => $this->comment,
+//            'forum'         => $this->forum
+//        ]);
     }
 
     /**
