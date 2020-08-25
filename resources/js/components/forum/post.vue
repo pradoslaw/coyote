@@ -134,7 +134,7 @@
           <div class="post-comments">
             <vue-comment v-for="comment in post.comments" :key="comment.id" :comment="comment"></vue-comment>
 
-            <vue-comment-form v-if="isCommenting" :comment="commentDefault" @save="isCommenting = false"></vue-comment-form>
+            <vue-comment-form v-show="isCommenting" :comment="commentDefault" @save="isCommenting = false" @cancel="isCommenting = false" ref="comment-form"></vue-comment-form>
           </div>
         </div>
       </div>
@@ -257,10 +257,8 @@
     post!: Post;
 
     isCollapsed = this.post.deleted_at != null;
-
     isEditing = false;
     isCommenting = false;
-
     reasonId = null;
 
     private commentDefault = {
@@ -276,6 +274,9 @@
 
     @Ref()
     readonly form!: VueForm;
+
+    @Ref('comment-form')
+    readonly commentForm!: VueCommentForm;
 
     @Ref()
     readonly confirm!: VueModal;
@@ -304,6 +305,11 @@
 
     comment() {
       this.isCommenting = !this.isCommenting;
+
+      if (this.isCommenting) {
+        // @ts-ignore
+        this.$nextTick(() => this.commentForm.textarea.focus());
+      }
     }
 
     deletePost(confirm = false) {

@@ -18,14 +18,15 @@
 
     <p class="text-muted float-left">Pozostało <strong>580</strong> znaków</p>
 
-    <vue-button :disabled="isProcessing" class="btn btn-sm btn-primary float-right" title="Kliknij, aby wysłać (Ctrl+Enter)">Zapisz</vue-button>
+    <vue-button :disabled="isProcessing" @click.native.prevent="saveComment" class="btn btn-sm btn-primary float-right" title="Kliknij, aby wysłać (Ctrl+Enter)">Zapisz</vue-button>
+    <button @click.prevent="cancel" class="btn btn-sm btn-danger float-right mr-2">Anuluj</button>
   </form>
 </template>
 
 <script lang="ts">
   import Vue from 'vue';
   import Component from "vue-class-component";
-  import {Mixins, Prop} from "vue-property-decorator";
+  import {Mixins, Prop, Ref} from "vue-property-decorator";
   import store from "../../store";
   import VueAutosize from '../../plugins/autosize';
   import VuePrompt from '../forms/prompt.vue';
@@ -46,6 +47,9 @@
     @Prop(Object)
     comment!: PostComment;
 
+    @Ref()
+    readonly textarea!: HTMLTextAreaElement;
+
     isProcessing = false;
 
     saveComment() {
@@ -63,7 +67,7 @@
     }
 
     cancel() {
-
+      this.$emit('cancel');
     }
   }
 </script>
