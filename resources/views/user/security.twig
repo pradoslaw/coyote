@@ -4,72 +4,72 @@
 {% import 'components/forms.twig' as forms %}
 
 {% block content %}
-    <h2>Ostatnia wizyta</h2>
+  <h2>Ostatnia wizyta</h2>
 
-    <div class="card card-default">
-        <div class="card-body">
+  <div class="card card-default">
+    <div class="card-body">
 
-            <div>
-                <div class="form-group-sm">
-                    <label class="col-md-4 col-form-label">Data i czas</label>
-                    <div class="col-md-6">
-                        <p class="form-control-static">{{ user('visited_at')|format_date }}</p>
-                    </div>
-                </div>
-
-                <div class="form-group-sm">
-                    <label class="col-md-4 col-form-label">Adres IP</label>
-                    <div class="col-md-6">
-                        <p class="form-control-static">{{ user('ip') }}</p>
-                    </div>
-                </div>
-
-                <div class="form-group-sm">
-                    <label class="col-md-4 col-form-label">Przeglądarka</label>
-                    <div class="col-md-8">
-                        <p class="form-control-static">{{ user('browser') }}</p>
-                    </div>
-                </div>
-
-                <div class="form-group-sm">
-                    <label class="col-md-4 col-form-label">Liczba wizyt</label>
-                    <div class="col-md-6">
-                        <p class="form-control-static">{{ user('visits')|number_format(0, ' ', ' ') }}</p>
-                    </div>
-                </div>
-            </div>
+      <div>
+        <div class="form-group row">
+          <label class="col-md-4 col-form-label">Data i czas</label>
+          <div class="col-md-6">
+            <p class="form-control-plaintext">{{ user('visited_at')|format_date }}</p>
+          </div>
         </div>
-    </div>
 
-    <h2>Ustawienia bezpieczeństwa</h2>
-
-    <div id="box-security" class="card card-default">
-        <div class="card-body">
-            {{ form_open({'method': 'POST', 'role': 'form', 'url': route('user.security')}) }}
-
-            {{ forms.checkbox('alert_login', 'Chce otrzymywać wiadomość e-mail o udanym logowaniu na moje konto', 1, user('alert_login')) }}
-            {{ forms.checkbox('alert_failure', 'Chce otrzymywać wiadomość e-mail o nieudanej próbie logowania na moje konto', 1, user('alert_failure')) }}
-
-            <div class="form-group">
-                <label class="col-md-4 col-form-label">Dostęp z adresów IP</label>
-                <div class="col-md-6">
-                    {% set index = 0 %}
-
-                    {% for i in 1..3 %}
-                        <p>
-                            {% for j in 1..4 %}
-                                <input type="text" name="ips[]" value="{{ ips[index] }}" class="form-control form-control-sm" size="3" maxlength="3" tabindex="{{ index + 1 }}" style="display: inline-block; width: 45px">
-                                {% set index = index + 1 %}
-                            {% endfor %}
-                        </p>
-                    {% endfor %}
-
-                    <p class="text-muted">Możesz zabezpieczyć dostęp do swojego konta, podając adresy IP, z jakich będzie możliwy do nich dostęp. Znak gwiazdki (*) zastępuje cały zakres danych.</p>
-                </div>
-            </div>
-
-            {{ forms.submit('Zapisz', 'Zapisywanie...') }}
-            {{ form_close() }}
+        <div class="form-group row">
+          <label class="col-md-4 col-form-label">Adres IP</label>
+          <div class="col-md-6">
+            <p class="form-control-plaintext">{{ user('ip') }}</p>
+          </div>
         </div>
+
+        <div class="form-group row">
+          <label class="col-md-4 col-form-label">Przeglądarka</label>
+          <div class="col-md-8">
+            <p class="form-control-plaintext">{{ user('browser') }}</p>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-md-4 col-form-label">Liczba wizyt</label>
+          <div class="col-md-6">
+            <p class="form-control-plaintext">{{ user('visits')|number_format(0, ' ', ' ') }}</p>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+
+  <h2>Ustawienia bezpieczeństwa</h2>
+
+  <div id="box-security" class="card card-default">
+    <div class="card-body">
+      {{ form_open({'method': 'POST', 'role': 'form', 'url': route('user.security')}) }}
+
+      {{ forms.checkbox('alert_login', 'Chce otrzymywać wiadomość e-mail o udanym logowaniu na moje konto', 1, user('alert_login')) }}
+      {{ forms.checkbox('alert_failure', 'Chce otrzymywać wiadomość e-mail o nieudanej próbie logowania na moje konto', 1, user('alert_failure')) }}
+
+      <div class="form-group row">
+        <label class="col-md-4 col-form-label">Dostęp z adresów IP</label>
+        <div class="col-md-6">
+          {% set index = 0 %}
+
+          {% for i in 1..3 %}
+            <p>
+              {% for j in 1..4 %}
+                <input type="text" name="ips[]" value="{{ ips[index] }}" class="form-control form-control-sm" size="3" maxlength="3" tabindex="{{ index + 1 }}" style="display: inline-block; width: 45px">
+                {% set index = index + 1 %}
+              {% endfor %}
+            </p>
+          {% endfor %}
+
+          <p class="text-muted">Możesz zabezpieczyć dostęp do swojego konta, podając adresy IP, z jakich będzie możliwy do nich dostęp. Znak gwiazdki (*) zastępuje cały zakres danych.</p>
+        </div>
+      </div>
+
+      {{ forms.submit('Zapisz', 'Zapisywanie...') }}
+      {{ form_close() }}
+    </div>
+  </div>
 {% endblock %}

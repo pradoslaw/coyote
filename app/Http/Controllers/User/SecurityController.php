@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class SecurityController extends BaseController
 {
     use SettingsTrait;
-    
+
     /**
      * @return \Illuminate\View\View
      */
@@ -29,15 +29,15 @@ class SecurityController extends BaseController
 
         $user->alert_login = (bool) $request->get('alert_login');
         $user->alert_failure = (bool) $request->get('alert_failure');
-        
+
         $ips = [];
-        
+
         foreach ($request->get('ips') as $element) {
-            if (pattern('[0-9*]{1,3}')->test($element)) {
+            if ($element !== null && pattern('[0-9*]{1,3}')->test($element)) {
                 $ips[] = $element;
             }
         }
-        
+
         if (!in_array(count($ips), [0, 4, 8, 12])) {
             $count = count($ips);
 
@@ -47,7 +47,7 @@ class SecurityController extends BaseController
                 }
             }
         }
-        
+
         $user->access_ip = implode('.', $ips);
         $user->save();
 
