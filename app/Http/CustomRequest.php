@@ -3,15 +3,15 @@
 namespace Coyote\Http;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class CustomRequest extends Request
 {
     /**
      * @return mixed
-     * @todo mozna usunac? trzeba filtrowac te wartosc czy robi to symfony?
      */
     public function browser()
     {
-        return str_limit(filter_var($this->header('User-Agent'), FILTER_SANITIZE_STRING), 900);
+        return str_limit(Str::ascii($this->header('User-Agent')), 900);
     }
 }
