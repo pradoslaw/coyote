@@ -11,12 +11,21 @@
         <i class="fas fa-pencil-alt"></i>
       </a>
 
-      <a href="javascript:" title="Usuń ten komentarz" class="btn-comment">
+      <a @click="deleteComment(true)" href="javascript:" title="Usuń ten komentarz" class="btn-comment">
         <i class="fas fa-times"></i>
       </a>
     </template>
 
     <vue-comment-form v-if="isEditing" :comment="comment" @save="isEditing = false" @cancel="isEditing = false" ref="comment-form"></vue-comment-form>
+
+    <vue-modal ref="confirm">
+      Komentarz zostanie usunięty. Czy na pewno chcesz to zrobić?
+
+      <template slot="buttons">
+        <button @click="$refs.confirm.close()" type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+        <button @click="deleteComment(false)" type="submit" class="btn btn-danger danger">Tak, usuń</button>
+      </template>
+    </vue-modal>
   </div>
 </template>
 
@@ -57,6 +66,18 @@
 
       if (this.isEditing) {
         this.$nextTick(() => this.commentForm.textarea.focus());
+      }
+    }
+
+    deleteComment(confirm = false) {
+      if (confirm) {
+        // @ts-ignore
+        this.confirm.open();
+      }
+      else {
+        // @ts-ignore
+        this.confirm.close();
+        this.$store.dispatch('posts/deleteComment', this.comment);
       }
     }
   }

@@ -35,6 +35,16 @@ const mutations = {
     Vue.set(post.comments, comment.id!, comment);
   },
 
+  updateComment(state, { post, comment}: ParentChild) {
+    let { text, html } = comment; // update only text and html version
+
+    Vue.set(post.comments, comment.id!, {...post.comments[comment.id], ...{text, html}});
+  },
+
+  deleteComment(state, comment: PostComment) {
+    Vue.delete(state.data[comment.post_id!].comments, comment.id!);
+  },
+
   restore(state, post: Post) {
     post.deleted_at = null;
 
@@ -115,6 +125,10 @@ const actions = {
 
   delete({ commit }, { post, reasonId }: { post: Post, reasonId: number | null }) {
     return axios.delete(`/Forum/Post/Delete/${post.id}`, { data: { reason: reasonId } }).then(() => commit('delete', post));
+  },
+
+  deleteComment({ commit }, comment: PostComment) {
+    return axios.delete(`/Forum/Comment/Delete/${comment.id}`).then(() => commit('deleteComment', comment));
   },
 
   restore({ commit }, post: Post) {

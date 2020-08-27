@@ -8,6 +8,7 @@
         name="text"
         ref="textarea"
         rows="1"
+        :maxlength="maxLength"
         v-model="comment.text"
         :disabled="isProcessing"
         @keydown.ctrl.enter="saveComment"
@@ -16,10 +17,14 @@
       ></textarea>
     </vue-prompt>
 
-    <p class="text-muted float-left">Pozostało <strong>580</strong> znaków</p>
+    <div class="row">
+      <div class="col-12">
+        <p class="text-muted float-left">Pozostało <strong>{{ maxLength - comment.text.length }}</strong> znaków</p>
 
-    <vue-button :disabled="isProcessing" @click.native.prevent="saveComment" class="btn btn-sm btn-primary float-right" title="Kliknij, aby wysłać (Ctrl+Enter)">Zapisz</vue-button>
-    <button @click.prevent="cancel" class="btn btn-sm btn-danger float-right mr-2">Anuluj</button>
+        <vue-button :disabled="isProcessing" @click.native.prevent="saveComment" class="btn btn-sm btn-primary float-right" title="Kliknij, aby wysłać (Ctrl+Enter)">Zapisz</vue-button>
+        <button @click.prevent="cancel" class="btn btn-sm btn-danger float-right mr-2">Anuluj</button>
+      </div>
+    </div>
   </form>
 </template>
 
@@ -50,7 +55,8 @@
     @Ref()
     readonly textarea!: HTMLTextAreaElement;
 
-    isProcessing = false;
+    private isProcessing = false;
+    private readonly maxLength = 580;
 
     saveComment() {
       this.isProcessing = true;

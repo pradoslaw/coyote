@@ -151,7 +151,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
         'middleware' => ['auth', 'comment.access']
     ]);
 
-    $this->post('Comment/Delete/{id}', [
+    $this->delete('Comment/Delete/{id}', [
         'uses' => 'CommentController@delete',
         'as' => 'comment.delete',
         'middleware' => [
