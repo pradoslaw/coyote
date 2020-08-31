@@ -44,22 +44,23 @@ class DispatchPostNotifications implements ShouldQueue
     public function handle(PostWasSaved $event)
     {
         $post = $event->post;
-        $user = $event->post->user;
         $topic = $event->post->topic;
 
         if ($event->wasRecentlyCreated) {
+            $user = $event->post->user;
             $subscribers = $topic->subscribers()->with('user.notificationSettings')->get()->pluck('user')->exceptUser($user);
             $notification = (new SubmittedNotification($user, $post))->setSender($this->getSender($post));
 
             $this->dispatcher->send($subscribers, $notification);
 
-            $this->sendUserMentionedNotification($post, $user, $subscribers);
+            $this->sendUserMentionedNotification($post, $user, $subscribers, $this->getSender($post));
         } else {
+            $user = $event->post->editor;
             $subscribers = $post->subscribers()->with('user')->get()->pluck('user')->exceptUser($user);
 
             $this->dispatcher->send($subscribers, new ChangedNotification($user, $post));
 
-            $this->sendUserMentionedNotification($post, $user, $subscribers);
+            $this->sendUserMentionedNotification($post, $user, $subscribers, $user->name);
         }
     }
 
@@ -67,8 +68,9 @@ class DispatchPostNotifications implements ShouldQueue
      * @param Post $post
      * @param User $user
      * @param array $subscribers
+     * @param string $senderName
      */
-    private function sendUserMentionedNotification(Post $post, User $user, $subscribers): void
+    private function sendUserMentionedNotification(Post $post, User $user, $subscribers, string $senderName): void
     {
         // get id of users that were mentioned in the text
         $usersId = (new LoginHelper())->grab($post->html);
@@ -76,7 +78,7 @@ class DispatchPostNotifications implements ShouldQueue
         if (!empty($usersId)) {
             $this->dispatcher->send(
                 $this->user->findMany($usersId)->exceptUser($user)->exceptUsers($subscribers),
-                (new UserMentionedNotification($user, $post))->setSender($this->getSender($post))
+                (new UserMentionedNotification($user, $post))->setSender($senderName)
             );
         }
     }

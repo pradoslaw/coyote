@@ -31,6 +31,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Coyote\Post\Vote[] $votes
  * @property \Coyote\Post\Comment[] $comments
  * @property \Coyote\User $user
+ * @property \Coyote\User $editor
  * @property \Coyote\Post\Accept $accept
  */
 class Post extends Model
@@ -141,6 +142,14 @@ class Post extends Model
     public function user()
     {
         return $this->belongsTo('Coyote\User');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function editor()
+    {
+        return $this->belongsTo(User::class);
     }
 
     /**
