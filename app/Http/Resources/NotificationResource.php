@@ -31,7 +31,7 @@ class NotificationResource extends JsonResource
 
             'headline' => $this->getHeadline($user, $senders),
             'created_at' => $this->resource->created_at->toIso8601String(),
-            'photo' => $this->getMediaUrl($user->photo)
+            'photo' => $this->getMediaUrl($user ? $user->photo : null)
         ]);
     }
 
