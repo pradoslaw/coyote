@@ -54,7 +54,7 @@ class DispatchPostNotifications implements ShouldQueue
             $this->dispatcher->send($subscribers, $notification);
 
             $this->sendUserMentionedNotification($post, $user, $subscribers, $this->getSender($post));
-        } else {
+        } elseif ($event->post->editor) {
             $user = $event->post->editor;
             $subscribers = $post->subscribers()->with('user')->get()->pluck('user')->exceptUser($user);
 
