@@ -3,6 +3,7 @@
 namespace Coyote\Notifications\Job;
 
 use Coyote\Job;
+use Coyote\Services\Invoice\Calculator;
 use Coyote\Services\Invoice\CalculatorFactory;
 use Coyote\Services\Notification\Notification;
 use Coyote\Services\UrlBuilder\UrlBuilder;
@@ -24,6 +25,11 @@ class CreatedNotification extends Notification implements ShouldQueue
     private $job;
 
     /**
+     * @var Calculator
+     */
+    private $calculator;
+
+    /**
      * @param Job $job
      */
     public function __construct(Job $job)
@@ -37,6 +43,19 @@ class CreatedNotification extends Notification implements ShouldQueue
      */
     public function via(User $user)
     {
+        $payment = $this->job->getUnpaidPayment();
+
+        if (!$payment) {
+            return [];
+        }
+
+        // calculate price based on payment details
+        $this->calculator = CalculatorFactory::payment($payment);
+
+        if (!$this->calculator->grossPrice()) {
+            return [];
+        }
+
         return ['mail', DatabaseChannel::class];
     }
 
@@ -85,9 +104,6 @@ class CreatedNotification extends Notification implements ShouldQueue
      */
     public function toMail()
     {
-        // calculate price based on payment details
-        $calculator = CalculatorFactory::payment($this->job->getUnpaidPayment());
-
         return (new MailMessage)
             ->subject(sprintf('Ogłoszenie "%s" zostało dodane i oczekuje na płatność', $this->job->title))
             ->line(sprintf('Dziękujemy za dodanie ogłoszenia w serwisie <strong>%s</strong>.', config('app.name')))
@@ -95,7 +111,7 @@ class CreatedNotification extends Notification implements ShouldQueue
                 sprintf(
                     'Ogłoszenie %s zostało dodane i czeka dokonanie opłaty w kwocie %s zł.',
                     link_to(UrlBuilder::job($this->job), $this->job->title),
-                    $calculator->netPrice()
+                    $this->calculator->netPrice()
                 )
             )
             ->action('Opłać ogłoszenie', route('job.payment', [$this->job->getUnpaidPayment()]))
