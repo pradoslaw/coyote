@@ -80,3 +80,5 @@ yieldlab.net, 8633311, RESELLER
 facebook.com, 796635377204452, RESELLER, c3e20eee3f780d68
 improvedigital.com, 1391, RESELLER
 indexexchange.com, 184665, RESELLER, 50b1c356f2c5c8fc
+improvedigital.com, 1673, RESELLER
+tech.convergd.com, 43, RESELLER
