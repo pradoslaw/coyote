@@ -32,6 +32,10 @@ const mutations = {
   },
 
   addComment(state, { post, comment}: ParentChild) {
+    if (Array.isArray(post.comments)) {
+      Vue.set(post, "comments", {});
+    }
+
     Vue.set(post.comments, comment.id!, comment);
   },
 
@@ -117,9 +121,9 @@ const actions = {
 
   saveComment({ state, commit, getters }, comment: PostComment) {
     return axios.post(`/Forum/Comment/${comment.id || ''}`, comment).then(result => {
-      const post = state.data[comment.post_id!];
-
-      commit(post.comments[comment.id!] ? 'updateComment' : 'addComment', { post, comment: result.data });
+      const post = state.data[result.data.post_id!];
+console.log(result);
+      commit(post.comments[result.data.id!] ? 'updateComment' : 'addComment', { post, comment: result.data });
     });
   },
 
