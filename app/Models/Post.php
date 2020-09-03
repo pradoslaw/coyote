@@ -80,6 +80,14 @@ class Post extends Model
             $post->deleter_id = null;
             $post->delete_reason = null;
         });
+
+        static::saving(function (Post $post) {
+            if ($post->exists && $post->isDirtyWithRelations()) {
+                $post->logs()->create(
+                    array_merge($post->toArray(), ['subject' => $post->topic->subject, 'user_id' => $post->editor_id])
+                );
+            }
+        });
     }
 
     /**
@@ -236,5 +244,10 @@ class Post extends Model
         $this->{$this->getDeletedAtColumn()} = $this->freshTimestamp();
 
         $this->save();
+    }
+
+    public function isDirtyWithRelations(): bool
+    {
+        return $this->isDirty() || $this->topic->isDirty();
     }
 }

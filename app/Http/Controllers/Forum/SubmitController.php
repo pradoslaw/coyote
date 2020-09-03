@@ -81,11 +81,13 @@ class SubmitController extends BaseController
             $post->host = ''; // pole nie moze byc nullem
         } else {
             $this->authorize('update', [$post]);
+
+            $post->topic()->associate($topic);
         }
 
         $post->fill($request->all());
 
-        if ($post->isDirty() && $post->exists) {
+        if ($post->isDirtyWithRelations() && $post->exists) {
             $post->fill([
                 'edit_count' => $post->edit_count + 1, 'editor_id' => $this->auth->id
             ]);
@@ -135,7 +137,10 @@ class SubmitController extends BaseController
         $tracker = Tracker::make($topic);
 
         PostResource::withoutWrapping();
-        $post->user->group = $post->user->group->name;
+
+        if ($post->user->group) {
+            $post->user->group = $post->user->group->name;
+        }
 
         return (new PostResource($post))->setTracker($tracker)->setSigParser(app('parser.sig'));
     }
