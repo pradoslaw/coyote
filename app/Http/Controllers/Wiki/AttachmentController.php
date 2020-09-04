@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Wiki;
 
+use Coyote\Http\Forms\AttachmentForm;
 use Coyote\Wiki\Attachment;
 use Coyote\Http\Controllers\AttachmentController as BaseAttachmentController;
 
@@ -30,4 +31,14 @@ class AttachmentController extends BaseAttachmentController
     {
         return Attachment::create($attributes);
     }
+
+    protected function render($attachment)
+    {
+        $form = $this->createForm(AttachmentForm::class, $attachment);
+        // we're changing field name because front end expect this field to be an array
+        $form->get('id')->setName('attachments[][id]');
+
+        return (string) $form->render();
+    }
+
 }

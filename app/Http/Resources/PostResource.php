@@ -109,7 +109,8 @@ class PostResource extends JsonResource
                 ]];
             }),
 
-            'comments'      => PostCommentResource::collection($this->resource->comments)->keyBy('id')
+            'comments'      => PostCommentResource::collection($this->resource->comments)->keyBy('id'),
+            'attachments'   => PostAttachmentResource::collection($this->resource->attachments)
         ]);
     }
 

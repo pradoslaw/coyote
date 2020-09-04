@@ -34,7 +34,7 @@ abstract class AttachmentController extends Controller
             'mime' => $media->getMime()
         ]);
 
-        return $this->renderForm($attachment);
+        return $this->render($attachment);
     }
 
     /**
@@ -52,7 +52,7 @@ abstract class AttachmentController extends Controller
             'name' => $media->getName()
         ]);
 
-        return $this->renderForm($attachment);
+        return $this->render($attachment);
     }
 
     /**
@@ -61,18 +61,7 @@ abstract class AttachmentController extends Controller
      */
     abstract protected function create(array $attributes);
 
-    /**
-     * @param mixed $data
-     * @return string
-     */
-    protected function renderForm($data)
-    {
-        $form = $this->createForm(AttachmentForm::class, $data);
-        // we're changing field name because front end expect this field to be an array
-        $form->get('id')->setName('attachments[][id]');
-
-        return (string) $form->render();
-    }
+    abstract protected function render($attachment);
 
     /**
      * @param string $name

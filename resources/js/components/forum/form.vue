@@ -49,9 +49,11 @@
             <tbody>
               <template v-if="post.attachments">
                 <tr v-for="attachment in post.attachments">
-                  <td>{{ attachment.name }}</td>
+                  <td>
+                    <a @click="insertAtCaret(attachment.file)" href="javascript:" class="btn-append">{{ attachment.name }}</a>
+                  </td>
                   <td>{{ attachment.mime }}</td>
-                  <td>{{ attachment.created_at }}</td>
+                  <td><vue-timeago :datetime="attachment.created_at"></vue-timeago></td>
                   <td>{{ Math.round(attachment.size / 1024) }} kB</td>
                   <td>
                     <button type="button" title="Usuń załącznik" class="btn btn-secondary btn-sm btn-del">
@@ -68,8 +70,8 @@
           <div class="card-footer">
             <p class="text-muted"><small>Każdy załącznik może zawierać maksymalnie <strong>{{ uploadMaxSize }}MB</strong>. Dostępne rozszerzenia: <strong>{{ uploadMimes }}</strong></small></p>
 
-            <input class="input-file" type="file" name="attachment" style="visibility: hidden; height: 1px">
-            <button type="button" id="btn-upload" class="btn btn-primary btn-sm">Dodaj załącznik</button>
+            <input @change="upload" type="file" ref="attachment" style="visibility: hidden; height: 1px; width: 0">
+            <button @click="openDialog" type="button" class="btn btn-primary btn-sm">Dodaj załącznik</button>
           </div>
         </div>
       </div>
@@ -123,12 +125,14 @@
   import VueButton from '../forms/button.vue';
   import VuePaste from '../../plugins/paste.js';
   import VueToolbar from '../../components/forms/toolbar.vue';
+  import VueTimeago from '../../plugins/timeago';
   import { Post, Topic } from "../../types/models";
   import { mapActions, mapGetters, mapState } from "vuex";
   import axios from 'axios';
 
   Vue.use(VueAutosize);
   Vue.use(VuePaste, {url: '/Mikroblogi/Paste'});
+  Vue.use(VueTimeago);
 
   @Component({
     name: 'forum-form',
@@ -175,6 +179,9 @@
     }})
     post!: Post;
 
+    @Ref('attachment')
+    readonly attachment!: HTMLInputElement;
+
     public topic!: Topic;
 
     @Emit()
@@ -203,6 +210,31 @@
 
     switchTab(activeTab: string) {
       this.activeTab = activeTab;
+    }
+
+    openDialog() {
+      (this.$refs.attachment as HTMLInputElement).click();
+    }
+
+    upload() {
+      let form = new FormData();
+      form.append('attachment', (this.$refs.attachment as HTMLInputElement).files![0]);
+
+      this.isProcessing = true;
+
+      axios.post('/Forum/Upload', form)
+        .then(response => this.post.attachments.push(response.data))
+        .catch(error => {
+          // this.error = error.response.data.message;
+          //
+          // this.$refs.error.open();
+
+        })
+        .finally(() => this.isProcessing = false);
+    }
+
+    insertAtCaret(fileName) {
+
     }
 
   }

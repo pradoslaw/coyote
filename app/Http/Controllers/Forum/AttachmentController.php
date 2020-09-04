@@ -61,4 +61,13 @@ class AttachmentController extends BaseAttachmentController
     {
         return Attachment::create($attributes);
     }
+
+    /**
+     * @param Attachment $attachment
+     * @return mixed
+     */
+    protected function render($attachment)
+    {
+        return json_encode($attachment->toArray() + ['file' => $attachment->file->getFilename()]);
+    }
 }
