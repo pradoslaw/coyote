@@ -155,6 +155,22 @@ new Vue({
   created() {
     store.commit('posts/init', { pagination: window.pagination, forum: window.forum, topic: window.topic });
   },
+  mounted() {
+    const hints = ['hint-subject', 'hint-text', 'hint-tags', 'hint-user_name'];
+
+    [
+      document.querySelector('input[name="subject"]'),
+      document.querySelector('textarea[name="text"]'),
+      document.querySelector('input[name="tags"]')
+    ].forEach(el => {
+      el.addEventListener('focus', () => {
+        const name = el.getAttribute('name');
+
+        hints.forEach(hint => document.getElementById(hint).style.display = 'none');
+        document.getElementById(`hint-${name}`).style.display = 'block';
+      });
+    });
+  },
   methods: {
     isAcceptAllowed(post) {
       if (!this.isAuthorized) {

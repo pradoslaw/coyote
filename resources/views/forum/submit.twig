@@ -77,7 +77,6 @@
 {% endblock %}
 
 {% block body %}
-
   <script>
     var forum = {{ forum|json_encode|raw }};
     var topic = {subject: '', is_subscribed: {{ user('allow_subscribe') }}};
@@ -85,28 +84,4 @@
   </script>
 
   {{ parent() }}
-{#  <script>#}
-{#    $(function () {#}
-{#      var toolTipHints = $('#hint-subject, #hint-text, #hint-tags, #hint-user_name');#}
-
-{#      $('#submit-form').delegate('input[name="subject"], textarea[name="text"], input[name="user_name"], #tags', 'focus', function () {#}
-{#        var name = typeof $(this).attr('name') == 'undefined' ? 'tags' : $(this).attr('name');#}
-
-{#        if ('hint-' + name != $('.sidebar-hint:visible').attr('id')) {#}
-{#          toolTipHints.each(function () {#}
-{#            $(this).hide();#}
-{#          });#}
-
-{#          $('#hint-' + name).fadeIn(1000);#}
-{#        }#}
-{#      }).append('<input style="display: none" type="checkbox" name="human" value="1" checked="checked">');#}
-
-{#      $('#tags').tag({#}
-{#        validateUrl: '{{ route('forum.tag.validate') }}',#}
-{#        promptUrl: '{{ route('forum.tag.prompt') }}'#}
-{#      });#}
-
-{#      $('#submit-form').find('textarea, input[type="text"]').first().focus();#}
-{#    });#}
-{#  </script>#}
 {% endblock %}
