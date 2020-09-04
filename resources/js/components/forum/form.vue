@@ -10,7 +10,7 @@
 
     <ul class="nav nav-tabs">
       <li class="nav-item"><a @click="switchTab('textarea')" :class="{active: activeTab === 'textarea'}" class="nav-link" href="javascript:">Treść</a></li>
-      <li class="nav-item"><a class="nav-link" href="javascript:">Załączniki</a></li>
+      <li class="nav-item"><a @click="switchTab('attachments')" :class="{active: activeTab === 'attachments'}" class="nav-link" href="javascript:">Załączniki</a></li>
       <li class="nav-item"><a @click="switchTab('preview')" :class="{active: activeTab === 'preview'}" class="nav-link" href="javascript:">Podgląd</a></li>
     </ul>
 
@@ -34,11 +34,50 @@
         </vue-prompt>
       </div>
 
+      <div :class="{active: activeTab === 'attachments'}" class="tab-pane post-content">
+        <div class="card card-default">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Nazwa pliku</th>
+                <th>Typ MIME</th>
+                <th>Data dodania</th>
+                <th>Rozmiar</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <template v-if="post.attachments">
+                <tr v-for="attachment in post.attachments">
+                  <td>{{ attachment.name }}</td>
+                  <td>{{ attachment.mime }}</td>
+                  <td>{{ attachment.created_at }}</td>
+                  <td>{{ Math.round(attachment.size / 1024) }} kB</td>
+                  <td>
+                    <button type="button" title="Usuń załącznik" class="btn btn-secondary btn-sm btn-del">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </td>
+                </tr>
+              </template>
+              <tr v-else>
+                <td colspan="5" class="text-center">Brak załączników.</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="card-footer">
+            <p class="text-muted"><small>Każdy załącznik może zawierać maksymalnie <strong>{{ uploadMaxSize }}MB</strong>. Dostępne rozszerzenia: <strong>{{ uploadMimes }}</strong></small></p>
+
+            <input class="input-file" type="file" name="attachment" style="visibility: hidden; height: 1px">
+            <button type="button" id="btn-upload" class="btn btn-primary btn-sm">Dodaj załącznik</button>
+          </div>
+        </div>
+      </div>
+
       <div :class="{active: activeTab === 'preview'}" class="tab-pane post-content">
         <div v-html="post.html"></div>
       </div>
     </div>
-
 
     <div v-if="showTagsInput" class="form-group">
       <label class="col-form-label">Tagi <em>*</em></label>
@@ -121,6 +160,12 @@
 
     @Prop({default: false})
     readonly showSubscribeCheckbox!: boolean;
+
+    @Prop({default: 20})
+    readonly uploadMaxSize!: number;
+
+    @Prop()
+    readonly uploadMimes!: string;
 
     @Prop({default() {
       return {

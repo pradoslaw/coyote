@@ -74,6 +74,15 @@ export interface PostComment {
   user: User;
 }
 
+export interface PostAttachment {
+  id: number;
+  name: string;
+  file: string;
+  mime: string;
+  created_at: Date | null;
+  size: number;
+}
+
 export interface Post {
   id: number;
   user?: User;
@@ -95,6 +104,7 @@ export interface Post {
   permissions: PostPermission;
   ip?: string;
   comments: PostComment[];
+  attachments: PostAttachment[];
   edit_count?: number;
 }
 

@@ -23,6 +23,8 @@
         :show-tags-input="true"
         :show-sticky-checkbox="showStickyCheckbox"
         :show-subscribe-checkbox="true"
+        upload-mimes="{{ config_get('filesystems.upload_mimes')|split(',')|join(', ') }}"
+        upload-max-size="{{ config_get('filesystems.upload_max_size') }}"
         @save="redirectToTopic"
       ></vue-form>
 
