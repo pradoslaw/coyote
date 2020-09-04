@@ -1,9 +1,10 @@
 import axios from "axios";
-import {Post, Forum, Topic, PostComment, Microblog} from "../../types/models";
+import { Post, Forum, Topic, PostComment, PostAttachment } from "../../types/models";
 import Vue from "vue";
 
 type PostObj = {[key: number]: Post};
 type ParentChild = { post: Post, comment: PostComment };
+type PostWithAttachment = { post: Post, attachment: PostAttachment };
 
 const state: { data: PostObj, links: null, meta: null, forum?: Forum, topic?: Topic } = {data: {}, links: null, meta: null}
 
@@ -47,6 +48,14 @@ const mutations = {
 
   deleteComment(state, comment: PostComment) {
     Vue.delete(state.data[comment.post_id!].comments, comment.id!);
+  },
+
+  addAttachment(state, { post, attachment }: { post: Post, attachment: PostAttachment }) {
+    post.attachments.push(attachment);
+  },
+
+  deleteAttachment(state, { post, attachment }: PostWithAttachment) {
+    post.attachments.splice(post.attachments.findIndex(item => item.file === attachment.file));
   },
 
   restore(state, post: Post) {

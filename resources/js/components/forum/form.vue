@@ -22,6 +22,7 @@
           <textarea
             v-autosize
             v-model="post.text"
+            v-paste:success="addAttachment"
             @keydown.ctrl.enter="save"
             @keydown.meta.enter="save"
             @keydown.esc="cancel"
@@ -50,7 +51,7 @@
               <template v-if="post.attachments">
                 <tr v-for="attachment in post.attachments">
                   <td>
-                    <a @click="insertAtCaret(attachment.file)" href="javascript:" class="btn-append">{{ attachment.name }}</a>
+                    <a @click="insertAtCaret(attachment)" href="javascript:">{{ attachment.name }}</a>
                   </td>
                   <td>{{ attachment.mime }}</td>
                   <td><vue-timeago :datetime="attachment.created_at"></vue-timeago></td>
@@ -126,12 +127,13 @@
   import VuePaste from '../../plugins/paste.js';
   import VueToolbar from '../../components/forms/toolbar.vue';
   import VueTimeago from '../../plugins/timeago';
-  import { Post, Topic } from "../../types/models";
-  import { mapActions, mapGetters, mapState } from "vuex";
+  import { Post, PostAttachment, Topic } from "../../types/models";
+  import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
   import axios from 'axios';
+  import Textarea from "../../libs/textarea";
 
   Vue.use(VueAutosize);
-  Vue.use(VuePaste, {url: '/Mikroblogi/Paste'});
+  Vue.use(VuePaste, {url: '/Forum/Paste'});
   Vue.use(VueTimeago);
 
   @Component({
@@ -223,18 +225,19 @@
       this.isProcessing = true;
 
       axios.post('/Forum/Upload', form)
-        .then(response => this.post.attachments.push(response.data))
-        .catch(error => {
-          // this.error = error.response.data.message;
-          //
-          // this.$refs.error.open();
-
-        })
+        .then(response => this.addAttachment(response.data))
         .finally(() => this.isProcessing = false);
     }
 
-    insertAtCaret(fileName) {
+    addAttachment(attachment: PostAttachment) {
+      store.commit('posts/addAttachment', { post: this.post, attachment })
+    }
 
+    insertAtCaret(attachment: PostAttachment) {
+      const textarea = new Textarea(this.$refs.textarea);
+
+      textarea.insertAtCaret('', '', '![' + attachment.name + '](' + attachment.url + ')');
+      this.post.text = textarea.textarea.value;
     }
 
   }

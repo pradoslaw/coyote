@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Http\Resources\PostAttachmentResource;
 use Coyote\Post\Attachment;
 use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface as AttachmentRepository;
 use Coyote\Http\Controllers\AttachmentController as BaseAttachmentController;
@@ -68,6 +69,8 @@ class AttachmentController extends BaseAttachmentController
      */
     protected function render($attachment)
     {
-        return json_encode($attachment->toArray() + ['file' => $attachment->file->getFilename()]);
+        PostAttachmentResource::withoutWrapping();
+
+        return new PostAttachmentResource($attachment);
     }
 }

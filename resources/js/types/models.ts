@@ -81,6 +81,7 @@ export interface PostAttachment {
   mime: string;
   created_at: Date | null;
   size: number;
+  url: string;
 }
 
 export interface Post {
