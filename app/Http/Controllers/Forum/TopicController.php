@@ -114,8 +114,7 @@ class TopicController extends BaseController
             $allForums = $treeDecorator->setKey('id')->build();
         }
 
-        $topic->is_subscribed = $this->userId ? $topic->subscribers()->forUser($this->userId)->exists() : false;
-
+        $topic->load('tags');
 
         return $this->view(
             'forum.topic',

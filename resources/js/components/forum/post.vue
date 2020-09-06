@@ -101,6 +101,12 @@
           <div v-if="!isEditing" class="post-content">
             <div v-html="post.html"></div>
 
+            <div v-if="tags" class="padding-sm-top padding-sm-bottom">
+              <ul class="tag-clouds">
+                <li v-for="tag in tags"><a :href="tag.url">{{ tag.name }}</a></li>
+              </ul>
+            </div>
+
             <ul v-if="post.attachments" class="list-unstyled list-attachments">
               <li v-for="attachment in post.attachments">
                 <i class="fas fa-download"></i>
@@ -228,9 +234,9 @@
 </template>
 <script lang="ts">
   import Vue from 'vue';
-  import {Prop, Ref} from "vue-property-decorator";
+  import { Prop, Ref } from "vue-property-decorator";
   import Component from "vue-class-component";
-  import { Post } from '../../types/models';
+  import { Post, Topic, User } from '../../types/models';
   import VueClipboard from '../../plugins/clipboard';
   import VueAvatar from '../avatar.vue';
   import VueUserName from "../user-name.vue";
@@ -260,16 +266,13 @@
     computed: {
       ...mapState('user', {user: state => state}),
       ...mapGetters('user', ['isAuthorized']),
+      ...mapGetters('posts', ['posts']),
       ...mapState('posts', ['topic'])
     }
-  // mixins: [mixins]
   })
   export default class VuePost extends Vue {
     @Prop(Object)
     post!: Post;
-
-    @Prop({default: false})
-    readonly isAcceptAllowed!: boolean;
 
     @Prop({default: 20})
     readonly uploadMaxSize!: number;
@@ -293,6 +296,11 @@
     isEditing = false;
     isCommenting = false;
     reasonId = null;
+
+    readonly topic!: Topic;
+    readonly isAuthorized! : boolean;
+    readonly posts!: Post[];
+    readonly user!: User;
 
     private commentDefault = { text: '', post_id: this.post.id };
 
@@ -344,7 +352,22 @@
       this.$store.dispatch('posts/restore', this.post);
     }
 
+    get firstPost() {
+      return this.posts[Object.keys(this.posts)[0]];
+    }
 
+    get tags() {
+      return this.post.id === this.firstPost.id ? this.topic.tags : [];
+    }
+
+    get isAcceptAllowed() {
+      if (!this.isAuthorized) {
+        return false;
+      }
+
+      // user can't accept first post in topic
+      return (this.user.id === this.firstPost.user_id || this.post.permissions.update) && this.post.id !== this.firstPost.id;
+    }
   }
 </script>
 

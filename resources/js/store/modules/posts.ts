@@ -10,6 +10,7 @@ const state: { data: PostObj, links: null, meta: null, forum?: Forum, topic?: To
 
 const getters = {
   posts: state => state.data,
+  topic: state => state.topic,
   exists: state => (id: number) => id in state.data
 }
 

@@ -109,6 +109,14 @@ export interface Post {
   edit_count?: number;
 }
 
+export interface Tag {
+  id: number;
+  name: string;
+  url: string;
+  real_name?: string;
+  logo?: string;
+}
+
 export interface Topic {
   id: number;
   is_locked: boolean;
@@ -116,6 +124,7 @@ export interface Topic {
   subject: string;
   first_post_id?: number;
   is_subscribed?: boolean;
+  tags?: Tag[];
 }
 
 export interface Links {

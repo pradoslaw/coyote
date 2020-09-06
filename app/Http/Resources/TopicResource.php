@@ -39,7 +39,7 @@ class TopicResource extends JsonResource
      */
     public function toArray($request)
     {
-        $only = $this->resource->only(['id', 'subject', 'score', 'views', 'is_sticky', 'is_locked', 'first_post_id', 'last_post_id', 'subscribers', 'accepted_id', 'is_subscribed', 'is_voted', 'is_replied', 'user_name', 'user_post_id']);
+        $only = $this->resource->only(['id', 'subject', 'score', 'views', 'is_sticky', 'is_locked', 'first_post_id', 'last_post_id', 'subscribers', 'accepted_id', 'is_voted', 'is_replied', 'user_name', 'user_post_id']);
 
         return array_merge(
             $only,
@@ -56,6 +56,7 @@ class TopicResource extends JsonResource
                     'url'       => UrlBuilder::forum($this->forum)
                 ],
                 'tags'                  => TagResource::collection($this->whenLoaded('tags')),
+                'is_subscribed'         => $request->user() ? $this->subscribers()->forUser($request->user()->id)->exists() : false,
 
                 $this->mergeWhen($this->whenLoaded('user'), function () {
                     return ['user' => new UserResource($this->user)];

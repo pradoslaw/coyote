@@ -176,17 +176,6 @@ new Vue({
     });
   },
   methods: {
-    isAcceptAllowed(post) {
-      if (!this.isAuthorized) {
-        return false;
-      }
-
-      const firstPost = this.posts[Object.keys(this.posts)[0]];
-
-      // user can't accept first post in topic
-      return (this.user.id === firstPost.user_id || post.permissions.update) && post.id !== firstPost.id;
-    },
-
     redirectToTopic(post) {
       window.location.href = post.url;
     },
@@ -202,9 +191,7 @@ new Vue({
     }
   },
   computed: {
-    ...mapGetters('posts', ['posts']),
-    ...mapState('user', {user: state => state}),
+    ...mapGetters('posts', ['posts', 'topic']),
     ...mapGetters('user', ['isAuthorized'])
-
   }
 })
