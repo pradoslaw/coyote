@@ -6,7 +6,6 @@ use Coyote\Forum;
 use Coyote\Post;
 use Coyote\Topic;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class PostRequest extends FormRequest
 {

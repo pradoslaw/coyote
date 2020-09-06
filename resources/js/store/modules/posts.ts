@@ -119,7 +119,13 @@ const actions = {
   },
 
   save({ commit, state, getters }, { post, topic }: { post: Post, topic: Topic }) {
-    const input = { text: post.text, subject: topic?.subject, is_sticky: topic?.is_sticky, is_subscribed: topic?.is_subscribed };
+    const input = {
+      text: post.text,
+      subject: topic?.subject,
+      is_sticky: topic?.is_sticky,
+      is_subscribed: topic?.is_subscribed,
+      attachments: post.attachments
+    };
 
     return axios.post(`/Forum/${state.forum.slug}/Submit/${topic?.id || ''}/${post?.id || ''}`, input).then(result => {
       commit(getters.exists(result.data.id) ? 'update' : 'add', result.data);
@@ -131,7 +137,7 @@ const actions = {
   saveComment({ state, commit, getters }, comment: PostComment) {
     return axios.post(`/Forum/Comment/${comment.id || ''}`, comment).then(result => {
       const post = state.data[result.data.post_id!];
-console.log(result);
+
       commit(post.comments[result.data.id!] ? 'updateComment' : 'addComment', { post, comment: result.data });
     });
   },

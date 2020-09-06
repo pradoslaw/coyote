@@ -159,10 +159,14 @@ new Vue({
     const hints = ['hint-subject', 'hint-text', 'hint-tags', 'hint-user_name'];
 
     [
-      document.querySelector('input[name="subject"]'),
-      document.querySelector('textarea[name="text"]'),
-      document.querySelector('input[name="tags"]')
+      document.querySelector('#js-submit-form input[name="subject"]'),
+      document.querySelector('#js-submit-form textarea[name="text"]'),
+      document.querySelector('#js-submit-form input[name="tags"]')
     ].forEach(el => {
+      if (!el) {
+        return;
+      }
+
       el.addEventListener('focus', () => {
         const name = el.getAttribute('name');
 
@@ -177,8 +181,9 @@ new Vue({
         return false;
       }
 
-      const firstPost = window.pagination.data[Object.keys(window.pagination.data)[0]];
+      const firstPost = this.posts[Object.keys(this.posts)[0]];
 
+      // user can't accept first post in topic
       return (this.user.id === firstPost.user_id || post.permissions.update) && post.id !== firstPost.id;
     },
 

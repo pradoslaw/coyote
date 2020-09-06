@@ -235,9 +235,12 @@
 
     insertAtCaret(attachment: PostAttachment) {
       const textarea = new Textarea(this.$refs.textarea);
+      const suffix = attachment.name.split('.').pop()!.toLowerCase();
 
-      textarea.insertAtCaret('', '', '![' + attachment.name + '](' + attachment.url + ')');
+      textarea.insertAtCaret('', '', (suffix === 'png' || suffix === 'jpg' || suffix === 'jpeg' || suffix === 'gif' ? '!' : '') + '[' + attachment.name + '](' + attachment.url + ')');
       this.post.text = textarea.textarea.value;
+
+      this.switchTab('textarea');
     }
 
   }

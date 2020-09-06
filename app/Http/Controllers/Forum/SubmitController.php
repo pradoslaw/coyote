@@ -6,6 +6,7 @@ use Coyote\Forum;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Forum\SubjectForm;
 use Coyote\Http\Requests\Forum\PostRequest;
+use Coyote\Http\Requests\Forum\SubjectRequest;
 use Coyote\Http\Resources\PostResource;
 use Coyote\Notifications\Post\ChangedNotification;
 use Coyote\Notifications\Post\SubmittedNotification;
@@ -86,6 +87,7 @@ class SubmitController extends BaseController
         }
 
         $post->fill($request->all());
+        $post->syncAttachments(array_pluck($request->input('attachments', []), 'id'));
 
         if ($post->isDirtyWithRelations() && $post->exists) {
             $post->fill([
@@ -173,26 +175,24 @@ class SubmitController extends BaseController
 
     /**
      * @param \Coyote\Topic $topic
-     * @param SubjectForm $form
+     * @param SubjectRequest $form
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @todo moze jakas refaktoryzacja? przeniesienie do repozytorium? na pewno logowanie o tym, ze zostal zmieniony
      * tytul a nie tresc posta (jak to jest obecnie)
      */
-    public function subject($topic, SubjectForm $form)
+    public function subject($topic, SubjectRequest $request)
     {
-        /** @var \Coyote\Forum $forum */
-        $forum = $topic->forum()->first();
-        $this->authorize('update', $forum);
+        $this->authorize('update', $topic->forum);
 
-        $request = $form->getRequest();
+        $topic->fill(['subject' => $request->input('subject')]);
 
-        $url = $this->transaction(function () use ($request, $forum, $topic) {
-            $topic->fill(['subject' => $request->get('subject')]);
+        $url = $this->transaction(function () use ($request, $topic) {
+
 
             /** @var \Coyote\Post $post */
             $post = $topic->firstPost()->first();
-            $url = route('forum.topic', [$forum->slug, $topic->id, $topic->slug], false);
+            $url = route('forum.topic', [$topic->forum->slug, $topic->id, $topic->slug], false);
 
             if ($topic->isDirty()) {
                 $original = $topic->getOriginal();
@@ -217,11 +217,6 @@ class SubmitController extends BaseController
                             ->setOriginalSubject(str_limit($original['subject'], 84))
                     );
                 }
-
-                // fire the event. it can be used to index a content and/or add page path to "pages" table
-                event(new TopicWasSaved($topic));
-                // add post to elasticsearch
-                event(new PostWasSaved($post));
             }
 
             // get text from cache to put excerpt in stream activity
@@ -231,11 +226,16 @@ class SubmitController extends BaseController
             stream(
                 Stream_Update::class,
                 (new Stream_Topic)->map($topic, $post->text),
-                (new Stream_Forum)->map($forum)
+                (new Stream_Forum)->map($topic->forum)
             );
 
             return $url;
         });
+
+        // fire the event. it can be used to index a content and/or add page path to "pages" table
+        event(new TopicWasSaved($topic));
+        // add post to elasticsearch
+        event(new PostWasSaved($post));
 
         if ($request->ajax()) {
             return response(url($url));

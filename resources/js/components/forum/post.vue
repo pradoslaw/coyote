@@ -110,13 +110,15 @@
           <vue-form
             v-else
             ref="form"
-            :post="post"
             class="post-content mt-2 mb-2"
-            @cancel="isEditing = false"
-            @save="isEditing = false"
+            :post="post"
             :show-title-input="post.id === topic.first_post_id"
             :show-tags-input="post.id === topic.first_post_id"
             :show-sticky-checkbox="post.id === topic.first_post_id && post.permissions.sticky"
+            :upload-mimes="uploadMimes"
+            :upload-max-size="uploadMaxSize"
+            @cancel="isEditing = false"
+            @save="isEditing = false"
           ></vue-form>
 
           <div v-if="post.edit_count" class="edit-info">
@@ -256,21 +258,17 @@
     @Prop(Object)
     post!: Post;
 
-    isCollapsed = this.post.deleted_at != null;
-    isEditing = false;
-    isCommenting = false;
-    reasonId = null;
-
-    private commentDefault = {
-      text: '',
-      post_id: this.post.id
-    }
-
     @Prop({default: false})
-    isAcceptAllowed!: boolean;
+    readonly isAcceptAllowed!: boolean;
+
+    @Prop({default: 20})
+    readonly uploadMaxSize!: number;
 
     @Prop()
-    reasons!: string[];
+    readonly uploadMimes!: string;
+
+    @Prop()
+    readonly reasons!: string[];
 
     @Ref()
     readonly form!: VueForm;
@@ -280,6 +278,13 @@
 
     @Ref()
     readonly confirm!: VueModal;
+
+    isCollapsed = this.post.deleted_at != null;
+    isEditing = false;
+    isCommenting = false;
+    reasonId = null;
+
+    private commentDefault = { text: '', post_id: this.post.id };
 
     formatDistanceToNow(date) {
       return formatDistanceToNow(new Date(date), { locale: pl });
