@@ -101,8 +101,18 @@
           <div v-if="!isEditing" class="post-content">
             <div v-html="post.html"></div>
 
+            <ul v-if="post.attachments" class="list-unstyled list-attachments">
+              <li v-for="attachment in post.attachments">
+                <i class="fas fa-download"></i>
+
+                <a :href="attachment.url">{{ attachment.name }}</a>
+                <small>({{ Math.round(attachment.size / 1024 / 1024, 2) }} MB) - <em>ściągnięć: {{ attachment.count }}</em></small>
+              </li>
+            </ul>
+
             <template v-if="post.user && post.user.sig">
               <hr>
+
               <footer v-html="post.user.sig"></footer>
             </template>
           </div>
