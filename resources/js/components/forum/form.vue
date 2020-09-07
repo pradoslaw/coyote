@@ -85,7 +85,7 @@
     <div v-if="showTagsInput" class="form-group">
       <label class="col-form-label">Tagi <em>*</em></label>
 
-      <input class="form-control" name="tags" type="text">
+      <vue-tags-inline :tags="topic.tags"></vue-tags-inline>
     </div>
 
     <div v-if="showStickyCheckbox" class="form-group">
@@ -119,11 +119,12 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from "vue-class-component";
-  import { Ref, Mixins, Prop, Emit, Watch } from "vue-property-decorator";
+  import { Ref, Prop, Emit, Watch } from "vue-property-decorator";
   import store from "../../store";
   import VueAutosize from '../../plugins/autosize';
   import VuePrompt from '../forms/prompt.vue';
   import VueButton from '../forms/button.vue';
+  import VueTagsInline from '../forms/tags-inline.vue';
   import VuePaste from '../../plugins/paste.js';
   import VueToolbar from '../../components/forms/toolbar.vue';
   import VueTimeago from '../../plugins/timeago';
@@ -142,7 +143,8 @@
     components: {
       'vue-button': VueButton,
       'vue-prompt': VuePrompt,
-      'vue-toolbar': VueToolbar
+      'vue-toolbar': VueToolbar,
+      'vue-tags-inline': VueTagsInline
     },
     computed: {
       ...mapState('posts', ['topic'])

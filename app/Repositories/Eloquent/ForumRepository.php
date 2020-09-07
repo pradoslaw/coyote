@@ -3,6 +3,7 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Repositories\Contracts\ForumRepositoryInterface;
+use Coyote\Tag;
 use Coyote\Topic;
 use Coyote\Forum;
 use Illuminate\Database\Eloquent\Builder;
@@ -133,9 +134,9 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
             ->tags()
             ->whereIn('tags.name', $tags)
             ->orderBy($this->raw('COUNT(*)'), 'DESC')
-            ->get()
-            ->pluck('count', 'name')
-            ->toArray();
+            ->get();
+//            ->pluck('count', 'name')
+//            ->toArray();
     }
 
     /**
@@ -188,12 +189,12 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     {
         return $this
             ->app
-            ->make(Topic\Tag::class)
-            ->select(['name', $this->raw('COUNT(*) AS count')])
-            ->join('tags', 'tags.id', '=', 'tag_id')
+            ->make(Tag::class)
+            ->select(['tags.id', 'name', 'logo', $this->raw('COUNT(*) AS count')])
+            ->join('topic_tags', 'tags.id', '=', 'tag_id')
             ->join('topics', 'topics.id', '=', 'topic_id')
                 ->whereNull('topics.deleted_at')
                 ->whereNull('tags.deleted_at')
-            ->groupBy('name');
+            ->groupBy('name', 'logo', 'tags.id');
     }
 }
