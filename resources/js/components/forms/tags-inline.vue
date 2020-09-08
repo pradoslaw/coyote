@@ -54,17 +54,16 @@
     }
 
     dropTag(tag: Tag) {
-      this.tags.splice(this.tags.findIndex(item => item.name === tag.name), 1);
+      this.$emit('change', tag);
+
       this.$nextTick(() => this.calcInputWidth());
     }
 
     selectTag(tag: Tag) {
-      this.tags.push(tag);
-
       this.inputText = '';
       (this.$refs.input as HTMLInputElement).focus();
 
-      // this.$emit('change', tag);
+      this.$emit('change', tag);
 
       this.$nextTick(() => this.calcInputWidth());
     }

@@ -34,13 +34,9 @@ const mutations = {
   },
 
   toggleTag(state, { topic, tag }: { topic: Topic, tag: Tag }) {
-    // if (!Array.isArray(topic.tags)) {
-    //   topic.tags = [];
-    // }
-
     const index = topic.tags!.findIndex(item => item.name === tag.name);
 
-    index > -1 ? topic.tags!.splice(index, 1) : topic.tags?.push(tag);
+    index > -1 ? topic.tags!.splice(index, 1) : topic.tags!.push(tag);
   }
 };
 

@@ -85,7 +85,7 @@
     <div v-if="showTagsInput" class="form-group">
       <label class="col-form-label">Tagi <em>*</em></label>
 
-      <vue-tags-inline :tags="topic.tags"></vue-tags-inline>
+      <vue-tags-inline :tags="topic.tags" @change="toggleTag"></vue-tags-inline>
     </div>
 
     <div v-if="showStickyCheckbox" class="form-group">
@@ -128,7 +128,7 @@
   import VuePaste from '../../plugins/paste.js';
   import VueToolbar from '../../components/forms/toolbar.vue';
   import VueTimeago from '../../plugins/timeago';
-  import { Post, PostAttachment, Topic } from "../../types/models";
+  import { Post, PostAttachment, Topic, Tag } from "../../types/models";
   import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
   import axios from 'axios';
   import Textarea from "../../libs/textarea";
@@ -158,6 +158,9 @@
     @Ref()
     readonly textarea!: HTMLTextAreaElement;
 
+    @Ref('attachment')
+    readonly attachment!: HTMLInputElement;
+
     @Prop({default: false})
     readonly showTitleInput!: boolean;
 
@@ -184,10 +187,7 @@
     }})
     post!: Post;
 
-    @Ref('attachment')
-    readonly attachment!: HTMLInputElement;
-
-    public topic!: Topic;
+    topic!: Topic;
 
     @Emit()
     cancel() { }
@@ -244,6 +244,10 @@
       this.post.text = textarea.textarea.value;
 
       this.switchTab('textarea');
+    }
+
+    toggleTag(tag: Tag) {
+      store.commit('topics/toggleTag', { topic: this.topic, tag });
     }
 
   }
