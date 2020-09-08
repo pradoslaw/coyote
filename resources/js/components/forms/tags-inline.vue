@@ -1,11 +1,11 @@
 <template>
   <div class="position-relative">
-    <div class="form-control tag-editor">
-      <ul ref="clouds" class="tag-clouds" style="left: 0px;">
+    <div ref="editor" class="form-control tag-editor">
+      <ul ref="clouds" class="tag-clouds">
         <li v-for="tag in tags"><a @click="dropTag(tag)" class="remove">{{ tag.name }}</a></li>
       </ul>
 
-      <input v-model="inputText" ref="input" type="text" tabindex="4" placeholder="Np. c#, .net" autocomplete="off" style="width: 943.011px; left: 0px;">
+      <input v-model="inputText" :style="`width: ${inputWidth}`" ref="input" type="text" tabindex="4" placeholder="Np. c#, .net" autocomplete="off">
     </div>
 
     <vue-dropdown :items="filteredTags" @select="selectTag" class="tag-dropdown">
@@ -40,6 +40,7 @@
 
     private inputText: string = '';
     private filteredTags = [];
+    private inputWidth = '100%';
 
     @Watch('inputText')
     onInputTextChanged(newVal) {
@@ -54,6 +55,7 @@
 
     dropTag(tag: Tag) {
       this.tags.splice(this.tags.findIndex(item => item.name === tag.name), 1);
+      this.$nextTick(() => this.calcInputWidth());
     }
 
     selectTag(tag: Tag) {
@@ -61,8 +63,17 @@
 
       this.inputText = '';
       (this.$refs.input as HTMLInputElement).focus();
+
+      // this.$emit('change', tag);
+
+      this.$nextTick(() => this.calcInputWidth());
     }
 
+    private calcInputWidth() {
+      const editor = (this.$refs.editor as HTMLElement);
+      const styles = window.getComputedStyle(editor);
 
+      this.inputWidth = (editor.offsetWidth - (this.$refs.clouds as HTMLElement).offsetWidth - parseInt(styles.paddingLeft) - 1) + 'px';
+    }
   }
 </script>

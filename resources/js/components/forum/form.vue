@@ -148,7 +148,8 @@
     },
     computed: {
       ...mapState('posts', ['topic'])
-    }
+    },
+    methods: mapMutations('topics', ['toggleTag'])
   })
   export default class VueForm extends Vue {
     isProcessing = false;

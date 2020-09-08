@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Topic } from '../../types/models';
+import { Tag, Topic } from '../../types/models';
 
 const state = {
   topics: []
@@ -31,6 +31,16 @@ const mutations = {
 
   lock(state, topic: Topic) {
     topic.is_locked = !topic.is_locked;
+  },
+
+  toggleTag(state, { topic, tag }: { topic: Topic, tag: Tag }) {
+    // if (!Array.isArray(topic.tags)) {
+    //   topic.tags = [];
+    // }
+
+    const index = topic.tags!.findIndex(item => item.name === tag.name);
+
+    index > -1 ? topic.tags!.splice(index, 1) : topic.tags?.push(tag);
   }
 };
 
