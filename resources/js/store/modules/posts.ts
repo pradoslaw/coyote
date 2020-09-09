@@ -125,7 +125,8 @@ const actions = {
       subject: topic?.subject,
       is_sticky: topic?.is_sticky,
       is_subscribed: topic?.is_subscribed,
-      attachments: post.attachments
+      attachments: post.attachments,
+      tags: topic.tags!.map(o => o['name'])
     };
 
     return axios.post(`/Forum/${state.forum.slug}/Submit/${topic?.id || ''}/${post?.id || ''}`, input).then(result => {

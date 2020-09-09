@@ -87,7 +87,6 @@ class SubmitController extends BaseController
         }
 
         $post->fill($request->all());
-        $post->syncAttachments(array_pluck($request->input('attachments', []), 'id'));
 
         if ($post->isDirtyWithRelations() && $post->exists) {
             $post->fill([
@@ -108,8 +107,17 @@ class SubmitController extends BaseController
 
             $topic->save();
 
+            $tags = array_unique((array) $request->input('tags', []));
+
+            if (is_array($tags) && ($topic->wasRecentlyCreated || $post->id == $topic->first_post_id)) {
+                // assign tags to topic
+                $topic->setTags($tags);
+            }
+
             $post->topic()->associate($topic);
             $post->save();
+
+            $post->syncAttachments(array_pluck($request->input('attachments', []), 'id'));
 
             if ($topic->wasRecentlyCreated && $this->userId) {
                 $topic->subscribe($this->userId, $request->filled('is_subscribed'));
