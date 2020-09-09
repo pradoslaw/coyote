@@ -2,13 +2,13 @@
   <div class="position-relative">
     <div ref="editor" class="form-control tag-editor">
       <ul ref="clouds" class="tag-clouds">
-        <li v-for="tag in tags"><a @click="dropTag(tag)" class="remove">{{ tag.name }}</a></li>
+        <li v-for="tag in tags"><a @click="toggleTag(tag)" class="remove">{{ tag.name }}</a></li>
       </ul>
 
       <input v-model="inputText" :style="`width: ${inputWidth}`" ref="input" type="text" tabindex="4" placeholder="Np. c#, .net" autocomplete="off">
     </div>
 
-    <vue-dropdown :items="filteredTags" @select="selectTag" class="tag-dropdown">
+    <vue-dropdown :items="filteredTags" @select="toggleTag" class="tag-dropdown">
       <template v-slot:item="slot">
         <span>{{ slot.item.name }}</span>
         <small>×{{ slot.item.count }}</small>
@@ -19,7 +19,7 @@
 
 <script lang="ts">
   import Vue from "vue";
-  import { Ref, Mixins, Prop, Emit, Watch } from "vue-property-decorator";
+  import { Prop, Watch } from "vue-property-decorator";
   import Component from "vue-class-component";
   import VueDropdown from '../forms/dropdown.vue';
   import { Tag } from '../../types/models';
@@ -48,23 +48,14 @@
         return;
       }
 
-      axios.get(this.sourceUrl, {params: {q: newVal}}).then(result => {
-        this.filteredTags = result.data;
-      })
+      axios.get(this.sourceUrl, {params: {q: newVal}}).then(result => this.filteredTags = result.data);
     }
 
-    dropTag(tag: Tag) {
-      this.$emit('change', tag);
-
-      this.$nextTick(() => this.calcInputWidth());
-    }
-
-    selectTag(tag: Tag) {
+    toggleTag(tag: Tag) {
       this.inputText = '';
       (this.$refs.input as HTMLInputElement).focus();
 
       this.$emit('change', tag);
-
       this.$nextTick(() => this.calcInputWidth());
     }
 

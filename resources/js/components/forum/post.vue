@@ -84,7 +84,7 @@
           </template>
         </div>
 
-        <div class="col-12 col-lg-10">
+        <div v-if="!isEditing" class="col-12 col-lg-10">
           <div class="post-vote">
             <strong class="vote-count" title="Ocena postu">{{ post.score }}</strong>
 
@@ -98,7 +98,7 @@
             </a>
           </div>
 
-          <div v-if="!isEditing" class="post-content">
+          <div class="post-content">
             <div v-html="post.html"></div>
 
             <div v-if="tags" class="padding-sm-top padding-sm-bottom">
@@ -123,20 +123,6 @@
             </template>
           </div>
 
-          <vue-form
-            v-else
-            ref="form"
-            class="post-content mt-2 mb-2"
-            :post="post"
-            :show-title-input="post.id === topic.first_post_id"
-            :show-tags-input="post.id === topic.first_post_id"
-            :show-sticky-checkbox="post.id === topic.first_post_id && post.permissions.sticky"
-            :upload-mimes="uploadMimes"
-            :upload-max-size="uploadMaxSize"
-            @cancel="isEditing = false"
-            @save="isEditing = false"
-          ></vue-form>
-
           <div v-if="post.edit_count" class="edit-info">
             <strong>
               <a class="btn-history" :title="post.permissions.update ? 'Zobacz historię zmian tego postu' : ''" :href="post.permissions.update ? `/Forum/Post/Log/${post.id}` : ''">
@@ -155,6 +141,20 @@
             <vue-comment-form v-show="isCommenting" :comment="commentDefault" @save="isCommenting = false" @cancel="isCommenting = false" ref="comment-form"></vue-comment-form>
           </div>
         </div>
+
+        <vue-form
+          v-else
+          ref="form"
+          class="col-12 col-lg-10 mt-2 mb-2"
+          :post="post"
+          :show-title-input="post.id === topic.first_post_id"
+          :show-tags-input="post.id === topic.first_post_id"
+          :show-sticky-checkbox="post.id === topic.first_post_id && post.permissions.sticky"
+          :upload-mimes="uploadMimes"
+          :upload-max-size="uploadMaxSize"
+          @cancel="isEditing = false"
+          @save="isEditing = false"
+        ></vue-form>
       </div>
     </div>
 
