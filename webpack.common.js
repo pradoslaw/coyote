@@ -8,7 +8,7 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin');
 
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
   module: {
@@ -194,7 +194,7 @@ module.exports = {
 
 
     //
-    new BundleAnalyzerPlugin()
+    // new BundleAnalyzerPlugin()
   ]
 };
 
