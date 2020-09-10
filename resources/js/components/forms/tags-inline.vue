@@ -5,7 +5,17 @@
         <li v-for="tag in tags"><a @click="toggleTag(tag)" class="remove">{{ tag.name }}</a></li>
       </ul>
 
-      <input v-model="inputText" :style="`width: ${inputWidth}`" ref="input" type="text" tabindex="4" placeholder="Np. c#, .net" autocomplete="off">
+      <input
+        v-model="inputText"
+        :style="`width: ${inputWidth}`"
+        @keyup.space="setTag"
+        @keyup.enter="setTag"
+        ref="input"
+        type="text"
+        tabindex="4"
+        placeholder="Np. c#, .net"
+        autocomplete="off"
+      >
     </div>
 
     <vue-dropdown :items="filteredTags" @select="toggleTag" class="tag-dropdown">
@@ -57,6 +67,10 @@
 
       this.$emit('change', tag);
       this.$nextTick(() => this.calcInputWidth());
+    }
+
+    setTag() {
+      this.toggleTag({name: this.inputText})
     }
 
     private calcInputWidth() {
