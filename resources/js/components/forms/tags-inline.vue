@@ -65,12 +65,20 @@
       this.inputText = '';
       (this.$refs.input as HTMLInputElement).focus();
 
+
+
       this.$emit('change', tag);
       this.$nextTick(() => this.calcInputWidth());
     }
 
     setTag() {
-      this.toggleTag({name: this.inputText})
+      let name = this.inputText.trim().toLowerCase().replace(/[^a-ząęśżźćółń0-9\-\.#\+\s]/gi, '')
+
+      if (name.startsWith('#')) {
+        name = name.substr(1);
+      }
+
+      this.toggleTag({ name })
     }
 
     private calcInputWidth() {

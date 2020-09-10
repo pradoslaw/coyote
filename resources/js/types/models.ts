@@ -110,9 +110,9 @@ export interface Post {
 }
 
 export interface Tag {
-  id: number;
+  id?: number;
   name: string;
-  url: string;
+  url?: string;
   real_name?: string;
   logo?: string;
 }

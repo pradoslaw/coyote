@@ -1,4 +1,3 @@
-import '../../plugins/uploader';
 import tinymce from '../../libs/tinymce';
 import Geocoder from '../../libs/geocoder';
 import Vue from 'vue';
