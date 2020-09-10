@@ -135,7 +135,7 @@ abstract class BaseController extends Controller
         if ($tags) {
             $tags = (array) json_decode($tags);
 
-            $weight = $this->forum->getTagsWeight($tags)->pluck('name', 'count')->toArray();
+            $weight = $this->forum->getTagsWeight($tags)->pluck('count', 'name')->toArray();
             $diff = array_diff($tags, $weight);
 
             $tags = array_merge($weight, array_combine($diff, array_fill(0, count($diff), 0)));

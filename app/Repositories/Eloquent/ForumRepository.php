@@ -135,8 +135,6 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
             ->whereIn('tags.name', $tags)
             ->orderBy($this->raw('COUNT(*)'), 'DESC')
             ->get();
-//            ->pluck('count', 'name')
-//            ->toArray();
     }
 
     /**
