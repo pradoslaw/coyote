@@ -1,8 +1,8 @@
-import format from 'date-fns/format';
 import timeago from '../libs/timeago';
 import store from '../store';
-
-const locale = require('date-fns/locale/pl').default;
+// esm import mode includes all locales (don't know why)
+const format = require('date-fns/format');
+const locale = require('date-fns/locale/pl');
 
 export const createTimeago = (options = {}) => {
   return {
