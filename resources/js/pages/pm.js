@@ -15,14 +15,11 @@ import VuePagination from '../components/pagination.vue';
 import VueAutocomplete from '../components/forms/autocomplete.vue';
 import Textarea from "../libs/textarea";
 import axios from 'axios';
+import differenceInMinutes from 'date-fns/differenceInMinutes';
+import parseISO from 'date-fns/parseISO';
 
 Vue.use(VueAutosize);
 Vue.use(VuePaste, {url: '/User/Pm/Paste'});
-
-// esm import mode includes all locales (don't know why)
-const differenceInMinutes = require('date-fns/differenceInMinutes');
-const parseISO = require('date-fns/parseISO');
-
 
 const INBOX = 1;
 

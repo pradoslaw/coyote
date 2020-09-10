@@ -193,7 +193,7 @@ module.exports = {
     }),
 
 
-    //
+
     // new BundleAnalyzerPlugin()
   ]
 };

@@ -246,10 +246,8 @@
   import VueSelect from  './../forms/select.vue';
   import { mapActions, mapGetters, mapState } from "vuex";
   import VueModal from "../modal.vue";
-
-  // esm import mode includes all locales (don't know why)
-  const format = require('date-fns/formatDistanceToNow');
-  const pl = require('date-fns/locale/pl');
+  import formatDistanceToNow from 'date-fns/formatDistanceToNow';
+  import pl from 'date-fns/locale/pl';
 
   Vue.use(VueClipboard);
 

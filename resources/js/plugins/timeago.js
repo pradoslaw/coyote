@@ -1,8 +1,7 @@
 import timeago from '../libs/timeago';
 import store from '../store';
-// esm import mode includes all locales (don't know why)
-const format = require('date-fns/format');
-const locale = require('date-fns/locale/pl');
+import format from 'date-fns/format';
+import pl from 'date-fns/locale/pl';
 
 export const createTimeago = (options = {}) => {
   return {
@@ -42,7 +41,7 @@ export const createTimeago = (options = {}) => {
         'time',
         {
           attrs: {
-            title: this.datetime === null ? '' : format(new Date(this.datetime), this.format, { locale })
+            title: this.datetime === null ? '' : format(new Date(this.datetime), this.format, { locale: pl })
           }
         },
         [this.timeago]
@@ -58,7 +57,7 @@ export const createTimeago = (options = {}) => {
         const date = new Date(this.datetime);
         const value = timeago(date.getTime() / 1000);
 
-        return value ? value : format(date, this.format, { locale });
+        return value ? value : format(date, this.format, { locale: pl });
       },
 
       startUpdater() {
