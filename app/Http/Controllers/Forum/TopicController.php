@@ -118,7 +118,6 @@ class TopicController extends BaseController
 
         return $this->view(
             'forum.topic',
-//            compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'adminForumList', 'reasonList', 'form', 'flags')
             compact('posts', 'forum', 'paginate', 'forumList', 'reasons', 'flags')
         )->with([
             'mlt'           => $this->moreLikeThis($topic),
@@ -133,6 +132,9 @@ class TopicController extends BaseController
         // build "more like this" block. it's important to send elasticsearch query before
         // send SQL query to database because search() method exists only in Model and not Builder class.
         return $this->getCacheFactory()->remember('mlt-post:' . $topic->id, now()->addDay(), function () use ($topic) {
+            // it's important to reset criteria for the further queries
+            $this->forum->resetCriteria();
+
             $this->forum->pushCriteria(new OnlyThoseWithAccess());
 
             $builder = new MoreLikeThisBuilder($topic, $this->forum->pluck('id'));
@@ -140,8 +142,6 @@ class TopicController extends BaseController
             // search related topics
             $mlt = $this->topic->search($builder);
 
-            // it's important to reset criteria for the further queries
-            $this->forum->resetCriteria();
             return $mlt;
         });
     }

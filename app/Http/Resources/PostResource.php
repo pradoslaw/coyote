@@ -4,6 +4,7 @@ namespace Coyote\Http\Resources;
 
 use Carbon\Carbon;
 use Coyote\Forum;
+use Coyote\Http\Factories\GateFactory;
 use Coyote\Services\Forum\Tracker;
 use Coyote\Services\Parser\Factories\SigFactory;
 use Coyote\Services\UrlBuilder\UrlBuilder;
@@ -35,6 +36,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class PostResource extends JsonResource
 {
+    use GateFactory;
+
     /**
      * @var Tracker
      */
@@ -74,11 +77,11 @@ class PostResource extends JsonResource
         $only = $this->resource->only(['id', 'user_name', 'score', 'text', 'edit_count', 'is_voted', 'is_accepted', 'is_subscribed', 'user_id', 'deleter_name', 'delete_reason']);
         $html = $this->text !== null ? $this->html : null;
 
-        if ($this->isSignatureAllowed($request)) {
+        if ($this->isSignatureAllowed($request) && $this->user->sig) {
             $this->user->sig = $this->sigParser->parse($this->user->sig);
         }
 
-        $auth = $request->user();
+        $gate = $this->getGateFactory();
 
         return array_merge($only, [
             'created_at'    => $this->created_at->toIso8601String(),
@@ -90,7 +93,7 @@ class PostResource extends JsonResource
             'is_read'       => $this->tracker->getMarkTime() > $this->created_at,
             'is_locked'     => $this->topic->is_locked || $this->forum->is_locked,
 
-            $this->mergeWhen($auth->can('update', $this->resource), function () {
+            $this->mergeWhen($gate->allows('update', $this->resource), function () {
                return [
                    'ip'         => $this->ip . ' ' . ($this->host ? "($this->host)" : ''),
                    'browser'    => $this->browser
@@ -101,16 +104,14 @@ class PostResource extends JsonResource
                 return ['editor' => UserResource::make($this->editor)];
             }),
 
-            $this->mergeWhen($auth, function () use ($auth) {
-                return ['permissions' => [
-                    'write'             => $auth->can('write', $this->topic) && $auth->can('write', $this->forum),
-                    'delete'            => $auth->can('delete', $this->topic) || $auth->can('delete', $this->forum),
-                    'update'            => $auth->can('update', $this->resource),
-                    'merge'             => $auth->can('merge', $this->forum),
-                    'sticky'            => $auth->can('sticky', $this->forum),
-                    'adm_access'        => $auth->can('adm-access')
-                ]];
-            }),
+            'permissions' => [
+                'write'             => $gate->allows('write', $this->topic) && $gate->allows('write', $this->forum),
+                'delete'            => $gate->allows('delete', $this->topic) || $gate->allows('delete', $this->forum),
+                'update'            => $gate->allows('update', $this->resource),
+                'merge'             => $gate->allows('merge', $this->forum),
+                'sticky'            => $gate->allows('sticky', $this->forum),
+                'adm_access'        => $gate->allows('adm-access')
+            ],
 
             'comments'      => PostCommentResource::collection($this->resource->comments)->keyBy('id'),
             'attachments'   => PostAttachmentResource::collection($this->resource->attachments)
