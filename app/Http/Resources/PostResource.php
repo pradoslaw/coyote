@@ -77,7 +77,7 @@ class PostResource extends JsonResource
         $only = $this->resource->only(['id', 'user_name', 'score', 'text', 'edit_count', 'is_voted', 'is_accepted', 'is_subscribed', 'user_id', 'deleter_name', 'delete_reason']);
         $html = $this->text !== null ? $this->html : null;
 
-        if ($this->isSignatureAllowed($request) && $this->user->sig) {
+        if ($this->isSignatureAllowed($request)) {
             $this->user->sig = $this->sigParser->parse($this->user->sig);
         }
 
@@ -120,6 +120,10 @@ class PostResource extends JsonResource
 
     private function isSignatureAllowed(Request $request)
     {
-        return !$request->user() || ($request->user() && $request->user()->allow_sig) && ($this->user_id && $this->user->sig);
+        if (!$this->user_id || !$this->user->sig) {
+            return false;
+        }
+
+        return !$request->user() || ($request->user() && $request->user()->allow_sig);
     }
 }
