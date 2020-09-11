@@ -2,7 +2,6 @@
 
 namespace Coyote\Http\Requests\Forum;
 
-
 class SubjectRequest extends PostRequest
 {
     public function rules()

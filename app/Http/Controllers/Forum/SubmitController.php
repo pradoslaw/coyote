@@ -77,7 +77,6 @@ class SubmitController extends BaseController
             }
 
             $post->ip = $request->ip();
-//            $post->browser = '';
             $post->browser = str_limit($this->request->browser(), 250);
             $post->host = ''; // pole nie moze byc nullem
         } else {
@@ -182,12 +181,10 @@ class SubmitController extends BaseController
     }
 
     /**
-     * @param \Coyote\Topic $topic
-     * @param SubjectRequest $form
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @todo moze jakas refaktoryzacja? przeniesienie do repozytorium? na pewno logowanie o tym, ze zostal zmieniony
-     * tytul a nie tresc posta (jak to jest obecnie)
+     * @param Topic $topic
+     * @param SubjectRequest $request
+     * @return string
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function subject($topic, SubjectRequest $request)
     {
@@ -195,36 +192,24 @@ class SubmitController extends BaseController
 
         $topic->fill(['subject' => $request->input('subject')]);
 
-        $url = $this->transaction(function () use ($request, $topic) {
+        if (!$topic->isDirty()) {
+            return response()->json(['url' => UrlBuilder::topic($topic)]);
+        }
 
+        /** @var \Coyote\Post $post */
+        $post = $topic->firstPost;
 
-            /** @var \Coyote\Post $post */
-            $post = $topic->firstPost()->first();
-            $url = route('forum.topic', [$topic->forum->slug, $topic->id, $topic->slug], false);
+        $this->transaction(function () use ($request, $topic, $post) {
+            $originalSubject = $topic->getOriginal('subject');
 
-            if ($topic->isDirty()) {
-                $original = $topic->getOriginal();
+            $topic->save();
+            $post->fill(['edit_count' => $post->edit_count + 1, 'editor_id' => $this->userId])->save();
 
-                $topic->save();
-                $tags = $topic->getTagNames();
-
-                // save it in log...
-                (new Log)
-                    ->fillWithPost($post)
-                    ->fill(['user_id' => $this->userId, 'subject' => $topic->subject, 'tags' => $tags])
-                    ->save();
-
-                $post->fill([
-                    'edit_count' => $post->edit_count + 1, 'editor_id' => $this->userId
-                ])
-                ->save();
-
-                if ($post->user_id !== null) {
-                    $post->user->notify(
-                        (new SubjectChangedNotification($this->auth, $topic))
-                            ->setOriginalSubject(str_limit($original['subject'], 84))
-                    );
-                }
+            if ($post->user_id !== null) {
+                $post->user->notify(
+                    (new SubjectChangedNotification($this->auth, $topic))
+                        ->setOriginalSubject(str_limit($originalSubject, 84))
+                );
             }
 
             // get text from cache to put excerpt in stream activity
@@ -236,8 +221,6 @@ class SubmitController extends BaseController
                 (new Stream_Topic)->map($topic, $post->text),
                 (new Stream_Forum)->map($topic->forum)
             );
-
-            return $url;
         });
 
         // fire the event. it can be used to index a content and/or add page path to "pages" table
@@ -245,11 +228,7 @@ class SubmitController extends BaseController
         // add post to elasticsearch
         event(new PostWasSaved($post));
 
-        if ($request->ajax()) {
-            return response(url($url));
-        } else {
-            return redirect()->to($url);
-        }
+        return response()->json(['url' => UrlBuilder::topic($topic)]);
     }
 
     /**

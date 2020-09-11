@@ -136,6 +136,14 @@ new Vue({
       store.dispatch('topics/move', { topic: this.topic, forumId: this.forumId, reasonId: this.reasonId })
         .then(result => window.location.href = result.data.url)
         .finally(() => this.isProcessing = false);
+    },
+
+    changeTitle() {
+      this.isProcessing = true;
+
+      store.dispatch('topics/changeTitle', { topic: this.topic })
+        .then(result => window.location.href = result.data.url)
+        .finally(() => this.isProcessing = false);
     }
   }
 });

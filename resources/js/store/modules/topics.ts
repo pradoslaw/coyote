@@ -67,6 +67,10 @@ const actions = {
 
   move({ commit }, { topic, forumId, reasonId }) {
     return axios.post(`/Forum/Topic/Move/${topic.id}`, { id: forumId, reason_id: reasonId });
+  },
+
+  changeTitle({ commit }, { topic }) {
+    return axios.post(`/Forum/Topic/Subject/${topic.id}`, { subject: topic.subject });
   }
 };
 
