@@ -104,6 +104,7 @@ export interface Post {
   is_voted: boolean;
   permissions: PostPermission;
   ip?: string;
+  browser?: string;
   comments: PostComment[];
   attachments: PostAttachment[];
   edit_count?: number;

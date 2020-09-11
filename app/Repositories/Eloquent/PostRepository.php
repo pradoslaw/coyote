@@ -3,8 +3,6 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Carbon\Carbon;
-use Coyote\Forum;
-use Coyote\Http\Forms\Forum\PostForm;
 use Coyote\Post;
 use Coyote\Repositories\Contracts\PostRepositoryInterface;
 use Coyote\Repositories\Criteria\WithTrashed;
@@ -102,79 +100,6 @@ class PostRepository extends Repository implements PostRepositoryInterface
             ->whereIn('posts.id', array_map('intval', $postsId))
             ->where('topic_id', $topicId) // <-- this condition for extra security
             ->get();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function save(PostForm $form, $user, Forum $forum, Topic $topic, Post $post, $poll)
-    {
-        $postId = $post->id;
-        $log = new Post\Log();
-
-        /**
-         * @var $topic Topic
-         */
-        $topic->fill($form->all());
-        $topic->forum()->associate($forum);
-        $topic->poll()->associate($poll);
-
-        $topic->save();
-        $tags = array_unique((array) $form->getRequest()->get('tags', []));
-
-        if (is_array($tags) && ($topic->wasRecentlyCreated || $postId == $topic->first_post_id)) {
-            // assign tags to topic
-            $topic->setTags($tags);
-        }
-
-        /**
-         * @var $post Post
-         */
-        $post->fill($form->all());
-
-        if (empty($postId)) {
-            if ($user) {
-                $post->user()->associate($user);
-            }
-
-            $post->ip = $form->getRequest()->ip();
-            $post->browser = str_limit($form->getRequest()->browser(), 250);
-            $post->host = ''; // pole nie moze byc nullem
-        }
-
-        $log->fillWithPost($post)->fill(['subject' => $topic->subject, 'tags' => $tags]);
-        $isDirty = $log->isDirtyComparedToPrevious();
-
-        if ($isDirty && !empty($postId)) {
-            $post->fill([
-                'edit_count' => $post->edit_count + 1, 'editor_id' => $user->id
-            ]);
-        }
-
-        $post->forum()->associate($forum);
-        $post->topic()->associate($topic);
-
-        $post->save();
-
-        if ($isDirty) {
-            if ($user) {
-                $log->user_id = $user->id;
-            }
-            $post->logs()->save($log);
-        }
-
-        $post->syncAttachments(array_pluck($form->getRequest()->get('attachments', []), 'id'));
-
-        if ($user) {
-            if (empty($postId)) {
-                // automatically subscribe post
-                $post->subscribe($user->id, true);
-            }
-
-            $topic->subscribe($user->id, $form->getRequest()->get('subscribe'));
-        }
-
-        return $post;
     }
 
     /**

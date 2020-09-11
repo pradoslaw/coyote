@@ -2,12 +2,7 @@
 
 namespace Coyote\Repositories\Contracts;
 
-use Coyote\Http\Forms\Forum\PostForm;
 use Coyote\Topic;
-use Coyote\User;
-use Coyote\Forum;
-use Coyote\Post;
-use Coyote\Poll;
 
 /**
  * @method mixed search(\Coyote\Services\Elasticsearch\QueryBuilderInterface $queryBuilder)
@@ -51,17 +46,6 @@ interface PostRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function findPosts(array $postsId, $topicId);
-
-    /**
-     * @param PostForm $form
-     * @param User|null $user
-     * @param Forum $forum
-     * @param Topic $topic
-     * @param Post $post
-     * @param Poll|null $poll
-     * @return Post $post
-     */
-    public function save(PostForm $form, $user, Forum $forum, Topic $topic, Post $post, $poll);
 
     /**
      * @param int $userId
