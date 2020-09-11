@@ -6,6 +6,8 @@ use Collective\Html\HtmlBuilder;
 use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
 use Coyote\Services\Parser\Parsers\Parentheses\ParenthesesParser;
 use Coyote\Services\Parser\Parsers\Parentheses\SymmetricParenthesesChunks;
+use TRegx\CleanRegex\Match\Details\Match;
+use TRegx\SafeRegex\preg;
 
 class Link extends Parser implements ParserInterface
 {
@@ -89,7 +91,7 @@ class Link extends Parser implements ParserInterface
      */
     protected function parseLinks($text)
     {
-        if (!preg_match_all('/' . self::LINK_TAG_REGEXP . '/siU', $text, $matches, PREG_SET_ORDER)) {
+        if (!preg::match_all('/' . self::LINK_TAG_REGEXP . '/siU', $text, $matches, PREG_SET_ORDER)) {
             return $text;
         }
 
@@ -242,11 +244,11 @@ class Link extends Parser implements ParserInterface
             return null;
         }
 
-        if (preg_match('/(\d+)m(\d+)s/', $time, $match)) {
-            return ($match[1] * 60) + $match[2];
-        }
-
-        return $time;
+        return pattern("(\d+)m(\d+)s")->match($time)
+            ->findFirst(function (Match $match) {
+                return ($match->get(1) * 60) + $match->group(2)->toInt();
+            })
+            ->orElse($time);
     }
 
     /**
