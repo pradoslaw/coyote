@@ -52,6 +52,10 @@
     display: inline-block;
     width: 46%;
     font-weight: normal;
+
+    @include media-breakpoint-down(lg) {
+      width: 100%;
+    }
   }
 
   small {
