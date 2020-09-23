@@ -19,7 +19,6 @@ use Illuminate\Routing\Events\RouteMatched;
 use Illuminate\Routing\Redirector;
 use Illuminate\Http\Request;
 
-
 class AppServiceProvider extends ServiceProvider
 {
     /**
