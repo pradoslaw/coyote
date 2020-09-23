@@ -70,7 +70,7 @@
           </template>
 
           <div class="microblog-comments">
-            <div v-if="microblog.comments_count > Object.keys(microblog.comments).length" class="show-all">
+            <div v-if="microblog.comments_count > Object.keys(microblog.comments).length" class="show-all-comments">
               <a @click="loadComments(microblog)" href="javascript:"><i class="far fa-comments"></i> Zobacz {{ totalComments | declination(['pozostały', 'pozostałe', 'pozostałe']) }} {{ totalComments }} {{ totalComments | declination(['komentarz', 'komentarze', 'komentarzy']) }}</a>
             </div>
 

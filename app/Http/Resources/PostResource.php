@@ -83,6 +83,10 @@ class PostResource extends JsonResource
 
         $gate = $this->getGateFactory();
 
+        $commentsCount = count($this->resource->comments);
+        $comments = $this->resource->comments->slice(-5, null, true);
+//        $comments = array_slice($this->resource->comments, -5, null, true);
+
         return array_merge($only, [
             'created_at'    => $this->created_at->toIso8601String(),
             'updated_at'    => $this->updated_at ? $this->updated_at->toIso8601String() : null,
@@ -113,7 +117,8 @@ class PostResource extends JsonResource
                 'adm_access'        => $gate->allows('adm-access')
             ],
 
-            'comments'      => PostCommentResource::collection($this->resource->comments)->keyBy('id'),
+            'comments'      => PostCommentResource::collection($comments)->keyBy('id'),
+            'comments_count'=> $commentsCount,
             'attachments'   => PostAttachmentResource::collection($this->resource->attachments)
         ]);
     }

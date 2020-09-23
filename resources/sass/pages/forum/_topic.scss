@@ -317,11 +317,6 @@
   }
 }
 
-
-div.tooltip-inner {
-  font-size: 11px;
-}
-
 @include media-breakpoint-down(sm) {
   //.vote-up, .vote-count {
   //  font-size: $font-size-base;
@@ -332,95 +327,23 @@ div.tooltip-inner {
   }
 }
 
-// Komentarze na forum
-// -----------------------
-
-.comments {
-  margin: 15px 0 5px 25px;
-  font-family: Tahoma,sans-serif;
-  font-size: .75rem;
-  padding-right: 50px;
-
-  @include link-color-darker;
-
-  .btn-comment-edit, .btn-comment-del {
-    padding: 0 5px;
-    color: $gray;
-    display: none;
-  }
-
-  > div {
-    border-bottom: 1px dotted $border-color;
-    padding: 5px 0 5px 0;
-    margin-top: 1px;
-    position: relative;
-    word-wrap: break-word;
-
-
-    // Topic's author
-    // -----------------
-
-    .badge-primary {
-      font-weight: normal;
-      padding: 1px 5px;
-      margin-top: -1px;
-      font-size: 100%;
-
-      > a:hover {
-        text-decoration: none;
-      }
-    }
-
-    .timestamp {
-      color: $gray-light;
-
-      &:hover {
-        color: $alt-link-hover-color;
-      }
-    }
-
-    &:hover {
-      .btn-comment-edit, .btn-comment-del {
-        display: inline-block;
-      }
-    }
-  }
-
-  .btn-show-all {
-    color: $gray;
-    font-size: 12px;
-    padding: 2px 0 8px 1px;
-    display: inline-block;
-
-    &:hover {
-      text-decoration: none;
-      color: $alt-link-hover-color;
-    }
-  }
-
-}
-
-
-
 // Cytowane posty na forum
 // ----------------------------------------------------------
 
 blockquote {
   color: $gray-light;
 
-  > h5 {
-    a {
-      color: $gray !important;
-      position: relative;
-      padding-left: 16px;
-      font-family: Helvetica, sans-serif;
-      font-size: .8rem;
+  > h5 a {
+    color: $gray !important;
+    position: relative;
+    padding-left: 16px;
+    font-family: Helvetica, sans-serif;
+    font-size: .8rem;
 
-      &:before {
-        @include font-awesome($fa-var-external-link-alt);
-        left: 0;
-        font-weight: 900;
-      }
+    &:before {
+      @include font-awesome($fa-var-external-link-alt);
+      left: 0;
+      font-weight: 900;
     }
   }
 }

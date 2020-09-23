@@ -40,12 +40,10 @@ class PostRepository extends Repository implements PostRepositoryInterface
                 return $builder->select(['users.id', 'users.name', 'photo', 'posts', 'sig', 'location', 'users.created_at', 'visited_at', 'deleted_at', 'is_blocked', 'allow_smilies', 'allow_count', 'allow_sig', $this->raw('groups.name AS group')])
                     ->leftJoin('groups', 'groups.id', 'group_id');
             }])
-            ->with(['editor:id,name,is_blocked,deleted_at', 'comments.user'])
+            ->with(['editor:id,name,is_blocked,deleted_at', 'comments.user', 'attachments'])
             ->get();
 
         $paginate = new LengthAwarePaginator($result, $topic->replies, $perPage, $page, ['path' => ' ']);
-
-//        $sql->load('attachments');
 
         return $paginate;
     }

@@ -140,7 +140,15 @@
           </div>
 
           <div class="post-comments">
-            <vue-comment v-for="comment in post.comments" :key="comment.id" :comment="comment"></vue-comment>
+            <div v-if="post.comments_count > Object.keys(post.comments).length" class="d-inline-block mb-2 show-all-comments">
+              <a @click="loadComments(post)" href="javascript:"><i class="far fa-comments"></i> Zobacz {{ totalComments | declination(['pozostały', 'pozostałe', 'pozostałe']) }} {{ totalComments }} {{ totalComments | declination(['komentarz', 'komentarze', 'komentarzy']) }}</a>
+            </div>
+
+            <vue-comment
+              v-for="comment in post.comments"
+              :key="comment.id"
+              :comment="comment"
+            ></vue-comment>
 
             <vue-comment-form v-show="isCommenting" :comment="commentDefault" @save="isCommenting = false" @cancel="isCommenting = false" ref="comment-form"></vue-comment-form>
           </div>
@@ -264,11 +272,13 @@
   import VueModal from "../modal.vue";
   import formatDistanceToNow from 'date-fns/formatDistanceToNow';
   import pl from 'date-fns/locale/pl';
+  import { default as mixins } from '../mixins/user';
 
   Vue.use(VueClipboard);
 
   @Component({
     name: 'post',
+    mixins: [ mixins ],
     components: {
       'vue-avatar': VueAvatar,
       'vue-user-name': VueUserName,
@@ -358,9 +368,11 @@
 
     deletePost(confirm = false) {
       if (confirm) {
+        // @ts-ignore
         this.deleteModal.open();
       }
       else {
+        // @ts-ignore
         this.deleteModal.close();
         this.$store.dispatch('posts/delete', { post: this.post, reasonId: this.reasonId }).then(() => this.isCollapsed = true);
       }
@@ -368,6 +380,7 @@
 
     merge(confirm = false) {
       if (confirm) {
+        // @ts-ignore
         this.mergeModal.open();
       }
       else {
@@ -376,6 +389,7 @@
         this.$store.dispatch('posts/merge', this.post).finally(() => {
           this.isProcessing = false;
 
+          // @ts-ignore
           this.mergeModal.close();
         });
       }
@@ -409,6 +423,10 @@
 
     get highlight() {
       return '#' + this.anchor === window.location.hash;
+    }
+
+    get totalComments() {
+      return this.post.comments_count! - Object.keys(this.post.comments).length;
     }
   }
 </script>

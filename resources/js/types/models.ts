@@ -106,6 +106,7 @@ export interface Post {
   ip?: string;
   browser?: string;
   comments: PostComment[];
+  comments_count: number;
   attachments: PostAttachment[];
   edit_count?: number;
 }
