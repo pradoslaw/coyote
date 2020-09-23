@@ -4,6 +4,7 @@ namespace Tests\Browser;
 
 use Coyote\Permission;
 use Coyote\Services\UrlBuilder\UrlBuilder;
+use Faker\Factory;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 
@@ -40,9 +41,7 @@ class ForumTest extends DuskTestCase
                 $browser
                     ->loginAs($user)
                     ->visit(UrlBuilder::topic($topic))
-                    ->assertDontSee('Odpowiedz')
-                    ->visitRoute('forum.post.submit', [$forum, $topic])
-                    ->assertSee('401');
+                    ->assertDontSee('Odpowiedz');
             } finally {
                 $topic->forceDelete();
                 $forum->delete();
@@ -61,13 +60,21 @@ class ForumTest extends DuskTestCase
         $topic = $this->createTopic($forum->id, ['is_locked' => true]);
 
         $this->browse(function (Browser $browser) use ($user, $forum, $topic) {
+            $faker = Factory::create();
+            $text = $faker->text;
+
             try {
                 $browser
                     ->loginAs($user)
                     ->visit(UrlBuilder::topic($topic))
                     ->assertSee('Odpowiedz')
                     ->clickLink('Odpowiedz')
-                    ->assertSee('Odpowiedz');
+                    ->with('#js-submit-form', function ($form) use ($text) {
+                        $form->type('textarea[name="text"]', $text)
+                            ->screenshot('form')
+                            ->press('Zapisz');
+                    })
+                    ->waitForText($text);
             } finally {
                 $topic->forceDelete();
                 $forum->delete();

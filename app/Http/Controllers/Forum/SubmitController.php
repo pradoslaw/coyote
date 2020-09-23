@@ -4,21 +4,15 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Forum;
 use Coyote\Http\Controllers\Controller;
-use Coyote\Http\Forms\Forum\SubjectForm;
 use Coyote\Http\Requests\Forum\PostRequest;
 use Coyote\Http\Requests\Forum\SubjectRequest;
 use Coyote\Http\Resources\PostResource;
-use Coyote\Notifications\Post\ChangedNotification;
-use Coyote\Notifications\Post\SubmittedNotification;
-use Coyote\Notifications\Post\UserMentionedNotification;
 use Coyote\Notifications\Topic\SubjectChangedNotification;
 use Coyote\Post;
 use Coyote\Repositories\Contracts\PollRepositoryInterface;
-use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Services\Forum\Tracker;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Topic;
-use Illuminate\Contracts\Notifications\Dispatcher;
 use Illuminate\Http\Request;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
@@ -26,10 +20,8 @@ use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Services\Stream\Objects\Post as Stream_Post;
 use Coyote\Services\Stream\Objects\Forum as Stream_Forum;
 use Coyote\Services\Stream\Actor as Stream_Actor;
-use Coyote\Services\Parser\Helpers\Login as LoginHelper;
 use Coyote\Events\PostWasSaved;
 use Coyote\Events\TopicWasSaved;
-use Coyote\Post\Log;
 
 class SubmitController extends BaseController
 {

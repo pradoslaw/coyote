@@ -122,7 +122,7 @@ class TopicController extends BaseController
         )->with([
             'mlt'           => $this->moreLikeThis($topic),
             'topic'         => (new TopicResource($tracker))->resolve($request),
-            'is_writeable'  => $this->gate->allows('write', $forum) || $this->gate->allows('write', $topic),
+            'is_writeable'  => $this->gate->allows('write', $forum) && $this->gate->allows('write', $topic),
             'all_forums'    => $allForums
         ]);
     }

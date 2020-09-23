@@ -6,8 +6,6 @@
 {% import 'components.forms' as forms %}
 {% import 'components.modals' as modals %}
 
-{% set is_locked = topic.is_locked or forum.is_locked %}
-
 {% block content %}
 
   {% if topic.locked_at %}
@@ -40,7 +38,7 @@
         {{ paginate|raw }}
       </div>
 
-      {% if not is_locked or is_writeable %}
+      {% if is_writeable %}
         <div class="ml-auto">
           <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm">Nowy wątek</a>
           <a href="#js-submit-form" class="btn btn-primary btn-sm ml-2">Odpowiedz</a>
@@ -64,7 +62,7 @@
       </div>
 
       <div class="ml-auto">
-        {% if not is_locked or is_writeable %}
+        {% if is_writeable %}
           <a href="#js-submit-form" class="btn btn-primary btn-sm float-right ml-3">Odpowiedz</a>
         {% endif %}
       </div>
@@ -82,7 +80,7 @@
       </div>
     {% endif %}
 
-    {% if not is_locked or is_writeable %}
+    {% if is_writeable %}
       <vue-form id="js-submit-form" :post="undefinedPost"></vue-form>
     {% endif %}
 
