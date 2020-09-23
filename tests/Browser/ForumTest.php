@@ -71,7 +71,6 @@ class ForumTest extends DuskTestCase
                     ->clickLink('Odpowiedz')
                     ->with('#js-submit-form', function ($form) use ($text) {
                         $form->type('textarea[name="text"]', $text)
-                            ->screenshot('form')
                             ->press('Zapisz');
                     })
                     ->waitForText($text);
