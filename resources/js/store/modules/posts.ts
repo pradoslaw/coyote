@@ -50,7 +50,10 @@ const mutations = {
   },
 
   deleteComment(state, comment: PostComment) {
-    Vue.delete(state.data[comment.post_id!].comments, comment.id!);
+    const post = state.data[comment.post_id!];
+
+    Vue.delete(post.comments, comment.id!);
+    post.comments_count! -= 1;
   },
 
   addAttachment(state, { post, attachment }: { post: Post, attachment: PostAttachment }) {
