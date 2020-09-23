@@ -210,7 +210,7 @@
               </button>
 
               <div class="dropdown-menu dropdown-menu-right">
-                <a v-if="!post.deleted_at && post.permissions.merge" @click="merge(true)" href="javascript:" class="dropdown-item">
+                <a v-if="!post.deleted_at && post.permissions.merge && !firstPost" @click="merge(true)" href="javascript:" class="dropdown-item">
                   <i class="fas fa-compress fa-fw"></i> Połącz z poprzednim
                 </a>
 
