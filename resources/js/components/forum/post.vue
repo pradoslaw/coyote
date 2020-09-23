@@ -43,7 +43,7 @@
         </div>
 
         <div class="col-10 text-truncate small">
-          <i class="far fa-file small"></i>
+          <i class="far fa-file"></i>
 
           <a :href="post.url" class="small text-body">
             <vue-timeago :datetime="post.created_at"></vue-timeago>
