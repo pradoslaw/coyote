@@ -117,8 +117,6 @@
   }
 }
 
-
-
 .col-user {
   .avatar {
     margin: 5px 0 10px 0;
@@ -181,8 +179,6 @@
   }
 }
 
-
-
 .col-body {
   vertical-align: top;
   line-height: 1.3em;
@@ -203,7 +199,6 @@
     width: 40px;
   }
 }
-
 
 
 // Tresc posta wraz z ikonami do glosowania, stopka czy komentarzami
@@ -243,11 +238,6 @@
   img:not(.img-smile) {
     @include img-fluid;
   }
-}
-
-.list-attachments {
-  margin: 15px 0 5px 10px;
-  font-size: 11px;
 }
 
 .edit-info {

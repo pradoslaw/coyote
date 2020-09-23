@@ -39,6 +39,8 @@ const mutations = {
     }
 
     Vue.set(post.comments, comment.id!, comment);
+
+    post.comments_count! += 1;
   },
 
   updateComment(state, { post, comment}: ParentChild) {
@@ -160,8 +162,6 @@ const actions = {
     return axios.post(`/Forum/Post/Merge/${post.id}`).then(result => {
       commit('delete', post);
       commit('update', result.data);
-
-
     });
   }
 }

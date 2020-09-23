@@ -111,8 +111,8 @@
               </ul>
             </div>
 
-            <ul v-if="post.attachments" class="list-unstyled list-attachments">
-              <li v-for="attachment in post.attachments">
+            <ul v-if="post.attachments" class="list-unstyled">
+              <li v-for="attachment in post.attachments" class="small">
                 <i class="fas fa-download"></i>
 
                 <a :href="attachment.url">{{ attachment.name }}</a>
