@@ -14,26 +14,7 @@
       </template>
     </a>
 
-    <div :class="{'collapse': isCollapsed}" class="card-body">
-      <div class="media d-lg-none">
-        <div class="media-left mr-2">
-          <vue-avatar v-if="post.user" :id="post.user.id" :name="post.user.name" :photo="post.user.photo" class="d-block i-35 img-thumbnail"></vue-avatar>
-        </div>
-
-        <div class="media-body">
-          <h5 class="mb-0 post-author">
-            <vue-user-name v-if="post.user" :user="post.user"></vue-user-name>
-            <span v-else>{{ post.user_name }}</span>
-          </h5>
-
-          <a :href="post.url" class="text-muted small">
-            <vue-timeago :datetime="post.created_at"></vue-timeago>
-
-            <small v-if="post.ip" :title="post.ip" class="post-ip">({{ post.ip }})</small>
-          </a>
-        </div>
-      </div>
-
+    <div :class="{'collapse': isCollapsed}" class="card-header">
       <div class="row d-none d-lg-flex">
         <div class="col-2">
           <h5 class="mb-0 post-author">
@@ -51,6 +32,28 @@
 
           <small v-if="post.ip" :title="post.ip" class="text-muted">{{ post.ip }}</small>
           <small v-if="post.browser" :title="post.ip" class="text-muted">{{ post.browser }}</small>
+        </div>
+      </div>
+
+    </div>
+
+    <div :class="{'collapse': isCollapsed}" class="card-body">
+      <div class="media d-lg-none">
+        <div class="media-left mr-2">
+          <vue-avatar v-if="post.user" :id="post.user.id" :name="post.user.name" :photo="post.user.photo" class="d-block i-35 img-thumbnail"></vue-avatar>
+        </div>
+
+        <div class="media-body">
+          <h5 class="mb-0 post-author">
+            <vue-user-name v-if="post.user" :user="post.user"></vue-user-name>
+            <span v-else>{{ post.user_name }}</span>
+          </h5>
+
+          <a :href="post.url" class="text-muted small">
+            <vue-timeago :datetime="post.created_at"></vue-timeago>
+
+            <small v-if="post.ip" :title="post.ip" class="post-ip">({{ post.ip }})</small>
+          </a>
         </div>
       </div>
 

@@ -5,6 +5,10 @@
     padding: 10px 15px;
   }
 
+  .card-header {
+    padding: .5rem .75rem;
+  }
+
   .card-footer {
     padding: .25rem;
   }
@@ -38,7 +42,7 @@
 .post-author {
   @include link-color-darker;
 
-  font-size: 1rem;
+  font-size: .9rem;
 }
 
 .post-stats {
