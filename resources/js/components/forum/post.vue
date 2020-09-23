@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'is-deleted': post.deleted_at}" class="card card-post">
+  <div :id="anchor" :class="{'is-deleted': post.deleted_at, 'highlight-flash': highlight}" class="card card-post">
     <a v-if="post.deleted_at" @click="isCollapsed = !isCollapsed" href="javascript:" class="post-delete card-body text-decoration-none">
       <i class="fas fa-warning"></i>
 
@@ -358,11 +358,9 @@
 
     deletePost(confirm = false) {
       if (confirm) {
-        // @ts-ignore
         this.deleteModal.open();
       }
       else {
-        // @ts-ignore
         this.deleteModal.close();
         this.$store.dispatch('posts/delete', { post: this.post, reasonId: this.reasonId }).then(() => this.isCollapsed = true);
       }
@@ -370,7 +368,6 @@
 
     merge(confirm = false) {
       if (confirm) {
-        // @ts-ignore
         this.mergeModal.open();
       }
       else {
@@ -404,6 +401,14 @@
 
       // user can't accept first post in topic
       return (this.user.id === this.firstPost.user_id || this.post.permissions.update) && this.post.id !== this.firstPost.id;
+    }
+
+    get anchor() {
+      return `id${this.post.id}`;
+    }
+
+    get highlight() {
+      return '#' + this.anchor === window.location.hash;
     }
   }
 </script>
