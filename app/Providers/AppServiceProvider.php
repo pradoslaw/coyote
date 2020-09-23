@@ -18,7 +18,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Events\RouteMatched;
 use Illuminate\Routing\Redirector;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\Paginator;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -198,6 +198,10 @@ class AppServiceProvider extends ServiceProvider
             logger()->debug("Host lookup time: " . ($stop - $start) . "ms");
 
             return $this->clientHost;
+        });
+
+        Request::macro('browser', function () {
+            return str_limit(filter_var($this->header('User-Agent'), FILTER_SANITIZE_STRING), 900);
         });
     }
 }

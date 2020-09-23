@@ -40,7 +40,7 @@ class SubmitControllerTest extends TestCase
         $response = $this->actingAs($this->user)->json(
             'POST',
             "/Forum/{$this->forum->slug}/Submit",
-            ['text' => $post->text, 'subject' => $faker->text(50), 'is_sticky' => true, 'subscribe' => true]
+            ['text' => $post->text, 'subject' => $faker->text(50), 'is_sticky' => true, 'is_subscribed' => true]
         );
 
         $response->assertJsonFragment([
