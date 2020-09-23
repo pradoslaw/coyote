@@ -40,5 +40,4 @@ class AttachmentController extends BaseAttachmentController
 
         return (string) $form->render();
     }
-
 }
