@@ -110,97 +110,6 @@
   }
 }
 
-// klasa dodawana do tresci posta na okres podswietlania tresci
-.post-body.highlight {
-  > div.row:nth-child(even) {
-    background-color: inherit;
-  }
-}
-
-.col-user {
-  .avatar {
-    margin: 5px 0 10px 0;
-  }
-
-  p {
-    font-size: 11px;
-    color: $gray;
-    margin: 0;
-    padding: 2px 0;
-    @include text-overflow();
-
-    strong {
-      width: 36%;
-      display: inline-block;
-      font-weight: normal;
-
-      @include media-breakpoint-down(lg) {
-        display: block;
-        width: 100%;
-      }
-    }
-
-    small {
-      color: $gray-light;
-    }
-  }
-
-  h5 {
-    margin: 0;
-    font-weight: bold;
-    padding-left: 18px;
-    position: relative;
-    font-family: Arial, sans-serif;
-    color: $gray;
-    font-size: 0.85rem;
-
-    &:before {
-      @include font-awesome($fa-var-user);
-      color: $link-color-darker;
-      left: 0;
-      font-weight: 900;
-    }
-
-    .badge {
-      font-size: 90%;
-      margin-top: -2px;
-      margin-bottom: -2px;
-      padding: 1px 5px;
-    }
-
-    @include link-color-darker;
-    @include text-overflow;
-  }
-
-  h5.offline {
-    &:before {
-      color: $gray-300;
-    }
-  }
-}
-
-.col-body {
-  vertical-align: top;
-  line-height: 1.3em;
-  overflow: hidden;
-  position: relative;
-}
-
-.col-vote {
-  width: 50px;
-  vertical-align: top;
-  float: right;
-  line-height: 120%;
-  height: 100%;
-  position: absolute;
-  right: 0;
-
-  @include media-breakpoint-down(sm) {
-    width: 40px;
-  }
-}
-
-
 // Tresc posta wraz z ikonami do glosowania, stopka czy komentarzami
 // ------------------------------------------------------------------
 
@@ -210,7 +119,6 @@
   line-height: 139%;
   overflow: hidden;
   padding-right: 10px;
-  margin-top: 10px;
 
   @include link-color-darker;
   @include stripped-table;
@@ -308,10 +216,6 @@
 }
 
 @include media-breakpoint-down(sm) {
-  //.vote-up, .vote-count {
-  //  font-size: $font-size-base;
-  //}
-
   .vote-accept {
     font-size: $font-size-base + 0.6rem;
   }
