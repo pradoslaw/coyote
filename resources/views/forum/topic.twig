@@ -180,18 +180,6 @@
           </vue-modal>
         {% endif %}
 
-        {% if can('merge', forum) %}
-          <vue-modal ref="merge-modal">
-            <template v-slot:title>Czy chcesz połączyć?</template>
-
-            <template v-slot:buttons>
-              <button @click="$refs['merge-modal'].close()"  type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
-              <vue-button @click.native="merge" :disabled="isProcessing" class="btn btn-danger danger">Tak, połącz</vue-button>
-            </template>
-
-            <p>Czy chcesz połaczyć ten post z poprzednim?</p>
-          </vue-modal>
-        {% endif %}
       </div>
     {% endblock %}
 

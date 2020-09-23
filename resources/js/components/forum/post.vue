@@ -210,7 +210,7 @@
               </button>
 
               <div class="dropdown-menu dropdown-menu-right">
-                <a v-if="!post.deleted_at && post.permissions.merge" class="dropdown-item">
+                <a v-if="!post.deleted_at && post.permissions.merge" @click="merge(true)" href="javascript:" class="dropdown-item">
                   <i class="fas fa-compress fa-fw"></i> Połącz z poprzednim
                 </a>
 
@@ -224,14 +224,25 @@
       </div>
     </div>
 
-    <vue-modal ref="confirm">
+    <vue-modal ref="delete-modal">
       Post zostanie usunięty. Czy na pewno chcesz to zrobić?
 
       <p v-if="post.permissions.delete" class="mt-2"><vue-select name="reason_id" :options="reasons" :value.sync="reasonId" class="form-control-sm" placeholder="-- wybierz --"></vue-select></p>
 
       <template slot="buttons">
-        <button @click="$refs.confirm.close()" type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+        <button @click="$refs['delete-modal'].close()" type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
         <button @click="deletePost(false)" type="submit" class="btn btn-danger danger">Tak, usuń</button>
+      </template>
+    </vue-modal>
+
+    <vue-modal ref="merge-modal">
+      <p>Czy chcesz połaczyć ten post z poprzednim?</p>
+
+      <template slot="title">Czy chcesz połączyć?</template>
+
+      <template slot="buttons">
+        <button @click="$refs['merge-modal'].close()" type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+        <vue-button @click.native="merge(false)" :disabled="isProcessing" class="btn btn-danger danger">Tak, połącz</vue-button>
       </template>
     </vue-modal>
   </div>
@@ -248,6 +259,7 @@
   import VueForm from  './form.vue';
   import VueCommentForm from "./comment-form.vue";
   import VueSelect from  './../forms/select.vue';
+  import VueButton from  './../forms/button.vue';
   import { mapActions, mapGetters, mapState } from "vuex";
   import VueModal from "../modal.vue";
   import formatDistanceToNow from 'date-fns/formatDistanceToNow';
@@ -264,7 +276,8 @@
       'vue-comment-form': VueCommentForm,
       'vue-form': VueForm,
       'vue-modal': VueModal,
-      'vue-select': VueSelect
+      'vue-select': VueSelect,
+      'vue-button': VueButton
     },
     methods: mapActions('posts', ['vote', 'accept', 'subscribe']),
     computed: {
@@ -293,9 +306,13 @@
     @Ref('comment-form')
     readonly commentForm!: VueCommentForm;
 
-    @Ref()
-    readonly confirm!: VueModal;
+    @Ref('delete-modal')
+    readonly deleteModal!: VueModal;
 
+    @Ref('merge-modal')
+    readonly mergeModal!: VueModal;
+
+    isProcessing = false;
     isCollapsed = this.post.deleted_at != null;
     isEditing = false;
     isCommenting = false;
@@ -342,12 +359,28 @@
     deletePost(confirm = false) {
       if (confirm) {
         // @ts-ignore
-        this.confirm.open();
+        this.deleteModal.open();
       }
       else {
         // @ts-ignore
-        this.confirm.close();
+        this.deleteModal.close();
         this.$store.dispatch('posts/delete', { post: this.post, reasonId: this.reasonId }).then(() => this.isCollapsed = true);
+      }
+    }
+
+    merge(confirm = false) {
+      if (confirm) {
+        // @ts-ignore
+        this.mergeModal.open();
+      }
+      else {
+        this.isProcessing = true;
+
+        this.$store.dispatch('posts/merge', this.post).finally(() => {
+          this.isProcessing = false;
+
+          this.mergeModal.close();
+        });
       }
     }
 

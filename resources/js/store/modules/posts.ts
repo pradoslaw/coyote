@@ -2,7 +2,7 @@ import axios from "axios";
 import { Post, Forum, Topic, PostComment, PostAttachment, Tag } from "../../types/models";
 import Vue from "vue";
 
-type PostObj = {[key: number]: Post};
+type PostObj = { [key: number]: Post };
 type ParentChild = { post: Post, comment: PostComment };
 type PostWithAttachment = { post: Post, attachment: PostAttachment };
 
@@ -154,6 +154,15 @@ const actions = {
 
   restore({ commit }, post: Post) {
     return axios.post(`/Forum/Post/Restore/${post.id}`).then(() => commit('restore', post));
+  },
+
+  merge({ commit, getters }, post: Post) {
+    return axios.post(`/Forum/Post/Merge/${post.id}`).then(result => {
+      commit('delete', post);
+      commit('update', result.data);
+
+
+    });
   }
 }
 
