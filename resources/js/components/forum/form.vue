@@ -29,8 +29,9 @@
             name="text"
             class="form-control"
             ref="textarea"
-            rows="2"
+            rows="4"
             tabindex="1"
+            placeholder="Kliknij, aby dodać treść"
           ></textarea>
         </vue-prompt>
       </div>
