@@ -177,9 +177,14 @@ new Vue({
 
       el.addEventListener('focus', () => {
         const name = el.getAttribute('name');
+        const hint = document.getElementById(`hint-${name}`);
+
+        if (!hint) {
+          return; // hint tooltips might not be present on the website
+        }
 
         hints.forEach(hint => document.getElementById(hint).style.display = 'none');
-        document.getElementById(`hint-${name}`).style.display = 'block';
+        hint.style.display = 'block';
       });
     });
   },
