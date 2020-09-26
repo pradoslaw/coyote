@@ -150,7 +150,13 @@
               :comment="comment"
             ></vue-comment>
 
-            <vue-comment-form v-show="isCommenting" :comment="commentDefault" @save="isCommenting = false" @cancel="isCommenting = false" ref="comment-form"></vue-comment-form>
+            <vue-comment-form
+              v-show="isCommenting"
+              :comment="commentDefault"
+              @save="isCommenting = false"
+              @cancel="isCommenting = false"
+              ref="comment-form"
+            ></vue-comment-form>
           </div>
         </div>
 

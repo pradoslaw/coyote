@@ -85,7 +85,6 @@ class PostResource extends JsonResource
 
         $commentsCount = count($this->resource->comments);
         $comments = $this->resource->comments->slice(-5, null, true);
-//        $comments = array_slice($this->resource->comments, -5, null, true);
 
         return array_merge($only, [
             'created_at'    => $this->created_at->toIso8601String(),

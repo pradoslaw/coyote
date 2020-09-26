@@ -7,11 +7,11 @@
 
       <a :href="`#comment-${comment.id}`"><vue-timeago :datetime="comment.created_at" class="text-muted small"></vue-timeago></a>
 
-      <a @click="edit" href="javascript:" title="Edytuj ten komentarz" class="btn-comment">
+      <a v-if="comment.editable" @click="edit" href="javascript:" title="Edytuj ten komentarz" class="btn-comment">
         <i class="fas fa-pencil-alt"></i>
       </a>
 
-      <a @click="deleteComment(true)" href="javascript:" title="Usuń ten komentarz" class="btn-comment">
+      <a v-if="comment.editable" @click="deleteComment(true)" href="javascript:" title="Usuń ten komentarz" class="btn-comment">
         <i class="fas fa-times"></i>
       </a>
     </template>

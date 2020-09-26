@@ -18,7 +18,7 @@ class PostCommentPolicy
      * @param Forum $forum
      * @return bool
      */
-    private function check($ability, User $user, Comment $comment, Forum $forum)
+    private function check(string $ability, User $user, Comment $comment, Forum $forum)
     {
         return $user->id === $comment->user_id || $forum->ability($ability, $user->id) || $user->can($ability);
     }

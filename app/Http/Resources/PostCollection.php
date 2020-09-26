@@ -74,6 +74,10 @@ class PostCollection extends ResourceCollection
                 $post->setRelation('topic', $this->topic);
                 $post->setRelation('forum', $this->forum);
 
+                $post->comments->each(function (Post\Comment $comment) {
+                    $comment->setRelation('forum', $this->forum);
+                });
+
                 return (new PostResource($post))->setTracker($this->tracker)->setSigParser($parser)->toArray($request);
             })
             ->keyBy('id');

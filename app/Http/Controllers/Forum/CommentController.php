@@ -121,6 +121,8 @@ class CommentController extends Controller
             );
         }
 
+        $this->comment->setRelation('forum', $this->forum);
+
         event(new CommentSaved($this->comment));
 
         PostCommentResource::withoutWrapping();
@@ -159,6 +161,10 @@ class CommentController extends Controller
         PostCommentResource::withoutWrapping();
 
         $post->load('comments.user');
+
+        $post->comments->each(function (Post\Comment $comment) use ($post) {
+            $comment->setRelation('forum', $post->forum);
+        });
 
         return PostCommentResource::collection($post->comments)->keyBy('id');
     }

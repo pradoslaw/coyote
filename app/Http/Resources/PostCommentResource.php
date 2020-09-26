@@ -11,6 +11,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property User $user
+ * @property \Coyote\Forum $forum
  * @property int $user_id
  * @property string $text
  */
@@ -29,7 +30,11 @@ class PostCommentResource extends JsonResource
             [
                 'created_at'    => $this->created_at->toIso8601String(),
                 'updated_at'    => $this->updated_at->toIso8601String(),
-                'user'          => new UserResource($this->user)
+                'user'          => new UserResource($this->user),
+
+                $this->mergeWhen($request->user(), function () use ($request) {
+                    return ['editable' => $request->user()->can('update', [$this->resource, $this->forum])];
+                })
             ]
         );
     }

@@ -72,6 +72,7 @@ export interface PostComment {
   text: string;
   html: string;
   user: User;
+  editable?: boolean;
 }
 
 export interface PostAttachment {

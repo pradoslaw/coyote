@@ -88,10 +88,6 @@
   padding: 5px 0 5px 0;
   word-wrap: break-word;
 
-  &:before {
-    content: "▪";
-  }
-
   .btn-comment {
     padding: 0 5px;
     color: $gray;
@@ -106,7 +102,10 @@
 
   // comment text
   > span {
-    padding-left: 10px;
+    &:before {
+      content: "▪";
+      margin-right: 5px;
+    }
   }
 }
 
