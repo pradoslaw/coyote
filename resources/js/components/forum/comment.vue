@@ -1,5 +1,5 @@
 <template>
-  <div :id="`comment-${comment.id}`" class="post-comment">
+  <div :id="anchor" :class="{'highlight-flash': highlight}" class="post-comment">
     <template v-if="!isEditing">
       <span v-html="comment.html"></span>
 
@@ -35,13 +35,11 @@
   import VueModal from '../modal.vue';
   import VueCommentForm from "./comment-form.vue";
   import { default as mixins } from '../mixins/user';
-  import { Prop, Ref, Mixins } from "vue-property-decorator";
-  import {mapActions, mapGetters} from "vuex";
+  import { Prop, Ref } from "vue-property-decorator";
   import Component from "vue-class-component";
   import { mixin as clickaway } from "vue-clickaway";
   import store from "../../store";
   import { PostComment } from "../../types/models";
-
 
   @Component({
     name: 'comment',
@@ -79,6 +77,14 @@
         this.confirm.close();
         this.$store.dispatch('posts/deleteComment', this.comment);
       }
+    }
+
+    get anchor() {
+      return `comment-${this.comment.id}`;
+    }
+
+    get highlight() {
+      return '#' + this.anchor === window.location.hash;
     }
   }
 </script>
