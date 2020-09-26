@@ -19,21 +19,15 @@ class MergeControllerTest extends TestCase
         parent::setUp();
 
         $this->user = $this->createUserWithGroup();
-
         $this->forum = $this->createForum([], $this->user->groups()->first()->id);
     }
 
     public function testMergeTwoPostWhenUnauthorized()
     {
-        $this->forum->permissions()->create(['value' => 1, 'group_id' => $this->user->groups()->first()->id, 'permission_id' => Permission::where('name', 'forum-update')->get()->first()->id]);
-
         $topic = $this->createTopic($this->forum->id);
         $post = factory(Post::class)->create(['topic_id' => $topic->id, 'forum_id' => $this->forum->id]);
 
         $response = $this->json('POST', "/Forum/Post/Merge/$post->id");
-        $response->assertStatus(403);
-
-        $response = $this->actingAs($this->user)->json('POST', "/Forum/Post/Merge/$post->id");
         $response->assertStatus(403);
     }
 
@@ -57,6 +51,4 @@ class MergeControllerTest extends TestCase
 
         $this->assertNotNull($post->deleted_at);
     }
-
-
 }
