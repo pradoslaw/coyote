@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controllers\Forum;
 
 use Coyote\Forum;
+use Coyote\Permission;
 use Coyote\Post;
 use Coyote\Topic;
 use Coyote\User;
@@ -29,7 +30,30 @@ class SubmitControllerTest extends TestCase
         parent::setUp();
 
         $this->forum = factory(Forum::class)->create();
-        $this->user = factory(User::class)->create();
+        $this->user = $this->createUserWithGroup();
+    }
+
+    public function testSubmitWithInvalidTags()
+    {
+        $this->forum->require_tag = true;
+        $this->forum->save();
+
+        $response = $this->actingAs($this->user)->json('POST', "/Forum/{$this->forum->slug}/Submit");
+        $response->assertJsonValidationErrors(['subject', 'text', 'tags']);
+
+        $response = $this->actingAs($this->user)->json(
+            'POST',
+            "/Forum/{$this->forum->slug}/Submit",
+            ['tags' => ['aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa']]
+        );
+
+        $response->assertJsonValidationErrors(['tags']);
+
+        $this->forum->require_tag = false;
+        $this->forum->save();
+
+        $response = $this->actingAs($this->user)->json('POST', "/Forum/{$this->forum->slug}/Submit");
+        $response->assertJsonMissingValidationErrors(['tags']);
     }
 
     public function testSubmitTopicWithPost()
@@ -56,6 +80,27 @@ class SubmitControllerTest extends TestCase
         $topic = Topic::where('first_post_id', $id)->first();
 
         $this->assertTrue($topic->subscribers()->forUser($this->user->id)->exists());
+    }
+
+    public function testSubmitStickyTopic()
+    {
+        $faker = Factory::create();
+
+        $permission = Permission::where('name', 'forum-sticky')->get()->first();
+        $group = $this->user->groups()->first();
+
+        $this->forum->permissions()->create(['value' => 1, 'group_id' => $group->id, 'permission_id' => $permission->id]);
+
+        $response = $this->actingAs($this->user)->json(
+            'POST',
+            "/Forum/{$this->forum->slug}/Submit",
+            ['text' => $faker->text, 'subject' => $faker->text(50), 'is_sticky' => true]
+        );
+
+        $id = $response->decodeResponseJson('id');
+
+        $this->assertDatabaseHas('posts', ['id' => $id]);
+        $this->assertDatabaseHas('topics', ['first_post_id' => $id, 'is_sticky' => true]);
     }
 
     public function testSubmitPostToExistingTopic()
@@ -178,9 +223,4 @@ class SubmitControllerTest extends TestCase
 
         $response->assertStatus(401);
     }
-
-//    public function testSubmitStickyTopic()
-//    {
-//
-//    }
 }

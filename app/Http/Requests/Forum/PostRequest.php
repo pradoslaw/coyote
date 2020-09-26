@@ -5,6 +5,7 @@ namespace Coyote\Http\Requests\Forum;
 use Coyote\Forum;
 use Coyote\Post;
 use Coyote\Topic;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PostRequest extends FormRequest
@@ -52,9 +53,9 @@ class PostRequest extends FormRequest
 
         if ($this->canChangeSubject($topic, $post)) {
             $rules = array_merge($rules, [
-                'subject'       => self::RULE_SUBJECT,
-                'tag'           => self::RULE_TAGS,
-                'tag.*.name'    => self::RULE_TAG
+                'subject'   => self::RULE_SUBJECT,
+                'tags'      => self::RULE_TAGS,
+                'tags.*'    => self::RULE_TAG
             ]);
         }
 
@@ -89,16 +90,16 @@ class PostRequest extends FormRequest
         return !empty($post->id);
     }
 
-    public function withValidator($validator)
+    public function withValidator(Validator $validator)
     {
-        $validator->after(function ($validator) {
+        $validator->sometimes('tags', 'required', function () {
             /** @var Forum $forum */
             $forum = $this->route('forum');
 
-            if ($forum->require_tag && !$this->request->get('tag')) {
-                $validator->errors()->add('tags', 'To pole jest wymagane.');
-            }
+            return $forum->require_tag;
+        });
 
+        $validator->after(function ($validator) {
             $messages = $validator->errors();
 
             for ($i = 0; $i <= 5; $i++) {

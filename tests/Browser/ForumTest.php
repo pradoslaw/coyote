@@ -20,9 +20,11 @@ class ForumTest extends DuskTestCase
                 $browser
                     ->loginAs($user)
                     ->visitRoute('forum.topic.submit', ['forum' => $forum])
+                    ->assertChecked('#is-subscribed')
                     ->pressAndWaitFor('Zapisz')
                     ->assertSee('Temat musi posiadać minimum 3 znaki długości.')
-                    ->assertSee('To pole jest wymagane.');
+                    ->assertSee('Proszę wpisać treść.')
+                    ->assertSee('Wymagane jest przypisanie minimum jednego tagu do tego wątku.');
             } finally {
                 $forum->delete();
             }
