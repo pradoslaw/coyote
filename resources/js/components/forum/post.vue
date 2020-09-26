@@ -156,6 +156,7 @@
               @save="isCommenting = false"
               @cancel="isCommenting = false"
               ref="comment-form"
+              class="mt-2"
             ></vue-comment-form>
           </div>
         </div>
