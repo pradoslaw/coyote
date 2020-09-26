@@ -227,8 +227,10 @@
         .then(result => {
           this.$emit('save', result.data);
 
+          // post was recently created. we're not editing it
           if (!this.post.id) {
             this.post.text = '';
+            document.getElementById(`id${result.data.id}`)!.scrollIntoView();
           }
         })
         .catch(err => {

@@ -38,7 +38,7 @@
     </div>
 
     <div :class="{'collapse': isCollapsed}" class="card-body">
-      <div class="media d-lg-none">
+      <div class="media d-lg-none mb-2">
         <div class="media-left mr-2">
           <vue-avatar v-if="post.user" :id="post.user.id" :name="post.user.name" :photo="post.user.photo" class="d-block i-35 img-thumbnail"></vue-avatar>
         </div>
