@@ -1,4 +1,4 @@
-// import 'jquery-color-animation/jquery.animate-colors';
+
 // import 'jquery-prettytextdiff/jquery.pretty-text-diff';
 // import '../plugins/tags';
 // import '../pages/forum/draft';
@@ -201,6 +201,7 @@ new Vue({
       this.undefinedPost.text += text;
 
       document.getElementById('js-submit-form').scrollIntoView();
+      this.$refs['js-submit-form'].$refs['textarea'].focus();
     }
   },
   computed: {
