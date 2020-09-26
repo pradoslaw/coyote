@@ -10,6 +10,25 @@ use Tests\DuskTestCase;
 
 class ForumTest extends DuskTestCase
 {
+    public function testShowValidateErrors()
+    {
+        $forum = $this->createForum(['require_tag' => true]);
+        $user = $this->createUserWithGroup();
+
+        $this->browse(function (Browser $browser) use ($forum, $user) {
+            try {
+                $browser
+                    ->loginAs($user)
+                    ->visitRoute('forum.topic.submit', ['forum' => $forum])
+                    ->pressAndWaitFor('Zapisz')
+                    ->assertSee('Temat musi posiadać minimum 3 znaki długości.')
+                    ->assertSee('To pole jest wymagane.');
+            } finally {
+                $forum->delete();
+            }
+        });
+    }
+
     public function testWriteInLockedCategory()
     {
         $forum = $this->createForum(['is_locked' => true, 'name' => 'some locked category']);

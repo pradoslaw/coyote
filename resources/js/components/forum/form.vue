@@ -3,9 +3,10 @@
     <div v-if="showTitleInput" class="form-group">
       <label class="col-form-label">Temat <em>*</em></label>
 
-      <input v-model="topic.subject" tabindex="1" autofocus="autofocus" class="form-control" name="subject" type="text">
+      <vue-text :value="topic.subject" :is-invalid="'subject' in errors" name="subject" tabindex="1" autofocus="autofocus"></vue-text>
+      <vue-error :message="errors['subject']"></vue-error>
 
-      <small class="text-muted form-text">Bądź rzeczowy. Nie nadawaj wątkom jednowyrazowych tematów.</small>
+      <small v-if="!('subject' in errors)" class="text-muted form-text">Bądź rzeczowy. Nie nadawaj wątkom jednowyrazowych tematów.</small>
     </div>
 
     <ul class="nav nav-tabs">
@@ -23,6 +24,7 @@
             v-autosize
             v-model="post.text"
             v-paste:success="addAttachment"
+            :class="{'is-invalid': 'text' in errors}"
             @keydown.ctrl.enter="save"
             @keydown.meta.enter="save"
             @keydown.esc="cancel"
@@ -33,6 +35,8 @@
             tabindex="1"
             placeholder="Kliknij, aby dodać treść"
           ></textarea>
+
+          <vue-error :message="errors['text']"></vue-error>
         </vue-prompt>
       </div>
 
@@ -84,9 +88,16 @@
     </div>
 
     <div v-if="showTagsInput" class="form-group">
-      <label class="col-form-label">Tagi <em>*</em></label>
+      <label class="col-form-label">Tagi <em v-if="requireTag">*</em></label>
 
-      <vue-tags-inline :tags="topic.tags" @change="toggleTag"></vue-tags-inline>
+      <vue-tags-inline
+        :tags="topic.tags"
+        :class="{'is-invalid': 'tags' in errors}"
+        :placeholder="requireTag ? 'Minimum 1 tag jest wymagany': 'Np. c#, .net'"
+        @change="toggleTag"
+      ></vue-tags-inline>
+
+      <vue-error :message="errors['tags']"></vue-error>
     </div>
 
     <div v-if="showStickyCheckbox" class="form-group">
@@ -130,9 +141,11 @@
   import VueToolbar from '../../components/forms/toolbar.vue';
   import VueTimeago from '../../plugins/timeago';
   import { Post, PostAttachment, Topic, Tag } from "../../types/models";
-  import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
+  import { mapMutations, mapState } from "vuex";
   import axios from 'axios';
   import Textarea from "../../libs/textarea";
+  import VueError from '../forms/error.vue';
+  import VueText from '../forms/text.vue';
 
   Vue.use(VueAutosize);
   Vue.use(VuePaste, {url: '/Forum/Paste'});
@@ -145,7 +158,9 @@
       'vue-button': VueButton,
       'vue-prompt': VuePrompt,
       'vue-toolbar': VueToolbar,
-      'vue-tags-inline': VueTagsInline
+      'vue-tags-inline': VueTagsInline,
+      'vue-error': VueError,
+      'vue-text': VueText
     },
     computed: {
       ...mapState('posts', ['topic'])
@@ -154,7 +169,8 @@
   })
   export default class VueForm extends Vue {
     isProcessing = false;
-    activeTab = 'textarea'
+    activeTab = 'textarea';
+    errors = {};
 
     @Ref()
     readonly textarea!: HTMLTextAreaElement;
@@ -180,6 +196,9 @@
     @Prop()
     readonly uploadMimes!: string;
 
+    @Prop({default: false})
+    readonly requireTag!: boolean;
+
     @Prop({default() {
       return {
         text: '',
@@ -202,6 +221,7 @@
 
     save() {
       this.isProcessing = true;
+      this.errors = {};
 
       store.dispatch('posts/save', { post: this.post, topic: this.topic })
         .then(result => {
@@ -210,6 +230,13 @@
           if (!this.post.id) {
             this.post.text = '';
           }
+        })
+        .catch(err => {
+          if (err.response.status !== 422) {
+            return;
+          }
+
+          this.errors = err.response.data.errors;
         })
         .finally(() => this.isProcessing = false);
     }

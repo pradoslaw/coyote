@@ -40,7 +40,7 @@ class SubmitController extends BaseController
 
         return Controller::view('forum.submit', [
             'forum' => $forum,
-            'show_sticky_checkbox' => $this->userId ? $this->auth->can('sticky', $forum) : false
+            'show_sticky_checkbox' => (int) ($this->userId ? $this->auth->can('sticky', $forum) : false)
         ]);
     }
 

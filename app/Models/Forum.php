@@ -62,7 +62,14 @@ class Forum extends Model
     /**
      * @var array
      */
-    protected $casts = ['redirects' => 'int', 'is_locked' => 'bool', 'is_prohibited' => 'bool'];
+    protected $casts = [
+        'redirects' => 'int',
+        'is_locked' => 'bool',
+        'is_prohibited' => 'bool',
+        'require_tag' => 'bool',
+        'enable_reputation' => 'bool',
+        'enable_anonymous' => 'bool'
+    ];
 
     /**
      * @var array

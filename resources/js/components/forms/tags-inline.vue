@@ -8,12 +8,12 @@
       <input
         v-model="inputText"
         :style="`width: ${inputWidth}`"
+        :placeholder="placeholder"
         @keyup.space="setTag"
         @keyup.enter="setTag"
         ref="input"
         type="text"
         tabindex="4"
-        placeholder="Np. c#, .net"
         autocomplete="off"
       >
     </div>
@@ -43,7 +43,10 @@
   })
   export default class VueTagsInline extends Vue {
     @Prop({default: '/Forum/Tag/Prompt'})
-    sourceUrl!: string;
+    readonly sourceUrl!: string;
+
+    @Prop({default: ''})
+    readonly placeholder!: string;
 
     @Prop({default: () => []})
     tags!: Tag[];
@@ -64,8 +67,6 @@
     toggleTag(tag: Tag) {
       this.inputText = '';
       (this.$refs.input as HTMLInputElement).focus();
-
-
 
       this.$emit('change', tag);
       this.$nextTick(() => this.calcInputWidth());

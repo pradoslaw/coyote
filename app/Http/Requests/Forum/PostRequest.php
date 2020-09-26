@@ -88,4 +88,26 @@ class PostRequest extends FormRequest
     {
         return !empty($post->id);
     }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            /** @var Forum $forum */
+            $forum = $this->route('forum');
+
+            if ($forum->require_tag && !$this->request->get('tag')) {
+                $validator->errors()->add('tags', 'To pole jest wymagane.');
+            }
+
+            $messages = $validator->errors();
+
+            for ($i = 0; $i <= 5; $i++) {
+                $error = $messages->first("tags.$i");
+
+                if ($error) {
+                    $validator->errors()->add('tags', $error);
+                }
+            }
+        });
+    }
 }
