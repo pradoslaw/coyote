@@ -31,7 +31,7 @@
           </a>
 
           <small v-if="post.ip" :title="post.ip" class="text-muted">{{ post.ip }}</small>
-          <small v-if="post.browser" :title="post.ip" class="text-muted">{{ post.browser }}</small>
+          <small v-if="post.browser" :title="post.browser" class="text-muted">{{ post.browser }}</small>
         </div>
       </div>
 

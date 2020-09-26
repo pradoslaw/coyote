@@ -98,7 +98,7 @@ class PostResource extends JsonResource
 
             $this->mergeWhen($gate->allows('update', $this->resource), function () {
                 return [
-                   'ip'         => $this->ip . ' ' . ($this->host ? "($this->host)" : ''),
+                   'ip'         => $this->ip,
                    'browser'    => $this->browser
                ];
             }),
