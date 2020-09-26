@@ -159,6 +159,11 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
         ]
     ]);
 
+    $this->get('Comment/Show/{post}', [
+        'uses' => 'CommentController@show',
+        'as' => 'comment.show'
+    ]);
+
     // glosowanie w ankiecie
     $this->post('{forum}/Poll/{id}', [
         'uses' => 'PollController@vote',

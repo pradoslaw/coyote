@@ -289,7 +289,7 @@
       'vue-select': VueSelect,
       'vue-button': VueButton
     },
-    methods: mapActions('posts', ['vote', 'accept', 'subscribe']),
+    methods: mapActions('posts', ['vote', 'accept', 'subscribe', 'loadComments']),
     computed: {
       ...mapState('user', {user: state => state}),
       ...mapGetters('user', ['isAuthorized']),

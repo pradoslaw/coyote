@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Post, Forum, Topic, PostComment, PostAttachment, Tag } from "../../types/models";
+import { Post, Forum, Topic, PostComment, PostAttachment } from "../../types/models";
 import Vue from "vue";
 
 type PostObj = { [key: number]: Post };
@@ -54,6 +54,11 @@ const mutations = {
 
     Vue.delete(post.comments, comment.id!);
     post.comments_count! -= 1;
+  },
+
+  setComments(state, { post, comments }) {
+    post.comments = comments;
+    post.comments_count = comments.length;
   },
 
   addAttachment(state, { post, attachment }: { post: Post, attachment: PostAttachment }) {
@@ -166,6 +171,12 @@ const actions = {
       commit('delete', post);
       commit('update', result.data);
     });
+  },
+
+  loadComments({ commit }, post: Post) {
+    axios.get(`/Forum/Comment/Show/${post.id}`).then(result => {
+      commit('setComments', { post, comments: result.data });
+    })
   }
 }
 
