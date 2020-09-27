@@ -186,10 +186,18 @@ new Vue({
 
       axios.post('/Forum/Tag/Save', { tags })
         .then(result => {
-          this.isEditing = false;
           this.tags = result.data;
+          this.isEditing = false;
         })
         .finally(() => this.isProcessing = false);
+    },
+
+    toggleEdit() {
+      this.isEditing = !this.isEditing;
+
+      if (this.isEditing) {
+        this.$nextTick(() => this.$refs.input.focus());
+      }
     }
   },
   computed: {

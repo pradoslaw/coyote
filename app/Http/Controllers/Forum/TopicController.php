@@ -116,10 +116,7 @@ class TopicController extends BaseController
 
         $topic->load('tags');
 
-        return $this->view(
-            'forum.topic',
-            compact('posts', 'forum', 'paginate', 'forumList', 'reasons', 'flags')
-        )->with([
+        return $this->view('forum.topic', compact('posts', 'forum', 'paginate', 'forumList', 'reasons', 'flags'))->with([
             'mlt'           => $this->moreLikeThis($topic),
             'topic'         => (new TopicResource($tracker))->resolve($request),
             'is_writeable'  => $this->gate->allows('write', $forum) && $this->gate->allows('write', $topic),

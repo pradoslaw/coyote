@@ -90,7 +90,7 @@ abstract class Controller extends BaseController
      * @param $value
      * @return string
      */
-    protected function setSetting($name, $value)
+    protected function setSetting(string $name, $value)
     {
         return app(Guest::class)->setSetting($name, $value);
     }

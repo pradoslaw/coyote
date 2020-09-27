@@ -123,14 +123,14 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * @return array|null
+     * @return array
      */
     protected function getUserTags()
     {
         $tags = json_decode($this->getSetting('forum.tags', '[]'));
 
         if (!$tags) {
-            return null;
+            return [];
         }
 
         return TagResource::collection($this->forum->getTagsWeight($tags))->resolve($this->request);

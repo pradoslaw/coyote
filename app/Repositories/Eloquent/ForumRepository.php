@@ -130,9 +130,23 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
      */
     public function getTagsWeight(array $tags)
     {
+        $list = [];
+
+        foreach ($tags as $tag) {
+            $list[] = "('$tag', 0)";
+        }
+
         return $this
-            ->tags()
-            ->whereIn('tags.name', $tags)
+            ->app
+            ->make(Tag::class)
+            ->select(['tags.id', 'custom.name', 'logo', $this->raw('GREATEST(custom.count, count(topic_tags.id)) AS count')])
+            ->fromRaw("(VALUES" . implode(',', $list) . ") AS custom(name, count)")
+            ->leftJoin('tags', 'tags.name', '=', 'custom.name')
+            ->leftJoin('topic_tags', 'tag_id', '=', 'tags.id')
+            ->leftJoin('topics', 'topics.id', '=', 'topic_id')
+            ->whereNull('topics.deleted_at')
+            ->whereNull('tags.deleted_at')
+            ->groupBy('custom.name', 'logo', 'tags.id', 'custom.count')
             ->orderBy($this->raw('COUNT(*)'), 'DESC')
             ->get();
     }
