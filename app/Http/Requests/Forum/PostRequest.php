@@ -21,6 +21,11 @@ class PostRequest extends FormRequest
     const RULE_HUMAN                = 'required';
     const RULE_THROTTLE             = 'throttle';
 
+    const RULE_POLL_TITLE           = 'nullable|string|max:100';
+    const RULE_POLL_ITEMS           = 'required_with:poll.title';
+    const RULE_POLL_MAX_ITEMS       = 'required_with:poll.title|integer|min:1';
+    const RULE_POLL_LENGTH          = 'required_with:poll.title|integer';
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -53,9 +58,14 @@ class PostRequest extends FormRequest
 
         if ($this->canChangeSubject($topic, $post)) {
             $rules = array_merge($rules, [
-                'subject'   => self::RULE_SUBJECT,
-                'tags'      => self::RULE_TAGS,
-                'tags.*'    => self::RULE_TAG
+                'subject'       => self::RULE_SUBJECT,
+                'tags'          => self::RULE_TAGS,
+                'tags.*'        => self::RULE_TAG,
+
+                'poll.title'    => self::RULE_POLL_TITLE,
+                'poll.items'    => self::RULE_POLL_ITEMS,
+                'poll.length'   => self::RULE_POLL_LENGTH,
+                'poll.max_items'=> self::RULE_POLL_MAX_ITEMS
             ]);
         }
 

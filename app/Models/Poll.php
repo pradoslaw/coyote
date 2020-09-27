@@ -53,18 +53,15 @@ class Poll extends Model
         return $this->hasMany('Coyote\Poll\Vote');
     }
 
-    /**
-     * @return static
-     */
     public function expiredAt()
     {
-        return $this->created_at->addDay($this->length);
+        return $this->created_at->addDays($this->length);
     }
 
     /**
      * @return bool
      */
-    public function hasExpired()
+    public function expired()
     {
         return $this->length > 0 ? Carbon::now() > $this->expiredAt() : false;
     }
@@ -73,7 +70,7 @@ class Poll extends Model
      * @param int $userId
      * @return array
      */
-    public function userVotedItems($userId)
+    public function userVoteIds(int $userId)
     {
         return $this->votes()->forUser($userId)->pluck('item_id')->toArray();
     }

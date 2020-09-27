@@ -7,6 +7,7 @@ import VueSection from '../components/forum/section.vue';
 import VueTopic from '../components/forum/topic.vue';
 import VuePost from '../components/forum/post.vue';
 import VueForm from '../components/forum/form.vue';
+import VuePoll from '../components/forum/poll.vue';
 import VueModal from '../components/modal.vue';
 import VueButton from '../components/forms/button.vue';
 import VueSelect from '../components/forms/select.vue';
@@ -208,13 +209,14 @@ new Vue({
 new Vue({
   el: '#js-post',
   delimiters: ['${', '}'],
-  components: { 'vue-post': VuePost, 'vue-form': VueForm },
+  components: { 'vue-post': VuePost, 'vue-form': VueForm, 'vue-poll': VuePoll },
   store,
   data() {
     return {
       showStickyCheckbox: window.showStickyCheckbox,
       undefinedPost: { text: '', html: '' },
-      reasons: window.reasons
+      reasons: window.reasons,
+      poll: window.poll
     }
   },
   created() {

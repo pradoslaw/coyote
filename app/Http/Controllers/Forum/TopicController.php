@@ -6,6 +6,7 @@ use Coyote\Events\TopicWasSaved;
 use Coyote\Forum\Reason;
 use Coyote\Http\Factories\CacheFactory;
 use Coyote\Http\Factories\FlagFactory;
+use Coyote\Http\Resources\PollResource;
 use Coyote\Http\Resources\PostCollection;
 use Coyote\Http\Resources\TopicResource;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
@@ -115,6 +116,7 @@ class TopicController extends BaseController
         return $this->view('forum.topic', compact('posts', 'forum', 'paginate', 'forumList', 'reasons'))->with([
             'mlt'           => $this->moreLikeThis($topic),
             'topic'         => (new TopicResource($tracker))->resolve($request),
+            'poll'          => (new PollResource($topic->poll))->resolve($request),
             'is_writeable'  => $this->gate->allows('write', $forum) && $this->gate->allows('write', $topic),
             'all_forums'    => $allForums
         ]);

@@ -12,6 +12,7 @@
     <ul class="nav nav-tabs">
       <li class="nav-item"><a @click="switchTab('textarea')" :class="{active: activeTab === 'textarea'}" class="nav-link" href="javascript:">Treść</a></li>
       <li class="nav-item"><a @click="switchTab('attachments')" :class="{active: activeTab === 'attachments'}" class="nav-link" href="javascript:">Załączniki</a></li>
+      <li class="nav-item"><a @click="switchTab('poll')" :class="{active: activeTab === 'poll'}" class="nav-link" href="javascript:">Ankieta</a></li>
       <li class="nav-item"><a @click="switchTab('preview')" :class="{active: activeTab === 'preview'}" class="nav-link" href="javascript:">Podgląd</a></li>
     </ul>
 
@@ -82,6 +83,47 @@
         </div>
       </div>
 
+      <div :class="{active: activeTab === 'poll'}" class="tab-pane post-content">
+        <div class="form-group row">
+          <label class="col-md-4 col-form-label text-right">Tytuł ankiety</label>
+
+          <div class="col-md-6">
+            <vue-text :value="poll.title"></vue-text>
+            <vue-error :message="errors['poll.title']"></vue-error>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-md-4 col-form-label text-right">Odpowiedzi w ankiecie</label>
+
+          <div class="col-md-6">
+            <textarea v-model="poll.items" class="form-control" cols="50" rows="10"></textarea>
+            <vue-error :message="errors['poll.items']"></vue-error>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-md-4 col-form-label text-right">Liczba możliwych odpowiedzi</label>
+
+          <div class="col-md-6">
+            <vue-text :value="poll.max_items"></vue-text>
+            <vue-error :message="errors['poll.max_items']"></vue-error>
+
+            <span class="form-text text-muted">Minimalnie jedna możliwa odpowiedź w ankiecie.</span>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-md-4 col-form-label text-right">Długość działania</label>
+
+          <div class="col-md-6">
+            <vue-text :value="poll.length"></vue-text>
+
+            <span class="form-text text-muted">Okreś długość działania ankiety (w dniach). 0 oznacza brak terminu ważności.</span>
+          </div>
+        </div>
+      </div>
+
       <div :class="{active: activeTab === 'preview'}" class="tab-pane post-content">
         <div v-html="post.html"></div>
       </div>
@@ -140,7 +182,7 @@
   import VuePaste from '../../plugins/paste.js';
   import VueToolbar from '../../components/forms/toolbar.vue';
   import VueTimeago from '../../plugins/timeago';
-  import { Post, PostAttachment, Topic, Tag } from "../../types/models";
+  import { Post, PostAttachment, Topic, Tag, Poll } from "../../types/models";
   import { mapMutations, mapState } from "vuex";
   import axios from 'axios';
   import Textarea from "../../libs/textarea";
@@ -208,6 +250,15 @@
     post!: Post;
 
     topic!: Topic;
+
+    @Prop({default() {
+      return {
+        title: '',
+        max_items: 1,
+        length: 0
+      }
+    }})
+    poll!: Poll;
 
     @Emit()
     cancel() { }

@@ -64,6 +64,22 @@ export interface Forum {
   name: string;
 }
 
+export interface PollItem {
+  id: number;
+  text: string;
+  total: number;
+}
+
+export interface Poll {
+  title: string;
+  length: number;
+  max_items: number;
+  expired_at?: Date;
+  expired?: boolean;
+  votes?: number[];
+  items: PollItem[];
+}
+
 interface PostPermission {
   write: boolean;
   delete: boolean;
