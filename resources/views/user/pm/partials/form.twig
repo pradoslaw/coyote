@@ -8,7 +8,7 @@
     <div class="tab-content">
       <div :class="{'active': tab === 'body'}" role="tabpanel" class="tab-pane" id="body">
 
-        <vue-toolbar @update="updateModel" :input="() => $refs.textarea"></vue-toolbar>
+        <vue-toolbar :input="() => $refs.textarea"></vue-toolbar>
 
         <vue-prompt source="{{ route('user.prompt') }}" :errors="errors.text">
           <textarea
@@ -26,7 +26,6 @@
             @keydown.ctrl.enter="sendMessage"
             @keydown.meta.enter="sendMessage"
             @keyup="typing"
-            @change="onChange"
             rows="2"
             tabindex="1"
           ></textarea>

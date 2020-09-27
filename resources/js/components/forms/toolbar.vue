@@ -136,7 +136,7 @@
     components: { 'vue-dropdown-menu': VueDropdownMenu },
     props: {
       input: {
-          type: Function
+        type: Function
       }
     },
     data() {
@@ -155,13 +155,13 @@
         this.textarea.insertAtCaret(startsWith.replace(/<br>/g, "\n"), endsWith.replace(/<br>/g, "\n"), this.textarea.isSelected() ? this.textarea.getSelection() : '');
         this.isDropdownVisible = false;
 
-        this.$emit('update', this.textarea.value);
+        this.updateModel();
       },
 
       insertCitation() {
         this.textarea.insertAtCaret('> ', '', this.textarea.getSelection().replace(/\r\n/g, "\n").replace(/\n/g, "\n> "));
 
-        this.$emit('update', this.textarea.value);
+        this.updateModel();
       },
 
       toggleDropdown() {
@@ -171,6 +171,10 @@
 
       hideDropdown() {
         this.$refs.dropdown.toggle();
+      },
+
+      updateModel() {
+        this.input().dispatchEvent(new Event('input', {'bubbles': true}));
       }
     },
     computed: {

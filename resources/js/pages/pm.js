@@ -107,11 +107,8 @@ new Vue({
       const textarea = new Textarea(this.$refs.textarea);
 
       textarea.insertAtCaret('', '', '![' + file.name + '](' + file.url + ')');
-      this.updateModel(textarea.textarea.value);
-    },
 
-    onChange(e) {
-      this.updateModel(e.target.value);
+      this.$refs.textarea.dispatchEvent(new Event('input', {'bubbles': true}));
     },
 
     showError() {
@@ -180,10 +177,6 @@ new Vue({
 
         return response;
       });
-    },
-
-    updateModel(value) {
-      this.text = value;
     },
 
     changePage(page) {
