@@ -116,7 +116,14 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     public function getTagsCloud()
     {
         return $this
-            ->tags()
+            ->app
+            ->make(Tag::class)
+            ->select(['tags.id', 'name', 'logo', $this->raw('COUNT(*) AS count')])
+            ->join('topic_tags', 'tags.id', '=', 'tag_id')
+            ->join('topics', 'topics.id', '=', 'topic_id')
+            ->whereNull('topics.deleted_at')
+            ->whereNull('tags.deleted_at')
+            ->groupBy('name', 'logo', 'tags.id')
             ->orderBy($this->raw('COUNT(*)'), 'DESC')
             ->limit(10)
             ->get()
@@ -145,7 +152,6 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
             ->leftJoin('topic_tags', 'tag_id', '=', 'tags.id')
             ->leftJoin('topics', 'topics.id', '=', 'topic_id')
             ->whereNull('topics.deleted_at')
-            ->whereNull('tags.deleted_at')
             ->groupBy('custom.name', 'logo', 'tags.id', 'custom.count')
             ->orderBy($this->raw('COUNT(*)'), 'DESC')
             ->get();
@@ -192,21 +198,5 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
             $forum->save();
             $other->save();
         }
-    }
-
-    /**
-     * @return mixed
-     */
-    private function tags()
-    {
-        return $this
-            ->app
-            ->make(Tag::class)
-            ->select(['tags.id', 'name', 'logo', $this->raw('COUNT(*) AS count')])
-            ->join('topic_tags', 'tags.id', '=', 'tag_id')
-            ->join('topics', 'topics.id', '=', 'topic_id')
-                ->whereNull('topics.deleted_at')
-                ->whereNull('tags.deleted_at')
-            ->groupBy('name', 'logo', 'tags.id');
     }
 }
