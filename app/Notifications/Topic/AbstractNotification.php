@@ -50,7 +50,7 @@ abstract class AbstractNotification extends Notification implements ShouldQueue,
      */
     public function getReasonName(): string
     {
-        return $this->reasonName ?: '(moderator nie podał powodu)';
+        return $this->reasonName ?: '(nie podano powodu)';
     }
 
     /**
@@ -69,7 +69,7 @@ abstract class AbstractNotification extends Notification implements ShouldQueue,
      */
     public function getReasonText(): string
     {
-        return $this->reasonText ?: '(moderator nie podał powodu)';
+        return $this->reasonText ?: '(nie podano powodu)';
     }
 
     /**

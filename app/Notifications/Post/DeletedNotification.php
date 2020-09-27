@@ -25,7 +25,7 @@ class DeletedNotification extends AbstractNotification
      */
     public function getReasonName()
     {
-        return $this->reasonName ?: '(moderator nie podał powodu)';
+        return $this->reasonName ?: '(nie podano powodu)';
     }
 
     /**
@@ -44,7 +44,7 @@ class DeletedNotification extends AbstractNotification
      */
     public function getReasonText()
     {
-        return $this->reasonText ?: '(moderator nie podał powodu)';
+        return $this->reasonText ?: '(nie podano powodu)';
     }
 
     /**
