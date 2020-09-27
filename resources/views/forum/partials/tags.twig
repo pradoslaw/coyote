@@ -1,7 +1,9 @@
 <div class="padding-sm-top">
-    <ul class="tag-clouds cloud">
-        {% for name, count in tags %}
-            <li><a href="{{ route('forum.tag', [name|url_encode]) }}">{{ name }}</a><small>× {{ count }}</small></li>
-        {% endfor %}
-    </ul>
+  <ul class="tag-clouds cloud">
+    {% for name, count in tags %}
+      <li>
+        <a href="{{ route('forum.tag', [name|url_encode]) }}">{{ name }}</a><small>× {{ count }}</small>
+      </li>
+    {% endfor %}
+  </ul>
 </div>

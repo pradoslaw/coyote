@@ -1,8 +1,6 @@
 
 // import 'jquery-prettytextdiff/jquery.pretty-text-diff';
-// import '../plugins/tags';
 // import '../pages/forum/draft';
-// import '../pages/forum/posting';
 // import '../pages/forum/sidebar';
 // import '../pages/forum/tags';
 // import 'bootstrap/js/src/popover';
@@ -20,11 +18,20 @@ import store from '../store';
 import { default as mixin } from '../components/mixins/user';
 import { default as axiosErrorHandler } from '../libs/axios-error-handler';
 import { mapState, mapGetters } from "vuex";
+import axios from 'axios';
 
 Vue.use(VueTimeago);
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 
 axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
+
+function pluck(arr, field) {
+  return arr.reduce((acc, curr) => {
+    acc.push(curr[field]);
+
+    return acc;
+  }, []);
+}
 
 new Vue({
   el: '#js-forum',
@@ -53,6 +60,14 @@ new Vue({
 
     getFlag(topicId) {
       return this.flags[topicId];
+    },
+
+    containsUserTags(topic) {
+      if (!topic.tags) {
+        return false;
+      }
+
+      return topic.tags.filter(tag => this.tagNames.includes(tag.name)).length > 0;
     }
   },
   computed: {
@@ -89,6 +104,10 @@ new Vue({
 
         return acc;
       }, {});
+    },
+
+    tagNames() {
+      return pluck(this.tags, 'name');
     },
 
     ...mapState('topics', ['topics'])
@@ -147,6 +166,38 @@ new Vue({
     }
   }
 });
+
+new Vue({
+  el: '#js-tags',
+  delimiters: ['${', '}'],
+  components: { 'vue-button': VueButton },
+  data() {
+    return {
+      tags: window.tags,
+      isProcessing: false,
+      isEditing: false
+    }
+  },
+  methods: {
+    saveTags() {
+      this.isProcessing = true;
+
+      const tags = this.$refs.input.value.replace(new RegExp(',', 'g'), ' ').split(' ').filter(tag => tag !== '');
+
+      axios.post('/Forum/Tag/Save', { tags })
+        .then(result => {
+          this.isEditing = false;
+          this.tags = result.data;
+        })
+        .finally(() => this.isProcessing = false);
+    }
+  },
+  computed: {
+    inlineTags () {
+      return pluck(this.tags, 'name').join(', ');
+    }
+  }
+})
 
 new Vue({
   el: '#js-post',

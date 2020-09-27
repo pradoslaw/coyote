@@ -10,7 +10,6 @@ use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
-use Coyote\Http\Forms\Forum\PostForm;
 use Illuminate\Http\Request;
 
 abstract class BaseController extends Controller
@@ -50,8 +49,6 @@ abstract class BaseController extends Controller
             if ($forum instanceof Forum) {
                 $this->breadcrumb($forum);
             }
-
-            $request->attributes->set('uploadUrl', route('forum.upload'));
 
             return $next($request);
         });
@@ -126,43 +123,17 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * @return mixed|null
+     * @return array|null
      */
     protected function getUserTags()
     {
-        $tags = $this->getSetting('forum.tags');
+        $tags = json_decode($this->getSetting('forum.tags', '[]'));
 
-        if ($tags) {
-            $tags = (array) json_decode($tags);
-
-            $weight = $this->forum->getTagsWeight($tags)->pluck('count', 'name')->toArray();
-            $diff = array_diff($tags, $weight);
-
-            $tags = array_merge($weight, array_combine($diff, array_fill(0, count($diff), 0)));
+        if (!$tags) {
+            return null;
         }
 
-        return $tags;
-    }
-
-    /**
-     * @param \Coyote\Forum $forum
-     * @param \Coyote\Topic $topic
-     * @param \Coyote\Post $post
-     * @return \Coyote\Http\Forms\Forum\PostForm
-     */
-    protected function getForm($forum, $topic = null, $post = null)
-    {
-        return $this->createForm(PostForm::class, [
-            'forum' => $forum,
-            'topic' => $topic,
-            'post' => $post
-        ], [
-            'url' => route('forum.post.submit', [$forum->slug, $topic ? $topic->id : null, $post ? $post->id : null]),
-            'attr' => [
-                'id' => 'submit-form',
-                'method' => PostForm::POST
-            ]
-        ]);
+        return TagResource::collection($this->forum->getTagsWeight($tags))->resolve($this->request);
     }
 
     /**

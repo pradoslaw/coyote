@@ -55,44 +55,6 @@
   }
 }
 
-
-
-.btn-back:before {
-  content: $fa-var-undo;
-}
-
-
-#btn-setting:before {
-  content: $fa-var-cog;
-}
-
-
-#btn-edit-subject:before {
-  content: $fa-var-pencil-alt;
-}
-
-
-#btn-status:before {
-  content: $fa-var-sticky-note;
-  font-weight: 400;
-}
-
-#btn-lock {
-  .fa-unlock {
-    display: none;
-  }
-
-  &.on {
-    .fa-unlock {
-      display: inline;
-    }
-
-    .fa-lock {
-      display: none;
-    }
-  }
-}
-
 // Licznik watkow w danym dziale
 // ----------------------------------
 
@@ -111,41 +73,26 @@
   }
 }
 
-// Wskazowki dotyczace wyszukiwania na forum
-// ----------------------------------------------------------------
-
-#box-search-tips {
-  ul {
-    margin: 20px 0;
-
-    li {
-      margin: 4px 0;
-    }
-  }
-}
 
 // Style zwiazane z ustawianiem wlasnych tagow
 // -----------------------------------------------------------------
 
-#box-popular-tags, #box-my-tags {
-  margin-bottom: 20px;
-}
 
-#box-my-tags {
-  .btn-settings {
-    margin-top: -4px;
-  }
-}
-
-#tags-form {
-  .col-2 {
-    padding: 0;
-  }
-}
-
-div.tag-clouds {
-  .btn-add {
-    color: $gray;
-    font-style: italic;
-  }
-}
+//#box-my-tags {
+//  .btn-settings {
+//    margin-top: -4px;
+//  }
+//}
+//
+//#tags-form {
+//  .col-2 {
+//    padding: 0;
+//  }
+//}
+//
+//div.tag-clouds {
+//  .btn-add {
+//    color: $gray;
+//    font-style: italic;
+//  }
+//}

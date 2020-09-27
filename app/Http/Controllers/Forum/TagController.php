@@ -10,19 +10,18 @@ use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 class TagController extends BaseController
 {
     /**
-     * Save user's custom tags
-     *
      * @param Request $request
-     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     * @return array|null
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function save(Request $request)
     {
-        $this->validate($request, ['tag' => 'array', 'tags.*' => 'required|max:25|tag']);
+        $this->validate($request, ['tags' => 'array', 'tags.*' => 'required|max:25|tag']);
 
         $tags = json_encode($request->get('tags', []));
         $this->setSetting('forum.tags', $tags);
 
-        return view('forum.partials.tags')->with('tags', $this->getUserTags());
+        return $this->getUserTags();
     }
 
     /**
