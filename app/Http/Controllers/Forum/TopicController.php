@@ -116,7 +116,7 @@ class TopicController extends BaseController
         return $this->view('forum.topic', compact('posts', 'forum', 'paginate', 'forumList', 'reasons'))->with([
             'mlt'           => $this->moreLikeThis($topic),
             'topic'         => (new TopicResource($tracker))->resolve($request),
-            'poll'          => (new PollResource($topic->poll))->resolve($request),
+            'poll'          => $topic->poll ? (new PollResource($topic->poll))->resolve($request) : null,
             'is_writeable'  => $this->gate->allows('write', $forum) && $this->gate->allows('write', $topic),
             'all_forums'    => $allForums
         ]);

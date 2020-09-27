@@ -39,6 +39,7 @@ use Illuminate\Database\Query\Builder;
  * @property \Carbon\Carbon $locked_at
  * @property \Carbon\Carbon $read_at
  * @property int $subscribers
+ * @property Poll $poll
  */
 class Topic extends Model
 {

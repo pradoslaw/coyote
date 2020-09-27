@@ -46,7 +46,9 @@
       {% endif %}
     </div>
 
-    <vue-poll :poll="poll"></vue-poll>
+    <template v-if="poll">
+      <vue-poll :poll="poll"></vue-poll>
+    </template>
 
     <vue-post
       v-for="post in posts"
