@@ -1,18 +1,33 @@
+import axios from 'axios';
+
+function openDialog(event) {
+  const el = event.target;
+
+  axios.get('/Flag', {params: { url: el.dataset.url, metadata: el.dataset.metadata }}).then(result => {
+    const html = result.data;
+    // @todo usuniecie jquery
+    $(html).appendTo('body');
+
+    $('#flag').find('.modal').modal('show');
+  });
+
+  return false;
+}
+
+function bindEvents() {
+  const links = document.querySelectorAll('a[data-metadata]');
+
+  links.forEach(link => {
+    link.addEventListener('click', openDialog);
+  });
+}
+
+const observer = new MutationObserver(bindEvents);
+observer.observe(document.body, { attributes: true, childList: true, subtree: true });
+
 $(function() {
     'use strict';
 
-    /**
-     * Show "flag to report" page
-     */
-    $('body').on('click', '.btn-report', function() {
-        $.get($(this).attr('href'), {url: $(this).data('url'), metadata: $(this).data('metadata')}, function(html) {
-            $(html).appendTo('body');
-
-            $('#flag').find('.modal').modal('show');
-        });
-
-        return false;
-    });
 
     /**
      * Close flagged post report

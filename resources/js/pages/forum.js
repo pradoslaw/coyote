@@ -1,9 +1,7 @@
 
 // import 'jquery-prettytextdiff/jquery.pretty-text-diff';
-// import '../pages/forum/draft';
-// import '../pages/forum/sidebar';
-// import '../pages/forum/tags';
-// import 'bootstrap/js/src/popover';
+
+import '../pages/forum/sidebar';
 import VueTimeago from '../plugins/timeago';
 import VueSection from '../components/forum/section.vue';
 import VueTopic from '../components/forum/topic.vue';

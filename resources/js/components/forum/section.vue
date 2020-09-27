@@ -98,13 +98,10 @@
 
 <script>
   import { default as mixins } from '../mixins/user';
-  import VueTimeago from '../../plugins/timeago';
   import { mixin as clickaway } from 'vue-clickaway';
   import store from '../../store';
   import { mapGetters, mapActions } from "vuex";
   import VueAvatar from '../avatar.vue';
-
-  Vue.use(VueTimeago);
 
   export default {
     mixins: [ mixins, clickaway ],

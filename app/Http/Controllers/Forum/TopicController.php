@@ -7,7 +7,6 @@ use Coyote\Forum\Reason;
 use Coyote\Http\Factories\CacheFactory;
 use Coyote\Http\Factories\FlagFactory;
 use Coyote\Http\Resources\PostCollection;
-use Coyote\Http\Resources\PostResource;
 use Coyote\Http\Resources\TopicResource;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
@@ -18,11 +17,8 @@ use Coyote\Services\Elasticsearch\Builders\Forum\MoreLikeThisBuilder;
 use Coyote\Services\Forum\Tracker;
 use Coyote\Services\Forum\TreeBuilder\Builder;
 use Coyote\Services\Forum\TreeBuilder\ListDecorator;
-use Coyote\Services\Parser\Parsers\ParserInterface;
 use Coyote\Topic;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Gate;
 
 class TopicController extends BaseController
 {
@@ -98,14 +94,14 @@ class TopicController extends BaseController
         $this->pushForumCriteria(true);
         $forumList = $treeDecorator->build();
 
-        $flags = $activities = $allForums = $reasons = [];
+        $activities = $allForums = $reasons = [];
 
         if ($this->gate->allows('delete', $forum) || $this->gate->allows('move', $forum)) {
             $postIds = $paginate->pluck('id')->toArray();
             $reasons = Reason::pluck('name', 'id')->toArray();
 
             if ($this->gate->allows('delete', $forum)) {
-                $flags = $this->getFlags($postIds);
+                $posts->setFlags($this->getFlags($postIds));
             }
 
             $this->forum->skipCriteria(true);
@@ -116,7 +112,7 @@ class TopicController extends BaseController
 
         $topic->load('tags');
 
-        return $this->view('forum.topic', compact('posts', 'forum', 'paginate', 'forumList', 'reasons', 'flags'))->with([
+        return $this->view('forum.topic', compact('posts', 'forum', 'paginate', 'forumList', 'reasons'))->with([
             'mlt'           => $this->moreLikeThis($topic),
             'topic'         => (new TopicResource($tracker))->resolve($request),
             'is_writeable'  => $this->gate->allows('write', $forum) && $this->gate->allows('write', $topic),
@@ -141,18 +137,6 @@ class TopicController extends BaseController
 
             return $mlt;
         });
-    }
-
-    /**
-     * @return ParserInterface[]
-     */
-    private function getParsers()
-    {
-        return [
-            'post'      => app('parser.post'),
-            'comment'   => app('parser.comment'),
-            'sig'       => app('parser.sig')
-        ];
     }
 
     /**

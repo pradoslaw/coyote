@@ -16,6 +16,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * @property int $id
  * @property int $user_id
+ * @property int $topic_id
+ * @property int $forum_id
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Carbon|null $deleted_at
@@ -49,6 +51,11 @@ class PostResource extends JsonResource
     protected $sigParser;
 
     /**
+     * @var \Coyote\Flag[]
+     */
+    protected $flags;
+
+    /**
      * @param Tracker $tracker
      * @return $this
      */
@@ -62,6 +69,13 @@ class PostResource extends JsonResource
     public function setSigParser(SigFactory $sigFactory)
     {
         $this->sigParser = $sigFactory;
+
+        return $this;
+    }
+
+    public function setFlags($flags)
+    {
+        $this->flags = $flags;
 
         return $this;
     }
@@ -107,6 +121,10 @@ class PostResource extends JsonResource
                 return ['editor' => UserResource::make($this->editor)];
             }),
 
+            $this->mergeWhen($this->flags !== null, function () {
+                return ['flags' => JsonResource::collection($this->flags)];
+            }),
+
             'permissions' => [
                 'write'             => $gate->allows('write', $this->topic) && $gate->allows('write', $this->forum),
                 'delete'            => $gate->allows('delete', $this->topic) || $gate->allows('delete', $this->forum),
@@ -118,7 +136,8 @@ class PostResource extends JsonResource
 
             'comments'      => PostCommentResource::collection($comments)->keyBy('id'),
             'comments_count'=> $commentsCount,
-            'attachments'   => PostAttachmentResource::collection($this->resource->attachments)
+            'attachments'   => PostAttachmentResource::collection($this->resource->attachments),
+            'metadata'      => encrypt(['post_id' => $this->id, 'topic_id' => $this->topic_id, 'forum_id' => $this->forum_id, 'permission' => 'delete'])
         ]);
     }
 

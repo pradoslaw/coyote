@@ -103,6 +103,13 @@
           </div>
 
           <div class="post-content">
+            <vue-flag
+              v-for="flag in post.flags"
+              :key="flag.id"
+              :flag="flag"
+              @close="closeFlag"
+            ></vue-flag>
+
             <div v-html="post.html"></div>
 
             <div v-if="tags" class="padding-sm-top padding-sm-bottom">
@@ -215,9 +222,9 @@
               <i class="fa fa-fw fa-quote-left"></i> <span class="d-none d-sm-inline">Odpowiedz</span>
             </button>
 
-            <button class="btn btn-sm">
+            <a href="javascript:" :data-metadata="post.metadata" :data-url="post.url" class="btn btn-sm">
               <i class="fa fa-fw fa-flag"></i> <span class="d-none d-sm-inline">Raportuj</span>
-            </button>
+            </a>
 
             <div v-if="post.permissions.merge || post.permissions.adm_access" class="dropdown float-right">
               <button class="btn btn-sm" data-toggle="dropdown">
@@ -266,7 +273,7 @@
   import Vue from 'vue';
   import { Prop, Ref } from "vue-property-decorator";
   import Component from "vue-class-component";
-  import { Post, Topic, User } from '../../types/models';
+  import { Post, Topic, User, Flag } from '../../types/models';
   import VueClipboard from '../../plugins/clipboard';
   import VueAvatar from '../avatar.vue';
   import VueUserName from "../user-name.vue";
@@ -275,6 +282,7 @@
   import VueCommentForm from "./comment-form.vue";
   import VueSelect from  './../forms/select.vue';
   import VueButton from  './../forms/button.vue';
+  import VueFlag from './../forum/flag.vue';
   import { mapActions, mapGetters, mapState } from "vuex";
   import VueModal from "../modal.vue";
   import formatDistanceToNow from 'date-fns/formatDistanceToNow';
@@ -294,7 +302,8 @@
       'vue-form': VueForm,
       'vue-modal': VueModal,
       'vue-select': VueSelect,
-      'vue-button': VueButton
+      'vue-button': VueButton,
+      'vue-flag': VueFlag
     },
     methods: mapActions('posts', ['vote', 'accept', 'subscribe', 'loadComments']),
     computed: {
@@ -316,6 +325,9 @@
 
     @Prop()
     readonly reasons!: string[];
+
+    @Prop()
+    readonly flags!: Flag[];
 
     @Ref()
     readonly form!: VueForm;
@@ -400,6 +412,12 @@
           this.mergeModal.close();
         });
       }
+    }
+
+    closeFlag(flagId) {
+      const index = this.post.flags?.findIndex(flag => flag.id === flagId);
+
+      this.post.flags?.splice(index!, 1);
     }
 
     restore() {

@@ -6,6 +6,15 @@ export enum Model {
   Wiki = 'Wiki'
 }
 
+export interface Flag {
+  id: number;
+  name: string;
+  text: string;
+  created_at: Date;
+  user_id: number;
+  user_name: string;
+}
+
 export interface User {
   id: number;
   name: string;
@@ -110,6 +119,7 @@ export interface Post {
   comments_count: number;
   attachments: PostAttachment[];
   edit_count?: number;
+  flags?: Flag[];
 }
 
 export interface Tag {
