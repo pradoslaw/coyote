@@ -187,16 +187,20 @@ class HomeController extends BaseController
      */
     public function tag($name)
     {
-        $this
+        $item = $this
             ->tabs
-            ->add('Wątki z: ' . $this->request->route('tag'), [
+            ->add('Wątki z: ' . $name, [
                 'route' => [
                     'forum.tag', urlencode($this->request->route('tag'))
-                ]
-            ])
-            ->activate();
+                ],
+                'class' => 'nav-item'
+            ]);
+
+        $item->link->attr(['class' => 'nav-link']);
+        $item->activate();
 
         $this->topic->pushCriteria(new WithTags($name));
+
         return $this->loadAndRender();
     }
 
