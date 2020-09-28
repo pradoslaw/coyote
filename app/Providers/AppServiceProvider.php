@@ -18,6 +18,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Events\RouteMatched;
 use Illuminate\Routing\Redirector;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -200,7 +201,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Request::macro('browser', function () {
-            return str_limit(filter_var($this->header('User-Agent'), FILTER_SANITIZE_STRING), 900);
+            return str_limit(Str::ascii($this->header('User-Agent')), 900);
         });
     }
 }
