@@ -197,7 +197,7 @@ class SubmitController extends BaseController
             $topic->save();
             $post->fill(['edit_count' => $post->edit_count + 1, 'editor_id' => $this->userId])->save();
 
-            if ($post->user_id !== null) {
+            if ($post->user_id !== null && $post->user_id !== $this->userId) {
                 $post->user->notify(
                     (new SubjectChangedNotification($this->auth, $topic))
                         ->setOriginalSubject(str_limit($originalSubject, 84))
