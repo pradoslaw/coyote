@@ -5,6 +5,7 @@ namespace Tests\Browser;
 use Coyote\Permission;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Faker\Factory;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 
@@ -28,6 +29,27 @@ class ForumTest extends DuskTestCase
             } finally {
                 $forum->delete();
             }
+        });
+    }
+
+    public function testWriteTopic()
+    {
+        $forum = $this->createForum();
+        $user = $this->createUserWithGroup();
+
+        $this->browse(function (Browser $browser) use ($forum, $user) {
+            $faker = Factory::create();
+
+            $browser
+                ->loginAs($user)
+                ->visitRoute('forum.topic.submit', ['forum' => $forum])
+                ->type('subject', $title = $faker->text())
+                ->type('text', $text = $faker->realText())
+
+                ->press('Zapisz')
+                ->waitForText($title)
+                ->assertSee($title)
+                ->assertSee($text);
         });
     }
 

@@ -3,7 +3,7 @@
     <div v-if="showTitleInput" class="form-group">
       <label class="col-form-label">Temat <em>*</em></label>
 
-      <vue-text :value="topic.subject" :is-invalid="'subject' in errors" name="subject" tabindex="1" autofocus="autofocus"></vue-text>
+      <vue-text :value.sync="topic.subject" :is-invalid="'subject' in errors" name="subject" tabindex="1" autofocus="autofocus"></vue-text>
       <vue-error :message="errors['subject']"></vue-error>
 
       <small v-if="!('subject' in errors)" class="text-muted form-text">Bądź rzeczowy. Nie nadawaj wątkom jednowyrazowych tematów.</small>
@@ -88,7 +88,7 @@
           <label class="col-md-4 col-form-label text-right">Tytuł ankiety</label>
 
           <div class="col-md-6">
-            <vue-text :value="poll.title"></vue-text>
+            <vue-text :value.sync="poll.title"></vue-text>
             <vue-error :message="errors['poll.title']"></vue-error>
           </div>
         </div>
@@ -106,7 +106,7 @@
           <label class="col-md-4 col-form-label text-right">Liczba możliwych odpowiedzi</label>
 
           <div class="col-md-6">
-            <vue-text :value="poll.max_items"></vue-text>
+            <vue-text :value.sync="poll.max_items"></vue-text>
             <vue-error :message="errors['poll.max_items']"></vue-error>
 
             <span class="form-text text-muted">Minimalnie jedna możliwa odpowiedź w ankiecie.</span>
@@ -117,7 +117,7 @@
           <label class="col-md-4 col-form-label text-right">Długość działania</label>
 
           <div class="col-md-6">
-            <vue-text :value="poll.length"></vue-text>
+            <vue-text :value.sync="poll.length"></vue-text>
 
             <span class="form-text text-muted">Okreś długość działania ankiety (w dniach). 0 oznacza brak terminu ważności.</span>
           </div>
