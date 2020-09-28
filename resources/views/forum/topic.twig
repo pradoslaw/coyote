@@ -92,9 +92,6 @@
       {% include 'forum.partials.per_page' with {label: 'Liczba odpowiedzi na stronę', perPage: paginate.perPage()} %}
     </section>
 
-  {#    {% include 'forum.partials.poll' %}#}
-
-
     {{ viewers|raw }}
 
     <vue-notifications position="bottom right" />

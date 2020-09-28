@@ -271,3 +271,10 @@ new Vue({
 
 document.getElementById('js-forum-list').addEventListener('change', event => window.location.href = `/Forum/${event.target.value}`);
 document.getElementById('js-reload').addEventListener('click', () => window.location.reload());
+
+document.getElementById('js-per-page').addEventListener('change', event => {
+  const perPage = event.target.value;
+  const url = event.target.dataset.url;
+
+  window.location.href = `${url}?perPage=${perPage}`;
+})

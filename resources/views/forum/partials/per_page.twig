@@ -1,7 +1,7 @@
 <span class="form-inline ml-auto">
   <label class="mr-1">{{ label }}</label>
 
-  <select name="perPage" class="form-control form-control-sm" data-url="{{ url(request().path()) }}">
+  <select id="js-per-page" class="form-control form-control-sm" data-url="{{ url(request().path()) }}">
       {% for i in 1..5 %}
         <option value="{{ i * 10 }}" {{ perPage == i * 10 ? 'selected="selected"' }}>{{ i * 10 }}</option>
       {% endfor %}
