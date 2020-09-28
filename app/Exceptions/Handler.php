@@ -70,7 +70,7 @@ class Handler extends ExceptionHandler
     {
         if ($e instanceof TokenMismatchException) {
             return $this->renderTokenMismatchException($request, $e);
-        } elseif (!$request->expectsJson() && (($e instanceof HttpException && $e->getStatusCode() === 404) || $e instanceof ModelNotFoundException)) {
+        } elseif (($e instanceof HttpException && $e->getStatusCode() === 404) || $e instanceof ModelNotFoundException) {
             return $this->renderHttpErrorException($request, $e);
         }
 
@@ -103,6 +103,10 @@ class Handler extends ExceptionHandler
      */
     protected function renderHttpErrorException(Request $request, $e)
     {
+        if ($request->expectsJson()) {
+            return response()->json(['message' => 'Uuups. Strona nie istnieje lub została usunięta.'], 404);
+        }
+
         // Case insensitive path lookup.
         // Redirect to correct version if exists
         $path = $this->findCamelCasePath($request);
