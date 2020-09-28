@@ -17,7 +17,7 @@ class MergeController extends BaseController
 {
     /**
      * @param Post $post
-     * @return \Illuminate\Http\JsonResponse
+     * @return PostResource
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function index(Post $post)
@@ -42,16 +42,13 @@ class MergeController extends BaseController
         stream(Stream_Merge::class, $object, $target);
         stream(Stream_Delete::class, $object, $target);
 
-        $url .= '?p=' . $previous->id . '#id' . $previous->id;
-
         PostResource::withoutWrapping();
         $tracker = Tracker::make($post->topic);
 
+        $previous->comments->each(function (Post\Comment $comment) use ($post) {
+            $comment->setRelation('forum', $post->forum);
+        });
 
         return (new PostResource($previous))->setTracker($tracker)->setSigParser(app('parser.sig'));
-
-//        session()->flash('success', 'Posty zostały połączone.');
-//
-//        return response()->json(['url' => $url]);
     }
 }

@@ -232,7 +232,7 @@
               </button>
 
               <div class="dropdown-menu dropdown-menu-right">
-                <a v-if="!post.deleted_at && post.permissions.merge && !firstPost" @click="merge(true)" href="javascript:" class="dropdown-item">
+                <a v-if="!post.deleted_at && post.permissions.merge && post.id !== topic.first_post_id" @click="merge(true)" href="javascript:" class="dropdown-item">
                   <i class="fas fa-compress fa-fw"></i> Połącz z poprzednim
                 </a>
 
@@ -430,7 +430,7 @@
     }
 
     get tags() {
-      return this.post.id === this.firstPost.id ? this.topic.tags : [];
+      return this.post.id === this.topic.first_post_id ? this.topic.tags : [];
     }
 
     get isAcceptAllowed() {
