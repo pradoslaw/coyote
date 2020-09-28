@@ -1,24 +1,24 @@
 {% extends 'forum.base' %}
 
 {% block title %}{{ topic.subject ~ (paginate.currentPage() > 1 ? (' - Strona ' ~ paginate.currentPage())) }}{{ parent() }}{% endblock %}
-{% block description %}{{ excerpt(posts[0].text, 100) }}{% endblock %}
+{% block description %}{{ description }}{% endblock %}
 
 {% import 'components.forms' as forms %}
 {% import 'components.modals' as modals %}
 
 {% block content %}
 
-  {% if topic.locked_at %}
+  {% if model.locked_at %}
     <p class="alert alert-warning">
-      Wątek zablokowany {{ topic.locked_at|format_date }} przez <a class="alert-warning" href="{{ route('profile', [topic.locker.id]) }}">{{ topic.locker.name }}</a>.
+      Wątek zablokowany {{ model.locked_at|format_date }} przez <a class="alert-warning" href="{{ route('profile', [model.locker.id]) }}">{{ model.locker.name }}</a>.
     </p>
   {% endif %}
 
-  {% if topic.moved_at %}
+  {% if model.moved_at %}
     <p class="alert alert-warning">
-      Wątek przeniesiony {{ topic.moved_at|format_date }} z
-      <a class="alert-link" href="{{ route('forum.category', [topic.prevForum.slug]) }}">{{ topic.prevForum.name }}</a> przez
-      <a class="alert-link" href="{{ route('profile', [topic.mover.id]) }}">{{ topic.mover.name }}</a>.
+      Wątek przeniesiony {{ model.moved_at|format_date }} z
+      <a class="alert-link" href="{{ route('forum.category', [model.prevForum.slug]) }}">{{ model.prevForum.name }}</a> przez
+      <a class="alert-link" href="{{ route('profile', [model.mover.id]) }}">{{ model.mover.name }}</a>.
     </p>
   {% endif %}
 

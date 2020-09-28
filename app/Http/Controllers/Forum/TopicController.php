@@ -95,7 +95,7 @@ class TopicController extends BaseController
         $this->pushForumCriteria(true);
         $forumList = $treeDecorator->build();
 
-        $activities = $allForums = $reasons = [];
+        $allForums = $reasons = [];
 
         if ($this->gate->allows('delete', $forum) || $this->gate->allows('move', $forum)) {
             $postIds = $paginate->pluck('id')->toArray();
@@ -115,10 +115,12 @@ class TopicController extends BaseController
 
         return $this->view('forum.topic', compact('posts', 'forum', 'paginate', 'forumList', 'reasons'))->with([
             'mlt'           => $this->moreLikeThis($topic),
+            'model'         => $topic, // we need eloquent model in twig to show information about locked/moved topic
             'topic'         => (new TopicResource($tracker))->resolve($request),
             'poll'          => $topic->poll ? (new PollResource($topic->poll))->resolve($request) : null,
             'is_writeable'  => $this->gate->allows('write', $forum) && $this->gate->allows('write', $topic),
-            'all_forums'    => $allForums
+            'all_forums'    => $allForums,
+            'description'   => excerpt($paginate[0]->text, 100)
         ]);
     }
 
