@@ -267,4 +267,7 @@ new Vue({
     ...mapGetters('posts', ['posts', 'topic']),
     ...mapGetters('user', ['isAuthorized'])
   }
-})
+});
+
+document.getElementById('js-forum-list').addEventListener('change', event => window.location.href = `/Forum/${event.target.value}`);
+document.getElementById('js-reload').addEventListener('click', () => window.location.reload());

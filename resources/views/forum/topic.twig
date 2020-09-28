@@ -75,9 +75,9 @@
     {% if forumList is defined %}
       <div class="row no-gutters">
         <div class="ml-auto">
-          {{ form_select('forum', forumList, forum.slug, {'id': 'sel-forum-list', 'class': 'form-control d-inline w-auto', 'data-url': route('forum.home')}) }}
+          {{ form_select('forum', forumList, forum.slug, {'id': 'js-forum-list', 'class': 'form-control d-inline w-auto', 'data-url': route('forum.home')}) }}
 
-          <a class="btn" href="javascript:" id="btn-goto">
+          <a class="btn" href="javascript:" id="js-reload">
             <i class="fas fa-arrow-circle-right"></i>
           </a>
         </div>
