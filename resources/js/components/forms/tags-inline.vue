@@ -15,6 +15,7 @@
         type="text"
         tabindex="4"
         autocomplete="off"
+        name="tags"
       >
     </div>
 
