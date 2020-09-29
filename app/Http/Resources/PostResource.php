@@ -56,6 +56,18 @@ class PostResource extends JsonResource
     protected $flags;
 
     /**
+     * @var \Illuminate\Contracts\Auth\Access\Gate
+     */
+    protected $gate;
+
+    public function __construct($resource)
+    {
+        parent::__construct($resource);
+
+        $this->gate = $this->getGateFactory();
+    }
+
+    /**
      * @param Tracker $tracker
      * @return $this
      */
@@ -95,8 +107,6 @@ class PostResource extends JsonResource
             $this->user->sig = $this->sigParser->parse($this->user->sig);
         }
 
-        $gate = $this->getGateFactory();
-
         $commentsCount = count($this->resource->comments);
         $comments = $this->resource->comments->slice(-5, null, true);
 
@@ -107,10 +117,10 @@ class PostResource extends JsonResource
             'user'          => UserResource::make($this->user),
             'html'          => $html,
             'url'           => UrlBuilder::post($this->resource, true),
-            'is_read'       => $this->tracker->getMarkTime() > $this->created_at,
+            'is_read'       => $this->tracker->getMarkTime() >= $this->created_at,
             'is_locked'     => $this->topic->is_locked || $this->forum->is_locked,
 
-            $this->mergeWhen($gate->allows('update', $this->resource), function () {
+            $this->mergeWhen($this->gate->allows('update', $this->resource), function () {
                 return [
                    'ip'         => $this->ip,
                    'browser'    => $this->browser
@@ -126,19 +136,24 @@ class PostResource extends JsonResource
             }),
 
             'permissions' => [
-                'write'             => $gate->allows('write', $this->topic) && $gate->allows('write', $this->forum),
-                'delete'            => $gate->allows('delete', $this->topic) || $gate->allows('delete', $this->forum),
-                'update'            => $gate->allows('update', $this->resource),
-                'merge'             => $gate->allows('merge', $this->forum),
-                'sticky'            => $gate->allows('sticky', $this->forum),
-                'adm_access'        => $gate->allows('adm-access'),
-                'accept'            => $gate->allows('accept', $this->resource)
+                'write'             => $this->gate->allows('write', $this->topic) && $this->gate->allows('write', $this->forum),
+                'delete'            => $this->gate->allows('delete', $this->topic) || $this->gate->allows('delete', $this->forum),
+                'update'            => $this->gate->allows('update', $this->resource),
+                'merge'             => $this->gate->allows('merge', $this->forum),
+                'sticky'            => $this->gate->allows('sticky', $this->forum),
+                'adm_access'        => $this->gate->allows('adm-access'),
+                'accept'            => $this->gate->allows('accept', $this->resource)
             ],
 
             'comments'      => PostCommentResource::collection($comments)->keyBy('id'),
             'comments_count'=> $commentsCount,
             'attachments'   => PostAttachmentResource::collection($this->resource->attachments),
-            'metadata'      => encrypt(['post_id' => $this->id, 'topic_id' => $this->topic_id, 'forum_id' => $this->forum_id, 'permission' => 'delete'])
+            'metadata'      => encrypt([
+                'post_id'           => $this->id,
+                'topic_id'          => $this->topic_id,
+                'forum_id'          => $this->forum_id,
+                'permission'        => 'delete'
+            ])
         ]);
     }
 

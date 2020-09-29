@@ -81,12 +81,16 @@ class TopicController extends BaseController
         $dateTime = $paginate->last()->created_at;
 
         $tracker = Tracker::make($topic);
+        // first, build array of posts
+        $posts = (new PostCollection($paginate))
+            ->setRelations($topic, $forum)
+            ->setTracker($tracker)
+            ->resolve($this->request);
 
+        // ..then, mark topic as read
         if ($markTime < $dateTime) {
             $tracker->asRead($dateTime);
         }
-
-        $posts = (new PostCollection($paginate))->setRelations($topic, $forum)->setTracker($tracker);
 
         // create forum list for current user (according to user's privileges)
         $treeBuilder = new Builder($this->forum->list());
@@ -120,8 +124,7 @@ class TopicController extends BaseController
             'poll'          => $topic->poll ? (new PollResource($topic->poll))->resolve($request) : null,
             'is_writeable'  => $this->gate->allows('write', $forum) && $this->gate->allows('write', $topic),
             'all_forums'    => $allForums,
-            'description'   => excerpt($paginate[0]->text, 100),
-            'author'        => $topic->firstPost->user
+            'description'   => excerpt(array_first($posts)['text'], 100)
         ]);
     }
 
