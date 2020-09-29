@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 function openDialog(event) {
-  const el = event.target;
+  const el = event.currentTarget;
 
   axios.get('/Flag', {params: { url: el.dataset.url, metadata: el.dataset.metadata }}).then(result => {
     const html = result.data;
@@ -24,31 +24,3 @@ function bindEvents() {
 
 const observer = new MutationObserver(bindEvents);
 observer.observe(document.body, { attributes: true, childList: true, subtree: true });
-
-$(function() {
-    'use strict';
-
-
-    /**
-     * Close flagged post report
-     */
-    $('.alert-report').submit(function() {
-        var url = $(this).attr('action');
-        var $this = $(this);
-
-        $.get(url, function(html) {
-            $('body').append(html);
-
-            $('#modal-report').modal('show').one('click', '.danger', function() {
-                $.post(url);
-                $this.fadeOut();
-
-                $('#modal-report').modal('dispose').remove();
-                $('.modal-backdrop').remove();
-                return false;
-            });
-        });
-
-        return false;
-    });
-});
