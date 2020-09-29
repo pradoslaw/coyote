@@ -10,8 +10,14 @@
 
     <div v-for="item in pollSync.items" :key="item.id" :class="{'voted': pollSync.votes.includes(item.id)}" class="row">
       <div class="col-sm-6">
-        <div v-if="isVoteable" :class="{'custom-checkbox': pollSync.max_items > 1, 'custom-radio': !pollSync.max_items}" class="custom-control">
-          <input :id="`item-${item.id}`" v-model="item.id" type="checkbox" class="custom-control-input">
+        <div v-if="isVoteable" :class="{'custom-checkbox': pollSync.max_items > 1, 'custom-radio': pollSync.max_items === 1}" class="custom-control">
+          <input
+            :id="`item-${item.id}`"
+            v-model="checkedOptions"
+            :value="item.id"
+            :type="pollSync.max_items > 1 ? 'checkbox' : 'radio'"
+            class="custom-control-input"
+          >
 
           <label :for="`item-${item.id}`" class="custom-control-label">
             {{ item.text }}
@@ -38,7 +44,7 @@
 
     <div v-if="isVoteable" class="row">
       <div class="col-12">
-        <vue-button class="btn btn-sm btn-primary">Głosuj</vue-button>
+        <vue-button @click.native="vote" class="btn btn-sm btn-primary">Głosuj</vue-button>
       </div>
     </div>
 
@@ -76,8 +82,14 @@
 
     readonly isAuthorized! : boolean;
 
+    checkedOptions: number[] = [];
+
     percentage(item: PollItem) {
       return this.totalVotes ? Math.round(100 * item.total / this.totalVotes) : 0
+    }
+
+    vote() {
+      this.pollSync.votes = Array.isArray(this.checkedOptions) ? this.checkedOptions : [this.checkedOptions];
     }
 
     get totalVotes() {

@@ -78,26 +78,18 @@ class TopicController extends BaseController
         /* @var \Illuminate\Support\Collection $posts */
         $paginate = $this->post->lengthAwarePagination($topic, $page, $perPage);
 
-        $dateTime = $paginate->last()->created_at;
-
-        $tracker = Tracker::make($topic);
-        // first, build array of posts
-        $posts = (new PostCollection($paginate))
-            ->setRelations($topic, $forum)
-            ->setTracker($tracker)
-            ->resolve($this->request);
-
-        // ..then, mark topic as read
-        if ($markTime < $dateTime) {
-            $tracker->asRead($dateTime);
-        }
-
         // create forum list for current user (according to user's privileges)
         $treeBuilder = new Builder($this->forum->list());
         $treeDecorator = new ListDecorator($treeBuilder);
 
         $this->pushForumCriteria(true);
         $forumList = $treeDecorator->build();
+
+        $tracker = Tracker::make($topic);
+
+        $posts = (new PostCollection($paginate))
+            ->setRelations($topic, $forum)
+            ->setTracker($tracker);
 
         $allForums = $reasons = [];
 
@@ -113,6 +105,15 @@ class TopicController extends BaseController
 
             $treeBuilder->setForums($this->forum->list());
             $allForums = $treeDecorator->setKey('id')->build();
+        }
+
+        $dateTime = $paginate->last()->created_at;
+        // first, build array of posts with info which posts have been read
+        $posts = $posts->resolve($this->request);
+
+        // ..then, mark topic as read
+        if ($markTime < $dateTime) {
+            $tracker->asRead($dateTime);
         }
 
         $topic->load('tags');

@@ -20,9 +20,13 @@ class PollResource extends JsonResource
                 'expired_at'    => $this->resource->expiredAt(),
                 'expired'       => $this->resource->expired(),
 
-                $this->mergeWhen($request->user(), function () use ($request) {
-                    return ['votes' => $this->resource->userVoteIds($request->user()->id)];
-                })
+                'votes'         => $this->when(
+                    $request->user(),
+                    function () use ($request) {
+                        return (array) $this->resource->userVoteIds($request->user()->id);
+                    },
+                    []
+                )
             ]
         );
     }
