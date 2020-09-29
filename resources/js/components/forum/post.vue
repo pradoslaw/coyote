@@ -206,7 +206,7 @@
 
           <div v-if="post.permissions.write" class="ml-auto">
             <button v-if="post.permissions.update && !post.deleted_at" @click="edit" class="btn btn-sm">
-              <i :class="{'fas text-primary': isEditing, 'far': !isEditing}" class="fa-fw fa-edit"></i> <span class="d-none d-sm-inline">Edytuj</span>
+              <i :class="{'text-primary': isEditing}" class="fas fa-fw fa-edit"></i> <span class="d-none d-sm-inline">Edytuj</span>
             </button>
 
             <template v-if="post.permissions.delete">
