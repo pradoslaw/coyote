@@ -98,20 +98,17 @@ class SubmitController extends BaseController
 
             $topic->save();
 
-            $tags = array_unique((array) $request->input('tags', []));
-
-            if (is_array($tags) && ($topic->wasRecentlyCreated || $post->id == $topic->first_post_id)) {
-                // assign tags to topic
-                $topic->setTags($tags);
-            }
-
             $post->topic()->associate($topic);
             $post->save();
 
             $post->syncAttachments(array_pluck($request->input('attachments', []), 'id'));
 
-            if ($topic->wasRecentlyCreated && $this->userId) {
-                $topic->subscribe($this->userId, $request->filled('is_subscribed'));
+            if ($topic->wasRecentlyCreated) {
+                if ($this->userId) {
+                    $topic->subscribe($this->userId, $request->filled('is_subscribed'));
+                }
+
+                $topic->first_post_id = $post->id;
             }
 
             // url to the post
@@ -120,6 +117,10 @@ class SubmitController extends BaseController
             if ($topic->wasRecentlyCreated || $post->id === $topic->first_post_id) {
                 $object = (new Stream_Topic)->map($topic, $post->html);
                 $target = (new Stream_Forum)->map($forum);
+
+                if ($tags = array_unique((array) $request->input('tags', []))) {
+                    $topic->setTags($tags);
+                }
             } else {
                 $object = (new Stream_Post(['url' => $url]))->map($post);
                 $target = (new Stream_Topic())->map($topic);
