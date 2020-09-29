@@ -62,7 +62,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
             return $this->model->where('topic_id', $topicId)->where('posts.id', '<', $postId)->count();
         });
 
-        return max(0, floor(($count - 1) / $perPage)) + 1;
+        return max(0, floor($count / $perPage)) + 1;
     }
 
     /**
