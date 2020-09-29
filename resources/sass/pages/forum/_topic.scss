@@ -17,6 +17,10 @@
   &.is-deleted {
     opacity: .6;
   }
+
+  .new {
+    color: $alt-link-hover-color;
+  }
 }
 
 .post-delete {

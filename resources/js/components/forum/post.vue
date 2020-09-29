@@ -24,7 +24,7 @@
         </div>
 
         <div class="col-10 text-truncate small">
-          <i class="far fa-file"></i>
+          <i :class="{'fas new': !post.is_read, 'far': post.is_read}" class="fa-file"></i>
 
           <a :href="post.url" class="small text-body">
             <vue-timeago :datetime="post.created_at"></vue-timeago>
@@ -112,11 +112,9 @@
 
             <div v-html="post.html"></div>
 
-            <div v-if="tags" class="padding-sm-top padding-sm-bottom">
-              <ul class="tag-clouds">
-                <li v-for="tag in tags"><a :href="tag.url">{{ tag.name }}</a></li>
-              </ul>
-            </div>
+            <ul v-if="tags" class="mt-2 mb-2 tag-clouds">
+              <li v-for="tag in tags"><a :href="tag.url">{{ tag.name }}</a></li>
+            </ul>
 
             <ul v-if="post.attachments" class="list-unstyled">
               <li v-for="attachment in post.attachments" class="small">
