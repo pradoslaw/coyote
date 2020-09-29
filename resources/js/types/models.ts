@@ -87,6 +87,7 @@ interface PostPermission {
   merge: boolean;
   sticky: boolean;
   adm_access: boolean;
+  accept: boolean;
 }
 
 export interface PostComment {

@@ -131,7 +131,8 @@ class PostResource extends JsonResource
                 'update'            => $gate->allows('update', $this->resource),
                 'merge'             => $gate->allows('merge', $this->forum),
                 'sticky'            => $gate->allows('sticky', $this->forum),
-                'adm_access'        => $gate->allows('adm-access')
+                'adm_access'        => $gate->allows('adm-access'),
+                'accept'            => $gate->allows('accept', $this->resource)
             ],
 
             'comments'      => PostCommentResource::collection($comments)->keyBy('id'),

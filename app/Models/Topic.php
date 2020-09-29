@@ -40,6 +40,7 @@ use Illuminate\Database\Query\Builder;
  * @property \Carbon\Carbon $read_at
  * @property int $subscribers
  * @property Poll $poll
+ * @property Post $firstPost
  */
 class Topic extends Model
 {

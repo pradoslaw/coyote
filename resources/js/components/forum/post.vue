@@ -97,7 +97,7 @@
               <i class="fas fa-thumbs-up fa-fw"></i>
             </a>
 
-            <a v-if="!post.deleted_at && isAcceptAllowed" :class="{'on': post.is_accepted}" @click="accept(post)" class="vote-accept" href="javascript:" title="Kliknij, aby ustawić tę odpowiedź jako zaakceptowaną (kliknij ponownie, aby cofnąć)">
+            <a v-if="!post.deleted_at && post.permissions.accept" :class="{'on': post.is_accepted}" @click="accept(post)" class="vote-accept" href="javascript:" title="Kliknij, aby ustawić tę odpowiedź jako zaakceptowaną (kliknij ponownie, aby cofnąć)">
               <i class="fas fa-check fa-fw"></i>
             </a>
           </div>
@@ -425,21 +425,8 @@
       this.$store.dispatch('posts/restore', this.post);
     }
 
-    get firstPost() {
-      return this.posts[Object.keys(this.posts)[0]];
-    }
-
     get tags() {
       return this.post.id === this.topic.first_post_id ? this.topic.tags : [];
-    }
-
-    get isAcceptAllowed() {
-      if (!this.isAuthorized) {
-        return false;
-      }
-
-      // user can't accept first post in topic
-      return (this.user.id === this.firstPost.user_id || this.post.permissions.update) && this.post.id !== this.firstPost.id;
     }
 
     get anchor() {

@@ -120,7 +120,8 @@ class TopicController extends BaseController
             'poll'          => $topic->poll ? (new PollResource($topic->poll))->resolve($request) : null,
             'is_writeable'  => $this->gate->allows('write', $forum) && $this->gate->allows('write', $topic),
             'all_forums'    => $allForums,
-            'description'   => excerpt($paginate[0]->text, 100)
+            'description'   => excerpt($paginate[0]->text, 100),
+            'author'        => $topic->firstPost->user
         ]);
     }
 

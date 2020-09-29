@@ -269,12 +269,22 @@ new Vue({
   }
 });
 
-document.getElementById('js-forum-list').addEventListener('change', event => window.location.href = `/Forum/${event.target.value}`);
-document.getElementById('js-reload').addEventListener('click', () => window.location.reload());
+let el = document.getElementById('js-forum-list');
+if (el) {
+  el.addEventListener('change', event => window.location.href = `/Forum/${event.target.value}`);
+}
 
-document.getElementById('js-per-page').addEventListener('change', event => {
-  const perPage = event.target.value;
-  const url = event.target.dataset.url;
+el = document.getElementById('js-reload');
+if (el) {
+  el.addEventListener('click', () => window.location.reload());
+}
 
-  window.location.href = `${url}?perPage=${perPage}`;
-})
+el = document.getElementById('js-per-page');
+if (el) {
+  el.addEventListener('change', event => {
+    const perPage = event.target.value;
+    const url = event.target.dataset.url;
+
+    window.location.href = `${url}?perPage=${perPage}`;
+  });
+}
