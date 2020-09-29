@@ -120,12 +120,10 @@ class PostResource extends JsonResource
             'is_read'       => $this->tracker->getMarkTime() >= $this->created_at,
             'is_locked'     => $this->topic->is_locked || $this->forum->is_locked,
 
-            $this->mergeWhen($this->gate->allows('update', $this->resource), function () {
-                return [
-                   'ip'         => $this->ip,
-                   'browser'    => $this->browser
-               ];
-            }),
+            $this->mergeWhen($this->gate->allows('update', $this->resource), [
+               'ip'         => $this->ip,
+               'browser'    => $this->browser
+            ]),
 
             $this->mergeWhen($this->editor !== null, function () {
                 return ['editor' => UserResource::make($this->editor)];

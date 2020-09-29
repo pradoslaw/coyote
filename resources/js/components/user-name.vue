@@ -1,5 +1,5 @@
 <template>
-  <component :is="tagName" v-profile="user.id">{{ user.name }}</component>
+  <component :is="tagName" v-profile="user.id" :class="{'badge badge-primary': authorBadge}">{{ user.name }}</component>
 </template>
 
 <script lang="ts">
@@ -16,6 +16,9 @@
   export default class VueUserName extends Vue {
     @Prop(Object)
     user!: User;
+
+    @Prop({default: false})
+    authorBadge: boolean;
 
     get tagName() {
       return this.user.is_blocked || this.user.deleted_at ? 'del' : 'a';
