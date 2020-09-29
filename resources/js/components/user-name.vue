@@ -18,7 +18,7 @@
     user!: User;
 
     @Prop({default: false})
-    authorBadge: boolean;
+    authorBadge!: boolean;
 
     get tagName() {
       return this.user.is_blocked || this.user.deleted_at ? 'del' : 'a';
