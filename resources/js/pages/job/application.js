@@ -1,5 +1,5 @@
 import { default as tinyConfig } from '../../libs/tinymce';
-import Dialog from '../../libs/dialog';
+import Dialog from '../../legacy/dialog';
 
 $(function() {
     tinymce.init(tinyConfig);

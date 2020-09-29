@@ -1,6 +1,6 @@
 import 'jquery-prettytextdiff/jquery.pretty-text-diff';
 import '../components/subscribe';
-import Dialog from '../libs/dialog';
+import Dialog from '../legacy/dialog';
 
 $(() => {
     'use strict';

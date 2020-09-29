@@ -1,4 +1,6 @@
-
+/**
+ * @deprecated
+ */
 class Button {
     /**
      * @param options
@@ -34,6 +36,9 @@ class Button {
     }
 }
 
+/**
+ * @deprecated
+ */
 class Dialog {
     /**
      * @param options
