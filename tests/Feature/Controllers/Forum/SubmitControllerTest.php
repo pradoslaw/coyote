@@ -223,4 +223,41 @@ class SubmitControllerTest extends TestCase
 
         $response->assertStatus(401);
     }
+
+    public function testWriteTopicWithPoll()
+    {
+        $faker = Factory::create();
+
+        $response = $this->actingAs($this->user)->json(
+            'POST',
+            "/Forum/{$this->forum->slug}/Submit",
+            [
+                'text' => $faker->text,
+                'subject' => $faker->text(50),
+                'poll' => [
+                    'title' => $pollTitle = $faker->word,
+                    'max_items' => 1,
+                    'length' => 0,
+                    'items' => [
+                        [
+                            'text' => $faker->realText(50)
+                        ],
+                        [
+                            'text' => $faker->realText(50)
+                        ]
+                    ]
+                ]
+            ]
+        );
+
+        $response->assertStatus(201);
+
+        $id = $response->json('id');
+
+        $topic = Topic::where('first_post_id', $id)->first();
+
+        $this->assertNotNull($topic->poll_id);
+
+        $this->assertDatabaseHas('polls', ['id' => $topic->poll_id, 'title' => $pollTitle]);
+    }
 }

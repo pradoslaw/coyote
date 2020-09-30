@@ -2,7 +2,13 @@ import { Poll, PollItem } from '../../types/models';
 
 const state = {
   poll: {
-    items: [{text: ''}]
+    title: '',
+    max_items: 1,
+    length: 0,
+    items: [
+      {text: ''},
+      {text: ''}
+    ]
   }
 }
 
@@ -14,7 +20,7 @@ const mutations = {
   },
 
   removeItem(state, item: PollItem) {
-    if (state.poll.items.length > 1) {
+    if (state.poll.items.length > 2) {
       state.poll.items.splice(state.poll.items.indexOf(item), 1);
     }
   },

@@ -26,7 +26,7 @@ class PollRepository extends Repository implements PollRepositoryInterface
         $poll->fill($data)->save();
 
         $current = $poll->items()->pluck('text');
-        $next = $this->collect($data['items']);
+        $next = collect($data['items'])->pluck('text');
 
         // to remove...
         $current->diff($next)->each(function ($value) use ($poll) {
@@ -38,16 +38,5 @@ class PollRepository extends Repository implements PollRepositoryInterface
         });
 
         return $poll;
-    }
-
-    /**
-     * @param string $items
-     * @return mixed
-     */
-    private function collect(string $items)
-    {
-        return collect(explode("\n", $items))->map(function ($item) {
-            return trim($item);
-        });
     }
 }

@@ -97,17 +97,25 @@
           <label class="col-md-4 col-form-label text-right">Odpowiedzi w ankiecie</label>
 
           <div class="col-md-6">
-            <div v-for="item in poll.items" :key="item.id" class="input-group mb-1">
+            <div v-for="(item, index) in poll.items" :key="item.id" class="input-group mb-1">
               <div class="input-group-prepend">
                 <a @click="removeItem(item)" class="input-group-text text-decoration-none" href="javascript:">
-                  <i :class="{'text-danger': poll.items.length > 1, 'text-muted': poll.items.length === 1}" class="fas fa-fw fa-minus-circle"></i>
+                  <i :class="{'text-danger': poll.items.length > 2, 'text-muted': poll.items.length <= 2}" class="fas fa-fw fa-minus-circle"></i>
                 </a>
               </div>
 
-              <input v-model="item.text" class="form-control input-sm" @keydown.enter="addItem" placeholder="Naciśnij Enter, aby dodać kolejną pozycję">
+              <vue-text
+                :value.sync="item.text"
+                :is-invalid="`poll.items.${index}.text` in errors"
+                class="input-sm"
+                @keydown.enter.native="addItem"
+                placeholder="Naciśnij Enter, aby dodać kolejną pozycję"
+              ></vue-text>
+
+              <vue-error :message="errors[`poll.items.${index}.text`]"></vue-error>
             </div>
 
-            <vue-error :message="errors['poll.items']"></vue-error>
+<!--            <vue-error :message="errors['poll.items']"></vue-error>-->
           </div>
         </div>
 
@@ -218,10 +226,15 @@
       ...mapState('posts', ['topic']),
       ...mapState('poll', ['poll'])
     },
-    methods: {
-      // ...mapMutations('topics', ['toggleTag']),
-      ...mapMutations('poll', ['removeItem', 'addItem'])
-    }
+    watch: {
+      poll: {
+        handler(poll) {
+          store.commit('poll/init', poll);
+        },
+        deep: true
+      }
+    },
+    methods: mapMutations('poll', ['removeItem', 'addItem'])
   })
   export default class VueForm extends Vue {
     isProcessing = false;
@@ -264,15 +277,6 @@
     post!: Post;
 
     topic!: Topic;
-
-    // @Prop({default() {
-    //   return {
-    //     title: '',
-    //     max_items: 1,
-    //     length: 0
-    //   }
-    // }})
-    // poll!: Poll;
 
     @Emit()
     cancel() { }

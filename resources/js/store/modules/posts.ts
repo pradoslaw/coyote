@@ -129,14 +129,15 @@ const actions = {
     return axios.post(`/Forum/Post/Subscribe/${post.id}`).catch(() => commit('subscribe', post));
   },
 
-  save({ commit, state, getters }, { post, topic }: { post: Post, topic: Topic }) {
+  save({ commit, state, getters, rootState }, { post, topic }: { post: Post, topic: Topic }) {
     const input = {
       text: post.text,
       subject: topic?.subject,
       is_sticky: topic?.is_sticky,
       is_subscribed: topic?.is_subscribed,
       attachments: post.attachments,
-      tags: topic.tags!.map(o => o['name'])
+      tags: topic.tags!.map(o => o['name']),
+      poll: rootState.poll.poll
     };
 
     return axios.post(`/Forum/${state.forum.slug}/Submit/${topic?.id || ''}/${post?.id || ''}`, input).then(result => {
