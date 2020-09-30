@@ -12,7 +12,7 @@
     <ul class="nav nav-tabs">
       <li class="nav-item"><a @click="switchTab('textarea')" :class="{active: activeTab === 'textarea'}" class="nav-link" href="javascript:">Treść</a></li>
       <li class="nav-item"><a @click="switchTab('attachments')" :class="{active: activeTab === 'attachments'}" class="nav-link" href="javascript:">Załączniki</a></li>
-      <li class="nav-item"><a @click="switchTab('poll')" :class="{active: activeTab === 'poll'}" class="nav-link" href="javascript:">Ankieta</a></li>
+      <li v-if="showPollTab" class="nav-item"><a @click="switchTab('poll')" :class="{active: activeTab === 'poll'}" class="nav-link" href="javascript:">Ankieta</a></li>
       <li class="nav-item"><a @click="switchTab('preview')" :class="{active: activeTab === 'preview'}" class="nav-link" href="javascript:">Podgląd</a></li>
     </ul>
 
@@ -83,7 +83,7 @@
         </div>
       </div>
 
-      <div :class="{active: activeTab === 'poll'}" class="tab-pane post-content">
+      <div v-if="showPollTab" :class="{active: activeTab === 'poll'}" class="tab-pane post-content">
         <div class="form-group row">
           <label class="col-md-4 col-form-label text-right">Tytuł ankiety</label>
 
@@ -351,6 +351,10 @@
 
     toggleTag(tag: Tag) {
       store.commit('topics/toggleTag', { topic: this.topic, tag });
+    }
+
+    get showPollTab() {
+      return !this.topic || this.topic.first_post_id === this.post.id;
     }
   }
 </script>
