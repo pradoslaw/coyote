@@ -58,14 +58,14 @@ class PostRequest extends FormRequest
 
         if ($this->canChangeSubject($topic, $post)) {
             $rules = array_merge($rules, [
-                'subject'       => self::RULE_SUBJECT,
-                'tags'          => self::RULE_TAGS,
-                'tags.*'        => self::RULE_TAG,
+                'subject'               => self::RULE_SUBJECT,
+                'tags'                  => self::RULE_TAGS,
+                'tags.*'                => self::RULE_TAG,
 
-                'poll.title'    => self::RULE_POLL_TITLE,
-                'poll.items'    => self::RULE_POLL_ITEMS,
-                'poll.length'   => self::RULE_POLL_LENGTH,
-                'poll.max_items'=> self::RULE_POLL_MAX_ITEMS
+                'poll.title'            => self::RULE_POLL_TITLE,
+                'poll.items.*.text'     => self::RULE_POLL_ITEMS,
+                'poll.length'           => self::RULE_POLL_LENGTH,
+                'poll.max_items'        => self::RULE_POLL_MAX_ITEMS
             ]);
         }
 

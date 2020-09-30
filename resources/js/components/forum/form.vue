@@ -97,7 +97,16 @@
           <label class="col-md-4 col-form-label text-right">Odpowiedzi w ankiecie</label>
 
           <div class="col-md-6">
-            <textarea v-model="poll.items" class="form-control" cols="50" rows="10"></textarea>
+            <div v-for="item in poll.items" :key="item.id" class="input-group mb-1">
+              <div class="input-group-prepend">
+                <a @click="removeItem(item)" class="input-group-text text-decoration-none" href="javascript:">
+                  <i :class="{'text-danger': poll.items.length > 1, 'text-muted': poll.items.length === 1}" class="fas fa-fw fa-minus-circle"></i>
+                </a>
+              </div>
+
+              <input v-model="item.text" class="form-control input-sm" @keydown.enter="addItem" placeholder="Naciśnij Enter, aby dodać kolejną pozycję">
+            </div>
+
             <vue-error :message="errors['poll.items']"></vue-error>
           </div>
         </div>
@@ -118,6 +127,7 @@
 
           <div class="col-md-6">
             <vue-text :value.sync="poll.length"></vue-text>
+            <vue-error :message="errors['poll.length']"></vue-error>
 
             <span class="form-text text-muted">Okreś długość działania ankiety (w dniach). 0 oznacza brak terminu ważności.</span>
           </div>
@@ -205,9 +215,13 @@
       'vue-text': VueText
     },
     computed: {
-      ...mapState('posts', ['topic'])
+      ...mapState('posts', ['topic']),
+      ...mapState('poll', ['poll'])
     },
-    methods: mapMutations('topics', ['toggleTag'])
+    methods: {
+      // ...mapMutations('topics', ['toggleTag']),
+      ...mapMutations('poll', ['removeItem', 'addItem'])
+    }
   })
   export default class VueForm extends Vue {
     isProcessing = false;
@@ -251,14 +265,14 @@
 
     topic!: Topic;
 
-    @Prop({default() {
-      return {
-        title: '',
-        max_items: 1,
-        length: 0
-      }
-    }})
-    poll!: Poll;
+    // @Prop({default() {
+    //   return {
+    //     title: '',
+    //     max_items: 1,
+    //     length: 0
+    //   }
+    // }})
+    // poll!: Poll;
 
     @Emit()
     cancel() { }
@@ -330,6 +344,5 @@
     toggleTag(tag: Tag) {
       store.commit('topics/toggleTag', { topic: this.topic, tag });
     }
-
   }
 </script>

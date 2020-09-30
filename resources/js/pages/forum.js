@@ -215,12 +215,12 @@ new Vue({
     return {
       showStickyCheckbox: window.showStickyCheckbox,
       undefinedPost: { text: '', html: '' },
-      reasons: window.reasons,
-      poll: window.poll
+      reasons: window.reasons
     }
   },
   created() {
     store.commit('posts/init', { pagination: window.pagination, forum: window.forum, topic: window.topic });
+    store.commit('poll/init', window.poll);
   },
   mounted() {
     const hints = ['hint-subject', 'hint-text', 'hint-tags', 'hint-user_name'];
@@ -260,12 +260,14 @@ new Vue({
       this.undefinedPost.text += text;
 
       document.getElementById('js-submit-form').scrollIntoView();
+
       this.$refs['js-submit-form'].$refs['textarea'].focus();
     }
   },
   computed: {
     ...mapGetters('posts', ['posts', 'topic']),
-    ...mapGetters('user', ['isAuthorized'])
+    ...mapGetters('user', ['isAuthorized']),
+    ...mapState('poll', ['poll'])
   }
 });
 
