@@ -20,7 +20,7 @@
       <div :class="{active: activeTab === 'textarea'}" class="tab-pane">
         <vue-toolbar :input="() => $refs.textarea"></vue-toolbar>
 
-        <vue-prompt source="/User/Prompt">
+        <vue-prompt :source="`/Forum/Topic/Prompt/${topic.id || ''}`">
           <textarea
             v-autosize
             v-model="post.text"

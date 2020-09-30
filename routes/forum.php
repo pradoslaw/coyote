@@ -86,7 +86,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     // blokowanie watku
     $this->post('Topic/Lock/{topic}', ['uses' => 'LockController@index', 'as' => 'lock', 'middleware' => 'auth']);
     // podpowiadanie nazwy uzytkownika (w kontekscie danego watku)
-    $this->get('Topic/Prompt/{id}', ['uses' => 'TopicController@prompt', 'as' => 'prompt']);
+    $this->get('Topic/Prompt/{id?}', ['uses' => 'TopicController@prompt', 'as' => 'prompt']);
     // przeniesienie watku do innej kategorii
     $this->post('Topic/Move/{topic}', ['uses' => 'MoveController@index', 'as' => 'move']);
     // oznacz watek jako przeczytany

@@ -8,8 +8,9 @@ use Coyote\Http\Factories\CacheFactory;
 use Coyote\Http\Factories\FlagFactory;
 use Coyote\Http\Resources\PollResource;
 use Coyote\Http\Resources\PostCollection;
+use Coyote\Http\Resources\PromptResource;
 use Coyote\Http\Resources\TopicResource;
-use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
+use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Post\WithSubscribers;
 use Coyote\Repositories\Criteria\WithTrashed;
@@ -177,25 +178,31 @@ class TopicController extends BaseController
     }
 
     /**
-     * @param $id
-     * @param User $user
+     * @param UserRepository $user
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param int|null $id
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function prompt($id, User $user, Request $request)
+    public function prompt(UserRepository $user, Request $request, int $id = null)
     {
         $this->validate($request, ['q' => 'username']);
+        $userIds = [];
 
-        $posts = $this->post->findAllBy('topic_id', $id, ['id', 'user_id']);
-        $posts->load('comments:id,post_id,user_id'); // load comments assigned to posts
+        if ($id) {
+            $posts = $this->post->findAllBy('topic_id', $id, ['id', 'user_id']);
+            $posts->load('comments:id,post_id,user_id'); // load comments assigned to posts
 
-        $usersId = $posts->pluck('user_id')->toArray();
+            $usersId = $posts->pluck('user_id')->toArray();
 
-        $posts->pluck('comments')[0]->each(function ($comment) use (&$usersId) {
-            $usersId[] = $comment->user_id;
-        });
+            $posts->pluck('comments')[0]->each(function ($comment) use (&$usersId) {
+                $usersId[] = $comment->user_id;
+            });
+        }
 
-        return view('components.prompt')->with('users', $user->lookupName($request['q'], array_filter(array_unique($usersId))));
+        $result = $user->lookupName($request['q'], array_filter(array_unique($userIds)));
+
+        return PromptResource::collection($result);
     }
 
     /**
