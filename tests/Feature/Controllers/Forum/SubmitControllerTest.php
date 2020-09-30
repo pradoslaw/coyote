@@ -240,10 +240,10 @@ class SubmitControllerTest extends TestCase
                     'length' => 0,
                     'items' => [
                         [
-                            'text' => $faker->realText(50)
+                            'text' => $itemA = $faker->realText(50)
                         ],
                         [
-                            'text' => $faker->realText(50)
+                            'text' => $itemB = $faker->realText(50)
                         ]
                     ]
                 ]
@@ -259,5 +259,7 @@ class SubmitControllerTest extends TestCase
         $this->assertNotNull($topic->poll_id);
 
         $this->assertDatabaseHas('polls', ['id' => $topic->poll_id, 'title' => $pollTitle]);
+        $this->assertDatabaseHas('poll_items', ['poll_id' => $topic->poll_id, 'text' => $itemA]);
+        $this->assertDatabaseHas('poll_items', ['poll_id' => $topic->poll_id, 'text' => $itemB]);
     }
 }

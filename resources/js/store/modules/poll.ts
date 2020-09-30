@@ -1,15 +1,16 @@
 import { Poll, PollItem } from '../../types/models';
 
+const DEFAULTS = {
+  max_items: 1,
+  length: 0,
+  items: [
+    {text: ''},
+    {text: ''}
+  ]
+};
+
 const state = {
-  poll: {
-    title: '',
-    max_items: 1,
-    length: 0,
-    items: [
-      {text: ''},
-      {text: ''}
-    ]
-  }
+  poll: DEFAULTS
 }
 
 const mutations = {
@@ -27,6 +28,10 @@ const mutations = {
 
   addItem(state) {
     state.poll.items.push({});
+  },
+
+  resetDefaults(state) {
+    state.poll = DEFAULTS;
   }
 }
 

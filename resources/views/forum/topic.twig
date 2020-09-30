@@ -46,7 +46,7 @@
       {% endif %}
     </div>
 
-    <template v-if="poll">
+    <template v-if="'id' in poll">
       <vue-poll :poll="poll"></vue-poll>
     </template>
 

@@ -92,8 +92,6 @@ class SubmitController extends BaseController
                 $actor->displayName = $request->get('user_name');
             }
 
-
-
             $activity = $post->id ? new Stream_Update($actor) : new Stream_Create($actor);
 
             $poll = $this->savePoll($request, $topic->poll_id);
@@ -157,7 +155,7 @@ class SubmitController extends BaseController
      */
     private function savePoll(Request $request, $pollId)
     {
-        if ($request->input('poll.remove')) {
+        if (!$request->filled('poll.title') && $pollId) {
             $this->getPollRepository()->delete($pollId);
         } elseif ($request->filled('poll.title')) {
             return $this->getPollRepository()->updateOrCreate($pollId, $request->input('poll'));

@@ -100,7 +100,7 @@
             <div v-for="(item, index) in poll.items" :key="item.id" class="input-group mb-1">
               <div class="input-group-prepend">
                 <a @click="removeItem(item)" class="input-group-text text-decoration-none" href="javascript:">
-                  <i :class="{'text-danger': poll.items.length > 2, 'text-muted': poll.items.length <= 2}" class="fas fa-fw fa-minus-circle"></i>
+                  <i :class="{'text-danger': poll.items.length > 2, 'text-muted': poll.items.length <= 2}" title="Usuń odpowiedź" class="fas fa-fw fa-minus-circle"></i>
                 </a>
               </div>
 
@@ -114,8 +114,6 @@
 
               <vue-error :message="errors[`poll.items.${index}.text`]"></vue-error>
             </div>
-
-<!--            <vue-error :message="errors['poll.items']"></vue-error>-->
           </div>
         </div>
 
@@ -137,7 +135,13 @@
             <vue-text :value.sync="poll.length"></vue-text>
             <vue-error :message="errors['poll.length']"></vue-error>
 
-            <span class="form-text text-muted">Okreś długość działania ankiety (w dniach). 0 oznacza brak terminu ważności.</span>
+            <span class="form-text text-muted">Określ długość działania ankiety (w dniach). 0 oznacza brak terminu ważności.</span>
+          </div>
+        </div>
+
+        <div v-if="poll.id" class="form-group row">
+          <div class="col-md-6 offset-md-4">
+            <button @click="resetDefaults" class="btn btn-danger btn-sm">Usuń ankietę</button>
           </div>
         </div>
       </div>
@@ -234,7 +238,7 @@
         deep: true
       }
     },
-    methods: mapMutations('poll', ['removeItem', 'addItem'])
+    methods: mapMutations('poll', ['removeItem', 'addItem', 'resetDefaults'])
   })
   export default class VueForm extends Vue {
     isProcessing = false;
