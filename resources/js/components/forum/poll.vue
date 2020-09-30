@@ -44,7 +44,7 @@
 
     <div v-if="isVoteable" class="row">
       <div class="col-12">
-        <vue-button @click.native="vote" class="btn btn-sm btn-primary">Głosuj</vue-button>
+        <vue-button :disabled="isProcessing" @click.native="vote" class="btn btn-sm btn-primary">Głosuj</vue-button>
       </div>
     </div>
 
@@ -63,17 +63,14 @@
   import { Poll, PollItem } from '../../types/models';
   import VueButton from "../forms/button.vue";
   import { default as mixins } from '../mixins/user';
-
-  import {mapGetters, mapMutations, mapState} from "vuex";
+  import store from "../../store";
+  import { mapGetters } from "vuex";
 
   @Component({
     name: 'forum-poll',
     mixins: [ mixins ],
-    components: {
-      'vue-button': VueButton,
-
-
-    },
+    store,
+    components: { 'vue-button': VueButton },
     computed: mapGetters('user', ['isAuthorized']),
   })
   export default class VuePoll extends Vue {
@@ -81,15 +78,18 @@
     readonly pollSync!: Poll;
 
     readonly isAuthorized! : boolean;
-
     checkedOptions: number[] = [];
+    isProcessing = false;
 
     percentage(item: PollItem) {
       return this.totalVotes ? Math.round(100 * item.total / this.totalVotes) : 0
     }
 
     vote() {
-      this.pollSync.votes = Array.isArray(this.checkedOptions) ? this.checkedOptions : [this.checkedOptions];
+      this.isProcessing = true;
+
+      store.dispatch('poll/vote', Array.isArray(this.checkedOptions) ? this.checkedOptions : [this.checkedOptions])
+        .finally(() => this.isProcessing = false);
     }
 
     get totalVotes() {

@@ -14,6 +14,7 @@ use Carbon\Carbon;
  * @property string $title
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property Topic $topic
  */
 class Poll extends Model
 {
@@ -36,6 +37,14 @@ class Poll extends Model
         'max_items' => 1,
         'length' => 0
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function topic()
+    {
+        return $this->hasOne(Topic::class);
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

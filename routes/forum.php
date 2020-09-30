@@ -165,11 +165,11 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     ]);
 
     // glosowanie w ankiecie
-    $this->post('{forum}/Poll/{id}', [
+    $this->post('Poll/{id}', [
         'uses' => 'PollController@vote',
         'as' => 'poll.vote',
         'middleware' => [
-            'auth', 'can:access,forum'
+            'auth'
         ]
     ]);
 

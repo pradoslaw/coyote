@@ -14,7 +14,7 @@ class PollResource extends JsonResource
     public function toArray($request)
     {
         return array_merge(
-            array_except(parent::toArray($request), ['created_at', 'updated_at']),
+            $this->resource->only(['id', 'title', 'max_items', 'length']),
             [
                 'items'         => JsonResource::collection($this->items),
                 'expired_at'    => $this->resource->expiredAt(),

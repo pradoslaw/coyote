@@ -1,4 +1,5 @@
 import { Poll, PollItem } from '../../types/models';
+import axios from 'axios';
 
 const DEFAULTS = {
   max_items: 1,
@@ -36,8 +37,8 @@ const mutations = {
 }
 
 const actions = {
-  vote() {
-    //
+  vote({ state, commit }, options: number[]) {
+    return axios.post(`/Forum/Poll/${state.poll.id}`, { items: options }).then(result => commit('init', result.data));
   }
 }
 
