@@ -23,7 +23,7 @@ class PollResource extends JsonResource
                 'votes'         => $this->when(
                     $request->user(),
                     function () use ($request) {
-                        return (array) $this->resource->userVoteIds($request->user()->id);
+                        return (array) $this->resource->votes()->forUser($request->user()->id)->pluck('item_id')->toArray();
                     },
                     []
                 )

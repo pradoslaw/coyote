@@ -74,13 +74,4 @@ class Poll extends Model
     {
         return $this->length > 0 ? Carbon::now() > $this->expiredAt() : false;
     }
-
-    /**
-     * @param int $userId
-     * @return array
-     */
-    public function userVoteIds(int $userId)
-    {
-        return $this->votes()->forUser($userId)->pluck('item_id')->toArray();
-    }
 }

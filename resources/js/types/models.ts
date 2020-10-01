@@ -20,6 +20,7 @@ export interface User {
   name: string;
   deleted_at?: Date;
   is_blocked: boolean;
+  is_online?: boolean;
   photo: string;
   posts?: number;
   created_at?: Date;
