@@ -67,6 +67,18 @@
   }
 }
 
+// czy nie nalezy umiescic tego kodu w innym pliku? wszak to ustawienie globalne
+.is-online {
+  width: 15px;
+  height: 15px;
+  background-color: $brand-primary;
+  border-radius: 50%;
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  border: 2px solid #fff;
+}
+
 
 // Strona glowna forum
 // ----------------------------------------------------------------------------------

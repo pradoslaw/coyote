@@ -2,9 +2,7 @@
   <div :title="message.excerpt" :class="{'unread': ! isRead}" class="notification">
     <a :href="message.url" class="notification-link">
       <div class="media">
-        <object class="media-object mr-2" :data="message.user.photo || '//'" type="image/png">
-          <img src="/img/avatar.png">
-        </object>
+        <vue-avatar :photo="message.user.photo" class="media-object mr-2"></vue-avatar>
 
         <div class="media-body">
           <header class="text-truncate">
@@ -28,10 +26,12 @@
 
 <script>
   import VueTimeago from '../../plugins/timeago';
+  import VueAvatar from '../avatar.vue';
 
   Vue.use(VueTimeago);
 
   export default {
+    components: { 'vue-avatar': VueAvatar },
     props: {
       message: {
         type: Object

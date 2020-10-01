@@ -2,9 +2,7 @@
   <div :class="{'unread': ! notification.is_read}" class="notification">
     <a @mousedown="markAsRead(notification)" @touchstart="markAsRead(notification)" :href="notification.url" :title="notification.headline" class="notification-link">
       <div class="media">
-        <object class="media-object mr-2" :data="notification.photo || '//'" type="image/png">
-          <img src="/img/avatar.png">
-        </object>
+        <vue-avatar :photo="notification.photo" class="media-object mr-2"></vue-avatar>
 
         <div class="media-body text-truncate">
           <header>
@@ -27,10 +25,12 @@
 <script>
   import store from '../../store';
   import VueTimeago from '../../plugins/timeago';
+  import VueAvatar from '../avatar.vue';
 
   Vue.use(VueTimeago);
 
   export default {
+    components: { 'vue-avatar': VueAvatar },
     props: {
       notification: {
         type: Object

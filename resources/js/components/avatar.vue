@@ -1,9 +1,14 @@
 <template>
-  <object :data="photo || '//'" type="image/png">
-    <img src="/img/avatar.png" :alt="name" class="mw-100">
+  <div class="position-relative">
+    <object :data="photo || '//'" type="image/png" class="d-block mw-100">
+      <img src="/img/avatar.png" :alt="name" class="mw-100">
 
-    <slot></slot>
-  </object>
+      <slot></slot>
+    </object>
+
+    <div v-if="isOnline" class="is-online"></div>
+  </div>
+
 </template>
 
 <script lang="js">
@@ -15,7 +20,13 @@
       id: {
         type: Number
       },
-      photo: String
+      photo: {
+        type: String
+      },
+      isOnline: {
+        type: Boolean
+      }
     }
   }
 </script>
+

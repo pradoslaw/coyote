@@ -37,7 +37,23 @@ class PostRepository extends Repository implements PostRepositoryInterface
                     ->forPage($page, $perPage);
             })
             ->with(['user' => function ($builder) {
-                return $builder->select(['users.id', 'users.name', 'photo', 'posts', 'sig', 'location', 'users.created_at', 'visited_at', 'deleted_at', 'is_blocked', 'allow_smilies', 'allow_count', 'allow_sig', $this->raw('groups.name AS group')])
+                return $builder->select([
+                        'users.id',
+                        'users.name',
+                        'photo',
+                        'posts',
+                        'sig',
+                        'location',
+                        'users.created_at',
+                        'visited_at',
+                        'deleted_at',
+                        'is_blocked',
+                        'allow_smilies',
+                        'allow_count',
+                        'allow_sig',
+                        'is_online',
+                        $this->raw('groups.name AS group')
+                    ])
                     ->leftJoin('groups', 'groups.id', 'group_id');
             }])
             ->with(['editor:id,name,is_blocked,deleted_at', 'comments.user', 'attachments'])

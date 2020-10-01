@@ -40,7 +40,14 @@
     <div :class="{'collapse': isCollapsed}" class="card-body">
       <div class="media d-lg-none mb-2">
         <div class="media-left mr-2">
-          <vue-avatar v-if="post.user" :id="post.user.id" :name="post.user.name" :photo="post.user.photo" class="d-block i-35 img-thumbnail"></vue-avatar>
+          <vue-avatar
+            v-if="post.user"
+            :id="post.user.id"
+            :name="post.user.name"
+            :photo="post.user.photo"
+            :is-online="post.user.is_online"
+            class="d-block i-35 img-thumbnail"
+          ></vue-avatar>
         </div>
 
         <div class="media-body">
@@ -60,7 +67,14 @@
       <div class="row">
         <div class="d-none d-lg-block col-lg-2">
           <template v-if="post.user">
-            <vue-avatar v-if="post.user" :id="post.user.id" :name="post.user.name" :photo="post.user.photo" class="post-avatar img-thumbnail"></vue-avatar>
+            <vue-avatar
+              v-if="post.user"
+              :id="post.user.id"
+              :name="post.user.name"
+              :photo="post.user.photo"
+              :is-online="post.user.is_online"
+              class="post-avatar img-thumbnail"
+            ></vue-avatar>
 
             <span v-if="post.user.group" class="badge badge-secondary mb-1">{{ post.user.group }}</span>
 
