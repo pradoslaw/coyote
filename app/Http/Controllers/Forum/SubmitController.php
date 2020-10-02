@@ -148,7 +148,7 @@ class SubmitController extends BaseController
         $resource = (new PostResource($post))->setTracker($tracker)->setSigParser(app('parser.sig'))->resolve($this->request);
 
         // mark topic as read after publishing
-        $tracker->asRead($post->created_at);
+        $post->wasRecentlyCreated ? $tracker->asRead($post->created_at) : null;
 
         return $resource;
     }

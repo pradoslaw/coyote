@@ -1,6 +1,4 @@
-
-// import 'jquery-prettytextdiff/jquery.pretty-text-diff';
-
+import 'jquery-prettytextdiff/jquery.pretty-text-diff';
 import '../pages/forum/sidebar';
 import VueTimeago from '../plugins/timeago';
 import VueSection from '../components/forum/section.vue';
@@ -165,43 +163,43 @@ new Vue({
   }
 });
 
-new Vue({
-  el: '#js-tags',
-  delimiters: ['${', '}'],
-  components: { 'vue-button': VueButton },
-  data: () => ({
-    tags: window.tags,
-    isProcessing: false,
-    isEditing: false
-  }),
-  methods: {
-    saveTags() {
-      this.isProcessing = true;
-
-      const tags = this.$refs.input.value.replace(new RegExp(',', 'g'), ' ').split(' ').filter(tag => tag !== '');
-
-      axios.post('/Forum/Tag/Save', { tags })
-        .then(result => {
-          this.tags = result.data;
-          this.isEditing = false;
-        })
-        .finally(() => this.isProcessing = false);
-    },
-
-    toggleEdit() {
-      this.isEditing = !this.isEditing;
-
-      if (this.isEditing) {
-        this.$nextTick(() => this.$refs.input.focus());
-      }
-    }
-  },
-  computed: {
-    inlineTags () {
-      return pluck(this.tags, 'name').join(', ');
-    }
-  }
-})
+// new Vue({
+//   el: '#js-tags',
+//   delimiters: ['${', '}'],
+//   components: { 'vue-button': VueButton },
+//   data: () => ({
+//     tags: window.tags,
+//     isProcessing: false,
+//     isEditing: false
+//   }),
+//   methods: {
+//     saveTags() {
+//       this.isProcessing = true;
+//
+//       const tags = this.$refs.input.value.replace(new RegExp(',', 'g'), ' ').split(' ').filter(tag => tag !== '');
+//
+//       axios.post('/Forum/Tag/Save', { tags })
+//         .then(result => {
+//           this.tags = result.data;
+//           this.isEditing = false;
+//         })
+//         .finally(() => this.isProcessing = false);
+//     },
+//
+//     toggleEdit() {
+//       this.isEditing = !this.isEditing;
+//
+//       if (this.isEditing) {
+//         this.$nextTick(() => this.$refs.input.focus());
+//       }
+//     }
+//   },
+//   computed: {
+//     inlineTags () {
+//       return pluck(this.tags, 'name').join(', ');
+//     }
+//   }
+// })
 
 let PostVue = Vue.extend({
   delimiters: ['${', '}'],

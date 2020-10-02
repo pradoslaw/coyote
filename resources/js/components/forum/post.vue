@@ -34,7 +34,6 @@
           <small v-if="post.browser" :title="post.browser" class="text-muted">{{ post.browser }}</small>
         </div>
       </div>
-
     </div>
 
     <div :class="{'collapse': isCollapsed}" class="card-body">
