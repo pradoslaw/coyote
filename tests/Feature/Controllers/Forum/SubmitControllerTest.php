@@ -117,6 +117,8 @@ class SubmitControllerTest extends TestCase
         ]);
 
         $this->assertFalse($topic->subscribers()->forUser($this->user->id)->exists());
+
+        $this->assertDatabaseHas('forum_track', ['forum_id' => $this->forum->id, 'guest_id' => $this->user->guest_id]);
     }
 
     public function testEditExistingPostByAuthor()

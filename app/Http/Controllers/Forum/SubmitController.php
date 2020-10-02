@@ -49,7 +49,7 @@ class SubmitController extends BaseController
      * @param Forum $forum
      * @param Topic|null $topic
      * @param Post|null $post
-     * @return PostResource
+     * @return array
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function save(PostRequest $request, Forum $forum, ?Topic $topic, ?Post $post)
@@ -145,7 +145,12 @@ class SubmitController extends BaseController
             $post->user->group = $post->user->group->name;
         }
 
-        return (new PostResource($post))->setTracker($tracker)->setSigParser(app('parser.sig'));
+        $resource = (new PostResource($post))->setTracker($tracker)->setSigParser(app('parser.sig'))->resolve($this->request);
+
+        // mark topic as read after publishing
+        $tracker->asRead($post->created_at);
+
+        return $resource;
     }
 
     /**
