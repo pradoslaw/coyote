@@ -226,7 +226,7 @@ class SubmitControllerTest extends TestCase
         $response->assertStatus(401);
     }
 
-    public function testWriteTopicWithPoll()
+    public function testSubmitTopicWithPoll()
     {
         $faker = Factory::create();
 
@@ -252,7 +252,7 @@ class SubmitControllerTest extends TestCase
             ]
         );
 
-        $response->assertStatus(201);
+        $response->assertStatus(200);
 
         $id = $response->json('id');
 
