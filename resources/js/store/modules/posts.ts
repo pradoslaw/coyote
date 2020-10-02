@@ -6,17 +6,16 @@ type PostObj = { [key: number]: Post };
 type ParentChild = { post: Post, comment: PostComment };
 type PostWithAttachment = { post: Post, attachment: PostAttachment };
 
-const state: { data: PostObj, links: null, meta: null, forum?: Forum, topic?: Topic } = {data: {}, links: null, meta: null}
+const state: { data: PostObj, links: null, meta: null } = {data: {}, links: null, meta: null}
 
 const getters = {
   posts: state => state.data,
-  topic: state => state.topic,
   exists: state => (id: number) => id in state.data
 }
 
 const mutations = {
-  init(state, { pagination, forum, topic }) {
-    state = Object.assign(state, pagination, { forum, topic });
+  init(state, pagination) {
+    state = Object.assign(state, pagination);
   },
 
   add(state, post: Post) {
@@ -129,18 +128,21 @@ const actions = {
     return axios.post(`/Forum/Post/Subscribe/${post.id}`).catch(() => commit('subscribe', post));
   },
 
-  save({ commit, state, getters, rootState }, { post, topic }: { post: Post, topic: Topic }) {
-    const input = {
+  save({ commit, state, getters, rootState, rootGetters }, post: Post) {
+    const topic = rootGetters['topics/topic'];
+    const forum = rootGetters['forums/forum'];
+
+    const payload = {
       text: post.text,
-      subject: topic?.subject,
-      is_sticky: topic?.is_sticky,
-      is_subscribed: topic?.is_subscribed,
+      subject: rootGetters['topics/topic'].subject,
+      is_sticky: rootGetters['topics/topic'].is_sticky,
+      is_subscribed: rootGetters['topics/topic'].is_subscribed,
       attachments: post.attachments,
-      tags: topic.tags!.map(o => o['name']),
+      tags: rootGetters['topics/topic'].tags!.map(o => o['name']),
       poll: rootState.poll.poll
     };
 
-    return axios.post(`/Forum/${state.forum.slug}/Submit/${topic?.id || ''}/${post?.id || ''}`, input).then(result => {
+    return axios.post(`/Forum/${forum.slug}/Submit/${topic?.id || ''}/${post?.id || ''}`, payload).then(result => {
       commit(getters.exists(result.data.id) ? 'update' : 'add', result.data);
 
       return result;

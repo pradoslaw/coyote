@@ -152,10 +152,12 @@ export interface Topic {
   id: number;
   is_locked: boolean;
   is_sticky?: boolean;
+  is_read?: boolean;
   subject: string;
   first_post_id?: number;
   is_subscribed?: boolean;
   tags?: Tag[];
+  subscribers?: number;
 }
 
 export interface Links {

@@ -205,7 +205,7 @@
   import VueToolbar from '../../components/forms/toolbar.vue';
   import VueTimeago from '../../plugins/timeago';
   import { Post, PostAttachment, Topic, Tag, Poll } from "../../types/models";
-  import { mapMutations, mapState } from "vuex";
+  import { mapMutations, mapState, mapGetters } from "vuex";
   import axios from 'axios';
   import Textarea from "../../libs/textarea";
   import VueError from '../forms/error.vue';
@@ -227,7 +227,7 @@
       'vue-text': VueText
     },
     computed: {
-      ...mapState('posts', ['topic']),
+      ...mapGetters('topics', ['topic']),
       ...mapState('poll', ['poll'])
     },
     watch: {
@@ -296,13 +296,16 @@
       this.isProcessing = true;
       this.errors = {};
 
-      store.dispatch('posts/save', { post: this.post, topic: this.topic })
+      store.commit('topics/init', [ this.topic ]);
+
+      store.dispatch('posts/save', this.post)
         .then(result => {
           this.$emit('save', result.data);
 
           // post was recently created. we're not editing it
-          if (!this.post.id) {
+          if ('id' in this.topic && !this.post.id) {
             this.post.text = '';
+
             document.getElementById(`id${result.data.id}`)!.scrollIntoView();
           }
         })

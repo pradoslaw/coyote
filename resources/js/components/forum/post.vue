@@ -322,7 +322,7 @@
       ...mapState('user', {user: state => state}),
       ...mapGetters('user', ['isAuthorized']),
       ...mapGetters('posts', ['posts']),
-      ...mapState('posts', ['topic'])
+      ...mapGetters('topics', ['topic'])
     }
   })
   export default class VuePost extends Vue {

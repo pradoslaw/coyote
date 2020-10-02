@@ -7,7 +7,8 @@ const state = {
 const getters = {
   findIndex: (state) => (order, section) => {
     return state.categories.findIndex(value => value.order === order && value.section === section);
-  }
+  },
+  forum: state => state.categories[0]
 };
 
 const pluck = (category) => {

@@ -5,12 +5,16 @@ const state = {
   topics: []
 };
 
+const getters = {
+  topic: state => state.topics[0]
+};
+
 const mutations = {
-  init(state, topics) {
+  init(state, topics: Topic[]) {
     state.topics = topics;
   },
 
-  mark(state, topic) {
+  mark(state, topic: Topic) {
     topic.is_read = true;
   },
 
@@ -18,12 +22,12 @@ const mutations = {
     state.topics.forEach(topic => topic.is_read = true);
   },
 
-  subscribe(state, topic) {
+  subscribe(state, topic: Topic) {
     if (topic.is_subscribed) {
-      topic.subscribers--;
+      topic.subscribers!--;
     }
     else {
-      topic.subscribers++;
+      topic.subscribers!++;
     }
 
     topic.is_subscribed = !topic.is_subscribed;
@@ -77,6 +81,7 @@ const actions = {
 export default {
   namespaced: true,
   state,
+  getters,
   mutations,
   actions
 };

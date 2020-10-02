@@ -32,18 +32,17 @@ function pluck(arr, field) {
   }, []);
 }
 
-new Vue({
-  el: '#js-forum',
+let ForumVue = Vue.extend({
   delimiters: ['${', '}'],
   store,
-  data: {
+  data: () => ({
     collapse: window.collapse || {},
     postsPerPage: window.postsPerPage || null,
     flags: window.flags || [],
     showCategoryName: window.showCategoryName || false,
     groupStickyTopics: window.groupStickyTopics || false,
     tags: window.tags || {}
-  },
+  }),
   components: {
     'vue-section': VueSection,
     'vue-topic': VueTopic
@@ -170,13 +169,11 @@ new Vue({
   el: '#js-tags',
   delimiters: ['${', '}'],
   components: { 'vue-button': VueButton },
-  data() {
-    return {
-      tags: window.tags,
-      isProcessing: false,
-      isEditing: false
-    }
-  },
+  data: () => ({
+    tags: window.tags,
+    isProcessing: false,
+    isEditing: false
+  }),
   methods: {
     saveTags() {
       this.isProcessing = true;
@@ -206,20 +203,19 @@ new Vue({
   }
 })
 
-new Vue({
-  el: '#js-post',
+let PostVue = Vue.extend({
   delimiters: ['${', '}'],
   components: { 'vue-post': VuePost, 'vue-form': VueForm, 'vue-poll': VuePoll },
   store,
-  data() {
-    return {
-      showStickyCheckbox: window.showStickyCheckbox,
-      undefinedPost: { text: '', html: '' },
-      reasons: window.reasons
-    }
-  },
+  data: () => ({
+    showStickyCheckbox: window.showStickyCheckbox,
+    undefinedPost: { text: '', html: '' },
+    reasons: window.reasons
+  }),
   created() {
-    store.commit('posts/init', { pagination: window.pagination, forum: window.forum, topic: window.topic });
+    store.commit('posts/init', window.pagination);
+    store.commit('topics/init', [ window.topic ]);
+    store.commit('forums/init', [ window.forum ]);
     store.commit('poll/init', window.poll);
   },
   mounted() {
@@ -265,28 +261,36 @@ new Vue({
     }
   },
   computed: {
-    ...mapGetters('posts', ['posts', 'topic']),
+    ...mapGetters('posts', ['posts']),
+    ...mapGetters('topics', ['topic']),
     ...mapGetters('user', ['isAuthorized']),
     ...mapState('poll', ['poll'])
   }
 });
 
-let el = document.getElementById('js-forum-list');
-if (el) {
-  el.addEventListener('change', event => window.location.href = `/Forum/${event.target.value}`);
+const boot = { 'js-forum': ForumVue, 'js-post': PostVue }
+
+for (let el in boot) {
+  if (document.getElementById(el)) {
+    new boot[el]().$mount('#' + el);
+  }
 }
 
-el = document.getElementById('js-reload');
-if (el) {
-  el.addEventListener('click', () => window.location.reload());
+function addEventListener(selector, event, handler) {
+  let el = document.getElementById(selector);
+
+  if (el) {
+    el.addEventListener(event, handler);
+  }
 }
 
-el = document.getElementById('js-per-page');
-if (el) {
-  el.addEventListener('change', event => {
-    const perPage = event.target.value;
-    const url = event.target.dataset.url;
+addEventListener('js-forum-list', 'change', event => window.location.href = `/Forum/${event.target.value}`);
 
-    window.location.href = `${url}?perPage=${perPage}`;
-  });
-}
+addEventListener('js-reload', 'click', () => window.location.reload());
+
+addEventListener('js-per-page', 'change', event => {
+  const perPage = event.target.value;
+  const url = event.target.dataset.url;
+
+  window.location.href = `${url}?perPage=${perPage}`;
+});

@@ -1,5 +1,5 @@
 <template>
-  <component :is="tagName" v-profile="user.id" :class="{'badge badge-primary': authorBadge}">{{ user.name }}</component>
+  <component :is="tagName" v-profile="user.id" :class="{'badge badge-primary': owner}">{{ user.name }}</component>
 </template>
 
 <script lang="ts">
@@ -18,7 +18,7 @@
     user!: User;
 
     @Prop({default: false})
-    authorBadge!: boolean;
+    owner!: boolean;
 
     get tagName() {
       return this.user.is_blocked || this.user.deleted_at ? 'del' : 'a';
