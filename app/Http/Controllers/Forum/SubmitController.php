@@ -141,7 +141,7 @@ class SubmitController extends BaseController
 
         PostResource::withoutWrapping();
 
-        if ($post->user->group) {
+        if ($post->user && $post->user->group) {
             $post->user->group = $post->user->group->name;
         }
 
