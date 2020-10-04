@@ -47,6 +47,11 @@
   @include link-color-darker;
 
   font-size: .9rem;
+
+  .badge {
+    font-size: 90%;
+    padding: 1px 5px;
+  }
 }
 
 .post-stats {
@@ -84,7 +89,14 @@
   font-size: .75rem;
   padding-right: 50px;
 
-  @include link-color-darker;
+  .badge {
+    font-weight: 400;
+    padding: 1px 5px;
+    margin-top: -1px;
+    font-size: 100%;
+  }
+
+  @include link-color-darker();
 }
 
 .post-comment {

@@ -204,7 +204,7 @@
   import VuePaste from '../../plugins/paste.js';
   import VueToolbar from '../../components/forms/toolbar.vue';
   import VueTimeago from '../../plugins/timeago';
-  import { Post, PostAttachment, Topic, Tag, Poll } from "../../types/models";
+  import { Post, PostAttachment, Topic, Tag } from "../../types/models";
   import { mapMutations, mapState, mapGetters } from "vuex";
   import axios from 'axios';
   import Textarea from "../../libs/textarea";

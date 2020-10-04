@@ -3,7 +3,7 @@
     <template v-if="!isEditing">
       <span v-html="comment.html"></span>
 
-      <vue-user-name :user="comment.user"></vue-user-name>
+      <vue-user-name :user="comment.user" :owner="comment.user.id === topic.owner_id"></vue-user-name>
 
       <a :href="`#comment-${comment.id}`"><vue-timeago :datetime="comment.created_at" class="text-muted small"></vue-timeago></a>
 
@@ -40,12 +40,14 @@
   import { mixin as clickaway } from "vue-clickaway";
   import store from "../../store";
   import { PostComment } from "../../types/models";
+  import { mapGetters } from "vuex";
 
   @Component({
     name: 'comment',
     mixins: [clickaway, mixins],
     store,
     components: { 'vue-modal': VueModal, 'vue-user-name': VueUserName, 'vue-comment-form': VueCommentForm },
+    computed: mapGetters('topics', ['topic'])
   })
   export default class VueComment extends Vue {
     @Ref()

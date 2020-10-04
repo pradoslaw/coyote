@@ -88,7 +88,7 @@ class TopicController extends BaseController
 
         $tracker = Tracker::make($topic);
 
-        $posts = (new PostCollection($paginate))
+        $resource = (new PostCollection($paginate))
             ->setRelations($topic, $forum)
             ->setTracker($tracker);
 
@@ -99,7 +99,7 @@ class TopicController extends BaseController
             $reasons = Reason::pluck('name', 'id')->toArray();
 
             if ($this->gate->allows('delete', $forum)) {
-                $posts->setFlags($this->getFlags($postIds));
+                $resource->setFlags($this->getFlags($postIds));
             }
 
             $this->forum->skipCriteria(true);
@@ -110,7 +110,7 @@ class TopicController extends BaseController
 
         $dateTime = $paginate->last()->created_at;
         // first, build array of posts with info which posts have been read
-        $posts = $posts->resolve($this->request);
+        $posts = $resource->resolve($this->request);
 
         // ..then, mark topic as read
         if ($markTime < $dateTime) {

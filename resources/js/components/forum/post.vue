@@ -18,7 +18,7 @@
       <div class="row d-none d-lg-flex">
         <div class="col-2">
           <h5 class="mb-0 post-author">
-            <vue-user-name v-if="post.user" :user="post.user"></vue-user-name>
+            <vue-user-name v-if="post.user" :user="post.user" :owner="post.user_id === topic.owner_id"></vue-user-name>
             <span v-else>{{ post.user_name }}</span>
           </h5>
         </div>
@@ -51,7 +51,7 @@
 
         <div class="media-body">
           <h5 class="mb-0 post-author">
-            <vue-user-name v-if="post.user" :user="post.user"></vue-user-name>
+            <vue-user-name v-if="post.user" :user="post.user" :owner="post.user_id === topic.owner_id"></vue-user-name>
             <span v-else>{{ post.user_name }}</span>
           </h5>
 

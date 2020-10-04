@@ -115,6 +115,7 @@ export interface PostAttachment {
 export interface Post {
   id: number;
   user?: User;
+  user_id: number | null;
   editor?: User;
   deleter_name?: string;
   delete_reason?: string;
@@ -158,6 +159,7 @@ export interface Topic {
   is_subscribed?: boolean;
   tags?: Tag[];
   subscribers?: number;
+  owner_id?: number | null;
 }
 
 export interface Links {
