@@ -84,11 +84,11 @@
         "@babel/plugin-transform-modules-commonjs": "^7.10.4",
         "@babel/preset-typescript": "^7.10.4",
         "@types/jest": "^25.2.1",
-        "@vue/test-utils": "^1.0.2",
+        "@vue/test-utils": "^1.1.0",
         "babel-core": "^7.0.0-bridge.0",
         "babel-jest": "^26.0.1",
         "faker": "^4.1.0",
         "jest": "^26.0.1",
-        "vue-jest": "^3.0.5"
+        "vue-jest": "^3.0.7"
     }
 }
