@@ -3,9 +3,7 @@
     <li v-for="(item, index) in items" :key="index" :class="{'hover': index === selectedIndex}" @click="selectItem" @mouseover="hoverItem(index)">
 
       <slot name="item" :item="item">
-        <object :data="item.photo || '//'" type="image/png">
-          <img src="/img/avatar.png" class="w-100">
-        </object>
+        <vue-avatar :photo="item.photo" :name="item.name" class="d-inline-block"></vue-avatar>
 
         <span>{{ item.name }}</span>
 
@@ -16,7 +14,10 @@
 </template>
 
 <script>
+  import VueAvatar from '../avatar.vue';
+
   export default {
+    components: { 'vue-avatar': VueAvatar },
     props: {
       items: {
         type: Array,
