@@ -207,7 +207,7 @@ let PostVue = Vue.extend({
   store,
   data: () => ({
     showStickyCheckbox: window.showStickyCheckbox,
-    undefinedPost: { text: '', html: '' },
+    undefinedPost: { text: '', html: '', attachments: [] },
     reasons: window.reasons
   }),
   created() {

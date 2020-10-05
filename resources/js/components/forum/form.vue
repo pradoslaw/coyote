@@ -275,7 +275,8 @@
     @Prop({default() {
       return {
         text: '',
-        html: ''
+        html: '',
+        attachments: []
       }
     }})
     post!: Post;

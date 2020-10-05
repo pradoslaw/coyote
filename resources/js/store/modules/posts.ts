@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Post, Forum, Topic, PostComment, PostAttachment } from "../../types/models";
+import { Post, PostComment, PostAttachment } from "../../types/models";
 import Vue from "vue";
 
 type PostObj = { [key: number]: Post };
