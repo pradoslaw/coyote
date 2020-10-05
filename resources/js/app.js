@@ -1,10 +1,10 @@
 import './store';
-// import './components/dropdown.js';
 import './components/scrolltop.js';
 import './components/breadcrumb.js';
 import './components/navbar-toggle.js';
 import './components/state.js';
 import './libs/timeago.js';
+import './libs/helpers.ts';
 import './components/vcard.js';
 import './components/popover.js';
 import './components/flag.js';

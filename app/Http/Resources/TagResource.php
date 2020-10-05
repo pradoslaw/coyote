@@ -30,7 +30,7 @@ class TagResource extends JsonResource
             return route('job.tag', [urlencode($name)]);
         };
 
-        return array_merge($this->resource->only(['id', 'name', 'real_name']), [
+        return array_merge($this->resource->only(['id', 'name', 'real_name', 'count']), [
             'logo'      => (string) $this->logo->url(),
             'url'       => $callback($this->name)
         ]);

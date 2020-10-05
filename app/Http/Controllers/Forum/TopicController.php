@@ -6,7 +6,11 @@ use Coyote\Events\TopicWasSaved;
 use Coyote\Forum\Reason;
 use Coyote\Http\Factories\CacheFactory;
 use Coyote\Http\Factories\FlagFactory;
-use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
+use Coyote\Http\Resources\PollResource;
+use Coyote\Http\Resources\PostCollection;
+use Coyote\Http\Resources\PromptResource;
+use Coyote\Http\Resources\TopicResource;
+use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Post\WithSubscribers;
 use Coyote\Repositories\Criteria\WithTrashed;
@@ -15,9 +19,8 @@ use Coyote\Services\Elasticsearch\Builders\Forum\MoreLikeThisBuilder;
 use Coyote\Services\Forum\Tracker;
 use Coyote\Services\Forum\TreeBuilder\Builder;
 use Coyote\Services\Forum\TreeBuilder\ListDecorator;
-use Coyote\Services\Parser\Parsers\ParserInterface;
+use Coyote\Topic;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 class TopicController extends BaseController
 {
@@ -36,6 +39,8 @@ class TopicController extends BaseController
      */
     public function index(Request $request, $forum, $topic)
     {
+        $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->slug, $topic->id, $topic->slug]));
+
         // get the topic (and forum) mark time value from middleware
         // @see \Coyote\Http\Middleware\ScrollToPost
         $markTime = $request->attributes->get('mark_time');
@@ -44,8 +49,6 @@ class TopicController extends BaseController
 
         // current page...
         $page = (int) $request->get('page');
-        // number of answers
-        $replies = $topic->replies;
         // number of posts per one page
         $perPage = $this->postsPerPage($request);
 
@@ -56,7 +59,7 @@ class TopicController extends BaseController
             $this->post->pushCriteria(new WithTrashedInfo());
 
             // user is able to see real number of posts in this topic
-            $replies = $topic->replies_real;
+            $topic->replies = $topic->replies_real;
         }
 
         // user wants to show certain post. we need to calculate page number based on post id.
@@ -65,61 +68,16 @@ class TopicController extends BaseController
         }
 
         // show posts of last page if page parameter is higher than pages count
-        $lastPage = max((int) ceil($replies / $perPage), 1);
+        $lastPage = max((int) ceil($topic->replies / $perPage), 1);
         if ($page > $lastPage) {
             $page = $lastPage;
         }
-
-        // build "more like this" block. it's important to send elasticsearch query before
-        // send SQL query to database because search() method exists only in Model and not Builder class.
-        $mlt = $this->getCacheFactory()->remember('mlt-post:' . $topic->id, now()->addDay(), function () use ($topic) {
-            $this->forum->pushCriteria(new OnlyThoseWithAccess());
-
-            $builder = new MoreLikeThisBuilder($topic, $this->forum->pluck('id'));
-
-            // search related topics
-            $mlt = $this->topic->search($builder);
-
-            // it's important to reset criteria for the further queries
-            $this->forum->resetCriteria();
-            return $mlt;
-        });
 
         $this->post->pushCriteria(new WithSubscribers($this->userId));
 
         // magic happens here. get posts for given topic (including first post for every page)
         /* @var \Illuminate\Support\Collection $posts */
-        $posts = $this->post->takeForTopic($topic->id, $topic->first_post_id, $page, $perPage);
-        $paginate = new LengthAwarePaginator($posts, $replies, $perPage, $page, ['path' => ' ']);
-
-        start_measure('Parsing...');
-        $parser = $this->getParsers();
-
-        /** @var \Coyote\Post $post */
-        foreach ($posts as &$post) {
-            // parse post or get it from cache
-            $post->text = $parser['post']->parse($post->text);
-
-            if ((auth()->guest() || (auth()->check() && $this->auth->allow_sig)) && $post->sig) {
-                $post->sig = $parser['sig']->parse($post->sig);
-            }
-
-            foreach ($post->comments as &$comment) {
-                $comment->text = $parser['comment']->setUserId($comment->user_id)->parse($comment->text);
-            }
-
-            $post->setRelation('topic', $topic);
-            $post->setRelation('forum', $forum);
-        }
-
-        stop_measure('Parsing...');
-
-        $postIds = $posts->pluck('id')->toArray();
-        $dateTime = $posts->last()->created_at;
-
-        if ($markTime < $dateTime) {
-            Tracker::make($topic)->asRead($dateTime);
-        }
+        $paginate = $this->post->lengthAwarePagination($topic, $page, $perPage);
 
         // create forum list for current user (according to user's privileges)
         $treeBuilder = new Builder($this->forum->list());
@@ -128,46 +86,68 @@ class TopicController extends BaseController
         $this->pushForumCriteria(true);
         $forumList = $treeDecorator->build();
 
-        $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->slug, $topic->id, $topic->slug]));
+        $tracker = Tracker::make($topic);
 
-        $flags = $activities = $adminForumList = $reasonList = [];
+        $resource = (new PostCollection($paginate))
+            ->setRelations($topic, $forum)
+            ->setTracker($tracker);
+
+        $allForums = $reasons = [];
 
         if ($this->gate->allows('delete', $forum) || $this->gate->allows('move', $forum)) {
-            $reasonList = Reason::pluck('name', 'id')->toArray();
+            $postIds = $paginate->pluck('id')->toArray();
+            $reasons = Reason::pluck('name', 'id')->toArray();
 
             if ($this->gate->allows('delete', $forum)) {
-                $flags = $this->getFlags($postIds);
+                $resource->setFlags($this->getFlags($postIds));
             }
 
             $this->forum->resetCriteria();
             $this->pushForumCriteria(false);
 
             $treeBuilder->setForums($this->forum->list());
-            $adminForumList = $treeDecorator->build();
+            $allForums = $treeDecorator->setKey('id')->build();
         }
 
-        $form = $this->getForm($forum, $topic);
+        $dateTime = $paginate->last()->created_at;
+        // first, build array of posts with info which posts have been read
+        $posts = $resource->resolve($this->request);
 
-        return $this->view(
-            'forum.topic',
-            compact('posts', 'forum', 'topic', 'paginate', 'forumList', 'adminForumList', 'reasonList', 'form', 'mlt', 'flags')
-        )->with([
-            'markTime'      => $markTime,
-            'subscribers'   => $this->userId ? $topic->subscribers()->pluck('topic_id', 'user_id') : [],
-            'author_id'     => $posts[0]->user_id
+        // ..then, mark topic as read
+        if ($markTime < $dateTime) {
+            $tracker->asRead($dateTime);
+        }
+
+        $topic->load('tags');
+
+        return $this->view('forum.topic', compact('posts', 'forum', 'paginate', 'forumList', 'reasons'))->with([
+            'mlt'           => $this->moreLikeThis($topic),
+            'model'         => $topic, // we need eloquent model in twig to show information about locked/moved topic
+            'topic'         => (new TopicResource($tracker))->resolve($request),
+            'poll'          => $topic->poll ? (new PollResource($topic->poll))->resolve($request) : null,
+            'is_writeable'  => $this->gate->allows('write', $forum) && $this->gate->allows('write', $topic),
+            'all_forums'    => $allForums,
+            'description'   => excerpt(array_first($posts)['text'], 100)
         ]);
     }
 
-    /**
-     * @return ParserInterface[]
-     */
-    private function getParsers()
+    private function moreLikeThis(Topic $topic)
     {
-        return [
-            'post'      => app('parser.post'),
-            'comment'   => app('parser.comment'),
-            'sig'       => app('parser.sig')
-        ];
+        // build "more like this" block. it's important to send elasticsearch query before
+        // send SQL query to database because search() method exists only in Model and not Builder class.
+        return $this->getCacheFactory()->remember('mlt-post:' . $topic->id, now()->addDay(), function () use ($topic) {
+            // it's important to reset criteria for the further queries
+            $this->forum->resetCriteria();
+
+            $this->forum->pushCriteria(new OnlyThoseWithAccess());
+
+            $builder = new MoreLikeThisBuilder($topic, $this->forum->pluck('id'));
+
+            // search related topics
+            $mlt = $this->topic->search($builder);
+
+            return $mlt;
+        });
     }
 
     /**
@@ -199,25 +179,31 @@ class TopicController extends BaseController
     }
 
     /**
-     * @param $id
-     * @param User $user
+     * @param UserRepository $user
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param int|null $id
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function prompt($id, User $user, Request $request)
+    public function prompt(UserRepository $user, Request $request, int $id = null)
     {
         $this->validate($request, ['q' => 'username']);
+        $userIds = [];
 
-        $posts = $this->post->findAllBy('topic_id', $id, ['id', 'user_id']);
-        $posts->load('comments:id,post_id,user_id'); // load comments assigned to posts
+        if ($id) {
+            $posts = $this->post->findAllBy('topic_id', $id, ['id', 'user_id']);
+            $posts->load('comments:id,post_id,user_id'); // load comments assigned to posts
 
-        $usersId = $posts->pluck('user_id')->toArray();
+            $usersId = $posts->pluck('user_id')->toArray();
 
-        $posts->pluck('comments')[0]->each(function ($comment) use (&$usersId) {
-            $usersId[] = $comment->user_id;
-        });
+            $posts->pluck('comments')[0]->each(function ($comment) use (&$usersId) {
+                $usersId[] = $comment->user_id;
+            });
+        }
 
-        return view('components.prompt')->with('users', $user->lookupName($request['q'], array_filter(array_unique($usersId))));
+        $result = $user->lookupName($request['q'], array_filter(array_unique($userIds)));
+
+        return PromptResource::collection($result);
     }
 
     /**

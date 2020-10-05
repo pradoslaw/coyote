@@ -3,13 +3,12 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Carbon\Carbon;
-use Coyote\Forum;
-use Coyote\Http\Forms\Forum\PostForm;
 use Coyote\Post;
 use Coyote\Repositories\Contracts\PostRepositoryInterface;
 use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Topic;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
  * @method string search(array $body)
@@ -27,51 +26,42 @@ class PostRepository extends Repository implements PostRepositoryInterface
     }
 
     /**
-     * Take first post in thread
-     *
-     * @param int $postId
-     * @return mixed
+     * @inheritDoc
      */
-    public function takeFirst($postId)
+    public function lengthAwarePagination(Topic $topic, int $page = 0, int $perPage = 10)
     {
-        return $this
-            ->build(function (Builder $sql) use ($postId) {
-                return $sql->where('posts.id', $postId);
-            })
-            ->first();
-    }
-
-    /**
-     * Take X posts from topic. IMPORTANT: first post of topic will always be fetched
-     *
-     * @param int $topicId
-     * @param int $postId   First post ID (in thread)
-     * @param int $page
-     * @param int $perPage
-     * @return mixed
-     */
-    public function takeForTopic($topicId, $postId, $page = 0, $perPage = 10)
-    {
-        $first = $this->takeFirst($postId);
-
-        $sql = $this
-            ->build(function (Builder $builder) use ($topicId, $postId, $page, $perPage) {
+        $result = $this
+            ->build(function (Builder $builder) use ($topic, $page, $perPage) {
                 return $builder
-                    ->where('posts.topic_id', $topicId)
-                    ->where('posts.id', '<>', $postId)
+                    ->where('posts.topic_id', $topic->id)
                     ->forPage($page, $perPage);
             })
-            ->get()
-            ->prepend($first);
+            ->with(['user' => function ($builder) {
+                return $builder->select([
+                        'users.id',
+                        'users.name',
+                        'photo',
+                        'posts',
+                        'sig',
+                        'location',
+                        'users.created_at',
+                        'visited_at',
+                        'deleted_at',
+                        'is_blocked',
+                        'allow_smilies',
+                        'allow_count',
+                        'allow_sig',
+                        'is_online',
+                        $this->raw('groups.name AS group')
+                    ])
+                    ->leftJoin('groups', 'groups.id', 'group_id');
+            }])
+            ->with(['editor:id,name,is_blocked,deleted_at', 'comments.user', 'attachments'])
+            ->get();
 
-        $sql->load(['comments' => function ($sub) {
-            $sub->select([
-                'post_comments.*', 'name', $this->raw('users.deleted_at IS NULL AS is_active'), 'is_blocked'
-            ])->join('users', 'users.id', '=', 'user_id')->orderBy('id');
-        }]);
-        $sql->load('attachments');
+        $paginate = new LengthAwarePaginator($result, $topic->replies, $perPage, $page, ['path' => ' ']);
 
-        return $sql;
+        return $paginate;
     }
 
     /**
@@ -88,7 +78,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
             return $this->model->where('topic_id', $topicId)->where('posts.id', '<', $postId)->count();
         });
 
-        return max(0, floor(($count - 1) / $perPage)) + 1;
+        return max(0, floor($count / $perPage)) + 1;
     }
 
     /**
@@ -124,79 +114,6 @@ class PostRepository extends Repository implements PostRepositoryInterface
             ->whereIn('posts.id', array_map('intval', $postsId))
             ->where('topic_id', $topicId) // <-- this condition for extra security
             ->get();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function save(PostForm $form, $user, Forum $forum, Topic $topic, Post $post, $poll)
-    {
-        $postId = $post->id;
-        $log = new Post\Log();
-
-        /**
-         * @var $topic Topic
-         */
-        $topic->fill($form->all());
-        $topic->forum()->associate($forum);
-        $topic->poll()->associate($poll);
-
-        $topic->save();
-        $tags = array_unique((array) $form->getRequest()->get('tags', []));
-
-        if (is_array($tags) && ($topic->wasRecentlyCreated || $postId == $topic->first_post_id)) {
-            // assign tags to topic
-            $topic->setTags($tags);
-        }
-
-        /**
-         * @var $post Post
-         */
-        $post->fill($form->all());
-
-        if (empty($postId)) {
-            if ($user) {
-                $post->user()->associate($user);
-            }
-
-            $post->ip = $form->getRequest()->ip();
-            $post->browser = str_limit($form->getRequest()->browser(), 250);
-            $post->host = ''; // pole nie moze byc nullem
-        }
-
-        $log->fillWithPost($post)->fill(['subject' => $topic->subject, 'tags' => $tags]);
-        $isDirty = $log->isDirtyComparedToPrevious();
-
-        if ($isDirty && !empty($postId)) {
-            $post->fill([
-                'edit_count' => $post->edit_count + 1, 'editor_id' => $user->id
-            ]);
-        }
-
-        $post->forum()->associate($forum);
-        $post->topic()->associate($topic);
-
-        $post->save();
-
-        if ($isDirty) {
-            if ($user) {
-                $log->user_id = $user->id;
-            }
-            $post->logs()->save($log);
-        }
-
-        $post->syncAttachments(array_pluck($form->getRequest()->get('attachments', []), 'id'));
-
-        if ($user) {
-            if (empty($postId)) {
-                // automatically subscribe post
-                $post->subscribe($user->id, true);
-            }
-
-            $topic->subscribe($user->id, $form->getRequest()->get('subscribe'));
-        }
-
-        return $post;
     }
 
     /**
@@ -440,29 +357,29 @@ class PostRepository extends Repository implements PostRepositoryInterface
             ->model
             ->addSelect([// addSelect() instead of select() to retrieve extra columns in criteria
                 'posts.*',
-                'author.name AS author_name',
-                'author.photo',
-                $this->raw('author.deleted_at IS NULL AS is_active'),
-                'author.is_blocked',
-                'author.is_online',
-                'author.sig',
-                'author.location',
-                'author.posts AS author_posts',
-                'author.allow_sig',
-                'author.allow_smilies',
-                'author.allow_count',
-                'author.created_at AS author_created_at',
-                'author.visited_at AS author_visited_at',
-                'editor.name AS editor_name',
-                $this->raw('editor.deleted_at IS NULL AS editor_is_active'),
-                'editor.is_blocked AS editor_is_blocked',
-                'groups.name AS group_name',
-                'pa.user_id AS accept_on'
+//                'author.name AS author_name',
+//                'author.photo',
+//                $this->raw('author.deleted_at IS NULL AS is_active'),
+//                'author.is_blocked',
+//                'author.is_online',
+//                'author.sig',
+//                'author.location',
+//                'author.posts AS author_posts',
+//                'author.allow_sig',
+//                'author.allow_smilies',
+//                'author.allow_count',
+//                'author.created_at AS author_created_at',
+//                'author.visited_at AS author_visited_at',
+//                'editor.name AS editor_name',
+//                $this->raw('editor.deleted_at IS NULL AS editor_is_active'),
+//                'editor.is_blocked AS editor_is_blocked',
+//                'groups.name AS group_name',
+                'pa.user_id AS is_accepted'
             ])
             ->from($this->raw("($sub) AS posts"))
-            ->leftJoin('users AS author', 'author.id', '=', 'posts.user_id')
-            ->leftJoin('users AS editor', 'editor.id', '=', 'editor_id')
-            ->leftJoin('groups', 'groups.id', '=', 'author.group_id')
+//            ->leftJoin('users AS author', 'author.id', '=', 'posts.user_id')
+//            ->leftJoin('users AS editor', 'editor.id', '=', 'editor_id')
+//            ->leftJoin('groups', 'groups.id', '=', 'author.group_id')
             ->leftJoin('post_accepts AS pa', 'pa.post_id', '=', 'posts.id')
             ->orderBy('posts.created_at'); // <-- make sure that posts are in the right order!
 

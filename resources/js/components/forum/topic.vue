@@ -1,5 +1,5 @@
 <template>
-  <div class="card-body" :class="{'not-read': !topic.is_read, 'flagged': flag != null, 'tagged': containsUserTags}">
+  <div class="card-body" :class="{'not-read': !topic.is_read, 'flagged': flag != null, 'tagged': highlight}">
     <div class="row">
       <div :class="{'col-xl-9 col-lg-10': showCategoryName, 'col-xl-10 col-lg-10': ! showCategoryName}" class="col-md-12 d-flex align-items-center">
         <a @click.left="mark" :href="getUrl()" :class="{'not-read': !topic.is_read}" class="topic-icon mr-2 d-none d-md-flex">
@@ -91,12 +91,9 @@
 
 <script>
   import { default as mixins } from '../mixins/user';
-  import VueTimeago from '../../plugins/timeago';
   import VueAvatar from '../avatar.vue';
   import { mixin as clickaway } from 'vue-clickaway';
   import { mapActions, mapGetters } from "vuex";
-
-  Vue.use(VueTimeago);
 
   export default {
     mixins: [ mixins, clickaway ],
@@ -113,9 +110,8 @@
       flag: {
         type: String
       },
-      tags: {
-        type: Object,
-        default: () => ({})
+      highlight: {
+        type: Boolean
       },
       showCategoryName: {
         type: Boolean
@@ -158,16 +154,6 @@
         }
 
         return pages;
-      },
-
-      containsUserTags() {
-        if (!this.topic.tags) {
-          return false;
-        }
-
-        const userTags = Object.keys(this.tags);
-
-        return this.topic.tags.filter(tag => userTags.includes(tag.name)).length > 0;
       },
 
       ...mapGetters('user', ['isAuthorized'])

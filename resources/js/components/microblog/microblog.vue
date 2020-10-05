@@ -70,7 +70,7 @@
           </template>
 
           <div class="microblog-comments">
-            <div v-if="microblog.comments_count > Object.keys(microblog.comments).length" class="show-all">
+            <div v-if="microblog.comments_count > Object.keys(microblog.comments).length" class="show-all-comments">
               <a @click="loadComments(microblog)" href="javascript:"><i class="far fa-comments"></i> Zobacz {{ totalComments | declination(['pozostały', 'pozostałe', 'pozostałe']) }} {{ totalComments }} {{ totalComments | declination(['komentarz', 'komentarze', 'komentarzy']) }}</a>
             </div>
 
@@ -125,8 +125,7 @@
   import store from "../../store";
   import VueUserName from "../user-name.vue";
   import { MicroblogMixin } from "../mixins/microblog";
-  import VueNotification from "vue-notification";
-  import {Microblog} from "../../types/models"; // do not remove (support for $notify method)
+  import VueNotification from "vue-notification"; // do not remove (support for $notify method)
 
   Vue.use(VueTimeago);
   Vue.use(VueClipboard);

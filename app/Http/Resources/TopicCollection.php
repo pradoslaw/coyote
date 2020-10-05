@@ -59,8 +59,6 @@ class TopicCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-//        dd($this->collection);
-//        dd($this->resource instanceof AbstractPaginator);
         return $this
             ->resource
             ->setCollection(

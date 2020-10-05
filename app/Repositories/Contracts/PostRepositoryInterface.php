@@ -2,12 +2,7 @@
 
 namespace Coyote\Repositories\Contracts;
 
-use Coyote\Http\Forms\Forum\PostForm;
 use Coyote\Topic;
-use Coyote\User;
-use Coyote\Forum;
-use Coyote\Post;
-use Coyote\Poll;
 
 /**
  * @method mixed search(\Coyote\Services\Elasticsearch\QueryBuilderInterface $queryBuilder)
@@ -17,23 +12,14 @@ use Coyote\Poll;
 interface PostRepositoryInterface extends RepositoryInterface
 {
     /**
-     * Take first post in thread
+     * Take X posts from topic.
      *
-     * @param int $postId
-     * @return mixed
-     */
-    public function takeFirst($postId);
-
-    /**
-     * Take X posts from topic. IMPORTANT: first post of topic will be always fetched
-     *
-     * @param int $topicId
-     * @param int $postId   First post ID (in thread)
+     * @param Topic $topic
      * @param int $page
      * @param int $perPage
      * @return mixed
      */
-    public function takeForTopic($topicId, $postId, $page = 0, $perPage = 10);
+    public function lengthAwarePagination(Topic $topic, int $page = 0, int $perPage = 10);
 
     /**
      * Return page number based on ID of post
@@ -60,17 +46,6 @@ interface PostRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function findPosts(array $postsId, $topicId);
-
-    /**
-     * @param PostForm $form
-     * @param User|null $user
-     * @param Forum $forum
-     * @param Topic $topic
-     * @param Post $post
-     * @param Poll|null $poll
-     * @return Post $post
-     */
-    public function save(PostForm $form, $user, Forum $forum, Topic $topic, Post $post, $poll);
 
     /**
      * @param int $userId

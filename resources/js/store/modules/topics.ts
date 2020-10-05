@@ -1,15 +1,20 @@
 import axios from "axios";
+import { Tag, Topic } from '../../types/models';
 
 const state = {
   topics: []
 };
 
+const getters = {
+  topic: state => state.topics[0]
+};
+
 const mutations = {
-  init(state, topics) {
+  init(state, topics: Topic[]) {
     state.topics = topics;
   },
 
-  mark(state, topic) {
+  mark(state, topic: Topic) {
     topic.is_read = true;
   },
 
@@ -17,15 +22,25 @@ const mutations = {
     state.topics.forEach(topic => topic.is_read = true);
   },
 
-  subscribe(state, topic) {
+  subscribe(state, topic: Topic) {
     if (topic.is_subscribed) {
-      topic.subscribers--;
+      topic.subscribers!--;
     }
     else {
-      topic.subscribers++;
+      topic.subscribers!++;
     }
 
     topic.is_subscribed = !topic.is_subscribed;
+  },
+
+  lock(state, topic: Topic) {
+    topic.is_locked = !topic.is_locked;
+  },
+
+  toggleTag(state, { topic, tag }: { topic: Topic, tag: Tag }) {
+    const index = topic.tags!.findIndex(item => item.name === tag.name);
+
+    index > -1 ? topic.tags!.splice(index, 1) : topic.tags!.push(tag);
   }
 };
 
@@ -46,12 +61,27 @@ const actions = {
     commit('subscribe', topic);
 
     axios.post(`/Forum/Topic/Subscribe/${topic.id}`);
+  },
+
+  lock({ commit }, topic) {
+    commit('lock', topic);
+
+    axios.post(`/Forum/Topic/Lock/${topic.id}`);
+  },
+
+  move({ commit }, { topic, forumId, reasonId }) {
+    return axios.post(`/Forum/Topic/Move/${topic.id}`, { id: forumId, reason_id: reasonId });
+  },
+
+  changeTitle({ commit }, { topic }) {
+    return axios.post(`/Forum/Topic/Subject/${topic.id}`, { subject: topic.subject });
   }
 };
 
 export default {
   namespaced: true,
   state,
+  getters,
   mutations,
   actions
 };

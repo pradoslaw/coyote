@@ -9,6 +9,7 @@ use Coyote\Post;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Tag;
 use Coyote\User;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -39,7 +40,7 @@ class TopicResource extends JsonResource
      */
     public function toArray($request)
     {
-        $only = $this->resource->only(['id', 'subject', 'score', 'views', 'is_sticky', 'is_locked', 'first_post_id', 'last_post_id', 'subscribers', 'accepted_id', 'is_subscribed', 'is_voted', 'is_replied', 'user_name', 'user_post_id']);
+        $only = $this->resource->only(['id', 'subject', 'score', 'views', 'is_sticky', 'is_subscribed', 'is_locked', 'first_post_id', 'last_post_id', 'subscribers', 'accepted_id', 'is_voted', 'is_replied', 'user_name', 'user_post_id']);
 
         return array_merge(
             $only,
@@ -56,9 +57,14 @@ class TopicResource extends JsonResource
                     'url'       => UrlBuilder::forum($this->forum)
                 ],
                 'tags'                  => TagResource::collection($this->whenLoaded('tags')),
+                'is_subscribed'         => $this->isSubscribed($request),
 
                 $this->mergeWhen($this->whenLoaded('user'), function () {
                     return ['user' => new UserResource($this->user)];
+                }),
+
+                $this->mergeWhen($this->whenLoaded('firstPost'), function () {
+                    return ['owner_id' => $this->firstPost->user_id];
                 }),
 
                 $this->mergeWhen($this->whenLoaded('lastPost'), function () {
@@ -73,11 +79,24 @@ class TopicResource extends JsonResource
     }
 
     /**
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return int
      */
-    private function replies($request): int
+    private function replies(Request $request): int
     {
         return $request->user() && $request->user()->can('delete', $this->forum) ? $this->replies_real : $this->replies;
+    }
+
+    /**
+     * @param Request $request
+     * @return bool
+     */
+    private function isSubscribed(Request $request): bool
+    {
+        if ($this->resource->is_subscribed !== null) {
+            return $this->resource->is_subscribed;
+        }
+
+        return $request->user() ? $this->subscribers()->forUser($request->user()->id)->exists() : false;
     }
 }

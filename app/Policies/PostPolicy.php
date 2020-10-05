@@ -31,13 +31,18 @@ class PostPolicy
         return $this->check('forum-delete', $user, $post);
     }
 
+    public function accept(User $user, Post $post): bool
+    {
+        return $post->id !== $post->topic->first_post_id && ($user->id === $post->topic->firstPost->user_id || $user->can('update', $post->forum));
+    }
+
     /**
      * @param string $ability
      * @param User $user
      * @param Post $post
      * @return bool
      */
-    private function check($ability, User $user, Post $post): bool
+    private function check(string $ability, User $user, Post $post): bool
     {
         if (!$post->forum->is_locked // removing (updating etc) in locked category is forbidden
             && !$post->topic->is_locked

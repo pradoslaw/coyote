@@ -1,0 +1,41 @@
+<?php
+
+namespace Coyote\Http\Resources;
+
+use Carbon\Carbon;
+use Coyote\User;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+/**
+ * @property int $id
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property User $user
+ * @property \Coyote\Forum $forum
+ * @property int $user_id
+ * @property string $text
+ */
+class PostCommentResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return array
+     */
+    public function toArray($request)
+    {
+        return array_merge(
+            $this->resource->toArray(['id', 'text', 'html']),
+            [
+                'created_at'    => $this->created_at->toIso8601String(),
+                'updated_at'    => $this->updated_at->toIso8601String(),
+                'user'          => new UserResource($this->user),
+
+                $this->mergeWhen($request->user(), function () use ($request) {
+                    return ['editable' => $request->user()->can('update', [$this->resource, $this->forum])];
+                })
+            ]
+        );
+    }
+}

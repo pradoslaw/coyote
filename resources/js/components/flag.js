@@ -1,39 +1,26 @@
-$(function() {
-    'use strict';
+import axios from 'axios';
 
-    /**
-     * Show "flag to report" page
-     */
-    $('body').on('click', '.btn-report', function() {
-        $.get($(this).attr('href'), {url: $(this).data('url'), metadata: $(this).data('metadata')}, function(html) {
-            $(html).appendTo('body');
+function openDialog(event) {
+  const el = event.currentTarget;
 
-            $('#flag').find('.modal').modal('show');
-        });
+  axios.get('/Flag', {params: { url: el.dataset.url, metadata: el.dataset.metadata }}).then(result => {
+    const html = result.data;
+    // @todo usuniecie jquery
+    $(html).appendTo('body');
 
-        return false;
-    });
+    $('#flag').find('.modal').modal('show');
+  });
 
-    /**
-     * Close flagged post report
-     */
-    $('.alert-report').submit(function() {
-        var url = $(this).attr('action');
-        var $this = $(this);
+  return false;
+}
 
-        $.get(url, function(html) {
-            $('body').append(html);
+function bindEvents() {
+  const links = document.querySelectorAll('a[data-metadata]');
 
-            $('#modal-report').modal('show').one('click', '.danger', function() {
-                $.post(url);
-                $this.fadeOut();
+  links.forEach(link => {
+    link.addEventListener('click', openDialog);
+  });
+}
 
-                $('#modal-report').modal('dispose').remove();
-                $('.modal-backdrop').remove();
-                return false;
-            });
-        });
-
-        return false;
-    });
-});
+const observer = new MutationObserver(bindEvents);
+observer.observe(document.body, { attributes: true, childList: true, subtree: true });

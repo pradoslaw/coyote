@@ -57,6 +57,7 @@ use Ramsey\Uuid\Uuid;
  * @property string $firm
  * @property string $position
  * @property string $access_ip
+ * @property string $sig
  * @property \Coyote\Services\Media\MediaInterface $photo
  * @property bool $is_online
  * @property bool $alert_login
@@ -131,8 +132,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'allow_subscribe' => 'int',
         'allow_sticky_header' => 'int',
         'is_confirm' => 'int',
-        'is_online' => 'int',
-        'is_blocked' => 'bool'
+        'is_blocked' => 'bool',
+        'is_online' => 'bool'
     ];
 
     public static function boot()

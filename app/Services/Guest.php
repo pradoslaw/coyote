@@ -61,7 +61,7 @@ class Guest
      * @param $value
      * @return string
      */
-    public function setSetting($name, $value)
+    public function setSetting(string $name, $value)
     {
         if ($this->getSetting($name) === $value) {
             return $value;
@@ -94,7 +94,7 @@ class Guest
      * @param null $default
      * @return mixed|null
      */
-    public function getSetting($name, $default = null)
+    public function getSetting(string $name, $default = null)
     {
         return $this->getSettings()[$name] ?? $default;
     }

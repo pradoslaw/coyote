@@ -107,18 +107,6 @@ class HomeController extends BaseController
     }
 
     /**
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function preview(Request $request)
-    {
-        $parser = app('parser.post');
-        $parser->cache->setEnable(false);
-
-        return response($parser->parse((string) $request->get('text')));
-    }
-
-    /**
      * @return \Illuminate\View\View
      */
     public function categories()
@@ -199,16 +187,20 @@ class HomeController extends BaseController
      */
     public function tag($name)
     {
-        $this
+        $item = $this
             ->tabs
-            ->add('Wątki z: ' . $this->request->route('tag'), [
+            ->add('Wątki z: ' . $name, [
                 'route' => [
                     'forum.tag', urlencode($this->request->route('tag'))
-                ]
-            ])
-            ->activate();
+                ],
+                'class' => 'nav-item'
+            ]);
+
+        $item->link->attr(['class' => 'nav-link']);
+        $item->activate();
 
         $this->topic->pushCriteria(new WithTags($name));
+
         return $this->loadAndRender();
     }
 

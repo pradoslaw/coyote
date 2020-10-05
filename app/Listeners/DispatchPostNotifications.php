@@ -70,7 +70,7 @@ class DispatchPostNotifications implements ShouldQueue
      * @param array $subscribers
      * @param string $senderName
      */
-    private function sendUserMentionedNotification(Post $post, User $user, $subscribers, string $senderName): void
+    private function sendUserMentionedNotification(Post $post, ?User $user, $subscribers, string $senderName): void
     {
         // get id of users that were mentioned in the text
         $usersId = (new LoginHelper())->grab($post->html);

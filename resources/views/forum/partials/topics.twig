@@ -19,7 +19,7 @@
     :key="topic.id"
     :topic="topic"
     :flag="getFlag(topic.id)"
-    :tags="tags"
+    :highlight="containsUserTags(topic)"
     :posts-per-page="postsPerPage"
     :show-category-name="showCategoryName"
   ></vue-topic>
@@ -32,9 +32,9 @@
 
   {% if forumList is defined %}
     <div class="ml-auto">
-      {{ form_select('forum', forumList, forum.slug, {'id': 'sel-forum-list', 'class': 'form-control d-inline w-auto', 'data-url': route('forum.home')}) }}
+      {{ form_select('forum', forumList, forum.slug, {'id': 'js-forum-list', 'class': 'form-control d-inline w-auto'}) }}
 
-      <a class="btn" href="javascript:" id="btn-goto">
+      <a class="btn" href="javascript:" id="js-reload">
         <i class="fas fa-arrow-circle-right"></i>
       </a>
     </div>

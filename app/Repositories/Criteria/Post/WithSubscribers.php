@@ -29,7 +29,7 @@ class WithSubscribers extends Criteria
     {
         if ($this->userId) {
             // pobieramy wartosc "id" a nie "created_at" poniewaz kiedys created_at nie bylo zapisywane
-            $model = $model->addSelect(['pv.id AS vote_on', 'ps.id AS subscribe_on'])
+            $model = $model->addSelect(['pv.id AS is_voted', 'ps.id AS is_subscribed'])
                 ->leftJoin('post_votes AS pv', function ($join) use ($repository) {
                     $join->on('pv.post_id', '=', 'posts.id')->on('pv.user_id', '=', $repository->raw($this->userId));
                 })

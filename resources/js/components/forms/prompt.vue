@@ -18,7 +18,8 @@
     store,
     props: {
       source: {
-        type: String
+        type: String,
+        default: '/User/Prompt'
       },
       errors: {
         type: Array,
@@ -59,8 +60,12 @@
             return; // break the code
           } else if (keyCode === SpecialKeys.DOWN) {
             this.$refs.dropdown.goDown();
+
+            return;
           } else if (keyCode === SpecialKeys.UP) {
             this.$refs.dropdown.goUp();
+
+            return;
           } else if (keyCode === SpecialKeys.ENTER || keyCode === SpecialKeys.TAB) {
             const item = this.$refs.dropdown.getSelected();
 
@@ -120,7 +125,7 @@
       },
 
       lookupName(name) {
-        store.dispatch('prompt/request', name).then(items => this.items = items);
+        store.dispatch('prompt/request', { source: this.source, value: name }).then(items => this.items = items);
       },
 
       applySelected(text, startIndex, caretPosition) {

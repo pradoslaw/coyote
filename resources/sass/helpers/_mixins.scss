@@ -19,7 +19,7 @@
 }
 
 @mixin link-color-darker() {
-  a {
+  a:not(.badge) {
     color: $link-color-darker;
   }
 }

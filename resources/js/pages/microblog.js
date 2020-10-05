@@ -5,38 +5,11 @@ import VueForm from '../components/microblog/form';
 import VueNotifications from 'vue-notification';
 import store from '../store';
 import { mapGetters } from 'vuex';
-import axios, { Cancel } from 'axios';
-
-axios.interceptors.response.use(null, err => {
-  let message = '';
-
-  if (err instanceof Cancel || (err.config.hasOwnProperty("errorHandle") &&  err.config.errorHandle === false)) {
-    return Promise.reject(err);
-  }
-
-  if (err.response) {
-    if (err.response.data.errors) {
-      const errors = err.response.data.errors;
-
-      message = errors[Object.keys(errors)[0]][0];
-    }
-    else if (err.response.data.message) {
-      message = err.response.data.message;
-    }
-    else {
-      message = err.response.statusText;
-    }
-  }
-  else {
-    message = err.message;
-  }
-
-  Vue.notify({type: 'error', text: message});
-
-  return Promise.reject(err);
-});
+import { default as axiosErrorHandler } from '../libs/axios-error-handler';
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
+
+axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 
 new Vue({
   el: '#js-microblog',

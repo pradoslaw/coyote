@@ -14,6 +14,7 @@ use Carbon\Carbon;
  * @property string $title
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property Topic $topic
  */
 class Poll extends Model
 {
@@ -22,7 +23,7 @@ class Poll extends Model
      *
      * @var array
      */
-    protected $fillable = ['title', 'length', 'votes', 'max_items'];
+    protected $fillable = ['title', 'length', 'max_items'];
 
     /**
      * @var string
@@ -36,6 +37,14 @@ class Poll extends Model
         'max_items' => 1,
         'length' => 0
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function topic()
+    {
+        return $this->hasOne(Topic::class);
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -53,28 +62,16 @@ class Poll extends Model
         return $this->hasMany('Coyote\Poll\Vote');
     }
 
-    /**
-     * @return static
-     */
     public function expiredAt()
     {
-        return $this->created_at->addDay($this->length);
+        return $this->created_at->addDays($this->length);
     }
 
     /**
      * @return bool
      */
-    public function hasExpired()
+    public function expired()
     {
         return $this->length > 0 ? Carbon::now() > $this->expiredAt() : false;
-    }
-
-    /**
-     * @param int $userId
-     * @return array
-     */
-    public function userVotedItems($userId)
-    {
-        return $this->votes()->forUser($userId)->pluck('item_id')->toArray();
     }
 }

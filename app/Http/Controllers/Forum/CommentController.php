@@ -4,8 +4,10 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Events\CommentDeleted;
 use Coyote\Events\CommentSaved;
+use Coyote\Http\Resources\PostCommentResource;
 use Coyote\Notifications\Post\Comment\UserMentionedNotification;
 use Coyote\Notifications\Post\CommentedNotification;
+use Coyote\Post;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
@@ -56,8 +58,10 @@ class CommentController extends Controller
     /**
      * @param Request $request
      * @param Dispatcher $dispatcher
-     * @param null|int $id
-     * @return $this
+     * @param null $id
+     * @return PostCommentResource
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function save(Request $request, Dispatcher $dispatcher, $id = null)
     {
@@ -76,7 +80,6 @@ class CommentController extends Controller
         } else {
             $this->authorize('update', [$this->comment, $this->forum]);
 
-            $user = $this->comment->user()->withTrashed()->first(['id', 'name', 'is_blocked', 'deleted_at']);
             $data = $request->only(['text']);
 
             $activity = Stream_Update::class;
@@ -118,36 +121,13 @@ class CommentController extends Controller
             );
         }
 
+        $this->comment->setRelation('forum', $this->forum);
+
         event(new CommentSaved($this->comment));
 
-        foreach (['name', 'is_blocked', 'is_active', 'photo'] as $key) {
-            $this->comment->{$key} = $user->{$key};
-        }
+        PostCommentResource::withoutWrapping();
 
-        // pass html version of comment to  twig
-        $this->comment->text = $this->comment->html;
-
-        // we need to pass is_writeable variable to let know that we are able to edit/delete this comment
-        return view('forum.partials.comment', [
-            'is_writeable'  => true,
-            // get topic's author id
-            'author_id'     => $this->topic->firstPost->user_id,
-            'comment'       => $this->comment,
-            'forum'         => $this->forum
-        ]);
-    }
-
-    /**
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
-     */
-    public function edit()
-    {
-        $this->authorize('update', [$this->comment, $this->forum]);
-
-        return view('forum.partials.form', [
-            'post'      => ['id' => $this->comment->post_id],
-            'comment'   => $this->comment
-        ]);
+        return new PostCommentResource($this->comment);
     }
 
     /**
@@ -167,5 +147,25 @@ class CommentController extends Controller
         });
 
         event(new CommentDeleted($this->comment));
+    }
+
+    /**
+     * @param Post $post
+     * @return mixed
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function show(Post $post)
+    {
+        $this->authorize('access', [$post->forum]);
+
+        PostCommentResource::withoutWrapping();
+
+        $post->load('comments.user');
+
+        $post->comments->each(function (Post\Comment $comment) use ($post) {
+            $comment->setRelation('forum', $post->forum);
+        });
+
+        return PostCommentResource::collection($post->comments)->keyBy('id');
     }
 }

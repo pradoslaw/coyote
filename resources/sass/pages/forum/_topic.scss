@@ -1,36 +1,25 @@
 @charset "UTF-8";
 
-// "Kontener" dla posta
-// --------------------------------------------------
-
-.post {
-  background-color: #fff;
-  border: 1px solid $border-color;
-
-  > div > div.row {
-    border-bottom: 1px solid $border-color;
-    margin: 0;
+.card-post {
+  .card-body {
+    padding: 10px 15px;
   }
 
-  > div > div.row:nth-child(even) {
-    background-color: #fafafa;
+  .card-header {
+    padding: .5rem .75rem;
   }
 
-  div[class*="col-"] {
-    padding: 5px;
+  .card-footer {
+    padding: .25rem;
   }
 
   // w przypadku gdy post jest usuniety wyswietlamy go na pol-przezroczystym tle
-  .deleted {
+  &.is-deleted {
     opacity: .6;
   }
 
-  ins {
-    color: $green;
-  }
-
-  del {
-    color: $red;
+  .new {
+    color: $alt-link-hover-color;
   }
 }
 
@@ -48,213 +37,92 @@
   }
 }
 
-// klasa dodawana do tresci posta na okres podswietlania tresci
-.post-body.highlight {
-  > div.row:nth-child(even) {
-    background-color: inherit;
+.post-avatar {
+  margin: 5px 0;
+  display: block;
+  max-width: 75px;
+}
+
+.post-author {
+  @include link-color-darker;
+
+  font-size: .9rem;
+
+  .badge {
+    font-size: 90%;
+    padding: 1px 5px;
   }
 }
 
-#first-post {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  border-radius: 3px;
-}
+.post-stats {
+  font-size: $font-size-sm;
 
-#last-post {
-  border-bottom-left-radius: 3px;
-  border-bottom-right-radius: 3px;
-  margin-bottom: 10px;
-}
-
-.col-user {
-  .avatar {
-    margin: 5px 0 10px 0;
-  }
-
-  p {
-    font-size: 11px;
-    color: $gray;
-    margin: 0;
+  li {
     padding: 2px 0;
-    @include text-overflow();
-
-    strong {
-      width: 36%;
-      display: inline-block;
-      font-weight: normal;
-
-      @include media-breakpoint-down(lg) {
-        display: block;
-        width: 100%;
-      }
-    }
-
-    small {
-      color: $gray-light;
-    }
   }
 
-  h5 {
-    margin: 0;
-    font-weight: bold;
-    padding-left: 18px;
-    position: relative;
-    font-family: Arial, sans-serif;
-    color: $gray;
-    font-size: 0.85rem;
-
-    &:before {
-      @include font-awesome($fa-var-user);
-      color: $link-color-darker;
-      left: 0;
-      font-weight: 900;
-    }
-
-    .badge {
-      font-size: 90%;
-      margin-top: -2px;
-      margin-bottom: -2px;
-      padding: 1px 5px;
-    }
-
-    @include link-color-darker;
-    @include text-overflow;
-  }
-
-  h5.offline {
-    &:before {
-      color: $gray-300;
-    }
-  }
-}
-
-.col-time {
-  font-size: 11px;
-  padding-top: 4px;
-  padding-bottom: 0;
-  @include text-overflow();
-
-  small a {
-    color: $gray-light;
-  }
-
-  .post-link {
-    color: $gray;
-    margin-right: 3px;
+  strong {
     display: inline-block;
-    //background: url(/img/sprites.png) no-repeat 0 -742px;
-    background: url('/img/post.png') no-repeat 0 0;
-    background-size: 12px 12px;
-    width: 12px;
-    height: 12px;
-    vertical-align: middle;
+    width: 46%;
+    font-weight: normal;
 
-    &:focus {
-      outline: none;
+    @include media-breakpoint-down(lg) {
+      width: 100%;
     }
   }
 
-  .post-link.unread {
-    background-image: url('/img/post-unread.png');
+  small {
+    color: $text-muted;
   }
 }
 
-.col-body {
-  vertical-align: top;
-  line-height: 1.3em;
-  overflow: hidden;
-  position: relative;
-}
-
-.col-vote {
-  width: 50px;
+.post-vote {
   vertical-align: top;
   float: right;
   line-height: 120%;
   height: 100%;
-  position: absolute;
-  right: 0;
-
-  @include media-breakpoint-down(sm) {
-    width: 40px;
-  }
+  padding-top: 1rem;
 }
 
-#col-toggle {
-  background-color: #fff;
+.post-comments {
+  margin: 15px 0 5px 15px;
+  font-size: .75rem;
+  padding-right: 50px;
 
-  a {
-    margin: 2px auto 2px auto;
-    display: block;
-    width: 67px;
-    height: 5px;
-
-    span {
-      display: block;
-      height: 1px;
-      border-radius: 1px;
-      background-color: $gray-light;
-    }
-
-    span + span {
-      margin-top: 1px;
-    }
+  .badge {
+    font-weight: 400;
+    padding: 1px 5px;
+    margin-top: -1px;
+    font-size: 100%;
   }
 
+  @include link-color-darker();
 }
 
-// Ikony do zarzadzania pod spodem postu
-// -------------------------------------
+.post-comment {
+  border-top: 1px solid $border-color;
+  padding: 5px 0 5px 0;
+  word-wrap: break-word;
 
-.col-bottom {
-  background-color: #ececec;
+  .btn-comment {
+    padding: 0 5px;
+    color: $gray;
+    display: none;
+  }
 
-  // @todo ten styl tyczy sie wszystkich przyciskow pod postem? jest sens je wszystkie listowac?
-  .btn-sub, .btn-share, .btn-comment, .btn-report, .btn-quote, .btn-multi-quote, .btn-edit, .btn-fast-edit, .btn-del, .btn-res, .btn-rollback, .dropdown-toggle {
-    color: $text-color;
-    opacity: .9;
-    border: 1px solid transparent;
-
-    &:hover {
-      opacity: 1;
-      border-color: $border-color;
-    }
-
-    i {
-      font-size: $font-size-base;
+  &:hover {
+    .btn-comment {
+      display: inline-block;
     }
   }
 
-  .btn-report, .btn-quote, .btn-multi-quote, .btn-edit, .btn-fast-edit, .btn-del, .btn-res {
-    float: right;
-  }
-
-  .active {
-    border-color: $gray;
-    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
-    opacity: 1;
-
-    &:hover {
-      border: 1px solid $gray !important;
+  // comment text
+  > span {
+    &:before {
+      content: "▪";
+      margin-right: 5px;
     }
   }
-
-  .btn-multi-quote {
-    border-right: 1px solid $border-color;
-  }
-
-  .btn-multi-quote.active {
-    border-right: 1px solid #555;
-  }
-
-  .dropdown-toggle {
-    background-color: transparent;
-  }
-}
-
-.col-end {
-  background-color: #dedddd;
 }
 
 // Tresc posta wraz z ikonami do glosowania, stopka czy komentarzami
@@ -265,7 +133,7 @@
   word-wrap: break-word;
   line-height: 139%;
   overflow: hidden;
-  padding-right: 50px;
+  padding-right: 10px;
 
   @include link-color-darker;
   @include stripped-table;
@@ -289,19 +157,10 @@
     background: transparent;
   }
 
-  textarea {
-    margin-bottom: 5px;
-  }
-
   // emoticons are NOT responsive
   img:not(.img-smile) {
     @include img-fluid;
   }
-}
-
-.list-attachments {
-  margin: 15px 0 5px 10px;
-  font-size: 11px;
 }
 
 .edit-info {
@@ -365,122 +224,15 @@
 .vote-accept {
   margin-top: 10px;
   font-size: $font-size-large + 1rem;
-}
 
-.vote-accept.on {
-  color: $brand-primary;
-}
-
-div.tooltip-inner {
-  font-size: 11px;
+  &.on {
+    color: $brand-primary;
+  }
 }
 
 @include media-breakpoint-down(sm) {
-  .vote-up, .vote-count {
-    font-size: $font-size-base;
-  }
-
   .vote-accept {
-    font-size: $font-size-base + 0.2rem;
-  }
-}
-
-// Komentarze na forum
-// -----------------------
-
-.comments {
-  margin: 15px 0 5px 25px;
-  font-family: Tahoma,sans-serif;
-  font-size: .75rem;
-  padding-right: 50px;
-
-  @include link-color-darker;
-
-  .btn-comment-edit, .btn-comment-del {
-    padding: 0 5px;
-    color: $gray;
-    display: none;
-  }
-
-  > div {
-    border-bottom: 1px dotted $border-color;
-    padding: 5px 0 5px 0;
-    margin-top: 1px;
-    position: relative;
-    word-wrap: break-word;
-
-    &:first-child {
-      border-top: 1px dotted $border-color;
-    }
-
-    &:before {
-      content: "▪";
-    }
-
-    // Topic's author
-    // -----------------
-
-    .badge-primary {
-      font-weight: normal;
-      padding: 1px 5px;
-      margin-top: -1px;
-      font-size: 100%;
-
-      > a:hover {
-        text-decoration: none;
-      }
-    }
-
-    .timestamp {
-      color: $gray-light;
-
-      &:hover {
-        color: $alt-link-hover-color;
-      }
-    }
-
-    &:hover {
-      .btn-comment-edit, .btn-comment-del {
-        display: inline-block;
-      }
-    }
-  }
-
-  .btn-show-all {
-    color: $gray;
-    font-size: 12px;
-    padding: 2px 0 8px 1px;
-    display: inline-block;
-
-    &:hover {
-      text-decoration: none;
-      color: $alt-link-hover-color;
-    }
-  }
-
-  form {
-    overflow: hidden;
-  }
-
-  // dodatkowy margines dla formularza dodawania nowego komentarza (nie tego ktory edytujemy)
-  > form {
-    margin-top: 10px;
-  }
-
-  textarea {
-    padding: 4px 5px;
-    margin-bottom: 5px;
-  }
-}
-
-// Formularz szybkiej odpowiedzi
-// ----------------------------------------------------------
-
-#box-fast-form {
-  margin-bottom: 18px;
-
-  textarea {
-    height: 50px;
+    font-size: $font-size-base + 0.6rem;
   }
 }
 
@@ -490,19 +242,17 @@ div.tooltip-inner {
 blockquote {
   color: $gray-light;
 
-  > h5 {
-    a {
-      color: $gray !important;
-      position: relative;
-      padding-left: 16px;
-      font-family: Helvetica, sans-serif;
-      font-size: .8rem;
+  > h5 a {
+    color: $gray !important;
+    position: relative;
+    padding-left: 16px;
+    font-family: Helvetica, sans-serif;
+    font-size: .8rem;
 
-      &:before {
-        @include font-awesome($fa-var-external-link-alt);
-        left: 0;
-        font-weight: 900;
-      }
+    &:before {
+      @include font-awesome($fa-var-external-link-alt);
+      left: 0;
+      font-weight: 900;
     }
   }
 }

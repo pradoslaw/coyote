@@ -62,7 +62,15 @@ class Forum extends Model
     /**
      * @var array
      */
-    protected $casts = ['redirects' => 'int', 'is_locked' => 'bool', 'is_prohibited' => 'bool'];
+    protected $casts = [
+        'redirects' => 'int',
+        'is_locked' => 'bool',
+        'is_prohibited' => 'bool',
+        'require_tag' => 'bool',
+        'enable_reputation' => 'bool',
+        'enable_anonymous' => 'bool',
+        'enable_prune' => 'bool'
+    ];
 
     /**
      * @var array
@@ -161,12 +169,12 @@ class Forum extends Model
      * @param int $userId
      * @return bool
      */
-    public function ability($name, $userId)
+    public function ability(string $name, int $userId)
     {
         static $acl = null;
 
-        if (is_null($acl)) {
-            $acl = $this->permissions()
+        if (!isset($acl[$userId])) {
+            $acl[$userId] = $this->permissions()
                         ->join('permissions AS p', 'p.id', '=', 'forum_permissions.permission_id')
                         ->join('group_users AS ug', 'ug.group_id', '=', 'forum_permissions.group_id')
                         ->where('ug.user_id', $userId)
@@ -175,7 +183,7 @@ class Forum extends Model
                         ->pluck('value', 'name');
         }
 
-        return isset($acl[$name]) ? $acl[$name] : false;
+        return isset($acl[$userId][$name]) ? $acl[$userId][$name] : false;
     }
 
     /**

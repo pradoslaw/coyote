@@ -194,19 +194,20 @@
     background: none;
     font-size: 15px;
   }
+}
 
-  .show-all {
-    padding: 2px 0 2px 5px;
+// we use this class name also on forum
+.show-all-comments {
+  padding: 2px 0 2px 5px;
 
-    a {
-      color: $gray;
-      font-size: 12px;
+  a {
+    color: $gray;
+    font-size: 12px;
 
-      &:hover,
-      &:focus {
-        text-decoration: none;
-        color: $alt-link-hover-color;
-      }
+    &:hover,
+    &:focus {
+      text-decoration: none;
+      color: $alt-link-hover-color;
     }
   }
 }

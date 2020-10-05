@@ -43,8 +43,8 @@ interface ForumRepositoryInterface extends RepositoryInterface
     public function getTagsCloud();
 
     /**
-     * @param array $tags
-     * @return mixed
+     * @param string[] $tags
+     * @return array
      */
     public function getTagsWeight(array $tags);
 }

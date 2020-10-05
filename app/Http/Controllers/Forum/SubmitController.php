@@ -2,16 +2,17 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Forum;
 use Coyote\Http\Controllers\Controller;
-use Coyote\Http\Forms\Forum\SubjectForm;
-use Coyote\Notifications\Post\ChangedNotification;
-use Coyote\Notifications\Post\SubmittedNotification;
-use Coyote\Notifications\Post\UserMentionedNotification;
+use Coyote\Http\Requests\Forum\PostRequest;
+use Coyote\Http\Requests\Forum\SubjectRequest;
+use Coyote\Http\Resources\PostResource;
 use Coyote\Notifications\Topic\SubjectChangedNotification;
+use Coyote\Post;
 use Coyote\Repositories\Contracts\PollRepositoryInterface;
-use Coyote\Repositories\Contracts\UserRepositoryInterface;
+use Coyote\Services\Forum\Tracker;
 use Coyote\Services\UrlBuilder\UrlBuilder;
-use Illuminate\Contracts\Notifications\Dispatcher;
+use Coyote\Topic;
 use Illuminate\Http\Request;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
@@ -19,10 +20,8 @@ use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Services\Stream\Objects\Post as Stream_Post;
 use Coyote\Services\Stream\Objects\Forum as Stream_Forum;
 use Coyote\Services\Stream\Actor as Stream_Actor;
-use Coyote\Services\Parser\Helpers\Login as LoginHelper;
 use Coyote\Events\PostWasSaved;
 use Coyote\Events\TopicWasSaved;
-use Coyote\Post\Log;
 
 class SubmitController extends BaseController
 {
@@ -35,60 +34,83 @@ class SubmitController extends BaseController
      * @param \Coyote\Post|null $post
      * @return \Illuminate\View\View
      */
-    public function index(Request $request, $forum, $topic, $post = null)
+    public function index($forum)
     {
-        if (!empty($topic->id)) {
-            $this->breadcrumb->push([
-                $topic->subject => route('forum.topic', [$forum->slug, $topic->id, $topic->slug]),
-                $post === null ? 'Odpowiedz' : 'Edycja' => url($request->path())
-            ]);
-        } else {
-            $this->breadcrumb->push('Nowy wątek', route('forum.topic.submit', [$forum->slug]));
-        }
+        $this->breadcrumb->push('Nowy wątek', route('forum.topic.submit', [$forum->slug]));
 
-        if (!empty($post)) {
-            // make sure user can edit this post
-            $this->authorize('update', [$post]);
-        }
-
-        $form = $this->getForm($forum, $topic, $post);
-        $form->text->setValue($form->text->getValue() ?: ($topic ? $this->getDefaultText($request, $topic) : ''));
-
-        return Controller::view('forum.submit')->with(compact('forum', 'form', 'topic', 'post'));
+        return Controller::view('forum.submit', [
+            'forum' => $forum,
+            'show_sticky_checkbox' => (int) ($this->userId ? $this->auth->can('sticky', $forum) : false)
+        ]);
     }
 
     /**
-     * Show new post/edit form
-     *
-     * @param \Coyote\Forum $forum
-     * @param \Coyote\Topic $topic
-     * @param \Coyote\Post|null $post
-     * @return mixed
+     * @param PostRequest $request
+     * @param Forum $forum
+     * @param Topic|null $topic
+     * @param Post|null $post
+     * @return array
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function save($forum, $topic, $post = null)
+    public function save(PostRequest $request, Forum $forum, ?Topic $topic, ?Post $post)
     {
-        if (is_null($post)) {
-            $post = $this->post->makeModel();
-        } else {
-            $this->authorize('update', [$post]);
+        if (!$topic->exists) {
+            $topic = $this->topic->makeModel();
+            $topic->forum()->associate($forum);
         }
 
-        $form = $this->getForm($forum, $topic, $post);
-        $form->validate();
+        $topic->fill($request->only(array_keys($request->rules())));
 
-        $request = $form->getRequest();
+        if (!$post->exists) {
+            $post->forum()->associate($forum);
 
-        $post = $this->transaction(function () use ($form, $forum, $topic, $post, $request) {
+            if ($this->userId) {
+                $post->user()->associate($this->auth);
+            }
+
+            $post->ip = $request->ip();
+            $post->browser = str_limit($this->request->browser(), 250);
+            $post->host = ''; // pole nie moze byc nullem
+        } else {
+            $this->authorize('update', [$post]);
+
+            $post->topic()->associate($topic);
+        }
+
+        $post->fill($request->all());
+
+        if ($post->isDirtyWithRelations() && $post->exists) {
+            $post->fill([
+                'edit_count' => $post->edit_count + 1, 'editor_id' => $this->auth->id
+            ]);
+        }
+
+        $post = $this->transaction(function () use ($forum, $topic, $post, $request) {
             $actor = new Stream_Actor($this->auth);
+
             if (auth()->guest()) {
                 $actor->displayName = $request->get('user_name');
             }
 
-            $poll = $this->savePoll($request, $topic->poll_id);
-
             $activity = $post->id ? new Stream_Update($actor) : new Stream_Create($actor);
-            // saving post through repository... we need to pass few object to save relationships
-            $this->post->save($form, $this->auth, $forum, $topic, $post, $poll);
+
+            $poll = $this->savePoll($request, $topic->poll_id);
+            $topic->poll()->associate($poll);
+
+            $topic->save();
+
+            $post->topic()->associate($topic);
+            $post->save();
+
+            $post->syncAttachments(array_pluck($request->input('attachments', []), 'id'));
+
+            if ($topic->wasRecentlyCreated) {
+                if ($this->userId) {
+                    $topic->subscribe($this->userId, $request->filled('is_subscribed'));
+                }
+
+                $topic->first_post_id = $post->id;
+            }
 
             // url to the post
             $url = UrlBuilder::post($post);
@@ -96,14 +118,16 @@ class SubmitController extends BaseController
             if ($topic->wasRecentlyCreated || $post->id === $topic->first_post_id) {
                 $object = (new Stream_Topic)->map($topic, $post->html);
                 $target = (new Stream_Forum)->map($forum);
+
+                if ($tags = array_unique((array) $request->input('tags', []))) {
+                    $topic->setTags($tags);
+                }
             } else {
                 $object = (new Stream_Post(['url' => $url]))->map($post);
                 $target = (new Stream_Topic())->map($topic);
             }
 
             stream($activity, $object, $target);
-
-            $request->attributes->set('url', $url);
 
             return $post;
         });
@@ -113,7 +137,20 @@ class SubmitController extends BaseController
         // add post to elasticsearch
         event(new PostWasSaved($post));
 
-        return $post;
+        $tracker = Tracker::make($topic);
+
+        PostResource::withoutWrapping();
+
+        if ($post->user && $post->user->group) {
+            $post->user->group = $post->user->group->name;
+        }
+
+        $resource = (new PostResource($post))->setTracker($tracker)->setSigParser(app('parser.sig'))->resolve($this->request);
+
+        // mark topic as read after publishing
+        $post->wasRecentlyCreated ? $tracker->asRead($post->created_at) : null;
+
+        return $resource;
     }
 
     /**
@@ -123,7 +160,7 @@ class SubmitController extends BaseController
      */
     private function savePoll(Request $request, $pollId)
     {
-        if ($request->input('poll.remove')) {
+        if (!$request->filled('poll.title') && $pollId) {
             $this->getPollRepository()->delete($pollId);
         } elseif ($request->filled('poll.title')) {
             return $this->getPollRepository()->updateOrCreate($pollId, $request->input('poll'));
@@ -143,72 +180,35 @@ class SubmitController extends BaseController
     }
 
     /**
-     * Ajax request. Display edit form
-     *
-     * @param $forum
-     * @param $topic
-     * @param $post
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param Topic $topic
+     * @param SubjectRequest $request
+     * @return string
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function edit($forum, $topic, $post)
+    public function subject($topic, SubjectRequest $request)
     {
-        $this->authorize('update', [$post]);
-        $form = $this->getForm($forum, $topic, $post);
+        $this->authorize('update', $topic->forum);
 
-        return view('forum.partials.edit')->with('form', $form);
-    }
+        $topic->fill(['subject' => $request->input('subject')]);
 
-    /**
-     * @param \Coyote\Topic $topic
-     * @param SubjectForm $form
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @todo moze jakas refaktoryzacja? przeniesienie do repozytorium? na pewno logowanie o tym, ze zostal zmieniony
-     * tytul a nie tresc posta (jak to jest obecnie)
-     */
-    public function subject($topic, SubjectForm $form)
-    {
-        /** @var \Coyote\Forum $forum */
-        $forum = $topic->forum()->first();
-        $this->authorize('update', $forum);
+        if (!$topic->isDirty()) {
+            return response()->json(['url' => UrlBuilder::topic($topic)]);
+        }
 
-        $request = $form->getRequest();
+        /** @var \Coyote\Post $post */
+        $post = $topic->firstPost;
 
-        $url = $this->transaction(function () use ($request, $forum, $topic) {
-            $topic->fill(['subject' => $request->get('subject')]);
+        $this->transaction(function () use ($request, $topic, $post) {
+            $originalSubject = $topic->getOriginal('subject');
 
-            /** @var \Coyote\Post $post */
-            $post = $topic->firstPost()->first();
-            $url = route('forum.topic', [$forum->slug, $topic->id, $topic->slug], false);
+            $topic->save();
+            $post->fill(['edit_count' => $post->edit_count + 1, 'editor_id' => $this->userId])->save();
 
-            if ($topic->isDirty()) {
-                $original = $topic->getOriginal();
-
-                $topic->save();
-                $tags = $topic->getTagNames();
-
-                // save it in log...
-                (new Log)
-                    ->fillWithPost($post)
-                    ->fill(['user_id' => $this->userId, 'subject' => $topic->subject, 'tags' => $tags])
-                    ->save();
-
-                $post->fill([
-                    'edit_count' => $post->edit_count + 1, 'editor_id' => $this->userId
-                ])
-                ->save();
-
-                if ($post->user_id !== null) {
-                    $post->user->notify(
-                        (new SubjectChangedNotification($this->auth, $topic))
-                            ->setOriginalSubject(str_limit($original['subject'], 84))
-                    );
-                }
-
-                // fire the event. it can be used to index a content and/or add page path to "pages" table
-                event(new TopicWasSaved($topic));
-                // add post to elasticsearch
-                event(new PostWasSaved($post));
+            if ($post->user_id !== null && $post->user_id !== $this->userId) {
+                $post->user->notify(
+                    (new SubjectChangedNotification($this->auth, $topic))
+                        ->setOriginalSubject(str_limit($originalSubject, 84))
+                );
             }
 
             // get text from cache to put excerpt in stream activity
@@ -218,58 +218,27 @@ class SubmitController extends BaseController
             stream(
                 Stream_Update::class,
                 (new Stream_Topic)->map($topic, $post->text),
-                (new Stream_Forum)->map($forum)
+                (new Stream_Forum)->map($topic->forum)
             );
-
-            return $url;
         });
 
-        if ($request->ajax()) {
-            return response(url($url));
-        } else {
-            return redirect()->to($url);
-        }
+        // fire the event. it can be used to index a content and/or add page path to "pages" table
+        event(new TopicWasSaved($topic));
+        // add post to elasticsearch
+        event(new PostWasSaved($post));
+
+        return response()->json(['url' => UrlBuilder::topic($topic)]);
     }
 
     /**
-     * Format post text in case of quoting
-     *
      * @param Request $request
-     * @param \Coyote\Topic $topic
-     * @return string
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    protected function getDefaultText(Request $request, $topic)
+    public function preview(Request $request)
     {
-        $text = '';
+        $parser = app('parser.post');
+        $parser->cache->setEnable(false);
 
-        // IDs of posts that user want to quote...
-        $postsId = [];
-        $cookie = isset($_COOKIE['mqid' . $topic->id]) ? $_COOKIE['mqid' . $topic->id] : null;
-
-        if ($cookie) {
-            $postsId = array_map('intval', explode(',', $cookie));
-            // I used raw PHP function because I don't want to use laravel encryption in this case
-            setcookie('mqid' . $topic->id, null, time() - 3600, '/');
-        }
-
-        if ($request->input('quote')) {
-            $postsId[] = intval($request->input('quote'));
-        }
-
-        if (!empty($postsId)) {
-            $posts = $this->post->findPosts(array_unique($postsId), $topic->id);
-
-            // builds text with quoted posts
-            foreach ($posts as $post) {
-                $text .= '> ##### [' .
-                    ($post->name ?: $post->user_name) .
-                    ' napisał(a)](' . route('forum.share', [$post->id]) . '):';
-
-                $text .= "\n> " . str_replace("\n", "\n> ", $post->text);
-                $text .= "\n\n";
-            }
-        }
-
-        return $text;
+        return response($parser->parse((string) $request->get('text')));
     }
 }

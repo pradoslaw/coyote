@@ -99,7 +99,7 @@ class ForumCollectionTest extends TestCase
         $topic->refresh();
 
         $guest = new Guest($guestId);
-        $guest->setDefaultSessionTime(now()->subMinute(5)); // simulate session start
+        $guest->setDefaultSessionTime(now()->subMinutes(5)); // simulate session start
 
         $tracker = new Tracker($topic, $guest);
 
@@ -117,7 +117,7 @@ class ForumCollectionTest extends TestCase
         $faker = Faker\Factory::create();
 
         $guestId = $faker->uuid;
-        $now = now()->subMinute(5);
+        $now = now()->subMinutes(5);
 
         \Coyote\Guest::forceCreate(['id' => $guestId, 'created_at' => $now, 'updated_at' => $now]);
 
@@ -156,7 +156,7 @@ class ForumCollectionTest extends TestCase
         $faker = Faker\Factory::create();
 
         $guestId = $faker->uuid;
-        $now = now()->subMinute(5);
+        $now = now()->subMinutes(5);
 
         \Coyote\Guest::forceCreate(['id' => $guestId, 'created_at' => $now, 'updated_at' => $now]);
 

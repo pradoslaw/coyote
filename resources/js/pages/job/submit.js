@@ -1,4 +1,3 @@
-import '../../plugins/uploader';
 import tinymce from '../../libs/tinymce';
 import Geocoder from '../../libs/geocoder';
 import Vue from 'vue';
@@ -19,7 +18,6 @@ import VueMarker from '../../components/google-maps/marker.vue';
 import Editor from '@tinymce/tinymce-vue';
 import 'chosen-js';
 import axios from "axios";
-import Config from "../../libs/config";
 
 new Vue({
   el: '.submit-form',
@@ -54,8 +52,6 @@ new Vue({
     $('#industries').chosen({
       placeholder_text_multiple: 'Wybierz z listy'
     });
-
-    axios.defaults.headers.common['X-CSRF-TOKEN'] = Config.csrfToken();
   },
   destroyed() {
     window.removeEventListener('scroll', this.handleScroll);

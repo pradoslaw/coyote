@@ -1,4 +1,4 @@
-import Dialog from '../libs/dialog';
+import Dialog from '../legacy/dialog';
 
 $(function() {
     'use strict';

@@ -3,6 +3,7 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Repositories\Contracts\ForumRepositoryInterface;
+use Coyote\Tag;
 use Coyote\Topic;
 use Coyote\Forum;
 use Illuminate\Database\Eloquent\Builder;
@@ -115,7 +116,14 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     public function getTagsCloud()
     {
         return $this
-            ->tags()
+            ->app
+            ->make(Tag::class)
+            ->select(['tags.id', 'name', 'logo', $this->raw('COUNT(*) AS count')])
+            ->join('topic_tags', 'tags.id', '=', 'tag_id')
+            ->join('topics', 'topics.id', '=', 'topic_id')
+            ->whereNull('topics.deleted_at')
+            ->whereNull('tags.deleted_at')
+            ->groupBy('name', 'logo', 'tags.id')
             ->orderBy($this->raw('COUNT(*)'), 'DESC')
             ->limit(10)
             ->get()
@@ -129,13 +137,24 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
      */
     public function getTagsWeight(array $tags)
     {
+        $list = [];
+
+        foreach ($tags as $tag) {
+            $list[] = "('$tag', 0)";
+        }
+
         return $this
-            ->tags()
-            ->whereIn('tags.name', $tags)
+            ->app
+            ->make(Tag::class)
+            ->select(['tags.id', 'custom.name', 'logo', $this->raw('GREATEST(custom.count, count(topic_tags.id)) AS count')])
+            ->fromRaw("(VALUES" . implode(',', $list) . ") AS custom(name, count)")
+            ->leftJoin('tags', 'tags.name', '=', 'custom.name')
+            ->leftJoin('topic_tags', 'tag_id', '=', 'tags.id')
+            ->leftJoin('topics', 'topics.id', '=', 'topic_id')
+            ->whereNull('topics.deleted_at')
+            ->groupBy('custom.name', 'logo', 'tags.id', 'custom.count')
             ->orderBy($this->raw('COUNT(*)'), 'DESC')
-            ->get()
-            ->pluck('count', 'name')
-            ->toArray();
+            ->get();
     }
 
     /**
@@ -179,21 +198,5 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
             $forum->save();
             $other->save();
         }
-    }
-
-    /**
-     * @return mixed
-     */
-    private function tags()
-    {
-        return $this
-            ->app
-            ->make(Topic\Tag::class)
-            ->select(['name', $this->raw('COUNT(*) AS count')])
-            ->join('tags', 'tags.id', '=', 'tag_id')
-            ->join('topics', 'topics.id', '=', 'topic_id')
-                ->whereNull('topics.deleted_at')
-                ->whereNull('tags.deleted_at')
-            ->groupBy('name');
     }
 }

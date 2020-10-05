@@ -32,12 +32,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Coyote\Post\Comment[] $comments
  * @property \Coyote\User $user
  * @property \Coyote\User $editor
+ * @property \Coyote\User $deleter
  * @property \Coyote\Post\Accept $accept
  */
 class Post extends Model
 {
     use SoftDeletes;
     use Searchable;
+
+    protected $attributes = ['score' => 0];
 
     /**
      * The attributes that are mass assignable.
@@ -78,6 +81,14 @@ class Post extends Model
             $post->deleter_id = null;
             $post->delete_reason = null;
         });
+
+        static::saving(function (Post $post) {
+            if ($post->exists && $post->isDirtyWithRelations()) {
+                $post->logs()->create(
+                    array_merge($post->toArray(), ['subject' => $post->topic->subject, 'user_id' => $post->editor_id])
+                );
+            }
+        });
     }
 
     /**
@@ -85,7 +96,7 @@ class Post extends Model
      */
     public function comments()
     {
-        return $this->hasMany('Coyote\Post\Comment');
+        return $this->hasMany('Coyote\Post\Comment')->orderBy('id');
     }
 
     /**
@@ -141,7 +152,7 @@ class Post extends Model
      */
     public function user()
     {
-        return $this->belongsTo('Coyote\User');
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     /**
@@ -149,7 +160,15 @@ class Post extends Model
      */
     public function editor()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withTrashed();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function deleter()
+    {
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     /**
@@ -226,5 +245,10 @@ class Post extends Model
         $this->{$this->getDeletedAtColumn()} = $this->freshTimestamp();
 
         $this->save();
+    }
+
+    public function isDirtyWithRelations(): bool
+    {
+        return $this->isDirty() || $this->topic->isDirty();
     }
 }

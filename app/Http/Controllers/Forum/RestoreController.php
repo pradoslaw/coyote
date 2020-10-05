@@ -16,7 +16,6 @@ class RestoreController extends BaseController
      * Restore post or whole topic
      *
      * @param int $id post id
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function index($id)
     {
@@ -48,7 +47,5 @@ class RestoreController extends BaseController
         }
 
         stream(Stream_Restore::class, $object, $target);
-
-        return redirect()->to($url)->with('success', 'Post został przywrócony.');
     }
 }

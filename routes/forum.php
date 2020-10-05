@@ -5,10 +5,10 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     // strona glowna forum
     $this->get('/', ['uses' => 'HomeController@index', 'as' => 'home']);
 
-    $this->post('Preview', ['uses' => 'HomeController@preview', 'as' => 'preview']);
+    $this->post('Preview', ['uses' => 'SubmitController@preview', 'as' => 'preview']);
 
     $this->get('Tag/{tag_name}', ['uses' => 'HomeController@tag', 'as' => 'tag']);
-    $this->post('Tag/save', ['uses' => 'TagController@save', 'as' => 'tag.save']);
+    $this->post('Tag/Save', ['uses' => 'TagController@save', 'as' => 'tag.save']);
     $this->get('Tag/Prompt', ['uses' => 'TagController@prompt', 'as' => 'tag.prompt']);
     $this->get('Tag/Validate', ['uses' => 'TagController@valid', 'as' => 'tag.validate']);
     $this->get('Categories', ['uses' => 'HomeController@categories', 'as' => 'categories']);
@@ -41,7 +41,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
         'uses' => 'SubmitController@save',
         'middleware' => [
             // topic.access must be first
-            'topic.access', 'can:access,forum', 'forum.write', 'post.response'
+            'topic.access', 'can:access,forum', 'forum.write'
         ]
     ]);
 
@@ -59,16 +59,6 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
         'uses' => 'SubmitController@save',
         'middleware' => [
             'can:access,forum', 'forum.write', 'forum.url', 'post.response'
-        ]
-    ]);
-
-    // Fast edit
-    // ------------------------------------------------
-    $this->get('{forum}/{topic}/Edit/{post}', [
-        'uses' => 'SubmitController@edit',
-        'as' => 'post.edit',
-        'middleware' => [
-            'auth', 'topic.access', 'can:access,forum', 'forum.write'
         ]
     ]);
 
@@ -96,7 +86,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     // blokowanie watku
     $this->post('Topic/Lock/{topic}', ['uses' => 'LockController@index', 'as' => 'lock', 'middleware' => 'auth']);
     // podpowiadanie nazwy uzytkownika (w kontekscie danego watku)
-    $this->get('Topic/Prompt/{id}', ['uses' => 'TopicController@prompt', 'as' => 'prompt']);
+    $this->get('Topic/Prompt/{id?}', ['uses' => 'TopicController@prompt', 'as' => 'prompt']);
     // przeniesienie watku do innej kategorii
     $this->post('Topic/Move/{topic}', ['uses' => 'MoveController@index', 'as' => 'move']);
     // oznacz watek jako przeczytany
@@ -123,7 +113,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     ]);
 
     // usuwanie posta
-    $this->post('Post/Delete/{post}', [
+    $this->delete('Post/Delete/{post}', [
         'uses' => 'DeleteController@index',
         'as' => 'post.delete',
         'middleware' => 'auth'
@@ -161,8 +151,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
         'middleware' => ['auth', 'comment.access']
     ]);
 
-    $this->get('Comment/{id}', ['uses' => 'CommentController@edit', 'middleware' => ['auth', 'comment.access']]);
-    $this->post('Comment/Delete/{id}', [
+    $this->delete('Comment/Delete/{id}', [
         'uses' => 'CommentController@delete',
         'as' => 'comment.delete',
         'middleware' => [
@@ -170,12 +159,17 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
         ]
     ]);
 
+    $this->get('Comment/Show/{post}', [
+        'uses' => 'CommentController@show',
+        'as' => 'comment.show'
+    ]);
+
     // glosowanie w ankiecie
-    $this->post('{forum}/Poll/{id}', [
+    $this->post('Poll/{id}', [
         'uses' => 'PollController@vote',
         'as' => 'poll.vote',
         'middleware' => [
-            'auth', 'can:access,forum'
+            'auth'
         ]
     ]);
 

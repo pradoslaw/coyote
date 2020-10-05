@@ -114,22 +114,13 @@ module.exports = {
   context: path.join(__dirname, 'resources'),
   entry: {
     app: './js/app.js',
-    posting: './js/posting.js',
+    legacy: './js/legacy.js',
     forum: ['./js/pages/forum.js'],
-    // forum: ['./js/pages/forum.js', './sass/pages/forum.scss'],
     wiki: ['./js/pages/wiki.js'],
-    // wiki: ['./js/pages/wiki.js', './sass/pages/wiki.scss'],
-    // job: ['./js/pages/job.js', './sass/pages/job.scss'],
     job: ['./js/pages/job.js'],
     'job-submit': './js/pages/job/submit.js',
-    wikieditor: './js/plugins/wikieditor.js',
     main: './sass/main.scss',
-    // auth: './sass/pages/auth.scss',
-    // help: './sass/pages/help.scss',
-    // 'user-panel': './sass/pages/user.scss',
-    // errors: './sass/pages/errors.scss',
-    adm: './sass/pages/adm.scss',
-    // search: './sass/pages/search.scss'
+    adm: './sass/pages/adm.scss'
   },
   plugins: [
     new VueLoaderPlugin(),
@@ -202,7 +193,7 @@ module.exports = {
     }),
 
 
-    //
+
     // new BundleAnalyzerPlugin()
   ]
 };
