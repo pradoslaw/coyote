@@ -211,6 +211,7 @@
   import Textarea from "../../libs/textarea";
   import VueError from '../forms/error.vue';
   import VueText from '../forms/text.vue';
+  import Prism from 'prismjs';
 
   Vue.use(VueAutosize);
   Vue.use(VueAutosave, {identifier: 'post'});
@@ -289,10 +290,16 @@
     cancel() { }
 
     @Watch('activeTab')
-    onTabChanged(newValue) {
-      if (newValue === 'preview') {
-        axios.post('/Forum/Preview', {text: this.post.text}).then(result => this.post.html = result.data);
+    showPreview(newValue) {
+      if (newValue !== 'preview') {
+        return;
       }
+
+      axios.post('/Forum/Preview', {text: this.post.text}).then(result => {
+        this.post.html = result.data;
+
+        Prism.highlightAll();
+      });
     }
 
     created() {
@@ -313,6 +320,7 @@
       store.dispatch('posts/save', this.post)
         .then(result => {
           this.$emit('save', result.data);
+          this.$removeDraft();
 
           // post was recently created. we're not editing it
           if ('id' in this.topic && !this.exists) {
@@ -321,7 +329,7 @@
             document.getElementById(`id${result.data.id}`)!.scrollIntoView();
           }
 
-          this.$removeDraft();
+          this.$nextTick(() => Prism.highlightAll());
         })
         .catch(err => {
           if (err.response.status !== 422) {

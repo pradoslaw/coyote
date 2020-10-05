@@ -4,6 +4,7 @@ import Vue from 'vue';
 import PerfectScrollbar from '../components/perfect-scrollbar';
 import VuePm from '../components/pm/message.vue';
 import VueAutosize from '../plugins/autosize';
+import VueAutosave from '../plugins/autosave';
 import VuePrompt from '../components/forms/prompt.vue';
 import VueToolbar from '../components/forms/toolbar.vue';
 import VueButton from '../components/forms/button.vue';
@@ -19,6 +20,7 @@ import differenceInMinutes from 'date-fns/differenceInMinutes';
 import parseISO from 'date-fns/parseISO';
 
 Vue.use(VueAutosize);
+Vue.use(VueAutosave, {identifier: 'pm'});
 Vue.use(VuePaste, {url: '/User/Pm/Paste'});
 
 const INBOX = 1;
@@ -54,6 +56,9 @@ new Vue({
   created() {
     // fill vuex with data passed from controller to view
     store.commit('messages/init', {messages: window.data.messages, total: window.data.total, perPage: window.data.per_page, currentPage: window.data.current_page});
+
+    this.text = this.$loadDraft();
+    this.$watch('text', newValue => this.$saveDraft(newValue));
   },
   mounted() {
     this.listenForMessage();
@@ -94,6 +99,8 @@ new Vue({
 
           this.$nextTick(() => this.scrollToBottom());
           this.tab = 'body';
+
+          this.$removeDraft();
         })
         .catch(err => this.errors = err.response.data.errors)
         .finally(() => this.isProcessing = false);
