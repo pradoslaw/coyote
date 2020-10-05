@@ -43,13 +43,19 @@ class ForumTest extends DuskTestCase
             $browser
                 ->loginAs($user)
                 ->visitRoute('forum.topic.submit', ['forum' => $forum])
+
+                ->type('tags', 'c#')
+                ->keys('input[name="tags"]', '{enter}')
+                ->keys('input[name="tags"]', '{escape}')
+                ->pause(500)
+                ->click('input[name="subject"]')
                 ->type('subject', $title = $faker->text())
                 ->type('text', $text = $faker->realText())
-
                 ->press('Zapisz')
-                ->waitForText($title)
+                ->pause(1000)
                 ->assertSee($title)
-                ->assertSee($text);
+                ->assertSee($text)
+                ->assertSee('c#');
         });
     }
 

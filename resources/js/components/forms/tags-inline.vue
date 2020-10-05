@@ -9,8 +9,9 @@
         v-model="inputText"
         :style="`width: ${inputWidth}`"
         :placeholder="placeholder"
-        @keyup.space="setTag"
-        @keyup.enter="setTag"
+        @keyup.space="applyTag"
+        @keyup.enter="applyTag"
+        @keyup.esc="$refs.dropdown.toggleDropdown(false)"
         ref="input"
         type="text"
         tabindex="4"
@@ -19,7 +20,7 @@
       >
     </div>
 
-    <vue-dropdown :items="filteredTags" @select="toggleTag" class="tag-dropdown">
+    <vue-dropdown :items="filteredTags" @select="toggleTag" ref="dropdown" class="tag-dropdown">
       <template v-slot:item="slot">
         <span>{{ slot.item.name }}</span>
         <small>×{{ slot.item.count }}</small>
@@ -50,14 +51,14 @@
     readonly placeholder!: string;
 
     @Prop({default: () => []})
-    tags!: Tag[];
+    readonly tags!: Tag[];
 
     private inputText: string = '';
     private filteredTags = [];
     private inputWidth = '100%';
 
     @Watch('inputText')
-    onInputTextChanged(newVal) {
+    searchResults(newVal) {
       if (!newVal) {
         return;
       }
@@ -73,11 +74,15 @@
       this.$nextTick(() => this.calcInputWidth());
     }
 
-    setTag() {
+    applyTag() {
       let name = this.inputText.trim().toLowerCase().replace(/[^a-ząęśżźćółń0-9\-\.#\+\s]/gi, '')
 
       if (name.startsWith('#')) {
         name = name.substr(1);
+      }
+
+      if (!name) {
+        return;
       }
 
       this.toggleTag({ name })
