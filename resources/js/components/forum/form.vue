@@ -198,6 +198,7 @@
   import { Ref, Prop, Emit, Watch } from "vue-property-decorator";
   import store from "../../store";
   import VueAutosize from '../../plugins/autosize';
+  import VueAutosave from '../../plugins/autosave';
   import VuePrompt from '../forms/prompt.vue';
   import VueButton from '../forms/button.vue';
   import VueTagsInline from '../forms/tags-inline.vue';
@@ -212,6 +213,7 @@
   import VueText from '../forms/text.vue';
 
   Vue.use(VueAutosize);
+  Vue.use(VueAutosave, {identifier: 'post'});
   Vue.use(VuePaste, {url: '/Forum/Paste'});
   Vue.use(VueTimeago);
 
@@ -293,6 +295,15 @@
       }
     }
 
+    created() {
+      if (this.exists) {
+        return;
+      }
+
+      this.post.text = this.$loadDraft() as string;
+      this.$watch('post.text', newValue => this.$saveDraft(newValue));
+    }
+
     save() {
       this.isProcessing = true;
       this.errors = {};
@@ -304,11 +315,13 @@
           this.$emit('save', result.data);
 
           // post was recently created. we're not editing it
-          if ('id' in this.topic && !this.post.id) {
+          if ('id' in this.topic && !this.exists) {
             this.post.text = '';
 
             document.getElementById(`id${result.data.id}`)!.scrollIntoView();
           }
+
+          this.$removeDraft();
         })
         .catch(err => {
           if (err.response.status !== 422) {
@@ -347,7 +360,7 @@
       const textarea = new Textarea(this.$refs.textarea);
       const suffix = attachment.name.split('.').pop()!.toLowerCase();
 
-      textarea.insertAtCaret('', '', (suffix === 'png' || suffix === 'jpg' || suffix === 'jpeg' || suffix === 'gif' ? '!' : '') + '[' + attachment.name + '](' + attachment.url + ')');
+      textarea.insertAtCaret('', '', (['png', 'jpg', 'jpeg', 'gif'].includes(suffix) ? '!' : '') + '[' + attachment.name + '](' + attachment.url + ')');
       this.post.text = textarea.textarea.value;
 
       this.switchTab('textarea');
@@ -359,6 +372,10 @@
 
     get showPollTab() {
       return !this.topic || this.topic.first_post_id === this.post.id;
+    }
+
+    get exists() {
+      return this.post.id !== undefined;
     }
   }
 </script>
