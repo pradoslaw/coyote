@@ -54,7 +54,7 @@
               </tr>
             </thead>
             <tbody>
-              <template v-if="post.attachments">
+              <template v-if="post.attachments.length">
                 <tr v-for="attachment in post.attachments">
                   <td>
                     <a @click="insertAtCaret(attachment)" href="javascript:">{{ attachment.name }}</a>

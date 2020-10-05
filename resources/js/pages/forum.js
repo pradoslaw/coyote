@@ -160,7 +160,8 @@ new Vue({
         .then(result => window.location.href = result.data.url)
         .finally(() => this.isProcessing = false);
     }
-  }
+  },
+  computed: mapGetters('user', ['isAuthorized'])
 });
 
 new Vue({

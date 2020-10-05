@@ -85,7 +85,13 @@
     {% endif %}
 
     {% if is_writeable %}
-      <vue-form id="js-submit-form" ref="js-submit-form" :post="undefinedPost"></vue-form>
+      <vue-form
+        id="js-submit-form"
+        ref="js-submit-form"
+        :post="undefinedPost"
+        upload-mimes="{{ config_get('filesystems.upload_mimes')|split(',')|join(', ') }}"
+        upload-max-size="{{ config_get('filesystems.upload_max_size') }}"
+      ></vue-form>
     {% endif %}
 
     <section class="row no-gutters mt-3">
@@ -101,7 +107,7 @@
     {% block side_menu %}
       <div id="js-sidebar" class="box" v-cloak>
         <ul class="side-menu mt-2">
-          <li :class="{'on': topic.is_subscribed}" class="btn-subscribe">
+          <li v-if="isAuthorized" :class="{'on': topic.is_subscribed}" class="btn-subscribe">
             <a @click="subscribe(topic)" href="javascript:">
               <i :class="{'fas': topic.is_subscribed, 'far': !topic.is_subscribed}" class="fa-star fa-fw"></i>
 

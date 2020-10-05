@@ -447,7 +447,7 @@
         return;
       }
 
-      cb(args);
+      cb(...args);
     }
 
     get tags() {
