@@ -298,7 +298,7 @@
       axios.post('/Forum/Preview', {text: this.post.text}).then(result => {
         this.post.html = result.data;
 
-        Prism.highlightAll();
+        this.$nextTick(() => Prism.highlightAll());
       });
     }
 
@@ -325,6 +325,8 @@
           // post was recently created. we're not editing it
           if ('id' in this.topic && !this.exists) {
             this.post.text = '';
+            this.post.html = '';
+            this.post.attachments = [];
 
             document.getElementById(`id${result.data.id}`)!.scrollIntoView();
           }
