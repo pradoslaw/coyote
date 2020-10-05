@@ -247,7 +247,7 @@ let PostVue = Vue.extend({
     },
 
     reply(post) {
-      let text = `> ##### [${post.user.name ? post.user.name : post.user_name} napisał(a)](/Forum/Post/${post.id}):`
+      let text = `> ##### [${post.user ? post.user.name : post.user_name} napisał(a)](/Forum/Post/${post.id}):`
 
       text += "\n" + post.text.replace(/\n/, "\n> ") + "\n\n"
 
