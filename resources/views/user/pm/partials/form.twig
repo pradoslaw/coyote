@@ -10,7 +10,7 @@
 
         <vue-toolbar :input="() => $refs.textarea"></vue-toolbar>
 
-        <vue-prompt source="{{ route('user.prompt') }}" :errors="errors.text">
+        <vue-prompt :errors="errors.text">
           <textarea
             placeholder="Kliknij, aby odpowiedzieć"
             v-autosize

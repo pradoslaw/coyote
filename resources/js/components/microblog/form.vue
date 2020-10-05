@@ -1,7 +1,7 @@
 <template>
   <div class="microblog-submit">
 
-    <vue-prompt source="/User/Prompt" class="border-bottom">
+    <vue-prompt class="border-bottom">
       <textarea
         v-autosize
         placeholder="Kliknij, aby dodać wpis"

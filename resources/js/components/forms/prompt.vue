@@ -18,7 +18,8 @@
     store,
     props: {
       source: {
-        type: String
+        type: String,
+        default: '/User/Prompt'
       },
       errors: {
         type: Array,

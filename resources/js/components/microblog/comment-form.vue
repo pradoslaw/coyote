@@ -1,6 +1,6 @@
 <template>
   <form>
-    <vue-prompt source="/User/Prompt">
+    <vue-prompt>
       <textarea
         v-autosize
         placeholder="Napisz komentarz... (Ctrl+Enter aby wysłać)"
