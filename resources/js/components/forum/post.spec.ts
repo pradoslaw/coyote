@@ -19,23 +19,33 @@ describe('Deleted post', () => {
   it('should not allow to accept', () => {
     expect(wrapper.find('.fa-check').exists()).toBeFalsy();
   });
-});
 
-describe('Regular post', () => {
-  it('should not allow to accept', () => {
-    store.commit('topics/init', [ topic ]);
-
-    const wrapper = shallowMount(VuePost, {propsData: {post: fake()}, store });
-
-    expect(wrapper.find('.fa-check').exists()).toBeFalsy();
+  it('should not allow to delete', () => {
+    expect(wrapper.html()).not.toContain('Usuń');
+    expect(wrapper.html()).not.toContain('Przywróć');
   });
 
+  it('should not allow to report', () => {
+    expect(wrapper.find('Raportuj').exists()).toBeFalsy();
+  });
+});
+
+describe('Author post', () => {
+  store.commit('topics/init', [ topic ]);
+
+  const post = fake({permissions: {accept: true, update: true, delete: true, write: true}});
+  const wrapper = shallowMount(VuePost, {propsData: { post }, store});
+
   it('should allow to accept', () => {
-    store.commit('topics/init', [ topic ]);
-
-    const wrapper = shallowMount(VuePost, {propsData: {post: fake({permissions: {accept: true}})}, store});
-
     expect(wrapper.find('.fa-check').exists()).toBeTruthy();
+  });
+
+  it('should allow to reply', () => {
+    expect(wrapper.html()).toContain('Odpowiedz');
+  });
+
+  it('should allow to delete', () => {
+    expect(wrapper.html()).toContain('Usuń');
   });
 
   it('should show ip', () => {
