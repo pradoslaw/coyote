@@ -102,6 +102,13 @@
         </div>
 
         <div v-if="!isEditing" class="col-12 col-lg-10">
+          <vue-flag
+            v-for="flag in post.flags"
+            :key="flag.id"
+            :flag="flag"
+            @close="closeFlag"
+          ></vue-flag>
+
           <div class="post-vote">
             <strong class="vote-count" title="Ocena postu">{{ post.score }}</strong>
 
@@ -116,13 +123,6 @@
           </div>
 
           <div class="post-content">
-            <vue-flag
-              v-for="flag in post.flags"
-              :key="flag.id"
-              :flag="flag"
-              @close="closeFlag"
-            ></vue-flag>
-
             <div v-html="post.html"></div>
 
             <ul v-if="tags" class="mt-2 mb-2 tag-clouds">

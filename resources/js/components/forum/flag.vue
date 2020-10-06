@@ -3,7 +3,7 @@
     <button @click="$refs.modal.open()" type="button" class="close" data-dismiss="alert" aria-label="Close" title="Usuń"><span aria-hidden="true">&times;</span></button>
 
     <vue-username :user="{id: flag.user_id, name: flag.user_name}" class="alert-link"></vue-username>
-    z powodu {{ flag.name }}
+    z powodu <strong>{{ flag.name }}</strong>
     dnia <vue-timeago :datetime="flag.created_at"></vue-timeago>
 
     <p v-if="flag.text">{{ flag.text }}</p>
