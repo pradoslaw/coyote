@@ -4,18 +4,29 @@
       <div class="col-12">
         <strong>{{ pollSync.title }}</strong>
 
-        <em v-if="pollSync.max_items > 1" class="max-items">(* możesz oddać maksymalnie {{ declination(poll.max_items, ['głos', 'głosy', 'głosów']) }})</em>
+        <em v-if="pollSync.max_items > 1" class="max-items">(* możesz oddać maksymalnie {{ poll.max_items }} {{ poll.max_items|declination(['głos', 'głosy', 'głosów']) }})</em>
       </div>
     </div>
 
     <div v-for="item in pollSync.items" :key="item.id" :class="{'voted': pollSync.votes.includes(item.id)}" class="row">
       <div class="col-sm-6">
         <div v-if="isVoteable" :class="{'custom-checkbox': pollSync.max_items > 1, 'custom-radio': pollSync.max_items === 1}" class="custom-control">
+          <!-- bug na IE 11 nie pozwala na użycie :type, musimy użyć type -->
           <input
+            v-if="pollSync.max_items > 1"
             :id="`item-${item.id}`"
             v-model="checkedOptions"
             :value="item.id"
-            :type="pollSync.max_items > 1 ? 'checkbox' : 'radio'"
+            type="checkbox"
+            class="custom-control-input"
+          >
+
+          <input
+            v-else
+            :id="`item-${item.id}`"
+            v-model="checkedOptions"
+            :value="item.id"
+            type="radio"
             class="custom-control-input"
           >
 
