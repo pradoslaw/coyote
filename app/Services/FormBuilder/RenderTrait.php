@@ -3,7 +3,7 @@
 namespace Coyote\Services\FormBuilder;
 
 use Illuminate\View\View;
-use Symfony\Component\Filesystem\Exception\FileNotFoundException;
+use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 
 trait RenderTrait
 {
