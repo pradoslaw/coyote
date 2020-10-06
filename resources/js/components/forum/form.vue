@@ -55,7 +55,7 @@
             </thead>
             <tbody>
               <template v-if="post.attachments.length">
-                <tr v-for="attachment in post.attachments">
+                <tr v-for="attachment in post.attachments" :key="attachment.id">
                   <td>
                     <a @click="insertAtCaret(attachment)" href="javascript:">{{ attachment.name }}</a>
                   </td>
@@ -63,7 +63,7 @@
                   <td><vue-timeago :datetime="attachment.created_at"></vue-timeago></td>
                   <td>{{ Math.round(attachment.size / 1024) }} kB</td>
                   <td>
-                    <button type="button" title="Usuń załącznik" class="btn btn-secondary btn-sm btn-del">
+                    <button @click="deleteAttachment({ post, attachment })" type="button" title="Usuń załącznik" class="btn btn-secondary btn-sm">
                       <i class="fas fa-times"></i>
                     </button>
                   </td>
@@ -241,7 +241,10 @@
         deep: true
       }
     },
-    methods: mapMutations('poll', ['removeItem', 'addItem', 'resetDefaults'])
+    methods: {
+      ...mapMutations('poll', ['removeItem', 'addItem', 'resetDefaults']),
+      ...mapMutations('posts', ['deleteAttachment'])
+    }
   })
   export default class VueForm extends Vue {
     isProcessing = false;
@@ -357,13 +360,13 @@
 
       this.isProcessing = true;
 
-      axios.post('/Forum/Upload', form)
-        .then(response => this.addAttachment(response.data))
+      store.dispatch('posts/upload', { post: this.post, form })
         .finally(() => this.isProcessing = false);
     }
 
     addAttachment(attachment: PostAttachment) {
-      store.commit('posts/addAttachment', { post: this.post, attachment })
+      store.commit('posts/addAttachment', { post: this.post, attachment });
+      this.insertAtCaret(attachment);
     }
 
     insertAtCaret(attachment: PostAttachment) {

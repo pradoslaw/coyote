@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Post, PostComment, PostAttachment } from "../../types/models";
 import Vue from "vue";
+import store from "../index";
 
 type PostObj = { [key: number]: Post };
 type ParentChild = { post: Post, comment: PostComment };
@@ -180,6 +181,13 @@ const actions = {
     axios.get(`/Forum/Comment/Show/${post.id}`).then(result => {
       commit('setComments', { post, comments: result.data });
     })
+  },
+
+  upload({ commit }, { post, form }: { post: Post, form: FormData }) {
+    return axios.post('/Forum/Upload', form)
+      .then(response => {
+        commit('addAttachment', { post: post, attachment: response.data })
+      });
   }
 }
 
