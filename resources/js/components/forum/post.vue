@@ -440,6 +440,7 @@
       if (!this.isAuthorized) {
         this.$notify({
           type: 'warn',
+          // @ts-ignore
           width: '400px',
           text: 'Zaloguj się, aby skorzystać z tej funkcjonalności.'
         });
