@@ -4,7 +4,6 @@ namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Repositories\Contracts\ForumRepositoryInterface;
 use Coyote\Tag;
-use Coyote\Topic;
 use Coyote\Forum;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

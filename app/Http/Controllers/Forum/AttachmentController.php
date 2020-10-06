@@ -65,7 +65,7 @@ class AttachmentController extends BaseAttachmentController
 
     /**
      * @param Attachment $attachment
-     * @return mixed
+     * @return PostAttachmentResource
      */
     protected function render($attachment)
     {

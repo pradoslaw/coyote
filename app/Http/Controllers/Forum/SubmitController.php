@@ -28,10 +28,7 @@ class SubmitController extends BaseController
     /**
      * Show new post/edit form
      *
-     * @param Request $request
      * @param \Coyote\Forum $forum
-     * @param \Coyote\Topic $topic
-     * @param \Coyote\Post|null $post
      * @return \Illuminate\View\View
      */
     public function index($forum)

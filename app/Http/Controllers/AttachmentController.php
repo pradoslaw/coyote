@@ -3,7 +3,6 @@
 namespace Coyote\Http\Controllers;
 
 use Coyote\Http\Factories\MediaFactory;
-use Coyote\Http\Forms\AttachmentForm;
 use Coyote\Services\Media\Clipboard;
 use Illuminate\Http\Request;
 

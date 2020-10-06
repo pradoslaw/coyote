@@ -121,8 +121,8 @@ class PostResource extends JsonResource
             'is_locked'     => $this->topic->is_locked || $this->forum->is_locked,
 
             $this->mergeWhen($this->gate->allows('update', $this->resource), [
-               'ip'         => $this->ip,
-               'browser'    => $this->browser
+                'ip'         => $this->ip,
+                'browser'    => $this->browser
             ]),
 
             $this->mergeWhen($this->editor !== null, function () {
