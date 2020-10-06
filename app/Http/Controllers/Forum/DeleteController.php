@@ -56,8 +56,6 @@ class DeleteController extends BaseController
 
             // if this is the first post in topic... we must delete whole thread
             if ($post->id === $topic->first_post_id) {
-                $redirect = redirect()->route('forum.category', [$forum->slug]);
-
                 $subscribers = $topic->subscribers()->with('user')->get()->pluck('user');
 
                 if ($post->user_id !== null) {
