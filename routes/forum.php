@@ -136,7 +136,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     // glosowanie na dany post
     $this->post('Post/Vote/{post}', ['uses' => 'VoteController@index', 'as' => 'post.vote']);
     // akceptowanie danego posta jako poprawna odpowiedz w watku
-    $this->post('Post/Accept/{post}', ['uses' => 'AcceptController@index', 'as' => 'post.accept']);
+    $this->post('Post/Accept/{post}', ['uses' => 'AcceptController@index', 'as' => 'post.accept', 'middleware' => 'auth']);
     // historia edycji danego posta
     $this->get('Post/Log/{post}', ['uses' => 'LogController@log', 'as' => 'post.log']);
     // przywrocenie poprzedniej wersji posta

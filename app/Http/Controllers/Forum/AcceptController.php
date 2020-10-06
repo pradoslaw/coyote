@@ -20,10 +20,6 @@ class AcceptController extends BaseController
      */
     public function index($post)
     {
-        if (auth()->guest()) {
-            throw new AuthenticationException('Musisz być zalogowany, aby zaakceptować ten post.');
-        }
-
         // post belongs to this topic:
         $topic = $post->topic;
 
@@ -36,7 +32,7 @@ class AcceptController extends BaseController
             throw new AuthorizationException('Forum jest zablokowane.');
         }
 
-        if ($this->auth->cannot('update', $forum) && $topic->firstPost()->value('user_id') !== $this->userId) {
+        if ($this->auth->cannot('update', $forum) && $topic->firstPost->user_id !== $this->userId) {
             throw new AuthorizationException('Możesz zaakceptować post tylko we własnym wątku.');
         }
 
