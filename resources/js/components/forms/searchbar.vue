@@ -57,6 +57,7 @@
   import { SpecialKeys } from '../../types/keys';
   import Component from 'vue-class-component';
   import { Prop, Ref, Watch } from 'vue-property-decorator';
+  import { mapGetters } from "vuex";
 
   type HitCategory = {[key: string]: {children: Hit[], model: string, context: string}}
 
@@ -167,13 +168,15 @@
   @Component({
     name: 'app',
     mixins: [clickaway],
-    store
+    store,
+    computed: mapGetters('user', ['isAuthorized'])
   })
   export default class VueSearchbar extends Vue {
     isActive: boolean = false;
     isDropdownVisible: boolean = false;
     items: Hit[] = [];
     selectedIndex: number = -1;
+    readonly isAuthorized! : boolean;
 
     @Prop(String)
     readonly url!: string;
@@ -269,7 +272,7 @@
 
     loadItems(): void {
       const endpoint = this.getEndpoint();
-      const headers = this.$store.getters['user/isAuthorized'] ? {Authorization: `Bearer ${this.$store.state.user.token}`} : {};
+      const headers = this.isAuthorized ? {Authorization: `Bearer ${this.$store.state.user.token}`} : {};
 
       if (!endpoint) {
         return;
@@ -282,7 +285,7 @@
     }
 
     getEndpoint(): string | null {
-      return this.value.trim() === '' ? (this.$store.getters['user/isAuthorized'] ? '/completion/hub/' : null) : '/completion/';
+      return this.value.trim() === '' ? (this.isAuthorized ? '/completion/hub/' : null) : '/completion/';
     }
 
     shortcutSupport(event: KeyboardEvent): void {

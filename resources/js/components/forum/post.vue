@@ -425,7 +425,7 @@
       }
     }
 
-    closeFlag(flagId) {
+    closeFlag(flagId: number) {
       const index = this.post.flags?.findIndex(flag => flag.id === flagId);
 
       this.post.flags?.splice(index!, 1);
