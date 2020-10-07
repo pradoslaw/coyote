@@ -27,6 +27,21 @@ class PostRequest extends FormRequest
     const RULE_POLL_LENGTH          = 'required_with:poll.title|integer';
 
     /**
+     * @var Post
+     */
+    protected $post;
+
+    /**
+     * @var Topic
+     */
+    protected $topic;
+
+    /**
+     * @var Forum
+     */
+    protected $forum;
+
+    /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
@@ -43,20 +58,17 @@ class PostRequest extends FormRequest
      */
     public function rules()
     {
-        /** @var Post $post */
-        $post = $this->route('post') ?: new Post();
-        /** @var Topic $topic */
-        $topic = $this->route('topic');
-        /** @var Forum $forum */
-        $forum = $this->route('forum');
+        $this->post = $this->route('post') ?: new Post();
+        $this->topic = $this->route('topic');
+        $this->forum = $this->route('forum');
 
         $rules = [
-            '_token'        => self::RULE_THROTTLE . ($post->id ? ":$post->id" : ''),
+            '_token'        => self::RULE_THROTTLE . ($this->post->id ? ":$this->post->id" : ''),
             'text'          => self::RULE_TEXT,
             'is_subscribed' => self::RULE_SUBSCRIBE
         ];
 
-        if ($this->canChangeSubject($topic, $post)) {
+        if ($this->canChangeSubject()) {
             $rules = array_merge($rules, [
                 'subject'               => self::RULE_SUBJECT,
                 'tags'                  => self::RULE_TAGS,
@@ -69,44 +81,42 @@ class PostRequest extends FormRequest
             ]);
         }
 
-        if ($this->canMakeSticky($forum)) {
+        if ($this->canMakeSticky()) {
             $rules['is_sticky'] = self::RULE_STICKY;
         }
 
-        if ($this->canSeeUsername($post)) {
-            $rules['user_name'] = [self::RULE_USER_NAME, $this->isUpdating($post) ? self::RULE_USER_UNIQUE : ''];
+        if ($this->canSeeUsername()) {
+            $rules['user_name'] = [self::RULE_USER_NAME, $this->isUpdating() ? self::RULE_USER_UNIQUE : ''];
         }
 
         return $rules;
     }
 
-    private function canChangeSubject(Topic $topic, Post $post): bool
+    private function canChangeSubject(): bool
     {
-        return !$topic->exists || ($topic->first_post_id === $post->id);
+        return !$this->topic->exists || ($this->topic->first_post_id === $this->post->id);
     }
 
-    private function canMakeSticky(Forum $forum): bool
+    private function canMakeSticky(): bool
     {
-        return $this->user() && $this->user()->can('sticky', $forum);
+        return $this->user() && $this->user()->can('sticky', $this->forum);
     }
 
-    private function canSeeUsername(Post $post): bool
+    private function canSeeUsername(): bool
     {
-        return $this->user() === null || (!empty($post->user_name) && $this->isUpdating($post));
+        return $this->user() === null || (!empty($this->post->user_name) && $this->isUpdating());
     }
 
-    private function isUpdating(Post $post): bool
+    private function isUpdating(): bool
     {
-        return !empty($post->id);
+        return !empty($this->post->id);
     }
 
     public function withValidator(Validator $validator)
     {
         $validator->sometimes('tags', 'required', function () {
-            /** @var Forum $forum */
-            $forum = $this->route('forum');
 
-            return $forum->require_tag;
+            return $this->forum->require_tag && $this->canChangeSubject();
         });
 
         $validator->after(function ($validator) {

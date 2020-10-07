@@ -121,6 +121,19 @@ class SubmitControllerTest extends TestCase
         $this->assertDatabaseHas('forum_track', ['forum_id' => $this->forum->id, 'guest_id' => $this->user->guest_id]);
     }
 
+    public function testSubmitPostToExistingTopicWhereTagIsRequired()
+    {
+        $this->forum->require_tag = true;
+        $this->forum->save();
+
+        $topic = factory(Topic::class)->create(['forum_id' => $this->forum->id]);
+        $post = factory(Post::class)->make();
+
+        $response = $this->actingAs($this->user)->json('POST', "/Forum/{$this->forum->slug}/Submit/{$topic->id}", ['text' => $post->text]);
+
+        $response->assertStatus(200);
+    }
+
     public function testEditExistingPostByAuthor()
     {
         $faker = Factory::create();
