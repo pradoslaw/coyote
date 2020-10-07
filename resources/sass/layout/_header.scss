@@ -192,9 +192,8 @@ body.padding-top {
     background-color: var(--header-search-bg);
     border: 1px solid var(--header-search-border);
 
-    // temp code
     &:after {
-      content: 'Beta';
+      content: 'Shift+/';
       position: absolute;
       right: 25px;
       top: 30%;

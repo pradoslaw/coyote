@@ -17,7 +17,7 @@
           type="search"
           name="q"
           autocomplete="off"
-          placeholder="Szukaj (Shift+/)"
+          placeholder="Szukaj"
         >
       </form>
 
