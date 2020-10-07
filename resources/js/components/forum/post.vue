@@ -439,7 +439,7 @@
     authMiddleware(cb, ...args) {
       if (!this.isAuthorized) {
         this.$notify({
-          type: 'warn',
+          type: 'error',
           // @ts-ignore
           width: '400px',
           text: 'Zaloguj się, aby skorzystać z tej funkcjonalności.'
