@@ -68,7 +68,7 @@ class TopicController extends BaseController
         }
 
         // show posts of last page if page parameter is higher than pages count
-        $lastPage = max((int) ceil($topic->replies / $perPage), 1);
+        $lastPage = max((int) ceil(($topic->replies + 1) / $perPage), 1);
         if ($page > $lastPage) {
             $page = $lastPage;
         }

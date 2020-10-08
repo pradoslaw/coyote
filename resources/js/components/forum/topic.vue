@@ -143,7 +143,7 @@
     },
     computed: {
       totalPages() {
-        return Math.ceil(this.topic.replies / this.postsPerPage);
+        return Math.ceil((this.topic.replies + 1) / this.postsPerPage);
       },
 
       paginatorPages() {

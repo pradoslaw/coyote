@@ -59,7 +59,8 @@ class PostRepository extends Repository implements PostRepositoryInterface
             ->with(['editor:id,name,is_blocked,deleted_at', 'comments.user', 'attachments'])
             ->get();
 
-        $paginate = new LengthAwarePaginator($result, $topic->replies, $perPage, $page, ['path' => ' ']);
+        // +1 because we have to count first post in the topic
+        $paginate = new LengthAwarePaginator($result, $topic->replies + 1, $perPage, $page, ['path' => ' ']);
 
         return $paginate;
     }
