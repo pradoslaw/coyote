@@ -4,7 +4,7 @@ declare module 'vue-autosave' {
   module "vue/types/vue" {
     interface Vue {
       $saveDraft(key: string, value: string): void;
-      $loadDraft(key: string): string | void;
+      $loadDraft(key: string): string;
       $removeDraft(key: string): void;
     }
   }

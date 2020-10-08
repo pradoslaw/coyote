@@ -32,11 +32,11 @@ export const install = (Vue) => {
     }
   };
 
-  Vue.prototype.$loadDraft = (key: string): string | void => {
+  Vue.prototype.$loadDraft = (key: string): string => {
     gc();
 
     if (!localStorage.getItem(key)) {
-      return;
+      return '';
     }
 
     const data = JSON.parse(localStorage.getItem(key) as string);
