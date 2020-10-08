@@ -16,7 +16,7 @@ class UserResourceTest extends TestCase
         $this->assertArrayNotHasKey('allow_count', $user);
         $this->assertArrayNotHasKey('sig', $user);
 
-        $resource = (new UserResource($user))->toArray(request());
+        $resource = (new UserResource($user))->resolve(request());
 
         $this->assertArrayNotHasKey('allow_sig', $resource);
         $this->assertArrayNotHasKey('allow_count', $user);
@@ -30,7 +30,7 @@ class UserResourceTest extends TestCase
         $this->assertArrayHasKey('allow_sig', $user);
         $this->assertArrayHasKey('sig', $user);
 
-        $resource = (new UserResource($user))->toArray(request());
+        $resource = (new UserResource($user))->resolve(request());
 
         $this->assertArrayHasKey('allow_sig', $resource);
         $this->assertArrayHasKey('sig', $resource);
