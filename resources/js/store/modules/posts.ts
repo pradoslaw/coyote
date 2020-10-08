@@ -137,7 +137,6 @@ const actions = {
       text: post.text,
       subject: rootGetters['topics/topic'].subject,
       is_sticky: rootGetters['topics/topic'].is_sticky,
-      is_subscribed: rootGetters['topics/topic'].is_subscribed,
       attachments: post.attachments,
       tags: rootGetters['topics/topic'].tags!.map(o => o['name']),
       poll: rootState.poll.poll

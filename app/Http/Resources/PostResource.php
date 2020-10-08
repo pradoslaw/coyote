@@ -102,7 +102,8 @@ class PostResource extends JsonResource
             'is_read'       => $this->tracker->getMarkTime() >= $this->created_at,
             'is_locked'     => $this->topic->is_locked || $this->forum->is_locked,
 
-            $this->mergeWhen($this->gate->allows('update', $this->resource), [
+            // only for moderators
+            $this->mergeWhen($this->gate->allows('delete', $this->forum), [
                 'ip'         => $this->ip,
                 'browser'    => $this->browser
             ]),
