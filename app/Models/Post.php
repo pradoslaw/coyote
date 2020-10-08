@@ -82,10 +82,10 @@ class Post extends Model
             $post->delete_reason = null;
         });
 
-        static::saving(function (Post $post) {
-            if ($post->exists && $post->isDirtyWithRelations()) {
+        static::saved(function (Post $post) {
+            if ($post->isDirtyWithRelations()) {
                 $post->logs()->create(
-                    array_merge($post->toArray(), ['subject' => $post->topic->subject, 'user_id' => $post->editor_id])
+                    array_merge($post->toArray(), ['subject' => $post->topic->subject, 'user_id' => $post->editor_id ?: $post->user_id])
                 );
             }
         });
