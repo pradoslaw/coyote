@@ -66,7 +66,7 @@ const mutations = {
   },
 
   deleteAttachment(state, { post, attachment }: PostWithAttachment) {
-    post.attachments.splice(post.attachments.findIndex(item => item.file === attachment.file));
+    post.attachments.splice(post.attachments.findIndex(item => item.id === attachment.id), 1);
   },
 
   restore(state, post: Post) {
