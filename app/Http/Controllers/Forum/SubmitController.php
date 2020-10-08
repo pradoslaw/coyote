@@ -143,6 +143,11 @@ class SubmitController extends BaseController
             $post->user->group = $post->user->group->name;
         }
 
+        // @todo zdublowany kod z PostCollection
+        $post->comments->each(function (Post\Comment $comment) use ($forum) {
+            $comment->setRelation('forum', $forum);
+        });
+
         $resource = (new PostResource($post))->setTracker($tracker)->resolve($this->request);
 
         // mark topic as read after publishing
