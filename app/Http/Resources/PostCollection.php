@@ -77,11 +77,9 @@ class PostCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        $parser = app('parser.sig');
-
         $collection = $this
             ->collection
-            ->map(function (Post $post) use ($request, $parser) {
+            ->map(function (Post $post) use ($request) {
                 // set relations to avoid N+1 SQL loading. be aware we must use setRelation() method because setRelations() overwrites all already
                 // assigned relations
                 $post->setRelation('topic', $this->topic);
@@ -91,7 +89,7 @@ class PostCollection extends ResourceCollection
                     $comment->setRelation('forum', $this->forum);
                 });
 
-                $resource = (new PostResource($post))->setTracker($this->tracker)->setSigParser($parser);
+                $resource = (new PostResource($post))->setTracker($this->tracker);
 
                 if (isset($this->flags[$post->id])) {
                     $resource->setFlags($this->flags[$post->id]);

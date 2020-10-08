@@ -49,6 +49,6 @@ class MergeController extends BaseController
             $comment->setRelation('forum', $post->forum);
         });
 
-        return (new PostResource($previous))->setTracker($tracker)->setSigParser(app('parser.sig'));
+        return (new PostResource($previous))->setTracker($tracker);
     }
 }

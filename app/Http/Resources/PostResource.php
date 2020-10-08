@@ -6,11 +6,9 @@ use Carbon\Carbon;
 use Coyote\Forum;
 use Coyote\Http\Factories\GateFactory;
 use Coyote\Services\Forum\Tracker;
-use Coyote\Services\Parser\Factories\SigFactory;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Topic;
 use Coyote\User;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -46,11 +44,6 @@ class PostResource extends JsonResource
     protected $tracker;
 
     /**
-     * @var SigFactory
-     */
-    protected $sigParser;
-
-    /**
      * @var \Coyote\Flag[]
      */
     protected $flags;
@@ -78,13 +71,6 @@ class PostResource extends JsonResource
         return $this;
     }
 
-    public function setSigParser(SigFactory $sigFactory)
-    {
-        $this->sigParser = $sigFactory;
-
-        return $this;
-    }
-
     public function setFlags($flags)
     {
         $this->flags = $flags;
@@ -102,10 +88,6 @@ class PostResource extends JsonResource
     {
         $only = $this->resource->only(['id', 'user_name', 'score', 'text', 'edit_count', 'is_voted', 'is_accepted', 'is_subscribed', 'user_id', 'deleter_name', 'delete_reason']);
         $html = $this->text !== null ? $this->html : null;
-
-        if ($this->isSignatureAllowed($request)) {
-            $this->user->sig = $this->sigParser->parse($this->user->sig);
-        }
 
         $commentsCount = count($this->resource->comments);
         $comments = $this->resource->comments->slice(-5, null, true);
@@ -153,14 +135,5 @@ class PostResource extends JsonResource
                 'permission'        => 'delete'
             ])
         ]);
-    }
-
-    private function isSignatureAllowed(Request $request)
-    {
-        if (!$this->user_id || !$this->user->sig) {
-            return false;
-        }
-
-        return !$request->user() || ($request->user() && $request->user()->allow_sig);
     }
 }

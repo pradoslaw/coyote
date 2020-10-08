@@ -7,6 +7,7 @@
 
 **Wiadomości prywatne**
 - Łączenie wiadomości prywatnych napisanych w przeciągu 5 min
+- Odświeżenie strony nie powoduje znikania treści wiadomości
 
 **Forum**
 - Przepisanie listy wątków w danej kategorii na Vue.js
