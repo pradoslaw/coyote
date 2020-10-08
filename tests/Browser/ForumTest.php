@@ -21,7 +21,6 @@ class ForumTest extends DuskTestCase
                 $browser
                     ->loginAs($user)
                     ->visitRoute('forum.topic.submit', ['forum' => $forum])
-                    ->assertChecked('#is-subscribed')
                     ->pressAndWaitFor('Zapisz')
                     ->assertSee('Temat musi posiadać minimum 3 znaki długości.')
                     ->assertSee('Proszę wpisać treść.')
