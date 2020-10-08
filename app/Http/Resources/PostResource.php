@@ -118,7 +118,7 @@ class PostResource extends JsonResource
 
             'permissions' => [
                 'write'             => $this->gate->allows('write', $this->topic) && $this->gate->allows('write', $this->forum),
-                'delete'            => $this->gate->allows('delete', $this->topic) || $this->gate->allows('delete', $this->forum),
+                'delete'            => $this->gate->allows('delete', $this->resource) || $this->gate->allows('delete', $this->forum),
                 'update'            => $this->gate->allows('update', $this->resource),
                 'merge'             => $this->gate->allows('merge', $this->forum),
                 'sticky'            => $this->gate->allows('sticky', $this->forum),
