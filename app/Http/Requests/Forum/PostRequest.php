@@ -115,7 +115,6 @@ class PostRequest extends FormRequest
     public function withValidator(Validator $validator)
     {
         $validator->sometimes('tags', 'required', function () {
-
             return $this->forum->require_tag && $this->canChangeSubject();
         });
 
