@@ -20,9 +20,10 @@ import differenceInMinutes from 'date-fns/differenceInMinutes';
 import parseISO from 'date-fns/parseISO';
 
 Vue.use(VueAutosize);
-Vue.use(VueAutosave, {identifier: 'pm'});
+Vue.use(VueAutosave);
 Vue.use(VuePaste, {url: '/User/Pm/Paste'});
 
+const DRAFT_KEY = 'pm';
 const INBOX = 1;
 
 new Vue({
@@ -57,8 +58,8 @@ new Vue({
     // fill vuex with data passed from controller to view
     store.commit('messages/init', {messages: window.data.messages, total: window.data.total, perPage: window.data.per_page, currentPage: window.data.current_page});
 
-    this.text = this.$loadDraft();
-    this.$watch('text', newValue => this.$saveDraft(newValue));
+    this.text = this.$loadDraft(DRAFT_KEY);
+    this.$watch('text', newValue => this.$saveDraft(DRAFT_KEY, newValue));
   },
   mounted() {
     this.listenForMessage();
@@ -100,7 +101,7 @@ new Vue({
           this.$nextTick(() => this.scrollToBottom());
           this.tab = 'body';
 
-          this.$removeDraft();
+          this.$removeDraft(DRAFT_KEY);
         })
         .catch(err => this.errors = err.response.data.errors)
         .finally(() => this.isProcessing = false);

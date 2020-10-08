@@ -207,7 +207,7 @@
   import Prism from 'prismjs';
 
   Vue.use(VueAutosize);
-  Vue.use(VueAutosave, {identifier: 'post'});
+  Vue.use(VueAutosave);
   Vue.use(VuePaste, {url: '/Forum/Paste'});
   Vue.use(VueTimeago);
 
@@ -300,8 +300,8 @@
         return;
       }
 
-      this.post.text = this.$loadDraft() as string;
-      this.$watch('post.text', newValue => this.$saveDraft(newValue));
+      this.post.text = this.$loadDraft(this.draftKey) as string;
+      this.$watch('post.text', newValue => this.$saveDraft(this.draftKey, newValue));
     }
 
     save() {
@@ -313,7 +313,6 @@
       store.dispatch('posts/save', this.post)
         .then(result => {
           this.$emit('save', result.data);
-          this.$removeDraft();
 
           // post was recently created. we're not editing it
           if ('id' in this.topic && !this.exists) {
@@ -324,7 +323,12 @@
             window.location.hash = `id${result.data.id}`;
           }
 
-          this.$nextTick(() => Prism.highlightAll());
+          this.$nextTick(() => {
+            // remove local storage data after clearing input
+            this.$removeDraft(this.draftKey);
+
+            Prism.highlightAll();
+          });
         })
         .catch(err => {
           if (err.response.status !== 422) {
@@ -379,6 +383,10 @@
 
     get exists() {
       return this.post.id !== undefined;
+    }
+
+    private get draftKey(): string {
+      return `topic-${this.topic.id ? this.topic.id : ''}`
     }
   }
 </script>
