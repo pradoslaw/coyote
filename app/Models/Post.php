@@ -85,7 +85,10 @@ class Post extends Model
         static::saved(function (Post $post) {
             if ($post->isDirtyWithRelations()) {
                 $post->logs()->create(
-                    array_merge($post->toArray(), ['subject' => $post->topic->subject, 'user_id' => $post->editor_id ?: $post->user_id])
+                    array_merge(
+                        $post->only(['user_id', 'text', 'ip', 'browser', 'host']),
+                        ['subject' => $post->topic->subject, 'user_id' => $post->editor_id ?: $post->user_id]
+                    )
                 );
             }
         });
