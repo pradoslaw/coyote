@@ -102,11 +102,15 @@ class SubmitController extends BaseController
             $post->syncAttachments(array_pluck($request->input('attachments', []), 'id'));
 
             if ($topic->wasRecentlyCreated) {
-                if ($this->userId) {
-                    $topic->subscribe($this->userId, $request->filled('is_subscribed'));
-                }
-
                 $topic->first_post_id = $post->id;
+            }
+
+            if ($this->userId) {
+                $topic->subscribe($this->userId, $request->filled('is_subscribed'));
+
+                if ($post->wasRecentlyCreated) {
+                    $post->subscribe($this->userId, true);
+                }
             }
 
             // url to the post

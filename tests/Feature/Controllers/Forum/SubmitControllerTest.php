@@ -80,6 +80,7 @@ class SubmitControllerTest extends TestCase
         $topic = Topic::where('first_post_id', $id)->first();
 
         $this->assertTrue($topic->subscribers()->forUser($this->user->id)->exists());
+        $this->assertTrue($topic->firstPost->subscribers()->forUser($this->user->id)->exists());
     }
 
     public function testSubmitStickyTopic()
