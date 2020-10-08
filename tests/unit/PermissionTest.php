@@ -92,41 +92,6 @@ class PermissionTest extends \Codeception\TestCase\Test
         $this->assertTrue($user->can('delete', $post));
     }
 
-    public function testCanUserDeletePostDespiteItsOldAndHasAnswers()
-    {
-        $user = $this->tester->createUser();
-
-        $forum = $this->tester->createForum();
-
-        $topic = $this->tester->createTopic(['forum_id' => $forum->id]);
-        $post = $this->tester->createPost(['topic_id' => $topic->id, 'forum_id' => $forum->id, 'user_id' => $user->id, 'created_at' => \Carbon\Carbon::yesterday()]);
-
-        $user2 = $this->tester->createUser();
-        // new post by another author
-        $this->tester->createPost(['topic_id' => $topic->id, 'forum_id' => $forum->id, 'user_id' => $user2->id, 'created_at' => \Carbon\Carbon::yesterday()]);
-
-        $this->assertFalse($user->can('delete', $post));
-    }
-
-    public function testCanUserDeletePostHavingReputation()
-    {
-        $user = $this->tester->createUser(['reputation' => 99]);
-
-        $forum = $this->tester->createForum();
-
-        $topic = $this->tester->createTopic(['forum_id' => $forum->id]);
-        $post = $this->tester->createPost(['topic_id' => $topic->id, 'forum_id' => $forum->id, 'user_id' => $user->id, 'created_at' => \Carbon\Carbon::yesterday()]);
-
-        $user2 = $this->tester->createUser();
-        // new post by another author
-        $this->tester->createPost(['topic_id' => $topic->id, 'forum_id' => $forum->id, 'user_id' => $user2->id, 'created_at' => \Carbon\Carbon::yesterday()]);
-
-        $this->assertFalse($user->can('delete', $post));
-
-        $user->reputation = 100;
-        $this->assertTrue($user->can('delete', $post));
-    }
-
     public function testCanUserDeletePostInLockedForumOrTopic()
     {
         $user = $this->tester->createUser();
