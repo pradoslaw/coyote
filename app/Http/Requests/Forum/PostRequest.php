@@ -15,7 +15,6 @@ class PostRequest extends FormRequest
     const RULE_SUBJECT              = 'required|min:3|max:200|spam_chinese:1';
     const RULE_TEXT                 = 'required|spam_chinese:1|spam_foreign:1';
     const RULE_STICKY               = 'nullable|bool';
-    const RULE_SUBSCRIBE            = 'nullable|bool';
     const RULE_TAGS                 = 'array|max:5';
     const RULE_TAG                  = 'max:25|tag|tag_creation:50';
     const RULE_HUMAN                = 'required';
@@ -64,8 +63,7 @@ class PostRequest extends FormRequest
 
         $rules = [
             '_token'        => self::RULE_THROTTLE . ($this->post->id ? ":$this->post->id" : ''),
-            'text'          => self::RULE_TEXT,
-            'is_subscribed' => self::RULE_SUBSCRIBE
+            'text'          => self::RULE_TEXT
         ];
 
         if ($this->canChangeSubject()) {

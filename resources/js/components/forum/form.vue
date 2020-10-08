@@ -171,13 +171,6 @@
       </div>
     </div>
 
-    <div v-if="showSubscribeCheckbox" class="form-group">
-      <div class="custom-control custom-checkbox">
-        <input v-model="topic.is_subscribed" type="checkbox" class="custom-control-input" id="is-subscribed">
-        <label class="custom-control-label" for="is-subscribed">Obserwowany wątek</label>
-      </div>
-    </div>
-
     <div class="row mt-2">
       <div class="col-12">
         <vue-button :disabled="isProcessing" title="Kliknij, aby zapisać (Ctrl+Enter)" class="btn btn-primary btn-sm" @click.native.prevent="save">
@@ -265,9 +258,6 @@
 
     @Prop({default: false})
     readonly showStickyCheckbox!: boolean;
-
-    @Prop({default: false})
-    readonly showSubscribeCheckbox!: boolean;
 
     @Prop({default: 20})
     readonly uploadMaxSize!: number;

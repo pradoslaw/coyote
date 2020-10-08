@@ -23,7 +23,6 @@
         :show-title-input="true"
         :show-tags-input="true"
         :show-sticky-checkbox="showStickyCheckbox"
-        :show-subscribe-checkbox="true"
         require-tag="{{ forum.require_tag }}"
         upload-mimes="{{ config_get('filesystems.upload_mimes')|split(',')|join(', ') }}"
         upload-max-size="{{ config_get('filesystems.upload_max_size') }}"
@@ -83,7 +82,7 @@
 {% block body %}
   <script>
     var forum = {{ forum|json_encode|raw }};
-    var topic = {subject: '', is_subscribed: {{ user('allow_subscribe') }}, tags: []};
+    var topic = {subject: '', tags: []};
     var showStickyCheckbox = {{ show_sticky_checkbox }};
   </script>
 
