@@ -129,7 +129,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'allow_smilies' => 'int',
         'allow_sig' => 'int',
         'allow_count' => 'int',
-        'allow_subscribe' => 'int',
+        'allow_subscribe' => 'bool',
         'allow_sticky_header' => 'int',
         'is_confirm' => 'int',
         'is_blocked' => 'bool',

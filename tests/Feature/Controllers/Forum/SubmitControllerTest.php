@@ -64,7 +64,7 @@ class SubmitControllerTest extends TestCase
         $response = $this->actingAs($this->user)->json(
             'POST',
             "/Forum/{$this->forum->slug}/Submit",
-            ['text' => $post->text, 'subject' => $faker->text(50), 'is_sticky' => true, 'is_subscribed' => true]
+            ['text' => $post->text, 'subject' => $faker->text(50), 'is_sticky' => true]
         );
 
         $response->assertJsonFragment([
@@ -104,8 +104,10 @@ class SubmitControllerTest extends TestCase
         $this->assertDatabaseHas('topics', ['first_post_id' => $id, 'is_sticky' => true]);
     }
 
-    public function testSubmitPostToExistingTopic()
+    public function testSubmitPostToExistingTopicAndSubscribe()
     {
+        $this->assertTrue($this->user->allow_subscribe);
+
         $topic = factory(Topic::class)->create(['forum_id' => $this->forum->id]);
         $post = factory(Post::class)->make();
 
@@ -116,6 +118,23 @@ class SubmitControllerTest extends TestCase
             'is_read' => false,
             'is_locked' => false
         ]);
+
+        $this->assertTrue($topic->subscribers()->forUser($this->user->id)->exists());
+
+        $this->assertDatabaseHas('forum_track', ['forum_id' => $this->forum->id, 'guest_id' => $this->user->guest_id]);
+    }
+
+    public function testSubmitPostToExistingTopicAndDoNotSubscribe()
+    {
+        $this->user->allow_subscribe = false;
+        $this->user->save();
+
+        $this->assertFalse($this->user->allow_subscribe);
+
+        $topic = factory(Topic::class)->create(['forum_id' => $this->forum->id]);
+        $post = factory(Post::class)->make();
+
+        $response = $this->actingAs($this->user)->json('POST', "/Forum/{$this->forum->slug}/Submit/{$topic->id}", ['text' => $post->text]);
 
         $this->assertFalse($topic->subscribers()->forUser($this->user->id)->exists());
 
@@ -143,11 +162,16 @@ class SubmitControllerTest extends TestCase
         factory(Post::class)->create(['forum_id' => $this->forum->id, 'topic_id' => $topic->id]);
         $post = factory(Post::class)->create(['user_id' => $this->user->id, 'forum_id' => $this->forum->id, 'topic_id' => $topic->id]);
 
+        $post->subscribe($this->user->id, true);
+
         $response = $this->actingAs($this->user)->json('POST', "/Forum/{$this->forum->slug}/Submit/{$topic->id}/{$post->id}", ['text' => $text = $faker->text]);
 
         $response->assertJsonFragment([
             'text' => $text
         ]);
+
+        $post->refresh();
+        $this->assertTrue($post->subscribers()->forUser($this->user->id)->exists());
     }
 
     public function testEditExistingPostByAnotherUser()
