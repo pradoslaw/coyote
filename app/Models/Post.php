@@ -84,10 +84,12 @@ class Post extends Model
 
         static::saved(function (Post $post) {
             if ($post->isDirtyWithRelations()) {
+                $topic = $post->topic()->withTrashed()->first();
+
                 $post->logs()->create(
                     array_merge(
                         $post->only(['user_id', 'text', 'ip', 'browser', 'host']),
-                        ['subject' => $post->topic->subject, 'user_id' => $post->editor_id ?: $post->user_id]
+                        ['subject' => $topic->subject, 'user_id' => $post->editor_id ?: $post->user_id]
                     )
                 );
             }
