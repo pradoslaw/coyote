@@ -125,11 +125,7 @@
           <div class="post-content">
             <div v-html="post.html"></div>
 
-            <ul v-if="tags" class="mt-2 mb-2 tag-clouds">
-              <li v-for="tag in tags"><a :href="tag.url">{{ tag.name }}</a></li>
-            </ul>
-
-            <ul v-if="post.attachments" class="list-unstyled">
+            <ul v-if="post.attachments.length" class="list-unstyled">
               <li v-for="attachment in post.attachments" class="small">
                 <i class="fas fa-download"></i>
 
@@ -144,6 +140,10 @@
               <footer v-html="post.user.sig"></footer>
             </template>
           </div>
+
+          <ul v-if="tags" class="mt-2 mb-2 tag-clouds">
+            <li v-for="tag in tags"><a :href="tag.url">{{ tag.name }}</a></li>
+          </ul>
 
           <div v-if="post.edit_count" class="edit-info">
             <strong>

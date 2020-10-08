@@ -95,8 +95,6 @@
     margin-top: -1px;
     font-size: 100%;
   }
-
-  @include link-color-darker();
 }
 
 .post-comment {
@@ -123,6 +121,8 @@
       margin-right: 5px;
     }
   }
+
+  @include link-color-darker();
 }
 
 // Tresc posta wraz z ikonami do glosowania, stopka czy komentarzami
