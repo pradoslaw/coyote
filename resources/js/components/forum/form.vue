@@ -331,7 +331,7 @@
             this.post.html = '';
             this.post.attachments = [];
 
-            document.getElementById(`id${result.data.id}`)!.scrollIntoView();
+            window.location.hash = `id${result.data.id}`;
           }
 
           this.$nextTick(() => Prism.highlightAll());
