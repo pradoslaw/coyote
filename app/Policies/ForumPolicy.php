@@ -133,7 +133,7 @@ class ForumPolicy
      * @param Forum $forum
      * @return bool
      */
-    private function check($ability, User $user, Forum $forum)
+    private function check(string $ability, User $user, Forum $forum)
     {
         return $forum->ability($ability, $user->id) || $user->can($ability);
     }

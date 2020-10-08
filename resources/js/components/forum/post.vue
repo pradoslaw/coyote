@@ -195,7 +195,7 @@
       </div>
     </div>
 
-    <div class="card-footer">
+    <div :class="{'collapse': isCollapsed}" class="card-footer">
       <div class="row">
         <div class="d-none d-lg-block col-lg-2"></div>
         <div class="col-12 d-flex col-lg-10">
@@ -233,7 +233,7 @@
               <i class="fa fa-fw fa-quote-left"></i> <span class="d-none d-sm-inline">Odpowiedz</span>
             </button>
 
-            <a href="javascript:" :data-metadata="post.metadata" :data-url="post.url" class="btn btn-sm">
+            <a v-if="!post.deleted_at" href="javascript:" :data-metadata="post.metadata" :data-url="post.url" class="btn btn-sm">
               <i class="fa fa-fw fa-flag"></i> <span class="d-none d-sm-inline">Raportuj</span>
             </a>
 
@@ -260,7 +260,9 @@
     <vue-modal ref="delete-modal">
       Post zostanie usunięty. Czy na pewno chcesz to zrobić?
 
-      <p v-if="post.permissions.delete" class="mt-2"><vue-select name="reason_id" :options="reasons" :value.sync="reasonId" class="form-control-sm" placeholder="-- wybierz --"></vue-select></p>
+      <template slot="title">Czy chcesz usunąć?</template>
+
+      <p v-if="post.permissions.delete && reasons.length" class="mt-2"><vue-select name="reason_id" :options="reasons" :value.sync="reasonId" class="form-control-sm" placeholder="-- wybierz --"></vue-select></p>
 
       <template slot="buttons">
         <button @click="$refs['delete-modal'].close()" type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
