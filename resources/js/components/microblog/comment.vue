@@ -19,10 +19,15 @@
               <vue-timeago :datetime="comment.created_at"></vue-timeago>
             </a>
           </li>
+
           <li class="list-inline-item">
-            <a @click="vote(comment)" :title="comment.voters.join(', ')" :class="{'thumbs-on': comment.is_voted}" href="javascript:" class="text-muted btn-sm-thumbs">
+            <a @click="checkAuth(vote, comment)" :title="comment.voters.join(', ')" :class="{'thumbs-on': comment.is_voted}" href="javascript:" class="text-muted btn-sm-thumbs">
               {{ comment.votes }} {{ comment.votes | declination(['głos', 'głosy', 'głosów']) }}
             </a>
+          </li>
+
+          <li class="list-inline-item">
+            <a @click="checkAuth($emit, 'reply', comment.user)" href="javascript:" class="text-muted">Odpowiedz</a>
           </li>
         </ul>
       </div>

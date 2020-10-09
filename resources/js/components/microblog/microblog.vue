@@ -43,38 +43,36 @@
 
           <vue-form v-if="isEditing" ref="form" :microblog="microblog" class="mt-2 mb-2" @cancel="isEditing = false" @save="isEditing = false"></vue-form>
 
-          <a @click="vote(microblog)" :title="microblog.voters.join(', ')" href="javascript:" class="btn btn-thumbs">
+          <a @click="checkAuth(vote, microblog)" :title="microblog.voters.join(', ')" href="javascript:" class="btn btn-thumbs">
             <i :class="{'fas text-primary': microblog.is_voted, 'far': !microblog.is_voted}" class="fa-fw fa-thumbs-up"></i>
 
             {{ microblog.votes }} {{ microblog.votes | declination(['głos', 'głosy', 'głosów']) }}
           </a>
 
-          <template v-if="isAuthorized">
-            <a @click="subscribe(microblog)" href="javascript:" class="btn btn-subscribe" title="Wł/Wył obserwowanie tego wpisu">
-              <i :class="{'fas text-primary': microblog.is_subscribed, 'far': !microblog.is_subscribed}" class="fa-fw fa-bell"></i>
+          <a @click="checkAuth(subscribe, microblog)" href="javascript:" class="btn btn-subscribe" title="Wł/Wył obserwowanie tego wpisu">
+            <i :class="{'fas text-primary': microblog.is_subscribed, 'far': !microblog.is_subscribed}" class="fa-fw fa-bell"></i>
 
-              <span class="d-none d-sm-inline">Obserwuj</span>
-            </a>
+            <span class="d-none d-sm-inline">Obserwuj</span>
+          </a>
 
-            <a @click="comment" href="javascript:" class="btn btn-reply" title="Odpowiedz na ten wpis">
-              <i class="far fa-fw fa-comment"></i>
+          <a @click="checkAuth(reply, microblog.user)" href="javascript:" class="btn btn-reply" title="Odpowiedz na ten wpis">
+            <i class="far fa-fw fa-comment"></i>
 
-              <span class="d-none d-sm-inline">Komentuj</span>
-            </a>
+            <span class="d-none d-sm-inline">Komentuj</span>
+          </a>
 
-            <a @click.prevent="copy" :href="microblog.url" class="btn btn-share" title="Kopiuj link do schowka">
-              <i class="far fa-share-square"></i>
+          <a @click.prevent="copy" :href="microblog.url" class="btn btn-share" title="Kopiuj link do schowka">
+            <i class="fas fa-share-alt"></i>
 
-              <span class="d-none d-sm-inline">Udostępnij</span>
-            </a>
-          </template>
+            <span class="d-none d-sm-inline">Udostępnij</span>
+          </a>
 
           <div class="microblog-comments">
             <div v-if="microblog.comments_count > Object.keys(microblog.comments).length" class="show-all-comments">
               <a @click="loadComments(microblog)" href="javascript:"><i class="far fa-comments"></i> Zobacz {{ totalComments | declination(['pozostały', 'pozostałe', 'pozostałe']) }} {{ totalComments }} {{ totalComments | declination(['komentarz', 'komentarze', 'komentarzy']) }}</a>
             </div>
 
-            <vue-comment v-for="comment in microblog.comments" :key="comment.id" :comment="comment"></vue-comment>
+            <vue-comment v-for="comment in microblog.comments" :key="comment.id" :comment="comment" @reply="reply"></vue-comment>
 
             <form v-if="isAuthorized" method="POST">
               <div class="media bg-light rounded border-top-0">
@@ -125,7 +123,7 @@
   import store from "../../store";
   import VueUserName from "../user-name.vue";
   import { MicroblogMixin } from "../mixins/microblog";
-  import VueNotification from "vue-notification"; // do not remove (support for $notify method)
+  import { User } from '../../types/models';
 
   Vue.use(VueTimeago);
   Vue.use(VueClipboard);
@@ -151,10 +149,7 @@
   })
   export default class VueMicroblog extends Mixins(MicroblogMixin) {
     private index: number | null = null;
-    private commentDefault = {
-      parent_id: this.microblog.id,
-      text: ''
-    }
+    private commentDefault = { parent_id: this.microblog.id, text: '' };
 
     @Ref('comment-form')
     readonly commentForm!: VueCommentForm;
@@ -170,9 +165,9 @@
       }
     }
 
-    comment() {
+    reply(user: User) {
       // @ts-ignore
-      this.commentForm.textarea.value = `@${this.microblog.user.name}: `;
+      this.commentForm.textarea.value += `@${user.name}: `;
       // @ts-ignore
       this.commentForm.textarea.focus();
     }
@@ -200,7 +195,7 @@
 
     get images() {
       return this.microblog.media.map(media => {
-        return {src: media.url, thumb: media.thumbnail, url: media.url};
+        return { src: media.url, thumb: media.thumbnail, url: media.url };
       })
     }
   }
