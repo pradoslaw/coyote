@@ -22,5 +22,23 @@ export default {
     declination(count, set) {
       return declination(count, set);
     }
+  },
+
+  methods: {
+    checkAuth(cb, ...args) {
+      if (!this.isAuthorized) {
+        this.$notify({
+          type: 'error',
+          // @ts-ignore
+          width: '400px',
+          title: 'Logowanie wymagane',
+          text: '<a href="/Login">Zaloguj się</a>, aby skorzystać z tej funkcjonalności.'
+        });
+
+        return;
+      }
+
+      cb(...args);
+    }
   }
 };

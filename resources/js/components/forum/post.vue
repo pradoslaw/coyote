@@ -112,7 +112,7 @@
           <div class="post-vote">
             <strong class="vote-count" title="Ocena postu">{{ post.score }}</strong>
 
-            <a v-if="!post.deleted_at" :class="{'on': post.is_voted}" @click="vote(post)" class="vote-up" href="javascript:" title="Kliknij, jeżeli post jest wartościowy (kliknij ponownie, aby cofnąć)">
+            <a v-if="!post.deleted_at" :class="{'on': post.is_voted}" @click="checkAuth(vote, post)" class="vote-up" href="javascript:" title="Kliknij, jeżeli post jest wartościowy (kliknij ponownie, aby cofnąć)">
               <i class="far fa-thumbs-up fa-fw"></i>
               <i class="fas fa-thumbs-up fa-fw"></i>
             </a>
@@ -200,7 +200,7 @@
         <div class="d-none d-lg-block col-lg-2"></div>
         <div class="col-12 d-flex col-lg-10">
           <div v-if="!post.deleted_at">
-            <button @click="authMiddleware(subscribe, post)" class="btn btn-sm">
+            <button @click="checkAuth(subscribe, post)" class="btn btn-sm">
               <i :class="{'fas text-primary': post.is_subscribed, 'far': !post.is_subscribed}" class="fa-fw fa-bell"></i>
 
               <span class="d-none d-sm-inline">Obserwuj</span>
@@ -210,7 +210,7 @@
               <i class="fas fa-fw fa-share-alt"></i> <span class="d-none d-sm-inline">Udostępnij</span>
             </button>
 
-            <button @click="authMiddleware(comment)" class="btn btn-sm">
+            <button @click="checkAuth(comment)" class="btn btn-sm">
               <i :class="{'fas text-primary': isCommenting, 'far': !isCommenting}" class="fa-fw fa-comment"></i> <span class="d-none d-sm-inline">Komentuj</span>
             </button>
           </div>
@@ -225,7 +225,7 @@
                 <i class="fa fa-fw fa-times"></i> <span class="d-none d-sm-inline">Usuń</span>
               </button>
               <button v-else class="btn btn-sm" @click="restore">
-                <i class="fa fa-fw- fa-undo"></i> <span class="d-none d-sm-inline">Przywróć</span>
+                <i class="fa fa-fw fa-undo"></i> <span class="d-none d-sm-inline">Przywróć</span>
               </button>
             </template>
 
@@ -436,21 +436,6 @@
     restore() {
       this.isCollapsed = false;
       this.$store.dispatch('posts/restore', this.post);
-    }
-
-    authMiddleware(cb, ...args) {
-      if (!this.isAuthorized) {
-        this.$notify({
-          type: 'error',
-          // @ts-ignore
-          width: '400px',
-          text: 'Zaloguj się, aby skorzystać z tej funkcjonalności.'
-        });
-
-        return;
-      }
-
-      cb(...args);
     }
 
     get tags() {
