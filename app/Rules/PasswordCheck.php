@@ -6,7 +6,7 @@ use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Contracts\Auth\Factory as Auth;
 
-class PasswordRule implements Rule
+class PasswordCheck implements Rule
 {
     /**
      * @var Hasher

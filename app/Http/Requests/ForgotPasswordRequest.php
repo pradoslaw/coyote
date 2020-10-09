@@ -2,7 +2,6 @@
 
 namespace Coyote\Http\Requests;
 
-use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Rules\EmailExists;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -14,7 +13,7 @@ class ForgotPasswordRequest extends FormRequest
             'email' => [
                 'required',
                 'email',
-                new EmailExists(app(UserRepositoryInterface::class)),
+                app(EmailExists::class),
                 'email_confirmed'
             ]
         ];

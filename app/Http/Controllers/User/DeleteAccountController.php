@@ -3,7 +3,7 @@
 namespace Coyote\Http\Controllers\User;
 
 use Coyote\Events\UserDeleted;
-use Coyote\Rules\PasswordRule;
+use Coyote\Rules\PasswordCheck;
 use Coyote\Services\Stream\Activities\Delete;
 use Coyote\Services\Stream\Objects\Person;
 use Illuminate\Http\Request;
@@ -34,7 +34,7 @@ class DeleteAccountController extends BaseController
                 Rule::requiredIf(function () {
                     return $this->auth->password !== null;
                 }),
-                app(PasswordRule::class)
+                app(PasswordCheck::class)
             ]
         ]);
 
