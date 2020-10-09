@@ -30,6 +30,9 @@ class ForgotPasswordControllerTest extends TestCase
         $response->assertStatus(422);
 
         $response->assertJsonValidationErrors('email');
+        $errors = $response->json('errors.email');
+
+        $this->assertEquals(trans('validation.email_exists'), $errors[0]);
     }
 
     public function testSubmitFormWithNotConfirmedEmail()
