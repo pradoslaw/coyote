@@ -94,6 +94,7 @@ return [
     'wiki_unique'          => 'Uuups. Strona o tym tytule już istnieje w tej kategorii. Proszę wpisać inny tytuł.',
     'wiki_route'           => 'Nie można dodać strony o tym tytule ponieważ koliduje z już istniejącą.',
     'email_unique'         => 'Podany adres e-mail przypisany jest do innego użytkownika.',
+    'email_exists'         => 'Podany adres e-mail nie istnieje.',
     'email_confirmed'      => 'Ten adres e-mail nie został zweryfikowany. <a href=":link">Kliknij tutaj</a> by go potwierdzić.',
     'cc_number'            => 'Wprowadzony numer karty jest nieprawidłowy.',
     'cc_cvc'               => 'Wprowadzony kod CVC jest nieprawidłowy.',

@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\Auth;
 
 use Coyote\Http\Controllers\Controller;
+use Coyote\Http\Requests\ForgotPasswordRequest;
 use Coyote\Services\Stream\Activities\ForgotPassword;
 use Coyote\Services\Stream\Actor;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
@@ -49,21 +50,11 @@ class ForgotPasswordController extends Controller
     /**
      * Formularz powoduje wyslanie linku umozliwiajacego zmiane hasla
      *
-     * @param Request $request
+     * @param ForgotPasswordRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function sendResetLinkEmail(Request $request)
+    public function sendResetLinkEmail(ForgotPasswordRequest $request)
     {
-        $this->validate($request, [
-            // check if email exists (case sensitive) because sendResetLink() is also case sensitive
-            'email'                     => [
-                'required',
-                'email',
-                Rule::exists('users')->whereNull('deleted_at'),
-                'email_confirmed'
-            ]
-        ]);
-
         // We will send the password reset link to this user. Once we have attempted
         // to send the link, we will examine the response then see the message we
         // need to show to the user. Finally, we'll send out a proper response.
