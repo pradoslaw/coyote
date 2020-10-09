@@ -24,17 +24,6 @@
   </div>
 </template>
 
-<style scoped>
-  .background-darken {
-    background: rgba(0, 0, 0, 0.3);
-  }
-
-  .modal {
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
-</style>
-
 <script>
   export default {
     props: ['title'],
