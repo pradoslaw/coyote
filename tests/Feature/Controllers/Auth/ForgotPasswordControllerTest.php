@@ -16,7 +16,7 @@ class ForgotPasswordControllerTest extends TestCase
         factory(User::class)->create(['is_confirm' => true, 'email' => strtoupper($email)]);
 
         $response = $this->json('POST', '/Password', ['email' => $email]);
-        $response->assertStatus(301);
+        $response->assertStatus(302);
     }
 
     public function testSubmitFormWithDeletedUser()
