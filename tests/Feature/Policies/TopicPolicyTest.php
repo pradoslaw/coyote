@@ -36,7 +36,6 @@ class TopicPolicyTest extends ForumPolicyTest
             return true;
         });
 
-        $this->assertTrue(Gate::allows('write', $this->topic));
         $this->assertTrue($this->user->can('write', $this->topic));
     }
 }
