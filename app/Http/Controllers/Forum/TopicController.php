@@ -18,6 +18,7 @@ use Coyote\Repositories\Criteria\Post\WithTrashedInfo;
 use Coyote\Services\Elasticsearch\Builders\Forum\MoreLikeThisBuilder;
 use Coyote\Services\Forum\Tracker;
 use Coyote\Services\Forum\TreeBuilder\Builder;
+use Coyote\Services\Forum\TreeBuilder\JsonDecorator;
 use Coyote\Services\Forum\TreeBuilder\ListDecorator;
 use Coyote\Topic;
 use Illuminate\Http\Request;
@@ -106,8 +107,10 @@ class TopicController extends BaseController
             $this->forum->resetCriteria();
             $this->pushForumCriteria(false);
 
+            // forum list only for moderators
             $treeBuilder->setForums($this->forum->list());
-            $allForums = $treeDecorator->setKey('id')->build();
+
+            $allForums = (new JsonDecorator($treeBuilder))->build();
         }
 
         $dateTime = $paginate->last()->created_at;

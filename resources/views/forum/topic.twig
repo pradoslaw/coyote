@@ -169,7 +169,12 @@
 
             <p>Czy na pewno chcesz przenieść wątek do innej kategorii?</p>
 
-            <p><vue-select name="forum_id" :options="allForums" :value.sync="forumId" class="form-control-sm"></vue-select></p>
+            <p>
+              <select v-model="forumId" class="form-control form-control-sm">
+                <option v-for="forum in sortedForums" :key="forum.id" :value="forum.id" v-html="forum.name"></option>
+              </select>
+            </p>
+
             <p><vue-select name="reason_id" :options="reasons" :value.sync="reasonId" class="form-control-sm" placeholder="-- wybierz --"></vue-select></p>
           </vue-modal>
         {% endif %}

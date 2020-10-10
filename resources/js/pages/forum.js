@@ -161,7 +161,17 @@ new Vue({
         .finally(() => this.isProcessing = false);
     }
   },
-  computed: mapGetters('user', ['isAuthorized'])
+  computed: {
+    ...mapGetters('user', ['isAuthorized']),
+
+    sortedForums() {
+      return this.allForums.map(forum => {
+        forum.name = '&nbsp;'.repeat(forum.indent * 4) + forum.name;
+
+        return forum;
+      });
+    }
+  }
 });
 
 new Vue({
