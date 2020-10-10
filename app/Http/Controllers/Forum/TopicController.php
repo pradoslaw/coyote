@@ -79,12 +79,13 @@ class TopicController extends BaseController
         /* @var \Illuminate\Support\Collection $posts */
         $paginate = $this->post->lengthAwarePagination($topic, $page, $perPage);
 
+        $this->pushForumCriteria(true);
+
         // create forum list for current user (according to user's privileges)
         $treeBuilder = new Builder($this->forum->list());
         $treeDecorator = new ListDecorator($treeBuilder);
 
-        $this->pushForumCriteria(true);
-        $forumList = $treeDecorator->build();
+        $userForums = $treeDecorator->build();
 
         $tracker = Tracker::make($topic);
 
@@ -120,13 +121,14 @@ class TopicController extends BaseController
 
         $topic->load('tags');
 
-        return $this->view('forum.topic', compact('posts', 'forum', 'paginate', 'forumList', 'reasons'))->with([
+        return $this->view('forum.topic', compact('posts', 'forum', 'paginate', 'reasons'))->with([
             'mlt'           => $this->moreLikeThis($topic),
             'model'         => $topic, // we need eloquent model in twig to show information about locked/moved topic
             'topic'         => (new TopicResource($tracker))->resolve($request),
             'poll'          => $topic->poll ? (new PollResource($topic->poll))->resolve($request) : null,
             'is_writeable'  => $this->gate->allows('write', $forum) && $this->gate->allows('write', $topic),
             'all_forums'    => $allForums,
+            'user_forums'   => $userForums,
             'description'   => excerpt(array_first($posts)['text'], 100)
         ]);
     }
