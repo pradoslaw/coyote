@@ -120,6 +120,10 @@
             <a v-if="!post.deleted_at && post.permissions.accept" :class="{'on': post.is_accepted}" @click="accept(post)" class="vote-accept" href="javascript:" title="Kliknij, aby ustawić tę odpowiedź jako zaakceptowaną (kliknij ponownie, aby cofnąć)">
               <i class="fas fa-check fa-fw"></i>
             </a>
+
+            <span v-else-if="post.is_accepted" class="vote-accept on">
+              <i class="fas fa-check fa-fw"></i>
+            </span>
           </div>
 
           <div class="post-content">
@@ -301,6 +305,7 @@
   import formatDistanceToNow from 'date-fns/formatDistanceToNow';
   import pl from 'date-fns/locale/pl';
   import { default as mixins } from '../mixins/user';
+  import VueNotifications from 'vue-notification';
 
   Vue.use(VueClipboard);
 
