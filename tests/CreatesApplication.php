@@ -4,6 +4,7 @@ namespace Tests;
 
 use Coyote\Forum;
 use Coyote\Group;
+use Coyote\Permission;
 use Coyote\Topic;
 use Coyote\User;
 use Illuminate\Contracts\Console\Kernel;
@@ -53,5 +54,18 @@ trait CreatesApplication
         }
 
         return $forum;
+    }
+
+    public function grantAdminAccess(User $user)
+    {
+        $group = factory(Group::class)->create();
+
+        $group->users()->attach($user->id);
+
+        $permissions = Permission::all();
+
+        foreach ($permissions as $permission) {
+            $group->permissions()->attach($permission->id, ['value' => 1]);
+        }
     }
 }

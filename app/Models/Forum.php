@@ -34,6 +34,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property bool $is_prohibited
  * @property Post $post
  * @property \Carbon\Carbon $read_at
+ * @property Group[]|\Illuminate\Support\Collection $groups
  */
 class Forum extends Model
 {

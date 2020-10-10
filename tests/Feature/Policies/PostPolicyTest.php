@@ -3,11 +3,13 @@
 namespace Tests\Feature\Policies;
 
 use Coyote\Forum;
+use Coyote\Group;
 use Coyote\Policies\PostPolicy;
 use Coyote\Post;
 use Coyote\Topic;
 use Coyote\User;
 use Faker\Factory;
+use Illuminate\Support\Facades\Gate;
 use Tests\TestCase;
 
 class PostPolicyTest extends TestCase
@@ -55,7 +57,7 @@ class PostPolicyTest extends TestCase
         $this->post->forum()->associate($this->forum);
     }
 
-    public function testDeleteAndRestoreLastPostByAuthor()
+    public function testDeleteAndRestoreAllowedDueToLastPostInTopic()
     {
         $this->topic->last_post_id = $this->post->id; // last post in topic
 
@@ -67,7 +69,7 @@ class PostPolicyTest extends TestCase
         $this->assertTrue($policy->delete($this->user, $this->post));
     }
 
-    public function testDeleteAndRestoreLastPostByAuthorDespiteAllowedTime()
+    public function testDeleteAndRestoreAllowedDespiteAllowedTime()
     {
         $this->topic->last_post_id = $this->post->id; // last post in topic
 
@@ -77,7 +79,7 @@ class PostPolicyTest extends TestCase
         $this->assertTrue($policy->delete($this->user, $this->post));
     }
 
-    public function testDeleteAndRestorePostByAuthor()
+    public function testDeleteAndRestoreAllowedDespiteAnswers()
     {
         $post = factory(Post::class)->make(['id' => $this->faker->numberBetween()]);
         $this->topic->last_post_id = $post->id; // last post in topic
@@ -99,5 +101,37 @@ class PostPolicyTest extends TestCase
 
         $policy = new PostPolicy();
         $this->assertFalse($policy->delete($this->user, $this->post));
+    }
+
+    public function testDeleteNotAllowedDueToLockedTopic()
+    {
+        $this->post->topic->is_locked = true;
+
+        $policy = new PostPolicy();
+        $this->assertFalse($policy->delete($this->user, $this->post));
+    }
+
+    public function testDeleteIsAllowedInTopickedTopicByAdmin()
+    {
+        $this->post->topic->is_locked = true;
+
+        Gate::define('forum-delete', function () {
+            return true;
+        });
+
+        $policy = new PostPolicy();
+        $this->assertTrue($policy->delete($this->user, $this->post));
+    }
+
+    public function testDeleteIsAllowedInTopickeForumByAdmin()
+    {
+        $this->post->forum->is_locked = true;
+
+        Gate::define('forum-delete', function () {
+            return true;
+        });
+
+        $policy = new PostPolicy();
+        $this->assertTrue($policy->delete($this->user, $this->post));
     }
 }

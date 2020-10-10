@@ -62,6 +62,7 @@ use Ramsey\Uuid\Uuid;
  * @property bool $is_online
  * @property bool $alert_login
  * @property \Coyote\Notification\Setting $notificationSettings[]
+ * @property Group[]|\Illuminate\Support\Collection $groups
  */
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {

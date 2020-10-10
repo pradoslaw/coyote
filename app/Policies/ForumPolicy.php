@@ -106,7 +106,7 @@ class ForumPolicy
             return true;
         }
 
-        $groups = $forum->groups()->get()->pluck('id')->toArray();
+        $groups = $forum->groups->pluck('id')->toArray();
 
         if (empty($groups)) {
             return true;
@@ -118,7 +118,7 @@ class ForumPolicy
             return false;
         }
 
-        foreach ($user->groups()->get() as $group) {
+        foreach ($user->groups as $group) {
             if (in_array($group->id, $groups)) {
                 return true;
             }
