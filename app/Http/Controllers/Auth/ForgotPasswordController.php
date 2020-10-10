@@ -7,9 +7,7 @@ use Coyote\Http\Requests\ForgotPasswordRequest;
 use Coyote\Services\Stream\Activities\ForgotPassword;
 use Coyote\Services\Stream\Actor;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Validation\Rule;
 
 class ForgotPasswordController extends Controller
 {
