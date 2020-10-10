@@ -13,7 +13,7 @@
         <h6><vue-user-name :user="comment.user"></vue-user-name></h6>
         <div class="comment-text" v-html="comment.html"></div>
 
-        <ul class="list-inline list-inline-bullet-sm text-muted small m-0">
+        <ul class="d-none d-sm-block list-inline list-inline-bullet-sm text-muted small m-0">
           <li class="list-inline-item">
             <a :href="comment.url" class="text-muted">
               <vue-timeago :datetime="comment.created_at"></vue-timeago>
@@ -21,13 +21,40 @@
           </li>
 
           <li class="list-inline-item">
-            <a @click="checkAuth(vote, comment)" :title="comment.voters.join(', ')" :class="{'thumbs-on': comment.is_voted}" href="javascript:" class="text-muted btn-sm-thumbs">
-              {{ comment.votes }} {{ comment.votes | declination(['głos', 'głosy', 'głosów']) }}
+            <a @click="checkAuth(vote, comment)" :title="commentVoters" :class="{'text-primary': comment.is_voted, 'text-muted': !comment.is_voted}" href="javascript:">
+              {{ commentLabel }}
             </a>
           </li>
 
           <li class="list-inline-item">
-            <a @click="checkAuth($emit, 'reply', comment.user)" href="javascript:" class="text-muted">Odpowiedz</a>
+            <a @click="checkAuth(reply)" href="javascript:" class="text-muted">Odpowiedz</a>
+          </li>
+        </ul>
+
+        <ul class="d-sm-none list-inline text-muted small m-0">
+          <li class="list-inline-item">
+            <a :href="comment.url" class="text-muted">
+              <vue-timeago :datetime="comment.created_at"></vue-timeago>
+            </a>
+          </li>
+
+          <li class="list-inline-item">
+            <a href="javascript:" class="text-muted" data-toggle="dropdown">
+              <i class="fa fa-bars"></i>
+            </a>
+
+            <div class="dropdown-menu">
+              <a @click="checkAuth(reply)" href="javascript:" class="dropdown-item text-muted">Odpowiedz</a>
+
+              <a @click="checkAuth(vote, comment)"
+                 :title="commentVoters"
+                 :class="{'text-primary': comment.is_voted, 'text-muted': !comment.is_voted}"
+                 href="javascript:"
+                 class="dropdown-item"
+              >
+                {{ commentLabel }}
+              </a>
+            </div>
           </li>
         </ul>
       </div>
@@ -69,6 +96,7 @@
   import store from "../../store";
   import { Microblog } from "../../types/models";
   import { MicroblogMixin } from "../mixins/microblog";
+  import declination from '../../components/declination';
 
   Vue.use(VueTimeago);
 
@@ -88,6 +116,10 @@
     @Prop(Object)
     comment!: Microblog;
 
+    reply() {
+      this.$emit('reply', this.comment.user);
+    }
+
     deleteItem(confirm: boolean) {
       this.delete('microblogs/deleteComment', confirm, this.comment);
     }
@@ -98,6 +130,14 @@
 
     get highlight() {
       return '#' + this.anchor === window.location.hash;
+    }
+
+    get commentLabel() {
+      return this.comment.votes + ' ' + declination(this.comment.votes, ['głos', 'głosy', 'głosów']);
+    }
+
+    get commentVoters() {
+      return this.comment.voters!.join(', ');
     }
   }
 </script>
