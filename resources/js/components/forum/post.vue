@@ -266,7 +266,9 @@
 
       <template slot="title">Czy chcesz usunąć?</template>
 
-      <p v-if="post.permissions.delete && reasons.length" class="mt-2"><vue-select name="reason_id" :options="reasons" :value.sync="reasonId" class="form-control-sm" placeholder="-- wybierz --"></vue-select></p>
+      <p v-if="post.permissions.delete && reasons" class="mt-2">
+        <vue-select name="reason_id" :options="reasons" :value.sync="reasonId" class="form-control-sm" placeholder="-- wybierz --"></vue-select>
+      </p>
 
       <template slot="buttons">
         <button @click="$refs['delete-modal'].close()" type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
@@ -341,8 +343,8 @@
     @Prop()
     readonly uploadMimes!: string;
 
-    @Prop()
-    readonly reasons!: string[];
+    @Prop(Object)
+    readonly reasons!: { [key: number]: string };
 
     @Prop()
     readonly flags!: Flag[];

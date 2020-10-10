@@ -94,7 +94,8 @@ class TopicController extends BaseController
             ->setRelations($topic, $forum)
             ->setTracker($tracker);
 
-        $allForums = $reasons = [];
+        $allForums = [];
+        $reasons = null;
 
         if ($this->gate->allows('delete', $forum) || $this->gate->allows('move', $forum)) {
             $postIds = $paginate->pluck('id')->toArray();
