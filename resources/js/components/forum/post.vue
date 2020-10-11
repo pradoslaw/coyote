@@ -30,7 +30,7 @@
             <vue-timeago :datetime="post.created_at"></vue-timeago>
           </a>
 
-          <small v-if="post.ip" :title="post.ip" class="text-muted">{{ post.ip }}</small>
+          <a v-if="post.ip" :href="`/Adm/Stream?ip=${post.ip}`" :title="post.ip" class="text-muted small">{{ post.ip }}</a>
           <small v-if="post.browser" :title="post.browser" class="text-muted">{{ post.browser }}</small>
         </div>
       </div>
@@ -57,8 +57,10 @@
 
           <a :href="post.url" class="text-muted small">
             <vue-timeago :datetime="post.created_at"></vue-timeago>
+          </a>
 
-            <small v-if="post.ip" :title="post.ip" class="post-ip">({{ post.ip }})</small>
+          <a v-if="post.ip" :href="`/Adm/Stream?ip=${post.ip}`" :title="post.ip" class="text-muted small">
+            ({{ post.ip }})
           </a>
         </div>
       </div>
