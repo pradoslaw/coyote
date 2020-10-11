@@ -60,7 +60,7 @@
       </div>
 
       <div v-if="comment.editable" class="dropdown">
-        <button class="btn btn-xs dropdown-toggle border-0" type="button" data-toggle="dropdown"></button>
+        <button class="btn btn-xs dropdown-toggle border-0" type="button" data-toggle="dropdown" aria-label="Dropdown"></button>
 
         <div class="dropdown-menu dropdown-menu-right">
           <a @click="edit" class="dropdown-item btn-sm-edit" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>

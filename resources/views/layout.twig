@@ -27,6 +27,10 @@
     <link rel="apple-touch-icon" href="{{ asset('img/apple-touch.png') }}">
     <link rel="shortcut icon" href="{{ asset('img/favicon.png') }}" type="image/png">
 
+    <link rel="preload" href="/fonts/font-awesome/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/font-awesome/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/font-awesome/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin>
+
     {{ render_region('head') }}
   </head>
   <body class="{{ auth_guest() or user('allow_sticky_header') ? 'padding-top' }}">
@@ -43,14 +47,13 @@
         {{ form_close() }}
 
         <nav class="navbar navbar-expand-lg {{ __dark_theme ? 'bg-dark navbar-dark' : 'bg-light navbar-light' }}">
-
-        <div class="container-xxl d-flex w-100 flex-wrap">
+          <div class="container-xxl d-flex w-100 flex-wrap">
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
             <span class="navbar-toggler-icon"></span>
           </button>
 
           <a rel="home" class="navbar-brand order-0" href="{{ route('home') }}" title="4programmers.net - Strona główna">
-            <img src="{{ cdn('img/logo-mobile.png') }}">
+            <img alt="4programmers.net" src="{{ cdn('img/logo-mobile.png') }}">
           </a>
 
           <div class="collapse navbar-collapse flex-grow-0 order-3 order-lg-1 ml-2" id="navbarSupportedContent">
@@ -85,7 +88,7 @@
 
             <div class="dropdown nav-avatar order-2">
               <a href="javascript:" class="dropdown-toggle img-thumbnail d-block" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="width: 35px">
-                <img src="{{ user_photo(user('photo')) }}" style="width: 100%">
+                <img alt="{{ user('name') }}" src="{{ user_photo(user('photo')) }}" style="width: 100%">
               </a>
 
               <div class="dropdown-menu dropdown-menu-right">
@@ -118,91 +121,8 @@
             </div>
           {% endif %}
         </div>
-      </nav>
+        </nav>
       </header>
-      {#      <header class="container-fluid navbar-header {{ auth_guest() or user('allow_sticky_header') ? ' fixed-top' }} {{ __dark_theme ? 'navbar-dark' }}">#}
-      {#              <div class="navbar-border-top row"></div>#}
-
-
-      {#        <div class="container-xxl d-flex align-items-center flex-wrap flex-md-nowrap">#}
-      {#          <a rel="home" class="navbar-brand" href="{{ route('home') }}" title="4programmers.net - Strona główna">#}
-      {#            <img src="{{ cdn('img/logo-mobile.png') }}">#}
-      {#          </a>#}
-
-      {#          <ul class="nav-desktop d-none d-md-flex">#}
-      {#            {% for item in __master_menu.roots() %}#}
-      {#              <li {{ forms.attr(item.attr) }}>#}
-      {#                <a href="{{ item.url }}">{{ item.title|raw }}</a>#}
-
-      {#                {{ item.afterHTML|raw }}#}
-
-      {#                {% if item.hasChildren() %}#}
-      {#                  <div class="dropdown-menu dropdown-menu-left">#}
-      {#                    {% for children in item.children() %}#}
-
-      {#                      <a class="dropdown-item" href="{{ children.url }}">{{ children.title }}</a>#}
-
-      {#                    {% endfor %}#}
-      {#                  </div>#}
-      {#                {% endif %}#}
-      {#              </li>#}
-      {#            {% endfor %}#}
-      {#          </ul>#}
-
-      {#                <div id="js-searchbar" class="d-none d-md-flex flex-grow-1 pl-4 pr-4">#}
-      {#                  <vue-searchbar url="{{ search_url|default(route('search')) }}" value="{{ input_get('q') }}"></vue-searchbar>#}
-      {#                </div>#}
-
-      {#          <div class="d-md-flex ml-auto">#}
-
-
-      {#            <button class="navbar-toggler d-inline-flex d-md-none" type="button" data-toggle="collapse" data-target="#js-nav-mobile">#}
-      {#              <i class="fa fa-bars"></i>#}
-      {#            </button>#}
-      {#          </div>#}
-
-      {#          <div id="js-nav-mobile" class="collapse navbar-collapse nav-mobile pd-3 pb-3">#}
-      {#            {% for item in __master_menu.roots() %}#}
-      {#              <a class="dropdown-link" href="{{ item.url }}">{{ item.title|raw }}</a>#}
-      {#            {% endfor %}#}
-
-      {#            <div class="dropdown-divider"></div>#}
-
-      {#            {% if auth_check() %}#}
-      {#              <a class="dropdown-link" href="{{ route('user.settings') }}"><i class="fas fa-cog fa-fw"></i> Ustawienia</a>#}
-      {#              <a class="dropdown-link" href="{{ route('profile', [user('id')]) }}"><i class="fas fa-user fa-fw"></i> Profil</a>#}
-
-      {#              {% if can('adm-access') %}#}
-      {#                <a class="dropdown-link" href="{{ route('adm.home') }}"><i class="fas fa-user-secret fa-fw"></i> Panel administracyjny</a>#}
-      {#              {% endif %}#}
-
-      {#              <div class="dropdown-divider"></div>#}
-
-      {#              <a href="javascript:" class="dropdown-link js-change-menu position-relative">Nowe menu <sup class="badge badge-pill label-new">Beta</sup></a>#}
-
-      {#              <div class="dropdown-divider"></div>#}
-
-      {#              <a href="javascript:" onclick="document['logout-form'].submit()" class="dropdown-link btn-sign-out"><i class="fas fa-sign-out-alt fa-fw"></i> Wyloguj</a>#}
-      {#            {% else %}#}
-      {#              <div class="row">#}
-      {#                <div class="col-6">#}
-      {#                  <a class="btn d-block btn-register btn-sm" href="{{ route('register') }}"><i class="fas fa-sign-in"></i> Utwórz konto</a>#}
-      {#                </div>#}
-      {#                <div class="col-6">#}
-      {#                  <a class="btn-login d-block btn-sm d-block d-sm-none text-center" href="{{ route('login') }}">Logowanie</a>#}
-      {#                </div>#}
-      {#              </div>#}
-      {#            {% endif %}#}
-
-      {#            <div class="dropdown-divider"></div>#}
-
-      {#            <form action="{{ search_url|default(route('search')) }}" role="search">#}
-      {#              <input type="text" name="q" autocomplete="off" placeholder="{{ search_placeholder|default('Szukaj...') }}" value="{{ input_get('q') }}" class="form-control form-control-sm">#}
-      {#            </form>#}
-      {#          </div>#}
-      {#        </div>#}
-
-      {#      </header>#}
 
       <div class="container-fluid">
         {{ breadcrumb|raw }}

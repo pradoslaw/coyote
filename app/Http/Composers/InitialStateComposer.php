@@ -79,6 +79,7 @@ class InitialStateComposer
         return [
             'user' => [
                 'id'                    => $user->id,
+                'name'                  => $user->name,
                 'date_format'           => $this->mapFormat($user->date_format),
                 'token'                 => $this->jwtToken->token($user),
                 'notifications_unread'  => $user->notifications_unread,

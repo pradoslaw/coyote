@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 Disallow: /User/
 Disallow: /Szukaj/
-Sitemap: /sitemap
+Sitemap: https://4programmers.net/sitemap
 User-agent: AhrefsBot
 Disallow: /
 User-agent: proximic

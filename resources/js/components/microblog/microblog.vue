@@ -10,7 +10,7 @@
         </div>
         <div class="media-body">
           <div v-if="microblog.editable" class="dropdown float-right">
-            <button class="btn btn-secondary btn-xs dropdown-toggle" type="button" id="microblog-menu" data-toggle="dropdown"></button>
+            <button class="btn btn-secondary btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-label="Dropdown"></button>
 
             <div class="dropdown-menu dropdown-menu-right">
               <a @click="edit" class="dropdown-item btn-edit" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
@@ -33,7 +33,7 @@
                 class="col-6 col-md-3"
               >
                 <a @click.prevent="index = imageIndex" :href="image.url">
-                  <img class="img-thumbnail" :src="image.thumb">
+                  <img :alt="`Załącznik ${imageIndex}`" class="img-thumbnail" :src="image.thumb">
                 </a>
               </div>
             </div>
