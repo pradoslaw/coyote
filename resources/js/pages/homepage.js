@@ -26,12 +26,12 @@ $(function () {
     tabs.forum.click(function() {
         let index = tabs.forum.index(this);
 
-        $.post(__INITIAL_STATE.settings_url, {'homepage_mode': index});
+        $.post('/User/Settings/Ajax', {'homepage_mode': index});
     });
 
     tabs.reputation.click(function() {
         let index = tabs.reputation.index(this);
 
-        $.post(__INITIAL_STATE.settings_url, {'homepage_reputation': index});
+        $.post('/User/Settings/Ajax', {'homepage_reputation': index});
     });
 });
