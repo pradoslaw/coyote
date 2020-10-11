@@ -46,11 +46,14 @@
     store,
     data() {
       return {
-        isOpen: false
+        isOpen: false,
+        currentTitle: null,
+        animationId: null
       }
     },
     mounted() {
       this.listenForMessages();
+      this.listenForVisibilityChange();
     },
     methods: {
       loadMessages() {
@@ -73,8 +76,45 @@
           this.isOpen = false;
 
           DesktopNotifications.doNotify(data.user.name, data.excerpt, data.url);
+
+          this.startAnimation(data.user);
         });
       },
+
+      listenForVisibilityChange() {
+        document.addEventListener('visibilitychange', () => {
+          if (!document.hidden) {
+            this.stopAnimation();
+          }
+        })
+      },
+
+      startAnimation(user) {
+        this.stopAnimation();
+
+        if (!document.hidden) {
+          return;
+        }
+
+        this.currentTitle = document.title;
+
+        this.animationId = setInterval(() =>
+          document.title = document.title === this.currentTitle ? 'Masz wiadomość od: ' + user.name : this.currentTitle, 2000
+        );
+      },
+
+      stopAnimation() {
+        if (this.animationId === null) {
+          return;
+        }
+
+        // remove animation if exists
+        clearInterval(this.animationId);
+        // restore original title
+        document.title = this.currentTitle;
+
+        this.currentTitle = this.animationId = null;
+      }
     },
     computed: mapState('inbox', ['messages', 'count'])
   };
