@@ -219,7 +219,8 @@ let PostVue = Vue.extend({
   data: () => ({
     showStickyCheckbox: window.showStickyCheckbox,
     undefinedPost: { text: '', html: '', attachments: [] },
-    reasons: window.reasons
+    reasons: window.reasons,
+    skeleton: true
   }),
   created() {
     store.commit('posts/init', window.pagination);
@@ -229,6 +230,8 @@ let PostVue = Vue.extend({
   },
   mounted() {
     const hints = ['hint-subject', 'hint-text', 'hint-tags', 'hint-user_name'];
+
+    this.skeleton = false;
 
     [
       document.querySelector('#js-submit-form input[name="subject"]'),
