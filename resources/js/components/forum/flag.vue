@@ -42,6 +42,8 @@
       axios.post(`/Flag/Delete/${this.flag.id}`);
 
       this.$emit('close', this.flag.id);
+      // @ts-ignore
+      this.$refs.modal.close()
     }
   }
 </script>
