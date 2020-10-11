@@ -46,7 +46,7 @@ abstract class Activity implements ObjectInterface
 
     /**
      * @param ObjectInterface $actor
-     * @param ObjectInterface $object
+     * @param ObjectInterface|null $object
      * @param ObjectInterface|null $target
      */
     public function __construct(ObjectInterface $actor, ObjectInterface $object = null, ObjectInterface $target = null)
@@ -56,9 +56,7 @@ abstract class Activity implements ObjectInterface
         $this->target = $target;
         $this->ip = request()->ip();
 
-        if (method_exists(request(), 'browser')) {
-            $this->browser = request()->browser();
-        }
+        $this->browser = request()->browser();
 
         if (empty($this->verb)) {
             $this->verb = strtolower(class_basename($this));
