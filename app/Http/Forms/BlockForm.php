@@ -54,6 +54,13 @@ class BlockForm extends Form implements ValidatesWhenSubmitted
      */
     private function regions()
     {
-        return ['header' => 'Nagłówek', 'footer' => 'Stopka', 'head' => 'Znacznik <head>', 'body' => 'Znacznik <body>', 'wiki_footer' => 'Stopka artykułów'];
+        return [
+            'header' => 'Nagłówek',
+            'footer' => 'Stopka',
+            'head' => 'Znacznik <head>',
+            'body' => 'Znacznik <body>',
+            'wiki_footer' => 'Stopka artykułów',
+            'bottom' => 'Koniec strony'
+        ];
     }
 }
