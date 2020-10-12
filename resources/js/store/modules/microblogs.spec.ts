@@ -63,7 +63,7 @@ describe('microblog mutation', () => {
       data: []
     };
 
-    mutations.init(state, { microblog: parent, pagination: undefined });
+    mutations.add(state, parent);
     mutations.addComment(state, { parent, comment });
 
     expect(parent.id! in state.data).toBeTruthy();

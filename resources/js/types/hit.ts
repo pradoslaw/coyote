@@ -1,4 +1,4 @@
-import {Links, Meta, Model} from "./models";
+import { Model } from "./models";
 
 export interface Hit {
   model: Model;
@@ -38,6 +38,23 @@ export enum Context {
   User = 'user',
   Subscriber = 'subscriber',
   Participant = 'participant'
+}
+
+export interface Links {
+  first: string;
+  last: string;
+  prev?: string;
+  next: string;
+}
+
+export interface Meta {
+  current_page: number;
+  from: number;
+  last_page: number;
+  path: string;
+  per_page: number;
+  to: number;
+  total: number;
 }
 
 export interface Hits {
