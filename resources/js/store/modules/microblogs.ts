@@ -42,6 +42,10 @@ const mutations = {
   },
 
   addComment(state, { parent, comment }: ParentChild) {
+    if (Array.isArray(parent.comments)) {
+      Vue.set(parent, "comments", {});
+    }
+
     Vue.set(parent.comments, comment.id!, comment);
 
     parent.comments_count! += 1;

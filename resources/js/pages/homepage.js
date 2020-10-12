@@ -13,7 +13,7 @@ new Vue({
   components: { 'vue-microblog': VueMicroblog },
   store,
   created() {
-    store.commit('microblogs/init', { pagination: { data: window.microblogs } });
+    Object.keys(window.microblogs).forEach(id => store.commit('microblogs/add', window.microblogs[id]));
   },
   computed: mapGetters('microblogs', ['microblogs'])
 });
