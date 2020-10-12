@@ -24,6 +24,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class MicroblogResource extends JsonResource
 {
     /**
+     * DO NOT REMOVE! This will preserver keys from being filtered in data
+     *
+     * @var bool
+     */
+    protected $preserveKeys = true;
+
+    /**
      * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -40,9 +47,16 @@ class MicroblogResource extends JsonResource
                 'created_at'    => $this->created_at->toIso8601String(),
                 'updated_at'    => $this->created_at->toIso8601String(),
                 'html'          => $this->html,
-                'comments'      => $this->when(!$this->parent_id, function () {
-                    return $this->resource->relationLoaded('comments') ? MicroblogResource::collection($this->comments) : [];
-                }),
+                'comments'      => $this->when(
+                    ! $this->parent_id && $this->resource->relationLoaded('comments'),
+                    function () {
+                        $collection = MicroblogResource::collection($this->comments);
+                        $collection->preserveKeys = true;
+
+                        return $collection;
+                    },
+                    []
+                ),
                 'user'          => UserResource::make($this->user),
                 'media'         => $this->media(),
                 'editable'      => $this->when($request->user(), function () use ($request) {
@@ -56,6 +70,11 @@ class MicroblogResource extends JsonResource
                 })
             ]
         );
+    }
+
+    public function preserverKeys()
+    {
+        $this->resource->setRelation('comments', $this->resource->comments->keyBy('id'));
     }
 
     protected function media(): array

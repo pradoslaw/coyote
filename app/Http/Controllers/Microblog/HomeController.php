@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers\Microblog;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\CacheFactory;
 use Coyote\Http\Resources\Api\MicroblogResource;
+use Coyote\Http\Resources\MicroblogCollection;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
 use Coyote\Services\Microblogs\Builder;
 
@@ -54,7 +55,7 @@ class HomeController extends Controller
         return $this->view('microblog.home', [
             'count'                     => $this->microblog->count(),
             'count_user'                => $this->microblog->countForUser($this->userId),
-            'pagination'                => MicroblogResource::collection($paginator)->response()->getContent(),
+            'pagination'                => new MicroblogCollection($paginator),
             'route'                     => request()->route()->getName()
         ])->with(compact('tags', 'popular'));
     }
@@ -100,6 +101,9 @@ class HomeController extends Controller
 
         MicroblogResource::withoutWrapping();
 
-        return $this->view('microblog.view')->with(['microblog' => new MicroblogResource($microblog), 'excerpt' => $excerpt]);
+        $resource = new MicroblogResource($microblog);
+        $resource->preserverKeys();
+
+        return $this->view('microblog.view')->with(['microblog' => $resource, 'excerpt' => $excerpt]);
     }
 }

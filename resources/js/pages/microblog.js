@@ -17,7 +17,13 @@ new Vue({
   components: { 'vue-microblog': VueMicroblog, 'vue-pagination': VuePagination, 'vue-form': VueForm },
   store,
   created() {
-    store.commit('microblogs/init', { pagination: 'pagination' in window ? window.pagination : { data: window.microblogs } });
+    if ('pagination' in window) {
+      store.commit('microblogs/init', window.pagination);
+    }
+
+    if ('microblog' in window) {
+      store.commit('microblogs/add', window.microblog);
+    }
   },
   methods: {
     changePage(page) {

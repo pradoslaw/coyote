@@ -6,6 +6,7 @@ use Coyote\Events\MicroblogWasSaved;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Requests\MicroblogRequest;
 use Coyote\Http\Resources\Api\MicroblogResource;
+use Coyote\Http\Resources\MicroblogCollection;
 use Coyote\Microblog;
 use Coyote\Notifications\Microblog\UserMentionedNotification;
 use Coyote\Notifications\Microblog\SubmittedNotification;
@@ -155,10 +156,10 @@ class CommentController extends Controller
     }
 
     /**
-     * @param $id
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @param int $id
+     * @return array
      */
-    public function show($id)
+    public function show(int $id)
     {
         $this->microblog->pushCriteria(new LoadUserScope($this->userId));
 
@@ -166,6 +167,7 @@ class CommentController extends Controller
 
         MicroblogResource::withoutWrapping();
 
-        return MicroblogResource::collection($comments);
+        // I don't know why I had to call resolve() to return associative array with IDs as keys
+        return (new MicroblogCollection($comments))->resolve($this->request);
     }
 }

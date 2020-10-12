@@ -2,38 +2,29 @@ import axios from "axios";
 import { Microblog, Paginator, Media } from "../../types/models";
 import Vue from 'vue';
 
-const state = {
+const state: Paginator = {
+  current_page: 0,
   data: [],
-  links: null,
-  meta: null
+  from: 0,
+  last_page: 0,
+  path: "",
+  per_page: 0,
+  to: 0,
+  total: 0
 };
 
 const getters = {
-  // @ts-ignore
-  microblogs: state => Object.values(state.data).sort((a, b) => a.id > b.id ? -1 : 1),
+  microblogs: state => Object.values(state.data).sort((a, b) => (a as Microblog).id! > (b as Microblog).id! ? -1 : 1),
   exists: state => (id: number) => id in state.data,
-  currentPage: state => state.meta.current_page,
-  totalPages: state => state.meta.last_page
+  currentPage: state => state.current_page,
+  totalPages: state => state.last_page
 }
 
 type ParentChild = { parent: Microblog, comment: Microblog };
 
-
 const mutations = {
-  init(state, { pagination, microblog }) {
-    if (pagination) {
-      pagination.data = pagination.data
-        .map(microblog => (microblog.comments = microblog.comments.keyBy('id'), microblog))
-        .keyBy('id');
-
-      state = Object.assign(state, pagination);
-    }
-
-    if (microblog) {
-      microblog.comments = microblog.comments.keyBy('id');
-
-      state.data = {[microblog.id]: microblog};
-    }
+  init(state, pagination: Paginator) {
+    state = Object.assign(state, pagination);
   },
 
   add(state, microblog: Microblog) {
@@ -96,8 +87,8 @@ const mutations = {
   },
 
   setComments(state, { microblog, comments }) {
-    microblog.comments = comments.keyBy('id');
-    microblog.comments_count = comments.length;
+    microblog.comments = comments;
+    microblog.comments_count = Object.keys(comments).length;
   },
 
   setSubscribed(state, microblog: Microblog) {

@@ -98,6 +98,6 @@
   {{ parent() }}
 
   <script>
-    var pagination = {{ pagination|raw }};
+    var pagination = {{ pagination|json_encode|raw }};
   </script>
 {% endblock %}

@@ -162,14 +162,8 @@ export interface Topic {
   owner_id?: number | null;
 }
 
-export interface Links {
-  first: string;
-  last: string;
-  prev?: string;
-  next: string;
-}
-
-export interface Meta {
+export interface Paginator {
+  data: Microblog[] | Post[];
   current_page: number;
   from: number;
   last_page: number;
@@ -177,10 +171,4 @@ export interface Meta {
   per_page: number;
   to: number;
   total: number;
-}
-
-export interface Paginator {
-  data: Microblog[];
-  links: Links;
-  meta: Meta;
 }
