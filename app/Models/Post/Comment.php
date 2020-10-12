@@ -63,7 +63,7 @@ class Comment extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class)->select(['id', 'name', 'photo', 'is_blocked'])->withTrashed();
+        return $this->belongsTo(User::class)->select(['id', 'name', 'photo', 'is_blocked', 'deleted_at'])->withTrashed();
     }
 
     /**
