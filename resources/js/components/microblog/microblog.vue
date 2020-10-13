@@ -67,7 +67,7 @@
             <span class="d-none d-sm-inline">Udostępnij</span>
           </a>
 
-          <div class="microblog-comments">
+          <div ref="comments" class="microblog-comments">
             <div v-if="microblog.comments_count > Object.keys(microblog.comments).length" class="show-all-comments">
               <a @click="loadComments(microblog)" href="javascript:"><i class="far fa-comments"></i> Zobacz {{ totalComments | declination(['pozostały', 'pozostałe', 'pozostałe']) }} {{ totalComments }} {{ totalComments | declination(['komentarz', 'komentarze', 'komentarzy']) }}</a>
             </div>
@@ -145,7 +145,7 @@
       ...mapGetters('user', ['isAuthorized']),
       ...mapState('user', {user: state => state})
     },
-    methods: mapActions('microblogs', ['loadComments', 'vote', 'subscribe', 'loadVoters'])
+    methods: mapActions('microblogs', ['vote', 'subscribe', 'loadVoters'])
   })
   export default class VueMicroblog extends Mixins(MicroblogMixin) {
     private index: number | null = null;
@@ -187,6 +187,12 @@
       else {
         this.$notify({type: 'error', text: 'Nie można skopiować linku do schowka.'});
       }
+    }
+
+    loadComments() {
+      store.dispatch('microblogs/loadComments', this.microblog).then(() => {
+        this.$nextTick(() => (this.$refs.comments as HTMLElement).scrollIntoView());
+      });
     }
 
     get totalComments() {

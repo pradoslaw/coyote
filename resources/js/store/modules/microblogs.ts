@@ -145,7 +145,7 @@ const actions = {
   },
 
   loadComments({ commit }, microblog: Microblog) {
-    axios.get(`/Mikroblogi/Comment/Show/${microblog.id}`).then(result => {
+    return axios.get(`/Mikroblogi/Comment/Show/${microblog.id}`).then(result => {
       commit('setComments', { microblog, comments: result.data });
     })
   }
