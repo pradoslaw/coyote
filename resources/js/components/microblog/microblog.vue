@@ -124,6 +124,7 @@
   import VueUserName from "../user-name.vue";
   import { MicroblogMixin } from "../mixins/microblog";
   import { User } from '../../types/models';
+  import useBrackets from "../../libs/prompt";
 
   Vue.use(VueTimeago);
   Vue.use(VueClipboard);
@@ -166,9 +167,7 @@
     }
 
     reply(user: User) {
-      // @ts-ignore
-      this.commentForm.textarea.value += `@${user.name}: `;
-      // @ts-ignore
+      this.commentForm.textarea.value += `@${useBrackets(user.name)}: `;
       this.commentForm.textarea.focus();
     }
 

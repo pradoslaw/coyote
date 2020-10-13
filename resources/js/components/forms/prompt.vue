@@ -12,6 +12,7 @@
   import VueError from './error.vue';
   import { SpecialKeys } from '../../types/keys.ts';
   import store from '../../store';
+  import useBrackets from "../../libs/prompt";
 
   export default {
     components: { 'vue-dropdown': VueDropdown, 'vue-error': VueError },
@@ -135,10 +136,7 @@
           return;
         }
 
-        if (text.indexOf(' ') > -1 || text.indexOf('.') > -1) {
-          text = '{' + text + '}';
-        }
-
+        text = useBrackets(text);
         text += startIndex === 1 ? ': ' : ' '; // add space at the end
 
         this.input.value = this.input.value.substr(0, startIndex) + text + this.input.value.substring(caretPosition);
