@@ -103,7 +103,7 @@
             {% set cols = tags|length >= 3 ? 3 : 6 %}
 
             {% for category, tags in tags %}
-              <div class="col-sm-{{ cols }}">
+              <div class="col-sm-{{ cols }} mb-2 mb-sm-auto">
                 <strong>{{ category }}</strong>
 
                 <ul class="tag-clouds tag-clouds-md tag-clouds-skills">
