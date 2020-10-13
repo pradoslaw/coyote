@@ -46,8 +46,9 @@
       {% endif %}
     </div>
 
-    {% for i in 1..min(4, posts.total) %}
-      <div v-if="skeleton" class="card card-post">
+    {% for post in posts.data %}
+{#      <div id="id{{ post.id }}" class="card card-post">#}
+         <div v-if="skeleton" class="card card-post">
         <div class="card-header">
           <div class="row d-none d-lg-flex">
             <div class="col-2">
@@ -74,13 +75,43 @@
           <div class="row">
             <div class="d-none d-lg-block col-lg-2">
               <div class="skeleton" style="width: 75px; height: 75px"></div>
+
+              <ul class="post-stats list-unstyled">
+                <li>
+                  <strong class="skeleton skeleton-sm">Rejestracja:</strong>
+                </li>
+                <li>
+                  <strong class="skeleton skeleton-sm">Ostatnio:</strong>
+                </li>
+                <li>
+                  <strong class="skeleton skeleton-sm">Postów:</strong>
+                </li>
+              </ul>
             </div>
 
             <div class="col-12 col-lg-10">
-              <div class="skeleton mb-1" style="height: 10px"></div>
-              <div class="skeleton mb-1" style="height: 10px"></div>
+              <div class="post-content">{{ post.html|raw }}</div>
             </div>
           </div>
+        </div>
+
+        <div class="card-footer">
+          <div class="row">
+            <div class="d-none d-lg-block col-lg-2"></div>
+
+            <div class="col-12 d-flex col-lg-10">
+              <div>
+                <button class="btn btn-sm skeleton">Obserwuj</button>
+                <button class="btn btn-sm skeleton">Udostępnij</button>
+                <button class="btn btn-sm skeleton">Komentuj</button>
+              </div>
+
+              <div class="ml-auto">
+
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     {% endfor %}

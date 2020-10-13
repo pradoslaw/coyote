@@ -131,7 +131,7 @@
           <div class="post-content">
             <div v-html="post.html"></div>
 
-            <ul v-if="post.attachments.length" class="list-unstyled">
+            <ul v-if="post.attachments.length" class="list-unstyled mb-1">
               <li v-for="attachment in post.attachments" class="small">
                 <i class="fas fa-download"></i>
 
@@ -147,7 +147,7 @@
             </template>
           </div>
 
-          <ul v-if="tags" class="mt-2 mb-2 tag-clouds">
+          <ul v-if="tags.length" class="mt-2 mb-2 tag-clouds">
             <li v-for="tag in tags"><a :href="tag.url">{{ tag.name }}</a></li>
           </ul>
 

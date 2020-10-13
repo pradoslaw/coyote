@@ -62,6 +62,7 @@
 
 .post-stats {
   font-size: $font-size-sm;
+  margin-bottom: 0;
 
   li {
     padding: 2px 0;
@@ -172,7 +173,7 @@
 .edit-info {
   font-size: 11px;
   padding: 5px 0;
-  margin-top: 15px;
+  margin-top: 10px;
   color: $text-color;
 
   a {
