@@ -7,9 +7,9 @@
     </div>
 
     <div class="media-body d-flex">
-      <vue-comment-form v-if="isEditing" :microblog="comment" ref="form" class="flex-grow-1 mr-1" @cancel="isEditing = false" @save="isEditing = false"></vue-comment-form>
+      <vue-comment-form v-if="isEditing" :microblog="comment" ref="form" class="w-100 mr-1" @cancel="isEditing = false" @save="isEditing = false"></vue-comment-form>
 
-      <div v-if="!isEditing" class="break-word flex-grow-1">
+      <div v-if="!isEditing" class="break-word w-100">
         <h6><vue-user-name :user="comment.user"></vue-user-name></h6>
         <div class="comment-text" v-html="comment.html"></div>
 
