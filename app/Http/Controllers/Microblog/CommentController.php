@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Controllers\Microblog;
 
-use Coyote\Events\MicroblogWasSaved;
+use Coyote\Events\MicroblogSaved;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Requests\MicroblogRequest;
 use Coyote\Http\Resources\Api\MicroblogResource;
@@ -54,24 +54,23 @@ class CommentController extends Controller
      * @return MicroblogResource
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function save(MicroblogRequest $request, Dispatcher $dispatcher, $microblog)
+    public function save(MicroblogRequest $request, Dispatcher $dispatcher, ?Microblog $microblog)
     {
         $this->user->pushCriteria(new WithTrashed());
 
         if (!$microblog->exists) {
-            $user = $this->auth;
-            $data = $request->only(['text', 'parent_id']) + ['user_id' => $user->id];
+            $microblog->user()->associate($this->auth);
+
+            $microblog->fill($request->only(['text', 'parent_id']));
         } else {
             $this->authorize('update', $microblog);
 
-            $user = $microblog->user;
-            $data = $request->only(['text']);
+            $microblog->fill($request->only(['text']));
         }
 
-        $microblog->fill($data);
         $isSubscribed = false;
 
-        $this->transaction(function () use ($microblog, $user, $dispatcher, &$isSubscribed) {
+        $this->transaction(function () use ($microblog, $dispatcher, &$isSubscribed) {
             $microblog->save();
 
             // we need to get parent entry only for notification
@@ -87,11 +86,11 @@ class CommentController extends Controller
             if ($microblog->wasRecentlyCreated) {
                 // now we can add user to subscribers list (if he's not in there yet)
                 // after that he will receive notification about other users comments
-                if (!$parent->subscribers()->forUser($user->id)->exists()) {
-                    $count = $this->microblog->where('parent_id', $parent->id)->where('user_id', $user->id)->count();
+                if (!$parent->subscribers()->forUser($this->auth->id)->exists()) {
+                    $count = $microblog->parent()->where('user_id', $this->auth->id)->count();
 
                     if ($count == 1) {
-                        $parent->subscribers()->create(['user_id' => $user->id]);
+                        $parent->subscribers()->create(['user_id' => $this->auth->id]);
                         $isSubscribed = true;
                     }
                 } else {
@@ -127,7 +126,10 @@ class CommentController extends Controller
             );
         }
 
-        event(new MicroblogWasSaved($microblog->parent));
+        // save broadcast parent entry
+        event(new MicroblogSaved($microblog->parent));
+        // just broadcast comment
+        broadcast(new MicroblogSaved($microblog));
 
         MicroblogResource::withoutWrapping();
 
@@ -152,7 +154,7 @@ class CommentController extends Controller
             stream(Stream_Delete::class, $object, $target);
         });
 
-        event(new MicroblogWasSaved($comment->parent));
+        event(new MicroblogSaved($comment->parent));
     }
 
     /**

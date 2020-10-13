@@ -4,7 +4,7 @@ namespace Coyote\Listeners;
 
 use Coyote\Events\JobDeleted;
 use Coyote\Events\MicroblogWasDeleted;
-use Coyote\Events\MicroblogWasSaved;
+use Coyote\Events\MicroblogSaved;
 use Coyote\Events\TopicWasMoved;
 use Coyote\Events\TopicWasSaved;
 use Coyote\Events\TopicWasDeleted;
@@ -117,9 +117,9 @@ class PageListener implements ShouldQueue
     }
 
     /**
-     * @param MicroblogWasSaved $event
+     * @param MicroblogSaved $event
      */
-    public function onMicroblogSave(MicroblogWasSaved $event)
+    public function onMicroblogSave(MicroblogSaved $event)
     {
         $event->microblog->page()->updateOrCreate([
             'content_id'    => $event->microblog->id,
@@ -221,7 +221,7 @@ class PageListener implements ShouldQueue
         );
 
         $events->listen(
-            'Coyote\Events\MicroblogWasSaved',
+            'Coyote\Events\MicroblogSaved',
             'Coyote\Listeners\PageListener@onMicroblogSave'
         );
 
