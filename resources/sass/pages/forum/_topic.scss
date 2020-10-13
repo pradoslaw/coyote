@@ -21,6 +21,12 @@
   .new {
     color: $alt-link-hover-color;
   }
+
+  .btn-fast-reply {
+    margin-right: -5px;
+    padding-right: 5px;
+    border-right: 1px solid $border-color;
+  }
 }
 
 .post-delete {

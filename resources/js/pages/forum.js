@@ -260,16 +260,21 @@ let PostVue = Vue.extend({
       window.location.href = post.url;
     },
 
-    reply(post) {
+    reply(post, scrollIntoFrom = true) {
       let text = `> ##### [${post.user ? post.user.name : post.user_name} napisał(a)](/Forum/Post/${post.id}):`
 
       text += "\n" + post.text.replace(/\n/g, "\n> ") + "\n\n"
 
       this.undefinedPost.text += text;
 
-      document.getElementById('js-submit-form').scrollIntoView();
+      if (scrollIntoFrom) {
+        document.getElementById('js-submit-form').scrollIntoView();
 
-      this.$refs['js-submit-form'].$refs['textarea'].focus();
+        this.$refs['js-submit-form'].$refs['textarea'].focus();
+      }
+      else {
+        this.$notify({type: 'success', text: 'Cytat został skopiowany do formularza.'});
+      }
     }
   },
   computed: {
