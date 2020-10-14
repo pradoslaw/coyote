@@ -48,15 +48,15 @@
 
     {% for post in posts.data %}
 {#      <div id="id{{ post.id }}" class="card card-post">#}
-         <div v-if="skeleton" class="card card-post">
+      <div v-if="skeleton" class="card card-post">
         <div class="card-header">
           <div class="row d-none d-lg-flex">
             <div class="col-2">
-              <div class="skeleton" style="height: 20px"></div>
+              <div style="height: 20px"></div>
             </div>
 
             <div class="col-10 text-truncate small">
-              <div class="skeleton" style="height: 20px; width: 30%"></div>
+              <div style="height: 20px; width: 30%"></div>
             </div>
           </div>
         </div>
@@ -64,32 +64,28 @@
         <div class="card-body">
           <div class="media d-lg-none mb-2">
             <div class="media-left mr-2">
-              <div class="skeleton" style="width: 35px; height: 35px"></div>
+              <div style="width: 35px; height: 35px"></div>
             </div>
 
             <div class="media-body">
-              <div class="skeleton" style="height: 20px"></div>
+              <div style="height: 20px"></div>
             </div>
           </div>
 
           <div class="row">
             <div class="d-none d-lg-block col-lg-2">
-              <div class="skeleton" style="width: 75px; height: 75px"></div>
+              <div style="width: 75px; height: 75px"></div>
 
-              <ul class="post-stats list-unstyled">
-                <li>
-                  <strong class="skeleton skeleton-sm">Rejestracja:</strong>
-                </li>
-                <li>
-                  <strong class="skeleton skeleton-sm">Ostatnio:</strong>
-                </li>
-                <li>
-                  <strong class="skeleton skeleton-sm">Postów:</strong>
-                </li>
+              <ul class="post-stats list-unstyled" style="height: 66px">
+
               </ul>
             </div>
 
             <div class="col-12 col-lg-10">
+              <div class="post-vote">
+                <strong title="Ocena postu" class="vote-count">{{ post.score }}</strong>
+              </div>
+
               <div class="post-content">{{ post.html|raw }}</div>
             </div>
           </div>
@@ -101,9 +97,20 @@
 
             <div class="col-12 d-flex col-lg-10">
               <div>
-                <button class="btn btn-sm skeleton">Obserwuj</button>
-                <button class="btn btn-sm skeleton">Udostępnij</button>
-                <button class="btn btn-sm skeleton">Komentuj</button>
+                <button class="btn btn-sm">
+                  <i class="fa-fw fa-bell far"></i>
+                  <span class="d-none d-sm-inline">Obserwuj</span>
+                </button>
+
+                <button class="btn btn-sm">
+                  <i class="fas fa-fw fa-share-alt"></i>
+                  <span class="d-none d-sm-inline">Udostępnij</span>
+                </button>
+
+                <button class="btn btn-sm">
+                  <i class="fa-fw fa-comment far"></i>
+                  <span class="d-none d-sm-inline">Komentuj</span>
+                </button>
               </div>
 
               <div class="ml-auto">
@@ -111,7 +118,6 @@
               </div>
             </div>
           </div>
-
         </div>
       </div>
     {% endfor %}
