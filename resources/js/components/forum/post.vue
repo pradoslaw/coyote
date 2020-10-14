@@ -14,8 +14,8 @@
       </template>
     </a>
 
-    <div :class="{'collapse': isCollapsed}" class="card-header">
-      <div class="row d-none d-lg-flex">
+    <div :class="{'collapse': isCollapsed}" class="card-header d-none d-lg-block">
+      <div class="row">
         <div class="col-2">
           <h5 class="mb-0 post-author">
             <vue-user-name v-if="post.user" :user="post.user" :owner="post.user_id === topic.owner_id"></vue-user-name>
