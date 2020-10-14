@@ -30,10 +30,10 @@
 
 <script>
   import DesktopNotifications from '../../libs/notifications';
-  import {default as ws} from '../../libs/realtime.js';
+  import { default as ws } from '../../libs/realtime.js';
   import store from '../../store';
-  import {default as PerfectScrollbar} from '../perfect-scrollbar';
-  import {mixin as clickaway} from 'vue-clickaway';
+  import { default as PerfectScrollbar } from '../perfect-scrollbar';
+  import { mixin as clickaway } from 'vue-clickaway';
   import VueMessage from './message-compact.vue';
   import { mapState, mapGetters, mapMutations } from "vuex";
 
