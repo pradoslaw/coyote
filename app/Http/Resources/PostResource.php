@@ -90,7 +90,9 @@ class PostResource extends JsonResource
         $html = $this->text !== null ? $this->html : null;
 
         $commentsCount = count($this->resource->comments);
-        $comments = $this->resource->comments->slice(-5, null, true);
+        // show all comments if parameter "p" is present. it means that user wants to be redirected
+        // to specific post and probably wants to see all comments (or specific comment)
+        $comments = $request->get('p') == $this->id ? $this->resource->comments : $this->resource->comments->slice(-5, null, true);
 
         return array_merge($only, [
             'created_at'    => $this->created_at->toIso8601String(),
