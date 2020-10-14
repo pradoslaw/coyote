@@ -25,6 +25,7 @@
 </template>
 
 <script>
+  import Vue from 'vue';
   import VueTimeago from '../../plugins/timeago';
   import VueAvatar from '../avatar.vue';
 

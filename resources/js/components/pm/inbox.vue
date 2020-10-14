@@ -35,10 +35,10 @@
   import {default as PerfectScrollbar} from '../perfect-scrollbar';
   import {mixin as clickaway} from 'vue-clickaway';
   import VueMessage from './message-compact.vue';
-  import {mapState} from "vuex";
+  import { mapState, mapGetters, mapMutations } from "vuex";
 
   export default {
-    mixins: [clickaway],
+    mixins: [ clickaway ],
     components: {
       'perfect-scrollbar': PerfectScrollbar,
       'vue-message': VueMessage
@@ -46,18 +46,21 @@
     store,
     data() {
       return {
-        isOpen: false
+        isOpen: false,
+        currentTitle: null,
+        animationId: null
       }
     },
     mounted() {
       this.listenForMessages();
+      this.listenForVisibilityChange();
     },
     methods: {
       loadMessages() {
         this.isOpen = !this.isOpen;
 
-        if (this.$store.getters['inbox/isEmpty']) {
-          this.$store.dispatch('inbox/get');
+        if (this.isEmpty) {
+          store.dispatch('inbox/get');
         }
       },
 
@@ -67,15 +70,72 @@
 
       listenForMessages() {
         ws.on('Coyote\\Events\\PmCreated', data => {
-          this.$store.commit('inbox/increment');
-          this.$store.commit('inbox/reset');
+          this.increment();
+          this.reset();
 
           this.isOpen = false;
 
           DesktopNotifications.doNotify(data.user.name, data.excerpt, data.url);
+
+          this.startAnimation(data.user);
         });
       },
+
+      listenForVisibilityChange() {
+        document.addEventListener('visibilitychange', () => {
+          if (!document.hidden) {
+            this.stopAnimation();
+          }
+        });
+
+        ws.on('PmVisible', this.stopAnimation);
+      },
+
+      startAnimation(user) {
+        if (!document.hidden) {
+          // page is not hidden. tell other tabs to stop animation
+          this.stopAnimationOnAllWindows();
+
+          return;
+        }
+
+        // there is an animation still in progress. skip it.
+        if (this.animationId !== null) {
+          return;
+        }
+
+        this.currentTitle = document.title;
+
+        this.animationId = setInterval(() =>
+          document.title = document.title === this.currentTitle ? 'Masz wiadomość od: ' + user.name : this.currentTitle, 2000
+        );
+      },
+
+      stopAnimation() {
+        if (this.animationId === null) {
+          return;
+        }
+
+        // remove animation if exists
+        clearInterval(this.animationId);
+        // restore original title
+        document.title = this.currentTitle;
+
+        this.currentTitle = this.animationId = null;
+
+        this.stopAnimationOnAllWindows();
+      },
+
+      stopAnimationOnAllWindows() {
+        // send event to other tabs
+        ws.whisper(`user:${store.state.user.id}`, 'PmVisible', {});
+      },
+
+      ...mapMutations('inbox', ['increment', 'reset'])
     },
-    computed: mapState('inbox', ['messages', 'count'])
+    computed: {
+      ...mapState('inbox', ['messages', 'count']),
+      ...mapGetters('inbox', ['isEmpty'])
+    }
   };
 </script>
