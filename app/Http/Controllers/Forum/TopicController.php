@@ -133,7 +133,7 @@ class TopicController extends BaseController
             'is_writeable'  => $this->gate->allows('write', $forum) && $this->gate->allows('write', $topic),
             'all_forums'    => $allForums,
             'user_forums'   => $userForums,
-            'description'   => excerpt(array_first($posts)['text'], 100)
+            'description'   => excerpt(array_first($posts['data'])['text'], 100)
         ]);
     }
 
