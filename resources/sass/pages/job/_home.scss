@@ -59,6 +59,7 @@
   &.inline {
     display: flex;
     align-items: center;
+    flex-direction: row;
 
     .list-group-item a:hover:after {
       @include remove-overlay();
