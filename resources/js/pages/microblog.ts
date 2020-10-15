@@ -20,6 +20,52 @@ declare global {
   }
 }
 
+interface Observer {
+  update(microblog: Microblog): void;
+}
+
+class LiveNotification {
+  private observers: Observer[] = [];
+
+  attach(observer: Observer) {
+    this.observers.push(observer);
+  }
+
+  notify(microblog: Microblog) {
+    for (const observer of this.observers) {
+      observer.update(microblog);
+    }
+  }
+}
+
+class UpdateMicroblog implements Observer {
+  update(microblog: Microblog) {
+    const item = store.state.microblogs.data[microblog.id!];
+
+    if (!item || item.is_editing) {
+      return; // do not add new entries live (yet)
+    }
+
+    store.commit('microblogs/update', microblog);
+  }
+}
+
+class UpdateComment implements Observer {
+  update(comment: Microblog) {
+    if (!comment.parent_id) {
+      return;
+    }
+
+    const parent = store.state.microblogs.data[comment.parent_id];
+
+    if (parent.comments[comment.id!]?.is_editing) {
+      return;
+    }
+
+    store.commit(`microblogs/${comment.id! in parent.comments ? 'updateComment' : 'addComment'}`, { parent, comment });
+  }
+}
+
 new Vue({
   el: '#js-microblog',
   delimiters: ['${', '}'],
@@ -35,50 +81,25 @@ new Vue({
     }
   },
   mounted() {
-    ws.on('MicroblogSaved', this.liveUpdate);
+    const notification = new LiveNotification();
+
+    notification.attach(new UpdateMicroblog());
+    notification.attach(new UpdateComment());
+
+    ws.on('MicroblogSaved', (microblog: Microblog) => {
+      // highlight not read text
+      microblog.is_read = false;
+
+      notification.notify(microblog);
+    });
   },
   methods: {
     changePage(page: number) {
       window.location.href = `${window.location.href.split('?')[0]}?page=${page}`;
-    },
-
-    liveUpdate(microblog: Microblog) {
-      // user is in the middle of updating text. don't replace text with the one from web server
-      if (this.isEditing(microblog.id)) {
-        return;
-      }
-
-      // highlight not read text
-      microblog.is_read = false;
-
-      if (microblog.parent_id) {
-        const parent = store.state.microblogs.data[microblog.parent_id];
-
-        this.updateComment(parent, microblog);
-      }
-      else {
-        this.updateMicroblog(microblog);
-      }
-    },
-
-    updateComment(parent: Microblog, comment: Microblog): void {
-      if (!parent) {
-        return;
-      }
-
-      store.commit(`microblogs/${comment.id! in parent.comments ? 'updateComment' : 'addComment'}`, { parent, comment });
-    },
-
-    updateMicroblog(microblog): void {
-      if (!this.exists(microblog.id)) {
-        return; // do not add new entries
-      }
-
-      store.commit('microblogs/update', microblog);
     }
   },
   computed: {
-    ...mapGetters('microblogs', ['microblogs', 'currentPage', 'totalPages', 'exists', 'isEditing']),
+    ...mapGetters('microblogs', ['microblogs', 'currentPage', 'totalPages']),
 
     microblog(): Microblog {
       return this.microblogs[Object.keys(this.microblogs)[0]];

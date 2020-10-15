@@ -14,7 +14,7 @@ const DEFAULT_INTERVAL = 5000;
  */
 const MAX_RETRIES = 50;
 
-export const SOCKET_ID = Math.random().toString(32);
+export const SOCKET_ID = Math.random().toString(32).substr(2);
 
 class Realtime {
   constructor(host, token) {

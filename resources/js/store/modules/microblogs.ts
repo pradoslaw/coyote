@@ -1,6 +1,8 @@
 import axios from "axios";
-import { Microblog, Paginator, Media } from "../../types/models";
+import { Microblog, Paginator } from "../../types/models";
 import Vue from 'vue';
+
+type ParentChild = { parent: Microblog, comment: Microblog };
 
 const state: Paginator = {
   current_page: 0,
@@ -17,11 +19,8 @@ const getters = {
   microblogs: state => Object.values(state.data).sort((a, b) => (a as Microblog).id! > (b as Microblog).id! ? -1 : 1),
   exists: state => (id: number) => id in state.data,
   currentPage: state => state.current_page,
-  totalPages: state => state.last_page,
-  isEditing: state => (id: number) => id in state.data && state.data[id].is_editing,
+  totalPages: state => state.last_page
 }
-
-type ParentChild = { parent: Microblog, comment: Microblog };
 
 const mutations = {
   init(state, pagination: Paginator) {
