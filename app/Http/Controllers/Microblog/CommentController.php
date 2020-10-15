@@ -127,9 +127,9 @@ class CommentController extends Controller
         }
 
         // save broadcast parent entry
-        event(new MicroblogSaved($microblog->parent));
+        broadcast(new MicroblogSaved($microblog->parent))->toOthers();
         // just broadcast comment
-        broadcast(new MicroblogSaved($microblog));
+        broadcast(new MicroblogSaved($microblog))->toOthers();
 
         MicroblogResource::withoutWrapping();
 
