@@ -146,7 +146,7 @@
       ...mapGetters('user', ['isAuthorized']),
       ...mapState('user', {user: state => state})
     },
-    methods: mapActions('microblogs', ['vote', 'subscribe', 'loadVoters'])
+    methods: mapActions('microblogs', ['vote', 'subscribe', 'loadVoters', 'loadComments'])
   })
   export default class VueMicroblog extends Mixins(MicroblogMixin) {
     private index: number | null = null;
@@ -186,12 +186,6 @@
       else {
         this.$notify({type: 'error', text: 'Nie można skopiować linku do schowka.'});
       }
-    }
-
-    loadComments() {
-      store.dispatch('microblogs/loadComments', this.microblog).then(() => {
-        this.$nextTick(() => (this.$refs.comments as HTMLElement).scrollIntoView());
-      });
     }
 
     get totalComments() {
