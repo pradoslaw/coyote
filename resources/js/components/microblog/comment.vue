@@ -1,5 +1,5 @@
 <template>
-  <div :id="anchor" :class="{'highlight-flash': highlight}" class="media">
+  <div :id="anchor" :class="{'highlight-flash': highlight, 'not-read': comment.is_read === false}" class="media">
     <div class="mr-2">
       <a v-profile="comment.user.id">
         <vue-avatar v-bind="comment.user" class="i-35 d-block img-thumbnail"></vue-avatar>

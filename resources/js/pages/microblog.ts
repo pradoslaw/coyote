@@ -35,23 +35,33 @@ new Vue({
     }
   },
   mounted() {
-    ws.on('MicroblogSaved', (microblog: Microblog) => {
-      if (microblog.parent_id) {
-        const parent = store.state.microblogs.data[microblog.parent_id];
-
-        this.liveComments(parent, microblog);
-      }
-      else {
-        this.liveMicroblogs(microblog);
-      }
-    });
+    ws.on('MicroblogSaved', this.liveUpdate);
   },
   methods: {
     changePage(page: number) {
       window.location.href = `${window.location.href.split('?')[0]}?page=${page}`;
     },
 
-    liveComments(parent: Microblog, comment: Microblog): void {
+    liveUpdate(microblog: Microblog) {
+      // user is in the middle of updating text. don't replace text with the one from web server
+      if (this.isEditing(microblog.id)) {
+        return;
+      }
+
+      // highlight not read text
+      microblog.is_read = false;
+
+      if (microblog.parent_id) {
+        const parent = store.state.microblogs.data[microblog.parent_id];
+
+        this.updateComment(parent, microblog);
+      }
+      else {
+        this.updateMicroblog(microblog);
+      }
+    },
+
+    updateComment(parent: Microblog, comment: Microblog): void {
       if (!parent) {
         return;
       }
@@ -59,7 +69,7 @@ new Vue({
       store.commit(`microblogs/${comment.id! in parent.comments ? 'updateComment' : 'addComment'}`, { parent, comment });
     },
 
-    liveMicroblogs(microblog): void {
+    updateMicroblog(microblog): void {
       if (!this.exists(microblog.id)) {
         return; // do not add new entries
       }
@@ -68,7 +78,7 @@ new Vue({
     }
   },
   computed: {
-    ...mapGetters('microblogs', ['microblogs', 'currentPage', 'totalPages', 'exists']),
+    ...mapGetters('microblogs', ['microblogs', 'currentPage', 'totalPages', 'exists', 'isEditing']),
 
     microblog(): Microblog {
       return this.microblogs[Object.keys(this.microblogs)[0]];
