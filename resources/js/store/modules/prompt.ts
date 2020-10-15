@@ -17,10 +17,6 @@ const actions = {
   request ({ state, commit }, { source, value }) {
     commit('cancel');
 
-    if (!value.trim().length) {
-      return Promise.resolve([]);
-    }
-
     return axios.get(source, {cancelToken: state.source.token, params: {q: value}, errorHandle: false})
       .then(response => {
         let items = response.data.data;

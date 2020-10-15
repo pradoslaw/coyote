@@ -81,9 +81,16 @@
 
         if (startIndex > -1) {
           userName = this.input.value.substr(startIndex, caretPosition - startIndex);
+          this.lookupName(userName);
+
+          return;
         }
 
-        this.lookupName(userName);
+        if (this.items.length) {
+          store.commit('prompt/cancel');
+
+          this.items = [];
+        }
       },
 
       selectItem(item) {
