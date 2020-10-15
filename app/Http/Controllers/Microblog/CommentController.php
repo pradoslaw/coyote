@@ -87,9 +87,9 @@ class CommentController extends Controller
                 // now we can add user to subscribers list (if he's not in there yet)
                 // after that he will receive notification about other users comments
                 if (!$parent->subscribers()->forUser($this->auth->id)->exists()) {
-                    $count = $microblog->parent()->where('user_id', $this->auth->id)->count();
+                    $count = $parent->comments()->forUser($this->auth->id)->count();
 
-                    if ($count == 1) {
+                    if ($count === 1) {
                         $parent->subscribers()->create(['user_id' => $this->auth->id]);
                         $isSubscribed = true;
                     }

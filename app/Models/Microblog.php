@@ -2,7 +2,7 @@
 
 namespace Coyote;
 
-use Coyote\Microblog\Vote;
+use Coyote\Models\Scopes\ForUser;
 use Coyote\Services\Media\Factory as MediaFactory;
 use Coyote\Services\Media\MediaInterface;
 use Illuminate\Database\Eloquent\Builder;
@@ -32,7 +32,7 @@ use Illuminate\Database\Query\Expression;
  */
 class Microblog extends Model
 {
-    use SoftDeletes, Taggable;
+    use SoftDeletes, Taggable, ForUser;
     use Searchable{
         getIndexBody as parentGetIndexBody;
     }

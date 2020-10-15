@@ -24,7 +24,7 @@ class CommentControllerTest extends TestCase
         $this->user = factory(User::class)->create();
     }
 
-    public function testSubmitComment()
+    public function testSubmitCommentAndSubscribe()
     {
         $microblog = factory(Microblog::class)->create();
         $fake = Factory::create();
