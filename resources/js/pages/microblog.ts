@@ -58,7 +58,7 @@ class UpdateComment implements Observer {
 
     const parent = store.state.microblogs.data[comment.parent_id];
 
-    if (parent.comments[comment.id!]?.is_editing) {
+    if (parent?.comments[comment.id!]?.is_editing) {
       return;
     }
 
