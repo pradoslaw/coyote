@@ -42,7 +42,13 @@ class MicroblogSaved implements ShouldBroadcast
      */
     public function broadcastWith()
     {
-        return (new MicroblogResource($this->microblog))->resolve();
+        $request = clone request();
+        // assign null to user.
+        $request->setUserResolver(function () {
+            return null;
+        });
+
+        return (new MicroblogResource($this->microblog))->resolve($request);
     }
 
     /**
