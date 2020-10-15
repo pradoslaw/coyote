@@ -35,7 +35,7 @@ new Vue({
     }
   },
   mounted() {
-    ws.on('MicroblogSaved', (microblog) => {
+    ws.on('MicroblogSaved', (microblog: Microblog) => {
       if (microblog.parent_id) {
         const parent = store.state.microblogs.data[microblog.parent_id];
 

@@ -1,12 +1,11 @@
 import {Vue, Component, Prop, Emit, Ref} from "vue-property-decorator";
 import store from "../../store";
-import {Microblog} from "../../types/models";
+import { Microblog } from "../../types/models";
 import VueModal from "../modal.vue";
 import VueForm from "../microblog/form.vue";
 
 @Component
 export class MicroblogMixin extends Vue {
-  protected isEditing = false;
   protected isWrapped = false;
 
   @Prop(Object)
@@ -18,11 +17,10 @@ export class MicroblogMixin extends Vue {
   @Ref()
   protected readonly form!: VueForm;
 
-  protected edit() {
-    this.isEditing = !this.isEditing;
+  protected edit(microblog: Microblog) {
+    store.commit('microblogs/toggleEdit', microblog);
 
-    if (this.isEditing) {
-      // @ts-ignore
+    if (microblog.is_editing) {
       this.$nextTick(() => this.form.textarea.focus());
       this.isWrapped = false;
     }

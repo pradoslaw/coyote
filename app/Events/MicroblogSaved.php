@@ -29,16 +29,25 @@ class MicroblogSaved implements ShouldBroadcast
         $this->microblog = $microblog;
     }
 
+    /**
+     * @return Channel|Channel[]
+     */
     public function broadcastOn()
     {
         return new Channel('microblog');
     }
 
+    /**
+     * @return array
+     */
     public function broadcastWith()
     {
         return (new MicroblogResource($this->microblog))->resolve();
     }
 
+    /**
+     * @return string
+     */
     public function broadcastAs()
     {
         return class_basename(self::class);

@@ -97,6 +97,11 @@ const mutations = {
 
   setSubscribed(state, microblog: Microblog) {
     microblog.is_subscribed = true;
+  },
+
+  toggleEdit(state, microblog: Microblog) {
+    // we must use set() because is_editing can be undefined
+    Vue.set(microblog, 'is_editing', !microblog.is_editing);
   }
 };
 

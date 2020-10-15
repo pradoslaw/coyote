@@ -7,9 +7,9 @@
     </div>
 
     <div class="media-body d-flex">
-      <vue-comment-form v-if="isEditing" :microblog="comment" ref="form" class="w-100 mr-1" @cancel="isEditing = false" @save="isEditing = false"></vue-comment-form>
+      <vue-comment-form v-if="comment.is_editing" :microblog="comment" ref="form" class="w-100 mr-1" @cancel="toggleEdit(comment)" @save="toggleEdit(comment)"></vue-comment-form>
 
-      <div v-if="!isEditing" class="break-word w-100">
+      <div v-if="!comment.is_editing" class="break-word w-100">
         <h6><vue-user-name :user="comment.user"></vue-user-name></h6>
         <div class="comment-text" v-html="comment.html"></div>
 
@@ -63,7 +63,7 @@
         <button class="btn btn-xs dropdown-toggle border-0" type="button" data-toggle="dropdown" aria-label="Dropdown"></button>
 
         <div class="dropdown-menu dropdown-menu-right">
-          <a @click="edit" class="dropdown-item btn-sm-edit" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
+          <a @click="edit(comment)" class="dropdown-item btn-sm-edit" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
           <a @click="deleteItem" class="dropdown-item btn-sm-remove"><i class="fas fa-times fa-fw"></i> Usuń</a>
         </div>
       </div>
@@ -90,7 +90,7 @@
   import VueModal from '../modal.vue';
   import { default as mixins } from '../mixins/user';
   import { Prop, Ref, Mixins } from "vue-property-decorator";
-  import {mapActions, mapGetters} from "vuex";
+  import { mapActions, mapGetters, mapMutations } from "vuex";
   import Component from "vue-class-component";
   import { mixin as clickaway } from "vue-clickaway";
   import store from "../../store";
@@ -106,7 +106,10 @@
     store,
     components: { 'vue-avatar': VueAvatar, 'vue-modal': VueModal, 'vue-user-name': VueUserName, 'vue-comment-form': VueCommentForm },
     computed: mapGetters('user', ['isAuthorized']),
-    methods: mapActions('microblogs', ['vote', 'loadVoters'])
+    methods: {
+      ...mapActions('microblogs', ['vote', 'loadVoters']),
+      ...mapMutations('microblogs', ['toggleEdit'])
+    }
   })
   export default class VueComment extends Mixins(MicroblogMixin) {
 
