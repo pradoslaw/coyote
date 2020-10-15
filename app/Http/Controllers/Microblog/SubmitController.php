@@ -100,7 +100,7 @@ class SubmitController extends Controller
             );
         }
 
-        event(new MicroblogSaved($microblog));
+        broadcast(new MicroblogSaved($microblog))->toOthers();
 
         MicroblogResource::withoutWrapping();
 
