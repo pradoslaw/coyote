@@ -1,7 +1,7 @@
 <template>
   <div :id="anchor" :class="{'highlight-flash': highlight}" class="post-comment">
     <template v-if="!isEditing">
-      <span v-html="comment.html"></span>
+      <span v-html="comment.html"></span> &mdash;
 
       <vue-user-name :user="comment.user" :owner="comment.user.id === topic.owner_id"></vue-user-name>
 
