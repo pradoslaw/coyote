@@ -3,7 +3,7 @@
 namespace Coyote\Listeners;
 
 use Coyote\Events\MicroblogWasDeleted;
-use Coyote\Events\MicroblogWasSaved;
+use Coyote\Events\MicroblogSaved;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
 use Coyote\Services\Elasticsearch\Crawler;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -31,9 +31,9 @@ class MicroblogListener implements ShouldQueue
     }
 
     /**
-     * @param MicroblogWasSaved $event
+     * @param MicroblogSaved $event
      */
-    public function onMicroblogSave(MicroblogWasSaved $event)
+    public function onMicroblogSave(MicroblogSaved $event)
     {
         $this->crawler->index($event->microblog);
     }
@@ -57,7 +57,7 @@ class MicroblogListener implements ShouldQueue
     public function subscribe($events)
     {
         $events->listen(
-            MicroblogWasSaved::class,
+            MicroblogSaved::class,
             'Coyote\Listeners\MicroblogListener@onMicroblogSave'
         );
 

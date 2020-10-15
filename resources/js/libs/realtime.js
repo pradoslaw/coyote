@@ -1,4 +1,4 @@
-import Config from './config';
+import store from '../store';
 
 /**
  * default interal between retries
@@ -14,12 +14,7 @@ const DEFAULT_INTERVAL = 5000;
  */
 const MAX_RETRIES = 50;
 
-/**
- * Path for web socket handler
- *
- * @type {string}
- */
-const PATH = '/realtime';
+export const SOCKET_ID = Math.random().toString(32);
 
 class Realtime {
   constructor(host, token) {
@@ -58,7 +53,7 @@ class Realtime {
 
   connect() {
     this._handler = new WebSocket(
-      (window.location.protocol === 'https:' ? 'wss' : 'ws') + '://' + this._host + PATH + '?token=' + this._token
+      (window.location.protocol === 'https:' ? 'wss' : 'ws') + `://${this._host}/realtime?token=${this._token}`
     );
 
     this._handler.onopen = () => {
@@ -69,7 +64,7 @@ class Realtime {
     this._handler.onmessage = e => {
       let data = JSON.parse(e.data);
 
-      if (data.event) {
+      if (data.socket !== SOCKET_ID && data.event) {
         this._emit(data.event, data.data, this._handler);
       }
     };
@@ -102,7 +97,7 @@ class Realtime {
 class RealtimeFactory {
   constructor() {
     if (!RealtimeFactory.instance) {
-      let realtime = new Realtime(Config.get('ws'), Config.get('user').token);
+      let realtime = new Realtime(window.__INITIAL_STATE.ws, store.state.user.token);
 
       // response to the heartbeat event
       realtime.on('hb', (data, handler) => handler.send(data));

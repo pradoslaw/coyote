@@ -3,17 +3,18 @@
 namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Events\MicroblogWasDeleted;
-use Coyote\Events\MicroblogWasSaved;
+use Coyote\Events\MicroblogSaved;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\MediaFactory;
 use Coyote\Http\Requests\MicroblogRequest;
 use Coyote\Http\Resources\Api\MicroblogResource;
+use Coyote\Microblog;
 use Coyote\Notifications\Microblog\UserMentionedNotification;
 use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Services\Media\Clipboard;
 use Coyote\Services\Parser\Helpers\Login as LoginHelper;
 use Coyote\Services\Parser\Helpers\Hash as HashHelper;
-use Coyote\Repositories\Contracts\UserRepositoryInterface as User;
+use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
@@ -30,14 +31,14 @@ class SubmitController extends Controller
     use MediaFactory;
 
     /**
-     * @var User
+     * @var UserRepository
      */
     private $user;
 
     /**
-     * @param User $user
+     * @param UserRepository $user
      */
-    public function __construct(User $user)
+    public function __construct(UserRepository $user)
     {
         parent::__construct();
 
@@ -51,25 +52,21 @@ class SubmitController extends Controller
      * @return MicroblogResource
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function save(MicroblogRequest $request, Dispatcher $dispatcher, $microblog)
+    public function save(MicroblogRequest $request, Dispatcher $dispatcher, ?Microblog $microblog)
     {
         $this->user->pushCriteria(new WithTrashed());
 
-        $data = $request->only(['text', 'media']);
-
         if (!$microblog->exists) {
-            $user = $this->auth;
-            $data['user_id'] = $user->id;
+            $microblog->user()->associate($this->auth);
         } else {
             $this->authorize('update', $microblog);
-
-            $user = $microblog->user;
         }
 
-        $microblog->fill($data);
+        $microblog->fill($request->only(['text', 'media']));
 
-        $this->transaction(function () use (&$microblog, $user) {
+        $this->transaction(function () use ($microblog) {
             $microblog->save();
+
             $object = (new Stream_Microblog())->map($microblog);
 
             if ($microblog->wasRecentlyCreated) {
@@ -82,7 +79,7 @@ class SubmitController extends Controller
                 if ($this->auth->allow_subscribe) {
                     // enable subscribe button
                     $microblog->is_subscribed = true;
-                    $microblog->subscribers()->create(['user_id' => $user->id]);
+                    $microblog->subscribers()->create(['user_id' => $this->auth->id]);
                 }
             } else {
                 stream(Stream_Update::class, $object);
@@ -103,7 +100,7 @@ class SubmitController extends Controller
             );
         }
 
-        event(new MicroblogWasSaved($microblog));
+        broadcast(new MicroblogSaved($microblog))->toOthers();
 
         MicroblogResource::withoutWrapping();
 

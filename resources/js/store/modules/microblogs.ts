@@ -17,7 +17,8 @@ const getters = {
   microblogs: state => Object.values(state.data).sort((a, b) => (a as Microblog).id! > (b as Microblog).id! ? -1 : 1),
   exists: state => (id: number) => id in state.data,
   currentPage: state => state.current_page,
-  totalPages: state => state.last_page
+  totalPages: state => state.last_page,
+  isEditing: state => (id: number) => id in state.data && state.data[id].is_editing,
 }
 
 type ParentChild = { parent: Microblog, comment: Microblog };
@@ -97,6 +98,11 @@ const mutations = {
 
   setSubscribed(state, microblog: Microblog) {
     microblog.is_subscribed = true;
+  },
+
+  toggleEdit(state, microblog: Microblog) {
+    // we must use set() because is_editing can be undefined
+    Vue.set(microblog, 'is_editing', !microblog.is_editing);
   }
 };
 

@@ -162,6 +162,10 @@
       display: inline;
       margin-right: 3px;
     }
+
+    &.not-read {
+      border-left: 2px solid $alt-link-hover-color;
+    }
   }
 
   // Comment text

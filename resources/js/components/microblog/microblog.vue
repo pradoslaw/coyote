@@ -13,7 +13,7 @@
             <button class="btn btn-secondary btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-label="Dropdown"></button>
 
             <div class="dropdown-menu dropdown-menu-right">
-              <a @click="edit" class="dropdown-item btn-edit" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
+              <a @click="edit(microblog)" class="dropdown-item btn-edit" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
               <a @click="deleteItem" class="dropdown-item btn-remove" href="javascript:"><i class="fas fa-times fa-fw"></i> Usuń</a>
             </div>
           </div>
@@ -23,7 +23,7 @@
 
           <small v-if="microblog.is_sponsored" class="text-muted small">&bull; Sponsorowane</small>
 
-          <div v-show="!isEditing" :class="{'microblog-wrap': isWrapped}">
+          <div v-show="!microblog.is_editing" :class="{'microblog-wrap': isWrapped}">
             <div v-html="microblog.html" class="break-word microblog-text"></div>
 
             <div v-if="microblog.media.length" class="row mb-2">
@@ -41,7 +41,7 @@
             <div v-if="isWrapped" @click="unwrap" class="show-more"><a href="javascript:"><i class="fa fa-arrow-alt-circle-right"></i> Zobacz całość</a></div>
           </div>
 
-          <vue-form v-if="isEditing" ref="form" :microblog="microblog" class="mt-2 mb-2" @cancel="isEditing = false" @save="isEditing = false"></vue-form>
+          <vue-form v-if="microblog.is_editing" ref="form" :microblog="microblog" class="mt-2 mb-2" @cancel="toggleEdit(microblog)" @save="toggleEdit(microblog)"></vue-form>
 
           <a @click="checkAuth(vote, microblog)" :title="microblog.voters.join(', ')" href="javascript:" class="btn btn-thumbs">
             <i :class="{'fas text-primary': microblog.is_voted, 'far': !microblog.is_voted}" class="fa-fw fa-thumbs-up"></i>
@@ -117,7 +117,7 @@
   import VueForm from './form.vue';
   import { default as mixins } from '../mixins/user';
   import { Prop, Ref, Mixins } from "vue-property-decorator";
-  import { mapGetters, mapState, mapActions } from "vuex";
+  import {mapGetters, mapState, mapActions, mapMutations} from "vuex";
   import Component from "vue-class-component";
   import { mixin as clickaway } from "vue-clickaway";
   import store from "../../store";
@@ -146,7 +146,10 @@
       ...mapGetters('user', ['isAuthorized']),
       ...mapState('user', {user: state => state})
     },
-    methods: mapActions('microblogs', ['vote', 'subscribe', 'loadVoters', 'loadComments'])
+    methods: {
+      ...mapActions('microblogs', ['vote', 'subscribe', 'loadVoters', 'loadComments']),
+      ...mapMutations('microblogs', ['toggleEdit'])
+    }
   })
   export default class VueMicroblog extends Mixins(MicroblogMixin) {
     private index: number | null = null;
