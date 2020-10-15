@@ -72,4 +72,15 @@ describe('microblog mutation', () => {
     // @ts-ignore
     expect(state.data[parent.id!].comments_count).toBe(1);
   });
+
+  test('edit', () => {
+    const parent = fake();
+    const state = {
+      data: [parent]
+    };
+
+    mutations.edit(state, parent);
+
+    expect(parent.is_editing).toBeTruthy();
+  });
 });

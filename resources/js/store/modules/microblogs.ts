@@ -90,6 +90,11 @@ const mutations = {
     }
   },
 
+  edit(state, microblog: Microblog) {
+    // we must use set() because is_editing can be undefined
+    Vue.set(microblog, 'is_editing', !microblog.is_editing);
+  },
+
   setComments(state, { microblog, comments }) {
     microblog.comments = comments;
     microblog.comments_count = Object.keys(comments).length;
@@ -97,11 +102,6 @@ const mutations = {
 
   setSubscribed(state, microblog: Microblog) {
     microblog.is_subscribed = true;
-  },
-
-  toggleEdit(state, microblog: Microblog) {
-    // we must use set() because is_editing can be undefined
-    Vue.set(microblog, 'is_editing', !microblog.is_editing);
   }
 };
 

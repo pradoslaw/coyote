@@ -41,7 +41,7 @@
             <div v-if="isWrapped" @click="unwrap" class="show-more"><a href="javascript:"><i class="fa fa-arrow-alt-circle-right"></i> Zobacz całość</a></div>
           </div>
 
-          <vue-form v-if="microblog.is_editing" ref="form" :microblog="microblog" class="mt-2 mb-2" @cancel="toggleEdit(microblog)" @save="toggleEdit(microblog)"></vue-form>
+          <vue-form v-if="microblog.is_editing" ref="form" :microblog="microblog" class="mt-2 mb-2" @cancel="edit(microblog)" @save="edit(microblog)"></vue-form>
 
           <a @click="checkAuth(vote, microblog)" :title="microblog.voters.join(', ')" href="javascript:" class="btn btn-thumbs">
             <i :class="{'fas text-primary': microblog.is_voted, 'far': !microblog.is_voted}" class="fa-fw fa-thumbs-up"></i>
@@ -148,7 +148,7 @@
     },
     methods: {
       ...mapActions('microblogs', ['vote', 'subscribe', 'loadVoters', 'loadComments']),
-      ...mapMutations('microblogs', ['toggleEdit'])
+      ...mapMutations('microblogs', ['edit'])
     }
   })
   export default class VueMicroblog extends Mixins(MicroblogMixin) {
