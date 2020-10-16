@@ -85,10 +85,6 @@ class PostCollection extends ResourceCollection
                 $post->setRelation('topic', $this->topic);
                 $post->setRelation('forum', $this->forum);
 
-                $post->comments->each(function (Post\Comment $comment) {
-                    $comment->setRelation('forum', $this->forum);
-                });
-
                 $resource = (new PostResource($post))->setTracker($this->tracker);
 
                 if (isset($this->flags[$post->id])) {

@@ -7,6 +7,8 @@ use Coyote\Group;
 use Coyote\User;
 use Faker\Factory;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Mockery;
 use Tests\TestCase;
@@ -96,5 +98,19 @@ class ForumPolicyTest extends TestCase
 
         $this->assertTrue($this->user->can('update', $this->forum));
         $this->assertTrue($this->user->can('write', $this->forum));
+    }
+
+    public function testDeleteForumIsAllowed()
+    {
+        Auth::setUser($this->user);
+
+        Gate::define('forum-delete', function () {
+            return true;
+        });
+
+        $this->assertTrue($this->user->can('delete', $this->forum));
+        $this->assertTrue(Gate::allows('forum-delete'));
+        $this->assertTrue(Gate::allows('delete', $this->forum));
+        $this->assertTrue(Gate::forUser($this->user)->allows('delete', $this->forum));
     }
 }

@@ -5,10 +5,12 @@ namespace Coyote\Http\Resources;
 use Carbon\Carbon;
 use Coyote\Forum;
 use Coyote\Http\Factories\GateFactory;
+use Coyote\Post\Comment;
 use Coyote\Services\Forum\Tracker;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Topic;
 use Coyote\User;
+use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -71,12 +73,17 @@ class PostResource extends JsonResource
         return $this;
     }
 
+    /**
+     * @param \Coyote\Flag[] $flags
+     * @return $this
+     */
     public function setFlags($flags)
     {
         $this->flags = $flags;
 
         return $this;
     }
+
 
     /**
      * Transform the resource into an array.
@@ -86,6 +93,8 @@ class PostResource extends JsonResource
      */
     public function toArray($request)
     {
+        $this->applyCommentsRelation();
+
         $only = $this->resource->only(['id', 'user_name', 'score', 'text', 'edit_count', 'is_voted', 'is_accepted', 'is_subscribed', 'user_id', 'deleter_name', 'delete_reason']);
         $html = $this->text !== null ? $this->html : null;
 
@@ -138,5 +147,12 @@ class PostResource extends JsonResource
                 'permission'        => 'delete'
             ])
         ]);
+    }
+
+    private function applyCommentsRelation()
+    {
+        $this->resource->comments->each(function (Comment $comment) {
+            $comment->setRelation('forum', $this->forum);
+        });
     }
 }
