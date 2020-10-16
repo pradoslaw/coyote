@@ -10,7 +10,6 @@ use Coyote\Services\Forum\Tracker;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Topic;
 use Coyote\User;
-use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
