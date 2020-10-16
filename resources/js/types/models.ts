@@ -30,7 +30,7 @@ export interface User {
   allow_sig?: boolean;
   location?: string;
   sig?: string;
-  group?: string;
+  group_name?: string;
 }
 
 export interface Media {

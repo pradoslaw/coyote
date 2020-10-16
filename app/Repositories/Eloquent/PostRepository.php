@@ -40,6 +40,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
                 return $builder->select([
                         'users.id',
                         'users.name',
+                        'users.group_name',
                         'photo',
                         'posts',
                         'sig',
@@ -51,10 +52,8 @@ class PostRepository extends Repository implements PostRepositoryInterface
                         'allow_smilies',
                         'allow_count',
                         'allow_sig',
-                        'is_online',
-                        $this->raw('groups.name AS group')
-                    ])
-                    ->leftJoin('groups', 'groups.id', 'group_id');
+                        'is_online'
+                    ]);
             }])
             ->with(['editor:id,name,is_blocked,deleted_at', 'comments.user', 'attachments'])
             ->get();

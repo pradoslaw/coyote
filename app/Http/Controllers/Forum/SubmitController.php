@@ -139,10 +139,6 @@ class SubmitController extends BaseController
 
         PostResource::withoutWrapping();
 
-        if ($post->user && $post->user->group) {
-            $post->user->group = $post->user->group->name;
-        }
-
         $resource = (new PostResource($post))->setTracker($tracker)->resolve($this->request);
 
         // mark topic as read after publishing

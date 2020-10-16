@@ -13,7 +13,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class UserResource extends JsonResource
 {
-    private const OPTIONALS = ['allow_sig', 'allow_count', 'allow_smilies', 'posts', 'location', 'visited_at', 'created_at', 'group'];
+    private const OPTIONALS = ['allow_sig', 'allow_count', 'allow_smilies', 'posts', 'location', 'visited_at', 'created_at', 'group_name'];
 
     /**
      * Transform the resource into an array.

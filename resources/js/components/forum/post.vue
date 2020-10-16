@@ -77,7 +77,7 @@
               class="post-avatar img-thumbnail"
             ></vue-avatar>
 
-            <span v-if="post.user.group" class="badge badge-secondary mb-1">{{ post.user.group }}</span>
+            <span v-if="post.user.group_name" class="badge badge-secondary mb-1">{{ post.user.group_name }}</span>
 
             <ul class="post-stats list-unstyled">
               <li>

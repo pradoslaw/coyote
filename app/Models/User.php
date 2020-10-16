@@ -24,6 +24,7 @@ use Ramsey\Uuid\Uuid;
  * @property bool $is_confirm
  * @property bool $is_blocked
  * @property int $group_id
+ * @property string $group_name
  * @property int $visits
  * @property int $notifications
  * @property int $pm
@@ -63,6 +64,7 @@ use Ramsey\Uuid\Uuid;
  * @property bool $alert_login
  * @property \Coyote\Notification\Setting $notificationSettings[]
  * @property Group[]|\Illuminate\Support\Collection $groups
+ * @property Group $group
  */
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
@@ -145,6 +147,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
             if (empty($model->guest_id)) {
                 $model->guest_id = (string) Uuid::uuid4();
             }
+        });
+
+        static::saving(function (User $user) {
+            // save group name. it rarely changes
+            $user->group_name = $user->group_id ? $user->group->name : null;
         });
     }
 
