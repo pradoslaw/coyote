@@ -73,8 +73,11 @@ class GroupsController extends BaseController
             }
 
             $group->users()->sync((array) $form->users->getValue()); // array can be empty
+            // update group name in users table
+            $group->users()->where('users.group_id', $group->id)->update(['group_name' => $group->name]);
 
             $this->flushPermission();
+
             stream(Stream_Update::class, (new Stream_Group())->map($group));
         });
 
