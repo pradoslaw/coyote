@@ -117,9 +117,8 @@ class SubmitController extends BaseController
                 $object = (new Stream_Topic)->map($topic, $post->html);
                 $target = (new Stream_Forum)->map($forum);
 
-                if ($tags = array_unique((array) $request->input('tags', []))) {
-                    $topic->setTags($tags);
-                }
+                $tags = array_unique((array) $request->input('tags', []));
+                $topic->setTags($tags);
             } else {
                 $object = (new Stream_Post(['url' => $url]))->map($post);
                 $target = (new Stream_Topic())->map($topic);

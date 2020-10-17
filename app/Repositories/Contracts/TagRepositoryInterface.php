@@ -15,7 +15,7 @@ interface TagRepositoryInterface extends RepositoryInterface
     /**
      * @param int[] $ids
      */
-    public function countTopics(array $ids): void;
+    public function countTopics(array $ids = []): void;
 
     /**
      * @param string[] $tags
