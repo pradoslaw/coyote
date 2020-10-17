@@ -1,7 +1,7 @@
 // Top/bottom margin classes.
 // -------------------------------
 
-@each $size, $width in (lg, 30px), (md, 20px), (sm, 10px), (xs, 5px), (none, 0) {
+@each $size, $width in (md, 20px), (sm, 10px) {
   .margin-#{$size} {
     margin: #{$width};
   }
