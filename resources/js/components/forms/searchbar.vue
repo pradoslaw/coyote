@@ -17,11 +17,35 @@
           type="search"
           name="q"
           autocomplete="off"
-          placeholder="Szukaj"
+          placeholder="Wpisz &quot;?&quot; aby uzyskac pomoc lub wyszukaj"
         >
       </form>
 
-      <div v-if="isDropdownVisible && items.length > 0" class="search-dropdown">
+      <div v-if="isHelpEnabled" class="search-dropdown p-3">
+        <div class="row">
+          <div class="col-6 mb-2">
+            <code>"foo bar"</code> <small class="text-muted">szukaj całych fraz</small>
+          </div>
+
+          <div class="col-6 mb-2">
+            <code>+foo -bar</code> <small class="text-muted">wyklucz lub żądaj danego słowa w dokumencie</small>
+          </div>
+
+          <div class="col-6 mb-2">
+            <code>foo*</code> <small class="text-muted">szuka fragmentów słów</small>
+          </div>
+
+          <div class="col-6 mb-2">
+            <code>foo~</code> <small class="text-muted">szuka podobnych słów</small>
+          </div>
+
+          <div class="col-6 mb-2">
+            <code>user:foo</code> <small class="text-muted">szukaj po autorze</small>
+          </div>
+        </div>
+      </div>
+
+      <div v-else-if="isDropdownVisible && items.length > 0" class="search-dropdown">
 <!--&lt;!&ndash;      <div v-if="isDropdownVisible && items.length > 0" class="search-dropdown">&ndash;&gt;-->
 <!--&lt;!&ndash;        <nav class="list-inline" style="margin: 10px 7px 10px 7px">&ndash;&gt;-->
 <!--&lt;!&ndash;          <a class="list-inline-item active mr-2 text-primary" href="#" style="padding: 5px; font-size: 90%; border-bottom: 2px solid #80a41a">Forum</a>&ndash;&gt;-->
@@ -122,9 +146,10 @@
         }
 
         // @ts-ignore
-        const ascii = this.value.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
-        // @ts-ignore
-        const re = new RegExp(`\\b(${this.value}|${ascii})`, "i");
+        const value = this.value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+        const ascii = value.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+        const re = new RegExp(`\\b(${value}|${ascii})`, "i");
 
         return text.replace(re, "<strong>$1</strong>");
       }
@@ -174,6 +199,7 @@
   export default class VueSearchbar extends Vue {
     isActive: boolean = false;
     isDropdownVisible: boolean = false;
+    isHelpEnabled: boolean = false;
     items: Hit[] = [];
     selectedIndex: number = -1;
     readonly isAuthorized! : boolean;
@@ -262,7 +288,9 @@
     }
 
     completion(event: KeyboardEvent): void {
-      if (Object.values(SpecialKeys).includes(event.keyCode)) {
+      this.isHelpEnabled = this.value === '?';
+
+      if (this.isHelpEnabled || Object.values(SpecialKeys).includes(event.keyCode)) {
         return;
       }
 
@@ -271,21 +299,16 @@
     }
 
     loadItems(): void {
-      const endpoint = this.getEndpoint();
       const headers = this.isAuthorized ? {Authorization: `Bearer ${this.$store.state.user.token}`} : {};
 
-      if (!endpoint) {
+      if (!this.endpoint) {
         return;
       }
 
-      axios.get(endpoint, {params: {q: this.value || null}, headers}).then(response => {
+      axios.get(this.endpoint, {params: {q: this.value || null}, headers}).then(response => {
         this.items = response.data;
         this.isDropdownVisible = true;
       });
-    }
-
-    getEndpoint(): string | null {
-      return this.value.trim() === '' ? (this.isAuthorized ? '/completion/hub/' : null) : '/completion/';
     }
 
     shortcutSupport(event: KeyboardEvent): void {
@@ -308,6 +331,10 @@
 
     makeDecorator(item: Hit): string {
       return `${item.model}Decorator`;
+    }
+
+    get endpoint(): string | null {
+      return this.value.trim() === '' ? (this.isAuthorized ? '/completion/hub/' : null) : '/completion/';
     }
 
     get categories() {
