@@ -39,20 +39,17 @@ interface PostRepositoryInterface extends RepositoryInterface
     public function getFirstUnreadPostId($topicId, $markTime);
 
     /**
-     * Find posts by given ID. We use this method to retrieve quoted posts
-     *
-     * @param array $postsId
-     * @param int $topicId
-     * @return mixed
-     */
-    public function findPosts(array $postsId, $topicId);
-
-    /**
      * @param int $userId
      * @param \Coyote\Post $post
      * @return \Coyote\Post
      */
     public function merge($userId, $post);
+
+    /**
+     * @param int $postId
+     * @return mixed
+     */
+    public function history(int $postId);
 
     /**
      * @param int $userId

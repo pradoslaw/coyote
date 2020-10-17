@@ -99,24 +99,6 @@ class PostRepository extends Repository implements PostRepositoryInterface
     }
 
     /**
-     * Find posts by given ID. We use this method to retrieve quoted posts
-     *
-     * @param array $postsId
-     * @param int $topicId
-     * @return mixed
-     */
-    public function findPosts(array $postsId, $topicId)
-    {
-        return $this
-            ->model
-            ->select(['posts.*', 'users.name'])
-            ->leftJoin('users', 'users.id', '=', 'posts.user_id')
-            ->whereIn('posts.id', array_map('intval', $postsId))
-            ->where('topic_id', $topicId) // <-- this condition for extra security
-            ->get();
-    }
-
-    /**
      * @param int $userId
      * @param \Coyote\Post $post
      * @return \Coyote\Post
@@ -158,6 +140,28 @@ class PostRepository extends Repository implements PostRepositoryInterface
         $post->delete();
 
         return $previous;
+    }
+
+    /**
+     * @param int $postId
+     * @return mixed
+     */
+    public function history(int $postId)
+    {
+        return Post\Log::select([
+            'post_log.id',
+            'post_log.*',
+            'posts.user_name',
+            'users.name AS author_name',
+            $this->raw('users.deleted_at IS NULL AS is_active'),
+            'users.is_blocked',
+            'users.is_online'
+        ])
+        ->where('post_id', $postId)
+        ->join('posts', 'posts.id', '=', 'post_id')
+        ->leftJoin('users', 'users.id', '=', 'post_log.user_id')
+        ->orderBy('post_log.id', 'DESC')
+        ->get();
     }
 
     /**
@@ -357,29 +361,9 @@ class PostRepository extends Repository implements PostRepositoryInterface
             ->model
             ->addSelect([// addSelect() instead of select() to retrieve extra columns in criteria
                 'posts.*',
-//                'author.name AS author_name',
-//                'author.photo',
-//                $this->raw('author.deleted_at IS NULL AS is_active'),
-//                'author.is_blocked',
-//                'author.is_online',
-//                'author.sig',
-//                'author.location',
-//                'author.posts AS author_posts',
-//                'author.allow_sig',
-//                'author.allow_smilies',
-//                'author.allow_count',
-//                'author.created_at AS author_created_at',
-//                'author.visited_at AS author_visited_at',
-//                'editor.name AS editor_name',
-//                $this->raw('editor.deleted_at IS NULL AS editor_is_active'),
-//                'editor.is_blocked AS editor_is_blocked',
-//                'groups.name AS group_name',
                 'pa.user_id AS is_accepted'
             ])
             ->from($this->raw("($sub) AS posts"))
-//            ->leftJoin('users AS author', 'author.id', '=', 'posts.user_id')
-//            ->leftJoin('users AS editor', 'editor.id', '=', 'editor_id')
-//            ->leftJoin('groups', 'groups.id', '=', 'author.group_id')
             ->leftJoin('post_accepts AS pa', 'pa.post_id', '=', 'posts.id')
             ->orderBy('posts.created_at'); // <-- make sure that posts are in the right order!
 

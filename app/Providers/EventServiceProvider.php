@@ -8,7 +8,10 @@ use Coyote\Events\ForumWasSaved;
 use Coyote\Events\PostWasSaved;
 use Coyote\Events\StreamSaved;
 use Coyote\Events\SuccessfulLogin;
+use Coyote\Events\TopicWasDeleted;
+use Coyote\Events\TopicWasSaved;
 use Coyote\Listeners\ActivitySubscriber;
+use Coyote\Listeners\CalculateTagWeight;
 use Coyote\Listeners\ChangeImageUrl;
 use Coyote\Listeners\DispatchPostNotifications;
 use Coyote\Listeners\FlushFirewallCache;
@@ -23,7 +26,6 @@ use Coyote\Listeners\SetupWikiLinks;
 use Coyote\Listeners\UserSubscriber;
 use Coyote\Listeners\WikiListener;
 use Coyote\Listeners\PageListener;
-use Coyote\Listeners\PostListener;
 use Coyote\Listeners\TopicListener;
 use Coyote\Listeners\JobListener;
 use Illuminate\Auth\Events\Lockout;
@@ -47,7 +49,9 @@ class EventServiceProvider extends ServiceProvider
         MessageSending::class => [ChangeImageUrl::class, LogSentMessage::class],
         ForumWasSaved::class => [IndexCategory::class],
         StreamSaved::class => [IndexStream::class],
-        PostWasSaved::class => [DispatchPostNotifications::class]
+        PostWasSaved::class => [DispatchPostNotifications::class],
+        TopicWasSaved::class => [CalculateTagWeight::class],
+        TopicWasDeleted::class => [CalculateTagWeight::class]
     ];
 
     /**
