@@ -31,8 +31,7 @@
         <ul class="list-inline">
           <li class="list-inline-item dropdown">
             <a class="dropdown-toggle text-muted text-decoration-none" id="dropdownMenuButton" data-toggle="dropdown" href="javascript:">
-              <template v-if="!categories.length">Wszystkie kategorie</template>
-              <span v-else>${ selectedCategories }</span>
+              <span>${ selectedCategories || 'Wszystkie kategorie' }</span>
             </a>
 
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">

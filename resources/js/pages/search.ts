@@ -265,7 +265,8 @@ new Vue({
         .map(id => {
           const index = this.forums.findIndex(forum => forum.id == id) // == because id can be string
 
-          return this.forums[index].name;
+          // operator "?" is import. dategory ID passed in URL can be hidden for given user
+          return this.forums[index]?.name;
         })
         .splice(0, 5)
         .join(', ');
