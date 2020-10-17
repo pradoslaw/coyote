@@ -83,7 +83,9 @@
 
   // mobile
   @include media-breakpoint-down(sm) {
-    @include card-body-not-read();
+    .not-read {
+      @include not-read-border();
+    }
   }
 
   .tag-clouds {
@@ -125,14 +127,11 @@ a.not-read {
 
   &:after {
     content: ' ';
-    width: 12px;
-    height: 12px;
-    background-color: #d7661c;
-    border-radius: 50%;
     position: absolute;
     bottom: 2px;
     right: 0;
-    border: 2px solid #fff;
+
+    @include not-read-bullet;
   }
 }
 

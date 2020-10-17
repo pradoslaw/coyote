@@ -87,8 +87,14 @@
   }
 }
 
-@mixin card-body-not-read() {
-  .card-body.not-read {
-    border-left: 2px solid $alt-link-hover-color;
-  }
+@mixin not-read-border() {
+  border-left: 2px solid $alt-link-hover-color;
+}
+
+@mixin not-read-bullet() {
+  width: 12px;
+  height: 12px;
+  background-color: #d7661c;
+  border-radius: 50%;
+  border: 2px solid #fff;
 }

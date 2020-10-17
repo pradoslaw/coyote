@@ -1,5 +1,5 @@
 <template>
-  <div :id="anchor" :class="{'is-deleted': post.deleted_at, 'highlight-flash': highlight}" class="card card-post">
+  <div :id="anchor" :class="{'is-deleted': post.deleted_at, 'not-read': !post.is_read, 'highlight-flash': highlight}" class="card card-post">
     <a v-if="post.deleted_at" @click="isCollapsed = !isCollapsed" href="javascript:" class="post-delete card-body text-decoration-none">
       <i class="fas fa-warning"></i>
 
@@ -24,7 +24,8 @@
         </div>
 
         <div class="col-10 text-truncate small">
-          <i :class="{'fas new': !post.is_read, 'far': post.is_read}" class="fa-file"></i>
+          <i v-if="post.is_read" class="far fa-file"></i>
+          <i v-else title="Nowy post" class="not-read"></i>
 
           <a :href="post.url" class="small text-body">
             <vue-timeago :datetime="post.created_at"></vue-timeago>

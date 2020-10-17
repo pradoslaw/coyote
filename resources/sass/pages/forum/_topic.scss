@@ -18,8 +18,19 @@
     opacity: .6;
   }
 
-  .new {
-    color: $alt-link-hover-color;
+  // mobile
+  @include media-breakpoint-down(md) {
+    &.not-read {
+      @include not-read-border();
+    }
+  }
+
+  // desktop version
+  i.not-read {
+    @include not-read-bullet;
+
+    margin-bottom: -2px;
+    display: inline-block;
   }
 
   .btn-fast-reply {

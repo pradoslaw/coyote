@@ -41,7 +41,8 @@
 
               <ul v-if="category.children" class="list-inline list-sub d-none d-md-block d-lg-block">
                 <li v-for="children in category.children" class="list-inline-item">
-                  <i :class="{'fas new': !children.is_read, 'far': children.is_read}" class="fa-file"></i>
+                  <i v-if="children.is_read" class="far fa-file"></i>
+                  <i v-else class="not-read" title="Nowe posty w tej kategorii"></i>
 
                   <a :href="children.url">{{ children.name }}</a>
                 </li>

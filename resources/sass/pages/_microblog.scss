@@ -164,7 +164,7 @@
     }
 
     &.not-read {
-      border-left: 2px solid $alt-link-hover-color;
+      @include not-read-border;
     }
   }
 

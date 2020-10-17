@@ -98,7 +98,9 @@
 
   // mobile
   @include media-breakpoint-down(md) {
-    @include card-body-not-read();
+    .not-read {
+      @include not-read-border();
+    }
 
     .media {
       border-top: 1px solid $border-color;
@@ -163,7 +165,10 @@
     }
   }
 
-  .new {
-    color: $alt-link-hover-color;
+  i.not-read {
+    @include not-read-bullet;
+
+    display: inline-block;
+    margin-bottom: -2px;
   }
 }
