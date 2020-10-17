@@ -23,7 +23,7 @@
     <vue-dropdown :items="filteredTags" @select="toggleTag" ref="dropdown" class="tag-dropdown">
       <template v-slot:item="slot">
         <span>{{ slot.item.name }}</span>
-        <small>×{{ slot.item.count }}</small>
+        <small>×{{ slot.item.topics }}</small>
       </template>
     </vue-dropdown>
   </div>

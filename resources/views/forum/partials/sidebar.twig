@@ -27,7 +27,7 @@
     <template v-else>
       <ul v-if="tags.length" class="mt-3 tag-clouds cloud">
         <li v-for="tag in tags">
-          <a :href="`/Forum/Tag/${ encodeURIComponent(tag.name) }`">${ tag.name }</a><small>× ${ tag.count }</small>
+          <a :href="`/Forum/Tag/${ encodeURIComponent(tag.name) }`">${ tag.name }</a><small>× ${ tag.topics }</small>
         </li>
       </ul>
 

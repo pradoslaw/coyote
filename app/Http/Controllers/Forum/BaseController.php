@@ -6,10 +6,12 @@ use Coyote\Forum;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Resources\TagResource;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
+use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
+use Coyote\Services\UrlBuilder\UrlBuilder;
 use Illuminate\Http\Request;
 
 abstract class BaseController extends Controller
@@ -30,17 +32,24 @@ abstract class BaseController extends Controller
     protected $post;
 
     /**
+     * @var TagRepository
+     */
+    protected $tag;
+
+    /**
      * @param ForumRepository $forum
      * @param TopicRepository $topic
      * @param PostRepository $post
+     * @param TagRepository $tag
      */
-    public function __construct(ForumRepository $forum, TopicRepository $topic, PostRepository $post)
+    public function __construct(ForumRepository $forum, TopicRepository $topic, PostRepository $post, TagRepository $tag)
     {
         parent::__construct();
 
         $this->forum = $forum;
         $this->topic = $topic;
         $this->post = $post;
+        $this->tag = $tag;
 
         $this->middleware(function (Request $request, $next) {
             $this->breadcrumb->push('Forum', route('forum.home'));
@@ -66,10 +75,10 @@ abstract class BaseController extends Controller
     public function breadcrumb($forum)
     {
         if ($forum->parent_id) {
-            $this->breadcrumb->push($forum->parent->name, route('forum.category', [$forum->parent->slug]));
+            $this->breadcrumb->push($forum->parent->name, UrlBuilder::forum($forum->parent));
         }
 
-        $this->breadcrumb->push($forum->name, route('forum.category', [$forum->slug]));
+        $this->breadcrumb->push($forum->name, UrlBuilder::forum($forum));
     }
 
     /**
@@ -133,7 +142,7 @@ abstract class BaseController extends Controller
             return [];
         }
 
-        return TagResource::collection($this->forum->getTagsWeight($tags))->resolve($this->request);
+        return TagResource::collection($this->tag->findWhere(['name' => $tags]))->resolve($this->request);
     }
 
     /**
@@ -146,6 +155,7 @@ abstract class BaseController extends Controller
     {
         if ($request->filled('perPage')) {
             $perPage = max(10, min($request->get('perPage'), 50));
+
             $this->setSetting($setting, $perPage);
         } else {
             $perPage = $this->getSetting($setting, $default);

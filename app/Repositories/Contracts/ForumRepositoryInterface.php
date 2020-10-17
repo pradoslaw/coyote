@@ -41,10 +41,4 @@ interface ForumRepositoryInterface extends RepositoryInterface
      * @return array
      */
     public function getTagsCloud();
-
-    /**
-     * @param string[] $tags
-     * @return array
-     */
-    public function getTagsWeight(array $tags);
 }

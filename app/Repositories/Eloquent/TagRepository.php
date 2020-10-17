@@ -21,10 +21,27 @@ class TagRepository extends Repository implements TagRepositoryInterface
     {
         return $this
             ->model
-            ->select(['tags.id', 'name'])
+            ->select(['tags.id', 'name', 'topics'])
             ->where('name', 'ILIKE', $name . '%')
             ->limit(100)
             ->get();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function countTopics(array $ids): void
+    {
+        $sql = 'UPDATE tags
+                SET topics = (
+                    SELECT COUNT(*)
+                    FROM topic_tags
+                             JOIN topics ON topics.id = topic_tags.topic_id
+                    WHERE topic_tags.tag_id = tags.id AND topics.deleted_at IS NULL
+                )
+                WHERE tags.id in (%s)';
+
+        $this->app['db']->update(sprintf($sql, implode(',', $ids)));
     }
 
     /**

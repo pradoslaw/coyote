@@ -7,6 +7,7 @@ use Coyote\Http\Factories\GateFactory;
 use Coyote\Http\Resources\Api\ForumCollection;
 use Coyote\Http\Resources\TopicCollection;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
+use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
@@ -32,16 +33,23 @@ class HomeController extends BaseController
     private $tabs;
 
     /**
+     * @var TagRepository
+     */
+    protected $tag;
+
+    /**
      * @param ForumRepository $forum
      * @param TopicRepository $topic
      * @param PostRepository $post
+     * @param TagRepository $tag
      */
     public function __construct(
         ForumRepository $forum,
         TopicRepository $topic,
-        PostRepository $post
+        PostRepository $post,
+        TagRepository $tag
     ) {
-        parent::__construct($forum, $topic, $post);
+        parent::__construct($forum, $topic, $post, $tag);
 
         $this->tabs = app(Menu::class)->make('_forum', function (Builder $menu) {
             foreach (config('laravel-menu._forum') as $title => $row) {

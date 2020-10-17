@@ -41,11 +41,6 @@ class TagController extends BaseController
         // search for tag
         $tags = $tag->lookupName($request->input('q'));
 
-        if (count($tags)) {
-            // calculate weight
-            $tags = $forum->getTagsWeight($tags->pluck('name')->toArray());
-        }
-
         TagResource::withoutWrapping();
 
         return TagResource::collection($tags);
