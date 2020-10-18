@@ -5,7 +5,6 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Http\Resources\TagResource;
 use Illuminate\Http\Request;
 use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
-use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 
 class TagController extends BaseController
 {
