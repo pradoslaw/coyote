@@ -17,7 +17,7 @@ class RestoreController extends BaseController
      *
      * @param int $id post id
      */
-    public function index($id)
+    public function index(int $id)
     {
         // Step 1. Does post really exist?
         /** @var \Coyote\Post $post */
