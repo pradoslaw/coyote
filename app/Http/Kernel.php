@@ -70,7 +70,6 @@ class Kernel extends HttpKernel
         'job.redirect'  => Middleware\PermanentRedirect::class,
         'topic.scroll'  => Middleware\RedirectToPost::class,
         'post.response' => Middleware\PostSubmitResponse::class,
-        'comment.access' => Middleware\CommentAccess::class,
         'wiki.access'   => Middleware\WikiAccess::class,
         'wiki.lock'     => Middleware\WikiLock::class,
         'wiki.legacy'   => Middleware\WikiLegacy::class,

@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Events\CommentDeleted;
 use Coyote\Events\CommentSaved;
+use Coyote\Http\Requests\Forum\PostCommentRequest;
 use Coyote\Http\Resources\PostCommentResource;
 use Coyote\Notifications\Post\Comment\UserMentionedNotification;
 use Coyote\Notifications\Post\CommentedNotification;
@@ -16,137 +17,100 @@ use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Objects\Comment as Stream_Comment;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Illuminate\Contracts\Notifications\Dispatcher;
-use Illuminate\Http\Request;
 use Coyote\Services\Parser\Helpers\Login as LoginHelper;
 
 class CommentController extends Controller
 {
     /**
-     * @var \Coyote\Post\Comment
-     */
-    private $comment;
-
-    /**
-     * @var \Coyote\Topic
-     */
-    private $topic;
-
-    /**
-     * @var \Coyote\Forum
-     */
-    private $forum;
-
-    /**
-     * @var \Coyote\Post
-     */
-    private $post;
-
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->middleware(function (Request $request, $next) {
-            // set variables from middleware
-            foreach ($request->attributes->keys() as $key) {
-                $this->{$key} = $request->attributes->get($key);
-            }
-
-            return $next($request);
-        });
-    }
-
-    /**
-     * @param Request $request
+     * @param PostCommentRequest $request
      * @param Dispatcher $dispatcher
-     * @param null $id
+     * @param Post\Comment|null $comment
      * @return PostCommentResource
      * @throws \Illuminate\Auth\Access\AuthorizationException
-     * @throws \Illuminate\Validation\ValidationException
      */
-    public function save(Request $request, Dispatcher $dispatcher, $id = null)
+    public function save(PostCommentRequest $request, Dispatcher $dispatcher, ?Post\Comment $comment)
     {
-        $this->validate($request, [
-            'text'          => 'required|string|max:580',
-            'post_id'       => 'required|integer|exists:posts,id'
-        ]);
-
-        $target = (new Stream_Topic())->map($this->topic);
-
-        if ($id === null) {
-            $user = $this->auth;
-            $data = $request->only(['text']) + ['user_id' => $user->id, 'post_id' => $request->input('post_id')];
+        if (!$comment->exists) {
+            $comment->user()->associate($this->auth);
+            $comment->post_id = $request->input('post_id');
 
             $activity = Stream_Create::class;
         } else {
-            $this->authorize('update', [$this->comment, $this->forum]);
-
-            $data = $request->only(['text']);
+            $this->authorize('update', [$comment, $comment->post->forum]);
 
             $activity = Stream_Update::class;
         }
 
-        $this->comment->fill($data);
+        // Maybe user does not have an access to this category?
+        $this->authorize('access', [$comment->post->forum]);
+        // Only moderators can post comment if topic (or forum) was locked
+        $this->authorize('write', [$comment]);
 
-        $this->transaction(function () use ($activity, $target, $dispatcher) {
-            $this->comment->save();
+        $comment->fill($request->only(['text']));
+
+        $this->transaction(function () use ($comment, $activity) {
+            $comment->save();
+
+            $target = (new Stream_Topic())->map($comment->post->topic);
 
             // it is IMPORTANT to parse text first, and then put information to activity stream.
             // so that we will save plan text (without markdown)
-            $object = (new Stream_Comment())->map($this->post, $this->comment, $this->topic);
+            $object = (new Stream_Comment())->map($comment->post, $comment, $comment->post->topic);
             stream($activity, $object, $target);
 
-            if ($this->comment->wasRecentlyCreated) {
+            if ($comment->wasRecentlyCreated) {
                 // subscribe post. notify about all future comments to this post
-                $this->post->subscribe($this->userId, true);
+                $comment->post->subscribe($this->userId, true);
             }
         });
 
         $subscribers = [];
 
-        if ($this->comment->wasRecentlyCreated) {
-            $subscribers = $this->post->subscribers()->with('user')->get()->pluck('user')->exceptUser($this->auth);
+        if ($comment->wasRecentlyCreated) {
+            $subscribers = $comment->post->subscribers()->with('user')->get()->pluck('user')->exceptUser($this->auth);
 
             $dispatcher->send(
                 $subscribers,
-                (new CommentedNotification($this->comment))
+                (new CommentedNotification($comment))
             );
         }
 
-        $usersId = (new LoginHelper())->grab($this->comment->html);
+        $usersId = (new LoginHelper())->grab($comment->html);
 
         if (!empty($usersId)) {
             $dispatcher->send(
                 app(UserRepositoryInterface::class)->findMany($usersId)->exceptUser($this->auth)->exceptUsers($subscribers),
-                new UserMentionedNotification($this->comment)
+                new UserMentionedNotification($comment)
             );
         }
 
-        $this->comment->setRelation('forum', $this->forum);
+        $comment->setRelation('forum', $comment->post->forum);
 
-        event(new CommentSaved($this->comment));
+        event(new CommentSaved($comment));
 
         PostCommentResource::withoutWrapping();
 
-        return new PostCommentResource($this->comment);
+        return new PostCommentResource($comment);
     }
 
     /**
-     * @throws \Exception
+     * @param Post\Comment $comment
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function delete()
+    public function delete(Post\Comment $comment)
     {
-        $this->authorize('delete', [$this->comment, $this->forum]);
+        $this->authorize('delete', [$comment, $comment->post->forum]);
 
-        $target = (new Stream_Topic())->map($this->topic);
-        $object = (new Stream_Comment())->map($this->post, $this->comment, $this->topic);
+        $this->transaction(function () use ($comment) {
+            $target = (new Stream_Topic())->map($comment->post->topic);
+            $object = (new Stream_Comment())->map($comment->post, $comment, $comment->post->topic);
 
-        $this->transaction(function () use ($object, $target) {
-            $this->comment->delete();
+            $comment->delete();
 
             stream(Stream_Delete::class, $object, $target);
         });
 
-        event(new CommentDeleted($this->comment));
+        event(new CommentDeleted($comment));
     }
 
     /**

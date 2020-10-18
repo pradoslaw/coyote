@@ -44,4 +44,14 @@ class PostCommentPolicy
     {
         return $this->check('forum-delete', $user, $comment, $forum);
     }
+
+    /**
+     * @param User $user
+     * @param Comment $comment
+     * @return bool
+     */
+    public function write(User $user, Comment $comment): bool
+    {
+        return $user->can('write', $comment->post->topic) && $user->can('write', $comment->post->forum);
+    }
 }

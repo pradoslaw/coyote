@@ -145,18 +145,16 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     $this->post('Post/Merge/{post}', ['uses' => 'MergeController@index', 'as' => 'post.merge']);
 
     // edycja/publikacja komentarza oraz jego usuniecie
-    $this->post('Comment/{id?}', [
+    $this->post('Comment/{comment?}', [
         'uses' => 'CommentController@save',
         'as' => 'comment.save',
-        'middleware' => ['auth', 'comment.access']
+        'middleware' => ['auth']
     ]);
 
-    $this->delete('Comment/Delete/{id}', [
+    $this->delete('Comment/Delete/{comment}', [
         'uses' => 'CommentController@delete',
         'as' => 'comment.delete',
-        'middleware' => [
-            'auth', 'comment.access'
-        ]
+        'middleware' => ['auth']
     ]);
 
     $this->get('Comment/Show/{post}', [
