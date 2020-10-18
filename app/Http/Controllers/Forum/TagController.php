@@ -27,11 +27,10 @@ class TagController extends BaseController
     /**
      * @param Request $request
      * @param TagRepository $tag
-     * @param ForumRepository $forum
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function prompt(Request $request, TagRepository $tag, ForumRepository $forum)
+    public function prompt(Request $request, TagRepository $tag)
     {
         // we don't wanna tags with "#" at the beginning
         $request->merge(['q' => ltrim($request['q'], '#')]);

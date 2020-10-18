@@ -32,13 +32,13 @@ class TagRepository extends Repository implements TagRepositoryInterface
      */
     public function countTopics(array $ids = []): void
     {
-        $builder = $this->app['db']->table('tags');
+        $sql = $this->app['db']->table('tags');
 
-        if ($ids) {
-            $builder->whereIn('tags.id', $ids);
-        }
-
-        $builder->update(['topics' =>
+        $sql
+            ->when(!empty($ids), function ($builder) use ($ids) {
+                return $builder->whereIn('tags.id', $ids);
+            })
+            ->update(['topics' =>
             $this->raw('
                 (SELECT COUNT(*)
                 FROM topic_tags
