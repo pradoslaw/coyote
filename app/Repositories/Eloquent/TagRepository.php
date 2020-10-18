@@ -39,8 +39,8 @@ class TagRepository extends Repository implements TagRepositoryInterface
                 return $builder->whereIn('tags.id', $ids);
             })
             ->update(['topics' =>
-            $this->raw('
-                (SELECT COUNT(*)
+            $this->raw(
+                '(SELECT COUNT(*)
                 FROM topic_tags
                     JOIN topics ON topics.id = topic_tags.topic_id
                 WHERE topic_tags.tag_id = tags.id AND topics.deleted_at IS NULL)'
