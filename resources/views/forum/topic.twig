@@ -32,7 +32,7 @@
 
   {% include "forum.partials.top" %}
 
-  <main id="js-post" class="mainbar">
+  <main class="mainbar">
     <div class="row no-gutters mb-3">
       <div class="mr-auto">
         {{ paginate|raw }}
@@ -46,136 +46,140 @@
       {% endif %}
     </div>
 
-    {% for post in posts.data %}
-      <div v-if="skeleton" class="card card-post">
-        <div class="card-header d-none d-lg-block">
-          <div class="row">
-            <div class="col-2">
-              <div style="height: 20px"></div>
-            </div>
-
-            <div class="col-10 text-truncate small">
-              <div style="height: 20px; width: 30%"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card-body">
-          <div class="media d-lg-none mb-2">
-            <div class="media-left mr-2">
-              <div style="width: 35px; height: 35px"></div>
-            </div>
-
-            <div class="media-body">
-              <div style="height: 20px"></div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="d-none d-lg-block col-lg-2">
-              <div style="width: 75px; height: 75px"></div>
-
-              <ul class="post-stats list-unstyled" style="height: 66px">
-
-              </ul>
-            </div>
-
-            <div class="col-12 col-lg-10">
-              <div class="post-vote">
-                <strong title="Ocena postu" class="vote-count">{{ post.score }}</strong>
+    <div id="js-skeleton">
+      {% for post in posts.data %}
+        <div v-if="skeleton" class="card card-post">
+          <div class="card-header d-none d-lg-block">
+            <div class="row">
+              <div class="col-2">
+                <div style="height: 20px"></div>
               </div>
 
-              <div class="post-content">{{ post.html|raw }}</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card-footer">
-          <div class="row">
-            <div class="d-none d-lg-block col-lg-2"></div>
-
-            <div class="col-12 d-flex col-lg-10">
-              <div>
-                <button class="btn btn-sm">
-                  <i class="fa-fw fa-bell far"></i>
-                  <span class="d-none d-sm-inline">Obserwuj</span>
-                </button>
-
-                <button class="btn btn-sm">
-                  <i class="fas fa-fw fa-share-alt"></i>
-                  <span class="d-none d-sm-inline">Udostępnij</span>
-                </button>
-
-                <button class="btn btn-sm">
-                  <i class="fa-fw fa-comment far"></i>
-                  <span class="d-none d-sm-inline">Komentuj</span>
-                </button>
-              </div>
-
-              <div class="ml-auto">
-
+              <div class="col-10 text-truncate small">
+                <div style="height: 20px; width: 30%"></div>
               </div>
             </div>
           </div>
+
+          <div class="card-body">
+            <div class="media d-lg-none mb-2">
+              <div class="media-left mr-2">
+                <div style="width: 35px; height: 35px"></div>
+              </div>
+
+              <div class="media-body">
+                <div style="height: 20px"></div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="d-none d-lg-block col-lg-2">
+                <div style="width: 75px; height: 75px"></div>
+
+                <ul class="post-stats list-unstyled" style="height: 66px">
+
+                </ul>
+              </div>
+
+              <div class="col-12 col-lg-10">
+                <div class="post-vote">
+                  <strong title="Ocena postu" class="vote-count">{{ post.score }}</strong>
+                </div>
+
+                <div class="post-content">{{ post.html|raw }}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <div class="row">
+              <div class="d-none d-lg-block col-lg-2"></div>
+
+              <div class="col-12 d-flex col-lg-10">
+                <div>
+                  <button class="btn btn-sm">
+                    <i class="fa-fw fa-bell far"></i>
+                    <span class="d-none d-sm-inline">Obserwuj</span>
+                  </button>
+
+                  <button class="btn btn-sm">
+                    <i class="fas fa-fw fa-share-alt"></i>
+                    <span class="d-none d-sm-inline">Udostępnij</span>
+                  </button>
+
+                  <button class="btn btn-sm">
+                    <i class="fa-fw fa-comment far"></i>
+                    <span class="d-none d-sm-inline">Komentuj</span>
+                  </button>
+                </div>
+
+                <div class="ml-auto">
+
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    {% endfor %}
-
-    <template v-if="'id' in poll">
-      <vue-poll :poll="poll"></vue-poll>
-    </template>
-
-    <vue-post
-      v-for="post in posts"
-      :key="post.id"
-      :post="post"
-      :reasons="reasons"
-      upload-mimes="{{ config_get('filesystems.upload_mimes')|split(',')|join(', ') }}"
-      upload-max-size="{{ config_get('filesystems.upload_max_size') }}"
-      @reply="reply"
-    ></vue-post>
-
-    <div class="row no-gutters mb-3">
-      <div class="mr-auto">
-        {{ paginate|raw }}
-      </div>
-
-      <div class="ml-auto">
-        {% if is_writeable %}
-          <a href="#js-submit-form" class="btn btn-primary btn-sm float-right ml-3">Odpowiedz</a>
-        {% endif %}
-      </div>
+      {% endfor %}
     </div>
 
-    {% if user_forums is defined %}
-      <div class="row no-gutters">
-        <div class="ml-auto">
-          {{ form_select('forum', user_forums, forum.slug, {'id': 'js-forum-list', 'class': 'form-control d-inline w-auto', 'data-url': route('forum.home')}) }}
+    <div id="js-post">
+      <template v-if="'id' in poll">
+        <vue-poll :poll="poll"></vue-poll>
+      </template>
 
-          <a class="btn" href="javascript:" id="js-reload">
-            <i class="fas fa-arrow-circle-right"></i>
-          </a>
-        </div>
-      </div>
-    {% endif %}
-
-    {% if is_writeable %}
-      <vue-form
-        id="js-submit-form"
-        ref="js-submit-form"
-        :post="undefinedPost"
+      <vue-post
+        v-for="post in posts"
+        :key="post.id"
+        :post="post"
+        :reasons="reasons"
         upload-mimes="{{ config_get('filesystems.upload_mimes')|split(',')|join(', ') }}"
         upload-max-size="{{ config_get('filesystems.upload_max_size') }}"
-      ></vue-form>
-    {% endif %}
+        @reply="reply"
+      ></vue-post>
 
-    <section class="row no-gutters mt-3">
-      {% include 'forum.partials.per_page' with {label: 'Liczba odpowiedzi na stronę', perPage: paginate.perPage()} %}
-    </section>
+      <div class="row no-gutters mb-3">
+        <div class="mr-auto">
+          {{ paginate|raw }}
+        </div>
+
+        <div class="ml-auto">
+          {% if is_writeable %}
+            <a href="#js-submit-form" class="btn btn-primary btn-sm float-right ml-3">Odpowiedz</a>
+          {% endif %}
+        </div>
+      </div>
+
+      {% if user_forums is defined %}
+        <div class="row no-gutters">
+          <div class="ml-auto">
+            {{ form_select('forum', user_forums, forum.slug, {'id': 'js-forum-list', 'class': 'form-control d-inline w-auto', 'data-url': route('forum.home')}) }}
+
+            <a class="btn" href="javascript:" id="js-reload">
+              <i class="fas fa-arrow-circle-right"></i>
+            </a>
+          </div>
+        </div>
+      {% endif %}
+
+      {% if is_writeable %}
+        <vue-form
+          id="js-submit-form"
+          ref="js-submit-form"
+          :post="undefinedPost"
+          upload-mimes="{{ config_get('filesystems.upload_mimes')|split(',')|join(', ') }}"
+          upload-max-size="{{ config_get('filesystems.upload_max_size') }}"
+        ></vue-form>
+      {% endif %}
+
+      <section class="row no-gutters mt-3">
+        {% include 'forum.partials.per_page' with {label: 'Liczba odpowiedzi na stronę', perPage: paginate.perPage()} %}
+      </section>
+
+      <vue-notifications position="bottom right"/>
+    </div>
 
     {{ viewers|raw }}
-
-    <vue-notifications position="bottom right"/>
   </main>
 
   {% embed 'forum.partials.sidebar' %}

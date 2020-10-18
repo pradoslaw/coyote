@@ -219,8 +219,7 @@ let PostVue = Vue.extend({
   data: () => ({
     showStickyCheckbox: window.showStickyCheckbox,
     undefinedPost: { text: '', html: '', attachments: [] },
-    reasons: window.reasons,
-    skeleton: true
+    reasons: window.reasons
   }),
   created() {
     store.commit('posts/init', window.pagination);
@@ -229,6 +228,8 @@ let PostVue = Vue.extend({
     store.commit('poll/init', window.poll);
   },
   mounted() {
+    document.getElementById('js-skeleton').remove();
+
     const hints = ['hint-subject', 'hint-text', 'hint-tags', 'hint-user_name'];
 
     this.skeleton = false;
