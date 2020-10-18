@@ -297,9 +297,7 @@
       {% endif %}
     {% endblock %}
   {% endembed %}
-{% endblock %}
 
-{% block body %}
   <script>
     var pagination = {{ posts|json_encode|raw }};
     var topic = {{ topic|json_encode|raw }};
@@ -309,6 +307,4 @@
     var reasons = {{ reasons|json_encode|raw }};
     var tags = {{ tags.user|json_encode|raw }};
   </script>
-
-  {{ parent() }}
 {% endblock %}
