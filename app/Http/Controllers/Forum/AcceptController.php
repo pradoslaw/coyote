@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Notifications\Post\AcceptedNotification;
+use Coyote\Post;
 use Coyote\Services\Stream\Activities\Accept as Stream_Accept;
 use Coyote\Services\Stream\Activities\Reject as Stream_Reject;
 use Coyote\Services\Stream\Objects\Post as Stream_Post;
@@ -15,30 +16,24 @@ class AcceptController extends BaseController
 {
     /**
      * @param \Coyote\Post $post
-     * @return \Illuminate\Http\JsonResponse
      * @throws AuthenticationException|AuthorizationException
      */
-    public function index($post)
+    public function index(Post $post)
     {
         // post belongs to this topic:
         $topic = $post->topic;
 
-        if ($this->auth->cannot('write', $topic)) {
-            throw new AuthorizationException('Wątek jest zablokowany.');
-        }
+        abort_if($this->auth->cannot('write', $topic), 403, 'Wątek jest zablokowany.');
 
         $forum = $topic->forum;
-        if ($this->auth->cannot('write', $forum)) {
-            throw new AuthorizationException('Forum jest zablokowane.');
-        }
+
+        abort_if($this->auth->cannot('write', $forum), 403, 'Forum jest zablokowane.');
 
         if ($this->auth->cannot('update', $forum) && $topic->firstPost->user_id !== $this->userId) {
             throw new AuthorizationException('Możesz zaakceptować post tylko we własnym wątku.');
         }
 
-        if ($post->id === $topic->first_post_id) {
-            throw new \InvalidArgumentException('Nie można zaakceptować pierwszego postu w wątku.');
-        }
+        abort(500, $post->id === $topic->first_post_id);
 
         $this->transaction(function () use ($topic, $post, $forum) {
             // currently accepted post (if any)
