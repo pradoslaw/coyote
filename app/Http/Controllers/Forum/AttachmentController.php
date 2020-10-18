@@ -4,42 +4,21 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Resources\PostAttachmentResource;
 use Coyote\Post\Attachment;
-use Coyote\Repositories\Contracts\Post\AttachmentRepositoryInterface as AttachmentRepository;
 use Coyote\Http\Controllers\AttachmentController as BaseAttachmentController;
 
 class AttachmentController extends BaseAttachmentController
 {
     /**
-     * @var AttachmentRepository
+     * @param Attachment $attachment
+     * @return \Illuminate\Http\Response|mixed
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    private $attachment;
-
-    /**
-     * @param AttachmentRepository $attachment
-     */
-    public function __construct(AttachmentRepository $attachment)
+    public function download(Attachment $attachment)
     {
-        parent::__construct();
-
-        $this->attachment = $attachment;
-    }
-
-    /**
-     * Download the attachment (or show image)
-     *
-     * @param $id
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|\Illuminate\Http\Response
-     */
-    public function download($id)
-    {
-        /** @var \Coyote\Post\Attachment $attachment */
-        $attachment = $this->attachment->findOrFail($id);
-
         // post_id can be null if saving post was not completed.
         // post could also be deleted.
-        if ($attachment->post === null) {
-            abort(404);
-        }
+        abort_if($attachment->post === null, 404);
 
         $this->authorize('access', $attachment->post->forum);
 

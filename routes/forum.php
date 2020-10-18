@@ -22,7 +22,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     // dodawanie zalacznika do posta
     $this->post('Upload', ['uses' => 'AttachmentController@upload', 'as' => 'upload']);
     // sciaganie zalacznika
-    $this->get('Download/{id}', ['uses' => 'AttachmentController@download', 'as' => 'download']);
+    $this->get('Download/{attachment}', ['uses' => 'AttachmentController@download', 'as' => 'download']);
     // wklejanie zdjec przy pomocy Ctrl+V w textarea
     $this->post('Paste', ['uses' => 'AttachmentController@paste', 'as' => 'paste']);
 
