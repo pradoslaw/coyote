@@ -186,4 +186,27 @@ class CommentControllerTest extends TestCase
 
         $this->assertEquals($id, $comment->id);
     }
+
+    public function testDeleteCommentIsNotAllowed()
+    {
+        $user = factory(User::class)->create();
+        $comment = factory(Comment::class)->create(['post_id' => $this->post->id, 'user_id' => $user->id]);
+
+        $response = $this
+            ->actingAs($this->user)
+            ->delete("/Forum/Comment/Delete/$comment->id");
+
+        $response->assertStatus(403);
+    }
+
+    public function testDeleteCommentByAuthor()
+    {
+        $comment = factory(Comment::class)->create(['post_id' => $this->post->id, 'user_id' => $this->user->id]);
+
+        $response = $this
+            ->actingAs($this->user)
+            ->delete("/Forum/Comment/Delete/$comment->id");
+
+        $response->assertStatus(200);
+    }
 }
