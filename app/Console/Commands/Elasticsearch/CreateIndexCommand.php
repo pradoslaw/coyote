@@ -286,7 +286,6 @@ class CreateIndexCommand extends Command
                                 "analyzer" => "stopwords_analyzer",
                                 "fields" => [
                                     "original" => ["type" => "text", "analyzer" => "keyword_analyzer"]
-//                                    "original" => ["type" => "text", "analyzer" => "keyword_analyzer", "fielddata" => true]
                                 ]
                             ],
                             "group" => [

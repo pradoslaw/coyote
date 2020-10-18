@@ -209,6 +209,8 @@ class TopicController extends BaseController
 
         $result = $user->lookupName($request['q'], array_filter(array_unique($userIds)));
 
+        PromptResource::withoutWrapping();
+
         return PromptResource::collection($result);
     }
 

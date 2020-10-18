@@ -19,7 +19,7 @@ const actions = {
 
     return axios.get(source, {cancelToken: state.source.token, params: {q: value}, errorHandle: false})
       .then(response => {
-        let items = response.data.data;
+        let items = response.data;
 
         if (items.length === 1 && items[0].name.toLowerCase() === value.toLowerCase()) {
           items = [];

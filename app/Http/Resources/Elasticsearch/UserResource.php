@@ -10,7 +10,7 @@ namespace Coyote\Http\Resources\Elasticsearch;
  * @property \Coyote\Services\Media\MediaInterface $photo
  * @property int $reputation
  * @property int $group_id
- * @property \Coyote\Group $group
+ * @property string $group_name
  */
 class UserResource extends ElasticsearchResource
 {
@@ -34,7 +34,7 @@ class UserResource extends ElasticsearchResource
                 'suggest'       => $this->getSuggest(),
 
                 $this->mergeWhen($this->group_id, function () {
-                    return ['group' => $this->group->name];
+                    return ['group' => $this->group_name];
                 })
             ]
         );

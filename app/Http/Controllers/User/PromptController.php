@@ -21,6 +21,8 @@ class PromptController extends Controller
 
         $result = $user->lookupName($request['q']);
 
+        PromptResource::withoutWrapping();
+
         if ($request->wantsJson()) {
             return PromptResource::collection($result);
         }
