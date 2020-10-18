@@ -228,7 +228,7 @@ let PostVue = Vue.extend({
     store.commit('poll/init', window.poll);
   },
   mounted() {
-    document.getElementById('js-skeleton').remove();
+    document.getElementById('js-skeleton')?.remove();
 
     const hints = ['hint-subject', 'hint-text', 'hint-tags', 'hint-user_name'];
 
