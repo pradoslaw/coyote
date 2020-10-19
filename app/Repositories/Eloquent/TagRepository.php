@@ -23,6 +23,7 @@ class TagRepository extends Repository implements TagRepositoryInterface
             ->model
             ->select(['tags.id', 'name', 'topics'])
             ->where('name', 'ILIKE', $name . '%')
+            ->orderByDesc('topics')
             ->limit(100)
             ->get();
     }
