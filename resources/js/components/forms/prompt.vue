@@ -20,7 +20,7 @@
     props: {
       source: {
         type: String,
-        default: '/User/Prompt'
+        default: '/completion/prompt'
       },
       errors: {
         type: Array,
