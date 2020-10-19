@@ -79,7 +79,8 @@
           }
         }
 
-        if (startIndex > -1) {
+        // min length to search is 1 character
+        if (startIndex > -1 && caretPosition - startIndex >= 1) {
           userName = this.input.value.substr(startIndex, caretPosition - startIndex);
           this.lookupName(userName);
 
