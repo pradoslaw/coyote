@@ -55,7 +55,7 @@
       handler: {
         type: Function,
         default: (value) => {
-          return store.dispatch('prompt/request', { value, source: '/User/Prompt' });
+          return store.dispatch('prompt/request', { value, source: '/completion/prompt' });
         }
       }
     },

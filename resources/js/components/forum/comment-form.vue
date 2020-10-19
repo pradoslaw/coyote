@@ -1,6 +1,6 @@
 <template>
   <form>
-    <vue-prompt source="/User/Prompt" class="mb-2">
+    <vue-prompt :source="`/completion/prompt/${$store.getters['topics/topic'].id}`" class="mb-2">
       <textarea
         v-autosize
         placeholder="Drobne uwagi, sugestie. Nie odpowiadaj tutaj na pytania zawarte w poście."
