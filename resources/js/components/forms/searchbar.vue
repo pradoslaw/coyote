@@ -1,6 +1,6 @@
 <template>
   <div v-on-clickaway="blurInput" :class="{'nav-search-mobile': isMobile}" class="nav-search">
-    <div :class="{'search-bar-active': isActive}" class="search-bar ml-lg-4 mr-lg-4">
+    <div :class="{'active': isActive}" class="search-bar ml-lg-4 mr-lg-4">
       <i class="fas fa-search ml-2 mr-2"></i>
 
       <form :action="url" role="search" ref="search" class="flex-grow-1">
@@ -21,6 +21,7 @@
         >
       </form>
 
+      <!-- close mobile menu -->
       <button v-if="isMobile" @click="toggleMobile" class="btn nav-link">
         <i class="fa fa-2x fa-times"></i>
       </button>
@@ -241,7 +242,7 @@
       this.isMobile = ! this.isMobile;
 
       if (this.isMobile) {
-        (this.$refs.input as HTMLInputElement).focus();
+        this.$nextTick(() => (this.$refs.input as HTMLInputElement).focus());
       }
     }
 

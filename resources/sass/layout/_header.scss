@@ -110,9 +110,9 @@ body.padding-top {
   display: none;
   border: 1px solid $border-color;
   box-shadow: $dropdown-box-shadow;
-  width: 100%;
+  width: calc(100% + 2px);
   background-color: #fff;
-  left: 0;
+  left: -1px;
   top: 100%;
   z-index: 100;
 
@@ -182,15 +182,15 @@ body.padding-top {
     background-color: var(--header-search-bg);
     border: 1px solid var(--header-search-border);
 
-    //&:after {
-    //  content: 'Shift+/';
-    //  position: absolute;
-    //  right: 25px;
-    //  top: 30%;
-    //  text-transform: uppercase;
-    //  font-size: 10px;
-    //  color: var(--header-color);
-    //}
+    &:after {
+      content: 'Shift+/';
+      position: absolute;
+      right: 25px;
+      top: 30%;
+      text-transform: uppercase;
+      font-size: 10px;
+      color: var(--header-color);
+    }
 
     .fa-search {
       color: var(--header-color);
@@ -208,13 +208,13 @@ body.padding-top {
     border: none;
   }
 
-  .search-bar-active {
+  .active {
     &.search-bar {
       background-color: #fff;
 
-      //&:after {
-      //  display: none; // temp code
-      //}
+      &:after {
+        display: none; // temp code
+      }
     }
 
     .fa-search {
@@ -244,11 +244,20 @@ body.padding-top {
 
   .search-bar {
     height: 100%;
+    border-radius: 0;
+
+    &:after {
+      display: none; // temp code
+    }
   }
 
-  //::placeholder {
-  //  color: transparent;
-  //}
+  .search-dropdown {
+    margin-top: 1px; // add extra margin since input does not have border-radius anymore
+  }
+
+  input::placeholder, input::-webkit-input-placeholder {
+    color: transparent;
+  }
 }
 
 .nav-avatar {
@@ -431,7 +440,7 @@ body.padding-top {
     }
   }
 
-  .search-bar-active {
+  .active {
     input {
       background-color: #fff !important;
       color: $gray-700 !important;
