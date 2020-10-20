@@ -285,11 +285,8 @@ body.padding-top {
 // Notifications and private messages button
 // ------------------------------------------
 .nav-auth {
-  display: flex;
-  margin-bottom: 0;
   margin-left: auto; // align to the right
   padding: 0; // no default padding
-
   flex-direction: unset !important; // overwrite .navbar-nav setting to show link next to each other
 }
 
