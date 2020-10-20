@@ -161,15 +161,6 @@ body.padding-top {
     }
   }
 
-  .more {
-    padding: 0;
-    font-size: .7rem;
-
-    a {
-      color: $text-muted;
-    }
-  }
-
   .forum-name {
     font-size: .65rem;
   }
@@ -200,10 +191,10 @@ body.padding-top {
     //  font-size: 10px;
     //  color: var(--header-color);
     //}
-  }
 
-  .fa-search, .fa-times {
-    color: var(--header-color);
+    .fa-search {
+      color: var(--header-color);
+    }
   }
 
   input {
@@ -221,12 +212,12 @@ body.padding-top {
     &.search-bar {
       background-color: #fff;
 
-      &:after {
-        display: none; // temp code
-      }
+      //&:after {
+      //  display: none; // temp code
+      //}
     }
 
-    .fa-search, .fa-times {
+    .fa-search {
       color: $gray-700 !important;
     }
 
@@ -255,9 +246,9 @@ body.padding-top {
     height: 100%;
   }
 
-  ::placeholder {
-    color: transparent;
-  }
+  //::placeholder {
+  //  color: transparent;
+  //}
 }
 
 .nav-avatar {

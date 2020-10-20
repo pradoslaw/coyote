@@ -58,29 +58,22 @@
 
         <ul class="list-unstyled">
           <template v-for="category in categories">
-            <li class="title"><span>{{ getCategoryLabel(category) }}</span></li>
+            <li class="title"><span>{{ categoryLabel(category) }}</span></li>
 
             <li v-for="child in category.children" :class="{'hover': child.index === selectedIndex}" @mouseover="hoverItem(child.index)">
               <component :is="makeDecorator(child)" :item="child" :value="value"></component>
             </li>
-
-<!--&lt;!&ndash;            <li v-if="contexts.length > 0" class="more">&ndash;&gt;-->
-<!--&lt;!&ndash;              <a href="#">więcej ...</a>&ndash;&gt;-->
-<!--&lt;!&ndash;            </li>&ndash;&gt;-->
           </template>
         </ul>
       </div>
     </div>
 
-    <a @click="toggleMobile" v-if="!isMobile" href="javascript:" class="d-sm-none nav-link ml-auto">
-      <i class="fa fa-search fa-fw"></i>
-    </a>
-
-<!--    <ul class="d-sm-none nav-auth navbar-nav">-->
-<!--      <li class="nav-item">-->
-<!--        -->
-<!--      </li>-->
-<!--    </ul>-->
+    <!-- show this only on mobile devices to show search bar -->
+    <div v-if="!isMobile" class="d-sm-none navbar-nav ml-auto mr-2">
+      <a @click="toggleMobile" href="javascript:" class="nav-link">
+        <i class="fa fa-search fa-fw"></i>
+      </a>
+    </div>
   </div>
 </template>
 
@@ -307,7 +300,7 @@
       }
     }
 
-    getCategoryLabel(category: Hit): string {
+    categoryLabel(category: Hit): string {
       return category.context !== undefined ? CONTEXTS[category.model][category.context] : MODELS[category.model];
     }
 
