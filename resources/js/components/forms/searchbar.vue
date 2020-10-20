@@ -1,6 +1,6 @@
 <template>
   <div v-on-clickaway="blurInput" :class="{'nav-search-mobile': isMobile}" class="nav-search">
-    <div :class="{'active': isActive}" class="search-bar ml-lg-4 mr-lg-4">
+    <div :class="{'active': isActive}" class="search-bar ml-md-4 mr-md-4">
       <i class="fas fa-search ml-2 mr-2"></i>
 
       <form :action="url" role="search" ref="search" class="flex-grow-1">
@@ -70,7 +70,7 @@
     </div>
 
     <!-- show this only on mobile devices to show search bar -->
-    <div v-if="!isMobile" class="d-sm-none navbar-nav ml-auto mr-2">
+    <div v-if="!isMobile" class="d-md-none navbar-nav ml-auto mr-2">
       <a @click="toggleMobile" href="javascript:" class="nav-link">
         <i class="fa fa-search fa-fw"></i>
       </a>
