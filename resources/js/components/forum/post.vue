@@ -14,7 +14,7 @@
       </template>
     </a>
 
-    <div :class="{'collapse': isCollapsed}" class="card-header d-none d-lg-block">
+    <div :class="{'collapse': isCollapsed, 'd-lg-block': !isCollapsed}" class="card-header d-none ">
       <div class="row">
         <div class="col-2">
           <h5 class="mb-0 post-author">
