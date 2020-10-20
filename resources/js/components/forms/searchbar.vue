@@ -1,6 +1,6 @@
 <template>
-  <div v-on-clickaway="blurInput" class="nav-search">
-    <div :class="{'search-bar-active': isActive}" class="search-bar">
+  <div v-on-clickaway="blurInput" :class="{'nav-search-mobile': isMobile}" class="nav-search">
+    <div :class="{'search-bar-active': isActive}" class="search-bar ml-lg-4 mr-lg-4">
       <i class="fas fa-search ml-2 mr-2"></i>
 
       <form :action="url" role="search" ref="search" class="flex-grow-1">
@@ -20,6 +20,10 @@
           placeholder="Wpisz &quot;?&quot; aby uzyskac pomoc lub wyszukaj"
         >
       </form>
+
+      <button v-if="isMobile" @click="toggleMobile" class="btn nav-link">
+        <i class="fa fa-2x fa-times"></i>
+      </button>
 
       <div v-if="isHelpEnabled" class="search-dropdown p-3">
         <div class="row">
@@ -67,6 +71,16 @@
         </ul>
       </div>
     </div>
+
+    <a @click="toggleMobile" v-if="!isMobile" href="javascript:" class="d-sm-none nav-link ml-auto">
+      <i class="fa fa-search fa-fw"></i>
+    </a>
+
+<!--    <ul class="d-sm-none nav-auth navbar-nav">-->
+<!--      <li class="nav-item">-->
+<!--        -->
+<!--      </li>-->
+<!--    </ul>-->
   </div>
 </template>
 
@@ -200,8 +214,10 @@
     isActive: boolean = false;
     isDropdownVisible: boolean = false;
     isHelpEnabled: boolean = false;
+    isMobile: boolean = false;
     items: Hit[] = [];
     selectedIndex: number = -1;
+
     readonly isAuthorized! : boolean;
 
     @Prop(String)
@@ -226,6 +242,14 @@
 
     beforeDestroy() {
       document.removeEventListener('keydown', this.shortcutSupport);
+    }
+
+    toggleMobile() {
+      this.isMobile = ! this.isMobile;
+
+      if (this.isMobile) {
+        (this.$refs.input as HTMLInputElement).focus();
+      }
     }
 
     showDropdown() {
