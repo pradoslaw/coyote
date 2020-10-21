@@ -224,7 +224,7 @@
 }
 
 .vote-up.on {
-  color: $brand-primary;
+  color: $primary;
 
   .fas.fa-thumbs-up {
     display: inline-block;
@@ -244,7 +244,7 @@
   font-size: $font-size-lg + 1rem;
 
   &.on {
-    color: $brand-primary;
+    color: $primary;
   }
 }
 

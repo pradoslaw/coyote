@@ -320,7 +320,7 @@ body.padding-top {
 
 .btn-register {
   margin-left: 0;
-  background-color: $brand-primary;
+  background-color: $primary;
   color: #fff;
 
   &:hover, &:focus {
@@ -334,7 +334,7 @@ body.padding-top {
 
 .btn-login {
   &:hover, &:focus {
-    color: $brand-primary;
+    color: $primary;
   }
 }
 
@@ -377,7 +377,7 @@ body.padding-top {
 
     &:hover {
       text-decoration: none;
-      color: $brand-primary;
+      color: $primary;
     }
   }
 }
@@ -592,7 +592,7 @@ body.padding-top {
       margin: 1px 0;
       font-weight: bold;
       font-family: Arial, sans-serif;
-      color: $brand-primary;
+      color: $primary;
     }
 
     p {

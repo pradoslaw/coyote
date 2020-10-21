@@ -138,8 +138,8 @@ ul.nav-pills {
     &:focus,
     &:active {
       background: transparent;
-      color: $brand-primary;
-      border-bottom: 2px solid $brand-primary;
+      color: $primary;
+      border-bottom: 2px solid $primary;
       border-radius: 0;
       margin-bottom: -2px;
     }

@@ -28,7 +28,7 @@
       .fa-question-circle {
         font-size: 16px;
         cursor: help;
-        color: $brand-primary;
+        color: $primary;
       }
     }
   }
@@ -103,7 +103,7 @@
 
     &.selected {
       box-shadow: 0 0 25px rgba(0, 0, 0, 0.25);
-      border-color: $brand-primary;
+      border-color: $primary;
       margin-left: -5px;
       margin-right: -5px;
       margin-top: -10px;
@@ -112,7 +112,7 @@
       width: 24%;
 
       > .plan-header {
-        background-color: $brand-primary;
+        background-color: $primary;
         color: #fff;
         padding: 12px 0;
       }

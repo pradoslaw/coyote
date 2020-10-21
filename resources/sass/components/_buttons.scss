@@ -10,13 +10,13 @@
 }
 
 .btn-warning {
-  @include bg-gradient-variant(lighten($brand-warning, 5%), $brand-warning);
+  @include bg-gradient-variant(lighten($warning, 5%), $warning);
 }
 
 .btn-outline {
   background: none;
 
-  @each $selector, $color in (btn-primary, $brand-primary), (btn-default, #444), (btn-warning, $brand-warning) {
+  @each $selector, $color in (btn-primary, $primary), (btn-default, #444), (btn-warning, $warning) {
     &.#{$selector} {
       color: #{$color};
 

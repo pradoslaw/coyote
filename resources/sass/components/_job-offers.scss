@@ -11,14 +11,14 @@
   // Default border color
   // -----------------------
   .card-default {
-    border: 2px solid $brand-primary;
+    border: 2px solid $primary;
   }
 
   // Default headline background
   // -----------------
   .card-header {
     text-align: center;
-    background-color: $brand-primary;
+    background-color: $primary;
     background-image: url('/img/escheresque.png');
 
     h4 {
@@ -46,7 +46,7 @@
       padding: 10px 0 0 0;
 
       a {
-        color: darken($brand-primary, 10%);
+        color: darken($primary, 10%);
         font-weight: bold;
         font-size: $font-size-sm;
       }
@@ -124,7 +124,7 @@
     padding-bottom: 1px;
     font-size: $font-size-base;
     font-weight: bold;
-    color: $brand-primary;
+    color: $primary;
   }
 
   p {
