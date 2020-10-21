@@ -68,7 +68,7 @@
 
   .list-group-item {
     display: inline-block;
-    border-radius: $border-radius-large;
+    border-radius: $border-radius-lg;
     margin-right: 5px;
     background: darken($tag-bg, 2%);
     border: none;
@@ -299,8 +299,8 @@
   border-radius: 0;
   margin-top: 5px;
   z-index: 1000;
-  border-top-right-radius: $border-radius-small;
-  border-bottom-right-radius: $border-radius-small;
+  border-top-right-radius: $border-radius-sm;
+  border-bottom-right-radius: $border-radius-sm;
 
   &:before {
     content: "";
