@@ -162,22 +162,26 @@
       </section>
 
       {% if patronage %}
-        <section id="box-patronage" class="box">
-          <div class="card card-patronage">
-            <h3><a title="4programmers.net patronuje wydarzeniom ze świata IT!" href="{{ url('Patronat') }}" data-category="Patronage" data-value="Logo">Patronujemy</a></h3>
+        <section class="box">
+          <h4>
+            <a title="4programmers.net patronuje wydarzeniom ze świata IT!" href="{{ url('Patronat') }}">
+              <i class="fas fa-calendar-day"></i> Zbliżające się wydarzenie
+            </a>
+          </h4>
 
+          <div class="card">
             <div class="card-body">
-              <h4><a href="{{ url(patronage.path) }}">{{ patronage.title }}</a></h4>
+              <h5 class="card-title"><a href="{{ url(patronage.path) }}">{{ patronage.title }}</a></h5>
 
-              <div class="patronage-content">
-                <a href="{{ url(patronage.path) }}">{{ patronage.excerpt }}</a>
+              <div class="card-text">
+                <a href="{{ url(patronage.path) }}" class="text-dark">{{ patronage.excerpt }}</a>
               </div>
+            </div>
 
-              <div class="patronage-footer">
-                <a title="4programmers.net patronuje wydarzeniom ze świata IT!" href="{{ url('Patronat') }}">
-                  <i class="fas fa-arrow-right fa-fw"></i> Zainteresowany patronatem? Dowiedz się więcej
-                </a>
-              </div>
+            <div class="card-footer">
+              <a title="4programmers.net patronuje wydarzeniom ze świata IT!" href="{{ url('Patronat') }}" class="text-dark">
+                <i class="fas fa-arrow-right fa-fw"></i> Zainteresowany patronatem? Dowiedz się więcej
+              </a>
             </div>
           </div>
         </section>
