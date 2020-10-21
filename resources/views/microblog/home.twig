@@ -92,10 +92,6 @@
 
     <vue-notifications position="bottom right" />
   </div>
-{% endblock %}
-
-{% block head %}
-  {{ parent() }}
 
   <script>
     var pagination = {{ pagination|json_encode|raw }};

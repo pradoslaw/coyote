@@ -12,11 +12,6 @@
     <vue-notifications position="bottom right" />
   </div>
 
-{% endblock %}
-
-{% block head %}
-  {{ parent() }}
-
   <script>
     var microblog = {{ microblog|json_encode|raw }};
   </script>

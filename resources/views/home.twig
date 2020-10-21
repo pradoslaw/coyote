@@ -206,10 +206,6 @@
       {{ viewers|raw }}
     </aside>
   </div>
-{% endblock %}
-
-{% block head %}
-  {{ parent() }}
 
   <script type="text/javascript">
     var microblogs = {{ microblogs|json_encode|raw }};

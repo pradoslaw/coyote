@@ -41,9 +41,7 @@
       </ul>
     {% endblock %}
   {% endembed %}
-{% endblock %}
 
-{% block body %}
   <script>
     var forums = {{ forums|json_encode|raw }};
     var collapse = {{ collapse|json_encode|raw }};
@@ -51,6 +49,4 @@
     var postsPerPage = {{ postsPerPage|number_format }};
     var tags = {{ tags.user|json_encode|raw }};
   </script>
-
-  {{ parent() }}
 {% endblock %}

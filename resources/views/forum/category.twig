@@ -45,9 +45,7 @@
       </ul>
     {% endblock %}
   {% endembed %}
-{% endblock %}
 
-{% block body %}
   <script>
     var forums = {{ forums|json_encode|raw }};
     var topics = {{ topics|json_encode|raw }};
@@ -56,6 +54,4 @@
     var groupStickyTopics = true;
     var tags = {{ tags.user|json_encode|raw }};
   </script>
-
-  {{ parent() }}
 {% endblock %}
