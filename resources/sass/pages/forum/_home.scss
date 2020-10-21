@@ -23,7 +23,7 @@
 // desktop
 @include media-breakpoint-up(lg) {
   .card-section {
-    background-color: $panel-footer-bg;
+    background-color: $secondary;
     border: 1px solid $card-border-color;
   }
 }
