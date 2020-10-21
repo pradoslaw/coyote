@@ -41,51 +41,7 @@
   }
 }
 
-#box-whats-new {
-  h5 {
-    font-size: 15px;
-
-    a {
-      color: #f2f2f2;
-    }
-  }
-
-  ul {
-    margin: 10px 0 0 0;
-    list-style-type: square;
-    padding: 0;
-
-    li {
-      padding: 5px 0;
-      color: #969696;
-      clear: both;
-
-      @include text-overflow;
-
-      a {
-        color: #969696;
-      }
-
-      small {
-        color: #f6f6f6;
-        font-size: 11px;
-        float: left;
-        width: 17%;
-        padding-top: 1px;
-
-        @include text-overflow;
-      }
-    }
-  }
-}
-
-.card-news {
-  background-color: #454545;
-}
-
-
 #box-forum {
-
   #stream-wrapper {
     background: url('/img/stream-last-feed.png') no-repeat;
     padding-top: 25px;

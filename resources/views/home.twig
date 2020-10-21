@@ -187,25 +187,19 @@
         </section>
       {% endif %}
 
-      <section id="box-whats-new" class="box">
+      <div class="card bg-dark">
+        <div class="card-body">
+          <h5 class="card-title"><a class="text-light" title="Zobacz zmiany w serwisie 4programmers.net" href="{{ url('Blog') }}">Nowości w serwisie</a></h5>
 
-        <div class="card card-news">
-          <div class="card-body">
-            <h5><a title="Zobacz zmiany w serwisie 4programmers.net" href="{{ url('Blog') }}">Nowości w serwisie</a></h5>
+          {% for article in blog %}
+            <li class="row pt-1 pb-1">
+              <small class="col-md-2 text-light" style="font-size: 11px">{{ article.created_at|date_localized('%d %b %y') }}</small>
 
-            <ul>
-              {% for article in blog %}
-                <li>
-                  <small class="d-none d-sm-block">{{ article.created_at|date_localized('%d %b %y') }}</small>
-
-                  <a href="{{ url(article.path) }}" title="{{ article.long_title|default(article.title) }}">{{ article.title }}</a>
-                </li>
-              {% endfor %}
-            </ul>
-          </div>
+              <a class="col-12 col-md-10 text-white-50" href="{{ url(article.path) }}" title="{{ article.long_title|default(article.title) }}">{{ article.title }}</a>
+            </li>
+          {% endfor %}
         </div>
-
-      </section>
+      </div>
 
       {{ viewers|raw }}
     </aside>
