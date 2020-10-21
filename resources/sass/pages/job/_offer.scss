@@ -10,7 +10,7 @@
 
     section {
       padding: 20px 0;
-      border-bottom: 1px solid $border-color;
+      border-bottom: 1px solid $card-border-color;
       clear: both;
 
       &:first-child {
@@ -87,7 +87,7 @@
       color: $gray-light;
       padding-bottom: 5px;
       margin-bottom: 10px;
-      border-bottom: 1px solid $border-color;
+      border-bottom: 1px solid $card-border-color;
       display: block;
     }
   }
@@ -216,7 +216,7 @@
       }
 
       .media-body {
-        border-bottom: 1px solid $border-color;
+        border-bottom: 1px solid $card-border-color;
         padding-bottom: 10px;
       }
 

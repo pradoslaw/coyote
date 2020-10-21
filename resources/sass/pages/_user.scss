@@ -19,7 +19,7 @@
     padding-top: 0;
     margin-top: 0;
     padding-bottom: 10px;
-    border-bottom: 1px solid $border-color;
+    border-bottom: 1px solid $card-border-color;
     border-top: 0;
     margin-left: -2px;
   }
@@ -89,13 +89,13 @@
 
 #box-sessions {
   > div {
-    border-bottom: 1px solid $border-color;
+    border-bottom: 1px solid $card-border-color;
 
     div {
       padding-top: 5px;
       padding-bottom: 5px;
       padding-left: 25px;
-      border-right: 1px solid $border-color;
+      border-right: 1px solid $card-border-color;
     }
 
     &:last-child {
@@ -150,7 +150,7 @@
 }
 
 #wrap {
-  border-bottom: 1px solid $border-color;
+  border-bottom: 1px solid $card-border-color;
   padding-bottom: 10px;
   position: relative;
   max-height: 430px;
@@ -162,14 +162,14 @@
 
 #box-alerts-settings {
   .row {
-    border-bottom: 1px solid $border-color;
+    border-bottom: 1px solid $card-border-color;
     margin: 0;
 
     > div {
       padding-top: 5px;
       padding-bottom: 5px;
       font-size: 12px;
-      border-right: 1px solid $border-color;
+      border-right: 1px solid $card-border-color;
       text-align: center;
 
       &:last-child {

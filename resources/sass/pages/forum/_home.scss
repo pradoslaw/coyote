@@ -24,7 +24,7 @@
 @include media-breakpoint-up(lg) {
   .card-section {
     background-color: $panel-footer-bg;
-    border: 1px solid $border-color;
+    border: 1px solid $card-border-color;
   }
 }
 
@@ -103,7 +103,7 @@
     }
 
     .media {
-      border-top: 1px solid $border-color;
+      border-top: 1px solid $card-border-color;
       margin-top: 5px;
       padding-top: 10px;
     }
@@ -129,7 +129,7 @@
 
   .card-body {
     padding: 10px 15px;
-    border-bottom: 1px solid $border-color;
+    border-bottom: 1px solid $card-border-color;
 
     &:nth-child(even) {
       background-color: #fafafa;

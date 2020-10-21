@@ -74,14 +74,14 @@
 
 #box-reputation {
   .chart-bar {
-    border-top: 1px solid $border-color;
+    border-top: 1px solid $card-border-color;
     margin-top: 10px;
     padding-top: 10px;
   }
 
   .reputation-item {
     padding: 10px 0 20px 0;
-    border-bottom: 1px solid $border-color;
+    border-bottom: 1px solid $card-border-color;
     font-size: 12px;
 
     > div {

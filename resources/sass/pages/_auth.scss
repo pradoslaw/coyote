@@ -84,7 +84,7 @@ $github-color: #60b044;
       @include font-awesome($fa-var-quote-right);
       top: 0;
       left: 0;
-      color: $border-color;
+      color: $card-border-color;
       font-weight: 900;
     }
   }

@@ -25,7 +25,7 @@
   }
 
   .padding-xs-bottom {
-    border-bottom: 1px solid $border-color;
+    border-bottom: 1px solid $card-border-color;
     clear: left;
   }
 
@@ -196,7 +196,7 @@
     > .input-item {
       &.keyword-search,
       &.location-search {
-        border-right: 1px solid $border-color;
+        border-right: 1px solid $card-border-color;
       }
     }
   }
@@ -212,7 +212,7 @@
 
 .job-filter-form {
   .btn-salary {
-    border: 1px solid $border-color;
+    border: 1px solid $card-border-color;
     background: #f5f5f5;
     text-align: center;
     display: block;

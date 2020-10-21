@@ -14,7 +14,7 @@
   }
 
   .media {
-    border-bottom: 1px solid $border-color;
+    border-bottom: 1px solid $card-border-color;
     padding-bottom: 10px;
     padding-top: 10px;
     margin-bottom: 0;
@@ -27,7 +27,7 @@
     &:after {
       content: '1';
       font-size: 40px;
-      color: $border-color;
+      color: $card-border-color;
       position: absolute;
       right: 10px;
       top: 9px;
@@ -86,7 +86,7 @@
 .card-patronage {
   background: url('/img/patronage-background.png') repeat-x;
   color: #7d7d7d;
-  border: 1px solid $border-color;
+  border: 1px solid $card-border-color;
   position: relative;
 
   &:before {
@@ -177,7 +177,7 @@
   }
 
   .patronage-footer {
-    border-top: 1px dashed $border-color;
+    border-top: 1px dashed $card-border-color;
     padding-top: 10px;
     margin-top: 10px;
 
@@ -208,7 +208,7 @@
   }
 
   .overview {
-    border-left: 1px solid $border-color;
+    border-left: 1px solid $card-border-color;
     margin: 10px 0 0 10px;
 
     @include media-breakpoint-down(sm) {
@@ -230,7 +230,7 @@
     span {
       box-shadow: 0 1px 2px #CCC;
       border-radius: 50%;
-      border: 1px solid $border-color;
+      border: 1px solid $card-border-color;
       background: #fff;
       position: absolute;
       width: 20px;
@@ -281,7 +281,7 @@
 
     strong {
       font-weight: normal;
-      border-left: 1px solid $border-color;
+      border-left: 1px solid $card-border-color;
       padding: 0 0 0 10px;
       margin: 10px 0 0 1px;
       display: block;

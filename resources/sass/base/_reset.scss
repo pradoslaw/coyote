@@ -36,7 +36,7 @@ a.user-deleted {
 // -----------------------------------
 
 dfn {
-  border-top: 1px solid $border-color;
+  border-top: 1px solid $card-border-color;
   display: block;
   padding: 10px 0 15px 30px;
   min-height: 30px;
@@ -56,6 +56,6 @@ dd {
 }
 
 blockquote {
-  border-left: 4px solid $border-color;
+  border-left: 4px solid $card-border-color;
   padding: 2px 0 2px 20px;
 }

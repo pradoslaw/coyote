@@ -32,7 +32,7 @@
 // przezroczyste tlo. dodano jedynie obramowanie.  np. w mikroblogach czy na stronie kategorii tekstow
 .card-transparent {
   background-color: transparent;
-  border: 1px solid $border-color;
+  border: 1px solid $card-border-color;
 }
 
 // panel wykorzystywany np. na forum czy w panelu usera.
@@ -55,7 +55,7 @@
 
 .card-forum {
   background-color: $panel-footer-bg;
-  border: 1px solid $border-color;
+  border: 1px solid $card-border-color;
 }
 
 // Komponent uzywany do sortowania elementow znajdujacych sie w panelu

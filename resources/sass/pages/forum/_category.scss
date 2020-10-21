@@ -39,7 +39,7 @@
   }
 
   .card-body {
-    border-bottom: 1px solid $border-color;
+    border-bottom: 1px solid $card-border-color;
 
     &:nth-child(even) {
       background-color: #fafafa;

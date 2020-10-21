@@ -10,7 +10,7 @@
 
 #box-popular-entries {
   > .media {
-    border-bottom: 1px solid $border-color;
+    border-bottom: 1px solid $card-border-color;
 
     &:last-child {
       border-bottom: none;
@@ -79,7 +79,7 @@
     position: relative;
 
     &:hover {
-      border: 1px solid $border-color;
+      border: 1px solid $card-border-color;
       @include gradient-y(#fff, $gray-lighter);
     }
   }

@@ -85,7 +85,7 @@ $font-size-control-label: 15px;
 
 #form-navbar.fixed {
   background-color: $body-bg;
-  border-top: 2px solid $border-color;
+  border-top: 2px solid $card-border-color;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -256,7 +256,7 @@ select[name=is_gross] {
   > .plan-tooltip {
     position: absolute;
     background-color: #fff;
-    border: 2px solid $border-color;
+    border: 2px solid $card-border-color;
     padding: 5px;
     display: none;
     right: -450px;
@@ -285,7 +285,7 @@ select[name=is_gross] {
 
     &:before {
       border-color: rgba(208, 208, 208, 0);
-      border-right-color: $border-color;
+      border-right-color: $card-border-color;
       border-width: 13px;
       margin-top: -13px;
     }

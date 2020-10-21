@@ -36,7 +36,7 @@
   .btn-fast-reply {
     margin-right: -5px;
     padding-right: 5px;
-    border-right: 1px solid $border-color;
+    border-right: 1px solid $card-border-color;
   }
 }
 
@@ -116,7 +116,7 @@
 }
 
 .post-comment {
-  border-top: 1px solid $border-color;
+  border-top: 1px solid $card-border-color;
   padding: 5px 0 5px 0;
   word-wrap: break-word;
 

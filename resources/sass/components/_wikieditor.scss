@@ -30,7 +30,7 @@
   .select-menu-search {
     background-color: $gray-lighter;
     padding: 5px;
-    border-bottom: 2px solid $border-color;
+    border-bottom: 2px solid $card-border-color;
   }
 }
 
@@ -43,7 +43,7 @@
   }
 
   li {
-    border-bottom: 1px solid $border-color;
+    border-bottom: 1px solid $card-border-color;
 
     a {
       color: $gray;

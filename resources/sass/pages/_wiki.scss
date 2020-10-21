@@ -30,7 +30,7 @@
 }
 
 #folder {
-  border: 1px solid $border-color;
+  border: 1px solid $card-border-color;
   background-color: #f6f6f6;
 
   ol {
@@ -235,7 +235,7 @@ article > header {
 
     &:before {
       //border-color: rgba(194, 225, 245, 0);
-      border-right-color: $border-color;
+      border-right-color: $card-border-color;
       border-width: 9px;
       margin-top: -9px;
     }

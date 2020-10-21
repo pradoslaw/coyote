@@ -25,7 +25,7 @@
   font-family: 'Open Sans', Arial, sans-serif;
 
   .nav-item {
-    border: 1px solid $border-color;
+    border: 1px solid $card-border-color;
     background: #D1D1D1;
     background: -o-linear-gradient(top, #ececec 50%, #d1d1d1 100%);
     background: -ms-linear-gradient(top, #ececec 50%, #d1d1d1 100%);
@@ -121,7 +121,7 @@
 }
 
 ul.nav-pills {
-  border-bottom: 1px solid $border-color;
+  border-bottom: 1px solid $card-border-color;
   box-shadow: 0 2px 0 #FFF;
 
   .nav-link {
