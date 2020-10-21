@@ -10,7 +10,7 @@
 
 @include media-breakpoint-down(sm)  {
   .pagination-sm .page-link {
-    font-size: $font-size-small;
+    font-size: $font-size-sm;
     padding: $pagination-padding-y-sm - .1rem $pagination-padding-x-sm - .1rem;
   }
 

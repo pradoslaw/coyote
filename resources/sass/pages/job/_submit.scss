@@ -112,7 +112,7 @@ $font-size-control-label: 15px;
 
 .submit-form {
   .card-header {
-    font-size: $font-size-large;
+    font-size: $font-size-lg;
   }
 
   .col-form-label, .checkbox label {
@@ -120,7 +120,7 @@ $font-size-control-label: 15px;
   }
 
   .form-text {
-    font-size: $font-size-small;
+    font-size: $font-size-sm;
     margin-bottom: .4rem;
   }
 
@@ -240,7 +240,7 @@ select[name=is_gross] {
 
 .has-feedback label ~ .fa.form-control-feedback {
   top: 30px;
-  font-size: $font-size-large;
+  font-size: $font-size-lg;
   color: $gray;
 }
 

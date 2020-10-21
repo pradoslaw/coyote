@@ -40,7 +40,7 @@
     margin-bottom: 10px;
 
     @include media-breakpoint-down(sm) {
-      font-size: $font-size-large;
+      font-size: $font-size-lg;
     }
   }
 
@@ -67,7 +67,7 @@
     padding: 0 0 0 30px;
     position: relative;
     border-left: none;
-    font-size: $font-size-large;
+    font-size: $font-size-lg;
     margin: 18px 0 17px 20px;
 
     &:after {
@@ -96,7 +96,7 @@
   // ----------------------------------------------------
   .text {
     @include media-breakpoint-down(sm) {
-      font-size: $font-size-small;
+      font-size: $font-size-sm;
     }
 
     img:not(.img-smile) {

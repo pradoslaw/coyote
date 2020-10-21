@@ -48,7 +48,7 @@
       a {
         color: darken($brand-primary, 10%);
         font-weight: bold;
-        font-size: $font-size-small;
+        font-size: $font-size-sm;
       }
     }
   }
@@ -128,17 +128,13 @@
   }
 
   p {
-    font-size: $font-size-small;
+    font-size: $font-size-sm;
     margin: 3px 0;
 
     a {
       color: inherit;
     }
   }
-
-  //img[src*="logo-gray"] {
-  //  opacity: 0.7;
-  //}
 
   .tag-clouds {
     > li {

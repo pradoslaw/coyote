@@ -23,7 +23,7 @@
     padding-left: 4px;
 
     @include media-breakpoint-down(sm) {
-      font-size: $font-size-large;
+      font-size: $font-size-lg;
     }
   }
 
@@ -105,7 +105,7 @@
 
 #box-stats {
   margin: 0 auto 10px auto;
-  font-size: $font-size-small;
+  font-size: $font-size-sm;
 
   li {
     text-align: right;

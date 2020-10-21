@@ -236,12 +236,12 @@
 }
 
 .vote-up, .vote-count {
-  font-size: $font-size-large;
+  font-size: $font-size-lg;
 }
 
 .vote-accept {
   margin-top: 10px;
-  font-size: $font-size-large + 1rem;
+  font-size: $font-size-lg + 1rem;
 
   &.on {
     color: $brand-primary;
