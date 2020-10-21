@@ -45,7 +45,7 @@
   background-color: theme-color-level("warning", $alert-bg-level);
   padding: 4px 10px;
   font-size: 11px;
-  border-bottom: 1px solid $alert-warning-border;
+  border-bottom: 1px solid theme-color-level('warning', $alert-border-level);
 
   a {
     display: block;

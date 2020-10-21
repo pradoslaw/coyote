@@ -261,7 +261,7 @@ article > header {
   .btn-warning {
     padding: 4px;
     font-weight: bold;
-    box-shadow: 1px 1px $alert-warning-border;
+    box-shadow: 1px 1px theme-color-level('warning', $alert-border-level);
     margin: 0 5px;
   }
 }
