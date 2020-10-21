@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\Auth;
 
 use Coyote\Actkey;
+use Coyote\Events\UserWasSaved;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\MailFactory;
 use Coyote\Http\Forms\Auth\RegisterForm;
@@ -78,7 +79,10 @@ class RegisterController extends Controller
             $this->getMailFactory()->to($email)->send(new UserRegistered($url));
 
             auth()->login($user, true);
+
             stream(Stream_Create::class, new Stream_Person());
+
+            event(new UserWasSaved($user));
         });
 
         return redirect()
