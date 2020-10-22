@@ -109,7 +109,11 @@ module.exports = {
   },
   resolve: {
     mainFields: ['main', 'module'],
-    extensions: [ '.ts', '.tsx', '.js', '.vue' ]
+    extensions: [ '.ts', '.tsx', '.js', '.vue' ],
+
+    alias: {
+      '@': path.join(__dirname, 'resources')
+    }
   },
   context: path.join(__dirname, 'resources'),
   entry: {

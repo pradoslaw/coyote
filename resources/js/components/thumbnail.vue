@@ -1,5 +1,5 @@
 <template>
-  <div class="editable-thumbnail">
+  <div class="thumbnail">
     <div class="position-relative img-thumbnail">
       <img v-if="url" :src="url" class="mw-100">
       <div v-else class="d-block bg-light img-placeholder"></div>
@@ -81,3 +81,48 @@
     }
   }
 </script>
+
+<style lang="scss" scoped>
+  @import "@/sass/helpers/_variables.scss";
+
+  .thumbnail:hover {
+    .flush {
+      display: flex;
+    }
+  }
+
+  .img-placeholder {
+    height: 100px; // fixed height
+  }
+
+  .flush,
+  .spinner,
+  .upload {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    vertical-align: middle;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .flush {
+    display: none;
+    background-color: #000;
+    opacity: .5;
+    color: #fff;
+  }
+
+  .spinner, .upload {
+    color: $gray;
+    display: flex;
+  }
+
+  input {
+    visibility: hidden;
+    height: 1px;
+  }
+</style>
