@@ -96,7 +96,7 @@ module.exports = {
         },
         // all common code across entry points
         common: {
-          test: /\.(s?js|vue)$/,
+          test: /\.(s?js|vue|ts)$/,
           minChunks: 2,
           name: "common",
           chunks: "all",
@@ -117,13 +117,12 @@ module.exports = {
   },
   context: path.join(__dirname, 'resources'),
   entry: {
-    app: './js/app.js',
+    app: ['./js/app.js', './sass/app.scss'],
     legacy: './js/legacy.js',
     forum: ['./js/pages/forum.js'],
     wiki: ['./js/pages/wiki.js'],
     job: ['./js/pages/job.js'],
     'job-submit': './js/pages/job/submit.js',
-    main: './sass/main.scss',
     adm: './sass/pages/adm.scss'
   },
   plugins: [
