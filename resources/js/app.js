@@ -26,7 +26,7 @@ $(function () {
   let r = new Router();
 
   r.on('/User', () => {
-    require.ensure([], require => require('./pages/user'), 'user');
+    require('./pages/user');
   })
   .on('/Praca/Application/*', () => {
     require.ensure([], require => require('./pages/job/application'), 'application');

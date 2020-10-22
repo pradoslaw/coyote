@@ -386,6 +386,7 @@
 @import "@/sass/helpers/_variables.scss";
 @import "~bootstrap/scss/_functions.scss";
 @import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins/_breakpoints.scss";
 
 .nav-search {
   width: 100%;
