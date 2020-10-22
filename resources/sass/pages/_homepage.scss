@@ -1,10 +1,9 @@
 @charset "UTF-8";
 
-#box-reputation {
-  margin-top: 10px;
-
+.card-reputation {
   img {
-    border-radius: 4px;
+    width: 40px;
+    height: 40px;
   }
 
   .progress {
@@ -15,13 +14,12 @@
     border-bottom: 1px solid $card-border-color;
     padding-bottom: 10px;
     padding-top: 10px;
-    margin-bottom: 0;
-    margin-top: 0;
     position: relative;
 
     &:last-child {
       border-bottom: none;
     }
+
     &:after {
       content: '1';
       font-size: 40px;
@@ -30,9 +28,11 @@
       right: 10px;
       top: 9px;
     }
+
     &:nth-child(2):after {
       content: '2';
     }
+
     &:nth-child(3):after {
       content: '3';
     }

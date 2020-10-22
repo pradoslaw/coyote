@@ -122,7 +122,7 @@
     <aside class="col-md-4">
       {{ render_block('job_ads') }}
 
-      <section id="box-reputation" class="box">
+      <section class="box mt-2">
         <h4><i class="fas fa-star fa-fw"></i> Reputacja użytkowników</h4>
 
         <div id="reputation-tabs" class="nav nav-panel">
@@ -131,16 +131,17 @@
           <a role="tab" data-toggle="tab" href="#total" class="nav-item {{ settings['homepage.reputation'] == 2 ? 'active' }}"><span>Ogólnie</span></a>
         </div>
 
-        <div class="card card-default tab-content">
+        <div class="card card-default card-reputation tab-content">
           {% for key, mode in reputation %}
             <div id="{{ key }}" role="tabpanel" class="card-body tab-pane {{ settings['homepage.reputation'] == loop.index0 ? 'active' }}">
               {% for item in mode %}
                 <div class="media">
                   <div class="mr-2">
                     <a href="{{ route('profile', [item.id]) }}">
-                      <img class="media-object" src="{{ user_photo(item.photo) }}" style="width: 40px; height: 40px;" alt="{{ item.name }}">
+                      <img src="{{ user_photo(item.photo) }}" alt="{{ item.name }}">
                     </a>
                   </div>
+
                   <div class="media-body">
                     <span class="mb-1 d-block"><a data-user-id="{{ item.id }}" href="{{ route('profile', [item.id]) }}" class="text-body">{{ item.name }}</a></span>
 
