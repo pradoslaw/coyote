@@ -14,7 +14,7 @@
   padding: 3px 0 3px 16px;
 
   a {
-    color: #fff;
+    color: inherit;
   }
 }
 
@@ -22,74 +22,17 @@
   background-color: #fff;
   padding: 15px;
 
-  .label {
-    width: 100%;
-    display: inline-block;
-    margin-top: 12px;
-    white-space: normal; // zawijaj wiersze
-  }
-
-  .list-inline, .box-reputation {
-    border-bottom: 1px solid $card-border-color;
-    padding-bottom: 10px;
-  }
-
   .list-inline {
     color: $gray-light;
     font-size: 12px;
     max-width: 328px;
 
-    @include text-overflow;
-
     li {
-      @include text-overflow;
       max-width: 160px;
     }
   }
 
-  h6 {
-    color: $gray;
-    font-family: Arial, sans-serif;
-  }
-
-  .box-reputation {
-    margin-top: 12px;
-  }
-
-  .avatar-panel {
-    display: flex;
-    flex-direction: column;
-
-    .img-thumbnail {
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-    }
-
-    .status {
-      display: inline-block;
-      background-color: $primary;
-      border-bottom-left-radius: 4px;
-      border-bottom-right-radius: 4px;
-      color: #fff;
-      text-align: center;
-    }
-
-    .status.offline {
-      background-color: $gray-light;
-    }
-  }
-
-  .box-buttons {
-    padding-top: 10px;
-    font-size: 15px;
-
-    a {
-      color: $gray-light;
-      margin-left: 5px;
-
-      &:first-child {
-        margin-left: 0;
-      }
-    }
+  img {
+    width: 106px;
   }
 }

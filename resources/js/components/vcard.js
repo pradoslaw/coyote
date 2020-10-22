@@ -53,5 +53,4 @@ function bindEvents() {
   });
 }
 
-const observer = new MutationObserver(bindEvents);
-observer.observe(document.body, { attributes: true, childList: true, subtree: true });
+new MutationObserver(bindEvents).observe(document.body, { attributes: true, childList: true, subtree: true });
