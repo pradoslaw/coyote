@@ -1,5 +1,4 @@
 .editable-thumbnail {
-  position: relative;
 
   .img-placeholder {
     height: 100px; // fixed height
@@ -40,12 +39,6 @@
   input {
     visibility: hidden;
     height: 1px;
-  }
-
-  // all links have pointer
-  a {
-    cursor: pointer;
-    text-decoration: none;
   }
 }
 
