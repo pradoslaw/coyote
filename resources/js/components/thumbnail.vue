@@ -1,6 +1,6 @@
 <template>
   <div class="thumbnail">
-    <div class="position-relative img-thumbnail">
+    <div class="position-relative img-thumbnail text-center">
       <img v-if="url" :src="url" class="mw-100">
       <div v-else class="d-block bg-light img-placeholder"></div>
 
@@ -18,16 +18,11 @@
     </div>
 
     <input type="file" ref="input" @change="upload">
-
-    <vue-modal ref="error">
-      {{ error }}
-    </vue-modal>
   </div>
 </template>
 
 <script>
   import axios from 'axios';
-  import VueModal from './modal.vue';
 
   export default {
     props: {
@@ -45,13 +40,9 @@
         default: 'photo'
       }
     },
-    components: {
-      'vue-modal': VueModal
-    },
     data() {
       return {
-        isPending: false,
-        error: null
+        isPending: false
       }
     },
     methods: {
@@ -67,11 +58,6 @@
 
         axios.post(this.uploadUrl, form)
           .then(response => this.$emit('upload', response.data))
-          .catch(error => {
-            this.error = error.response.data.message;
-
-            this.$refs.error.open();
-          })
           .finally(() => this.isPending = false);
       },
 

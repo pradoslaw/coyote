@@ -6,27 +6,19 @@
 
   <div id="box-start" class="card card-default">
     <div class="card-body">
-
       <div class="media">
-        <div class="d-none d-sm-block mr-3">
+        <div id="js-user" class="d-none d-sm-block mr-3">
+          <vue-thumbnail
+            :url="url"
+            upload-url="{{ route('user.photo.upload') }}"
+            @upload="setPhoto"
+            @delete="deletePhoto"
+          ></vue-thumbnail>
 
-          <div class="img-placeholder img-thumbnail" style="{{ user('photo').filename ? 'display: none' }}">
-            <img src="{{ cdn('img/avatar.png') }}">
-          </div>
-
-          <div class="img-container img-thumbnail" style="{{ not user('photo').filename ? 'display: none' }}">
-            <img src="{{ user_photo(user('photo')) }}">
-
-            <a href="{{ route('user.photo.delete') }}" id="btn-delete-photo">
-              <i class="fas fa-times fa-2x"></i>
-            </a>
-          </div>
-
-          <a id="btn-change-photo" href="{{ route('user.photo.upload') }}" class="btn btn-sm btn-upload"><i class="fas fa-upload"></i> Zmień</a>
+          <vue-notifications position="bottom right" />
         </div>
 
         <div class="media-body">
-
           <ul class="metadata list-inline">
             <li class="list-inline-item" title="Ostatnia wizyta">
               <i class="fas fa-sign-in-alt fa-fw"></i>
@@ -63,54 +55,4 @@
       </div>
     </div>
   </div>
-
-  {# <h2 class="hidden-xs">Aktywne sesje</h2> #}
-
-  {# <div id="box-sessions" class="card card-default hidden-xs"> #}
-  {# {% for session in sessions %} #}
-  {# <div class="row"> #}
-  {# <div class="col-xs-5"> #}
-  {# <i class="fas fa-user"></i> #}
-  {# {{ session.ip }} #}
-  {# </div> #}
-  {# <div class="col-xs-4"> #}
-  {# <i class="far fa-clock"></i> #}
-  {# {{ session.updated_at|format_date }} #}
-  {# </div> #}
-  {# <div class="col-xs-3"> #}
-  {# <i class="fab fa-{{ session.agent.browser|lower }}"></i> #}
-  {# {{ session.agent.browser }} #}
-  {# </div> #}
-  {# </div> #}
-  {# {% endfor %} #}
-  {# </div> #}
-
-  {# <h2>Komunikaty</h2> #}
-
-  {# <div id="box-infobox" class="card card-default"> #}
-  {# <div class="card-body"> #}
-  {# Augue? Odio a rhoncus elit elementum sit tristique aliquet rhoncus in? Elementum urna. Dis tincidunt cum elit elementum nec. Porta proin dapibus dignissim pulvinar porta pulvinar! Mid purus habitasse cras platea in, auctor, cursus, amet natoque! Nascetur hac phasellus, elementum lorem, in. Enim pid, vut, elit! Risus elementum, habitasse enim mid? Ut purus elementum, tristique urna enim in dapibus rhoncus rhoncus vel dolor sociis mus enim, lectus ut. Diam rhoncus duis pulvinar? Ac quis ut velit. Non placerat? Habitasse porttitor, enim purus! Eros lectus rhoncus tempor dictumst, eros, pellentesque ut et dictumst ridiculus! In urna pellentesque aliquam, aenean, mauris vut ultrices adipiscing, ridiculus vut, et montes in in urna, vut scelerisque tincidunt. Ac platea scelerisque pellentesque! A lectus nisi mattis. #}
-
-  {# <nav> #}
-  {# <ul class="pagination pagination-xs"> #}
-  {# <li class="disabled"> #}
-  {# <a href="#" aria-label="Previous"> #}
-  {# <span aria-hidden="true">&laquo;</span> #}
-  {# </a> #}
-  {# </li> #}
-  {# <li class="active"><a href="#">1</a></li> #}
-  {# <li><a href="#">2</a></li> #}
-  {# <li><a href="#">3</a></li> #}
-  {# <li><a href="#">4</a></li> #}
-  {# <li><a href="#">5</a></li> #}
-  {# <li> #}
-  {# <a href="#" aria-label="Next"> #}
-  {# <span aria-hidden="true">&raquo;</span> #}
-  {# </a> #}
-  {# </li> #}
-  {# </ul> #}
-  {# </nav> #}
-  {# </div> #}
-  {# </div> #}
-
 {% endblock %}

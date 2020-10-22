@@ -7,7 +7,7 @@ $this->group(['namespace' => 'User', 'prefix' => 'User', 'middleware' => 'auth',
     $this->get('/', ['uses' => 'HomeController@index', 'as' => 'home']);
     // dodawanie i usuwanie zdjecia uzytkownika
     $this->post('Photo/Upload', ['uses' => 'HomeController@upload', 'as' => 'photo.upload']);
-    $this->post('Photo/Delete', ['uses' => 'HomeController@delete', 'as' => 'photo.delete']);
+    $this->delete('Photo/Delete', ['uses' => 'HomeController@delete', 'as' => 'photo.delete']);
 
     // ustawienia uzytkownika
     $this->get('Settings', ['uses' => 'SettingsController@index', 'as' => 'settings']);

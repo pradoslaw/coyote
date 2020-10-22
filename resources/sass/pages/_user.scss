@@ -40,68 +40,6 @@
   .box-reputation {
     margin-top: 10px;
   }
-
-  .img-thumbnail {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    position: relative;
-
-    img {
-      max-width: 100%;
-      height: auto;
-    }
-
-    &:hover {
-      #btn-delete-photo {
-        display: flex;
-      }
-    }
-  }
-
-  .btn-upload {
-    width: 100%;
-    background-color: $alt-link-hover-color;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    color: #fff;
-  }
-
-  #btn-delete-photo {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    vertical-align: middle;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    display: none;
-    background-color: #000;
-    opacity: .5;
-    color: #fff;
-
-    &:hover {
-      text-decoration: none;
-    }
-  }
-}
-
-#box-sessions {
-  > div {
-    border-bottom: 1px solid $card-border-color;
-
-    div {
-      padding-top: 5px;
-      padding-bottom: 5px;
-      padding-left: 25px;
-      border-right: 1px solid $card-border-color;
-    }
-
-    &:last-child {
-      border-bottom: none;
-    }
-  }
 }
 
 #box-infobox {
