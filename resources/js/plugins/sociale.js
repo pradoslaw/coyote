@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueNotification from '../components/notifications/notifications.vue';
-import VueSearchbar from '../components/forms/searchbar.vue';
+import VueSearchbar from '../components/searchbar/searchbar.vue';
 import VuePm from '../components/pm/inbox.vue';
 import store from '../store';
 import axios from "axios";

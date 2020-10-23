@@ -79,7 +79,6 @@
 </template>
 
 <script lang="ts">
-  import VueAvatar from '../avatar.vue';
   import Vue from 'vue';
   import { mixin as clickaway } from 'vue-clickaway';
   import axios from 'axios';
@@ -90,6 +89,11 @@
   import Component from 'vue-class-component';
   import { Prop, Ref, Watch } from 'vue-property-decorator';
   import { mapGetters } from "vuex";
+  import VueTopicDecorator from './decorators/topic';
+  import VueJobDecorator from './decorators/job';
+  import VueMicroblogDecorator from './decorators/microblog';
+  import VueWikiDecorator from './decorators/wiki';
+  import VueUserDecorator from './decorators/user';
 
   type HitCategory = {[key: string]: {children: Hit[], model: string, context: string}}
 
@@ -141,68 +145,18 @@
     [Model.Microblog]: 'Mikroblogi'
   };
 
-  const Decorator = {
-    props: {
-      value: String,
-      item: Object
-    },
-    methods: {
-      highlight(text) {
-        // @ts-ignore
-        if (!this.value) {
-          return text;
-        }
-
-        // @ts-ignore
-        const value = this.value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
-        const ascii = value.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
-        const re = new RegExp(`\\b(${value}|${ascii})`, "i");
-
-        return text.replace(re, "<strong>$1</strong>");
-      }
-    }
-  };
-
-  Vue.component('TopicDecorator', {
-    mixins: [ Decorator ],
-    template: '<a :href="item.url" class="text-truncate" tabindex="-1"><span v-html="highlight(item.subject, value)"></span> <small class="forum-name text-muted">w {{ item.forum.name }}</small></a>'
-  });
-
-  Vue.component('JobDecorator', {
-    mixins: [ Decorator ],
-    template: '<a :href="item.url" class="text-truncate" tabindex="-1"><span v-html="highlight(item.title, value)"></span></a>'
-  });
-
-  Vue.component('WikiDecorator', {
-    mixins: [ Decorator ],
-    template: '<a :href="item.url" class="text-truncate" tabindex="-1"><span v-html="highlight(item.title, value)"></span></a>'
-  });
-
-  Vue.component('MicroblogDecorator', {
-    mixins: [ Decorator ],
-    template: '<a :href="item.url" class="text-truncate" tabindex="-1"><span v-html="highlight(item.text, value)"></span></a>'
-  });
-
-  Vue.component('UserDecorator', {
-    mixins: [ Decorator ],
-    components: { 'vue-avatar': VueAvatar },
-    template:
-      `<a :href="item.url" class="d-flex align-content-center text-truncate" tabindex="-1">
-        <vue-avatar :photo="item.photo" class="i-16 mr-2"></vue-avatar> <span v-html="highlight(item.name, value)"></span>
-        <div class="item-options">
-          <a :href="item.url" class="ml-3" title="Przejdź do profilu użytkownika"><i class="fas fa-user"></i></a>
-          <a :href="\'/User/Pm/Submit?to=\' + item.name" class="ml-3" title="Napisz wiadomość"><i class="fas fa-comment"></i></a>
-          <a :href="\'/Search?model=Topic&sort=date&user=\' + item.name" class="ml-3" title="Znajdź posty użytkownika"><i class="fas fa-search"></i></a>
-        </div>
-      </a>`
-  });
-
   @Component({
     name: 'app',
     mixins: [clickaway],
     store,
-    computed: mapGetters('user', ['isAuthorized'])
+    computed: mapGetters('user', ['isAuthorized']),
+    components: {
+      'vue-topic-decorator': VueTopicDecorator,
+      'vue-job-decorator': VueJobDecorator,
+      'vue-wiki-decorator': VueWikiDecorator,
+      'vue-microblog-decorator': VueMicroblogDecorator,
+      'vue-user-decorator': VueUserDecorator
+    }
   })
   export default class VueSearchbar extends Vue {
     isActive: boolean = false;
@@ -348,7 +302,7 @@
     }
 
     makeDecorator(item: Hit): string {
-      return `${item.model}Decorator`;
+      return `vue-${item.model.toLowerCase()}-decorator`;
     }
 
     get endpoint(): string | null {
@@ -384,9 +338,9 @@
 <style lang="scss">
 
 @import "@/sass/helpers/_variables.scss";
-@import "~bootstrap/scss/_functions.scss";
+@import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
-@import "~bootstrap/scss/mixins/_breakpoints.scss";
+@import "~bootstrap/scss/mixins/breakpoints";
 
 .nav-search {
   width: 100%;
