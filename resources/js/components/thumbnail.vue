@@ -2,22 +2,21 @@
   <div class="thumbnail">
     <div class="position-relative img-thumbnail text-center">
       <img v-if="url" :src="url" class="mw-100">
-      <div v-else class="d-block bg-light img-placeholder"></div>
 
-      <a v-if="url" href="javascript:" class="flush text-decoration-none" @click="remove">
+      <div v-else class="bg-light placeholder-mask">
+        <i class="fas fa-plus-circle fa-2x"></i>
+      </div>
+
+      <a v-if="url" href="javascript:" class="flush-mask text-decoration-none" @click="deleteImage">
         <i class="fas fa-times fa-2x"></i>
       </a>
 
-      <div v-if="isPending" class="spinner">
+      <div v-if="isPending" class="spinner-mask">
         <i class="fas fa-spinner fa-spin fa-2x"></i>
       </div>
 
-      <a v-if="!url && !isPending" href="javascript:" class="upload text-decoration-none" @click="openDialog">
-        <i class="fas fa-plus-circle fa-2x"></i>
-      </a>
+      <input v-show="!url && !isPending" @change="upload" type="file" ref="input" >
     </div>
-
-    <input type="file" ref="input" @change="upload">
   </div>
 </template>
 
@@ -46,10 +45,6 @@
       }
     },
     methods: {
-      openDialog() {
-        this.$refs.input.click();
-      },
-
       upload() {
         let form = new FormData();
         form.append(this.name, this.$refs.input.files[0]);
@@ -61,7 +56,7 @@
           .finally(() => this.isPending = false);
       },
 
-      remove() {
+      deleteImage() {
         this.$emit('delete', this.file);
       }
     }
@@ -71,44 +66,53 @@
 <style lang="scss" scoped>
   @import "@/sass/helpers/_variables.scss";
 
-  .thumbnail:hover {
-    .flush {
-      display: flex;
-    }
+  .placeholder-mask {
+    min-height: 100px;
+    min-width: 100px;
   }
 
-  .img-placeholder {
-    height: 100px; // fixed height
-  }
-
-  .flush,
-  .spinner,
-  .upload {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
+  .flush-mask,
+  .placeholder-mask,
+  .spinner-mask,
+  input {
+    display: flex;
     vertical-align: middle;
     text-align: center;
     justify-content: center;
     align-items: center;
+    width: 100%;
+    height: 100%;
   }
 
-  .flush {
+  .flush-mask,
+  .spinner-mask,
+  input {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .flush-mask {
     display: none;
     background-color: #000;
     opacity: .5;
     color: #fff;
   }
 
-  .spinner, .upload {
+  .thumbnail:hover {
+    .flush-mask {
+      display: flex;
+    }
+  }
+
+  .spinner-mask,
+  input {
     color: $gray;
-    display: flex;
   }
 
   input {
-    visibility: hidden;
-    height: 1px;
+    appearance: none;
+    cursor: pointer;
+    opacity: 0;
   }
 </style>
