@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block container %}
-  <div class="row margin-md-top">
+  <div class="row mt-3">
     <div class="col-12">
       {% if flag %}
         {% include 'components.flag' %}
@@ -31,7 +31,7 @@
       {% endif %}
 
       {% if is_author %}
-        <ul class="nav nav-tabs margin-md-bottom">
+        <ul class="nav nav-tabs mb-3">
           <li class="nav-item"><a class="nav-link active" href="#offer" role="tab" data-toggle="tab">Ogłoszenie</a></li>
           <li class="nav-item"><a class="nav-link" href="#applications" role="tab" data-toggle="tab">Kandydaci
               <small>({{ applications|length }})</small>
@@ -53,7 +53,7 @@
 
           <p>Ogłoszenie jest już w naszej bazie. Nie możemy jednak rozpocząć wyświetlania oferty, dopóki nie uregulujesz płatności.</p>
 
-          <a href="{{ route('job.payment', [payment.id]) }}" class="btn btn-sm alert-warning margin-sm-top">Przejdź do płatności</a>
+          <a href="{{ route('job.payment', [payment.id]) }}" class="btn btn-sm alert-warning mt-2">Przejdź do płatności</a>
         </div>
       {% endif %}
 

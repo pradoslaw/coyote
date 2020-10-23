@@ -7,39 +7,39 @@
 {% block container %}
     <div id="business" class="row">
         <div class="col-md-9">
-            <h1 class="text-center margin-lg-top margin-lg-bottom">Szukasz programistów do swojego zespołu? <strong>Rekrutuj najlepszych kandydatów z 4programmers.net!</strong></h1>
+            <h1 class="text-center mt-4 mb-4">Szukasz programistów do swojego zespołu? <strong>Rekrutuj najlepszych kandydatów z 4programmers.net!</strong></h1>
 
             <div class="business-benefits list-group list-group-flush list-group-horizontal mt-4 mb-4">
                 <div class="list-group-item w-50 text-center bg-transparent border-0">
                     <i class="fas fa-users text-primary"></i>
 
-                    <h4 class="margin-sm-top">Aktywna społeczność ponad <br><strong>250 000 programistów</strong></h4>
+                    <h4 class="mt-2">Aktywna społeczność ponad <br><strong>250 000 programistów</strong></h4>
                 </div>
 
                 <div class="list-group-item w-50 text-center bg-transparent border-0">
                     <i class="fas fa-graduation-cap text-primary"></i>
 
-                    <h4 class="margin-sm-top">Najbardziej merytoryczne forum IT w kraju</h4>
+                    <h4 class="mt-2">Najbardziej merytoryczne forum IT w kraju</h4>
                 </div>
 
                 <div class="list-group-item w-50 text-center bg-transparent border-0">
                     <i class="fas fa-mouse-pointer text-primary"></i>
 
-                    <h4 class="margin-sm-top">Średnio ponad <strong>1.5 miliona</strong> odsłon miesięcznie</h4>
+                    <h4 class="mt-2">Średnio ponad <strong>1.5 miliona</strong> odsłon miesięcznie</h4>
                 </div>
 
                 <div class="list-group-item w-50 text-center bg-transparent border-0">
                     <i class="fas fa-comments text-primary"></i>
 
-                    <h4 class="margin-sm-top">Miejsce wymiany wiedzy już <br><strong>od 2000 roku</strong></h4>
+                    <h4 class="mt-2">Miejsce wymiany wiedzy już <br><strong>od 2000 roku</strong></h4>
                 </div>
             </div>
 
-            <h2 class="text-center margin-lg-top margin-lg-bottom">Dajemy Ci do dyspozycji 3 atrakcyjne plany taryfowe. <strong>Już od 30 zł!</strong></h2>
+            <h2 class="text-center mt-4 mb-4">Dajemy Ci do dyspozycji 3 atrakcyjne plany taryfowe. <strong>Już od 30 zł!</strong></h2>
 
             <vue-pricing :plans="plans" :value.sync="default_plan.id" email="{{ config('mail.from.address') }}"></vue-pricing>
 
-            <h2 class="text-center margin-lg-top margin-lg-bottom">Co zyskujesz dodając ogłoszenie na 4programmers.net?</h2>
+            <h2 class="text-center mt-4 mb-4">Co zyskujesz dodając ogłoszenie na 4programmers.net?</h2>
 
             <ul class="business-benefits list-group list-group-flush list-group-horizontal d-flex flex-row flex-wrap">
                 <li class="list-group-item w-50 bg-transparent border-0">
@@ -102,7 +102,7 @@
                     <a :href="{{ submit_url }}" class="btn btn-lg btn-primary">Dodaj ofertę pracy</a>
                 </span>
 
-                <p class="margin-md-top">Masz pytania? Skontaktuj się z nami pod adresem <a href="mailto:{{ config('mail.from.address') }}">{{ config('mail.from.address') }}</a>.</p>
+                <p class="mt-3">Masz pytania? Skontaktuj się z nami pod adresem <a href="mailto:{{ config('mail.from.address') }}">{{ config('mail.from.address') }}</a>.</p>
             </div>
         </div>
 

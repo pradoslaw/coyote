@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div id="plan-table" class="clearfix margin-lg-top margin-lg-bottom">
+        <div id="plan-table" class="clearfix mt-4 mb-4">
             <ul class="plan-benefits">
                 <li><div>Publikacja ogłoszenia na okres <strong>40 dni</strong></div></li>
                 <li><div>Promocja ogłoszenia w kanałach social media <i class="fa fa-question-circle" data-toggle="tooltip" title="Jedynie ogłoszenia z określonym wynagrodzeniem"></i></div></li>
@@ -45,14 +45,14 @@
             </div>
         </div>
 
-        <div class="custom-plan clearfix text-center margin-lg-bottom">
+        <div class="custom-plan clearfix text-center mb-4">
 
             <h3>Potrzebujesz kilku ogłoszeń?</h3>
 
             <div class="custom-plan-container">
                 <i class="fa fa-info-circle fa-2x float-left"></i>
 
-                <div class="float-left margin-xs-left custom-plan-info">
+                <div class="float-left ml-1 custom-plan-info">
                     Napisz do nas na adres:<br>
                     <a :href="'mailto:' + email + '?subject=Interesuje mnie pakiet ogłoszeń. Proszę o przesłanie szczegółów'">{{ email }}</a>
                 </div>

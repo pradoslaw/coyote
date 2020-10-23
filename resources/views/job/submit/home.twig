@@ -61,7 +61,7 @@
               <div class="form-group border-bottom">
                 <label class="col-form-label">Lokalizacja</label>
 
-                <div v-for="(location, index) in job.locations" class="row margin-sm-bottom">
+                <div v-for="(location, index) in job.locations" class="row mb-2">
                   <div class="col-sm-12">
                     <div class="input-group">
                       <div class="input-group-prepend">
@@ -132,7 +132,7 @@
                     </template>
                 </span>
 
-                <div id="tags-container" class="margin-md-top">
+                <div id="tags-container" class="mt-3">
                   <ul class="tag-clouds tag-clouds-skills">
                     <template v-for="(tag, index) in job.tags">
                       <vue-tag-skill :tag.sync="tag" :tooltips="['mile widziane', 'średnio zaawansowany', 'zaawansowany']" @delete="removeTag"></vue-tag-skill>
@@ -235,7 +235,7 @@
                     </vue-button>
 
                     {% if not firm.is_private and firm.name %}
-                      <vue-button :disabled="isSubmitting" type="submit" class="btn btn-danger float-right btn-save margin-sm-right" title="Zapisz tę ofertę" @click.native="isDone = 1">
+                      <vue-button :disabled="isSubmitting" type="submit" class="btn btn-danger float-right btn-save mr-2" title="Zapisz tę ofertę" @click.native="isDone = 1">
                         <i class="fas fa-save"></i> Zapisz jako {{ firm.name[:38] }}
                       </vue-button>
                     {% endif %}
@@ -258,34 +258,34 @@
             Masz możliwość wyboru jednego z trzech pakietów. Koszt najtańszego pakietu to niecałe <strong>1 zł</strong> za dzień.
           </p>
 
-          <h4 class="margin-md-top">Możliwe opcje promowania oferty pracy</h4>
+          <h4 class="mt-3">Możliwe opcje promowania oferty pracy</h4>
 
           <p><i class="fas fa-check fa-fw"></i> Ogłoszenie wyświetlane nad tymi darmowymi.</p>
           <p><i class="fas fa-check fa-fw"></i> Reklama na stronie głównej oraz forum.</p>
           <p><i class="fas fa-check fa-fw"></i> Podświetlenie oferty.</p>
           <p><i class="fas fa-check fa-fw"></i> 3x podbicie oferty.</p>
 
-          <h4 class="margin-md-top">Formy płatności</h4>
+          <h4 class="mt-3">Formy płatności</h4>
 
           <p>
             Za opcję promowania zapłacisz kartą Visa, Mastercard lub Maestro jak i również <strong>szybkim</strong> przelewem bankowym.
             Operatorem płatności jest firma PayLane oraz serwis Przelewy24.pl.
           </p>
 
-          <h4 class="margin-md-top">Faktura VAT</h4>
+          <h4 class="mt-3">Faktura VAT</h4>
 
           <p>
             Fakturę VAT prześlemy Ci na e-mail. Dane do faktury podasz w ostatnim kroku.
           </p>
 
-          <h4 class="margin-md-top">Kupno większej ilości pakietów</h4>
+          <h4 class="mt-3">Kupno większej ilości pakietów</h4>
 
           <p>
             Istnieje możliwość płatności z góry za większą ilość pakietów. Jeżeli chcesz poznać więcej szczegółów,
             napisz do nas na adres <a href="mailto:{{ config('mail.from.address') }}" style="color: #960202; text-decoration: underline">{{ config('mail.from.address') }}</a>.
           </p>
 
-          <h4 class="margin-md-top">Pomoc</h4>
+          <h4 class="mt-3">Pomoc</h4>
 
           <p>
             Jeżeli masz problem z publikacją ogłoszenia lub płatnością, chętnie Ci pomożemy! Napisz do nas na

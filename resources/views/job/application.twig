@@ -10,11 +10,11 @@
             <div class="card card-default">
                 <div class="card-body">
                     <h1 class="media-heading">{{ link_to_route('job.offer', job.title, [job.id, job.slug]) }}</h1>
-                    <h3 class="margin-md-bottom">Wypełnij poniższy formularz, aby zgłosić swoją ofertę</h3>
+                    <h3 class="mb-3">Wypełnij poniższy formularz, aby zgłosić swoją ofertę</h3>
 
                     {{ form(form) }}
 
-                    <p class="text-center text-muted margin-md-top margin-md-bottom"><small>Wysyłając ten formularz akceptujesz nasz <a href="/Regulamin">Regulamin</a> oraz <a href="/Polityka_prywatności">Politykę prywatności</a>.</small></p>
+                    <p class="text-center text-muted mt-3 mb-3"><small>Wysyłając ten formularz akceptujesz nasz <a href="/Regulamin">Regulamin</a> oraz <a href="/Polityka_prywatności">Politykę prywatności</a>.</small></p>
                 </div>
             </div>
         </div>

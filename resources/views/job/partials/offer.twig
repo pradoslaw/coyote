@@ -227,7 +227,7 @@
             {{ job.recruitment|raw }}
           </div>
         {% else %}
-          <div id="apply" class="margin-lg-top">
+          <div id="apply" class="mt-4">
             <a class="btn btn-primary" href="{{ not preview ? route('job.application', [job.id]) : 'javascript:' }}" {{ is_applied ? 'title="Już aplikowałeś na tę ofertę pracy" disabled' }}>Aplikuj
               na to stanowisko</a>
           </div>

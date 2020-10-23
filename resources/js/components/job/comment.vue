@@ -23,11 +23,11 @@
 
         <h6><a :href="'#comment-' + comment.id" class="text-muted timestamp" :data-timestamp="comment.timestamp">{{ comment.created_at }}</a></h6>
 
-        <div class="margin-sm-top margin-sm-bottom" v-if="!isEditing" v-html="comment.html">
+        <div class="mt-2" v-if="!isEditing" v-html="comment.html">
           {{ comment.html }}
         </div>
 
-        <div class="margin-sm-top" v-if="isEditing">
+        <div class="mt-2" v-if="isEditing">
           <form method="post" :action="comment.route.edit" ref="updateForm" @submit.prevent="updateForm">
             <div class="form-group row">
               <textarea
@@ -43,7 +43,7 @@
             </div>
 
             <div class="form-group row">
-              <button type="submit" class="btn btn-primary btn-sm float-right margin-xs-left">Zapisz</button>
+              <button type="submit" class="btn btn-primary btn-sm float-right ml-1">Zapisz</button>
               <button type="button" class="btn btn-danger btn-sm float-right" @click="isEditing = false">Anuluj</button>
             </div>
 
@@ -83,7 +83,7 @@
             </div>
 
             <div class="form-group col-sm-6">
-              <button type="submit" class="btn btn-primary btn-sm float-right margin-xs-left" title="Ctrl+Enter aby opublikować">
+              <button type="submit" class="btn btn-primary btn-sm float-right ml-1" title="Ctrl+Enter aby opublikować">
                 Zapisz
               </button>
               <button type="button" class="btn btn-danger btn-sm float-right" @click="isReplying = false">Anuluj

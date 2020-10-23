@@ -53,7 +53,7 @@
       <div id="box-popular-tags" class="box">
         <h4 class="border-bottom"><i class="fas fa-tag fa-fw"></i> Popularne tagi</h4>
 
-        <div class="padding-sm-top padding-sm-bottom">
+        <div class="pt-2 pb-2">
           <ul class="tag-clouds cloud">
             {% for name, count in tags %}
               <li><a href="{{ route('microblog.tag', [name]) }}">{{ name }}</a>

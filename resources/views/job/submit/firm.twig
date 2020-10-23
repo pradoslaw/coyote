@@ -65,7 +65,7 @@
                 <a href="{{ route('job.submit') }}" class="btn btn-secondary float-left"><i class="fas fa-angle-left"></i> Podstawowe informacje</a>
 
                 <vue-button type="submit" :disabled="isSubmitting" class="btn btn-primary float-right">Podgląd <i class="fas fa-angle-right"></i></vue-button>
-                <vue-button type="submit" :disabled="isSubmitting" class="btn btn-danger float-right btn-save margin-sm-right" @click.native="isDone = 1"><i class="fas fa-save"></i> Zapisz i zakończ
+                <vue-button type="submit" :disabled="isSubmitting" class="btn btn-danger float-right btn-save mr-2" @click.native="isDone = 1"><i class="fas fa-save"></i> Zapisz i zakończ
                 </vue-button>
               </div>
             </div>
@@ -277,7 +277,7 @@
                     <a href="{{ route('job.submit') }}" class="btn btn-secondary float-left"><i class="fas fa-angle-left"></i> Podstawowe informacje</a>
 
                     <vue-button type="submit" :disabled="isSubmitting" class="btn btn-primary float-right">Podgląd <i class="fas fa-angle-right"></i></vue-button>
-                    <vue-button type="submit" :disabled="isSubmitting" class="btn btn-danger float-right btn-save margin-sm-right" @click.native="isDone = 1"><i class="fas fa-save"></i> Zapisz i
+                    <vue-button type="submit" :disabled="isSubmitting" class="btn btn-danger float-right btn-save mr-2" @click.native="isDone = 1"><i class="fas fa-save"></i> Zapisz i
                       zakończ
                     </vue-button>
                   </div>

@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'highlight': job.is_highlight}" class="card card-default card-job margin-md-bottom">
+  <div :class="{'highlight': job.is_highlight}" class="card card-default card-job mb-3">
     <span v-if="order === 0 && job.is_on_top" class="label top-spot-badge d-none d-sm-block">Promowane</span>
 
     <div class="card-body">
@@ -27,16 +27,16 @@
           >
           </vue-salary>
 
-          <p class="padding-xs-bottom">
+          <p class="pb-1 border-bottom" style="clear: left">
             <a class="employer" :title="'Zobacz oferty pracy z ' + job.firm.name" :href="job.firm.url">{{ job.firm.name }}</a>
 
             <vue-location :locations="job.locations" :remote="job.remote"></vue-location>
           </p>
 
-          <span v-if="job.is_new" class="badge label-new float-right margin-sm-top">Nowe</span>
+          <span v-if="job.is_new" class="badge label-new float-right mt-2">Nowe</span>
           <small v-else class="text-muted float-right">{{ job.boost_at }}</small>
 
-          <ul class="tag-clouds tag-clouds-sm tag-clouds-skills margin-md-top">
+          <ul class="tag-clouds tag-clouds-sm tag-clouds-skills">
             <li v-for="tag in limitedTags">
               <a :href="tag.url" :title="'Znajdź oferty zawierające ' + tag.name">
                 <img v-if="tag.logo" :alt="tag.name" :src="tag.logo">
@@ -46,7 +46,7 @@
             </li>
           </ul>
 
-          <ul class="list-inline job-options margin-sm-top">
+          <ul class="list-inline job-options mt-2">
             <li class="list-inline-item">
               <a @click="subscribe()" href="javascript:"><i :class="{'fas fa-heart on': isSubscribed, 'far fa-heart': !isSubscribed}" class="fa-fw"></i>
                 Ulubiona</a>
