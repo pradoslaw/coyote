@@ -43,7 +43,7 @@
   button[type=submit] {
     font-size: 12px;
     width: 100%;
-    @include text-overflow();
+    @include text-truncate();
   }
 }
 

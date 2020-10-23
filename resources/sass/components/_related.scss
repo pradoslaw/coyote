@@ -32,7 +32,7 @@
         }
 
         strong {
-          @include text-overflow();
+          @include text-truncate();
           width: 90%;
           display: inline-block;
           line-height: 1;

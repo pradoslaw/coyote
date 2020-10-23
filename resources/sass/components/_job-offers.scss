@@ -81,31 +81,12 @@
     margin: 0;
     border-bottom: 1px solid $card-border-color;
 
-    //.media-left {
-    //  @media screen and (max-width: $screen-xlg-min) {
-    //    display: none;
-    //  }
-    //}
-
-    //.media-left, .media-body {
-    //  // firm's logo
-    //  vertical-align: middle;
-    //}
-
-
     &:last-child {
       border-bottom: none;
     }
 
     img {
-      //position: relative;
       max-width: 100%;
-      //
-      //@include img-placeholder('/img/logo-gray.png', 50px, 50px);
-      //
-      //@include media-breakpoint-down(lg) {
-      //  display: none;
-      //}
     }
   }
 

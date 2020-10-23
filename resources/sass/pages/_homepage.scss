@@ -127,7 +127,7 @@
   .media-body {
     p {
       margin: 0;
-      @include text-overflow();
+      @include text-truncate();
     }
 
     strong {
@@ -182,7 +182,7 @@
   a.title {
     color: $gray;
     display: block;
-    @include text-overflow;
+    @include text-truncate();
   }
 
   a.category {

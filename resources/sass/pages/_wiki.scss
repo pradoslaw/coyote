@@ -42,7 +42,7 @@
       background: none;
       padding: 2px 0 2px 20px;
       position: relative;
-      @include text-overflow();
+      @include text-truncate();
 
       &:before {
         @include font-awesome($fa-var-folder-open);

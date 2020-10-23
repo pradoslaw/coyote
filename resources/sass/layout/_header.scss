@@ -201,7 +201,7 @@ body.padding-top {
     color: #464646;
     padding-bottom: 5px;
 
-    @include text-overflow;
+    @include text-truncate;
     max-width: 9vw;
   }
 
