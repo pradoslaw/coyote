@@ -221,8 +221,8 @@
 
         <vue-job v-for="(job, index) in jobs.data" :job="job" :key="job.id" :order="index"></vue-job>
 
-        <div v-cloak v-if="jobs.data.length === 0" class="empty-result p-2">
-          <p>
+        <div v-cloak v-if="jobs.data.length === 0" class="card card-body bg-light p-2">
+          <p class="text-center lead mt-4">
             Nie znaleźliśmy ofert, które spełniają Twoje kryteria.<br>
             <a href="{{ route('job.home') }}">Zobacz wszystkie oferty</a>, a być może znajdziesz coś dla siebie!
           </p>

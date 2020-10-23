@@ -75,10 +75,10 @@
         </ul>
 
         <component v-if="hits.meta.total" :is="getComponent()" :hits="hits.data"></component>
-        <div v-else class="card card-body bg-light p-2 empty-result mt-4">
-          <p>
+        <div v-else class="card card-body bg-light p-2 mt-4">
+          <p class="text-center lead mt-4">
             Nie znaleźliśmy stron, które spełniają Twoje kryteria wyszukiwania.<br>
-            <a href="{{ route('home') }}">Wejdź na naszą stronę główną</a>, a być może znajdziesz coś dla siebie!
+            <a href="{{ route('home') }}"><u>Wejdź na naszą stronę główną</u></a>, a być może znajdziesz coś dla siebie!
           </p>
         </div>
 

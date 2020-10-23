@@ -68,14 +68,4 @@ class SkillsController extends BaseController
             }
         });
     }
-
-    /**
-     * @return \Coyote\Services\FormBuilder\Form
-     */
-    protected function getForm()
-    {
-        return $this->createForm(SkillsForm::class, (object) array_only($this->auth->toArray(), ['id']), [
-            'url' => route('user.skills')
-        ]);
-    }
 }

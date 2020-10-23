@@ -4,7 +4,7 @@ namespace Coyote\Http\Controllers\Profile;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Controllers\User\UserMenuTrait;
-use Coyote\Http\Forms\User\SkillsForm;
+use Coyote\Http\Requests\SkillsRequest;
 use Coyote\Http\Resources\Api\MicroblogResource;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface as ReputationRepository;
@@ -80,7 +80,7 @@ class HomeController extends Controller
             'top_menu'      => $menu,
             'user'          => $user,
             'skills'        => $user->skills()->orderBy('order')->get(),
-            'rate_labels'   => SkillsForm::RATE_LABELS,
+            'rate_labels'   => SkillsRequest::RATE_LABELS,
             'tab'           => strtolower($tab),
             'module'        => $this->$tab($user)
         ]);
