@@ -181,7 +181,7 @@
       filteredValue() {
         return Object
           .keys(this.languages)
-          .filter(language => language.toLowerCase().startsWith(this.searchText))
+          .filter(language => this.languages[language].toLowerCase().startsWith(this.searchText.toLowerCase()))
           .reduce((obj, key) => {
             obj[key] = this.languages[key];
 
