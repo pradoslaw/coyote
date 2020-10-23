@@ -3,7 +3,6 @@ const webpack = require('webpack');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const ConcatPlugin = require('webpack-concat-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin');
@@ -138,20 +137,6 @@ module.exports = {
 
     new ManifestPlugin({
       fileName: 'manifest.json'
-    }),
-
-    new ConcatPlugin({
-      uglify: true,
-      sourceMap: false,
-      name: 'jquery-ui.js',
-      fileName: 'js/jquery-ui.js',
-      filesToConcat: [
-        '../node_modules/jquery-ui.1.11.1/ui/core.js',
-        '../node_modules/jquery-ui.1.11.1/ui/widget.js',
-        '../node_modules/jquery-ui.1.11.1/ui/mouse.js',
-        '../node_modules/jquery-ui.1.11.1/ui/resizable.js',
-        '../node_modules/jquery-ui.1.11.1/ui/sortable.js',
-      ],
     }),
 
     new SVGSpritemapPlugin([

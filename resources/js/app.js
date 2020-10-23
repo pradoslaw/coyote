@@ -25,7 +25,7 @@ $(function () {
 
   let r = new Router();
 
-  r.on('/User', () => {
+  r.on(['/User', '/User/Skills'], () => {
     require('./pages/user');
   })
   .on('/Praca/Application/*', () => {

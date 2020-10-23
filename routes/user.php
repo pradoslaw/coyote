@@ -51,7 +51,7 @@ $this->group(['namespace' => 'User', 'prefix' => 'User', 'middleware' => 'auth',
     $this->get('Skills', ['uses' => 'SkillsController@index', 'as' => 'skills']);
     $this->post('Skills', 'SkillsController@save');
     $this->post('Skills/Order', ['uses' => 'SkillsController@order', 'as' => 'skills.order']);
-    $this->post('Skills/{id}', ['uses' => 'SkillsController@delete', 'as' => 'skills.delete']);
+    $this->delete('Skills/{id}', ['uses' => 'SkillsController@delete', 'as' => 'skills.delete']);
 
     $this->get('Security', ['uses' => 'SecurityController@index', 'as' => 'security']);
     $this->post('Security', 'SecurityController@save');

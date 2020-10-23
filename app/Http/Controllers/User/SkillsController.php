@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Controllers\User;
 
-use Coyote\Http\Forms\User\SkillsForm;
+use Coyote\Http\Requests\SkillsRequest;
 use Coyote\Job\Preferences;
 use Illuminate\Http\Request;
 
@@ -17,39 +17,33 @@ class SkillsController extends BaseController
     {
         $this->breadcrumb->push('Umiejętności', route('user.skills'));
 
-        $skills = $this->auth->skills()->get();
+        $skills = $this->auth->skills()->get(['id', 'name', 'rate']);
 
         return $this->view('user.skills.home')->with([
             'skills' => $skills,
-            'form' => $this->getForm(),
-            'rate_labels' => SkillsForm::RATE_LABELS
+            'rate_labels' => SkillsRequest::RATE_LABELS
         ]);
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\View\View
+     * @param SkillsRequest $request
+     * @return mixed
      */
-    public function save(Request $request)
+    public function save(SkillsRequest $request)
     {
-        $form = $this->getForm();
-        $skill = null;
+        $skill = $this->transaction(function () use ($request) {
+            /** @var \Coyote\User\Skill $skill */
+            $skill = $this->auth->skills()->create($request->all());
 
-        if ($form->isValid()) {
-            $skill = $this->transaction(function () use ($request) {
-                /** @var \Coyote\User\Skill $skill */
-                $skill = $this->auth->skills()->create($request->all());
+            $preferences = new Preferences($this->getSetting('job.preferences'));
+            $preferences->addTag($skill->name);
 
-                $preferences = new Preferences($this->getSetting('job.preferences'));
-                $preferences->addTag($skill->name);
+            $this->setSetting('job.preferences', $preferences);
 
-                $this->setSetting('job.preferences', $preferences);
+            return $skill;
+        });
 
-                return $skill;
-            });
-        }
-
-        return view('user.skills.list')->with('item', $skill);
+        return $skill->toJson();
     }
 
     /**

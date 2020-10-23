@@ -30,3 +30,47 @@ new Vue({
     }
   }
 });
+
+new Vue({
+  el: '#js-skills',
+  delimiters: ['${', '}'],
+  data() {
+    return {
+      skills: window.skills,
+      rateLabels: window.rateLabels,
+      selectedMark: null,
+      clickedMark: null,
+      skillName: null
+    };
+  },
+  methods: {
+    addSkill() {
+      axios.post('/User/Skills', {name: this.skillName, rate: this.clickedMark}).then(() => {
+        this.skills.push({
+          name: this.skillName,
+          rate: this.clickedMark
+        });
+
+        this.clickedMark = this.selectedMark = this.skillName = null;
+      });
+    },
+
+    deleteSkill(id) {
+      this.skills.splice(this.skills.findIndex(skill => skill.id === id), 1);
+
+      axios.delete(`/User/Skills/${id}`);
+    },
+
+    setMark(mark) {
+      this.clickedMark = mark;
+    },
+
+    selectMark(mark) {
+      this.selectedMark = mark;
+    },
+
+    clearMarks() {
+      this.selectedMark = null;
+    }
+  }
+});
