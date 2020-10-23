@@ -83,8 +83,7 @@
   import { mixin as clickaway } from 'vue-clickaway';
   import axios from 'axios';
   import store from '../../store';
-  import { Hit, Context } from '../../types/hit';
-  import { Model } from '../../types/models';
+  import { Hit } from '../../types/hit';
   import { SpecialKeys } from '../../types/keys';
   import Component from 'vue-class-component';
   import { Prop, Ref, Watch } from 'vue-property-decorator';
@@ -94,56 +93,7 @@
   import VueMicroblogDecorator from './decorators/microblog';
   import VueWikiDecorator from './decorators/wiki';
   import VueUserDecorator from './decorators/user';
-
-  type HitCategory = {[key: string]: {children: Hit[], model: string, context: string}}
-
-  type ModelType = {
-    [key in Model]: string;
-  };
-
-  type ContextType = {
-    [key in Context]: string;
-  }
-
-  type ModelContextType = {
-    [key in Model]: ContextType;
-  };
-
-  const CONTEXTS: ModelContextType = {
-    [Model.Topic]: {
-      [Context.User]: 'Twoje wątki',
-      [Context.Subscriber]: 'Obserwowane wątki',
-      [Context.Participant]: 'Twoje dyskusje',
-    },
-    [Model.User]: {
-      [Context.User]: '',
-      [Context.Subscriber]: '',
-      [Context.Participant]: '',
-    },
-    [Model.Job]: {
-      [Context.User]: 'Twoje oferty pracy',
-      [Context.Subscriber]: 'Zapisane oferty pracy',
-      [Context.Participant]: '',
-    },
-    [Model.Wiki]: {
-      [Context.User]: 'Twoje artykuły',
-      [Context.Subscriber]: 'Obserwowane artykuły',
-      [Context.Participant]: 'Artykuły z Twoim udziałem'
-    },
-    [Model.Microblog]: {
-      [Context.User]: 'Twoje wpisy na mikroblogu',
-      [Context.Subscriber]: '',
-      [Context.Participant]: ''
-    }
-  };
-
-  const MODELS: ModelType = {
-    [Model.Topic]: 'Wątki na forum',
-    [Model.Job]: 'Oferty pracy',
-    [Model.User]: 'Użytkownicy',
-    [Model.Wiki]: 'Artykuły',
-    [Model.Microblog]: 'Mikroblogi'
-  };
+  import { HitCategory, Contexts, Models } from '../../types/search';
 
   @Component({
     name: 'app',
@@ -256,7 +206,7 @@
     }
 
     categoryLabel(category: Hit): string {
-      return category.context !== undefined ? CONTEXTS[category.model][category.context] : MODELS[category.model];
+      return category.context !== undefined ? Contexts[category.model][category.context] : Models[category.model];
     }
 
     completion(event: KeyboardEvent): void {
