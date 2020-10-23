@@ -7,13 +7,16 @@
     <vue-pagination :current-page="currentPage" :total-pages="totalPages" @change="changePage"></vue-pagination>
   </nav>
 
-  <vue-microblog v-if="microblogs.length > 0" v-for="microblog in microblogs" :key="microblog.id" :microblog="microblog" :wrap="true"></vue-microblog>
-  <div v-else v-cloak class="card card-default">
+  <template v-if="microblogs.length > 0">
+    <vue-microblog v-for="microblog in microblogs" :key="microblog.id" :microblog="microblog" :wrap="true"></vue-microblog>
+  </template>
+
+  <div v-else class="card card-default">
     <div class="card-body">
       <div class="row">
         <div class="col-12">
           <div class="card card-body bg-light p-2">
-            <p class="text-center">Użytkownik nie opublikował ani jednego wpisu na mikroblogu.</p>
+            <p class="text-center mb-0">Użytkownik nie opublikował ani jednego wpisu na mikroblogu.</p>
           </div>
         </div>
       </div>
