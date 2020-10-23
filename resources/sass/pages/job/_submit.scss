@@ -1,5 +1,4 @@
 @charset "UTF-8";
-@import "../../vendor/chosen";
 @import "../../components/thumbnail";
 
 $font-size-control-label: 15px;
@@ -133,7 +132,7 @@ $font-size-control-label: 15px;
 
       .btn-delete {
         position: absolute;
-        top: 15px;
+        top: 13px;
         right: 50px;
         border: 0;
       }

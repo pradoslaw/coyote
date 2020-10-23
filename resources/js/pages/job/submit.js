@@ -16,7 +16,6 @@ import VueModal from '../../components/modal.vue';
 import VueMap from '../../components/google-maps/map.vue';
 import VueMarker from '../../components/google-maps/marker.vue';
 import Editor from '@tinymce/tinymce-vue';
-import 'chosen-js';
 import axios from "axios";
 
 new Vue({
