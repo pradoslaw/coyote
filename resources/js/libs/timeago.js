@@ -1,4 +1,4 @@
-import declination from '../components/declination';
+import declination from './declination';
 
 Date.prototype.asInteger = function () {
   return String(this.getFullYear()) + String(this.getMonth() + 1) + String((this.getDate() < 10 ? '0' : '') + this.getDate());

@@ -1,4 +1,4 @@
-import declination from '../../components/declination';
+import declination from '../../libs/declination';
 
 export default {
   directives: {

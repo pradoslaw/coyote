@@ -96,7 +96,7 @@
   import store from "../../store";
   import { Microblog } from "../../types/models";
   import { MicroblogMixin } from "../mixins/microblog";
-  import declination from '../../components/declination';
+  import declination from '../../libs/declination';
 
   Vue.use(VueTimeago);
 

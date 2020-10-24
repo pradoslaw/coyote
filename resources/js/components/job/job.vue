@@ -70,7 +70,7 @@
 <script>
   import VueSalary from './salary.vue';
   import VueLocation from './location.vue';
-  import declination from '../../components/declination';
+  import declination from '../../libs/declination';
 
   import VueModal from '../modal.vue';
 
