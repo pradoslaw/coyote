@@ -8,7 +8,7 @@
 {% block container %}
   <div id="js-microblog" class="row mt-3">
     <div class="col-md-9">
-      <ul class="nav nav-tabs">
+      <ul class="nav nav-tabs mb-4">
         <li class="nav-item">
           <a class="nav-link {{ route != 'microblog.mine' ? 'active' }}" href="{{ route('microblog.home') }}">Wszystkie wpisy <small>({{ count }})</small></a>
         </li>

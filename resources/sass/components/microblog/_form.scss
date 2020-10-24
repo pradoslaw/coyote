@@ -1,0 +1,15 @@
+.microblog-submit {
+  textarea {
+    width: 100%;
+    resize: none;
+    border: none;
+    box-sizing: border-box;
+    padding: 6px 0;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+

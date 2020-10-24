@@ -1,0 +1,85 @@
+.microblog {
+  @include media-breakpoint-down(md) {
+    textarea::placeholder {
+      color: transparent;
+    }
+  }
+
+  .media-heading {
+    margin-bottom: 2px;
+
+    a {
+      font-size: 16px;
+      color: $link-color-darker;
+    }
+  }
+
+  .btn-thumbs,
+  .btn-reply,
+  .btn-subscribe,
+  .btn-share {
+    padding: 2px 7px;
+    color: $gray-light;
+    position: relative;
+
+    &:hover {
+      border: 1px solid $card-border-color;
+      @include gradient-y(#fff, $gray-lighter);
+    }
+  }
+
+  textarea {
+    resize: none;
+
+    // we need padding-right because of submit button next to textarea comment form
+    padding-right: 32px;
+  }
+}
+
+.microblog-text {
+  padding: 10px 0;
+  overflow: hidden;
+  position: relative;
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.show-more {
+  position: absolute;
+  bottom: 0;
+  z-index: 100;
+  display: none;
+}
+
+.microblog-wrap {
+  max-height: 300px;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 1rem;
+
+  &:after {
+    position: absolute;
+    content: '';
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0, white 65%);
+  }
+
+  .show-more {
+    display: block;
+  }
+}
+
+.break-word {
+  @include break-word;
+  @include link-color-darker;
+
+  // emoticons are NOT responsive
+  img:not(.img-smile) {
+    @include img-fluid();
+  }
+}

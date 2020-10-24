@@ -1,0 +1,77 @@
+
+// Comments block
+// -------------------------
+
+.microblog-comments {
+  margin-top: 10px;
+
+  // One comment
+  .media {
+    border-top: 1px solid $gray-200;
+    padding: 10px 5px 6px 5px;
+    margin-top: 5px;
+
+    // User name
+    // ---------------------
+
+    h6 {
+      @include link-color-darker;
+
+      font-size: 13px;
+      display: inline;
+      margin-right: 3px;
+    }
+
+    &.not-read {
+      @include not-read-border;
+    }
+  }
+
+  // Comment text
+  // ----------------
+
+  .comment-text {
+    font-size: 12px;
+    display: inline;
+
+    // markdown moze "produkowac" <p> w tresci komentarza. pierwsza linia komentarza musi byc na rowni
+    // z loginem stad takie dziwne zabiegi majace na celu zachowanie odstepow od paragrafow z jednoczesnym
+    // wyrownaniem pierwszego <p> wzgledem loginu
+    p:first-child {
+      display: inline;
+    }
+
+    p:nth-child(2) {
+      margin-top: 9px;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .btn-comment-submit {
+    color: $gray;
+    position: absolute;
+    bottom: 0;
+    right: 2px;
+    background: none;
+    font-size: 15px;
+  }
+}
+
+// we use this class name also on forum
+.show-all-comments {
+  padding: 2px 0 2px 5px;
+
+  a {
+    color: $gray;
+    font-size: 12px;
+
+    &:hover,
+    &:focus {
+      text-decoration: none;
+      color: $alt-link-hover-color;
+    }
+  }
+}
