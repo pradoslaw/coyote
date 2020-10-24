@@ -114,6 +114,7 @@ class SubmitController extends Controller
      */
     public function delete($microblog)
     {
+        abort_if(!$microblog->exists, 404);
         $this->authorize('delete', $microblog);
 
         $this->transaction(function () use ($microblog) {

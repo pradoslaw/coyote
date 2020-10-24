@@ -143,6 +143,7 @@ class CommentController extends Controller
      */
     public function delete(Microblog $comment)
     {
+        abort_if(!$comment->exists, 404);
         $this->authorize('delete', $comment);
 
         $this->transaction(function () use ($comment) {
