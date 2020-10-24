@@ -25,6 +25,16 @@ class SettingsController extends BaseController
         $email = $this->auth->actkey()->value('email');
         $form = $this->getForm();
 
+        if ($email) {
+            $popover = [
+                'message' => "Na adres $email wysłaliśmy link umożliwiający zmianę adresu e-mail.",
+                'placement' => 'top',
+                'offset' => '0,10px'
+            ];
+
+            $form->get('email')->setAttr(['data-popover' => json_encode($popover)]);
+        }
+
         return $this->view('user.settings', [
             'email'             => $email,
             'form'              => $form

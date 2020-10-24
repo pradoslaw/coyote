@@ -35,6 +35,7 @@
             rows="4"
             tabindex="1"
             placeholder="Kliknij, aby dodać treść"
+            data-popover='{"placement": "top", "offset": "16%,14px", "message": "Markdown jest obsługiwany. Ctrl+V wkleja obraz ze schowka (Firefox oraz Chrome)."}'
           ></textarea>
 
           <vue-error :message="errors['text']"></vue-error>

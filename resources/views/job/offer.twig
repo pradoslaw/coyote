@@ -136,13 +136,6 @@
 
   {{ parent() }}
 
-  {% if user('id') == job.user_id %}
-    <div class="alert alert-warning alert-popover right" data-id="job-sidemenu" data-containment=".btn-edit">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close" title="Kliknij, aby zamknąć"><span aria-hidden="true">&times;</span></button>
-      Ofertę możesz edytować lub dodać kolejne ogłoszenie.
-    </div>
-  {% endif %}
-
   <script>
     $(function () {
       $('.metadata li').tooltip({'container': 'body'});

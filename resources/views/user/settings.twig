@@ -48,14 +48,3 @@
         </section>
     {{ form_close() }}
 {% endblock %}
-
-{% block body %}
-    {{ parent() }}
-
-    {% if email %}
-        <div class="alert alert-warning alert-popover bottom" data-id="change-email" data-containment="input[name=email]">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close" title="Kliknij, aby zamknąć"><span aria-hidden="true">&times;</span></button>
-            Na adres {{ email }} wysłaliśmy link umożliwiający zmianę adresu e-mail.
-        </div>
-    {% endif %}
-{% endblock %}

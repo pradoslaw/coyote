@@ -20,14 +20,24 @@ const Popover = {
         continue;
       }
 
-      const wrapper = new VuePopover({propsData: {message: options.message}}).$mount();
+      const wrapper = new VuePopover({propsData: {message: options.message, placement: options.placement}}).$mount();
       const el = document.body;
 
       if (el !== null) {
         el.appendChild(wrapper.$el);
       }
 
-      new Popper(node, wrapper.$el, {modifiers: { offset: { offset: options.offset } }});
+      let popperOptions = {};
+
+      if (options.placement) {
+        popperOptions['placement'] = options.placement;
+      }
+
+      if (options.offset) {
+        popperOptions = Object.assign(popperOptions, {modifiers: { offset: { offset: options.offset } }});
+      }
+
+      new Popper(node, wrapper.$el, popperOptions);
     }
   }
 };
