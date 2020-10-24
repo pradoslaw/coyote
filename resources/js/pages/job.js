@@ -1,4 +1,4 @@
-import '../components/subscribe';
+import '../legacy/subscribe';
 
 $(() => {
     'use strict';

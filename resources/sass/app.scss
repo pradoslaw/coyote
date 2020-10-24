@@ -1,57 +1,30 @@
 @charset "UTF-8";
 
-@import url("//fonts.googleapis.com/css?family=Open+Sans:400,300&subset=latin,latin-ext&display=swap");
+
 // variables need to be at the top
 @import "helpers/variables";
 @import "helpers/mixins";
+@import "helpers/sprites";
 
-@import "vendor/bootstrap";
-@import "vendor/font-awesome";
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+
+@import "core/logos";
+@import "core/ajax";
+@import "core/job-offers";
+
+@import "components/forms/toolbar";
+@import "components/vcard";
+@import "components/modals";
+@import "components/searchbar";
+@import "components/thumbnail";
+@import "components/avatar";
+@import "components/popover";
+@import "components/notifications";
+@import "components/forms/auto-complete";
+@import "components/forms/tags-inline";
+
 @import "vendor/lightbox";
 
-@import "base/reset";
-@import "components/breadcrumbs";
-@import "components/buttons";
-@import "components/alerts";
-@import "components/badges";
-@import "components/panels";
-@import "components/progress-bars";
-@import "components/navs";
-@import "components/pagination";
-@import "components/dropdowns";
-@import "components/vcard";
-@import "components/auto-complete";
-@import "components/wikieditor";
-@import "components/ajax";
-@import "components/forms";
-@import "components/tables";
-@import "components/tags";
-@import "components/job-offers";
-@import "components/code";
-@import "components/skeleteon";
-@import "components/sprites";
-@import "components/logos";
-@import "components/related";
-@import "components/sidemenu";
-@import "components/metadata";
-@import "components/stream";
-@import "components/modals";
-@import "layout/header";
-@import "layout/footer";
-@import "layout/grid";
-
-@import "pages/errors";
-@import "pages/search";
-@import "pages/auth";
-@import "pages/help";
-@import "pages/user";
-@import "pages/profile";
-@import "pages/homepage";
-@import "pages/wiki";
-@import "pages/forum";
-@import "pages/microblog";
-@import "pages/job";
-@import "pages/pm";
-
-@import "~perfect-scrollbar/css/perfect-scrollbar";
 

@@ -1,5 +1,5 @@
 import 'jquery-prettytextdiff/jquery.pretty-text-diff';
-import '../components/subscribe';
+import '../legacy/subscribe';
 import Dialog from '../legacy/dialog';
 
 $(() => {

@@ -8,7 +8,7 @@
 
     <div ref="dropdown" v-show="isOpen" class="dropdown-alerts dropdown-menu dropdown-menu-right">
       <div class="dropdown-header">
-        <a class="btn-write-message" href="/User/Pm/Submit">
+        <a class="float-right small" href="/User/Pm/Submit">
           Wyślij wiadomość
         </a>
 

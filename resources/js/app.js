@@ -2,7 +2,7 @@ import './store';
 import './components/scrolltop.js';
 import './components/breadcrumb.js';
 import './components/navbar-toggle.js';
-import './components/state.js';
+import './legacy/state.js';
 import './libs/timeago.js';
 import './components/vcard.js';
 import './components/flag.js';

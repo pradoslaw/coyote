@@ -15,7 +15,7 @@
         <i class="fas fa-spinner fa-spin fa-2x"></i>
       </div>
 
-      <input v-show="!url && !isPending" @change="upload" type="file" ref="input" >
+      <input v-show="!url && !isPending" @change="upload" class="thumbnail-mask" type="file" ref="input" >
     </div>
   </div>
 </template>
@@ -63,56 +63,3 @@
   }
 </script>
 
-<style lang="scss" scoped>
-  @import "@/sass/helpers/_variables.scss";
-
-  .placeholder-mask {
-    min-height: 100px;
-    min-width: 100px;
-  }
-
-  .flush-mask,
-  .placeholder-mask,
-  .spinner-mask,
-  input {
-    display: flex;
-    vertical-align: middle;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-  }
-
-  .flush-mask,
-  .spinner-mask,
-  input {
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-
-  .flush-mask {
-    display: none;
-    background-color: #000;
-    opacity: .5;
-    color: #fff;
-  }
-
-  .thumbnail:hover {
-    .flush-mask {
-      display: flex;
-    }
-  }
-
-  .spinner-mask,
-  input {
-    color: $gray;
-  }
-
-  input {
-    appearance: none;
-    cursor: pointer;
-    opacity: 0;
-  }
-</style>

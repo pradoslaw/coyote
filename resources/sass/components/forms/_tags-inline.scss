@@ -1,0 +1,75 @@
+.tag-editor {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  padding: 0 0 0 10px;
+
+  input {
+    border: none;
+    width: 100%;
+    position: relative;
+    outline: none;
+    padding: 5px 0;
+  }
+
+  .tag-clouds {
+    display: inline;
+    position: relative;
+  }
+
+  .tag-clouds {
+    > li {
+      margin-right: 5px;
+
+      > a {
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: none;
+          background: #DDD;
+        }
+      }
+    }
+  }
+}
+
+.tag-dropdown {
+  border: 2px solid #DDD;
+  list-style-type: none;
+  border-radius: 3px;
+  position: absolute;
+  margin: -2px 0 0 0;
+  background-color: #FFF;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 100;
+  padding: 0;
+
+  li {
+    padding: 6px 5px;
+    cursor: pointer;
+
+    span {
+      font-size: 11px;
+      background: $tag-bg;
+      border-radius: 5px;
+      display: inline;
+      color: $tag-color;
+      padding: 4px 10px;
+      text-shadow: 1px 1px 1px #FFF;
+      position: relative;
+      transition: all .25s linear;
+    }
+
+    &.hover {
+      background-color: #F8F8F8;
+      color: $tag-hover-color;
+    }
+
+    small {
+      font-size: 80%;
+    }
+  }
+}
+

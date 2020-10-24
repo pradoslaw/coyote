@@ -116,6 +116,7 @@ module.exports = {
   },
   context: path.join(__dirname, 'resources'),
   entry: {
+    core: './sass/core.scss',
     app: ['./js/app.js', './sass/app.scss'],
     legacy: './js/legacy.js',
     forum: ['./js/pages/forum.js'],
@@ -176,7 +177,7 @@ module.exports = {
       },
       styles: {
         format: 'fragment',
-        filename: path.join(__dirname, 'resources/sass/components/_sprites.scss')
+        filename: path.join(__dirname, 'resources/sass/helpers/_sprites.scss')
       }
     }),
 

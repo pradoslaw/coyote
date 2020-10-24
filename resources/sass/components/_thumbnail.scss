@@ -1,13 +1,50 @@
 
-$thumbnail-size: (
-  35: 35px,
-  38: 38px,
-  45: 45px,
-  16: 16px,
-);
+.placeholder-mask {
+  min-height: 100px;
+  min-width: 100px;
+}
 
-@each $name, $size in $thumbnail-size {
-  .i-#{$name} {
-    @include size($size);
+.flush-mask,
+.placeholder-mask,
+.spinner-mask,
+.thumbnail-mask {
+  display: flex;
+  vertical-align: middle;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.flush-mask,
+.spinner-mask,
+.thumbnail-mask  {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.flush-mask {
+  display: none;
+  background-color: #000;
+  opacity: .5;
+  color: #fff;
+}
+
+.thumbnail:hover {
+  .flush-mask {
+    display: flex;
   }
+}
+
+.spinner-mask,
+.thumbnail-mask  {
+  color: $gray;
+}
+
+.thumbnail-mask  {
+  appearance: none;
+  cursor: pointer;
+  opacity: 0;
 }
