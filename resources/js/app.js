@@ -45,6 +45,8 @@ $(function () {
   .on('/Adm/Firewall/*', () => {
     require.ensure(['flatpickr', 'flatpickr/dist/l10n/pl'], require => {
       require('flatpickr');
+      require('../sass/vendor/_flatpickr.scss');
+
       const Polish = require('flatpickr/dist/l10n/pl.js').pl;
 
       $('#expire-at').flatpickr({
