@@ -5,7 +5,6 @@ import './components/navbar-toggle.js';
 import './components/state.js';
 import './libs/timeago.js';
 import './components/vcard.js';
-import './components/popover.js';
 import './components/flag.js';
 import './plugins/sociale.js';
 import './plugins/geo-ip';
@@ -66,4 +65,7 @@ $(function () {
   .on('/Search', () => require('./pages/search'));
 
   r.resolve();
+
+  // must be at the end so other vue components can render
+  require('./plugins/popover');
 });

@@ -17,10 +17,7 @@ function openDialog(event) {
 function bindEvents() {
   const links = document.querySelectorAll('a[data-metadata]');
 
-  links.forEach(link => {
-    link.addEventListener('click', openDialog);
-  });
+  links.forEach(link => link.addEventListener('click', openDialog));
 }
 
-const observer = new MutationObserver(bindEvents);
-observer.observe(document.body, { attributes: true, childList: true, subtree: true });
+new MutationObserver(bindEvents).observe(document.body, { attributes: true, childList: true, subtree: true });

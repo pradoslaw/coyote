@@ -4,7 +4,8 @@
 {% block content %}
   <h2>Umiejętności</h2>
 
-  <div v-cloak id="js-skills" class="card card-default">
+  <div  id="js-skills" class="card card-default">
+{#  <div v-cloak id="js-skills" class="card card-default">#}
     <div class="card-body">
       <div class="list-group">
         <div v-for="skill in skills" :key="skill.name" class="list-group-item">
@@ -24,15 +25,14 @@
 
       <div class="form-group row mt-4">
         <div class="col">
-          <input v-model="skillName" @keyup.enter="addSkill" placeholder="Np. java, c#" class="form-control" name="name" type="text">
-
-          <div class="alert alert-warning alert-popover top" data-id="skills">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close" title="Kliknij, aby zamknąć">
-              <span aria-hidden="true">&times;</span>
-            </button>
-
-            Umiejętności będą widoczne na Twoim profilu.
-          </div>
+          <input
+            v-model="skillName"
+            @keyup.enter="addSkill"
+            placeholder="Np. java, c#"
+            class="form-control"
+            type="text"
+            data-popover='{"message": "Umiejętności będą widoczne na Twoim profilu.", "offset": "0,15px"}'
+          >
         </div>
         <div class="col">
           <button @click="addSkill" type="submit" class="btn btn-primary">
