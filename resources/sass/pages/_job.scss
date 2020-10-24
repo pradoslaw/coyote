@@ -3,7 +3,6 @@
 @import "job/submit";
 @import "job/payment";
 @import "job/application";
-@import "job/pricing";
 
 .benefits,
 .features,
@@ -61,33 +60,6 @@
 
     a {
       color: inherit;
-    }
-  }
-}
-
-.location {
-  color: $text-muted;
-
-  a {
-    color: inherit;
-  }
-
-  ul {
-    list-style: none;
-    display: inline;
-    margin: 0;
-    padding: 0;
-
-    li {
-      display: inline;
-
-      &:after {
-        content: ' • ';
-      }
-
-      &:last-child:after {
-        content: '';
-      }
     }
   }
 }

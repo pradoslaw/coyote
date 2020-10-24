@@ -1,0 +1,39 @@
+
+#comments {
+  .comment {
+    > .comment {
+      margin-left: 50px;
+    }
+
+    .media {
+      margin-bottom: 15px;
+
+      .media-object {
+        width: 40px;
+      }
+
+      .media-body {
+        border-bottom: 1px solid $card-border-color;
+        padding-bottom: 10px;
+      }
+
+      &.author {
+        border-left: 2px solid $primary;
+        padding-left: 10px;
+      }
+    }
+
+    &:last-child .media-body {
+      border-bottom: none;
+    }
+  }
+
+  h5 {
+    margin: 1px 0 0 0;
+    font-size: 14px;
+  }
+
+  h6 {
+    margin: 6px 0 0 0;
+  }
+}

@@ -1,6 +1,5 @@
 @charset "UTF-8";
 
-
 // variables need to be at the top
 @import "helpers/variables";
 @import "helpers/mixins";
@@ -34,6 +33,10 @@
 @import "components/forum/comment";
 @import "components/forum/post";
 @import "components/forum/poll";
+@import "components/job/job";
+@import "components/job/pricing";
+@import "components/job/location";
+@import "components/job/comment";
 
 @import "vendor/lightbox";
 
