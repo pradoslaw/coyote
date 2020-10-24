@@ -102,47 +102,6 @@
   padding-top: 1rem;
 }
 
-.post-comments {
-  margin: 15px 0 5px 15px;
-  font-size: .75rem;
-  padding-right: 50px;
-
-  .badge {
-    font-weight: 400;
-    padding: 1px 5px;
-    margin-top: -1px;
-    font-size: 100%;
-  }
-}
-
-.post-comment {
-  border-top: 1px solid $card-border-color;
-  padding: 5px 0 5px 0;
-  word-wrap: break-word;
-
-  .btn-comment {
-    padding: 0 5px;
-    color: $gray;
-    display: none;
-  }
-
-  &:hover {
-    .btn-comment {
-      display: inline-block;
-    }
-  }
-
-  // comment text
-  > span {
-    &:before {
-      content: "▪";
-      margin-right: 5px;
-    }
-  }
-
-  @include link-color-darker();
-}
-
 // Tresc posta wraz z ikonami do glosowania, stopka czy komentarzami
 // ------------------------------------------------------------------
 
@@ -154,7 +113,7 @@
   padding-right: 10px;
 
   @include link-color-darker;
-  @include stripped-table;
+  //@include stripped-table;
 
   // styles for better column width adjustment
   // @see https://github.com/adam-boduch/coyote/issues/347

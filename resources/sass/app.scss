@@ -5,6 +5,7 @@
 @import "helpers/variables";
 @import "helpers/mixins";
 @import "helpers/sprites";
+@import "~@fortawesome/fontawesome-free/scss/variables";
 
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
@@ -13,6 +14,7 @@
 @import "core/logos";
 @import "core/ajax";
 @import "core/job-offers";
+@import "core/thumbnail";
 
 @import "components/forms/toolbar";
 @import "components/vcard";
@@ -27,6 +29,11 @@
 @import "components/microblog/microblog";
 @import "components/microblog/form";
 @import "components/microblog/comment";
+@import "components/forum/section";
+@import "components/forum/topic";
+@import "components/forum/comment";
+@import "components/forum/post";
+@import "components/forum/poll";
 
 @import "vendor/lightbox";
 

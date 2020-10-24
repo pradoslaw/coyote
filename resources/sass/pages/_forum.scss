@@ -39,56 +39,82 @@
   margin: 5px 0 0 0;
 }
 
-.card-wrapper {
-  .card-body {
-    .toggle {
+
+// Menu po prawej stronie w pasku narzedziowym forum
+// ------------------------------------------------------------------------------------
+
+#sidebar {
+  float: right;
+  width: 23%;
+  margin-right: -25%;
+  z-index: 1000;
+
+  @include media-breakpoint-down(lg) {
+    display: none;
+    position: absolute;
+    z-index: 101;
+    font-size: .9em;
+    right: 25%;
+    background: #F3F5F0;
+    border: 2px solid $card-border-color;
+    padding: 6px 10px;
+    box-shadow: 5px 5px 6px #AAA;
+    width: 45%; // na urzadzeniach mobilnych rozszerzamy to okno aby cokolwiek bylo tam widac
+  }
+
+  @include media-breakpoint-down(xs) {
+    width: 65%;
+  }
+}
+
+// Przycisk do ukrywania menu bocznego
+// -------------------------------------------------------------------------------------------
+
+#btn-toggle-sidebar {
+  position: absolute;
+  top: 0;
+  font-size: 18px;
+  right: 0;
+  color: $gray;
+}
+
+.side-menu {
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0 0 0 9px;
+
+    a {
       color: $gray-dark;
-      margin: 2px 2px 0 0;
-      font-size: 13px;
+      text-shadow: 1px 1px #FFF;
+      font-size: 11px;
+      padding: 1px 0 1px 21px;
+      opacity: .9;
 
-      .fa-plus-square {
-        display: inline-block;
-      }
-
-      .fa-minus-square {
-        display: none;
-      }
-    }
-
-    .toggle.in {
-      .fa-plus-square {
-        display: none;
-      }
-
-      .fa-minus-square {
-        display: inline-block;
+      &:hover {
+        opacity: 1;
+        color: $primary;
+        text-decoration: none;
       }
     }
   }
 }
 
-// Strona glowna forum
-// ----------------------------------------------------------------------------------
+// Licznik watkow w danym dziale
+// ----------------------------------
 
-@import "forum/home";
+#box-count {
+  color: lighten($gray-light, 10%);
+  margin: 5px 0 15px 0;
 
-// Menu po prawej stronie w pasku narzedziowym forum
-// ------------------------------------------------------------------------------------
+  strong {
+    font-size: 270%;
+    display: block;
+  }
 
-@import "forum/sidebar";
+  span {
+    letter-spacing: 2px;
+    font-size: 90%;
+  }
+}
 
-// Lista watkow
-// ----------------------------------------
-
-@import "forum/category";
-
-// Wyswietlanie zawartosci watku
-// -----------------------------------------
-
-@import "forum/topic";
-
-
-// Formularz glosowania w ankiecie
-// -------------------------------------------------------------
-
-@import "forum/poll";
