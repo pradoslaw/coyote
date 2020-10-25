@@ -39,7 +39,7 @@ jobs:
           command: pwd
           host: ${{ secrets.STAGGING_IP }}
           user: github
-          key: "${{ secrets.STAGGING_PRIVATE_KEY }}"
+          key: ${{ secrets.STAGGING_PRIVATE_KEY }}
 
           
       #- name: Login to Docker hub
