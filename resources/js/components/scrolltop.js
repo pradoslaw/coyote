@@ -1,19 +1,16 @@
-$(function() {
-    'use strict';
+const scrollButton = document.getElementById('scroll-to-top');
 
-    const AMOUNT_SCROLLED = 300;
+function handleScroll() {
+  if (document.documentElement.scrollTop > 300) {
+    scrollButton.style.display = 'block';
+  } else {
+    scrollButton.style.display = 'none';
+  }
+}
 
-    $(window).scroll(() => {
-        if ($(window).scrollTop() > AMOUNT_SCROLLED) {
-            $('.back-to-top').fadeIn('slow');
-        } else {
-            $('.back-to-top').fadeOut('slow');
-        }
-    });
+function scrollToTop() {
+  document.documentElement.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-    $(".back-to-top").click(() => {
-        $("html, body").animate({scrollTop: 0}, "fast");
-
-        return false;
-    });
-});
+scrollButton.addEventListener('click', scrollToTop);
+document.addEventListener('scroll', handleScroll);
