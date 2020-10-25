@@ -36,7 +36,17 @@ jobs:
         uses: tarunjangra/ssh-remote-cmd@v1
         with:
             # Command(s) to execute on the remote server.
-          command: pwd
+          command: |
+            cd /var/www/4programmers.dev
+            git reset --hard
+            git pull            
+            sudo docker-compose exec php composer install --no-dev
+            sudo docker-compose exec php yarn install
+            sudo docker-compose exec php make migration
+            sudo docker-compose exec php make assets-production
+            sudo docker-compose exec php make cache-config
+            sudo docker-compose exec php php artisan queue:restart
+            ${{ secrets.ENABLE_PLUGIN }}
           host: ${{ secrets.STAGGING_IP }}
           user: github
           key: ${{ secrets.STAGGING_PRIVATE_KEY }}
