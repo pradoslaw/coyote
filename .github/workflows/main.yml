@@ -35,5 +35,8 @@ jobs:
       - name: Login to Docker hub
         run: docker login -u ${{ secrets.DOCKER_LOGIN }} -p ${{ secrets.DOCKER_PASSWORD }}
         
+      - name: Build docker
+        run: docker build -t 4programmers/coyote:$GITHUB_SHA -f docker/coyote/Dockerfile .
+        
       - name: Push to registry
-        run: docker build -t 4programmers/coyote:$GITHUB_SHA -f docker/coyote/Dockerfile . && docker push 4programmers/coyote:$GITHUB_SHA
+        run: docker push 4programmers/coyote:$GITHUB_SHA
