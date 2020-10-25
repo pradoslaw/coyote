@@ -105,7 +105,7 @@ class ConfirmCest
         $I->click('Zapisz');
 
         $I->seeInField('email', $user->email);
-        $I->seeInSource('Na adres ' . $newEmail . ' wysłaliśmy link umożliwiający zmianę adresu e-mail.');
+        $I->seeInSource($newEmail);
     }
 
     // nie wiem czemu ten test wywala sie na travisie :( kiedys dzialalo

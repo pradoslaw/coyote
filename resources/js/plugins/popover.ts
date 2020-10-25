@@ -21,11 +21,8 @@ const Popover = {
       }
 
       const wrapper = new VuePopover({propsData: {message: options.message, placement: options.placement}}).$mount();
-      const el = document.body;
 
-      if (el !== null) {
-        el.appendChild(wrapper.$el);
-      }
+      node.parentNode!.insertBefore(wrapper.$el, node.nextSibling);
 
       let popperOptions = {};
 

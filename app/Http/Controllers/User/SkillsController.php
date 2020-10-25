@@ -19,7 +19,7 @@ class SkillsController extends BaseController
 
         $skills = $this->auth->skills()->get(['id', 'name', 'rate']);
 
-        return $this->view('user.skills.home')->with([
+        return $this->view('user.skills')->with([
             'skills' => $skills,
             'rate_labels' => SkillsRequest::RATE_LABELS
         ]);

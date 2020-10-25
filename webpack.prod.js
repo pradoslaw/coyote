@@ -46,7 +46,6 @@ module.exports = merge(common, {
         'boolean',
         'number',
         'constant',
-        'bs-popover-top',
         'modal-backdrop',
         'show',
         'fade',
@@ -74,7 +73,6 @@ module.exports = merge(common, {
       whitelistPatterns: [
         /^logo/,
         /^language/,
-        /^popover/,
         /^badge/
       ],
       whitelistPatternsChildren: [
@@ -84,7 +82,6 @@ module.exports = merge(common, {
         /^bs-tooltip/,
         /^ps/,
         /^cool-lightbox/,
-        /^chosen/,
         /^tag/,
         /:not/,
         /^pre/,
