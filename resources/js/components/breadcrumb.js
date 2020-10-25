@@ -1,42 +1,39 @@
-$(function () {
-    'use strict';
-
-    let handler = function () {
-        if ($(window).scrollTop() > 150) {
-            let breadcrumb = $('#breadcrumb-fixed');
-            let css = {left: $('.navbar-brand').position().left, opacity: 1.0};
-
-            if (!breadcrumb.length) {
-                breadcrumb = $('.breadcrumb:first:visible').clone();
-
-                // breadcrumb can be empty
-                if ($.trim(breadcrumb.text()).length > 0) {
-                    breadcrumb.attr({id: 'breadcrumb-fixed'}).css(css).hide().appendTo('body');
-
-                    breadcrumb.slideDown('fast');
-                }
-            }
-            else {
-                breadcrumb.css(css);
-            }
-        }
-        else {
-            $('#breadcrumb-fixed').remove();
-        }
-    };
-
-  let isMobile = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
-
-  if (!isMobile && $('.fixed-top').length === 1) {
-    $(window).scroll(handler);
-  }
-});
-
-function adjustHashOffset() {
-  window.scrollTo(window.scrollX, window.scrollY - 58);
+function getElementByClass(name) {
+  return document.getElementsByClassName(name)[0];
 }
 
-if (document.getElementsByClassName('fixed-top').length) {
+function handleScroll() {
+  let breadcrumb = document.getElementById('breadcrumb-fixed');
+
+  if (document.documentElement.scrollTop < 150) {
+    breadcrumb?.remove();
+
+    return;
+  }
+
+  const logo = getElementByClass('navbar-brand');
+
+  if (!breadcrumb) {
+    breadcrumb = getElementByClass('breadcrumb')?.cloneNode(true);
+
+    if (!breadcrumb) {
+      return;
+    }
+
+    breadcrumb.id = 'breadcrumb-fixed';
+    breadcrumb.style.left = `${logo.offsetLeft}px`;
+
+    document.body.append(breadcrumb);
+  }
+}
+
+function adjustHashOffset() {
+  window.scrollTo(window.scrollX, window.scrollY - 60);
+}
+
+const isMobile = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+
+if (!isMobile && getElementByClass('fixed-top')) {
   window.addEventListener('hashchange', adjustHashOffset);
 
   window.addEventListener('load', () => {
@@ -44,4 +41,6 @@ if (document.getElementsByClassName('fixed-top').length) {
       adjustHashOffset();
     }
   });
+
+  window.addEventListener('scroll', handleScroll);
 }
