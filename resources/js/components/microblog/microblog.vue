@@ -8,7 +8,7 @@
             <vue-avatar v-bind="microblog.user" class="i-45 d-block img-thumbnail"></vue-avatar>
           </a>
         </div>
-        <div class="media-body">
+        <div class="media-body" style="width: 90%">
           <div v-if="microblog.editable" class="dropdown float-right">
             <button class="btn btn-secondary btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-label="Dropdown"></button>
 
@@ -24,7 +24,7 @@
           <small v-if="microblog.is_sponsored" class="text-muted small">&bull; Sponsorowane</small>
 
           <div v-show="!microblog.is_editing" :class="{'microblog-wrap': isWrapped}">
-            <div v-html="microblog.html" class="break-word microblog-text"></div>
+            <div v-html="microblog.html" class="microblog-text"></div>
 
             <div v-if="microblog.media.length" class="row mb-2">
               <div
