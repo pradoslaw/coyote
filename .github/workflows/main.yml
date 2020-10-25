@@ -38,8 +38,8 @@ jobs:
             # Command(s) to execute on the remote server.
           command: |
             cd /var/www/4programmers.dev
-            git reset --hard
-            git pull            
+            sudo git reset --hard
+            sudo git pull            
             sudo docker-compose exec php composer install --no-dev
             sudo docker-compose exec php yarn install
             sudo docker-compose exec php make migration
