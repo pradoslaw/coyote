@@ -33,7 +33,7 @@
             class="form-control"
             ref="textarea"
             rows="4"
-            tabindex="1"
+            tabindex="2"
             placeholder="Kliknij, aby dodać treść"
             data-popover='{"placement": "top", "offset": "16%,14px", "message": "Markdown jest obsługiwany. Ctrl+V wkleja obraz ze schowka."}'
           ></textarea>
@@ -174,7 +174,7 @@
 
     <div class="row mt-2">
       <div class="col-12">
-        <vue-button :disabled="isProcessing" title="Kliknij, aby zapisać (Ctrl+Enter)" class="btn btn-primary btn-sm" @click.native.prevent="save">
+        <vue-button :disabled="isProcessing" tabindex="4" title="Kliknij, aby zapisać (Ctrl+Enter)" class="btn btn-primary btn-sm" @click.native.prevent="save">
           Zapisz
         </vue-button>
 
