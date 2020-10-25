@@ -30,3 +30,15 @@ jobs:
         
       - name: Push to registry
         run: docker push 4programmers/coyote:$GITHUB_SHA
+        
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.PRODUCTION_IP }}
+          username: ${{ secrets.PRODUCTION_LOGIN }}
+          key: ${{ secrets.PRODUCTION_PRIVATE_KEY }}
+          port: 22
+          script: |
+            sudo docker service update --image 4programmers/coyote:$GITHUB_SHA coyote_php
+            sudo docker service update --image 4programmers/coyote:$GITHUB_SHA coyote_worker
+            sudo docker service update --image 4programmers/coyote:$GITHUB_SHA coyote_cron
