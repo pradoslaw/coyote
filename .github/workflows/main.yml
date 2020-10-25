@@ -33,25 +33,13 @@ jobs:
       - name: SSH Execute Commands
           # You may pin to the exact commit or the version.
           # uses: JimCronqvist/action-ssh@1c03e01b4ac39da814b45cfd2924c2df0ff1396f
-        uses: JimCronqvist/action-ssh@0.1.1
+        uses: tarunjangra/ssh-remote-cmd@v1
         with:
             # Command(s) to execute on the remote server.
-          command: |
-            cd /var/www/4programmers.dev
-            pwd
-            git reset --hard
-            sudo docker-compose exec php composer install --no-dev
-            sudo docker-compose exec php yarn install
-            sudo docker-compose exec php make migration
-            sudo docker-compose exec php make assets-production
-            sudo docker-compose exec php make cache-config
-            sudo docker-compose exec php php artisan queue:restart
-            ${{ secrets.ENABLE_PLUGIN }}
-
-          hosts: ${{ secrets.STAGGING_IP }}
-          # The private key (id_rsa) content for authenticating to the SSH server(s). Recommended to store it as a GitHub Secret.
-          privateKey: ${{ secrets.STAGGING_PRIVATE_KEY }}
-          debug: "true"
+          command: pwd
+          host: ${{ secrets.STAGGING_IP }}
+          user: "www-data"
+          key: ${{ secrets.STAGGING_PRIVATE_KEY }}
 
           
       #- name: Login to Docker hub
