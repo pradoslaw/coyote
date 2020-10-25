@@ -48,10 +48,10 @@ jobs:
             sudo docker-compose exec php php artisan queue:restart
             ${{ secrets.ENABLE_PLUGIN }}
 
-            # Hostname or IP address of the remote server(s). Separate multiple servers with a blank space. Example: 'user@mydomain.com:22 user@otherdomain.com:2222'
           hosts: ${{ secrets.STAGGING_IP }}
-            # The private key (id_rsa) content for authenticating to the SSH server(s). Recommended to store it as a GitHub Secret.
+          # The private key (id_rsa) content for authenticating to the SSH server(s). Recommended to store it as a GitHub Secret.
           privateKey: ${{ secrets.STAGGING_PRIVATE_KEY }}
+          debug: "true"
 
           
       #- name: Login to Docker hub
