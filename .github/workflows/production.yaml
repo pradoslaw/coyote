@@ -1,0 +1,32 @@
+name: Production deployment
+
+on: 
+  workflow_dispatch:
+    inputs:
+      git-ref:
+        description: Git Ref (Optional)    
+        required: false
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  deploy:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+          
+      - name: Login to Docker hub
+        run: docker login -u ${{ secrets.DOCKER_LOGIN }} -p ${{ secrets.DOCKER_PASSWORD }}
+        
+      - name: Build plugin
+        run: ${{ secrets.ENABLE_PLUGIN }}
+        
+      - name: Build docker
+        run: docker build -t 4programmers/coyote:$GITHUB_SHA -f docker/coyote/Dockerfile .
+        
+      - name: Push to registry
+        run: docker push 4programmers/coyote:$GITHUB_SHA
