@@ -38,8 +38,8 @@ jobs:
             # Command(s) to execute on the remote server.
           command: pwd
           host: ${{ secrets.STAGGING_IP }}
-          user: "www-data"
-          key: ${{ secrets.STAGGING_PRIVATE_KEY }}
+          user: github
+          key: "${{ secrets.STAGGING_PRIVATE_KEY }}"
 
           
       #- name: Login to Docker hub
