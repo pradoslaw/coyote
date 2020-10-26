@@ -308,7 +308,7 @@
   import VueCommentForm from "./comment-form.vue";
   import VueSelect from  './../forms/select.vue';
   import VueButton from  './../forms/button.vue';
-  import VueFlag from './../forum/flag.vue';
+  import VueFlag from './../flags/flag.vue';
   import { mapActions, mapGetters, mapState } from "vuex";
   import VueModal from "../modal.vue";
   import formatDistanceToNow from 'date-fns/formatDistanceToNow';

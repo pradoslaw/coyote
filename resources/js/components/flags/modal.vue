@@ -15,7 +15,12 @@
 
           <p>{{ type.description }}</p>
 
-          <textarea v-if="index + 1 === types.length && selectedType === type.id" name="text" class="form-control">{{ text }}</textarea>
+          <textarea
+            v-if="index + 1 === types.length && selectedType === type.id"
+            v-model="text"
+            name="text"
+            class="form-control"
+          ></textarea>
         </div>
       </div>
     </slot>
@@ -76,9 +81,8 @@ export default class FlagModal extends Vue {
   sendReport() {
     this.isProcessing = true;
 
-    axios.post('/Flag', { type_id: this.selectedType, url: this.url, metadata: this.metadata })
+    axios.post('/Flag', { type_id: this.selectedType, url: this.url, metadata: this.metadata, text: this.text })
       .then(() => {
-
         this.$notify({type: 'success', text: 'Dziękujemy za wysłanie raportu.'});
         this.closeModal();
       })

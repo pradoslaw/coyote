@@ -6,7 +6,7 @@
     z powodu <strong>{{ flag.name }}</strong>
     dnia <vue-timeago :datetime="flag.created_at"></vue-timeago>
 
-    <p v-if="flag.text">{{ flag.text }}</p>
+    <p v-if="flag.text" class="mb-0">{{ flag.text }}</p>
 
     <vue-modal ref="modal">
       <template v-slot:title>Zamknięcie raportu</template>
@@ -23,7 +23,7 @@
 
 <script lang="ts">
   import Vue from 'vue';
-  import { Prop } from "vue-property-decorator";
+  import { Prop, Ref } from "vue-property-decorator";
   import Component from "vue-class-component";
   import { Flag } from "../../types/models";
   import VueUserName from "../user-name.vue";
@@ -38,12 +38,15 @@
     @Prop()
     readonly flag!: Flag;
 
+    @Ref()
+    readonly modal!: VueModal;
+
     close() {
       axios.post(`/Flag/Delete/${this.flag.id}`);
 
       this.$emit('close', this.flag.id);
-      // @ts-ignore
-      this.$refs.modal.close()
+
+      this.modal.close()
     }
   }
 </script>
