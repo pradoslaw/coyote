@@ -5,7 +5,7 @@ import './components/navbar-toggle.js';
 import './legacy/state.js';
 import './libs/timeago.js';
 import './components/vcard.js';
-import './components/flag.js';
+import './plugins/flags.ts';
 import './plugins/sociale.js';
 import './plugins/geo-ip';
 import './bootstrap';

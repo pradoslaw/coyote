@@ -15,6 +15,12 @@ export interface Flag {
   user_name: string;
 }
 
+export interface FlagType {
+  id: number;
+  name: string;
+  description: string;
+}
+
 export interface User {
   id: number;
   name: string;

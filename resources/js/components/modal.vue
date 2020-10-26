@@ -24,31 +24,33 @@
   </div>
 </template>
 
-<script>
-  export default {
-    props: ['title'],
-    data: function () {
-      return {
-        isOpen: false,
-        _bodyOverflow: ''
-      }
-    },
-    methods: {
-      open() {
-        this.isOpen = true;
+<script lang="ts">
+import Vue from 'vue';
+import Component from "vue-class-component";
+import { Ref } from 'vue-property-decorator';
 
-        this.$nextTick(() => {
-          this.$refs.modal.focus();
+@Component
+export default class VueModal extends Vue {
+  isOpen = false;
 
-          this._bodyOverflow = document.body.style.overflow;
-          document.body.style.overflow = 'hidden';
-        })
-      },
+  @Ref()
+  private modal!: HTMLElement;
+  private bodyOverflow: string = '';
 
-      close() {
-        this.isOpen = false;
-        document.body.style.overflow = this._bodyOverflow;
-      }
-    }
+  open() {
+    this.isOpen = true;
+
+    this.$nextTick(() => {
+      this.modal.focus();
+
+      this.bodyOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+    })
   }
+
+  close() {
+    this.isOpen = false;
+    document.body.style.overflow = this.bodyOverflow;
+  }
+}
 </script>

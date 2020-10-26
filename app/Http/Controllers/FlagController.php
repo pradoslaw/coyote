@@ -47,16 +47,11 @@ class FlagController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Type[]|\Illuminate\Database\Eloquent\Collection
      */
-    public function index(Request $request)
+    public function index()
     {
-        return view('flag', [
-            'types'         => Type::all(),
-            'url'           => $request->query('url'),
-            'metadata'      => $request->query('metadata')
-        ]);
+        return Type::all();
     }
 
     /**
@@ -113,10 +108,10 @@ class FlagController extends Controller
     }
 
     /**
-     * @param $id
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response|null
+     * @param int $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function delete($id)
+    public function delete(int $id)
     {
         $flag = $this->flag->findOrFail($id);
         $object = new Stream_Flag(['id' => $flag->id]);
@@ -132,14 +127,6 @@ class FlagController extends Controller
             $flag->delete();
             stream(Stream_Delete::class, $object);
         });
-    }
-
-    /**
-     * @return mixed
-     */
-    public function modal()
-    {
-        return view('flag.modal');
     }
 
     /**
