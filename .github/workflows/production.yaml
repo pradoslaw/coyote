@@ -36,7 +36,7 @@ jobs:
         with:
           host: ${{ secrets.PRODUCTION_IP }}
           username: ${{ secrets.PRODUCTION_LOGIN }}
-          key: ${{ secrets.PRODUCTION_PRIVATE_KEY }}
+          key: ${{ secrets.PRODUCTION_KEY }}
           port: 22
           script: |
             sudo docker service update --image 4programmers/coyote:$GITHUB_SHA coyote_php
