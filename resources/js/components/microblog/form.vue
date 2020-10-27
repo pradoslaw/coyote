@@ -83,12 +83,10 @@
     }
 
     addEmptyImage() {
-      if (!this.microblog.media.length || !this.microblog.media[this.microblog.media.length - 1].url) {
-        store.commit('microblogs/addImage', { microblog: this.microblog, media: {url: '', name: '', thumbnail: ''} });
-      }
+      const thumbnail = new VueThumbnail({propsData: {uploadUrl: '/Mikroblogi/Upload'}}).$mount();
 
-      // @ts-ignore
-      this.$nextTick(() => this.thumbnail[this.thumbnail.length - 1].openDialog());
+      thumbnail.$on('upload', this.addImage);
+      thumbnail.openDialog();
     }
 
     addImage(media) {

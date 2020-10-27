@@ -20,46 +20,51 @@
   </div>
 </template>
 
-<script>
-  import axios from 'axios';
+<script lang="ts">
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import { Prop, Ref } from 'vue-property-decorator';
+import axios from 'axios';
 
-  export default {
-    props: {
-      url: {
-        type: String
-      },
-      file: {
-        type: String
-      },
-      uploadUrl: {
-        type: String
-      },
-      name: {
-        type: String,
-        default: 'photo'
-      }
-    },
-    data() {
-      return {
-        isPending: false
-      }
-    },
-    methods: {
-      upload() {
-        let form = new FormData();
-        form.append(this.name, this.$refs.input.files[0]);
+@Component
+export default class VueThumbnail extends Vue {
+  @Ref('input')
+  readonly input!: HTMLInputElement;
 
-        this.isPending = true;
+  @Prop()
+  readonly url?: string;
 
-        axios.post(this.uploadUrl, form)
-          .then(response => this.$emit('upload', response.data))
-          .finally(() => this.isPending = false);
-      },
+  @Prop()
+  readonly file?: string;
 
-      deleteImage() {
-        this.$emit('delete', this.file);
-      }
-    }
+  @Prop({required: true})
+  readonly uploadUrl!: string;
+
+  @Prop({default: 'photo'})
+  readonly name!: string;
+
+  isPending = false;
+
+  upload() {
+    let form = new FormData();
+    form.append(this.name, this.input.files![0]);
+
+    this.isPending = true;
+
+    axios.post(this.uploadUrl, form)
+      .then(response => this.$emit('upload', response.data))
+      .finally(() => this.isPending = false);
   }
+
+  deleteImage() {
+    this.$emit('delete', this.file);
+  }
+
+  // this method can be used by other components to open upload dialog
+  openDialog() {
+    this.input.click();
+  }
+}
+
 </script>
 
