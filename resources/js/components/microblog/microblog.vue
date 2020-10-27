@@ -8,7 +8,7 @@
             <vue-avatar v-bind="microblog.user" class="i-45 d-block img-thumbnail"></vue-avatar>
           </a>
         </div>
-        <div class="media-body" style="width: 90%">
+        <div class="media-body">
           <div v-if="microblog.editable" class="dropdown float-right">
             <button class="btn btn-secondary btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-label="Dropdown"></button>
 

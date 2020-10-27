@@ -34,12 +34,23 @@
     // we need padding-right because of submit button next to textarea comment form
     padding-right: 32px;
   }
+
+  .media-body {
+    min-width: 0;  // thanks to this, text will not overflow its parent
+  }
 }
 
 .microblog-text {
   padding: 10px 0;
   overflow: hidden;
   position: relative;
+
+  @include link-color-darker;
+
+  // emoticons are NOT responsive
+  img:not(.img-smile) {
+    @include img-fluid();
+  }
 
   p:last-child {
     margin-bottom: 0;
@@ -71,15 +82,5 @@
 
   .show-more {
     display: block;
-  }
-}
-
-.break-word {
-  @include break-word;
-  @include link-color-darker;
-
-  // emoticons are NOT responsive
-  img:not(.img-smile) {
-    @include img-fluid();
   }
 }
