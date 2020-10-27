@@ -31,6 +31,7 @@
 @import "core/stream";
 
 @import "components/tags";
+@import "components/forum/post"; // it needs to be here because post's placeholder use styles in this specific file
 
 @import "pages/auth";
 @import "pages/user";

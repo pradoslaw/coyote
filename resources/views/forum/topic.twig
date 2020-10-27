@@ -28,7 +28,7 @@
     </p>
   {% endif %}
 
-  <h1 class="mb-0">{{ link_to_route('forum.topic', topic.subject, [forum.slug, topic.id, topic.slug]) }}</h1>
+  <h1 class="mb-0">{{ link_to_route('forum.topic', model.subject, [forum.slug, model.id, model.slug]) }}</h1>
 
   {% include "forum.partials.top" %}
 
@@ -48,7 +48,7 @@
 
     <div id="js-skeleton">
       {% for post in posts.data %}
-        <div v-if="skeleton" class="card card-post">
+        <div class="card card-post">
           <div class="card-header d-none d-lg-block">
             <div class="row">
               <div class="col-2">
