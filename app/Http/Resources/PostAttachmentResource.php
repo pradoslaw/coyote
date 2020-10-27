@@ -25,9 +25,18 @@ class PostAttachmentResource extends JsonResource
             $this->resource->toArray(['id', 'name', 'size', 'mime']),
             [
                 'created_at' => $this->created_at->toIso8601String(),
-                'file' => $this->file->getFilename(),
-                'url' => (string) $this->file->url()
+                'url'        => $this->getUrl($this->file)
             ]
         );
+    }
+
+    protected function getUrl(MediaInterface $media): string
+    {
+        if ($media->isImage()) {
+            return (string) $this->file->url();
+        }
+
+        // file can be located in hidden forum. we must hide real file url
+        return route('forum.download', [$this->resource->id]);
     }
 }

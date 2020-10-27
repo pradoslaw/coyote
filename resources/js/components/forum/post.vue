@@ -136,7 +136,7 @@
               <li v-for="attachment in post.attachments" class="small">
                 <i class="fas fa-download"></i>
 
-                <a :href="attachment.url">{{ attachment.name }}</a>
+                <a :href="`/Forum/Download/${attachment.id}`">{{ attachment.name }}</a>
                 <small>({{ Math.round(attachment.size / 1024 / 1024, 2) }} MB) - <em>ściągnięć: {{ attachment.count }}</em></small>
               </li>
             </ul>

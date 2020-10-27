@@ -50,10 +50,10 @@ class Attachment extends Model
     public function getFileAttribute($value)
     {
         if (!($value instanceof \Coyote\Services\Media\Attachment)) {
+            /** @var \Coyote\Services\Media\MediaInterface $photo */
             $photo = app(MediaFactory::class)->make('attachment', [
                 'file_name' => $value,
-                'name' => $this->attributes['name'],
-                'download_url' => route('forum.download', [$this->id])
+                'name' => $this->attributes['name']
             ]);
 
             $this->attributes['file'] = $photo;
