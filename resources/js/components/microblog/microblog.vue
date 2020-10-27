@@ -67,6 +67,12 @@
             <span class="d-none d-sm-inline">Udostępnij</span>
           </a>
 
+          <a href="javascript:" class="btn btn-share" title="Zgłoś ten wpis">
+            <i class="fas fa-flag"></i>
+
+            <span class="d-none d-sm-inline">Raportuj</span>
+          </a>
+
           <div ref="comments" class="microblog-comments">
             <div v-if="microblog.comments_count > Object.keys(microblog.comments).length" class="show-all-comments">
               <a @click="loadComments(microblog)" href="javascript:"><i class="far fa-comments"></i> Zobacz {{ totalComments | declination(['pozostały', 'pozostałe', 'pozostałe']) }} {{ totalComments }} {{ totalComments | declination(['komentarz', 'komentarze', 'komentarzy']) }}</a>

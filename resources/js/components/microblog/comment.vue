@@ -29,6 +29,10 @@
           <li class="list-inline-item">
             <a @click="checkAuth(reply)" href="javascript:" class="text-muted">Odpowiedz</a>
           </li>
+
+          <li class="list-inline-item">
+            <a  href="javascript:" class="text-muted">Raportuj</a>
+          </li>
         </ul>
 
         <ul class="d-sm-none list-inline text-muted small m-0">
