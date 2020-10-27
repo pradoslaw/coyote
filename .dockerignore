@@ -1,6 +1,9 @@
 /vendor
 /node_modules
-/storage/app/*
+/storage/app/cv/*
+/storage/app/purifier/*
+/storage/app/tmp/*
+/storage/app/ttfontdata/*
 /storage/logs/*
 /storage/debugbar/*
 /storage/framework/cache/data/*
