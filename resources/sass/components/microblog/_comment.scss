@@ -48,6 +48,8 @@
     p:last-child {
       margin-bottom: 0;
     }
+
+    @include link-color-darker;
   }
 
   .btn-comment-submit {
