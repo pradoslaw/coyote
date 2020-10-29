@@ -38,6 +38,7 @@ jobs:
           username: ${{ secrets.PRODUCTION_LOGIN }}
           key: ${{ secrets.PRODUCTION_KEY }}
           port: 22
+          envs: GITHUB_SHA
           script: |
             sudo docker service update --image 4programmers/coyote:$GITHUB_SHA coyote_php
             sudo docker service update --image 4programmers/coyote:$GITHUB_SHA coyote_worker
