@@ -69,7 +69,7 @@
             <span class="d-none d-sm-inline">Udostępnij</span>
           </a>
 
-          <a href="javascript:" :data-metadata="microblog.metadata" :data-url="microblog.url" class="btn btn-share" title="Zgłoś ten wpis">
+          <a v-if="isAuthorized" href="javascript:" :data-metadata="microblog.metadata" :data-url="microblog.url" class="btn btn-share" title="Zgłoś ten wpis">
             <i class="fas fa-flag"></i>
 
             <span class="d-none d-sm-inline">Zgłoś</span>

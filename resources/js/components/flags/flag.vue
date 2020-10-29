@@ -13,7 +13,7 @@
 
       <template v-slot:buttons>
         <button @click="$refs.modal.close()" type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
-        <button @click="close" class="btn btn-danger danger">Tak, zamknij</button>
+        <button @click.prevent="closeFlag" class="btn btn-danger danger">Tak, zamknij</button>
       </template>
 
       <p>Czy na pewno chcesz zamknąć ten raport?</p>
@@ -28,7 +28,6 @@
   import { Flag } from "../../types/models";
   import VueUserName from "../user-name.vue";
   import VueModal from '../modal.vue';
-  import axios from 'axios';
 
   @Component({
     name: 'flag',
@@ -41,12 +40,9 @@
     @Ref()
     readonly modal!: VueModal;
 
-    close() {
-      axios.post(`/Flag/Delete/${this.flag.id}`);
-
-      this.$emit('close', this.flag.id);
-
+    closeFlag() {
       this.modal.close()
+      this.$store.dispatch('flags/delete', this.flag);
     }
   }
 </script>

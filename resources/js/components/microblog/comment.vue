@@ -11,6 +11,9 @@
 
       <div v-if="!comment.is_editing" class="w-100">
         <h6><vue-user-name :user="comment.user"></vue-user-name></h6>
+
+        <vue-flag v-for="flag in flags" :key="flag.id" :flag="flag"></vue-flag>
+
         <div class="comment-text" v-html="comment.html"></div>
 
         <ul class="d-none d-sm-block list-inline list-inline-bullet-sm text-muted small m-0">
@@ -30,7 +33,7 @@
             <a @click="checkAuth(reply)" href="javascript:" class="text-muted">Odpowiedz</a>
           </li>
 
-          <li class="list-inline-item">
+          <li v-if="isAuthorized" class="list-inline-item">
             <a href="javascript:" :data-metadata="comment.metadata" :data-url="comment.url" class="text-muted">Zgłoś</a>
           </li>
         </ul>
@@ -92,6 +95,7 @@
   import VueTimeago from '../../plugins/timeago';
   import VueCommentForm from "./comment-form.vue";
   import VueModal from '../modal.vue';
+  import VueFlag from '../flags/flag.vue';
   import { default as mixins } from '../mixins/user';
   import { Prop, Ref, Mixins } from "vue-property-decorator";
   import { mapActions, mapGetters, mapMutations } from "vuex";
@@ -108,7 +112,13 @@
     name: 'comment',
     mixins: [clickaway, mixins],
     store,
-    components: { 'vue-avatar': VueAvatar, 'vue-modal': VueModal, 'vue-user-name': VueUserName, 'vue-comment-form': VueCommentForm },
+    components: {
+      'vue-avatar': VueAvatar,
+      'vue-modal': VueModal,
+      'vue-user-name': VueUserName,
+      'vue-comment-form': VueCommentForm,
+      'vue-flag': VueFlag
+    },
     computed: mapGetters('user', ['isAuthorized']),
     methods: {
       ...mapActions('microblogs', ['vote', 'loadVoters']),
@@ -145,6 +155,10 @@
 
     get commentVoters() {
       return this.comment.voters!.join(', ');
+    }
+
+    get flags() {
+      return store.getters['flags/filter'](this.comment.id);
     }
   }
 </script>

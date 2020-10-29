@@ -2,19 +2,15 @@
 
 namespace Coyote\Http\Controllers\Microblog;
 
-use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\CacheFactory;
-use Coyote\Http\Factories\FlagFactory;
-use Coyote\Http\Resources\FlagResource;
 use Coyote\Http\Resources\MicroblogResource;
 use Coyote\Http\Resources\MicroblogCollection;
-use Coyote\Microblog;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
 use Coyote\Services\Microblogs\Builder;
 
-class HomeController extends Controller
+class HomeController extends BaseController
 {
-    use CacheFactory, FlagFactory;
+    use CacheFactory;
 
     /**
      * @var MicroblogRepository
@@ -60,20 +56,8 @@ class HomeController extends Controller
             'count_user'                => $this->microblog->countForUser($this->userId),
             'pagination'                => new MicroblogCollection($paginator),
             'route'                     => request()->route()->getName(),
-            'flags'                     => $this->flags($paginator->pluck('id')->toArray())
+            'flags'                     => $this->flags($paginator)
         ])->with(compact('tags', 'popular'));
-    }
-
-    private function flags(array $ids)
-    {
-        if (!$this->auth->can('microblog-delete')) {
-            return [];
-        }
-
-        $repository = $this->getFlagFactory();
-        $flags = $repository->findAllByModel(Microblog::class, $ids);
-
-        return FlagResource::collection($flags)->toArray($this->request);
     }
 
     /**
@@ -120,6 +104,10 @@ class HomeController extends Controller
         $resource = new MicroblogResource($microblog);
         $resource->preserverKeys();
 
-        return $this->view('microblog.view')->with(['microblog' => $resource, 'excerpt' => $excerpt]);
+        return $this->view('microblog.view')->with([
+            'microblog' => $resource,
+            'excerpt' => $excerpt,
+            'flags' => $this->flags($microblog)
+        ]);
     }
 }

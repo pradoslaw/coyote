@@ -23,7 +23,7 @@ use Coyote\Services\Stream\Objects\Microblog as Stream_Microblog;
 use Coyote\Services\Stream\Objects\Comment as Stream_Comment;
 use Illuminate\Contracts\Notifications\Dispatcher;
 
-class CommentController extends Controller
+class CommentController extends BaseController
 {
     /**
      * @var MicroblogRepository
