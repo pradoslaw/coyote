@@ -17,7 +17,7 @@ class BaseController extends Controller
      */
     protected function flags($collection): array
     {
-        if (!$this->auth->can('microblog-delete')) {
+        if (!$this->userId || !$this->auth->can('microblog-delete')) {
             return [];
         }
 
