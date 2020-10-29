@@ -2,12 +2,11 @@
 
 namespace Coyote\Pm;
 
-use Coyote\WithoutUpdatedAt;
 use Illuminate\Database\Eloquent\Model;
 
 class Text extends Model
 {
-    use WithoutUpdatedAt;
+    const UPDATED_AT = null;
 
     /**
      * @var string

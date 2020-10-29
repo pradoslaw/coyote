@@ -22,6 +22,8 @@ class Flag extends Model
 {
     use SoftDeletes;
 
+    const UPDATED_AT = null;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -30,9 +32,9 @@ class Flag extends Model
     protected $fillable = ['type_id', 'user_id', 'url', 'metadata', 'text', 'moderator_id'];
 
     /**
-     * @var bool
+     * @var string
      */
-    public $timestamps = false;
+    protected $dateFormat = 'Y-m-d H:i:se';
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

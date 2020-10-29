@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Mail extends Model
 {
-    use WithoutUpdatedAt;
+    const UPDATED_AT = null;
 
     /**
      * @var array

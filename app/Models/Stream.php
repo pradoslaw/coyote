@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Stream extends Model
 {
-    use WithoutUpdatedAt, Searchable;
+    use Searchable;
+
+    const UPDATED_AT = null;
 
     /**
      * @var string

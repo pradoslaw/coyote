@@ -123,7 +123,7 @@ class PostResource extends JsonResource
             }),
 
             $this->mergeWhen($this->flags !== null, function () {
-                return ['flags' => JsonResource::collection($this->flags)];
+                return ['flags' => FlagResource::collection($this->flags)];
             }),
 
             'permissions' => [
