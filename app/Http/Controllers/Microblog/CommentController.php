@@ -5,7 +5,7 @@ namespace Coyote\Http\Controllers\Microblog;
 use Coyote\Events\MicroblogSaved;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Requests\MicroblogRequest;
-use Coyote\Http\Resources\Api\MicroblogResource;
+use Coyote\Http\Resources\MicroblogResource;
 use Coyote\Http\Resources\MicroblogCollection;
 use Coyote\Microblog;
 use Coyote\Notifications\Microblog\UserMentionedNotification;

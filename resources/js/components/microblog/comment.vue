@@ -31,7 +31,7 @@
           </li>
 
           <li class="list-inline-item">
-            <a  href="javascript:" class="text-muted">Raportuj</a>
+            <a href="javascript:" :data-metadata="comment.metadata" :data-url="comment.url" class="text-muted">Zgłoś</a>
           </li>
         </ul>
 

@@ -2,7 +2,6 @@
 
 namespace Coyote\Http\Resources;
 
-use Coyote\Http\Resources\Api\MicroblogResource;
 use Coyote\Microblog;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Pagination\AbstractPaginator;

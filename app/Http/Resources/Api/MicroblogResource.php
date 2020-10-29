@@ -50,7 +50,7 @@ class MicroblogResource extends JsonResource
                 'comments'      => $this->when(
                     ! $this->parent_id && $this->resource->relationLoaded('comments'),
                     function () {
-                        $collection = MicroblogResource::collection($this->comments);
+                        $collection = static::collection($this->comments);
                         $collection->preserveKeys = true;
 
                         return $collection;

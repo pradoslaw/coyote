@@ -20,7 +20,8 @@ function fake(): Microblog {
     is_subscribed: false,
     is_sponsored: false,
     comments_count: 0,
-    url: ''
+    url: '',
+    metadata: ''
   };
 }
 

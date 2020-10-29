@@ -45,8 +45,7 @@ class FlagsGrid extends Grid
                 'decorators' => [new StrLimit()]
             ])
             ->addColumn('created_at', [
-                'title' => 'Data utworzenia',
-                'decorators' => [new DateTimeLocalized(auth()->user()->date_format)]
+                'title' => 'Data utworzenia'
             ])
             ->addColumn('moderator_name', [
                 'title' => 'Zamknięty przez',

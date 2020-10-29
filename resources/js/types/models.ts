@@ -65,6 +65,7 @@ export interface Microblog {
   editable?: boolean;
   comments_count?: number;
   voters?: string[];
+  metadata: string;
 }
 
 export interface Forum {

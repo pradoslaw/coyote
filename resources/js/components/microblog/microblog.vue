@@ -67,10 +67,10 @@
             <span class="d-none d-sm-inline">Udostępnij</span>
           </a>
 
-          <a href="javascript:" class="btn btn-share" title="Zgłoś ten wpis">
+          <a href="javascript:" :data-metadata="microblog.metadata" :data-url="microblog.url" class="btn btn-share" title="Zgłoś ten wpis">
             <i class="fas fa-flag"></i>
 
-            <span class="d-none d-sm-inline">Raportuj</span>
+            <span class="d-none d-sm-inline">Zgłoś</span>
           </a>
 
           <div ref="comments" class="microblog-comments">
