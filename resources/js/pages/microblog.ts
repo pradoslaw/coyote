@@ -7,7 +7,7 @@ import store from '../store';
 import { mapGetters } from 'vuex';
 import { default as axiosErrorHandler } from '../libs/axios-error-handler';
 import { default as ws } from '../libs/realtime';
-import {Microblog, Paginator} from "../types/models";
+import {Microblog, Paginator, Flag} from "../types/models";
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 
@@ -17,6 +17,7 @@ declare global {
   interface Window {
     pagination: Paginator;
     microblog: Microblog;
+    flags: Flag[] | undefined;
   }
 }
 
@@ -79,6 +80,8 @@ new Vue({
     if ('microblog' in window) {
       store.commit('microblogs/add', window.microblog!);
     }
+
+    store.commit('flags/init', window.flags);
   },
   mounted() {
     const notification = new LiveNotification();

@@ -27,6 +27,13 @@ class FlagRepository extends Repository implements FlagRepositoryInterface
                     ->pluck('url', 'topic_id');
     }
 
+    public function findAllByModel(string $model, array $ids)
+    {
+        $key = strtolower(class_basename($model)) . '_id';
+
+        return $this->build($key, $ids)->get();
+    }
+
     /**
      * @param array $postsId
      * @return mixed
@@ -82,9 +89,9 @@ class FlagRepository extends Repository implements FlagRepositoryInterface
         return $this
             ->model
             ->select(['flags.*', 'users.name AS user_name', 'flag_types.name'])
-            ->join('flag_types', 'flag_types.id', '=', 'type_id')
-            ->join('users', 'users.id', '=', 'user_id')
-            ->addSelect($this->raw("metadata->>'$index' AS $index"))
+                ->join('flag_types', 'flag_types.id', '=', 'type_id')
+                ->join('users', 'users.id', '=', 'user_id')
+            ->addSelect($this->raw("metadata->>'$index' AS metadata_id"))
             ->whereRaw("metadata->>'$index' IN($data)");
     }
 

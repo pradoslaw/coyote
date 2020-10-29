@@ -24,6 +24,8 @@
           <small v-if="microblog.is_sponsored" class="text-muted small">&bull; Sponsorowane</small>
 
           <div v-show="!microblog.is_editing" :class="{'microblog-wrap': isWrapped}">
+            <vue-flag v-for="flag in flags" :key="flag.id" :flag="flag"></vue-flag>
+
             <div v-html="microblog.html" class="microblog-text"></div>
 
             <div v-if="microblog.media.length" class="row mb-2">
@@ -121,6 +123,7 @@
   import VueComment from "./comment.vue";
   import VueCommentForm from './comment-form.vue';
   import VueForm from './form.vue';
+  import VueFlag from '../flags/flag.vue';
   import { default as mixins } from '../mixins/user';
   import { Prop, Ref, Mixins } from "vue-property-decorator";
   import {mapGetters, mapState, mapActions, mapMutations} from "vuex";
@@ -146,7 +149,8 @@
       'vue-comment': VueComment,
       'vue-form': VueForm,
       'vue-comment-form': VueCommentForm,
-      'vue-gallery': VueLightbox
+      'vue-gallery': VueLightbox,
+      'vue-flag': VueFlag
     },
     computed: {
       ...mapGetters('user', ['isAuthorized']),
@@ -205,6 +209,10 @@
       return this.microblog.media.map(media => {
         return { src: media.url, thumb: media.thumbnail, url: media.url };
       })
+    }
+
+    get flags() {
+      return store.getters['flags/filter'](this.microblog.id);
     }
   }
 </script>

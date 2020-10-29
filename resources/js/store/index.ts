@@ -12,6 +12,7 @@ import user from './modules/user';
 import microblogs from './modules/microblogs';
 import prompt from './modules/prompt';
 import poll from './modules/poll';
+import flags from './modules/flags';
 
 Vue.use(Vuex);
 
@@ -28,6 +29,7 @@ export default new Vuex.Store({
     user,
     microblogs,
     prompt,
-    poll
+    poll,
+    flags
   }
 });

@@ -13,6 +13,7 @@ export interface Flag {
   created_at: Date;
   user_id: number;
   user_name: string;
+  metadata_id?: number;
 }
 
 export interface FlagType {

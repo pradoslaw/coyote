@@ -4,14 +4,17 @@ namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\CacheFactory;
+use Coyote\Http\Factories\FlagFactory;
+use Coyote\Http\Resources\FlagResource;
 use Coyote\Http\Resources\MicroblogResource;
 use Coyote\Http\Resources\MicroblogCollection;
+use Coyote\Microblog;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
 use Coyote\Services\Microblogs\Builder;
 
 class HomeController extends Controller
 {
-    use CacheFactory;
+    use CacheFactory, FlagFactory;
 
     /**
      * @var MicroblogRepository
@@ -56,15 +59,28 @@ class HomeController extends Controller
             'count'                     => $this->microblog->count(),
             'count_user'                => $this->microblog->countForUser($this->userId),
             'pagination'                => new MicroblogCollection($paginator),
-            'route'                     => request()->route()->getName()
+            'route'                     => request()->route()->getName(),
+            'flags'                     => $this->flags($paginator->pluck('id')->toArray())
         ])->with(compact('tags', 'popular'));
+    }
+
+    private function flags(array $ids)
+    {
+        if (!$this->auth->can('microblog-delete')) {
+            return [];
+        }
+
+        $repository = $this->getFlagFactory();
+        $flags = $repository->findAllByModel(Microblog::class, $ids);
+
+        return FlagResource::collection($flags)->toArray($this->request);
     }
 
     /**
      * @param string $tag
      * @return \Illuminate\View\View
      */
-    public function tag($tag)
+    public function tag(string $tag)
     {
         $this->breadcrumb->push('Wpisy z tagiem: ' . $tag, route('microblog.tag', [$tag]));
 
