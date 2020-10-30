@@ -11,6 +11,7 @@ use Coyote\Events\SuccessfulLogin;
 use Coyote\Listeners\ActivitySubscriber;
 use Coyote\Listeners\ChangeImageUrl;
 use Coyote\Listeners\DispatchPostNotifications;
+use Coyote\Listeners\FlagSubscriber;
 use Coyote\Listeners\FlushFirewallCache;
 use Coyote\Listeners\IndexCategory;
 use Coyote\Listeners\IndexStream;
@@ -62,7 +63,8 @@ class EventServiceProvider extends ServiceProvider
         WikiListener::class,
         SetupWikiLinks::class,
         ActivitySubscriber::class,
-        UserSubscriber::class
+        UserSubscriber::class,
+        FlagSubscriber::class
     ];
 
     /**

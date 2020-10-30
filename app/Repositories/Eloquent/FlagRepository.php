@@ -28,7 +28,7 @@ class FlagRepository extends Repository implements FlagRepositoryInterface
             ->get();
     }
 
-    public function deleteByModel(string $model, int $id, int $userId)
+    public function deleteByModel(string $model, int $id, int $userId = null)
     {
         $model = strtolower(class_basename($model));
         $key = "{$model}_id";

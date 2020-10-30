@@ -122,10 +122,11 @@ class SubmitController extends Controller
             // cofniecie pkt reputacji
             app('reputation.microblog.create')->undo($microblog->id);
 
-            event(new MicroblogWasDeleted($microblog));
             // put this to activity stream
             stream(Stream_Delete::class, (new Stream_Microblog())->map($microblog));
         });
+
+        event(new MicroblogWasDeleted($microblog));
     }
 
     /**

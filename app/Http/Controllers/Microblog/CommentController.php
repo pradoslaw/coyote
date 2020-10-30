@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Events\MicroblogSaved;
+use Coyote\Events\MicroblogWasDeleted;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Requests\MicroblogRequest;
 use Coyote\Http\Resources\MicroblogResource;
@@ -155,6 +156,7 @@ class CommentController extends BaseController
             stream(Stream_Delete::class, $object, $target);
         });
 
+        event(new MicroblogWasDeleted($comment));
         event(new MicroblogSaved($comment->parent));
     }
 
