@@ -2,9 +2,12 @@
 
 namespace Coyote\Http\Controllers;
 
+use Coyote\Http\Factories\FlagFactory;
 use Coyote\Http\Resources\ActivityResource as ActivityResource;
 use Coyote\Http\Resources\Api\MicroblogResource;
+use Coyote\Http\Resources\FlagResource;
 use Coyote\Http\Resources\MicroblogCollection;
+use Coyote\Microblog;
 use Coyote\Repositories\Contracts\ActivityRepositoryInterface as ActivityRepository;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface as ReputationRepository;
@@ -18,6 +21,8 @@ use Coyote\Services\Session\Renderer;
 
 class HomeController extends Controller
 {
+    use FlagFactory;
+
     /**
      * @var MicroblogRepository
      */
@@ -95,7 +100,9 @@ class HomeController extends Controller
             }
         }
 
-        return $this->view('home', $result)->with('settings', $this->getSettings());
+        return $this->view('home', $result)
+            ->with('settings', $this->getSettings())
+            ->with('flags', $this->flags());
     }
 
     /**
@@ -198,5 +205,14 @@ class HomeController extends Controller
         }
 
         return $parent->children()->latest()->limit(1)->first(['path', 'title', 'excerpt']);
+    }
+
+    private function flags()
+    {
+        if (!$this->userId || !$this->auth->can('microblog-delete')) {
+            return [];
+        }
+
+        return FlagResource::collection($this->getFlagFactory()->findAllByModel(Microblog::class))->toArray($this->request);
     }
 }

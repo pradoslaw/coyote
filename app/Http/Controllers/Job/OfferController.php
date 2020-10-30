@@ -56,7 +56,7 @@ class OfferController extends Controller
         $flags = [];
 
         if ($this->getGateFactory()->allows('job-delete')) {
-            $flags = FlagResource::collection($this->getFlagFactory()->findAllByModel(Job::class, [$job->id]))->toArray($this->request);
+            $flags = FlagResource::collection($this->getFlagFactory()->findAllByModel(Job::class))->toArray($this->request);
         }
 
         // search related offers

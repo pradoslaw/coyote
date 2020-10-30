@@ -14,6 +14,8 @@ new Vue({
   store,
   created() {
     Object.keys(window.microblogs).forEach(id => store.commit('microblogs/add', window.microblogs[id]));
+
+    store.commit('flags/init', window.flags);
   },
   computed: mapGetters('microblogs', ['microblogs'])
 });

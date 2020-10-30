@@ -13,7 +13,7 @@ const mutations = {
   },
 
   delete(state, flag: Flag) {
-    state.splice(state.find(_ => _.id === flag.id), 1);
+    state.splice(state.findIndex(_ => _.id === flag.id), 1);
   }
 }
 

@@ -134,7 +134,7 @@ class TopicController extends BaseController
             'all_forums'    => $allForums,
             'user_forums'   => $userForums,
             'description'   => excerpt(array_first($posts['data'])['text'], 100),
-            'flags'         => $this->flags($forum, $postIds)
+            'flags'         => $this->flags($forum)
         ]);
     }
 
@@ -159,10 +159,9 @@ class TopicController extends BaseController
 
     /**
      * @param Forum $forum
-     * @param array $ids
      * @return array
      */
-    private function flags(Forum $forum, array $ids): array
+    private function flags(Forum $forum): array
     {
         if (!$this->gate->allows('delete', $forum)) {
             return [];
@@ -170,7 +169,7 @@ class TopicController extends BaseController
 
         $repository = $this->getFlagFactory();
 
-        return FlagResource::collection($repository->findAllByModel(Post::class, $ids))->toArray($this->request);
+        return FlagResource::collection($repository->findAllByModel(Post::class))->toArray($this->request);
     }
 
     /**

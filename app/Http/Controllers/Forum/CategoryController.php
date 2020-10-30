@@ -59,7 +59,7 @@ class CategoryController extends BaseController
         // that's something's wrong with posts.
         if ($paginate->total() > 0 && $this->getGateFactory()->allows('delete', $forum)) {
             $flags = FlagResource::collection(
-                $this->getFlagFactory()->findAllByModel(Topic::class, $paginate->pluck('id')->toArray())
+                $this->getFlagFactory()->findAllByModel(Topic::class)
             );
         }
 
