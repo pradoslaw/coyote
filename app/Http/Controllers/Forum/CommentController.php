@@ -36,6 +36,8 @@ class CommentController extends Controller
 
             $activity = Stream_Create::class;
         } else {
+            abort_if(!$comment->post, 404);
+
             $this->authorize('update', [$comment, $comment->post->forum]);
 
             $activity = Stream_Update::class;
@@ -99,6 +101,8 @@ class CommentController extends Controller
      */
     public function delete(Post\Comment $comment)
     {
+        abort_if(!$comment->post, 404);
+
         $this->authorize('delete', [$comment, $comment->post->forum]);
 
         $this->transaction(function () use ($comment) {
