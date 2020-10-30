@@ -2,7 +2,6 @@
 
 namespace Coyote\Http\Resources;
 
-use Coyote\Flag;
 use Coyote\Forum;
 use Coyote\Post;
 use Coyote\Services\Forum\Tracker;
@@ -25,11 +24,6 @@ class PostCollection extends ResourceCollection
      * @var Forum
      */
     protected $forum;
-
-    /**
-     * @var Flag[]
-     */
-    protected $flags;
 
     /**
      * DO NOT REMOVE! This will preserver keys from being filtered in data
@@ -62,13 +56,6 @@ class PostCollection extends ResourceCollection
         return $this;
     }
 
-    public function setFlags($flags)
-    {
-        $this->flags = $flags;
-
-        return $this;
-    }
-
     /**
      * Transform the resource collection into an array.
      *
@@ -86,10 +73,6 @@ class PostCollection extends ResourceCollection
                 $post->setRelation('forum', $this->forum);
 
                 $resource = (new PostResource($post))->setTracker($this->tracker);
-
-                if (isset($this->flags[$post->id])) {
-                    $resource->setFlags($this->flags[$post->id]);
-                }
 
                 return $resource->toArray($request);
             })

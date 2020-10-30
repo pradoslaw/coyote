@@ -48,6 +48,7 @@ let ForumVue = Vue.extend({
   created() {
     store.commit('forums/init', window.forums || []);
     store.commit('topics/init', (window.topics?.data) || []);
+    store.commit('flags/init', window.flags);
   },
   methods: {
     changeCollapse(id) {
@@ -226,6 +227,7 @@ let PostVue = Vue.extend({
     store.commit('topics/init', [ window.topic ]);
     store.commit('forums/init', [ window.forum ]);
     store.commit('poll/init', window.poll);
+    store.commit('flags/init', window.flags);
   },
   mounted() {
     document.getElementById('js-skeleton')?.remove();

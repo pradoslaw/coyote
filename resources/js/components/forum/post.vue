@@ -105,12 +105,7 @@
         </div>
 
         <div v-if="!isEditing" class="col-12 col-lg-10">
-          <vue-flag
-            v-for="flag in post.flags"
-            :key="flag.id"
-            :flag="flag"
-            @close="closeFlag"
-          ></vue-flag>
+          <vue-flag v-for="flag in flags" :key="flag.id" :flag="flag"></vue-flag>
 
           <div class="post-vote">
             <strong class="vote-count" title="Ocena postu">{{ post.score }}</strong>
@@ -245,7 +240,7 @@
             </button>
 
             <a v-if="!post.deleted_at" href="javascript:" :data-metadata="post.metadata" :data-url="post.url" class="btn btn-sm">
-              <i class="fa fa-fw fa-flag"></i> <span class="d-none d-sm-inline">Raportuj</span>
+              <i class="fa fa-fw fa-flag"></i> <span class="d-none d-sm-inline">Zgłoś</span>
             </a>
 
             <div v-if="post.permissions.merge || post.permissions.adm_access" class="dropdown float-right">
@@ -315,6 +310,7 @@
   import pl from 'date-fns/locale/pl';
   import { default as mixins } from '../mixins/user';
   import VueNotifications from 'vue-notification';
+  import store from "../../store";
 
   Vue.use(VueClipboard);
 
@@ -352,9 +348,6 @@
 
     @Prop(Object)
     readonly reasons!: { [key: number]: string };
-
-    @Prop()
-    readonly flags!: Flag[];
 
     @Ref()
     readonly form!: VueForm;
@@ -441,12 +434,6 @@
       }
     }
 
-    closeFlag(flagId: number) {
-      const index = this.post.flags?.findIndex(flag => flag.id === flagId);
-
-      this.post.flags?.splice(index!, 1);
-    }
-
     restore() {
       this.isCollapsed = false;
       this.$store.dispatch('posts/restore', this.post);
@@ -466,6 +453,10 @@
 
     get totalComments() {
       return this.post.comments_count! - Object.keys(this.post.comments).length;
+    }
+
+    get flags() {
+      return store.getters['flags/filter'](this.post.id);
     }
   }
 </script>

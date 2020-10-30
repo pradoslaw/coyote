@@ -73,18 +73,6 @@ class PostResource extends JsonResource
     }
 
     /**
-     * @param \Coyote\Flag[] $flags
-     * @return $this
-     */
-    public function setFlags($flags)
-    {
-        $this->flags = $flags;
-
-        return $this;
-    }
-
-
-    /**
      * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -120,10 +108,6 @@ class PostResource extends JsonResource
 
             $this->mergeWhen($this->editor !== null, function () {
                 return ['editor' => UserResource::make($this->editor)];
-            }),
-
-            $this->mergeWhen($this->flags !== null, function () {
-                return ['flags' => FlagResource::collection($this->flags)];
             }),
 
             'permissions' => [

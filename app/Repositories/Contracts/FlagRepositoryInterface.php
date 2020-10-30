@@ -13,12 +13,6 @@ interface FlagRepositoryInterface extends RepositoryInterface
     public function takeForTopics(array $topicsId);
 
     /**
-     * @param array $postsId
-     * @return mixed
-     */
-    public function takeForPosts(array $postsId);
-
-    /**
      * @param int $jobId
      * @return mixed
      */

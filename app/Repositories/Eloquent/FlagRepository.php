@@ -35,15 +35,6 @@ class FlagRepository extends Repository implements FlagRepositoryInterface
     }
 
     /**
-     * @param array $postsId
-     * @return mixed
-     */
-    public function takeForPosts(array $postsId)
-    {
-        return $this->build('post_id', $postsId)->get()->groupBy('post_id');
-    }
-
-    /**
      * @param int $jobId
      * @return mixed
      */

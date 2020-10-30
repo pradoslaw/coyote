@@ -3,13 +3,16 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Events\TopicWasSaved;
+use Coyote\Forum;
 use Coyote\Forum\Reason;
 use Coyote\Http\Factories\CacheFactory;
 use Coyote\Http\Factories\FlagFactory;
+use Coyote\Http\Resources\FlagResource;
 use Coyote\Http\Resources\PollResource;
 use Coyote\Http\Resources\PostCollection;
 use Coyote\Http\Resources\PromptResource;
 use Coyote\Http\Resources\TopicResource;
+use Coyote\Post;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Post\WithSubscribers;
@@ -97,13 +100,10 @@ class TopicController extends BaseController
         $allForums = [];
         $reasons = null;
 
-        if ($this->gate->allows('delete', $forum) || $this->gate->allows('move', $forum)) {
-            $postIds = $paginate->pluck('id')->toArray();
-            $reasons = Reason::pluck('name', 'id')->toArray();
+        $postIds = $paginate->pluck('id')->toArray();
 
-            if ($this->gate->allows('delete', $forum)) {
-                $resource->setFlags($this->getFlags($postIds));
-            }
+        if ($this->gate->allows('delete', $forum) || $this->gate->allows('move', $forum)) {
+            $reasons = Reason::pluck('name', 'id')->toArray();
 
             $this->forum->resetCriteria();
             $this->pushForumCriteria(false);
@@ -133,7 +133,8 @@ class TopicController extends BaseController
             'is_writeable'  => $this->gate->allows('write', $forum) && $this->gate->allows('write', $topic),
             'all_forums'    => $allForums,
             'user_forums'   => $userForums,
-            'description'   => excerpt(array_first($posts['data'])['text'], 100)
+            'description'   => excerpt(array_first($posts['data'])['text'], 100),
+            'flags'         => $this->flags($forum, $postIds)
         ]);
     }
 
@@ -157,12 +158,19 @@ class TopicController extends BaseController
     }
 
     /**
-     * @param array $postsId
-     * @return mixed
+     * @param Forum $forum
+     * @param array $ids
+     * @return array
      */
-    private function getFlags($postsId)
+    private function flags(Forum $forum, array $ids): array
     {
-        return $this->getFlagFactory()->takeForPosts($postsId);
+        if (!$this->gate->allows('delete', $forum)) {
+            return [];
+        }
+
+        $repository = $this->getFlagFactory();
+
+        return FlagResource::collection($repository->findAllByModel(Post::class, $ids))->toArray($this->request);
     }
 
     /**

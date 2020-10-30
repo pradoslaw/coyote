@@ -1,5 +1,5 @@
 <template>
-  <form class="alert alert-danger alert-report">
+  <div class="alert alert-danger alert-report">
     <button @click="$refs.modal.open()" type="button" class="close" data-dismiss="alert" aria-label="Close" title="Usuń"><span aria-hidden="true">&times;</span></button>
 
     <vue-username :user="{id: flag.user_id, name: flag.user_name}" class="alert-link"></vue-username>
@@ -18,7 +18,7 @@
 
       <p>Czy na pewno chcesz zamknąć ten raport?</p>
     </vue-modal>
-  </form>
+  </div>
 </template>
 
 <script lang="ts">

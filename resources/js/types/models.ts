@@ -148,7 +148,7 @@ export interface Post {
   comments_count: number;
   attachments: PostAttachment[];
   edit_count?: number;
-  flags?: Flag[];
+  metadata?: string;
 }
 
 export interface Tag {
