@@ -23,24 +23,6 @@ class FlagRepository extends Repository implements FlagRepositoryInterface
     }
 
     /**
-     * @param int $jobId
-     * @return mixed
-     */
-    public function takeForJob($jobId)
-    {
-        return $this->build('job_id', [$jobId])->first();
-    }
-
-    /**
-     * @param int $wikiId
-     * @return mixed
-     */
-    public function takeForWiki($wikiId)
-    {
-        return $this->build('wiki_id', [$wikiId])->first();
-    }
-
-    /**
      * @param $key
      * @param $value
      * @param int|null $userId

@@ -46,13 +46,6 @@
         </li>
 
         {% include 'wiki.partials.admin' %}
-
-        {% if auth_check() %}
-          <li>
-            <a class="btn-report" href="{{ route('flag') }}" data-url="/{{ wiki.path }}" data-metadata="{{ {'wiki_id': wiki.id, 'permission': 'wiki-admin'}|encrypt }}"><i class="fas fa-fw fa-flag"></i>
-              Zgłoś naruszenie</a>
-          </li>
-        {% endif %}
       </ul>
 
       {% if author.bio %}

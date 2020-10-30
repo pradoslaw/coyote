@@ -20,9 +20,9 @@
 {% block container %}
   <div class="row mt-3">
     <div class="col-12">
-      {% if flag %}
-        {% include 'components.flag' %}
-      {% endif %}
+      <div id="js-flags">
+        <vue-flag v-for="flag in flags" :key="flag.id" :flag="flag"></vue-flag>
+      </div>
 
       {% if job.is_expired %}
         <div class="alert alert-warning">
@@ -132,6 +132,8 @@
     var data = {
       comments: {{ comments|json_encode|raw }}
     };
+
+    var flags = {{ flags|json_encode|raw }};
   </script>
 
   {{ parent() }}

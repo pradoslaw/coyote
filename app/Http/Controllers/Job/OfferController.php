@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers\Job;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\FlagFactory;
 use Coyote\Http\Resources\CommentResource;
+use Coyote\Http\Resources\FlagResource;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Firm;
 use Coyote\Job;
@@ -52,10 +53,10 @@ class OfferController extends Controller
         }
 
         $job->addReferer(url()->previous());
-        $flag = null;
+        $flags = [];
 
         if ($this->getGateFactory()->allows('job-delete')) {
-            $flag = $this->getFlagFactory()->takeForJob($job->id);
+            $flags = FlagResource::collection($this->getFlagFactory()->findAllByModel(Job::class, [$job->id]))->toArray($this->request);
         }
 
         // search related offers
@@ -78,7 +79,7 @@ class OfferController extends Controller
             'comments'          => $comments->toArray($this->request),
             'applications'      => $this->applications($job)
         ])->with(
-            compact('job', 'flag', 'mlt')
+            compact('job', 'flags', 'mlt')
         );
     }
 

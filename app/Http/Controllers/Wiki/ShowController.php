@@ -47,7 +47,6 @@ class ShowController extends BaseController
             'categories' => $this->wiki->getAllCategories($wiki->wiki_id),
             'parents' => $this->parents->slice(1)->reverse(), // we skip current page
             'subscribed' => $wiki->subscribers()->forUser($this->userId)->exists(),
-            'flag' => $this->getGateFactory()->allows('wiki-admin') ? $this->getFlagFactory()->takeForWiki($wiki->id) : '',
             'form' => $this->createForm(CommentForm::class, [], [
                 'url' => route('wiki.comment.save', [$wiki->id])
             ]),

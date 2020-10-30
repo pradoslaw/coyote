@@ -8,8 +8,11 @@ import axios from 'axios';
 import store from '../../store';
 import VueMap from '../../components/google-maps/map.vue';
 import VueMarker from '../../components/google-maps/marker.vue';
+import VueNotifications from "vue-notification";
+import VueFlag from '../../components/flags/flag.vue';
 
 Vue.use(VueAutosize);
+Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 
 new Vue({
   el: '#comments',
@@ -58,5 +61,20 @@ new Vue({
   components: {
     'vue-map': VueMap,
     'vue-marker': VueMarker
+  }
+});
+
+new Vue({
+  el: '#js-flags',
+  delimiters: ['${', '}'],
+  components: { 'vue-flag': VueFlag },
+  store,
+  created() {
+    store.commit('flags/init', window.flags);
+  },
+  computed: {
+    flags() {
+      return store.state.flags;
+    }
   }
 });
