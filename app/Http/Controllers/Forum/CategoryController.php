@@ -5,12 +5,14 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Events\UserWasSaved;
 use Coyote\Http\Factories\FlagFactory;
 use Coyote\Http\Resources\Api\ForumCollection;
+use Coyote\Http\Resources\FlagResource;
 use Coyote\Http\Resources\TopicCollection;
 use Coyote\Repositories\Criteria\Topic\BelongsToForum;
 use Coyote\Repositories\Criteria\Topic\StickyGoesFirst;
 use Coyote\Services\Forum\TreeBuilder\Builder;
 use Coyote\Services\Forum\TreeBuilder\ListDecorator;
 use Coyote\Services\Guest;
+use Coyote\Topic;
 use Illuminate\Http\Request;
 
 class CategoryController extends BaseController
@@ -56,7 +58,9 @@ class CategoryController extends BaseController
         // we need to get an information about flagged topics. that's how moderators can notice
         // that's something's wrong with posts.
         if ($paginate->total() > 0 && $this->getGateFactory()->allows('delete', $forum)) {
-            $flags = $this->getFlagFactory()->takeForTopics($paginate->groupBy('id')->keys()->toArray());
+            $flags = FlagResource::collection(
+                $this->getFlagFactory()->findAllByModel(Topic::class, $paginate->pluck('id')->toArray())
+            );
         }
 
         $guest = new Guest($this->guestId);

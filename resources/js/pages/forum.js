@@ -55,10 +55,6 @@ let ForumVue = Vue.extend({
       this.$set(this.collapse, id, !(!!(this.collapse[id])));
     },
 
-    getFlag(topicId) {
-      return this.flags[topicId];
-    },
-
     containsUserTags(topic) {
       if (!topic.tags) {
         return false;

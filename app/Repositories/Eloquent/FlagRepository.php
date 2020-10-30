@@ -15,18 +15,6 @@ class FlagRepository extends Repository implements FlagRepositoryInterface
         return 'Coyote\Flag';
     }
 
-    /**
-     * @param array $topicsId
-     * @return mixed
-     */
-    public function takeForTopics(array $topicsId)
-    {
-        return $this->model->selectRaw("url, metadata->>'topic_id' AS topic_id")
-                    ->whereRaw("metadata->>'topic_id' IN(" . $this->join($topicsId) . ")")
-                    ->get()
-                    ->pluck('url', 'topic_id');
-    }
-
     public function findAllByModel(string $model, array $ids)
     {
         $key = strtolower(class_basename($model)) . '_id';

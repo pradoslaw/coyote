@@ -107,9 +107,6 @@
         type: Number,
         default: 10
       },
-      flag: {
-        type: String
-      },
       highlight: {
         type: Boolean
       },
@@ -154,6 +151,12 @@
         }
 
         return pages;
+      },
+
+      flag() {
+        const flags = this.$store.getters['flags/filter'](this.topic.id);
+
+        return flags.length ? flags[0].url : null;
       },
 
       ...mapGetters('user', ['isAuthorized'])

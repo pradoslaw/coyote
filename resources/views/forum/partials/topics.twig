@@ -18,7 +18,6 @@
     v-for="topic in topics"
     :key="topic.id"
     :topic="topic"
-    :flag="getFlag(topic.id)"
     :highlight="containsUserTags(topic)"
     :posts-per-page="postsPerPage"
     :show-category-name="showCategoryName"
