@@ -8,11 +8,13 @@ use Coyote\Events\PostWasDeleted;
 use Coyote\Http\Factories\FlagFactory;
 use Coyote\Notifications\Topic\DeletedNotification as TopicDeletedNotification;
 use Coyote\Notifications\Post\DeletedNotification as PostDeletedNotification;
+use Coyote\Post;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Services\Stream\Objects\Post as Stream_Post;
 use Coyote\Services\Stream\Objects\Forum as Stream_Forum;
 use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Topic;
 use Illuminate\Contracts\Notifications\Dispatcher;
 use Illuminate\Http\Request;
 
@@ -64,7 +66,7 @@ class DeleteController extends BaseController
 
                 $topic->delete();
                 // delete topic's flag
-                $this->getFlagFactory()->deleteBy('topic_id', $topic->id, $this->userId);
+                $this->getFlagFactory()->deleteByModel(Topic::class, $topic->id, $this->userId);
 
                 $dispatcher->send(
                     $subscribers->exceptUser($this->auth),
@@ -88,7 +90,7 @@ class DeleteController extends BaseController
                 $post->deleteWithReason($this->userId, $reason->name);
 
                 // delete post's flags
-                $this->getFlagFactory()->deleteBy('post_id', $post->id, $this->userId);
+                $this->getFlagFactory()->deleteByModel(Post::class, $post->id, $this->userId);
 
                 $dispatcher->send(
                     $subscribers->exceptUser($this->auth),

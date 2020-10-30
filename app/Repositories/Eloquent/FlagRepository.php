@@ -3,7 +3,6 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Repositories\Contracts\FlagRepositoryInterface;
-use Illuminate\Database\Query\Builder;
 
 class FlagRepository extends Repository implements FlagRepositoryInterface
 {
@@ -19,41 +18,23 @@ class FlagRepository extends Repository implements FlagRepositoryInterface
     {
         $key = strtolower(class_basename($model)) . '_id';
 
-        return $this->build($key, $ids)->get();
-    }
-
-    /**
-     * @param $key
-     * @param $value
-     * @param int|null $userId
-     */
-    public function deleteBy($key, $value, $userId = null)
-    {
-        $path = "metadata->>'$key' = ?";
-
-        if ($userId !== null) {
-            $this->model->whereRaw($path, [$value])->update(['moderator_id' => $userId]);
-        }
-
-        $this->model->whereRaw($path, [$value])->delete();
-    }
-
-    /**
-     * @param string $index
-     * @param mixed $data
-     * @return Builder
-     */
-    private function build($index, $data)
-    {
-        $data = $this->join($data);
-
         return $this
             ->model
             ->select(['flags.*', 'users.name AS user_name', 'flag_types.name'])
-                ->join('flag_types', 'flag_types.id', '=', 'type_id')
-                ->join('users', 'users.id', '=', 'user_id')
-            ->addSelect($this->raw("metadata->>'$index' AS metadata_id"))
-            ->whereRaw("metadata->>'$index' IN($data)");
+            ->join('flag_types', 'flag_types.id', '=', 'type_id')
+            ->join('users', 'users.id', '=', 'user_id')
+            ->addSelect($this->raw("metadata->>'$key' AS metadata_id"))
+            ->whereRaw("metadata->>'$key' IN(" . $this->implodeIds($ids) . ")")
+            ->get();
+    }
+
+    public function deleteByModel(string $model, int $id, int $userId)
+    {
+        $model = strtolower(class_basename($model));
+        $key = "{$model}_id";
+
+        $this->model->whereJsonContains("metadata->$key", $id)->update(['moderator_id' => $userId]);
+        $this->model->whereJsonContains("metadata->$key", $id)->delete();
     }
 
     /**
@@ -66,11 +47,11 @@ class FlagRepository extends Repository implements FlagRepositoryInterface
     }
 
     /**
-     * @param array $data
+     * @param array $ids
      * @return string
      */
-    private function join(array $data)
+    private function implodeIds(array $ids)
     {
-        return implode(',', array_map([&$this, 'strVal'], $data));
+        return implode(',', array_map([&$this, 'strVal'], $ids));
     }
 }
