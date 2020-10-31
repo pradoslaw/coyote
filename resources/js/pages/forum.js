@@ -16,6 +16,7 @@ import { default as mixin } from '../components/mixins/user';
 import { default as axiosErrorHandler } from '../libs/axios-error-handler';
 import { mapState, mapGetters } from "vuex";
 import axios from 'axios';
+import useBrackets from '../libs/prompt';
 
 Vue.use(VueTimeago);
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
@@ -259,19 +260,19 @@ let PostVue = Vue.extend({
       window.location.href = post.url;
     },
 
-    reply(post, scrollIntoFrom = true) {
-      let text = `> ##### [${post.user ? post.user.name : post.user_name} napisał(a)](/Forum/Post/${post.id}):`
-
-      text += "\n" + post.text.replace(/\n/g, "\n> ") + "\n\n"
-
-      this.undefinedPost.text += text;
-
-      if (scrollIntoFrom) {
+    reply(post, scrollIntoForm = true) {
+      if (scrollIntoForm) {
         document.getElementById('js-submit-form').scrollIntoView();
 
+        this.undefinedPost.text += `@${useBrackets(post.user.name)}: `;
         this.$refs['js-submit-form'].$refs['textarea'].focus();
       }
       else {
+        let text = `> ##### [${post.user ? post.user.name : post.user_name} napisał(a)](/Forum/Post/${post.id}):`
+        text += "\n" + post.text.replace(/\n/g, "\n> ") + "\n\n"
+
+        this.undefinedPost.text += text;
+
         this.$notify({type: 'success', text: 'Cytat został skopiowany do formularza.'});
       }
     }

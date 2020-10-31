@@ -231,7 +231,7 @@
               </button>
             </template>
 
-            <button v-if="!post.deleted_at" @click="$emit('reply', post, false)" class="btn btn-sm btn-fast-reply" title="Dodaj cytat do formularza">
+            <button v-if="!post.deleted_at" @click="$emit('reply', post, false)" class="btn btn-sm btn-fast-reply" title="Odpowiedz na ten post">
               <i class="fa fa-fw fa-plus"></i>
             </button>
 

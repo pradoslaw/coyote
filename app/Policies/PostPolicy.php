@@ -56,7 +56,6 @@ class PostPolicy
      */
     private function check(string $ability, User $user, Post $post): bool
     {
-
         return $user->can(substr($ability, 6), $post->forum);
     }
 
