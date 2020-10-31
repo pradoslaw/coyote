@@ -39,7 +39,7 @@
 
     // DO NOT show triangle above menu (only for mobile devices)
     &:after, &:before {
-      content: none;
+      content: none !important;
     }
   }
 }
