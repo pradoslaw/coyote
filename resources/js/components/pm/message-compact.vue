@@ -1,26 +1,26 @@
 <template>
   <div :title="message.excerpt" :class="{'unread': ! isRead}" class="notification">
-    <a :href="message.url" class="notification-link">
-      <div class="media">
-        <vue-avatar :photo="message.user.photo" class="media-object mr-2"></vue-avatar>
+    <div class="media">
+      <a :href="`/Profile/${message.user.id}`" title="Kliknij, aby wyświetlić profil użytkownika">
+        <vue-avatar :photo="message.user.photo" class="i-35 mr-2"></vue-avatar>
+      </a>
 
-        <div class="media-body">
-          <header class="text-truncate">
-            <h4>{{ message.user.name }}</h4>
-            <small><vue-timeago :datetime="message.created_at"></vue-timeago></small>
-          </header>
+      <a :href="message.url" class="media-body">
+        <header class="text-truncate">
+          <h4>{{ message.user.name }}</h4>
+          <small><vue-timeago :datetime="message.created_at"></vue-timeago></small>
+        </header>
 
-          <p class="text-truncate">
-            <template v-if="message.folder === SENTBOX">
-              <i v-if="message.read_at" class="fas fa-check"></i>
-              <span v-else>Ty: </span>
-            </template>
+        <p class="text-truncate">
+          <template v-if="message.folder === SENTBOX">
+            <i v-if="message.read_at" class="fas fa-check"></i>
+            <span v-else>Ty: </span>
+          </template>
 
-            {{ message.excerpt }}
-          </p>
-        </div>
-      </div>
-    </a>
+          {{ message.excerpt }}
+        </p>
+      </a>
+    </div>
   </div>
 </template>
 
