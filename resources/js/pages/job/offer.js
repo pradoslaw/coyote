@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import Config from '../../libs/config';
 import VueComment from '../../components/job/comment.vue';
 import VueModal from '../../components/modal.vue';
 import VueAutosize from '../../plugins/autosize';
@@ -67,6 +66,7 @@ new Vue({
 new Vue({
   el: '#js-flags',
   delimiters: ['${', '}'],
+  data: { job: window.job },
   components: { 'vue-flag': VueFlag },
   store,
   created() {
@@ -74,7 +74,7 @@ new Vue({
   },
   computed: {
     flags() {
-      return store.state.flags;
+      return store.getters['flags/filter'](this.job.id);
     }
   }
 });
