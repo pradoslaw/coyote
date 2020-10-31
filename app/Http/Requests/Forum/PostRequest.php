@@ -18,7 +18,6 @@ class PostRequest extends FormRequest
     const RULE_TAGS                 = 'array|max:5';
     const RULE_TAG                  = 'max:25|tag|tag_creation:50';
     const RULE_HUMAN                = 'required';
-    const RULE_THROTTLE             = 'throttle';
 
     const RULE_POLL_TITLE           = 'nullable|string|max:100';
     const RULE_POLL_ITEMS           = 'required_with:poll.title';
@@ -62,7 +61,6 @@ class PostRequest extends FormRequest
         $this->forum = $this->route('forum');
 
         $rules = [
-            '_token'        => self::RULE_THROTTLE . ($this->post->id ? ":$this->post->id" : ''),
             'text'          => self::RULE_TEXT
         ];
 

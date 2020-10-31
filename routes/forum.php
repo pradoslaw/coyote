@@ -41,7 +41,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
         'uses' => 'SubmitController@save',
         'middleware' => [
             // topic.access must be first
-            'topic.access', 'can:access,forum', 'forum.write'
+            'topic.access', 'can:access,forum', 'forum.write', 'throttle:10,1'
         ]
     ]);
 
@@ -58,7 +58,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     $this->post('{forum}/Submit/{topic?}', [
         'uses' => 'SubmitController@save',
         'middleware' => [
-            'can:access,forum', 'forum.write', 'forum.url', 'post.response'
+            'can:access,forum', 'forum.write', 'forum.url', 'post.response', 'throttle:10,1'
         ]
     ]);
 

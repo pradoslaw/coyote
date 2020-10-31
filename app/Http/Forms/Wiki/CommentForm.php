@@ -36,17 +36,4 @@ class CommentForm extends Form
                 ]
             ]);
     }
-
-    /**
-     * @return array
-     */
-    public function rules()
-    {
-        $rule = 'throttle';
-        if (!empty($this->data->id)) {
-            $rule .= ':' . $this->data->id;
-        }
-
-        return parent::rules() + ['_token' => $rule];
-    }
 }

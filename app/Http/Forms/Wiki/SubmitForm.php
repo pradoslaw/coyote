@@ -140,14 +140,6 @@ class SubmitForm extends Form
     /**
      * @return array
      */
-    public function rules()
-    {
-        return parent::rules() + ['_token' => 'throttle:' . (int) ($this->data->id ?? null)];
-    }
-
-    /**
-     * @return array
-     */
     public function messages()
     {
         return ['title.reputation' => 'Aby dodać nową stronę, musisz posiadać minimum 1 pkt reputacji.'];

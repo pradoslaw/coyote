@@ -27,7 +27,7 @@ class MicroblogRequest extends FormRequest
 
         return [
             'parent_id'     => 'nullable|integer|exists:microblogs,id',
-            'text'          => 'required|string|max:12000|throttle:' . $microblog->id,
+            'text'          => 'required|string|max:12000',
             'media.*.name'  => 'nullable|string'
         ];
     }
