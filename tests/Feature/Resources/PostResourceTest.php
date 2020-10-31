@@ -66,26 +66,25 @@ class PostResourceTest extends TestCase
             return true;
         });
 
-        $this->forum = factory(Forum::class)->make();
-        $this->topic = factory(Topic::class)->make();
+        $forum = factory(Forum::class)->make();
+        $topic = factory(Topic::class)->make();
 
-        $this->topic->forum()->associate($this->forum);
+        $topic->forum()->associate($forum);
 
         $post = factory(Post::class)->make();
 
-        $post->topic()->associate($this->topic);
-        $post->forum()->associate($this->forum);
+        $post->topic()->associate($topic);
+        $post->forum()->associate($forum);
 
         $guest = new Guest($this->faker->uuid);
 
         /** @var Request $request */
         $request = $this->app['request'];
 
-        $resource = (new PostResource($post))->setTracker(new Tracker($this->topic, $guest));
+        $resource = (new PostResource($post))->setTracker(new Tracker($topic, $guest));
         $result = $resource->resolve($request);
 
         $this->assertArrayHasKey('ip', $result);
         $this->assertArrayHasKey('browser', $result);
-        $this->assertArrayNotHasKey('flags', $result);
     }
 }

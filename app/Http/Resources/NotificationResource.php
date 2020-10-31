@@ -24,14 +24,15 @@ class NotificationResource extends JsonResource
         $senders = $this->resource->senders->unique('name');
         $user = $senders->first();
 
-        $only = $this->resource->only(['subject', 'excerpt', 'id', 'url', 'user_id']);
+        $only = $this->resource->only(['subject', 'excerpt', 'id', 'url']);
 
         return array_merge($only, [
             'is_read'       => $this->is_clicked || ($this->read_at && $this->read_at->timestamp < $request->session()->get('created_at')),
 
             'headline'      => $this->getHeadline($user, $senders),
             'created_at'    => $this->resource->created_at->toIso8601String(),
-            'photo'         => $this->getMediaUrl($user ? $user->photo : null)
+            'photo'         => $this->getMediaUrl($user ? $user->photo : null),
+            'user_id'       => $senders->first()->user_id
         ]);
     }
 
