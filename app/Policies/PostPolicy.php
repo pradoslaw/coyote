@@ -18,6 +18,12 @@ class PostPolicy
      */
     public function update(User $user, Post $post): bool
     {
+        if (!$this->isLocked($post)
+            && $this->isAuthor($user, $post)
+            && ($this->isNotOld($post) || $this->hasEnoughReputation($user, $post))) {
+            return true;
+        }
+
         return $this->check('forum-update', $user, $post);
     }
 
@@ -28,6 +34,12 @@ class PostPolicy
      */
     public function delete(User $user, Post $post): bool
     {
+        if (!$this->isLocked($post)
+            && $this->isAuthor($user, $post)
+            && $this->hasEnoughReputation($user, $post)) {
+            return true;
+        }
+
         return $this->check('forum-delete', $user, $post);
     }
 
@@ -44,14 +56,14 @@ class PostPolicy
      */
     private function check(string $ability, User $user, Post $post): bool
     {
-        if (!$post->forum->is_locked // removing (updating etc) in locked category is forbidden
-            && !$post->topic->is_locked
-            && $this->isAuthor($user, $post)
-            && ($this->isNotOld($post) || $this->hasEnoughReputation($user, $post))) {
-            return true;
-        }
 
         return $user->can(substr($ability, 6), $post->forum);
+    }
+
+    private function isLocked(Post $post)
+    {
+        return $post->forum->is_locked // removing (updating etc) in locked category is forbidden
+            || $post->topic->is_locked;
     }
 
     /**
@@ -71,7 +83,7 @@ class PostPolicy
      */
     private function hasEnoughReputation(User $user, Post $post): bool
     {
-        return $post->id == $post->topic->last_post_id ? true : ($user->reputation >= 100);
+        return $post->id == $post->topic->last_post_id ? true : ($user->reputation >= 300);
     }
 
     /**

@@ -79,10 +79,25 @@ class PostPolicyTest extends TestCase
         $this->assertTrue($policy->delete($this->user, $this->post));
     }
 
-    public function testDeleteAndRestoreAllowedDespiteAnswers()
+    public function testDeleteAndRestoreNotAllowedBecauseLaterAnswers()
     {
         $post = factory(Post::class)->make(['id' => $this->faker->numberBetween()]);
         $this->topic->last_post_id = $post->id; // last post in topic
+
+        $policy = new PostPolicy();
+        $this->assertFalse($policy->delete($this->user, $this->post));
+
+        $this->post->deleted_at = now();
+
+        $this->assertFalse($policy->delete($this->user, $this->post));
+    }
+
+    public function testDeleteAndRestoreAllowedDueToReputationPoints()
+    {
+        $post = factory(Post::class)->make(['id' => $this->faker->numberBetween()]);
+        $this->topic->last_post_id = $post->id; // last post in topic
+
+        $this->user->reputation = 301;
 
         $policy = new PostPolicy();
         $this->assertTrue($policy->delete($this->user, $this->post));
@@ -90,17 +105,6 @@ class PostPolicyTest extends TestCase
         $this->post->deleted_at = now();
 
         $this->assertTrue($policy->delete($this->user, $this->post));
-    }
-
-    public function testDeleteNotAllowedDueToTimeOfCreation()
-    {
-        $post = factory(Post::class)->make(['id' => $this->faker->numberBetween()]);
-        $this->topic->last_post_id = $post->id; // last post in topic
-
-        $this->post->created_at = now()->subMinutes(31);
-
-        $policy = new PostPolicy();
-        $this->assertFalse($policy->delete($this->user, $this->post));
     }
 
     public function testDeleteNotAllowedDueToLockedTopic()
@@ -111,7 +115,7 @@ class PostPolicyTest extends TestCase
         $this->assertFalse($policy->delete($this->user, $this->post));
     }
 
-    public function testDeleteIsAllowedInTopickedTopicByAdmin()
+    public function testDeleteIsAllowedInTopicByAdmin()
     {
         $this->post->topic->is_locked = true;
 
@@ -123,7 +127,7 @@ class PostPolicyTest extends TestCase
         $this->assertTrue($policy->delete($this->user, $this->post));
     }
 
-    public function testDeleteIsAllowedInTopickeForumByAdmin()
+    public function testDeleteIsAllowedInForumByAdmin()
     {
         $this->post->forum->is_locked = true;
 
@@ -133,5 +137,25 @@ class PostPolicyTest extends TestCase
 
         $policy = new PostPolicy();
         $this->assertTrue($policy->delete($this->user, $this->post));
+    }
+
+    public function testUpdateNotAllowedDueToTimeOfCreation()
+    {
+        $post = factory(Post::class)->make(['id' => $this->faker->numberBetween()]);
+        $this->topic->last_post_id = $post->id; // last post in topic
+
+        $this->post->created_at = now()->subMinutes(31);
+
+        $policy = new PostPolicy();
+        $this->assertFalse($policy->delete($this->user, $this->post));
+    }
+
+    public function testUpdateAllowedDueToTimeOfCreation()
+    {
+        $post = factory(Post::class)->make(['id' => $this->faker->numberBetween()]);
+        $this->topic->last_post_id = $post->id; // last post in topic
+
+        $policy = new PostPolicy();
+        $this->assertTrue($policy->update($this->user, $this->post));
     }
 }
