@@ -5,6 +5,7 @@ namespace Coyote\Notifications\Post;
 use Coyote\Post;
 use Coyote\Services\Notification\Notification;
 use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Topic;
 use Coyote\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
@@ -66,7 +67,9 @@ abstract class AbstractNotification extends Notification implements ShouldQueue,
             'subject'       => $this->post->topic->subject,
             'excerpt'       => excerpt($this->post->html),
             'url'           => UrlBuilder::post($this->post),
-            'id'            => $this->id
+            'id'            => $this->id,
+            'content_type'  => Topic::class,
+            'content_id'    => $this->post->topic_id
         ];
     }
 

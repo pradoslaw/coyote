@@ -4,6 +4,7 @@ namespace Coyote\Notifications\Topic;
 
 use Coyote\Notification;
 use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Topic;
 use Coyote\User;
 use Illuminate\Notifications\Messages\MailMessage;
 
@@ -40,7 +41,9 @@ class SubjectChangedNotification extends AbstractNotification
             'subject'       => $this->topic->subject,
             'excerpt'       => $this->originalSubject,
             'url'           => UrlBuilder::topic($this->topic),
-            'id'            => $this->id
+            'id'            => $this->id,
+            'content_type'  => Topic::class,
+            'content_id'    => $this->topic->id
         ];
     }
 

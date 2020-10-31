@@ -74,7 +74,7 @@ class VotedNotification extends AbstractNotification
                 )
             )
             ->action('Zobacz wpis', url($this->notificationUrl()))
-            ->line('Dostajesz to powiadomienie, ponieważ obserwujesz ten wpis.');
+            ->line('Dostajesz to powiadomienie, ponieważ wynika to z ustawień Twojego konta.');
     }
 
     /**

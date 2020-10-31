@@ -2,6 +2,7 @@
 
 namespace Coyote\Notifications\Microblog;
 
+use Coyote\Microblog;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\User;
 use Illuminate\Notifications\Messages\MailMessage;
