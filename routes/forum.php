@@ -140,7 +140,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     // historia edycji danego posta
     $this->get('Post/Log/{post}', ['uses' => 'LogController@log', 'as' => 'post.log']);
     // przywrocenie poprzedniej wersji posta
-    $this->post('Post/Rollback/{post}/{id}', ['uses' => 'LogController@rollback', 'as' => 'post.rollback']);
+    $this->post('Post/Rollback/{post}/{id}', ['uses' => 'RollbackController@rollback', 'as' => 'post.rollback']);
     // mergowanie posta z poprzednim
     $this->post('Post/Merge/{post}', ['uses' => 'MergeController@index', 'as' => 'post.merge']);
 
