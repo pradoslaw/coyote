@@ -9,7 +9,7 @@ import VuePrompt from '../components/forms/prompt.vue';
 import VueToolbar from '../components/forms/toolbar.vue';
 import VueButton from '../components/forms/button.vue';
 import VueError from '../components/forms/error.vue';
-import {default as ws} from '../libs/realtime.js';
+import {default as ws} from '../libs/realtime.ts';
 import VuePaste from '../plugins/paste.js';
 import VueModal from '../components/modal.vue';
 import VuePagination from '../components/pagination.vue';
@@ -108,7 +108,7 @@ new Vue({
     },
 
     typing() {
-      ws.whisper(`user:${this.recipient.id}`, 'pm-typing', {recipient: this.sender});
+      ws.subscribe(`user:${this.recipient.id}`).whisper('pm-typing', {recipient: this.sender});
     },
 
     insertToTextarea(file) {
@@ -124,7 +124,7 @@ new Vue({
     },
 
     listenForMessage() {
-      ws.on('Coyote\\Events\\PmCreated', data => {
+      this.channel().on('Coyote\\Events\\PmCreated', data => {
         if (data.user.id === this.recipient.id) {
           store.commit('messages/add', data);
 
@@ -135,7 +135,7 @@ new Vue({
         }
       });
 
-      ws.on('Coyote\\Events\\PmRead', data => {
+      this.channel().on('Coyote\\Events\\PmRead', data => {
         const message = this.messages.find(item => item.text_id === data.text_id);
 
         if (message) {
@@ -147,7 +147,7 @@ new Vue({
     listenForTyping() {
       this.timer = null;
 
-      ws.on('pm-typing', data => {
+      this.channel().on('pm-typing', data => {
         if (this.recipient.id !== data.recipient.id) {
           return;
         }
@@ -221,6 +221,10 @@ new Vue({
 
       document.getElementById('app-pm').addEventListener('mouseover', listener, {once: true});
       document.getElementById('app-pm').addEventListener('touchmove', listener, {once: true});
+    },
+
+    channel() {
+      return ws.subscribe(`user:${store.state.user.id}`);
     }
   },
   computed: {

@@ -36,7 +36,7 @@
 
 <script>
   import DesktopNotifications from '../../libs/notifications';
-  import {default as ws} from '../../libs/realtime.js';
+  import {default as ws} from '../../libs/realtime.ts';
   import Session from '../../libs/session';
   import store from '../../store';
   import {default as PerfectScrollbar} from '../perfect-scrollbar';
@@ -115,7 +115,7 @@
           }
         });
 
-        ws.on('Illuminate\\Notifications\\Events\\BroadcastNotificationCreated', data => {
+        ws.subscribe(`user:${store.state.user.id}`).on('Illuminate\\Notifications\\Events\\BroadcastNotificationCreated', data => {
           this.resetNotifications();
 
           this.$store.commit('notifications/increment');

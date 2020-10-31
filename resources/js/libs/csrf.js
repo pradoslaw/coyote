@@ -1,5 +1,5 @@
 import axios from "axios";
-import { SOCKET_ID } from './realtime';
+import { SOCKET_ID } from './realtime.ts';
 
 export default function setToken(token) {
   axios.defaults.headers.common['X-CSRF-TOKEN'] = token;

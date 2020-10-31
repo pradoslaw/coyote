@@ -30,7 +30,7 @@
 
 <script>
   import DesktopNotifications from '../../libs/notifications';
-  import { default as ws } from '../../libs/realtime.js';
+  import { default as ws } from '../../libs/realtime.ts';
   import store from '../../store';
   import { default as PerfectScrollbar } from '../perfect-scrollbar';
   import { mixin as clickaway } from 'vue-clickaway';
@@ -69,7 +69,7 @@
       },
 
       listenForMessages() {
-        ws.on('Coyote\\Events\\PmCreated', data => {
+        this.channel.on('Coyote\\Events\\PmCreated', data => {
           this.increment();
           this.reset();
 
@@ -88,7 +88,7 @@
           }
         });
 
-        ws.on('PmVisible', this.stopAnimation);
+        this.channel.on('PmVisible', this.stopAnimation);
       },
 
       startAnimation(user) {
@@ -128,14 +128,18 @@
 
       stopAnimationOnAllWindows() {
         // send event to other tabs
-        ws.whisper(`user:${store.state.user.id}`, 'PmVisible', {});
+        this.channel.whisper('PmVisible', {});
       },
 
       ...mapMutations('inbox', ['increment', 'reset'])
     },
     computed: {
       ...mapState('inbox', ['messages', 'count']),
-      ...mapGetters('inbox', ['isEmpty'])
+      ...mapGetters('inbox', ['isEmpty']),
+
+      channel() {
+        return ws.subscribe(`user:${store.state.user.id}`);
+      }
     }
   };
 </script>
