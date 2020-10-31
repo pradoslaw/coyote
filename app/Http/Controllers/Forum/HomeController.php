@@ -18,6 +18,7 @@ use Coyote\Repositories\Criteria\Topic\Subscribes;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Topic\WithTags;
 use Coyote\Services\Guest;
+use Coyote\Topic;
 use Illuminate\Http\Request;
 use Lavary\Menu\Item;
 use Lavary\Menu\Menu;
@@ -277,7 +278,7 @@ class HomeController extends BaseController
         // we need to get an information about flagged topics. that's how moderators can notice
         // that's something's wrong with posts.
         if ($topics->total() && $this->getGateFactory()->allows('forum-delete')) {
-            $flags = $this->getFlagFactory()->takeForTopics($topics->groupBy('id')->keys()->toArray());
+            $flags = $this->getFlagFactory()->findAllByModel(Topic::class);
         }
 
         $postsPerPage = $this->postsPerPage($this->request);
