@@ -9,6 +9,7 @@ use Coyote\Topic;
 use Coyote\User;
 use Faker\Factory;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Routing\Middleware\ThrottleRequests;
 use Tests\TestCase;
 
 class SubmitControllerTest extends TestCase
@@ -31,6 +32,10 @@ class SubmitControllerTest extends TestCase
 
         $this->forum = factory(Forum::class)->create();
         $this->user = $this->createUserWithGroup();
+
+        $this->withoutMiddleware(
+            ThrottleRequests::class
+        );
     }
 
     public function testSubmitWithInvalidTags()
