@@ -61,6 +61,7 @@
 
   .notification {
     border-bottom: 1px solid $body-bg;
+    padding: 6px;
     position: relative; // we need this to position remove button in notification
 
     &:hover {
@@ -78,20 +79,6 @@
         background-color: $unread-bg-hover;
       }
     }
-  }
-
-  .media-object {
-    width: 35px;
-    height: 35px;
-
-    img {
-      width: 100%;
-    }
-  }
-
-  .notification-link {
-    display: block;
-    padding: 7px 6px;
   }
 
   .btn-delete-alert {
