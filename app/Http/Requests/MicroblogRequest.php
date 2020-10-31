@@ -23,8 +23,6 @@ class MicroblogRequest extends FormRequest
      */
     public function rules()
     {
-        $microblog = $this->route('microblog');
-
         return [
             'parent_id'     => 'nullable|integer|exists:microblogs,id',
             'text'          => 'required|string|max:12000',
