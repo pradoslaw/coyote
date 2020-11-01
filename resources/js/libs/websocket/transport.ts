@@ -26,11 +26,11 @@ export default class Transport {
   public openHandler;
   public closeHandler;
   public messageHandler;
-  private websocket!: WebSocket;
+  private websocket?: WebSocket;
   private retries = 0;
   private readonly url;
 
-  constructor(url: string) {
+  constructor(url: string | undefined | null) {
     this.url = url;
   }
 
@@ -65,10 +65,10 @@ export default class Transport {
   }
 
   send(data: string) {
-    this.websocket.send(data);
+    this.websocket?.send(data);
   }
 
   get readyState() {
-    return this.websocket.readyState;
+    return this.websocket?.readyState;
   }
 }

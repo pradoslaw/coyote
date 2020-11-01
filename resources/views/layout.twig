@@ -25,6 +25,10 @@
       <script type="text/javascript">var __INITIAL_STATE = {{ __INITIAL_STATE|default('{}')|raw }};</script>
     {% endblock %}
 
+    {% if __WS_URL %}
+      <meta name="websocket-url" content="{{ __WS_URL }}">
+    {% endif %}
+
     <link rel="apple-touch-icon" href="{{ asset('img/apple-touch.png') }}">
     <link rel="shortcut icon" href="{{ asset('img/favicon.png') }}" type="image/png">
 

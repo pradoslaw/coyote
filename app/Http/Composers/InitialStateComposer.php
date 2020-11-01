@@ -15,9 +15,10 @@ class InitialStateComposer
     private $request;
 
     /**
-     * @var JwtToken
+     * @var string
      */
     private $jwtToken;
+
 
     /**
      * @param Request $request
@@ -26,7 +27,10 @@ class InitialStateComposer
     public function __construct(Request $request, JwtToken $jwtToken)
     {
         $this->request = $request;
-        $this->jwtToken = $jwtToken;
+
+        if ($request->user()) {
+            $this->jwtToken = $jwtToken->token($request->user());
+        }
     }
 
     /**
@@ -46,23 +50,29 @@ class InitialStateComposer
                     'pm_unread'     => 0
                 ]
             ],
-            $this->registerWebSocket(),
             $this->registerUserModel()
         );
 
         $view->with('__INITIAL_STATE', json_encode($state));
+        $view->with('__WS_URL', $this->websocketUrl());
     }
 
     /**
-     * @return array|string[]
+     * @return string|null
      */
-    private function registerWebSocket(): array
+    private function websocketUrl(): ?string
     {
         if (config('services.ws.host') && $this->request->user()) {
-            return ['ws' => config('services.ws.host') . (config('services.ws.port') ? ':' . config('services.ws.port') : '')];
+            return sprintf(
+                '%s://%s%s/realtime?token=%s',
+                $this->request->isSecure() ? 'wss' : 'ws',
+                config('services.ws.host'),
+                (config('services.ws.port') ? ':' . config('services.ws.port') : ''),
+                $this->jwtToken
+            );
         }
 
-        return [];
+        return null;
     }
 
     /**
@@ -81,7 +91,7 @@ class InitialStateComposer
                 'id'                    => $user->id,
                 'name'                  => $user->name,
                 'date_format'           => $this->mapFormat($user->date_format),
-                'token'                 => $this->jwtToken->token($user),
+                'token'                 => $this->jwtToken,
                 'notifications_unread'  => $user->notifications_unread,
                 'pm_unread'             => $user->pm_unread,
                 'created_at'            => $user->created_at->toIso8601String(),

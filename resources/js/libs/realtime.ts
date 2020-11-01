@@ -1,23 +1,17 @@
-import store from '../store';
 import Channels from "./websocket/channels";
 import Transport, { WebSocketData } from "./websocket/transport";
 
 export const SOCKET_ID = Math.random().toString(32).substr(2);
 
 class Realtime {
-  private host: string;
-  private token: string;
-
   private readonly channels: Channels;
   private readonly transport: Transport;
 
-  constructor(host, token) {
-    this.host = host;
-    this.token = token;
+  constructor(url: string | null | undefined) {
     this.channels = new Channels();
-    this.transport = new Transport((window.location.protocol === 'https:' ? 'wss' : 'ws') + `://${this.host}/realtime?token=${this.token}`);
+    this.transport = new Transport(url);
 
-    if (this.isSupported() && this.host) {
+    if (this.isSupported() && url) {
       this.transport.openHandler = () => this.channels.subscribe();
       this.transport.closeHandler = () => this.channels.unsubscribe();
       this.transport.messageHandler = (data: WebSocketData) => {
@@ -37,7 +31,6 @@ class Realtime {
   }
 }
 
-// @ts-ignore
-let realtime = new Realtime(window.__INITIAL_STATE.ws, store.state.user.token);
+const websocketUrl = document.querySelector('meta[name="websocket-url"]')?.getAttribute('content');
 
-export default realtime;
+export default new Realtime(websocketUrl);
