@@ -4,6 +4,7 @@ import VueNotifications from "vue-notification";
 import VueMicroblog from "../components/microblog/microblog";
 import store from "../store";
 import {mapGetters} from "vuex";
+import axios from 'axios';
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 
@@ -20,20 +21,26 @@ new Vue({
   computed: mapGetters('microblogs', ['microblogs'])
 });
 
-$(function () {
+function switchForumTab(index) {
+  axios.post('/User/Settings/Ajax', {'homepage_mode': index});
+}
+
+function switchReputationTab(index) {
+  axios.post('/User/Settings/Ajax', {'homepage_reputation': index});
+}
+
+(function () {
     new PerfectScrollbar(document.getElementById('stream'));
 
-    let tabs = {'forum': $('#forum-tabs').find('a'), 'reputation': $('#reputation-tabs').find('a')};
+    let tabs = document.querySelectorAll('#forum-tabs .nav-link');
 
-    tabs.forum.click(function() {
-        let index = tabs.forum.index(this);
+    for (let i = 0; i < tabs.length; i++) {
+      tabs[i].addEventListener('click', () => switchForumTab(i));
+    }
 
-        $.post('/User/Settings/Ajax', {'homepage_mode': index});
-    });
+    tabs = document.querySelectorAll('#reputation-tabs .nav-item');
 
-    tabs.reputation.click(function() {
-        let index = tabs.reputation.index(this);
-
-        $.post('/User/Settings/Ajax', {'homepage_reputation': index});
-    });
-});
+    for (let i = 0; i < tabs.length; i++) {
+      tabs[i].addEventListener('click', () => switchReputationTab(i));
+    }
+})();

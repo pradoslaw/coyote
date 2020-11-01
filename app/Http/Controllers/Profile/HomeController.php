@@ -67,7 +67,6 @@ class HomeController extends Controller
     public function index($user, $tab = 'reputation')
     {
         $this->breadcrumb->push($user->name, route('profile', ['user' => $user->id]));
-        $this->request->attributes->set('reputation_url', route('profile.history', [$user->id]));
 
         $menu = $this->getUserMenu();
 
