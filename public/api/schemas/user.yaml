@@ -14,3 +14,5 @@ properties:
   photo:
     type: string
     nullable: true
+  is_online:
+    type: boolean

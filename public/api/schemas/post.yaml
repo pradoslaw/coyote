@@ -21,6 +21,13 @@ properties:
     format: "datetime"
   text:
     type: string
+    description: "Raw version of post"
+  excerpt:
+    type: string
+    description: "Short version of plain post"
+  html:
+    type: string
+    description: "HTML version of post"
   url:
     type: string
   user:
@@ -34,9 +41,12 @@ properties:
       properties:
         id:
           type: integer
+        text:
+          type: string
+          description: "Text version of comment"
         html:
           type: string
-          description: "Parsed post content"
+          description: "HTML version of comment"
         created_at:
           type: string
           format: "datetime"

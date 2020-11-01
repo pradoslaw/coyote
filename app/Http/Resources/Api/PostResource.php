@@ -28,7 +28,7 @@ class PostResource extends JsonResource
      */
     public function toArray($request)
     {
-        $only = $this->resource->only(['id', 'user_name', 'score', 'edit_count', 'forum_id', 'topic_id']);
+        $only = $this->resource->only(['id', 'user_name', 'score', 'text', 'edit_count', 'forum_id', 'topic_id']);
 
         return array_merge($only, [
             'created_at'    => $this->created_at->toIso8601String(),

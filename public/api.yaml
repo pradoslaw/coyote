@@ -260,6 +260,60 @@ paths:
                 type: object
                 $ref: './api/schemas/forum.yaml'
 
+  /posts:
+    get:
+      summary: "Get list of all posts"
+      tags:
+        - forum
+      parameters:
+        - name: order
+          required: false
+          in: query
+          description: "Default sort order is DESC."
+          schema:
+            type: string
+            enum: [ asc, desc ]
+      security:
+        - bearerAuth: [ ]
+      responses:
+        200:
+          description: "Post object"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      $ref: './api/schemas/post.yaml'
+                  meta:
+                    type: object
+                    $ref: '#/components/schemas/Meta'
+
+  /posts/{id}:
+    get:
+      summary: "Get post by ID"
+      tags:
+        - forum
+      parameters:
+        - name: id
+          required: true
+          in: "path"
+          schema:
+            type: integer
+      security:
+        - bearerAuth: [ ]
+      responses:
+        200:
+          description: "Post object"
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: './api/schemas/post.yaml'
+
 components:
   requestBodies:
     JobBody:

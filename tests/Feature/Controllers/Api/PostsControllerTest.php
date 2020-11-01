@@ -55,15 +55,26 @@ class PostsControllerTest extends TestCase
         $this->post = factory(Post::class)->create(['forum_id' => $this->forum->id, 'topic_id' => $this->topic->id]);
 
         $this->token = $this->user->createToken('4programmers.net')->accessToken;
+
+        $this->post->comments()->save(factory(Post\Comment::class)->make(['user_id' => $this->user->id]));
     }
 
-    public function testShowAllTopics()
+    public function testShowAllPosts()
     {
         $request = $this->get('/v1/posts', ['Accept' => 'application/json']);
 
         $data = $request->decodeResponseJson('data');
 
         $this->assertNotEquals($data[0]['html'], $this->topic->posts()->first()->html);
+
+        $this->assertArrayHasKey('id', $data[0]);
+        $this->assertArrayHasKey('text', $data[0]);
+        $this->assertArrayHasKey('html', $data[0]);
+        $this->assertArrayHasKey('excerpt', $data[0]);
+        $this->assertArrayHasKey('created_at', $data[0]);
+        $this->assertArrayHasKey('url', $data[0]);
+        $this->assertArrayHasKey('user', $data[0]);
+        $this->assertArrayHasKey('edit_count', $data[0]);
     }
 
     public function testShowAllPostsAuthorized()
@@ -88,7 +99,13 @@ class PostsControllerTest extends TestCase
         $request->assertJsonFragment([
             'user_name' => $this->post->user_name,
             'topic_id' => $this->topic->id,
-            'forum_id' => $this->forum->id
+            'forum_id' => $this->forum->id,
+            'text' => $this->post->text
         ]);
+
+        $comment = array_first($request->decodeResponseJson('comments'));
+
+        $this->assertEquals($comment['text'], $this->post->comments->first()->text);
+        $this->assertEquals($comment['id'], $this->post->comments->first()->id);
     }
 }

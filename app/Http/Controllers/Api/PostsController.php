@@ -54,6 +54,7 @@ class PostsController extends Controller
         $this->post->pushCriteria(new Sort('id', $request->input('order', Sort::DESC)));
 
         $this->post->pushCriteria(new EagerLoading($this->includeUser()));
+        $this->post->pushCriteria(new EagerLoading($this->includeComments()));
         $this->post->pushCriteria(new OnlyThoseWithAccess($this->user));
 
         $paginate = $this->post->paginate();
@@ -71,12 +72,7 @@ class PostsController extends Controller
         $this->authorizeForUser($this->user, 'access', $post->forum);
 
         $post->load($this->includeUser());
-
-        $post->load(['comments' => function ($builder) {
-            return $builder->with(['user' => function ($query) {
-                return $query->select(['id', 'name', 'photo', 'deleted_at', 'is_blocked'])->withTrashed();
-            }]);
-        }]);
+        $post->load($this->includeComments());
 
         PostResource::withoutWrapping();
 
@@ -86,7 +82,16 @@ class PostsController extends Controller
     private function includeUser(): array
     {
         return ['user' => function ($builder) {
-            return $builder->select(['id', 'name', 'photo', 'deleted_at', 'is_blocked'])->withTrashed();
+            return $builder->select(['id', 'name', 'photo', 'deleted_at', 'is_blocked', 'is_online'])->withTrashed();
+        }];
+    }
+
+    private function includeComments(): array
+    {
+        return ['comments' => function ($builder) {
+            return $builder->with(['user' => function ($query) {
+                return $query->select(['id', 'name', 'photo', 'deleted_at', 'is_blocked', 'is_online'])->withTrashed();
+            }]);
         }];
     }
 }
