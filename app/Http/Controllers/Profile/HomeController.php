@@ -57,6 +57,15 @@ class HomeController extends Controller
         $this->reputation = $reputation;
         $this->post = $post;
         $this->microblog = $microblog;
+
+        $this->middleware(function (Request $request, $next) {
+            /** @var User $user */
+            $user = $request->route('user_trashed');
+
+            abort_if($user->deleted_at && (!$this->userId || $this->auth->cannot('adm-access')), 404);
+
+            return $next($request);
+        });
     }
 
     /**

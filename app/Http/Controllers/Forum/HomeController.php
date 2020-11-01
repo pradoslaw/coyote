@@ -17,6 +17,7 @@ use Coyote\Repositories\Criteria\Topic\SkipLockedCategories;
 use Coyote\Repositories\Criteria\Topic\Subscribes;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Topic\WithTags;
+use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Services\Guest;
 use Coyote\Topic;
 use Illuminate\Http\Request;
@@ -162,12 +163,12 @@ class HomeController extends BaseController
      * @param int $userId
      * @return \Illuminate\View\View
      */
-    public function user($userId)
+    public function user(int $userId)
     {
         $this->topic->pushCriteria(new OnlyMine($userId, true));
         $topics = $this->load();
 
-        $user = app(UserRepositoryInterface::class)->find($userId);
+        $user = app(UserRepositoryInterface::class)->pushCriteria(new WithTrashed())->find($userId);
         abort_if(is_null($user), 404);
 
         if ($this->request->route()->getName() == 'forum.user') {
