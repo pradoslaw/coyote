@@ -1,4 +1,3 @@
-import 'jquery-prettytextdiff/jquery.pretty-text-diff';
 import '../pages/forum/sidebar';
 import VueTimeago from '../plugins/timeago';
 import VueSection from '../components/forum/section.vue';
