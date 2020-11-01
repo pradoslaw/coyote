@@ -12,5 +12,7 @@ function scrollToTop() {
   document.documentElement.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-scrollButton?.addEventListener('click', scrollToTop);
-document.addEventListener('scroll', handleScroll);
+if (scrollButton) {
+  scrollButton.addEventListener('click', scrollToTop);
+  document.addEventListener('scroll', handleScroll);
+}
