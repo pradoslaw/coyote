@@ -2,6 +2,10 @@
 {% block title %}{{ user.name }} - Profil {{ parent() }}{% endblock %}
 
 {% block container %}
+  <script>
+    var userId = {{ user.id }};
+  </script>
+
   {% if user.id == user('id') %}
     {{ include('user/top', {active: 'profile'}) }}
   {% endif %}

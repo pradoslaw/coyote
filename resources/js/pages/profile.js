@@ -1,7 +1,7 @@
-import Config from '../libs/config';
 import PerfectScrollbar from 'perfect-scrollbar';
+import axios from 'axios';
 
-$(function () {
+(function () {
   const container = document.getElementById('wrap');
 
   if (!container) {
@@ -10,20 +10,22 @@ $(function () {
 
   new PerfectScrollbar(container);
 
-  let pending = false;
+  let isPending = false;
 
   container.addEventListener('ps-y-reach-end', function () {
-    if (pending) {
+    if (isPending) {
       return;
     }
 
-    let offset = $('#reputation').find('.reputation-item').length;
-    pending = true;
+    const el = document.getElementById('reputation');
+    const offset = el.childNodes.length;
 
-    $.get(Config.get('reputation_url'), {offset: offset}, function (html) {
-      $('#reputation').append(html);
+    isPending = true;
 
-      pending = false;
+    axios.get(`/Profile/${window.userId}/History`, {params: {offset: offset}}).then(data => {
+      el.insertAdjacentHTML('beforeend', data.data);
+
+      isPending = false;
     });
   });
-});
+})();
