@@ -1,4 +1,3 @@
-import 'jquery-prettytextdiff/jquery.pretty-text-diff';
 import '../legacy/subscribe';
 import Dialog from '../legacy/dialog';
 
