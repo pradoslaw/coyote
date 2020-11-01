@@ -2,95 +2,98 @@
 {% block title %}Pastebin {{ parent() }}{% endblock %}
 
 {% import 'components.modals' as modals %}
+{% import 'components.widgets' as widgets %}
 
 {% block container %}
-    <div class="row">
-        <div class="col-12">
-            <h1>Pastebin - wklej swój kod!</h1>
+  <div class="row">
+    <div class="col-12">
+      <h1>Pastebin - wklej swój kod!</h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-2">
+      <section id="box-related" class="box related">
+        <h4 class="border-bottom"><i class="far fa-eye fa-fw"></i> Ostatnie wpisy</h4>
+
+        <div>
+          <ul>
+            {% for item in latest %}
+              <li>
+                <a data-category="forum-related" href="{{ route('pastebin.show', [item.id]) }}" title="{{ item.title }}">
+                  <strong>{{ item.title }}</strong>
+                  <small>{{ item.created_at|format_date }}</small>
+                </a>
+              </li>
+            {% else %}
+              <li>
+                <p><em>(brak wpisów)</em></p>
+              </li>
+            {% endfor %}
+          </ul>
         </div>
+      </section>
     </div>
 
-    <div class="row">
-        <div class="col-sm-2">
-            <section id="box-related" class="box related">
-                <h4 class="border-bottom"><i class="far fa-eye fa-fw"></i> Ostatnie wpisy</h4>
+    <div class="col-sm-10">
+      {{ form_start(form) }}
+      {{ form_row(form.text) }}
+      {{ form_row(form.title) }}
+      {{ form_row(form.mode) }}
+      {{ form_row(form.expires) }}
+      {{ form_row(form.human_email) }}
 
-                <div>
-                    <ul>
-                        {% for item in latest %}
-                            <li>
-                                <a data-category="forum-related" href="{{ route('pastebin.show', [item.id]) }}" title="{{ item.title }}">
-                                    <strong>{{ item.title }}</strong>
-                                    <small>{{ item.created_at|format_date }}</small>
-                                </a>
-                            </li>
-                        {% else %}
-                            <li>
-                                <p><em>(brak wpisów)</em></p>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </section>
-        </div>
-
-        <div class="col-sm-10">
-            {{ form_start(form) }}
-            {{ form_row(form.text) }}
-            {{ form_row(form.title) }}
-            {{ form_row(form.mode) }}
-            {{ form_row(form.expires) }}
-            {{ form_row(form.human_email) }}
-
-            <div class="form-group row">
-                <label class="col-md-6 offset-md-4">
-                    {{ form_widget(form.submit) }}
-                    {{ form_widget(form.del) }}
-                </label>
-            </div>
-            {{ form_end(form) }}
-        </div>
+      <div class="form-group row">
+        <label class="col-md-6 offset-md-4">
+          {{ form_widget(form.submit) }}
+          {{ form_widget(form.del) }}
+        </label>
+      </div>
+      {{ form_end(form) }}
     </div>
+  </div>
 
-    {% if pastebin.id is not null %}
-        {{ form_open({url: route('pastebin.delete', [pastebin.id]), id: 'form-delete'}) }}
-        {{ modals.confirm('Czy na pewno chcesz usunąć?', 'Usuwanie wpisu') }}
-        {{ form_close() }}
-    {% endif %}
+  {% if pastebin.id is not null %}
+    {{ form_open({url: route('pastebin.delete', [pastebin.id]), id: 'form-delete'}) }}
+    {{ modals.confirm('Czy na pewno chcesz usunąć?', 'Usuwanie wpisu') }}
+    {{ form_close() }}
+  {% endif %}
 {% endblock %}
 
 {% block body %}
-    {{ parent() }}
+  {{ parent() }}
 
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js"></script>
+  {{ widgets.jquery() }}
 
-    <script>
-        $(function() {
-            var textarea = $('#code');
-            $('<div id="editor" style="height: 500px" />').insertAfter(textarea);
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js"></script>
 
-            textarea.hide();
+  <script>
+    $(function () {
+      var textarea = $('#code');
+      $('<div id="editor" style="height: 500px" />').insertAfter(textarea);
 
-            var editor = ace.edit("editor");
+      textarea.hide();
 
-            editor.getSession().setValue(textarea.val());
-            editor.getSession().on('change', function() {
-                textarea.val(editor.getSession().getValue());
-            });
+      var editor = ace.edit("editor");
 
-            $('select[name="mode"]').change(function() {
-                if ($(this).val()) {
-                    editor.getSession().setMode("ace/mode/" + $(this).val().toLowerCase());
-                }
-            }).trigger('change');
+      editor.getSession().setValue(textarea.val());
+      editor.getSession().on('change', function () {
+        textarea.val(editor.getSession().getValue());
+      });
 
-            $(function() {
-                $('#btn-delete').click(function() {
-                    $('#confirm').modal('show').find('.btn-danger').one('click', function() {
-                        $('#form-delete').submit();
-                    });
-                });
-            });
+      $('select[name="mode"]').change(function () {
+        if ($(this).val()) {
+          editor.getSession().setMode("ace/mode/" + $(this).val().toLowerCase());
+        }
+      }).trigger('change');
+
+      $(function () {
+        $('#btn-delete').click(function () {
+          $('#confirm').modal('show').find('.btn-danger').one('click', function () {
+            $('#form-delete').submit();
+          });
         });
-    </script>
+      });
+    });
+  </script>
 {% endblock %}

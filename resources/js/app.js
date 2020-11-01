@@ -7,7 +7,7 @@ import './libs/timeago.js';
 import './components/vcard.js';
 import './plugins/flags.ts';
 import './plugins/sociale.js';
-import './plugins/geo-ip';
+import 'popper.js';
 import './bootstrap';
 
 import Config from './libs/config';
@@ -17,7 +17,7 @@ import Prism from 'prismjs';
 
 Prism.highlightAll();
 
-$(function () {
+(function () {
   'use strict';
 
   setToken(Config.csrfToken());
@@ -70,4 +70,4 @@ $(function () {
 
   // must be at the end so other vue components can render
   require('./plugins/popover');
-});
+})();
