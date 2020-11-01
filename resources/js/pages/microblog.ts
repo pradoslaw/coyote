@@ -89,7 +89,7 @@ new Vue({
     notification.attach(new UpdateMicroblog());
     notification.attach(new UpdateComment());
 
-    ws.subscribe('microblogs').on('MicroblogSaved', (microblog: Microblog) => {
+    ws.subscribe('microblog').on('MicroblogSaved', (microblog: Microblog) => {
       // highlight not read text
       microblog.is_read = false;
 

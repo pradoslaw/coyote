@@ -21,9 +21,7 @@ class Realtime {
       this.transport.openHandler = () => this.channels.subscribe();
       this.transport.closeHandler = () => this.channels.unsubscribe();
       this.transport.messageHandler = (data: WebSocketData) => {
-        // for (let name of Object.keys(this.channels)) {
-        //   this.channels[name].dispatch(data.event, data.data);
-        // }
+        this.channels.collection().forEach(channel => channel.handleEvent(data.event, data.data));
       }
 
       this.transport.connect();
