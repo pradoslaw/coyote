@@ -16,6 +16,15 @@ properties:
   html:
     type: string
     description: "HTML version of microblog"
+  voters:
+    type: array
+    items:
+      type: string
+    description: "Array with voters name"
+  editable:
+    type: boolean
+    nullable: true
+    description: "Determines if current microblog can be edited by given user"
   comments:
     type: array
     items:
@@ -41,42 +50,9 @@ properties:
           type: string
           description: "HTML version of comment"
         user:
-          type: object
-          properties:
-            id:
-              type: integer
-              required: true
-            name:
-              type: string
-              required: true
-            photo:
-              type: string
-              nullable: true
-            deleted_at:
-              nullable: true
-              type: string
-              format: "datetime"
-            is_blocked:
-              type: boolean
-              default: false
+          $ref: './user.yaml'
   user:
-    type: object
-    properties:
-      id:
-        type: integer
-        required: true
-      name:
-        type: string
-        required: true
-      photo:
-        type: string
-      deleted_at:
-        nullable: true
-        type: string
-        format: "datetime"
-      is_blocked:
-        type: boolean
-        default: false
+    $ref: './user.yaml'
   media:
     type: array
     items:

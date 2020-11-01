@@ -210,7 +210,7 @@ class Microblog extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class)->select(['id', 'name', 'deleted_at', 'is_blocked', 'photo'])->withTrashed();
+        return $this->belongsTo(User::class)->select(['id', 'name', 'deleted_at', 'is_blocked', 'photo', 'is_online'])->withTrashed();
     }
 
     /**
