@@ -1,12 +1,13 @@
-$(function () {
-    'use strict';
+import axios from 'axios';
 
-    // tymczasowy test: mozliwosc zmiany menu na nowe/stare
-    $('.js-change-menu').click(() => {
-        let header = $('.navbar');
+// tymczasowy test: mozliwosc zmiany menu na nowe/stare
+document.getElementById('js-change-menu')?.addEventListener('click', () => {
+  let header = document.getElementsByClassName('navbar')[0];
 
-        header.toggleClass('navbar-dark bg-dark bg-light navbar-light');
+  header.classList.toggle('navbar-dark');
+  header.classList.toggle('bg-dark');
+  header.classList.toggle('bg-light');
+  header.classList.toggle('navbar-light');
 
-        $.post('/User/Settings/Ajax', {'dark_theme': +header.hasClass('navbar-dark')});
-    });
+  axios.post('/User/Settings/Ajax', {'dark_theme': +header.classList.contains('navbar-dark')});
 });
