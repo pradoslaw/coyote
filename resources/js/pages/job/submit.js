@@ -47,10 +47,6 @@ new Vue({
 
     $('[v-loader]').remove();
     this._initTooltip();
-
-    $('#industries').chosen({
-      placeholder_text_multiple: 'Wybierz z listy'
-    });
   },
   destroyed() {
     window.removeEventListener('scroll', this.handleScroll);
