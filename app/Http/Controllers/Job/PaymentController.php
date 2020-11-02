@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Job;
 
 use Coyote\Events\PaymentPaid;
 use Coyote\Exceptions\PaymentFailedException;
+use Coyote\Firm;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Job\PaymentForm;
 use Coyote\Http\Requests\Job\PaymentRequest;
@@ -97,18 +98,25 @@ class PaymentController extends Controller
         $this->breadcrumb->push($payment->job->title, UrlBuilder::job($payment->job));
         $this->breadcrumb->push('Płatność');
 
+        $firm = $payment->job->firm ?? new Firm();
+
+        if (empty($firm->country_id)) {
+            $geoIp = app('geo-ip');
+            $result = $geoIp->ip($this->request->ip());
+
+            $firm->country = $result->country_code ?? '';
+        }
+
         // calculate price based on payment details
         $calculator = CalculatorFactory::payment($payment);
-//        $calculator->vatRate = $this->establishVatRate($form);
 
-
-        $countries = $this->country->pluck('name', 'id');
+        $countries = $this->country->pluck('code', 'id');
 
         return $this->view('job.payment', [
             'payment'           => $payment,
             'vat_rates'         => $this->vatRates,
             'calculator'        => $calculator->toArray(),
-            'default_vat_rate'  => $payment->plan->vat_rate,
+            'firm'              => $firm,
             'countries'         => $countries
         ]);
     }

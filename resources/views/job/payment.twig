@@ -120,14 +120,13 @@
                                         <label class="col-form-label">NIP (opcjonalnie)</label>
 
                                         <div class="row">
-                                            <div class="col-4 pr-0">
-                                                {# {{ form_widget(form.invoice.children.country_id) }} #}
+                                            <vue-form-group class="col-4">
                                                 <vue-select name="invoice[country_id]" :options="countries" v-model="form.invoice.country_id"></vue-select>
-                                            </div>
-                                            <div class="col-8">
-                                                {# {{ form_widget(form.invoice.children.vat_id) }} #}
+                                            </vue-form-group>
+
+                                            <vue-form-group class="col-8">
                                                 <vue-text name="invoice[vat_id]" v-model="form.invoice.vat_id"></vue-text>
-                                            </div>
+                                            </vue-form-group>
                                         </div>
                                     </div>
                                 </div>
@@ -257,7 +256,7 @@
         var countries = {{ countries|json_encode|raw }};
         var calculator = {{ calculator|json_encode|raw }};
         var vat_rates = {{ vat_rates|json_encode|raw }};
-        var default_vat_rate = {{ default_vat_rate }};
+
         var form = {
             number: '',
             name: '',
@@ -265,10 +264,12 @@
             cvc: '',
             payment_method: 'card',
             invoice: {
-                vat_id: '{{ form.invoice.get('vat_id').value }}',
-                country_id: '{{ form.invoice.get('country_id').value }}',
+                vat_id: '{{ firm.vat_id }}',
+                country_id: '{{ firm.country_id }}',
             }
         };
+
+
 
         var banks = [
             {id: 25, _class: 'mtransfer'},

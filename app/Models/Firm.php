@@ -23,10 +23,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $website
  * @property string $description
  * @property string $vat_id
+ * @property int $country_id
  * @property \Coyote\Firm\Benefit[] $benefits
  * @property \Coyote\Firm\Industry[] $industries
  * @property \Coyote\Firm\Gallery[] $gallery
  * @property Logo $logo
+ * @property \Coyote\Country $country
  */
 class Firm extends Model
 {
@@ -172,6 +174,14 @@ class Firm extends Model
     public function industries()
     {
         return $this->belongsToMany(Industry::class, 'firm_industries');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
     }
 
     /**

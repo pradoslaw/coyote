@@ -22,8 +22,9 @@ new Vue({
     countries: window.countries,
     calculator: window.calculator,
     varRates: window.vat_rates,
-    defaultVatRate: window.default_vat_rate,
+    // defaultVatRate: window.default_vat_rate,
     form: window.form,
+    // firm: window.firm,
     banks: window.banks,
     coupon: {
       code: null,
@@ -38,12 +39,12 @@ new Vue({
     },
     calculate() {
       // if VAT ID is empty we must add VAT
-      this.calculator.vat_rate = !this.form.invoice.vat_id ?
-        this.default_vat_rate
-          : (this.form.invoice.country_id ? this.vat_rates[this.form.invoice.country_id] : this.default_vat_rate);
+      this.calculator.vat_rate = this.vat_rates[this.form.invoice.country_id];
     },
     submitForm(e) {
-      axios.post('', {...Object.assign(this.form, {price: this.grossPrice, enable_invoice: this.enableInvoice})}).then(() => {
+      const data = Object.assign(this.form, {price: this.grossPrice, enable_invoice: this.enableInvoice});
+
+      axios.post('', data).then(() => {
 
       })
     },
