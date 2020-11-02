@@ -122,7 +122,7 @@ module.exports = {
     forum: ['./js/pages/forum.js'],
     wiki: ['./js/pages/wiki.js'],
     job: ['./js/pages/job.js'],
-    'job-submit': './js/pages/job/submit.js',
+    // 'job-submit': './js/pages/job/submit.js',
     adm: './sass/pages/adm.scss'
   },
   plugins: [

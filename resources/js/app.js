@@ -27,21 +27,7 @@ Prism.highlightAll();
   r.on(['/User', '/User/Skills'], () => {
     require('./pages/user');
   })
-  .on('/Praca/Application/*', () => {
-    require.ensure([], require => require('./pages/job/application'), 'application');
-  })
-  .on('/Praca/Payment/*', () => {
-    require.ensure([], require => require('./pages/job/payment'), 'payment');
-  })
-  .on('/Praca/Oferta', () => {
-    require.ensure([], require => require('./pages/job/business'), 'business');
-  })
-  .on(['/Praca', '/Praca/Miasto/*', '/Praca/Technologia/*', '/Praca/Zdalna', '/Praca/Firma/*'], () => {
-    require('./pages/job/homepage');
-  })
-  .on('/Praca/\\d+\\-*', () => {
-    require('./pages/job/offer');
-  })
+
   .on('/Adm/Firewall/*', () => {
     require.ensure(['flatpickr', 'flatpickr/dist/l10n/pl'], require => {
       require('flatpickr');
