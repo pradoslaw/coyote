@@ -29,11 +29,11 @@ class PaymentRequest extends FormRequest
 
         return [
             'payment_method' => 'required|in:card,transfer',
-            'price' => 'float',
+            'price' => 'numeric',
             'name' => 'bail|nullable|string|max:32',
             'number' => 'bail|nullable|string|cc_number',
-            'exp_year' => 'bail|int',
-            'exp_month' => 'bail|int|cc_date:exp_month,exp_year',
+//            'exp_year' => 'bail|int',
+            'exp' => 'bail|cc_date',
             'cvc' => 'bail|nullable|cc_cvc:number',
             'coupon' => [
                 'nullable',
@@ -85,7 +85,7 @@ class PaymentRequest extends FormRequest
         $validator = parent::getValidatorInstance();
 
         $validator
-            ->sometimes(['name', 'number', 'cvc', 'exp_month'], 'required', function (Fluent $input) {
+            ->sometimes(['name', 'number', 'cvc', 'exp'], 'required', function (Fluent $input) {
                 return $input->price > 0 && $input->payment_method == 'card';
             })
             ->sometimes('transfer_method', 'required', function (Fluent $input) {

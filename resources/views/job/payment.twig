@@ -159,8 +159,7 @@
                         <div class="col-12">
                             <a href="{{ route('job.offer', [payment.job.id, payment.job.slug]) }}" class="btn btn-secondary float-left"><i class="fas fa-angle-left"></i> Powrót do ogłoszenia</a>
 
-                            <button type="submit" id="submit" class="btn btn-primary float-right" data-submit-state="Realizacja płatności...">Zapłać i zapisz <i class="fas fa-angle-right"></i>
-                            </button>
+                            <vue-button @click.native="submitForm" type="submit" class="btn btn-primary float-right">Zapłać i zapisz <i class="fas fa-angle-right"></i></vue-button>
                         </div>
 
                     </div>
@@ -262,8 +261,7 @@
         var form = {
             number: '',
             name: '',
-            expiration_year: '',
-            expiration_month: '',
+            exp: '',
             cvc: '',
             payment_method: 'card',
             invoice: {

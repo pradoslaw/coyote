@@ -6,6 +6,7 @@ use Coyote\Events\PaymentPaid;
 use Coyote\Exceptions\PaymentFailedException;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Job\PaymentForm;
+use Coyote\Http\Requests\Job\PaymentRequest;
 use Coyote\Payment;
 use Coyote\Repositories\Contracts\CountryRepositoryInterface as CountryRepository;
 use Coyote\Repositories\Contracts\CouponRepositoryInterface as CouponRepository;
@@ -117,16 +118,13 @@ class PaymentController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Exception
      */
-    public function process($payment)
+    public function process(PaymentRequest $request, Payment  $payment)
     {
-        /** @var PaymentForm $form */
-        $form = $this->getForm($payment);
-        $form->validate();
 
         $calculator = CalculatorFactory::payment($payment);
-        $calculator->vatRate = $this->establishVatRate($form);
+//        $calculator->vatRate = $this->establishVatRate($form);
 
-        $coupon = $this->coupon->findBy('code', $form->get('coupon')->getValue());
+        $coupon = $this->coupon->findBy('code', $request->input('coupon')->getValue());
         $calculator->setCoupon($coupon);
 
         // begin db transaction

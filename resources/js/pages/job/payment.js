@@ -4,6 +4,7 @@ import VueFormGroup from '@/js/components/forms/form-group.vue';
 import VueText from '@/js/components/forms/text.vue';
 import VueSelect from '@/js/components/forms/select.vue';
 import VueCheckbox from '@/js/components/forms/checkbox.vue';
+import VueButton from '@/js/components/forms/button.vue';
 import axios from 'axios';
 
 new Vue({
@@ -14,7 +15,8 @@ new Vue({
     'vue-text': VueText,
     'vue-select': VueSelect,
     'vue-checkbox': VueCheckbox,
-    'vue-masked-input': VueMaskedInput
+    'vue-masked-input': VueMaskedInput,
+    'vue-button': VueButton
   },
   data: {
     countries: window.countries,
@@ -40,11 +42,10 @@ new Vue({
         this.default_vat_rate
           : (this.form.invoice.country_id ? this.vat_rates[this.form.invoice.country_id] : this.default_vat_rate);
     },
-    submit(e) {
+    submitForm(e) {
+      axios.post('', {...Object.assign(this.form, {price: this.grossPrice, enable_invoice: this.enableInvoice})}).then(() => {
 
-      this.$nextTick(() => {
-        HTMLFormElement.prototype.submit.call(e.target);
-      });
+      })
     },
     setPaymentMethod(payment_method) {
       this.form.payment_method = payment_method;
@@ -69,7 +70,10 @@ new Vue({
   },
   watch: {
     'coupon.code': function(newValue) {
-      axios.get('/Praca/Coupon/Validate', {params: {code: newValue}}).then(result => this.coupon.amount = result.data);
+      axios.get('/Praca/Coupon/Validate', {params: {code: newValue}}).then(result => {
+        this.coupon.amount = result.data;
+        this.form.coupon = newValue;
+      });
     }
   }
 });

@@ -57,8 +57,11 @@ class CreditCardValidator
      */
     public function validateDate($attribute, $value, $parameters)
     {
-        $month = $this->request->input($parameters[0]);
-        $year = $this->request->input($parameters[1]);
+        if (strpos($value, '/') === false) {
+            return false;
+        }
+
+        list($month, $year) = explode('/', $value);
 
         return CreditCard::validDate($year, $month);
     }
