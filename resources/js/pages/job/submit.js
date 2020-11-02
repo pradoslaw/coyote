@@ -44,9 +44,7 @@ new Vue({
     this.marker = null;
 
     window.addEventListener('scroll', this.handleScroll);
-
-    $('[v-loader]').remove();
-    this._initTooltip();
+    document.querySelector('[v-loader]')?.remove();
   },
   destroyed() {
     window.removeEventListener('scroll', this.handleScroll);
@@ -87,8 +85,6 @@ new Vue({
         .then(response => {
           this.suggestions = response.data;
         });
-
-      this._initTooltip();
     },
 
     removeTag(name) {
@@ -185,10 +181,6 @@ new Vue({
         street_number: null,
         country_id: null
       });
-
-      this.$nextTick(() => {
-        $('#industries').trigger('chosen:updated');
-      });
     },
 
     changeAddress(e) {
@@ -224,12 +216,6 @@ new Vue({
       if (index > -1) {
         this.firm.gallery.splice(index, 1);
       }
-    },
-
-    _initTooltip() {
-      this.$nextTick(function () {
-        $('i[data-toggle="tooltip"]').tooltip();
-      });
     },
 
     addLocation() {

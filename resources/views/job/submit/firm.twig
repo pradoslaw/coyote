@@ -282,11 +282,8 @@
       </div>
     </main>
   </div>
-{% endblock %}
 
-{% block body %}
-  {{ parent() }}
-
+  <script src="//maps.googleapis.com/maps/api/js?key={{ config('services.google-maps.key') }}&sensor=false"></script>
   <script>
     var data = {
       job: {{ job|json_encode|raw }},
@@ -300,8 +297,12 @@
     };
   </script>
 
+{% endblock %}
+
+{% block body %}
+  {{ parent() }}
+
   <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
-  <script src="//maps.googleapis.com/maps/api/js?key={{ config('services.google-maps.key') }}&sensor=false"></script>
 
   {% include 'job.submit.partials.chat' %}
 {% endblock %}
