@@ -29,10 +29,9 @@ class PaymentRequest extends FormRequest
 
         return [
             'payment_method' => 'required|in:card,transfer',
-            'price' => 'numeric',
+            'price' => 'required|numeric',
             'name' => 'bail|nullable|string|max:32',
             'number' => 'bail|nullable|string|cc_number',
-//            'exp_year' => 'bail|int',
             'exp' => 'bail|cc_date',
             'cvc' => 'bail|nullable|cc_cvc:number',
             'coupon' => [
@@ -46,7 +45,7 @@ class PaymentRequest extends FormRequest
             'invoice.address' => 'bail|required_with:enable_invoice|nullable|string|max:200',
             'invoice.city' => 'bail|required_with:enable_invoice|nullable|string|max:200',
             'invoice.postal_code' => 'bail|required_with:enable_invoice|nullable|string|max:30',
-            'invoice.country_id' => Rule::in($codes)
+            'invoice.country_id' => ['required', Rule::in($codes)]
         ];
     }
 
@@ -58,6 +57,7 @@ class PaymentRequest extends FormRequest
         return [
             'name' => 'nazwa',
             'number' => 'numer karty kredytowej',
+            'exp' => 'data ważności karty',
             'cvc' => 'CVC',
             'payment_method' => 'forma płatności',
             'card' => 'karta kredytowa',
