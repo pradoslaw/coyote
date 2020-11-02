@@ -1,42 +1,46 @@
 {% extends 'user.base' %}
 {% block title %}Statystyki moich postów{{ parent() }}{% endblock %}
 
-{% block content %}
-    <h2>Statystyki moich postów</h2>
+{% import 'components.widgets' as widgets %}
 
-    <div id="box-start" class="card card-default">
-        <div class="card-body">
-            {{ grid(grid) }}
-        </div>
+{% block content %}
+  <h2>Statystyki moich postów</h2>
+
+  <div id="box-start" class="card card-default">
+    <div class="card-body">
+      {{ grid(grid) }}
     </div>
+  </div>
 {% endblock %}
 
 {% block body %}
-    {{ parent() }}
+  {{ parent() }}
 
-    <script>
-        $(function() {
-            $('#filter-form').find('table').append('<tfoot><tr><td></td><td id="total-posts"></td><td id="total-votes"></td><td></td><td></td></tr></tfoot>');
+  {{ widgets.jquery() }}
 
-            function applyStats() {
-                var totalPosts = 0, totalVotes = 0;
+  <script>
+    $(function () {
+      $('#filter-form').find('table').append('<tfoot><tr><td></td><td id="total-posts"></td><td id="total-votes"></td><td></td><td></td></tr></tfoot>');
 
-                $('.switcher:checked').each(function() {
-                    var parent = $(this).parents('tr');
+      function applyStats() {
+        var totalPosts = 0, totalVotes = 0;
 
-                    totalPosts += parseInt(parent.children('td:eq(1)').text()) || 0;
-                    totalVotes += parseInt(parent.children('td:eq(2)').text()) || 0;
-                });
+        $('.switcher:checked').each(function () {
+          var parent = $(this).parents('tr');
 
-                $('#total-posts').text(totalPosts);
-                $('#total-votes').text(totalVotes);
-            }
-
-            $('.switcher').change(function() {
-                applyStats();
-            });
-
-            applyStats();
+          totalPosts += parseInt(parent.children('td:eq(1)').text()) || 0;
+          totalVotes += parseInt(parent.children('td:eq(2)').text()) || 0;
         });
-    </script>
+
+        $('#total-posts').text(totalPosts);
+        $('#total-votes').text(totalVotes);
+      }
+
+      $('.switcher').change(function () {
+        applyStats();
+      });
+
+      applyStats();
+    });
+  </script>
 {% endblock %}

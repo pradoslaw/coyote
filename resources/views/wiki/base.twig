@@ -1,11 +1,13 @@
 {% extends 'layout' %}
 
 {% block body %}
-    {% import 'components.modals' as modals %}
+  {% import 'components.modals' as modals %}
+  {% import 'components.widgets' as widgets %}
 
-    {{ parent() }}
+  {{ parent() }}
 
-    <script src="{{ cdn('js/wiki.js') }}"></script>
+  {{ widgets.jquery() }}
+  <script src="{{ cdn('js/wiki.js') }}"></script>
 
-    {{ modals.alert('Należy się zalogować, aby dodać ogłoszenie do ulubionych', 'Logowanie', 'modal-unauthorized') }}
+  {{ modals.alert('Należy się zalogować, aby dodać ogłoszenie do ulubionych', 'Logowanie', 'modal-unauthorized') }}
 {% endblock %}
