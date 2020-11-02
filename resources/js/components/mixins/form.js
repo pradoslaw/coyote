@@ -6,6 +6,7 @@ export default {
             },
             set: function (value) {
                 this.$emit('update:value', value);
+                this.$emit('input', value);
             }
         }
     }

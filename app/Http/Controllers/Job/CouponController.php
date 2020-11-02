@@ -22,17 +22,14 @@ class CouponController extends Controller
         $this->coupon = $coupon;
     }
 
-    /**
-     * @return array|mixed
-     */
-    public function validateCode()
+    public function validateCode(): int
     {
         $result = $this->coupon->findBy('code', $this->request->input('code'));
 
         if (!$result) {
-            return [];
+            return 0;
         }
 
-        return $result;
+        return $result->amount;
     }
 }

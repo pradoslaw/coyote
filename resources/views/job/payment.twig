@@ -3,303 +3,300 @@
 {% block title %}Płatność{{ parent() }}{% endblock %}
 
 {% block container %}
-  <div class="row">
-    <div class="col-md-9">
-      {% include 'job.submit.partials.indicator' with {'current': 4} %}
+    <div class="row">
+        <div class="col-md-9">
+            {% include 'job.submit.partials.indicator' with {'current': 4} %}
+        </div>
     </div>
-  </div>
 
-  {{ form_start(form) }}
-  {{ form_widget(form.payment_method) }}
-
-  <div id="payment" class="row" v-cloak>
-    <main class="col-md-9">
-      <div class="card card-default">
-        <div class="card-header">
-          <i class="fas fa-lock fa-fw"></i> Płatność poprzez bezpieczne połączenie
-        </div>
-        <div class="card-body" v-show="grossPrice > 0">
-          <div class="row">
-            <div class="col-lg-4" style="z-index: 1">
-              <ul class="nav nav-payment-forms flex-column">
-                <li class="nav-item" :class="{'active': form.payment_method == 'card'}">
-                  <a @click="setPaymentMethod('card')" href="javascript:" class="nav-link">
-                    <strong>Karta kredytowa/debetowa</strong>
-
-                    <img src="{{ cdn('img/mastercard.png') }}">
-                    <img src="{{ cdn('img/visa.png') }}">
-                    <img src="{{ cdn('img/maestro.png') }}">
-
-                    <small class="text-muted" style="display: block; margin-top: 9px; font-size: 10px;">Powered by PayLane</small>
-                  </a>
-                </li>
-
-                <li class="nav-item" :class="{'active': form.payment_method == 'transfer'}">
-                  <a @click="setPaymentMethod('transfer')" href="javascript:" class="nav-link">
-                    <strong class="mb-2">Przelew bankowy</strong>
-
-                    <img src="{{ cdn('img/ipko.png') }}" class="mr-1">
-                    <img src="{{ cdn('img/mbank.png') }}" class="mr-1">
-                    <img src="{{ cdn('img/pekao.png') }}" class="mr-1">
-
-                    <i class="fas fa-ellipsis-h"></i>
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div class="col-lg-8 col-12">
-              <div class="card card-default">
-                <div id="card" v-show="form.payment_method === 'card'" class="card-body">
-                  {{ form_widget(form.price) }}
-                  {{ form_row(form.name) }}
-
-                  <div class="form-group border-bottom credit-card-container">
-                    {{ form_label(form.number) }}
-
-                    {{ form_widget(form.number) }}
-                    {{ form_error(form.number) }}
-                  </div>
-
-                  <div class="form-row">
-
-                    <div class="form-group col-sm-5">
-                      <label class="col-form-label">Data ważności karty *</label>
-
-                      {{ form_widget(form.exp_month) }}
-                      {{ form_error(form.exp_month) }}
-                    </div>
-
-                    <div class="form-group col-sm-2">
-                      <label class="col-form-label">&nbsp;</label>
-                      {{ form_widget(form.exp_year) }}
-                      {{ form_error(form.exp_year) }}
-                    </div>
-
-                    <div class="form-group col-sm-5">
-
-                      {{ form_label(form.cvc) }}
-
-                      {{ form_widget(form.cvc) }}
-                      {{ form_error(form.cvc) }}
-                    </div>
-                  </div>
+    <div id="js-payment" class="row" v-cloak>
+        <main class="col-md-9">
+            <div class="card card-default">
+                <div class="card-header">
+                    <i class="fas fa-lock fa-fw"></i> Płatność poprzez bezpieczne połączenie
                 </div>
-
-                <div id="transfer" v-show="form.payment_method === 'transfer'" class="card-body">
-                  <div class="row">
-                    <p class="has-error text-center">{{ form_error(form.transfer_method) }}</p>
-
-                    <div class="col-sm-3 text-center mb-2" v-for="bank in banks">
-                      <label class="bank-logo" :class="bank._class" :for="bank._class"></label>
-
-                      <input type="radio" name="transfer_method" :value="bank.id" :id="bank._class">
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {# v-if instade of v-show. remove invoice inputs from form if price == 0 #}
-              <div class="row" v-if="grossPrice > 0">
-                <div class="col-12">
-                  <div class="card card-body bg-light p-2">
-                    <div class="custom-control custom-checkbox m-0">
-                      {{ form_widget(form.enable_invoice) }}
-
-                      <label class="custom-control-label" for="{{ form.enable_invoice.attr.id }}">
-                        {{ form.enable_invoice.label }}
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {# v-if instade of v-show. remove invoice inputs from form if price == 0 #}
-              <div class="invoice" v-if="grossPrice > 0">
-                <div class="row">
-                  <div class="col-sm-7">
-                    {{ form_row(form.invoice.children.name) }}
-                  </div>
-
-                  <div class="col-sm-5">
-                    {{ form_label(form.invoice.children.vat_id) }}
-
+                <div class="card-body" v-show="grossPrice > 0">
                     <div class="row">
-                      <div class="col-4 pr-0">
-                        {{ form_widget(form.invoice.children.country_id) }}
-                      </div>
-                      <div class="col-8">
-                        {{ form_widget(form.invoice.children.vat_id) }}
-                      </div>
+                        <div class="col-lg-4" style="z-index: 1">
+                            <ul class="nav nav-payment-forms flex-column">
+                                <li class="nav-item" :class="{'active': form.payment_method === 'card'}">
+                                    <a @click="setPaymentMethod('card')" href="javascript:" class="nav-link">
+                                        <strong>Karta kredytowa/debetowa</strong>
+
+                                        <img src="{{ cdn('img/mastercard.png') }}">
+                                        <img src="{{ cdn('img/visa.png') }}">
+                                        <img src="{{ cdn('img/maestro.png') }}">
+
+                                        <small class="text-muted" style="display: block; margin-top: 9px; font-size: 10px;">Powered by PayLane</small>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item" :class="{'active': form.payment_method === 'transfer'}">
+                                    <a @click="setPaymentMethod('transfer')" href="javascript:" class="nav-link">
+                                        <strong class="mb-2">Przelew bankowy</strong>
+
+                                        <img src="{{ cdn('img/ipko.png') }}" class="mr-1">
+                                        <img src="{{ cdn('img/mbank.png') }}" class="mr-1">
+                                        <img src="{{ cdn('img/pekao.png') }}" class="mr-1">
+
+                                        <i class="fas fa-ellipsis-h"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="col-lg-8 col-12">
+                            <div class="card card-default">
+                                <div id="card" v-show="form.payment_method === 'card'" class="card-body">
+                                    {{ form_widget(form.price) }}
+
+                                    <div class="form-row">
+                                        <vue-form-group label="Nazwa (jaka widnieje na karcie kredytowej)" class="form-group col-md-6">
+                                            <vue-text v-model="form.name"></vue-text>
+                                        </vue-form-group>
+
+                                        <vue-form-group label="Numer karty kredytowej lub debetowej" class="form-group col-md-6">
+                                            <vue-masked-input v-model="form.number" class="form-control" mask="1111-1111-1111-1111"></vue-masked-input>
+
+                                            {# {{ form_widget(form.number) }} #}
+                                            {# {{ form_error(form.number) }} #}
+                                        </vue-form-group>
+                                    </div>
+
+
+
+                                    <div class="form-row">
+                                        <vue-form-group label="Data ważności karty *" class="form-group col-md-6">
+                                            <vue-masked-input name="exp" mask="11/11" placeholder="MM/YY" class="form-control"></vue-masked-input>
+
+                                            {# {{ form_error(form.exp_month) }} #}
+                                        </vue-form-group>
+
+                                        <vue-form-group label="Kod zabezpieczeń (CVC)" class="form-group col-md-6">
+                                            <vue-masked-input name="cvc" mask="111" class="form-control"></vue-masked-input>
+                                            {# {{ form_error(form.cvc) }} #}
+                                        </vue-form-group>
+                                    </div>
+                                </div>
+
+                                <div id="transfer" v-show="form.payment_method === 'transfer'" class="card-body">
+                                    <div class="row">
+                                        <p class="has-error text-center">{{ form_error(form.transfer_method) }}</p>
+
+                                        <div class="col-sm-3 text-center mb-2" v-for="bank in banks">
+                                            <label class="bank-logo" :class="bank._class" :for="bank._class"></label>
+
+                                            <input type="radio" name="transfer_method" :value="bank.id" :id="bank._class">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {# v-if instade of v-show. remove invoice inputs from form if price == 0 #}
+                            <div class="row" v-if="grossPrice > 0">
+                                <div class="col-12">
+                                    <div class="card card-body bg-light p-2">
+                                        <div class="custom-control custom-checkbox">
+                                            <vue-checkbox v-model="enableInvoice" id="enable-invoice" class="custom-control-input"></vue-checkbox>
+
+                                            <label class="custom-control-label" for="enable-invoice">
+                                                Tak, chcę otrzymać fakturę
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {# v-if instade of v-show. remove invoice inputs from form if price == 0 #}
+                            <div v-if="grossPrice > 0 && enableInvoice">
+                                <div class="row">
+                                    <div class="col-sm-7">
+                                        <vue-form-group label="Nazwa firmy">
+                                            <vue-text name="invoice.name" v-model="form.invoice.name"></vue-text>
+                                        </vue-form-group>
+                                    </div>
+
+                                    <div class="col-sm-5">
+                                        <label class="col-form-label">NIP (opcjonalnie)</label>
+
+                                        <div class="row">
+                                            <div class="col-4 pr-0">
+                                                {# {{ form_widget(form.invoice.children.country_id) }} #}
+                                                <vue-select name="invoice[country_id]" :options="countries" v-model="form.invoice.country_id"></vue-select>
+                                            </div>
+                                            <div class="col-8">
+                                                {# {{ form_widget(form.invoice.children.vat_id) }} #}
+                                                <vue-text name="invoice[vat_id]" v-model="form.invoice.vat_id"></vue-text>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <vue-form-group label="Adres">
+                                            <vue-text name="invoice[address]" v-model="form.invoice.address"></vue-text>
+                                        </vue-form-group>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <vue-form-group label="Kod pocztowy">
+                                            <vue-text name="invoice[postal_code]" v-model="form.invoice.postal_code"></vue-text>
+                                        </vue-form-group>
+                                    </div>
+
+                                    <div class="col-sm-5">
+                                        <vue-form-group label="Miasto">
+                                            <vue-text name="invoice[city]" v-model="form.invoice.city"></vue-text>
+                                        </vue-form-group>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                  </div>
+
+                    <div id="form-navigation" class="form-group row">
+                        <div class="col-12">
+                            <a href="{{ route('job.offer', [payment.job.id, payment.job.slug]) }}" class="btn btn-secondary float-left"><i class="fas fa-angle-left"></i> Powrót do ogłoszenia</a>
+
+                            <button type="submit" id="submit" class="btn btn-primary float-right" data-submit-state="Realizacja płatności...">Zapłać i zapisz <i class="fas fa-angle-right"></i>
+                            </button>
+                        </div>
+
+                    </div>
                 </div>
 
-                <div class="row">
-                  <div class="col-sm-4 padding-none-right">
-                    {{ form_row(form.invoice.children.address) }}
-                  </div>
+                <div class="card-body" v-show="!grossPrice">
+                    <h1 class="text-center"><i class="fas fa-check text-primary"></i> Płatność nie jest wymagana</h1>
 
-                  <div class="col-sm-3">
-                    {{ form_row(form.invoice.children.postal_code) }}
-                  </div>
-
-                  <div class="col-sm-5">
-                    {{ form_row(form.invoice.children.city) }}
-                  </div>
+                    <div class="d-flex justify-content-center mt-3">
+                        <button type="submit" class="btn btn-primary btn-lg" data-submit-state="Zapisywanie...">Zapisz i zakończ</button>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
+        </main>
 
-          <div id="form-navigation" class="form-group row">
-            <div class="col-12">
-              <a href="{{ route('job.offer', [payment.job.id, payment.job.slug]) }}" class="btn btn-secondary float-left"><i class="fas fa-angle-left"></i> Powrót do ogłoszenia</a>
+        <aside class="col-md-3">
+            <div class="card card-default card-review" v-cloak>
+                <div class="card-header">
+                    Twoja płatność obejmuje
+                </div>
 
-              <button type="submit" id="submit" class="btn btn-primary float-right" data-submit-state="Realizacja płatności...">Zapłać i zapisz <i class="fas fa-angle-right"></i></button>
+                <div class="card-body">
+                    <div class="mt-1 mb-1 clearfix">
+                        <div class="float-left">
+                            Publikacja ogłoszenia ({{ payment.days }} dni)
+                        </div>
+                        <div class="float-right text-right">
+                            ${ netPrice } zł
+                        </div>
+                    </div>
+
+                    <div class="mt-1 mb-1 clearfix" v-if="coupon.amount > 0">
+                        <div class="float-left">
+                            Rabat
+                        </div>
+                        <div class="float-right text-right">
+                            ${ coupon.amount } zł
+                        </div>
+                    </div>
+
+                    {# <div class="margin-xs-top margin-xs-bottom clearfix"> #}
+                    {# <div class="float-left"> #}
+                    {# VAT (${ percentageVatRate }%) #}
+                    {# </div> #}
+                    {# <div class="float-right"> #}
+                    {# ${ vatPrice } zł #}
+                    {# </div> #}
+                    {# </div> #}
+
+                    <hr>
+
+                    <div class="clearfix">
+                        <div class="float-left">
+                            <strong>Suma:</strong>
+                        </div>
+                        <div class="float-right">
+                            <strong>${ grossPrice } zł</strong>
+                        </div>
+                    </div>
+
+                    ${ coupon.shown }
+
+                    <hr>
+
+                    <div v-show="!coupon.code && !isCoupon">
+                        <span class="fa-stack">
+                            <i class="far fa-circle fa-stack-2x"></i>
+                            <i class="fas fa-dollar-sign fa-stack-1x"></i>
+                        </span>
+
+                        <a @click="isCoupon = true" style="text-decoration: underline; font-size: 14px; cursor: pointer">Masz kupon rabatowy?</a>
+                    </div>
+
+                    <vue-form-group v-show="isCoupon" label="Masz kod promocyjny?" class="form-group">
+                        <vue-text v-model="coupon.code" class="input-sm" autocomplete="off"></vue-text>
+                        {# {{ form_error(form.coupon) }} #}
+                    </vue-form-group>
+                </div>
+
+                <div class="card-footer">
+                    <div class="clearfix">
+                        <div class="float-left">
+                            <span>Do zapłaty:</span>
+                        </div>
+                        <div class="float-right">
+                            <span>${ grossPrice } zł</span>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </aside>
+    </div>
 
-          </div>
-        </div>
+    <script>
+        var countries = {{ countries|json_encode|raw }};
+        var calculator = {{ calculator|json_encode|raw }};
+        var vat_rates = {{ vat_rates|json_encode|raw }};
+        var default_vat_rate = {{ default_vat_rate }};
+        var form = {
+            number: '',
+            name: '',
+            expiration_year: '',
+            expiration_month: '',
+            cvc: '',
+            payment_method: 'card',
+            invoice: {
+                vat_id: '{{ form.invoice.get('vat_id').value }}',
+                country_id: '{{ form.invoice.get('country_id').value }}',
+            }
+        };
 
-        <div class="card-body" v-show="grossPrice == 0">
-          <h1 class="text-center"><i class="fas fa-check text-primary"></i> Płatność nie jest wymagana</h1>
-
-          <div class="d-flex justify-content-center mt-3">
-            <button type="submit" class="btn btn-primary btn-lg" data-submit-state="Zapisywanie...">Zapisz i zakończ</button>
-          </div>
-        </div>
-      </div>
-    </main>
-
-    <aside class="col-md-3">
-      <div class="card card-default card-review" v-cloak>
-        <div class="card-header">
-          Twoja płatność obejmuje
-        </div>
-
-        <div class="card-body">
-          <div class="mt-1 mb-1 clearfix">
-            <div class="float-left">
-              Publikacja ogłoszenia ({{ payment.days }} dni)
-            </div>
-            <div class="float-right text-right">
-              ${ netPrice } zł
-            </div>
-          </div>
-
-          <div class="mt-1 mb-1 clearfix" v-if="coupon.amount > 0">
-            <div class="float-left">
-              Rabat
-            </div>
-            <div class="float-right text-right">
-              ${ coupon.amount } zł
-            </div>
-          </div>
-
-          {#<div class="margin-xs-top margin-xs-bottom clearfix">#}
-          {#<div class="float-left">#}
-          {#VAT (${ percentageVatRate }%)#}
-          {#</div>#}
-          {#<div class="float-right">#}
-          {#${ vatPrice } zł#}
-          {#</div>#}
-          {#</div>#}
-
-          <hr>
-
-          <div class="clearfix">
-            <div class="float-left">
-              <strong>Suma:</strong>
-            </div>
-            <div class="float-right">
-              <strong>${ grossPrice } zł</strong>
-            </div>
-          </div>
-
-          ${ coupon.shown }
-
-          <hr>
-
-          <div v-show="!coupon.code && show_coupon === false">
-            <span class="fa-stack">
-                <i class="far fa-circle fa-stack-2x"></i>
-                <i class="fas fa-dollar-sign fa-stack-1x"></i>
-            </span>
-
-            <a @click="show_coupon = true" style="text-decoration: underline; font-size: 14px; cursor: pointer">Masz kupon rabatowy?</a>
-          </div>
-
-          <div class="form-group" v-show="coupon.code || show_coupon === true">
-            {{ form_widget(form.coupon) }}
-            {{ form_error(form.coupon) }}
-          </div>
-        </div>
-
-        <div class="card-footer">
-          <div class="clearfix">
-            <div class="float-left">
-              <span>Do zapłaty:</span>
-            </div>
-            <div class="float-right">
-              <span>${ grossPrice } zł</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </aside>
-  </div>
-  {{ form_end() }}
+        var banks = [
+            {id: 25, _class: 'mtransfer'},
+            {id: 31, _class: 'ipko'},
+            {id: 20, _class: 'santander'},
+            {id: 65, _class: 'pekao'},
+            {id: 85, _class: 'millenium'},
+            {id: 88, _class: 'alior'},
+            {id: 26, _class: 'inteligo'},
+            {id: 45, _class: 'credit-agricole'},
+            {id: 121, _class: 't-mobile'},
+            {id: 110, _class: 'deutsche-bank'},
+            {id: 94, _class: 'eurobank'},
+            {id: 119, _class: 'citi'},
+            {id: 153, _class: 'getin'},
+            {id: 33, _class: 'bgz'},
+            {id: 48, _class: 'bos'},
+            {id: 141, _class: 'pocztowy-24'},
+            {id: 143, _class: 'bps'},
+            {id: 69, _class: 'volkswagen-bank'},
+            {id: 158, _class: 'noble'},
+            {id: 112, _class: 'ing'},
+            {id: 131, _class: 'plus'},
+            {id: 222, _class: 'nest'},
+            {id: 154, _class: 'blik'}
+        ]
+    </script>
 {% endblock %}
 
-{% block body %}
-  {{ parent() }}
-
-  <script>
-    var data = {
-      countries: {{ countries|json_encode|raw }},
-      calculator: {{ calculator|json_encode|raw }},
-      vat_rates: {{ vat_rates|json_encode|raw }},
-      default_vat_rate: {{ default_vat_rate }},
-      show_coupon: false,
-      coupon: {{ coupon|json_encode|raw }},
-      form: {
-        number: '{{ form.number.value }}',
-        name: '{{ form.name.value }}',
-        expiration_year: '{{ form.exp_year.value }}',
-        expiration_month: '{{ form.exp_month.value }}',
-        cvc: '{{ form.cvc.value }}',
-        payment_method: '{{ form.payment_method.value }}',
-        invoice: {
-          vat_id: '{{ form.invoice.get('vat_id').value }}',
-          country_id: '{{ form.invoice.get('country_id').value }}',
-        }
-      },
-      banks: [
-        {id: 25, _class: 'mtransfer'},
-        {id: 31, _class: 'ipko'},
-        {id: 20, _class: 'santander'},
-        {id: 65, _class: 'pekao'},
-        {id: 85, _class: 'millenium'},
-        {id: 88, _class: 'alior'},
-        {id: 26, _class: 'inteligo'},
-        {id: 45, _class: 'credit-agricole'},
-        {id: 121, _class: 't-mobile'},
-        {id: 110, _class: 'deutsche-bank'},
-        {id: 94, _class: 'eurobank'},
-        {id: 119, _class: 'citi'},
-        {id: 153, _class: 'getin'},
-        {id: 33, _class: 'bgz'},
-        {id: 48, _class: 'bos'},
-        {id: 141, _class: 'pocztowy-24'},
-        {id: 143, _class: 'bps'},
-        {id: 69, _class: 'volkswagen-bank'},
-        {id: 158, _class: 'noble'},
-        {id: 112, _class: 'ing'},
-        {id: 131, _class: 'plus'},
-        {id: 222, _class: 'nest'},
-        {id: 154, _class: 'blik'}
-      ]
-    };
-  </script>
-{% endblock %}

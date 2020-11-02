@@ -1,75 +1,75 @@
-import 'jquery.maskedinput/src/jquery.maskedinput';
-import Config from '../../libs/config';
+import Vue from 'vue';
+import VueMaskedInput from 'vue-masked-input';
+import VueFormGroup from '@/js/components/forms/form-group.vue';
+import VueText from '@/js/components/forms/text.vue';
+import VueSelect from '@/js/components/forms/select.vue';
+import VueCheckbox from '@/js/components/forms/checkbox.vue';
+import axios from 'axios';
 
-let vm = new Vue({
-  el: '#payment-form',
+new Vue({
+  el: '#js-payment',
   delimiters: ['${', '}'],
-  // data might be undefined on gateway page
-  data: 'data' in window ? window.data : {},
+  components: {
+    'vue-form-group': VueFormGroup,
+    'vue-text': VueText,
+    'vue-select': VueSelect,
+    'vue-checkbox': VueCheckbox,
+    'vue-masked-input': VueMaskedInput
+  },
+  data: {
+    countries: window.countries,
+    calculator: window.calculator,
+    varRates: window.vat_rates,
+    defaultVatRate: window.default_vat_rate,
+    form: window.form,
+    banks: window.banks,
+    coupon: {
+      code: null,
+      amount: 0
+    },
+    enableInvoice: true,
+    isCoupon: false
+  },
   methods: {
-    money: function (value) {
+    money(value) {
       return parseFloat(value).toFixed(2);
     },
-    calculate: function () {
+    calculate() {
       // if VAT ID is empty we must add VAT
-      if (this.form.invoice.vat_id === undefined || this.form.invoice.vat_id === null || this.form.invoice.vat_id.length === 0) {
-        this.calculator.vat_rate = this.default_vat_rate;
-      } else {
-        this.calculator.vat_rate = this.form.invoice.country_id ? this.vat_rates[this.form.invoice.country_id] : this.default_vat_rate;
-      }
+      this.calculator.vat_rate = !this.form.invoice.vat_id ?
+        this.default_vat_rate
+          : (this.form.invoice.country_id ? this.vat_rates[this.form.invoice.country_id] : this.default_vat_rate);
     },
-    submit: function (e) {
-      this.form.cvc = $('#cvc').val();
-      this.form.number = $('#credit-card').val();
+    submit(e) {
 
       this.$nextTick(() => {
         HTMLFormElement.prototype.submit.call(e.target);
       });
     },
-    validateCoupon: function (e) {
-      $.get(Config.get('validate_coupon_url'), {code: e.target.value}, result => {
-        if (typeof result.id !== 'undefined') {
-          this.coupon = result;
-        } else {
-          this.coupon = {code: null, amount: 0};
-        }
-      });
-    },
-    setPaymentMethod: function (payment_method) {
+    setPaymentMethod(payment_method) {
       this.form.payment_method = payment_method;
     }
   },
   computed: {
-    percentageVatRate: function () {
+    percentageVatRate() {
       return (this.calculator.vat_rate * 100) - 100;
     },
-    netPrice: function () {
+    netPrice() {
       return this.money(this.calculator.net_price);
     },
-    grossPrice: function () {
+    grossPrice() {
       return this.money(this.discountNetPrice * this.calculator.vat_rate);
     },
-    discountNetPrice: function () {
+    discountNetPrice() {
       return this.money(Math.max(0, this.calculator.net_price - this.coupon.amount));
     },
-    vatPrice: function () {
+    vatPrice() {
       return this.money(this.grossPrice - this.discountNetPrice);
     }
-  }
-});
-
-$(function ($) {
-  $('#enable-invoice')
-    .change(function () {
-      $('.invoice').toggle($(this).is(':checked'));
-    })
-    .trigger('change');
-
-  $("#credit-card").mask("9999-9999-9999-9999", {
-    completed: function () {
-      vm.$set(vm.form, 'number', this.val());
+  },
+  watch: {
+    'coupon.code': function(newValue) {
+      axios.get('/Praca/Coupon/Validate', {params: {code: newValue}}).then(result => this.coupon.amount = result.data);
     }
-  });
-
-  $("#cvc").mask("999");
+  }
 });

@@ -91,29 +91,24 @@ class PaymentController extends Controller
      * @param \Coyote\Payment $payment
      * @return \Illuminate\View\View
      */
-    public function index($payment)
+    public function index(Payment $payment)
     {
         $this->breadcrumb->push($payment->job->title, UrlBuilder::job($payment->job));
         $this->breadcrumb->push('Płatność');
 
-        /** @var PaymentForm $form */
-        $form = $this->getForm($payment);
-
         // calculate price based on payment details
         $calculator = CalculatorFactory::payment($payment);
-        $calculator->vatRate = $this->establishVatRate($form);
+//        $calculator->vatRate = $this->establishVatRate($form);
 
-        $coupon = $this->coupon->firstOrNew(['code' => $form->get('coupon')->getValue()]);
 
-        $this->request->attributes->set('validate_coupon_url', route('job.coupon'));
+        $countries = $this->country->pluck('name', 'id');
 
         return $this->view('job.payment', [
-            'form'              => $form,
             'payment'           => $payment,
             'vat_rates'         => $this->vatRates,
             'calculator'        => $calculator->toArray(),
             'default_vat_rate'  => $payment->plan->vat_rate,
-            'coupon'            => $coupon->toArray()
+            'countries'         => $countries
         ]);
     }
 
@@ -286,15 +281,6 @@ class PaymentController extends Controller
         return redirect()
             ->to(UrlBuilder::job($payment->job))
             ->with('success', trans('payment.success'));
-    }
-
-    /**
-     * @param \Coyote\Payment $payment
-     * @return \Coyote\Services\FormBuilder\Form
-     */
-    private function getForm($payment)
-    {
-        return $this->createForm(PaymentForm::class, $payment);
     }
 
     /**
