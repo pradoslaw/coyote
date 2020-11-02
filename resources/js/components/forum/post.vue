@@ -231,11 +231,11 @@
               </button>
             </template>
 
-            <button v-if="!post.deleted_at" @click="$emit('reply', post, false)" class="btn btn-sm btn-fast-reply" title="Odpowiedz na ten post">
+            <button v-if="!post.deleted_at" @click="$emit('reply', post, false)" class="btn btn-sm btn-fast-reply" title="Dodaj cytat do pola odpowiedzi">
               <i class="fa fa-fw fa-plus"></i>
             </button>
 
-            <button v-if="!post.deleted_at" @click="$emit('reply', post)" class="btn btn-sm" title="Dodaj cytat oraz przewiń do formularza">
+            <button v-if="!post.deleted_at" @click="$emit('reply', post)" class="btn btn-sm" title="Odpowiedz na ten post">
               <i class="fa fa-fw fa-quote-left"></i> <span class="d-none d-sm-inline">Odpowiedz</span>
             </button>
 
