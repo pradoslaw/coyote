@@ -60,4 +60,30 @@ class PaymentControllerTest extends TestCase
             ]
         ]);
     }
+
+    public function testSubmitValidFormWithoutInvoice()
+    {
+        $payment = $this->job->getUnpaidPayment();
+
+        $response = $this->actingAs($this->job->user)->json(
+            'POST',
+            "/Praca/Payment/{$payment->id}",
+            [
+                'payment_method' => 'card',
+                'price' => $payment->plan->gross_price,
+                'enable_invoice' => false,
+                'number' => '4012001038443335',
+                'name' => 'Jan Kowalski',
+                'cvc' => '123',
+                'exp' => '12/26'
+            ]
+        );
+
+        $response->assertStatus(200);
+        $url = $response->getContent();
+
+        $response = $this->get($url);
+
+        $response->assertSee($this->job->title);
+    }
 }

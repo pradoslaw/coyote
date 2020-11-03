@@ -63,6 +63,6 @@ class CreditCardValidator
 
         list($month, $year) = explode('/', $value);
 
-        return CreditCard::validDate($year, $month);
+        return CreditCard::validDate('20' . $year, sprintf('%02d', $month));
     }
 }

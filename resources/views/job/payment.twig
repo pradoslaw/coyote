@@ -50,22 +50,21 @@
                 <div id="card" v-show="form.payment_method === 'card'" class="card-body">
                   <div class="form-row">
                     <vue-form-group :errors="errors['name']" label="Nazwa (jaka widnieje na karcie kredytowej)" class="form-group col-md-6">
-                      <vue-text v-model="form.name" :is-invalid="'name' in errors"></vue-text>
+                      <vue-text v-model="form.name" :is-invalid="'name' in errors" name="name"></vue-text>
                     </vue-form-group>
 
                     <vue-form-group :errors="errors['number']" label="Numer karty kredytowej lub debetowej" class="form-group col-md-6">
-                      <vue-masked-input v-model="form.number" :class="{'is-invalid': 'number' in errors}" class="form-control" mask="1111-1111-1111-1111"></vue-masked-input>
+                      <vue-masked-input v-model="form.number" :class="{'is-invalid': 'number' in errors}" name="number" class="form-control" mask="1111-1111-1111-1111"></vue-masked-input>
                     </vue-form-group>
                   </div>
 
-
                   <div class="form-row">
                     <vue-form-group :errors="errors['exp']" label="Data ważności karty *" class="form-group col-md-6">
-                      <vue-masked-input :class="{'is-invalid': 'exp' in errors}" mask="11/11" placeholder="MM/YY" class="form-control"></vue-masked-input>
+                      <vue-masked-input :class="{'is-invalid': 'exp' in errors}" v-model="form.exp" name="exp" mask="11/11" placeholder="MM/YY" class="form-control"></vue-masked-input>
                     </vue-form-group>
 
                     <vue-form-group :errors="errors['cvc']" label="Kod zabezpieczeń (CVC)" class="form-group col-md-6">
-                      <vue-masked-input :class="{'is-invalid': 'cvc' in errors}" mask="111" class="form-control"></vue-masked-input>
+                      <vue-masked-input :class="{'is-invalid': 'cvc' in errors}" v-model="form.cvc" name="cvc" mask="111" class="form-control"></vue-masked-input>
                     </vue-form-group>
                   </div>
                 </div>
@@ -103,7 +102,7 @@
                 <div class="row">
                   <div class="col-sm-7">
                     <vue-form-group :errors="errors['invoice.name']" label="Nazwa firmy">
-                      <vue-text v-model="form.invoice.name" :is-invalid="'invoice.name' in errors"></vue-text>
+                      <vue-text v-model="form.invoice.name" :is-invalid="'invoice.name' in errors" name="invoice[name]"></vue-text>
                     </vue-form-group>
                   </div>
 
@@ -112,11 +111,11 @@
 
                     <div class="row">
                       <vue-form-group :errors="errors['invoice.country_id']" class="col-4">
-                        <vue-select :is-invalid="'invoice.country_id' in errors" :options="countries" v-model="form.invoice.country_id"></vue-select>
+                        <vue-select :is-invalid="'invoice.country_id' in errors" :options="countries" v-model="form.invoice.country_id" name="invoice[country_id]"></vue-select>
                       </vue-form-group>
 
                       <vue-form-group :errors="errors['invoice.vat_id']" class="col-8">
-                        <vue-text :is-invalid="'invoice.vat_id' in errors" v-model="form.invoice.vat_id"></vue-text>
+                        <vue-text :is-invalid="'invoice.vat_id' in errors" v-model="form.invoice.vat_id" name="invoice[vat_id]"></vue-text>
                       </vue-form-group>
                     </div>
                   </div>
@@ -125,19 +124,19 @@
                 <div class="row">
                   <div class="col-sm-4">
                     <vue-form-group :errors="errors['invoice.address']" label="Adres">
-                      <vue-text :is-invalid="'invoice.address' in errors" v-model="form.invoice.address"></vue-text>
+                      <vue-text :is-invalid="'invoice.address' in errors" v-model="form.invoice.address" name="invoice[address]"></vue-text>
                     </vue-form-group>
                   </div>
 
                   <div class="col-sm-3">
                     <vue-form-group :errors="errors['invoice.postal_code']" label="Kod pocztowy">
-                      <vue-text :is-invalid="'invoice.postal_code' in errors" v-model="form.invoice.postal_code"></vue-text>
+                      <vue-text :is-invalid="'invoice.postal_code' in errors" v-model="form.invoice.postal_code" name="invoice[postal_code]"></vue-text>
                     </vue-form-group>
                   </div>
 
                   <div class="col-sm-5">
                     <vue-form-group :errors="errors['invoice.city']" label="Miasto">
-                      <vue-text :is-invalid="'invoice.city' in errors" v-model="form.invoice.city"></vue-text>
+                      <vue-text :is-invalid="'invoice.city' in errors" v-model="form.invoice.city" name="invoice[city]"></vue-text>
                     </vue-form-group>
                   </div>
                 </div>
@@ -240,6 +239,8 @@
         </div>
       </div>
     </aside>
+
+    <vue-notifications position="bottom right" />
   </div>
 
   <script>

@@ -6,7 +6,12 @@ import VueSelect from '@/js/components/forms/select.vue';
 import VueCheckbox from '@/js/components/forms/checkbox.vue';
 import VueButton from '@/js/components/forms/button.vue';
 import axios from 'axios';
+import VueNotifications from "vue-notification";
+import {default as axiosErrorHandler} from "@/js/libs/axios-error-handler";
 
+Vue.use(VueNotifications, {componentName: 'vue-notifications'});
+
+axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 
 new Vue({
   el: '#js-payment',
@@ -44,11 +49,13 @@ new Vue({
     },
     submitForm(e) {
       const data = Object.assign(this.form, {price: this.grossPrice, enable_invoice: this.enableInvoice});
+
       this.errors = {};
+      this.isProcessing = true;
 
       axios.post(window.location.href, data)
-        .then(() => {
-
+        .then(result => {
+          window.location.href = result.data;
         })
         .catch(err => {
           if (err.response.status !== 422) {

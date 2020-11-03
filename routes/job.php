@@ -76,6 +76,12 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
 
     $this->post('Payment/{payment}', ['uses' => 'PaymentController@process', 'middleware' => 'auth']);
 
+    $this->get('Payment/{payment}/Gateway', [
+        'uses' => 'PaymentController@gateway',
+        'as' => 'gateway',
+        'middleware' => 'auth'
+    ]);
+
     $this->get('Payment/{payment}/Success', [
         'uses' => 'PaymentController@success',
         'as' => 'payment.success'
