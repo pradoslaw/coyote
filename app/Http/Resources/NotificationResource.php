@@ -59,7 +59,7 @@ class NotificationResource extends JsonResource
         } elseif ($count === 2) {
             $sender = $user->name . ' (oraz ' . $senders->last()->name . ')';
         } elseif ($count > 2) {
-            $sender = $user->name . ' (oraz ' . Declination::format($count, ['osoba', 'osoby', 'osób']) . ')';
+            $sender = $user->name . ' (oraz ' . Declination::format($count - 1, ['osoba', 'osoby', 'osób']) . ')';
         } else {
             $sender = $user->name;
         }

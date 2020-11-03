@@ -76,7 +76,7 @@ class Notification extends Model
     }
 
     /**
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function senders()
     {
