@@ -2,8 +2,11 @@
 
 namespace Tests\Feature\Controllers\Job;
 
+use Coyote\Coupon;
 use Coyote\Job;
+use Coyote\Plan;
 use Tests\TestCase;
+use Faker\Factory;
 
 class PaymentControllerTest extends TestCase
 {
@@ -56,7 +59,6 @@ class PaymentControllerTest extends TestCase
                 'invoice.city' => ['To pole jest wymagane.'],
                 'invoice.postal_code' => ['To pole jest wymagane.'],
                 'invoice.country_id' => ['To pole jest wymagane.'],
-
             ]
         ]);
     }
@@ -85,5 +87,80 @@ class PaymentControllerTest extends TestCase
         $response = $this->get($url);
 
         $response->assertSee($this->job->title);
+    }
+
+    public function testSubmitValidFormWithInvoice()
+    {
+        $faker = Factory::create();
+        $payment = $this->job->getUnpaidPayment();
+
+        $response = $this->actingAs($this->job->user)->json(
+            'POST',
+            "/Praca/Payment/{$payment->id}",
+            [
+                'payment_method' => 'card',
+                'price' => $payment->plan->gross_price,
+                'enable_invoice' => true,
+                'number' => '4012001038443335',
+                'name' => 'Jan Kowalski',
+                'cvc' => '123',
+                'exp' => '12/26',
+                'invoice' => [
+                    'name' => $name = $faker->company,
+                    'vat_id' => $vat = '123123123',
+                    'country_id' => $countryId = 14,
+                    'address' => $address = $faker->address,
+                    'city' => $city = $faker->city,
+                    'postal_code' => $postalCode = $faker->postcode
+                ]
+            ]
+        );
+
+        $response->assertStatus(200);
+        $url = $response->getContent();
+
+        $response = $this->get($url);
+
+        $response->assertSee($this->job->title);
+
+        $payment->refresh();
+
+        $this->assertEquals($payment->invoice->name, $name);
+        $this->assertEquals($payment->invoice->vat_id, $vat);
+        $this->assertEquals($payment->invoice->country_id, $countryId);
+        $this->assertEquals($payment->invoice->address, $address);
+        $this->assertEquals($payment->invoice->city, $city);
+        $this->assertEquals($payment->invoice->postal_code, $postalCode);
+    }
+
+    public function testSubmitFormWithCoupon()
+    {
+        $faker = Factory::create();
+
+        $payment = $this->job->getUnpaidPayment();
+        $payment->setRelation('plan', Plan::where('name', 'Premium')->get()->first());
+        $payment->save();
+
+        $coupon = Coupon::create(['amount' => 10, 'code' => $faker->randomAscii]);
+
+        $response = $this->actingAs($this->job->user)->json(
+            'POST',
+            "/Praca/Payment/{$payment->id}",
+            [
+                'payment_method' => 'card',
+                'price' => $payment->plan->gross_price,
+                'enable_invoice' => false,
+                'number' => '4012001038443335',
+                'name' => 'Jan Kowalski',
+                'cvc' => '123',
+                'exp' => '12/26',
+                'coupon' => $coupon->code
+            ]
+        );
+
+        $response->assertStatus(200);
+        $payment->refresh();
+
+        $this->assertEquals($payment->invoice->grossPrice(), $payment->plan->gross_price - 10);
     }
 }

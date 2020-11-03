@@ -24,6 +24,11 @@ new Vue({
     'vue-masked-input': VueMaskedInput,
     'vue-button': VueButton
   },
+  filters: {
+    money(value) {
+      return parseFloat(value).toFixed(2);
+    }
+  },
   data: {
     countries: window.countries,
     calculator: window.calculator,
@@ -40,9 +45,6 @@ new Vue({
     isProcessing: false
   },
   methods: {
-    money(value) {
-      return parseFloat(value).toFixed(2);
-    },
     calculate() {
       // if VAT ID is empty we must add VAT
       this.calculator.vat_rate = this.vat_rates[this.form.invoice.country_id];
@@ -75,16 +77,16 @@ new Vue({
       return (this.calculator.vat_rate * 100) - 100;
     },
     netPrice() {
-      return this.money(this.calculator.net_price);
+      return this.calculator.net_price;
     },
     grossPrice() {
-      return this.money(this.discountNetPrice * this.calculator.vat_rate);
+      return this.discountNetPrice * this.calculator.vat_rate;
     },
     discountNetPrice() {
-      return this.money(Math.max(0, this.calculator.net_price - this.coupon.amount));
+      return Math.max(0, this.calculator.net_price - this.coupon.amount);
     },
     vatPrice() {
-      return this.money(this.grossPrice - this.discountNetPrice);
+      return this.grossPrice - this.discountNetPrice;
     }
   },
   watch: {
@@ -92,6 +94,10 @@ new Vue({
       axios.get('/Praca/Coupon/Validate', {params: {code: newValue}}).then(result => {
         this.coupon.amount = result.data;
         this.form.coupon = newValue;
+
+        if (!this.grossPrice) {
+          this.enableInvoice = false;
+        }
       });
     }
   }

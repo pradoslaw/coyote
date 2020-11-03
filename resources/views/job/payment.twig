@@ -150,7 +150,6 @@
 
               <vue-button @click.native="submitForm" :disabled="isProcessing" class="btn btn-primary float-right">Zapłać i zapisz <i class="fas fa-angle-right"></i></vue-button>
             </div>
-
           </div>
         </div>
 
@@ -176,7 +175,7 @@
               Publikacja ogłoszenia ({{ payment.days }} dni)
             </div>
             <div class="float-right text-right">
-              ${ netPrice } zł
+              ${ netPrice | money } zł
             </div>
           </div>
 
@@ -185,7 +184,7 @@
               Rabat
             </div>
             <div class="float-right text-right">
-              ${ coupon.amount } zł
+              ${ coupon.amount | money } zł
             </div>
           </div>
 
@@ -205,7 +204,7 @@
               <strong>Suma:</strong>
             </div>
             <div class="float-right">
-              <strong>${ grossPrice } zł</strong>
+              <strong>${ grossPrice | money } zł</strong>
             </div>
           </div>
 
@@ -233,7 +232,7 @@
               <span>Do zapłaty:</span>
             </div>
             <div class="float-right">
-              <span>${ grossPrice } zł</span>
+              <span>${ grossPrice | money } zł</span>
             </div>
           </div>
         </div>
@@ -259,7 +258,6 @@
         country_id: '{{ firm.country_id }}',
       }
     };
-
 
     var banks = [
       {id: 25, _class: 'mtransfer'},

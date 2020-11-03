@@ -32,7 +32,7 @@ class PaymentRequest extends FormRequest
             'price' => 'required|numeric',
             'name' => 'bail|nullable|string|max:32',
             'number' => 'bail|nullable|string|cc_number',
-            'exp' => 'bail|cc_date',
+            'exp' => 'bail|nullable|cc_date',
             'cvc' => 'bail|nullable|cc_cvc:number',
             'coupon' => [
                 'nullable',
@@ -45,7 +45,7 @@ class PaymentRequest extends FormRequest
             'invoice.address' => 'bail|required_if:enable_invoice,true|nullable|string|max:200',
             'invoice.city' => 'bail|required_if:enable_invoice,true|nullable|string|max:200',
             'invoice.postal_code' => 'bail|required_if:enable_invoice,true|nullable|string|max:30',
-            'invoice.country_id' => ['required_if:enable_invoice,true', Rule::in(array_flip($codes))]
+            'invoice.country_id' => ['bail', 'required_if:enable_invoice,true', 'nullable', Rule::in(array_flip($codes))]
         ];
     }
 
