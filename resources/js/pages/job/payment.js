@@ -7,6 +7,7 @@ import VueCheckbox from '@/js/components/forms/checkbox.vue';
 import VueButton from '@/js/components/forms/button.vue';
 import axios from 'axios';
 
+
 new Vue({
   el: '#js-payment',
   delimiters: ['${', '}'],
@@ -22,16 +23,16 @@ new Vue({
     countries: window.countries,
     calculator: window.calculator,
     varRates: window.vat_rates,
-    // defaultVatRate: window.default_vat_rate,
     form: window.form,
-    // firm: window.firm,
     banks: window.banks,
     coupon: {
       code: null,
       amount: 0
     },
     enableInvoice: true,
-    isCoupon: false
+    isCoupon: false,
+    errors: {},
+    isProcessing: false
   },
   methods: {
     money(value) {
@@ -43,13 +44,23 @@ new Vue({
     },
     submitForm(e) {
       const data = Object.assign(this.form, {price: this.grossPrice, enable_invoice: this.enableInvoice});
+      this.errors = {};
 
-      axios.post('', data).then(() => {
+      axios.post(window.location.href, data)
+        .then(() => {
 
-      })
+        })
+        .catch(err => {
+          if (err.response.status !== 422) {
+            return;
+          }
+
+          this.errors = err.response.data.errors;
+        })
+        .finally(() => this.isProcessing = false);
     },
-    setPaymentMethod(payment_method) {
-      this.form.payment_method = payment_method;
+    setPaymentMethod(method) {
+      this.form.payment_method = method;
     }
   },
   computed: {

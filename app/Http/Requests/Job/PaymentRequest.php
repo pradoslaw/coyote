@@ -40,12 +40,12 @@ class PaymentRequest extends FormRequest
             ],
             'transfer_method' => 'bail|int',
 
-            'invoice.name' => 'bail|required_with:enable_invoice|nullable|string|max:200',
+            'invoice.name' => 'bail|required_if:enable_invoice,true|nullable|string|max:200',
             'invoice.vat_id' => 'nullable|string|max:20',
-            'invoice.address' => 'bail|required_with:enable_invoice|nullable|string|max:200',
-            'invoice.city' => 'bail|required_with:enable_invoice|nullable|string|max:200',
-            'invoice.postal_code' => 'bail|required_with:enable_invoice|nullable|string|max:30',
-            'invoice.country_id' => ['required', Rule::in($codes)]
+            'invoice.address' => 'bail|required_if:enable_invoice,true|nullable|string|max:200',
+            'invoice.city' => 'bail|required_if:enable_invoice,true|nullable|string|max:200',
+            'invoice.postal_code' => 'bail|required_if:enable_invoice,true|nullable|string|max:30',
+            'invoice.country_id' => ['required_if:enable_invoice,true', Rule::in(array_flip($codes))]
         ];
     }
 
