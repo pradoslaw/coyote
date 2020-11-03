@@ -16,7 +16,11 @@ const state: Paginator = {
 };
 
 const getters = {
-  microblogs: state => Object.values(state.data).sort((a, b) => (a as Microblog).id! > (b as Microblog).id! ? -1 : 1),
+  microblogs: state => Object
+    .values(state.data)
+    .sort((a, b) => (b as Microblog).id! - (a as Microblog).id!)
+    .sort((a, b) => +(b as Microblog).is_sponsored! - +(a as Microblog).is_sponsored!),
+
   exists: state => (id: number) => id in state.data,
   currentPage: state => state.current_page,
   totalPages: state => state.last_page

@@ -29,7 +29,7 @@ class OrderById extends Criteria
     public function apply($model, Repository $repository)
     {
         if ($this->withPremium) {
-            $model->orderBy('microblogs.is_sponsored', 'DESC');
+            $model = $model->orderBy('microblogs.is_sponsored', 'DESC');
         }
 
         return $model->orderBy('microblogs.id', 'DESC');
