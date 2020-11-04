@@ -193,4 +193,56 @@ class PaymentControllerTest extends TestCase
 
         $this->assertEquals($payment->invoice->grossPrice(), $payment->plan->gross_price - 10);
     }
+
+    public function testSubmitFormWithTotalDiscount()
+    {
+        $faker = Factory::create();
+        /** @var Plan $plan */
+        $plan = Plan::where('name', 'Premium')->get()->first();
+
+        $payment = $this->job->getUnpaidPayment();
+        $payment->setRelation('plan', $plan);
+        $payment->save();
+
+        $coupon = Coupon::create(['amount' => $plan->gross_price, 'code' => $faker->randomAscii]);
+
+        $response = $this->actingAs($this->job->user)->json(
+            'POST',
+            "/Praca/Payment/{$payment->id}",
+            [
+                'payment_method' => 'card',
+                'price' => 0,
+                'enable_invoice' => false,
+                'coupon' => $coupon->code
+            ]
+        );
+
+        $response->assertStatus(200);
+        $payment->refresh();
+
+        $this->assertEquals($payment->invoice->grossPrice(), 0);
+    }
+
+    public function testSubmitFormWithTransferMethod()
+    {
+        $payment = $this->job->getUnpaidPayment();
+
+        $response = $this->actingAs($this->job->user)->json(
+            'POST',
+            "/Praca/Payment/{$payment->id}",
+            [
+                'payment_method' => 'transfer',
+                'price' => $payment->plan->gross_price,
+                'enable_invoice' => false,
+                'transfer_method' => 25
+            ]
+        );
+
+        $response->assertStatus(200);
+        $url = $response->getContent();
+
+        $response = $this->get($url);
+
+        $response->assertSee('Ładowanie');
+    }
 }
