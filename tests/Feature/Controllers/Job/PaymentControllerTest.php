@@ -94,7 +94,29 @@ class PaymentControllerTest extends TestCase
 
     public function testSubmitFormWithInvalidExpDate()
     {
+        $payment = $this->job->getUnpaidPayment();
 
+        $response = $this->actingAs($this->job->user)->json(
+            'POST',
+            "/Praca/Payment/{$payment->id}",
+            [
+                'payment_method' => 'card',
+                'price' => $payment->plan->gross_price,
+                'enable_invoice' => false,
+                'number' => '4012001038443335',
+                'name' => 'Jan Kowalski',
+                'cvc' => '123',
+                'exp' => '12/19'
+            ]
+        );
+
+        $response->assertStatus(422);
+        $response->assertJsonFragment([
+            'message' => 'The given data was invalid.',
+            'errors' => [
+                'exp' => ['Upłynęła data ważności karty.']
+            ]
+        ]);
     }
 
     public function testSubmitValidFormWithInvoice()

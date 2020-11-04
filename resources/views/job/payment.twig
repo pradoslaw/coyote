@@ -23,9 +23,9 @@
                   <a @click="setPaymentMethod('card')" href="javascript:" class="nav-link">
                     <strong>Karta kredytowa/debetowa</strong>
 
-                    <img src="{{ cdn('img/mastercard.png') }}">
-                    <img src="{{ cdn('img/visa.png') }}">
-                    <img src="{{ cdn('img/maestro.png') }}">
+                    <img src="/img/mastercard.png">
+                    <img src="/img/visa.png">
+                    <img src="/img/maestro.png">
 
                     <small class="text-muted" style="display: block; margin-top: 9px; font-size: 10px;">Powered by PayLane</small>
                   </a>
@@ -35,9 +35,9 @@
                   <a @click="setPaymentMethod('transfer')" href="javascript:" class="nav-link">
                     <strong class="mb-2">Przelew bankowy</strong>
 
-                    <img src="{{ cdn('img/ipko.png') }}" class="mr-1">
-                    <img src="{{ cdn('img/mbank.png') }}" class="mr-1">
-                    <img src="{{ cdn('img/pekao.png') }}" class="mr-1">
+                    <img src="/img/ipko.png" class="mr-1">
+                    <img src="/img/mbank.png" class="mr-1">
+                    <img src="/img/pekao.png" class="mr-1">
 
                     <i class="fas fa-ellipsis-h"></i>
                   </a>
@@ -71,12 +71,10 @@
 
                 <div id="transfer" v-show="form.payment_method === 'transfer'" class="card-body">
                   <div class="row">
-                    <p class="has-error text-center">{{ form_error(form.transfer_method) }}</p>
-
                     <div class="col-sm-3 text-center mb-2" v-for="bank in banks">
                       <label class="bank-logo" :class="bank._class" :for="bank._class"></label>
 
-                      <input type="radio" name="transfer_method" :value="bank.id" :id="bank._class">
+                      <input type="radio" name="transfer_method" v-model="form.transfer_method" :value="bank.id" :id="bank._class">
                     </div>
                   </div>
                 </div>
@@ -253,6 +251,7 @@
       exp: '',
       cvc: '',
       payment_method: 'card',
+      transfer_method: null,
       invoice: {
         vat_id: '{{ firm.vat_id }}',
         country_id: '{{ firm.country_id }}',

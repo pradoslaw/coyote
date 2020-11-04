@@ -73,7 +73,7 @@ class PaymentRequest extends FormRequest
     public function messages()
     {
         return [
-            'transfer_method.required' => 'Przy tej formy płatności należy wybrać bank.',
+            'transfer_method.required' => 'Przy tej formie płatności należy wybrać bank.',
         ];
     }
 
