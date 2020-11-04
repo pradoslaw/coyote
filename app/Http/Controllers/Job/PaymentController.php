@@ -4,13 +4,13 @@ namespace Coyote\Http\Controllers\Job;
 
 use Coyote\Events\PaymentPaid;
 use Coyote\Exceptions\PaymentFailedException;
+use Coyote\Firm;
 use Coyote\Http\Controllers\Controller;
-use Coyote\Http\Forms\Job\PaymentForm;
+use Coyote\Http\Requests\Job\PaymentRequest;
 use Coyote\Payment;
 use Coyote\Repositories\Contracts\CountryRepositoryInterface as CountryRepository;
 use Coyote\Repositories\Contracts\CouponRepositoryInterface as CouponRepository;
 use Coyote\Repositories\Contracts\PaymentRepositoryInterface as PaymentRepository;
-use Coyote\Services\FormBuilder\FormInterface;
 use Coyote\Services\Invoice\CalculatorFactory;
 use Coyote\Services\UrlBuilder\UrlBuilder;
 use Coyote\Services\Invoice\Generator as InvoiceGenerator;
@@ -80,80 +80,68 @@ class PaymentController extends Controller
         $this->vatRates = $this->country->vatRatesList();
     }
 
-    private function establishVatRate(FormInterface $form)
-    {
-        $invoice = $form->get('invoice')->getValue();
-
-        return isset($this->vatRates[$invoice['country_id']]) && $invoice['vat_id'] ? $this->vatRates[$invoice['country_id']] : config('vendor.default_vat_rate');
-    }
-
     /**
      * @param \Coyote\Payment $payment
      * @return \Illuminate\View\View
      */
-    public function index($payment)
+    public function index(Payment $payment)
     {
         $this->breadcrumb->push($payment->job->title, UrlBuilder::job($payment->job));
         $this->breadcrumb->push('Płatność');
 
-        /** @var PaymentForm $form */
-        $form = $this->getForm($payment);
+        $firm = $payment->job->firm ?? new Firm();
+
+        if (empty($firm->country_id)) {
+            $geoIp = app('geo-ip');
+            $result = $geoIp->ip($this->request->ip());
+
+            $firm->country = $result->country_code ?? '';
+        }
 
         // calculate price based on payment details
         $calculator = CalculatorFactory::payment($payment);
-        $calculator->vatRate = $this->establishVatRate($form);
 
-        $coupon = $this->coupon->firstOrNew(['code' => $form->get('coupon')->getValue()]);
-
-        $this->request->attributes->set('validate_coupon_url', route('job.coupon'));
+        $countries = $this->country->pluck('code', 'id');
 
         return $this->view('job.payment', [
-            'form'              => $form,
             'payment'           => $payment,
             'vat_rates'         => $this->vatRates,
             'calculator'        => $calculator->toArray(),
-            'default_vat_rate'  => $payment->plan->vat_rate,
-            'coupon'            => $coupon->toArray()
+            'firm'              => $firm,
+            'countries'         => $countries
         ]);
     }
 
     /**
-     * @param \Coyote\Payment $payment
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Exception
+     * @param PaymentRequest $request
+     * @param Payment $payment
+     * @return string
      */
-    public function process($payment)
+    public function process(PaymentRequest $request, Payment $payment)
     {
-        /** @var PaymentForm $form */
-        $form = $this->getForm($payment);
-        $form->validate();
-
         $calculator = CalculatorFactory::payment($payment);
-        $calculator->vatRate = $this->establishVatRate($form);
 
-        $coupon = $this->coupon->findBy('code', $form->get('coupon')->getValue());
+        $coupon = $this->coupon->findBy('code', $request->input('coupon'));
         $calculator->setCoupon($coupon);
 
+        $payment->coupon_id = $coupon->id ?? null;
+
         // begin db transaction
-        return $this->handlePayment(function () use ($payment, $form, $calculator, $coupon) {
+        $response = $this->handlePayment(function () use ($payment, $request, $calculator, $coupon) {
             // save invoice data. keep in mind that we do not setup invoice number until payment is done.
             /** @var \Coyote\Invoice $invoice */
             $invoice = $this->invoice->create(
-                array_merge($form->get('enable_invoice')->isChecked() ? $form->all()['invoice'] : [], ['user_id' => $this->auth->id]),
+                array_merge($request->input('enable_invoice') ? $request->input('invoice') : [], ['user_id' => $this->auth->id]),
                 $payment,
                 $calculator
             );
-
-            if ($coupon) {
-                $payment->coupon_id = $coupon->id;
-            }
 
             // associate invoice with payment
             $payment->invoice()->associate($invoice);
 
             if ($payment->job->firm_id) {
                 // update firm's VAT ID
-                $payment->job->firm->vat_id = $form->getRequest()->input('invoice.vat_id');
+                $payment->job->firm->vat_id = $request->input('invoice.vat_id');
                 $payment->job->firm->save();
             }
 
@@ -164,8 +152,10 @@ class PaymentController extends Controller
             }
 
             // make a payment
-            return $this->{'make' . ucfirst($form->get('payment_method')->getValue()) . 'Transaction'}($payment);
+            return $this->{'make' . ucfirst($request->input('payment_method')) . 'Transaction'}($payment);
         });
+
+        return $response->getTargetUrl();
     }
 
     /**
@@ -265,7 +255,10 @@ class PaymentController extends Controller
                 $error = $result['error'];
                 logger()->error(var_export($result, true));
 
-                throw (new PaymentFailedException($error['error_description'], $error['error_number']))->setPayment($payment);
+                throw new PaymentFailedException(
+                    trans('payment.validation', ['message' => $error['error_description']]),
+                    $error['error_number']
+                );
             }
 
             return $this->successfulTransaction($payment);
@@ -289,15 +282,6 @@ class PaymentController extends Controller
     }
 
     /**
-     * @param \Coyote\Payment $payment
-     * @return \Coyote\Services\FormBuilder\Form
-     */
-    private function getForm($payment)
-    {
-        return $this->createForm(PaymentForm::class, $payment);
-    }
-
-    /**
      * @param Payment $payment
      * @throws PaymentFailedException
      * @return \Illuminate\Http\RedirectResponse
@@ -305,6 +289,8 @@ class PaymentController extends Controller
     private function makeCardTransaction(Payment $payment)
     {
         $client = new \PayLaneRestClient(config('services.paylane.username'), config('services.paylane.password'));
+
+        list($month, $year) = explode('/', $this->request->input('exp'));
 
         $params = [
             'sale' => [
@@ -320,8 +306,8 @@ class PaymentController extends Controller
             'card' => [
                 'card_number'       => str_replace('-', '', $this->request->input('number')),
                 'name_on_card'      => $this->request->input('name'),
-                'expiration_month'  => sprintf('%02d', $this->request->input('exp_month')),
-                'expiration_year'   => $this->request->input('exp_year'),
+                'expiration_month'  => sprintf('%02d', $month),
+                'expiration_year'   => '20' . $year,
                 'card_code'         => $this->request->input('cvc'),
             ],
             'back_url'              => route('job.payment.3dsecure')
@@ -334,7 +320,10 @@ class PaymentController extends Controller
             $error = $result['error'];
             logger()->error(var_export($result, true));
 
-            throw new PaymentFailedException($error['error_description'], $error['error_number']);
+            throw new PaymentFailedException(
+                trans('payment.validation', ['message' => $error['error_description']]),
+                $error['error_number']
+            );
         }
 
         if ($result['is_card_enrolled']) {
@@ -350,13 +339,18 @@ class PaymentController extends Controller
 
     /**
      * @param Payment $payment
-     * @return \Illuminate\View\View
+     * @return \Illuminate\Http\RedirectResponse
      */
     private function makeTransferTransaction(Payment $payment)
     {
         $payment->session_id = str_random(90);
         $payment->save();
 
+        return redirect()->route('job.gateway', [$payment]);
+    }
+
+    public function gateway(Payment $payment)
+    {
         return $this->view('job.gateway', [
             'payment' => $payment
         ]);
@@ -376,9 +370,9 @@ class PaymentController extends Controller
 
             return $result;
         } catch (PaymentFailedException $e) {
-            return $this->handlePaymentException($e, trans('payment.validation', ['message' => $e->getMessage()]));
+            return $this->handlePaymentException($e);
         } catch (\Exception $e) {
-            return $this->handlePaymentException($e, trans('payment.unhandled'));
+            return $this->handlePaymentException($e);
         }
     }
 
@@ -386,17 +380,10 @@ class PaymentController extends Controller
      * Handle payment exception. Remove sensitive data before saving to logs and sending to sentry.
      *
      * @param \Exception $exception
-     * @param string $message
      * @return \Illuminate\Http\RedirectResponse
      */
-    private function handlePaymentException($exception, $message)
+    private function handlePaymentException($exception)
     {
-        $back = $exception instanceof PaymentFailedException && $exception->payment instanceof Payment
-                ? redirect()->route('job.payment', [$exception->payment])
-                    : back()->withInput();
-
-        $back->with('error', $message);
-
         // remove sensitive data
         $this->request->merge(['number' => '***', 'cvc' => '***']);
         $_POST['number'] = $_POST['cvc'] = '***';
@@ -409,6 +396,6 @@ class PaymentController extends Controller
             app('sentry')->captureException($exception);
         }
 
-        return $back;
+        throw $exception;
     }
 }

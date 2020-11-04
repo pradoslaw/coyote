@@ -59,7 +59,7 @@ return [
     'numeric'              => 'The :attribute must be a number.',
     'regex'                => 'The :attribute format is invalid.',
     'required'             => 'Pole :attribute jest wymagane.',
-    'required_if'          => 'Pole :attribute jest wymagane jeżeli :other to :value.',
+    'required_if'          => 'To pole jest wymagane.',
     'required_with'        => 'To pole jest wymagane.',
     'required_with_all'    => 'The :attribute field is required when :values is present.',
     'required_without'     => 'The :attribute field is required when :values is not present.',

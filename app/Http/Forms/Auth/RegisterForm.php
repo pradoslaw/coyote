@@ -17,7 +17,7 @@ class RegisterForm extends Form implements ValidatesWhenSubmitted
     public function buildForm()
     {
         $this
-            ->setAttr(['id' => 'register-form'])
+            ->setAttr(['id' => 'js-register-form'])
             ->add('name', 'text', [
                 'rules' => 'required|min:2|max:28|username|user_unique',
                 'label' => 'Nazwa użytkownika',
@@ -47,7 +47,6 @@ class RegisterForm extends Form implements ValidatesWhenSubmitted
                 'attr' => [
                     'class' => 'g-recaptcha btn btn-primary',
                     'data-sitekey' => config('services.recaptcha.key'),
-                    'data-callback' => 'onSubmit',
                     'data-submit-state' => 'Rejestracja...'
                 ]
             ]);

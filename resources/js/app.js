@@ -7,7 +7,7 @@ import './libs/timeago.js';
 import './components/vcard.js';
 import './plugins/flags.ts';
 import './plugins/sociale.js';
-import './plugins/geo-ip';
+import 'popper.js';
 import './bootstrap';
 
 import Config from './libs/config';
@@ -17,7 +17,7 @@ import Prism from 'prismjs';
 
 Prism.highlightAll();
 
-$(function () {
+(function () {
   'use strict';
 
   setToken(Config.csrfToken());
@@ -27,20 +27,8 @@ $(function () {
   r.on(['/User', '/User/Skills'], () => {
     require('./pages/user');
   })
-  .on('/Praca/Application/*', () => {
-    require.ensure([], require => require('./pages/job/application'), 'application');
-  })
-  .on('/Praca/Payment/*', () => {
-    require.ensure([], require => require('./pages/job/payment'), 'payment');
-  })
-  .on('/Praca/Oferta', () => {
-    require.ensure([], require => require('./pages/job/business'), 'business');
-  })
-  .on(['/Praca', '/Praca/Miasto/*', '/Praca/Technologia/*', '/Praca/Zdalna', '/Praca/Firma/*'], () => {
-    require('./pages/job/homepage');
-  })
-  .on('/Praca/\\d+\\-*', () => {
-    require('./pages/job/offer');
+  r.on(['/Register', '/Login'], () => {
+    require('./pages/auth');
   })
   .on('/Adm/Firewall/*', () => {
     require.ensure(['flatpickr', 'flatpickr/dist/l10n/pl'], require => {
@@ -70,4 +58,4 @@ $(function () {
 
   // must be at the end so other vue components can render
   require('./plugins/popover');
-});
+})();

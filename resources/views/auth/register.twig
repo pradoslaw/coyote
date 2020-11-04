@@ -56,25 +56,5 @@
 {% block head %}
   {{ parent() }}
 
-  <script src="https://www.google.com/recaptcha/api.js"></script>
-{% endblock %}
-
-{% block body %}
-  {{ parent() }}
-
-  <script type="text/javascript">
-    function onSubmit(token) {
-      $('#register-form').find(':submit').disable();
-      document.getElementById("register-form").submit();
-    }
-
-    $(function () {
-      $('#box-register').find('form').append('<input style="display: none" type="checkbox" name="human" value="1" checked="checked">');
-
-      $('.btn-github, .btn-google, .btn-fb').click(function () {
-        $(this).text('Logowanie...');
-        window.location.href = $(this).data('url');
-      });
-    });
-  </script>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 {% endblock %}

@@ -11,11 +11,6 @@
 
     <link rel="apple-touch-icon" href="{{ cdn('img/apple-touch.png') }}">
     <link rel="shortcut icon" href="{{ cdn('img/favicon.png') }}" type="image/png">
-
-    <script type="text/javascript">var __INITIAL_STATE = {{ __INITIAL_STATE|default('{}')|raw }};</script>
-
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script src="{{ cdn('js/app.js') }}"></script>
   </head>
   <body>
     <div id="container">
@@ -28,15 +23,15 @@
           {% endif %}
 
           {{ form_open({'url': route('adm.home'), 'method': 'POST'}) }}
-          <div class="form-group">
-            {{ form_password('password', {'class': 'form-control', 'placeholder': 'Hasło', 'autofocus': 'autofocus'}) }}
-          </div>
+            <div class="form-group">
+              {{ form_password('password', {'class': 'form-control', 'placeholder': 'Hasło', 'autofocus': 'autofocus'}) }}
+            </div>
 
-          <div class="form-group">
-            <button type="submit" class="btn btn-primary col-12" data-submit-state="Logowanie...">
-              Logowanie
-            </button>
-          </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary col-12" data-submit-state="Logowanie...">
+                Logowanie
+              </button>
+            </div>
           {{ form_close() }}
         </div>
       </div>

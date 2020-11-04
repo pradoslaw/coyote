@@ -1,75 +1,104 @@
-import 'jquery.maskedinput/src/jquery.maskedinput';
-import Config from '../../libs/config';
+import Vue from 'vue';
+import VueMaskedInput from 'vue-masked-input';
+import VueFormGroup from '@/js/components/forms/form-group.vue';
+import VueText from '@/js/components/forms/text.vue';
+import VueSelect from '@/js/components/forms/select.vue';
+import VueCheckbox from '@/js/components/forms/checkbox.vue';
+import VueButton from '@/js/components/forms/button.vue';
+import axios from 'axios';
+import VueNotifications from "vue-notification";
+import {default as axiosErrorHandler} from "@/js/libs/axios-error-handler";
 
-let vm = new Vue({
-  el: '#payment-form',
+Vue.use(VueNotifications, {componentName: 'vue-notifications'});
+
+axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
+
+new Vue({
+  el: '#js-payment',
   delimiters: ['${', '}'],
-  // data might be undefined on gateway page
-  data: 'data' in window ? window.data : {},
-  methods: {
-    money: function (value) {
+  components: {
+    'vue-form-group': VueFormGroup,
+    'vue-text': VueText,
+    'vue-select': VueSelect,
+    'vue-checkbox': VueCheckbox,
+    'vue-masked-input': VueMaskedInput,
+    'vue-button': VueButton
+  },
+  filters: {
+    money(value) {
       return parseFloat(value).toFixed(2);
+    }
+  },
+  data: {
+    countries: window.countries,
+    calculator: window.calculator,
+    varRates: window.vat_rates,
+    form: window.form,
+    banks: window.banks,
+    coupon: {
+      code: null,
+      amount: 0
     },
-    calculate: function () {
+    enableInvoice: true,
+    isCoupon: false,
+    errors: {},
+    isProcessing: false
+  },
+  methods: {
+    calculate() {
       // if VAT ID is empty we must add VAT
-      if (this.form.invoice.vat_id === undefined || this.form.invoice.vat_id === null || this.form.invoice.vat_id.length === 0) {
-        this.calculator.vat_rate = this.default_vat_rate;
-      } else {
-        this.calculator.vat_rate = this.form.invoice.country_id ? this.vat_rates[this.form.invoice.country_id] : this.default_vat_rate;
-      }
+      this.calculator.vat_rate = this.vat_rates[this.form.invoice.country_id];
     },
-    submit: function (e) {
-      this.form.cvc = $('#cvc').val();
-      this.form.number = $('#credit-card').val();
+    submitForm(e) {
+      const data = Object.assign(this.form, {price: this.grossPrice, enable_invoice: this.enableInvoice});
 
-      this.$nextTick(() => {
-        HTMLFormElement.prototype.submit.call(e.target);
-      });
+      this.errors = {};
+      this.isProcessing = true;
+
+      axios.post(window.location.href, data)
+        .then(result => {
+          window.location.href = result.data;
+        })
+        .catch(err => {
+          if (err.response.status !== 422) {
+            return;
+          }
+
+          this.errors = err.response.data.errors;
+        })
+        .finally(() => this.isProcessing = false);
     },
-    validateCoupon: function (e) {
-      $.get(Config.get('validate_coupon_url'), {code: e.target.value}, result => {
-        if (typeof result.id !== 'undefined') {
-          this.coupon = result;
-        } else {
-          this.coupon = {code: null, amount: 0};
-        }
-      });
-    },
-    setPaymentMethod: function (payment_method) {
-      this.form.payment_method = payment_method;
+    setPaymentMethod(method) {
+      this.form.payment_method = method;
     }
   },
   computed: {
-    percentageVatRate: function () {
+    percentageVatRate() {
       return (this.calculator.vat_rate * 100) - 100;
     },
-    netPrice: function () {
-      return this.money(this.calculator.net_price);
+    netPrice() {
+      return this.calculator.net_price;
     },
-    grossPrice: function () {
-      return this.money(this.discountNetPrice * this.calculator.vat_rate);
+    grossPrice() {
+      return this.discountNetPrice * this.calculator.vat_rate;
     },
-    discountNetPrice: function () {
-      return this.money(Math.max(0, this.calculator.net_price - this.coupon.amount));
+    discountNetPrice() {
+      return Math.max(0, this.calculator.net_price - this.coupon.amount);
     },
-    vatPrice: function () {
-      return this.money(this.grossPrice - this.discountNetPrice);
+    vatPrice() {
+      return this.grossPrice - this.discountNetPrice;
+    }
+  },
+  watch: {
+    'coupon.code': function(newValue) {
+      axios.get('/Praca/Coupon/Validate', {params: {code: newValue}}).then(result => {
+        this.coupon.amount = result.data;
+        this.form.coupon = newValue;
+
+        if (!this.grossPrice) {
+          this.enableInvoice = false;
+        }
+      });
     }
   }
-});
-
-$(function ($) {
-  $('#enable-invoice')
-    .change(function () {
-      $('.invoice').toggle($(this).is(':checked'));
-    })
-    .trigger('change');
-
-  $("#credit-card").mask("9999-9999-9999-9999", {
-    completed: function () {
-      vm.$set(vm.form, 'number', this.val());
-    }
-  });
-
-  $("#cvc").mask("999");
 });

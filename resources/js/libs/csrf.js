@@ -5,10 +5,13 @@ export default function setToken(token) {
   axios.defaults.headers.common['X-CSRF-TOKEN'] = token;
   axios.defaults.headers.common['X-Socket-ID'] = SOCKET_ID;
 
-  // deprecated
-  $.ajaxSetup({
-    headers: {
-      'X-CSRF-TOKEN': token
-    }
-  });
+  if (window.$ !== undefined) {
+    // deprecated
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': token
+      }
+    });
+  }
+
 }

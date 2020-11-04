@@ -93,7 +93,7 @@
             <ul id="nav-auth" class="nav-auth navbar-nav order-2"></ul>
 
             <div class="dropdown nav-avatar order-2">
-              <a href="javascript:" class="dropdown-toggle img-thumbnail d-block" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" style="width: 35px">
+              <a href="#" class="dropdown-toggle img-thumbnail d-block i-35" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                 <img alt="{{ user('name') }}" src="{{ user_photo(user('photo')) }}" style="width: 100%">
               </a>
 
@@ -113,7 +113,7 @@
 
                 <div class="dropdown-divider"></div>
 
-                <a href="javascript:" class="dropdown-item js-change-menu position-relative">Nowe menu <sup class="badge badge-pill" style="top: -3px; right: 14px;">Beta</sup></a>
+                <a href="javascript:" id="js-change-menu" class="dropdown-item position-relative">Nowe menu <sup class="badge badge-pill" style="top: -3px; right: 14px;">Beta</sup></a>
 
                 <div class="dropdown-divider"></div>
 
@@ -207,7 +207,7 @@
 
       {{ widgets.vue() }}
 
-      <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
       <script src="{{ cdn('js/runtime.js') }}"></script>
       <script src="{{ cdn('js/vendor.js') }}"></script>
       <script src="{{ cdn('js/app.js') }}"></script>

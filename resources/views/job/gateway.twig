@@ -32,8 +32,8 @@
   {{ parent() }}
 
   <script>
-    $(function () {
-      $('#gateway-form').submit();
-    });
+    (function () {
+      document.getElementById('gateway-form').submit();
+    })();
   </script>
 {% endblock %}

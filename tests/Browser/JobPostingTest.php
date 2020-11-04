@@ -222,13 +222,13 @@ class JobPostingTest extends DuskTestCase
                 ->click('label[for="is_private_1"]')
                 ->press('Zapisz i zakończ')
                 ->waitForText('Płatność poprzez bezpieczne połączenie')
-                ->assertSelected('invoice[country_id]', Country::where('name', 'Polska')->value('id'))
                 ->click('label[for="enable-invoice"]')
                 ->type('number', '4012001038443335')
                 ->type('name', 'Jan Kowalski')
                 ->type('cvc', '123')
+                ->type('exp', '12/24')
                 ->press('Zapłać i zapisz')
-                ->assertSee('Dziękujemy! Płatność została zaksięgowana. Za chwilę dostaniesz potwierdzenie na adres e-mail.');
+                ->waitForText('Dziękujemy! Płatność została zaksięgowana. Za chwilę dostaniesz potwierdzenie na adres e-mail.');
 
             /** @var Job $job */
             $job = Job::where('title', $title)->where('is_publish', 1)->first();

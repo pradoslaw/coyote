@@ -35,7 +35,8 @@
           return this.value !== undefined ? this.value : null;
         },
         set: function (value) {
-          this.$emit('update:value', value);
+          this.$emit('update:value', value); // deprecated
+          this.$emit('input', value);
         }
       }
     }

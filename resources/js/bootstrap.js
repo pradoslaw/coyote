@@ -1,6 +1,6 @@
-import 'bootstrap/js/dist/tooltip';
-import 'bootstrap/js/dist/collapse';
-import 'bootstrap/js/dist/dropdown';
-import 'bootstrap/js/dist/modal';
-import 'bootstrap/js/dist/tab';
+import 'bootstrap5/js/dist/tooltip';
+import 'bootstrap5/js/dist/collapse';
+import 'bootstrap5/js/dist/dropdown';
+import 'bootstrap5/js/dist/modal';
+import 'bootstrap5/js/dist/tab';
 
