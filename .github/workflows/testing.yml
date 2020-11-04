@@ -8,7 +8,8 @@ jobs:
         steps:
             - uses: actions/checkout@v2
 
-            #- name: Add user
+            - name: Add user
+              run: cat /etc/passwd
             #  run: sudo addgroup --gid 1000 nginx && sudo useradd --uid 1000 -g nginx nginx
 
             - name: Setup config
