@@ -3,6 +3,7 @@
 namespace Tests\Browser;
 
 use Coyote\User;
+use Faker\Factory;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 
@@ -72,6 +73,29 @@ class LoginTest extends DuskTestCase
                 ->type('password', '1235')
                 ->press('Logowanie')
                 ->assertSee('Podane hasło nie jest prawidłowe.');
+        });
+    }
+
+    public function testShowThrottleMessageDueToTooManyAttempts()
+    {
+        $user = factory(User::class)->create(['password' => bcrypt('123')]);
+        $faker = Factory::create();
+
+        $this->browse(function (Browser $browser) use ($user, $faker) {
+            $attempt = function () use ($browser, $user, $faker) {
+                $browser->visit('/Login')
+                    ->type('name', $user->name)
+                    ->type('password', $faker->password)
+                    ->press('Logowanie');
+            };
+
+            for ($i = 1; $i <=3; $i++) {
+                $attempt();
+            }
+
+            $attempt();
+
+            $browser->assertSee('Zbyt wiele prób logowania');
         });
     }
 }
