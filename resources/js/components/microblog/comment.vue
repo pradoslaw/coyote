@@ -46,7 +46,7 @@
           </li>
 
           <li class="list-inline-item">
-            <a href="javascript:" class="text-muted" data-toggle="dropdown">
+            <a href="#" class="text-muted" data-toggle="dropdown">
               <i class="fa fa-bars"></i>
             </a>
 
