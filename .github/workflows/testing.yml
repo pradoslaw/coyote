@@ -18,7 +18,7 @@ jobs:
               run: docker-compose build && docker-compose up -d
 
             - name: Install packages
-              run: docker-compose exec php make install
+              run: docker-compose exec -T php make install
 
             - name: Create uploads directory
               run: mkdir public/uploads
@@ -27,8 +27,8 @@ jobs:
               run: sudo chown -R nginx:nginx ./
 
             - name: Run tests
-              run: docker-compose exec --user=nginx:nginx php php vendor/bin/phpunit
+              run: docker-compose exec -T php php vendor/bin/phpunit
 
             - name: Run Dusk
-              run: docker-compose exec --user=nginx:nginx php php artisan dusk
+              run: docker-compose exec -T php php artisan dusk
 
