@@ -5,11 +5,14 @@ namespace Tests\Feature\Controllers\Job;
 use Coyote\Coupon;
 use Coyote\Job;
 use Coyote\Plan;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Faker\Factory;
 
 class PaymentControllerTest extends TestCase
 {
+    use DatabaseTransactions;
+
     /**
      * @var Job
      */
@@ -87,6 +90,11 @@ class PaymentControllerTest extends TestCase
         $response = $this->get($url);
 
         $response->assertSee($this->job->title);
+    }
+
+    public function testSubmitFormWithInvalidExpDate()
+    {
+
     }
 
     public function testSubmitValidFormWithInvoice()

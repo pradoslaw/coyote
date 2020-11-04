@@ -255,7 +255,9 @@ class PaymentController extends Controller
                 $error = $result['error'];
                 logger()->error(var_export($result, true));
 
-                throw (new PaymentFailedException($error['error_description'], $error['error_number']))->setPayment($payment);
+                throw new PaymentFailedException(
+                    trans('payment.validation', ['message' => $error['error_description']]), $error['error_number']
+                );
             }
 
             return $this->successfulTransaction($payment);
@@ -317,7 +319,9 @@ class PaymentController extends Controller
             $error = $result['error'];
             logger()->error(var_export($result, true));
 
-            throw new PaymentFailedException($error['error_description'], $error['error_number']);
+            throw new PaymentFailedException(
+                trans('payment.validation', ['message' => $error['error_description']]), $error['error_number']
+            );
         }
 
         if ($result['is_card_enrolled']) {
@@ -364,9 +368,9 @@ class PaymentController extends Controller
 
             return $result;
         } catch (PaymentFailedException $e) {
-            return $this->handlePaymentException($e, trans('payment.validation', ['message' => $e->getMessage()]));
+            return $this->handlePaymentException($e);
         } catch (\Exception $e) {
-            return $this->handlePaymentException($e, trans('payment.unhandled'));
+            return $this->handlePaymentException($e);
         }
     }
 
@@ -374,10 +378,9 @@ class PaymentController extends Controller
      * Handle payment exception. Remove sensitive data before saving to logs and sending to sentry.
      *
      * @param \Exception $exception
-     * @param string $message
      * @return \Illuminate\Http\RedirectResponse
      */
-    private function handlePaymentException($exception, $message)
+    private function handlePaymentException($exception)
     {
         // remove sensitive data
         $this->request->merge(['number' => '***', 'cvc' => '***']);
