@@ -9,6 +9,6 @@ describe('Basic avatar', () => {
   });
 
   it('renders the correct markup', () => {
-    expect(wrapper.html()).toContain('<img src="/img/avatar.png" alt="Foo" class="mw-100">');
+    expect(wrapper.html()).toContain('<img src="/img/avatar.png" alt="Foo" class="d-block mw-100">');
   });
 });
