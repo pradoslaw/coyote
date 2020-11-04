@@ -1,13 +1,12 @@
 <?php
 
-class SpamValidatorTest extends \Codeception\TestCase\Test
-{
-    /**
-     * @var \UnitTester
-     */
-    protected $tester;
+namespace Tests\Feature\Validators;
 
-    // tests
+use Tests\TestCase;
+use Mockery;
+
+class SpamValidatorTest extends TestCase
+{
     public function testValidateSpamLink()
     {
         $auth = Mockery::mock(\Illuminate\Contracts\Auth\Guard::class);
