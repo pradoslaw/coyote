@@ -28,8 +28,8 @@ jobs:
               run: sudo chown -R runneradmin:runneradmin ./
 
             - name: Run tests
-              run: docker-compose exec -T --user=runneradmin:runneradmin php php vendor/bin/phpunit
+              run: docker-compose exec -T --user=nginx:nginx php php vendor/bin/phpunit
 
             - name: Run Dusk
-              run: docker-compose exec -T --user=runneradmin:runneradmin php php artisan dusk
+              run: docker-compose exec -T --user=nginx:nginx php php artisan dusk
 
