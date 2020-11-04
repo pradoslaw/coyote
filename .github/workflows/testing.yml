@@ -33,3 +33,10 @@ jobs:
             - name: Run Dusk
               run: docker-compose exec -T --user=nginx:nginx php php artisan dusk
 
+            - name: 'Upload Artifact'
+              uses: actions/upload-artifact@v2
+              with:
+                name: logs
+                path: storage/logs/
+                retention-days: 5
+

@@ -19,7 +19,8 @@ class LoginTest extends DuskTestCase
                 ->type('password', '123')
                 ->press('Logowanie')
                 ->assertPathIs('/')
-                ->assertAuthenticated();
+                ->assertAuthenticated()
+                ->logout();
         });
     }
 
@@ -33,7 +34,8 @@ class LoginTest extends DuskTestCase
                 ->type('password', '123')
                 ->press('Logowanie')
                 ->assertPathIs('/')
-                ->assertAuthenticated();
+                ->assertAuthenticated()
+                ->logout();
         });
     }
 

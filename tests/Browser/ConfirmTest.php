@@ -15,16 +15,12 @@ class ConfirmTest extends DuskTestCase
     {
         $user = factory(User::class)->create(['password' => bcrypt('123'), 'is_confirm' => false]);
 
-        Mail::fake();
-
         $this->browse(function (Browser $browser) use ($user) {
             $browser->visit('/Confirm')
                 ->type('email', $user->email)
                 ->press('Wyślij e-mail z linkiem aktywacyjnym')
                 ->assertSee('Na podany adres e-mail został wysłany link aktywacyjny.');
         });
-
-        Mail::assertQueued(EmailConfirmation::class);
     }
 
     public function testSendVerificationFailedToDueInvalidEmail()
