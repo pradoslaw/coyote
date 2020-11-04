@@ -13,6 +13,7 @@ return [
     |
     */
 
-    'failed' => 'Podane hasło nie jest prawidłowe.'
+    'failed' => 'Podane hasło nie jest prawidłowe.',
+    'throttle' => 'Zbyt wiele prób logowania. Spróbuj ponownie za :seconds sekund.',
 
 ];

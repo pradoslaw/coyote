@@ -1,33 +1,39 @@
 {% extends 'job.base' %}
 {% block title %}
-    Aplikuj na stanowisko "{{ job.title }}"
-    {{ parent() }}
+  Aplikuj na stanowisko "{{ job.title }}"
+  {{ parent() }}
 {% endblock %}
 
+{% import 'components.widgets' as widgets %}
+
 {% block container %}
-    <div class="row" style="margin-top: 20px">
-        <div class="col-md-9">
-            <div class="card card-default">
-                <div class="card-body">
-                    <h1 class="media-heading">{{ link_to_route('job.offer', job.title, [job.id, job.slug]) }}</h1>
-                    <h3 class="mb-3">Wypełnij poniższy formularz, aby zgłosić swoją ofertę</h3>
+  <div class="row" style="margin-top: 20px">
+    <div class="col-md-9">
+      <div class="card card-default">
+        <div class="card-body">
+          <h1 class="media-heading">{{ link_to_route('job.offer', job.title, [job.id, job.slug]) }}</h1>
+          <h3 class="mb-3">Wypełnij poniższy formularz, aby zgłosić swoją ofertę</h3>
 
-                    {{ form(form) }}
+          {{ form(form) }}
 
-                    <p class="text-center text-muted mt-3 mb-3"><small>Wysyłając ten formularz akceptujesz nasz <a href="/Regulamin">Regulamin</a> oraz <a href="/Polityka_prywatności">Politykę prywatności</a>.</small></p>
-                </div>
-            </div>
+          <p class="text-center text-muted mt-3 mb-3">
+            <small>Wysyłając ten formularz akceptujesz nasz <a href="/Regulamin">Regulamin</a> oraz <a href="/Polityka_prywatności">Politykę prywatności</a>.</small>
+          </p>
         </div>
-
-        <aside class="col-md-3">
-            {% include 'job.partials.sidemenu' %}
-            {{ render_block('job_ads') }}
-        </aside>
+      </div>
     </div>
+
+    <aside class="col-md-3">
+      {% include 'job.partials.sidemenu' %}
+      {{ render_block('job_ads') }}
+    </aside>
+  </div>
 {% endblock %}
 
 {% block body %}
-    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+  <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 
-    {{ parent() }}
+  {{ widgets.jquery() }}
+
+  {{ parent() }}
 {% endblock %}
