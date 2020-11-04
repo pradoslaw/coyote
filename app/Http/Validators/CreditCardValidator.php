@@ -55,7 +55,7 @@ class CreditCardValidator
      * @param array $parameters
      * @return bool
      */
-    public function validateDate($attribute, $value, $parameters)
+    public function validateDate($attribute, $value)
     {
         if (strpos($value, '/') === false) {
             return false;
