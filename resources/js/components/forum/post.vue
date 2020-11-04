@@ -413,7 +413,9 @@
       else {
         // @ts-ignore
         this.deleteModal.close();
-        this.$store.dispatch('posts/delete', { post: this.post, reasonId: this.reasonId }).then(() => this.isCollapsed = true);
+        store.dispatch('posts/delete', { post: this.post, reasonId: this.reasonId }).then(() => this.isCollapsed = true);
+
+        this.flags.forEach(flag => store.commit('flags/delete', flag));
       }
     }
 
