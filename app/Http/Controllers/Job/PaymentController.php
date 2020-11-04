@@ -256,7 +256,8 @@ class PaymentController extends Controller
                 logger()->error(var_export($result, true));
 
                 throw new PaymentFailedException(
-                    trans('payment.validation', ['message' => $error['error_description']]), $error['error_number']
+                    trans('payment.validation', ['message' => $error['error_description']]),
+                    $error['error_number']
                 );
             }
 
@@ -320,7 +321,8 @@ class PaymentController extends Controller
             logger()->error(var_export($result, true));
 
             throw new PaymentFailedException(
-                trans('payment.validation', ['message' => $error['error_description']]), $error['error_number']
+                trans('payment.validation', ['message' => $error['error_description']]),
+                $error['error_number']
             );
         }
 
