@@ -27,7 +27,9 @@ Prism.highlightAll();
   r.on(['/User', '/User/Skills'], () => {
     require('./pages/user');
   })
-
+  r.on(['/Register', '/Login'], () => {
+    require('./pages/auth');
+  })
   .on('/Adm/Firewall/*', () => {
     require.ensure(['flatpickr', 'flatpickr/dist/l10n/pl'], require => {
       require('flatpickr');

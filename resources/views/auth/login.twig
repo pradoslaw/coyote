@@ -44,16 +44,3 @@
     </div>
   </div>
 {% endblock %}
-
-{% block body %}
-  {{ parent() }}
-
-  <script type="text/javascript">
-    $(function () {
-      $('.btn-github, .btn-google, .btn-fb').click(function () {
-        $(this).text('Logowanie...');
-        window.location.href = $(this).data('url');
-      });
-    });
-  </script>
-{% endblock %}
