@@ -38,7 +38,7 @@ class PaymentRequest extends FormRequest
                 'nullable',
                 Rule::exists('coupons', 'code')->whereNull('deleted_at')
             ],
-            'transfer_method' => 'bail|int',
+            'transfer_method' => 'bail|nullable|int',
 
             'invoice.name' => 'bail|required_if:enable_invoice,true|nullable|string|max:200',
             'invoice.vat_id' => 'nullable|string|max:20',

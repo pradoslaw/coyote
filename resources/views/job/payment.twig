@@ -220,7 +220,7 @@
           </div>
 
           <vue-form-group v-show="isCoupon" label="Masz kod promocyjny?" class="form-group">
-            <vue-text v-model="coupon.code" :is-invalid="coupon in errors" class="input-sm" autocomplete="off"></vue-text>
+            <vue-text v-model="coupon.code" :is-invalid="coupon in errors" name="coupon" class="input-sm" autocomplete="off"></vue-text>
           </vue-form-group>
         </div>
 
