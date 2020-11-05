@@ -52,6 +52,11 @@ class PaymentTest extends DuskTestCase
                 ->waitForText('Dziękujemy! Płatność została zaksięgowana. Za chwilę dostaniesz potwierdzenie na adres e-mail.')
                 ->assertRouteIs('job.offer', [$this->job->id, $this->job->slug]);
         });
+
+        $this->job->refresh();
+
+        $this->assertTrue($this->job->is_publish);
+        $this->assertEmpty($this->job->getUnpaidPayment());
     }
 
 }
