@@ -96,13 +96,29 @@ return [
     |
     */
 
-    'redis'       => [
+    'redis' => [
 
-        'cluster' => false,
+        'client' => env('REDIS_CLIENT', 'predis'),
+
+        'options' => [
+            'cluster' => env('REDIS_CLUSTER', 'redis'),
+            'prefix' => '',
+        ],
+
         'default' => [
-            'host'     =>  env('REDIS_HOST', 'localhost'),
-            'port'     => 6379,
-            'database' => 0,
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', 'localhost'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_DB', '0'),
+        ],
+
+        'cache' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', 'localhost'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_CACHE_DB', '1'),
         ],
 
     ],

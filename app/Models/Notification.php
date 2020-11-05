@@ -48,6 +48,13 @@ class Notification extends Model
     protected $fillable = ['id', 'type_id', 'user_id', 'subject', 'excerpt', 'url', 'object_id', 'content_id', 'content_type'];
 
     /**
+     * The "type" of the primary key ID.
+     *
+     * @var string
+     */
+    protected $keyType = 'string';
+
+    /**
      * @var bool
      */
     public $timestamps = false;
