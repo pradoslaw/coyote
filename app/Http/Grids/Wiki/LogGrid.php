@@ -44,7 +44,7 @@ class LogGrid extends Grid
                 'decorators' => [new TextSize()]
             ])
             ->addColumn('created_at', [
-                'Data modyfikacji',
+                'title' => 'Data modyfikacji',
                 'decorators' => [$this->getDateTimeDecorator()]
             ]);
     }
