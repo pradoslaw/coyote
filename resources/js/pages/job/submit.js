@@ -171,7 +171,6 @@ new Vue({
         youtube_url: null,
         gallery: [{file: ''}],
         benefits: [],
-        industries: [],
         latitude: null,
         longitude: null,
         country: null,

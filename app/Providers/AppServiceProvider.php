@@ -125,10 +125,6 @@ class AppServiceProvider extends ServiceProvider
             $this->items = [];
         });
 
-        Collection::macro('replace', function ($items) {
-            $this->items = $items;
-        });
-
         Collection::macro('exceptUser', function (User $auth = null) {
             if ($auth === null) {
                 return $this;

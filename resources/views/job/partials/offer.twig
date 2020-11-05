@@ -63,17 +63,6 @@
           </li>
         {% endif %}
 
-        {% if job.firm.industries|length > 0 %}
-          <li class="list-group-item col-sm-6">
-            <i class="fas fa-industry fa-fw"></i>
-
-            <p>
-              <strong>{{ job.firm.industries.pluck('name')|join(', ') }}</strong>
-              <small>Branża</small>
-            </p>
-          </li>
-        {% endif %}
-
         {% if job.firm.founded %}
           <li class="list-group-item col-sm-6">
             <i class="far fa-calendar fa-fw"></i>

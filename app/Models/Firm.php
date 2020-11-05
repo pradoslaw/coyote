@@ -25,7 +25,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $vat_id
  * @property int $country_id
  * @property \Coyote\Firm\Benefit[] $benefits
- * @property \Coyote\Firm\Industry[] $industries
  * @property \Coyote\Firm\Gallery[] $gallery
  * @property Logo $logo
  * @property \Coyote\Country $country
@@ -169,14 +168,6 @@ class Firm extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function industries()
-    {
-        return $this->belongsToMany(Industry::class, 'firm_industries');
-    }
-
-    /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function country()
@@ -241,7 +232,7 @@ class Firm extends Model
         }
 
         // call macro and replace collection items
-        $this->benefits->replace($models);
+        $this->setRelation('benefits', $models);
     }
 
     public function setGalleryAttribute($gallery)
@@ -255,18 +246,7 @@ class Firm extends Model
         }
 
         // call macro and replace collection items
-        $this->gallery->replace($models);
-    }
-
-    public function setIndustriesAttribute($industries)
-    {
-        $models = [];
-
-        foreach ((array) $industries as $industry) {
-            $models[] = new Industry(['id' => $industry]);
-        }
-
-        $this->industries->replace($models);
+        $this->setRelation('gallery', $models);
     }
 
     /**

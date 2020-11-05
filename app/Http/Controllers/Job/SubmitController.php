@@ -114,7 +114,7 @@ class SubmitController extends Controller
         $job = clone $draft->get(Job::class);
 
         // get all firms assigned to user...
-        $this->firm->pushCriteria(new EagerLoading(['benefits', 'industries', 'gallery']));
+        $this->firm->pushCriteria(new EagerLoading(['benefits', 'gallery']));
 
         $firms = FirmResource::collection($this->firm->findAllBy('user_id', $job->user_id));
 
@@ -141,7 +141,7 @@ class SubmitController extends Controller
         /** @var \Coyote\Job $job */
         $job = $draft->get(Job::class);
 
-        $job->firm->fill(array_merge(['industries' => []], $request->all()));
+        $job->firm->fill($request->all());
 
         // new firm has empty ID.
         if (empty($request->input('id'))) {

@@ -17,7 +17,6 @@ class FirmFormResource extends JsonResource
 
         return array_merge($data, [
             'benefits'      => $this->resource->benefits->pluck('name')->toArray(),
-            'industries'    => $this->resource->industries->pluck('id')->toArray(),
             'gallery'       => $this->gallery($this->resource),
 
             'logo'          => [
