@@ -53,24 +53,6 @@ return [
             'charset'  => 'utf8',
             'prefix'   => '',
             'schema'   => 'public',
-        ],
-        'mongodb' => [
-            'driver'   => 'mongodb',
-            'host'     => env('MONGO_HOST', 'localhost'),
-            'database' => env('MONGO_DATABASE', 'coyote'),
-            'username' => env('MONGO_USERNAME', ''),
-            'password' => env('MONGO_PASSWORD', '')
-        ],
-        'mysql' => [
-            'driver'   => 'mysql',
-            'host'     => env('MYSQL_HOST', 'localhost'),
-            'database' => env('MYSQL_DATABASE', 'coyote'),
-            'username' => env('MYSQL_USERNAME', 'root'),
-            'password' => env('MYSQL_PASSWORD', '123'),
-            'port'     => env('MYSQL_PORT', 3306),
-            'charset'   => 'utf8',
-            'collation' => 'utf8_unicode_ci',
-            'prefix'    => '',
         ]
     ],
     /*
