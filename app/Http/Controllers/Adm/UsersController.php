@@ -10,7 +10,7 @@ use Boduch\Grid\Source\EloquentSource;
 use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Services\Stream\Activities\Update;
 use Coyote\Services\Stream\Objects\Person;
-use Coyote\Events\UserWasSaved;
+use Coyote\Events\UserSaved;
 
 class UsersController extends BaseController
 {
@@ -90,7 +90,7 @@ class UsersController extends BaseController
 
             stream(Update::class, new Person($user));
 
-            event($user->deleted_at ? new UserDeleted($user) : new UserWasSaved($user));
+            event($user->deleted_at ? new UserDeleted($user) : new UserSaved($user));
         });
 
         return back()->with('success', 'Zmiany zostały poprawie zapisane');

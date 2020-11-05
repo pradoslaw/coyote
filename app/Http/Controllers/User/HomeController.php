@@ -3,7 +3,7 @@
 namespace Coyote\Http\Controllers\User;
 
 use Carbon\Carbon;
-use Coyote\Events\UserWasSaved;
+use Coyote\Events\UserSaved;
 use Coyote\Http\Factories\MediaFactory;
 use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
@@ -54,7 +54,7 @@ class HomeController extends BaseController
         $media = $this->auth->photo->upload($request->file('photo'));
         $this->auth->save();
 
-        event(new UserWasSaved($this->auth));
+        event(new UserSaved($this->auth));
 
         return response()->json([
             'url' => (string) $media->url()

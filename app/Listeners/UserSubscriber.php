@@ -3,7 +3,7 @@
 namespace Coyote\Listeners;
 
 use Coyote\Events\UserDeleted;
-use Coyote\Events\UserWasSaved;
+use Coyote\Events\UserSaved;
 use Coyote\Services\Elasticsearch\Crawler;
 use Coyote\User;
 use Illuminate\Contracts\Cache\Repository;
@@ -26,23 +26,31 @@ class UserSubscriber
     /**
      * Handle the event.
      *
-     * @param  UserWasSaved  $event
+     * @param  UserSaved  $event
      */
-    public function flushCache(UserWasSaved $event)
+    public function flushCache(UserSaved $event)
     {
         $this->cache->tags('menu-for-user')->forget('menu-for-user:' . $event->user->id);
         $this->cache->tags('permissions')->forget('permission:' . $event->user->id);
         $this->cache->tags('forum-order')->forget('forum-order:' . $event->user->id);
     }
 
-    /**
-     * @param UserWasSaved|UserDeleted $event
-     */
-    public function reindex($event)
+    public function index(UserSaved $event)
     {
-        $user = $event instanceof UserWasSaved ? $event->user : (new User())->forceFill($event->user);
+        $user = $event->user;
 
-        (new Crawler())->index($user);
+        dispatch(function () use ($user) {
+            (new Crawler())->index($user);
+        });
+    }
+
+    public function delete(UserDeleted $event)
+    {
+        $user = (new User())->forceFill($event->user);
+
+        dispatch(function () use ($user) {
+            (new Crawler())->delete($user);
+        });
     }
 
     /**
@@ -53,18 +61,18 @@ class UserSubscriber
     public function subscribe($events)
     {
         $events->listen(
-            UserWasSaved::class,
+            UserSaved::class,
             'Coyote\Listeners\UserSubscriber@flushCache'
         );
 
         $events->listen(
-            UserWasSaved::class,
-            'Coyote\Listeners\UserSubscriber@reindex'
+            UserSaved::class,
+            'Coyote\Listeners\UserSubscriber@index'
         );
 
         $events->listen(
             UserDeleted::class,
-            'Coyote\Listeners\UserSubscriber@reindex'
+            'Coyote\Listeners\UserSubscriber@delete'
         );
     }
 }

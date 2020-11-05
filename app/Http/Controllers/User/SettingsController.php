@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Controllers\User;
 
-use Coyote\Events\UserWasSaved;
+use Coyote\Events\UserSaved;
 use Coyote\Http\Factories\MailFactory;
 use Coyote\Http\Forms\User as Forms;
 use Coyote\Mail\EmailConfirmation;
@@ -80,7 +80,7 @@ class SettingsController extends BaseController
 
             stream(Update::class, new Person());
 
-            event(new UserWasSaved($this->auth));
+            event(new UserSaved($this->auth));
         });
 
         return back()->with('success', 'Zmiany zostały poprawie zapisane');

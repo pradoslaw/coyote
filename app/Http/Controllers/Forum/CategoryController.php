@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
-use Coyote\Events\UserWasSaved;
+use Coyote\Events\UserSaved;
 use Coyote\Http\Factories\FlagFactory;
 use Coyote\Http\Resources\Api\ForumCollection;
 use Coyote\Http\Resources\FlagResource;
@@ -144,6 +144,6 @@ class CategoryController extends BaseController
             $this->forum->setup($this->userId, $result);
         });
 
-        event(new UserWasSaved($this->auth));
+        event(new UserSaved($this->auth));
     }
 }
