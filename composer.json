@@ -12,13 +12,13 @@
     "require": {
         "php": ">=7.2.0",
         "nesbot/carbon": "^2.32.0",
-        "illuminate/http": "5.8|6.*|7.*",
-        "illuminate/support": "5.8|6.*|7.*",
-        "illuminate/view": "5.8|6.*|7.*",
-        "illuminate/pagination": "5.8|6.*|7.*",
-        "illuminate/validation": "5.8|6.*|7.*",
+        "illuminate/http": "5.8|6.*|7.*|8.*",
+        "illuminate/support": "5.8|6.*|7.*|8.*",
+        "illuminate/view": "5.8|6.*|7.*|8.*",
+        "illuminate/pagination": "5.8|6.*|7.*|8.*",
+        "illuminate/validation": "5.8|6.*|7.*|8.*",
         "laravelcollective/html": "5.8|6.*",
-        "laravel/helpers": "^1.1"
+        "laravel/helpers": "^1.3"
     },
     "require-dev": {
       "phpunit/phpunit": "~8.5",
