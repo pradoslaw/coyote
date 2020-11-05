@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Auth;
 
+use Coyote\Events\UserSaved;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\MediaFactory;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
@@ -105,6 +106,8 @@ class OAuthController extends Controller
 
         if ($user->wasRecentlyCreated) {
             stream(Stream_Create::class, new Stream_Person($user));
+
+            event(new UserSaved($user));
         }
 
         stream(Stream_Login::class);
