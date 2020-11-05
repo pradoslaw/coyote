@@ -6,7 +6,7 @@
       <vue-text :value.sync="topic.subject" :is-invalid="'subject' in errors" @keydown.enter.native="save" name="subject" tabindex="1" autofocus="autofocus"></vue-text>
       <vue-error :message="errors['subject']"></vue-error>
 
-      <small v-if="!('subject' in errors)" class="text-muted form-text">Bądź rzeczowy. Nie nadawaj wątkom jednowyrazowych tematów.</small>
+      <small v-if="!('subject' in errors)" class="text-muted form-text">Bądź rzeczowy. Nie nadawaj wątkom jednowyrazowych tytułów.</small>
     </div>
 
     <ul class="nav nav-tabs">
