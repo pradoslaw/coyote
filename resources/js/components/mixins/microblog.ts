@@ -1,4 +1,5 @@
-import {Vue, Component, Prop, Emit, Ref} from "vue-property-decorator";
+import Prism from 'prismjs';
+import { Vue, Component, Prop, Emit, Ref } from "vue-property-decorator";
 import store from "../../store";
 import { Microblog } from "../../types/models";
 import VueModal from "../modal.vue";
@@ -69,6 +70,9 @@ export class MicroblogFormMixin extends Vue {
           this.microblog.text = '';
           this.microblog.media = [];
         }
+
+        // highlight once again after saving
+        this.$nextTick(() => Prism.highlightAll());
       })
       .finally(() => this.isProcessing = false);
   }

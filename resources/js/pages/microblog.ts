@@ -8,6 +8,7 @@ import { mapGetters } from 'vuex';
 import { default as axiosErrorHandler } from '../libs/axios-error-handler';
 import { default as ws } from '../libs/realtime';
 import {Microblog, Paginator, Flag} from "../types/models";
+import Prism from "prismjs";
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 
@@ -94,6 +95,9 @@ new Vue({
       microblog.is_read = false;
 
       notification.notify(microblog);
+
+      // highlight once again after saving
+      this.$nextTick(() => Prism.highlightAll());
     });
   },
   methods: {
