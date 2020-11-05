@@ -207,13 +207,12 @@
 
       {{ widgets.vue() }}
 
+      <link rel="stylesheet" href="{{ cdn('css/app.css') }}">
 
       <script src="{{ cdn('js/runtime.js') }}"></script>
       <script src="{{ cdn('js/vendor.js') }}"></script>
       <script src="{{ cdn('js/app.js') }}"></script>
       <script src="{{ cdn('js/common.js') }}"></script>
-
-      <link rel="stylesheet" href="{{ cdn('css/app.css') }}">
     {% endblock %}
 
     {{ render_region('bottom') }}
