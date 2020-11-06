@@ -5,24 +5,19 @@ import Vue from 'vue';
 
 const Popover = {
   install() {
-    const nodes = document.querySelectorAll('[data-popover]');
-
-    if (!nodes.length) {
-      return;
-    }
-
     let popover = JSON.parse(Session.getItem('popover', '[]'));
 
-    for (let node of nodes) {
+    function installPopover(node: HTMLElement) {
       const options = JSON.parse((node as HTMLElement).dataset.popover as string);
 
       if (popover.includes(options.message)) {
-        continue;
+        return;
       }
 
       const wrapper = new VuePopover({propsData: {message: options.message, placement: options.placement}}).$mount();
 
       node.parentNode!.insertBefore(wrapper.$el, node.nextSibling);
+      delete node.dataset.popover;
 
       let popperOptions = {};
 
@@ -36,6 +31,17 @@ const Popover = {
 
       new Popper(node, wrapper.$el, popperOptions);
     }
+
+    function waitForPopover() {
+      const nodes = document.querySelectorAll('[data-popover]');
+
+      for (let node of nodes) {
+        installPopover(node as HTMLElement);
+      }
+    }
+
+    const observer = new MutationObserver(waitForPopover);
+    observer.observe(document.body, { attributes: false, childList: true, subtree: true });
   }
 };
 

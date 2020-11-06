@@ -7,7 +7,7 @@
   padding-top: $alert-padding-y / 3;
   padding-bottom: $alert-padding-y / 3;
 
-  @include media-breakpoint-down(sm) {
+  @include media-breakpoint-down(lg) {
     display: none !important; // overwrite inline style
   }
 

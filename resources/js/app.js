@@ -17,45 +17,41 @@ import Prism from 'prismjs';
 
 Prism.highlightAll();
 
-(function () {
-  'use strict';
+setToken(Config.csrfToken());
 
-  setToken(Config.csrfToken());
+let r = new Router();
 
-  let r = new Router();
+r.on(['/User', '/User/Skills'], () => {
+  require('./pages/user');
+})
+r.on(['/Register', '/Login'], () => {
+  require('./pages/auth');
+})
+.on('/Adm/Firewall/*', () => {
+  require.ensure(['flatpickr', 'flatpickr/dist/l10n/pl'], require => {
+    require('flatpickr');
+    require('../sass/vendor/_flatpickr.scss');
 
-  r.on(['/User', '/User/Skills'], () => {
-    require('./pages/user');
-  })
-  r.on(['/Register', '/Login'], () => {
-    require('./pages/auth');
-  })
-  .on('/Adm/Firewall/*', () => {
-    require.ensure(['flatpickr', 'flatpickr/dist/l10n/pl'], require => {
-      require('flatpickr');
-      require('../sass/vendor/_flatpickr.scss');
+    const Polish = require('flatpickr/dist/l10n/pl.js').pl;
 
-      const Polish = require('flatpickr/dist/l10n/pl.js').pl;
-
-      $('#expire-at').flatpickr({
-        allowInput: true,
-        locale: Polish
-      });
+    $('#expire-at').flatpickr({
+      allowInput: true,
+      locale: Polish
     });
-  })
-  .on('/Adm/Mailing', () => {
-    require('./libs/tinymce').default();
-  })
-  .on(['/User/Pm/Submit', '/User/Pm/Show/*', '/User/Pm'], () => {
-    require('./pages/pm');
-  })
-  .on(['/Mikroblogi', '/Mikroblogi/*', '/Profile/*/Microblog'], () => require('./pages/microblog'))
-  .on(['/Profile/*'], () => require('./pages/profile'))
-  .on('/', () => require('./pages/homepage'))
-  .on('/Search', () => require('./pages/search'));
+  });
+})
+.on('/Adm/Mailing', () => {
+  require('./libs/tinymce').default();
+})
+.on(['/User/Pm/Submit', '/User/Pm/Show/*', '/User/Pm'], () => {
+  require('./pages/pm');
+})
+.on(['/Mikroblogi', '/Mikroblogi/*', '/Profile/*/Microblog'], () => require('./pages/microblog'))
+.on(['/Profile/*'], () => require('./pages/profile'))
+.on('/', () => require('./pages/homepage'))
+.on('/Search', () => require('./pages/search'));
 
-  r.resolve();
+r.resolve();
 
-  // must be at the end so other vue components can render
-  require('./plugins/popover');
-})();
+// must be at the end so other vue components can render
+require('./plugins/popover');
