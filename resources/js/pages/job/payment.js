@@ -50,7 +50,7 @@ new Vue({
       this.calculator.vat_rate = this.vat_rates[this.form.invoice.country_id];
     },
     submitForm(e) {
-      const data = Object.assign(this.form, {price: this.grossPrice, enable_invoice: this.enableInvoice});
+      const data = Object.assign(this.form, {price: this.grossPrice, enable_invoice: this.grossPrice > 0 ? this.enableInvoice : false});
 
       this.errors = {};
       this.isProcessing = true;
@@ -94,10 +94,6 @@ new Vue({
       axios.get('/Praca/Coupon/Validate', {params: {code: newValue}}).then(result => {
         this.coupon.amount = result.data;
         this.form.coupon = newValue;
-
-        if (!this.grossPrice) {
-          this.enableInvoice = false;
-        }
       });
     }
   }
