@@ -30,7 +30,7 @@
 
         <ul class="list-inline">
           <li class="list-inline-item dropdown">
-            <a class="dropdown-toggle text-muted text-decoration-none" id="dropdownMenuButton" data-toggle="dropdown" href="javascript:">
+            <a class="dropdown-toggle text-muted text-decoration-none" id="dropdownMenuButton" data-toggle="dropdown" href="#">
               <span>${ selectedCategories || 'Wszystkie kategorie' }</span>
             </a>
 
@@ -46,7 +46,7 @@
           </li>
 
           <li class="list-inline-item dropdown">
-            <a class="dropdown-toggle text-muted text-decoration-none" data-toggle="dropdown" href="javascript:">
+            <a class="dropdown-toggle text-muted text-decoration-none" data-toggle="dropdown" href="#">
               ${ sortOptions[defaultSort] }
             </a>
 
@@ -60,16 +60,14 @@
           </li>
 
           <li class="list-inline-item dropdown">
-            <a @click="$refs['author-menu'].toggle()" class="dropdown-toggle text-muted text-decoration-none" href="javascript:">
+            <a @click="$refs['author-menu'].toggle()" class="dropdown-toggle text-muted text-decoration-none" href="#">
               ${ this.user || 'Autor' }
             </a>
 
             <vue-dropdown-menu ref="author-menu" style="width: 350px">
-              <form class="px-2 py-2">
-                <div class="form-group">
-                  <vue-autocomplete :value.sync="user" placeholder="Szukaj" @select="setUser"></vue-autocomplete>
-                </div>
-              </form>
+              <div class="px-2 py-2">
+                <vue-autocomplete :value.sync="user" placeholder="Szukaj" @select="setUser"></vue-autocomplete>
+              </div>
             </vue-dropdown-menu>
           </li>
         </ul>
