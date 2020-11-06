@@ -14,7 +14,6 @@ use Coyote\Job;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Notifications\Job\CreatedNotification;
 use Coyote\Repositories\Contracts\FirmRepositoryInterface as FirmRepository;
-use Coyote\Repositories\Contracts\IndustryRepositoryInterface;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Repositories\Contracts\PlanRepositoryInterface as PlanRepository;
 use Coyote\Repositories\Criteria\EagerLoading;
@@ -105,10 +104,9 @@ class SubmitController extends Controller
 
     /**
      * @param Draft $draft
-     * @param IndustryRepositoryInterface $industry
      * @return \Illuminate\View\View
      */
-    public function getFirm(Draft $draft, IndustryRepositoryInterface $industry)
+    public function getFirm(Draft $draft)
     {
         /** @var \Coyote\Job $job */
         $job = clone $draft->get(Job::class);
@@ -126,8 +124,7 @@ class SubmitController extends Controller
             'firms'             => $firms,
             'default_benefits'  => Benefit::getBenefitsList(), // default benefits,
             'employees'         => Firm::getEmployeesList(),
-            'founded'           => Firm::getFoundedList(),
-            'industries'        => $industry->getAlphabeticalList()
+            'founded'           => Firm::getFoundedList()
         ]);
     }
 

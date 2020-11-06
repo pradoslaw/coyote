@@ -57,7 +57,7 @@ trait SubmitsJob
         }
 
         $job->load(['tags', 'features', 'locations.country']);
-        $job->firm->load(['benefits', 'gallery', 'industries']);
+        $job->firm->load(['benefits', 'gallery']);
 
         if (!$job->exists) {
             $job->user_id = $user->id;

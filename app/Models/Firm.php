@@ -56,7 +56,6 @@ class Firm extends Model
         'longitude',
         'is_private',
         'youtube_url',
-        'industries',
         'gallery',
         'benefits',
         'country'
