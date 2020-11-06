@@ -10,9 +10,9 @@
 <script>
   import VueDropdown from './dropdown.vue';
   import VueError from './error.vue';
-  import { SpecialKeys } from '../../types/keys.ts';
-  import store from '../../store';
-  import useBrackets from "../../libs/prompt";
+  import { SpecialKeys } from '@/js/types/keys';
+  import store from '@/js/store';
+  import useBrackets from "@/js/libs/prompt";
 
   export default {
     components: { 'vue-dropdown': VueDropdown, 'vue-error': VueError },
@@ -48,8 +48,6 @@
     },
     methods: {
       onKeyUp(e) {
-        let userName = '';
-
         const keyCode = e.keyCode;
         const caretPosition = this.getCaretPosition();
         const startIndex = this.getUserNamePosition(caretPosition);
@@ -81,8 +79,7 @@
 
         // min length to search is 1 character
         if (startIndex > -1 && caretPosition - startIndex >= 1) {
-          userName = this.input.value.substr(startIndex, caretPosition - startIndex);
-          this.lookupName(userName);
+          this.lookupName(this.input.value.substr(startIndex, caretPosition - startIndex));
 
           return;
         }
@@ -102,7 +99,7 @@
       },
 
       onKeyDown(e) {
-        if (this.isDropdownVisible && Object.values(SpecialKeys).indexOf(e.keyCode) !== -1) {
+        if (this.isDropdownVisible && [SpecialKeys.ENTER, SpecialKeys.TAB, SpecialKeys.DOWN, SpecialKeys.UP].indexOf(e.keyCode) !== -1) {
           e.preventDefault();
         }
       },
@@ -115,18 +112,18 @@
         let i = caretPosition;
         let result = -1;
 
-        while (i > caretPosition - 50 && i >= 0) {
-          let $val = this.input.value[i];
+        while (i > caretPosition - 50 && i > 0) {
+          let char = this.input.value[i - 1];
 
-          if ($val === ' ' || $val === "\n") {
+          if (char === ' ' || char === "\n") {
             break;
           }
-          else if ($val === '@') {
-            if (i === 0 || this.input.value[i - 1] === ' ' || this.input.value[i - 1] === "\n") {
-              result = i + 1;
-              break;
-            }
+          // we must check if @ is not a part of email address
+          else if (char === '@' && (i === 1 || (this.input.value[i - 2] === ' ' || this.input.value[i - 2] === "\n"))) {
+            result = i;
+            break;
           }
+
           i--;
         }
 
