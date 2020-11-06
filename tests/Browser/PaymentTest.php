@@ -54,4 +54,27 @@ class PaymentTest extends DuskTestCase
         });
     }
 
+    public function testSubmitFormWithoutPaymentNeeded()
+    {
+        try {
+            $this->job->plan->discount = 1;
+            $this->job->plan->save();
+
+            $payment = $this->job->getUnpaidPayment();
+
+            $this->browse(function (Browser $browser) use ($payment) {
+                $browser
+                    ->resize(1600, 1200)
+                    ->loginAs($this->job->user)
+                    ->visitRoute('job.payment', [$payment])
+                    ->waitForText('Płatność nie jest wymagana')
+                    ->press('Zapisz i zakończ')
+                    ->waitForText('Dziękujemy! Płatność została zaksięgowana. Za chwilę dostaniesz potwierdzenie na adres e-mail.')
+                    ->assertRouteIs('job.offer', [$this->job->id, $this->job->slug]);
+            });
+        } finally {
+            $this->job->plan->discount = 1;
+            $this->job->plan->save();
+        }
+    }
 }
