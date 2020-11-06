@@ -41,7 +41,7 @@ const Popover = {
     }
 
     const observer = new MutationObserver(waitForPopover);
-    observer.observe(document.body, { attributes: false, childList: true, subtree: true });
+    observer.observe(document.body, { attributes: false, childList: true, subtree: false });
   }
 };
 
