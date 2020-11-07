@@ -1,13 +1,7 @@
 {
     "name": "adam-boduch/coyote",
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/chrisboulton/php-diff"
-        }
-    ],
     "description": "4programmers.net",
-    "version": "2.4",
+    "version": "2.5",
     "homepage": "http://4programmers.net",
     "license": "MIT",
     "type": "project",
@@ -45,19 +39,15 @@
         "league/flysystem-cached-adapter": "^1.0",
         "mpdf/mpdf": "dev-development",
         "paylane/client": "^1.1",
-        "php-http/guzzle6-adapter": "^1.1",
-        "php-http/message": "^1.5",
         "predis/predis": "^1.0",
         "rawr/t-regx": "^0.9.8",
         "rcrowe/twigbridge": "^0.11",
-        "sentry/sentry-laravel": "^1.1",
+        "sentry/sentry-laravel": "^1.2",
         "twig/extensions": "^1.5"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.5",
         "codeception/codeception": "^3.0",
-        "symfony/css-selector": "4.2.*",
-        "symfony/dom-crawler": "4.2.*",
         "mockery/mockery": "^1.0",
         "codeception/mockery-module": "^0.3",
         "laravel/dusk": "^5.0",
