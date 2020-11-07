@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2ec931ed12baf43430f5cf862336e06d",
+    "content-hash": "9c7e89728d200795f37d1cefe9d708ef",
     "packages": [
         {
             "name": "adam-boduch/laravel-grid",
@@ -329,42 +329,6 @@
                 "tag"
             ],
             "time": "2016-08-08T17:20:09+00:00"
-        },
-        {
-            "name": "chrisboulton/php-diff",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/chrisboulton/php-diff.git",
-                "reference": "3cb3f7ce6bb8b910f5a41ea1887b1faceba6a7d7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/chrisboulton/php-diff/zipball/3cb3f7ce6bb8b910f5a41ea1887b1faceba6a7d7",
-                "reference": "3cb3f7ce6bb8b910f5a41ea1887b1faceba6a7d7",
-                "shasum": ""
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~5.5"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Diff": "lib/"
-                }
-            },
-            "authors": [
-                {
-                    "name": "Chris Boulton",
-                    "email": "@chrisboulton"
-                }
-            ],
-            "description": "A comprehensive library for generating differences between two hashable objects (strings or arrays).",
-            "support": {
-                "source": "https://github.com/chrisboulton/php-diff/tree/master",
-                "issues": "https://github.com/chrisboulton/php-diff/issues"
-            },
-            "time": "2016-10-14T23:54:40+00:00"
         },
         {
             "name": "clue/stream-filter",
@@ -1769,57 +1733,6 @@
                 "web service"
             ],
             "time": "2020-06-16T21:01:06+00:00"
-        },
-        {
-            "name": "guzzlehttp/oauth-subscriber",
-            "version": "0.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/guzzle/oauth-subscriber.git",
-                "reference": "04960cdef3cd80ea401d6b0ca8b3e110e9bf12cf"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/oauth-subscriber/zipball/04960cdef3cd80ea401d6b0ca8b3e110e9bf12cf",
-                "reference": "04960cdef3cd80ea401d6b0ca8b3e110e9bf12cf",
-                "shasum": ""
-            },
-            "require": {
-                "guzzlehttp/guzzle": "~6.0",
-                "php": ">=5.5.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.3-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "GuzzleHttp\\Subscriber\\Oauth\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Michael Dowling",
-                    "email": "mtdowling@gmail.com",
-                    "homepage": "https://github.com/mtdowling"
-                }
-            ],
-            "description": "Guzzle OAuth 1.0 subscriber",
-            "homepage": "http://guzzlephp.org/",
-            "keywords": [
-                "Guzzle",
-                "oauth"
-            ],
-            "time": "2015-08-15T19:44:28+00:00"
         },
         {
             "name": "guzzlehttp/promises",
@@ -11353,7 +11266,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "chrisboulton/php-diff": 20,
         "mpdf/mpdf": 20
     },
     "prefer-stable": false,
