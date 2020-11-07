@@ -1,3 +1,10 @@
+##2.5
+
+**Ogólne**
+- Migracja do Laravel 6
+- Migracja do phpunit 8
+- Usunięcie codeception
+
 ##2.4
 
 **Ogólne**
