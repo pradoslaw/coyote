@@ -8,5 +8,5 @@ indent_style = space
 indent_size = 4
 trim_trailing_whitespace = true
 
-[*.{scss,yaml,vue,twig,js,ts,json}]
+[*.{scss,yaml,yml,vue,twig,js,ts,json}]
 indent_size = 2

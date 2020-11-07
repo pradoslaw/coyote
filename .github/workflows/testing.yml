@@ -2,48 +2,46 @@ name: Testing
 on: [ push ]
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
 
-        steps:
-            - uses: actions/checkout@v2
+    steps:
+      - uses: actions/checkout@v2
 
-            - name: Add user
-              run: cat /etc/passwd
-            #  run: sudo addgroup --gid 1000 nginx && sudo useradd --uid 1000 -g nginx nginx
+      - name: Add user
+        run: cat /etc/passwd
+      #  run: sudo addgroup --gid 1000 nginx && sudo useradd --uid 1000 -g nginx nginx
 
-            - name: Setup config
-              run: cp .env.testing .env
+      - name: Setup config
+        run: cp .env.testing .env
 
-            - name: Run docker containers
-              run: docker-compose build && docker-compose up -d
+      - name: Run docker containers
+        run: docker-compose build && docker-compose up -d
 
-            - name: Install packages
-              run: docker-compose exec -T php make install
+      - name: Install packages
+        run: docker-compose exec -T php make install
 
-            - name: Create uploads directory
-              run: mkdir public/uploads
+      - name: Create uploads directory
+        run: mkdir public/uploads
 
-            - name: Create uploads directory
-              run: sudo chown -R runneradmin:runneradmin ./
+      - name: Create uploads directory
+        run: sudo chown -R runneradmin:runneradmin ./
 
-            - name: Run tests
-              run: docker-compose exec -T --user=nginx:nginx php php vendor/bin/phpunit
+      - name: Run tests
+        run: docker-compose exec -T --user=nginx:nginx php php vendor/bin/phpunit
 
-            - name: Run Dusk
-              run: docker-compose exec -T --user=nginx:nginx php php artisan dusk
+      - name: Run Dusk
+        run: docker-compose exec -T --user=nginx:nginx php php artisan dusk
 
-            - name: 'Upload Artifact'
-              uses: actions/upload-artifact@v2
-              with:
-                name: logs
-                path: storage/logs/
-                retention-days: 5
+      - uses: actions/upload-artifact@v2
+        with:
+          name: logs
+          path: storage/logs/
+          retention-days: 5
 
-            -   name: 'Upload Artifact'
-                uses: actions/upload-artifact@v2
-                with:
-                  name: screenshots
-                  path: tests/Browser/screenshots/
-                  retention-days: 5
+      - uses: actions/upload-artifact@v2
+        with:
+          name: screenshots
+          path: tests/Browser/screenshots/
+          retention-days: 5
 
