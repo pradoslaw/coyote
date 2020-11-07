@@ -157,7 +157,7 @@ class Topic extends Model
      */
     public function users()
     {
-        return $this->hasMany('Coyote\Topic\User');
+        return $this->hasMany(Topic\User::class);
     }
 
     /**

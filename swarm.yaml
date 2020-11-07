@@ -10,6 +10,7 @@ x-env:
 
   SESSION_DOMAIN: ".4programmers.net"
 
+  DB_CONNECTION: pgsql
   DB_PORT: 5432
   DB_HOST: db
   DB_DATABASE: coyote

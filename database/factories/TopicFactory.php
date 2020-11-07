@@ -21,14 +21,8 @@ $factory->afterCreating(\Coyote\Topic::class, function (\Coyote\Topic $topic) {
     $topic->posts()->save(factory(\Coyote\Post::class)->make(['forum_id' => $topic->forum_id]));
 });
 
-$factory->state(\Coyote\Topic::class, 'id', function ($faker) {
+$factory->state(\Coyote\Topic::class, 'id', function (Faker $faker) {
     return [
-        'id' => $faker->randomDigit,
+        'id' => $faker->numberBetween(10000000)
     ];
 });
-
-
-//
-//$factory->afterMaking(\Coyote\Topic::class, function (\Coyote\Topic $topic, Faker $faker) {
-//    $topic->id = $faker->randomDigit;
-//});
