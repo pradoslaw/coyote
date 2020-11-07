@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Declination;
+namespace Tests\Feature\Services\Declination;
 
 use Coyote\Services\Declination\Declination;
 use Tests\TestCase;

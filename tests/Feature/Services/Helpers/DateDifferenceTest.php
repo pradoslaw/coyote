@@ -8,7 +8,23 @@ use PHPUnit\Framework\TestCase;
 
 class DateDifferenceTest extends TestCase
 {
-    use TestCarbonLocale;
+    /** @var string */
+    private $locale;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->locale = Carbon::getLocale();
+        Carbon::setLocale('pl');
+    }
+
+    protected function tearDown(): void
+    {
+        Carbon::setLocale($this->locale);
+
+        parent::tearDown();
+    }
 
     /**
      * @test
