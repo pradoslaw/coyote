@@ -57,7 +57,7 @@ trait SubmitsJob
         }
 
         $job->load(['tags', 'features', 'locations.country']);
-        $job->firm->load(['benefits', 'gallery', 'industries']);
+        $job->firm->load(['benefits', 'gallery']);
 
         if (!$job->exists) {
             $job->user_id = $user->id;
@@ -116,8 +116,6 @@ trait SubmitsJob
             $job->firm()->associate($job->firm);
             // remove old benefits and save new ones.
             $job->firm->benefits()->push($job->firm->benefits);
-            // sync industries
-            $job->firm->industries()->sync($job->firm->industries);
             $job->firm->gallery()->push($job->firm->gallery);
         }
 

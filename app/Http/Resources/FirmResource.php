@@ -26,7 +26,7 @@ class FirmResource extends JsonResource
     {
         $data = array_except(
             $this->resource->toArray(),
-            ['slug', 'user_id', 'headline', 'employees', 'founded', 'country_id', 'vat_id', 'deleted_at', 'is_private', 'benefits', 'industries', 'gallery']
+            ['slug', 'user_id', 'headline', 'employees', 'founded', 'country_id', 'vat_id', 'deleted_at', 'is_private', 'benefits','gallery']
         );
 
         return array_merge($data, [

@@ -10,7 +10,7 @@
 
     <div class="media-body">
       <section>
-        <h1 class="media-heading">{{ link_to_route('job.offer', job.title, [job.id, job.slug]) }}</h1>
+        <h1 class="media-heading">{{ link_to_route('job.offer', job.title, [job.id|default(0), job.slug]) }}</h1>
 
         {% if job.firm.name %}
           <a class="employer" title="Zobacz oferty pracy z firmy {{ job.firm.name }}" href="{{ route('job.firm', [job.firm.slug]) }}">{{ job.firm.name }}</a>
@@ -59,17 +59,6 @@
             <p>
               <strong>{{ employees_list[job.firm.employees] }} pracowników</strong>
               <small>Rozmiar firmy</small>
-            </p>
-          </li>
-        {% endif %}
-
-        {% if job.firm.industries|length > 0 %}
-          <li class="list-group-item col-sm-6">
-            <i class="fas fa-industry fa-fw"></i>
-
-            <p>
-              <strong>{{ job.firm.industries.pluck('name')|join(', ') }}</strong>
-              <small>Branża</small>
             </p>
           </li>
         {% endif %}
@@ -150,8 +139,8 @@
               <li class="list-group-item col-12 col-sm-6 {{ feature.pivot.checked ? 'checked' }}">
                 <i class="fas fa-fw {{ feature.pivot.checked ? 'fa-check' : 'fa-times' }}"></i> {{ feature.name }}
 
-                {% if feature.pivot.value %}
-                  <small class="text-muted"> ― {{ feature.pivot.value }}</small>
+                {% if feature.pivot.getAttribute('value') %}
+                  <small class="text-muted"> ― {{ feature.pivot.getAttribute('value') }}</small>
                 {% endif %}
               </li>
             {% endfor %}

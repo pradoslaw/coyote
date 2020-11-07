@@ -14,7 +14,6 @@ use Coyote\Job;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Notifications\Job\CreatedNotification;
 use Coyote\Repositories\Contracts\FirmRepositoryInterface as FirmRepository;
-use Coyote\Repositories\Contracts\IndustryRepositoryInterface;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Repositories\Contracts\PlanRepositoryInterface as PlanRepository;
 use Coyote\Repositories\Criteria\EagerLoading;
@@ -105,16 +104,15 @@ class SubmitController extends Controller
 
     /**
      * @param Draft $draft
-     * @param IndustryRepositoryInterface $industry
      * @return \Illuminate\View\View
      */
-    public function getFirm(Draft $draft, IndustryRepositoryInterface $industry)
+    public function getFirm(Draft $draft)
     {
         /** @var \Coyote\Job $job */
         $job = clone $draft->get(Job::class);
 
         // get all firms assigned to user...
-        $this->firm->pushCriteria(new EagerLoading(['benefits', 'industries', 'gallery']));
+        $this->firm->pushCriteria(new EagerLoading(['benefits', 'gallery']));
 
         $firms = FirmResource::collection($this->firm->findAllBy('user_id', $job->user_id));
 
@@ -126,8 +124,7 @@ class SubmitController extends Controller
             'firms'             => $firms,
             'default_benefits'  => Benefit::getBenefitsList(), // default benefits,
             'employees'         => Firm::getEmployeesList(),
-            'founded'           => Firm::getFoundedList(),
-            'industries'        => $industry->getAlphabeticalList()
+            'founded'           => Firm::getFoundedList()
         ]);
     }
 
@@ -141,7 +138,7 @@ class SubmitController extends Controller
         /** @var \Coyote\Job $job */
         $job = $draft->get(Job::class);
 
-        $job->firm->fill(array_merge(['industries' => []], $request->all()));
+        $job->firm->fill($request->all());
 
         // new firm has empty ID.
         if (empty($request->input('id'))) {

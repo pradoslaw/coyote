@@ -13,3 +13,15 @@ $factory->define(\Coyote\Post::class, function (Faker $faker) {
         'updated_at' => \Carbon\Carbon::now()
     ];
 });
+
+$factory->state(\Coyote\Post::class, 'id', function ($faker) {
+    return [
+        'id' => $faker->randomDigit,
+    ];
+});
+
+
+//
+//$factory->afterMaking(\Coyote\Post::class, function (\Coyote\Post $post, Faker $faker) {
+//    $post->id = $faker->randomDigit;
+//});

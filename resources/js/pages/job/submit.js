@@ -147,10 +147,6 @@ new Vue({
       // text can not be NULL
       // tinymce.get('description').setContent(this.firm.description === null ? '' : this.firm.description);
       this.firm.description = this.firm.description === null ? '' : this.firm.description;
-
-      this.$nextTick(() => {
-        $('#industries').trigger('chosen:updated');
-      });
     },
 
     _newFirm() {
@@ -171,7 +167,6 @@ new Vue({
         youtube_url: null,
         gallery: [{file: ''}],
         benefits: [],
-        industries: [],
         latitude: null,
         longitude: null,
         country: null,

@@ -16,6 +16,13 @@ use Illuminate\Database\Eloquent\Model;
 class Guest extends Model
 {
     /**
+     * The "type" of the primary key ID.
+     *
+     * @var string
+     */
+    protected $keyType = 'string';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array

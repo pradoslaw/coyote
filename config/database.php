@@ -53,24 +53,6 @@ return [
             'charset'  => 'utf8',
             'prefix'   => '',
             'schema'   => 'public',
-        ],
-        'mongodb' => [
-            'driver'   => 'mongodb',
-            'host'     => env('MONGO_HOST', 'localhost'),
-            'database' => env('MONGO_DATABASE', 'coyote'),
-            'username' => env('MONGO_USERNAME', ''),
-            'password' => env('MONGO_PASSWORD', '')
-        ],
-        'mysql' => [
-            'driver'   => 'mysql',
-            'host'     => env('MYSQL_HOST', 'localhost'),
-            'database' => env('MYSQL_DATABASE', 'coyote'),
-            'username' => env('MYSQL_USERNAME', 'root'),
-            'password' => env('MYSQL_PASSWORD', '123'),
-            'port'     => env('MYSQL_PORT', 3306),
-            'charset'   => 'utf8',
-            'collation' => 'utf8_unicode_ci',
-            'prefix'    => '',
         ]
     ],
     /*
@@ -96,13 +78,29 @@ return [
     |
     */
 
-    'redis'       => [
+    'redis' => [
 
-        'cluster' => false,
+        'client' => env('REDIS_CLIENT', 'predis'),
+
+        'options' => [
+            'cluster' => env('REDIS_CLUSTER', 'redis'),
+            'prefix' => '',
+        ],
+
         'default' => [
-            'host'     =>  env('REDIS_HOST', 'localhost'),
-            'port'     => 6379,
-            'database' => 0,
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', 'localhost'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_DB', '0'),
+        ],
+
+        'cache' => [
+            'url' => env('REDIS_URL'),
+            'host' => env('REDIS_HOST', 'localhost'),
+            'password' => env('REDIS_PASSWORD', null),
+            'port' => env('REDIS_PORT', '6379'),
+            'database' => env('REDIS_CACHE_DB', '1'),
         ],
 
     ],

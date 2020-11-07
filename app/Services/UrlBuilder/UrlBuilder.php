@@ -17,7 +17,7 @@ class UrlBuilder
      */
     public static function topic(Topic $topic)
     {
-        return route('forum.topic', [$topic->forum->slug, $topic->id, $topic->slug], false);
+        return route('forum.topic', ['forum' => $topic->forum->slug, 'topic' => $topic->id, 'slug' => $topic->slug], false);
     }
 
     /**
@@ -36,7 +36,7 @@ class UrlBuilder
      */
     public static function post(Post $post, bool $absolute = false)
     {
-        return route('forum.topic', [$post->forum->slug, $post->topic->id, $post->topic->slug], $absolute) . '?p=' . $post->id . '#id' . $post->id;
+        return route('forum.topic', ['forum' => $post->forum->slug, 'topic' => $post->topic->id, 'slug' => $post->topic->slug], $absolute) . '?p=' . $post->id . '#id' . $post->id;
     }
 
     /**

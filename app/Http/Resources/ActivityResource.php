@@ -54,7 +54,7 @@ class ActivityResource extends JsonResource
      */
     public function user(): string
     {
-        return $this->user_id ? link_to_route('profile', $this->user->name, ['id' => $this->user_id]) : $this->user_name;
+        return $this->user_id ? link_to_route('profile', $this->user->name, ['user' => $this->user_id]) : $this->user_name;
     }
 
     /**

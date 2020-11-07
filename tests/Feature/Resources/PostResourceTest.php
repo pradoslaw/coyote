@@ -67,7 +67,7 @@ class PostResourceTest extends TestCase
         });
 
         $forum = factory(Forum::class)->make();
-        $topic = factory(Topic::class)->make();
+        $topic = factory(Topic::class)->state('id')->make();
 
         $topic->forum()->associate($forum);
 

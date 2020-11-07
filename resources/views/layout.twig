@@ -15,7 +15,7 @@
 
       <meta property="og:url" content="{{ current_url() }}">
       <meta property="og:type" content="website">
-      <meta property="og:title" content="{{ block('ogtitle') ?: block('title') }}">
+      <meta property="og:title" content="{{ block('ogtitle') is defined ? block('ogtitle') : block('title') }}">
       <meta property="og:description" content="{{ block('description') }}">
       <meta property="og:image" content="{{ block('logo') is defined ? block ('logo') : secure_asset('img/apple-touch.png') }}">
 

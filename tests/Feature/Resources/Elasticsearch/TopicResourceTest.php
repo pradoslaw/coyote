@@ -15,8 +15,8 @@ class TopicResourceTest extends TestCase
     {
         $carbon = Carbon::parse('2020-04-09 00:00');
 
-        $topic = factory(Topic::class)->make(['score' => 1, 'replies' => 1, 'subject' => 'Lorem', 'last_post_created_at' => $carbon]);
-        $topic->setRelation('firstPost', factory(Post::class)->make());
+        $topic = factory(Topic::class)->state('id')->make(['score' => 1, 'replies' => 1, 'subject' => 'Lorem', 'last_post_created_at' => $carbon]);
+        $topic->setRelation('firstPost', factory(Post::class)->state('id')->make());
 
         $resource = TopicResource::make($topic)->toArray(request());
 
@@ -35,8 +35,8 @@ class TopicResourceTest extends TestCase
     {
         $carbon = Carbon::parse('2020-04-09 00:00');
 
-        $topic = factory(Topic::class)->make(['score' => 1, 'replies' => 1, 'subject' => 'Lorem ipsum', 'last_post_created_at' => $carbon]);
-        $topic->setRelation('firstPost', factory(Post::class)->make());
+        $topic = factory(Topic::class)->state('id')->make(['score' => 1, 'replies' => 1, 'subject' => 'Lorem ipsum', 'last_post_created_at' => $carbon]);
+        $topic->setRelation('firstPost', factory(Post::class)->state('id')->make());
 
         $resource = TopicResource::make($topic)->toArray(request());
 
