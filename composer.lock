@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6796147762f696ec47ed2cf01055276b",
+    "content-hash": "2706f2df0536f907fd8845a23ed3c3a9",
     "packages": [
         {
             "name": "adam-boduch/laravel-grid",
@@ -8617,47 +8617,6 @@
                 "unit testing"
             ],
             "time": "2019-10-19T13:15:55+00:00"
-        },
-        {
-            "name": "codeception/mockery-module",
-            "version": "0.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Codeception/MockeryModule.git",
-                "reference": "19cc51ae4123031d7c93c56a9abbde40697dbc24"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/MockeryModule/zipball/19cc51ae4123031d7c93c56a9abbde40697dbc24",
-                "reference": "19cc51ae4123031d7c93c56a9abbde40697dbc24",
-                "shasum": ""
-            },
-            "require": {
-                "codeception/codeception": "^2.0|^3.0",
-                "mockery/mockery": "^0.8|^0.9|^1.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Codeception\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Michael Bodnarchuk",
-                    "email": "davert.php@mailican.com"
-                },
-                {
-                    "name": "Jáchym Toušek",
-                    "email": "enumag@gmail.com"
-                }
-            ],
-            "description": "Mockery Module for Codeception",
-            "time": "2019-04-26T19:47:46+00:00"
         },
         {
             "name": "codeception/phpunit-wrapper",

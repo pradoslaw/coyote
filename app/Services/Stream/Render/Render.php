@@ -41,7 +41,7 @@ abstract class Render
         $message = $translator->get($id);
         $parameters = $this->bindParameters($message);
 
-        $this->stream['headline'] = $translator->trans($id, $parameters);
+        $this->stream['headline'] = $translator->get($id, $parameters);
         $this->stream['excerpt'] = $this->excerpt();
         $this->stream['agent'] = $agent;
 
