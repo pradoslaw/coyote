@@ -73,7 +73,7 @@
       }
     },
     "name": "coyote",
-    "version": "2.4",
+    "version": "2.5",
     "main": "index.js",
     "repository": "https://github.com/adam-boduch/coyote.git",
     "author": "adam-boduch <adam@boduch.net>",
