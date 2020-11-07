@@ -125,54 +125,54 @@ class PurgeViewsCommand extends Command
         }
     }
 
-    /**
-     * @param \Coyote\Page $page
-     * @param \Illuminate\Support\Collection $hits
-     */
-    private function registerVisit($page, $hits)
-    {
-        foreach ($hits as $hit) {
-            if ($hit['user_id']) {
-                /** @var \Coyote\Page\Visit $visits */
-                $visits = $page->visits()->firstOrNew(['user_id' => $hit['user_id']]);
-                $visits->visits++;
-
-                $visits->save();
-            }
-
-            /** @var \Coyote\Page\Stat $stats */
-            $stats = $page->stats()->firstOrNew(['date' => date('Y-m-d')]);
-            $stats->visits++;
-
-            $stats->save();
-        }
-    }
-
-    /**
-     * @param \Coyote\Page $page
-     * @param \Illuminate\Support\Collection $hits
-     */
-    private function registerTags($page, $hits)
-    {
-        if (empty($page->tags)) {
-            return;
-        }
-
-        foreach ($hits as $hit) {
-            /** @var \Coyote\Guest $guest */
-            $guest = $this->guest->findOrNew($hit['guest_id']);
-
-            if (!$guest->exists) {
-                $guest->id = $hit['guest_id'];
-                $guest->created_at = $guest->updated_at = Carbon::now();
-            }
-
-            $calculator = new Calculator($guest->interests);
-            $calculator->increment($page->tags);
-
-            $guest->interests = $calculator->toArray();
-
-            $guest->save();
-        }
-    }
+//    /**
+//     * @param \Coyote\Page $page
+//     * @param \Illuminate\Support\Collection $hits
+//     */
+//    private function registerVisit($page, $hits)
+//    {
+//        foreach ($hits as $hit) {
+//            if ($hit['user_id']) {
+//                /** @var \Coyote\Page\Visit $visits */
+//                $visits = $page->visits()->firstOrNew(['user_id' => $hit['user_id']]);
+//                $visits->visits++;
+//
+//                $visits->save();
+//            }
+//
+//            /** @var \Coyote\Page\Stat $stats */
+//            $stats = $page->stats()->firstOrNew(['date' => date('Y-m-d')]);
+//            $stats->visits++;
+//
+//            $stats->save();
+//        }
+//    }
+//
+//    /**
+//     * @param \Coyote\Page $page
+//     * @param \Illuminate\Support\Collection $hits
+//     */
+//    private function registerTags($page, $hits)
+//    {
+//        if (empty($page->tags)) {
+//            return;
+//        }
+//
+//        foreach ($hits as $hit) {
+//            /** @var \Coyote\Guest $guest */
+//            $guest = $this->guest->findOrNew($hit['guest_id']);
+//
+//            if (!$guest->exists) {
+//                $guest->id = $hit['guest_id'];
+//                $guest->created_at = $guest->updated_at = Carbon::now();
+//            }
+//
+//            $calculator = new Calculator($guest->interests);
+//            $calculator->increment($page->tags);
+//
+//            $guest->interests = $calculator->toArray();
+//
+//            $guest->save();
+//        }
+//    }
 }
