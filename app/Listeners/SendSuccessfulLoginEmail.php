@@ -6,8 +6,7 @@ use Coyote\Events\SuccessfulLogin;
 use Coyote\Repositories\Contracts\StreamRepositoryInterface as StreamRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Contracts\Mail\Mailer;
-use Illuminate\Mail\Message;
-use Jenssegers\Agent\Agent;
+use Coyote\Mail\SuccessfulLogin as Mailable;
 
 class SendSuccessfulLoginEmail implements ShouldQueue
 {
@@ -22,19 +21,12 @@ class SendSuccessfulLoginEmail implements ShouldQueue
     private $mailer;
 
     /**
-     * @var Agent
-     */
-    private $agent;
-
-    /**
      * @param Mailer $mailer
      * @param StreamRepository $stream
-     * @param Agent $agent
      */
-    public function __construct(Mailer $mailer, StreamRepository $stream, Agent $agent)
+    public function __construct(Mailer $mailer, StreamRepository $stream)
     {
         $this->mailer = $mailer;
-        $this->agent = $agent;
         $this->stream = $stream;
     }
 
@@ -74,23 +66,6 @@ class SendSuccessfulLoginEmail implements ShouldQueue
      */
     private function sendSuccessfulLoginEmail(SuccessfulLogin $event)
     {
-        $this->agent->setUserAgent($event->browser);
-
-        $data = array_merge(
-            $event->user->toArray(),
-            [
-                'ip' => $event->ip,
-                'host' => gethostbyaddr($event->ip),
-                'browser' => $this->agent->browser(),
-                'platform' => $this->agent->platform()
-            ]
-        );
-
-        $user = $event->user;
-
-        $this->mailer->send('emails.auth.successful', $data, function (Message $message) use ($user) {
-            $message->to($user->email);
-            $message->subject('Powiadomienie o logowaniu z nowego urządzenia');
-        });
+        $this->mailer->to($event->user)->send(new Mailable($event));
     }
 }
