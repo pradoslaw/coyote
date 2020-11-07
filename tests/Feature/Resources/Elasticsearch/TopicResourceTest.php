@@ -18,7 +18,7 @@ class TopicResourceTest extends TestCase
         $topic = factory(Topic::class)->state('id')->make(['score' => 1, 'replies' => 1, 'subject' => 'Lorem', 'last_post_created_at' => $carbon]);
         $topic->setRelation('firstPost', factory(Post::class)->state('id')->make());
 
-        $resource = TopicResource::make($topic)->toArray(request());
+        $resource = TopicResource::make($topic)->resolve(request());
 
         $this->assertEquals($topic->subject, $resource['subject']);
         $this->assertCount(1, $resource['suggest']);
@@ -38,7 +38,7 @@ class TopicResourceTest extends TestCase
         $topic = factory(Topic::class)->state('id')->make(['score' => 1, 'replies' => 1, 'subject' => 'Lorem ipsum', 'last_post_created_at' => $carbon]);
         $topic->setRelation('firstPost', factory(Post::class)->state('id')->make());
 
-        $resource = TopicResource::make($topic)->toArray(request());
+        $resource = TopicResource::make($topic)->resolve(request());
 
         $this->assertCount(2, $resource['suggest']);
 
