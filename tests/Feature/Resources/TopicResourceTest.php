@@ -29,12 +29,14 @@ class TopicResourceTest extends TestCase
         $topic = factory(Topic::class)->state('id')->make();
         $paginator = new LengthAwarePaginator([$topic], 1, 10);
 
+        TopicCollection::wrap('data');
+
         $collection = (new TopicCollection($paginator))
             ->setGuest($guest)
             ->setRepository($this->repository);
 
         $result = $collection->toResponse(request())->getData(true);
-var_dump($result);
+
         $this->assertEquals(1, $result['meta']['total']);
         $this->assertEquals(1, $result['meta']['current_page']);
         $this->assertEquals($topic['subject'], $result['data'][0]['subject']);
