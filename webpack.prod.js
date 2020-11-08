@@ -10,6 +10,7 @@ module.exports = merge(common, {
   mode: "production",
   optimization: {
     namedChunks: true,
+    minimize: true,
     minimizer: [
       new TerserPlugin({
         extractComments: false,
@@ -62,7 +63,6 @@ module.exports = merge(common, {
         'fa-key',
         'fa-minus',
         'fa-columns',
-        'fa-at',
         'pre',
         'code',
         'breadcrumb-fixed',
