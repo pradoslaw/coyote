@@ -67,7 +67,6 @@ class Kernel extends HttpKernel
         'job.forget'    => Middleware\ForgetJobDraft::class,
         'job.redirect'  => Middleware\PermanentRedirect::class,
         'topic.scroll'  => Middleware\RedirectToPost::class,
-        'post.response' => Middleware\PostSubmitResponse::class,
         'wiki.access'   => Middleware\WikiAccess::class,
         'wiki.lock'     => Middleware\WikiLock::class,
         'wiki.legacy'   => Middleware\WikiLegacy::class,
