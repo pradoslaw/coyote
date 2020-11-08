@@ -1,8 +1,11 @@
 <?php
 
+namespace Tests\Feature\Services\FormBuilder;
+
 use Illuminate\Routing\Redirector;
 use Faker\Factory;
 use Illuminate\Contracts\Validation\Validator;
+use Tests\TestCase;
 
 class TestForm extends \Coyote\Services\FormBuilder\Form
 {
@@ -82,7 +85,7 @@ class Model
 
     public function __construct()
     {
-        $faker = Faker\Factory::create();
+        $faker = Factory::create();
 
         $this->name = $faker->name;
         $this->email = $faker->email;
@@ -113,22 +116,16 @@ class Model
     }
 }
 
-class FormTest extends \Codeception\TestCase\Test
+class FormTest extends TestCase
 {
-    /**
-     * @var \UnitTester
-     */
-    protected $tester;
     protected $request;
 
-    protected function _before()
+    protected function setUp(): void
     {
+        parent::setUp();
+
         $this->request = app()->make('request');
         $this->request->setLaravelSession(app('session')->driver('array'));
-    }
-
-    protected function _after()
-    {
     }
 
     public function testCreateFormAndSetAttributes()
@@ -344,7 +341,7 @@ class FormTest extends \Codeception\TestCase\Test
 
     public function testBuildFormWithChildFormAndFillUpWithArray()
     {
-        $faker = Faker\Factory::create();
+        $faker = Factory::create();
         $value = ['title' => $title = $faker->text(50), 'items' => $items = "Answer 1\nAnswer 2"];
 
         $this->fillUpChildFormWithData($value);
@@ -352,7 +349,7 @@ class FormTest extends \Codeception\TestCase\Test
 
     public function testBuildFormWithChildFormAndFillUpWithCollection()
     {
-        $faker = Faker\Factory::create();
+        $faker = Factory::create();
         $value = collect(['title' => $title = $faker->text(50), 'items' => $items = "Answer 1\nAnswer 2"]);
 
         $this->fillUpChildFormWithData($value);
@@ -409,7 +406,7 @@ class FormTest extends \Codeception\TestCase\Test
 
     public function testBuildFormAndFillUpWithCollection()
     {
-        $faker = Faker\Factory::create();
+        $faker = Factory::create();
 
         $data = collect([
             'name' => $faker->name,
@@ -453,20 +450,20 @@ class FormTest extends \Codeception\TestCase\Test
 
         $groups = $form->get('groups');
 
-        $this->tester->assertEquals(3, count($groups->getChildren()));
-        $this->tester->assertEquals('Admin', $groups->getChild(0)->getLabel());
-        $this->tester->assertEquals('Moderator', $groups->getChild(1)->getLabel());
-        $this->tester->assertEquals('Unassigned Group', $groups->getChild(2)->getLabel());
+        $this->assertEquals(3, count($groups->getChildren()));
+        $this->assertEquals('Admin', $groups->getChild(0)->getLabel());
+        $this->assertEquals('Moderator', $groups->getChild(1)->getLabel());
+        $this->assertEquals('Unassigned Group', $groups->getChild(2)->getLabel());
 
-        $this->tester->assertTrue($groups->getChild(0)->isChecked());
-        $this->tester->assertFalse($groups->getChild(1)->isChecked());
-        $this->tester->assertTrue($groups->getChild(2)->isChecked());
+        $this->assertTrue($groups->getChild(0)->isChecked());
+        $this->assertFalse($groups->getChild(1)->isChecked());
+        $this->assertTrue($groups->getChild(2)->isChecked());
 
-        $this->tester->assertEquals(2, $groups->getChild(0)->getCheckedValue());
-        $this->tester->assertEquals(4, $groups->getChild(1)->getCheckedValue());
-        $this->tester->assertEquals(8, $groups->getChild(2)->getCheckedValue());
+        $this->assertEquals(2, $groups->getChild(0)->getCheckedValue());
+        $this->assertEquals(4, $groups->getChild(1)->getCheckedValue());
+        $this->assertEquals(8, $groups->getChild(2)->getCheckedValue());
 
-        $this->tester->assertEquals([2, 8], $groups->getChildrenValues());
+        $this->assertEquals([2, 8], $groups->getChildrenValues());
     }
 
     public function testPassesValidation()
