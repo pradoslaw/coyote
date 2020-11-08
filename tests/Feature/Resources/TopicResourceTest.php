@@ -34,7 +34,7 @@ class TopicResourceTest extends TestCase
             ->setRepository($this->repository);
 
         $result = $collection->toResponse(request())->getData(true);
-
+var_dump($result);
         $this->assertEquals(1, $result['meta']['total']);
         $this->assertEquals(1, $result['meta']['current_page']);
         $this->assertEquals($topic['subject'], $result['data'][0]['subject']);

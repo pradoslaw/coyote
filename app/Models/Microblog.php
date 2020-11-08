@@ -5,6 +5,7 @@ namespace Coyote;
 use Coyote\Models\Scopes\ForUser;
 use Coyote\Services\Media\Factory as MediaFactory;
 use Coyote\Services\Media\MediaInterface;
+use Coyote\Services\Media\SerializeClass;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -32,7 +33,7 @@ use Illuminate\Database\Query\Expression;
  */
 class Microblog extends Model
 {
-    use SoftDeletes, Taggable, ForUser;
+    use SoftDeletes, Taggable, ForUser, SerializeClass;
     use Searchable{
         getIndexBody as parentGetIndexBody;
     }
