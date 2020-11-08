@@ -22,12 +22,6 @@
     </p>
   {% endif %}
 
-  {% if errors.first('_token') %}
-    <p class="alert alert-danger">
-      {{ errors.first('_token') }}
-    </p>
-  {% endif %}
-
   <h1 class="mb-0">{{ link_to_route('forum.topic', model.subject, [forum.slug, model.id, model.slug]) }}</h1>
 
   {% include "forum.partials.top" %}
