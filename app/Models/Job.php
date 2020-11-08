@@ -473,7 +473,7 @@ class Job extends Model
      */
     public function setFeaturesAttribute($features)
     {
-        $this->features->flush();
+        $models = [];
 
         foreach ($features as $feature) {
             $checked = (int) $feature['checked'];
@@ -483,30 +483,42 @@ class Job extends Model
                 'value'         => $checked ? ($feature['value'] ?? null) : null
             ]);
 
-            $model = Feature::findOrNew($feature['id'])->setRelation('pivot', $pivot);
-            $this->features->add($model);
+            $models[] = Feature::findOrNew($feature['id'])->setRelation('pivot', $pivot);
+        }
+
+        // set only if not empty. important!
+        if ($models) {
+            $this->setRelation('features', collect($models));
         }
     }
 
     public function setTagsAttribute($tags)
     {
-        $this->tags->flush();
+        $models = [];
 
         foreach ($tags as $tag) {
             $pivot = $this->tags()->newPivot(['priority' => $tag['priority'] ?? 1]);
-            $model = (new Tag($tag))->setRelation('pivot', $pivot);
+            $models[] = (new Tag($tag))->setRelation('pivot', $pivot);
+        }
 
-            $this->tags->add($model);
+        // set only if not empty. important!
+        if ($models) {
+            $this->setRelation('tags', collect($models));
         }
     }
 
     public function setLocationsAttribute($locations)
     {
-        $this->locations->flush();
+        $models = [];
 
         // remove empty locations before adding...
         foreach (array_filter(array_map('array_filter', $locations)) as $location) {
-            $this->locations->add(new Job\Location($location));
+            $models[] = new Job\Location($location);
+        }
+
+        // set only if not empty. important!
+        if ($models) {
+            $this->setRelation('locations', collect($models));
         }
     }
 

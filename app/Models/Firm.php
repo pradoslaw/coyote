@@ -230,8 +230,9 @@ class Firm extends Model
             $models[] = new Firm\Benefit(['name' => $benefit]);
         }
 
-        // call macro and replace collection items
-        $this->setRelation('benefits', $models);
+        if ($models) {
+            $this->setRelation('benefits', collect($models));
+        }
     }
 
     public function setGalleryAttribute($gallery)
@@ -244,8 +245,9 @@ class Firm extends Model
             }
         }
 
-        // call macro and replace collection items
-        $this->setRelation('gallery', $models);
+        if ($models) {
+            $this->setRelation('gallery', collect($models));
+        }
     }
 
     /**
