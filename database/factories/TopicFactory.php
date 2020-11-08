@@ -20,20 +20,27 @@ $factory->define(\Coyote\Topic::class, function (Faker $faker) {
 });
 
 $factory->afterCreating(\Coyote\Topic::class, function (\Coyote\Topic $topic) {
-    $topic->posts()->save(factory(\Coyote\Post::class)->make(['forum_id' => $topic->forum_id]));
+    $topic->posts()->saveMany($topic->posts);
 });
 
 $factory->afterMaking(\Coyote\Topic::class, function (\Coyote\Topic $topic) {
     $post = factory(\Coyote\Post::class)->make(['forum_id' => $topic->forum_id]);
 
-    $topic->setRelation('posts', [$post]);
-    $topic->setRelation('firstPost', $post);
-    $topic->setRelation('lastPost', $post);
-});
+    $post->setRelation('topic', $topic);
 
+    $topic->setRelations([
+        'posts' => [$post],
+        'firstPost' => $post,
+        'lastPost' => $post
+    ]);
+});
 
 $factory->state(\Coyote\Topic::class, 'id', function (Faker $faker) {
     return [
         'id' => $faker->numberBetween(10000000)
     ];
+});
+
+$factory->afterMakingState(\Coyote\Topic::class, 'id', function (\Coyote\Topic $topic, $faker) {
+    $topic->firstPost->id = $faker->numberBetween(10000000);
 });

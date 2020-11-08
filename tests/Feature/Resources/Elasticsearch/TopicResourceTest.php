@@ -5,7 +5,6 @@ namespace Tests\Feature\Resources\Elasticsearch;
 
 use Carbon\Carbon;
 use Coyote\Http\Resources\Elasticsearch\TopicResource;
-use Coyote\Post;
 use Coyote\Topic;
 use Tests\TestCase;
 
