@@ -159,7 +159,7 @@ class JobsControllerTest extends TestCase
         $response = $this->json('PUT', '/v1/jobs/' . $result['id'], $data, ['Authorization' => 'Bearer ' . $this->token, 'Accept' => 'application/json']);
         $this->assertEquals(200, $response->getStatusCode());
 
-        $response->assertJsonFragment(['title' => $data['title'], 'firm' => null, 'tags' => []]);
+        $response->assertJsonFragment(['title' => $data['title'], 'firm' => null]);
     }
 
     public function testNotEnoughFunds()

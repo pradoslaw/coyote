@@ -30,11 +30,6 @@ class PostsControllerTest extends TestCase
     private $topic;
 
     /**
-     * @var Post
-     */
-    private $post;
-
-    /**
      * @var string
      */
     private $token;
@@ -52,11 +47,10 @@ class PostsControllerTest extends TestCase
         $this->forum = factory(Forum::class)->create(['is_prohibited' => true]);
         $this->forum->access()->create(['group_id' => $group->id]);
         $this->topic = factory(Topic::class)->create(['forum_id' => $this->forum->id]);
-        $this->post = factory(Post::class)->create(['forum_id' => $this->forum->id, 'topic_id' => $this->topic->id]);
 
         $this->token = $this->user->createToken('4programmers.net')->accessToken;
 
-        $this->post->comments()->save(factory(Post\Comment::class)->make(['user_id' => $this->user->id]));
+        $this->topic->firstPost->comments()->save(factory(Post\Comment::class)->make(['user_id' => $this->user->id]));
     }
 
     public function testShowAllPosts()
@@ -65,7 +59,7 @@ class PostsControllerTest extends TestCase
 
         $data = $request->decodeResponseJson('data');
 
-        $this->assertNotEquals($data[0]['html'], $this->topic->posts()->first()->html);
+        $this->assertNotEquals($data[0]['html'], $this->topic->firstPost->html);
 
         $this->assertArrayHasKey('id', $data[0]);
         $this->assertArrayHasKey('text', $data[0]);
@@ -82,30 +76,30 @@ class PostsControllerTest extends TestCase
         $request = $this->get('/v1/posts', ['Accept' => 'application/json', 'Authorization' => 'Bearer ' . $this->token]);
         $data = $request->decodeResponseJson('data');
 
-        $this->assertEquals($data[0]['html'], $this->topic->posts()->first()->html);
+        $this->assertEquals($data[0]['html'], $this->topic->firstPost->html);
     }
 
     public function testShowForbiddenWhenUnauthorized()
     {
-        $request = $this->get('/v1/posts/' . $this->post->id, ['Accept' => 'application/json']);
+        $request = $this->get('/v1/posts/' . $this->topic->firstPost->id, ['Accept' => 'application/json']);
 
         $request->assertForbidden();
     }
 
     public function testShowPostWhenAuthorized()
     {
-        $request = $this->get('/v1/posts/' . $this->post->id, ['Accept' => 'application/json', 'Authorization' => 'Bearer ' . $this->token]);
+        $request = $this->get('/v1/posts/' . $this->topic->firstPost->id, ['Accept' => 'application/json', 'Authorization' => 'Bearer ' . $this->token]);
 
         $request->assertJsonFragment([
-            'user_name' => $this->post->user_name,
+            'user_name' => $this->topic->firstPost->user_name,
             'topic_id' => $this->topic->id,
             'forum_id' => $this->forum->id,
-            'text' => $this->post->text
+            'text' => $this->topic->firstPost->text
         ]);
 
         $comment = array_first($request->decodeResponseJson('comments'));
 
-        $this->assertEquals($comment['text'], $this->post->comments->first()->text);
-        $this->assertEquals($comment['id'], $this->post->comments->first()->id);
+        $this->assertEquals($comment['text'], $this->topic->firstPost->comments->first()->text);
+        $this->assertEquals($comment['id'], $this->topic->firstPost->comments->first()->id);
     }
 }
