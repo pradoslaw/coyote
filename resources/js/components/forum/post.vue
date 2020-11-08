@@ -232,11 +232,11 @@
             </template>
 
             <button v-if="!post.deleted_at" @click="$emit('reply', post, false)" class="btn btn-sm btn-fast-reply" title="Dodaj cytat do pola odpowiedzi">
-              <i class="fa fa-fw fa-plus"></i>
+              <i class="fa fa-fw fa-quote-left"></i>
             </button>
 
             <button v-if="!post.deleted_at" @click="$emit('reply', post)" class="btn btn-sm" title="Odpowiedz na ten post">
-              <i class="fa fa-fw fa-quote-left"></i> <span class="d-none d-sm-inline">Odpowiedz</span>
+              <i class="fa fa-fw fa-at"></i> <span class="d-none d-sm-inline">Odpowiedz</span>
             </button>
 
             <a v-if="!post.deleted_at" href="javascript:" :data-metadata="post.metadata" :data-url="post.url" class="btn btn-sm">
