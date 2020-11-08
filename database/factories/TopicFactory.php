@@ -26,7 +26,7 @@ $factory->afterCreating(\Coyote\Topic::class, function (\Coyote\Topic $topic) {
 $factory->afterMaking(\Coyote\Topic::class, function (\Coyote\Topic $topic) {
     $post = factory(\Coyote\Post::class)->make(['forum_id' => $topic->forum_id]);
 
-    $topic->setRelation('post', [$post]);
+    $topic->setRelation('posts', [$post]);
     $topic->setRelation('firstPost', $post);
     $topic->setRelation('lastPost', $post);
 });
