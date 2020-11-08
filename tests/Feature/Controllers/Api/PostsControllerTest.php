@@ -51,6 +51,7 @@ class PostsControllerTest extends TestCase
         $this->token = $this->user->createToken('4programmers.net')->accessToken;
 
         $this->topic->firstPost->comments()->save(factory(Post\Comment::class)->make(['user_id' => $this->user->id]));
+        $this->topic->refresh();
     }
 
     public function testShowAllPosts()

@@ -14,6 +14,8 @@ $factory->define(\Coyote\Post::class, function (Faker $faker) {
     ];
 });
 
-$factory->afterMaking(\Coyote\Post::class, function (\Coyote\Post $post, Faker $faker) {
-    $post->id = $faker->numberBetween(10000000);
+$factory->state(\Coyote\Post::class, 'id', function (Faker $faker) {
+    return [
+        'id' => $faker->numberBetween(10000000)
+    ];
 });
