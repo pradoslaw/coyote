@@ -13,11 +13,11 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
+        Middleware\TrustProxies::class,
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         Middleware\TrimStrings::class,
-        \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-        Middleware\TrustProxies::class
+        \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class
     ];
 
     /**
@@ -39,7 +39,7 @@ class Kernel extends HttpKernel
         ],
         'api' => [
             'throttle:60,1',
-            'bindings',
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
             ForceRootUrl::class
         ],
     ];
@@ -57,6 +57,7 @@ class Kernel extends HttpKernel
         'can'           => \Illuminate\Auth\Middleware\Authorize::class,
         'guest'         => Middleware\RedirectIfAuthenticated::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
+        'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         'signed'        => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'verified'      => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'adm'           => Middleware\AdmAccess::class,
@@ -85,6 +86,7 @@ class Kernel extends HttpKernel
         \Illuminate\Session\Middleware\StartSession::class,
         \Illuminate\View\Middleware\ShareErrorsFromSession::class,
         Middleware\Authenticate::class,
+        \Illuminate\Routing\Middleware\ThrottleRequests::class,
         \Illuminate\Session\Middleware\AuthenticateSession::class,
         \Illuminate\Routing\Middleware\SubstituteBindings::class,
         \Illuminate\Auth\Middleware\Authorize::class,
