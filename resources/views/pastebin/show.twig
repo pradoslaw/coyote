@@ -86,14 +86,6 @@
           editor.getSession().setMode("ace/mode/" + $(this).val().toLowerCase());
         }
       }).trigger('change');
-
-      $(function () {
-        $('#btn-delete').click(function () {
-          $('#confirm').modal('show').find('.btn-danger').one('click', function () {
-            $('#form-delete').submit();
-          });
-        });
-      });
     });
   </script>
 {% endblock %}

@@ -56,7 +56,9 @@ class PastebinForm extends Form implements ValidatesWhenSubmitted
                     'label' => 'Usuń',
                     'attr' => [
                         'id' => 'btn-delete',
-                        'class' => 'btn btn-danger'
+                        'class' => 'btn btn-danger',
+                        'data-toggle' => "modal",
+                        'data-target' => "#confirm"
                     ]
                 ]);
             }
