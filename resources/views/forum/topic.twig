@@ -14,10 +14,10 @@
     </p>
   {% endif %}
 
-  {% if model.moved_at %}
+  {% if model.moved_at and model.prevForum.slug %}
     <p class="alert alert-warning">
       Wątek przeniesiony {{ model.moved_at|format_date }} z
-      <a class="alert-link" href="{{ route('forum.category', [model.prevForum.slug]) }}">{{ model.prevForum.name }}</a> przez
+      <a class="alert-link" href="{{ route('forum.category', {'forum': model.prevForum.slug}) }}">{{ model.prevForum.name }}</a> przez
       <a class="alert-link" href="{{ route('profile', [model.mover.id]) }}">{{ model.mover.name }}</a>.
     </p>
   {% endif %}
