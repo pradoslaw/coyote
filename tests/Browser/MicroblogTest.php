@@ -25,7 +25,8 @@ class MicroblogTest extends DuskTestCase
                 ->type('text', $text = $faker->text())
                 ->press('Zapisz')
                 ->waitForText($text)
-                ->assertSee($text);
+                ->assertSee($text)
+                ->assertInputValueIsNot('text', $text);
 
             $browser->logout();
         });
