@@ -44,7 +44,6 @@ class InitialStateComposer
         $state = array_merge(
             $this->request->attributes->all(),
             [
-                'public'        => route('home'),
                 'user' => [
                     'notifications_unread' => 0,
                     'pm_unread'     => 0

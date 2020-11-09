@@ -7,9 +7,9 @@ import './libs/timeago.js';
 import './components/vcard.js';
 import './plugins/flags.ts';
 import './plugins/sociale.js';
-import 'popper.js';
+import 'popper.js'; // must be imported before bootstrap
 import './bootstrap';
-import './libs/csrf';
+import './libs/csrf'; // setup CSRF token
 import Router from './libs/router';
 import Prism from 'prismjs';
 
