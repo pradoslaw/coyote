@@ -4,7 +4,7 @@ namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Notifications\Microblog\VotedNotification;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;

@@ -2,7 +2,7 @@
 
 namespace Coyote\Services\Stream\Objects;
 
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 
 class Comment extends ObjectAbstract
 {

@@ -7,7 +7,7 @@ use Coyote\Http\Forms\Job\ReferForm;
 use Coyote\Job;
 use Coyote\Mail\OfferReferred;
 use Coyote\Mail\OfferReferredPerson;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Objects\Job as Stream_Job;
 use Coyote\Services\Stream\Objects\Refer as Stream_Refer;

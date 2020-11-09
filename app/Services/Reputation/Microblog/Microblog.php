@@ -5,7 +5,7 @@ namespace Coyote\Services\Reputation\Microblog;
 use Coyote\Services\Reputation\Reputation;
 use Coyote\Services\Reputation\ReputationInterface;
 use Coyote\Microblog as Model;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 
 /**
  * Class Microblog

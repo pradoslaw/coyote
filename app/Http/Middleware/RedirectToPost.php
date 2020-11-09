@@ -5,7 +5,7 @@ namespace Coyote\Http\Middleware;
 use Closure;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Coyote\Services\Forum\Tracker;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 use Illuminate\Http\Request;
 
 class RedirectToPost

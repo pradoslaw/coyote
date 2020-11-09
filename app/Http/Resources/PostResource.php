@@ -7,7 +7,7 @@ use Coyote\Forum;
 use Coyote\Http\Factories\GateFactory;
 use Coyote\Post\Comment;
 use Coyote\Services\Forum\Tracker;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 use Coyote\Topic;
 use Coyote\User;
 use Illuminate\Http\Resources\Json\JsonResource;

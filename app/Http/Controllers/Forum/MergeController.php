@@ -11,7 +11,7 @@ use Coyote\Services\Stream\Activities\Merge as Stream_Merge;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Objects\Post as Stream_Post;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 
 class MergeController extends BaseController
 {

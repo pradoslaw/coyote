@@ -8,7 +8,7 @@ use Coyote\Http\Grids\Adm\PaymentsGrid;
 use Coyote\Payment;
 use Coyote\Repositories\Contracts\PaymentRepositoryInterface as PaymentRepository;
 use Coyote\Services\Invoice\Pdf;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 
 class PaymentsController extends BaseController
 {

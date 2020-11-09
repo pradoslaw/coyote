@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Coyote\Http\Resources\UserResource;
 use Coyote\Microblog;
 use Coyote\Services\Media\MediaInterface;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 use Coyote\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 

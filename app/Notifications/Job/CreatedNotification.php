@@ -6,7 +6,7 @@ use Coyote\Job;
 use Coyote\Services\Invoice\Calculator;
 use Coyote\Services\Invoice\CalculatorFactory;
 use Coyote\Services\Notification\Notification;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 use Coyote\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

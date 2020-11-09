@@ -3,7 +3,7 @@
 namespace Tests\Browser;
 
 use Coyote\Permission;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 use Faker\Factory;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Laravel\Dusk\Browser;

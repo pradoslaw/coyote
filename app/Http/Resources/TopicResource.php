@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Coyote\Forum;
 use Coyote\Http\Resources\Api\PostResource;
 use Coyote\Post;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 use Coyote\Tag;
 use Coyote\User;
 use Illuminate\Http\Request;

@@ -3,7 +3,7 @@
 namespace Coyote\Notifications\Microblog;
 
 use Coyote\Microblog;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 use Illuminate\Notifications\Messages\MailMessage;
 
 class SubmittedNotification extends AbstractNotification

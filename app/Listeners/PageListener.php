@@ -15,7 +15,7 @@ use Coyote\Events\WikiWasDeleted;
 use Coyote\Events\WikiWasSaved;
 use Coyote\Microblog;
 use Coyote\Job;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 use Coyote\Topic;
 use Coyote\Forum;
 use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;

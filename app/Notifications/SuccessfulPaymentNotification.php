@@ -3,7 +3,7 @@
 namespace Coyote\Notifications;
 
 use Coyote\Payment;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
 

@@ -7,7 +7,7 @@ use Coyote\Post;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Services\Stream\Objects\Post as Stream_Post;
 use Coyote\Services\Stream\Activities\Rollback as Stream_Rollback;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 
 class RollbackController extends Controller
 {

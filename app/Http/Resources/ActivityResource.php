@@ -3,7 +3,7 @@
 namespace Coyote\Http\Resources;
 
 use Coyote\Post;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**

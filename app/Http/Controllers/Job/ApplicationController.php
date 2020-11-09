@@ -8,7 +8,7 @@ use Coyote\Http\Forms\Job\ApplicationForm;
 use Coyote\Job;
 use Coyote\Notifications\Job\ApplicationConfirmationNotification;
 use Coyote\Notifications\Job\ApplicationSentNotification;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Http\Request;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;

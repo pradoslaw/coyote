@@ -5,7 +5,7 @@ namespace Coyote\Http\Resources\Elasticsearch;
 use Carbon\Carbon;
 use Coyote\Forum;
 use Coyote\Post;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 use Coyote\User;
 
 /**

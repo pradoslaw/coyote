@@ -3,7 +3,7 @@
 namespace Coyote\Services\Stream\Objects;
 
 use Coyote\Microblog as Model;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 
 class Microblog extends ObjectAbstract
 {

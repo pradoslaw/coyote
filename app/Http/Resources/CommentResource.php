@@ -5,7 +5,7 @@ namespace Coyote\Http\Resources;
 use Carbon\Carbon;
 use Coyote\Job;
 use Coyote\Job\Comment;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 use Coyote\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 

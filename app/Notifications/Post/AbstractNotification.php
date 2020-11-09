@@ -4,7 +4,7 @@ namespace Coyote\Notifications\Post;
 
 use Coyote\Post;
 use Coyote\Services\Notification\Notification;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 use Coyote\Topic;
 use Coyote\User;
 use Illuminate\Bus\Queueable;

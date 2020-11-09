@@ -5,7 +5,7 @@ namespace Coyote\Notifications\Job;
 use Coyote\Job;
 use Coyote\Services\Notification\DatabaseChannel;
 use Coyote\Services\Notification\NotificationInterface;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Contracts\Queue\ShouldQueue;

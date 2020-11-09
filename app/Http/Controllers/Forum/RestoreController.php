@@ -8,7 +8,7 @@ use Coyote\Services\Stream\Objects\Post as Stream_Post;
 use Coyote\Services\Stream\Objects\Forum as Stream_Forum;
 use Coyote\Events\PostWasSaved;
 use Coyote\Events\TopicWasSaved;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 
 class RestoreController extends BaseController
 {

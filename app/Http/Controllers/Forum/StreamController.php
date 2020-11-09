@@ -6,7 +6,7 @@ use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
 use Coyote\Repositories\Contracts\StreamRepositoryInterface as StreamRepository;
 use Coyote\Services\Elasticsearch\Builders\Stream\TopicBuilder;
 use Coyote\Services\Stream\Renderer;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 use Coyote\Topic;
 use Illuminate\Pagination\Paginator;
 

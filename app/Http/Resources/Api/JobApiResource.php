@@ -10,7 +10,7 @@ use Coyote\Http\Resources\FirmResource;
 use Coyote\Http\Resources\LocationResource;
 use Coyote\Http\Resources\TagResource;
 use Coyote\Job;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 use Coyote\Tag;
 use Illuminate\Http\Resources\Json\JsonResource;
 

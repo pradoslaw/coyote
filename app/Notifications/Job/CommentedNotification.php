@@ -4,7 +4,7 @@ namespace Coyote\Notifications\Job;
 
 use Coyote\Job\Comment;
 use Coyote\Services\Notification\Notification;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 use Coyote\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;

@@ -19,7 +19,7 @@ use Coyote\Repositories\Contracts\PlanRepositoryInterface as PlanRepository;
 use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Services\Job\Draft;
 use Coyote\Services\Job\SubmitsJob;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 use Illuminate\Database\Connection;
 use Illuminate\Http\Request;
 

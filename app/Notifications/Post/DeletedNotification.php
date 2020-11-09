@@ -2,7 +2,7 @@
 
 namespace Coyote\Notifications\Post;
 
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 use Coyote\User;
 use Illuminate\Notifications\Messages\MailMessage;
 

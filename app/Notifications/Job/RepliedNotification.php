@@ -3,7 +3,7 @@
 namespace Coyote\Notifications\Job;
 
 use Coyote\Job\Comment;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;

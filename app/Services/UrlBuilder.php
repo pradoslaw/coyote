@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Services\UrlBuilder;
+namespace Coyote\Services;
 
 use Coyote\Forum;
 use Coyote\Job;

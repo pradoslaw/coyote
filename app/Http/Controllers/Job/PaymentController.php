@@ -12,7 +12,7 @@ use Coyote\Repositories\Contracts\CountryRepositoryInterface as CountryRepositor
 use Coyote\Repositories\Contracts\CouponRepositoryInterface as CouponRepository;
 use Coyote\Repositories\Contracts\PaymentRepositoryInterface as PaymentRepository;
 use Coyote\Services\Invoice\CalculatorFactory;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 use Coyote\Services\Invoice\Generator as InvoiceGenerator;
 use Illuminate\Database\Connection as Db;
 use Illuminate\Http\Request;

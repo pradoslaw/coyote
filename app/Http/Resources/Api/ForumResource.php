@@ -5,7 +5,7 @@ namespace Coyote\Http\Resources\Api;
 use Coyote\Http\Resources\UserResource;
 use Coyote\Post;
 use Coyote\Services\Guest;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**

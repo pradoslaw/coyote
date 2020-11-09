@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Coyote\Currency;
 use Coyote\Http\Factories\MediaFactory;
 use Coyote\Job;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 use Coyote\Tag;
 use Illuminate\Http\Resources\Json\JsonResource;
 

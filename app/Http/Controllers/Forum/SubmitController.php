@@ -11,7 +11,7 @@ use Coyote\Notifications\Topic\SubjectChangedNotification;
 use Coyote\Post;
 use Coyote\Repositories\Contracts\PollRepositoryInterface;
 use Coyote\Services\Forum\Tracker;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 use Coyote\Topic;
 use Illuminate\Http\Request;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;

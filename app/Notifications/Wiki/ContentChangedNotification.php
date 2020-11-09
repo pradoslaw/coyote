@@ -3,7 +3,7 @@
 namespace Coyote\Notifications\Wiki;
 
 use Coyote\Services\Notification\Notification;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 use Coyote\User;
 use Coyote\Wiki;
 use Illuminate\Bus\Queueable;

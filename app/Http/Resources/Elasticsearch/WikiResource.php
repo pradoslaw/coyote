@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Resources\Elasticsearch;
 
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 
 /**
  * @property \Carbon\Carbon $created_at

@@ -8,7 +8,7 @@ use Coyote\Services\Stream\Activities\Move as Stream_Move;
 use Coyote\Services\Stream\Objects\Forum as Stream_Forum;
 use Coyote\Events\TopicWasMoved;
 use Coyote\Forum\Reason;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 use Coyote\Topic;
 use Illuminate\Http\Request;
 

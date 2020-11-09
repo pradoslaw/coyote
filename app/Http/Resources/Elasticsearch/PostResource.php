@@ -3,7 +3,7 @@
 namespace Coyote\Http\Resources\Elasticsearch;
 
 use Carbon\Carbon;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 use Coyote\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 

@@ -3,7 +3,7 @@
 namespace Coyote\Notifications\Post;
 
 use Coyote\Post\Comment;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 use Coyote\User;
 use Illuminate\Notifications\Messages\MailMessage;
 

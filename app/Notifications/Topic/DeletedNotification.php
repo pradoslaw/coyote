@@ -3,7 +3,7 @@
 namespace Coyote\Notifications\Topic;
 
 use Coyote\Notification;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 use Illuminate\Notifications\Messages\MailMessage;
 
 class DeletedNotification extends AbstractNotification

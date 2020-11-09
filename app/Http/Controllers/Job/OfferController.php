@@ -10,7 +10,7 @@ use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Firm;
 use Coyote\Job;
 use Coyote\Services\Elasticsearch\Builders\Job\MoreLikeThisBuilder;
-use Coyote\Services\UrlBuilder\UrlBuilder;
+use Coyote\Services\UrlBuilder;
 
 class OfferController extends Controller
 {

@@ -104,7 +104,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
 
     // Show topic
     // -------------------------------------------------------
-    $this->get('{forum}/{topic}-{slug}', [
+    $this->get('{forum}/{topic}-{slug?}', [
         'uses' => 'TopicController@index',
         'as' => 'topic',
         'middleware' => [
