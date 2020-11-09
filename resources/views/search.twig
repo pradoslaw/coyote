@@ -28,9 +28,10 @@
 
         <p v-if="hits.meta.total" class="text-muted">Wyniki <strong>${ hits.meta.from } - ${ hits.meta.to }</strong> z <strong>${ hits.meta.total }</strong> znalezione w czasie <strong>${ hits.took } ms.</strong></p>
 
+
         <ul class="list-inline">
           <li class="list-inline-item dropdown">
-            <a class="dropdown-toggle text-muted text-decoration-none" id="dropdownMenuButton" data-toggle="dropdown" href="#">
+            <a class="btn btn-secondary dropdown-toggle text-muted" id="dropdownMenuButton" data-toggle="dropdown" href="#">
               <span>${ selectedCategories || 'Wszystkie kategorie' }</span>
             </a>
 
@@ -46,7 +47,7 @@
           </li>
 
           <li class="list-inline-item dropdown">
-            <a class="dropdown-toggle text-muted text-decoration-none" data-toggle="dropdown" href="#">
+            <a class="btn btn-secondary dropdown-toggle text-muted" data-toggle="dropdown" href="#">
               ${ sortOptions[defaultSort] }
             </a>
 
@@ -59,16 +60,8 @@
             </div>
           </li>
 
-          <li class="list-inline-item dropdown">
-            <a @click="$refs['author-menu'].toggle()" class="dropdown-toggle text-muted text-decoration-none" href="#">
-              ${ this.user || 'Autor' }
-            </a>
-
-            <vue-dropdown-menu ref="author-menu" style="width: 350px">
-              <div class="px-2 py-2">
-                <vue-autocomplete :value.sync="user" placeholder="Szukaj" @select="setUser"></vue-autocomplete>
-              </div>
-            </vue-dropdown-menu>
+          <li class="list-inline-item">
+            <vue-autocomplete :value.sync="user" placeholder="Autor" @select="setUser"></vue-autocomplete>
           </li>
         </ul>
 

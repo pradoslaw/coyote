@@ -186,8 +186,6 @@ new Vue({
     setUser(user: User) {
       this.user = user?.name;
 
-      // @ts-ignore
-      (this.$refs['author-menu'] as VueDropdownMenu).toggle();
       this.request();
     },
 

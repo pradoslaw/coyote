@@ -76,7 +76,7 @@
       },
 
       changeItem() {
-        this.$emit('select', this.$refs.dropdown.getSelected());
+        this.$emit('select', this.$refs.dropdown.getSelected() ?? {name: this.value});
 
         this.toggleDropdown(false);
       },
