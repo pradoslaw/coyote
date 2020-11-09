@@ -63,8 +63,8 @@ class TopicResource extends JsonResource
                     return ['user' => new UserResource($this->user)];
                 }),
 
-                $this->mergeWhen($this->whenLoaded('firstPost'), function () {
-                    return ['owner_id' => $this->firstPost->user_id];
+                'owner_id'          => $this->whenLoaded('firstPost', function () {
+                    return $this->firstPost->user_id;
                 }),
 
                 $this->mergeWhen($this->whenLoaded('lastPost'), function () {

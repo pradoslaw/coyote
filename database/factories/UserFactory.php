@@ -13,3 +13,12 @@ $factory->define(\Coyote\User::class, function (Faker $faker) {
         'allow_subscribe' => true
     ];
 });
+
+$factory->state(\Coyote\User::class, 'id', function (Faker $faker) {
+    return [
+        'id' => $faker->numberBetween(10000000)
+    ];
+});
+
+$factory->state(\Coyote\User::class, 'blocked', ['is_blocked' => true]);
+
