@@ -49,23 +49,26 @@ class SubmitController extends Controller
      * @param int $id
      * @return \Illuminate\View\View
      */
-    public function getIndex(Draft $draft, $id = null)
+    public function getIndex(Job $job)
     {
-        /** @var \Coyote\Job $job */
-        if ($id === null && $draft->has(Job::class)) {
-            // get form content from session
-            $job = $draft->get(Job::class);
-        } else {
-            $job = $this->job->findOrNew($id);
-            abort_if($job->exists && $job->is_expired, 404);
-
+        if (!$job->exists) {
             $job = $this->loadDefaults($job, $this->auth);
         }
+        /** @var \Coyote\Job $job */
+//        if ($id === null && $draft->has(Job::class)) {
+//            // get form content from session
+//            $job = $draft->get(Job::class);
+//        } else {
+//            $job = $this->job->findOrNew($id);
+//            abort_if($job->exists && $job->is_expired, 404);
+//
+//            $job = $this->loadDefaults($job, $this->auth);
+//        }
 
         $this->authorize('update', $job);
         $this->authorize('update', $job->firm);
 
-        $draft->put(Job::class, $job);
+//        $draft->put(Job::class, $job);
 
         $this->breadcrumb($job);
 

@@ -1,7 +1,6 @@
 import axios from "axios";
 import { Post, PostComment, PostAttachment } from "../../types/models";
 import Vue from "vue";
-import store from "../index";
 
 type PostObj = { [key: number]: Post };
 type ParentChild = { post: Post, comment: PostComment };

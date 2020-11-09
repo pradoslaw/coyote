@@ -70,28 +70,7 @@ new Vue({
       });
     },
 
-    /**
-     * Add tag after clicking on suggestion tag.
-     *
-     * @param {String} name
-     */
-    addTag(name) {
-      this.job.tags.push({name: name, pivot: {priority: 1}});
-      // fetch only tag name
-      let pluck = this.job.tags.map(item => item.name);
 
-      // request suggestions
-      axios.get(this.suggestion_url, {params: {t: pluck}})
-        .then(response => {
-          this.suggestions = response.data;
-        });
-    },
-
-    removeTag(name) {
-      let index = this.job.tags.findIndex(el => el.name === name);
-
-      this.job.tags.splice(index, 1);
-    },
 
     isInvalid(fields) {
       return Object.keys(this.errors).findIndex(element => fields.indexOf(element) > -1) > -1;

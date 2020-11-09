@@ -1,3 +1,4 @@
+
 export enum Model {
   Topic = 'Topic',
   User = 'User',
@@ -157,6 +158,7 @@ export interface Tag {
   url?: string;
   real_name?: string;
   logo?: string;
+  priority?: number;
 }
 
 export interface Topic {
@@ -181,4 +183,56 @@ export interface Paginator {
   per_page: number;
   to: number;
   total: number;
+}
+
+export interface JobLocation {
+  label?: string;
+  street?: string;
+  street_number?: string;
+  city?: string;
+  country?: string;
+}
+
+export enum Rate {
+  monthly = 'miesiecznie',
+  yearly = 'rocznie',
+  weekly = 'tygodniowo',
+  hourly = 'godzinowo'
+}
+
+export enum Employment {
+  employment = 'Umowa o pracę',
+  mandatory = 'Umowa zlecenie',
+  contract = 'Umowa o dzieło',
+  b2b = 'Kontrakt'
+}
+
+export enum Seniority {
+  student ='Stażysta',
+  junior = 'Junior',
+  mid = 'Mid-level',
+  senior = 'Senior',
+  lead = 'Lead',
+  manager = 'Manager'
+}
+
+export interface Job {
+  id: number;
+  title: string;
+  user?: User;
+  locations: JobLocation[];
+  enable_apply: boolean;
+  email: string;
+  tags: Tag[];
+  description: string;
+  recruitment: string;
+  salary_from: number;
+  salary_to: number;
+  currency_id: number;
+  is_gross: boolean;
+  is_remote: boolean;
+  remote_range: number;
+  rate: Rate;
+  employment: Employment;
+  seniority: Seniority;
 }
