@@ -21,4 +21,5 @@ $factory->state(\Coyote\User::class, 'id', function (Faker $faker) {
 });
 
 $factory->state(\Coyote\User::class, 'blocked', ['is_blocked' => true]);
+$factory->state(\Coyote\User::class, 'deleted', ['deleted_at' => now()]);
 
