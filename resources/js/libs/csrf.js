@@ -13,5 +13,8 @@ export default function setToken(token) {
       }
     });
   }
-
 }
+
+const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+setToken(csrfToken);
