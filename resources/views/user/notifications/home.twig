@@ -16,7 +16,7 @@
         {% set url = route('user.notifications.url', [notification.id]) %}
 
         <div class="media {{ notification.is_read ? '' : 'unread' }}">
-          <a href="{{ route('profile', [notification.user_id]) }}" class="d-none d-sm-inline-block mr-2">
+          <a href="{{ notification.user_id ? route('profile', [notification.user_id]) : '#' }}" class="d-none d-sm-inline-block mr-2">
             <object data="{{ notification.photo|default('//') }}" title="{{ notification.user.name }}" type="image/png" class="d-block" style="width: 49px; height: 49px">
               <img src="/img/avatar.png" class="mw-100">
             </object>
