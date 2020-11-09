@@ -19,7 +19,7 @@ export class MicroblogMixin extends Vue {
   protected readonly form!: VueForm;
 
   protected edit(microblog: Microblog) {
-    store.commit('microblogs/toggleEdit', microblog);
+    store.commit('microblogs/edit', microblog);
 
     if (microblog.is_editing) {
       this.$nextTick(() => this.form.textarea.focus());

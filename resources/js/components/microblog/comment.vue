@@ -121,8 +121,7 @@
     },
     computed: mapGetters('user', ['isAuthorized']),
     methods: {
-      ...mapActions('microblogs', ['vote', 'loadVoters']),
-      ...mapMutations('microblogs', ['edit'])
+      ...mapActions('microblogs', ['vote', 'loadVoters'])
     }
   })
   export default class VueComment extends Mixins(MicroblogMixin) {

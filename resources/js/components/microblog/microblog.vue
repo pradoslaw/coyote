@@ -157,8 +157,7 @@
       ...mapState('user', {user: state => state})
     },
     methods: {
-      ...mapActions('microblogs', ['vote', 'subscribe', 'loadVoters', 'loadComments']),
-      ...mapMutations('microblogs', ['edit'])
+      ...mapActions('microblogs', ['vote', 'subscribe', 'loadVoters', 'loadComments'])
     }
   })
   export default class VueMicroblog extends Mixins(MicroblogMixin) {
