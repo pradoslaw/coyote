@@ -1,7 +1,12 @@
 
 document.querySelectorAll('.btn-github, .btn-google, .btn-fb').forEach(el => {
   el.addEventListener('click', function () {
+    if (this.hasAttribute('disabled')) {
+      return;
+    }
+
     this.innerText = 'Logowanie...';
+    this.setAttribute('disabled', 'disabled');
 
     window.location.href = this.dataset.url;
   });
