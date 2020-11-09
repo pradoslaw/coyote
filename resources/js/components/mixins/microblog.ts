@@ -63,8 +63,8 @@ export class MicroblogFormMixin extends Vue {
     this.isProcessing = true;
 
     store.dispatch(action, this.microblog)
-      .then(() => {
-        this.$emit('save');
+      .then(result => {
+        this.$emit('save', result.data);
 
         if (!this.microblog.id) {
           this.microblog.text = '';

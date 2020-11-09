@@ -103,6 +103,10 @@ new Vue({
   methods: {
     changePage(page: number) {
       window.location.href = `${window.location.href.split('?')[0]}?page=${page}`;
+    },
+
+    scrollToMicroblog(microblog: Microblog) {
+      window.location.hash = `#entry-${microblog.id}`;
     }
   },
   computed: {
