@@ -13,6 +13,6 @@ class UrlBuilderTest extends TestCase
     {
         $topic = factory(Topic::class)->state('id')->make(['slug' => '']);
 
-        $this->assertStringContainsString("/Forum/" . urlencode($topic->forum->slug) . "/{$topic->id}-", UrlBuilder::topic($topic));
+        $this->assertStringContainsString("/Forum/" . $topic->forum->slug . "/{$topic->id}-", UrlBuilder::topic($topic));
     }
 }
