@@ -69,7 +69,8 @@ module.exports = merge(common, {
         'mention',
         'user-deleted',
         'strikeout',
-        'ajax-loader'
+        'ajax-loader',
+        'link-broken'
       ],
       whitelistPatterns: [
         /^logo/,
