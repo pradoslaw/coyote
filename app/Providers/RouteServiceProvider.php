@@ -52,6 +52,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->router->pattern('microblog', '[0-9]+');
         $this->router->pattern('topic', '[0-9]+');
         $this->router->pattern('user', '[0-9]+');
+        $this->router->pattern('user_trashed', '[0-9]+');
         $this->router->pattern('post', '[0-9]+');
         $this->router->pattern('job', '[0-9]+');
         $this->router->pattern('pm', '[0-9]+');
