@@ -152,6 +152,8 @@ const actions = {
           commit('setSubscribed', parent);
         }
       }
+
+      return result;
     });
   },
 
