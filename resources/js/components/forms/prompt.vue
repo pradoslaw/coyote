@@ -99,7 +99,7 @@
       },
 
       onKeyDown(e) {
-        if (this.isDropdownVisible && [SpecialKeys.ENTER, SpecialKeys.TAB, SpecialKeys.DOWN, SpecialKeys.UP].indexOf(e.keyCode) !== -1) {
+        if (this.isDropdownVisible && [SpecialKeys.ENTER, SpecialKeys.TAB, SpecialKeys.DOWN, SpecialKeys.UP, SpecialKeys.ESC].indexOf(e.keyCode) !== -1) {
           e.preventDefault();
         }
       },

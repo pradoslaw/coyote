@@ -9,7 +9,7 @@ import VueForm from "../microblog/form.vue";
 export class MicroblogMixin extends Vue {
   protected isWrapped = false;
 
-  @Prop(Object)
+  @Prop({required: false})
   protected microblog!: Microblog;
 
   @Ref()

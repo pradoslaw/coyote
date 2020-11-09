@@ -68,9 +68,9 @@
             "^.+\\.ts": "babel-jest",
             ".*\\.(vue)$": "vue-jest"
         },
-      "moduleNameMapper": {
-        "^@/js/(.*)$": "<rootDir>/resources/js/$1"
-      }
+        "moduleNameMapper": {
+            "^@/js/(.*)$": "<rootDir>/resources/js/$1"
+        }
     },
     "name": "coyote",
     "version": "2.5",
