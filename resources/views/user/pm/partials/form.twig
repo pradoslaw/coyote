@@ -10,7 +10,7 @@
 
         <vue-toolbar :input="() => $refs.textarea"></vue-toolbar>
 
-        <vue-prompt :errors="errors.text">
+        <vue-prompt>
           <textarea
             placeholder="Kliknij, aby odpowiedzieć"
             v-autosize
@@ -29,6 +29,8 @@
             rows="2"
             tabindex="1"
           ></textarea>
+
+          <vue-error :message="errors.text"></vue-error>
         </vue-prompt>
       </div>
 

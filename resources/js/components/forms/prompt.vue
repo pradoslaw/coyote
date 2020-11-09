@@ -3,28 +3,22 @@
     <slot></slot>
 
     <vue-dropdown ref="dropdown" :items="items" @select="selectItem"></vue-dropdown>
-    <vue-error :message="errors"></vue-error>
   </div>
 </template>
 
 <script>
   import VueDropdown from './dropdown.vue';
-  import VueError from './error.vue';
   import { SpecialKeys } from '@/js/types/keys';
   import store from '@/js/store';
   import useBrackets from "@/js/libs/prompt";
 
   export default {
-    components: { 'vue-dropdown': VueDropdown, 'vue-error': VueError },
+    components: { 'vue-dropdown': VueDropdown },
     store,
     props: {
       source: {
         type: String,
         default: '/completion/prompt'
-      },
-      errors: {
-        type: Array,
-        default: () => []
       }
     },
     data() {
