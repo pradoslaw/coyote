@@ -149,7 +149,7 @@
         <div class="form-group">
           <div class="form-group">
             <div class="custom-control custom-radio">
-              <vue-radio id="enable_apply_1" name="enable_apply" v-model="job.enable_apply" :checked-value="true" class="custom-control-input"></vue-radio>
+              <input type="radio" id="enable_apply_1" name="enable_apply" v-model="job.enable_apply" :value="true" class="custom-control-input">
 
               <label for="enable_apply_1" class="custom-control-label">
                 Zezwól na wysyłanie CV poprzez serwis 4programmers.net
@@ -170,7 +170,7 @@
         <div class="form-group">
           <div class="form-group">
             <div class="custom-control custom-radio">
-              <vue-radio id="enable_apply_0" v-model="job.enable_apply" :checked-value="true" class="custom-control-input"></vue-radio>
+              <input type="radio" id="enable_apply_0" v-model="job.enable_apply" :value="false" class="custom-control-input">
 
               <label for="enable_apply_0" class="custom-control-label">
                 ...lub podaj informacje w jaki sposób kandydaci mogą aplikować na to stanowisko
