@@ -73,7 +73,7 @@ class CommentControllerTest extends TestCase
         ]);
     }
 
-    public function testSubmitWithValidData()
+    public function testSubmitValidData()
     {
         $response = $this
             ->actingAs($this->user)
@@ -208,5 +208,31 @@ class CommentControllerTest extends TestCase
             ->delete("/Forum/Comment/Delete/$comment->id");
 
         $response->assertStatus(200);
+    }
+
+    public function testShowAllComments()
+    {
+        $comment = factory(Comment::class)->create(['post_id' => $this->post->id, 'user_id' => $this->user->id]);
+
+        $response = $this->get("/Forum/Comment/Show/{$this->post->id}");
+
+        $response->assertStatus(200);
+        $result = $response->decodeResponseJson($comment->id);
+
+        $this->assertEquals($comment->text, $result['text']);
+        $this->assertArrayNotHasKey('editable', $result);
+    }
+
+    public function testShowAllCommentsByAuthorized()
+    {
+        $comment = factory(Comment::class)->create(['post_id' => $this->post->id, 'user_id' => $this->user->id]);
+
+        $response = $this->actingAs($this->user)->get("/Forum/Comment/Show/{$this->post->id}");
+
+        $result = $response->decodeResponseJson($comment->id);
+
+        $this->assertEquals($comment->text, $result['text']);
+        $this->assertArrayHasKey('editable', $result);
+        $this->assertTrue($result['editable']);
     }
 }
