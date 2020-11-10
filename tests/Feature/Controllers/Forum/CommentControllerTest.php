@@ -73,6 +73,22 @@ class CommentControllerTest extends TestCase
         ]);
     }
 
+    public function testSubmitToDeletedPost()
+    {
+        $this->post->delete();
+
+        $response = $this
+            ->actingAs($this->user)
+            ->json('POST', "/Forum/Comment", ['text' => $text = $this->faker->realText(), 'post_id' => $this->post->id]);
+
+        $response->assertStatus(422);
+        $response->assertJsonFragment([
+            'errors' => [
+                'post_id' => ['Post nie istnieje lub został usunięty.']
+            ]
+        ]);
+    }
+
     public function testSubmitValidData()
     {
         $response = $this
