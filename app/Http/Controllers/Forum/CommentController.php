@@ -33,14 +33,8 @@ class CommentController extends Controller
         if (!$comment->exists) {
             $comment->user()->associate($this->auth);
             $comment->post_id = $request->input('post_id');
-
-            $activity = Stream_Create::class;
         } else {
-            abort_if(!$comment->post, 404);
-
             $this->authorize('update', [$comment, $comment->post->forum]);
-
-            $activity = Stream_Update::class;
         }
 
         // Maybe user does not have an access to this category?
@@ -50,7 +44,7 @@ class CommentController extends Controller
 
         $comment->fill($request->only(['text']));
 
-        $this->transaction(function () use ($comment, $activity) {
+        $this->transaction(function () use ($comment) {
             $comment->save();
 
             $target = (new Stream_Topic())->map($comment->post->topic);
@@ -58,7 +52,7 @@ class CommentController extends Controller
             // it is IMPORTANT to parse text first, and then put information to activity stream.
             // so that we will save plan text (without markdown)
             $object = (new Stream_Comment())->map($comment->post, $comment, $comment->post->topic);
-            stream($activity, $object, $target);
+            stream($comment->wasRecentlyCreated ? Stream_Create::class : Stream_Update::class, $object, $target);
 
             if ($comment->wasRecentlyCreated) {
                 // subscribe post. notify about all future comments to this post

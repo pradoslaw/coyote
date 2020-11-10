@@ -3,6 +3,7 @@
 namespace Coyote\Http\Requests\Forum;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class PostCommentRequest extends FormRequest
 {
@@ -10,7 +11,7 @@ class PostCommentRequest extends FormRequest
     {
         return [
             'text'          => 'required|string|max:580',
-            'post_id'       => 'required|integer|exists:posts,id'
+            'post_id'       => ['required', 'integer', Rule::exists('posts', 'id')->whereNull('deleted_at')]
         ];
     }
 }
