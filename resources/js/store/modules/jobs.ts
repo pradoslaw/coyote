@@ -1,12 +1,18 @@
 import Vue from 'vue';
-import { Job } from '../../types/models';
+import {Job, JobFeature} from '../../types/models';
 import axios from "axios";
 
 const state = {
-
+  data: [],
+  links: [],
+  meta: []
 }
 
 const mutations = {
+  ADD(state, job: Job) {
+    state.data.push(job);
+  },
+
   ADD_LOCATION(state, job: Job) {
     job.locations.push({});
   },
@@ -15,8 +21,8 @@ const mutations = {
     job.locations.splice(job.locations.indexOf(location), 1);
   },
 
-  SET_LOCATION(state, { job, index, location }) {
-    Vue.set(job.locations, index, location);
+  SET_LABEL(state, { job, index, label }) {
+    Vue.set(job.locations, index, {...job.locations[index], ...{ label }});
   },
 
   ADD_TAG(state, { job, name }) {
@@ -33,7 +39,11 @@ const mutations = {
 
   REMOVE_TAG(state, { job, name }) {
     job.tags.splice(job.tags.findIndex(el => el.name === name), 1);
-  }
+  },
+
+  TOGGLE_FEATURE(state, feature: JobFeature) {
+    feature.checked = !feature.checked;
+  },
 
 }
 

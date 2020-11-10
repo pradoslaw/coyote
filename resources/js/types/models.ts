@@ -193,6 +193,14 @@ export interface JobLocation {
   country?: string;
 }
 
+export interface JobFeature {
+  id: number;
+  default: string;
+  name: string;
+  value: string;
+  checked: boolean;
+}
+
 export enum Rate {
   monthly = 'miesiecznie',
   yearly = 'rocznie',
@@ -208,7 +216,7 @@ export enum Employment {
 }
 
 export enum Seniority {
-  student ='Stażysta',
+  student = 'Stażysta',
   junior = 'Junior',
   mid = 'Mid-level',
   senior = 'Senior',
@@ -216,14 +224,22 @@ export enum Seniority {
   manager = 'Manager'
 }
 
+export interface Currency {
+  id: number;
+  name: string;
+  symbol: string;
+}
+
 export interface Job {
   id: number;
+  plan_id: number;
   title: string;
   user?: User;
   locations: JobLocation[];
   enable_apply: boolean;
   email: string;
   tags: Tag[];
+  features: JobFeature[];
   description: string;
   recruitment: string;
   salary_from: number;

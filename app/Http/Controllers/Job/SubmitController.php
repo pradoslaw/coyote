@@ -82,7 +82,7 @@ class SubmitController extends Controller
             'plans'             => $this->plan->active()->toJson(),
             'seniority'         => Job::getSeniorityList(),
             'remote_range'      => Job::getRemoteRangeList(),
-            'currencies'        => Currency::getCurrenciesList(),
+            'currencies'        => Currency::all(),
             'taxes'             => (object) Job::getTaxList(),
             'rates'             => Job::getRatesList(),
             'employments'       => Job::getEmploymentList()

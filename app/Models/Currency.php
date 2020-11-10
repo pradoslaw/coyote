@@ -23,20 +23,6 @@ class Currency extends Model
     public $timestamps = false;
 
     /**
-     * @return array
-     */
-    public static function getCurrenciesList()
-    {
-        $result = [];
-
-        foreach (self::orderBy('id')->get() as $row) {
-            $result[$row->id] = sprintf('%s (%s)', $row->name, $row->symbol);
-        }
-
-        return $result;
-    }
-
-    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function exchanges()

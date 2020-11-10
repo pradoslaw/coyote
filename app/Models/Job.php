@@ -76,9 +76,6 @@ class Job extends Model
     const LEAD              = 'lead';
     const MANAGER           = 'manager';
 
-    const NET             = 0;
-    const GROSS           = 1;
-
     const EMPLOYMENT      = 'employment';
     const MANDATORY       = 'mandatory';
     const CONTRACT        = 'contract';
@@ -134,7 +131,7 @@ class Job extends Model
         'title'             => '',
         'remote_range'      => 100,
         'currency_id'       => Currency::PLN,
-        'is_gross'          => self::NET,
+        'is_gross'          => false,
         'rate'              => self::MONTHLY,
         'employment'        => self::EMPLOYMENT
     ];

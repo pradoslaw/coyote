@@ -7,6 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * @property \Coyote\Job\Location[] $locations
  * @property \Coyote\Job\Tag[] $tags
+ * @property \Coyote\Job\Feature[] $features
  */
 class JobFormResource extends JsonResource
 {
@@ -21,6 +22,7 @@ class JobFormResource extends JsonResource
         return array_merge($this->resource->toArray(), [
             'locations' => LocationResource::collection($this->locations),
             'tags'      => TagResource::collection($this->tags),
+            'features'  => FeatureResource::collection($this->features)
         ]);
     }
 }

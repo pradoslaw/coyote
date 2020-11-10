@@ -14,7 +14,7 @@
           </vue-form-group>
 
           <vue-form-group class="col-sm-3" label="Staż pracy">
-            <vue-select name="seniority" :value.sync="job.seniority" :options="seniority" placeholder="--"></vue-select>
+            <vue-select name="seniority" :value.sync="job.seniority" :options="seniorities" placeholder="--"></vue-select>
           </vue-form-group>
         </div>
 
@@ -48,7 +48,7 @@
                 <vue-checkbox id="is_remote" class="custom-control-input" name="is_remote" v-model="job.is_remote"></vue-checkbox>
                 <label for="is_remote" class="custom-control-label">Możliwa praca zdalna w zakresie</label>
 
-                <vue-select name="remote_range" :options="remote_range" v-model="job.remote_range" class="form-control-sm input-inline" style="width: 100px; margin-top: -5px"></vue-select>
+                <vue-select name="remote_range" :options="remoteRange" v-model="job.remote_range" class="form-control-sm input-inline" style="width: 100px; margin-top: -5px"></vue-select>
               </div>
             </div>
           </div>
@@ -64,9 +64,9 @@
             do
             <vue-text name="salary_to" class="input-inline" v-model="job.salary_to" :is-invalid="'salary_to' in errors"></vue-text>
 
-            <vue-select name="currency_id" class="input-inline" :options="currencies" v-model="job.currency_id"></vue-select>
+            <vue-select name="currency_id" class="input-inline" :options="currenciesValues" v-model="job.currency_id"></vue-select>
 
-            <vue-select name="is_gross" class="input-inline" :options="taxes" v-model="job.is_gross"></vue-select>
+            <vue-select name="is_gross" class="input-inline" :options="['Netto', 'Brutto']" v-model="+job.is_gross"></vue-select>
             <vue-select name="rate" class="input-inline" :options="rates" v-model="job.rate"></vue-select>
             <vue-select name="employment" class="input-inline" :options="employments" v-model="job.employment"></vue-select>
 
@@ -80,9 +80,9 @@
         <div class="form-group">
           <label class="col-form-label">Kluczowe technologie (wymagane lub mile widziane)</label>
 
-          <vue-tags-dropdown id="tag" :tags="popular_tags" @change="addTag" :is-invalid="errors.tags != null"></vue-tags-dropdown>
+          <vue-tags-dropdown id="tag" :tags="popularTags" @change="ADD_TAG" :is-invalid="errors.tags != null"></vue-tags-dropdown>
 
-          <span class="form-text text-muted" v-if="errors.tags != null">${ errors.tags[0] }</span>
+          <span class="form-text text-muted" v-if="errors.tags != null">{{ errors.tags[0] }}</span>
           <span class="form-text text-muted" v-else-if="suggestions.length === 0">Wybierz z listy lub wpisz nazwę języka/technologii i naciśnij Enter, aby dodać wymaganie.</span>
           <span class="form-text text-muted" v-else-if="suggestions.length > 0">
             Podpowiedź:
@@ -115,7 +115,7 @@
         <div class="border-bottom form-group">
           <label class="col-form-label">Opis oferty (opcjonalnie)</label>
 
-          <vue-tinymce v-model="job.description" :init="tinymceOptions"></vue-tinymce>
+          <vue-tinymce v-model="job.description" :init="tinyMceOptions"></vue-tinymce>
           <span class="form-text text-muted">Miejsce na szczegółowy opis oferty. Pole to jednak nie jest wymagane.</span>
 
           <input type="hidden" name="description" v-model="job.description">
@@ -125,21 +125,21 @@
           <label class="col-form-label">Narzędzia oraz metodologia pracy</label>
 
           <ol class="features list-group list-group-horizontal d-flex flex-row flex-wrap">
-            <li class="list-group-item w-50" v-for="(feature, index) in job.features" :class="{checked: feature.pivot.checked}">
+            <li class="list-group-item w-50" v-for="(feature, index) in job.features" :class="{checked: feature.checked}">
               <div class="row form-group">
-                <div class="col-7" @click="toggleFeature(feature)">
-                  <i class="fas fa-fw " :class="{'fa-check': feature.pivot.checked, 'fa-times': !feature.pivot.checked}"></i>
+                <div class="col-7" @click="TOGGLE_FEATURE(feature)">
+                  <i class="fas fa-fw " :class="{'fa-check': feature.checked, 'fa-times': !feature.checked}"></i>
 
                   {{ feature.name }}
                 </div>
 
-                <input type="hidden" :name="'features[' + index + '][id]'" :value="feature.id">
-                <input type="hidden" :name="'features[' + index + '][name]'" :value="feature.name">
-                <input type="hidden" :name="'features[' + index + '][default]'" :value="feature.default">
-                <input type="hidden" :name="'features[' + index + '][checked]'" :value="feature.pivot.checked">
+<!--                <input type="hidden" :name="'features[' + index + '][id]'" :value="feature.id">-->
+<!--                <input type="hidden" :name="'features[' + index + '][name]'" :value="feature.name">-->
+<!--                <input type="hidden" :name="'features[' + index + '][default]'" :value="feature.default">-->
+<!--                <input type="hidden" :name="'features[' + index + '][checked]'" :value="feature.pivot.checked">-->
 
-                <div class="col-5" v-show="feature.pivot.checked && feature.default">
-                  <input type="text" class="form-control form-control-sm" :placeholder="feature.default" :name="'features[' + index + '][value]'" v-model="feature.pivot.value">
+                <div class="col-5" v-show="feature.checked && feature.default">
+                  <input type="text" class="form-control form-control-sm" :placeholder="feature.default" v-model="feature.value">
                 </div>
               </div>
             </li>
@@ -179,7 +179,7 @@
           </div>
 
           <div v-show="job.enable_apply === false">
-            <vue-tinymce v-model="job.recruitment" :init="tinymceOptions"></vue-tinymce>
+            <vue-tinymce v-model="job.recruitment" :init="tinyMceOptions"></vue-tinymce>
 
             <input type="hidden" name="recruitment" v-model="job.recruitment">
 
@@ -222,10 +222,11 @@
   import VueGooglePlace from '@/js/components/google-maps/place.vue';
   import VueTinyMce from '@tinymce/tinymce-vue';
   import { Prop } from "vue-property-decorator";
-  import { Job } from '@/js/types/models';
+  import {Job, Rate, Employment, Seniority, Currency, Tag } from '../../types/models';
   import { mapMutations, mapActions } from "vuex";
-  import TinyMceOptions from '@/js/libs/tinymce';
-  import axios from "axios";
+  import TinyMceOptions from '../../libs/tinymce';
+  // import TinyMceOptions from '@/js/libs/tinymce';
+  // import axios from "axios";
 
   @Component({
     components: {
@@ -234,7 +235,6 @@
       'vue-select': VueSelect,
       'vue-checkbox': VueCheckbox,
       'vue-radio': VueRadio,
-      'vue-masked-input': VueMaskedInput,
       'vue-button': VueButton,
       'vue-error': VueError,
       'vue-tags-dropdown': VueTagsDropdown,
@@ -243,11 +243,11 @@
       'vue-tinymce': VueTinyMce
     },
     methods: {
-      ...mapMutations('job', ['ADD_LOCATION', 'REMOVE_LOCATION', 'SET_LOCATION', 'ADD_TAG', 'REMOVE_TAG'])
+      ...mapMutations('jobs', ['ADD_LOCATION', 'REMOVE_LOCATION', 'SET_LABEL', 'ADD_TAG', 'REMOVE_TAG', 'TOGGLE_FEATURE'])
     },
     filters: {
       charCounter(value, limit = 60) {
-        return limit - String(model ?? '').length;
+        return limit - String(value ?? '').length;
       }
     }
   })
@@ -255,17 +255,54 @@
     @Prop(Object)
     job!: Job;
 
+    @Prop()
+    currencies!: Currency[];
+
+    @Prop()
+    popularTags!: Tag[]
+
     errors = {};
+    suggestions = {};
 
 
     formatAddress(index, data) {
-      data.label = [(`${data.street ?? ''} ${data.street_number ?? ''}`).trim(), data.city, data.country].filter(item => item !== '').join(', ');
+      const label = [(`${data.street ?? ''} ${data.street_number ?? ''}`).trim(), data.city, data.country].filter(item => item !== '').join(', ');
 
-      this.SET_LOCATION({ job: this.job, index, location: data })
+      this.$store.commit('jobs/SET_LABEL', { job: this.job, index, label });
     }
 
     get tinyMceOptions() {
       return TinyMceOptions;
+    }
+
+    get remoteRange() {
+      let result = {};
+
+      for (let i = 100; i > 0; i -= 10) {
+        result[i] = `${i}%`;
+      }
+
+      return result;
+    }
+
+    get rates() {
+      return Rate;
+    }
+
+    get seniorities() {
+      return Seniority;
+    }
+
+    get employments() {
+      return Employment;
+    }
+
+    get currenciesValues() {
+      let result = {};
+
+      this.currencies.forEach((value) => result[value.id as unknown as string] = `${value.name} (${value.symbol})`);
+
+      return result;
     }
   }
 
