@@ -3,7 +3,6 @@
 namespace Coyote\Http\Requests\Job;
 
 use Coyote\Job;
-use Coyote\Services\Job\Draft;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -59,9 +58,7 @@ class JobRequest extends FormRequest
      */
     public function rules()
     {
-        /** @var Draft $draft */
-        $draft = $this->container[Draft::class];
-        $job = $draft->get(Job::class);
+        $job = $this->route('job') ?: new Job();
 
         return [
             'title' => self::TITLE,

@@ -41,8 +41,8 @@ const mutations = {
 }
 
 const actions = {
-  save({ commit, state }) {
-    return axios.post(`/Praca/Submit/${state.form.id}`, state.form);
+  save({ state }) {
+    return axios.post(`/Praca/Submit/${state.form.id ?? ''}`, state.form);
   }
 }
 

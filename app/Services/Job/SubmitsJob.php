@@ -60,7 +60,6 @@ trait SubmitsJob
         $job->firm->load(['benefits', 'gallery']);
 
         if (!$job->exists) {
-            $job->user_id = $user->id;
             $job->plan_id = request('default_plan') ?? $this->plan->findDefault()->id;
             $job->email = $user->email;
             $job->setAttribute('features', $this->job->getDefaultFeatures($user->id));
@@ -118,6 +117,10 @@ trait SubmitsJob
             $job->firm->benefits()->push($job->firm->benefits);
             $job->firm->gallery()->push($job->firm->gallery);
         }
+
+        $job->creating(function (Job $model) use ($user) {
+            $model->user_id = $user->id;
+        });
 
         $job->save();
         $job->locations()->push($job->locations);

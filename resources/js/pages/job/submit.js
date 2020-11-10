@@ -54,18 +54,18 @@ new Vue({
       this.isSubmitting = true;
       this.errors = {};
 
-      this.$store.dispatch('jobs/save')
+      store.dispatch('jobs/save')
         .then(result => {
           window.location.href = result.data;
         })
-        .error(err => {
+        .catch(err => {
           if (err.response.status !== 422) {
             return;
           }
 
           this.errors = err.response.data.errors;
         })
-        .finally(() => this.isProcessing = false);
+        .finally(() => this.isSubmitting = false);
     }
   }
 });

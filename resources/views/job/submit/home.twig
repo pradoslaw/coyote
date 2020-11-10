@@ -35,22 +35,24 @@
 {#        <input type="hidden" name="done" v-model="isDone">#}
 
         <div id="form-navbar">
-          <div class="row">
-            <div class="col-12 col-lg-9">
-              <vue-button :disabled="isSubmitting" type="submit" class="btn btn-primary float-right">
-                Informacje o firmie <i class="fas fa-angle-right"></i>
-              </vue-button>
-
-              {% if not firm.is_private and firm.name %}
-                <vue-button :disabled="isSubmitting" @click.native="submitForm" type="submit" class="btn btn-danger float-right btn-save mr-2" title="Zapisz tę ofertę">
-                  <i class="fas fa-save"></i> Zapisz jako {{ firm.name[:38] }}
+          <div class="container-xxl">
+            <div class="row">
+              <div class="col-12 col-lg-9">
+                <vue-button :disabled="isSubmitting" type="submit" class="btn btn-primary float-right">
+                  Informacje o firmie <i class="fas fa-angle-right"></i>
                 </vue-button>
-              {% endif %}
+
+                {% if not firm.is_private and firm.name %}
+                  <vue-button :disabled="isSubmitting" @click.native="submitForm" type="submit" class="btn btn-danger float-right btn-save mr-2" title="Zapisz tę ofertę">
+                    <i class="fas fa-save"></i> Zapisz jako {{ firm.name[:38] }}
+                  </vue-button>
+                {% endif %}
+              </div>
             </div>
           </div>
         </div>
 
-
+        <vue-notifications position="bottom right" />
       </div>
     </main>
 
@@ -102,8 +104,6 @@
 
     </aside>
   </div>
-
-
 
   <script src="//maps.googleapis.com/maps/api/js?key={{ config('services.google-maps.key') }}&sensor=false&libraries=places"></script>
   <script>

@@ -87,22 +87,6 @@ class SubmitController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Draft $draft
-     * @return string
-     */
-    public function postIndex(JobRequest $request, Job $job, Draft $draft)
-    {
-        /** @var \Coyote\Job $job */
-//        $job = clone $draft->get(Job::class);
-//        $job->fill($request->all());
-//
-//        $draft->put(Job::class, $job);
-
-        return $this->next($request, $draft, route('job.submit.firm'));
-    }
-
-    /**
      * @param Draft $draft
      * @return \Illuminate\View\View
      */
@@ -201,12 +185,15 @@ class SubmitController extends Controller
     }
 
     /**
-     * @param Draft $draft
-     * @return \Illuminate\Http\RedirectResponse
+     * @param JobRequest $request
+     * @param Job $job
+     * @return string
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function save(Job $job)
+    public function save(JobRequest $request, Job $job)
     {
+        $job->fill($request->all());
+//dd($job);
         /** @var \Coyote\Job $job */
 //        $job = clone $draft->get(Job::class);
 
@@ -229,19 +216,14 @@ class SubmitController extends Controller
         }
 
         if ($unpaidPayment = $this->getUnpaidPayment($job)) {
-            session('success', 'Oferta została dodana, lecz nie jest jeszcze promowana. Uzupełnij poniższy formularz, aby zakończyć.');
+            session()->flash('success', 'Oferta została dodana, lecz nie jest jeszcze promowana. Uzupełnij poniższy formularz, aby zakończyć.');
 
             return route('job.payment', [$unpaidPayment]);
-
-//            return redirect()
-//                ->route('job.payment', [$unpaidPayment])
-//                ->with('success', 'Oferta została dodana, lecz nie jest jeszcze promowana. Uzupełnij poniższy formularz, aby zakończyć.');
         }
 
-        session('success', 'Oferta została prawidłowo dodana.');
+        session()->flash('success', 'Oferta została prawidłowo dodana.');
 
         return UrlBuilder::job($job);
-//        return redirect()->to(UrlBuilder::job($job))->with('success', 'Oferta została prawidłowo dodana.');
     }
 
     /**
@@ -257,21 +239,5 @@ class SubmitController extends Controller
             $this->breadcrumb->push($job['title'], route('job.offer', [$job['id'], $job['slug']]));
             $this->breadcrumb->push('Edycja oferty', route('job.submit'));
         }
-    }
-
-    /**
-     * @param Request $request
-     * @param Draft $draft
-     * @param string $next
-     * @return string
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     */
-    private function next(Request $request, Draft $draft, $next)
-    {
-        if ($request->get('done')) {
-            return $this->save($draft)->getTargetUrl();
-        }
-
-        return $next;
     }
 }

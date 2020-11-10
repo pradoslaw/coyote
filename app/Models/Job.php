@@ -173,13 +173,11 @@ class Job extends Model
 
         static::saving(function (Job $model) {
             $model->score = $model->getScore();
-
-            // field must not be null
-            $model->is_remote = (int) $model->is_remote;
         });
 
         static::creating(function (Job $model) {
             $model->boost_at = $model->freshTimestamp();
+            $model->deadline_at = $model->freshTimestamp()->addDays($this->plan->length);
         });
     }
 
@@ -519,16 +517,6 @@ class Job extends Model
         }
     }
 
-    public function setPlanIdAttribute($value)
-    {
-        // set default deadline_at date time, only if offer was not publish yet.
-        if (!$this->is_publish) {
-            $this->attributes['plan_id'] = $value;
-
-            $this->deadline_at = Carbon::now()->addDays($this->plan->length);
-        }
-    }
-
     public function setCurrencyAttribute($currency)
     {
         $this->attributes['currency_id'] = Currency::where('name', $currency)->value('id');
@@ -548,10 +536,10 @@ class Job extends Model
      *
      * @param string $plan
      */
-    public function setPlanAttribute($plan)
-    {
-        $this->plan_id = Plan::where('is_active', 1)->whereRaw('LOWER(name) = ?', $plan)->value('id');
-    }
+//    public function setPlanAttribute($plan)
+//    {
+//        $this->plan_id = Plan::where('is_active', 1)->whereRaw('LOWER(name) = ?', $plan)->value('id');
+//    }
 
     /**
      * @return Payment
