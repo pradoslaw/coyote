@@ -102,16 +102,6 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
         'middleware' => ['can:access,forum', 'forum.url']
     ]);
 
-    // Show topic
-    // -------------------------------------------------------
-    $this->get('{forum}/{topic}-{slug?}', [
-        'uses' => 'TopicController@index',
-        'as' => 'topic',
-        'middleware' => [
-            'topic.access', 'can:access,forum', 'topic.scroll', 'page.hit'
-        ]
-    ]);
-
     // usuwanie posta
     $this->delete('Post/Delete/{post}', [
         'uses' => 'DeleteController@index',
@@ -174,6 +164,16 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     // change category order
     $this->post('Setup', ['uses' => 'CategoryController@setup', 'middleware' => 'auth']);
     $this->post('{forum}/Collapse', ['uses' => 'CategoryController@collapseSection', 'as' => 'section']);
+
+    // Show topic
+    // -------------------------------------------------------
+    $this->get('{forum}/{topic}-{slug?}', [
+        'uses' => 'TopicController@index',
+        'as' => 'topic',
+        'middleware' => [
+            'topic.access', 'can:access,forum', 'topic.scroll', 'page.hit'
+        ]
+    ]);
 
     // skrocony link do posta
     $this->get('{id}', ['uses' => 'ShareController@index', 'as' => 'share']);
