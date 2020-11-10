@@ -12,7 +12,7 @@ import VueJobForm from '../../components/job/form.vue';
 // import VueCheckbox from '../../components/forms/checkbox.vue';
 // import VueRadio from '../../components/forms/radio.vue';
 // import VueError from '../../components/forms/error.vue';
-// import VueButton from '../../components/forms/button.vue';
+import VueButton from '../../components/forms/button.vue';
 // import VueModal from '../../components/modal.vue';
 // import VueMap from '../../components/google-maps/map.vue';
 // import VueMarker from '../../components/google-maps/marker.vue';
@@ -29,13 +29,23 @@ new Vue({
     currencies,
     job,
     popularTags,
-    errors: {}
+    errors: {},
+    isSubmitting: false
   },
   components: {
-    'vue-job-form': VueJobForm
+    'vue-job-form': VueJobForm,
+    'vue-button': VueButton
   },
   created() {
     store.commit('jobs/ADD', window.job);
+  },
+  mounted() {
+    document.querySelector('[v-loader]')?.remove();
+  },
+  methods: {
+    submitForm() {
+
+    }
   }
 });
 
@@ -97,11 +107,7 @@ new Vue({
 //       return Object.keys(this.errors).findIndex(element => fields.indexOf(element) > -1) > -1;
 //     },
 //
-//     charCounter(item, limit) {
-//       let model = item.split('.').reduce((o, i) => o[i], this);
-//
-//       return limit - String(model !== null ? model : '').length;
-//     },
+
 //
 //     toggleBenefit(item) {
 //       let index = this.firm.benefits.indexOf(item);
@@ -125,14 +131,7 @@ new Vue({
 //       this.firm.benefits.splice(this.firm.benefits.indexOf(benefit), 1);
 //     },
 //
-//     /**
-//      * Enable/disable feature for this offer.
-//      *
-//      * @param feature
-//      */
-//     toggleFeature(feature) {
-//       feature.pivot.checked = +!feature.pivot.checked;
-//     },
+
 //
 //     addFirm() {
 //       this.$refs['add-firm-modal'].open();
@@ -213,14 +212,7 @@ new Vue({
 //       }
 //     },
 //
-//     addLocation() {
-//       this.job.locations.push({});
-//     },
-//
-//     removeLocation(location) {
-//       this.job.locations.splice(this.job.locations.indexOf(location), 1);
-//     },
-//
+
 //     formatAddress(index, data) {
 //       const strip = (value) => value !== undefined ? value : '';
 //
@@ -277,15 +269,7 @@ new Vue({
 //       }
 //     },
 //
-//     enableApply: {
-//       get() {
-//         return +this.job.enable_apply;
-//       },
-//       set(val) {
-//         this.job.enable_apply = val;
-//       }
-//     },
-//
+
 //
 //   },
 //   watch: {

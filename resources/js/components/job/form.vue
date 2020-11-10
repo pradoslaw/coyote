@@ -48,7 +48,7 @@
                 <vue-checkbox id="is_remote" class="custom-control-input" name="is_remote" v-model="job.is_remote"></vue-checkbox>
                 <label for="is_remote" class="custom-control-label">Możliwa praca zdalna w zakresie</label>
 
-                <vue-select name="remote_range" :options="remoteRange" v-model="job.remote_range" class="form-control-sm input-inline" style="width: 100px; margin-top: -5px"></vue-select>
+                <vue-select name="remote_range" :options="remoteRange" v-model="job.remote_range" class="form-control-sm d-inline-block" style="width: 100px; margin-top: -5px"></vue-select>
               </div>
             </div>
           </div>
@@ -59,16 +59,16 @@
 
           <div>
             od
-            <vue-text name="salary_from" class="input-inline" v-model="job.salary_from" :is-invalid="'salary_from' in errors"></vue-text>
+            <vue-text name="salary_from" class="d-inline-block" v-model="job.salary_from" :is-invalid="'salary_from' in errors"></vue-text>
 
             do
-            <vue-text name="salary_to" class="input-inline" v-model="job.salary_to" :is-invalid="'salary_to' in errors"></vue-text>
+            <vue-text name="salary_to" class="d-inline-block" v-model="job.salary_to" :is-invalid="'salary_to' in errors"></vue-text>
 
-            <vue-select name="currency_id" class="input-inline" :options="currenciesValues" v-model="job.currency_id"></vue-select>
+            <vue-select name="currency_id" class="d-inline-block" :options="currenciesValues" v-model="job.currency_id"></vue-select>
 
-            <vue-select name="is_gross" class="input-inline" :options="['Netto', 'Brutto']" v-model="+job.is_gross"></vue-select>
-            <vue-select name="rate" class="input-inline" :options="rates" v-model="job.rate"></vue-select>
-            <vue-select name="employment" class="input-inline" :options="employments" v-model="job.employment"></vue-select>
+            <vue-select name="is_gross" class="d-inline-block" :options="['Netto', 'Brutto']" v-model="+job.is_gross"></vue-select>
+            <vue-select name="rate" class="d-inline-block" :options="rates" v-model="job.rate"></vue-select>
+            <vue-select name="employment" class="d-inline-block" :options="employments" v-model="job.employment"></vue-select>
 
             <span class="form-text text-muted">Podanie tych informacji nie jest obowiązkowe, ale dzięki temu Twoja oferta zainteresuje więcej osób. Obiecujemy!</span>
 
@@ -186,22 +186,6 @@
             <vue-error :message="errors.recruitment"></vue-error>
           </div>
         </div>
-
-<!--        <div id="form-navbar" :class="{'fixed': showFormNavbar}">-->
-<!--          <div class="row">-->
-<!--            <div class="col-12" :class="{'col-lg-9': showFormNavbar}">-->
-<!--              <vue-button :disabled="isSubmitting" type="submit" class="btn btn-primary float-right">-->
-<!--                Informacje o firmie <i class="fas fa-angle-right"></i>-->
-<!--              </vue-button>-->
-
-<!--              {% if not firm.is_private and firm.name %}-->
-<!--              <vue-button :disabled="isSubmitting" type="submit" class="btn btn-danger float-right btn-save mr-2" title="Zapisz tę ofertę" @click.native="isDone = 1">-->
-<!--                <i class="fas fa-save"></i> Zapisz jako {{ firm.name[:38] }}-->
-<!--              </vue-button>-->
-<!--              {% endif %}-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
       </div>
     </div>
   </div>
