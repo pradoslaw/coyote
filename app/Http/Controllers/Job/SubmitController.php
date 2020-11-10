@@ -71,7 +71,7 @@ class SubmitController extends Controller
 //        $draft->put(Job::class, $job);
 
         $this->breadcrumb($job);
-
+//dd($job);
         return $this->view('job.submit.home', [
             'popular_tags'      => $this->job->getPopularTags(),
             'job'               => new JobFormResource($job),
@@ -80,12 +80,12 @@ class SubmitController extends Controller
             // is plan is still going on?
             'is_plan_ongoing'   => $job->is_publish,
             'plans'             => $this->plan->active()->toJson(),
-            'seniority'         => Job::getSeniorityList(),
-            'remote_range'      => Job::getRemoteRangeList(),
+//            'seniority'         => Job::getSeniorityList(),
+//            'remote_range'      => Job::getRemoteRangeList(),
             'currencies'        => Currency::all(),
-            'taxes'             => (object) Job::getTaxList(),
-            'rates'             => Job::getRatesList(),
-            'employments'       => Job::getEmploymentList()
+//            'taxes'             => (object) Job::getTaxList(),
+//            'rates'             => Job::getRatesList(),
+//            'employments'       => Job::getEmploymentList()
         ]);
     }
 

@@ -7,7 +7,7 @@
 $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], function () {
     $this->get('/', ['uses' => 'HomeController@index', 'as' => 'home', 'middleware' => 'job.redirect']);
 
-    $this->get('Submit/{id?}', ['uses' => 'SubmitController@getIndex', 'as' => 'submit', 'middleware' => 'auth']);
+    $this->get('Submit/{job?}', ['uses' => 'SubmitController@getIndex', 'as' => 'submit', 'middleware' => 'auth']);
     $this->post('Submit', ['uses' => 'SubmitController@postIndex', 'middleware' => 'auth']);
 
     $this->get('Submit/Firm', ['uses' => 'SubmitController@getFirm', 'as' => 'submit.firm', 'middleware' => 'auth']);

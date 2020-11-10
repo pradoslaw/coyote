@@ -26,7 +26,7 @@
               <div class="input-group">
                 <div class="input-group-prepend">
                   <a class="input-group-text text-decoration-none" href="javascript:" @click="ADD_LOCATION(job)"><i class="fas fa-fw fa-plus-circle"></i></a>
-                  <a class="input-group-text text-decoration-none" href="javascript:" @click="REMOVE_LOCATION(job, location)" v-if="job.locations.length > 1"><i class="fas fa-fw fa-minus-circle text-danger"></i></a>
+                  <a class="input-group-text text-decoration-none" href="javascript:" @click="REMOVE_LOCATION({ job, location })" v-if="job.locations.length > 1"><i class="fas fa-fw fa-minus-circle text-danger"></i></a>
                 </div>
 
 <!--                <input type="hidden" :name="'locations[' + index + '][longitude]'" :value="location.longitude">-->
@@ -36,7 +36,7 @@
 <!--                <input type="hidden" :name="'locations[' + index + '][city]'" :value="location.city">-->
 <!--                <input type="hidden" :name="'locations[' + index + '][country]'" :value="location.country">-->
 
-                <vue-google-place @change="formatAddress(index, ...arguments)" :label="location.label"></vue-google-place>
+                <vue-google-place @change="setLocation(index, ...arguments)" :label="location.label"></vue-google-place>
               </div>
             </div>
           </div>
@@ -80,7 +80,7 @@
         <div class="form-group">
           <label class="col-form-label">Kluczowe technologie (wymagane lub mile widziane)</label>
 
-          <vue-tags-dropdown id="tag" :tags="popularTags" @change="ADD_TAG" :is-invalid="errors.tags != null"></vue-tags-dropdown>
+          <vue-tags-dropdown id="tag" :tags="popularTags" @change="addTag" :is-invalid="errors.tags != null"></vue-tags-dropdown>
 
           <span class="form-text text-muted" v-if="errors.tags != null">{{ errors.tags[0] }}</span>
           <span class="form-text text-muted" v-else-if="suggestions.length === 0">Wybierz z listy lub wpisz nazwę języka/technologii i naciśnij Enter, aby dodać wymaganie.</span>
@@ -95,7 +95,7 @@
           <div id="tags-container" class="mt-3">
             <ul class="tag-clouds tag-clouds-skills">
               <template v-for="(tag, index) in job.tags">
-                <vue-tag-skill :tag.sync="tag" :tooltips="['mile widziane', 'średnio zaawansowany', 'zaawansowany']" @delete="REMOVE_TAG"></vue-tag-skill>
+                <vue-tag-skill :tag.sync="tag" :tooltips="['mile widziane', 'średnio zaawansowany', 'zaawansowany']" @delete="removeTag"></vue-tag-skill>
 
 <!--                <input type="hidden" :name="'tags[' + index + '][name]'" :value="tag.name">-->
 <!--                <input type="hidden" :name="'tags[' + index + '][priority]'" v-model="tag.pivot.priority">-->
@@ -265,8 +265,16 @@
     suggestions = {};
 
 
-    formatAddress(index, location) {
+    setLocation(index, location) {
       this.$store.commit('jobs/SET_LOCATION', { job: this.job, index, location });
+    }
+
+    addTag(name) {
+      this.$store.commit('jobs/ADD_TAG', { job: this.job, name });
+    }
+
+    removeTag(name) {
+      this.$store.commit('jobs/REMOVE_TAG', { job: this.job, name });
     }
 
     get tinyMceOptions() {
