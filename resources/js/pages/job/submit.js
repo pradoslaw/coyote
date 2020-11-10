@@ -19,6 +19,12 @@ import VueButton from '../../components/forms/button.vue';
 // import Editor from '@tinymce/tinymce-vue';
 // import axios from "axios";
 import store from '../../store';
+import { default as axiosErrorHandler } from '../../libs/axios-error-handler';
+import VueNotifications from "vue-notification";
+
+Vue.use(VueNotifications, {componentName: 'vue-notifications'});
+
+axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 
 new Vue({
   el: '#js-submit-form',
@@ -34,17 +40,32 @@ new Vue({
   },
   components: {
     'vue-job-form': VueJobForm,
-    'vue-button': VueButton
+    'vue-button': VueButton,
+    'vue-pricing': VuePricing
   },
   created() {
-    store.commit('jobs/ADD', window.job);
+    store.commit('jobs/INIT_FORM', window.job);
   },
   mounted() {
     document.querySelector('[v-loader]')?.remove();
   },
   methods: {
     submitForm() {
+      this.isSubmitting = true;
+      this.errors = {};
 
+      this.$store.dispatch('jobs/save')
+        .then(result => {
+          window.location.href = result.data;
+        })
+        .error(err => {
+          if (err.response.status !== 422) {
+            return;
+          }
+
+          this.errors = err.response.data.errors;
+        })
+        .finally(() => this.isProcessing = false);
     }
   }
 });

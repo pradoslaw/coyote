@@ -8,10 +8,10 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
     $this->get('/', ['uses' => 'HomeController@index', 'as' => 'home', 'middleware' => 'job.redirect']);
 
     $this->get('Submit/{job?}', ['uses' => 'SubmitController@getIndex', 'as' => 'submit', 'middleware' => 'auth']);
-    $this->post('Submit', ['uses' => 'SubmitController@postIndex', 'middleware' => 'auth']);
+//    $this->post('Submit', ['uses' => 'SubmitController@postIndex', 'middleware' => 'auth']);
 
-    $this->get('Submit/Firm', ['uses' => 'SubmitController@getFirm', 'as' => 'submit.firm', 'middleware' => 'auth']);
-    $this->post('Submit/Firm', ['uses' => 'SubmitController@postFirm', 'middleware' => 'auth']);
+//    $this->get('Submit/Firm', ['uses' => 'SubmitController@getFirm', 'as' => 'submit.firm', 'middleware' => 'auth']);
+//    $this->post('Submit/Firm', ['uses' => 'SubmitController@postFirm', 'middleware' => 'auth']);
 
     $this->get('Submit/Preview', [
         'uses' => 'SubmitController@getPreview',
@@ -19,7 +19,7 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
         'middleware' => 'auth'
     ]);
 
-    $this->post('Submit/Save', ['uses' => 'SubmitController@save', 'as' => 'submit.save', 'middleware' => 'auth']);
+    $this->post('Submit/{job?}', ['uses' => 'SubmitController@save', 'middleware' => 'auth']);
 
     $this->post('Tag/Submit', ['uses' => 'TagController@submit', 'as' => 'submit.tag']);
     $this->get('Tag/Prompt', ['uses' => 'TagController@prompt', 'as' => 'tag.prompt']);

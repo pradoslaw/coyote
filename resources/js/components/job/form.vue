@@ -25,8 +25,8 @@
             <div class="col-sm-12">
               <div class="input-group">
                 <div class="input-group-prepend">
-                  <a class="input-group-text text-decoration-none" href="javascript:" @click="ADD_LOCATION(job)"><i class="fas fa-fw fa-plus-circle"></i></a>
-                  <a class="input-group-text text-decoration-none" href="javascript:" @click="REMOVE_LOCATION({ job, location })" v-if="job.locations.length > 1"><i class="fas fa-fw fa-minus-circle text-danger"></i></a>
+                  <a class="input-group-text text-decoration-none" href="javascript:" @click="ADD_LOCATION"><i class="fas fa-fw fa-plus-circle"></i></a>
+                  <a class="input-group-text text-decoration-none" href="javascript:" @click="REMOVE_LOCATION(location)" v-if="job.locations.length > 1"><i class="fas fa-fw fa-minus-circle text-danger"></i></a>
                 </div>
 
 <!--                <input type="hidden" :name="'locations[' + index + '][longitude]'" :value="location.longitude">-->
@@ -88,14 +88,14 @@
             Podpowiedź:
 
             <template v-for="(suggestion, index) in suggestions">
-              <a href="javascript:" class="tag-suggestion" @click="ADD_TAG(suggestion)">{{ suggestion }}</a>{{ index < suggestions.length - 1 ? ', ' : '' }}
+              <a href="javascript:" class="tag-suggestion" @click="addTag(suggestion)">{{ suggestion }}</a>{{ index < suggestions.length - 1 ? ', ' : '' }}
             </template>
           </span>
 
           <div id="tags-container" class="mt-3">
             <ul class="tag-clouds tag-clouds-skills">
               <template v-for="(tag, index) in job.tags">
-                <vue-tag-skill :tag.sync="tag" :tooltips="['mile widziane', 'średnio zaawansowany', 'zaawansowany']" @delete="removeTag"></vue-tag-skill>
+                <vue-tag-skill :tag.sync="tag" :tooltips="['mile widziane', 'średnio zaawansowany', 'zaawansowany']" @delete="REMOVE_TAG"></vue-tag-skill>
 
 <!--                <input type="hidden" :name="'tags[' + index + '][name]'" :value="tag.name">-->
 <!--                <input type="hidden" :name="'tags[' + index + '][priority]'" v-model="tag.pivot.priority">-->
@@ -209,8 +209,9 @@
   import {Job, Rate, Employment, Seniority, Currency, Tag } from '../../types/models';
   import { mapMutations, mapActions } from "vuex";
   import TinyMceOptions from '../../libs/tinymce';
+  import store from "../../store";
   // import TinyMceOptions from '@/js/libs/tinymce';
-  // import axios from "axios";
+  import axios from "axios";
 
   @Component({
     components: {
@@ -233,7 +234,15 @@
       charCounter(value, limit = 60) {
         return limit - String(value ?? '').length;
       }
-    }
+    },
+    watch: {
+      job: {
+        handler(job) {
+          store.commit('jobs/INIT_FORM', job);
+        },
+        deep: true
+      }
+    },
   })
   export default class VueForm extends Vue {
     @Prop(Object)
@@ -245,20 +254,23 @@
     @Prop()
     popularTags!: Tag[]
 
+    @Prop()
     errors = {};
+
     suggestions = {};
 
-
     setLocation(index, location) {
-      this.$store.commit('jobs/SET_LOCATION', { job: this.job, index, location });
+      this.$store.commit('jobs/SET_LOCATION', { index, location });
     }
 
     addTag(name) {
-      this.$store.commit('jobs/ADD_TAG', { job: this.job, name });
-    }
+      this.$store.commit('jobs/ADD_TAG', name);
 
-    removeTag(name) {
-      this.$store.commit('jobs/REMOVE_TAG', { job: this.job, name });
+      // fetch only tag name
+      let pluck = this.job.tags.map(item => item.name);
+
+      // request suggestions
+      axios.get('/Praca/Tag/Suggestions', {params: {t: pluck}}).then(response => this.suggestions = response.data);
     }
 
     get tinyMceOptions() {

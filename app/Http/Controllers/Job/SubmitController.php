@@ -36,9 +36,6 @@ class SubmitController extends Controller
     {
         parent::__construct();
 
-        $this->middleware('job.forget');
-        $this->middleware('job.session', ['except' => ['getIndex']]);
-
         $this->job = $job;
         $this->firm = $firm;
         $this->plan = $plan;
@@ -71,7 +68,7 @@ class SubmitController extends Controller
 //        $draft->put(Job::class, $job);
 
         $this->breadcrumb($job);
-//dd($job);
+
         return $this->view('job.submit.home', [
             'popular_tags'      => $this->job->getPopularTags(),
             'job'               => new JobFormResource($job),
@@ -94,13 +91,13 @@ class SubmitController extends Controller
      * @param Draft $draft
      * @return string
      */
-    public function postIndex(JobRequest $request, Draft $draft)
+    public function postIndex(JobRequest $request, Job $job, Draft $draft)
     {
         /** @var \Coyote\Job $job */
-        $job = clone $draft->get(Job::class);
-        $job->fill($request->all());
-
-        $draft->put(Job::class, $job);
+//        $job = clone $draft->get(Job::class);
+//        $job->fill($request->all());
+//
+//        $draft->put(Job::class, $job);
 
         return $this->next($request, $draft, route('job.submit.firm'));
     }
@@ -208,14 +205,14 @@ class SubmitController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function save(Draft $draft)
+    public function save(Job $job)
     {
         /** @var \Coyote\Job $job */
-        $job = clone $draft->get(Job::class);
+//        $job = clone $draft->get(Job::class);
 
         $this->authorize('update', $job);
 
-        app(Connection::class)->transaction(function () use ($job, $draft) {
+        $this->transaction(function () use ($job) {
             $this->prepareAndSave($job, $this->auth);
 
             if ($job->wasRecentlyCreated || !$job->is_publish) {
@@ -224,7 +221,7 @@ class SubmitController extends Controller
 
             event(new JobWasSaved($job)); // we don't queue listeners for this event
 
-            $draft->forget();
+//            $draft->forget();
         });
 
         if ($job->wasRecentlyCreated) {
@@ -232,12 +229,19 @@ class SubmitController extends Controller
         }
 
         if ($unpaidPayment = $this->getUnpaidPayment($job)) {
-            return redirect()
-                ->route('job.payment', [$unpaidPayment])
-                ->with('success', 'Oferta została dodana, lecz nie jest jeszcze promowana. Uzupełnij poniższy formularz, aby zakończyć.');
+            session('success', 'Oferta została dodana, lecz nie jest jeszcze promowana. Uzupełnij poniższy formularz, aby zakończyć.');
+
+            return route('job.payment', [$unpaidPayment]);
+
+//            return redirect()
+//                ->route('job.payment', [$unpaidPayment])
+//                ->with('success', 'Oferta została dodana, lecz nie jest jeszcze promowana. Uzupełnij poniższy formularz, aby zakończyć.');
         }
 
-        return redirect()->to(UrlBuilder::job($job))->with('success', 'Oferta została prawidłowo dodana.');
+        session('success', 'Oferta została prawidłowo dodana.');
+
+        return UrlBuilder::job($job);
+//        return redirect()->to(UrlBuilder::job($job))->with('success', 'Oferta została prawidłowo dodana.');
     }
 
     /**

@@ -1,5 +1,14 @@
 <template>
-  <input ref="autocomplete" :value="label" autocomplete="off" class="form-control" placeholder="Np. Warszawa, al. Jerozolimskie 3" type="text" @keydown.enter.prevent="" @blur="search"/>
+  <input
+    ref="autocomplete"
+    :value="label"
+    autocomplete="off"
+    class="form-control"
+    placeholder="Np. Warszawa, al. Jerozolimskie 3"
+    type="text"
+    @keydown.enter.prevent=""
+    @focus="shouldGeocode = true"
+    @blur="search"/>
 </template>
 
 <script>
@@ -11,7 +20,7 @@
     },
     data() {
       return {
-        isFound: false
+        shouldGeocode: true
       }
     },
     mounted() {
@@ -20,13 +29,12 @@
       autocomplete.addListener('place_changed', () => {
         let place = autocomplete.getPlace();
 
-        this.isFound = false;
-
         if (!place.geometry) {
           return;
         }
 
-        this.isFound = true;
+        this.shouldGeocode = false;
+        console.log(this.shouldGeocode);
         this.$emit('change', this.map(place.geometry.location.lat(), place.geometry.location.lng(), place.address_components));
       });
     },
@@ -63,9 +71,11 @@
       search() {
         // add setTimeout because onblur event occurs first, before place_changed.
         setTimeout(() => {
-          if (this.isFound) {
+          if (!this.shouldGeocode) {
             return;
           }
+
+          console.log('geo');
 
           const geocoder = new google.maps.Geocoder();
 
@@ -79,7 +89,7 @@
 
             this.$emit('change', this.map(location.lat(), location.lng(), components));
           });
-        }, 100);
+        }, 500);
       }
     }
   }

@@ -64,8 +64,6 @@ class Kernel extends HttpKernel
         'forum.write'   => Middleware\ForumWrite::class,
         'forum.url'     => Middleware\RedirectIfUrl::class,
         'topic.access'  => Middleware\RedirectIfMoved::class,
-        'job.session'   => Middleware\VerifyJobSession::class,
-        'job.forget'    => Middleware\ForgetJobDraft::class,
         'job.redirect'  => Middleware\PermanentRedirect::class,
         'topic.scroll'  => Middleware\RedirectToPost::class,
         'wiki.access'   => Middleware\WikiAccess::class,

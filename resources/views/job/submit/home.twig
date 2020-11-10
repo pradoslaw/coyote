@@ -18,10 +18,15 @@
         {% if not is_plan_ongoing %}
 {#          <input type="hidden" name="plan_id" v-model="job.plan_id">#}
 
-{#          <vue-pricing :plans="plans" :value.sync="job.plan_id" email="{{ config('mail.from.address') }}"></vue-pricing>#}
+          <vue-pricing :plans="plans" :value.sync="job.plan_id" email="{{ config('mail.from.address') }}"></vue-pricing>
         {% endif %}
 
-        <vue-job-form :job="job" :currencies="currencies" :popular-tags="popularTags"></vue-job-form>
+        <vue-job-form
+          :job="job"
+          :errors="errors"
+          :currencies="currencies"
+          :popular-tags="popularTags"
+        ></vue-job-form>
 
 {#        <input type="hidden" name="id" v-model="job.id">#}
 {#        <input type="hidden" name="firm_id" v-model="job.firm_id">#}
