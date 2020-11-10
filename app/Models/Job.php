@@ -491,8 +491,9 @@ class Job extends Model
     {
         $models = [];
 
-        foreach ($tags as $tag) {
-            $pivot = $this->tags()->newPivot(['priority' => $tag['priority'] ?? 1]);
+        foreach ($tags as $order => $tag) {
+            $pivot = $this->tags()->newPivot(['priority' => $tag['priority'] ?? 1, 'order' => $order]);
+
             $models[] = (new Tag($tag))->setRelation('pivot', $pivot);
         }
 

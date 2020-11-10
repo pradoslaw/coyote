@@ -100,7 +100,7 @@ trait SubmitsJob
 
         $activity = $job->id ? Stream_Update::class : Stream_Create::class;
 
-        if (!$job->firm || $job->firm->is_private) {
+        if (!$job->firm) {
             $job->firm()->dissociate();
         } elseif ($job->firm->name) { // firm name is required to save firm
             // user might click on "add new firm" button in form. make sure user_id is set up.
