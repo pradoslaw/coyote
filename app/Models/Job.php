@@ -177,7 +177,7 @@ class Job extends Model
 
         static::creating(function (Job $model) {
             $model->boost_at = $model->freshTimestamp();
-            $model->deadline_at = $model->freshTimestamp()->addDays($this->plan->length);
+            $model->deadline_at = $model->freshTimestamp()->addDays($model->plan->length);
         });
     }
 

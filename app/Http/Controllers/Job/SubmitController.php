@@ -17,10 +17,8 @@ use Coyote\Repositories\Contracts\FirmRepositoryInterface as FirmRepository;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Repositories\Contracts\PlanRepositoryInterface as PlanRepository;
 use Coyote\Repositories\Criteria\EagerLoading;
-use Coyote\Services\Job\Draft;
 use Coyote\Services\Job\SubmitsJob;
 use Coyote\Services\UrlBuilder;
-use Illuminate\Database\Connection;
 use Illuminate\Http\Request;
 
 class SubmitController extends Controller
@@ -42,30 +40,21 @@ class SubmitController extends Controller
     }
 
     /**
-     * @param Draft $draft
-     * @param int $id
+     * @param Job $job
      * @return \Illuminate\View\View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function getIndex(Job $job)
     {
         if (!$job->exists) {
             $job = $this->loadDefaults($job, $this->auth);
         }
-        /** @var \Coyote\Job $job */
-//        if ($id === null && $draft->has(Job::class)) {
-//            // get form content from session
-//            $job = $draft->get(Job::class);
-//        } else {
-//            $job = $this->job->findOrNew($id);
-//            abort_if($job->exists && $job->is_expired, 404);
-//
-//            $job = $this->loadDefaults($job, $this->auth);
-//        }
 
         $this->authorize('update', $job);
-        $this->authorize('update', $job->firm);
 
-//        $draft->put(Job::class, $job);
+        if ($job->firm) {
+            $this->authorize('update', $job->firm);
+        }
 
         $this->breadcrumb($job);
 
@@ -77,12 +66,7 @@ class SubmitController extends Controller
             // is plan is still going on?
             'is_plan_ongoing'   => $job->is_publish,
             'plans'             => $this->plan->active()->toJson(),
-//            'seniority'         => Job::getSeniorityList(),
-//            'remote_range'      => Job::getRemoteRangeList(),
-            'currencies'        => Currency::all(),
-//            'taxes'             => (object) Job::getTaxList(),
-//            'rates'             => Job::getRatesList(),
-//            'employments'       => Job::getEmploymentList()
+            'currencies'        => Currency::all()
         ]);
     }
 

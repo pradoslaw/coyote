@@ -38,15 +38,13 @@
           <div class="container-xxl">
             <div class="row">
               <div class="col-12 col-lg-9">
-                <vue-button :disabled="isSubmitting" type="submit" class="btn btn-primary float-right">
+                <vue-button :disabled="isSubmitting" type="submit" class="btn btn-secondary float-right">
                   Informacje o firmie <i class="fas fa-angle-right"></i>
                 </vue-button>
 
-                {% if not firm.is_private and firm.name %}
-                  <vue-button :disabled="isSubmitting" @click.native="submitForm" type="submit" class="btn btn-danger float-right btn-save mr-2" title="Zapisz tę ofertę">
-                    <i class="fas fa-save"></i> Zapisz jako {{ firm.name[:38] }}
-                  </vue-button>
-                {% endif %}
+                <vue-button :disabled="isSubmitting" @click.native="submitForm" type="submit" class="btn btn-primary float-right btn-save mr-2" title="Zapisz tę ofertę">
+                  <i class="fas fa-save"></i> Zapisz jako {{ firm.name[:38] }}
+                </vue-button>
               </div>
             </div>
           </div>
