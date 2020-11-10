@@ -265,10 +265,8 @@
     suggestions = {};
 
 
-    formatAddress(index, data) {
-      const label = [(`${data.street ?? ''} ${data.street_number ?? ''}`).trim(), data.city, data.country].filter(item => item !== '').join(', ');
-
-      this.$store.commit('jobs/SET_LABEL', { job: this.job, index, label });
+    formatAddress(index, location) {
+      this.$store.commit('jobs/SET_LOCATION', { job: this.job, index, location });
     }
 
     get tinyMceOptions() {

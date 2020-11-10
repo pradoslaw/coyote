@@ -21,8 +21,8 @@ const mutations = {
     job.locations.splice(job.locations.indexOf(location), 1);
   },
 
-  SET_LABEL(state, { job, index, label }) {
-    Vue.set(job.locations, index, {...job.locations[index], ...{ label }});
+  SET_LOCATION(state, { job, index, location }) {
+    Vue.set(job.locations, index, location);
   },
 
   ADD_TAG(state, { job, name }) {
