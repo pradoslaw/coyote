@@ -89,6 +89,12 @@ class SubmitControllerTest extends TestCase
             'enable_apply' => true,
             'email' => $this->user->email,
             'description' => $description = $this->faker->realText(),
+            'rate' => 'weekly',
+            'employment' => 'b2b',
+            'seniority' => 'lead',
+            'is_gross' => true,
+            'salary_from' => 10000,
+            'salary_to' => 20000,
             'locations' => [
                 [
                     'city' => 'Wrocław',
@@ -110,15 +116,21 @@ class SubmitControllerTest extends TestCase
         /** @var Job $job */
         $job = Job::where('user_id', $this->user->id)->first();
 
-        $this->assertEquals($job->title, $title);
-        $this->assertEquals($job->description, $description);
-        $this->assertEquals($job->currency_id, $currency);
-        $this->assertEquals($job->locations[0]->city, 'Wrocław');
-        $this->assertEquals($job->locations[0]->street, 'Rynek');
-        $this->assertEquals($job->locations[0]->latitude, 51);
-        $this->assertEquals($job->locations[0]->longitude, 17);
-        $this->assertEquals($job->tags[0]->name, 'c#');
-        $this->assertEquals($job->tags[0]->pivot->priority, 2);
-
+        $this->assertEquals($title, $job->title);
+        $this->assertEquals($description, $job->description);
+        $this->assertEquals($currency, $job->currency_id);
+        $this->assertEquals('weekly', $job->rate);
+        $this->assertEquals('b2b', $job->employment);
+        $this->assertEquals('lead', $job->seniority);
+        $this->assertEquals(10000, $job->salary_from);
+        $this->assertEquals(20000, $job->salary_to);
+        $this->assertTrue($job->is_gross);
+        $this->assertTrue($job->deadline_at->isFuture());
+        $this->assertEquals('Wrocław', $job->locations[0]->city);
+        $this->assertEquals('Rynek', $job->locations[0]->street);
+        $this->assertEquals(51, $job->locations[0]->latitude);
+        $this->assertEquals(17, $job->locations[0]->longitude);
+        $this->assertEquals('c#', $job->tags[0]->name);
+        $this->assertEquals(2, $job->tags[0]->pivot->priority);
     }
 }

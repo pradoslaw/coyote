@@ -16,8 +16,6 @@
         {% include 'job.submit.partials.error_message' %}
 
         {% if not is_plan_ongoing %}
-{#          <input type="hidden" name="plan_id" v-model="job.plan_id">#}
-
           <vue-pricing :plans="plans" :value.sync="job.plan_id" email="{{ config('mail.from.address') }}"></vue-pricing>
         {% endif %}
 
@@ -27,12 +25,6 @@
           :currencies="currencies"
           :popular-tags="popularTags"
         ></vue-job-form>
-
-{#        <input type="hidden" name="id" v-model="job.id">#}
-{#        <input type="hidden" name="firm_id" v-model="job.firm_id">#}
-{#        <input type="hidden" name="slug" v-model="job.slug">#}
-
-{#        <input type="hidden" name="done" v-model="isDone">#}
 
         <div id="form-navbar">
           <div class="container-xxl">
