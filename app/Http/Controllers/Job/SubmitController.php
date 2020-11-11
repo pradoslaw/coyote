@@ -66,8 +66,8 @@ class SubmitController extends Controller
         return $this->view('job.submit.home', [
             'popular_tags'      => $this->job->getPopularTags(),
             'job'               => new JobFormResource($job),
-            // firm information (in order to show firm nam on the button)
-            'firm'              => $job->firm,
+            'firms'             => $firms,
+
             // is plan is still going on?
             'is_plan_ongoing'   => $job->is_publish,
             'plans'             => $this->plan->active()->toJson(),
@@ -77,25 +77,6 @@ class SubmitController extends Controller
         ]);
     }
 
-    /**
-     * @param Draft $draft
-     * @return \Illuminate\View\View
-     */
-    public function getFirm(Draft $draft)
-    {
-        /** @var \Coyote\Job $job */
-        $job = clone $draft->get(Job::class);
-
-
-
-        $this->breadcrumb($job);
-
-        return $this->view('job.submit.firm')->with([
-            'job'               => $job,
-            'firm'              => new FirmResource($job->firm),
-
-        ]);
-    }
 
     /**
      * @param Request $request
@@ -104,8 +85,6 @@ class SubmitController extends Controller
      */
     public function postFirm(FirmRequest $request, Draft $draft)
     {
-        /** @var \Coyote\Job $job */
-        $job = $draft->get(Job::class);
 
         $job->firm->fill($request->all());
 
@@ -124,9 +103,7 @@ class SubmitController extends Controller
             $job->firm->syncOriginalAttribute('id');
         }
 
-        $draft->put(Job::class, $job);
 
-        return $this->next($request, $draft, route('job.submit.preview'));
     }
 
     /**

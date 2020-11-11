@@ -103,7 +103,7 @@
       </vue-form-group>
 
       <vue-form-group label="Adres" class="border-bottom" v-show="firm.is_agency === false">
-        <vue-text id="address" v-model="address" @keydown.native.enter.prevent="changeAddress"></vue-text>
+        <vue-text autocomplete="off" v-model="address" @keydown.native.enter.prevent="changeAddress"></vue-text>
 
         <span class="form-text text-muted">Wpisz adres i naciśnij Enter lub kliknij na mapę. Adres firmy będzie wyświetlany przy ofercie.</span>
 
@@ -118,7 +118,7 @@
 <!--        <input type="hidden" name="address" v-model="firm.address">-->
 
         <div id="map">
-          <vue-map @click="geocode" style="height: 100%" :latitude="firm.latitude || 51.919438" :longitude="firm.longitude || 19.145135999">
+          <vue-map @click="geocode" class="h-100" :latitude="firm.latitude || 51.919438" :longitude="firm.longitude || 19.145135999">
             <vue-marker :latitude="firm.latitude" :longitude="firm.longitude"></vue-marker>
           </vue-map>
         </div>
@@ -139,7 +139,7 @@
             <i class="fas fa-fw " :class="{'fa-check': firm.benefits.includes(benefit), 'fa-times': !firm.benefits.includes(benefit)}"></i> {{ benefit }}
           </li>
 
-          <li class="list-group-item w-50 checked" v-for="benefit in firm.benefits" v-if="defaultBenefits.includes(benefit)">
+          <li class="list-group-item w-50 checked" v-for="benefit in firm.benefits" v-if="!defaultBenefits.includes(benefit)">
             <i class="fas fa-fw fa-check"></i>
 
             <input type="text" maxlength="100" :value="benefit" class="form-control form-control-sm" @keydown.enter.prevent="">
@@ -148,7 +148,8 @@
 
           <li class="list-group-item w-50 checked">
             <i class="fas fa-fw fa-check"></i>
-            <input type="text" maxlength="100" class="form-control form-control-sm" @keydown.enter.prevent="ADD_BENEFIT(this.target.value)" placeholder="Naciśnij Enter, aby dodać">
+
+            <input v-model="benefit" type="text" maxlength="100" class="form-control form-control-sm" @keydown.enter.prevent="addBenefit" placeholder="Naciśnij Enter, aby dodać">
           </li>
         </ol>
 
@@ -167,16 +168,15 @@
   import VueButton from '@/js/components/forms/button.vue';
   import VueError from '@/js/components/forms/error.vue';
   import VueTinyMce from '@tinymce/tinymce-vue';
-  import VueMap from '../../components/google-maps/map.vue';
-  import VueMarker from '../../components/google-maps/marker.vue';
-  import VueThumbnail from '../../components/thumbnail.vue';
+  import VueMap from '@/js/components/google-maps/map.vue';
+  import VueMarker from '@/js/components/google-maps/marker.vue';
+  import VueThumbnail from '@/js/components/thumbnail.vue';
   import { Prop } from "vue-property-decorator";
   import { Job, Firm } from '../../types/models';
   import { mapMutations, mapActions } from "vuex";
   import Geocoder from '../../libs/geocoder';
   import TinyMceOptions from '../../libs/tinymce';
-  import store from "../../store";
-  import axios from "axios";
+  import store from '../../store';
 
   @Component({
     components: {
@@ -191,20 +191,15 @@
       'vue-thumbnail': VueThumbnail,
     },
     methods: {
-      ...mapMutations('jobs', ['ADD_BENEFIT', 'REMOVE_BENEFIT', 'TOGGLE_BENEFIT', 'ADD_LOGO', 'REMOVE_LOGO', 'ADD_PHOTO', 'REMOVE_PHOTO'])
-    },
-    filters: {
-      charCounter(value, limit = 60) {
-        return limit - String(value ?? '').length;
-      }
+      ...mapMutations('jobs', ['REMOVE_BENEFIT', 'TOGGLE_BENEFIT', 'ADD_LOGO', 'REMOVE_LOGO', 'ADD_PHOTO', 'REMOVE_PHOTO'])
     },
     watch: {
-      // job: {
-      //   handler(job) {
-      //     store.commit('jobs/INIT_FORM', job);
-      //   },
-      //   deep: true
-      // }
+      firm: {
+        handler(firm) {
+          store.commit('jobs/SET_FIRM', firm);
+        },
+        deep: true
+      }
     },
   })
   export default class VueFirmForm extends Vue {
@@ -219,6 +214,8 @@
 
     @Prop()
     employees!: number[];
+
+    benefit: string = '';
 
     changeAddress(e) {
       const val = e.target.value.trim();
@@ -239,6 +236,14 @@
       const geocoder = new Geocoder();
 
       geocoder.reverseGeocode(latlng, result => this.firm = Object.assign(this.firm, result));
+    }
+
+    addBenefit() {
+      if (this.benefit.trim()) {
+        store.commit('jobs/ADD_BENEFIT', this.benefit);
+      }
+
+      this.benefit = '';
     }
 
     get address() {

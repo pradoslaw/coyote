@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import {Job, JobFeature} from '../../types/models';
+import { Job, Firm, JobFeature } from '../../types/models';
 import axios from "axios";
 
 const state = {
@@ -12,6 +12,10 @@ const state = {
 const mutations = {
   INIT_FORM(state, job: Job) {
     state.form = job;
+  },
+
+  SET_FIRM(state, firm: Firm) {
+    state.form.firm = firm;
   },
 
   ADD_LOCATION(state) {
