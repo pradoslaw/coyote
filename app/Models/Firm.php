@@ -79,19 +79,6 @@ class Firm extends Model
         'is_agency' => 'bool'
     ];
 
-//    public static function boot()
-//    {
-//        parent::boot();
-//
-//        static::saving(function ($model) {
-//            foreach (['latitude', 'longitude', 'founded', 'employees', 'description', 'latitude', 'longitude', 'country_id', 'street', 'city', 'street_number', 'postcode', 'youtube_url'] as $column) {
-//                if (empty($model->{$column})) {
-//                    $model->{$column} = null;
-//                }
-//            }
-//        });
-//    }
-
     /**
      * @return array
      */
@@ -173,6 +160,15 @@ class Firm extends Model
         return $this->attributes['logo'];
     }
 
+    public function setLogoAttribute($logo)
+    {
+        $this->attributes['logo'] = null;
+
+        if ($logo) {
+            $this->attributes['logo'] = $this->basename($logo);
+        }
+    }
+
     public function setYoutubeUrlAttribute($value)
     {
         $this->attributes['youtube_url'] = $this->getEmbedUrl($value);
@@ -199,7 +195,7 @@ class Firm extends Model
 
         foreach ($gallery as $photo) {
             if (!empty($photo)) {
-                $models[] = new Firm\Gallery(['file' => $photo]);
+                $models[] = new Firm\Gallery(['file' => $this->basename($photo)]);
             }
         }
 
@@ -256,5 +252,10 @@ class Firm extends Model
         parse_str($components['query'], $query);
 
         return 'https://www.youtube.com/embed/' . $query['v'];
+    }
+
+    private function basename(string $url): string
+    {
+        return basename(parse_url($url, PHP_URL_PATH));
     }
 }

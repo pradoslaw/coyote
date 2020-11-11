@@ -56,10 +56,6 @@ class SubmitController extends Controller
 
         $this->authorize('update', $job);
 
-        if ($job->firm) {
-            $this->authorize('update', $job->firm);
-        }
-
         $this->breadcrumb($job);
 
         // get all firms assigned to user...
@@ -81,34 +77,6 @@ class SubmitController extends Controller
         ]);
     }
 
-
-    /**
-     * @param Request $request
-     * @param Draft $draft
-     * @return string
-     */
-    public function postFirm(FirmRequest $request, Draft $draft)
-    {
-
-        $job->firm->fill($request->all());
-
-        // new firm has empty ID.
-        if (empty($request->input('id'))) {
-            $job->firm->exists = false;
-
-            unset($job->firm->id);
-        } else {
-            // assign firm id. id is not fillable - that's why we must set it directly.
-            $job->firm->id = (int) $request->input('id');
-        }
-
-        if ($job->firm->exists) {
-            // syncOriginalAttribute() is important if user changes firm
-            $job->firm->syncOriginalAttribute('id');
-        }
-
-
-    }
 
     /**
      * @param Draft $draft
@@ -205,21 +173,10 @@ class SubmitController extends Controller
             $job->firm()->dissociate();
         }
 
-//        if ($job->exists) {
-//            $this->authorize('update', $job);
-//        }
-
-
-
-
         $this->transaction(function () use ($job, $request) {
             $activity = $job->id ? Stream_Update::class : Stream_Create::class;
 
             if ($job->firm) {
-
-
-//                $this->authorizeForUser($user, 'update', $job->firm);
-
                 // fist, we need to save firm because firm might not exist.
                 $job->firm->save();
 

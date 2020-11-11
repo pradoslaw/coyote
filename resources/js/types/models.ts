@@ -254,11 +254,6 @@ export interface Job {
   firm?: Firm;
 }
 
-export interface Logo {
-  filename: string;
-  url: string;
-}
-
 export interface Firm {
   id: number;
   name: string;
@@ -273,8 +268,8 @@ export interface Firm {
   employees: number;
   founded: number;
   youtube_url: string;
-  logo: Logo;
-  gallery: Logo[];
+  logo: string;
+  gallery: string;
   benefits: string[];
   website: string;
   description: string;

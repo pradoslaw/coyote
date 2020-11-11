@@ -139,6 +139,7 @@ class SubmitControllerTest extends TestCase
     {
         /** @var Firm $firm */
         $firm = factory(Firm::class)->make();
+        $photo = url('/img/a.png');
 
         $response = $this->actingAs($this->user)->json('POST', '/Praca/Submit', [
             'title' => $title = $this->faker->text(60),
@@ -146,7 +147,12 @@ class SubmitControllerTest extends TestCase
             'currency_id' => $currency = Currency::first()->id,
             'enable_apply' => true,
             'email' => $this->user->email,
-            'firm' => $firm->toArray()
+            'firm' => $firm->toArray() + [
+                    'logo' => $logo = url('/img/b.png'),
+                    'gallery' => [
+                        $photo
+                    ]
+                ]
         ]);
 
         $response->assertStatus(200);
@@ -158,12 +164,14 @@ class SubmitControllerTest extends TestCase
 
         $this->assertNotEmpty($job->firm_id);
         $this->assertEquals($firm->name, $job->firm->name);
-        $this->assertEquals($firm->user_id, $job->firm->user_id);
+        $this->assertEquals($this->user->id, $job->firm->user_id);
         $this->assertEquals($firm->latitude, $job->firm->latitude);
         $this->assertEquals($firm->longitude, $job->firm->longitude);
         $this->assertEquals($firm->street, $job->firm->street);
         $this->assertEquals($firm->city, $job->firm->city);
         $this->assertEquals($firm->country_id, $job->firm->country_id);
+        $this->assertEquals('b.png', $job->firm->logo->getFilename());
+        $this->assertEquals('a.png', $job->firm->gallery[0]->file);
     }
 
     public function testSubmitValidFormWithExistingFirm()
@@ -183,5 +191,17 @@ class SubmitControllerTest extends TestCase
         $response->assertStatus(200);
 
         $this->assertDatabaseHas('jobs', ['firm_id' => $firm->id]);
+    }
+
+    public function testSubmitShouldFailDueToUnauthorizedException()
+    {
+        /** @var Job $job */
+        $job = factory(Job::class)->create(['user_id' => $this->user->id]);
+
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($user)->json('POST', '/Praca/Submit/' . $job->id);
+
+        $response->assertStatus(403);
     }
 }

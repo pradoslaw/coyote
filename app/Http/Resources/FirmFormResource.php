@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Resources;
 
+use Coyote\Firm;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class FirmFormResource extends JsonResource
@@ -19,27 +20,18 @@ class FirmFormResource extends JsonResource
             'benefits'      => $this->resource->benefits->pluck('name')->toArray(),
             'gallery'       => $this->gallery($this->resource),
 
-            'logo'          => [
-                'url'       => $this->resource->logo->getFilename() ? (string) $this->resource->logo->url() : null,
-                'filename'  => $this->resource->logo->getFilename()
-            ]
+            'logo'          => (string) $this->resource->logo->url()
         ]);
     }
 
-    /**
-     * @param \Coyote\Firm $firm
-     * @return array
-     */
-    private function gallery($firm)
+    private function gallery(Firm $firm): array
     {
-        $result = [];
-
-        foreach ($firm->gallery as $gallery) {
-            $result[] = ['filename' => $gallery->file, 'url' => (string) $gallery->photo->url()];
-        }
-
-        $result[] = ['filename' => '']; // append empty element (always) so user can click on "+" icon to add next one
-
-        return $result;
+        return $firm
+            ->gallery
+            ->map(function ($gallery) {
+                return (string) $gallery->photo->url();
+            })
+            ->push('')
+            ->toArray();
     }
 }

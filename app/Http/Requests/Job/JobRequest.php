@@ -38,6 +38,23 @@ class JobRequest extends FormRequest
      */
     public function authorize()
     {
+        /** @var Job $job */
+        $job = $this->route('job');
+
+        if ($job->firm && $this->user()->cannot('update', $job->firm)) {
+            return false;
+        }
+
+        if (!$job->exists) {
+            return true;
+        }
+
+        if (!$this->user()->can('update', $job)) {
+            return false;
+        }
+
+
+
         return true;
     }
 
@@ -63,9 +80,7 @@ class JobRequest extends FormRequest
      */
     public function rules()
     {
-        $job = $this->route('job') ?: new Job();
-
-
+        $job = $this->route('job');
 
         return [
             'title' => self::TITLE,

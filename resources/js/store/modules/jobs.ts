@@ -60,24 +60,22 @@ const mutations = {
     state.form.firm.benefits.splice(state.form.firm.benefits.indexOf(benefit), 1);
   },
 
-  ADD_LOGO(state, result) {
-    state.form.firm.logo = result;
+  ADD_LOGO(state, logo) {
+    state.form.firm.logo = logo;
   },
 
   REMOVE_LOGO(state) {
-    state.form.firm.logo = { url: null, filename: null };
+    state.form.firm.logo = null;
   },
 
-  ADD_PHOTO(state, file) {
-    state.form.firm.gallery.splice(state.form.firm.gallery.length - 1, 0, file);
+  ADD_PHOTO(state, photo) {
+    state.form.firm.gallery.splice(state.form.firm.gallery.length - 1, 0, photo);
   },
 
-  REMOVE_PHOTO(state, file) {
-    let index = state.form.firm.gallery.findIndex(photo => photo.file === file);
+  REMOVE_PHOTO(state, url) {
+    const gallery = state.form.firm.gallery;
 
-    if (index > -1) {
-      state.form.firm.gallery.splice(index, 1);
-    }
+    gallery.splice(gallery.findIndex(photo => photo === url), 1);
   },
 }
 

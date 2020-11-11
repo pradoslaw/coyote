@@ -41,8 +41,8 @@
         <div class="row">
           <div class="col-sm-2">
             <vue-thumbnail
-              :url="firm.logo.url"
-              :file="firm.logo.filename"
+              :url="firm.logo"
+              :file="firm.logo"
               name="logo"
               upload-url="/Firm/Logo"
               @upload="ADD_LOGO"
@@ -71,11 +71,9 @@
 
         <div class="row mb-2">
           <div class="col-sm-2" v-for="photo in gallery">
-            <input type="hidden" name="gallery[]" :value="photo.file">
-
             <vue-thumbnail
-              :url="photo.url"
-              :file="photo.file"
+              :url="photo"
+              :file="photo"
               upload-url="/Firm/Gallery"
               @upload="ADD_PHOTO"
               @delete="REMOVE_PHOTO">
