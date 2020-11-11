@@ -1,26 +1,12 @@
-// import tinymce from '../../libs/tinymce';
-
 import Vue from 'vue';
-
+import VueNotifications from "vue-notification";
 import VuePricing from '../../components/job/pricing.vue';
 import VueJobForm from '../../components/job/form.vue';
 import VueFirmForm from '../../components/job/firm-form.vue';
-// import VueTagsDropdown from '../../components/job/tags-dropdown.vue';
-// import VueTagsSkill from '../../components/job/tag-skill.vue';
-// import VueGooglePlace from '../../components/google-maps/place.vue';
-// import VueText from '../../components/forms/text.vue';
-// import VueSelect from '../../components/forms/select.vue';
-// import VueCheckbox from '../../components/forms/checkbox.vue';
-// import VueRadio from '../../components/forms/radio.vue';
-// import VueError from '../../components/forms/error.vue';
 import VueButton from '../../components/forms/button.vue';
-// import VueModal from '../../components/modal.vue';
-
-// import Editor from '@tinymce/tinymce-vue';
-// import axios from "axios";
+import VueTabs from '@/js/components/tabs.vue';
 import store from '../../store';
 import { default as axiosErrorHandler } from '../../libs/axios-error-handler';
-import VueNotifications from "vue-notification";
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 
@@ -38,13 +24,15 @@ new Vue({
     defaultBenefits,
     employees,
     errors: {},
-    isSubmitting: false
+    isSubmitting: false,
+    currentTab: 0
   },
   components: {
     'vue-job-form': VueJobForm,
     'vue-firm-form': VueFirmForm,
     'vue-button': VueButton,
-    'vue-pricing': VuePricing
+    'vue-pricing': VuePricing,
+    'vue-tabs': VueTabs
   },
   created() {
     store.commit('jobs/INIT_FORM', window.job);
@@ -53,6 +41,10 @@ new Vue({
     document.querySelector('[v-loader]')?.remove();
   },
   methods: {
+    switchTab(tab) {
+      this.currentTab = tab;
+    },
+
     submitForm() {
       this.isSubmitting = true;
       this.errors = {};

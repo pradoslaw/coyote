@@ -13,13 +13,14 @@
       {% include 'job.submit.partials.loader' %}
 
       <div id="js-submit-form" class="job-form" v-cloak>
-        {% include 'job.submit.partials.error_message' %}
-
         {% if not is_plan_ongoing %}
           <vue-pricing :plans="plans" :value.sync="job.plan_id" email="{{ config('mail.from.address') }}"></vue-pricing>
         {% endif %}
 
+        <vue-tabs @click="switchTab" :items="['Oferta pracy', 'Firma', 'Podgląd']" :current-tab="currentTab" class="mb-4"></vue-tabs>
+
         <vue-job-form
+          v-show="currentTab === 0"
           :job="job"
           :errors="errors"
           :currencies="currencies"
@@ -27,6 +28,7 @@
         ></vue-job-form>
 
         <vue-firm-form
+          v-show="currentTab === 1"
           :firm="job.firm"
           :errors="errors"
           :default-benefits="defaultBenefits"
