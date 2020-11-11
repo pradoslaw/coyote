@@ -137,24 +137,8 @@
           {{ paginate|raw }}
         </div>
 
-        <div class="ml-auto">
-          {% if is_writeable %}
-            <a href="#js-submit-form" class="btn btn-primary btn-sm float-right ml-3">Odpowiedz</a>
-          {% endif %}
-        </div>
+        {% include 'forum.partials.per_page' with {label: 'Liczba odpowiedzi na stronę', perPage: paginate.perPage()} %}
       </div>
-
-      {% if user_forums is defined %}
-        <div class="row no-gutters">
-          <div class="ml-auto">
-            {{ form_select('forum', user_forums, forum.slug, {'id': 'js-forum-list', 'class': 'form-control d-inline w-auto', 'data-url': route('forum.home')}) }}
-
-            <a class="btn" href="javascript:" id="js-reload">
-              <i class="fas fa-arrow-circle-right"></i>
-            </a>
-          </div>
-        </div>
-      {% endif %}
 
       {% if is_writeable %}
         <vue-form
@@ -167,7 +151,15 @@
       {% endif %}
 
       <section class="row no-gutters mt-3">
-        {% include 'forum.partials.per_page' with {label: 'Liczba odpowiedzi na stronę', perPage: paginate.perPage()} %}
+        {% if user_forums is defined %}
+          <div class="ml-auto">
+            {{ form_select('forum', user_forums, forum.slug, {'id': 'js-forum-list', 'class': 'form-control d-inline w-auto', 'data-url': route('forum.home')}) }}
+
+            <a class="btn" href="javascript:" id="js-reload">
+              <i class="fas fa-arrow-circle-right"></i>
+            </a>
+          </div>
+        {% endif %}
       </section>
 
       <vue-notifications position="bottom right"/>
