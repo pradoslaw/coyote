@@ -44,7 +44,7 @@
               :url="firm.logo"
               :file="firm.logo"
               name="logo"
-              upload-url="/Firm/Logo"
+              upload-url="/Firma/Logo"
               @upload="ADD_LOGO"
               @delete="REMOVE_LOGO">
             </vue-thumbnail>
@@ -61,8 +61,6 @@
       <vue-form-group label="Opis firmy" class="border-bottom">
         <vue-tinymce v-model="firm.description" :init="tinyMceOptions"></vue-tinymce>
 
-<!--        <input type="hidden" name="description" v-model="firm.description"></input>-->
-
         <span class="form-text text-muted">Czym zajmuje się firma, w jakich branżach działa oraz jakie technologie wykorzystuje?</span>
       </vue-form-group>
 
@@ -74,7 +72,7 @@
             <vue-thumbnail
               :url="photo"
               :file="photo"
-              upload-url="/Firm/Gallery"
+              upload-url="/Firma/Gallery"
               @upload="ADD_PHOTO"
               @delete="REMOVE_PHOTO">
             </vue-thumbnail>
