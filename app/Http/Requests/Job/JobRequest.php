@@ -53,22 +53,20 @@ class JobRequest extends FormRequest
             return false;
         }
 
-
-
         return true;
     }
 
-    public static function seniorityRule()
+    protected function seniorityRule()
     {
         return ['nullable', 'string', Rule::in([Job::STUDENT, Job::JUNIOR, Job::MID, Job::SENIOR, Job::LEAD, Job::MANAGER])];
     }
 
-    public static function rateRule()
+    protected function rateRule()
     {
         return ['nullable', 'string', Rule::in([Job::HOURLY, Job::MONTHLY, Job::WEEKLY, Job::YEARLY])];
     }
 
-    public static function employmentRule()
+    protected function employmentRule()
     {
         return ['nullable', 'string', Rule::in([Job::MANDATORY, Job::EMPLOYMENT, Job::B2B, Job::CONTRACT])];
     }
@@ -84,15 +82,15 @@ class JobRequest extends FormRequest
 
         return [
             'title' => self::TITLE,
-            'seniority' => self::seniorityRule(),
+            'seniority' => $this->seniorityRule(),
             'is_remote' => self::IS_REMOTE,
             'remote_range' => self::REMOTE_RANGE,
             'salary_from' => self::SALARY_FROM,
             'salary_to' => self::SALARY_TO,
             'is_gross' => self::IS_GROSS,
             'currency_id' => ['required', 'int', 'exists:currencies,id'],
-            'rate' => self::rateRule(),
-            'employment' => self::employmentRule(),
+            'rate' => $this->rateRule(),
+            'employment' => $this->employmentRule(),
             'recruitment' => [
                 Rule::requiredIf(function () use ($job) {
                     return $this->input('enable_apply') === false;

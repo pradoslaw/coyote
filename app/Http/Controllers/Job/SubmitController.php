@@ -6,7 +6,6 @@ use Coyote\Currency;
 use Coyote\Events\JobWasSaved;
 use Coyote\Firm;
 use Coyote\Firm\Benefit;
-use Coyote\Http\Requests\Job\FirmRequest;
 use Coyote\Http\Requests\Job\JobRequest;
 use Coyote\Http\Resources\FirmFormResource as FirmResource;
 use Coyote\Http\Resources\JobFormResource;
@@ -23,7 +22,6 @@ use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Objects\Job as Stream_Job;
 use Coyote\Services\UrlBuilder;
 use Coyote\Tag;
-use Illuminate\Http\Request;
 
 class SubmitController extends Controller
 {

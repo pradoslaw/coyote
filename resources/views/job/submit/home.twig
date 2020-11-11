@@ -17,7 +17,7 @@
           <vue-pricing :plans="plans" :value.sync="job.plan_id" email="{{ config('mail.from.address') }}"></vue-pricing>
         {% endif %}
 
-        <vue-tabs @click="switchTab" :items="['Oferta pracy', 'Firma', 'Podgląd']" :current-tab="currentTab" class="mb-4"></vue-tabs>
+        <vue-tabs @click="switchTab" :items="tabs" :current-tab="currentTab" class="mb-4"></vue-tabs>
 
         <vue-job-form
           v-show="currentTab === 0"
@@ -39,12 +39,24 @@
           <div class="container-xxl">
             <div class="row">
               <div class="col-12 col-lg-9">
-                <vue-button :disabled="isSubmitting" type="submit" class="btn btn-secondary float-right">
-                  Informacje o firmie <i class="fas fa-angle-right"></i>
+                <vue-button v-if="currentTab > 0" @click.native="switchTab(currentTab - 1)" :disabled="isSubmitting" class="btn btn-secondary float-left">
+                  <i class="fas fa-angle-left"></i>
+
+                  ${ tabs[currentTab - 1] }
                 </vue-button>
 
-                <vue-button :disabled="isSubmitting" @click.native="submitForm" type="submit" class="btn btn-primary float-right btn-save mr-2" title="Zapisz tę ofertę">
-                  <i class="fas fa-save"></i> Zapisz jako {{ firm.name[:38] }}
+                <vue-button v-if="currentTab < 2" @click.native="switchTab(currentTab + 1)" :disabled="isSubmitting" class="btn btn-secondary float-right">
+                  ${ tabs[currentTab + 1] }
+
+                  <i class="fas fa-angle-right"></i>
+                </vue-button>
+
+                <vue-button :disabled="isSubmitting" @click.native="submitForm" class="btn btn-primary float-right btn-save mr-2" title="Zapisz tę ofertę">
+                  <i class="fas fa-save"></i> Zapisz
+
+                  <template v-if="job.firm">
+                    jako {{ job.firm.name }}
+                  </template>
                 </vue-button>
               </div>
             </div>
@@ -112,20 +124,6 @@
     var popularTags = {{ popular_tags|json_encode|raw }};
     var defaultBenefits = {{ default_benefits|json_encode|raw }};
     var employees = {{ employees|json_encode|raw }};
-    {#var data = {#}
-    {#  job: {{ job|json_encode|raw }},#}
-    {#  errors: {},#}
-    {#  plans: {{ plans|raw }},#}
-    {#  ,#}
-    {#  suggestions: [],#}
-    {#  suggestion_url: '{{ route('job.tag.suggestions') }}',#}
-    {#  seniority: {{ seniority|json_encode|raw }},#}
-    {#  remote_range: {{ remote_range|json_encode|raw }},#}
-    {#  currencies: {{ currencies|json_encode|raw }},#}
-    {#  taxes: {{ taxes|json_encode|raw }},#}
-    {#  rates: {{ rates|json_encode|raw }},#}
-    {#  employments: {{ employments|json_encode|raw }}#}
-    {#};#}
   </script>
 {% endblock %}
 
@@ -134,5 +132,4 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.9.11/tinymce.min.js" integrity="sha512-3tlegnpoIDTv9JHc9yJO8wnkrIkq7WO7QJLi5YfaeTmZHvfrb1twMwqT4C0K8BLBbaiR6MOo77pLXO1/PztcLg==" crossorigin="anonymous"></script>
 
-{#  {% include 'job.submit.partials.chat' %}#}
 {% endblock %}
