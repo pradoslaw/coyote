@@ -1,9 +1,10 @@
 // import tinymce from '../../libs/tinymce';
-// import Geocoder from '../../libs/geocoder';
+
 import Vue from 'vue';
-// import VueThumbnail from '../../components/thumbnail.vue';
+
 import VuePricing from '../../components/job/pricing.vue';
 import VueJobForm from '../../components/job/form.vue';
+import VueFirmForm from '../../components/job/firm-form.vue';
 // import VueTagsDropdown from '../../components/job/tags-dropdown.vue';
 // import VueTagsSkill from '../../components/job/tag-skill.vue';
 // import VueGooglePlace from '../../components/google-maps/place.vue';
@@ -14,8 +15,7 @@ import VueJobForm from '../../components/job/form.vue';
 // import VueError from '../../components/forms/error.vue';
 import VueButton from '../../components/forms/button.vue';
 // import VueModal from '../../components/modal.vue';
-// import VueMap from '../../components/google-maps/map.vue';
-// import VueMarker from '../../components/google-maps/marker.vue';
+
 // import Editor from '@tinymce/tinymce-vue';
 // import axios from "axios";
 import store from '../../store';
@@ -35,11 +35,14 @@ new Vue({
     currencies,
     job,
     popularTags,
+    defaultBenefits,
+    employees,
     errors: {},
     isSubmitting: false
   },
   components: {
     'vue-job-form': VueJobForm,
+    'vue-firm-form': VueFirmForm,
     'vue-button': VueButton,
     'vue-pricing': VuePricing
   },
@@ -76,7 +79,7 @@ new Vue({
 //   data: Object.assign(window.data, {isSubmitting: false, isDone: 0, showFormNavbar: false}),
 //   components: {
 //     'vue-tinymce': Editor,
-//     'vue-thumbnail': VueThumbnail,
+
 //     'vue-pricing': VuePricing,
 //     'vue-tags-dropdown': VueTagsDropdown,
 //     'vue-tag-skill': VueTagsSkill,
@@ -88,8 +91,7 @@ new Vue({
 //     'vue-error': VueError,
 //     'vue-modal': VueModal,
 //     'vue-button': VueButton,
-//     'vue-map': VueMap,
-//     'vue-marker': VueMarker
+
 //   },
 //
 //   mounted() {
@@ -101,56 +103,12 @@ new Vue({
 //   destroyed() {
 //     window.removeEventListener('scroll', this.handleScroll);
 //   },
-//   methods: {
-//     submitForm() {
-//       this.isSubmitting = true;
-//
-//       // nextTick() is required in order to reload data in the form before calling FormData() to aggregate inputs
-//       this.$nextTick(() => {
-//         axios.post(this.$refs.submitForm.action, new FormData(this.$refs.submitForm))
-//           .then(response => {
-//             window.location.href = response.data;
-//           })
-//           .catch(error => {
-//             this.errors = error.response.data.errors;
-//
-//             window.location.href = '#top';
-//           })
-//           .finally(() => {
-//             this.isSubmitting = false;
-//           });
-//       });
-//     },
-//
-//
-//
-//     isInvalid(fields) {
-//       return Object.keys(this.errors).findIndex(element => fields.indexOf(element) > -1) > -1;
-//     },
-//
 
 //
-//     toggleBenefit(item) {
-//       let index = this.firm.benefits.indexOf(item);
+
+
 //
-//       if (index === -1) {
-//         this.firm.benefits.push(item);
-//       } else {
-//         this.firm.benefits.splice(index, 1);
-//       }
-//     },
-//
-//     addBenefit(e) {
-//       if (e.target.value.trim()) {
-//         this.firm.benefits.push(e.target.value);
-//       }
-//
-//       e.target.value = '';
-//     },
-//
-//     removeBenefit(benefit) {
-//       this.firm.benefits.splice(this.firm.benefits.indexOf(benefit), 1);
-//     },
+
 //
 
 //
@@ -198,59 +156,14 @@ new Vue({
 //       });
 //     },
 //
-//     changeAddress(e) {
-//       const val = e.target.value.trim();
-//       const geocoder = new Geocoder();
-//
-//       if (val.length) {
-//         geocoder.geocode(val, result => {
-//           this.firm = Object.assign(this.firm, result);
-//         });
-//       } else {
-//         ['longitude', 'latitude', 'country', 'city', 'street', 'street_number', 'postcode'].forEach(field => {
-//           this.firm[field] = null;
-//         });
-//       }
-//     },
-//
-//     geocode(latlng) {
-//       const geocoder = new Geocoder();
-//
-//       geocoder.reverseGeocode(latlng, result => {
-//         this.firm = Object.assign(this.firm, result);
-//       });
-//     },
-//
-//     addPhoto(file) {
-//       this.firm.gallery.splice(this.firm.gallery.length - 1, 0, file);
-//     },
-//
-//     removePhoto(file) {
-//       let index = this.firm.gallery.findIndex(photo => photo.file === file);
-//
-//       if (index > -1) {
-//         this.firm.gallery.splice(index, 1);
-//       }
-//     },
+
 //
 
-//     formatAddress(index, data) {
-//       const strip = (value) => value !== undefined ? value : '';
 //
-//       data.label = [(`${strip(data.street)} ${strip(data.street_number)}`).trim(), data.city, data.country]
-//         .filter(item => item !== '')
-//         .join(', ');
+
+
 //
-//       this.$set(this.job.locations, index, data);
-//     },
-//
-//     addLogo(result) {
-//       this.firm.logo = result;
-//     },
-//
-//     removeLogo() {
-//       this.firm.logo = {url: null, filename: null};
-//     },
+
 //
 //     handleScroll() {
 //       const offset = document.getElementById('footer-top').offsetTop;
@@ -259,13 +172,8 @@ new Vue({
 //     }
 //   },
 //   computed: {
-//     address() {
-//       return String((this.firm.street || '') + ' ' + (this.firm.street_number || '') + ' ' + (this.firm.postcode || '') + ' ' + (this.firm.city || '')).trim();
-//     },
-//
-//     gallery() {
-//       return this.firm.gallery && this.firm.gallery.length ? this.firm.gallery : {'file': ''};
-//     },
+
+
 //
 //     tinymceOptions() {
 //       return tinymce;

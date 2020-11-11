@@ -29,13 +29,6 @@
                   <a class="input-group-text text-decoration-none" href="javascript:" @click="REMOVE_LOCATION(location)" v-if="job.locations.length > 1"><i class="fas fa-fw fa-minus-circle text-danger"></i></a>
                 </div>
 
-<!--                <input type="hidden" :name="'locations[' + index + '][longitude]'" :value="location.longitude">-->
-<!--                <input type="hidden" :name="'locations[' + index + '][latitude]'" :value="location.latitude">-->
-<!--                <input type="hidden" :name="'locations[' + index + '][street]'" :value="location.street">-->
-<!--                <input type="hidden" :name="'locations[' + index + '][street_number]'" :value="location.street_number">-->
-<!--                <input type="hidden" :name="'locations[' + index + '][city]'" :value="location.city">-->
-<!--                <input type="hidden" :name="'locations[' + index + '][country]'" :value="location.country">-->
-
                 <vue-google-place @change="setLocation(index, ...arguments)" :label="location.label"></vue-google-place>
               </div>
             </div>
@@ -43,8 +36,6 @@
           <div class="row">
             <div class="col-12">
               <div class="custom-control custom-checkbox mt-2 mb-3">
-<!--                <input type="hidden" name="is_remote" value="0">-->
-
                 <vue-checkbox id="is_remote" class="custom-control-input" name="is_remote" v-model="job.is_remote"></vue-checkbox>
                 <label for="is_remote" class="custom-control-label">Możliwa praca zdalna w zakresie</label>
 
@@ -96,9 +87,6 @@
             <ul class="tag-clouds tag-clouds-skills">
               <template v-for="(tag, index) in job.tags">
                 <vue-tag-skill :tag.sync="tag" :tooltips="['mile widziane', 'średnio zaawansowany', 'zaawansowany']" @delete="REMOVE_TAG"></vue-tag-skill>
-
-<!--                <input type="hidden" :name="'tags[' + index + '][name]'" :value="tag.name">-->
-<!--                <input type="hidden" :name="'tags[' + index + '][priority]'" v-model="tag.pivot.priority">-->
               </template>
             </ul>
           </div>
@@ -132,11 +120,6 @@
 
                   {{ feature.name }}
                 </div>
-
-<!--                <input type="hidden" :name="'features[' + index + '][id]'" :value="feature.id">-->
-<!--                <input type="hidden" :name="'features[' + index + '][name]'" :value="feature.name">-->
-<!--                <input type="hidden" :name="'features[' + index + '][default]'" :value="feature.default">-->
-<!--                <input type="hidden" :name="'features[' + index + '][checked]'" :value="feature.pivot.checked">-->
 
                 <div class="col-5" v-show="feature.checked && feature.default">
                   <input type="text" class="form-control form-control-sm" :placeholder="feature.default" v-model="feature.value">
@@ -210,7 +193,6 @@
   import { mapMutations, mapActions } from "vuex";
   import TinyMceOptions from '../../libs/tinymce';
   import store from "../../store";
-  // import TinyMceOptions from '@/js/libs/tinymce';
   import axios from "axios";
 
   @Component({
@@ -255,7 +237,7 @@
     popularTags!: Tag[]
 
     @Prop()
-    errors = {};
+    errors;
 
     suggestions = {};
 

@@ -251,4 +251,31 @@ export interface Job {
   rate: Rate;
   employment: Employment;
   seniority: Seniority;
+  firm?: Firm;
+}
+
+export interface Logo {
+  filename: string;
+  url: string;
+}
+
+export interface Firm {
+  id: number;
+  name: string;
+  is_agency: boolean;
+  city: string;
+  country: string;
+  street: string;
+  street_number: string;
+  postcode: string;
+  latitude: number;
+  longitude: number;
+  employees: number;
+  founded: number;
+  youtube_url: string;
+  logo: Logo;
+  gallery: Logo[];
+  benefits: string[];
+  website: string;
+  description: string;
 }

@@ -26,6 +26,13 @@
           :popular-tags="popularTags"
         ></vue-job-form>
 
+        <vue-firm-form
+          :firm="job.firm"
+          :errors="errors"
+          :default-benefits="defaultBenefits"
+          :employees="employees"
+        ></vue-firm-form>
+
         <div id="form-navbar">
           <div class="container-xxl">
             <div class="row">
@@ -101,7 +108,8 @@
     var plans = {{ plans|raw }};
     var currencies = {{ currencies|json_encode|raw }};
     var popularTags = {{ popular_tags|json_encode|raw }};
-
+    var defaultBenefits = {{ default_benefits|json_encode|raw }};
+    var employees = {{ employees|json_encode|raw }};
     {#var data = {#}
     {#  job: {{ job|json_encode|raw }},#}
     {#  errors: {},#}

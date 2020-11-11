@@ -35,10 +35,10 @@ class FirmFormResource extends JsonResource
         $result = [];
 
         foreach ($firm->gallery as $gallery) {
-            $result[] = ['file' => $gallery->file, 'url' => (string) $gallery->photo->url()];
+            $result[] = ['filename' => $gallery->file, 'url' => (string) $gallery->photo->url()];
         }
 
-        $result[] = ['file' => '']; // append empty element (always) so user can click on "+" icon to add next one
+        $result[] = ['filename' => '']; // append empty element (always) so user can click on "+" icon to add next one
 
         return $result;
     }

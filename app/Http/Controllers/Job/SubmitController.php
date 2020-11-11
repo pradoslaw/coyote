@@ -58,6 +58,11 @@ class SubmitController extends Controller
 
         $this->breadcrumb($job);
 
+        // get all firms assigned to user...
+        $this->firm->pushCriteria(new EagerLoading(['benefits', 'gallery']));
+
+        $firms = FirmResource::collection($this->firm->findAllBy('user_id', $this->userId));
+
         return $this->view('job.submit.home', [
             'popular_tags'      => $this->job->getPopularTags(),
             'job'               => new JobFormResource($job),
@@ -66,7 +71,9 @@ class SubmitController extends Controller
             // is plan is still going on?
             'is_plan_ongoing'   => $job->is_publish,
             'plans'             => $this->plan->active()->toJson(),
-            'currencies'        => Currency::all()
+            'currencies'        => Currency::all(),
+            'default_benefits'  => Benefit::getBenefitsList(), // default benefits,
+            'employees'         => Firm::getEmployeesList(),
         ]);
     }
 
@@ -79,20 +86,14 @@ class SubmitController extends Controller
         /** @var \Coyote\Job $job */
         $job = clone $draft->get(Job::class);
 
-        // get all firms assigned to user...
-        $this->firm->pushCriteria(new EagerLoading(['benefits', 'gallery']));
 
-        $firms = FirmResource::collection($this->firm->findAllBy('user_id', $job->user_id));
 
         $this->breadcrumb($job);
 
         return $this->view('job.submit.firm')->with([
             'job'               => $job,
             'firm'              => new FirmResource($job->firm),
-            'firms'             => $firms,
-            'default_benefits'  => Benefit::getBenefitsList(), // default benefits,
-            'employees'         => Firm::getEmployeesList(),
-            'founded'           => Firm::getFoundedList()
+
         ]);
     }
 
