@@ -4,9 +4,10 @@
   {% import 'components.modals' as modals %}
   {% import 'components.widgets' as widgets %}
 
+  {{ widgets.jquery() }}
+
   {{ parent() }}
 
-  {{ widgets.jquery() }}
   <script src="{{ cdn('js/wiki.js') }}"></script>
 
   {{ modals.alert('Należy się zalogować, aby dodać ogłoszenie do ulubionych', 'Logowanie', 'modal-unauthorized') }}
