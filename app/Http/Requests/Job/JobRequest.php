@@ -60,6 +60,8 @@ class JobRequest extends FormRequest
     {
         $job = $this->route('job') ?: new Job();
 
+
+
         return [
             'title' => self::TITLE,
             'seniority' => self::seniorityRule(),
@@ -71,14 +73,24 @@ class JobRequest extends FormRequest
             'currency_id' => ['required', 'int', 'exists:currencies,id'],
             'rate' => self::rateRule(),
             'employment' => self::employmentRule(),
-            'recruitment' => 'required_if:enable_apply,false|nullable|string',
-            'email' => 'required_if:enable_apply,true|email',
+            'recruitment' => [
+                Rule::requiredIf(function () use ($job) {
+                    return $this->input('enable_apply') === false;
+                }),
+                'nullable',
+                'string'
+            ],
+            'email' => [
+                'bail',
+                Rule::requiredIf($this->input('enable_apply') === true),
+                'nullable',
+                'email'
+            ],
             'plan_id' => [
                 'bail',
                 Rule::requiredIf(function () use ($job) {
                     return ! $job->exists;
                 }),
-
                 'int',
                 Rule::exists('plans', 'id')->where('is_active', 1),
             ],

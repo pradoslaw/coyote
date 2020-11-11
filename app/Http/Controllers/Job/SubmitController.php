@@ -177,11 +177,10 @@ class SubmitController extends Controller
     public function save(JobRequest $request, Job $job)
     {
         $job->fill($request->all());
-//dd($job);
-        /** @var \Coyote\Job $job */
-//        $job = clone $draft->get(Job::class);
 
-        $this->authorize('update', $job);
+        if ($job->exists) {
+            $this->authorize('update', $job);
+        }
 
         $this->transaction(function () use ($job) {
             $this->prepareAndSave($job, $this->auth);
