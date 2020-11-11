@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controllers\Job;
 
 use Coyote\Currency;
+use Coyote\Firm;
 use Coyote\Job;
 use Coyote\Plan;
 use Coyote\User;
@@ -132,5 +133,55 @@ class SubmitControllerTest extends TestCase
         $this->assertEquals(17, $job->locations[0]->longitude);
         $this->assertEquals('c#', $job->tags[0]->name);
         $this->assertEquals(2, $job->tags[0]->pivot->priority);
+    }
+
+    public function testSubmitValidFormWithFirm()
+    {
+        /** @var Firm $firm */
+        $firm = factory(Firm::class)->make();
+
+        $response = $this->actingAs($this->user)->json('POST', '/Praca/Submit', [
+            'title' => $title = $this->faker->text(60),
+            'plan_id' => Plan::first()->id,
+            'currency_id' => $currency = Currency::first()->id,
+            'enable_apply' => true,
+            'email' => $this->user->email,
+            'firm' => $firm->toArray()
+        ]);
+
+        $response->assertStatus(200);
+
+        $this->assertDatabaseHas('firms', ['user_id' => $this->user->id]);
+
+        /** @var Job $job */
+        $job = Job::where('user_id', $this->user->id)->first();
+
+        $this->assertNotEmpty($job->firm_id);
+        $this->assertEquals($firm->name, $job->firm->name);
+        $this->assertEquals($firm->user_id, $job->firm->user_id);
+        $this->assertEquals($firm->latitude, $job->firm->latitude);
+        $this->assertEquals($firm->longitude, $job->firm->longitude);
+        $this->assertEquals($firm->street, $job->firm->street);
+        $this->assertEquals($firm->city, $job->firm->city);
+        $this->assertEquals($firm->country_id, $job->firm->country_id);
+    }
+
+    public function testSubmitValidFormWithExistingFirm()
+    {
+        /** @var Firm $firm */
+        $firm = factory(Firm::class)->create(['user_id' => $this->user->id]);
+
+        $response = $this->actingAs($this->user)->json('POST', '/Praca/Submit', [
+            'title' => $this->faker->text(60),
+            'plan_id' => Plan::first()->id,
+            'currency_id' => Currency::first()->id,
+            'enable_apply' => true,
+            'email' => $this->user->email,
+            'firm' => $firm->toArray()
+        ]);
+
+        $response->assertStatus(200);
+
+        $this->assertDatabaseHas('jobs', ['firm_id' => $firm->id]);
     }
 }

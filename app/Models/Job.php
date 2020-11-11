@@ -112,8 +112,8 @@ class Job extends Model
         'enable_apply',
         'seniority',
         'plan_id',
-        'tags',
-        'features',
+//        'tags',
+//        'features',
         'locations',
 
         'currency',
@@ -300,7 +300,7 @@ class Job extends Model
      */
     public function firm()
     {
-        return $this->belongsTo('Coyote\Firm');
+        return $this->belongsTo('Coyote\Firm')->withDefault();
     }
 
     /**
@@ -466,42 +466,26 @@ class Job extends Model
     /**
      * @param mixed $features
      */
-    public function setFeaturesAttribute($features)
-    {
-        $models = [];
+//    public function setFeaturesAttribute($features)
+//    {
 
-        foreach ($features as $feature) {
-            $checked = (int) $feature['checked'];
-
-            $pivot = $this->features()->newPivot([
-                'checked'       => $checked,
-                'value'         => $checked ? ($feature['value'] ?? null) : null
-            ]);
-
-            $models[] = Feature::findOrNew($feature['id'])->setRelation('pivot', $pivot);
-        }
-
-        // set only if not empty. important!
-        if ($models) {
-            $this->setRelation('features', collect($models));
-        }
-    }
-
-    public function setTagsAttribute($tags)
-    {
-        $models = [];
-
-        foreach ($tags as $order => $tag) {
-            $pivot = $this->tags()->newPivot(['priority' => $tag['priority'] ?? 1, 'order' => $order]);
-
-            $models[] = (new Tag($tag))->setRelation('pivot', $pivot);
-        }
-
-        // set only if not empty. important!
-        if ($models) {
-            $this->setRelation('tags', collect($models));
-        }
-    }
+//    }
+//
+//    public function setTagsAttribute($tags)
+//    {
+//        $models = [];
+//
+//        foreach ($tags as $order => $tag) {
+//            $pivot = $this->tags()->newPivot(['priority' => $tag['priority'] ?? 1, 'order' => $order]);
+//
+//            $models[] = (new Tag($tag))->setRelation('pivot', $pivot);
+//        }
+//
+//        // set only if not empty. important!
+//        if ($models) {
+//            $this->setRelation('tags', collect($models));
+//        }
+//    }
 
     public function setLocationsAttribute($locations)
     {
@@ -518,19 +502,19 @@ class Job extends Model
         }
     }
 
-    public function setCurrencyAttribute($currency)
-    {
-        $this->attributes['currency_id'] = Currency::where('name', $currency)->value('id');
-    }
+//    public function setCurrencyAttribute($currency)
+//    {
+//        $this->attributes['currency_id'] = Currency::where('name', $currency)->value('id');
+//    }
 
-    public function setRecruitmentAttribute($recruitment)
-    {
-        if (!empty($recruitment)) {
-            $this->attributes['enable_apply'] = false;
-        }
-
-        $this->attributes['recruitment'] = $recruitment;
-    }
+//    public function setRecruitmentAttribute($recruitment)
+//    {
+//        if (!empty($recruitment)) {
+//            $this->attributes['enable_apply'] = false;
+//        }
+//
+//        $this->attributes['recruitment'] = $recruitment;
+//    }
 
     /**
      * Set plan as name

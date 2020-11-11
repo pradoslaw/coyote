@@ -26,6 +26,11 @@ class JobRequest extends FormRequest
     const TAG_NAME = 'max:50|tag';
     const TAG_PRIORITY = 'nullable|int|min:0|max:2';
 
+    const IS_AGENCY = 'bool';
+    const WEBSITE = 'nullable|url';
+    const DESCRIPTION = 'nullable|string';
+    const YOUTUBE_URL = 'nullable|string|max:255|url|host:youtube.com,youtu.be';
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -94,6 +99,10 @@ class JobRequest extends FormRequest
                 'int',
                 Rule::exists('plans', 'id')->where('is_active', 1),
             ],
+            'firm_id' => [
+                'nullable',
+                Rule::exists('firms', 'id')->whereNull('deleted_at')
+            ],
             'features.*.id' => 'required|int',
             'features.*.name' => 'string|max:100',
             'features.*.value' => 'nullable|string|max:100',
@@ -105,7 +114,27 @@ class JobRequest extends FormRequest
             'locations.*.street_number' => self::LOCATION_STREET_NUMBER,
             'locations.*.country' => self::LOCATION_COUNTRY,
             'locations.*.latitude' => self::LOCATION_LATITUDE,
-            'locations.*.longitude' => self::LOCATION_LONGITUDE
+            'locations.*.longitude' => self::LOCATION_LONGITUDE,
+
+            'firm.id' => [
+                'nullable',
+                'integer',
+                Rule::exists('firms', 'id')->whereNull('deleted_at')
+            ],
+            'firm.name' => 'required_with:job.firm_id|max:60',
+            'firm.is_agency' => self::IS_AGENCY,
+            'firm.website' => self::WEBSITE,
+            'firm.logo' => 'nullable|string',
+            'firm.description' => self::DESCRIPTION,
+            'firm.employees' => 'nullable|integer',
+            'firm.founded' => 'nullable|integer',
+            'firm.youtube_url' => self::YOUTUBE_URL,
+            'firm.latitude' => self::LOCATION_LATITUDE,
+            'firm.longitude' => self::LOCATION_LONGITUDE,
+            'firm.street' => self::LOCATION_STREET,
+            'firm.city' => self::LOCATION_CITY,
+            'firm.postcode' => 'nullable|string|max:50',
+            'firm.street_number' => self::LOCATION_STREET_NUMBER,
         ];
     }
 

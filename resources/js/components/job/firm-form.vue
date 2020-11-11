@@ -193,14 +193,14 @@
     methods: {
       ...mapMutations('jobs', ['REMOVE_BENEFIT', 'TOGGLE_BENEFIT', 'ADD_LOGO', 'REMOVE_LOGO', 'ADD_PHOTO', 'REMOVE_PHOTO'])
     },
-    watch: {
-      firm: {
-        handler(firm) {
-          store.commit('jobs/SET_FIRM', firm);
-        },
-        deep: true
-      }
-    },
+    // watch: {
+    //   firm: {
+    //     handler(firm) {
+    //       // store.commit('jobs/SET_FIRM', firm);
+    //     },
+    //     deep: true
+    //   }
+    // },
   })
   export default class VueFirmForm extends Vue {
     @Prop()

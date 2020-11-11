@@ -2,6 +2,7 @@
 
 namespace Coyote\Services\Job;
 
+use Coyote\Feature;
 use Coyote\Job;
 use Coyote\Payment;
 use Coyote\Repositories\Contracts\FirmRepositoryInterface as FirmRepository;
@@ -48,22 +49,14 @@ trait SubmitsJob
      */
     public function loadDefaults(Job $job, User $user): Job
     {
-        // load default firm regardless of offer is private or not
-        if (!$job->firm_id) {
-            $firm = $this->firm->loadDefaultFirm($user->id);
-            $firm->is_private = $job->exists && !$job->firm_id;
+        $firm = $this->firm->loadDefaultFirm($user->id);
+        $job->firm()->associate($firm);
 
-            $job->firm()->associate($firm);
-        }
-
-        $job->load(['tags', 'features', 'locations.country']);
         $job->firm->load(['benefits', 'gallery']);
 
-        if (!$job->exists) {
-            $job->plan_id = request('default_plan') ?? $this->plan->findDefault()->id;
-            $job->email = $user->email;
-            $job->setAttribute('features', $this->job->getDefaultFeatures($user->id));
-        }
+        $job->plan_id = request('default_plan') ?? $this->plan->findDefault()->id;
+        $job->email = $user->email;
+        $job->setRelation('features', $this->getDefaultFeatures($job));
 
         if (!count($job->locations)) {
             $job->locations->add(new Job\Location());
@@ -72,65 +65,23 @@ trait SubmitsJob
         return $job;
     }
 
-    /**
-     * @param Job $job
-     * @param User $user
-     * @return Job
-     */
-    protected function prepareAndSave(Job $job, User $user)
+    protected function getDefaultFeatures(Job $job)
     {
-        $tags = [];
-        if (count($job->tags)) {
-            $order = 0;
+        $features = $this->job->getDefaultFeatures($this->userId);
+        $models = [];
 
-            foreach ($job->tags as $tag) {
-                $model = $tag->firstOrCreate(['name' => $tag->name]);
+        foreach ($features as $feature) {
+            $checked = (int) $feature['checked'];
 
-                $tags[$model->id] = [
-                    'priority'  => $tag->pivot->priority ?? 0,
-                    'order'     => ++$order
-                ];
-            }
+            $pivot = $job->features()->newPivot([
+                'checked'       => $checked,
+                'value'         => $checked ? ($feature['value'] ?? null) : null
+            ]);
+
+            $models[] = Feature::findOrNew($feature['id'])->setRelation('pivot', $pivot);
         }
 
-        $features = [];
-        foreach ($job->features as $feature) {
-            $features[$feature->id] = $feature->pivot->toArray();
-        }
-
-        $activity = $job->id ? Stream_Update::class : Stream_Create::class;
-
-        if (!$job->firm) {
-            $job->firm()->dissociate();
-        } elseif ($job->firm->name) { // firm name is required to save firm
-            // user might click on "add new firm" button in form. make sure user_id is set up.
-            $job->firm->setDefaultUserId($job->user_id);
-
-            $this->authorizeForUser($user, 'update', $job->firm);
-
-            // fist, we need to save firm because firm might not exist.
-            $job->firm->save();
-
-            // reassociate job with firm. user could change firm, that's why we have to do it again.
-            $job->firm()->associate($job->firm);
-            // remove old benefits and save new ones.
-            $job->firm->benefits()->push($job->firm->benefits);
-            $job->firm->gallery()->push($job->firm->gallery);
-        }
-
-        $job->creating(function (Job $model) use ($user) {
-            $model->user_id = $user->id;
-        });
-
-        $job->save();
-        $job->locations()->push($job->locations);
-
-        $job->tags()->sync($tags);
-        $job->features()->sync($features);
-
-        stream($activity, (new Stream_Job)->map($job));
-
-        return $job;
+        return $models;
     }
 
     /**
