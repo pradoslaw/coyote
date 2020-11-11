@@ -23,7 +23,6 @@ return [
         'Forum' => ['route' => 'forum.home', 'class' => 'nav-item dropdown'],
         'Mikroblogi' => ['route' => 'microblog.home', 'class' => 'nav-item'],
         'Praca' => ['route' => 'job.home', 'class' => 'nav-item'],
-        'Pastebin' => ['route' => 'pastebin.show', 'class' => 'nav-item'],
         'Kompendium' => [
             'url' => 'Kategorie',
             'class' => 'nav-item dropdown',
