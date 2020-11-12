@@ -5,7 +5,7 @@
     </div>
 
     <div class="card-body">
-      <div v-if="firmsSelect.length" class="border-bottom form-group">
+      <div v-if="Object.keys(firmsSelect).length" class="border-bottom form-group">
         <label class="col-form-label">Wybierz firmę z listy</label>
 
         <vue-select :options="firmsSelect" placeholder="-- zapisane firmy --" v-model="defaultFirm"></vue-select>
@@ -18,7 +18,7 @@
             <a @click="addFirm" class="input-group-text text-decoration-none" href="javascript:" title="Dodaj nową firmę"><i class="fas fa-fw fa-plus-circle"></i></a>
           </div>
 
-          <vue-text v-model="firm.name" :is-invalid="'name' in errors"></vue-text>
+          <vue-text v-model="firm.name" :is-invalid="'name' in errors" name="firm[name]"></vue-text>
         </div>
 
         <span class="form-text text-muted">Podając nazwę firmy, oferta staje się bardziej wiarygodna i wartościowa.</span>
@@ -60,7 +60,7 @@
       </div>
 
       <vue-form-group :errors="errors['website']" label="Strona WWW" class="border-bottom">
-        <vue-text name="website" :value.sync="firm.website" :is-invalid="'website' in errors"></vue-text>
+        <vue-text v-model="firm.website" :is-invalid="'website' in errors" name="firm[website]"></vue-text>
 
         <span class="form-text text-muted">Firmowa strona WWW. Będzie ona wyświetlana przy ofercie.</span>
       </vue-form-group>
@@ -88,37 +88,27 @@
       </div>
 
       <vue-form-group :errors="errors['youtube_url']" label="Nagranie wideo w Youtube" class="form-group">
-        <vue-text name="youtube_url" v-model="firm.youtube_url" :is-invalid="'youtube_url' in errors"></vue-text>
+        <vue-text v-model="firm.youtube_url" :is-invalid="'youtube_url' in errors" name="firm[youtube_url]"></vue-text>
 
         <span class="form-text text-muted">Film promujący firmę będzie wyświetlany pod ogłoszeniem o pracę.</span>
       </vue-form-group>
 
       <vue-form-group :errors="errors['employees']" label="Liczba pracowników w firmie">
-        <vue-select name="employees" :options="employees" v-model="firm.employees" placeholder="--"></vue-select>
+        <vue-select :options="employees" v-model="firm.employees" placeholder="--" name="firm[employees]"></vue-select>
 
         <span class="form-text text-muted">Pozwala ocenić jak duża jest firma. Czy jest to korporacja, czy mała rodzinna firma?</span>
       </vue-form-group>
 
       <vue-form-group :errors="errors['founded']" label="Rok powstania" class="border-bottom">
-        <vue-select name="founded" :options="founded" v-model="firm.founded" placeholder="--"></vue-select>
+        <vue-select :options="founded" v-model="firm.founded" placeholder="--" name="firm[founded]"></vue-select>
 
         <span class="form-text text-muted">Pozwala ocenić jak duża jest firma. Czy jest to korporacja, czy mała rodzinna firma?</span>
       </vue-form-group>
 
       <vue-form-group label="Adres" class="border-bottom" v-show="firm.is_agency === false">
-        <vue-text autocomplete="off" v-model="address" @keydown.native.enter.prevent="changeAddress"></vue-text>
+        <vue-text autocomplete="off" v-model="address" @keydown.native.enter.prevent="changeAddress" name="address"></vue-text>
 
         <span class="form-text text-muted">Wpisz adres i naciśnij Enter lub kliknij na mapę. Adres firmy będzie wyświetlany przy ofercie.</span>
-
-<!--        <input type="hidden" name="latitude" v-model="firm.latitude">-->
-<!--        <input type="hidden" name="longitude" v-model="firm.longitude">-->
-<!--        <input type="hidden" name="country_id" v-model="firm.country_id">-->
-<!--        <input type="hidden" name="street" v-model="firm.street">-->
-<!--        <input type="hidden" name="city" v-model="firm.city">-->
-<!--        <input type="hidden" name="country" v-model="firm.country">-->
-<!--        <input type="hidden" name="postcode" v-model="firm.postcode">-->
-<!--        <input type="hidden" name="street_number" v-model="firm.street_number">-->
-<!--        <input type="hidden" name="address" v-model="firm.address">-->
 
         <div id="map">
           <vue-map @click="geocode" class="h-100" :latitude="firm.latitude || 51.919438" :longitude="firm.longitude || 19.145135999">

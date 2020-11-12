@@ -59,9 +59,7 @@ trait SubmitsJob
         $job->user_id = $user->id;
         $job->setRelation('features', $this->getDefaultFeatures($job));
 
-        if (!count($job->locations)) {
-            $job->locations->add(new Job\Location());
-        }
+
 
         return $job;
     }

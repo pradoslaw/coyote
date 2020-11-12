@@ -46,10 +46,14 @@ class SubmitController extends Controller
      * @return \Illuminate\View\View
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function getIndex(Job $job)
+    public function index(Job $job)
     {
         if (!$job->exists) {
             $job = $this->loadDefaults($job, $this->auth);
+        }
+
+        if (!count($job->locations)) {
+            $job->locations->add(new Job\Location());
         }
 
         $this->authorize('update', $job);
@@ -76,46 +80,6 @@ class SubmitController extends Controller
     }
 
     /**
-     * @param Draft $draft
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function getPreview(Draft $draft)
-    {
-        /** @var \Coyote\Job $job */
-        $job = clone $draft->get(Job::class);
-
-        $this->breadcrumb($job);
-
-        $tags = $job->tags()->orderBy('priority', 'DESC')->with('category')->get()->groupCategory();
-
-        $parser = app('parser.job');
-
-        foreach (['description', 'requirements', 'recruitment'] as $name) {
-            if (!empty($job[$name])) {
-                $job[$name] = $parser->parse($job[$name]);
-            }
-        }
-
-        if ($job->firm->is_private) {
-            $job->firm()->dissociate();
-        }
-
-        if (!empty($job->firm->description)) {
-            $job->firm->description = $parser->parse($job->firm->description);
-        }
-
-        return $this->view('job.submit.preview', [
-            'job'               => $job,
-            'firm'              => $job->firm ? $job->firm->toJson() : '{}',
-            'tags'              => $tags,
-            'rates_list'        => Job::getRatesList(),
-            'seniority_list'    => Job::getSeniorityList(),
-            'employment_list'   => Job::getEmploymentList(),
-            'employees_list'    => Firm::getEmployeesList(),
-        ]);
-    }
-
-    /**
      * @param JobRequest $request
      * @param Job $job
      * @return string
@@ -125,11 +89,11 @@ class SubmitController extends Controller
     {
         $job->fill($request->all());
 
-        if ($request->input('firm')) {
+        if ($request->has('firm.name')) {
             $job->firm->fill($request->input('firm'));
 
             // firm ID is present. user is changing assigned firm
-            if ($request->has('firm.id')) {
+            if ($request->filled('firm.id')) {
                 $job->firm->id = $request->input('firm.id');
                 $job->firm->exists = true;
 

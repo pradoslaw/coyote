@@ -1,8 +1,6 @@
-{% set preview = preview|default(false) %}
-
 <div id="job-offer" class="card-body">
   <div class="media">
-    {% if job.firm.logo %}
+    {% if job.firm.logo.name %}
       <div>
         <a title="Zobacz wszystkie oferty {{ job.firm.name }}" href="{{ route('job.firm', [job.firm.slug]) }}"><img class="media-object" src="{{ logo(job.firm.logo) }}" alt="{{ job.firm.name }}"></a>
       </div>

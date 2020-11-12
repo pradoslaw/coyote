@@ -27,7 +27,7 @@ new Vue({
     errors: {},
     isSubmitting: false,
     currentTab: 0,
-    tabs: ['Oferta pracy', 'Firma', 'Podgląd']
+    tabs: ['Oferta pracy', 'Informacje o firmie']
   },
   components: {
     'vue-job-form': VueJobForm,

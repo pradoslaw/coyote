@@ -23,7 +23,7 @@ class JobPostingTest extends DuskTestCase
         $this->user = User::first();
     }
 
-    public function testCreateJobOfferAsRegularUser()
+    public function testSubmitWithoutFirm()
     {
         $fake = Factory::create();
 
@@ -37,14 +37,7 @@ class JobPostingTest extends DuskTestCase
                 ->type('salary_to', $salaryTo = $fake->numberBetween(1000, 2000))
                 ->select('currency_id', Currency::CHF)
                 ->type('email', $fake->email)
-                ->assertDontSee('Zapisz i zakończ')
-                ->press('Informacje o firmie')
-                ->waitForLocation('/Praca/Submit/Firm')
-                ->click('label[for="is_private_1"]')
-                ->scrollTo('#footer-top')
-                ->press('Podgląd')
-                ->waitForLocation('/Praca/Submit/Preview')
-                ->press('Opublikuj')
+                ->press('Zapisz')
                 ->waitForText('Powrót do ogłoszenia')
                 ->clickLink('Powrót do ogłoszenia')
                 ->assertSeeIn('.media-heading', $title)
@@ -53,49 +46,42 @@ class JobPostingTest extends DuskTestCase
         });
     }
 
-    public function testCreateJobOfferAsFirm()
+    public function testSubmitWithFirm()
     {
         $fake = Factory::create();
 
         $this->browse(function (Browser $browser) use ($fake) {
             $browser->loginAs(User::first());
 
-            $plan = Plan::where('name', 'Premium')->first();
-
             $browser->visit('/Praca/Submit')
                 ->resize(1920, 1080)
                 ->type('title', $title = $fake->text(50))
-                ->value('input[name=plan_id]', $plan->id)
-//                ->select('employment_id', 1)
                 ->type('email', $fake->email)
                 ->press('Informacje o firmie')
-                ->waitForLocation('/Praca/Submit/Firm')
-                ->assertRadioSelected('is_private', 0)
-                ->click('label[for="is_agency_0"]')
+//                ->click('label[for="is_agency_0"]')
                 ->assertSee('Benefity')
-                ->type('name', $firm = $fake->name)
-                ->type('website', $website = 'http://4programmers.net')
-                ->select('employees', 2)
-                ->value('input[name=country]', 'Polska')
-                ->value('input[name=city]', 'Wrocław')
-                ->assertValue('input[name=country]', 'Polska')
-                ->type('youtube_url', 'https://www.youtube.com/watch?v=fz2OUoJpR7k')
+                ->type('firm[name]', $firm = $fake->name)
+                ->type('firm[website]', $website = 'http://4programmers.net')
+                ->select('firm[employees]', 2)
+                ->type('address', 'Wrocław Rynek')
+                ->keys('input[name="address"]', '{enter}')
+                ->pause(1000)
+                ->screenshot('t1')
+                ->type('firm[youtube_url]', 'https://www.youtube.com/watch?v=fz2OUoJpR7k')
                 ->scrollTo('#footer-top')
-                ->press('Podgląd')
-                ->waitForLocation('/Praca/Submit/Preview')
-                ->press('Opublikuj')
+                ->press('Zapisz')
                 ->waitForText('Powrót do ogłoszenia')
                 ->clickLink('Powrót do ogłoszenia')
                 ->assertSeeIn('.media-heading', $title)
                 ->assertSeeIn('.employer', $firm)
                 ->assertSee($website);
 
-//            $this->assertDatabaseHas('firms', ['name' => $firm, 'country_id' => 14, 'city' => 'Wrocław']);
+            $this->assertDatabaseHas('firms', ['name' => $firm, 'city' => 'Wrocław']);
             $this->assertDatabaseHas('firms', ['name' => $firm, 'youtube_url' => 'https://www.youtube.com/embed/fz2OUoJpR7k']);
         });
     }
 
-    public function testCreateJobOfferAsSecondFirm()
+    public function testSubmitOfferWithSecondFirm()
     {
         $user = factory(User::class)->create();
         $firm = factory(Firm::class)->create(['user_id' => $user->id]);
@@ -111,16 +97,13 @@ class JobPostingTest extends DuskTestCase
 //                ->select('employment_id', 1)
                 ->type('email', $fake->email)
                 ->press('Informacje o firmie')
-                ->waitForLocation('/Praca/Submit/Firm')
-                ->assertInputValue('name', $firm->name)
-                ->value('input[name=id]', '')
-                ->type('website', $website = 'http://4programmers.net')
-                ->type('name', 'New firm')
-                ->scrollTo('#footer-top')
-                ->press('Podgląd')
-                ->waitForLocation('/Praca/Submit/Preview')
-                ->assertSeeIn('.employer', 'New firm')
-                ->press('Opublikuj')
+                ->assertInputValue('firm[name]', $firm->name)
+                ->scrollTo('#js-submit-form')
+                ->clickAtXPath('/html/body/div[1]/div[2]/div/main/div[3]/div[3]/div[2]/div[2]/div/div/a')
+                ->assertInputValue('firm[name]', '')
+                ->type('firm[website]', $website = 'http://4programmers.net')
+                ->type('firm[name]', 'New firm')
+                ->press('Zapisz jako New firm')
                 ->waitForText('Powrót do ogłoszenia')
                 ->clickLink('Powrót do ogłoszenia')
                 ->assertSeeIn('.media-heading', $title)
@@ -129,7 +112,7 @@ class JobPostingTest extends DuskTestCase
         });
     }
 
-    public function testCreatePrivateJobOfferDespiteHavingFirm()
+    public function testSubmitPrivateJobOfferDespiteHavingFirm()
     {
         $user = factory(User::class)->create();
         $firm = factory(Firm::class)->create(['user_id' => $user->id]);

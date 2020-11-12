@@ -46,7 +46,7 @@
                   ${ tabs[currentTab - 1] }
                 </vue-button>
 
-                <vue-button v-if="currentTab < 2" @click.native="switchTab(currentTab + 1)" :disabled="isSubmitting" class="btn btn-secondary float-right">
+                <vue-button v-if="currentTab < 1" @click.native="switchTab(currentTab + 1)" :disabled="isSubmitting" class="btn btn-secondary float-right">
                   ${ tabs[currentTab + 1] }
 
                   <i class="fas fa-angle-right"></i>
@@ -55,8 +55,8 @@
                 <vue-button :disabled="isSubmitting" @click.native="submitForm" class="btn btn-primary float-right btn-save mr-2" title="Zapisz tę ofertę">
                   <i class="fas fa-save"></i> Zapisz
 
-                  <template v-if="job.firm">
-                    jako {{ job.firm.name }}
+                  <template v-if="job.firm.name">
+                    jako ${ job.firm.name }
                   </template>
                 </vue-button>
               </div>

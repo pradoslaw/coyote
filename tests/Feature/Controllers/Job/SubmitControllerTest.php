@@ -133,6 +133,7 @@ class SubmitControllerTest extends TestCase
         $this->assertEquals(17, $job->locations[0]->longitude);
         $this->assertEquals('c#', $job->tags[0]->name);
         $this->assertEquals(2, $job->tags[0]->pivot->priority);
+        $this->assertNull($job->firm_id);
     }
 
     public function testSubmitValidFormWithFirm()

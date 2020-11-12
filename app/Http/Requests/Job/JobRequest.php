@@ -41,7 +41,7 @@ class JobRequest extends FormRequest
         /** @var Job $job */
         $job = $this->route('job');
 
-        if ($job->firm && $this->user()->cannot('update', $job->firm)) {
+        if ($job->firm->exists && $this->user()->cannot('update', $job->firm)) {
             return false;
         }
 
