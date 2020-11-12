@@ -204,4 +204,56 @@ class SubmitControllerTest extends TestCase
 
         $response->assertStatus(403);
     }
+
+    public function testUpdateTitle()
+    {
+        $firm = factory(Firm::class)->create(['user_id' => $this->user->id]);
+        /** @var Job $job */
+        $job = factory(Job::class)->create(['user_id' => $this->user->id, 'firm_id' => $firm->id]);
+
+        $response = $this->actingAs($this->user)->json('POST', '/Praca/Submit/' . $job->id, [
+            'title' => $title = $this->faker->text(60),
+            'plan_id' => $plan = Plan::first()->id,
+            'currency_id' => $currency = Currency::first()->id,
+            'enable_apply' => true,
+            'email' => $email = $this->user->email,
+            'firm' => $firm->toArray()
+        ]);
+
+        $response->assertStatus(200);
+
+        $job->refresh();
+
+        $this->assertEquals($title, $job->title);
+        $this->assertEquals($plan, $job->plan_id);
+        $this->assertEquals($currency, $job->currency_id);
+        $this->assertEquals($email, $job->email);
+        $this->assertEquals($firm->id, $job->firm_id);
+    }
+
+    public function testUpdateWithDifferentFirm()
+    {
+        $firm = factory(Firm::class)->create(['user_id' => $this->user->id]);
+        /** @var Job $job */
+        $job = factory(Job::class)->create(['user_id' => $this->user->id, 'firm_id' => $firm->id]);
+
+        $newFirm = factory(Firm::class)->make();
+
+        $response = $this->actingAs($this->user)->json('POST', '/Praca/Submit/' . $job->id, [
+            'title' => $title = $this->faker->text(60),
+            'plan_id' => Plan::first()->id,
+            'currency_id' => $currency = Currency::first()->id,
+            'enable_apply' => true,
+            'email' => $this->user->email,
+            'firm' => $newFirm->toArray()
+        ]);
+
+        $response->assertStatus(200);
+
+        $job->refresh();
+
+        $this->assertEquals($title, $job->title);
+        $this->assertEquals($newFirm->name, $job->firm->name);
+        $this->assertNotEquals($firm->id, $job->firm_id);
+    }
 }

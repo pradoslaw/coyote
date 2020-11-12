@@ -282,11 +282,11 @@
     }
 
     get currenciesValues() {
-      let result = {};
+      return this.currencies.reduce((acc, value) => {
+        acc[value.id as unknown as string] = `${value.name} (${value.symbol})`;
 
-      this.currencies.forEach((value) => result[value.id as unknown as string] = `${value.name} (${value.symbol})`);
-
-      return result;
+        return acc
+      }, {});
     }
   }
 

@@ -128,12 +128,17 @@ class SubmitController extends Controller
         if ($request->input('firm')) {
             $job->firm->fill($request->input('firm'));
 
+            // firm ID is present. user is changing assigned firm
             if ($request->has('firm.id')) {
                 $job->firm->id = $request->input('firm.id');
                 $job->firm->exists = true;
 
                 // syncOriginalAttribute() is important if user changes firm
                 $job->firm->syncOriginalAttribute('id');
+            } else {
+                $job->firm->exists = false;
+
+                unset($job->firm->id);
             }
 
             Firm::creating(function (Firm $model) {

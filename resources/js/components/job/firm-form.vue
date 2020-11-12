@@ -5,7 +5,7 @@
     </div>
 
     <div class="card-body">
-      <div class="border-bottom form-group">
+      <div v-if="firmsSelect.length" class="border-bottom form-group">
         <label class="col-form-label">Wybierz firmę z listy</label>
 
         <vue-select :options="firmsSelect" placeholder="-- zapisane firmy --" v-model="defaultFirm"></vue-select>
@@ -301,7 +301,7 @@
       let result = {};
 
       for (let i = 1900; i <= year; i++) {
-        result[i] = `${i}%`;
+        result[i] = i;
       }
 
       return result;
@@ -312,17 +312,10 @@
     }
 
     get firmsSelect() {
-      let options = {};
-
-      this.firms.reduce((_, curr) => options[curr.id as unknown as string] = curr.name, options, options);
-      //
-      // this.firms.reduce((_, curr) => {
-      //   options[curr.id as unknown as string] = curr.name;
-      //
-      //   return list;
-      // }, options);
-
-      return options;
+      return this.firms.reduce((acc, curr) => {
+        acc[curr.id as unknown as string] = curr.name;
+        return acc;
+      }, {});
     }
 
     get defaultFirm() {
