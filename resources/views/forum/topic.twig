@@ -8,7 +8,7 @@
 
 {% block content %}
 
-  {% if model.locked_at %}
+  {% if model.locked_at and moderl.locker %}
     <p class="alert alert-warning">
       Wątek zablokowany {{ model.locked_at|format_date }} przez <a class="alert-warning" href="{{ route('profile', [model.locker.id]) }}">{{ model.locker.name }}</a>.
     </p>
