@@ -268,8 +268,8 @@ export interface Firm {
   employees: number;
   founded: number;
   youtube_url: string;
-  logo: string;
-  gallery: string;
+  logo: string | null;
+  gallery: string[];
   benefits: string[];
   website: string;
   description: string;

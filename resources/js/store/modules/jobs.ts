@@ -58,25 +58,7 @@ const mutations = {
 
   REMOVE_BENEFIT(state, benefit) {
     state.form.firm.benefits.splice(state.form.firm.benefits.indexOf(benefit), 1);
-  },
-
-  ADD_LOGO(state, logo) {
-    state.form.firm.logo = logo;
-  },
-
-  REMOVE_LOGO(state) {
-    state.form.firm.logo = null;
-  },
-
-  ADD_PHOTO(state, photo) {
-    state.form.firm.gallery.splice(state.form.firm.gallery.length - 1, 0, photo);
-  },
-
-  REMOVE_PHOTO(state, url) {
-    const gallery = state.form.firm.gallery;
-
-    gallery.splice(gallery.findIndex(photo => photo === url), 1);
-  },
+  }
 }
 
 const actions = {

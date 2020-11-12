@@ -46,7 +46,7 @@
               name="logo"
               upload-url="/Firma/Logo"
               @upload="addLogo"
-              @delete="REMOVE_LOGO">
+              @delete="removeLogo">
             </vue-thumbnail>
           </div>
         </div>
@@ -74,7 +74,7 @@
               :file="photo"
               upload-url="/Firma/Gallery"
               @upload="addPhoto"
-              @delete="REMOVE_PHOTO">
+              @delete="removePhoto">
             </vue-thumbnail>
           </div>
         </div>
@@ -187,7 +187,7 @@
       'vue-thumbnail': VueThumbnail,
     },
     methods: {
-      ...mapMutations('jobs', ['REMOVE_BENEFIT', 'TOGGLE_BENEFIT', 'ADD_LOGO', 'REMOVE_LOGO', 'ADD_PHOTO', 'REMOVE_PHOTO'])
+      ...mapMutations('jobs', ['REMOVE_BENEFIT', 'TOGGLE_BENEFIT'])
     },
     // watch: {
     //   firm: {
@@ -243,11 +243,21 @@
     }
 
     addLogo(input) {
-      store.commit('jobs/ADD_LOGO', input.url);
+      this.firm.logo = input.url;
     }
 
     addPhoto(input) {
-      store.commit('jobs/ADD_PHOTO', input.url);
+      this.firm.gallery.splice(this.firm.gallery.length - 1, 0, input.url);
+    }
+
+    removeLogo() {
+      this.firm.logo = null;
+    }
+
+    removePhoto(url) {
+      const gallery = this.firm.gallery;
+
+      gallery.splice(gallery.findIndex(photo => photo === url), 1);
     }
 
     get address() {
@@ -255,7 +265,7 @@
     }
 
     get gallery() {
-      return this.firm.gallery && this.firm.gallery.length ? this.firm.gallery : {'file': ''};
+      return this.firm.gallery?.length ? this.firm.gallery : {'file': ''};
     }
 
     get founded() {
