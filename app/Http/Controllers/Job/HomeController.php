@@ -2,7 +2,6 @@
 
 namespace Coyote\Http\Controllers\Job;
 
-use Coyote\Http\Resources\JobCollection;
 use Coyote\Http\Resources\JobResource;
 use Coyote\Http\Resources\TagResource;
 use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
@@ -194,7 +193,7 @@ class HomeController extends BaseController
 
             'locations'         => $result->getAggregationCount("global.locations.locations_city_original")->slice(0, 10)->filter(),
             'tags'              => TagResource::collection($tags)->toArray($this->request),
-            'jobs'              => json_decode((new JobCollection($pagination))->response()->getContent()),
+            'jobs'              => JobResource::collection($pagination)->toResponse($this->request)->getData(true),
             'subscribed'        => $this->getSubscribed(),
             'published'         => $this->getPublished()
         ];

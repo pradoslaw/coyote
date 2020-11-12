@@ -63,8 +63,8 @@ class JobResource extends JsonResource
                 'url'           => route('job.remote')
             ],
             'text'        => $this->description,
-            'firm'        => $this->firm ? new FirmResource($this->firm) : (object) ['logo' => '', 'name' => ''],
             'recruitment' => $this->recruitment,
+            'firm'        => $this->when($this->firm->exists, new FirmResource($this->firm), (object) ['logo' => '', 'name' => '']),
 
             'features'    => $this->whenLoaded('features', function () {
                 return FeatureResource::collection($this->features);

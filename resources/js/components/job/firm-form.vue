@@ -45,7 +45,7 @@
               :file="firm.logo"
               name="logo"
               upload-url="/Firma/Logo"
-              @upload="ADD_LOGO"
+              @upload="addLogo"
               @delete="REMOVE_LOGO">
             </vue-thumbnail>
           </div>
@@ -73,7 +73,7 @@
               :url="photo"
               :file="photo"
               upload-url="/Firma/Gallery"
-              @upload="ADD_PHOTO"
+              @upload="addPhoto"
               @delete="REMOVE_PHOTO">
             </vue-thumbnail>
           </div>
@@ -240,6 +240,14 @@
       }
 
       this.benefit = '';
+    }
+
+    addLogo(input) {
+      store.commit('jobs/ADD_LOGO', input.url);
+    }
+
+    addPhoto(input) {
+      store.commit('jobs/ADD_PHOTO', input.url);
     }
 
     get address() {
