@@ -1,6 +1,8 @@
 <template>
   <div class="form-group">
-    <label v-if="label" class="col-form-label">{{ label }}</label>
+    <slot name="label">
+      <label v-if="label" class="col-form-label">{{ label }}</label>
+    </slot>
 
     <slot></slot>
 

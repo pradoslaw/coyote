@@ -7,7 +7,11 @@
       <div class="card-body">
 
         <div class="form-row border-bottom">
-          <vue-form-group :errors="errors['title']" class="col-sm-9" label="Tytuł oferty <em>*</em>">
+          <vue-form-group :errors="errors['title']" class="col-sm-9">
+            <template v-slot:label>
+              <label class="col-form-label">Tytuł oferty <em>*</em></label>
+            </template>
+
             <vue-text name="title" v-model="job.title" placeholder="Np. Senior Java Developer" maxlength="60" :is-invalid="'title' in errors"></vue-text>
 
             <span class="form-text text-muted">Pozostało <strong>{{ job.title | charCounter(60) }}</strong> znaków</span>
