@@ -56,6 +56,7 @@ trait SubmitsJob
 
         $job->plan_id = request('default_plan') ?? $this->plan->findDefault()->id;
         $job->email = $user->email;
+        $job->user_id = $user->id;
         $job->setRelation('features', $this->getDefaultFeatures($job));
 
         if (!count($job->locations)) {

@@ -23,6 +23,7 @@ new Vue({
     popularTags,
     defaultBenefits,
     employees,
+    firms,
     errors: {},
     isSubmitting: false,
     currentTab: 0,

@@ -75,7 +75,6 @@ class SubmitController extends Controller
         ]);
     }
 
-
     /**
      * @param Draft $draft
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -116,36 +115,6 @@ class SubmitController extends Controller
         ]);
     }
 
-    private function features(JobRequest $request)
-    {
-        $features = [];
-
-        foreach ($request->input('features', []) as $feature) {
-            $checked = (int) $feature['checked'];
-
-            $features[$feature['id']] = ['checked' => $feature['checked'], 'value' => $checked ? ($feature['value'] ?? null) : null];
-        }
-
-        return $features;
-    }
-
-    private function tags(JobRequest $request)
-    {
-        $tags = [];
-        $order = 0;
-
-        foreach ($request->input('tags', []) as $tag) {
-            $model = Tag::firstOrCreate(['name' => $tag['name']]);
-
-            $tags[$model->id] = [
-                'priority'  => $tag['priority'] ?? 0,
-                'order'     => ++$order
-            ];
-        }
-
-        return $tags;
-    }
-
     /**
      * @param JobRequest $request
      * @param Job $job
@@ -162,6 +131,9 @@ class SubmitController extends Controller
             if ($request->has('firm.id')) {
                 $job->firm->id = $request->input('firm.id');
                 $job->firm->exists = true;
+
+                // syncOriginalAttribute() is important if user changes firm
+                $job->firm->syncOriginalAttribute('id');
             }
 
             Firm::creating(function (Firm $model) {
@@ -232,5 +204,35 @@ class SubmitController extends Controller
             $this->breadcrumb->push($job['title'], route('job.offer', [$job['id'], $job['slug']]));
             $this->breadcrumb->push('Edycja oferty', route('job.submit'));
         }
+    }
+
+    private function features(JobRequest $request): array
+    {
+        $features = [];
+
+        foreach ($request->input('features', []) as $feature) {
+            $checked = (int) $feature['checked'];
+
+            $features[$feature['id']] = ['checked' => $feature['checked'], 'value' => $checked ? ($feature['value'] ?? null) : null];
+        }
+
+        return $features;
+    }
+
+    private function tags(JobRequest $request): array
+    {
+        $tags = [];
+        $order = 0;
+
+        foreach ($request->input('tags', []) as $tag) {
+            $model = Tag::firstOrCreate(['name' => $tag['name']]);
+
+            $tags[$model->id] = [
+                'priority'  => $tag['priority'] ?? 0,
+                'order'     => ++$order
+            ];
+        }
+
+        return $tags;
     }
 }

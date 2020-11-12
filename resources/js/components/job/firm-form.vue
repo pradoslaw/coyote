@@ -1,17 +1,24 @@
 <template>
-  <div id="box-edit-firm" class="card card-default">
+  <div class="card card-default">
     <div class="card-header">
       Dane firmy
     </div>
 
     <div class="card-body">
+      <div class="border-bottom form-group">
+        <label class="col-form-label">Wybierz firmę z listy</label>
+
+        <vue-select :options="firmsSelect" placeholder="-- zapisane firmy --" v-model="defaultFirm"></vue-select>
+        <span class="form-text text-muted">Możesz wybrać jedną z pośród kilku firm przypiasnych do Twojego konta.</span>
+      </div>
+
       <vue-form-group :errors="errors['name']" label="Nazwa firmy" class="border-bottom">
         <div class="input-group">
-          <vue-text v-model="firm.name" :is-invalid="'name' in errors"></vue-text>
-
-          <div class="input-group-append">
-            <a class="input-group-text text-decoration-none" href="javascript:" title="Dodaj nową firmę"><i class="fas fa-plus"></i></a>
+          <div class="input-group-prepend">
+            <a @click="addFirm" class="input-group-text text-decoration-none" href="javascript:" title="Dodaj nową firmę"><i class="fas fa-fw fa-plus-circle"></i></a>
           </div>
+
+          <vue-text v-model="firm.name" :is-invalid="'name' in errors"></vue-text>
         </div>
 
         <span class="form-text text-muted">Podając nazwę firmy, oferta staje się bardziej wiarygodna i wartościowa.</span>
@@ -188,15 +195,7 @@
     },
     methods: {
       ...mapMutations('jobs', ['REMOVE_BENEFIT', 'TOGGLE_BENEFIT'])
-    },
-    // watch: {
-    //   firm: {
-    //     handler(firm) {
-    //       // store.commit('jobs/SET_FIRM', firm);
-    //     },
-    //     deep: true
-    //   }
-    // },
+    }
   })
   export default class VueFirmForm extends Vue {
     @Prop()
@@ -210,6 +209,9 @@
 
     @Prop()
     employees!: number[];
+
+    @Prop()
+    firms!: Firm[];
 
     benefit: string = '';
 
@@ -260,6 +262,32 @@
       gallery.splice(gallery.findIndex(photo => photo === url), 1);
     }
 
+    addFirm() {
+      this.$store.commit('jobs/SET_FIRM', {
+        id: null,
+        name: '',
+        logo: null,
+        thumbnail: null,
+        description: '',
+        website: null,
+        is_agency: false,
+        employees: null,
+        founded: null,
+        vat_id: null,
+        youtube_url: null,
+        gallery: [''],
+        benefits: [],
+        latitude: null,
+        longitude: null,
+        country: null,
+        street: null,
+        postcode: null,
+        city: null,
+        street_number: null,
+        country_id: null
+      })
+    }
+
     get address() {
       return String((this.firm.street || '') + ' ' + (this.firm.street_number || '') + ' ' + (this.firm.postcode || '') + ' ' + (this.firm.city || '')).trim();
     }
@@ -281,6 +309,28 @@
 
     get tinyMceOptions() {
       return TinyMceOptions;
+    }
+
+    get firmsSelect() {
+      let options = {};
+
+      this.firms.reduce((_, curr) => options[curr.id as unknown as string] = curr.name, options, options);
+      //
+      // this.firms.reduce((_, curr) => {
+      //   options[curr.id as unknown as string] = curr.name;
+      //
+      //   return list;
+      // }, options);
+
+      return options;
+    }
+
+    get defaultFirm() {
+      return this.firm.id;
+    }
+
+    set defaultFirm(id) {
+      this.$store.commit('jobs/SET_FIRM', this.firms.find(firm => firm.id == id));
     }
   }
 </script>
