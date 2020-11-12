@@ -23,8 +23,7 @@ class GalleryController extends Controller
         $media = $this->getMediaFactory()->make('gallery')->upload($request->file('photo'));
 
         return response()->json([
-            'url' => (string) $media->url(),
-            'file' => $media->getFilename()
+            'url' => (string) $media->url()
         ]);
     }
 }
