@@ -2,15 +2,10 @@
 
 namespace Tests\Browser;
 
-use Coyote\Country;
 use Coyote\Currency;
 use Coyote\Firm;
-use Coyote\Job;
-use Coyote\Payment;
-use Coyote\Plan;
 use Coyote\User;
 use Laravel\Dusk\Browser;
-use function PHPSTORM_META\type;
 use Tests\DuskTestCase;
 use Faker\Factory;
 
@@ -58,7 +53,6 @@ class JobPostingTest extends DuskTestCase
                 ->type('title', $title = $fake->text(50))
                 ->type('email', $fake->email)
                 ->press('Informacje o firmie')
-//                ->click('label[for="is_agency_0"]')
                 ->assertSee('Benefity')
                 ->type('firm[name]', $firm = $fake->name)
                 ->type('firm[website]', $website = 'http://4programmers.net')
@@ -66,7 +60,6 @@ class JobPostingTest extends DuskTestCase
                 ->type('address', 'Wrocław Rynek')
                 ->keys('input[name="address"]', '{enter}')
                 ->pause(1000)
-                ->screenshot('t1')
                 ->type('firm[youtube_url]', 'https://www.youtube.com/watch?v=fz2OUoJpR7k')
                 ->scrollTo('#footer-top')
                 ->press('Zapisz')
@@ -94,7 +87,6 @@ class JobPostingTest extends DuskTestCase
             $browser->visit('/Praca/Submit')
                 ->resize(1920, 1080)
                 ->type('title', $title = $fake->text(50))
-//                ->select('employment_id', 1)
                 ->type('email', $fake->email)
                 ->press('Informacje o firmie')
                 ->assertInputValue('firm[name]', $firm->name)
@@ -125,20 +117,19 @@ class JobPostingTest extends DuskTestCase
             $browser->visit('/Praca/Submit')
                 ->resize(1920, 1080)
                 ->type('title', $title = $fake->text(50))
-//                ->select('employment_id', 1)
                 ->type('email', $fake->email)
-                ->scrollTo('#footer-top')
                 ->press('Informacje o firmie')
-                ->waitForLocation('/Praca/Submit/Firm')
-                ->click('label[for="is_private_1"]')
-                ->press('Zapisz i zakończ')
+                ->scrollTo('#js-submit-form')
+                ->clickAtXPath('/html/body/div[1]/div[2]/div/main/div[3]/div[3]/div[2]/div[2]/div/div/a')
+                ->assertInputValue('firm[name]', '')
+                ->press('Zapisz')
                 ->waitForText('Powrót do ogłoszenia')
                 ->clickLink('Powrót do ogłoszenia')
                 ->assertDontSee($firm->name);
         });
     }
 
-    public function testCreateJobOfferWithErrors()
+    public function testSubmitInvalidForm()
     {
         $user = factory(User::class)->create();
 
@@ -149,21 +140,14 @@ class JobPostingTest extends DuskTestCase
             $browser->visit('/Praca/Submit')
                 ->resize(1920, 1080)
                 ->assertInputValue('email', $user->email)
-                ->scrollTo('#footer-top')
-                ->press('Informacje o firmie')
-                ->waitForText('Formularz zawiera błędy. Sprawdź poprawność wprowadzonych danych i spróbuj ponownie.')
-                ->assertSee('Tytuł jest wymagany.')
+                ->press('Zapisz')
+                ->waitForText('Tytuł jest wymagany.')
                 ->type('title', $fake->title)
-                ->scrollTo('#footer-top')
-                ->press('Informacje o firmie')
-                ->waitForLocation('/Praca/Submit/Firm')
-                ->scrollTo('#footer-top')
-                ->press('Zapisz i zakończ')
-                ->waitForText('Nazwa firmy jest wymagana.');
+                ->press('Zapisz');
         });
     }
 
-    public function testQuickCreateJobOffer()
+    public function testSubmitWithFirmPresent()
     {
         $user = factory(User::class)->create();
         /** @var Firm $firm */
@@ -179,50 +163,10 @@ class JobPostingTest extends DuskTestCase
             $browser->visit('/Praca/Submit')
                 ->resize(1920, 1080)
                 ->type('title', $title = $fake->title)
-                ->scrollTo('#footer-top')
                 ->press("Zapisz jako $firm->name")
                 ->waitForText('Powrót do ogłoszenia')
                 ->clickLink('Powrót do ogłoszenia')
                 ->assertSeeIn('.media-heading', $title);
-        });
-    }
-
-    public function testCreatePremiumOfferWithoutInvoice()
-    {
-        $user = factory(User::class)->create();
-
-        $this->browse(function (Browser $browser) use ($user) {
-            $browser->loginAs($user);
-            $fake = Factory::create();
-
-            $browser->visit('/Praca/Submit')
-                ->resize(1920, 1080)
-                ->type('title', $title = $fake->title)
-                ->press('Wybierz')
-                ->scrollTo('#footer-top')
-                ->press('Informacje o firmie')
-                ->waitForLocation('/Praca/Submit/Firm')
-                ->click('label[for="is_private_1"]')
-                ->press('Zapisz i zakończ')
-                ->waitForText('Płatność poprzez bezpieczne połączenie')
-                ->click('label[for="enable-invoice"]')
-                ->type('number', '4012001038443335')
-                ->type('name', 'Jan Kowalski')
-                ->type('cvc', '123')
-                ->type('exp', '12/24')
-                ->press('Zapłać i zapisz')
-                ->waitForText('Dziękujemy! Płatność została zaksięgowana. Za chwilę dostaniesz potwierdzenie na adres e-mail.');
-
-            /** @var Job $job */
-            $job = Job::where('title', $title)->where('is_publish', 1)->first();
-            $payment = $job->payments()->first();
-
-            $this->assertEquals($title, $job->title);
-            $this->assertEquals(Payment::PAID, $payment->status_id);
-            $this->assertEquals(40, $payment->days);
-            $this->assertTrue($job->is_publish);
-            $this->assertNull($payment->invoice->country_id);
-            $this->assertEquals(30, $payment->invoice->items()->first()->price);
         });
     }
 }
