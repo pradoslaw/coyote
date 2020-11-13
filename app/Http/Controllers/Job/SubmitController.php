@@ -17,12 +17,7 @@ use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Repositories\Contracts\PlanRepositoryInterface as PlanRepository;
 use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Services\Job\SubmitsJob;
-use Coyote\Services\Stream\Activities\Create as Stream_Create;
-use Coyote\Services\Stream\Activities\Update as Stream_Update;
-use Coyote\Services\Stream\Objects\Job as Stream_Job;
 use Coyote\Services\UrlBuilder;
-use Coyote\Tag;
-use Illuminate\Http\Request;
 
 class SubmitController extends Controller
 {
@@ -139,7 +134,7 @@ class SubmitController extends Controller
     }
 
     /**
-     * @param $job
+     * @param Job $job
      */
     private function breadcrumb($job)
     {

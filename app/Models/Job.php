@@ -498,7 +498,6 @@ class Job extends Model
     /**
      * Set currency as name. This is being used on API routes
      *
-     * @param string $plan
      */
     public function setCurrencyAttribute($currency)
     {
@@ -508,7 +507,6 @@ class Job extends Model
     /**
      * This is being used on API routes
      *
-     * @param string $plan
      */
     public function setRecruitmentAttribute($recruitment)
     {
