@@ -26,8 +26,8 @@
             v-model="post.text"
             v-paste:success="addAttachment"
             :class="{'is-invalid': 'text' in errors}"
-            @keydown.ctrl.enter="save"
-            @keydown.meta.enter="save"
+            @keypress.ctrl.enter="save"
+            @keypress.meta.enter="save"
             @keydown.esc="cancel"
             name="text"
             class="form-control"
@@ -206,6 +206,7 @@
   import VueError from '../forms/error.vue';
   import VueText from '../forms/text.vue';
   import Prism from 'prismjs';
+  import '../../libs/axios-throttle.ts';
 
   Vue.use(VueAutosize);
   Vue.use(VueAutosave);
@@ -332,11 +333,11 @@
           });
         })
         .catch(err => {
-          if (err.response.status !== 422) {
+          if (err.response?.status !== 422) {
             return;
           }
 
-          this.errors = err.response.data.errors;
+          this.errors = err.response?.data.errors;
         })
         .finally(() => this.isProcessing = false);
     }
