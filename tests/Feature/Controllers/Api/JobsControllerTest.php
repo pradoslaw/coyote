@@ -61,9 +61,9 @@ class JobsControllerTest extends TestCase
             'locations' => [
                 [
                     'city' => 'Wrocław',
+                    'country' => 'Polska',
                     'street' => 'Rynek',
-                    'street_number' => '23',
-                    'country' => 'PL'
+                    'street_number' => '23'
                 ]
             ]
         ];
@@ -80,20 +80,22 @@ class JobsControllerTest extends TestCase
             'employment' => $data['employment'],
             'seniority' => $data['seniority'],
             'is_gross' => true,
-            'is_remote' => false,
-            'firm' => null
+            'is_remote' => false
         ]);
 
         $this->assertNotNull(Coupon::withTrashed()->find($coupon->id)->deleted_at);
 
-        $result = json_decode($response->getContent(), true);
         /** @var Job $job */
-        $job = Job::find($result['id']);
+        $job = Job::find($response->decodeResponseJson('id'));
 
         $this->assertFalse($job->enable_apply);
         $this->assertEquals($job->seniority, $data['seniority']);
         $this->assertEquals($job->employment, $data['employment']);
         $this->assertEquals($job->rate, $data['rate']);
+        $this->assertEquals($job->locations[0]->city, $data['locations'][0]['city']);
+        $this->assertEquals($job->locations[0]->street, $data['locations'][0]['street']);
+        $this->assertEquals($job->locations[0]->street_number, $data['locations'][0]['street_number']);
+        $this->assertEquals($job->locations[0]->country->name, $data['locations'][0]['country']);
         $this->assertTrue($job->is_publish);
 
         $payment = $job->payments->first();
@@ -159,7 +161,7 @@ class JobsControllerTest extends TestCase
         $response = $this->json('PUT', '/v1/jobs/' . $result['id'], $data, ['Authorization' => 'Bearer ' . $this->token, 'Accept' => 'application/json']);
         $this->assertEquals(200, $response->getStatusCode());
 
-        $response->assertJsonFragment(['title' => $data['title'], 'firm' => null]);
+        $response->assertJsonFragment(['title' => $data['title']]);
     }
 
     public function testNotEnoughFunds()

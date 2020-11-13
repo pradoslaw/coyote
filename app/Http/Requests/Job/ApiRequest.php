@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Requests\Job;
 
+use Coyote\Job;
 use Coyote\Repositories\Contracts\CouponRepositoryInterface as CouponRepository;
 use Coyote\Repositories\Contracts\PlanRepositoryInterface as PlanRepository;
 use Coyote\Rules\Base64Image;
@@ -17,11 +18,11 @@ class ApiRequest extends JobRequest
      */
     public function authorize()
     {
-        if ($this->route('job') !== null) {
-            return true;
-        }
-
         $user = $this->user('api');
+
+        if ($this->route('job') !== null) {
+            return $user->can('update', $this->route('job'));
+        }
 
         /** @var \Coyote\Plan $plan */
         $plan = $this->plan()->findDefault($this->input('plan'));
@@ -61,7 +62,7 @@ class ApiRequest extends JobRequest
             'plans' => [
                 'bail',
                 'string',
-                Rule::in(array_map('strtolower', $this->plan()->where('is_active', 1)->pluck('name')->toArray()))
+                Rule::exists('plans', 'name')->where('is_active', true)
             ],
             'features.*.id' => 'required|int',
             'features.*.name' => 'string|max:100',

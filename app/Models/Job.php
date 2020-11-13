@@ -463,13 +463,6 @@ class Job extends Model
         return $this->currency()->value('symbol');
     }
 
-    /**
-     * @param mixed $features
-     */
-//    public function setFeaturesAttribute($features)
-//    {
-
-//    }
 //
 //    public function setTagsAttribute($tags)
 //    {
@@ -502,29 +495,39 @@ class Job extends Model
         }
     }
 
-//    public function setCurrencyAttribute($currency)
-//    {
-//        $this->attributes['currency_id'] = Currency::where('name', $currency)->value('id');
-//    }
-
-//    public function setRecruitmentAttribute($recruitment)
-//    {
-//        if (!empty($recruitment)) {
-//            $this->attributes['enable_apply'] = false;
-//        }
-//
-//        $this->attributes['recruitment'] = $recruitment;
-//    }
-
     /**
-     * Set plan as name
+     * Set currency as name. This is being used on API routes
      *
      * @param string $plan
      */
-//    public function setPlanAttribute($plan)
-//    {
-//        $this->plan_id = Plan::where('is_active', 1)->whereRaw('LOWER(name) = ?', $plan)->value('id');
-//    }
+    public function setCurrencyAttribute($currency)
+    {
+        $this->attributes['currency_id'] = Currency::where('name', $currency)->value('id');
+    }
+
+    /**
+     * This is being used on API routes
+     *
+     * @param string $plan
+     */
+    public function setRecruitmentAttribute($recruitment)
+    {
+        if (!empty($recruitment)) {
+            $this->attributes['enable_apply'] = false;
+        }
+
+        $this->attributes['recruitment'] = $recruitment;
+    }
+
+    /**
+     * Set plan as name. This is being used on API routes
+     *
+     * @param string $plan
+     */
+    public function setPlanAttribute($plan)
+    {
+        $this->plan_id = Plan::where('is_active', 1)->whereRaw('LOWER(name) = ?', $plan)->value('id');
+    }
 
     /**
      * @return Payment

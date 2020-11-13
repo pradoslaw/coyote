@@ -22,6 +22,7 @@ use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Objects\Job as Stream_Job;
 use Coyote\Services\UrlBuilder;
 use Coyote\Tag;
+use Illuminate\Http\Request;
 
 class SubmitController extends Controller
 {
@@ -113,30 +114,7 @@ class SubmitController extends Controller
         }
 
         $this->transaction(function () use ($job, $request) {
-            $activity = $job->id ? Stream_Update::class : Stream_Create::class;
-
-            if ($job->firm) {
-                // fist, we need to save firm because firm might not exist.
-                $job->firm->save();
-
-                // reassociate job with firm. user could change firm, that's why we have to do it again.
-                $job->firm()->associate($job->firm);
-                // remove old benefits and save new ones.
-                $job->firm->benefits()->push($job->firm->benefits);
-                $job->firm->gallery()->push($job->firm->gallery);
-            }
-
-            $job->creating(function (Job $model) {
-                $model->user_id = $this->userId;
-            });
-
-            $job->save();
-            $job->locations()->push($job->locations);
-
-            $job->tags()->sync($this->tags($request));
-            $job->features()->sync($this->features($request));
-
-            stream($activity, (new Stream_Job)->map($job));
+            $this->saveRelations($job, $this->auth);
 
             if ($job->wasRecentlyCreated || !$job->is_publish) {
                 $job->payments()->create(['plan_id' => $job->plan_id, 'days' => $job->plan->length]);
@@ -173,35 +151,5 @@ class SubmitController extends Controller
             $this->breadcrumb->push($job['title'], route('job.offer', [$job['id'], $job['slug']]));
             $this->breadcrumb->push('Edycja oferty', route('job.submit'));
         }
-    }
-
-    private function features(JobRequest $request): array
-    {
-        $features = [];
-
-        foreach ($request->input('features', []) as $feature) {
-            $checked = (int) $feature['checked'];
-
-            $features[$feature['id']] = ['checked' => $feature['checked'], 'value' => $checked ? ($feature['value'] ?? null) : null];
-        }
-
-        return $features;
-    }
-
-    private function tags(JobRequest $request): array
-    {
-        $tags = [];
-        $order = 0;
-
-        foreach ($request->input('tags', []) as $tag) {
-            $model = Tag::firstOrCreate(['name' => $tag['name']]);
-
-            $tags[$model->id] = [
-                'priority'  => $tag['priority'] ?? 0,
-                'order'     => ++$order
-            ];
-        }
-
-        return $tags;
     }
 }

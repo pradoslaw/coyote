@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Api;
 
 use Coyote\Events\JobWasSaved;
 use Coyote\Events\PaymentPaid;
+use Coyote\Firm;
 use Coyote\Http\Factories\MediaFactory;
 use Coyote\Http\Resources\Api\JobApiResource;
 use Coyote\Repositories\Contracts\CouponRepositoryInterface as CouponRepository;
@@ -72,14 +73,14 @@ class JobsController extends Controller
 
         JobApiResource::$parser = app('parser.job');
 
-        $job = $this->loadDefaults($job, $user);
-        $job->firm()->dissociate(); // default setting with API: firm is not assigned to the job
-
-        $this->authorizeForUser($user, 'update', $job);
+        if (!$job->exists) {
+            $job = $this->loadDefaults($job, $user);
+            $job->firm()->dissociate(); // default setting with API: firm is not assigned to the job
+        }
 
         $job->fill(array_merge(['tags' => [], 'locations' => []], $request->all()));
 
-        if ($request->has('firm.name')) {
+        if ($request->filled('firm.name')) {
             $firm = $this->firm->loadFirm($user->id, $request->input('firm.name'));
 
             $firm->fill($request->input('firm'));
@@ -89,13 +90,18 @@ class JobsController extends Controller
                 $firm->logo = $media->getFilename();
             }
 
+            Firm::creating(function (Firm $model) use ($user) {
+                $model->user_id = $user->id;
+            });
+
             $job->firm()->associate($firm);
         }
 
         $job->load('plan'); // reload plan relation as it might has changed
+        $this->request = $request;
 
         app(Connection::class)->transaction(function () use ($job, $repository, $user) {
-            $this->prepareAndSave($job, $user);
+            $this->saveRelations($job, $user);
 
             if ($job->wasRecentlyCreated || !$job->is_publish) {
                 $coupon = $repository->findCoupon($user->id, $job->plan->gross_price);
