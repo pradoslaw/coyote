@@ -55,7 +55,7 @@ class ApiRequest extends JobRequest
             'rate' => $this->rateRule(),
             'is_gross' => self::IS_GROSS,
             'currency' => 'nullable|string|exists:currencies,name',
-            'employment' => self::employmentRule(),
+            'employment' => $this->employmentRule(),
             'description' => 'string',
             'recruitment' => 'nullable|string',
             'email' => 'nullable|email',

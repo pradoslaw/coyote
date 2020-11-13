@@ -49,6 +49,7 @@ class SubmitController extends Controller
         }
 
         if (!count($job->locations)) {
+            // always one empty location
             $job->locations->add(new Job\Location());
         }
 
