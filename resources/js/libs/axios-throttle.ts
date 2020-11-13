@@ -15,10 +15,14 @@ function removePending(config: AxiosRequestConfig): void {
 }
 
 axios.interceptors.request.use((config: AxiosRequestConfig) => {
+  if (config.method !== 'post') {
+    return config;
+  }
+
   const url = getUrl(config);
 
   if (pending.includes(url)) {
-    throw new axios.Cancel('Operation canceled by the user.');
+    throw new axios.Cancel('Throttle detected.');
   }
 
   pending.push(url);
@@ -33,7 +37,9 @@ axios.interceptors.response.use(
     return response;
   },
   err => {
-    removePending(err.config);
+    if (err.config) {
+      removePending(err.config);
+    }
 
     return Promise.reject(err);
   }
