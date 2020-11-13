@@ -82,7 +82,7 @@ $font-size-control-label: 15px;
 // Fixed navigation bar with "next", "previous" buttons
 // ---------------------------------------------------------
 
-#form-navbar.fixed {
+#form-navbar {
   background-color: $body-bg;
   border-top: 2px solid $card-border-color;
   position: fixed;
@@ -109,7 +109,7 @@ $font-size-control-label: 15px;
 // Submit form
 // --------------------------------------------
 
-.submit-form {
+.job-form {
   .card-header {
     font-size: $font-size-lg;
   }
@@ -162,10 +162,6 @@ $font-size-control-label: 15px;
 
 .mce-tinymce {
   width: 95% !important;
-}
-
-.input-inline {
-  display: inline-block;
 }
 
 input[name=salary_from],

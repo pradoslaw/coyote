@@ -40,6 +40,7 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:60,1',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            Middleware\DefaultBindings::class,
             ForceRootUrl::class
         ],
     ];
@@ -64,8 +65,6 @@ class Kernel extends HttpKernel
         'forum.write'   => Middleware\ForumWrite::class,
         'forum.url'     => Middleware\RedirectIfUrl::class,
         'topic.access'  => Middleware\RedirectIfMoved::class,
-        'job.session'   => Middleware\VerifyJobSession::class,
-        'job.forget'    => Middleware\ForgetJobDraft::class,
         'job.redirect'  => Middleware\PermanentRedirect::class,
         'topic.scroll'  => Middleware\RedirectToPost::class,
         'wiki.access'   => Middleware\WikiAccess::class,

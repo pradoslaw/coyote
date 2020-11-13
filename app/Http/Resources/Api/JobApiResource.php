@@ -74,9 +74,10 @@ class JobApiResource extends JsonResource
             'locations'   => LocationResource::collection($this->locations),
             'tags'        => TagResource::collection($this->tags->sortByDesc('pivot.priority')),
             'currency'    => $this->currency->name,
-            'firm'        => new FirmResource($this->firm),
             'description' => $this->parse((string) $this->description), // argument must be a string
             'recruitment' => $this->parse((string) $this->recruitment),
+
+            'firm'        => $this->when($this->firm && $this->firm->exists, new FirmResource($this->firm)),
 
             'features'    => $this->whenLoaded('features', function () {
                 return FeatureResource::collection($this->features);

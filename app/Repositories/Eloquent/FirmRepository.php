@@ -20,15 +20,7 @@ class FirmRepository extends Repository implements FirmRepositoryInterface
      */
     public function loadDefaultFirm(int $userId): Firm
     {
-        $firm = $this->findBy('user_id', $userId);
-
-        if (!$firm) {
-            /** @var \Coyote\Firm $firm */
-            $firm = $this->newInstance();
-            $firm->setDefaultUserId($userId);
-        }
-
-        return $firm;
+        return $this->findBy('user_id', $userId) ?? $this->newInstance();
     }
 
     /**
@@ -36,12 +28,6 @@ class FirmRepository extends Repository implements FirmRepositoryInterface
      */
     public function loadFirm(int $userId, string $name): Firm
     {
-        $firm = $this->where('user_id', $userId)->where('name', $name)->first();
-
-        if (!$firm) {
-            $firm = $this->newInstance();
-        }
-
-        return $firm;
+        return $this->where('user_id', $userId)->where('name', $name)->first() ?? $this->newInstance();
     }
 }

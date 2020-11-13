@@ -13,6 +13,7 @@ import microblogs from './modules/microblogs';
 import prompt from './modules/prompt';
 import poll from './modules/poll';
 import flags from './modules/flags';
+import jobs from './modules/jobs';
 
 Vue.use(Vuex);
 
@@ -30,6 +31,7 @@ export default new Vuex.Store({
     microblogs,
     prompt,
     poll,
-    flags
+    flags,
+    jobs
   }
 });

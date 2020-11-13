@@ -3,7 +3,6 @@
 namespace Coyote\Http\Requests\Job;
 
 use Coyote\Job;
-use Coyote\Services\Job\Draft;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -27,6 +26,11 @@ class JobRequest extends FormRequest
     const TAG_NAME = 'max:50|tag';
     const TAG_PRIORITY = 'nullable|int|min:0|max:2';
 
+    const IS_AGENCY = 'bool';
+    const WEBSITE = 'nullable|url';
+    const DESCRIPTION = 'nullable|string';
+    const YOUTUBE_URL = 'nullable|string|max:255|url|host:youtube.com,youtu.be';
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -34,20 +38,35 @@ class JobRequest extends FormRequest
      */
     public function authorize()
     {
+        /** @var Job $job */
+        $job = $this->route('job');
+
+        if (!$job->exists) {
+            return true;
+        }
+
+        if ($job->firm->exists && $this->user()->cannot('update', $job->firm)) {
+            return false;
+        }
+
+        if (!$this->user()->can('update', $job)) {
+            return false;
+        }
+
         return true;
     }
 
-    public static function seniorityRule()
+    protected function seniorityRule()
     {
         return ['nullable', 'string', Rule::in([Job::STUDENT, Job::JUNIOR, Job::MID, Job::SENIOR, Job::LEAD, Job::MANAGER])];
     }
 
-    public static function rateRule()
+    protected function rateRule()
     {
         return ['nullable', 'string', Rule::in([Job::HOURLY, Job::MONTHLY, Job::WEEKLY, Job::YEARLY])];
     }
 
-    public static function employmentRule()
+    protected function employmentRule()
     {
         return ['nullable', 'string', Rule::in([Job::MANDATORY, Job::EMPLOYMENT, Job::B2B, Job::CONTRACT])];
     }
@@ -59,31 +78,43 @@ class JobRequest extends FormRequest
      */
     public function rules()
     {
-        /** @var Draft $draft */
-        $draft = $this->container[Draft::class];
-        $job = $draft->get(Job::class);
+        $job = $this->route('job');
 
         return [
             'title' => self::TITLE,
-            'seniority' => self::seniorityRule(),
+            'seniority' => $this->seniorityRule(),
             'is_remote' => self::IS_REMOTE,
             'remote_range' => self::REMOTE_RANGE,
             'salary_from' => self::SALARY_FROM,
             'salary_to' => self::SALARY_TO,
             'is_gross' => self::IS_GROSS,
             'currency_id' => ['required', 'int', 'exists:currencies,id'],
-            'rate' => self::rateRule(),
-            'employment' => self::employmentRule(),
-            'recruitment' => 'required_if:enable_apply,false|nullable|string',
-            'email' => 'required_if:enable_apply,true|email',
+            'rate' => $this->rateRule(),
+            'employment' => $this->employmentRule(),
+            'recruitment' => [
+                Rule::requiredIf(function () use ($job) {
+                    return $this->input('enable_apply') === false;
+                }),
+                'nullable',
+                'string'
+            ],
+            'email' => [
+                'bail',
+                Rule::requiredIf($this->input('enable_apply') === true),
+                'nullable',
+                'email'
+            ],
             'plan_id' => [
                 'bail',
                 Rule::requiredIf(function () use ($job) {
                     return ! $job->exists;
                 }),
-
                 'int',
                 Rule::exists('plans', 'id')->where('is_active', 1),
+            ],
+            'firm_id' => [
+                'nullable',
+                Rule::exists('firms', 'id')->whereNull('deleted_at')
             ],
             'features.*.id' => 'required|int',
             'features.*.name' => 'string|max:100',
@@ -96,7 +127,27 @@ class JobRequest extends FormRequest
             'locations.*.street_number' => self::LOCATION_STREET_NUMBER,
             'locations.*.country' => self::LOCATION_COUNTRY,
             'locations.*.latitude' => self::LOCATION_LATITUDE,
-            'locations.*.longitude' => self::LOCATION_LONGITUDE
+            'locations.*.longitude' => self::LOCATION_LONGITUDE,
+
+            'firm.id' => [
+                'nullable',
+                'integer',
+                Rule::exists('firms', 'id')->whereNull('deleted_at')
+            ],
+            'firm.name' => 'required_with:job.firm_id|max:60',
+            'firm.is_agency' => self::IS_AGENCY,
+            'firm.website' => self::WEBSITE,
+            'firm.logo' => 'nullable|string',
+            'firm.description' => self::DESCRIPTION,
+            'firm.employees' => 'nullable|integer',
+            'firm.founded' => 'nullable|integer',
+            'firm.youtube_url' => self::YOUTUBE_URL,
+            'firm.latitude' => self::LOCATION_LATITUDE,
+            'firm.longitude' => self::LOCATION_LONGITUDE,
+            'firm.street' => self::LOCATION_STREET,
+            'firm.city' => self::LOCATION_CITY,
+            'firm.postcode' => 'nullable|string|max:50',
+            'firm.street_number' => self::LOCATION_STREET_NUMBER,
         ];
     }
 

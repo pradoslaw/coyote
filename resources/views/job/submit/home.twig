@@ -12,239 +12,59 @@
 
       {% include 'job.submit.partials.loader' %}
 
-      <div class="submit-form">
-        {% include 'job.submit.partials.error_message' %}
+      <div id="js-submit-form" class="job-form" v-cloak>
+        {% if not is_plan_ongoing %}
+          <vue-pricing :plans="plans" :value.sync="job.plan_id" email="{{ config('mail.from.address') }}"></vue-pricing>
+        {% endif %}
 
-        <form
-          @submit.prevent="submitForm"
-          ref="submitForm"
-          method="post"
-          action="{{ route('job.submit') }}"
-          v-cloak
-        >
-          {% if not is_plan_ongoing %}
-            <input type="hidden" name="plan_id" v-model="job.plan_id">
+        <vue-tabs @click="switchTab" :items="tabs" :current-tab="currentTab" class="mb-4"></vue-tabs>
 
-            <vue-pricing :plans="plans" :value.sync="job.plan_id" email="{{ config('mail.from.address') }}"></vue-pricing>
-          {% endif %}
+        <vue-job-form
+          v-show="currentTab === 0"
+          :job="job"
+          :errors="errors"
+          :currencies="currencies"
+          :popular-tags="popularTags"
+        ></vue-job-form>
 
-          <input type="hidden" name="id" v-model="job.id">
-          <input type="hidden" name="firm_id" v-model="job.firm_id">
-          <input type="hidden" name="slug" v-model="job.slug">
+        <vue-firm-form
+          v-show="currentTab === 1"
+          :firm="job.firm"
+          :errors="errors"
+          :default-benefits="defaultBenefits"
+          :employees="employees"
+          :firms="firms"
+        ></vue-firm-form>
 
-          <input type="hidden" name="done" v-model="isDone">
+        <div id="form-navbar">
+          <div class="container-xxl">
+            <div class="row">
+              <div class="col-12 col-lg-9">
+                <vue-button v-if="currentTab > 0" @click.native="switchTab(currentTab - 1)" :disabled="isSubmitting" class="btn btn-secondary float-left">
+                  <i class="fas fa-angle-left"></i>
 
-          <div class="card card-default">
-            <div class="card-header">
-              Podstawowe informacje
-            </div>
-            <div class="card-body">
+                  ${ tabs[currentTab - 1] }
+                </vue-button>
 
-              <div class="form-row border-bottom">
-                <div class="col-sm-9 form-group">
-                  <label class="col-form-label">Tytuł oferty <em>*</em></label>
+                <vue-button v-if="currentTab < 1" @click.native="switchTab(currentTab + 1)" :disabled="isSubmitting" class="btn btn-secondary float-right">
+                  ${ tabs[currentTab + 1] }
 
-                  <vue-text name="title" :value.sync="job.title" placeholder="Np. Senior Java Developer" maxlength="60" :is-invalid="isInvalid(['title'])"></vue-text>
+                  <i class="fas fa-angle-right"></i>
+                </vue-button>
 
-                  <span class="form-text text-muted">Pozostało <strong>${ charCounter('job.title', 60) }</strong> znaków</span>
+                <vue-button :disabled="isSubmitting" @click.native="submitForm" class="btn btn-primary float-right btn-save mr-2" title="Zapisz tę ofertę">
+                  <i class="fas fa-save"></i> Zapisz
 
-                  <vue-error :message="errors.title"></vue-error>
-                </div>
-
-                <div class="col-sm-3 form-group">
-                  <label class="col-form-label">Staż pracy</label>
-
-                  <vue-select name="seniority" :value.sync="job.seniority" :options="seniority" placeholder="--"></vue-select>
-                </div>
-              </div>
-
-              <div class="form-group border-bottom">
-                <label class="col-form-label">Lokalizacja</label>
-
-                <div v-for="(location, index) in job.locations" class="row mb-2">
-                  <div class="col-sm-12">
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <a class="input-group-text text-decoration-none" href="javascript:" @click="addLocation"><i class="fas fa-fw fa-plus-circle"></i></a>
-                        <a class="input-group-text text-decoration-none" href="javascript:" @click="removeLocation(location)" v-if="job.locations.length > 1"><i class="fas fa-fw fa-minus-circle text-danger"></i></a>
-                      </div>
-
-                      <input type="hidden" :name="'locations[' + index + '][longitude]'" :value="location.longitude">
-                      <input type="hidden" :name="'locations[' + index + '][latitude]'" :value="location.latitude">
-                      <input type="hidden" :name="'locations[' + index + '][street]'" :value="location.street">
-                      <input type="hidden" :name="'locations[' + index + '][street_number]'" :value="location.street_number">
-                      <input type="hidden" :name="'locations[' + index + '][city]'" :value="location.city">
-                      <input type="hidden" :name="'locations[' + index + '][country]'" :value="location.country">
-
-                      <vue-google-place @change="formatAddress(index, ...arguments)" :label="location.label"></vue-google-place>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-12">
-                    <div class="custom-control custom-checkbox mt-2 mb-3">
-                      <input type="hidden" name="is_remote" value="0">
-
-                      <vue-checkbox id="is_remote" class="custom-control-input" name="is_remote" :value.sync="job.is_remote"></vue-checkbox>
-                      <label for="is_remote" class="custom-control-label">Możliwa praca zdalna w zakresie</label>
-
-                      <vue-select name="remote_range" :options="remote_range" :value.sync="job.remote_range" class="form-control-sm input-inline" style="width: 100px; margin-top: -5px"></vue-select>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="form-group border-bottom">
-                <label class="col-form-label">Ofertowane wynagrodzenie netto i forma zatrudnienia</label>
-
-                <div>
-                  od
-                  <vue-text name="salary_from" class="input-inline" :value.sync="job.salary_from" :is-invalid="isInvalid(['salary_from'])"></vue-text>
-
-                  do
-                  <vue-text name="salary_to" class="input-inline" :value.sync="job.salary_to" :is-invalid="isInvalid(['salary_to'])"></vue-text>
-
-                  <vue-select name="currency_id" class="input-inline" :options="currencies" :value.sync="job.currency_id"></vue-select>
-
-                  <vue-select name="is_gross" class="input-inline" :options="taxes" :value.sync="job.is_gross"></vue-select>
-                  <vue-select name="rate" class="input-inline" :options="rates" :value.sync="job.rate"></vue-select>
-                  <vue-select name="employment" class="input-inline" :options="employments" :value.sync="job.employment"></vue-select>
-
-                  <span class="form-text text-muted">Podanie tych informacji nie jest obowiązkowe, ale dzięki temu Twoja oferta zainteresuje więcej osób. Obiecujemy!</span>
-
-                  <vue-error :message="errors.salary_from"></vue-error>
-                  <vue-error :message="errors.salary_to"></vue-error>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label class="col-form-label">Kluczowe technologie (wymagane lub mile widziane)</label>
-
-                <vue-tags-dropdown id="tag" :tags="popular_tags" @change="addTag" :is-invalid="errors.tags != null"></vue-tags-dropdown>
-
-                <span class="form-text text-muted" v-if="errors.tags != null">${ errors.tags[0] }</span>
-                <span class="form-text text-muted" v-else-if="suggestions.length === 0">Wybierz z listy lub wpisz nazwę języka/technologii i naciśnij Enter, aby dodać wymaganie.</span>
-                <span class="form-text text-muted" v-else-if="suggestions.length > 0">
-                    Podpowiedź:
-
-                    <template v-for="(suggestion, index) in suggestions">
-                        <a href="javascript:" class="tag-suggestion" @click="addTag(suggestion)">${ suggestion }</a>${ index < suggestions.length - 1 ? ', ' : '' }
-                    </template>
-                </span>
-
-                <div id="tags-container" class="mt-3">
-                  <ul class="tag-clouds tag-clouds-skills">
-                    <template v-for="(tag, index) in job.tags">
-                      <vue-tag-skill :tag.sync="tag" :tooltips="['mile widziane', 'średnio zaawansowany', 'zaawansowany']" @delete="removeTag"></vue-tag-skill>
-
-                      <input type="hidden" :name="'tags[' + index + '][name]'" :value="tag.name">
-                      <input type="hidden" :name="'tags[' + index + '][priority]'" v-model="tag.pivot.priority">
-                    </template>
-                  </ul>
-                </div>
+                  <template v-if="job.firm.name">
+                    jako ${ job.firm.name }
+                  </template>
+                </vue-button>
               </div>
             </div>
           </div>
+        </div>
 
-          <div class="card card-default">
-            <div class="card-header">
-              Szczegółowe informacje
-            </div>
-
-            <div class="card-body">
-              <div class="border-bottom form-group">
-                <label class="col-form-label">Opis oferty (opcjonalnie)</label>
-
-                <vue-tinymce v-model="job.description" :init="tinymceOptions"></vue-tinymce>
-                <span class="form-text text-muted">Miejsce na szczegółowy opis oferty. Pole to jednak nie jest wymagane.</span>
-
-                <input type="hidden" name="description" v-model="job.description">
-              </div>
-
-              <div class="form-group border-bottom">
-                <label class="col-form-label">Narzędzia oraz metodologia pracy</label>
-
-                <ol class="features list-group list-group-horizontal d-flex flex-row flex-wrap">
-                  <li class="list-group-item w-50" v-for="(feature, index) in job.features" :class="{checked: feature.pivot.checked}">
-                    <div class="row form-group">
-                      <div class="col-7" @click="toggleFeature(feature)">
-                        <i class="fas fa-fw " :class="{'fa-check': feature.pivot.checked, 'fa-times': !feature.pivot.checked}"></i>
-
-                        ${ feature.name }
-                      </div>
-
-                      <input type="hidden" :name="'features[' + index + '][id]'" :value="feature.id">
-                      <input type="hidden" :name="'features[' + index + '][name]'" :value="feature.name">
-                      <input type="hidden" :name="'features[' + index + '][default]'" :value="feature.default">
-                      <input type="hidden" :name="'features[' + index + '][checked]'" :value="feature.pivot.checked">
-
-                      <div class="col-5" v-show="feature.pivot.checked && feature.default">
-                        <input type="text" class="form-control form-control-sm" :placeholder="feature.default" :name="'features[' + index + '][value]'" v-model="feature.pivot.value">
-                      </div>
-                    </div>
-                  </li>
-                </ol>
-              </div>
-
-              <div class="form-group">
-                <div class="form-group">
-                  <div class="custom-control custom-radio">
-                    <vue-radio id="enable_apply_1" name="enable_apply" :value.sync="enableApply" checked-value="1" class="custom-control-input"></vue-radio>
-
-                    <label for="enable_apply_1" class="custom-control-label">
-                      Zezwól na wysyłanie CV poprzez serwis 4programmers.net
-                    </label>
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="col-sm-6">
-                    <vue-text name="email" :value.sync="job.email" :disabled="enableApply == 0" :is-invalid="isInvalid(['email'])"></vue-text>
-                    <span class="form-text text-muted">Adres e-mail nie będzie widoczny dla osób postronnych.</span>
-
-                    <vue-error :message="errors.email"></vue-error>
-                  </div>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <div class="form-group">
-                  <div class="custom-control custom-radio">
-                    <vue-radio id="enable_apply_0" name="enable_apply" :value.sync="enableApply" checked-value="0" class="custom-control-input"></vue-radio>
-
-                    <label for="enable_apply_0" class="custom-control-label">
-                      ...lub podaj informacje w jaki sposób kandydaci mogą aplikować na to stanowisko
-                    </label>
-                  </div>
-                </div>
-
-                <div v-show="enableApply == 0">
-                  <vue-tinymce v-model="job.recruitment" :init="tinymceOptions"></vue-tinymce>
-
-                  <input type="hidden" name="recruitment" v-model="job.recruitment">
-
-                  <vue-error :message="errors.recruitment"></vue-error>
-                </div>
-              </div>
-
-              <div id="form-navbar" :class="{'fixed': showFormNavbar}">
-                <div class="row">
-                  <div class="col-12" :class="{'col-lg-9': showFormNavbar}">
-                    <vue-button :disabled="isSubmitting" type="submit" class="btn btn-primary float-right">
-                      Informacje o firmie <i class="fas fa-angle-right"></i>
-                    </vue-button>
-
-                    {% if not firm.is_private and firm.name %}
-                      <vue-button :disabled="isSubmitting" type="submit" class="btn btn-danger float-right btn-save mr-2" title="Zapisz tę ofertę" @click.native="isDone = 1">
-                        <i class="fas fa-save"></i> Zapisz jako {{ firm.name[:38] }}
-                      </vue-button>
-                    {% endif %}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </form>
+        <vue-notifications position="bottom right" />
       </div>
     </main>
 
@@ -299,27 +119,19 @@
 
   <script src="//maps.googleapis.com/maps/api/js?key={{ config('services.google-maps.key') }}&sensor=false&libraries=places"></script>
   <script>
-    var data = {
-      job: {{ job|json_encode|raw }},
-      errors: {},
-      plans: {{ plans|raw }},
-      popular_tags: {{ popular_tags|json_encode|raw }},
-      suggestions: [],
-      suggestion_url: '{{ route('job.tag.suggestions') }}',
-      seniority: {{ seniority|json_encode|raw }},
-      remote_range: {{ remote_range|json_encode|raw }},
-      currencies: {{ currencies|json_encode|raw }},
-      taxes: {{ taxes|json_encode|raw }},
-      rates: {{ rates|json_encode|raw }},
-      employments: {{ employments|json_encode|raw }}
-    };
+    var job = {{ job|json_encode|raw }};
+    var plans = {{ plans|raw }};
+    var currencies = {{ currencies|json_encode|raw }};
+    var popularTags = {{ popular_tags|json_encode|raw }};
+    var defaultBenefits = {{ default_benefits|json_encode|raw }};
+    var employees = {{ employees|json_encode|raw }};
+    var firms = {{ firms|json_encode|raw }};
   </script>
 {% endblock %}
 
 {% block body %}
   {{ parent() }}
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.9.2/tinymce.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.9.11/tinymce.min.js" integrity="sha512-3tlegnpoIDTv9JHc9yJO8wnkrIkq7WO7QJLi5YfaeTmZHvfrb1twMwqT4C0K8BLBbaiR6MOo77pLXO1/PztcLg==" crossorigin="anonymous"></script>
 
-  {% include 'job.submit.partials.chat' %}
 {% endblock %}

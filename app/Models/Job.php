@@ -76,9 +76,6 @@ class Job extends Model
     const LEAD              = 'lead';
     const MANAGER           = 'manager';
 
-    const NET             = 0;
-    const GROSS           = 1;
-
     const EMPLOYMENT      = 'employment';
     const MANDATORY       = 'mandatory';
     const CONTRACT        = 'contract';
@@ -115,8 +112,8 @@ class Job extends Model
         'enable_apply',
         'seniority',
         'plan_id',
-        'tags',
-        'features',
+//        'tags',
+//        'features',
         'locations',
 
         'currency',
@@ -134,7 +131,7 @@ class Job extends Model
         'title'             => '',
         'remote_range'      => 100,
         'currency_id'       => Currency::PLN,
-        'is_gross'          => self::NET,
+        'is_gross'          => false,
         'rate'              => self::MONTHLY,
         'employment'        => self::EMPLOYMENT
     ];
@@ -176,13 +173,11 @@ class Job extends Model
 
         static::saving(function (Job $model) {
             $model->score = $model->getScore();
-
-            // field must not be null
-            $model->is_remote = (int) $model->is_remote;
         });
 
         static::creating(function (Job $model) {
             $model->boost_at = $model->freshTimestamp();
+            $model->deadline_at = $model->freshTimestamp()->addDays($model->plan->length);
         });
     }
 
@@ -305,7 +300,7 @@ class Job extends Model
      */
     public function firm()
     {
-        return $this->belongsTo('Coyote\Firm');
+        return $this->belongsTo('Coyote\Firm')->withDefault();
     }
 
     /**
@@ -468,44 +463,22 @@ class Job extends Model
         return $this->currency()->value('symbol');
     }
 
-    /**
-     * @param mixed $features
-     */
-    public function setFeaturesAttribute($features)
-    {
-        $models = [];
-
-        foreach ($features as $feature) {
-            $checked = (int) $feature['checked'];
-
-            $pivot = $this->features()->newPivot([
-                'checked'       => $checked,
-                'value'         => $checked ? ($feature['value'] ?? null) : null
-            ]);
-
-            $models[] = Feature::findOrNew($feature['id'])->setRelation('pivot', $pivot);
-        }
-
-        // set only if not empty. important!
-        if ($models) {
-            $this->setRelation('features', collect($models));
-        }
-    }
-
-    public function setTagsAttribute($tags)
-    {
-        $models = [];
-
-        foreach ($tags as $tag) {
-            $pivot = $this->tags()->newPivot(['priority' => $tag['priority'] ?? 1]);
-            $models[] = (new Tag($tag))->setRelation('pivot', $pivot);
-        }
-
-        // set only if not empty. important!
-        if ($models) {
-            $this->setRelation('tags', collect($models));
-        }
-    }
+//
+//    public function setTagsAttribute($tags)
+//    {
+//        $models = [];
+//
+//        foreach ($tags as $order => $tag) {
+//            $pivot = $this->tags()->newPivot(['priority' => $tag['priority'] ?? 1, 'order' => $order]);
+//
+//            $models[] = (new Tag($tag))->setRelation('pivot', $pivot);
+//        }
+//
+//        // set only if not empty. important!
+//        if ($models) {
+//            $this->setRelation('tags', collect($models));
+//        }
+//    }
 
     public function setLocationsAttribute($locations)
     {
@@ -522,21 +495,21 @@ class Job extends Model
         }
     }
 
-    public function setPlanIdAttribute($value)
-    {
-        // set default deadline_at date time, only if offer was not publish yet.
-        if (!$this->is_publish) {
-            $this->attributes['plan_id'] = $value;
-
-            $this->deadline_at = Carbon::now()->addDays($this->plan->length);
-        }
-    }
-
+    /**
+     * Set currency as name. This is being used on API routes
+     *
+     * @param string $plan
+     */
     public function setCurrencyAttribute($currency)
     {
         $this->attributes['currency_id'] = Currency::where('name', $currency)->value('id');
     }
 
+    /**
+     * This is being used on API routes
+     *
+     * @param string $plan
+     */
     public function setRecruitmentAttribute($recruitment)
     {
         if (!empty($recruitment)) {
@@ -547,7 +520,7 @@ class Job extends Model
     }
 
     /**
-     * Set plan as name
+     * Set plan as name. This is being used on API routes
      *
      * @param string $plan
      */

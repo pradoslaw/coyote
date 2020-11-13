@@ -1,5 +1,14 @@
 <template>
-  <input ref="autocomplete" :value="label" autocomplete="off" class="form-control" placeholder="Np. Warszawa, al. Jerozolimskie 3" type="text" @keydown.enter.prevent="" @blur="search"/>
+  <input
+    ref="autocomplete"
+    :value="label"
+    autocomplete="off"
+    class="form-control"
+    placeholder="Np. Warszawa, al. Jerozolimskie 3"
+    type="text"
+    @keydown.enter.prevent=""
+    @focus="shouldGeocode = true"
+    @blur="search"/>
 </template>
 
 <script>
@@ -9,8 +18,12 @@
         type: String
       }
     },
+    data() {
+      return {
+        shouldGeocode: true
+      }
+    },
     mounted() {
-      let data = {};
       const autocomplete = new google.maps.places.Autocomplete(this.$refs.autocomplete, {types: ['geocode']});
 
       autocomplete.addListener('place_changed', () => {
@@ -20,14 +33,14 @@
           return;
         }
 
-        data = Object.assign({latitude: place.geometry.location.lat(), longitude: place.geometry.location.lng()}, this.map(place.address_components));
-
-        this.$emit('change', data);
+        this.shouldGeocode = false;
+        console.log(this.shouldGeocode);
+        this.$emit('change', this.map(place.geometry.location.lat(), place.geometry.location.lng(), place.address_components));
       });
     },
     methods: {
-      map(components) {
-        let result = {};
+      map(latitude, longitude, components) {
+        let result = { latitude, longitude };
 
         components.forEach(item => {
           switch (item.types[0]) {
@@ -50,15 +63,19 @@
           }
         });
 
+        result.label = [(`${result.street ?? ''} ${result.street_number ?? ''}`).trim(), result.city, result.country].filter(item => item !== '').join(', ');
+
         return result;
       },
 
       search() {
         // add setTimeout because onblur event occurs first, before place_changed.
         setTimeout(() => {
-          if (Object.keys(data).length !== 0) {
+          if (!this.shouldGeocode) {
             return;
           }
+
+          console.log('geo');
 
           const geocoder = new google.maps.Geocoder();
 
@@ -70,11 +87,9 @@
             let components = result[0].address_components;
             let location = result[0].geometry.location;
 
-            data = Object.assign({longitude: location.lng(), latitude: location.lat()}, this.map(components));
-
-            this.$emit('change', data);
+            this.$emit('change', this.map(location.lat(), location.lng(), components));
           });
-        }, 100);
+        }, 500);
       }
     }
   }

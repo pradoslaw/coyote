@@ -6,6 +6,9 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @property \Coyote\Job\Location[] $locations
+ * @property \Coyote\Job\Tag[] $tags
+ * @property \Coyote\Job\Feature[] $features
+ * @property \Coyote\Firm $firm
  */
 class JobFormResource extends JsonResource
 {
@@ -19,7 +22,10 @@ class JobFormResource extends JsonResource
     {
         return array_merge($this->resource->toArray(), [
             'locations' => LocationResource::collection($this->locations),
-            'is_gross' => (int) $this->resource->is_gross // is_gross is dropdown list, that's why we cast to int
+            'tags'      => TagResource::collection($this->tags),
+            'features'  => FeatureResource::collection($this->features),
+
+            'firm'      => new FirmFormResource($this->firm)
         ]);
     }
 }

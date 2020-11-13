@@ -76,33 +76,8 @@ class Firm extends Model
     ];
 
     protected $casts = [
-        'is_agency' => 'bool',
-        'is_private' => 'bool'
+        'is_agency' => 'bool'
     ];
-
-    protected $appends = [
-        'is_private'
-    ];
-
-    /**
-     * Do not change default value. It is set to FALSE on purpose.
-     *
-     * @var bool
-     */
-    protected $isPrivate = false;
-
-    public static function boot()
-    {
-        parent::boot();
-
-        static::saving(function ($model) {
-            foreach (['latitude', 'longitude', 'founded', 'employees', 'description', 'latitude', 'longitude', 'country_id', 'street', 'city', 'street_number', 'postcode', 'youtube_url'] as $column) {
-                if (empty($model->{$column})) {
-                    $model->{$column} = null;
-                }
-            }
-        });
-    }
 
     /**
      * @return array
@@ -122,20 +97,6 @@ class Firm extends Model
             10 => '1001-5000',
             11 => '5000+'
         ];
-    }
-
-    /**
-     * @return array
-     */
-    public static function getFoundedList()
-    {
-        $result = [];
-
-        for ($i = 1900, $year = date('Y'); $i <= $year; $i++) {
-            $result[$i] = $i;
-        }
-
-        return $result;
     }
 
     /**
@@ -199,20 +160,13 @@ class Firm extends Model
         return $this->attributes['logo'];
     }
 
-    /**
-     * @param bool $flag
-     */
-    public function setIsPrivateAttribute($flag)
+    public function setLogoAttribute($logo)
     {
-        $this->isPrivate = (bool) $flag;
-    }
+        $this->attributes['logo'] = null;
 
-    /**
-     * @return bool
-     */
-    public function getIsPrivateAttribute()
-    {
-        return $this->isPrivate;
+        if ($logo) {
+            $this->attributes['logo'] = $this->basename($logo);
+        }
     }
 
     public function setYoutubeUrlAttribute($value)
@@ -241,7 +195,7 @@ class Firm extends Model
 
         foreach ($gallery as $photo) {
             if (!empty($photo)) {
-                $models[] = new Firm\Gallery(['file' => $photo]);
+                $models[] = new Firm\Gallery(['file' => $this->basename($photo)]);
             }
         }
 
@@ -280,16 +234,6 @@ class Firm extends Model
     }
 
     /**
-     * @param int $userId
-     */
-    public function setDefaultUserId($userId)
-    {
-        if (empty($this->user_id)) {
-            $this->user_id = $userId;
-        }
-    }
-
-    /**
      * @param string $url
      * @return string
      */
@@ -308,5 +252,10 @@ class Firm extends Model
         parse_str($components['query'], $query);
 
         return 'https://www.youtube.com/embed/' . $query['v'];
+    }
+
+    private function basename(string $url): string
+    {
+        return basename(parse_url($url, PHP_URL_PATH));
     }
 }

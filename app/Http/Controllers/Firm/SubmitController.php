@@ -24,8 +24,7 @@ class SubmitController extends Controller
         $media = $this->getMediaFactory()->make('logo')->upload($request->file('logo'));
 
         return response()->json([
-            'url'       => (string) $media->url(),
-            'filename'  => $media->getFilename()
+            'url'       => (string) $media->url()
         ]);
     }
 }
