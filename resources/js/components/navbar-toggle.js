@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // tymczasowy test: mozliwosc zmiany menu na nowe/stare
-document.getElementById('js-change-menu')?.addEventListener('click', () => {
+document.getElementById('js-dark-theme')?.addEventListener('change', () => {
   let header = document.getElementsByClassName('navbar')[0];
 
   header.classList.toggle('navbar-dark');

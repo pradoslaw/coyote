@@ -29,7 +29,7 @@ class ViewServiceProvider extends ServiceProvider
                 '__master_menu' => $this->buildMasterMenu(),
 
                 // temporary code
-                '__dark_theme' => $this->app[Guest::class]->getSetting('dark.theme', false)
+                '__dark_theme' => $this->app[Guest::class]->getSetting('dark.theme', true)
             ]);
         });
     }

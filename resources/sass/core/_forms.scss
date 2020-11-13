@@ -7,3 +7,19 @@
 .col-form-label {
   font-weight: bold;
 }
+
+.custom-switch {
+  .custom-control-label::before {
+    background-color: $body-bg;
+  }
+
+  .custom-control-input:checked ~ .custom-control-label {
+    &::after {
+      background-color: $primary;
+    }
+
+    &::before {
+      background-color: var(--header-color);
+    }
+  }
+}
