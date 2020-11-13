@@ -107,7 +107,7 @@ class JobRequest extends FormRequest
             'plan_id' => [
                 'bail',
                 Rule::requiredIf(function () use ($job) {
-                    return ! $job->exists;
+                    return !$job->exists;
                 }),
                 'int',
                 Rule::exists('plans', 'id')->where('is_active', 1),

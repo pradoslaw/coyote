@@ -80,7 +80,7 @@ class Firm extends Model
     ];
 
     /**
-     * @return array
+     * @return string[]
      */
     public static function getEmployeesList()
     {
