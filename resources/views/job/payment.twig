@@ -3,11 +3,6 @@
 {% block title %}Płatność{{ parent() }}{% endblock %}
 
 {% block container %}
-  <div class="row">
-    <div class="col-md-9">
-      {% include 'job.submit.partials.indicator' with {'current': 4} %}
-    </div>
-  </div>
 
   <div id="js-payment" class="row" v-cloak>
     <main class="col-md-9">
