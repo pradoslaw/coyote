@@ -2,15 +2,12 @@
 
 {% block title %}Wystaw ofertę pracy{{ parent() }}{% endblock %}
 
-{% import 'components.modals' as modals %}
-
 {% block container %}
   <div class="row">
     <main class="col-lg-9 col-12-md">
-
-      {% include 'job.submit.partials.indicator' with {'current': 1} %}
-
-      {% include 'job.submit.partials.loader' %}
+      <div class="card card-body bg-light p-2 border-0 text-center" v-loader>
+        <span class="lead justify-content-center ml-1"><i class="fas fa-spin fa-spinner  fa-fw"></i> Ładowanie...</span>
+      </div>
 
       <div id="js-submit-form" class="job-form" v-cloak>
         {% if not is_plan_ongoing %}
@@ -36,7 +33,7 @@
           :firms="firms"
         ></vue-firm-form>
 
-        <div id="form-navbar">
+        <div id="form-fixed">
           <div class="container-xxl">
             <div class="row">
               <div class="col-12 col-lg-9">
@@ -68,8 +65,7 @@
       </div>
     </main>
 
-    <aside class="col-lg-3 hidden-md hidden-sm hidden-xs">
-
+    <aside class="col-lg-3">
       <div id="hint-container">
         <div id="hint-title" class="alert alert-warning">
           <h4>Ile kosztuje dodanie ogłoszenia?</h4>

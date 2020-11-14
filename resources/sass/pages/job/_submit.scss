@@ -1,80 +1,11 @@
 @charset "UTF-8";
 @import "../../core/thumbnail";
 
-.mce-notification {display: none !important;}
-
-$font-size-control-label: 15px;
-
-// Wizard form. Element that indicates current step
-// -----------------------------------------------------
-
-#indicator {
-  margin: 20px 0;
-  overflow: hidden;
-  padding-top: 10px;
-
-  .bar {
-    height: 10px;
-    background-color: $gray-lighter;
-    width: 76%;
-    margin: auto;
-  }
-
-  ul {
-    li {
-      display: inline-block;
-      width: 25%;
-      float: left;
-      text-align: center;
-
-      .bubble {
-        border-radius: 50%;
-        border: 5px solid $gray-lighter;
-        width: 30px;
-        height: 30px;
-        background-color: #fff;
-        display: block;
-        margin: -19px auto 0 auto;
-        padding-top: 2px;
-
-        i {
-          color: #fff;
-        }
-      }
-
-      strong {
-        font-weight: bold;
-        color: lighten($gray-light, 30%);
-        display: inline-block;
-        padding-top: 10px;
-      }
-    }
-
-    li.complete {
-      .bubble {
-        background-color: #555;
-        @include gradient-radial(#aed91d, #abd600);
-        box-shadow: inset 1px -1px $gray-light;
-      }
-
-      strong {
-        color: $gray-light;
-      }
-    }
-
-    li.end {
-      .bubble {
-        background-color: $gray-lighter;
-      }
-    }
-  }
-}
-
 // Sidebar hints
 // --------------------------------------------
 
 #hint-container {
-  margin-top: 99px;
+  margin-top: 23px;
 }
 
 .sidebar-hint p {
@@ -84,7 +15,7 @@ $font-size-control-label: 15px;
 // Fixed navigation bar with "next", "previous" buttons
 // ---------------------------------------------------------
 
-#form-navbar {
+#form-fixed {
   background-color: $body-bg;
   border-top: 2px solid $card-border-color;
   position: fixed;
@@ -164,6 +95,10 @@ $font-size-control-label: 15px;
 
 .mce-tinymce {
   width: 95% !important;
+}
+
+.mce-notification {
+  display: none !important;
 }
 
 input[name=salary_from],
