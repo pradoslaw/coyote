@@ -4,7 +4,7 @@
       <img v-if="url" :src="url" class="mw-100">
 
       <div v-else class="bg-light placeholder-mask">
-        <i class="fas fa-plus-circle fa-2x"></i>
+        <i v-if="!isPending" class="fas fa-plus-circle fa-2x"></i>
       </div>
 
       <a v-if="url" href="javascript:" class="flush-mask text-decoration-none" @click="deleteImage">
