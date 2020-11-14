@@ -3,6 +3,12 @@
 {% block title %}Wystaw ofertę pracy{{ parent() }}{% endblock %}
 
 {% block container %}
+  <style>
+    .mce-notification {
+      display: none !important;
+    }
+  </style>
+
   <div class="row">
     <main class="col-lg-9 col-12-md">
       <div class="card card-body bg-light p-2 border-0 text-center" v-loader>
@@ -14,7 +20,7 @@
           <vue-pricing :plans="plans" :value.sync="job.plan_id" email="{{ config('mail.from.address') }}"></vue-pricing>
         {% endif %}
 
-        <vue-tabs @click="switchTab" :items="tabs" :current-tab="currentTab" class="mb-4"></vue-tabs>
+        <vue-tabs @click="switchTab" :items="tabs" :current-tab="currentTab" class="mt-2 mb-4"></vue-tabs>
 
         <vue-job-form
           v-show="currentTab === 0"
