@@ -1,6 +1,8 @@
 @charset "UTF-8";
 @import "../../core/thumbnail";
 
+.mce-notification {display: none !important;}
+
 $font-size-control-label: 15px;
 
 // Wizard form. Element that indicates current step
