@@ -2,130 +2,124 @@
 
 {% block title %}Nasza oferta :: Praca {{ parent() }}{% endblock %}
 
-{% set submit_url = "'" ~ route('job.submit') ~ "?revalidate=1&default_plan=' + default_plan.id" %}
+{% set submit_url = "'" ~ route('job.submit') ~ "?default_plan=' + default_plan.id" %}
 
 {% block container %}
-    <div id="business" class="row">
-        <div class="col-md-9">
-            <h1 class="text-center mt-4 mb-4">Szukasz programistów do swojego zespołu? <strong>Rekrutuj najlepszych kandydatów z 4programmers.net!</strong></h1>
+  <script>
+    var plans = {{ plans|raw }};
+    var plan = {{ default_plan|raw }};
+  </script>
 
-            <div class="business-benefits list-group list-group-flush list-group-horizontal mt-4 mb-4">
-                <div class="list-group-item w-50 text-center bg-transparent border-0">
-                    <i class="fas fa-users text-primary"></i>
+  <div id="js-business" class="row">
+    <div class="col-md-9">
+      <h1 class="text-center mt-4 mb-4">Szukasz programistów do swojego zespołu? <strong>Rekrutuj najlepszych kandydatów z 4programmers.net!</strong></h1>
 
-                    <h4 class="mt-2">Aktywna społeczność ponad <br><strong>250 000 programistów</strong></h4>
-                </div>
+      <div class="business-benefits list-group list-group-flush list-group-horizontal mt-4 mb-4">
+        <div class="list-group-item w-50 text-center bg-transparent border-0">
+          <i class="fas fa-users text-primary"></i>
 
-                <div class="list-group-item w-50 text-center bg-transparent border-0">
-                    <i class="fas fa-graduation-cap text-primary"></i>
-
-                    <h4 class="mt-2">Najbardziej merytoryczne forum IT w kraju</h4>
-                </div>
-
-                <div class="list-group-item w-50 text-center bg-transparent border-0">
-                    <i class="fas fa-mouse-pointer text-primary"></i>
-
-                    <h4 class="mt-2">Średnio ponad <strong>1.5 miliona</strong> odsłon miesięcznie</h4>
-                </div>
-
-                <div class="list-group-item w-50 text-center bg-transparent border-0">
-                    <i class="fas fa-comments text-primary"></i>
-
-                    <h4 class="mt-2">Miejsce wymiany wiedzy już <br><strong>od 2000 roku</strong></h4>
-                </div>
-            </div>
-
-            <h2 class="text-center mt-4 mb-4">Dajemy Ci do dyspozycji 3 atrakcyjne plany taryfowe. <strong>Już od 30 zł!</strong></h2>
-
-            <vue-pricing :plans="plans" :value.sync="default_plan.id" email="{{ config('mail.from.address') }}"></vue-pricing>
-
-            <h2 class="text-center mt-4 mb-4">Co zyskujesz dodając ogłoszenie na 4programmers.net?</h2>
-
-            <ul class="business-benefits list-group list-group-flush list-group-horizontal d-flex flex-row flex-wrap">
-                <li class="list-group-item w-50 bg-transparent border-0">
-                    <i class="fas fa-check-circle fa-2x fas text-primary"></i>
-
-                    <span>Prosty, uniwersalny szablon ofert</span>
-                </li>
-
-                <li class="list-group-item w-50 bg-transparent border-0">
-                    <i class="fas fa-check-circle fa-2x fas text-primary"></i>
-
-                    <span>Bardzo konkurencyjne ceny w 3 pakietach</span>
-                </li>
-
-                <li class="list-group-item w-50 bg-transparent border-0">
-                    <i class="fas fa-check-circle fa-2x fas text-primary"></i>
-
-                    <span>Jasno określasz swoje widełki wynagrodzenia</span>
-                </li>
-
-                <li class="list-group-item w-50 bg-transparent border-0">
-                    <i class="fas fa-check-circle fa-2x fas text-primary"></i>
-
-                    <span>Grupa kandydatów wyłącznie z branży IT</span>
-                </li>
-
-                <li class="list-group-item w-50 bg-transparent border-0">
-                    <i class="fas fa-check-circle fa-2x fas text-primary"></i>
-
-                    <span>Korzystasz z szybkich i wygodnych form płatności</span>
-                </li>
-
-                <li class="list-group-item w-50 bg-transparent border-0">
-                    <i class="fas fa-check-circle fa-2x fas text-primary"></i>
-
-                    <span>Procentowo deklarujesz ilość pracy zdalnej</span>
-                </li>
-
-                <li class="list-group-item w-50 bg-transparent border-0">
-                    <i class="fas fa-check-circle fa-2x fas text-primary"></i>
-
-                    <span>Ciekawe opcje wyróżniania oferty</span>
-                </li>
-
-                <li class="list-group-item w-50 bg-transparent border-0">
-                    <i class="fas fa-check-circle fa-2x fas text-primary"></i>
-
-                    <span>Budujesz pozytywny wizerunek pracodawcy</span>
-                </li>
-
-                <li class="list-group-item w-50 bg-transparent border-0">
-                    <i class="fas fa-check-circle fa-2x fas text-primary"></i>
-
-                    <span>Możesz dodawać zdjęcia do Twoich ogłoszeń</span>
-                </li>
-            </ul>
-
-            <div class="text-center">
-                <span class="edge">
-                    <a :href="{{ submit_url }}" class="btn btn-lg btn-primary">Dodaj ofertę pracy</a>
-                </span>
-
-                <p class="mt-3">Masz pytania? Skontaktuj się z nami pod adresem <a href="mailto:{{ config('mail.from.address') }}">{{ config('mail.from.address') }}</a>.</p>
-            </div>
+          <h4 class="mt-2">Aktywna społeczność ponad <br><strong>250 000 programistów</strong></h4>
         </div>
 
-        <div class="col-md-3 hidden-sm d-none d-sm-block">
-            <section id="post-offer">
-                <h4>Dla pracodawców</h4>
+        <div class="list-group-item w-50 text-center bg-transparent border-0">
+          <i class="fas fa-graduation-cap text-primary"></i>
 
-                <span class="edge">
-                    <a :href="{{ submit_url }}" class="btn btn-primary">Dodaj ofertę pracy</a>
-                </span>
-            </section>
+          <h4 class="mt-2">Najbardziej merytoryczne forum IT w kraju</h4>
         </div>
+
+        <div class="list-group-item w-50 text-center bg-transparent border-0">
+          <i class="fas fa-mouse-pointer text-primary"></i>
+
+          <h4 class="mt-2">Średnio ponad <strong>1.5 miliona</strong> odsłon miesięcznie</h4>
+        </div>
+
+        <div class="list-group-item w-50 text-center bg-transparent border-0">
+          <i class="fas fa-comments text-primary"></i>
+
+          <h4 class="mt-2">Miejsce wymiany wiedzy już <br><strong>od 2000 roku</strong></h4>
+        </div>
+      </div>
+
+      <h2 class="text-center mt-4 mb-4">Dajemy Ci do dyspozycji 3 atrakcyjne plany taryfowe. <strong>Już od 30 zł!</strong></h2>
+
+      <vue-pricing :plans="plans" :value.sync="plan.id" email="{{ config('mail.from.address') }}"></vue-pricing>
+
+      <h2 class="text-center mt-4 mb-4">Co zyskujesz dodając ogłoszenie na 4programmers.net?</h2>
+
+      <ul class="business-benefits list-group list-group-flush list-group-horizontal d-flex flex-row flex-wrap">
+        <li class="list-group-item w-50 bg-transparent border-0">
+          <i class="fas fa-check-circle fa-2x fas text-primary"></i>
+
+          <span>Prosty, uniwersalny szablon ofert</span>
+        </li>
+
+        <li class="list-group-item w-50 bg-transparent border-0">
+          <i class="fas fa-check-circle fa-2x fas text-primary"></i>
+
+          <span>Bardzo konkurencyjne ceny w 3 pakietach</span>
+        </li>
+
+        <li class="list-group-item w-50 bg-transparent border-0">
+          <i class="fas fa-check-circle fa-2x fas text-primary"></i>
+
+          <span>Jasno określasz swoje widełki wynagrodzenia</span>
+        </li>
+
+        <li class="list-group-item w-50 bg-transparent border-0">
+          <i class="fas fa-check-circle fa-2x fas text-primary"></i>
+
+          <span>Grupa kandydatów wyłącznie z branży IT</span>
+        </li>
+
+        <li class="list-group-item w-50 bg-transparent border-0">
+          <i class="fas fa-check-circle fa-2x fas text-primary"></i>
+
+          <span>Korzystasz z szybkich i wygodnych form płatności</span>
+        </li>
+
+        <li class="list-group-item w-50 bg-transparent border-0">
+          <i class="fas fa-check-circle fa-2x fas text-primary"></i>
+
+          <span>Procentowo deklarujesz ilość pracy zdalnej</span>
+        </li>
+
+        <li class="list-group-item w-50 bg-transparent border-0">
+          <i class="fas fa-check-circle fa-2x fas text-primary"></i>
+
+          <span>Ciekawe opcje wyróżniania oferty</span>
+        </li>
+
+        <li class="list-group-item w-50 bg-transparent border-0">
+          <i class="fas fa-check-circle fa-2x fas text-primary"></i>
+
+          <span>Budujesz pozytywny wizerunek pracodawcy</span>
+        </li>
+
+        <li class="list-group-item w-50 bg-transparent border-0">
+          <i class="fas fa-check-circle fa-2x fas text-primary"></i>
+
+          <span>Możesz dodawać zdjęcia do Twoich ogłoszeń</span>
+        </li>
+      </ul>
+
+      <div class="text-center">
+        <span class="edge">
+          <a :href="submitUrl" class="btn btn-lg btn-primary">Dodaj ofertę pracy</a>
+        </span>
+
+        <p class="mt-3">Masz pytania? Skontaktuj się z nami pod adresem <a href="mailto:{{ config('mail.from.address') }}">{{ config('mail.from.address') }}</a>.</p>
+      </div>
     </div>
+
+    <div class="col-md-3 hidden-sm d-none d-sm-block">
+      <section id="post-offer">
+        <h4>Dla pracodawców</h4>
+
+        <span class="edge">
+          <a :href="submitUrl" class="btn btn-primary">Dodaj ofertę pracy</a>
+        </span>
+      </section>
+    </div>
+  </div>
 {% endblock %}
 
-{% block body %}
-    {{ parent() }}
-
-    <script>
-        var data = {
-            plans: {{ plans|raw }},
-            default_plan: {{ default_plan|raw }}
-        };
-    </script>
-
-{% endblock %}

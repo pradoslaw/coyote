@@ -1,9 +1,19 @@
-import VuePricing from '../../components/job/pricing.vue';
-
-Vue.component('vue-pricing', VuePricing);
+import Vue from 'vue';
+import VuePricing from '@/js/components/job/pricing.vue';
 
 new Vue({
-  el: '#business',
+  el: '#js-business',
   delimiters: ['${', '}'],
-  data: window.data
+  components: {
+    'vue-pricing': VuePricing
+  },
+  data: {
+    plans,
+    plan
+  },
+  computed: {
+    submitUrl() {
+      return `/Praca/Submit?default_plan=${this.plan.id}`;
+    }
+  }
 });
