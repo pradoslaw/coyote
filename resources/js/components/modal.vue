@@ -1,5 +1,5 @@
 <template>
-  <div ref="modal" class="modal fade background-darken" tabindex="-1" role="dialog" @click.self="close()" @keyup.esc="close()" v-show="isOpen" :class="{'d-block': isOpen, 'show': isOpen}">
+  <div tabindex="-1" class="modal fade background-darken" role="dialog" @click.self="close()" @keyup.esc="close()" v-show="isOpen" :class="{'d-block': isOpen, 'show': isOpen}">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -27,24 +27,25 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from "vue-class-component";
-import { Ref } from 'vue-property-decorator';
 
 @Component
 export default class VueModal extends Vue {
   isOpen = false;
 
-  @Ref()
-  private modal!: HTMLElement;
   private bodyOverflow: string = '';
 
   open() {
     this.isOpen = true;
 
     this.$nextTick(() => {
-      this.modal.focus();
+      // firefox hack: set focus to make Esc button works
+      (this.$el as HTMLElement).focus();
 
       this.bodyOverflow = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
+
+      // set focus on any first element
+      (this.$el.querySelectorAll('select,input')[0] as HTMLInputElement)?.focus();
     })
   }
 
