@@ -167,19 +167,15 @@
             </div>
           </div>
 
-          <div class="row mb-3">
-            <div class="col-12">
-              <div class="float-right">
-                Sortuj według
+          <div class="row no-gutters mb-3">
+            <div class="ml-auto">
+              Sortuj według
 
-                <select v-model="defaultSort" @change="search" name="sort" class="form-control input-inline form-control-sm ml-2" style="width: auto">
-                  <option value="boost_at">Data dodania</option>
-                  <option value="_score">Trafność</option>
-                  <option value="salary">Wynagrodzenie</option>
-                </select>
-              </div>
-
-              <div class="clearfix"></div>
+              <select v-model="defaultSort" @change="search" name="sort" class="form-control d-inline-block form-control-sm ml-2 w-auto">
+                <option value="boost_at">Data dodania</option>
+                <option value="_score">Trafność</option>
+                <option value="salary">Wynagrodzenie</option>
+              </select>
             </div>
           </div>
         </form>
