@@ -3,6 +3,7 @@
 namespace Coyote\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class MicroblogRequest extends FormRequest
 {
@@ -24,7 +25,7 @@ class MicroblogRequest extends FormRequest
     public function rules()
     {
         return [
-            'parent_id'     => 'nullable|integer|exists:microblogs,id',
+            'parent_id'     => ['nullable', 'integer', Rule::exists('microblogs', 'id')->whereNull('deleted_at')],
             'text'          => 'required|string|max:12000',
             'media.*.name'  => 'nullable|string'
         ];

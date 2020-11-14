@@ -180,9 +180,11 @@ return [
         'salary' => [
             'integer'       => 'Wynagrodzenie musi być liczbą całkowitą.'
         ],
-
         'post_id' => [
             'exists'        => 'Post nie istnieje lub został usunięty.'
+        ],
+        'parent_id' => [
+            'exists'        => 'Wpis nie istnieje lub został usunięty.'
         ]
     ],
 
