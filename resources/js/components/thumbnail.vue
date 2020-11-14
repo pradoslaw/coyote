@@ -34,9 +34,6 @@ export default class VueThumbnail extends Vue {
   @Prop()
   readonly url?: string;
 
-  @Prop()
-  readonly file?: string;
-
   @Prop({required: true})
   readonly uploadUrl!: string;
 
@@ -57,7 +54,7 @@ export default class VueThumbnail extends Vue {
   }
 
   deleteImage() {
-    this.$emit('delete', this.file);
+    this.$emit('delete', this.url);
   }
 
   // this method can be used by other components to open upload dialog

@@ -165,7 +165,7 @@ class Firm extends Model
         $this->attributes['logo'] = null;
 
         if ($logo) {
-            $this->attributes['logo'] = $this->basename($logo);
+            $this->attributes['logo'] = basename($logo);
         }
     }
 
@@ -195,7 +195,7 @@ class Firm extends Model
 
         foreach ($gallery as $photo) {
             if (!empty($photo)) {
-                $models[] = new Firm\Gallery(['file' => $this->basename($photo)]);
+                $models[] = new Firm\Gallery(['file' => basename($photo)]);
             }
         }
 

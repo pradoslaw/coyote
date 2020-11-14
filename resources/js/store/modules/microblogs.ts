@@ -68,15 +68,15 @@ const mutations = {
   },
 
   addEmptyImage(state, microblog: Microblog) {
-    microblog.media.push({thumbnail: '', url: '', name: ''});
+    microblog.media.push({thumbnail: '', url: ''});
   },
 
   addImage(state, { microblog, media }) {
     microblog.media.push(media);
   },
 
-  deleteImage(state, { microblog, media }) {
-    microblog.media.splice(microblog.media.findIndex(item => item.name === media), 1);
+  deleteImage(state, { microblog, url }) {
+    microblog.media.splice(microblog.media.findIndex(item => item.url === url), 1);
   },
 
   subscribe(state, microblog: Microblog) {

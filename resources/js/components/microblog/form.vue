@@ -22,7 +22,6 @@
         <vue-thumbnail
           ref="thumbnail"
           :url="media.url"
-          :file="media.name"
           upload-url="/Mikroblogi/Upload"
           @upload="addImage"
           @delete="deleteImage">
@@ -93,8 +92,8 @@
       store.commit('microblogs/addImage', { microblog: this.microblog, media })
     }
 
-    deleteImage(name) {
-      store.commit('microblogs/deleteImage', { microblog: this.microblog, media: name });
+    deleteImage(url) {
+      store.commit('microblogs/deleteImage', { microblog: this.microblog, media: url });
     }
   }
 </script>
