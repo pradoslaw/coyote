@@ -1,19 +1,19 @@
 <template>
   <ul v-if="totalPages > 1" class="pagination">
     <li class="page-item" v-if="currentPage > 1">
-      <a href="javascript:" class="page-link" aria-label="Previous" @click.prevent="change(currentPage - 1)">
+      <a :href="url(currentPage - 1)" class="page-link" aria-label="Previous" @click.prevent="change(currentPage - 1)">
         <span aria-hidden="true">&laquo;</span>
       </a>
     </li>
 
     <li v-for="element in slider" class="page-item" :class="{'active': element === currentPage, 'disabled': element === '...'}">
       <span v-if="element === currentPage" class="page-link">{{ element }}</span>
-      <a v-else-if="element !== '...'" href="javascript:" @click.prevent="change(element)" class="page-link">{{ element }}</a>
+      <a v-else-if="element !== '...'" :href="url(element)" @click.prevent="change(element)" class="page-link">{{ element }}</a>
       <span v-else class="page-link">...</span>
     </li>
 
     <li v-if="currentPage < totalPages" class="page-item">
-      <a href="javascript:" class="page-link" aria-label="Next" @click.prevent="change(currentPage + 1)">
+      <a :href="url(currentPage + 1)" class="page-link" aria-label="Next" @click.prevent="change(currentPage + 1)">
         <span aria-hidden="true">&raquo;</span>
       </a>
     </li>
@@ -34,10 +34,14 @@
       offset: {
         type: Number,
         default: 3
+      },
+      baseUrl: {
+        type: String,
+        default: ''
       }
     },
     computed: {
-      slider: function () {
+      slider() {
         if (!this.totalPages) {
           return [];
         }
@@ -64,12 +68,10 @@
       }
     },
     methods: {
-      change: function (page) {
-        // this.currentPage = page;
-
+      change(page) {
         this.$emit('change', page);
       },
-      range: function (start, end) {
+      range(start, end) {
         let arr = [];
 
         for (let i = start; i <= end; i++) {
@@ -77,6 +79,9 @@
         }
 
         return arr;
+      },
+      url(page) {
+        return `${this.baseUrl}?page=${page}`;
       }
     }
   };

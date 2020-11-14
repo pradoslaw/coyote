@@ -100,8 +100,6 @@ class TopicController extends BaseController
         $allForums = [];
         $reasons = null;
 
-        $postIds = $paginate->pluck('id')->toArray();
-
         if ($this->gate->allows('delete', $forum) || $this->gate->allows('move', $forum)) {
             $reasons = Reason::pluck('name', 'id')->toArray();
 
@@ -116,6 +114,7 @@ class TopicController extends BaseController
 
         $dateTime = $paginate->last()->created_at;
         // first, build array of posts with info which posts have been read
+        // assign array ot posts variable. this is our skeleton! do not remove
         $posts = $resource->resolve($this->request);
 
         // ..then, mark topic as read

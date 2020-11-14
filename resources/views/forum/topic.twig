@@ -27,20 +27,16 @@
   {% include "forum.partials.top" %}
 
   <main class="mainbar">
-    <div class="row no-gutters mb-3">
-      <div class="mr-auto">
-        {{ paginate|raw }}
+    <div id="js-skeleton">
+      <div class="row no-gutters mb-3">
+        {% if is_writeable %}
+          <div class="ml-auto">
+            <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm">Nowy wątek</a>
+            <a href="#js-submit-form" class="btn btn-primary btn-sm ml-2">Odpowiedz</a>
+          </div>
+        {% endif %}
       </div>
 
-      {% if is_writeable %}
-        <div class="ml-auto">
-          <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm">Nowy wątek</a>
-          <a href="#js-submit-form" class="btn btn-primary btn-sm ml-2">Odpowiedz</a>
-        </div>
-      {% endif %}
-    </div>
-
-    <div id="js-skeleton">
       {% for post in posts.data %}
         <div class="card card-post">
           <div class="card-header d-none d-lg-block">
@@ -118,6 +114,19 @@
     </div>
 
     <div id="js-post">
+      <div class="row no-gutters mb-3">
+        <div class="mr-auto">
+          <vue-pagination @change="changePage" :current-page="currentPage" :total-pages="totalPages" class="pagination-sm"></vue-pagination>
+        </div>
+
+        {% if is_writeable %}
+          <div class="ml-auto">
+            <a href="{{ route('forum.topic.submit', [forum.slug]) }}" class="btn btn-primary btn-sm">Nowy wątek</a>
+            <a href="#js-submit-form" class="btn btn-primary btn-sm ml-2">Odpowiedz</a>
+          </div>
+        {% endif %}
+      </div>
+
       <template v-if="'id' in poll">
         <vue-poll :poll="poll"></vue-poll>
       </template>
@@ -134,7 +143,7 @@
 
       <div class="row no-gutters mb-3">
         <div class="mr-auto">
-          {{ paginate|raw }}
+          <vue-pagination @change="changePage" :current-page="currentPage" :total-pages="totalPages" class="pagination-sm"></vue-pagination>
         </div>
 
         {% include 'forum.partials.per_page' with {label: 'Liczba odpowiedzi na stronę', perPage: paginate.perPage()} %}

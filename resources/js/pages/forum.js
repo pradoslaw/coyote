@@ -1,4 +1,3 @@
-import '../pages/forum/sidebar';
 import VueTimeago from '../plugins/timeago';
 import VueSection from '../components/forum/section.vue';
 import VueTopic from '../components/forum/topic.vue';
@@ -9,6 +8,7 @@ import VueModal from '../components/modal.vue';
 import VueButton from '../components/forms/button.vue';
 import VueSelect from '../components/forms/select.vue';
 import VueNotifications from 'vue-notification';
+import VuePagination from '../components/pagination.vue';
 import Vue from "vue";
 import store from '../store';
 import { default as mixin } from '../components/mixins/user';
@@ -211,7 +211,12 @@ new Vue({
 
 let PostVue = Vue.extend({
   delimiters: ['${', '}'],
-  components: { 'vue-post': VuePost, 'vue-form': VueForm, 'vue-poll': VuePoll },
+  components: {
+    'vue-post': VuePost,
+    'vue-form': VueForm,
+    'vue-poll': VuePoll,
+    'vue-pagination': VuePagination
+  },
   store,
   data: () => ({
     showStickyCheckbox: window.showStickyCheckbox,
@@ -229,8 +234,6 @@ let PostVue = Vue.extend({
     document.getElementById('js-skeleton')?.remove();
 
     const hints = ['hint-subject', 'hint-text', 'hint-tags', 'hint-user_name'];
-
-    this.skeleton = false;
 
     [
       document.querySelector('#js-submit-form input[name="subject"]'),
@@ -259,6 +262,10 @@ let PostVue = Vue.extend({
       window.location.href = post.url;
     },
 
+    changePage(page) {
+      window.location.href = `?page=${page}`;
+    },
+
     reply(post, scrollIntoForm = true) {
       if (scrollIntoForm) {
         document.getElementById('js-submit-form').scrollIntoView();
@@ -277,7 +284,7 @@ let PostVue = Vue.extend({
     }
   },
   computed: {
-    ...mapGetters('posts', ['posts']),
+    ...mapGetters('posts', ['posts', 'totalPages', 'currentPage']),
     ...mapGetters('topics', ['topic']),
     ...mapGetters('user', ['isAuthorized']),
     ...mapState('poll', ['poll'])
@@ -310,3 +317,10 @@ addEventListener('js-per-page', 'change', event => {
 
   window.location.href = `${url}?perPage=${perPage}`;
 });
+
+document.getElementById('btn-toggle-sidebar')?.addEventListener('click', function () {
+  document.getElementById('sidebar').classList.toggle('d-block');
+
+  return false;
+});
+

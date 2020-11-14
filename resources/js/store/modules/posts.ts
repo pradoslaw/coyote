@@ -1,16 +1,27 @@
 import axios from "axios";
-import { Post, PostComment, PostAttachment } from "../../types/models";
+import {Post, PostComment, PostAttachment, Paginator} from "../../types/models";
 import Vue from "vue";
 
 type PostObj = { [key: number]: Post };
 type ParentChild = { post: Post, comment: PostComment };
 type PostWithAttachment = { post: Post, attachment: PostAttachment };
 
-const state: { data: PostObj, links: null, meta: null } = {data: {}, links: null, meta: null}
+const state: Paginator = {
+  current_page: 0,
+  data: [],
+  from: 0,
+  last_page: 0,
+  path: "",
+  per_page: 0,
+  to: 0,
+  total: 0
+};
 
 const getters = {
   posts: state => state.data,
-  exists: state => (id: number) => id in state.data
+  exists: state => (id: number) => id in state.data,
+  currentPage: state => state.current_page,
+  totalPages: state => state.last_page
 }
 
 const mutations = {
