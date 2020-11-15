@@ -115,7 +115,7 @@ class TopicController extends BaseController
         $dateTime = $paginate->last()->created_at;
         // first, build array of posts with info which posts have been read
         // assign array ot posts variable. this is our skeleton! do not remove
-        $posts = $resource->resolve($this->request);
+        $posts = $resource->toResponse($this->request)->getData(true);
 
         // ..then, mark topic as read
         if ($markTime < $dateTime) {

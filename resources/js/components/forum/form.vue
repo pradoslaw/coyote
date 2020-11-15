@@ -226,7 +226,8 @@
     },
     computed: {
       ...mapGetters('topics', ['topic']),
-      ...mapState('poll', ['poll'])
+      ...mapState('poll', ['poll']),
+      ...mapGetters('posts', ['totalPages', 'currentPage'])
     },
     watch: {
       poll: {
@@ -238,8 +239,7 @@
     },
     methods: {
       ...mapMutations('poll', ['removeItem', 'addItem', 'resetDefaults']),
-      ...mapMutations('posts', ['deleteAttachment', 'changePage']),
-      ...mapMutations('topics', ['totalPages', 'currentPage'])
+      ...mapMutations('posts', ['deleteAttachment', 'changePage'])
     }
   })
   export default class VueForm extends Vue {
@@ -311,6 +311,7 @@
     save() {
       this.isProcessing = true;
       this.errors = {};
+      this.lastPage();
 
       store.dispatch('posts/save', this.post)
         .then(result => {
@@ -372,6 +373,8 @@
 
     lastPage() {
       if (this.currentPage < this.totalPages) {
+        history.pushState({ page: this.totalPages }, '', `?page=${this.totalPages}`);
+
         store.dispatch('posts/changePage', this.totalPages);
       }
     }
