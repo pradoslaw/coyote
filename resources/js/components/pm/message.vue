@@ -9,8 +9,8 @@
         <small class="float-right text-muted"><vue-timeago :datetime="message.created_at"></vue-timeago></small>
 
         <h3>
-          <a v-if="clickableText" :href="'/User/Pm/Show/' + message.id">{{ message.user.name }}</a>
-          <a v-else v-profile="message.user.id">{{ message.user.name }}</a>
+          <vue-username v-if="clickableText" :user="message.user" :href="'/User/Pm/Show/' + message.id"></vue-username>
+          <vue-username v-else :user="message.user"></vue-username>
         </h3>
       </template>
 
@@ -40,12 +40,13 @@
   import VueModal from '../modal.vue';
   import VueAvatar from '../avatar.vue';
   import VueTimeago from '../../plugins/timeago';
+  import VueUserName from '@/js/components/user-name';
 
   Vue.use(VueTimeago);
 
   export default {
     mixins: [ mixins ],
-    components: {'vue-modal': VueModal, 'vue-avatar': VueAvatar},
+    components: { 'vue-modal': VueModal, 'vue-avatar': VueAvatar, 'vue-username': VueUserName },
     props: {
       message: {
         type: Object
