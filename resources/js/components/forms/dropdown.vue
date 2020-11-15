@@ -67,7 +67,7 @@
         let dropdown = this.$refs['dropdown'];
 
         if (dropdown.children.length) {
-          dropdown.scrollTop = this.hoverItem * dropdown.children[0].offsetHeight;
+          dropdown.scrollTop = this.selectedIndex * dropdown.children[0].offsetHeight;
         }
       },
 
