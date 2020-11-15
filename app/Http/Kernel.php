@@ -65,13 +65,13 @@ class Kernel extends HttpKernel
         'forum.write'   => Middleware\ForumWrite::class,
         'forum.url'     => Middleware\RedirectIfUrl::class,
         'topic.access'  => Middleware\RedirectIfMoved::class,
-        'job.redirect'  => Middleware\PermanentRedirect::class,
         'topic.scroll'  => Middleware\RedirectToPost::class,
         'wiki.access'   => Middleware\WikiAccess::class,
         'wiki.lock'     => Middleware\WikiLock::class,
         'wiki.legacy'   => Middleware\WikiLegacy::class,
         'page.hit'      => Middleware\PageHit::class,
-        'geocode'       => Middleware\GeocodeIp::class
+        'geocode'       => Middleware\GeocodeIp::class,
+        'json'          => Middleware\JsonResponse::class
     ];
 
     /**

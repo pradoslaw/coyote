@@ -5,7 +5,7 @@
  */
 /** @var $this \Illuminate\Routing\Router */
 $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], function () {
-    $this->get('/', ['uses' => 'HomeController@index', 'as' => 'home', 'middleware' => 'job.redirect']);
+    $this->get('/', ['uses' => 'HomeController@index', 'as' => 'home', 'middleware' => 'json']);
 
     $this->get('Submit/{job?}', ['uses' => 'SubmitController@index', 'as' => 'submit', 'middleware' => 'auth']);
     $this->post('Submit/{job?}', ['uses' => 'SubmitController@save', 'middleware' => 'auth']);

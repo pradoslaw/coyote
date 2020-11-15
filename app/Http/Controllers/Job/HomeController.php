@@ -200,10 +200,6 @@ class HomeController extends BaseController
 
         $this->request->session()->put('current_url', $this->request->fullUrl());
 
-        if ($this->request->wantsJson()) {
-            return response()->json($data);
-        }
-
         return $this->view('job.home', $data + [
             'currencies'    => (object) Currency::all('name', 'id', 'symbol')->keyBy('id'),
             'form_url'      => $this->request->url(),
