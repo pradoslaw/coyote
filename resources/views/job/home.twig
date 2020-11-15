@@ -25,7 +25,7 @@
 {% block keywords %}programowanie, praca, C#, Java, programista, HTML, CSS, webdesign, JavaScript, jQuery, C, C++, webmastering{% endblock %}
 
 {% block container %}
-  <div id="page-job">
+  <div id="js-job">
     <div class="row">
       <div class="col-md-9 col-12">
         <form method="get" ref="searchForm" action="{{ form_url }}" @submit.prevent="search" autocomplete="off">
@@ -112,7 +112,7 @@
             </div>
 
             <div v-cloak class="job-filter-form card-footer">
-              <div id="filter-tech" v-show="isTabSelected('tech')" class="filters">
+              <div id="js-filter-tech" v-show="isTabSelected('tech')" class="filters">
                 <ul class="list-group list-group-horizontal list-group-tech">
                   <li v-for="tag in tags" :key="tag.id" class="list-group-item">
                     <input type="hidden" name="tags[]" :value="tag.name" :checked="includesTag(tag.name)">
@@ -126,7 +126,7 @@
                 </ul>
               </div>
 
-              <div id="filter-location" v-show="isTabSelected('location')" class="filters">
+              <div id="js-filter-location" v-show="isTabSelected('location')" class="filters">
                 <ul class="list-group list-group-horizontal list-group-tech">
                   <li class="list-group-item">
                     <input type="hidden" name="remote" :checked="input.remote">
@@ -233,7 +233,7 @@
         <section v-cloak v-show="published.length" class="box sidebar-offers">
           <h4><i class="fas fa-fw fa-user-secret"></i> Moje ogłoszenia</h4>
 
-          <div id="card-published" class="card card-default">
+          <div id="js-published" class="card card-default" style="max-height: 400px">
             <div class="card-body">
               <vue-job-tiny v-for="job in published" :job="job" :key="job.id"></vue-job-tiny>
             </div>
@@ -243,7 +243,7 @@
         <section v-cloak v-show="subscribed.length" class="box sidebar-offers">
           <h4><i class="fas fa-fw fa-heart"></i> Ulubione ogłoszenia</h4>
 
-          <div id="card-subscribed" class="card card-default">
+          <div id="js-subscribed" class="card card-default" style="max-height: 400px">
             <div class="card-body">
               <vue-job-tiny v-for="job in subscribedStore" :job="job" :key="job.id"></vue-job-tiny>
             </div>

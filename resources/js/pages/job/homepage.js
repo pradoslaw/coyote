@@ -7,7 +7,7 @@ import store from '../../store';
 import PerfectScrollbar from 'perfect-scrollbar';
 
 new Vue({
-  el: '#page-job',
+  el: '#js-job',
   delimiters: ['${', '}'],
   components: {
     'vue-job': VueJob,
@@ -25,11 +25,11 @@ new Vue({
       this.input = e.state.input;
     };
 
-    this.initYScrollbar(document.querySelector('#panel-published'));
-    this.initYScrollbar(document.querySelector('#panel-subscribed'));
+    this.initYScrollbar(document.querySelector('#js-published'));
+    this.initYScrollbar(document.querySelector('#js-subscribed'));
     //
-    this.initXScrollbar(document.querySelector('#filter-location'));
-    this.initXScrollbar(document.querySelector('#filter-tech'));
+    this.initXScrollbar(document.querySelector('#js-filter-location'));
+    this.initXScrollbar(document.querySelector('#js-filter-tech'));
   },
   filters: {
     capitalize(value) {
@@ -87,8 +87,7 @@ new Vue({
         currency: this.input.currency,
         remote: this.input.remote,
         remote_range: this.input.remote_range,
-        locations: this.input.locations,
-        json: 1 // add json param to distinguish JSON url from "normal" request
+        locations: this.input.locations
       };
 
       this.skeleton = true;
