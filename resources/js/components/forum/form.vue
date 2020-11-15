@@ -238,13 +238,14 @@
     },
     methods: {
       ...mapMutations('poll', ['removeItem', 'addItem', 'resetDefaults']),
-      ...mapMutations('posts', ['deleteAttachment'])
+      ...mapMutations('posts', ['deleteAttachment', 'changePage'])
     }
   })
   export default class VueForm extends Vue {
     isProcessing = false;
     activeTab = 'textarea';
     errors = {};
+    readonly topic!: Topic;
 
     @Ref()
     readonly textarea!: HTMLTextAreaElement;
@@ -279,8 +280,6 @@
     }})
     post!: Post;
 
-    topic!: Topic;
-
     @Emit()
     cancel() { }
 
@@ -298,7 +297,7 @@
     }
 
     created() {
-      if (this.exists) {
+      if (this.post.id !== undefined) {
         return;
       }
 
@@ -310,20 +309,9 @@
       this.isProcessing = true;
       this.errors = {};
 
-      store.commit('topics/init', [ this.topic ]);
-
       store.dispatch('posts/save', this.post)
         .then(result => {
           this.$emit('save', result.data);
-
-          // post was recently created. we're not editing it
-          if ('id' in this.topic && !this.exists) {
-            this.post.text = '';
-            this.post.html = '';
-            this.post.attachments = [];
-
-            window.location.hash = `id${result.data.id}`;
-          }
 
           this.$nextTick(() => {
             // remove local storage data after clearing input
@@ -379,12 +367,14 @@
       store.commit('topics/toggleTag', { topic: this.topic, tag });
     }
 
-    get showPollTab() {
-      return !this.topic || this.topic.first_post_id === this.post.id;
+    lastPage() {
+      if (this.currentPage < this.totalPages) {
+        store.dispatch('posts/changePage', this.totalPages);
+      }
     }
 
-    get exists() {
-      return this.post.id !== undefined;
+    get showPollTab() {
+      return !this.topic || this.topic.first_post_id === this.post.id;
     }
 
     private get draftKey(): string {

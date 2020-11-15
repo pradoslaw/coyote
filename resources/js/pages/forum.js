@@ -281,6 +281,12 @@ let PostVue = Vue.extend({
 
         this.$notify({type: 'success', text: 'Cytat został skopiowany do formularza.'});
       }
+    },
+
+    resetPost(post) {
+      this.undefinedPost = { text: '', html: '', attachments: [] };
+
+      window.location.hash = `id${post.id}`;
     }
   },
   computed: {

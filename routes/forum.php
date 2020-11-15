@@ -171,7 +171,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
         'uses' => 'TopicController@index',
         'as' => 'topic',
         'middleware' => [
-            'topic.access', 'can:access,forum', 'topic.scroll', 'page.hit'
+            'topic.access', 'can:access,forum', 'topic.scroll', 'page.hit', 'json'
         ]
     ]);
 

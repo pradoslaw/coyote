@@ -1,8 +1,7 @@
 import axios from "axios";
-import {Post, PostComment, PostAttachment, Paginator} from "../../types/models";
+import { Post, PostComment, PostAttachment, Paginator } from "../../types/models";
 import Vue from "vue";
 
-type PostObj = { [key: number]: Post };
 type ParentChild = { post: Post, comment: PostComment };
 type PostWithAttachment = { post: Post, attachment: PostAttachment };
 
@@ -197,6 +196,17 @@ const actions = {
       .then(response => {
         commit('addAttachment', { post: post, attachment: response.data })
       });
+  },
+
+  changePage({ commit, rootGetters }, page: number) {
+    const topic = rootGetters['topics/topic'];
+    const forum = rootGetters['forums/forum'];
+
+    return axios.get(`/Forum/${forum.slug}/${topic.id}-${topic.slug}`, { params: { page }}).then(result => {
+      commit('init', result);
+
+      return result;
+    });
   }
 }
 
