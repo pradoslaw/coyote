@@ -12,6 +12,7 @@ use Coyote\Pm;
 use Coyote\Repositories\Contracts\NotificationRepositoryInterface as NotificationRepository;
 use Coyote\Repositories\Contracts\PmRepositoryInterface as PmRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
+use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Services\Media\Clipboard;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
@@ -91,7 +92,9 @@ class PmController extends BaseController
         $talk = $this->pm->conversation($this->userId, $pm->author_id, 10, (int) $request->query('offset', 0));
         $messages = PmResource::collection($talk);
 
-        $recipient = $this->user->find($pm->author_id, ['id', 'name']);
+        $this->user->pushCriteria(new WithTrashed());
+
+        $recipient = $this->user->find($pm->author_id, ['id', 'name', 'deleted_at']);
 
         $this->markAllAsRead($pm->author_id);
 

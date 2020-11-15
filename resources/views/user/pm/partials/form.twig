@@ -1,4 +1,4 @@
-<div class="row mb-2">
+<div v-if="!recipient.deleted_at" class="row mb-2">
   <div class="col-12">
     <ul class="nav nav-tabs">
       <li class="nav-item"><a :class="{'active': tab === 'body'}" class="nav-link" href="javascript:" role="tab" @click="tab = 'body'">Treść</a></li>
@@ -38,7 +38,7 @@
     </div>
   </div>
 </div>
-<div class="row">
+<div v-if="!recipient.deleted_at" class="row">
   <div class="col-12">
     <vue-button :disabled="isProcessing" @click.native="sendMessage" class="btn btn-primary btn-sm">Wyślij</vue-button>
   </div>
