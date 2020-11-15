@@ -1,5 +1,5 @@
 <template>
-  <ol ref="dropdown" class="auto-complete w-100" v-show="isDropdownVisible">
+  <ol v-on-clickaway="hideDropdown" ref="dropdown" class="auto-complete w-100" v-show="isDropdownVisible">
     <li v-for="(item, index) in items" :key="index" :class="{'hover': index === selectedIndex}" @click="selectItem" @mouseover="hoverItem(index)">
 
       <slot name="item" :item="item">
@@ -15,27 +15,26 @@
 
 <script>
   import VueAvatar from '../avatar.vue';
+  import { mixin as clickaway } from 'vue-clickaway';
 
   export default {
     components: { 'vue-avatar': VueAvatar },
+    mixins: [ clickaway ],
     props: {
       items: {
         type: Array,
         default: () => []
+      },
+      defaultIndex: {
+        type: Number,
+        default: 0
       }
     },
     data() {
       return {
         isDropdownVisible: false,
-        selectedIndex: 0
+        selectedIndex: this.defaultIndex
       }
-    },
-    mounted() {
-      document.body.addEventListener('click', event => {
-        if (!(this.$el === event.target || this.$el.contains(event.target))) {
-          this.isDropdownVisible = false;
-        }
-      });
     },
     methods: {
       goDown() {
@@ -90,6 +89,10 @@
         this.isDropdownVisible = flag;
       },
 
+      hideDropdown() {
+        this.toggleDropdown(false);
+      },
+
       getSelected() {
         return this.selectedIndex > -1 ? this.items[this.selectedIndex] : null;
       }
@@ -99,7 +102,7 @@
         this.toggleDropdown(Boolean(newItems.length));
 
         if (newItems.length > 0 && newItems.length !== oldItems.length) {
-          this.selectedIndex = 0;
+          this.selectedIndex = this.defaultIndex;
         }
       }
     }

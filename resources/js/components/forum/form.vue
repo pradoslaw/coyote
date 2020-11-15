@@ -238,7 +238,8 @@
     },
     methods: {
       ...mapMutations('poll', ['removeItem', 'addItem', 'resetDefaults']),
-      ...mapMutations('posts', ['deleteAttachment', 'changePage'])
+      ...mapMutations('posts', ['deleteAttachment', 'changePage']),
+      ...mapMutations('topics', ['totalPages', 'currentPage'])
     }
   })
   export default class VueForm extends Vue {
@@ -246,6 +247,8 @@
     activeTab = 'textarea';
     errors = {};
     readonly topic!: Topic;
+    readonly totalPages!: number;
+    readonly currentPage!: number;
 
     @Ref()
     readonly textarea!: HTMLTextAreaElement;
