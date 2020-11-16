@@ -203,7 +203,7 @@ const actions = {
     const forum = rootGetters['forums/forum'];
 
     return axios.get(`/Forum/${forum.slug}/${topic.id}-${topic.slug}`, { params: { page }}).then(result => {
-      commit('init', result.data.paginate);
+      commit('init', result.data);
 
       return result;
     });

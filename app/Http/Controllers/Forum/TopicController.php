@@ -37,9 +37,9 @@ class TopicController extends BaseController
 
     /**
      * @param Request $request
-     * @param \Coyote\Forum $forum
-     * @param \Coyote\Topic $topic
-     * @return \Illuminate\View\View
+     * @param $forum
+     * @param $topic
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Support\Collection|\Illuminate\View\View
      */
     public function index(Request $request, $forum, $topic)
     {
@@ -120,6 +120,10 @@ class TopicController extends BaseController
         // ..then, mark topic as read
         if ($markTime < $dateTime) {
             $tracker->asRead($dateTime);
+        }
+
+        if ($request->wantsJson()) {
+            return $posts;
         }
 
         $topic->load('tags');

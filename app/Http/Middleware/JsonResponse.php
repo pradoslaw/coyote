@@ -3,6 +3,7 @@
 namespace Coyote\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\Response;
 
 class JsonResponse
 {
@@ -18,9 +19,12 @@ class JsonResponse
         /** @var \Illuminate\Http\Response $response */
         $response = $next($request);
 
-        if ($request->wantsJson()) {
-            $data = $response->getOriginalContent()->getData();
+        if (!$request->wantsJson()) {
+            return $response;
+        }
 
+        if ($response instanceof Response) {
+            $data = $response->getOriginalContent()->getData();
             $response->setContent($data);
         }
 
