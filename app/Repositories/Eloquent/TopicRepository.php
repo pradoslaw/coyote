@@ -205,41 +205,6 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
      * @param int $limit
      * @return mixed
      */
-    public function voted($limit = 7)
-    {
-        $this->applyCriteria();
-
-        $result = $this
-            ->model
-            ->select([
-                'topics.id',
-                'forum_id',
-                'subject',
-                'topics.slug',
-                'forums.name',
-                'forums.slug AS forum_slug',
-                'last_post_created_at',
-                'views',
-                'score',
-                'deleted_at'
-            ])
-            ->join('forums', 'forums.id', '=', 'forum_id')
-            ->where('last_post_created_at', '>', date('Y-m-d', strtotime('-1 month')))
-            ->where('forums.is_locked', 0)
-            ->where('topics.is_locked', 0)
-            ->orderBy('score', 'DESC')
-            ->orderBy('views', 'DESC')
-            ->limit($limit)
-            ->get();
-
-        $this->resetModel();
-        return $result;
-    }
-
-    /**
-     * @param int $limit
-     * @return mixed
-     */
     public function interesting($limit = 7)
     {
         $sub = $this->getSubQuery('last_post_id');

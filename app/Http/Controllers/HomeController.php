@@ -90,7 +90,7 @@ class HomeController extends Controller
             if (substr($snake, 0, 3) === 'get') {
                 $name = substr($snake, 4);
 
-                if (in_array($name, ['reputation', 'newest', 'voted', 'interesting', 'blog', 'patronage'])) {
+                if (in_array($name, ['reputation', 'newest', 'interesting', 'blog', 'patronage'])) {
                     $result[$name] = $cache->remember('homepage:' . $name, 30 * 60, function () use ($method) {
                         return $this->$method();
                     });
@@ -144,14 +144,6 @@ class HomeController extends Controller
         MicroblogResource::withoutWrapping();
 
         return (new MicroblogCollection($microblogs))->resolve($this->request);
-    }
-
-    /**
-     * @return mixed
-     */
-    private function getVoted()
-    {
-        return $this->topic->voted();
     }
 
     /**

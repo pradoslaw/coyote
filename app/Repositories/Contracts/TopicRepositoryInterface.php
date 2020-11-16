@@ -54,12 +54,6 @@ interface TopicRepositoryInterface extends RepositoryInterface
      * @param int $limit
      * @return mixed
      */
-    public function voted($limit = 7);
-
-    /**
-     * @param int $limit
-     * @return mixed
-     */
     public function interesting($limit = 7);
 
     /**
