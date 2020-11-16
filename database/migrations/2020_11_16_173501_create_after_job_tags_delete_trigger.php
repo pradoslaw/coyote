@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-
 class CreateAfterJobTagsDeleteTrigger extends Migration
 {
     use SchemaBuilder;
