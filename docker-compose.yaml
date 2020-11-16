@@ -14,7 +14,7 @@ services:
       - coyote
 
   php:
-    image: 4programmers/php:7.4
+    image: 4programmers/php-node:latest
     working_dir: /var/www
     environment:
       - ENABLE_XDEBUG=$ENABLE_XDEBUG
