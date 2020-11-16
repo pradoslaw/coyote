@@ -4,7 +4,7 @@ use Faker\Generator as Faker;
 
 $factory->define(\Coyote\Job::class, function (Faker $faker) {
     return [
-        'title' => $faker->title(60),
+        'title' => $faker->realText(60),
         'description' => $faker->text(2000),
         'is_publish' => false,
         'boost_at' => now(),

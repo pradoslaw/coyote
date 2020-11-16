@@ -3,7 +3,7 @@
 namespace Coyote\Http\Validators;
 
 use Illuminate\Http\Request;
-use Inacho\CreditCard;
+use Freelancehunt\Validators\CreditCard;
 
 class CreditCardValidator
 {

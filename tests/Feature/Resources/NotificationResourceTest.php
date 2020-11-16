@@ -50,6 +50,6 @@ class NotificationResourceTest extends TestCase
         $resource = new NotificationResource($notification);
         $result = $resource->toArray(request());
 
-        $this->assertContains($senders[0]->name, $result['headline']);
+        $this->assertStringContainsString($senders[0]->name, $result['headline']);
     }
 }

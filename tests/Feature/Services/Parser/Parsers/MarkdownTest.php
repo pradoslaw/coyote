@@ -119,7 +119,7 @@ class MarkdownTest extends TestCase
         $this->assertRegExp('/<a href=".*">@First\(Name\)<\/a>: hello/', $input);
 
         $input = $this->markdown->parse('@ 2Ghz');
-        $this->assertContains('@ 2Ghz', $input);
+        $this->assertStringContainsString('@ 2Ghz', $input);
     }
 
     public function testParseLinks()

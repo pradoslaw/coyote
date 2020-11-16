@@ -1,4 +1,4 @@
-FROM 4programmers/php-node:latest as backend
+FROM 4programmers/php:7.4 as backend
 
 WORKDIR /app
 
