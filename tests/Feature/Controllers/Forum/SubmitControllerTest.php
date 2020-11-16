@@ -73,7 +73,16 @@ class SubmitControllerTest extends TestCase
         );
 
         $response->assertJsonFragment([
-            'text' => $post->text
+            'text' => $post->text,
+            'permissions' => [
+                'delete' => true,
+                'accept' => false,
+                'adm_access' => false,
+                'merge' => false,
+                'sticky' => false,
+                'update' => true,
+                'write' => true
+            ]
         ]);
 
         $id = $response->decodeResponseJson('id');

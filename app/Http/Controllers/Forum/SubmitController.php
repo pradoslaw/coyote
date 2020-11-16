@@ -106,6 +106,8 @@ class SubmitController extends BaseController
             }
 
             if ($post->wasRecentlyCreated && $this->userId) {
+                $topic->last_post_id = $post->id;
+
                 $post->subscribe($this->userId, true);
                 $topic->subscribe($this->userId, $this->auth->allow_subscribe);
             }
