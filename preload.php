@@ -12,10 +12,12 @@ class Preloader
     {
         $this->paths = $paths;
 
-        // We'll use composer's classmap
-        // to easily find which classes to autoload,
-        // based on their filename
-        $classMap = require __DIR__ . '/vendor/composer/autoload_classmap.php';
+        $classMap = [];
+        $autoload = __DIR__ . '/vendor/composer/autoload_classmap.php';
+
+        if (file_exists($autoload)) {
+            $classMap = require $autoload;
+        }
 
         $this->fileMap = array_flip($classMap);
     }
