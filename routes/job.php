@@ -17,10 +17,10 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
 
     $this->post('Delete/{job}', ['uses' => 'DeleteController@index', 'as' => 'delete']);
 
-    $this->get('Technologia/{name}', ['uses' => 'HomeController@tag', 'as' => 'tag', 'middleware' => 'job.redirect']);
-    $this->get('Zdalna', ['uses' => 'HomeController@remote', 'as' => 'remote', 'middleware' => 'job.redirect']);
-    $this->get('Miasto/{name}', ['uses' => 'HomeController@city', 'as' => 'city', 'middleware' => 'job.redirect']);
-    $this->get('Firma/{name}', ['uses' => 'HomeController@firm', 'as' => 'firm', 'middleware' => 'job.redirect']);
+    $this->get('Technologia/{name}', ['uses' => 'HomeController@tag', 'as' => 'tag']);
+    $this->get('Zdalna', ['uses' => 'HomeController@remote', 'as' => 'remote']);
+    $this->get('Miasto/{name}', ['uses' => 'HomeController@city', 'as' => 'city']);
+    $this->get('Firma/{name}', ['uses' => 'HomeController@firm', 'as' => 'firm']);
     $this->get('My', ['uses' => 'HomeController@my', 'as' => 'my', 'middleware' => 'auth']);
 
     $this->get('{job}-{slug}', ['uses' => 'OfferController@index', 'as' => 'offer', 'middleware' => 'page.hit']);
