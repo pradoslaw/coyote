@@ -13,11 +13,6 @@ interface TagRepositoryInterface extends RepositoryInterface
     public function lookupName($name);
 
     /**
-     * @param int[] $ids
-     */
-    public function countTopics(array $ids = []): void;
-
-    /**
      * @param string[] $tags
      * @return int[] Ids of tags
      */

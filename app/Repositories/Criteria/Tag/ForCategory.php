@@ -31,8 +31,6 @@ class ForCategory extends Criteria
             ->select('tags.*')
             ->where('category_id', $this->categoryId)
             ->whereNotNull('logo')
-            ->join('job_tags', 'job_tags.tag_id', '=', 'tags.id')
-            ->groupBy('tags.id')
-            ->orderByRaw('COUNT(*) DESC');
+            ->orderBy('jobs', 'DESC');
     }
 }

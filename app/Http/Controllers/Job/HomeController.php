@@ -169,9 +169,7 @@ class HomeController extends BaseController
         $this->tag->pushCriteria(new ForCategory(Tag\Category::LANGUAGE));
 
         // only tags with logo
-        $tags = $this->tag->all()->filter(function (Tag $tag) {
-            return $tag->logo->getFilename() !== null;
-        });
+        $tags = $this->tag->all();
 
         $input = array_merge(
             $this->request->all('q', 'city', 'sort', 'salary', 'currency', 'remote_range', 'page'),
