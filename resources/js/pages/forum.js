@@ -270,7 +270,10 @@ let PostVue = Vue.extend({
       if (scrollIntoForm) {
         document.getElementById('js-submit-form').scrollIntoView();
 
-        this.undefinedPost.text += `@${useBrackets(post.user.name)}: `;
+        if (!this.undefinedPost.text.includes(`[${post.user.name}`)) {
+          this.undefinedPost.text += `@${useBrackets(post.user.name)}: `;
+        }
+
         this.$refs['js-submit-form'].$refs['textarea'].focus();
       }
       else {
