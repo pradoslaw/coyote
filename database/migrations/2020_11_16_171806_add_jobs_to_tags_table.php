@@ -1,9 +1,10 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class AddTopicsToTagsTable extends Migration
+class AddJobsToTagsTable extends Migration
 {
     use SchemaBuilder;
 
@@ -15,17 +16,17 @@ class AddTopicsToTagsTable extends Migration
     public function up()
     {
         $this->schema->table('tags', function (Blueprint $table) {
-            $table->integer('topics')->default(0);
+            $table->integer('jobs')->default(0);
         });
 
         $this->db
             ->table('tags')
             ->update([
-                'topics' => $this->db->raw(
+                'jobs' => $this->db->raw(
                     '(SELECT COUNT(*)
-                    FROM topic_tags
-                        JOIN topics ON topics.id = topic_tags.topic_id
-                    WHERE topic_tags.tag_id = tags.id AND topics.deleted_at IS NULL)'
+                    FROM job_tags
+                        JOIN jobs ON jobs.id = job_tags.job_id
+                    WHERE job_tags.tag_id = tags.id AND jobs.deleted_at IS NULL)'
                 )
             ]);
     }
@@ -38,7 +39,7 @@ class AddTopicsToTagsTable extends Migration
     public function down()
     {
         $this->schema->table('tags', function (Blueprint $table) {
-            $table->dropColumn('topics');
+            $table->dropColumn('jobs');
         });
     }
 }

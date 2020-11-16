@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Models;
+namespace Tests\Unit\Models;
 
 use Coyote\Forum;
 use Illuminate\Foundation\Testing\DatabaseTransactions;

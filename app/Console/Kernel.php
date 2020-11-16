@@ -3,7 +3,6 @@
 namespace Coyote\Console;
 
 use Coyote\Console\Commands\BoostJobsCommand;
-use Coyote\Console\Commands\CalculateTagWeight;
 use Coyote\Console\Commands\CreateCouponCommand;
 use Coyote\Console\Commands\CreateSitemapCommand;
 use Coyote\Console\Commands\CurrencyExchangeCommand;
@@ -11,7 +10,6 @@ use Coyote\Console\Commands\Elasticsearch\CreateIndexCommand;
 use Coyote\Console\Commands\Elasticsearch\DropIndexCommand;
 use Coyote\Console\Commands\Elasticsearch\IndexCommand;
 use Coyote\Console\Commands\FlushCacheCommand;
-use Coyote\Console\Commands\MigrateFilesystemCommand;
 use Coyote\Console\Commands\PurgeFirewallCommand;
 use Coyote\Console\Commands\PurgeGuestsCommand;
 use Coyote\Console\Commands\PurgeJobsCommand;
@@ -46,8 +44,7 @@ class Kernel extends ConsoleKernel
         CreateCouponCommand::class,
         PurgeGuestsCommand::class,
         ResendApplicationCommand::class,
-        PurgePostsCommand::class,
-        CalculateTagWeight::class
+        PurgePostsCommand::class
     ];
 
     /**
@@ -67,7 +64,6 @@ class Kernel extends ConsoleKernel
         $schedule->command('sitemap:create')->dailyAt('03:00:00');
         $schedule->command('guest:purge')->dailyAt('04:00:00');
         $schedule->command('posts:purge')->dailyAt('05:00:00');
-        $schedule->command('tags:calculate')->twiceDaily();
     }
 
     /**

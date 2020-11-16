@@ -17,6 +17,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $category_id
  * @property Category $category
  * @property MediaInterface $logo
+ * @property int $topics
+ * @property int $jobs
  */
 class Tag extends Model
 {
