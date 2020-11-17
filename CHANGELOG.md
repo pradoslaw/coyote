@@ -4,6 +4,7 @@
 - Migracja do Laravel 6
 - Migracja do phpunit 8
 - Usunięcie codeception
+- Migracja na PHP 7.4
 
 ##2.4
 
