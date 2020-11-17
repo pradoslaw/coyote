@@ -154,46 +154,16 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
     }
 
     /**
-     * @param string $sort
-     * @return mixed
-     */
-    private function getSubQuery($sort)
-    {
-        return $this->model
-                ->select([
-                    'id',
-                    'forum_id',
-                    'subject',
-                    'slug',
-                    'is_locked',
-                    'last_post_created_at',
-                    'views',
-                    'score',
-                    'replies',
-                    'deleted_at',
-                    'first_post_id',
-                    'rank'])
-                ->orderBy($sort, 'DESC')
-                ->whereRaw('is_locked = 0')
-                ->limit(3000)
-                ->toSql();
-    }
-
-    /**
      * @param int $limit
      * @return mixed
      */
     public function newest($limit = 7)
     {
-        $sub = $this->getSubQuery('id');
         $this->applyCriteria();
 
         $result = $this
             ->model
-            ->select(['topics.*', 'forums.name', 'forums.slug AS forum_slug'])
-            ->from($this->raw("($sub) AS topics"))
-            ->join('forums', 'forums.id', '=', 'forum_id')
-            ->where('forums.is_locked', 0)
+            ->from('topic_recent AS topics')
             ->limit($limit)
             ->get();
 
@@ -207,27 +177,11 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
      */
     public function interesting($limit = 7)
     {
-        $sub = $this->getSubQuery('last_post_id');
         $this->applyCriteria();
 
         $result = $this
             ->model
-            ->select([
-                'topics.id',
-                'topics.forum_id',
-                'topics.subject',
-                'topics.slug',
-                'forums.name',
-                'forums.slug AS forum_slug',
-                'last_post_created_at',
-                'views',
-                'topics.score',
-                'topics.deleted_at'
-            ])
-            ->from($this->raw("($sub) AS topics"))
-            ->withTrashed()
-            ->join('forums', 'forums.id', '=', 'forum_id')
-            ->where('forums.is_locked', 0)
+            ->from('topic_recent AS topics')
             ->where('replies', '>', 0)
             ->limit($limit)
             ->orderBy('rank', 'DESC')

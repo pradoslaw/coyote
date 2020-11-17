@@ -15,6 +15,7 @@ use Coyote\Console\Commands\PurgeGuestsCommand;
 use Coyote\Console\Commands\PurgeJobsCommand;
 use Coyote\Console\Commands\PurgePastebinCommand;
 use Coyote\Console\Commands\PurgePostsCommand;
+use Coyote\Console\Commands\PurgeRecentTopicsCommand;
 use Coyote\Console\Commands\PurgeSessionsCommand;
 use Coyote\Console\Commands\PurgeViewsCommand;
 use Coyote\Console\Commands\ResendApplicationCommand;
@@ -44,7 +45,8 @@ class Kernel extends ConsoleKernel
         CreateCouponCommand::class,
         PurgeGuestsCommand::class,
         ResendApplicationCommand::class,
-        PurgePostsCommand::class
+        PurgePostsCommand::class,
+        PurgeRecentTopicsCommand::class
     ];
 
     /**
@@ -64,6 +66,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('sitemap:create')->dailyAt('03:00:00');
         $schedule->command('guest:purge')->dailyAt('04:00:00');
         $schedule->command('posts:purge')->dailyAt('05:00:00');
+        $schedule->command('topics:purge')->everyFifteenMinutes();
     }
 
     /**

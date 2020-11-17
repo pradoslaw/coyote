@@ -11,18 +11,18 @@ class AccordingToUserOrder extends Criteria
     /**
      * @var int|null
      */
-    protected $userId;
+    protected ?int $userId;
 
     /**
      * @var bool
      */
-    protected $ignoreHidden;
+    protected bool $ignoreHidden;
 
     /**
      * @param int|null $userId
      * @param bool $ignoreHidden
      */
-    public function __construct($userId, bool $ignoreHidden = false)
+    public function __construct(?int $userId, bool $ignoreHidden = false)
     {
         $this->userId = $userId;
         $this->ignoreHidden = $ignoreHidden;
