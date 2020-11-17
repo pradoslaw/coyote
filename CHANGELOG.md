@@ -6,6 +6,9 @@
 - Usunięcie codeception
 - Migracja na PHP 7.4
 
+**Forum**
+- Walidacja tagów: ponowne użycie skasowanego tagu nie jest możliwe
+
 ##2.4
 
 **Ogólne**
