@@ -101,6 +101,7 @@ return [
     'cc_date'              => 'Upłynęła data ważności karty.',
     'recaptcha'            => 'Wartość pola recaptcha jest nieprawidłowa. Prosimy o kontakt.',
     'host'                 => 'Podany link musi pochodzić z serwera :host.',
+    'invalid_tag'          => 'Tag ":value" został usunięty i jego ponowne użycie nie jest możliwe.',
 
     /*
     |--------------------------------------------------------------------------

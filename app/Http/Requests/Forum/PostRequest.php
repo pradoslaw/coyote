@@ -4,6 +4,7 @@ namespace Coyote\Http\Requests\Forum;
 
 use Coyote\Forum;
 use Coyote\Post;
+use Coyote\Rules\InvalidTag;
 use Coyote\Topic;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -16,7 +17,6 @@ class PostRequest extends FormRequest
     const RULE_TEXT                 = 'required|spam_chinese:1|spam_foreign:1';
     const RULE_STICKY               = 'nullable|bool';
     const RULE_TAGS                 = 'array|max:5';
-    const RULE_TAG                  = 'max:25|tag|tag_creation:50';
     const RULE_HUMAN                = 'required';
 
     const RULE_POLL_TITLE           = 'nullable|string|max:100';
@@ -68,7 +68,13 @@ class PostRequest extends FormRequest
             $rules = array_merge($rules, [
                 'subject'               => self::RULE_SUBJECT,
                 'tags'                  => self::RULE_TAGS,
-                'tags.*'                => self::RULE_TAG,
+                'tags.*'                => [
+                    'bail',
+                    'max:25',
+                    'tag',
+                    app(InvalidTag::class),
+                    'tag_creation:50'
+                ],
 
                 'poll.title'            => self::RULE_POLL_TITLE,
                 'poll.items.*.text'     => self::RULE_POLL_ITEMS,

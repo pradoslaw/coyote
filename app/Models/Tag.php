@@ -32,16 +32,6 @@ class Tag extends Model
     protected $fillable = ['name', 'real_name', 'category_id'];
 
     /**
-     * @var array
-     */
-    protected $dates = ['created_at', 'deleted_at'];
-
-    /**
-     * @var string
-     */
-    protected $dateFormat = 'Y-m-d H:i:se';
-
-    /**
      * @var bool
      */
     public $timestamps = false;
