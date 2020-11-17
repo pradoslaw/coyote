@@ -55,11 +55,13 @@ class TagForm extends Form
                 'label' => 'Logo',
                 'rules' => 'mimes:jpeg,jpg,png,gif'
             ])
-            ->add('submit', 'submit', [
+            ->add('submit', 'submit_with_delete', [
                 'label' => 'Zapisz',
                 'attr' => [
                     'data-submit-state' => 'Zapisywanie...'
-                ]
+                ],
+                'delete_url' => empty($this->data->id) ? '' : route('adm.tags.delete', [$this->data->id]),
+                'delete_visibility' => !empty($this->data->id)
             ]);
     }
 

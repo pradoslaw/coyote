@@ -6,6 +6,7 @@ use Boduch\Grid\Source\EloquentSource;
 use Coyote\Http\Forms\TagForm;
 use Coyote\Http\Grids\Adm\TagsGrid;
 use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
+use Coyote\Tag;
 
 class TagsController extends BaseController
 {
@@ -76,5 +77,12 @@ class TagsController extends BaseController
         $tag->save();
 
         return redirect()->route('adm.tags')->with('success', 'Zmiany zostały zapisane.');
+    }
+
+    public function delete(Tag $tag)
+    {
+        $tag->delete();
+
+        return redirect()->route('adm.tags')->with('success', 'Tag został usunięty.');
     }
 }
