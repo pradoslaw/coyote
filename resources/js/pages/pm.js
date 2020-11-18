@@ -18,7 +18,6 @@ import Textarea from "../libs/textarea";
 import axios from 'axios';
 import differenceInMinutes from 'date-fns/differenceInMinutes';
 import parseISO from 'date-fns/parseISO';
-import '../libs/axios-throttle.ts';
 
 Vue.use(VueAutosize);
 Vue.use(VueAutosave);

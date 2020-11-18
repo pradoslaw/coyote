@@ -16,7 +16,6 @@ import { default as axiosErrorHandler } from '../libs/axios-error-handler';
 import { mapState, mapGetters } from "vuex";
 import axios from 'axios';
 import useBrackets from '../libs/prompt';
-import '../libs/axios-throttle.ts';
 
 Vue.use(VueTimeago);
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});

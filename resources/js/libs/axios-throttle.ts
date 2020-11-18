@@ -2,12 +2,12 @@ import axios, { AxiosRequestConfig } from 'axios';
 
 const pending: string[] = [];
 
-function getUrl(config: AxiosRequestConfig): string {
-  return config.url as string;
+function signature(config: AxiosRequestConfig): string {
+  return config.method + (config.url as string);
 }
 
 function removePending(config: AxiosRequestConfig): void {
-  const url = getUrl(config);
+  const url = signature(config);
 
   if (pending.includes(url)) {
     delete pending[pending.findIndex(item => item === url)];
@@ -15,11 +15,7 @@ function removePending(config: AxiosRequestConfig): void {
 }
 
 axios.interceptors.request.use((config: AxiosRequestConfig) => {
-  if (config.method === 'get') {
-    return config;
-  }
-
-  const url = getUrl(config);
+  const url = signature(config);
 
   if (pending.includes(url)) {
     throw new axios.Cancel('Throttle detected.');

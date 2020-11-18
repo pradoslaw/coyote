@@ -3,8 +3,7 @@ import axios from "axios";
 const state = {
   notifications: null, // initial value must be null to show fa-spinner
   count: 0,
-  offset: 0,
-  isOngoing: false
+  offset: 0
 };
 
 const getters = {
@@ -48,16 +47,9 @@ const mutations = {
 };
 
 const actions = {
-  get({ state, commit }) {
-    if (state.isOngoing) {
-      return;
-    }
-
-    state.isOngoing = true;
-
+  load({ state, commit }) {
     return axios.get('/User/Notifications/Ajax', {params: {offset: state.offset}})
-      .then(result => commit('init', result.data))
-      .finally(() => state.isOngoing = false);
+      .then(result => commit('init', result.data));
   },
 
   remove ({ commit }, notification) {

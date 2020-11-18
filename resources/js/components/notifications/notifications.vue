@@ -82,7 +82,7 @@
           return;
         }
 
-        return store.dispatch('notifications/get');
+        return store.dispatch('notifications/load');
       },
 
       markAllAsRead() {
@@ -103,7 +103,7 @@
 
       resetNotifications() {
         this.isOpen = false;
-        this.$store.commit('notifications/reset');
+        store.commit('notifications/reset');
 
         this.$refs.scrollbar.$refs.container.removeEventListener('ps-y-reach-end', this.loadMoreNotifications);
       },
