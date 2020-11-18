@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Carbon\Carbon $read_at
  * @property bool $is_clicked
  * @property Notification\Sender[] $senders
+ * @private User $user
  */
 class Notification extends Model
 {
@@ -89,5 +90,9 @@ class Notification extends Model
     {
         // LEFT JOIN is on purpose. notification sender can be anonymous user (for example: post author)
         return $this->hasMany(Sender::class)->leftJoin('users', 'users.id', '=', 'notification_senders.user_id');
+    }
+
+    public function user() {
+        return $this->belongsTo(User::class);
     }
 }

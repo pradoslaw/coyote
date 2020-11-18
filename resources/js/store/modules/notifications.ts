@@ -34,6 +34,10 @@ const mutations = {
     state.count += 1;
   },
 
+  decrement (state) {
+    state.count -= 1;
+  },
+
   count (state, count) {
     state.count = count;
   },

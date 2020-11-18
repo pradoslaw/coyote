@@ -82,18 +82,18 @@
           return;
         }
 
-        return this.$store.dispatch('notifications/get');
+        return store.dispatch('notifications/get');
       },
 
       markAllAsRead() {
-        this.$store.dispatch('notifications/markAll');
+        store.dispatch('notifications/markAll');
       },
 
       openAll() {
         this.unreadNotifications.forEach(notification => {
           window.open(`/notification/${notification.id}`);
 
-          this.$store.commit('notifications/mark', notification);
+          store.commit('notifications/mark', notification);
         });
       },
 
@@ -111,18 +111,21 @@
       listenForNotification() {
         Session.addListener(e => {
           if (e.key === 'notifications' && e.newValue < this.count) {
-            this.$store.commit('notifications/count', parseInt(e.newValue));
+            store.commit('notifications/count', parseInt(e.newValue));
           }
         });
 
-        ws.subscribe(`user:${store.state.user.id}`).on('Illuminate\\Notifications\\Events\\BroadcastNotificationCreated', data => {
-          this.resetNotifications();
+        ws.subscribe(`user:${store.state.user.id}`)
+          .on('Illuminate\\Notifications\\Events\\BroadcastNotificationCreated', data => {
+            this.resetNotifications();
 
-          this.$store.commit('notifications/increment');
-          this.syncCount();
+            store.commit('notifications/increment');
+            this.syncCount();
 
-          DesktopNotifications.doNotify(data.headline, data.subject, data.url);
-        });
+            DesktopNotifications.doNotify(data.headline, data.subject, data.url);
+          })
+          // notification link was clicked in email or desktop notifications.
+          .on('NotificationRead', () => store.commit('notifications/decrement'));
       },
 
       setIcon(path) {

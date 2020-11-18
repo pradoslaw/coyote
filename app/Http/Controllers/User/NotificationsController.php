@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\User;
 
+use Coyote\Events\NotificationRead;
 use Coyote\Notification;
 use Coyote\Repositories\Contracts\NotificationRepositoryInterface as NotificationRepository;
 use Coyote\Http\Resources\NotificationResource;
@@ -134,13 +135,14 @@ class NotificationsController extends BaseController
     public function url(string $id)
     {
         /** @var \Coyote\Notification $notification */
-        $notification = $this->notification->find($id, ['id', 'url', 'read_at', 'is_clicked']);
-        abort_if($notification === null, 404);
+        $notification = $this->notification->findOrFail($id, ['id', 'url', 'read_at', 'user_id', 'is_clicked']);
 
         $notification->is_clicked = true;
 
         if (!$notification->read_at) {
             $notification->read_at = Carbon\Carbon::now();
+
+            broadcast(new NotificationRead($notification));
         }
 
         $notification->save();

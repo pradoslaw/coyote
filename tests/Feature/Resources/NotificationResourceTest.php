@@ -14,7 +14,7 @@ class NotificationResourceTest extends TestCase
         $faker = Factory::create();
 
         /** @var Notification $notification */
-        $notification = factory(Notification::class)->make();
+        $notification = factory(Notification::class)->state('headline')->make();
 
         $senders = [
             new \Coyote\Notification\Sender(['user_id' => factory(\Coyote\User::class)->make(), 'name' => $faker->userName]),
@@ -27,7 +27,7 @@ class NotificationResourceTest extends TestCase
         $resource = new NotificationResource($notification);
         $result = $resource->toArray(request());
 
-        $this->assertContains($senders[0]->name . ' (oraz 2 osoby)', $result['headline']);
+        $this->assertStringContainsString($senders[0]->name . ' (oraz 2 osoby)', $result['headline']);
 
         $senders = [
             new \Coyote\Notification\Sender(['user_id' => factory(\Coyote\User::class)->make(), 'name' => $faker->userName]),
@@ -39,7 +39,7 @@ class NotificationResourceTest extends TestCase
         $resource = new NotificationResource($notification);
         $result = $resource->toArray(request());
 
-        $this->assertContains($senders[0]->name . ' (oraz ' . $senders[1]->name . ')', $result['headline']);
+        $this->assertStringContainsString($senders[0]->name . ' (oraz ' . $senders[1]->name . ')', $result['headline']);
 
         $senders = [
             new \Coyote\Notification\Sender(['user_id' => factory(\Coyote\User::class)->make(), 'name' => $faker->userName])
