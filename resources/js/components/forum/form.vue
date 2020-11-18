@@ -26,8 +26,8 @@
             v-model="post.text"
             v-paste:success="addAttachment"
             :class="{'is-invalid': 'text' in errors}"
-            @keypress.ctrl.enter="save"
-            @keypress.meta.enter="save"
+            @keydown.ctrl.enter="save"
+            @keydown.meta.enter="save"
             @keydown.esc="cancel"
             name="text"
             class="form-control"
@@ -206,7 +206,6 @@
   import VueError from '../forms/error.vue';
   import VueText from '../forms/text.vue';
   import Prism from 'prismjs';
-  import '../../libs/axios-throttle.ts';
 
   Vue.use(VueAutosize);
   Vue.use(VueAutosave);
@@ -274,13 +273,7 @@
     @Prop({default: false})
     readonly requireTag!: boolean;
 
-    @Prop({default() {
-      return {
-        text: '',
-        html: '',
-        attachments: []
-      }
-    }})
+    @Prop({required: true})
     post!: Post;
 
     @Emit()

@@ -15,7 +15,7 @@ function removePending(config: AxiosRequestConfig): void {
 }
 
 axios.interceptors.request.use((config: AxiosRequestConfig) => {
-  if (config.method !== 'post') {
+  if (config.method === 'get') {
     return config;
   }
 

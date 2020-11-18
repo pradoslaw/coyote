@@ -16,6 +16,7 @@ import { default as axiosErrorHandler } from '../libs/axios-error-handler';
 import { mapState, mapGetters } from "vuex";
 import axios from 'axios';
 import useBrackets from '../libs/prompt';
+import '../libs/axios-throttle.ts';
 
 Vue.use(VueTimeago);
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
@@ -259,6 +260,8 @@ let PostVue = Vue.extend({
   },
   methods: {
     redirectToTopic(post) {
+      this.resetPost(post);
+
       window.location.href = post.url;
     },
 
@@ -280,7 +283,7 @@ let PostVue = Vue.extend({
         let text = `> ##### [${post.user ? post.user.name : post.user_name} napisał(a)](/Forum/Post/${post.id}):`
         text += "\n" + post.text.replace(/\n/g, "\n> ") + "\n\n"
 
-        this.undefinedPost.text += text;
+        this.undefinedPost.text += (this.undefinedPost.text.length ? "\n" : '') + text;
 
         this.$notify({type: 'success', text: 'Cytat został skopiowany do formularza.'});
       }
