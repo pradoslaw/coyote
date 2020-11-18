@@ -92,7 +92,8 @@ class Notification extends Model
         return $this->hasMany(Sender::class)->leftJoin('users', 'users.id', '=', 'notification_senders.user_id');
     }
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 }

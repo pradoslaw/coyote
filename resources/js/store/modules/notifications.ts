@@ -49,7 +49,11 @@ const mutations = {
 const actions = {
   load({ state, commit }) {
     return axios.get('/User/Notifications/Ajax', {params: {offset: state.offset}})
-      .then(result => commit('init', result.data));
+      .then(result => {
+        commit('init', result.data)
+
+        return result;
+      });
   },
 
   remove ({ commit }, notification) {

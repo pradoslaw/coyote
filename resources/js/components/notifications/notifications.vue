@@ -1,6 +1,6 @@
 <template>
   <li :class="{'open': isOpen}" v-on-clickaway="hideDropdown">
-    <a @click.prevent="loadNotifications" href="/User/Notifications" class="nav-link" role="button" aria-haspopup="true" aria-expanded="false">
+    <a @click.prevent="toggleDropdown" href="/User/Notifications" class="nav-link" role="button" aria-haspopup="true" aria-expanded="false">
       <span v-show="count > 0" class="badge">{{ count }}</span>
 
       <i class="fas fa-bell fa-fw"></i>
@@ -64,25 +64,22 @@
     },
 
     methods: {
-      loadNotifications() {
+      toggleDropdown() {
         DesktopNotifications.requestPermission();
+
         this.isOpen = !this.isOpen;
-
-        if (this.isEmpty) {
-          this.loadMoreNotifications().then(() => {
-            this.$refs.scrollbar.$refs.container.addEventListener('ps-y-reach-end', this.loadMoreNotifications);
-
-            this.syncCount();
-          });
-        }
       },
 
-      loadMoreNotifications() {
-        if (!this.isOpen) {
-          return;
-        }
+      loadNotifications() {
+        return store.dispatch('notifications/load').then(result => {
+          // no more new notifications? remove listener to avoid infinite loop
+          if (!result.data.notifications.length) {
+            this.removeScrollbarListener();
+          }
 
-        return store.dispatch('notifications/load');
+          // sync unread notifications counter with other tabs
+          this.syncCount();
+        });
       },
 
       markAllAsRead() {
@@ -105,7 +102,11 @@
         this.isOpen = false;
         store.commit('notifications/reset');
 
-        this.$refs.scrollbar.$refs.container.removeEventListener('ps-y-reach-end', this.loadMoreNotifications);
+        this.removeScrollbarListener();
+      },
+
+      removeScrollbarListener() {
+        this.$refs.scrollbar.$refs.container.removeEventListener('ps-y-reach-end', this.loadNotifications);
       },
 
       listenForNotification() {
@@ -151,6 +152,17 @@
         } else {
           this.setTitle(this.title);
           this.setIcon('/img/favicon.png');
+        }
+      },
+
+      isOpen(isOpen) {
+        if (isOpen) {
+          this.$refs.scrollbar.$refs.container.addEventListener('ps-y-reach-end', this.loadNotifications);
+        }
+        else {
+          // we must remove listener after closing a list. I don't know why but scrollbar event works even after
+          // hiding the list
+          this.removeScrollbarListener();
         }
       }
     },
