@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Coyote\Microblog;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface;
 use Coyote\Repositories\Contracts\SubscribableInterface;
+use Coyote\Tag;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
@@ -149,14 +150,9 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
      */
     public function getTags()
     {
-        return (new Microblog\Tag())
-                ->select(['name', $this->raw('COUNT(*) AS count')])
-                ->join('tags', 'tags.id', '=', 'tag_id')
-                ->join('microblogs', 'microblogs.id', '=', 'microblog_id')
-                    ->whereNull('microblogs.deleted_at')
-                    ->whereNull('microblogs.parent_id')
-                ->groupBy('name')
-                ->orderBy($this->raw('COUNT(*)'), 'DESC')
+        return (new Tag())
+                ->select(['name', $this->raw('microblogs AS count')])
+                ->orderBy('microblogs', 'DESC')
                 ->limit(30)
                 ->get()
                 ->pluck('count', 'name')

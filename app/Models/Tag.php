@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property MediaInterface $logo
  * @property int $topics
  * @property int $jobs
+ * @property int $microblogs
  */
 class Tag extends Model
 {
