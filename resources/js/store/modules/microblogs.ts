@@ -106,6 +106,10 @@ const mutations = {
 
   setSubscribed(state, microblog: Microblog) {
     microblog.is_subscribed = true;
+  },
+
+  setVoters(state, { microblog, voters }) {
+    Vue.set(microblog, 'voters', voters);
   }
 };
 
@@ -119,7 +123,9 @@ const actions = {
   vote({ commit }, microblog: Microblog) {
     commit('vote', microblog);
 
-    return axios.post(`/Mikroblogi/Vote/${microblog.id}`).catch(() => commit('vote', microblog));
+    return axios.post(`/Mikroblogi/Vote/${microblog.id}`)
+      .then(result => commit('setVoters', { microblog, voters: result.data }))
+      .catch(() => commit('vote', microblog));
   },
 
   delete({ commit }, microblog: Microblog) {

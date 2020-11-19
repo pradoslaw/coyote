@@ -30,6 +30,7 @@ use Illuminate\Database\Query\Expression;
  * @property Tag[] $tags
  * @property User $user
  * @property Microblog[] $children
+ * @property Microblog\Vote[]|\Illuminate\Support\Collection $voters
  */
 class Microblog extends Model
 {

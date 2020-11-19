@@ -24,7 +24,13 @@
           </li>
 
           <li class="list-inline-item">
-            <a @click="checkAuth(vote, comment)" :title="commentVoters" :class="{'text-primary': comment.is_voted, 'text-muted': !comment.is_voted}" href="javascript:">
+            <a
+              @click="checkAuth(vote, comment)"
+              :aria-label="commentVoters"
+              :class="{'text-primary': comment.is_voted, 'text-muted': !comment.is_voted}"
+              href="javascript:"
+              data-balloon-pos="up"
+              data-balloon-break>
               {{ commentLabel }}
             </a>
           </li>
@@ -153,7 +159,7 @@
     }
 
     get commentVoters() {
-      return this.comment.voters!.join(', ');
+      return this.comment.voters?.length ? this.comment.voters.join("\n") : null;
     }
 
     get flags() {

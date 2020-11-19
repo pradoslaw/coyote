@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
+use Coyote\Microblog;
 use Coyote\Notifications\Microblog\VotedNotification;
 use Coyote\Services\UrlBuilder;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -21,12 +22,13 @@ use Coyote\Services\Stream\Objects\Comment as Stream_Comment;
 class VoteController extends Controller
 {
     /**
-     * @param \Coyote\Microblog $microblog
+     * @param Microblog $microblog
      * @param Request $request
-     * @return int
-     * @throws \Exception
+     * @return Microblog\Vote[]|\Illuminate\Support\Collection
+     * @throws AuthenticationException
+     * @throws AuthorizationException
      */
-    public function post($microblog, Request $request)
+    public function post(Microblog $microblog, Request $request)
     {
         if (auth()->guest()) {
             throw new AuthenticationException('Musisz być zalogowany, aby oddać ten głos.');
@@ -75,6 +77,8 @@ class VoteController extends Controller
             $microblog->user->notify(new VotedNotification($vote));
         }
 
-        return $microblog->voters()->count();
+        $microblog->load('voters.user:id,name');
+
+        return $microblog->voters->pluck('user.name');
     }
 }
