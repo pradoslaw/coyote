@@ -3,15 +3,15 @@
 namespace Coyote\Post;
 
 use Coyote\Models\Scopes\ForUser;
+use Coyote\User;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use DB;
 
 /**
  * @property int $post_id
  * @property int $user_id
  * @property int $forum_id
  * @property string $ip
+ * @property User $user
  */
 class Vote extends Model
 {
@@ -40,4 +40,9 @@ class Vote extends Model
      * @var array
      */
     public $timestamps = false;
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -110,7 +110,16 @@
           <div class="post-vote">
             <strong class="vote-count" title="Ocena postu">{{ post.score }}</strong>
 
-            <a v-if="!post.deleted_at" :class="{'on': post.is_voted}" @click="checkAuth(vote, post)" class="vote-up" href="javascript:" title="Kliknij, jeżeli post jest wartościowy (kliknij ponownie, aby cofnąć)">
+            <a
+              v-if="!post.deleted_at"
+              :class="{'on': post.is_voted}"
+              :aria-label="voters"
+              @click="checkAuth(vote, post)"
+              @mouseenter.once="loadVoters(post)"
+              data-balloon-pos="left"
+              class="vote-up"
+              href="javascript:"
+            >
               <i class="far fa-thumbs-up fa-fw"></i>
               <i class="fas fa-thumbs-up fa-fw"></i>
             </a>
@@ -328,7 +337,7 @@
       'vue-button': VueButton,
       'vue-flag': VueFlag
     },
-    methods: mapActions('posts', ['vote', 'accept', 'subscribe', 'loadComments']),
+    methods: mapActions('posts', ['vote', 'accept', 'subscribe', 'loadComments', 'loadVoters']),
     computed: {
       ...mapState('user', {user: state => state}),
       ...mapGetters('user', ['isAuthorized']),
@@ -439,6 +448,10 @@
     restore() {
       this.isCollapsed = false;
       this.$store.dispatch('posts/restore', this.post);
+    }
+
+    get voters() {
+      return this.post.voters && this.post.voters.length ? this.post.voters.join('<br>') : null;
     }
 
     get tags() {

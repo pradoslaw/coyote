@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Notifications\Post\VotedNotification;
+use Coyote\Post;
 use Coyote\Services\Stream\Activities\Vote as Stream_Vote;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Services\Stream\Objects\Post as Stream_Post;
@@ -77,5 +78,12 @@ class VoteController extends BaseController
         });
 
         return $post->score;
+    }
+
+    public function voters(Post $post)
+    {
+        $post->load('votes.user:id,name');
+
+        return $post->votes->pluck('user.name');
     }
 }

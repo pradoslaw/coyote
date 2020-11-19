@@ -149,6 +149,7 @@ export interface Post {
   attachments: PostAttachment[];
   edit_count?: number;
   metadata?: string;
+  voters?: string[];
 }
 
 export interface Tag {

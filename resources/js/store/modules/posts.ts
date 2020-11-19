@@ -116,6 +116,10 @@ const mutations = {
 
   subscribe(state, post: Post) {
     post.is_subscribed = !post.is_subscribed;
+  },
+
+  updateVoters(state, { post, voters }) {
+    Vue.set(post, 'voters', voters);
   }
 }
 
@@ -206,6 +210,12 @@ const actions = {
       commit('init', result.data);
 
       return result;
+    });
+  },
+
+  loadVoters({ commit }, post: Post) {
+    return axios.get(`/Forum/Post/Voters/${post.id}`).then(result => {
+      commit('updateVoters', { post, voters: result.data });
     });
   }
 }

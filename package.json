@@ -16,6 +16,7 @@
         "axios": "^0.18.1",
         "babel-loader": "8.1.0",
         "babel-plugin-prismjs": "1.0.2",
+        "balloon-css": "^1.2.0",
         "bootstrap": "^4.4.1",
         "bootstrap5": "npm:bootstrap@5.0.0-alpha2",
         "clean-webpack-plugin": "^1.0.0",
