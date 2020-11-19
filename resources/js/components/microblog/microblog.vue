@@ -45,7 +45,7 @@
 
           <vue-form v-if="microblog.is_editing" ref="form" :microblog="microblog" class="mt-2 mb-2" @cancel="edit(microblog)" @save="edit(microblog)"></vue-form>
 
-          <a @click="checkAuth(vote, microblog)" :title="microblog.voters.join(', ')" href="javascript:" class="btn btn-thumbs">
+          <a @click="checkAuth(vote, microblog)" :aria-label="microblog.voters.join(', ')" href="javascript:" class="btn btn-thumbs" data-balloon-pos="up">
             <i :class="{'fas text-primary': microblog.is_voted, 'far': !microblog.is_voted}" class="fa-fw fa-thumbs-up"></i>
 
             {{ microblog.votes }} {{ microblog.votes | declination(['głos', 'głosy', 'głosów']) }}

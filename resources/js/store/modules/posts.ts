@@ -217,7 +217,7 @@ const actions = {
 
   loadVoters({ commit }, post: Post) {
     return axios.get(`/Forum/Post/Voters/${post.id}`).then(result => {
-      commit('updateVoters', { post, voters: result.data });
+      commit('setVoters', { post, voters: result.data });
     });
   }
 }
