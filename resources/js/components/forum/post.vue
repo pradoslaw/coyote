@@ -117,6 +117,7 @@
               @click="checkAuth(vote, post)"
               @mouseenter.once="loadVoters(post)"
               data-balloon-pos="left"
+              data-balloon-break
               class="vote-up"
               href="javascript:"
             >
@@ -451,7 +452,7 @@
     }
 
     get voters() {
-      return this.post.voters && this.post.voters.length ? this.post.voters.join('<br>') : null;
+      return this.post.voters?.length ? this.post.voters.join("\n") : null;
     }
 
     get tags() {

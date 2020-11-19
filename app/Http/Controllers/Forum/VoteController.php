@@ -77,7 +77,7 @@ class VoteController extends BaseController
             stream(Stream_Vote::class, (new Stream_Post(['url' => $url]))->map($post), (new Stream_Topic())->map($topic));
         });
 
-        return $post->score;
+        return $this->voters($post);
     }
 
     public function voters(Post $post)

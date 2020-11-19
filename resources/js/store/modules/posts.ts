@@ -118,7 +118,7 @@ const mutations = {
     post.is_subscribed = !post.is_subscribed;
   },
 
-  updateVoters(state, { post, voters }) {
+  setVoters(state, { post, voters }) {
     Vue.set(post, 'voters', voters);
   }
 }
@@ -127,7 +127,9 @@ const actions = {
   vote({ commit }, post: Post) {
     commit('vote', post);
 
-    return axios.post(`/Forum/Post/Vote/${post.id}`).catch(() => commit('vote', post));
+    return axios.post(`/Forum/Post/Vote/${post.id}`)
+      .then(result => commit('setVoters', { post, voters: result.data }))
+      .catch(() => commit('vote', post));
   },
 
   accept({ commit, getters }, post: Post) {
