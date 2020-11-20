@@ -73,7 +73,7 @@ class PostRequest extends FormRequest
                     'max:25',
                     'tag',
                     app(InvalidTag::class),
-                    'tag_creation:50'
+                    'tag_creation:200'
                 ],
 
                 'poll.title'            => self::RULE_POLL_TITLE,
