@@ -11,4 +11,14 @@ services:
       PORT: 3500
       ELASTICSEARCH_HOST: elasticsearch
       INDEX: coyote
+
+
+  websocket:
+    image: 4programmers/websocket:latest
+    tty: true
+    networks:
+      - coyote
+    environment:
+      PORT: 8888
+      REDIS_HOST: redis
       APP_KEY: $APP_KEY
