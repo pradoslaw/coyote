@@ -37,16 +37,16 @@ jobs:
         run: docker-compose exec -T --user=nginx:nginx php php artisan dusk
 
       - uses: actions/upload-artifact@v2
+        if: ${{ failure() }}
         with:
           name: logs
-          if: ${{ failure() }}
           path: storage/logs/
           retention-days: 5
 
       - uses: actions/upload-artifact@v2
+        if: ${{ failure() }}
         with:
           name: screenshots
-          if: ${{ failure() }}
           path: tests/Browser/screenshots/
           retention-days: 5
 
