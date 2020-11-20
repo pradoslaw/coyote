@@ -78,7 +78,7 @@
           return;
         }
 
-        if (this.items.length) {
+        if (this.items?.length) {
           store.commit('prompt/cancel');
 
           this.items = [];

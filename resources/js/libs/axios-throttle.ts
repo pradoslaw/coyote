@@ -8,19 +8,24 @@ function signature(config: AxiosRequestConfig): string {
 
 function removePending(config: AxiosRequestConfig): void {
   const url = signature(config);
+  const index = pending.indexOf(url);
 
-  if (pending.includes(url)) {
-    delete pending[pending.findIndex(item => item === url)];
+  if (index > -1) {
+    pending.splice(index, 1);
   }
 }
 
 axios.interceptors.request.use((config: AxiosRequestConfig) => {
+  // don't mess with request with cancelToken already set.
+  if ('cancelToken' in config) {
+    return config;
+  }
+
   const url = signature(config);
 
   if (pending.includes(url)) {
     throw new axios.Cancel('Throttle detected.');
   }
-
   pending.push(url);
 
   return config;
@@ -33,6 +38,12 @@ axios.interceptors.response.use(
     return response;
   },
   err => {
+    // system worked. request was canceled. unfortunately we err.config is undefined so we don't know
+    // which url cause this. it's better to clear an array
+    if (err instanceof axios.Cancel) {
+      pending.splice(0, pending.length);
+    }
+
     if (err.config) {
       removePending(err.config);
     }
