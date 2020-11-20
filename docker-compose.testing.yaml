@@ -7,9 +7,9 @@ services:
     networks:
       - coyote
     environment:
-      POSTGRES_USER: coyote
+      POSTGRES_USER: $ELASTICSEARCH_INDEX
       PORT: 3500
-      ELASTICSEARCH_HOST: elasticsearch
+      ELASTICSEARCH_HOST: $ELASTICSEARCH_HOST
       INDEX: coyote
 
 
@@ -20,5 +20,5 @@ services:
       - coyote
     environment:
       PORT: 8888
-      REDIS_HOST: redis
+      REDIS_HOST: $REDIS_HOST
       APP_KEY: $APP_KEY
