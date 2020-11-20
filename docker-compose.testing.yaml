@@ -1,0 +1,14 @@
+version: '3.5'
+
+services:
+  es:
+    image: 4programmers/coyote-es:latest
+    tty: true
+    networks:
+      - coyote
+    environment:
+      POSTGRES_USER: coyote
+      PORT: 3500
+      ELASTICSEARCH_HOST: elasticsearch
+      INDEX: coyote
+      APP_KEY: $APP_KEY
