@@ -44,9 +44,9 @@ class VoteControllerTest extends TestCase
             [$microblog->user], VotedNotification::class
         );
 
-        $response->assertSee(1);
+        $response->assertJson([$this->user->name]);
 
         $response = $this->actingAs($this->user)->json('POST', '/Mikroblogi/Vote/' . $microblog->id);
-        $response->assertSee(0);
+        $response->assertJson([]);
     }
 }
