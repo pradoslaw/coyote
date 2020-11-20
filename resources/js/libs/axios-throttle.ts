@@ -3,7 +3,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 const pending: string[] = [];
 
 function signature(config: AxiosRequestConfig): string {
-  return config.method + (config.url as string);
+  return config.method + (config.url as string) + Object.entries(config.params ?? []).join(',');
 }
 
 function removePending(config: AxiosRequestConfig): void {
