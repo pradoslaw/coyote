@@ -39,12 +39,14 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: logs
+          if: ${{ failure() }}
           path: storage/logs/
           retention-days: 5
 
       - uses: actions/upload-artifact@v2
         with:
           name: screenshots
+          if: ${{ failure() }}
           path: tests/Browser/screenshots/
           retention-days: 5
 
