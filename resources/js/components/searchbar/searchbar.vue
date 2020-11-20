@@ -1,6 +1,6 @@
 <template>
   <div v-on-clickaway="blurInput" :class="{'nav-search-mobile': isMobile}" class="nav-search">
-    <div :class="{'active': isActive}" class="search-bar ml-lg-5 mr-lg-5 ml-sm-2 mr-sm-2">
+    <div :class="{'active': isActive}" class="search-bar ml-md-4 mr-md-4">
       <i class="fas fa-search ml-2 mr-2"></i>
 
       <form :action="url" role="search" ref="search" class="flex-grow-1">
