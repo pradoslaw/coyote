@@ -7,10 +7,9 @@ services:
     networks:
       - coyote
     environment:
-      POSTGRES_USER: $ELASTICSEARCH_INDEX
       PORT: 3500
       ELASTICSEARCH_HOST: $ELASTICSEARCH_HOST
-      INDEX: coyote
+      INDEX: $ELASTICSEARCH_INDEX
 
 
   websocket:
