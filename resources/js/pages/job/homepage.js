@@ -1,11 +1,14 @@
 import Vue from 'vue';
-import VueJob from '../../components/job/job.vue';
-import VueJobTiny from '../../components/job/job-tiny.vue';
-import VuePagination from '../../components/pagination.vue';
+import VueJob from '@/js/components/job/job.vue';
+import VueJobTiny from '@/js/components/job/job-tiny.vue';
+import VuePagination from '@/js/components/pagination.vue';
 import axios from 'axios';
-import store from '../../store';
+import store from '@/js/store';
 import PerfectScrollbar from 'perfect-scrollbar';
 import { mapState } from 'vuex';
+import VueNotifications from "vue-notification";
+
+Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 
 new Vue({
   el: '#js-job',
@@ -13,7 +16,8 @@ new Vue({
   components: {
     'vue-job': VueJob,
     'vue-pagination': VuePagination,
-    'vue-job-tiny': VueJobTiny
+    'vue-job-tiny': VueJobTiny,
+    'vue-notification': VueNotifications
   },
   data: window.data,
   store,
@@ -167,9 +171,5 @@ new Vue({
     },
 
     ...mapState('jobs', ['subscriptions'])
-
-    // subscribedStore() {
-    //   return store.state.subscriptions.subscribed;
-    // }
   }
 });
