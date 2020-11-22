@@ -48,7 +48,7 @@
 
           <ul class="list-inline job-options mt-2">
             <li class="list-inline-item">
-              <a @click="subscribe()" href="javascript:"><i :class="{'fas fa-heart on': isSubscribed, 'far fa-heart': !isSubscribed}" class="fa-fw"></i>
+              <a @click="subscribe()" href="javascript:"><i :class="{'fas fa-heart on': isSubscribed(job), 'far fa-heart': !isSubscribed(job)}" class="fa-fw"></i>
                 Ulubiona</a>
             </li>
             <li class="list-inline-item">
@@ -71,8 +71,8 @@
   import VueSalary from './salary.vue';
   import VueLocation from './location.vue';
   import declination from '../../libs/declination';
-
   import VueModal from '../modal.vue';
+  import { mapGetters } from 'vuex';
 
   export default {
     props: {
@@ -95,13 +95,8 @@
       }
     },
     methods: {
-      subscribe: function () {
-        this.$store.dispatch('subscriptions/toggle', this.job).catch(() => {
-          this.$refs.error.open();
-
-          // change button status in case of any error
-          this.$store.commit('subscriptions/pop', this.$store.getters['subscriptions/exists'](this.job));
-        });
+      subscribe() {
+        this.$store.dispatch('jobs/subscribe', this.job);
       }
     },
     computed: {
@@ -113,9 +108,7 @@
         return this.job.tags.slice(0, 5);
       },
 
-      isSubscribed() {
-        return this.$store.getters['subscriptions/exists'](this.job) !== -1;
-      }
+      ...mapGetters('jobs', ['isSubscribed'])
     }
   }
 </script>

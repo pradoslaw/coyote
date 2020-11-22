@@ -6,7 +6,12 @@ const state = {
   data: [],
   links: [],
   meta: [],
-  form: {}
+  form: {},
+  subscriptions: []
+}
+
+const getters = {
+  isSubscribed: state => (job: Job) => state.subscriptions.findIndex(item => item.id === job.id) > -1
 }
 
 const mutations = {
@@ -58,12 +63,28 @@ const mutations = {
 
   REMOVE_BENEFIT(state, benefit) {
     state.form.firm.benefits.splice(state.form.firm.benefits.indexOf(benefit), 1);
+  },
+
+  SUBSCRIBE(state, job: Job) {
+    state.subscriptions.push(job);
+  },
+
+  UNSUBSCRIBE(state, job: Job) {
+    const index = state.subscriptions.findIndex(item => item.id === job.id);
+
+    state.subscriptions.splice(index, 1);
   }
 }
 
 const actions = {
   save({ state }) {
     return axios.post(`/Praca/Submit/${state.form.id ?? ''}`, state.form);
+  },
+
+  subscribe({ commit, getters }, job: Job) {
+    getters.isSubscribed(job) ? commit('UNSUBSCRIBE', job) : commit('SUBSCRIBE', job);
+
+    return axios.post(`/Praca/Subscribe/${job.id}`);
   }
 }
 
@@ -71,6 +92,7 @@ const actions = {
 export default {
   namespaced: true,
   state,
+  getters,
   mutations,
   actions
 };

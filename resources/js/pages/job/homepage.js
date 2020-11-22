@@ -5,6 +5,7 @@ import VuePagination from '../../components/pagination.vue';
 import axios from 'axios';
 import store from '../../store';
 import PerfectScrollbar from 'perfect-scrollbar';
+import { mapState } from 'vuex';
 
 new Vue({
   el: '#js-job',
@@ -17,7 +18,7 @@ new Vue({
   data: window.data,
   store,
   created() {
-    store.state.subscriptions.subscribed = window.data.subscribed;
+    store.state.jobs.subscriptions = window.data.subscribed;
   },
   mounted() {
     window.onpopstate = e => {
@@ -165,8 +166,10 @@ new Vue({
       }
     },
 
-    subscribedStore() {
-      return store.state.subscriptions.subscribed;
-    }
+    ...mapState('jobs', ['subscriptions'])
+
+    // subscribedStore() {
+    //   return store.state.subscriptions.subscribed;
+    // }
   }
 });

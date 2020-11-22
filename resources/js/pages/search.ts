@@ -7,13 +7,10 @@ import VueDropdownMenu from '../components/dropdown-menu.vue';
 import PerfectScrollbar from '../components/perfect-scrollbar';
 import store from "../store";
 import { Hit, Hits, Sort, SearchOptions } from "../types/hit";
+import { Models as ModelsDict } from "../types/search";
 import {Model, User} from "../types/models";
 import axios from 'axios';
 import { mixin as clickaway } from 'vue-clickaway';
-
-type ModelType = {
-  [key in Model]: string;
-};
 
 interface ForumItem {
   id: number;
@@ -24,15 +21,6 @@ interface ForumItem {
 enum SortOptions {
   'score' = 'Trafność',
   'date' = 'Data'
-}
-
-// @todo duplikat z searchbar.vue
-const ModelOptions: ModelType = {
-  [Model.Topic]: 'Wątki na forum',
-  [Model.Job]: 'Oferty pracy',
-  [Model.Microblog]: 'Mikroblogi',
-  [Model.User]: 'Użytkownicy',
-  [Model.Wiki]: 'Artykuły'
 }
 
 declare global {
@@ -127,7 +115,7 @@ new Vue({
       sort: 'score'
     },
     sortOptions: SortOptions,
-    modelOptions: ModelOptions,
+    modelOptions: ModelsDict,
     user: window.user,
     isDropdownVisible: false
   },
