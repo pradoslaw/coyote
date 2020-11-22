@@ -27,9 +27,11 @@ class CommentRequest extends FormRequest
         return [
             'text' => 'required|string',
             'email' => [
+                'bail',
                 Rule::requiredIf(function () {
                     return $this->user() === null;
                 }),
+                'nullable',
                 'email'
             ],
             'job_id' => [

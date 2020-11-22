@@ -3,15 +3,20 @@ import VueComment from '../../components/job/comment.vue';
 import VueModal from '../../components/modal.vue';
 import VueAutosize from '../../plugins/autosize';
 import VuePrompt from '../../components/forms/prompt.vue';
+import VueButton from '../../components/forms/button.vue';
 import axios from 'axios';
 import store from '../../store';
 import VueMap from '../../components/google-maps/map.vue';
 import VueMarker from '../../components/google-maps/marker.vue';
 import VueNotifications from "vue-notification";
 import VueFlag from '../../components/flags/flag.vue';
+import { default as axiosErrorHandler } from '../../libs/axios-error-handler';
+import { mapState } from 'vuex';
 
 Vue.use(VueAutosize);
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
+
+axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 
 new Vue({
   el: '#comments',
@@ -19,39 +24,30 @@ new Vue({
   components: {
     'vue-comment': VueComment,
     'vue-modal': VueModal,
-    'vue-prompt': VuePrompt
+    'vue-prompt': VuePrompt,
+    'vue-button': VueButton
   },
   data: {
-    defaultText: '',
-    defaultEmail: '',
-    error: '',
-    textFocused: false
+    comment: {
+      text: '',
+      email: ''
+    },
+    textFocused: false,
+    isSubmitting: false
   },
   store,
-  created: function () {
+  created() {
     // fill vuex with data passed from controller to view
-    store.commit('comments/init', window.data.comments);
+    store.commit('jobs/SET_COMMENTS', window.comments);
   },
   methods: {
-    submitForm() {
-      axios.post(this.$refs.submitForm.action, new FormData(this.$refs.submitForm))
-        .then(response => {
-          store.commit('comments/add', response.data);
-          this.defaultText = this.defaultEmail = '';
-        })
-        .catch(error => {
-          let errors = error.response.data.errors;
-
-          this.error = errors[Object.keys(errors)[0]][0];
-          this.$refs.error.open();
-        });
+    saveComment() {
+      store
+        .dispatch('jobs/saveComment', Object.assign(this.comment, {'job_id': window.job.id}))
+        .then(() => this.comment = { text: '', email: '' });
     }
   },
-  computed: {
-    comments() {
-      return store.state.comments.comments;
-    }
-  }
+  computed: mapState('jobs', ['comments'])
 });
 
 new Vue({

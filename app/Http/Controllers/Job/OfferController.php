@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Job;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\FlagFactory;
+use Coyote\Http\Resources\CommentCollection;
 use Coyote\Http\Resources\CommentResource;
 use Coyote\Http\Resources\FlagResource;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
@@ -62,8 +63,8 @@ class OfferController extends Controller
         // search related offers
         $mlt = $this->job->search(new MoreLikeThisBuilder($job))->getSource();
 
-        CommentResource::$job = $job;
-        $comments = CommentResource::collection($job->commentsWithChildren()->get());
+        $comments = new CommentCollection($job->commentsWithChildren);
+        $comments->job = $job;
 
         return $this->view('job.offer', [
             'rates_list'        => Job::getRatesList(),

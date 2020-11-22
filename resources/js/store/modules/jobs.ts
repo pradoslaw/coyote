@@ -7,7 +7,8 @@ const state = {
   links: [],
   meta: [],
   form: {},
-  subscriptions: []
+  subscriptions: [],
+  comments: {}
 }
 
 const getters = {
@@ -73,7 +74,29 @@ const mutations = {
     const index = state.subscriptions.findIndex(item => item.id === job.id);
 
     state.subscriptions.splice(index, 1);
-  }
+  },
+
+  SET_COMMENTS(state, comments) {
+    state.comments = comments;
+  },
+
+  UPDATE_COMMENT(state, comment) {
+    if (comment.parent_id) {
+      Vue.set(state.comments[comment.parent_id].children, comment.id, comment);
+    } else {
+      Vue.set(state.comments, comment.id, comment);
+    }
+  },
+
+  DELETE_COMMENT(state, comment) {
+    if (comment.parent_id) {
+      let parent = state.comments[comment.parent_id];
+
+      parent.children.splice(comment.id, 1);
+    } else {
+      state.comments.splice(comment.id, 1);
+    }
+  },
 }
 
 const actions = {
@@ -85,6 +108,11 @@ const actions = {
     getters.isSubscribed(job) ? commit('UNSUBSCRIBE', job) : commit('SUBSCRIBE', job);
 
     return axios.post(`/Praca/Subscribe/${job.id}`);
+  },
+
+  saveComment({ commit }, comment) {
+    return axios.post(`/Praca/Comment/${comment.id || ''}`, comment)
+      .then(result => commit('UPDATE_COMMENT', result.data))
   }
 }
 

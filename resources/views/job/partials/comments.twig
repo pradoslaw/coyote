@@ -11,18 +11,17 @@
           </div>
 
           <div class="media-body">
-            {{ form_open({'v-on:submit.prevent': 'submitForm', url: route('job.comment', {job: job.id}), method: 'post', ref: 'submitForm'}) }}
             <div class="form-group">
-              <vue-prompt source="{{ route('user.prompt') }}">
+              <vue-prompt>
                 <textarea
                   v-autosize
                   placeholder="Zadaj pytanie"
                   name="text"
                   class="form-control"
                   ref="textarea"
-                  v-model="defaultText"
+                  v-model="comment.text"
                   @focus.once="textFocused = true"
-                  @keydown.ctrl.enter="submitForm"
+                  @keydown.ctrl.enter="saveComment"
                   rows="1"
                   tabindex="1"
                 ></textarea>
@@ -32,22 +31,21 @@
             <div class="row" v-show="textFocused">
               <div class="col-sm-6">
                 {% if user('id') == null %}
-                  <input v-model="defaultEmail" type="text" name="email" class="form-control" placeholder="Adres e-mail" tabindex="2">
+                  <input v-model="comment.email" type="text" name="email" class="form-control" placeholder="Adres e-mail" tabindex="2">
                 {% endif %}
               </div>
 
               <div class="col-sm-6">
-                <button type="submit" class="btn btn-primary btn-sm float-right" tabindex="3" title="Ctrl+Enter aby opublikować">Zapisz</button>
+                <vue-button :disabled="isSubmitting" @click.native="saveComment" class="btn btn-primary btn-sm float-right" tabindex="3" title="Ctrl+Enter aby opublikować">Zapisz</vue-button>
               </div>
             </div>
-            {{ form_close() }}
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div v-if="comments.length > 0" class="card card-default">
+  <div v-if="Object.keys(comments).length > 0" class="card card-default">
     <div class="card-body">
       <vue-comment
         v-for="comment in comments"
@@ -57,9 +55,7 @@
     </div>
   </div>
 
-  <vue-modal ref="error">
-    ${ error }
-  </vue-modal>
+  <vue-notifications position="bottom right" />
 </div>
 
 

@@ -3,7 +3,9 @@
 namespace Coyote\Http\Middleware;
 
 use Closure;
+use Coyote\Job\Comment;
 use Coyote\Repositories\Contracts\JobRepositoryInterface;
+use Coyote\Repositories\Contracts\RepositoryInterface;
 use Coyote\Repositories\Contracts\TagRepositoryInterface;
 use Illuminate\Container\Container as App;
 use Coyote\Repositories\Contracts\BlockRepositoryInterface;
@@ -29,7 +31,8 @@ class DefaultBindings
         'group' => GroupRepositoryInterface::class,
         'block' => BlockRepositoryInterface::class,
         'job' => JobRepositoryInterface::class,
-        'tag' => TagRepositoryInterface::class
+        'tag' => TagRepositoryInterface::class,
+        'comment' => Comment::class
     ];
 
     /**
@@ -61,7 +64,12 @@ class DefaultBindings
 
         foreach ($optional as $parameter) {
             if (isset($this->default[$parameter]) && null === $route->parameter($parameter)) {
-                $model = $this->app->make($this->default[$parameter])->makeModel();
+                $model = $this->app->make($this->default[$parameter]);
+
+                if ($model instanceof RepositoryInterface) {
+                    $model = $model->makeModel();
+                }
+
                 $route->setParameter($parameter, $model);
             }
         }

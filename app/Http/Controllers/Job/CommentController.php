@@ -25,11 +25,8 @@ class CommentController extends Controller
      * @param int|null $id
      * @return CommentResource
      */
-    public function save(CommentRequest $request, Dispatcher $dispatcher, Job $job, int $id = null)
+    public function save(CommentRequest $request, Dispatcher $dispatcher, Job\Comment $comment = null)
     {
-        /** @var Job\Comment $comment */
-        $comment = $job->comments()->findOrNew($id);
-
         if ($comment->exists) {
             $this->checkAbility();
         }
@@ -44,23 +41,24 @@ class CommentController extends Controller
             $actor->displayName = $request->input('email');
         }
 
-        $this->transaction(function () use ($comment, $job, $dispatcher, $actor) {
+        $this->transaction(function () use ($comment, $dispatcher, $actor) {
             $comment->save();
 
             stream(
                 $comment->wasRecentlyCreated ? new Stream_Create($actor) : new Stream_Update($actor),
-                (new Stream_Comment())->map($job, $comment),
-                (new Stream_Job())->map($job)
+                (new Stream_Comment())->map($comment->job, $comment),
+                (new Stream_Job())->map($comment->job)
             );
         });
 
         if ($comment->wasRecentlyCreated) {
-            $subscribers = $job
+            $subscribers = $comment
+                ->job
                 ->subscribers()
                 ->with('user')
                 ->get()
                 ->pluck('user') // get all job's subscribers
-                ->push($job->user) // push job's author
+                ->push($comment->job->user) // push job's author
                 ->exceptUser($this->auth); // exclude current logged user
 
             $dispatcher->send($subscribers, new CommentedNotification($comment));
@@ -71,7 +69,6 @@ class CommentController extends Controller
         }
 
         CommentResource::withoutWrapping();
-        CommentResource::$job = $job;
 
         return new CommentResource($comment->load('user'));
     }

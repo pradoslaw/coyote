@@ -22,11 +22,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class CommentResource extends JsonResource
 {
     /**
-     * @var Job
-     */
-    public static $job;
-
-    /**
      * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -37,45 +32,26 @@ class CommentResource extends JsonResource
         return array_merge(
             parent::toArray($request),
             [
-                'timestamp'     => $this->created_at->timestamp,
-                'created_at'    => format_date($this->created_at),
-                'user'          => $this->user(),
+                'created_at'    => $this->created_at->toIso8601String(),
                 'editable'      => $request->user() ? $this->user_id == $request->user()->id || $request->user()->can('job-update') : false,
-                'route'         => [
-                    'edit'      => route('job.comment', [$this->job_id, $this->id]),
-                    'delete'    => route('job.comment.delete', [$this->job_id, $this->id]),
-                    'reply'     => route('job.comment', [$this->job_id]),
-                    'flag'      => route('flag')
-                ],
-                'children'      => CommentResource::collection($this->children),
-                'is_author'     => $request->user() ? $this->user_id == CommentResource::$job->user_id : false,
-                'flag'          => [
-                    'url'       => UrlBuilder::jobComment(static::$job, $this->id),
-                    'metadata'  => encrypt(['job_id' => $this->id, 'permission' => 'job-delete'])
-                ]
+                'children'      => CommentResource::collection($this->children)->keyBy('id'),
+                'is_author'     => $request->user() ? $this->user_id == $this->job->user_id : false,
+                'url'           => UrlBuilder::jobComment($this->job, $this->id),
+                'metadata'      => encrypt(['job_id' => $this->id, 'permission' => 'job-delete']),
+
+                'user'          => new UserResource($this->user ?: (new User)->forceFill($this->anonymous()))
             ]
         );
     }
 
     /**
      * @return array
-     * @throws \Exception
      */
-    private function user(): array
+    private function anonymous(): array
     {
-        $avatar = cdn('img/avatar.png');
-
-        if ($this->user_id) {
-            return [
-                'name' => $this->user->name,
-                'profile' => (string) route('profile', [$this->user_id]),
-                'photo' => $this->user->photo->getFilename() ? (string) $this->user->photo->url() : $avatar
-            ];
-        }
-
         return [
             'name' => $this->hideEmail($this->email),
-            'photo' => $avatar
+            'photo' => null
         ];
     }
 
