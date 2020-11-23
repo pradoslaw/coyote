@@ -56,6 +56,7 @@ use Illuminate\Notifications\RoutesNotifications;
  * @property bool $is_on_top
  * @property Plan $plan
  * @property Comment[] $comments
+ * @property Comment[] $commentsWithChildren
  */
 class Job extends Model
 {
@@ -112,8 +113,6 @@ class Job extends Model
         'enable_apply',
         'seniority',
         'plan_id',
-//        'tags',
-//        'features',
         'locations',
 
         'currency',

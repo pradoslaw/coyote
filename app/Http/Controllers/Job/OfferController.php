@@ -54,11 +54,6 @@ class OfferController extends Controller
         }
 
         $job->addReferer(url()->previous());
-        $flags = [];
-
-        if ($this->getGateFactory()->allows('job-delete')) {
-            $flags = FlagResource::collection($this->getFlagFactory()->findAllByModel(Job::class))->toArray($this->request);
-        }
 
         // search related offers
         $mlt = $this->job->search(new MoreLikeThisBuilder($job))->getSource();
@@ -78,9 +73,10 @@ class OfferController extends Controller
             // tags along with grouped category
             'tags'              => $job->tags()->orderBy('priority', 'DESC')->with('category')->get()->groupCategory(),
             'comments'          => $comments->toArray($this->request),
-            'applications'      => $this->applications($job)
+            'applications'      => $this->applications($job),
+            'flags'             => $this->flags()
         ])->with(
-            compact('job', 'flags', 'mlt')
+            compact('job', 'mlt')
         );
     }
 
@@ -95,5 +91,20 @@ class OfferController extends Controller
         }
 
         return $job->applications()->get();
+    }
+
+    private function flags()
+    {
+        if (!$this->getGateFactory()->allows('job-delete')) {
+            return [];
+        }
+
+        $repository = $this->getFlagFactory();
+
+        $flags = $repository->findAllByModel(Job::class);
+        $flags = $flags->merge($repository->findAllByModel(Job\Comment::class));
+//        $flags = array_merge($flags, $repository->findAllByModel(Job\Comment::class));
+
+        return FlagResource::collection($flags)->toArray($this->request);
     }
 }

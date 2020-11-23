@@ -19,6 +19,22 @@ Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 
 new Vue({
+  el: '#js-flags',
+  delimiters: ['${', '}'],
+  data: { job: window.job },
+  components: { 'vue-flag': VueFlag },
+  store,
+  created() {
+    store.commit('flags/init', window.flags);
+  },
+  computed: {
+    flags() {
+      return store.getters['flags/filter'](this.job.id);
+    }
+  }
+});
+
+new Vue({
   el: '#comments',
   delimiters: ['${', '}'],
   components: {
@@ -62,18 +78,3 @@ new Vue({
   }
 });
 
-new Vue({
-  el: '#js-flags',
-  delimiters: ['${', '}'],
-  data: { job: window.job },
-  components: { 'vue-flag': VueFlag },
-  store,
-  created() {
-    store.commit('flags/init', window.flags);
-  },
-  computed: {
-    flags() {
-      return store.getters['flags/filter'](this.job.id);
-    }
-  }
-});

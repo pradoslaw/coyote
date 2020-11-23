@@ -25,6 +25,8 @@
 
         <h6><a :href="'#comment-' + comment.id" class="text-muted"><vue-timeago :datetime="comment.created_at"></vue-timeago></a></h6>
 
+        <vue-flag v-for="flag in flags" :key="flag.id" :flag="flag"></vue-flag>
+
         <div class="mt-2" v-if="!isEditing" v-html="comment.html">
           {{ comment.html }}
         </div>
@@ -116,6 +118,7 @@
   import VueAvatar from '../avatar.vue';
   import VueUserName from '../user-name.vue';
   import VueButton from '../forms/button.vue';
+  import VueFlag from '../flags/flag.vue';
   import { default as mixins } from '../mixins/user';
   import { mapGetters } from 'vuex';
 
@@ -126,7 +129,8 @@
       'vue-modal': VueModal,
       'vue-avatar': VueAvatar,
       'vue-username': VueUserName,
-      'vue-button': VueButton
+      'vue-button': VueButton,
+      'vue-flag': VueFlag
     },
     mixins: [ mixins ],
     data() {
@@ -182,17 +186,15 @@
       },
 
       scrollIntoView(comment) {
-        this.$nextTick(function () {
-          window.location.hash = `comment-${comment.id}`;
-          // el.scrollIntoView(true);
-          //
-          // window.scrollBy(0, -100);
-        });
+        this.$nextTick(() => window.location.hash = `comment-${comment.id}`);
       }
     },
     computed: {
+      ...mapGetters('user', ['isAuthorized']),
 
-      ...mapGetters('user', ['isAuthorized'])
+      flags() {
+        return this.$store.getters['flags/filter'](this.comment.id);
+      }
     }
   }
 </script>
