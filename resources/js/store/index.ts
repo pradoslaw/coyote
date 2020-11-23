@@ -29,8 +29,5 @@ export default new Vuex.Store({
     poll,
     flags,
     jobs
-  },
-  state: {
-
   }
 });

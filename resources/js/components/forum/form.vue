@@ -301,10 +301,11 @@
       this.$watch('post.text', newValue => this.$saveDraft(this.draftKey, newValue));
     }
 
-    save() {
+    async save() {
       this.isProcessing = true;
       this.errors = {};
-      this.lastPage();
+
+      await this.lastPage();
 
       store.dispatch('posts/save', this.post)
         .then(result => {
@@ -364,11 +365,11 @@
       store.commit('topics/toggleTag', { topic: this.topic, tag });
     }
 
-    lastPage() {
+    async lastPage() {
       if (this.currentPage < this.totalPages) {
         history.pushState({ page: this.totalPages }, '', `?page=${this.totalPages}`);
 
-        store.dispatch('posts/changePage', this.totalPages);
+        await store.dispatch('posts/changePage', this.totalPages);
       }
     }
 
