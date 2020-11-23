@@ -5,7 +5,6 @@ namespace Coyote\Http\Controllers\Job;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\FlagFactory;
 use Coyote\Http\Resources\CommentCollection;
-use Coyote\Http\Resources\CommentResource;
 use Coyote\Http\Resources\FlagResource;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Firm;

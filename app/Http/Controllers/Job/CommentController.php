@@ -21,8 +21,7 @@ class CommentController extends Controller
     /**
      * @param CommentRequest $request
      * @param Dispatcher $dispatcher
-     * @param Job $job
-     * @param int|null $id
+     * @param Job\Comment|null $comment
      * @return CommentResource
      */
     public function save(CommentRequest $request, Dispatcher $dispatcher, Job\Comment $comment = null)
@@ -77,9 +76,7 @@ class CommentController extends Controller
     }
 
     /**
-     * @param Job $job
-     * @param int $id
-     * @throws \Exception
+     * @param Job\Comment $comment
      */
     public function delete(Job\Comment $comment)
     {
