@@ -217,15 +217,11 @@ class Microblog extends Model
 
     /**
      * @param  \Illuminate\Database\Query\Builder $query
-     * @param int|null $userId
+     * @param int $userId
      * @return \Illuminate\Database\Query\Builder|$this
      */
-    public function scopeIncludeIsSubscribed(Builder $builder, ?int $userId): Builder
+    public function scopeIncludeIsSubscribed(Builder $builder, int $userId): Builder
     {
-        if (empty($userId)) {
-            return $builder;
-        }
-
         $this->addSelectIfNull($builder);
 
         return $builder
@@ -235,12 +231,8 @@ class Microblog extends Model
             });
     }
 
-    public function scopeIncludeIsVoted(Builder $builder, ?int $userId): Builder
+    public function scopeIncludeIsVoted(Builder $builder, int $userId): Builder
     {
-        if (empty($userId)) {
-            return $builder;
-        }
-
         $this->addSelectIfNull($builder);
 
         return $builder
@@ -248,6 +240,15 @@ class Microblog extends Model
             ->leftJoin('microblog_votes AS mv', function ($join) use ($userId) {
                 $join->on('mv.microblog_id', '=', 'microblogs.id')->where('mv.user_id', '=', $userId);
             });
+    }
+
+    public function scopeExclude(Builder $builder, array $exclude): Builder
+    {
+        if (empty($exclude)) {
+            return $builder;
+        }
+
+        return $builder->whereNotIn('microblogs.user_id', $exclude);
     }
 
     public function scopeWithVoters(Builder $builder): Builder

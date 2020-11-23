@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Coyote\Notifications\ResetPasswordNotification;
 use Coyote\Services\Media\Photo;
 use Coyote\Services\Media\Factory as MediaFactory;
+use Coyote\User\Relation;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -65,6 +66,7 @@ use Ramsey\Uuid\Uuid;
  * @property \Coyote\Notification\Setting $notificationSettings[]
  * @property Group[]|\Illuminate\Support\Collection $groups
  * @property Group $group
+ * @property Relation $relations
  * @property bool $is_sponsor
  */
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
@@ -247,6 +249,14 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function notifications()
     {
         return $this->hasMany(Notification::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function relations()
+    {
+        return $this->hasMany(Relation::class);
     }
 
     /**

@@ -166,7 +166,9 @@ class CommentController extends BaseController
      */
     public function show(int $id)
     {
-        $this->microblog->pushCriteria(new LoadUserScope($this->userId));
+        if ($this->userId) {
+            $this->microblog->pushCriteria(new LoadUserScope($this->auth));
+        }
 
         $comments = $this->microblog->getComments($id);
 

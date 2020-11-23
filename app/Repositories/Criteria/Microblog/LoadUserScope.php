@@ -4,22 +4,18 @@ namespace Coyote\Repositories\Criteria\Microblog;
 
 use Coyote\Repositories\Criteria\Criteria;
 use Coyote\Repositories\Contracts\RepositoryInterface as Repository;
+use Coyote\User;
 use Illuminate\Database\Eloquent\Model;
 
 class LoadUserScope extends Criteria
 {
-    /**
-     * @var int|null
-     */
-    private $userId;
+    private int $userId;
+    private array $exclude = [];
 
-    /**
-     * LoadComments constructor.
-     * @param int|null $userId
-     */
-    public function __construct(int $userId = null)
+    public function __construct(User $user)
     {
-        $this->userId = $userId;
+        $this->userId = $user->id;
+        $this->exclude = $user->relations()->blocked()->pluck('related_user_id')->toArray();
     }
 
     /**
@@ -31,7 +27,8 @@ class LoadUserScope extends Criteria
     {
         $model = $model
             ->includeIsVoted($this->userId)
-            ->includeIsSubscribed($this->userId);
+            ->includeIsSubscribed($this->userId)
+            ->exclude($this->exclude);
 
         return $model;
     }

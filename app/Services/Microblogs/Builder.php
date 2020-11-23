@@ -185,7 +185,7 @@ class Builder
     private function loadUserScope()
     {
         if (auth()->check()) {
-            $this->microblog->pushCriteria(new LoadUserScope(auth()->user()->id));
+            $this->microblog->pushCriteria(new LoadUserScope(auth()->user()));
         }
     }
 }
