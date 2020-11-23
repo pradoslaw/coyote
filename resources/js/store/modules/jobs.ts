@@ -82,7 +82,13 @@ const mutations = {
 
   UPDATE_COMMENT(state, comment) {
     if (comment.parent_id) {
-      Vue.set(state.comments[comment.parent_id].children, comment.id, comment);
+      const parent = state.comments[comment.parent_id];
+
+      if (Array.isArray(parent.children)) {
+        Vue.set(parent, "children", {});
+      }
+
+      Vue.set(parent.children, comment.id, comment);
     } else {
       Vue.set(state.comments, comment.id, comment);
     }
@@ -92,9 +98,9 @@ const mutations = {
     if (comment.parent_id) {
       let parent = state.comments[comment.parent_id];
 
-      parent.children.splice(comment.id, 1);
+      Vue.delete(parent.children, comment.id);
     } else {
-      state.comments.splice(comment.id, 1);
+      Vue.delete(state.comments, comment.id);
     }
   },
 }
@@ -112,10 +118,17 @@ const actions = {
 
   saveComment({ commit }, comment) {
     return axios.post(`/Praca/Comment/${comment.id || ''}`, comment)
-      .then(result => commit('UPDATE_COMMENT', result.data))
+      .then(result => {
+        commit('UPDATE_COMMENT', result.data);
+
+        return result;
+      });
+  },
+
+  deleteComment({ commit }, comment) {
+    return axios.delete(`/Praca/Comment/${comment.id}`).then(() => commit('DELETE_COMMENT', comment));
   }
 }
-
 
 export default {
   namespaced: true,

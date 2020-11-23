@@ -42,9 +42,12 @@ new Vue({
   },
   methods: {
     saveComment() {
+      this.isSubmitting = true;
+
       store
         .dispatch('jobs/saveComment', Object.assign(this.comment, {'job_id': window.job.id}))
-        .then(() => this.comment = { text: '', email: '' });
+        .then(() => this.comment = { text: '', email: '' })
+        .finally(() => this.isSubmitting = false);
     }
   },
   computed: mapState('jobs', ['comments'])

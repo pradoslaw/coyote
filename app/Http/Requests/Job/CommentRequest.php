@@ -35,11 +35,12 @@ class CommentRequest extends FormRequest
                 'email'
             ],
             'job_id' => [
+                'sometimes',
                 'int',
                 Rule::exists('jobs', 'id')
             ],
             'parent_id' => [
-                'sometimes',
+                'nullable',
                 'int',
                 Rule::exists('job_comments', 'id')->whereNull('parent_id')
             ]

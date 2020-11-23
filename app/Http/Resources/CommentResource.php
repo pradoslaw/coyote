@@ -3,7 +3,6 @@
 namespace Coyote\Http\Resources;
 
 use Carbon\Carbon;
-use Coyote\Job;
 use Coyote\Job\Comment;
 use Coyote\Services\UrlBuilder;
 use Coyote\User;

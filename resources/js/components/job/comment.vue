@@ -30,22 +30,24 @@
         </div>
 
         <div class="mt-2" v-if="isEditing">
-          <div class="form-group row">
+          <div class="form-group">
             <textarea
               v-autosize
               name="text"
               class="form-control"
               ref="submitText"
               v-model="comment.text"
-              @keydown.ctrl.enter="updateForm"
+              @keydown.ctrl.enter="saveComment(comment)"
               rows="1"
               tabindex="1"
             ></textarea>
           </div>
 
-          <div class="form-group row">
-            <vue-button :disabled="isSubmitting" class="btn btn-primary btn-sm float-right ml-1">Zapisz</vue-button>
-            <button type="button" class="btn btn-danger btn-sm float-right" @click="isEditing = false">Anuluj</button>
+          <div class="row">
+            <div class="form-group col-12">
+              <vue-button :disabled="isSubmitting" @click.native="saveComment(comment)" class="btn btn-primary btn-sm float-right ml-1">Zapisz</vue-button>
+              <button type="button" class="btn btn-danger btn-sm float-right" @click="isEditing = false">Anuluj</button>
+            </div>
           </div>
 
           <div class="clearfix"></div>
@@ -65,10 +67,10 @@
         <div class="form-group">
           <textarea
             v-autosize
-            name="text"
+            v-model="replyForm.text"
             class="form-control"
             ref="replyText"
-            @keydown.ctrl.enter="replyForm"
+            @keydown.ctrl.enter="saveComment(replyForm)"
             rows="1"
             tabindex="1"
           ></textarea>
@@ -76,13 +78,13 @@
 
         <div class="row">
           <div class="form-group col-sm-6">
-            <input v-if="!isAuthorized" type="text" name="email" class="form-control" placeholder="Adres e-mail" tabindex="2">
+            <input v-if="!isAuthorized" type="text" v-model="replyForm.email" class="form-control" placeholder="Adres e-mail" tabindex="2">
           </div>
 
           <div class="form-group col-sm-6">
-            <button type="submit" class="btn btn-primary btn-sm float-right ml-1" title="Ctrl+Enter aby opublikować">
+            <vue-button @click.native="saveComment(replyForm)" :disabled="isSubmitting" type="submit" class="btn btn-primary btn-sm float-right ml-1" title="Ctrl+Enter aby opublikować">
               Zapisz
-            </button>
+            </vue-button>
             <button type="button" class="btn btn-danger btn-sm float-right" @click="isReplying = false">Anuluj
             </button>
           </div>
@@ -110,7 +112,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
   import VueModal from '../modal.vue';
   import VueAvatar from '../avatar.vue';
   import VueUserName from '../user-name.vue';
@@ -132,7 +133,12 @@
       return {
         isEditing: false,
         isReplying: false,
-        isSubmitting: false
+        isSubmitting: false,
+        replyForm: {
+          text: '',
+          email: '',
+          parent_id: this.comment.parent_id ? this.comment.parent_id : this.comment.id
+        }
       }
     },
     methods: {
@@ -158,46 +164,33 @@
         } else {
           this.$refs.confirm.close();
 
-          axios.delete(this.comment.route.delete).then(() => {
-            this.$store.commit('comments/remove', this.comment);
-          });
+          this.$store.dispatch('jobs/deleteComment', this.comment);
         }
       },
 
-      updateForm() {
-        axios.post(this.$refs.updateForm.action, new FormData(this.$refs.updateForm))
-          .then(response => {
-            this.$store.commit('comments/update', response.data);
-            this.isEditing = false;
-          })
-          .catch(function (error) {
-            this._showError(error);
-          });
-      },
+      saveComment(comment) {
+        this.isSubmitting = true;
 
-      replyForm() {
-        axios.post(this.$refs.replyForm.action, new FormData(this.$refs.replyForm))
+        this.$store.dispatch('jobs/saveComment', comment)
           .then(response => {
-            this.$store.commit('comments/reply', response.data);
+            this.isEditing = false;
             this.isReplying = false;
 
             this.scrollIntoView(response.data);
           })
+          .finally(() => this.isSubmitting = false);
       },
 
-      scrollIntoView(data) {
+      scrollIntoView(comment) {
         this.$nextTick(function () {
-          let el = document.getElementById(`comment-${data.id}`);
-          el.scrollIntoView(true);
-
-          window.scrollBy(0, -100);
+          window.location.hash = `comment-${comment.id}`;
+          // el.scrollIntoView(true);
+          //
+          // window.scrollBy(0, -100);
         });
       }
     },
     computed: {
-      parentId() {
-        return this.comment.parent_id ? this.comment.parent_id : this.comment.id;
-      },
 
       ...mapGetters('user', ['isAuthorized'])
     }

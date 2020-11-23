@@ -31,10 +31,13 @@ class CommentController extends Controller
             $this->checkAbility();
         }
 
-        $comment->fill($request->all())->creating(function ($model) {
+        $comment->fill($request->all())->creating(function (Job\Comment $model) {
             $model->user_id = $this->userId;
-        });
 
+            if ($model->parent_id) {
+                $model->job_id = $model->parent->job_id;
+            }
+        });
 
         $actor = new Stream_Actor($this->auth);
         if (auth()->guest()) {
@@ -78,14 +81,11 @@ class CommentController extends Controller
      * @param int $id
      * @throws \Exception
      */
-    public function delete(Job $job, int $id)
+    public function delete(Job\Comment $comment)
     {
         $this->checkAbility();
 
-        /** @var Job\Comment $comment */
-        $comment = $job->comments()->findOrNew($id);
-
-        $this->transaction(function () use ($comment, $job) {
+        $this->transaction(function () use ($comment) {
             $comment->children->each(function ($child) {
                 $child->delete();
             });
@@ -94,8 +94,8 @@ class CommentController extends Controller
 
             stream(
                 Stream_Delete::class,
-                (new Stream_Comment())->map($job, $comment),
-                (new Stream_Job())->map($job)
+                (new Stream_Comment())->map($comment->job, $comment),
+                (new Stream_Job())->map($comment->job)
             );
         });
     }
