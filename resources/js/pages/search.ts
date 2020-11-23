@@ -10,7 +10,6 @@ import { Hit, Hits, Sort, SearchOptions } from "../types/hit";
 import { Models as ModelsDict } from "../types/search";
 import {Model, User} from "../types/models";
 import axios from 'axios';
-import { mixin as clickaway } from 'vue-clickaway';
 
 interface ForumItem {
   id: number;
@@ -102,7 +101,6 @@ Vue.component('vue-result-topic', {
 new Vue({
   el: '#js-search',
   delimiters: ['${', '}'],
-  mixins: [clickaway],
   data: {
     hits: window.hits,
     model: window.model,
@@ -215,7 +213,7 @@ new Vue({
       });
     },
 
-    getUrl(params: any) {
+    getUrl(params: any): string {
       return `/Search?${new URLSearchParams(params).toString()}`;
     },
 
@@ -259,3 +257,18 @@ new Vue({
     }
   }
 });
+
+(function(history){
+  const pushState = history.pushState;
+
+  history.pushState = function(state) {
+    // @ts-ignore
+    if (typeof history.onpushstate == "function") {
+      // @ts-ignore
+      history.onpushstate({state: state});
+    }
+
+    // @ts-ignore
+    return pushState.apply(history, arguments);
+  };
+})(window.history);

@@ -85,7 +85,7 @@
           </div>
 
           <div id="js-searchbar" class="d-flex flex-grow-1 order-1">
-            <vue-searchbar url="{{ search_url|default(route('search')) }}" value="{{ input_get('q') }}"></vue-searchbar>
+            <vue-searchbar value="{{ input_get('q') }}"></vue-searchbar>
           </div>
 
           {% if auth_check() %}

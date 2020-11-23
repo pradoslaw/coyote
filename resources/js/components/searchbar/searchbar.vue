@@ -3,7 +3,9 @@
     <div :class="{'active': isActive}" class="search-bar ml-md-4 mr-md-4">
       <i class="fas fa-search ml-2 mr-2"></i>
 
-      <form :action="url" role="search" ref="search" class="flex-grow-1">
+      <form action="/Search" role="search" ref="search" class="flex-grow-1">
+        <input v-for="[key, value] of params" type="hidden" :name="key" :value="value">
+
         <input
           ref="input"
           @focus="showDropdown"
@@ -115,11 +117,9 @@
     isMobile: boolean = false;
     items: Hit[] = [];
     selectedIndex: number = -1;
+    params?: URLSearchParams;
 
     readonly isAuthorized! : boolean;
-
-    @Prop(String)
-    readonly url!: string;
 
     @Prop()
     value!: string;
@@ -134,8 +134,18 @@
       }
     }
 
+    created() {
+      this.makeParams();
+    }
+
     mounted() {
       document.addEventListener('keydown', this.shortcutSupport);
+
+      // @ts-ignore
+      history.onpushstate = window.onpopstate = () => {
+        // wait for location to really change before setting up new url
+        setTimeout(() => this.makeParams(), 0);
+      }
     }
 
     beforeDestroy() {
@@ -167,7 +177,7 @@
       }
     }
 
-    blurInput(): void {
+    blurInput() {
       this.isActive = false;
     }
 
@@ -249,6 +259,19 @@
       }
 
       window.location.href = this.items.find(item => item.index === this.selectedIndex)!.url;
+    }
+
+    makeParams(): void {
+      if (window.location.pathname !== '/Search') {
+        this.params = undefined;
+
+        return;
+      }
+
+      const params = new URLSearchParams(window.location.search);
+      params.delete('q');
+
+      this.params = params;
     }
 
     makeDecorator(item: Hit): string {
