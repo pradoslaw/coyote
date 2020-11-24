@@ -29,13 +29,7 @@
             </div>
 
             <div class="row" v-show="textFocused">
-              <div class="col-sm-6">
-                {% if user('id') == null %}
-                  <input v-model="comment.email" type="text" name="email" class="form-control" placeholder="Adres e-mail" tabindex="2">
-                {% endif %}
-              </div>
-
-              <div class="col-sm-6">
+              <div class="col-12">
                 <vue-button :disabled="isSubmitting" @click.native="saveComment" class="btn btn-primary btn-sm float-right" tabindex="3" title="Ctrl+Enter aby opublikować">Zapisz</vue-button>
               </div>
             </div>

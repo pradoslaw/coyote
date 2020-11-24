@@ -39,9 +39,6 @@ class CommentController extends Controller
         });
 
         $actor = new Stream_Actor($this->auth);
-        if (auth()->guest()) {
-            $actor->displayName = $request->input('email');
-        }
 
         $this->transaction(function () use ($comment, $dispatcher, $actor) {
             $comment->save();

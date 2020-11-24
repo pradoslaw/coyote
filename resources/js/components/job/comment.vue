@@ -79,11 +79,7 @@
         </div>
 
         <div class="row">
-          <div class="form-group col-sm-6">
-            <input v-if="!isAuthorized" type="text" v-model="replyForm.email" class="form-control" placeholder="Adres e-mail" tabindex="2">
-          </div>
-
-          <div class="form-group col-sm-6">
+          <div class="form-group col-12">
             <vue-button @click.native="saveComment(replyForm)" :disabled="isSubmitting" type="submit" class="btn btn-primary btn-sm float-right ml-1" title="Ctrl+Enter aby opublikować">
               Zapisz
             </vue-button>
@@ -140,7 +136,6 @@
         isSubmitting: false,
         replyForm: {
           text: '',
-          email: '',
           parent_id: this.comment.parent_id ? this.comment.parent_id : this.comment.id
         }
       }
