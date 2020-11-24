@@ -16,12 +16,12 @@ class Builder
     /**
      * @var MicroblogRepositoryInterface
      */
-    private $microblog;
+    private MicroblogRepositoryInterface $microblog;
 
     /**
      * @var User|null
      */
-    private $user;
+    private ?User $user;
 
     private bool $isSponsor = false;
 
@@ -184,8 +184,14 @@ class Builder
 
     private function loadUserScope()
     {
+        static $scope = null;
+
         if (auth()->check()) {
-            $this->microblog->pushCriteria(new LoadUserScope(auth()->user()));
+            if ($scope === null) {
+                $scope = new LoadUserScope(auth()->user());
+            }
+
+            $this->microblog->pushCriteria($scope);
         }
     }
 }

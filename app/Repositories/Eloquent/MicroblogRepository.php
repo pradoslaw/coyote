@@ -26,7 +26,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
         return $this->applyCriteria(function () use ($perPage) {
-            return $this->model->whereNull('parent_id')->withVoters()->with('user')->withCount('comments')->paginate($perPage);
+            return $this->model->whereNull('parent_id')->with('user')->withCount('comments')->paginate($perPage);
         });
     }
 
@@ -45,7 +45,6 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
         $result = $this
             ->model
             ->whereNull('parent_id')
-            ->withVoters()
             ->with('user')
             ->withCount('comments')
             ->where(function (Builder $builder) {
@@ -87,7 +86,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     public function findById(int $id)
     {
         return $this->applyCriteria(function () use ($id) {
-            return $this->model->with('user')->withVoters()->withCount('comments')->where('microblogs.id', $id)->firstOrFail();
+            return $this->model->with('user')->withCount('comments')->where('microblogs.id', $id)->firstOrFail();
         });
     }
 
@@ -97,7 +96,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     public function getComments($parentId)
     {
         return $this->applyCriteria(function () use ($parentId) {
-            return $this->model->with('user')->withVoters()->where('parent_id', $parentId)->orderBy('id')->get();
+            return $this->model->with('user')->where('parent_id', $parentId)->orderBy('id')->get();
         });
     }
 
@@ -111,7 +110,6 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
             return $this
                 ->model
                 ->with('user')
-                ->withVoters()
                 ->withTrashed()
                 ->fromSub(function ($builder) use ($parentIds) {
                     return $builder
