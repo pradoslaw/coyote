@@ -2,6 +2,7 @@
 
 namespace Coyote;
 
+use Coyote\Microblog\Vote;
 use Coyote\Models\Scopes\ForUser;
 use Coyote\Models\Scopes\UserRelationsScope;
 use Coyote\Services\Media\Factory as MediaFactory;
@@ -184,7 +185,7 @@ class Microblog extends Model
      */
     public function voters()
     {
-        return $this->hasMany('Coyote\Microblog\Vote');
+        return $this->hasMany(Vote::class);
     }
 
     /**

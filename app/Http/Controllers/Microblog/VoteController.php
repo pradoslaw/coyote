@@ -77,8 +77,17 @@ class VoteController extends Controller
             $microblog->user->notify(new VotedNotification($vote));
         }
 
+        return $this->voters($microblog);
+    }
+
+    public function voters(Microblog $microblog)
+    {
         $microblog->load('voters.user:id,name');
 
-        return $microblog->voters->pluck('user.name');
+        $collection = $microblog->voters->pluck('user.name');
+
+        return $collection->when($collection->count() > 10, function ($collection) {
+            return $collection->splice(10)->concat(['...']);
+        });
     }
 }

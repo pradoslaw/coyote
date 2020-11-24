@@ -26,6 +26,7 @@
           <li class="list-inline-item">
             <a
               @click="checkAuth(vote, comment)"
+              @mouseenter.once="loadVoters(comment)"
               :aria-label="commentVoters"
               :class="{'text-primary': comment.is_voted, 'text-muted': !comment.is_voted}"
               href="javascript:"

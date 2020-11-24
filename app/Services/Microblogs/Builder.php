@@ -184,14 +184,8 @@ class Builder
 
     private function loadUserScope()
     {
-        static $scope = null;
-
         if (auth()->check()) {
-            if ($scope === null) {
-                $scope = new LoadUserScope(auth()->user());
-            }
-
-            $this->microblog->pushCriteria($scope);
+            $this->microblog->pushCriteria(new LoadUserScope(auth()->user()));
         }
     }
 }

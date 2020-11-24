@@ -172,6 +172,16 @@ const actions = {
     return axios.get(`/Mikroblogi/Comment/Show/${microblog.id}`).then(result => {
       commit('setComments', { microblog, comments: result.data });
     })
+  },
+
+  loadVoters({ commit }, microblog: Microblog) {
+    if (!microblog.votes) {
+      return;
+    }
+
+    return axios.get(`/Mikroblogi/Voters/${microblog.id}`).then(result => {
+      commit('setVoters', { microblog, voters: result.data });
+    });
   }
 };
 
