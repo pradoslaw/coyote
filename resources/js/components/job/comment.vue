@@ -56,7 +56,7 @@
         </div>
 
         <ul class="list-inline list-inline-bullet mb-0">
-          <li class="list-inline-item"><a @click="reply" href="javascript:" class="text-muted">Odpowiedz</a></li>
+          <li class="list-inline-item"><a @click="checkAuth(reply)" href="javascript:" class="text-muted">Odpowiedz</a></li>
           <li v-if="isAuthorized" class="list-inline-item">
             <a href="javascript:" :data-metadata="comment.metadata" :data-url="comment.url"  class="btn-report text-muted">Zgłoś</a>
           </li>

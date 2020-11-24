@@ -20,7 +20,7 @@
                   class="form-control"
                   ref="textarea"
                   v-model="comment.text"
-                  @focus.once="textFocused = true"
+                  @focus="checkAuth(showForm)"
                   @keydown.ctrl.enter="saveComment"
                   rows="1"
                   tabindex="1"
