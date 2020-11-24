@@ -4,6 +4,7 @@ namespace Coyote\Repositories\Eloquent;
 
 use Carbon\Carbon;
 use Coyote\Microblog;
+use Coyote\Models\Scopes\UserRelationsScope;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface;
 use Coyote\Repositories\Contracts\SubscribableInterface;
 use Coyote\Tag;
@@ -106,18 +107,23 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
      */
     public function getTopComments($parentIds)
     {
-        return $this->applyCriteria(function () use ($parentIds) {
+        $sub = Microblog::selectRaw('*, row_number() OVER (PARTITION BY parent_id ORDER BY id DESC)')
+            ->whereIn('parent_id', $parentIds);
+
+        return $this->applyCriteria(function () use ($parentIds, $sub) {
             return $this
                 ->model
                 ->with('user')
                 ->withTrashed()
-                ->fromSub(function ($builder) use ($parentIds) {
-                    return $builder
-                        ->selectRaw('*, row_number() OVER (PARTITION BY parent_id ORDER BY id DESC)')
-                        ->from('microblogs')
-                        ->whereIn('parent_id', $parentIds)
-                        ->whereNull('deleted_at');
-                }, 'microblogs')
+                ->withoutGlobalScope(UserRelationsScope::class)
+                ->fromRaw('(' . $sub->toSql() . ') AS microblogs', $sub->getBindings())
+//                ->fromSub(function ($builder) use ($parentIds) {
+//                    return $builder
+//                        ->selectRaw('*, row_number() OVER (PARTITION BY parent_id ORDER BY id DESC)')
+//                        ->from('microblogs')
+//                        ->whereIn('parent_id', $parentIds)
+//                        ->whereNull('deleted_at');
+//                }, 'microblogs')
                 ->whereIn('microblogs.row_number', [1, 2])
                 ->orderBy('microblogs.id')
                 ->get();

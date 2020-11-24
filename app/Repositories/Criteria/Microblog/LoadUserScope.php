@@ -10,12 +10,10 @@ use Illuminate\Database\Eloquent\Model;
 class LoadUserScope extends Criteria
 {
     private int $userId;
-    private array $exclude = [];
 
     public function __construct(User $user)
     {
         $this->userId = $user->id;
-        $this->exclude = $user->relations()->blocked()->pluck('related_user_id')->toArray();
     }
 
     /**
@@ -27,8 +25,7 @@ class LoadUserScope extends Criteria
     {
         $model = $model
             ->includeIsVoted($this->userId)
-            ->includeIsSubscribed($this->userId)
-            ->exclude($this->exclude);
+            ->includeIsSubscribed($this->userId);
 
         return $model;
     }

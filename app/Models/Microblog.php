@@ -3,6 +3,7 @@
 namespace Coyote;
 
 use Coyote\Models\Scopes\ForUser;
+use Coyote\Models\Scopes\UserRelationsScope;
 use Coyote\Services\Media\Factory as MediaFactory;
 use Coyote\Services\Media\MediaInterface;
 use Coyote\Services\Media\SerializeClass;
@@ -66,13 +67,6 @@ class Microblog extends Model
     protected $attributes = ['votes' => 0];
 
     /**
-     * This field does not exists in db. It's dynamically added as subquery
-     *
-     * @var string[]
-     */
-    protected $casts = ['voters_json' => 'json'];
-
-    /**
      * Html version of the entry.
      *
      * @var null|string
@@ -91,6 +85,8 @@ class Microblog extends Model
         static::deleted(function (Microblog $model) {
             $model->media = null; // MUST remove closure before serializing object
         });
+
+        static::addGlobalScope(new UserRelationsScope());
     }
 
     /**
@@ -242,14 +238,6 @@ class Microblog extends Model
             });
     }
 
-    public function scopeExclude(Builder $builder, array $exclude): Builder
-    {
-        if (empty($exclude)) {
-            return $builder;
-        }
-
-        return $builder->whereNotIn('microblogs.user_id', $exclude);
-    }
 
 //    public function scopeWithVoters(Builder $builder): Builder
 //    {
