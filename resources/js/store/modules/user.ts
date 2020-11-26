@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 const state = window["__INITIAL_STATE"]?.user || {};
 
 const getters = {
@@ -11,9 +13,16 @@ const mutations = {
   }
 };
 
+const actions = {
+  block({ commit }, relatedUserId: number) {
+    return axios.post(`/User/Block/${relatedUserId}`);
+  }
+}
+
 export default {
   namespaced: true,
   state,
   getters,
-  mutations
+  mutations,
+  actions
 };

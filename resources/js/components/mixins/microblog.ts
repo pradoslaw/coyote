@@ -1,7 +1,7 @@
 import Prism from 'prismjs';
 import { Vue, Component, Prop, Emit, Ref } from "vue-property-decorator";
 import store from "../../store";
-import { Microblog } from "../../types/models";
+import { Microblog, User } from "../../types/models";
 import VueModal from "../modal.vue";
 import VueForm from "../microblog/form.vue";
 
@@ -15,6 +15,9 @@ export class MicroblogMixin extends Vue {
   @Ref()
   protected readonly confirm!: VueModal;
 
+  @Ref('block')
+  protected readonly blockModal!: VueModal;
+
   @Ref()
   protected readonly form!: VueForm;
 
@@ -27,16 +30,22 @@ export class MicroblogMixin extends Vue {
     }
   }
 
-  protected delete(action: string, confirm: boolean, microblog: Microblog) {
-    if (confirm) {
-      // @ts-ignore
-      this.confirm.open();
-    } else {
-      store.dispatch(action, microblog);
+  protected delete(action: string, microblog: Microblog) {
+    this.$confirm({
+      message: 'Tej operacji nie będzie można cofnąć.',
+      title: 'Usunąć wpis?',
+      okLabel: 'Tak, usuń'
+    })
+    .then(() => store.dispatch(action, microblog));
+  }
 
-      // @ts-ignore
-      this.confirm.close()
-    }
+  protected block(user: User) {
+    this.$confirm({
+      message: 'Nie będziesz widział komentarzy ani wpisów tego użytkownika',
+      title: 'Zablokować użytkownika?',
+      okLabel: 'Tak, zablokuj'
+    })
+    .then(() => store.dispatch('user/block', user.id));
   }
 }
 

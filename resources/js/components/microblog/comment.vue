@@ -82,16 +82,6 @@
         </div>
       </div>
     </div>
-
-    <vue-modal ref="confirm">
-      Czy na pewno chcesz usunąć ten komentarz?
-
-      <template slot="buttons">
-        <button @click="$refs.confirm.close()" type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj
-        </button>
-        <button @click="deleteItem(false)" type="submit" class="btn btn-danger danger">Tak, usuń</button>
-      </template>
-    </vue-modal>
   </div>
 </template>
 
@@ -101,11 +91,10 @@
   import VueUserName from '../user-name.vue';
   import VueTimeago from '../../plugins/timeago';
   import VueCommentForm from "./comment-form.vue";
-  import VueModal from '../modal.vue';
   import VueFlag from '../flags/flag.vue';
   import { default as mixins } from '../mixins/user';
-  import { Prop, Ref, Mixins } from "vue-property-decorator";
-  import { mapActions, mapGetters, mapMutations } from "vuex";
+  import { Prop, Mixins } from "vue-property-decorator";
+  import { mapActions, mapGetters } from "vuex";
   import Component from "vue-class-component";
   import { mixin as clickaway } from "vue-clickaway";
   import store from "../../store";
@@ -121,7 +110,6 @@
     store,
     components: {
       'vue-avatar': VueAvatar,
-      'vue-modal': VueModal,
       'vue-user-name': VueUserName,
       'vue-comment-form': VueCommentForm,
       'vue-flag': VueFlag
@@ -132,10 +120,6 @@
     }
   })
   export default class VueComment extends Mixins(MicroblogMixin) {
-
-    @Ref()
-    readonly confirm!: VueModal;
-
     @Prop(Object)
     comment!: Microblog;
 
@@ -143,8 +127,8 @@
       this.$emit('reply', this.comment.user);
     }
 
-    deleteItem(confirm: boolean) {
-      this.delete('microblogs/deleteComment', confirm, this.comment);
+    deleteItem() {
+      this.delete('microblogs/deleteComment', this.comment);
     }
 
     get anchor() {

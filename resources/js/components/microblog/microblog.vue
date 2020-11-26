@@ -9,12 +9,18 @@
           </a>
         </div>
         <div class="media-body">
-          <div v-if="microblog.editable" class="dropdown float-right">
+          <div class="dropdown float-right">
             <button class="btn btn-secondary btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-label="Dropdown"></button>
 
             <div class="dropdown-menu dropdown-menu-right">
-              <a @click="edit(microblog)" class="dropdown-item btn-edit" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
-              <a @click="deleteItem" class="dropdown-item btn-remove" href="javascript:"><i class="fas fa-times fa-fw"></i> Usuń</a>
+              <template v-if="microblog.editable">
+                <a @click="edit(microblog)" class="dropdown-item btn-edit" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
+                <a @click="deleteItem" class="dropdown-item btn-remove" href="javascript:"><i class="fas fa-times fa-fw"></i> Usuń</a>
+
+                <div class="divider"></div>
+              </template>
+
+              <a @click="block(microblog.user)" href="javascript:" class="dropdown-item"><i class="fas fa-fw fa-ban"></i> Zablokuj użytkownika</a>
             </div>
           </div>
 
@@ -99,16 +105,6 @@
       </div>
     </div>
 
-    <vue-modal ref="confirm">
-      Czy na pewno chcesz usunąć ten wpis?
-
-      <template slot="buttons">
-        <button @click="$refs.confirm.close()" type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj
-        </button>
-        <button @click="deleteItem(false)" type="submit" class="btn btn-danger danger">Tak, usuń</button>
-      </template>
-    </vue-modal>
-
     <vue-gallery :items="images" :index="index" @close="index = null"></vue-gallery>
   </div>
 </template>
@@ -119,14 +115,13 @@
   import VueTimeago from '../../plugins/timeago';
   import VueClipboard from '../../plugins/clipboard';
   import VueLightbox from 'vue-cool-lightbox';
-  import VueModal from '../modal.vue';
   import VueComment from "./comment.vue";
   import VueCommentForm from './comment-form.vue';
   import VueForm from './form.vue';
   import VueFlag from '../flags/flag.vue';
   import { default as mixins } from '../mixins/user';
   import { Prop, Ref, Mixins } from "vue-property-decorator";
-  import {mapGetters, mapState, mapActions, mapMutations} from "vuex";
+  import { mapGetters, mapState, mapActions } from "vuex";
   import Component from "vue-class-component";
   import { mixin as clickaway } from "vue-clickaway";
   import store from "../../store";
@@ -134,7 +129,9 @@
   import { MicroblogMixin } from "../mixins/microblog";
   import { User } from '../../types/models';
   import useBrackets from "../../libs/prompt";
+  import VueModals from '../../plugins/modals.ts';
 
+  Vue.use(VueModals);
   Vue.use(VueTimeago);
   Vue.use(VueClipboard);
 
@@ -144,7 +141,6 @@
     store,
     components: {
       'vue-avatar': VueAvatar,
-      'vue-modal': VueModal,
       'vue-user-name': VueUserName,
       'vue-comment': VueComment,
       'vue-form': VueForm,
@@ -187,8 +183,8 @@
       this.isWrapped = false;
     }
 
-    deleteItem(confirm: boolean) {
-      this.delete('microblogs/delete', confirm, this.microblog);
+    deleteItem() {
+      this.delete('microblogs/delete', this.microblog);
     }
 
     copy() {
