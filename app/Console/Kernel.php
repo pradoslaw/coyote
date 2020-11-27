@@ -9,6 +9,7 @@ use Coyote\Console\Commands\CurrencyExchangeCommand;
 use Coyote\Console\Commands\Elasticsearch\CreateIndexCommand;
 use Coyote\Console\Commands\Elasticsearch\DropIndexCommand;
 use Coyote\Console\Commands\Elasticsearch\IndexCommand;
+use Coyote\Console\Commands\FixAvatarCommand;
 use Coyote\Console\Commands\FlushCacheCommand;
 use Coyote\Console\Commands\PurgeFirewallCommand;
 use Coyote\Console\Commands\PurgeGuestsCommand;
@@ -46,7 +47,8 @@ class Kernel extends ConsoleKernel
         PurgeGuestsCommand::class,
         ResendApplicationCommand::class,
         PurgePostsCommand::class,
-        PurgeRecentTopicsCommand::class
+        PurgeRecentTopicsCommand::class,
+        FixAvatarCommand::class
     ];
 
     /**
