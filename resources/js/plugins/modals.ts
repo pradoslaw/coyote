@@ -20,6 +20,7 @@ function confirmModal(options: ModalOptions) {
       },
 
       destroy(): void {
+        (this.$refs[modalRef] as VueModal).close();
         this.$destroy();
 
         // remove the element from the DOM
