@@ -73,12 +73,19 @@
         </ul>
       </div>
 
-      <div v-if="comment.editable" class="dropdown">
+      <div class="dropdown">
         <button class="btn btn-xs dropdown-toggle border-0" type="button" data-toggle="dropdown" aria-label="Dropdown"></button>
 
         <div class="dropdown-menu dropdown-menu-right">
-          <a @click="edit(comment)" class="dropdown-item btn-sm-edit" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
-          <a @click="deleteItem" class="dropdown-item btn-sm-remove" href="javascript:"><i class="fas fa-times fa-fw"></i> Usuń</a>
+          <template v-if="comment.editable">
+            <a @click="edit(comment)" class="dropdown-item btn-sm-edit" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
+            <a @click="deleteItem" class="dropdown-item btn-sm-remove" href="javascript:"><i class="fas fa-times fa-fw"></i> Usuń</a>
+          </template>
+
+          <template v-if="comment.user.id !== user.id">
+            <div class="dropdown-divider"></div>
+            <a @click="block(comment.user)" href="javascript:" class="dropdown-item"><i class="fas fa-fw fa-ban"></i> Zablokuj użytkownika</a>
+          </template>
         </div>
       </div>
     </div>
@@ -94,7 +101,7 @@
   import VueFlag from '../flags/flag.vue';
   import { default as mixins } from '../mixins/user';
   import { Prop, Mixins } from "vue-property-decorator";
-  import { mapActions, mapGetters } from "vuex";
+  import {mapActions, mapGetters, mapState} from "vuex";
   import Component from "vue-class-component";
   import { mixin as clickaway } from "vue-clickaway";
   import store from "../../store";
@@ -114,7 +121,10 @@
       'vue-comment-form': VueCommentForm,
       'vue-flag': VueFlag
     },
-    computed: mapGetters('user', ['isAuthorized']),
+    computed: {
+      ...mapState('user', {user: state => state}),
+      ...mapGetters('user', ['isAuthorized'])
+    },
     methods: {
       ...mapActions('microblogs', ['vote', 'loadVoters'])
     }
