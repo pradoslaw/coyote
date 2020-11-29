@@ -53,6 +53,10 @@ class AdminForm extends SettingsForm
                 'label' => 'Potwierdzony adres e-mail',
                 'rules' => 'bool'
             ])
+            ->addAfter('group_id', 'is_sponsor', 'checkbox', [
+                'label' => 'Sponsor',
+                'rules' => 'bool'
+            ])
             ->addAfter('group_id', 'is_active', 'checkbox', [
                 'label' => 'Konto aktywne',
                 'rules' => 'bool'
