@@ -47,16 +47,12 @@ class PaymentControllerTest extends TestCase
 
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(
-            ['name', 'number', 'exp', 'cvc', 'invoice.address', 'invoice.name', 'invoice.city', 'invoice.country_id', 'invoice.postal_code']
+            ['invoice.address', 'invoice.name', 'invoice.city', 'invoice.country_id', 'invoice.postal_code']
         );
 
         $response->assertJson([
             'message' => 'The given data was invalid.',
             'errors' => [
-                'name' => ['Pole nazwa jest wymagane.'],
-                'number' => ['Pole numer karty kredytowej jest wymagane.'],
-                'cvc' => ['Pole CVC jest wymagane.'],
-                'exp' => ['Pole data ważności karty jest wymagane.'],
                 'invoice.name' => ['To pole jest wymagane.'],
                 'invoice.address' => ['To pole jest wymagane.'],
                 'invoice.city' => ['To pole jest wymagane.'],
@@ -76,20 +72,15 @@ class PaymentControllerTest extends TestCase
             [
                 'payment_method' => 'card',
                 'price' => $payment->plan->gross_price,
-                'enable_invoice' => false,
-                'number' => '4012001038443335',
-                'name' => 'Jan Kowalski',
-                'cvc' => '123',
-                'exp' => '12/26'
+                'enable_invoice' => false
             ]
         );
 
         $response->assertStatus(200);
-        $url = $response->getContent();
 
-        $response = $this->get($url);
+        $data = $response->decodeResponseJson();
 
-        $response->assertSee($this->job->title);
+        $this->assertNotEmpty($data['token']);
     }
 
     public function testSubmitFormWithInvalidExpDate()
