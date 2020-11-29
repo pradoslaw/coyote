@@ -1,0 +1,83 @@
+<?php
+
+namespace Tests\Feature\Controllers;
+
+use Coyote\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
+
+class GithubControllerTest extends TestCase
+{
+    use DatabaseTransactions, WithFaker;
+
+    private User $user;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+
+    }
+
+    public function testSetSuccessSponsorshipById()
+    {
+        $user = factory(User::class)->create(['provider' => 'Github', 'provider_id' => $this->faker->randomDigit]);
+
+        $this->assertNotNull($user->provider);
+        $this->assertNotNull($user->provider_id);
+
+        $response = $this->post('/github/sponsorship', [
+            'action' => 'created',
+            'sender' => [
+                'id' => $user->provider_id,
+                'html_url' => 'https://github.com/lorem-ipsum'
+            ]
+        ]);
+
+        $response->assertStatus(200);
+
+        $user->refresh();
+
+        $this->assertTrue($user->is_sponsor);
+    }
+
+    public function testSetSuccessSponsorshipByGithubRepo()
+    {
+        $user = factory(User::class)->create(['github' => 'https://github.com/lorem-ipsum']);
+
+        $response = $this->post('/github/sponsorship', [
+            'action' => 'created',
+            'sender' => [
+                'id' => 1,
+                'html_url' => 'https://github.com/lorem-ipsum'
+            ]
+        ]);
+
+        $response->assertStatus(200);
+
+        $user->refresh();
+
+        $this->assertTrue($user->is_sponsor);
+    }
+
+    public function testDowngradeSponsorship()
+    {
+        $user = factory(User::class)->create(['github' => 'https://github.com/lorem-ipsum', 'is_sponsor' => true]);
+
+        $response = $this->post('/github/sponsorship', [
+            'action' => 'cancelled',
+            'sender' => [
+                'id' => 1,
+                'html_url' => 'https://github.com/lorem-ipsum'
+            ]
+        ]);
+
+        $response->assertStatus(200);
+
+        $user->refresh();
+
+        $this->assertFalse($user->is_sponsor);
+
+    }
+}

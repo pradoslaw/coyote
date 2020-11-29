@@ -122,6 +122,15 @@ class UserRepository extends Repository implements UserRepositoryInterface
         return $this->model->where('reputation', '>', 0)->count();
     }
 
+    public function sponsorship(bool $flag, string $githubId, string $url): bool
+    {
+        return $this
+            ->model
+            ->where('github', $url)
+            ->orWhere(fn ($query) => $query->where('provider', 'Github')->where('provider_id', $githubId))
+            ->update(['is_sponsor' => $flag]);
+    }
+
     /**
      * @param string $field
      * @param string $value

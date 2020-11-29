@@ -25,3 +25,5 @@ $this->get('Search', ['uses' => 'SearchController@index', 'as' => 'search']);
 
 $this->get('mailing/unsubscribe/{uuid}', 'MailingController@unsubscribe')->name('mailing.unsubscribe');
 $this->post('mailgun/permanent-failure', 'MailgunController@permanentFailure');
+
+$this->post('github/sponsorship', 'GithubController@sponsorship');

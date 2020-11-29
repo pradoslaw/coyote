@@ -47,4 +47,6 @@ interface UserRepositoryInterface extends RepositoryInterface
      * @return int
      */
     public function countUsersWithReputation();
+
+    public function sponsorship(bool $flag, string $githubId, string $profileUrl): bool;
 }
