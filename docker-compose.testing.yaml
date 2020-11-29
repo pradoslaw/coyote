@@ -1,6 +1,12 @@
 version: '3.5'
 
 services:
+  php:
+    environment:
+      STRIPE_KEY: $STRIPE_KEY
+      STRIPE_SECRET: $STRIPE_SECRET
+      STRIPE_ENDPOINT_SECRET: $STRIPE_ENDPOINT_SECRET
+
   es:
     image: 4programmers/coyote-es:latest
     tty: true
