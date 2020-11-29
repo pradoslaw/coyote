@@ -5,6 +5,7 @@ import VueText from '@/js/components/forms/text.vue';
 import VueSelect from '@/js/components/forms/select.vue';
 import VueCheckbox from '@/js/components/forms/checkbox.vue';
 import VueButton from '@/js/components/forms/button.vue';
+import VueTabs from '@/js/components/tabs.vue';
 import axios from 'axios';
 import VueNotifications from "vue-notification";
 import {default as axiosErrorHandler} from "@/js/libs/axios-error-handler";
@@ -22,7 +23,8 @@ new Vue({
     'vue-select': VueSelect,
     'vue-checkbox': VueCheckbox,
     'vue-masked-input': VueMaskedInput,
-    'vue-button': VueButton
+    'vue-button': VueButton,
+    'vue-tabs': VueTabs
   },
   filters: {
     money(value) {
@@ -44,21 +46,91 @@ new Vue({
     errors: {},
     isProcessing: false
   },
+  mounted() {
+    this.stripe = Stripe('pk_test_51HMI9jCHUDu7oSByvpWKMgotYB5kLTmkikmtb5jj8MmYexoB0VYEwHjKa1qZnbCQ7uAPKrtbqG0GZE3X1ewQcQFT00T7AMe0Pr');
+    const elements = this.stripe.elements();
+
+    var style = {
+      iconStyle: 'solid',
+      style: {
+        base: {
+          iconColor: '#c4f0ff',
+          color: '#fff',
+          fontWeight: 500,
+          fontFamily: 'Roboto, Open Sans, Segoe UI, sans-serif',
+          fontSize: '16px',
+          fontSmoothing: 'antialiased',
+
+          ':-webkit-autofill': {
+            color: '#fce883',
+          },
+          '::placeholder': {
+            color: '#87BBFD',
+          },
+        },
+        invalid: {
+          iconColor: '#FFC7EE',
+          color: '#FFC7EE',
+        },
+      },
+    };
+
+    this.card = elements.create("card", { style: style });
+    this.card.mount("#card-element");
+
+  },
   methods: {
     calculate() {
       // if VAT ID is empty we must add VAT
       this.calculator.vat_rate = this.vat_rates[this.form.invoice.country_id];
     },
-    submitForm(e) {
+
+    cardPayment({ token, success_url }) {
+      this.stripe.confirmCardPayment(token, {
+        payment_method: {
+          card: this.card,
+          billing_details: {
+            name: this.form.invoice.name
+          }
+        }
+      }).then((result) => {
+        if (result.error) {
+          this.$notify({type: 'error', text: result.error.message});
+        } else {
+          // The payment has been processed!
+          if (result.paymentIntent.status === 'succeeded') {
+            window.location.href = success_url;
+          }
+        }
+      });
+    },
+
+    async p24Payment({ token, success_url }) {
+      const {error} = await this.stripe.confirmP24Payment(
+        token,
+        {
+          payment_method: {
+            billing_details: {
+              email: this.form.invoice.email
+            }
+          },
+          return_url: success_url,
+        }
+      );
+
+      if (error) {
+        this.$notify({type: 'error', text: error});
+      }
+    },
+
+    submitForm() {
       const data = Object.assign(this.form, {price: this.grossPrice, enable_invoice: this.grossPrice > 0 ? this.enableInvoice : false});
 
       this.errors = {};
       this.isProcessing = true;
 
       axios.post(window.location.href, data)
-        .then(result => {
-          window.location.href = result.data;
-        })
+        .then(response => this[`${this.form.payment_method}Payment`](response.data))
         .catch(err => {
           if (err.response.status !== 422) {
             return;
@@ -66,8 +138,9 @@ new Vue({
 
           this.errors = err.response.data.errors;
         })
-        .finally(() => this.isProcessing = false);
+        .finally(() => this.isProcessing = false)
     },
+
     setPaymentMethod(method) {
       this.form.payment_method = method;
     }
@@ -76,15 +149,19 @@ new Vue({
     percentageVatRate() {
       return (this.calculator.vat_rate * 100) - 100;
     },
+
     netPrice() {
       return this.calculator.net_price;
     },
+
     grossPrice() {
       return this.discountNetPrice * this.calculator.vat_rate;
     },
+
     discountNetPrice() {
       return Math.max(0, this.calculator.net_price - this.coupon.amount);
     },
+
     vatPrice() {
       return this.grossPrice - this.discountNetPrice;
     }

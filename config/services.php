@@ -73,6 +73,11 @@ return [
         'salt'          => env('PAYLANE_SALT', docker_secret('PAYLANE_SALT_FILE'))
     ],
 
+    'stripe' => [
+        'key'           => env('STRIPE_KEY', docker_secret('STRIPE_KEY_FILE')),
+        'secret'        => env('STRIPE_SECRET', docker_secret('STRIPE_SECRET_FILE')),
+    ],
+
     'p24' => [
         'client_id'     => env('P24_CLIENT_ID', docker_secret('P24_CLIENT_ID_FILE')),
         'payment_url'   => env('P24_PAYMENT_URL', 'https://sandbox.przelewy24.pl/trnDirect'),

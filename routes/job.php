@@ -52,11 +52,6 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
         'as' => 'payment.status'
     ]);
 
-    $this->any('Payment/3DSecure', [
-        'uses' => 'PaymentController@payment3DSecure',
-        'as' => 'payment.3dsecure'
-    ]);
-
     $this->get('Payment/{payment}', [
         'uses' => 'PaymentController@index',
         'as' => 'payment',
@@ -64,12 +59,6 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
     ]);
 
     $this->post('Payment/{payment}', ['uses' => 'PaymentController@process', 'middleware' => 'auth']);
-
-    $this->get('Payment/{payment}/Gateway', [
-        'uses' => 'PaymentController@gateway',
-        'as' => 'gateway',
-        'middleware' => 'auth'
-    ]);
 
     $this->get('Payment/{payment}/Success', [
         'uses' => 'PaymentController@success',

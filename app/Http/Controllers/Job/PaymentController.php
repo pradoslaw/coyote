@@ -14,9 +14,12 @@ use Coyote\Repositories\Contracts\PaymentRepositoryInterface as PaymentRepositor
 use Coyote\Services\Invoice\CalculatorFactory;
 use Coyote\Services\UrlBuilder;
 use Coyote\Services\Invoice\Generator as InvoiceGenerator;
+use Coyote\Str;
 use Illuminate\Database\Connection as Db;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client as HttpClient;
+use Stripe\PaymentIntent;
+use Stripe\Stripe;
 
 class PaymentController extends Controller
 {
@@ -119,6 +122,8 @@ class PaymentController extends Controller
      */
     public function process(PaymentRequest $request, Payment $payment)
     {
+        Stripe::setApiKey(config('services.stripe.secret'));
+
         $calculator = CalculatorFactory::payment($payment);
 
         $coupon = $this->coupon->findBy('code', $request->input('coupon'));
@@ -127,7 +132,7 @@ class PaymentController extends Controller
         $payment->coupon_id = $coupon->id ?? null;
 
         // begin db transaction
-        $response = $this->handlePayment(function () use ($payment, $request, $calculator, $coupon) {
+        $this->handlePayment(function () use ($payment, $request, $calculator, $coupon) {
             // save invoice data. keep in mind that we do not setup invoice number until payment is done.
             /** @var \Coyote\Invoice $invoice */
             $invoice = $this->invoice->create(
@@ -146,16 +151,24 @@ class PaymentController extends Controller
             }
 
             $payment->save();
-
-            if (!$calculator->grossPrice()) {
-                return $this->successfulTransaction($payment);
-            }
-
-            // make a payment
-            return $this->{'make' . ucfirst($request->input('payment_method')) . 'Transaction'}($payment);
         });
 
-        return $response->getTargetUrl();
+        if (!$calculator->grossPrice()) {
+            return $this->successfulTransaction($payment);
+        }
+
+        $intent = PaymentIntent::create([
+            'amount'                => $payment->invoice->grossPrice() * 100,
+            'currency'              => strtolower($payment->invoice->currency->name),
+            'metadata'              => ['integration_check' => 'accept_a_payment'],
+            'payment_method_types'  => [$request->input('payment_method')],
+        ]);
+
+        return [
+            'token' => $intent->client_secret,
+            'success_url' => route('job.payment.success', [$payment]),
+            'status_url' => route('job.payment.status', [$payment])
+        ];
     }
 
     /**
@@ -288,53 +301,17 @@ class PaymentController extends Controller
      */
     private function makeCardTransaction(Payment $payment)
     {
-        $client = new \PayLaneRestClient(config('services.paylane.username'), config('services.paylane.password'));
+        Stripe::setApiKey(config('services.stripe.secret'));
 
-        list($month, $year) = explode('/', $this->request->input('exp'));
+        $intent = PaymentIntent::create([
+            'amount' => $payment->invoice->grossPrice() * 100,
+            'currency' => strtolower($payment->invoice->currency->name),
+            'metadata' => ['integration_check' => 'accept_a_payment'],
+            'payment_method_types' => ['p24'],
+        ]);
 
-        $params = [
-            'sale' => [
-                'amount'            => number_format($payment->invoice->grossPrice(), 2, '.', ''),
-                'currency'          => 'PLN',
-                'description'       => $payment->id
-            ],
-            'customer' => [
-                'name'              => $this->request->input('name'),
-                'email'             => $this->auth->email,
-                'ip'                => $this->request->ip()
-            ],
-            'card' => [
-                'card_number'       => str_replace('-', '', $this->request->input('number')),
-                'name_on_card'      => $this->request->input('name'),
-                'expiration_month'  => sprintf('%02d', $month),
-                'expiration_year'   => '20' . $year,
-                'card_code'         => $this->request->input('cvc'),
-            ],
-            'back_url'              => route('job.payment.3dsecure')
-        ];
+        return $intent->client_secret;
 
-        /** @var array $result */
-        $result = $client->checkCard3DSecure($params);
-
-        if (!$result['success']) {
-            $error = $result['error'];
-            logger()->error(var_export($result, true));
-
-            throw new PaymentFailedException(
-                trans('payment.validation', ['message' => $error['error_description']]),
-                $error['error_number']
-            );
-        }
-
-        if ($result['is_card_enrolled']) {
-            return redirect()->to($result['redirect_url']);
-        } else {
-            $result = $client->saleBy3DSecureAuthorization(['id_3dsecure_auth' => $result['id_3dsecure_auth']]);
-        }
-
-        logger()->debug('Successfully payment', ['result' => $result]);
-
-        return $this->successfulTransaction($payment);
     }
 
     /**

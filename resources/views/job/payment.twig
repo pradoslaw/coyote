@@ -3,6 +3,7 @@
 {% block title %}Płatność{{ parent() }}{% endblock %}
 
 {% block container %}
+  <script src="https://js.stripe.com/v3/"></script>
 
   <div id="js-payment" class="row" v-cloak>
     <main class="col-md-9">
@@ -10,68 +11,50 @@
         <div class="card-header">
           <i class="fas fa-lock fa-fw"></i> Płatność poprzez bezpieczne połączenie
         </div>
+
         <div class="card-body" v-show="grossPrice > 0">
-          <div class="row">
-            <div class="col-lg-4" style="z-index: 1">
-              <ul class="nav nav-payment-forms flex-column">
-                <li class="nav-item" :class="{'active': form.payment_method === 'card'}">
-                  <a @click="setPaymentMethod('card')" href="javascript:" class="nav-link">
-                    <strong>Karta kredytowa/debetowa</strong>
+          <ul class="nav nav-pills">
+            <li class="nav-item">
+              <a @click="setPaymentMethod('card')" :class="{'active': form.payment_method === 'card'}" href="javascript:" class="nav-link">
+                <strong>Karta kredytowa/debetowa</strong>
 
-                    <img src="/img/mastercard.png">
-                    <img src="/img/visa.png">
-                    <img src="/img/maestro.png">
+                <img src="/img/mastercard.png">
+                <img src="/img/visa.png">
+                <img src="/img/maestro.png">
 
-                    <small class="text-muted" style="display: block; margin-top: 9px; font-size: 10px;">Powered by PayLane</small>
-                  </a>
-                </li>
+                <small class="text-muted" style="display: block; margin-top: 9px; font-size: 10px;">Powered by PayLane</small>
+              </a>
+            </li>
 
-                <li class="nav-item" :class="{'active': form.payment_method === 'transfer'}">
-                  <a @click="setPaymentMethod('transfer')" href="javascript:" class="nav-link">
-                    <strong class="mb-2">Przelew bankowy</strong>
+            <li class="nav-item">
+              <a @click="setPaymentMethod('p24')" :class="{'active': form.payment_method === 'p24'}" href="javascript:" class="nav-link">
+                <strong class="mb-2">Przelew bankowy</strong>
 
-                    <img src="/img/ipko.png" class="mr-1">
-                    <img src="/img/mbank.png" class="mr-1">
-                    <img src="/img/pekao.png" class="mr-1">
+                <img src="/img/ipko.png" class="mr-1">
+                <img src="/img/mbank.png" class="mr-1">
+                <img src="/img/pekao.png" class="mr-1">
 
-                    <i class="fas fa-ellipsis-h"></i>
-                  </a>
-                </li>
-              </ul>
-            </div>
+                <i class="fas fa-ellipsis-h"></i>
+              </a>
+            </li>
+          </ul>
 
-            <div class="col-lg-8 col-12">
+          <div class="mt-3 row">
+            <div class="col-12">
               <div class="card card-default">
                 <div id="card" v-show="form.payment_method === 'card'" class="card-body">
-                  <div class="form-row">
-                    <vue-form-group :errors="errors['name']" label="Nazwa (jaka widnieje na karcie kredytowej)" class="form-group col-md-6">
-                      <vue-text v-model="form.name" :is-invalid="'name' in errors" name="name"></vue-text>
-                    </vue-form-group>
+                  <form id="card-form">
+                    <div id="card-element">
+                      <!-- Elements will create input elements here -->
+                    </div>
 
-                    <vue-form-group :errors="errors['number']" label="Numer karty kredytowej lub debetowej" class="form-group col-md-6">
-                      <vue-masked-input v-model="form.number" :class="{'is-invalid': 'number' in errors}" name="number" class="form-control" mask="1111-1111-1111-1111"></vue-masked-input>
-                    </vue-form-group>
-                  </div>
-
-                  <div class="form-row">
-                    <vue-form-group :errors="errors['exp']" label="Data ważności karty *" class="form-group col-md-6">
-                      <vue-masked-input :class="{'is-invalid': 'exp' in errors}" v-model="form.exp" name="exp" mask="11/11" placeholder="MM/YY" class="form-control"></vue-masked-input>
-                    </vue-form-group>
-
-                    <vue-form-group :errors="errors['cvc']" label="Kod zabezpieczeń (CVC)" class="form-group col-md-6">
-                      <vue-masked-input :class="{'is-invalid': 'cvc' in errors}" v-model="form.cvc" name="cvc" mask="111" class="form-control"></vue-masked-input>
-                    </vue-form-group>
-                  </div>
+                    <!-- We'll put the error messages in this element -->
+                    <div id="card-errors" role="alert"></div>
+                  </form>
                 </div>
 
-                <div id="transfer" v-show="form.payment_method === 'transfer'" class="card-body">
-                  <div class="row">
-                    <div class="col-sm-3 text-center mb-2" v-for="bank in banks">
-                      <label class="bank-logo" :class="bank._class" :for="bank._class"></label>
+                <div id="transfer" v-show="form.payment_method === 'p24'" class="card-body">
 
-                      <input type="radio" name="transfer_method" v-model="form.transfer_method" :value="bank.id" :id="bank._class">
-                    </div>
-                  </div>
                 </div>
               </div>
 
@@ -241,12 +224,7 @@
     var vat_rates = {{ vat_rates|json_encode|raw }};
 
     var form = {
-      number: '',
-      name: '',
-      exp: '',
-      cvc: '',
       payment_method: 'card',
-      transfer_method: null,
       invoice: {
         vat_id: '{{ firm.vat_id }}',
         country_id: '{{ firm.country_id }}',
