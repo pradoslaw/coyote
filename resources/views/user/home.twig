@@ -1,58 +1,72 @@
 {% extends 'user.base' %}
 {% block title %}Moje konto{{ parent() }}{% endblock %}
 
-{% block content %}
-  <h2>Start</h2>
+{% block wrapper %}
+  <div class="row">
+    <div class="col-8">
+      <div id="box-start" class="card card-default">
+        <div class="card-body">
+          <div class="media">
+            <div id="js-user" class="d-none d-sm-block mr-3">
+              <vue-thumbnail
+                :url="url"
+                upload-url="{{ route('user.photo.upload') }}"
+                @upload="setPhoto"
+                @delete="deletePhoto"
+              ></vue-thumbnail>
 
-  <div id="box-start" class="card card-default">
-    <div class="card-body">
-      <div class="media">
-        <div id="js-user" class="d-none d-sm-block mr-3">
-          <vue-thumbnail
-            :url="url"
-            upload-url="{{ route('user.photo.upload') }}"
-            @upload="setPhoto"
-            @delete="deletePhoto"
-          ></vue-thumbnail>
+              <vue-notifications position="bottom right" />
+            </div>
 
-          <vue-notifications position="bottom right" />
-        </div>
+            <div class="media-body">
+              <ul class="metadata list-inline">
+                <li class="list-inline-item" title="Ostatnia wizyta">
+                  <i class="fas fa-sign-in-alt fa-fw"></i>
+                  {{ user('visited_at')|format_date }}
+                </li>
+                <li class="list-inline-item" title="Twoje aktualne IP">
+                  <i class="fas fa-home fa-fw"></i>
+                  {{ ip }}
+                </li>
+                <li class="list-inline-item" title="Data rejestracji">
+                  <i class="fas fa-user-plus fa-fw"></i>
+                  {{ user('created_at')|format_date }}
+                </li>
+                <li class="list-inline-item" title="Liczba wizyt">
+                  <i class="far fa-eye fa-fw"></i>
+                  {{ user('visits')|number_format(0, ',', ' ') }}
+                </li>
+              </ul>
 
-        <div class="media-body">
-          <ul class="metadata list-inline">
-            <li class="list-inline-item" title="Ostatnia wizyta">
-              <i class="fas fa-sign-in-alt fa-fw"></i>
-              {{ user('visited_at')|format_date }}
-            </li>
-            <li class="list-inline-item" title="Twoje aktualne IP">
-              <i class="fas fa-home fa-fw"></i>
-              {{ ip }}
-            </li>
-            <li class="list-inline-item" title="Data rejestracji">
-              <i class="fas fa-user-plus fa-fw"></i>
-              {{ user('created_at')|format_date }}
-            </li>
-            <li class="list-inline-item" title="Liczba wizyt">
-              <i class="far fa-eye fa-fw"></i>
-              {{ user('visits')|number_format(0, ',', ' ') }}
-            </li>
-          </ul>
+              <div class="mt-2">
+                <h6><i class="fas fa-chart-line"></i> Twoja reputacja</h6>
 
-          <div class="mt-2">
-            <h6><i class="fas fa-chart-line"></i> Twoja reputacja</h6>
+                <div class="progress">
+                  <div class="progress-bar" role="progressbar" aria-valuenow="{{ rank.percentage }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ rank.percentage }}%;"></div>
 
-            <div class="progress">
-              <div class="progress-bar" role="progressbar" aria-valuenow="{{ rank.percentage }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ rank.percentage }}%;"></div>
+                  <span class="rep"><strong>{{ user('reputation')|number_format(0, '', ' ') }}</strong> <small>punktów</small></span>
 
-              <span class="rep"><strong>{{ user('reputation')|number_format(0, '', ' ') }}</strong> <small>punktów</small></span>
-
-              {% if total_users > 0 %}
-                <span class="rank" title="Miejsce w rankingu"><strong>#{{ rank.rank }}</strong> <small>/ {{ total_users }}</small></span>
-              {% endif %}
+                  {% if total_users > 0 %}
+                    <span class="rank" title="Miejsce w rankingu"><strong>#{{ rank.rank }}</strong> <small>/ {{ total_users }}</small></span>
+                  {% endif %}
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <div class="col-4">
+      <section class="box">
+        <h4 class="border-bottom"><i class="far fa-fw fa-heart"></i> Masz dość reklam?</h4>
+
+        <p>Zostań patronem 4programmers.net na <strong>Github</strong> i wyłącz reklamy na 4programmers.net</p>
+
+        <iframe src="https://github.com/sponsors/adam-boduch/button" title="Sponsoruj 4programmers.net" height="35" width="116" style="border: 0;" class="mb-3"></iframe>
+      </section>
+    </div>
   </div>
+
+
 {% endblock %}
