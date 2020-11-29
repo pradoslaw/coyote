@@ -100,20 +100,4 @@ class Payment extends Model
     {
         return $this->belongsTo(Coupon::class);
     }
-
-    /**
-     * @return string
-     */
-    public function sign()
-    {
-        $crc = [
-            $this->session_id,
-            config('services.p24.client_id'),
-            (int) round($this->invoice->grossPrice() * 100),
-            'PLN',
-            config('services.p24.salt')
-        ];
-
-        return md5(join('|', $crc));
-    }
 }

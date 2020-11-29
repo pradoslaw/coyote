@@ -13,22 +13,20 @@
         </div>
 
         <div class="card-body" v-show="grossPrice > 0">
-          <ul class="nav nav-pills">
+          <ul class="nav nav-tabs">
             <li class="nav-item">
               <a @click="setPaymentMethod('card')" :class="{'active': form.payment_method === 'card'}" href="javascript:" class="nav-link">
-                <strong>Karta kredytowa/debetowa</strong>
+                <strong class="d-block mb-1">Karta kredytowa/debetowa</strong>
 
                 <img src="/img/mastercard.png">
-                <img src="/img/visa.png">
+                <img src="/img/visa.png" style="height: 20px">
                 <img src="/img/maestro.png">
-
-                <small class="text-muted" style="display: block; margin-top: 9px; font-size: 10px;">Powered by PayLane</small>
               </a>
             </li>
 
             <li class="nav-item">
               <a @click="setPaymentMethod('p24')" :class="{'active': form.payment_method === 'p24'}" href="javascript:" class="nav-link">
-                <strong class="mb-2">Przelew bankowy</strong>
+                <strong class="d-block mb-1">Przelew bankowy</strong>
 
                 <img src="/img/ipko.png" class="mr-1">
                 <img src="/img/mbank.png" class="mr-1">
@@ -42,7 +40,7 @@
           <div class="mt-3 row">
             <div class="col-12">
               <div class="card card-default">
-                <div id="card" v-show="form.payment_method === 'card'" class="card-body">
+                <div v-show="form.payment_method === 'card'" class="card-body">
                   <form id="card-form">
                     <div id="card-element">
                       <!-- Elements will create input elements here -->
@@ -51,10 +49,6 @@
                     <!-- We'll put the error messages in this element -->
                     <div id="card-errors" role="alert"></div>
                   </form>
-                </div>
-
-                <div id="transfer" v-show="form.payment_method === 'p24'" class="card-body">
-
                 </div>
               </div>
 
@@ -219,6 +213,7 @@
   </div>
 
   <script>
+    var stripe_key = '{{ stripe_key }}';
     var countries = {{ countries|json_encode|raw }};
     var calculator = {{ calculator|json_encode|raw }};
     var vat_rates = {{ vat_rates|json_encode|raw }};
@@ -228,34 +223,9 @@
       invoice: {
         vat_id: '{{ firm.vat_id }}',
         country_id: '{{ firm.country_id }}',
+        email: '{{ user('email') }}'
       }
     };
-
-    var banks = [
-      {id: 25, _class: 'mtransfer'},
-      {id: 31, _class: 'ipko'},
-      {id: 20, _class: 'santander'},
-      {id: 65, _class: 'pekao'},
-      {id: 85, _class: 'millenium'},
-      {id: 88, _class: 'alior'},
-      {id: 26, _class: 'inteligo'},
-      {id: 45, _class: 'credit-agricole'},
-      {id: 121, _class: 't-mobile'},
-      {id: 110, _class: 'deutsche-bank'},
-      {id: 94, _class: 'eurobank'},
-      {id: 119, _class: 'citi'},
-      {id: 153, _class: 'getin'},
-      {id: 33, _class: 'bgz'},
-      {id: 48, _class: 'bos'},
-      {id: 141, _class: 'pocztowy-24'},
-      {id: 143, _class: 'bps'},
-      {id: 69, _class: 'volkswagen-bank'},
-      {id: 158, _class: 'noble'},
-      {id: 112, _class: 'ing'},
-      {id: 131, _class: 'plus'},
-      {id: 222, _class: 'nest'},
-      {id: 154, _class: 'blik'}
-    ]
   </script>
 {% endblock %}
 

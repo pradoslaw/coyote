@@ -14,17 +14,15 @@ use Coyote\Repositories\Contracts\PaymentRepositoryInterface as PaymentRepositor
 use Coyote\Services\Invoice\CalculatorFactory;
 use Coyote\Services\UrlBuilder;
 use Coyote\Services\Invoice\Generator as InvoiceGenerator;
-use Coyote\Str;
 use Illuminate\Database\Connection as Db;
 use Illuminate\Http\Request;
-use GuzzleHttp\Client as HttpClient;
+use Stripe\Exception\SignatureVerificationException;
 use Stripe\PaymentIntent;
 use Stripe\Stripe;
+use Stripe\Webhook;
 
 class PaymentController extends Controller
 {
-    private const ERROR = 'error';
-
     /**
      * @var InvoiceGenerator
      */
@@ -111,14 +109,16 @@ class PaymentController extends Controller
             'vat_rates'         => $this->vatRates,
             'calculator'        => $calculator->toArray(),
             'firm'              => $firm,
-            'countries'         => $countries
+            'countries'         => $countries,
+            'stripe_key'        => config('services.stripe.key')
         ]);
     }
 
     /**
      * @param PaymentRequest $request
      * @param Payment $payment
-     * @return string
+     * @return array|\Illuminate\Http\RedirectResponse
+     * @throws \Stripe\Exception\ApiErrorException
      */
     public function process(PaymentRequest $request, Payment $payment)
     {
@@ -160,14 +160,14 @@ class PaymentController extends Controller
         $intent = PaymentIntent::create([
             'amount'                => $payment->invoice->grossPrice() * 100,
             'currency'              => strtolower($payment->invoice->currency->name),
-            'metadata'              => ['integration_check' => 'accept_a_payment'],
-            'payment_method_types'  => [$request->input('payment_method')],
+            'metadata'              => ['id' => $payment->id],
+            'payment_method_types'  => [$request->input('payment_method')]
         ]);
 
         return [
-            'token' => $intent->client_secret,
-            'success_url' => route('job.payment.success', [$payment]),
-            'status_url' => route('job.payment.status', [$payment])
+            'token'             => $intent->client_secret,
+            'success_url'       => route('job.payment.success', [$payment]),
+            'status_url'        => route('job.payment.status', [$payment])
         ];
     }
 
@@ -185,97 +185,30 @@ class PaymentController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param HttpClient $client
-     * @param PaymentRepository $payment
-     * @throws \Exception
+     * @param PaymentRepository $repository
+     * @throws SignatureVerificationException
      */
-    public function paymentStatus(Request $request, HttpClient $client, PaymentRepository $payment)
+    public function paymentStatus(PaymentRepository $repository)
     {
-        /** @var \Coyote\Payment $payment */
-        $payment = $payment->findBy('session_id', $request->get('p24_session_id'));
-        abort_if($payment === null, 404);
+        Stripe::setApiKey(config('services.stripe.secret'));
 
-        $crc = md5(
-            join(
-                '|',
-                array_merge(
-                    $request->only(['p24_session_id', 'p24_order_id', 'p24_amount', 'p24_currency']),
-                    [config('services.p24.salt')]
-                )
-            )
-        );
+        $payload = @file_get_contents('php://input');
+        $event = null;
 
         try {
-            if ($request->get('p24_sign') !== $crc) {
-                throw new \InvalidArgumentException(
-                    sprintf('Crc does not match in payment: %s.', $payment->session_id)
-                );
-            }
-
-            $response = $client->post(config('services.p24.verify_url'), [
-                'form_params' => $request->except(['p24_method', 'p24_statement', 'p24_amount'])
-                    + ['p24_amount' => round($payment->invoice->grossPrice() * 100)]
-            ]);
-
-            $body = \GuzzleHttp\Psr7\parse_query($response->getBody());
-
-            if (!isset($body['error']) || $body['error'] != 0) {
-                throw new \InvalidArgumentException(
-                    sprintf('[%s]: %s', $payment->session_id, $response->getBody())
-                );
-            }
-
-            event(new PaymentPaid($payment));
-        } catch (\Exception $e) {
-            logger()->debug($request->all());
-
+            $event = Webhook::constructEvent($payload, $_SERVER['HTTP_STRIPE_SIGNATURE'], config('services.stripe.endpoint_secret'));
+        } catch (\UnexpectedValueException | SignatureVerificationException $e) {
             throw $e;
         }
-    }
 
-    /**
-     * @param Request $request
-     * @param PaymentRepository $payment
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function payment3DSecure(Request $request, PaymentRepository $payment)
-    {
-        $salt        = config('services.paylane.salt');
-        $status      = $request->input('status');
-        $description = $request->input('description');
-        $amount      = $request->input('amount');
-        $currency    = $request->input('currency');
-        $hash        = $request->input('hash');
-
-        $id = '';
-        if ($status !== self::ERROR) {
-            $id = $request->input('id_3dsecure_auth');
+        if ($event->type !== 'payment_intent.succeeded') {
+            return;
         }
 
-        $calcHash = sha1("{$salt}|{$status}|{$description}|{$amount}|{$currency}|{$id}");
-        abort_if($calcHash !== $hash, 500, "Error, wrong hash");
+        $paymentIntent = $event->data->object;
+        $repository = $repository->findOrFail($paymentIntent->metadata->id);
 
-        $payment = $payment->findOrFail($description);
-        abort_if($payment === null, 404);
-
-        $client = new \PayLaneRestClient(config('services.paylane.username'), config('services.paylane.password'));
-
-        return $this->handlePayment(function () use ($client, $id, $payment) {
-            $result = $client->saleBy3DSecureAuthorization(['id_3dsecure_auth' => $id]);
-
-            if (!$result['success']) {
-                $error = $result['error'];
-                logger()->error(var_export($result, true));
-
-                throw new PaymentFailedException(
-                    trans('payment.validation', ['message' => $error['error_description']]),
-                    $error['error_number']
-                );
-            }
-
-            return $this->successfulTransaction($payment);
-        });
+        event(new PaymentPaid($repository));
     }
 
     /**
@@ -292,45 +225,6 @@ class PaymentController extends Controller
         return redirect()
             ->to(UrlBuilder::job($payment->job))
             ->with('success', trans('payment.success'));
-    }
-
-    /**
-     * @param Payment $payment
-     * @throws PaymentFailedException
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    private function makeCardTransaction(Payment $payment)
-    {
-        Stripe::setApiKey(config('services.stripe.secret'));
-
-        $intent = PaymentIntent::create([
-            'amount' => $payment->invoice->grossPrice() * 100,
-            'currency' => strtolower($payment->invoice->currency->name),
-            'metadata' => ['integration_check' => 'accept_a_payment'],
-            'payment_method_types' => ['p24'],
-        ]);
-
-        return $intent->client_secret;
-
-    }
-
-    /**
-     * @param Payment $payment
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    private function makeTransferTransaction(Payment $payment)
-    {
-        $payment->session_id = str_random(90);
-        $payment->save();
-
-        return redirect()->route('job.gateway', [$payment]);
-    }
-
-    public function gateway(Payment $payment)
-    {
-        return $this->view('job.gateway', [
-            'payment' => $payment
-        ]);
     }
 
     /**
@@ -361,10 +255,6 @@ class PaymentController extends Controller
      */
     private function handlePaymentException($exception)
     {
-        // remove sensitive data
-        $this->request->merge(['number' => '***', 'cvc' => '***']);
-        $_POST['number'] = $_POST['cvc'] = '***';
-
         $this->db->rollBack();
         // log error. sensitive data won't be saved (we removed them)
         logger()->error($exception);

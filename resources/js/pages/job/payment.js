@@ -47,37 +47,36 @@ new Vue({
     isProcessing: false
   },
   mounted() {
-    this.stripe = Stripe('pk_test_51HMI9jCHUDu7oSByvpWKMgotYB5kLTmkikmtb5jj8MmYexoB0VYEwHjKa1qZnbCQ7uAPKrtbqG0GZE3X1ewQcQFT00T7AMe0Pr');
+    this.stripe = Stripe(window.stripe_key);
     const elements = this.stripe.elements();
 
-    var style = {
+    const style = {
       iconStyle: 'solid',
-      style: {
-        base: {
-          iconColor: '#c4f0ff',
-          color: '#fff',
-          fontWeight: 500,
-          fontFamily: 'Roboto, Open Sans, Segoe UI, sans-serif',
-          fontSize: '16px',
-          fontSmoothing: 'antialiased',
-
-          ':-webkit-autofill': {
-            color: '#fce883',
-          },
-          '::placeholder': {
-            color: '#87BBFD',
-          },
-        },
-        invalid: {
-          iconColor: '#FFC7EE',
-          color: '#FFC7EE',
-        },
-      },
+      // style: {
+      //   base: {
+      //     iconColor: '#c4f0ff',
+      //     color: '#fff',
+      //     fontWeight: 500,
+      //     fontFamily: 'Roboto, Open Sans, Segoe UI, sans-serif',
+      //     fontSize: '16px',
+      //     fontSmoothing: 'antialiased',
+      //
+      //     ':-webkit-autofill': {
+      //       color: '#fce883',
+      //     },
+      //     '::placeholder': {
+      //       color: '#87BBFD',
+      //     },
+      //   },
+      //   invalid: {
+      //     iconColor: '#FFC7EE',
+      //     color: '#FFC7EE',
+      //   },
+      // },
     };
 
-    this.card = elements.create("card", { style: style });
-    this.card.mount("#card-element");
-
+    this.card = elements.create('card', { style });
+    this.card.mount('#card-element');
   },
   methods: {
     calculate() {
@@ -106,7 +105,7 @@ new Vue({
     },
 
     async p24Payment({ token, success_url }) {
-      const {error} = await this.stripe.confirmP24Payment(
+      const { error } = await this.stripe.confirmP24Payment(
         token,
         {
           payment_method: {

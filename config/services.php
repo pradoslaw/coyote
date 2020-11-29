@@ -74,8 +74,9 @@ return [
     ],
 
     'stripe' => [
-        'key'           => env('STRIPE_KEY', docker_secret('STRIPE_KEY_FILE')),
-        'secret'        => env('STRIPE_SECRET', docker_secret('STRIPE_SECRET_FILE')),
+        'key'            => env('STRIPE_KEY', docker_secret('STRIPE_KEY_FILE')),
+        'secret'         => env('STRIPE_SECRET', docker_secret('STRIPE_SECRET_FILE')),
+        'endpoint_secret'=> env('STRIPE_ENDPOINT_SECRET', docker_secret('STRIPE_ENDPOINT_SECRET_FILE')),
     ],
 
     'p24' => [
