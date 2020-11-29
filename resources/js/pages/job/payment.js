@@ -129,7 +129,13 @@ new Vue({
       this.isProcessing = true;
 
       axios.post(window.location.href, data)
-        .then(response => this[`${this.form.payment_method}Payment`](response.data))
+        .then(response => {
+          if (response.status === 201) {
+            window.location.href = response.data;
+          }
+
+          this[`${this.form.payment_method}Payment`](response.data)
+        })
         .catch(err => {
           if (err.response.status !== 422) {
             return;

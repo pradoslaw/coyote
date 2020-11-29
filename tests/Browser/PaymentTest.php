@@ -42,7 +42,7 @@ class PaymentTest extends DuskTestCase
                 ->resize(1600, 1200)
                 ->loginAs($this->job->user)
                 ->visitRoute('job.payment', [$payment])
-                ->waitFor('#card')
+                ->waitFor('#js-payment')
                 ->assertInputValue('invoice[vat_id]', $firm->vat_id)
                 ->assertSelected('invoice[country_id]', $firm->country_id)
                 ->clickLink('Masz kupon rabatowy?')

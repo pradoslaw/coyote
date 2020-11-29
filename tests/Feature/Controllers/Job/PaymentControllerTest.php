@@ -173,8 +173,8 @@ class PaymentControllerTest extends TestCase
             ]
         );
 
-        $response->assertStatus(302);
-        $response->assertRedirect(UrlBuilder::job($this->job));
+        $response->assertStatus(201);
+        $response->assertSeeText(UrlBuilder::job($this->job));
 
         $payment->refresh();
 

@@ -212,19 +212,17 @@ class PaymentController extends Controller
     }
 
     /**
-     * Card transaction was successful. Reindex and return to the offer
-     *
      * @param Payment $payment
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     private function successfulTransaction(Payment $payment)
     {
         // boost job offer, send invoice and reindex
         event(new PaymentPaid($payment));
 
-        return redirect()
-            ->to(UrlBuilder::job($payment->job))
-            ->with('success', trans('payment.success'));
+        session()->flash('success', trans('payment.success'));
+
+        return response(UrlBuilder::job($payment->job, true), 201);
     }
 
     /**
