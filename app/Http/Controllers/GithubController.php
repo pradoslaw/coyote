@@ -12,7 +12,8 @@ class GithubController extends Controller
 
     public function sponsorship(Request $request, UserRepository $repository)
     {
-        logger()->debug($request->getContent());
+        abort_if($request->header('X-Hub-Signature-256') === null, 401);
+        logger()->debug((string) $request->getContent());
 
         abort_unless($this->verify($request->header('X-Hub-Signature-256'), $request->getContent()), 403);
 
