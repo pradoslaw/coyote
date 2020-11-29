@@ -10,10 +10,8 @@ use Coyote\Http\Factories\FlagFactory;
 use Coyote\Http\Resources\FlagResource;
 use Coyote\Http\Resources\PollResource;
 use Coyote\Http\Resources\PostCollection;
-use Coyote\Http\Resources\PromptResource;
 use Coyote\Http\Resources\TopicResource;
 use Coyote\Post;
-use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Post\WithSubscribers;
 use Coyote\Repositories\Criteria\WithTrashed;
@@ -192,36 +190,6 @@ class TopicController extends BaseController
         event(new TopicWasSaved($topic));
 
         return response($topic->subscribers()->count());
-    }
-
-    /**
-     * @param UserRepository $user
-     * @param Request $request
-     * @param int|null $id
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    public function prompt(UserRepository $user, Request $request, int $id = null)
-    {
-        $this->validate($request, ['q' => 'username']);
-        $userIds = [];
-
-        if ($id) {
-            $posts = $this->post->findAllBy('topic_id', $id, ['id', 'user_id']);
-            $posts->load('comments:id,post_id,user_id'); // load comments assigned to posts
-
-            $usersId = $posts->pluck('user_id')->toArray();
-
-            $posts->pluck('comments')[0]->each(function ($comment) use (&$usersId) {
-                $usersId[] = $comment->user_id;
-            });
-        }
-
-        $result = $user->lookupName($request['q'], array_filter(array_unique($userIds)));
-
-        PromptResource::withoutWrapping();
-
-        return PromptResource::collection($result);
     }
 
     /**
