@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property bool $is_enabled
  * @property string $content
  * @property int $max_reputation
+ * @property bool $enable_sponsor
  */
 class Block extends Model
 {
@@ -19,7 +20,7 @@ class Block extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'region', 'is_enabled', 'content', 'max_reputation'];
+    protected $fillable = ['name', 'region', 'is_enabled', 'content', 'max_reputation', 'enable_sponsor'];
 
     /**
      * @var string
@@ -30,17 +31,7 @@ class Block extends Model
      * @var array
      */
     protected $attributes = [
-        'is_enabled' => true
+        'is_enabled' => true,
+        'enable_sponsor' => true
     ];
-
-    public static function boot()
-    {
-        parent::boot();
-
-        static::saving(function (Block $model) {
-            if (!$model->max_reputation) {
-                $model->max_reputation = null;
-            }
-        });
-    }
 }

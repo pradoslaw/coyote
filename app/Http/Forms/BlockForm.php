@@ -31,6 +31,9 @@ class BlockForm extends Form implements ValidatesWhenSubmitted
             ->add('is_enabled', 'checkbox', [
                 'label' => 'Włączony'
             ])
+            ->add('enable_sponsor', 'checkbox', [
+                'label' => 'Włączony dla sponsorów'
+            ])
             ->add('max_reputation', 'text', [
                 'label' => 'Wyświetlaj tylko użytkownikom z reputacją od 0 do...',
                 'help' => 'Blok ten nie będzie wyświetlany użytkownikom, którzy posiadają więcej niż N punktów reputacji',

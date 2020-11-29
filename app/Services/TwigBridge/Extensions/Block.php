@@ -5,6 +5,7 @@ namespace Coyote\Services\TwigBridge\Extensions;
 use Coyote\Http\Factories\CacheFactory;
 use Coyote\Repositories\Contracts\BlockRepositoryInterface;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface;
+use Coyote\Block as Model;
 use Twig_Extension;
 use Twig_SimpleFunction;
 
@@ -15,7 +16,7 @@ class Block extends Twig_Extension
     /**
      * @var \Illuminate\Support\Collection
      */
-    private $blocks;
+    public $blocks;
 
     public function __construct()
     {
@@ -71,15 +72,29 @@ class Block extends Twig_Extension
         /** @var \Coyote\Block $block */
         $block = $this->blocks->where('name', $name)->first();
 
-        if (!$block || !$block->is_enabled) {
-            return '';
-        }
-
-        if ($block->max_reputation && auth()->check() && auth()->user()->reputation > $block->max_reputation) {
+        if (!$block || !$block->is_enabled || !$this->shouldDisplayForSponsor($block) || !$this->shouldDisplayForPrivilegeUsers($block)) {
             return '';
         }
 
         return $block->content;
+    }
+
+    private function shouldDisplayForSponsor(Model $block): bool
+    {
+        if ($block->enable_sponsor || auth()->guest()) {
+            return true;
+        }
+
+        return !auth()->user()->is_sponsor;
+    }
+
+    private function shouldDisplayForPrivilegeUsers(Model $block): bool
+    {
+        if (!$block->max_reputation || auth()->guest()) {
+            return true;
+        }
+
+        return auth()->user()->reputation < $block->max_reputation;
     }
 
     /**
@@ -139,7 +154,7 @@ class Block extends Twig_Extension
     private function getBlocks()
     {
         return $this->getCacheFactory()->rememberForever('blocks', function () {
-            return $this->getBlockRepository()->all(['name', 'is_enabled', 'content', 'region', 'max_reputation']);
+            return $this->getBlockRepository()->all(['name', 'is_enabled', 'content', 'region', 'max_reputation', 'enable_sponsor']);
         });
     }
 }

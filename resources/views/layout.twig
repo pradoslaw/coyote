@@ -97,7 +97,13 @@
               </a>
 
               <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item profile-name" href="{{ route('user.home') }}">{{ user('name') }}</a>
+                <a class="dropdown-item profile-name" href="{{ route('user.home') }}">
+                  {{ user('name') }}
+
+                  {% if user('is_sponsor') %}
+                    <i class="fa fa-fw fa-medal" title="Konto Premium"></i>
+                  {% endif %}
+                </a>
 
                 <div class="dropdown-divider"></div>
 
