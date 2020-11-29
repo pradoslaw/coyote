@@ -65,15 +65,6 @@ class UserRepository extends Repository implements UserRepositoryInterface
     }
 
     /**
-     * @param array $data
-     * @return User
-     */
-    public function newUser(array $data)
-    {
-        return User::forceCreate($data);
-    }
-
-    /**
      * Pobiera reputacje usera w procentach (jak i rowniez pozycje usera w rankingu)
      *
      * @param $userId

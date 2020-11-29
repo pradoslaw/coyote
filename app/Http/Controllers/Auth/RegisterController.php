@@ -11,6 +11,7 @@ use Coyote\Mail\UserRegistered;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Objects\Person as Stream_Person;
+use Coyote\User;
 
 class RegisterController extends Controller
 {
@@ -68,7 +69,7 @@ class RegisterController extends Controller
         $this->transaction(function () use ($request) {
             $email = $request->input('email');
 
-            $user = $this->user->newUser([
+            $user = User::forceCreate([
                 'name'     => $request->input('name'),
                 'email'    => $email,
                 'password' => bcrypt($request->input('password')),
