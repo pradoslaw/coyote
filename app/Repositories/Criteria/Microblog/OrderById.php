@@ -10,7 +10,7 @@ class OrderById extends Criteria
     /**
      * @var bool
      */
-    private $withPremium;
+    protected $withPremium;
 
     /**
      * OrderById constructor.

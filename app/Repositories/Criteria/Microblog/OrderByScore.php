@@ -3,9 +3,8 @@
 namespace Coyote\Repositories\Criteria\Microblog;
 
 use Coyote\Repositories\Contracts\RepositoryInterface as Repository;
-use Coyote\Repositories\Criteria\Criteria;
 
-class OrderByScore extends Criteria
+class OrderByScore extends OrderById
 {
     /**
      * @param \Illuminate\Database\Eloquent\Builder $model
@@ -14,6 +13,10 @@ class OrderByScore extends Criteria
      */
     public function apply($model, Repository $repository)
     {
-        return $model->orderBy('microblogs.is_sponsored', 'DESC')->orderBy('microblogs.score', 'DESC');
+        if ($this->withPremium) {
+            $model = $model->orderBy('microblogs.is_sponsored', 'DESC');
+        }
+
+        return $model->orderBy('microblogs.score', 'DESC');
     }
 }

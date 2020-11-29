@@ -94,7 +94,8 @@ class InitialStateComposer
                 'notifications_unread'  => $user->notifications_unread,
                 'pm_unread'             => $user->pm_unread,
                 'created_at'            => $user->created_at->toIso8601String(),
-                'photo'                 => (string) $user->photo->url()
+                'photo'                 => (string) $user->photo->url(),
+                'is_sponsor'            => $user->is_sponsor
             ]
         ];
     }

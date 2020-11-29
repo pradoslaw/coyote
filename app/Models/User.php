@@ -65,6 +65,7 @@ use Ramsey\Uuid\Uuid;
  * @property \Coyote\Notification\Setting $notificationSettings[]
  * @property Group[]|\Illuminate\Support\Collection $groups
  * @property Group $group
+ * @property bool $is_sponsor
  */
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {

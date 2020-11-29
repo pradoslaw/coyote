@@ -23,6 +23,8 @@ class Builder
      */
     private $user;
 
+    private bool $isSponsor = false;
+
     /**
      * @param MicroblogRepositoryInterface $microblog
      */
@@ -38,6 +40,7 @@ class Builder
     public function forUser(?User $user)
     {
         $this->user = $user;
+        $this->isSponsor = $user ? $user->is_sponsor : false;
 
         return $this;
     }
@@ -47,7 +50,7 @@ class Builder
      */
     public function orderByScore()
     {
-        $this->microblog->pushCriteria(new OrderByScore());
+        $this->microblog->pushCriteria(new OrderByScore(!$this->isSponsor));
 
         return $this;
     }
@@ -57,7 +60,7 @@ class Builder
      */
     public function orderById()
     {
-        $this->microblog->pushCriteria(new OrderById());
+        $this->microblog->pushCriteria(new OrderById(!$this->isSponsor));
 
         return $this;
     }
