@@ -5,6 +5,7 @@ namespace Tests\Feature\Controllers\Job;
 use Coyote\Coupon;
 use Coyote\Job;
 use Coyote\Plan;
+use Coyote\Services\UrlBuilder;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Faker\Factory;
@@ -83,33 +84,6 @@ class PaymentControllerTest extends TestCase
         $this->assertNotEmpty($data['token']);
     }
 
-    public function testSubmitFormWithInvalidExpDate()
-    {
-        $payment = $this->job->getUnpaidPayment();
-
-        $response = $this->actingAs($this->job->user)->json(
-            'POST',
-            "/Praca/Payment/{$payment->id}",
-            [
-                'payment_method' => 'card',
-                'price' => $payment->plan->gross_price,
-                'enable_invoice' => false,
-                'number' => '4012001038443335',
-                'name' => 'Jan Kowalski',
-                'cvc' => '123',
-                'exp' => '12/19'
-            ]
-        );
-
-        $response->assertStatus(422);
-        $response->assertJsonFragment([
-            'message' => 'The given data was invalid.',
-            'errors' => [
-                'exp' => ['Upłynęła data ważności karty.']
-            ]
-        ]);
-    }
-
     public function testSubmitValidFormWithInvoice()
     {
         $faker = Factory::create();
@@ -122,10 +96,6 @@ class PaymentControllerTest extends TestCase
                 'payment_method' => 'card',
                 'price' => $payment->plan->gross_price,
                 'enable_invoice' => true,
-                'number' => '4012001038443335',
-                'name' => 'Jan Kowalski',
-                'cvc' => '123',
-                'exp' => '12/26',
                 'invoice' => [
                     'name' => $name = $faker->company,
                     'vat_id' => $vat = '123123123',
@@ -138,11 +108,10 @@ class PaymentControllerTest extends TestCase
         );
 
         $response->assertStatus(200);
-        $url = $response->getContent();
 
-        $response = $this->get($url);
+        $data = $response->decodeResponseJson();
 
-        $response->assertSee($this->job->title);
+        $this->assertNotEmpty($data['token']);
 
         $payment->refresh();
 
@@ -159,10 +128,10 @@ class PaymentControllerTest extends TestCase
         $faker = Factory::create();
 
         $payment = $this->job->getUnpaidPayment();
-        $payment->setRelation('plan', Plan::where('name', 'Premium')->get()->first());
+        $payment->plan_id = Plan::where('name', 'Premium')->value('id');
         $payment->save();
 
-        $coupon = Coupon::create(['amount' => 10, 'code' => $faker->randomAscii]);
+        $coupon = Coupon::create(['amount' => 10, 'code' => $faker->word]);
 
         $response = $this->actingAs($this->job->user)->json(
             'POST',
@@ -171,10 +140,6 @@ class PaymentControllerTest extends TestCase
                 'payment_method' => 'card',
                 'price' => $payment->plan->gross_price,
                 'enable_invoice' => false,
-                'number' => '4012001038443335',
-                'name' => 'Jan Kowalski',
-                'cvc' => '123',
-                'exp' => '12/26',
                 'coupon' => $coupon->code
             ]
         );
@@ -208,7 +173,9 @@ class PaymentControllerTest extends TestCase
             ]
         );
 
-        $response->assertStatus(200);
+        $response->assertStatus(302);
+        $response->assertRedirect(UrlBuilder::job($this->job));
+
         $payment->refresh();
 
         $this->assertEquals($payment->invoice->grossPrice(), 0);
@@ -222,18 +189,12 @@ class PaymentControllerTest extends TestCase
             'POST',
             "/Praca/Payment/{$payment->id}",
             [
-                'payment_method' => 'transfer',
+                'payment_method' => 'p24',
                 'price' => $payment->plan->gross_price,
-                'enable_invoice' => false,
-                'transfer_method' => 25
+                'enable_invoice' => false
             ]
         );
 
         $response->assertStatus(200);
-        $url = $response->getContent();
-
-        $response = $this->get($url);
-
-        $response->assertSee('Ładowanie');
     }
 }
