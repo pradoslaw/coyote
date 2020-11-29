@@ -32,7 +32,7 @@ return [
     'github' => [
         'client_id'     => env('GITHUB_CLIENT_ID', docker_secret('GITHUB_CLIENT_ID_FILE')),
         'client_secret' => env('GITHUB_SECRET_ID', docker_secret('GITHUB_SECRET_ID_FILE')),
-        'redirect'      => env('GITHUB_REDIRECT'),
+        'redirect'      => env('GITHUB_REDIRECT')
     ],
 
     'google' => [

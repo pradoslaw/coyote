@@ -11,13 +11,9 @@ class GithubControllerTest extends TestCase
 {
     use DatabaseTransactions, WithFaker;
 
-    private User $user;
-
-    public function setUp(): void
+    private function signature(array $data): string
     {
-        parent::setUp();
-
-
+        return 'sha256=' . hash_hmac('sha256', json_encode($data), config('services.github.client_secret'));
     }
 
     public function testSetSuccessSponsorshipById()
@@ -27,13 +23,17 @@ class GithubControllerTest extends TestCase
         $this->assertNotNull($user->provider);
         $this->assertNotNull($user->provider_id);
 
-        $response = $this->post('/github/sponsorship', [
+        $data = [
             'action' => 'created',
             'sender' => [
                 'id' => $user->provider_id,
                 'html_url' => 'https://github.com/lorem-ipsum'
             ]
-        ]);
+        ];
+
+        $signature = $this->signature($data);
+
+        $response = $this->json('POST', '/github/sponsorship', $data, ['X-Hub-Signature-256' => $signature]);
 
         $response->assertStatus(200);
 
@@ -46,13 +46,16 @@ class GithubControllerTest extends TestCase
     {
         $user = factory(User::class)->create(['github' => 'https://github.com/lorem-ipsum']);
 
-        $response = $this->post('/github/sponsorship', [
+        $data = [
             'action' => 'created',
             'sender' => [
                 'id' => 1,
                 'html_url' => 'https://github.com/lorem-ipsum'
             ]
-        ]);
+        ];
+
+        $signature = $this->signature($data);
+        $response = $this->json('POST', '/github/sponsorship', $data, ['X-Hub-Signature-256' => $signature]);
 
         $response->assertStatus(200);
 
@@ -65,19 +68,21 @@ class GithubControllerTest extends TestCase
     {
         $user = factory(User::class)->create(['github' => 'https://github.com/lorem-ipsum', 'is_sponsor' => true]);
 
-        $response = $this->post('/github/sponsorship', [
+        $data = [
             'action' => 'cancelled',
             'sender' => [
                 'id' => 1,
                 'html_url' => 'https://github.com/lorem-ipsum'
             ]
-        ]);
+        ];
+
+        $signature = $this->signature($data);
+        $response = $this->json('POST', '/github/sponsorship', $data, ['X-Hub-Signature-256' => $signature]);
 
         $response->assertStatus(200);
 
         $user->refresh();
 
         $this->assertFalse($user->is_sponsor);
-
     }
 }
