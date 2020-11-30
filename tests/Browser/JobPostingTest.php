@@ -153,6 +153,8 @@ class JobPostingTest extends DuskTestCase
         /** @var Firm $firm */
         $firm = factory(Firm::class)->create(['user_id' => $user->id]);
 
+        $this->assertNotEmpty($firm->name);
+
         $firm->benefits()->create(['name' => 'Game-boy']);
         $firm->benefits()->create(['name' => 'TV']);
 
