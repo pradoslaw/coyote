@@ -26,7 +26,8 @@
         <env name="APP_ENV" value="testing"/>
         <env name="APP_DEBUG" value="false"/>
         <env name="BCRYPT_ROUNDS" value="4"/>
-        <env name="MAIL_DRIVER" value="array"/>
+        <env name="CACHE_DRIVER" value="redis"/>
+        <env name="MAIL_DRIVER" value="log"/>
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="AWS_URL" value="http://nginx/uploads/"/>
     </php>
