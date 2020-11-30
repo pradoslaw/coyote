@@ -54,7 +54,7 @@ jobs:
       - name: Create uploads directory
         run: mkdir public/uploads
 
-      - name: Create uploads directory
+      - name: Setup owner
         run: sudo chown -R runneradmin:runneradmin ./
 
       - name: Run tests
@@ -62,10 +62,8 @@ jobs:
 
       - name: Run Dusk
         run: docker-compose exec -T --user=nginx:nginx php php artisan dusk
-
-      - name: Ls log
-        if: ${{ always() }}
-        run: ls -lsa storage/logs
+        env:
+          DEBUGBAR_ENABLED: "false"
 
       - uses: actions/upload-artifact@v2
         if: ${{ always() }}
