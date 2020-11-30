@@ -28,6 +28,9 @@ jobs:
       - name: Create uploads directory
         run: mkdir public/uploads
 
+      - name: chmod
+        run: chmod 0777 -R storage/logs
+
       - name: Create uploads directory
         run: sudo chown -R runneradmin:runneradmin ./
 

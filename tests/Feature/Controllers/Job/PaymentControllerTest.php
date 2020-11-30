@@ -77,7 +77,7 @@ class PaymentControllerTest extends TestCase
             ]
         );
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
 
         $data = $response->decodeResponseJson();
 
@@ -107,7 +107,7 @@ class PaymentControllerTest extends TestCase
             ]
         );
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
 
         $data = $response->decodeResponseJson();
 
@@ -195,6 +195,6 @@ class PaymentControllerTest extends TestCase
             ]
         );
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
     }
 }
