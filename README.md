@@ -40,12 +40,6 @@ spowodują wygenerowanie nowych plików wynikowych CSS oraz JS.
 
 ## Testowanie
 
-Testy pisane są w dwóch frameworkach: codeception (legacy code) oraz laravel.
-
-Aby uruchomić testy napisane w codeception należy wykonać polecenie:
-
-`docker-compose exec php php vendor/bin/codecept run`
-
 Aby uruchomić testy w laravel:
 
 `docker-compose exec php php vendor/bin/phpunit`
@@ -64,15 +58,6 @@ Jeżeli jednak chciałbyś przetestować działanie mechanizmu kolejek, ustaw w
 Aby uruchomić mechanizm kolejek skorzystaj z następującego polecenia:
 
 `sudo docker-compose exec php php artisan queue:listen --sleep=10`
-
-## Ustawienia crona
-
-W przypadku ustawienia środowiska na `production` w pliku `.env`, konieczne będzie ustawienie crona aby wykonywać
-pewne czynności cykliczne.
-
-1. W konsoli wpisz `crontab -e`
-2. Dodaj linię: `* * * * * php /var/www/path-to-app/artisan schedule:run >> /dev/null 2>&1`
-
 
 ## Jak możesz pomóc?
 
