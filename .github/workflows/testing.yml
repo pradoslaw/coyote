@@ -17,6 +17,10 @@ jobs:
 
       - name: Run docker containers
         run: docker-compose build && docker-compose -f docker-compose.yaml -f docker-compose.testing.yaml up -d
+        env:
+          STRIPE_KEY: ${{ secrets.STRIPE_KEY }}
+          STRIPE_SECRET: ${{ secrets.STRIPE_SECRET }}
+          STRIPE_ENDPOINT_SECRET: ${{ secrets.STRIPE_ENDPOINT_SECRET }}
 
       - name: Show logs
         run: docker-compose logs php
