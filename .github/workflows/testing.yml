@@ -34,8 +34,8 @@ jobs:
       - name: Create uploads directory
         run: sudo chown -R runneradmin:runneradmin ./
 
-      - name: Run tests
-        run: docker-compose exec -T --user=nginx:nginx php php vendor/bin/phpunit
+#      - name: Run tests
+#        run: docker-compose exec -T --user=nginx:nginx php php vendor/bin/phpunit
 
       - name: Run Dusk
         run: docker-compose exec -T --user=nginx:nginx php php artisan dusk
