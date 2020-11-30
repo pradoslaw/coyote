@@ -24,6 +24,9 @@ class PaymentControllerTest extends TestCase
         parent::setUp();
 
         $this->job = factory(Job::class)->create(['is_publish' => false]);
+
+        $this->assertNotEmpty(config('services.stripe.key'));
+        $this->assertNotEmpty(config('services.stripe.secret'));
     }
 
     public function testSubmitInvalidFormWithoutAnyData()
