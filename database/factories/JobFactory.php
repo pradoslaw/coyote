@@ -9,7 +9,7 @@ $factory->define(\Coyote\Job::class, function (Faker $faker) {
         'is_publish' => false,
         'boost_at' => now(),
         'user_id' => factory(\Coyote\User::class),
-        'plan_id' => \Coyote\Plan::inRandomOrder()->get()->first()->id
+        'plan_id' => \Coyote\Plan::where('is_active', 1)->inRandomOrder()->get()->first()->id
     ];
 });
 
