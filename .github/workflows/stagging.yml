@@ -1,25 +1,16 @@
-# This is a basic workflow to help you get started with Actions
-
 name: Stagging
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
 on:
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
       - name: executing remote ssh commands using password
@@ -34,18 +25,8 @@ jobs:
             git reset --hard
             git pull
             docker-compose exec -T php composer install --no-dev
-            docker-compose exec -T php yarn install
+            docker-compose exec -T php make install-assets
             docker-compose exec -T php make migration
             docker-compose exec -T php make assets-production
             docker-compose exec -T php make cache-config
             docker-compose exec -T php php artisan queue:restart
-
-
-      #- name: Login to Docker hub
-      #  run: docker login -u ${{ secrets.DOCKER_LOGIN }} -p ${{ secrets.DOCKER_PASSWORD }}
-
-      #- name: Build docker
-      #  run: docker build -t 4programmers/coyote:$GITHUB_SHA -f docker/coyote/Dockerfile .
-
-      #- name: Push to registry
-      #  run: docker push 4programmers/coyote:$GITHUB_SHA

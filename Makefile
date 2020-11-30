@@ -1,6 +1,6 @@
 .PHONY: all update-repo dependency-install file-permission migration seed assets-dev assets-production install-es install-passport
 
-install: dependency-install file-permission migration seed install-assets assets-production cache-config key-generate install-es install-passport
+install: dependency-install file-permission migration seed install-assets assets-production key-generate install-es install-passport
 install-dev: dependency-install file-permission migration seed install-assets assets-dev key-generate install-es install-passport
 update: update-repo dependency-install migration assets-production cache-config
 update-dev: update-repo dependency-install migration assets-dev
