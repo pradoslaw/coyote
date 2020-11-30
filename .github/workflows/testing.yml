@@ -19,7 +19,7 @@ jobs:
         run: docker-compose build && docker-compose -f docker-compose.yaml -f docker-compose.testing.yaml up -d
 
       - name: Show logs
-        run: docker-compose logs php
+        run: docker-compose ps
 
       - name: Install packages
         run: docker-compose exec -T php make install
