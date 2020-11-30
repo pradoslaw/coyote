@@ -16,7 +16,7 @@ jobs:
         run: cp .env.testing .env
 
       - name: Run docker containers
-        run: docker-compose build && docker-compose up -d
+        run: docker-compose build && docker-compose -f docker-compose.yaml -f docker-compose.testing.yaml up -d
 
       - name: Show logs
         run: docker-compose logs php
