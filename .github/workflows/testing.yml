@@ -62,8 +62,6 @@ jobs:
 
       - name: Run Dusk
         run: docker-compose exec -T --user=nginx:nginx php php artisan dusk
-        env:
-          DEBUGBAR_ENABLED: "false"
 
       - uses: actions/upload-artifact@v2
         if: ${{ always() }}
