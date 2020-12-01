@@ -130,9 +130,7 @@
   import { MicroblogMixin } from "../mixins/microblog";
   import { User } from '../../types/models';
   import useBrackets from "../../libs/prompt";
-  import VueModals from '../../plugins/modals.ts';
 
-  Vue.use(VueModals);
   Vue.use(VueTimeago);
   Vue.use(VueClipboard);
 

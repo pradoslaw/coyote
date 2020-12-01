@@ -3,6 +3,7 @@ import VueMicroblog from "../components/microblog/microblog.vue";
 import VuePagination from '../components/pagination.vue';
 import VueForm from '../components/microblog/form.vue';
 import VueNotifications from 'vue-notification';
+import VueModals from '../plugins/modals';
 import store from '../store';
 import { mapGetters } from 'vuex';
 import { default as axiosErrorHandler } from '../libs/axios-error-handler';
@@ -11,6 +12,7 @@ import {Microblog, Paginator, Flag} from "../types/models";
 import Prism from "prismjs";
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
+Vue.use(VueModals);
 
 axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 

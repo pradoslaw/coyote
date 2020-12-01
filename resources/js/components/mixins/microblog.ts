@@ -45,7 +45,11 @@ export class MicroblogMixin extends Vue {
       title: 'Zablokować użytkownika?',
       okLabel: 'Tak, zablokuj'
     })
-    .then(() => store.dispatch('user/block', user.id));
+    .then(() => {
+      store.dispatch('user/block', user.id);
+
+      this.$notify({type: 'success', text: 'Nie będziesz więcej widział wpisów tego użytkownika.'})
+    });
   }
 }
 
