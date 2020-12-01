@@ -74,18 +74,17 @@
       </div>
 
       <div class="dropdown">
-        <button class="btn btn-xs dropdown-toggle border-0" type="button" data-toggle="dropdown" aria-label="Dropdown"></button>
+        <button class="btn btn-xs border-0 text-muted" type="button" data-toggle="dropdown" aria-label="Dropdown"><i class="small fa fa-ellipsis-h"></i></button>
 
         <div class="dropdown-menu dropdown-menu-right">
           <template v-if="comment.editable">
             <a @click="edit(comment)" class="dropdown-item btn-sm-edit" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
             <a @click="deleteItem" class="dropdown-item btn-sm-remove" href="javascript:"><i class="fas fa-times fa-fw"></i> Usuń</a>
+
+            <div class="dropdown-divider"></div>
           </template>
 
-          <template v-if="comment.user.id !== user.id">
-            <div class="dropdown-divider"></div>
-            <a @click="block(comment.user)" href="javascript:" class="dropdown-item"><i class="fas fa-fw fa-ban"></i> Zablokuj użytkownika</a>
-          </template>
+          <a v-if="comment.user.id !== user.id" @click="block(comment.user)" href="javascript:" class="dropdown-item"><i class="fas fa-fw fa-ban"></i> Zablokuj użytkownika</a>
         </div>
       </div>
     </div>
