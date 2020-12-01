@@ -27,8 +27,8 @@ class PaymentControllerTest extends TestCase
 
         $this->assertNotEmpty(config('services.stripe.key'));
         $this->assertNotEmpty(config('services.stripe.secret'));
-        $this->assertFalse(config('app.debug'));
         $this->assertEquals('testing', config('app.env'));
+        $this->assertFalse(config('app.debug'));
     }
 
     public function testSubmitInvalidFormWithoutAnyData()
