@@ -103,30 +103,6 @@ class CommentController extends BaseController
             stream($microblog->wasRecentlyCreated ? Stream_Create::class : Stream_Update::class, $object, $target);
         });
 
-        $subscribers = [];
-
-        if ($microblog->wasRecentlyCreated) {
-            $subscribers = $microblog->parent
-                ->subscribers()
-                ->with('user.notificationSettings')
-                ->get()
-                ->pluck('user')
-                ->exceptUser($this->auth);
-
-            $dispatcher->send($subscribers, new SubmittedNotification($microblog));
-        }
-
-        $helper = new LoginHelper();
-        // get id of users that were mentioned in the text
-        $usersId = $helper->grab($microblog->html);
-
-        if (!empty($usersId)) {
-            $dispatcher->send(
-                $this->user->findMany($usersId)->exceptUser($this->auth)->exceptUsers($subscribers),
-                new UserMentionedNotification($microblog)
-            );
-        }
-
         // save broadcast parent entry
         broadcast(new MicroblogSaved($microblog->parent))->toOthers();
         // just broadcast comment

@@ -14,10 +14,9 @@ class MicroblogSaved implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * @var Microblog
-     */
-    public $microblog;
+    public Microblog $microblog;
+    public bool $wasRecentlyCreated;
+    public bool $wasContentChanged;
 
     /**
      * Create a new event instance.
@@ -27,6 +26,8 @@ class MicroblogSaved implements ShouldBroadcast
     public function __construct(Microblog $microblog)
     {
         $this->microblog = $microblog;
+        $this->wasRecentlyCreated = $microblog->wasRecentlyCreated;
+        $this->wasContentChanged = $microblog->wasRecentlyCreated || $microblog->wasChanged(['text']);
     }
 
     /**

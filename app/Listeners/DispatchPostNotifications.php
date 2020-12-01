@@ -66,7 +66,7 @@ class DispatchPostNotifications implements ShouldQueue
 
     /**
      * @param Post $post
-     * @param User $user
+     * @param User|null $user
      * @param array $subscribers
      * @param string $senderName
      */

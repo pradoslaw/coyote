@@ -17,8 +17,13 @@ class Relation extends Model
      */
     protected $table = 'user_relations';
 
-    public function scopeBlocked(Builder $query)
+    /**
+     * @var string[]
+     */
+    protected $fillable = ['is_blocked', 'related_user_id'];
+
+    public function scopeBlocked(Builder $builder)
     {
-        return $query->where('is_blocked', true);
+        return $builder->where('is_blocked', true);
     }
 }

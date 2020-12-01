@@ -89,17 +89,6 @@ class SubmitController extends Controller
             $microblog->setTags($helper->grab($microblog->html));
         });
 
-        $helper = new LoginHelper();
-        // get id of users that were mentioned in the text
-        $usersId = $helper->grab($microblog->html);
-
-        if (!empty($usersId)) {
-            $dispatcher->send(
-                $this->user->findMany($usersId)->exceptUser($this->auth),
-                new UserMentionedNotification($microblog)
-            );
-        }
-
         broadcast(new MicroblogSaved($microblog))->toOthers();
 
         MicroblogResource::withoutWrapping();

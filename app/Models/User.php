@@ -3,6 +3,7 @@
 namespace Coyote;
 
 use Carbon\Carbon;
+use Coyote\Models\Scopes\ExcludeBlocked;
 use Coyote\Notifications\ResetPasswordNotification;
 use Coyote\Services\Media\Photo;
 use Coyote\Services\Media\Factory as MediaFactory;
@@ -71,7 +72,7 @@ use Ramsey\Uuid\Uuid;
  */
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
-    use Authenticatable, Authorizable, CanResetPassword, RoutesNotifications, HasApiTokens, SoftDeletes;
+    use Authenticatable, Authorizable, CanResetPassword, RoutesNotifications, HasApiTokens, SoftDeletes, ExcludeBlocked;
 
     /**
      * The database table used by the model.

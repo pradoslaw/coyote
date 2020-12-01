@@ -2,8 +2,10 @@
 
 namespace Coyote\Microblog;
 
+use Coyote\Models\Scopes\ExcludeBlocked;
 use Coyote\Models\Scopes\ForUser;
 use Coyote\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -11,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Subscriber extends Model
 {
-    use ForUser;
+    use ForUser, ExcludeBlocked;
 
     /**
      * The attributes that are mass assignable.
