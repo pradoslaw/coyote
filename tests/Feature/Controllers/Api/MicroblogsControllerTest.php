@@ -50,8 +50,7 @@ class MicroblogsControllerTest extends TestCase
                             'is_blocked' => false,
                             'photo' => null
                         ],
-                        'votes' => 1,
-                        'voters' => [$user->name]
+                        'votes' => 1
                     ]
                 )
             );
@@ -66,8 +65,7 @@ class MicroblogsControllerTest extends TestCase
 
         $response
             ->assertJsonFragment([
-                'votes' => 0,
-                'voters' => []
+                'votes' => 0
             ]);
     }
 }

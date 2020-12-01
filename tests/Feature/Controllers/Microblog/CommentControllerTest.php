@@ -40,7 +40,6 @@ class CommentControllerTest extends TestCase
             'is_subscribed',
             'data' => [
                 'editable',
-                'voters',
                 'votes',
                 'html'
             ]
@@ -49,7 +48,6 @@ class CommentControllerTest extends TestCase
         $response->assertJson([
             'is_subscribed' => true,
             'data' => [
-                'voters' => [],
                 'votes' => 0,
                 'editable' => true,
             ]
