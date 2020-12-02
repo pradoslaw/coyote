@@ -9,6 +9,8 @@ class RelationsController extends Controller
 {
     public function block(int $relatedUserId, Cache $cache)
     {
+        abort(500, $relatedUserId === $this->userId);
+
         $this->auth->relations()->updateOrInsert(['related_user_id' => $relatedUserId, 'is_blocked' => true, 'user_id' => $this->userId]);
 
         $cache->forget('followers:' . $this->userId);
