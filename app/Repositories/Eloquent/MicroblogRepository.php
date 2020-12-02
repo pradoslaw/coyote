@@ -107,8 +107,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
      */
     public function getTopComments($parentIds)
     {
-        $sub = Microblog::selectRaw('*, row_number() OVER (PARTITION BY parent_id ORDER BY id DESC)')
-            ->whereIn('parent_id', $parentIds);
+        $sub = $this->model->selectRaw('*, row_number() OVER (PARTITION BY parent_id ORDER BY id DESC)')->whereIn('parent_id', $parentIds);
 
         return $this->applyCriteria(function () use ($parentIds, $sub) {
             return $this

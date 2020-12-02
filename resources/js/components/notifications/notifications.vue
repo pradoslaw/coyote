@@ -116,7 +116,7 @@
           }
         });
 
-        ws.subscribe(`user:${store.state.user.id}`)
+        ws.subscribe(`user:${store.state.user.user.id}`)
           .on('Illuminate\\Notifications\\Events\\BroadcastNotificationCreated', data => {
             this.resetNotifications();
 

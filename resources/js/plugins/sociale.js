@@ -14,8 +14,8 @@ new Vue({
 const el = document.getElementById('nav-auth');
 
 if (el !== null) {
-  store.commit('inbox/init', store.state.user.pm_unread);
-  store.commit('notifications/init', {notifications: null, count: store.state.user.notifications_unread});
+  store.commit('inbox/init', store.state.user.user.pm_unread);
+  store.commit('notifications/init', {notifications: null, count: store.state.user.user.notifications_unread});
 
   const NotificationWrapper = Vue.extend(VueNotification);1
   const PmWrapper = Vue.extend(VuePm);

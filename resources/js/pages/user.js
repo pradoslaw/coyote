@@ -26,7 +26,7 @@ new Vue({
   },
   computed: {
     url() {
-      return store.state.user.photo;
+      return store.state.user.user.photo;
     }
   }
 });

@@ -224,7 +224,7 @@ new Vue({
     },
 
     channel() {
-      return ws.subscribe(`user:${store.state.user.id}`);
+      return ws.subscribe(`user:${store.state.user.user.id}`);
     }
   },
   computed: {

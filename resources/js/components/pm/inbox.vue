@@ -138,7 +138,7 @@
       ...mapGetters('inbox', ['isEmpty']),
 
       channel() {
-        return ws.subscribe(`user:${store.state.user.id}`);
+        return ws.subscribe(`user:${store.state.user.user.id}`);
       }
     }
   };

@@ -74,6 +74,7 @@ class DispatchMicroblogNotificationsTest extends TestCase
 
         /** @var Microblog $microblog */
         $microblog = factory(Microblog::class)->create(['text' => "Hello @{$user->name}"]);
+        var_dump($microblog->text);
         $microblog->wasRecentlyCreated = true;
 
         Notification::fake();
