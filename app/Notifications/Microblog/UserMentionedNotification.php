@@ -2,12 +2,12 @@
 
 namespace Coyote\Notifications\Microblog;
 
-use Coyote\Microblog;
 use Coyote\Services\UrlBuilder;
 use Coyote\User;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class UserMentionedNotification extends AbstractNotification
+class UserMentionedNotification extends AbstractNotification implements ShouldQueue
 {
     const ID = \Coyote\Notification::MICROBLOG_LOGIN;
 

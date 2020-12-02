@@ -7,10 +7,9 @@ use Coyote\Services\Notification\Notification;
 use Coyote\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
-abstract class AbstractNotification extends Notification implements ShouldQueue, ShouldBroadcast
+abstract class AbstractNotification extends Notification implements ShouldBroadcast
 {
     use Queueable;
 

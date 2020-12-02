@@ -4,9 +4,10 @@ namespace Coyote\Notifications\Microblog;
 
 use Coyote\Microblog;
 use Coyote\Services\UrlBuilder;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class SubmittedNotification extends AbstractNotification
+class SubmittedNotification extends AbstractNotification implements ShouldQueue
 {
     const ID = \Coyote\Notification::MICROBLOG_SUBSCRIBER;
 
