@@ -48,7 +48,7 @@ export class MicroblogMixin extends Vue {
     .then(() => {
       store.dispatch('user/block', user.id);
 
-      this.$notify({type: 'success', text: 'Nie będziesz więcej widział wpisów tego użytkownika.'})
+      this.$notify({type: 'success', duration: 5000, title: 'Gotowe!', text: '<a href="javascript:" onclick="window.location.reload();">Przeładuj stronę, aby odświeżyć wyniki</a>.'})
     });
   }
 }

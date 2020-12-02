@@ -9,7 +9,7 @@ class RelationsController extends Controller
 {
     public function block(int $relatedUserId, Cache $cache)
     {
-        abort(500, $relatedUserId === $this->userId);
+        abort_if($relatedUserId === $this->userId, 500);
 
         $this->auth->relations()->updateOrInsert(['related_user_id' => $relatedUserId, 'is_blocked' => true, 'user_id' => $this->userId]);
 
