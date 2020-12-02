@@ -17,7 +17,7 @@ if (el !== null) {
   store.commit('inbox/init', store.state.user.user.pm_unread);
   store.commit('notifications/init', {notifications: null, count: store.state.user.user.notifications_unread});
 
-  const NotificationWrapper = Vue.extend(VueNotification);1
+  const NotificationWrapper = Vue.extend(VueNotification);
   const PmWrapper = Vue.extend(VuePm);
 
   el.appendChild(new NotificationWrapper().$mount().$el);
