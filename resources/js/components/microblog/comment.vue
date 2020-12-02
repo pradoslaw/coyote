@@ -81,7 +81,7 @@
             <a @click="edit(comment)" class="dropdown-item btn-sm-edit" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
             <a @click="deleteItem" class="dropdown-item btn-sm-remove" href="javascript:"><i class="fas fa-times fa-fw"></i> Usuń</a>
 
-            <div class="dropdown-divider"></div>
+            <div v-if="comment.user.id !== user.id" class="dropdown-divider"></div>
           </template>
 
           <a v-if="comment.user.id !== user.id" @click="block(comment.user)" href="javascript:" class="dropdown-item"><i class="fas fa-fw fa-ban"></i> Zablokuj użytkownika</a>

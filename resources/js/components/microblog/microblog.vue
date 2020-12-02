@@ -17,7 +17,7 @@
                 <a @click="edit(microblog)" class="dropdown-item btn-edit" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
                 <a @click="deleteItem" class="dropdown-item btn-remove" href="javascript:"><i class="fas fa-times fa-fw"></i> Usuń</a>
 
-                <div class="dropdown-divider"></div>
+                <div v-if="microblog.user.id !== user.id" class="dropdown-divider"></div>
               </template>
 
               <a v-if="microblog.user.id !== user.id" @click="block(microblog.user)" href="javascript:" class="dropdown-item"><i class="fas fa-fw fa-ban"></i> Zablokuj użytkownika</a>
