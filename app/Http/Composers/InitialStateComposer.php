@@ -6,27 +6,36 @@ use Coyote\Services\JwtToken;
 use Coyote\User;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Contracts\Cache\Repository as Cache;
 
 class InitialStateComposer
 {
+    // cache permission for 1 month
+    const CACHE_TTL = 60 * 60 * 24 * 30;
+
     /**
      * @var Request
      */
-    private $request;
+    private Request $request;
 
     /**
      * @var string
      */
-    private $jwtToken;
+    private string $jwtToken;
 
+    /**
+     * @var Cache
+     */
+    private Cache $cache;
 
     /**
      * @param Request $request
      * @param JwtToken $jwtToken
      */
-    public function __construct(Request $request, JwtToken $jwtToken)
+    public function __construct(Request $request, JwtToken $jwtToken, Cache $cache)
     {
         $this->request = $request;
+        $this->cache = $cache;
 
         if ($request->user()) {
             $this->jwtToken = $jwtToken->token($request->user());
@@ -49,7 +58,8 @@ class InitialStateComposer
                     'pm_unread'     => 0
                 ]
             ],
-            $this->registerUserModel()
+            $this->registerUserModel(),
+            $this->registerFollowers()
         );
 
         $view->with('__INITIAL_STATE', json_encode($state));
@@ -97,6 +107,22 @@ class InitialStateComposer
                 'photo'                 => (string) $user->photo->url(),
                 'is_sponsor'            => $user->is_sponsor
             ]
+        ];
+    }
+
+    private function registerFollowers()
+    {
+        /** @var User $user */
+        $user = $this->request->user();
+
+        if (empty($user)) {
+            return [];
+        }
+
+        return [
+            'followers' => $this->cache->remember('followers:' . $user->id, self::CACHE_TTL, function () use ($user) {
+                return $user->relations()->get(['related_user_id AS user_id', 'is_blocked'])->values()->toArray();
+            })
         ];
     }
 
