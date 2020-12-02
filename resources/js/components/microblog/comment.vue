@@ -121,7 +121,7 @@
       'vue-flag': VueFlag
     },
     computed: {
-      ...mapState('user', {user: state => state}),
+      ...mapState('user', ['user']),
       ...mapGetters('user', ['isAuthorized'])
     },
     methods: {

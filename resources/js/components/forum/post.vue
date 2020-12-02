@@ -340,7 +340,7 @@
     },
     methods: mapActions('posts', ['vote', 'accept', 'subscribe', 'loadComments', 'loadVoters']),
     computed: {
-      ...mapState('user', {user: state => state}),
+      ...mapState('user', ['user']),
       ...mapGetters('user', ['isAuthorized']),
       ...mapGetters('posts', ['posts']),
       ...mapGetters('topics', ['topic'])
