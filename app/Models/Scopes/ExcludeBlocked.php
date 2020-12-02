@@ -13,7 +13,8 @@ trait ExcludeBlocked
             return $builder;
         }
 
-        $relation = $this->table === 'users' ? "{$this->table}.id" : "{$this->table}.user_id";
+        $table = $builder->getModel()->getTable();
+        $relation = $table === 'users' ? "{$table}.id" : "{$table}.user_id";
 
         return $builder->where($relation, '!=', $userId)->whereNotExists(function ($builder) use ($userId, $relation) {
             return $builder
