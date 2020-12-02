@@ -212,11 +212,6 @@ class Microblog extends Model
         return $this->belongsTo(User::class)->select(['id', 'name', 'deleted_at', 'is_blocked', 'photo', 'is_online'])->withTrashed();
     }
 
-    /**
-     * @param  \Illuminate\Database\Query\Builder $query
-     * @param int $userId
-     * @return \Illuminate\Database\Query\Builder|$this
-     */
     public function scopeIncludeIsSubscribed(Builder $builder, int $userId): Builder
     {
         $this->addSelectIfNull($builder);
@@ -238,15 +233,6 @@ class Microblog extends Model
                 $join->on('mv.microblog_id', '=', 'microblogs.id')->where('mv.user_id', '=', $userId);
             });
     }
-
-
-//    public function scopeWithVoters(Builder $builder): Builder
-//    {
-//        $this->addSelectIfNull($builder);
-//        $subQuery = $builder->getQuery()->newQuery()->select('name')->from('microblog_votes')->whereRaw('microblog_id = microblogs.id')->join('users', 'users.id', '=', 'user_id');
-//
-//        return $builder->selectSub(sprintf("array_to_json(array(%s))", $subQuery->toSql()), 'voters_json');
-//    }
 
     private function addSelectIfNull(Builder $builder)
     {
