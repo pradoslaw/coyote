@@ -148,7 +148,7 @@
     },
     computed: {
       ...mapGetters('user', ['isAuthorized']),
-      ...mapState('user', {user: state => state})
+      ...mapState('user', ['user'])
     },
     methods: {
       ...mapActions('microblogs', ['vote', 'subscribe', 'loadVoters', 'loadComments'])

@@ -2,17 +2,14 @@
 
 namespace Coyote\Http\Composers;
 
+use Coyote\Services\Forum\UserDefined;
 use Coyote\Services\JwtToken;
 use Coyote\User;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Illuminate\Contracts\Cache\Repository as Cache;
 
 class InitialStateComposer
 {
-    // cache permission for 1 month
-    const CACHE_TTL = 60 * 60 * 24 * 30;
-
     /**
      * @var Request
      */
@@ -24,18 +21,19 @@ class InitialStateComposer
     private string $jwtToken;
 
     /**
-     * @var Cache
+     * @var UserDefined
      */
-    private Cache $cache;
+    private UserDefined $userDefined;
 
     /**
      * @param Request $request
      * @param JwtToken $jwtToken
+     * @param UserDefined $userDefined
      */
-    public function __construct(Request $request, JwtToken $jwtToken, Cache $cache)
+    public function __construct(Request $request, JwtToken $jwtToken, UserDefined $userDefined)
     {
         $this->request = $request;
-        $this->cache = $cache;
+        $this->userDefined = $userDefined;
 
         if ($request->user()) {
             $this->jwtToken = $jwtToken->token($request->user());
@@ -120,9 +118,7 @@ class InitialStateComposer
         }
 
         return [
-            'followers' => $this->cache->remember('followers:' . $user->id, self::CACHE_TTL, function () use ($user) {
-                return $user->relations()->get(['related_user_id AS user_id', 'is_blocked'])->values()->toArray();
-            })
+            'followers' => $this->userDefined->followers($user)
         ];
     }
 

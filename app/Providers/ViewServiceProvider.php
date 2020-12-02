@@ -49,7 +49,7 @@ class ViewServiceProvider extends ServiceProvider
             }
         });
 
-        $categories = collect($this->app[UserDefined::class]->getAllowedForums($this->app['request']->user()))->where('parent_id', null);
+        $categories = collect($this->app[UserDefined::class]->allowedForums($this->app['request']->user()))->where('parent_id', null);
         $rendered = view('components.mega-menu', ['sections' => $this->groupBySections($categories)])->render();
 
         $builder->forum->after($rendered);

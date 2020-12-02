@@ -5,18 +5,23 @@ import VueMicroblog from "../components/microblog/microblog";
 import store from "../store";
 import {mapGetters} from "vuex";
 import axios from 'axios';
+import { default as LiveMixin } from './microblog/live';
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 
 new Vue({
   el: '#js-microblog',
   delimiters: ['${', '}'],
+  mixins: [ LiveMixin ],
   components: { 'vue-microblog': VueMicroblog },
   store,
   created() {
     Object.keys(window.microblogs).forEach(id => store.commit('microblogs/add', window.microblogs[id]));
 
     store.commit('flags/init', window.flags);
+  },
+  mounted() {
+    this.liveNotifications();
   },
   computed: mapGetters('microblogs', ['microblogs'])
 });

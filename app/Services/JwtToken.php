@@ -30,7 +30,7 @@ class JwtToken
     public function token(User $user): string
     {
         $signer = new Sha256();
-        $allowed = array_pluck($this->userDefined->getAllowedForums($user), 'id');
+        $allowed = array_pluck($this->userDefined->allowedForums($user), 'id');
 
         $token = (new \Lcobucci\JWT\Builder())
             ->issuedAt(now()->timestamp)

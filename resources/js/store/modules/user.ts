@@ -1,15 +1,19 @@
 import axios from 'axios';
 
-const state = window["__INITIAL_STATE"]?.user || {};
+const state = {
+  user: window["__INITIAL_STATE"]?.user || {},
+  followers: window["__INITIAL_STATE"]?.followers || []
+};
 
 const getters = {
-  isAuthorized: state => state.id !== undefined,
-  dateFormat: state => (defaultFormat = null) => state.date_format ? state.date_format : defaultFormat
+  isAuthorized: state => state.user.id !== undefined,
+  dateFormat: state => (defaultFormat = null) => state.user.date_format ?? defaultFormat,
+  isBlocked: state => (userId: number) => state.followers.find(follower => follower.user_id === userId && follower.is_blocked)
 };
 
 const mutations = {
   update(state, payload) {
-    state = Object.assign(state, payload);
+    state.user = Object.assign(state.user, payload);
   }
 };
 

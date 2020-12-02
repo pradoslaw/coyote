@@ -13,12 +13,12 @@ class UserDefined
     /**
      * @var ForumRepository
      */
-    private $forum;
+    private ForumRepository $forum;
 
     /**
      * @var Cache
      */
-    private $cache;
+    private Cache $cache;
 
     /**
      * @param ForumRepository $forum
@@ -34,7 +34,7 @@ class UserDefined
      * @param User|null $user
      * @return array
      */
-    public function getAllowedForums(?User $user): array
+    public function allowedForums(?User $user): array
     {
         $userId = $user->id ?? null;
 
@@ -48,6 +48,13 @@ class UserDefined
             $this->forum->pushCriteria(new AccordingToUserOrder($userId, true));
 
             return $this->forum->list()->toArray();
+        });
+    }
+
+    public function followers(User $user): array
+    {
+        return $this->cache->remember('followers:' . $user->id, now()->addMonth(), function () use ($user) {
+            return $user->relations()->get(['related_user_id AS user_id', 'is_blocked'])->values()->toArray();
         });
     }
 }

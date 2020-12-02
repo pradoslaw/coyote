@@ -7,9 +7,8 @@ import VueModals from '../plugins/modals';
 import store from '../store';
 import { mapGetters } from 'vuex';
 import { default as axiosErrorHandler } from '../libs/axios-error-handler';
-import { default as ws } from '../libs/realtime';
 import {Microblog, Paginator, Flag} from "../types/models";
-import Prism from "prismjs";
+import { default as LiveMixin } from './microblog/live';
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 Vue.use(VueModals);
@@ -24,56 +23,11 @@ declare global {
   }
 }
 
-interface Observer {
-  update(microblog: Microblog): void;
-}
-
-class LiveNotification {
-  private observers: Observer[] = [];
-
-  attach(observer: Observer) {
-    this.observers.push(observer);
-  }
-
-  notify(microblog: Microblog) {
-    for (const observer of this.observers) {
-      observer.update(microblog);
-    }
-  }
-}
-
-class UpdateMicroblog implements Observer {
-  update(microblog: Microblog) {
-    const item = store.state.microblogs.data[microblog.id!];
-
-    if (!item || item.is_editing) {
-      return; // do not add new entries live (yet)
-    }
-
-    store.commit('microblogs/update', microblog);
-  }
-}
-
-class UpdateComment implements Observer {
-  update(comment: Microblog) {
-    if (!comment.parent_id) {
-      return;
-    }
-
-    const parent = store.state.microblogs.data[comment.parent_id];
-
-    if (!parent || parent.comments[comment.id!]?.is_editing) {
-      return;
-    }
-
-    store.commit(`microblogs/${comment.id! in parent.comments ? 'updateComment' : 'addComment'}`, { parent, comment });
-  }
-}
-
 new Vue({
   el: '#js-microblog',
   delimiters: ['${', '}'],
   components: { 'vue-microblog': VueMicroblog, 'vue-pagination': VuePagination, 'vue-form': VueForm },
+  mixins: [ LiveMixin ],
   store,
   created() {
     if ('pagination' in window) {
@@ -87,20 +41,8 @@ new Vue({
     store.commit('flags/init', window.flags);
   },
   mounted() {
-    const notification = new LiveNotification();
-
-    notification.attach(new UpdateMicroblog());
-    notification.attach(new UpdateComment());
-
-    ws.subscribe('microblog').on('MicroblogSaved', (microblog: Microblog) => {
-      // highlight not read text
-      microblog.is_read = false;
-
-      notification.notify(microblog);
-
-      // highlight once again after saving
-      this.$nextTick(() => Prism.highlightAll());
-    });
+    // @ts-ignore
+    this.liveNotifications();
   },
   methods: {
     changePage(page: number) {
