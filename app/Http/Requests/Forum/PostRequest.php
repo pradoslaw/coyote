@@ -6,7 +6,6 @@ use Coyote\Forum;
 use Coyote\Post;
 use Coyote\Rules\InvalidTag;
 use Coyote\Rules\MinWords;
-use Coyote\Rules\TitleContainsTag;
 use Coyote\Topic;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;

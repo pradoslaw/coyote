@@ -15,12 +15,12 @@ class Reputation extends Model
     const CUSTOM = 7;
     const WIKI_RATE = 8;
 
-    const USING_CHINESE = 1;
-    const URL_IN_PROFILE = 50;
-    const URL_IN_SIG = 50;
-    const ADDING_TAGS = 300;
-    const DELETING_POSTS = 300;
-    const POSTING_SHORT_TITLE = 1000;
+    const CHINESE = 1;
+    const PROFILE_LINK = 50;
+    const SIG_LINK = 50;
+    const CREATE_TAGS = 300;
+    const DELETE_POSTS = 300;
+    const SHORT_TITLE = 1000;
 
     /**
      * The attributes that are mass assignable.

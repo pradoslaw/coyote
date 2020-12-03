@@ -23,7 +23,7 @@ class MinWords implements Rule
      */
     public function passes($attribute, $value)
     {
-        if (auth()->check() && auth()->user()->reputation >= Reputation::POSTING_SHORT_TITLE) {
+        if (auth()->check() && auth()->user()->reputation >= Reputation::SHORT_TITLE) {
             return true;
         }
 

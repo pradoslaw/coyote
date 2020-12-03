@@ -3,6 +3,7 @@
 namespace Coyote\Policies;
 
 use Carbon\Carbon;
+use Coyote\Reputation;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Coyote\User;
 use Coyote\Post;
@@ -82,7 +83,7 @@ class PostPolicy
      */
     private function hasEnoughReputation(User $user, Post $post): bool
     {
-        return $post->id == $post->topic->last_post_id ? true : ($user->reputation >= 300);
+        return $post->id == $post->topic->last_post_id ? true : ($user->reputation >= Reputation::DELETE_POSTS);
     }
 
     /**
