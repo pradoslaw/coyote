@@ -231,7 +231,7 @@
     }
 
     loadItems(): void {
-      const headers = this.isAuthorized ? {Authorization: `Bearer ${this.$store.state.user.token}`} : {};
+      const headers = this.isAuthorized ? {Authorization: `Bearer ${this.$store.state.user.user.token}`} : {};
 
       if (!this.endpoint) {
         return;
