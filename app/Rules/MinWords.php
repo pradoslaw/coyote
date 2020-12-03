@@ -2,6 +2,7 @@
 
 namespace Coyote\Rules;
 
+use Coyote\Reputation;
 use Illuminate\Contracts\Validation\Rule;
 
 class MinWords implements Rule
@@ -22,6 +23,10 @@ class MinWords implements Rule
      */
     public function passes($attribute, $value)
     {
+        if (auth()->check() && auth()->user()->reputation >= Reputation::POSTING_SHORT_TITLE) {
+            return true;
+        }
+
         return count(array_filter(preg_split('/\s+/', $value), fn ($word) => strlen($word) > 1)) >= $this->minWords;
     }
 
