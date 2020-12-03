@@ -3,11 +3,11 @@
 namespace Tests\Unit\Rules;
 
 use Coyote\Repositories\Contracts\TagRepositoryInterface;
-use Coyote\Rules\InvalidTag;
+use Coyote\Rules\TagDeleted;
 use Coyote\Tag;
 use Tests\TestCase;
 
-class InvalidTagTest extends TestCase
+class TagDeletedTest extends TestCase
 {
     public function testValidationFails()
     {
@@ -17,7 +17,7 @@ class InvalidTagTest extends TestCase
             $mock->shouldReceive('findBy')->andReturn($tag);
         });
 
-        $rule = new InvalidTag($repository);
+        $rule = new TagDeleted($repository);
         $this->assertFalse($rule->passes('', $tag->name));
     }
 
@@ -29,7 +29,7 @@ class InvalidTagTest extends TestCase
             $mock->shouldReceive('findBy')->andReturn($tag);
         });
 
-        $rule = new InvalidTag($repository);
+        $rule = new TagDeleted($repository);
         $this->assertTrue($rule->passes('', $tag->name));
     }
 
@@ -41,7 +41,7 @@ class InvalidTagTest extends TestCase
             $mock->shouldReceive('findBy')->andReturn(null);
         });
 
-        $rule = new InvalidTag($repository);
+        $rule = new TagDeleted($repository);
         $this->assertTrue($rule->passes('', $tag->name));
     }
 }

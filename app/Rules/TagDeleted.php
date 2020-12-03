@@ -6,7 +6,7 @@ use Coyote\Repositories\Contracts\TagRepositoryInterface;
 use Coyote\Repositories\Criteria\WithTrashed;
 use Illuminate\Contracts\Validation\Rule;
 
-class InvalidTag implements Rule
+class TagDeleted implements Rule
 {
     private TagRepositoryInterface $repository;
     private string $value;
@@ -43,6 +43,6 @@ class InvalidTag implements Rule
      */
     public function message()
     {
-        return trans('validation.invalid_tag', ['value' => $this->value]);
+        return trans('validation.tag_deleted', ['value' => $this->value]);
     }
 }

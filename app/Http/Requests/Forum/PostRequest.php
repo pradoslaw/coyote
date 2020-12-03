@@ -4,7 +4,7 @@ namespace Coyote\Http\Requests\Forum;
 
 use Coyote\Forum;
 use Coyote\Post;
-use Coyote\Rules\InvalidTag;
+use Coyote\Rules\TagDeleted;
 use Coyote\Rules\MinWords;
 use Coyote\Topic;
 use Illuminate\Contracts\Validation\Validator;
@@ -79,7 +79,7 @@ class PostRequest extends FormRequest
                     'bail',
                     'max:25',
                     'tag',
-                    app(InvalidTag::class),
+                    app(TagDeleted::class),
                     'tag_creation:200'
                 ],
 
