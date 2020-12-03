@@ -54,6 +54,7 @@ return [
         'file'    => 'The :attribute must be at least :min kilobytes.',
         'string'  => 'To pole musi mieć :min znaków.',
         'array'   => 'The :attribute must have at least :min items.',
+        'words'   => 'Być może powinieneś dodać więcej informacji?',
     ],
     'not_in'               => 'The selected :attribute is invalid.',
     'numeric'              => 'The :attribute must be a number.',
@@ -102,6 +103,7 @@ return [
     'recaptcha'            => 'Wartość pola recaptcha jest nieprawidłowa. Prosimy o kontakt.',
     'host'                 => 'Podany link musi pochodzić z serwera :host.',
     'invalid_tag'          => 'Tag ":value" został usunięty i jego ponowne użycie nie jest możliwe.',
+    'title_contains_tag'   => 'Wygląda na to, że tytuł zawiera prefiks z nazwą tagu. Użyj dedykowanego pola z możliwością wpisania tagu.',
 
     /*
     |--------------------------------------------------------------------------

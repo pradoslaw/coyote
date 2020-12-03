@@ -5,6 +5,8 @@ namespace Coyote\Http\Requests\Forum;
 use Coyote\Forum;
 use Coyote\Post;
 use Coyote\Rules\InvalidTag;
+use Coyote\Rules\MinWords;
+use Coyote\Rules\TitleContainsTag;
 use Coyote\Topic;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
@@ -13,7 +15,6 @@ class PostRequest extends FormRequest
 {
     const RULE_USER_NAME            = 'required|string|min:2|max:27';
     const RULE_USER_UNIQUE          = 'unique:users,name';
-    const RULE_SUBJECT              = 'required|min:3|max:200|spam_chinese:1';
     const RULE_TEXT                 = 'required|spam_chinese:1|spam_foreign:1';
     const RULE_STICKY               = 'nullable|bool';
     const RULE_TAGS                 = 'array|max:5';
@@ -66,7 +67,14 @@ class PostRequest extends FormRequest
 
         if ($this->canChangeSubject()) {
             $rules = array_merge($rules, [
-                'subject'               => self::RULE_SUBJECT,
+                'subject'               => [
+                    'required',
+                    'min:3',
+                    'max:200',
+                    'spam_chinese:1',
+                    'not_regex:/^\[.+\]/',
+                    new MinWords()
+                ],
                 'tags'                  => self::RULE_TAGS,
                 'tags.*'                => [
                     'bail',
@@ -131,5 +139,12 @@ class PostRequest extends FormRequest
                 }
             }
         });
+    }
+
+    public function messages()
+    {
+        return [
+            'subject.not_regex' => 'Wygląda na to, że tytuł zawiera prefiks z nazwą tagu. Użyj dedykowanego pola z możliwością wpisania tagu.'
+        ];
     }
 }
