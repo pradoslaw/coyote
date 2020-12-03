@@ -5,8 +5,6 @@ namespace Coyote\Http\Controllers\Microblog;
 use Coyote\Http\Factories\CacheFactory;
 use Coyote\Http\Resources\MicroblogResource;
 use Coyote\Http\Resources\MicroblogCollection;
-use Coyote\Microblog;
-use Coyote\Models\Scopes\UserRelationsScope;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
 use Coyote\Services\Microblogs\Builder;
 
