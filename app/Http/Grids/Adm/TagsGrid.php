@@ -33,6 +33,18 @@ class TagsGrid extends Grid
                 'sortable' => true,
                 'placeholder' => '--',
                 'filter' => new Select(['options' => Tag\Category::pluck('name', 'id')->toArray(), 'name' => 'category_id'])
+            ])
+            ->addColumn('topics', [
+                'title' => 'Wątki',
+                'sortable' => true
+            ])
+            ->addColumn('jobs', [
+                'title' => 'Oferty Pracy',
+                'sortable' => true
+            ])
+            ->addColumn('microblogs', [
+                'title' => 'Mikroblogi',
+                'sortable' => true
             ]);
     }
 }
