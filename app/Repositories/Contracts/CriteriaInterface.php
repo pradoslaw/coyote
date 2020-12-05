@@ -10,17 +10,6 @@ use Coyote\Repositories\Criteria\Criteria;
 interface CriteriaInterface
 {
     /**
-     * @return mixed
-     */
-    public function getCriteria();
-
-    /**
-     * @param Criteria $criteria
-     * @return $this
-     */
-    public function getByCriteria(Criteria $criteria);
-
-    /**
      * @param Criteria $criteria
      * @return $this
      */
