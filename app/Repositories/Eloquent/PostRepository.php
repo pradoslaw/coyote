@@ -381,7 +381,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
     {
         $sql = clone $this->model;
 
-        foreach ($this->getCriteria() as $criteria) {
+        foreach ($this->criteria as $criteria) {
             // include only this criteria to fetch deleted posts (only for users with special access)
             if ($criteria instanceof WithTrashed) {
                 $sql = $criteria->apply($sql, $this);

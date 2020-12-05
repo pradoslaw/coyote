@@ -93,29 +93,11 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
     }
 
     /**
-     * @return mixed
-     */
-    public function getCriteria()
-    {
-        return $this->criteria;
-    }
-
-    /**
      * @return $this
      */
     public function resetScope()
     {
         $this->skipCriteria(false);
-        return $this;
-    }
-
-    /**
-     * @param Criteria $criteria
-     * @return $this
-     */
-    public function getByCriteria(Criteria $criteria)
-    {
-        $this->model = $criteria->apply($this->model, $this);
         return $this;
     }
 
@@ -143,7 +125,7 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
             return $this;
         }
 
-        foreach ($this->getCriteria() as $criteria) {
+        foreach ($this->criteria as $criteria) {
             if ($criteria instanceof Criteria) {
                 $this->model = $criteria->apply($this->model, $this);
             }

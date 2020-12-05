@@ -32,17 +32,6 @@ interface RepositoryInterface
     public function skipCriteria($flag = true);
 
     /**
-     * @return mixed
-     */
-    public function getCriteria();
-
-    /**
-     * @param Criteria $criteria
-     * @return $this
-     */
-    public function getByCriteria(Criteria $criteria);
-
-    /**
      * @param Criteria $criteria
      * @return $this
      */
