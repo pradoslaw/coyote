@@ -124,7 +124,7 @@
         }
 
         // redirect to last post if topic has been read by registered user.
-        return (this.topic.is_read && (this.isAuthorized && this.topic.last_post_created_at > this.$store.state.user.created_at) ? urlFragment(this.topic.last_post.id) : this.topic.url);
+        return (this.topic.is_read && (this.isAuthorized && this.topic.last_post_created_at > this.$store.state.user.user.created_at) ? urlFragment(this.topic.last_post.id) : this.topic.url);
       },
 
       mark(event) {
