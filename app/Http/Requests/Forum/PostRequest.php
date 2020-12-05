@@ -66,14 +66,7 @@ class PostRequest extends FormRequest
 
         if ($this->canChangeSubject()) {
             $rules = array_merge($rules, [
-                'subject'               => [
-                    'required',
-                    'min:3',
-                    'max:200',
-                    'spam_chinese:1',
-                    'not_regex:/^\[.+\]/',
-                    new MinWords()
-                ],
+                'subject'               => $this->subjectRule(),
                 'tags'                  => self::RULE_TAGS,
                 'tags.*'                => [
                     'bail',
@@ -119,6 +112,18 @@ class PostRequest extends FormRequest
     private function isUpdating(): bool
     {
         return !empty($this->post->id);
+    }
+
+    protected function subjectRule()
+    {
+        return [
+            'required',
+            'min:3',
+            'max:200',
+            'spam_chinese:1',
+            'not_regex:/^\[.+\]/',
+            new MinWords()
+        ];
     }
 
     public function withValidator(Validator $validator)

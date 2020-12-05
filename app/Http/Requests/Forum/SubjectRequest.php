@@ -8,7 +8,7 @@ class SubjectRequest extends PostRequest
 {
     public function rules()
     {
-        return ['subject' => self::RULE_SUBJECT];
+        return ['subject' => $this->subjectRule()];
     }
 
     public function withValidator(Validator $validator)
