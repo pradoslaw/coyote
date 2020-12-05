@@ -140,7 +140,7 @@ class HomeController extends Controller
         /** @var Builder $builder */
         $builder = app(Builder::class);
 
-        $microblogs = $builder->forUser($this->auth)->orderByScore()->popular();
+        $microblogs = $builder->orderByScore()->popular();
 
         MicroblogResource::withoutWrapping();
 

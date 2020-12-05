@@ -3,12 +3,15 @@
 namespace Coyote\Services\Microblogs;
 
 use Coyote\Microblog;
+use Coyote\Models\Scopes\UserRelationsScope;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface;
 use Coyote\Repositories\Criteria\Microblog\LoadUserScope;
 use Coyote\Repositories\Criteria\Microblog\OnlyMine;
 use Coyote\Repositories\Criteria\Microblog\OrderById;
 use Coyote\Repositories\Criteria\Microblog\OrderByScore;
 use Coyote\Repositories\Criteria\Microblog\WithTag;
+use Coyote\Repositories\Criteria\WithoutScope;
+use Illuminate\Contracts\Auth\Guard;
 use Coyote\User;
 
 class Builder
@@ -25,12 +28,14 @@ class Builder
 
     private bool $isSponsor = false;
 
-    /**
-     * @param MicroblogRepositoryInterface $microblog
-     */
-    public function __construct(MicroblogRepositoryInterface $microblog)
+    public function __construct(MicroblogRepositoryInterface $microblog, Guard $auth)
     {
         $this->microblog = $microblog;
+        $this->user = $auth->user();
+
+        if ($this->user) {
+            $this->isSponsor = $this->user->is_sponsor;
+        }
     }
 
     /**
@@ -41,9 +46,7 @@ class Builder
     {
         $this->user = $user;
 
-        if ($user) {
-            $this->isSponsor = $user->is_sponsor;
-        }
+
 
         return $this;
     }
@@ -69,13 +72,13 @@ class Builder
     }
 
     /**
+     * @param User $user
      * @return $this
      */
-    public function onlyMine()
+    public function onlyUsers(User $user)
     {
-        if ($this->user) {
-            $this->microblog->pushCriteria(new OnlyMine($this->user->id));
-        }
+        $this->microblog->pushCriteria(new OnlyMine($user->id));
+        $this->microblog->pushCriteria(new WithoutScope(UserRelationsScope::class));
 
         return $this;
     }

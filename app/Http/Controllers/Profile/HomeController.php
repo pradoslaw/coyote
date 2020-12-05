@@ -150,7 +150,7 @@ class HomeController extends Controller
         /** @var Builder $builder */
         $builder = app(Builder::class);
 
-        $microblogs = $builder->forUser($user)->orderById()->onlyMine()->paginate();
+        $microblogs = $builder->orderById()->onlyUsers($user)->paginate();
 
         return view('profile.partials.microblog', [
             'user'          => $user,

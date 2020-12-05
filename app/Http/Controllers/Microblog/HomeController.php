@@ -41,7 +41,7 @@ class HomeController extends BaseController
      */
     public function index()
     {
-        $paginator = $this->builder->forUser($this->auth)->orderById()->paginate();
+        $paginator = $this->builder->orderById()->paginate();
 
         // let's cache microblog tags. we don't need to run this query every time
         $tags = $this->getCacheFactory()->remember('microblog:tags', 30 * 60, function () {
@@ -80,7 +80,7 @@ class HomeController extends BaseController
     {
         $this->breadcrumb->push('Moje wpisy', route('microblog.mine'));
 
-        $this->builder->forUser($this->auth)->onlyMine();
+        $this->builder->onlyUsers($this->auth);
 
         return $this->index();
     }
@@ -91,7 +91,7 @@ class HomeController extends BaseController
      */
     public function show($id)
     {
-        $microblog = $this->builder->forUser($this->auth)->one($id);
+        $microblog = $this->builder->one($id);
 
         abort_if(!is_null($microblog->parent_id), 404);
 
