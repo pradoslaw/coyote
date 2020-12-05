@@ -7,6 +7,7 @@ use Coyote\Http\Resources\MicroblogResource;
 use Coyote\Http\Resources\MicroblogCollection;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
 use Coyote\Services\Microblogs\Builder;
+use Illuminate\Http\Request;
 
 class HomeController extends BaseController
 {
@@ -26,14 +27,18 @@ class HomeController extends BaseController
      * @param MicroblogRepository $microblog
      * @param Builder $builder
      */
-    public function __construct(MicroblogRepository $microblog, Builder $builder)
+    public function __construct(MicroblogRepository $microblog)
     {
         parent::__construct();
 
         $this->microblog = $microblog;
         $this->breadcrumb->push('Mikroblog', route('microblog.home'));
 
-        $this->builder = $builder;
+        $this->middleware(function (Request $request, $next) {
+            $this->builder = resolve(Builder::class);
+
+            return $next($request);
+        });
     }
 
     /**

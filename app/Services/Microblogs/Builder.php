@@ -39,19 +39,6 @@ class Builder
     }
 
     /**
-     * @param User|null $user
-     * @return $this
-     */
-    public function forUser(?User $user)
-    {
-        $this->user = $user;
-
-
-
-        return $this;
-    }
-
-    /**
      * @return $this
      */
     public function orderByScore()
@@ -190,8 +177,8 @@ class Builder
 
     private function loadUserScope()
     {
-        if (auth()->check()) {
-            $this->microblog->pushCriteria(new LoadUserScope(auth()->user()));
+        if ($this->user) {
+            $this->microblog->pushCriteria(new LoadUserScope($this->user));
         }
     }
 }
