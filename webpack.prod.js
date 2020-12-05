@@ -63,6 +63,7 @@ module.exports = merge(common, {
         'fa-key',
         'fa-minus',
         'fa-columns',
+        'fa-user-slash',
         'pre',
         'code',
         'breadcrumb-fixed',
