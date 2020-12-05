@@ -38,6 +38,12 @@ trait SettingsTrait
                 'route' => 'user.notifications.settings',
                 'icon' => 'fa-bell',
                 'label' => 'Ustawienia powiadomień'
+            ],
+            [
+                'id' => 'btn-favorites',
+                'route' => 'user.relations',
+                'icon' => 'fa-user-slash',
+                'label' => 'Zablokowani użytkownicy'
             ]
         ];
 

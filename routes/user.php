@@ -62,7 +62,9 @@ $this->group(['namespace' => 'User', 'prefix' => 'User', 'middleware' => 'auth',
     $this->get('DeleteAccount', ['uses' => 'DeleteAccountController@index', 'as' => 'delete']);
     $this->post('DeleteAccount', ['uses' => 'DeleteAccountController@delete']);
 
+    $this->get('Relations', ['uses' => 'RelationsController@showRelations', 'as' => 'relations']);
     $this->post('Block/{id}', ['uses' => 'RelationsController@block']);
+    $this->post('Unblock/{id}', ['uses' => 'RelationsController@unblock']);
 });
 
 // wizytowka usera. komponent ktory pojawia sie po naprowadzenia kursora nad login usera

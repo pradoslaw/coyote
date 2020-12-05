@@ -1,0 +1,34 @@
+{% extends 'user.base' %}
+{% block title %}Zablokowani użytkownicy {{ parent() }}{% endblock %}
+
+{% block content %}
+  <h2>Zablokowani użytkownicy</h2>
+
+  <div v-cloak id="js-followers" class="card card-default">
+    <div class="card-body">
+      <div class="list-group list-group-flush">
+        <div v-for="user in users" :key="user.id" class="list-group-item pl-0 pr-0">
+          <div class="media">
+            <vue-avatar v-bind="user" :is-online="user.is_online" class="i-35 d-block img-thumbnail mr-3"></vue-avatar>
+
+            <div class="media-body">
+              <button @click="unblock(user.id)" class="btn btn-sm btn-secondary float-right mt-1">Odblokuj</button>
+
+              <h5 class="mt-2"><vue-username :user="user"></vue-username></h5>
+            </div>
+          </div>
+        </div>
+
+        <div v-if="!users.length" class="card">
+          <div class="card-body text-center">
+            <h5 class="card-title mb-0">Brak zablokowanych użytkowników.</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var users = {{ users|json_encode|raw }};
+  </script>
+{% endblock %}

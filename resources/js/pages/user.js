@@ -1,6 +1,8 @@
 import Vue from "vue";
 import VueThumbnail from '../components/thumbnail';
 import VueNotifications from 'vue-notification';
+import VueAvatar from '@/js/components/avatar';
+import VueUserName from '@/js/components/user-name';
 import axios from 'axios';
 import store from '../store';
 import { default as axiosErrorHandler } from '../libs/axios-error-handler';
@@ -71,6 +73,24 @@ new Vue({
 
     clearMarks() {
       this.selectedMark = null;
+    }
+  }
+});
+
+new Vue({
+  el: '#js-followers',
+  delimiters: ['${', '}'],
+  components: { 'vue-avatar': VueAvatar, 'vue-username': VueUserName },
+  data() {
+    return {
+      users: window.users
+    };
+  },
+  methods: {
+    unblock(userId) {
+      this.users.splice(this.users.findIndex(user => user.id === userId), 1);
+
+      axios.post(`/User/Unblock/${userId}`);
     }
   }
 });

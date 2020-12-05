@@ -9,7 +9,7 @@ import './plugins/flags.ts';
 import './plugins/sociale.js';
 import 'popper.js'; // must be imported before bootstrap
 import './bootstrap';
-import './libs/csrf'; // setup CSRF token\
+import './libs/csrf'; // setup CSRF token
 import './libs/axios-throttle.ts';
 
 import Router from './libs/router';
@@ -19,7 +19,7 @@ Prism.highlightAll();
 
 let r = new Router();
 
-r.on(['/User', '/User/Skills'], () => require('./pages/user'));
+r.on(['/User', '/User/Skills', '/User/Relations'], () => require('./pages/user'));
 r.on(['/Register', '/Login'], () => require('./pages/auth'))
 .on('/Adm/Firewall/*', () => {
   require.ensure(['flatpickr', 'flatpickr/dist/l10n/pl'], require => {
