@@ -87,7 +87,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     public function findById(int $id)
     {
         return $this->applyCriteria(function () use ($id) {
-            return $this->model->with('user')->withCount('comments')->where('microblogs.id', $id)->firstOrFail();
+            return $this->model->with('user')->withCount('comments')->withoutGlobalScope(UserRelationsScope::class)->where('microblogs.id', $id)->firstOrFail();
         });
     }
 
@@ -116,7 +116,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
                 ->withTrashed()
                 ->withoutGlobalScope(UserRelationsScope::class)
                 ->fromRaw('(' . $sub->toSql() . ') AS microblogs', $sub->getBindings())
-                ->whereIn('microblogs.row_number', [1, 2])
+                ->whereRaw('microblogs.row_number <= 2')
                 ->orderBy('microblogs.id')
                 ->get();
         });

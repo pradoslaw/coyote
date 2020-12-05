@@ -87,7 +87,7 @@ class Microblog extends Model
             $model->media = null; // MUST remove closure before serializing object
         });
 
-        static::addGlobalScope(new UserRelationsScope());
+        static::addGlobalScope(resolve(UserRelationsScope::class));
     }
 
     /**

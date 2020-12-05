@@ -40,7 +40,10 @@ class Builder
     public function forUser(?User $user)
     {
         $this->user = $user;
-        $this->isSponsor = $user ? $user->is_sponsor : false;
+
+        if ($user) {
+            $this->isSponsor = $user->is_sponsor;
+        }
 
         return $this;
     }
