@@ -259,7 +259,7 @@
               </button>
 
               <div class="dropdown-menu dropdown-menu-right">
-                <a v-if="!post.deleted_at && post.permissions.merge && post.id !== topic.first_post_id" @click="merge(true)" href="javascript:" class="dropdown-item">
+                <a v-if="!post.deleted_at && post.permissions.merge && post.id !== topic.first_post_id" @click="merge" href="javascript:" class="dropdown-item">
                   <i class="fas fa-compress fa-fw"></i> Połącz z poprzednim
                 </a>
 
@@ -285,17 +285,6 @@
       <template slot="buttons">
         <button @click="$refs['delete-modal'].close()" type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
         <button @click="deletePost(false)" type="submit" class="btn btn-danger danger">Tak, usuń</button>
-      </template>
-    </vue-modal>
-
-    <vue-modal ref="merge-modal">
-      <p>Czy chcesz połaczyć ten post z poprzednim?</p>
-
-      <template slot="title">Czy chcesz połączyć?</template>
-
-      <template slot="buttons">
-        <button @click="$refs['merge-modal'].close()" type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
-        <vue-button @click.native="merge(false)" :disabled="isProcessing" class="btn btn-danger danger">Tak, połącz</vue-button>
       </template>
     </vue-modal>
   </div>
@@ -368,9 +357,6 @@
     @Ref('delete-modal')
     readonly deleteModal!: VueModal;
 
-    @Ref('merge-modal')
-    readonly mergeModal!: VueModal;
-
     isProcessing = false;
     isCollapsed = this.post.deleted_at != null;
     isEditing = false;
@@ -429,21 +415,15 @@
       }
     }
 
-    merge(confirm = false) {
-      if (confirm) {
-        // @ts-ignore
-        this.mergeModal.open();
-      }
-      else {
-        this.isProcessing = true;
-
-        this.$store.dispatch('posts/merge', this.post).finally(() => {
-          this.isProcessing = false;
-
-          // @ts-ignore
-          this.mergeModal.close();
-        });
-      }
+    merge() {
+      this.$confirm({
+        message: 'Czy chcesz połaczyć ten post z poprzednim?',
+        title: 'Połączyć posty?',
+        okLabel: 'Tak, połącz'
+      })
+      .then(() => {
+        this.$store.dispatch('posts/merge', this.post);
+      });
     }
 
     restore() {

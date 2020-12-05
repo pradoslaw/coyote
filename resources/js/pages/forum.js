@@ -16,9 +16,11 @@ import { default as axiosErrorHandler } from '../libs/axios-error-handler';
 import { mapState, mapGetters } from "vuex";
 import axios from 'axios';
 import useBrackets from '../libs/prompt';
+import VueModals from "@/js/plugins/modals";
 
 Vue.use(VueTimeago);
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
+Vue.use(VueModals);
 
 axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 
