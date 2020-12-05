@@ -52,7 +52,7 @@ trait HomeTrait
                 'label' => 'Zaakceptowane odpowiedzi'
             ],
             [
-                'id' => 'btn-remove',
+                'class' => 'text-danger',
                 'route' => 'user.delete',
                 'icon' => 'fa-times',
                 'label' => 'Usuń konto'
@@ -61,7 +61,7 @@ trait HomeTrait
 
         return app(Menu::class)->make('user.home', function ($menu) use ($collection) {
             foreach ($collection as $row) {
-                $menu->add($row['label'], ['route' => $row['route'], 'id' => $row['id']])
+                $menu->add($row['label'], ['route' => $row['route'], 'id' => $row['id'] ?? '', 'class' => $row['class'] ?? ''])
                         ->prepend('<i class="fa fa-fw ' . $row['icon'] . '"></i>');
             }
 
