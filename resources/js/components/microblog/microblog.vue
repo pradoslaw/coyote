@@ -5,7 +5,7 @@
       <div class="media">
         <div class="d-none d-sm-block mr-2">
           <a v-profile="microblog.user.id">
-            <vue-avatar v-bind="microblog.user" class="i-45 d-block img-thumbnail"></vue-avatar>
+            <vue-avatar v-bind="microblog.user" :is-online="microblog.user.is_online" class="i-45 d-block img-thumbnail"></vue-avatar>
           </a>
         </div>
         <div class="media-body">
