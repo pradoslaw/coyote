@@ -7,7 +7,7 @@
     <slot>
       <div v-for="(type, index) in types" class="media">
         <div class="mr-2">
-          <vue-radio name="type_id" :value.sync="selectedType" :checked-value="type.id" :id="`type-${type.id}`"></vue-radio>
+          <vue-radio name="type_id" v-model="selectedType" :checked-value="type.id" :id="`type-${type.id}`"></vue-radio>
         </div>
 
         <div class="media-body">

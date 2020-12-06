@@ -18,7 +18,7 @@
           </vue-form-group>
 
           <vue-form-group class="col-sm-3" label="Staż pracy">
-            <vue-select name="seniority" :value.sync="job.seniority" :options="seniorities" placeholder="--"></vue-select>
+            <vue-select name="seniority" v-model="job.seniority" :options="seniorities" placeholder="--"></vue-select>
           </vue-form-group>
         </div>
 
