@@ -33,28 +33,18 @@
 
     <div class="tab-content">
       <div :class="{active: activeTab === 'textarea'}" class="tab-pane">
-        <vue-toolbar :input="() => $refs.textarea"></vue-toolbar>
 
-        <vue-prompt :source="`/completion/prompt/${topic.id || ''}`">
-          <textarea
-            v-autosize
-            v-model="post.text"
-            v-paste:success="addAttachment"
-            :class="{'is-invalid': 'text' in errors}"
-            @keydown.ctrl.enter="save"
-            @keydown.meta.enter="save"
-            @keydown.esc="cancel"
-            name="text"
-            class="form-control"
-            ref="textarea"
-            rows="4"
-            tabindex="2"
-            placeholder="Kliknij, aby dodać treść"
-            data-popover='{"placement": "top", "offset": "16%,14px", "message": "Markdown jest obsługiwany. Ctrl+V wkleja obraz ze schowka."}'
-          ></textarea>
-
+        <vue-toolbar
+          v-model="post.text"
+          :source="`/completion/prompt/${topic.id || ''}`"
+          :is-invalid="'text' in errors"
+          @save="save"
+          @cancel="cancel"
+          @paste="addAttachment"
+          ref="editor"
+        >
           <vue-error :message="errors['text']"></vue-error>
-        </vue-prompt>
+        </vue-toolbar>
       </div>
 
       <div :class="{active: activeTab === 'attachments'}" class="tab-pane post-content">
@@ -206,12 +196,9 @@
   import Component from "vue-class-component";
   import { Ref, Prop, Emit, Watch } from "vue-property-decorator";
   import store from "../../store";
-  import VueAutosize from '../../plugins/autosize';
   import VueAutosave from '../../plugins/autosave';
-  import VuePrompt from '../forms/prompt.vue';
   import VueButton from '../forms/button.vue';
   import VueTagsInline from '../forms/tags-inline.vue';
-  import VuePaste from '../../plugins/paste.js';
   import VueToolbar from '../../components/forms/toolbar.vue';
   import { Post, PostAttachment, Topic, Tag } from "../../types/models";
   import { mapMutations, mapState, mapGetters } from "vuex";
@@ -222,16 +209,13 @@
   import Prism from 'prismjs';
   import {default as PerfectScrollbar} from '../perfect-scrollbar';
 
-  Vue.use(VueAutosize);
   Vue.use(VueAutosave);
-  Vue.use(VuePaste, {url: '/Forum/Paste'});
 
   @Component({
     name: 'forum-form',
     store,
     components: {
       'vue-button': VueButton,
-      'vue-prompt': VuePrompt,
       'vue-toolbar': VueToolbar,
       'vue-tags-inline': VueTagsInline,
       'vue-error': VueError,
@@ -265,8 +249,8 @@
     readonly totalPages!: number;
     readonly currentPage!: number;
 
-    @Ref()
-    readonly textarea!: HTMLTextAreaElement;
+    @Ref('editor')
+    readonly editor!: VueToolbar;
 
     @Ref('attachment')
     readonly attachment!: HTMLInputElement;
@@ -368,11 +352,11 @@
     }
 
     insertAtCaret(attachment: PostAttachment) {
-      const textarea = new Textarea(this.$refs.textarea);
+      // const textarea = new Textarea(this.$refs.textarea);
       const suffix = attachment.name.split('.').pop()!.toLowerCase();
 
-      textarea.insertAtCaret('', '', (['png', 'jpg', 'jpeg', 'gif'].includes(suffix) ? '!' : '') + '[' + attachment.name + '](' + attachment.url + ')');
-      this.post.text = textarea.textarea.value;
+      this.editor.insertAtCaret((['png', 'jpg', 'jpeg', 'gif'].includes(suffix) ? '!' : '') + '[' + attachment.name + '](' + attachment.url + ')', '');
+      // this.post.text = textarea.textarea.value;
 
       this.switchTab('textarea');
     }

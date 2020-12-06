@@ -123,71 +123,124 @@
         </div>
       </div>
     </div>
+
+    <vue-prompt :source="source">
+      <textarea
+        v-autosize
+        v-model="valueLocal"
+        v-paste:success="paste"
+        :class="{'is-invalid': isInvalid}"
+        @keydown.ctrl.enter="save"
+        @keydown.meta.enter="save"
+        @keydown.esc="cancel"
+        name="text"
+        class="form-control"
+        ref="input"
+        rows="4"
+        tabindex="2"
+        placeholder="Kliknij, aby dodać treść"
+        data-popover='{"placement": "top", "offset": "16%,14px", "message": "Markdown jest obsługiwany. Ctrl+V wkleja obraz ze schowka."}'
+      ></textarea>
+
+      <slot></slot>
+    </vue-prompt>
   </div>
 </template>
 
-<script>
+<script lang="ts">
+  import Vue from 'vue';
+  import Component from "vue-class-component";
+  import { Ref, Prop, Emit, Watch } from "vue-property-decorator";
   import { default as Textarea, languages } from '../../libs/textarea';
   import { mixin as clickaway } from 'vue-clickaway';
-  import VueDropdownMenu from '../dropdown-menu';
+  import { default as mixin } from '../mixins/form';
+  import VueDropdownMenu from '../dropdown-menu.vue';
+  import VuePaste from "../../plugins/paste";
+  import VueAutosize from '../../plugins/autosize';
+  import VuePrompt from '../forms/prompt.vue';
 
-  export default {
-    mixins: [clickaway],
-    components: { 'vue-dropdown-menu': VueDropdownMenu },
-    props: {
-      input: {
-        type: Function
-      }
-    },
-    data() {
-      return {
-        textarea: null,
-        languages,
-        searchText: '',
-        isDropdownVisible: false
-      }
-    },
+  Vue.use(VuePaste, {url: '/Forum/Paste'});
+  Vue.use(VueAutosize);
+
+  @Component({
+    mixins: [ clickaway, mixin ],
+    components: { 'vue-dropdown-menu': VueDropdownMenu, 'vue-prompt': VuePrompt },
+  })
+  export default class VueToolbar extends Vue {
+    textarea!: Textarea;
+    searchText: string = '';
+    isDropdownVisible: boolean = false;
+
+    @Ref('input')
+    readonly input!: HTMLTextAreaElement;
+
+    @Ref('search')
+    readonly search!: HTMLInputElement;
+
+    @Ref('dropdown')
+    readonly dropdown!: VueDropdownMenu;
+
+    @Prop()
+    value!: string;
+
+    @Prop({default: '/completion/prompt'})
+    readonly source!: string;
+
+    @Prop()
+    readonly isInvalid: boolean = false;
+
+    @Emit('save')
+    save() {}
+
+    @Emit('cancel')
+    cancel() {}
+
+    @Emit('paste')
+    paste() {}
+
     mounted() {
-      this.textarea = new Textarea(this.input());
-    },
-    methods: {
-      insertAtCaret(startsWith, endsWith) {
-        this.textarea.insertAtCaret(startsWith.replace(/<br>/g, "\n"), endsWith.replace(/<br>/g, "\n"), this.textarea.isSelected() ? this.textarea.getSelection() : '');
-        this.isDropdownVisible = false;
+      this.textarea = new Textarea(this.input);
+    }
 
-        this.updateModel();
-      },
+    insertAtCaret(startsWith, endsWith) {
+      this.textarea.insertAtCaret(startsWith.replace(/<br>/g, "\n"), endsWith.replace(/<br>/g, "\n"), this.textarea.isSelected() ? this.textarea.getSelection() : '');
+      this.isDropdownVisible = false;
 
-      insertCitation() {
-        this.textarea.insertAtCaret('> ', '', this.textarea.getSelection().replace(/\r\n/g, "\n").replace(/\n/g, "\n> "));
+      this.updateModel();
+    }
 
-        this.updateModel();
-      },
+    insertCitation() {
+      this.textarea.insertAtCaret('> ', '', this.textarea.getSelection().replace(/\r\n/g, "\n").replace(/\n/g, "\n> "));
 
-      toggleDropdown() {
-        this.$refs.dropdown.toggle();
-        this.$nextTick(() => this.$refs.search.focus());
-      },
+      this.updateModel();
+    }
 
-      hideDropdown() {
-        this.$refs.dropdown.toggle();
-      },
+    toggleDropdown() {
+      this.dropdown.toggle();
+      this.$nextTick(() => this.search.focus());
+    }
 
-      updateModel() {
-        this.input().dispatchEvent(new Event('input', {'bubbles': true}));
-      }
-    },
-    computed: {
-      filteredValue() {
-        return Object
-          .keys(this.languages)
-          .filter(language => this.languages[language].toLowerCase().startsWith(this.searchText.toLowerCase()))
-          .reduce((obj, key) => {
-            obj[key] = this.languages[key];
+    hideDropdown() {
+      this.dropdown.toggle();
+    }
 
-            return obj;
-          }, {});
-      }
+    updateModel() {
+      this.input.dispatchEvent(new Event('input', {'bubbles': true}));
+    }
+
+    focus() {
+      this.input.focus();
+    }
+
+    get filteredValue() {
+      return Object
+        .keys(languages)
+        .filter(language => languages[language].toLowerCase().startsWith(this.searchText.toLowerCase()))
+        .reduce((obj, key) => {
+          obj[key] = languages[key];
+
+          return obj;
+        }, {});
     }
   }
 </script>
