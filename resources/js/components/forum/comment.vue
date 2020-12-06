@@ -17,42 +17,27 @@
     </template>
 
     <vue-comment-form v-if="isEditing" :comment="comment" @save="isEditing = false" @cancel="isEditing = false" ref="comment-form"></vue-comment-form>
-
-    <vue-modal ref="confirm">
-      Komentarz zostanie usunięty. Czy na pewno chcesz to zrobić?
-
-      <template slot="buttons">
-        <button @click="$refs.confirm.close()" type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
-        <button @click="deleteComment(false)" type="submit" class="btn btn-danger danger">Tak, usuń</button>
-      </template>
-    </vue-modal>
   </div>
 </template>
 
 <script lang="ts">
   import Vue from 'vue';
   import VueUserName from '../user-name.vue';
-  import VueModal from '../modal.vue';
   import VueCommentForm from "./comment-form.vue";
   import { default as mixins } from '../mixins/user';
   import { Prop, Ref } from "vue-property-decorator";
   import Component from "vue-class-component";
   import { mixin as clickaway } from "vue-clickaway";
-  import store from "../../store";
   import { PostComment } from "../../types/models";
   import { mapGetters } from "vuex";
 
   @Component({
     name: 'comment',
     mixins: [clickaway, mixins],
-    store,
-    components: { 'vue-modal': VueModal, 'vue-user-name': VueUserName, 'vue-comment-form': VueCommentForm },
+    components: { 'vue-user-name': VueUserName, 'vue-comment-form': VueCommentForm },
     computed: mapGetters('topics', ['topic'])
   })
   export default class VueComment extends Vue {
-    @Ref()
-    readonly confirm!: VueModal;
-
     @Ref('comment-form')
     readonly commentForm!: VueCommentForm;
 
@@ -69,16 +54,13 @@
       }
     }
 
-    deleteComment(confirm = false) {
-      if (confirm) {
-        // @ts-ignore
-        this.confirm.open();
-      }
-      else {
-        // @ts-ignore
-        this.confirm.close();
-        this.$store.dispatch('posts/deleteComment', this.comment);
-      }
+    deleteComment() {
+      this.$confirm({
+        message: 'Tej operacji nie będzie można cofnąć.',
+        title: 'Usunąć komentarz?',
+        okLabel: 'Tak, usuń'
+      })
+      .then(() => this.$store.dispatch('posts/deleteComment', this.comment));
     }
 
     get anchor() {
