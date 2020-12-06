@@ -8,30 +8,15 @@
     <div class="tab-content">
       <div :class="{'active': tab === 'body'}" role="tabpanel" class="tab-pane" id="body">
 
-        <vue-toolbar :input="() => $refs.textarea"></vue-toolbar>
-
-        <vue-prompt>
-          <textarea
-            placeholder="Kliknij, aby odpowiedzieć"
-            v-autosize
-            v-paste:success="insertToTextarea"
-            v-paste:error="showError"
-            name="text"
-            class="form-control"
-            ref="textarea"
-            v-model="text"
-            :class="{'is-invalid': errors.text !== undefined}"
-            :min-height="40"
-            :max-height="350"
-            @keydown.ctrl.enter="sendMessage"
-            @keydown.meta.enter="sendMessage"
-            @keyup="typing"
-            rows="2"
-            tabindex="1"
-          ></textarea>
-
+        <vue-toolbar
+          v-model="text"
+          :is-invalid="'text' in errors"
+          @save="sendMessage"
+          @paste="insertToTextarea"
+          ref="editor"
+        >
           <vue-error :message="errors.text"></vue-error>
-        </vue-prompt>
+        </vue-toolbar>
       </div>
 
       <div :class="{'active': tab === 'preview'}" role="tabpanel" class="tab-pane" id="preview" v-html="previewHtml"></div>
@@ -43,5 +28,3 @@
     <vue-button :disabled="isProcessing" @click.native="sendMessage" class="btn btn-primary btn-sm">Wyślij</vue-button>
   </div>
 </div>
-
-<vue-modal v-cloak ref="error">Nie można dodać załącznika. Prosimy o kontakt w celu zgłoszenia tego błędu.</vue-modal>

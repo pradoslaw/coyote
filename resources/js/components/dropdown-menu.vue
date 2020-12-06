@@ -14,7 +14,7 @@
     mixins: [clickaway]
   })
   export default class VueDropdownMenu extends Vue {
-    private isDropdownVisible = false;
+    public isDropdownVisible = false;
 
     hideDropdown(event) {
       if (event && !event.target.classList.contains('dropdown-toggle')) {

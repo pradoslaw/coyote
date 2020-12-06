@@ -3,7 +3,6 @@ import { mapState } from 'vuex';
 import Vue from 'vue';
 import PerfectScrollbar from '../components/perfect-scrollbar';
 import VuePm from '../components/pm/message.vue';
-import VueAutosize from '../plugins/autosize';
 import VueAutosave from '../plugins/autosave';
 import VuePrompt from '../components/forms/prompt.vue';
 import VueToolbar from '../components/forms/toolbar.vue';
@@ -14,14 +13,17 @@ import VuePaste from '../plugins/paste.js';
 import VueModal from '../components/modal.vue';
 import VuePagination from '../components/pagination.vue';
 import VueAutocomplete from '../components/forms/autocomplete.vue';
-import Textarea from "../libs/textarea";
 import axios from 'axios';
 import differenceInMinutes from 'date-fns/differenceInMinutes';
 import parseISO from 'date-fns/parseISO';
+import {default as axiosErrorHandler} from "@/js/libs/axios-error-handler";
+import VueNotifications from "vue-notification";
 
-Vue.use(VueAutosize);
 Vue.use(VueAutosave);
+Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 Vue.use(VuePaste, {url: '/User/Pm/Paste'});
+
+axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 
 const DRAFT_KEY = 'pm';
 const INBOX = 1;
@@ -112,16 +114,16 @@ new Vue({
     },
 
     insertToTextarea(file) {
-      const textarea = new Textarea(this.$refs.textarea);
+      // const textarea = new Textarea(this.$refs.textarea);
 
-      textarea.insertAtCaret('', '', '![' + file.name + '](' + file.url + ')');
+      this.$refs.editor.insertAtCaret('![' + file.name + '](' + file.url + ')', '');
 
-      this.$refs.textarea.dispatchEvent(new Event('input', {'bubbles': true}));
+      // this.$refs.editor.$refs.input.dispatchEvent(new Event('input', {'bubbles': true}));
     },
 
-    showError() {
-      this.$refs.error.open();
-    },
+    // showError() {
+    //   this.$refs.error.open();
+    // },
 
     listenForMessage() {
       this.channel().on('Coyote\\Events\\PmCreated', data => {
@@ -158,6 +160,8 @@ new Vue({
 
         this.timer = setTimeout(() => this.isTyping = false, 1000);
       });
+
+      this.$refs.editor.$refs.input.addEventListener('keyup', this.typing);
     },
 
     showPreview() {

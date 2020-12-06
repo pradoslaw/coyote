@@ -150,16 +150,14 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from "vue-class-component";
-  import { Ref, Prop, Emit, Watch } from "vue-property-decorator";
+  import { Ref, Prop, Emit } from "vue-property-decorator";
   import { default as Textarea, languages } from '../../libs/textarea';
   import { mixin as clickaway } from 'vue-clickaway';
   import { default as mixin } from '../mixins/form';
   import VueDropdownMenu from '../dropdown-menu.vue';
-  import VuePaste from "../../plugins/paste";
   import VueAutosize from '../../plugins/autosize';
   import VuePrompt from '../forms/prompt.vue';
 
-  Vue.use(VuePaste, {url: '/Forum/Paste'});
   Vue.use(VueAutosize);
 
   @Component({
@@ -169,7 +167,6 @@
   export default class VueToolbar extends Vue {
     textarea!: Textarea;
     searchText: string = '';
-    isDropdownVisible: boolean = false;
 
     @Ref('input')
     readonly input!: HTMLTextAreaElement;
@@ -204,7 +201,10 @@
 
     insertAtCaret(startsWith, endsWith) {
       this.textarea.insertAtCaret(startsWith.replace(/<br>/g, "\n"), endsWith.replace(/<br>/g, "\n"), this.textarea.isSelected() ? this.textarea.getSelection() : '');
-      this.isDropdownVisible = false;
+
+      if (this.dropdown.isDropdownVisible) {
+        this.hideDropdown();
+      }
 
       this.updateModel();
     }

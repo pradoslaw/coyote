@@ -9,6 +9,7 @@ import VueButton from '../components/forms/button.vue';
 import VueSelect from '../components/forms/select.vue';
 import VueNotifications from 'vue-notification';
 import VuePagination from '../components/pagination.vue';
+import VuePaste from "../plugins/paste";
 import Vue from "vue";
 import store from '../store';
 import { default as mixin } from '../components/mixins/user';
@@ -21,6 +22,7 @@ import VueModals from "@/js/plugins/modals";
 Vue.use(VueTimeago);
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 Vue.use(VueModals);
+Vue.use(VuePaste, {url: '/Forum/Paste'});
 
 axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 
