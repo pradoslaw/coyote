@@ -277,18 +277,16 @@
         <section id="box-related" class="box related">
           <h4 class="border-bottom"><i class="far fa-eye fa-fw"></i> Strony pokrewne</h4>
 
-          <div>
-            <ul>
-              {% for page in mlt %}
-                <li>
-                  <a href="{{ route('forum.topic', [page.forum.slug, page.id, page.slug]) }}" title="{{ page.subject|raw }}">
-                    <strong>{{ page.subject|raw }}</strong>
-                    <small>{{ page.last_post_created_at|format_date }}</small>
-                  </a>
-                </li>
-              {% endfor %}
-            </ul>
-          </div>
+          <ul>
+            {% for page in mlt %}
+              <li>
+                <a href="{{ route('forum.topic', [page.forum.slug, page.id, page.slug]) }}" title="{{ page.subject|raw }}">
+                  <strong>{{ page.subject|raw }}</strong>
+                  <small>{{ page.last_post_created_at|format_date }}</small>
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
         </section>
       {% endif %}
     {% endblock %}

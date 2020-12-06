@@ -3,10 +3,25 @@
     <div v-if="showTitleInput" class="form-group">
       <label class="col-form-label">Temat <em>*</em></label>
 
-      <vue-text :value.sync="topic.subject" :is-invalid="'subject' in errors" @keydown.enter.native="save" name="subject" tabindex="1" autofocus="autofocus"></vue-text>
+      <vue-text :value.sync="topic.subject" :is-invalid="'subject' in errors" @keydown.enter.native="save" @blur.native="findSimilar" name="subject" tabindex="1" autofocus="autofocus"></vue-text>
       <vue-error :message="errors['subject']"></vue-error>
 
       <small v-if="!('subject' in errors)" class="text-muted form-text">Bądź rzeczowy. Nie nadawaj wątkom jednowyrazowych tytułów.</small>
+
+      <div v-if="similar.length" class="card mt-2">
+        <div class="card-header p-3">Podobne wątki</div>
+
+        <div class="card-body related mt-0 p-3">
+          <perfect-scrollbar tag="ul" class="position-relative" style="height: 100px">
+            <li v-for="topic in similar">
+              <a :href="topic.url">
+                <strong>{{ topic.subject }}</strong>
+                <small><vue-timeago :datetime="topic.last_post_created_at"></vue-timeago></small>
+              </a>
+            </li>
+          </perfect-scrollbar>
+        </div>
+      </div>
     </div>
 
     <ul class="nav nav-tabs">
@@ -198,7 +213,6 @@
   import VueTagsInline from '../forms/tags-inline.vue';
   import VuePaste from '../../plugins/paste.js';
   import VueToolbar from '../../components/forms/toolbar.vue';
-  import VueTimeago from '../../plugins/timeago';
   import { Post, PostAttachment, Topic, Tag } from "../../types/models";
   import { mapMutations, mapState, mapGetters } from "vuex";
   import axios from 'axios';
@@ -206,11 +220,11 @@
   import VueError from '../forms/error.vue';
   import VueText from '../forms/text.vue';
   import Prism from 'prismjs';
+  import {default as PerfectScrollbar} from '../perfect-scrollbar';
 
   Vue.use(VueAutosize);
   Vue.use(VueAutosave);
   Vue.use(VuePaste, {url: '/Forum/Paste'});
-  Vue.use(VueTimeago);
 
   @Component({
     name: 'forum-form',
@@ -221,7 +235,8 @@
       'vue-toolbar': VueToolbar,
       'vue-tags-inline': VueTagsInline,
       'vue-error': VueError,
-      'vue-text': VueText
+      'vue-text': VueText,
+      'perfect-scrollbar': PerfectScrollbar
     },
     computed: {
       ...mapGetters('topics', ['topic']),
@@ -245,6 +260,7 @@
     isProcessing = false;
     activeTab = 'textarea';
     errors = {};
+    similar: Topic[] = [];
     readonly topic!: Topic;
     readonly totalPages!: number;
     readonly currentPage!: number;
@@ -363,6 +379,14 @@
 
     toggleTag(tag: Tag) {
       store.commit('topics/toggleTag', { topic: this.topic, tag });
+    }
+
+    findSimilar() {
+      if (!this.topic.subject) {
+        return;
+      }
+
+      axios.get('/completion/similar', { params: { q: this.topic.subject }}).then(response => this.similar = response.data.hits);
     }
 
     async lastPage() {
