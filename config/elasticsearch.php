@@ -37,7 +37,7 @@ return [
         'no', 'not', 'of', 'on', 'or', 's', 'such', 't', 'that', 'the', 'their', 'then', 'there', 'these', 'they', 'this',
         'to', 'was', 'will', 'with', 'vol', 'o.o.', 'mgr', 'godz', 'zł', 'www', 'pl', 'ul', 'tel', 'hab', 'prof', 'inż',
         'dr', 'i', 'u', 'aby', 'albo', 'ale', 'ani', 'aż', 'bardzo', 'bez', 'bo', 'bowiem', 'by', 'byli', 'bym', 'był',
-        'była', 'było', 'były', 'być', 'będzie', 'będą', 'chce', 'choć', 'co', 'coraz', 'coś', 'czy', 'czyli', 'często',
+        'była', 'było', 'były', 'być', 'będzie', 'będą', 'choć', 'co', 'coraz', 'coś', 'czy', 'czyli', 'często',
         'dla', 'do', 'gdy', 'gdyby', 'gdyż', 'gdzie', 'go', 'ich', 'im', 'inne', 'iż', 'ja', 'jak', 'jakie', 'jako',
         'je', 'jednak', 'jednym', 'jedynie', 'jego', 'jej', 'jest', 'jeszcze', 'jeśli', 'jeżeli', 'już', 'ją', 'kiedy',
         'kilku', 'kto', 'która', 'które', 'którego', 'której', 'który', 'których', 'którym', 'którzy', 'lat', 'lecz',

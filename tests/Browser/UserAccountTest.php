@@ -20,13 +20,13 @@ class UserAccountTest extends DuskTestCase
             $browser
                 ->loginAs($user)
                 ->visit('/User/DeleteAccount')
-                ->press('Potwierdzam, że chce usunąć moje konto')
+                ->press('Potwierdzam, że chcę usunąć moje konto')
                 ->assertSee('Pole hasło jest wymagane.')
                 ->type('password', $faker->password)
-                ->press('Potwierdzam, że chce usunąć moje konto')
+                ->press('Potwierdzam, że chcę usunąć moje konto')
                 ->assertSee('Wprowadzone hasło nie jest poprawne.')
                 ->type('password', '123')
-                ->press('Potwierdzam, że chce usunąć moje konto')
+                ->press('Potwierdzam, że chcę usunąć moje konto')
                 ->assertSee('Konto zostało prawidłowo usunięte.');
 
             $browser->logout();
@@ -42,7 +42,7 @@ class UserAccountTest extends DuskTestCase
                 ->loginAs($user)
                 ->visit('/User/DeleteAccount')
                 ->assertMissing('input[type="password"]')
-                ->press('Potwierdzam, że chce usunąć moje konto')
+                ->press('Potwierdzam, że chcę usunąć moje konto')
                 ->assertPathIs('/')
                 ->assertSee('Konto zostało prawidłowo usunięte.');
 
