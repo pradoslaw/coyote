@@ -19,7 +19,7 @@
           type="search"
           name="q"
           autocomplete="off"
-          placeholder="Wpisz &quot;?&quot;, aby uzyskac pomoc lub wyszukaj"
+          placeholder="Wpisz &quot;?&quot;, aby uzyskać pomoc lub wyszukaj"
         >
       </form>
 

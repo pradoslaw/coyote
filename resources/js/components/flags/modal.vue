@@ -1,7 +1,7 @@
 <template>
   <vue-modal ref="modal">
     <template v-slot:title>
-      Chce zgłosić ten materiał w związku z...
+      Chcę zgłosić ten materiał w związku z...
     </template>
 
     <slot>

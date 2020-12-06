@@ -15,13 +15,13 @@
       {{ form_open({'method': 'POST', 'role': 'form', 'url': route('user.delete')}) }}
 
       {% if user('password') %}
-        {{ forms.password('password', 'Hasło', '', {}, 'Hasło musi mieć min. 3 znaki długości') }}
+        {{ forms.password('password', 'Hasło') }}
       {% endif %}
 
       <div class="form-group row">
         <div class="col-md-6 col-12 offset-md-4">
           <button type="submit" class="btn btn-danger w-100" data-submit-state="Usuwanie....">
-            Potwierdzam, że chce usunąć moje konto
+            Potwierdzam, że chcę usunąć moje konto
           </button>
         </div>
       </div>

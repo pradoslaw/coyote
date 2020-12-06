@@ -47,8 +47,8 @@
     <div class="card-body">
       {{ form_open({'method': 'POST', 'role': 'form', 'url': route('user.security')}) }}
 
-      {{ forms.checkbox('alert_login', 'Chce otrzymywać wiadomość e-mail o udanym logowaniu na moje konto', 1, user('alert_login')) }}
-      {{ forms.checkbox('alert_failure', 'Chce otrzymywać wiadomość e-mail o nieudanej próbie logowania na moje konto', 1, user('alert_failure')) }}
+      {{ forms.checkbox('alert_login', 'Chcę otrzymywać wiadomość e-mail o udanym logowaniu na moje konto', 1, user('alert_login')) }}
+      {{ forms.checkbox('alert_failure', 'Chcę otrzymywać wiadomość e-mail o nieudanej próbie logowania na moje konto', 1, user('alert_failure')) }}
 
       <div class="form-group row">
         <label class="col-md-4 col-form-label">Dostęp z adresów IP</label>
@@ -64,7 +64,7 @@
             </p>
           {% endfor %}
 
-          <p class="text-muted">Możesz zabezpieczyć dostęp do swojego konta, podając adresy IP, z jakich będzie możliwy do nich dostęp. Znak gwiazdki (*) zastępuje cały zakres danych.</p>
+          <p class="text-muted">Możesz zabezpieczyć dostęp do swojego konta, podając adresy IP, z jakich będzie możliwy do niego dostęp. Znak gwiazdki (*) zastępuje cały zakres danych.</p>
         </div>
       </div>
 
