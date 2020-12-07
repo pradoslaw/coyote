@@ -1,9 +1,11 @@
 <template>
-  <ul class="nav nav-tabs">
-    <li v-for="(item, key) in items" :key="key" class="nav-item">
+  <div :class="`nav nav-${this.type}`">
+    <div v-for="(item, key) in items" :key="key" class="nav-item">
       <a @click="$emit('click', key)" :class="{'active': key === currentTab}" class="nav-link" href="javascript:">{{ item }}</a>
-    </li>
-  </ul>
+    </div>
+
+    <slot></slot>
+  </div>
 </template>
 
 <script>
@@ -13,7 +15,14 @@
         type: [Array, Object],
         default: []
       },
-      currentTab: null
+      currentTab: null,
+      type: {
+        type: String,
+        default: 'tabs',
+        validator(value) {
+          return value === 'tabs' || value === 'pills';
+        }
+      }
     }
   }
 </script>

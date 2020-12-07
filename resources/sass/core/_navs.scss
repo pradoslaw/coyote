@@ -110,38 +110,31 @@
   margin-top:             -1px;
 }
 
-.nav-tabs {
-  > li > a {
-    color: $gray-light;
-  }
+.nav-link {
+  color: $gray-light;
 
+  &:hover {
+    color: inherit;
+  }
+}
+
+.nav-tabs {
   .nav-link.active {
     border-top: 2px solid $alt-link-hover-color;
   }
 }
 
-ul.nav-pills {
+.nav-pills {
   border-bottom: 1px solid $card-border-color;
-  box-shadow: 0 2px 0 #FFF;
-
-  .nav-link {
-    color: $gray-light;
-
-    &:hover {
-      background: transparent !important;
-    }
-  }
 
   .nav-link.active {
     &,
     &:hover,
     &:focus,
     &:active {
-      background: transparent;
-      color: $primary;
-      border-bottom: 2px solid $primary;
-      border-radius: 0;
-      margin-bottom: -2px;
+      font-weight: bold;
+      border-bottom: 2px solid $alt-link-hover-color;
+      margin-bottom: -1px;
     }
   }
 }

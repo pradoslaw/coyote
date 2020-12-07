@@ -5,7 +5,6 @@ import VueText from '@/js/components/forms/text.vue';
 import VueSelect from '@/js/components/forms/select.vue';
 import VueCheckbox from '@/js/components/forms/checkbox.vue';
 import VueButton from '@/js/components/forms/button.vue';
-import VueTabs from '@/js/components/tabs.vue';
 import axios from 'axios';
 import VueNotifications from "vue-notification";
 import {default as axiosErrorHandler} from "@/js/libs/axios-error-handler";
@@ -23,8 +22,7 @@ new Vue({
     'vue-select': VueSelect,
     'vue-checkbox': VueCheckbox,
     'vue-masked-input': VueMaskedInput,
-    'vue-button': VueButton,
-    'vue-tabs': VueTabs
+    'vue-button': VueButton
   },
   filters: {
     money(value) {

@@ -13,7 +13,6 @@ import VuePaste from '../plugins/paste.js';
 import VueModal from '../components/modal.vue';
 import VuePagination from '../components/pagination.vue';
 import VueAutocomplete from '../components/forms/autocomplete.vue';
-import axios from 'axios';
 import differenceInMinutes from 'date-fns/differenceInMinutes';
 import parseISO from 'date-fns/parseISO';
 import {default as axiosErrorHandler} from "@/js/libs/axios-error-handler";
@@ -114,16 +113,8 @@ new Vue({
     },
 
     insertToTextarea(file) {
-      // const textarea = new Textarea(this.$refs.textarea);
-
       this.$refs.editor.insertAtCaret('![' + file.name + '](' + file.url + ')', '');
-
-      // this.$refs.editor.$refs.input.dispatchEvent(new Event('input', {'bubbles': true}));
     },
-
-    // showError() {
-    //   this.$refs.error.open();
-    // },
 
     listenForMessage() {
       this.channel().on('Coyote\\Events\\PmCreated', data => {
@@ -162,16 +153,6 @@ new Vue({
       });
 
       this.$refs.editor.$refs.input.addEventListener('keyup', this.typing);
-    },
-
-    showPreview() {
-      this.tab = 'preview';
-
-      axios.post('/User/Pm/Preview', {text: this.text}).then((response) => {
-        this.previewHtml = response.data;
-
-        Prism.highlightAll();
-      });
     },
 
     loadMore() {

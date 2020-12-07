@@ -1,23 +1,10 @@
-#wiki-toolbar {
-  margin-bottom: 15px;
-  margin-top: 15px;
+.editor {
+  border: 1px solid $border-color;
+  padding: $input-padding-y;
+  border-radius: $border-radius;
 
-  .btn-sm {
-    @include gradient-y(#f6f6f6, #ddd);
-  }
-
-  // Alert informujacy o tym, ze obslugujemy markdown
-  // ---------------------------------------------------
-
-  .alert-popover {
-    top: 0;
-    right: 65px;
-  }
-
-  @include media-breakpoint-down(xs) {
-    > div {
-      display: none;
-    }
+  .form-control {
+    border: none;
   }
 }
 
