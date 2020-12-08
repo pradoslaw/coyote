@@ -25,9 +25,9 @@
     </div>
 
     <div class="form-group">
-      <vue-toolbar
+      <vue-markdown
         v-model="post.text"
-        :source="`/completion/prompt/${topic.id || ''}`"
+        :prompt-url="`/completion/prompt/${topic.id || ''}`"
         :error="errors['text']"
         :tabs="['Treść', 'Załączniki', 'Ankieta', 'Podgląd']"
         preview-url="/Forum/Preview"
@@ -138,7 +138,7 @@
             </div>
           </div>
         </div>
-      </vue-toolbar>
+      </vue-markdown>
     </div>
 
     <div v-if="showTagsInput" class="form-group">
@@ -183,7 +183,7 @@
   import VueAutosave from '../../plugins/autosave';
   import VueButton from '../forms/button.vue';
   import VueTagsInline from '../forms/tags-inline.vue';
-  import VueToolbar from '../../components/forms/toolbar.vue';
+  import VueMarkdown from '../../components/forms/markdown.vue';
   import { Post, PostAttachment, Topic, Tag } from "../../types/models";
   import { mapMutations, mapState, mapGetters } from "vuex";
   import axios from 'axios';
@@ -200,7 +200,7 @@
     store,
     components: {
       'vue-button': VueButton,
-      'vue-toolbar': VueToolbar,
+      'vue-markdown': VueMarkdown,
       'vue-tags-inline': VueTagsInline,
       'vue-error': VueError,
       'vue-text': VueText,
@@ -234,7 +234,7 @@
     readonly currentPage!: number;
 
     @Ref('editor')
-    readonly editor!: VueToolbar;
+    readonly editor!: VueMarkdown;
 
     @Ref('attachment')
     readonly attachment!: HTMLInputElement;

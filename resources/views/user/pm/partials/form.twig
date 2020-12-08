@@ -1,6 +1,6 @@
 <div v-if="!recipient.deleted_at" class="row mb-2">
   <div class="col-12">
-    <vue-toolbar
+    <vue-markdown
       v-model="text"
       :error="errors[text]"
       @save="sendMessage"
@@ -8,7 +8,7 @@
       ref="editor"
       preview-url="/User/Pm/Preview"
     >
-    </vue-toolbar>
+    </vue-markdown>
   </div>
 </div>
 
