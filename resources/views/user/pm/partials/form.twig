@@ -1,27 +1,14 @@
 <div v-if="!recipient.deleted_at" class="row mb-2">
   <div class="col-12">
-{#    <ul class="nav nav-tabs">#}
-{#      <li class="nav-item"><a :class="{'active': tab === 'body'}" class="nav-link" href="javascript:" role="tab" @click="tab = 'body'">Treść</a></li>#}
-{#      <li class="nav-item" ><a :class="{'active': tab === 'preview'}" class="nav-link" href="javascript:" role="tab" @click="showPreview">Podgląd</a></li>#}
-{#    </ul>#}
-
-{#    <div class="tab-content">#}
-{#      <div :class="{'active': tab === 'body'}" role="tabpanel" class="tab-pane" id="body">#}
-
-        <vue-toolbar
-          v-model="text"
-          :error="errors[text]"
-          @save="sendMessage"
-          @paste="insertToTextarea"
-          ref="editor"
-          preview-url="/User/Pm/Preview"
-        >
-{#          <vue-error :message="errors.text"></vue-error>#}
-        </vue-toolbar>
-{#      </div>#}
-
-{#      <div :class="{'active': tab === 'preview'}" role="tabpanel" class="tab-pane" id="preview" v-html="previewHtml"></div>#}
-{#    </div>#}
+    <vue-toolbar
+      v-model="text"
+      :error="errors[text]"
+      @save="sendMessage"
+      @paste="insertToTextarea"
+      ref="editor"
+      preview-url="/User/Pm/Preview"
+    >
+    </vue-toolbar>
   </div>
 </div>
 

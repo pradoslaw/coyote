@@ -149,6 +149,8 @@
     </vue-prompt>
 
     <div @click="showPreview" v-show="currentTab === 1" v-html="previewHtml" class="form-control"></div>
+
+    <slot></slot>
   </div>
 </template>
 
@@ -267,7 +269,7 @@
       axios.post(this.previewUrl, {text: this.value}).then(response => {
         this.previewHtml = response.data;
 
-        Prism.highlightAll();
+        this.$nextTick(() => Prism.highlightAll());
       });
     }
 

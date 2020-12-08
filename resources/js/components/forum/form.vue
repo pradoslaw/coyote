@@ -24,31 +24,20 @@
       </div>
     </div>
 
-    <ul class="nav nav-tabs">
-      <li class="nav-item"><a @click="switchTab('textarea')" :class="{active: activeTab === 'textarea'}" class="nav-link" href="javascript:">Treść</a></li>
-      <li class="nav-item"><a @click="switchTab('attachments')" :class="{active: activeTab === 'attachments'}" class="nav-link" href="javascript:">Załączniki</a></li>
-      <li v-if="showPollTab" class="nav-item"><a @click="switchTab('poll')" :class="{active: activeTab === 'poll'}" class="nav-link" href="javascript:">Ankieta</a></li>
-      <li class="nav-item"><a @click="switchTab('preview')" :class="{active: activeTab === 'preview'}" class="nav-link" href="javascript:">Podgląd</a></li>
-    </ul>
+    <div class="form-group">
+      <vue-toolbar
+        v-model="post.text"
+        :source="`/completion/prompt/${topic.id || ''}`"
+        :error="errors['text']"
+        :tabs="['Treść', 'Załączniki', 'Ankieta', 'Podgląd']"
+        preview-url="/Forum/Preview"
+        @save="save"
+        @cancel="cancel"
+        @paste="addAttachment"
+        ref="editor"
+      >
 
-    <div class="tab-content">
-      <div :class="{active: activeTab === 'textarea'}" class="tab-pane">
-
-        <vue-toolbar
-          v-model="post.text"
-          :source="`/completion/prompt/${topic.id || ''}`"
-          :is-invalid="'text' in errors"
-          @save="save"
-          @cancel="cancel"
-          @paste="addAttachment"
-          ref="editor"
-        >
-          <vue-error :message="errors['text']"></vue-error>
-        </vue-toolbar>
-      </div>
-
-      <div :class="{active: activeTab === 'attachments'}" class="tab-pane post-content">
-        <div class="card card-default">
+        <div v-show="currentTab === 1" class="card card-default">
           <table class="table table-striped">
             <thead>
               <tr>
@@ -87,74 +76,69 @@
             <button @click="openDialog" type="button" class="btn btn-primary btn-sm">Dodaj załącznik</button>
           </div>
         </div>
-      </div>
+        <div v-show="currentTab === 2" v-if="showPollTab" class="post-content">
+          <div class="form-group row">
+            <label class="col-md-4 col-form-label text-right">Tytuł ankiety</label>
 
-      <div v-if="showPollTab" :class="{active: activeTab === 'poll'}" class="tab-pane post-content">
-        <div class="form-group row">
-          <label class="col-md-4 col-form-label text-right">Tytuł ankiety</label>
-
-          <div class="col-md-6">
-            <vue-text v-model="poll.title"></vue-text>
-            <vue-error :message="errors['poll.title']"></vue-error>
+            <div class="col-md-6">
+              <vue-text v-model="poll.title"></vue-text>
+              <vue-error :message="errors['poll.title']"></vue-error>
+            </div>
           </div>
-        </div>
 
-        <div class="form-group row">
-          <label class="col-md-4 col-form-label text-right">Odpowiedzi w ankiecie</label>
+          <div class="form-group row">
+            <label class="col-md-4 col-form-label text-right">Odpowiedzi w ankiecie</label>
 
-          <div class="col-md-6">
-            <div v-for="(item, index) in poll.items" :key="item.id" class="input-group mb-1">
-              <div class="input-group-prepend">
-                <a @click="removeItem(item)" class="input-group-text text-decoration-none" href="javascript:">
-                  <i :class="{'text-danger': poll.items.length > 2, 'text-muted': poll.items.length <= 2}" title="Usuń odpowiedź" class="fas fa-fw fa-minus-circle"></i>
-                </a>
+            <div class="col-md-6">
+              <div v-for="(item, index) in poll.items" :key="item.id" class="input-group mb-1">
+                <div class="input-group-prepend">
+                  <a @click="removeItem(item)" class="input-group-text text-decoration-none" href="javascript:">
+                    <i :class="{'text-danger': poll.items.length > 2, 'text-muted': poll.items.length <= 2}" title="Usuń odpowiedź" class="fas fa-fw fa-minus-circle"></i>
+                  </a>
+                </div>
+
+                <vue-text
+                  v-model="item.text"
+                  :is-invalid="`poll.items.${index}.text` in errors"
+                  class="input-sm"
+                  @keydown.enter.native="addItem"
+                  placeholder="Naciśnij Enter, aby dodać kolejną pozycję"
+                ></vue-text>
+
+                <vue-error :message="errors[`poll.items.${index}.text`]"></vue-error>
               </div>
+            </div>
+          </div>
 
-              <vue-text
-                v-model="item.text"
-                :is-invalid="`poll.items.${index}.text` in errors"
-                class="input-sm"
-                @keydown.enter.native="addItem"
-                placeholder="Naciśnij Enter, aby dodać kolejną pozycję"
-              ></vue-text>
+          <div class="form-group row">
+            <label class="col-md-4 col-form-label text-right">Liczba możliwych odpowiedzi</label>
 
-              <vue-error :message="errors[`poll.items.${index}.text`]"></vue-error>
+            <div class="col-md-6">
+              <vue-text v-model="poll.max_items"></vue-text>
+              <vue-error :message="errors['poll.max_items']"></vue-error>
+
+              <span class="form-text text-muted">Minimalnie jedna możliwa odpowiedź w ankiecie.</span>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-md-4 col-form-label text-right">Długość działania</label>
+
+            <div class="col-md-6">
+              <vue-text v-model="poll.length"></vue-text>
+              <vue-error :message="errors['poll.length']"></vue-error>
+
+              <span class="form-text text-muted">Określ długość działania ankiety (w dniach). 0 oznacza brak terminu ważności.</span>
+            </div>
+          </div>
+
+          <div v-if="poll.id" class="form-group row">
+            <div class="col-md-6 offset-md-4">
+              <button @click="resetDefaults" class="btn btn-danger btn-sm">Usuń ankietę</button>
             </div>
           </div>
         </div>
-
-        <div class="form-group row">
-          <label class="col-md-4 col-form-label text-right">Liczba możliwych odpowiedzi</label>
-
-          <div class="col-md-6">
-            <vue-text v-model="poll.max_items"></vue-text>
-            <vue-error :message="errors['poll.max_items']"></vue-error>
-
-            <span class="form-text text-muted">Minimalnie jedna możliwa odpowiedź w ankiecie.</span>
-          </div>
-        </div>
-
-        <div class="form-group row">
-          <label class="col-md-4 col-form-label text-right">Długość działania</label>
-
-          <div class="col-md-6">
-            <vue-text v-model="poll.length"></vue-text>
-            <vue-error :message="errors['poll.length']"></vue-error>
-
-            <span class="form-text text-muted">Określ długość działania ankiety (w dniach). 0 oznacza brak terminu ważności.</span>
-          </div>
-        </div>
-
-        <div v-if="poll.id" class="form-group row">
-          <div class="col-md-6 offset-md-4">
-            <button @click="resetDefaults" class="btn btn-danger btn-sm">Usuń ankietę</button>
-          </div>
-        </div>
-      </div>
-
-      <div :class="{active: activeTab === 'preview'}" class="tab-pane post-content">
-        <div v-html="post.html"></div>
-      </div>
+      </vue-toolbar>
     </div>
 
     <div v-if="showTagsInput" class="form-group">
@@ -242,7 +226,7 @@
   })
   export default class VueForm extends Vue {
     isProcessing = false;
-    activeTab = 'textarea';
+    currentTab: number = 0;
     errors = {};
     similar: Topic[] = [];
     readonly topic!: Topic;
@@ -279,18 +263,18 @@
     @Emit()
     cancel() { }
 
-    @Watch('activeTab')
-    showPreview(newValue) {
-      if (newValue !== 'preview') {
-        return;
-      }
-
-      axios.post('/Forum/Preview', {text: this.post.text}).then(result => {
-        this.post.html = result.data;
-
-        this.$nextTick(() => Prism.highlightAll());
-      });
-    }
+    // @Watch('activeTab')
+    // showPreview(newValue) {
+    //   if (newValue !== 'preview') {
+    //     return;
+    //   }
+    //
+    //   axios.post('/Forum/Preview', {text: this.post.text}).then(result => {
+    //     this.post.html = result.data;
+    //
+    //     this.$nextTick(() => Prism.highlightAll());
+    //   });
+    // }
 
     created() {
       if (this.post.id !== undefined) {
@@ -328,9 +312,9 @@
         .finally(() => this.isProcessing = false);
     }
 
-    switchTab(activeTab: string) {
-      this.activeTab = activeTab;
-    }
+    // switchTab(activeTab: string) {
+    //   this.currentTab = activeTab;
+    // }
 
     openDialog() {
       (this.$refs.attachment as HTMLInputElement).click();
@@ -358,7 +342,7 @@
       this.editor.insertAtCaret((['png', 'jpg', 'jpeg', 'gif'].includes(suffix) ? '!' : '') + '[' + attachment.name + '](' + attachment.url + ')', '');
       // this.post.text = textarea.textarea.value;
 
-      this.switchTab('textarea');
+      // this.switchTab('textarea');
     }
 
     toggleTag(tag: Tag) {
