@@ -31,6 +31,7 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop, Ref } from 'vue-property-decorator';
 import axios from 'axios';
+import IsImage from '../libs/media';
 
 @Component
 export default class VueThumbnail extends Vue {
@@ -75,7 +76,7 @@ export default class VueThumbnail extends Vue {
   }
 
   private get isImage() {
-    return this.url?.match(/\.(jpeg|jpg|gif|png)$/) != null;
+    return IsImage(this.url!);
   }
 }
 

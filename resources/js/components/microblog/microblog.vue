@@ -129,6 +129,7 @@
   import { MicroblogMixin } from "../mixins/microblog";
   import { User } from '../../types/models';
   import useBrackets from "../../libs/prompt";
+  import IsImage from '../../libs/media';
 
   Vue.use(VueTimeago);
   Vue.use(VueClipboard);
@@ -203,9 +204,13 @@
     }
 
     get images() {
-      return this.microblog.media.map(media => {
-        return { src: media.url, thumb: media.thumbnail, url: media.url };
-      })
+      return this
+        .microblog
+        .media
+        .filter(media => IsImage(media.name!))
+        .map(media => {
+          return { src: media.url, thumb: media.thumbnail, url: media.url };
+        });
     }
 
     get flags() {

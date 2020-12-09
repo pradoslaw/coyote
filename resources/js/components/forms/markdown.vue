@@ -177,6 +177,7 @@
   import VueThumbnail from "../thumbnail.vue";
   import axios from 'axios';
   import Prism from 'prismjs';
+  import IsImage from '../../libs/media';
 
   const CONTENT = 'Treść';
   const PREVIEW = 'Podgląd';
@@ -211,6 +212,9 @@
     @Prop()
     value!: string;
 
+    @Prop({default: true})
+    readonly autoInsertMedia = true;
+
     @Prop({default: () => [CONTENT, PREVIEW]})
     readonly tabs!: string[];
 
@@ -234,12 +238,11 @@
 
     @Emit('paste')
     addMedia(media: Media) {
-      this.isProcessing = false;
       this.media.push(media);
 
-      const suffix = media.name!.split('.').pop()!.toLowerCase();
-
-      this.insertAtCaret((['png', 'jpg', 'jpeg', 'gif'].includes(suffix) ? '!' : '') + '[' + media.name + '](' + media.url + ')', '');
+      if (this.autoInsertMedia) {
+        this.insertAtCaret((IsImage(media.name!) ? '!' : '') + '[' + media.name + '](' + media.url + ')', '');
+      }
     }
 
     deleteMedia(media) {
