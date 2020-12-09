@@ -60,12 +60,24 @@
       ></textarea>
 
       <div class="row no-gutters border-top pt-2 pl-1 pr-1">
-        <div class="small text-muted mr-auto">
-          <small>Ctrl+V wkleja obraz ze schowka.</small>
+        <div class="small mr-auto">
+          <a href="javascript:" class="small text-muted" @click="openDialog"><i class="far fa-image"></i> Kliknij, aby dodać załącznik lub wklej ze schowka.</a>
         </div>
 
-        <div class="small text-muted ml-auto">
-          <a href="#js-wiki-help" data-toggle="collapse" class="text-reset"><small><i class="fa fab fa-markdown"></i> Markdown jest obsługiwany.</small></a>
+        <div class="small ml-auto">
+          <a href="#js-wiki-help" data-toggle="collapse" class="small text-muted"><i class="fa fab fa-markdown"></i> Markdown jest obsługiwany.</a>
+        </div>
+      </div>
+
+      <div v-if="media.length" class="row pt-3 pb-3">
+        <div v-for="item in media" class="col-sm-2">
+          <vue-thumbnail
+            :url="item.url"
+            @upload="addMedia"
+            @delete="deleteMedia"
+            name="media"
+            >
+          </vue-thumbnail>
         </div>
       </div>
 
@@ -157,6 +169,7 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from "vue-class-component";
+  import { Media } from '../../types/models';
   import { Ref, Prop, Emit } from "vue-property-decorator";
   import { default as Textarea, languages } from '../../libs/textarea';
   import { mixin as clickaway } from 'vue-clickaway';
@@ -165,6 +178,7 @@
   import VueAutosize from '../../plugins/autosize';
   import VuePrompt from '../forms/prompt.vue';
   import VueTabs from '../tabs.vue';
+  import VueThumbnail from "../thumbnail.vue";
   import axios from 'axios';
   import Prism from 'prismjs';
 
@@ -178,7 +192,8 @@
     components: {
       'vue-dropdown': VueDropdownMenu,
       'vue-prompt': VuePrompt ,
-      'vue-tabs': VueTabs
+      'vue-tabs': VueTabs,
+      'vue-thumbnail': VueThumbnail
     },
   })
   export default class VueToolbar extends Vue {
@@ -211,6 +226,9 @@
     @Prop()
     readonly error: string | undefined;
 
+    @Prop({default: []})
+    readonly media!: Media[];
+
     @Emit('save')
     save() {}
 
@@ -222,6 +240,22 @@
 
     mounted() {
       this.textarea = new Textarea(this.input);
+    }
+
+    addMedia(media: Media) {
+      this.media.push(media);
+    }
+
+    deleteMedia(media) {
+      this.media.splice(this.media.findIndex(item => item.id === media.id), 1);
+    }
+
+    openDialog() {
+      // this.media.push({'name': 'foo', 'thumbnail': '', 'url': ''});
+      const thumbnail = new VueThumbnail({propsData: {name: 'media'}}).$mount();
+
+      thumbnail.$on('upload', this.addMedia);
+      thumbnail.openDialog();
     }
 
     insertAtCaret(startsWith, endsWith) {

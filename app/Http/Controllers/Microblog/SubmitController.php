@@ -116,40 +116,40 @@ class SubmitController extends Controller
         event(new MicroblogWasDeleted($microblog));
     }
 
-    /**
-     * Upload pliku na serwer wraz z wczesniejsza walidacja
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function upload(Request $request)
-    {
-        $this->validate($request, [
-            'photo'             => 'required|mimes:jpeg,jpg,png,gif'
-        ]);
-
-        $media = $this->getMediaFactory()->make('attachment')->upload($request->file('photo'));
-
-        return response()->json([
-            'url' => (string) $media->url(),
-            'thumbnail' => $media->url()->thumbnail('microblog')
-        ]);
-    }
-
-    /**
-     * Paste image from clipboard
-     *
-     * @param Clipboard $clipboard
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function paste(Clipboard $clipboard)
-    {
-        $media = $clipboard->paste('attachment');
-
-        return response()->json([
-            'name' => $media->getFilename(),
-            'url' => (string) $media->url(),
-            'thumbnail' => $media->url()->thumbnail('microblog')
-        ]);
-    }
+//    /**
+//     * Upload pliku na serwer wraz z wczesniejsza walidacja
+//     *
+//     * @param Request $request
+//     * @return \Illuminate\Http\JsonResponse
+//     */
+//    public function upload(Request $request)
+//    {
+//        $this->validate($request, [
+//            'photo'             => 'required|mimes:jpeg,jpg,png,gif'
+//        ]);
+//
+//        $media = $this->getMediaFactory()->make('attachment')->upload($request->file('photo'));
+//
+//        return response()->json([
+//            'url' => (string) $media->url(),
+//            'thumbnail' => $media->url()->thumbnail('microblog')
+//        ]);
+//    }
+//
+//    /**
+//     * Paste image from clipboard
+//     *
+//     * @param Clipboard $clipboard
+//     * @return \Illuminate\Http\JsonResponse
+//     */
+//    public function paste(Clipboard $clipboard)
+//    {
+//        $media = $clipboard->paste('attachment');
+//
+//        return response()->json([
+//            'name' => $media->getFilename(),
+//            'url' => (string) $media->url(),
+//            'thumbnail' => $media->url()->thumbnail('microblog')
+//        ]);
+//    }
 }

@@ -4,6 +4,7 @@ import VuePagination from '../components/pagination.vue';
 import VueForm from '../components/microblog/form.vue';
 import VueNotifications from 'vue-notification';
 import VueModals from '../plugins/modals';
+import VuePaste from '../plugins/paste.js';
 import store from '../store';
 import { mapGetters } from 'vuex';
 import { default as axiosErrorHandler } from '../libs/axios-error-handler';
@@ -12,6 +13,7 @@ import { default as LiveMixin } from './microblog/live';
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 Vue.use(VueModals);
+Vue.use(VuePaste, {url: '/media'});
 
 axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 

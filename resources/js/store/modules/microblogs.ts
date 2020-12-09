@@ -72,17 +72,17 @@ const mutations = {
     state.data[microblog.parent_id!].comments_count -= 1;
   },
 
-  addEmptyImage(state, microblog: Microblog) {
-    microblog.media.push({thumbnail: '', url: ''});
-  },
-
-  addImage(state, { microblog, media }) {
-    microblog.media.push(media);
-  },
-
-  deleteImage(state, { microblog, url }) {
-    microblog.media.splice(microblog.media.findIndex(item => item.url === url), 1);
-  },
+  // addEmptyImage(state, microblog: Microblog) {
+  //   microblog.media.push({thumbnail: '', url: ''});
+  // },
+  //
+  // addImage(state, { microblog, media }) {
+  //   microblog.media.push(media);
+  // },
+  //
+  // deleteImage(state, { microblog, url }) {
+  //   microblog.media.splice(microblog.media.findIndex(item => item.url === url), 1);
+  // },
 
   subscribe(state, microblog: Microblog) {
     microblog.is_subscribed = ! microblog.is_subscribed;

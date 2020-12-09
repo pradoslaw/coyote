@@ -34,7 +34,7 @@ export default class VueThumbnail extends Vue {
   @Prop()
   readonly url?: string;
 
-  @Prop({required: true})
+  @Prop({required: false, default: '/media'})
   readonly uploadUrl!: string;
 
   @Prop({default: 'photo'})
