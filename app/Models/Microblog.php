@@ -14,15 +14,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Expression;
 
+
 /**
- * @property MediaInterface[] $media
  * @property int $id
  * @property int $user_id
  * @property int $parent_id
  * @property int $votes
  * @property int $score
  * @property int $is_sponsored
- * @property int $bonus
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  * @property string $deleted_at
@@ -34,6 +33,7 @@ use Illuminate\Database\Query\Expression;
  * @property User $user
  * @property Microblog[] $children
  * @property Microblog\Vote[]|\Illuminate\Support\Collection $voters
+ * @property Media[]|\Illuminate\Support\Collection $media
  */
 class Microblog extends Model
 {
@@ -87,9 +87,34 @@ class Microblog extends Model
         static::addGlobalScope(resolve(UserRelationsScope::class));
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
     public function media()
     {
         return $this->morphMany(Media::class, 'content');
+    }
+
+    /**
+     * @param array $media
+     */
+    public function saveMedia(array $media)
+    {
+        $media = collect($media)->map(fn ($attributes) => Media::find($attributes['id']))->keyBy('id');
+
+        $ids = $media->pluck('id')->toArray();
+        $current = $this->media->keyBy('id');
+
+        $detach = array_diff($current->keys()->toArray(), $ids);
+        $attach = array_diff($ids, $current->keys()->toArray());
+
+        foreach ($attach as $id) {
+            $this->media()->save($media[$id]);
+        }
+
+        foreach ($detach as $id) {
+            $current[$id]->delete();
+        }
     }
 
     /**

@@ -10,7 +10,6 @@ use Coyote\Http\Requests\MicroblogRequest;
 use Coyote\Http\Resources\MicroblogResource;
 use Coyote\Microblog;
 use Coyote\Repositories\Criteria\WithTrashed;
-use Coyote\Services\Media\Clipboard;
 use Coyote\Services\Parser\Helpers\Hash as HashHelper;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
@@ -18,7 +17,6 @@ use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Objects\Microblog as Stream_Microblog;
 use Illuminate\Contracts\Notifications\Dispatcher;
-use Illuminate\Http\Request;
 
 /**
  * Class SubmitController
@@ -60,10 +58,11 @@ class SubmitController extends Controller
             $this->authorize('update', $microblog);
         }
 
-        $microblog->fill($request->only(['text', 'media']));
+        $microblog->fill($request->only(['text']));
 
-        $this->transaction(function () use ($microblog) {
+        $this->transaction(function () use ($microblog, $request) {
             $microblog->save();
+            $microblog->saveMedia($request->input('media'));
 
             $object = (new Stream_Microblog())->map($microblog);
 
@@ -115,41 +114,4 @@ class SubmitController extends Controller
 
         event(new MicroblogWasDeleted($microblog));
     }
-
-//    /**
-//     * Upload pliku na serwer wraz z wczesniejsza walidacja
-//     *
-//     * @param Request $request
-//     * @return \Illuminate\Http\JsonResponse
-//     */
-//    public function upload(Request $request)
-//    {
-//        $this->validate($request, [
-//            'photo'             => 'required|mimes:jpeg,jpg,png,gif'
-//        ]);
-//
-//        $media = $this->getMediaFactory()->make('attachment')->upload($request->file('photo'));
-//
-//        return response()->json([
-//            'url' => (string) $media->url(),
-//            'thumbnail' => $media->url()->thumbnail('microblog')
-//        ]);
-//    }
-//
-//    /**
-//     * Paste image from clipboard
-//     *
-//     * @param Clipboard $clipboard
-//     * @return \Illuminate\Http\JsonResponse
-//     */
-//    public function paste(Clipboard $clipboard)
-//    {
-//        $media = $clipboard->paste('attachment');
-//
-//        return response()->json([
-//            'name' => $media->getFilename(),
-//            'url' => (string) $media->url(),
-//            'thumbnail' => $media->url()->thumbnail('microblog')
-//        ]);
-//    }
 }
