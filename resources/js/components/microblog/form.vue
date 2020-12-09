@@ -1,5 +1,5 @@
 <template>
-  <div class="microblog-submit">
+  <div>
 
     <vue-markdown v-model="microblog.text" :media.sync="microblog.media"></vue-markdown>
 
@@ -51,7 +51,6 @@
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
   import Component from "vue-class-component";
   import { Mixins, Watch } from "vue-property-decorator";
   import store from "../../store";
@@ -63,9 +62,6 @@
   @Component({
     name: 'microblog-form',
     store,
-    // watch: {
-    //   'microblog.media':
-    // },
     components: {
       'vue-button': VueButton,
       'vue-prompt': VuePrompt,
@@ -78,20 +74,18 @@
       this.save('microblogs/save');
     }
 
-    @Watch('microblog.media')
-    onMediaChange(path) {
-      console.log(path);
-    }
+    // @Watch('microblog.media')
+    // onMediaChange(path) {
+    //   console.log(path);
+    // }
 
-
-
-    addImage(media) {
-      store.commit('microblogs/addImage', { microblog: this.microblog, media })
-    }
-
-    deleteImage(url) {
-      store.commit('microblogs/deleteImage', { microblog: this.microblog, media: url });
-    }
+    // addImage(media) {
+    //   store.commit('microblogs/addImage', { microblog: this.microblog, media })
+    // }
+    //
+    // deleteImage(url) {
+    //   store.commit('microblogs/deleteImage', { microblog: this.microblog, media: url });
+    // }
   }
 </script>
 

@@ -3,6 +3,7 @@
 namespace Coyote\Http\Resources\Api;
 
 use Carbon\Carbon;
+use Coyote\Http\Resources\MediaResource;
 use Coyote\Http\Resources\UserResource;
 use Coyote\Microblog;
 use Coyote\Services\Media\MediaInterface;
@@ -40,6 +41,8 @@ class MicroblogResource extends JsonResource
     {
         $only = $this->resource->only(['id', 'votes', 'text', 'html', 'parent_id']);
 
+        MediaResource::makeThumbnail('microblog');
+
         return array_merge(
             $only,
             [
@@ -67,15 +70,7 @@ class MicroblogResource extends JsonResource
                     return $this->resource->only(['is_voted', 'is_subscribed']);
                 }),
 
-                $this->mergeWhen($this->whenLoaded('media'), function () {
-                    $result = [];
-
-                    foreach ($this->media as $media) {
-                        $result[] = ['thumbnail' => $media->url->thumbnail('microblog'), 'url' => (string) $media->url, 'name' => $media->name];
-                    }
-
-                    return ['media' => $result];
-                })
+                'media'         => MediaResource::collection($this->media)
             ]
         );
     }

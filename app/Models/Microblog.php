@@ -100,6 +100,7 @@ class Microblog extends Model
      */
     public function saveMedia(array $media)
     {
+        debugbar()->debug($media);
         $media = collect($media)->map(fn ($attributes) => Media::find($attributes['id']))->keyBy('id');
 
         $ids = $media->pluck('id')->toArray();
