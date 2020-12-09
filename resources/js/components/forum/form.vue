@@ -263,19 +263,6 @@
     @Emit()
     cancel() { }
 
-    // @Watch('activeTab')
-    // showPreview(newValue) {
-    //   if (newValue !== 'preview') {
-    //     return;
-    //   }
-    //
-    //   axios.post('/Forum/Preview', {text: this.post.text}).then(result => {
-    //     this.post.html = result.data;
-    //
-    //     this.$nextTick(() => Prism.highlightAll());
-    //   });
-    // }
-
     created() {
       if (this.post.id !== undefined) {
         return;
@@ -311,10 +298,6 @@
         })
         .finally(() => this.isProcessing = false);
     }
-
-    // switchTab(activeTab: string) {
-    //   this.currentTab = activeTab;
-    // }
 
     openDialog() {
       (this.$refs.attachment as HTMLInputElement).click();

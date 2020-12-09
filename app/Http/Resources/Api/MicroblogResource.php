@@ -17,7 +17,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property User $user
  * @property Microblog[] $comments
  * @property int $parent_id
- * @property MediaInterface[] $media
+ * @property \Coyote\Models\Media $media
  * @property int $comments_count
  * @property array voters_json
  */
@@ -58,7 +58,6 @@ class MicroblogResource extends JsonResource
                     []
                 ),
                 'user'          => UserResource::make($this->user),
-                'media'         => $this->media(),
                 'editable'      => $this->when($request->user(), function () use ($request) {
                     return $request->user()->can('update', $this->resource);
                 }),
@@ -66,6 +65,16 @@ class MicroblogResource extends JsonResource
 
                 $this->mergeWhen(array_has($this->resource, ['is_voted', 'is_subscribed']), function () {
                     return $this->resource->only(['is_voted', 'is_subscribed']);
+                }),
+
+                $this->mergeWhen($this->whenLoaded('media'), function () {
+                    $result = [];
+
+                    foreach ($this->media as $media) {
+                        $result[] = ['thumbnail' => $media->url->thumbnail('microblog'), 'url' => (string) $media->url, 'name' => $media->name];
+                    }
+
+                    return ['media' => $result];
                 })
             ]
         );
@@ -74,20 +83,5 @@ class MicroblogResource extends JsonResource
     public function preserverKeys()
     {
         $this->resource->setRelation('comments', $this->resource->comments->keyBy('id'));
-    }
-
-    protected function media(): array
-    {
-        if (!$this->resource->getOriginal('media')) {
-            return [];
-        }
-
-        $result = [];
-
-        foreach ($this->media as $media) {
-            $result[] = ['thumbnail' => $media->url()->thumbnail('microblog'), 'url' => (string) $media->url(), 'name' => $media->getFilename()];
-        }
-
-        return $result;
     }
 }

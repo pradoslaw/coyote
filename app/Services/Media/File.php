@@ -103,7 +103,7 @@ abstract class File implements MediaInterface
      */
     public function path($filename = null)
     {
-        return ($filename ?: $this->relative());
+        return ($filename ?: $this->filename);
     }
 
     /**
@@ -111,7 +111,7 @@ abstract class File implements MediaInterface
      */
     public function get()
     {
-        return $this->filesystem->get($this->relative());
+        return $this->filesystem->get($this->filename);
     }
 
     /**
@@ -119,7 +119,7 @@ abstract class File implements MediaInterface
      */
     public function size()
     {
-        return $this->filesystem->size($this->relative());
+        return $this->filesystem->size($this->filename);
     }
 
     /**
@@ -129,9 +129,9 @@ abstract class File implements MediaInterface
     public function upload(UploadedFile $uploadedFile)
     {
         $this->setName($uploadedFile->getClientOriginalName());
-        $this->setFilename($this->getUniqueName($uploadedFile->getClientOriginalExtension()));
 
-        $this->filesystem->put($this->relative(), file_get_contents($uploadedFile->getRealPath()), 'public');
+        $path = $this->filesystem->putFile($this->directory, $uploadedFile, 'public');
+        $this->setFilename($path);
 
         return $this;
     }
@@ -155,7 +155,7 @@ abstract class File implements MediaInterface
      */
     public function delete()
     {
-        return $this->filesystem->delete($this->relative());
+        return $this->filesystem->delete($this->filename);
     }
 
     /**
@@ -163,10 +163,10 @@ abstract class File implements MediaInterface
      *
      * @return string
      */
-    public function relative()
-    {
-        return $this->directory() . '/' . $this->filename;
-    }
+//    public function relative()
+//    {
+//        return $this->directory . '/' . $this->filename;
+//    }
 
     /**
      * @return bool
@@ -251,18 +251,18 @@ abstract class File implements MediaInterface
     /**
      * @return string
      */
-    protected function directory()
-    {
-        if (strlen($this->filename) !== 17) {
-            return $this->directory;
-        }
-
-        $timestamp = hexdec(substr($this->filename, 0, 8));
-        // as of 15th of Jan, we decided to put files into subdirectories
-        if ($timestamp < 1484438400) {
-            return $this->directory;
-        }
-
-        return $this->directory . '/' . substr($this->filename, 0, 2);
-    }
+//    protected function directory()
+//    {
+//        if (strlen($this->filename) !== 17) {
+//            return $this->directory;
+//        }
+//
+//        $timestamp = hexdec(substr($this->filename, 0, 8));
+//        // as of 15th of Jan, we decided to put files into subdirectories
+//        if ($timestamp < 1484438400) {
+//            return $this->directory;
+//        }
+//
+//        return $this->directory . '/' . substr($this->filename, 0, 2);
+//    }
 }

@@ -3,6 +3,7 @@
 namespace Coyote;
 
 use Coyote\Microblog\Vote;
+use Coyote\Models\Media;
 use Coyote\Models\Scopes\ForUser;
 use Coyote\Models\Scopes\UserRelationsScope;
 use Coyote\Services\Media\Factory as MediaFactory;
@@ -46,7 +47,7 @@ class Microblog extends Model
      *
      * @var array
      */
-    protected $fillable = ['parent_id', 'user_id', 'text', 'media'];
+    protected $fillable = ['parent_id', 'user_id', 'text'];
 
     /**
      * @var string
@@ -83,11 +84,12 @@ class Microblog extends Model
             $model->score = $model->getScore();
         });
 
-        static::deleted(function (Microblog $model) {
-            $model->media = null; // MUST remove closure before serializing object
-        });
-
         static::addGlobalScope(resolve(UserRelationsScope::class));
+    }
+
+    public function media()
+    {
+        return $this->morphMany(Media::class, 'content');
     }
 
     /**
@@ -103,40 +105,6 @@ class Microblog extends Model
         // magia dzieje sie tutaj :) ustalanie "mocy" danego wpisu. na tej podstawie wyswietlane
         // sa wpisy na stronie glownej. liczba glosow swiadczy o ich popularnosci
         return (int) ($log + ($timestamp / 45000));
-    }
-
-    /**
-     * @param string $value
-     * @return mixed
-     */
-    public function getMediaAttribute($value)
-    {
-        $json = json_decode($value, true);
-        $media = [];
-
-        if (!empty($json['image'])) {
-            $factory = $this->getMediaFactory();
-
-            foreach ($json['image'] as $image) {
-                $media[] = $factory->make('attachment', [
-                    'file_name' => $image
-                ]);
-            }
-        }
-
-        return $media;
-    }
-
-    /**
-     * @param $media
-     */
-    public function setMediaAttribute($media)
-    {
-        if (empty($media)) {
-            return;
-        }
-
-        $this->attributes['media'] = json_encode(['image' => array_values(array_filter(array_map('basename', array_pluck($media, 'url'))))]);
     }
 
     public function setHtmlAttribute($value)
@@ -239,13 +207,5 @@ class Microblog extends Model
         if (is_null($builder->getQuery()->columns)) {
             $builder->select([$builder->getQuery()->from . '.*']);
         }
-    }
-
-    /**
-     * @return MediaFactory
-     */
-    protected function getMediaFactory()
-    {
-        return app(MediaFactory::class);
     }
 }
