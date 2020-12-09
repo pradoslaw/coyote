@@ -90,17 +90,17 @@
     {% endfor %}
   </main>
 
-  {% embed 'forum.partials.sidebar' %}
-    {% block side_menu %}
-      <div class="box">
-        <ul class="side-menu">
-          <li>
-            <a id="js-btn-diff" title="Pokaż różnice w postach" href="javascript:"><i class="fa fa-project-diagram fa-fw"></i> Pokaż różnice</a>
-          </li>
-        </ul>
-      </div>
-    {% endblock %}
-  {% endembed %}
+{#  {% embed 'forum.partials.sidebar' %}#}
+{#    {% block side_menu %}#}
+{#      <div class="box">#}
+{#        <ul class="side-menu">#}
+{#          <li>#}
+{#            <a id="js-btn-diff" title="Pokaż różnice w postach" href="javascript:"><i class="fa fa-project-diagram fa-fw"></i> Pokaż różnice</a>#}
+{#          </li>#}
+{#        </ul>#}
+{#      </div>#}
+{#    {% endblock %}#}
+{#  {% endembed %}#}
 
   {{ form_open({'url': '', 'id': 'form-rollback'}) }}
   {{ modal.confirm('Treść postu zostanie zastąpiona. Czy chcesz kontynuować?', 'Potwierdź operację', 'confirm', 'Tak, cofnij') }}
@@ -108,45 +108,3 @@
 
 {% endblock %}
 
-{% block body %}
-  {{ parent() }}
-
-  {{ widgets.jquery() }}
-
-  <script src="https://raw.githubusercontent.com/arnab/jQuery.PrettyTextDiff/master/jquery.pretty-text-diff.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/diff_match_patch/20121119/diff_match_patch.js"></script>
-
-  <script>
-    var tags = {{ tags.user|json_encode|raw }};
-    var raw = {{ raw|raw }};
-    var parsed = [];
-
-    $('a[data-toggle="modal"]').click(function () {
-      document.getElementById('form-rollback').setAttribute('action', this.dataset['href']);
-    })
-
-    $(function () {
-      $('#js-btn-diff').click(function () {
-        if (!parsed.length) {
-          $('.diff').each(function (index) {
-            parsed.push($(this).find('.post-content').html());
-
-            if (index < raw.length - 1) {
-              $(this).prettyTextDiff({
-                originalContent: raw[index],
-                changedContent: raw[index + 1],
-                diffContainer: '.post-content'
-              });
-            }
-          });
-        } else {
-          $('.post-content').each(function (index) {
-            $(this).html(parsed[index]);
-          });
-
-          parsed = [];
-        }
-      });
-    });
-  </script>
-{% endblock %}
