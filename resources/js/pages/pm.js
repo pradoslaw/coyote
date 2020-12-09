@@ -112,10 +112,6 @@ new Vue({
       ws.subscribe(`user:${this.recipient.id}`).whisper('pm-typing', {recipient: this.sender});
     },
 
-    insertToTextarea(file) {
-      this.$refs.editor.insertAtCaret('![' + file.name + '](' + file.url + ')', '');
-    },
-
     listenForMessage() {
       this.channel().on('Coyote\\Events\\PmCreated', data => {
         if (data.user.id === this.recipient.id) {

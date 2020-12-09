@@ -24,7 +24,7 @@
 
             <div class="select-menu-wrapper">
               <ul class="list-unstyled">
-                <li v-for="(value, key) in filteredValue">
+                <li v-for="(value, key) in filteredLanguages">
                   <a @click="insertAtCaret('```' + key + '<br>', '<br>```<br>')">{{ value }}</a>
                 </li>
               </ul>
@@ -47,6 +47,7 @@
         v-autosize
         v-model="valueLocal"
         v-paste:success="addMedia"
+        v-paste:error="showError"
         :class="{'is-invalid': error !== undefined}"
         @keydown.ctrl.enter="save"
         @keydown.meta.enter="save"
@@ -71,16 +72,8 @@
       </div>
 
       <div v-if="media.length" class="row pt-3 pb-3">
-        <div v-for="item in media" class="col-sm-2">
-          <vue-thumbnail
-            :url="item.url"
-            @upload="addMedia"
-            @delete="deleteMedia"
-            name="media"
-            data-balloon-pos="top"
-            :aria-label="item.name"
-            >
-          </vue-thumbnail>
+        <div v-for="item in media" :key="item.id" :aria-label="item.name" class="col-sm-2" data-balloon-pos="bottom">
+          <vue-thumbnail :url="item.url" @delete="deleteMedia" name="media"></vue-thumbnail>
         </div>
       </div>
 
@@ -262,6 +255,7 @@
 
       Thumbnail.$on('upload', this.addMedia);
       Thumbnail.$on('progress', progress => this.isProcessing = progress > 0 && progress < 100);
+
       Thumbnail.openDialog();
     }
 
@@ -314,7 +308,11 @@
       });
     }
 
-    get filteredValue() {
+    showError(err) {
+      this.$notify({'type': 'error', 'text': err});
+    }
+
+    get filteredLanguages() {
       return Object
         .keys(languages)
         .filter(language => languages[language].toLowerCase().startsWith(this.searchText.toLowerCase()))

@@ -5,7 +5,6 @@ namespace Coyote\Http\Controllers\Microblog;
 use Coyote\Events\MicroblogWasDeleted;
 use Coyote\Events\MicroblogSaved;
 use Coyote\Http\Controllers\Controller;
-use Coyote\Http\Factories\MediaFactory;
 use Coyote\Http\Requests\MicroblogRequest;
 use Coyote\Http\Resources\MicroblogResource;
 use Coyote\Microblog;
@@ -17,6 +16,7 @@ use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Objects\Microblog as Stream_Microblog;
 use Illuminate\Contracts\Notifications\Dispatcher;
+use Illuminate\Http\Request;
 
 /**
  * Class SubmitController
@@ -24,8 +24,6 @@ use Illuminate\Contracts\Notifications\Dispatcher;
  */
 class SubmitController extends Controller
 {
-    use MediaFactory;
-
     /**
      * @var UserRepository
      */
@@ -113,5 +111,22 @@ class SubmitController extends Controller
         });
 
         event(new MicroblogWasDeleted($microblog));
+    }
+
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function preview(Request $request)
+    {
+        return response($this->getParser()->parse((string) $request->get('text')));
+    }
+
+    /**
+     * @return \Coyote\Services\Parser\Factories\PmFactory
+     */
+    private function getParser()
+    {
+        return app('parser.microblog');
     }
 }

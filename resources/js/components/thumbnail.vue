@@ -10,18 +10,18 @@
       </template>
 
       <div v-else class="bg-light placeholder-mask">
-        <i v-if="!isPending" class="fas fa-plus-circle fa-2x"></i>
+        <i v-if="!isProcessing" class="fas fa-plus-circle fa-2x"></i>
       </div>
 
       <a v-if="url" href="javascript:" class="flush-mask text-decoration-none" @click="deleteImage">
         <i class="fas fa-times fa-2x"></i>
       </a>
 
-      <div v-if="isPending" class="spinner-mask">
+      <div v-if="isProcessing" class="spinner-mask">
         <i class="fas fa-spinner fa-spin fa-2x"></i>
       </div>
 
-      <input v-show="!url && !isPending" @change="upload" class="thumbnail-mask" type="file" ref="input" >
+      <input v-show="!url && !isProcessing" @change="upload" class="thumbnail-mask" type="file" ref="input" >
     </div>
   </div>
 </template>
@@ -46,13 +46,13 @@ export default class VueThumbnail extends Vue {
   @Prop({default: 'photo'})
   readonly name!: string;
 
-  isPending = false;
+  isProcessing = false;
 
   upload() {
     let formData = new FormData();
     formData.append(this.name, this.input.files![0]);
 
-    this.isPending = true;
+    this.isProcessing = true;
 
     let config = {
       onUploadProgress: event =>  {
@@ -62,7 +62,7 @@ export default class VueThumbnail extends Vue {
 
     return axios.post(this.uploadUrl, formData, config)
       .then(response => this.$emit('upload', response.data))
-      .finally(() => this.isPending = false);
+      .finally(() => this.isProcessing = false);
   }
 
   deleteImage() {

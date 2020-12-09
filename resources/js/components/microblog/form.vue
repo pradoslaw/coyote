@@ -1,6 +1,13 @@
 <template>
   <div>
-    <vue-markdown v-model="microblog.text" :media.sync="microblog.media" ref="markdown"></vue-markdown>
+    <vue-markdown
+      v-model="microblog.text"
+      :media.sync="microblog.media"
+      @save="saveMicroblog"
+      @cancel="cancel"
+      ref="markdown"
+      preview-url="/Mikroblogi/Preview"
+    ></vue-markdown>
 
     <div class="row mt-2">
       <div class="col-12">

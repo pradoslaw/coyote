@@ -13,9 +13,7 @@ use Coyote\Repositories\Contracts\NotificationRepositoryInterface as Notificatio
 use Coyote\Repositories\Contracts\PmRepositoryInterface as PmRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Repositories\Criteria\WithTrashed;
-use Coyote\Services\Media\Clipboard;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 
 /**
  * Class PmController
@@ -23,7 +21,7 @@ use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
  */
 class PmController extends BaseController
 {
-    use HomeTrait, MediaFactory;
+    use HomeTrait;
 
     /**
      * @var UserRepository
@@ -237,35 +235,6 @@ class PmController extends BaseController
         abort_if($pm->count() == 0, 404);
 
         $this->pm->trash($this->userId, $authorId);
-    }
-
-    /**
-     * @param Clipboard $clipboard
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function paste(Clipboard $clipboard)
-    {
-        $media = $clipboard->paste();
-
-        $filesystem = app('filesystem')->disk('local_fs');
-        $mime = null;
-
-        try {
-            $filesystem->put($media->getFilename(), $media->get());
-
-            $mime = (MimeTypeGuesser::getInstance())->guess(storage_path('app/' . $media->getFilename()));
-        } finally {
-            $filesystem->delete($media->getFilename());
-        }
-
-        return response()->json([
-            'size'      => $media->size(),
-            'suffix'    => 'png',
-            'name'      => $media->getName(),
-            'file'      => $media->getFilename(),
-            'mime'      => $mime,
-            'url'       => (string) $media->url()
-        ]);
     }
 
     /**
