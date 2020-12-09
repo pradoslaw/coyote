@@ -9,7 +9,7 @@ export default {
     let successCallback, errorCallback;
     let textarea;
 
-    const upload = (base64) => {
+    const upload = async (base64) => {
       textarea.readonly = 'readonly';
 
       const overlay = document.createElement('div');
@@ -24,7 +24,13 @@ export default {
 
       document.body.append(overlay);
 
-      axios.post(options.url, base64, {'Content-Type': 'application/x-www-form-urlencoded'})
+      const response = await fetch(base64);
+      const blob = await response.blob();
+
+      let formData = new FormData();
+      formData.append('media', blob);
+
+      axios.post(options.url, formData)
         .then(response => {
           successCallback(response.data);
         })

@@ -19,7 +19,7 @@ class Media extends Model
     /**
      * @var string[]
      */
-    protected $fillable = ['content_id', 'content_type', 'name', 'path', 'size', 'mime'];
+    protected $fillable = ['name', 'path', 'size', 'mime'];
 
     /**
      * @var string

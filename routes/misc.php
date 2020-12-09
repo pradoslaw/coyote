@@ -27,3 +27,5 @@ $this->get('mailing/unsubscribe/{uuid}', 'MailingController@unsubscribe')->name(
 $this->post('mailgun/permanent-failure', 'MailgunController@permanentFailure');
 
 $this->post('github/sponsorship', 'GithubController@sponsorship');
+
+$this->post('media', 'MediaController@upload');

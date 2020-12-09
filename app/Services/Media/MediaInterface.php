@@ -57,12 +57,6 @@ interface MediaInterface
     public function upload(UploadedFile $uploadedFile);
 
     /**
-     * @param mixed $content
-     * @return MediaInterface
-     */
-    public function put($content);
-
-    /**
      * @return bool
      */
     public function delete();
@@ -71,9 +65,4 @@ interface MediaInterface
      * @return bool
      */
     public function isImage();
-
-    /**
-     * @return string|null
-     */
-    public function getMime(): ?string;
 }

@@ -136,19 +136,6 @@ abstract class File implements MediaInterface
         return $this;
     }
 
-    /**
-     * @param mixed $content
-     * @return MediaInterface
-     */
-    public function put($content)
-    {
-        $this->setName($this->getHumanName('png'));
-        $this->setFilename($this->getUniqueName('png'));
-
-        $this->filesystem->put($this->relative(), $content, 'public');
-
-        return $this;
-    }
 
     /**
      * @return bool
@@ -159,16 +146,6 @@ abstract class File implements MediaInterface
     }
 
     /**
-     * Return relative path. Example: attachment/1234.jpg
-     *
-     * @return string
-     */
-//    public function relative()
-//    {
-//        return $this->directory . '/' . $this->filename;
-//    }
-
-    /**
      * @return bool
      */
     public function isImage()
@@ -176,15 +153,6 @@ abstract class File implements MediaInterface
         return in_array(pathinfo($this->getFilename(), PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']);
     }
 
-    /**
-     * @return string|null
-     */
-    public function getMime(): ?string
-    {
-        $mimes = (new MimeTypes())->getMimeTypes(pathinfo($this->getFilename(), PATHINFO_EXTENSION));
-
-        return $mimes[0] ?? null;
-    }
 
     /**
      * @return string
@@ -230,14 +198,7 @@ abstract class File implements MediaInterface
         return $image;
     }
 
-    /**
-     * @param string $extension
-     * @return string
-     */
-    protected function getUniqueName($extension)
-    {
-        return uniqid() . '.' . strtolower($extension);
-    }
+
 
     /**
      * @param string $extension
@@ -248,21 +209,4 @@ abstract class File implements MediaInterface
         return 'screenshot-' . date('YmdHis') . '.' . $extension;
     }
 
-    /**
-     * @return string
-     */
-//    protected function directory()
-//    {
-//        if (strlen($this->filename) !== 17) {
-//            return $this->directory;
-//        }
-//
-//        $timestamp = hexdec(substr($this->filename, 0, 8));
-//        // as of 15th of Jan, we decided to put files into subdirectories
-//        if ($timestamp < 1484438400) {
-//            return $this->directory;
-//        }
-//
-//        return $this->directory . '/' . substr($this->filename, 0, 2);
-//    }
 }
