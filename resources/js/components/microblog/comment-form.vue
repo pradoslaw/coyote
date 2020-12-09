@@ -6,7 +6,7 @@
         placeholder="Napisz komentarz... (Ctrl+Enter aby wysłać)"
         class="form-control"
         name="text"
-        ref="textarea"
+        ref="markdown"
         rows="1"
         v-model="microblog.text"
         :disabled="isProcessing"
@@ -21,15 +21,11 @@
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
   import Component from "vue-class-component";
-  import { Mixins } from "vue-property-decorator";
+  import { Mixins, Ref } from "vue-property-decorator";
   import store from "../../store";
-  import VueAutosize from '../../plugins/autosize';
   import VuePrompt from '../forms/prompt.vue';
   import { MicroblogFormMixin } from '../mixins/microblog';
-
-  Vue.use(VueAutosize);
 
   @Component({
     name: 'microblog-comment-form',
@@ -39,6 +35,9 @@
     }
   })
   export default class VueCommentForm extends Mixins(MicroblogFormMixin) {
+    @Ref('markdown')
+    public markdown!: HTMLTextAreaElement;
+
     saveComment() {
       this.save('microblogs/saveComment');
     }

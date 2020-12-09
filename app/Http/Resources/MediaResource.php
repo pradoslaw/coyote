@@ -19,7 +19,11 @@ class MediaResource extends JsonResource
             parent::toArray($request),
             [
                 'url' => (string) $this->resource->url,
-                'thumbnail' => $this->when(self::$filter !== null, fn () => $this->resource->url->thumbnail(self::$filter))
+                'thumbnail' => $this->when(
+                    // thumbnail only for images
+                    self::$filter !== null && $this->resource->isImage(),
+                    fn () => $this->resource->url->thumbnail(self::$filter)
+                )
             ]
         );
     }

@@ -8,12 +8,14 @@ import VuePaste from '../plugins/paste.js';
 import store from '../store';
 import { mapGetters } from 'vuex';
 import { default as axiosErrorHandler } from '../libs/axios-error-handler';
-import {Microblog, Paginator, Flag} from "../types/models";
+import { Microblog, Paginator, Flag } from "../types/models";
 import { default as LiveMixin } from './microblog/live';
+import VueAutosave from "../plugins/autosave";
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 Vue.use(VueModals);
 Vue.use(VuePaste, {url: '/media'});
+Vue.use(VueAutosave);
 
 axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 

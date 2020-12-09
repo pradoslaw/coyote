@@ -37,4 +37,9 @@ class Media extends Model
 
         return $this->file->url();
     }
+
+    public function isImage()
+    {
+        return in_array(pathinfo($this->name, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']);
+    }
 }

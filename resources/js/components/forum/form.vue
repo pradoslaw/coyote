@@ -180,20 +180,16 @@
   import Component from "vue-class-component";
   import { Ref, Prop, Emit, Watch } from "vue-property-decorator";
   import store from "../../store";
-  import VueAutosave from '../../plugins/autosave';
   import VueButton from '../forms/button.vue';
   import VueTagsInline from '../forms/tags-inline.vue';
   import VueMarkdown from '../../components/forms/markdown.vue';
   import { Post, PostAttachment, Topic, Tag } from "../../types/models";
   import { mapMutations, mapState, mapGetters } from "vuex";
   import axios from 'axios';
-  import Textarea from "../../libs/textarea";
   import VueError from '../forms/error.vue';
   import VueText from '../forms/text.vue';
   import Prism from 'prismjs';
   import {default as PerfectScrollbar} from '../perfect-scrollbar';
-
-  Vue.use(VueAutosave);
 
   @Component({
     name: 'forum-form',

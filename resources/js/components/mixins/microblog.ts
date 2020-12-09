@@ -25,7 +25,7 @@ export class MicroblogMixin extends Vue {
     store.commit('microblogs/edit', microblog);
 
     if (microblog.is_editing) {
-      this.$nextTick(() => this.form.textarea.focus());
+      this.$nextTick(() => this.form.markdown.focus());
       this.isWrapped = false;
     }
   }

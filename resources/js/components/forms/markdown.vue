@@ -46,7 +46,7 @@
       <textarea
         v-autosize
         v-model="valueLocal"
-        v-paste:success="paste"
+        v-paste:success="addMedia"
         :class="{'is-invalid': error !== undefined}"
         @keydown.ctrl.enter="save"
         @keydown.meta.enter="save"
@@ -61,7 +61,8 @@
 
       <div class="row no-gutters border-top pt-2 pl-1 pr-1">
         <div class="small mr-auto">
-          <a href="javascript:" class="small text-muted" @click="openDialog"><i class="far fa-image"></i> Kliknij, aby dodać załącznik lub wklej ze schowka.</a>
+          <i v-if="isProcessing" class="fas fa-spinner fa-spin small"></i>
+          <a v-else href="javascript:" class="small text-muted" @click="chooseFile"><i class="far fa-image"></i> Kliknij, aby dodać załącznik lub wklej ze schowka.</a>
         </div>
 
         <div class="small ml-auto">
@@ -76,6 +77,8 @@
             @upload="addMedia"
             @delete="deleteMedia"
             name="media"
+            data-balloon-pos="top"
+            :aria-label="item.name"
             >
           </vue-thumbnail>
         </div>
@@ -201,6 +204,7 @@
     searchText: string = '';
     previewHtml: string = '';
     currentTab: number = 0;
+    isProcessing = false;
 
     @Ref('input')
     readonly input!: HTMLTextAreaElement;
@@ -236,26 +240,29 @@
     cancel() {}
 
     @Emit('paste')
-    paste() {}
-
-    mounted() {
-      this.textarea = new Textarea(this.input);
-    }
-
     addMedia(media: Media) {
+      this.isProcessing = false;
       this.media.push(media);
+
+      const suffix = media.name!.split('.').pop()!.toLowerCase();
+
+      this.insertAtCaret((['png', 'jpg', 'jpeg', 'gif'].includes(suffix) ? '!' : '') + '[' + media.name + '](' + media.url + ')', '');
     }
 
     deleteMedia(media) {
       this.media.splice(this.media.findIndex(item => item.id === media.id), 1);
     }
 
-    openDialog() {
-      // this.media.push({'name': 'foo', 'thumbnail': '', 'url': ''});
-      const thumbnail = new VueThumbnail({propsData: {name: 'media'}}).$mount();
+    mounted() {
+      this.textarea = new Textarea(this.input);
+    }
 
-      thumbnail.$on('upload', this.addMedia);
-      thumbnail.openDialog();
+    chooseFile() {
+      const Thumbnail = new VueThumbnail({propsData: {name: 'media'}}).$mount();
+
+      Thumbnail.$on('upload', this.addMedia);
+      Thumbnail.$on('progress', progress => this.isProcessing = progress > 0 && progress < 100);
+      Thumbnail.openDialog();
     }
 
     insertAtCaret(startsWith, endsWith) {

@@ -1,7 +1,13 @@
 <template>
   <div class="thumbnail">
     <div class="position-relative img-thumbnail text-center">
-      <img v-if="url" :src="url" class="mw-100">
+      <template v-if="url">
+        <img v-if="isImage" :src="url" class="mw-100">
+
+        <div v-else class="bg-light placeholder-mask">
+          <i class="far fa-folder fa-2x"></i>
+        </div>
+      </template>
 
       <div v-else class="bg-light placeholder-mask">
         <i v-if="!isPending" class="fas fa-plus-circle fa-2x"></i>
@@ -43,12 +49,18 @@ export default class VueThumbnail extends Vue {
   isPending = false;
 
   upload() {
-    let form = new FormData();
-    form.append(this.name, this.input.files![0]);
+    let formData = new FormData();
+    formData.append(this.name, this.input.files![0]);
 
     this.isPending = true;
 
-    axios.post(this.uploadUrl, form)
+    let config = {
+      onUploadProgress: event =>  {
+        this.$emit('progress', Math.round((event.loaded * 100) / event.total));
+      }
+    };
+
+    return axios.post(this.uploadUrl, formData, config)
       .then(response => this.$emit('upload', response.data))
       .finally(() => this.isPending = false);
   }
@@ -60,6 +72,10 @@ export default class VueThumbnail extends Vue {
   // this method can be used by other components to open upload dialog
   openDialog() {
     this.input.click();
+  }
+
+  private get isImage() {
+    return this.url?.match(/\.(jpeg|jpg|gif|png)$/) != null;
   }
 }
 
