@@ -33,9 +33,9 @@ const mutations = {
   },
 
   update(state, post: Post) {
-    let { text, html } = post; // update only text and html version
+    let { text, html, edit_count, editor, updated_at } = post; // update only these fields
 
-    Vue.set(state.data, post.id!, {...state.data[post.id!], ...{text, html}})
+    Vue.set(state.data, post.id!, {...state.data[post.id!], ...{text, html, edit_count, editor, updated_at}})
   },
 
   delete(state, post: Post) {
