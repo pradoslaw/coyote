@@ -281,7 +281,7 @@ let PostVue = Vue.extend({
         this.$refs['js-submit-form'].$refs['textarea'].focus();
       }
       else {
-        let text = `> ##### [${post.user ? post.user.name : post.user_name} napisał(a)](/Forum/Post/${post.id}):`
+        let text = `> ##### [${post.user ? post.user.name : post.user_name} napisał(a)](/Forum/${post.id}):`
         text += "\n" + post.text.replace(/\n/g, "\n> ") + "\n\n"
 
         this.undefinedPost.text += (this.undefinedPost.text.length ? "\n" : '') + text;
