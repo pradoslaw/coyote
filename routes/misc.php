@@ -29,3 +29,4 @@ $this->post('mailgun/permanent-failure', 'MailgunController@permanentFailure');
 $this->post('github/sponsorship', 'GithubController@sponsorship');
 
 $this->post('assets', 'AssetsController@upload');
+$this->get('assets/{id}/{name}', 'AssetsController@download');

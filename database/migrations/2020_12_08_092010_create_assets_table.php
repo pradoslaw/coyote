@@ -23,6 +23,7 @@ class CreateAssetsTable extends Migration
             $table->string('path');
             $table->integer('size')->default(0);
             $table->string('mime')->nullable();
+            $table->integer('count')->default(0);
         });
 
         $attachments = \Coyote\Post\Attachment::all();
@@ -38,6 +39,7 @@ class CreateAssetsTable extends Migration
                 'name' => $attachment->name,
                 'size' => $attachment->size,
                 'mime' => $attachment->mime,
+                'count' => $attachment->count,
                 'content_id' => $attachment->post_id,
                 'content_type' => \Coyote\Post::class
             ]);
@@ -119,7 +121,7 @@ class CreateAssetsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('media');
+        Schema::dropIfExists('assets');
 
         $users = \Coyote\User::whereNotNull('photo')->get();
 

@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers;
 
 use Coyote\Http\Requests\AssetRequest;
 use Coyote\Models\Asset;
+use Coyote\Post;
 use Coyote\Services\Media\Clipboard;
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
@@ -28,6 +29,20 @@ class AssetsController extends Controller
         ]);
 
         return array_merge($media->toArray(), ['url' => (string) $media->url]);
+    }
+
+    public function download(Asset $asset, string $name = null)
+    {
+        if ($asset->content_type === Post::class) {
+            $this->authorize('access', $asset->post->forum);
+        }
+
+        set_time_limit(0);
+
+        $asset->count = $asset->count + 1;
+        $asset->save();
+
+        return response()->download($asset->path, $name);
     }
 
     /**
