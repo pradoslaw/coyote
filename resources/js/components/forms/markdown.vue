@@ -259,8 +259,8 @@
       }
     }
 
-    deleteAsset(asset: Asset) {
-      this.assets.splice(this.assets.findIndex(item => item.id === asset.id), 1);
+    deleteAsset(url: string) {
+      this.assets.splice(this.assets.findIndex(item => item.url === url), 1);
     }
 
     mounted() {
