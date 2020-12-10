@@ -6,8 +6,6 @@ use Coyote\Microblog\Vote;
 use Coyote\Models\Asset;
 use Coyote\Models\Scopes\ForUser;
 use Coyote\Models\Scopes\UserRelationsScope;
-use Coyote\Services\Media\Factory as MediaFactory;
-use Coyote\Services\Media\MediaInterface;
 use Coyote\Services\Media\SerializeClass;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -93,28 +91,6 @@ class Microblog extends Model
     public function assets()
     {
         return $this->morphMany(Asset::class, 'content');
-    }
-
-    /**
-     * @param array $assets
-     */
-    public function saveAssets(array $assets)
-    {
-        $assets = collect($assets)->map(fn ($attributes) => Asset::find($attributes['id']))->keyBy('id');
-
-        $ids = $assets->pluck('id')->toArray();
-        $current = $this->assets->keyBy('id');
-
-        $detach = array_diff($current->keys()->toArray(), $ids);
-        $attach = array_diff($ids, $current->keys()->toArray());
-
-        foreach ($attach as $id) {
-            $this->assets()->save($assets[$id]);
-        }
-
-        foreach ($detach as $id) {
-            $current[$id]->delete();
-        }
     }
 
     /**

@@ -99,7 +99,7 @@ class SubmitController extends BaseController
             $post->topic()->associate($topic);
             $post->save();
 
-            $post->syncAttachments(array_pluck($request->input('attachments', []), 'id'));
+            $post->assets()->sync($request->input('assets'));
 
             if ($topic->wasRecentlyCreated) {
                 $topic->first_post_id = $post->id;
@@ -139,6 +139,9 @@ class SubmitController extends BaseController
         $tracker = Tracker::make($topic);
 
         PostResource::withoutWrapping();
+
+        $post->unsetRelation('assets');
+        $post->load('assets');
 
         $resource = (new PostResource($post))->setTracker($tracker)->resolve($this->request);
 

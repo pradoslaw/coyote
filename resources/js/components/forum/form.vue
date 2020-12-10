@@ -34,7 +34,7 @@
         preview-url="/Forum/Preview"
         @save="save"
         @cancel="cancel"
-        ref="mrakdown"
+        ref="markdown"
       >
 
         <div v-show="currentTab === 2" v-if="showPollTab" class="post-content">

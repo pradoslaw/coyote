@@ -226,7 +226,7 @@ let PostVue = Vue.extend({
   store,
   data: () => ({
     showStickyCheckbox: window.showStickyCheckbox,
-    undefinedPost: { text: '', html: '', attachments: [] },
+    undefinedPost: { text: '', html: '', assets: [] },
     reasons: window.reasons
   }),
   created() {
@@ -295,7 +295,7 @@ let PostVue = Vue.extend({
     },
 
     resetPost(post) {
-      this.undefinedPost = { text: '', html: '', attachments: [] };
+      this.undefinedPost = { text: '', html: '', assets: [] };
 
       window.location.hash = `id${post.id}`;
     }

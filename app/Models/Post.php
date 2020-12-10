@@ -28,7 +28,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $host
  * @property \Coyote\Forum $forum
  * @property \Coyote\Topic $topic
- * @property \Coyote\Post\Attachment[] $attachments
+ * @property \Coyote\Models\Asset[] $assets
  * @property \Coyote\Post\Vote[] $votes
  * @property \Coyote\Post\Comment[] $comments
  * @property \Coyote\User $user
@@ -209,20 +209,6 @@ class Post extends Model
         }
 
         return $this->html = app('parser.post')->parse($this->text);
-    }
-
-    /**
-     * @param array $ids
-     */
-    public function syncAttachments($ids)
-    {
-        foreach ($this->attachments as $attachment) {
-            $attachment->post()->dissociate()->save();
-        }
-
-        foreach ($ids as $id) {
-            Post\Attachment::find($id)->post()->associate($this)->save();
-        }
     }
 
     /**

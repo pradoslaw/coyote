@@ -3,7 +3,7 @@
 namespace Coyote\Post;
 
 use Illuminate\Database\Eloquent\Model;
-use Coyote\Services\Media\Factory as MediaFactory;
+
 
 /**
  * @property int $id
@@ -36,29 +36,4 @@ class Attachment extends Model
      */
     protected $table = 'post_attachments';
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function post()
-    {
-        return $this->belongsTo('Coyote\Post');
-    }
-
-    /**
-     * @return \Coyote\Services\Media\MediaInterface
-     */
-    public function getFileAttribute($value)
-    {
-        if (!($value instanceof \Coyote\Services\Media\Attachment)) {
-            /** @var \Coyote\Services\Media\MediaInterface $photo */
-            $photo = app(MediaFactory::class)->make('attachment', [
-                'file_name' => $value,
-                'name' => $this->attributes['name']
-            ]);
-
-            $this->attributes['file'] = $photo;
-        }
-
-        return $this->attributes['file'];
-    }
 }

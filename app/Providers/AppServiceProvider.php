@@ -4,6 +4,7 @@ namespace Coyote\Providers;
 
 use Carbon\Carbon;
 use Coyote\Forum;
+use Coyote\Models\Asset;
 use Coyote\Services\Elasticsearch\Api as EsApi;
 use Coyote\Services\FormBuilder\FormBuilder;
 use Coyote\Services\FormBuilder\FormInterface;
@@ -13,6 +14,7 @@ use Coyote\Services\Forum\Tracker;
 use Coyote\Services\Invoice;
 use Coyote\User;
 use GuzzleHttp\Client;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Events\RouteMatched;
@@ -197,6 +199,27 @@ class AppServiceProvider extends ServiceProvider
 
         Request::macro('browser', function () {
             return str_limit(Str::ascii($this->header('User-Agent')), 900);
+        });
+
+        MorphMany::macro('sync', function (array $assets) {
+            /** @var \Coyote\Post $post */
+            $post = $this->getParent();
+
+            $assets = collect($assets)->map(fn ($attributes) => Asset::find($attributes['id']))->keyBy('id');
+
+            $ids = $assets->pluck('id')->toArray();
+            $current = $post->assets->keyBy('id');
+
+            $detach = array_diff($current->keys()->toArray(), $ids);
+            $attach = array_diff($ids, $current->keys()->toArray());
+
+            foreach ($attach as $id) {
+                $post->assets()->save($assets[$id]);
+            }
+
+            foreach ($detach as $id) {
+                $current[$id]->delete();
+            }
         });
     }
 }

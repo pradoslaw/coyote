@@ -47,7 +47,7 @@ class Url
 
     private function downloadUrl(Asset $asset): string
     {
-        return route('assets.download', ['id' => $asset->id, 'name' => basename($asset->path)]);
+        return route('assets.download', ['asset' => $asset->id, 'name' => basename($asset->path)]);
     }
 
     protected function thumbnailPath(FilterInterface $filter): string

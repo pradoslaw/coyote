@@ -3,6 +3,7 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Carbon\Carbon;
+use Coyote\Models\Asset;
 use Coyote\Post;
 use Coyote\Repositories\Contracts\PostRepositoryInterface;
 use Coyote\Repositories\Criteria\WithTrashed;
@@ -127,7 +128,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
         $previous->update(['text' => $text, 'edit_count' => $previous->edit_count + 1, 'editor_id' => $userId]);
         $previous->logs()->create($data);
 
-        $this->app[Post\Attachment::class]->where('post_id', $post->id)->update(['post_id' => $previous->id]);
+        $this->app[Asset::class]->where('content_id', $post->id)->where('content_type', Post::class)->update(['post_id' => $previous->id]);
         $this->app[Post\Comment::class]->where('post_id', $post->id)->update(['post_id' => $previous->id]);
 
         $post->votes()->each(function ($vote) use ($previous) {

@@ -3,7 +3,6 @@
 namespace Coyote\Http\Controllers;
 
 use Coyote\Http\Factories\MediaFactory;
-use Coyote\Services\Media\Clipboard;
 use Illuminate\Http\Request;
 
 abstract class AttachmentController extends Controller
@@ -31,24 +30,6 @@ abstract class AttachmentController extends Controller
             'file' => $media->getFilename(),
             'name' => $media->getName(),
             'mime' => $media->getMime()
-        ]);
-
-        return $this->render($attachment);
-    }
-
-    /**
-     * @param Clipboard $clipboard
-     * @return string
-     */
-    public function paste(Clipboard $clipboard)
-    {
-        $media = $clipboard->paste('attachment');
-
-        $attachment = $this->create([
-            'size' => $media->size(),
-            'mime' => $media->getMime(),
-            'file' => $media->getFilename(),
-            'name' => $media->getName()
         ]);
 
         return $this->render($attachment);
