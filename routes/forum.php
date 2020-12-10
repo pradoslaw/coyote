@@ -1,5 +1,8 @@
 <?php
 
+// sciaganie zalacznika (stara regula routingu
+$this->get('Forum/Download/{asset}', ['uses' => 'AssetsController@download', 'as' => 'download']);
+
 /** @var $this \Illuminate\Routing\Router */
 $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], function () {
     // strona glowna forum
@@ -18,13 +21,6 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     $this->get('User/{id}', ['uses' => 'HomeController@user', 'as' => 'user']);
     $this->get('Interesting', ['uses' => 'HomeController@interesting', 'as' => 'interesting']);
     $this->post('Mark', ['uses' => 'HomeController@mark', 'as' => 'mark']);
-
-    // dodawanie zalacznika do posta
-    $this->post('Upload', ['uses' => 'AttachmentController@upload', 'as' => 'upload']);
-    // sciaganie zalacznika
-    $this->get('Download/{attachment}', ['uses' => 'AttachmentController@download', 'as' => 'download']);
-    // wklejanie zdjec przy pomocy Ctrl+V w textarea
-    $this->post('Paste', ['uses' => 'AttachmentController@paste', 'as' => 'paste']);
 
     // Add or edit topic's post
     // ----------------------------------------------------
@@ -177,3 +173,6 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     // skrocony link do posta
     $this->get('{id}', ['uses' => 'ShareController@index', 'as' => 'share']);
 });
+
+
+

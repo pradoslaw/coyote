@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateAssetsTable extends Migration
 {
-    use \Coyote\Http\Factories\MediaFactory;
+    use \Coyote\Http\Factories\MediaFactory, SchemaBuilder;
 
     /**
      * Run the migrations.
@@ -27,13 +27,16 @@ class CreateAssetsTable extends Migration
         });
 
         $attachments = \Coyote\Post\Attachment::all();
+        $seq = 0;
 
         foreach ($attachments as $attachment) {
             $path = $this->getPath('attachment/', $attachment->file);
+            $seq = $attachment->id;
 
             $path .= $attachment->getAttributeValue('file');
 
             \Coyote\Models\Asset::forceCreate([
+                'id' => $attachment->id,
                 'created_at' => $attachment->created_at,
                 'path' => $path,
                 'name' => $attachment->name,
@@ -44,6 +47,9 @@ class CreateAssetsTable extends Migration
                 'content_type' => \Coyote\Post::class
             ]);
         }
+
+        $seq++;
+        $this->db->statement("SELECT setval('assets_id_seq', $seq, true)");
 
         $microblogs = \Coyote\Microblog::whereNotNull('media')->get();
         $factory = $this->getMediaFactory();

@@ -2,7 +2,6 @@
 
 namespace Coyote\Models;
 
-use Coyote\Post;
 use Coyote\Services\Media\Url;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,10 +9,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property string $name
  * @property string $path
+ * @property string $mime
  * @property Url $url
- * @property Post $post
  * @property string $content_type
  * @property int $count
+ * @property mixed $content
  */
 class Asset extends Model
 {
@@ -29,9 +29,9 @@ class Asset extends Model
      */
     protected $table = 'assets';
 
-    public function post()
+    public function content()
     {
-        return $this->morphTo(Post::class);
+        return $this->morphTo();
     }
 
     public function isImage()

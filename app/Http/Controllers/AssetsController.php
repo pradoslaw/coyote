@@ -6,6 +6,7 @@ use Coyote\Http\Requests\AssetRequest;
 use Coyote\Models\Asset;
 use Coyote\Post;
 use Coyote\Services\Assets\Url;
+use Illuminate\Contracts\Filesystem\Filesystem;
 
 class AssetsController extends Controller
 {
@@ -26,10 +27,10 @@ class AssetsController extends Controller
         return array_merge($asset->toArray(), ['url' => (string) Url::make($asset)]);
     }
 
-    public function download(Asset $asset, string $name = null)
+    public function download(Filesystem $filesystem, Asset $asset, string $name = null)
     {
         if ($asset->content_type === Post::class) {
-            $this->authorize('access', $asset->post->forum);
+            $this->authorize('access', $asset->content->forum);
         }
 
         set_time_limit(0);
@@ -37,7 +38,12 @@ class AssetsController extends Controller
         $asset->count = $asset->count + 1;
         $asset->save();
 
-        return response()->download($asset->path, $name);
+        $headers = [
+            'Content-Type'        => 'Content-Type: ' . $asset->mime,
+            'Content-Disposition' => 'attachment; filename="'. $asset->name .'"',
+        ];
+
+        return response()->make($filesystem->get($asset->path), 200, $headers);
     }
 
     /**
