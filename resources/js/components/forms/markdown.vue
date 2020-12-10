@@ -1,7 +1,7 @@
 <template>
   <div class="editor">
     <vue-tabs @click="switchTab" :items="tabs" :current-tab="currentTab" type="pills" class="mb-2">
-      <div class="btn-toolbar ml-auto">
+      <div class="btn-toolbar ml-auto mt-2 mt-sm-0">
         <div class="btn-group mr-2" role="group" aria-label="...">
           <button @click="insertAtCaret('**', '**')" type="button" class="btn btn-sm" title="Pogrubienie"><i class="fas fa-bold fa-fw"></i></button>
           <button @click="insertAtCaret('*', '*')" type="button" class="btn btn-sm" title="Kursywa"><i class="fas fa-italic fa-fw"></i></button>
@@ -65,7 +65,11 @@
       <div class="row no-gutters border-top pt-2 pl-1 pr-1">
         <div class="small mr-auto">
           <i v-if="isProcessing" class="fas fa-spinner fa-spin small"></i>
-          <a v-else :aria-label="uploadTooltip" data-balloon-pos="right" data-balloon-nofocus href="javascript:" class="small text-muted" @click="chooseFile"><i class="far fa-image"></i> Kliknij, aby dodać załącznik lub wklej ze schowka.</a>
+          <a v-else :aria-label="uploadTooltip" data-balloon-pos="right" data-balloon-nofocus href="javascript:" class="small text-muted" @click="chooseFile">
+            <i class="far fa-image"></i>
+
+            <span class="d-none d-sm-inline">Kliknij, aby dodać załącznik lub wklej ze schowka.</span>
+          </a>
         </div>
 
         <div class="small ml-auto">
