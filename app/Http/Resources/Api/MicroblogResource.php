@@ -41,8 +41,6 @@ class MicroblogResource extends JsonResource
     {
         $only = $this->resource->only(['id', 'votes', 'text', 'html', 'parent_id']);
 
-        AssetsResource::makeThumbnail('microblog');
-
         return array_merge(
             $only,
             [
