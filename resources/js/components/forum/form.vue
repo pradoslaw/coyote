@@ -29,52 +29,14 @@
         v-model="post.text"
         :prompt-url="`/completion/prompt/${topic.id || ''}`"
         :error="errors['text']"
-        :tabs="['Treść', 'Załączniki', 'Ankieta', 'Podgląd']"
+        :tabs="['Treść', 'Ankieta', 'Podgląd']"
+        :assets.sync="post.assets"
         preview-url="/Forum/Preview"
         @save="save"
         @cancel="cancel"
         ref="mrakdown"
       >
 
-        <div v-show="currentTab === 1" class="card card-default">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>Nazwa pliku</th>
-                <th>Typ MIME</th>
-                <th>Data dodania</th>
-                <th>Rozmiar</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <template v-if="post.attachments.length">
-                <tr v-for="attachment in post.attachments" :key="attachment.id">
-                  <td>
-                    <a @click="insertAtCaret(attachment)" href="javascript:">{{ attachment.name }}</a>
-                  </td>
-                  <td>{{ attachment.mime }}</td>
-                  <td><vue-timeago :datetime="attachment.created_at"></vue-timeago></td>
-                  <td>{{ Math.round(attachment.size / 1024) }} kB</td>
-                  <td>
-                    <button @click="deleteAttachment({ post, attachment })" type="button" title="Usuń załącznik" class="btn btn-secondary btn-sm">
-                      <i class="fas fa-times"></i>
-                    </button>
-                  </td>
-                </tr>
-              </template>
-              <tr v-else>
-                <td colspan="5" class="text-center">Brak załączników.</td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="card-footer">
-            <p class="text-muted"><small>Każdy załącznik może zawierać maksymalnie <strong>{{ uploadMaxSize }}MB</strong>. Dostępne rozszerzenia: <strong>{{ uploadMimes }}</strong></small></p>
-
-            <input @change="upload" type="file" ref="attachment" style="visibility: hidden; height: 1px; width: 0">
-            <button @click="openDialog" type="button" class="btn btn-primary btn-sm">Dodaj załącznik</button>
-          </div>
-        </div>
         <div v-show="currentTab === 2" v-if="showPollTab" class="post-content">
           <div class="form-group row">
             <label class="col-md-4 col-form-label text-right">Tytuł ankiety</label>
@@ -182,7 +144,7 @@
   import VueButton from '../forms/button.vue';
   import VueTagsInline from '../forms/tags-inline.vue';
   import VueMarkdown from '../../components/forms/markdown.vue';
-  import { Post, PostAttachment, Topic, Tag } from "../../types/models";
+  import { Post, Topic, Tag } from "../../types/models";
   import { mapMutations, mapState, mapGetters } from "vuex";
   import axios from 'axios';
   import VueError from '../forms/error.vue';

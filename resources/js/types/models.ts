@@ -115,16 +115,6 @@ export interface PostComment {
   editable?: boolean;
 }
 
-export interface PostAttachment {
-  id: number;
-  name: string;
-  file: string;
-  mime: string;
-  created_at: Date | null;
-  size: number;
-  url: string;
-}
-
 export interface Post {
   id: number;
   user?: User;
@@ -149,7 +139,7 @@ export interface Post {
   browser?: string;
   comments: PostComment[];
   comments_count: number;
-  attachments: PostAttachment[];
+  assets: Asset[];
   edit_count?: number;
   metadata?: string;
   voters?: string[];

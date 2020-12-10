@@ -122,7 +122,7 @@ class PostResource extends JsonResource
 
             'comments'      => PostCommentResource::collection($comments)->keyBy('id'),
             'comments_count'=> $commentsCount,
-            'attachments'   => PostAttachmentResource::collection($this->resource->attachments),
+            'assets'        => AssetsResource::collection($this->resource->assets),
             'metadata'      => encrypt([
                 'post_id'           => $this->id,
                 'topic_id'          => $this->topic_id,

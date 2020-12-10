@@ -1,9 +1,9 @@
 import axios from "axios";
-import { Post, PostComment, PostAttachment, Paginator } from "../../types/models";
+import { Post, PostComment, Paginator } from "../../types/models";
 import Vue from "vue";
 
 type ParentChild = { post: Post, comment: PostComment };
-type PostWithAttachment = { post: Post, attachment: PostAttachment };
+// type PostWithAttachment = { post: Post };
 
 const state: Paginator = {
   current_page: 0,
@@ -70,13 +70,13 @@ const mutations = {
     post.comments_count = comments.length;
   },
 
-  addAttachment(state, { post, attachment }: { post: Post, attachment: PostAttachment }) {
-    post.attachments.push(attachment);
-  },
-
-  deleteAttachment(state, { post, attachment }: PostWithAttachment) {
-    post.attachments.splice(post.attachments.findIndex(item => item.id === attachment.id), 1);
-  },
+  // addAttachment(state, { post, attachment }: { post: Post, attachment: PostAttachment }) {
+  //   post.attachments.push(attachment);
+  // },
+  //
+  // deleteAttachment(state, { post, attachment }: PostWithAttachment) {
+  //   post.attachments.splice(post.attachments.findIndex(item => item.id === attachment.id), 1);
+  // },
 
   restore(state, post: Post) {
     post.deleted_at = null;
@@ -152,7 +152,7 @@ const actions = {
       text: post.text,
       subject: rootGetters['topics/topic'].subject,
       is_sticky: rootGetters['topics/topic'].is_sticky,
-      attachments: post.attachments,
+      assets: post.assets,
       tags: rootGetters['topics/topic'].tags!.map(o => o['name']),
       poll: rootState.poll.poll
     };

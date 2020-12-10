@@ -18,11 +18,13 @@ import { mapState, mapGetters } from "vuex";
 import axios from 'axios';
 import useBrackets from '../libs/prompt';
 import VueModals from "@/js/plugins/modals";
+import VueAutosave from "../plugins/autosave";
 
 Vue.use(VueTimeago);
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 Vue.use(VueModals);
-Vue.use(VuePaste, {url: '/Forum/Paste'});
+Vue.use(VuePaste, {url: '/media'});
+Vue.use(VueAutosave);
 
 axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 

@@ -137,12 +137,12 @@
           <div class="post-content">
             <div v-html="post.html"></div>
 
-            <ul v-if="post.attachments.length" class="list-unstyled mb-1">
-              <li v-for="attachment in post.attachments" class="small">
+            <ul v-if="post.assets.length" class="list-unstyled mb-1">
+              <li v-for="asset in post.assets" class="small">
                 <i class="fas fa-download"></i>
 
-                <a :href="`/Forum/Download/${attachment.id}`">{{ attachment.name }}</a>
-                <small>({{ Math.round(attachment.size / 1024 / 1024, 2) }} MB) - <em>ściągnięć: {{ attachment.count }}</em></small>
+                <a :href="`/Forum/Download/${asset.id}`">{{ asset.name }}</a>
+                <small>({{ Math.round(asset.size / 1024 / 1024, 2) }} MB) - <em>ściągnięć: {{ asset.count }}</em></small>
               </li>
             </ul>
 

@@ -2,6 +2,7 @@
 
 namespace Coyote;
 
+use Coyote\Models\Asset;
 use Coyote\Post\Subscriber;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -112,11 +113,11 @@ class Post extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
-    public function attachments()
+    public function assets()
     {
-        return $this->hasMany('Coyote\Post\Attachment');
+        return $this->morphMany(Asset::class, 'content');
     }
 
     /**

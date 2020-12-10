@@ -55,7 +55,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
                         'is_online'
                     ]);
             }])
-            ->with(['editor:id,name,is_blocked,deleted_at', 'comments.user', 'attachments'])
+            ->with(['editor:id,name,is_blocked,deleted_at', 'comments.user', 'assets'])
             ->get();
 
         // +1 because we have to count first post in the topic
