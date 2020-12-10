@@ -41,7 +41,7 @@ export interface User {
   group_name?: string;
 }
 
-export interface Media {
+export interface Asset {
   id: number;
   thumbnail: string;
   url: string;
@@ -65,7 +65,7 @@ export interface Microblog {
   url: string;
   comments: Microblog[];
   user: User | null
-  media: Media[];
+  assets: Asset[];
   editable?: boolean;
   comments_count?: number;
   voters?: string[];

@@ -3,7 +3,7 @@
 namespace Coyote\Http\Resources\Api;
 
 use Carbon\Carbon;
-use Coyote\Http\Resources\MediaResource;
+use Coyote\Http\Resources\AssetsResource;
 use Coyote\Http\Resources\UserResource;
 use Coyote\Microblog;
 use Coyote\Services\Media\MediaInterface;
@@ -18,7 +18,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property User $user
  * @property Microblog[] $comments
  * @property int $parent_id
- * @property \Coyote\Models\Media $media
+ * @property \Coyote\Models\Asset $assets
  * @property int $comments_count
  * @property array voters_json
  */
@@ -41,7 +41,7 @@ class MicroblogResource extends JsonResource
     {
         $only = $this->resource->only(['id', 'votes', 'text', 'html', 'parent_id']);
 
-        MediaResource::makeThumbnail('microblog');
+        AssetsResource::makeThumbnail('microblog');
 
         return array_merge(
             $only,
@@ -70,7 +70,8 @@ class MicroblogResource extends JsonResource
                     return $this->resource->only(['is_voted', 'is_subscribed']);
                 }),
 
-                'media'         => MediaResource::collection($this->media)
+                // @todo do zmiany na assets
+                'media'         => $this->whenLoaded('assets', fn () => AssetsResource::collection($this->assets), [])
             ]
         );
     }

@@ -25,6 +25,7 @@ export class MicroblogMixin extends Vue {
     store.commit('microblogs/edit', microblog);
 
     if (microblog.is_editing) {
+      // @ts-ignore
       this.$nextTick(() => this.form.markdown.focus());
       this.isWrapped = false;
     }
@@ -81,7 +82,7 @@ export class MicroblogFormMixin extends Vue {
 
         if (!this.microblog.id) {
           this.microblog.text = '';
-          this.microblog.media = [];
+          this.microblog.assets = [];
         }
 
         // highlight once again after saving

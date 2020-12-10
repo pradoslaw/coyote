@@ -31,7 +31,7 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop, Ref } from 'vue-property-decorator';
 import axios from 'axios';
-import IsImage from '../libs/media';
+import IsImage from '../libs/assets';
 
 @Component
 export default class VueThumbnail extends Vue {
@@ -41,7 +41,7 @@ export default class VueThumbnail extends Vue {
   @Prop()
   readonly url?: string;
 
-  @Prop({required: false, default: '/media'})
+  @Prop({required: false, default: '/assets'})
   readonly uploadUrl!: string;
 
   @Prop({default: 'photo'})

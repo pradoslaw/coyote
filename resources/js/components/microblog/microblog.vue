@@ -34,7 +34,7 @@
 
             <div v-html="microblog.html" class="microblog-text"></div>
 
-            <div v-if="microblog.media.length" class="row mb-2">
+            <div v-if="microblog.assets.length" class="row mb-2">
               <div
                 v-for="(image, imageIndex) in images"
                 :key="imageIndex"
@@ -129,7 +129,7 @@
   import { MicroblogMixin } from "../mixins/microblog";
   import { User } from '../../types/models';
   import useBrackets from "../../libs/prompt";
-  import IsImage from '../../libs/media';
+  import IsImage from '../../libs/assets';
 
   Vue.use(VueTimeago);
   Vue.use(VueClipboard);
@@ -206,10 +206,10 @@
     get images() {
       return this
         .microblog
-        .media
-        .filter(media => IsImage(media.name!))
-        .map(media => {
-          return { src: media.url, thumb: media.thumbnail, url: media.url };
+        .assets
+        .filter(asset => IsImage(asset.name!))
+        .map(asset => {
+          return { src: asset.url, thumb: asset.thumbnail, url: asset.url };
         });
     }
 

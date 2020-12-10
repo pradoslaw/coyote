@@ -2,7 +2,7 @@
   <div class="col-12">
     <vue-markdown
       v-model="text"
-      :media.sync="media"
+      :assets.sync="assets"
       :error="errors.text"
       @save="sendMessage"
       ref="editor"

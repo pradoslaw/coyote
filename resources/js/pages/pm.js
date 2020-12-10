@@ -49,7 +49,7 @@ new Vue({
       isProcessing: false,
       errors: {},
       items: [],
-      media: [],
+      assets: [],
       tab: 'body',
       isTyping: false
     };
@@ -96,7 +96,7 @@ new Vue({
       store.dispatch('messages/add', {recipient: this.recipient.name, text: this.text})
         .then(() => {
           this.errors = {};
-          this.media = [];
+          this.assets = [];
           this.text = null;
 
           this.$nextTick(() => this.scrollToBottom());

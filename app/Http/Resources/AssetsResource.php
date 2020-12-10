@@ -4,7 +4,7 @@ namespace Coyote\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class MediaResource extends JsonResource
+class AssetsResource extends JsonResource
 {
     private static ?string $filter = null;
 

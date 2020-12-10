@@ -3,7 +3,7 @@
 namespace Coyote;
 
 use Coyote\Microblog\Vote;
-use Coyote\Models\Media;
+use Coyote\Models\Asset;
 use Coyote\Models\Scopes\ForUser;
 use Coyote\Models\Scopes\UserRelationsScope;
 use Coyote\Services\Media\Factory as MediaFactory;
@@ -33,7 +33,7 @@ use Illuminate\Database\Query\Expression;
  * @property User $user
  * @property Microblog[] $children
  * @property Microblog\Vote[]|\Illuminate\Support\Collection $voters
- * @property Media[]|\Illuminate\Support\Collection $media
+ * @property Asset[]|\Illuminate\Support\Collection $assets
  */
 class Microblog extends Model
 {
@@ -90,27 +90,26 @@ class Microblog extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
-    public function media()
+    public function assets()
     {
-        return $this->morphMany(Media::class, 'content');
+        return $this->morphMany(Asset::class, 'content');
     }
 
     /**
-     * @param array $media
+     * @param array $assets
      */
-    public function saveMedia(array $media)
+    public function saveAssets(array $assets)
     {
-        debugbar()->debug($media);
-        $media = collect($media)->map(fn ($attributes) => Media::find($attributes['id']))->keyBy('id');
+        $assets = collect($assets)->map(fn ($attributes) => Asset::find($attributes['id']))->keyBy('id');
 
-        $ids = $media->pluck('id')->toArray();
-        $current = $this->media->keyBy('id');
+        $ids = $assets->pluck('id')->toArray();
+        $current = $this->assets->keyBy('id');
 
         $detach = array_diff($current->keys()->toArray(), $ids);
         $attach = array_diff($ids, $current->keys()->toArray());
 
         foreach ($attach as $id) {
-            $this->media()->save($media[$id]);
+            $this->assets()->save($assets[$id]);
         }
 
         foreach ($detach as $id) {

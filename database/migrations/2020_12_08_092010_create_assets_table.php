@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMediaTable extends Migration
+class CreateAssetsTable extends Migration
 {
     use \Coyote\Http\Factories\MediaFactory;
 
@@ -15,7 +15,7 @@ class CreateMediaTable extends Migration
      */
     public function up()
     {
-        Schema::create('media', function (Blueprint $table) {
+        Schema::create('assets', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamp('created_at')->useCurrent();
             $table->nullableMorphs('content');
@@ -32,7 +32,7 @@ class CreateMediaTable extends Migration
 
             $path .= $attachment->getAttributeValue('file');
 
-            \Coyote\Models\Media::forceCreate([
+            \Coyote\Models\Asset::forceCreate([
                 'created_at' => $attachment->created_at,
                 'path' => $path,
                 'name' => $attachment->name,
@@ -67,7 +67,7 @@ class CreateMediaTable extends Migration
                     $size = \Illuminate\Support\Facades\Storage::size($path);
                 }
 
-                \Coyote\Models\Media::forceCreate([
+                \Coyote\Models\Asset::forceCreate([
                     'created_at' => $microblog->created_at,
                     'path' => $path,
                     'name' => basename($path),
@@ -86,6 +86,16 @@ class CreateMediaTable extends Migration
 
             $user->photo = $path;
             $user->save();
+        }
+
+        $firms = \Coyote\Firm::whereNotNull('logo')->get();
+
+        foreach ($firms as $firm) {
+            $path = $this->getPath('logo/', $firm->logo);
+            $path .= $firm->logo;
+
+            $firm->logo = $path;
+            $firm->save();
         }
     }
 

@@ -46,7 +46,7 @@
       <textarea
         v-autosize
         v-model="valueLocal"
-        v-paste:success="addMedia"
+        v-paste:success="addAsset"
         v-paste:error="showError"
         :class="{'is-invalid': error !== null}"
         @keydown.ctrl.enter="save"
@@ -73,9 +73,9 @@
         </div>
       </div>
 
-      <div v-if="media.length" class="row pt-3 pb-3">
-        <div v-for="item in media" :key="item.id" :aria-label="item.name" class="col-sm-2" data-balloon-pos="bottom">
-          <vue-thumbnail :url="item.url" @delete="deleteMedia" name="media"></vue-thumbnail>
+      <div v-if="assets.length" class="row pt-3 pb-3">
+        <div v-for="item in assets" :key="item.id" :aria-label="item.name" class="col-sm-2" data-balloon-pos="bottom">
+          <vue-thumbnail :url="item.url" @delete="deleteAsset" name="media"></vue-thumbnail>
         </div>
       </div>
 
@@ -167,7 +167,7 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from "vue-class-component";
-  import { Media } from '../../types/models';
+  import { Asset } from '../../types/models';
   import { Ref, Prop, Emit } from "vue-property-decorator";
   import { default as Textarea, languages } from '../../libs/textarea';
   import { mixin as clickaway } from 'vue-clickaway';
@@ -180,7 +180,7 @@
   import VueError from '../forms/error.vue';
   import axios from 'axios';
   import Prism from 'prismjs';
-  import IsImage from '../../libs/media';
+  import IsImage from '../../libs/assets';
 
   const CONTENT = 'Treść';
   const PREVIEW = 'Podgląd';
@@ -232,7 +232,7 @@
     readonly error: string | null = null;
 
     @Prop({default: () => []})
-    readonly media!: Media[];
+    readonly assets!: Asset[];
 
     @Emit('save')
     save() {}
@@ -241,16 +241,16 @@
     cancel() {}
 
     @Emit('paste')
-    addMedia(media: Media) {
-      this.media.push(media);
+    addAsset(asset: Asset) {
+      this.assets.push(asset);
 
       if (this.autoInsertMedia) {
-        this.insertAtCaret((IsImage(media.name!) ? '!' : '') + '[' + media.name + '](' + media.url + ')', '');
+        this.insertAtCaret((IsImage(asset.name!) ? '!' : '') + '[' + asset.name + '](' + asset.url + ')', '');
       }
     }
 
-    deleteMedia(media) {
-      this.media.splice(this.media.findIndex(item => item.id === media.id), 1);
+    deleteAsset(asset: Asset) {
+      this.assets.splice(this.assets.findIndex(item => item.id === asset.id), 1);
     }
 
     mounted() {
@@ -258,9 +258,9 @@
     }
 
     chooseFile() {
-      const Thumbnail = new VueThumbnail({propsData: {name: 'media'}}).$mount();
+      const Thumbnail = new VueThumbnail({propsData: {name: 'asset'}}).$mount();
 
-      Thumbnail.$on('upload', this.addMedia);
+      Thumbnail.$on('upload', this.addAsset);
       Thumbnail.$on('progress', progress => this.isProcessing = progress > 0 && progress < 100);
 
       Thumbnail.openDialog();

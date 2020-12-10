@@ -11,7 +11,7 @@ function fake(): Microblog {
     editable: true,
     html: faker.lorem.words(),
     id: faker.random.number(),
-    media: [],
+    assets: [],
     text: faker.lorem.words(),
     updated_at: new Date(),
     user: {id: 1, name: faker.name.firstName(), deleted_at: undefined, is_blocked: false, photo: ''},

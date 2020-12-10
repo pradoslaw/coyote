@@ -60,7 +60,7 @@ class SubmitController extends Controller
 
         $this->transaction(function () use ($microblog, $request) {
             $microblog->save();
-            $microblog->saveMedia($request->input('media'));
+            $microblog->saveAssets($request->input('assets'));
 
             $object = (new Stream_Microblog())->map($microblog);
 

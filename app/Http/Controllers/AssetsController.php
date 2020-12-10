@@ -2,8 +2,8 @@
 
 namespace Coyote\Http\Controllers;
 
-use Coyote\Http\Requests\MediaRequest;
-use Coyote\Models\Media;
+use Coyote\Http\Requests\AssetRequest;
+use Coyote\Models\Asset;
 use Coyote\Services\Media\Clipboard;
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
@@ -11,16 +11,16 @@ use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesser;
 use Coyote\Services\Media\Factory as MediaFactory;
 use Illuminate\Contracts\Filesystem\Filesystem;
 
-class MediaController extends Controller
+class AssetsController extends Controller
 {
-    public function upload(MediaRequest $request, Filesystem $filesystem)
+    public function upload(AssetRequest $request, Filesystem $filesystem)
     {
-        $uploadedFile = $request->file('media');
+        $uploadedFile = $request->file('asset');
         $path = $uploadedFile->store($this->userId);
 
         $extension = pathinfo($path, PATHINFO_EXTENSION);
 
-        $media = Media::create([
+        $media = Asset::create([
             'name' => $uploadedFile->getClientOriginalName() !== 'blob' ? $uploadedFile->getClientOriginalName() : $this->getHumanName($extension),
             'path' => $path,
             'size' => $uploadedFile->getSize(),

@@ -2,7 +2,7 @@
   <div>
     <vue-markdown
       v-model="microblog.text"
-      :media.sync="microblog.media"
+      :assets.sync="microblog.assets"
       @save="saveMicroblog"
       @cancel="cancel"
       ref="markdown"

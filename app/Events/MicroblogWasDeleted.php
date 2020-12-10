@@ -21,6 +21,6 @@ class MicroblogWasDeleted extends Event
      */
     public function __construct(Microblog $microblog)
     {
-        $this->microblog = array_except($microblog->toArray(), ['media']); // except media because media can contain AWS S3 Class that cannot be serialized
+        $this->microblog = $microblog->toArray();
     }
 }

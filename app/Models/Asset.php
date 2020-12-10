@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $path
  * @property Url $url
  */
-class Media extends Model
+class Asset extends Model
 {
     const UPDATED_AT = null;
 
@@ -24,7 +24,7 @@ class Media extends Model
     /**
      * @var string
      */
-    protected $table = 'media';
+    protected $table = 'assets';
 
     private ?File $file = null;
 

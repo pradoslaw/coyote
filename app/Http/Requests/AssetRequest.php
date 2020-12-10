@@ -4,7 +4,7 @@ namespace Coyote\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class MediaRequest extends FormRequest
+class AssetRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,7 @@ class MediaRequest extends FormRequest
     public function rules()
     {
         return [
-            'media' => 'mimes:' . config('filesystems.upload_mimes')
+            'asset' => 'mimes:' . config('filesystems.upload_mimes')
         ];
     }
 }
