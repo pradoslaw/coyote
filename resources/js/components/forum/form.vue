@@ -33,8 +33,7 @@
         preview-url="/Forum/Preview"
         @save="save"
         @cancel="cancel"
-        @paste="addAttachment"
-        ref="editor"
+        ref="mrakdown"
       >
 
         <div v-show="currentTab === 1" class="card card-default">
@@ -229,8 +228,8 @@
     readonly totalPages!: number;
     readonly currentPage!: number;
 
-    @Ref('editor')
-    readonly editor!: VueMarkdown;
+    @Ref('markdown')
+    readonly markdown!: VueMarkdown;
 
     @Ref('attachment')
     readonly attachment!: HTMLInputElement;
@@ -308,21 +307,12 @@
       store.dispatch('posts/upload', { post: this.post, form })
         .finally(() => this.isProcessing = false);
     }
-
-    addAttachment(attachment: PostAttachment) {
-      store.commit('posts/addAttachment', { post: this.post, attachment });
-      this.insertAtCaret(attachment);
-    }
-
-    insertAtCaret(attachment: PostAttachment) {
-      // const textarea = new Textarea(this.$refs.textarea);
-      const suffix = attachment.name.split('.').pop()!.toLowerCase();
-
-      this.editor.insertAtCaret((['png', 'jpg', 'jpeg', 'gif'].includes(suffix) ? '!' : '') + '[' + attachment.name + '](' + attachment.url + ')', '');
-      // this.post.text = textarea.textarea.value;
-
-      // this.switchTab('textarea');
-    }
+    //
+    // addAttachment(attachment: PostAttachment) {
+    //   store.commit('posts/addAttachment', { post: this.post, attachment });
+    //   this.insertAtCaret(attachment);
+    // }
+    //
 
     toggleTag(tag: Tag) {
       store.commit('topics/toggleTag', { topic: this.topic, tag });

@@ -41,9 +41,9 @@ const mutations = {
   },
 
   update(state, microblog: Microblog) {
-    let { text, html } = microblog; // update only text and html version
+    let { text, html, assets } = microblog; // update only text and html version
 
-    Vue.set(state.data, microblog.id!, {...state.data[microblog.id!], ...{text, html}})
+    Vue.set(state.data, microblog.id!, {...state.data[microblog.id!], ...{ text, html, assets }})
   },
 
   delete(state, microblog: Microblog) {

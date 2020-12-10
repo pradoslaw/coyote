@@ -3,6 +3,7 @@
     <vue-markdown
       v-model="microblog.text"
       :assets.sync="microblog.assets"
+      :auto-insert-assets="false"
       @save="saveMicroblog"
       @cancel="cancel"
       ref="markdown"

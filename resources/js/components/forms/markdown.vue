@@ -47,7 +47,7 @@
         v-autosize
         v-model="valueLocal"
         v-paste:success="addAsset"
-        v-paste:error="showError"
+        v-paste:error="errorNotification"
         :class="{'is-invalid': error !== null}"
         @keydown.ctrl.enter="save"
         @keydown.meta.enter="save"
@@ -65,7 +65,7 @@
       <div class="row no-gutters border-top pt-2 pl-1 pr-1">
         <div class="small mr-auto">
           <i v-if="isProcessing" class="fas fa-spinner fa-spin small"></i>
-          <a v-else href="javascript:" class="small text-muted" @click="chooseFile"><i class="far fa-image"></i> Kliknij, aby dodać załącznik lub wklej ze schowka.</a>
+          <a v-else :aria-label="uploadTooltip" data-balloon-pos="right" data-balloon-nofocus href="javascript:" class="small text-muted" @click="chooseFile"><i class="far fa-image"></i> Kliknij, aby dodać załącznik lub wklej ze schowka.</a>
         </div>
 
         <div class="small ml-auto">
@@ -74,8 +74,8 @@
       </div>
 
       <div v-if="assets.length" class="row pt-3 pb-3">
-        <div v-for="item in assets" :key="item.id" :aria-label="item.name" class="col-sm-2" data-balloon-pos="bottom">
-          <vue-thumbnail :url="item.url" @delete="deleteAsset" name="media"></vue-thumbnail>
+        <div v-for="item in assets" :key="item.id" :aria-label="item.name" class="col-sm-2" data-balloon-pos="down">
+          <vue-thumbnail :url="item.url" @delete="deleteAsset" name="asset"></vue-thumbnail>
         </div>
       </div>
 
@@ -216,8 +216,14 @@
     @Prop()
     value!: string;
 
+    @Prop({default: 20})
+    readonly uploadMaxSize!: number;
+
+    @Prop({default: 'jpg, jpeg, gif, png, zip, rar, txt, pdf, doc, docx, xls, xlsx, cpp, 7z, 7zip, patch, webm'})
+    readonly uploadMimes!: string;
+
     @Prop({default: true})
-    readonly autoInsertMedia = true;
+    readonly autoInsertAssets!: boolean;
 
     @Prop({default: () => [CONTENT, PREVIEW]})
     readonly tabs!: string[];
@@ -244,7 +250,7 @@
     addAsset(asset: Asset) {
       this.assets.push(asset);
 
-      if (this.autoInsertMedia) {
+      if (this.autoInsertAssets) {
         this.insertAtCaret((IsImage(asset.name!) ? '!' : '') + '[' + asset.name + '](' + asset.url + ')', '');
       }
     }
@@ -315,8 +321,12 @@
       });
     }
 
-    showError(err) {
+    errorNotification(err) {
       this.$notify({'type': 'error', 'text': err});
+    }
+
+    get uploadTooltip() {
+      return `Maksymalnie ${this.uploadMaxSize}MB. Dostępne rozszerzenia: ${this.uploadMimes}`;
     }
 
     get filteredLanguages() {

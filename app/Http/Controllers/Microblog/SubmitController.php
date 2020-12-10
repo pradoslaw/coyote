@@ -88,6 +88,9 @@ class SubmitController extends Controller
 
         MicroblogResource::withoutWrapping();
 
+        $microblog->unsetRelation('assets');
+        $microblog->load('assets');
+
         return new MicroblogResource($microblog);
     }
 

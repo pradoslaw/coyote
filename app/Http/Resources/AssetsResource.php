@@ -16,7 +16,7 @@ class AssetsResource extends JsonResource
     public function toArray($request)
     {
         return array_merge(
-            parent::toArray($request),
+            array_except($this->resource->toArray(), ['content_id', 'content_type']),
             [
                 'url' => (string) $this->resource->url,
                 'thumbnail' => $this->when(
