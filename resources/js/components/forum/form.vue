@@ -205,12 +205,6 @@
     @Prop({default: false})
     readonly showStickyCheckbox!: boolean;
 
-    @Prop({default: 20})
-    readonly uploadMaxSize!: number;
-
-    @Prop()
-    readonly uploadMimes!: string;
-
     @Prop({default: false})
     readonly requireTag!: boolean;
 

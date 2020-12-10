@@ -136,8 +136,6 @@
         :key="post.id"
         :post="post"
         :reasons="reasons"
-        upload-mimes="{{ config_get('filesystems.upload_mimes')|split(',')|join(', ') }}"
-        upload-max-size="{{ config_get('filesystems.upload_max_size') }}"
         @reply="reply"
       ></vue-post>
 
@@ -155,8 +153,6 @@
           ref="js-submit-form"
           :post="undefinedPost"
           @save="resetPost"
-          upload-mimes="{{ config_get('filesystems.upload_mimes')|split(',')|join(', ') }}"
-          upload-max-size="{{ config_get('filesystems.upload_max_size') }}"
         ></vue-form>
       {% endif %}
 

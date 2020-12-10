@@ -25,8 +25,6 @@
         :show-sticky-checkbox="showStickyCheckbox"
         :post="undefinedPost"
         require-tag="{{ forum.require_tag }}"
-        upload-mimes="{{ config_get('filesystems.upload_mimes')|split(',')|join(', ') }}"
-        upload-max-size="{{ config_get('filesystems.upload_max_size') }}"
         @save="redirectToTopic"
       ></vue-form>
 
