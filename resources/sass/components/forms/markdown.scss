@@ -7,6 +7,11 @@
   .form-control {
     border: none;
   }
+
+  .img-thumbnail img {
+    height: 100px;
+    object-fit: cover;
+  }
 }
 
 // Lista rozwijalna z jezykami kolorowania skladni

@@ -388,7 +388,7 @@
 
       if (this.isEditing) {
         // @ts-ignore
-        this.$nextTick(() => this.form.editor.focus());
+        this.$nextTick(() => this.form.markdown.focus());
       }
     }
 
