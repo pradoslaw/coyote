@@ -2,7 +2,8 @@
   <div class="col-12">
     <vue-markdown
       v-model="text"
-      :error="errors[text]"
+      :media.sync="media"
+      :error="errors.text"
       @save="sendMessage"
       ref="editor"
       preview-url="/User/Pm/Preview"

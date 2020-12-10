@@ -48,8 +48,8 @@ new Vue({
       text: '',
       isProcessing: false,
       errors: {},
-      previewHtml: null,
       items: [],
+      media: [],
       tab: 'body',
       isTyping: false
     };
@@ -96,8 +96,8 @@ new Vue({
       store.dispatch('messages/add', {recipient: this.recipient.name, text: this.text})
         .then(() => {
           this.errors = {};
+          this.media = [];
           this.text = null;
-          this.previewHtml = null;
 
           this.$nextTick(() => this.scrollToBottom());
           this.tab = 'body';

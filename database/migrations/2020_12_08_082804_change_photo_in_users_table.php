@@ -14,7 +14,7 @@ class ChangePhotoInUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('photo', 50)->change();
+            $table->string('photo', 100)->change();
         });
     }
 

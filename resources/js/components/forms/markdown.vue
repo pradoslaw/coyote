@@ -48,7 +48,7 @@
         v-model="valueLocal"
         v-paste:success="addMedia"
         v-paste:error="showError"
-        :class="{'is-invalid': error !== undefined}"
+        :class="{'is-invalid': error !== null}"
         @keydown.ctrl.enter="save"
         @keydown.meta.enter="save"
         @keydown.esc="cancel"
@@ -59,6 +59,8 @@
         tabindex="2"
         placeholder="Kliknij, aby dodać treść"
       ></textarea>
+
+      <vue-error :message="error"></vue-error>
 
       <div class="row no-gutters border-top pt-2 pl-1 pr-1">
         <div class="small mr-auto">
@@ -175,6 +177,7 @@
   import VuePrompt from '../forms/prompt.vue';
   import VueTabs from '../tabs.vue';
   import VueThumbnail from "../thumbnail.vue";
+  import VueError from '../forms/error.vue';
   import axios from 'axios';
   import Prism from 'prismjs';
   import IsImage from '../../libs/media';
@@ -190,10 +193,11 @@
       'vue-dropdown': VueDropdownMenu,
       'vue-prompt': VuePrompt ,
       'vue-tabs': VueTabs,
-      'vue-thumbnail': VueThumbnail
+      'vue-thumbnail': VueThumbnail,
+      'vue-error': VueError
     },
   })
-  export default class VueToolbar extends Vue {
+  export default class VueMarkdown extends Vue {
     textarea!: Textarea;
     searchText: string = '';
     previewHtml: string = '';
@@ -224,10 +228,10 @@
     @Prop()
     readonly previewUrl!: string;
 
-    @Prop()
-    readonly error: string | undefined;
+    @Prop({default: null})
+    readonly error: string | null = null;
 
-    @Prop({default: []})
+    @Prop({default: () => []})
     readonly media!: Media[];
 
     @Emit('save')
