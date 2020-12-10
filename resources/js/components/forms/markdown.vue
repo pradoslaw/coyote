@@ -74,8 +74,8 @@
       </div>
 
       <div v-if="assets.length" class="row pt-3 pb-3">
-        <div v-for="item in assets" :key="item.id" :aria-label="item.name" class="col-sm-2" data-balloon-pos="down">
-          <vue-thumbnail :url="item.url" @delete="deleteAsset" name="asset"></vue-thumbnail>
+        <div v-for="item in assets" :key="item.id" class="col-sm-2">
+          <vue-thumbnail :url="item.url" @delete="deleteAsset" :aria-label="item.name" data-balloon-pos="down" name="asset"></vue-thumbnail>
         </div>
       </div>
 
@@ -158,7 +158,7 @@
       </div>
     </vue-prompt>
 
-    <div @click="showPreview" v-show="currentTab === 1" v-html="previewHtml" class="form-control"></div>
+    <div @click="showPreview" v-show="currentTab === 1" v-html="previewHtml" class="form-control h-auto"></div>
 
     <slot></slot>
   </div>
