@@ -28,7 +28,7 @@ export default {
       const blob = await response.blob();
 
       let formData = new FormData();
-      formData.append('media', blob);
+      formData.append('asset', blob);
 
       axios.post(options.url, formData)
         .then(response => {

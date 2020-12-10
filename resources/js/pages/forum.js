@@ -23,7 +23,7 @@ import VueAutosave from "../plugins/autosave";
 Vue.use(VueTimeago);
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 Vue.use(VueModals);
-Vue.use(VuePaste, {url: '/media'});
+Vue.use(VuePaste, {url: '/assets'});
 Vue.use(VueAutosave);
 
 axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));

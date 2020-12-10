@@ -1,4 +1,4 @@
-import isImage from "./media";
+import isImage from "./assets";
 
 test('declination test', () => {
   expect(isImage('foo.png')).toBe(true);

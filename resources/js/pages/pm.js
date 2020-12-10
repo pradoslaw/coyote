@@ -20,7 +20,7 @@ import VueNotifications from "vue-notification";
 
 Vue.use(VueAutosave);
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
-Vue.use(VuePaste, {url: '/media'});
+Vue.use(VuePaste, {url: '/assets'});
 
 axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 

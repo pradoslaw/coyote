@@ -24,7 +24,7 @@ class AssetRequest extends FormRequest
     public function rules()
     {
         return [
-            'asset' => 'mimes:' . config('filesystems.upload_mimes')
+            'asset' => 'required|mimes:' . config('filesystems.upload_mimes')
         ];
     }
 }
