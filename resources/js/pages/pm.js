@@ -93,7 +93,7 @@ new Vue({
     sendMessage() {
       this.isProcessing = true;
 
-      store.dispatch('messages/add', {recipient: this.recipient.name, text: this.text})
+      store.dispatch('messages/add', {recipient: this.recipient.name, text: this.text, assets: this.assets})
         .then(() => {
           this.errors = {};
           this.assets = [];

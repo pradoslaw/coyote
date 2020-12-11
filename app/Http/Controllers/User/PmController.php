@@ -4,7 +4,6 @@ namespace Coyote\Http\Controllers\User;
 
 use Coyote\Events\PmCreated;
 use Coyote\Events\PmRead;
-use Coyote\Http\Factories\MediaFactory;
 use Coyote\Http\Requests\PmRequest;
 use Coyote\Http\Resources\PmResource;
 use Coyote\Notifications\PmCreatedNotification;
@@ -156,7 +155,10 @@ class PmController extends BaseController
         $recipient = $this->user->findByName($request->input('recipient'));
 
         $pm = $this->transaction(function () use ($request, $recipient) {
-            return $this->pm->submit($this->auth, $request->all() + ['author_id' => $recipient->id]);
+            $result = $this->pm->submit($this->auth, $request->all() + ['author_id' => $recipient->id]);
+            $result[Pm::SENTBOX]->assets()->sync($request->input('assets'));
+
+            return $result;
         });
 
         event(new PmCreated($pm[Pm::INBOX]));
