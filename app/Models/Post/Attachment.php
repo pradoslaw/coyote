@@ -34,5 +34,4 @@ class Attachment extends Model
      * @var string
      */
     protected $table = 'post_attachments';
-
 }
