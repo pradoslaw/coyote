@@ -137,7 +137,7 @@ class JobRequest extends FormRequest
             'firm.name' => 'required_with:job.firm_id|max:60',
             'firm.is_agency' => self::IS_AGENCY,
             'firm.website' => self::WEBSITE,
-            'firm.logo' => 'nullable|string',
+            'firm.logo' => 'nullable|string|url',
             'firm.description' => self::DESCRIPTION,
             'firm.employees' => 'nullable|integer',
             'firm.founded' => 'nullable|integer',

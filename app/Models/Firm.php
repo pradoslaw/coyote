@@ -155,7 +155,7 @@ class Firm extends Model
         $this->attributes['logo'] = null;
 
         if ($logo) {
-            $this->attributes['logo'] = parse_url($logo, PHP_URL_PATH);
+            $this->attributes['logo'] = trim(str_replace('/uploads', '', parse_url($logo, PHP_URL_PATH)), '/');
         }
     }
 
@@ -178,21 +178,6 @@ class Firm extends Model
             $this->setRelation('benefits', collect($models));
         }
     }
-
-//    public function setGalleryAttribute($gallery)
-//    {
-//        $models = [];
-//
-//        foreach ($gallery as $photo) {
-//            if (!empty($photo)) {
-//                $models[] = new Firm\Gallery(['file' => basename($photo)]);
-//            }
-//        }
-//
-//        if ($models) {
-//            $this->setRelation('gallery', collect($models));
-//        }
-//    }
 
     /**
      * @param string $country

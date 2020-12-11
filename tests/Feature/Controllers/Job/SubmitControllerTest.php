@@ -5,6 +5,7 @@ namespace Tests\Feature\Controllers\Job;
 use Coyote\Currency;
 use Coyote\Firm;
 use Coyote\Job;
+use Coyote\Models\Asset;
 use Coyote\Plan;
 use Coyote\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -140,7 +141,7 @@ class SubmitControllerTest extends TestCase
     {
         /** @var Firm $firm */
         $firm = factory(Firm::class)->make();
-        $photo = url('/img/a.png');
+        $asset = factory(Asset::class)->create(['name' => 'a.png']);
 
         $response = $this->actingAs($this->user)->json('POST', '/Praca/Submit', [
             'title' => $title = $this->faker->text(60),
@@ -149,9 +150,9 @@ class SubmitControllerTest extends TestCase
             'enable_apply' => true,
             'email' => $this->user->email,
             'firm' => $firm->toArray() + [
-                    'logo' => $logo = url('/img/b.png'),
-                    'gallery' => [
-                        $photo
+                    'logo' => $logo = url('/uploads/logo/b.png'),
+                    'assets' => [
+                        $asset
                     ]
                 ]
         ]);
@@ -171,8 +172,8 @@ class SubmitControllerTest extends TestCase
         $this->assertEquals($firm->street, $job->firm->street);
         $this->assertEquals($firm->city, $job->firm->city);
         $this->assertEquals($firm->country_id, $job->firm->country_id);
-        $this->assertEquals('b.png', $job->firm->logo->getFilename());
-        $this->assertEquals('a.png', $job->firm->gallery[0]->file);
+        $this->assertEquals('logo/b.png', $job->firm->logo->getFilename());
+        $this->assertEquals('a.png', $job->firm->assets[0]->name);
     }
 
     public function testSubmitValidFormWithExistingFirm()
