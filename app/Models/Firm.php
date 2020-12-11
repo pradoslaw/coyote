@@ -160,14 +160,14 @@ class Firm extends Model
         return $this->attributes['logo'];
     }
 
-    public function setLogoAttribute($logo)
-    {
-        $this->attributes['logo'] = null;
-
-        if ($logo) {
-            $this->attributes['logo'] = basename($logo);
-        }
-    }
+//    public function setLogoAttribute($logo)
+//    {
+//        $this->attributes['logo'] = null;
+//
+//        if ($logo) {
+//            $this->attributes['logo'] = basename($logo);
+//        }
+//    }
 
     public function setYoutubeUrlAttribute($value)
     {

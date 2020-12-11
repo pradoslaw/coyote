@@ -2,6 +2,7 @@
 
 namespace Coyote;
 
+use Coyote\Models\Asset;
 use Coyote\Pm\Text;
 use Illuminate\Database\Eloquent\Model;
 
@@ -37,6 +38,14 @@ class Pm extends Model
      * @var bool
      */
     public $timestamps = false;
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function assets()
+    {
+        return $this->morphMany(Asset::class, 'content');
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

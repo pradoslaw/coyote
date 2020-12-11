@@ -29,9 +29,9 @@ class Gallery extends Model
     protected $fillable = ['firm_id', 'file'];
 
     /**
-     * @var bool
+     * @var string
      */
-    public $timestamps = false;
+    protected $dateFormat = 'Y-m-d H:i:se';
 
     public static function boot()
     {

@@ -135,7 +135,6 @@ abstract class File implements MediaInterface
         return $this;
     }
 
-
     /**
      * @return bool
      */
@@ -151,7 +150,6 @@ abstract class File implements MediaInterface
     {
         return in_array(pathinfo($this->getFilename(), PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']);
     }
-
 
     /**
      * @return string

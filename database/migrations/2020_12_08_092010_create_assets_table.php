@@ -48,8 +48,34 @@ class CreateAssetsTable extends Migration
             ]);
         }
 
+        unset($attachments);
+
         $seq++;
         $this->db->statement("SELECT setval('assets_id_seq', $seq, true)");
+
+        $gallery = \Coyote\Firm\Gallery::all();
+
+        foreach ($gallery as $photo) {
+            $path = $this->getPath('gallery/', $photo->file);
+
+            $path .= $photo->file;
+            $size = 0;
+
+            if (\Illuminate\Support\Facades\Storage::exists($path)) {
+                $size = \Illuminate\Support\Facades\Storage::size($path);
+            }
+
+            \Coyote\Models\Asset::forceCreate([
+                'created_at' => $photo->created_at,
+                'path' => $path,
+                'name' => basename($path),
+                'size' => $size,
+                'content_id' => $photo->firm_id,
+                'content_type' => \Coyote\Firm::class
+            ]);
+        }
+
+        unset($gallery);
 
         $microblogs = \Coyote\Microblog::whereNotNull('media')->get();
         $factory = $this->getMediaFactory();
@@ -86,6 +112,8 @@ class CreateAssetsTable extends Migration
             }
         }
 
+        unset($microblogs);
+
         $users = \Coyote\User::whereNotNull('photo')->get();
 
         foreach ($users as $user) {
@@ -95,6 +123,8 @@ class CreateAssetsTable extends Migration
             $user->photo = $path;
             $user->save();
         }
+
+        unset($users);
 
         $firms = \Coyote\Firm::whereNotNull('logo')->get();
 
@@ -134,6 +164,13 @@ class CreateAssetsTable extends Migration
         foreach ($users as $user) {
             $user->photo = basename($user->photo);
             $user->save();
+        }
+
+        $firms = \Coyote\Firm::whereNotNull('logo')->get();
+
+        foreach ($firms as $firm) {
+            $firm->logo = basename($firm->logo);
+            $firm->save();
         }
     }
 }

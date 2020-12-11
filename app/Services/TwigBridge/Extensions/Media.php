@@ -27,8 +27,7 @@ class Media extends Twig_Extension
         return [
             // funkcja generuje URL do zdjecia usera lub domyslny avatar jezeli brak
             new Twig_SimpleFunction('user_photo', [$this, 'userPhoto']),
-            new Twig_SimpleFunction('logo', [$this, 'logo']),
-            new Twig_SimpleFunction('thumbnail', [$this, 'thumbnail'])
+            new Twig_SimpleFunction('logo', [$this, 'logo'])
         ];
     }
 
@@ -51,17 +50,6 @@ class Media extends Twig_Extension
     public function logo($filename, $secure = null)
     {
         return (string) $this->getMediaUrl('logo', $filename, 'img/logo-gray.png', $secure);
-    }
-
-    /**
-     * Generate thumbnail URL for microblog attachments...
-     *
-     * @param MediaInterface $media
-     * @return string
-     */
-    public function thumbnail(MediaInterface $media)
-    {
-        return $media->url()->thumbnail('microblog');
     }
 
     /**
