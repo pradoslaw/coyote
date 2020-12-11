@@ -6,6 +6,7 @@ use Illuminate\Contracts\Filesystem\Filesystem;
 use Intervention\Image\Filters\FilterInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Intervention\Image\ImageManager;
+use Symfony\Component\Mime\MimeTypes;
 
 abstract class File implements MediaInterface
 {
@@ -138,14 +139,6 @@ abstract class File implements MediaInterface
     /**
      * @return bool
      */
-    public function delete()
-    {
-        return $this->filesystem->delete($this->filename);
-    }
-
-    /**
-     * @return bool
-     */
     public function isImage()
     {
         return in_array(pathinfo($this->getFilename(), PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']);
@@ -195,14 +188,13 @@ abstract class File implements MediaInterface
         return $image;
     }
 
-
-
     /**
-     * @param string $extension
-     * @return string
+     * @return string|null
      */
-    protected function getHumanName($extension)
+    public function getMime(): ?string
     {
-        return 'screenshot-' . date('YmdHis') . '.' . $extension;
+        $mimes = (new MimeTypes())->getMimeTypes(pathinfo($this->getFilename(), PATHINFO_EXTENSION));
+
+        return $mimes[0] ?? null;
     }
 }

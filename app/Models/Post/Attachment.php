@@ -5,6 +5,7 @@ namespace Coyote\Post;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * @deprecated
  * @property int $id
  * @property string $name
  * @property string $mime
