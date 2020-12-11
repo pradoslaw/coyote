@@ -6,7 +6,6 @@ use Illuminate\Contracts\Filesystem\Filesystem;
 use Intervention\Image\Filters\FilterInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Intervention\Image\ImageManager;
-use Symfony\Component\Mime\MimeTypes;
 
 abstract class File implements MediaInterface
 {
@@ -208,5 +207,4 @@ abstract class File implements MediaInterface
     {
         return 'screenshot-' . date('YmdHis') . '.' . $extension;
     }
-
 }
