@@ -206,19 +206,19 @@ class AppServiceProvider extends ServiceProvider
                 return;
             }
 
-            /** @var \Coyote\Post $post */
-            $post = $this->getParent();
+            /** @var \Coyote\Post|\Coyote\Pm|\Coyote\Microblog|\Coyote\Firm $parent */
+            $parent = $this->getParent();
 
             $assets = collect($assets)->map(fn ($attributes) => Asset::find($attributes['id']))->keyBy('id');
 
             $ids = $assets->pluck('id')->toArray();
-            $current = $post->assets->keyBy('id');
+            $current = $parent->assets->keyBy('id');
 
             $detach = array_diff($current->keys()->toArray(), $ids);
             $attach = array_diff($ids, $current->keys()->toArray());
 
             foreach ($attach as $id) {
-                $post->assets()->save($assets[$id]);
+                $parent->assets()->save($assets[$id]);
             }
 
             foreach ($detach as $id) {

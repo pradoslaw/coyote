@@ -81,7 +81,7 @@ trait SubmitsJob
             $job->firm()->associate($job->firm);
             // remove old benefits and save new ones.
             $job->firm->benefits()->push($job->firm->benefits);
-            $job->firm->assets()->sync($this->request->input('assets'));
+            $job->firm->assets()->sync($this->request->input('firm.assets'));
         }
 
         $job->creating(function (Job $model) use ($user) {

@@ -52,9 +52,7 @@ new Vue({
       this.errors = {};
 
       store.dispatch('jobs/save')
-        .then(result => {
-          window.location.href = result.data;
-        })
+        .then(result => window.location.href = result.data)
         .catch(err => {
           if (err.response.status !== 422) {
             return;

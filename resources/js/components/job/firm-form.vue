@@ -83,7 +83,7 @@
           </div>
 
           <div class="col-sm-2">
-            <vue-thumbnail @upload="addPhoto"></vue-thumbnail>
+            <vue-thumbnail @upload="addPhoto" name="asset"></vue-thumbnail>
           </div>
         </div>
       </div>
@@ -166,8 +166,8 @@
   import VueMarker from '@/js/components/google-maps/marker.vue';
   import VueThumbnail from '@/js/components/thumbnail.vue';
   import { Prop } from "vue-property-decorator";
-  import { Job, Firm } from '../../types/models';
-  import { mapMutations, mapActions } from "vuex";
+  import { Firm, Asset } from '../../types/models';
+  import { mapMutations } from "vuex";
   import Geocoder from '../../libs/geocoder';
   import TinyMceOptions from '../../libs/tinymce';
   import store from '../../store';
@@ -239,18 +239,18 @@
       this.firm.logo = input.url;
     }
 
-    addPhoto(input) {
-      this.firm.gallery.splice(this.firm.gallery.length - 1, 0, input.url);
+    addPhoto(asset: Asset) {
+      this.firm.assets.push(asset);
     }
 
     removeLogo() {
       this.firm.logo = null;
     }
 
-    removePhoto(url) {
-      const gallery = this.firm.gallery;
+    removePhoto(url: string) {
+      const gallery = this.firm.assets;
 
-      gallery.splice(gallery.findIndex(photo => photo === url), 1);
+      gallery.splice(gallery.findIndex(asset => asset.url === url), 1);
     }
 
     addFirm() {

@@ -163,8 +163,8 @@
           <h3 class="mt-3">Praca w {{ job.firm.name }}</h3>
 
           <div id="gallery">
-            {% for gallery in job.firm.gallery %}
-              <a href="{{ gallery.photo.url() }}" data-toggle="lightbox"><img src="{{ gallery.photo.url() }}"></a>
+            {% for asset in job.firm.assets %}
+              <a href="{{ url(asset.path) }}" data-toggle="lightbox"><img src="/uploads/{{ asset.path }}"></a>
             {% endfor %}
 
             {% if job.firm.youtube_url and job.firm.gallery|length > 0 %}
