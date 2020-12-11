@@ -29,26 +29,32 @@
         v-model="post.text"
         :prompt-url="`/completion/prompt/${topic.id || ''}`"
         :error="errors['text']"
-        :tabs="['Treść', 'Ankieta', 'Podgląd']"
         :assets.sync="post.assets"
         preview-url="/Forum/Preview"
         @save="save"
         @cancel="cancel"
         ref="markdown"
       >
+        <template v-if="enablePoll" v-slot:options>
+          <a href="javascript:" data-target="#js-poll-form" data-toggle="collapse" class="ml-1 small text-muted">
+            <i class="fa fa-poll-h"></i>
 
-        <div v-show="currentTab === 2" v-if="showPollTab" class="post-content">
+            <span class="d-none d-sm-inline">Ankieta</span>
+          </a>
+        </template>
+
+        <div v-if="enablePoll" id="js-poll-form" class="bg-light p-3 mt-2 collapse">
+<!--          <div class="form-group row">-->
+<!--            <label class="col-md-4 col-form-label text-right">Tytuł ankiety</label>-->
+
+<!--            <div class="col-md-6">-->
+<!--              <vue-text v-model="poll.title"></vue-text>-->
+<!--              <vue-error :message="errors['poll.title']"></vue-error>-->
+<!--            </div>-->
+<!--          </div>-->
+
           <div class="form-group row">
-            <label class="col-md-4 col-form-label text-right">Tytuł ankiety</label>
-
-            <div class="col-md-6">
-              <vue-text v-model="poll.title"></vue-text>
-              <vue-error :message="errors['poll.title']"></vue-error>
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <label class="col-md-4 col-form-label text-right">Odpowiedzi w ankiecie</label>
+            <label class="col-md-3 col-form-label text-right">Odpowiedzi w ankiecie</label>
 
             <div class="col-md-6">
               <div v-for="(item, index) in poll.items" :key="item.id" class="input-group mb-1">
@@ -72,10 +78,10 @@
           </div>
 
           <div class="form-group row">
-            <label class="col-md-4 col-form-label text-right">Liczba możliwych odpowiedzi</label>
+            <label class="col-md-3 col-form-label text-right">Możliwych odpowiedzi</label>
 
             <div class="col-md-6">
-              <vue-text v-model="poll.max_items"></vue-text>
+              <vue-text v-model="poll.max_items" class="input-sm"></vue-text>
               <vue-error :message="errors['poll.max_items']"></vue-error>
 
               <span class="form-text text-muted">Minimalnie jedna możliwa odpowiedź w ankiecie.</span>
@@ -83,10 +89,10 @@
           </div>
 
           <div class="form-group row">
-            <label class="col-md-4 col-form-label text-right">Długość działania</label>
+            <label class="col-md-3 col-form-label text-right">Długość działania</label>
 
             <div class="col-md-6">
-              <vue-text v-model="poll.length"></vue-text>
+              <vue-text v-model="poll.length" class="input-sm"></vue-text>
               <vue-error :message="errors['poll.length']"></vue-error>
 
               <span class="form-text text-muted">Określ długość działania ankiety (w dniach). 0 oznacza brak terminu ważności.</span>
@@ -263,12 +269,6 @@
       store.dispatch('posts/upload', { post: this.post, form })
         .finally(() => this.isProcessing = false);
     }
-    //
-    // addAttachment(attachment: PostAttachment) {
-    //   store.commit('posts/addAttachment', { post: this.post, attachment });
-    //   this.insertAtCaret(attachment);
-    // }
-    //
 
     toggleTag(tag: Tag) {
       store.commit('topics/toggleTag', { topic: this.topic, tag });
@@ -290,7 +290,7 @@
       }
     }
 
-    get showPollTab() {
+    get enablePoll() {
       return !this.topic || this.topic.first_post_id === this.post.id;
     }
 

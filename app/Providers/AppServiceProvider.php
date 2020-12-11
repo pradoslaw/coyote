@@ -201,7 +201,11 @@ class AppServiceProvider extends ServiceProvider
             return str_limit(Str::ascii($this->header('User-Agent')), 900);
         });
 
-        MorphMany::macro('sync', function (array $assets) {
+        MorphMany::macro('sync', function (?array $assets) {
+            if (!is_array($assets)) {
+                return;
+            }
+
             /** @var \Coyote\Post $post */
             $post = $this->getParent();
 

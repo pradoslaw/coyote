@@ -9,6 +9,7 @@ use Coyote\Rules\MinWords;
 use Coyote\Topic;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class PostRequest extends FormRequest
 {
@@ -18,11 +19,6 @@ class PostRequest extends FormRequest
     const RULE_STICKY               = 'nullable|bool';
     const RULE_TAGS                 = 'array|max:5';
     const RULE_HUMAN                = 'required';
-
-    const RULE_POLL_TITLE           = 'nullable|string|max:100';
-    const RULE_POLL_ITEMS           = 'required_with:poll.title';
-    const RULE_POLL_MAX_ITEMS       = 'required_with:poll.title|integer|min:1';
-    const RULE_POLL_LENGTH          = 'required_with:poll.title|integer';
 
     /**
      * @var Post
@@ -65,6 +61,8 @@ class PostRequest extends FormRequest
         ];
 
         if ($this->canChangeSubject()) {
+            $require = Rule::requiredIf(fn () => count(array_filter($this->input('poll.items.*.text', []))) >= 2);
+
             $rules = array_merge($rules, [
                 'subject'               => $this->subjectRule(),
                 'tags'                  => self::RULE_TAGS,
@@ -76,10 +74,9 @@ class PostRequest extends FormRequest
                     'tag_creation:200'
                 ],
 
-                'poll.title'            => self::RULE_POLL_TITLE,
-                'poll.items.*.text'     => self::RULE_POLL_ITEMS,
-                'poll.length'           => self::RULE_POLL_LENGTH,
-                'poll.max_items'        => self::RULE_POLL_MAX_ITEMS
+                'poll.items.*.text'     => [$require, 'nullable', 'string', 'max:200'],
+                'poll.length'           => [$require, 'nullable', 'integer'],
+                'poll.max_items'        => [$require, 'nullable', 'integer']
             ]);
         }
 

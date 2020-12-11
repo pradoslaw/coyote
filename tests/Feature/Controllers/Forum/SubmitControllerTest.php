@@ -216,7 +216,18 @@ class SubmitControllerTest extends TestCase
         $response = $this->actingAs($this->user)->json(
             'POST',
             "/Forum/{$this->forum->slug}/Submit/{$topic->id}/{$post->id}",
-            ['text' => $text = $faker->text, 'subject' => $subject = $faker->text(100)]
+            [
+                'text' => $text = $faker->text,
+                'subject' => $subject = $faker->text(100),
+                'poll' => [
+                    'items' => [
+                        ['text' => ''],
+                        ['text' => '']
+                    ],
+                    'length' => 0,
+                    'max_items' => 1
+                ]
+            ]
         );
 
         $response->assertJsonFragment([
@@ -239,7 +250,10 @@ class SubmitControllerTest extends TestCase
         $this->actingAs($this->user)->json(
             'POST',
             "/Forum/{$this->forum->slug}/Submit/{$topic->id}/{$post->id}",
-            ['text' => $text = $faker->text, 'subject' => $subject = $faker->text(100)]
+            [
+                'text' => $text = $faker->text,
+                'subject' => $subject = $faker->text(100)
+            ]
         );
 
         $topic->refresh();

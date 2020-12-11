@@ -70,6 +70,8 @@
 
             <span class="d-none d-sm-inline">Kliknij, aby dodać załącznik lub wklej ze schowka.</span>
           </a>
+
+          <slot name="options"></slot>
         </div>
 
         <div class="small ml-auto">
@@ -162,7 +164,7 @@
       </div>
     </vue-prompt>
 
-    <div @click="showPreview" v-show="currentTab === 1" v-html="previewHtml" class="form-control h-auto"></div>
+    <div @click="showPreview" v-show="currentTab === 1" v-html="previewHtml" class="preview post-content"></div>
 
     <slot></slot>
   </div>

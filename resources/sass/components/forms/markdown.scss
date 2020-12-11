@@ -4,8 +4,12 @@
   border-radius: $border-radius;
   background-color: #fff;
 
-  .form-control {
+  textarea.form-control {
     border: none;
+  }
+
+  .preview {
+    padding: $input-padding-y $input-padding-x ;
   }
 
   .img-thumbnail img {
