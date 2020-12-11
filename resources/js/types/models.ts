@@ -262,7 +262,7 @@ export interface Firm {
   founded: number;
   youtube_url: string;
   logo: string | null;
-  gallery: string[];
+  assets: Asset[];
   benefits: string[];
   website: string;
   description: string;

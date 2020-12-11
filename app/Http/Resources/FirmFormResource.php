@@ -18,19 +18,8 @@ class FirmFormResource extends JsonResource
 
         return array_merge($data, [
             'benefits'      => $this->resource->benefits->pluck('name')->toArray(),
-            'gallery'       => $this->gallery($this->resource),
+            'assets'        => AssetsResource::collection($this->resource->assets),
             'logo'          => (string) $this->resource->logo->url()
         ]);
-    }
-
-    private function gallery(Firm $firm): array
-    {
-        return $firm
-            ->gallery
-            ->map(function ($gallery) {
-                return (string) $gallery->photo->url();
-            })
-            ->push('')
-            ->toArray();
     }
 }

@@ -54,7 +54,7 @@ trait SubmitsJob
         $firm = $this->firm->loadDefaultFirm($user->id);
         $job->firm()->associate($firm);
 
-        $job->firm->load(['benefits', 'gallery']);
+        $job->firm->load(['benefits', 'assets']);
 
         $job->plan_id = request('default_plan', $this->plan->findDefault()->id);
         $job->email = $user->email;
@@ -81,7 +81,7 @@ trait SubmitsJob
             $job->firm()->associate($job->firm);
             // remove old benefits and save new ones.
             $job->firm->benefits()->push($job->firm->benefits);
-            $job->firm->gallery()->push($job->firm->gallery);
+            $job->firm->assets()->sync($this->request->input('assets'));
         }
 
         $job->creating(function (Job $model) use ($user) {

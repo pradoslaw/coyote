@@ -58,7 +58,7 @@ class SubmitController extends Controller
         $this->breadcrumb($job);
 
         // get all firms assigned to user...
-        $this->firm->pushCriteria(new EagerLoading(['benefits', 'gallery']));
+        $this->firm->pushCriteria(new EagerLoading(['benefits', 'assets']));
 
         $firms = FirmResource::collection($this->firm->findAllBy('user_id', $this->userId));
 

@@ -2,7 +2,7 @@
 
 namespace Coyote;
 
-use Coyote\Firm\Gallery;
+use Coyote\Models\Asset;
 use Coyote\Services\Eloquent\HasMany;
 use Coyote\Services\Media\Factory as MediaFactory;
 use Coyote\Services\Media\Logo;
@@ -25,7 +25,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $vat_id
  * @property int $country_id
  * @property \Coyote\Firm\Benefit[] $benefits
- * @property \Coyote\Firm\Gallery[] $gallery
+ * @property Asset[] $assets
  * @property Logo $logo
  * @property \Coyote\Country $country
  */
@@ -110,21 +110,11 @@ class Firm extends Model
     }
 
     /**
-     * @return HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
-    public function gallery()
+    public function assets()
     {
-        $instance = new Firm\Gallery();
-
-        return new HasMany($instance->newQuery(), $this, $instance->getTable() . '.' . $this->getForeignKey(), $this->getKeyName());
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function photos()
-    {
-        return $this->hasMany(Gallery::class);
+        return $this->morphMany(Asset::class, 'content');
     }
 
     /**
@@ -160,14 +150,14 @@ class Firm extends Model
         return $this->attributes['logo'];
     }
 
-//    public function setLogoAttribute($logo)
-//    {
-//        $this->attributes['logo'] = null;
-//
-//        if ($logo) {
-//            $this->attributes['logo'] = basename($logo);
-//        }
-//    }
+    public function setLogoAttribute($logo)
+    {
+        $this->attributes['logo'] = null;
+
+        if ($logo) {
+            $this->attributes['logo'] = parse_url($logo, PHP_URL_PATH);
+        }
+    }
 
     public function setYoutubeUrlAttribute($value)
     {
@@ -189,20 +179,20 @@ class Firm extends Model
         }
     }
 
-    public function setGalleryAttribute($gallery)
-    {
-        $models = [];
-
-        foreach ($gallery as $photo) {
-            if (!empty($photo)) {
-                $models[] = new Firm\Gallery(['file' => basename($photo)]);
-            }
-        }
-
-        if ($models) {
-            $this->setRelation('gallery', collect($models));
-        }
-    }
+//    public function setGalleryAttribute($gallery)
+//    {
+//        $models = [];
+//
+//        foreach ($gallery as $photo) {
+//            if (!empty($photo)) {
+//                $models[] = new Firm\Gallery(['file' => basename($photo)]);
+//            }
+//        }
+//
+//        if ($models) {
+//            $this->setRelation('gallery', collect($models));
+//        }
+//    }
 
     /**
      * @param string $country

@@ -76,11 +76,14 @@
         <div class="row mb-2">
           <div class="col-sm-2" v-for="photo in gallery">
             <vue-thumbnail
-              :url="photo"
-              upload-url="/Firma/Gallery"
+              :url="photo.url"
               @upload="addPhoto"
               @delete="removePhoto">
             </vue-thumbnail>
+          </div>
+
+          <div class="col-sm-2">
+            <vue-thumbnail @upload="addPhoto"></vue-thumbnail>
           </div>
         </div>
       </div>
@@ -281,7 +284,7 @@
     }
 
     get gallery() {
-      return this.firm.gallery?.length ? this.firm.gallery : {'file': ''};
+      return this.firm.assets?.length ? this.firm.assets : [];
     }
 
     get founded() {
