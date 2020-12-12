@@ -6,7 +6,7 @@
       </ul>
 
       <input
-        v-model="inputText"
+        v-model="searchText"
         :style="`width: ${inputWidth}`"
         :placeholder="placeholder"
         @keyup.space="applyTag"
@@ -21,6 +21,8 @@
         name="tags"
       >
     </div>
+
+    <span class="form-text text-warning">Tag nie istnieje. Czy jesteś przekonany aby go dodać zamiast wybrać któryś z istniejących?</span>
 
     <vue-dropdown :items="filteredTags" @select="toggleTag" :default-index="-1" ref="dropdown" class="tag-dropdown">
       <template v-slot:item="slot">
@@ -67,11 +69,11 @@
     @Ref('cloud')
     readonly cloud!: HTMLElement;
 
-    private inputText: string = '';
+    private searchText: string = '';
     private filteredTags = [];
     private inputWidth = '100%';
 
-    @Watch('inputText')
+    @Watch('searchText')
     searchResults(newVal) {
       if (!newVal) {
         return;
@@ -81,7 +83,7 @@
     }
 
     toggleTag(tag: Tag) {
-      this.inputText = '';
+      this.searchText = '';
       this.input.focus();
 
       this.$emit('change', tag);
@@ -90,7 +92,7 @@
 
     applyTag() {
       const filterValue = () => {
-        let input = this.inputText.trim().toLowerCase().replace(/[^a-ząęśżźćółń0-9\-\.#\+\s]/gi, '')
+        let input = this.searchText.trim().toLowerCase().replace(/[^a-ząęśżźćółń0-9\-\.#\+\s]/gi, '')
 
         if (input.startsWith('#')) {
           input = name.substr(1);
