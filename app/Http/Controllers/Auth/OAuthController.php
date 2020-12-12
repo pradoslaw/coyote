@@ -51,8 +51,8 @@ class OAuthController extends Controller
      */
     public function callback($provider)
     {
-        if (!$this->request->filled('code') || $this->request->filled('denied')) {
-            return redirect()->route('login');
+        if (!$this->request->filled('code') || $this->request->filled('error')) {
+            return redirect()->route('login', ['error' => $this->request->input('error_description')]);
         }
 
         $oauth = $this->getSocialiteFactory()->driver($provider)->stateless()->user();
