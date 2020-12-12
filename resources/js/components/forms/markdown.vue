@@ -64,7 +64,12 @@
 
       <div class="row no-gutters border-top pt-2 pl-1 pr-1">
         <div class="small mr-auto">
-          <i v-if="isProcessing" class="fas fa-spinner fa-spin small"></i>
+          <template v-if="isProcessing">
+            <i class="fas fa-spinner fa-spin small"></i>
+
+            <span class="small">{{ progress }}%</span>
+          </template>
+
           <a v-else :aria-label="uploadTooltip" data-balloon-pos="right" data-balloon-nofocus href="javascript:" class="small text-muted" @click="chooseFile">
             <i class="far fa-image"></i>
 
@@ -209,6 +214,8 @@
     previewHtml: string = '';
     currentTab: number = 0;
     isProcessing = false;
+    progress = 0;
+    tabs: string[] = [CONTENT, PREVIEW];
 
     @Ref('input')
     readonly input!: HTMLTextAreaElement;
@@ -230,9 +237,6 @@
 
     @Prop({default: true})
     readonly autoInsertAssets!: boolean;
-
-    @Prop({default: () => [CONTENT, PREVIEW]})
-    readonly tabs!: string[];
 
     @Prop({default: '/completion/prompt'})
     readonly promptUrl!: string;
@@ -272,8 +276,13 @@
     chooseFile() {
       const Thumbnail = new VueThumbnail({propsData: {name: 'asset'}}).$mount();
 
+      this.progress = 0;
+
       Thumbnail.$on('upload', this.addAsset);
-      Thumbnail.$on('progress', progress => this.isProcessing = progress > 0 && progress < 100);
+      Thumbnail.$on('progress', progress => {
+        this.progress = progress;
+        this.isProcessing = progress > 0 && progress < 100
+      });
 
       Thumbnail.openDialog();
     }
