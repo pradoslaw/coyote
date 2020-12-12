@@ -137,14 +137,6 @@ abstract class File implements MediaInterface
     }
 
     /**
-     * @return bool
-     */
-    public function isImage()
-    {
-        return in_array(pathinfo($this->getFilename(), PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']);
-    }
-
-    /**
      * @return string
      */
     public function __toString()

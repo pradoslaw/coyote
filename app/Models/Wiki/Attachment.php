@@ -56,7 +56,7 @@ class Attachment extends Model
             $photo = app(MediaFactory::class)->make('attachment', [
                 'file_name' => $value,
                 'name' => $this->attributes['name'],
-                'download_url' => $this->wiki_id ? route('wiki.download', [$this->wiki_id, $this->id]) : ''
+//                'download_url' => $this->wiki_id ? route('wiki.download', [$this->wiki_id, $this->id], false) : ''
             ]);
 
             $this->attributes['file'] = $photo;

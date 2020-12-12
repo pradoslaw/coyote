@@ -55,9 +55,4 @@ interface MediaInterface
      * @return MediaInterface
      */
     public function upload(UploadedFile $uploadedFile);
-
-    /**
-     * @return bool
-     */
-    public function isImage();
 }
