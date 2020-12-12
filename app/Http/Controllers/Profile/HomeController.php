@@ -5,7 +5,7 @@ namespace Coyote\Http\Controllers\Profile;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Controllers\User\UserMenuTrait;
 use Coyote\Http\Requests\SkillsRequest;
-use Coyote\Http\Resources\Api\MicroblogResource;
+use Coyote\Http\Resources\MicroblogCollection;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface as ReputationRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
@@ -150,11 +150,11 @@ class HomeController extends Controller
         /** @var Builder $builder */
         $builder = app(Builder::class);
 
-        $microblogs = $builder->orderById()->onlyUsers($user)->paginate();
+        $paginator = $builder->orderById()->onlyUsers($user)->paginate();
 
         return view('profile.partials.microblog', [
             'user'          => $user,
-            'pagination'    => MicroblogResource::collection($microblogs)->response()->getContent()
+            'pagination'    => new MicroblogCollection($paginator)
         ]);
     }
 }
