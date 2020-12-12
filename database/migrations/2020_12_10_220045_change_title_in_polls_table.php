@@ -26,7 +26,7 @@ class ChangeTitleInPollsTable extends Migration
     public function down()
     {
         Schema::table('polls', function (Blueprint $table) {
-            $table->string('title')->nullable(false)->change();
+            //
         });
     }
 }

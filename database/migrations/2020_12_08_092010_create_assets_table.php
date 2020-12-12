@@ -26,7 +26,7 @@ class CreateAssetsTable extends Migration
             $table->integer('count')->default(0);
         });
 
-        $attachments = \Coyote\Post\Attachment::all();
+        $attachments = \Coyote\Post\Attachment::orderBy('id')->get();
         $seq = 0;
 
         foreach ($attachments as $attachment) {
@@ -114,7 +114,7 @@ class CreateAssetsTable extends Migration
 
         unset($microblogs);
 
-        $users = \Coyote\User::whereNotNull('photo')->get();
+        $users = \Coyote\User::whereNotNull('photo')->where('photo', '!=', '')->get();
 
         foreach ($users as $user) {
             $path = $this->getPath('photo/', $user->photo);
