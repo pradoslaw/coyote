@@ -33,9 +33,9 @@
         </div>
 
         <div class="btn-group mr-2" role="group">
-          <button @click="insertAtCaret('<br>', '*')" type="button" class="btn btn-sm" title="Wypunktowanie"><i class="fas fa-list-ul fa-fw"></i></button>
+          <button @click="insertAtCaret('<br>', '* ')" type="button" class="btn btn-sm" title="Wypunktowanie"><i class="fas fa-list-ul fa-fw"></i></button>
           <button @click="insertAtCaret('<br>', '1. ')" type="button" class="btn btn-sm" title="Numerowanie"><i class="fas fa-list-ol fa-fw"></i></button>
-          <button @click="insertAtCaret('![title', '](http://)')" type="button" class="btn btn-sm" title="Obraz"><i class="fas fa-image fa-fw"></i></button>
+          <button @click="insertAtCaret('![', '](http://)')" type="button" class="btn btn-sm" title="Obraz"><i class="fas fa-image fa-fw"></i></button>
           <button @click="insertAtCaret('[', '](http://)')" type="button" class="btn btn-sm" title="Link"><i class="fas fa-link fa-fw"></i></button>
           <button @click="insertAtCaret('<br>Nagłówek 1 | Nagłówek 2<br>---------------- | -------------------<br>Kolumna1 | Kolumna 2<br>', '')" type="button" class="btn btn-sm" title="Tabela"><i class="fas fa-table fa-fw"></i></button>
         </div>
