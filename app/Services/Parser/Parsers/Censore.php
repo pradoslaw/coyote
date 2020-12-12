@@ -28,14 +28,19 @@ class Censore extends Parser implements ParserInterface
      */
     public function parse($text)
     {
+        static $result;
+
         $text = $this->hashBlock($text, ['code', 'a']);
         $text = $this->hashInline($text, 'img');
 
+        if ($result === null) {
+            $result = $this->word->getResultSet();
+        }
         $words = [];
 
-        foreach ($this->word->all() as $row) {
-            $word = '#(?<![\p{L}\p{N}_])' . str_replace('\*', '(\p{L}*?)', preg_quote($row['word'])) . '(?![\p{L}\p{N}_])#iu';
-            $words[$word] = $row['replacement'];
+        foreach ($result as $row) {
+            $word = '#(?<![\p{L}\p{N}_])' . str_replace('\*', '(\p{L}*?)', preg_quote($row->word)) . '(?![\p{L}\p{N}_])#iu';
+            $words[$word] = $row->replacement;
         }
 
         $text = preg_replace(array_keys($words), array_values($words), $text);
