@@ -34,7 +34,7 @@ class Censore extends Parser implements ParserInterface
         $text = $this->hashInline($text, 'img');
 
         if ($result === null) {
-            $result = $this->word->getResultSet();
+            $result = $this->word->allWords();
         }
         $words = [];
 
