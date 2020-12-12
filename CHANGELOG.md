@@ -5,6 +5,7 @@
 - Migracja do phpunit 8
 - Usunięcie codeception
 - Migracja na PHP 7.4
+- Ujednolicenie edytora markdown oraz sposobu dodawania załączników
 
 **Forum**
 - Walidacja tagów: ponowne użycie skasowanego tagu nie jest możliwe
