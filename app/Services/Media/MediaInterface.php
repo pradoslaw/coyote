@@ -55,4 +55,10 @@ interface MediaInterface
      * @return MediaInterface
      */
     public function upload(UploadedFile $uploadedFile);
+
+    /**
+     * @param mixed $content
+     * @return MediaInterface
+     */
+    public function put($content);
 }

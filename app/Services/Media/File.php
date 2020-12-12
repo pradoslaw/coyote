@@ -3,10 +3,12 @@
 namespace Coyote\Services\Media;
 
 use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Support\Str;
 use Intervention\Image\Filters\FilterInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Intervention\Image\ImageManager;
 use Symfony\Component\Mime\MimeTypes;
+use Illuminate\Http\File as LaravelFile;
 
 abstract class File implements MediaInterface
 {
@@ -131,6 +133,30 @@ abstract class File implements MediaInterface
         $this->setName($uploadedFile->getClientOriginalName());
 
         $path = $this->filesystem->putFile($this->directory, $uploadedFile, 'public');
+        $this->setFilename($path);
+
+        return $this;
+    }
+
+    /**
+     * @param mixed $content
+     * @return MediaInterface
+     */
+    public function put($content)
+    {
+        $tmpFilePath = sys_get_temp_dir() . '/' . Str::uuid()->toString();
+        file_put_contents($tmpFilePath, $content);
+
+        $tmpFile = new LaravelFile($tmpFilePath);
+
+        $this->setName($tmpFile->getFilename());
+
+        $path = $this->filesystem->putFile(
+            $this->directory,
+            $tmpFile,
+            'public'
+        );
+
         $this->setFilename($path);
 
         return $this;
