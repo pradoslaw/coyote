@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Job;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\FlagFactory;
+use Coyote\Http\Resources\AssetsResource;
 use Coyote\Http\Resources\CommentCollection;
 use Coyote\Http\Resources\FlagResource;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
@@ -73,7 +74,8 @@ class OfferController extends Controller
             'tags'              => $job->tags()->orderBy('priority', 'DESC')->with('category')->get()->groupCategory(),
             'comments'          => $comments->toArray($this->request),
             'applications'      => $this->applications($job),
-            'flags'             => $this->flags()
+            'flags'             => $this->flags(),
+            'assets'            => AssetsResource::collection($job->firm->assets)->toArray($this->request)
         ])->with(
             compact('job', 'mlt')
         );
