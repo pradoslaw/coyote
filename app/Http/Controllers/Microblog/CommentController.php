@@ -4,16 +4,12 @@ namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Events\MicroblogSaved;
 use Coyote\Events\MicroblogWasDeleted;
-use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Requests\MicroblogRequest;
 use Coyote\Http\Resources\MicroblogResource;
 use Coyote\Http\Resources\MicroblogCollection;
 use Coyote\Microblog;
-use Coyote\Notifications\Microblog\UserMentionedNotification;
-use Coyote\Notifications\Microblog\SubmittedNotification;
 use Coyote\Repositories\Criteria\Microblog\LoadUserScope;
 use Coyote\Repositories\Criteria\WithTrashed;
-use Coyote\Services\Parser\Helpers\Login as LoginHelper;
 use Coyote\Services\Parser\Helpers\Hash as HashHelper;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
@@ -22,7 +18,6 @@ use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Objects\Microblog as Stream_Microblog;
 use Coyote\Services\Stream\Objects\Comment as Stream_Comment;
-use Illuminate\Contracts\Notifications\Dispatcher;
 
 class CommentController extends BaseController
 {
@@ -50,12 +45,11 @@ class CommentController extends BaseController
 
     /**
      * @param MicroblogRequest $request
-     * @param Dispatcher $dispatcher
      * @param \Coyote\Microblog $microblog
      * @return MicroblogResource
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function save(MicroblogRequest $request, Dispatcher $dispatcher, ?Microblog $microblog)
+    public function save(MicroblogRequest $request, ?Microblog $microblog)
     {
         $this->user->pushCriteria(new WithTrashed());
 
@@ -71,7 +65,7 @@ class CommentController extends BaseController
 
         $isSubscribed = false;
 
-        $this->transaction(function () use ($microblog, $dispatcher, &$isSubscribed) {
+        $this->transaction(function () use ($microblog, &$isSubscribed) {
             $microblog->save();
 
             // we need to get parent entry only for notification

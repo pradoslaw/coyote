@@ -15,7 +15,6 @@ use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Objects\Microblog as Stream_Microblog;
-use Illuminate\Contracts\Notifications\Dispatcher;
 use Illuminate\Http\Request;
 
 /**
@@ -41,12 +40,11 @@ class SubmitController extends Controller
 
     /**
      * @param MicroblogRequest $request
-     * @param Dispatcher $dispatcher
      * @param $microblog
      * @return MicroblogResource
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function save(MicroblogRequest $request, Dispatcher $dispatcher, ?Microblog $microblog)
+    public function save(MicroblogRequest $request, ?Microblog $microblog)
     {
         $this->user->pushCriteria(new WithTrashed());
 
