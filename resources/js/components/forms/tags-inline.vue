@@ -22,8 +22,6 @@
       >
     </div>
 
-    <span class="form-text text-warning">Tag nie istnieje. Czy jesteś przekonany aby go dodać zamiast wybrać któryś z istniejących?</span>
-
     <vue-dropdown :items="filteredTags" @select="toggleTag" :default-index="-1" ref="dropdown" class="tag-dropdown">
       <template v-slot:item="slot">
         <span>{{ slot.item.name }}</span>
