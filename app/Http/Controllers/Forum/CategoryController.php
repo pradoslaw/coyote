@@ -7,6 +7,7 @@ use Coyote\Http\Factories\FlagFactory;
 use Coyote\Http\Resources\Api\ForumCollection;
 use Coyote\Http\Resources\FlagResource;
 use Coyote\Http\Resources\TopicCollection;
+use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Repositories\Criteria\Topic\BelongsToForum;
 use Coyote\Repositories\Criteria\Topic\StickyGoesFirst;
 use Coyote\Services\Forum\TreeBuilder\Builder;
@@ -29,6 +30,7 @@ class CategoryController extends BaseController
         $this->pushForumCriteria();
 
         $forumList = (new ListDecorator(new Builder($this->forum->list())))->build();
+        $gate = $this->getGateFactory();
 
         $forums = $this
             ->forum
@@ -57,10 +59,10 @@ class CategoryController extends BaseController
 
         // we need to get an information about flagged topics. that's how moderators can notice
         // that's something's wrong with posts.
-        if ($paginate->total() > 0 && $this->getGateFactory()->allows('delete', $forum)) {
-            $flags = FlagResource::collection(
-                $this->getFlagFactory()->findAllByModel(Topic::class)
-            );
+        if ($paginate->total() > 0 && $gate->allows('delete', $forum)) {
+            $paginate->load('flags');
+
+            $flags = FlagResource::collection($paginate->pluck('flags')->values()->flatten());
         }
 
         $guest = new Guest($this->guestId);

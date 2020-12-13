@@ -57,11 +57,11 @@ class HomeController extends BaseController
         $popular = $this->microblog->takePopular(5);
 
         return $this->view('microblog.home', [
+            'flags'                     => $this->flags($paginator),
             'count'                     => $this->microblog->count(),
             'count_user'                => $this->microblog->countForUser($this->userId),
             'pagination'                => new MicroblogCollection($paginator),
-            'route'                     => request()->route()->getName(),
-            'flags'                     => $this->flags()
+            'route'                     => request()->route()->getName()
         ])->with(compact('tags', 'popular'));
     }
 
@@ -110,9 +110,9 @@ class HomeController extends BaseController
         $resource->preserverKeys();
 
         return $this->view('microblog.view')->with([
+            'flags' => $this->flags($microblog),
             'microblog' => $resource,
-            'excerpt' => $excerpt,
-            'flags' => $this->flags()
+            'excerpt' => $excerpt
         ]);
     }
 }

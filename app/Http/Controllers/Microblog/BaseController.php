@@ -6,22 +6,25 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\FlagFactory;
 use Coyote\Http\Resources\FlagResource;
 use Coyote\Microblog;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class BaseController extends Controller
 {
     use FlagFactory;
 
-    /**
-     * @return array
-     */
-    protected function flags(): array
+    protected function flags($paginator): array
     {
         if (!$this->userId || !$this->auth->can('microblog-delete')) {
             return [];
         }
 
-        $repository = $this->getFlagFactory();
-        $flags = $repository->findAllByModel(Microblog::class);
+        $paginator->load('flags');
+
+        if ($paginator instanceof LengthAwarePaginator) {
+            $flags = $paginator->pluck('flags')->values()->flatten();
+        } else {
+            $flags = $paginator->flags;
+        }
 
         return FlagResource::collection($flags)->toArray($this->request);
     }

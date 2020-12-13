@@ -84,6 +84,15 @@ class Microblog extends Model
         static::addGlobalScope(resolve(UserRelationsScope::class));
     }
 
+    public function flags()
+    {
+        return $this
+            ->morphToMany(Flag::class, 'resource', 'flag_resources')
+            ->addSelect(['flags.*', 'users.name AS user_name', 'flag_types.name'])
+            ->join('flag_types', 'flag_types.id', '=', 'type_id')
+            ->join('users', 'users.id', '=', 'user_id');
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */

@@ -2,6 +2,8 @@
 
 namespace Coyote\Http\Resources;
 
+use Coyote\Microblog;
+
 class MicroblogResource extends Api\MicroblogResource
 {
     public function toArray($request)
@@ -14,7 +16,7 @@ class MicroblogResource extends Api\MicroblogResource
         return array_merge($result, [
             'assets'        => $assets,
             'is_sponsored'  => $this->resource->is_sponsored,
-            'metadata'      => encrypt(['permission' => 'microblog-delete', 'microblog_id' => $this->resource->id])
+            'metadata'      => encrypt([Microblog::class => $this->resource->id])
         ]);
     }
 }

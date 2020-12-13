@@ -11,8 +11,6 @@ use Coyote\Http\Resources\FlagResource;
 use Coyote\Http\Resources\PollResource;
 use Coyote\Http\Resources\PostCollection;
 use Coyote\Http\Resources\TopicResource;
-use Coyote\Post;
-use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Post\WithSubscribers;
 use Coyote\Repositories\Criteria\WithTrashed;
@@ -60,7 +58,6 @@ class TopicController extends BaseController
         if ($this->gate->allows('delete', $forum)) {
             $this->post->pushCriteria(new WithTrashed());
             $this->post->pushCriteria(new WithTrashedInfo());
-            $this->post->pushCriteria(new EagerLoading('flags'));
 
             // user is able to see real number of posts in this topic
             $topic->replies = $topic->replies_real;
@@ -93,14 +90,11 @@ class TopicController extends BaseController
 
         $tracker = Tracker::make($topic);
 
-        $resource = (new PostCollection($paginate))
-            ->setRelations($topic, $forum)
-            ->setTracker($tracker);
-
         $allForums = [];
         $reasons = null;
 
         if ($this->gate->allows('delete', $forum) || $this->gate->allows('move', $forum)) {
+            $paginate->load('flags');
             $reasons = Reason::pluck('name', 'id')->toArray();
 
             $this->forum->resetCriteria();
@@ -111,6 +105,10 @@ class TopicController extends BaseController
 
             $allForums = (new JsonDecorator($treeBuilder))->build();
         }
+
+        $resource = (new PostCollection($paginate))
+            ->setRelations($topic, $forum)
+            ->setTracker($tracker);
 
         $dateTime = $paginate->last()->created_at;
         // first, build array of posts with info which posts have been read
@@ -137,7 +135,7 @@ class TopicController extends BaseController
             'all_forums'    => $allForums,
             'user_forums'   => $userForums,
             'description'   => excerpt(array_first($posts['data'])['text'], 100),
-            'flags'         => $this->flags($paginate)
+            'flags'         => $this->flags($forum, $paginate)
         ]);
     }
 
@@ -160,8 +158,12 @@ class TopicController extends BaseController
         });
     }
 
-    private function flags($paginator): array
+    private function flags(Forum $forum, $paginator): array
     {
+        if (!$this->gate->allows('delete', $forum)) {
+            return [];
+        }
+
         $flags = $paginator->pluck('flags')->values()->flatten();
 
         return FlagResource::collection($flags)->toArray($this->request);

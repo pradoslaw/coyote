@@ -141,11 +141,11 @@ class FlagController extends Controller
     {
         $gate = $this->getGateFactory();
 
-        if ($flag->forums) {
+        if (count($flag->forums)) {
             return $gate->allows('delete', $flag->forums[0]);
-        } elseif ($flag->microblogs) {
+        } elseif (count($flag->microblogs)) {
             return $gate->allows('microblog-delete');
-        } elseif ($flag->jobs) {
+        } elseif (count($flag->jobs)) {
             return $gate->allows('job-delete');
         } else {
             return false;
