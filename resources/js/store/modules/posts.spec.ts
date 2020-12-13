@@ -31,6 +31,10 @@ describe('posts mutation', () => {
     mutations.subscribe(state, post);
 
     expect(post.is_subscribed).toBeTruthy();
+
+    mutations.unsubscribe(state, post);
+
+    expect(post.is_subscribed).toBeFalsy();
   });
 
   test('accepts post', () => {

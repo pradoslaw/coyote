@@ -73,7 +73,11 @@ const mutations = {
   },
 
   subscribe(state, microblog: Microblog) {
-    microblog.is_subscribed = ! microblog.is_subscribed;
+    microblog.is_subscribed = true;
+  },
+
+  unsubscribe(state, microblog: Microblog) {
+    microblog.is_subscribed = false;
   },
 
   vote(state, microblog: Microblog) {
@@ -97,10 +101,6 @@ const mutations = {
     microblog.comments_count = Object.keys(comments).length;
   },
 
-  setSubscribed(state, microblog: Microblog) {
-    microblog.is_subscribed = true;
-  },
-
   setVoters(state, { microblog, voters }) {
     Vue.set(microblog, 'voters', voters);
   }
@@ -108,7 +108,7 @@ const mutations = {
 
 const actions = {
   subscribe({ commit }, microblog: Microblog) {
-    commit('subscribe', microblog);
+    commit(microblog.is_subscribed ? 'unsubscribe' : 'subscribe', microblog);
 
     axios.post(`/Mikroblogi/Subscribe/${microblog.id}`);
   },
@@ -146,10 +146,7 @@ const actions = {
       }
       else {
         commit('addComment', { parent, comment: result.data.data});
-
-        if (result.data.is_subscribed) {
-          commit('setSubscribed', parent);
-        }
+        commit(result.data.is_subscribed ? 'subscribe' : 'unsubscribe', parent);
       }
 
       return result;
