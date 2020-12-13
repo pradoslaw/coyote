@@ -4,6 +4,7 @@ namespace Coyote\Services\Elasticsearch\Builders\Job;
 
 use Coyote\Job;
 use Coyote\Services\Elasticsearch\Filters\Term;
+use Coyote\Services\Elasticsearch\Functions\FieldValueFactor;
 use Coyote\Services\Elasticsearch\Functions\Random;
 use Coyote\Services\Elasticsearch\QueryBuilder;
 use Coyote\Services\Elasticsearch\SimpleQueryString;
@@ -27,6 +28,7 @@ class AdBuilder extends SearchBuilder
         $this->must(new Term('is_ads', true));
         $this->must(new Term('model', class_basename(Job::class)));
 
+        $this->score(new FieldValueFactor('score', 'log', 1));
         $this->score(new Random());
         $this->size(0, 4);
 
