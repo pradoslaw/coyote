@@ -179,7 +179,7 @@
   import Vue from 'vue';
   import Component from "vue-class-component";
   import { Asset } from '../../types/models';
-  import { Ref, Prop, Emit } from "vue-property-decorator";
+  import { Ref, Prop, Emit, Watch } from "vue-property-decorator";
   import { default as Textarea, languages } from '../../libs/textarea';
   import { mixin as clickaway } from 'vue-clickaway';
   import { default as mixin } from '../mixins/form';
@@ -262,6 +262,13 @@
 
       if (this.autoInsertAssets) {
         this.insertAtCaret((IsImage(asset.name!) ? '!' : '') + '[' + asset.name + '](' + asset.url + ')', '');
+      }
+    }
+
+    @Watch('value')
+    clearPreview(value) {
+      if (value === '') {
+        this.previewHtml = '';
       }
     }
 
