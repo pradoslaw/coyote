@@ -8,7 +8,7 @@ function fake(): Microblog {
   return {
     comments: [],
     created_at: new Date(),
-    editable: true,
+    permissions: {update: true},
     html: faker.lorem.words(),
     id: faker.random.number(),
     assets: [],

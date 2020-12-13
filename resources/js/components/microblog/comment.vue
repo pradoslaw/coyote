@@ -73,11 +73,11 @@
         </ul>
       </div>
 
-      <div class="dropdown">
+      <div v-if="isAuthorized" class="dropdown">
         <button class="btn btn-xs border-0 text-muted" type="button" data-toggle="dropdown" aria-label="Dropdown"><i class="small fa fa-ellipsis-h"></i></button>
 
         <div class="dropdown-menu dropdown-menu-right">
-          <template v-if="comment.editable">
+          <template v-if="comment.permissions.update">
             <a @click="edit(comment)" class="dropdown-item btn-sm-edit" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
             <a @click="deleteItem" class="dropdown-item btn-sm-remove" href="javascript:"><i class="fas fa-times fa-fw"></i> Usuń</a>
 

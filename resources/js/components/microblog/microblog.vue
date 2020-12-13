@@ -9,11 +9,11 @@
           </a>
         </div>
         <div class="media-body">
-          <div class="dropdown float-right">
+          <div v-if="isAuthorized" class="dropdown float-right">
             <button class="btn btn-xs border-0 text-muted" type="button" data-toggle="dropdown" aria-label="Dropdown"><i class="fa fa-ellipsis-h"></i></button>
 
             <div class="dropdown-menu dropdown-menu-right">
-              <template v-if="microblog.editable">
+              <template v-if="microblog.permissions.update">
                 <a @click="edit(microblog)" class="dropdown-item btn-edit" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
                 <a @click="deleteItem" class="dropdown-item btn-remove" href="javascript:"><i class="fas fa-times fa-fw"></i> Usuń</a>
 

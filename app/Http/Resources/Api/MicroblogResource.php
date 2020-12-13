@@ -59,9 +59,11 @@ class MicroblogResource extends JsonResource
                     []
                 ),
                 'user'          => UserResource::make($this->user),
-                'editable'      => $this->when($request->user(), function () use ($request) {
-                    return $request->user()->can('update', $this->resource);
-                }),
+
+                'permissions'   => [
+                    'update'    => $this->when($request->user(), fn () => $request->user()->can('update', $this->resource), false)
+                ],
+
                 'comments_count'=> $this->when($this->comments_count, $this->comments_count),
 
                 $this->mergeWhen(array_has($this->resource, ['is_voted', 'is_subscribed']), function () {

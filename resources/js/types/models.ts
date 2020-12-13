@@ -66,7 +66,7 @@ export interface Microblog {
   comments: Microblog[];
   user: User | null
   assets: Asset[];
-  editable?: boolean;
+  permissions: MicroblogPermission;
   comments_count?: number;
   voters?: string[];
   metadata: string;
@@ -92,6 +92,10 @@ export interface Poll {
   expired?: boolean;
   votes?: number[];
   items: PollItem[];
+}
+
+interface MicroblogPermission {
+  update: boolean;
 }
 
 interface PostPermission {
