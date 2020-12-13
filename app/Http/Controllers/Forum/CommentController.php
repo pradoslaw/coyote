@@ -86,7 +86,7 @@ class CommentController extends Controller
 
         PostCommentResource::withoutWrapping();
 
-        return new PostCommentResource($comment);
+        return (new PostCommentResource($comment))->additional(['is_subscribed' => $comment->post->subscribers()->forUser($this->userId)->exists()]);
     }
 
     /**

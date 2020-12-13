@@ -32,16 +32,14 @@ const mutations = {
   },
 
   update(state, post: Post) {
-    let { text, html, edit_count, editor, updated_at } = post; // update only these fields
-
-    Vue.set(state.data, post.id!, {...state.data[post.id!], ...{text, html, edit_count, editor, updated_at}})
+    Vue.set(state.data, post.id!, post)
   },
 
   delete(state, post: Post) {
     post.deleted_at = new Date();
   },
 
-  addComment(state, { post, comment}: ParentChild) {
+  addComment(state, { post, comment }: ParentChild) {
     if (Array.isArray(post.comments)) {
       Vue.set(post, "comments", {});
     }
@@ -106,7 +104,11 @@ const mutations = {
   },
 
   subscribe(state, post: Post) {
-    post.is_subscribed = !post.is_subscribed;
+    post.is_subscribed = true;
+  },
+
+  unsubscribe(state, post: Post) {
+    post.is_subscribed = false;
   },
 
   setVoters(state, { post, voters }) {
@@ -130,9 +132,10 @@ const actions = {
   },
 
   subscribe({ commit }, post: Post) {
-    commit('subscribe', post);
+    const subscribe = () => commit(post.is_subscribed ? 'unsubscribe' : 'subscribe', post);
+    subscribe();
 
-    return axios.post(`/Forum/Post/Subscribe/${post.id}`).catch(() => commit('subscribe', post));
+    return axios.post(`/Forum/Post/Subscribe/${post.id}`).catch(subscribe);
   },
 
   save({ commit, state, getters, rootState, rootGetters }, post: Post) {
@@ -157,9 +160,10 @@ const actions = {
 
   saveComment({ state, commit, getters }, comment: PostComment) {
     return axios.post(`/Forum/Comment/${comment.id || ''}`, comment).then(result => {
-      const post = state.data[result.data.post_id!];
+      const post = state.data[result.data.data.post_id!];
 
-      commit(post.comments[result.data.id!] ? 'updateComment' : 'addComment', { post, comment: result.data });
+      commit(result.data.is_subscribed ? 'subscribe' : 'unsubscribe', post);
+      commit(post.comments[result.data.data.id!] ? 'updateComment' : 'addComment', { post, comment: result.data.data });
     });
   },
 
@@ -188,12 +192,12 @@ const actions = {
     })
   },
 
-  upload({ commit }, { post, form }: { post: Post, form: FormData }) {
-    return axios.post('/Forum/Upload', form)
-      .then(response => {
-        commit('addAttachment', { post: post, attachment: response.data })
-      });
-  },
+  // upload({ commit }, { post, form }: { post: Post, form: FormData }) {
+  //   return axios.post('/Forum/Upload', form)
+  //     .then(response => {
+  //       commit('addAttachment', { post: post, attachment: response.data })
+  //     });
+  // },
 
   changePage({ commit, rootGetters }, page: number) {
     const topic = rootGetters['topics/topic'];
