@@ -19,6 +19,10 @@ export default {
       return Math.abs(value) > 999 ? Math.sign(value) * ((Math.abs(value)/1000).toFixed(1)) + 'k' : Math.sign(value) * Math.abs(value);
     },
 
+    size(size) {
+      return size > 1024 * 1024 ? Math.round(size / 1024 / 1024) + ' MB' : Math.round(size / 1024) + ' KB';
+    },
+
     declination(count, set) {
       return declination(count, set);
     }

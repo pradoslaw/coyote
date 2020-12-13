@@ -142,7 +142,7 @@
                 <i class="fas fa-download"></i>
 
                 <a :href="`/assets/${asset.id}/${asset.name}`">{{ asset.name }}</a>
-                <small>({{ Math.round(asset.size / 1024 / 1024, 2) }} MB) - <em>ściągnięć: {{ asset.count }}</em></small>
+                <small>({{ asset.size | size }}) - <em>ściągnięć: {{ asset.count }}</em></small>
               </li>
             </ul>
 
