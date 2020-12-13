@@ -12,6 +12,7 @@ use Coyote\Http\Resources\PollResource;
 use Coyote\Http\Resources\PostCollection;
 use Coyote\Http\Resources\TopicResource;
 use Coyote\Post;
+use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Post\WithSubscribers;
 use Coyote\Repositories\Criteria\WithTrashed;
@@ -59,6 +60,7 @@ class TopicController extends BaseController
         if ($this->gate->allows('delete', $forum)) {
             $this->post->pushCriteria(new WithTrashed());
             $this->post->pushCriteria(new WithTrashedInfo());
+            $this->post->pushCriteria(new EagerLoading('flags'));
 
             // user is able to see real number of posts in this topic
             $topic->replies = $topic->replies_real;
@@ -135,7 +137,7 @@ class TopicController extends BaseController
             'all_forums'    => $allForums,
             'user_forums'   => $userForums,
             'description'   => excerpt(array_first($posts['data'])['text'], 100),
-            'flags'         => $this->flags($forum)
+            'flags'         => $this->flags($paginate)
         ]);
     }
 
@@ -158,19 +160,11 @@ class TopicController extends BaseController
         });
     }
 
-    /**
-     * @param Forum $forum
-     * @return array
-     */
-    private function flags(Forum $forum): array
+    private function flags($paginator): array
     {
-        if (!$this->gate->allows('delete', $forum)) {
-            return [];
-        }
+        $flags = $paginator->pluck('flags')->values()->flatten();
 
-        $repository = $this->getFlagFactory();
-
-        return FlagResource::collection($repository->findAllByModel(Post::class))->toArray($this->request);
+        return FlagResource::collection($flags)->toArray($this->request);
     }
 
     /**

@@ -5,6 +5,7 @@ namespace Coyote\Http\Resources;
 use Carbon\Carbon;
 use Coyote\Forum;
 use Coyote\Http\Factories\GateFactory;
+use Coyote\Post;
 use Coyote\Post\Comment;
 use Coyote\Services\Forum\Tracker;
 use Coyote\Services\UrlBuilder;
@@ -124,10 +125,9 @@ class PostResource extends JsonResource
             'comments_count'=> $commentsCount,
             'assets'        => AssetsResource::collection($this->resource->assets),
             'metadata'      => encrypt([
-                'post_id'           => $this->id,
-                'topic_id'          => $this->topic_id,
-                'forum_id'          => $this->forum_id,
-                'permission'        => 'delete'
+                Post::class     => $this->id,
+                Topic::class    => $this->topic_id,
+                Forum::class    => $this->forum_id
             ])
         ]);
     }

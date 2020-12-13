@@ -4,7 +4,7 @@ import axios from "axios";
 const state = [];
 
 const getters = {
-  filter: state => (metadata_id: number) => state.filter(flag => flag.metadata_id === metadata_id)
+  filter: state => (resourceId: number) => state.filter(flag => flag.resource_id === resourceId)
 }
 
 const mutations = {

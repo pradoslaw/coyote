@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers;
 
 use Carbon\Carbon;
+use Coyote\Flag;
 use Coyote\Flag\Type;
 use Coyote\Notifications\FlagCreatedNotification;
 use Coyote\Repositories\Contracts\FlagRepositoryInterface as FlagRepository;
@@ -59,37 +60,39 @@ class FlagController extends Controller
      */
     public function save(Request $request)
     {
-        $rules = [
+        $this->validate($request, [
             'url'           => 'required|string',
             'metadata'      => 'required',
             'type_id'       => 'integer|exists:flag_types,id',
             'text'          => 'nullable|string',
             '_token'        => 'throttle'
-        ];
+        ]);
 
-        $validator = $this->getValidationFactory()->make($request->all(), $rules);
-        $validator->after(function ($validator) use ($request) {
-            $metadata = $this->decrypt($request->get('metadata'));
+        $metadata = decrypt($request->input('metadata'));
 
-            if (empty($metadata['permission'])) {
-                $validator->errors()->add('metadata', trans('validation.string', ['attribute' => 'string']));
-            }
-        });
+        $permissions = [];
 
-        $this->validateWith($validator);
-
-        $flag = $this->transaction(function () use ($request) {
+        $flag = $this->transaction(function () use ($request, $metadata) {
             $data = $request->all() + ['user_id' => $this->userId];
-            $data['metadata'] = $this->decrypt($data['metadata']);
 
-            $flag = $this->flag->create($data);
+            /** @var Flag $flag */
+            $flag = Flag::create($data);
+
+            foreach ($metadata as $resource => $id) {
+                $model = strtolower(class_basename($resource));
+                $relation = str_plural($model);
+
+                $permissions[] = "$model-delete";
+
+                $flag->$relation()->attach($id);
+            }
 
             stream(Stream_Create::class, (new Stream_Flag())->map($flag));
 
             return $flag;
         });
 
-        $this->user->pushCriteria(new HasPermission($this->getPermissionName($flag)));
+        $this->user->pushCriteria(new HasPermission($permissions));
 
         $users = $this
             ->user
@@ -108,12 +111,11 @@ class FlagController extends Controller
     }
 
     /**
-     * @param int $id
+     * @param Flag $flag
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function delete(int $id)
+    public function delete(Flag $flag)
     {
-        $flag = $this->flag->findOrFail($id);
         $object = new Stream_Flag(['id' => $flag->id]);
 
         if (!$this->isAuthorized($flag)) {
@@ -125,58 +127,28 @@ class FlagController extends Controller
             $flag->save();
 
             $flag->delete();
+
             stream(Stream_Delete::class, $object);
         });
     }
 
-    /**
-     * @return Encrypter
-     */
-    protected function getCryptFactory()
-    {
-        return app(Encrypter::class);
-    }
-
-    /**
-     * @param $metadata
-     * @return string
-     */
-    protected function decrypt($metadata)
-    {
-        return $this->getCryptFactory()->decrypt($metadata);
-    }
 
     /**
      * @param \Coyote\Flag $flag
      * @return bool
      */
-    private function isAuthorized($flag)
+    private function isAuthorized(Flag $flag)
     {
         $gate = $this->getGateFactory();
 
-        if (isset($flag->metadata->forum_id)) {
-            $forum = $this->forum->findOrFail($flag->metadata->forum_id);
-
-            return $gate->allows($flag->metadata->permission, $forum);
-        } elseif (isset($flag->metadata->permission)) {
-            return $gate->allows($flag->metadata->permission);
+        if ($flag->forums) {
+            return $gate->allows('delete', $flag->forums[0]);
+        } elseif ($flag->microblogs) {
+            return $gate->allows('microblog-delete');
+        } elseif ($flag->jobs) {
+            return $gate->allows('job-delete');
         } else {
             return false;
         }
-    }
-
-    /**
-     * @param \Coyote\Flag $flag
-     * @return string
-     */
-    private function getPermissionName($flag)
-    {
-        $permission = $flag->metadata->permission;
-
-        if (isset($flag->metadata->forum_id)) {
-            $permission = "forum-$permission";
-        }
-
-        return $permission;
     }
 }

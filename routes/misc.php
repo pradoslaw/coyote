@@ -16,8 +16,8 @@ $this->get('/', ['as' => 'home', 'uses' => 'HomeController@index']);
 
 $this->get('Flag', ['uses' => 'FlagController@index', 'as' => 'flag', 'middleware' => 'auth']);
 $this->post('Flag', ['uses' => 'FlagController@save', 'middleware' => 'auth']);
-$this->post('Flag/Delete/{id}', ['uses' => 'FlagController@delete', 'middleware' => 'auth', 'as' => 'flag.delete']);
-$this->get('Flag/Delete/{id}', ['uses' => 'FlagController@modal', 'middleware' => 'auth', 'as' => 'flag.modal']);
+$this->post('Flag/Delete/{flag}', ['uses' => 'FlagController@delete', 'middleware' => 'auth', 'as' => 'flag.delete']);
+$this->get('Flag/Delete/{flag}', ['uses' => 'FlagController@modal', 'middleware' => 'auth', 'as' => 'flag.modal']);
 
 $this->get('sitemap/{sitemap?}', ['uses' => 'SitemapController@index', 'as' => 'sitemap']);
 

@@ -17,6 +17,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Carbon\Carbon $updated_at
  * @property Flag\Type $type
  * @property User $user
+ * @property Forum[] $forums
+ * @property Topic[] $topics
+ * @property Post[] $posts
+ * @property Job[] $jobs
+ * @property Microblog[] $microblogs
  */
 class Flag extends Model
 {
@@ -29,7 +34,7 @@ class Flag extends Model
      *
      * @var array
      */
-    protected $fillable = ['type_id', 'user_id', 'url', 'metadata', 'text', 'moderator_id'];
+    protected $fillable = ['type_id', 'user_id', 'url', 'text', 'moderator_id'];
 
     /**
      * @var string
@@ -64,19 +69,28 @@ class Flag extends Model
         return $this->belongsTo('Coyote\User');
     }
 
-    /**
-     * @param $metadata
-     */
-    public function setMetadataAttribute($metadata)
+    public function posts()
     {
-        $this->attributes['metadata'] = json_encode($metadata);
+        return $this->morphedByMany(Post::class, 'resource', 'flag_resources');
     }
 
-    /**
-     * @return mixed
-     */
-    public function getMetadataAttribute()
+    public function topics()
     {
-        return json_decode($this->attributes['metadata']);
+        return $this->morphedByMany(Topic::class, 'resource', 'flag_resources');
+    }
+
+    public function forums()
+    {
+        return $this->morphedByMany(Forum::class, 'resource', 'flag_resources');
+    }
+
+    public function microblogs()
+    {
+        return $this->morphedByMany(Microblog::class, 'resource', 'flag_resources');
+    }
+
+    public function jobs()
+    {
+        return $this->morphedByMany(Job::class, 'resource', 'flag_resources');
     }
 }

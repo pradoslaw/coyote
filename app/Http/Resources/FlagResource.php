@@ -16,7 +16,7 @@ class FlagResource extends JsonResource
             $this->resource->only(['id', 'name', 'text', 'user_id', 'user_name', 'url']),
             [
                 'created_at' => $this->created_at->toIso8601String(),
-                'metadata_id' => (int) $this->resource->metadata_id
+                'resource_id' => $this->resource->pivot->resource_id
             ]
         );
     }

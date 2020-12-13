@@ -105,7 +105,7 @@
         </div>
 
         <div v-if="!isEditing" class="col-12 col-lg-10">
-          <vue-flag v-for="flag in flags" :key="flag.id" :flag="flag"></vue-flag>
+          <vue-flag v-for="flag in flags" :key="flag.id" :flag.sync="flag"></vue-flag>
 
           <div class="post-vote">
             <strong class="vote-count" title="Ocena postu">{{ post.score }}</strong>
@@ -411,7 +411,7 @@
         this.deleteModal.close();
         store.dispatch('posts/delete', { post: this.post, reasonId: this.reasonId }).then(() => this.isCollapsed = true);
 
-        this.flags.forEach(flag => store.commit('flags/delete', flag));
+        // this.flags.forEach(flag => store.commit('flags/delete', flag));
       }
     }
 

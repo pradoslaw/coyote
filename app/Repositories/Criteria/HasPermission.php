@@ -7,16 +7,16 @@ use Coyote\Repositories\Contracts\RepositoryInterface as Repository;
 class HasPermission extends Criteria
 {
     /**
-     * @var string
+     * @var string[]
      */
-    protected $permission;
+    protected array $permissions;
 
     /**
-     * @param string $permission
+     * @param string[] $permissions
      */
-    public function __construct(string $permission)
+    public function __construct(array $permissions)
     {
-        $this->permission = $permission;
+        $this->permissions = $permissions;
     }
 
     /**
@@ -32,7 +32,7 @@ class HasPermission extends Criteria
                 ->from('permissions')
                 ->join('group_permissions', 'group_permissions.permission_id', '=', 'permissions.id')
                 ->join('group_users', 'group_users.group_id', '=', 'group_permissions.group_id')
-                ->where('name', $this->permission)
+                ->whereIn('name', $this->permissions)
                 ->where('value', 1);
         });
     }
