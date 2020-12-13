@@ -4,7 +4,7 @@ namespace Coyote\Http\Resources;
 
 use Coyote\Services\Media\Factory;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Coyote\Services\Declination\Declination;
+use Coyote\Services\Declination;
 
 /**
  * @property \Carbon\Carbon $read_at

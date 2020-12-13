@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Services\Declination;
 
-use Coyote\Services\Declination\Declination;
+use Coyote\Services\Declination;
 use Tests\TestCase;
 
 class DeclinationTest extends TestCase

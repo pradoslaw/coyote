@@ -2,7 +2,7 @@
 
 namespace Coyote\Services\TwigBridge\Extensions;
 
-use Coyote\Services\Declination\Declination;
+use Coyote\Services\Declination;
 use Twig_Extension;
 use Twig_SimpleFunction;
 use Twig_SimpleFilter;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Services\Declination;
+namespace Coyote\Services;
 
 /**
  * Klasa zawiera metode zwracajaca poprawna forme jezykowa (deklinacja)
