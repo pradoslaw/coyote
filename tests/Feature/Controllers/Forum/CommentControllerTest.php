@@ -100,7 +100,7 @@ class CommentControllerTest extends TestCase
             'editable' => true
         ]);
 
-        $id = $response->decodeResponseJson('id');
+        $id = $response->decodeResponseJson('data.id');
 
         $comment = Post\Comment::find($id);
 
@@ -196,9 +196,10 @@ class CommentControllerTest extends TestCase
             ->actingAs($this->user)
             ->json('POST', "/Forum/Comment/$comment->id", ['text' => $text = $this->faker->realText(), 'post_id' => $this->post->id]);
 
-        $response->assertJsonFragment(['text' => $text]);
+        $data = $response->decodeResponseJson('data');
+        $this->assertEquals($text, $data['text']);
 
-        $id = $response->decodeResponseJson('id');
+        $id = $response->decodeResponseJson('data.id');
 
         $this->assertEquals($id, $comment->id);
     }

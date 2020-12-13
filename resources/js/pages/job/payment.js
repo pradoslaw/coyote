@@ -135,6 +135,8 @@ new Vue({
           this[`${this.form.payment_method}Payment`](response.data)
         })
         .catch(err => {
+          console.error(err);
+
           if (err.response.status !== 422) {
             return;
           }
