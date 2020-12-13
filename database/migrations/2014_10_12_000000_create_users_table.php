@@ -16,10 +16,6 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->string('name', 50)->unique();
             $table->string('email');
-            /*
-             * @deprecated
-             * Musi zostac ze wzgledu na stare hashe w poprzedniej wersji Coyote
-             */
             $table->string('salt', 34)->nullable();
             $table->string('password', 64)->nullable();
             $table->string('provider', 50)->nullable();
