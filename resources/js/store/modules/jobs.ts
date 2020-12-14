@@ -81,6 +81,10 @@ const mutations = {
   },
 
   UPDATE_COMMENT(state, comment) {
+    if (Array.isArray(state.comments)) {
+      Vue.set(state, "comments", {});
+    }
+
     if (comment.parent_id) {
       const parent = state.comments[comment.parent_id];
 
