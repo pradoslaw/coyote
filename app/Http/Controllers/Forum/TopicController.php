@@ -94,7 +94,6 @@ class TopicController extends BaseController
         $reasons = null;
 
         if ($this->gate->allows('delete', $forum) || $this->gate->allows('move', $forum)) {
-            $paginate->load('flags');
             $reasons = Reason::pluck('name', 'id')->toArray();
 
             $this->forum->resetCriteria();
