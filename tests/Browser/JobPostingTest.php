@@ -11,11 +11,13 @@ use Faker\Factory;
 
 class JobPostingTest extends DuskTestCase
 {
+    private User $user;
+
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->user = User::first();
+        $this->user = factory(User::class)->create();
     }
 
     public function testSubmitWithoutFirm()
@@ -23,7 +25,7 @@ class JobPostingTest extends DuskTestCase
         $fake = Factory::create();
 
         $this->browse(function (Browser $browser) use ($fake) {
-            $browser->loginAs(User::first());
+            $browser->loginAs($this->user);
 
             $browser->visit('/Praca/Submit')
                 ->resize(1920, 1080)
@@ -38,6 +40,8 @@ class JobPostingTest extends DuskTestCase
                 ->assertSeeIn('.media-heading', $title)
                 ->assertSeeIn('.salary', $salaryFrom)
                 ->assertSeeIn('.salary', '₣');
+
+            $browser->logout();
         });
     }
 
@@ -46,7 +50,7 @@ class JobPostingTest extends DuskTestCase
         $fake = Factory::create();
 
         $this->browse(function (Browser $browser) use ($fake) {
-            $browser->loginAs(User::first());
+            $browser->loginAs($this->user);
 
             $browser->visit('/Praca/Submit')
                 ->resize(1920, 1080)
@@ -71,16 +75,17 @@ class JobPostingTest extends DuskTestCase
 
             $this->assertDatabaseHas('firms', ['name' => $firm, 'city' => 'Wrocław']);
             $this->assertDatabaseHas('firms', ['name' => $firm, 'youtube_url' => 'https://www.youtube.com/embed/fz2OUoJpR7k']);
+
+            $browser->logout();
         });
     }
 
     public function testSubmitOfferWithSecondFirm()
     {
-        $user = factory(User::class)->create();
-        $firm = factory(Firm::class)->create(['user_id' => $user->id]);
+        $firm = factory(Firm::class)->create(['user_id' => $this->user->id]);
 
-        $this->browse(function (Browser $browser) use ($user, $firm) {
-            $browser->loginAs($user);
+        $this->browse(function (Browser $browser) use ($firm) {
+            $browser->loginAs($this->user);
 
             $fake = Factory::create();
 
@@ -101,16 +106,17 @@ class JobPostingTest extends DuskTestCase
                 ->assertSeeIn('.media-heading', $title)
                 ->assertSeeIn('.employer', 'New firm')
                 ->assertSee($website);
+
+            $browser->logout();
         });
     }
 
     public function testSubmitPrivateJobOfferDespiteHavingFirm()
     {
-        $user = factory(User::class)->create();
-        $firm = factory(Firm::class)->create(['user_id' => $user->id]);
+        $firm = factory(Firm::class)->create(['user_id' => $this->user->id]);
 
-        $this->browse(function (Browser $browser) use ($user, $firm) {
-            $browser->loginAs($user);
+        $this->browse(function (Browser $browser) use ($firm) {
+            $browser->loginAs($this->user);
 
             $fake = Factory::create();
 
@@ -126,40 +132,41 @@ class JobPostingTest extends DuskTestCase
                 ->waitForText('Powrót do ogłoszenia')
                 ->clickLink('Powrót do ogłoszenia')
                 ->assertDontSee($firm->name);
+
+            $browser->logout();
         });
     }
 
     public function testSubmitInvalidForm()
     {
-        $user = factory(User::class)->create();
-
-        $this->browse(function (Browser $browser) use ($user) {
-            $browser->loginAs($user);
+        $this->browse(function (Browser $browser) {
+            $browser->loginAs($this->user);
             $fake = Factory::create();
 
             $browser->visit('/Praca/Submit')
                 ->resize(1920, 1080)
-                ->assertInputValue('email', $user->email)
+                ->assertInputValue('email', $this->user->email)
                 ->press('Zapisz')
                 ->waitForText('Tytuł jest wymagany.')
                 ->type('title', $fake->title)
                 ->press('Zapisz');
+
+            $browser->logout();
         });
     }
 
     public function testSubmitWithFirmPresent()
     {
-        $user = factory(User::class)->create();
         /** @var Firm $firm */
-        $firm = factory(Firm::class)->create(['user_id' => $user->id]);
+        $firm = factory(Firm::class)->create(['user_id' => $this->user->id]);
 
         $this->assertNotEmpty($firm->name);
 
         $firm->benefits()->create(['name' => 'Game-boy']);
         $firm->benefits()->create(['name' => 'TV']);
 
-        $this->browse(function (Browser $browser) use ($user, $firm) {
-            $browser->loginAs($user);
+        $this->browse(function (Browser $browser) use ($firm) {
+            $browser->loginAs($this->user);
             $fake = Factory::create();
 
             $browser->visit('/Praca/Submit')
