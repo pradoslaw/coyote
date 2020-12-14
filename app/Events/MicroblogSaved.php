@@ -2,7 +2,7 @@
 
 namespace Coyote\Events;
 
-use Coyote\Http\Resources\Api\MicroblogResource;
+use Coyote\Http\Resources\MicroblogResource;
 use Coyote\Microblog;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -48,6 +48,9 @@ class MicroblogSaved implements ShouldBroadcast
         $request->setUserResolver(function () {
             return null;
         });
+
+        // don't forget to load assets before sending JSON via websocket
+        $this->microblog->load('assets');
 
         return (new MicroblogResource($this->microblog))->resolve($request);
     }
