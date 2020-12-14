@@ -24,6 +24,8 @@ services:
     tty: true
     networks:
       - coyote
+    ports:
+      - 8888:8888
     environment:
       PORT: 8888
       REDIS_HOST: $REDIS_HOST
