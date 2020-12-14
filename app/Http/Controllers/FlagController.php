@@ -62,7 +62,7 @@ class FlagController extends Controller
         $metadata = decrypt($request->input('metadata'));
         $permissions = [];
 
-        $flag = $this->transaction(function () use ($request, $metadata) {
+        $flag = $this->transaction(function () use ($request, $metadata, $permissions) {
             $data = $request->all() + ['user_id' => $this->userId];
 
             /** @var Flag $flag */

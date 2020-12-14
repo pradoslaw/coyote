@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Factories\GateFactory;
 use Coyote\Http\Resources\Api\ForumCollection;
+use Coyote\Http\Resources\FlagResource;
 use Coyote\Http\Resources\TopicCollection;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
@@ -17,6 +18,7 @@ use Coyote\Repositories\Criteria\Topic\Subscribes;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Topic\WithTags;
 use Coyote\Repositories\Criteria\WithTrashed;
+use Coyote\Services\Flags;
 use Coyote\Services\Guest;
 use Coyote\Topic;
 use Illuminate\Http\Request;
@@ -273,13 +275,8 @@ class HomeController extends BaseController
             ->setGuest($guest)
             ->setRepository($this->topic);
 
-        $flags = [];
-
-        // we need to get an information about flagged topics. that's how moderators can notice
-        // that's something's wrong with posts.
-        if ($topics->total() && $this->getGateFactory()->allows('forum-delete')) {
-            $flags = $this->getFlagFactory()->findAllByModel(Topic::class);
-        }
+        $flags = resolve(Flags::class)->fromModels([Topic::class])->permission('forum-delete')->get();
+        $flags = FlagResource::collection($flags);
 
         $postsPerPage = $this->postsPerPage($this->request);
 
