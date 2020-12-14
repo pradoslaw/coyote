@@ -20,7 +20,6 @@ class CreateFlagResourcesTable extends Migration
             $table->morphs('resource');
 
             $table->foreign('flag_id')->references('id')->on('flags')->onDelete('cascade');
-
         });
     }
 

@@ -13,5 +13,4 @@ class FlagRepository extends Repository implements FlagRepositoryInterface
     {
         return 'Coyote\Flag';
     }
-
 }
