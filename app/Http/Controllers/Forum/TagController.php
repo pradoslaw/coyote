@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Resources\TagResource;
+use Coyote\Reputation;
 use Illuminate\Http\Request;
 use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
 
@@ -44,14 +45,18 @@ class TagController extends BaseController
         return TagResource::collection($tags);
     }
 
-    /**
-     * @param Request $request
-     */
-    public function valid(Request $request)
+    public function validation(Request $request, TagRepository $repository)
     {
-        // we don't wanna tags with "#" at the beginning
-        $request->merge(['t' => ltrim($request['t'], '#')]);
+        if ($this->auth->reputation < Reputation::CREATE_TAGS) {
+            return;
+        }
 
-        $this->validate($request, ['t' => 'required|string|max:25|tag|tag_creation:50']);
+        if (!$repository->exists($request->input('t'))) {
+            return response(sprintf(
+                'Tag <strong>%s</strong> nie istnieje ale możesz go utworzyć.<br><br>Czy jesteś pewien, że jest to <strong>tag techniczny</strong> i chcesz go dodać?',
+                $request->input('t')
+                )
+            );
+        }
     }
 }

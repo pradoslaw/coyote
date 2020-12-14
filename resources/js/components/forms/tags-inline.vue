@@ -9,8 +9,8 @@
         v-model="searchText"
         :style="`width: ${inputWidth}`"
         :placeholder="placeholder"
-        @keyup.space="applyTag"
-        @keyup.enter.prevent="applyTag"
+        @keyup.space="validateTag"
+        @keyup.enter.prevent="validateTag"
         @keyup.esc="dropdown.toggleDropdown(false)"
         @keyup.up.prevent="dropdown.goUp"
         @keyup.down.prevent="dropdown.goDown"
@@ -72,12 +72,12 @@
     private inputWidth = '100%';
 
     @Watch('searchText')
-    searchResults(newVal) {
-      if (!newVal) {
+    filterResults(searchText) {
+      if (!searchText) {
         return;
       }
 
-      axios.get(this.sourceUrl, {params: {q: newVal}}).then(result => this.filteredTags = result.data);
+      axios.get(this.sourceUrl, { params: {q: searchText} }).then(result => this.filteredTags = result.data);
     }
 
     toggleTag(tag: Tag) {
@@ -88,7 +88,7 @@
       this.$nextTick(() => this.calcInputWidth());
     }
 
-    applyTag() {
+    async validateTag() {
       const filterValue = () => {
         let input = this.searchText.trim().toLowerCase().replace(/[^a-ząęśżźćółń0-9\-\.#\+\s]/gi, '')
 
@@ -106,6 +106,18 @@
         return;
       }
 
+      const response = await axios.get('/Forum/Tag/Validation', { params: {t: name }});
+
+      if (response.data === '') {
+        this.applyTag(name);
+      }
+
+      await this.$confirm({ message: response.data, title: 'Dodać nowy tag?', okLabel: 'Tak, jestem pewien' });
+
+      this.applyTag(name);
+    }
+
+    applyTag(name: string) {
       this.toggleTag({ name });
       // @ts-ignore
       this.dropdown.toggleDropdown(false);

@@ -31,7 +31,7 @@ function confirmModal(options: ModalOptions) {
         <vue-modal :ref="modalRef">
           <template slot="title">{{ title }}</template>
 
-          {{ message }}
+          <div v-html="message"></div>
 
           <template slot="buttons">
             <button @click="destroy" type="button" class="btn btn-secondary">Anuluj</button>

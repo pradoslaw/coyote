@@ -28,6 +28,14 @@ class TagRepository extends Repository implements TagRepositoryInterface
             ->get();
     }
 
+    public function exists(string $name): bool
+    {
+        return $this
+            ->model
+            ->where('name', $name)
+            ->exists();
+    }
+
     /**
      * @inheritdoc
      */

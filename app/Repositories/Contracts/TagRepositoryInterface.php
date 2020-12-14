@@ -12,6 +12,8 @@ interface TagRepositoryInterface extends RepositoryInterface
      */
     public function lookupName($name);
 
+    public function exists(string $name): bool;
+
     /**
      * @param string[] $tags
      * @return int[] Ids of tags
