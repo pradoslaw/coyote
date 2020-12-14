@@ -6,11 +6,9 @@ use Carbon\Carbon;
 use Coyote\Flag;
 use Coyote\Flag\Type;
 use Coyote\Notifications\FlagCreatedNotification;
-use Coyote\Repositories\Contracts\FlagRepositoryInterface as FlagRepository;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Repositories\Criteria\HasPermission;
-use Illuminate\Contracts\Encryption\Encrypter;
 use Illuminate\Http\Request;
 use Coyote\Services\Stream\Objects\Flag as Stream_Flag;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
@@ -18,11 +16,6 @@ use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 
 class FlagController extends Controller
 {
-    /**
-     * @var FlagRepository
-     */
-    private $flag;
-
     /**
      * @var ForumRepository
      */
@@ -34,15 +27,13 @@ class FlagController extends Controller
     private $user;
 
     /**
-     * @param FlagRepository $flag
      * @param ForumRepository $forum
      * @param UserRepository $user
      */
-    public function __construct(FlagRepository $flag, ForumRepository $forum, UserRepository $user)
+    public function __construct(ForumRepository $forum, UserRepository $user)
     {
         parent::__construct();
 
-        $this->flag = $flag;
         $this->forum = $forum;
         $this->user = $user;
     }
@@ -69,7 +60,6 @@ class FlagController extends Controller
         ]);
 
         $metadata = decrypt($request->input('metadata'));
-
         $permissions = [];
 
         $flag = $this->transaction(function () use ($request, $metadata) {
@@ -131,7 +121,6 @@ class FlagController extends Controller
             stream(Stream_Delete::class, $object);
         });
     }
-
 
     /**
      * @param \Coyote\Flag $flag

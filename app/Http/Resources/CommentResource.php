@@ -3,6 +3,7 @@
 namespace Coyote\Http\Resources;
 
 use Carbon\Carbon;
+use Coyote\Job;
 use Coyote\Job\Comment;
 use Coyote\Services\UrlBuilder;
 use Coyote\User;
@@ -36,7 +37,7 @@ class CommentResource extends JsonResource
                 'children'      => CommentResource::collection($this->children)->keyBy('id'),
                 'is_author'     => $request->user() ? $this->user_id == $this->job->user_id : false,
                 'url'           => UrlBuilder::jobComment($this->job, $this->id),
-                'metadata'      => encrypt(['comment_id' => $this->id, 'permission' => 'job-delete']),
+                'metadata'      => encrypt([Comment::class => $this->id, Job::class => $this->job_id]),
 
                 'user'          => new UserResource($this->user ?: (new User)->forceFill($this->anonymous()))
             ]

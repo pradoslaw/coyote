@@ -41,7 +41,6 @@ use Illuminate\Database\Query\Builder;
  * @property int $subscribers
  * @property Poll $poll
  * @property Post $firstPost
- * @property Flag[] $flags
  */
 class Topic extends Model
 {
@@ -135,15 +134,6 @@ class Topic extends Model
     {
         $this->attributes['subject'] = trim($subject);
         $this->attributes['slug'] = str_slug($subject, '_');
-    }
-
-    public function flags()
-    {
-        return $this
-            ->morphToMany(Flag::class, 'resource', 'flag_resources')
-            ->addSelect(['flags.*', 'users.name AS user_name', 'flag_types.name'])
-            ->join('flag_types', 'flag_types.id', '=', 'type_id')
-            ->join('users', 'users.id', '=', 'user_id');
     }
 
     /**

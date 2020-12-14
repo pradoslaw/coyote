@@ -2,7 +2,6 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
-use Coyote\Http\Factories\FlagFactory;
 use Coyote\Http\Factories\GateFactory;
 use Coyote\Http\Resources\Api\ForumCollection;
 use Coyote\Http\Resources\TopicCollection;
@@ -27,7 +26,7 @@ use Lavary\Menu\Builder;
 
 class HomeController extends BaseController
 {
-    use GateFactory, FlagFactory;
+    use GateFactory;
 
     /**
      * @var Builder

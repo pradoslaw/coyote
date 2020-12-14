@@ -6,7 +6,6 @@ use Coyote\Events\TopicWasSaved;
 use Coyote\Forum;
 use Coyote\Forum\Reason;
 use Coyote\Http\Factories\CacheFactory;
-use Coyote\Http\Factories\FlagFactory;
 use Coyote\Http\Resources\FlagResource;
 use Coyote\Http\Resources\PollResource;
 use Coyote\Http\Resources\PostCollection;
@@ -16,6 +15,7 @@ use Coyote\Repositories\Criteria\Post\WithSubscribers;
 use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Repositories\Criteria\Post\WithTrashedInfo;
 use Coyote\Services\Elasticsearch\Builders\Forum\MoreLikeThisBuilder;
+use Coyote\Services\Flags;
 use Coyote\Services\Forum\Tracker;
 use Coyote\Services\Forum\TreeBuilder\Builder;
 use Coyote\Services\Forum\TreeBuilder\JsonDecorator;
@@ -25,7 +25,7 @@ use Illuminate\Http\Request;
 
 class TopicController extends BaseController
 {
-    use CacheFactory, FlagFactory;
+    use CacheFactory;
 
     /**
      * @var \Illuminate\Contracts\Auth\Access\Gate
@@ -135,7 +135,7 @@ class TopicController extends BaseController
             'all_forums'    => $allForums,
             'user_forums'   => $userForums,
             'description'   => excerpt(array_first($posts['data'])['text'], 100),
-            'flags'         => $this->flags($forum, $paginate)
+            'flags'         => $this->flags($forum)
         ]);
     }
 
@@ -158,13 +158,9 @@ class TopicController extends BaseController
         });
     }
 
-    private function flags(Forum $forum, $paginator): array
+    private function flags(Forum $forum): array
     {
-        if (!$this->gate->allows('delete', $forum)) {
-            return [];
-        }
-
-        $flags = $paginator->pluck('flags')->values()->flatten();
+        $flags = resolve(Flags::class)->fromModels([Topic::class])->permission('delete', [$forum])->get();
 
         return FlagResource::collection($flags)->toArray($this->request);
     }

@@ -3,13 +3,12 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Events\UserSaved;
-use Coyote\Http\Factories\FlagFactory;
 use Coyote\Http\Resources\Api\ForumCollection;
 use Coyote\Http\Resources\FlagResource;
 use Coyote\Http\Resources\TopicCollection;
-use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Repositories\Criteria\Topic\BelongsToForum;
 use Coyote\Repositories\Criteria\Topic\StickyGoesFirst;
+use Coyote\Services\Flags;
 use Coyote\Services\Forum\TreeBuilder\Builder;
 use Coyote\Services\Forum\TreeBuilder\ListDecorator;
 use Coyote\Services\Guest;
@@ -18,8 +17,6 @@ use Illuminate\Http\Request;
 
 class CategoryController extends BaseController
 {
-    use FlagFactory;
-
     /**
      * @param \Coyote\Forum $forum
      * @param Request $request
@@ -30,7 +27,6 @@ class CategoryController extends BaseController
         $this->pushForumCriteria();
 
         $forumList = (new ListDecorator(new Builder($this->forum->list())))->build();
-        $gate = $this->getGateFactory();
 
         $forums = $this
             ->forum
@@ -55,15 +51,8 @@ class CategoryController extends BaseController
             )
             ->appends($request->except('page'));
 
-        $flags = [];
-
-        // we need to get an information about flagged topics. that's how moderators can notice
-        // that's something's wrong with posts.
-        if ($paginate->total() > 0 && $gate->allows('delete', $forum)) {
-            $paginate->load('flags');
-
-            $flags = FlagResource::collection($paginate->pluck('flags')->values()->flatten());
-        }
+        $flags = resolve(Flags::class)->fromModels([Topic::class])->permission('delete', [$forum])->get();
+        $flags = FlagResource::collection($flags);
 
         $guest = new Guest($this->guestId);
 

@@ -2,7 +2,6 @@
 
 namespace Coyote\Http\Controllers;
 
-use Coyote\Http\Factories\FlagFactory;
 use Coyote\Http\Resources\ActivityResource as ActivityResource;
 use Coyote\Http\Resources\Api\MicroblogResource;
 use Coyote\Http\Resources\FlagResource;
@@ -16,13 +15,12 @@ use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
 use Coyote\Repositories\Criteria\Forum\SkipHiddenCategories;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess as OnlyThoseTopicsWithAccess;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess as OnlyThoseForumsWithAccess;
+use Coyote\Services\Flags;
 use Coyote\Services\Microblogs\Builder;
 use Coyote\Services\Session\Renderer;
 
 class HomeController extends Controller
 {
-    use FlagFactory;
-
     /**
      * @var MicroblogRepository
      */
@@ -202,10 +200,8 @@ class HomeController extends Controller
 
     private function flags()
     {
-        if (!$this->userId || !$this->auth->can('microblog-delete')) {
-            return [];
-        }
+        $flags = $flags = resolve(Flags::class)->fromModels([Microblog::class])->permission('microblog-delete')->get();
 
-        return FlagResource::collection($this->getFlagFactory()->findAllByModel(Microblog::class))->toArray($this->request);
+        return FlagResource::collection($flags)->toArray($this->request);
     }
 }

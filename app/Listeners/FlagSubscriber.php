@@ -5,34 +5,25 @@ namespace Coyote\Listeners;
 use Coyote\Events\MicroblogWasDeleted;
 use Coyote\Events\PostWasDeleted;
 use Coyote\Events\TopicWasDeleted;
-use Coyote\Microblog;
-use Coyote\Post;
-use Coyote\Repositories\Contracts\FlagRepositoryInterface as FlagRepository;
-use Coyote\Topic;
+use Coyote\Flag;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Eloquent\Builder;
 
 class FlagSubscriber implements ShouldQueue
 {
-    private $repository;
-
-    public function __construct(FlagRepository $repository)
-    {
-        $this->repository = $repository;
-    }
-
     public function handleTopicDelete(TopicWasDeleted $event)
     {
-        $this->repository->deleteByModel(Topic::class, $event->topic['id']);
+        Flag::whereHas('topics', fn (Builder $query) => $query->withTrashed()->where('id', $event->topic['id']))->delete();
     }
 
     public function handlePostDelete(PostWasDeleted $event)
     {
-        $this->repository->deleteByModel(Post::class, $event->post['id']);
+        Flag::whereHas('posts', fn (Builder $query) => $query->withTrashed()->where('id', $event->post['id']))->delete();
     }
 
     public function handleMicroblogDelete(MicroblogWasDeleted $event)
     {
-        $this->repository->deleteByModel(Microblog::class, $event->microblog['id']);
+        Flag::whereHas('microblogs', fn (Builder $query) => $query->withTrashed()->where('id', $event->microblog['id']))->delete();
     }
 
     public function subscribe($events)

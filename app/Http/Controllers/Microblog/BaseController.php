@@ -3,28 +3,15 @@
 namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\Http\Factories\FlagFactory;
 use Coyote\Http\Resources\FlagResource;
 use Coyote\Microblog;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Coyote\Services\Flags;
 
 class BaseController extends Controller
 {
-    use FlagFactory;
-
-    protected function flags($paginator): array
+    protected function flags(): array
     {
-        if (!$this->userId || !$this->auth->can('microblog-delete')) {
-            return [];
-        }
-
-        $paginator->load('flags');
-
-        if ($paginator instanceof LengthAwarePaginator) {
-            $flags = $paginator->pluck('flags')->values()->flatten();
-        } else {
-            $flags = $paginator->flags;
-        }
+        $flags = $flags = resolve(Flags::class)->fromModels([Microblog::class])->permission('microblog-delete')->get();
 
         return FlagResource::collection($flags)->toArray($this->request);
     }

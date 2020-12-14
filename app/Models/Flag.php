@@ -2,6 +2,7 @@
 
 namespace Coyote;
 
+use Coyote\Models\Flag\Resource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -69,6 +70,11 @@ class Flag extends Model
         return $this->belongsTo('Coyote\User');
     }
 
+    public function resources()
+    {
+        return $this->hasMany(Resource::class);
+    }
+
     public function posts()
     {
         return $this->morphedByMany(Post::class, 'resource', 'flag_resources');
@@ -92,5 +98,10 @@ class Flag extends Model
     public function jobs()
     {
         return $this->morphedByMany(Job::class, 'resource', 'flag_resources');
+    }
+
+    public function comments()
+    {
+        return $this->morphedByMany(Job\Comment::class, 'resource', 'flag_resources');
     }
 }

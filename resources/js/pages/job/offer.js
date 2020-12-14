@@ -29,7 +29,7 @@ new Vue({
   },
   computed: {
     flags() {
-      return store.getters['flags/filter'](this.job.id);
+      return store.getters['flags/filter'](this.job.id, 'Coyote\\Job').filter(flag => flag.resources.length === 1);
     }
   }
 });

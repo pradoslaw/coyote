@@ -154,7 +154,7 @@
       },
 
       flag() {
-        const flags = this.$store.getters['flags/filter'](this.topic.id);
+        const flags = this.$store.getters['flags/filter'](this.topic.id, 'Coyote\\Topic');
 
         return flags.length ? flags[0].url : null;
       },

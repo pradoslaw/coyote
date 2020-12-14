@@ -12,15 +12,19 @@ export interface Flag {
   name: string;
   text: string;
   created_at: Date;
-  user_id: number;
-  user_name: string;
-  metadata_id?: number;
+  user: User;
+  resources: FlagResource;
 }
 
 export interface FlagType {
   id: number;
   name: string;
   description: string;
+}
+
+export interface FlagResource {
+  resource_id: number;
+  resource_type: string;
 }
 
 export interface User {

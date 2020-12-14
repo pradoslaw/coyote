@@ -2,7 +2,7 @@
   <div class="alert alert-danger alert-report">
     <button @click="$refs.modal.open()" type="button" class="close" data-dismiss="alert" aria-label="Close" title="Usuń"><span aria-hidden="true">&times;</span></button>
 
-    <vue-username :user="{id: flag.user_id, name: flag.user_name}" class="alert-link"></vue-username>
+    <vue-username :user="flag.user" class="alert-link"></vue-username>
     z powodu <strong>{{ flag.name }}</strong>
     dnia <vue-timeago :datetime="flag.created_at"></vue-timeago>
 

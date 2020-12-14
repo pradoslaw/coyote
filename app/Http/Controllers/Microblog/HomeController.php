@@ -57,7 +57,7 @@ class HomeController extends BaseController
         $popular = $this->microblog->takePopular(5);
 
         return $this->view('microblog.home', [
-            'flags'                     => $this->flags($paginator),
+            'flags'                     => $this->flags(),
             'count'                     => $this->microblog->count(),
             'count_user'                => $this->microblog->countForUser($this->userId),
             'pagination'                => new MicroblogCollection($paginator),
@@ -110,7 +110,7 @@ class HomeController extends BaseController
         $resource->preserverKeys();
 
         return $this->view('microblog.view')->with([
-            'flags' => $this->flags($microblog),
+            'flags' => $this->flags(),
             'microblog' => $resource,
             'excerpt' => $excerpt
         ]);

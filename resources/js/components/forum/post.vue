@@ -452,7 +452,7 @@
     }
 
     get flags() {
-      return store.getters['flags/filter'](this.post.id);
+      return store.getters['flags/filter'](this.post.id, 'Coyote\\Post');
     }
   }
 </script>

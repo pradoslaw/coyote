@@ -214,7 +214,7 @@
     }
 
     get flags() {
-      return store.getters['flags/filter'](this.microblog.id);
+      return store.getters['flags/filter'](this.microblog.id, 'Coyote\\Microblog');
     }
   }
 </script>

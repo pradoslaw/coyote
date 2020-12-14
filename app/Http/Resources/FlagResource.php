@@ -13,10 +13,11 @@ class FlagResource extends JsonResource
     public function toArray($request)
     {
         return array_merge(
-            $this->resource->only(['id', 'name', 'text', 'user_id', 'user_name', 'url']),
+            $this->resource->only(['id', 'text', 'url', 'resources']),
             [
                 'created_at' => $this->created_at->toIso8601String(),
-                'resource_id' => $this->resource->pivot->resource_id
+                'user' => new UserResource($this->resource->user),
+                'name' => $this->resource->type->name
             ]
         );
     }

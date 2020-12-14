@@ -188,7 +188,7 @@
       ...mapGetters('user', ['isAuthorized']),
 
       flags() {
-        return this.$store.getters['flags/filter'](this.comment.id);
+        return this.$store.getters['flags/filter'](this.comment.id, 'Coyote\\Job\\Comment');
       }
     }
   }

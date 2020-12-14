@@ -157,7 +157,7 @@
     }
 
     get flags() {
-      return store.getters['flags/filter'](this.comment.id);
+      return store.getters['flags/filter'](this.comment.id, 'Coyote\\Microblog');
     }
   }
 </script>

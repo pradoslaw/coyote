@@ -3,7 +3,6 @@
 namespace Coyote\Http\Controllers\Job;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\Http\Factories\FlagFactory;
 use Coyote\Http\Resources\AssetsResource;
 use Coyote\Http\Resources\CommentCollection;
 use Coyote\Http\Resources\FlagResource;
@@ -11,12 +10,11 @@ use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Firm;
 use Coyote\Job;
 use Coyote\Services\Elasticsearch\Builders\Job\MoreLikeThisBuilder;
+use Coyote\Services\Flags;
 use Coyote\Services\UrlBuilder;
 
 class OfferController extends Controller
 {
-    use FlagFactory;
-
     /**
      * @var JobRepository
      */
@@ -96,15 +94,7 @@ class OfferController extends Controller
 
     private function flags()
     {
-        if (!$this->getGateFactory()->allows('job-delete')) {
-            return [];
-        }
-
-        $repository = $this->getFlagFactory();
-
-        $flags = $repository->findAllByModel(Job::class);
-        $flags = $flags->merge($repository->findAllByModel(Job\Comment::class));
-//        $flags = array_merge($flags, $repository->findAllByModel(Job\Comment::class));
+        $flags = resolve(Flags::class)->fromModels([Job::class, Job\Comment::class])->permission('job-delete')->get();
 
         return FlagResource::collection($flags)->toArray($this->request);
     }
