@@ -52,9 +52,10 @@ class TagController extends BaseController
         }
 
         if (!$repository->exists($request->input('t'))) {
-            return response(sprintf(
-                'Tag <strong>%s</strong> nie istnieje ale możesz go utworzyć.<br><br>Czy jesteś pewien, że jest to <strong>tag techniczny</strong> i chcesz go dodać?',
-                $request->input('t')
+            return response(
+                sprintf(
+                    'Tag <strong>%s</strong> nie istnieje ale możesz go utworzyć.<br><br>Czy jesteś pewien, że jest to <strong>tag techniczny</strong> i chcesz go dodać?',
+                    $request->input('t')
                 )
             );
         }
