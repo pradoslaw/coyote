@@ -23,7 +23,7 @@ jobs:
           STRIPE_ENDPOINT_SECRET: ${{ secrets.STRIPE_ENDPOINT_SECRET }}
 
       - name: Show logs
-        run: docker-compose logs php
+        run: docker-compose logs websocket
 
       - uses: actions/cache@v2
         with:
