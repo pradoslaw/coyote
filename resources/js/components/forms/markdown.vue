@@ -1,7 +1,7 @@
 <template>
   <div class="editor">
-    <vue-tabs @click="switchTab" :items="tabs" :current-tab="currentTab" type="pills" class="mb-2">
-      <div class="btn-toolbar ml-auto mt-2 mt-sm-0">
+    <vue-tabs @click="switchTab" :items="tabs" :current-tab="tabs.indexOf(currentTab)" type="pills" class="mb-2">
+      <div v-if="isContent" class="btn-toolbar ml-auto mt-2 mt-sm-0">
         <div class="btn-group mr-2" role="group" aria-label="...">
           <button @click="insertAtCaret('**', '**')" type="button" class="btn btn-sm" title="Pogrubienie"><i class="fas fa-bold fa-fw"></i></button>
           <button @click="insertAtCaret('*', '*')" type="button" class="btn btn-sm" title="Kursywa"><i class="fas fa-italic fa-fw"></i></button>
@@ -42,7 +42,7 @@
       </div>
     </vue-tabs>
 
-    <vue-prompt v-show="currentTab === 0" :source="promptUrl">
+    <vue-prompt v-show="isContent" :source="promptUrl">
       <textarea
         v-autosize
         v-model="valueLocal"
@@ -169,7 +169,7 @@
       </div>
     </vue-prompt>
 
-    <div @click="showPreview" v-show="currentTab === 1" v-html="previewHtml" class="preview post-content"></div>
+    <div @click="showPreview" v-show="isPreview" v-html="previewHtml" class="preview post-content"></div>
 
     <slot></slot>
   </div>
@@ -212,7 +212,7 @@
     textarea!: Textarea;
     searchText: string = '';
     previewHtml: string = '';
-    currentTab: number = 0;
+    currentTab: string = CONTENT;
     isProcessing = false;
     progress = 0;
     tabs: string[] = [CONTENT, PREVIEW];
@@ -328,7 +328,7 @@
     }
 
     switchTab(index: number) {
-      this.currentTab = index;
+      this.currentTab = this.tabs[index];
 
       if (this.tabs[index] === PREVIEW) {
         this.showPreview();
@@ -349,6 +349,14 @@
 
     get uploadTooltip() {
       return `Maksymalnie ${this.uploadMaxSize}MB. Dostępne rozszerzenia: ${this.uploadMimes}`;
+    }
+
+    get isContent() {
+      return this.currentTab == CONTENT;
+    }
+
+    get isPreview() {
+      return this.currentTab === PREVIEW;
     }
 
     get filteredLanguages() {
