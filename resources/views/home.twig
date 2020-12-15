@@ -171,19 +171,7 @@
         </section>
       {% endif %}
 
-      <div class="card bg-dark">
-        <div class="card-body">
-          <h5 class="card-title"><a class="text-light" title="Zobacz zmiany w serwisie 4programmers.net" href="{{ url('Blog') }}">Nowości w serwisie</a></h5>
-
-          {% for article in blog %}
-            <li class="row pt-1 pb-1">
-              <small class="col-md-2 text-light" style="font-size: 11px">{{ article.created_at|date_localized('%d %b %y') }}</small>
-
-              <a class="col-12 col-md-10 text-white-50" href="{{ url(article.path) }}" title="{{ article.long_title|default(article.title) }}">{{ article.title }}</a>
-            </li>
-          {% endfor %}
-        </div>
-      </div>
+      {{ whats_new|raw }}
 
       {{ viewers|raw }}
     </aside>

@@ -67,4 +67,6 @@ interface MicroblogRepositoryInterface extends RepositoryInterface
      * @return null|int
      */
     public function countForUser($userId);
+
+    public function recent();
 }

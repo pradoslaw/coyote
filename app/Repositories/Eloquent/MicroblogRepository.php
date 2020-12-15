@@ -31,6 +31,13 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
         });
     }
 
+    public function recent()
+    {
+        return $this->applyCriteria(function () {
+            return $this->model->whereNull('parent_id')->withoutGlobalScope(UserRelationsScope::class)->limit(5)->orderBy('id', 'DESC')->get();
+        });
+    }
+
     /**
      * Pobierz X ostatnich wpisow z mikrobloga przy czym sortowane sa one wedlug oceny. Metoda
      * ta jest wykorzystywana na stronie glownej serwisu
