@@ -17,10 +17,10 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
 
     $this->post('Delete/{job}', ['uses' => 'DeleteController@index', 'as' => 'delete']);
 
-    $this->get('Technologia/{name}', ['uses' => 'HomeController@tag', 'as' => 'tag']);
-    $this->get('Zdalna', ['uses' => 'HomeController@remote', 'as' => 'remote']);
-    $this->get('Miasto/{name}', ['uses' => 'HomeController@city', 'as' => 'city']);
-    $this->get('Firma/{name}', ['uses' => 'HomeController@firm', 'as' => 'firm']);
+    $this->get('Technologia/{name}', ['uses' => 'HomeController@tag', 'as' => 'tag', 'middleware' => 'json']);
+    $this->get('Zdalna', ['uses' => 'HomeController@remote', 'as' => 'remote', 'middleware' => 'json']);
+    $this->get('Miasto/{name}', ['uses' => 'HomeController@city', 'as' => 'city', 'middleware' => 'json']);
+    $this->get('Firma/{name}', ['uses' => 'HomeController@firm', 'as' => 'firm', 'middleware' => 'json']);
     $this->get('My', ['uses' => 'HomeController@my', 'as' => 'my', 'middleware' => 'auth']);
 
     $this->get('{job}-{slug}', ['uses' => 'OfferController@index', 'as' => 'offer', 'middleware' => 'page.hit']);

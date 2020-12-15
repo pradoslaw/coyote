@@ -154,7 +154,7 @@ new Vue({
   computed: {
     defaultSort: {
       get() {
-        return this.input.sort ? this.input.sort : this.defaults.sort;
+        return this.input.sort ?? this.defaults.sort;
       },
       set(value) {
         this.input.sort = value;
@@ -163,7 +163,7 @@ new Vue({
 
     defaultCurrency: {
       get() {
-        return this.input.currency ? this.input.currency : this.defaults.currency;
+        return this.input.currency ?? this.defaults.currency;
       },
       set(value) {
         this.input.currency = value;
