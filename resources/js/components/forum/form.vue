@@ -27,7 +27,7 @@
     <div class="form-group">
       <vue-markdown
         v-model="post.text"
-        :prompt-url="`/completion/prompt/${topic.id || ''}`"
+        :prompt-url="`/completion/prompt/users/${topic.id || ''}`"
         :error="errors['text']"
         :assets.sync="post.assets"
         preview-url="/Forum/Preview"

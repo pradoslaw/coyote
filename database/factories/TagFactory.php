@@ -5,7 +5,10 @@
 use Faker\Generator as Faker;
 
 $factory->define(\Coyote\Tag::class, function (Faker $faker) {
+    $name = $faker->name();
+
     return [
-        'name' => $faker->name()
+        'name' => strtolower($name),
+        'real_name' => ucfirst($name)
     ];
 });
