@@ -86,8 +86,9 @@ class VoteController extends Controller
 
         $collection = $microblog->voters->pluck('user.name');
 
-        return $collection->when($collection->count() > 10, function ($collection) {
-            return $collection->splice(0, 10)->concat(['...']);
-        });
+        return [
+            'count' => $collection->count(),
+            'users' => $collection->when($collection->count() > 10, fn ($collection) => $collection->splice(0, 10)->concat(['...']))
+        ];
     }
 }

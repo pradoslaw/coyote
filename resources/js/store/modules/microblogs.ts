@@ -4,6 +4,11 @@ import Vue from 'vue';
 
 type ParentChild = { parent: Microblog, comment: Microblog };
 
+interface VoteResponse {
+  users: string[];
+  count: number;
+}
+
 const state: Paginator = {
   current_page: 0,
   data: [],
@@ -101,8 +106,9 @@ const mutations = {
     microblog.comments_count = Object.keys(comments).length;
   },
 
-  setVoters(state, { microblog, voters }) {
-    Vue.set(microblog, 'voters', voters);
+  setVoters(state, { microblog, voters }: { microblog: Microblog, voters: VoteResponse }) {
+    Vue.set(microblog, 'voters', voters.users);
+    Vue.set(microblog, 'votes', voters.count);
   }
 };
 
@@ -160,10 +166,6 @@ const actions = {
   },
 
   loadVoters({ commit }, microblog: Microblog) {
-    if (!microblog.votes) {
-      return;
-    }
-
     return axios.get(`/Mikroblogi/Voters/${microblog.id}`).then(result => {
       commit('setVoters', { microblog, voters: result.data });
     });

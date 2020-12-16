@@ -84,6 +84,11 @@ class VoteController extends BaseController
     {
         $post->load('votes.user:id,name');
 
-        return $post->votes->pluck('user.name');
+        $collection = $post->votes->pluck('user.name');
+
+        return [
+            'count' => $collection->count(),
+            'users' => $collection->when($collection->count() > 10, fn ($collection) => $collection->splice(0, 10)->concat(['...']))
+        ];
     }
 }

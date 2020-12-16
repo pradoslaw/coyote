@@ -4,6 +4,11 @@ import Vue from "vue";
 
 type ParentChild = { post: Post, comment: PostComment };
 
+interface VoteResponse {
+  users: string[];
+  count: number;
+}
+
 const state: Paginator = {
   current_page: 0,
   data: [],
@@ -111,8 +116,9 @@ const mutations = {
     post.is_subscribed = false;
   },
 
-  setVoters(state, { post, voters }) {
-    Vue.set(post, 'voters', voters);
+  setVoters(state, { post, voters }: { post: Post, voters: VoteResponse }) {
+    Vue.set(post, 'voters', voters.users);
+    Vue.set(post, 'votes', voters.count);
   }
 }
 
@@ -191,13 +197,6 @@ const actions = {
       commit('setComments', { post, comments: result.data });
     })
   },
-
-  // upload({ commit }, { post, form }: { post: Post, form: FormData }) {
-  //   return axios.post('/Forum/Upload', form)
-  //     .then(response => {
-  //       commit('addAttachment', { post: post, attachment: response.data })
-  //     });
-  // },
 
   changePage({ commit, rootGetters }, page: number) {
     const topic = rootGetters['topics/topic'];
