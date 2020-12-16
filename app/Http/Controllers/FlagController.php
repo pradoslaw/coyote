@@ -60,19 +60,23 @@ class FlagController extends Controller
         ]);
 
         $metadata = decrypt($request->input('metadata'));
-        $permissions = [];
+        $models = $permissions = [];
 
-        $flag = $this->transaction(function () use ($request, $metadata, $permissions) {
+        foreach ($metadata as $resource => $id) {
+            $model = strtolower(class_basename($resource));
+            $permissions[] = "$model-delete";
+
+            $models[$model] = $id;
+        }
+
+        $flag = $this->transaction(function () use ($request, $models) {
             $data = $request->all() + ['user_id' => $this->userId];
 
             /** @var Flag $flag */
             $flag = Flag::create($data);
 
-            foreach ($metadata as $resource => $id) {
-                $model = strtolower(class_basename($resource));
+            foreach ($models as $model => $id) {
                 $relation = str_plural($model);
-
-                $permissions[] = "$model-delete";
 
                 $flag->$relation()->attach($id);
             }
