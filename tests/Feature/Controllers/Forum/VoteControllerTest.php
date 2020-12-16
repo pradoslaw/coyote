@@ -23,6 +23,6 @@ class VoteControllerTest extends TestCase
 
         $response = $this->get('/Forum/Post/Voters/' . $topic->firstPost->id);
 
-        $response->assertJson($users->pluck('name')->toArray());
+        $response->assertJson(['count' => 5, 'users' => $users->pluck('name')->toArray()]);
     }
 }
