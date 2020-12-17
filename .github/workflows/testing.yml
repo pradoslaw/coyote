@@ -25,6 +25,9 @@ jobs:
       - name: Show logs
         run: docker-compose -f docker-compose.yaml -f docker-compose.testing.yaml logs websocket
 
+      - name: Ping websocket
+        run: curl localhost:8888
+
       - uses: actions/cache@v2
         with:
           path: '**/vendor'
