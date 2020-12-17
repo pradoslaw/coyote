@@ -85,8 +85,9 @@ RUN apk --no-cache add ca-certificates wget && \
 
 RUN /usr/glibc-compat/bin/localedef -i pl_PL -f UTF-8 pl_PL.UTF-8
 
-ENV LANG=pl_PL.UTF-8 \
-    LANGUAGE=pl_PL.UTF-8
+ENV LANG=pl_PL.UTF-8
+ENV LANGUAGE=pl_PL.UTF-8
+ENV LC_ALL=pl_PL.UTF-8
 
 COPY ./docker/php/cron /etc/crontabs/root
 
