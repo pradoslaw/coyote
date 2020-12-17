@@ -46,7 +46,7 @@
     },
   })
   export default class VueTagsInline extends Vue {
-    @Prop({default: '/Forum/Tag/Prompt'})
+    @Prop({default: '/completion/prompt/tags'})
     readonly sourceUrl!: string;
 
     @Prop({default: ''})

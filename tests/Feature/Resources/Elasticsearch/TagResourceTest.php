@@ -20,5 +20,6 @@ class TagResourceTest extends TestCase
         $this->assertEquals($tag->real_name, $resource['real_name']);
         $this->assertEquals($tag->topics, $resource['topics']);
         $this->assertEquals($tag->microblogs, $resource['microblogs']);
+        $this->assertEmpty($resource['logo']);
     }
 }
