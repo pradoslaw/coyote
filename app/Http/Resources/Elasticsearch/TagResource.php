@@ -13,7 +13,7 @@ class TagResource extends JsonResource
     public function toArray($request)
     {
         return array_merge(
-            array_except(parent::toArray($request), ['created_at', 'category_id', 'last_used_at']),
+            array_except(parent::toArray($request), ['created_at', 'updated_at', 'category_id', 'last_used_at']),
             [
                 'logo'      => (string) $this->logo->url(),
             ]
