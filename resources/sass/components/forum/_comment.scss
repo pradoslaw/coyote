@@ -37,4 +37,9 @@
   }
 
   @include link-color-darker();
+
+  &.not-read {
+    @include not-read-border;
+    padding-left: 4px;
+  }
 }

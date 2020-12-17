@@ -119,7 +119,7 @@ module.exports = {
     core: './sass/core.scss',
     app: ['./js/app.js', './sass/app.scss'],
     legacy: './js/legacy.js',
-    forum: ['./js/pages/forum.js'],
+    forum: ['./js/pages/forum.ts'],
     wiki: ['./js/pages/wiki.js'],
     job: ['./js/pages/job.js'],
     // 'job-submit': './js/pages/job/submit.js',

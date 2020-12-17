@@ -80,6 +80,9 @@ export interface Forum {
   id: number;
   slug: string;
   name: string;
+  order: number;
+  section: string;
+  indent: number;
 }
 
 export interface PollItem {
@@ -121,12 +124,14 @@ export interface PostComment {
   html: string;
   user: User;
   editable?: boolean;
+  is_read?: boolean;
 }
 
 export interface Post {
   id: number;
   user?: User;
   user_id: number | null;
+  user_name?: string;
   editor?: User;
   deleter_name?: string;
   delete_reason?: string;

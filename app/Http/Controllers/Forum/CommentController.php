@@ -82,7 +82,7 @@ class CommentController extends Controller
 
         $comment->setRelation('forum', $comment->post->forum);
 
-        event(new CommentSaved($comment));
+        broadcast(new CommentSaved($comment))->toOthers();
 
         PostCommentResource::withoutWrapping();
 

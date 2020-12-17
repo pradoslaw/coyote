@@ -1,0 +1,139 @@
+import Vue from "vue";
+import VuePost from "@/js/components/forum/post.vue";
+import VueForm from "@/js/components/forum/form.vue";
+import VuePoll from "@/js/components/forum/poll.vue";
+import VuePagination from "../../components/pagination.vue";
+import store from "@/js/store";
+import {LiveNotification, Observer} from "@/js/libs/live";
+import {default as ws} from "@/js/libs/realtime";
+import Prism from "prismjs";
+import useBrackets from "@/js/libs/prompt";
+import {mapGetters, mapState} from "vuex";
+import { Post, PostComment } from "@/js/types/models.ts";
+
+class UpdateComment implements Observer {
+  update(comment: PostComment) {
+    const post = store.getters['posts/posts'][comment.post_id];
+
+    if (!post || post.comments[comment.id!]?.is_editing) {
+      return;
+    }
+
+    store.commit(`posts/${comment.id! in post.comments ? 'updateComment' : 'addComment'}`, { post, comment });
+  }
+}
+
+export default Vue.extend({
+  delimiters: ['${', '}'],
+  components: {
+    'vue-post': VuePost,
+    'vue-form': VueForm,
+    'vue-poll': VuePoll,
+    'vue-pagination': VuePagination
+  },
+  store,
+  data: () => ({
+    showStickyCheckbox: window.showStickyCheckbox,
+    undefinedPost: { text: '', html: '', assets: [] },
+    reasons: window.reasons
+  }),
+  created() {
+    store.commit('posts/init', window.pagination);
+    store.commit('topics/init', [ window.topic ]);
+    store.commit('forums/init', [ window.forum ]);
+    store.commit('poll/init', window.poll);
+    store.commit('flags/init', window.flags);
+  },
+  mounted() {
+    document.getElementById('js-skeleton')?.remove();
+    this.liveNotifications();
+
+    const hints = ['hint-subject', 'hint-text', 'hint-tags', 'hint-user_name'];
+
+    [
+      document.querySelector('#js-submit-form input[name="subject"]'),
+      document.querySelector('#js-submit-form textarea[name="text"]'),
+      document.querySelector('#js-submit-form input[name="tags"]')
+    ].forEach(el => {
+      if (!el) {
+        return;
+      }
+
+      el.addEventListener('focus', () => {
+        const name = el.getAttribute('name');
+        const hint = document.getElementById(`hint-${name}`);
+
+        if (!hint) {
+          return; // hint tooltips might not be present on the website
+        }
+
+        hints.forEach(hint => document.getElementById(hint)!.style.display = 'none');
+        hint.style.display = 'block';
+      });
+    });
+  },
+  methods: {
+    liveNotifications() {
+      const notification = new LiveNotification();
+
+      // notification.attach(new UpdateMicroblog());
+      notification.attach(new UpdateComment());
+
+      ws.subscribe(`topic:${window.topic.id}`).on('CommentSaved', comment => {
+        if (store.getters['user/isBlocked'](comment.user.id)) {
+          return;
+        }
+
+        // highlight not read text
+        comment.is_read = false;
+
+        notification.notify(comment);
+
+        this.$nextTick(() => Prism.highlightAll());
+      });
+    },
+
+    redirectToTopic(post: Post) {
+      this.resetPost(post);
+
+      window.location.href = post.url;
+    },
+
+    changePage(page: number) {
+      window.location.href = `?page=${page}`;
+    },
+
+    reply(post: Post, scrollIntoForm = true) {
+      if (scrollIntoForm) {
+        document.getElementById('js-submit-form')!.scrollIntoView();
+
+        if (!this.undefinedPost.text!.includes(`[${post.user!.name}`)) {
+          this.undefinedPost.text += `@${useBrackets(post.user!.name)}: `;
+        }
+
+        // @ts-ignore
+        this.$refs['js-submit-form'].$refs['textarea']!.focus();
+      }
+      else {
+        let text = `> ##### [${post.user ? post.user.name : post.user_name} napisał(a)](/Forum/${post.id}):`
+        text += "\n" + post.text.replace(/\n/g, "\n> ") + "\n\n"
+
+        this.undefinedPost.text += (this.undefinedPost.text.length ? "\n" : '') + text;
+
+        this.$notify({type: 'success', text: 'Cytat został skopiowany do formularza.'});
+      }
+    },
+
+    resetPost(post: Post) {
+      this.undefinedPost = { text: '', html: '', assets: [] };
+
+      window.location.hash = `id${post.id}`;
+    }
+  },
+  computed: {
+    ...mapGetters('posts', ['posts', 'totalPages', 'currentPage']),
+    ...mapGetters('topics', ['topic']),
+    ...mapGetters('user', ['isAuthorized']),
+    ...mapState('poll', ['poll'])
+  }
+});

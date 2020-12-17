@@ -1,5 +1,5 @@
 <template>
-  <div :id="anchor" :class="{'highlight-flash': highlight}" class="post-comment">
+  <div :id="anchor" :class="{'highlight-flash': highlight, 'not-read': comment.is_read === false}" class="post-comment">
     <template v-if="!isEditing">
       <span v-html="comment.html"></span> &mdash;
 

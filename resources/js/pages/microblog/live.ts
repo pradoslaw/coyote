@@ -2,25 +2,7 @@ import { Microblog } from "../../types/models";
 import store from "../../store";
 import { default as ws } from "../../libs/realtime";
 import Prism from "prismjs";
-
-
-interface Observer {
-  update(microblog: Microblog): void;
-}
-
-class LiveNotification {
-  private observers: Observer[] = [];
-
-  attach(observer: Observer) {
-    this.observers.push(observer);
-  }
-
-  notify(microblog: Microblog) {
-    for (const observer of this.observers) {
-      observer.update(microblog);
-    }
-  }
-}
+import { LiveNotification, Observer } from "../../libs/live";
 
 class UpdateMicroblog implements Observer {
   update(microblog: Microblog) {
