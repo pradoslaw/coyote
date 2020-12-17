@@ -10,6 +10,7 @@ use Coyote\Console\Commands\Elasticsearch\CreateIndexCommand;
 use Coyote\Console\Commands\Elasticsearch\DropIndexCommand;
 use Coyote\Console\Commands\Elasticsearch\IndexCommand;
 use Coyote\Console\Commands\FlushCacheCommand;
+use Coyote\Console\Commands\IndexTagsCommand;
 use Coyote\Console\Commands\PurgeFirewallCommand;
 use Coyote\Console\Commands\PurgeGuestsCommand;
 use Coyote\Console\Commands\PurgeJobsCommand;
@@ -18,7 +19,6 @@ use Coyote\Console\Commands\PurgePostsCommand;
 use Coyote\Console\Commands\PurgeRecentTopicsCommand;
 use Coyote\Console\Commands\PurgeSessionsCommand;
 use Coyote\Console\Commands\PurgeViewsCommand;
-use Coyote\Console\Commands\ResendApplicationCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -44,9 +44,9 @@ class Kernel extends ConsoleKernel
         IndexCommand::class,
         CreateCouponCommand::class,
         PurgeGuestsCommand::class,
-        ResendApplicationCommand::class,
         PurgePostsCommand::class,
-        PurgeRecentTopicsCommand::class
+        PurgeRecentTopicsCommand::class,
+        IndexTagsCommand::class
     ];
 
     /**
@@ -67,6 +67,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('guest:purge')->dailyAt('04:00:00');
         $schedule->command('posts:purge')->dailyAt('05:00:00');
         $schedule->command('topics:purge')->everyFifteenMinutes();
+        $schedule->command('tags:index')->everyFiveMinutes();
     }
 
     /**
