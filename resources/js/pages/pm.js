@@ -109,7 +109,7 @@ new Vue({
     },
 
     typing() {
-      ws.subscribe(`user:${this.recipient.id}`).whisper('pm-typing', {recipient: this.sender});
+      ws.subscribe(this.privateChannel).whisper('pm-typing', {recipient: this.sender});
     },
 
     listenForMessage() {
@@ -136,7 +136,7 @@ new Vue({
     listenForTyping() {
       this.timer = null;
 
-      this.channel().on('pm-typing', data => {
+      ws.subscribe(this.privateChannel).on('pm-typing', data => {
         if (this.recipient.id !== data.recipient.id) {
           return;
         }
@@ -227,6 +227,10 @@ new Vue({
 
           return item;
         });
+    },
+
+    privateChannel() {
+      return 'private:' + [store.state.user.user.id, this.recipient.id].sort((a, b) => a - b).join('');
     },
 
     ...mapState('messages', ['messages', 'currentPage', 'total', 'perPage'])
