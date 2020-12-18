@@ -18,7 +18,7 @@
     props: {
       source: {
         type: String,
-        default: '/completion/prompt'
+        default: '/completion/prompt/users'
       }
     },
     data() {

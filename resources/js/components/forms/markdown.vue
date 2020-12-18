@@ -238,7 +238,7 @@
     @Prop({default: true})
     readonly autoInsertAssets!: boolean;
 
-    @Prop({default: '/completion/prompt'})
+    @Prop({default: '/completion/prompt/users'})
     readonly promptUrl!: string;
 
     @Prop()
