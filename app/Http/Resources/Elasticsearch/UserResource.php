@@ -9,8 +9,6 @@ namespace Coyote\Http\Resources\Elasticsearch;
  * @property \Carbon\Carbon $created_at
  * @property \Coyote\Services\Media\MediaInterface $photo
  * @property int $reputation
- * @property int $group_id
- * @property string $group_name
  */
 class UserResource extends ElasticsearchResource
 {
@@ -23,7 +21,7 @@ class UserResource extends ElasticsearchResource
         $date = $this->visited_at ?: $this->created_at;
 
         return array_merge(
-            $this->resource->only('id', 'name'),
+            $this->resource->only('id', 'name', 'group'),
             [
                 'created_at'    => $this->created_at->toIso8601String(),
                 'visited_at'    => $date->toIso8601String(),
@@ -31,11 +29,7 @@ class UserResource extends ElasticsearchResource
                 'decay_date'    => $date->toIso8601String(),
                 'url'           => route('profile', [$this->id], false),
                 'photo'         => ((string) $this->photo->url()) ?? null,
-                'suggest'       => $this->getSuggest(),
-
-                $this->mergeWhen($this->group_id, function () {
-                    return ['group' => $this->group_name];
-                })
+                'suggest'       => $this->getSuggest()
             ]
         );
     }

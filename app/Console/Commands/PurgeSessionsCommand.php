@@ -7,6 +7,7 @@ use Coyote\Guest;
 use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Repositories\Criteria\WithTrashed;
+use Coyote\Services\Elasticsearch\Crawler;
 use Coyote\Session;
 use Illuminate\Console\Command;
 use Illuminate\Database\Connection as Db;
@@ -129,7 +130,7 @@ class PurgeSessionsCommand extends Command
     /**
      * @param Session $session
      */
-    private function signout($session)
+    private function signout(Session $session)
     {
         if (!empty($session->guestId)) {
             /** @var Guest $guest */
@@ -151,5 +152,10 @@ class PurgeSessionsCommand extends Command
         $user->is_online = false;
 
         $user->save();
+
+        // reindex user data in elasticsearch so we can sort users by last activity date
+        dispatch(function () use ($user) {
+            (new Crawler())->index($user);
+        });
     }
 }
