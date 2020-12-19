@@ -31,6 +31,7 @@ class PostResourceTest extends TestCase
         parent::setUp();
 
         $this->faker = Factory::create();
+        PostResource::withoutWrapping();
     }
 
     public function testPostUnreadForNewUser()
@@ -45,13 +46,13 @@ class PostResourceTest extends TestCase
         $tracker = new Tracker($topic, $guest);
         $tracker->setRepository($this->app[TopicRepositoryInterface::class]);
 
-        $post = (new PostResource($topic->firstPost))->setTracker($tracker)->toArray(request());
+        $post = (new PostResource($topic->firstPost))->setTracker($tracker)->toResponse(request())->getData(true);
 
         $this->assertFalse($post['is_read']);
 
         $tracker->asRead($topic->last_post_created_at);
 
-        $post = (new PostResource($topic->firstPost))->setTracker($tracker)->toArray(request());
+        $post = (new PostResource($topic->firstPost))->setTracker($tracker)->toResponse(request())->getData(true);
 
         $this->assertTrue($post['is_read']);
     }
