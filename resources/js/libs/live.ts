@@ -1,21 +1,94 @@
 import { Microblog, Post, PostComment } from "../types/models";
+import { default as ws } from "./realtime";
+import Prism from "prismjs";
+import store from '../store';
+import Vue from 'vue';
+import Channel from "@/js/libs/websocket/channel";
 
-type Payload = Microblog | Post | PostComment;
+export type Payload = Microblog | Post | PostComment;
 
 export interface Observer {
-  update(microblog: Payload): void;
+  update(payload: Payload): void;
 }
 
-export class LiveNotification {
-  private observers: Observer[] = [];
+export class MicroblogSaved implements Observer {
+  update(microblog: Microblog) {
+    const existing = store.state.microblogs.data[microblog.id!];
 
-  attach(observer: Observer) {
-    this.observers.push(observer);
+    if (!existing || existing.is_editing) {
+      return; // do not add new entries live (yet)
+    }
+
+    store.commit('microblogs/update', microblog);
+  }
+}
+
+export class MicroblogCommentSaved implements Observer {
+  update(payload: Microblog) {
+    if (!payload.parent_id) {
+      return;
+    }
+
+    const parent = store.state.microblogs.data[payload.parent_id];
+    const existing = parent?.comments[payload.id!];
+
+    if (!parent || existing?.is_editing === true) {
+      return;
+    }
+
+    if (!existing) {
+      payload.is_read = false;
+    }
+
+    store.commit(`microblogs/${payload.id! in parent.comments ? 'updateComment' : 'addComment'}`, { parent, comment: payload });
+  }
+}
+
+export class PostCommentSaved implements Observer {
+  update(payload: PostComment) {
+    const post = store.getters['posts/posts'][payload.post_id];
+    const existing = post.comments[payload.id!];
+
+    if (existing?.is_editing === true) {
+      return;
+    }
+
+    if (!existing) {
+      payload.is_read = false;
+    }
+
+    store.commit(`posts/${payload.id! in post.comments ? 'updateComment' : 'addComment'}`, { post, comment: payload });
+  }
+}
+
+export class PostSaved implements Observer {
+  update(payload: Post) {
+    const existing = store.getters['posts/posts'][payload.id!];
+
+    if (!existing) {
+      payload.is_read = false;
+    }
+
+    store.commit(`posts/update`, payload);
+  }
+}
+
+export class Subscriber {
+  private channel: Channel;
+
+  constructor(channelName: string) {
+    this.channel = ws.subscribe(channelName);
   }
 
-  notify(payload: Payload) {
-    for (const observer of this.observers) {
+  subscribe(event: string, observer: Observer) {
+    this.channel.on(event, payload => {
+      if (store.getters['user/isBlocked'](payload.user!.id)) {
+        return;
+      }
+
       observer.update(payload);
-    }
+
+      Vue.nextTick(() => Prism.highlightAll());
+    });
   }
 }

@@ -3,7 +3,7 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Events\PostWasDeleted;
-use Coyote\Events\PostWasSaved;
+use Coyote\Events\PostSaved;
 use Coyote\Http\Resources\PostResource;
 use Coyote\Post;
 use Coyote\Services\Forum\Tracker;
@@ -30,7 +30,7 @@ class MergeController extends BaseController
         });
 
         // add post to elasticsearch
-        event(new PostWasSaved($previous));
+        event(new PostSaved($previous));
         // remove from elasticsearch
         event(new PostWasDeleted($post));
 

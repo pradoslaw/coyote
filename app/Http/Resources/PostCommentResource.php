@@ -26,7 +26,7 @@ class PostCommentResource extends JsonResource
     public function toArray($request)
     {
         return array_merge(
-            $this->resource->toArray(['id', 'text', 'html']),
+            $this->resource->only(['id', 'text', 'html', 'post_id']),
             [
                 'created_at'    => $this->created_at->toIso8601String(),
                 'updated_at'    => $this->updated_at->toIso8601String(),

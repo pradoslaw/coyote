@@ -1,21 +1,23 @@
 {
-    "compilerOptions": {
-        "target": "esnext",
-        "module": "es2015",
-        "strict": true,
-        "jsx": "preserve",
-        "importHelpers": true,
-        "moduleResolution": "node",
-        "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
-        "sourceMap": true,
-        "baseUrl": ".",
-        // tymczasowo, na czas migracji do typescript
-        "noImplicitAny": false,
-        // vue-class-component
-        "experimentalDecorators":  true,
-      "paths": {
-        "@": ["resources"]
-      }
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "es2015",
+    "strict": true,
+    "jsx": "preserve",
+    "importHelpers": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    // tymczasowo, na czas migracji do typescript
+    "noImplicitAny": false,
+    // vue-class-component
+    "experimentalDecorators": true,
+    "paths": {
+      "@/*": [
+        "./resources/*"
+      ]
     }
+  }
 }

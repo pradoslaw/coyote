@@ -4,24 +4,10 @@ import VueForm from "@/js/components/forum/form.vue";
 import VuePoll from "@/js/components/forum/poll.vue";
 import VuePagination from "../../components/pagination.vue";
 import store from "@/js/store";
-import {LiveNotification, Observer} from "@/js/libs/live";
-import {default as ws} from "@/js/libs/realtime";
-import Prism from "prismjs";
+import { Subscriber, PostSaved, PostCommentSaved } from "@/js/libs/live";
 import useBrackets from "@/js/libs/prompt";
-import {mapGetters, mapState} from "vuex";
-import { Post, PostComment } from "@/js/types/models.ts";
-
-class UpdateComment implements Observer {
-  update(comment: PostComment) {
-    const post = store.getters['posts/posts'][comment.post_id];
-
-    if (!post || post.comments[comment.id!]?.is_editing) {
-      return;
-    }
-
-    store.commit(`posts/${comment.id! in post.comments ? 'updateComment' : 'addComment'}`, { post, comment });
-  }
-}
+import { mapGetters, mapState } from "vuex";
+import { Post } from "@/js/types/models.ts";
 
 export default Vue.extend({
   delimiters: ['${', '}'],
@@ -46,7 +32,8 @@ export default Vue.extend({
   },
   mounted() {
     document.getElementById('js-skeleton')?.remove();
-    this.liveNotifications();
+
+    this.liveUpdate();
 
     const hints = ['hint-subject', 'hint-text', 'hint-tags', 'hint-user_name'];
 
@@ -73,24 +60,11 @@ export default Vue.extend({
     });
   },
   methods: {
-    liveNotifications() {
-      const notification = new LiveNotification();
+    liveUpdate() {
+      const subscriber = new Subscriber(`topic:${window.topic.id}`);
 
-      // notification.attach(new UpdateMicroblog());
-      notification.attach(new UpdateComment());
-
-      ws.subscribe(`topic:${window.topic.id}`).on('CommentSaved', comment => {
-        if (store.getters['user/isBlocked'](comment.user.id)) {
-          return;
-        }
-
-        // highlight not read text
-        comment.is_read = false;
-
-        notification.notify(comment);
-
-        this.$nextTick(() => Prism.highlightAll());
-      });
+      subscriber.subscribe('CommentSaved', new PostCommentSaved())
+      subscriber.subscribe('PostSaved', new PostSaved())
     },
 
     redirectToTopic(post: Post) {

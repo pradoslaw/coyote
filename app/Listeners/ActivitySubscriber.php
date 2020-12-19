@@ -5,7 +5,7 @@ namespace Coyote\Listeners;
 use Coyote\Events\CommentDeleted;
 use Coyote\Events\CommentSaved;
 use Coyote\Events\PostWasDeleted;
-use Coyote\Events\PostWasSaved;
+use Coyote\Events\PostSaved;
 use Coyote\Events\TopicWasDeleted;
 use Coyote\Post;
 use Coyote\Repositories\Contracts\ActivityRepositoryInterface as ActivityRepository;
@@ -28,9 +28,9 @@ class ActivitySubscriber implements ShouldQueue
     }
 
     /**
-     * @param PostWasSaved $event
+     * @param PostSaved $event
      */
-    public function onPostSaved(PostWasSaved $event)
+    public function onPostSaved(PostSaved $event)
     {
         $this->activity->updateOrCreate([
             'content_type'  => Post::class,
@@ -91,7 +91,7 @@ class ActivitySubscriber implements ShouldQueue
     public function subscribe($events)
     {
         $events->listen(
-            PostWasSaved::class,
+            PostSaved::class,
             'Coyote\Listeners\ActivitySubscriber@onPostSaved'
         );
 

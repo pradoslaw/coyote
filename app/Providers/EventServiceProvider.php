@@ -6,7 +6,7 @@ use Coyote\Events\FirewallWasDeleted;
 use Coyote\Events\FirewallWasSaved;
 use Coyote\Events\ForumWasSaved;
 use Coyote\Events\MicroblogSaved;
-use Coyote\Events\PostWasSaved;
+use Coyote\Events\PostSaved;
 use Coyote\Events\StreamSaved;
 use Coyote\Events\SuccessfulLogin;
 use Coyote\Listeners\ActivitySubscriber;
@@ -49,7 +49,7 @@ class EventServiceProvider extends ServiceProvider
         MessageSending::class => [ChangeImageUrl::class, LogSentMessage::class],
         ForumWasSaved::class => [IndexCategory::class],
         StreamSaved::class => [IndexStream::class],
-        PostWasSaved::class => [DispatchPostNotifications::class],
+        PostSaved::class => [DispatchPostNotifications::class],
         MicroblogSaved::class => [DispatchMicroblogNotifications::class]
     ];
 

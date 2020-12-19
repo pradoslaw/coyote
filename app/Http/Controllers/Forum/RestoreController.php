@@ -6,7 +6,7 @@ use Coyote\Services\Stream\Activities\Restore as Stream_Restore;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Services\Stream\Objects\Post as Stream_Post;
 use Coyote\Services\Stream\Objects\Forum as Stream_Forum;
-use Coyote\Events\PostWasSaved;
+use Coyote\Events\PostSaved;
 use Coyote\Events\TopicWasSaved;
 use Coyote\Services\UrlBuilder;
 
@@ -40,7 +40,7 @@ class RestoreController extends BaseController
             $post->restore();
 
             // fire the event. add post to search engine
-            event(new PostWasSaved($post));
+            event(new PostSaved($post));
 
             $object = (new Stream_Post(['url' => $url]))->map($post);
             $target = (new Stream_Topic())->map($post->topic);

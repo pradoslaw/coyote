@@ -2,29 +2,36 @@
 
 namespace Coyote\Events;
 
-use Coyote\Http\Resources\PostCommentResource;
-use Coyote\Post\Comment;
+use Coyote\Http\Resources\PostResource;
+use Coyote\Post;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Queue\SerializesModels;
 
-class CommentSaved implements ShouldBroadcast
+class PostSaved extends Event implements ShouldBroadcast
 {
     use SerializesModels, InteractsWithSockets;
 
     /**
-     * @var Comment
+     * @var Post
      */
-    public $comment;
+    public Post $post;
 
     /**
-     * CommentSaved constructor.
-     * @param Comment $comment
+     * @var bool
      */
-    public function __construct(Comment $comment)
+    public bool $wasRecentlyCreated;
+
+    /**
+     * Create a new event instance.
+     *
+     * @param Post $post
+     */
+    public function __construct(Post $post)
     {
-        $this->comment = $comment;
+        $this->post = $post;
+        $this->wasRecentlyCreated = $post->wasRecentlyCreated;
     }
 
     /**
@@ -32,13 +39,13 @@ class CommentSaved implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('topic:' . $this->comment->post->topic_id);
+        return new Channel('topic:' . $this->post->topic_id);
     }
 
     /**
      * @return array
      */
-    public function broadcastWith()
+    public function broadcastWith(): array
     {
         $request = clone request();
         // assign null to user.
@@ -46,13 +53,13 @@ class CommentSaved implements ShouldBroadcast
             return null;
         });
 
-        return (new PostCommentResource($this->comment))->resolve($request);
+        return (new PostResource($this->post))->resolve($request);
     }
 
     /**
      * @return string
      */
-    public function broadcastAs()
+    public function broadcastAs(): string
     {
         return class_basename(self::class);
     }

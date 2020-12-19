@@ -2,7 +2,7 @@
 
 namespace Coyote\Listeners;
 
-use Coyote\Events\PostWasSaved;
+use Coyote\Events\PostSaved;
 use Coyote\Notifications\Post\ChangedNotification;
 use Coyote\Notifications\Post\SubmittedNotification;
 use Coyote\Notifications\Post\UserMentionedNotification;
@@ -38,10 +38,10 @@ class DispatchPostNotifications implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param  PostWasSaved  $event
+     * @param  PostSaved  $event
      * @return void
      */
-    public function handle(PostWasSaved $event)
+    public function handle(PostSaved $event)
     {
         $post = $event->post;
         $topic = $event->post->topic;

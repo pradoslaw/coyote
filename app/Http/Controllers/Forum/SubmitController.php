@@ -20,7 +20,7 @@ use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Services\Stream\Objects\Post as Stream_Post;
 use Coyote\Services\Stream\Objects\Forum as Stream_Forum;
 use Coyote\Services\Stream\Actor as Stream_Actor;
-use Coyote\Events\PostWasSaved;
+use Coyote\Events\PostSaved;
 use Coyote\Events\TopicWasSaved;
 
 class SubmitController extends BaseController
@@ -131,17 +131,17 @@ class SubmitController extends BaseController
             return $post;
         });
 
-        // fire the event. it can be used to index a content and/or add page path to "pages" table
-        event(new TopicWasSaved($topic));
-        // add post to elasticsearch
-        event(new PostWasSaved($post));
-
         $tracker = Tracker::make($topic);
 
         PostResource::withoutWrapping();
 
         $post->unsetRelation('assets');
         $post->load('assets');
+
+        // fire the event. it can be used to index a content and/or add page path to "pages" table
+        event(new TopicWasSaved($topic));
+        // add post to elasticsearch
+        broadcast(new PostSaved($post))->toOthers();
 
         $resource = (new PostResource($post))->setTracker($tracker)->resolve($this->request);
 
@@ -225,7 +225,7 @@ class SubmitController extends BaseController
         // fire the event. it can be used to index a content and/or add page path to "pages" table
         event(new TopicWasSaved($topic));
         // add post to elasticsearch
-        event(new PostWasSaved($post));
+        event(new PostSaved($post));
 
         return response()->json(['url' => UrlBuilder::topic($topic)]);
     }

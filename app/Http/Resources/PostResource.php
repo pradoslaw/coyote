@@ -79,7 +79,7 @@ class PostResource extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         $this->applyCommentsRelation();
 
@@ -98,8 +98,11 @@ class PostResource extends JsonResource
             'user'          => UserResource::make($this->user),
             'html'          => $html,
             'url'           => UrlBuilder::post($this->resource, true),
-            'is_read'       => $this->tracker->getMarkTime() >= $this->created_at,
             'is_locked'     => $this->topic->is_locked || $this->forum->is_locked,
+
+            $this->mergeWhen($this->tracker !== null, function () {
+                return ['is_read' => $this->tracker->getMarkTime() >= $this->created_at];
+            }),
 
             // only for moderators
             $this->mergeWhen($this->gate->allows('delete', $this->forum), [
