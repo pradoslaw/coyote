@@ -36,7 +36,6 @@ class JwtToken
             ->issuedAt(now()->timestamp)
             ->expiresAt(now()->addDays(30)->timestamp)
             ->issuedBy($user->id)
-            ->withClaim('channel', ["user:$user->id", 'microblog'])
             ->withClaim('allowed', $allowed)
             ->getToken($signer, new Key(config('app.key')));
 
