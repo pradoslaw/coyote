@@ -104,7 +104,7 @@
           </template>
         </div>
 
-        <div v-if="!isEditing" class="col-12 col-lg-10">
+        <div v-if="!post.is_editing" class="col-12 col-lg-10">
           <vue-flag v-for="flag in flags" :key="flag.id" :flag.sync="flag"></vue-flag>
 
           <div class="post-vote">
@@ -201,8 +201,8 @@
           :show-sticky-checkbox="post.id === topic.first_post_id && post.permissions.sticky"
           :upload-mimes="uploadMimes"
           :upload-max-size="uploadMaxSize"
-          @cancel="isEditing = false"
-          @save="isEditing = false"
+          @cancel="$store.commit('posts/edit', post)"
+          @save="$store.commit('posts/edit', post)"
         ></vue-form>
       </div>
     </div>
@@ -229,7 +229,7 @@
 
           <div v-if="post.permissions.write" class="ml-auto">
             <button v-if="post.permissions.update && !post.deleted_at" @click="edit" class="btn btn-sm">
-              <i :class="{'text-primary': isEditing}" class="fas fa-fw fa-edit"></i> <span class="d-none d-sm-inline">Edytuj</span>
+              <i :class="{'text-primary': post.is_editing}" class="fas fa-fw fa-edit"></i> <span class="d-none d-sm-inline">Edytuj</span>
             </button>
 
             <template v-if="post.permissions.delete">
@@ -359,7 +359,6 @@
 
     isProcessing = false;
     isCollapsed = this.post.deleted_at != null;
-    isEditing = false;
     isCommenting = false;
     reasonId = null;
 
@@ -384,9 +383,9 @@
     }
 
     edit() {
-      this.isEditing = !this.isEditing;
+      store.commit('posts/edit', this.post);
 
-      if (this.isEditing) {
+      if (this.post.is_editing) {
         // @ts-ignore
         this.$nextTick(() => this.form.markdown.focus());
       }

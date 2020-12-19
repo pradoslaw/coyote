@@ -44,6 +44,11 @@ const mutations = {
     post.deleted_at = new Date();
   },
 
+  edit(state, editable: Post | PostComment) {
+    // we must use set() because is_editing can be undefined
+    Vue.set(editable, 'is_editing', !editable.is_editing);
+  },
+
   addComment(state, { post, comment }: ParentChild) {
     if (Array.isArray(post.comments)) {
       Vue.set(post, "comments", {});

@@ -1,6 +1,6 @@
 <template>
   <div :id="anchor" :class="{'highlight-flash': highlight, 'not-read': comment.is_read === false}" class="post-comment">
-    <template v-if="!isEditing">
+    <template v-if="!comment.is_editing">
       <span v-html="comment.html"></span> &mdash;
 
       <vue-user-name :user="comment.user" :owner="comment.user.id === topic.owner_id"></vue-user-name>
@@ -16,7 +16,13 @@
       </a>
     </template>
 
-    <vue-comment-form v-if="isEditing" :comment="comment" @save="isEditing = false" @cancel="isEditing = false" ref="comment-form"></vue-comment-form>
+    <vue-comment-form
+      v-if="comment.is_editing"
+      :comment="comment"
+      @save="$store.commit('posts/edit', comment)"
+      @cancel="$store.commit('posts/edit', comment)"
+      ref="comment-form"
+    ></vue-comment-form>
   </div>
 </template>
 
@@ -28,7 +34,7 @@
   import { Prop, Ref } from "vue-property-decorator";
   import Component from "vue-class-component";
   import { mixin as clickaway } from "vue-clickaway";
-  import { PostComment } from "../../types/models";
+  import { PostComment } from "@/js/types/models";
   import { mapGetters } from "vuex";
 
   @Component({
@@ -44,12 +50,10 @@
     @Prop(Object)
     comment!: PostComment;
 
-    private isEditing = false;
-
     edit() {
-      this.isEditing = !this.isEditing;
+      this.$store.commit('posts/edit', this.comment);
 
-      if (this.isEditing) {
+      if (this.comment.is_editing) {
         this.$nextTick(() => this.commentForm.textarea.focus());
       }
     }

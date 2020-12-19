@@ -125,6 +125,7 @@ export interface PostComment {
   user: User;
   editable?: boolean;
   is_read?: boolean;
+  is_editing? :boolean;
 }
 
 export interface Post {
@@ -147,6 +148,7 @@ export interface Post {
   is_subscribed: boolean;
   is_accepted: boolean;
   is_voted: boolean;
+  is_editing?: boolean;
   permissions: PostPermission;
   ip?: string;
   browser?: string;
