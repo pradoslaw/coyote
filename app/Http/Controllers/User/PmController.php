@@ -203,6 +203,8 @@ class PmController extends BaseController
         foreach ($result as $pm) {
             $this->markAsRead($pm);
         }
+
+        $this->request->attributes->set('pm_unread', --$this->auth->pm_unread);
     }
 
     /**
@@ -222,8 +224,6 @@ class PmController extends BaseController
         if ($this->auth->notifications_unread) {
             $this->notification->markAsReadByModel($this->userId, $pm);
         }
-
-        $this->request->attributes->set('pm_unread', --$this->auth->pm_unread);
 
         event(new PmRead($pm));
     }
