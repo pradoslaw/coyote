@@ -47,9 +47,9 @@ export class MicroblogCommentSaved implements Observer {
 export class PostCommentSaved implements Observer {
   update(payload: PostComment) {
     const post = store.getters['posts/posts'][payload.post_id];
-    const existing = post.comments[payload.id!];
+    const existing = post?.comments[payload.id!];
 
-    if (existing?.is_editing === true) {
+    if (!post || existing?.is_editing === true) {
       return;
     }
 
@@ -70,6 +70,12 @@ export class PostSaved implements Observer {
     }
 
     store.commit(`posts/update`, payload);
+
+    if (!existing) {
+      const topic = store.getters['topics/topic'];
+
+      Vue.nextTick(() => document.getElementById(`id${payload.id}`)!.addEventListener('mouseover', () => store.dispatch('topics/mark', topic), {once: true}))
+    }
   }
 }
 
