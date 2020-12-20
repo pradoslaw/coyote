@@ -21,6 +21,10 @@
         </p>
       </a>
     </div>
+
+    <a v-if="!isRead" @click="mark" href="javascript:" class="btn-action" title="Oznacz jako przeczytane">
+      <i class="fas fa-eye"></i>
+    </a>
   </div>
 </template>
 
@@ -41,6 +45,12 @@
     data() {
       return {
         SENTBOX: 2
+      }
+    },
+    methods: {
+      mark() {
+        this.$store.dispatch('messages/mark', this.message);
+        this.$store.commit('inbox/decrement');
       }
     },
     computed: {

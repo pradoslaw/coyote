@@ -16,7 +16,7 @@
       </a>
     </div>
 
-    <a @click.stop="deleteNotification(notification)" href="javascript:" class="btn-delete-alert" title="Usuń">
+    <a @click.stop="deleteNotification(notification)" href="javascript:" class="btn-action" title="Usuń">
       <i class="fas fa-times"></i>
     </a>
   </div>

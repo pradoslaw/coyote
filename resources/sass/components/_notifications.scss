@@ -67,7 +67,7 @@
     &:hover {
       background-color: $body-bg;
 
-      .btn-delete-alert {
+      .btn-action {
         display: block;
       }
     }
@@ -81,10 +81,10 @@
     }
   }
 
-  .btn-delete-alert {
+  .btn-action {
     position: absolute;
-    right: 6px;
-    top: 13px;
+    right: 10px;
+    top: 20px;
     padding: 6px;
     display: none;
   }
