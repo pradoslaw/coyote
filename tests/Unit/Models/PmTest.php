@@ -7,12 +7,13 @@ use Coyote\Pm;
 use Coyote\Repositories\Contracts\PmRepositoryInterface;
 use Coyote\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Faker\Factory;
 
 class PmTest extends TestCase
 {
-    use DatabaseTransactions;
+    use DatabaseTransactions, WithFaker;
 
     private $user;
     private $author;
@@ -27,7 +28,7 @@ class PmTest extends TestCase
         $this->author = factory(User::class)->create();
     }
 
-    public function testPrivateMessageCreation()
+    public function testSubmitMessage()
     {
         $this->repo->submit($this->user, ['text' => 'Lorem ipsum lores', 'author_id' => $this->author->id]);
 
@@ -38,6 +39,36 @@ class PmTest extends TestCase
         $this->assertEquals($this->author->pm_unread + 1, $after->pm_unread);
     }
 
+    public function testSubmitMultipleMessagesToUser()
+    {
+        $this->repo->submit($this->user, ['text' => $this->faker->realText(), 'author_id' => $this->author->id]);
+        $this->repo->submit($this->user, ['text' => $this->faker->realText(), 'author_id' => $this->author->id]);
+
+        $this->assertDatabaseHas('pm', ['author_id' => $this->author->id]);
+
+        $after = clone $this->author;
+        $after->refresh();
+
+        $this->assertEquals($this->author->pm + 2, $after->pm);
+        $this->assertEquals($this->author->pm_unread + 1, $after->pm_unread);
+    }
+
+    public function testSubmitMultipleMessagesFromManyUsers()
+    {
+        $otherUser = factory(User::class)->create();
+
+        $this->repo->submit($this->user, ['text' => $this->faker->realText(), 'author_id' => $this->author->id]);
+        $this->repo->submit($otherUser, ['text' => $this->faker->realText(), 'author_id' => $this->author->id]);
+
+        $this->assertDatabaseHas('pm', ['author_id' => $this->author->id]);
+
+        $after = clone $this->author;
+        $after->refresh();
+
+        $this->assertEquals($this->author->pm + 2, $after->pm);
+        $this->assertEquals($this->author->pm_unread + 2, $after->pm_unread);
+    }
+
     public function testMarkAsRead()
     {
         $pm = $this->repo->submit($this->user, ['text' => 'Lorem ipsum lores', 'author_id' => $this->author->id]);
@@ -45,7 +76,8 @@ class PmTest extends TestCase
         $pm[Pm::INBOX]->read_at = Carbon::now();
         $pm[Pm::INBOX]->save();
 
-        $after = User::find($this->author->id);
+        $after = clone $this->author;
+        $after->refresh();
 
         $this->assertEquals($this->author->pm + 1, $after->pm);
         $this->assertEquals($this->author->pm_unread, $after->pm_unread);
@@ -56,7 +88,8 @@ class PmTest extends TestCase
         $pm = $this->repo->submit($this->user, ['text' => 'Lorem ipsum lores', 'author_id' => $this->author->id]);
         $pm[Pm::INBOX]->delete();
 
-        $after = User::find($this->author->id);
+        $after = clone $this->author;
+        $after->refresh();
 
         $this->assertEquals($this->author->pm, $after->pm);
         $this->assertEquals($this->author->pm_unread, $after->pm_unread);
@@ -75,39 +108,5 @@ class PmTest extends TestCase
 
         $pm[Pm::SENTBOX]->delete();
         $this->assertDatabaseMissing('pm_text', ['id' => $pm[Pm::SENTBOX]->text_id]);
-    }
-
-    public function testWriteMessage()
-    {
-        $faker = Factory::create();
-
-        $response = $this->actingAs($this->user)->post(
-            '/User/Pm/Submit',
-            ['text' => $text = $faker->text, 'recipient' => $this->author->name],
-            ['Accept' => 'application/json']);
-
-        $response
-            ->assertStatus(201)
-            ->assertSeeText($text);
-    }
-
-    public function testWriteMessageWithoutRecipient()
-    {
-        $faker = Factory::create();
-
-        $response = $this->actingAs($this->user)->post('/User/Pm/Submit', ['text' => $text = $faker->text], ['Accept' => 'application/json']);
-
-        $response
-            ->assertJsonValidationErrors(['recipient']);
-    }
-
-    public function testWriteMessageToMyself()
-    {
-        $faker = Factory::create();
-
-        $response = $this->actingAs($this->user)->post('/User/Pm/Submit', ['text' => $text = $faker->text, 'recipient' => $this->user->name], ['Accept' => 'application/json']);
-
-        $response
-            ->assertJsonValidationErrors(['recipient']);
     }
 }
