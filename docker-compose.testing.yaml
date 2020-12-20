@@ -35,4 +35,4 @@ services:
     environment:
       PORT: 8888
       REDIS_HOST: $REDIS_HOST
-      APP_KEY: "base64:mxXTLiTXOcsKZ+u6OoYVaZFNYAwM91nmbzrdEV+mUfE="
+      APP_KEY: $APP_KEY
