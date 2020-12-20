@@ -58,7 +58,10 @@ class PmControllerTest extends TestCase
     {
         factory(Pm::class, 2)->create(['user_id' => $this->user->id, 'author_id' => $this->author->id]);
 
-        $this->assertDatabaseHas('users', ['id' => $this->author->id, 'pm' => 2, 'pm_unread' => 1]);
+        $otherUser = factory(User::class)->create();
+        factory(Pm::class, 2)->create(['user_id' => $otherUser->id, 'author_id' => $this->author->id]);
+
+        $this->assertDatabaseHas('users', ['id' => $this->author->id, 'pm' => 4, 'pm_unread' => 2]);
 
         $pm = Pm::where('user_id', $this->author->id)->where('folder', Pm::INBOX)->get()->first();
 
@@ -67,6 +70,6 @@ class PmControllerTest extends TestCase
 
         $this->author->refresh();
 
-        $this->assertEquals(0, $this->author->pm_unread);
+        $this->assertEquals(1, $this->author->pm_unread);
     }
 }

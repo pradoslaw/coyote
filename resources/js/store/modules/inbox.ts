@@ -10,32 +10,30 @@ const getters = {
 };
 
 const mutations = {
-  init (state, count) {
+  init(state, count) {
     state.count = count;
   },
 
-  set (state, messages) {
+  set(state, messages) {
     state.messages = messages;
   },
 
-  reset (state) {
+  reset(state) {
     state.messages = null;
   },
 
-  increment (state) {
+  increment(state) {
     state.count += 1;
   },
 
-  decrement (state) {
+  decrement(state) {
     state.count = Math.max(0, state.count - 1);
   }
 };
 
 const actions = {
   get({ commit }) {
-    return axios.get('/User/Pm/Ajax').then(result => {
-      commit('set', result.data.pm);
-    });
+    return axios.get('/User/Pm/Inbox').then(result => commit('set', result.data));
   }
 };
 

@@ -109,11 +109,11 @@ class PmRepository extends Repository implements PmRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function getUnreadIds(int $userId, int $authorId)
+    public function getNotRead(int $userId, int $authorId)
     {
         return $this
             ->model
-            ->select(['id', 'text_id'])
+            ->select(['id', 'text_id', 'author_id', 'user_id'])
             ->where('user_id', $userId)
             ->where('author_id', $authorId)
             ->where('folder', Pm::INBOX)

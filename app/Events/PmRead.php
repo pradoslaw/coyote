@@ -26,4 +26,12 @@ class PmRead extends PmCreated implements ShouldBroadcast
 
         return $this->pm->only(['text_id', 'read_at']);
     }
+
+    /**
+     * @return string
+     */
+    public function broadcastAs()
+    {
+        return class_basename(self::class);
+    }
 }

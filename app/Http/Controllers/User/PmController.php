@@ -12,6 +12,7 @@ use Coyote\Repositories\Contracts\NotificationRepositoryInterface as Notificatio
 use Coyote\Repositories\Contracts\PmRepositoryInterface as PmRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Repositories\Criteria\WithTrashed;
+use Coyote\User;
 use Illuminate\Http\Request;
 
 /**
@@ -89,13 +90,9 @@ class PmController extends BaseController
         $talk = $this->pm->conversation($this->userId, $pm->author_id, 10, (int) $request->query('offset', 0));
         $messages = PmResource::collection($talk);
 
-        $this->user->pushCriteria(new WithTrashed());
+        $this->markAllAsRead($pm->author);
 
-        $recipient = $this->user->find($pm->author_id, ['id', 'name', 'deleted_at']);
-
-        $this->markAllAsRead($pm->author_id);
-
-        return $this->view('user.pm.show')->with(compact('pm', 'messages', 'recipient'));
+        return $this->view('user.pm.show')->with(compact('pm', 'messages'))->with('recipient', $pm->author);
     }
 
     /**
@@ -110,17 +107,15 @@ class PmController extends BaseController
     }
 
     /**
-     * Get last 10 conversations
-     *
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function inbox()
     {
         $pm = $this->pm->groupByAuthor($this->userId);
 
-        return response()->json([
-            'pm' => PmResource::collection($pm)
-        ]);
+        PmResource::withoutWrapping();
+
+        return PmResource::collection($pm);
     }
 
     /**
@@ -193,18 +188,20 @@ class PmController extends BaseController
     }
 
     /**
-     * @param int $authorId
+     * @param User $author
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    private function markAllAsRead(int $authorId)
+    private function markAllAsRead(User $author)
     {
-        $result = $this->pm->getUnreadIds($this->userId, $authorId);
+        $result = $this->pm->getNotRead($this->userId, $author->id);
 
         foreach ($result as $pm) {
             $this->markAsRead($pm);
         }
 
-        $this->request->attributes->set('pm_unread', --$this->auth->pm_unread);
+        if (count($result)) {
+            $this->request->attributes->set('pm_unread', --$this->auth->pm_unread);
+        }
     }
 
     /**

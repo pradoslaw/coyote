@@ -60,7 +60,7 @@ class Pm extends Model
      */
     public function author()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withTrashed()->select(['id', 'name', 'deleted_at', 'is_blocked', 'pm', 'pm_unread']);
     }
 
     /**

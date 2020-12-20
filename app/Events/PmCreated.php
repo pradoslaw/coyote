@@ -19,12 +19,15 @@ class PmCreated implements ShouldBroadcast
      */
     protected $pm;
 
+    protected int $count;
+
     /**
      * @param Pm $pm
      */
     public function __construct(Pm $pm)
     {
         $this->pm = $pm;
+        $this->count = $pm->user->pm_unread;
     }
 
     /**
@@ -44,6 +47,14 @@ class PmCreated implements ShouldBroadcast
     {
         $this->pm->setRelation('user', $this->pm->author);
 
-        return (new PmResource($this->pm))->toArray(request());
+        return (new PmResource($this->pm))->additional(['count' => $this->count])->toResponse(request())->getData(true);
+    }
+
+    /**
+     * @return string
+     */
+    public function broadcastAs()
+    {
+        return class_basename(self::class);
     }
 }

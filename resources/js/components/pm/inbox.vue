@@ -69,8 +69,8 @@
       },
 
       listenForMessages() {
-        this.channel.on('Coyote\\Events\\PmCreated', data => {
-          this.increment();
+        this.channel.on('PmCreated', ({ count, data }) => {
+          this.init(count);
           this.reset();
 
           this.isOpen = false;
@@ -131,7 +131,7 @@
         this.channel.whisper('PmVisible', {});
       },
 
-      ...mapMutations('inbox', ['increment', 'reset'])
+      ...mapMutations('inbox', ['init', 'reset'])
     },
     computed: {
       ...mapState('inbox', ['messages', 'count']),

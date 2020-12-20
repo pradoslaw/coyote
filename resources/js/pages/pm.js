@@ -113,7 +113,7 @@ new Vue({
     },
 
     listenForMessage() {
-      this.channel().on('Coyote\\Events\\PmCreated', data => {
+      this.channel().on('PmCreated', ({ count, data }) => {
         if (data.user.id === this.recipient.id) {
           store.commit('messages/add', data);
 
@@ -124,7 +124,7 @@ new Vue({
         }
       });
 
-      this.channel().on('Coyote\\Events\\PmRead', data => {
+      this.channel().on('PmRead', data => {
         const message = this.messages.find(item => item.text_id === data.text_id);
 
         if (message) {
@@ -196,7 +196,7 @@ new Vue({
           .filter(message => message.read_at === null && message.folder === INBOX && shouldMarkAsRead())
           .forEach(message => {
             store.dispatch('messages/mark', message);
-            store.commit('inbox/decrement');
+            // store.commit('inbox/decrement');
           });
       };
 

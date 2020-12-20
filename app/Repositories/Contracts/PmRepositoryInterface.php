@@ -39,7 +39,7 @@ interface PmRepositoryInterface extends RepositoryInterface
      * @param int $authorId
      * @return Pm[]
      */
-    public function getUnreadIds(int $userId, int $authorId);
+    public function getNotRead(int $userId, int $authorId);
 
     /**
      * Submit a new message
