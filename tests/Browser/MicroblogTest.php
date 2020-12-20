@@ -53,7 +53,7 @@ class MicroblogTest extends DuskTestCase
                 ->assertSee($text)
                 ->assertInputValueIsNot('text', $text);
 
-//            $browser2->waitForText($text, 10);
+            $browser2->waitForText($text, 30);
 
             $browser->logout();
         });
