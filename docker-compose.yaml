@@ -10,6 +10,9 @@ services:
       POSTGRES_PASSWORD: coyote
       POSTGRES_DB: coyote
       TZ: "Europe/Warsaw"
+    logging:
+      options:
+        max-size: 10m
     networks:
       - coyote
 
@@ -22,6 +25,9 @@ services:
       - XDEBUG_PORT=$XDEBUG_PORT
     volumes:
       - ./:/var/www
+    logging:
+      options:
+        max-size: 10m
     networks:
       - coyote
 
@@ -31,6 +37,9 @@ services:
     volumes:
       - ./:/var/www
     entrypoint: crond -f -l 8
+    logging:
+      options:
+        max-size: 10m
     networks:
       - coyote
 
@@ -44,12 +53,18 @@ services:
     working_dir: /var/www
     depends_on:
       - php
+    logging:
+      options:
+        max-size: 10m
     networks:
       - coyote
 
   redis:
     image: redis:5
     command: redis-server --appendonly no --save
+    logging:
+      options:
+        max-size: 10m
     networks:
       - coyote
 
@@ -60,6 +75,9 @@ services:
     environment:
       - "discovery.type=single-node"
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    logging:
+      options:
+        max-size: 10m
     networks:
       - coyote
 
@@ -67,6 +85,9 @@ services:
     image: docker.elastic.co/kibana/kibana:6.8.6
     depends_on:
       - elasticsearch
+    logging:
+      options:
+        max-size: 10m
     networks:
       - coyote
 
@@ -74,6 +95,9 @@ services:
     image: mongo:3
     volumes:
       - mongo:/data/db
+    logging:
+      options:
+        max-size: 10m
     networks:
       - coyote
 
@@ -88,6 +112,9 @@ services:
     depends_on:
       - mongo
       - elasticsearch
+    logging:
+      options:
+        max-size: 10m
     ports:
       - 29000:9000
       - 12201:12201
@@ -103,11 +130,17 @@ services:
     command: server /data
     ports:
       - 39000:9000
+    logging:
+      options:
+        max-size: 10m
     networks:
       - coyote
 
   mailhog:
     image: mailhog/mailhog
+    logging:
+      options:
+        max-size: 10m
     networks:
       - coyote
 
@@ -117,6 +150,9 @@ services:
       - nginx
     volumes:
       - /dev/shm:/dev/shm
+    logging:
+      options:
+        max-size: 10m
     networks:
       - coyote
 
@@ -132,6 +168,9 @@ services:
       /usr/bin/mc policy set public minio/public;
       exit 0;
       "
+    logging:
+      options:
+        max-size: 10m
     networks:
       - coyote
 
