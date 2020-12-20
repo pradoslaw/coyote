@@ -20,14 +20,6 @@ const mutations = {
 
   reset(state) {
     state.messages = null;
-  },
-
-  increment(state) {
-    state.count += 1;
-  },
-
-  decrement(state) {
-    state.count = Math.max(0, state.count - 1);
   }
 };
 

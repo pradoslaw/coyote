@@ -80,7 +80,7 @@ const actions = {
   mark ({ commit }, message) {
     commit('mark', message);
 
-    return axios.post(`/User/Pm/Mark/${message.id}`);
+    return axios.post(`/User/Pm/Mark/${message.id}`).then(response => commit('inbox/init', response.data.count, { root: true }));
   },
 
   loadMore ({ state, commit }, authorId) {

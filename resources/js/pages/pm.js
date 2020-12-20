@@ -113,7 +113,7 @@ new Vue({
     },
 
     listenForMessage() {
-      this.channel().on('PmCreated', ({ count, data }) => {
+      this.channel().on('PmCreated', ({ data }) => {
         if (data.user.id === this.recipient.id) {
           store.commit('messages/add', data);
 
@@ -124,6 +124,7 @@ new Vue({
         }
       });
 
+      // message was read by recipient
       this.channel().on('PmRead', data => {
         const message = this.messages.find(item => item.text_id === data.text_id);
 
@@ -194,10 +195,7 @@ new Vue({
       const listener = () => {
         this.messages
           .filter(message => message.read_at === null && message.folder === INBOX && shouldMarkAsRead())
-          .forEach(message => {
-            store.dispatch('messages/mark', message);
-            // store.commit('inbox/decrement');
-          });
+          .forEach(message => store.dispatch('messages/mark', message));
       };
 
       document.getElementById('app-pm').addEventListener('mouseover', listener, {once: true});

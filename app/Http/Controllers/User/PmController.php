@@ -178,6 +178,7 @@ class PmController extends BaseController
 
     /**
      * @param Pm $pm
+     * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function mark(Pm $pm)
@@ -185,6 +186,9 @@ class PmController extends BaseController
         $this->authorize('show', $pm);
 
         $this->markAsRead($pm);
+        $this->auth->refresh();
+
+        return response()->json(['count' => $this->auth->pm_unread]);
     }
 
     /**
