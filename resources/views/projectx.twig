@@ -1,7 +1,7 @@
 {% extends 'layout' %}
 
 {% block container %}
-  <div class="row margin-lg-top">
+  <div class="row mt-1">
     <div class="col-lg-2">
       <div class="qa-filter">
 
@@ -22,73 +22,84 @@
     </div>
 
     <div class="col-lg-7">
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <div class="qa-title margin-md-bottom">
-            <h1><a href="#">Czym różni się metoda prywatna od publicznej?</a></h1>
+      <div class="card card-default">
+        <div class="card-body">
+          <div class="qa-title mb-2">
+            <h1><a href="#">Jaki będzie wynik wykonania poniższego kodu?</a></h1>
 
-            <ul class="list-inline margin-sm-top margin-sm-bottom qa-metadata">
-              <li>
-                <strong>3</strong> <small>odpowiedzi</small>
-              </li>
+{#            <ul class="d-none d-sm-block list-inline list-inline-bullet-sm text-muted small m-0">#}
+{#              <li class="list-inline-item">#}
+{#                <strong>3</strong>#}
+{#                <small>odpowiedzi</small>#}
+{#              </li>#}
 
-              <li>
-                <strong>1700</strong> <small>wyświetleń</small>
-              </li>
-            </ul>
+{#              <li class="list-inline-item">#}
+{#                <strong>1700</strong>#}
+{#                <small>wyświetleń</small>#}
+{#              </li>#}
+{#            </ul>#}
+{#          </div>#}
+
+{#          <div class="media">#}
+{#            <div class="media-left pl-2">#}
+{#              <a href="https://4programmers.net/Profile/23428">#}
+{#                <img class="img-thumbnail" src="https://4programmers.net/uploads/photo/4ccbfd85b1f8e" style="width: 35px; height: 35px;" alt="">#}
+{#              </a>#}
+{#            </div>#}
+
+{#            <div class="media-body">#}
+{#              <h5 class="media-heading"><a href="https://4programmers.net/Profile/23428" data-user-id="23428" style="color: #454545; font-weight: bold">Koziołek</a></h5>#}
+
+{#              <a href="https://4programmers.net/Mikroblogi/View/64395#entry-64395" title="04 February 2020, 21:02" class="timestamp" data-timestamp="1580846571">#}
+{#                <small class="text-muted">dziś, 21:02</small>#}
+{#              </a>#}
+{#            </div>#}
           </div>
 
-          <div class="media">
-            <div class="media-left hidden-xs padding-sm-right">
-              <a href="https://4programmers.net/Profile/23428">
-                <img class="media-object img-thumbnail" src="https://4programmers.net/uploads/photo/4ccbfd85b1f8e" style="width: 35px; height: 35px;" alt="">
-              </a>
+          <div class="mt-2">
+            <pre><code class="language-php">true === 1</code></pre>
+          </div>
+
+          <div class="mt-2 position-relative">
+            <div class="blur" style="font-size: 14px">
+              Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a
+              Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in
+              classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero,
+              written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in
+              section 1.10.32.
             </div>
 
-            <div class="media-body">
-              <h5 class="media-heading"><a href="https://4programmers.net/Profile/23428" data-user-id="23428" style="color: #454545; font-weight: bold">Koziołek</a></h5>
-
-              <a href="https://4programmers.net/Mikroblogi/View/64395#entry-64395" title="04 February 2020, 21:02" class="timestamp" data-timestamp="1580846571"><small class="text-muted">dziś, 21:02</small></a>
-            </div>
+            <button class="position-absolute btn btn-primary" style="left: 50%; top: 50%; transform: translate(-50%, -50%);">Zobacz odpowiedź</button>
           </div>
 
-          <div class="margin-md-top" style="font-size: 14px">
-            Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
-          </div>
 
-          <ul class="tag-clouds tag-clouds-skills margin-md-top " style="margin-top: 20px">
+          <ul class="tag-clouds tag-clouds-skills mt-3 ">
             <li>
-              <a href="https://4programmers.net/Praca/Technologia/java" title="Znajdź oferty zawierające Java"><img style="width: 15px" alt="java" src="https://4programmers.net/uploads/logo/59/59f9f808bc606.png"> Java</a>
+              <a href="https://4programmers.net/Praca/Technologia/java" title="Znajdź oferty zawierające Java"><img style="width: 15px" alt="java" src="https://4programmers.net/uploads/logo/59/59f9f808bc606.png">
+                Java</a>
             </li>
             <li>
-              <a href="https://4programmers.net/Praca/Technologia/javascript" title="Znajdź oferty zawierające Javascript"><img style="width: 15px" alt="javascript" src="https://4programmers.net/uploads/logo/59/59f9f81f8f897.png">   Javascript             </a>
+              <a href="https://4programmers.net/Praca/Technologia/javascript" title="Znajdź oferty zawierające Javascript"><img style="width: 15px" alt="javascript" src="https://4programmers.net/uploads/logo/59/59f9f81f8f897.png">
+                Javascript </a>
             </li>
           </ul>
 
-          <div class="margin-md-top padding-md-top qa-options">
-            <button class="pull-right btn btn-sm btn-primary" style="margin-top: -5px">Odpowiedz</button>
+          <div class="mt-3 pt-3 qa-options">
+{#            <button class="float-right btn btn-sm btn-primary" style="margin-top: -5px">Odpowiedz</button>#}
 
-            <ul class="list-inline">
-              <li>
+            <ul class="list-inline mb-2">
+              <li class="list-inline-item">
                 <a href="#">
                   <i class="fa text-primary fa-fw fa-thumbs-up"></i>
                   5 głosów
                 </a>
               </li>
 
-              <li>
+              <li class="list-inline-item">
                 <a href="#">
                   <i class="far fa-fw fa-star"></i>
 
                   10 obserwatorów
-                </a>
-              </li>
-
-              <li>
-                <a href="#">
-                  <i class="fas fa-fw fa-check"></i>
-
-                  Cel spełniony
                 </a>
               </li>
             </ul>
@@ -96,27 +107,60 @@
         </div>
       </div>
 
-      <h3 class="margin-md-top margin-md-bottom">3 odpowiedzi</h3>
+      <h3 class="mt-2 mb-2">Komentarze</h3>
 
-      <div class="panel panel-default panel-primary">
-        <div class="panel-body">
-          <div class="media">
-            <div class="media-left hidden-xs padding-sm-right">
-              <a href="https://4programmers.net/Profile/23428">
-                <img class="media-object img-thumbnail" src="https://4programmers.net/uploads/photo/4ccbfd85b1f8e" style="width: 35px; height: 35px;" alt="">
-              </a>
+      <div id="comments" class="card card-default">
+        <div class="card-body">
+          <div id="comment-438" class="comment">
+            <div class="media">
+              <div class="mr-2"><a href="/Profile/1" data-user-id="1">
+                  <div class="position-relative img-thumbnail media-object">
+                    <img src="http://4p.local:8880/uploads/photo/yPLjhM456oR3qDVVuuaK3govIgs1dNKOrkYwGVir.png" alt="Adam Boduch" class="d-block mw-100"> <!----></div>
+                </a></div>
+              <div class="media-body">
+                <div class="dropdown float-right">
+                  <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-secondary btn-xs dropdown-toggle"></button>
+                  <div class="dropdown-menu dropdown-menu-right"><a href="javascript:" class="btn-edit dropdown-item"><i class="fa fa-edit fa-fw"></i> Edytuj</a>
+                    <a href="javascript:" class="dropdown-item"><i class="fa fa-trash fa-fw"></i> Usuń</a></div>
+                </div>
+                <h5><a class="" href="/Profile/1" data-user-id="1">Adam Boduch</a></h5>
+                <h6><a href="#comment-438" class="text-muted">
+                    <time title="21 grudnia 2020 20:40">1 sekunda temu</time>
+                  </a></h6>
+                <div class="mt-2"><p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.
+                    Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going
+                    through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum"
+                    (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum,
+                    "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.</p></div> <!---->
+              </div>
             </div>
+            <div class="comment"><!----></div>
+            <div id="comment-439" class="comment">
+              <div class="media">
+                <div class="mr-2"><a href="/Profile/1" data-user-id="1">
+                    <div class="position-relative img-thumbnail media-object">
+                      <img src="http://4p.local:8880/uploads/photo/yPLjhM456oR3qDVVuuaK3govIgs1dNKOrkYwGVir.png" alt="Adam Boduch" class="d-block mw-100"> <!----></div>
+                  </a></div>
+                <div class="media-body">
+                  <div class="dropdown float-right">
+                    <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-secondary btn-xs dropdown-toggle"></button>
+                    <div class="dropdown-menu dropdown-menu-right"><a href="javascript:" class="btn-edit dropdown-item"><i class="fa fa-edit fa-fw"></i> Edytuj</a>
+                      <a href="javascript:" class="dropdown-item"><i class="fa fa-trash fa-fw"></i> Usuń</a></div>
+                  </div>
+                  <h5><a class="" href="/Profile/1" data-user-id="1">Adam Boduch</a></h5>
+                  <h6><a href="#comment-439" class="text-muted">
+                      <time title="21 grudnia 2020 20:40">1 sekunda temu</time>
+                    </a></h6>
+                  <div class="mt-2"><p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years
+                      old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and
+                      going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et
+                      Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of
+                      Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.</p></div> <!---->
+                </div>
+              </div>
+              <div class="comment"><!----></div>
 
-            <div class="media-body">
-              <h5 class="media-heading"><a href="https://4programmers.net/Profile/23428" data-user-id="23428" style="color: #454545; font-weight: bold">Koziołek</a></h5>
-
-              <a href="https://4programmers.net/Mikroblogi/View/64395#entry-64395" title="04 February 2020, 21:02" class="timestamp" data-timestamp="1580846571"><small class="text-muted">dziś, 21:02</small></a>
             </div>
-
-          </div>
-
-          <div class="margin-md-top" style="font-size: 14px">
-            Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
           </div>
         </div>
       </div>
