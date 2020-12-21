@@ -67,6 +67,11 @@ export class PostSaved implements Observer {
 
     if (!existing) {
       payload.is_read = false;
+
+      // user must be on the last page of topic
+      if (store.getters['posts/currentPage'] < store.getters['posts/totalPages']) {
+        return;
+      }
     }
 
     store.commit(`posts/update`, payload);
