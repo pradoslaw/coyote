@@ -39,11 +39,10 @@ class JwtToken
             $key
         );
 
-        $now   = new \DateTimeImmutable();
+        $now   = new \DateTimeImmutable('@' . time());
 
         $token = $configuration
             ->builder()
-            ->issuedAt($now)
             ->expiresAt($now->modify('+30 days'))
             ->issuedBy($user->id)
             ->withClaim('allowed', $allowed)
