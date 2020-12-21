@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 
 class UsersTableSeeder extends Seeder
@@ -17,6 +19,6 @@ class UsersTableSeeder extends Seeder
             'password'              => bcrypt('123')
         ]);
 
-        factory(\Coyote\User::class, 10)->create();
+        \factory(\Coyote\User::class, 10)->create();
     }
 }

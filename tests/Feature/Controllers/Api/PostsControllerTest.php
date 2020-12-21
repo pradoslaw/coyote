@@ -58,7 +58,7 @@ class PostsControllerTest extends TestCase
     {
         $request = $this->get('/v1/posts', ['Accept' => 'application/json']);
 
-        $data = $request->decodeResponseJson('data');
+        $data = $request->json('data');
 
         $this->assertNotEquals($data[0]['html'], $this->topic->firstPost->html);
 
@@ -75,7 +75,7 @@ class PostsControllerTest extends TestCase
     public function testShowAllPostsAuthorized()
     {
         $request = $this->get('/v1/posts', ['Accept' => 'application/json', 'Authorization' => 'Bearer ' . $this->token]);
-        $data = $request->decodeResponseJson('data');
+        $data = $request->json('data');
 
         $this->assertEquals($data[0]['html'], $this->topic->firstPost->html);
     }
@@ -98,7 +98,7 @@ class PostsControllerTest extends TestCase
             'text' => $this->topic->firstPost->text
         ]);
 
-        $comment = array_first($request->decodeResponseJson('comments'));
+        $comment = array_first($request->json('comments'));
 
         $this->assertEquals($comment['text'], $this->topic->firstPost->comments->first()->text);
         $this->assertEquals($comment['id'], $this->topic->firstPost->comments->first()->id);

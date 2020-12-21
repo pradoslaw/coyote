@@ -72,7 +72,7 @@ class SettingsController extends BaseController
 
                 // user changed email. first, user has to confirm email before we save it.
                 if ($this->auth->is_confirm) {
-                    $this->auth->email = $this->auth->getOriginal('email');
+                    $this->auth->email = $this->auth->getRawOriginal('email');
                 }
             }
 

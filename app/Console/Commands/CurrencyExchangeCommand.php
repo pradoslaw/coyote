@@ -60,5 +60,7 @@ class CurrencyExchangeCommand extends Command
         }
 
         $this->info('Done.');
+
+        return 0;
     }
 }

@@ -35,12 +35,9 @@ class SubmitControllerTest extends TestCase
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(['currency_id', 'plan_id', 'title']);
         $response->assertJsonFragment([
-            'message' => 'The given data was invalid.',
-            'errors' => [
-                'title' => ['Tytuł jest wymagany.'],
-                'currency_id' => ['Pole currency id jest wymagane.'],
-                'plan_id' => ['Pole plan id jest wymagane.']
-            ]
+            'title' => ['Tytuł jest wymagany.'],
+            'currency_id' => ['Pole currency id jest wymagane.'],
+            'plan_id' => ['Pole plan id jest wymagane.']
         ]);
     }
 
@@ -56,10 +53,7 @@ class SubmitControllerTest extends TestCase
 
         $response->assertJsonValidationErrors(['email']);
         $response->assertJsonFragment([
-            'message' => 'The given data was invalid.',
-            'errors' => [
-                'email' => ['Pole email jest wymagane.']
-            ]
+            'email' => ['Pole email jest wymagane.']
         ]);
     }
 
@@ -75,10 +69,7 @@ class SubmitControllerTest extends TestCase
 
         $response->assertJsonValidationErrors(['recruitment']);
         $response->assertJsonFragment([
-            'message' => 'The given data was invalid.',
-            'errors' => [
-                'recruitment' => ['Proszę podać informacje w jaki sposób można składać aplikacje na to stanowisko.']
-            ]
+            'recruitment' => ['Proszę podać informacje w jaki sposób można składać aplikacje na to stanowisko.']
         ]);
     }
 

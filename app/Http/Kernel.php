@@ -14,6 +14,7 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         Middleware\TrustProxies::class,
+        \Fruitcake\Cors\HandleCors::class,
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         Middleware\TrimStrings::class,

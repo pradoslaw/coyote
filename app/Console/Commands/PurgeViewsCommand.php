@@ -81,6 +81,8 @@ class PurgeViewsCommand extends Command
 
             $this->commit($page, $hits);
         }
+
+        return 0;
     }
 
     /**

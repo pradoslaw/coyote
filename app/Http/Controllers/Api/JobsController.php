@@ -10,7 +10,6 @@ use Coyote\Http\Resources\Api\JobApiResource;
 use Coyote\Repositories\Contracts\CouponRepositoryInterface as CouponRepository;
 use Illuminate\Database\Connection;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\Resource;
 use Coyote\Http\Requests\Job\ApiRequest;
 use Coyote\Job;
 use Coyote\Repositories\Criteria\EagerLoading;
@@ -56,7 +55,7 @@ class JobsController extends Controller
      */
     public function show(Job $job)
     {
-        Resource::withoutWrapping();
+        JobApiResource::withoutWrapping();
 
         $this->job->pushCriteria(new EagerLoading(['firm', 'locations', 'tags', 'currency']));
         $this->job->pushCriteria(new EagerLoading('features'));

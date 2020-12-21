@@ -85,7 +85,7 @@ class SubmitControllerTest extends TestCase
             ]
         ]);
 
-        $id = $response->decodeResponseJson('id');
+        $id = $response->json('id');
 
         $this->assertDatabaseHas('posts', ['id' => $id]);
         $this->assertDatabaseHas('topics', ['first_post_id' => $id, 'is_sticky' => false]);
@@ -112,7 +112,7 @@ class SubmitControllerTest extends TestCase
             ['text' => $faker->text, 'subject' => $faker->text(50), 'is_sticky' => true]
         );
 
-        $id = $response->decodeResponseJson('id');
+        $id = $response->json('id');
 
         $this->assertDatabaseHas('posts', ['id' => $id]);
         $this->assertDatabaseHas('topics', ['first_post_id' => $id, 'is_sticky' => true]);

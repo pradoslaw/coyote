@@ -101,8 +101,8 @@ class AuthServiceProvider extends ServiceProvider
         }
 
 //        Passport::routes();
-        Passport::personalAccessClientId(1);
-        Passport::personalAccessClientSecret(config('app.key'));
+//        Passport::personalAccessClientId(1);
+//        Passport::personalAccessClientSecret(config('app.key'));
     }
 
     /**

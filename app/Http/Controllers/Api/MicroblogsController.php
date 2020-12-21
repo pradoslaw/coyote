@@ -6,7 +6,6 @@ use Coyote\Http\Resources\Api\MicroblogResource;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
 use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Repositories\Criteria\Microblog\OrderById;
-use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Routing\Controller;
 
 class MicroblogsController extends Controller
@@ -43,7 +42,7 @@ class MicroblogsController extends Controller
      */
     public function show(int $id)
     {
-        Resource::withoutWrapping();
+        MicroblogResource::withoutWrapping();
 
         $microblog = $this->microblog->findById($id);
         return new MicroblogResource($microblog);

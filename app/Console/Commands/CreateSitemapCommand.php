@@ -62,6 +62,8 @@ class CreateSitemapCommand extends Command
         $sitemap->save();
 
         $this->info("Done.");
+
+        return 0;
     }
 
     /**

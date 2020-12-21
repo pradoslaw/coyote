@@ -50,7 +50,7 @@ class PurgeFirewallCommand extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return int
      */
     public function handle()
     {
@@ -58,5 +58,7 @@ class PurgeFirewallCommand extends Command
         $this->cache->forget(Rules::CACHE_KEY);
 
         $this->info('Done.');
+
+        return 0;
     }
 }

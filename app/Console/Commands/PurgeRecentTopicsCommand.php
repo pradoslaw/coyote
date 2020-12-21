@@ -35,5 +35,7 @@ class PurgeRecentTopicsCommand extends Command
         $this->db->statement('REFRESH MATERIALIZED VIEW topic_recent');
 
         $this->info('Done.');
+
+        return 0;
     }
 }

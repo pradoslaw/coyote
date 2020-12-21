@@ -16,6 +16,6 @@ class ChangeImageUrlTest extends TestCase
         $listener = new \Coyote\Listeners\ChangeImageUrl();
         $listener->handle($event);
 
-        $this->assertRegExp('~<img src="https://static.4programmers.net/img/smilies/sad.gif">~', $message->getBody());
+        $this->assertMatchesRegularExpression('~<img src="https://static.4programmers.net/img/smilies/sad.gif">~', $message->getBody());
     }
 }

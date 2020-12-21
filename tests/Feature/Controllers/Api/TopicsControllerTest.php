@@ -52,7 +52,7 @@ class TopicsControllerTest extends TestCase
     {
         $request = $this->get('/v1/topics', ['Accept' => 'application/json']);
 
-        $data = $request->decodeResponseJson('data');
+        $data = $request->json('data');
 
         $this->assertNotEquals($this->topic->subject, $data[0]['subject']);
         $this->assertTrue($data[0]['is_read']);
@@ -61,7 +61,7 @@ class TopicsControllerTest extends TestCase
     public function testShowAllTopicsAuthorized()
     {
         $request = $this->get('/v1/topics', ['Accept' => 'application/json', 'Authorization' => 'Bearer ' . $this->token]);
-        $data = $request->decodeResponseJson('data');
+        $data = $request->json('data');
 
         $this->assertEquals($this->topic->subject, $data[0]['subject']);
         $this->assertTrue($data[0]['is_read']);
@@ -103,7 +103,7 @@ class TopicsControllerTest extends TestCase
         $this->factory($this->topic)->asRead($this->topic->last_post_created_at);
 
         $request = $this->get('/v1/topics', ['Accept' => 'application/json', 'Authorization' => 'Bearer ' . $this->token]);
-        $data = $request->decodeResponseJson('data');
+        $data = $request->json('data');
 
         $this->assertEquals($this->topic->subject, $data[0]['subject']);
         $this->assertTrue($data[0]['is_read']);

@@ -1,10 +1,12 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 
 class ActivityTableSeeder extends Seeder
 {
-    use SchemaBuilder;
+    use \SchemaBuilder;
 
     /**
      * Run the database seeds.

@@ -39,7 +39,7 @@ class CreateCouponCommand extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return int
      */
     public function handle()
     {
@@ -50,5 +50,7 @@ class CreateCouponCommand extends Command
 
             $this->line($code);
         }
+
+        return 0;
     }
 }
