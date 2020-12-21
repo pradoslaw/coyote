@@ -14,7 +14,7 @@ class AddUpdatedAtToTagsTable extends Migration
     public function up()
     {
         Schema::table('tags', function (Blueprint $table) {
-            $table->timestampTz('updated_at')->useCurrent();
+            $table->timestampTz('updated_at')->nullable()->useCurrent();
         });
 
         \Illuminate\Support\Facades\DB::statement('UPDATE tags SET updated_at = last_used_at');
