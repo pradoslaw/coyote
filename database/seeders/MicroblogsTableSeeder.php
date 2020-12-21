@@ -6,6 +6,8 @@ use Illuminate\Database\Seeder;
 
 class MicroblogsTableSeeder extends Seeder
 {
+    use \SchemaBuilder;
+
     /**
      * Run the database seeds.
      *
@@ -13,19 +15,19 @@ class MicroblogsTableSeeder extends Seeder
      */
     public function run()
     {
-        \DB::table('permissions')->insert([
+        $this->db->table('permissions')->insert([
             'name'           => 'microblog-update',
             'description'    => 'Edycja wpisów mikrobloga',
             'default'        => false
         ]);
 
-        \DB::table('permissions')->insert([
+        $this->db->table('permissions')->insert([
             'name'           => 'microblog-delete',
             'description'    => 'Usuwanie wpisów mikrobloga',
             'default'        => false
         ]);
 
-        $user = DB::table('users')->orderBy('id')->first();
+        $user = $this->db->table('users')->orderBy('id')->first();
 
         \Coyote\Microblog::create([
             'user_id'           => $user->id,

@@ -20,7 +20,7 @@ class WikiTableSeeder extends Seeder
 
     private function create($title, $path, $template)
     {
-        $wiki = Coyote\Wiki\Page::create(['title' => $title, 'template' => $template]);
+        $wiki = \Coyote\Wiki\Page::create(['title' => $title, 'template' => $template]);
         $wiki->logs()->create(['user_id' => 1, 'title' => $title, 'ip' => 'localhost', 'browser' => '(none)', 'host' => '(none)']);
         $wiki->paths()->create(['path' => $path]);
     }

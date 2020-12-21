@@ -6,6 +6,8 @@ use Illuminate\Database\Seeder;
 
 class GroupsTableSeeder extends Seeder
 {
+    use \SchemaBuilder;
+
     /**
      * Run the database seeds.
      *
@@ -21,7 +23,7 @@ class GroupsTableSeeder extends Seeder
         $group->system = true;
         $group->save();
 
-        $user = DB::table('users')->orderBy('id')->first();
+        $user = $this->db->table('users')->orderBy('id')->first();
 
         \Coyote\Group\User::create([
            'group_id'       => $group->id,
