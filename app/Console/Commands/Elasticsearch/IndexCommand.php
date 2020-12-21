@@ -61,6 +61,8 @@ class IndexCommand extends Command
             $this->dispatch();
             $this->info('Done.');
         }
+
+        return 0;
     }
 
     /**

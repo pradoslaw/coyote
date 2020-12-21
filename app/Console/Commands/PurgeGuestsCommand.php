@@ -39,7 +39,7 @@ class PurgeGuestsCommand extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return int
      */
     public function handle()
     {
@@ -49,5 +49,7 @@ class PurgeGuestsCommand extends Command
         $this->db->delete("DELETE FROM activities WHERE created_at < NOW()  - INTERVAL '2 weeks'");
 
         $this->info('Done.');
+
+        return 0;
     }
 }

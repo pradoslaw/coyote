@@ -39,12 +39,14 @@ class FlushCacheCommand extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return int
      */
     public function handle()
     {
         $this->cache->tags($this->option('tag'))->flush();
 
         $this->info('Done.');
+
+        return 0;
     }
 }

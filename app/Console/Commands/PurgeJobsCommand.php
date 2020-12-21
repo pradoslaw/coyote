@@ -80,7 +80,7 @@ class PurgeJobsCommand extends Command
     }
 
     /**
-     * @return void
+     * @return int
      */
     public function handle()
     {
@@ -100,6 +100,8 @@ class PurgeJobsCommand extends Command
                 $this->info(sprintf('Sending e-mail about ending offer: %s.', $job->title));
             }
         }
+
+        return 0;
     }
 
     /**

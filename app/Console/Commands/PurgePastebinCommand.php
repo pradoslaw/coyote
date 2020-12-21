@@ -41,11 +41,13 @@ class PurgePastebinCommand extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return int
      */
     public function handle()
     {
         $this->pastebin->purge();
         $this->info('Done.');
+
+        return 0;
     }
 }

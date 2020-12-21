@@ -99,6 +99,8 @@ class PurgeSessionsCommand extends Command
 
         $this->user->resetCriteria();
         $this->info('Session purged.');
+
+        return 0;
     }
 
     /**
