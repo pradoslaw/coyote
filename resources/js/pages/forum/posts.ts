@@ -86,7 +86,7 @@ export default Vue.extend({
         }
 
         // @ts-ignore
-        this.$refs['js-submit-form'].$refs['textarea']!.focus();
+        this.$refs['js-submit-form'].$refs['markdown']!.focus();
       }
       else {
         let text = `> ##### [${post.user ? post.user.name : post.user_name} napisał(a)](/Forum/${post.id}):`
