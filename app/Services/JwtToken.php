@@ -6,6 +6,8 @@ use Coyote\Services\Forum\UserDefined;
 use Coyote\User;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key;
+use Lcobucci\JWT\Signer\Key\InMemory;
+use Lcobucci\JWT\Configuration;
 
 class JwtToken
 {
@@ -29,16 +31,25 @@ class JwtToken
      */
     public function token(User $user): string
     {
-        $signer = new Sha256();
         $allowed = array_pluck($this->userDefined->allowedForums($user), 'id');
 
-        $token = (new \Lcobucci\JWT\Builder())
-            ->issuedAt(now()->timestamp)
-            ->expiresAt(now()->addDays(30)->timestamp)
+        $key = InMemory::plainText(config('app.key'));
+
+        $configuration = Configuration::forSymmetricSigner(
+            new Sha256(),
+            $key
+        );
+
+        $now   = new \DateTimeImmutable();
+
+        $token = $configuration
+            ->builder()
+            ->issuedAt($now)
+            ->expiresAt($now->modify('+30 days'))
             ->issuedBy($user->id)
             ->withClaim('allowed', $allowed)
-            ->getToken($signer, new Key(config('app.key')));
+            ->getToken($configuration->signer(), $configuration->signingKey());
 
-        return (string) $token;
+        return (string) $token->toString();
     }
 }

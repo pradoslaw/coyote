@@ -21,6 +21,7 @@ use Illuminate\Routing\Events\RouteMatched;
 use Illuminate\Routing\Redirector;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -78,6 +79,8 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->registerMacros();
+
+        Paginator::useBootstrap();
     }
 
     /**

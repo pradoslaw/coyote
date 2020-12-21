@@ -85,7 +85,7 @@ class JobsControllerTest extends TestCase
         $this->assertNotNull(Coupon::withTrashed()->find($coupon->id)->deleted_at);
 
         /** @var Job $job */
-        $job = Job::find($response->decodeResponseJson('id'));
+        $job = Job::find($response->json('id'));
 
         $this->assertFalse($job->enable_apply);
         $this->assertEquals($job->seniority, $data['seniority']);
@@ -129,7 +129,7 @@ class JobsControllerTest extends TestCase
             'is_remote' => false
         ]);
 
-        $logo = $response->decodeResponseJson('firm.logo');
+        $logo = $response->json('firm.logo');
 
         $this->assertNotEmpty($logo);
     }

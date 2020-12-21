@@ -100,7 +100,7 @@ class CommentControllerTest extends TestCase
             'editable' => true
         ]);
 
-        $id = $response->decodeResponseJson('data.id');
+        $id = $response->json('data.id');
 
         $comment = Post\Comment::find($id);
 
@@ -196,10 +196,10 @@ class CommentControllerTest extends TestCase
             ->actingAs($this->user)
             ->json('POST', "/Forum/Comment/$comment->id", ['text' => $text = $this->faker->realText(), 'post_id' => $this->post->id]);
 
-        $data = $response->decodeResponseJson('data');
+        $data = $response->json('data');
         $this->assertEquals($text, $data['text']);
 
-        $id = $response->decodeResponseJson('data.id');
+        $id = $response->json('data.id');
 
         $this->assertEquals($id, $comment->id);
     }
@@ -234,7 +234,7 @@ class CommentControllerTest extends TestCase
         $response = $this->get("/Forum/Comment/Show/{$this->post->id}");
 
         $response->assertStatus(200);
-        $result = $response->decodeResponseJson($comment->id);
+        $result = $response->json($comment->id);
 
         $this->assertEquals($comment->text, $result['text']);
         $this->assertArrayNotHasKey('editable', $result);
@@ -246,7 +246,7 @@ class CommentControllerTest extends TestCase
 
         $response = $this->actingAs($this->user)->get("/Forum/Comment/Show/{$this->post->id}");
 
-        $result = $response->decodeResponseJson($comment->id);
+        $result = $response->json($comment->id);
 
         $this->assertEquals($comment->text, $result['text']);
         $this->assertArrayHasKey('editable', $result);

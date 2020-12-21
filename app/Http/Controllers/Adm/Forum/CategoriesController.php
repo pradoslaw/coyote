@@ -71,7 +71,7 @@ class CategoriesController extends BaseController
         $form = $this->getForm($forum);
         $form->validate();
 
-        $original = $forum->getOriginal();
+        $original = $forum->getRawOriginal();
         $forum->fill($form->all());
 
         $this->transaction(function () use ($form, $forum) {

@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use Coyote\Reputation\Type;
 use Coyote\Reputation;

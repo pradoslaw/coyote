@@ -161,7 +161,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
 
         if ($other) {
             $forum->order = $other->order;
-            $other->order = $forum->getOriginal('order');
+            $other->order = $forum->getRawOriginal('order');
 
             $forum->save();
             $other->save();

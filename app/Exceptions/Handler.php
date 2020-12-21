@@ -4,6 +4,7 @@ namespace Coyote\Exceptions;
 
 use Coyote\Repositories\Contracts\PageRepositoryInterface;
 use Exception;
+use Throwable;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Session\TokenMismatchException;
@@ -41,17 +42,17 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param  \Exception $e
+     * @param  \Exception $exception
      * @return void
      */
-    public function report(Exception $e)
+    public function report(Throwable $exception)
     {
-        if ($this->shouldReport($e) && app()->bound('sentry') && app()->environment('production')) {
+        if ($this->shouldReport($exception) && app()->bound('sentry') && app()->environment('production')) {
             // send report to sentry
-            app('sentry')->captureException($e);
+            app('sentry')->captureException($exception);
         }
 
-        parent::report($e);
+        parent::report($exception);
     }
 
     protected function context()
@@ -63,18 +64,18 @@ class Handler extends ExceptionHandler
      * Render an exception into an HTTP response.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  \Exception $e
+     * @param  \Exception $exception
      * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function render($request, Exception $e)
+    public function render($request, Throwable $exception)
     {
-        if ($e instanceof TokenMismatchException) {
-            return $this->renderTokenMismatchException($request, $e);
-        } elseif (($e instanceof HttpException && $e->getStatusCode() === 404) || $e instanceof ModelNotFoundException) {
-            return $this->renderHttpErrorException($request, $e);
+        if ($exception instanceof TokenMismatchException) {
+            return $this->renderTokenMismatchException($request, $exception);
+        } elseif (($exception instanceof HttpException && $exception->getStatusCode() === 404) || $exception instanceof ModelNotFoundException) {
+            return $this->renderHttpErrorException($request, $exception);
         }
 
-        return parent::render($request, $e);
+        return parent::render($request, $exception);
     }
 
     /**
