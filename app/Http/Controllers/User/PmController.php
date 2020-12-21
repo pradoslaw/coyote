@@ -185,7 +185,7 @@ class PmController extends BaseController
     {
         $this->authorize('show', $pm);
 
-        $this->markAsRead($pm);
+        $this->markAllAsRead($pm->author);
         $this->auth->refresh();
 
         return response()->json(['count' => $this->auth->pm_unread]);

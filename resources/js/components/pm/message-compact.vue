@@ -50,7 +50,6 @@
     methods: {
       mark() {
         this.$store.dispatch('messages/mark', this.message);
-        this.$store.commit('inbox/decrement');
       }
     },
     computed: {

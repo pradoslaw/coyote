@@ -190,12 +190,14 @@ new Vue({
     },
 
     markAllAsRead() {
-      const shouldMarkAsRead = () => Object.keys(this.recipient).length > 0;
-
       const listener = () => {
-        this.messages
-          .filter(message => message.read_at === null && message.folder === INBOX && shouldMarkAsRead())
-          .forEach(message => store.dispatch('messages/mark', message));
+        const lastMessage = this.unreadMessages[this.unreadMessages.length - 1];
+
+        if (lastMessage) {
+          store.dispatch('messages/mark', lastMessage);
+
+          this.unreadMessages.forEach(message => store.commit('messages/mark', message));
+        }
       };
 
       document.getElementById('app-pm').addEventListener('mouseover', listener, {once: true});
@@ -225,6 +227,13 @@ new Vue({
 
           return item;
         });
+    },
+
+    unreadMessages() {
+      const shouldMarkAsRead = () => Object.keys(this.recipient).length > 0;
+
+      return this.messages
+        .filter(message => message.read_at === null && message.folder === INBOX && shouldMarkAsRead());
     },
 
     privateChannel() {

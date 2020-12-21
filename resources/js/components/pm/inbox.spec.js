@@ -1,11 +1,10 @@
 import { mount } from '@vue/test-utils';
 import VueInbox from './inbox.vue';
 import store from '../../store';
-import {default as ws} from '../../libs/realtime.js';
 import axios from 'axios';
 
 
-jest.mock('../../libs/realtime.js', () => ({
+jest.mock('../../libs/realtime.ts', () => ({
   on: jest.fn()
 }));
 
