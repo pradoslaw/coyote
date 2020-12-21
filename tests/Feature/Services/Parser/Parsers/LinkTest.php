@@ -83,19 +83,19 @@ class LinkTest extends TestCase
         $this->createPage($title, $path);
 
         $input = $this->link->parse('[[Discussion board]]');
-        $this->assertRegExp("~<a href=\".*" . preg_quote($path) . "\">$title</a>~", $input);
+        $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "\">$title</a>~", $input);
 
         $input = $this->link->parse('[[Discussion_board]]');
-        $this->assertRegExp("~<a href=\".*" . preg_quote($path) . "\">$title</a>~", $input);
+        $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "\">$title</a>~", $input);
 
         $input = $this->link->parse('[[Discussion board|takie tam forum]]');
-        $this->assertRegExp("~<a href=\".*" . preg_quote($path) . "\">takie tam forum</a>~", $input);
+        $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "\">takie tam forum</a>~", $input);
 
         $input = $this->link->parse('[[Discussion board#section|takie tam forum]]');
-        $this->assertRegExp("~<a href=\".*" . preg_quote($path) . "#section\">takie tam forum</a>~", $input);
+        $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "#section\">takie tam forum</a>~", $input);
 
         $input = $this->link->parse('[[Discussion board#section]]');
-        $this->assertRegExp("~<a href=\".*" . preg_quote($path) . "#section\">$title</a>~", $input);
+        $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "#section\">$title</a>~", $input);
 
         $title = 'Newbie';
         $path = '/Discussion_board/Newbie';
@@ -103,10 +103,10 @@ class LinkTest extends TestCase
         $this->createPage($title, $path);
 
         $input = $this->link->parse('[[Discussion board/Newbie]]');
-        $this->assertRegExp("~<a href=\".*" . preg_quote($path) . "\">$title</a>~", $input);
+        $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "\">$title</a>~", $input);
 
         $input = $this->link->parse('[[Discussion board/Newbie|forum newbie]]');
-        $this->assertRegExp("~<a href=\".*" . preg_quote($path) . "\">forum newbie</a>~", $input);
+        $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "\">forum newbie</a>~", $input);
 
         $title = 'Kim jesteśmy?';
         $path = '/Kim_jesteśmy';
@@ -114,7 +114,7 @@ class LinkTest extends TestCase
         $this->createPage($title, $path);
 
         $input = $this->link->parse('[[Kim jesteśmy?]]');
-        $this->assertRegExp("~<a href=\".*" . preg_quote($path) . "\">" . preg_quote($title) . "</a>~", $input);
+        $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "\">" . preg_quote($title) . "</a>~", $input);
 
         $input = $this->link->parse('<code>[[Kim jesteśmy?]]</code>');
         $this->assertStringContainsString("<code>[[Kim jesteśmy?]]</code>", $input);

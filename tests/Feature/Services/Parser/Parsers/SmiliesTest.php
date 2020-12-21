@@ -12,9 +12,9 @@ class SmiliesTest extends TestCase
     {
         $parser = new Smilies();
 
-        $this->assertRegExp('/<img class="img-smile" alt="\:\)" title="\:\)" src=\"\/img\/smilies\/smile\.gif\">/', $parser->parse(':)'));
-        $this->assertRegExp('/<p><img class="img-smile" alt="\:\)" title="\:\)" src="\/img\/smilies\/smile.gif"><\/p>/', $parser->parse('<p>:)</p>'));
-        $this->assertRegExp('/\(\:\)\)/', $parser->parse('(:))'));
+        $this->assertMatchesRegularExpression('/<img class="img-smile" alt="\:\)" title="\:\)" src=\"\/img\/smilies\/smile\.gif\">/', $parser->parse(':)'));
+        $this->assertMatchesRegularExpression('/<p><img class="img-smile" alt="\:\)" title="\:\)" src="\/img\/smilies\/smile.gif"><\/p>/', $parser->parse('<p>:)</p>'));
+        $this->assertMatchesRegularExpression('/\(\:\)\)/', $parser->parse('(:))'));
         $this->assertEquals('admin:)', $parser->parse('admin:)'));
     }
 }

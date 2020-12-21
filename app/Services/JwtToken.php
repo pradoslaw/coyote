@@ -5,7 +5,6 @@ namespace Coyote\Services;
 use Coyote\Services\Forum\UserDefined;
 use Coyote\User;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
-use Lcobucci\JWT\Signer\Key;
 use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Configuration;
 
