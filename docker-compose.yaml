@@ -25,6 +25,11 @@ services:
       - XDEBUG_PORT=$XDEBUG_PORT
     volumes:
       - ./:/var/www
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost/" ]
+      interval: 5s
+      timeout: 10s
+      retries: 3
     logging:
       options:
         max-size: 10m
@@ -80,45 +85,6 @@ services:
         max-size: 10m
     networks:
       - coyote
-
-  kibana:
-    image: docker.elastic.co/kibana/kibana:6.8.6
-    depends_on:
-      - elasticsearch
-    logging:
-      options:
-        max-size: 10m
-    networks:
-      - coyote
-
-  mongo:
-    image: mongo:3
-    volumes:
-      - mongo:/data/db
-    logging:
-      options:
-        max-size: 10m
-    networks:
-      - coyote
-
-  graylog:
-    image: graylog/graylog:3.1
-    environment:
-      - GRAYLOG_PASSWORD_SECRET=somepasswordpepper
-      - GRAYLOG_ROOT_PASSWORD_SHA2=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
-      - GRAYLOG_HTTP_EXTERNAL_URI=http://127.0.0.1:29000/
-    networks:
-      - coyote
-    depends_on:
-      - mongo
-      - elasticsearch
-    logging:
-      options:
-        max-size: 10m
-    ports:
-      - 29000:9000
-      - 12201:12201
-      - 12201:12201/udp
 
   minio:
     image: minio/minio

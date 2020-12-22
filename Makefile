@@ -5,6 +5,18 @@ install-dev: dependency-install file-permission migration seed install-assets as
 update: update-repo dependency-install migration assets-production cache-config
 update-dev: update-repo dependency-install migration assets-dev
 
+up:
+	docker-compose up -d
+
+stop:
+	docker-compose stop
+
+up-ci:
+	docker-compose -f docker-compose.yaml -f docker-compose-testing.yaml up -d
+
+stop-ci:
+ 	docker-compose -f docker-compose.yaml -f docker-compose-testing.yaml stop
+
 help:
 	@echo 'make install -- download dependencies and install'
 	@echo 'make install-dev -- download dependencies and install without minifing assets'
