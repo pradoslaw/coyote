@@ -36,7 +36,7 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
     // Send job's application
     // ------------------------------------------------------------------------------------------
     $this->get('Application/{job}', ['uses' => 'ApplicationController@submit', 'as' => 'application']);
-    $this->post('Application/{job}', ['uses' => 'ApplicationController@save', 'as' => 'application']);
+    $this->post('Application/{job}', ['uses' => 'ApplicationController@save']);
     $this->post('Upload', ['uses' => 'ApplicationController@upload', 'as' => 'application.upload']);
     $this->get('Application/{job}/{id}', ['uses' => 'ApplicationController@downloadApplication', 'as' => 'application.download']);
 
