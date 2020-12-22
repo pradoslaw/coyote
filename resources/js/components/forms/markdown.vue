@@ -70,7 +70,7 @@
             <span class="small">{{ progress }}%</span>
           </template>
 
-          <a v-else :aria-label="uploadTooltip" data-balloon-length="large" data-balloon-pos="right" data-balloon-nofocus href="javascript:" class="small text-muted" @click="chooseFile">
+          <a v-else :aria-label="uploadTooltip" data-balloon-length="large" data-balloon-pos="up-left" data-balloon-nofocus href="javascript:" class="small text-muted" @click="chooseFile">
             <i class="far fa-image"></i>
 
             <span class="d-none d-sm-inline">Kliknij, aby dodać załącznik lub wklej ze schowka.</span>
