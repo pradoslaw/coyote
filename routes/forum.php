@@ -12,8 +12,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
 
     $this->get('Tag/{tag_name}', ['uses' => 'HomeController@tag', 'as' => 'tag']);
     $this->post('Tag/Save', ['uses' => 'TagController@save', 'as' => 'tag.save']);
-    $this->get('Tag/Prompt', ['uses' => 'TagController@prompt', 'as' => 'tag.prompt']);
-    $this->get('Tag/Validation', ['uses' => 'TagController@validation', 'as' => 'tag.validate']);
+    $this->post('Tag/Validation', ['uses' => 'TagController@validation', 'as' => 'tag.validate']);
     $this->get('Categories', ['uses' => 'HomeController@categories', 'as' => 'categories']);
     $this->get('All', ['uses' => 'HomeController@all', 'as' => 'all']);
     $this->get('Mine', ['uses' => 'HomeController@mine', 'as' => 'mine', 'middleware' => 'auth']);

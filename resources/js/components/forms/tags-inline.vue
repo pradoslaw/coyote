@@ -106,16 +106,6 @@
         return;
       }
 
-      // const response = await axios.get('/Forum/Tag/Validation', { params: {t: name }});
-      //
-      // if (response.data === '') {
-      //   this.applyTag(name);
-      //
-      //   return;
-      // }
-      //
-      // await this.$confirm({ message: response.data, title: 'Dodać nowy tag?', okLabel: 'Tak, jestem pewien' });
-
       this.applyTag(name);
     }
 

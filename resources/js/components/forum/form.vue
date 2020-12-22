@@ -230,6 +230,8 @@
     }
 
     async save() {
+      await this.validateTags();
+
       this.isProcessing = true;
       this.errors = {};
 
@@ -260,16 +262,6 @@
       (this.$refs.attachment as HTMLInputElement).click();
     }
 
-    upload() {
-      let form = new FormData();
-      form.append('attachment', (this.$refs.attachment as HTMLInputElement).files![0]);
-
-      this.isProcessing = true;
-
-      store.dispatch('posts/upload', { post: this.post, form })
-        .finally(() => this.isProcessing = false);
-    }
-
     toggleTag(tag: Tag) {
       store.commit('topics/toggleTag', { topic: this.topic, tag });
     }
@@ -288,6 +280,25 @@
 
         await store.dispatch('posts/changePage', this.totalPages);
       }
+    }
+
+    async validateTags() {
+      if (!this.topic.tags?.length) {
+        return;
+      }
+
+      this.isProcessing = true;
+      const response = await axios.post('/Forum/Tag/Validation', { tags: this.topic.tags.map(tag => tag.name) });
+
+      this.isProcessing = false;
+
+      if (!response.data.warning) {
+        return;
+      }
+
+      await this.$confirm({ message: response.data.message, title: 'Dodać nowy tag?', okLabel: 'Tak, jestem pewien' });
+
+      return true;
     }
 
     get enablePoll() {

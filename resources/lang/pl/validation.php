@@ -103,6 +103,7 @@ return [
     'recaptcha'            => 'Wartość pola recaptcha jest nieprawidłowa. Prosimy o kontakt.',
     'host'                 => 'Podany link musi pochodzić z serwera :host.',
     'tag_deleted'          => 'Tag ":value" został usunięty i jego ponowne użycie nie jest możliwe.',
+    'tag_not_exist'        => 'Tag <strong>:value</strong> nie istnieje ale możesz go utworzyć.<br><br>Czy jesteś pewien, że jest to <strong>tag techniczny</strong> i chcesz go dodać?',
 
     /*
     |--------------------------------------------------------------------------

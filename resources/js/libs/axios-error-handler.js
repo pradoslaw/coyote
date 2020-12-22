@@ -4,7 +4,7 @@ export default function errorHandler(cb) {
   axios.interceptors.response.use(null, err => {
     let message = '';
 
-    if (err instanceof Cancel || (err.config.hasOwnProperty("errorHandle") &&  err.config.errorHandle === false)) {
+    if (err instanceof Cancel || (err.config.hasOwnProperty("errorHandle") && err.config.errorHandle === false)) {
       return Promise.reject(err);
     }
 

@@ -24,40 +24,25 @@ class TagController extends BaseController
         return $this->getUserTags();
     }
 
-    /**
-     * @param Request $request
-     * @param TagRepository $tag
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    public function prompt(Request $request, TagRepository $tag)
-    {
-        // we don't wanna tags with "#" at the beginning
-        $request->merge(['q' => ltrim($request['q'], '#')]);
-
-        $this->validate($request, ['q' => 'required|string|max:25']);
-
-        // search for tag
-        $tags = $tag->lookupName($request->input('q'));
-
-        TagResource::withoutWrapping();
-
-        return TagResource::collection($tags);
-    }
-
     public function validation(Request $request, TagRepository $repository)
     {
+        $this->validate($request, ['tags' => 'array']);
+
         if ($this->auth->reputation < Reputation::CREATE_TAGS) {
-            return;
+            return response(['warning' => false]);
         }
 
-        if (!$repository->exists($request->input('t'))) {
-            return response(
-                sprintf(
-                    'Tag <strong>%s</strong> nie istnieje ale możesz go utworzyć.<br><br>Czy jesteś pewien, że jest to <strong>tag techniczny</strong> i chcesz go dodać?',
-                    $request->input('t')
-                )
-            );
+        $invalid = [];
+
+        foreach ($request->input('tags') as $tag) {
+            if (!$repository->exists($tag)) {
+                $invalid[] = $tag;
+            }
         }
+
+        return response([
+            'warning' => count($invalid) > 0,
+            'message' => trans('validation.tag_not_exist', ['value' => implode(', ', $invalid)])
+        ]);
     }
 }
