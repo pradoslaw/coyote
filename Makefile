@@ -15,7 +15,7 @@ up-ci:
 	docker-compose -f docker-compose.yaml -f docker-compose-testing.yaml up -d
 
 stop-ci:
- 	docker-compose -f docker-compose.yaml -f docker-compose-testing.yaml stop
+	docker-compose -f docker-compose.yaml -f docker-compose-testing.yaml stop
 
 help:
 	@echo 'make install -- download dependencies and install'
