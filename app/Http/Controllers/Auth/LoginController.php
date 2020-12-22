@@ -127,10 +127,8 @@ class LoginController extends Controller
     }
 
     /**
-     * Wylogowanie uzytkownika
-     *
      * @param Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function logout(Request $request)
     {
