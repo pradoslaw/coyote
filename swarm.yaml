@@ -120,7 +120,7 @@ services:
         max-size: 10m
 
   php:
-    image: 4programmers/coyote:latest
+    image: 4programmers/coyote:f0548dbd9751ea96d2626b4cdfd70b153923b8aa
     build:
       context: .
       dockerfile: docker/coyote/Dockerfile
@@ -134,6 +134,11 @@ services:
     secrets: *secrets
     deploy:
       replicas: 2
+    healthcheck:
+      test: [ "CMD", "php", "artisan", "help" ]
+      interval: 5s
+      timeout: 10s
+      retries: 3
     networks:
       - coyote
     logging:
@@ -181,11 +186,6 @@ services:
       - 80:80
     depends_on:
       - php
-    healthcheck:
-      test: [ "CMD", "php", "artisan", "help" ]
-      interval: 5s
-      timeout: 10s
-      retries: 3
     networks:
       - coyote
     logging:
