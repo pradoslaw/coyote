@@ -181,6 +181,11 @@ services:
       - 80:80
     depends_on:
       - php
+    healthcheck:
+      test: [ "CMD", "php", "artisan", "help" ]
+      interval: 5s
+      timeout: 10s
+      retries: 3
     networks:
       - coyote
     logging:
@@ -301,11 +306,11 @@ services:
       ELASTICSEARCH_HOST: "elasticsearch"
       INDEX: "coyote"
       APP_KEY_FILE: /run/secrets/APP_KEY_FILE
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3500/healtcheck || exit 1"]
-      interval: 30s
-      timeout: 20s
-      retries: 3
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:3500/healtcheck || exit 1"]
+#      interval: 30s
+#      timeout: 20s
+#      retries: 3
     secrets:
       - APP_KEY_FILE
     logging:
