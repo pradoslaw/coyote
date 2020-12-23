@@ -56,7 +56,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->router->pattern('post', '[0-9]+');
         $this->router->pattern('job', '[0-9]+');
         $this->router->pattern('pm', '[0-9]+');
-        $this->router->pattern('attachment', '[0-9]+');
+        $this->router->pattern('asset', '[0-9]+');
         $this->router->pattern('payment', '[0-9a-z\-]+');
 
         $this->router->pattern('forum', '[A-Za-ząęśćłźżóń\-\_\/\.\+]+');
