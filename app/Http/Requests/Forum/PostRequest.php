@@ -71,7 +71,7 @@ class PostRequest extends FormRequest
                     'max:25',
                     'tag',
                     app(TagDeleted::class),
-                    'tag_creation:200'
+                    'tag_creation:300'
                 ],
 
                 'poll.items.*.text'     => [$require, 'nullable', 'string', 'max:200'],
