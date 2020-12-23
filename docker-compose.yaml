@@ -41,7 +41,7 @@ services:
     working_dir: /var/www
     volumes:
       - ./:/var/www
-    entrypoint: crond -f -l 8
+    entrypoint: cron -f -l 8
     logging:
       options:
         max-size: 10m
