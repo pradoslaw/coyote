@@ -6,33 +6,6 @@ WORKDIR /var/www
 
 RUN apt-get update -yqq && apt-get install -y gnupg libmcrypt-dev libpq-dev locales libpng-dev libjpeg-dev libfreetype6-dev libzip-dev zlib1g-dev git libgmp-dev libxml2-dev libcurl4-openssl-dev pkg-config libssl-dev libonig-dev cron yarn
 
-#RUN apt-get update && apt-get install -y \
-#    curl \
-#    bash \
-#    openssh-client \
-#    libmcrypt-dev \
-#    libpq \
-#    libzip-dev \
-#    freetype-dev \
-#    libcurl \
-#    libzip-dev \
-#    bzip2-dev \
-#    libjpeg-turbo-dev \
-#    postgresql-dev \
-#    freetype-dev \
-#    libpng-dev \
-#    libc-dev \
-#    linux-headers \
-#    zlib-dev \
-#    gnupg \
-#    libxml2-dev \
-#    zip \
-#    make \
-#    autoconf \
-#    gcc \
-#    git \
-#    oniguruma-dev
-
 RUN docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
     && docker-php-ext-install -j$(nproc) pgsql gd soap pdo_pgsql mbstring zip opcache iconv
 
@@ -44,17 +17,12 @@ RUN echo Europe/Warsaw >/etc/timezone && \
     ln -sf /usr/share/zoneinfo/Europe/Warsaw /etc/localtime && \
     dpkg-reconfigure -f noninteractive tzdata
 
-#RUN apt install yarn
-
 ARG UID=1000
 ARG GID=1000
 
 ENV php_conf /usr/local/etc/php-fpm.conf
 ENV fpm_conf /usr/local/etc/php-fpm.d/www.conf
 ENV php_vars /usr/local/etc/php/conf.d/docker-vars.ini
-
-#RUN addgroup -g ${GID} -S nginx
-#RUN adduser -u ${UID} -D -S -h /var/cache/nginx -s /sbin/nologin -G nginx nginx
 
 RUN groupadd -g ${GID} nginx
 RUN useradd -u ${UID} -g nginx nginx
@@ -81,15 +49,6 @@ RUN echo "cgi.fix_pathinfo=0" > ${php_vars} &&\
         -e "s/^;clear_env = no$/clear_env = no/" \
         ${fpm_conf}
 
-#RUN apk --no-cache add ca-certificates wget && \
-#    wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub && \
-#    wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.25-r0/glibc-2.25-r0.apk && \
-#    wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.25-r0/glibc-bin-2.25-r0.apk && \
-#    wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.25-r0/glibc-i18n-2.25-r0.apk && \
-#    apk add glibc-bin-2.25-r0.apk glibc-i18n-2.25-r0.apk glibc-2.25-r0.apk
-#
-#RUN /usr/glibc-compat/bin/localedef -i pl_PL -f UTF-8 pl_PL.UTF-8
-
 RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
     sed -i -e 's/# pl_PL.UTF-8 UTF-8/pl_PL.UTF-8 UTF-8/' /etc/locale.gen && \
     sed -i -e 's/# de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen && \
@@ -101,7 +60,9 @@ ENV LANG=pl_PL.UTF-8
 ENV LANGUAGE=pl_PL.UTF-8
 ENV LC_ALL=pl_PL.UTF-8
 
-COPY ./docker/php/cron /etc/crontab
+COPY ./docker/php/cron /etc/cron.d/coyote
+RUN chmod 0644 /etc/cron.d/coyote
+RUN crontab /etc/cron.d/coyote
 
 ADD ./docker/php/xdebug.sh /xdebug.sh
 RUN chmod 755 /xdebug.sh
