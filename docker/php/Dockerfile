@@ -4,7 +4,25 @@ LABEL maintainer="4programmers.net <support@4programmers.net>"
 
 WORKDIR /var/www
 
-RUN apt-get update -yqq && apt-get install -y gnupg libmcrypt-dev libpq-dev locales libpng-dev libjpeg-dev libfreetype6-dev libzip-dev zlib1g-dev git libgmp-dev libxml2-dev libcurl4-openssl-dev pkg-config libssl-dev libonig-dev cron yarn
+RUN apt-get update -yqq && apt-get install -y \
+    gnupg \
+    libmcrypt-dev \
+    libpq-dev \
+    locales \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    libzip-dev \
+    zlib1g-dev \
+    git \
+    libgmp-dev \
+    libxml2-dev \
+    libcurl4-openssl-dev \
+    pkg-config \
+    libssl-dev \
+    libonig-dev \
+    cron \
+    gnupg2
 
 RUN docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
     && docker-php-ext-install -j$(nproc) pgsql gd soap pdo_pgsql mbstring zip opcache iconv
@@ -55,7 +73,6 @@ RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
     sed -i -e 's/# sv_SE.UTF-8 UTF-8/sv_SE.UTF-8 UTF-8/' /etc/locale.gen && \
     locale-gen
 
-
 ENV LANG=pl_PL.UTF-8
 ENV LANGUAGE=pl_PL.UTF-8
 ENV LC_ALL=pl_PL.UTF-8
@@ -63,6 +80,11 @@ ENV LC_ALL=pl_PL.UTF-8
 COPY ./docker/php/cron /etc/cron.d/coyote
 RUN chmod 0644 /etc/cron.d/coyote
 RUN crontab /etc/cron.d/coyote
+
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+
+RUN apt-get update -yqq && apt-get install -y yarn
 
 ADD ./docker/php/xdebug.sh /xdebug.sh
 RUN chmod 755 /xdebug.sh
