@@ -123,7 +123,7 @@ const mutations = {
 
   setVoters(state, { post, voters }: { post: Post, voters: VoteResponse }) {
     Vue.set(post, 'voters', voters.users);
-    Vue.set(post, 'votes', voters.count);
+    Vue.set(post, 'score', voters.count);
   }
 }
 
