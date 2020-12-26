@@ -16,14 +16,6 @@ interface MicroblogRepositoryInterface extends RepositoryInterface
     public function getPopular($limit);
 
     /**
-     * Pobiera $limit najpopularniejszych wpisow z mikrobloga z ostatniego tygodnia
-     *
-     * @param $limit
-     * @return mixed
-     */
-    public function takePopular($limit);
-
-    /**
      * @param int $id
      * @return Microblog
      */
