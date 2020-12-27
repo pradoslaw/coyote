@@ -124,18 +124,7 @@ new Vue({
   },
 
   mounted() {
-    window.addEventListener('popstate', event => {
-      if (!event.state) {
-        return;
-      }
-
-      this.resetDefaults();
-
-      Object.keys(event.state.params).forEach(key => this[key] = event.state[key]);
-
-      this.hits = event.state.hits;
-    });
-
+    window.addEventListener('popstate', this.popState);
     this.pushState();
   },
 
@@ -219,6 +208,17 @@ new Vue({
 
     pushState() {
       history.pushState({ params: this.requestParams, hits: this.hits }, '', this.getUrl(this.requestParams));
+    },
+
+    popState(event) {
+      if (!event.state) {
+        return;
+      }
+
+      this.resetDefaults();
+
+      Object.keys(event.state.params).forEach(key => this[key] = event.state.params[key]);
+      this.hits = event.state.hits;
     }
   },
 
