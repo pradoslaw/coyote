@@ -192,9 +192,9 @@ class Post extends Model
     public function subscribe($userId, $flag)
     {
         if (!$flag) {
-            $this->subscribers()->where('user_id', $userId)->delete();
+            $this->subscribers()->forUser($userId)->delete();
         } else {
-            $this->subscribers()->firstOrCreate(['post_id' => $this->id, 'user_id' => $userId]);
+            $this->subscribers()->firstOrCreate(['user_id' => $userId]);
         }
     }
 

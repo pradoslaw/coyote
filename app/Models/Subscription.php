@@ -2,13 +2,14 @@
 
 namespace Coyote\Models;
 
+use Coyote\Models\Scopes\ExcludeBlocked;
 use Coyote\Models\Scopes\ForUser;
 use Coyote\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Subscription extends Model
 {
-    use ForUser;
+    use ForUser, ExcludeBlocked;
 
     /**
      * The attributes that are mass assignable.
