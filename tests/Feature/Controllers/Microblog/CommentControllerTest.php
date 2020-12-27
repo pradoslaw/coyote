@@ -3,9 +3,11 @@
 namespace Tests\Feature\Controllers\Microblog;
 
 use Coyote\Microblog;
+use Coyote\Notifications\Microblog\DeletedNotification;
 use Coyote\User;
 use Faker\Factory;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class CommentControllerTest extends TestCase
@@ -103,5 +105,22 @@ class CommentControllerTest extends TestCase
         $response->assertStatus(403);
 
         $response->assertJson(['message' => 'This action is unauthorized.']);
+    }
+
+    public function testDeleteCommentAndSentNotification()
+    {
+        Notification::fake();
+
+        $microblog = factory(Microblog::class)->create();
+        $comment = factory(Microblog::class)->create(['parent_id' => $microblog->id]);
+
+        $admin = factory(User::class)->state('admin')->create();
+
+        $this->assertTrue($admin->can('microblog-update'));
+        $response = $this->actingAs($admin)->json('DELETE', '/Mikroblogi/Comment/Delete/' . $comment->id);
+
+        $response->assertStatus(200);
+
+        Notification::assertSentTo($comment->user, DeletedNotification::class);
     }
 }

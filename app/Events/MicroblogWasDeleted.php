@@ -21,6 +21,6 @@ class MicroblogWasDeleted extends Event
      */
     public function __construct(Microblog $microblog)
     {
-        $this->microblog = $microblog->toArray();
+        $this->microblog = $microblog->only(['id']);
     }
 }
