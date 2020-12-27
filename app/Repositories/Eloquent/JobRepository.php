@@ -189,30 +189,6 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
     }
 
     /**
-     * @inheritdoc
-     */
-    public function setDraft(int $userId, string $key, string $value): void
-    {
-        $this->app[Draft::class]->updateOrCreate(['user_id' => $userId, 'key' => $key], ['value' => $value]);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getDraft(int $userId, string $key): ?string
-    {
-        return $this->app[Draft::class]->where('user_id', $userId)->where('key', $key)->value('value');
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function forgetDraft(int $userId): void
-    {
-        $this->app[Draft::class]->where('user_id', $userId)->delete();
-    }
-
-    /**
      * @return mixed
      */
     private function getTagsQueryBuilder()
