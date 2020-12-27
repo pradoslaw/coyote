@@ -25,7 +25,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $html
  * @property string $ip
  * @property string $browser
- * @property string $host
  * @property \Coyote\Forum $forum
  * @property \Coyote\Topic $topic
  * @property \Coyote\Models\Asset[] $assets
@@ -47,7 +46,7 @@ class Post extends Model
      *
      * @var array
      */
-    protected $fillable = ['topic_id', 'forum_id', 'user_id', 'user_name', 'text', 'ip', 'browser', 'host', 'edit_count', 'editor_id'];
+    protected $fillable = ['topic_id', 'forum_id', 'user_id', 'user_name', 'text', 'ip', 'browser', 'edit_count', 'editor_id'];
 
     /**
      * @var string
@@ -88,7 +87,7 @@ class Post extends Model
 
                 $post->logs()->create(
                     array_merge(
-                        $post->only(['user_id', 'text', 'ip', 'browser', 'host']),
+                        $post->only(['user_id', 'text', 'ip', 'browser']),
                         ['subject' => $topic->subject, 'user_id' => $post->editor_id ?: $post->user_id]
                     )
                 );
