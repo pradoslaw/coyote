@@ -134,7 +134,7 @@ class Microblog extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function subscribers()
     {

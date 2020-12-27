@@ -5,8 +5,8 @@ namespace Coyote;
 use Carbon\Carbon;
 use Coyote\Job\Comment;
 use Coyote\Job\Location;
-use Coyote\Job\Subscriber;
 use Coyote\Models\Scopes\ForUser;
+use Coyote\Models\Subscription;
 use Coyote\Services\Eloquent\HasMany;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -335,11 +335,11 @@ class Job extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function subscribers()
     {
-        return $this->hasMany(Subscriber::class);
+        return $this->morphMany(Subscription::class, 'resource');
     }
 
     /**

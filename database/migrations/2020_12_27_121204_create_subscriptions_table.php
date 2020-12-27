@@ -22,6 +22,8 @@ class CreateSubscriptionsTable extends Migration
             $table->morphs('resource');
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
+            $table->dropIndex('subscriptions_resource_type_resource_id_index');
         });
 
         $this->db->table('topic_subscribers')->orderBy('id')->chunk(10000, function ($result) {
@@ -62,6 +64,10 @@ class CreateSubscriptionsTable extends Migration
             }
 
             $this->db->table('subscriptions')->insert($data);
+        });
+
+        Schema::table('subscriptions', function (Blueprint $table) {
+            $table->index(['resource_id', 'resource_type', 'user_id']);
         });
     }
 

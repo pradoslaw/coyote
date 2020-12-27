@@ -3,6 +3,7 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Repositories\Contracts\SubscribableInterface;
+use Coyote\Topic;
 use Coyote\Topic\Track;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -112,8 +113,8 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
                     $this->raw('CASE WHEN pv.id IS NULL THEN false ELSE true END AS is_voted'),
                     $this->raw('CASE WHEN tu.user_id IS NULL THEN false ELSE true END AS is_replied')
                 ])
-                ->leftJoin('topic_subscribers AS ts', function (JoinClause $join) use ($userId) {
-                    $join->on('ts.topic_id', '=', 'topics.id')->on('ts.user_id', '=', $this->raw($userId));
+                ->leftJoin('subscriptions AS ts', function (JoinClause $join) use ($userId) {
+                    $join->on('ts.resource_id', '=', 'topics.id')->where('resource_type', Topic::class)->where('ts.user_id', $userId);
                 })
                 ->leftJoin('post_votes AS pv', function (JoinClause $join) use ($userId) {
                     $join->on('pv.post_id', '=', 'first_post_id')->on('pv.user_id', '=', $this->raw($userId));

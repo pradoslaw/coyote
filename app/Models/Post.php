@@ -3,7 +3,7 @@
 namespace Coyote;
 
 use Coyote\Models\Asset;
-use Coyote\Post\Subscriber;
+use Coyote\Models\Subscription;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -104,11 +104,11 @@ class Post extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function subscribers()
     {
-        return $this->hasMany(Subscriber::class);
+        return $this->morphMany(Subscription::class, 'resource');
     }
 
     /**

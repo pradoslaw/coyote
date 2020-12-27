@@ -5,7 +5,7 @@ namespace Coyote;
 use Carbon\Carbon;
 use Coyote\Models\Scopes\TrackForum;
 use Coyote\Models\Scopes\TrackTopic;
-use Coyote\Topic\Subscriber;
+use Coyote\Models\Subscription;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Coyote\Models\Scopes\Sortable;
@@ -145,11 +145,11 @@ class Topic extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function subscribers()
     {
-        return $this->hasMany(Subscriber::class);
+        return $this->morphMany(Subscription::class, 'resource');
     }
 
     /**
