@@ -67,7 +67,6 @@ class SubmitController extends BaseController
 
             $post->ip = $request->ip();
             $post->browser = str_limit($this->request->browser(), 250);
-            $post->host = ''; // pole nie moze byc nullem
         } else {
             $this->authorize('update', [$post]);
 
