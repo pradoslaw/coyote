@@ -6,6 +6,7 @@ use Coyote\Microblog\Vote;
 use Coyote\Models\Asset;
 use Coyote\Models\Scopes\ForUser;
 use Coyote\Models\Scopes\UserRelationsScope;
+use Coyote\Models\Subscription;
 use Coyote\Services\Media\SerializeClass;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -137,7 +138,7 @@ class Microblog extends Model
      */
     public function subscribers()
     {
-        return $this->hasMany('Coyote\Microblog\Subscriber', 'microblog_id', 'id');
+        return $this->morphMany(Subscription::class, 'resource');
     }
 
     /**
@@ -186,8 +187,8 @@ class Microblog extends Model
 
         return $builder
             ->addSelect(new Expression('CASE WHEN mw.user_id IS NULL THEN false ELSE true END AS is_subscribed'))
-            ->leftJoin('microblog_subscribers AS mw', function ($join) use ($userId) {
-                $join->on('mw.microblog_id', '=', 'microblogs.id')->where('mw.user_id', '=', $userId);
+            ->leftJoin('subscriptions AS mw', function ($join) use ($userId) {
+                $join->on('mw.resource_id', '=', 'microblogs.id')->where('mw.resource_type', '=', static::class)->where('mw.user_id', '=', $userId);
             });
     }
 
