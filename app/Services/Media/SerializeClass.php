@@ -6,6 +6,8 @@ trait SerializeClass
 {
     public function __sleep()
     {
+        $this->unsetRelation('assets');
+
         foreach ($this->attributes as $key => $value) {
             if ($value instanceof File) {
                 $this->attributes[$key] = $this->attributes[$key]->getFilename();

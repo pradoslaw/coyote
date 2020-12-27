@@ -8,6 +8,7 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Requests\MicroblogRequest;
 use Coyote\Http\Resources\MicroblogResource;
 use Coyote\Microblog;
+use Coyote\Notifications\Microblog\DeletedNotification;
 use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Services\Parser\Helpers\Hash as HashHelper;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
@@ -110,6 +111,10 @@ class SubmitController extends Controller
             // put this to activity stream
             stream(Stream_Delete::class, (new Stream_Microblog())->map($microblog));
         });
+
+        if ($this->userId !== $microblog->user_id) {
+            $microblog->user->notify(new DeletedNotification($microblog));
+        }
 
         event(new MicroblogWasDeleted($microblog));
     }

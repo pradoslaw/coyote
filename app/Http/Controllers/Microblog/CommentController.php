@@ -8,6 +8,7 @@ use Coyote\Http\Requests\MicroblogRequest;
 use Coyote\Http\Resources\MicroblogResource;
 use Coyote\Http\Resources\MicroblogCollection;
 use Coyote\Microblog;
+use Coyote\Notifications\Microblog\DeletedNotification;
 use Coyote\Repositories\Criteria\Microblog\LoadUserScope;
 use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Services\Parser\Helpers\Hash as HashHelper;
@@ -125,6 +126,10 @@ class CommentController extends BaseController
 
             stream(Stream_Delete::class, $object, $target);
         });
+
+        if ($this->userId !== $comment->user_id) {
+//            $comment->user->notify(new DeletedNotification($comment));
+        }
 
         event(new MicroblogWasDeleted($comment));
         event(new MicroblogSaved($comment->parent));

@@ -2,7 +2,6 @@
 
 namespace Coyote\Notifications\Microblog;
 
-use Coyote\Services\UrlBuilder;
 use Coyote\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -17,15 +16,13 @@ class UserMentionedNotification extends AbstractNotification implements ShouldQu
      */
     public function toDatabase($user)
     {
-        $url = $this->microblog->parent_id ? UrlBuilder::microblogComment($this->microblog) : UrlBuilder::microblog($this->microblog);
-
         return [
             'object_id'     => $this->objectId(),
             'user_id'       => $user->id,
             'type_id'       => static::ID,
             'subject'       => excerpt($this->microblog->parent_id ? $this->microblog->parent->html : $this->microblog->html), // original excerpt of parent entry
             'excerpt'       => excerpt($this->microblog->html),
-            'url'           => $url,
+            'url'           => $this->microblogUrl(),
             'id'            => $this->id
         ];
     }

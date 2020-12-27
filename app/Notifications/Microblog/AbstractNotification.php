@@ -4,6 +4,7 @@ namespace Coyote\Notifications\Microblog;
 
 use Coyote\Microblog;
 use Coyote\Services\Notification\Notification;
+use Coyote\Services\UrlBuilder;
 use Coyote\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -75,6 +76,11 @@ abstract class AbstractNotification extends Notification implements ShouldBroadc
             'subject'   => excerpt($this->microblog->html),
             'url'       => $this->notificationUrl(),
         ]);
+    }
+
+    protected function microblogUrl(): string
+    {
+        return $url = $this->microblog->parent_id ? UrlBuilder::microblogComment($this->microblog) : UrlBuilder::microblog($this->microblog);
     }
 
     /**
