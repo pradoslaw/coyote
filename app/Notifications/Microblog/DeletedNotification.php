@@ -2,10 +2,9 @@
 
 namespace Coyote\Notifications\Microblog;
 
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class DeletedNotification extends UserMentionedNotification implements ShouldQueue
+class DeletedNotification extends UserMentionedNotification
 {
     const ID = \Coyote\Notification::MICROBLOG_DELETE;
 

@@ -3,12 +3,10 @@
 namespace Coyote\Notifications\Microblog;
 
 use Coyote\Microblog\Vote;
-use Coyote\Services\UrlBuilder;
 use Coyote\User;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class VotedNotification extends AbstractNotification implements ShouldQueue
+class VotedNotification extends AbstractNotification
 {
     const ID = \Coyote\Notification::MICROBLOG_VOTE;
 
