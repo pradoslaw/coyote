@@ -273,20 +273,7 @@
       </div>
     </div>
 
-    <vue-modal ref="delete-modal">
-      Post zostanie usunięty. Czy na pewno chcesz to zrobić?
-
-      <template slot="title">Czy chcesz usunąć?</template>
-
-      <p v-if="post.permissions.delete && reasons" class="mt-2">
-        <vue-select name="reason_id" :options="reasons" v-model="reasonId" class="form-control-sm" placeholder="-- wybierz --"></vue-select>
-      </p>
-
-      <template slot="buttons">
-        <button @click="$refs['delete-modal'].close()" type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
-        <button @click="deletePost(false)" type="submit" class="btn btn-danger danger">Tak, usuń</button>
-      </template>
-    </vue-modal>
+    <vue-modal ref="delete-modal" @delete="deletePost(false, ...arguments)" :reasons="reasons"></vue-modal>
   </div>
 </template>
 <script lang="ts">
@@ -304,7 +291,7 @@
   import VueButton from  './../forms/button.vue';
   import VueFlag from './../flags/flag.vue';
   import { mapActions, mapGetters, mapState } from "vuex";
-  import VueModal from "../modal.vue";
+  import VueModal from "../delete-modal.vue";
   import formatDistanceToNow from 'date-fns/formatDistanceToNow';
   import pl from 'date-fns/locale/pl';
   import { default as mixins } from '../mixins/user';
@@ -360,7 +347,6 @@
     isProcessing = false;
     isCollapsed = this.post.deleted_at != null;
     isCommenting = false;
-    reasonId = null;
 
     readonly topic!: Topic;
     readonly isAuthorized! : boolean;
@@ -400,7 +386,7 @@
       }
     }
 
-    deletePost(confirm = false) {
+    deletePost(confirm = false, reasonId: number | null = null) {
       if (confirm) {
         // @ts-ignore
         this.deleteModal.open();
@@ -408,7 +394,7 @@
       else {
         // @ts-ignore
         this.deleteModal.close();
-        store.dispatch('posts/delete', { post: this.post, reasonId: this.reasonId }).then(() => this.isCollapsed = true);
+        store.dispatch('posts/delete', { post: this.post, reasonId }).then(() => this.isCollapsed = true);
 
         // this.flags.forEach(flag => store.commit('flags/delete', flag));
       }
