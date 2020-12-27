@@ -13,6 +13,7 @@ use Coyote\Repositories\Criteria\Microblog\WithTag;
 use Coyote\Repositories\Criteria\WithoutScope;
 use Illuminate\Contracts\Auth\Guard;
 use Coyote\User;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class Builder
 {
@@ -86,9 +87,24 @@ class Builder
      */
     public function paginate()
     {
-        $this->loadUserScope();
+        $this->microblog->applyCriteria();
 
-        $paginator = $this->microblog->paginate(10);
+        $count = $this->microblog->count();
+        $page = LengthAwarePaginator::resolveCurrentPage();
+
+        $this->loadUserScope();
+        $perPage = 10;
+
+        $result = $this->microblog->limit($perPage)->offset(max(0, $page - 1) * $perPage)->get();
+
+        $paginator = new LengthAwarePaginator(
+            $result,
+            $count,
+            $perPage,
+            $page,
+            ['path' => LengthAwarePaginator::resolveCurrentPath()]
+        );
+
         $this->microblog->resetCriteria();
 
         /** @var \Illuminate\Database\Eloquent\Collection $microblogs */
