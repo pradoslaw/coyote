@@ -14,7 +14,6 @@ use Coyote\Post;
  * @property string $comment
  * @property string $ip
  * @property string $browser
- * @property string $host
  */
 class Log extends Model
 {
@@ -23,7 +22,7 @@ class Log extends Model
      *
      * @var array
      */
-    protected $fillable = ['post_id', 'user_id', 'text', 'subject', 'tags', 'comment', 'ip', 'browser', 'host'];
+    protected $fillable = ['post_id', 'user_id', 'text', 'subject', 'tags', 'comment', 'ip', 'browser'];
 
     /**
      * @var string
