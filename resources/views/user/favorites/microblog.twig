@@ -1,7 +1,7 @@
-{% for microblog in subscribed %}
+{% for subscription in subscriptions %}
     <tr>
-        <td><a href="{{ route('microblog.view', [microblog.id]) }}">{{ excerpt(microblog.text) }}</a></td>
-        <td>{{ microblog.created_at ? microblog.created_at|format_date : '--' }}</td>
+        <td><a href="{{ route('microblog.view', [subscription.resource.id]) }}">{{ excerpt(subscription.resource.html) }}</a></td>
+        <td>{{ subscription.created_at ? subscription.created_at|format_date : '--' }}</td>
     </tr>
 {% else %}
     <tr>

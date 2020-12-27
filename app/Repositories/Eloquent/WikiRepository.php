@@ -2,7 +2,6 @@
 
 namespace Coyote\Repositories\Eloquent;
 
-use Coyote\Repositories\Contracts\SubscribableInterface;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface;
 use Coyote\Wiki;
 use Illuminate\Database\Query\JoinClause;
@@ -11,7 +10,7 @@ use Illuminate\Http\Request;
 /**
  * @method $this withTrashed()
  */
-class WikiRepository extends Repository implements WikiRepositoryInterface, SubscribableInterface
+class WikiRepository extends Repository implements WikiRepositoryInterface
 {
     /**
      * @return string
@@ -131,23 +130,6 @@ class WikiRepository extends Repository implements WikiRepositoryInterface, Subs
         }
 
         return $result;
-    }
-
-    /**
-     * @param int $userId
-     * @return mixed
-     */
-    public function getSubscribed($userId)
-    {
-        return $this
-            ->app
-            ->make(Wiki\Subscriber::class)
-            ->select()
-            ->join('wiki', 'wiki.wiki_id', '=', 'wiki_subscribers.wiki_id')
-            ->where('wiki_subscribers.user_id', $userId)
-            ->whereNull('deleted_at')
-            ->orderBy('wiki_subscribers.id', 'DESC')
-            ->paginate();
     }
 
     /**
@@ -281,8 +263,8 @@ class WikiRepository extends Repository implements WikiRepositoryInterface, Subs
         $this->app->make(Wiki\Author::class)->where('wiki_id', $wikiId)->delete();
 
         $insert = "INSERT INTO wiki_authors (wiki_id, user_id, share, length)
-                   SELECT wiki_id, user_id, SUM(diff::FLOAT) / $totalDiff * 100, SUM(diff) 
-                   FROM (SELECT * FROM wiki_log WHERE wiki_id = $wikiId AND diff > 0 AND is_restored = 0 ORDER BY id) AS t 
+                   SELECT wiki_id, user_id, SUM(diff::FLOAT) / $totalDiff * 100, SUM(diff)
+                   FROM (SELECT * FROM wiki_log WHERE wiki_id = $wikiId AND diff > 0 AND is_restored = 0 ORDER BY id) AS t
                    GROUP BY user_id, wiki_id";
 
         $this->app->make('db')->insert($insert);

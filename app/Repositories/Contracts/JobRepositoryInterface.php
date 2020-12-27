@@ -46,12 +46,6 @@ interface JobRepositoryInterface extends RepositoryInterface
 
     /**
      * @param int $userId
-     * @return mixed
-     */
-    public function getSubscribed($userId);
-
-    /**
-     * @param int $userId
      * @return \Illuminate\Support\Collection
      */
     public function getPublished($userId);

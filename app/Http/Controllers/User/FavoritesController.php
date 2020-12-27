@@ -2,12 +2,10 @@
 
 namespace Coyote\Http\Controllers\User;
 
-use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
-use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
-use Coyote\Repositories\Contracts\SubscribableInterface;
-use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
-use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
-use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
+use Coyote\Job;
+use Coyote\Microblog;
+use Coyote\Models\Subscription;
+use Coyote\Topic;
 use Lavary\Menu\Builder;
 use Lavary\Menu\Menu;
 
@@ -31,65 +29,54 @@ class FavoritesController extends BaseController
     }
 
     /**
-     * @param TopicRepository $topic
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function forum(TopicRepository $topic)
+    public function forum()
     {
-        $topic->pushCriteria(new OnlyThoseWithAccess(auth()->user()));
         $this->breadcrumb->push('Wątki na forum', route('user.favorites.forum'));
 
-        return $this->load($topic);
+        return $this->load(Topic::class);
     }
 
     /**
-     * @param JobRepository $job
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function job(JobRepository $job)
+    public function job()
     {
         $this->breadcrumb->push('Oferty pracy', route('user.favorites.job'));
 
-        return $this->load($job);
+        return $this->load(Job::class);
     }
 
     /**
-     * @param MicroblogRepository $microblog
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function microblog(MicroblogRepository $microblog)
+    public function microblog()
     {
         $this->breadcrumb->push('Mikroblogi', route('user.favorites.microblog'));
 
-        return $this->load($microblog);
+        return $this->load(Microblog::class);
     }
 
     /**
-     * @param WikiRepository $wiki
+     * @param string $resource
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function wiki(WikiRepository $wiki)
+    protected function load(string $resource)
     {
-        $this->breadcrumb->push('Artykuły', route('user.favorites.wiki'));
-
-        return $this->load($wiki);
-    }
-
-    /**
-     * @param SubscribableInterface $repository
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    protected function load(SubscribableInterface $repository)
-    {
-        $subscribed = $repository->getSubscribed($this->userId);
+        $subscriptions = Subscription::where('user_id', $this->userId)
+            ->whereHasMorph('resource', [$resource])
+            ->with('resource')
+            ->orderBy('id', 'DESC')
+            ->paginate();
 
         return $this->view(
             'user.favorites',
             [
                 'tabs' => $this->getTabs(),
                 'partial' => $this->request->route()->getName(),
-                'subscribed' => $subscribed,
-                'paginate' => $subscribed->links()
+                'subscriptions' => $subscriptions,
+                'paginate' => $subscriptions->links()
             ]
         );
     }
@@ -103,8 +90,7 @@ class FavoritesController extends BaseController
             $tabs = [
                 'user.favorites.forum' => 'Wątki na forum',
                 'user.favorites.job' => 'Oferty pracy',
-                'user.favorites.microblog' => 'Mikroblogi',
-                'user.favorites.wiki' => 'Artykuły'
+                'user.favorites.microblog' => 'Mikroblogi'
             ];
 
             foreach ($tabs as $route => $label) {

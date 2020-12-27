@@ -3,7 +3,6 @@
 namespace Coyote\Repositories\Contracts;
 
 use Coyote\Microblog;
-use Coyote\Repositories\Eloquent\MicroblogRepository;
 
 interface MicroblogRepositoryInterface extends RepositoryInterface
 {
@@ -50,12 +49,6 @@ interface MicroblogRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function getTags();
-
-    /**
-     * @param int $userId
-     * @return mixed
-     */
-    public function getSubscribed($userId);
 
     /**
      * @return int

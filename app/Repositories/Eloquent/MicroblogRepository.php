@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use Coyote\Microblog;
 use Coyote\Models\Scopes\UserRelationsScope;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface;
-use Coyote\Repositories\Contracts\SubscribableInterface;
 use Coyote\Tag;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -14,7 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
  * Class MicroblogRepository
  * @package Coyote\Repositories\Eloquent
  */
-class MicroblogRepository extends Repository implements MicroblogRepositoryInterface, SubscribableInterface
+class MicroblogRepository extends Repository implements MicroblogRepositoryInterface
 {
     public function model()
     {
@@ -161,22 +160,5 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
                 ->get()
                 ->pluck('count', 'name')
                 ->toArray();
-    }
-
-    /**
-     * @param int $userId
-     * @return mixed
-     */
-    public function getSubscribed($userId)
-    {
-        return $this
-            ->app
-            ->make(Microblog\Subscriber::class)
-            ->select(['microblogs.id', 'microblog_subscribers.created_at', 'microblogs.text'])
-            ->join('microblogs', 'microblogs.id', '=', 'microblog_id')
-            ->where('microblog_subscribers.user_id', $userId)
-            ->whereNull('deleted_at')
-            ->orderBy('microblog_subscribers.id', 'DESC')
-            ->paginate();
     }
 }

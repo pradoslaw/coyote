@@ -2,7 +2,6 @@
 
 namespace Coyote\Repositories\Eloquent;
 
-use Coyote\Repositories\Contracts\SubscribableInterface;
 use Coyote\Topic;
 use Coyote\Topic\Track;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,7 +14,7 @@ use Coyote\Repositories\Contracts\TopicRepositoryInterface;
  * @method $this withTrashed()
  * @method mixed search(\Coyote\Services\Elasticsearch\QueryBuilderInterface $queryBuilder)
  */
-class TopicRepository extends Repository implements TopicRepositoryInterface, SubscribableInterface
+class TopicRepository extends Repository implements TopicRepositoryInterface
 {
     /**
      * @return string
@@ -191,29 +190,5 @@ class TopicRepository extends Repository implements TopicRepositoryInterface, Su
         $this->resetModel();
 
         return $result;
-    }
-
-    /**
-     * @param int $userId
-     * @return mixed
-     */
-    public function getSubscribed($userId)
-    {
-        $this->applyCriteria();
-
-        return $this
-            ->model
-            ->select([
-                'subject',
-                'topics.slug AS topic_slug',
-                'forums.slug AS forum_slug',
-                'topics.id',
-                'topic_subscribers.created_at'
-            ])
-            ->join('topic_subscribers', 'topic_id', '=', 'topics.id')
-            ->join('forums', 'forums.id', '=', 'forum_id')
-            ->where('user_id', $userId)
-            ->orderBy('topic_subscribers.id', 'DESC')
-            ->paginate();
     }
 }

@@ -49,12 +49,6 @@ interface WikiRepositoryInterface extends RepositoryInterface
     public function treeList();
 
     /**
-     * @param int $userId
-     * @return mixed
-     */
-    public function getSubscribed($userId);
-
-    /**
      * @param \Coyote\Wiki $wiki
      * @param Request $request
      */

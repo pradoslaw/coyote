@@ -1,7 +1,7 @@
-{% for topic in subscribed %}
+{% for subscription in subscriptions %}
     <tr>
-        <td><a href="{{ route('forum.topic', [topic.forum_slug, topic.id, topic.topic_slug]) }}">{{ topic.subject }}</a></td>
-        <td>{{ topic.created_at|format_date }}</td>
+        <td><a href="{{ route('forum.topic', [subscription.resource.forum.slug, subscription.resource.id, subscription.resource.slug]) }}">{{ subscription.resource.subject }}</a></td>
+        <td>{{ subscription.created_at|format_date }}</td>
     </tr>
 {% else %}
     <tr>

@@ -55,10 +55,4 @@ interface TopicRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function interesting($limit = 7);
-
-    /**
-     * @param int $userId
-     * @return mixed
-     */
-    public function getSubscribed($userId);
 }

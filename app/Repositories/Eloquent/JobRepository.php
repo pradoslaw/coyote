@@ -3,19 +3,16 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Feature;
-use Coyote\Models\Job\Draft;
 use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Coyote\Job;
-use Coyote\Repositories\Contracts\SubscribableInterface;
 use Coyote\Str;
-use Illuminate\Database\Connection;
 use Illuminate\Database\Query\JoinClause;
 
 /**
  * @method mixed search(\Coyote\Services\Elasticsearch\QueryBuilderInterface $queryBuilder)
  * @method $this withTrashed()
  */
-class JobRepository extends Repository implements JobRepositoryInterface, SubscribableInterface
+class JobRepository extends Repository implements JobRepositoryInterface
 {
     /**
      * @return string
@@ -136,22 +133,6 @@ class JobRepository extends Repository implements JobRepositoryInterface, Subscr
             ->whereIn('job_tags.tag_id', $tagsId)
             ->get()
             ->pluck('count', 'name');
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getSubscribed($userId)
-    {
-        return $this
-            ->app
-            ->make(Job\Subscriber::class)
-            ->select(['jobs.id', 'title', 'slug', 'job_subscribers.created_at'])
-            ->join('jobs', 'jobs.id', '=', 'job_subscribers.job_id')
-            ->where('job_subscribers.user_id', $userId)
-            ->whereNull('deleted_at')
-            ->orderBy('job_subscribers.id', 'DESC')
-            ->paginate();
     }
 
     /**
