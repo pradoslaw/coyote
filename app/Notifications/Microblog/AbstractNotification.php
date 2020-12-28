@@ -81,7 +81,7 @@ abstract class AbstractNotification extends Notification implements ShouldQueue,
 
     protected function microblogUrl(): string
     {
-        return $url = $this->microblog->parent_id ? UrlBuilder::microblogComment($this->microblog) : UrlBuilder::microblog($this->microblog);
+        return $this->microblog->parent_id ? UrlBuilder::microblogComment($this->microblog) : UrlBuilder::microblog($this->microblog);
     }
 
     /**
