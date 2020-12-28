@@ -164,7 +164,7 @@ services:
 
   cron:
     image: 4programmers/coyote:latest
-    entrypoint: crond -f -l 8
+    entrypoint: cron -f -l 8
     environment: *env
     secrets: *secrets
     volumes:
