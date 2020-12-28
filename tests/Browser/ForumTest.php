@@ -21,8 +21,9 @@ class ForumTest extends DuskTestCase
                 $browser
                     ->loginAs($user)
                     ->visitRoute('forum.topic.submit', ['forum' => $forum])
+                    ->type('title', 'ab')
                     ->pressAndWaitFor('Zapisz')
-                    ->assertSee('Temat musi posiadać minimum 3 znaki długości.')
+                    ->assertSee('Tytuł jest zbyt krótki. Musi mieć minimum 3 znaki długości.')
                     ->assertSee('Proszę wpisać treść.')
                     ->assertSee('Wymagane jest przypisanie minimum jednego tagu do tego wątku.');
             } finally {

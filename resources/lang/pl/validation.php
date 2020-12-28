@@ -160,7 +160,7 @@ return [
         // formularz pracy oraz forum
         'title' => [
             'required'      => 'Tytuł jest wymagany.',
-            'min'           => 'Tytuł jest zbyt krótki. Musi mieć minimum 3 znaku długości.'
+            'min'           => 'Tytuł jest zbyt krótki. Musi mieć minimum 3 znaki długości.'
         ],
         'recruitment' => [
             'required'   => 'Proszę podać informacje w jaki sposób można składać aplikacje na to stanowisko.'
