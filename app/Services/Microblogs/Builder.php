@@ -92,10 +92,12 @@ class Builder
         $count = $this->microblog->count();
         $page = LengthAwarePaginator::resolveCurrentPage();
 
+        $this->microblog->resetModel();
+
         $this->loadUserScope();
         $perPage = 10;
 
-        $result = $this->microblog->limit($perPage)->offset(max(0, $page - 1) * $perPage)->get();
+        $result = $this->microblog->page($perPage, $page);
 
         $paginator = new LengthAwarePaginator(
             $result,

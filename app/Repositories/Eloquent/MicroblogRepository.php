@@ -30,6 +30,16 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
         });
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function page(int $perPage, int $page)
+    {
+        return $this->applyCriteria(function () use ($perPage, $page) {
+            return $this->model->whereNull('parent_id')->with('user')->with('assets')->withCount('comments')->limit($perPage)->offset(max(0, $page - 1) * $perPage)->get();
+        });
+    }
+
     public function recent()
     {
         return $this->applyCriteria(function () {

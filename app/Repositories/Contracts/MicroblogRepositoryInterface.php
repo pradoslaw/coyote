@@ -61,5 +61,12 @@ interface MicroblogRepositoryInterface extends RepositoryInterface
      */
     public function countForUser($userId);
 
+    /**
+     * @param int $perPage
+     * @param int $page
+     * @return Microblog[]
+     */
+    public function page(int $perPage, int $page);
+
     public function recent();
 }
