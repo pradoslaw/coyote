@@ -166,7 +166,7 @@ class NotificationTypesTableSeeder extends Seeder
             'is_public' => false
         ]);
         Type::updateOrCreate(['id' => Notification::MICROBLOG_DELETE], [
-            'name' => '...usunięcie Twojego wpisu',
+            'name' => '...usunięciu Twojego wpisu',
             'headline' => 'Wpis został usunięty przez {sender}',
             'profile' => true,
             'email' => true,
