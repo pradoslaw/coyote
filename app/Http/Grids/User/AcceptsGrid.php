@@ -11,12 +11,12 @@ class AcceptsGrid extends Grid
     {
         $this
             ->setDefaultOrder(new Order('post_accepts.id', 'desc'))
-            ->addColumn('subject', [
+            ->addColumn('title', [
                 'title' => 'Temat wątku',
                 'clickable' => function ($row) {
                     return link_to(
                         route('forum.topic', [$row->forum_slug, $row->topic_id, $row->topic_slug]) . '?p=' . $row->post_id . '#id' . $row->post_id,
-                        $row->subject
+                        $row->title
                     );
                 },
             ])

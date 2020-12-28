@@ -3,10 +3,10 @@
     <div v-if="showTitleInput" class="form-group">
       <label class="col-form-label">Temat <em>*</em></label>
 
-      <vue-text v-model="topic.subject" :is-invalid="'subject' in errors" @keydown.enter.native="save" @blur.native="findSimilar" name="subject" tabindex="1" autofocus="autofocus"></vue-text>
-      <vue-error :message="errors['subject']"></vue-error>
+      <vue-text v-model="topic.title" :is-invalid="'title' in errors" @keydown.enter.native="save" @blur.native="findSimilar" name="title" tabindex="1" autofocus="autofocus"></vue-text>
+      <vue-error :message="errors['title']"></vue-error>
 
-      <small v-if="!('subject' in errors)" class="text-muted form-text">Bądź rzeczowy. Nie nadawaj wątkom jednowyrazowych tytułów.</small>
+      <small v-if="!('title' in errors)" class="text-muted form-text">Bądź rzeczowy. Nie nadawaj wątkom jednowyrazowych tytułów.</small>
 
       <div v-if="similar.length" class="card mt-2">
         <div class="card-header p-3">Podobne wątki</div>
@@ -15,7 +15,7 @@
           <perfect-scrollbar tag="ul" class="position-relative" style="height: 100px">
             <li v-for="topic in similar">
               <a :href="topic.url">
-                <strong>{{ topic.subject }}</strong>
+                <strong>{{ topic.title }}</strong>
                 <small><vue-timeago :datetime="topic.last_post_created_at"></vue-timeago></small>
               </a>
             </li>
@@ -267,11 +267,11 @@
     }
 
     findSimilar() {
-      if (!this.topic.subject) {
+      if (!this.topic.title) {
         return;
       }
 
-      axios.get('/completion/similar', { params: { q: this.topic.subject }}).then(response => this.similar = response.data.hits);
+      axios.get('/completion/similar', { params: { q: this.topic.title }}).then(response => this.similar = response.data.hits);
     }
 
     async lastPage() {

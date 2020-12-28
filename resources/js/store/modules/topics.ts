@@ -74,7 +74,7 @@ const actions = {
   },
 
   changeTitle({ commit }, { topic }) {
-    return axios.post(`/Forum/Topic/Subject/${topic.id}`, { subject: topic.subject });
+    return axios.post(`/Forum/Topic/Subject/${topic.id}`, { title: topic.title });
   }
 };
 

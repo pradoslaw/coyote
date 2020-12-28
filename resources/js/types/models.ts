@@ -174,7 +174,7 @@ export interface Topic {
   is_locked: boolean;
   is_sticky?: boolean;
   is_read?: boolean;
-  subject: string;
+  title: string;
   first_post_id?: number;
   is_subscribed?: boolean;
   tags?: Tag[];

@@ -74,7 +74,7 @@
 
               <div class="media-body overflow-hidden">
                 <p class="text-truncate mb-1">
-                  <a :href="getUrl(category)">{{ category.topic.subject }}</a>
+                  <a :href="getUrl(category)">{{ category.topic.title }}</a>
                 </p>
 
                 <span class="text-muted"><vue-timeago :datetime="category.post.created_at"></vue-timeago></span>,

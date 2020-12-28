@@ -43,7 +43,7 @@ class TopicResourceTest extends TestCase
 
         $this->assertEquals(1, $result['meta']['total']);
         $this->assertEquals(1, $result['meta']['current_page']);
-        $this->assertEquals($topic['subject'], $result['data'][0]['subject']);
+        $this->assertEquals($topic['title'], $result['data'][0]['title']);
     }
 
     public function testTransformResource()

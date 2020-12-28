@@ -49,9 +49,6 @@ Vue.component('vue-result-common', {
       if (hit.title) {
         return hit.title;
       }
-      else if (hit.subject) {
-        return hit.subject;
-      }
       else if (hit.name) {
         return hit.name;
       }

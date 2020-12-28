@@ -39,7 +39,7 @@ class StreamController extends BaseController
 
         $this->breadcrumb($topic->forum);
         $this->breadcrumb->push([
-            $topic->subject     => UrlBuilder::topic($topic),
+            $topic->title     => UrlBuilder::topic($topic),
             'Dziennik zdarzeń'  => route('forum.stream', [$topic->id])
         ]);
 

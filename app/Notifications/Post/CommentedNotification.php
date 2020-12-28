@@ -36,7 +36,7 @@ class CommentedNotification extends AbstractNotification
             'object_id'     => $this->objectId(),
             'user_id'       => $user->id,
             'type_id'       => static::ID,
-            'subject'       => $this->post->topic->subject,
+            'subject'       => $this->post->topic->title,
             'excerpt'       => excerpt($this->comment->html),
             'url'           => UrlBuilder::postComment($this->comment),
             'id'            => $this->id
@@ -54,7 +54,7 @@ class CommentedNotification extends AbstractNotification
             ->subject($this->getMailSubject())
             ->view($this->getMailView(), [
                 'sender'    => $this->notifier->name,
-                'subject'   => link_to($this->notificationUrl(), $this->post->topic->subject),
+                'subject'   => link_to($this->notificationUrl(), $this->post->topic->title),
                 'text'      => $this->comment->html
             ]);
     }
@@ -64,7 +64,7 @@ class CommentedNotification extends AbstractNotification
      */
     protected function getMailSubject(): string
     {
-        return $this->notifier->name . ' dodał(a) komentarz w wątku: ' . $this->post->topic->subject;
+        return $this->notifier->name . ' dodał(a) komentarz w wątku: ' . $this->post->topic->title;
     }
 
     /**

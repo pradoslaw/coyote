@@ -88,7 +88,7 @@ class Post extends Model
                 $post->logs()->create(
                     array_merge(
                         $post->only(['user_id', 'text', 'ip', 'browser']),
-                        ['subject' => $topic->subject, 'user_id' => $post->editor_id ?: $post->user_id]
+                        ['title' => $topic->title, 'user_id' => $post->editor_id ?: $post->user_id]
                     )
                 );
             }

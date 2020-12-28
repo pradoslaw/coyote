@@ -2,7 +2,7 @@
 {% extends 'emails.notifications.base' %}
 
 {% block content %}
-    <b>{{ sender }}</b> użył Twojego loginu w treści komentarza postu w wątku <b>{{ subject|raw }}</b>:<br><br>
+    <b>{{ sender }}</b> użył Twojego loginu w treści komentarza postu w wątku <b>{{ title|raw }}</b>:<br><br>
 
     <hr>
     {{ text|raw }}

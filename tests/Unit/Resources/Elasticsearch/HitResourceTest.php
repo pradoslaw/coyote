@@ -13,7 +13,7 @@ class HitResourceTest extends TestCase
         $faker = Factory::create();
 
         $hit = [
-            'subject' => $faker->text(100),
+            'title' => $faker->text(100),
             'model' => 'Topic',
             'children' => [[
                 'text' => $text = $faker->text

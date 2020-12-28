@@ -17,7 +17,7 @@
 
               <a v-if="topic.accepted_id" :href="topic.url + `?p=${topic.accepted_id}#id${topic.accepted_id}`"><i class="fas fa-check"></i></a>
 
-              <a :href="getUrl()" :class="{'font-weight-bold': !topic.is_read}">{{ topic.subject }}</a>
+              <a :href="getUrl()" :class="{'font-weight-bold': !topic.is_read}">{{ topic.title }}</a>
               <small v-if="showCategoryName" class="d-inline d-xl-none"> w <a :href="topic.forum.url" class="text-body">{{ topic.forum.name }}</a></small>
 
               <a v-if="flag != null" :href="flag" title="Przejdź do raportowanego postu"><i class="fa fa-fire"></i></a>

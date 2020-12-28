@@ -64,7 +64,7 @@ abstract class AbstractNotification extends Notification implements ShouldQueue,
             'object_id'     => $this->objectId(),
             'user_id'       => $user->id,
             'type_id'       => static::ID,
-            'subject'       => $this->post->topic->subject,
+            'subject'       => $this->post->topic->title,
             'excerpt'       => excerpt($this->post->html),
             'url'           => UrlBuilder::post($this->post),
             'id'            => $this->id,
@@ -101,7 +101,7 @@ abstract class AbstractNotification extends Notification implements ShouldQueue,
     {
         return new BroadcastMessage([
             'headline'  => $this->getMailSubject(),
-            'subject'   => $this->post->topic->subject,
+            'subject'   => $this->post->topic->title,
             'url'       => $this->notificationUrl()
         ]);
     }

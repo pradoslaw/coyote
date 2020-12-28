@@ -79,7 +79,7 @@ class PageListener implements ShouldQueue
             'content_id'     => $topic->id,
             'content_type'   => Topic::class
         ], [
-            'title'          => $topic->subject,
+            'title'          => $topic->title,
             'tags'           => $topic->tags->pluck('name'),
             'path'           => UrlBuilder::topic($topic),
             'allow_sitemap'  => !$topic->forum->access()->exists()

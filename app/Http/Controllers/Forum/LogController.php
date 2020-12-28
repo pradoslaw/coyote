@@ -20,7 +20,7 @@ class LogController extends BaseController
 
         $this->breadcrumb($forum);
         $this->breadcrumb->push([
-            $topic->subject => route('forum.topic', [$forum->slug, $topic->id, $topic->slug]),
+            $topic->title => route('forum.topic', [$forum->slug, $topic->id, $topic->slug]),
             'Historia postu' => route('forum.post.log', [$post->id])
         ]);
 

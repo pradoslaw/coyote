@@ -68,7 +68,7 @@ class DeletedNotification extends AbstractNotification
             'object_id'     => $this->objectId(),
             'user_id'       => $user->id,
             'type_id'       => static::ID,
-            'subject'       => $this->post->topic->subject,
+            'subject'       => $this->post->topic->title,
             'excerpt'       => $this->getReasonName(),
             'url'           => UrlBuilder::post($this->post),
             'id'            => $this->id
@@ -86,7 +86,7 @@ class DeletedNotification extends AbstractNotification
             ->subject($this->getMailSubject())
             ->view('emails.notifications.post.delete', [
                 'sender'        => $this->notifier->name,
-                'subject'       => link_to(UrlBuilder::post($this->post), $this->post->topic->subject),
+                'subject'       => link_to(UrlBuilder::post($this->post), $this->post->topic->title),
                 'reason_name'   => $this->getReasonName(),
                 'reason_text'   => $this->getReasonText()
             ]);

@@ -1,7 +1,7 @@
 {% extends 'emails.notifications.base' %}
 
 {% block content %}
-    <b>{{ sender }}</b> dodał nowy post w wątku <b>{{ subject|raw }}</b>, który obserwujesz:<br><br>
+    <b>{{ sender }}</b> dodał nowy post w wątku <b>{{ title|raw }}</b>, który obserwujesz:<br><br>
 
     <hr>
     {{ text|raw }}

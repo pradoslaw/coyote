@@ -22,7 +22,7 @@ class Log extends Model
      *
      * @var array
      */
-    protected $fillable = ['post_id', 'user_id', 'text', 'subject', 'tags', 'comment', 'ip', 'browser'];
+    protected $fillable = ['post_id', 'user_id', 'text', 'title', 'tags', 'comment', 'ip', 'browser'];
 
     /**
      * @var string

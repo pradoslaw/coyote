@@ -64,7 +64,7 @@ class PostRequest extends FormRequest
             $require = Rule::requiredIf(fn () => count(array_filter($this->input('poll.items.*.text', []))) >= 2);
 
             $rules = array_merge($rules, [
-                'subject'               => $this->subjectRule(),
+                'title'                 => $this->titleRule(),
                 'tags'                  => self::RULE_TAGS,
                 'tags.*'                => [
                     'bail',
@@ -111,7 +111,7 @@ class PostRequest extends FormRequest
         return !empty($this->post->id);
     }
 
-    protected function subjectRule()
+    protected function titleRule()
     {
         return [
             'required',
@@ -145,7 +145,7 @@ class PostRequest extends FormRequest
     public function messages()
     {
         return [
-            'subject.not_regex' => 'Wygląda na to, że tytuł zawiera prefiks z nazwą tagu. Użyj dedykowanego pola z możliwością wpisania tagu.'
+            'title.not_regex' => 'Wygląda na to, że tytuł zawiera prefiks z nazwą tagu. Użyj dedykowanego pola z możliwością wpisania tagu.'
         ];
     }
 }

@@ -26,7 +26,7 @@ class Topic extends ObjectAbstract
     {
         $this->id = $topic->id;
         $this->url = UrlBuilder::topic($topic);
-        $this->displayName = $topic->subject;
+        $this->displayName = $topic->title;
         $this->forum = ['id' => $topic->forum->id, 'name' => $topic->forum->name, 'slug' => $topic->forum->slug];
 
         if ($text) {

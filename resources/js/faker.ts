@@ -34,7 +34,7 @@ export function topic(props?: any): Topic {
 
   return Object.assign({
     id: faker.random.number(),
-    subject: faker.lorem.string(),
+    title: faker.lorem.string(),
     is_locked: false,
     is_read: false,
     is_sticky: false,

@@ -54,7 +54,7 @@ class TopicsControllerTest extends TestCase
 
         $data = $request->json('data');
 
-        $this->assertNotEquals($this->topic->subject, $data[0]['subject']);
+        $this->assertNotEquals($this->topic->title, $data[0]['subject']);
         $this->assertTrue($data[0]['is_read']);
     }
 
@@ -63,7 +63,7 @@ class TopicsControllerTest extends TestCase
         $request = $this->get('/v1/topics', ['Accept' => 'application/json', 'Authorization' => 'Bearer ' . $this->token]);
         $data = $request->json('data');
 
-        $this->assertEquals($this->topic->subject, $data[0]['subject']);
+        $this->assertEquals($this->topic->title, $data[0]['subject']);
         $this->assertTrue($data[0]['is_read']);
     }
 
@@ -79,7 +79,7 @@ class TopicsControllerTest extends TestCase
         $request = $this->get('/v1/topics/' . $this->topic->id, ['Accept' => 'application/json', 'Authorization' => 'Bearer ' . $this->token]);
 
         $request->assertJsonFragment([
-            'subject' => $this->topic->subject,
+            'subject' => $this->topic->title,
             'forum' => [
                 'id' => $this->forum->id,
                 'name' => $this->forum->name,
@@ -105,7 +105,7 @@ class TopicsControllerTest extends TestCase
         $request = $this->get('/v1/topics', ['Accept' => 'application/json', 'Authorization' => 'Bearer ' . $this->token]);
         $data = $request->json('data');
 
-        $this->assertEquals($this->topic->subject, $data[0]['subject']);
+        $this->assertEquals($this->topic->title, $data[0]['subject']);
         $this->assertTrue($data[0]['is_read']);
     }
 

@@ -1,5 +1,5 @@
 {% extends 'forum.base' %}
-{% block title %}Historia edycji posta w {{ topic.subject }}{{ parent() }}{% endblock %}
+{% block title %}Historia edycji posta w {{ topic.title }}{{ parent() }}{% endblock %}
 
 {% import 'components.modals' as modal %}
 {% import 'components.widgets' as widgets %}
@@ -10,7 +10,7 @@
 
   {% include "forum.partials.top" %}
 
-  <h1>{{ link_to_route('forum.topic', topic.subject, [forum.slug, topic.id, topic.slug]) }}</h1>
+  <h1>{{ link_to_route('forum.topic', topic.title, [forum.slug, topic.id, topic.slug]) }}</h1>
 
   <main class="mainbar">
     {% for log in logs %}
@@ -30,7 +30,7 @@
             <div class="col-10">
               <i class="far fa-file"></i>
 
-              <a id="id{{ log.id }}" href="{{ url }}#id{{ log.id }}">{{ log.subject }}</a>
+              <a id="id{{ log.id }}" href="{{ url }}#id{{ log.id }}">{{ log.title }}</a>
             </div>
           </div>
         </div>

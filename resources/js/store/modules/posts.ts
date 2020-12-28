@@ -155,7 +155,7 @@ const actions = {
 
     const payload = {
       text: post.text,
-      subject: rootGetters['topics/topic'].subject,
+      title: rootGetters['topics/topic'].title,
       is_sticky: rootGetters['topics/topic'].is_sticky,
       assets: post.assets,
       tags: rootGetters['topics/topic'].tags!.map(o => o['name']),

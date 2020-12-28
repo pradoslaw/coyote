@@ -44,7 +44,7 @@ class SubmitControllerTest extends TestCase
         $this->forum->save();
 
         $response = $this->actingAs($this->user)->json('POST', "/Forum/{$this->forum->slug}/Submit");
-        $response->assertJsonValidationErrors(['subject', 'text', 'tags']);
+        $response->assertJsonValidationErrors(['title', 'text', 'tags']);
 
         $response = $this->actingAs($this->user)->json(
             'POST',
@@ -69,7 +69,7 @@ class SubmitControllerTest extends TestCase
         $response = $this->actingAs($this->user)->json(
             'POST',
             "/Forum/{$this->forum->slug}/Submit",
-            ['text' => $post->text, 'subject' => $faker->text(50), 'is_sticky' => true]
+            ['text' => $post->text, 'title' => $faker->text(50), 'is_sticky' => true]
         );
 
         $response->assertJsonFragment([
@@ -109,7 +109,7 @@ class SubmitControllerTest extends TestCase
         $response = $this->actingAs($this->user)->json(
             'POST',
             "/Forum/{$this->forum->slug}/Submit",
-            ['text' => $faker->text, 'subject' => $faker->text(50), 'is_sticky' => true]
+            ['text' => $faker->text, 'title' => $faker->text(50), 'is_sticky' => true]
         );
 
         $id = $response->json('id');
@@ -218,7 +218,7 @@ class SubmitControllerTest extends TestCase
             "/Forum/{$this->forum->slug}/Submit/{$topic->id}/{$post->id}",
             [
                 'text' => $text = $faker->text,
-                'subject' => $subject = $faker->text(100),
+                'title' => $subject = $faker->text(100),
                 'poll' => [
                     'items' => [
                         ['text' => ''],
@@ -236,7 +236,7 @@ class SubmitControllerTest extends TestCase
 
         $topic->refresh();
 
-        $this->assertEquals($subject, $topic->subject);
+        $this->assertEquals($subject, $topic->title);
     }
 
     public function testFailToChangeTopicSubject()
@@ -252,13 +252,13 @@ class SubmitControllerTest extends TestCase
             "/Forum/{$this->forum->slug}/Submit/{$topic->id}/{$post->id}",
             [
                 'text' => $text = $faker->text,
-                'subject' => $subject = $faker->text(100)
+                'title' => $subject = $faker->text(100)
             ]
         );
 
         $topic->refresh();
 
-        $this->assertNotEquals($subject, $topic->subject);
+        $this->assertNotEquals($subject, $topic->title);
     }
 
     public function testEditExistingPostInLockedTopic()
@@ -301,7 +301,7 @@ class SubmitControllerTest extends TestCase
             "/Forum/{$this->forum->slug}/Submit",
             [
                 'text' => $faker->text,
-                'subject' => $faker->text(50),
+                'title' => $faker->text(50),
                 'poll' => [
                     'title' => $pollTitle = $faker->word,
                     'max_items' => 1,

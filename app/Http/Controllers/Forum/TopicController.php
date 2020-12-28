@@ -40,7 +40,7 @@ class TopicController extends BaseController
      */
     public function index(Request $request, $forum, $topic)
     {
-        $this->breadcrumb->push($topic->subject, route('forum.topic', [$forum->slug, $topic->id, $topic->slug]));
+        $this->breadcrumb->push($topic->title, route('forum.topic', [$forum->slug, $topic->id, $topic->slug]));
 
         // get the topic (and forum) mark time value from middleware
         // @see \Coyote\Http\Middleware\ScrollToPost

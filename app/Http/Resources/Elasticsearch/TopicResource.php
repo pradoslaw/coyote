@@ -12,7 +12,7 @@ use Coyote\User;
  * @property int $id
  * @property int $replies
  * @property int $score
- * @property string $subject
+ * @property string $title
  * @property Carbon $created_at
  * @property Carbon $last_post_created_at
  * @property User $user
@@ -40,7 +40,7 @@ class TopicResource extends ElasticsearchResource
         return array_merge(
             $only,
             [
-                'subject'               => htmlspecialchars($this->subject),
+                'title'                 => htmlspecialchars($this->title),
                 'created_at'            => $this->created_at->toIso8601String(),
                 'last_post_created_at'  => $this->last_post_created_at->toIso8601String(),
                 'decay_date'            => $this->last_post_created_at->toIso8601String(),
@@ -63,7 +63,7 @@ class TopicResource extends ElasticsearchResource
 
     protected function getDefaultSuggestTitle(): ?string
     {
-        return $this->subject;
+        return $this->title;
     }
 
     /**

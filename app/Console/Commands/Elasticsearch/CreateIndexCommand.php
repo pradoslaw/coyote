@@ -277,10 +277,6 @@ class CreateIndexCommand extends Command
                                     ]
                                 ]
                             ],
-                            "subject" => [
-                                "type" => "text",
-                                "analyzer" => "stopwords_analyzer"
-                            ],
                             "name" => [
                                 "type" => "text",
                                 "analyzer" => "stopwords_analyzer",

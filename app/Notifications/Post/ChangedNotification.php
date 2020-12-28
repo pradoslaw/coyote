@@ -21,7 +21,7 @@ class ChangedNotification extends SubmittedNotification
                 sprintf(
                     'Informujemy, ze <strong>%s</strong> zmodyfikował post, który obserwujesz w wątku: %s.',
                     $this->notifier->name,
-                    $this->post->topic->subject
+                    $this->post->topic->title
                 )
             )
             ->action('Zobacz post', url($this->notificationUrl()))

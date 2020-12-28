@@ -35,10 +35,10 @@ export default Vue.extend({
 
     this.liveUpdate();
 
-    const hints = ['hint-subject', 'hint-text', 'hint-tags', 'hint-user_name'];
+    const hints = ['hint-title', 'hint-text', 'hint-tags', 'hint-user_name'];
 
     [
-      document.querySelector('#js-submit-form input[name="subject"]'),
+      document.querySelector('#js-submit-form input[name="title"]'),
       document.querySelector('#js-submit-form textarea[name="text"]'),
       document.querySelector('#js-submit-form input[name="tags"]')
     ].forEach(el => {

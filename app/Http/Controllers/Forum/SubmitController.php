@@ -188,7 +188,7 @@ class SubmitController extends BaseController
     {
         $this->authorize('update', $topic->forum);
 
-        $topic->fill(['subject' => $request->input('subject')]);
+        $topic->fill(['title' => $request->input('title')]);
 
         if (!$topic->isDirty()) {
             return response()->json(['url' => UrlBuilder::topic($topic)]);
@@ -198,7 +198,7 @@ class SubmitController extends BaseController
         $post = $topic->firstPost;
 
         $this->transaction(function () use ($request, $topic, $post) {
-            $originalSubject = $topic->getRawOriginal('subject');
+            $originalSubject = $topic->getRawOriginal('title');
 
             $topic->save();
             $post->fill(['edit_count' => $post->edit_count + 1, 'editor_id' => $this->userId])->save();

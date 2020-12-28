@@ -21,7 +21,7 @@ class DeletedNotification extends AbstractNotification
             ->subject($this->getMailSubject())
             ->view('emails.notifications.topic.delete', [
                 'sender'        => $this->notifier->name,
-                'subject'       => link_to($this->notificationUrl(), $this->topic->subject),
+                'subject'       => link_to($this->notificationUrl(), $this->topic->title),
                 'reason_name'   => $this->reasonName,
                 'reason_text'   => $this->reasonText
             ]);

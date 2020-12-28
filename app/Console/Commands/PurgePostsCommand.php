@@ -66,7 +66,7 @@ class PurgePostsCommand extends Command
             // fire the event. it can be used to delete row from "pages" table or from search index
             event(new TopicWasDeleted($topic));
 
-            $this->info($topic->subject . ' from ' . $forum->name . ' removed permanently.');
+            $this->info($topic->title . ' from ' . $forum->name . ' removed permanently.');
         }
     }
 }

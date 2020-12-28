@@ -4,7 +4,7 @@
     {% if topic.id is null %}
       Nowy wątek
     {% elseif post.id is null %}
-      Napisz odpowiedź w wątku {{ topic.subject }}
+      Napisz odpowiedź w wątku {{ topic.title }}
     {% else %}
       Edycja posta
     {% endif %}
@@ -32,7 +32,7 @@
     </div>
 
     <aside class="col-sm-3">
-      <div id="hint-subject" class="alert alert-warning">
+      <div id="hint-title" class="alert alert-warning">
         <h4>Jak tytułować wątki</h4>
 
         <p>► Staraj się nadawać wątkom znaczące tematy!</p>
@@ -82,7 +82,7 @@
 {% block body %}
   <script>
     var forum = {{ forum|json_encode|raw }};
-    var topic = {subject: '', tags: []};
+    var topic = {title: '', tags: []};
     var showStickyCheckbox = {{ show_sticky_checkbox }};
   </script>
 

@@ -38,7 +38,7 @@ class SubjectChangedNotification extends AbstractNotification
             'object_id'     => $this->objectId(),
             'user_id'       => $user->id,
             'type_id'       => static::ID,
-            'subject'       => $this->topic->subject,
+            'subject'       => $this->topic->title,
             'excerpt'       => $this->originalSubject,
             'url'           => UrlBuilder::topic($this->topic),
             'id'            => $this->id,
@@ -58,7 +58,7 @@ class SubjectChangedNotification extends AbstractNotification
             ->subject($this->getMailSubject())
             ->view('emails.notifications.topic.subject', [
                 'sender'        => $this->notifier->name,
-                'subject'       => link_to($this->notificationUrl(), $this->topic->subject),
+                'subject'       => link_to($this->notificationUrl(), $this->topic->title),
                 'original'      => $this->originalSubject
             ]);
     }

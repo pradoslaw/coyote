@@ -5,7 +5,6 @@ export interface Hit {
   id: number;
   score: number | null;
   replies: number | null;
-  subject: string | null;
   title: string | null;
   name: string | null;
   salary: number | null;

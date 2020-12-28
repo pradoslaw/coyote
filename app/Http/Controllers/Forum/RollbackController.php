@@ -23,8 +23,8 @@ class RollbackController extends Controller
 
             if ($post->id === $post->topic->first_post_id) {
                 // w starej wersji nie logowalismy zmian w temacie watku
-                if ($revision->subject) {
-                    $post->topic->fill(['subject' => $revision->subject]);
+                if ($revision->title) {
+                    $post->topic->fill(['title' => $revision->title]);
                 }
 
                 if ($revision->tags) {

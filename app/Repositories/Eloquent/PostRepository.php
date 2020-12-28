@@ -113,7 +113,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
 
         $data = [
             'text'      => $text,
-            'subject'   => $post->topic->subject,
+            'title'     => $post->topic->title,
             'tags'      => [],
             'user_id'   => $userId,
             'ip'        => request()->ip(),
@@ -175,7 +175,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
             ->model
             ->select([
                 'posts.id AS post_id',
-                'subject',
+                'title',
                 'posts.topic_id',
                 'posts.created_at',
                 'post_votes.created_at AS voted_at',
@@ -201,7 +201,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
             ->model
             ->select([
                 'posts.id AS post_id',
-                'subject',
+                'title',
                 'posts.topic_id',
                 'posts.created_at',
                 'post_accepts.created_at AS accepted_at',

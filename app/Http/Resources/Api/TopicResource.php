@@ -34,11 +34,13 @@ class TopicResource extends JsonResource
      */
     public function toArray($request)
     {
-        $only = $this->resource->only(['id', 'subject', 'score', 'views', 'replies', 'is_sticky', 'is_locked', 'first_post_id', 'last_post_id']);
+        $only = $this->resource->only(['id', 'score', 'views', 'replies', 'is_sticky', 'is_locked', 'first_post_id', 'last_post_id']);
 
         return array_merge(
             $only,
             [
+                // backward compatibility
+                'subject'               => $this->title,
                 'locked_at'             => $this->locked_at ? $this->locked_at->toIso8601String() : null,
                 'created_at'            => $this->created_at->toIso8601String(),
                 'last_post_created_at'  => $this->last_post_created_at->toIso8601String(),

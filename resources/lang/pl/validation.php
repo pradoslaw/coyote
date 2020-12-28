@@ -144,11 +144,6 @@ return [
             'exists'        => 'Użytkownik o tej nazwie nie istnieje.',
             'different'     => 'Nie można wysłać wiadomości do samego siebie.'
         ],
-        // uzywany na forum
-        'subject' => [
-            'required'      => 'Temat musi posiadać minimum 3 znaki długości.',
-            'min'           => 'Temat musi posiadać minimum 3 znaki długości.',
-        ],
         // tagi, np. na forum
         'tags' => [
             'required'      => 'Wymagane jest przypisanie minimum jednego tagu do tego wątku.',
@@ -162,7 +157,7 @@ return [
             'required'      => 'Proszę wpisać nazwę użytkownika.',
             'unique'        => 'Ta nazwa jest zajęta przez innego użytkownika.',
         ],
-        // formularz pracy
+        // formularz pracy oraz forum
         'title' => [
             'required'      => 'Tytuł jest wymagany.',
             'min'           => 'Tytuł jest zbyt krótki. Musi mieć minimum 3 znaku długości.'

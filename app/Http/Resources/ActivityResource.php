@@ -65,7 +65,7 @@ class ActivityResource extends JsonResource
         if ($this->content_type === Post::class) {
             $this->content->setRelations(['topic' => $this->topic, 'forum' => $this->forum]);
 
-            return link_to(UrlBuilder::post($this->content), $this->topic->subject);
+            return link_to(UrlBuilder::post($this->content), $this->topic->title);
         } else {
             $post = (new Post)
                 ->forceFill(['id' => $this->content->post_id])
@@ -73,7 +73,7 @@ class ActivityResource extends JsonResource
 
             $this->content->setRelations(['post' => $post]);
 
-            return link_to(UrlBuilder::postComment($this->content), $post->topic->subject);
+            return link_to(UrlBuilder::postComment($this->content), $post->topic->title);
         }
     }
 }

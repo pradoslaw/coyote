@@ -55,7 +55,7 @@ class ForumsControllerTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        Guest::forceCreate(['id' => $user->guest_id, 'created_at' => now()->subMinute(5)]);
+        Guest::forceCreate(['id' => $user->guest_id, 'created_at' => now()->subMinutes(5)]);
 
         $forum = factory(Forum::class)->create(['order' => 0]);
         $topic = factory(Topic::class)->create(['forum_id' => $forum->id]);
@@ -66,7 +66,7 @@ class ForumsControllerTest extends TestCase
         $data = $request->decodeResponseJson();
 
         $this->assertEquals($forum->name, $data[0]['name']);
-        $this->assertEquals($topic->subject, $data[0]['topic']['subject']);
+        $this->assertEquals($topic->title, $data[0]['topic']['subject']);
         $this->assertFalse($data[0]['topic']['is_read']);
         $this->assertFalse($data[0]['is_read']);
     }

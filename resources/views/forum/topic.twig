@@ -1,6 +1,6 @@
 {% extends 'forum.base' %}
 
-{% block title %}{{ topic.subject ~ (paginate.currentPage() > 1 ? (' - Strona ' ~ paginate.currentPage())) }}{{ parent() }}{% endblock %}
+{% block title %}{{ topic.title ~ (paginate.currentPage() > 1 ? (' - Strona ' ~ paginate.currentPage())) }}{{ parent() }}{% endblock %}
 {% block description %}{{ description }}{% endblock %}
 
 {% import 'components.forms' as forms %}
@@ -22,7 +22,7 @@
     </p>
   {% endif %}
 
-  <h1 class="mb-0">{{ link_to_route('forum.topic', model.subject, [forum.slug, model.id, model.slug]) }}</h1>
+  <h1 class="mb-0">{{ link_to_route('forum.topic', model.title, [forum.slug, model.id, model.slug]) }}</h1>
 
   {% include "forum.partials.top" %}
 
@@ -261,7 +261,7 @@
               <vue-button @click.native="changeTitle" :disabled="isProcessing" class="btn btn-danger danger">Zmień tytuł</vue-button>
             </template>
 
-            <input type="text" name="subject" v-model="topic.subject" @keydown.enter="changeTitle" class="form-control">
+            <input type="text" name="title" v-model="topic.title" @keydown.enter="changeTitle" class="form-control">
           </vue-modal>
         {% endif %}
 
@@ -276,8 +276,8 @@
           <ul>
             {% for page in mlt %}
               <li>
-                <a href="{{ route('forum.topic', [page.forum.slug, page.id, page.slug]) }}" title="{{ page.subject|raw }}">
-                  <strong>{{ page.subject|raw }}</strong>
+                <a href="{{ route('forum.topic', [page.forum.slug, page.id, page.slug]) }}" title="{{ page.title|raw }}">
+                  <strong>{{ page.title|raw }}</strong>
                   <small>{{ page.last_post_created_at|format_date }}</small>
                 </a>
               </li>

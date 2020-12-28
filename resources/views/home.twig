@@ -36,7 +36,7 @@
                           </span>
 
                           <div class="col-sm-10 col-12">
-                            <a title="[{{ topic.last_post_created_at|format_date }}] {{ topic.subject }}" href="{{ route('forum.topic', [topic.forum_slug, topic.id, topic.slug]) }}?view=unread" class="title">{{ topic.subject }}</a>
+                            <a title="[{{ topic.last_post_created_at|format_date }}] {{ topic.title }}" href="{{ route('forum.topic', [topic.forum_slug, topic.id, topic.slug]) }}?view=unread" class="title">{{ topic.title }}</a>
                             <a href="{{ route('forum.category', [topic.forum_slug]) }}" class="category">{{ topic.forum }}</a>
                             <small class="float-right">{{ topic.last_post_created_at|format_date }}</small>
                           </div>
@@ -53,7 +53,7 @@
                           </span>
 
                           <div class="col-sm-10 col-12">
-                            <a title="[{{ topic.last_post_created_at|format_date }}] {{ topic.subject }}" href="{{ route('forum.topic', [topic.forum_slug, topic.id, topic.slug]) }}?view=unread" class="title">{{ topic.subject }}</a>
+                            <a title="[{{ topic.last_post_created_at|format_date }}] {{ topic.title }}" href="{{ route('forum.topic', [topic.forum_slug, topic.id, topic.slug]) }}?view=unread" class="title">{{ topic.title }}</a>
                             <a href="{{ route('forum.category', [topic.forum_slug]) }}" class="category">{{ topic.forum }}</a>
                             <small class="float-right">{{ topic.last_post_created_at|format_date }}</small>
                           </div>

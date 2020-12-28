@@ -57,7 +57,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
         ]
     ]);
 
-    // Change topic's subject
+    // Change topic's title
     // ----------------------------------------------
     $this->post('Topic/Subject/{topic}', [
         'uses' => 'SubmitController@subject',

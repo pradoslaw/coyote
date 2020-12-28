@@ -27,7 +27,7 @@ use Illuminate\Database\Query\Builder;
  * @property int $poll_id
  * @property int $score
  * @property float $rank
- * @property string $subject
+ * @property string $title
  * @property Forum $forum
  * @property Post\Accept $accept
  * @property \Carbon\Carbon $created_at
@@ -54,7 +54,7 @@ class Topic extends Model
      *
      * @var array
      */
-    protected $fillable = ['subject', 'slug', 'forum_id', 'is_sticky', 'poll_id'];
+    protected $fillable = ['title', 'slug', 'forum_id', 'is_sticky', 'poll_id'];
 
     /**
      * @var string
@@ -130,10 +130,10 @@ class Topic extends Model
     /**
      * @param $subject
      */
-    public function setSubjectAttribute($subject)
+    public function setTitleAttribute($title)
     {
-        $this->attributes['subject'] = trim($subject);
-        $this->attributes['slug'] = str_slug($subject, '_');
+        $this->attributes['title'] = trim($title);
+        $this->attributes['slug'] = str_slug($title, '_');
     }
 
     /**
