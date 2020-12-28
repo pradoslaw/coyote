@@ -37,6 +37,23 @@ class SubmitController extends Controller
         $this->plan = $plan;
     }
 
+    public function renew(Job $job)
+    {
+        abort_unless($job->is_expired, 404);
+
+        unset($job->id);
+        $job->exists = false; // new job offer
+
+        $job->user_id = $this->userId;
+
+        // reset all plan values
+        $job->is_boost = $job->is_publish = $job->is_ads = $job->is_on_top = $job->is_highlight = false;
+        // reset views counter
+        $job->views = 1;
+
+        return $this->index($job);
+    }
+
     /**
      * @param Job $job
      * @return \Illuminate\View\View

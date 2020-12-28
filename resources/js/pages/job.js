@@ -19,7 +19,7 @@ import Router from '../libs/router';
   .on('/Praca/\\d+\\-*', () => {
     require('./job/offer');
   })
-  .on(['/Praca/Submit*'], () => {
+  .on(['/Praca/Submit*', '/Praca/Renew/*'], () => {
     import('./job/submit');
   });
 

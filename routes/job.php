@@ -66,7 +66,7 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
     ]);
 
     $this->get('Coupon/Validate', ['uses' => 'CouponController@validateCode', 'as' => 'coupon']);
-    $this->get('Renew/{job}', ['uses' => 'RenewController@index', 'as' => 'renew', 'middleware' => 'auth']);
+    $this->get('Renew/{job}', ['uses' => 'SubmitController@renew', 'as' => 'renew', 'middleware' => 'auth']);
 
     $this->get('Oferta', ['uses' => 'BusinessController@show', 'as' => 'business']);
     $this->post('Comment/{comment?}', ['uses' => 'CommentController@save', 'as' => 'comment', 'middleware' => 'auth']);
