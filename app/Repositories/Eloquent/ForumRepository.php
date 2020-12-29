@@ -151,6 +151,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
             ->join('tags', 'tags.id', '=', 'topic_tags.tag_id')
             ->join('topics', 'topics.id', '=', 'topic_tags.topic_id')
             ->where('forum_id', $forumId)
+            ->whereNull('tags.deleted_at')
             ->groupBy('tags.id')
             ->groupBy('name')
             ->orderByRaw('COUNT(*) DESC')
