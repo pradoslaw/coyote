@@ -35,11 +35,13 @@ class DispatchMicroblogNotifications implements ShouldQueue
 
     public function handle(MicroblogSaved $event)
     {
-        if (!$event->wasRecentlyCreated && !$event->wasContentChanged) {
+        $microblog = $event->microblog;
+
+        // microblog could be deleted at this point
+        if (!$microblog || (!$event->wasRecentlyCreated && !$event->wasContentChanged)) {
             return false;
         }
 
-        $microblog = $event->microblog;
         $subscribers = [];
 
         if ($event->wasRecentlyCreated && $microblog->parent_id) {
@@ -54,7 +56,7 @@ class DispatchMicroblogNotifications implements ShouldQueue
         }
 
         if ($event->wasContentChanged) {
-            $this->sendUserMentionedNotifications($event->microblog, $subscribers);
+            $this->sendUserMentionedNotifications($microblog, $subscribers);
         }
 
         return true;
