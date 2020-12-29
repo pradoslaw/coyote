@@ -33,6 +33,7 @@ declare global {
     showCategoryName: boolean;
     groupStickyTopics: boolean;
     topics: Models.Paginator;
+    popularTags: string[];
   }
 }
 

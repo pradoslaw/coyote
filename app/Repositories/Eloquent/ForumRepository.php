@@ -142,6 +142,23 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     }
 
     /**
+     * @inheritDoc
+     */
+    public function popularTags(int $forumId)
+    {
+        return (new \Coyote\Topic\Tag)
+            ->select('name')
+            ->join('tags', 'tags.id', '=', 'topic_tags.tag_id')
+            ->join('topics', 'topics.id', '=', 'topic_tags.topic_id')
+            ->where('forum_id', $forumId)
+            ->groupBy('tags.id')
+            ->groupBy('name')
+            ->orderByRaw('COUNT(*) DESC')
+            ->limit(5)
+            ->pluck('name');
+    }
+
+    /**
      * @param int $id
      * @param string $operator
      */

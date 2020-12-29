@@ -11,7 +11,7 @@ import VueNotifications from "vue-notification";
 import VueFlag from '../../components/flags/flag.vue';
 import { default as axiosErrorHandler } from '../../libs/axios-error-handler';
 import {mapGetters, mapState} from 'vuex';
-import { default as mixins } from '@/js/components/mixins/user';
+import { default as mixins } from '@/components/mixins/user';
 
 Vue.use(VueAutosize);
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});

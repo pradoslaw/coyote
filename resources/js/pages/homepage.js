@@ -6,7 +6,7 @@ import store from "../store";
 import {mapGetters} from "vuex";
 import axios from 'axios';
 import { default as LiveMixin } from './microblog/live';
-import VueModals from "@/js/plugins/modals";
+import VueModals from "@/plugins/modals";
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 Vue.use(VueModals);

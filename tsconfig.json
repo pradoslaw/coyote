@@ -16,7 +16,7 @@
     "experimentalDecorators": true,
     "paths": {
       "@/*": [
-        "./resources/*"
+        "./resources/js/*"
       ]
     }
   }

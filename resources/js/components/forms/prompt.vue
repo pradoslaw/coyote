@@ -8,9 +8,9 @@
 
 <script>
   import VueDropdown from './dropdown.vue';
-  import { SpecialKeys } from '@/js/types/keys';
-  import store from '@/js/store';
-  import useBrackets from "@/js/libs/prompt";
+  import { SpecialKeys } from '@/types/keys';
+  import store from '@/store';
+  import useBrackets from "@/libs/prompt";
 
   export default {
     components: { 'vue-dropdown': VueDropdown },

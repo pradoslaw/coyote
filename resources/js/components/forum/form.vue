@@ -119,6 +119,14 @@
       ></vue-tags-inline>
 
       <vue-error :message="errors['tags']"></vue-error>
+
+      <span v-if="popularTags.length" class="form-text text-muted">
+        Podpowiedź:
+
+        <template v-for="(tag, index) in popularTags">
+          <a @click="toggleTag({name: tag})" href="javascript:" class="tag-suggestion">{{ tag }}</a>{{ index < popularTags.length - 1 ? ', ' : '' }}
+        </template>
+      </span>
     </div>
 
     <div v-if="showStickyCheckbox" class="form-group">
@@ -150,7 +158,7 @@
   import VueButton from '../forms/button.vue';
   import VueTagsInline from '../forms/tags-inline.vue';
   import VueMarkdown from '../../components/forms/markdown.vue';
-  import { Post, Topic, Tag } from "../../types/models";
+  import { Post, Topic, Tag } from "@/types/models";
   import { mapMutations, mapState, mapGetters } from "vuex";
   import axios from 'axios';
   import VueError from '../forms/error.vue';
@@ -214,6 +222,9 @@
     @Prop({default: false})
     readonly requireTag!: boolean;
 
+    @Prop({default: () => []})
+    readonly popularTags!: string[];
+
     @Prop({required: true})
     post!: Post;
 
@@ -264,6 +275,12 @@
 
     toggleTag(tag: Tag) {
       store.commit('topics/toggleTag', { topic: this.topic, tag });
+
+      const searchIndex = this.popularTags.indexOf(tag.name);
+
+      if (searchIndex > -1) {
+        this.popularTags.splice(searchIndex, 1);
+      }
     }
 
     findSimilar() {

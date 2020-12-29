@@ -1,12 +1,12 @@
 import Vue from 'vue';
 import VueNotifications from "vue-notification";
-import VuePricing from '@/js/components/job/pricing.vue';
-import VueJobForm from '@/js/components/job/form.vue';
-import VueFirmForm from '@/js/components/job/firm-form.vue';
-import VueButton from '@/js/components/forms/button.vue';
-import VueTabs from '@/js/components/tabs.vue';
-import store from '@/js/store';
-import { default as axiosErrorHandler } from '@/js/libs/axios-error-handler';
+import VuePricing from '@/components/job/pricing.vue';
+import VueJobForm from '@/components/job/form.vue';
+import VueFirmForm from '@/components/job/firm-form.vue';
+import VueButton from '@/components/forms/button.vue';
+import VueTabs from '@/components/tabs.vue';
+import store from '@/store';
+import { default as axiosErrorHandler } from '@/libs/axios-error-handler';
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 

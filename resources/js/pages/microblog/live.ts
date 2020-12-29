@@ -1,4 +1,4 @@
-import { Subscriber, MicroblogCommentSaved, MicroblogSaved } from "@/js/libs/live";
+import { Subscriber, MicroblogCommentSaved, MicroblogSaved } from "@/libs/live";
 
 export default {
   methods: {

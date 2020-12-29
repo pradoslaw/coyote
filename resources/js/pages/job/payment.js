@@ -1,13 +1,13 @@
 import Vue from 'vue';
 import VueMaskedInput from 'vue-masked-input';
-import VueFormGroup from '@/js/components/forms/form-group.vue';
-import VueText from '@/js/components/forms/text.vue';
-import VueSelect from '@/js/components/forms/select.vue';
-import VueCheckbox from '@/js/components/forms/checkbox.vue';
-import VueButton from '@/js/components/forms/button.vue';
+import VueFormGroup from '@/components/forms/form-group.vue';
+import VueText from '@/components/forms/text.vue';
+import VueSelect from '@/components/forms/select.vue';
+import VueCheckbox from '@/components/forms/checkbox.vue';
+import VueButton from '@/components/forms/button.vue';
 import axios from 'axios';
 import VueNotifications from "vue-notification";
-import {default as axiosErrorHandler} from "@/js/libs/axios-error-handler";
+import {default as axiosErrorHandler} from "@/libs/axios-error-handler";
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 

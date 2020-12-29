@@ -1,13 +1,13 @@
 import Vue from "vue";
-import VuePost from "@/js/components/forum/post.vue";
-import VueForm from "@/js/components/forum/form.vue";
-import VuePoll from "@/js/components/forum/poll.vue";
-import VuePagination from "../../components/pagination.vue";
-import store from "@/js/store";
-import { Subscriber, PostSaved, PostCommentSaved } from "@/js/libs/live";
-import useBrackets from "@/js/libs/prompt";
+import VuePost from "@/components/forum/post.vue";
+import VueForm from "@/components/forum/form.vue";
+import VuePoll from "@/components/forum/poll.vue";
+import VuePagination from "@/components/pagination.vue";
+import store from "@/store";
+import { Subscriber, PostSaved, PostCommentSaved } from "@/libs/live";
+import useBrackets from "@/libs/prompt";
 import { mapGetters, mapState } from "vuex";
-import { Post } from "@/js/types/models.ts";
+import { Post } from "@/types/models.ts";
 
 export default Vue.extend({
   delimiters: ['${', '}'],
@@ -21,7 +21,8 @@ export default Vue.extend({
   data: () => ({
     showStickyCheckbox: window.showStickyCheckbox,
     undefinedPost: { text: '', html: '', assets: [] },
-    reasons: window.reasons
+    reasons: window.reasons,
+    popularTags: window.popularTags
   }),
   created() {
     store.commit('posts/init', window.pagination);

@@ -36,7 +36,7 @@
   import { Prop, Watch, Ref } from "vue-property-decorator";
   import Component from "vue-class-component";
   import VueDropdown from '../forms/dropdown.vue';
-  import { Tag } from '../../types/models';
+  import { Tag } from '@/types/models';
   import axios from 'axios';
 
   @Component({

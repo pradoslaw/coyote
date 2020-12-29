@@ -1,9 +1,9 @@
-import { Microblog, Post, PostComment } from "../types/models";
+import { Microblog, Post, PostComment } from "@/types/models";
 import { default as ws } from "./realtime";
 import Prism from "prismjs";
 import store from '../store';
 import Vue from 'vue';
-import Channel from "@/js/libs/websocket/channel";
+import Channel from "@/libs/websocket/channel";
 
 export type Payload = Microblog | Post | PostComment;
 

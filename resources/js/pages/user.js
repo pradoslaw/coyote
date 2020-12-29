@@ -1,8 +1,8 @@
 import Vue from "vue";
 import VueThumbnail from '../components/thumbnail';
 import VueNotifications from 'vue-notification';
-import VueAvatar from '@/js/components/avatar';
-import VueUserName from '@/js/components/user-name';
+import VueAvatar from '@/components/avatar';
+import VueUserName from '@/components/user-name';
 import axios from 'axios';
 import store from '../store';
 import { default as axiosErrorHandler } from '../libs/axios-error-handler';

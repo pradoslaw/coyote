@@ -156,17 +156,17 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from "vue-class-component";
-  import VueFormGroup from '@/js/components/forms/form-group.vue';
-  import VueText from '@/js/components/forms/text.vue';
-  import VueSelect from '@/js/components/forms/select.vue';
-  import VueButton from '@/js/components/forms/button.vue';
-  import VueError from '@/js/components/forms/error.vue';
+  import VueFormGroup from '@/components/forms/form-group.vue';
+  import VueText from '@/components/forms/text.vue';
+  import VueSelect from '@/components/forms/select.vue';
+  import VueButton from '@/components/forms/button.vue';
+  import VueError from '@/components/forms/error.vue';
   import VueTinyMce from '@tinymce/tinymce-vue';
-  import VueMap from '@/js/components/google-maps/map.vue';
-  import VueMarker from '@/js/components/google-maps/marker.vue';
-  import VueThumbnail from '@/js/components/thumbnail.vue';
+  import VueMap from '@/components/google-maps/map.vue';
+  import VueMarker from '@/components/google-maps/marker.vue';
+  import VueThumbnail from '@/components/thumbnail.vue';
   import { Prop } from "vue-property-decorator";
-  import { Firm, Asset } from '../../types/models';
+  import { Firm, Asset } from '@/types/models';
   import { mapMutations } from "vuex";
   import Geocoder from '../../libs/geocoder';
   import TinyMceOptions from '../../libs/tinymce';

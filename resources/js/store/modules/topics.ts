@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Tag, Topic } from '@/js/types/models';
+import { Tag, Topic } from '@/types/models';
 
 const state = {
   topics: []

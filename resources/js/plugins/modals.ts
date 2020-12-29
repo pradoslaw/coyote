@@ -1,4 +1,4 @@
-import VueModal from "@/js/components/modal.vue";
+import VueModal from "@/components/modal.vue";
 import Vue from 'vue';
 
 function confirmModal(options: ModalOptions) {

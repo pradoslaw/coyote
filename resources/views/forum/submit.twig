@@ -24,6 +24,7 @@
         :show-tags-input="true"
         :show-sticky-checkbox="showStickyCheckbox"
         :post="undefinedPost"
+        :popular-tags="popularTags"
         require-tag="{{ forum.require_tag }}"
         @save="redirectToTopic"
       ></vue-form>
@@ -84,6 +85,7 @@
     var forum = {{ forum|json_encode|raw }};
     var topic = {title: '', tags: []};
     var showStickyCheckbox = {{ show_sticky_checkbox }};
+    var popularTags = {{ popular_tags|json_encode|raw }};
   </script>
 
   {{ parent() }}

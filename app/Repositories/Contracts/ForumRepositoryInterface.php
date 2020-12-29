@@ -39,6 +39,13 @@ interface ForumRepositoryInterface extends RepositoryInterface
 
     /**
      * @return array
+     * @deprecated
      */
     public function getTagsCloud();
+
+    /**
+     * @param int $forumId
+     * @return string[]
+     */
+    public function popularTags(int $forumId);
 }

@@ -34,7 +34,7 @@
   import { Prop, Ref } from "vue-property-decorator";
   import Component from "vue-class-component";
   import { mixin as clickaway } from "vue-clickaway";
-  import { PostComment } from "@/js/types/models";
+  import { PostComment } from "@/types/models";
   import { mapGetters } from "vuex";
 
   @Component({

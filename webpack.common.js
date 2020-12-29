@@ -111,7 +111,7 @@ module.exports = {
     extensions: [ '.ts', '.tsx', '.js', '.vue' ],
 
     alias: {
-      '@': path.join(__dirname, 'resources')
+      '@': path.join(__dirname, 'resources/js')
     }
   },
   context: path.join(__dirname, 'resources'),

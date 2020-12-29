@@ -15,7 +15,7 @@ import VuePagination from '../components/pagination.vue';
 import VueAutocomplete from '../components/forms/autocomplete.vue';
 import differenceInMinutes from 'date-fns/differenceInMinutes';
 import parseISO from 'date-fns/parseISO';
-import {default as axiosErrorHandler} from "@/js/libs/axios-error-handler";
+import {default as axiosErrorHandler} from "@/libs/axios-error-handler";
 import VueNotifications from "vue-notification";
 
 Vue.use(VueAutosave);

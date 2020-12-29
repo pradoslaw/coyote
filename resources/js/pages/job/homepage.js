@@ -1,9 +1,9 @@
 import Vue from 'vue';
-import VueJob from '@/js/components/job/job.vue';
-import VueJobTiny from '@/js/components/job/job-tiny.vue';
-import VuePagination from '@/js/components/pagination.vue';
+import VueJob from '@/components/job/job.vue';
+import VueJobTiny from '@/components/job/job-tiny.vue';
+import VuePagination from '@/components/pagination.vue';
 import axios from 'axios';
-import store from '@/js/store';
+import store from '@/store';
 import PerfectScrollbar from 'perfect-scrollbar';
 import { mapState } from 'vuex';
 import VueNotifications from "vue-notification";

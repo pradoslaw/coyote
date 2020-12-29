@@ -40,7 +40,7 @@
   import VueModal from '../modal.vue';
   import VueAvatar from '../avatar.vue';
   import VueTimeago from '../../plugins/timeago';
-  import VueUserName from '@/js/components/user-name';
+  import VueUserName from '@/components/user-name';
 
   Vue.use(VueTimeago);
 
