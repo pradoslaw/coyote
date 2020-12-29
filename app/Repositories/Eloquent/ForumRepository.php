@@ -156,7 +156,8 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
             ->groupBy('name')
             ->orderByRaw('COUNT(*) DESC')
             ->limit(5)
-            ->pluck('name');
+            ->pluck('name')
+            ->toArray();
     }
 
     /**
