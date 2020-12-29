@@ -3,7 +3,7 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Factories\GateFactory;
-use Coyote\Http\Resources\Api\ForumCollection;
+use Coyote\Http\Resources\ForumCollection;
 use Coyote\Http\Resources\FlagResource;
 use Coyote\Http\Resources\TopicCollection;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;

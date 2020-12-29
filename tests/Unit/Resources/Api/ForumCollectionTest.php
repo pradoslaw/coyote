@@ -3,7 +3,8 @@
 namespace Tests\Unit\Resources\Api;
 
 use Coyote\Forum;
-use Coyote\Http\Resources\Api\ForumCollection;
+use Coyote\Http\Resources\Api\ForumResource;
+use Coyote\Http\Resources\ForumCollection;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
@@ -36,7 +37,6 @@ class ForumCollectionTest extends TestCase
         $child2 = factory(Forum::class)->create(['parent_id' => $parent->id, 'order' => 2]);
         $child1 = factory(Forum::class)->create(['parent_id' => $parent->id, 'order' => 1]);
 
-
         $this->createTopic($child2->id);
 
         $child1->refresh();
@@ -58,6 +58,7 @@ class ForumCollectionTest extends TestCase
         $this->assertEquals(2, $result[$child2->id]['order']);
 
         $collection = new ForumCollection($forums);
+
         $result = $collection->toArray(request());
 
         $result = collect($result)->keyBy('id');

@@ -3,7 +3,7 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Events\UserSaved;
-use Coyote\Http\Resources\Api\ForumCollection;
+use Coyote\Http\Resources\ForumCollection;
 use Coyote\Http\Resources\FlagResource;
 use Coyote\Http\Resources\TopicCollection;
 use Coyote\Repositories\Criteria\Topic\BelongsToForum;
