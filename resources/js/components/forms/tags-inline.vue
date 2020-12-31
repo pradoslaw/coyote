@@ -1,6 +1,14 @@
 <template>
   <div ref="editor" class="tag-editor">
     <ul ref="cloud" class="tag-clouds">
+      <li v-for="tag in popularTags">
+        <a @click="toggleTag({ name: tag })" class="suggest">
+          <i class="fa fa-plus"></i>
+
+          {{ tag }}
+        </a>
+      </li>
+
       <li v-for="tag in tags">
         <span>
           {{ tag.name }}
@@ -37,7 +45,7 @@
 
 <script lang="ts">
   import Vue from "vue";
-  import { Prop, Watch, Ref } from "vue-property-decorator";
+  import {Prop, Watch, Ref, InjectReactive} from "vue-property-decorator";
   import Component from "vue-class-component";
   import VueDropdown from '../forms/dropdown.vue';
   import { Tag } from '@/types/models';
@@ -71,6 +79,9 @@
     @Ref('cloud')
     readonly cloud!: HTMLElement;
 
+    @InjectReactive()
+    readonly popularTags!: string[];
+
     private searchText: string = '';
     private filteredTags = [];
     private inputWidth = '100%';
@@ -90,6 +101,12 @@
 
       this.$emit('change', tag);
       this.$nextTick(() => this.calcInputWidth());
+
+      const searchIndex = this.popularTags.indexOf(tag.name);
+
+      if (searchIndex > -1) {
+        this.popularTags.splice(searchIndex, 1);
+      }
     }
 
     async validateTag() {

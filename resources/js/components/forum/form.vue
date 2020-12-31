@@ -104,7 +104,7 @@
             <vue-tags-inline
               :tags="topic.tags"
               :class="{'is-invalid': 'tags' in errors}"
-              :placeholder="requireTag ? 'Minimum 1 tag jest wymagany': 'Np. c#, .net'"
+              :placeholder="requireTag ? 'Minimum 1 tag jest wymagany': '...jaki? kliknij, aby wybrać'"
               @change="toggleTag"
             ></vue-tags-inline>
 
@@ -146,7 +146,7 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from "vue-class-component";
-  import { Ref, Prop, Emit, Watch } from "vue-property-decorator";
+  import {Ref, Prop, Emit, Watch, Provide, ProvideReactive} from "vue-property-decorator";
   import store from "../../store";
   import VueButton from '../forms/button.vue';
   import VueTagsInline from '../forms/tags-inline.vue';
@@ -216,6 +216,7 @@
     readonly requireTag!: boolean;
 
     @Prop({default: () => []})
+    @ProvideReactive()
     readonly popularTags!: string[];
 
     @Prop({required: true})
@@ -268,12 +269,6 @@
 
     toggleTag(tag: Tag) {
       store.commit('topics/toggleTag', { topic: this.topic, tag });
-
-      const searchIndex = this.popularTags.indexOf(tag.name);
-
-      if (searchIndex > -1) {
-        this.popularTags.splice(searchIndex, 1);
-      }
     }
 
     findSimilar() {

@@ -115,6 +115,7 @@
   padding-bottom: $input-padding-y-sm;
   width: 100%;
   position: relative;
+  cursor: default;
   //padding: 0 0 0 10px;
 
   input {
@@ -138,6 +139,16 @@
     &:hover {
       background-color: $tag-color;
       color: #fff;
+    }
+  }
+
+  .suggest {
+    background-color: transparent;
+    border: 1px solid $border-color;
+    opacity: .7;
+
+    &:hover {
+      cursor: pointer;
     }
   }
 
