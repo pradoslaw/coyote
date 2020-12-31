@@ -1,26 +1,30 @@
 <template>
-  <div class="position-relative">
-    <div ref="editor" class="form-control tag-editor">
-      <ul ref="cloud" class="tag-clouds">
-        <li v-for="tag in tags"><a @click="toggleTag(tag)" class="remove">{{ tag.name }}</a></li>
-      </ul>
+  <div ref="editor" class="tag-editor">
+    <ul ref="cloud" class="tag-clouds">
+      <li v-for="tag in tags">
+        <span>
+          {{ tag.name }}
 
-      <input
-        v-model="searchText"
-        :style="`width: ${inputWidth}`"
-        :placeholder="placeholder"
-        @keyup.space="validateTag"
-        @keyup.enter.prevent="validateTag"
-        @keyup.esc="dropdown.toggleDropdown(false)"
-        @keyup.up.prevent="dropdown.goUp"
-        @keyup.down.prevent="dropdown.goDown"
-        ref="input"
-        type="text"
-        tabindex="4"
-        autocomplete="off"
-        name="tags"
-      >
-    </div>
+          <a @click="toggleTag(tag)" class="remove"><i class="fa fa-times"></i></a>
+        </span>
+      </li>
+    </ul>
+
+    <input
+      v-model="searchText"
+      :style="`width: ${inputWidth}`"
+      :placeholder="placeholder"
+      @keyup.space="validateTag"
+      @keyup.enter.prevent="validateTag"
+      @keyup.esc="dropdown.toggleDropdown(false)"
+      @keyup.up.prevent="dropdown.goUp"
+      @keyup.down.prevent="dropdown.goDown"
+      ref="input"
+      type="text"
+      tabindex="4"
+      autocomplete="off"
+      name="tags"
+    >
 
     <vue-dropdown :items="filteredTags" @select="toggleTag" :default-index="-1" ref="dropdown" class="tag-dropdown">
       <template v-slot:item="slot">

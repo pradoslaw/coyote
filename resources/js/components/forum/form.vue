@@ -44,15 +44,6 @@
         </template>
 
         <div v-if="enablePoll" id="js-poll-form" class="bg-light p-3 mt-2 collapse">
-<!--          <div class="form-group row">-->
-<!--            <label class="col-md-4 col-form-label text-right">Tytuł ankiety</label>-->
-
-<!--            <div class="col-md-6">-->
-<!--              <vue-text v-model="poll.title"></vue-text>-->
-<!--              <vue-error :message="errors['poll.title']"></vue-error>-->
-<!--            </div>-->
-<!--          </div>-->
-
           <div class="form-group row">
             <label class="col-md-3 col-form-label text-right">Odpowiedzi w ankiecie</label>
 
@@ -105,28 +96,30 @@
             </div>
           </div>
         </div>
-      </vue-markdown>
-    </div>
 
-    <div v-if="showTagsInput" class="form-group">
-      <label class="col-form-label">Tagi <em v-if="requireTag">*</em></label>
+        <template v-slot:bottom>
+          <div v-if="showTagsInput" class="row no-gutters p-1">
+<!--            <label class="col-form-label">Tagi <em v-if="requireTag">*</em></label>-->
 
-      <vue-tags-inline
-        :tags="topic.tags"
-        :class="{'is-invalid': 'tags' in errors}"
-        :placeholder="requireTag ? 'Minimum 1 tag jest wymagany': 'Np. c#, .net'"
-        @change="toggleTag"
-      ></vue-tags-inline>
+            <vue-tags-inline
+              :tags="topic.tags"
+              :class="{'is-invalid': 'tags' in errors}"
+              :placeholder="requireTag ? 'Minimum 1 tag jest wymagany': 'Np. c#, .net'"
+              @change="toggleTag"
+            ></vue-tags-inline>
 
-      <vue-error :message="errors['tags']"></vue-error>
+            <vue-error :message="errors['tags']"></vue-error>
 
-      <span v-if="popularTags.length" class="form-text text-muted">
-        Podpowiedź:
-
-        <template v-for="(tag, index) in popularTags">
-          <a @click="toggleTag({name: tag})" href="javascript:" class="tag-suggestion">{{ tag }}</a>{{ index < popularTags.length - 1 ? ', ' : '' }}
+<!--            <span v-if="popularTags.length" class="form-text text-muted">-->
+<!--            Podpowiedź:-->
+<!--    -->
+<!--            <template v-for="(tag, index) in popularTags">-->
+<!--              <a @click="toggleTag({name: tag})" href="javascript:" class="tag-suggestion">{{ tag }}</a>{{ index < popularTags.length - 1 ? ', ' : '' }}-->
+<!--            </template>-->
+<!--          </span>-->
+          </div>
         </template>
-      </span>
+      </vue-markdown>
     </div>
 
     <div v-if="showStickyCheckbox" class="form-group">

@@ -61,113 +61,129 @@
       ></textarea>
 
       <vue-error :message="error"></vue-error>
+    </vue-prompt>
 
-      <div class="row no-gutters border-top pt-2 pl-1 pr-1">
-        <div class="small mr-auto">
-          <template v-if="isProcessing">
-            <i class="fas fa-spinner fa-spin small"></i>
+    <hr class="m-0">
 
-            <span class="small">{{ progress }}%</span>
-          </template>
+    <slot name="bottom"></slot>
 
-          <a v-else :aria-label="uploadTooltip" data-balloon-length="large" data-balloon-pos="up-left" data-balloon-nofocus href="javascript:" class="small text-muted" @click="chooseFile">
-            <i class="far fa-image"></i>
+<!--      <div class="">-->
 
-            <span class="d-none d-sm-inline">Kliknij, aby dodać załącznik lub wklej ze schowka.</span>
-          </a>
+<!--          <ul class="tag-clouds tag-clouds-sm">-->
+<!--            <li><a href="#" style="background-color: transparent; border: 1px solid #ddd;"><i class="fa fa-plus"></i> Nowości</a></li>-->
+<!--            <li><a href="#" style="background-color: transparent; border: 1px solid #ddd;"><i class="fa fa-plus"></i> 4programmers.net</a></li>-->
+<!--            <li><a href="#">Wydarzenia IT <span class="border-left ml-1 pl-2"><i class="fa fa-times"></i></span></a></li>-->
+<!--          </ul>-->
 
-          <slot name="options"></slot>
-        </div>
+<!--        <span class="text-muted pl-2 pt-1">...inny? jaki?</span>-->
 
-        <div class="small ml-auto">
-          <a href="#js-wiki-help" data-toggle="collapse" class="small text-muted"><i class="fa fab fa-markdown"></i> Markdown jest obsługiwany.</a>
-        </div>
+<!--      </div>-->
+
+    <div class="row no-gutters pt-1 pl-1 pr-1">
+      <div class="small mr-auto">
+        <template v-if="isProcessing">
+          <i class="fas fa-spinner fa-spin small"></i>
+
+          <span class="small">{{ progress }}%</span>
+        </template>
+
+        <a v-else :aria-label="uploadTooltip" data-balloon-length="large" data-balloon-pos="up-left" data-balloon-nofocus href="javascript:" class="small text-muted" @click="chooseFile">
+          <i class="far fa-image"></i>
+
+          <span class="d-none d-sm-inline">Kliknij, aby dodać załącznik lub wklej ze schowka.</span>
+        </a>
+
+        <slot name="options"></slot>
       </div>
 
-      <div v-if="assets.length" class="row pt-3 pb-3">
-        <div v-for="item in assets" :key="item.id" class="col-sm-2">
-          <vue-thumbnail :url="item.url" @delete="deleteAsset" :aria-label="item.name" data-balloon-pos="down" name="asset"></vue-thumbnail>
-        </div>
+      <div class="small ml-auto">
+        <a href="#js-wiki-help" data-toggle="collapse" class="small text-muted"><i class="fa fab fa-markdown"></i> Markdown jest obsługiwany.</a>
       </div>
+    </div>
 
-      <div id="js-wiki-help" class="row collapse mt-2">
-        <div class="col-md-12">
-          <div class="card card-info">
-            <div class="card-header">Pomoc</div>
-            <div class="card-body">
-              <h2>Pogrubienie, kursywa...</h2>
+    <div v-if="assets.length" class="row pt-3 pb-3">
+      <div v-for="item in assets" :key="item.id" class="col-sm-2">
+        <vue-thumbnail :url="item.url" @delete="deleteAsset" :aria-label="item.name" data-balloon-pos="down" name="asset"></vue-thumbnail>
+      </div>
+    </div>
 
-              <p>Możesz używać pogrubienia czy kursywy, aby usprawnić czytelność tekstu: <code>**to jest pogrubienie**</code>, a to
-                <code>*kursywa*</code>.
-              </p>
+    <div id="js-wiki-help" class="row collapse mt-2">
+      <div class="col-md-12">
+        <div class="card card-info">
+          <div class="card-header">Pomoc</div>
+          <div class="card-body">
+            <h2>Pogrubienie, kursywa...</h2>
 
-              <h2>Kod źródłowy</h2>
+            <p>Możesz używać pogrubienia czy kursywy, aby usprawnić czytelność tekstu: <code>**to jest pogrubienie**</code>, a to
+              <code>*kursywa*</code>.
+            </p>
 
-              <p>Wszelkie jednolinijkowe instrukcje języka programowania (fragmenty kodu) powinny być zawarte pomiędzy obrócone
-                apostrofy
-                lub podwójny cudzysłów, czyli: <code>`kod instrukcji języka programowania`</code>.</p>
+            <h2>Kod źródłowy</h2>
 
-              <p><code>```</code> umożliwia kolorowanie większych fragmentów kodu. Możemy nadać nazwę języka
-                programowania,
-                aby system użył konkretnych ustawień kolorowania składnii:
-                <br/><br/>
-                <code>
-                  ```javascript<br/>
-                  &nbsp;&nbsp;document.write('Hello World');<br/>
-                  ```<br/>
-                </code></p>
+            <p>Wszelkie jednolinijkowe instrukcje języka programowania (fragmenty kodu) powinny być zawarte pomiędzy obrócone
+              apostrofy
+              lub podwójny cudzysłów, czyli: <code>`kod instrukcji języka programowania`</code>.</p>
 
-              <h2>Nagłówki</h2>
+            <p><code>```</code> umożliwia kolorowanie większych fragmentów kodu. Możemy nadać nazwę języka
+              programowania,
+              aby system użył konkretnych ustawień kolorowania składnii:
+              <br/><br/>
+              <code>
+                ```javascript<br/>
+                &nbsp;&nbsp;document.write('Hello World');<br/>
+                ```<br/>
+              </code></p>
 
-              <p>
-                <code>## Nagłówek 2</code><br/>
-                <code>### Nagłówek 3</code><br/>
-                <code>#### Nagłówek 4</code>
-              </p>
+            <h2>Nagłówki</h2>
 
-              <h2>Wypunktowanie i numerowanie</h2>
+            <p>
+              <code>## Nagłówek 2</code><br/>
+              <code>### Nagłówek 3</code><br/>
+              <code>#### Nagłówek 4</code>
+            </p>
 
-              <p>Możliwe jest tworzenie listy numerowanych oraz wypunktowanych. Wystarczy, że pierwszym znakiem linii będzie
-                <code>*</code> lub <code>1. </code></p>
+            <h2>Wypunktowanie i numerowanie</h2>
 
-              <p>
-                <code>1. Lista numerowana</code><br/>
-                <code>2. Lista numerowana</code><br/>
-              </p>
-              <p></p>
-              <p>
-                <code>* Lista wypunktowana</code><br/>
-                <code>* Lista wypunktowana</code><br/>
-                <code>** Lista wypunktowana (drugi poziom)</code><br/>
-              </p>
+            <p>Możliwe jest tworzenie listy numerowanych oraz wypunktowanych. Wystarczy, że pierwszym znakiem linii będzie
+              <code>*</code> lub <code>1. </code></p>
 
-              <h2>Linki</h2>
+            <p>
+              <code>1. Lista numerowana</code><br/>
+              <code>2. Lista numerowana</code><br/>
+            </p>
+            <p></p>
+            <p>
+              <code>* Lista wypunktowana</code><br/>
+              <code>* Lista wypunktowana</code><br/>
+              <code>** Lista wypunktowana (drugi poziom)</code><br/>
+            </p>
 
-              <p>URL umieszczony w tekście zostanie przez system automatycznie wykryty i zamieniony na znacznik <code>
-                &lt;a&gt;</code>.<br/>
-                Jeżeli chcesz, możesz samodzielnie sformatować link: <code>&lt;a href="http://4programmers.net">kliknij tutaj&lt;/a&gt;</code>
-              </p>
+            <h2>Linki</h2>
 
-              <p>Możesz umieścić odnośnik do wewnętrznej podstrony, używając następującej składnii: <code>[[Delphi/Kompendium]]</code>
-                lub <code>[[Delphi/Kompendium|kliknij, aby przejść do kompendium]]</code></p>
+            <p>URL umieszczony w tekście zostanie przez system automatycznie wykryty i zamieniony na znacznik <code>
+              &lt;a&gt;</code>.<br/>
+              Jeżeli chcesz, możesz samodzielnie sformatować link: <code>&lt;a href="http://4programmers.net">kliknij tutaj&lt;/a&gt;</code>
+            </p>
 
-              <h2>Znaczniki HTML</h2>
+            <p>Możesz umieścić odnośnik do wewnętrznej podstrony, używając następującej składnii: <code>[[Delphi/Kompendium]]</code>
+              lub <code>[[Delphi/Kompendium|kliknij, aby przejść do kompendium]]</code></p>
 
-              <p>Dozwolone jest używanie podstawowych znaczników HTML: &lt;a&gt;, &lt;b&gt;, &lt;i&gt;, &lt;del&gt;, &lt;strong&gt;,
-                &lt;tt&gt;, &lt;dfn&gt;, &lt;ins&gt;, &lt;pre&gt;, &lt;blockquote&gt;, &lt;hr&gt;, &lt;sub&gt;, &lt;sup&gt;, &lt;img&gt;</p>
+            <h2>Znaczniki HTML</h2>
 
-              <h2>Indeks górny oraz dolny</h2>
+            <p>Dozwolone jest używanie podstawowych znaczników HTML: &lt;a&gt;, &lt;b&gt;, &lt;i&gt;, &lt;del&gt;, &lt;strong&gt;,
+              &lt;tt&gt;, &lt;dfn&gt;, &lt;ins&gt;, &lt;pre&gt;, &lt;blockquote&gt;, &lt;hr&gt;, &lt;sub&gt;, &lt;sup&gt;, &lt;img&gt;</p>
 
-              <p>Przykład: wpisując <code>m&lt;sub&gt;2&lt;/sub&gt;,, i m&lt;sup&gt;2&lt;/sup&gt;</code> otrzymasz: m<sub>2</sub> i m<sup>2</sup>.</p>
+            <h2>Indeks górny oraz dolny</h2>
 
-              <h2>Składnia Tex</h2>
+            <p>Przykład: wpisując <code>m&lt;sub&gt;2&lt;/sub&gt;,, i m&lt;sup&gt;2&lt;/sup&gt;</code> otrzymasz: m<sub>2</sub> i m<sup>2</sup>.</p>
 
-              <p><code>&lt;tex&gt;arcctg(x) = argtan(\frac{1}{x}) = arcsin(\frac{1}{\sqrt{1+x^2}})&lt;/tex&gt;</code></p>
-            </div>
+            <h2>Składnia Tex</h2>
+
+            <p><code>&lt;tex&gt;arcctg(x) = argtan(\frac{1}{x}) = arcsin(\frac{1}{\sqrt{1+x^2}})&lt;/tex&gt;</code></p>
           </div>
         </div>
       </div>
-    </vue-prompt>
+    </div>
 
     <div @click="showPreview" v-show="isPreview" v-html="previewHtml" class="preview post-content"></div>
 
@@ -178,7 +194,7 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from "vue-class-component";
-  import { Asset } from '../../types/models';
+  import { Asset } from '@/types/models';
   import { Ref, Prop, Emit, Watch } from "vue-property-decorator";
   import { default as Textarea, languages } from '../../libs/textarea';
   import { mixin as clickaway } from 'vue-clickaway';
