@@ -102,7 +102,7 @@
             <vue-tags-inline
               :tags="topic.tags"
               :class="{'is-invalid': 'tags' in errors}"
-              :placeholder="requireTag ? 'Minimum 1 tag jest wymagany': '...jaki? kliknij, aby wybrać'"
+              :placeholder="requireTag ? 'Minimum 1 tag jest wymagany': '...inny? kliknij, aby wybrać tag'"
               @change="toggleTag"
             ></vue-tags-inline>
 

@@ -1,17 +1,22 @@
 <template>
   <li>
-    <a href="javascript:" @click="$emit('delete', tag.name)" class="remove">{{ tag.name }}</a>
+    <span>
+      {{ tag.name }}
+
+      <a @click="$emit('delete', tag.name)" class="remove"><i class="fa fa-times"></i></a>
+    </span>
 
     <div class="d-inline" @mouseenter="editable = true" @mouseleave="disableEditing">
-      <i
+      <span
         v-for="i in [0, 1, 2]"
-        class="fa fa-circle"
-        :title="tooltips[i]"
-        :class="{'text-primary': getHighlight(tag.priority) >= i, 'text-muted': getHighlight(tag.priority) < i}"
+        :aria-label="tooltips[i]"
         @mouseover="highlight = i"
         @click="setPriority(i)"
-        data-toggle="tooltip"
-      ></i>
+        data-balloon-pos="down"
+      >
+        <i class="fa fa-circle" :class="{'text-primary': getHighlight(tag.priority) >= i, 'text-muted': getHighlight(tag.priority) < i}"></i>
+      </span>
+
     </div>
   </li>
 </template>

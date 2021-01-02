@@ -1,5 +1,5 @@
 <template>
-  <div style="position: relative">
+  <div class="position-relative">
     <input
       type="text"
       class="form-control"

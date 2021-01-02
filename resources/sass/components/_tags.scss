@@ -4,7 +4,7 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  //overflow: hidden;
 
   > li {
     display: inline-block;
@@ -55,6 +55,17 @@
       >span {
         font-size: 11px;
       }
+    }
+  }
+
+  .remove {
+    margin-left: .25rem;
+    padding: 1px 2px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $tag-color;
+      color: #fff;
     }
   }
 }
@@ -129,17 +140,6 @@
   .tag-clouds {
     display: inline;
     position: relative;
-  }
-
-  .remove {
-    margin-left: .25rem;
-    padding: 1px 2px;
-    cursor: pointer;
-
-    &:hover {
-      background-color: $tag-color;
-      color: #fff;
-    }
   }
 
   .suggest {
