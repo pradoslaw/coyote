@@ -67,18 +67,6 @@
 
     <slot name="bottom"></slot>
 
-<!--      <div class="">-->
-
-<!--          <ul class="tag-clouds tag-clouds-sm">-->
-<!--            <li><a href="#" style="background-color: transparent; border: 1px solid #ddd;"><i class="fa fa-plus"></i> Nowości</a></li>-->
-<!--            <li><a href="#" style="background-color: transparent; border: 1px solid #ddd;"><i class="fa fa-plus"></i> 4programmers.net</a></li>-->
-<!--            <li><a href="#">Wydarzenia IT <span class="border-left ml-1 pl-2"><i class="fa fa-times"></i></span></a></li>-->
-<!--          </ul>-->
-
-<!--        <span class="text-muted pl-2 pt-1">...inny? jaki?</span>-->
-
-<!--      </div>-->
-
     <div class="row no-gutters pt-1 pl-1 pr-1">
       <div class="small mr-auto">
         <template v-if="isProcessing">

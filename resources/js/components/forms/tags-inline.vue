@@ -95,6 +95,10 @@
       axios.get(this.sourceUrl, { params: {q: searchText} }).then(result => this.filteredTags = result.data);
     }
 
+    mounted() {
+      this.calcInputWidth();
+    }
+
     toggleTag(tag: Tag) {
       this.searchText = '';
       this.input.focus();

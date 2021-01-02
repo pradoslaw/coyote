@@ -99,8 +99,6 @@
 
         <template v-slot:bottom>
           <div v-if="showTagsInput" class="row no-gutters p-1">
-<!--            <label class="col-form-label">Tagi <em v-if="requireTag">*</em></label>-->
-
             <vue-tags-inline
               :tags="topic.tags"
               :class="{'is-invalid': 'tags' in errors}"
@@ -109,14 +107,6 @@
             ></vue-tags-inline>
 
             <vue-error :message="errors['tags']"></vue-error>
-
-<!--            <span v-if="popularTags.length" class="form-text text-muted">-->
-<!--            Podpowiedź:-->
-<!--    -->
-<!--            <template v-for="(tag, index) in popularTags">-->
-<!--              <a @click="toggleTag({name: tag})" href="javascript:" class="tag-suggestion">{{ tag }}</a>{{ index < popularTags.length - 1 ? ', ' : '' }}-->
-<!--            </template>-->
-<!--          </span>-->
           </div>
         </template>
       </vue-markdown>
@@ -146,7 +136,7 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from "vue-class-component";
-  import {Ref, Prop, Emit, Watch, Provide, ProvideReactive} from "vue-property-decorator";
+  import {Ref, Prop, Emit, ProvideReactive} from "vue-property-decorator";
   import store from "../../store";
   import VueButton from '../forms/button.vue';
   import VueTagsInline from '../forms/tags-inline.vue';
@@ -186,7 +176,8 @@
     methods: {
       ...mapMutations('poll', ['removeItem', 'addItem', 'resetDefaults']),
       ...mapMutations('posts', ['deleteAttachment', 'changePage'])
-    }
+    },
+    inject: []
   })
   export default class VueForm extends Vue {
     isProcessing = false;
@@ -216,7 +207,7 @@
     readonly requireTag!: boolean;
 
     @Prop({default: () => []})
-    @ProvideReactive()
+    @ProvideReactive('popularTags')
     readonly popularTags!: string[];
 
     @Prop({required: true})
