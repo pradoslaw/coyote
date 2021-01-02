@@ -169,17 +169,10 @@
 }
 
 .tag-dropdown {
-  margin-top: 5px !important;
   border: 2px solid #DDD;
-  list-style-type: none;
   border-radius: 3px;
-  position: absolute;
-
-  background-color: #FFF;
-  width: 100%;
   max-height: 200px;
   overflow-y: auto;
-  z-index: 100;
   padding: 0;
 
   li {

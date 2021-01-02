@@ -17,7 +17,7 @@
       @keydown.enter.prevent="onEnter"
     >
 
-    <ol ref="dropdown" class="tag-dropdown" v-show="isDropdownShown">
+    <ol ref="dropdown" class="auto-complete tag-dropdown" v-show="isDropdownShown">
       <li v-for="(name, index) in filtered" :key="index" :class="{'hover': index === hoverIndex}" @click="onClick(name)" @mouseover="onMouseOver(index)">
         <span>{{ name }}</span>
       </li>

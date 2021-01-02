@@ -1,5 +1,5 @@
 <template>
-  <ol v-on-clickaway="hideDropdown" ref="dropdown" class="auto-complete w-100" v-show="isDropdownVisible">
+  <ol v-on-clickaway="hideDropdown" ref="dropdown" class="auto-complete" v-show="isDropdownVisible">
     <li v-for="(item, index) in items" :key="index" :class="{'hover': index === selectedIndex}" @click="selectItem" @mouseover="hoverItem(index)">
 
       <slot name="item" :item="item">

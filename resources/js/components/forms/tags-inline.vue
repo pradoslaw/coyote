@@ -34,7 +34,7 @@
       name="tags"
     >
 
-    <vue-dropdown :items="filteredTags" @select="toggleTag" :default-index="-1" ref="dropdown" class="tag-dropdown">
+    <vue-dropdown :items="filteredTags" @select="toggleTag" :default-index="-1" ref="dropdown" class="tag-dropdown mt-2">
       <template v-slot:item="slot">
         <span>{{ slot.item.name }}</span>
         <small>×{{ slot.item.topics }}</small>
