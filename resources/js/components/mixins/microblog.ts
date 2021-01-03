@@ -1,7 +1,7 @@
 import Prism from 'prismjs';
 import { Vue, Component, Prop, Emit, Ref } from "vue-property-decorator";
 import store from "../../store";
-import { Microblog, User } from "../../types/models";
+import { Microblog, User } from "@/types/models";
 import VueModal from "../modal.vue";
 import VueForm from "../microblog/form.vue";
 
@@ -76,7 +76,7 @@ export class MicroblogFormMixin extends Vue {
   protected save(action) {
     this.isProcessing = true;
 
-    store.dispatch(action, this.microblog)
+    return store.dispatch(action, this.microblog)
       .then(result => {
         this.$emit('save', result.data);
 

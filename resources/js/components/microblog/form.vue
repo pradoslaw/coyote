@@ -33,6 +33,8 @@
   import VueMarkdown from '../forms/markdown.vue';
   import { MicroblogFormMixin } from '../mixins/microblog';
 
+  const DRAFT_KEY = 'microblog';
+
   @Component({
     name: 'microblog-form',
     store,
@@ -46,8 +48,17 @@
     @Ref('markdown')
     public markdown!: VueMarkdown;
 
+    created() {
+      if (this.microblog.id) {
+        return;
+      }
+
+      this.$set(this.microblog, 'text', this.$loadDraft(DRAFT_KEY));
+      this.$watch('microblog.text', newValue => this.$saveDraft(DRAFT_KEY, newValue));
+    }
+
     saveMicroblog() {
-      this.save('microblogs/save');
+      this.save('microblogs/save').then(() => this.$removeDraft(DRAFT_KEY))
     }
   }
 </script>
