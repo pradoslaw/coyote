@@ -5,4 +5,14 @@
 
 table {
   @include link-color-darker;
+
+  @extend .table;
+  @extend .table-striped;
+}
+
+// styles for better column width adjustment
+// @see https://github.com/adam-boduch/coyote/issues/347
+> table > tbody > tr > td,
+> table > tbody > tr > th {
+  word-break: break-word;
 }

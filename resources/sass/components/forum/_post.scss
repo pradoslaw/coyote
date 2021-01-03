@@ -113,14 +113,6 @@
   padding-right: 10px;
 
   @include link-color-darker;
-  //@include stripped-table;
-
-  // styles for better column width adjustment
-  // @see https://github.com/adam-boduch/coyote/issues/347
-  > table > tbody > tr > td,
-  > table > tbody > tr > th {
-    word-break: break-word;
-  }
 
   hr {
     margin: 15px 0 5px 0;
