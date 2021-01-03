@@ -21,11 +21,11 @@
       <vue-form
         id="js-submit-form"
         :show-title-input="true"
-        :show-tags-input="true"
         :show-sticky-checkbox="showStickyCheckbox"
         :post="undefinedPost"
         :popular-tags="popularTags"
         require-tag="{{ forum.require_tag }}"
+        show-tags-input="{{ forum.enable_tags }}"
         @save="redirectToTopic"
       ></vue-form>
 

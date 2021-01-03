@@ -57,7 +57,8 @@ class Forum extends Model
         'is_locked',
         'require_tag',
         'enable_reputation',
-        'enable_anonymous'
+        'enable_anonymous',
+        'enable_tags'
     ];
 
     /**

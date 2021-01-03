@@ -75,6 +75,9 @@ class ForumForm extends Form
             ->add('enable_anonymous', 'checkbox', [
                 'label' => 'Zezwalaj na tworzenie postów bez logowania'
             ])
+            ->add('enable_tags', 'checkbox', [
+                'label' => 'Zezwalaj na dodawanie tagów'
+            ])
             ->add('access', 'choice', [
                 'label' => 'Dostęp dla grup',
                 'choices' => $this->getGroupsList(),
