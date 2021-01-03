@@ -22,11 +22,17 @@ class SubmittedNotification extends AbstractNotification
     {
         return (new MailMessage)
             ->subject($this->getMailSubject())
-            ->view($this->getMailView(), [
-                'sender'    => $this->getSender(),
-                'subject'   => link_to($this->notificationUrl(), $this->post->topic->title),
-                'text'      => $this->post->html
-            ]);
+            ->line(
+                sprintf(
+                    '<strong>%s</strong> dodał nowy post w wątku: <strong>%s</strong>',
+                    $this->getSender(),
+                    $this->post->topic->title
+                )
+            )
+            ->line('<hr>')
+            ->line($this->post->html)
+            ->line('<hr>')
+            ->action('Zobacz komentarz', url($this->notificationUrl()));
     }
 
     /**
@@ -74,14 +80,6 @@ class SubmittedNotification extends AbstractNotification
      */
     protected function getMailSubject(): string
     {
-        return $this->getSender() . ' dodał(a) odpowiedź w wątku';
-    }
-
-    /**
-     * @return string
-     */
-    protected function getMailView(): string
-    {
-        return 'emails.notifications.post.submit';
+        return $this->getSender() . ' dodał(a) odpowiedź w wątku: ' . $this->post->topic->title;
     }
 }
