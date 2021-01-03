@@ -37,7 +37,7 @@ class UserMentionedNotification extends AbstractNotification
             ->subject($this->getMailSubject())
             ->line(
                 sprintf(
-                    '<strong>%s</strong> użył Twojego loginu w treści wpisu mikrobloga: <strong>%s</strong>',
+                    '<strong>%s</strong> wspomniał o Tobie na mikroblogu: <strong>%s</strong>',
                     $this->notifier->name,
                     excerpt($this->microblog->html)
                 )

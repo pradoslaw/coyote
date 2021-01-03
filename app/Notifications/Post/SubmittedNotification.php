@@ -32,7 +32,7 @@ class SubmittedNotification extends AbstractNotification
             ->line('<hr>')
             ->line($this->post->html)
             ->line('<hr>')
-            ->action('Zobacz komentarz', url($this->notificationUrl()));
+            ->action('Zobacz post', url($this->notificationUrl()));
     }
 
     /**

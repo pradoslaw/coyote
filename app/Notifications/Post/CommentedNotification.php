@@ -52,11 +52,18 @@ class CommentedNotification extends AbstractNotification
     {
         return (new MailMessage)
             ->subject($this->getMailSubject())
-            ->view($this->getMailView(), [
-                'sender'    => $this->notifier->name,
-                'subject'   => link_to($this->notificationUrl(), $this->post->topic->title),
-                'text'      => $this->comment->html
-            ]);
+            ->line(
+                sprintf(
+                    '<strong>%s</strong> dodał komentarz do posta w wątku: <strong>%s</strong>',
+                    $this->notifier->name,
+                    $this->post->topic->title
+                )
+            )
+            ->line('<hr>')
+            ->line($this->comment->html)
+            ->line('<hr>')
+            ->action('Zobacz komentarz', url($this->notificationUrl()))
+            ->line('Jeżeli nie chcesz dostawać tego typu powiadomień, kliknij na przycisk <i>Obserwuj</i> pod postem, aby przestać obserwować dany post.');
     }
 
     /**
@@ -65,13 +72,5 @@ class CommentedNotification extends AbstractNotification
     protected function getMailSubject(): string
     {
         return $this->notifier->name . ' dodał(a) komentarz w wątku: ' . $this->post->topic->title;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getMailView(): string
-    {
-        return 'emails.notifications.post.comment';
     }
 }
