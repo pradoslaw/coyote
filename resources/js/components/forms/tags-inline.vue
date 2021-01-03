@@ -2,7 +2,7 @@
   <div ref="editor" class="tag-editor">
     <ul ref="cloud" class="tag-clouds">
       <li v-for="tag in popularTags">
-        <a @click="toggleTag({ name: tag })" class="suggest">
+        <a @click="toggleTag({ name: tag })" class="suggest" :title="`Dodaj tag '${tag}'`">
           <i class="fa fa-plus"></i>
 
           {{ tag }}
