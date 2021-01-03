@@ -84,12 +84,19 @@ class DeletedNotification extends AbstractNotification
     {
         return (new MailMessage)
             ->subject($this->getMailSubject())
-            ->view('emails.notifications.post.delete', [
-                'sender'        => $this->notifier->name,
-                'subject'       => link_to(UrlBuilder::post($this->post), $this->post->topic->title),
-                'reason_name'   => $this->getReasonName(),
-                'reason_text'   => $this->getReasonText()
-            ]);
+            ->line(
+                sprintf(
+                    '<strong>%s</strong> usunał post w wątku: <strong>%s</strong> z powodu: %s.',
+                    $this->notifier->name,
+                    $this->post->topic->title,
+                    $this->getReasonName()
+                )
+            )
+            ->line('Szczegóły:')
+            ->line('<hr>')
+            ->line($this->getReasonText())
+            ->line('<hr>')
+            ->line('Otrzymujesz tego e-maila ponieważ obserwowałeś ten post lub jesteś jego autorem.');
     }
 
     /**
