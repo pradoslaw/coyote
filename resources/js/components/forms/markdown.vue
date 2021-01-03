@@ -62,6 +62,7 @@
 
       <vue-error :message="error"></vue-error>
     </vue-prompt>
+    <div @click="showPreview" v-show="isPreview" v-html="previewHtml" class="preview post-content"></div>
 
     <hr class="m-0">
 
@@ -172,8 +173,6 @@
         </div>
       </div>
     </div>
-
-    <div @click="showPreview" v-show="isPreview" v-html="previewHtml" class="preview post-content"></div>
 
     <slot></slot>
   </div>
