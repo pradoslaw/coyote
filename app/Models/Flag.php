@@ -67,7 +67,7 @@ class Flag extends Model
      */
     public function user()
     {
-        return $this->belongsTo('Coyote\User');
+        return $this->belongsTo('Coyote\User')->withTrashed();
     }
 
     public function resources()
