@@ -29,7 +29,7 @@
             <a @click="mark(category)" :class="{'not-read': !category.is_read}" class="d-none d-lg-block position-relative mr-2">
               <i v-if="category.is_locked" class="logo fas fa-lock "></i>
 
-              <i v-else :class="[className(category.name)]" class="logo far fa-comments "></i>
+              <i v-else :class="[className(category.name)]" class="logo far fa-comments"></i>
             </a>
 
             <div class="overflow-hidden">
@@ -79,7 +79,7 @@
 
                 <span class="text-muted"><vue-timeago :datetime="category.post.created_at"></vue-timeago></span>,
 
-                <a v-if="category.post.user" v-profile="category.post.user.id">{{ category.post.user.name }}</a>
+                <vue-user-name v-if="category.post.user" :user="category.post.user"></vue-user-name>
                 <span v-else>{{ category.post.user_name }}</span>
 
                 <div class="toolbox">
@@ -103,10 +103,11 @@
   import store from '../../store';
   import { mapGetters, mapActions } from "vuex";
   import VueAvatar from '../avatar.vue';
+  import VueUsername from '../user-name.vue';
 
   export default {
     mixins: [ mixins, clickaway ],
-    components: { 'vue-avatar': VueAvatar },
+    components: { 'vue-avatar': VueAvatar, 'vue-user-name': VueUsername },
     store,
     props: {
       name: {

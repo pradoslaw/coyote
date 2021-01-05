@@ -56,7 +56,7 @@
             <div class="d-none d-lg-inline small text-truncate">
               <a :href="topic.url + `?p=${topic.first_post_id}#id${topic.first_post_id}`" class="text-muted"><vue-timeago :datetime="topic.created_at"></vue-timeago></a>,
 
-              <a v-if="topic.user" v-profile="topic.user ? topic.user.id : null" class="mt-1 text-body" :title="topic.user.name">{{ topic.user.name }}</a>
+              <vue-user-name v-if="topic.user" :user="topic.user" class="mt-1 text-body"></vue-user-name>
               <span v-else>{{ topic.user_name }}</span>
             </div>
 
@@ -77,7 +77,7 @@
 
           <div class="media-body small text-truncate">
             <p class="mb-0 d-inline d-md-block">
-              <a v-if="topic.last_post.user" v-profile="topic.last_post.user.id">{{ topic.last_post.user.name }}</a>
+              <vue-user-name v-if="topic.last_post.user" :user="topic.last_post.user"></vue-user-name>
               <span v-else>{{ topic.last_post.user_name }}</span>
             </p>
 
@@ -92,12 +92,13 @@
 <script>
   import { default as mixins } from '../mixins/user';
   import VueAvatar from '../avatar.vue';
+  import VueUserName from '../user-name.vue';
   import { mixin as clickaway } from 'vue-clickaway';
   import { mapActions, mapGetters } from "vuex";
 
   export default {
     mixins: [ mixins, clickaway ],
-    components: { 'vue-avatar': VueAvatar },
+    components: { 'vue-avatar': VueAvatar, 'vue-user-name': VueUserName },
     props: {
       topic: {
         type: Object,
