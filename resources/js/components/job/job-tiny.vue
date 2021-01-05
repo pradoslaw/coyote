@@ -1,10 +1,8 @@
 <template>
   <div class="media text-truncate">
     <a class="media-link" :href="job.url" :title="fullTitle">
-      <div class="media-object d-none d-xl-inline-block mr-2">
-        <object :data="job.firm.logo || '//'" type="image/png" class="media-object d-inline-block">
-          <img src="/img/logo-gray.png" :alt="job.firm.logo ? job.firm.name : ''">
-        </object>
+      <div class="d-none d-xl-inline-block mr-2">
+        <img :src="job.firm.logo || '/img/logo-gray.png'" :alt="job.firm.logo ? job.firm.name : ''" class="i-45">
       </div>
 
       <div class="media-body">

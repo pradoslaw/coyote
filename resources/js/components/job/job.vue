@@ -6,9 +6,7 @@
       <div class="media">
         <div class="d-none d-sm-block mr-3">
           <a :href="job.url">
-            <object :data="job.firm.logo || '//'" type="image/png" class="media-object d-inline-block">
-              <img src="/img/logo-gray.png" :alt="job.firm.logo ? job.firm.name : ''">
-            </object>
+            <img :src="job.firm.logo || '/img/logo-gray.png'" :alt="job.firm.logo ? job.firm.name : ''" class="i-95">
           </a>
         </div>
 
