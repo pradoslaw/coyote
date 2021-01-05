@@ -24,7 +24,7 @@
             </div>
           </div>
 
-          <h5 class="media-heading"><vue-user-name :user="microblog.user"></vue-user-name></h5>
+          <h5 class="media-heading"><vue-username :user="microblog.user"></vue-username></h5>
           <a :href="microblog.url" class="text-muted small"><vue-timeago :datetime="microblog.created_at"></vue-timeago></a>
 
           <small v-if="microblog.is_sponsored" class="text-muted small">&bull; Sponsorowane</small>
@@ -140,7 +140,7 @@
     store,
     components: {
       'vue-avatar': VueAvatar,
-      'vue-user-name': VueUserName,
+      'vue-username': VueUserName,
       'vue-comment': VueComment,
       'vue-form': VueForm,
       'vue-comment-form': VueCommentForm,

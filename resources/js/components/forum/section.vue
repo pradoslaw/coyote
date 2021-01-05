@@ -79,7 +79,7 @@
 
                 <span class="text-muted"><vue-timeago :datetime="category.post.created_at"></vue-timeago></span>,
 
-                <vue-user-name v-if="category.post.user" :user="category.post.user"></vue-user-name>
+                <vue-username v-if="category.post.user" :user="category.post.user"></vue-username>
                 <span v-else>{{ category.post.user_name }}</span>
 
                 <div class="toolbox">
@@ -107,7 +107,7 @@
 
   export default {
     mixins: [ mixins, clickaway ],
-    components: { 'vue-avatar': VueAvatar, 'vue-user-name': VueUsername },
+    components: { 'vue-avatar': VueAvatar, 'vue-username': VueUsername },
     store,
     props: {
       name: {

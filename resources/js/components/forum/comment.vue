@@ -3,7 +3,7 @@
     <template v-if="!comment.is_editing">
       <span v-html="comment.html"></span> &mdash;
 
-      <vue-user-name :user="comment.user" :owner="comment.user.id === topic.owner_id"></vue-user-name>
+      <vue-username :user="comment.user" :owner="comment.user.id === topic.owner_id"></vue-username>
 
       <a :href="`#comment-${comment.id}`"><vue-timeago :datetime="comment.created_at" class="text-muted small"></vue-timeago></a>
 
@@ -40,7 +40,7 @@
   @Component({
     name: 'comment',
     mixins: [clickaway, mixins],
-    components: { 'vue-user-name': VueUserName, 'vue-comment-form': VueCommentForm },
+    components: { 'vue-username': VueUserName, 'vue-comment-form': VueCommentForm },
     computed: mapGetters('topics', ['topic'])
   })
   export default class VueComment extends Vue {

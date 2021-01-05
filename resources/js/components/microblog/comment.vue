@@ -10,7 +10,7 @@
       <vue-comment-form v-if="comment.is_editing" :microblog="comment" ref="form" class="w-100 mr-1" @cancel="edit(comment)" @save="edit(comment)"></vue-comment-form>
 
       <div v-if="!comment.is_editing" class="w-100">
-        <h6><vue-user-name :user="comment.user"></vue-user-name></h6>
+        <h6><vue-username :user="comment.user"></vue-username></h6>
 
         <vue-flag v-for="flag in flags" :key="flag.id" :flag="flag"></vue-flag>
 
@@ -116,7 +116,7 @@
     store,
     components: {
       'vue-avatar': VueAvatar,
-      'vue-user-name': VueUserName,
+      'vue-username': VueUserName,
       'vue-comment-form': VueCommentForm,
       'vue-flag': VueFlag
     },

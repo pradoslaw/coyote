@@ -18,7 +18,7 @@
       <div class="row">
         <div class="col-2">
           <h5 class="mb-0 post-author">
-            <vue-user-name v-if="post.user" :user="post.user" :owner="post.user_id === topic.owner_id"></vue-user-name>
+            <vue-username v-if="post.user" :user="post.user" :owner="post.user_id === topic.owner_id"></vue-username>
             <span v-else>{{ post.user_name }}</span>
           </h5>
         </div>
@@ -52,7 +52,7 @@
 
         <div class="media-body">
           <h5 class="mb-0 post-author">
-            <vue-user-name v-if="post.user" :user="post.user" :owner="post.user_id === topic.owner_id"></vue-user-name>
+            <vue-username v-if="post.user" :user="post.user" :owner="post.user_id === topic.owner_id"></vue-username>
             <span v-else>{{ post.user_name }}</span>
           </h5>
 
@@ -163,7 +163,7 @@
                 <i class="fas fa-external-link-alt"></i>
               </a>
 
-              edytowany {{ post.edit_count }}x, ostatnio: <vue-user-name :user="post.editor"></vue-user-name>
+              edytowany {{ post.edit_count }}x, ostatnio: <vue-username :user="post.editor"></vue-username>
             </strong>
 
             <vue-timeago :datetime="post.updated_at"></vue-timeago>
@@ -305,7 +305,7 @@
     mixins: [ mixins ],
     components: {
       'vue-avatar': VueAvatar,
-      'vue-user-name': VueUserName,
+      'vue-username': VueUserName,
       'vue-comment': VueComment,
       'vue-comment-form': VueCommentForm,
       'vue-form': VueForm,

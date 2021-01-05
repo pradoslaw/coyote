@@ -56,7 +56,7 @@
             <div class="d-none d-lg-inline small text-truncate">
               <a :href="topic.url + `?p=${topic.first_post_id}#id${topic.first_post_id}`" class="text-muted"><vue-timeago :datetime="topic.created_at"></vue-timeago></a>,
 
-              <vue-user-name v-if="topic.user" :user="topic.user" class="mt-1 text-body"></vue-user-name>
+              <vue-username v-if="topic.user" :user="topic.user" class="mt-1 text-body"></vue-username>
               <span v-else>{{ topic.user_name }}</span>
             </div>
 
@@ -77,7 +77,7 @@
 
           <div class="media-body small text-truncate">
             <p class="mb-0 d-inline d-md-block">
-              <vue-user-name v-if="topic.last_post.user" :user="topic.last_post.user"></vue-user-name>
+              <vue-username v-if="topic.last_post.user" :user="topic.last_post.user"></vue-username>
               <span v-else>{{ topic.last_post.user_name }}</span>
             </p>
 
@@ -98,7 +98,7 @@
 
   export default {
     mixins: [ mixins, clickaway ],
-    components: { 'vue-avatar': VueAvatar, 'vue-user-name': VueUserName },
+    components: { 'vue-avatar': VueAvatar, 'vue-username': VueUserName },
     props: {
       topic: {
         type: Object,
