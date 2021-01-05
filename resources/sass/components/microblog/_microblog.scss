@@ -47,13 +47,16 @@
 
   @include link-color-darker;
 
+  p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.microblog-text,
+.comment-text {
   // emoticons are NOT responsive
   img:not(.img-smile) {
     @include img-fluid();
-  }
-
-  p:last-child {
-    margin-bottom: 0;
   }
 }
 
