@@ -15,7 +15,7 @@ class VoteController extends BaseController
 {
     /**
      * @param \Coyote\Post $post
-     * @return int
+     * @return array
      * @throws AuthenticationException|AuthorizationException
      */
     public function index($post)

@@ -184,8 +184,6 @@
 
               <span v-if="topic.is_subscribed">Zakończ obserwację</span>
               <span v-else>Obserwuj wątek</span>
-
-              <small v-if="topic.subscribers">(${ topic.subscribers } ${ topic.subscribers | declination(['obserwujący', 'obserwujących', 'obserwujących']) })</small>
             </a>
           </li>
 
