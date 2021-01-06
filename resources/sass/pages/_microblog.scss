@@ -1,40 +1,5 @@
 @charset "UTF-8";
 
-#box-popular-tags {
-  margin-top: 13px;
-}
-
-#box-popular-entries {
-  > .media {
-    border-bottom: 1px solid $card-border-color;
-
-    &:last-child {
-      border-bottom: none;
-    }
-  }
-
-  p {
-    line-height: 140%;
-    padding: 10px 0 0 0;
-    font-size: 12px;
-
-    a {
-      color: $gray-light;
-    }
-  }
-
-  .media-heading {
-    font-size: .8rem;
-
-    a {
-      color: $gray-darker;
-    }
-  }
-
-  .btn-thumbs {
-    font-size: 11px;
-  }
-}
 
 // @todo to przeniesc poniewaz nie dotyczy to tylko mikroblogow, ale to styl globalny
 .highlight-flash {

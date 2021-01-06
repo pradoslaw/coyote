@@ -53,9 +53,6 @@ class HomeController extends BaseController
             return $this->microblog->getTags();
         });
 
-        // we MUST NOT cache popular entries because it may contains current user's data
-        $popular = $this->microblog->takePopular(5);
-
         return $this->view('microblog.home', [
             'flags'                     => $this->flags(),
             'count'                     => $this->microblog->count(),

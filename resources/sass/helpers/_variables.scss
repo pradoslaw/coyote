@@ -109,8 +109,10 @@ $unread-bg-hover:           #FFDCA5;
 // Tag clouds, tag dropdown list and tag editor
 // ----------------------------------------------
 
-$tag-color:                   $gray-light;
+//$tag-color:                   $text-color;
+$tag-color:                   $gray;
 $tag-bg:                      $gray-lighter;
+//$tag-bg:                      $pagination-bg;
 $tag-counter-color:           lighten($tag-color, 10%);
 $tag-hover-color:             $alt-link-hover-color;
 $tag-hover-bg:                darken($gray-lighter, 2%);

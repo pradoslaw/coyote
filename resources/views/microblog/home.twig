@@ -10,12 +10,16 @@
     <div class="col-md-9">
       <ul class="nav nav-tabs mb-4">
         <li class="nav-item">
-          <a class="nav-link {{ route != 'microblog.mine' ? 'active' }}" href="{{ route('microblog.home') }}">Wszystkie wpisy <small>({{ count }})</small></a>
+          <a class="nav-link {{ route != 'microblog.mine' ? 'active' }}" href="{{ route('microblog.home') }}">Wszystkie wpisy
+            <small>({{ count }})</small>
+          </a>
         </li>
 
         {% if auth_check() %}
           <li role="presentation" class="nav-item" title="Kliknij, aby zobaczyć swoje wpisy">
-            <a class="nav-link {{ route == 'microblog.mine' ? 'active' }}" href="{{ route('microblog.mine') }}">Moje <small>({{ count_user }})</small></a></li>
+            <a class="nav-link {{ route == 'microblog.mine' ? 'active' }}" href="{{ route('microblog.mine') }}">Moje
+              <small>({{ count_user }})</small>
+            </a></li>
         {% endif %}
       </ul>
 
@@ -42,47 +46,106 @@
     </div>
 
     <aside class="col-md-3">
-      <div id="box-popular-tags" class="box">
-        <h4 class="border-bottom"><i class="fas fa-tag fa-fw"></i> Popularne tagi</h4>
+      <div id="box-popular-tags" class="box" style="margin-top: 11px">
+        <h4 class="border-bottom"><i class="fas fa-tag fa-fw"></i> Popularne tematy</h4>
 
         <div class="pt-2 pb-2">
-          <ul class="tag-clouds cloud">
-            {% for name, count in tags %}
-              <li><a href="{{ route('microblog.tag', [name]) }}">{{ name }}</a>
-                <small>× {{ count }}</small>
-              </li>
-            {% endfor %}
+          <ul class="tag-clouds">
+            <li class="d-block mb-1">
+              <a href="#">Newsy</a> <small>× 80</small>
+            </li>
+
+            <li class="d-block mb-1">
+              <a href="#">Wydarzenia</a> <small>× 70</small>
+            </li>
+
+            <li class="d-block mb-1">
+              <a href="#">Techniczne</a> <small>× 50</small>
+            </li>
+{#            {% for name, count in tags %}#}
+{#              <li><a href="{{ route('microblog.tag', [name]) }}">{{ name }}</a>#}
+{#                <small>× {{ count }}</small>#}
+{#              </li>#}
+{#            {% endfor %}#}
           </ul>
         </div>
       </div>
 
-      <div id="box-popular-entries" class="box">
-        <h4 class="border-bottom"><i class="fas fa-star fa-fw"></i> Popularne wpisy</h4>
+      <div class="box mt-2">
+        <h4 class="border-bottom"><i class="fas fa-wrench fa-fw"></i>  Technologie</h4>
 
-        {% for microblog in popular %}
-          <div class="media pb-2 mb-2">
-            <div class="media-body">
-              <img class="media-object float-left mr-1" src="{{ user_photo(microblog.photo) }}" style="width: 16px; height: 16px;" alt="">
+        <ul class="tag-clouds tag-clouds-md">
+          <li class="d-block mb-1"><input type="hidden" name="tags[]" value="javascript">
+            <a href="https://4programmers.net/Praca/Technologia/javascript" class=""><img alt="javascript" src="https://4programmers.net/uploads/logo/59/59f9f81f8f897.png">
 
-              <ul class="list-inline list-inline-bullet-sm mb-2">
-                <li class="list-inline-item">{{ link_to_profile(microblog.user_id, microblog.name, microblog.is_active, microblog.is_blocked) }}</li>
-                <li class="list-inline-item"><a href="{{ route('microblog.view', [microblog.id]) }}#entry-{{ microblog.id }}" title="{{ created_at|format_date(false) }}" class="small text-muted" data-timestamp="{{ microblog.created_at|timestamp }}">{{ microblog.created_at|format_date }}</a></li>
-              </ul>
+              Javascript
+            </a> <small>× 50</small></li>
+          <li class="d-block  mb-1"><input type="hidden" name="tags[]" value="java">
+            <a href="https://4programmers.net/Praca/Technologia/java" class=""><img alt="java" src="https://4programmers.net/uploads/logo/59/59f9f808bc606.png">
 
-              <p>
-                <a href="{{ route('microblog.view', [microblog.id]) }}">{{ excerpt(microblog.text, 200) }}</a>
-              </p>
+              Java
+            </a> <small>× 50</small></li>
+          <li class="d-block mb-1"><input type="hidden" name="tags[]" value="php">
+            <a href="https://4programmers.net/Praca/Technologia/php" class=""><img alt="php" src="https://4programmers.net/uploads/logo/59/59f9f830e3d3d.png">
 
-              <span class="btn-thumbs">
-                {{ declination(microblog.votes, ['głos', 'głosy', 'głosów']) }}
-              </span>
-            </div>
-          </div>
-        {% endfor %}
+              PHP
+            </a></li>
+          <li class="d-block mb-1"><input type="hidden" name="tags[]" value="c#">
+            <a href="https://4programmers.net/Praca/Technologia/c%23" class=""><img alt="c#" src="https://4programmers.net/uploads/logo/59/59f9f83fcd1ef.png">
+
+              C#
+            </a> <small>× 50</small></li>
+          <li class="d-block mb-1"><input type="hidden" name="tags[]" value="python">
+            <a href="https://4programmers.net/Praca/Technologia/python" class=""><img alt="python" src="https://4programmers.net/uploads/logo/59/59f9f8605fd1e.png">
+
+              Python
+            </a></li>
+          <li class="d-block mb-1"><input type="hidden" name="tags[]" value="c++">
+            <a href="https://4programmers.net/Praca/Technologia/c%2B%2B" class=""><img alt="c++" src="https://4programmers.net/uploads/logo/59/59f9f84aeea17.png">
+
+              C++
+            </a> <small>× 50</small></li>
+          <li class="d-block mb-1"><input type="hidden" name="tags[]" value="c">
+            <a href="https://4programmers.net/Praca/Technologia/c" class=""><img alt="c" src="https://4programmers.net/uploads/logo/59/59f9faa6ed2cd.png">
+
+              C
+            </a> <small>× 50</small></li>
+          <li class="d-block mb-1"><input type="hidden" name="tags[]" value="ruby">
+            <a href="https://4programmers.net/Praca/Technologia/ruby" class=""><img alt="ruby" src="https://4programmers.net/uploads/logo/59/59f9f8af846ea.png">
+
+              Ruby
+            </a></li>
+          <li class="d-block mb-1"><input type="hidden" name="tags[]" value="objective-c">
+            <a href="https://4programmers.net/Praca/Technologia/objective-c" class=""><img alt="objective-c" src="https://4programmers.net/uploads/logo/59/59f9f8896a414.png">
+
+              Objective-C
+            </a> <small>× 50</small></li>
+          <li class="d-block mb-1"><input type="hidden" name="tags[]" value="scala">
+            <a href="https://4programmers.net/Praca/Technologia/scala" class=""><img alt="scala" src="https://4programmers.net/uploads/logo/59/59f9f891e0ae0.png">
+
+              Scala
+            </a> <small>× 50</small></li>
+          <li class="d-block mb-1"><input type="hidden" name="tags[]" value="swift">
+            <a href="https://4programmers.net/Praca/Technologia/swift" class=""><img alt="swift" src="https://4programmers.net/uploads/logo/59/59f9f87c7baa3.png">
+
+              Swift
+            </a> <small>× 50</small></li>
+          <li class="d-block mb-1"><input type="hidden" name="tags[]" value="perl">
+            <a href="https://4programmers.net/Praca/Technologia/perl" class=""><img alt="perl" src="https://4programmers.net/uploads/logo/59/59f9f872eea82.png">
+
+              Perl
+            </a> <small>× 50</small></li>
+          <li class="d-block mb-1"><input type="hidden" name="tags[]" value="go">
+            <a href="https://4programmers.net/Praca/Technologia/go" class=""><img alt="go" src="https://4programmers.net/uploads/logo/59/59f9f855eee02.png">
+
+              Go
+            </a> <small>× 50</small></li>
+        </ul>
       </div>
     </aside>
 
-    <vue-notifications position="bottom right" />
+
+    <vue-notifications position="bottom right"/>
   </div>
 
   <script>
