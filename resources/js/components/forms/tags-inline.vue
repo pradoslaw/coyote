@@ -22,8 +22,8 @@
       v-model="searchText"
       :style="`width: ${inputWidth}`"
       :placeholder="placeholder"
-      @keyup.space="validateTag"
-      @keyup.enter.prevent="validateTag"
+      @keyup.space="filter"
+      @keyup.enter.prevent="filter"
       @keyup.esc="dropdown.toggleDropdown(false)"
       @keyup.up.prevent="dropdown.goUp"
       @keyup.down.prevent="dropdown.goDown"
@@ -113,7 +113,7 @@
       }
     }
 
-    async validateTag() {
+    async filter() {
       const filterValue = () => {
         let input = this.searchText.trim().toLowerCase().replace(/[^a-ząęśżźćółń0-9\-\.#\+\s]/gi, '')
 
@@ -127,11 +127,9 @@
       // @ts-ignore
       const name = this.dropdown.getSelected() ? this.dropdown.getSelected()['name'] : filterValue();
 
-      if (!name) {
-        return;
+      if (name) {
+        this.applyTag(name);
       }
-
-      this.applyTag(name);
     }
 
     applyTag(name: string) {
@@ -143,6 +141,7 @@
     private calcInputWidth() {
       const styles = window.getComputedStyle(this.editor);
 
+      console.log(this.editor.offsetWidth , this.cloud.offsetWidth , parseInt(styles.paddingLeft) );
       this.inputWidth = (this.editor.offsetWidth - this.cloud.offsetWidth - parseInt(styles.paddingLeft) - 1) + 'px';
     }
   }
