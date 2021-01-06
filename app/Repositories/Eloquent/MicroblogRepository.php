@@ -135,6 +135,38 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     }
 
     /**
+     * @inheritDoc
+     */
+    public function popularTags(int $userId): array
+    {
+        $db = $this->app['db'];
+
+        $base = $db->table('microblog_tags')
+            ->selectRaw('name, COUNT(*)')
+            ->join('tags', 'tags.id', '=', 'microblog_tags.tag_id')
+            ->join('microblogs', 'microblogs.id', '=', 'microblog_tags.microblog_id')
+            ->whereNull('tags.deleted_at')
+            ->groupBy('tags.id')
+            ->groupBy('name')
+            ->orderByRaw('COUNT(*) DESC')
+            ->limit(3);
+
+        $builder = clone $base;
+
+        return $builder
+            ->where('microblogs.user_id', $userId)
+            ->selectRaw('1 AS "order"')
+            ->limit(2)
+            ->unionAll($base->selectRaw('0 AS "order"'))
+            ->orderByRaw('"order" DESC')
+            ->orderBy("count", 'DESC')
+            ->get()
+            ->pluck('name')
+            ->slice(0, 3)
+            ->toArray();
+    }
+
+    /**
      * Pobiera najpopularniejsze tagi w mikroblogach
      *
      * @return mixed

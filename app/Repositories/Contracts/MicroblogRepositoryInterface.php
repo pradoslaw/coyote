@@ -60,5 +60,10 @@ interface MicroblogRepositoryInterface extends RepositoryInterface
      */
     public function page(int $perPage, int $page);
 
+    /**
+     * @inheritDoc
+     */
+    public function popularTags(int $userId): array;
+
     public function recent();
 }

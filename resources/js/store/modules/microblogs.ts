@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Microblog, Paginator } from "../../types/models";
+import { Microblog, Paginator, Tag } from "@/types/models";
 import Vue from 'vue';
 
 type ParentChild = { parent: Microblog, comment: Microblog };
@@ -109,6 +109,12 @@ const mutations = {
   setVoters(state, { microblog, voters }: { microblog: Microblog, voters: VoteResponse }) {
     Vue.set(microblog, 'voters', voters.users);
     Vue.set(microblog, 'votes', voters.count);
+  },
+
+  toggleTag(state, { microblog, tag }: { microblog: Microblog, tag: Tag }) {
+    const index = microblog.tags!.findIndex(item => item.name === tag.name);
+
+    index > -1 ? microblog.tags!.splice(index, 1) : microblog.tags!.push(tag);
   }
 };
 
