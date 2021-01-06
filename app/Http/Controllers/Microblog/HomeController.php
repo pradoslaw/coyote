@@ -61,7 +61,8 @@ class HomeController extends BaseController
             'count'                     => $this->microblog->count(),
             'count_user'                => $this->microblog->countForUser($this->userId),
             'pagination'                => new MicroblogCollection($paginator),
-            'route'                     => request()->route()->getName()
+            'route'                     => request()->route()->getName(),
+            'popular_tags'              => $this->microblog->popularTags($this->userId)
         ])->with(compact('tags', 'popular'));
     }
 
