@@ -8,7 +8,17 @@
       @cancel="cancel"
       ref="markdown"
       preview-url="/Mikroblogi/Preview"
-    ></vue-markdown>
+    >
+      <template v-slot:bottom>
+        <div class="row no-gutters p-1">
+          <vue-tags-inline
+            :tags="microblog.tags"
+            placeholder="...inny? kliknij, aby wybrać tag"
+            @change="toggleTag"
+          ></vue-tags-inline>
+        </div>
+      </template>
+    </vue-markdown>
 
     <div class="row mt-2">
       <div class="col-12">
@@ -26,12 +36,14 @@
 
 <script lang="ts">
   import Component from "vue-class-component";
-  import { Mixins, Ref } from "vue-property-decorator";
+  import {Mixins, Prop, ProvideReactive, Ref} from "vue-property-decorator";
   import store from "../../store";
   import VuePrompt from '../forms/prompt.vue';
   import VueButton from '../forms/button.vue';
   import VueMarkdown from '../forms/markdown.vue';
+  import VueTagsInline from '../forms/tags-inline.vue';
   import { MicroblogFormMixin } from '../mixins/microblog';
+  import {Tag} from "@/types/models";
 
   const DRAFT_KEY = 'microblog';
 
@@ -41,12 +53,17 @@
     components: {
       'vue-button': VueButton,
       'vue-prompt': VuePrompt,
-      'vue-markdown': VueMarkdown
+      'vue-markdown': VueMarkdown,
+      'vue-tags-inline': VueTagsInline
     }
   })
   export default class VueForm extends Mixins(MicroblogFormMixin) {
     @Ref('markdown')
     public markdown!: VueMarkdown;
+
+    @Prop({default: () => []})
+    @ProvideReactive('popularTags')
+    readonly popularTags!: string[];
 
     created() {
       if (this.microblog.id) {
@@ -59,6 +76,10 @@
 
     saveMicroblog() {
       this.save('microblogs/save').then(() => this.$removeDraft(DRAFT_KEY))
+    }
+
+    toggleTag(tag: Tag) {
+      store.commit('microblogs/toggleTag', { microblog: this.microblog, tag });
     }
   }
 </script>

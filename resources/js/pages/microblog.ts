@@ -8,7 +8,7 @@ import VuePaste from '../plugins/paste.js';
 import store from '../store';
 import { mapGetters } from 'vuex';
 import { default as axiosErrorHandler } from '../libs/axios-error-handler';
-import { Microblog, Paginator, Flag } from "../types/models";
+import { Microblog, Paginator, Flag } from "@/types/models";
 import { default as LiveMixin } from './microblog/live';
 import VueAutosave from "../plugins/autosave";
 
@@ -24,6 +24,7 @@ declare global {
     pagination: Paginator;
     microblog: Microblog;
     flags: Flag[] | undefined;
+    popularTags: string[];
   }
 }
 
@@ -33,6 +34,9 @@ new Vue({
   components: { 'vue-microblog': VueMicroblog, 'vue-pagination': VuePagination, 'vue-form': VueForm },
   mixins: [ LiveMixin ],
   store,
+  data() {
+    return { popularTags: window.popularTags }
+  },
   created() {
     if ('pagination' in window) {
       store.commit('microblogs/init', window.pagination);

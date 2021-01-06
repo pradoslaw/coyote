@@ -28,7 +28,7 @@
               </a>
             </div>
             <div class="media-body">
-              <vue-form @save="scrollToMicroblog"></vue-form>
+              <vue-form @save="scrollToMicroblog" :popular-tags="popularTags"></vue-form>
             </div>
           </div>
         </form>
@@ -92,5 +92,6 @@
   <script>
     var pagination = {{ pagination|json_encode|raw }};
     var flags = {{ flags|json_encode|raw }};
+    var popularTags = {{ popular_tags|json_encode|raw }};
   </script>
 {% endblock %}
