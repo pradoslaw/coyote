@@ -78,7 +78,7 @@
           this.$emit('select', selected);
         }
 
-        this.toggleDropdown(false);
+        this.hideDropdown();
       },
 
       hoverItem(index) {
@@ -91,6 +91,7 @@
 
       hideDropdown() {
         this.toggleDropdown(false);
+        this.selectedIndex = -1;
       },
 
       getSelected() {

@@ -21,9 +21,9 @@
     <input
       v-model="searchText"
       :placeholder="placeholder"
-      @keyup.space="filter"
-      @keyup.enter.prevent="filter"
-      @keyup.esc="dropdown.toggleDropdown(false)"
+      @keyup.space="setTag"
+      @keyup.enter.prevent="selectTag"
+      @keyup.esc="dropdown.hideDropdown"
       @keyup.up.prevent="dropdown.goUp"
       @keyup.down.prevent="dropdown.goDown"
       ref="input"
@@ -33,7 +33,7 @@
       name="tags"
     >
 
-    <vue-dropdown :items="filteredTags" @select="toggleTag" :default-index="-1" ref="dropdown" class="tag-dropdown mt-2">
+    <vue-dropdown :items="filteredTags" @select="toggleTag" ref="dropdown" class="tag-dropdown mt-2">
       <template v-slot:item="slot">
         <span>{{ slot.item.name }}</span>
         <small>×{{ slot.item.topics }}</small>
@@ -83,7 +83,6 @@
 
     private searchText: string = '';
     private filteredTags = [];
-    private inputWidth = '100%';
 
     @Watch('searchText')
     filterResults(searchText) {
@@ -107,29 +106,34 @@
       }
     }
 
-    async filter() {
-      const filterValue = () => {
-        let input = this.searchText.trim().toLowerCase().replace(/[^a-ząęśżźćółń0-9\-\.#\+\s]/gi, '')
-
-        if (input.startsWith('#')) {
-          input = name.substr(1);
-        }
-
-        return input;
-      }
-
+    selectTag() {
       // @ts-ignore
-      const name = this.dropdown.getSelected() ? this.dropdown.getSelected()['name'] : filterValue();
+      if (this.dropdown.getSelected()) {
+        // @ts-ignore
+        this.applyTag(this.dropdown.getSelected()['name']);
 
-      if (name) {
-        this.applyTag(name);
+        return false; // prevent submitting the form
       }
     }
 
-    applyTag(name: string) {
+    setTag() {
+      let input = this.searchText.trim().toLowerCase().replace(/[^a-ząęśżźćółń0-9\-\.#\+\s]/gi, '')
+
+      if (input.startsWith('#')) {
+        input = input.substr(1);
+      }
+
+      if (input) {
+        this.applyTag(input);
+      }
+    }
+
+    private applyTag(name: string) {
       this.toggleTag({ name });
       // @ts-ignore
-      this.dropdown.toggleDropdown(false);
+      // hiding dropdown resets internal index of selected position. it's important because otherwise pressing enter would apply
+      // last selected tag
+      this.dropdown.hideDropdown();
     }
   }
 </script>
