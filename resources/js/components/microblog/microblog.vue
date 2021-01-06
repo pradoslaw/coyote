@@ -24,6 +24,8 @@
             </div>
           </div>
 
+          <vue-tags :tags="microblog.tags" class="float-right mr-1 tag-clouds-md"></vue-tags>
+
           <h5 class="media-heading"><vue-username :user="microblog.user"></vue-username></h5>
           <a :href="microblog.url" class="text-muted small"><vue-timeago :datetime="microblog.created_at"></vue-timeago></a>
 
@@ -126,10 +128,11 @@
   import { mixin as clickaway } from "vue-clickaway";
   import store from "../../store";
   import VueUserName from "../user-name.vue";
+  import VueTags from '../tags.vue';
   import { MicroblogMixin } from "../mixins/microblog";
-  import { User } from '../../types/models';
-  import useBrackets from "../../libs/prompt";
-  import IsImage from '../../libs/assets';
+  import { User } from '@/types/models';
+  import useBrackets from "@/libs/prompt";
+  import IsImage from '@/libs/assets';
 
   Vue.use(VueTimeago);
   Vue.use(VueClipboard);
@@ -145,7 +148,8 @@
       'vue-form': VueForm,
       'vue-comment-form': VueCommentForm,
       'vue-gallery': VueLightbox,
-      'vue-flag': VueFlag
+      'vue-flag': VueFlag,
+      'vue-tags': VueTags
     },
     computed: {
       ...mapGetters('user', ['isAuthorized']),

@@ -80,7 +80,10 @@ class SubmitController extends Controller
             }
 
             $helper = new HashHelper();
-            $microblog->setTags($helper->grab($microblog->html));
+
+            $microblog->setTags(
+                array_merge($helper->grab($microblog->html), array_pluck($request->input('tags', []), 'name'))
+            );
         });
 
         broadcast(new MicroblogSaved($microblog))->toOthers();

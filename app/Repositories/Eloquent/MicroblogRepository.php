@@ -26,7 +26,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
         return $this->applyCriteria(function () use ($perPage) {
-            return $this->model->whereNull('parent_id')->with('user')->with('assets')->withCount('comments')->paginate($perPage);
+            return $this->model->whereNull('parent_id')->with('user')->with('assets')->with('tags')->withCount('comments')->paginate($perPage);
         });
     }
 
@@ -36,7 +36,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     public function page(int $perPage, int $page)
     {
         return $this->applyCriteria(function () use ($perPage, $page) {
-            return $this->model->whereNull('parent_id')->with('user')->with('assets')->withCount('comments')->limit($perPage)->offset(max(0, $page - 1) * $perPage)->get();
+            return $this->model->whereNull('parent_id')->with('user')->with('assets')->with('tags')->withCount('comments')->limit($perPage)->offset(max(0, $page - 1) * $perPage)->get();
         });
     }
 

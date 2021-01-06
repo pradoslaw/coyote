@@ -153,9 +153,7 @@
             </template>
           </div>
 
-          <ul v-if="tags.length" class="mt-2 mb-2 tag-clouds">
-            <li v-for="tag in tags"><a :href="tag.url">{{ tag.name }}</a></li>
-          </ul>
+          <vue-tags :tags="tags" class="mt-2 mb-2"></vue-tags>
 
           <div v-if="post.edit_count" class="edit-info">
             <strong>
@@ -280,7 +278,7 @@
   import Vue from 'vue';
   import { Prop, Ref } from "vue-property-decorator";
   import Component from "vue-class-component";
-  import { Post, Topic, User, Flag } from '../../types/models';
+  import { Post, Topic, User, Flag } from '@/types/models';
   import VueClipboard from '../../plugins/clipboard';
   import VueAvatar from '../avatar.vue';
   import VueUserName from "../user-name.vue";
@@ -292,6 +290,7 @@
   import VueFlag from './../flags/flag.vue';
   import { mapActions, mapGetters, mapState } from "vuex";
   import VueModal from "../delete-modal.vue";
+  import VueTags from '@/components/tags.vue';
   import formatDistanceToNow from 'date-fns/formatDistanceToNow';
   import pl from 'date-fns/locale/pl';
   import { default as mixins } from '../mixins/user';
@@ -312,7 +311,8 @@
       'vue-modal': VueModal,
       'vue-select': VueSelect,
       'vue-button': VueButton,
-      'vue-flag': VueFlag
+      'vue-flag': VueFlag,
+      'vue-tags': VueTags
     },
     methods: mapActions('posts', ['vote', 'accept', 'subscribe', 'loadComments', 'loadVoters']),
     computed: {

@@ -84,6 +84,7 @@ export class MicroblogFormMixin extends Vue {
         if (!this.microblog.id) {
           this.microblog.text = '';
           this.microblog.assets = [];
+          this.microblog.tags = [];
         }
 
         // highlight once again after saving

@@ -55,7 +55,8 @@
       'vue-prompt': VuePrompt,
       'vue-markdown': VueMarkdown,
       'vue-tags-inline': VueTagsInline
-    }
+    },
+    inject: []
   })
   export default class VueForm extends Mixins(MicroblogFormMixin) {
     @Ref('markdown')
