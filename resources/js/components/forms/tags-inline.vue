@@ -20,7 +20,6 @@
 
     <input
       v-model="searchText"
-      :style="`width: ${inputWidth}`"
       :placeholder="placeholder"
       @keyup.space="filter"
       @keyup.enter.prevent="filter"
@@ -95,16 +94,11 @@
       axios.get(this.sourceUrl, { params: {q: searchText} }).then(result => this.filteredTags = result.data);
     }
 
-    mounted() {
-      this.calcInputWidth();
-    }
-
     toggleTag(tag: Tag) {
       this.searchText = '';
       this.input.focus();
 
       this.$emit('change', tag);
-      this.$nextTick(() => this.calcInputWidth());
 
       const searchIndex = this.popularTags.indexOf(tag.name);
 
@@ -136,13 +130,6 @@
       this.toggleTag({ name });
       // @ts-ignore
       this.dropdown.toggleDropdown(false);
-    }
-
-    private calcInputWidth() {
-      const styles = window.getComputedStyle(this.editor);
-
-      console.log(this.editor.offsetWidth , this.cloud.offsetWidth , parseInt(styles.paddingLeft) );
-      this.inputWidth = (this.editor.offsetWidth - this.cloud.offsetWidth - parseInt(styles.paddingLeft) - 1) + 'px';
     }
   }
 </script>

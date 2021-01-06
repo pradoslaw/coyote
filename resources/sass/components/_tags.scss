@@ -120,26 +120,28 @@
 }
 
 .tag-editor {
-  //overflow: hidden;
   white-space: nowrap;
   border-bottom: 1px solid $border-color;
   padding-bottom: $input-padding-y-sm;
   width: 100%;
   position: relative;
   cursor: default;
-  //padding: 0 0 0 10px;
+  display: flex;
+  flex-flow: row nowrap;
 
   input {
     border: none;
-    width: 100%;
     position: relative;
     outline: none;
     padding: 5px 0;
+    margin-left: 5px;
+    flex: 1 1 auto;
   }
 
   .tag-clouds {
-    display: inline;
-    position: relative;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
   }
 
   .suggest {
@@ -151,29 +153,13 @@
       cursor: pointer;
     }
   }
-
-  //.tag-clouds {
-  //  > li {
-  //    margin-right: 5px;
-  //
-  //    > a {
-  //      cursor: pointer;
-  //
-  //      &:hover {
-  //        text-decoration: none;
-  //        background: #DDD;
-  //      }
-  //    }
-  //  }
-  //}
 }
 
 .tag-dropdown {
-  border: 2px solid #DDD;
   border-radius: 3px;
   max-height: 200px;
   overflow-y: auto;
-  padding: 0;
+  top: calc(100% - 5px);
 
   li {
     padding: 6px 5px;
