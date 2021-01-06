@@ -7,6 +7,7 @@ use Coyote\Http\Resources\MicroblogResource;
 use Coyote\Http\Resources\MicroblogCollection;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
 use Coyote\Services\Microblogs\Builder;
+use Coyote\Tag;
 use Illuminate\Http\Request;
 
 class HomeController extends BaseController
@@ -55,14 +56,22 @@ class HomeController extends BaseController
 //
         $tags = $this->microblog->getTags();
 
+        list($tech, $others) = $tags->partition(function (Tag $tag) {
+            return $tag->category_id === Tag\Category::LANGUAGE;
+        });
+
         return $this->view('microblog.home', [
             'flags'                     => $this->flags(),
             'count'                     => $this->microblog->count(),
             'count_user'                => $this->microblog->countForUser($this->userId),
             'pagination'                => new MicroblogCollection($paginator),
             'route'                     => request()->route()->getName(),
-            'popular_tags'              => $this->microblog->popularTags($this->userId)
-        ])->with(compact('tags'));
+            'popular_tags'              => $this->microblog->popularTags($this->userId),
+            'tags'                      => [
+                'tech'                  => $tech,
+                'others'                => $others
+            ]
+        ]);
     }
 
     /**
