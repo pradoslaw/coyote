@@ -33,7 +33,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     /**
      * @inheritDoc
      */
-    public function page(int $perPage, int $page)
+    public function forPage(int $perPage, int $page)
     {
         return $this->applyCriteria(function () use ($perPage, $page) {
             return $this->model->whereNull('parent_id')->with('user')->with('assets')->with('tags')->withCount('comments')->limit($perPage)->offset(max(0, $page - 1) * $perPage)->get();
@@ -177,11 +177,9 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     public function getTags()
     {
         return (new Tag())
-                ->select(['name', $this->raw('microblogs AS count')])
+                ->select(['name', $this->raw('microblogs AS count'), 'logo', 'category_id'])
                 ->orderBy('microblogs', 'DESC')
                 ->limit(30)
-                ->get()
-                ->pluck('count', 'name')
-                ->toArray();
+                ->get();
     }
 }

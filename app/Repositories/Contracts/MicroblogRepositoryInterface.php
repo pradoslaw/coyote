@@ -38,7 +38,7 @@ interface MicroblogRepositoryInterface extends RepositoryInterface
     /**
      * Pobiera najpopularniejsze tagi w mikroblogach
      *
-     * @return mixed
+     * @return Microblog\Tag[]
      */
     public function getTags();
 
@@ -58,7 +58,7 @@ interface MicroblogRepositoryInterface extends RepositoryInterface
      * @param int $page
      * @return Microblog[]
      */
-    public function page(int $perPage, int $page);
+    public function forPage(int $perPage, int $page);
 
     /**
      * @param int|null $userId

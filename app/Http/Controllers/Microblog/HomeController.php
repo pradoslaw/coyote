@@ -49,9 +49,11 @@ class HomeController extends BaseController
         $paginator = $this->builder->orderById()->paginate();
 
         // let's cache microblog tags. we don't need to run this query every time
-        $tags = $this->getCacheFactory()->remember('microblog:tags', 30 * 60, function () {
-            return $this->microblog->getTags();
-        });
+//        $tags = $this->getCacheFactory()->remember('microblog:tags', 30 * 60, function () {
+//            return $this->microblog->getTags();
+//        });
+//
+        $tags = $this->microblog->getTags();
 
         return $this->view('microblog.home', [
             'flags'                     => $this->flags(),
@@ -60,7 +62,7 @@ class HomeController extends BaseController
             'pagination'                => new MicroblogCollection($paginator),
             'route'                     => request()->route()->getName(),
             'popular_tags'              => $this->microblog->popularTags($this->userId)
-        ])->with(compact('tags', 'popular'));
+        ])->with(compact('tags'));
     }
 
     /**

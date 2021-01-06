@@ -97,7 +97,7 @@ class Builder
         $this->loadUserScope();
         $perPage = 10;
 
-        $result = $this->microblog->page($perPage, $page);
+        $result = $this->microblog->forPage($perPage, $page);
 
         $paginator = new LengthAwarePaginator(
             $result,
