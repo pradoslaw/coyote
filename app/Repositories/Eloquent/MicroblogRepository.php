@@ -159,7 +159,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     /**
      * @inheritDoc
      */
-    public function popularTags(int $userId): array
+    public function popularTags(?int $userId): array
     {
         $db = $this->app['db'];
 
@@ -173,14 +173,17 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
             ->orderByRaw('COUNT(*) DESC')
             ->limit(3);
 
-        $builder = clone $base;
+        $query = clone $base;
 
-        return $builder
-            ->where('microblogs.user_id', $userId)
-            ->selectRaw('1 AS "order"')
-            ->limit(2)
-            ->unionAll($base->selectRaw('0 AS "order"'))
-            ->orderByRaw('"order" DESC')
+        return $query
+            ->when($userId, function ($builder) use ($base, $userId) {
+                return $builder->where('microblogs.user_id', $userId)
+                    ->selectRaw('1 AS "order"')
+                    ->limit(2)
+                    ->unionAll($base->selectRaw('0 AS "order"'))
+                    ->orderByRaw('"order" DESC');
+            })
+
             ->orderBy("count", 'DESC')
             ->get()
             ->pluck('name')

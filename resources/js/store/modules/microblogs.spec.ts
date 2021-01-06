@@ -1,5 +1,5 @@
 import store from "./microblogs";
-import {Microblog} from "../../types/models";
+import {Microblog} from "@/types/models";
 const faker = require('faker');
 
 const { mutations } = store;
@@ -12,6 +12,7 @@ function fake(): Microblog {
     html: faker.lorem.words(),
     id: faker.random.number(),
     assets: [],
+    tags: [],
     text: faker.lorem.words(),
     updated_at: new Date(),
     user: {id: 1, name: faker.name.firstName(), deleted_at: undefined, is_blocked: false, photo: ''},

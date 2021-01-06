@@ -74,7 +74,7 @@ export interface Microblog {
   comments_count?: number;
   voters?: string[];
   metadata: string;
-  tags?: Tag[];
+  tags: Tag[];
 }
 
 export interface Forum {

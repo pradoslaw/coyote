@@ -60,7 +60,8 @@ export class MicroblogFormMixin extends Vue {
 
   @Prop({default() {
     return {
-      assets: []
+      assets: [],
+      tags: []
     }
   }})
   microblog!: Microblog;
