@@ -4,6 +4,7 @@ namespace Coyote\Http\Resources;
 
 use Coyote\Services\Media\MediaInterface;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Closure;
 
 /**
  * @property int $id
@@ -16,7 +17,26 @@ class TagResource extends JsonResource
     /**
      * @var \Closure
      */
-    public static $url;
+    public static Closure $urlResolver;
+
+    public function __construct($resource)
+    {
+        parent::__construct($resource);
+
+        if (empty(static::$urlResolver)) {
+            static::$urlResolver = fn ($name) => route('job.tag', [urlencode($name)]);
+        }
+    }
+
+    public static function urlResolver(Closure $resolver)
+    {
+        static::$urlResolver = $resolver;
+    }
+
+    public static function resolveUrl(string $name): string
+    {
+        return call_user_func(static::$urlResolver, $name);
+    }
 
     /**
      * Transform the resource into an array.
@@ -26,13 +46,9 @@ class TagResource extends JsonResource
      */
     public function toArray($request)
     {
-        $callback = self::$url instanceof \Closure ? self::$url : function ($name) {
-            return route('job.tag', [urlencode($name)]);
-        };
-
         return array_merge($this->resource->only(['id', 'name', 'real_name', 'topics', 'count']), [
             'logo'      => (string) $this->logo->url(),
-            'url'       => $callback($this->name),
+            'url'       => static::resolveUrl($this->name),
 
             'priority'  => $this->whenPivotLoaded('job_tags', function () {
                 return $this->pivot->priority;

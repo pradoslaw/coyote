@@ -62,9 +62,7 @@ abstract class BaseController extends Controller
             return $next($request);
         });
 
-        TagResource::$url = function ($name) {
-            return route('forum.tag', [urlencode($name)]);
-        };
+        TagResource::urlResolver(fn ($name) => route('forum.tag', [urlencode($name)]));
     }
 
     /**

@@ -6,6 +6,13 @@ use Coyote\Microblog;
 
 class MicroblogResource extends Api\MicroblogResource
 {
+    public function __construct($resource)
+    {
+        parent::__construct($resource);
+
+        TagResource::urlResolver(fn ($name) => route('microblog.tag', [urlencode($name)]));
+    }
+
     public function toArray($request)
     {
         $result = parent::toArray($request);

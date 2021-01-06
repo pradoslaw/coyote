@@ -43,9 +43,7 @@ class TopicsController extends Controller
      */
     public function __construct(Auth $auth, TopicRepository $repository)
     {
-        TagResource::$url = function ($name) {
-            return route('forum.tag', [urlencode($name)]);
-        };
+        TagResource::urlResolver(fn ($name) => route('forum.tag', [urlencode($name)]));
 
         $this->repository = $repository;
         $this->user = $auth->guard('api')->user();
