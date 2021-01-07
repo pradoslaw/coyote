@@ -3,16 +3,18 @@
 namespace Tests\Feature\Controllers\Microblog;
 
 use Coyote\Microblog;
+use Coyote\Tag;
 use Coyote\User;
 use Faker\Factory;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class SubmitControllerTest extends TestCase
 {
-    use DatabaseTransactions;
+    use DatabaseTransactions, WithFaker;
 
-    public function testSubmitEmpty()
+    public function testSubmitWithEmptyText()
     {
         $user = factory(User::class)->create();
 
@@ -20,6 +22,28 @@ class SubmitControllerTest extends TestCase
         $response->assertStatus(422);
 
         $response->assertJsonValidationErrors(['text']);
+    }
+
+    public function testSubmitWithTooManyTags()
+    {
+        $user = factory(User::class)->create(['reputation' => 3000]);
+        $tags = factory(Tag::class, 6)->create();
+
+        $response = $this->actingAs($user)->json(
+            'POST',
+            '/Mikroblogi/Edit', [
+                'text' => $this->faker->text(),
+                'tags' => $tags->toArray()
+            ]);
+
+        $response->assertStatus(422);
+
+        $response->assertJsonValidationErrors(['tags']);
+        $response->assertJsonFragment([
+            'errors' => [
+                'tags' => ['Możesz przypisać maksymalnie 5 tagów.']
+            ]
+        ]);
     }
 
     public function testSubmitUnauthenticated()

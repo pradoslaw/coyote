@@ -69,7 +69,7 @@ class HomeController extends BaseController
             'popular_tags'              => $this->microblog->popularTags($this->userId),
             'tags'                      => [
                 'tech'                  => $tech,
-                'others'                => $others
+                'others'                => $others->splice(0, 10)
             ]
         ]);
     }
