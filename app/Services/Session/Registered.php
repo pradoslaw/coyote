@@ -3,7 +3,6 @@
 namespace Coyote\Services\Session;
 
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
-use Coyote\Repositories\Criteria\User\InSession;
 use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Session;
 use Illuminate\Support\Collection;
@@ -33,19 +32,17 @@ class Registered
             return $item->userId !== null;
         });
 
-        // include group name and only few columns in query
-        $this->user->pushCriteria(new InSession());
         $this->user->pushCriteria(new WithTrashed());
 
-        $result = $this->user->findMany($registered->pluck('user_id')->toArray());
+        $result = $this->user->findMany($registered->pluck('user_id')->toArray(), ['id', 'name', 'group_name']);
 
         $this->user->resetCriteria();
 
         foreach ($result as $row) {
             foreach ($collection as &$item) {
-                if ($row->user_id == $item['user_id']) {
+                if ($row->id == $item['user_id']) {
                     $item['name'] = $row->name;
-                    $item['group'] = $row->group;
+                    $item['group'] = $row->group_name;
                 }
             }
         }
