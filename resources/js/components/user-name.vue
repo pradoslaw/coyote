@@ -1,5 +1,10 @@
 <template>
-  <component :is="tagName" v-profile="user.id" :class="{'badge badge-primary': owner}">{{ user.name }}</component>
+  <component
+    :is="tagName"
+    v-profile="user.id"
+    :class="{'badge badge-primary': owner}"
+    :style="{textDecoration: this.user.is_blocked ? 'line-through' : ''}"
+  >{{ user.name }}</component>
 </template>
 
 <script lang="ts">
@@ -21,7 +26,7 @@
     owner!: boolean;
 
     get tagName() {
-      return this.user.is_blocked || this.user.deleted_at ? 'del' : 'a';
+      return this.user.deleted_at ? 'del' : 'a';
     }
   }
 </script>

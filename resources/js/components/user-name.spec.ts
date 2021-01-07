@@ -11,7 +11,7 @@ describe('Render component with regular user', () => {
   });
 
   it('renders the correct markup', () => {
-    expect(wrapper.html()).toContain('<a href="/Profile/1" data-user-id="1">Foo</a>');
+    expect(wrapper.html()).toContain('<a class="" href="/Profile/1" data-user-id="1">Foo</a>');
   });
 });
 
@@ -20,7 +20,7 @@ describe('Render component with blocked user', () => {
   const wrapper = mount(VueUserName, {propsData: { user }});
 
   it('renders the correct markup', () => {
-    expect(wrapper.html()).toContain('<del data-user-id="1">Foo</del>');
+    expect(wrapper.html()).toContain('<a class="" style="text-decoration: line-through;" href="/Profile/1" data-user-id="1">Foo</a>');
   });
 });
 
@@ -29,7 +29,7 @@ describe('Render component with removed user', () => {
   const wrapper = mount(VueUserName, {propsData: { user }});
 
   it('renders the correct markup', () => {
-    expect(wrapper.html()).toContain('<del data-user-id="1">Foo</del>');
+    expect(wrapper.html()).toContain('<del class="" data-user-id="1">Foo</del>');
   });
 });
 
