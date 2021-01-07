@@ -103,6 +103,7 @@
               :tags="topic.tags"
               :class="{'is-invalid': 'tags' in errors}"
               :placeholder="requireTag ? 'Minimum 1 tag jest wymagany': '...inny? kliknij, aby wybrać tag'"
+              class="d-none d-md-flex"
               @change="toggleTag"
             ></vue-tags-inline>
 

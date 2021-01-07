@@ -9,27 +9,31 @@
           </a>
         </div>
         <div class="media-body">
-          <div v-if="isAuthorized" class="dropdown float-right">
-            <button class="btn btn-xs border-0 text-muted" type="button" data-toggle="dropdown" aria-label="Dropdown"><i class="fa fa-ellipsis-h"></i></button>
+          <div class="d-flex flex-nowrap">
+            <div class="flex-shrink-0 mr-auto">
+              <h5 class="media-heading"><vue-username :user="microblog.user"></vue-username></h5>
+              <a :href="microblog.url" class="text-muted small"><vue-timeago :datetime="microblog.created_at"></vue-timeago></a>
 
-            <div class="dropdown-menu dropdown-menu-right">
-              <template v-if="microblog.permissions.update">
-                <a @click="edit(microblog)" class="dropdown-item btn-edit" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
-                <a @click="deleteItem" class="dropdown-item btn-remove" href="javascript:"><i class="fas fa-times fa-fw"></i> Usuń</a>
+              <small v-if="microblog.is_sponsored" class="text-muted small">&bull; Sponsorowane</small>
+            </div>
 
-                <div v-if="microblog.user.id !== user.id" class="dropdown-divider"></div>
-              </template>
+            <vue-tags :tags="microblog.tags" class="flex-shrink-1 ml-auto mr-1 tag-clouds-md"></vue-tags>
 
-              <a v-if="microblog.user.id !== user.id" @click="block(microblog.user)" href="javascript:" class="dropdown-item"><i class="fas fa-fw fa-ban"></i> Zablokuj użytkownika</a>
+            <div v-if="isAuthorized" class="dropdown">
+              <button class="btn btn-xs border-0 text-muted" type="button" data-toggle="dropdown" aria-label="Dropdown"><i class="fa fa-ellipsis-h"></i></button>
+
+              <div class="dropdown-menu dropdown-menu-right">
+                <template v-if="microblog.permissions.update">
+                  <a @click="edit(microblog)" class="dropdown-item btn-edit" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
+                  <a @click="deleteItem" class="dropdown-item btn-remove" href="javascript:"><i class="fas fa-times fa-fw"></i> Usuń</a>
+
+                  <div v-if="microblog.user.id !== user.id" class="dropdown-divider"></div>
+                </template>
+
+                <a v-if="microblog.user.id !== user.id" @click="block(microblog.user)" href="javascript:" class="dropdown-item"><i class="fas fa-fw fa-ban"></i> Zablokuj użytkownika</a>
+              </div>
             </div>
           </div>
-
-          <vue-tags :tags="microblog.tags" class="float-right mr-1 tag-clouds-md"></vue-tags>
-
-          <h5 class="media-heading"><vue-username :user="microblog.user"></vue-username></h5>
-          <a :href="microblog.url" class="text-muted small"><vue-timeago :datetime="microblog.created_at"></vue-timeago></a>
-
-          <small v-if="microblog.is_sponsored" class="text-muted small">&bull; Sponsorowane</small>
 
           <div v-show="!microblog.is_editing" :class="{'microblog-wrap': isWrapped}">
             <vue-flag v-for="flag in flags" :key="flag.id" :flag="flag"></vue-flag>
