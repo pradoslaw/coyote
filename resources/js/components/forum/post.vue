@@ -153,7 +153,7 @@
             </template>
           </div>
 
-          <vue-tags :tags="tags" class="mt-2 mb-2"></vue-tags>
+          <vue-tags :tags="tags" class="tag-clouds-md mt-2 mb-2"></vue-tags>
 
           <div v-if="post.edit_count" class="edit-info">
             <strong>
