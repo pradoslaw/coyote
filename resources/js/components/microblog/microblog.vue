@@ -17,7 +17,7 @@
               <small v-if="microblog.is_sponsored" class="text-muted small">&bull; Sponsorowane</small>
             </div>
 
-            <vue-tags :tags="microblog.tags" class="flex-shrink-1 ml-auto mr-1 tag-clouds-md"></vue-tags>
+            <vue-tags :tags="microblog.tags" class="flex-shrink-1 ml-auto text-truncate mr-1 tag-clouds-md"></vue-tags>
 
             <div v-if="isAuthorized" class="dropdown">
               <button class="btn btn-xs border-0 text-muted" type="button" data-toggle="dropdown" aria-label="Dropdown"><i class="fa fa-ellipsis-h"></i></button>

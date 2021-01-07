@@ -38,12 +38,6 @@
   .media-body {
     min-width: 0;  // thanks to this, text will not overflow its parent
   }
-
-  .tag-clouds {
-    white-space: nowrap;
-    overflow: hidden;
-
-  }
 }
 
 .microblog-text {
