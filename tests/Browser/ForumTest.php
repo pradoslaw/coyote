@@ -4,6 +4,7 @@ namespace Tests\Browser;
 
 use Coyote\Permission;
 use Coyote\Services\UrlBuilder;
+use Coyote\User;
 use Faker\Factory;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Laravel\Dusk\Browser;
@@ -35,7 +36,7 @@ class ForumTest extends DuskTestCase
     public function testWriteTopic()
     {
         $forum = $this->createForum();
-        $user = $this->createUserWithGroup();
+        $user = factory(User::class)->create(['reputation' => 5000]);
 
         $this->browse(function (Browser $browser) use ($forum, $user) {
             $faker = Factory::create();
@@ -43,19 +44,20 @@ class ForumTest extends DuskTestCase
             $browser
                 ->loginAs($user)
                 ->visitRoute('forum.topic.submit', ['forum' => $forum])
-
-                ->type('tags', 'c#')
-                ->keys('input[name="tags"]', '{enter}')
+                ->type('tags', $tag = $faker->word)
+                ->keys('input[name="tags"]', '{space}')
                 ->keys('input[name="tags"]', '{escape}')
                 ->pause(500)
                 ->click('input[name="title"]')
-                ->type('title', $title = $faker->text())
+                ->type('title', $title = $faker->text(50))
                 ->type('text', $text = $faker->realText())
                 ->press('Zapisz')
-                ->pause(1000)
+                ->waitForText('Tak, jestem pewien')
+                ->press('Tak, jestem pewien')
+                ->waitForText($title, 15)
                 ->assertSee($title)
                 ->assertSee($text)
-                ->assertSee('c#');
+                ->assertSee($tag);
         });
     }
 
