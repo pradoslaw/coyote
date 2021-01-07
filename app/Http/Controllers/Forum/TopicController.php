@@ -88,6 +88,9 @@ class TopicController extends BaseController
 
         $userForums = $treeDecorator->build();
 
+        // important: load topic owner so we can highlight user's login
+        $page === 1 ? $topic->setRelation('firstPost', $paginate->first()) : $topic->load('firstPost');
+
         $tracker = Tracker::make($topic);
 
         $allForums = [];
