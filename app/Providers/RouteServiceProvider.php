@@ -112,7 +112,6 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
-
         Passport::routes();
 
         $this->mapApiRoutes();
