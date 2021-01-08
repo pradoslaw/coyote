@@ -3,6 +3,7 @@ import VueThumbnail from '../components/thumbnail';
 import VueNotifications from 'vue-notification';
 import VueAvatar from '@/components/avatar';
 import VueUserName from '@/components/user-name';
+import VueModal from '@/components/modal';
 import axios from 'axios';
 import store from '../store';
 import { default as axiosErrorHandler } from '../libs/axios-error-handler';
@@ -91,6 +92,44 @@ new Vue({
       this.users.splice(this.users.findIndex(user => user.id === userId), 1);
 
       axios.post(`/User/Unblock/${userId}`);
+    }
+  }
+});
+
+new Vue({
+  el: '#js-tokens',
+  delimiters: ['${', '}'],
+  components: { 'vue-modal': VueModal },
+  data() {
+    return {
+      tokens: [],
+      tokenName: null,
+      tokenId: null
+    };
+  },
+  mounted() {
+    this.loadTokens();
+  },
+  methods: {
+    loadTokens() {
+      axios.get('/oauth/personal-access-tokens').then(response => this.tokens = response.data);
+    },
+
+    addToken() {
+      axios.post('/oauth/personal-access-tokens', { name: this.tokenName })
+        .then(response => {
+          this.tokenId = response.data.accessToken;
+          this.loadTokens();
+
+          this.$refs.modal.open();
+          this.tokenName = null;
+        });
+    },
+
+    deleteToken(tokenId) {
+      axios.delete(`/oauth/personal-access-tokens/${tokenId}`);
+
+      this.loadTokens();
     }
   }
 });

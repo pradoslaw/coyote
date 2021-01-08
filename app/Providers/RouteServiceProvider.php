@@ -19,6 +19,7 @@ use Coyote\Repositories\Contracts\WikiRepositoryInterface;
 use Coyote\User;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Routing\Router;
+use Laravel\Passport\Passport;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -111,6 +112,9 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
+
+        Passport::routes();
+
         $this->mapApiRoutes();
         $this->mapWebRoutes();
     }

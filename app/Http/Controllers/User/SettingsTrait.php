@@ -44,6 +44,12 @@ trait SettingsTrait
                 'route' => 'user.relations',
                 'icon' => 'fa-user-slash',
                 'label' => 'Zablokowani użytkownicy'
+            ],
+            [
+                'id' => 'btn-favorites',
+                'route' => 'user.tokens',
+                'icon' => 'fa-key',
+                'label' => 'Tokeny API'
             ]
         ];
 

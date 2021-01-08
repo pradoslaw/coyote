@@ -19,7 +19,7 @@ Prism.highlightAll();
 
 let r = new Router();
 
-r.on(['/User', '/User/Skills', '/User/Relations'], () => require('./pages/user'));
+r.on(['/User', '/User/Skills', '/User/Relations', '/User/Tokens'], () => require('./pages/user'));
 r.on(['/Register', '/Login'], () => require('./pages/auth'))
 .on('/Adm/Firewall/*', () => {
   require.ensure(['flatpickr', 'flatpickr/dist/l10n/pl'], require => {

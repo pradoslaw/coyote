@@ -1,0 +1,50 @@
+{% extends 'user.base' %}
+{% block title %}Tokeny API {{ parent() }}{% endblock %}
+
+{% block content %}
+  <h2>Tokeny API</h2>
+
+  <div v-cloak id="js-tokens" class="card card-default">
+    <vue-modal ref="modal">
+      <template v-slot:title>
+        Twój nowy token
+      </template>
+
+      ${ tokenId }
+
+      <p class="mt-3"><strong>Zapisz go gdyż nie zobaczysz go ponownie.</strong></p>
+    </vue-modal>
+
+    <div class="card-body">
+      <div class="alert alert-warning">
+        Tokeny służą do komunikacji z <a href="https://api.4programmers.net">naszym API</a>.
+      </div>
+
+      <div class="list-group list-group-flush">
+        <div v-for="token in tokens" :key="token.id" class="list-group-item pl-0 pr-0">
+          <button @click="deleteToken(token.id)" class="btn btn-sm btn-danger float-right mt-1">Usuń</button>
+          <h5 class="mb-0">${ token.name }</h5>
+
+          <vue-timeago :datetime="token.created_at" class="text-muted small"></vue-timeago>
+        </div>
+
+        <div class="form-group row mt-4">
+          <div class="col">
+            <input
+              v-model="tokenName"
+              @keyup.enter="addToken"
+              placeholder="Nazwa tokenu"
+              class="form-control"
+              type="text"
+            >
+          </div>
+          <div class="col">
+            <button @click="addToken" type="submit" class="btn btn-primary">
+              Dodaj
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
