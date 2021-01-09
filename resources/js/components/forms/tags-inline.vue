@@ -1,14 +1,32 @@
 <template>
   <div ref="editor" class="tag-editor">
     <ul ref="cloud" class="tag-clouds">
-      <li v-for="tag in popularTags">
+      <li v-for="tag in popularTags.slice(0, 3)">
         <a @click="toggleTag({ name: tag })" class="suggest" :title="`Dodaj tag '${tag}'`">
           <i class="fa fa-plus"></i>
 
           {{ tag }}
         </a>
       </li>
+    </ul>
 
+    <template v-if="popularTags.length > 3">
+      <button class="btn btn-xs text-muted" type="button" data-toggle="dropdown" aria-label="Dropdown"><i class="fa fa-ellipsis-h"></i></button>
+
+      <div class="dropdown-menu p-2">
+        <ul class="tag-clouds">
+          <li v-for="tag in popularTags.slice(3)">
+            <a @click="toggleTag({ name: tag })" class="suggest" :title="`Dodaj tag '${tag}'`">
+              <i class="fa fa-plus"></i>
+
+              {{ tag }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </template>
+
+    <ul class="tag-clouds">
       <li v-for="tag in tags">
         <span>
           {{ tag.name }}

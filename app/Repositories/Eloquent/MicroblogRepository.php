@@ -157,15 +157,13 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
             ->when($userId, function ($builder) use ($base, $userId) {
                 return $builder->where('microblogs.user_id', $userId)
                     ->selectRaw('1 AS "order"')
-                    ->limit(2)
+                    ->limit(3)
                     ->unionAll($base->selectRaw('0 AS "order"'))
                     ->orderByRaw('"order" DESC');
             })
-
             ->orderBy("count", 'DESC')
             ->get()
             ->pluck('name')
-            ->slice(0, 3)
             ->toArray();
     }
 

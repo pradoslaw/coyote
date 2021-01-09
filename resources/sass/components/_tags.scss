@@ -127,21 +127,21 @@
   position: relative;
   cursor: default;
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: row wrap;
 
   input {
     border: none;
     position: relative;
     outline: none;
     padding: 5px 0;
-    margin-left: 5px;
     flex: 1 1 auto;
   }
 
   .tag-clouds {
     display: flex;
     align-items: center;
-    flex-direction: row;
+    flex-flow: row wrap;
+    margin-right: .1rem;
   }
 
   .suggest {
