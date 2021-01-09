@@ -20,7 +20,7 @@ class RelationsController extends BaseController
 
     public function showRelations()
     {
-        $users = $this->auth->relations()->blocked()->with('relatedUser')->get()->pluck('relatedUser');
+        $users = $this->auth->relations()->with('relatedUser')->get()->pluck('relatedUser');
 
         return $this->view('user.relations', [
             'users' => UserResource::collection($users)
@@ -32,13 +32,20 @@ class RelationsController extends BaseController
         abort_if($relatedUserId === $this->userId, 500);
 
         $this->auth->relations()->updateOrInsert(['related_user_id' => $relatedUserId, 'is_blocked' => true, 'user_id' => $this->userId]);
-
         $this->clearCache();
     }
 
     public function unblock(int $relatedUserId)
     {
         $this->auth->relations()->where('related_user_id', $relatedUserId)->delete();
+        $this->clearCache();
+    }
+
+    public function follow(int $relatedUserId)
+    {
+        abort_if($relatedUserId === $this->userId, 500);
+
+        $this->auth->relations()->updateOrInsert(['related_user_id' => $relatedUserId, 'user_id' => $this->userId]);
         $this->clearCache();
     }
 

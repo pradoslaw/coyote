@@ -10,7 +10,7 @@
     <div class="media">
       <div class="mr-2 d-flex flex-column">
         <div class="position-relative img-thumbnail">
-          <img src="{{ user_photo(user.photo) }}">
+          <img class="i-95" src="{{ user_photo(user.photo) }}">
 
           {% if user.is_online %}
             <div class="is-online"></div>
@@ -50,27 +50,29 @@
             {% endif %}
           </div>
         </div>
-
-        <div class="mt-3">
-          <a href="{{ route('forum.user', [user.id]) }}" title="Znajdź posty użytkownika" class="btn btn-sm btn-secondary mr-1">
-            <i class="fas fa-search fa-fw"></i>
-          </a>
-
-          <a href="{{ route('user.pm.submit', {to: user.name}) }}" title="Napisz wiadomość do tego użytkownika" class="btn btn-sm btn-secondary">
-            <i class="fas fa-envelope fa-fw"></i>
-          </a>
-
-          {% if can('adm-access') %}
-            <a href="{{ route('adm.firewall.save') }}?user={{ user.id }}" title="Zablokuj tego użytkownika" class="btn btn-sm btn-secondary float-right ml-1">
-              <i class="fas fa-ban fa-fw"></i>
-            </a>
-
-            <a href="{{ route('adm.users.save', [user.id]) }}" title="Przejdź do panelu administracyjnego" class="btn btn-sm btn-secondary float-right">
-              <i class="fas fa-cogs fa-fw"></i>
-            </a>
-          {% endif %}
-        </div>
       </div>
+    </div>
+
+    <div class="mt-3">
+      <vue-follow-button :user-id="{{ user.id }}" class="btn-sm"></vue-follow-button>
+
+      <a href="{{ route('forum.user', [user.id]) }}" title="Znajdź posty użytkownika" class="btn btn-sm btn-secondary mr-1">
+        <i class="fas fa-search fa-fw"></i>
+      </a>
+
+      <a href="{{ route('user.pm.submit', {to: user.name}) }}" title="Napisz wiadomość do tego użytkownika" class="btn btn-sm btn-secondary">
+        <i class="fas fa-envelope fa-fw"></i>
+      </a>
+
+      {% if can('adm-access') %}
+        <a href="{{ route('adm.firewall.save') }}?user={{ user.id }}" title="Zablokuj tego użytkownika" class="btn btn-sm btn-secondary float-right ml-1">
+          <i class="fas fa-ban fa-fw"></i>
+        </a>
+
+        <a href="{{ route('adm.users.save', [user.id]) }}" title="Przejdź do panelu administracyjnego" class="btn btn-sm btn-secondary float-right">
+          <i class="fas fa-cogs fa-fw"></i>
+        </a>
+      {% endif %}
     </div>
   </div>
 </div>

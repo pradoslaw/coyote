@@ -4,9 +4,11 @@ import VueNotifications from 'vue-notification';
 import VueAvatar from '@/components/avatar';
 import VueUserName from '@/components/user-name';
 import VueModal from '@/components/modal';
+import VueFollowButton from '@/components/forms/follow-button';
 import axios from 'axios';
 import store from '../store';
 import { default as axiosErrorHandler } from '../libs/axios-error-handler';
+import { mapActions, mapGetters, mapState } from 'vuex';
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 
@@ -81,18 +83,23 @@ new Vue({
 new Vue({
   el: '#js-followers',
   delimiters: ['${', '}'],
-  components: { 'vue-avatar': VueAvatar, 'vue-username': VueUserName },
+  store,
+  components: { 'vue-avatar': VueAvatar, 'vue-username': VueUserName, 'vue-follow-button': VueFollowButton },
   data() {
     return {
       users: window.users
     };
   },
   methods: {
-    unblock(userId) {
-      this.users.splice(this.users.findIndex(user => user.id === userId), 1);
+    user(userId) {
+      return this.users.find(user => user.id === userId);
+    },
 
-      axios.post(`/User/Unblock/${userId}`);
-    }
+    ...mapActions('user', ['unfollow'])
+  },
+  computed: {
+    ...mapState('user', ['followers']),
+    ...mapGetters('user', ['isBlocked'])
   }
 });
 

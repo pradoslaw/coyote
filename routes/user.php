@@ -64,6 +64,8 @@ $this->group(['namespace' => 'User', 'prefix' => 'User', 'middleware' => 'auth',
     $this->get('Relations', ['uses' => 'RelationsController@showRelations', 'as' => 'relations']);
     $this->post('Block/{id}', ['uses' => 'RelationsController@block']);
     $this->post('Unblock/{id}', ['uses' => 'RelationsController@unblock']);
+    $this->post('Follow/{id}', ['uses' => 'RelationsController@follow']);
+    $this->post('Unfollow/{id}', ['uses' => 'RelationsController@unblock']);
 
     $this->get('Tokens', ['uses' => 'TokensController@index', 'as' => 'tokens']);
 });

@@ -13,17 +13,14 @@
   @include bg-gradient-variant(lighten($warning, 5%), $warning);
 }
 
-.btn-outline {
-  background: none;
+.btn-follow {
+  @extend .btn-outline-primary;
 
-  @each $selector, $color in (btn-primary, $primary), (btn-default, #444), (btn-warning, $warning) {
-    &.#{$selector} {
-      color: #{$color};
+  &.follows {
+    @extend .btn-primary;
 
-      &:hover {
-        color: #fff;
-        background: $color;
-      }
+    &:hover {
+      @extend .btn-danger;
     }
   }
 }

@@ -23,6 +23,12 @@ class NotificationTypesTableSeeder extends Seeder
             'profile' => false,
             'email' => true,
         ]);
+        Type::updateOrCreate(['id' => Notification::FOLLOWER,
+            'name' => '...aktywności obserwowanego użytkownika',
+            'headline' => 'Nowy {type} od: {sender}',
+            'profile' => true,
+            'email' => false,
+        ]);
         Type::create(['id' => Notification::TOPIC_SUBSCRIBER,
             'name' => '...nowych postach w obserwowanych wątkach',
             'headline' => '{sender} dodał odpowiedź w wątku',
