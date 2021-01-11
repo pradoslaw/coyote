@@ -13,7 +13,6 @@
         <div class="row no-gutters p-1">
           <vue-tags-inline
             :tags="microblog.tags"
-            class="d-none d-md-flex"
             placeholder="...inny? kliknij, aby wybrać tag"
             @change="toggleTag"
           ></vue-tags-inline>
