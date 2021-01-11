@@ -11,7 +11,6 @@ use Coyote\Microblog;
 use Coyote\Notifications\Microblog\DeletedNotification;
 use Coyote\Repositories\Criteria\Microblog\LoadUserScope;
 use Coyote\Repositories\Criteria\WithTrashed;
-use Coyote\Services\Parser\Helpers\Hash as HashHelper;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
@@ -71,9 +70,6 @@ class CommentController extends BaseController
 
             // we need to get parent entry only for notification
             $parent = $microblog->parent;
-
-            $helper = new HashHelper();
-            $microblog->setTags($helper->grab($microblog->text));
 
             // map microblog object into stream activity object
             $object = (new Stream_Comment())->map($microblog);

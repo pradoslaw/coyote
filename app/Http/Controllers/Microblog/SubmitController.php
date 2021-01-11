@@ -10,7 +10,6 @@ use Coyote\Http\Resources\MicroblogResource;
 use Coyote\Microblog;
 use Coyote\Notifications\Microblog\DeletedNotification;
 use Coyote\Repositories\Criteria\WithTrashed;
-use Coyote\Services\Parser\Helpers\Hash as HashHelper;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
@@ -79,11 +78,7 @@ class SubmitController extends Controller
                 stream(Stream_Update::class, $object);
             }
 
-            $helper = new HashHelper();
-
-            $microblog->setTags(
-                array_merge($helper->grab($microblog->html), array_pluck($request->input('tags', []), 'name'))
-            );
+            $microblog->setTags(array_pluck($request->input('tags', []), 'name'));
         });
 
         broadcast(new MicroblogSaved($microblog))->toOthers();

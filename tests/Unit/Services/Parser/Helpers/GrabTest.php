@@ -6,18 +6,6 @@ use Tests\TestCase;
 
 class GrabTest extends TestCase
 {
-    // tests
-    public function testParseUserName()
-    {
-        $hash = new \Coyote\Services\Parser\Helpers\Hash();
-        $tags = $hash->grab('<a href="">#słoma</a>');
-
-        $this->assertEquals('słoma', $tags[0]);
-
-        $tags = $hash->grab('<a href="">słoma</a>');
-        $this->assertEquals(0, count($tags));
-    }
-
     public function testGrabCityName()
     {
         $city = new \Coyote\Services\Parser\Helpers\City();
