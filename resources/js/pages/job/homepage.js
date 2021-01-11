@@ -25,6 +25,8 @@ new Vue({
     store.state.jobs.subscriptions = window.data.subscribed;
   },
   mounted() {
+    window.history.pushState({ jobs: window.data.jobs, input: window.data.input }, '', window.location.href);
+
     window.onpopstate = e => {
       this.jobs = e.state.jobs;
       this.input = e.state.input;
@@ -108,9 +110,6 @@ new Vue({
 
           window.history.pushState(response.data, '', response.data.url);
         })
-        .catch(error => {
-          console.log(error);
-        })
         .then(() => {
           this.skeleton = false;
         });
@@ -126,7 +125,6 @@ new Vue({
 
     initYScrollbar(container) {
       if (container) {
-        // Ps.initialize(container);
         new PerfectScrollbar(container);
       }
     },
