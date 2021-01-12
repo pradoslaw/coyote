@@ -217,7 +217,7 @@
     cancel() { }
 
     created() {
-      if (this.post.id !== undefined) {
+      if (this.exists) {
         return;
       }
 
@@ -271,7 +271,7 @@
     }
 
     async lastPage() {
-      if (this.currentPage < this.totalPages) {
+      if (!this.exists && this.currentPage < this.totalPages) {
         history.pushState({ page: this.totalPages }, '', `?page=${this.totalPages}`);
 
         await store.dispatch('posts/changePage', this.totalPages);
@@ -303,6 +303,10 @@
 
     private get draftKey(): string {
       return `topic-${this.topic.id ? this.topic.id : ''}`
+    }
+
+    private get exists(): boolean {
+      return this.post.id !== undefined;
     }
   }
 </script>
