@@ -35,7 +35,7 @@
         @cancel="cancel"
         ref="markdown"
       >
-        <template v-if="enablePoll" v-slot:options>
+        <template v-if="isFirstPost" v-slot:options>
           <a href="javascript:" data-target="#js-poll-form" data-toggle="collapse" class="ml-1 small text-muted">
             <i class="fa fa-poll-h"></i>
 
@@ -43,7 +43,7 @@
           </a>
         </template>
 
-        <div v-if="enablePoll" id="js-poll-form" class="bg-light p-3 mt-2 collapse">
+        <div v-if="isFirstPost" id="js-poll-form" class="bg-light p-3 mt-2 collapse">
           <div class="form-group row">
             <label class="col-md-3 col-form-label text-right">Odpowiedzi w ankiecie</label>
 
@@ -279,7 +279,7 @@
     }
 
     async validateTags() {
-      if (!this.topic.tags?.length) {
+      if (!this.topic.tags?.length || !this.isFirstPost) {
         return;
       }
 
@@ -297,7 +297,7 @@
       return true;
     }
 
-    get enablePoll() {
+    private get isFirstPost() {
       return !this.topic || this.topic.first_post_id === this.post.id;
     }
 
