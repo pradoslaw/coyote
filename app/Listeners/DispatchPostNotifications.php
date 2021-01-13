@@ -48,8 +48,11 @@ class DispatchPostNotifications implements ShouldQueue
 
         if ($event->wasRecentlyCreated) {
             $user = $event->post->user;
+
             $subscribers = $topic->subscribers()->with('user.notificationSettings')->get()->pluck('user')->exceptUser($user);
             $notification = (new SubmittedNotification($user, $post))->setSender($this->getSender($post));
+
+            $subscribers = $subscribers->merge($this->user->followingUsers($user->id));
 
             $this->dispatcher->send($subscribers, $notification);
 

@@ -12,7 +12,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
-abstract class AbstractNotification extends Notification implements ShouldQueue, ShouldBroadcastNow
+abstract class AbstractNotification extends Notification implements ShouldBroadcastNow
 {
     use Queueable;
 

@@ -122,6 +122,17 @@ class UserRepository extends Repository implements UserRepositoryInterface
             ->update(['is_sponsor' => $flag]);
     }
 
+    public function followingUsers(int $userId)
+    {
+        return $this
+            ->model
+            ->select(['users.id', 'name'])
+            ->join('user_relations', 'user_relations.user_id', '=', 'users.id')
+            ->where('user_relations.related_user_id', $userId)
+            ->where('user_relations.is_blocked', false)
+            ->get();
+    }
+
     /**
      * @param string $field
      * @param string $value
