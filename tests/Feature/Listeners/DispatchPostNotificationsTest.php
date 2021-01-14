@@ -58,20 +58,24 @@ class DispatchPostNotificationsTest extends TestCase
 
         Notification::assertSentTo($follower, SubmittedNotification::class);
     }
-//
-//    public function testDispatchOnlyOneNotification()
-//    {
-//        /** @var Microblog $microblog */
-//        $microblog = factory(Microblog::class)->create();
-//        $microblog->subscribers()->create(['user_id' => $microblog->user_id]);
-//
-//        $comment = factory(Microblog::class)->create(['parent_id' => $microblog->id, 'text' => "Hello @{$microblog->user->name}"]);
-//        $comment->wasRecentlyCreated = true;
-//
-//        Notification::fake();
-//
-//        event(new MicroblogSaved($comment));
-//
-//        Notification::assertNotSentTo($microblog->user, UserMentionedNotification::class);
-//    }
+
+    public function testDispatchOnlyOneNotification()
+    {
+        /** @var User $user */
+        $user = factory(User::class)->create();
+        $follower = factory(User::class)->create();
+
+        $this->topic->subscribers()->create(['user_id' => $user->id]);
+        $this->topic->subscribers()->create(['user_id' => $follower->id]);
+
+        $follower->relations()->create(['related_user_id' => $user->id, 'is_blocked' => false]);
+
+        $post = factory(Post::class)->create(['user_id' => $user->id, 'topic_id' => $this->topic->id, 'forum_id' => $this->forum->id]);
+
+        Notification::fake();
+
+        event(new PostSaved($post));
+
+        Notification::assertSentToTimes($follower, SubmittedNotification::class, 1);
+    }
 }

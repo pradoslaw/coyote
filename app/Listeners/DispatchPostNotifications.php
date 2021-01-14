@@ -52,7 +52,9 @@ class DispatchPostNotifications implements ShouldQueue
             $subscribers = $topic->subscribers()->with('user.notificationSettings')->get()->pluck('user')->exceptUser($user);
             $notification = (new SubmittedNotification($user, $post))->setSender($this->getSender($post));
 
-            $subscribers = $subscribers->merge($user->followers);
+            $subscribers = $subscribers
+                ->merge($user->followers)
+                ->unique('id');
 
             $this->dispatcher->send($subscribers, $notification);
 
