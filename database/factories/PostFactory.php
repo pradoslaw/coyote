@@ -13,6 +13,12 @@ $factory->define(\Coyote\Post::class, function (Faker $faker) {
     ];
 });
 
+$factory->state(\Coyote\Post::class, 'user', function (Faker $faker) {
+    return [
+        'user_id' => factory(\Coyote\User::class)->create()
+    ];
+});
+
 $factory->state(\Coyote\Post::class, 'id', function (Faker $faker) {
     return [
         'id' => $faker->numberBetween(10000000)

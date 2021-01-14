@@ -42,11 +42,5 @@ interface UserRepositoryInterface extends RepositoryInterface
      */
     public function countUsersWithReputation();
 
-    /**
-     * @param int $userId
-     * @return \Coyote\User[]
-     */
-    public function followingUsers(int $userId);
-
     public function sponsorship(bool $flag, string $githubId, string $profileUrl): bool;
 }

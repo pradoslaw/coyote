@@ -83,7 +83,7 @@ class HomeController extends Controller
             // activate "Profile" tab no matter what.
             $menu->get('profile')->activate();
         }
-
+$user->followers;
         return $this->view('profile.home')->with([
             'top_menu'      => $menu,
             'user'          => $user,
