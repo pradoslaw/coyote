@@ -80,6 +80,6 @@ class SubmittedNotification extends AbstractNotification
      */
     protected function getMailSubject(): string
     {
-        return $this->getSender() . ' dodał(a) odpowiedź w wątku: ' . $this->post->topic->title;
+        return $this->getSender() . ' napisał post w wątku: ' . $this->post->topic->title;
     }
 }

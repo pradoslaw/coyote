@@ -5,6 +5,7 @@ namespace Tests\Feature\Listeners;
 use Coyote\Events\MicroblogSaved;
 use Coyote\Listeners\DispatchMicroblogNotifications;
 use Coyote\Microblog;
+use Coyote\Notifications\Microblog\CommentedNotification;
 use Coyote\Notifications\Microblog\SubmittedNotification;
 use Coyote\Notifications\Microblog\UserMentionedNotification;
 use Coyote\User;
@@ -15,6 +16,13 @@ use Tests\TestCase;
 class DispatchMicroblogNotificationsTest extends TestCase
 {
     use DatabaseTransactions;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        Notification::fake();
+    }
 
     public function testScopeShouldNotIncludeBlockedUsers()
     {
@@ -74,10 +82,7 @@ class DispatchMicroblogNotificationsTest extends TestCase
 
         /** @var Microblog $microblog */
         $microblog = factory(Microblog::class)->create(['text' => "Hello @{{$user->name}}"]);
-        var_dump($microblog->text);
         $microblog->wasRecentlyCreated = true;
-
-        Notification::fake();
 
         event(new MicroblogSaved($microblog));
 
@@ -97,8 +102,6 @@ class DispatchMicroblogNotificationsTest extends TestCase
         $microblog = factory(Microblog::class)->create(['user_id' => $blocked->id, 'text' => "Hello @{$user->name}"]);
         $microblog->wasRecentlyCreated = true;
 
-        Notification::fake();
-
         event(new MicroblogSaved($microblog));
 
         Notification::assertNothingSent();
@@ -113,11 +116,9 @@ class DispatchMicroblogNotificationsTest extends TestCase
         $comment = factory(Microblog::class)->create(['parent_id' => $microblog->id]);
         $comment->wasRecentlyCreated = true;
 
-        Notification::fake();
-
         event(new MicroblogSaved($comment));
 
-        Notification::assertSentTo($microblog->user, SubmittedNotification::class);
+        Notification::assertSentTo($microblog->user, CommentedNotification::class);
     }
 
     public function testDispatchOnlyOneNotification()
@@ -129,10 +130,24 @@ class DispatchMicroblogNotificationsTest extends TestCase
         $comment = factory(Microblog::class)->create(['parent_id' => $microblog->id, 'text' => "Hello @{$microblog->user->name}"]);
         $comment->wasRecentlyCreated = true;
 
-        Notification::fake();
-
         event(new MicroblogSaved($comment));
 
+        Notification::assertSentTo($microblog->user, CommentedNotification::class);
         Notification::assertNotSentTo($microblog->user, UserMentionedNotification::class);
+    }
+
+    public function testDispatchNotificationToFollowers()
+    {
+        /** @var User $user */
+        $user = factory(User::class)->create();
+        $follower = factory(User::class)->create();
+
+        $follower->relations()->create(['related_user_id' => $user->id]);
+
+        $microblog = factory(Microblog::class)->create(['user_id' => $user->id]);
+
+        event(new MicroblogSaved($microblog));
+
+        Notification::assertSentTo($follower, SubmittedNotification::class);
     }
 }
