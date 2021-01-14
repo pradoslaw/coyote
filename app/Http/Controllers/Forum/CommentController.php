@@ -60,26 +60,6 @@ class CommentController extends Controller
             }
         });
 
-        $subscribers = [];
-
-        if ($comment->wasRecentlyCreated) {
-            $subscribers = $comment->post->subscribers()->with('user')->get()->pluck('user')->exceptUser($this->auth);
-
-            $dispatcher->send(
-                $subscribers,
-                (new CommentedNotification($comment))
-            );
-        }
-
-        $usersId = (new LoginHelper())->grab($comment->html);
-
-        if (!empty($usersId)) {
-            $dispatcher->send(
-                app(UserRepositoryInterface::class)->findMany($usersId)->exceptUser($this->auth)->exceptUsers($subscribers),
-                new UserMentionedNotification($comment)
-            );
-        }
-
         $comment->setRelation('forum', $comment->post->forum);
 
         broadcast(new CommentSaved($comment))->toOthers();

@@ -2,6 +2,7 @@
 
 namespace Coyote\Providers;
 
+use Coyote\Events\CommentSaved;
 use Coyote\Events\FirewallWasDeleted;
 use Coyote\Events\FirewallWasSaved;
 use Coyote\Events\ForumWasSaved;
@@ -12,6 +13,7 @@ use Coyote\Events\SuccessfulLogin;
 use Coyote\Listeners\ActivitySubscriber;
 use Coyote\Listeners\ChangeImageUrl;
 use Coyote\Listeners\DispatchMicroblogNotifications;
+use Coyote\Listeners\DispatchPostCommentNotification;
 use Coyote\Listeners\DispatchPostNotifications;
 use Coyote\Listeners\FlagSubscriber;
 use Coyote\Listeners\FlushFirewallCache;
@@ -50,7 +52,8 @@ class EventServiceProvider extends ServiceProvider
         ForumWasSaved::class => [IndexCategory::class],
         StreamSaved::class => [IndexStream::class],
         PostSaved::class => [DispatchPostNotifications::class],
-        MicroblogSaved::class => [DispatchMicroblogNotifications::class]
+        MicroblogSaved::class => [DispatchMicroblogNotifications::class],
+        CommentSaved::class => [DispatchPostCommentNotification::class]
     ];
 
     /**
