@@ -4,9 +4,10 @@ namespace Coyote\Notifications\Post;
 
 use Coyote\Services\UrlBuilder;
 use Coyote\User;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class DeletedNotification extends AbstractNotification
+class DeletedNotification extends AbstractNotification implements ShouldQueue
 {
     const ID = \Coyote\Notification::POST_DELETE;
 

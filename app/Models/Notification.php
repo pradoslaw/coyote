@@ -41,6 +41,7 @@ class Notification extends Model
     const JOB_COMMENT = 23;
     const JOB_APPLICATION = 24;
     const MICROBLOG_DELETE = 25;
+    const FOLLOWER = 26;
 
     /**
      * The attributes that are mass assignable.

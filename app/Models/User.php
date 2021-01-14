@@ -69,6 +69,7 @@ use Ramsey\Uuid\Uuid;
  * @property Group $group
  * @property Relation $relations
  * @property bool $is_sponsor
+ * @property User[] $followers
  */
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
@@ -258,6 +259,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function relations()
     {
         return $this->hasMany(Relation::class);
+    }
+
+    public function followers()
+    {
+        return $this->hasManyThrough(User::class, Relation::class, 'related_user_id', 'id', 'id', 'user_id')->where('user_relations.is_blocked', false);
     }
 
     /**

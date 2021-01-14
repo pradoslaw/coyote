@@ -43,7 +43,7 @@ trait SettingsTrait
                 'id' => 'btn-favorites',
                 'route' => 'user.relations',
                 'icon' => 'fa-user-slash',
-                'label' => 'Zablokowani użytkownicy'
+                'label' => 'Zablokowani oraz obserwowani'
             ],
             [
                 'id' => 'btn-favorites',

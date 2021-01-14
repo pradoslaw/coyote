@@ -23,6 +23,12 @@ class NotificationTypesTableSeeder extends Seeder
             'profile' => false,
             'email' => true,
         ]);
+        Type::updateOrCreate(['id' => Notification::FOLLOWER,
+            'name' => '...aktywności obserwowanego użytkownika',
+            'headline' => 'Nowy {type} od: {sender}',
+            'profile' => true,
+            'email' => false,
+        ]);
         Type::create(['id' => Notification::TOPIC_SUBSCRIBER,
             'name' => '...nowych postach w obserwowanych wątkach',
             'headline' => '{sender} dodał odpowiedź w wątku',
@@ -129,8 +135,8 @@ class NotificationTypesTableSeeder extends Seeder
             'category' => 'Mikroblogi'
         ]);
         Type::create(['id' => Notification::MICROBLOG_SUBSCRIBER,
-            'name' => '...nowym komentarzu do wpisu, który doceniłeś',
-            'headline' => '{sender} dodał komentarz do wpisu, który obserwujesz',
+            'name' => '...nowym komentarzu do obserwowanego wpisu',
+            'headline' => '{sender} dodał wpis na mikroblogu',
             'profile' => true,
             'email' => false,
             'category' => 'Mikroblogi'

@@ -19,12 +19,18 @@ class CommentSaved implements ShouldBroadcast
     public $comment;
 
     /**
+     * @var bool
+     */
+    public bool $wasRecentlyCreated;
+
+    /**
      * CommentSaved constructor.
      * @param Comment $comment
      */
     public function __construct(Comment $comment)
     {
         $this->comment = $comment;
+        $this->wasRecentlyCreated = $comment->wasRecentlyCreated;
     }
 
     /**

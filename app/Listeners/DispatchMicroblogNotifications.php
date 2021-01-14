@@ -4,6 +4,7 @@ namespace Coyote\Listeners;
 
 use Coyote\Events\MicroblogSaved;
 use Coyote\Microblog;
+use Coyote\Notifications\Microblog\CommentedNotification;
 use Coyote\Notifications\Microblog\SubmittedNotification;
 use Coyote\Notifications\Microblog\UserMentionedNotification;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
@@ -36,26 +37,34 @@ class DispatchMicroblogNotifications implements ShouldQueue
     public function handle(MicroblogSaved $event)
     {
         // microblog could be deleted at this point
-        if ($this->shouldSendNotification($event)) {
+        if ($this->shouldNotSendNotification($event)) {
             return false;
         }
 
         $microblog = $event->microblog;
-        $subscribers = [];
+        /** @var \Coyote\User[]|\Illuminate\Support\Collection  $subscribers */
+        $subscribers = $microblog->user->followers;
 
-        if ($event->wasRecentlyCreated && $microblog->parent_id) {
-            $subscribers = $microblog->parent
-                ->subscribers()
-                ->excludeBlocked($microblog->user->id)
-                ->with('user.notificationSettings')
-                ->get()
-                ->pluck('user');
-
-            if (!count($subscribers)) {
-                return false;
+        if ($event->wasRecentlyCreated) {
+            if ($microblog->parent_id) {
+                $subscribers = $subscribers
+                    ->merge(
+                        $microblog->parent
+                            ->subscribers()
+                            ->excludeBlocked($microblog->user->id)
+                            ->with('user')
+                            ->get()
+                            ->pluck('user')
+                    )
+                    ->unique('id');
             }
 
-            $this->dispatcher->send($subscribers, new SubmittedNotification($microblog));
+            if (count($subscribers)) {
+                $this->dispatcher->send(
+                    $subscribers->load('notificationSettings'),
+                    $microblog->parent_id ? new CommentedNotification($microblog) : new SubmittedNotification($microblog)
+                );
+            }
         }
 
         if ($event->wasContentChanged) {
@@ -65,7 +74,7 @@ class DispatchMicroblogNotifications implements ShouldQueue
         return true;
     }
 
-    private function shouldSendNotification(MicroblogSaved $event): bool
+    private function shouldNotSendNotification(MicroblogSaved $event): bool
     {
         return !$event->microblog || (!$event->wasRecentlyCreated && !$event->wasContentChanged);
     }
