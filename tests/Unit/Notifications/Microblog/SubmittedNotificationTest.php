@@ -3,7 +3,7 @@
 namespace Tests\Unit\Notifications\Microblog;
 
 use Coyote\Microblog;
-use Coyote\Notifications\Microblog\SubmittedNotification;
+use Coyote\Notifications\Microblog\CommentedNotification;
 use Coyote\User;
 use Faker\Factory;
 use Tests\TestCase;
@@ -20,7 +20,7 @@ class SubmittedNotificationTest extends TestCase
         $text1 = "Hello";
         $microblog = Microblog::forceCreate(['user_id' => $sender->id, 'text' => $text1, 'parent_id' => $parent->id]);
 
-        $notification = new SubmittedNotification($microblog);
+        $notification = new CommentedNotification($microblog);
         $recipient->notify($notification);
 
         $this->assertDatabaseHas('notifications', ['user_id' => $recipient->id, 'excerpt' => $text1]);
@@ -29,7 +29,7 @@ class SubmittedNotificationTest extends TestCase
         $text2 = "Hello v2";
         $microblog = Microblog::forceCreate(['user_id' => $sender->id, 'text' => $text2, 'parent_id' => $parent->id]);
 
-        $notification = new SubmittedNotification($microblog);
+        $notification = new CommentedNotification($microblog);
         $recipient->notify($notification);
 
         $this->assertDatabaseMissing('notifications', ['user_id' => $recipient->id, 'excerpt' => $text2]);
