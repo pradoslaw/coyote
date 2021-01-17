@@ -18,12 +18,6 @@
       </div>
 
       <vue-tags :tags="skills" :editable="true" @delete="deleteSkill" @priority="updateSkill" class="tag-clouds-skills"></vue-tags>
-
-{#      <ul class="tag-clouds tag-clouds-skills">#}
-{#        <template v-for="skill in skills">#}
-{#          <vue-tag-skill :tag.sync="skill" :tooltips="['podstawy', 'średnio zaawansowany', 'zaawansowany']" @delete="deleteSkill(skill.id)"></vue-tag-skill>#}
-{#        </template>#}
-{#      </ul>#}
     </div>
 
     <vue-notifications position="bottom right" />

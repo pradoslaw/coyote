@@ -87,11 +87,7 @@
             </template>
           </span>
 
-          <ul class="tag-clouds tag-clouds-skills mt-3">
-            <template v-for="(tag, index) in job.tags">
-              <vue-tag-skill :tag.sync="tag" :tooltips="['mile widziane', 'średnio zaawansowany', 'zaawansowany']" @delete="REMOVE_TAG"></vue-tag-skill>
-            </template>
-          </ul>
+          <vue-tags :tags.sync="job.tags" :editable="true" @delete="REMOVE_TAG" :tooltips="['mile widziane', 'średnio zaawansowany', 'zaawansowany']" class="tag-clouds-skills mt-3"></vue-tags>
         </div>
       </div>
     </div>
@@ -187,7 +183,7 @@
   import VueButton from '@/components/forms/button.vue';
   import VueError from '@/components/forms/error.vue';
   import VueTagsDropdown from '@/components/job/tags-dropdown.vue';
-  import VueTagsSkill from '@/components/job/tag-skill.vue';
+  import VueTags from '@/components/tags.vue';
   import VueGooglePlace from '@/components/google-maps/place.vue';
   import VueTinyMce from '@tinymce/tinymce-vue';
   import { Prop } from "vue-property-decorator";
@@ -207,7 +203,7 @@
       'vue-button': VueButton,
       'vue-error': VueError,
       'vue-tags-dropdown': VueTagsDropdown,
-      'vue-tag-skill': VueTagsSkill,
+      'vue-tags': VueTags,
       'vue-google-place': VueGooglePlace,
       'vue-tinymce': VueTinyMce
     },
