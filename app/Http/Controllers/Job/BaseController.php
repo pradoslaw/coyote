@@ -26,12 +26,6 @@ abstract class BaseController extends Controller
     {
         parent::__construct();
 
-        $this->middleware(function (Request $request, $next) {
-            $request->attributes->set('promptUrl', route('job.tag.prompt'));
-
-            return $next($request);
-        });
-
         $this->job = $job;
     }
 }
