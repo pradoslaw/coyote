@@ -24,7 +24,7 @@ class JobRequest extends FormRequest
     const LOCATION_LONGITUDE = 'nullable|numeric';
 
     const TAG_NAME = 'max:50|tag';
-    const TAG_PRIORITY = 'nullable|int|min:0|max:2';
+    const TAG_PRIORITY = 'nullable|int|min:0|max:3';
 
     const IS_AGENCY = 'bool';
     const WEBSITE = 'nullable|url';

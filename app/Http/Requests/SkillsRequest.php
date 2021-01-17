@@ -27,7 +27,7 @@ class SkillsRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:100|unique:user_skills,name,NULL,id,user_id,' . (auth()->user()->id),
-            'rate' => 'required|integer|min:1|max:6'
+            'rate' => 'required|integer|min:1|max:2'
         ];
     }
 

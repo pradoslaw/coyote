@@ -46,16 +46,12 @@ class TagResource extends JsonResource
      */
     public function toArray($request)
     {
-        return array_merge($this->resource->only(['id', 'name', 'real_name', 'topics', 'count']), [
+        return array_merge($this->resource->only(['id', 'name', 'real_name', 'topics', 'jobs', 'microblogs']), [
             'logo'      => (string) $this->logo->url(),
             'url'       => static::resolveUrl($this->name),
 
-            'priority'  => $this->whenPivotLoaded('job_tags', function () {
-                return $this->pivot->priority;
-            }),
-
-            'priority'  => $this->whenPivotLoaded('user_skills', function () {
-                return $this->pivot->rate;
+            'priority'  => $this->whenLoaded('pivot', function () {
+                return $this->pivot->priority ?: $this->pivot->rate;
             })
         ]);
     }

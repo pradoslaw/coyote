@@ -8,7 +8,7 @@
 
     <div class="d-inline" @mouseenter="editable = true" @mouseleave="disableEditing">
       <span
-        v-for="i in [0, 1, 2]"
+        v-for="i in [1, 2, 3]"
         :aria-label="tooltips[i]"
         @mouseover="highlight = i"
         @click="setPriority(i)"
