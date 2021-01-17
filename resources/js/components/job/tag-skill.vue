@@ -14,9 +14,8 @@
         @click="setPriority(i)"
         data-balloon-pos="down"
       >
-        <i class="fa fa-circle" :class="{'text-primary': getHighlight(tag.priority) >= i, 'text-muted': getHighlight(tag.priority) < i}"></i>
+        <i class="fas fa-circle" :class="{'text-primary': getHighlight(tag.priority) >= i, 'text-muted': getHighlight(tag.priority) < i}"></i>
       </span>
-
     </div>
   </li>
 </template>

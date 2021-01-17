@@ -7,6 +7,7 @@
 .alert.right,
 .alert.top,
 .alert.top-end,
+.alert.top-start,
 .alert.bottom,
 .alert.bottom-end {
   padding-top: $alert-padding-y / 3;
@@ -47,7 +48,7 @@
   }
 }
 
-.alert.top, .alert.top-end, {
+.alert.top, .alert.top-end, .alert.top-start, {
   &:before, &:after {
     top: 100%;
     left: 5%;
@@ -92,13 +93,13 @@ $arrow-size: 8px;
   margin-left: -($arrow-size + 3px);
 }
 
-.alert.top:after, .alert.top-end:after {
+.alert.top:after, .alert.top-end:after, .alert.top-start:after {
   border-top-color: theme-color-level('warning', $alert-bg-level);
   border-width: $arrow-size;
   margin-left: -$arrow-size;
 }
 
-.alert.top:before, .alert.top-end:before {
+.alert.top:before, .alert.top-end:before, .alert.top-start:before {
   border-top-color: theme-color-level('warning', $alert-border-level);
   border-width: $arrow-size + 3px;
   margin-left: -($arrow-size + 3px);

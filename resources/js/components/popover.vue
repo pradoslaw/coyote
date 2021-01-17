@@ -19,7 +19,7 @@ import Component from "vue-class-component";
 import { Prop } from "vue-property-decorator";
 import Session from '../libs/session';
 
-type Placement = 'top' | 'bottom' | 'left' | 'right';
+type Placement = 'top' | 'bottom' | 'left' | 'right' | 'top-start';
 
 @Component
 export default class Popover extends Vue {

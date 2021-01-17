@@ -230,11 +230,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function skills()
     {
-        return $this->hasMany('Coyote\User\Skill')->orderBy('order');
+        return $this->belongsToMany('Coyote\Tag', 'user_skills')->withPivot(['rate', 'order'])->orderByPivot('order');
     }
 
     /**

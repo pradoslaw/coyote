@@ -6,53 +6,22 @@
 
   <div v-cloak id="js-skills" class="card card-default">
     <div class="card-body">
-      <div class="list-group">
-        <div v-for="skill in skills" :key="skill.name" class="list-group-item">
-          <i class="fas fa-arrows"></i>
-
-          <strong>${ skill.name }</strong>
-
-          <a @click="deleteSkill(skill.id)" href="javascript:" class="btn-delete float-right text-danger">
-            <i class="fas fa-times" title="Usuń"></i>
-          </a>
-
-          <span class="float-right mr-2">
-            <span v-for="i in [1, 2, 3, 4, 5]" :key="i" :class="{'marked': i <= skill.rate}" class="rate"></span>
-          </span>
-        </div>
-      </div>
-
-      <div class="form-group row mt-4">
+      <div class="form-group row pb-2">
         <div class="col">
-          <input
-            v-model="skillName"
-            @keyup.enter="addSkill"
+          <vue-tags-inline
+            @change="addSkill"
             placeholder="Np. java, c#"
-            class="form-control"
-            type="text"
-            data-popover='{"message": "Umiejętności będą widoczne na Twoim profilu.", "offset": "25%,15px"}'
+            data-popover='{"message": "Umiejętności będą widoczne na Twoim profilu.", "placement": "top-start", "offset": "0,10px"}'
           >
-        </div>
-        <div class="col">
-          <button @click="addSkill" type="submit" class="btn btn-primary">
-            Dodaj
-          </button>
+          </vue-tags-inline>
         </div>
       </div>
 
-      <div class="form-group row">
-        <div @mouseleave="clearMarks" class="rate-container col-12">
-          <a
-            v-for="(label, index) in rateLabels"
-            :key="index"
-            @click="setMark(index + 1)"
-            @mouseenter="selectMark(index + 1)"
-            :class="{'marked': index + 1 <= selectedMark || index + 1 <= clickedMark}"
-            class="rate rate-large"
-            :title="label"
-          ></a>
-        </div>
-      </div>
+      <ul class="tag-clouds tag-clouds-skills">
+        <template v-for="skill in skills">
+          <vue-tag-skill :tag.sync="skill" :tooltips="['podstawy', 'średnio zaawansowany', 'zaawansowany']" @delete="deleteSkill(skill.id)"></vue-tag-skill>
+        </template>
+      </ul>
     </div>
 
     <vue-notifications position="bottom right" />

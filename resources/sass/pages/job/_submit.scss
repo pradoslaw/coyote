@@ -26,19 +26,6 @@
   z-index: 1000;
 }
 
-// Container for offer's tags
-// -----------------------------------------------
-
-#tags-container {
-  .tag-clouds-skills {
-    > li .fa {
-      font-size: 10px;
-      margin-right: 4px;
-      cursor: pointer;
-    }
-  }
-}
-
 // Submit form
 // --------------------------------------------
 

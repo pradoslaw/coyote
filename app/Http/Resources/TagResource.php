@@ -52,6 +52,10 @@ class TagResource extends JsonResource
 
             'priority'  => $this->whenPivotLoaded('job_tags', function () {
                 return $this->pivot->priority;
+            }),
+
+            'priority'  => $this->whenPivotLoaded('user_skills', function () {
+                return $this->pivot->rate;
             })
         ]);
     }

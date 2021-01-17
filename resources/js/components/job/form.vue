@@ -87,13 +87,11 @@
             </template>
           </span>
 
-          <div id="tags-container" class="mt-3">
-            <ul class="tag-clouds tag-clouds-skills">
-              <template v-for="(tag, index) in job.tags">
-                <vue-tag-skill :tag.sync="tag" :tooltips="['mile widziane', 'średnio zaawansowany', 'zaawansowany']" @delete="REMOVE_TAG"></vue-tag-skill>
-              </template>
-            </ul>
-          </div>
+          <ul class="tag-clouds tag-clouds-skills mt-3">
+            <template v-for="(tag, index) in job.tags">
+              <vue-tag-skill :tag.sync="tag" :tooltips="['mile widziane', 'średnio zaawansowany', 'zaawansowany']" @delete="REMOVE_TAG"></vue-tag-skill>
+            </template>
+          </ul>
         </div>
       </div>
     </div>

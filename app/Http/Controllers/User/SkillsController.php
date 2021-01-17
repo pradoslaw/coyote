@@ -3,7 +3,8 @@
 namespace Coyote\Http\Controllers\User;
 
 use Coyote\Http\Requests\SkillsRequest;
-use Coyote\Job\Preferences;
+use Coyote\Http\Resources\TagResource;
+use Coyote\Tag;
 use Illuminate\Http\Request;
 
 class SkillsController extends BaseController
@@ -17,33 +18,19 @@ class SkillsController extends BaseController
     {
         $this->breadcrumb->push('Umiejętności', route('user.skills'));
 
-        $skills = $this->auth->skills()->get(['id', 'name', 'rate']);
-
         return $this->view('user.skills')->with([
-            'skills' => $skills,
+            'skills' => TagResource::collection($this->auth->skills),
             'rate_labels' => SkillsRequest::RATE_LABELS
         ]);
     }
 
-    /**
-     * @param SkillsRequest $request
-     * @return mixed
-     */
     public function save(SkillsRequest $request)
     {
-        $skill = $this->transaction(function () use ($request) {
-            /** @var \Coyote\User\Skill $skill */
-            $skill = $this->auth->skills()->create($request->all());
+        $this->transaction(function () use ($request) {
+            $model = Tag::firstOrCreate(['name' => $request->input('name')]);
 
-            $preferences = new Preferences($this->getSetting('job.preferences'));
-            $preferences->addTag($skill->name);
-
-            $this->setSetting('job.preferences', $preferences);
-
-            return $skill;
+            $this->auth->skills()->attach($model->id, ['rate' => $request->input('rate'), 'order' => $request->input('order')]);
         });
-
-        return $skill->toJson();
     }
 
     /**
@@ -51,8 +38,7 @@ class SkillsController extends BaseController
      */
     public function delete($id)
     {
-        $skill = $this->auth->skills()->findOrFail($id, ['id', 'user_id']);
-        $skill->delete();
+        $this->auth->skills()->where('tag_id', $id)->delete();
     }
 
     /**

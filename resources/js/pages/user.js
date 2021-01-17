@@ -5,6 +5,8 @@ import VueAvatar from '@/components/avatar';
 import VueUserName from '@/components/user-name';
 import VueModal from '@/components/modal';
 import VueFollowButton from '@/components/forms/follow-button';
+import VueTagsSkill from '@/components/job/tag-skill.vue';
+import VueTagsInline from '@/components/forms/tags-inline.vue';
 import axios from 'axios';
 import store from '../store';
 import { default as axiosErrorHandler } from '../libs/axios-error-handler';
@@ -39,24 +41,28 @@ new Vue({
 new Vue({
   el: '#js-skills',
   delimiters: ['${', '}'],
+  components: {
+    'vue-tag-skill': VueTagsSkill,
+    'vue-tags-inline': VueTagsInline
+  },
+  provide: {
+    popularTags: []
+  },
   data() {
     return {
       skills: window.skills,
-      rateLabels: window.rateLabels,
-      selectedMark: null,
-      clickedMark: null,
-      skillName: null
+      rateLabels: window.rateLabels
     };
   },
   methods: {
-    addSkill() {
-      axios.post('/User/Skills', {name: this.skillName, rate: this.clickedMark}).then(() => {
-        this.skills.push({
-          name: this.skillName,
-          rate: this.clickedMark
-        });
+    addSkill(tag) {
+      const defaultRate = 2;
 
-        this.clickedMark = this.selectedMark = this.skillName = null;
+      axios.post('/User/Skills', {name: tag.name, rate: defaultRate}).then(() => {
+        this.skills.push({
+          name: tag.name,
+          rate: defaultRate
+        });
       });
     },
 
@@ -64,18 +70,6 @@ new Vue({
       this.skills.splice(this.skills.findIndex(skill => skill.id === id), 1);
 
       axios.delete(`/User/Skills/${id}`);
-    },
-
-    setMark(mark) {
-      this.clickedMark = mark;
-    },
-
-    selectMark(mark) {
-      this.selectedMark = mark;
-    },
-
-    clearMarks() {
-      this.selectedMark = null;
     }
   }
 });

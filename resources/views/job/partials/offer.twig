@@ -102,15 +102,17 @@
 
                       {% set tooltip = ['mile widziane', 'średnio zaawansowany', 'zaawansowany'][tag.pivot.priority] %}
 
-                      {% for i in 0..tag.pivot.priority %}
-                        <i class="fas fa-circle text-primary" title="{{ tooltip }}"></i>
-                      {% endfor %}
-
-                      {% if tag.pivot.priority < 2 %}
-                        {% for i in 0..max(0, 1 - tag.pivot.priority) %}
-                          <i class="fas fa-circle text-muted" title="{{ tooltip }}"></i>
+                      {% spaceless %}
+                        {% for i in 0..tag.pivot.priority %}
+                          <i class="fas fa-circle text-primary" title="{{ tooltip }}"></i>
                         {% endfor %}
-                      {% endif %}
+
+                        {% if tag.pivot.priority < 2 %}
+                          {% for i in 0..max(0, 1 - tag.pivot.priority) %}
+                            <i class="fas fa-circle text-muted" title="{{ tooltip }}"></i>
+                          {% endfor %}
+                        {% endif %}
+                      {% endspaceless %}
                     </li>
                   {% endfor %}
                 </ul>
