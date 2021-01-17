@@ -10,8 +10,6 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
     $this->get('Submit/{job?}', ['uses' => 'SubmitController@index', 'as' => 'submit', 'middleware' => 'auth']);
     $this->post('Submit/{job?}', ['uses' => 'SubmitController@save', 'middleware' => 'auth']);
 
-    $this->post('Tag/Submit', ['uses' => 'TagController@submit', 'as' => 'submit.tag']);
-    $this->get('Tag/Prompt', ['uses' => 'TagController@prompt', 'as' => 'tag.prompt']);
     $this->get('Tag/Validate', ['uses' => 'TagController@valid', 'as' => 'tag.validate']);
     $this->get('Tag/Suggestions', ['uses' => 'TagController@suggestions', 'as' => 'tag.suggestions']);
 

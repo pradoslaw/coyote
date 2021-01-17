@@ -26,11 +26,22 @@ class SkillsController extends BaseController
 
     public function save(SkillsRequest $request)
     {
-        $this->transaction(function () use ($request) {
+        $model = $this->transaction(function () use ($request) {
             $model = Tag::firstOrCreate(['name' => $request->input('name')]);
 
-            $this->auth->skills()->attach($model->id, ['rate' => $request->input('rate'), 'order' => $request->input('order')]);
+            $this->auth->skills()->attach($model->id, ['rate' => $request->input('priority'), 'order' => $request->input('order')]);
+
+            return $model;
         });
+
+        TagResource::withoutWrapping();
+
+        return new TagResource($model);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $this->auth->skills()->newPivotStatement()->where('tag_id', $id)->update(['rate' => $request->input('priority')]);
     }
 
     /**
@@ -38,7 +49,7 @@ class SkillsController extends BaseController
      */
     public function delete($id)
     {
-        $this->auth->skills()->where('tag_id', $id)->delete();
+        $this->auth->skills()->detach($id);
     }
 
     /**

@@ -9,7 +9,7 @@
     <div class="d-inline" @mouseenter="editable = true" @mouseleave="disableEditing">
       <span
         v-for="i in [1, 2, 3]"
-        :aria-label="tooltips[i]"
+        :aria-label="tooltips[i - 1]"
         @mouseover="highlight = i"
         @click="setPriority(i)"
         data-balloon-pos="down"
@@ -43,6 +43,8 @@ export default {
     setPriority(priority) {
       this.tag.priority = priority;
       this.disableEditing();
+
+      this.$emit('priority', this.tag);
     },
     disableEditing() {
       this.editable = false;

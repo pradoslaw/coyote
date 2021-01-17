@@ -5,7 +5,7 @@ import VueAvatar from '@/components/avatar';
 import VueUserName from '@/components/user-name';
 import VueModal from '@/components/modal';
 import VueFollowButton from '@/components/forms/follow-button';
-import VueTagsSkill from '@/components/job/tag-skill.vue';
+import VueTags from '@/components/tags.vue';
 import VueTagsInline from '@/components/forms/tags-inline.vue';
 import axios from 'axios';
 import store from '../store';
@@ -42,7 +42,7 @@ new Vue({
   el: '#js-skills',
   delimiters: ['${', '}'],
   components: {
-    'vue-tag-skill': VueTagsSkill,
+    'vue-tags': VueTags,
     'vue-tags-inline': VueTagsInline
   },
   provide: {
@@ -58,18 +58,19 @@ new Vue({
     addSkill(tag) {
       const defaultRate = 2;
 
-      axios.post('/User/Skills', {name: tag.name, rate: defaultRate}).then(() => {
-        this.skills.push({
-          name: tag.name,
-          rate: defaultRate
-        });
+      axios.post('/User/Skills', {name: tag.name, priority: defaultRate}).then(response => {
+        this.skills.push(Object.assign(response.data, {priority: defaultRate}));
       });
     },
 
-    deleteSkill(id) {
-      this.skills.splice(this.skills.findIndex(skill => skill.id === id), 1);
+    updateSkill(tag) {
+      axios.post(`/User/Skills/${tag.id}`, tag);
+    },
 
-      axios.delete(`/User/Skills/${id}`);
+    deleteSkill(tag) {
+      this.skills.splice(this.skills.findIndex(skill => skill.id === tag.id), 1);
+
+      axios.delete(`/User/Skills/${tag.id}`);
     }
   }
 });
