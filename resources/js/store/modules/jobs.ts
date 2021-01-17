@@ -37,7 +37,7 @@ const mutations = {
   },
 
   ADD_TAG(state, name) {
-    state.form.tags.push({ name: name, priority: 1 });
+    state.form.tags.push({ name: name, priority: 2 });
   },
 
   REMOVE_TAG(state, name) {
