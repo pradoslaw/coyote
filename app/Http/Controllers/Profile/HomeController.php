@@ -6,6 +6,7 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Controllers\User\UserMenuTrait;
 use Coyote\Http\Requests\SkillsRequest;
 use Coyote\Http\Resources\MicroblogCollection;
+use Coyote\Http\Resources\TagResource;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface as ReputationRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
@@ -87,7 +88,7 @@ class HomeController extends Controller
         return $this->view('profile.home')->with([
             'top_menu'      => $menu,
             'user'          => $user,
-            'skills'        => $user->skills()->orderBy('order')->get(),
+            'skills'        => TagResource::collection($user->skills->load('category')),
             'rate_labels'   => SkillsRequest::RATE_LABELS,
             'tab'           => strtolower($tab),
             'module'        => $this->$tab($user)
