@@ -96,7 +96,7 @@
     @Ref('cloud')
     readonly cloud!: HTMLElement;
 
-    @InjectReactive({default: []})
+    @InjectReactive({from: 'popularTags', default: []})
     readonly popularTags!: string[];
 
     private searchText: string = '';

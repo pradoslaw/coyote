@@ -45,9 +45,6 @@ new Vue({
     'vue-tags': VueTags,
     'vue-tags-inline': VueTagsInline
   },
-  provide: {
-    popularTags: []
-  },
   data() {
     return {
       skills: window.skills,

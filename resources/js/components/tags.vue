@@ -9,7 +9,7 @@
         <a v-if="editable" @click="deleteTag(tag)" class="remove"><i class="fa fa-times"></i></a>
       </component>
 
-      <div class="d-inline" @mouseleave="hover = null">
+      <div v-if="editable" class="d-inline" @mouseleave="hover = null">
         <span
           v-for="i in [1, 2, 3]"
           :aria-label="tooltips[i - 1]"

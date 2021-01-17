@@ -51,18 +51,4 @@ class SkillsController extends BaseController
     {
         $this->auth->skills()->detach($id);
     }
-
-    /**
-     * Saves order of skills
-     *
-     * @param Request $request
-     */
-    public function order(Request $request)
-    {
-        $this->transaction(function () use ($request) {
-            foreach ($request->get('order') as $id => $order) {
-                $this->auth->skills()->where('id', $id)->update(['order' => intval($order) + 1]);
-            }
-        });
-    }
 }
