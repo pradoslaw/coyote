@@ -72,16 +72,18 @@ new Vue({
   },
   computed: {
     groupedSkills() {
-      return this.skills.reduce((acc, curr) => {
-        const key = curr.category ?? 'Inne';
+      return this.skills
+        .sort((a, b) => a.priority < b.priority ? 1 : -1)
+        .reduce((acc, curr) => {
+          const key = curr.category ?? 'Inne';
 
-        if (!acc[key]) {
-          acc[key] = [];
-        }
+          if (!acc[key]) {
+            acc[key] = [];
+          }
 
-        acc[key].push(curr);
+          acc[key].push(curr);
 
-        return acc;
+          return acc;
       }, {});
     }
   }
