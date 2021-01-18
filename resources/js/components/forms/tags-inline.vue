@@ -40,7 +40,7 @@
       v-model="searchText"
       :placeholder="placeholder"
       @keyup.space="setTag"
-      @keyup.enter.prevent="selectTag"
+      @keydown.enter="selectTag"
       @keyup.esc="dropdown.hideDropdown"
       @keyup.up.prevent="dropdown.goUp"
       @keyup.down.prevent="dropdown.goDown"
@@ -124,13 +124,13 @@
       }
     }
 
-    selectTag() {
+    selectTag(event) {
       // @ts-ignore
       if (this.dropdown.getSelected()) {
         // @ts-ignore
         this.applyTag(this.dropdown.getSelected()['name']);
 
-        return false; // prevent submitting the form
+        event.preventDefault(); // prevent submitting the form
       }
     }
 

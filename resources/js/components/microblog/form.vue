@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <form @submit.prevent="saveMicroblog">
     <vue-markdown
       v-model="microblog.text"
       :assets.sync="microblog.assets"
@@ -31,7 +31,7 @@
         </button>
       </div>
     </div>
-  </div>
+  </form>
 </template>
 
 <script lang="ts">

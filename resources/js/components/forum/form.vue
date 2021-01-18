@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <form @submit.prevent="save">
     <div v-if="showTitleInput" class="form-group">
       <label class="col-form-label">Temat <em>*</em></label>
 
@@ -130,7 +130,7 @@
         </button>
       </div>
     </div>
-  </div>
+  </form>
 </template>
 
 <script lang="ts">
