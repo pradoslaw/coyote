@@ -68,6 +68,7 @@
 
         if (dropdown.children.length) {
           dropdown.scrollTop = this.selectedIndex * dropdown.children[0].offsetHeight;
+          console.log(dropdown.scrollTop)
         }
       },
 
@@ -102,9 +103,9 @@
       items(newItems, oldItems) {
         this.toggleDropdown(Boolean(newItems.length));
 
-        if (newItems.length > 0 && newItems.length !== oldItems.length) {
-          this.selectedIndex = this.defaultIndex;
-        }
+        // reset position and set scrollbar
+        this.selectedIndex = this.defaultIndex;
+        this.adjustScrollbar();
       }
     }
   }
