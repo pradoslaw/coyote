@@ -10,6 +10,7 @@ import VueTagsInline from '@/components/forms/tags-inline.vue';
 import axios from 'axios';
 import store from '../store';
 import { default as axiosErrorHandler } from '../libs/axios-error-handler';
+import { default as SkillsMixin } from '@/components/mixins/skills';
 import { mapActions, mapGetters, mapState } from 'vuex';
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
@@ -41,6 +42,7 @@ new Vue({
 new Vue({
   el: '#js-skills',
   delimiters: ['${', '}'],
+  mixins: [ SkillsMixin ],
   components: {
     'vue-tags': VueTags,
     'vue-tags-inline': VueTagsInline
@@ -68,23 +70,6 @@ new Vue({
       this.skills.splice(this.skills.findIndex(skill => skill.id === tag.id), 1);
 
       axios.delete(`/User/Skills/${tag.id}`);
-    }
-  },
-  computed: {
-    groupedSkills() {
-      return this.skills
-        .sort((a, b) => a.priority < b.priority ? 1 : -1)
-        .reduce((acc, curr) => {
-          const key = curr.category ?? 'Inne';
-
-          if (!acc[key]) {
-            acc[key] = [];
-          }
-
-          acc[key].push(curr);
-
-          return acc;
-      }, {});
     }
   }
 });

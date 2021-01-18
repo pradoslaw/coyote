@@ -4,6 +4,7 @@
 {% block container %}
   <script>
     var userId = {{ user.id }};
+    var skills = {{ skills|json_encode|raw }};
   </script>
 
   {% if user.id == user('id') %}
@@ -18,34 +19,49 @@
         </div>
       {% endif %}
 
-      <div id="profile" class="card card-default">
+      <div id="js-profile" class="card card-default">
         <div class="card-body">
-
           <div class="media">
-            <div class="mr-2 user-photo">
+            <div class="mr-3">
               <img src="{{ user_photo(user.photo) }}" class="img-thumbnail">
 
-              <a class="btn btn-secondary btn-sm btn-pm" href="{{ route('user.pm.submit') }}?to={{ user.name }}">
+              <a class="btn btn-secondary btn-sm d-block mt-2" href="{{ route('user.pm.submit') }}?to={{ user.name }}">
                 <i class="fas fa-envelope"></i> Wiadomość
               </a>
+
+              <div class="d-flex mt-2">
+                <div class="flex-1 flex-grow-1">
+                  <vue-follow-button user-id="{{ user.id }}"></vue-follow-button>
+                </div>
+
+                <div class="flex-shrink-0 ml-2">
+                  <button class="btn btn-secondary d-block" data-toggle="dropdown"><i class="fa fa-ellipsis-h"></i></button>
+
+                  <div class="dropdown-menu">
+                    <a href="javascript:" class="dropdown-item"><i class="fas fa-fw fa-ban"></i> Zablokuj użytkownika</a>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div class="media-body">
               <h1>{{ user.name }}</h1>
 
-              <ol class="list-inline">
+              <ol class="list-inline mb-0">
                 {% if user.position %}
-                  <li class="position list-inline-item">
-                    {{ user.position }}
+                  <li class="list-inline-item">
+                    <h5 class="mb-0">
+                      {{ user.position }}
 
-                    {% if user.firm %}
-                      <small>@ {{ user.firm }}</small>
-                    {% endif %}
+                      {% if user.firm %}
+                        <small class="text-muted">@ {{ user.firm }}</small>
+                      {% endif %}
+                    </h5>
                   </li>
                 {% endif %}
 
                 {% if user.location %}
-                  <li class="location list-inline-item">
+                  <li class="list-inline-item">
                     <i class="fas fa-map-marker-alt fa-fw"></i>
                     {{ user.location }}
                   </li>
@@ -88,19 +104,19 @@
                 {% endif %}
               </ol>
 
-              {% if skills %}
-                <ul class="tag-clouds">
-                  {% for skill in skills %}
-                    <li><a href="{{ route('job.tag', [skill.name|url_encode]) }}" title="Ocena umiejętności: {{ rate_labels[skill.rate - 1] }}">{{ skill.name }}</a></li>
-                  {% endfor %}
-                </ul>
-              {% endif %}
-
               {% if user.bio %}
                 <div class="statement">
                   {{ user.bio }}
                 </div>
               {% endif %}
+
+              <div d-cloak class="row">
+                <div v-for="(skills, name) in groupedSkills" class="col">
+                  <strong class="d-block text-muted border-bottom mb-3">${ name }</strong>
+
+                  <vue-tags :tags="skills" class="tag-clouds-skills"></vue-tags>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -1,5 +1,25 @@
 import PerfectScrollbar from 'perfect-scrollbar';
 import axios from 'axios';
+import Vue from "vue";
+import VueFollowButton from "@/components/forms/follow-button.vue";
+import VueTags from "@/components/tags.vue";
+import store from "@/store";
+import {default as SkillsMixin} from "@/components/mixins/skills";
+
+new Vue({
+  el: '#js-profile',
+  delimiters: ['${', '}'],
+  components: { 'vue-follow-button': VueFollowButton, 'vue-tags': VueTags },
+  mixins: [ SkillsMixin ],
+  data() {
+    return {
+      skills: window.skills
+    };
+  },
+  methods: {
+
+  }
+});
 
 (function () {
   const container = document.getElementById('wrap');

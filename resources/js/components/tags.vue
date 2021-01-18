@@ -20,6 +20,16 @@
           <i class="fas fa-circle" :class="{'text-primary': tag.priority >= i, 'text-muted': tag.priority < i}"></i>
         </span>
       </div>
+
+      <div v-else-if="tag.priority" class="d-inline">
+        <span
+          v-for="i in [1, 2, 3]"
+          :aria-label="tooltips[i - 1]"
+          data-balloon-pos="down"
+        >
+          <i class="fas fa-circle" :class="{'text-primary': tag.priority >= i, 'text-muted': tag.priority < i}"></i>
+        </span>
+      </div>
     </li>
   </ul>
 </template>
