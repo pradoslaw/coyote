@@ -3,8 +3,13 @@ import axios from 'axios';
 import Vue from "vue";
 import VueFollowButton from "@/components/forms/follow-button.vue";
 import VueTags from "@/components/tags.vue";
-import store from "@/store";
 import {default as SkillsMixin} from "@/components/mixins/skills";
+import store from "@/store";
+import VueNotifications from "vue-notification";
+import VueModals from "@/plugins/modals";
+
+Vue.use(VueNotifications, {componentName: 'vue-notifications'});
+Vue.use(VueModals);
 
 new Vue({
   el: '#js-profile',
@@ -13,11 +18,28 @@ new Vue({
   mixins: [ SkillsMixin ],
   data() {
     return {
+      user: window.user,
       skills: window.skills
     };
   },
   methods: {
+    block() {
+      this.$confirm({
+        message: 'Nie będziesz widział komentarzy ani wpisów tego użytkownika',
+        title: 'Zablokować użytkownika?',
+        okLabel: 'Tak, zablokuj'
+      })
+      .then(() => {
+        store.dispatch('user/block', this.user.id);
 
+        this.$notify({type: 'success', duration: 5000, title: 'Gotowe!', text: 'Użytkownik został zablokowany.'});
+      });
+    }
+  },
+  computed: {
+    isAuthorized() {
+      return store.getters['user/isAuthorized'] && store.state.user.user.id !== this.user.id;
+    }
   }
 });
 
@@ -42,7 +64,7 @@ new Vue({
 
     isPending = true;
 
-    axios.get(`/Profile/${window.userId}/History`, {params: {offset: offset}}).then(data => {
+    axios.get(`/Profile/${window.user.id}/History`, {params: {offset: offset}}).then(data => {
       el.insertAdjacentHTML('beforeend', data.data);
 
       isPending = false;

@@ -3,7 +3,7 @@
 
 {% block container %}
   <script>
-    var userId = {{ user.id }};
+    var user = {{ user|json_encode|raw }};
     var skills = {{ skills|json_encode|raw }};
   </script>
 
@@ -23,22 +23,22 @@
         <div class="card-body">
           <div class="media">
             <div class="mr-3">
-              <img src="{{ user_photo(user.photo) }}" class="img-thumbnail">
+              <img src="{{ user_photo(user.photo) }}" class="img-thumbnail w-100">
 
               <a class="btn btn-secondary btn-sm d-block mt-2" href="{{ route('user.pm.submit') }}?to={{ user.name }}">
                 <i class="fas fa-envelope"></i> Wiadomość
               </a>
 
-              <div class="d-flex mt-2">
+              <div v-cloak v-if="isAuthorized" class="d-flex mt-2">
                 <div class="flex-1 flex-grow-1">
-                  <vue-follow-button user-id="{{ user.id }}"></vue-follow-button>
+                  <vue-follow-button :user-id="{{ user.id }}"></vue-follow-button>
                 </div>
 
                 <div class="flex-shrink-0 ml-2">
                   <button class="btn btn-secondary d-block" data-toggle="dropdown"><i class="fa fa-ellipsis-h"></i></button>
 
                   <div class="dropdown-menu">
-                    <a href="javascript:" class="dropdown-item"><i class="fas fa-fw fa-ban"></i> Zablokuj użytkownika</a>
+                    <a @click="block" href="javascript:" class="dropdown-item"><i class="fas fa-fw fa-ban"></i> Zablokuj użytkownika</a>
                   </div>
                 </div>
               </div>
@@ -110,7 +110,7 @@
                 </div>
               {% endif %}
 
-              <div d-cloak class="row">
+              <div v-cloak class="row">
                 <div v-for="(skills, name) in groupedSkills" class="col">
                   <strong class="d-block text-muted border-bottom mb-3">${ name }</strong>
 
@@ -120,6 +120,8 @@
             </div>
           </div>
         </div>
+
+        <vue-notifications position="bottom right" />
       </div>
 
       {% if user.posts > 0 %}
