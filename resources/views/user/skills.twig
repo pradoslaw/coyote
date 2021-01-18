@@ -6,7 +6,7 @@
 
   <div v-cloak id="js-skills" class="card card-default">
     <div class="card-body">
-      <div class="form-group row pb-2">
+      <div class="form-group row">
         <div class="col">
           <vue-tags-inline
             @change="addSkill"
@@ -17,7 +17,13 @@
         </div>
       </div>
 
-      <vue-tags :tags="skills" :editable="true" @delete="deleteSkill" @priority="updateSkill" class="tag-clouds-skills"></vue-tags>
+      <div class="row">
+        <div v-for="(skills, name) in groupedSkills" class="col">
+          <strong class="d-block text-muted border-bottom mb-3">${ name }</strong>
+
+          <vue-tags :tags="skills" :editable="true" @delete="deleteSkill" @priority="updateSkill" class="tag-clouds-skills"></vue-tags>
+        </div>
+      </div>
     </div>
 
     <vue-notifications position="bottom right" />

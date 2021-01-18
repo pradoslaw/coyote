@@ -70,6 +70,7 @@ use Ramsey\Uuid\Uuid;
  * @property Relation $relations
  * @property bool $is_sponsor
  * @property User[] $followers
+ * @property Tag[] $skills
  */
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
@@ -234,7 +235,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public function skills()
     {
-        return $this->belongsToMany('Coyote\Tag', 'user_skills')->withPivot(['rate', 'order'])->orderByPivot('order');
+        return $this->belongsToMany('Coyote\Tag', 'user_skills')->withPivot(['priority', 'order'])->orderByPivot('priority', 'desc');
     }
 
     /**

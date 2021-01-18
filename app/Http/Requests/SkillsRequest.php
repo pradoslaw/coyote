@@ -26,9 +26,17 @@ class SkillsRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:100',
-//            'name' => 'required|string|max:100|unique:user_skills,name,NULL,id,user_id,' . (auth()->user()->id),
-            'priority' => 'required|integer|min:1|max:2'
+            'name' => [
+                'required',
+                'string',
+                'max:100',
+                function ($attribute, $value, $fail) {
+                    if ($this->user()->skills()->where('tags.name', $value)->exists()) {
+                        $fail('Taka umiejętność znajduje się już na Twojej liście.');
+                    }
+                },
+            ],
+            'priority' => 'required|integer|min:1|max:3'
         ];
     }
 
@@ -39,7 +47,6 @@ class SkillsRequest extends FormRequest
     {
         return [
             'name.required'     => 'Proszę wpisać nazwę umiejętności',
-            'name.unique'       => 'Taka umiejętność znajduje się już na Twojej liście.',
             'priority.min'      => 'Nie wprowadziłeś oceny swojej umiejętności.'
         ];
     }

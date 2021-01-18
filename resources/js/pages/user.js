@@ -69,6 +69,21 @@ new Vue({
 
       axios.delete(`/User/Skills/${tag.id}`);
     }
+  },
+  computed: {
+    groupedSkills() {
+      return this.skills.reduce((acc, curr) => {
+        const key = curr.category ?? 'Inne';
+
+        if (!acc[key]) {
+          acc[key] = [];
+        }
+
+        acc[key].push(curr);
+
+        return acc;
+      }, {});
+    }
   }
 });
 

@@ -51,8 +51,10 @@ class TagResource extends JsonResource
             'url'       => static::resolveUrl($this->name),
 
             'priority'  => $this->whenLoaded('pivot', function () {
-                return $this->pivot->priority ?: $this->pivot->rate;
-            })
+                return $this->pivot->priority;
+            }),
+
+            'category'  => $this->whenLoaded('category', fn () => $this->category->name)
         ]);
     }
 }

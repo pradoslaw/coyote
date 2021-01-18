@@ -19,35 +19,32 @@ class SkillsController extends BaseController
         $this->breadcrumb->push('Umiejętności', route('user.skills'));
 
         return $this->view('user.skills')->with([
-            'skills' => TagResource::collection($this->auth->skills),
+            'skills' => TagResource::collection($this->auth->skills->load('category')),
             'rate_labels' => SkillsRequest::RATE_LABELS
         ]);
     }
 
-    public function save(SkillsRequest $request)
+    public function save(SkillsRequest $request): TagResource
     {
         $model = $this->transaction(function () use ($request) {
             $model = Tag::firstOrCreate(['name' => $request->input('name')]);
 
-            $this->auth->skills()->attach($model->id, ['rate' => $request->input('priority'), 'order' => $request->input('order')]);
+            $this->auth->skills()->attach($model->id, ['priority' => $request->input('priority'), 'order' => $request->input('order')]);
 
             return $model;
         });
 
         TagResource::withoutWrapping();
 
-        return new TagResource($model);
+        return new TagResource($model->load('category'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
-        $this->auth->skills()->newPivotStatement()->where('tag_id', $id)->update(['rate' => $request->input('priority')]);
+        $this->auth->skills()->newPivotStatement()->where('tag_id', $id)->update(['priority' => $request->input('priority')]);
     }
 
-    /**
-     * @param int $id
-     */
-    public function delete($id)
+    public function delete(int $id)
     {
         $this->auth->skills()->detach($id);
     }
