@@ -31,7 +31,7 @@ class RelationsController extends BaseController
     {
         abort_if($relatedUserId === $this->userId, 500);
 
-        $this->auth->relations()->updateOrInsert(['related_user_id' => $relatedUserId, 'is_blocked' => true, 'user_id' => $this->userId]);
+        $this->auth->relations()->updateOrInsert(['related_user_id' => $relatedUserId, 'user_id' => $this->userId], ['is_blocked' => true]);
         $this->clearCache();
     }
 
@@ -45,7 +45,7 @@ class RelationsController extends BaseController
     {
         abort_if($relatedUserId === $this->userId, 500);
 
-        $this->auth->relations()->updateOrInsert(['related_user_id' => $relatedUserId, 'user_id' => $this->userId]);
+        $this->auth->relations()->updateOrInsert(['related_user_id' => $relatedUserId, 'user_id' => $this->userId], ['is_blocked' => false]);
         $this->clearCache();
     }
 

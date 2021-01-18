@@ -18,26 +18,30 @@ const mutations = {
     state.user = Object.assign(state.user, payload);
   },
 
-  FOLLOW(state, userId) {
-    state.followers.push({ is_blocked: false, user_id: userId });
+  ADD_RELATION(state, { userId, isBlocked }) {
+    state.followers.push({ is_blocked: isBlocked, user_id: userId });
   },
 
-  UNFOLLOW(state, userId) {
-    state.followers.splice(state.followers.findIndex(follower => follower.user_id === userId && !follower.is_blocked));
+  REMOVE_RELATION(state, { userId, isBlocked }) {
+    state.followers.splice(state.followers.findIndex(follower => follower.user_id === userId && follower.is_blocked === isBlocked));
   }
 };
 
 const actions = {
   block({ commit }, relatedUserId: number) {
-    return axios.post(`/User/Block/${relatedUserId}`);
+    return axios.post(`/User/Block/${relatedUserId}`).then(() => commit('ADD_RELATION', { userId: relatedUserId, isBlocked: true }));
+  },
+
+  unblock({ commit }, relatedUserId: number) {
+    return axios.post(`/User/Unblock/${relatedUserId}`).then(() => commit('REMOVE_RELATION', { userId: relatedUserId, isBlocked: true }));
   },
 
   follow({ commit }, relatedUserId: number) {
-    return axios.post(`/User/Follow/${relatedUserId}`).then(() => commit('FOLLOW', relatedUserId));
+    return axios.post(`/User/Follow/${relatedUserId}`).then(() => commit('ADD_RELATION', { userId: relatedUserId, isBlocked: false }));
   },
 
   unfollow({ commit }, relatedUserId: number) {
-    return axios.post(`/User/Unfollow/${relatedUserId}`).then(() => commit('UNFOLLOW', relatedUserId));
+    return axios.post(`/User/Unfollow/${relatedUserId}`).then(() => commit('REMOVE_RELATION', { userId: relatedUserId, isBlocked: false }));
   }
 }
 

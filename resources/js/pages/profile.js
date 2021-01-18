@@ -7,6 +7,7 @@ import {default as SkillsMixin} from "@/components/mixins/skills";
 import store from "@/store";
 import VueNotifications from "vue-notification";
 import VueModals from "@/plugins/modals";
+import { mapActions, mapGetters } from "vuex";
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 Vue.use(VueModals);
@@ -16,6 +17,7 @@ new Vue({
   delimiters: ['${', '}'],
   components: { 'vue-follow-button': VueFollowButton, 'vue-tags': VueTags },
   mixins: [ SkillsMixin ],
+  store,
   data() {
     return {
       user: window.user,
@@ -34,12 +36,16 @@ new Vue({
 
         this.$notify({type: 'success', duration: 5000, title: 'Gotowe!', text: 'Użytkownik został zablokowany.'});
       });
-    }
+    },
+
+    ...mapActions('user', ['unblock'])
   },
   computed: {
     isAuthorized() {
       return store.getters['user/isAuthorized'] && store.state.user.user.id !== this.user.id;
-    }
+    },
+
+    ...mapGetters('user', ['isBlocked'])
   }
 });
 

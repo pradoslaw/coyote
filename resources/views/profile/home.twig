@@ -38,7 +38,8 @@
                   <button class="btn btn-secondary d-block" data-toggle="dropdown"><i class="fa fa-ellipsis-h"></i></button>
 
                   <div class="dropdown-menu">
-                    <a @click="block" href="javascript:" class="dropdown-item"><i class="fas fa-fw fa-ban"></i> Zablokuj użytkownika</a>
+                    <a v-if="isBlocked(user.id)" @click="unblock(user.id)" href="javascript:" class="dropdown-item"><i class="fas fa-fw fa-user"></i> Odlobkuj użytkownika</a>
+                    <a v-else @click="block" href="javascript:" class="dropdown-item"><i class="fas fa-fw fa-ban"></i> Zablokuj użytkownika</a>
                   </div>
                 </div>
               </div>
