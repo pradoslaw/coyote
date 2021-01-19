@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Resource;
+namespace Tests\Unit\Resources;
 
 use Coyote\Http\Resources\PmResource;
 use Coyote\Pm;
