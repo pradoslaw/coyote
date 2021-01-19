@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Grids\Adm;
 
+use Coyote\Services\Grid\Components\CreateButton;
 use Coyote\Services\Grid\Grid;
 use Boduch\Grid\Order;
 use Coyote\Tag;
@@ -45,6 +46,12 @@ class TagsGrid extends Grid
             ->addColumn('microblogs', [
                 'title' => 'Mikroblogi',
                 'sortable' => true
-            ]);
+            ])
+            ->addComponent(
+                new CreateButton(
+                    route('adm.tags.save'),
+                    'Nowy tag'
+                )
+            );
     }
 }

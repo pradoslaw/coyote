@@ -54,7 +54,7 @@ class TagForm extends Form
                 'rules' => 'mimes:jpeg,jpg,png,gif'
             ])
             ->add('text', 'textarea', [
-                'rules' => 'string',
+                'rules' => 'nullable|string',
                 'label' => 'Opis (opcjonalnie)',
             ])
             ->add('submit', 'submit_with_delete', [
