@@ -73,7 +73,8 @@ module.exports = merge(common, {
         'strikeout',
         'ajax-loader',
         'link-broken',
-        '[aria-label]'
+        '[aria-label]',
+        '[x-placement]'
       ],
       whitelistPatterns: [
         /^logo/,
