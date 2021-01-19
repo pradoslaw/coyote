@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $id
  * @property string $name
  * @property string $real_name
+ * @property string $text
  * @property int $category_id
  * @property Category $category
  * @property MediaInterface $logo
@@ -30,7 +31,7 @@ class Tag extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'real_name', 'category_id'];
+    protected $fillable = ['name', 'real_name', 'category_id', 'text'];
 
     /**
      * @var bool

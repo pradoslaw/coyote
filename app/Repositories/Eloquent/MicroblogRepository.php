@@ -137,15 +137,14 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     /**
      * @inheritDoc
      */
-    public function popularTags(?int $userId): array
+    public function popularTags(?int $userId)
     {
         $db = $this->app['db'];
 
         $base = $db->table('microblog_tags')
-            ->selectRaw('name, COUNT(*)')
+            ->selectRaw('name, tags.text, COUNT(*)')
             ->join('tags', 'tags.id', '=', 'microblog_tags.tag_id')
             ->join('microblogs', 'microblogs.id', '=', 'microblog_tags.microblog_id')
-            ->whereNull('tags.deleted_at')
             ->groupBy('tags.id')
             ->groupBy('name')
             ->orderByRaw('COUNT(*) DESC')
@@ -154,16 +153,16 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
         $query = clone $base;
 
         return $query
-            ->when($userId, function ($builder) use ($base, $userId) {
-                return $builder->where('microblogs.user_id', $userId)
-                    ->selectRaw('1 AS "order"')
-                    ->limit(3)
-                    ->unionAll($base->selectRaw('0 AS "order"'))
-                    ->orderByRaw('"order" DESC');
-            })
             ->orderBy("count", 'DESC')
+            ->when($userId, function ($builder) use ($base, $userId) {
+                return $builder
+                    ->where('microblogs.user_id', $userId)
+                    ->selectRaw('1 AS "order"')
+                    ->limit(5)
+                    ->unionAll($base->selectRaw('0 AS "order"')->whereIn('tags.name', ['news', 'programowanie', 'wydarzenia', 'off-topic', 'autopromocja']))
+                    ->orderByRaw('"order" asc');
+            })
             ->get()
-            ->pluck('name')
             ->toArray();
     }
 

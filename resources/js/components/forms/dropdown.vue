@@ -68,7 +68,6 @@
 
         if (dropdown.children.length) {
           dropdown.scrollTop = this.selectedIndex * dropdown.children[0].offsetHeight;
-          console.log(dropdown.scrollTop)
         }
       },
 

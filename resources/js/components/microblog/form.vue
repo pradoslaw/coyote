@@ -15,6 +15,7 @@
             :tags="microblog.tags"
             placeholder="...inny? kliknij, aby wybrać tag"
             @change="toggleTag"
+            data-popover='{"message": "Sugerowane tagi, które możesz przypisać do tego wpisu.", "placement": "bottom-start", "offset": "0,10px"}'
           ></vue-tags-inline>
         </div>
       </template>
@@ -43,7 +44,7 @@
   import VueMarkdown from '../forms/markdown.vue';
   import VueTagsInline from '../forms/tags-inline.vue';
   import { MicroblogFormMixin } from '../mixins/microblog';
-  import {Tag} from "@/types/models";
+  import { Tag } from "@/types/models";
 
   const DRAFT_KEY = 'microblog';
 
@@ -64,7 +65,7 @@
 
     @Prop({default: () => []})
     @ProvideReactive('popularTags')
-    readonly popularTags!: string[];
+    readonly popularTags!: Tag[];
 
     created() {
       if (this.microblog.id) {

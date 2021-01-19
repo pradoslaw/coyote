@@ -37,9 +37,8 @@ class TagForm extends Form
 
             ])
             ->add('real_name', 'text', [
-                'rules' => 'string|max:100',
+                'rules' => 'nullable|string|max:100',
                 'label' => 'Nazwa (pełna)',
-
             ])
             ->add('category_id', 'select', [
                 'label' => 'Kategoria',
@@ -49,11 +48,14 @@ class TagForm extends Form
                     'nullable',
                     'int'
                 ]
-
             ])
             ->add('logo', 'file', [
                 'label' => 'Logo',
                 'rules' => 'mimes:jpeg,jpg,png,gif'
+            ])
+            ->add('text', 'textarea', [
+                'rules' => 'string',
+                'label' => 'Opis (opcjonalnie)',
             ])
             ->add('submit', 'submit_with_delete', [
                 'label' => 'Zapisz',

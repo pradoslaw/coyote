@@ -62,9 +62,9 @@ interface MicroblogRepositoryInterface extends RepositoryInterface
 
     /**
      * @param int|null $userId
-     * @return array
+     * @return \Coyote\Tag[]
      */
-    public function popularTags(?int $userId): array;
+    public function popularTags(?int $userId);
 
     public function recent();
 }

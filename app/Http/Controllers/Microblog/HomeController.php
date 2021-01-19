@@ -50,11 +50,9 @@ class HomeController extends BaseController
         $paginator = $this->builder->orderById()->paginate();
 
         // let's cache microblog tags. we don't need to run this query every time
-//        $tags = $this->getCacheFactory()->remember('microblog:tags', 30 * 60, function () {
-//            return $this->microblog->getTags();
-//        });
-//
-        $tags = $this->microblog->getTags();
+        $tags = $this->getCacheFactory()->remember('microblog:tags', 30 * 60, function () {
+            return $this->microblog->getTags();
+        });
 
         list($tech, $others) = $tags->partition(function (Tag $tag) {
             return $tag->category_id === Tag\Category::LANGUAGE;

@@ -2,24 +2,24 @@
   <div ref="editor" class="tag-editor">
     <ul ref="cloud" class="tag-clouds">
       <li v-for="tag in popularTags.slice(0, 3)">
-        <a @click="toggleTag({ name: tag })" class="suggest" :title="`Dodaj tag '${tag}'`">
+        <a @click="toggleTag({ name: tag.name })" class="suggest" :aria-label="tag.text" data-balloon-pos="up">
           <i class="fa fa-plus"></i>
 
-          {{ tag }}
+          {{ tag.name }}
         </a>
       </li>
     </ul>
 
     <template v-if="popularTags.length > 3">
-      <button class="btn btn-xs text-muted" type="button" data-toggle="dropdown" aria-label="Dropdown"><i class="fa fa-ellipsis-h"></i></button>
+      <button class="btn btn-xs text-muted" type="button" data-toggle="dropdown" aria-label="Dropdown" title="Więcej..."><i class="fa fa-ellipsis-h"></i></button>
 
       <div class="dropdown-menu p-2">
         <ul class="tag-clouds">
           <li v-for="tag in popularTags.slice(3)">
-            <a @click="toggleTag({ name: tag })" class="suggest" :title="`Dodaj tag '${tag}'`">
+            <a @click="toggleTag({ name: tag.name })" class="suggest" :aria-label="tag.text" data-balloon-pos="up">
               <i class="fa fa-plus"></i>
 
-              {{ tag }}
+              {{ tag.name }}
             </a>
           </li>
         </ul>
@@ -54,7 +54,7 @@
     <vue-dropdown :items="filteredTags" @select="toggleTag" ref="dropdown" class="tag-dropdown mt-2">
       <template v-slot:item="slot">
         <span>{{ slot.item.name }}</span>
-        <small>×{{ slot.item.topics }}</small>
+        <small>×{{ slot.item.topics + slot.item.microblogs + slot.item.jobs }}</small>
       </template>
     </vue-dropdown>
   </div>
@@ -97,7 +97,7 @@
     readonly cloud!: HTMLElement;
 
     @InjectReactive({from: 'popularTags', default: []})
-    readonly popularTags!: string[];
+    readonly popularTags!: Tag[];
 
     private searchText: string = '';
     private filteredTags = [];
@@ -117,7 +117,7 @@
 
       this.$emit('change', tag);
 
-      const searchIndex = this.popularTags.indexOf(tag.name);
+      const searchIndex = this.popularTags.findIndex(el => el.name === tag.name);
 
       if (searchIndex > -1) {
         this.popularTags.splice(searchIndex, 1);
