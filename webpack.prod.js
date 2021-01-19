@@ -74,7 +74,7 @@ module.exports = merge(common, {
         'ajax-loader',
         'link-broken',
         '[aria-label]',
-        '[x-placement]'
+        'x-placement'
       ],
       whitelistPatterns: [
         /^logo/,
