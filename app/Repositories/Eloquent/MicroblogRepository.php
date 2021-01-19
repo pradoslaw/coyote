@@ -163,6 +163,8 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
                     ->orderByRaw('"order" asc');
             })
             ->get()
+            ->unique('name')
+            ->values()
             ->toArray();
     }
 
