@@ -143,8 +143,8 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
 
         $base = $db->table('microblog_tags')
             ->selectRaw('name, tags.text, COUNT(*)')
-            ->join('tags', 'tags.id', '=', 'microblog_tags.tag_id')
-            ->join('microblogs', 'microblogs.id', '=', 'microblog_tags.microblog_id')
+            ->leftJoin('tags', 'tags.id', '=', 'microblog_tags.tag_id')
+            ->leftJoin('microblogs', 'microblogs.id', '=', 'microblog_tags.microblog_id')
             ->groupBy('tags.id')
             ->groupBy('name')
             ->orderByRaw('COUNT(*) DESC')
