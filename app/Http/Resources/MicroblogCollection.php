@@ -25,8 +25,7 @@ class MicroblogCollection extends ResourceCollection
     {
         $collection = $this
             ->collection
-            ->map(function (Microblog $microblog) use ($request) {
-                $resource = new MicroblogResource($microblog);
+            ->map(function (MicroblogResource $resource) use ($request) {
                 $resource->preserverKeys();
 
                 return $resource->toArray($request);
