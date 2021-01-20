@@ -66,5 +66,11 @@ interface MicroblogRepositoryInterface extends RepositoryInterface
      */
     public function popularTags(?int $userId);
 
+    /**
+     * @param int|null $userId
+     * @return mixed
+     */
+    public function recommendedUsers(?int $userId);
+
     public function recent();
 }

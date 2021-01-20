@@ -168,6 +168,27 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
             ->toArray();
     }
 
+    public function recommendedUsers(?int $userId)
+    {
+        return $this
+            ->app[\Coyote\User::class]
+            ->select(['user_id', 'users.name', 'users.id', 'users.photo'])
+            ->where('microblogs.created_at', '>', now()->subMonth())
+            ->groupBy('user_id')
+            ->groupBy('users.name')
+            ->groupBy('users.id')
+            ->groupBy('users.photo')
+            ->orderByRaw('COUNT(*) DESC')
+            ->join('microblogs', 'users.id', '=', 'user_id')
+            ->when($userId, function ($builder) use ($userId) {
+                return $builder->whereNotIn('user_id', function ($query) use ($userId) {
+                    return $query->select('related_user_id')->from('user_relations')->where('user_id', $userId)->where('is_blocked', false);
+                });
+            })
+            ->get();
+
+    }
+
     /**
      * Pobiera najpopularniejsze tagi w mikroblogach
      *

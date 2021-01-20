@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueMicroblog from "../components/microblog/microblog.vue";
 import VuePagination from '../components/pagination.vue';
+import VueAvatar from '../components/avatar.vue';
 import VueForm from '../components/microblog/form.vue';
 import VueNotifications from 'vue-notification';
 import VueModals from '../plugins/modals';
@@ -8,9 +9,11 @@ import VuePaste from '../plugins/paste.js';
 import store from '../store';
 import { mapGetters } from 'vuex';
 import { default as axiosErrorHandler } from '../libs/axios-error-handler';
-import { Microblog, Paginator, Flag } from "@/types/models";
+import {Microblog, Paginator, Flag, User} from "@/types/models";
 import { default as LiveMixin } from './microblog/live';
 import VueAutosave from "../plugins/autosave";
+import VueUserName from "@/components/user-name.vue";
+import VueFollowButton from "@/components/forms/follow-button.vue";
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 Vue.use(VueModals);
@@ -25,17 +28,25 @@ declare global {
     microblog: Microblog;
     flags: Flag[] | undefined;
     popularTags: string[];
+    recommendedUsers: User[];
   }
 }
 
 new Vue({
   el: '#js-microblog',
   delimiters: ['${', '}'],
-  components: { 'vue-microblog': VueMicroblog, 'vue-pagination': VuePagination, 'vue-form': VueForm },
+  components: {
+    'vue-microblog': VueMicroblog,
+    'vue-pagination': VuePagination,
+    'vue-form': VueForm,
+    'vue-avatar': VueAvatar,
+    'vue-username': VueUserName,
+    'vue-follow-button': VueFollowButton
+  },
   mixins: [ LiveMixin ],
   store,
   data() {
-    return { popularTags: window.popularTags }
+    return { popularTags: window.popularTags, recommendedUsers: window.recommendedUsers }
   },
   created() {
     if ('pagination' in window) {

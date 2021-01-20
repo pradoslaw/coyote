@@ -5,6 +5,8 @@ namespace Coyote\Http\Controllers\Microblog;
 use Coyote\Http\Factories\CacheFactory;
 use Coyote\Http\Resources\MicroblogResource;
 use Coyote\Http\Resources\MicroblogCollection;
+use Coyote\Http\Resources\TagResource;
+use Coyote\Http\Resources\UserResource;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
 use Coyote\Services\Microblogs\Builder;
 use Coyote\Tag;
@@ -57,7 +59,7 @@ class HomeController extends BaseController
         list($tech, $others) = $tags->partition(function (Tag $tag) {
             return $tag->category_id === Tag\Category::LANGUAGE;
         });
-
+//dd($this->microblog->recommendedUsers($this->userId));
         return $this->view('microblog.home', [
             'flags'                     => $this->flags(),
             'count'                     => $this->microblog->count(),
@@ -65,6 +67,7 @@ class HomeController extends BaseController
             'pagination'                => new MicroblogCollection($paginator),
             'route'                     => request()->route()->getName(),
             'popular_tags'              => $this->microblog->popularTags($this->userId),
+            'recommended_users'         => UserResource::collection($this->microblog->recommendedUsers($this->userId)),
             'tags'                      => [
                 'tech'                  => $tech,
                 'others'                => $others->splice(0, 10)
