@@ -66,13 +66,18 @@ class PostCollection extends ResourceCollection
     {
         $collection = $this
             ->collection
-            ->map(function (Post $post) use ($request) {
+            ->map(function (PostResource $resource) use ($request) {
+                $post = $resource->resource;
+
                 // set relations to avoid N+1 SQL loading. be aware we must use setRelation() method because setRelations() overwrites all already
                 // assigned relations
                 $post->setRelation('topic', $this->topic);
                 $post->setRelation('forum', $this->forum);
 
-                return (new PostResource($post))->setTracker($this->tracker);
+                $resource->resource = $post;
+                $resource->setTracker($this->tracker);
+
+                return $resource;
             })
             ->keyBy('id');
 

@@ -63,10 +63,10 @@ class TopicCollection extends ResourceCollection
             ->setCollection(
                 $this
                     ->collection
-                    ->map(function ($model) use ($request) {
-                        $resource = (new Tracker($model, $this->guest))->setRepository($this->repository);
+                    ->map(function (TopicResource $resource) use ($request) {
+                        $resource->resource = (new Tracker($resource->resource, $this->guest))->setRepository($this->repository);
 
-                        return new TopicResource($resource);
+                        return $resource;
                     })
             )
             ->toArray();
