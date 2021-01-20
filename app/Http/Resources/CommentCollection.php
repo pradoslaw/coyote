@@ -29,14 +29,15 @@ class CommentCollection extends ResourceCollection
 
         $collection = $this
             ->collection
-            ->map(function (Job\Comment $comment) use ($request, $model) {
+            ->map(function (CommentResource $resource) use ($request, $model) {
+                $comment = $resource->resource;
                 $comment->job()->associate($model);
 
                 foreach ($comment->children as $child) {
                     $child->job()->associate($model);
                 }
 
-                return new CommentResource($comment);
+                return $resource;
             })
             ->keyBy('id');
 
