@@ -23,8 +23,10 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
+        $parent = $this->resource->only(['id', 'name', 'deleted_at', 'is_blocked', 'is_online', 'bio', 'location']);
+
         $result = array_merge(
-            $this->resource->only(['id', 'name', 'deleted_at', 'is_blocked', 'is_online']),
+            array_filter($parent),
             [
                 'photo' => (string) $this->photo->url() ?: null,
 

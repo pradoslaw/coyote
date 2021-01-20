@@ -172,8 +172,9 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     {
         return $this
             ->app[\Coyote\User::class]
-            ->select(['user_id', 'users.name', 'users.id', 'users.photo'])
+            ->select(['user_id', 'users.name', 'users.id', 'users.photo', 'bio', 'location'])
             ->where('microblogs.created_at', '>', now()->subMonth())
+            ->whereNull('microblogs.parent_id')
             ->groupBy('user_id')
             ->groupBy('users.name')
             ->groupBy('users.id')
@@ -186,7 +187,6 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
                 });
             })
             ->get();
-
     }
 
     /**

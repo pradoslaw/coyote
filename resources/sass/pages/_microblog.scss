@@ -1,5 +1,23 @@
 @charset "UTF-8";
 
+.recommended-users {
+  .media {
+    border-bottom: 1px solid $border-color;
+    padding: .5rem 0 .5rem 0;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  @include media-breakpoint-up(md) {
+    .btn-follow {
+
+    }
+  }
+
+}
+
 
 // @todo to przeniesc poniewaz nie dotyczy to tylko mikroblogow, ale to styl globalny
 .highlight-flash {
