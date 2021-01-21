@@ -5,22 +5,10 @@
     border-bottom: 1px solid $border-color;
     padding: .5rem 0 .5rem 0;
 
-
     &:last-child {
       border-bottom: none;
     }
-
-    @include media-breakpoint-down(lg) {
-      flex-direction: column;
-    }
-
-    @include media-breakpoint-up(xl) {
-      align-items: center;
-    }
   }
-
-
-
 }
 
 
