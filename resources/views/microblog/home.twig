@@ -47,23 +47,19 @@
       <div class="box" style="margin-top: 11px">
         <h4><i class="fas fa-tag fa-fw"></i> Zacznij obserwować</h4>
 
-        <div class="recommended-users card card-body mt-2">
+        <div v-cloak class="recommended-users card card-body mt-2">
           <div v-for="user in recommendedUsers" class="media">
-            <vue-avatar :id="user.id" :photo="user.photo" :name="user.name" class="i-45 mr-2"></vue-avatar>
+            <vue-avatar :id="user.id" :photo="user.photo" :name="user.name" class="d-none d-xl-block i-45 mr-2"></vue-avatar>
 
-            <div class="media-body">
+            <div class="media-body d-flex">
               <span class="d-block mb-1"><vue-username :user="user" class="text-body"></vue-username></span>
 
-{#              <div class="row no-gutters">#}
-{#                <small class="text-muted text-truncate d-none d-md-block w-50">${ user.bio }</small>#}
+              <small class="text-muted text-truncate d-none d-xl-block w-50">${ user.bio || user.location }</small>
 
-{#                <div class="ml-auto">#}
-{#                  #}
-{#                </div>#}
-{#              </div>#}
+              <vue-follow-button :user-id="user.id" class="btn-sm ml-auto order-2"></vue-follow-button>
             </div>
 
-            <vue-follow-button :user-id="user.id" class="btn-sm"></vue-follow-button>
+
           </div>
         </div>
 
