@@ -44,10 +44,13 @@
     </div>
 
     <aside class="col-md-3">
-      <div class="box" style="margin-top: 11px">
+      <div class="box recommended-users">
         <h4><i class="fas fa-tag fa-fw"></i> Zacznij obserwować</h4>
 
-        <div v-cloak class="recommended-users card card-body mt-2">
+        <div id="js-skeleton" class="card card-body mt-2" style="min-height: 300px">
+        </div>
+
+        <div v-cloak class="card card-body mt-2">
           <div v-for="user in recommendedUsers" class="media">
             <vue-avatar :id="user.id" :photo="user.photo" :name="user.name" class="d-none d-xl-block i-45 mr-2"></vue-avatar>
 
@@ -58,7 +61,6 @@
             </div>
           </div>
         </div>
-
       </div>
 
       <div class="box mt-2">

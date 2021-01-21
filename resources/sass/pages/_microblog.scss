@@ -1,6 +1,12 @@
 @charset "UTF-8";
 
 .recommended-users {
+  margin-top: 11px;
+
+  .card-body {
+    padding: .75rem;
+  }
+
   .media {
     border-bottom: 1px solid $border-color;
     padding: .5rem 0 .5rem 0;

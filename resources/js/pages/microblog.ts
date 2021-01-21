@@ -60,6 +60,7 @@ new Vue({
     store.commit('flags/init', window.flags);
   },
   mounted() {
+    document.getElementById('js-skeleton')?.remove();
     // @ts-ignore
     this.liveNotifications();
   },
