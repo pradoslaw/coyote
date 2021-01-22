@@ -25,16 +25,22 @@ class UserResourceTest extends TestCase
 
     public function testUserModelWithOptionalFields()
     {
-        $user = factory(User::class)->make(['sig' => 'foo', 'allow_sig' => true]);
+        $user = factory(User::class)->make(['sig' => 'foo', 'allow_sig' => true, 'is_online' => false, 'is_blocked' => false]);
 
         $this->assertArrayHasKey('allow_sig', $user);
         $this->assertArrayHasKey('sig', $user);
+        $this->assertArrayHasKey('is_online', $user);
+        $this->assertArrayHasKey('is_blocked', $user);
 
         $resource = (new UserResource($user))->resolve(request());
 
         $this->assertArrayHasKey('allow_sig', $resource);
         $this->assertArrayHasKey('sig', $resource);
+        $this->assertArrayHasKey('is_online', $resource);
+        $this->assertArrayHasKey('is_blocked', $resource);
 
         $this->assertEquals($user->sig, $resource['sig']);
+        $this->assertFalse($resource['is_online']);
+        $this->assertFalse($resource['is_blocked']);
     }
 }

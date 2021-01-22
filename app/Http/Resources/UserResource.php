@@ -13,8 +13,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class UserResource extends JsonResource
 {
-    private const OPTIONALS = ['allow_sig', 'allow_count', 'allow_smilies', 'posts', 'location', 'visited_at', 'created_at', 'group_name'];
-
     /**
      * Transform the resource into an array.
      *
@@ -23,24 +21,20 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
-        $parent = $this->resource->only(['id', 'name', 'deleted_at', 'is_blocked', 'is_online', 'bio', 'location']);
+        $parent = $this->resource->only(['id', 'name', 'is_online', 'bio', 'location', 'allow_sig', 'allow_count', 'allow_smilies', 'posts', 'location', 'visited_at', 'created_at', 'group_name']);
 
         $result = array_merge(
-            array_filter($parent),
+            array_filter($parent, fn ($value) => $value !== null),
             [
                 'photo' => (string) $this->photo->url() ?: null,
+                'deleted_at' => $this->resource->deleted_at,
+                'is_blocked' => $this->resource->is_blocked,
 
                 $this->mergeWhen($this->isSignatureAllowed($request), function () {
                     return ['sig' => $this->getParser()->parse($this->sig)];
                 })
             ]
         );
-
-        foreach (self::OPTIONALS as $value) {
-            if (isset($this->resource[$value])) {
-                $result[$value] = $this->resource->$value;
-            }
-        }
 
         return $result;
     }
