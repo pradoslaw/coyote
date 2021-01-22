@@ -59,7 +59,7 @@ class HomeController extends BaseController
         list($tech, $others) = $tags->partition(function (Tag $tag) {
             return $tag->category_id === Tag\Category::LANGUAGE;
         });
-//dd($this->microblog->recommendedUsers($this->userId));
+
         return $this->view('microblog.home', [
             'flags'                     => $this->flags(),
             'count'                     => $this->microblog->count(),
