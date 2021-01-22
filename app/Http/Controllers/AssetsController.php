@@ -6,10 +6,25 @@ use Coyote\Http\Requests\AssetRequest;
 use Coyote\Models\Asset;
 use Coyote\Post;
 use Coyote\Services\Assets\Url;
+use GuzzleHttp\Client;
+use Http\Factory\Guzzle\RequestFactory;
 use Illuminate\Contracts\Filesystem\Filesystem;
+use Fusonic\OpenGraph\Consumer;
+use Illuminate\Http\Request;
 
 class AssetsController extends Controller
 {
+    public function opengraph(Request $request)
+    {
+        $client = new Client(['headers' => ['User-Agent' => 'facebookexternalhit/1.1']]);
+
+        $consumer = new Consumer($client, new RequestFactory());
+        $object = $consumer->loadUrl($request->get('url'));
+
+        dd($object);
+
+    }
+
     public function upload(AssetRequest $request)
     {
         $uploadedFile = $request->file('asset');

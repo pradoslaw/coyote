@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a4d954668592fbd69ba442239026a377",
+    "content-hash": "7fed278cfdf012a313612b1b2a0362cf",
     "packages": [
         {
             "name": "adam-boduch/laravel-grid",
@@ -1855,6 +1855,110 @@
                 }
             ],
             "time": "2020-10-22T13:57:20+00:00"
+        },
+        {
+            "name": "fusonic/linq",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fusonic/linq.git",
+                "reference": "63520ef1470ca771acbd26871efb945dd4a7a5d8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fusonic/linq/zipball/63520ef1470ca771acbd26871efb945dd4a7a5d8",
+                "reference": "63520ef1470ca771acbd26871efb945dd4a7a5d8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Fusonic\\Linq": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fusonic",
+                    "homepage": "http://www.fusonic.net"
+                }
+            ],
+            "description": "LINQ 2 objects class for PHP",
+            "homepage": "http://fusonic.github.io/fusonic-linq/",
+            "keywords": [
+                "linq",
+                "linq2objects"
+            ],
+            "support": {
+                "issues": "https://github.com/fusonic/linq/issues",
+                "source": "https://github.com/fusonic/linq/tree/master"
+            },
+            "time": "2015-02-26T22:49:17+00:00"
+        },
+        {
+            "name": "fusonic/opengraph",
+            "version": "v2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fusonic/opengraph.git",
+                "reference": "5f362f17541d9ceca839972f6dc84ca37583a45d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fusonic/opengraph/zipball/5f362f17541d9ceca839972f6dc84ca37583a45d",
+                "reference": "5f362f17541d9ceca839972f6dc84ca37583a45d",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "fusonic/linq": "^1.0",
+                "php": "^7.4",
+                "psr/http-client": "^1.0",
+                "psr/http-factory": "^1.0",
+                "symfony/css-selector": "^3.0|^4.0|^5.0",
+                "symfony/dom-crawler": "^3.0|^4.0|^5.0"
+            },
+            "require-dev": {
+                "nyholm/psr7": "^1.2",
+                "phpunit/phpunit": "^9.0",
+                "symfony/http-client": "^5.0"
+            },
+            "suggest": {
+                "nyholm/psr7": "^1.2",
+                "symfony/http-client": "^5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Fusonic\\OpenGraph\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fusonic",
+                    "homepage": "https://www.fusonic.net"
+                }
+            ],
+            "description": "PHP library for consuming and publishing Open Graph resources.",
+            "homepage": "https://github.com/fusonic/fusonic-opengraph",
+            "keywords": [
+                "opengraph"
+            ],
+            "support": {
+                "issues": "https://github.com/fusonic/opengraph/issues",
+                "source": "https://github.com/fusonic/opengraph/tree/2.x"
+            },
+            "time": "2020-05-13T12:06:43+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -6809,6 +6913,80 @@
             "time": "2020-09-07T11:33:47+00:00"
         },
         {
+            "name": "symfony/dom-crawler",
+            "version": "v5.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/dom-crawler.git",
+                "reference": "ee7cf316fb0de786cfe5ae32ee79502b290c81ea"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/ee7cf316fb0de786cfe5ae32ee79502b290c81ea",
+                "reference": "ee7cf316fb0de786cfe5ae32ee79502b290c81ea",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2.5",
+                "symfony/polyfill-ctype": "~1.8",
+                "symfony/polyfill-mbstring": "~1.0",
+                "symfony/polyfill-php80": "^1.15"
+            },
+            "conflict": {
+                "masterminds/html5": "<2.6"
+            },
+            "require-dev": {
+                "masterminds/html5": "^2.6",
+                "symfony/css-selector": "^4.4|^5.0"
+            },
+            "suggest": {
+                "symfony/css-selector": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\DomCrawler\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony DomCrawler Component",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/dom-crawler/tree/v5.2.1"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-12-18T08:02:46+00:00"
+        },
+        {
             "name": "symfony/error-handler",
             "version": "v5.2.1",
             "source": {
@@ -11443,5 +11621,5 @@
         "ext-json": "*"
     },
     "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.0.0"
 }
