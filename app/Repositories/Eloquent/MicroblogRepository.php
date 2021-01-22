@@ -186,6 +186,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
                     return $query->select('related_user_id')->from('user_relations')->where('user_id', $userId)->where('is_blocked', false);
                 });
             })
+            ->limit(5)
             ->get();
     }
 
