@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Job, Firm, JobFeature } from '../../types/models';
+import {Job, Firm, JobFeature, Tag} from '../../types/models';
 import axios from "axios";
 
 const state = {
@@ -40,8 +40,8 @@ const mutations = {
     state.form.tags.push({ name: name, priority: 2 });
   },
 
-  REMOVE_TAG(state, name) {
-    state.form.tags.splice(state.form.tags.findIndex(el => el.name === name), 1);
+  REMOVE_TAG(state, tag: Tag) {
+    state.form.tags.splice(state.form.tags.findIndex(el => el.name === tag.name), 1);
   },
 
   TOGGLE_FEATURE(state, feature: JobFeature) {
