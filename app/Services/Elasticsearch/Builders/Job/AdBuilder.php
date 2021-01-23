@@ -16,7 +16,7 @@ class AdBuilder extends SearchBuilder
      */
     public function boostTags(array $tags)
     {
-        $this->should(new SimpleQueryString(implode(' ', $tags), ['title^2', 'tags^2'], 3));
+        $this->must(new SimpleQueryString(implode(' ', $tags), ['title^2', 'tags^2'], 3));
     }
 
     /**
