@@ -175,7 +175,8 @@ const actions = {
     return axios.get(`/Mikroblogi/Voters/${microblog.id}`).then(result => {
       commit('setVoters', { microblog, voters: result.data });
     });
-  }
+  },
+
 };
 
 export default {

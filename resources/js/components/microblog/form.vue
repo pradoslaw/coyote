@@ -37,7 +37,7 @@
 
 <script lang="ts">
   import Component from "vue-class-component";
-  import {Mixins, Prop, ProvideReactive, Ref} from "vue-property-decorator";
+  import {Mixins, Prop, ProvideReactive, Ref, Watch} from "vue-property-decorator";
   import store from "../../store";
   import VuePrompt from '../forms/prompt.vue';
   import VueButton from '../forms/button.vue';
@@ -45,6 +45,7 @@
   import VueTagsInline from '../forms/tags-inline.vue';
   import { MicroblogFormMixin } from '../mixins/microblog';
   import { Tag } from "@/types/models";
+  import axios from 'axios';
 
   const DRAFT_KEY = 'microblog';
 
@@ -60,12 +61,34 @@
     inject: []
   })
   export default class VueForm extends Mixins(MicroblogFormMixin) {
+    private timeoutId?: number;
+    private urlDetector: any;
+
     @Ref('markdown')
     public markdown!: VueMarkdown;
 
     @Prop({default: () => []})
     @ProvideReactive('popularTags')
     readonly popularTags!: Tag[];
+
+    detectUrl() {
+      const handler = () => {
+        const matches = this.microblog.text.match(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig);
+
+        if (!matches) {
+          return;
+        }
+
+        this.urlDetector(); // remove watcher
+
+        axios.get('/assets/opg', { params: { url: matches[0]} }).then(response => {
+          this.microblog.assets.push(response.data);
+        })
+      };
+
+      clearTimeout(this.timeoutId);
+      this.timeoutId = window.setTimeout(handler, 500);
+    }
 
     created() {
       if (this.microblog.id) {
@@ -74,6 +97,7 @@
 
       this.$set(this.microblog, 'text', this.$loadDraft(DRAFT_KEY));
       this.$watch('microblog.text', newValue => this.$saveDraft(DRAFT_KEY, newValue));
+      this.urlDetector = this.$watch('microblog.text', this.detectUrl);
     }
 
     saveMicroblog() {
