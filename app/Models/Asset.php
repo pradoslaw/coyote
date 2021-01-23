@@ -22,7 +22,9 @@ class Asset extends Model
     /**
      * @var string[]
      */
-    protected $fillable = ['name', 'path', 'size', 'mime'];
+    protected $fillable = ['name', 'path', 'size', 'mime', 'metadata'];
+
+    protected $casts = ['metadata' => 'json'];
 
     /**
      * @var string

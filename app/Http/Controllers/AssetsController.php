@@ -10,19 +10,58 @@ use GuzzleHttp\Client;
 use Http\Factory\Guzzle\RequestFactory;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Fusonic\OpenGraph\Consumer;
+use Illuminate\Database\Connection;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 
 class AssetsController extends Controller
 {
-    public function opengraph(Request $request)
+    public function opengraph(Request $request, Connection $db)
     {
         $client = new Client(['headers' => ['User-Agent' => 'facebookexternalhit/1.1']]);
 
         $consumer = new Consumer($client, new RequestFactory());
         $object = $consumer->loadUrl($request->get('url'));
 
-        dd($object);
+        $extension = pathinfo(parse_url($object->images[0]->url, PHP_URL_PATH), PATHINFO_EXTENSION);
 
+        $filename = $this->getHumanName($extension);
+        $tmpPath = sys_get_temp_dir() . '/' . $filename;
+
+        try {
+            $db->beginTransaction();
+
+            file_put_contents($tmpPath, file_get_contents($object->images[0]->url));
+
+            $uploadedFile = UploadedFile::createFromBase(new UploadedFile($tmpPath, $filename));
+            $path = $uploadedFile->store($this->userId);
+
+            $asset = Asset::create([
+                'name' => $uploadedFile->getClientOriginalName(),
+                'path' => $path,
+                'size' => $uploadedFile->getSize(),
+                'mime' => $uploadedFile->getMimeType(),
+                'metadata' => [
+                    'title'       => $object->title,
+                    'description' => $object->description,
+                    'url'         => $object->url
+                ]
+            ]);
+
+            if (!$asset->isImage()) {
+                throw new \InvalidArgumentException("$extension is not supported.");
+            }
+
+            $db->commit();
+        } catch (\Exception $exception) {
+            $db->rollBack();
+
+            throw $exception;
+        } finally {
+            @unlink($tmpPath);
+        }
+
+        return array_merge($asset->toArray(), ['url' => (string) Url::make($asset)]);
     }
 
     public function upload(AssetRequest $request)
