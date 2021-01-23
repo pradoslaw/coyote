@@ -79,10 +79,9 @@
           return;
         }
 
-        this.urlDetector(); // remove watcher
-
-        axios.get('/assets/opg', { params: { url: matches[0]} }).then(response => {
+        axios.get('/assets/opg', { params: { url: matches[0] }, errorHandle: false }).then(response => {
           this.microblog.assets.push(response.data);
+          this.urlDetector(); // remove watcher
         })
       };
 

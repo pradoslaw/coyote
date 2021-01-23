@@ -5,7 +5,9 @@ namespace Coyote\Http\Controllers;
 use Coyote\Http\Requests\AssetRequest;
 use Coyote\Models\Asset;
 use Coyote\Post;
+use Coyote\Services\Assets\Thumbnail;
 use Coyote\Services\Assets\Url;
+use Coyote\Services\Media\Filters\Opg;
 use GuzzleHttp\Client;
 use Http\Factory\Guzzle\RequestFactory;
 use Illuminate\Contracts\Filesystem\Filesystem;
@@ -16,13 +18,13 @@ use Illuminate\Http\UploadedFile;
 
 class AssetsController extends Controller
 {
-    public function opengraph(Request $request, Connection $db)
+    public function opengraph(Request $request, Connection $db, Thumbnail $thumbnail)
     {
         $client = new Client(['headers' => ['User-Agent' => 'facebookexternalhit/1.1']]);
 
         $consumer = new Consumer($client, new RequestFactory());
         $object = $consumer->loadUrl($request->get('url'));
-
+//dd($object);
         $extension = pathinfo(parse_url($object->images[0]->url, PHP_URL_PATH), PATHINFO_EXTENSION);
 
         $filename = $this->getHumanName($extension);
@@ -35,6 +37,8 @@ class AssetsController extends Controller
 
             $uploadedFile = UploadedFile::createFromBase(new UploadedFile($tmpPath, $filename));
             $path = $uploadedFile->store($this->userId);
+
+            $thumbnail->open($path)->setFilter(new Opg())->store($path);
 
             $asset = Asset::create([
                 'name' => $uploadedFile->getClientOriginalName(),

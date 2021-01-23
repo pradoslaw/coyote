@@ -41,7 +41,7 @@
             <div v-html="microblog.html" class="microblog-text"></div>
 
             <a v-if="opg" :href="opg.metadata.url" :title="opg.metadata.title" class="card microblog-opg" target="_blank">
-              <img :alt="opg.metadata.title" class="card-img-top" :src="opg.url">
+              <div :alt="opg.metadata.title" class="card-img-top" :style="`background-image: url(${opg.url})`"></div>
 
               <div class="card-body">
                 <h5 class="card-title text-truncate">{{ opg.metadata.title }}</h5>
