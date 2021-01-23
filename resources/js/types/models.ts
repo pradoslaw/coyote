@@ -45,12 +45,19 @@ export interface User {
   group_name?: string;
 }
 
+interface AssetMetadata {
+  url: string;
+  description: string;
+  title: string;
+}
+
 export interface Asset {
   id: number;
   thumbnail: string;
   url: string;
   name?: string;
   mime?: string;
+  metadata?: AssetMetadata;
 }
 
 export interface Microblog {

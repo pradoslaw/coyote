@@ -40,7 +40,18 @@
 
             <div v-html="microblog.html" class="microblog-text"></div>
 
-            <div v-if="microblog.assets.length" class="row mb-2">
+            <a v-if="opg" :href="opg.metadata.url" :title="opg.metadata.title" class="card microblog-opg" target="_blank">
+              <img :alt="opg.metadata.title" class="card-img-top" :src="opg.url">
+
+              <div class="card-body">
+                <h5 class="card-title text-truncate">{{ opg.metadata.title }}</h5>
+                <p class="card-text text-truncate">{{ opg.metadata.description }}</p>
+
+                <small class="text-muted">{{ opg.metadata.url }}</small>
+              </div>
+            </a>
+
+            <div v-if="images.length" class="row mb-2">
               <div
                 v-for="(image, imageIndex) in images"
                 :key="imageIndex"
@@ -215,10 +226,17 @@
       return this
         .microblog
         .assets
-        .filter(asset => IsImage(asset.name!))
+        .filter(asset => IsImage(asset.name!) && !asset.metadata)
         .map(asset => {
           return { src: asset.url, thumb: asset.thumbnail, url: asset.url };
         });
+    }
+
+    get opg() {
+      return this
+        .microblog
+        .assets
+        .find(asset => asset.metadata !== null)
     }
 
     get flags() {

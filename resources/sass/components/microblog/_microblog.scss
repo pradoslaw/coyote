@@ -60,6 +60,27 @@
   }
 }
 
+.microblog-opg {
+  color: inherit;
+
+  &:hover {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .card-body {
+    padding: .75rem;
+  }
+
+  .card-title, p {
+    margin-bottom: .5rem;
+  }
+
+  @include media-breakpoint-up(lg) {
+    max-width: 50%;
+  }
+}
+
 .show-more {
   position: absolute;
   bottom: 0;
