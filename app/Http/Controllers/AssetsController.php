@@ -30,7 +30,7 @@ class AssetsController extends Controller
         $object = $consumer->loadUrl($request->get('url'));
 
         if (!count($object->images)) {
-            return response("No images to save.", 200);
+            return response("No images to save.", 404);
         }
 
         $extension = pathinfo(parse_url($object->images[0]->url, PHP_URL_PATH), PATHINFO_EXTENSION);
