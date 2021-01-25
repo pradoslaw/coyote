@@ -60,10 +60,6 @@ class AssetsController extends Controller
                 ]
             ]);
 
-            if (!$asset->isImage()) {
-                throw new \InvalidArgumentException("$extension is not supported.");
-            }
-
             $db->commit();
         } catch (\Exception $exception) {
             $db->rollBack();
