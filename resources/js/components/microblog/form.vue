@@ -45,7 +45,7 @@
   import VueTagsInline from '../forms/tags-inline.vue';
   import { MicroblogFormMixin } from '../mixins/microblog';
   import { Tag } from "@/types/models";
-  import axios from 'axios';
+  import axios, { CancelTokenSource } from 'axios';
 
   const DRAFT_KEY = 'microblog';
 
@@ -63,6 +63,7 @@
   export default class VueForm extends Mixins(MicroblogFormMixin) {
     private timeoutId?: number;
     private urlDetector: any;
+    private cancelTokenSource?: CancelTokenSource;
 
     @Ref('markdown')
     public markdown!: VueMarkdown;
@@ -79,10 +80,13 @@
           return;
         }
 
-        axios.get('/assets/opg', { params: { url: matches[0] }, errorHandle: false }).then(response => {
-          this.microblog.assets.push(response.data);
-          this.urlDetector(); // remove watcher
-        })
+        this.urlDetector(); // remove watcher
+
+        this.cancelTokenSource = axios.CancelToken.source();
+
+        axios.get('/assets/opg', { params: { url: matches[0] }, errorHandle: false, cancelToken: this.cancelTokenSource.token })
+          .then(response => this.microblog.assets.push(response.data))
+          .catch(this.startUrlDetector);
       };
 
       clearTimeout(this.timeoutId);
@@ -96,15 +100,24 @@
 
       this.$set(this.microblog, 'text', this.$loadDraft(DRAFT_KEY));
       this.$watch('microblog.text', newValue => this.$saveDraft(DRAFT_KEY, newValue));
-      this.urlDetector = this.$watch('microblog.text', this.detectUrl);
+
+      this.startUrlDetector();
     }
 
     saveMicroblog() {
+      if (this.cancelTokenSource) {
+        this.cancelTokenSource.cancel();
+      }
+
       this.save('microblogs/save').then(() => this.$removeDraft(DRAFT_KEY))
     }
 
     toggleTag(tag: Tag) {
       store.commit('microblogs/toggleTag', { microblog: this.microblog, tag });
+    }
+
+    startUrlDetector() {
+      this.urlDetector = this.$watch('microblog.text', this.detectUrl);
     }
   }
 </script>

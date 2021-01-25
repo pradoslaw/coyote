@@ -20,11 +20,19 @@ class AssetsController extends Controller
 {
     public function opengraph(Request $request, Connection $db, Thumbnail $thumbnail)
     {
+        $this->validate($request, [
+            'url' => 'required|url'
+        ]);
+
         $client = new Client(['headers' => ['User-Agent' => 'facebookexternalhit/1.1']]);
 
         $consumer = new Consumer($client, new RequestFactory());
         $object = $consumer->loadUrl($request->get('url'));
-//dd($object);
+
+        if (!count($object->images)) {
+            return response("No images to save.", 200);
+        }
+
         $extension = pathinfo(parse_url($object->images[0]->url, PHP_URL_PATH), PATHINFO_EXTENSION);
 
         $filename = $this->getHumanName($extension);
