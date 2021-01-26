@@ -2,9 +2,10 @@
 
 namespace Coyote\Notifications\Post;
 
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class SubmittedNotification extends AbstractNotification
+class SubmittedNotification extends AbstractNotification implements ShouldQueue
 {
     const ID = \Coyote\Notification::TOPIC_SUBSCRIBER;
 

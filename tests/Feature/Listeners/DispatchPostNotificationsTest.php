@@ -28,6 +28,21 @@ class DispatchPostNotificationsTest extends TestCase
         $this->topic = factory(Topic::class)->create(['forum_id' => $this->forum->id]);
     }
 
+    public function testDispatchNotificationToSubscribers()
+    {
+        /** @var User $user */
+        $user = factory(User::class)->create();
+        $this->topic->subscribers()->create(['user_id' => $user->id]);
+
+        $post = factory(Post::class)->state('user')->create(['topic_id' => $this->topic->id, 'forum_id' => $this->forum->id]);
+
+        Notification::fake();
+
+        event(new PostSaved($post));
+
+        Notification::assertSentTo($user, SubmittedNotification::class);
+    }
+
     public function testDispatchMentionNotification()
     {
         /** @var User $user */
