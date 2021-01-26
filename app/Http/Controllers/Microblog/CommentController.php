@@ -124,7 +124,7 @@ class CommentController extends BaseController
         });
 
         if ($this->userId !== $comment->user_id) {
-            $comment->user->notify(new DeletedNotification($comment));
+            $comment->user->notify(new DeletedNotification($comment, $this->auth));
         }
 
         event(new MicroblogWasDeleted($comment));
