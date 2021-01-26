@@ -111,7 +111,7 @@ class SubmitController extends Controller
         });
 
         if ($this->userId !== $microblog->user_id) {
-            $microblog->user->notify(new DeletedNotification($microblog));
+            $microblog->user->notify(new DeletedNotification($microblog, $this->auth));
         }
 
         event(new MicroblogWasDeleted($microblog));

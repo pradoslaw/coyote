@@ -8,3 +8,9 @@ $factory->define(\Coyote\Microblog::class, function (Faker $faker) {
         'user_id' => factory(\Coyote\User::class)
     ];
 });
+
+$factory->state(\Coyote\Microblog::class, 'id', function (Faker $faker) {
+    return [
+        'id' => $faker->numberBetween(10000000)
+    ];
+});

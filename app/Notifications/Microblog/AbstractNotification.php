@@ -29,7 +29,7 @@ abstract class AbstractNotification extends Notification implements ShouldBroadc
     /**
      * @var User
      */
-    protected $notifier;
+    public $notifier;
 
     /**
      * @var string

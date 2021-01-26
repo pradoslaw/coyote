@@ -2,11 +2,19 @@
 
 namespace Coyote\Notifications\Microblog;
 
+use Coyote\Microblog;
+use Coyote\User;
 use Illuminate\Notifications\Messages\MailMessage;
 
 class DeletedNotification extends UserMentionedNotification
 {
     const ID = \Coyote\Notification::MICROBLOG_DELETE;
+
+    public function __construct(Microblog $microblog, User $user)
+    {
+        $this->microblog = $microblog;
+        $this->notifier = $user;
+    }
 
     /**
      * Get the mail representation of the notification.
