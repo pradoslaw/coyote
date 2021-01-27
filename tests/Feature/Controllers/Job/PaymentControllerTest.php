@@ -151,7 +151,7 @@ class PaymentControllerTest extends TestCase
         $response->assertStatus(200);
         $payment->refresh();
 
-        $this->assertEquals($payment->invoice->grossPrice(), $payment->plan->gross_price - 10);
+        $this->assertEquals($payment->invoice->netPrice(), $payment->plan->price - 10);
     }
 
     public function testSubmitFormWithTotalDiscount()
@@ -164,7 +164,7 @@ class PaymentControllerTest extends TestCase
         $payment->setRelation('plan', $plan);
         $payment->save();
 
-        $coupon = Coupon::create(['amount' => $plan->gross_price, 'code' => $faker->randomAscii]);
+        $coupon = Coupon::create(['amount' => $plan->price, 'code' => $faker->randomAscii]);
 
         $response = $this->actingAs($this->job->user)->json(
             'POST',
