@@ -50,7 +50,7 @@ class JobRepository extends Repository implements JobRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function getPublished($userId)
+    public function published($userId)
     {
         $this->applyCriteria();
 
@@ -59,7 +59,7 @@ class JobRepository extends Repository implements JobRepositoryInterface
             ->select('jobs.*')
             ->where('jobs.user_id', $userId)
             ->orderBy('jobs.id', 'DESC')
-            ->get();
+            ->paginate();
 
         $this->resetModel();
 

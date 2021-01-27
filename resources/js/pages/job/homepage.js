@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueJob from '@/components/job/job.vue';
 import VueJobTiny from '@/components/job/job-tiny.vue';
 import VuePagination from '@/components/pagination.vue';
+import VueTabs from '@/components/tabs.vue';
 import axios from 'axios';
 import store from '@/store';
 import PerfectScrollbar from 'perfect-scrollbar';
@@ -17,7 +18,8 @@ new Vue({
     'vue-job': VueJob,
     'vue-pagination': VuePagination,
     'vue-job-tiny': VueJobTiny,
-    'vue-notification': VueNotifications
+    'vue-notification': VueNotifications,
+    'vue-tabs': VueTabs
   },
   data: window.data,
   store,
@@ -33,7 +35,7 @@ new Vue({
     };
 
     this.initYScrollbar(document.querySelector('#js-published'));
-    this.initYScrollbar(document.querySelector('#js-subscribed'));
+    // this.initYScrollbar(document.querySelector('#js-subscribed'));
     //
     this.initXScrollbar(document.querySelector('#js-filter-location'));
     this.initXScrollbar(document.querySelector('#js-filter-tech'));
@@ -166,6 +168,10 @@ new Vue({
       set(value) {
         this.input.currency = value;
       }
+    },
+
+    tabs() {
+      return { '/Praca': 'Ogłoszenia', '/Praca/Moje': 'Moje ogłoszenia' };
     },
 
     ...mapState('jobs', ['subscriptions'])

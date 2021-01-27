@@ -21,13 +21,15 @@
 
   {{ parent() }}
 {%- endblock -%}
-{% block description %}Praca dla programistów. Pracodawco: umieść u nas swoją ofertę pracy - już od 0,75 zł za dzień. Znajdź u nas pracownika wśród 50 000 programistów.{% endblock %}
-{% block keywords %}programowanie, praca, C#, Java, programista, HTML, CSS, webdesign, JavaScript, jQuery, C, C++, webmastering{% endblock %}
+{% block description %}Praca dla programistów. Pracodawco: umieść u nas swoją ofertę pracy - już od 1 zł za dzień. Znajdź u nas pracownika wśród 50 000 programistów.{% endblock %}
+{% block keywords %}programowanie, praca, C#, Java, PHP, Android, Kotlin, Python, programista, HTML, CSS, webdesign, JavaScript, jQuery, C, C++, webmastering{% endblock %}
 
 {% block container %}
   <div id="js-job">
     <div class="row">
       <div class="col-md-9 col-12">
+        <vue-tabs :items="tabs" current-tab="/Praca" class="mt-4"></vue-tabs>
+
         <form method="get" ref="searchForm" action="{{ form_url }}" @submit.prevent="search" autocomplete="off">
           <div class="card card-default mt-3">
             <div class="job-search-form card-body">
@@ -181,41 +183,12 @@
         </form>
       </div>
 
-      <div class="col-md-3 d-none d-sm-block">
-        <section id="post-offer">
-          <h4>Dla pracodawców</h4>
-
-          <span class="edge">
-            <a href="{{ route('job.submit') }}?revalidate=1" class="btn btn-primary">Dodaj ofertę pracy <strong>za darmo</strong></a>
-          </span>
-
-          <p><a href="{{ route('job.business') }}">Już od 0 zł / 40 dni!</a></p>
-        </section>
-      </div>
+      {% include 'job.partials.business' %}
     </div>
 
     <div class="row">
       <div class="col-md-9 col-12">
-
-        {% for i in 0..4 %}
-          <div v-if="skeleton" class="card card-default card-job mb-3">
-            <div class="card-body">
-              <div class="media">
-
-                  <div class="i-95 skeleton skeleton-media"></div>
-
-
-                <div class="media-body">
-                  <div class="media-heading">
-                    <h4 class="skeleton skeleton-header"></h4>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        {% endfor %}
-
-        <vue-job v-for="(job, index) in jobs.data" :job="job" :key="job.id" :order="index"></vue-job>
+        {% include 'job.partials.skeletons' %}
 
         <div v-cloak v-if="jobs.data.length === 0" class="card card-body bg-light p-2">
           <p class="text-center lead mt-4">
@@ -230,16 +203,6 @@
       </div>
 
       <div class="col-md-3 col-12" style="margin-top: -35px">
-        <section v-cloak v-show="published.length" class="box sidebar-offers">
-          <h4><i class="fas fa-fw fa-user-secret"></i> Moje ogłoszenia</h4>
-
-          <div id="js-published" class="card card-default" style="max-height: 400px">
-            <div class="card-body">
-              <vue-job-tiny v-for="job in published" :job="job" :key="job.id"></vue-job-tiny>
-            </div>
-          </div>
-        </section>
-
         <section v-cloak v-show="subscribed.length" class="box sidebar-offers">
           <h4><i class="fas fa-fw fa-heart"></i> Ulubione ogłoszenia</h4>
 
@@ -266,7 +229,6 @@
       defaults: {{ defaults|json_encode|raw }},
       currencies: {{ currencies|json_encode|raw }},
       subscribed: {{ subscribed|json_encode|raw }},
-      published: {{ published|json_encode|raw }},
       selectedTab: 'tech',
       skeleton: false
     }

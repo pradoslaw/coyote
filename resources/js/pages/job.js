@@ -13,7 +13,7 @@ import Router from '../libs/router';
   .on('/Praca/Oferta', () => {
     require('./job/business');
   })
-  .on(['/Praca', '/Praca/Miasto/*', '/Praca/Technologia/*', '/Praca/Zdalna', '/Praca/Firma/*'], () => {
+  .on(['/Praca', '/Praca/Miasto/*', '/Praca/Technologia/*', '/Praca/Zdalna', '/Praca/Firma/*', '/Praca/Moje'], () => {
     require('./job/homepage');
   })
   .on('/Praca/\\d+\\-*', () => {

@@ -103,16 +103,6 @@ class HomeController extends BaseController
     /**
      * @return \Illuminate\View\View
      */
-    public function my()
-    {
-        $this->builder->addUserFilter($this->userId);
-
-        return $this->load();
-    }
-
-    /**
-     * @return \Illuminate\View\View
-     */
     private function load()
     {
         // set sort by score if keyword was provided and no sort was specified
@@ -192,8 +182,7 @@ class HomeController extends BaseController
             'locations'         => $result->getAggregationCount("global.locations.locations_city_original")->slice(0, 10)->filter(),
             'tags'              => TagResource::collection($tags)->toArray($this->request),
             'jobs'              => JobResource::collection($pagination)->toResponse($this->request)->getData(true),
-            'subscribed'        => $this->getSubscribed(),
-            'published'         => $this->getPublished()
+            'subscribed'        => $this->getSubscribed()
         ];
 
         $this->request->session()->put('current_url', $this->request->fullUrl());
@@ -215,18 +204,6 @@ class HomeController extends BaseController
         }
 
         return JobResource::collection($this->job->subscribes($this->userId))->toArray($this->request);
-    }
-
-    /**
-     * @return array
-     */
-    public function getPublished(): array
-    {
-        if (!$this->userId) {
-            return [];
-        }
-
-        return JobResource::collection($this->job->getPublished($this->userId))->toArray($this->request);
     }
 
     /**

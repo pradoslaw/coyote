@@ -1,0 +1,41 @@
+{% extends 'job.base' %}
+
+{%- block title -%}
+  Moje ogłoszenia
+
+  {{ parent() }}
+{%- endblock -%}
+
+{% block container %}
+  <div id="js-job">
+    <div class="row">
+      <div class="col-md-9 col-12">
+        <vue-tabs :items="tabs" current-tab="/Praca/Moje" class="mt-4 mb-4"></vue-tabs>
+
+        {% include 'job.partials.skeletons' %}
+
+        <div v-cloak v-if="jobs.data.length === 0" class="card card-body bg-light p-2">
+          <p class="text-center lead mt-4">
+            Nie znaleźliśmy żadnych Twoich ogłoszeń.
+          </p>
+        </div>
+
+        <nav class="mb-2">
+          <vue-pagination :current-page="jobs.meta.current_page" :total-pages="jobs.meta.last_page" @change="changePage"></vue-pagination>
+        </nav>
+      </div>
+
+      {% include 'job.partials.business' %}
+    </div>
+
+    <vue-notifications position="bottom right" />
+  </div>
+
+  <script type="text/javascript">
+    var data = {
+      jobs: {{ jobs|json_encode|raw }},
+      subscribed: {{ subscribed|json_encode|raw }},
+      skeleton: false
+    }
+  </script>
+{% endblock %}

@@ -48,7 +48,7 @@ interface JobRepositoryInterface extends RepositoryInterface
      * @param int $userId
      * @return \Illuminate\Support\Collection
      */
-    public function getPublished($userId);
+    public function published($userId);
 
     /**
      * @param array $tags
