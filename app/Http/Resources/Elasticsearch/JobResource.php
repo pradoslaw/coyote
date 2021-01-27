@@ -35,7 +35,7 @@ class JobResource extends ElasticsearchResource
     {
         // maximum offered salary
         $salary = $this->monthlySalary(max($this->salary_from, $this->salary_to));
-        $body = $this->resource->only(['id', 'slug', 'firm_id', 'is_remote', 'is_ads', 'user_id']);
+        $body = $this->resource->only(['id', 'slug', 'firm_id', 'is_remote', 'is_ads', 'is_on_top', 'user_id']);
 
         $locations = [];
 
