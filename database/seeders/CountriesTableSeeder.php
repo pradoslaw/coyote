@@ -27,7 +27,7 @@ class CountriesTableSeeder extends Seeder
         Country::forceCreate(['name' => 'Malta', 'code' => 'MT', 'vat_rate' => 1]);
         Country::forceCreate(['name' => 'Niemcy', 'code' => 'DE', 'vat_rate' => 1]);
         Country::forceCreate(['name' => 'Norwegia', 'code' => 'NO', 'vat_rate' => 1]);
-        Country::forceCreate(['name' => 'Polska', 'code' => 'PL', 'vat_rate' => 1]);
+        Country::forceCreate(['name' => 'Polska', 'code' => 'PL', 'vat_rate' => 1.23]);
         Country::forceCreate(['name' => 'Finlandia', 'code' => 'FI', 'vat_rate' => 1]);
         Country::forceCreate(['name' => 'Portugalia', 'code' => 'PT', 'vat_rate' => 1]);
         Country::forceCreate(['name' => 'Szwajcaria', 'code' => 'CH', 'vat_rate' => 1]);

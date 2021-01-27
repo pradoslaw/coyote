@@ -7,5 +7,5 @@ return [
     'postal_code' => env('VENDOR_POSTAL_CODE'),
     'vat_id' => env('VENDOR_VAT_ID'),
     'country' => env('VENDOR_COUNTRY'),
-    'default_vat_rate' => 1
+    'default_vat_rate' => 1.23
 ];
