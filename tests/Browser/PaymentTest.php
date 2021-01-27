@@ -35,7 +35,7 @@ class PaymentTest extends DuskTestCase
         $this->job->save();
 
         $payment = $this->job->getUnpaidPayment();
-        $coupon = Coupon::create(['amount' => $payment->plan->gross_price, 'code' => $coupon = $faker->text(10)]);
+        $coupon = Coupon::create(['amount' => $payment->plan->price, 'code' => $coupon = $faker->text(10)]);
 
         $this->browse(function (Browser $browser) use ($payment, $firm, $coupon) {
             $browser
