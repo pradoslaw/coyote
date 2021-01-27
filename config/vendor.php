@@ -1,11 +1,11 @@
 <?php
 
 return [
-    'name' => env('VENDOR_NAME'),
-    'address' => env('VENDOR_ADDRESS'),
-    'city' => env('VENDOR_CITY'),
-    'postal_code' => env('VENDOR_POSTAL_CODE'),
-    'vat_id' => env('VENDOR_VAT_ID'),
-    'country' => env('VENDOR_COUNTRY'),
+    'name' => 'Makana Sp. z o.o.',
+    'address' => 'Stoszowska 23',
+    'city' => 'Wrocław',
+    'postal_code' => '54-060',
+    'vat_id' => 'PL894-313-94-60',
+    'country' => 'Polska',
     'default_vat_rate' => 1.23
 ];

@@ -32,7 +32,7 @@ new Vue({
   data: {
     countries: window.countries,
     calculator: window.calculator,
-    varRates: window.vat_rates,
+    vatRates: window.vat_rates,
     form: window.form,
     banks: window.banks,
     coupon: {
@@ -79,7 +79,7 @@ new Vue({
   methods: {
     calculate() {
       // if VAT ID is empty we must add VAT
-      this.calculator.vat_rate = this.vat_rates[this.form.invoice.country_id];
+      this.calculator.vat_rate = this.vatRates[this.form.invoice.country_id];
     },
 
     cardPayment({ token, success_url }) {
@@ -177,6 +177,10 @@ new Vue({
         this.coupon.amount = result.data;
         this.form.coupon = newValue;
       });
+    },
+
+    'form.invoice.country_id': function(newValue) {
+      this.calculate();
     }
   }
 });
