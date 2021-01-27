@@ -1,7 +1,7 @@
 <template>
   <div :class="`nav nav-${this.type}`">
     <div v-for="(item, key) in items" :key="key" class="nav-item">
-      <a @click="$emit('click', key)" :class="{'active': key === currentTab}" class="nav-link" href="javascript:">{{ item }}</a>
+      <a @click="$emit('click', key)" :class="{'active': key === currentTab}" :href="typeof key === 'string' ? key : 'javascript:'" class="nav-link">{{ item }}</a>
     </div>
 
     <slot></slot>
