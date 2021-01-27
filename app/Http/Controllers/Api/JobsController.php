@@ -109,7 +109,7 @@ class JobsController extends Controller
             $this->saveRelations($job, $user);
 
             if ($job->wasRecentlyCreated || !$job->is_publish) {
-                $coupon = $repository->findCoupon($user->id, $job->plan->gross_price);
+                $coupon = $repository->findCoupon($user->id, $job->plan->price);
 
                 $job->payments()->create(['plan_id' => $job->plan_id, 'days' => $job->plan->length, 'coupon_id' => $coupon->id]);
             }

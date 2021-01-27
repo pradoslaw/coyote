@@ -27,7 +27,7 @@ class ApiRequest extends JobRequest
         /** @var \Coyote\Plan $plan */
         $plan = $this->plan()->findDefault($this->input('plan'));
 
-        return $this->coupon()->findCoupon($user->id, $plan->gross_price) !== null;
+        return $this->coupon()->findCoupon($user->id, $plan->price) !== null;
     }
 
     /**
