@@ -13,7 +13,7 @@
         </div>
 
         <form @submit.prevent="makePayment" class="card-body" v-show="grossPrice > 0">
-          <ul class="nav nav-tabs">
+          <ul class="nav nav-tabs mb-3">
             <li class="nav-item">
               <a @click="setPaymentMethod('card')" :class="{'active': form.payment_method === 'card'}" href="javascript:" class="nav-link bg-white">
                 <strong class="d-block mb-1">Karta kredytowa/debetowa</strong>
@@ -37,89 +37,79 @@
             </li>
           </ul>
 
-          <div class="mt-3 row">
-            <div class="col-12">
-              <div v-show="form.payment_method === 'card'" class="card card-default">
-                <div class="card-body">
-                  <form id="card-form">
-                    <div id="card-element">
-                      <!-- Elements will create input elements here -->
-                    </div>
-
-                    <!-- We'll put the error messages in this element -->
-                    <div id="card-errors" role="alert"></div>
-                  </form>
-                </div>
-              </div>
-
-              {# v-if instade of v-show. remove invoice inputs from form if price == 0 #}
-              <div class="row" v-if="grossPrice > 0">
-                <div class="col-12">
-                  <div class="card card-body bg-light p-2">
-                    <div class="custom-control custom-checkbox">
-                      <vue-checkbox v-model="enableInvoice" id="enable-invoice" class="custom-control-input"></vue-checkbox>
-
-                      <label class="custom-control-label" for="enable-invoice">
-                        Tak, chcę otrzymać fakturę
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {# v-if instade of v-show. remove invoice inputs from form if price == 0 #}
-              <div v-if="grossPrice > 0 && enableInvoice">
-                <div class="row">
-                  <div class="col-sm-7">
-                    <vue-form-group :errors="errors['invoice.name']" label="Nazwa firmy">
-                      <vue-text v-model="form.invoice.name" :is-invalid="'invoice.name' in errors" name="invoice[name]"></vue-text>
-                    </vue-form-group>
-                  </div>
-
-                  <div class="col-sm-5">
-                    <label class="col-form-label">NIP (opcjonalnie)</label>
-
-                    <div class="row">
-                      <vue-form-group :errors="errors['invoice.country_id']" class="col-4">
-                        <vue-select :is-invalid="'invoice.country_id' in errors" :options="countries" v-model="form.invoice.country_id" name="invoice[country_id]"></vue-select>
-                      </vue-form-group>
-
-                      <vue-form-group :errors="errors['invoice.vat_id']" class="col-8">
-                        <vue-text :is-invalid="'invoice.vat_id' in errors" v-model="form.invoice.vat_id" name="invoice[vat_id]"></vue-text>
-                      </vue-form-group>
-                    </div>
-                  </div>
+          <div v-show="form.payment_method === 'card'" class="card card-default">
+            <div class="card-body">
+              <div id="card-form">
+                <div id="card-element">
+                  <!-- Elements will create input elements here -->
                 </div>
 
-                <div class="row">
-                  <div class="col-sm-4">
-                    <vue-form-group :errors="errors['invoice.address']" label="Adres">
-                      <vue-text :is-invalid="'invoice.address' in errors" v-model="form.invoice.address" name="invoice[address]"></vue-text>
-                    </vue-form-group>
-                  </div>
-
-                  <div class="col-sm-3">
-                    <vue-form-group :errors="errors['invoice.postal_code']" label="Kod pocztowy">
-                      <vue-text :is-invalid="'invoice.postal_code' in errors" v-model="form.invoice.postal_code" name="invoice[postal_code]"></vue-text>
-                    </vue-form-group>
-                  </div>
-
-                  <div class="col-sm-5">
-                    <vue-form-group :errors="errors['invoice.city']" label="Miasto">
-                      <vue-text :is-invalid="'invoice.city' in errors" v-model="form.invoice.city" name="invoice[city]"></vue-text>
-                    </vue-form-group>
-                  </div>
-                </div>
+                <!-- We'll put the error messages in this element -->
+                <div id="card-errors" role="alert"></div>
               </div>
             </div>
           </div>
 
-          <div class="form-group">
-            <div class="col-12">
-              <a href="{{ route('job.offer', [payment.job.id, payment.job.slug]) }}" class="btn btn-secondary float-left"><i class="fas fa-angle-left"></i> Powrót do ogłoszenia</a>
+          {# v-if instade of v-show. remove invoice inputs from form if price == 0 #}
+          <div v-if="grossPrice > 0" class="card card-body bg-light p-2">
+            <div class="custom-control custom-checkbox">
+              <vue-checkbox v-model="enableInvoice" id="enable-invoice" class="custom-control-input"></vue-checkbox>
 
-              <vue-button @click.native.prevent="makePayment" :disabled="isProcessing" class="btn btn-primary float-right">Zapłać i zapisz <i class="fas fa-angle-right"></i></vue-button>
+              <label class="custom-control-label" for="enable-invoice">
+                Tak, chcę otrzymać fakturę
+              </label>
             </div>
+          </div>
+
+          {# v-if instade of v-show. remove invoice inputs from form if price == 0 #}
+          <div v-if="grossPrice > 0 && enableInvoice">
+            <div class="row">
+              <div class="col-sm-7">
+                <vue-form-group :errors="errors['invoice.name']" label="Nazwa firmy">
+                  <vue-text v-model="form.invoice.name" :is-invalid="'invoice.name' in errors" name="invoice[name]"></vue-text>
+                </vue-form-group>
+              </div>
+
+              <div class="col-sm-5">
+                <label class="col-form-label">NIP (opcjonalnie)</label>
+
+                <div class="row">
+                  <vue-form-group :errors="errors['invoice.country_id']" class="col-4">
+                    <vue-select :is-invalid="'invoice.country_id' in errors" :options="countries" v-model="form.invoice.country_id" name="invoice[country_id]"></vue-select>
+                  </vue-form-group>
+
+                  <vue-form-group :errors="errors['invoice.vat_id']" class="col-8">
+                    <vue-text :is-invalid="'invoice.vat_id' in errors" v-model="form.invoice.vat_id" name="invoice[vat_id]"></vue-text>
+                  </vue-form-group>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-4">
+                <vue-form-group :errors="errors['invoice.address']" label="Adres">
+                  <vue-text :is-invalid="'invoice.address' in errors" v-model="form.invoice.address" name="invoice[address]"></vue-text>
+                </vue-form-group>
+              </div>
+
+              <div class="col-sm-3">
+                <vue-form-group :errors="errors['invoice.postal_code']" label="Kod pocztowy">
+                  <vue-text :is-invalid="'invoice.postal_code' in errors" v-model="form.invoice.postal_code" name="invoice[postal_code]"></vue-text>
+                </vue-form-group>
+              </div>
+
+              <div class="col-sm-5">
+                <vue-form-group :errors="errors['invoice.city']" label="Miasto">
+                  <vue-text :is-invalid="'invoice.city' in errors" v-model="form.invoice.city" name="invoice[city]"></vue-text>
+                </vue-form-group>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <a href="{{ route('job.offer', [payment.job.id, payment.job.slug]) }}" class="btn btn-secondary float-left"><i class="fas fa-angle-left"></i> Powrót do ogłoszenia</a>
+
+            <vue-button @click.native.prevent="makePayment" :disabled="isProcessing" class="btn btn-primary float-right">Zapłać i zapisz <i class="fas fa-angle-right"></i></vue-button>
           </div>
         </form>
 
@@ -127,7 +117,7 @@
           <h1 class="text-center"><i class="fas fa-check text-primary"></i> Płatność nie jest wymagana</h1>
 
           <div class="d-flex justify-content-center mt-3">
-            <vue-button @click.native="submitForm" :disabled="isProcessing" class="btn btn-primary btn-lg">Zapisz i zakończ</vue-button>
+            <vue-button @click.native="makePayment" :disabled="isProcessing" class="btn btn-primary btn-lg">Zapisz i zakończ</vue-button>
           </div>
         </div>
       </div>
@@ -209,7 +199,7 @@
       </div>
     </aside>
 
-    <vue-notifications position="bottom right" />
+    <vue-notifications position="bottom right"/>
   </div>
 
   <script>
