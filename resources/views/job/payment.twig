@@ -12,7 +12,7 @@
           <i class="fas fa-lock fa-fw"></i> Płatność poprzez bezpieczne połączenie
         </div>
 
-        <div class="card-body" v-show="grossPrice > 0">
+        <form @submit.prevent="makePayment" class="card-body" v-show="grossPrice > 0">
           <ul class="nav nav-tabs">
             <li class="nav-item">
               <a @click="setPaymentMethod('card')" :class="{'active': form.payment_method === 'card'}" href="javascript:" class="nav-link bg-white">
@@ -114,14 +114,14 @@
             </div>
           </div>
 
-          <div id="form-navigation" class="form-group row">
+          <div class="form-group">
             <div class="col-12">
               <a href="{{ route('job.offer', [payment.job.id, payment.job.slug]) }}" class="btn btn-secondary float-left"><i class="fas fa-angle-left"></i> Powrót do ogłoszenia</a>
 
-              <vue-button @click.native="submitForm" :disabled="isProcessing" class="btn btn-primary float-right">Zapłać i zapisz <i class="fas fa-angle-right"></i></vue-button>
+              <vue-button @click.native.prevent="makePayment" :disabled="isProcessing" class="btn btn-primary float-right">Zapłać i zapisz <i class="fas fa-angle-right"></i></vue-button>
             </div>
           </div>
-        </div>
+        </form>
 
         <div class="card-body" v-show="!grossPrice">
           <h1 class="text-center"><i class="fas fa-check text-primary"></i> Płatność nie jest wymagana</h1>
@@ -215,8 +215,9 @@
   <script>
     var stripeKey = '{{ stripe_key }}';
     var countries = {{ countries|json_encode|raw }};
-    var calculator = {{ calculator|json_encode|raw }};
+    var netPrice = {{ net_price|number_format(2, '.') }};
     var vatRates = {{ vat_rates|json_encode|raw }};
+    var vatRate = {{ vat_rate|number_format(2, '.') }};
 
     var form = {
       payment_method: 'card',

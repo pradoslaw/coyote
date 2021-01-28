@@ -13,6 +13,8 @@ Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 
 axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 
+const DEFAULT_VAT_RATE = 1.23;
+
 new Vue({
   el: '#js-payment',
   delimiters: ['${', '}'],
@@ -31,7 +33,8 @@ new Vue({
   },
   data: {
     countries: window.countries,
-    calculator: window.calculator,
+    netPrice: window.netPrice,
+    vatRate: window.vatRate,
     vatRates: window.vatRates,
     form: window.form,
     banks: window.banks,
@@ -58,7 +61,7 @@ new Vue({
   methods: {
     calculate() {
       // if VAT ID is empty we must add VAT
-      this.calculator.vat_rate = this.vatRates[this.form.invoice.country_id];
+      this.vatRate = this.enableInvoice ? this.vatRates[this.form.invoice.country_id] : DEFAULT_VAT_RATE;
     },
 
     cardPayment({ token, success_url }) {
@@ -99,7 +102,7 @@ new Vue({
       }
     },
 
-    submitForm() {
+    makePayment() {
       const data = Object.assign(this.form, {price: this.grossPrice, enable_invoice: this.grossPrice > 0 ? this.enableInvoice : false});
 
       this.errors = {};
@@ -131,19 +134,15 @@ new Vue({
   },
   computed: {
     percentageVatRate() {
-      return (this.calculator.vat_rate * 100) - 100;
-    },
-
-    netPrice() {
-      return this.calculator.net_price;
+      return (this.vatRate * 100) - 100;
     },
 
     grossPrice() {
-      return this.discountNetPrice * this.calculator.vat_rate;
+      return this.discountNetPrice * this.vatRate;
     },
 
     discountNetPrice() {
-      return Math.max(0, this.calculator.net_price - this.coupon.amount);
+      return Math.max(0, this.netPrice - this.coupon.amount);
     },
 
     vatPrice() {
@@ -158,7 +157,11 @@ new Vue({
       });
     },
 
-    'form.invoice.country_id': function(newValue) {
+    'form.invoice.country_id': function() {
+      this.calculate();
+    },
+
+    'enableInvoice': function() {
       this.calculate();
     }
   }

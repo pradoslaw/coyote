@@ -107,7 +107,8 @@ class PaymentController extends Controller
         return $this->view('job.payment', [
             'payment'           => $payment,
             'vat_rates'         => $this->vatRates,
-            'calculator'        => $calculator->toArray(),
+            'vat_rate'          => $calculator->vatRate,
+            'net_price'         => $calculator->netPrice(),
             'firm'              => $firm,
             'countries'         => $countries,
             'stripe_key'        => config('services.stripe.key')
