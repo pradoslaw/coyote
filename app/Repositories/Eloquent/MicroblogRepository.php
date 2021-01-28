@@ -148,7 +148,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
             ->groupBy('tags.id')
             ->groupBy('name')
             ->orderByRaw('COUNT(*) DESC')
-            ->limit(3);
+            ->limit(5);
 
         $query = clone $base;
 
@@ -158,7 +158,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
                 return $builder
                     ->where('microblogs.user_id', $userId)
                     ->selectRaw('1 AS "order"')
-                    ->limit(5)
+                    ->limit(3)
                     ->unionAll($base->selectRaw('0 AS "order"')->whereIn('tags.name', ['news', 'programowanie', 'wydarzenia', 'off-topic', 'autopromocja']))
                     ->orderByRaw('"order" asc');
             })
