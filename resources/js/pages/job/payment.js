@@ -32,7 +32,7 @@ new Vue({
   data: {
     countries: window.countries,
     calculator: window.calculator,
-    vatRates: window.vat_rates,
+    vatRates: window.vatRates,
     form: window.form,
     banks: window.banks,
     coupon: {
@@ -45,32 +45,11 @@ new Vue({
     isProcessing: false
   },
   mounted() {
-    this.stripe = Stripe(window.stripe_key);
+    this.stripe = Stripe(window.stripeKey);
     const elements = this.stripe.elements();
 
     const style = {
-      iconStyle: 'solid',
-      // style: {
-      //   base: {
-      //     iconColor: '#c4f0ff',
-      //     color: '#fff',
-      //     fontWeight: 500,
-      //     fontFamily: 'Roboto, Open Sans, Segoe UI, sans-serif',
-      //     fontSize: '16px',
-      //     fontSmoothing: 'antialiased',
-      //
-      //     ':-webkit-autofill': {
-      //       color: '#fce883',
-      //     },
-      //     '::placeholder': {
-      //       color: '#87BBFD',
-      //     },
-      //   },
-      //   invalid: {
-      //     iconColor: '#FFC7EE',
-      //     color: '#FFC7EE',
-      //   },
-      // },
+      iconStyle: 'solid'
     };
 
     this.card = elements.create('card', { style });
@@ -90,7 +69,7 @@ new Vue({
             name: this.form.invoice.name
           }
         }
-      }).then((result) => {
+      }).then(result => {
         if (result.error) {
           this.$notify({type: 'error', text: result.error.message});
         } else {

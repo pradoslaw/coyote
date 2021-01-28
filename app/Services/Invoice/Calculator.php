@@ -2,6 +2,7 @@
 
 namespace Coyote\Services\Invoice;
 
+use Coyote\Country;
 use Coyote\Coupon;
 use Illuminate\Contracts\Support\Arrayable;
 
@@ -45,9 +46,16 @@ class Calculator implements Arrayable
      * @param Coupon|null $coupon
      * @return $this
      */
-    public function setCoupon(Coupon $coupon = null)
+    public function setCoupon(Coupon $coupon = null): Calculator
     {
         $this->coupon = $coupon;
+
+        return $this;
+    }
+
+    public function setCountry(Country $country): Calculator
+    {
+        $this->vatRate = $country->vat_rate;
 
         return $this;
     }

@@ -117,26 +117,40 @@ class PaymentController extends Controller
     /**
      * @param PaymentRequest $request
      * @param Payment $payment
-     * @return array|\Illuminate\Http\RedirectResponse
+     * @return array|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      * @throws \Stripe\Exception\ApiErrorException
+     * @throws \Throwable
      */
-    public function process(PaymentRequest $request, Payment $payment)
+    public function makePayment(PaymentRequest $request, Payment $payment)
     {
         Stripe::setApiKey(config('services.stripe.secret'));
 
-        $calculator = CalculatorFactory::payment($payment);
-
         $coupon = $this->coupon->findBy('code', $request->input('coupon'));
-        $calculator->setCoupon($coupon);
-
         $payment->coupon_id = $coupon->id ?? null;
 
-        // begin db transaction
-        $this->handlePayment(function () use ($payment, $request, $calculator, $coupon) {
+        $calculator = CalculatorFactory::payment($payment);
+        $calculator->setCoupon($coupon);
+
+        $invoice = [];
+
+        if ($request->input('enable_invoice')) {
+            $calculator->setCountry($this->country->find($request->input('invoice.country_id')));
+            $invoice = $request->input('invoice');
+
+            if ($payment->job->firm_id) {
+                // update firm's VAT ID
+                $payment->job->firm->fill($request->only(['invoice.vat_id', 'invoice.country_id']));
+                $payment->job->firm->save();
+            }
+        }
+
+        $this->db->beginTransaction();
+
+        try {
             // save invoice data. keep in mind that we do not setup invoice number until payment is done.
             /** @var \Coyote\Invoice $invoice */
             $invoice = $this->invoice->create(
-                array_merge($request->input('enable_invoice') ? $request->input('invoice') : [], ['user_id' => $this->auth->id]),
+                array_merge($invoice, ['user_id' => $this->auth->id]),
                 $payment,
                 $calculator
             );
@@ -144,14 +158,13 @@ class PaymentController extends Controller
             // associate invoice with payment
             $payment->invoice()->associate($invoice);
 
-            if ($payment->job->firm_id) {
-                // update firm's VAT ID
-                $payment->job->firm->vat_id = $request->input('invoice.vat_id');
-                $payment->job->firm->save();
-            }
-
             $payment->save();
-        });
+            $this->db->commit();
+        } catch (PaymentFailedException $e) {
+            $this->handlePaymentException($e);
+        } catch (\Exception $e) {
+            $this->handlePaymentException($e);
+        }
 
         if (!$calculator->grossPrice()) {
             return $this->successfulTransaction($payment);
@@ -223,26 +236,6 @@ class PaymentController extends Controller
         session()->flash('success', trans('payment.success'));
 
         return response(UrlBuilder::job($payment->job, true), 201);
-    }
-
-    /**
-     * @param \Closure $callback
-     * @return \Illuminate\Http\RedirectResponse|mixed
-     */
-    private function handlePayment(\Closure $callback)
-    {
-        $this->db->beginTransaction();
-
-        try {
-            $result = $callback();
-            $this->db->commit();
-
-            return $result;
-        } catch (PaymentFailedException $e) {
-            return $this->handlePaymentException($e);
-        } catch (\Exception $e) {
-            return $this->handlePaymentException($e);
-        }
     }
 
     /**

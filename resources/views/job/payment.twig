@@ -213,10 +213,10 @@
   </div>
 
   <script>
-    var stripe_key = '{{ stripe_key }}';
+    var stripeKey = '{{ stripe_key }}';
     var countries = {{ countries|json_encode|raw }};
     var calculator = {{ calculator|json_encode|raw }};
-    var vat_rates = {{ vat_rates|json_encode|raw }};
+    var vatRates = {{ vat_rates|json_encode|raw }};
 
     var form = {
       payment_method: 'card',

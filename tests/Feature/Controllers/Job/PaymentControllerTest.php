@@ -201,4 +201,33 @@ class PaymentControllerTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    public function testSubmitFormWithZeroRateInvoice()
+    {
+        $faker = Factory::create();
+        $payment = $this->job->getUnpaidPayment();
+
+        $response = $this->actingAs($this->job->user)->json(
+            'POST',
+            "/Praca/Payment/{$payment->id}",
+            [
+                'payment_method' => 'card',
+                'price' => $payment->plan->gross_price,
+                'enable_invoice' => true,
+                'invoice' => [
+                    'name' => $name = $faker->company,
+                    'vat_id' => $vat = '123123123',
+                    'country_id' => $countryId = 1,
+                    'address' => $address = $faker->address,
+                    'city' => $city = $faker->city,
+                    'postal_code' => $postalCode = $faker->postcode
+                ]
+            ]
+        );
+
+        $payment->refresh();
+
+        $this->assertEquals($payment->invoice->country_id, $countryId);
+        $this->assertEquals($payment->invoice->grossPrice(), $this->job->plan->price);
+    }
 }
