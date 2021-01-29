@@ -32,7 +32,7 @@
           <vue-tabs :items="tabs" current-tab="/Praca" class="mt-4"></vue-tabs>
         {% endif %}
 
-        <form method="get" ref="searchForm" action="{{ form_url }}" @submit.prevent="search" autocomplete="off">
+        <form method="get" @submit.prevent="search" autocomplete="off">
           <div class="card card-default mt-3">
             <div class="job-search-form card-body">
               <div class="input-item keyword-search" :class="{'extended': selectedTab === 'tech'}">

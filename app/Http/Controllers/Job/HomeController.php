@@ -189,7 +189,6 @@ class HomeController extends BaseController
 
         return $this->view('job.home', $data + [
             'currencies'    => (object) Currency::all('name', 'id', 'symbol')->keyBy('id'),
-            'form_url'      => $this->request->url(),
             'firm'          => $this->firmName
         ]);
     }
