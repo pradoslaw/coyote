@@ -16,7 +16,7 @@
 
         <div v-cloak v-if="jobs.data.length === 0" class="card card-body bg-light p-2">
           <p class="text-center lead mt-4">
-            Nie znaleźliśmy żadnych Twoich ogłoszeń.
+            Nie znaleźliśmy żadnych Twoich ogłoszeń. <a href="{{ route('job.submit') }}">Dodaj swoje pierwsze ogłoszenie już teraz.</a>
           </p>
         </div>
 
@@ -26,6 +26,8 @@
       </div>
 
       {% include 'job.partials.business' %}
+
+      {{ render_block('job_ads') }}
     </div>
 
     <vue-notifications position="bottom right" />
@@ -35,6 +37,7 @@
     var data = {
       jobs: {{ jobs|json_encode|raw }},
       subscribed: {{ subscribed|json_encode|raw }},
+      input: {{ input|json_encode|raw }},
       skeleton: false
     }
   </script>

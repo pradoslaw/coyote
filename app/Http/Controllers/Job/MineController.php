@@ -20,8 +20,12 @@ class MineController extends BaseController
         $paginator = $this->job->published($this->userId);
 
         return $this->view('job.mine', [
-            'jobs' => JobResource::collection($paginator)->toResponse($this->request)->getData(true),
-            'subscribed' => JobResource::collection($this->job->subscribes($this->userId))->toArray($this->request)
+            'jobs'          => JobResource::collection($paginator)->toResponse($this->request)->getData(true),
+            'subscribed'    => JobResource::collection($this->job->subscribes($this->userId))->toArray($this->request),
+            'url'           => $this->request->url() . '?page=' . $this->request->input('page', 1),
+            'input' => [
+                'page'      => $this->request->input('page')
+            ]
         ]);
     }
 }

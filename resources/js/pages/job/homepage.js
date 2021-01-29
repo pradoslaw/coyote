@@ -105,16 +105,14 @@ new Vue({
         input = Object.assign({page}, input);
       }
 
-      axios.get(this.$refs.searchForm.action, {params: input})
+      axios.get(window.location.pathname, {params: input})
         .then(response => {
           this.jobs = response.data.jobs;
           this.defaults = response.data.defaults;
 
           window.history.pushState(response.data, '', response.data.url);
         })
-        .then(() => {
-          this.skeleton = false;
-        });
+        .then(() => this.skeleton = false);
     },
 
     includesLocation(location) {
