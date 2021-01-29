@@ -298,8 +298,12 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->attributes['photo'];
     }
 
+    /**
+     * @deprecated
+     */
     public function setIsActiveAttribute($value)
     {
+        $this->is_online = false;
         $this->setAttribute('deleted_at', !$value ? Carbon::now() : null);
     }
 

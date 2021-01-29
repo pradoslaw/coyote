@@ -155,6 +155,11 @@ class PurgeSessionsCommand extends Command
 
         $user->save();
 
+        // user was removed. that's it.
+        if ($user->deleted_at !== null) {
+            return;
+        }
+
         // reindex user data in elasticsearch so we can sort users by last activity date
         dispatch(function () use ($user) {
             (new Crawler())->index($user);
