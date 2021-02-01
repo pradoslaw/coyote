@@ -22,7 +22,7 @@ class MicroblogResource extends Api\MicroblogResource
 
         return array_merge($result, [
             'assets'        => $assets,
-            'tags'          => $this->whenLoaded('tags', TagResource::collection($this->resource->tags)),
+            'tags'          => $this->whenLoaded('tags', fn () => TagResource::collection($this->resource->tags)),
             'is_sponsored'  => $this->resource->is_sponsored,
             'metadata'      => encrypt([Microblog::class => $this->resource->id])
         ]);

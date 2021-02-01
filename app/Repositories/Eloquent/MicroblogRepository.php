@@ -55,7 +55,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
      * @return mixed
      * @throws
      */
-    public function getPopular($limit)
+    public function popular(int $limit)
     {
         $this->applyCriteria();
 
@@ -65,6 +65,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
             ->with('user')
             ->withCount('comments')
             ->with('assets')
+            ->with('tags')
             ->where(function (Builder $builder) {
                 return $builder->where('votes', '>=', 2)->orWhere('is_sponsored', true);
             })

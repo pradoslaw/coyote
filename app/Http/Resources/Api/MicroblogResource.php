@@ -46,7 +46,6 @@ class MicroblogResource extends JsonResource
                 'url'           => $this->parent_id ? UrlBuilder::microblogComment($this->resource, true) : UrlBuilder::microblog($this->resource, true),
                 'created_at'    => $this->created_at->toIso8601String(),
                 'updated_at'    => $this->created_at->toIso8601String(),
-                'html'          => $this->html,
                 'comments'      => $this->when(
                     $this->isNotComment(),
                     function () {

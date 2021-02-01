@@ -11,9 +11,9 @@ interface MicroblogRepositoryInterface extends RepositoryInterface
      * ta jest wykorzystywana na stronie glownej serwisu
      *
      * @param int $limit
-     * @return mixed
+     * @return Microblog[]
      */
-    public function getPopular($limit);
+    public function popular(int $limit);
 
     /**
      * @param int $id

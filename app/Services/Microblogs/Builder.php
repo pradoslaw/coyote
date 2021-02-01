@@ -127,7 +127,7 @@ class Builder
     {
         $this->loadUserScope();
 
-        $result = $this->microblog->getPopular(5);
+        $result = $this->microblog->popular(5);
 
         $this->microblog->resetCriteria();
 
