@@ -38,11 +38,6 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
     $this->post('Upload', ['uses' => 'ApplicationController@upload', 'as' => 'application.upload']);
     $this->get('Application/{job}/{id}', ['uses' => 'ApplicationController@downloadApplication', 'as' => 'application.download']);
 
-    // Refer friend
-    // ------------------------------------------------------------------------------
-    $this->get('Refer/{job}', ['uses' => 'ReferController@index', 'as' => 'refer']);
-    $this->post('Refer/{job}', ['uses' => 'ReferController@save']);
-
     // Payment routes
     // -----------------------------
     $this->any('Payment/Status', [

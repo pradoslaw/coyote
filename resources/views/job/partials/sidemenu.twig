@@ -1,32 +1,26 @@
 {% import 'components.modals' as modals %}
 
 {% if not job.is_expired %}
-  <div class="row mb-5">
-      <div class="col-lg-6">
-        {% set attr = is_applied ? {title: 'Już aplikowałeś na tę ofertę pracy', disabled: 'disabled' } : {} %}
+  <div class="mb-5">
+    {% set attr = is_applied ? {title: 'Już aplikowałeś na tę ofertę pracy', disabled: 'disabled' } : {} %}
 
-        {% if job.enable_apply %}
-          {% set url = route('job.application', [job.id]) %}
-        {% elseif is_url(job.getOriginal('recruitment')) %}
-          {% set url = job.getOriginal('recruitment') %}
-          {% set attr = attr|merge({'target': '_blank'}) %}
-        {% else %}
-          {% set url = "#apply" %}
-        {% endif %}
+    {% if job.enable_apply %}
+      {% set url = route('job.application', [job.id]) %}
+    {% elseif is_url(job.getOriginal('recruitment')) %}
+      {% set url = job.getOriginal('recruitment') %}
+      {% set attr = attr|merge({'target': '_blank'}) %}
+    {% else %}
+      {% set url = "#apply" %}
+    {% endif %}
 
-        {{ link_to(url, 'Aplikuj', attr|merge({class: 'btn d-block btn-primary'})) }}
-      </div>
-
-      <div class="col-lg-6">
-        <a class="btn d-block btn-refer" href="{{ route('job.refer', [job]) }}"><i class="fas fa-retweet"></i> Poleć znajomemu</a>
-      </div>
+    {{ link_to(url, 'Aplikuj', attr|merge({class: 'btn d-block btn-primary col-12 col-lg-6'})) }}
   </div>
 
   <div class="row mb-4">
     <div class="col-12">
       <h3>Dodatkowe pytania?</h3>
 
-      <i class="fas fa-info-circle fa-2x float-left"></i>
+      <i class="fas fa-info-circle fa-2x float-left d-none d-lg-inline"></i>
 
       <div class="float-left ml-1">
         <a href="#comments" style="font-size: 15px" class="text-muted">Zadaj pytanie dotyczace tego ogłoszenia</a>
