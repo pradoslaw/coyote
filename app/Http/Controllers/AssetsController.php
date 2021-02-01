@@ -54,13 +54,18 @@ class AssetsController extends Controller
                 'size' => $uploadedFile->getSize(),
                 'mime' => $uploadedFile->getMimeType(),
                 'metadata' => [
-                    'title'       => $object->title,
+                    'title' => $object->title,
                     'description' => $object->description,
-                    'url'         => $object->url
+                    'url' => $object->url
                 ]
             ]);
 
             $db->commit();
+        } catch (\ErrorException $exception) {
+            $db->rollBack();
+            logger()->error($exception);
+
+            abort(404);
         } catch (\Exception $exception) {
             $db->rollBack();
 
