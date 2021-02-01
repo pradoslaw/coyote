@@ -48,7 +48,7 @@ class MicroblogResource extends JsonResource
                 'updated_at'    => $this->created_at->toIso8601String(),
                 'html'          => $this->html,
                 'comments'      => $this->when(
-                    ! $this->parent_id && $this->resource->relationLoaded('comments'),
+                    $this->isNotComment(),
                     function () {
                         $collection = static::collection($this->comments);
                         $collection->preserveKeys = true;
@@ -77,6 +77,13 @@ class MicroblogResource extends JsonResource
 
     public function preserverKeys()
     {
-        $this->resource->setRelation('comments', $this->resource->comments->keyBy('id'));
+        if ($this->isNotComment()) {
+            $this->resource->setRelation('comments', $this->resource->comments->keyBy('id'));
+        }
+    }
+
+    private function isNotComment(): bool
+    {
+        return ! $this->parent_id && $this->resource->relationLoaded('comments');
     }
 }
