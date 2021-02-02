@@ -8,6 +8,8 @@ use Illuminate\Notifications\Messages\MailMessage;
 
 class CommentedNotification extends SubmittedNotification
 {
+    const ID = \Coyote\Notification::MICROBLOG_COMMENT;
+
     /**
      * @param \Coyote\User $user
      * @return array

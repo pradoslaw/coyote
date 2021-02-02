@@ -14,11 +14,12 @@ class AddFollowerNotificationTypeToNotificationTypesTable extends Migration
     public function up()
     {
         Type::unguard();
-        Type::updateOrCreate(['id' => Notification::FOLLOWER,
-            'name' => '...aktywności obserwowanego użytkownika',
-            'headline' => 'Nowy {type} od: {sender}',
+        Type::updateOrCreate(['id' => Notification::MICROBLOG_SUBSCRIBER,
+            'name' => '...wpisie obserwowanego użytkownika na mikroblogu',
+            'headline' => '{sender} dodał wpis na mikroblogu',
             'profile' => true,
             'email' => false,
+            'category' => 'Mikroblogi'
         ]);
     }
 
@@ -29,6 +30,6 @@ class AddFollowerNotificationTypeToNotificationTypesTable extends Migration
      */
     public function down()
     {
-        Type::where('id', \Coyote\Notification::FOLLOWER)->delete();
+        Type::where('id', \Coyote\Notification::MICROBLOG_SUBSCRIBER)->delete();
     }
 }

@@ -8,7 +8,7 @@ use Coyote\User;
 use Faker\Factory;
 use Tests\TestCase;
 
-class SubmittedNotificationTest extends TestCase
+class CommentedNotificationTest extends TestCase
 {
     public function testMergeNotification()
     {
