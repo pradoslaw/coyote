@@ -46,7 +46,7 @@ class SubmittedNotification extends AbstractNotification implements ShouldQueue
                 )
             )
             ->action('Zobacz wpis', url($this->notificationUrl()))
-            ->line('Dostajesz to powiadomienie, ponieważ obserwujesz śledzisz jego autora.');
+            ->line('Dostajesz to powiadomienie, ponieważ obserwujesz jego autora.');
     }
 
     /**
