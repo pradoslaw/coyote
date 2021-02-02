@@ -25,9 +25,11 @@
             <div class="mr-3">
               <img src="{{ user_photo(user.photo) }}" class="img-thumbnail w-100">
 
-              <a class="btn btn-secondary btn-sm d-block mt-2" href="{{ route('user.pm.submit') }}?to={{ user.name }}">
-                <i class="fas fa-envelope"></i> Wiadomość
-              </a>
+              {% if user.id != user('id') %}
+                <a class="btn btn-secondary btn-sm d-block mt-2" href="{{ route('user.pm.submit') }}?to={{ user.name }}">
+                  <i class="fas fa-envelope"></i> Wiadomość
+                </a>
+              {% endif %}
 
               <div v-cloak v-if="isAuthorized" class="d-flex mt-2">
                 <div class="flex-1 flex-grow-1">
