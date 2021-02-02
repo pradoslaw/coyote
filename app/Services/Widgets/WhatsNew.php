@@ -30,7 +30,7 @@ class WhatsNew
 
             $this->microblog->resetCriteria();
             $this->microblog->pushCriteria(new WithTag('4programmers.net'));
-            $this->microblog->pushCriteria(new OnlyMine($user->id));
+            $this->microblog->pushCriteria(new OnlyMine($user->id ?? null));
 
             return view('homepage.whats-new', ['microblogs' => $this->microblog->recent()])->render();
         });
