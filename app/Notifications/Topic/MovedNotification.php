@@ -20,7 +20,7 @@ class MovedNotification extends AbstractNotification
             ->subject($this->getMailSubject())
             ->view('emails.notifications.topic.move', [
                 'sender'        => $this->notifier->name,
-                'subject'       => link_to($this->notificationUrl(), $this->topic->title),
+                'title'         => link_to($this->notificationUrl(), $this->topic->title),
                 'reason_name'   => $this->getReasonName(),
                 'reason_text'   => $this->getReasonText(),
                 'forum'         => $this->topic->forum->name
