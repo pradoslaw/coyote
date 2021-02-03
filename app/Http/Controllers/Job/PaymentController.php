@@ -140,7 +140,7 @@ class PaymentController extends Controller
 
             if ($payment->job->firm_id) {
                 // update firm's VAT ID
-                $payment->job->firm->fill($request->only(['invoice.vat_id', 'invoice.country_id']));
+                $payment->job->firm->fill($request->only(['invoice.vat_id', 'invoice.country_id'])['invoice']);
                 $payment->job->firm->save();
             }
         }

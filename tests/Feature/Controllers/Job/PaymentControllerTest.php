@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controllers\Job;
 
 use Coyote\Coupon;
+use Coyote\Firm;
 use Coyote\Job;
 use Coyote\Plan;
 use Coyote\Services\UrlBuilder;
@@ -125,6 +126,50 @@ class PaymentControllerTest extends TestCase
         $this->assertEquals($payment->invoice->address, $address);
         $this->assertEquals($payment->invoice->city, $city);
         $this->assertEquals($payment->invoice->postal_code, $postalCode);
+
+        $this->assertEquals($this->job->firm->vat_id, $vat);
+    }
+
+    public function testSubmitValidFormWithInvoiceAndFirm()
+    {
+        $faker = Factory::create();
+
+        $firm = factory(Firm::class)->create(['user_id' => $this->job->user_id]);
+        $this->job->firm()->associate($firm);
+
+        $this->job->save();
+
+        $payment = $this->job->getUnpaidPayment();
+
+        $this->actingAs($this->job->user)->json(
+            'POST',
+            "/Praca/Payment/{$payment->id}",
+            [
+                'payment_method' => 'card',
+                'price' => $payment->plan->gross_price,
+                'enable_invoice' => true,
+                'invoice' => [
+                    'name' => $firm->name,
+                    'vat_id' => $vat = '123123123',
+                    'country_id' => $countryId = 14,
+                    'address' => $firm->street,
+                    'city' => $firm->city,
+                    'postal_code' => $postalCode = $faker->postcode
+                ]
+            ]
+        );
+
+        $firm->refresh();
+        $payment->refresh();
+
+        $this->assertEquals($payment->invoice->name, $firm->name);
+        $this->assertEquals($payment->invoice->vat_id, $vat);
+        $this->assertEquals($payment->invoice->country_id, $countryId);
+        $this->assertEquals($payment->invoice->address, $firm->street);
+        $this->assertEquals($payment->invoice->city, $firm->city);
+        $this->assertEquals($payment->invoice->postal_code, $postalCode);
+
+        $this->assertEquals($this->job->firm->vat_id, $vat);
     }
 
     public function testSubmitFormWithCoupon()
@@ -157,6 +202,7 @@ class PaymentControllerTest extends TestCase
     public function testSubmitFormWithTotalDiscount()
     {
         $faker = Factory::create();
+
         /** @var Plan $plan */
         $plan = Plan::where('name', 'Premium')->get()->first();
 
@@ -207,7 +253,7 @@ class PaymentControllerTest extends TestCase
         $faker = Factory::create();
         $payment = $this->job->getUnpaidPayment();
 
-        $response = $this->actingAs($this->job->user)->json(
+        $this->actingAs($this->job->user)->json(
             'POST',
             "/Praca/Payment/{$payment->id}",
             [

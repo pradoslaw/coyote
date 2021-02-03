@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
@@ -9,170 +9,171 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
-        * {
-            font-family: "DejaVuSans", sans-serif;
-        }
+      * {
+        font-family: "DejaVuSans", sans-serif;
+      }
 
-        body {
-            background: #fff;
-            background-image: none;
-            font-size: 12px;
-            width: 100%;
-        }
+      body {
+        background: #fff;
+        background-image: none;
+        font-size: 12px;
+        width: 100%;
+      }
 
-        .left {
-            text-align: left;
-        }
+      .left {
+        text-align: left;
+      }
 
-        .right {
-            text-align: right;
-        }
+      .right {
+        text-align: right;
+      }
 
-        .container {
-            padding-top: 30px;
-        }
+      .container {
+        padding-top: 30px;
+      }
 
-        .invoice-head td {
-            padding: 0 8px;
-        }
+      .invoice-head td {
+        padding: 0 8px;
+      }
 
-        .table th {
-            vertical-align: bottom;
-            font-weight: bold;
-            padding: 8px;
-            line-height: 20px;
-            border: 1px solid #dddddd;
-            background-color: #f8f8f8;
-        }
+      .table th {
+        vertical-align: bottom;
+        font-weight: bold;
+        padding: 8px;
+        line-height: 20px;
+        border: 1px solid #dddddd;
+        background-color: #f8f8f8;
+      }
 
-        .table td {
-            padding: 8px;
-            line-height: 20px;
-            vertical-align: top;
-            border: 1px solid #dddddd;
-        }
+      .table td {
+        padding: 8px;
+        line-height: 20px;
+        vertical-align: top;
+        border: 1px solid #dddddd;
+      }
 
-        .table td.empty-cell {
-            /*border-left: none;*/
-            /*border-right: none;*/
-            /*border-bottom: none;*/
-            border: none;
-        }
+      .table td.empty-cell {
+        /*border-left: none;*/
+        /*border-right: none;*/
+        /*border-bottom: none;*/
+        border: none;
+      }
 
-        img {
-            width: 300px;
-        }
+      img {
+        width: 300px;
+      }
 
-        .row-1 {
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 30px;
-            margin-bottom: 30px;
-            width: 50%;
-        }
+      .row-1 {
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 30px;
+        margin-bottom: 30px;
+        width: 50%;
+      }
 
-        .row-2 {
-            padding-top: 30px;
-            padding-bottom: 30px;
-            width: 50%;
-        }
+      .row-2 {
+        padding-top: 30px;
+        padding-bottom: 30px;
+        width: 50%;
+      }
 
-        .padding-sm {
-            padding: 2px 10px 2px 0;
-        }
+      .padding-sm {
+        padding: 2px 10px 2px 0;
+      }
     </style>
-</head>
+  </head>
 
-<body>
-<div class="container">
-    <table style="margin-left: auto; margin-right: auto" width="700">
+  <body>
+    <div class="container">
+      <table style="margin-left: auto; margin-right: auto" width="700">
         <tr>
-            <td class="row-1">
-                <br><br><h3>Invoice / Faktura: {{ invoice.number }}</h3><br>
+          <td class="row-1">
+            <br><br>
+            <h3>Invoice / Faktura: {{ invoice.number }}</h3><br>
 
-                <table border="0" cellpadding="0" cellspacing="0">
-                    <tr>
-                        <td class="padding-sm">Invoice issue date / Data wystawienia:</td>
-                        <td class="padding-sm">{{ invoice.created_at|date('Y-m-d') }}</td>
-                    </tr>
-                    <tr>
-                        <td class="padding-sm">Purchase date / Data sprzedaży</td>
-                        <td class="padding-sm">{{ invoice.created_at|date('Y-m-d') }}</td>
-                    </tr>
-                </table>
-            </td>
+            <table border="0" cellpadding="0" cellspacing="0">
+              <tr>
+                <td class="padding-sm">Invoice issue date / Data wystawienia:</td>
+                <td class="padding-sm">{{ invoice.created_at|date('Y-m-d') }}</td>
+              </tr>
+              <tr>
+                <td class="padding-sm">Purchase date / Data sprzedaży</td>
+                <td class="padding-sm">{{ invoice.created_at|date('Y-m-d') }}</td>
+              </tr>
+            </table>
+          </td>
 
-            <td class="row-1">
-                <img src="{{ url('img/logo-about.png') }}">
-            </td>
+          <td class="row-1">
+            <img src="{{ url('img/logo-about.png') }}">
+          </td>
         </tr>
         <tr>
-            <td class="left row-2">
-                <h3>Seller / Sprzedawca</h3><br>
+          <td class="left row-2">
+            <h3>Seller / Sprzedawca</h3><br>
 
-                <strong>{{ vendor.name }}</strong><br>
-                {{ vendor.address }}<br>
-                {{ vendor.city }}<br>
-                {{ vendor.postal_code }}<br>
-                {{ vendor.country }}
-            </td>
+            <strong>{{ vendor.name }}</strong><br>
+            {{ vendor.address }}<br>
+            {{ vendor.postal_code }} {{ vendor.city }}<br>
+            {{ vendor.country }}<br>
+            VAT ID / NIP: {{ vendor.vat_id }}
+          </td>
 
-            <!-- Organization Name / Image -->
-            <td class="left row-2">
-                <h3>Buyer / Nabywca</h3><br>
+          <!-- Organization Name / Image -->
+          <td class="left row-2">
+            <h3>Buyer / Nabywca</h3><br>
 
-                <strong>{{ invoice.name }}</strong><br>
-                {{ invoice.address }}<br>
-                {{ invoice.postal_code }} {{ invoice.city }}<br>
+            <strong>{{ invoice.name }}</strong><br>
+            {{ invoice.address }}<br>
+            {{ invoice.postal_code }} {{ invoice.city }}<br>
 
-                {% if invoice.vat_id %}
-                    VAT ID / NIP: {{ invoice.country.code }}{{ invoice.vat_id }}
-                {% endif %}
-            </td>
+            {% if invoice.vat_id %}
+              VAT ID / NIP: {{ invoice.country.code }}{{ invoice.vat_id }}
+            {% endif %}
+          </td>
         </tr>
         <tr valign="top" style="margin-top: 40px">
-            <td colspan="2">
-                <!-- Invoice Table -->
-                <table width="100%" class="table" border="0" cellpadding="0" cellspacing="0">
-                    <tr>
-                        <th class="left">Description / Opis</th>
-                        <th class="right">Quantity / Ilość</th>
-                        <th class="right">Unit price / Cena jedn.</th>
-                        <th class="right">Amount / Wartość</th>
-                    </tr>
+          <td colspan="2">
+            <!-- Invoice Table -->
+            <table width="100%" class="table" border="0" cellpadding="0" cellspacing="0">
+              <tr>
+                <th class="left">Description / Opis</th>
+                <th class="right">Quantity / Ilość</th>
+                <th class="right">Unit price / Cena jedn.</th>
+                <th class="right">Amount / Wartość</th>
+              </tr>
 
-                    <!-- Display The Invoice Items -->
-                    {% for item in invoice.items %}
-                        <tr>
-                            <td class="left">{{ item.description }}</td>
-                            <td class="right">1</td>
-                            <td class="right">{{ item.price }} {{ currency }}</td>
-                            <td class="right">{{ item.gross_price }} {{ currency }}</td>
-                        </tr>
-                    {% endfor %}
+              <!-- Display The Invoice Items -->
+              {% for item in invoice.items %}
+                <tr>
+                  <td class="left">{{ item.description }}</td>
+                  <td class="right">1</td>
+                  <td class="right">{{ item.price }} {{ currency }}</td>
+                  <td class="right">{{ item.gross_price }} {{ currency }}</td>
+                </tr>
+              {% endfor %}
 
-                    <!-- Display The Final Total -->
-                    <tr style="border-top:2px solid #000;">
-                        <td class="empty-cell">&nbsp;</td>
-                        <td class="empty-cell">&nbsp;</td>
-                        <td class="right"><strong>Total / Razem</strong></td>
-                        <td class="right"><strong>{{ invoice.gross_price }} {{ currency }}</strong></td>
-                    </tr>
-                    <tr style="border-top:2px solid #000;">
-                        <td class="empty-cell">&nbsp;</td>
-                        <td class="empty-cell">&nbsp;</td>
-                        <td class="right"><strong>Paid amount / Zapłacono</strong></td>
-                        <td class="right"><strong>{{ invoice.gross_price }} {{ currency }}</strong></td>
-                    </tr>
-                    <tr style="border-top:2px solid #000;">
-                        <td class="empty-cell">&nbsp;</td>
-                        <td class="empty-cell">&nbsp;</td>
-                        <td class="right"><strong>Balance Due / Do zapłaty</strong></td>
-                        <td class="right"><strong>0 {{ currency }}</strong></td>
-                    </tr>
-                </table>
-            </td>
+              <!-- Display The Final Total -->
+              <tr style="border-top:2px solid #000;">
+                <td class="empty-cell">&nbsp;</td>
+                <td class="empty-cell">&nbsp;</td>
+                <td class="right"><strong>Total / Razem</strong></td>
+                <td class="right"><strong>{{ invoice.gross_price }} {{ currency }}</strong></td>
+              </tr>
+              <tr style="border-top:2px solid #000;">
+                <td class="empty-cell">&nbsp;</td>
+                <td class="empty-cell">&nbsp;</td>
+                <td class="right"><strong>Paid amount / Zapłacono</strong></td>
+                <td class="right"><strong>{{ invoice.gross_price }} {{ currency }}</strong></td>
+              </tr>
+              <tr style="border-top:2px solid #000;">
+                <td class="empty-cell">&nbsp;</td>
+                <td class="empty-cell">&nbsp;</td>
+                <td class="right"><strong>Balance Due / Do zapłaty</strong></td>
+                <td class="right"><strong>0 {{ currency }}</strong></td>
+              </tr>
+            </table>
+          </td>
         </tr>
-    </table>
-</div>
-</body>
+      </table>
+    </div>
+  </body>
 </html>

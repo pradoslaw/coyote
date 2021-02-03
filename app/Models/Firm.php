@@ -48,6 +48,7 @@ class Firm extends Model
         'founded',
         'is_agency',
         'country_id',
+        'vat_id',
         'city',
         'street',
         'street_number',

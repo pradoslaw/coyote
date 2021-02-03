@@ -41,10 +41,13 @@ class FixSkillsCommand extends Command
 
         foreach ($skills as $skill) {
             if (mb_strtolower($skill->name) !== $skill->name) {
-                $tag = \Coyote\Tag::withTrashed()->firstOrCreate(['name' => mb_strtolower($skill->name)]);
+                $name = mb_strtolower($skill->name);
+                $tag = \Coyote\Tag::withTrashed()->firstOrCreate(['name' => $name]);
 
                 $skill->tag_id = $tag->id;
                 $skill->save();
+
+                $this->info($skill->name);
             }
 
         }
