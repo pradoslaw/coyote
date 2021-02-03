@@ -41,7 +41,7 @@ class SkillsController extends BaseController
 
     public function update(Request $request, int $id)
     {
-        $this->auth->skills()->newPivotStatement()->where('tag_id', $id)->update(['priority' => $request->input('priority')]);
+        $this->auth->skills()->newPivotStatement()->where('user_id', $this->userId)->where('tag_id', $id)->update(['priority' => $request->input('priority')]);
     }
 
     public function delete(int $id)
