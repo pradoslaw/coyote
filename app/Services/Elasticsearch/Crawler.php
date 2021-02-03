@@ -25,9 +25,10 @@ class Crawler
     public function index(Model $model): void
     {
         $resource = $this->makeResource($model);
+        $payload = $resource->response()->getData(true);
 
         $this->client->index(
-            array_merge_recursive($this->getDefaultParams($model), ['body' => array_merge($resource->jsonSerialize(), ['model' => class_basename($model)])])
+            array_merge_recursive($this->getDefaultParams($model), ['body' => array_merge($payload, ['model' => class_basename($model)])])
         );
 
         unset($resource);
