@@ -2,6 +2,8 @@
 
 namespace Coyote\Listeners;
 
+ini_set('memory_limit', '1G');
+
 use Carbon\Carbon;
 use Coyote\Events\PaymentPaid;
 use Coyote\Notifications\SuccessfulPaymentNotification;

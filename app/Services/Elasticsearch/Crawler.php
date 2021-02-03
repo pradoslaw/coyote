@@ -79,6 +79,8 @@ class Crawler
             throw new \InvalidArgumentException("$resource does not exist.");
         }
 
+        $resource::withoutWrapping();
+
         return $resource::make($model);
     }
 }

@@ -21,6 +21,7 @@ class JobResourceTest extends TestCase
         $result = JobResource::make($job)->toResponse(request())->getData(true);
 
         $this->assertNotEmpty($result['firm']);
+        $this->assertArrayHasKey('id', $result);
 
         $this->assertEmpty($result['firm']['logo']);
         $this->assertEquals($job->firm->name, $result['firm']['name']);
