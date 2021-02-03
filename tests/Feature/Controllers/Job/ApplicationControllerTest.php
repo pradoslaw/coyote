@@ -3,7 +3,10 @@
 namespace Tests\Feature\Controllers\Job;
 
 use Coyote\Job;
+use Coyote\Notifications\Job\ApplicationConfirmationNotification;
+use Coyote\Notifications\Job\ApplicationSentNotification;
 use Faker\Factory;
+use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class ApplicationControllerTest extends TestCase
@@ -43,6 +46,8 @@ class ApplicationControllerTest extends TestCase
     {
         $faker = Factory::create();
 
+        Notification::fake();
+
         $response = $this->json(
             'POST',
             route('job.application', [$this->job->id]),
@@ -59,5 +64,8 @@ class ApplicationControllerTest extends TestCase
         $response->assertRedirect(route('job.offer', [$this->job->id, $this->job->slug]));
 
         $this->assertTrue($this->job->applications()->where('email', $fakeEmail)->exists());
+
+        Notification::assertSentTo($this->job, ApplicationSentNotification::class);
+        Notification::assertSentTo($this->job->applications()->first(), ApplicationConfirmationNotification::class);
     }
 }
