@@ -126,8 +126,6 @@ class PaymentControllerTest extends TestCase
         $this->assertEquals($payment->invoice->address, $address);
         $this->assertEquals($payment->invoice->city, $city);
         $this->assertEquals($payment->invoice->postal_code, $postalCode);
-
-        $this->assertEquals($this->job->firm->vat_id, $vat);
     }
 
     public function testSubmitValidFormWithInvoiceAndFirm()

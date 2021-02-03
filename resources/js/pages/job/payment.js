@@ -75,6 +75,7 @@ new Vue({
       }).then(result => {
         if (result.error) {
           this.$notify({type: 'error', text: result.error.message});
+          this.isProcessing = false;
         } else {
           // The payment has been processed!
           if (result.paymentIntent.status === 'succeeded') {
@@ -99,6 +100,7 @@ new Vue({
 
       if (error) {
         this.$notify({type: 'error', text: error});
+        this.isProcessing = false;
       }
     },
 
@@ -124,8 +126,8 @@ new Vue({
           }
 
           this.errors = err.response.data.errors;
-        })
-        .finally(() => this.isProcessing = false)
+          this.isProcessing = false;
+        });
     },
 
     setPaymentMethod(method) {

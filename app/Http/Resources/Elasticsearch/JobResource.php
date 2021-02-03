@@ -22,6 +22,7 @@ use Coyote\Services\UrlBuilder;
  * @property string $title
  * @property string $description
  * @property string $recruitment
+ * @property \Coyote\Firm $firm
  */
 class JobResource extends ElasticsearchResource
 {
@@ -87,14 +88,16 @@ class JobResource extends ElasticsearchResource
             'remote_range'      => $this->is_remote ? $this->remote_range : null,
 
             'suggest'           => $this->getSuggest(),
-            'subscribers'       => $this->subscribers()->pluck('user_id')
+            'subscribers'       => $this->subscribers()->pluck('user_id'),
+
+            'firm'              => $this->when($this->firm_id, fn () => new FirmResource($this->firm))
         ]);
 
-        if ($this->firm_id) {
-            // logo is instance of File object. casting to string returns file name.
-            // cast to (array) if firm is empty.
-            $body['firm'] = array_map('strval', (array) array_only($this->firm->toArray(), ['name', 'logo', 'slug']));
-        }
+//        if ($this->firm_id) {
+//            // logo is instance of File object. casting to string returns file name.
+//            // cast to (array) if firm is empty.
+//            $body['firm'] = array_map('strval', (array) array_only($this->firm->toArray(), ['name', 'logo', 'slug']));
+//        }
 
         return $body;
     }

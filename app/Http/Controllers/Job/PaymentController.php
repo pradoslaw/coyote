@@ -220,9 +220,9 @@ class PaymentController extends Controller
         }
 
         $paymentIntent = $event->data->object;
-        $repository = $repository->findOrFail($paymentIntent->metadata->id);
+        $payment = $repository->findOrFail($paymentIntent->metadata->id);
 
-        event(new PaymentPaid($repository));
+        event(new PaymentPaid($payment));
     }
 
     /**
