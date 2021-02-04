@@ -25,7 +25,7 @@
           >
           </vue-salary>
 
-          <p class="pb-1 border-bottom" style="clear: left">
+          <p class="pb-1 mb-2 border-bottom" style="clear: left">
             <a class="employer" :title="'Zobacz oferty pracy z ' + job.firm.name" :href="job.firm.url">{{ job.firm.name }}</a>
 
             <vue-location :locations="job.locations" :remote="job.remote"></vue-location>
