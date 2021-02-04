@@ -31,6 +31,8 @@
             <vue-location :locations="job.locations" :remote="job.remote"></vue-location>
           </p>
 
+          <div class="clearfix"></div>
+
           <span v-if="job.is_new" class="badge label-new float-right mt-2">Nowe</span>
           <small v-else class="text-muted float-right">{{ job.boost_at }}</small>
 
