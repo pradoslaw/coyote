@@ -1,7 +1,7 @@
 {% for job in jobs %}
   <div class="media text-truncate">
     <a class="media-link" href="{{ route('job.offer', [job.id, job.slug]) }}" title="{{ job.title ~ (job.firm ? " @ #{job.firm.name}" ) }}">
-      <img src="{{ logo(job.firm.logo) }}" alt="{{ job.firm.name }}" class="d-none d-xl-inline-block mr-2 i-45">
+      <img src="{{ url(job.firm.logo) }}" alt="{{ job.firm.name }}" class="d-none d-xl-inline-block mr-2 i-45">
 
       <div class="media-body">
         <h5 class="mb-1">{{ job.title|raw }}</h5>
