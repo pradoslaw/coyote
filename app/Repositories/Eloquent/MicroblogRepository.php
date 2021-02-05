@@ -184,7 +184,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
             ->join('microblogs', 'users.id', '=', 'user_id')
             ->when($userId, function ($builder) use ($userId) {
                 return $builder->where('user_id', '!=', $userId)->whereNotIn('user_id', function ($query) use ($userId) {
-                    return $query->select('related_user_id')->from('user_relations')->where('user_id', $userId)->where('is_blocked', false);
+                    return $query->select('related_user_id')->from('user_relations')->where('user_id', $userId);
                 });
             })
             ->limit(5)
