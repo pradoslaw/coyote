@@ -55,7 +55,8 @@ class OfferController extends Controller
 
         // search related offers
         $mlt = $this->job->search(new MoreLikeThisBuilder($job))->getSource();
-
+        logger()->debug($mlt);
+//dd($mlt);
         $comments = new CommentCollection($job->commentsWithChildren);
         $comments->job = $job;
 
@@ -75,7 +76,7 @@ class OfferController extends Controller
             'flags'             => $this->flags(),
             'assets'            => AssetsResource::collection($job->firm->assets)->toArray($this->request)
         ])->with(
-            compact('job', 'mlt')
+            compact('job')
         );
     }
 
