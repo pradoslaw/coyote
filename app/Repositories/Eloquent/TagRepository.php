@@ -3,6 +3,9 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Coyote\Repositories\Contracts\TagRepositoryInterface;
+use Coyote\Tag;
+use Coyote\User\Skill;
+use Illuminate\Database\Connection;
 
 class TagRepository extends Repository implements TagRepositoryInterface
 {
@@ -66,5 +69,41 @@ class TagRepository extends Repository implements TagRepositoryInterface
             ->groupBy('name')
             ->groupBy('logo')
             ->get();
+    }
+
+    public function merge(Tag $from, Tag $to)
+    {
+        /** @var Connection $db */
+        $db = $this->app['db'];
+
+        $select = Skill::selectRaw("$to->id, user_id, priority, \"order\"")->where('tag_id', $from->id);
+
+        $db->table('user_skills')->insertUsing(['tag_id', 'user_id', 'priority', 'order'], $select);
+
+        Skill::where('tag_id', $from->id)->delete();
+
+        /////////////////////////////////////////
+
+        $select = \Coyote\Job\Tag::selectRaw("$to->id, job_id, priority, \"order\"")->where('tag_id', $from->id);
+
+        $db->table('job_tags')->insertUsing(['tag_id', 'job_id', 'priority', 'order'], $select);
+
+        Skill::where('tag_id', $from->id)->delete();
+
+        /////////////////////////////////////////
+
+        $select = \Coyote\Topic\Tag::selectRaw("$to->id, topic_id")->where('tag_id', $from->id);
+
+        $db->table('topic_tags')->insertUsing(['tag_id', 'topic_id'], $select);
+
+        \Coyote\Topic\Tag::where('tag_id', $from->id)->delete();
+
+        /////////////////////////////////////////
+
+        $select = \Coyote\Microblog\Tag::selectRaw("$to->id, microblog_id")->where('tag_id', $from->id);
+
+        $db->table('microblog_tags')->insertUsing(['tag_id', 'microblog_id'], $select);
+
+        \Coyote\Microblog\Tag::where('tag_id', $from->id)->delete();
     }
 }
