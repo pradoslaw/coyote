@@ -18,7 +18,7 @@
       </div>
 
       <div class="row">
-        <div v-for="(skills, name) in groupedSkills" class="col">
+        <div v-for="(skills, name) in groupedSkills" class="col-sm mb-2 mb-sm-0">
           <strong class="d-block text-muted border-bottom mb-3">${ name }</strong>
 
           <vue-tags :tags="skills" :editable="true" @delete="deleteSkill" @priority="updateSkill" class="tag-clouds-skills tag-clouds-md"></vue-tags>
