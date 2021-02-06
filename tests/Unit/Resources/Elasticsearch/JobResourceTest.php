@@ -50,6 +50,7 @@ class JobResourceTest extends TestCase
 
         $this->assertNotEmpty($result['firm']['logo']);
         $this->assertStringContainsString($filename, $result['firm']['logo']);
+        $this->assertStringNotContainsString($filename, 'uploads');
     }
 
     public function testMapModelWithoutFirm()
