@@ -94,6 +94,14 @@ class Microblog extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'resource', 'tag_resources');
+    }
+
+    /**
      * Prosty "algorytm" do generowania rankingu danego wpisu na podstawie ocen i czasu dodania
      *
      * @return int
@@ -139,14 +147,6 @@ class Microblog extends Model
     public function subscribers()
     {
         return $this->morphMany(Subscription::class, 'resource');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function tags()
-    {
-        return $this->belongsToMany('Coyote\Tag', 'microblog_tags');
     }
 
     /**
