@@ -9,6 +9,7 @@ use Coyote\Services\Assets\Thumbnail;
 use Coyote\Services\Assets\Url;
 use Coyote\Services\Media\Filters\Opg;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ConnectException;
 use Http\Factory\Guzzle\RequestFactory;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Fusonic\OpenGraph\Consumer;
@@ -25,20 +26,20 @@ class AssetsController extends Controller
         ]);
 
         $client = new Client(['headers' => ['User-Agent' => 'facebookexternalhit/1.1']]);
-
         $consumer = new Consumer($client, new RequestFactory());
-        $object = $consumer->loadUrl($request->get('url'));
-
-        if (!count($object->images)) {
-            return response("No images to save.", 404);
-        }
-
-        $extension = pathinfo(parse_url($object->images[0]->url, PHP_URL_PATH), PATHINFO_EXTENSION);
-
-        $filename = $this->getHumanName($extension);
-        $tmpPath = sys_get_temp_dir() . '/' . $filename;
 
         try {
+            $object = $consumer->loadUrl($request->get('url'));
+
+            if (!count($object->images)) {
+                return response("No images to save.", 404);
+            }
+
+            $extension = pathinfo(parse_url($object->images[0]->url, PHP_URL_PATH), PATHINFO_EXTENSION);
+
+            $filename = $this->getHumanName($extension);
+            $tmpPath = sys_get_temp_dir() . '/' . $filename;
+
             $db->beginTransaction();
 
             file_put_contents($tmpPath, file_get_contents($object->images[0]->url));
@@ -61,7 +62,7 @@ class AssetsController extends Controller
             ]);
 
             $db->commit();
-        } catch (\ErrorException $exception) {
+        } catch (\ErrorException | ConnectException $exception) {
             $db->rollBack();
             logger()->error($exception);
 
