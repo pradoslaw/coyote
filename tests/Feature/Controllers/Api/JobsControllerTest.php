@@ -44,7 +44,7 @@ class JobsControllerTest extends TestCase
 
     public function testSubmitSuccessful()
     {
-        $coupon = Coupon::create(['amount' => 30, 'code' => str_random(), 'user_id' => $this->user->id]);
+        $coupon = Coupon::create(['amount' => 39, 'code' => str_random(), 'user_id' => $this->user->id]);
 
         $data = [
             'title' => $this->faker->text(60),
@@ -103,7 +103,7 @@ class JobsControllerTest extends TestCase
 
     public function testSubmitWithFirm()
     {
-        Coupon::create(['amount' => 30, 'code' => str_random(), 'user_id' => $this->user->id]);
+        Coupon::create(['amount' => 39, 'code' => str_random(), 'user_id' => $this->user->id]);
 
         $data = [
             'title' => $this->faker->text(60),
@@ -136,7 +136,7 @@ class JobsControllerTest extends TestCase
 
     public function testSubmitWithAlreadyCreatedFirm()
     {
-        Coupon::create(['amount' => 57, 'code' => str_random(), 'user_id' => $this->user->id]);
+        Coupon::create(['amount' => 65, 'code' => str_random(), 'user_id' => $this->user->id]);
         $firm = factory(Firm::class)->create(['user_id' => $this->user->id]);
 
         $data = [
