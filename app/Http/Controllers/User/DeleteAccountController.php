@@ -56,6 +56,9 @@ class DeleteAccountController extends BaseController
         $this->transaction(function () use ($request, $guard) {
             $this->auth->save();
 
+            // save information before logging out
+            stream(Delete::class, new Person($this->auth));
+
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
@@ -63,8 +66,6 @@ class DeleteAccountController extends BaseController
             $this->auth->delete();
 
             event(new UserDeleted($this->auth));
-
-            stream(Delete::class, new Person($this->auth));
         });
 
         $request->session()->flash('success', 'Konto zostało prawidłowo usunięte.');
