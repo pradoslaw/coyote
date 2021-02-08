@@ -85,8 +85,8 @@
   import { mixin as clickaway } from 'vue-clickaway';
   import axios from 'axios';
   import store from '../../store';
-  import { Hit } from '../../types/hit';
-  import { SpecialKeys } from '../../types/keys';
+  import { Hit } from '@/types/hit';
+  import { SpecialKeys } from '@/types/keys';
   import Component from 'vue-class-component';
   import { Prop, Ref, Watch } from 'vue-property-decorator';
   import { mapGetters } from "vuex";
@@ -95,7 +95,7 @@
   import VueMicroblogDecorator from './decorators/microblog';
   import VueWikiDecorator from './decorators/wiki';
   import VueUserDecorator from './decorators/user';
-  import { HitCategory, Contexts, Models } from '../../types/search';
+  import { HitCategory, Contexts, Models } from '@/types/search';
 
   @Component({
     name: 'app',
@@ -270,6 +270,7 @@
 
       const params = new URLSearchParams(window.location.search);
       params.delete('q');
+      params.delete('page');
 
       this.params = params;
     }
