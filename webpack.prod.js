@@ -79,7 +79,8 @@ module.exports = merge(common, {
       whitelistPatterns: [
         /^logo/,
         /^language/,
-        /^badge/
+        /^badge/,
+        /^depth/
       ],
       whitelistPatternsChildren: [
         /hire-me$/,
