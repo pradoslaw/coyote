@@ -6,6 +6,7 @@ use Coyote\Http\Resources\JobResource;
 use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Repositories\Criteria\EagerLoadingWithCount;
 use Coyote\Repositories\Criteria\Job\IncludeSubscribers;
+use Coyote\Repositories\Criteria\Job\PriorDeadline;
 
 class MineController extends BaseController
 {
@@ -18,6 +19,10 @@ class MineController extends BaseController
         $this->job->pushCriteria(new IncludeSubscribers($this->userId));
 
         $paginator = $this->job->published($this->userId);
+
+        $this->job->resetCriteria();
+
+        $this->job->pushCriteria(new PriorDeadline());
 
         return $this->view('job.mine', [
             'jobs'          => JobResource::collection($paginator)->toResponse($this->request)->getData(true),
