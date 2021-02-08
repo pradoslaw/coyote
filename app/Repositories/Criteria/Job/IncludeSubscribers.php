@@ -2,6 +2,7 @@
 
 namespace Coyote\Repositories\Criteria\Job;
 
+use Coyote\Job;
 use Coyote\Repositories\Contracts\RepositoryInterface as Repository;
 use Coyote\Repositories\Criteria\Criteria;
 use Illuminate\Database\Eloquent\Builder;
@@ -30,9 +31,9 @@ class IncludeSubscribers extends Criteria
     public function apply($model, Repository $repository)
     {
         return $model->when($this->userId, function (Builder $builder) use ($repository) {
-            return $builder->addSelect(['js.created_at AS subscribe_on'])
-                ->leftJoin('job_subscribers AS js', function (JoinClause $join) use ($repository) {
-                    $join->on('js.job_id', '=', 'jobs.id')->on('js.user_id', '=', $repository->raw($this->userId));
+            return $builder->addSelect(['subscriptions.created_at AS subscribe_on'])
+                ->leftJoin('subscriptions', function (JoinClause $join) use ($repository) {
+                    $join->on('subscriptions.resource_id', '=', 'jobs.id')->where('subscriptions.resource_type', Job::class)->where('subscriptions.user_id', $this->userId);
                 });
         });
     }
