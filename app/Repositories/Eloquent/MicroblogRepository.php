@@ -180,7 +180,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
             ->groupBy('users.name')
             ->groupBy('users.id')
             ->groupBy('users.photo')
-            ->orderByRaw('COUNT(*) DESC')
+            ->orderByRaw('SUM(votes) DESC')
             ->join('microblogs', 'users.id', '=', 'user_id')
             ->when($userId, function ($builder) use ($userId) {
                 return $builder->where('user_id', '!=', $userId)->whereNotIn('user_id', function ($query) use ($userId) {
