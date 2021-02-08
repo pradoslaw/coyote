@@ -10,9 +10,9 @@ use Illuminate\Contracts\Cache\Repository as Cache;
 
 class WhatsNew
 {
-    private MicroblogRepository $microblog;
-    private UserRepository $user;
-    private Cache $cache;
+    protected MicroblogRepository $microblog;
+    protected UserRepository $user;
+    protected Cache $cache;
 
     public function __construct(MicroblogRepository $microblog, UserRepository $user, Cache $cache)
     {

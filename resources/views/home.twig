@@ -145,31 +145,7 @@
         </div>
       </section>
 
-      {% if patronage %}
-        <section class="box">
-          <h4>
-            <a title="4programmers.net patronuje wydarzeniom ze świata IT!" href="{{ url('Patronat') }}">
-              <i class="fas fa-calendar-day"></i> Zbliżające się wydarzenie
-            </a>
-          </h4>
-
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title"><a href="{{ url(patronage.path) }}">{{ patronage.title }}</a></h5>
-
-              <div class="card-text">
-                <a href="{{ url(patronage.path) }}" class="text-dark">{{ patronage.excerpt }}</a>
-              </div>
-            </div>
-
-            <div class="card-footer">
-              <a title="4programmers.net patronuje wydarzeniom ze świata IT!" href="{{ url('Patronat') }}" class="text-dark">
-                <i class="fas fa-arrow-right fa-fw"></i> Zainteresowany patronatem? Dowiedz się więcej
-              </a>
-            </div>
-          </div>
-        </section>
-      {% endif %}
+      {{ patronage|raw }}
 
       {{ whats_new|raw }}
 

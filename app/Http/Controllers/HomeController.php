@@ -18,6 +18,7 @@ use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess as OnlyThoseForumsWit
 use Coyote\Services\Flags;
 use Coyote\Services\Microblogs\Builder;
 use Coyote\Services\Session\Renderer;
+use Coyote\Services\Widgets\Patronage;
 use Coyote\Services\Widgets\WhatsNew;
 
 class HomeController extends Controller
@@ -90,7 +91,7 @@ class HomeController extends Controller
             if (substr($snake, 0, 3) === 'get') {
                 $name = substr($snake, 4);
 
-                if (in_array($name, ['reputation', 'patronage'])) {
+                if (in_array($name, ['reputation'])) {
                     $result[$name] = $cache->remember('homepage:' . $name, 30 * 60, function () use ($method) {
                         return $this->$method();
                     });
@@ -103,7 +104,8 @@ class HomeController extends Controller
         return $this->view('home', $result)
             ->with('settings', $this->getSettings())
             ->with('flags', $this->flags())
-            ->with('whats_new', resolve(WhatsNew::class)->render());
+            ->with('whats_new', resolve(WhatsNew::class)->render())
+            ->with('patronage', resolve(Patronage::class)->render());
     }
 
     /**
@@ -170,20 +172,6 @@ class HomeController extends Controller
         /** @var Renderer $viewers */
         $viewers = app(Renderer::class);
         return $viewers->render();
-    }
-
-    /**
-     * @return array
-     */
-    private function getPatronage()
-    {
-        /** @var \Coyote\Wiki $parent */
-        $parent = $this->wiki->findByPath('Patronat');
-        if (!$parent) {
-            return [];
-        }
-
-        return $parent->children()->latest()->limit(1)->first(['path', 'title', 'excerpt']);
     }
 
     private function flags()
