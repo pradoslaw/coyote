@@ -231,11 +231,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
     public function skills()
     {
-        return $this->belongsToMany('Coyote\Tag', 'user_skills')->withPivot(['priority', 'order'])->orderByPivot('priority', 'desc');
+        return $this->morphToMany(Tag::class, 'resource', 'tag_resources')->withPivot(['priority', 'order'])->orderByPivot('priority', 'desc');
     }
 
     /**

@@ -125,11 +125,11 @@ class Topic extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
     public function tags()
     {
-        return $this->belongsToMany('Coyote\Tag', 'topic_tags');
+        return $this->morphToMany(Tag::class, 'resource', 'tag_resources');
     }
 
     /**

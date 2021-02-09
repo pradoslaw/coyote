@@ -21,6 +21,8 @@ class CreateTagResourcesTable extends Migration
             $table->smallInteger('order')->nullable();
 
             $table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');
+            $table->index('tag_id');
+            $table->index(['resource_type', 'tag_id']);
         });
 
         \Coyote\User\Skill::chunkById(10000, function ($result) {

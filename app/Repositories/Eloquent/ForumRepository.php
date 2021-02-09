@@ -5,6 +5,7 @@ namespace Coyote\Repositories\Eloquent;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface;
 use Coyote\Tag;
 use Coyote\Forum;
+use Coyote\Topic;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -146,11 +147,12 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
      */
     public function popularTags(int $forumId)
     {
-        return (new \Coyote\Topic\Tag)
+        return (new \Coyote\Tag\Resource)
             ->select(['name', 'text'])
-            ->join('tags', 'tags.id', '=', 'topic_tags.tag_id')
-            ->join('topics', 'topics.id', '=', 'topic_tags.topic_id')
+            ->join('tags', 'tags.id', '=', 'tag_resources.tag_id')
+            ->join('topics', 'topics.id', '=', 'tag_resources.resource_id')
             ->where('forum_id', $forumId)
+            ->where('tag_resources.resource_type', Topic::class)
             ->whereNull('tags.deleted_at')
             ->groupBy('tags.id')
             ->groupBy('name')

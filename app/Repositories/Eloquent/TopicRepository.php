@@ -113,7 +113,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
                     $this->raw('CASE WHEN tu.user_id IS NULL THEN false ELSE true END AS is_replied')
                 ])
                 ->leftJoin('subscriptions AS ts', function (JoinClause $join) use ($userId) {
-                    $join->on('ts.resource_id', '=', 'topics.id')->where('resource_type', Topic::class)->where('ts.user_id', $userId);
+                    $join->on('ts.resource_id', '=', 'topics.id')->where('ts.resource_type', Topic::class)->where('ts.user_id', $userId);
                 })
                 ->leftJoin('post_votes AS pv', function (JoinClause $join) use ($userId) {
                     $join->on('pv.post_id', '=', 'first_post_id')->on('pv.user_id', '=', $this->raw($userId));

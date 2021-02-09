@@ -319,11 +319,11 @@ class Job extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
      */
     public function tags()
     {
-        return $this->belongsToMany('Coyote\Tag', 'job_tags')->withPivot(['priority', 'order']);
+        return $this->morphToMany(Tag::class, 'resource', 'tag_resources')->withPivot(['priority', 'order'])->orderByPivot('priority', 'desc');
     }
 
     /**
