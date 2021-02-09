@@ -107,9 +107,12 @@ class AssetsController extends Controller
         $asset->save();
 
         $headers = [
-            'Content-Type'        => 'Content-Type: ' . $asset->mime,
-            'Content-Disposition' => 'attachment; filename="'. $asset->name .'"',
+            'Content-Type'        => 'Content-Type: ' . $asset->mime
         ];
+
+        if (!$asset->isImage()) {
+            $headers['Content-Disposition'] = 'attachment; filename="'. $asset->name .'"';
+        }
 
         return response()->make($filesystem->get($asset->path), 200, $headers);
     }
