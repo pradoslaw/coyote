@@ -6,6 +6,7 @@ use Coyote\Feature;
 use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Coyote\Job;
 use Coyote\Str;
+use Coyote\Tag;
 use Illuminate\Database\Query\JoinClause;
 
 /**
@@ -130,7 +131,7 @@ class JobRepository extends Repository implements JobRepositoryInterface
 
         return $this
             ->getTagsQueryBuilder()
-            ->whereIn('job_tags.tag_id', $tagsId)
+            ->whereIn('tag_resources.tag_id', $tagsId)
             ->get()
             ->pluck('count', 'name');
     }
@@ -140,29 +141,14 @@ class JobRepository extends Repository implements JobRepositoryInterface
      */
     public function getTagSuggestions(array $tags): array
     {
-        $tags = array_map(function ($tag) {
-            return new Str($tag);
-        }, $tags);
-
-        $sub = $this->toSql(
-            $this
-                ->model
-                ->select(['job_id'])
-                ->from('tags')
-                ->whereIn('name', $tags)
-                ->join('job_tags', 'job_tags.tag_id', '=', 'tags.id')
-                ->join('jobs', 'jobs.id', '=', 'job_tags.job_id') // required for eloquent's scope (deleted_at column)
-        );
-
-        return $this
-            ->model
-            ->select(['tags.name'])
-            ->from($this->raw("($sub) AS t"))
-            ->join('job_tags', 'job_tags.job_id', '=', 't.job_id')
-            ->join('tags', 'tags.id', '=', 'job_tags.tag_id')
-            ->join('jobs', 'jobs.id', '=', 'job_tags.job_id') // required for eloquent's scope (deleted_at column)
-            ->whereNotIn('name', $tags)
-            ->groupBy('tags.name')
+        return (new Tag())
+            ->select(['t.name'])
+            ->join('tag_resources', 'tag_resources.tag_id', '=', 'tags.id')
+            ->join('tag_resources AS tr', 'tr.resource_id', '=', 'tag_resources.resource_id')
+            ->join('tags AS t', 't.id', 'tr.tag_id')
+            ->whereIn('tags.name', $tags)
+            ->whereRaw('t.id != tags.id')
+            ->groupBy('t.name')
             ->orderByRaw('COUNT(*) DESC')
             ->limit(5)
             ->pluck('name')
