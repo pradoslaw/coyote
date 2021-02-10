@@ -101,18 +101,6 @@ class Topic extends Model
     }
 
     /**
-     * Scope used in topic filtering.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder$query
-     * @param int $userId
-     * @return mixed
-     */
-    public function scopeSubscribes($query, $userId)
-    {
-        return $this->buildWhereIn($query, $userId, 'topic_subscribers');
-    }
-
-    /**
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param int $userId
      * @param string $table

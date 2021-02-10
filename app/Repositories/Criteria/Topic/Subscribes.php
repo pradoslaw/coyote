@@ -4,6 +4,8 @@ namespace Coyote\Repositories\Criteria\Topic;
 
 use Coyote\Repositories\Contracts\RepositoryInterface as Repository;
 use Coyote\Repositories\Criteria\Criteria;
+use Coyote\Topic;
+use Illuminate\Database\Query\Builder;
 
 class Subscribes extends Criteria
 {
@@ -27,6 +29,13 @@ class Subscribes extends Criteria
      */
     public function apply($model, Repository $repository)
     {
-        return $model->subscribes($this->userId);
+        return $model->whereExists(function (Builder $builder) {
+            return $builder
+                ->select('id')
+                ->from('subscriptions')
+                ->whereRaw('resource_id = topics.id')
+                ->where('resource_type', Topic::class)
+                ->where('user_id', $this->userId);
+        });
     }
 }
