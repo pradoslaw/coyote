@@ -37,15 +37,13 @@ class DispatchPostCommentNotification implements ShouldQueue
     {
         $comment = $event->comment;
         /** @var \Coyote\User[]|\Illuminate\Support\Collection $subscribers */
-        $subscribers = $comment->user->followers;
+        $subscribers = [];
 
         if ($event->wasRecentlyCreated) {
-            $subscribers = $subscribers
-                ->merge($comment->post->subscribers()->with('user')->get()->pluck('user')->exceptUser($comment->user))
-                ->unique('id');
+            $subscribers = $comment->post->subscribers()->with('user.notificationSettings')->get()->pluck('user')->exceptUser($comment->user);
 
             $this->dispatcher->send(
-                $subscribers->load('notificationSettings'),
+                $subscribers,
                 (new CommentedNotification($comment))
             );
         }
