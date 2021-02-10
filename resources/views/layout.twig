@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    {{ render_region('head') }}
+
     {% block head %}
       <title>{%- block title -%} :: 4programmers.net{%- endblock -%}</title>
 
@@ -35,8 +37,6 @@
     <link rel="preload" href="/fonts/font-awesome/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/font-awesome/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/font-awesome/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin>
-
-    {{ render_region('head') }}
   </head>
   <body class="{{ auth_guest() or user('allow_sticky_header') ? 'padding-top' }}">
     {{ render_region('body') }}
