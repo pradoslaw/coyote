@@ -99,7 +99,7 @@ class DispatchMicroblogNotificationsTest extends TestCase
         $user->relations()->create(['related_user_id' => $blocked->id, 'is_blocked' => true]);
 
         /** @var Microblog $microblog */
-        $microblog = factory(Microblog::class)->create(['user_id' => $blocked->id, 'text' => "Hello @{$user->name}"]);
+        $microblog = factory(Microblog::class)->create(['user_id' => $blocked->id, 'text' => "Hello @{{$user->name}}"]);
         $microblog->wasRecentlyCreated = true;
 
         event(new MicroblogSaved($microblog));

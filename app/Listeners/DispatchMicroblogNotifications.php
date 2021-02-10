@@ -43,25 +43,25 @@ class DispatchMicroblogNotifications implements ShouldQueue
 
         $microblog = $event->microblog;
         /** @var \Coyote\User[]|\Illuminate\Support\Collection  $subscribers */
-        $subscribers = $microblog->user->followers;
+        $subscribers = [];
 
         if ($event->wasRecentlyCreated) {
             if ($microblog->parent_id) {
-                $subscribers = $subscribers
-                    ->merge(
-                        $microblog->parent
-                            ->subscribers()
-                            ->excludeBlocked($microblog->user->id)
-                            ->with('user')
-                            ->get()
-                            ->pluck('user')
-                    )
-                    ->unique('id');
+                $subscribers = $microblog
+                    ->parent
+                    ->subscribers()
+                    ->excludeBlocked($microblog->user->id)
+                    ->with('user.notificationSettings')
+                    ->get()
+                    ->pluck('user');
+
+            } else {
+                $subscribers = $microblog->user->followers;
             }
 
             if (count($subscribers)) {
                 $this->dispatcher->send(
-                    $subscribers->load('notificationSettings'),
+                    $subscribers,
                     $microblog->parent_id ? new CommentedNotification($microblog) : new SubmittedNotification($microblog)
                 );
             }
