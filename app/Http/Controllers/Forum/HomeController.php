@@ -104,7 +104,7 @@ class HomeController extends BaseController
             }
         }
 
-        return parent::view($view, $data)->with(['tabs' => $this->tabs, 'title' => $title]);
+        return parent::view($view, $data)->with(['tabs' => $this->tabs, 'title' => $currentTab != 'categories' ? $title : '']);
     }
 
     /**
