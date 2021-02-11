@@ -54,7 +54,6 @@ class DispatchMicroblogNotifications implements ShouldQueue
                     ->with('user.notificationSettings')
                     ->get()
                     ->pluck('user');
-
             } else {
                 $subscribers = $microblog->user->followers;
             }
