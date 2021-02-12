@@ -112,10 +112,6 @@ class JobRequest extends FormRequest
                 'int',
                 Rule::exists('plans', 'id')->where('is_active', 1),
             ],
-            'firm_id' => [
-                'nullable',
-                Rule::exists('firms', 'id')->whereNull('deleted_at')
-            ],
             'features.*.id' => 'required|int',
             'features.*.name' => 'string|max:100',
             'features.*.value' => 'nullable|string|max:100',
@@ -134,7 +130,13 @@ class JobRequest extends FormRequest
                 'integer',
                 Rule::exists('firms', 'id')->whereNull('deleted_at')
             ],
-            'firm.name' => 'required_with:job.firm_id|max:60',
+            'firm.name' => [
+                'nullable',
+                Rule::requiredIf($this->input('firm.id') !== null),
+                'string',
+                'min:2',
+                'max:60'
+            ],
             'firm.is_agency' => self::IS_AGENCY,
             'firm.website' => self::WEBSITE,
             'firm.logo' => 'nullable|string|url',

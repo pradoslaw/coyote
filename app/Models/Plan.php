@@ -38,6 +38,11 @@ class Plan extends Model
         return $this->hasOne(Currency::class);
     }
 
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
     public function getGrossPriceAttribute()
     {
         return $this->price * $this->vat_rate;

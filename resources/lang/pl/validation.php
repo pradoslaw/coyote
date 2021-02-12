@@ -199,6 +199,7 @@ return [
 
     'attributes' => [
         'password'                  => 'hasło',
-        'name'                      => 'nazwa użytkownika'
+        'name'                      => 'nazwa użytkownika',
+        'firm.name'                 => 'nazwa firmy'
     ],
 ];

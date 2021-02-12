@@ -314,6 +314,11 @@
     }
 
     set defaultFirm(id) {
+      if (!id) {
+        this.addFirm();
+
+        return;
+      }
       this.$store.commit('jobs/SET_FIRM', this.firms.find(firm => firm.id == id));
     }
   }
