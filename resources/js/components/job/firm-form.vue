@@ -12,13 +12,13 @@
         <span class="form-text text-muted">Możesz wybrać jedną z pośród kilku firm przypiasnych do Twojego konta.</span>
       </div>
 
-      <vue-form-group :errors="errors['name']" label="Nazwa firmy" class="border-bottom">
+      <vue-form-group :errors="errors['firm.name']" label="Nazwa firmy" class="border-bottom">
         <div class="input-group">
           <div class="input-group-prepend">
             <a @click="addFirm" class="input-group-text text-decoration-none" href="javascript:" title="Dodaj nową firmę"><i class="fas fa-fw fa-plus-circle"></i></a>
           </div>
 
-          <vue-text v-model="firm.name" :is-invalid="'name' in errors" name="firm[name]"></vue-text>
+          <vue-text v-model="firm.name" :is-invalid="'firm.name' in errors" name="firm[name]"></vue-text>
         </div>
 
         <span class="form-text text-muted">Podając nazwę firmy, oferta staje się bardziej wiarygodna i wartościowa.</span>
@@ -58,8 +58,8 @@
         </div>
       </div>
 
-      <vue-form-group :errors="errors['website']" label="Strona WWW" class="border-bottom">
-        <vue-text v-model="firm.website" :is-invalid="'website' in errors" name="firm[website]"></vue-text>
+      <vue-form-group :errors="errors['firm.website']" label="Strona WWW" class="border-bottom">
+        <vue-text v-model="firm.website" :is-invalid="'firm.website' in errors" name="firm[website]"></vue-text>
 
         <span class="form-text text-muted">Firmowa strona WWW. Będzie ona wyświetlana przy ofercie.</span>
       </vue-form-group>
@@ -88,19 +88,19 @@
         </div>
       </div>
 
-      <vue-form-group :errors="errors['youtube_url']" label="Nagranie wideo w Youtube" class="form-group">
-        <vue-text v-model="firm.youtube_url" :is-invalid="'youtube_url' in errors" name="firm[youtube_url]"></vue-text>
+      <vue-form-group :errors="errors['firm.youtube_url']" label="Nagranie wideo w Youtube" class="form-group">
+        <vue-text v-model="firm.youtube_url" :is-invalid="'firm.youtube_url' in errors" name="firm[youtube_url]"></vue-text>
 
         <span class="form-text text-muted">Film promujący firmę będzie wyświetlany pod ogłoszeniem o pracę.</span>
       </vue-form-group>
 
-      <vue-form-group :errors="errors['employees']" label="Liczba pracowników w firmie">
+      <vue-form-group :errors="errors['firm.employees']" label="Liczba pracowników w firmie">
         <vue-select :options="employees" v-model="firm.employees" placeholder="--" name="firm[employees]"></vue-select>
 
         <span class="form-text text-muted">Pozwala ocenić jak duża jest firma. Czy jest to korporacja, czy mała rodzinna firma?</span>
       </vue-form-group>
 
-      <vue-form-group :errors="errors['founded']" label="Rok powstania" class="border-bottom">
+      <vue-form-group :errors="errors['firm.founded']" label="Rok powstania" class="border-bottom">
         <vue-select :options="founded" v-model="firm.founded" placeholder="--" name="firm[founded]"></vue-select>
 
         <span class="form-text text-muted">Pozwala ocenić jak duża jest firma. Czy jest to korporacja, czy mała rodzinna firma?</span>
