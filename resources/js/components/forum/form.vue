@@ -72,7 +72,7 @@
             <label class="col-md-3 col-form-label text-right">Możliwych odpowiedzi</label>
 
             <div class="col-md-6">
-              <vue-text v-model="poll.max_items" class="input-sm"></vue-text>
+              <vue-text v-model="poll.max_items" :is-invalid="`poll.max_items` in errors" class="input-sm"></vue-text>
               <vue-error :message="errors['poll.max_items']"></vue-error>
 
               <span class="form-text text-muted">Minimalnie jedna możliwa odpowiedź w ankiecie.</span>
@@ -83,7 +83,7 @@
             <label class="col-md-3 col-form-label text-right">Długość działania</label>
 
             <div class="col-md-6">
-              <vue-text v-model="poll.length" class="input-sm"></vue-text>
+              <vue-text v-model="poll.length" :is-invalid="`poll.length` in errors" class="input-sm"></vue-text>
               <vue-error :message="errors['poll.length']"></vue-error>
 
               <span class="form-text text-muted">Określ długość działania ankiety (w dniach). 0 oznacza brak terminu ważności.</span>

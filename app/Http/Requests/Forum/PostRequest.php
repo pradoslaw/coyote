@@ -61,8 +61,6 @@ class PostRequest extends FormRequest
         ];
 
         if ($this->canChangeSubject()) {
-            $require = Rule::requiredIf(fn () => count(array_filter($this->input('poll.items.*.text', []))) >= 2);
-
             $rules = array_merge($rules, [
                 'title'                 => $this->titleRule(),
                 'tags'                  => self::RULE_TAGS,
@@ -72,11 +70,7 @@ class PostRequest extends FormRequest
                     'tag',
                     app(TagDeleted::class),
                     'tag_creation:300'
-                ],
-
-                'poll.items.*.text'     => [$require, 'nullable', 'string', 'max:200'],
-                'poll.length'           => [$require, 'nullable', 'integer'],
-                'poll.max_items'        => [$require, 'nullable', 'integer']
+                ]
             ]);
         }
 
@@ -125,6 +119,12 @@ class PostRequest extends FormRequest
 
     public function withValidator(Validator $validator)
     {
+        $shouldValidatePoll = fn () => count(array_filter($this->input('poll.items.*.text', []))) >= 1;
+
+        $validator->sometimes('poll.items.*.text', ['required', 'string', 'max:200'], $shouldValidatePoll);
+        $validator->sometimes('poll.length', ['integer', 'min:0'], $shouldValidatePoll);
+        $validator->sometimes('poll.max_items', ['integer', 'min:1', 'max:200'], $shouldValidatePoll);
+
         $validator->sometimes('tags', 'required', function () {
             return $this->forum->require_tag && $this->canChangeSubject();
         });
@@ -145,7 +145,8 @@ class PostRequest extends FormRequest
     public function messages()
     {
         return [
-            'title.not_regex' => 'Wygląda na to, że tytuł zawiera prefiks z nazwą tagu. Użyj dedykowanego pola z możliwością wpisania tagu.'
+            'title.not_regex' => 'Wygląda na to, że tytuł zawiera prefiks z nazwą tagu. Użyj dedykowanego pola z możliwością wpisania tagu.',
+            'poll.items.*.text.required' => 'Proszę dodać odpowiedź w ankiecie.'
         ];
     }
 }

@@ -303,7 +303,6 @@ class SubmitControllerTest extends TestCase
                 'text' => $faker->text,
                 'title' => $faker->text(50),
                 'poll' => [
-                    'title' => $pollTitle = $faker->word,
                     'max_items' => 1,
                     'length' => 0,
                     'items' => [
@@ -326,8 +325,33 @@ class SubmitControllerTest extends TestCase
 
         $this->assertNotNull($topic->poll_id);
 
-        $this->assertDatabaseHas('polls', ['id' => $topic->poll_id, 'title' => $pollTitle]);
         $this->assertDatabaseHas('poll_items', ['poll_id' => $topic->poll_id, 'text' => $itemA]);
         $this->assertDatabaseHas('poll_items', ['poll_id' => $topic->poll_id, 'text' => $itemB]);
+    }
+
+    public function testFailedToSubmitTopicWithOnePollAnswer()
+    {
+        $faker = Factory::create();
+        $payload = [
+            'text' => $faker->text,
+            'title' => $faker->text(50),
+            'poll' => [
+                'max_items' => 1,
+                'length' => 0,
+                'items' => [
+                    [
+                        'text' => $itemA = $faker->realText(50)
+                    ]
+                ]
+            ]
+        ];
+
+        $response = $this->actingAs($this->user)->json('POST', "/Forum/{$this->forum->slug}/Submit",  $payload);
+        $response->assertStatus(422);
+
+        array_push($payload['poll']['items'], ['text' => '']);
+
+        $response = $this->actingAs($this->user)->json('POST', "/Forum/{$this->forum->slug}/Submit",  $payload);
+        $response->assertStatus(422);
     }
 }
