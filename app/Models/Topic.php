@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Coyote\Models\Scopes\TrackForum;
 use Coyote\Models\Scopes\TrackTopic;
 use Coyote\Models\Subscription;
+use Coyote\Tag\Resource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Coyote\Models\Scopes\Sortable;

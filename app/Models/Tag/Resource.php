@@ -2,6 +2,7 @@
 
 namespace Coyote\Tag;
 
+use Coyote\Tag;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -9,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $resource_type
  * @property int $priority
  * @property int $order
+ * @property Tag $tag
  */
 class Resource extends Model
 {
@@ -23,4 +25,9 @@ class Resource extends Model
      * @var bool
      */
     public $timestamps = false;
+
+    public function tag()
+    {
+        return $this->belongsTo(Tag::class);
+    }
 }

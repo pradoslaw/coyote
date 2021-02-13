@@ -21,12 +21,12 @@ class TagTest extends TestCase
 
         $tag->refresh();
 
-        $this->assertEquals(1, $tag->microblogs);
+        $this->assertEquals(1, $tag->resources['Coyote\Microblog']);
 
         $microblog->tags()->sync([]);
 
         $tag->refresh();
 
-        $this->assertEquals(0, $tag->microblogs);
+        $this->assertEquals(0, $tag->resources['Coyote\Microblog']);
     }
 }

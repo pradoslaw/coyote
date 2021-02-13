@@ -13,7 +13,9 @@ class TagTest extends TestCase
 
     public function testToggleTagAndCheckCounter()
     {
-        $tag = factory(Tag::class)->create();
+        $tag = factory(Tag::class)->create(['resources' => ['Coyote\Topic' => 1]]);
+
+        $this->assertEquals(1, $tag->resources['Coyote\Topic']);
 
         /** @var Topic $topic */
         $topic = factory(Topic::class)->create();
@@ -21,12 +23,12 @@ class TagTest extends TestCase
 
         $tag->refresh();
 
-        $this->assertEquals(1, $tag->topics);
+        $this->assertEquals(2, $tag->resources['Coyote\Topic']);
 
         $topic->tags()->sync([]);
 
         $tag->refresh();
 
-        $this->assertEquals(0, $tag->topics);
+        $this->assertEquals(1, $tag->resources['Coyote\Topic']);
     }
 }

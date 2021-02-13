@@ -21,12 +21,12 @@ class TagTest extends TestCase
 
         $tag->refresh();
 
-        $this->assertEquals(1, $tag->jobs);
+        $this->assertEquals(1, $tag->resources['Coyote\Job']);
 
         $job->tags()->sync([]);
 
         $tag->refresh();
 
-        $this->assertEquals(0, $tag->jobs);
+        $this->assertEquals(0, $tag->resources['Coyote\Job']);
     }
 }

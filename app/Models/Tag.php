@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $topics
  * @property int $jobs
  * @property int $microblogs
+ * @property mixed $resources
  */
 class Tag extends Model
 {
@@ -32,6 +33,10 @@ class Tag extends Model
      * @var array
      */
     protected $fillable = ['name', 'real_name', 'category_id', 'text'];
+
+    protected $casts = ['resources' => 'json'];
+
+    protected $attributes = ['resources' => '{}'];
 
     /**
      * @var bool
