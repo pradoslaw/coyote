@@ -59,7 +59,7 @@
                   v-model="item.text"
                   :is-invalid="`poll.items.${index}.text` in errors"
                   class="input-sm"
-                  @keydown.enter.native="addItem"
+                  @keydown.enter.native.prevent="addItem"
                   placeholder="Naciśnij Enter, aby dodać kolejną pozycję"
                 ></vue-text>
 
