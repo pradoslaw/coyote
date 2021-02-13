@@ -199,8 +199,9 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     public function getTags()
     {
         return (new Tag())
-                ->select(['name', $this->raw('microblogs AS count'), 'logo', 'category_id'])
-                ->orderBy('microblogs', 'DESC')
+                ->select(['name', 'logo', 'category_id'])
+                ->addSelectRaw("COALESCE(resources ->> '" . Microblog::class . "', '0')::int AS count")
+                ->orderByRaw("count DESC")
                 ->limit(30)
                 ->get();
     }
