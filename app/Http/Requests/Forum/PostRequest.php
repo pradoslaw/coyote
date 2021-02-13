@@ -121,6 +121,7 @@ class PostRequest extends FormRequest
     {
         $shouldValidatePoll = fn () => count(array_filter($this->input('poll.items.*.text', []))) >= 1;
 
+        $validator->sometimes('poll.items', ['min:2'], $shouldValidatePoll);
         $validator->sometimes('poll.items.*.text', ['required', 'string', 'max:200'], $shouldValidatePoll);
         $validator->sometimes('poll.length', ['integer', 'min:0'], $shouldValidatePoll);
         $validator->sometimes('poll.max_items', ['integer', 'min:1', 'max:200'], $shouldValidatePoll);
