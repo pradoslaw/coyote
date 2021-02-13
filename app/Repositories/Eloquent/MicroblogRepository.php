@@ -200,7 +200,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     {
         return (new Tag())
                 ->select(['name', 'logo', 'category_id'])
-                ->addSelectRaw("COALESCE(resources ->> '" . Microblog::class . "', '0')::int AS count")
+                ->addSelect($this->raw("COALESCE(resources ->> '" . Microblog::class . "', '0')::int AS count"))
                 ->orderByRaw("count DESC")
                 ->limit(30)
                 ->get();
