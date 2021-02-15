@@ -101,14 +101,17 @@ class IndexCommand extends Command
         }
 
         $bar = $this->output->createProgressBar($builder->count());
-        $crawler = new Crawler();
 
-        $builder->chunk(20000, function ($rowset) use ($bar, $crawler) {
+        $builder->chunk(20000, function ($rowset) use ($bar) {
+            $crawler = new Crawler();
+
             foreach ($rowset as $row) {
                 $crawler->index($row);
 
                 $bar->advance();
             }
+
+            unset($crawler);
         });
 
         $bar->finish();
