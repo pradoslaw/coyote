@@ -175,6 +175,10 @@ export interface Tag {
   real_name?: string;
   logo?: string;
   priority?: number;
+  text?: string;
+  topics?: number;
+  microblogs?: number;
+  jobs?: number;
 }
 
 export interface Topic {

@@ -80,7 +80,6 @@ class SubmitController extends Controller
         $firms = FirmResource::collection($this->firm->findAllBy('user_id', $this->userId));
 
         return $this->view('job.submit.home', [
-            'popular_tags'      => $this->job->getPopularTags(),
             'job'               => new JobFormResource($job),
             'firms'             => $firms,
 

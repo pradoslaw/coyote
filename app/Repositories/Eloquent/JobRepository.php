@@ -90,19 +90,6 @@ class JobRepository extends Repository implements JobRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function getPopularTags($limit = 500)
-    {
-        return $this
-            ->getTagsQueryBuilder()
-            ->orderBy($this->raw('COUNT(*)'), 'DESC')
-            ->limit($limit)
-            ->get()
-            ->pluck('name');
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getDefaultFeatures($userId)
     {
         $sub = $this->toSql(
@@ -125,20 +112,6 @@ class JobRepository extends Repository implements JobRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function getTagsWeight(array $tagsId)
-    {
-        $this->applyCriteria();
-
-        return $this
-            ->getTagsQueryBuilder()
-            ->whereIn('tag_resources.tag_id', $tagsId)
-            ->get()
-            ->pluck('count', 'name');
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getTagSuggestions(array $tags): array
     {
         return (new Tag())
@@ -153,22 +126,5 @@ class JobRepository extends Repository implements JobRepositoryInterface
             ->limit(5)
             ->pluck('name')
             ->toArray();
-    }
-
-    /**
-     * @return mixed
-     */
-    private function getTagsQueryBuilder()
-    {
-        return $this
-            ->app
-            ->make(Job\Tag::class)
-            ->select(['name', $this->raw('COUNT(*) AS count')])
-            ->join('tags', 'tags.id', '=', 'tag_id')
-            ->join('jobs', 'jobs.id', '=', 'job_id')
-                ->whereNull('jobs.deleted_at')
-                ->whereNull('tags.deleted_at')
-                ->where('deadline_at', '>', $this->raw('NOW()'))
-            ->groupBy('name');
     }
 }

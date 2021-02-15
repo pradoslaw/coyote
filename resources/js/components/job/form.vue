@@ -75,7 +75,7 @@
         <div class="form-group">
           <label class="col-form-label">Kluczowe technologie (wymagane lub mile widziane)</label>
 
-          <vue-tags-dropdown id="tag" :tags="popularTags" @change="addTag" :is-invalid="errors.tags != null"></vue-tags-dropdown>
+          <vue-tags-inline @change="addTag" placeholder="Np. java, c#, ms-sql"></vue-tags-inline>
 
           <span class="form-text text-muted" v-if="errors.tags != null">{{ errors.tags[0] }}</span>
           <span class="form-text text-muted" v-else-if="suggestions.length === 0">Wybierz z listy lub wpisz nazwę języka/technologii i naciśnij Enter, aby dodać wymaganie.</span>
@@ -83,7 +83,7 @@
             Podpowiedź:
 
             <template v-for="(suggestion, index) in suggestions">
-              <a href="javascript:" class="tag-suggestion" @click="addTag(suggestion)">{{ suggestion }}</a>{{ index < suggestions.length - 1 ? ', ' : '' }}
+              <a href="javascript:" class="tag-suggestion" @click="addTag({ name: suggestion })">{{ suggestion }}</a>{{ index < suggestions.length - 1 ? ', ' : '' }}
             </template>
           </span>
 
@@ -192,6 +192,7 @@
   import TinyMceOptions from '../../libs/tinymce';
   import store from "../../store";
   import axios from "axios";
+  import VueTagsInline from "@/components/forms/tags-inline.vue";
 
   @Component({
     components: {
@@ -202,7 +203,8 @@
       'vue-radio': VueRadio,
       'vue-button': VueButton,
       'vue-error': VueError,
-      'vue-tags-dropdown': VueTagsDropdown,
+      // 'vue-tags-dropdown': VueTagsDropdown,
+      'vue-tags-inline': VueTagsInline,
       'vue-tags': VueTags,
       'vue-google-place': VueGooglePlace,
       'vue-tinymce': VueTinyMce
@@ -232,9 +234,6 @@
     currencies!: Currency[];
 
     @Prop()
-    popularTags!: Tag[]
-
-    @Prop()
     errors;
 
     suggestions = {};
@@ -243,8 +242,8 @@
       this.$store.commit('jobs/SET_LOCATION', { index, location });
     }
 
-    addTag(name) {
-      this.$store.commit('jobs/ADD_TAG', name);
+    addTag(tag: Tag) {
+      this.$store.commit('jobs/ADD_TAG', tag.name);
 
       // fetch only tag name
       let pluck = this.job.tags.map(item => item.name);

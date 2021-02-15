@@ -33,7 +33,6 @@
           :job="job"
           :errors="errors"
           :currencies="currencies"
-          :popular-tags="popularTags"
         ></vue-job-form>
 
         <vue-firm-form
@@ -130,7 +129,6 @@
     var job = {{ job|json_encode|raw }};
     var plans = {{ plans|raw }};
     var currencies = {{ currencies|json_encode|raw }};
-    var popularTags = {{ popular_tags|json_encode|raw }};
     var defaultBenefits = {{ default_benefits|json_encode|raw }};
     var employees = {{ employees|json_encode|raw }};
     var firms = {{ firms|json_encode|raw }};

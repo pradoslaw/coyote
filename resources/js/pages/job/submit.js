@@ -20,7 +20,6 @@ new Vue({
     plans,
     currencies,
     job,
-    popularTags,
     defaultBenefits,
     employees,
     firms,

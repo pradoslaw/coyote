@@ -25,24 +25,10 @@ interface JobRepositoryInterface extends RepositoryInterface
     public function subscribes($userId);
 
     /**
-     * @param int $limit
-     * @return mixed
-     */
-    public function getPopularTags($limit = 1000);
-
-    /**
      * @param int $userId
      * @return \Coyote\Feature[]
      */
     public function getDefaultFeatures($userId);
-
-    /**
-     * Return tags with job offers counter
-     *
-     * @param array $tagsId
-     * @return mixed
-     */
-    public function getTagsWeight(array $tagsId);
 
     /**
      * @param int $userId
