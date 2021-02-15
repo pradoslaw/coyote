@@ -18,12 +18,12 @@ class HomeController extends BaseController
     /**
      * @var MicroblogRepository
      */
-    private $microblog;
+    private MicroblogRepository $microblog;
 
     /**
      * @var Builder
      */
-    private $builder;
+    private Builder $builder;
 
     /**
      * @param MicroblogRepository $microblog
