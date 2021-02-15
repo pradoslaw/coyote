@@ -135,7 +135,7 @@
     border: none;
     position: relative;
     outline: none;
-    padding: 5px 0;
+
     flex: 1 1 auto;
   }
 
@@ -162,6 +162,7 @@
   max-height: 200px;
   overflow-y: auto;
   top: calc(100% - 5px);
+  left: 0;
 
   li {
     padding: 6px 5px;
@@ -189,3 +190,12 @@
   }
 }
 
+.tag-editor:not(.form-control) {
+  .tag-dropdown {
+    top: calc(100% - 5px);
+  }
+
+  input {
+    padding: 5px 0;
+  }
+}

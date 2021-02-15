@@ -75,7 +75,7 @@
         <div class="form-group">
           <label class="col-form-label">Kluczowe technologie (wymagane lub mile widziane)</label>
 
-          <vue-tags-inline @change="addTag" placeholder="Np. java, c#, ms-sql"></vue-tags-inline>
+          <vue-tags-inline @change="addTag" placeholder="Np. java, c#, ms-sql" class="form-control"></vue-tags-inline>
 
           <span class="form-text text-muted" v-if="errors.tags != null">{{ errors.tags[0] }}</span>
           <span class="form-text text-muted" v-else-if="suggestions.length === 0">Wybierz z listy lub wpisz nazwę języka/technologii i naciśnij Enter, aby dodać wymaganie.</span>
@@ -182,15 +182,14 @@
   import VueRadio from '@/components/forms/radio.vue';
   import VueButton from '@/components/forms/button.vue';
   import VueError from '@/components/forms/error.vue';
-  import VueTagsDropdown from '@/components/job/tags-dropdown.vue';
   import VueTags from '@/components/tags.vue';
   import VueGooglePlace from '@/components/google-maps/place.vue';
   import VueTinyMce from '@tinymce/tinymce-vue';
   import { Prop } from "vue-property-decorator";
   import {Job, Rate, Employment, Seniority, Currency, Tag } from '@/types/models';
-  import { mapMutations, mapActions } from "vuex";
-  import TinyMceOptions from '../../libs/tinymce';
-  import store from "../../store";
+  import { mapMutations } from "vuex";
+  import TinyMceOptions from '@/libs/tinymce';
+  import store from "@/store";
   import axios from "axios";
   import VueTagsInline from "@/components/forms/tags-inline.vue";
 
@@ -203,7 +202,6 @@
       'vue-radio': VueRadio,
       'vue-button': VueButton,
       'vue-error': VueError,
-      // 'vue-tags-dropdown': VueTagsDropdown,
       'vue-tags-inline': VueTagsInline,
       'vue-tags': VueTags,
       'vue-google-place': VueGooglePlace,
