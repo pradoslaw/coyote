@@ -32,11 +32,26 @@ class MigrateTagsCommand extends Command
      */
     public function handle(Connection $db, TagRepositoryInterface $repository)
     {
+        if ($this->option('from') === $this->option('to')) {
+            $this->error('Parametry "from" i "to" są identyczne.');
+
+            return 1;
+        }
+
+        /** @var Tag $from */
         $from = Tag::where('name', $this->option('from'))->firstOrFail();
+        /** @var Tag $to */
         $to = Tag::where('name', $this->option('to'))->firstOrFail();
 
         $db->transaction(function () use ($from, $to, $repository) {
-            $repository->merge($from, $to);
+            $resources = $to->resources;
+
+            foreach (array_keys($from->resources) as $key) {
+                $resources[$key] = ($resources[$key] ?? 0) + $from->resources[$key];
+            }
+
+            $to->resources = $resources;
+            $to->save();
 
             $from->forceDelete();
 
