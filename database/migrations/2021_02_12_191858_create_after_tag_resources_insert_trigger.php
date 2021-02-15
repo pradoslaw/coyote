@@ -19,7 +19,7 @@ class CreateAfterTagResourcesInsertTrigger extends Migration
 CREATE OR REPLACE FUNCTION after_tag_resources_insert() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
     EXECUTE format('UPDATE tags
-    SET resources = jsonb_set(resources, ''{%s}'', (COALESCE(resources->>''%s'', ''0'')::int + 1)::text::jsonb)
+    SET resources = jsonb_set(resources, ''{%s}'', (COALESCE(resources->>''%s'', ''0'')::int + 1)::text::jsonb), last_used_at = now()
     WHERE id = %s', REPLACE(NEW.resource_type, '\', '\\\'), NEW.resource_type, NEW.tag_id);
 
 	RETURN NEW;
