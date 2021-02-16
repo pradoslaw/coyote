@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers\User;
 use Coyote\Http\Requests\SkillsRequest;
 use Coyote\Http\Resources\TagResource;
 use Coyote\Tag;
+use Coyote\User;
 use Illuminate\Http\Request;
 
 class SkillsController extends BaseController
@@ -41,7 +42,14 @@ class SkillsController extends BaseController
 
     public function update(Request $request, int $id)
     {
-        $this->auth->skills()->newPivotStatement()->where('user_id', $this->userId)->where('tag_id', $id)->update(['priority' => $request->input('priority')]);
+        $this
+            ->auth
+            ->skills()
+            ->newPivotStatement()
+            ->where('resource_id', $this->userId)
+            ->where('resource_type', User::class)
+            ->where('tag_id', $id)
+            ->update(['priority' => $request->input('priority')]);
     }
 
     public function delete(int $id)
