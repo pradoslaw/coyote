@@ -6,6 +6,9 @@ use Boduch\Grid\Source\EloquentSource;
 use Coyote\Http\Forms\TagForm;
 use Coyote\Http\Grids\Adm\TagsGrid;
 use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
+use Coyote\Services\Stream\Activities\Update as Stream_Update;
+use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
+use Coyote\Services\Stream\Objects\Tag as Stream_Tag;
 use Coyote\Tag;
 
 class TagsController extends BaseController
@@ -66,11 +69,15 @@ class TagsController extends BaseController
 
         $tag->fill($form->all());
 
-        if ($form->getRequest()->hasFile('logo')) {
-            $tag->logo->upload($form->getRequest()->file('logo'));
-        }
+        $this->transaction(function () use ($form, $tag) {
+            if ($form->getRequest()->hasFile('logo')) {
+                $tag->logo->upload($form->getRequest()->file('logo'));
+            }
 
-        $tag->save();
+            $tag->save();
+
+            stream(Stream_Update::class, (new Stream_Tag())->map($tag));
+        });
 
         return redirect()->route('adm.tags')->with('success', 'Zmiany zostały zapisane.');
     }
@@ -78,6 +85,8 @@ class TagsController extends BaseController
     public function delete(Tag $tag)
     {
         $tag->delete();
+
+        stream(Stream_Delete::class, (new Stream_Tag())->map($tag));
 
         return redirect()->route('adm.tags')->with('success', 'Tag został usunięty.');
     }

@@ -38,6 +38,7 @@ return [
         'person' => 'profil',
         'block' => 'blok',
         'group' => 'grupa',
+        'tag' => 'tag'
     ],
 
     'headline' => [
@@ -60,6 +61,7 @@ return [
         'unknown:reset'     => 'Zresetowanie hasła do konta :email',
         'block'             => ':actor :verb :object',
         'pastebin'          => ':actor :verb :object',
-        'group'             => ':actor :verb :object :name'
+        'group'             => ':actor :verb :object :name',
+        'tag'               => ':actor :verb :object :name'
     ]
 ];
