@@ -6,6 +6,7 @@ use Boduch\Grid\Source\EloquentSource;
 use Coyote\Http\Forms\TagForm;
 use Coyote\Http\Grids\Adm\TagsGrid;
 use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
+use Coyote\Services\Elasticsearch\Crawler;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Objects\Tag as Stream_Tag;
@@ -79,12 +80,16 @@ class TagsController extends BaseController
             stream(Stream_Update::class, (new Stream_Tag())->map($tag));
         });
 
+        (new Crawler())->index($tag);
+
         return redirect()->route('adm.tags')->with('success', 'Zmiany zostały zapisane.');
     }
 
     public function delete(Tag $tag)
     {
         $tag->delete();
+
+        (new Crawler())->delete($tag);
 
         stream(Stream_Delete::class, (new Stream_Tag())->map($tag));
 

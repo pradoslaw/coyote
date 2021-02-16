@@ -34,8 +34,14 @@ class Tag extends Model
      */
     protected $fillable = ['name', 'real_name', 'category_id', 'text'];
 
+    /**
+     * @var string[]
+     */
     protected $casts = ['resources' => 'json'];
 
+    /**
+     * @var string[]
+     */
     protected $attributes = ['resources' => '{}'];
 
     /**
@@ -63,6 +69,21 @@ class Tag extends Model
         }
 
         return $this->attributes['logo'];
+    }
+
+    public function getTopicsAttribute()
+    {
+        return $this->resources[Topic::class] ?? 0;
+    }
+
+    public function getJobsAttribute()
+    {
+        return $this->resources[Job::class] ?? 0;
+    }
+
+    public function getMicroblogsAttribute()
+    {
+        return $this->resources[Microblog::class] ?? 0;
     }
 
     /**
