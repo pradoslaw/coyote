@@ -9,7 +9,6 @@ use Coyote\Services\Elasticsearch\Functions\Random;
 use Coyote\Services\Elasticsearch\Functions\ScriptScore;
 use Coyote\Services\Elasticsearch\MatchAll;
 use Coyote\Services\Elasticsearch\MultiMatch;
-use Coyote\Services\Elasticsearch\Normalizers\Job;
 use Coyote\Services\Elasticsearch\QueryBuilder;
 use Coyote\Services\Elasticsearch\Filters;
 use Coyote\Services\Elasticsearch\Sort;
@@ -179,7 +178,7 @@ class SearchBuilder extends QueryBuilder
      */
     public function build()
     {
-        $this->must(new Filters\Term('model', class_basename(Job::class)));
+        $this->must(new Filters\Term('model', class_basename(\Coyote\Job::class)));
 
         if ($this->request->filled('q')) {
             $this->must(

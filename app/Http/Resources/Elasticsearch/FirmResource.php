@@ -11,7 +11,8 @@ class FirmResource extends JsonResource
         return [
             'name'          => $this->resource->name,
             'slug'          => $this->resource->slug,
-            'logo'          => $this->resource->logo->getFilename()
+            'logo'          => $this->resource->logo->getFilename(),
+            'is_agency'     => $this->resource->is_agency
         ];
     }
 }
