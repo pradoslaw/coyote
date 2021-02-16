@@ -51,7 +51,7 @@ class FieldValueFactor extends FunctionScore
      */
     private function getSetup()
     {
-        $result = [];
+        $result = ['missing' => 1];
 
         foreach (['field', 'modifier', 'factor'] as $option) {
             if ($this->{$option} !== null) {
