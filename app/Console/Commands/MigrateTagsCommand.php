@@ -53,6 +53,8 @@ class MigrateTagsCommand extends Command
             $to->resources = $resources;
             $to->save();
 
+            Tag\Resource::where('tag_id', $from->id)->update(['tag_id' => $to->id]);
+
             $from->forceDelete();
 
             $crawler = new Crawler();
