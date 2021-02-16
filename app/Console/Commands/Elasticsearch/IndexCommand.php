@@ -18,7 +18,7 @@ class IndexCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'es:index {--model=} {--force}';
+    protected $signature = 'es:index {--model=} {--force} {--offset=}';
 
     /**
      * The console command description.
@@ -90,7 +90,9 @@ class IndexCommand extends Command
         $model = $this->app->make($className);
         $this->line("Indexing $className ...");
 
-        $builder = $model->select()->orderBy('id', 'desc');//->where('id', 44030);
+        $offset = (int) $this->option('offset');
+
+        $builder = $model->select()->orderBy('id', 'desc');
         $objectName = get_class($model);
 
         // ugly hack for job offers...
@@ -100,9 +102,9 @@ class IndexCommand extends Command
             $builder = $builder->whereNull('parent_id');
         }
 
-        $bar = $this->output->createProgressBar($builder->count());
+        $bar = $this->output->createProgressBar($builder->count() - $offset);
 
-        $builder->chunk(20000, function ($rowset) use ($bar) {
+        $builder->skip($offset)->chunk(20000, function ($rowset) use ($bar) {
             $crawler = new Crawler();
 
             foreach ($rowset as $row) {
