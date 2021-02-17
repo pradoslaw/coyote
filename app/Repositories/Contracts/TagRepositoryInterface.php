@@ -24,5 +24,5 @@ interface TagRepositoryInterface extends RepositoryInterface
      * @param array $tags
      * @return Tag[]
      */
-    public function getCategorizedTags(array $tags);
+    public function categorizedTags(array $tags);
 }

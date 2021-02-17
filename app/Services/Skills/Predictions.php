@@ -4,6 +4,7 @@ namespace Coyote\Services\Skills;
 
 use Coyote\Repositories\Contracts\GuestRepositoryInterface as GuestRepository;
 use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
+use Coyote\User;
 use Illuminate\Http\Request;
 use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
 
@@ -29,6 +30,8 @@ class Predictions
      */
     protected $tag;
 
+    protected ?User $user;
+
     /**
      * @param Request $request
      * @param PageRepository $page
@@ -41,6 +44,7 @@ class Predictions
         $this->page = $page;
         $this->guest = $guest;
         $this->tag = $tag;
+        $this->user = $this->request->user();
     }
 
     /**
@@ -48,17 +52,21 @@ class Predictions
      */
     public function getTags()
     {
-        if (!($tags = $this->getRefererTags())) {
-            $tags = $this->getUserPopularTags();
+        if ($tags = $this->refered()) {
+            return $tags;
         }
 
-        return $tags;
+        if ($tags = $this->skills()) {
+            return $tags;
+        }
+
+        return $this->popular();
     }
 
     /**
      * @return \Coyote\Tag[]|null
      */
-    private function getRefererTags()
+    private function refered()
     {
         $referer = filter_var($this->request->headers->get('referer'), FILTER_SANITIZE_URL);
         if (!$referer) {
@@ -76,15 +84,15 @@ class Predictions
             return null;
         }
 
-        $result = $this->tag->getCategorizedTags($page->tags);
+        $result = $this->tag->categorizedTags($page->tags);
 
         return count($result) ? $result : null;
     }
 
     /**
-     * @return null|\Illuminate\Support\Collection
+     * @return \Coyote\Tag[]|null
      */
-    private function getUserPopularTags()
+    private function popular()
     {
         /** @var \Coyote\Guest $guest */
         $guest = $this->guest->find($this->request->session()->get('guest_id'));
@@ -97,13 +105,28 @@ class Predictions
         arsort($ratio);
 
         // get only five top tags
-        $result = $this->tag->getCategorizedTags(array_slice(array_keys($ratio), 0, 4));
+        $result = $this->tag->categorizedTags(array_slice(array_keys($ratio), 0, 4));
 
         if (!count($result)) {
             return null;
         }
 
         // only one tag please...
-        return collect()->push($result->random());
+        return $result;
+    }
+
+    public function skills()
+    {
+        if (empty($this->user) || $this->user->skills) {
+            return null;
+        }
+
+        $result = $this->tag->categorizedTags($this->user->skills->pluck('name')->toArray());
+
+        if (!count($result)) {
+            return null;
+        }
+
+        return $result;
     }
 }

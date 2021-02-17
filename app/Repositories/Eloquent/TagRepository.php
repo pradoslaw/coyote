@@ -2,6 +2,7 @@
 
 namespace Coyote\Repositories\Eloquent;
 
+use Coyote\Job;
 use Coyote\Repositories\Contracts\TagRepositoryInterface;
 
 class TagRepository extends Repository implements TagRepositoryInterface
@@ -55,16 +56,18 @@ class TagRepository extends Repository implements TagRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function getCategorizedTags(array $tags)
+    public function categorizedTags(array $tags)
     {
         return $this
             ->model
-            ->selectRaw('name, logo, COUNT(*) AS weight')
-                ->join('job_tags', 'tag_id', '=', 'tags.id')
+            ->selectRaw('name, logo')
             ->whereIn('name', $tags)
             ->whereNotNull('category_id')
             ->groupBy('name')
             ->groupBy('logo')
+            ->groupBy('resources')
+            ->orderByRaw("COALESCE(resources ->> '" . Job::class . "', '0')::int DESC")
+            ->limit(5)
             ->get();
     }
 }
