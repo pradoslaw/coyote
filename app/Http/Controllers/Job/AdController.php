@@ -57,11 +57,13 @@ class AdController extends Controller
             return '';
         }
 
+        $majorTag = $this->getMajorTag($tags);
+
         // search jobs that might be interesting for user
         return (string) view(
             'job.ad',
             $data,
-            ['jobs' => $result->getSource(), 'inverse_tags' => $this->getTagsNames($tags), 'major_tag' => $this->getMajorTag($tags)]
+            ['jobs' => $result->getSource(), 'inverse_tags' => $this->getTagsNames($majorTag), 'major_tag' => $majorTag]
         );
     }
 
