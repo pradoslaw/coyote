@@ -125,6 +125,12 @@
       white-space: nowrap;
     }
   }
+
+  // hide scrollbar due to bug
+  // @see https://github.com/mdbootstrap/perfect-scrollbar/issues/947
+  .ps__rail-x {
+    display: none !important;
+  }
 }
 
 // Post offer button (for employers)
