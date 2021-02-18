@@ -4,7 +4,6 @@ namespace Coyote\Services\Skills;
 
 use Coyote\Repositories\Contracts\GuestRepositoryInterface as GuestRepository;
 use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
-use Coyote\User;
 use Illuminate\Http\Request;
 use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
 
@@ -30,8 +29,6 @@ class Predictions
      */
     protected $tag;
 
-    protected ?User $user;
-
     /**
      * @param Request $request
      * @param PageRepository $page
@@ -44,7 +41,6 @@ class Predictions
         $this->page = $page;
         $this->guest = $guest;
         $this->tag = $tag;
-        $this->user = $this->request->user();
     }
 
     /**
@@ -52,21 +48,17 @@ class Predictions
      */
     public function getTags()
     {
-        if ($tags = $this->refered()) {
-            return $tags;
+        if (!($tags = $this->getRefererTags())) {
+            $tags = $this->getUserPopularTags();
         }
 
-//        if ($tags = $this->skills()) {
-//            return $tags;
-//        }
-
-        return $this->popular();
+        return $tags;
     }
 
     /**
      * @return \Coyote\Tag[]|null
      */
-    private function refered()
+    private function getRefererTags()
     {
         $referer = filter_var($this->request->headers->get('referer'), FILTER_SANITIZE_URL);
         if (!$referer) {
@@ -90,9 +82,9 @@ class Predictions
     }
 
     /**
-     * @return \Coyote\Tag[]|null
+     * @return null|\Illuminate\Support\Collection
      */
-    private function popular()
+    private function getUserPopularTags()
     {
         /** @var \Coyote\Guest $guest */
         $guest = $this->guest->find($this->request->session()->get('guest_id'));
@@ -112,21 +104,6 @@ class Predictions
         }
 
         // only one tag please...
-        return $result;
-    }
-
-    public function skills()
-    {
-        if (empty($this->user) || $this->user->skills) {
-            return null;
-        }
-
-        $result = $this->tag->categorizedTags($this->user->skills->pluck('name')->toArray());
-
-        if (!count($result)) {
-            return null;
-        }
-
-        return $result;
+        return collect()->push($result->random());
     }
 }
