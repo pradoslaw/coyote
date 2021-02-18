@@ -56,9 +56,9 @@ class Predictions
             return $tags;
         }
 
-        if ($tags = $this->skills()) {
-            return $tags;
-        }
+//        if ($tags = $this->skills()) {
+//            return $tags;
+//        }
 
         return $this->popular();
     }

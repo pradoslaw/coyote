@@ -29,7 +29,7 @@ class AdBuilder extends SearchBuilder
         $this->must(new Term('model', class_basename(Job::class)));
 
         $this->score(new FieldValueFactor('score', 'log', 1.2));
-        $this->score(new FieldValueFactor('firm.is_agency', 'none', 0.5));
+//        $this->score(new FieldValueFactor('firm.is_agency', 'none', 0.5));
         $this->score(new Random());
         $this->size(0, 4);
 
