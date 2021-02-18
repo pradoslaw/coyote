@@ -49,45 +49,47 @@ class BoostJobOffer implements ShouldQueue
      */
     public function handle(PaymentPaid $event)
     {
-        app(Connection::class)->transaction(function () use ($event) {
+        $payment = $event->payment;
+
+        app(Connection::class)->transaction(function () use ($payment) {
             $pdf = null;
 
             // set up invoice only if firm name was provided. it's required!
-            if ($event->payment->invoice_id && $event->payment->invoice->name) {
+            if ($payment->invoice_id && $payment->invoice->name) {
                 // set up invoice number since it's already paid.
-                $this->enumerator->enumerate($event->payment->invoice);
+                $this->enumerator->enumerate($payment->invoice);
                 // create pdf
-                $pdf = $this->pdf->create($event->payment);
+                $pdf = $this->pdf->create($payment);
             }
 
-            $event->payment->status_id = Payment::PAID;
+            $payment->status_id = Payment::PAID;
 
             // establish plan's finish date
-            $event->payment->starts_at = Carbon::now();
-            $event->payment->ends_at = Carbon::now()->addDays($event->payment->days);
+            $payment->starts_at = Carbon::now();
+            $payment->ends_at = Carbon::now()->addDays($payment->days);
 
-            if ($event->payment->coupon) {
-                $event->payment->coupon->delete();
+            if ($payment->coupon) {
+                $payment->coupon->delete();
             }
 
-            $event->payment->save();
+            $payment->save();
 
-            foreach ($event->payment->plan->benefits as $benefit) {
-                if ($benefit !== 'is_social') { // column is_social does not exist in table
-                    $event->payment->job->{$benefit} = true;
+            foreach ($payment->plan->benefits as $benefit) {
+                if ($benefit !== 'is_social' && $benefit === 'is_boost') { // column is_social does not exist in table
+                    $payment->job->{$benefit} = true;
                 }
             }
 
-            $event->payment->job->boost_at = Carbon::now();
-            $event->payment->job->deadline_at = max($event->payment->job->deadline_at, $event->payment->ends_at);
-            $event->payment->job->save();
+            $payment->job->boost_at = Carbon::now();
+            $payment->job->deadline_at = max($payment->job->deadline_at, $payment->ends_at);
+            $payment->job->save();
 
             // index job offer
-            (new Crawler())->index($event->payment->job);
+            (new Crawler())->index($payment->job);
 
             // send email with invoice
-            $event->payment->job->user->notify(
-                new SuccessfulPaymentNotification($event->payment, $pdf)
+            $payment->job->user->notify(
+                new SuccessfulPaymentNotification($payment, $pdf)
             );
         });
     }
