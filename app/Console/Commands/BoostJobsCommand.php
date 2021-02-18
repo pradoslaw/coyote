@@ -47,7 +47,7 @@ class BoostJobsCommand extends Command
         $crawler = new Crawler();
 
         foreach ($payments as $payment) {
-            $every = floor($payment->days / max(2, $payment->plan->boost));
+            $every = $payment->plan->boost === 1 ? floor($payment->days / $payment->plan->boost) : floor(($payment->days - 10) / $payment->plan->boost);
 
             if (Carbon::now()->gte(Carbon::parse($payment->job->boost_at)->addDays($every))) {
                 $payment->job->boost_at = Carbon::now();

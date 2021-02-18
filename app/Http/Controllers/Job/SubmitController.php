@@ -47,7 +47,7 @@ class SubmitController extends Controller
         $job->user_id = $this->userId;
 
         // reset all plan values
-        $job->is_boost = $job->is_publish = $job->is_ads = $job->is_on_top = $job->is_highlight = false;
+        $job->is_publish = $job->is_ads = $job->is_on_top = $job->is_highlight = false;
         // reset views counter
         $job->views = 1;
 

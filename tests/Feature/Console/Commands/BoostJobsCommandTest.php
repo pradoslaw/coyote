@@ -59,14 +59,13 @@ class BoostJobsCommandTest extends TestCase
 
         $this->assertTrue($job->is_publish);
         $this->assertTrue($job->is_ads);
-        $this->assertTrue($job->is_boost);
         $this->assertTrue($job->is_on_top);
 
         $now = now();
 
         for ($i = 1; $i <= $plan->length; $i++) {
             Carbon::setTestNow($now->addDay());
-            $output = $i == 13 || $i == 26 || $i == 39 ? "Boosting " . $job->title : "Done.";
+            $output = $i == 10 || $i == 20 || $i == 30 ? "Boosting " . $job->title : "Done.";
 
             $this->artisan('job:boost')
                 ->expectsOutput($output);

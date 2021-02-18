@@ -75,7 +75,7 @@ class BoostJobOffer implements ShouldQueue
             $payment->save();
 
             foreach ($payment->plan->benefits as $benefit) {
-                if ($benefit !== 'is_social' && $benefit === 'is_boost') { // column is_social does not exist in table
+                if ($benefit !== 'is_social') { // column is_social does not exist in table
                     $payment->job->{$benefit} = true;
                 }
             }

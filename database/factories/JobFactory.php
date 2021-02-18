@@ -20,7 +20,8 @@ $factory->define(\Coyote\Job::class, function (Faker $faker) {
 
 $factory->afterCreating(\Coyote\Job::class, function (\Coyote\Job $job, $faker) {
     $job->payments()->save(factory(\Coyote\Payment::class)->make([
-        'plan_id' => $job->plan_id
+        'plan_id' => $job->plan_id,
+        'status_id' => \Coyote\Payment::NEW
     ]));
 });
 
