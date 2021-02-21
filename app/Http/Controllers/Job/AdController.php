@@ -47,9 +47,10 @@ class AdController extends Controller
 
         $data = [];
         $tags = $predictions->getTags();
+        $majorTag = $this->getMajorTag($tags);
 
-        if (!empty($tags)) {
-            $builder->boostTags($this->boost($tags));
+        if (!empty($majorTag)) {
+            $builder->boostTags([sprintf('%s^%.1F', Raw::escape($majorTag->name), 1)]);
         }
 
         $result = $this->job->search($builder);
@@ -61,25 +62,8 @@ class AdController extends Controller
         return (string) view(
             'job.ad',
             $data,
-            ['jobs' => $result->getSource(), 'inverse_tags' => $this->getTagsNames($tags), 'major_tag' => $this->getMajorTag($tags)]
+            ['jobs' => $result->getSource(), 'inverse_tags' => [$majorTag->name], 'major_tag' => $majorTag]
         );
-    }
-
-    /**
-     * @param \Coyote\Tag[] $tags
-     * @return array
-     */
-    private function boost($tags)
-    {
-        $result = [];
-
-        foreach ($tags as $tag) {
-            if (!empty($tag)) {
-                $result[] = sprintf('%s^%.1F', Raw::escape($tag->name), 1);
-            }
-        }
-
-        return $result;
     }
 
     /**
@@ -92,19 +76,6 @@ class AdController extends Controller
             return [];
         }
 
-        return $tags->first();
-    }
-
-    /**
-     * @param \Coyote\Tag[] $tags
-     * @return array
-     */
-    private function getTagsNames($tags)
-    {
-        if (empty($tags)) {
-            return [];
-        }
-
-        return $tags->pluck('name')->toArray();
+        return $tags->random();
     }
 }

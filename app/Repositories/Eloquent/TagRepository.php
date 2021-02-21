@@ -63,6 +63,7 @@ class TagRepository extends Repository implements TagRepositoryInterface
             ->selectRaw('name, logo')
             ->whereIn('name', $tags)
             ->whereNotNull('category_id')
+            ->whereNotNull('logo')
             ->groupBy('name')
             ->groupBy('logo')
             ->groupBy('resources')
