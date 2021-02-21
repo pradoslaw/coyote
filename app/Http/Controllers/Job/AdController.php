@@ -8,6 +8,7 @@ use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
 use Coyote\Services\Elasticsearch\Builders\Job\AdBuilder;
 use Coyote\Services\Elasticsearch\Raw;
 use Coyote\Services\Skills\Predictions;
+use Coyote\Tag;
 
 class AdController extends Controller
 {
@@ -49,7 +50,7 @@ class AdController extends Controller
         $tags = $predictions->getTags();
         $majorTag = $this->getMajorTag($tags);
 
-        if (!empty($majorTag)) {
+        if ($majorTag->exists) {
             $builder->boostTags([sprintf('%s^%.1F', Raw::escape($majorTag->name), 1)]);
         }
 
@@ -68,12 +69,12 @@ class AdController extends Controller
 
     /**
      * @param \Coyote\Tag[] $tags
-     * @return array|\Coyote\Tag
+     * @return \Coyote\Tag
      */
     private function getMajorTag($tags)
     {
         if (empty($tags)) {
-            return [];
+            return new Tag();
         }
 
         return $tags->random();
