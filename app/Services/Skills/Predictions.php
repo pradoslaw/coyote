@@ -2,8 +2,10 @@
 
 namespace Coyote\Services\Skills;
 
+use Coyote\Guest;
 use Coyote\Repositories\Contracts\GuestRepositoryInterface as GuestRepository;
 use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
+use Coyote\User;
 use Illuminate\Http\Request;
 use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
 
@@ -12,53 +14,53 @@ class Predictions
     /**
      * @var Request
      */
-    protected $request;
+    protected Request $request;
 
     /**
      * @var PageRepository
      */
-    protected $page;
-
-    /**
-     * @var GuestRepository
-     */
-    protected $guest;
+    protected PageRepository $page;
 
     /**
      * @var TagRepository
      */
-    protected $tag;
+    protected TagRepository $tag;
+
+    protected ?User $user;
 
     /**
      * @param Request $request
      * @param PageRepository $page
-     * @param GuestRepository $guest
      * @param TagRepository $tag
      */
-    public function __construct(Request $request, PageRepository $page, GuestRepository $guest, TagRepository $tag)
+    public function __construct(Request $request, PageRepository $page, TagRepository $tag)
     {
         $this->request = $request;
         $this->page = $page;
-        $this->guest = $guest;
         $this->tag = $tag;
+        $this->user = $this->request->user();
     }
 
     /**
-     * @return array
+     * @return array|null
      */
     public function getTags()
     {
-        if (!($tags = $this->getRefererTags())) {
-            $tags = $this->getUserPopularTags();
+        if ($tags = $this->refered()) {
+            return $tags;
         }
 
-        return $tags;
+        if ($tags = $this->skills()) {
+            return $tags;
+        }
+
+        return $this->popular();
     }
 
     /**
      * @return \Coyote\Tag[]|null
      */
-    private function getRefererTags()
+    private function refered()
     {
         $referer = filter_var($this->request->headers->get('referer'), FILTER_SANITIZE_URL);
         if (!$referer) {
@@ -76,18 +78,16 @@ class Predictions
             return null;
         }
 
-        $result = $this->tag->categorizedTags($page->tags);
-
-        return count($result) ? $result : null;
+        return $this->tag->categorizedTags($page->tags) ?? null;
     }
 
     /**
-     * @return null|\Illuminate\Support\Collection
+     * @return \Coyote\Tag[]|null
      */
-    private function getUserPopularTags()
+    private function popular()
     {
         /** @var \Coyote\Guest $guest */
-        $guest = $this->guest->find($this->request->session()->get('guest_id'));
+        $guest = Guest::find($this->request->session()->get('guest_id'));
 
         if (empty($guest) || empty($guest->interests)) {
             return null;
@@ -96,14 +96,15 @@ class Predictions
         $ratio = $guest->interests['ratio'];
         arsort($ratio);
 
-        // get only five top tags
-        $result = $this->tag->categorizedTags(array_slice(array_keys($ratio), 0, 4));
+        return $this->tag->categorizedTags(array_slice(array_keys($ratio), 0, 4)) ?? null;
+    }
 
-        if (!count($result)) {
+    public function skills()
+    {
+        if (empty($this->user) || !$this->user->skills) {
             return null;
         }
 
-        // only one tag please...
-        return collect()->push($result->random());
+        return $this->tag->categorizedTags($this->user->skills->pluck('name')->toArray()) ?? null;
     }
 }
