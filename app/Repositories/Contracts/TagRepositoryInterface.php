@@ -25,4 +25,10 @@ interface TagRepositoryInterface extends RepositoryInterface
      * @return Tag[]
      */
     public function categorizedTags(array $tags);
+
+    /**
+     * @param string $model
+     * @return array
+     */
+    public function tagClouds(string $model): array;
 }

@@ -111,22 +111,6 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     }
 
     /**
-     * @return array
-     */
-    public function getTagsCloud()
-    {
-        return $this
-            ->app
-            ->make(Tag::class)
-            ->select(['id', 'name', 'logo', 'topics'])
-            ->orderBy('topics', 'DESC')
-            ->limit(10)
-            ->get()
-            ->pluck('topics', 'name')
-            ->toArray();
-    }
-
-    /**
      * @param int $id
      */
     public function up($id)

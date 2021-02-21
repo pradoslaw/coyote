@@ -12,6 +12,7 @@ use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Services\UrlBuilder;
+use Coyote\Topic;
 use Illuminate\Http\Request;
 
 abstract class BaseController extends Controller
@@ -125,7 +126,7 @@ abstract class BaseController extends Controller
     {
         // let's cache tags. we don't need to run this query every time
         return $this->getCacheFactory()->remember('forum:tags', now()->addDay(), function () {
-            return $this->forum->getTagsCloud();
+            return $this->tag->tagClouds(Topic::class);
         });
     }
 

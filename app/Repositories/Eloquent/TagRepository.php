@@ -70,4 +70,20 @@ class TagRepository extends Repository implements TagRepositoryInterface
             ->limit(5)
             ->get();
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function tagClouds(string $model): array
+    {
+        return $this
+            ->model
+            ->select(['id', 'name', 'logo'])
+            ->addSelect($this->raw("COALESCE(resources ->> '$model', '0')::int AS count"))
+            ->orderByRaw('count DESC')
+            ->limit(10)
+            ->get()
+            ->pluck('count', 'name')
+            ->toArray();
+    }
 }
