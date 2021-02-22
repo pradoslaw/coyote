@@ -61,7 +61,7 @@
 
             <vue-select name="currency_id" class="d-inline-block" :options="currenciesValues" v-model="job.currency_id"></vue-select>
 
-            <vue-select name="is_gross" class="d-inline-block" :options="['Netto', 'Brutto']" v-model="+job.is_gross"></vue-select>
+            <vue-select name="is_gross" class="d-inline-block" :options="['Netto', 'Brutto']" v-model="isGross"></vue-select>
             <vue-select name="rate" class="d-inline-block" :options="rates" v-model="job.rate"></vue-select>
             <vue-select name="employment" class="d-inline-block" :options="employments" v-model="job.employment"></vue-select>
 
@@ -282,6 +282,14 @@
 
         return acc
       }, {});
+    }
+
+    get isGross() {
+      return +this.job.is_gross;
+    }
+
+    set isGross(flag) {
+      this.job.is_gross = !!flag;
     }
   }
 
