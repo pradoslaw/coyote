@@ -73,7 +73,7 @@ class AdController extends Controller
      */
     private function getMajorTag($tags)
     {
-        if (empty($tags)) {
+        if (empty($tags) || !count($tags)) {
             return new Tag();
         }
 
