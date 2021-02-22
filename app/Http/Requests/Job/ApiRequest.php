@@ -2,15 +2,15 @@
 
 namespace Coyote\Http\Requests\Job;
 
-use Coyote\Job;
 use Coyote\Repositories\Contracts\CouponRepositoryInterface as CouponRepository;
 use Coyote\Repositories\Contracts\PlanRepositoryInterface as PlanRepository;
 use Coyote\Rules\Base64Image;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Validation\Rule;
+use Coyote\User;
 
 class ApiRequest extends JobRequest
 {
+    private User $user;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -18,24 +18,13 @@ class ApiRequest extends JobRequest
      */
     public function authorize()
     {
-        $user = $this->user('api');
+        $this->user = $this->user('api');
 
         if ($this->route('job') !== null) {
-            return $user->can('update', $this->route('job'));
+            return $this->user->can('update', $this->route('job'));
         }
 
-        /** @var \Coyote\Plan $plan */
-        $plan = $this->plan()->findDefault($this->input('plan'));
-
-        return $this->coupon()->findCoupon($user->id, $plan->price) !== null;
-    }
-
-    /**
-     * @throws AuthorizationException
-     */
-    protected function failedAuthorization()
-    {
-        throw new AuthorizationException('No sufficient funds to post this job offer.');
+        return true;
     }
 
     /**
@@ -59,11 +48,6 @@ class ApiRequest extends JobRequest
             'description' => 'string',
             'recruitment' => 'nullable|string',
             'email' => 'nullable|email',
-            'plans' => [
-                'bail',
-                'string',
-                Rule::exists('plans', 'name')->where('is_active', true)
-            ],
             'features.*.id' => 'required|int',
             'features.*.name' => 'string|max:100',
             'features.*.value' => 'nullable|string|max:100',
@@ -92,6 +76,34 @@ class ApiRequest extends JobRequest
             'firm.postcode' => 'nullable|string|max:50',
             'firm.street_number' => self::LOCATION_STREET_NUMBER,
         ];
+    }
+
+    protected function getValidatorInstance()
+    {
+        return parent::getValidatorInstance()->after(function ($validator) {
+            if ($this->route('job') !== null) {
+                return true;
+            }
+
+            /** @var \Coyote\Plan $plan */
+            $plan = $this->plan()->findDefault($this->input('plan'));
+
+            if (!$plan) {
+                $validator->errors()->add('plan', 'Invalid plan name.');
+
+                return false;
+            }
+
+            if ($plan->price > 0) {
+                if ($this->coupon()->findCoupon($this->user->id, $plan->price) === null) {
+                    $validator->errors()->add('plan', 'No sufficient funds to post this job offer.');
+
+                    return false;
+                }
+            }
+
+            return true;
+        });
     }
 
     private function plan(): PlanRepository
