@@ -41,7 +41,7 @@ trait Searchable
     protected function performSearch($body)
     {
         // show build query in laravel's debugbar
-        debugbar()->debug(json_encode($body));
+        debugbar()->debug(htmlspecialchars(json_encode($body)));
         debugbar()->debug($body);
 
         $params = $this->getParams();

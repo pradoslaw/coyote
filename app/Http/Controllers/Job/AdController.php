@@ -2,13 +2,14 @@
 
 namespace Coyote\Http\Controllers\Job;
 
-use Coyote\Http\Controllers\Controller;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
 use Coyote\Services\Elasticsearch\Builders\Job\AdBuilder;
 use Coyote\Services\Elasticsearch\Raw;
 use Coyote\Services\Skills\Predictions;
 use Coyote\Tag;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 class AdController extends Controller
 {
@@ -28,8 +29,8 @@ class AdController extends Controller
      */
     public function __construct(JobRepository $job, TagRepository $tag)
     {
-        debugbar()->disable();
-        parent::__construct();
+//        debugbar()->disable();
+//        parent::__construct();
 
         $this->job = $job;
         $this->tag = $tag;
@@ -41,22 +42,22 @@ class AdController extends Controller
      * @param Predictions $predictions
      * @return string
      */
-    public function index(Predictions $predictions)
+    public function index(Request $request, Predictions $predictions)
     {
-        $builder = new AdBuilder($this->request);
-        $builder->boostLocation($this->request->attributes->get('geocode'));
+        $builder = new AdBuilder($request);
+        $builder->boostLocation($request->attributes->get('geocode'));
 
         $data = [];
         $tags = $predictions->getTags();
         $majorTag = $this->getMajorTag($tags);
 
         if ($majorTag->exists) {
-            $builder->boostTags([sprintf('%s^%.1F', Raw::escape($majorTag->name), 1)]);
+            $builder->boostTags(Raw::escape($majorTag->name));
         }
 
         $result = $this->job->search($builder);
         if (!$result->total()) {
-            return '';
+            return false;
         }
 
         // search jobs that might be interesting for user

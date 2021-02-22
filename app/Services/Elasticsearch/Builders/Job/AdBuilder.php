@@ -12,11 +12,11 @@ use Coyote\Services\Elasticsearch\SimpleQueryString;
 class AdBuilder extends SearchBuilder
 {
     /**
-     * @param array $tags
+     * @param string $tags
      */
-    public function boostTags(array $tags)
+    public function boostTags(string $tag)
     {
-        $this->must(new SimpleQueryString(implode(' ', $tags), ['title^2', 'tags^2'], 3));
+        $this->must(new SimpleQueryString($tag, ['title^2', 'tags^2'], 3));
     }
 
     /**
