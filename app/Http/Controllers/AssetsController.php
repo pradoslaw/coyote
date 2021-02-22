@@ -10,6 +10,7 @@ use Coyote\Services\Assets\Url;
 use Coyote\Services\Media\Filters\Opg;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\RequestException;
 use Http\Factory\Guzzle\RequestFactory;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Fusonic\OpenGraph\Consumer;
@@ -62,7 +63,7 @@ class AssetsController extends Controller
             ]);
 
             $db->commit();
-        } catch (\ErrorException | ConnectException $exception) {
+        } catch (\ErrorException | ConnectException | RequestException $exception) {
             $db->rollBack();
             logger()->error($exception);
 
