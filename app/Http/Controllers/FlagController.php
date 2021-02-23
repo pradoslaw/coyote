@@ -43,7 +43,7 @@ class FlagController extends Controller
      */
     public function index()
     {
-        return Type::all();
+        return Type::orderBy('id')->get();
     }
 
     /**
