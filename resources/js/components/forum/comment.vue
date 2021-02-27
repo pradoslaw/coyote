@@ -11,8 +11,12 @@
         <i class="fas fa-pencil-alt"></i>
       </a>
 
-      <a v-if="comment.editable" @click="deleteComment(true)" href="javascript:" title="Usuń ten komentarz" class="btn-comment">
+      <a v-if="comment.editable" @click="deleteComment" href="javascript:" title="Usuń ten komentarz" class="btn-comment">
         <i class="fas fa-times"></i>
+      </a>
+
+      <a v-if="comment.editable" @click="migrate" href="javascript:" title="Zamień w post" class="btn-comment">
+        <i class="fab fa-hubspot"></i>
       </a>
     </template>
 
@@ -65,6 +69,15 @@
         okLabel: 'Tak, usuń'
       })
       .then(() => this.$store.dispatch('posts/deleteComment', this.comment));
+    }
+
+    migrate() {
+      this.$confirm({
+        message: 'Tej operacji nie będzie można cofnąć.',
+        title: 'Zamienić na post?',
+        okLabel: 'Tak, zamień'
+      })
+      .then(() => this.$store.dispatch('posts/migrateComment', this.comment));
     }
 
     get anchor() {

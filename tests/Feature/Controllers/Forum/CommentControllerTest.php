@@ -259,7 +259,9 @@ class CommentControllerTest extends TestCase
 
     public function testMigrateComment()
     {
-        $comment = factory(Comment::class)->create(['post_id' => $this->post->id, 'user_id' => $this->user->id]);
+        $posts = $this->user->posts;
+
+        $comment = factory(Comment::class)->create(['post_id' => $this->post->id, 'user_id' => $this->user->id, 'created_at' => now()->addSecond()]);
         $target = (new Stream_Topic())->map($this->topic);
 
         $object = (new Stream_Comment())->map($this->post, $comment, $this->topic);
@@ -270,16 +272,21 @@ class CommentControllerTest extends TestCase
         $comment->refresh();
 
         $this->assertNotNull($comment->deleted_at);
+
         $this->topic->refresh();
+        $this->user->refresh();
 
         $this->assertEquals(2, $this->topic->replies);
         $this->assertEquals(2, $this->topic->replies_real);
         $this->assertCount(3, $this->topic->posts);
+        $this->assertEquals($posts + 1, $this->user->posts);
 
         $response->assertStatus(200);
 
         $response->assertJsonFragment([
             'text' => $comment->text
         ]);
+
+        $this->assertEquals($response->json('id'), $this->topic->last_post_id);
     }
 }

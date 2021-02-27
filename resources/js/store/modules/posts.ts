@@ -186,6 +186,10 @@ const actions = {
     return axios.delete(`/Forum/Comment/Delete/${comment.id}`).then(() => commit('deleteComment', comment));
   },
 
+  migrateComment({ commit }, comment: PostComment) {
+    return axios.post(`/Forum/Comment/Migrate/${comment.id}`).then(() => commit('deleteComment', comment));
+  },
+
   restore({ commit }, post: Post) {
     return axios.post(`/Forum/Post/Restore/${post.id}`).then(() => commit('restore', post));
   },
