@@ -1,5 +1,5 @@
 <template>
-  <div ref="editor" class="tag-editor">
+  <div ref="editor" class="tag-editor dropup">
     <ul ref="cloud" class="tag-clouds">
       <li v-for="tag in popularTags.slice(0, 3)">
         <a @click="toggleTag({ name: tag.name })" class="suggest" :aria-label="tag.text" data-balloon-pos="up">
