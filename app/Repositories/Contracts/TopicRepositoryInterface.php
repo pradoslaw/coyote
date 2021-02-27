@@ -2,6 +2,8 @@
 
 namespace Coyote\Repositories\Contracts;
 
+use Carbon\Carbon;
+
 /**
  * @package Coyote\Repositories\Contracts
  * @method $this withTrashed()
@@ -43,6 +45,12 @@ interface TopicRepositoryInterface extends RepositoryInterface
      * @return mixed
      */
     public function flushRead(int $forumId, string $guestId);
+
+    /**
+     * @param int $topicId
+     * @param Carbon $carbon
+     */
+    public function adjustReadDate(int $topicId, Carbon $carbon): void;
 
     /**
      * @param int $limit

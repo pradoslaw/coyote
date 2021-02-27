@@ -4,18 +4,24 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Events\CommentDeleted;
 use Coyote\Events\CommentSaved;
+use Coyote\Events\PostSaved;
+use Coyote\Events\TopicWasSaved;
 use Coyote\Http\Requests\Forum\PostCommentRequest;
 use Coyote\Http\Resources\PostCommentResource;
+use Coyote\Http\Resources\PostResource;
 use Coyote\Notifications\Post\Comment\UserMentionedNotification;
 use Coyote\Notifications\Post\CommentedNotification;
 use Coyote\Post;
+use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Http\Controllers\Controller;
+use Coyote\Services\Forum\Tracker;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Objects\Comment as Stream_Comment;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
+use Coyote\Stream;
 use Illuminate\Contracts\Notifications\Dispatcher;
 use Coyote\Services\Parser\Helpers\Login as LoginHelper;
 
@@ -109,5 +115,44 @@ class CommentController extends Controller
         });
 
         return PostCommentResource::collection($post->comments)->keyBy('id');
+    }
+
+    public function migrate(Post\Comment $comment, TopicRepositoryInterface $repository)
+    {
+        $topic = $comment->post->topic;
+
+        // Maybe user does not have an access to this category?
+        $this->authorize('access', [$comment->post->forum]);
+        // Only moderators can post comment if topic (or forum) was locked
+        $this->authorize('write', [$comment]);
+
+        /** @var Post $post */
+        $post = $this->transaction(function () use ($topic, $comment, $repository) {
+            $stream = Stream::where('object->objectType', 'comment')->where('object->id', $comment->id)->first();
+
+            $post = $topic->posts()->forceCreate(
+                array_merge(
+                    ['forum_id' => $comment->post->forum_id, 'topic_id' => $topic->id, 'ip' => $stream->ip, 'browser' => $stream->browser],
+                    $comment->only(['created_at', 'text', 'user_id'])
+                )
+            );
+
+            $comment->delete();
+            $repository->adjustReadDate($topic->id, $comment->post->created_at);
+
+            return $post;
+        });
+
+        $post->load('assets');
+        $tracker = Tracker::make($topic);
+
+        // fire the event. it can be used to index a content and/or add page path to "pages" table
+        event(new TopicWasSaved($topic));
+        // add post to elasticsearch
+        broadcast(new PostSaved($post))->toOthers();
+
+        PostResource::withoutWrapping();
+
+        return (new PostResource($post))->setTracker($tracker)->resolve($this->request);
     }
 }

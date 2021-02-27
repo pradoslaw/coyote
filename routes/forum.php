@@ -146,6 +146,12 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
         'as' => 'comment.show'
     ]);
 
+    $this->post('Comment/Migrate/{comment}', [
+        'uses' => 'CommentController@migrate',
+        'as' => 'comment.migrate',
+        'middleware' => ['auth']
+    ]);
+
     // glosowanie w ankiecie
     $this->post('Poll/{poll}', [
         'uses' => 'PollController@vote',

@@ -2,6 +2,7 @@
 
 namespace Coyote\Repositories\Eloquent;
 
+use Carbon\Carbon;
 use Coyote\Topic;
 use Coyote\Topic\Track;
 use Illuminate\Database\Eloquent\Builder;
@@ -143,6 +144,14 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
                     ->where('topic_track.guest_id', $guestId);
             })
             ->exists();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function adjustReadDate(int $topicId, Carbon $carbon): void
+    {
+        Track::where('topic_id', $topicId)->update(['marked_at' => $carbon]);
     }
 
     /**

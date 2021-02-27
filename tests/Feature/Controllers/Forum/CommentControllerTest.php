@@ -6,6 +6,10 @@ use Coyote\Forum;
 use Coyote\Group;
 use Coyote\Post;
 use Coyote\Post\Comment;
+use Coyote\Services\Stream\Activities\Create as Stream_Create;
+use Coyote\Services\Stream\Activities\Update as Stream_Update;
+use Coyote\Services\Stream\Objects\Comment as Stream_Comment;
+use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Topic;
 use Coyote\User;
 use Faker\Factory;
@@ -251,5 +255,31 @@ class CommentControllerTest extends TestCase
         $this->assertEquals($comment->text, $result['text']);
         $this->assertArrayHasKey('editable', $result);
         $this->assertTrue($result['editable']);
+    }
+
+    public function testMigrateComment()
+    {
+        $comment = factory(Comment::class)->create(['post_id' => $this->post->id, 'user_id' => $this->user->id]);
+        $target = (new Stream_Topic())->map($this->topic);
+
+        $object = (new Stream_Comment())->map($this->post, $comment, $this->topic);
+        stream(Stream_Create::class, $object, $target);
+
+        $response = $this->actingAs($this->user)->json('POST', "/Forum/Comment/Migrate/$comment->id");
+
+        $comment->refresh();
+
+        $this->assertNotNull($comment->deleted_at);
+        $this->topic->refresh();
+
+        $this->assertEquals(2, $this->topic->replies);
+        $this->assertEquals(2, $this->topic->replies_real);
+        $this->assertCount(3, $this->topic->posts);
+
+        $response->assertStatus(200);
+
+        $response->assertJsonFragment([
+            'text' => $comment->text
+        ]);
     }
 }
