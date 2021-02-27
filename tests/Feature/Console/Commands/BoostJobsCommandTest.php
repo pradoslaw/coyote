@@ -65,7 +65,7 @@ class BoostJobsCommandTest extends TestCase
 
         for ($i = 1; $i <= $plan->length; $i++) {
             Carbon::setTestNow($now->addDay());
-            $output = $i == 10 || $i == 20 || $i == 30 ? "Boosting " . $job->title : "Done.";
+            $output = $i == 10 || $i == 20 || $i == 31 ? "Boosting " . $job->title : "Done.";
 
             $this->artisan('job:boost')
                 ->expectsOutput($output);
