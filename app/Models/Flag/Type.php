@@ -22,7 +22,7 @@ class Type extends Model
      *
      * @var array
      */
-    protected $fillable = ['id', 'name', 'description'];
+    protected $fillable = ['id', 'name', 'description', 'order'];
 
     /**
      * @var bool

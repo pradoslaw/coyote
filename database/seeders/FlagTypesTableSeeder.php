@@ -13,9 +13,11 @@ class FlagTypesTableSeeder extends Seeder
      */
     public function run()
     {
-        \Coyote\Flag\Type::create(['name' => 'Spam', 'description' => 'Promowanie produktu, usługi lub strony WWW.']);
-        \Coyote\Flag\Type::create(['name' => 'Wulgaryzmy', 'description' => 'Materiał zawiera przekaz, który może zostać uznany za obraźliwy.']);
-        \Coyote\Flag\Type::create(['name' => 'Off-topic', 'description' => 'Wpis odbiegający od tematu.']);
-        \Coyote\Flag\Type::create(['name' => 'Inne', 'description' => 'Inny problem, który wymaga interwencji moderatora.']);
+        \Coyote\Flag\Type::create(['name' => 'Spam', 'description' => 'Promowanie produktu, usługi lub strony WWW.', 'order' => 1]);
+        \Coyote\Flag\Type::create(['name' => 'Wulgaryzmy', 'description' => 'Materiał zawiera przekaz, który może zostać uznany za obraźliwy.', 'order' => 2]);
+        \Coyote\Flag\Type::create(['name' => 'Off-topic', 'description' => 'Wpis odbiegający od tematu.', 'order' => 3]);
+        \Coyote\Flag\Type::create(['name' => 'Nieprawidłowa kategoria', 'description' => 'Wpis nie znajduje się we właściwym miejscu.', 'order' => 4]);
+        \Coyote\Flag\Type::create(['name' => 'Próba wyłudzenia gotowca', 'description' => 'Prośba o wykonanie zadania na uczelnie.', 'order' => 5]);
+        \Coyote\Flag\Type::create(['name' => 'Inne', 'description' => 'Inny problem, który wymaga interwencji moderatora.', 'order' => 6]);
     }
 }
