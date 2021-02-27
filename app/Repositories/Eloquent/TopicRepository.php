@@ -151,7 +151,7 @@ class TopicRepository extends Repository implements TopicRepositoryInterface
      */
     public function adjustReadDate(int $topicId, Carbon $carbon): void
     {
-        Track::where('topic_id', $topicId)->update(['marked_at' => $carbon]);
+        Track::where('topic_id', $topicId)->where('marked_at', '>', $carbon)->update(['marked_at' => $carbon]);
     }
 
     /**

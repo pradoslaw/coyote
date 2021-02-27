@@ -6,8 +6,10 @@ use Coyote\Forum;
 use Coyote\Group;
 use Coyote\Post;
 use Coyote\Post\Comment;
+use Coyote\Repositories\Contracts\TopicRepositoryInterface;
+use Coyote\Services\Forum\Tracker;
+use Coyote\Services\Guest;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
-use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Objects\Comment as Stream_Comment;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Topic;
@@ -267,6 +269,13 @@ class CommentControllerTest extends TestCase
         $object = (new Stream_Comment())->map($this->post, $comment, $this->topic);
         stream(Stream_Create::class, $object, $target);
 
+        $guest = new Guest($this->user->guest_id);
+        $tracker = new Tracker($this->topic, $guest);
+        $tracker->setRepository($this->app[TopicRepositoryInterface::class]);
+
+        $carbon = $this->topic->last_post_created_at;
+        $tracker->asRead($carbon);
+
         $response = $this->actingAs($this->user)->json('POST', "/Forum/Comment/Migrate/$comment->id");
 
         $comment->refresh();
@@ -280,6 +289,7 @@ class CommentControllerTest extends TestCase
         $this->assertEquals(2, $this->topic->replies_real);
         $this->assertCount(3, $this->topic->posts);
         $this->assertEquals($posts + 1, $this->user->posts);
+        $this->assertEquals($carbon, $tracker->getMarkTime());
 
         $response->assertStatus(200);
 

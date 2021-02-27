@@ -16,7 +16,7 @@
       </a>
 
       <a v-if="comment.editable" @click="migrate" href="javascript:" title="Zamień w post" class="btn-comment">
-        <i class="fab fa-hubspot"></i>
+        <i class="fas fa-compress"></i>
       </a>
     </template>
 
@@ -78,6 +78,7 @@
         okLabel: 'Tak, zamień'
       })
       .then(() => {
+        // this.$store.dispatch('posts/migrateComment', this.comment);
         this.$store.dispatch('posts/migrateComment', this.comment).then(response => window.location.href = response.data.url);
       });
     }

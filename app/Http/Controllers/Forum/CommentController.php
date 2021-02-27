@@ -139,7 +139,7 @@ class CommentController extends Controller
             );
 
             $comment->delete();
-            $repository->adjustReadDate($topic->id, $comment->post->created_at);
+            $repository->adjustReadDate($topic->id, $comment->created_at->subSecond());
 
             return $post;
         });

@@ -189,7 +189,6 @@ const actions = {
   migrateComment({ commit }, comment: PostComment) {
     return axios.post(`/Forum/Comment/Migrate/${comment.id}`).then(response => {
       commit('deleteComment', comment);
-      commit('add', response.data);
 
       return response;
     });
