@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Post, PostComment, Paginator } from "../../types/models";
+import { Post, PostComment, Paginator } from "@/types/models";
 import Vue from "vue";
 
 type ParentChild = { post: Post, comment: PostComment };
@@ -21,7 +21,7 @@ const state: Paginator = {
 };
 
 const getters = {
-  posts: state => state.data,
+  posts: state => Object.values(state.data).sort((a, b) => ((a as Post).created_at! > (b as Post).created_at!) ? 1 : -1),
   exists: state => (id: number) => id in state.data,
   currentPage: state => state.current_page,
   totalPages: state => state.last_page
@@ -187,7 +187,12 @@ const actions = {
   },
 
   migrateComment({ commit }, comment: PostComment) {
-    return axios.post(`/Forum/Comment/Migrate/${comment.id}`).then(() => commit('deleteComment', comment));
+    return axios.post(`/Forum/Comment/Migrate/${comment.id}`).then(response => {
+      commit('deleteComment', comment);
+      commit('add', response.data);
+
+      return response;
+    });
   },
 
   restore({ commit }, post: Post) {

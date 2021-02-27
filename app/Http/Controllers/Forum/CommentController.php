@@ -125,6 +125,7 @@ class CommentController extends Controller
         $this->authorize('access', [$comment->post->forum]);
         // Only moderators can post comment if topic (or forum) was locked
         $this->authorize('write', [$comment]);
+        $this->authorize('delete', [$comment, $comment->post->forum]);
 
         /** @var Post $post */
         $post = $this->transaction(function () use ($topic, $comment, $repository) {
@@ -132,7 +133,7 @@ class CommentController extends Controller
 
             $post = $topic->posts()->forceCreate(
                 array_merge(
-                    ['forum_id' => $comment->post->forum_id, 'topic_id' => $topic->id, 'ip' => $stream->ip, 'browser' => $stream->browser],
+                    ['forum_id' => $topic->forum_id, 'topic_id' => $topic->id, 'ip' => $stream->ip, 'browser' => $stream->browser],
                     $comment->only(['created_at', 'text', 'user_id'])
                 )
             );
