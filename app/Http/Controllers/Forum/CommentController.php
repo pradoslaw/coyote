@@ -9,21 +9,18 @@ use Coyote\Events\TopicWasSaved;
 use Coyote\Http\Requests\Forum\PostCommentRequest;
 use Coyote\Http\Resources\PostCommentResource;
 use Coyote\Http\Resources\PostResource;
-use Coyote\Notifications\Post\Comment\UserMentionedNotification;
-use Coyote\Notifications\Post\CommentedNotification;
 use Coyote\Post;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
-use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Services\Forum\Tracker;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
+use Coyote\Services\Stream\Activities\Move as Stream_Move;
 use Coyote\Services\Stream\Objects\Comment as Stream_Comment;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Stream;
 use Illuminate\Contracts\Notifications\Dispatcher;
-use Coyote\Services\Parser\Helpers\Login as LoginHelper;
 
 class CommentController extends Controller
 {
@@ -53,12 +50,7 @@ class CommentController extends Controller
         $this->transaction(function () use ($comment) {
             $comment->save();
 
-            $target = (new Stream_Topic())->map($comment->post->topic);
-
-            // it is IMPORTANT to parse text first, and then put information to activity stream.
-            // so that we will save plan text (without markdown)
-            $object = (new Stream_Comment())->map($comment->post, $comment, $comment->post->topic);
-            stream($comment->wasRecentlyCreated ? Stream_Create::class : Stream_Update::class, $object, $target);
+            stream($comment->wasRecentlyCreated ? Stream_Create::class : Stream_Update::class, ...$this->target($comment));
 
             if ($comment->wasRecentlyCreated) {
                 // subscribe post. notify about all future comments to this post
@@ -86,12 +78,9 @@ class CommentController extends Controller
         $this->authorize('delete', [$comment, $comment->post->forum]);
 
         $this->transaction(function () use ($comment) {
-            $target = (new Stream_Topic())->map($comment->post->topic);
-            $object = (new Stream_Comment())->map($comment->post, $comment, $comment->post->topic);
-
             $comment->delete();
 
-            stream(Stream_Delete::class, $object, $target);
+            stream(Stream_Delete::class, ...$this->target($comment));
         });
 
         event(new CommentDeleted($comment));
@@ -141,6 +130,8 @@ class CommentController extends Controller
             $comment->delete();
             $repository->adjustReadDate($topic->id, $comment->created_at->subSecond());
 
+            stream(Stream_Move::class, ...$this->target($comment));
+
             return $post;
         });
 
@@ -155,5 +146,16 @@ class CommentController extends Controller
         PostResource::withoutWrapping();
 
         return (new PostResource($post))->setTracker($tracker)->resolve($this->request);
+    }
+
+    private function target(Post\Comment $comment): array
+    {
+        $target = (new Stream_Topic())->map($comment->post->topic);
+
+        // it is IMPORTANT to parse text first, and then put information to activity stream.
+        // so that we will save plan text (without markdown)
+        $object = (new Stream_Comment())->map($comment->post, $comment, $comment->post->topic);
+
+        return [$object, $target];
     }
 }
