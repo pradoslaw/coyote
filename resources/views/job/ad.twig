@@ -1,14 +1,18 @@
 <section class="box sidebar-offers {{ major_tag ? major_tag.name|replace({'.': '-', '#': 'sharp', 'c++': 'cpp'})|trim('.') }}">
-    <div class="card card-default">
-        <div class="card-header">
-            <h4><a href="{{ route('job.home') }}" title="Szukaj pracy jako programista">Szukaj pracy {{ (major_tag ? (' w ' ~ (major_tag.getOriginal('logo') ? ('<img src="' ~ logo(major_tag.logo) ~ '" alt="' ~ major_tag.name ~ '">') : major_tag.real_name|default(major_tag.name))))|raw }}</a></h4>
-        </div>
-        <div class="card-body">
-            {% include 'components.jobs' %}
-
-            <div class="media justify-content-center">
-                <a href="{{ route('job.home') }}" class="media-link ">Więcej ofert pracy</a>
-            </div>
-        </div>
+  <div class="card card-default">
+    <div class="card-header">
+      <h4>
+        <a href="{{ route('job.home') }}" title="Szukaj pracy jako programista">
+          Szukaj pracy {{ (major_tag.exists ? (' w ' ~ (major_tag.getOriginal('logo') ? ('<img src="' ~ logo(major_tag.logo) ~ '" alt="' ~ major_tag.name ~ '">') : major_tag.real_name|default(major_tag.name))))|raw }}
+        </a>
+      </h4>
     </div>
+    <div class="card-body">
+      {% include 'components.jobs' %}
+
+      <div class="media justify-content-center">
+        <a href="{{ route('job.home') }}" class="media-link ">Więcej ofert pracy</a>
+      </div>
+    </div>
+  </div>
 </section>
