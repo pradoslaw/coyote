@@ -17,7 +17,7 @@ class ChangeAfterPostInsertTrigger2 extends Migration
 CREATE OR REPLACE FUNCTION after_post_insert() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
 	UPDATE topics SET
-		last_post_id = (CASE WHEN NEW.created_at > last_post_created_at THEN NEW."id" ELSE last_post_id END),
+		last_post_id = (CASE WHEN last_post_id IS NULL OR NEW.created_at > last_post_created_at THEN NEW."id" ELSE last_post_id END),
 		last_post_created_at = GREATEST(last_post_created_at, NEW.created_at),
 		replies = (CASE WHEN first_post_id IS NULL THEN replies ELSE replies + 1 END),
 		replies_real = (CASE WHEN first_post_id IS NULL THEN replies_real ELSE replies_real + 1 END),
