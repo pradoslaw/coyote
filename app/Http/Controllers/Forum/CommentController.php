@@ -143,6 +143,8 @@ class CommentController extends Controller
         // add post to elasticsearch
         broadcast(new PostSaved($post))->toOthers();
 
+        event(new CommentDeleted($comment));
+
         PostResource::withoutWrapping();
 
         return (new PostResource($post))->setTracker($tracker)->resolve($this->request);
