@@ -2,6 +2,7 @@
 
 namespace Coyote\Repositories\Criteria\Microblog;
 
+use Coyote\Microblog;
 use Coyote\Tag;
 use Coyote\Repositories\Contracts\RepositoryInterface as Repository;
 use Coyote\Repositories\Contracts\RepositoryInterface;
@@ -33,9 +34,10 @@ class WithTag extends Criteria
         $query = $model->whereIn('microblogs.id', function ($sub) {
             $sub->selectRaw('(CASE WHEN parent_id IS NOT NULL THEN parent_id ELSE microblogs.id END)')
                 ->from((new Tag())->getTable())
-                ->join('microblog_tags', 'microblog_tags.tag_id', '=', 'tags.id')
-                ->join('microblogs', 'microblogs.id', '=', 'microblog_tags.microblog_id')
-                ->where('name', $this->tag);
+                ->join('tag_resources', 'tag_resources.tag_id', '=', 'tags.id')
+                ->join('microblogs', 'microblogs.id', '=', 'tag_resources.resource_id')
+                ->where('name', $this->tag)
+                ->where('tag_resources.resource_type', Microblog::class);
         });
 
         return $query;
