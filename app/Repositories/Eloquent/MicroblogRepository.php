@@ -142,19 +142,19 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     {
         $db = $this->app['db'];
 
-        $base = $db->table('microblog_tags')
-            ->selectRaw('name, tags.text, COUNT(*)')
-            ->leftJoin('tags', 'tags.id', '=', 'microblog_tags.tag_id')
-            ->leftJoin('microblogs', 'microblogs.id', '=', 'microblog_tags.microblog_id')
+        $base = $db->table('tags')
+            ->selectRaw('name, tags.text, microblogs AS count')
+            ->leftJoin('tag_resources', 'tags.id', '=', 'tag_resources.tag_id')
+            ->leftJoin('microblogs', 'microblogs.id', '=', 'tag_resources.resource_id')
+            ->where('tag_resources.resource_type', Microblog::class)
             ->groupBy('tags.id')
             ->groupBy('name')
-            ->orderByRaw('COUNT(*) DESC')
+            ->orderByRaw('microblogs DESC')
             ->limit(5);
 
         $query = clone $base;
 
         return $query
-            ->orderBy("count", 'DESC')
             ->when($userId, function ($builder) use ($base, $userId) {
                 return $builder
                     ->where('microblogs.user_id', $userId)
