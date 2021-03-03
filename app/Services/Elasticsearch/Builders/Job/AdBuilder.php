@@ -16,7 +16,7 @@ class AdBuilder extends SearchBuilder
      */
     public function boostTags(string $tag)
     {
-        $this->must(new SimpleQueryString($tag, ['title^2', 'tags^2'], 3));
+        $this->must(new SimpleQueryString($tag, ['title^2', 'tags.original'], 3));
     }
 
     /**
