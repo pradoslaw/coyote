@@ -125,8 +125,10 @@
             {{ invoice.address }}<br>
             {{ invoice.postal_code }} {{ invoice.city }}<br>
 
+            {% set reverse_charge = invoice.vat_id and invoice.country.vat_rate == 1 %}
+
             {% if invoice.vat_id %}
-              VAT ID / NIP: {{ invoice.country.code }}{{ invoice.vat_id }}
+              VAT ID / NIP: {{ reverse_charge ? invoice.country.code : ''  }}{{ invoice.vat_id }}
             {% endif %}
           </td>
         </tr>
@@ -138,7 +140,12 @@
                 <th class="left">Description / Opis</th>
                 <th class="right">Quantity / Ilość</th>
                 <th class="right">Unit price / Cena jedn.</th>
-                <th class="right">Amount / Wartość</th>
+
+                {% if not reverse_charge %}
+                  <th class="right">VAT rate / Stawka VAT</th>
+                  <th class="right">VAT amount / Wartość VAT</th>
+                  <th class="right">Gross amount / Wartość brutto</th>
+                {% endif %}
               </tr>
 
               <!-- Display The Invoice Items -->
@@ -147,29 +154,60 @@
                   <td class="left">{{ item.description }}</td>
                   <td class="right">1</td>
                   <td class="right">{{ item.price }} {{ currency }}</td>
-                  <td class="right">{{ item.gross_price }} {{ currency }}</td>
+
+                  {% if not reverse_charge %}
+                    <td class="right">{{ (item.vat_rate * 100) - 100 }}%</td>
+                    <td class="right">{{ item.gross_price - item.price }} {{ currency }}</td>
+                    <td class="right">{{ item.gross_price }} {{ currency }}</td>
+                  {% endif %}
                 </tr>
               {% endfor %}
 
               <!-- Display The Final Total -->
               <tr style="border-top:2px solid #000;">
                 <td class="empty-cell">&nbsp;</td>
-                <td class="empty-cell">&nbsp;</td>
+
+                {% if not reverse_charge  %}
+                  <td class="empty-cell">&nbsp;</td>
+                  <td class="empty-cell">&nbsp;</td>
+                  <td class="empty-cell">&nbsp;</td>
+                {% endif %}
+
                 <td class="right"><strong>Total / Razem</strong></td>
                 <td class="right"><strong>{{ invoice.gross_price }} {{ currency }}</strong></td>
               </tr>
+
               <tr style="border-top:2px solid #000;">
                 <td class="empty-cell">&nbsp;</td>
-                <td class="empty-cell">&nbsp;</td>
+
+                {% if not reverse_charge  %}
+                  <td class="empty-cell">&nbsp;</td>
+                  <td class="empty-cell">&nbsp;</td>
+                  <td class="empty-cell">&nbsp;</td>
+                {% endif %}
+
                 <td class="right"><strong>Paid amount / Zapłacono</strong></td>
                 <td class="right"><strong>{{ invoice.gross_price }} {{ currency }}</strong></td>
               </tr>
+
               <tr style="border-top:2px solid #000;">
                 <td class="empty-cell">&nbsp;</td>
-                <td class="empty-cell">&nbsp;</td>
+
+                {% if not reverse_charge  %}
+                  <td class="empty-cell">&nbsp;</td>
+                  <td class="empty-cell">&nbsp;</td>
+                  <td class="empty-cell">&nbsp;</td>
+                {% endif %}
+
                 <td class="right"><strong>Balance Due / Do zapłaty</strong></td>
                 <td class="right"><strong>0 {{ currency }}</strong></td>
               </tr>
+
+              {% if reverse_charge %}
+                <tr>
+                  <td class="pt-4" style="font-size: 14px; font-style: italic;" colspan="3">Do rozliczenia podatku VAT zobowiązany jest nabywca usługi (odwrotne obciążenie)</td>
+                </tr>
+              {% endif %}
             </table>
           </td>
         </tr>
