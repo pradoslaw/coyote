@@ -115,3 +115,17 @@
     display: block;
   }
 }
+
+.microblog-tags {
+  overflow: hidden;
+  height: 28px;
+  margin-left: auto;
+  margin-right: .25rem;
+
+  .tag-clouds-md {
+    white-space: nowrap;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+}
