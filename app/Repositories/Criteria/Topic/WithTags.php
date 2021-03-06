@@ -4,7 +4,6 @@ namespace Coyote\Repositories\Criteria\Topic;
 
 use Coyote\Repositories\Contracts\RepositoryInterface as Repository;
 use Coyote\Repositories\Criteria\Criteria;
-use Coyote\Tag;
 use Coyote\Topic;
 use Illuminate\Database\Query\Builder;
 
@@ -34,10 +33,13 @@ class WithTags extends Criteria
      */
     public function apply($model, Repository $repository)
     {
-        return $model
-            ->join('tag_resources', 'tag_resources.resource_id', '=', 'topics.id')
-            ->join('tags', 'tags.id', '=', 'tag_id')
-            ->where('tag_resources.resource_type', '=', Topic::class)
-            ->whereIn('name', $this->tags);
+        return $model->whereIn('topics.id', function (Builder $builder) {
+            return $builder
+                ->select('resource_id')
+                ->from('tags')
+                ->join('tag_resources', 'tag_resources.tag_id', '=', 'tags.id')
+                ->where('tag_resources.resource_type', '=', Topic::class)
+                ->whereIn('name', $this->tags);
+        });
     }
 }
