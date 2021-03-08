@@ -46,7 +46,7 @@ export class MicroblogCommentSaved implements Observer {
 
 export class PostCommentSaved implements Observer {
   update(payload: PostComment) {
-    const post = store.getters['posts/posts'][payload.post_id];
+    const post = store.state.posts.data[payload.post_id];
     const existing = post?.comments[payload.id!];
 
     if (!post || existing?.is_editing === true) {
@@ -63,7 +63,7 @@ export class PostCommentSaved implements Observer {
 
 export class PostSaved implements Observer {
   update(payload: Post) {
-    const existing = store.getters['posts/posts'][payload.id!];
+    const existing = store.state.posts.data[payload.id!];
 
     if (!existing) {
       payload.is_read = false;
