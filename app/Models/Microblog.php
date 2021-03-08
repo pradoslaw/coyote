@@ -60,6 +60,11 @@ class Microblog extends Model
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     /**
+     * @var string[]
+     */
+    protected $casts = ['is_sponsored' => 'bool'];
+
+    /**
      * Domyslne wartosci dla nowego modelu
      *
      * @var array

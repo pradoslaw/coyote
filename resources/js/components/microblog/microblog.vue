@@ -26,14 +26,15 @@
 
               <div class="dropdown-menu dropdown-menu-right">
                 <template v-if="microblog.permissions.update">
-                  <a @click="edit(microblog)" class="dropdown-item btn-edit" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
-                  <a @click="deleteItem" class="dropdown-item btn-remove" href="javascript:"><i class="fas fa-times fa-fw"></i> Usuń</a>
+                  <a @click="edit(microblog)" class="dropdown-item" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
+                  <a @click="deleteItem" class="dropdown-item" href="javascript:"><i class="fas fa-times fa-fw"></i> Usuń</a>
+                  <a v-if="microblog.permissions.moderate" @click="toggleSponsored(microblog)" class="dropdown-item" href="javascript:"><i class="fas fa-dollar-sign fa-fw"></i> Sponsorowany</a>
 
                   <div v-if="microblog.user.id !== user.id" class="dropdown-divider"></div>
                 </template>
 
                 <a v-if="microblog.user.id !== user.id" @click="block(microblog.user)" href="javascript:" class="dropdown-item"><i class="fas fa-fw fa-ban"></i> Zablokuj użytkownika</a>
-              </div>
+               </div>
             </div>
           </div>
 
@@ -173,7 +174,7 @@
       ...mapState('user', ['user'])
     },
     methods: {
-      ...mapActions('microblogs', ['vote', 'subscribe', 'loadVoters', 'loadComments'])
+      ...mapActions('microblogs', ['vote', 'subscribe', 'loadVoters', 'loadComments', 'toggleSponsored'])
     }
   })
   export default class VueMicroblog extends Mixins(MicroblogMixin) {

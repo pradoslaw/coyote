@@ -111,6 +111,7 @@ export interface Poll {
 
 interface MicroblogPermission {
   update: boolean;
+  moderate: boolean;
 }
 
 interface PostPermission {

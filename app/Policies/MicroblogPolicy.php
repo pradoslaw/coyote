@@ -15,7 +15,7 @@ class MicroblogPolicy
      * @param Microblog $microblog
      * @return bool
      */
-    public function update(User $user, Microblog $microblog)
+    public function update(User $user, Microblog $microblog): bool
     {
         return $user->id === $microblog->user_id || $user->can('microblog-update');
     }
@@ -25,8 +25,17 @@ class MicroblogPolicy
      * @param Microblog $microblog
      * @return bool
      */
-    public function delete(User $user, Microblog $microblog)
+    public function delete(User $user, Microblog $microblog): bool
     {
         return $user->id === $microblog->user_id || $user->can('microblog-delete');
+    }
+
+    /**
+     * @param User $user
+     * @return bool
+     */
+    public function moderate(User $user): bool
+    {
+        return $user->can('microblog-update');
     }
 }

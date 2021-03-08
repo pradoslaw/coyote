@@ -20,11 +20,15 @@ class MicroblogResource extends Api\MicroblogResource
         $assets = $result['media'];
         unset($result['media']);
 
-        return array_merge($result, [
+        return array_merge_recursive($result, [
             'assets'        => $assets,
             'tags'          => $this->whenLoaded('tags', fn () => TagResource::collection($this->resource->tags)),
             'is_sponsored'  => $this->resource->is_sponsored,
-            'metadata'      => encrypt([Microblog::class => $this->resource->id])
+            'metadata'      => encrypt([Microblog::class => $this->resource->id]),
+
+            'permissions'   => [
+                'moderate'  => $this->when($request->user(), fn () => $request->user()->can('moderate', $this->resource), false)
+            ]
         ]);
     }
 }

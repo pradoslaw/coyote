@@ -115,6 +115,10 @@ const mutations = {
     const index = microblog.tags!.findIndex(item => item.name === tag.name);
 
     index > -1 ? microblog.tags!.splice(index, 1) : microblog.tags!.push(tag);
+  },
+
+  toggleSponsored(state, microblog: Microblog) {
+    microblog.is_sponsored = !microblog.is_sponsored;
   }
 };
 
@@ -166,17 +170,16 @@ const actions = {
   },
 
   loadComments({ commit }, microblog: Microblog) {
-    return axios.get(`/Mikroblogi/Comment/Show/${microblog.id}`).then(result => {
-      commit('setComments', { microblog, comments: result.data });
-    })
+    return axios.get(`/Mikroblogi/Comment/Show/${microblog.id}`).then(response => commit('setComments', { microblog, comments: response.data }));
   },
 
   loadVoters({ commit }, microblog: Microblog) {
-    return axios.get(`/Mikroblogi/Voters/${microblog.id}`).then(result => {
-      commit('setVoters', { microblog, voters: result.data });
-    });
+    return axios.get(`/Mikroblogi/Voters/${microblog.id}`).then(response => commit('setVoters', { microblog, voters: response.data }));
   },
 
+  toggleSponsored({ commit }, microblog: Microblog) {
+    return axios.post(`/Mikroblogi/Sponsored/${microblog.id}`).then(() => commit('toggleSponsored', microblog));
+  }
 };
 
 export default {

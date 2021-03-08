@@ -127,6 +127,18 @@ class SubmitController extends Controller
     }
 
     /**
+     * @param Microblog $microblog
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function toggleSponsored(Microblog $microblog)
+    {
+        $this->authorize('moderate', $microblog);
+
+        $microblog->is_sponsored = !$microblog->is_sponsored;
+        $microblog->save();
+    }
+
+    /**
      * @return \Coyote\Services\Parser\Factories\PmFactory
      */
     private function getParser()
