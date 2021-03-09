@@ -31,6 +31,7 @@ class PaymentRepository extends Repository implements PaymentRepositoryInterface
             ->with('job')
             ->whereNull('deleted_at')
             ->where('is_boost', true)
+            ->orderBy('ends_at')
             ->get();
     }
 

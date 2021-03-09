@@ -56,19 +56,18 @@ class BoostJobsCommandTest extends TestCase
         event(new PaymentPaid($job->getUnpaidPayment()));
 
         $job->refresh();
+        $now = now();
 
         $this->assertTrue($job->is_publish);
         $this->assertTrue($job->is_ads);
         $this->assertTrue($job->is_on_top);
-
-        $now = now();
+        $this->assertTrue(now()->isSameDay($job->boost_at));
 
         for ($i = 1; $i <= $plan->length; $i++) {
             Carbon::setTestNow($now->addDay());
             $output = $i == 10 || $i == 20 || $i == 30 ? "Boosting " . $job->title : "Done.";
 
-            $this->artisan('job:boost')
-                ->expectsOutput($output);
+            $this->artisan('job:boost')->expectsOutput($output);
         }
     }
 }

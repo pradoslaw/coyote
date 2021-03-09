@@ -46,11 +46,15 @@ class BoostJobsCommand extends Command
         $payments = $this->payment->ongoingPaymentsWithBoostBenefit();
         $crawler = new Crawler();
 
+        $now = Carbon::now()->startOfDay();
+
         foreach ($payments as $payment) {
             $every = $payment->plan->boost === 1 ? floor($payment->days / 2) : floor(($payment->days - 10) / $payment->plan->boost);
+            /** @var Carbon $then */
+            $then = $payment->job->boost_at->addDays($every)->startOfDay();
 
-            if (Carbon::now()->gte(Carbon::parse($payment->job->boost_at)->addDays($every))) {
-                $payment->job->boost_at = Carbon::now();
+            if ($now->isSameDay($then)) {
+                $payment->job->boost_at = $then;
                 $payment->job->save();
 
                 $this->info("Boosting {$payment->job->title}");
