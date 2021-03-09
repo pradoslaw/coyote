@@ -78,13 +78,13 @@ class UsersController extends BaseController
             // we can do that because $form->all() returns only fields in form. $request->all() returns
             // all fields in HTTP POST so it's not secure.
             $user->forceFill(array_except($data, ['submit', 'skills', 'groups', 'delete_photo']))->save();
-            $user->skills()->delete();
-
-            if (!empty($data['skills'])) {
-                foreach ($data['skills'] as $idx => $skill) {
-                    $user->skills()->create($skill + ['order' => $idx + 1]);
-                }
-            }
+//            $user->skills()->delete();
+//
+//            if (!empty($data['skills'])) {
+//                foreach ($data['skills'] as $idx => $skill) {
+//                    $user->skills()->create($skill + ['order' => $idx + 1]);
+//                }
+//            }
 
             $user->groups()->sync((array) $data['groups']);
 

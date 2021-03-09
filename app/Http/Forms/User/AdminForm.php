@@ -41,14 +41,14 @@ class AdminForm extends SettingsForm
         parent::buildForm();
 
         $this
-            ->add('skills', 'collection', [
-                'label' => 'Umiejętności',
-                'child_attr' => [
-                    'type' => 'child_form',
-                    'class' => SkillsForm::class,
-                    'value' => $this->data
-                ]
-            ])
+//            ->add('skills', 'collection', [
+//                'label' => 'Umiejętności',
+//                'child_attr' => [
+//                    'type' => 'child_form',
+//                    'class' => SkillsForm::class,
+//                    'value' => $this->data
+//                ]
+//            ])
             ->addAfter('group_id', 'is_confirm', 'checkbox', [
                 'label' => 'Potwierdzony adres e-mail',
                 'rules' => 'bool'

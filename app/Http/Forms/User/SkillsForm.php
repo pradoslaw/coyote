@@ -15,14 +15,14 @@ class SkillsForm extends Form
         $this
             ->add('name', 'text', [
                 'label' => 'Nazwa',
-                'rules' => 'required|string|max:100|unique:user_skills,name,NULL,id,user_id,' . ($this->data->id ?? 0),
+                'rules' => ['required', 'string', 'max:100'],
                 'attr' => [
                     'placeholder' => 'Np. java, c#'
                 ]
             ])
-            ->add('rate', 'text', [
+            ->add('priority', 'text', [
                 'label' => 'Ocena',
-                'rules' => 'required|integer|min:1|max:6'
+                'rules' => 'required|integer|min:1|max:3'
             ])
             ->add('order', 'hidden');
     }
