@@ -16,8 +16,8 @@ class QuestionTableSeeder extends Seeder
     {
         \Coyote\Models\Question::forceCreate([
             'title' => 'Jaki będzie wynik wykonanai poniższego kodu?',
-            'question' => '`true === 1`',
-            'answer' => 'Lorem ipsum lores',
+            'excerpt' => '`true === 1`',
+            'text' => 'Lorem ipsum lores',
             'user_id' => User::first()->id
         ]);
     }

@@ -41,7 +41,8 @@ r.on(['/Register', '/Login'], () => require('./pages/auth'))
 .on(['/Mikroblogi', '/Mikroblogi/*', '/Profile/*/Microblog'], () => require('./pages/microblog'))
 .on(['/Profile/*'], () => require('./pages/profile'))
 .on('/', () => require('./pages/homepage'))
-.on('/Search', () => require('./pages/search'));
+.on('/Search', () => require('./pages/search'))
+.on('/Question', () => require('./pages/question'));
 
 r.resolve();
 

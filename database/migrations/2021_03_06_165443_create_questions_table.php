@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateQuestionsTable extends Migration
 {
+    use SchemaBuilder;
+
     /**
      * Run the migrations.
      *
@@ -19,11 +21,14 @@ class CreateQuestionsTable extends Migration
             $table->softDeletes();
             $table->integer('user_id');
             $table->string('title');
-            $table->text('question');
-            $table->text('answer');
+            $table->text('excerpt')->nullable();
+            $table->text('text');
             $table->smallInteger('votes')->default(0);
             $table->integer('views')->default(0);
         });
+
+        $sql = "ALTER TABLE questions ADD COLUMN seniority seniority DEFAULT NULL";
+        $this->db->unprepared($sql);
     }
 
     /**
