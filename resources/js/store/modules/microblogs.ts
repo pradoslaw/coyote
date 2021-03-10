@@ -22,10 +22,18 @@ const state: Paginator = {
 
 const getters = {
   microblogs: (state, getters, rootState) => {
-    const sorted = Object.values(state.data).sort((a, b) => (b as Microblog).id! - (a as Microblog).id!);
+    let sorted = Object.values(state.data).sort((a, b) => (b as Microblog).id! - (a as Microblog).id!);
+    const sponsoredIndex = sorted.findIndex(microblog => (microblog as Microblog).is_sponsored);
 
-    if (!rootState.user.is_sponsor) {
-      sorted.sort((a, b) => +(b as Microblog).is_sponsored! - +(a as Microblog).is_sponsored!);
+    if (!rootState.user.is_sponsor && sponsoredIndex > -1) {
+      const sponsored = sorted[sponsoredIndex];
+      const random = (min: number, max: number) => Math.floor(Math.random() * (max - min) + min);
+      const randomIndex = random(1, 4);
+
+      if (sponsoredIndex > randomIndex) {
+        sorted.splice(sponsoredIndex, 1);
+        sorted.splice(randomIndex, 0, sponsored);
+      }
     }
 
     return sorted;
