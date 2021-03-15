@@ -23,9 +23,7 @@ class FirmRepository extends Repository implements FirmRepositoryInterface
         $firm = $this
             ->model
             ->select('firms.*')
-            ->leftJoin('jobs', 'jobs.firm_id', '=', 'firms.id')
             ->where('firms.user_id', $userId)
-            ->orderBy('jobs.id', 'DESC')
             ->orderBy('firms.id', 'DESC')
             ->limit(1)
             ->first();
