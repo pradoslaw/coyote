@@ -61,7 +61,7 @@
 
     <div v-if="pollSync.expired" class="row">
       <div class="col-12">
-        <p><em>Ankieta wygasła {{ pollSync.expired_at }}</em></p>
+        <p><em>Ankieta wygasła <vue-timeago :datetime="pollSync.expired_at"></vue-timeago></em></p>
       </div>
     </div>
   </div>
