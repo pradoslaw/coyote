@@ -219,7 +219,7 @@ export interface Message {
 }
 
 export interface Paginator {
-  data: Microblog[] | Post[];
+  data: Microblog[] | Post[] | Question[];
   current_page: number;
   from: number;
   last_page: number;
@@ -334,4 +334,9 @@ export interface Firm {
   benefits: string[];
   website: string;
   description: string;
+}
+
+export interface Question {
+  id: number;
+  title: string;
 }

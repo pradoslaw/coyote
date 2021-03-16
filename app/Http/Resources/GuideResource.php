@@ -8,7 +8,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property string $text
  * @property string $excerpt
  */
-class QuestionResource extends JsonResource
+class GuideResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

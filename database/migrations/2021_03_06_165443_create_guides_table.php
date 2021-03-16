@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateQuestionsTable extends Migration
+class CreateGuidesTable extends Migration
 {
     use SchemaBuilder;
 
@@ -15,7 +15,7 @@ class CreateQuestionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('questions', function (Blueprint $table) {
+        Schema::create('guides', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
             $table->softDeletes();
@@ -27,7 +27,7 @@ class CreateQuestionsTable extends Migration
             $table->integer('views')->default(0);
         });
 
-        $sql = "ALTER TABLE questions ADD COLUMN seniority seniority DEFAULT NULL";
+        $sql = "ALTER TABLE guides ADD COLUMN seniority seniority DEFAULT NULL";
         $this->db->unprepared($sql);
     }
 
@@ -38,6 +38,6 @@ class CreateQuestionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('questions');
+        Schema::dropIfExists('guides');
     }
 }

@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Coyote\User;
 use Illuminate\Database\Seeder;
 
-class QuestionTableSeeder extends Seeder
+class GuidesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,7 +14,7 @@ class QuestionTableSeeder extends Seeder
      */
     public function run()
     {
-        \Coyote\Models\Question::forceCreate([
+        \Coyote\Models\Guide::forceCreate([
             'title' => 'Jaki będzie wynik wykonanai poniższego kodu?',
             'excerpt' => '`true === 1`',
             'text' => 'Lorem ipsum lores',

@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $excerpt
  * @property string $text
  */
-class Question extends Model
+class Guide extends Model
 {
     public function user()
     {

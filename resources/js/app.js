@@ -42,7 +42,7 @@ r.on(['/Register', '/Login'], () => require('./pages/auth'))
 .on(['/Profile/*'], () => require('./pages/profile'))
 .on('/', () => require('./pages/homepage'))
 .on('/Search', () => require('./pages/search'))
-.on('/Question', () => require('./pages/question'));
+.on('/Guide', () => require('./pages/Guide'));
 
 r.resolve();
 

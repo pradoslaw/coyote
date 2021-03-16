@@ -12,7 +12,7 @@ import prompt from './modules/prompt';
 import poll from './modules/poll';
 import flags from './modules/flags';
 import jobs from './modules/jobs';
-import questions from './modules/questions';
+import guides from './modules/guides';
 
 Vue.use(Vuex);
 
@@ -30,6 +30,6 @@ export default new Vuex.Store({
     poll,
     flags,
     jobs,
-    questions
+    guides
   }
 });
