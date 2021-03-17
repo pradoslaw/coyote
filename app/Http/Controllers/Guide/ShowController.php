@@ -8,10 +8,10 @@ use Coyote\Models\Guide;
 
 class ShowController extends Controller
 {
-    public function index(Guide $question)
+    public function index(Guide $guide)
     {
         $this->breadcrumb->push('Pytania kwalifikacyjne');
 
-        return $this->view('questions.show', ['question' => new GuideResource($question)]);
+        return $this->view('guide.show', ['guide' => new GuideResource($guide)]);
     }
 }
