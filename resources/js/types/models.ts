@@ -336,6 +336,10 @@ export interface Firm {
   description: string;
 }
 
+interface GuidePermission {
+  update: boolean;
+}
+
 export interface Guide {
   id: number;
   title: string;
@@ -344,4 +348,5 @@ export interface Guide {
   excerpt_html: string;
   text: string;
   html: string;
+  permissions: GuidePermission;
 }

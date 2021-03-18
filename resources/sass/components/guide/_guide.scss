@@ -1,0 +1,29 @@
+.guide-title {
+  border-bottom: 1px solid $border-color;
+  margin-bottom: 5px;
+
+  h1 {
+    margin-top: 0;
+  }
+}
+
+.guide-text {
+  margin-top: 8px;
+  position: relative;
+
+  > div {
+    font-size: 15px;
+  }
+
+  > button {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+  }
+}
+
+.blur {
+  color: transparent;
+  text-shadow: 0 0 5px rgba(0,0,0,0.5);
+}

@@ -2,6 +2,7 @@
 
 namespace Coyote\Models;
 
+use Coyote\Tag;
 use Coyote\User;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $title
  * @property string $excerpt
  * @property string $text
+ * @property Tag[] $tags
  */
 class Guide extends Model
 {
@@ -19,5 +21,11 @@ class Guide extends Model
         return $this->belongsTo(User::class);
     }
 
-
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'resource', 'tag_resources');
+    }
 }

@@ -1,31 +1,30 @@
 <template>
   <div class="card card-default">
     <div class="card-body">
-      <div class="qa-title">
+      <div class="guide-title">
+        <div v-if="guide.permissions.update" class="dropdown float-right">
+          <button class="btn btn-xs border-0 text-muted mt-2" type="button" data-toggle="dropdown" aria-label="Dropdown"><i class="fa fa-ellipsis-h"></i></button>
+
+          <div class="dropdown-menu dropdown-menu-right">
+            <a @click="edit" class="dropdown-item" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
+            <a @click="deleteItem" class="dropdown-item" href="javascript:"><i class="fas fa-times fa-fw"></i> Usuń</a>
+          </div>
+        </div>
+
         <h1><a :href="`/Guide/${guide.id}-${guide.slug}`">{{ guide.title }}</a></h1>
       </div>
 
       <div v-html="guide.excerpt_html" class="mt-2"></div>
 
-      <div class="mt-2 position-relative">
-        <div v-html="guide.html" :class="{'blur': !isShowing}" style="font-size: 14px"></div>
+      <div class="guide-text">
+        <div v-html="guide.html" :class="{'blur': !isShowing}"></div>
 
-        <button v-if="!isShowing" @click="isShowing = true" class="position-absolute btn btn-primary" style="left: 50%; top: 50%; transform: translate(-50%, -50%);">Zobacz odpowiedź</button>
+        <button v-if="!isShowing" @click="isShowing = true" class="btn btn-primary">Zobacz odpowiedź</button>
       </div>
 
-      <ul class="tag-clouds tag-clouds-skills mt-3 ">
-        <li>
-          <a href="https://4programmers.net/Praca/Technologia/java" title="Znajdź oferty zawierające Java"><img style="width: 15px" alt="java" src="https://4programmers.net/uploads/logo/59/59f9f808bc606.png">
-            Java</a>
-        </li>
-        <li>
-          <a href="https://4programmers.net/Praca/Technologia/javascript" title="Znajdź oferty zawierające Javascript"><img style="width: 15px" alt="javascript" src="https://4programmers.net/uploads/logo/59/59f9f81f8f897.png">
-            Javascript </a>
-        </li>
-      </ul>
+      <vue-tags :tags="guide.tags" class="tag-clouds-skills mt-3"></vue-tags>
 
       <div class="mt-3 pt-3 qa-options">
-
         <ul class="list-inline mb-2">
           <li class="list-inline-item">
             <a href="#">
@@ -54,15 +53,20 @@
   import { Prop } from "vue-property-decorator";
   import { Guide } from '@/types/models';
   import { default as mixins } from '../mixins/user';
+  import VueTags from "@/components/tags.vue";
   import { mapState } from 'vuex';
 
   @Component({
     mixins: [ mixins ],
+    components: { 'vue-tags': VueTags },
     computed: {
       ...mapState('guides', ['guide'])
     }
   })
   export default class VuePost extends Vue {
     private isShowing = false;
+
+    edit() { }
+    deleteItem() { }
   }
 </script>
