@@ -3,7 +3,7 @@
 namespace Coyote\Listeners;
 
 use Coyote\Events\JobDeleted;
-use Coyote\Events\MicroblogWasDeleted;
+use Coyote\Events\MicroblogDeleted;
 use Coyote\Events\MicroblogSaved;
 use Coyote\Events\TopicWasMoved;
 use Coyote\Events\TopicWasSaved;
@@ -132,9 +132,9 @@ class PageListener implements ShouldQueue
     }
 
     /**
-     * @param MicroblogWasDeleted $event
+     * @param MicroblogDeleted $event
      */
-    public function onMicroblogDelete(MicroblogWasDeleted $event)
+    public function onMicroblogDelete(MicroblogDeleted $event)
     {
         $this->page->deleteByContent($event->microblog['id'], Microblog::class);
     }
@@ -226,7 +226,7 @@ class PageListener implements ShouldQueue
         );
 
         $events->listen(
-            'Coyote\Events\MicroblogWasDeleted',
+            'Coyote\Events\MicroblogDeleted',
             'Coyote\Listeners\PageListener@onMicroblogDelete'
         );
 

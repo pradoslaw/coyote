@@ -2,7 +2,7 @@
 
 namespace Coyote\Listeners;
 
-use Coyote\Events\MicroblogWasDeleted;
+use Coyote\Events\MicroblogDeleted;
 use Coyote\Events\PostWasDeleted;
 use Coyote\Events\TopicWasDeleted;
 use Coyote\Flag;
@@ -21,7 +21,7 @@ class FlagSubscriber implements ShouldQueue
         Flag::whereHas('posts', fn (Builder $query) => $query->withTrashed()->where('id', $event->post['id']))->delete();
     }
 
-    public function handleMicroblogDelete(MicroblogWasDeleted $event)
+    public function handleMicroblogDelete(MicroblogDeleted $event)
     {
         Flag::whereHas('microblogs', fn (Builder $query) => $query->withTrashed()->where('id', $event->microblog['id']))->delete();
     }
@@ -39,7 +39,7 @@ class FlagSubscriber implements ShouldQueue
         );
 
         $events->listen(
-            MicroblogWasDeleted::class,
+            MicroblogDeleted::class,
             'Coyote\Listeners\FlagSubscriber@handleMicroblogDelete'
         );
     }

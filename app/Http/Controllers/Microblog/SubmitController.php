@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Controllers\Microblog;
 
-use Coyote\Events\MicroblogWasDeleted;
+use Coyote\Events\MicroblogDeleted;
 use Coyote\Events\MicroblogSaved;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Requests\MicroblogRequest;
@@ -114,7 +114,7 @@ class SubmitController extends Controller
             $microblog->user->notify(new DeletedNotification($microblog, $this->auth));
         }
 
-        event(new MicroblogWasDeleted($microblog));
+        event(new MicroblogDeleted($microblog));
     }
 
     /**

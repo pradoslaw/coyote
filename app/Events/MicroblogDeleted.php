@@ -5,7 +5,7 @@ namespace Coyote\Events;
 use Coyote\Microblog;
 use Illuminate\Queue\SerializesModels;
 
-class MicroblogWasDeleted extends Event
+class MicroblogDeleted extends Event
 {
     use SerializesModels;
 

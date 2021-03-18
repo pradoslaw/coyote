@@ -2,8 +2,9 @@
 
 namespace Coyote\Listeners;
 
-use Coyote\Events\MicroblogWasDeleted;
+use Coyote\Events\MicroblogDeleted;
 use Coyote\Events\MicroblogSaved;
+use Coyote\Microblog;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
 use Coyote\Services\Elasticsearch\Crawler;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -35,16 +36,24 @@ class MicroblogListener implements ShouldQueue
      */
     public function onMicroblogSave(MicroblogSaved $event)
     {
+        if ($event->microblog->parent_id) {
+            return;
+        }
+
         $this->crawler->index($event->microblog);
     }
 
     /**
-     * @param MicroblogWasDeleted $event
+     * @param MicroblogDeleted $event
      * @throws \Exception
      */
-    public function onMicroblogDelete(MicroblogWasDeleted $event)
+    public function onMicroblogDelete(MicroblogDeleted $event)
     {
-        $microblog = $this->microblog->withTrashed()->find($event->microblog['id']);
+        if ($event->microblog['parent_id']) {
+            return;
+        }
+
+        $microblog = (new Microblog())->forceFill($event->microblog);
 
         $this->crawler->delete($microblog);
     }
@@ -62,7 +71,7 @@ class MicroblogListener implements ShouldQueue
         );
 
         $events->listen(
-            MicroblogWasDeleted::class,
+            MicroblogDeleted::class,
             'Coyote\Listeners\MicroblogListener@onMicroblogDelete'
         );
     }

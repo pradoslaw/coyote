@@ -3,7 +3,7 @@
 namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Events\MicroblogSaved;
-use Coyote\Events\MicroblogWasDeleted;
+use Coyote\Events\MicroblogDeleted;
 use Coyote\Http\Requests\MicroblogRequest;
 use Coyote\Http\Resources\MicroblogResource;
 use Coyote\Http\Resources\MicroblogCollection;
@@ -127,7 +127,7 @@ class CommentController extends BaseController
             $comment->user->notify(new DeletedNotification($comment, $this->auth));
         }
 
-        event(new MicroblogWasDeleted($comment));
+        event(new MicroblogDeleted($comment));
         event(new MicroblogSaved($comment->parent));
     }
 
