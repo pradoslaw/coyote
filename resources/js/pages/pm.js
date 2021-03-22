@@ -135,6 +135,10 @@ new Vue({
     },
 
     listenForTyping() {
+      if (!('editor' in this.$refs)) {
+        return;
+      }
+
       this.timer = null;
 
       ws.subscribe(this.privateChannel).on('pm-typing', data => {
