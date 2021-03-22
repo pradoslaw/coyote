@@ -47,11 +47,12 @@ class SuccessfulPaymentNotification extends Notification
     public function toMail()
     {
         $mail = (new MailMessage)
-            ->subject($this->getSubject())
-            ->bcc(config('mail.from.address'));
+            ->subject($this->getSubject());
 
         if ($this->payment->invoice_id && $this->payment->invoice->grossPrice() > 0) {
-            $mail->line(
+            $mail
+                ->bcc(config('mail.from.address'))
+                ->line(
                 sprintf(
                     'Otrzymaliśmy płatność w kwocie <strong>%s %s</strong>.',
                     $this->payment->invoice->grossPrice(),
