@@ -53,11 +53,11 @@ class SuccessfulPaymentNotification extends Notification
             $mail
                 ->bcc(config('mail.from.address'))
                 ->line(
-                sprintf(
-                    'Otrzymaliśmy płatność w kwocie <strong>%s %s</strong>.',
-                    $this->payment->invoice->grossPrice(),
-                    $this->payment->invoice->currency->symbol
-                )
+                    sprintf(
+                        'Otrzymaliśmy płatność w kwocie <strong>%s %s</strong>.',
+                        $this->payment->invoice->grossPrice(),
+                        $this->payment->invoice->currency->symbol
+                    )
             );
         }
 
