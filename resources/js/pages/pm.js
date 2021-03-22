@@ -153,12 +153,14 @@ new Vue({
     },
 
     loadMore() {
+      this.removeScrollbarEvent();
+
       return store.dispatch('messages/loadMore', this.recipient.id).then(response => {
-        if (!response.data.data.length) {
-          this.removeScrollbarEvent();
+        if (response.data.data.length) {
+          this.addScrollbarEvent();
         }
 
-        // scroll area by 1px because we don't want to run ps-y-reach-start event in circle
+        // scroll area by 1px so we can scroll to top and load more messages
         const wrap = document.getElementById('wrap');
 
         if (wrap) {
