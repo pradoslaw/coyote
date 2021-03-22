@@ -58,7 +58,7 @@ class SuccessfulPaymentNotification extends Notification
                         $this->payment->invoice->grossPrice(),
                         $this->payment->invoice->currency->symbol
                     )
-            );
+                );
         }
 
         if ($this->payment->coupon_id) {
