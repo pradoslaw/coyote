@@ -1,4 +1,4 @@
-import { Paginator } from "@/types/models";
+import { Paginator, Guide } from "@/types/models";
 
 const state = {
   pagination: {},
@@ -8,6 +8,10 @@ const state = {
 const mutations = {
   init(state, { guide }) {
     state.guide = guide;
+  },
+
+  edit(state) {
+    state.guide.is_editing = !state.guide.is_editing;
   }
 }
 

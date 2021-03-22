@@ -1,6 +1,8 @@
 <template>
   <div class="card card-default">
-    <div class="card-body">
+    <vue-form v-if="guide.is_editing"></vue-form>
+
+    <div v-if="!guide.is_editing" class="card-body">
       <div class="guide-title">
         <div v-if="guide.permissions.update" class="dropdown float-right">
           <button class="btn btn-xs border-0 text-muted mt-2" type="button" data-toggle="dropdown" aria-label="Dropdown"><i class="fa fa-ellipsis-h"></i></button>
@@ -42,7 +44,6 @@
           </li>
         </ul>
       </div>
-
     </div>
   </div>
 </template>
@@ -50,6 +51,7 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from "vue-class-component";
+  import VueForm from './form.vue';
   import { Prop } from "vue-property-decorator";
   import { Guide } from '@/types/models';
   import { default as mixins } from '../mixins/user';
@@ -58,7 +60,10 @@
 
   @Component({
     mixins: [ mixins ],
-    components: { 'vue-tags': VueTags },
+    components: {
+      'vue-tags': VueTags,
+      'vue-form': VueForm
+    },
     computed: {
       ...mapState('guides', ['guide'])
     }
@@ -66,7 +71,11 @@
   export default class VuePost extends Vue {
     private isShowing = false;
 
-    edit() { }
+    edit() {
+      this.$store.commit('guides/edit');
+    }
+
     deleteItem() { }
+
   }
 </script>

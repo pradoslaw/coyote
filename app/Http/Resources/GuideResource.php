@@ -33,7 +33,8 @@ class GuideResource extends JsonResource
                 'tags'          => TagResource::collection($this->tags),
                 'permissions'   => [
                     'update' => true
-                ]
+                ],
+                'is_editing'    => false
             ]
         );
     }

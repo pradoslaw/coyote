@@ -349,4 +349,5 @@ export interface Guide {
   text: string;
   html: string;
   permissions: GuidePermission;
+  is_editing: boolean;
 }
