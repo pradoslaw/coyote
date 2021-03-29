@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Guide extends Model
 {
+    protected $fillable = ['title', 'excerpt', 'text'];
+
     public function user()
     {
         return $this->belongsTo(User::class);

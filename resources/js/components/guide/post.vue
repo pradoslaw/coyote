@@ -1,6 +1,6 @@
 <template>
   <div class="card card-default">
-    <vue-form v-if="guide.is_editing"></vue-form>
+    <vue-form v-if="guide.is_editing" class="card-body"></vue-form>
 
     <div v-if="!guide.is_editing" class="card-body">
       <div class="guide-title">
