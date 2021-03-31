@@ -49,6 +49,7 @@
         v-paste:success="addAsset"
         v-paste:error="errorNotification"
         :class="{'is-invalid': error !== null}"
+        :tabindex="tabIndex"
         @keydown.ctrl.enter="save"
         @keydown.meta.enter="save"
         @keydown.esc="cancel"
@@ -56,7 +57,6 @@
         class="form-control"
         ref="input"
         rows="4"
-        tabindex="2"
         placeholder="Kliknij, aby dodać treść"
       ></textarea>
 
@@ -76,7 +76,7 @@
           <span class="small">{{ progress }}%</span>
         </template>
 
-        <a v-else :aria-label="uploadTooltip" data-balloon-length="large" data-balloon-pos="up-left" data-balloon-nofocus href="javascript:" class="small text-muted" @click="chooseFile">
+        <a v-else :aria-label="uploadTooltip" tabindex="-1" data-balloon-length="large" data-balloon-pos="up-left" data-balloon-nofocus href="javascript:" class="small text-muted" @click="chooseFile">
           <i class="far fa-image"></i>
 
           <span class="d-none d-sm-inline">Kliknij, aby dodać załącznik lub wklej ze schowka.</span>
@@ -86,7 +86,7 @@
       </div>
 
       <div class="small ml-auto">
-        <a href="#js-wiki-help" data-toggle="collapse" class="small text-muted"><i class="fa fab fa-markdown"></i> Markdown jest obsługiwany.</a>
+        <a href="#js-wiki-help" tabindex="-1" data-toggle="collapse" class="small text-muted"><i class="fa fab fa-markdown"></i> Markdown jest obsługiwany.</a>
       </div>
     </div>
 
@@ -231,6 +231,9 @@
 
     @Prop()
     value!: string;
+
+    @Prop({require: false})
+    tabIndex!: number;
 
     @Prop({default: 20})
     readonly uploadMaxSize!: number;
