@@ -1,16 +1,10 @@
 import Vue from 'vue';
-import VueNotifications from "vue-notification";
 import VuePricing from '@/components/job/pricing.vue';
 import VueJobForm from '@/components/job/form.vue';
 import VueFirmForm from '@/components/job/firm-form.vue';
 import VueButton from '@/components/forms/button.vue';
 import VueTabs from '@/components/tabs.vue';
 import store from '@/store';
-import { default as axiosErrorHandler } from '@/libs/axios-error-handler';
-
-Vue.use(VueNotifications, {componentName: 'vue-notifications'});
-
-axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 
 new Vue({
   el: '#js-submit-form',

@@ -1,5 +1,12 @@
 // import '../legacy/subscribe';
 import Router from '../libs/router';
+import Vue from "vue";
+import VueNotifications from "vue-notification";
+import {default as axiosErrorHandler} from "@/libs/axios-error-handler";
+
+Vue.use(VueNotifications, {componentName: 'vue-notifications'});
+
+axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 
 (() => {
   let r = new Router();

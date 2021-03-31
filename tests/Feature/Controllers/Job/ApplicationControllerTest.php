@@ -61,7 +61,7 @@ class ApplicationControllerTest extends TestCase
             ]
         );
 
-        $response->assertRedirect(route('job.offer', [$this->job->id, $this->job->slug]));
+        $response->assertOk();
 
         $this->assertTrue($this->job->applications()->where('email', $fakeEmail)->exists());
 

@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers\Job;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\MailFactory;
 use Coyote\Http\Forms\Job\ApplicationForm;
+use Coyote\Http\Requests\ApplicationRequest;
 use Coyote\Job;
 use Coyote\Notifications\Job\ApplicationConfirmationNotification;
 use Coyote\Notifications\Job\ApplicationSentNotification;
@@ -28,7 +29,7 @@ class ApplicationController extends Controller
             function (Request $request, $next) {
                 /** @var \Coyote\Job $job */
                 $job = $request->route('job');
-                abort_if($job->applications()->forGuest($this->guestId)->exists(), 404);
+//                abort_if($job->applications()->forGuest($this->guestId)->exists(), 404);
 
                 return $next($request);
             },
@@ -50,24 +51,21 @@ class ApplicationController extends Controller
             'Aplikuj na to stanowisko pracy'    => null
         ]);
 
-        /**
-         * @var ApplicationForm $form
-         */
-        $form = $this->createForm(ApplicationForm::class);
+        $application = new Job\Application();
 
         if ($this->userId) {
-            $form->get('email')->setValue($this->auth->email);
-            $form->get('github')->setValue($this->auth->github);
+            $application->email = $this->auth->email;
+            $application->github = $this->auth->github;
         }
 
         // set default message
-        $form->get('text')->setValue(view('job.partials.application', compact('job')));
+        $application->text = view('job.partials.application', compact('job'))->render();
 
         if ($this->getSetting('job.application')) {
-            $form->setData(json_decode($this->getSetting('job.application')));
+            $application->forceFill((array) json_decode($this->getSetting('job.application')));
         }
 
-        return $this->view('job.application', compact('job', 'form'))->with(
+        return $this->view('job.application', compact('job', 'application'))->with(
             'subscribed',
             $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false
         );
@@ -75,21 +73,19 @@ class ApplicationController extends Controller
 
     /**
      * @param Job $job
-     * @param ApplicationForm $form
-     * @return \Illuminate\Http\RedirectResponse
+     * @param ApplicationRequest $request
+     * @return string
      */
-    public function save($job, ApplicationForm $form)
+    public function save(Job $job, ApplicationRequest $request)
     {
-        $data = $form->all() + ['guest_id' => $this->guestId];
-
-        $application = $this->transaction(function () use ($job, $form, $data) {
+        $application = $this->transaction(function () use ($job, $request) {
             $target = (new Stream_Job)->map($job);
 
             /** @var \Coyote\Job\Application $application */
-            $application = $job->applications()->create($data);
-            $this->setSetting('job.application', $form->get('remember')->isChecked() ? $form->toJson() : '');
+            $application = $job->applications()->create($request->all() + ['guest_id' => $this->guestId]);
+            $this->setSetting('job.application', $request->get('remember') ? json_encode($request->all()) : '');
 
-            stream(Stream_Create::class, new Stream_Application(['displayName' => $data['name']]), $target);
+            stream(Stream_Create::class, new Stream_Application(['displayName' => $request->input('name')]), $target);
 
             return $application;
         });
@@ -97,9 +93,9 @@ class ApplicationController extends Controller
         $job->notify(new ApplicationSentNotification($application));
         $application->notify(new ApplicationConfirmationNotification());
 
-        return redirect()
-            ->route('job.offer', [$job->id, $job->slug])
-            ->with('success', 'Zgłoszenie zostało prawidłowo wysłane.');
+        session()->flash('success', 'Zgłoszenie zostało prawidłowo wysłane.');
+
+        return UrlBuilder::job($job);
     }
 
     /**

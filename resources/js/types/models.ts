@@ -57,6 +57,7 @@ export interface Asset {
   url: string;
   name?: string;
   mime?: string;
+  filename?: string;
   metadata?: AssetMetadata;
 }
 
@@ -273,6 +274,18 @@ export interface Job {
   employment: Employment;
   seniority: Seniority;
   firm?: Firm;
+}
+
+export interface Application {
+  email: string;
+  name: string;
+  github: string;
+  text: string;
+  phone: string;
+  remember: boolean;
+  salary: string;
+  dismissal_period: string;
+  cv: string | null;
 }
 
 export interface Firm {

@@ -4,6 +4,10 @@
 @import "job/payment";
 @import "job/application";
 
+.mce-notification, .tox-notification {
+  display: none !important;
+}
+
 .benefits,
 .features,
 .about-items {

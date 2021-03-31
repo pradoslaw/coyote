@@ -2,19 +2,7 @@
 
 {% block title %}Wystaw ofertę pracy{{ parent() }}{% endblock %}
 
-{% block head %}
-  {{ parent() }}
-
-  <style>
-    .mce-notification, .tox-notification {
-      display: none !important;
-    }
-  </style>
-{% endblock %}
-
 {% block container %}
-
-
   <div class="row">
     <main class="col-lg-9 col-12-md">
       <div class="card card-body bg-light p-2 border-0 text-center" v-loader>
