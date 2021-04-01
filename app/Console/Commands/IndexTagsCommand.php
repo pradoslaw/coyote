@@ -39,11 +39,13 @@ class IndexTagsCommand extends Command
      */
     public function handle()
     {
-        $tags = Tag::withTrashed()->where('updated_at', '>', now()->subMinutes(5))->get();
+        $tags = Tag::withTrashed()->where('updated_at', '>', now()->subMinutes(6))->get();
 
         $crawler = new Crawler();
 
         foreach ($tags as $tag) {
+            $this->info("Indexing $tag->name ...");
+
             $tag->deleted_at ? $crawler->delete($tag) : $crawler->index($tag);
         }
 
