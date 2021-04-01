@@ -4,7 +4,6 @@ namespace Coyote\Http\Controllers\Job;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\MailFactory;
-use Coyote\Http\Forms\Job\ApplicationForm;
 use Coyote\Http\Requests\ApplicationRequest;
 use Coyote\Job;
 use Coyote\Notifications\Job\ApplicationConfirmationNotification;
@@ -29,7 +28,7 @@ class ApplicationController extends Controller
             function (Request $request, $next) {
                 /** @var \Coyote\Job $job */
                 $job = $request->route('job');
-//                abort_if($job->applications()->forGuest($this->guestId)->exists(), 404);
+                abort_if($job->applications()->forGuest($this->guestId)->exists(), 404);
 
                 return $next($request);
             },
@@ -65,10 +64,9 @@ class ApplicationController extends Controller
             $application->forceFill((array) json_decode($this->getSetting('job.application')));
         }
 
-        return $this->view('job.application', compact('job', 'application'))->with(
-            'subscribed',
-            $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false
-        );
+        return $this->view('job.application', compact('job', 'application'))->with([
+            'subscribed' => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false
+        ]);
     }
 
     /**

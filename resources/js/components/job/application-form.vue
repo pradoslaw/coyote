@@ -1,46 +1,46 @@
 <template>
   <form>
     <vue-form-group :errors="errors['email']" label="Email" help="Nie wysyłamy spamu! Obiecujemy.">
-      <vue-text name="email" v-model="application.email" :is-invalid="'email' in errors"></vue-text>
+      <vue-text name="email" v-model="applicationSync.email" :is-invalid="'email' in errors"></vue-text>
     </vue-form-group>
 
     <vue-form-group :errors="errors['name']" label="Imię i nazwisko">
-      <vue-text name="name" v-model="application.name" :is-invalid="'name' in errors"></vue-text>
+      <vue-text name="name" v-model="applicationSync.name" :is-invalid="'name' in errors"></vue-text>
     </vue-form-group>
 
     <vue-form-group :errors="errors['phone']" label="Numer telefonu" help="Podanie numeru telefonu nie jest obowiązkowe, ale pozwoli na szybki kontakt.">
-      <vue-text name="phone" v-model="application.phone" :is-invalid="'phone' in errors"></vue-text>
+      <vue-text name="phone" v-model="applicationSync.phone" :is-invalid="'phone' in errors"></vue-text>
     </vue-form-group>
 
     <div class="form-group">
       <label class="col-form-label">CV/Resume</label>
 
-      <vue-thumbnail :url="application.cv" upload-url="/Praca/Upload" name="cv" @upload="addAsset" @delete="deleteAsset" class="w-25"></vue-thumbnail>
+      <vue-thumbnail :url="applicationSync.cv" upload-url="/Praca/Upload" name="cv" @upload="addAsset" @delete="deleteAsset" class="w-25"></vue-thumbnail>
 
       <span class="form-text">CV/résumé z rozszerzeniem *.pdf, *.doc, *.docx lub *.rtf. Maksymalnie 5 MB.</span>
     </div>
 
     <vue-form-group :errors="errors['github']" label="Konto Github" class="github">
-      <vue-text name="github" v-model="application.github" :is-invalid="'github' in errors"></vue-text>
+      <vue-text name="github" v-model="applicationSync.github" :is-invalid="'github' in errors"></vue-text>
     </vue-form-group>
 
     <vue-form-group :errors="errors['salary']" label="Minimalne oczekiwania wynagrodzenie">
-      <vue-select v-model="application.salary" :options="dismissalPeriod" placeholder="Do negocjacji"></vue-select>
+      <vue-select v-model="applicationSync.salary" :options="dismissalPeriod" placeholder="Do negocjacji"></vue-select>
     </vue-form-group>
 
     <vue-form-group :errors="errors['dismissal_period']" label="Obecny okres wypowiedzenia">
-      <vue-select v-model="application.dismissal_period" :options="salaryChoices" placeholder="Nie określono"></vue-select>
+      <vue-select v-model="applicationSync.dismissal_period" :options="salaryChoices" placeholder="Nie określono"></vue-select>
     </vue-form-group>
 
     <vue-form-group :errors="errors['text']" label="Wiadomość dla pracodawcy/zleceniodawcy" help="Taką wiadomość otrzyma osoba, która wystawiła ogłoszenie">
-      <vue-tinymce v-model="application.text" :init="tinyMceOptions"></vue-tinymce>
+      <vue-tinymce v-model="applicationSync.text" :init="tinyMceOptions"></vue-tinymce>
 
-      <input type="hidden" name="text" v-model="application.text">
+      <input type="hidden" name="text" v-model="applicationSync.text">
     </vue-form-group>
 
     <div class="form-group">
       <div class="custom-control custom-checkbox">
-        <vue-checkbox v-model="application.remember" id="enable-invoice" class="custom-control-input"></vue-checkbox>
+        <vue-checkbox v-model="applicationSync.remember" id="enable-invoice" class="custom-control-input"></vue-checkbox>
 
         <label class="custom-control-label" for="enable-invoice">
           Zapamiętaj dane podane w formularzu
@@ -65,7 +65,7 @@
   import VueError from '@/components/forms/error.vue';
   import VueThumbnail from "@/components/thumbnail.vue";
   import VueTinyMce from '@tinymce/tinymce-vue';
-  import { Prop } from "vue-property-decorator";
+  import { Prop, PropSync } from "vue-property-decorator";
   import { Application, Job, Asset } from '@/types/models';
   import TinyMceOptions from '@/libs/tinymce';
   import axios from 'axios';
@@ -83,8 +83,8 @@
     }
   })
   export default class VueApplicationForm extends Vue {
-    @Prop(Object)
-    application!: Application;
+    @PropSync('application')
+    applicationSync!: Application;
 
     @Prop(Object)
     job!: Job;
@@ -95,7 +95,7 @@
     submitForm() {
       this.isProcessing = true;
 
-      axios.post(`/Praca/Application/${this.job.id}`, this.application)
+      axios.post(`/Praca/Application/${this.job.id}`, this.applicationSync)
         .then(result => window.location.href = result.data)
         .catch(err => {
           if (err.response.status !== 422) {
@@ -108,11 +108,11 @@
     }
 
     addAsset(asset: Asset) {
-      this.application.cv = asset.filename!;
+      Vue.set(this.applicationSync, 'cv', asset.filename!);
     }
 
     deleteAsset() {
-      this.application.cv = null;
+      this.applicationSync.cv = null;
     }
 
     get tinyMceOptions() {

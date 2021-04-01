@@ -5,7 +5,7 @@
         <img v-if="isImage" :src="url" class="mw-100">
 
         <div v-else class="bg-light placeholder-mask">
-          <i class="far fa-folder fa-2x"></i>
+          <i class="far fa-file fa-2x"></i>
         </div>
       </template>
 
