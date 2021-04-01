@@ -232,7 +232,7 @@
     @Prop()
     value!: string;
 
-    @Prop({require: false})
+    @Prop({required: false})
     tabIndex!: number;
 
     @Prop({default: 20})
