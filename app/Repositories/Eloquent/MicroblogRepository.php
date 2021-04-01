@@ -142,27 +142,27 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     {
         $db = $this->app['db'];
 
-        $base = $db->table('tags')
-            ->selectRaw('name, tags.text, microblogs AS count')
-            ->leftJoin('tag_resources', 'tags.id', '=', 'tag_resources.tag_id')
-            ->leftJoin('microblogs', 'microblogs.id', '=', 'tag_resources.resource_id')
-            ->where('tag_resources.resource_type', Microblog::class)
-            ->groupBy('tags.id')
-            ->groupBy('name')
-            ->orderByRaw('microblogs DESC')
-            ->limit(5);
-
-        $query = clone $base;
-
-        return $query
-            ->when($userId, function ($builder) use ($base, $userId) {
+        return $db
+            ->table('tags')
+            ->selectRaw("name, tags.text, (resources->'Coyote\Microblog')::int AS count, 0 as \"order\"")
+            ->whereIn('tags.name', ['programowanie', 'wydarzenia', 'off-topic', 'autopromocja'])
+            ->when($userId, function ($builder) use ($db, $userId) {
                 return $builder
-                    ->where('microblogs.user_id', $userId)
-                    ->selectRaw('1 AS "order"')
-                    ->limit(3)
-                    ->unionAll($base->selectRaw('0 AS "order"')->whereIn('tags.name', ['news', 'programowanie', 'wydarzenia', 'off-topic', 'autopromocja']))
-                    ->orderByRaw('"order" asc');
+                    ->unionAll(
+                        $db
+                            ->table('tags')
+                            ->selectRaw('name, tags.text, COUNT(*)::int AS count, 1 AS "order"')
+                            ->where('microblogs.user_id', $userId)
+                            ->leftJoin('tag_resources', 'tags.id', '=', 'tag_resources.tag_id')
+                            ->leftJoin('microblogs', 'microblogs.id', '=', 'tag_resources.resource_id')
+                            ->where('tag_resources.resource_type', Microblog::class)
+                            ->groupBy('tags.id')
+                            ->groupBy('tags.name')
+                            ->orderByRaw('"count" DESC')
+                            ->limit(3)
+                    );
             })
+            ->orderByRaw('"order" ASC, "count" DESC')
             ->get()
             ->unique('name')
             ->values()
