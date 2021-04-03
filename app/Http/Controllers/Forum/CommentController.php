@@ -128,14 +128,14 @@ class CommentController extends Controller
                 )
             );
 
-            $comment->user->notify(new MigratedNotification($this->auth, $post));
+            if ($this->userId !== $comment->user_id) {
+                $comment->user->notify(new MigratedNotification($this->auth, $post));
+            }
 
             $comment->delete();
             $repository->adjustReadDate($topic->id, $comment->created_at->subSecond());
 
             stream(Stream_Move::class, ...$this->target($comment));
-
-
 
             return $post;
         });
