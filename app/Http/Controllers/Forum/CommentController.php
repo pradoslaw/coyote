@@ -129,7 +129,11 @@ class CommentController extends Controller
             );
 
             if ($this->userId !== $comment->user_id) {
-                $comment->user->notify(new MigratedNotification($this->auth, $post));
+                $post->user->notify(new MigratedNotification($this->auth, $post));
+            }
+
+            if ($comment->user->allow_subscribe) {
+                $topic->subscribe($this->userId, true);
             }
 
             $comment->delete();

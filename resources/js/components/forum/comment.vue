@@ -78,7 +78,6 @@
         okLabel: 'Tak, zamień'
       })
       .then(() => {
-        // this.$store.dispatch('posts/migrateComment', this.comment);
         this.$store.dispatch('posts/migrateComment', this.comment).then(response => window.location.href = response.data.url);
       });
     }
