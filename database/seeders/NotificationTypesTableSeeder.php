@@ -179,5 +179,12 @@ class NotificationTypesTableSeeder extends Seeder
             'email' => true,
             'category' => 'Mikroblogi'
         ]);
+        Type::updateOrCreate(['id' => Notification::POST_COMMENT_MIGRATED], [
+            'name' => '...zamianie komentarza na post',
+            'headline' => 'Komentarz został zamieniony na post przez {sender}',
+            'profile' => true,
+            'email' => true,
+            'category' => 'Forum'
+        ]);
     }
 }

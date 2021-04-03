@@ -19,6 +19,6 @@ class CommentDeleted
      */
     public function __construct(Comment $comment)
     {
-        $this->comment = $comment->toArray();
+        $this->comment = array_only($comment->toArray(), ['id']);
     }
 }

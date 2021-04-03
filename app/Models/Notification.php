@@ -42,6 +42,7 @@ class Notification extends Model
     const JOB_CREATE = 22;
     const JOB_COMMENT = 23;
     const JOB_APPLICATION = 24;
+    const POST_COMMENT_MIGRATED = 25;
 
     /**
      * The attributes that are mass assignable.

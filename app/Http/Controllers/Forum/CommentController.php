@@ -9,6 +9,7 @@ use Coyote\Events\TopicWasSaved;
 use Coyote\Http\Requests\Forum\PostCommentRequest;
 use Coyote\Http\Resources\PostCommentResource;
 use Coyote\Http\Resources\PostResource;
+use Coyote\Notifications\Post\Comment\MigratedNotification;
 use Coyote\Post;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 use Coyote\Http\Controllers\Controller;
@@ -127,10 +128,14 @@ class CommentController extends Controller
                 )
             );
 
+            $comment->user->notify(new MigratedNotification($this->auth, $post));
+
             $comment->delete();
             $repository->adjustReadDate($topic->id, $comment->created_at->subSecond());
 
             stream(Stream_Move::class, ...$this->target($comment));
+
+
 
             return $post;
         });
