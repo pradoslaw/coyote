@@ -121,6 +121,7 @@ class CommentController extends Controller
         $post = $this->transaction(function () use ($topic, $comment, $repository) {
             $stream = Stream::where('object->objectType', 'comment')->where('object->id', $comment->id)->first();
 
+            /** @var Post $post */
             $post = $topic->posts()->forceCreate(
                 array_merge(
                     ['forum_id' => $topic->forum_id, 'topic_id' => $topic->id, 'ip' => $stream->ip, 'browser' => $stream->browser],
@@ -132,7 +133,7 @@ class CommentController extends Controller
                 $post->user->notify(new MigratedNotification($this->auth, $post));
             }
 
-            if ($comment->user->allow_subscribe) {
+            if ($post->user->allow_subscribe) {
                 $topic->subscribe($this->userId, true);
             }
 
