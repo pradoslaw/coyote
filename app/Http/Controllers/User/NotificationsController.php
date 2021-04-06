@@ -159,9 +159,7 @@ class NotificationsController extends BaseController
     private function mark($notifications)
     {
         $ids = $notifications
-            ->reject(function (Notification $notification) {
-                return $notification->read_at !== null;
-            })
+            ->reject(fn (Notification $notification) => $notification->read_at !== null)
             ->pluck('id')
             ->all();
 
