@@ -274,6 +274,7 @@
     addItem() {
       store.commit('poll/addItem');
 
+      // @ts-ignore
       this.$nextTick(() => this.$refs['poll-items'][this.$refs['poll-items'].length - 1].$el.focus());
     }
 
