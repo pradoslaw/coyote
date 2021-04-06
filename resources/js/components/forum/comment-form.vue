@@ -36,7 +36,7 @@
   import VueAutosize from '../../plugins/autosize';
   import VuePrompt from '../forms/prompt.vue';
   import VueButton from '../forms/button.vue';
-  import { PostComment } from "../../types/models";
+  import { PostComment } from "@/types/models";
 
   Vue.use(VueAutosize);
 

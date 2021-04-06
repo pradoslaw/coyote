@@ -58,6 +58,7 @@
                 <vue-text
                   v-model="item.text"
                   :is-invalid="`poll.items.${index}.text` in errors"
+                  ref="poll-items"
                   class="input-sm"
                   @keydown.enter.native.prevent="addItem"
                   placeholder="Naciśnij Enter, aby dodać kolejną pozycję"
@@ -174,7 +175,7 @@
       }
     },
     methods: {
-      ...mapMutations('poll', ['removeItem', 'addItem', 'resetDefaults']),
+      ...mapMutations('poll', ['removeItem', 'resetDefaults']),
       ...mapMutations('posts', ['deleteAttachment', 'changePage'])
     },
     inject: []
@@ -268,6 +269,12 @@
       }
 
       axios.get('/completion/similar', { params: { q: this.topic.title }}).then(response => this.similar = response.data.hits);
+    }
+
+    addItem() {
+      store.commit('poll/addItem');
+
+      this.$nextTick(() => this.$refs['poll-items'][this.$refs['poll-items'].length - 1].$el.focus());
     }
 
     async lastPage() {
