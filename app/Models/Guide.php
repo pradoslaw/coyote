@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $excerpt
  * @property string $text
  * @property Tag[] $tags
+ * @property int $user_id
  */
 class Guide extends Model
 {

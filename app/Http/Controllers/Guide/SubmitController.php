@@ -14,7 +14,7 @@ class SubmitController extends Controller
         if (!$guide->exists) {
             $guide->user()->associate($this->auth);
         } else {
-//            $this->authorize('update', $guide);
+            $this->authorize('update', $guide);
         }
 
         $guide->fill($request->all());
