@@ -1,5 +1,7 @@
 {% extends 'layout' %}
 
+{% block title %}{{ guide.title }}{{ parent() }}{% endblock %}
+
 {% block container %}
   <div class="row mt-1">
     <div class="col-lg-2">
@@ -81,6 +83,8 @@
           </div>
         </div>
       </div>
+
+      <vue-notifications position="bottom right"/>
     </div>
   </div>
 
