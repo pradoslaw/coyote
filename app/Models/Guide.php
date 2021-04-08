@@ -3,6 +3,7 @@
 namespace Coyote\Models;
 
 use Coyote\Tag;
+use Coyote\Taggable;
 use Coyote\User;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,6 +17,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Guide extends Model
 {
+    use Taggable;
+
     protected $fillable = ['title', 'excerpt', 'text'];
 
     public function user()

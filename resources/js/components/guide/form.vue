@@ -10,7 +10,19 @@
     </vue-form-group>
 
     <vue-form-group :errors="errors['text']" label="Odpowiedz">
-      <vue-markdown v-model="guide.text" :is-invalid="'text' in errors"></vue-markdown>
+      <vue-markdown v-model="guide.text" :is-invalid="'text' in errors">
+        <template v-slot:bottom>
+          <div class="row no-gutters p-1">
+            <vue-tags-inline
+              :tags="guide.tags"
+              :class="{'is-invalid': 'tags' in errors}"
+              @change="toggleTag"
+            ></vue-tags-inline>
+
+            <vue-error :message="errors['tags']"></vue-error>
+          </div>
+        </template>
+      </vue-markdown>
     </vue-form-group>
 
     <div class="row mt-2">
@@ -37,7 +49,8 @@
   import VueTagsInline from '@/components/forms/tags-inline.vue';
   import VueMarkdown from '@/components/forms/markdown.vue';
   import VueText from '@/components/forms/text.vue';
-  import {mapActions, mapState} from 'vuex';
+  import VueError from '@/components/forms/error.vue';
+  import {mapActions, mapMutations, mapState} from 'vuex';
   import VueFormGroup from "@/components/forms/form-group.vue";
 
   @Component({
@@ -46,13 +59,16 @@
       'vue-form-group': VueFormGroup,
       'vue-text': VueText,
       'vue-markdown': VueMarkdown,
-      'vue-button': VueButton
+      'vue-button': VueButton,
+      'vue-tags-inline': VueTagsInline,
+      'vue-error': VueError
     },
     computed: {
       ...mapState('guides', ['guide'])
     },
     methods: {
-      ...mapActions('guides', ['save'])
+      ...mapActions('guides', ['save']),
+      ...mapMutations('guides', ['toggleTag'])
     }
   })
   export default class VueForm extends Vue {

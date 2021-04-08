@@ -19,8 +19,10 @@ class SubmitController extends Controller
 
         $guide->fill($request->all());
 
-        $this->transaction(function () use ($guide) {
+        $this->transaction(function () use ($guide, $request) {
             $guide->save();
+
+            $guide->setTags(array_pluck($request->input('tags', []), 'name'));
         });
 
         GuideResource::withoutWrapping();

@@ -1,4 +1,4 @@
-import { Paginator, Guide } from "@/types/models";
+import { Paginator, Guide, Tag } from "@/types/models";
 import axios from 'axios';
 
 const state = {
@@ -17,14 +17,20 @@ const mutations = {
 
   save(state, guide: Guide) {
     state.guide = guide;
+  },
+
+  toggleTag(state, tag: Tag) {
+    const index = state.guide.tags!.findIndex(item => item.name === tag.name);
+
+    index > -1 ? state.guide.tags!.splice(index, 1) : state.guide.tags!.push(tag);
   }
 }
 
 const actions = {
   save({ state, commit }) {
     axios.post(`/Guide/Submit/${state.guide.id}`, state.guide).then(response => {
-      commit('save', response.data);
       commit('edit');
+      commit('save', response.data);
     });
   }
 }
