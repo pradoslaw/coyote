@@ -47,10 +47,6 @@
   {% endblock %}
 
   {% block footer %}
-    {% if create_button or button %}
-      <div class="float-right">{{ pagination|raw }}</div>
-    {% endif %}
-
     <div class="d-flex justify-content-center mt-2 mb-2">{{ pagination|raw }}</div>
   {% endblock %}
 </div>
