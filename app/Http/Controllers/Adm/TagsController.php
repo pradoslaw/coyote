@@ -11,6 +11,7 @@ use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Objects\Tag as Stream_Tag;
 use Coyote\Tag;
+use Illuminate\Support\Facades\DB;
 
 class TagsController extends BaseController
 {
@@ -38,6 +39,9 @@ class TagsController extends BaseController
         $builder = $this
             ->tag
             ->select(['tags.*', 'tag_categories.name AS category'])
+            ->addSelect(DB::raw('resources->>\'Coyote\Microblog\' as microblogs'))
+            ->addSelect(DB::raw('resources->>\'Coyote\Topic\' as topics'))
+            ->addSelect(DB::raw('resources->>\'Coyote\Job\' as jobs'))
             ->leftJoin('tag_categories', 'tag_categories.id', '=', 'category_id');
 
         $grid = $this->gridBuilder()
