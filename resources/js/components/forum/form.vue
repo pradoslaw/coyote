@@ -300,7 +300,7 @@
         return;
       }
 
-      await this.$confirm({ message: response.data.message, title: 'Dodać nowy tag?', okLabel: 'Tak, jestem pewien' });
+      await this.$confirm({ message: response.data.message, title: 'Czy to tag techniczny?', okLabel: 'Tak, jestem pewien' });
 
       return true;
     }
