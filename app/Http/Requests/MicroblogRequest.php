@@ -2,6 +2,8 @@
 
 namespace Coyote\Http\Requests;
 
+use Coyote\Repositories\Contracts\TagRepositoryInterface;
+use Coyote\Rules\TagDeleted;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -32,6 +34,7 @@ class MicroblogRequest extends FormRequest
                 'bail',
                 'max:25',
                 'tag',
+                new TagDeleted($this->container[TagRepositoryInterface::class]),
                 'tag_creation:300'
             ]
         ];

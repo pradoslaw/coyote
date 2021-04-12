@@ -4,6 +4,7 @@ namespace Coyote\Http\Requests\Forum;
 
 use Coyote\Forum;
 use Coyote\Post;
+use Coyote\Repositories\Contracts\TagRepositoryInterface;
 use Coyote\Rules\TagDeleted;
 use Coyote\Rules\MinWords;
 use Coyote\Topic;
@@ -68,7 +69,7 @@ class PostRequest extends FormRequest
                     'bail',
                     'max:25',
                     'tag',
-                    app(TagDeleted::class),
+                    new TagDeleted($this->container[TagRepositoryInterface::class]),
                     'tag_creation:300'
                 ]
             ]);
