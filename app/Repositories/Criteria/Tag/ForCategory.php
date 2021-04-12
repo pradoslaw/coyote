@@ -31,6 +31,6 @@ class ForCategory extends Criteria
             ->select('tags.*')
             ->where('category_id', $this->categoryId)
             ->whereNotNull('logo')
-            ->orderBy('jobs', 'DESC');
+            ->orderByRaw("resources->>'Coyote\Job' DESC");
     }
 }
