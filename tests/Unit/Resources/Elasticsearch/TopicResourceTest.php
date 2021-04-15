@@ -27,7 +27,7 @@ class TopicResourceTest extends TestCase
         $this->assertEquals($topic->score, $resource['score']);
         $this->assertEmpty($resource['subscribers']);
         $this->assertEmpty($resource['participants']);
-        $this->assertNull($resource['user_id']);
+        $this->assertNotNull($resource['user_id']);
     }
 
     public function testMapModelIntoResourceWithMultipleWordSubject()
