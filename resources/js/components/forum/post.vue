@@ -88,7 +88,7 @@
 
               <li>
                 <strong>Ostatnio:</strong>
-                <small>{{ formatDistanceToNow(post.user.visited_at) }}</small>
+                <small>{{ formatDistanceToNow(post.user.visited_at ? post.user.visited_at : post.user.created_at) }}</small>
               </li>
 
               <li v-if="post.user.location">

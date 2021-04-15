@@ -12,7 +12,8 @@ $factory->define(\Coyote\User::class, function (Faker $faker) {
         'is_confirm' => true,
         'alert_login' => true,
         'guest_id'  => $faker->uuid,
-        'allow_subscribe' => true
+        'allow_subscribe' => true,
+        'visited_at' => now()
     ];
 });
 
