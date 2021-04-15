@@ -7,15 +7,15 @@ $factory->define(\Coyote\Post::class, function (Faker $faker) {
         'text' => $faker->realText(),
         'ip' => $ip = $faker->ipv4,
         'browser' => $faker->userAgent,
-        'user_name' => $faker->userName,
         'created_at' => \Carbon\Carbon::now(),
-        'updated_at' => \Carbon\Carbon::now()
+        'updated_at' => \Carbon\Carbon::now(),
+        'user_id' => factory(\Coyote\User::class)
     ];
 });
 
 $factory->state(\Coyote\Post::class, 'user', function (Faker $faker) {
     return [
-        'user_id' => factory(\Coyote\User::class)->create()
+
     ];
 });
 
