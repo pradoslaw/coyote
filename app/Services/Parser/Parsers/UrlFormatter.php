@@ -31,9 +31,7 @@ class UrlFormatter
 
     public function parse(string $text): string
     {
-        return preg::replace_callback(self::REGEXP_URL, function (array $match): string {
-            return $this->processLink($match[0]);
-        }, $text);
+        return preg::replace_callback(self::REGEXP_URL, fn (array $match) => $this->processLink($match[0]), $text);
     }
 
     private function processLink(string $url): string
@@ -46,6 +44,7 @@ class UrlFormatter
         if (Pattern::pcre(self::REGEXP_URL)->test($url)) {
             return $this->html->link($this->prependSchema($url), $this->truncate($url));
         }
+
         return $url;
     }
 
@@ -54,6 +53,7 @@ class UrlFormatter
         if (pattern('^[\w]+?://', 'i')->fails($url)) {
             return "http://$url";
         }
+
         return $url;
     }
 
@@ -62,15 +62,18 @@ class UrlFormatter
         if (mb_strlen($text) < self::TITLE_LEN) {
             return $text;
         }
+
         if ($this->host === parse_url($text, PHP_URL_HOST)) {
             return $text;
         }
+
         return $this->truncateToLengthWith($text, self::TITLE_LEN, '[...]');
     }
 
     private function truncateToLengthWith(string $text, int $length, string $substitute): string
     {
         $padding = ($length - mb_strlen($substitute)) / 2;
+
         return mb_substr($text, 0, $padding) . $substitute . mb_substr($text, -$padding);
     }
 }
