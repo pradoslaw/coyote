@@ -105,14 +105,17 @@ new Vue({
         input = Object.assign({page}, input);
       }
 
-      axios.get(window.location.pathname, {params: input})
-        .then(response => {
-          this.jobs = response.data.jobs;
-          this.defaults = response.data.defaults;
+      axios.get(
+        window.location.pathname,
+        {params: input, headers: {'Cache-Control': 'no-cache', 'Pragma': 'no-cache', 'Expires': '0'}}
+      )
+      .then(response => {
+        this.jobs = response.data.jobs;
+        this.defaults = response.data.defaults;
 
-          window.history.pushState(response.data, '', response.data.url);
-        })
-        .then(() => this.skeleton = false);
+        window.history.pushState(response.data, '', response.data.url);
+      })
+      .then(() => this.skeleton = false);
     },
 
     includesLocation(location) {
