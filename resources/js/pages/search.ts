@@ -6,9 +6,9 @@ import VueAutocomplete from '../components/forms/autocomplete.vue';
 import VueDropdownMenu from '../components/dropdown-menu.vue';
 import PerfectScrollbar from '../components/perfect-scrollbar';
 import store from "../store";
-import { Hit, Hits, Sort, SearchOptions } from "../types/hit";
+import { Hit, Hits, Sort, SearchOptions } from "@/types/hit";
 import { Models as ModelsDict } from "../types/search";
-import {Model, User} from "../types/models";
+import { Model, User } from "@/types/models";
 import axios from 'axios';
 
 interface ForumItem {
@@ -192,7 +192,7 @@ new Vue({
     },
 
     request() {
-      axios.get('/Search', {params: this.requestParams}).then(result => {
+      axios.get(`/Search?timestamp=${new Date().getTime()}`, {params: this.requestParams}).then(result => {
         this.hits = result.data;
 
         this.pushState();

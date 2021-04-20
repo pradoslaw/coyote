@@ -101,7 +101,8 @@ class CreateIndexCommand extends Command
                                     ]
                                 ],
                             ]
-                        ]
+                        ],
+                        "max_result_window" => 15000
                     ]
                 ],
                 'mappings' => [
