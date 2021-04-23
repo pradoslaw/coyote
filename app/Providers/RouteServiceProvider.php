@@ -16,6 +16,7 @@ use Coyote\Repositories\Contracts\TagRepositoryInterface;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface;
+use Coyote\Topic;
 use Coyote\User;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Routing\Router;
@@ -68,7 +69,7 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->router->model('user', UserRepositoryInterface::class);
         $this->router->model('post', PostRepositoryInterface::class);
-        $this->router->model('topic', TopicRepositoryInterface::class);
+//        $this->router->model('topic', TopicRepositoryInterface::class);
         $this->router->model('pastebin', PastebinRepositoryInterface::class);
         $this->router->model('microblog', MicroblogRepositoryInterface::class);
         $this->router->model('wiki', WikiRepositoryInterface::class);
@@ -86,8 +87,18 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         $this->router->bind('user_trashed', function ($id) {
-            // we use model insteade of repository to avoid putting global criteria to all methods in repository
+            // we use model instead of repository to avoid putting global criteria to all methods in repository
             return User::withTrashed()->findOrFail($id);
+        });
+
+        $this->router->bind('topic', function ($id) {
+            $user = $this->getCurrentRequest()->user();
+
+            if ($this->router->currentRouteName() === 'forum.topic' && $user && $user->can('forum-delete')) {
+                return Topic::withTrashed()->findOrFail($id);
+            }
+
+            return Topic::findOrFail($id);
         });
 
         parent::boot();

@@ -140,7 +140,7 @@ class Post extends Model
      */
     public function topic()
     {
-        return $this->belongsTo('Coyote\Topic');
+        return $this->belongsTo('Coyote\Topic')->withTrashed();
     }
 
     /**

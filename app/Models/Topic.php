@@ -194,7 +194,7 @@ class Topic extends Model
      */
     public function firstPost()
     {
-        return $this->hasOne('Coyote\Post', 'id', 'first_post_id');
+        return $this->hasOne('Coyote\Post', 'id', 'first_post_id')->withTrashed();
     }
 
     /**
@@ -202,7 +202,7 @@ class Topic extends Model
      */
     public function lastPost()
     {
-        return $this->hasOne('Coyote\Post', 'id', 'last_post_id');
+        return $this->hasOne('Coyote\Post', 'id', 'last_post_id')->withTrashed();
     }
 
     /**
