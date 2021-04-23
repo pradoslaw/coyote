@@ -69,7 +69,6 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->router->model('user', UserRepositoryInterface::class);
         $this->router->model('post', PostRepositoryInterface::class);
-//        $this->router->model('topic', TopicRepositoryInterface::class);
         $this->router->model('pastebin', PastebinRepositoryInterface::class);
         $this->router->model('microblog', MicroblogRepositoryInterface::class);
         $this->router->model('wiki', WikiRepositoryInterface::class);
