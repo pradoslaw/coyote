@@ -72,6 +72,7 @@ export interface Microblog {
   is_read?: boolean;
   created_at: Date | null;
   updated_at: Date | null;
+  deleted_at: Date | null;
   html: string;
   text: string;
   url: string;

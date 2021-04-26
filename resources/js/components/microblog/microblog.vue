@@ -2,6 +2,10 @@
   <!-- we use below ID in mounted() method -->
   <div :id="`entry-${microblog.id}`" class="card card-default microblog">
     <div class="card-body">
+      <div v-if="microblog.deleted_at" class="alert alert-danger">
+        Ten wpis został usunięty. Możesz go przywrócić jeżeli chcesz.
+      </div>
+
       <div class="media">
         <div class="d-none d-sm-block mr-2">
           <a v-profile="microblog.user.id">
@@ -27,7 +31,10 @@
               <div class="dropdown-menu dropdown-menu-right">
                 <template v-if="microblog.permissions.update">
                   <a @click="edit(microblog)" class="dropdown-item" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
-                  <a @click="deleteItem" class="dropdown-item" href="javascript:"><i class="fas fa-times fa-fw"></i> Usuń</a>
+
+                  <a v-if="!microblog.deleted_at" @click="deleteItem" class="dropdown-item" href="javascript:"><i class="fas fa-times fa-fw"></i> Usuń</a>
+                  <a v-else @click="restoreItem" class="dropdown-item" href="javascript:"><i class="fas fa-trash-restore fa-fw"></i> Przywróć</a>
+
                   <a v-if="microblog.permissions.moderate" @click="toggleSponsored(microblog)" class="dropdown-item" href="javascript:"><i class="fas fa-dollar-sign fa-fw"></i> Sponsorowany</a>
 
                   <div v-if="microblog.user.id !== user.id" class="dropdown-divider"></div>
@@ -206,6 +213,10 @@
 
     deleteItem() {
       this.delete('microblogs/delete', this.microblog);
+    }
+
+    restoreItem() {
+      store.dispatch('microblogs/restore', this.microblog);
     }
 
     copy() {

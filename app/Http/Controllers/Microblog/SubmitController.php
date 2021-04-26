@@ -9,11 +9,13 @@ use Coyote\Http\Requests\MicroblogRequest;
 use Coyote\Http\Resources\MicroblogResource;
 use Coyote\Microblog;
 use Coyote\Notifications\Microblog\DeletedNotification;
+use Coyote\Repositories\Contracts\MicroblogRepositoryInterface;
 use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
+use Coyote\Services\Stream\Activities\Restore as Stream_Restore;
 use Coyote\Services\Stream\Objects\Microblog as Stream_Microblog;
 use Illuminate\Http\Request;
 
@@ -115,6 +117,22 @@ class SubmitController extends Controller
         }
 
         event(new MicroblogDeleted($microblog));
+    }
+
+    public function restore(int $id, MicroblogRepositoryInterface $repository)
+    {
+        $microblog = Microblog::withTrashed()->findOrFail($id);
+
+        $this->authorize('delete', $microblog);
+
+        $this->transaction(function () use ($microblog) {
+            $microblog->restore();
+
+            // put this to activity stream
+            stream(Stream_Restore::class, (new Stream_Microblog())->map($microblog));
+        });
+
+        event(new MicroblogSaved($microblog));
     }
 
     /**

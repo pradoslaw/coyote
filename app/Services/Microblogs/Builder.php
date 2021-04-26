@@ -11,6 +11,7 @@ use Coyote\Repositories\Criteria\Microblog\OrderById;
 use Coyote\Repositories\Criteria\Microblog\OrderByScore;
 use Coyote\Repositories\Criteria\Microblog\WithTag;
 use Coyote\Repositories\Criteria\WithoutScope;
+use Coyote\Repositories\Criteria\WithTrashed;
 use Illuminate\Contracts\Auth\Guard;
 use Coyote\User;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -146,6 +147,10 @@ class Builder
     public function one(int $id): Microblog
     {
         $this->loadUserScope();
+
+        if ($this->user && $this->user->can('microblog-delete')) {
+            $this->microblog->pushCriteria(new WithTrashed());
+        }
 
         $microblog = $this->microblog->findById($id);
 

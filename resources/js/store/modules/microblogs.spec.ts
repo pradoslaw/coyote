@@ -22,7 +22,8 @@ function fake(): Microblog {
     is_sponsored: false,
     comments_count: 0,
     url: '',
-    metadata: ''
+    metadata: '',
+    deleted_at: null
   };
 }
 
