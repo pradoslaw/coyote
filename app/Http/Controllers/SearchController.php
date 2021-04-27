@@ -65,7 +65,7 @@ class SearchController extends Controller
             $this->validate($request, [
                 'q'         => 'nullable|string',
                 'sort'      => 'nullable|in:' . SearchOptions::DATE . ',' . SearchOptions::SCORE,
-                'page'      => 'nullable|integer|min:1|max:1500`'
+                'page'      => 'nullable|integer|min:1|max:1500'
             ]);
 
             $response['hits'] = $strategy->search($request)->content();
