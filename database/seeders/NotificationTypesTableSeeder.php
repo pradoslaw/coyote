@@ -25,7 +25,7 @@ class NotificationTypesTableSeeder extends Seeder
         ]);
         Type::create(['id' => Notification::TOPIC_SUBSCRIBER,
             'name' => '...nowych postach w obserwowanych wątkach',
-            'headline' => '{sender} dodał odpowiedź w wątku',
+            'headline' => '{sender} dodał post',
             'profile' => true,
             'email' => true,
             'category' => 'Forum'
