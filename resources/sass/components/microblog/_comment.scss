@@ -60,6 +60,15 @@
     background: none;
     font-size: 15px;
   }
+
+  // maximum width for youtube videos
+  .embed-responsive:before {
+    padding-top: 42%;
+  }
+
+  .embed-responsive-item {
+    max-width: 500px;
+  }
 }
 
 // we use this class name also on forum
