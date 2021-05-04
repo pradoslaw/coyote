@@ -56,6 +56,10 @@
     height: 365px;
     position: relative;
     overflow: hidden;
+
+    @include media-breakpoint-down(sm) {
+      padding-left: 15px;
+    }
   }
 
   .overview {
