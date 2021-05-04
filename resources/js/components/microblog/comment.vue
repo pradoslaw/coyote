@@ -1,5 +1,5 @@
 <template>
-  <div :id="anchor" :class="{'highlight-flash': highlight, 'not-read': comment.is_read === false}" class="media">
+  <div :id="anchor" :class="{'highlight-flash': highlight, 'not-read': comment.is_read === false, 'border border-danger': comment.deleted_at}" class="media">
     <div class="mr-2">
       <a v-profile="comment.user.id">
         <vue-avatar v-bind="comment.user" :is-online="comment.user.is_online" class="i-35 d-block img-thumbnail"></vue-avatar>
@@ -78,8 +78,13 @@
 
         <div class="dropdown-menu dropdown-menu-right">
           <template v-if="comment.permissions.update">
-            <a @click="edit(comment)" class="dropdown-item btn-sm-edit" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
-            <a @click="deleteItem" class="dropdown-item btn-sm-remove" href="javascript:"><i class="fas fa-times fa-fw"></i> Usuń</a>
+
+            <template v-if="!comment.deleted_at">
+              <a @click="edit(comment)" class="dropdown-item btn-sm-edit" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
+              <a @click="deleteItem" class="dropdown-item btn-sm-remove" href="javascript:"><i class="fas fa-times fa-fw"></i> Usuń</a>
+            </template>
+
+            <a v-else @click="restoreItem" class="dropdown-item" href="javascript:"><i class="fas fa-trash-restore fa-fw"></i> Przywróć</a>
 
             <div v-if="comment.user.id !== user.id" class="dropdown-divider"></div>
           </template>
@@ -104,7 +109,7 @@
   import Component from "vue-class-component";
   import { mixin as clickaway } from "vue-clickaway";
   import store from "../../store";
-  import { Microblog } from "../../types/models";
+  import { Microblog } from "@/types/models";
   import { MicroblogMixin } from "../mixins/microblog";
   import declination from '../../libs/declination';
 
@@ -138,6 +143,10 @@
 
     deleteItem() {
       this.delete('microblogs/deleteComment', this.comment);
+    }
+
+    restoreItem() {
+      store.dispatch('microblogs/restoreComment', this.comment);
     }
 
     get anchor() {

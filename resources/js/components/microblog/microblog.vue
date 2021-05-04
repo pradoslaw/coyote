@@ -30,12 +30,15 @@
 
               <div class="dropdown-menu dropdown-menu-right">
                 <template v-if="microblog.permissions.update">
-                  <a @click="edit(microblog)" class="dropdown-item" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
 
-                  <a v-if="!microblog.deleted_at" @click="deleteItem" class="dropdown-item" href="javascript:"><i class="fas fa-times fa-fw"></i> Usuń</a>
+                  <template v-if="!microblog.deleted_at">
+                    <a @click="edit(microblog)" class="dropdown-item" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
+                    <a  @click="deleteItem" class="dropdown-item" href="javascript:"><i class="fas fa-times fa-fw"></i> Usuń</a>
+                  </template>
+
                   <a v-else @click="restoreItem" class="dropdown-item" href="javascript:"><i class="fas fa-trash-restore fa-fw"></i> Przywróć</a>
 
-                  <a v-if="microblog.permissions.moderate" @click="toggleSponsored(microblog)" class="dropdown-item" href="javascript:"><i class="fas fa-dollar-sign fa-fw"></i> Sponsorowany</a>
+                  <a v-if="microblog.permissions.moderate && !microblog.deleted_at" @click="toggleSponsored(microblog)" class="dropdown-item" href="javascript:"><i class="fas fa-dollar-sign fa-fw"></i> Sponsorowany</a>
 
                   <div v-if="microblog.user.id !== user.id" class="dropdown-divider"></div>
                 </template>

@@ -83,10 +83,16 @@ const mutations = {
     Vue.set(parent.comments, comment.id!, {...parent.comments[comment.id], ...{text, html}});
   },
 
-  deleteComment(state, microblog: Microblog) {
-    Vue.delete(state.data[microblog.parent_id!].comments, microblog.id!);
+  deleteComment(state, comment: Microblog) {
+    Vue.delete(state.data[comment.parent_id!].comments, comment.id!);
 
-    state.data[microblog.parent_id!].comments_count -= 1;
+    state.data[comment.parent_id!].comments_count -= 1;
+  },
+
+  restoreComment(state, comment: Microblog) {
+    comment.deleted_at = null;
+
+    state.data[comment.parent_id!].comments_count += 1;
   },
 
   subscribe(state, microblog: Microblog) {
@@ -159,6 +165,10 @@ const actions = {
 
   deleteComment({ commit }, microblog: Microblog) {
     return axios.delete(`/Mikroblogi/Comment/Delete/${microblog.id}`).then(() => commit('deleteComment', microblog));
+  },
+
+  restoreComment({ commit }, comment: Microblog) {
+    return axios.post(`/Mikroblogi/Restore/${comment.id}`).then(() => commit('restoreComment', comment));
   },
 
   save({ commit, getters }, microblog: Microblog) {

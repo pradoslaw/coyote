@@ -119,7 +119,7 @@ class SubmitController extends Controller
         event(new MicroblogDeleted($microblog));
     }
 
-    public function restore(int $id, MicroblogRepositoryInterface $repository)
+    public function restore(int $id)
     {
         $microblog = Microblog::withTrashed()->findOrFail($id);
 
@@ -133,6 +133,10 @@ class SubmitController extends Controller
         });
 
         event(new MicroblogSaved($microblog));
+
+        if ($microblog->parent_id) {
+            event(new MicroblogSaved($microblog->parent));
+        }
     }
 
     /**
