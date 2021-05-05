@@ -6,6 +6,7 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Resources\AssetsResource;
 use Coyote\Http\Resources\CommentCollection;
 use Coyote\Http\Resources\FlagResource;
+use Coyote\Http\Resources\JobResource;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Firm;
 use Coyote\Job;
@@ -73,7 +74,8 @@ class OfferController extends Controller
             'comments'          => $comments->toArray($this->request),
             'applications'      => $this->applications($job),
             'flags'             => $this->flags(),
-            'assets'            => AssetsResource::collection($job->firm->assets)->toArray($this->request)
+            'assets'            => AssetsResource::collection($job->firm->assets)->toArray($this->request),
+            'subscriptions'     => $this->subscriptions()
         ])->with(
             compact('job', 'mlt')
         );
@@ -97,5 +99,10 @@ class OfferController extends Controller
         $flags = resolve(Flags::class)->fromModels([Job::class, Job\Comment::class])->permission('job-delete')->get();
 
         return FlagResource::collection($flags)->toArray($this->request);
+    }
+
+    private function subscriptions(): array
+    {
+        return $this->userId ? JobResource::collection($this->job->subscribes($this->userId))->toArray($this->request) : [];
     }
 }

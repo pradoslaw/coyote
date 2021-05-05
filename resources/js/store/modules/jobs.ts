@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import {Job, Firm, JobFeature, Tag} from '../../types/models';
+import {Job, Firm, JobFeature, Tag} from '@/types/models';
 import axios from "axios";
 
 const state = {

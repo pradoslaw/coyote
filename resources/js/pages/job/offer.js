@@ -10,7 +10,7 @@ import VueMarker from '../../components/google-maps/marker.vue';
 import VueNotifications from "vue-notification";
 import VueFlag from '../../components/flags/flag.vue';
 import { default as axiosErrorHandler } from '../../libs/axios-error-handler';
-import {mapGetters, mapState} from 'vuex';
+import { mapGetters, mapState, mapActions } from 'vuex';
 import { default as mixins } from '@/components/mixins/user';
 
 Vue.use(VueAutosize);
@@ -83,5 +83,21 @@ new Vue({
     'vue-map': VueMap,
     'vue-marker': VueMarker
   }
+});
+
+new Vue({
+  el: '#js-sidemenu',
+  delimiters: ['${', '}'],
+  data: { job: window.job },
+  store,
+  created() {
+    store.state.jobs.subscriptions = window.subscriptions;
+  },
+  methods: {
+    subscribe() {
+      store.dispatch('jobs/subscribe', this.job);
+    }
+  },
+  computed: mapGetters('jobs', ['isSubscribed'])
 });
 

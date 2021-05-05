@@ -5,7 +5,7 @@ import VueSelect from "../../components/forms/select.vue";
 import store from "../../store";
 import { mapGetters } from "vuex";
 import { default as mixin } from '../../components/mixins/user';
-import { Forum } from '../../types/models';
+import { Forum } from '@/types/models';
 
 new Vue({
   el: '#js-sidebar',
