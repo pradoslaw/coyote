@@ -110,7 +110,7 @@ class UserRepository extends Repository implements UserRepositoryInterface
      */
     public function countUsersWithReputation()
     {
-        return $this->model->where('reputation', '>', 0)->count();
+        return $this->model->where('reputation', '>', 0)->withTrashed()->count();
     }
 
     public function sponsorship(bool $flag, string $githubId, string $url): bool
