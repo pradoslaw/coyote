@@ -69,7 +69,7 @@ class Rules
             return false;
         }
 
-        return preg_match('/^' . str_replace('\*', '\d+', preg_quote($ip)) . '$/', $this->request->ip());
+        return preg_match('/^' . str_replace('\*', '[a-z0-9\:\.]+', preg_quote($ip)) . '$/', $this->request->ip());
     }
 
     /**
@@ -136,6 +136,6 @@ class Rules
      */
     private function make(array $firewall): Firewall
     {
-        return Firewall::find($firewall['id']);
+        return $this->repository->find($firewall['id']);
     }
 }
