@@ -79,7 +79,7 @@
                   </vue-form-group>
 
                   <vue-form-group :errors="errors['invoice.vat_id']" class="col-8">
-                    <vue-text :is-invalid="'invoice.vat_id' in errors" v-model="form.invoice.vat_id" name="invoice[vat_id]"></vue-text>
+                    <vue-text :is-invalid="'invoice.vat_id' in errors" v-model="form.invoice.vat_id" name="invoice[vat_id]" autocomplete="off"></vue-text>
                   </vue-form-group>
                 </div>
               </div>
