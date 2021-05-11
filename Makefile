@@ -31,8 +31,8 @@ dependency-install:
 	composer install
 
 file-permission:
-	chmod -R 775 storage/
-	chmod 775 bootstrap/cache/
+	chmod -R 777 storage/
+	chmod 777 bootstrap/cache/
 
 migration:
 	php artisan migrate --force
