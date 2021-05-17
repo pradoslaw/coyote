@@ -62,18 +62,13 @@
 
 .post-author {
   @include link-color-darker;
+  @include text-truncate;
 
   font-size: .9rem;
 
   .badge {
     font-size: 90%;
     padding: 1px 5px;
-  }
-
-  // @see https://4programmers.net/Forum/Coyote/350933-moj_nick_zaslania_jakas_ikonke?p=1757873#id1757873
-  a {
-    @include text-truncate;
-    max-width: 100%;
   }
 }
 
