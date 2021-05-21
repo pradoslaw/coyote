@@ -172,7 +172,7 @@ class HomeController extends BaseController
 
         $data = [
             'input'             => $input,
-            'url'               => $this->fullUrl($this->request->except('json')),
+            'url'               => $this->fullUrl($this->request->except('timestamp')),
 
             'defaults'           => [
                 'sort'                  => $defaultSort,

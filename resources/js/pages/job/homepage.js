@@ -106,7 +106,7 @@ new Vue({
       }
 
       axios.get(
-        window.location.pathname,
+        `${window.location.pathname}?timestamp=${new Date().getTime()}`,
         {params: input, headers: {'Cache-Control': 'no-cache', 'Pragma': 'no-cache', 'Expires': '0'}}
       )
       .then(response => {
