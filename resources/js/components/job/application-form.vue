@@ -25,11 +25,11 @@
     </vue-form-group>
 
     <vue-form-group :errors="errors['salary']" label="Minimalne oczekiwania wynagrodzenie">
-      <vue-select v-model="applicationSync.salary" :options="dismissalPeriod" placeholder="Do negocjacji"></vue-select>
+      <vue-select v-model="applicationSync.salary" :options="salaryChoices" placeholder="Do negocjacji"></vue-select>
     </vue-form-group>
 
     <vue-form-group :errors="errors['dismissal_period']" label="Obecny okres wypowiedzenia">
-      <vue-select v-model="applicationSync.dismissal_period" :options="salaryChoices" placeholder="Nie określono"></vue-select>
+      <vue-select v-model="applicationSync.dismissal_period" :options="dismissalPeriod" placeholder="Nie określono"></vue-select>
     </vue-form-group>
 
     <vue-form-group :errors="errors['text']" label="Wiadomość dla pracodawcy/zleceniodawcy" help="Taką wiadomość otrzyma osoba, która wystawiła ogłoszenie">
