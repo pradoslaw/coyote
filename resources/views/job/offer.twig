@@ -112,10 +112,10 @@
       {% endif %}
 
       {% if mlt|length %}
-        <section class="box sidebar-offers">
+        <section class="box">
           <h4><i class="fas fa-star fa-fw"></i> Podobne oferty</h4>
 
-          <div class="card card-default">
+          <div class="card card-default card-media">
             <div class="card-body">
               {% include 'components.jobs' with {'jobs': mlt} %}
             </div>
