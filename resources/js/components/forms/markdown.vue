@@ -92,7 +92,7 @@
 
     <div v-if="assets.length" class="row pt-3 pb-3">
       <div v-for="item in assets" :key="item.id" class="col-sm-2">
-        <vue-thumbnail :url="item.url" @delete="deleteAsset" :aria-label="item.name" data-balloon-pos="down" name="asset"></vue-thumbnail>
+        <vue-thumbnail :url="item.url" @delete="deleteAsset(item)" @insert="insertAssetAtCaret(item)" :aria-label="item.name" data-balloon-pos="down" name="asset"></vue-thumbnail>
       </div>
     </div>
 
@@ -267,8 +267,12 @@
       this.assets.push(asset);
 
       if (this.autoInsertAssets) {
-        this.insertAtCaret((IsImage(asset.name!) ? '!' : '') + '[' + asset.name + '](' + asset.url + ')', '');
+        this.insertAssetAtCaret(asset)
       }
+    }
+    
+    insertAssetAtCaret(asset: Asset) {
+      this.insertAtCaret((IsImage(asset.name!) ? '!' : '') + '[' + asset.name + '](' + asset.url + ')', '');
     }
 
     @Watch('value')
@@ -278,8 +282,8 @@
       }
     }
 
-    deleteAsset(url: string) {
-      this.assets.splice(this.assets.findIndex(item => item.url === url), 1);
+    deleteAsset(asset: Asset) {
+      this.assets.splice(this.assets.indexOf(asset), 1);
     }
 
     mounted() {

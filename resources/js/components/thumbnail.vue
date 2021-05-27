@@ -13,8 +13,10 @@
         <i v-if="!isProcessing" class="fas fa-plus-circle fa-2x"></i>
       </div>
 
-      <a v-if="url" href="javascript:" class="flush-mask text-decoration-none" @click="deleteImage">
-        <i class="fas fa-times fa-2x"></i>
+      <a v-if="url" href="javascript:" class="thumbnail-mask" @click="insertImage"></a>
+
+      <a v-if="url" href="javascript:" class="btn btn-sm btn-danger delete" @click="deleteImage" title="Usuń">
+        <i class="fas fa-times"></i>
       </a>
 
       <div v-if="isProcessing" class="spinner-mask">
@@ -29,7 +31,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { Prop, Ref } from 'vue-property-decorator';
+import { Prop, Ref, Emit } from 'vue-property-decorator';
 import axios from 'axios';
 import IsImage from '../libs/assets';
 
@@ -66,8 +68,14 @@ export default class VueThumbnail extends Vue {
       .finally(() => this.isProcessing = false);
   }
 
+  @Emit('delete')
   deleteImage() {
-    this.$emit('delete', this.url);
+    return this.url;
+  }
+
+  @Emit('insert')
+  insertImage() {
+    return this.url;
   }
 
   // this method can be used by other components to open upload dialog
