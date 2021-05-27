@@ -4,6 +4,7 @@ import Prism from "prismjs";
 import store from '../store';
 import Vue from 'vue';
 import Channel from "@/libs/websocket/channel";
+import axios from 'axios';
 
 export type Payload = Microblog | Post | PostComment;
 
@@ -79,6 +80,8 @@ export class PostSaved implements Observer {
       const topic = store.getters['topics/topic'];
 
       Vue.nextTick(() => document.getElementById(`id${payload.id}`)!.addEventListener('mouseover', () => store.dispatch('topics/mark', topic), {once: true}))
+
+      axios.get(`/Forum/Post/${payload.id}`).then(response => store.commit('posts/update', response.data));
 
       return;
     }

@@ -127,6 +127,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     $this->post('Post/Rollback/{post}/{id}', ['uses' => 'RollbackController@rollback', 'as' => 'post.rollback']);
     // mergowanie posta z poprzednim
     $this->post('Post/Merge/{post}', ['uses' => 'MergeController@index', 'as' => 'post.merge']);
+    $this->get('Post/{post}', ['uses' => 'PostController@show']);
 
     // edycja/publikacja komentarza oraz jego usuniecie
     $this->post('Comment/{comment?}', [

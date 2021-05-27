@@ -37,9 +37,9 @@ const mutations = {
   },
 
   update(state, post: Post) {
-    const { text, html, assets, editor, updated_at, edit_count, score } = post;
+    const { text, html, assets, editor, updated_at, edit_count, score, permissions } = post;
 
-    Vue.set(state.data, post.id!, {...state.data[post.id!], ...{ text, html, assets, editor, updated_at, edit_count, score }})
+    Vue.set(state.data, post.id!, {...state.data[post.id!], ...{ text, html, assets, editor, updated_at, edit_count, score, permissions }})
   },
 
   delete(state, post: Post) {
