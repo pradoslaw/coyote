@@ -48,3 +48,18 @@
   cursor: pointer;
   opacity: 0;
 }
+
+.thumbnail {
+  .delete {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    opacity: 0;
+  }
+
+  &:hover {
+    .delete {
+      opacity: 1;
+    }
+  }
+}
