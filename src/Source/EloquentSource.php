@@ -69,9 +69,9 @@ class EloquentSource implements SourceInterface
         $input = $column->getFilter()->getInput();
 
         if ($column->getFilter()->getOperator() == FilterOperator::OPERATOR_BETWEEN) {
-            $this->source->whereBetween($name, $input);
+            $this->source = $this->source->whereBetween($name, $input);
         } else {
-            $this->source->where(
+            $this->source = $this->source->where(
                 $name,
                 $column->getFilter()->getOperator(),
                 $this->normalizeValue($input, $column->getFilter()->getOperator())

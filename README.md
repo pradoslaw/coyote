@@ -42,6 +42,7 @@ class UsersController extends Controller
 
 * Pagination
 * Filtering
+* Sorting
 * Highly customizable
 * Simple usage
 * Different data source (Eloquent model, collection, array)
@@ -67,7 +68,9 @@ To keep your controllers clean, it's highly recommended to keep your grid classe
 
 ### Using twig
 
-@todo
+```twig
+{{ grid | raw }}
+```
 
 #### Laravel Grid and repository pattern
 
