@@ -26,7 +26,7 @@ class FlagsGrid extends Grid
                 'placeholder' => '--',
                 'title' => 'Typ'
             ])
-            ->addColumn('user_name', [
+            ->addColumn('users.name', [
                 'title' => 'Nazwa użytkownika',
                 'sortable' => true,
                 'placeholder' => '--',
