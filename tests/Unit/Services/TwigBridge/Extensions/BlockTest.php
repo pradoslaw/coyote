@@ -3,10 +3,13 @@
 namespace Tests\Unit\Services\TwigBridge\Extensions;
 
 use Coyote\Block as Model;
+use Coyote\Repositories\Contracts\BlockRepositoryInterface;
 use Coyote\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Mockery\MockInterface;
 use Tests\TestCase;
 use Coyote\Services\TwigBridge\Extensions;
 
@@ -18,8 +21,11 @@ class BlockTest extends TestCase
     {
         $model = (new Model())->forceFill(['name' => $name = $this->faker->text, 'content' => $content = $this->faker->realText()]);
 
-        $block = resolve(Extensions\Block::class);
-        $block->blocks = collect([$model]);
+        $blockRepository = $this->partialMock(BlockRepositoryInterface::class, function (MockInterface $mock) use ($model) {
+            $mock->shouldReceive('all')->andReturn(collect([$model]));
+        });
+
+        $block = resolve(Extensions\Block::class, ['blockRepository' => $blockRepository]);
 
         $this->assertEquals($content, $block->renderBlock($name));
 
@@ -34,8 +40,11 @@ class BlockTest extends TestCase
     {
         $model = (new Model())->forceFill(['name' => $name = $this->faker->text, 'content' => $content = $this->faker->realText(), 'max_reputation' => 100]);
 
-        $block = resolve(Extensions\Block::class);
-        $block->blocks = collect([$model]);
+        $blockRepository = $this->partialMock(BlockRepositoryInterface::class, function (MockInterface $mock) use ($model) {
+            $mock->shouldReceive('all')->andReturn(collect([$model]));
+        });
+
+        $block = resolve(Extensions\Block::class, ['blockRepository' => $blockRepository]);
 
         $this->assertEquals($content, $block->renderBlock($name));
 
@@ -50,8 +59,11 @@ class BlockTest extends TestCase
     {
         $model = (new Model())->forceFill(['name' => $name = $this->faker->text, 'content' => $content = $this->faker->realText(), 'max_reputation' => 100]);
 
-        $block = resolve(Extensions\Block::class);
-        $block->blocks = collect([$model]);
+        $blockRepository = $this->partialMock(BlockRepositoryInterface::class, function (MockInterface $mock) use ($model) {
+            $mock->shouldReceive('all')->andReturn(collect([$model]));
+        });
+
+        $block = resolve(Extensions\Block::class, ['blockRepository' => $blockRepository]);
 
         $user = factory(User::class)->create(['reputation' => 101]);
 
@@ -64,9 +76,11 @@ class BlockTest extends TestCase
     {
         $model = (new Model())->forceFill(['name' => $name = $this->faker->text, 'content' => $content = $this->faker->realText(), 'enable_sponsor' => false]);
 
-        $block = resolve(Extensions\Block::class);
-        $block->blocks = collect([$model]);
+        $blockRepository = $this->partialMock(BlockRepositoryInterface::class, function (MockInterface $mock) use ($model) {
+            $mock->shouldReceive('all')->andReturn(collect([$model]));
+        });
 
+        $block = resolve(Extensions\Block::class, ['blockRepository' => $blockRepository]);
         $user = factory(User::class)->create(['is_sponsor' => true]);
 
         Auth::loginUsingId($user->id, true);
@@ -78,8 +92,11 @@ class BlockTest extends TestCase
     {
         $model = (new Model())->forceFill(['name' => $name = $this->faker->text, 'content' => $content = $this->faker->realText(), 'enable_sponsor' => false]);
 
-        $block = resolve(Extensions\Block::class);
-        $block->blocks = collect([$model]);
+        $blockRepository = $this->partialMock(BlockRepositoryInterface::class, function (MockInterface $mock) use ($model) {
+            $mock->shouldReceive('all')->andReturn(collect([$model]));
+        });
+
+        $block = resolve(Extensions\Block::class, ['blockRepository' => $blockRepository]);
 
         $this->assertEquals($content, $block->renderBlock($name));
 

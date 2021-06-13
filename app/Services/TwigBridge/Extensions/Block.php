@@ -169,9 +169,9 @@ class Block extends Twig_Extension
      */
     private function getBlocks()
     {
-        return $this->getCacheFactory()->rememberForever('blocks', function () {
+//        return $this->getCacheFactory()->rememberForever('blocks', function () {
             return $this->blockRepository->all(['name', 'is_enabled', 'content', 'region', 'max_reputation', 'enable_sponsor']);
-        });
+//        });
     }
 
     /**
