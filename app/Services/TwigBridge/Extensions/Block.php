@@ -2,10 +2,15 @@
 
 namespace Coyote\Services\TwigBridge\Extensions;
 
+use Coyote\Banner;
 use Coyote\Http\Factories\CacheFactory;
-use Coyote\Repositories\Contracts\BlockRepositoryInterface;
-use Coyote\Repositories\Contracts\WikiRepositoryInterface;
-use Coyote\Block as Model;
+use Coyote\Repositories\Contracts\BlockRepositoryInterface as BlockRepository;
+use Coyote\Repositories\Contracts\CampaignRepositoryInterface as CampaignRepository;
+use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
+use Coyote\Block as BlockModel;
+use Coyote\Campaign as CampaignModel;
+use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Support\Collection;
 use Twig_Extension;
 use Twig_SimpleFunction;
 
@@ -13,14 +18,17 @@ class Block extends Twig_Extension
 {
     use CacheFactory;
 
-    /**
-     * @var \Illuminate\Support\Collection
-     */
-    public $blocks;
+    private Filesystem $filesystem;
+    private CampaignRepository $campaignRepository;
+    private BlockRepository $blockRepository;
+    private WikiRepository $wikiRepository;
 
-    public function __construct()
+    public function __construct(Filesystem $filesystem, BlockRepository $blockRepository, CampaignRepository $campaignRepository, WikiRepository $wikiRepository)
     {
-        $this->blocks = $this->getBlocks();
+        $this->campaignRepository = $campaignRepository;
+        $this->blockRepository = $blockRepository;
+        $this->filesystem = $filesystem;
+        $this->wikiRepository = $wikiRepository;
     }
 
     /**
@@ -53,11 +61,17 @@ class Block extends Twig_Extension
     public function renderRegion($name)
     {
         /** @var \Coyote\Block $block */
-        $blocks = $this->blocks->where('region', $name);
+        $blocks = $this->getBlocks()->where('region', $name);
         $html = '';
 
         foreach ($blocks as $block) {
-            $html .= $this->renderBlock($block->name);
+            $html .= $this->renderBlock($block);
+        }
+
+        $campaigns = $this->getCampagins()->where('region', $name);
+
+        foreach ($campaigns as $campaign) {
+            $html .= $this->renderCampaign($campaign);
         }
 
         return $html;
@@ -67,11 +81,8 @@ class Block extends Twig_Extension
      * @param string $name
      * @return string
      */
-    public function renderBlock($name)
+    public function renderBlock(BlockModel $block)
     {
-        /** @var \Coyote\Block $block */
-        $block = $this->blocks->where('name', $name)->first();
-
         if (!$block || !$block->is_enabled || !$this->shouldDisplayForSponsor($block) || !$this->shouldDisplayForPrivilegeUsers($block)) {
             return '';
         }
@@ -79,7 +90,26 @@ class Block extends Twig_Extension
         return $block->content;
     }
 
-    private function shouldDisplayForSponsor(Model $block): bool
+    private function renderCampaign(CampaignModel $campaign): string
+    {
+        if (!$campaign->is_enabled || !$this->shouldDisplayForSponsor($campaign) || !$this->shouldDisplayForPrivilegeUsers($campaign)) {
+            return '';
+        }
+
+        /** @var Banner $banner */
+        $banner = $campaign->banners->first();
+
+        if (!$banner) {
+            return '';
+        }
+
+        $banner->increment('impressions');
+        $html = app('html');
+
+        return (string) $html->link($banner->url, $html->image($this->filesystem->url($banner->filename)), ['class' => 'revive', 'target' => '_blank'], null, false);
+    }
+
+    private function shouldDisplayForSponsor($block): bool
     {
         if ($block->enable_sponsor || auth()->guest()) {
             return true;
@@ -88,7 +118,7 @@ class Block extends Twig_Extension
         return !auth()->user()->is_sponsor;
     }
 
-    private function shouldDisplayForPrivilegeUsers(Model $block): bool
+    private function shouldDisplayForPrivilegeUsers($block): bool
     {
         if (!$block->max_reputation || auth()->guest()) {
             return true;
@@ -104,7 +134,7 @@ class Block extends Twig_Extension
      */
     public function renderHelpContext($helpId, $wiki)
     {
-        $children = $this->getWikiRepository()->children($helpId);
+        $children = $this->wikiRepository->children($helpId);
         $html = '<ul>';
 
         foreach ($children as $idx => $row) {
@@ -133,28 +163,20 @@ class Block extends Twig_Extension
     }
 
     /**
-     * @return BlockRepositoryInterface
-     */
-    private function getBlockRepository()
-    {
-        return app(BlockRepositoryInterface::class);
-    }
-
-    /**
-     * @return WikiRepositoryInterface
-     */
-    private function getWikiRepository()
-    {
-        return app(WikiRepositoryInterface::class);
-    }
-
-    /**
-     * @return \Coyote\Block[]
+     * @return Collection
      */
     private function getBlocks()
     {
         return $this->getCacheFactory()->rememberForever('blocks', function () {
-            return $this->getBlockRepository()->all(['name', 'is_enabled', 'content', 'region', 'max_reputation', 'enable_sponsor']);
+            return $this->blockRepository->all(['name', 'is_enabled', 'content', 'region', 'max_reputation', 'enable_sponsor']);
         });
+    }
+
+    /**
+     * @return Collection|\Coyote\Campaign[]
+     */
+    private function getCampagins()
+    {
+        return $this->campaignRepository->campaigns();
     }
 }
