@@ -92,7 +92,8 @@ module.exports = merge(common, {
         /^tag/,
         /:not/,
         /^pre/,
-        /^flatpickr/
+        /^flatpickr/,
+        /revive/
       ]
     })
   ]
