@@ -18,7 +18,7 @@ class BlockTest extends TestCase
     {
         $model = (new Model())->forceFill(['name' => $name = $this->faker->text, 'content' => $content = $this->faker->realText()]);
 
-        $block = new Extensions\Block();
+        $block = resolve(Extensions\Block::class);
         $block->blocks = collect([$model]);
 
         $this->assertEquals($content, $block->renderBlock($name));
@@ -34,7 +34,7 @@ class BlockTest extends TestCase
     {
         $model = (new Model())->forceFill(['name' => $name = $this->faker->text, 'content' => $content = $this->faker->realText(), 'max_reputation' => 100]);
 
-        $block = new Extensions\Block();
+        $block = resolve(Extensions\Block::class);
         $block->blocks = collect([$model]);
 
         $this->assertEquals($content, $block->renderBlock($name));
@@ -50,7 +50,7 @@ class BlockTest extends TestCase
     {
         $model = (new Model())->forceFill(['name' => $name = $this->faker->text, 'content' => $content = $this->faker->realText(), 'max_reputation' => 100]);
 
-        $block = new Extensions\Block();
+        $block = resolve(Extensions\Block::class);
         $block->blocks = collect([$model]);
 
         $user = factory(User::class)->create(['reputation' => 101]);
@@ -64,7 +64,7 @@ class BlockTest extends TestCase
     {
         $model = (new Model())->forceFill(['name' => $name = $this->faker->text, 'content' => $content = $this->faker->realText(), 'enable_sponsor' => false]);
 
-        $block = new Extensions\Block();
+        $block = resolve(Extensions\Block::class);
         $block->blocks = collect([$model]);
 
         $user = factory(User::class)->create(['is_sponsor' => true]);
@@ -78,7 +78,7 @@ class BlockTest extends TestCase
     {
         $model = (new Model())->forceFill(['name' => $name = $this->faker->text, 'content' => $content = $this->faker->realText(), 'enable_sponsor' => false]);
 
-        $block = new Extensions\Block();
+        $block = resolve(Extensions\Block::class);
         $block->blocks = collect([$model]);
 
         $this->assertEquals($content, $block->renderBlock($name));

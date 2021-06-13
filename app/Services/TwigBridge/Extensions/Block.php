@@ -65,7 +65,7 @@ class Block extends Twig_Extension
         $html = '';
 
         foreach ($blocks as $block) {
-            $html .= $this->renderBlock($block);
+            $html .= $this->renderBlock($block->name);
         }
 
         $campaigns = $this->getCampagins()->where('region', $name);
@@ -81,8 +81,10 @@ class Block extends Twig_Extension
      * @param string $name
      * @return string
      */
-    public function renderBlock(BlockModel $block)
+    public function renderBlock(string $name)
     {
+        $block = $this->getBlocks()->where('name', $name)->first();
+
         if (!$block || !$block->is_enabled || !$this->shouldDisplayForSponsor($block) || !$this->shouldDisplayForPrivilegeUsers($block)) {
             return '';
         }
