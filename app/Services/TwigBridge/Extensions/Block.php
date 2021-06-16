@@ -179,6 +179,8 @@ class Block extends Twig_Extension
      */
     private function getCampagins()
     {
-        return $this->campaignRepository->campaigns();
+        return $this->getCacheFactory()->remember('campaigns', now()->hour, function () {
+            return $this->campaignRepository->campaigns();
+        });
     }
 }
