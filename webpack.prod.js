@@ -64,6 +64,7 @@ module.exports = merge(common, {
         'fa-minus',
         'fa-columns',
         'fa-user-slash',
+        'fa-check-circle-o',
         'pre',
         'kbd',
         'code',
