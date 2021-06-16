@@ -3,6 +3,11 @@ a code {
   color: $primary;
 }
 
+// @see https://4programmers.net/Forum/Coyote/352953-zliczanie_linii_kodu_skrypt_konczy_zliczanie_po_696_linii
+pre code {
+  display: block;
+}
+
 
 /* PrismJS 1.15.0
 https://prismjs.com/download.html#themes=prism&languages=markup+css+clike+javascript+csharp+pascal&plugins=line-numbers */

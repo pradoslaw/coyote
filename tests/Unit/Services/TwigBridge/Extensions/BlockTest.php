@@ -3,6 +3,7 @@
 namespace Tests\Unit\Services\TwigBridge\Extensions;
 
 use Coyote\Block as Model;
+use Coyote\Http\Factories\CacheFactory;
 use Coyote\Repositories\Contracts\BlockRepositoryInterface;
 use Coyote\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -15,7 +16,7 @@ use Coyote\Services\TwigBridge\Extensions;
 
 class BlockTest extends TestCase
 {
-    use WithFaker, DatabaseTransactions;
+    use WithFaker, DatabaseTransactions, CacheFactory;
 
     public function testShowBlockToAllUsers()
     {
@@ -27,12 +28,14 @@ class BlockTest extends TestCase
 
         $block = resolve(Extensions\Block::class, ['blockRepository' => $blockRepository]);
 
+        $this->getCacheFactory()->delete('blocks');
         $this->assertEquals($content, $block->renderBlock($name));
 
         $user = factory(User::class)->create();
 
         Auth::loginUsingId($user->id, true);
 
+        $this->getCacheFactory()->delete('blocks');
         $this->assertEquals($content, $block->renderBlock($name));
     }
 
@@ -46,12 +49,14 @@ class BlockTest extends TestCase
 
         $block = resolve(Extensions\Block::class, ['blockRepository' => $blockRepository]);
 
+        $this->getCacheFactory()->delete('blocks');
         $this->assertEquals($content, $block->renderBlock($name));
 
         $user = factory(User::class)->create();
 
         Auth::loginUsingId($user->id, true);
 
+        $this->getCacheFactory()->delete('blocks');
         $this->assertEquals($content, $block->renderBlock($name));
     }
 
@@ -98,12 +103,14 @@ class BlockTest extends TestCase
 
         $block = resolve(Extensions\Block::class, ['blockRepository' => $blockRepository]);
 
+        $this->getCacheFactory()->delete('blocks');
         $this->assertEquals($content, $block->renderBlock($name));
 
         $user = factory(User::class)->create();
 
         Auth::loginUsingId($user->id, true);
 
+        $this->getCacheFactory()->delete('blocks');
         $this->assertEquals($content, $block->renderBlock($name));
     }
 }
