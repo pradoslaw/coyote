@@ -110,7 +110,7 @@ class Block extends Twig_Extension
 
         return (string) $html->link(
             route('campaign.redirect', ['banner' => $banner->id]),
-            $html->image($this->filesystem->url($banner->filename)),
+            $html->image($this->filesystem->url($banner->filename), null, ['width' => 728, 'height' => 91]),
             ['class' => 'revive', 'target' => '_blank'],
             null,
             false
