@@ -51,7 +51,7 @@
 
             <li class="feature-button">
               <button class="btn btn-secondary" v-if="valueLocal != plan.id" @click.prevent="changePlan(plan.id)">Wybierz</button>
-              <span class="text-primary" v-if="valueLocal == plan.id"><i class="fa fa-check-circle-o fa-fw text-primary"></i> Wybrano</span>
+              <span class="text-primary" v-if="valueLocal == plan.id"><i class="fa fa-check-circle fa-fw text-primary"></i> Wybrano</span>
             </li>
           </ul>
         </div>
