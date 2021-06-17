@@ -177,8 +177,12 @@ class TopicController extends BaseController
 
         if ($subscriber) {
             $subscriber->delete();
+
+            logger()->debug(sprintf("Wątek %s został usunięty z obserwowanych przez %s.", $topic->title, $this->auth->name));
         } else {
             $topic->subscribers()->create(['user_id' => $this->userId]);
+
+            logger()->debug(sprintf("Wątek %s został dodany do obserwowanych przez %s.", $topic->title, $this->auth->name));
         }
 
         event(new TopicWasSaved($topic));
