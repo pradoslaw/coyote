@@ -108,7 +108,13 @@ class Block extends Twig_Extension
         $banner->increment('impressions');
         $html = app('html');
 
-        return (string) $html->link($banner->url, $html->image($this->filesystem->url($banner->filename)), ['class' => 'revive', 'target' => '_blank'], null, false);
+        return (string) $html->link(
+            route('campaign.redirect', ['banner' => $banner->id]),
+            $html->image($this->filesystem->url($banner->filename)),
+            ['class' => 'revive', 'target' => '_blank'],
+            null,
+            false
+        );
     }
 
     private function shouldDisplayForSponsor($block): bool

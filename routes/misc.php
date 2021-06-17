@@ -31,3 +31,5 @@ $this->post('github/sponsorship', 'GithubController@sponsorship');
 $this->post('assets', 'AssetsController@upload');
 $this->get('assets/opg', 'AssetsController@opengraph');
 $this->get('assets/{asset}/{name}', ['uses' => 'AssetsController@download', 'as' => 'assets.download']);
+
+$this->get('campaign/{banner}', ['uses' => 'CampaignController@redirect', 'as' => 'campaign.redirect']);
