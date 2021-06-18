@@ -86,7 +86,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     $this->post('Topic/Mark/{topic}', ['uses' => 'TopicController@mark', 'as' => 'topic.mark']);
 
     // dziennik zdarzen dla watku
-    $this->get('Stream/{topic}', ['uses' => 'StreamController@index', 'as' => 'stream', 'middleware' => ['auth']]);
+    $this->get('Stream/{topic_trashed}', ['uses' => 'StreamController@index', 'as' => 'stream', 'middleware' => ['auth']]);
 
     // widok kategorii forum
     $this->get('{forum}', [

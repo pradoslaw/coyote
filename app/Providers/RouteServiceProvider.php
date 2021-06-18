@@ -90,6 +90,11 @@ class RouteServiceProvider extends ServiceProvider
             return User::withTrashed()->findOrFail($id);
         });
 
+        $this->router->bind('topic_trashed', function ($id) {
+            // we use model instead of repository to avoid putting global criteria to all methods in repository
+            return Topic::withTrashed()->findOrFail($id);
+        });
+
         $this->router->bind('topic', function ($id) {
             $user = $this->getCurrentRequest()->user();
 
