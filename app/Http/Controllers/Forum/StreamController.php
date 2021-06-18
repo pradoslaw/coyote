@@ -35,14 +35,12 @@ class StreamController extends BaseController
 
         (new Renderer($paginator->items()))->render();
 
-        $visits = $page->visits($topic->page()->getResults()->id);
-
         $this->breadcrumb($topic->forum);
         $this->breadcrumb->push([
             $topic->title     => UrlBuilder::topic($topic),
             'Dziennik zdarzeń'  => route('forum.stream', [$topic->id])
         ]);
 
-        return $this->view('forum.stream')->with(compact('topic', 'paginator', 'visits'));
+        return $this->view('forum.stream')->with(compact('topic', 'paginator'));
     }
 }
