@@ -90,6 +90,7 @@ new Vue({
   delimiters: ['${', '}'],
   data: { job: window.job },
   store,
+  mixins: [ mixins ],
   created() {
     store.state.jobs.subscriptions = window.subscriptions;
   },
@@ -98,6 +99,9 @@ new Vue({
       store.dispatch('jobs/subscribe', this.job);
     }
   },
-  computed: mapGetters('jobs', ['isSubscribed'])
+  computed: {
+    ...mapGetters('jobs', ['isSubscribed']),
+    ...mapGetters('user', ['isAuthorized'])
+  }
 });
 

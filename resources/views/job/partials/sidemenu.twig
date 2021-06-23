@@ -31,7 +31,7 @@
 
 <ul v-cloak id="js-sidemenu" class="side-menu">
   <li>
-    <a @click="subscribe" :class="{'on': isSubscribed(job)}" class="btn-subscribe" href="javascript:">
+    <a @click="checkAuth(subscribe)" :class="{'on': isSubscribed(job)}" class="btn-subscribe" href="javascript:">
       <i class="far fa-fw fa-star"></i>
       <i class="fas fa-fw fa-star"></i>
 
