@@ -19,7 +19,7 @@
   position: fixed;
   opacity: 0.9;
   box-shadow: 0 2px 4px rgba(220, 218, 216, 0.75);
-  background: url('/img/background.png') repeat-x 0 0;
+  background: $gray-lighter;
   border-bottom: 1px solid $card-border-color;
   border-left: 1px solid $card-border-color;
   border-right: 1px solid $card-border-color;
