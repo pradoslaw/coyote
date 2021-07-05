@@ -11,6 +11,7 @@ RUN apt-get update -yqq && apt-get install -y \
     locales \
     libpng-dev \
     libjpeg-dev \
+    libwebp-dev \
     libfreetype6-dev \
     libzip-dev \
     zlib1g-dev \
@@ -24,7 +25,7 @@ RUN apt-get update -yqq && apt-get install -y \
     cron \
     gnupg2
 
-RUN docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
+RUN docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ --with-webp \
     && docker-php-ext-install -j$(nproc) pgsql gd soap pdo_pgsql mbstring zip opcache iconv
 
 RUN pecl install xdebug

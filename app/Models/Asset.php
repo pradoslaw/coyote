@@ -38,6 +38,6 @@ class Asset extends Model
 
     public function isImage()
     {
-        return in_array(pathinfo($this->name, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']);
+        return in_array(pathinfo($this->name, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif', 'webp']);
     }
 }
