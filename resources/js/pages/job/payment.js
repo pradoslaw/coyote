@@ -7,11 +7,11 @@ import VueCheckbox from '@/components/forms/checkbox.vue';
 import VueButton from '@/components/forms/button.vue';
 import axios from 'axios';
 import VueNotifications from "vue-notification";
-import {default as axiosErrorHandler} from "@/libs/axios-error-handler";
+// import {default as axiosErrorHandler} from "@/libs/axios-error-handler";
+//
+// Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 
-Vue.use(VueNotifications, {componentName: 'vue-notifications'});
-
-axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
+// axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 
 const DEFAULT_VAT_RATE = 1.23;
 
@@ -42,7 +42,6 @@ new Vue({
       code: null,
       amount: 0
     },
-    enableInvoice: true,
     isCoupon: false,
     errors: {},
     isProcessing: false
@@ -105,7 +104,7 @@ new Vue({
     },
 
     makePayment() {
-      const data = Object.assign(this.form, {price: this.grossPrice, enable_invoice: this.grossPrice > 0 ? this.enableInvoice : false});
+      const data = Object.assign(this.form, {price: this.grossPrice});
 
       this.errors = {};
       this.isProcessing = true;
@@ -160,10 +159,6 @@ new Vue({
     },
 
     'form.invoice.country_id': function() {
-      this.calculate();
-    },
-
-    'enableInvoice': function() {
       this.calculate();
     }
   }

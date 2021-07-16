@@ -26,6 +26,9 @@ class PaymentRequest extends FormRequest
     {
         $codes = $country->pluck('code', 'id');
 
+        $price = $this->input('price');
+        $priceRule = Rule::requiredIf(fn () => $price > 0);
+
         return [
             'payment_method' => 'required|in:card,p24',
             'price' => 'required|numeric',
@@ -34,12 +37,12 @@ class PaymentRequest extends FormRequest
                 Rule::exists('coupons', 'code')->whereNull('deleted_at')
             ],
 
-            'invoice.name' => 'bail|required_if:enable_invoice,true|nullable|string|max:200',
+            'invoice.name' => ['bail', $priceRule, 'nullable', 'string', 'max:200'],
             'invoice.vat_id' => 'nullable|string|max:20',
-            'invoice.address' => 'bail|required_if:enable_invoice,true|nullable|string|max:200',
-            'invoice.city' => 'bail|required_if:enable_invoice,true|nullable|string|max:200',
-            'invoice.postal_code' => 'bail|required_if:enable_invoice,true|nullable|string|max:30',
-            'invoice.country_id' => ['bail', 'required_if:enable_invoice,true', 'nullable', Rule::in(array_flip($codes))]
+            'invoice.address' => ['bail', $priceRule, 'nullable', 'string', 'max:200'],
+            'invoice.city' => ['bail', $priceRule, 'nullable', 'string', 'max:200'],
+            'invoice.postal_code' => ['bail', $priceRule, 'nullable', 'string', 'max:30'],
+            'invoice.country_id' => ['bail', $priceRule, 'nullable', Rule::in(array_flip($codes))]
         ];
     }
 
@@ -50,7 +53,10 @@ class PaymentRequest extends FormRequest
     {
         return [
             'invoice.name'      => 'nazwa',
-            'invoice.vat_id'    => 'NIP'
+            'invoice.vat_id'    => 'NIP',
+            'invoice.address'   => 'adres',
+            'invoice.postal_code'=> 'kod pocztowy',
+            'invoice.city'      => 'miasto'
         ];
     }
 }

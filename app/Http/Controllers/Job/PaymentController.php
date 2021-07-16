@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Job;
 
+use Coyote\Country;
 use Coyote\Events\PaymentPaid;
 use Coyote\Exceptions\PaymentFailedException;
 use Coyote\Firm;
@@ -132,17 +133,13 @@ class PaymentController extends Controller
         $calculator = CalculatorFactory::payment($payment);
         $calculator->setCoupon($coupon);
 
-        $invoice = [];
+        $calculator->setCountry($this->country->find($request->input('invoice.country_id')));
+        $invoice = $request->input('invoice');
 
-        if ($request->input('enable_invoice')) {
-            $calculator->setCountry($this->country->find($request->input('invoice.country_id')));
-            $invoice = $request->input('invoice');
-
-            if ($payment->job->firm_id) {
-                // update firm's VAT ID
-                $payment->job->firm->fill($request->only(['invoice.vat_id', 'invoice.country_id'])['invoice']);
-                $payment->job->firm->save();
-            }
+        if ($payment->job->firm_id) {
+            // update firm's VAT ID
+            $payment->job->firm->fill($request->only(['invoice.vat_id', 'invoice.country_id'])['invoice']);
+            $payment->job->firm->save();
         }
 
         $this->db->beginTransaction();

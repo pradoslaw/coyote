@@ -53,9 +53,9 @@ class Calculator implements Arrayable
         return $this;
     }
 
-    public function setCountry(Country $country): Calculator
+    public function setCountry(?Country $country): Calculator
     {
-        $this->vatRate = $country->vat_rate;
+        $this->vatRate = $country->vat_rate ?? config('vendor.default_vat_rate');
 
         return $this;
     }
