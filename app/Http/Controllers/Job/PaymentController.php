@@ -134,7 +134,7 @@ class PaymentController extends Controller
         $calculator->setCoupon($coupon);
 
         $calculator->setCountry($this->country->find($request->input('invoice.country_id')));
-        $invoice = $request->input('invoice');
+        $invoice = $request->input('invoice', []);
 
         if ($payment->job->firm_id) {
             // update firm's VAT ID

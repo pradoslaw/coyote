@@ -8,12 +8,13 @@ use Coyote\Job;
 use Coyote\Plan;
 use Coyote\Services\UrlBuilder;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Faker\Factory;
 
 class PaymentControllerTest extends TestCase
 {
-    use DatabaseTransactions;
+    use DatabaseTransactions, WithFaker;
 
     /**
      * @var Job
@@ -48,7 +49,7 @@ class PaymentControllerTest extends TestCase
         $response = $this->actingAs($this->job->user)->json(
             'POST',
             "/Praca/Payment/{$payment->id}",
-            ['payment_method' => 'card', 'price' => $payment->plan->gross_price, 'enable_invoice' => true]
+            ['payment_method' => 'card', 'price' => $payment->plan->gross_price]
         );
 
         $response->assertStatus(422);
@@ -59,11 +60,11 @@ class PaymentControllerTest extends TestCase
         $response->assertJson([
             'message' => 'The given data was invalid.',
             'errors' => [
-                'invoice.name' => ['To pole jest wymagane.'],
-                'invoice.address' => ['To pole jest wymagane.'],
-                'invoice.city' => ['To pole jest wymagane.'],
-                'invoice.postal_code' => ['To pole jest wymagane.'],
-                'invoice.country_id' => ['To pole jest wymagane.'],
+                'invoice.name' => ['Pole nazwa jest wymagane.'],
+                'invoice.address' => ['Pole adres jest wymagane.'],
+                'invoice.city' => ['Pole miasto jest wymagane.'],
+                'invoice.postal_code' => ['Pole kod pocztowy jest wymagane.'],
+                'invoice.country_id' => ['Pole invoice.country id jest wymagane.'],
             ]
         ]);
     }
@@ -77,16 +78,11 @@ class PaymentControllerTest extends TestCase
             "/Praca/Payment/{$payment->id}",
             [
                 'payment_method' => 'card',
-                'price' => $payment->plan->gross_price,
-                'enable_invoice' => false
+                'price' => $payment->plan->gross_price
             ]
         );
 
-        $response->assertStatus(200);
-
-        $data = $response->decodeResponseJson();
-
-        $this->assertNotEmpty($data['token']);
+        $response->assertStatus(422);
     }
 
     public function testSubmitValidFormWithInvoice()
@@ -112,7 +108,7 @@ class PaymentControllerTest extends TestCase
             ]
         );
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
 
         $data = $response->decodeResponseJson();
 
@@ -145,7 +141,6 @@ class PaymentControllerTest extends TestCase
             [
                 'payment_method' => 'card',
                 'price' => $payment->plan->gross_price,
-                'enable_invoice' => true,
                 'invoice' => [
                     'name' => $firm->name,
                     'vat_id' => $vat = '123123123',
@@ -172,13 +167,11 @@ class PaymentControllerTest extends TestCase
 
     public function testSubmitFormWithCoupon()
     {
-        $faker = Factory::create();
-
         $payment = $this->job->getUnpaidPayment();
         $payment->plan_id = Plan::where('name', 'Premium')->value('id');
         $payment->save();
 
-        $coupon = Coupon::create(['amount' => 10, 'code' => $faker->word]);
+        $coupon = Coupon::create(['amount' => 10, 'code' => $this->faker->word]);
 
         $response = $this->actingAs($this->job->user)->json(
             'POST',
@@ -186,12 +179,19 @@ class PaymentControllerTest extends TestCase
             [
                 'payment_method' => 'card',
                 'price' => $payment->plan->gross_price,
-                'enable_invoice' => false,
-                'coupon' => $coupon->code
+                'coupon' => $coupon->code,
+                'invoice' => [
+                    'name' => $this->faker->company,
+                    'vat_id' => $vat = '123123123',
+                    'country_id' => $countryId = 14,
+                    'address' => $this->faker->address,
+                    'city' => $this->faker->city,
+                    'postal_code' => $postalCode = $this->faker->postcode
+                ]
             ]
         );
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
         $payment->refresh();
 
         $this->assertEquals($payment->invoice->netPrice(), $payment->plan->price - 10);
@@ -216,7 +216,6 @@ class PaymentControllerTest extends TestCase
             [
                 'payment_method' => 'card',
                 'price' => 0,
-                'enable_invoice' => false,
                 'coupon' => $coupon->code
             ]
         );
@@ -239,16 +238,22 @@ class PaymentControllerTest extends TestCase
             [
                 'payment_method' => 'p24',
                 'price' => $payment->plan->gross_price,
-                'enable_invoice' => false
+                'invoice' => [
+                    'name' => $this->faker->company,
+                    'vat_id' => '123123123',
+                    'country_id' => 14,
+                    'address' => $this->faker->address,
+                    'city' => $this->faker->city,
+                    'postal_code' => $this->faker->postcode
+                ]
             ]
         );
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
     }
 
     public function testSubmitFormWithZeroRateInvoice()
     {
-        $faker = Factory::create();
         $payment = $this->job->getUnpaidPayment();
 
         $this->actingAs($this->job->user)->json(
@@ -257,14 +262,13 @@ class PaymentControllerTest extends TestCase
             [
                 'payment_method' => 'card',
                 'price' => $payment->plan->gross_price,
-                'enable_invoice' => true,
                 'invoice' => [
-                    'name' => $name = $faker->company,
-                    'vat_id' => $vat = '123123123',
+                    'name' => $this->faker->company,
+                    'vat_id' => '123123123',
                     'country_id' => $countryId = 1,
-                    'address' => $address = $faker->address,
-                    'city' => $city = $faker->city,
-                    'postal_code' => $postalCode = $faker->postcode
+                    'address' => $this->faker->address,
+                    'city' => $this->faker->city,
+                    'postal_code' => $this->faker->postcode
                 ]
             ]
         );
