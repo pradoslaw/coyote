@@ -30,11 +30,11 @@
 
         <ul class="list-inline">
           <li class="list-inline-item dropdown">
-            <a class="btn btn-secondary dropdown-toggle text-muted" id="dropdownMenuButton" data-toggle="dropdown" href="#">
+            <a class="btn btn-secondary dropdown-toggle text-muted" data-toggle="dropdown" href="#">
               <span>${ selectedCategories || 'Wszystkie kategorie' }</span>
             </a>
 
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <div class="dropdown-menu">
               <perfect-scrollbar id="wrap">
                 <a v-for="forum in forums" @click="toggleCategory(forum.id)" :key="forum.id" class="dropdown-item" href="javascript:">
                   <i v-if="categories.indexOf(forum.id) > -1" class="fa fa-check"></i>
