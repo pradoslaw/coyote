@@ -108,7 +108,7 @@ class PaymentControllerTest extends TestCase
             ]
         );
 
-        $response->assertStatus(201);
+        $response->assertStatus(200);
 
         $data = $response->decodeResponseJson();
 
@@ -191,7 +191,7 @@ class PaymentControllerTest extends TestCase
             ]
         );
 
-        $response->assertStatus(201);
+        $response->assertStatus(200);
         $payment->refresh();
 
         $this->assertEquals($payment->invoice->netPrice(), $payment->plan->price - 10);
@@ -249,7 +249,7 @@ class PaymentControllerTest extends TestCase
             ]
         );
 
-        $response->assertStatus(201);
+        $response->assertStatus(200);
     }
 
     public function testSubmitFormWithZeroRateInvoice()
