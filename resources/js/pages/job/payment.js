@@ -6,14 +6,6 @@ import VueSelect from '@/components/forms/select.vue';
 import VueCheckbox from '@/components/forms/checkbox.vue';
 import VueButton from '@/components/forms/button.vue';
 import axios from 'axios';
-import VueNotifications from "vue-notification";
-// import {default as axiosErrorHandler} from "@/libs/axios-error-handler";
-//
-// Vue.use(VueNotifications, {componentName: 'vue-notifications'});
-
-// axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
-
-const DEFAULT_VAT_RATE = 1.23;
 
 new Vue({
   el: '#js-payment',
@@ -60,7 +52,7 @@ new Vue({
   methods: {
     calculate() {
       // if VAT ID is empty we must add VAT
-      this.vatRate = this.enableInvoice ? this.vatRates[this.form.invoice.country_id] : DEFAULT_VAT_RATE;
+      this.vatRate = this.vatRates[this.form.invoice.country_id];
     },
 
     cardPayment({ token, success_url }) {
