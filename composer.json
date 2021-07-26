@@ -20,7 +20,7 @@
         "doctrine/dbal": "^2.5",
         "elasticsearch/elasticsearch": "~6.7",
         "erusev/parsedown": "^1.7",
-        "ezyang/htmlpurifier": "^4.7",
+        "ezyang/htmlpurifier": "^v4.13.0",
         "fideloper/proxy": "^4.0",
         "filp/whoops": "^2.3",
         "florianv/laravel-swap": "^1.1",
