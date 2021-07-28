@@ -131,7 +131,7 @@
                     <div class="progress">
                       <div class="progress-bar" role="progressbar" aria-valuenow="{{ item.percentage|round }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ item.percentage|round }}%;"></div>
 
-                      <span class="rep"><strong>{{ item.reputation|number_format(0, '', ' ') }}</strong> <small>punktów</small></span>
+                      <span class="rep"><strong>{{ item.reputation|number_format(0, '', ' ') }}</strong> <small>{{ declination(user.reputation, ['punkt', 'punkty', 'punktów'], true) }}</small></span>
                     </div>
                   </div>
                 </div>

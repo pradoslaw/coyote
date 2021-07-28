@@ -22,6 +22,11 @@ class DeclinationTest extends TestCase
         return Declination::format($value, ['odsłona', 'odsłony', 'odsłon']);
     }
 
+    private function getPoints($value)
+    {
+        return Declination::format($value, ['punkt', 'punkty', 'punktów']);
+    }
+
     // tests
     public function testIfDeclinationReturnsCorrectFormatOfSeconds()
     {
@@ -47,5 +52,11 @@ class DeclinationTest extends TestCase
         $this->assertSame('1 odsłona', $this->getViews(1));
         $this->assertSame('2 odsłony', $this->getViews(2));
         $this->assertSame('27 odsłon', $this->getViews(27));
+
+        $this->assertSame('0 punktów', $this->getPoints(0));
+        $this->assertSame('1 punkt', $this->getPoints(1));
+        $this->assertSame('2 punkty', $this->getPoints(2));
+        $this->assertSame('22 punkty', $this->getPoints(22));
+        $this->assertSame('1000 punktów', $this->getPoints(1000));
     }
 }
