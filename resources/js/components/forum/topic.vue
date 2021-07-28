@@ -60,7 +60,7 @@
               <span v-else>{{ topic.user_name }}</span>
             </div>
 
-            <ul v-if="topic.tags.length" class="tag-clouds tag-clouds-xs tag-clouds-skills ml-auto d-none d-lg-block">
+            <ul v-if="topic.tags.length" class="tag-clouds tag-clouds-xs tag-clouds-skills">
               <li v-for="tag in topic.tags" ><a :href="tag.url">{{ tag.name }}</a></li>
             </ul>
           </div>

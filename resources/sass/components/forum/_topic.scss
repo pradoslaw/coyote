@@ -89,7 +89,15 @@
   }
 
   .tag-clouds {
-    margin-top: -4px; // same row height whether tag exists
+    margin-bottom: 4px;
+  }
+
+  @include media-breakpoint-up(lg) {
+    .tag-clouds {
+      margin-left: auto;
+      margin-top: -4px; // same height on every row whether tag exists
+      margin-bottom: 0; // remove margin bottom on large screen
+    }
   }
 
   .fa-star {
