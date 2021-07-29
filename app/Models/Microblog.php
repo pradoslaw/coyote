@@ -115,7 +115,7 @@ class Microblog extends Model
     {
         $timestamp = $this->created_at ? $this->created_at->timestamp : time();
 
-        return ($this->votes * 5) + (($timestamp - 1380153600) / 3600);
+        return (int) ($this->votes * 5) + (($timestamp - 1380153600) / 3600);
     }
 
     public function setHtmlAttribute($value)
