@@ -17,6 +17,9 @@ class OrderByScore extends OrderById
             $model = $model->orderBy('microblogs.is_sponsored', 'DESC');
         }
 
-        return $model->orderBy('microblogs.score', 'DESC');
+        return
+            $model
+            ->orderByDesc('score');
+//                ->orderByRaw('votes * 10 + (EXTRACT(EPOCH FROM microblogs.created_at::timestamp) - 1380153600) / 3600 desc');
     }
 }
