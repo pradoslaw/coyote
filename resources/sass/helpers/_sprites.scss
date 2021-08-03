@@ -1,13 +1,14 @@
 $sprites: (
-    'logo-php': "/img/sprites-c9a285ef160c00bf.svg#sprite-logo-php-fragment",
-    'logo-java': "/img/sprites-c9a285ef160c00bf.svg#sprite-logo-java-fragment",
-    'logo-javascript': "/img/sprites-c9a285ef160c00bf.svg#sprite-logo-javascript-fragment",
-    'logo-cpp': "/img/sprites-c9a285ef160c00bf.svg#sprite-logo-cpp-fragment",
-    'logo-csharp': "/img/sprites-c9a285ef160c00bf.svg#sprite-logo-csharp-fragment",
-    'logo-css': "/img/sprites-c9a285ef160c00bf.svg#sprite-logo-css-fragment",
-    'logo-android': "/img/sprites-c9a285ef160c00bf.svg#sprite-logo-android-fragment",
-    'logo-lazarus': "/img/sprites-c9a285ef160c00bf.svg#sprite-logo-lazarus-fragment",
-    'logo-postgresql': "/img/sprites-c9a285ef160c00bf.svg#sprite-logo-postgresql-fragment"
+    'logo-php': "/img/sprites-639440030ebf6a93.svg#sprite-logo-php-fragment",
+    'logo-java': "/img/sprites-639440030ebf6a93.svg#sprite-logo-java-fragment",
+    'logo-javascript': "/img/sprites-639440030ebf6a93.svg#sprite-logo-javascript-fragment",
+    'logo-cpp': "/img/sprites-639440030ebf6a93.svg#sprite-logo-cpp-fragment",
+    'logo-csharp': "/img/sprites-639440030ebf6a93.svg#sprite-logo-csharp-fragment",
+    'logo-css': "/img/sprites-639440030ebf6a93.svg#sprite-logo-css-fragment",
+    'logo-android': "/img/sprites-639440030ebf6a93.svg#sprite-logo-android-fragment",
+    'logo-lazarus': "/img/sprites-639440030ebf6a93.svg#sprite-logo-lazarus-fragment",
+    'logo-postgresql': "/img/sprites-639440030ebf6a93.svg#sprite-logo-postgresql-fragment",
+    'logo-rust': "/img/sprites-639440030ebf6a93.svg#sprite-logo-rust-fragment"
 );
 
 $sizes: (
@@ -46,6 +47,10 @@ $sizes: (
     'logo-postgresql': (
         'width': 128px,
         'height': 128px
+    ),
+    'logo-rust': (
+        'width': 106px,
+        'height': 106px
     )
 );
 

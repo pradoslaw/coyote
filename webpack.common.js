@@ -151,6 +151,7 @@ module.exports = {
       'resources/images/logos/logo-android.svg',
       'resources/images/logos/logo-lazarus.svg',
       'resources/images/logos/logo-postgresql.svg',
+      'resources/images/logos/logo-rust.svg',
       ], {
       output: {
         filename: 'img/sprites-[contenthash].svg',
