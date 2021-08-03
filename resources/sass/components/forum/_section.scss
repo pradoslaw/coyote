@@ -36,6 +36,7 @@
 .card-categories {
   .media {
     font-size: .75rem;
+    min-width: 0; // this is required for text-overflow property in flex @see https://css-tricks.com/flexbox-truncated-text/
   }
 
   h3 {
@@ -47,15 +48,6 @@
     font-size: 18px;
     color: $primary;
     padding: 5px;
-  }
-
-  .col-lg-stat {
-    white-space: nowrap;
-  }
-
-  .description {
-    margin: 0;
-    font-size: 12px;
   }
 
   .toolbox {
@@ -79,23 +71,6 @@
     }
   }
 
-  // desktop
-  @include media-breakpoint-up(lg) {
-    border-radius: 0;
-    border-left: none;
-    border-right: none;
-
-    .col-lg-stat {
-      text-align: right;
-      padding-top: 3px;
-    }
-
-    > .card-body > .row {
-      display: flex;
-      align-items: center;
-    }
-  }
-
   // mobile
   @include media-breakpoint-down(md) {
     .not-read {
@@ -106,10 +81,6 @@
       border-top: 1px solid $card-border-color;
       margin-top: 5px;
       padding-top: 10px;
-    }
-
-    .col-lg-stat {
-      padding-top: 3px;
     }
 
     .toolbox {
