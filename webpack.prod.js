@@ -75,7 +75,9 @@ module.exports = merge(common, {
         'link-broken',
         '[aria-label]',
         'x-placement',
-        'tox-notifications-container'
+        'tox-notifications-container',
+        'fa-arrow-down',
+        'fa-arrow-up'
       ],
       whitelistPatterns: [
         /^logo/,
