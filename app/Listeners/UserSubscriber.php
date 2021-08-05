@@ -30,7 +30,6 @@ class UserSubscriber
      */
     public function flushCache(UserSaved $event)
     {
-        $this->cache->tags('menu-for-user')->forget('menu-for-user:' . $event->user->id);
         $this->cache->tags('permissions')->forget('permission:' . $event->user->id);
         $this->cache->tags('forum-order')->forget('forum-order:' . $event->user->id);
     }
