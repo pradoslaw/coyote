@@ -112,7 +112,6 @@ class CategoriesController extends BaseController
 
     private function flushCache()
     {
-//        dd(\Illuminate\Support\Facades\Cache::tags('forum-order')->get('forum-order:'.$this->userId));
         app(Cache::class)->tags('forum-order')->flush();
     }
 
