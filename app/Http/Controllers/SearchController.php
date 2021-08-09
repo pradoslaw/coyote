@@ -17,6 +17,8 @@ use Illuminate\Validation\ValidationException;
 
 class SearchController extends Controller
 {
+    const PAGE_LIMIT = 1500;
+
     /**
      * @var ForumRepository
      */
@@ -49,7 +51,7 @@ class SearchController extends Controller
 
         $this->formatArray($request);
 
-        $response = [
+        $payload = [
             'hits'              => null,
             'model'             => $request->input('model'),
             'query'             => $request->input('q'),
@@ -58,6 +60,7 @@ class SearchController extends Controller
             'categories'        => $request->input('categories', []),
             'page'              => $request->input('page', 1),
             'posts_per_page'    => $this->getSetting('forum.posts_per_page', 10),
+            'page_limit'        => self::PAGE_LIMIT,
             'forums'            => $forums
         ];
 
@@ -65,27 +68,32 @@ class SearchController extends Controller
             $this->validate($request, [
                 'q'         => 'nullable|string',
                 'sort'      => 'nullable|in:' . SearchOptions::DATE . ',' . SearchOptions::SCORE,
-                'page'      => 'nullable|integer|min:1|max:1500'
+                'page'      => 'nullable|integer|min:1|max:' . self::PAGE_LIMIT
             ]);
 
-            $response['hits'] = $strategy->search($request)->content();
+            $payload['hits'] = $strategy->search($request)->content();
 
             if ($request->wantsJson()) {
-                return $response['hits'];
+                return $payload['hits'];
             }
         } catch (ConnectException $exception) {
-            logger()->error($exception);
-
-            $response['error'] = 'Brak połączenia z serwerem wyszukiwarki.';
+            $this->handleException($payload, 500, 'Brak połączenia z serwerem wyszukiwarki.');
         } catch (ServerException | ClientException $exception) {
-            logger()->error($exception);
-
-            $response['error'] = 'Serwer wyszukiwarki nie może przetworzyć tego żądania.';
+            $this->handleException($payload, 500, 'Serwer wyszukiwarki nie może przetworzyć tego żądania.');
         } catch (ValidationException $exception) {
-            $response['error'] = $exception->getMessage();
+            $this->handleException($payload, 422, $exception->getMessage());
         }
 
-        return $this->view('search', $response);
+        return $this->view('search', $payload);
+    }
+
+    private function handleException(array &$payload, int $code, string $message)
+    {
+        if ($this->request->wantsJson()) {
+            abort($code, $message);
+        }
+
+        $payload['error'] = $message;
     }
 
     private function formatArray(Request $request)

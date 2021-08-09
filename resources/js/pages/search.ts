@@ -8,8 +8,10 @@ import PerfectScrollbar from '../components/perfect-scrollbar';
 import store from "../store";
 import { Hit, Hits, Sort, SearchOptions } from "@/types/hit";
 import { Models as ModelsDict } from "../types/search";
+import { default as axiosErrorHandler } from '../libs/axios-error-handler';
 import { Model, User } from "@/types/models";
 import axios from 'axios';
+import VueNotifications from "vue-notification";
 
 interface ForumItem {
   id: number;
@@ -30,13 +32,17 @@ declare global {
     sort: Sort;
     page: number;
     postsPerPage: number;
+    pageLimit: number;
     categories: number[];
     forums: ForumItem[];
     user: string;
   }
 }
 
+Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 Vue.use(VueTimeago);
+
+axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 
 Vue.component('vue-result-common', {
   props: {
@@ -112,7 +118,8 @@ new Vue({
     sortOptions: SortOptions,
     modelOptions: ModelsDict,
     user: window.user,
-    isDropdownVisible: false
+    isDropdownVisible: false,
+    pageLimit: window.pageLimit
   },
   components: { 'vue-pagination': VuePagination, 'perfect-scrollbar': PerfectScrollbar, 'vue-autocomplete': VueAutocomplete, 'vue-dropdown-menu': VueDropdownMenu },
   store,

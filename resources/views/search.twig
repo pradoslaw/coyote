@@ -72,7 +72,9 @@
           </p>
         </div>
 
-        <vue-pagination :current-page="hits.meta.current_page" :total-pages="hits.meta.last_page" @change="setPage"></vue-pagination>
+        <vue-pagination :current-page="hits.meta.current_page" :total-pages="Math.min(pageLimit, hits.meta.last_page)" @change="setPage"></vue-pagination>
+
+        <vue-notifications position="bottom right"/>
       </div>
     </div>
   </div>
@@ -89,6 +91,7 @@
     var page = {{ page }};
     var hits = {{ hits|default('null')|raw }};
     var postsPerPage = {{ posts_per_page }};
+    var pageLimit = {{ page_limit }};
     var categories = {{ categories|default([])|json_encode|raw }};
     var forums = {{ forums|json_encode|raw }};
   </script>
