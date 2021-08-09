@@ -134,7 +134,7 @@ class CommentController extends Controller
             }
 
             if ($post->user->allow_subscribe) {
-                $topic->subscribe($this->userId, true);
+                $topic->subscribe($post->user_id, true);
             }
 
             $comment->delete();
