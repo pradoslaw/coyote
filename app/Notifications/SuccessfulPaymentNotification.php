@@ -109,7 +109,7 @@ class SuccessfulPaymentNotification extends Notification
         return sprintf(
             $this->pdf !== null
                 ? 'Faktura VAT: %s'
-                    : 'Potwierdzenie płatności za promowanie oferty: %s',
+                    : 'Potwierdzenie publikacji ogłoszenia: %s',
             $this->payment->job->title
         );
     }

@@ -90,6 +90,8 @@ class PaymentControllerTest extends TestCase
         $faker = Factory::create();
         $payment = $this->job->getUnpaidPayment();
 
+        $this->assertTrue($payment->plan->gross_price > 0);
+
         $response = $this->actingAs($this->job->user)->json(
             'POST',
             "/Praca/Payment/{$payment->id}",
@@ -226,6 +228,7 @@ class PaymentControllerTest extends TestCase
         $payment->refresh();
 
         $this->assertEquals($payment->invoice->grossPrice(), 0);
+        $this->assertEmpty($payment->invoice->number);
     }
 
     public function testSubmitFormWithTransferMethod()

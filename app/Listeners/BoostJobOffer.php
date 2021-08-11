@@ -55,7 +55,7 @@ class BoostJobOffer implements ShouldQueue
             $pdf = null;
 
             // set up invoice only if firm name was provided. it's required!
-            if ($payment->invoice_id && $payment->invoice->name) {
+            if ($this->shouldGeneratePayment($payment)) {
                 // set up invoice number since it's already paid.
                 $this->enumerator->enumerate($payment->invoice);
                 // create pdf
@@ -92,5 +92,10 @@ class BoostJobOffer implements ShouldQueue
                 new SuccessfulPaymentNotification($payment, $pdf)
             );
         });
+    }
+
+    private function shouldGeneratePayment(Payment $payment): bool
+    {
+        return $payment->invoice_id && $payment->invoice->name && $payment->invoice->netPrice();
     }
 }
