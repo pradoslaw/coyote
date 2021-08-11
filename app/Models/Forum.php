@@ -35,6 +35,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Post $post
  * @property \Carbon\Carbon $read_at
  * @property Group[]|\Illuminate\Support\Collection $groups
+ * @property Tag[] $tags
  */
 class Forum extends Model
 {
@@ -162,6 +163,14 @@ class Forum extends Model
     public function post()
     {
         return $this->hasOne(Post::class, 'id', 'last_post_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'resource', 'tag_resources');
     }
 
     /**

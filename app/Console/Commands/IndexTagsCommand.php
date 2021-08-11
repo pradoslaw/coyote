@@ -2,6 +2,7 @@
 
 namespace Coyote\Console\Commands;
 
+use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Coyote\Services\Elasticsearch\Crawler;
 use Coyote\Tag;
 use Illuminate\Console\Command;
@@ -23,13 +24,18 @@ class IndexTagsCommand extends Command
     protected $description = 'Reindex recently updated tags.';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
+     * @var ForumRepository
      */
-    public function __construct()
+    private ForumRepository $forum;
+
+    /**
+     * @param ForumRepository $forum
+     */
+    public function __construct(ForumRepository $forum)
     {
         parent::__construct();
+
+        $this->forum = $forum;
     }
 
     /**
@@ -38,6 +44,38 @@ class IndexTagsCommand extends Command
      * @return int
      */
     public function handle()
+    {
+        $this->updateIndex();
+        $this->popularTags();
+
+        $this->info('Done.');
+
+        return 0;
+    }
+
+    private function popularTags()
+    {
+        $forums = $this->forum->all();
+
+        /** @var \Coyote\Forum $forum */
+        foreach ($forums as $forum) {
+            $keys = array_pluck($this->forum->popularTags($forum->id), 'id');
+
+            if (!$keys) {
+                continue;
+            }
+
+            $values = [];
+
+            for ($i = 1; $i <= count($keys); $i++) {
+                $values[] = ['order' => $i];
+            }
+
+            $forum->tags()->sync(array_combine($keys, $values));
+        }
+    }
+
+    private function updateIndex()
     {
         $tags = Tag::withTrashed()->where('updated_at', '>', now()->subMinutes(6))->get();
 
@@ -48,9 +86,5 @@ class IndexTagsCommand extends Command
 
             $tag->deleted_at ? $crawler->delete($tag) : $crawler->index($tag);
         }
-
-        $this->info('Done.');
-
-        return 0;
     }
 }

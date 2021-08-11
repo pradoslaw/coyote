@@ -132,7 +132,7 @@ class ForumRepository extends Repository implements ForumRepositoryInterface
     public function popularTags(int $forumId)
     {
         return (new \Coyote\Tag\Resource)
-            ->select(['name', 'text'])
+            ->select(['tags.id', 'name', 'text'])
             ->join('tags', 'tags.id', '=', 'tag_resources.tag_id')
             ->join('topics', 'topics.id', '=', 'tag_resources.resource_id')
             ->where('forum_id', $forumId)
