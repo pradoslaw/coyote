@@ -131,6 +131,10 @@
   img:not(.img-smile) {
     @include img-fluid;
   }
+
+  table {
+    @extend .table-responsive-sm;
+  }
 }
 
 .edit-info {
