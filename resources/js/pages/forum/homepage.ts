@@ -3,7 +3,7 @@ import store from "../../store";
 import VueSection from '../../components/forum/section.vue';
 import VueTopic from "../../components/forum/topic.vue";
 import { mapState } from "vuex";
-import { Forum, Topic } from '../../types/models';
+import { Forum, Topic } from '@/types/models';
 
 type ForumGroup = {
   [key in number]: Forum;

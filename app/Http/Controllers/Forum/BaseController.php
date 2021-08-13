@@ -9,6 +9,7 @@ use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
+use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
 use Coyote\Services\UrlBuilder;
@@ -108,6 +109,7 @@ abstract class BaseController extends Controller
     {
         $this->forum->pushCriteria(new OnlyThoseWithAccess($this->auth));
         $this->forum->pushCriteria(new AccordingToUserOrder($this->userId, $ignoreHidden));
+        $this->forum->pushCriteria(new EagerLoading('tags'));
     }
 
     /**

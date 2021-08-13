@@ -93,6 +93,8 @@ export interface Forum {
   order: number;
   section: string;
   indent: number;
+  tags?: Tag[];
+  enable_tags: boolean;
 }
 
 export interface PollItem {

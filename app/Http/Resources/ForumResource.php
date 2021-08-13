@@ -50,6 +50,7 @@ class ForumResource extends JsonResource
             'order' => $this->custom_order ?? $this->order,
             'is_hidden' => $this->is_hidden ?? false,
             'is_redirected' => $this->url !== null,
+            'tags' => TagResource::collection($this->tags),
 
             $this->mergeWhen($this->whenLoaded('post'), function () {
                 // set relation to avoid unnecessary db request in UrlBuilder
