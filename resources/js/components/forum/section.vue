@@ -34,7 +34,7 @@
             <div class="overflow-hidden">
               <h3><a :href="category.url">{{ category.name }}</a></h3>
 
-              <vue-tags v-if="category.enable_tags" :tags="category.tags" class="tag-clouds-sm"></vue-tags>
+              <vue-tags v-if="category.enable_tags && !category.children" :tags="category.tags" class="tag-clouds-sm"></vue-tags>
 
               <ul v-if="category.children" class="list-inline list-sub d-none d-md-block d-lg-block">
                 <li v-for="children in category.children" class="list-inline-item">
