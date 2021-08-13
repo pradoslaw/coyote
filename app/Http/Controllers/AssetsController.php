@@ -124,6 +124,6 @@ class AssetsController extends Controller
      */
     protected function getHumanName(string $extension)
     {
-        return 'screenshot-' . date('YmdHis') . '.' . $extension;
+        return 'screenshot-' . date('YmdHis') . '.' . strtolower($extension);
     }
 }
