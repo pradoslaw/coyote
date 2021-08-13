@@ -5,7 +5,7 @@
     </template>
 
     <slot>
-      <div v-for="(type, index) in types" class="media">
+      <div v-for="(type, index) in types" :key="index" class="media">
         <div class="mr-2">
           <vue-radio name="type_id" v-model="selectedType" :checked-value="type.id" :id="`type-${type.id}`"></vue-radio>
         </div>
@@ -14,15 +14,15 @@
           <label :for="`type-${type.id}`" class="font-weight-bold">{{ type.name }}</label>
 
           <p>{{ type.description }}</p>
-
-          <textarea
-            v-if="index + 1 === types.length && selectedType === type.id"
-            v-model="text"
-            name="text"
-            class="form-control"
-          ></textarea>
         </div>
       </div>
+
+      <textarea
+        v-model="text"
+        placeholder="Dodatkowe informacje"
+        name="text"
+        class="form-control"
+      ></textarea>
     </slot>
 
     <template v-slot:buttons>
@@ -39,7 +39,7 @@ import Component from "vue-class-component";
 import { Prop, Ref } from "vue-property-decorator";
 import VueModal from '../modal.vue';
 import VueRadio from '../forms/radio.vue';
-import { FlagType } from "../../types/models";
+import { FlagType } from "@/types/models";
 import axios from 'axios';
 
 @Component({
