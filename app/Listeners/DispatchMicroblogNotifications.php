@@ -50,9 +50,8 @@ class DispatchMicroblogNotifications implements ShouldQueue
                 $subscribers = $microblog
                     ->parent
                     ->subscribers()
-                    ->excludeBlocked($microblog->user->id)
                     // exclude also author of parent entry! @see https://github.com/adam-boduch/coyote/issues/637
-                    ->excludeBlocked($microblog->parent->user->id)
+                    ->excludeBlocked($microblog->user_id, $microblog->parent->user_id)
                     ->with('user.notificationSettings')
                     ->get()
                     ->pluck('user');
