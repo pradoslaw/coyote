@@ -27,46 +27,36 @@ export default {
       const response = await fetch(base64);
       const blob = await response.blob();
 
-      let formData = new FormData();
+      const formData = new FormData();
       formData.append('asset', blob);
 
       axios.post(options.url, formData)
-        .then(response => {
-          successCallback(response.data);
-        })
+        .then(response => successCallback(response.data))
         .finally(() => {
           textarea.removeAttribute('readonly');
 
           overlay.remove();
         })
-        .catch(err => {
-          errorCallback(err);
-        });
+        .catch(err => errorCallback(err));
     };
 
     const handler = e => {
-      let items = [];
+      let items = (e.clipboardData || e.originalEvent.clipboardData).items;
+      let blob = null;
 
-      if (e.clipboardData && e.clipboardData.items) {
-        items = e.clipboardData.items;
-      }
+      const fr = new FileReader();
 
-      if (items.length) {
-        let blob = items[0].getAsFile();
-        let fr = new FileReader();
+      fr.onload = function (e) {
+        upload(e.target.result);
+      };
 
-        fr.onload = function (e) {
-          let mime = /^data:image/g;
+      for (const item of items) {
+        if (item.type.indexOf('image') === 0) {
+          blob = item.getAsFile();
 
-          if (!mime.test(e.target.result)) {
-            return false;
+          if (blob) {
+            fr.readAsDataURL(blob);
           }
-
-          upload(e.target.result);
-        };
-
-        if (blob) {
-          fr.readAsDataURL(blob);
         }
       }
     };
