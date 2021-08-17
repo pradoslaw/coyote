@@ -2,6 +2,7 @@
 
 namespace Coyote\Providers;
 
+use Coyote\Microblog;
 use Coyote\Repositories\Contracts\BlockRepositoryInterface;
 use Coyote\Repositories\Contracts\FirewallRepositoryInterface;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface;
@@ -85,15 +86,11 @@ class RouteServiceProvider extends ServiceProvider
             return $this->app->make(ForumRepositoryInterface::class, [$this->app])->where('slug', $slug)->firstOrFail();
         });
 
-        $this->router->bind('user_trashed', function ($id) {
-            // we use model instead of repository to avoid putting global criteria to all methods in repository
-            return User::withTrashed()->findOrFail($id);
-        });
+        // we use model instead of repository to avoid putting global criteria to all methods in repository
+        $this->router->bind('user_trashed', fn ($id) => User::withTrashed()->findOrFail($id));
 
-        $this->router->bind('topic_trashed', function ($id) {
-            // we use model instead of repository to avoid putting global criteria to all methods in repository
-            return Topic::withTrashed()->findOrFail($id);
-        });
+        // we use model instead of repository to avoid putting global criteria to all methods in repository
+        $this->router->bind('topic_trashed', fn ($id) => Topic::withTrashed()->findOrFail($id));
 
         $this->router->bind('topic', function ($id) {
             $user = $this->getCurrentRequest()->user();
@@ -104,6 +101,8 @@ class RouteServiceProvider extends ServiceProvider
 
             return Topic::findOrFail($id);
         });
+
+        $this->router->bind('any_microblog', fn ($id) => Microblog::withoutGlobalScopes()->findOrFail($id));
 
         parent::boot();
     }

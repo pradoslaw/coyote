@@ -9,8 +9,8 @@ $this->group(['namespace' => 'Microblog', 'prefix' => 'Mikroblogi', 'as' => 'mic
 
     $this->get('View/{id}', ['uses' => 'HomeController@show', 'as' => 'view']);
     $this->post('Vote/{microblog}', ['uses' => 'VoteController@post', 'as' => 'vote']);
-    $this->get('Voters/{microblog}', ['uses' => 'VoteController@voters']);
-    $this->post('Subscribe/{microblog}', ['uses' => 'SubscribeController@post', 'as' => 'subscribe', 'middleware' => 'auth']);
+    $this->get('Voters/{any_microblog}', ['uses' => 'VoteController@voters']);
+    $this->post('Subscribe/{any_microblog}', ['uses' => 'SubscribeController@post', 'as' => 'subscribe', 'middleware' => 'auth']);
     $this->delete('Delete/{microblog}', ['uses' => 'SubmitController@delete', 'as' => 'delete', 'middleware' => 'auth']);
     $this->post('Restore/{id}', ['uses' => 'SubmitController@restore', 'as' => 'restore', 'middleware' => 'auth']);
     $this->post('Sponsored/{microblog}', ['uses' => 'SubmitController@toggleSponsored', 'middleware' => 'auth']);

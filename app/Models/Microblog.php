@@ -172,7 +172,7 @@ class Microblog extends Model
      */
     public function parent()
     {
-        return $this->hasOne('Coyote\Microblog', 'id', 'parent_id');
+        return $this->hasOne('Coyote\Microblog', 'id', 'parent_id')->withoutGlobalScope(UserRelationsScope::class);
     }
 
     /**
