@@ -107,6 +107,31 @@ class DispatchMicroblogNotificationsTest extends TestCase
         Notification::assertNothingSent();
     }
 
+    public function testDoNotDispatchMentionNotificationParentMicroblogsUserWasBlocked()
+    {
+        /** @var User $blocked */
+        $blocked = factory(User::class)->create();
+
+        /** @var User $user */
+        $user = factory(User::class)->create();
+
+        /** @var Microblog $microblog */
+        $microblog = factory(Microblog::class)->create(['user_id' => $blocked->id]);
+        // subscribe microblog first!
+        $microblog->subscribers()->create(['user_id' => $user->id]);
+
+        // ...then block an author
+        $user->relations()->create(['related_user_id' => $blocked->id, 'is_blocked' => true]);
+
+        $friend = factory(User::class)->create();
+        $comment = factory(Microblog::class)->create(['user_id' => $friend->id, 'parent_id' => $microblog->id]);
+        $comment->wasRecentlyCreated = true;
+
+        event(new MicroblogSaved($comment));
+
+        Notification::assertNothingSent();
+    }
+
     public function testDispatchNotificationToAllSubscribers()
     {
         /** @var Microblog $microblog */

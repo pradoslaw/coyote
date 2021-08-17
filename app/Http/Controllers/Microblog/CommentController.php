@@ -101,7 +101,7 @@ class CommentController extends BaseController
 
         MicroblogResource::withoutWrapping();
 
-        return (new MicroblogResource($microblog))->additional(['is_subscribed' => (bool) $isSubscribed]);
+        return (new MicroblogResource($microblog))->additional(['is_subscribed' => $isSubscribed]);
     }
 
     /**
