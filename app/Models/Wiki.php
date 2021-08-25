@@ -141,7 +141,7 @@ class Wiki extends Model
      */
     public function comments()
     {
-        return $this->hasMany('Coyote\Wiki\Comment', 'wiki_id', 'wiki_id');
+        return $this->hasMany('Coyote\Wiki\Comment', 'wiki_id', 'wiki_id')->orderByDesc('id');
     }
 
     /**
