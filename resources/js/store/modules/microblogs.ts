@@ -205,6 +205,10 @@ const actions = {
 
   toggleSponsored({ commit }, microblog: Microblog) {
     return axios.post(`/Mikroblogi/Sponsored/${microblog.id}`).then(() => commit('toggleSponsored', microblog));
+  },
+
+  hit({ commit }, microblog: Microblog) {
+    return navigator.sendBeacon(`/Mikroblogi/Hit/${microblog.id}`);
   }
 };
 

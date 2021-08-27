@@ -51,7 +51,7 @@
           <div v-show="!microblog.is_editing" :class="{'microblog-wrap': isWrapped}">
             <vue-flag v-for="flag in flags" :key="flag.id" :flag="flag"></vue-flag>
 
-            <div v-html="microblog.html" class="microblog-text"></div>
+            <div ref="microblog-text" v-html="microblog.html" class="microblog-text"></div>
 
             <a v-if="opg" :href="opg.metadata.url" :title="opg.metadata.title" class="card microblog-opg" target="_blank">
               <div :alt="opg.metadata.title" class="card-img-top" :style="`background-image: url(${opg.url})`"></div>
@@ -194,14 +194,32 @@
     @Ref('comment-form')
     readonly commentForm!: VueCommentForm;
 
+    @Ref('microblog-text')
+    readonly microblogText!: Element;
+
     @Prop()
     wrap!: boolean;
 
     mounted() {
-      const el = document.querySelector(`#entry-${this.microblog.id} .microblog-text`);
-
-      if (this.wrap && el!.clientHeight > 300) {
+      if (this.wrap && this.microblogText!.clientHeight > 300) {
         this.isWrapped = true;
+      }
+
+      const pageHitHandler = () => {
+        const rect = this.microblogText.getBoundingClientRect();
+
+        if (rect.top >= 0 && rect.top <= window.innerHeight) {
+          document.removeEventListener('scroll', pageHitHandler);
+          store.dispatch('microblogs/hit', this.microblog);
+
+          return true;
+        }
+
+        return false;
+      }
+
+      if (!pageHitHandler()) {
+        document.addEventListener('scroll', pageHitHandler);
       }
     }
 

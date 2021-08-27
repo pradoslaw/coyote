@@ -50,7 +50,7 @@ class PageHit
     private function getPayload(Request $request): string
     {
         return serialize([
-            'path'          => trim($request->path(), '/'),
+            'path'          => trim($request->attributes->get('path', $request->path()), '/'),
             'timestamp'     => (int) (round(time() / 60) * 60),
             'user_id'       => empty($request->user()) ? null : $request->user()->id,
             'guest_id'      => $request->session()->get('guest_id')

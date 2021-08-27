@@ -2,10 +2,7 @@
 
 namespace Coyote\Console\Commands;
 
-use Carbon\Carbon;
-use Coyote\Repositories\Contracts\GuestRepositoryInterface as GuestRepository;
 use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
-use Coyote\Services\Skills\Calculator;
 use Illuminate\Console\Command;
 use Illuminate\Database\Connection as Db;
 
@@ -36,11 +33,6 @@ class PurgeViewsCommand extends Command
     private $page;
 
     /**
-     * @var GuestRepository
-     */
-    private $guest;
-
-    /**
      * @var mixed
      */
     private $redis;
@@ -48,15 +40,13 @@ class PurgeViewsCommand extends Command
     /**
      * @param Db $db
      * @param PageRepository $page
-     * @param GuestRepository $guest
      */
-    public function __construct(Db $db, PageRepository $page, GuestRepository $guest)
+    public function __construct(Db $db, PageRepository $page)
     {
         parent::__construct();
 
         $this->db = $db;
         $this->page = $page;
-        $this->guest = $guest;
         $this->redis = app('redis');
     }
 
