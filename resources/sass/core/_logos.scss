@@ -9,7 +9,8 @@
 .logo-delphiipascal,
 .logo-webmastering,
 .logo-bazydanych,
-.logo-rust {
+.logo-rust,
+.logo-go {
   &:before {
     content: "";
   }
@@ -63,4 +64,8 @@
 
 .logo-rust {
   @include sprite('logo-rust');
+}
+
+.logo-go {
+  @include sprite('logo-go');
 }
