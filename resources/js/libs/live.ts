@@ -26,7 +26,7 @@ export class MicroblogSaved implements Observer {
 
 export class MicroblogVoted implements Observer {
   update(microblog) {
-    const existing = store.state.microblogs.data[microblog.id!];
+    const existing = store.state.microblogs.data[microblog.id!] ?? store.state.microblogs.data[microblog.parent_id!]?.comments[microblog.id];
 
     if (!existing) {
       return;
