@@ -24,6 +24,12 @@ export class MicroblogSaved implements Observer {
   }
 }
 
+// export class MicroblogVoted implements Observer {
+//   update({ microblog }) {
+//
+//   }
+// }
+
 export class MicroblogCommentSaved implements Observer {
   update(payload: Microblog) {
     if (!payload.parent_id) {

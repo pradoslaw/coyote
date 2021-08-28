@@ -4,11 +4,6 @@ import Vue from 'vue';
 
 type ParentChild = { parent: Microblog, comment: Microblog };
 
-interface VoteResponse {
-  users: string[];
-  count: number;
-}
-
 const state: Paginator = {
   current_page: 0,
   data: [],
@@ -124,9 +119,13 @@ const mutations = {
     microblog.comments_count = Object.keys(comments).length;
   },
 
-  setVoters(state, { microblog, voters }: { microblog: Microblog, voters: VoteResponse }) {
-    Vue.set(microblog, 'voters', voters.users);
-    Vue.set(microblog, 'votes', voters.count);
+  setVoters(state, { microblog, response }: { microblog: Microblog, response: Microblog }) {
+    // let { votes, voters } = microblog; // update only text and html version
+    //
+    // Vue.set(state.data, microblog.id!, {...state.data[microblog.id!], ...{ votes, voters }})
+
+    Vue.set(microblog, 'voters', response.voters);
+    Vue.set(microblog, 'votes', response.votes);
   },
 
   toggleTag(state, { microblog, tag }: { microblog: Microblog, tag: Tag }) {
@@ -151,7 +150,7 @@ const actions = {
     commit('vote', microblog);
 
     return axios.post(`/Mikroblogi/Vote/${microblog.id}`)
-      .then(result => commit('setVoters', { microblog, voters: result.data }))
+      .then(result => commit('setVoters', { microblog, response: result.data }))
       .catch(() => commit('vote', microblog));
   },
 
@@ -200,7 +199,7 @@ const actions = {
   },
 
   loadVoters({ commit }, microblog: Microblog) {
-    return axios.get(`/Mikroblogi/Voters/${microblog.id}`).then(response => commit('setVoters', { microblog, voters: response.data }));
+    return axios.get(`/Mikroblogi/Voters/${microblog.id}`).then(response => commit('setVoters', { microblog, response: response.data }));
   },
 
   toggleSponsored({ commit }, microblog: Microblog) {

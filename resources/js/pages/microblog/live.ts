@@ -1,4 +1,4 @@
-import { Subscriber, MicroblogCommentSaved, MicroblogSaved } from "@/libs/live";
+import { Subscriber, MicroblogCommentSaved, MicroblogSaved, MicroblogVoted } from "@/libs/live";
 
 export default {
   methods: {
@@ -7,6 +7,7 @@ export default {
 
       subscriber.subscribe('MicroblogSaved', new MicroblogSaved())
       subscriber.subscribe('MicroblogSaved', new MicroblogCommentSaved())
+      // subscriber.subscribe('MicroblogVoted', new MicroblogVoted())
     }
   }
 }

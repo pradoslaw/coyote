@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\Controller;
+use Coyote\Http\Resources\MicroblogResource;
 use Coyote\Microblog;
 use Coyote\Notifications\Microblog\VotedNotification;
 use Coyote\Services\UrlBuilder;
@@ -24,7 +25,7 @@ class VoteController extends Controller
     /**
      * @param Microblog $microblog
      * @param Request $request
-     * @return Microblog\Vote[]|\Illuminate\Support\Collection
+     * @return MicroblogResource
      * @throws AuthenticationException
      * @throws AuthorizationException
      */
@@ -84,11 +85,8 @@ class VoteController extends Controller
     {
         $microblog->load('voters.user:id,name');
 
-        $collection = $microblog->voters->pluck('user.name');
+        MicroblogResource::withoutWrapping();
 
-        return [
-            'count' => $collection->count(),
-            'users' => $collection->when($collection->count() > 10, fn ($collection) => $collection->splice(0, 10)->concat(['...']))
-        ];
+        return new MicroblogResource($microblog);
     }
 }
