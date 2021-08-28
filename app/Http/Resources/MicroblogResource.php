@@ -35,7 +35,6 @@ class MicroblogResource extends Api\MicroblogResource
                 $collection = $this->resource->voters->pluck('user.name');
 
                 return [
-                    'votes' => $collection->count(),
                     'voters' => $collection->when($collection->count() > 10, fn ($collection) => $collection->splice(0, 10)->concat(['...']))
                 ];
             })

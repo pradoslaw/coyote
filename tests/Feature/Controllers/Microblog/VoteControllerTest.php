@@ -45,7 +45,7 @@ class VoteControllerTest extends TestCase
             [$microblog->user], VotedNotification::class
         );
 
-        $response->assertJson(['count' => 1, 'users' => [$this->user->name]]);
+        $response->assertJson(['votes' => 1, 'voters' => [$this->user->name]]);
 
         $response = $this->actingAs($this->user)->json('POST', '/Mikroblogi/Vote/' . $microblog->id);
         $response->assertJson([]);
@@ -54,7 +54,7 @@ class VoteControllerTest extends TestCase
     public function testGetAllVoters()
     {
         /** @var Microblog $microblog */
-        $microblog = factory(Microblog::class)->create();
+        $microblog = factory(Microblog::class)->create(['votes' => 11]);
 
         $users = factory(User::class, 11)->create()->each(function (User $user) use ($microblog) {
             $microblog->voters()->create(['user_id' => $user->id, 'ip' => $this->faker->ipv4]);
@@ -62,6 +62,6 @@ class VoteControllerTest extends TestCase
 
         $response = $this->get('/Mikroblogi/Voters/' . $microblog->id);
 
-        $response->assertJson(['count' => 11, 'users' => $users->pluck('name')->slice(0, 10)->concat(['...'])->toArray()]);
+        $response->assertJson(['votes' => 11, 'voters' => $users->pluck('name')->slice(0, 10)->concat(['...'])->toArray()]);
     }
 }
