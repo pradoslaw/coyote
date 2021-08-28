@@ -10,17 +10,18 @@ import VueButton from '../components/forms/button.vue';
 import VueError from '../components/forms/error.vue';
 import {default as ws} from '../libs/realtime.ts';
 import VuePaste from '../plugins/paste.js';
-import VueModal from '../components/modal.vue';
 import VuePagination from '../components/pagination.vue';
 import VueAutocomplete from '../components/forms/autocomplete.vue';
 import differenceInMinutes from 'date-fns/differenceInMinutes';
 import parseISO from 'date-fns/parseISO';
 import {default as axiosErrorHandler} from "@/libs/axios-error-handler";
 import VueNotifications from "vue-notification";
+import VueModals from '@/plugins/modals';
 
 Vue.use(VueAutosave);
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 Vue.use(VuePaste, {url: '/assets'});
+Vue.use(VueModals);
 
 axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 
@@ -35,7 +36,6 @@ new Vue({
     'vue-pm': VuePm,
     'vue-prompt': VuePrompt,
     'vue-button': VueButton,
-    'vue-modal': VueModal,
     'vue-markdown': VueMarkdown,
     'vue-pagination': VuePagination,
     'vue-autocomplete': VueAutocomplete,

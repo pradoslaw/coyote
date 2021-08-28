@@ -14,7 +14,7 @@
         </h3>
       </template>
 
-      <a @click="deleteMessage(true)" class="btn-delete float-right text-danger" href="javascript:" title="Usuń">
+      <a @click="deleteMessage" class="btn-delete float-right text-danger" href="javascript:" title="Usuń">
         <i class="fas fa-times"></i>
       </a>
 
@@ -23,67 +23,52 @@
 
       <small v-if="last && message.folder === SENTBOX && message.read_at" class="text-muted"><i class="fas fa-check"></i> Przeczytano, <vue-timeago :datetime="message.read_at"></vue-timeago></small>
     </div>
-
-    <vue-modal ref="confirm">
-      Czy na pewno chcesz usunąć tę wiadomość?
-
-      <template slot="buttons">
-        <button @click="$refs.confirm.close()" type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
-        <button @click="deleteMessage(false)" type="submit" class="btn btn-danger danger">Tak, usuń</button>
-      </template>
-    </vue-modal>
   </div>
 </template>
 
-<script>
-  import { default as mixins } from '../mixins/user';
-  import VueModal from '../modal.vue';
-  import VueAvatar from '../avatar.vue';
-  import VueTimeago from '../../plugins/timeago';
-  import VueUserName from '@/components/user-name';
+<script lang="ts">
+import Vue from 'vue';
+import {default as mixins} from '../mixins/user';
+import VueAvatar from '../avatar.vue';
+import VueTimeago from '../../plugins/timeago';
+import VueUserName from '@/components/user-name';
+import {Prop} from 'vue-property-decorator';
+import Component from 'vue-class-component';
+import {Message, MessageFolder} from '@/types/models';
 
-  Vue.use(VueTimeago);
+Vue.use(VueTimeago);
 
-  export default {
+  @Component({
     mixins: [ mixins ],
-    components: { 'vue-modal': VueModal, 'vue-avatar': VueAvatar, 'vue-username': VueUserName },
-    props: {
-      message: {
-        type: Object
-      },
-      last: {
-        type: Boolean,
-        default: false
-      },
-      clickableText: {
-        type: Boolean,
-        default: false
-      }
-    },
-    data() {
-      return {
-        SENTBOX: 2
-      }
-    },
-    methods: {
-      deleteMessage(confirm) {
-        if (confirm) {
-          this.$refs.confirm.open();
-        } else {
-          this.$refs.confirm.close();
+    components: { 'vue-avatar': VueAvatar, 'vue-username': VueUserName }
+  })
+  export default class VueMessage extends Vue {
+    @Prop()
+    message: Message;
 
-          this.$store.dispatch(`messages/${this.clickableText ? 'trash': 'remove' }`, this.message);
-        }
-      }
-    },
-    computed: {
-      isRead() {
-        return this.message.folder !== this.SENTBOX ? (this.message.read_at !== null) : true;
-      },
+    @Prop({default: false})
+    last!: boolean;
 
-      excerpt() {
-        return this.clickableText ? (message.excerpt ? message.excerpt : '(kliknij, aby przeczytać') : message.text
-      }
+    @Prop({default: false})
+    clickableText!: boolean;
+
+    SENTBOX = MessageFolder.sentbox;
+
+    deleteMessage() {
+      this.$confirm({
+        message: 'Tej operacji nie będzie można cofnąć.',
+        title: 'Usunąć tę wiadomość?',
+        okLabel: 'Tak, usuń'
+      })
+      .then(() => this.$store.dispatch(`messages/${this.clickableText ? 'trash': 'remove' }`, this.message));
+    }
+
+    get isRead() {
+      return this.message.folder !== MessageFolder.sentbox ? (this.message.read_at !== null) : true;
+    }
+
+    get excerpt() {
+      return this.clickableText ? (message.excerpt ? message.excerpt : '(kliknij, aby przeczytać') : message.text
     }
   }
 </script>

@@ -199,6 +199,17 @@ export interface Topic {
   owner_id?: number | null;
 }
 
+export interface Message {
+  id: number;
+  user: User;
+  created_at: Date;
+  read_at: Date;
+  excerpt: string;
+  text: string;
+  sequential: boolean;
+  folder: MessageFolder;
+}
+
 export interface Paginator {
   data: Microblog[] | Post[];
   current_page: number;
@@ -247,6 +258,11 @@ export enum Seniority {
   senior = 'Senior',
   lead = 'Lead',
   manager = 'Manager'
+}
+
+export enum MessageFolder {
+  inbox,
+  sentbox
 }
 
 export interface Currency {
