@@ -77,7 +77,8 @@ class IndexTagsCommand extends Command
 
     private function updateIndex()
     {
-        $tags = Tag::withTrashed()->where('updated_at', '>', now()->subMinutes(6))->get();
+        $then = now()->subMinutes(6);
+        $tags = Tag::withTrashed()->where('updated_at', '>', $then)->orWhere('last_used_at', '>', $then)->get();
 
         $crawler = new Crawler();
 
