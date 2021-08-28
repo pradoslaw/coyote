@@ -60,6 +60,6 @@ class MicroblogSaved implements ShouldBroadcast
      */
     public function broadcastAs()
     {
-        return class_basename(self::class);
+        return class_basename(static::class);
     }
 }

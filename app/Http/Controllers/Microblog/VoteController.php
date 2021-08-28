@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Microblog;
 
+use Coyote\Events\MicroblogVoted;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Resources\MicroblogResource;
 use Coyote\Microblog;
@@ -22,6 +23,13 @@ use Coyote\Services\Stream\Objects\Comment as Stream_Comment;
  */
 class VoteController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+
+        MicroblogResource::withoutWrapping();
+    }
+
     /**
      * @param Microblog $microblog
      * @param Request $request
@@ -78,14 +86,17 @@ class VoteController extends Controller
             $microblog->user->notify(new VotedNotification($vote));
         }
 
-        return $this->voters($microblog);
+        // load relations before broadcasting an event
+        $microblog->load('voters.user:id,name');
+
+        broadcast(new MicroblogVoted($microblog))->toOthers();
+
+        return new MicroblogResource($microblog);
     }
 
     public function voters(Microblog $microblog)
     {
         $microblog->load('voters.user:id,name');
-
-        MicroblogResource::withoutWrapping();
 
         return new MicroblogResource($microblog);
     }

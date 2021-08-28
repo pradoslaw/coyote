@@ -7,7 +7,7 @@ export default {
 
       subscriber.subscribe('MicroblogSaved', new MicroblogSaved())
       subscriber.subscribe('MicroblogSaved', new MicroblogCommentSaved())
-      // subscriber.subscribe('MicroblogVoted', new MicroblogVoted())
+      subscriber.subscribe('MicroblogVoted', new MicroblogVoted())
     }
   }
 }

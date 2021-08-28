@@ -24,11 +24,17 @@ export class MicroblogSaved implements Observer {
   }
 }
 
-// export class MicroblogVoted implements Observer {
-//   update({ microblog }) {
-//
-//   }
-// }
+export class MicroblogVoted implements Observer {
+  update(microblog) {
+    const existing = store.state.microblogs.data[microblog.id!];
+
+    if (!existing) {
+      return;
+    }
+
+    store.commit('microblogs/setVoters', { microblog: existing, response: microblog });
+  }
+}
 
 export class MicroblogCommentSaved implements Observer {
   update(payload: Microblog) {
