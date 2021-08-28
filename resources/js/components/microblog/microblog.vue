@@ -25,7 +25,7 @@
             </div>
 
             <div class="microblog-tags">
-              <vue-tags :tags="microblog.tags" class="tag-clouds-md "></vue-tags>
+              <vue-tags :tags="microblog.tags" class="tag-clouds-md"></vue-tags>
             </div>
 
             <div v-if="isAuthorized" class="dropdown">
