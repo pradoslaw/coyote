@@ -4,6 +4,8 @@ properties:
     type: integer
   votes:
     type: integer
+  views:
+    type: integer
   created_at:
     type: string
     format: "datetime"

@@ -16,9 +16,12 @@
           <div class="d-flex flex-nowrap">
             <div class="flex-shrink-0 mr-auto">
               <h5 class="media-heading"><vue-username :user="microblog.user"></vue-username></h5>
-              <a :href="microblog.url" class="text-muted small"><vue-timeago :datetime="microblog.created_at"></vue-timeago></a>
 
-              <small v-if="microblog.is_sponsored" class="text-muted small">&bull; Sponsorowane</small>
+              <ul class="list-inline list-inline-bullet-sm text-muted">
+                <li class="list-inline-item"><a :href="microblog.url" class="text-muted small"><vue-timeago :datetime="microblog.created_at"></vue-timeago></a></li>
+                <li class="list-inline-item small">{{ microblog.views }} {{ microblog.views | declination(['wyświetlenie', 'wyświetlenia', 'wyświetleń']) }}</li>
+                <li v-if="microblog.is_sponsored" class="list-inline-item small">Sponsorowane</li>
+              </ul>
             </div>
 
             <div class="microblog-tags">
