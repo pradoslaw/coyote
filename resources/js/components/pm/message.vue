@@ -44,7 +44,7 @@ Vue.use(VueTimeago);
   })
   export default class VueMessage extends Vue {
     @Prop()
-    message: Message;
+    message!: Message;
 
     @Prop({default: false})
     last!: boolean;
@@ -68,7 +68,7 @@ Vue.use(VueTimeago);
     }
 
     get excerpt() {
-      return this.clickableText ? (message.excerpt ? message.excerpt : '(kliknij, aby przeczytać') : message.text
+      return this.clickableText ? (this.message.excerpt ? this.message.excerpt : '(kliknij, aby przeczytać') : this.message.text
     }
   }
 </script>
