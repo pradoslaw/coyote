@@ -29,9 +29,7 @@ class ShowController extends BaseController
 
         $parser = app('parser.wiki');
         $wiki->load(['comments' => function ($query) {
-            return $query->with(['user' => function ($query) {
-                return $query->withTrashed();
-            }]);
+            return $query->orderByDesc('updated_at')->with(['user' => fn ($query) => $query->withTrashed()]);
         }]);
 
         foreach ($wiki->comments as &$comment) {
