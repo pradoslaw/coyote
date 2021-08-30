@@ -261,7 +261,7 @@ export enum Seniority {
 }
 
 export enum MessageFolder {
-  inbox,
+  inbox = 1,
   sentbox
 }
 
