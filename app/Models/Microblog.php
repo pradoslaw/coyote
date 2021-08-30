@@ -69,7 +69,7 @@ class Microblog extends Model
      *
      * @var array
      */
-    protected $attributes = ['votes' => 0];
+    protected $attributes = ['votes' => 0, 'views' => 1];
 
     /**
      * Html version of the entry.

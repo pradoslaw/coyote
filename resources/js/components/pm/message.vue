@@ -30,7 +30,7 @@
 import Vue from 'vue';
 import {default as mixins} from '../mixins/user';
 import VueAvatar from '../avatar.vue';
-import VueTimeago from '../../plugins/timeago';
+import VueTimeago from '@/plugins/timeago';
 import VueUserName from '@/components/user-name';
 import {Prop} from 'vue-property-decorator';
 import Component from 'vue-class-component';
