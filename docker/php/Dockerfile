@@ -1,4 +1,4 @@
-FROM php:7.4-fpm-buster as backend
+FROM php:8.0.8-fpm-buster as backend
 
 LABEL maintainer="4programmers.net <support@4programmers.net>"
 
