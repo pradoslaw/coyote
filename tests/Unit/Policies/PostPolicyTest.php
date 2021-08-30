@@ -5,14 +5,17 @@ namespace Tests\Unit\Policies;
 use Coyote\Forum;
 use Coyote\Policies\PostPolicy;
 use Coyote\Post;
+use Coyote\Reputation;
 use Coyote\Topic;
 use Coyote\User;
-use Faker\Factory;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Gate;
 use Tests\TestCase;
 
 class PostPolicyTest extends TestCase
 {
+    use WithFaker;
+
     /**
      * @var Forum
      */
@@ -33,16 +36,9 @@ class PostPolicyTest extends TestCase
      */
     private $user;
 
-    /**
-     * @var \Faker\Generator
-     */
-    private $faker;
-
     public function setUp(): void
     {
         parent::setUp();
-
-        $this->faker = Factory::create();
 
         $this->forum = factory(Forum::class)->make();
         $this->topic = factory(Topic::class)->make(['forum_id' => $this->forum->id]);
@@ -117,6 +113,7 @@ class PostPolicyTest extends TestCase
     public function testDeleteIsAllowedInTopicByAdmin()
     {
         $this->post->topic->is_locked = true;
+        $this->post->created_at = now()->subMonths(2);
 
         Gate::define('forum-delete', function () {
             return true;
@@ -156,5 +153,30 @@ class PostPolicyTest extends TestCase
 
         $policy = new PostPolicy();
         $this->assertTrue($policy->update($this->user, $this->post));
+    }
+
+    public function testDeleteNotAllowedDueToArchive()
+    {
+        $this->post->created_at = now()->subMonth();
+
+        $policy = new PostPolicy();
+        $this->assertFalse($policy->delete($this->user, $this->post));
+    }
+
+    public function testUpdateNotAllowedDueToArchive()
+    {
+        $this->post->created_at = now()->subMonth();
+
+        $policy = new PostPolicy();
+        $this->assertFalse($policy->update($this->user, $this->post));
+    }
+
+    public function testDeleteNotAllowedDueToArchiveEventForUserWithHighReputation()
+    {
+        $this->post->created_at = now()->subMonth();
+        $this->user->reputation = Reputation::DELETE_POSTS + 1;
+
+        $policy = new PostPolicy();
+        $this->assertFalse($policy->delete($this->user, $this->post));
     }
 }

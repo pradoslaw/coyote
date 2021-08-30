@@ -2,7 +2,6 @@
 
 namespace Coyote\Policies;
 
-use Carbon\Carbon;
 use Coyote\Reputation;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Coyote\User;
@@ -21,7 +20,8 @@ class PostPolicy
     {
         if (!$this->isLocked($post)
             && $this->isAuthor($user, $post)
-            && ($this->isNotOld($post) || $this->hasEnoughReputation($user, $post))) {
+            && ($this->isRecentlyAdded($post) || $this->hasEnoughReputation($user, $post))
+            && !$this->isArchive($post)) {
             return true;
         }
 
@@ -37,7 +37,8 @@ class PostPolicy
     {
         if (!$this->isLocked($post)
             && $this->isAuthor($user, $post)
-            && $this->hasEnoughReputation($user, $post)) {
+            && $this->hasEnoughReputation($user, $post)
+            && !$this->isArchive($post)) {
             return true;
         }
 
@@ -60,7 +61,7 @@ class PostPolicy
         return $user->can(substr($ability, 6), $post->forum);
     }
 
-    private function isLocked(Post $post)
+    private function isLocked(Post $post): bool
     {
         return $post->forum->is_locked // removing (updating etc) in locked category is forbidden
             || $post->topic->is_locked;
@@ -83,15 +84,20 @@ class PostPolicy
      */
     private function hasEnoughReputation(User $user, Post $post): bool
     {
-        return $post->id == $post->topic->last_post_id ? true : ($user->reputation >= Reputation::DELETE_POSTS);
+        return $post->id == $post->topic->last_post_id || $user->reputation >= Reputation::DELETE_POSTS;
     }
 
     /**
      * @param Post $post
      * @return bool
      */
-    private function isNotOld(Post $post): bool
+    private function isRecentlyAdded(Post $post): bool
     {
-        return $post->created_at->diffInMinutes(Carbon::now()) < 30;
+        return $post->created_at->diffInMinutes(now()) < 30;
+    }
+
+    private function isArchive(Post $post): bool
+    {
+        return $post->created_at->diffInMonths(now()) >= 1;
     }
 }
