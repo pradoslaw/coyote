@@ -44,17 +44,17 @@
         "mpdf/mpdf": "dev-development",
         "paylane/client": "^1.1",
         "predis/predis": "^1.0",
-        "rawr/t-regx": "^0.9.8",
+        "rawr/t-regx": "^v0.10.2",
         "rcrowe/twigbridge": "^0.12",
         "sentry/sentry-laravel": "^2.3",
         "stripe/stripe-php": "^7.66",
         "twig/extensions": "^1.5"
     },
     "require-dev": {
-        "fzaninotto/faker": "^1.5",
+        "fakerphp/faker": "^1.15",
         "laravel/dusk": "^6.0",
-        "phpunit/phpunit": "^9.0",
-        "mockery/mockery": "^1.4"
+        "mockery/mockery": "^1.4",
+        "phpunit/phpunit": "^9.0"
     },
     "autoload": {
         "classmap": [
