@@ -98,6 +98,8 @@ class AssetsController extends Controller
 
     public function download(Filesystem $filesystem, Asset $asset, string $name = null)
     {
+        abort_if(!$asset->content, 404);
+
         if ($asset->content_type === Post::class) {
             $this->authorize('access', $asset->content->forum);
         }
