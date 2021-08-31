@@ -69,6 +69,11 @@ class ActivitySubscriber implements ShouldQueue
      */
     public function onCommentSaved(CommentSaved $event)
     {
+        // post was removed?
+        if (!$event->comment->post) {
+            return;
+        }
+
         $this->activity->updateOrCreate([
             'content_id'    => $event->comment->id,
             'content_type'  => Post\Comment::class,
