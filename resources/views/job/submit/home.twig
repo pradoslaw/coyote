@@ -47,7 +47,6 @@
                   @click.native="switchTab(currentTab + 1)"
                   :disabled="isSubmitting"
                   class="btn btn-secondary float-right"
-                  data-popover='{"message": "Nie zapomnij dodać informacji o firmie.", "placement": "top", "offset": "0,10px"}'
                 >
                   ${ tabs[currentTab + 1] }
 
@@ -57,9 +56,7 @@
                 <vue-button :disabled="isSubmitting" @click.native="submitForm" class="btn btn-primary float-right btn-save mr-2" title="Zapisz tę ofertę">
                   <i class="fas fa-save"></i> Zapisz
 
-                  <template v-if="job.firm.name">
-                    jako ${ job.firm.name }
-                  </template>
+                  <template v-if="job.firm.name">jako ${ job.firm.name }</template>
                 </vue-button>
               </div>
             </div>
