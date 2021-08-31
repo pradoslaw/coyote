@@ -42,7 +42,13 @@
                   ${ tabs[currentTab - 1] }
                 </vue-button>
 
-                <vue-button v-if="currentTab < 1" @click.native="switchTab(currentTab + 1)" :disabled="isSubmitting" class="btn btn-secondary float-right">
+                <vue-button
+                  v-if="currentTab < 1"
+                  @click.native="switchTab(currentTab + 1)"
+                  :disabled="isSubmitting"
+                  class="btn btn-secondary float-right"
+                  data-popover='{"message": "Nie zapomnij dodać informacji o firmie.", "placement": "top", "offset": "0,10px"}'
+                >
                   ${ tabs[currentTab + 1] }
 
                   <i class="fas fa-angle-right"></i>
