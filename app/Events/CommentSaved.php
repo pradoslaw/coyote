@@ -38,7 +38,7 @@ class CommentSaved implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('topic:' . $this->comment->post->topic_id);
+        return new Channel('topic:' . $this->comment->post?->topic_id);
     }
 
     /**
