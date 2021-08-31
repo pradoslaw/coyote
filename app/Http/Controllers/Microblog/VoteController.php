@@ -43,6 +43,9 @@ class VoteController extends Controller
             throw new AuthenticationException('Musisz być zalogowany, aby oddać ten głos.');
         }
 
+        // throw error if parent entry was removed
+        abort_if($microblog->parent_id && !$microblog->parent, 404);
+
         /** @var \Coyote\Microblog\Vote $vote */
         $vote = $microblog->voters()->forUser($this->userId)->first();
 
