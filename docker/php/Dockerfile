@@ -55,7 +55,6 @@ RUN echo "cgi.fix_pathinfo=0" > ${php_vars} &&\
     echo "opcache.preload_user = nginx" >> ${php_vars} && \
     echo "opcache.preload_user = nginx" >> ${php_vars} && \
     echo "opcache.enable = 1" >> ${php_vars} && \
-    echo "opcache.enable_cli = 1" >> ${php_vars} && \
     echo "opcache.jit_buffer_size = 256M" >> ${php_vars} && \
     sed -i \
         -e "s/;catch_workers_output\s*=\s*yes/catch_workers_output = yes/g" \

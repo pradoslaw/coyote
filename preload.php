@@ -88,7 +88,7 @@ class Preloader
 
         // Finally we require the path,
         // causing all its dependencies to be loaded as well
-        opcache_compile_file($path);
+        @opcache_compile_file($path);
 
         self::$count++;
 
@@ -105,7 +105,7 @@ class Preloader
 //    ->paths(__DIR__ . '/vendor/filp')
 //    ->paths(__DIR__ . '/vendor/freelancehunt')
 //    ->paths(__DIR__ . '/vendor/jenssegers')
-    ->paths(__DIR__ . '/vendor/symfony')
+//    ->paths(__DIR__ . '/vendor/symfony')
     ->paths(__DIR__ . '/vendor/laravel/passport')
     ->paths(__DIR__ . '/vendor/laravel/socialite')
     ->paths(__DIR__ . '/vendor/laravel/framework')
