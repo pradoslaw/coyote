@@ -18,6 +18,8 @@ RUN rm -rf node_modules
 
 COPY composer.json composer.json
 COPY composer.lock composer.lock
+COPY preload.php /var/www/preload.php
+
 RUN composer install --prefer-dist --no-scripts --no-dev --no-autoloader
 
 COPY . .
