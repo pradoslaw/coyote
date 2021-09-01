@@ -40,7 +40,7 @@ class DispatchPostCommentNotification implements ShouldQueue
         $subscribers = [];
 
         if ($event->wasRecentlyCreated) {
-            $subscribers = $comment->post->subscribers()->with('user.notificationSettings')->get()->pluck('user')->exceptUser($comment->user);
+            $subscribers = $comment->post->subscribers()->with('user:id,name')->get()->pluck('user')->exceptUser($comment->user);
 
             $this->dispatcher->send(
                 $subscribers,
