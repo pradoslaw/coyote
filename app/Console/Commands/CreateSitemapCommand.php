@@ -41,7 +41,7 @@ class CreateSitemapCommand extends Command
      */
     public function handle()
     {
-        ini_set('memory_limit', '1GB');
+        ini_set('memory_limit', '1024M');
 
         $sitemap = $this->getSitemap();
         $bar = $this->output->createProgressBar($this->page->forSitemap()->count());
