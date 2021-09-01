@@ -95,7 +95,7 @@ class CommentController extends BaseController
         });
 
         // save broadcast parent entry
-        broadcast(new MicroblogSaved($microblog->parent))->toOthers();
+        event(new MicroblogSaved($microblog->parent));
         // just broadcast comment
         broadcast(new MicroblogSaved($microblog))->toOthers();
 
