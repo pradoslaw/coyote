@@ -60,6 +60,7 @@ class DispatchMicroblogNotifications implements ShouldQueue
             }
 
             if (count($subscribers)) {
+                logger()->debug($subscribers);
                 $this->dispatcher->send(
                     $subscribers,
                     $microblog->parent_id ? new CommentedNotification($microblog) : new SubmittedNotification($microblog)
