@@ -52,15 +52,15 @@ class DispatchMicroblogNotifications implements ShouldQueue
                     ->subscribers()
                     // exclude also author of parent entry! @see https://github.com/adam-boduch/coyote/issues/637
                     ->excludeBlocked($microblog->user_id, $microblog->parent->user_id)
-                    ->with('user.notificationSettings')
+                    ->has('user')
+                    ->with(['user:id,name'])
                     ->get()
                     ->pluck('user');
             } else {
                 $subscribers = $microblog->user->followers;
             }
 
-            if (count($subscribers)) {
-                logger()->debug($subscribers);
+            if (count($subscribers->filter())) {
                 $this->dispatcher->send(
                     $subscribers,
                     $microblog->parent_id ? new CommentedNotification($microblog) : new SubmittedNotification($microblog)
