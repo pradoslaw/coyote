@@ -72,10 +72,10 @@ const mutations = {
     parent.comments_count! += 1;
   },
 
-  updateComment(state, { parent, comment }) {
+  updateComment(state, { parent, comment }: ParentChild) {
     let { text, html } = comment; // update only text and html version
 
-    Vue.set(parent.comments, comment.id!, {...parent.comments[comment.id], ...{text, html}});
+    Vue.set(parent.comments, comment.id!, {...parent.comments[comment.id!], ...{text, html}});
   },
 
   deleteComment(state, comment: Microblog) {
@@ -90,14 +90,6 @@ const mutations = {
     state.data[comment.parent_id!].comments_count += 1;
   },
 
-  subscribe(state, microblog: Microblog) {
-    microblog.is_subscribed = true;
-  },
-
-  unsubscribe(state, microblog: Microblog) {
-    microblog.is_subscribed = false;
-  },
-
   vote(state, microblog: Microblog) {
     if (microblog.is_voted) {
       microblog.is_voted = false;
@@ -109,23 +101,16 @@ const mutations = {
     }
   },
 
-  edit(state, microblog: Microblog) {
-    // we must use set() because is_editing can be undefined
-    Vue.set(microblog, 'is_editing', !microblog.is_editing);
-  },
-
   setComments(state, { microblog, comments }) {
     microblog.comments = comments;
     microblog.comments_count = Object.keys(comments).length;
   },
 
-  setVoters(state, { microblog, response }: { microblog: Microblog, response: Microblog }) {
-    // let { votes, voters } = microblog; // update only text and html version
-    //
-    // Vue.set(state.data, microblog.id!, {...state.data[microblog.id!], ...{ votes, voters }})
+  UPDATE_VOTERS(state, { microblog, users, includesLoggedUser }: { microblog: Microblog, users: string[], includesLoggedUser: boolean }) {
+    Vue.set(microblog, 'voters', users);
 
-    Vue.set(microblog, 'voters', response.voters);
-    Vue.set(microblog, 'votes', response.votes);
+    microblog.votes = users.length;
+    microblog.is_voted = includesLoggedUser;
   },
 
   toggleTag(state, { microblog, tag }: { microblog: Microblog, tag: Tag }) {
@@ -136,12 +121,21 @@ const mutations = {
 
   toggleSponsored(state, microblog: Microblog) {
     microblog.is_sponsored = !microblog.is_sponsored;
+  },
+
+  toggleEdit(state, microblog: Microblog) {
+    // we must use set() because is_editing can be undefined
+    Vue.set(microblog, 'is_editing', !microblog.is_editing);
+  },
+
+  toggleSubscribed(state, microblog: Microblog) {
+    microblog.is_subscribed = !microblog.is_subscribed;
   }
 };
 
 const actions = {
   subscribe({ commit }, microblog: Microblog) {
-    commit(microblog.is_subscribed ? 'unsubscribe' : 'subscribe', microblog);
+    commit('toggleSubscribed', microblog);
 
     axios.post(`/Mikroblogi/Subscribe/${microblog.id}`);
   },
@@ -150,7 +144,7 @@ const actions = {
     commit('vote', microblog);
 
     return axios.post(`/Mikroblogi/Vote/${microblog.id}`)
-      .then(result => commit('setVoters', { microblog, response: result.data }))
+      .then(result => commit('setVoters', { microblog, response: result.data, isVoted: true }))
       .catch(() => commit('vote', microblog));
   },
 
@@ -179,18 +173,22 @@ const actions = {
   },
 
   saveComment({ state, commit, getters }, comment: Microblog) {
-    return axios.post(`/Mikroblogi/Comment/${comment.id || ''}`, comment).then(result => {
+    return axios.post(`/Mikroblogi/Comment/${comment.id || ''}`, comment).then(response => {
+      const comment = response.data.data;
       const parent = state.data[comment.parent_id!];
 
       if (parent.comments[comment.id!]) {
-        commit('updateComment', { parent, comment: result.data.data });
+        commit('updateComment', { parent, comment });
       }
       else {
-        commit('addComment', { parent, comment: result.data.data});
-        commit(result.data.is_subscribed ? 'subscribe' : 'unsubscribe', parent);
+        commit('addComment', { parent, comment });
+
+        if (response.data.is_subscribed && !parent.is_subscribed) {
+          commit('toggleSubscribed', parent);
+        }
       }
 
-      return result;
+      return response;
     });
   },
 
@@ -198,8 +196,14 @@ const actions = {
     return axios.get(`/Mikroblogi/Comment/Show/${microblog.id}`).then(response => commit('setComments', { microblog, comments: response.data }));
   },
 
-  loadVoters({ commit }, microblog: Microblog) {
-    return axios.get(`/Mikroblogi/Voters/${microblog.id}`).then(response => commit('setVoters', { microblog, response: response.data }));
+  loadVoters({ commit, dispatch }, microblog: Microblog) {
+    return axios.get(`/Mikroblogi/Voters/${microblog.id}`).then(response => {
+      dispatch('updateVoters', { microblog, users: response.data.users });
+    });
+  },
+
+  updateVoters({ commit, rootState }, { microblog, users }: { microblog: Microblog, users: string[] }) {
+    commit('UPDATE_VOTERS', { microblog, users, includesLoggedUser: users.includes(rootState.user.user.name) });
   },
 
   toggleSponsored({ commit }, microblog: Microblog) {

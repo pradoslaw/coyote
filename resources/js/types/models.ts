@@ -86,6 +86,12 @@ export interface Microblog {
   tags: Tag[];
 }
 
+export interface MicroblogVoters {
+  id: number;
+  parent_id: number;
+  users: string[];
+}
+
 export interface Forum {
   id: number;
   slug: string;

@@ -82,7 +82,7 @@ describe('microblog mutation', () => {
       data: [parent]
     };
 
-    mutations.edit(state, parent);
+    mutations.toggleEdit(state, parent);
 
     expect(parent.is_editing).toBeTruthy();
   });

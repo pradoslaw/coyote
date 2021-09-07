@@ -1,4 +1,4 @@
-import { Microblog, Post, PostComment } from "@/types/models";
+import { Microblog, Post, PostComment, MicroblogVoters } from "@/types/models";
 import { default as ws } from "./realtime";
 import Prism from "prismjs";
 import store from '../store';
@@ -6,15 +6,21 @@ import Vue from 'vue';
 import Channel from "@/libs/websocket/channel";
 import axios from 'axios';
 
-export type Payload = Microblog | Post | PostComment;
+export type Payload = Microblog | Post | PostComment | MicroblogVoters;
 
 export interface Observer {
   update(payload: Payload): void;
 }
 
-export class MicroblogSaved implements Observer {
+abstract class MicroblogObserver {
+  get microblogs(): Microblog[] {
+    return store.state.microblogs.data;
+  }
+}
+
+export class MicroblogSaved extends MicroblogObserver implements Observer {
   update(microblog: Microblog) {
-    const existing = store.state.microblogs.data[microblog.id!];
+    const existing = this.microblogs[microblog.id!];
 
     if (!existing || existing.is_editing) {
       return; // do not add new entries live (yet)
@@ -24,25 +30,25 @@ export class MicroblogSaved implements Observer {
   }
 }
 
-export class MicroblogVoted implements Observer {
-  update(microblog) {
-    const existing = store.state.microblogs.data[microblog.id!] ?? store.state.microblogs.data[microblog.parent_id!]?.comments[microblog.id];
+export class MicroblogVoted extends MicroblogObserver implements Observer {
+  update(payload: MicroblogVoters) {
+    const existing = this.microblogs[payload.id!] ?? this.microblogs[payload.parent_id!]?.comments[payload.id];
 
     if (!existing) {
       return;
     }
 
-    store.commit('microblogs/setVoters', { microblog: existing, response: microblog });
+    store.dispatch('microblogs/updateVoters', { microblog: existing, users: payload.users });
   }
 }
 
-export class MicroblogCommentSaved implements Observer {
+export class MicroblogCommentSaved extends MicroblogObserver implements Observer {
   update(payload: Microblog) {
     if (!payload.parent_id) {
       return;
     }
 
-    const parent = store.state.microblogs.data[payload.parent_id];
+    const parent = this.microblogs[payload.parent_id];
     const existing = parent?.comments[payload.id!];
 
     if (!parent || existing?.is_editing === true) {
@@ -111,7 +117,7 @@ export class Subscriber {
 
   subscribe(event: string, observer: Observer) {
     this.channel.on(event, payload => {
-      if (store.getters['user/isBlocked'](payload.user!.id)) {
+      if (store.getters['user/isBlocked'](payload.user?.id)) {
         return;
       }
 

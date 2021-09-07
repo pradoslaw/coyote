@@ -29,15 +29,7 @@ class MicroblogResource extends Api\MicroblogResource
 
             'permissions'   => [
                 'moderate'  => $this->when($request->user(), fn () => $request->user()->can('moderate', $this->resource), false)
-            ],
-
-            $this->mergeWhen($this->resource->relationLoaded('voters'), function () {
-                $collection = $this->resource->voters->pluck('user.name');
-
-                return [
-                    'voters' => $collection->when($collection->count() > 10, fn ($collection) => $collection->splice(0, 10)->concat(['...']))
-                ];
-            })
+            ]
         ]);
     }
 }

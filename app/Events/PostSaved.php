@@ -61,6 +61,6 @@ class PostSaved extends Event implements ShouldBroadcast
      */
     public function broadcastAs(): string
     {
-        return class_basename(self::class);
+        return class_basename(static::class);
     }
 }

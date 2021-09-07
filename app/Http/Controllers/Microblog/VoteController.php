@@ -33,7 +33,7 @@ class VoteController extends Controller
     /**
      * @param Microblog $microblog
      * @param Request $request
-     * @return MicroblogResource
+     * @return array
      * @throws AuthenticationException
      * @throws AuthorizationException
      */
@@ -89,18 +89,17 @@ class VoteController extends Controller
             $microblog->user->notify(new VotedNotification($vote));
         }
 
-        // load relations before broadcasting an event
-        $microblog->load('voters.user:id,name');
+        $payload = $this->voters($microblog);
 
-        broadcast(new MicroblogVoted($microblog))->toOthers();
+        broadcast(new MicroblogVoted($payload))->toOthers();
 
-        return new MicroblogResource($microblog);
+        return $payload;
     }
 
     public function voters(Microblog $microblog)
     {
-        $microblog->load('voters.user:id,name');
+        $microblog->load(['voters', 'voters.user' => fn ($query) => $query->select('id', 'name')->withTrashed()]);
 
-        return new MicroblogResource($microblog);
+        return ['id' => $microblog->id, 'parent_id' => $microblog->parent_id, 'users' => $microblog->voters->pluck('user.name')];
     }
 }
