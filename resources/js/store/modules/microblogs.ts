@@ -40,29 +40,29 @@ const getters = {
 }
 
 const mutations = {
-  init(state, pagination: Paginator) {
+  INIT(state, pagination: Paginator) {
     state = Object.assign(state, pagination);
   },
 
-  add(state, microblog: Microblog) {
+  ADD(state, microblog: Microblog) {
     Vue.set(state.data, microblog.id!, microblog);
   },
 
-  update(state, microblog: Microblog) {
+  UPDATE(state, microblog: Microblog) {
     let { text, html, assets } = microblog; // update only text and html version
 
     Vue.set(state.data, microblog.id!, {...state.data[microblog.id!], ...{ text, html, assets }})
   },
 
-  delete(state, microblog: Microblog) {
+  DELETE(state, microblog: Microblog) {
     Vue.delete(state.data, microblog.id!);
   },
 
-  restore(state, microblog: Microblog) {
+  RESTORE(state, microblog: Microblog) {
     microblog.deleted_at = null;
   },
 
-  addComment(state, { parent, comment }: ParentChild) {
+  ADD_COMMENT(state, { parent, comment }: ParentChild) {
     if (Array.isArray(parent.comments)) {
       Vue.set(parent, "comments", {});
     }
@@ -72,25 +72,25 @@ const mutations = {
     parent.comments_count! += 1;
   },
 
-  updateComment(state, { parent, comment }: ParentChild) {
+  UPDATE_COMMENT(state, { parent, comment }: ParentChild) {
     let { text, html } = comment; // update only text and html version
 
     Vue.set(parent.comments, comment.id!, {...parent.comments[comment.id!], ...{text, html}});
   },
 
-  deleteComment(state, comment: Microblog) {
+  DELETE_COMMENT(state, comment: Microblog) {
     Vue.delete(state.data[comment.parent_id!].comments, comment.id!);
 
     state.data[comment.parent_id!].comments_count -= 1;
   },
 
-  restoreComment(state, comment: Microblog) {
+  RESTORE_COMMENT(state, comment: Microblog) {
     comment.deleted_at = null;
 
     state.data[comment.parent_id!].comments_count += 1;
   },
 
-  vote(state, microblog: Microblog) {
+  VOTE(state, microblog: Microblog) {
     if (microblog.is_voted) {
       microblog.is_voted = false;
       microblog.votes -= 1;
@@ -101,7 +101,7 @@ const mutations = {
     }
   },
 
-  setComments(state, { microblog, comments }) {
+  SET_COMMENTS(state, { microblog, comments }) {
     microblog.comments = comments;
     microblog.comments_count = Object.keys(comments).length;
   },
@@ -113,60 +113,52 @@ const mutations = {
     microblog.is_voted = includesLoggedUser;
   },
 
-  toggleTag(state, { microblog, tag }: { microblog: Microblog, tag: Tag }) {
+  TOGGLE_TAG(state, { microblog, tag }: { microblog: Microblog, tag: Tag }) {
     const index = microblog.tags!.findIndex(item => item.name === tag.name);
 
     index > -1 ? microblog.tags!.splice(index, 1) : microblog.tags!.push(tag);
   },
 
-  toggleSponsored(state, microblog: Microblog) {
+  TOGGLE_SPONSORED(state, microblog: Microblog) {
     microblog.is_sponsored = !microblog.is_sponsored;
   },
 
-  toggleEdit(state, microblog: Microblog) {
+  TOGGLE_EDIT(state, microblog: Microblog) {
     // we must use set() because is_editing can be undefined
     Vue.set(microblog, 'is_editing', !microblog.is_editing);
   },
 
-  toggleSubscribed(state, microblog: Microblog) {
+  TOGGLE_SUBSCRIBED(state, microblog: Microblog) {
     microblog.is_subscribed = !microblog.is_subscribed;
   }
 };
 
 const actions = {
   subscribe({ commit }, microblog: Microblog) {
-    commit('toggleSubscribed', microblog);
+    commit('TOGGLE_SUBSCRIBED', microblog);
 
     axios.post(`/Mikroblogi/Subscribe/${microblog.id}`);
   },
 
-  vote({ commit }, microblog: Microblog) {
-    commit('vote', microblog);
-
-    return axios.post(`/Mikroblogi/Vote/${microblog.id}`)
-      .then(result => commit('setVoters', { microblog, response: result.data, isVoted: true }))
-      .catch(() => commit('vote', microblog));
-  },
-
   delete({ commit }, microblog: Microblog) {
-    return axios.delete(`/Mikroblogi/Delete/${microblog.id}`).then(() => commit('delete', microblog));
+    return axios.delete(`/Mikroblogi/Delete/${microblog.id}`).then(() => commit('DELETE', microblog));
   },
 
   restore({ commit }, microblog: Microblog) {
-    return axios.post(`/Mikroblogi/Restore/${microblog.id}`).then(() => commit('restore', microblog));
+    return axios.post(`/Mikroblogi/Restore/${microblog.id}`).then(() => commit('RESTORE', microblog));
   },
 
   deleteComment({ commit }, microblog: Microblog) {
-    return axios.delete(`/Mikroblogi/Comment/Delete/${microblog.id}`).then(() => commit('deleteComment', microblog));
+    return axios.delete(`/Mikroblogi/Comment/Delete/${microblog.id}`).then(() => commit('DELETE_COMMENT', microblog));
   },
 
   restoreComment({ commit }, comment: Microblog) {
-    return axios.post(`/Mikroblogi/Restore/${comment.id}`).then(() => commit('restoreComment', comment));
+    return axios.post(`/Mikroblogi/Restore/${comment.id}`).then(() => commit('RESTORE_COMMENT', comment));
   },
 
   save({ commit, getters }, microblog: Microblog) {
     return axios.post(`/Mikroblogi/Edit/${microblog.id || ''}`, microblog).then(result => {
-      commit(getters.exists(result.data.id) ? 'update' : 'add', result.data);
+      commit(getters.exists(result.data.id) ? 'UPDATE' : 'ADD', result.data);
 
       return result;
     });
@@ -178,13 +170,13 @@ const actions = {
       const parent = state.data[comment.parent_id!];
 
       if (parent.comments[comment.id!]) {
-        commit('updateComment', { parent, comment });
+        commit('UPDATE_COMMENT', { parent, comment });
       }
       else {
-        commit('addComment', { parent, comment });
+        commit('ADD_COMMENT', { parent, comment });
 
         if (response.data.is_subscribed && !parent.is_subscribed) {
-          commit('toggleSubscribed', parent);
+          commit('TOGGLE_SUBSCRIBED', parent);
         }
       }
 
@@ -193,7 +185,7 @@ const actions = {
   },
 
   loadComments({ commit }, microblog: Microblog) {
-    return axios.get(`/Mikroblogi/Comment/Show/${microblog.id}`).then(response => commit('setComments', { microblog, comments: response.data }));
+    return axios.get(`/Mikroblogi/Comment/Show/${microblog.id}`).then(response => commit('SET_COMMENTS', { microblog, comments: response.data }));
   },
 
   loadVoters({ commit, dispatch }, microblog: Microblog) {
@@ -206,8 +198,16 @@ const actions = {
     commit('UPDATE_VOTERS', { microblog, users, includesLoggedUser: users.includes(rootState.user.user.name) });
   },
 
+  vote({ commit, dispatch }, microblog: Microblog) {
+    commit('VOTE', microblog);
+
+    return axios.post(`/Mikroblogi/Vote/${microblog.id}`)
+      .then(response => dispatch('updateVoters', { microblog, users: response.data.users }))
+      .catch(() => commit('VOTE', microblog));
+  },
+
   toggleSponsored({ commit }, microblog: Microblog) {
-    return axios.post(`/Mikroblogi/Sponsored/${microblog.id}`).then(() => commit('toggleSponsored', microblog));
+    return axios.post(`/Mikroblogi/Sponsored/${microblog.id}`).then(() => commit('TOGGLE_SPONSORED', microblog));
   },
 
   hit({ commit }, microblog: Microblog) {

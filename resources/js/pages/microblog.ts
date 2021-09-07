@@ -50,11 +50,11 @@ new Vue({
   },
   created() {
     if ('pagination' in window) {
-      store.commit('microblogs/init', window.pagination);
+      store.commit('microblogs/INIT', window.pagination);
     }
 
     if ('microblog' in window) {
-      store.commit('microblogs/add', window.microblog!);
+      store.commit('microblogs/ADD', window.microblog!);
     }
 
     store.commit('flags/init', window.flags);

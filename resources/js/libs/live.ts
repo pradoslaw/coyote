@@ -26,7 +26,7 @@ export class MicroblogSaved extends MicroblogObserver implements Observer {
       return; // do not add new entries live (yet)
     }
 
-    store.commit('microblogs/update', microblog);
+    store.commit('microblogs/UPDATE', microblog);
   }
 }
 
@@ -59,7 +59,7 @@ export class MicroblogCommentSaved extends MicroblogObserver implements Observer
       payload.is_read = false;
     }
 
-    store.commit(`microblogs/${payload.id! in parent.comments ? 'updateComment' : 'addComment'}`, { parent, comment: payload });
+    store.commit(`microblogs/${payload.id! in parent.comments ? 'UPDATE_COMMENT' : 'ADD_COMMENT'}`, { parent, comment: payload });
   }
 }
 

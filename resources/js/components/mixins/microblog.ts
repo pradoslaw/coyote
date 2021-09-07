@@ -22,7 +22,7 @@ export class MicroblogMixin extends Vue {
   protected readonly form!: VueForm;
 
   protected edit(microblog: Microblog) {
-    store.commit('microblogs/toggleEdit', microblog);
+    store.commit('microblogs/TOGGLE_EDIT', microblog);
 
     if (microblog.is_editing) {
       // @ts-ignore

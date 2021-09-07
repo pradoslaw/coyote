@@ -113,7 +113,7 @@
     }
 
     toggleTag(tag: Tag) {
-      store.commit('microblogs/toggleTag', { microblog: this.microblog, tag });
+      store.commit('microblogs/TOGGLE_TAG', { microblog: this.microblog, tag });
     }
 
     startUrlDetector() {

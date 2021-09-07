@@ -32,7 +32,7 @@ describe('microblog mutation', () => {
     const state = {data: []};
     const microblog = fake();
 
-    mutations.add(state, microblog);
+    mutations.ADD(state, microblog);
 
     expect(microblog.id! in state.data).toBeTruthy();
   });
@@ -41,7 +41,7 @@ describe('microblog mutation', () => {
     const microblog = fake();
     const state = {data: [microblog]};
 
-    mutations.delete(state, microblog);
+    mutations.DELETE(state, microblog);
 
     expect(microblog.id! in state.data).toBeFalsy();
   });
@@ -54,7 +54,7 @@ describe('microblog mutation', () => {
 
     microblog.text = text = faker.lorem.words();
 
-    mutations.update(state, microblog);
+    mutations.UPDATE(state, microblog);
 
     expect(state.data[microblog.id!]['text']).toMatch(text);
   });
@@ -66,8 +66,8 @@ describe('microblog mutation', () => {
       data: []
     };
 
-    mutations.add(state, parent);
-    mutations.addComment(state, { parent, comment });
+    mutations.ADD(state, parent);
+    mutations.ADD_COMMENT(state, { parent, comment });
 
     expect(parent.id! in state.data).toBeTruthy();
     // @ts-ignore
@@ -82,7 +82,7 @@ describe('microblog mutation', () => {
       data: [parent]
     };
 
-    mutations.toggleEdit(state, parent);
+    mutations.TOGGLE_EDIT(state, parent);
 
     expect(parent.is_editing).toBeTruthy();
   });
