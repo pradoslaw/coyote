@@ -18,7 +18,7 @@ new Vue({
   components: { 'vue-microblog': VueMicroblog },
   store,
   created() {
-    Object.keys(window.microblogs).forEach(id => store.commit('microblogs/add', window.microblogs[id]));
+    Object.keys(window.microblogs).forEach(id => store.commit('microblogs/ADD', window.microblogs[id]));
 
     store.commit('flags/init', window.flags);
   },
