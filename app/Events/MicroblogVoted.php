@@ -7,7 +7,9 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 class MicroblogVoted implements ShouldBroadcast
 {
-    public function __construct(public $payload) { }
+    public function __construct(public $payload)
+    {
+    }
 
     /**
      * @return Channel|Channel[]
