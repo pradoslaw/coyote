@@ -52,6 +52,14 @@ export class MicroblogMixin extends Vue {
       this.$notify({type: 'success', duration: 5000, title: 'Gotowe!', text: '<a href="javascript:" onclick="window.location.reload();">Przeładuj stronę, aby odświeżyć wyniki</a>.'})
     });
   }
+
+  protected splice(users?: string[]): null | string {
+    if (!users) {
+      return null;
+    }
+
+    return users.length > 10 ? users.splice(0, 10).concat('...').join("\n") : users.join("\n");
+  }
 }
 
 @Component

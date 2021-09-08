@@ -162,7 +162,7 @@
     }
 
     get commentVoters() {
-      return this.comment.voters?.length ? this.comment.voters.join("\n") : null;
+      return this.splice(this.comment.voters);
     }
 
     get flags() {

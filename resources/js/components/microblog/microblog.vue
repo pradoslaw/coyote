@@ -253,7 +253,7 @@
     }
 
     get voters() {
-      return this.microblog.voters?.length ? this.microblog.voters.join("\n") : null;
+      return this.splice(this.microblog.voters);
     }
 
     get totalComments() {
