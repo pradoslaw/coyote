@@ -4,7 +4,7 @@ namespace Coyote\Events;
 
 use Illuminate\Queue\SerializesModels;
 
-class UserSaved extends Event
+class UserSaved
 {
     use SerializesModels;
 

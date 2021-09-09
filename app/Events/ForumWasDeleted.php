@@ -5,7 +5,7 @@ namespace Coyote\Events;
 use Illuminate\Queue\SerializesModels;
 use Coyote\Forum;
 
-class ForumWasDeleted extends Event
+class ForumWasDeleted
 {
     use SerializesModels;
 

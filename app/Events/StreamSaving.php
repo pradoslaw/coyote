@@ -5,7 +5,7 @@ namespace Coyote\Events;
 use Coyote\Services\Stream\Activities\Activity;
 use Illuminate\Queue\SerializesModels;
 
-class StreamSaving extends Event
+class StreamSaving
 {
     use SerializesModels;
 

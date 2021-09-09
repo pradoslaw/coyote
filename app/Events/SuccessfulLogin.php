@@ -5,7 +5,7 @@ namespace Coyote\Events;
 use Coyote\User;
 use Illuminate\Queue\SerializesModels;
 
-class SuccessfulLogin extends Event
+class SuccessfulLogin
 {
     use SerializesModels;
 

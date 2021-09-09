@@ -5,7 +5,7 @@ namespace Coyote\Events;
 use Illuminate\Queue\SerializesModels;
 use Coyote\Topic;
 
-class TopicWasDeleted extends Event
+class TopicWasDeleted
 {
     use SerializesModels;
 

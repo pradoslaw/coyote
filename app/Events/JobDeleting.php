@@ -5,7 +5,7 @@ namespace Coyote\Events;
 use Illuminate\Queue\SerializesModels;
 use Coyote\Job;
 
-class JobDeleting extends Event
+class JobDeleting
 {
     use SerializesModels;
 

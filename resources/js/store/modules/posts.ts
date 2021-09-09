@@ -4,11 +4,6 @@ import Vue from "vue";
 
 type ParentChild = { post: Post, comment: PostComment };
 
-interface VoteResponse {
-  users: string[];
-  count: number;
-}
-
 const state: Paginator = {
   current_page: 0,
   data: [],
@@ -123,18 +118,20 @@ const mutations = {
     post.is_subscribed = false;
   },
 
-  setVoters(state, { post, voters }: { post: Post, voters: VoteResponse }) {
-    Vue.set(post, 'voters', voters.users);
-    Vue.set(post, 'score', voters.count);
+  updateVoters(state, { post, users, userName }: { post: Post, users: string[], userName?: string }) {
+    Vue.set(post, 'voters', users);
+
+    post.score = users.length;
+    post.is_voted = userName ? users.includes(userName) : false;
   }
 }
 
 const actions = {
-  vote({ commit }, post: Post) {
+  vote({ commit, dispatch }, post: Post) {
     commit('vote', post);
 
     return axios.post(`/Forum/Post/Vote/${post.id}`)
-      .then(result => commit('setVoters', { post, voters: result.data }))
+      .then(response => dispatch('updateVoters', { post, users: response.data.users }))
       .catch(() => commit('vote', post));
   },
 
@@ -224,10 +221,18 @@ const actions = {
     });
   },
 
-  loadVoters({ commit }, post: Post) {
-    return axios.get(`/Forum/Post/Voters/${post.id}`).then(result => {
-      commit('setVoters', { post, voters: result.data });
+  loadVoters({ dispatch }, post: Post) {
+    if (!post.score) {
+      return;
+    }
+
+    return axios.get(`/Forum/Post/Voters/${post.id}`).then(response => {
+      dispatch('updateVoters', { post, users: response.data.users });
     });
+  },
+
+  updateVoters({ commit, rootState }, { post, users }: { post: Post, users: string[] }) {
+    commit('updateVoters', { post, users, userName: rootState.user.user.name });
   }
 }
 

@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Events\PostVoted;
 use Coyote\Notifications\Post\VotedNotification;
 use Coyote\Post;
 use Coyote\Services\Stream\Activities\Vote as Stream_Vote;
@@ -77,18 +78,20 @@ class VoteController extends BaseController
             stream(Stream_Vote::class, (new Stream_Post(['url' => $url]))->map($post), (new Stream_Topic())->map($topic));
         });
 
-        return $this->voters($post);
+        $payload = $this->voters($post);
+
+        broadcast(new PostVoted($payload, $post->topic_id))->toOthers();
+
+        return $payload;
     }
 
     public function voters(Post $post)
     {
-        $post->load('votes.user:id,name');
-
-        $collection = $post->votes->pluck('user.name');
+        $post->load(['votes', 'user' => fn ($query) => $query->select('id', 'name')->withTrashed()]);
 
         return [
-            'count' => $collection->count(),
-            'users' => $collection->when($collection->count() > 10, fn ($collection) => $collection->splice(0, 10)->concat(['...']))
+            'id' => $post->id,
+            'users' => $post->votes->pluck('user.name')
         ];
     }
 }

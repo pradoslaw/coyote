@@ -9,7 +9,7 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Queue\SerializesModels;
 
-class PostSaved extends Event implements ShouldBroadcast
+class PostSaved implements ShouldBroadcast
 {
     use SerializesModels, InteractsWithSockets;
 
@@ -56,11 +56,5 @@ class PostSaved extends Event implements ShouldBroadcast
         return (new PostResource($this->post))->resolve($request);
     }
 
-    /**
-     * @return string
-     */
-    public function broadcastAs(): string
-    {
-        return class_basename(static::class);
-    }
+
 }

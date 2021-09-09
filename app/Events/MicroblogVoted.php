@@ -8,7 +8,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class MicroblogVoted implements ShouldBroadcast
+class MicroblogVoted extends BroadcastEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -30,13 +30,5 @@ class MicroblogVoted implements ShouldBroadcast
     public function broadcastWith()
     {
         return $this->payload;
-    }
-
-    /**
-     * @return string
-     */
-    public function broadcastAs()
-    {
-        return class_basename(static::class);
     }
 }

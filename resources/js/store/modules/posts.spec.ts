@@ -73,8 +73,9 @@ describe('posts actions', () => {
   test('votes', async () => {
     const post = fake();
     const commit = jest.fn();
+    const dispatch = jest.fn();
 
-    await actions.vote({ commit }, post);
+    await actions.vote({ commit, dispatch }, post);
 
     expect(commit).toHaveBeenCalledWith("vote", post);
   })

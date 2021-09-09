@@ -5,7 +5,7 @@ namespace Coyote\Events;
 use Coyote\Topic;
 use Illuminate\Queue\SerializesModels;
 
-class TopicWasMoved extends Event
+class TopicWasMoved
 {
     use SerializesModels;
 

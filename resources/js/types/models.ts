@@ -92,6 +92,8 @@ export interface MicroblogVoters {
   users: string[];
 }
 
+export type PostVoters = Pick<MicroblogVoters, "id" | "users">
+
 export interface Forum {
   id: number;
   slug: string;

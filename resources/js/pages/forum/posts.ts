@@ -4,7 +4,7 @@ import VueForm from "@/components/forum/form.vue";
 import VuePoll from "@/components/forum/poll.vue";
 import VuePagination from "@/components/pagination.vue";
 import store from "@/store";
-import { Subscriber, PostSaved, PostCommentSaved } from "@/libs/live";
+import { Subscriber, PostSaved, PostCommentSaved, PostVoted } from "@/libs/live";
 import useBrackets from "@/libs/prompt";
 import { mapGetters, mapState } from "vuex";
 import { Post } from "@/types/models.ts";
@@ -66,6 +66,7 @@ export default Vue.extend({
 
       subscriber.subscribe('CommentSaved', new PostCommentSaved())
       subscriber.subscribe('PostSaved', new PostSaved())
+      subscriber.subscribe('PostVoted', new PostVoted())
     },
 
     redirectToTopic(post: Post) {

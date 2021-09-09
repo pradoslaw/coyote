@@ -1,4 +1,4 @@
-import { Microblog, Post, PostComment, MicroblogVoters } from "@/types/models";
+import { Microblog, Post, PostComment, MicroblogVoters, PostVoters } from "@/types/models";
 import { default as ws } from "./realtime";
 import Prism from "prismjs";
 import store from '../store';
@@ -6,7 +6,7 @@ import Vue from 'vue';
 import Channel from "@/libs/websocket/channel";
 import axios from 'axios';
 
-export type Payload = Microblog | Post | PostComment | MicroblogVoters;
+export type Payload = Microblog | Post | PostComment | MicroblogVoters | PostVoters;
 
 export interface Observer {
   update(payload: Payload): void;
@@ -15,6 +15,12 @@ export interface Observer {
 abstract class MicroblogObserver {
   get microblogs(): Microblog[] {
     return store.state.microblogs.data;
+  }
+}
+
+abstract class PostObserver {
+  get posts(): Post[] {
+    return store.state.posts.data;
   }
 }
 
@@ -105,6 +111,18 @@ export class PostSaved implements Observer {
     }
 
     store.commit(`posts/update`, payload);
+  }
+}
+
+export class PostVoted extends PostObserver implements Observer {
+  update(payload: PostVoters) {
+    const existing = this.posts[payload.id!];
+
+    if (!existing) {
+      return;
+    }
+
+    store.dispatch('posts/updateVoters', { post: existing, users: payload.users });
   }
 }
 

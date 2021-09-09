@@ -5,7 +5,7 @@ namespace Coyote\Events;
 use Illuminate\Queue\SerializesModels;
 use Coyote\Wiki;
 
-class WikiWasDeleted extends Event
+class WikiWasDeleted
 {
     use SerializesModels;
 

@@ -5,7 +5,7 @@ namespace Coyote\Events;
 use Coyote\Job;
 use Illuminate\Queue\SerializesModels;
 
-class JobWasSaved extends Event
+class JobWasSaved
 {
     use SerializesModels;
 

@@ -5,7 +5,7 @@ namespace Coyote\Events;
 use Coyote\Post;
 use Illuminate\Queue\SerializesModels;
 
-class PostWasDeleted extends Event
+class PostWasDeleted
 {
     use SerializesModels;
 
