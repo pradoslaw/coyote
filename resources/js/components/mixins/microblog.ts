@@ -54,7 +54,7 @@ export class MicroblogMixin extends Vue {
   }
 
   protected splice(users?: string[]): null | string {
-    if (!users) {
+    if (!users?.length) {
       return null;
     }
 

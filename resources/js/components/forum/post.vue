@@ -419,7 +419,7 @@
     get voters() {
       const users = this.post.voters;
 
-      if (!users) {
+      if (!users?.length) {
         return null;
       }
 
