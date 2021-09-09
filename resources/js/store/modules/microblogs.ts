@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Microblog, Paginator, Tag } from "@/types/models";
+import {Microblog, Paginator, Tag, User} from "@/types/models";
 import Vue from 'vue';
 
 type ParentChild = { parent: Microblog, comment: Microblog };
@@ -106,11 +106,11 @@ const mutations = {
     microblog.comments_count = Object.keys(comments).length;
   },
 
-  UPDATE_VOTERS(state, { microblog, users, includesLoggedUser }: { microblog: Microblog, users: string[], includesLoggedUser: boolean }) {
+  UPDATE_VOTERS(state, { microblog, users, user }: { microblog: Microblog, users: string[], user?: User }) {
     Vue.set(microblog, 'voters', users);
 
     microblog.votes = users.length;
-    microblog.is_voted = includesLoggedUser;
+    microblog.is_voted = users.includes(<string> user?.name);
   },
 
   TOGGLE_TAG(state, { microblog, tag }: { microblog: Microblog, tag: Tag }) {
@@ -189,13 +189,17 @@ const actions = {
   },
 
   loadVoters({ commit, dispatch }, microblog: Microblog) {
+    if (!microblog.votes) {
+      return;
+    }
+
     return axios.get(`/Mikroblogi/Voters/${microblog.id}`).then(response => {
       dispatch('updateVoters', { microblog, users: response.data.users });
     });
   },
 
   updateVoters({ commit, rootState }, { microblog, users }: { microblog: Microblog, users: string[] }) {
-    commit('UPDATE_VOTERS', { microblog, users, includesLoggedUser: users.includes(rootState.user.user.name) });
+    commit('UPDATE_VOTERS', { microblog, users, user: rootState.user.user });
   },
 
   vote({ commit, dispatch }, microblog: Microblog) {

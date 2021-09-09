@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Post, PostComment, Paginator } from "@/types/models";
+import {Post, PostComment, Paginator, User} from "@/types/models";
 import Vue from "vue";
 
 type ParentChild = { post: Post, comment: PostComment };
@@ -118,11 +118,11 @@ const mutations = {
     post.is_subscribed = false;
   },
 
-  updateVoters(state, { post, users, userName }: { post: Post, users: string[], userName?: string }) {
+  updateVoters(state, { post, users, user }: { post: Post, users: string[], user?: User }) {
     Vue.set(post, 'voters', users);
 
     post.score = users.length;
-    post.is_voted = userName ? users.includes(userName) : false;
+    post.is_voted = users.includes(<string> user?.name);
   }
 }
 
@@ -232,7 +232,7 @@ const actions = {
   },
 
   updateVoters({ commit, rootState }, { post, users }: { post: Post, users: string[] }) {
-    commit('updateVoters', { post, users, userName: rootState.user.user.name });
+    commit('updateVoters', { post, users, user: rootState.user.user });
   }
 }
 

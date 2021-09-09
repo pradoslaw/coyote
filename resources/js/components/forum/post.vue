@@ -417,7 +417,13 @@
     }
 
     get voters() {
-      return this.post.voters?.length ? this.post.voters.join("\n") : null;
+      const users = this.post.voters;
+
+      if (!users) {
+        return null;
+      }
+
+      return users.length > 10 ? users.splice(0, 10).concat('...').join("\n") : users.join("\n");
     }
 
     get tags() {
