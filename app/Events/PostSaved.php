@@ -55,6 +55,4 @@ class PostSaved implements ShouldBroadcast
 
         return (new PostResource($this->post))->resolve($request);
     }
-
-
 }
