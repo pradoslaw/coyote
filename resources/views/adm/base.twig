@@ -23,26 +23,7 @@
         </ol>
       </div>
 
-      <ul class="list-unstyled navbar-nav">
-
-        {% import 'components.forms' as forms %}
-
-        {% for item in menu.roots() %}
-          <li {{ forms.attr(item.attr) }}>
-            <a href="{{ item.url }}" {{ forms.attr(item.link.attr) }}>{{ item.title|raw }}</a>
-
-            {% if item.hasChildren() %}
-              <ul id="{{ item.url[1:] }}" class="list-unstyled collapse {{ item.attr['class'] == 'active' ? 'in' }}">
-                {% for children in item.children() %}
-                  <li>
-                    <a href="{{ children.url }}">{{ children.title|raw }}</a>
-                  </li>
-                {% endfor %}
-              </ul>
-            {% endif %}
-          </li>
-        {% endfor %}
-      </ul>
+      {{ menu.asUl({class: 'list-unstyled navbar-nav'})|raw }}
     </aside>
 
     <main id="wrapper">

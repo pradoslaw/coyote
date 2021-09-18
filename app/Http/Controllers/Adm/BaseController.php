@@ -23,7 +23,7 @@ class BaseController extends Controller
      */
     protected function buildMenu()
     {
-        return $this->getMenuFactory()->make('adm', function ($menu) {
+        $m = $this->getMenuFactory()->make('adm', function ($menu) {
             $html = app('html');
             $fa = function ($icon) use ($html) {
                 return $html->tag('i', '', ['class' => "fa $icon"]);
@@ -36,12 +36,11 @@ class BaseController extends Controller
             $menu->add('Bany', ['route' => 'adm.firewall'])->prepend($fa('fa-ban fa-fw'));
             $menu->add('Kto jest online', ['route' => 'adm.sessions'])->prepend($fa('fa-eye fa-fw'));
 
-            $forum = $menu->add('Forum', []);
+            $forum = $menu->add('Forum', ['class' => 'list-unstyled collapse']);
             $forum->link->attr(['data-toggle' => "collapse", 'aria-expanded' => "false", 'aria-controls' => "menu-forum"]);
             $forum->link->href('#menu-forum');
 
             $forum->prepend($fa('fa-comments fa-fw'));
-            $forum->append($html->tag('i', '', ['class' => 'arrow fa fa-angle-left float-right']));
 
             $forum->add('Kategorie', ['route' => 'adm.forum.categories']);
             $forum->add('Uprawnienia', ['route' => 'adm.forum.permissions'])->data('permission', 'adm-group');
@@ -63,6 +62,8 @@ class BaseController extends Controller
 
             return true;
         });
+
+        return $m;
     }
 
     /**
