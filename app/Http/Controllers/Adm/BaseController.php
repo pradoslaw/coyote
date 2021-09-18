@@ -23,7 +23,7 @@ class BaseController extends Controller
      */
     protected function buildMenu()
     {
-        $m = $this->getMenuFactory()->make('adm', function ($menu) {
+        return $this->getMenuFactory()->make('adm', function ($menu) {
             $html = app('html');
             $fa = function ($icon) use ($html) {
                 return $html->tag('i', '', ['class' => "fa $icon"]);
@@ -62,8 +62,6 @@ class BaseController extends Controller
 
             return true;
         });
-
-        return $m;
     }
 
     /**
