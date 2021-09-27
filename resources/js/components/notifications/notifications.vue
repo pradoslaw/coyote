@@ -14,7 +14,7 @@
           </a>
 
           <a @click="markAllAsRead" title="Oznacz jako przeczytane" href="javascript:">
-            <i class="far fa-calendar-check"></i>
+            <i class="far fa-eye"></i>
           </a>
         </div>
 
