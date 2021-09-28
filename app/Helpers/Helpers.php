@@ -44,7 +44,7 @@ function excerpt($value, $limit = 84)
  */
 function keywords($text, $limit = 10)
 {
-    $text = pattern('[^a-zA-Z0-9 -]')->remove(mb_strtolower(plain($text), 'UTF-8'))->all();
+    $text = pattern('[^a-zA-Z0-9 -]')->prune(mb_strtolower(plain($text), 'UTF-8'));
 
     $keywords = [];
     foreach (explode(' ', $text) as $word) {

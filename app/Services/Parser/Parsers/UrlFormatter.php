@@ -4,8 +4,8 @@ namespace Coyote\Services\Parser\Parsers;
 
 use Collective\Html\HtmlBuilder;
 use Coyote\Services\Parser\Parsers\Parentheses\ParenthesesParser;
+use TRegx\CleanRegex\Match\Details\Detail;
 use TRegx\CleanRegex\Pattern;
-use TRegx\SafeRegex\preg;
 
 class UrlFormatter
 {
@@ -31,7 +31,10 @@ class UrlFormatter
 
     public function parse(string $text): string
     {
-        return preg::replace_callback(self::REGEXP_URL, fn (array $match) => $this->processLink($match[0]), $text);
+        return Pattern::pcre()
+            ->of(self::REGEXP_URL)
+            ->replace($text)
+            ->callback(fn (Detail $match) => $this->processLink($match->text()));
     }
 
     private function processLink(string $url): string
@@ -41,7 +44,7 @@ class UrlFormatter
 
     private function buildLink(string $url): string
     {
-        if (Pattern::pcre(self::REGEXP_URL)->test($url)) {
+        if (Pattern::pcre()->of(self::REGEXP_URL)->test($url)) {
             return $this->html->link($this->prependSchema($url), $this->truncate($url));
         }
 
