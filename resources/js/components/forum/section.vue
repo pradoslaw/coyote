@@ -36,7 +36,7 @@
 
               <vue-tags v-if="category.enable_tags && !category.children" :tags="category.tags" class="tag-clouds-sm"></vue-tags>
 
-              <ul v-if="category.children" class="list-inline list-sub d-none d-md-block d-lg-block">
+              <ul v-if="category.children" class="list-inline list-sub d-md-block d-lg-block">
                 <li v-for="children in category.children" class="list-inline-item">
                   <i v-if="children.is_read" class="far fa-file"></i>
                   <i v-else class="not-read" title="Nowe posty w tej kategorii"></i>
