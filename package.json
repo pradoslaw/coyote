@@ -13,7 +13,7 @@
         "@tinymce/tinymce-vue": "^3.0.1",
         "@types/vue-clickaway": "^2.2.0",
         "autosize": "^4.0.2",
-        "axios": "^0.21.1",
+        "axios": "^0.21.2",
         "babel-loader": "8.1.0",
         "babel-plugin-prismjs": "1.0.2",
         "balloon-css": "^1.2.0",
