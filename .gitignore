@@ -66,6 +66,16 @@ app/Plugins/*
 .vagrant
 .data
 Vagrantfile
-/.composer
 /public/css/*
 /public/js/*
+
+# PhpUnit
+.phpunit.result.cache
+
+# Composer
+/.composer
+composer.phar
+
+# Secrets
+storage/oauth-private.key
+storage/oauth-public.key
