@@ -30,9 +30,8 @@ class RepositoryServiceProvider extends ServiceProvider
 
         $files = (new Filesystem())->allFiles(app_path('Repositories/Contracts'));
 
-        /** @var \SplFileInfo $file */
         foreach ($files as $file) {
-            $path = str_replace(app_path() . '/', '', $file->getPathname());
+            $path = str_replace(app_path() . DIRECTORY_SEPARATOR, '', $file->getPathname());
             $this->provides[] = 'Coyote\\' . str_replace('/', '\\', substr($path, 0, -4));
         }
     }
