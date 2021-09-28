@@ -258,6 +258,10 @@ new Vue({
         })
         .splice(0, 5)
         .join(', ');
+    },
+
+    shouldShowCategories(): boolean {
+      return !this.model || this.model === Model.Topic;
     }
   }
 });
