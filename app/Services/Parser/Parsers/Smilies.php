@@ -2,6 +2,7 @@
 
 namespace Coyote\Services\Parser\Parsers;
 
+use TRegx\CleanRegex\Match\Details\Detail;
 use TRegx\CleanRegex\Pattern;
 
 /**
@@ -40,10 +41,11 @@ class Smilies extends Parser implements ParserInterface
         $text = $this->hashBlock($text, ['code', 'a']);
         $text = $this->hashInline($text, 'img');
 
-        $text = Pattern::inject('(?<=^|[\n \>]|\.)(@)', [array_keys($this->smilies)])
+        $text = Pattern::template('(?<=^|[\n \>]|\.)(@)')
+            ->alteration(array_keys($this->smilies))
+            ->build()
             ->replace($text)
-            ->all()
-            ->callback(function ($match) {
+            ->callback(function (Detail $match) {
                 $smiley = $match->get(1);
                 $link = $this->smilies[$smiley];
                 return '<img class="img-smile" alt="' . $smiley . '" title="' . $smiley . '" src="/img/smilies/' . $link . '">';

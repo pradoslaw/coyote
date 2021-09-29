@@ -41,7 +41,7 @@ class UrlFormatter
 
     private function buildLink(string $url): string
     {
-        if (Pattern::pcre(self::REGEXP_URL)->test($url)) {
+        if (Pattern::pcre()->of(self::REGEXP_URL)->test($url)) {
             return $this->html->link($this->prependSchema($url), $this->truncate($url));
         }
 
