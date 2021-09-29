@@ -10,7 +10,8 @@
 .logo-webmastering,
 .logo-bazydanych,
 .logo-rust,
-.logo-go {
+.logo-go,
+.logo-gamedev {
   &:before {
     content: "";
   }
@@ -68,4 +69,8 @@
 
 .logo-go {
   @include sprite('logo-go');
+}
+
+.logo-gamedev {
+  @include sprite('logo-unity');
 }
