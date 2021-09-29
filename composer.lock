@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ef5af6299c57b792321ed4d1f1f1faf5",
+    "content-hash": "687ebf6c2564ef7042e8b2eed3163628",
     "packages": [
         {
             "name": "adam-boduch/laravel-grid",
@@ -6572,16 +6572,16 @@
         },
         {
             "name": "rawr/t-regx",
-            "version": "v0.10.2",
+            "version": "v0.13.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/T-Regx/T-Regx.git",
-                "reference": "310779ad7d9039caeb6c57a81d5a19a35f6b3723"
+                "reference": "c246a7163ab29e80a65e72a5e7109d8464400d3a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/T-Regx/T-Regx/zipball/310779ad7d9039caeb6c57a81d5a19a35f6b3723",
-                "reference": "310779ad7d9039caeb6c57a81d5a19a35f6b3723",
+                "url": "https://api.github.com/repos/T-Regx/T-Regx/zipball/c246a7163ab29e80a65e72a5e7109d8464400d3a",
+                "reference": "c246a7163ab29e80a65e72a5e7109d8464400d3a",
                 "shasum": ""
             },
             "require": {
@@ -6589,8 +6589,9 @@
                 "php": "~8.0.0 | >=7.1.0"
             },
             "require-dev": {
+                "ext-json": "*",
                 "php-coveralls/php-coveralls": "^2.0",
-                "phpunit/phpunit": "^9.0 || ^8.0 || ^7.5",
+                "phpunit/phpunit": "^9.5.4 || ^8.0 || ^7.5",
                 "rawr/cross-data-providers": "^2.3.0",
                 "rawr/fqn-check": "^1.2.0"
             },
@@ -6631,7 +6632,7 @@
             ],
             "support": {
                 "issues": "https://github.com/T-Regx/T-Regx/issues",
-                "source": "https://github.com/T-Regx/T-Regx/tree/v0.10.2"
+                "source": "https://github.com/T-Regx/T-Regx/tree/v0.13.8"
             },
             "funding": [
                 {
@@ -6639,7 +6640,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-03-06T20:41:34+00:00"
+            "time": "2021-09-24T19:57:00+00:00"
         },
         {
             "name": "rcrowe/twigbridge",
