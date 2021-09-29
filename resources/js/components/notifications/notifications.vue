@@ -78,17 +78,17 @@
 
     methods: {
       toggleDropdown() {
+        this.isOpen = !this.isOpen;
+
         if (DesktopNotifications.isSupported && DesktopNotifications.isDefault) {
           DesktopNotifications.requestPermission().then(permission => {
             if (permission !== 'granted') {
               return;
             }
 
-
+            this.subscribeUser();
           })
         }
-        this.subscribeUser();
-        this.isOpen = !this.isOpen;
       },
 
       loadNotifications() {
@@ -164,7 +164,6 @@
             });
           })
           .then(pushSubscription => {
-            console.log('Received PushSubscription: ', JSON.stringify(pushSubscription));
             store.dispatch('user/pushSubscription', pushSubscription);
           });
       },
