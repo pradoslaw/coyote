@@ -34,7 +34,7 @@ class UrlFormatter
 
     public function parse(string $text): string
     {
-        return $this->urlPattern->replace($text)->callback(fn(Detail $match) => $this->processLink($match->text()));
+        return $this->urlPattern->replace($text)->callback(fn (Detail $match) => $this->processLink($match->text()));
     }
 
     private function processLink(string $url): string
