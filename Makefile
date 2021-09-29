@@ -1,7 +1,7 @@
 .PHONY: all update-repo dependency-install file-permission migration seed assets-dev assets-production install-es install-passport
 
-install: dependency-install file-permission migration seed install-assets assets-production install-es install-passport
-install-dev: dependency-install file-permission migration seed install-assets assets-dev install-es install-passport
+install: dependency-install file-permission migration seed install-assets assets-production install-es install-passport install-push
+install-dev: dependency-install file-permission migration seed install-assets assets-dev install-es install-passport install-push
 update: update-repo dependency-install migration assets-production cache-config
 update-dev: update-repo dependency-install migration assets-dev
 
@@ -59,3 +59,6 @@ install-es:
 
 install-passport:
 	php artisan passport:install
+
+install-push:
+	php artisan webpush:vapid

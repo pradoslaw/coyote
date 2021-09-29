@@ -5,6 +5,7 @@ namespace Coyote\Services\Notification;
 use Coyote\User;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Notifications\Notification as BaseNotification;
+use NotificationChannels\WebPush\WebPushMessage;
 
 abstract class Notification extends BaseNotification implements NotificationInterface
 {
@@ -40,7 +41,7 @@ abstract class Notification extends BaseNotification implements NotificationInte
      */
     protected function getChannels(User $user)
     {
-        $channels = [];
+        $channels = [new WebPushMessage()];
         $this->broadcastChannel = null;
 
         $settings = $user->notificationSettings->where('type_id', static::ID)->first();
