@@ -44,6 +44,19 @@
   import VueNotification from './notification.vue';
   import { mapState, mapGetters } from 'vuex';
 
+  function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
+
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+
+    for (let i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+  }
+
   export default {
     mixins: [clickaway],
     components: {
@@ -65,8 +78,16 @@
 
     methods: {
       toggleDropdown() {
-        DesktopNotifications.requestPermission();
+        if (DesktopNotifications.isSupported && DesktopNotifications.isDefault) {
+          DesktopNotifications.requestPermission().then(permission => {
+            if (permission !== 'granted') {
+              return;
+            }
 
+
+          })
+        }
+        this.subscribeUser();
         this.isOpen = !this.isOpen;
       },
 
@@ -123,10 +144,29 @@
             store.commit('notifications/increment');
             this.syncCount();
 
-            DesktopNotifications.doNotify(data.headline, data.subject, data.url);
+            DesktopNotifications.notify(data.headline, data.subject, data.url);
           })
           // notification link was clicked in email or desktop notifications.
           .on('NotificationRead', () => store.commit('notifications/decrement'));
+      },
+
+      subscribeUser() {
+        if (!('PushManager' in window) || !navigator.serviceWorker.ready) {
+          return;
+        }
+
+        navigator.serviceWorker.ready.then(registration => {
+            const serverKey = urlBase64ToUint8Array(document.querySelector('meta[name="vapid-public-key"]')?.getAttribute('content'));
+
+            return registration.pushManager.subscribe({
+              userVisibleOnly: true,
+              applicationServerKey: serverKey
+            });
+          })
+          .then(pushSubscription => {
+            console.log('Received PushSubscription: ', JSON.stringify(pushSubscription));
+            store.dispatch('user/pushSubscription', pushSubscription);
+          });
       },
 
       setIcon(path) {

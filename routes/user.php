@@ -68,6 +68,7 @@ $this->group(['namespace' => 'User', 'prefix' => 'User', 'middleware' => 'auth',
     $this->post('Unfollow/{id}', ['uses' => 'RelationsController@unblock']);
 
     $this->get('Tokens', ['uses' => 'TokensController@index', 'as' => 'tokens']);
+    $this->post('push', ['uses' => 'PushController@store']);
 });
 
 // wizytowka usera. komponent ktory pojawia sie po naprowadzenia kursora nad login usera
@@ -81,3 +82,4 @@ $this->post('User/Settings/Ajax', ['uses' => 'User\SettingsController@ajax', 'as
 // przekierowanie do wlasciwego alertu po guid.
 $this->get('notification/{uuid}', ['uses' => 'User\NotificationsController@url'])->name('user.notifications.url');
 $this->get('ping', ['uses' => 'User\PingController@index'])->name('ping');
+

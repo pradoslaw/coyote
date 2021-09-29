@@ -42,6 +42,10 @@ const actions = {
 
   unfollow({ commit }, relatedUserId: number) {
     return axios.post(`/User/Unfollow/${relatedUserId}`).then(() => commit('REMOVE_RELATION', { userId: relatedUserId, isBlocked: false }));
+  },
+
+  pushSubscription({ commit }, pushSubscription) {
+    return axios.post('/User/push', pushSubscription);
   }
 }
 
