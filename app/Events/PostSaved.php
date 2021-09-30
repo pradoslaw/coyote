@@ -9,7 +9,7 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Queue\SerializesModels;
 
-class PostSaved implements ShouldBroadcast
+class PostSaved extends BroadcastEvent implements ShouldBroadcast
 {
     use SerializesModels, InteractsWithSockets;
 
