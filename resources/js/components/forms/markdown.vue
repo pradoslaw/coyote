@@ -270,14 +270,14 @@
         this.insertAssetAtCaret(asset)
       }
     }
-    
+
     insertAssetAtCaret(asset: Asset) {
       this.insertAtCaret((IsImage(asset.name!) ? '!' : '') + '[' + asset.name + '](' + asset.url + ')', '');
     }
 
     @Watch('value')
     clearPreview(value) {
-      if (value === '') {
+      if (!value) {
         this.previewHtml = '';
       }
     }

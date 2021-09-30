@@ -395,8 +395,6 @@
         // @ts-ignore
         this.deleteModal.close();
         store.dispatch('posts/delete', { post: this.post, reasonId }).then(() => this.isCollapsed = true);
-
-        // this.flags.forEach(flag => store.commit('flags/delete', flag));
       }
     }
 

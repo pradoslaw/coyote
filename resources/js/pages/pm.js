@@ -50,7 +50,6 @@ new Vue({
       errors: {},
       items: [],
       assets: [],
-      tab: 'body',
       isTyping: false
     };
   },
@@ -97,10 +96,9 @@ new Vue({
         .then(() => {
           this.errors = {};
           this.assets = [];
-          this.text = null;
+          this.text = '';
 
           this.$nextTick(() => this.scrollToBottom());
-          this.tab = 'body';
 
           this.$removeDraft(DRAFT_KEY);
         })
