@@ -80,8 +80,7 @@ class SubmitForm extends Form
                 'rules' => 'string',
                 'template' => 'textarea',
                 'attr' => [
-                    'data-paste-url' => '',
-                    'class' => 'form-control mono'
+                    'data-paste-url' => ''
                 ],
                 'row_attr' => [
                     'role' => 'tabpanel',
