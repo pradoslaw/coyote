@@ -9,7 +9,7 @@ class PushController extends Controller
 {
     public function store(Request $request)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'endpoint'    => 'required',
             'keys.auth'   => 'required',
             'keys.p256dh' => 'required'

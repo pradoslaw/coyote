@@ -38,7 +38,7 @@ class AddChannelToNotificationSettingsTable extends Migration
                         'is_enabled' => value(function () use ($channel, $row) {
                             if ($channel == 'push') {
                                 return true;
-                            } else if ($channel == 'db') {
+                            } elseif ($channel == 'db') {
                                 return (bool) $row->profile;
                             } else {
                                 return (bool) $row->email;
