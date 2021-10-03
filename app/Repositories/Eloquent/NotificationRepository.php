@@ -99,32 +99,16 @@ class NotificationRepository extends Repository implements NotificationRepositor
     }
 
     /**
-     * Gets notification settings for given user
+     * Gets public notification types
      *
-     * @param int|int[] $userId
      * @return mixed
      */
-    public function getUserSettings($userId)
+    public function notificationTypes()
     {
-        if (!is_array($userId)) {
-            $userId = [$userId];
-        }
-
         return $this
             ->app
-            ->make(Setting::class)
-            ->select([
-                'notification_settings.*',
-                'notification_types.name',
-                'notification_types.category',
-                'users.email AS user_email',
-                $this->raw('users.deleted_at IS NULL AS is_active'),
-                'is_blocked',
-                'is_confirm'
-            ])
-            ->whereIn('user_id', $userId)
-            ->join('users', 'users.id', '=', 'user_id')
-            ->join('notification_types', 'notification_types.id', '=', 'type_id')
+            ->make(Notification\Type::class)
+            ->select()
             ->where('is_public', 1)
             ->orderBy('notification_types.id')
             ->get();
@@ -134,12 +118,12 @@ class NotificationRepository extends Repository implements NotificationRepositor
      * @param int $userId
      * @param array $data
      */
-    public function setUserSettings($userId, array $data)
+    public function updateSettings($userId, array $data)
     {
         $model = $this->app->make(Setting::class);
 
-        foreach ($data as $id => $row) {
-            $model->where('user_id', $userId)->where('id', $id)->update($row);
+        foreach ($data as $id => $value) {
+            $model->where('user_id', $userId)->where('id', $id)->update(['is_enabled' => $value]);
         }
     }
 }

@@ -51,7 +51,7 @@ abstract class AbstractNotification extends Notification implements ShouldBroadc
             return [];
         }
 
-        return parent::getChannels($user);
+        return parent::channels($user);
     }
 
     /**
@@ -101,7 +101,7 @@ abstract class AbstractNotification extends Notification implements ShouldBroadc
     {
         return new BroadcastMessage([
             'headline'  => $this->getMailSubject(),
-            'subject'   => $this->post->topic->title,
+            'subject'   => excerpt($this->post->html),
             'url'       => $this->notificationUrl()
         ]);
     }

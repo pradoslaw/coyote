@@ -86,9 +86,11 @@
               return;
             }
 
-            this.subscribeUser();
+
           })
         }
+
+        this.subscribeUser();
       },
 
       loadNotifications() {
@@ -151,7 +153,7 @@
       },
 
       subscribeUser() {
-        if (!('PushManager' in window) || !navigator.serviceWorker.ready) {
+        if (!('PushManager' in window) || !navigator.serviceWorker?.ready) {
           return;
         }
 
@@ -163,9 +165,8 @@
               applicationServerKey: serverKey
             });
           })
-          .then(pushSubscription => {
-            store.dispatch('user/pushSubscription', pushSubscription);
-          });
+          .catch(err => console.warn(err))
+          .then(pushSubscription => pushSubscription && store.dispatch('user/pushSubscription', pushSubscription));
       },
 
       setIcon(path) {

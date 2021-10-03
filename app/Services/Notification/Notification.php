@@ -5,6 +5,7 @@ namespace Coyote\Services\Notification;
 use Coyote\User;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Notifications\Notification as BaseNotification;
+use Coyote\Notification as Model;
 use NotificationChannels\WebPush\WebPushChannel;
 
 abstract class Notification extends BaseNotification implements NotificationInterface
@@ -12,7 +13,7 @@ abstract class Notification extends BaseNotification implements NotificationInte
     /**
      * @var string|null
      */
-    protected $broadcastChannel;
+    public $broadcastChannel;
 
     /**
      * Get the notification's delivery channels.
@@ -22,7 +23,7 @@ abstract class Notification extends BaseNotification implements NotificationInte
      */
     public function via(User $user)
     {
-        return $this->getChannels($user);
+        return $this->channels($user);
     }
 
     /**
@@ -39,33 +40,48 @@ abstract class Notification extends BaseNotification implements NotificationInte
      * @param User $user
      * @return array
      */
-    protected function getChannels(User $user)
+    protected function channels(User $user): array
     {
-        $channels = [WebPushChannel::class];
-        $this->broadcastChannel = null;
+        $this->broadcastChannel = $user->receivesBroadcastNotificationsOn();
 
-        $settings = $user->notificationSettings->where('type_id', static::ID)->first();
+        /** @var \Illuminate\Support\Collection $channels */
+        $channels = $user->notificationSettings()->select('channel')->where('type_id', static::ID)->where('is_enabled', true)->pluck('channel');
 
-        if (empty($settings)) {
-            return $channels;
+        if (empty($channels)) {
+            return [];
         }
 
-        if ($settings->profile) {
-            $channels[] = DatabaseChannel::class;
+        if ($channels->contains(Model::DB) && $this instanceof ShouldBroadcast) {
+            $channels->push('broadcast');
         }
 
-        if (empty($user->getUnreadNotification($this->objectId()))) {
-            if ($settings->email && $user->canReceiveEmail()) {
-                $channels[] = 'mail';
+        if ($channels->contains(Model::MAIL) && !$user->canReceiveEmail()) {
+            $channels->forget(Model::MAIL);
+        }
+
+        // do not send another notification if previous was not yet read
+        if (!empty($user->getUnreadNotification($this->objectId()))) {
+            $channels->forget([Model::MAIL, Model::PUSH]);
+        }
+
+        return $this->resolveChannels($channels);
+    }
+
+    /**
+     * @param \Illuminate\Support\Collection $channels
+     * @return array
+     */
+    private function resolveChannels($channels): array
+    {
+        $replacement = [Model::DB => DatabaseChannel::class, Model::PUSH => WebPushChannel::class];
+
+        foreach ($replacement as $channel => $class) {
+            if ($channels->contains($channel)) {
+                $channels = $channels->reject(fn ($value) => $value === $channel)->push($class);
             }
-
-            if ($settings->profile && $this instanceof ShouldBroadcast) {
-                $channels[] = 'broadcast';
-                $this->broadcastChannel = $user->receivesBroadcastNotificationsOn();
-            }
         }
 
-        return $channels;
+        return $channels->toArray();
     }
 
     /**

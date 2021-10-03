@@ -10,6 +10,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
+use NotificationChannels\WebPush\WebPushMessage;
 
 abstract class AbstractNotification extends Notification implements ShouldQueue, ShouldBroadcast
 {
@@ -108,7 +109,7 @@ abstract class AbstractNotification extends Notification implements ShouldQueue,
             return [];
         }
 
-        return parent::getChannels($user);
+        return parent::channels($user);
     }
 
     /**
@@ -149,5 +150,15 @@ abstract class AbstractNotification extends Notification implements ShouldQueue,
             'subject'   => $this->topic->title,
             'url'       => $this->notificationUrl()
         ]);
+    }
+
+    public function toWebPush()
+    {
+        return (new WebPushMessage())
+            ->title($this->getMailSubject())
+            ->icon('/apple-touch.png')
+            ->body($this->topic->title)
+            ->data(['url' => $this->notificationUrl()])
+            ->options(['TTL' => 1000]);
     }
 }

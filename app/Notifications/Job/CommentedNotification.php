@@ -11,6 +11,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
+use NotificationChannels\WebPush\WebPushMessage;
 
 class CommentedNotification extends Notification implements ShouldQueue, ShouldBroadcastNow
 {
@@ -99,6 +100,16 @@ class CommentedNotification extends Notification implements ShouldQueue, ShouldB
             'subject'   => $this->comment->job->title,
             'url'       => $this->notificationUrl()
         ]);
+    }
+
+    public function toWebPush(): WebPushMessage
+    {
+        return (new WebPushMessage())
+            ->title($this->getMailSubject())
+            ->icon('/apple-touch.png')
+            ->body($this->comment->job->title)
+            ->data(['url' => $this->notificationUrl()])
+            ->options(['TTL' => 1000]);
     }
 
     /**

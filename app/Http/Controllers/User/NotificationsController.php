@@ -16,19 +16,9 @@ class NotificationsController extends BaseController
         HomeTrait::getSideMenu as homeSideMenu;
     }
 
-    /**
-     * @var NotificationRepository
-     */
-    private $notification;
-
-    /**
-     * @param NotificationRepository $notification
-     */
-    public function __construct(NotificationRepository $notification)
+    public function __construct(private NotificationRepository $notification)
     {
         parent::__construct();
-
-        $this->notification = $notification;
     }
 
     /**
@@ -69,9 +59,12 @@ class NotificationsController extends BaseController
     public function settings()
     {
         $this->breadcrumb->push('Ustawienia powiadomień', route('user.notifications.settings'));
-        $groups = $this->notification->getUserSettings($this->userId)->groupBy('category');
 
-        return $this->view('user.notifications.settings', compact('groups'));
+        return $this->view('user.notifications.settings', [
+            'groups'        => $this->notification->notificationTypes()->groupBy('category'),
+            'settings'      => $this->auth->notificationSettings()->get()->sortBy('channel')->groupBy('type_id'),
+            'channels'      => Notification::getChannels()
+        ]);
     }
 
     /**
@@ -80,7 +73,7 @@ class NotificationsController extends BaseController
      */
     public function save(Request $request)
     {
-        $this->notification->setUserSettings($this->userId, $request->input('settings'));
+        $this->notification->updateSettings($this->userId, $request->input('settings'));
 
         return back()->with('success', 'Zmiany zostały zapisane');
     }

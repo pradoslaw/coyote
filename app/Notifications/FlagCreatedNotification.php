@@ -5,11 +5,14 @@ namespace Coyote\Notifications;
 use Coyote\Flag;
 use Coyote\Services\Notification\DatabaseChannel;
 use Coyote\Services\Notification\Notification;
+use Coyote\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Channels\BroadcastChannel;
 use Illuminate\Notifications\Messages\BroadcastMessage;
+use NotificationChannels\WebPush\WebPushChannel;
+use NotificationChannels\WebPush\WebPushMessage;
 
 class FlagCreatedNotification extends Notification implements ShouldQueue, ShouldBroadcast
 {
@@ -36,11 +39,11 @@ class FlagCreatedNotification extends Notification implements ShouldQueue, Shoul
      * @param  \Coyote\User  $user
      * @return array
      */
-    public function via($user)
+    public function via(User $user)
     {
         $this->broadcastChannel = 'user:' . $user->id;
 
-        return $this->channels();
+        return $this->channels($user);
     }
 
     /**
@@ -56,7 +59,7 @@ class FlagCreatedNotification extends Notification implements ShouldQueue, Shoul
             'subject'       => $this->flag->type->name,
             'excerpt'       => str_limit($this->flag->text, 250),
             'url'           => $this->flag->url,
-            'id'          => $this->id
+            'id'            => $this->id
         ];
     }
 
@@ -93,11 +96,18 @@ class FlagCreatedNotification extends Notification implements ShouldQueue, Shoul
         ]);
     }
 
-    /**
-     * @return mixed
-     */
-    protected function channels()
+    public function toWebPush(): WebPushMessage
     {
-        return [DatabaseChannel::class, BroadcastChannel::class];
+        return (new WebPushMessage())
+            ->title($this->flag->user->name . ' dodał nowy raport')
+            ->icon('/apple-touch.png')
+            ->body($this->flag->type->name)
+            ->data(['url' => $this->notificationUrl()])
+            ->options(['TTL' => 1000]);
+    }
+
+    protected function channels(User $user): array
+    {
+        return [DatabaseChannel::class, BroadcastChannel::class, WebPushChannel::class];
     }
 }
