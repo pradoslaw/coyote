@@ -55,8 +55,27 @@ class AddChannelToNotificationSettingsTable extends Migration
      */
     public function down()
     {
-        $sql = 'DELETE FROM notification_settings WHERE channel IS NOT NULL';
-        $this->db->unprepared($sql);
+//        $result = $this->db->table('notification_settings')->selectRaw('user_id, type_id, array_to_string(array_agg(channel), \',\')')->groupBy(['user_id', 'type_id'])->get();
+//
+//
+//            $data = [];
+//
+//            foreach ($result as $row) {
+//                $channels = explode(',', $row->array_to_string);
+//
+//                $data[] = [
+//                    'user_id'       => $row->user_id,
+//                    'type_id'       => $row->type_id,
+//                    'profile'       => in_array('db', $channels),
+//                    'email'         => in_array('mail', $channels)
+//                ];
+//            }
+//
+//            $this->db->table('notification_settings')->insert($data);
+
+
+//        $sql = 'DELETE FROM notification_settings WHERE channel IS NOT NULL';
+//        $this->db->unprepared($sql);
 
         $sql = "ALTER TABLE notification_settings DROP COLUMN channel";
         $this->db->unprepared($sql);
