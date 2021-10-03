@@ -26,10 +26,12 @@ class AddChannelToNotificationSettingsTable extends Migration
 
         $channels = ['db', 'mail', 'push'];
 
-        $this->db->table('notification_settings')->whereNull('channel')->orderBy('id')->chunk(10000, function ($result) use ($channels) {
+        $this->db->table('notification_settings')->whereNull('channel')->orderBy('id')->chunk(100000, function ($result) use ($channels) {
+            $data = [];
+
             foreach ($result as $row) {
                 foreach ($channels as $channel) {
-                    $this->db->table('notification_settings')->insert([
+                    $data[] = [
                         'channel' => $channel,
                         'user_id' => $row->user_id,
                         'type_id' => $row->type_id,
@@ -42,9 +44,11 @@ class AddChannelToNotificationSettingsTable extends Migration
                                 return (bool) $row->email;
                             }
                         })
-                    ]);
+                    ];
                 }
             }
+
+            $this->db->table('notification_settings')->insert($data);
         });
     }
 

@@ -81,13 +81,7 @@
         this.isOpen = !this.isOpen;
 
         if (DesktopNotifications.isSupported && DesktopNotifications.isDefault) {
-          DesktopNotifications.requestPermission().then(permission => {
-            if (permission !== 'granted') {
-              return;
-            }
-
-
-          })
+          DesktopNotifications.requestPermission();
         }
 
         this.subscribeUser();
@@ -165,7 +159,7 @@
               applicationServerKey: serverKey
             });
           })
-          .catch(err => console.warn(err))
+          .catch(() => console.log('Push notification: access denied.'))
           .then(pushSubscription => pushSubscription && store.dispatch('user/pushSubscription', pushSubscription));
       },
 
