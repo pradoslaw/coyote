@@ -106,7 +106,7 @@ class CommentedNotification extends Notification implements ShouldQueue, ShouldB
     {
         return (new WebPushMessage())
             ->title($this->getMailSubject())
-            ->icon('/apple-touch.png')
+            ->icon(url('/apple-touch.png'))
             ->body($this->comment->job->title)
             ->data(['url' => $this->notificationUrl()])
             ->options(['TTL' => 1000]);

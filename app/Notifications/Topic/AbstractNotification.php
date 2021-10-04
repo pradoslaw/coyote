@@ -156,7 +156,7 @@ abstract class AbstractNotification extends Notification implements ShouldQueue,
     {
         return (new WebPushMessage())
             ->title($this->getMailSubject())
-            ->icon('/apple-touch.png')
+            ->icon(url('/apple-touch.png'))
             ->body($this->topic->title)
             ->data(['url' => $this->notificationUrl()])
             ->options(['TTL' => 1000]);

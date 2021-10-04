@@ -110,7 +110,7 @@ abstract class AbstractNotification extends Notification implements ShouldBroadc
     {
         return (new WebPushMessage())
             ->title($this->getMailSubject())
-            ->icon('/apple-touch.png')
+            ->icon(url('/apple-touch.png'))
             ->body(excerpt($this->post->html))
             ->data(['url' => $this->notificationUrl()])
             ->options(['TTL' => 1000]);
