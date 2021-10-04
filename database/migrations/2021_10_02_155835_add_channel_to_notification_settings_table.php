@@ -24,32 +24,17 @@ class AddChannelToNotificationSettingsTable extends Migration
         $sql = "ALTER TABLE notification_settings ADD COLUMN channel channel DEFAULT NULL";
         $this->db->unprepared($sql);
 
-        $channels = ['db', 'mail', 'push'];
+        $sql = "INSERT INTO notification_settings (type_id, user_id, channel, is_enabled) SELECT type_id, user_id, 'db', profile::int::bool FROM notification_settings WHERE channel IS NULL";
+        $this->db->unprepared($sql);
 
-        $this->db->table('notification_settings')->whereNull('channel')->orderBy('id')->chunk(100000, function ($result) use ($channels) {
-            $data = [];
+        $sql = "INSERT INTO notification_settings (type_id, user_id, channel, is_enabled) SELECT type_id, user_id, 'mail', profile::int::bool FROM notification_settings WHERE channel IS NULL";
+        $this->db->unprepared($sql);
 
-            foreach ($result as $row) {
-                foreach ($channels as $channel) {
-                    $data[] = [
-                        'channel' => $channel,
-                        'user_id' => $row->user_id,
-                        'type_id' => $row->type_id,
-                        'is_enabled' => value(function () use ($channel, $row) {
-                            if ($channel == 'push') {
-                                return true;
-                            } elseif ($channel == 'db') {
-                                return (bool) $row->profile;
-                            } else {
-                                return (bool) $row->email;
-                            }
-                        })
-                    ];
-                }
-            }
+        $sql = "INSERT INTO notification_settings (type_id, user_id, channel, is_enabled) SELECT type_id, user_id, 'push', true FROM notification_settings WHERE channel IS NULL";
+        $this->db->unprepared($sql);
 
-            $this->db->table('notification_settings')->insert($data);
-        });
+        $sql = "DELETE FROM notification_settings WHERE channel is null";
+        $this->db->unprepared($sql);
     }
 
     /**
@@ -59,28 +44,6 @@ class AddChannelToNotificationSettingsTable extends Migration
      */
     public function down()
     {
-//        $result = $this->db->table('notification_settings')->selectRaw('user_id, type_id, array_to_string(array_agg(channel), \',\')')->groupBy(['user_id', 'type_id'])->get();
-//
-//
-//            $data = [];
-//
-//            foreach ($result as $row) {
-//                $channels = explode(',', $row->array_to_string);
-//
-//                $data[] = [
-//                    'user_id'       => $row->user_id,
-//                    'type_id'       => $row->type_id,
-//                    'profile'       => in_array('db', $channels),
-//                    'email'         => in_array('mail', $channels)
-//                ];
-//            }
-//
-//            $this->db->table('notification_settings')->insert($data);
-
-
-//        $sql = 'DELETE FROM notification_settings WHERE channel IS NOT NULL';
-//        $this->db->unprepared($sql);
-
         $sql = "ALTER TABLE notification_settings DROP COLUMN channel";
         $this->db->unprepared($sql);
 

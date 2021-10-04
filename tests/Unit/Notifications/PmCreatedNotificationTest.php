@@ -31,8 +31,8 @@ class PmCreatedNotificationTest extends TestCase
         $this->sender = factory(User::class)->create();
         $this->recipient = factory(User::class)->create();
 
-        $setting = $this->recipient->notificationSettings()->where('type_id', Notification::PM)->first();
-        $setting->profile = true; // enable notification
+        $setting = $this->recipient->notificationSettings()->where('type_id', Notification::PM)->where('channel', Notification::DB)->first();
+        $setting->is_enabled = true; // enable notification
         $setting->save();
     }
 
