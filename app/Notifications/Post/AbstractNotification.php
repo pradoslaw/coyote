@@ -10,6 +10,7 @@ use Coyote\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Notifications\Messages\BroadcastMessage;
+use NotificationChannels\WebPush\WebPushMessage;
 
 abstract class AbstractNotification extends Notification implements ShouldBroadcastNow
 {
@@ -50,7 +51,7 @@ abstract class AbstractNotification extends Notification implements ShouldBroadc
             return [];
         }
 
-        return parent::getChannels($user);
+        return parent::channels($user);
     }
 
     /**
@@ -100,8 +101,18 @@ abstract class AbstractNotification extends Notification implements ShouldBroadc
     {
         return new BroadcastMessage([
             'headline'  => $this->getMailSubject(),
-            'subject'   => $this->post->topic->title,
+            'subject'   => excerpt($this->post->html),
             'url'       => $this->notificationUrl()
         ]);
+    }
+
+    public function toWebPush()
+    {
+        return (new WebPushMessage())
+            ->title($this->getMailSubject())
+            ->icon('/apple-touch.png')
+            ->body(excerpt($this->post->html))
+            ->data(['url' => $this->notificationUrl()])
+            ->options(['TTL' => 1000]);
     }
 }

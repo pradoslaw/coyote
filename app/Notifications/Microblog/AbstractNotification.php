@@ -9,6 +9,7 @@ use Coyote\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Notifications\Messages\BroadcastMessage;
+use NotificationChannels\WebPush\WebPushMessage;
 
 abstract class AbstractNotification extends Notification implements ShouldBroadcastNow
 {
@@ -69,13 +70,23 @@ abstract class AbstractNotification extends Notification implements ShouldBroadc
     /**
      * @return BroadcastMessage
      */
-    public function toBroadcast()
+    public function toBroadcast(): BroadcastMessage
     {
         return new BroadcastMessage([
             'headline'  => $this->getMailSubject(),
             'subject'   => excerpt($this->microblog->html),
             'url'       => $this->notificationUrl(),
         ]);
+    }
+
+    public function toWebPush(): WebPushMessage
+    {
+        return (new WebPushMessage())
+            ->title($this->getMailSubject())
+            ->icon('/apple-touch.png')
+            ->body(excerpt($this->microblog->html))
+            ->data(['url' => $this->notificationUrl()])
+            ->options(['TTL' => 1000]);
     }
 
     protected function microblogUrl(): string

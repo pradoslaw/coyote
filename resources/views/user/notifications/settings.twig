@@ -4,81 +4,73 @@
 {% import 'components.forms' as forms %}
 
 {% block content %}
-    <h2>Ustawienia powiadomień</h2>
+  <h2>Ustawienia powiadomień</h2>
 
-    <div id="box-alerts-settings" class="card card-default">
-        <div class="card-body">
-            {% if not user('is_confirm') %}
-                <p class="alert alert-warning">
-                    <strong>Uwaga!</strong> Nie potwierdziłeś swojego adresu e-mail dlatego też nie możemy wysyłać Ci powiadomień na maila.
-                    Aby potwierdzić adres e-mail, <a class="alert-link" href="{{ url('Confirm') }}">kliknij tutaj</a>.
-                </p>
-            {% endif %}
+  <div id="box-alerts-settings" class="card card-default">
+    <div class="card-body">
+      {% if not user('is_confirm') %}
+        <p class="alert alert-warning">
+          <strong>Uwaga!</strong> Nie potwierdziłeś swojego adresu e-mail dlatego też nie możemy wysyłać Ci powiadomień na maila.
+          Aby potwierdzić adres e-mail, <a class="alert-link" href="{{ url('Confirm') }}">kliknij tutaj</a>.
+        </p>
+      {% endif %}
 
-            {{ form_open({'method': 'POST', 'role': 'form', 'url': route('user.notifications.settings')}) }}
+      {{ form_open({'method': 'POST', 'role': 'form', 'url': route('user.notifications.settings')}) }}
 
-            <div class="row">
-                <div class="col-8">
-                    <strong>Powiadamiaj o...</strong>
-                </div>
-                <div class="col-2">
-                    <strong>Informacja w profilu</strong>
-                </div>
-                <div class="col-2">
-                    <strong>Informacja na e-mail</strong>
-                </div>
-            </div>
-
-            {% for category, settings in groups %}
-                {% if category %}
-                    <div class="row">
-                        <div class="col-12">
-                            <strong>{{ category }}</strong>
-                        </div>
-                    </div>
-                {% endif %}
-
-                {% for setting in settings %}
-                    <div class="row">
-                        <div class="col-8">
-                            {{ setting.name }}
-                        </div>
-                        <div class="col-2">
-                            {{ form_hidden('settings[' ~ setting.id ~ '][profile]', 0) }}
-
-                            <div class="checkbox">
-                                {% set random = 'id' ~ random() %}
-                                {{ form_checkbox('settings[' ~ setting.id ~ '][profile]', 1, setting.profile, {id: random, class: 'styled'}) }}
-
-                                <label for="{{ random }}">
-
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            {{ form_hidden('settings[' ~ setting.id ~ '][email]', 0) }}
-
-                            <div class="checkbox">
-                                {% set random = 'id' ~ random() %}
-                                {{ form_checkbox('settings[' ~ setting.id ~ '][email]', 1, setting.email, {id: random, class: 'styled'}) }}
-
-                                <label for="{{ random }}">
-
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% endfor %}
-
-            <div class="row">
-                <div class="col-12">
-                    <button type="submit" class="btn btn-primary" data-submit-state="Zapisywanie...">
-                        Zapisz zmiany
-                    </button>
-                </div>
-            </div>
-            {{ form_close() }}
+      <div class="row">
+        <div class="col-6">
+          <strong>Powiadamiaj o...</strong>
         </div>
+        <div class="col-2">
+          <strong>Powiadomienie w profilu</strong>
+        </div>
+        <div class="col-2">
+          <strong>Powiadomienie e-mail</strong>
+        </div>
+        <div class="col-2">
+          <strong>Powiadomienie Push</strong>
+        </div>
+      </div>
+
+      {% for category, types in groups %}
+        {% if category %}
+          <div class="row">
+            <div class="col-12">
+              <strong>{{ category }}</strong>
+            </div>
+          </div>
+        {% endif %}
+
+        {% for type in types %}
+          <div class="row">
+            <div class="col-6">
+              {{ type.name }}
+            </div>
+
+            {% for setting in settings[type.id] %}
+            <div class="col-2">
+              {% set random = 'id' ~ random() %}
+
+              <div class="custom-control custom-checkbox">
+                {{ form_hidden('settings[' ~ setting.id ~ ']', 0) }}
+                {{ form_checkbox('settings[' ~ setting.id ~ ']', 1, setting.is_enabled, {id: random, class: 'custom-control-input'}) }}
+
+                <label class="custom-control-label" for="{{ random }}"></label>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        {% endfor %}
+      {% endfor %}
+
+      <div class="row">
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary" data-submit-state="Zapisywanie...">
+            Zapisz zmiany
+          </button>
+        </div>
+      </div>
+      {{ form_close() }}
     </div>
+  </div>
 {% endblock %}

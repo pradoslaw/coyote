@@ -38,16 +38,15 @@ interface NotificationRepositoryInterface extends RepositoryInterface
     public function markAsReadByModel($userId, $url);
 
     /**
-     * Gets notification settings for given user
+     * Gets public notification types
      *
-     * @param int|int[] $userId
      * @return mixed
      */
-    public function getUserSettings($userId);
+    public function notificationTypes();
 
     /**
      * @param int $userId
      * @param array $data
      */
-    public function setUserSettings($userId, array $data);
+    public function updateSettings($userId, array $data);
 }

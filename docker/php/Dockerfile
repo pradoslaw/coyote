@@ -26,7 +26,7 @@ RUN apt-get update -yqq && apt-get install -y \
     gnupg2
 
 RUN docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ --with-webp \
-    && docker-php-ext-install -j$(nproc) pgsql gd soap pdo_pgsql mbstring zip opcache iconv
+    && docker-php-ext-install -j$(nproc) pgsql gd soap pdo_pgsql mbstring zip opcache iconv gmp
 
 RUN pecl install xdebug
 

@@ -31,6 +31,7 @@
         "intervention/image": "^2.4",
         "intervention/imagecache": "^2.3",
         "jenssegers/agent": "^2.3",
+        "laravel-notification-channels/webpush": "^5.1",
         "laravel/framework": "^v8.51.0",
         "laravel/helpers": "^1.2",
         "laravel/legacy-factories": "^1.1",

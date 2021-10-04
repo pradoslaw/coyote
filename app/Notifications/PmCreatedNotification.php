@@ -10,6 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
+use NotificationChannels\WebPush\WebPushMessage;
 
 class PmCreatedNotification extends Notification implements ShouldQueue, ShouldBroadcast
 {
@@ -44,7 +45,7 @@ class PmCreatedNotification extends Notification implements ShouldQueue, ShouldB
     public function toMail()
     {
         return (new MailMessage)
-            ->subject(sprintf('Masz nową wiadomość od: %s', $this->pm->author->name))
+            ->subject($this->getMailSubject())
             ->view(
                 'emails.notifications.pm',
                 [
@@ -82,10 +83,20 @@ class PmCreatedNotification extends Notification implements ShouldQueue, ShouldB
     public function toBroadcast()
     {
         return new BroadcastMessage([
-            'headline'  => $this->pm->author->name . ' przesyła Ci nową wiadomość',
+            'headline'  => $this->getMailSubject(),
             'subject'   => excerpt($this->text),
             'url'       => $this->notificationUrl()
         ]);
+    }
+
+    public function toWebPush(): WebPushMessage
+    {
+        return (new WebPushMessage())
+            ->title($this->getMailSubject())
+            ->icon('/apple-touch.png')
+            ->body(excerpt($this->text))
+            ->data(['url' => $this->notificationUrl()])
+            ->options(['TTL' => 1000]);
     }
 
     /**
@@ -107,5 +118,10 @@ class PmCreatedNotification extends Notification implements ShouldQueue, ShouldB
             'user_id'       => $this->pm->author_id,
             'name'          => $this->pm->author->name
         ];
+    }
+
+    private function getMailSubject(): string
+    {
+        return sprintf('Masz nową wiadomość od: %s', $this->pm->author->name);
     }
 }

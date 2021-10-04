@@ -47,3 +47,7 @@ r.resolve();
 
 // must be at the end so other vue components can render
 require('./plugins/popover');
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js');
+}

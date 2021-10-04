@@ -44,6 +44,10 @@ class Notification extends Model
     const MICROBLOG_SUBSCRIBER = 26;
     const POST_COMMENT_MIGRATED = 27;
 
+    const DB = 'db';
+    const MAIL = 'mail';
+    const PUSH = 'push';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -77,6 +81,11 @@ class Notification extends Model
      * @var array
      */
     protected $dates = ['created_at', 'read_at'];
+
+    public static function getChannels()
+    {
+        return [self::DB, self::MAIL, self::PUSH];
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne

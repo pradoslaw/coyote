@@ -75,7 +75,7 @@
 
           this.isOpen = false;
 
-          DesktopNotifications.doNotify(data.user.name, data.excerpt, data.url);
+          DesktopNotifications.notify(data.user.name, data.excerpt, data.url);
 
           this.startAnimation(data.user);
         });
