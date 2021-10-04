@@ -2,8 +2,7 @@
  * Handle push event and display notification
  */
 self.addEventListener('push', function(event) {
-  if (!self.Notification) {
-  // if (!(self.Notification && self.Notification.permission === 'granted')) {
+  if (!(self.Notification && self.Notification.permission === 'granted')) {
     return;
   }
 

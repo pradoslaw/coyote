@@ -1,8 +1,6 @@
 export default class DesktopNotifications {
   static requestPermission(): Promise<NotificationPermission> {
-    // if (this.isSupported() && Notification.permission === 'default') {
-      return Notification.requestPermission();
-    // }
+    return Notification.requestPermission();
   }
 
   static get isDefault(): boolean {

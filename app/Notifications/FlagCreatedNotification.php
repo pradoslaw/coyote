@@ -102,6 +102,7 @@ class FlagCreatedNotification extends Notification implements ShouldQueue, Shoul
             ->title($this->flag->user->name . ' dodał nowy raport')
             ->icon(url('/apple-touch.png'))
             ->body($this->flag->type->name)
+            ->tag($this->notificationUrl())
             ->data(['url' => $this->notificationUrl()])
             ->options(['TTL' => 1000]);
     }

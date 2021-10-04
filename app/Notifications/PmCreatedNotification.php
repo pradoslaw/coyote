@@ -95,6 +95,7 @@ class PmCreatedNotification extends Notification implements ShouldQueue, ShouldB
             ->title($this->getMailSubject())
             ->icon(url('/apple-touch.png'))
             ->body(excerpt($this->text))
+            ->tag($this->notificationUrl())
             ->data(['url' => $this->notificationUrl()])
             ->options(['TTL' => 1000]);
     }
