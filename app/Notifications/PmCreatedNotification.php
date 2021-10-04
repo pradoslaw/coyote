@@ -121,6 +121,11 @@ class PmCreatedNotification extends Notification implements ShouldQueue, ShouldB
         ];
     }
 
+    protected function notificationUrl(): string
+    {
+        return route('user.notifications.redirect', ['path' => urlencode(route('user.pm.show', [$this->pm->id], false))]);
+    }
+
     private function getMailSubject(): string
     {
         return sprintf('Masz nową wiadomość od: %s', $this->pm->author->name);

@@ -22,7 +22,7 @@ class SubmittedNotification extends AbstractNotification implements ShouldQueue
             'user_id'       => $user->id,
             'type_id'       => static::ID,
             'subject'       => excerpt($this->microblog->html),
-            'url'           => UrlBuilder::microblog($this->microblog),
+            'url'           => $this->microblogUrl(),
             'id'            => $this->id,
             'content_type'  => Microblog::class,
             'content_id'    => $this->microblog->id

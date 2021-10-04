@@ -117,4 +117,9 @@ class CreatedNotification extends Notification implements ShouldQueue
             ->action('Opłać ogłoszenie', route('job.payment', [$this->job->getUnpaidPayment()]))
             ->line('Dziękujemy za skorzystanie z naszych usług!');
     }
+
+    protected function notificationUrl(): string
+    {
+        return route('user.notifications.redirect', ['path' => UrlBuilder::job($this->job)]);
+    }
 }

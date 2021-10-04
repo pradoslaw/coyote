@@ -19,12 +19,14 @@ abstract class AbstractNotification extends Notification implements ShouldBroadc
     /**
      * @var User|null
      */
-    protected $notifier;
+    protected ?User $notifier;
 
     /**
      * @var Post
      */
-    protected $post;
+    protected Post $post;
+
+    protected string $postUrl;
 
     /**
      * @param User|null $notifier
@@ -34,6 +36,7 @@ abstract class AbstractNotification extends Notification implements ShouldBroadc
     {
         $this->notifier = $notifier;
         $this->post = $post;
+        $this->postUrl = UrlBuilder::post($this->post);
     }
 
     /**
@@ -66,7 +69,7 @@ abstract class AbstractNotification extends Notification implements ShouldBroadc
             'type_id'       => static::ID,
             'subject'       => $this->post->topic->title,
             'excerpt'       => excerpt($this->post->html),
-            'url'           => UrlBuilder::post($this->post),
+            'url'           => $this->postUrl,
             'id'            => $this->id,
             'content_type'  => Topic::class,
             'content_id'    => $this->post->topic_id
@@ -115,5 +118,10 @@ abstract class AbstractNotification extends Notification implements ShouldBroadc
             ->body(excerpt($this->post->html))
             ->data(['url' => $this->notificationUrl()])
             ->options(['TTL' => 1000]);
+    }
+
+    protected function notificationUrl(): string
+    {
+        return route('user.notifications.redirect', ['path' => urlencode($this->postUrl)]);
     }
 }

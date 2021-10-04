@@ -162,4 +162,9 @@ abstract class AbstractNotification extends Notification implements ShouldQueue,
             ->data(['url' => $this->notificationUrl()])
             ->options(['TTL' => 1000]);
     }
+
+    protected function notificationUrl(): string
+    {
+        return route('user.notifications.redirect', ['path' => urlencode(UrlBuilder::topic($this->topic))]);
+    }
 }

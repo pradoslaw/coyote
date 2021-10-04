@@ -24,12 +24,15 @@ class CommentedNotification extends Notification implements ShouldQueue, ShouldB
      */
     private $comment;
 
+    private string $commentUrl;
+
     /**
      * @param Comment $comment
      */
     public function __construct(Comment $comment)
     {
         $this->comment = $comment;
+        $this->commentUrl = UrlBuilder::jobComment($this->comment->job, $this->comment->id);
     }
 
     /**
@@ -44,7 +47,7 @@ class CommentedNotification extends Notification implements ShouldQueue, ShouldB
             'type_id'       => static::ID,
             'subject'       => $this->comment->job->title,
             'excerpt'       => excerpt($this->comment->html),
-            'url'           => UrlBuilder::jobComment($this->comment->job, $this->comment->id),
+            'url'           => $this->commentUrl,
             'id'            => $this->id
         ];
     }
@@ -119,5 +122,10 @@ class CommentedNotification extends Notification implements ShouldQueue, ShouldB
     private function getMailSubject(): string
     {
         return sprintf('Nowy komentarz do ogłoszenia %s.', $this->comment->job->title);
+    }
+
+    protected function notificationUrl(): string
+    {
+        return route('user.notifications.redirect', ['path' => urlencode($this->commentUrl)]);
     }
 }

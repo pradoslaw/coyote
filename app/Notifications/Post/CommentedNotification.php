@@ -74,4 +74,9 @@ class CommentedNotification extends AbstractNotification implements ShouldQueue
     {
         return $this->notifier->name . ' dodał(a) komentarz w wątku: ' . $this->post->topic->title;
     }
+
+    protected function notificationUrl(): string
+    {
+        return route('user.notifications.redirect', ['path' => urlencode(UrlBuilder::postComment($this->comment))]);
+    }
 }

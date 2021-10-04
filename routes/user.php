@@ -81,5 +81,6 @@ $this->post('User/Settings/Ajax', ['uses' => 'User\SettingsController@ajax', 'as
 
 // @deprecated
 $this->get('notification/{uuid}', ['uses' => 'User\NotificationsController@url'])->name('user.notifications.url');
+$this->get('Notification', ['uses' => 'User\NotificationsController@redirectToUrl'])->name('user.notifications.redirect');
 $this->get('ping', ['uses' => 'User\PingController@index'])->name('ping');
 

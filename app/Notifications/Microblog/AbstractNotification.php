@@ -95,6 +95,11 @@ abstract class AbstractNotification extends Notification implements ShouldBroadc
         return $this->microblog->parent_id ? UrlBuilder::microblogComment($this->microblog) : UrlBuilder::microblog($this->microblog);
     }
 
+    protected function notificationUrl(): string
+    {
+        return route('user.notifications.redirect', ['path' => urlencode($this->microblogUrl())]);
+    }
+
     /**
      * @return string
      */

@@ -124,6 +124,8 @@ class NotificationsController extends BaseController
     /**
      * @param string $id
      * @return \Illuminate\Http\RedirectResponse
+     *
+     * @deprecated
      */
     public function url(string $id)
     {
@@ -141,6 +143,28 @@ class NotificationsController extends BaseController
         $notification->save();
 
         return redirect()->to($notification->url);
+    }
+
+    public function redirectToUrl()
+    {
+        $path = urldecode($this->request->get('path'));
+
+        /** @var \Coyote\Notification $notification */
+        $notification = $this->auth->notifications()->where('url', $path)->first();
+
+        if ($notification) {
+            $notification->is_clicked = true;
+
+            if (!$notification->read_at) {
+                $notification->read_at = now();
+
+                broadcast(new NotificationRead($notification));
+            }
+
+            $notification->save();
+        }
+
+        return redirect()->to($path);
     }
 
     /**

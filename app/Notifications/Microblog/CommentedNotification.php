@@ -3,7 +3,6 @@
 namespace Coyote\Notifications\Microblog;
 
 use Coyote\Microblog;
-use Coyote\Services\UrlBuilder;
 use Illuminate\Notifications\Messages\MailMessage;
 
 class CommentedNotification extends SubmittedNotification
@@ -22,7 +21,7 @@ class CommentedNotification extends SubmittedNotification
             'type_id'       => static::ID,
             'subject'       => excerpt($this->microblog->parent->html), // original excerpt of parent entry
             'excerpt'       => excerpt($this->microblog->html),
-            'url'           => UrlBuilder::microblogComment($this->microblog),
+            'url'           => $this->microblogUrl(),
             'id'            => $this->id,
             'content_type'  => Microblog::class,
             'content_id'    => $this->microblog->parent_id
