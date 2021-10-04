@@ -112,7 +112,7 @@ class NotificationTypesTableSeeder extends Seeder
             'category' => 'Mikroblogi',
             'default' => '["db", "push"]'
         ]);
-        Type::updateOrCreate(['id' => Notification::MICROBLOG_SUBSCRIBER,
+        Type::create(['id' => Notification::MICROBLOG_SUBSCRIBER,
             'name' => '...wpisie obserwowanego użytkownika na mikroblogu',
             'headline' => '{sender} dodał wpis na mikroblogu',
             'category' => 'Mikroblogi',
@@ -150,13 +150,13 @@ class NotificationTypesTableSeeder extends Seeder
             'is_public' => false,
             'default' => '["db", "mail", "push"]'
         ]);
-        Type::updateOrCreate(['id' => Notification::MICROBLOG_DELETE], [
+        Type::create(['id' => Notification::MICROBLOG_DELETE], [
             'name' => '...usunięciu Twojego wpisu',
             'headline' => 'Wpis został usunięty przez {sender}',
             'category' => 'Mikroblogi',
             'default' => '["db", "mail", "push"]'
         ]);
-        Type::updateOrCreate(['id' => Notification::POST_COMMENT_MIGRATED], [
+        Type::create(['id' => Notification::POST_COMMENT_MIGRATED], [
             'name' => '...zamianie komentarza na post',
             'headline' => 'Komentarz został zamieniony na post przez {sender}',
             'category' => 'Forum',
