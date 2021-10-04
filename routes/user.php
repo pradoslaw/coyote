@@ -79,7 +79,7 @@ $this->get('User/Prompt', ['uses' => 'User\PromptController@index', 'as' => 'use
 // np. domyslna zakladka na stronie glownej
 $this->post('User/Settings/Ajax', ['uses' => 'User\SettingsController@ajax', 'as' => 'user.settings.ajax']);
 
-// przekierowanie do wlasciwego alertu po guid.
+// @deprecated
 $this->get('notification/{uuid}', ['uses' => 'User\NotificationsController@url'])->name('user.notifications.url');
 $this->get('ping', ['uses' => 'User\PingController@index'])->name('ping');
 

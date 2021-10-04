@@ -47,6 +47,7 @@ class Notification extends Model
     const DB = 'db';
     const MAIL = 'mail';
     const PUSH = 'push';
+    const BROADCAST = 'broadcast';
 
     /**
      * The attributes that are mass assignable.

@@ -53,7 +53,7 @@ abstract class Notification extends BaseNotification implements NotificationInte
 
         // extra channel: broadcast notification via web socket
         if (in_array(Model::DB, $channels) && $this instanceof ShouldBroadcast) {
-            $channels[] = 'broadcast';
+            $channels[] = Model::BROADCAST;
         }
 
         // remove mail channel from the list if user can't get emails (email address is not verified)
@@ -63,7 +63,7 @@ abstract class Notification extends BaseNotification implements NotificationInte
 
         // do not send another notification if previous was not yet read
         if (!empty($user->getUnreadNotification($this->objectId()))) {
-            $channels = $this->forget($channels, Model::MAIL, Model::PUSH, 'broadcast');
+            $channels = $this->forget($channels, Model::MAIL, Model::PUSH, Model::BROADCAST);
         }
 
         return $this->resolveChannels($channels);
@@ -79,8 +79,7 @@ abstract class Notification extends BaseNotification implements NotificationInte
 
         foreach ($replacement as $channel => $class) {
             if (in_array($channel, $channels)) {
-                $channels = $this->forget($channels, $channel);
-                $channels[] = $class;
+                $channels = array_prepend($this->forget($channels, $channel), $class);
             }
         }
 
