@@ -65,11 +65,14 @@ x-env:
   FACEBOOK_SECRET_ID_FILE: /run/secrets/FACEBOOK_SECRET_ID_FILE
   FACEBOOK_REDIRECT: "https://4programmers.net/OAuth/Facebook/Callback"
 
-  VENDOR_NAME: "4programmers.net Ltd"
-  VENDOR_ADDRESS: "International House 776-778 Barking Road"
-  VENDOR_POSTAL_CODE: "E13 9PJ"
-  VENDOR_CITY: "London"
-  VENDOR_COUNTRY: "United Kingdom"
+  VAPID_PUBLIC_KEY_FILE: /run/secrets/VAPID_PUBLIC_KEY_FILE
+  VAPID_PRIVATE_KEY_FILE: /run/secrets/VAPID_PRIVATE_KEY_FILE
+
+  VENDOR_NAME: "Makana Sp. z o.o."
+  VENDOR_ADDRESS: "ul. Stoszowska 23"
+  VENDOR_POSTAL_CODE: "54-060"
+  VENDOR_CITY: "Wrocław"
+  VENDOR_COUNTRY: "Polska"
 
 x-secrets:
   &secrets
@@ -96,6 +99,8 @@ x-secrets:
   - STRIPE_KEY_FILE
   - STRIPE_SECRET_FILE
   - STRIPE_ENDPOINT_SECRET_FILE
+  - VAPID_PUBLIC_KEY_FILE
+  - VAPID_PRIVATE_KEY_FILE
 
 services:
   db:
@@ -384,4 +389,7 @@ secrets:
     external: true
   STRIPE_ENDPOINT_SECRET_FILE:
     external: true
-
+  VAPID_PUBLIC_KEY_FILE:
+    external: true
+  VAPID_PRIVATE_KEY_FILE:
+    external: true
