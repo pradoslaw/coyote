@@ -6,7 +6,7 @@ info:
 servers:
   - url: https://api.4programmers.net/v1
     description: Production server
-  - url: http://api.4programmers.dev/v1
+  - url: https://api.4programmers.dev/v1
     description: Stagging server
 paths:
   /login:
