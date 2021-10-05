@@ -149,6 +149,10 @@ class NotificationsController extends BaseController
     {
         $path = urldecode($this->request->get('path'));
 
+        if (!$this->userId) {
+            return redirect()->to($path);
+        }
+
         /** @var \Coyote\Notification $notification */
         $notification = $this->auth->notifications()->where('url', $path)->first();
 
