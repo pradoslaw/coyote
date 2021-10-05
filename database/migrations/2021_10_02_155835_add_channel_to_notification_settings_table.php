@@ -27,7 +27,7 @@ class AddChannelToNotificationSettingsTable extends Migration
         $sql = "INSERT INTO notification_settings (type_id, user_id, channel, is_enabled) SELECT type_id, user_id, 'db', profile::int::bool FROM notification_settings WHERE channel IS NULL";
         $this->db->unprepared($sql);
 
-        $sql = "INSERT INTO notification_settings (type_id, user_id, channel, is_enabled) SELECT type_id, user_id, 'mail', profile::int::bool FROM notification_settings WHERE channel IS NULL";
+        $sql = "INSERT INTO notification_settings (type_id, user_id, channel, is_enabled) SELECT type_id, user_id, 'mail', email::int::bool FROM notification_settings WHERE channel IS NULL";
         $this->db->unprepared($sql);
 
         $sql = "INSERT INTO notification_settings (type_id, user_id, channel, is_enabled) SELECT type_id, user_id, 'push', true FROM notification_settings WHERE channel IS NULL";
