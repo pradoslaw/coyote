@@ -89,7 +89,7 @@ abstract class Notification extends BaseNotification implements NotificationInte
     /**
      * @return string
      */
-    protected function notificationUrl(): string
+    protected function redirectionUrl(): string
     {
         return route('user.notifications.url', [$this->id]);
     }

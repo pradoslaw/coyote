@@ -74,7 +74,7 @@ class VotedNotification extends AbstractNotification implements ShouldQueue
                     $this->vote->user->name
                 )
             )
-            ->action('Zobacz wpis', url($this->notificationUrl()))
+            ->action('Zobacz wpis', url($this->redirectionUrl()))
             ->line('Dostajesz to powiadomienie, ponieważ wynika to z ustawień Twojego konta.');
     }
 

@@ -49,7 +49,7 @@ class ContentChangedNotification extends Notification implements ShouldBroadcast
         return (new MailMessage())
             ->subject($this->getMailSubject())
             ->line(sprintf('%s wprowadził zmiany na stronie %s, którą obserwujesz', $this->log->user->name, $this->wiki->title))
-            ->action('Zobacz stronę', $this->notificationUrl());
+            ->action('Zobacz stronę', $this->redirectionUrl());
     }
 
     /**
@@ -77,7 +77,7 @@ class ContentChangedNotification extends Notification implements ShouldBroadcast
         return new BroadcastMessage([
             'headline'  => $this->getMailSubject(),
             'subject'   => $this->wiki->title,
-            'url'       => $this->notificationUrl()
+            'url'       => $this->redirectionUrl()
         ]);
     }
 
@@ -87,8 +87,8 @@ class ContentChangedNotification extends Notification implements ShouldBroadcast
             ->title($this->getMailSubject())
             ->icon('/img/favicon.png')
             ->body($this->wiki->title)
-            ->tag($this->notificationUrl())
-            ->data(['url' => $this->notificationUrl()])
+            ->tag($this->redirectionUrl())
+            ->data(['url' => $this->redirectionUrl()])
             ->options(['TTL' => 1000]);
     }
 
@@ -113,7 +113,7 @@ class ContentChangedNotification extends Notification implements ShouldBroadcast
         ];
     }
 
-    protected function notificationUrl(): string
+    protected function redirectionUrl(): string
     {
         return route('user.notifications.redirect', ['path' => urlencode(UrlBuilder::wiki($this->wiki))]);
     }

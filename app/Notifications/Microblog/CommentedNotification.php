@@ -44,7 +44,7 @@ class CommentedNotification extends SubmittedNotification
                     excerpt($this->microblog->parent->html)
                 )
             )
-            ->action('Zobacz komentarz', url($this->notificationUrl()))
+            ->action('Zobacz komentarz', url($this->redirectionUrl()))
             ->line('Dostajesz to powiadomienie, ponieważ obserwujesz ten wpis lub śledzisz jego autora.');
     }
 

@@ -92,7 +92,7 @@ class FlagCreatedNotification extends Notification implements ShouldQueue, Shoul
         return new BroadcastMessage([
             'headline'  => $this->flag->user->name . ' dodał nowy raport',
             'subject'   => $this->flag->type->name,
-            'url'       => $this->notificationUrl()
+            'url'       => $this->redirectionUrl()
         ]);
     }
 
@@ -102,8 +102,8 @@ class FlagCreatedNotification extends Notification implements ShouldQueue, Shoul
             ->title($this->flag->user->name . ' dodał nowy raport')
             ->icon('/img/favicon.png')
             ->body($this->flag->type->name)
-            ->tag($this->notificationUrl())
-            ->data(['url' => $this->notificationUrl()])
+            ->tag($this->redirectionUrl())
+            ->data(['url' => $this->redirectionUrl()])
             ->options(['TTL' => 1000]);
     }
 

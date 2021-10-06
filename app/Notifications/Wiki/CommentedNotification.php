@@ -43,7 +43,7 @@ class CommentedNotification extends Notification implements ShouldQueue, ShouldB
         return (new MailMessage())
             ->subject($this->getMailSubject())
             ->line(sprintf('%s dodał komentarz do strony, którą obserwujesz', $this->comment->user->name))
-            ->action('Zobacz komentarz', $this->notificationUrl());
+            ->action('Zobacz komentarz', $this->redirectionUrl());
     }
 
     /**
@@ -71,7 +71,7 @@ class CommentedNotification extends Notification implements ShouldQueue, ShouldB
         return new BroadcastMessage([
             'headline'  => $this->getMailSubject(),
             'subject'   => $this->comment->wiki->title,
-            'url'       => $this->notificationUrl()
+            'url'       => $this->redirectionUrl()
         ]);
     }
 
@@ -81,8 +81,8 @@ class CommentedNotification extends Notification implements ShouldQueue, ShouldB
             ->title($this->getMailSubject())
             ->icon('/img/favicon.png')
             ->body($this->comment->wiki->title)
-            ->tag($this->notificationUrl())
-            ->data(['url' => $this->notificationUrl()])
+            ->tag($this->redirectionUrl())
+            ->data(['url' => $this->redirectionUrl()])
             ->options(['TTL' => 1000]);
     }
 
@@ -112,7 +112,7 @@ class CommentedNotification extends Notification implements ShouldQueue, ShouldB
         return sprintf('%s dodał komentarz do strony %s', $this->comment->user->name, $this->comment->wiki->title);
     }
 
-    protected function notificationUrl(): string
+    protected function redirectionUrl(): string
     {
         return route('user.notifications.redirect', ['path' => urlencode(UrlBuilder::wikiComment($this->comment->wiki, $this->comment->id))]);
     }

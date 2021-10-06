@@ -105,7 +105,7 @@ abstract class AbstractNotification extends Notification implements ShouldBroadc
         return new BroadcastMessage([
             'headline'  => $this->getMailSubject(),
             'subject'   => excerpt($this->post->html),
-            'url'       => $this->notificationUrl()
+            'url'       => $this->redirectionUrl()
         ]);
     }
 
@@ -114,13 +114,13 @@ abstract class AbstractNotification extends Notification implements ShouldBroadc
         return (new WebPushMessage())
             ->title($this->getMailSubject())
             ->icon('/img/favicon.png')
-            ->tag($this->notificationUrl())
+            ->tag($this->redirectionUrl())
             ->body(excerpt($this->post->html))
-            ->data(['url' => $this->notificationUrl()])
+            ->data(['url' => $this->redirectionUrl()])
             ->options(['TTL' => 1000]);
     }
 
-    protected function notificationUrl(): string
+    protected function redirectionUrl(): string
     {
         return route('user.notifications.redirect', ['path' => urlencode($this->postUrl)]);
     }

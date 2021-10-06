@@ -102,7 +102,7 @@ class ApplicationSentNotification extends Notification implements ShouldQueue, N
     /**
      * @return string
      */
-    protected function notificationUrl()
+    protected function redirectionUrl()
     {
         return route('user.notifications.url', [$this->id]);
     }

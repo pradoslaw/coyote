@@ -148,7 +148,7 @@ abstract class AbstractNotification extends Notification implements ShouldQueue,
         return new BroadcastMessage([
             'headline'  => $this->getMailSubject(),
             'subject'   => $this->topic->title,
-            'url'       => $this->notificationUrl()
+            'url'       => $this->redirectionUrl()
         ]);
     }
 
@@ -157,13 +157,13 @@ abstract class AbstractNotification extends Notification implements ShouldQueue,
         return (new WebPushMessage())
             ->title($this->getMailSubject())
             ->icon('/img/favicon.png')
-            ->tag($this->notificationUrl())
+            ->tag($this->redirectionUrl())
             ->body($this->topic->title)
-            ->data(['url' => $this->notificationUrl()])
+            ->data(['url' => $this->redirectionUrl()])
             ->options(['TTL' => 1000]);
     }
 
-    protected function notificationUrl(): string
+    protected function redirectionUrl(): string
     {
         return route('user.notifications.redirect', ['path' => urlencode(UrlBuilder::topic($this->topic))]);
     }

@@ -27,7 +27,7 @@ class MigratedNotification extends AbstractNotification implements ShouldQueue
             )
             ->line('<strong>Prosimy o prowadzenie dyskusji w postach!</strong>')
             ->line('Komentarze są jedynie dodatkiem na wypadek gdybyśmy musieli zwrócić uwagę na literówkę w poście, błędne formatowanie kodu itp.')
-            ->action('Zobacz post', url($this->notificationUrl()))
+            ->action('Zobacz post', url($this->redirectionUrl()))
             ->line('Jeżeli nie chcesz dostawać tego typu powiadomień, zmień ustawienia na swoim koncie użytkownika.');
     }
 

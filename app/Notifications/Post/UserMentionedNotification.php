@@ -27,7 +27,7 @@ class UserMentionedNotification extends SubmittedNotification
             ->line('<hr>')
             ->line($this->post->html)
             ->line('<hr>')
-            ->action('Zobacz post', url($this->notificationUrl()));
+            ->action('Zobacz post', url($this->redirectionUrl()));
     }
 
     /**

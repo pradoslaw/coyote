@@ -118,7 +118,7 @@ class CreatedNotification extends Notification implements ShouldQueue
             ->line('Dziękujemy za skorzystanie z naszych usług!');
     }
 
-    protected function notificationUrl(): string
+    protected function redirectionUrl(): string
     {
         return route('user.notifications.redirect', ['path' => UrlBuilder::job($this->job)]);
     }

@@ -28,7 +28,7 @@ class UserMentionedNotification extends CommentedNotification
             ->line('<hr>')
             ->line($this->comment->html)
             ->line('<hr>')
-            ->action('Zobacz komentarz', url($this->notificationUrl()));
+            ->action('Zobacz komentarz', url($this->redirectionUrl()));
     }
 
     /**

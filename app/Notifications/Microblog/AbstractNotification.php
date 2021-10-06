@@ -75,7 +75,7 @@ abstract class AbstractNotification extends Notification implements ShouldBroadc
         return new BroadcastMessage([
             'headline'  => $this->getMailSubject(),
             'subject'   => excerpt($this->microblog->html),
-            'url'       => $this->notificationUrl(),
+            'url'       => $this->redirectionUrl(),
         ]);
     }
 
@@ -85,8 +85,8 @@ abstract class AbstractNotification extends Notification implements ShouldBroadc
             ->title($this->getMailSubject())
             ->icon('/img/favicon.png')
             ->body(excerpt($this->microblog->html))
-            ->tag($this->notificationUrl())
-            ->data(['url' => $this->notificationUrl()])
+            ->tag($this->redirectionUrl())
+            ->data(['url' => $this->redirectionUrl()])
             ->options(['TTL' => 1000]);
     }
 
@@ -95,7 +95,7 @@ abstract class AbstractNotification extends Notification implements ShouldBroadc
         return $this->microblog->parent_id ? UrlBuilder::microblogComment($this->microblog) : UrlBuilder::microblog($this->microblog);
     }
 
-    protected function notificationUrl(): string
+    protected function redirectionUrl(): string
     {
         return route('user.notifications.redirect', ['path' => urlencode($this->microblogUrl())]);
     }

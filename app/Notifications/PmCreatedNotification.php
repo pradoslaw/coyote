@@ -85,7 +85,7 @@ class PmCreatedNotification extends Notification implements ShouldQueue, ShouldB
         return new BroadcastMessage([
             'headline'  => $this->getMailSubject(),
             'subject'   => excerpt($this->text),
-            'url'       => $this->notificationUrl()
+            'url'       => $this->redirectionUrl()
         ]);
     }
 
@@ -95,8 +95,8 @@ class PmCreatedNotification extends Notification implements ShouldQueue, ShouldB
             ->title($this->getMailSubject())
             ->icon('/img/favicon.png')
             ->body(excerpt($this->text))
-            ->tag($this->notificationUrl())
-            ->data(['url' => $this->notificationUrl()])
+            ->tag($this->redirectionUrl())
+            ->data(['url' => $this->redirectionUrl()])
             ->options(['TTL' => 1000]);
     }
 
@@ -121,7 +121,7 @@ class PmCreatedNotification extends Notification implements ShouldQueue, ShouldB
         ];
     }
 
-    protected function notificationUrl(): string
+    protected function redirectionUrl(): string
     {
         return route('user.notifications.redirect', ['path' => urlencode(route('user.pm.show', [$this->pm->id], false))]);
     }

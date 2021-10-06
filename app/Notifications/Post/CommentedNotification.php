@@ -63,7 +63,7 @@ class CommentedNotification extends AbstractNotification implements ShouldQueue
             ->line('<hr>')
             ->line($this->comment->html)
             ->line('<hr>')
-            ->action('Zobacz komentarz', url($this->notificationUrl()))
+            ->action('Zobacz komentarz', url($this->redirectionUrl()))
             ->line('Jeżeli nie chcesz dostawać tego typu powiadomień, kliknij na przycisk <i>Obserwuj</i> pod postem, aby przestać obserwować dany post.');
     }
 
@@ -75,7 +75,7 @@ class CommentedNotification extends AbstractNotification implements ShouldQueue
         return $this->notifier->name . ' dodał(a) komentarz w wątku: ' . $this->post->topic->title;
     }
 
-    protected function notificationUrl(): string
+    protected function redirectionUrl(): string
     {
         return route('user.notifications.redirect', ['path' => urlencode(UrlBuilder::postComment($this->comment))]);
     }

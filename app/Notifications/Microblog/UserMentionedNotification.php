@@ -43,7 +43,7 @@ class UserMentionedNotification extends AbstractNotification implements ShouldQu
                     excerpt($this->microblog->html)
                 )
             )
-            ->action('Zobacz', url($this->notificationUrl()))
+            ->action('Zobacz', url($this->redirectionUrl()))
             ->line('Dostajesz to powiadomienie, ponieważ wynika to z ustawień Twojego konta.');
     }
 

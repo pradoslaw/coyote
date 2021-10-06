@@ -45,7 +45,7 @@ class SubmittedNotification extends AbstractNotification implements ShouldQueue
                     excerpt($this->microblog->html)
                 )
             )
-            ->action('Zobacz wpis', url($this->notificationUrl()))
+            ->action('Zobacz wpis', url($this->redirectionUrl()))
             ->line('Dostajesz to powiadomienie, ponieważ obserwujesz jego autora.');
     }
 

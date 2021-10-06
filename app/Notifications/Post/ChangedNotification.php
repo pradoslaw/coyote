@@ -24,7 +24,7 @@ class ChangedNotification extends SubmittedNotification
                     $this->post->topic->title
                 )
             )
-            ->action('Zobacz post', url($this->notificationUrl()))
+            ->action('Zobacz post', url($this->redirectionUrl()))
             ->line('Dostajesz to powiadomienie, ponieważ obserwujesz ten post.');
     }
 

@@ -88,7 +88,7 @@ class CommentedNotification extends Notification implements ShouldQueue, ShouldB
             )
             ->action(
                 'Kliknij, aby go zobaczyć i odpowiedzieć',
-                $this->notificationUrl()
+                $this->redirectionUrl()
             )
             ->line('Otrzymujesz to powiadomienie ponieważ dodałeś to ogłoszenie do ulubionych lub jesteś jego autorem.');
     }
@@ -101,7 +101,7 @@ class CommentedNotification extends Notification implements ShouldQueue, ShouldB
         return new BroadcastMessage([
             'headline'  => $this->getMailSubject(),
             'subject'   => $this->comment->job->title,
-            'url'       => $this->notificationUrl()
+            'url'       => $this->redirectionUrl()
         ]);
     }
 
@@ -110,9 +110,9 @@ class CommentedNotification extends Notification implements ShouldQueue, ShouldB
         return (new WebPushMessage())
             ->title($this->getMailSubject())
             ->icon('/img/favicon.png')
-            ->tag($this->notificationUrl())
+            ->tag($this->redirectionUrl())
             ->body($this->comment->job->title)
-            ->data(['url' => $this->notificationUrl()])
+            ->data(['url' => $this->redirectionUrl()])
             ->options(['TTL' => 1000]);
     }
 
@@ -124,7 +124,7 @@ class CommentedNotification extends Notification implements ShouldQueue, ShouldB
         return sprintf('Nowy komentarz do ogłoszenia %s.', $this->comment->job->title);
     }
 
-    protected function notificationUrl(): string
+    protected function redirectionUrl(): string
     {
         return route('user.notifications.redirect', ['path' => urlencode($this->commentUrl)]);
     }
