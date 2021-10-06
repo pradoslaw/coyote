@@ -102,6 +102,7 @@ class NotificationRepository extends Repository implements NotificationRepositor
      * Gets public notification types
      *
      * @return mixed
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function notificationTypes()
     {
@@ -117,6 +118,7 @@ class NotificationRepository extends Repository implements NotificationRepositor
     /**
      * @param int $userId
      * @param array $data
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function updateSettings($userId, array $data)
     {
@@ -125,5 +127,10 @@ class NotificationRepository extends Repository implements NotificationRepositor
         foreach ($data as $id => $value) {
             $model->where('user_id', $userId)->where('id', $id)->update(['is_enabled' => $value]);
         }
+    }
+
+    public function purge(): void
+    {
+        $this->model->whereNotNull('read_at')->where('is_clicked', true)->where('created_at', '<', now()->subYear())->delete();
     }
 }

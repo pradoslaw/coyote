@@ -15,6 +15,7 @@ use Coyote\Console\Commands\MigrateTagsCommand;
 use Coyote\Console\Commands\PurgeFirewallCommand;
 use Coyote\Console\Commands\PurgeGuestsCommand;
 use Coyote\Console\Commands\PurgeJobsCommand;
+use Coyote\Console\Commands\PurgeNotificationsCommand;
 use Coyote\Console\Commands\PurgePastebinCommand;
 use Coyote\Console\Commands\PurgePostsCommand;
 use Coyote\Console\Commands\PurgeRecentTopicsCommand;
@@ -47,6 +48,7 @@ class Kernel extends ConsoleKernel
         PurgeGuestsCommand::class,
         PurgePostsCommand::class,
         PurgeRecentTopicsCommand::class,
+        PurgeNotificationsCommand::class,
         IndexTagsCommand::class,
         MigrateTagsCommand::class
     ];
@@ -69,6 +71,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('guest:purge')->dailyAt('04:00:00');
         $schedule->command('posts:purge')->dailyAt('05:00:00');
         $schedule->command('topics:purge')->everyFifteenMinutes();
+        $schedule->command('notifications:purge')->dailyAt('06:00:00');
         $schedule->command('tags:index')->everyFiveMinutes();
     }
 

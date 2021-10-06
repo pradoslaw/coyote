@@ -49,4 +49,6 @@ interface NotificationRepositoryInterface extends RepositoryInterface
      * @param array $data
      */
     public function updateSettings($userId, array $data);
+
+    public function purge(): void;
 }
