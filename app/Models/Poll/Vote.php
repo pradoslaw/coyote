@@ -19,7 +19,7 @@ class Vote extends Model
      *
      * @var array
      */
-    protected $fillable = ['user_id', 'poll_id', 'ip', 'item_id'];
+    protected $fillable = ['user_id', 'poll_id', 'ip', 'item_id', 'fingerprint'];
 
     /**
      * @var bool
