@@ -100,7 +100,7 @@ class FlagCreatedNotification extends Notification implements ShouldQueue, Shoul
     {
         return (new WebPushMessage())
             ->title($this->flag->user->name . ' dodał nowy raport')
-            ->icon(url('/apple-touch.png'))
+            ->icon('/img/favicon.png')
             ->body($this->flag->type->name)
             ->tag($this->notificationUrl())
             ->data(['url' => $this->notificationUrl()])

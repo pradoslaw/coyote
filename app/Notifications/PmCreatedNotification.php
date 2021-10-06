@@ -93,7 +93,7 @@ class PmCreatedNotification extends Notification implements ShouldQueue, ShouldB
     {
         return (new WebPushMessage())
             ->title($this->getMailSubject())
-            ->icon(url('/apple-touch.png'))
+            ->icon('/img/favicon.png')
             ->body(excerpt($this->text))
             ->tag($this->notificationUrl())
             ->data(['url' => $this->notificationUrl()])
