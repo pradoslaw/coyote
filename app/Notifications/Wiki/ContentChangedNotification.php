@@ -11,6 +11,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
+use NotificationChannels\WebPush\WebPushMessage;
 
 class ContentChangedNotification extends Notification implements ShouldBroadcast, ShouldQueue
 {
@@ -46,7 +47,7 @@ class ContentChangedNotification extends Notification implements ShouldBroadcast
     public function toMail()
     {
         return (new MailMessage())
-            ->subject(sprintf('%s zmodyfikował stronę %s', $this->log->user->name, $this->wiki->title))
+            ->subject($this->getMailSubject())
             ->line(sprintf('%s wprowadził zmiany na stronie %s, którą obserwujesz', $this->log->user->name, $this->wiki->title))
             ->action('Zobacz stronę', $this->notificationUrl());
     }
@@ -74,10 +75,21 @@ class ContentChangedNotification extends Notification implements ShouldBroadcast
     public function toBroadcast()
     {
         return new BroadcastMessage([
-            'headline'  => "$this->wiki->user->name zmodyfikował stronę",
+            'headline'  => $this->getMailSubject(),
             'subject'   => $this->wiki->title,
             'url'       => $this->notificationUrl()
         ]);
+    }
+
+    public function toWebPush(): WebPushMessage
+    {
+        return (new WebPushMessage())
+            ->title($this->getMailSubject())
+            ->icon(url('/apple-touch.png'))
+            ->body($this->wiki->title)
+            ->tag($this->notificationUrl())
+            ->data(['url' => $this->notificationUrl()])
+            ->options(['TTL' => 1000]);
     }
 
     /**
@@ -99,5 +111,15 @@ class ContentChangedNotification extends Notification implements ShouldBroadcast
             'user_id'       => $this->log->user_id,
             'name'          => $this->log->user->name
         ];
+    }
+
+    protected function notificationUrl(): string
+    {
+        return route('user.notifications.redirect', ['path' => urlencode(UrlBuilder::wiki($this->wiki))]);
+    }
+
+    protected function getMailSubject(): string
+    {
+        return sprintf('%s zmodyfikował stronę %s', $this->log->user->name, $this->wiki->title);
     }
 }

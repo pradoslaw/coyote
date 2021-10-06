@@ -11,6 +11,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
+use NotificationChannels\WebPush\WebPushMessage;
 
 class CommentedNotification extends Notification implements ShouldQueue, ShouldBroadcast
 {
@@ -40,7 +41,7 @@ class CommentedNotification extends Notification implements ShouldQueue, ShouldB
     public function toMail()
     {
         return (new MailMessage())
-            ->subject(sprintf('%s dodał komentarz do strony %s', $this->comment->user->name, $this->comment->wiki->title))
+            ->subject($this->getMailSubject())
             ->line(sprintf('%s dodał komentarz do strony, którą obserwujesz', $this->comment->user->name))
             ->action('Zobacz komentarz', $this->notificationUrl());
     }
@@ -68,10 +69,21 @@ class CommentedNotification extends Notification implements ShouldQueue, ShouldB
     public function toBroadcast()
     {
         return new BroadcastMessage([
-            'headline'  => "$this->comment->user->name dodał komentarz",
+            'headline'  => $this->getMailSubject(),
             'subject'   => $this->comment->wiki->title,
             'url'       => $this->notificationUrl()
         ]);
+    }
+
+    public function toWebPush(): WebPushMessage
+    {
+        return (new WebPushMessage())
+            ->title($this->getMailSubject())
+            ->icon(url('/apple-touch.png'))
+            ->body($this->comment->wiki->title)
+            ->tag($this->notificationUrl())
+            ->data(['url' => $this->notificationUrl()])
+            ->options(['TTL' => 1000]);
     }
 
     /**
@@ -93,5 +105,15 @@ class CommentedNotification extends Notification implements ShouldQueue, ShouldB
             'user_id'       => $this->comment->user_id,
             'name'          => $this->comment->user->name
         ];
+    }
+
+    protected function getMailSubject(): string
+    {
+        return sprintf('%s dodał komentarz do strony %s', $this->comment->user->name, $this->comment->wiki->title);
+    }
+
+    protected function notificationUrl(): string
+    {
+        return route('user.notifications.redirect', ['path' => urlencode(UrlBuilder::wikiComment($this->comment->wiki, $this->comment->id))]);
     }
 }
