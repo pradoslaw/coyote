@@ -11,4 +11,4 @@ if [ ! -z "$DB_MIGRATE" ]; then
     php artisan route:cache
 fi
 
-exec /xdebug.sh
+exec /entrypoint.sh

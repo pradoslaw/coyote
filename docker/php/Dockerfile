@@ -90,7 +90,7 @@ RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources
 
 RUN apt-get update -yqq && apt-get install -y yarn
 
-ADD ./docker/php/start.sh /start.sh
-RUN chmod 755 /start.sh
+ADD ./docker/php/entrypoint.sh /entrypoint.sh
+RUN chmod 755 /entrypoint.sh
 
-CMD ["/start.sh"]
+CMD ["/entrypoint.sh"]
