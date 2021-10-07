@@ -28,6 +28,8 @@ class PmCreatedNotification extends Notification implements ShouldQueue, ShouldB
      */
     private $text;
 
+    private string $notificationUrl;
+
     /**
      * @param Pm $pm
      */
@@ -35,6 +37,7 @@ class PmCreatedNotification extends Notification implements ShouldQueue, ShouldB
     {
         $this->pm = $pm;
         $this->text = app('parser.pm')->parse($this->pm->text->text);
+        $this->notificationUrl = route('user.pm.show', [$this->pm->id], false);
     }
 
     /**
@@ -51,7 +54,7 @@ class PmCreatedNotification extends Notification implements ShouldQueue, ShouldB
                 [
                     'text' => $this->text,
                     'sender' => $this->pm->author->name,
-                    'url' => route('user.pm.show', [$this->pm->id], false)
+                    'url' => $this->redirectionUrl()
                 ]
             );
     }
@@ -70,7 +73,7 @@ class PmCreatedNotification extends Notification implements ShouldQueue, ShouldB
             'type_id'       => static::ID,
             'subject'       => $excerpt,
             'excerpt'       => $excerpt,
-            'url'           => route('user.pm.show', [$this->pm->id], false),
+            'url'           => $this->notificationUrl,
             'id'            => $this->id,
             'content_id'    => $this->pm->id,
             'content_type'  => class_basename($this->pm)
@@ -107,7 +110,7 @@ class PmCreatedNotification extends Notification implements ShouldQueue, ShouldB
      */
     public function objectId()
     {
-        return substr(md5(class_basename($this) . $this->pm->user_id), 16);
+        return substr(md5(class_basename($this) . $this->pm->author_id), 16);
     }
 
     /**
@@ -123,7 +126,7 @@ class PmCreatedNotification extends Notification implements ShouldQueue, ShouldB
 
     protected function redirectionUrl(): string
     {
-        return route('user.notifications.redirect', ['path' => urlencode(route('user.pm.show', [$this->pm->id], false))]);
+        return route('user.notifications.redirect', ['path' => urlencode($this->notificationUrl)]);
     }
 
     private function getMailSubject(): string
