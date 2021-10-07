@@ -28,7 +28,7 @@ RUN apt-get update -yqq && apt-get install -y \
 RUN docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ --with-webp \
     && docker-php-ext-install -j$(nproc) pgsql gd soap pdo_pgsql mbstring zip opcache iconv gmp
 
-RUN pecl install xdebug
+RUN pecl install xdebug redis
 
 RUN curl --insecure https://getcomposer.org/composer-stable.phar -o /usr/bin/composer && chmod +x /usr/bin/composer
 
@@ -90,7 +90,7 @@ RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources
 
 RUN apt-get update -yqq && apt-get install -y yarn
 
-ADD ./docker/php/xdebug.sh /xdebug.sh
-RUN chmod 755 /xdebug.sh
+ADD ./docker/php/start.sh /start.sh
+RUN chmod 755 /start.sh
 
-CMD ["/xdebug.sh"]
+CMD ["/start.sh"]

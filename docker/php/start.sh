@@ -1,5 +1,7 @@
 #!/bin/bash
 
+docker-php-ext-enable redis
+
 XdebugFile='/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini'
 
 if [[ "$ENABLE_XDEBUG" == "1" ]]; then
