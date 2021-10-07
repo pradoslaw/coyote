@@ -71,7 +71,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('guest:purge')->dailyAt('04:00:00');
         $schedule->command('posts:purge')->dailyAt('05:00:00');
         $schedule->command('topics:purge')->everyFifteenMinutes();
-        $schedule->command('notifications:purge')->dailyAt('06:00:00');
+//        $schedule->command('notifications:purge')->dailyAt('02:00:00');
         $schedule->command('tags:index')->everyFiveMinutes();
     }
 
