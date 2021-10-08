@@ -2,13 +2,13 @@ version: '3.5'
 
 services:
   db:
-    image: postgres:11-alpine
+    image: postgres:13-alpine
     volumes:
       - postgres:/var/lib/postgresql/data:z
     environment:
-      POSTGRES_USER: coyote
-      POSTGRES_PASSWORD: coyote
-      POSTGRES_DB: coyote
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
       TZ: "Europe/Warsaw"
     logging:
       options:
@@ -91,8 +91,8 @@ services:
     volumes:
       - minio:/data
     environment:
-      MINIO_ACCESS_KEY: minio
-      MINIO_SECRET_KEY: minio123
+      MINIO_ACCESS_KEY: ${AWS_ACCESS_KEY_ID}
+      MINIO_SECRET_KEY: ${AWS_SECRET_ACCESS_KEY}
     command: server /data
     ports:
       - 39000:9000
