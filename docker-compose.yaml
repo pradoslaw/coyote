@@ -65,7 +65,7 @@ services:
       - coyote
 
   redis:
-    image: redis:5
+    image: redis:6-alpine
     command: redis-server --appendonly no --save
     logging:
       options:
