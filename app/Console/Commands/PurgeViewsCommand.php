@@ -83,8 +83,10 @@ class PurgeViewsCommand extends Command
     private function commit($page, $hits)
     {
         $keys = array_map('serialize', $hits->toArray());
-        // remove keys before processing any further. any other process will not process those hits simultaneously
-        $this->redis->srem('hits', $keys);
+
+        foreach ($keys as $key) {
+            $this->redis->srem('hits', $key);
+        }
 
         if (empty($page->id)) {
             return; // hits to non-existing page will be lost
@@ -113,9 +115,6 @@ class PurgeViewsCommand extends Command
             $this->db->rollBack();
 
             logger()->error($e->getMessage());
-
-            // add those keys to the set again if transaction fails
-            $this->redis->sadd('hits', $keys);
         }
     }
 
