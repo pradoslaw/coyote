@@ -28,7 +28,7 @@ RUN apt-get update -yqq && apt-get install -y \
 RUN docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ --with-webp \
     && docker-php-ext-install -j$(nproc) pgsql gd soap pdo_pgsql mbstring zip opcache iconv gmp
 
-RUN pecl install xdebug redis
+RUN pecl install xdebug redis && docker-php-ext-enable redis
 
 RUN curl --insecure https://getcomposer.org/composer-stable.phar -o /usr/bin/composer && chmod +x /usr/bin/composer
 
