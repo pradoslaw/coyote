@@ -104,7 +104,7 @@ x-secrets:
 
 services:
   db:
-    image: postgres:11-alpine
+    image: postgres:13-alpine
     ports:
       - 5432:5432
     volumes:
@@ -200,7 +200,7 @@ services:
         max-size: 10m
 
   redis:
-    image: redis:5
+    image: redis:6-alpine
     command: redis-server --appendonly no --save
     networks:
       - coyote
