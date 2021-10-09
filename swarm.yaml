@@ -125,7 +125,7 @@ services:
         max-size: 10m
 
   php:
-    image: 4programmers/coyote:f0548dbd9751ea96d2626b4cdfd70b153923b8aa
+    image: 4programmers/coyote:latest
     build:
       context: .
       dockerfile: docker/coyote/Dockerfile
