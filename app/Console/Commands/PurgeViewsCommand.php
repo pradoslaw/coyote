@@ -112,6 +112,8 @@ class PurgeViewsCommand extends Command
         } catch (\Exception $e) {
             $this->db->rollBack();
 
+            logger()->error($e->getMessage());
+
             // add those keys to the set again if transaction fails
             $this->redis->sadd('hits', $keys);
         }
