@@ -2,6 +2,9 @@ version: '3.5'
 
 services:
   db:
+    command: postgres -c config_file=/etc/postgresql.conf
+    volumes:
+      - ./docker/postgres/postgresql.local.conf:/etc/postgresql.conf
     ports:
       - 5432:5432
 
