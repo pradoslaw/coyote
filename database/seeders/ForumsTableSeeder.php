@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Coyote\Events\ForumWasSaved;
+use Coyote\Events\ForumSaved;
 use Coyote\Forum;
 use Illuminate\Database\Seeder;
 
@@ -22,7 +22,7 @@ class ForumsTableSeeder extends Seeder
             'description' => 'Jeżeli jesteś kompletnym laikiem jeżeli chodzi o programowanie, to jest odpowiednia kategoria dla Ciebie. Tutaj możesz zadawać pytania o podstawy programowania, nie narażając się, że Twój temat zostanie skasowany z powodu niskiego poziomu merytorycznego.'
         ]);
 
-        event(new ForumWasSaved($row));
+        event(new ForumSaved($row));
 
         $parent = Forum::create([
             'name' => 'Python',
@@ -31,7 +31,7 @@ class ForumsTableSeeder extends Seeder
             'section' => 'Podstawy programowania'
         ]);
 
-        event(new ForumWasSaved($parent));
+        event(new ForumSaved($parent));
 
         $row = Forum::create([
             'name' => 'Dla początkujących',
@@ -41,7 +41,7 @@ class ForumsTableSeeder extends Seeder
             'section' => 'Podkategorie'
         ]);
 
-        event(new ForumWasSaved($row));
+        event(new ForumSaved($row));
 
         $row = Forum::create([
             'name' => 'Dla zaawansowanych',
@@ -51,7 +51,7 @@ class ForumsTableSeeder extends Seeder
             'section' => 'Podkategorie'
         ]);
 
-        event(new ForumWasSaved($row));
+        event(new ForumSaved($row));
 
         $row = Forum::create([
             'name' => 'Off-Topic',
@@ -60,6 +60,6 @@ class ForumsTableSeeder extends Seeder
             'section' => 'Inne'
         ]);
 
-        event(new ForumWasSaved($row));
+        event(new ForumSaved($row));
     }
 }

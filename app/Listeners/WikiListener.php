@@ -2,8 +2,8 @@
 
 namespace Coyote\Listeners;
 
-use Coyote\Events\WikiWasDeleted;
-use Coyote\Events\WikiWasSaved;
+use Coyote\Events\WikiDeleted;
+use Coyote\Events\WikiSaved;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
 use Coyote\Services\Elasticsearch\Crawler;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -31,18 +31,18 @@ class WikiListener implements ShouldQueue
     }
 
     /**
-     * @param WikiWasSaved $event
+     * @param WikiSaved $event
      */
-    public function onWikiSave(WikiWasSaved $event)
+    public function onWikiSave(WikiSaved $event)
     {
         $this->crawler->index($event->wiki);
     }
 
     /**
-     * @param WikiWasDeleted $event
+     * @param WikiDeleted $event
      * @throws \Exception
      */
-    public function onWikiDelete(WikiWasDeleted $event)
+    public function onWikiDelete(WikiDeleted $event)
     {
         $wiki = $this->wiki->withTrashed()->find($event->wiki['id']);
 
@@ -57,12 +57,12 @@ class WikiListener implements ShouldQueue
     public function subscribe($events)
     {
         $events->listen(
-            'Coyote\Events\WikiWasSaved',
+            'Coyote\Events\WikiSaved',
             'Coyote\Listeners\WikiListener@onWikiSave'
         );
 
         $events->listen(
-            'Coyote\Events\WikiWasDeleted',
+            'Coyote\Events\WikiDeleted',
             'Coyote\Listeners\WikiListener@onWikiDelete'
         );
     }

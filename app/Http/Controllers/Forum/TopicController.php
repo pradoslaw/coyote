@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
-use Coyote\Events\TopicWasSaved;
+use Coyote\Events\TopicSaved;
 use Coyote\Forum;
 use Coyote\Forum\Reason;
 use Coyote\Http\Factories\CacheFactory;
@@ -185,7 +185,7 @@ class TopicController extends BaseController
             logger()->debug(sprintf("Wątek %s został dodany do obserwowanych przez %s.", $topic->title, $this->auth->name));
         }
 
-        event(new TopicWasSaved($topic));
+        event(new TopicSaved($topic));
 
         return response($topic->subscribers()->count());
     }

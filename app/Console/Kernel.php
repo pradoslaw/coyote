@@ -9,6 +9,7 @@ use Coyote\Console\Commands\CurrencyExchangeCommand;
 use Coyote\Console\Commands\Elasticsearch\CreateIndexCommand;
 use Coyote\Console\Commands\Elasticsearch\DropIndexCommand;
 use Coyote\Console\Commands\Elasticsearch\IndexCommand;
+use Coyote\Console\Commands\FixPagesCommand;
 use Coyote\Console\Commands\FlushCacheCommand;
 use Coyote\Console\Commands\IndexTagsCommand;
 use Coyote\Console\Commands\MigrateTagsCommand;
@@ -50,7 +51,8 @@ class Kernel extends ConsoleKernel
         PurgeRecentTopicsCommand::class,
         PurgeNotificationsCommand::class,
         IndexTagsCommand::class,
-        MigrateTagsCommand::class
+        MigrateTagsCommand::class,
+        FixPagesCommand::class
     ];
 
     /**

@@ -2,7 +2,7 @@
 
 namespace Coyote\Console\Commands;
 
-use Coyote\Events\TopicWasDeleted;
+use Coyote\Events\TopicDeleted;
 use Coyote\Forum;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
@@ -64,7 +64,7 @@ class PurgePostsCommand extends Command
             Topic::destroy($topic->id);
 
             // fire the event. it can be used to delete row from "pages" table or from search index
-            event(new TopicWasDeleted($topic));
+            event(new TopicDeleted($topic));
 
             $this->info($topic->title . ' from ' . $forum->name . ' removed permanently.');
         }

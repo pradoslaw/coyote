@@ -2,23 +2,29 @@
 
 namespace Coyote\Events;
 
-use Illuminate\Queue\SerializesModels;
 use Coyote\Wiki;
+use Illuminate\Queue\SerializesModels;
 
-class WikiWasDeleted
+class WikiSaved
 {
     use SerializesModels;
 
     /**
-     * @var array
+     * @var Wiki
      */
     public $wiki;
+
+    /**
+     * @var string
+     */
+    public $host;
 
     /**
      * @param Wiki $wiki
      */
     public function __construct(Wiki $wiki)
     {
-        $this->wiki = $wiki->toArray();
+        $this->wiki = $wiki;
+        $this->host = request()->getHost();
     }
 }

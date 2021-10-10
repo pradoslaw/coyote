@@ -5,14 +5,14 @@ namespace Coyote\Listeners;
 use Coyote\Events\JobDeleted;
 use Coyote\Events\MicroblogDeleted;
 use Coyote\Events\MicroblogSaved;
-use Coyote\Events\TopicWasMoved;
-use Coyote\Events\TopicWasSaved;
-use Coyote\Events\TopicWasDeleted;
-use Coyote\Events\ForumWasSaved;
-use Coyote\Events\ForumWasDeleted;
+use Coyote\Events\TopicMoved;
+use Coyote\Events\TopicSaved;
+use Coyote\Events\TopicDeleted;
+use Coyote\Events\ForumSaved;
+use Coyote\Events\ForumDeleted;
 use Coyote\Events\JobWasSaved;
-use Coyote\Events\WikiWasDeleted;
-use Coyote\Events\WikiWasSaved;
+use Coyote\Events\WikiDeleted;
+use Coyote\Events\WikiSaved;
 use Coyote\Microblog;
 use Coyote\Job;
 use Coyote\Services\UrlBuilder;
@@ -53,17 +53,17 @@ class PageSubscriber implements ShouldQueue
     }
 
     /**
-     * @param TopicWasSaved $event
+     * @param TopicSaved $event
      */
-    public function onTopicSave(TopicWasSaved $event)
+    public function onTopicSave(TopicSaved $event)
     {
         $this->updateTopic($event->topic);
     }
 
     /**
-     * @param TopicWasMoved $event
+     * @param TopicMoved $event
      */
-    public function onTopicMove(TopicWasMoved $event)
+    public function onTopicMove(TopicMoved $event)
     {
         $this->updateTopic($event->topic);
     }
@@ -87,17 +87,17 @@ class PageSubscriber implements ShouldQueue
     }
 
     /**
-     * @param TopicWasDeleted $event
+     * @param TopicDeleted $event
      */
-    public function onTopicDelete(TopicWasDeleted $event)
+    public function onTopicDelete(TopicDeleted $event)
     {
         $this->page->deleteByContent($event->topic['id'], Topic::class);
     }
 
     /**
-     * @param ForumWasSaved $event
+     * @param ForumSaved $event
      */
-    public function onForumSave(ForumWasSaved $event)
+    public function onForumSave(ForumSaved $event)
     {
         $event->forum->page()->updateOrCreate([
             'content_id'    => $event->forum->id,
@@ -109,9 +109,9 @@ class PageSubscriber implements ShouldQueue
     }
 
     /**
-     * @param ForumWasDeleted $event
+     * @param ForumDeleted $event
      */
-    public function onForumDelete(ForumWasDeleted $event)
+    public function onForumDelete(ForumDeleted $event)
     {
         $this->page->deleteByContent($event->forum['id'], Forum::class);
     }
@@ -121,6 +121,10 @@ class PageSubscriber implements ShouldQueue
      */
     public function onMicroblogSave(MicroblogSaved $event)
     {
+        if ($event->microblog->parent_id) {
+            return;
+        }
+
         $event->microblog->page()->updateOrCreate([
             'content_id'    => $event->microblog->id,
             'content_type'  => Microblog::class,
@@ -165,9 +169,9 @@ class PageSubscriber implements ShouldQueue
     }
 
     /**
-     * @param WikiWasSaved $event
+     * @param WikiSaved $event
      */
-    public function onWikiSave(WikiWasSaved $event)
+    public function onWikiSave(WikiSaved $event)
     {
         $this->purgePageViews();
 
@@ -181,9 +185,9 @@ class PageSubscriber implements ShouldQueue
     }
 
     /**
-     * @param WikiWasDeleted $event
+     * @param WikiDeleted $event
      */
-    public function onWikiDelete(WikiWasDeleted $event)
+    public function onWikiDelete(WikiDeleted $event)
     {
         $this->page->deleteByContent($event->wiki['id'], Wiki::class);
     }
@@ -196,17 +200,17 @@ class PageSubscriber implements ShouldQueue
     public function subscribe($events)
     {
         return [
-            TopicWasSaved::class => 'onTopicSave',
-            TopicWasMoved::class => 'onTopicMove',
-            TopicWasDeleted::class => 'onTopicDelete',
-            ForumWasSaved::class => 'onForumSave',
-            ForumWasDeleted::class => 'onForumDelete',
+            TopicSaved::class => 'onTopicSave',
+            TopicMoved::class => 'onTopicMove',
+            TopicDeleted::class => 'onTopicDelete',
+            ForumSaved::class => 'onForumSave',
+            ForumDeleted::class => 'onForumDelete',
             MicroblogSaved::class => 'onMicroblogSave',
             MicroblogDeleted::class => 'onMicroblogDelete',
             JobWasSaved::class => 'onJobSave',
             JobDeleted::class => 'onJobDelete',
-            WikiWasSaved::class => 'onWikiSave',
-            WikiWasDeleted::class => 'onWikiDelete'
+            WikiSaved::class => 'onWikiSave',
+            WikiDeleted::class => 'onWikiDelete'
         ];
     }
 

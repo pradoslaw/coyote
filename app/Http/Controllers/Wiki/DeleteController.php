@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Controllers\Wiki;
 
-use Coyote\Events\WikiWasDeleted;
+use Coyote\Events\WikiDeleted;
 use Coyote\Services\Stream\Objects\Wiki as Stream_Wiki;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Activities\Unlink as Stream_Unlink;
@@ -30,7 +30,7 @@ class DeleteController extends BaseController
 
             foreach ($paths as $path) {
                 $this->wiki->unlink($path->id);
-                event(new WikiWasDeleted($path));
+                event(new WikiDeleted($path));
             }
         });
 
@@ -51,7 +51,7 @@ class DeleteController extends BaseController
                 (new Stream_Wiki())->map($wiki)
             );
 
-            event(new WikiWasDeleted($wiki));
+            event(new WikiDeleted($wiki));
         });
 
         return redirect()->route('home')->with('success', 'Kopia strony została usunięta.');

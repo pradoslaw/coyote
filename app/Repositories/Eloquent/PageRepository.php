@@ -29,11 +29,12 @@ class PageRepository extends Repository implements PageRepositoryInterface
      */
     public function deleteByContent($id, $content)
     {
-        return $this
-            ->model
-            ->where('content_id', $id)
-            ->where('content_type', $content)
-            ->delete();
+        var_dump($id,$content);
+//        return $this
+//            ->model
+//            ->where('content_id', $id)
+//            ->where('content_type', $content)
+//            ->delete();
     }
 
     /**

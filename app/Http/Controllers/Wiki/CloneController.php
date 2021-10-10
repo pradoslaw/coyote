@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Controllers\Wiki;
 
-use Coyote\Events\WikiWasSaved;
+use Coyote\Events\WikiSaved;
 use Coyote\Http\Forms\Wiki\CloneForm;
 use Coyote\Services\Stream\Objects\Wiki as Stream_Wiki;
 use Coyote\Services\Stream\Activities\Copy as Stream_Copy;
@@ -37,7 +37,7 @@ class CloneController extends BaseController
             $wiki->id = $wiki->path_id;
 
             stream(Stream_Copy::class, (new Stream_Wiki())->map($wiki));
-            event(new WikiWasSaved($wiki));
+            event(new WikiSaved($wiki));
 
             return $path->path;
         });

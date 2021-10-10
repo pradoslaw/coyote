@@ -6,8 +6,8 @@ use Coyote\Events\CommentDeleted;
 use Coyote\Events\CommentSaved;
 use Coyote\Events\PostWasDeleted;
 use Coyote\Events\PostSaved;
-use Coyote\Events\TopicWasDeleted;
-use Coyote\Events\TopicWasMoved;
+use Coyote\Events\TopicDeleted;
+use Coyote\Events\TopicMoved;
 use Coyote\Post;
 use Coyote\Repositories\Contracts\ActivityRepositoryInterface as ActivityRepository;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -54,12 +54,12 @@ class ActivitySubscriber implements ShouldQueue
         $this->activity->where('content_id', $event->post['id'])->where('content_type', Post::class)->delete();
     }
 
-    public function onTopicDeleted(TopicWasDeleted $event)
+    public function onTopicDeleted(TopicDeleted $event)
     {
         $this->activity->where('topic_id', $event->topic['id'])->delete();
     }
 
-    public function onTopicMoved(TopicWasMoved $event)
+    public function onTopicMoved(TopicMoved $event)
     {
         $this->activity->where('topic_id', $event->topic['id'])->update(['forum_id' => $event->topic['forum_id']]);
     }
@@ -112,12 +112,12 @@ class ActivitySubscriber implements ShouldQueue
         );
 
         $events->listen(
-            TopicWasDeleted::class,
+            TopicDeleted::class,
             'Coyote\Listeners\ActivitySubscriber@onTopicDeleted'
         );
 
         $events->listen(
-            TopicWasMoved::class,
+            TopicMoved::class,
             'Coyote\Listeners\ActivitySubscriber@onTopicMoved'
         );
 

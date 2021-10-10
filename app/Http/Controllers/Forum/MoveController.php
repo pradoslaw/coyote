@@ -6,7 +6,7 @@ use Coyote\Notifications\Topic\MovedNotification;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Services\Stream\Activities\Move as Stream_Move;
 use Coyote\Services\Stream\Objects\Forum as Stream_Forum;
-use Coyote\Events\TopicWasMoved;
+use Coyote\Events\TopicMoved;
 use Coyote\Forum\Reason;
 use Coyote\Services\UrlBuilder;
 use Coyote\Topic;
@@ -70,7 +70,7 @@ class MoveController extends BaseController
             }
 
             // we need to reindex this topic
-            event(new TopicWasMoved($topic));
+            event(new TopicMoved($topic));
             stream(Stream_Move::class, $object, (new Stream_Forum())->map($forum));
         });
 

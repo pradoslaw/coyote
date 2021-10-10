@@ -5,7 +5,7 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Events\CommentDeleted;
 use Coyote\Events\CommentSaved;
 use Coyote\Events\PostSaved;
-use Coyote\Events\TopicWasSaved;
+use Coyote\Events\TopicSaved;
 use Coyote\Http\Requests\Forum\PostCommentRequest;
 use Coyote\Http\Resources\PostCommentResource;
 use Coyote\Http\Resources\PostResource;
@@ -149,7 +149,7 @@ class CommentController extends Controller
         $tracker = Tracker::make($topic);
 
         // fire the event. it can be used to index a content and/or add page path to "pages" table
-        event(new TopicWasSaved($topic));
+        event(new TopicSaved($topic));
         // add post to elasticsearch
         broadcast(new PostSaved($post))->toOthers();
 

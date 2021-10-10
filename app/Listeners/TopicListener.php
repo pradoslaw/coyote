@@ -5,9 +5,9 @@ namespace Coyote\Listeners;
 ini_set('memory_limit', '10G');
 set_time_limit(0);
 
-use Coyote\Events\TopicWasDeleted;
-use Coyote\Events\TopicWasMoved;
-use Coyote\Events\TopicWasSaved;
+use Coyote\Events\TopicDeleted;
+use Coyote\Events\TopicMoved;
+use Coyote\Events\TopicSaved;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Services\Elasticsearch\Crawler;
 use Coyote\Topic;
@@ -36,26 +36,26 @@ class TopicListener implements ShouldQueue
     }
 
     /**
-     * @param TopicWasSaved $event
+     * @param TopicSaved $event
      */
-    public function onTopicSave(TopicWasSaved $event)
+    public function onTopicSave(TopicSaved $event)
     {
         $this->crawler->index($event->topic);
     }
 
     /**
-     * @param TopicWasMoved $event
+     * @param TopicMoved $event
      */
-    public function onTopicMove(TopicWasMoved $event)
+    public function onTopicMove(TopicMoved $event)
     {
         $this->crawler->index($event->topic);
     }
 
     /**
-     * @param TopicWasDeleted $event
+     * @param TopicDeleted $event
      * @throws \Exception
      */
-    public function onTopicDelete(TopicWasDeleted $event)
+    public function onTopicDelete(TopicDeleted $event)
     {
         $topic = (new Topic)->forceFill($event->topic);
 
@@ -70,17 +70,17 @@ class TopicListener implements ShouldQueue
     public function subscribe($events)
     {
         $events->listen(
-            'Coyote\Events\TopicWasSaved',
+            'Coyote\Events\TopicSaved',
             'Coyote\Listeners\TopicListener@onTopicSave'
         );
 
         $events->listen(
-            'Coyote\Events\TopicWasMoved',
+            'Coyote\Events\TopicMoved',
             'Coyote\Listeners\TopicListener@onTopicMove'
         );
 
         $events->listen(
-            'Coyote\Events\TopicWasDeleted',
+            'Coyote\Events\TopicDeleted',
             'Coyote\Listeners\TopicListener@onTopicDelete'
         );
     }

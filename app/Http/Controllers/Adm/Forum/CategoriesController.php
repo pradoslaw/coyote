@@ -3,7 +3,7 @@
 namespace Coyote\Http\Controllers\Adm\Forum;
 
 use Boduch\Grid\Source\CollectionSource;
-use Coyote\Events\ForumWasSaved;
+use Coyote\Events\ForumSaved;
 use Coyote\Http\Controllers\Adm\BaseController;
 use Coyote\Http\Forms\Forum\ForumForm;
 use Coyote\Http\Grids\Adm\Forum\CategoriesGrid;
@@ -88,7 +88,7 @@ class CategoriesController extends BaseController
             $this->flushCache();
         });
 
-        event(new ForumWasSaved($forum, $original));
+        event(new ForumSaved($forum, $original));
 
         return redirect()->route('adm.forum.categories')->with('success', 'Zmiany zostały zapisane.');
     }

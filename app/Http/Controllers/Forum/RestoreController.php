@@ -7,7 +7,7 @@ use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Services\Stream\Objects\Post as Stream_Post;
 use Coyote\Services\Stream\Objects\Forum as Stream_Forum;
 use Coyote\Events\PostSaved;
-use Coyote\Events\TopicWasSaved;
+use Coyote\Events\TopicSaved;
 use Coyote\Services\UrlBuilder;
 
 class RestoreController extends BaseController
@@ -31,7 +31,7 @@ class RestoreController extends BaseController
         if ($post->id === $post->topic->first_post_id) {
             $post->topic->restore();
 
-            event(new TopicWasSaved($post->topic));
+            event(new TopicSaved($post->topic));
 
             $object = (new Stream_Topic())->map($post->topic, $post->forum);
             $target = (new Stream_Forum())->map($post->forum);

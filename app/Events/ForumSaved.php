@@ -5,7 +5,7 @@ namespace Coyote\Events;
 use Coyote\Forum;
 use Illuminate\Queue\SerializesModels;
 
-class ForumWasSaved
+class ForumSaved
 {
     use SerializesModels;
 

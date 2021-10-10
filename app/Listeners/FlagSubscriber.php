@@ -4,14 +4,14 @@ namespace Coyote\Listeners;
 
 use Coyote\Events\MicroblogDeleted;
 use Coyote\Events\PostWasDeleted;
-use Coyote\Events\TopicWasDeleted;
+use Coyote\Events\TopicDeleted;
 use Coyote\Flag;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Builder;
 
 class FlagSubscriber implements ShouldQueue
 {
-    public function handleTopicDelete(TopicWasDeleted $event)
+    public function handleTopicDelete(TopicDeleted $event)
     {
         Flag::whereHas('topics', fn (Builder $query) => $query->withTrashed()->where('id', $event->topic['id']))->delete();
     }
@@ -29,7 +29,7 @@ class FlagSubscriber implements ShouldQueue
     public function subscribe($events)
     {
         $events->listen(
-            TopicWasDeleted::class,
+            TopicDeleted::class,
             'Coyote\Listeners\FlagSubscriber@handleTopicDelete'
         );
 

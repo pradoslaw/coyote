@@ -2,8 +2,8 @@
 
 namespace Coyote\Http\Controllers\Wiki;
 
-use Coyote\Events\WikiWasDeleted;
-use Coyote\Events\WikiWasSaved;
+use Coyote\Events\WikiDeleted;
+use Coyote\Events\WikiSaved;
 use Coyote\Http\Forms\Wiki\MoveForm;
 use Coyote\Services\Stream\Objects\Wiki as Stream_Wiki;
 use Coyote\Services\Stream\Activities\Move as Stream_Move;
@@ -43,8 +43,8 @@ class MoveController extends BaseController
 
             stream(Stream_Move::class, (new Stream_Wiki())->map($wiki));
 
-            event(new WikiWasDeleted($old));
-            event(new WikiWasSaved($wiki));
+            event(new WikiDeleted($old));
+            event(new WikiSaved($wiki));
 
             return $path->path;
         });

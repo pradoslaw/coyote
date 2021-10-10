@@ -2,8 +2,8 @@
 
 namespace Coyote\Listeners;
 
-use Coyote\Events\WikiWasDeleted;
-use Coyote\Events\WikiWasSaved;
+use Coyote\Events\WikiDeleted;
+use Coyote\Events\WikiSaved;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
 use Coyote\Services\Parser\Helpers\Link;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -27,10 +27,10 @@ class SetupWikiLinks implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param  WikiWasSaved  $event
+     * @param  WikiSaved  $event
      * @return void
      */
-    public function onWikiSave(WikiWasSaved $event)
+    public function onWikiSave(WikiSaved $event)
     {
         // at this point, text is probably in cache, so we need to just read from it.
         $cache = $this->getParser()->parse($event->wiki->text);
@@ -63,9 +63,9 @@ class SetupWikiLinks implements ShouldQueue
     }
 
     /**
-     * @param WikiWasDeleted $event
+     * @param WikiDeleted $event
      */
-    public function onWikiDelete(WikiWasDeleted $event)
+    public function onWikiDelete(WikiDeleted $event)
     {
         $this->getParser()->cache->forget($event->wiki['text']);
         $links = $this->wiki->getWikiAssociatedLinksByPath($event->wiki['path']);
@@ -85,12 +85,12 @@ class SetupWikiLinks implements ShouldQueue
     public function subscribe($events)
     {
         $events->listen(
-            'Coyote\Events\WikiWasSaved',
+            'Coyote\Events\WikiSaved',
             'Coyote\Listeners\SetupWikiLinks@onWikiSave'
         );
 
         $events->listen(
-            'Coyote\Events\WikiWasDeleted',
+            'Coyote\Events\WikiDeleted',
             'Coyote\Listeners\SetupWikiLinks@onWikiDelete'
         );
     }

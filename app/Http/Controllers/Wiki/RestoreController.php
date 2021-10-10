@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Controllers\Wiki;
 
-use Coyote\Events\WikiWasSaved;
+use Coyote\Events\WikiSaved;
 use Coyote\Services\Stream\Objects\Wiki as Stream_Wiki;
 use Coyote\Services\Stream\Activities\Restore as Stream_Restore;
 
@@ -23,7 +23,7 @@ class RestoreController extends BaseController
                 (new Stream_Wiki())->map($wiki)
             );
 
-            event(new WikiWasSaved($wiki));
+            event(new WikiSaved($wiki));
         });
 
         return back()->with('success', 'Strona została przywrócona.');

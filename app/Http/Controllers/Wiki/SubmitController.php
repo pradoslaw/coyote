@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Controllers\Wiki;
 
-use Coyote\Events\WikiWasSaved;
+use Coyote\Events\WikiSaved;
 use Coyote\Http\Forms\Wiki\SubmitForm;
 use Coyote\Notifications\Wiki\ContentChangedNotification;
 use Coyote\Services\Stream\Objects\Wiki as Stream_Wiki;
@@ -89,7 +89,7 @@ class SubmitController extends BaseController
         );
 
         // add to elasticsearch index and pages table...
-        event(new WikiWasSaved($wiki));
+        event(new WikiSaved($wiki));
 
         return redirect()->to($wiki->path)->with('success', 'Zmiany zostały zapisane.');
     }

@@ -5,7 +5,7 @@ namespace Coyote\Providers;
 use Coyote\Events\CommentSaved;
 use Coyote\Events\FirewallWasDeleted;
 use Coyote\Events\FirewallWasSaved;
-use Coyote\Events\ForumWasSaved;
+use Coyote\Events\ForumSaved;
 use Coyote\Events\MicroblogSaved;
 use Coyote\Events\PostSaved;
 use Coyote\Events\StreamSaved;
@@ -49,7 +49,7 @@ class EventServiceProvider extends ServiceProvider
         SuccessfulLogin::class => [SendSuccessfulLoginEmail::class],
         Login::class => [SetupLoginDate::class],
         MessageSending::class => [ChangeImageUrl::class, LogSentMessage::class],
-        ForumWasSaved::class => [IndexCategory::class],
+        ForumSaved::class => [IndexCategory::class],
         StreamSaved::class => [IndexStream::class],
         PostSaved::class => [DispatchPostNotifications::class],
         MicroblogSaved::class => [DispatchMicroblogNotifications::class],

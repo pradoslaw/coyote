@@ -3,7 +3,7 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Forum\Reason;
-use Coyote\Events\TopicWasDeleted;
+use Coyote\Events\TopicDeleted;
 use Coyote\Events\PostWasDeleted;
 use Coyote\Notifications\Topic\DeletedNotification as TopicDeletedNotification;
 use Coyote\Notifications\Post\DeletedNotification as PostDeletedNotification;
@@ -69,7 +69,7 @@ class DeleteController extends BaseController
                 );
 
                 // fire the event. it can be used to delete row from "pages" table or from search index
-                event(new TopicWasDeleted($topic));
+                event(new TopicDeleted($topic));
 
                 $object = (new Stream_Topic())->map($topic);
                 $target = (new Stream_Forum())->map($forum);

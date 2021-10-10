@@ -21,7 +21,7 @@ use Coyote\Services\Stream\Objects\Post as Stream_Post;
 use Coyote\Services\Stream\Objects\Forum as Stream_Forum;
 use Coyote\Services\Stream\Actor as Stream_Actor;
 use Coyote\Events\PostSaved;
-use Coyote\Events\TopicWasSaved;
+use Coyote\Events\TopicSaved;
 
 class SubmitController extends BaseController
 {
@@ -139,7 +139,7 @@ class SubmitController extends BaseController
         $post->load('assets');
 
         // fire the event. it can be used to index a content and/or add page path to "pages" table
-        event(new TopicWasSaved($topic));
+        event(new TopicSaved($topic));
         // add post to elasticsearch
         broadcast(new PostSaved($post))->toOthers();
 
@@ -223,7 +223,7 @@ class SubmitController extends BaseController
         });
 
         // fire the event. it can be used to index a content and/or add page path to "pages" table
-        event(new TopicWasSaved($topic));
+        event(new TopicSaved($topic));
         // add post to elasticsearch
         event(new PostSaved($post));
 

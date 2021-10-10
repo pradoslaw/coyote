@@ -2,15 +2,15 @@
 
 namespace Coyote\Events;
 
-use Coyote\Topic;
 use Illuminate\Queue\SerializesModels;
+use Coyote\Topic;
 
-class TopicWasSaved
+class TopicDeleted
 {
     use SerializesModels;
 
     /**
-     * @var Topic
+     * @var array
      */
     public $topic;
 
@@ -21,6 +21,6 @@ class TopicWasSaved
      */
     public function __construct(Topic $topic)
     {
-        $this->topic = $topic;
+        $this->topic = $topic->toArray();
     }
 }
