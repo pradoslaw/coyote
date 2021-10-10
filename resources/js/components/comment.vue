@@ -110,12 +110,12 @@
 </template>
 
 <script>
-  import VueModal from '../modal.vue';
-  import VueAvatar from '../avatar.vue';
-  import VueUserName from '../user-name.vue';
-  import VueButton from '../forms/button.vue';
-  import VueFlag from '../flags/flag.vue';
-  import { default as mixins } from '../mixins/user';
+  import VueModal from './modal.vue';
+  import VueAvatar from './avatar.vue';
+  import VueUserName from './user-name.vue';
+  import VueButton from './forms/button.vue';
+  import VueFlag from './flags/flag.vue';
+  import { default as mixins } from './mixins/user';
   import { mapGetters } from 'vuex';
 
   export default {

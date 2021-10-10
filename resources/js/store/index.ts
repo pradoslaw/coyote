@@ -13,6 +13,7 @@ import poll from './modules/poll';
 import flags from './modules/flags';
 import jobs from './modules/jobs';
 import guides from './modules/guides';
+import comments from './modules/comments';
 
 Vue.use(Vuex);
 
@@ -30,6 +31,7 @@ export default new Vuex.Store({
     poll,
     flags,
     jobs,
-    guides
+    guides,
+    comments
   }
 });

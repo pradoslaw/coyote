@@ -340,6 +340,13 @@ interface GuidePermission {
   update: boolean;
 }
 
+export interface Comment {
+  id: number;
+  parent_id: number;
+  text: string;
+
+}
+
 export interface Guide {
   id: number;
   title: string;
@@ -350,4 +357,5 @@ export interface Guide {
   html: string;
   permissions: GuidePermission;
   is_editing: boolean;
+  comments: Comment[];
 }

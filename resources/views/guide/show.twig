@@ -15,57 +15,63 @@
 
       <div id="comments" class="card card-default">
         <div class="card-body">
-          <div id="comment-438" class="comment">
-            <div class="media">
-              <div class="mr-2"><a href="/Profile/1" data-user-id="1">
-                  <div class="position-relative img-thumbnail media-object">
-                    <img src="http://4p.local:8880/uploads/photo/yPLjhM456oR3qDVVuuaK3govIgs1dNKOrkYwGVir.png" alt="Adam Boduch" class="d-block mw-100"> <!----></div>
-                </a></div>
-              <div class="media-body">
-                <div class="dropdown float-right">
-                  <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-secondary btn-xs dropdown-toggle"></button>
-                  <div class="dropdown-menu dropdown-menu-right"><a href="javascript:" class="btn-edit dropdown-item"><i class="fa fa-edit fa-fw"></i> Edytuj</a>
-                    <a href="javascript:" class="dropdown-item"><i class="fa fa-trash fa-fw"></i> Usuń</a></div>
-                </div>
-                <h5><a class="" href="/Profile/1" data-user-id="1">Adam Boduch</a></h5>
-                <h6><a href="#comment-438" class="text-muted">
-                    <time title="21 grudnia 2020 20:40">1 sekunda temu</time>
-                  </a></h6>
-                <div class="mt-2"><p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.
-                    Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going
-                    through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum"
-                    (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum,
-                    "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.</p></div> <!---->
-              </div>
-            </div>
-            <div class="comment"><!----></div>
-            <div id="comment-439" class="comment">
-              <div class="media">
-                <div class="mr-2"><a href="/Profile/1" data-user-id="1">
-                    <div class="position-relative img-thumbnail media-object">
-                      <img src="http://4p.local:8880/uploads/photo/yPLjhM456oR3qDVVuuaK3govIgs1dNKOrkYwGVir.png" alt="Adam Boduch" class="d-block mw-100"> <!----></div>
-                  </a></div>
-                <div class="media-body">
-                  <div class="dropdown float-right">
-                    <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-secondary btn-xs dropdown-toggle"></button>
-                    <div class="dropdown-menu dropdown-menu-right"><a href="javascript:" class="btn-edit dropdown-item"><i class="fa fa-edit fa-fw"></i> Edytuj</a>
-                      <a href="javascript:" class="dropdown-item"><i class="fa fa-trash fa-fw"></i> Usuń</a></div>
-                  </div>
-                  <h5><a class="" href="/Profile/1" data-user-id="1">Adam Boduch</a></h5>
-                  <h6><a href="#comment-439" class="text-muted">
-                      <time title="21 grudnia 2020 20:40">1 sekunda temu</time>
-                    </a></h6>
-                  <div class="mt-2"><p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years
-                      old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and
-                      going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et
-                      Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of
-                      Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.</p></div> <!---->
-                </div>
-              </div>
-              <div class="comment"><!----></div>
+          <vue-comment
+            v-for="comment in comments"
+            :comment="comment"
+            :key="comment.id"
+          ></vue-comment>
 
-            </div>
-          </div>
+{#          <div id="comment-438" class="comment">#}
+{#            <div class="media">#}
+{#              <div class="mr-2"><a href="/Profile/1" data-user-id="1">#}
+{#                  <div class="position-relative img-thumbnail media-object">#}
+{#                    <img src="http://4p.local:8880/uploads/photo/yPLjhM456oR3qDVVuuaK3govIgs1dNKOrkYwGVir.png" alt="Adam Boduch" class="d-block mw-100"> <!----></div>#}
+{#                </a></div>#}
+{#              <div class="media-body">#}
+{#                <div class="dropdown float-right">#}
+{#                  <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-secondary btn-xs dropdown-toggle"></button>#}
+{#                  <div class="dropdown-menu dropdown-menu-right"><a href="javascript:" class="btn-edit dropdown-item"><i class="fa fa-edit fa-fw"></i> Edytuj</a>#}
+{#                    <a href="javascript:" class="dropdown-item"><i class="fa fa-trash fa-fw"></i> Usuń</a></div>#}
+{#                </div>#}
+{#                <h5><a class="" href="/Profile/1" data-user-id="1">Adam Boduch</a></h5>#}
+{#                <h6><a href="#comment-438" class="text-muted">#}
+{#                    <time title="21 grudnia 2020 20:40">1 sekunda temu</time>#}
+{#                  </a></h6>#}
+{#                <div class="mt-2"><p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.#}
+{#                    Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going#}
+{#                    through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum"#}
+{#                    (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum,#}
+{#                    "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.</p></div> <!---->#}
+{#              </div>#}
+{#            </div>#}
+{#            <div class="comment"><!----></div>#}
+{#            <div id="comment-439" class="comment">#}
+{#              <div class="media">#}
+{#                <div class="mr-2"><a href="/Profile/1" data-user-id="1">#}
+{#                    <div class="position-relative img-thumbnail media-object">#}
+{#                      <img src="http://4p.local:8880/uploads/photo/yPLjhM456oR3qDVVuuaK3govIgs1dNKOrkYwGVir.png" alt="Adam Boduch" class="d-block mw-100"> <!----></div>#}
+{#                  </a></div>#}
+{#                <div class="media-body">#}
+{#                  <div class="dropdown float-right">#}
+{#                    <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-secondary btn-xs dropdown-toggle"></button>#}
+{#                    <div class="dropdown-menu dropdown-menu-right"><a href="javascript:" class="btn-edit dropdown-item"><i class="fa fa-edit fa-fw"></i> Edytuj</a>#}
+{#                      <a href="javascript:" class="dropdown-item"><i class="fa fa-trash fa-fw"></i> Usuń</a></div>#}
+{#                  </div>#}
+{#                  <h5><a class="" href="/Profile/1" data-user-id="1">Adam Boduch</a></h5>#}
+{#                  <h6><a href="#comment-439" class="text-muted">#}
+{#                      <time title="21 grudnia 2020 20:40">1 sekunda temu</time>#}
+{#                    </a></h6>#}
+{#                  <div class="mt-2"><p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years#}
+{#                      old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and#}
+{#                      going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et#}
+{#                      Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of#}
+{#                      Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.</p></div> <!---->#}
+{#                </div>#}
+{#              </div>#}
+{#              <div class="comment"><!----></div>#}
+
+{#            </div>#}
+{#          </div>#}
         </div>
       </div>
 
