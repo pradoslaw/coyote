@@ -9,7 +9,12 @@ use Coyote\Models\Guide;
 
 class SubmitController extends Controller
 {
-    public function index(Guide $guide, GuideRequest $request)
+    public function form()
+    {
+        return $this->view('guide.form');
+    }
+
+    public function save(Guide $guide, GuideRequest $request)
     {
         if (!$guide->exists) {
             $guide->user()->associate($this->auth);

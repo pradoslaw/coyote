@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Resources;
 
+use Coyote\Models\Comment;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -10,6 +11,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property string $excerpt
  * @property \Coyote\User $user
  * @property \Coyote\Tag[] $tags
+ * @property Comment[] $commentsWithChildren
  */
 class GuideResource extends JsonResource
 {
@@ -34,7 +36,10 @@ class GuideResource extends JsonResource
                 'permissions'   => [
                     'update' => true
                 ],
-                'is_editing'    => false
+                'is_editing'    => false,
+
+                'comments'      => $this->whenLoaded('commentsWithChildren', CommentResource::collection($this->commentsWithChildren))
+//                'comments'      => $this->whenLoaded('commentsWithChildren', CommentCollection::collection($this->commentsWithChildren))
             ]
         );
     }

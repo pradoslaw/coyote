@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VuePost from '@/components/guide/post.vue';
+import VueForm from '@/components/guide/form.vue';
 import store from '@/store';
 import VuePaste from "../plugins/paste";
 import { Guide, Paginator } from "@/types/models";
@@ -34,3 +35,21 @@ new Vue({
     store.commit('guides/init', { guide: window.guide });
   }
 });
+
+// new Vue({
+//   el: '#js-form',
+//   store,
+//   delimiters: ['${', '}'],
+//   components: { 'vue-form': VueForm },
+//   created() {
+//     if (document.getElementById('js-form')) {
+//       store.commit('guides/init', { guide: this.defaultContent });
+//     }
+//   },
+//
+//   computed: {
+//     defaultContent() {
+//       return {title: '', excerpt: '', tags: []}
+//     }
+//   }
+// });

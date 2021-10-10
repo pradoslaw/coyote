@@ -17,6 +17,7 @@
               :tags="guide.tags"
               :class="{'is-invalid': 'tags' in errors}"
               @change="toggleTag"
+              placeholder="...inny? kliknij, aby wybrać tag"
             ></vue-tags-inline>
 
             <vue-error :message="errors['tags']"></vue-error>
@@ -42,19 +43,21 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from "vue-class-component";
-  import { Prop } from "vue-property-decorator";
-  import { Guide } from '@/types/models';
+  import {Prop, ProvideReactive} from "vue-property-decorator";
+  import { Guide, Tag } from '@/types/models';
   import { default as mixins } from '../mixins/user';
   import VueButton from '@/components/forms/button.vue';
   import VueTagsInline from '@/components/forms/tags-inline.vue';
   import VueMarkdown from '@/components/forms/markdown.vue';
   import VueText from '@/components/forms/text.vue';
   import VueError from '@/components/forms/error.vue';
-  import {mapActions, mapMutations, mapState} from 'vuex';
+  import { mapActions, mapMutations, mapState } from 'vuex';
   import VueFormGroup from "@/components/forms/form-group.vue";
+  import store from '@/store';
 
   @Component({
     mixins: [ mixins ],
+    store,
     components: {
       'vue-form-group': VueFormGroup,
       'vue-text': VueText,
@@ -67,16 +70,37 @@
       ...mapState('guides', ['guide'])
     },
     methods: {
-      ...mapActions('guides', ['save']),
       ...mapMutations('guides', ['toggleTag'])
-    }
+    },
+    inject: []
   })
   export default class VueForm extends Vue {
-    private errors = {};
+    errors = {};
     private isProcessing = false;
 
+    @Prop({default: () => []})
+    @ProvideReactive('popularTags')
+    readonly popularTags!: Tag[];
+
     cancel() {
-      this.$store.commit('guides/edit');
+      store.commit('guides/edit');
+    }
+
+    save() {
+      this.isProcessing = true;
+
+      return store.dispatch('guides/save')
+        .then(() => {
+          this.$emit('save');
+        })
+        .catch(err => {
+          if (err.response?.status !== 422) {
+            return;
+          }
+
+          this.errors = err.response?.data.errors;console.log(err.response?.data.errors)
+        })
+        .finally(() => this.isProcessing = false);
     }
   }
 </script>

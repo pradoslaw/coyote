@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $text
  * @property Tag[] $tags
  * @property int $user_id
+ * @property Comment[] $comments
+ * @property Comment[] $commentsWithChildren
  */
 class Guide extends Model
 {
@@ -33,5 +35,26 @@ class Guide extends Model
     public function tags()
     {
         return $this->morphToMany(Tag::class, 'resource', 'tag_resources');
+    }
+
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'content');
+    }
+
+    public function commentsWithChildren()
+    {
+        $userRelation = fn ($builder) => $builder->select(['id', 'name', 'photo', 'deleted_at', 'is_blocked'])->withTrashed();
+
+        return $this
+            ->comments()
+            ->whereNull('parent_id')
+            ->orderBy('id', 'DESC')
+            ->with([
+                'children' => function ($builder) use ($userRelation) {
+                    return $builder->with(['user' => $userRelation]);
+                },
+                'user' => $userRelation
+            ]);
     }
 }

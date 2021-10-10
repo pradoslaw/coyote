@@ -14,8 +14,6 @@ class CommentCollection extends ResourceCollection
      */
     protected $preserveKeys = true;
 
-    public Job $job;
-
     /**
      * Transform the resource collection into an array.
      *
@@ -24,18 +22,15 @@ class CommentCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        $model = clone $this->job;
-        $model->unsetRelations();
-
         $collection = $this
             ->collection
-            ->map(function (CommentResource $resource) use ($request, $model) {
-                $comment = $resource->resource;
-                $comment->job()->associate($model);
-
-                foreach ($comment->children as $child) {
-                    $child->job()->associate($model);
-                }
+            ->map(function (CommentResource $resource) use ($request) {
+//                $comment = $resource->resource;
+//                $comment->job()->associate($model);
+//
+//                foreach ($comment->children as $child) {
+//                    $child->job()->associate($model);
+//                }
 
                 return $resource;
             })

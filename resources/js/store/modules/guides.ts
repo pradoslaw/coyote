@@ -28,7 +28,7 @@ const mutations = {
 
 const actions = {
   save({ state, commit }) {
-    axios.post(`/Guide/Submit/${state.guide.id}`, state.guide).then(response => {
+    return axios.post(`/Guide/Submit/${state.guide.id || ''}`, state.guide).then(response => {
       commit('edit');
       commit('save', response.data);
     });

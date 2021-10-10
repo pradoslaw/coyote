@@ -1,0 +1,19 @@
+{% extends 'layout' %}
+
+{% block title %}{{ guide.title }}{{ parent() }}{% endblock %}
+
+{% block container %}
+<div class="row mt-1">
+  <div class="col-lg-2">
+    {% include 'guide.partials.filter' %}
+  </div>
+
+  <div id="js-form" class="col-lg-7">
+    <div class="card card-default">
+      <vue-form class="card-body"></vue-form>
+    </div>
+
+    <vue-notifications position="bottom right"/>
+  </div>
+</div>
+{% endblock %}
