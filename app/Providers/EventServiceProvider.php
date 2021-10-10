@@ -27,7 +27,7 @@ use Coyote\Listeners\SetupLoginDate;
 use Coyote\Listeners\SetupWikiLinks;
 use Coyote\Listeners\UserSubscriber;
 use Coyote\Listeners\WikiListener;
-use Coyote\Listeners\PageListener;
+use Coyote\Listeners\PageSubscriber;
 use Coyote\Listeners\TopicListener;
 use Coyote\Listeners\JobListener;
 use Illuminate\Auth\Events\Lockout;
@@ -62,7 +62,7 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $subscribe = [
-        PageListener::class,
+        PageSubscriber::class,
         TopicListener::class,
         JobListener::class,
         MicroblogListener::class,

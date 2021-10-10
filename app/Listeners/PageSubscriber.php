@@ -23,7 +23,7 @@ use Coyote\Wiki;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Contracts\Console\Kernel;
 
-class PageListener implements ShouldQueue
+class PageSubscriber implements ShouldQueue
 {
     /**
      * Postpone this job to make sure that record was saved in transaction.
@@ -195,60 +195,19 @@ class PageListener implements ShouldQueue
      */
     public function subscribe($events)
     {
-        $events->listen(
-            'Coyote\Events\TopicWasSaved',
-            'Coyote\Listeners\PageListener@onTopicSave'
-        );
-
-        $events->listen(
-            'Coyote\Events\TopicWasMoved',
-            'Coyote\Listeners\PageListener@onTopicMove'
-        );
-
-        $events->listen(
-            'Coyote\Events\TopicWasDeleted',
-            'Coyote\Listeners\PageListener@onTopicDelete'
-        );
-
-        $events->listen(
-            'Coyote\Events\ForumWasSaved',
-            'Coyote\Listeners\PageListener@onForumSave'
-        );
-
-        $events->listen(
-            'Coyote\Events\ForumWasDeleted',
-            'Coyote\Listeners\PageListener@onForumDelete'
-        );
-
-        $events->listen(
-            'Coyote\Events\MicroblogSaved',
-            'Coyote\Listeners\PageListener@onMicroblogSave'
-        );
-
-        $events->listen(
-            'Coyote\Events\MicroblogDeleted',
-            'Coyote\Listeners\PageListener@onMicroblogDelete'
-        );
-
-        $events->listen(
-            'Coyote\Events\JobWasSaved',
-            'Coyote\Listeners\PageListener@onJobSave'
-        );
-
-        $events->listen(
-            'Coyote\Events\JobDeleted',
-            'Coyote\Listeners\PageListener@onJobDelete'
-        );
-
-        $events->listen(
-            'Coyote\Events\WikiWasSaved',
-            'Coyote\Listeners\PageListener@onWikiSave'
-        );
-
-        $events->listen(
-            'Coyote\Events\WikiWasDeleted',
-            'Coyote\Listeners\PageListener@onWikiDelete'
-        );
+        return [
+            TopicWasSaved::class => 'onTopicSave',
+            TopicWasMoved::class => 'onTopicMove',
+            TopicWasDeleted::class => 'onTopicDelete',
+            ForumWasSaved::class => 'onForumSave',
+            ForumWasDeleted::class => 'onForumDelete',
+            MicroblogSaved::class => 'onMicroblogSave',
+            MicroblogDeleted::class => 'onMicroblogDelete',
+            JobWasSaved::class => 'onJobSave',
+            JobDeleted::class => 'onJobDelete',
+            WikiWasSaved::class => 'onWikiSave',
+            WikiWasDeleted::class => 'onWikiDelete'
+        ];
     }
 
     // before changing page path we MUST save page views that are stored in redis
