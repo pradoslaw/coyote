@@ -50,5 +50,5 @@ interface NotificationRepositoryInterface extends RepositoryInterface
      */
     public function updateSettings($userId, array $data);
 
-    public function purge(): void;
+    public function purge(): int;
 }

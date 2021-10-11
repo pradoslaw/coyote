@@ -129,8 +129,8 @@ class NotificationRepository extends Repository implements NotificationRepositor
         }
     }
 
-    public function purge(): void
+    public function purge(): int
     {
-        $this->model->whereNotNull('read_at')->where('is_clicked', true)->where('created_at', '<', now()->subYear())->delete();
+        return $this->model->whereNotNull('read_at')->where('is_clicked', true)->where('created_at', '<', now()->subYear())->limit(1000)->delete();
     }
 }

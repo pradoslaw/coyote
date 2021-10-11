@@ -23,8 +23,8 @@ class PurgeNotificationsCommand extends Command
 
     public function handle(NotificationRepositoryInterface $notification)
     {
-        $notification->purge();
+        $affected = $notification->purge();
 
-        $this->info('Done.');
+        $this->info("Done. Notifications removed: $affected.");
     }
 }
