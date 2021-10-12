@@ -30,7 +30,7 @@ class CommentResource extends JsonResource
     public function toArray($request)
     {
         return array_merge(
-            array_only(parent::toArray($request), ['id', 'text', 'email']),
+            array_only(parent::toArray($request), ['id', 'text', 'email', 'html']),
             [
                 'created_at'    => $this->created_at->toIso8601String(),
 //                'editable'      => $request->user() ? $this->user_id == $request->user()->id || $request->user()->can('job-update') : false,

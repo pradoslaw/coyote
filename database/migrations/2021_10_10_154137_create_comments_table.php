@@ -18,7 +18,7 @@ class CreateCommentsTable extends Migration
             $table->timestamps();
             $table->softDeletesTz();
             $table->integer('parent_id')->nullable();
-            $table->morphs('content');
+            $table->morphs('resource');
             $table->integer('user_id');
             $table->text('text');
             $table->string('email')->nullable();

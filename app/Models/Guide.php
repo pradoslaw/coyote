@@ -39,7 +39,7 @@ class Guide extends Model
 
     public function comments()
     {
-        return $this->morphMany(Comment::class, 'content');
+        return $this->morphMany(Comment::class, 'resource');
     }
 
     public function commentsWithChildren()

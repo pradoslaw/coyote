@@ -3,15 +3,10 @@
 namespace Coyote\Repositories\Contracts;
 
 use Coyote\Tag;
+use JetBrains\PhpStorm\ArrayShape;
 
 interface TagRepositoryInterface extends RepositoryInterface
 {
-    /**
-     * @param string $name
-     * @return \Coyote\Tag[]
-     */
-    public function lookupName($name);
-
     public function exists(string $name): bool;
 
     /**
@@ -31,4 +26,10 @@ interface TagRepositoryInterface extends RepositoryInterface
      * @return array
      */
     public function tagClouds(string $model): array;
+
+    /**
+     * @param string $model
+     * @return \Coyote\Tag[]
+     */
+    public function popularTags(string $model);
 }

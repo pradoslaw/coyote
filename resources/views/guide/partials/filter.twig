@@ -1,15 +1,20 @@
 <div class="qa-filter">
 
-  <h4>Języki programowania</h4>
+  {% for category, tags in popular_tags %}
+    <h4>{{ category }}</h4>
 
-  <ol class="qa-categories list-unstyled">
-    <li><a href="#"><img alt="java" src="/img/sprites-c9a285ef160c00bf.svg#sprite-logo-java-fragment"> Java</a></li>
-    <li><a href="#"><img alt="javascript" src="/img/sprites-c9a285ef160c00bf.svg#sprite-logo-javascript-fragment"> JavaScript</a></li>
-  </ol>
+    <ol class="qa-categories list-unstyled">
+      {% for tag in tags %}
+        <li>
+          <a href="#">
+            {% if tag.logo.getName() %}
+              <img alt="{{ tag.name }}" src="{{ tag.logo }}">
+            {% endif %}
 
-  <h4>Bazy danych</h4>
-
-  <ol class="qa-categories list-unstyled">
-    <li><a href="#"><img alt="java" src="/img/sprites-c9a285ef160c00bf.svg#sprite-logo-postgresql-fragment"> PostgreSQL</a></li>
-  </ol>
+            {{ tag.real_name|default(tag.name) }}
+          </a>
+        </li>
+      {% endfor %}
+    </ol>
+  {% endfor %}
 </div>
