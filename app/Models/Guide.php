@@ -2,6 +2,7 @@
 
 namespace Coyote\Models;
 
+use Coyote\Page;
 use Coyote\Tag;
 use Coyote\Taggable;
 use Coyote\User;
@@ -17,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $user_id
  * @property Comment[] $comments
  * @property Comment[] $commentsWithChildren
+ * @property string $slug
  */
 class Guide extends Model
 {
@@ -24,9 +26,22 @@ class Guide extends Model
 
     protected $fillable = ['title', 'excerpt', 'text'];
 
+    public function getSlugAttribute(): string
+    {
+        return str_slug($this->title, '_');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
+     */
+    public function page()
+    {
+        return $this->morphOne(Page::class, 'content');
     }
 
     /**

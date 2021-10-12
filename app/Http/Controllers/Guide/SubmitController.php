@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Guide;
 
+use Coyote\Events\GuideSaved;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Requests\GuideRequest;
 use Coyote\Http\Resources\GuideResource;
@@ -29,6 +30,8 @@ class SubmitController extends Controller
 
             $guide->setTags(array_pluck($request->input('tags', []), 'name'));
         });
+
+        event(new GuideSaved($guide));
 
         GuideResource::withoutWrapping();
 

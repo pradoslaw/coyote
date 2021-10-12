@@ -5,6 +5,7 @@ namespace Coyote\Services;
 use Coyote\Forum;
 use Coyote\Job;
 use Coyote\Microblog;
+use Coyote\Models\Guide;
 use Coyote\Post;
 use Coyote\Topic;
 use Coyote\Wiki;
@@ -106,5 +107,14 @@ class UrlBuilder
     public static function microblogComment(Microblog $comment, bool $absolute = false)
     {
         return route('microblog.view', [$comment->parent_id], $absolute) . '#comment-' . $comment->id;
+    }
+
+    /**
+     * @param Guide $guide
+     * @return string
+     */
+    public static function guide(Guide $guide): string
+    {
+        return route('guide.show', [$guide->id, $guide->slug], false);
     }
 }
