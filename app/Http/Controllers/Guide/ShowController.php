@@ -19,9 +19,11 @@ class ShowController extends Controller
     {
         $this->breadcrumb->push('Pytania kwalifikacyjne');
 
+        $guide->loadCount('comments');
+
         return $this->view('guide.show', [
-            'guide' => new GuideResource($guide),
-            'popular_tags' => $this->tagRepository->popularTags(Guide::class)->groupBy('category')
+            'guide'         => new GuideResource($guide),
+            'popular_tags'  => $this->tagRepository->popularTags(Guide::class)->groupBy('category')
         ]);
     }
 }

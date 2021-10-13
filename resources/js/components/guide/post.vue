@@ -25,7 +25,7 @@
         </li>
 
         <li class="list-inline-item">
-          <i class="far fa-comments"></i> 0 komentarzy
+          <i class="far fa-comments"></i> {{ guide.comments_count }} {{ guide.comments_count | declination(['komentarz', 'komentarze', 'komentarzy']) }}
         </li>
 
         <li class="list-inline-item">

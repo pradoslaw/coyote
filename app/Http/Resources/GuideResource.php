@@ -9,9 +9,12 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property string $title
  * @property string $text
  * @property string $excerpt
+ * @property string $slug
  * @property \Coyote\User $user
  * @property \Coyote\Tag[] $tags
  * @property Comment[] $commentsWithChildren
+ * @property Comment[] $comments
+ * @property int $comments_count
  */
 class GuideResource extends JsonResource
 {
@@ -28,7 +31,7 @@ class GuideResource extends JsonResource
         return array_merge(
             parent::toArray($request),
             [
-                'slug'          => str_slug($this->title),
+                'slug'          => $this->slug,
                 'html'          => $parser->parse($this->text),
                 'excerpt_html'  => $parser->parse($this->excerpt),
                 'user'          => new UserResource($this->user),
@@ -38,8 +41,8 @@ class GuideResource extends JsonResource
                 ],
                 'is_editing'    => false,
 
-                'comments'      => $this->whenLoaded('commentsWithChildren', CommentResource::collection($this->commentsWithChildren))
-//                'comments'      => $this->whenLoaded('commentsWithChildren', CommentCollection::collection($this->commentsWithChildren))
+                'comments_count'    => $this->comments_count,
+                'comments'          => $this->whenLoaded('commentsWithChildren', CommentResource::collection($this->commentsWithChildren))
             ]
         );
     }
