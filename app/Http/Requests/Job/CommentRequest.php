@@ -2,6 +2,8 @@
 
 namespace Coyote\Http\Requests\Job;
 
+use Coyote\Job;
+use Coyote\Models\Guide;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -26,15 +28,15 @@ class CommentRequest extends FormRequest
     {
         return [
             'text' => 'required|string',
-            'job_id' => [
-                'sometimes',
-                'int',
-                Rule::exists('jobs', 'id')
-            ],
             'parent_id' => [
                 'nullable',
                 'int',
-                Rule::exists('job_comments', 'id')->whereNull('parent_id')
+                Rule::exists('comments', 'id')->whereNull('parent_id')
+            ],
+            'resource_id' => 'required|int',
+            'resource_type' => [
+                'required',
+                Rule::in([Guide::class, Job::class])
             ]
         ];
     }

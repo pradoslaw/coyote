@@ -26,22 +26,31 @@ class GuideResource extends JsonResource
      */
     public function toArray($request)
     {
-        $parser = resolve('parser.post');
 
         return array_merge(
             parent::toArray($request),
             [
                 'slug'          => $this->slug,
-                'html'          => $parser->parse($this->text),
-                'excerpt_html'  => $parser->parse($this->excerpt),
+
                 'user'          => new UserResource($this->user),
                 'tags'          => TagResource::collection($this->tags),
                 'permissions'   => [
-                    'update' => true
+                    'update'    => true
                 ],
 
                 'comments_count'    => $this->comments_count,
-                'comments'          => $this->whenLoaded('commentsWithChildren', CommentResource::collection($this->commentsWithChildren))
+
+                $this->mergeWhen($this->text && $this->excerpt, function () {
+                    $parser = resolve('parser.post');
+
+                    return [
+                        'html'          => $parser->parse($this->text),
+                        'excerpt_html'  => $parser->parse($this->excerpt)
+                    ];
+                }),
+
+
+                'comments'          => $this->whenLoaded('commentsWithChildren', (new CommentCollection($this->commentsWithChildren))->setOwner($this->resource))
             ]
         );
     }

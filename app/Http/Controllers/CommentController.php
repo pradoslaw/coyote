@@ -1,11 +1,10 @@
 <?php
 
-namespace Coyote\Http\Controllers\Job;
+namespace Coyote\Http\Controllers;
 
-use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Requests\Job\CommentRequest;
 use Coyote\Http\Resources\CommentResource;
-use Coyote\Job;
+use Coyote\Comment;
 use Coyote\Notifications\Job\CommentedNotification;
 use Coyote\Notifications\Job\RepliedNotification;
 use Coyote\Services\Stream\Actor as Stream_Actor;
@@ -21,21 +20,17 @@ class CommentController extends Controller
     /**
      * @param CommentRequest $request
      * @param Dispatcher $dispatcher
-     * @param Job\Comment|null $comment
+     * @param Comment|null $comment
      * @return CommentResource
      */
-    public function save(CommentRequest $request, Dispatcher $dispatcher, Job\Comment $comment = null)
+    public function save(CommentRequest $request, Dispatcher $dispatcher, Comment $comment = null)
     {
-        if ($comment->exists) {
-            $this->checkAbility();
-        }
+//        if ($comment->exists) {
+//            $this->checkAbility();
+//        }
 
-        $comment->fill($request->all())->creating(function (Job\Comment $model) {
+        $comment->fill($request->all())->creating(function (Comment $model) {
             $model->user_id = $this->userId;
-
-            if ($model->parent_id) {
-                $model->job_id = $model->parent->job_id;
-            }
         });
 
         $actor = new Stream_Actor($this->auth);
@@ -43,16 +38,16 @@ class CommentController extends Controller
         $this->transaction(function () use ($comment, $dispatcher, $actor) {
             $comment->save();
 
-            stream(
-                $comment->wasRecentlyCreated ? new Stream_Create($actor) : new Stream_Update($actor),
-                (new Stream_Comment())->map($comment->job, $comment),
-                (new Stream_Job())->map($comment->job)
-            );
+//            stream(
+//                $comment->wasRecentlyCreated ? new Stream_Create($actor) : new Stream_Update($actor),
+//                (new Stream_Comment())->map($comment->job, $comment),
+//                (new Stream_Job())->map($comment->job)
+//            );
         });
 
         if ($comment->wasRecentlyCreated) {
             $subscribers = $comment
-                ->job
+                ->resource
                 ->subscribers()
                 ->with('user')
                 ->get()
@@ -72,10 +67,7 @@ class CommentController extends Controller
         return new CommentResource($comment->load('user'));
     }
 
-    /**
-     * @param Job\Comment $comment
-     */
-    public function delete(Job\Comment $comment)
+    public function delete(Comment $comment)
     {
         $this->checkAbility();
 

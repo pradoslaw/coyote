@@ -1,19 +1,18 @@
 <template>
   <div :id="'comment-' + comment.id" class="comment">
-    <div class="media" :class="{author: comment.is_author}">
+    <div class="media" :class="{author: comment.is_owner}">
       <div class="mr-2">
         <a v-profile="comment.user.id">
-          <vue-avatar :photo="comment.user.photo" :name="comment.user.name" :id="comment.user.id" class="img-thumbnail media-object"></vue-avatar>
+          <vue-avatar v-bind="comment.user" :is-online="comment.user.is_online" class="img-thumbnail media-object"></vue-avatar>
         </a>
       </div>
 
       <div class="media-body">
-        <div class="dropdown float-right" v-if="comment.editable">
-          <button class="btn btn-secondary btn-xs dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          </button>
+        <div class="dropdown float-right" v-if="comment.permissions.update">
+          <button class="btn btn-xs border-0 text-muted mt-2" type="button" data-toggle="dropdown" aria-label="Dropdown"><i class="fa fa-ellipsis-h"></i></button>
 
           <div class="dropdown-menu dropdown-menu-right">
-            <a @click="edit" href="javascript:" class="btn-edit dropdown-item"><i class="fa fa-edit fa-fw"></i> Edytuj</a>
+            <a @click="edit" href="javascript:" class="dropdown-item"><i class="fa fa-edit fa-fw"></i> Edytuj</a>
             <a @click="deleteComment(true)" class="dropdown-item" href="javascript:"><i class="fa fa-trash fa-fw"></i> Usuń</a>
           </div>
         </div>
@@ -110,12 +109,12 @@
 </template>
 
 <script>
-  import VueModal from './modal.vue';
-  import VueAvatar from './avatar.vue';
-  import VueUserName from './user-name.vue';
-  import VueButton from './forms/button.vue';
-  import VueFlag from './flags/flag.vue';
-  import { default as mixins } from './mixins/user';
+  import VueModal from '../modal.vue';
+  import VueAvatar from '../avatar.vue';
+  import VueUserName from '../user-name.vue';
+  import VueButton from '../forms/button.vue';
+  import VueFlag from '../flags/flag.vue';
+  import { default as mixins } from '../mixins/user';
   import { mapGetters } from 'vuex';
 
   export default {
@@ -188,7 +187,7 @@
       ...mapGetters('user', ['isAuthorized']),
 
       flags() {
-        return this.$store.getters['flags/filter'](this.comment.id, 'Coyote\\Job\\Comment');
+        return this.$store.getters['flags/filter'](this.comment.id, 'Coyote\\Comment');
       }
     }
   }

@@ -2,6 +2,7 @@
 
 namespace Coyote\Models;
 
+use Coyote\Comment;
 use Coyote\Page;
 use Coyote\Tag;
 use Coyote\Taggable;
@@ -59,7 +60,7 @@ class Guide extends Model
 
     public function commentsWithChildren()
     {
-        $userRelation = fn ($builder) => $builder->select(['id', 'name', 'photo', 'deleted_at', 'is_blocked'])->withTrashed();
+        $userRelation = fn ($builder) => $builder->select(['id', 'name', 'photo', 'deleted_at', 'is_blocked', 'is_online'])->withTrashed();
 
         return $this
             ->comments()

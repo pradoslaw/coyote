@@ -2,7 +2,7 @@
 
 namespace Coyote\Notifications\Job;
 
-use Coyote\Job\Comment;
+use Coyote\Comment;
 use Coyote\Services\Notification\Notification;
 use Coyote\Services\UrlBuilder;
 use Coyote\User;
@@ -32,7 +32,7 @@ class CommentedNotification extends Notification implements ShouldQueue, ShouldB
     public function __construct(Comment $comment)
     {
         $this->comment = $comment;
-        $this->commentUrl = UrlBuilder::jobComment($this->comment->job, $this->comment->id);
+        $this->commentUrl = UrlBuilder::url($this->comment->resource) . '#comment-' . $comment->id;
     }
 
     /**
@@ -45,7 +45,7 @@ class CommentedNotification extends Notification implements ShouldQueue, ShouldB
             'object_id'     => $this->objectId(),
             'user_id'       => $user->id,
             'type_id'       => static::ID,
-            'subject'       => $this->comment->job->title,
+            'subject'       => $this->comment->resource->title,
             'excerpt'       => excerpt($this->comment->html),
             'url'           => $this->commentUrl,
             'id'            => $this->id
@@ -59,7 +59,7 @@ class CommentedNotification extends Notification implements ShouldQueue, ShouldB
      */
     public function objectId()
     {
-        return substr(md5(class_basename($this) . $this->comment->job->id), 16);
+        return substr(md5(class_basename($this) . $this->comment->id), 16);
     }
 
     /**
@@ -82,15 +82,15 @@ class CommentedNotification extends Notification implements ShouldQueue, ShouldB
             ->subject($this->getMailSubject())
             ->line(
                 sprintf(
-                    'Do ogłoszenia <b>%s</b> dodany został nowy komentarz.',
-                    link_to(UrlBuilder::job($this->comment->job), $this->comment->job->title)
+                    'Na stronie <b>%s</b> dodany został nowy komentarz.',
+                    link_to(UrlBuilder::url($this->comment->resource), $this->comment->resource->title)
                 )
             )
             ->action(
                 'Kliknij, aby go zobaczyć i odpowiedzieć',
                 $this->redirectionUrl()
             )
-            ->line('Otrzymujesz to powiadomienie ponieważ dodałeś to ogłoszenie do ulubionych lub jesteś jego autorem.');
+            ->line('Otrzymujesz to powiadomienie ponieważ dodałeś tę stronę do ulubionych lub jesteś jej autorem.');
     }
 
     /**
@@ -100,7 +100,7 @@ class CommentedNotification extends Notification implements ShouldQueue, ShouldB
     {
         return new BroadcastMessage([
             'headline'  => $this->getMailSubject(),
-            'subject'   => $this->comment->job->title,
+            'subject'   => $this->comment->resource->title,
             'url'       => $this->redirectionUrl()
         ]);
     }
@@ -121,7 +121,7 @@ class CommentedNotification extends Notification implements ShouldQueue, ShouldB
      */
     private function getMailSubject(): string
     {
-        return sprintf('Nowy komentarz do ogłoszenia %s.', $this->comment->job->title);
+        return sprintf('Nowy komentarz na stronie  %s.', $this->comment->resource->title);
     }
 
     protected function redirectionUrl(): string

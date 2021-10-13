@@ -40,6 +40,11 @@ export const Contexts: ModelContextType = {
     [Context.User]: 'Twoje wpisy na mikroblogu',
     [Context.Subscriber]: '',
     [Context.Participant]: ''
+  },
+  [Model.Guide]: {
+    [Context.User]: 'Twoje pytania rekrutacyjne',
+    [Context.Subscriber]: '',
+    [Context.Participant]: ''
   }
 };
 
@@ -48,5 +53,6 @@ export const Models: ModelType = {
   [Model.Job]: 'Oferty pracy',
   [Model.User]: 'Użytkownicy',
   [Model.Wiki]: 'Artykuły',
-  [Model.Microblog]: 'Mikroblogi'
+  [Model.Microblog]: 'Mikroblogi',
+  [Model.Guide]: 'Pytania rekrutacyjne'
 };

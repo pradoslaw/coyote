@@ -1,9 +1,7 @@
 <?php
 
-namespace Coyote\Models;
+namespace Coyote;
 
-use Coyote\Job;
-use Coyote\User;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -13,17 +11,18 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $parent_id
  * @property string $email
  * @property string $text
- * @property \Coyote\Job\Comment[]|\Illuminate\Support\Collection $children
+ * @property \Coyote\Comment[]|\Illuminate\Support\Collection $children
  * @property Job $job
  * @property Comment $parent
  * @property string $html
+ * @property \Coyote\Job|\Coyote\Models\Guide $resource
  */
 class Comment extends Model
 {
     /**
      * @var string[]
      */
-    protected $fillable = ['user_id', 'content_id', 'content_type', 'email', 'parent_id', 'text'];
+    protected $fillable = ['user_id', 'resource_id', 'resource_type', 'email', 'parent_id', 'text'];
 
     /**
      * @var string
@@ -40,7 +39,7 @@ class Comment extends Model
      */
     private $html = null;
 
-    public function content()
+    public function resource()
     {
         return $this->morphTo();
     }

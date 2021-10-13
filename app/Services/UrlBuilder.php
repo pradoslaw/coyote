@@ -9,6 +9,7 @@ use Coyote\Models\Guide;
 use Coyote\Post;
 use Coyote\Topic;
 use Coyote\Wiki;
+use Illuminate\Database\Eloquent\Model;
 
 class UrlBuilder
 {
@@ -116,5 +117,19 @@ class UrlBuilder
     public static function guide(Guide $guide): string
     {
         return route('guide.show', [$guide->id, $guide->slug], false);
+    }
+
+    public static function url($model): string
+    {
+        return match ($model::class) {
+            Guide::class        => self::guide($model),
+            Job::class          => self::job($model),
+            Topic::class        => self::topic($model),
+            Post::class         => self::post($model),
+            Forum::class        => self::forum($model),
+            Post\Comment::class => self::postComment($model),
+            Wiki::class         => self::wiki($model),
+            Microblog::class    => self::microblog($model)
+        };
     }
 }

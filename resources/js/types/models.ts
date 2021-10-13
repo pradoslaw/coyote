@@ -4,7 +4,8 @@ export enum Model {
   User = 'User',
   Microblog = 'Microblog',
   Job = 'Job',
-  Wiki = 'Wiki'
+  Wiki = 'Wiki',
+  Guide = 'Guide'
 }
 
 export interface Flag {

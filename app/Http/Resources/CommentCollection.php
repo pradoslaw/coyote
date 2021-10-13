@@ -3,6 +3,7 @@
 namespace Coyote\Http\Resources;
 
 use Coyote\Job;
+use Coyote\Models\Guide;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class CommentCollection extends ResourceCollection
@@ -14,6 +15,15 @@ class CommentCollection extends ResourceCollection
      */
     protected $preserveKeys = true;
 
+    protected Guide|Job $owner;
+
+    public function setOwner(Guide|Job $owner): static
+    {
+        $this->owner = $owner;
+
+        return $this;
+    }
+
     /**
      * Transform the resource collection into an array.
      *
@@ -22,20 +32,15 @@ class CommentCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        $collection = $this
+        return $this
             ->collection
             ->map(function (CommentResource $resource) use ($request) {
-//                $comment = $resource->resource;
-//                $comment->job()->associate($model);
-//
-//                foreach ($comment->children as $child) {
-//                    $child->job()->associate($model);
-//                }
+                $comment = $resource->resource;
+                $comment->setRelation('resource', (clone $this->owner)->unsetRelations());
 
                 return $resource;
             })
-            ->keyBy('id');
-
-        return $collection->toArray();
+            ->keyBy('id')
+            ->toArray();
     }
 }

@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import VuePost from '@/components/guide/post.vue';
 import VueForm from '@/components/guide/form.vue';
-import VueComment from '@/components/comment.vue';
+import VueComment from '@/components/comments/comment.vue';
+import VueCommentForm from '@/components/comments/form.vue';
 import store from '@/store';
 import VuePaste from "../plugins/paste";
 import { Guide, Paginator } from "@/types/models";
@@ -31,7 +32,8 @@ new Vue({
   delimiters: ['${', '}'],
   components: {
     'vue-post': VuePost,
-    'vue-comment': VueComment
+    'vue-comment': VueComment,
+    'vue-comment-form': VueCommentForm
   },
   created() {
     store.commit('guides/INIT', { guide: window.guide });
