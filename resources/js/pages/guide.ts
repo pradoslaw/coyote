@@ -34,8 +34,8 @@ new Vue({
     'vue-comment': VueComment
   },
   created() {
-    store.commit('guides/init', { guide: window.guide });
-    store.commit('comments/INIT', window.guide.comments);
+    store.commit('guides/INIT', { guide: window.guide });
+    store.commit('comments/INIT', window.guide?.comments);
   },
   computed: {
     comments() {
@@ -51,7 +51,7 @@ new Vue({
   components: { 'vue-form': VueForm },
   created() {
     if (document.getElementById('js-form')) {
-      store.commit('guides/init', { guide: this.defaultContent });
+      store.commit('guides/INIT', { guide: {} });
     }
   },
 

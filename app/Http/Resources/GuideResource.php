@@ -39,7 +39,6 @@ class GuideResource extends JsonResource
                 'permissions'   => [
                     'update' => true
                 ],
-                'is_editing'    => false,
 
                 'comments_count'    => $this->comments_count,
                 'comments'          => $this->whenLoaded('commentsWithChildren', CommentResource::collection($this->commentsWithChildren))

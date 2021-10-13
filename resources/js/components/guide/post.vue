@@ -108,7 +108,7 @@
     private isShowing = false;
 
     edit() {
-      this.$store.commit('guides/edit');
+      this.$store.commit('guides/EDIT');
     }
 
     deleteItem() { }

@@ -1,24 +1,36 @@
 <template>
   <form>
     <vue-form-group :errors="errors['title']" label="Tytuł">
-      <vue-text name="title" v-model="guide.title" :is-invalid="'title' in errors"></vue-text>
-
+      <vue-text
+        v-model="guide.title"
+        :is-invalid="'title' in errors"
+        name="title"
+      />
     </vue-form-group>
 
     <vue-form-group :errors="errors['excerpt']" label="Opis">
-      <vue-markdown name="excerpt" v-model="guide.excerpt" :is-invalid="'excerpt' in errors"></vue-markdown>
+      <vue-markdown
+        @save="save"
+        v-model="guide.excerpt"
+        :is-invalid="'excerpt' in errors"
+        name="excerpt"
+      />
     </vue-form-group>
 
-    <vue-form-group :errors="errors['text']" label="Odpowiedz">
-      <vue-markdown v-model="guide.text" :is-invalid="'text' in errors">
+    <vue-form-group :errors="errors['text']" label="Odpowiedź">
+      <vue-markdown
+        @save="save"
+        v-model="guide.text"
+        :is-invalid="'text' in errors"
+      >
         <template v-slot:bottom>
           <div class="row no-gutters p-1">
             <vue-tags-inline
               :tags="guide.tags"
               :class="{'is-invalid': 'tags' in errors}"
-              @change="toggleTag"
+              @change="TOGGLE_TAG"
               placeholder="...inny? kliknij, aby wybrać tag"
-            ></vue-tags-inline>
+            />
 
             <vue-error :message="errors['tags']"></vue-error>
           </div>
@@ -70,7 +82,7 @@
       ...mapState('guides', ['guide'])
     },
     methods: {
-      ...mapMutations('guides', ['toggleTag'])
+      ...mapMutations('guides', ['TOGGLE_TAG'])
     },
     inject: []
   })
@@ -83,7 +95,7 @@
     readonly popularTags!: Tag[];
 
     cancel() {
-      store.commit('guides/edit');
+      store.commit('guides/EDIT');
     }
 
     save() {
@@ -98,7 +110,7 @@
             return;
           }
 
-          this.errors = err.response?.data.errors;console.log(err.response?.data.errors)
+          this.errors = err.response?.data.errors;
         })
         .finally(() => this.isProcessing = false);
     }
