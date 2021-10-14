@@ -2,7 +2,7 @@
 
 namespace Coyote\Events;
 
-use Coyote\Models\Guide;
+use Coyote\Guide;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Queue\SerializesModels;
 

@@ -2,7 +2,7 @@
 
 namespace Coyote\Policies;
 
-use Coyote\Models\Guide;
+use Coyote\Guide;
 use Coyote\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 

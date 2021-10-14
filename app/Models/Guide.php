@@ -1,12 +1,7 @@
 <?php
 
-namespace Coyote\Models;
+namespace Coyote;
 
-use Coyote\Comment;
-use Coyote\Page;
-use Coyote\Tag;
-use Coyote\Taggable;
-use Coyote\User;
 use Illuminate\Database\Eloquent\Model;
 
 /**

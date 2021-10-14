@@ -5,11 +5,10 @@ namespace Coyote\Services;
 use Coyote\Forum;
 use Coyote\Job;
 use Coyote\Microblog;
-use Coyote\Models\Guide;
+use Coyote\Guide;
 use Coyote\Post;
 use Coyote\Topic;
 use Coyote\Wiki;
-use Illuminate\Database\Eloquent\Model;
 
 class UrlBuilder
 {

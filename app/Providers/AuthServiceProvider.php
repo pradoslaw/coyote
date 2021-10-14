@@ -6,7 +6,7 @@ use Coyote\Forum;
 use Coyote\Job;
 use Coyote\Firm;
 use Coyote\Microblog;
-use Coyote\Models\Guide;
+use Coyote\Guide;
 use Coyote\Pm;
 use Coyote\Policies\GuidePolicy;
 use Coyote\Policies\MicroblogPolicy;

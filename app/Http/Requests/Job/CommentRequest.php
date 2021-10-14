@@ -3,7 +3,7 @@
 namespace Coyote\Http\Requests\Job;
 
 use Coyote\Job;
-use Coyote\Models\Guide;
+use Coyote\Guide;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 

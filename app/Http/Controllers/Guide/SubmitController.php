@@ -6,7 +6,7 @@ use Coyote\Events\GuideSaved;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Requests\GuideRequest;
 use Coyote\Http\Resources\GuideResource;
-use Coyote\Models\Guide;
+use Coyote\Guide;
 
 class SubmitController extends Controller
 {

@@ -17,7 +17,7 @@ use Coyote\Events\WikiDeleted;
 use Coyote\Events\WikiSaved;
 use Coyote\Microblog;
 use Coyote\Job;
-use Coyote\Models\Guide;
+use Coyote\Guide;
 use Coyote\Services\UrlBuilder;
 use Coyote\Topic;
 use Coyote\Forum;

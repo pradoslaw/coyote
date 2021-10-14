@@ -3,7 +3,7 @@
 namespace Coyote\Http\Resources;
 
 use Coyote\Job;
-use Coyote\Models\Guide;
+use Coyote\Guide;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class CommentCollection extends ResourceCollection

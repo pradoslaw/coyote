@@ -14,7 +14,7 @@ class GuidesTableSeeder extends Seeder
      */
     public function run()
     {
-        \Coyote\Models\Guide::forceCreate([
+        \Coyote\Guide::forceCreate([
             'title' => 'Jaki będzie wynik wykonanai poniższego kodu?',
             'excerpt' => '`true === 1`',
             'text' => 'Lorem ipsum lores',

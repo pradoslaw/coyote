@@ -4,8 +4,7 @@ namespace Coyote\Http\Controllers\Guide;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Resources\GuideResource;
-use Coyote\Http\Resources\TagResource;
-use Coyote\Models\Guide;
+use Coyote\Guide;
 use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
 
 class ShowController extends Controller

@@ -3,8 +3,7 @@
 namespace Coyote\Providers;
 
 use Coyote\Microblog;
-use Coyote\Models\Question;
-use Coyote\Models\Guide;
+use Coyote\Guide;
 use Coyote\Repositories\Contracts\BlockRepositoryInterface;
 use Coyote\Repositories\Contracts\FirewallRepositoryInterface;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface;
