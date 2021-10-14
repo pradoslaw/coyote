@@ -3,7 +3,7 @@
     <div class="media" :class="{author: comment.is_owner}">
       <div class="mr-2">
         <a v-profile="comment.user.id">
-          <vue-avatar v-bind="comment.user" :is-online="comment.user.is_online" class="img-thumbnail media-object"></vue-avatar>
+          <vue-avatar v-bind="comment.user" :is-online="comment.user.is_online" class="img-thumbnail media-object i-38"></vue-avatar>
         </a>
       </div>
 
@@ -13,7 +13,7 @@
 
           <div class="dropdown-menu dropdown-menu-right">
             <a @click="edit" href="javascript:" class="dropdown-item"><i class="fa fa-edit fa-fw"></i> Edytuj</a>
-            <a @click="deleteComment(true)" class="dropdown-item" href="javascript:"><i class="fa fa-trash fa-fw"></i> Usuń</a>
+            <a @click="deleteComment" class="dropdown-item" href="javascript:"><i class="fa fa-times fa-fw"></i> Usuń</a>
           </div>
         </div>
 
@@ -95,16 +95,6 @@
       :key="child.id"
       :nested="true"
     ></vue-comment>
-
-    <vue-modal ref="confirm">
-      Czy na pewno chcesz usunąć ten komentarz?
-
-      <template slot="buttons">
-        <button @click="$refs.confirm.close()" type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj
-        </button>
-        <button @click="deleteComment(false)" type="submit" class="btn btn-danger danger">Tak, usuń</button>
-      </template>
-    </vue-modal>
   </div>
 </template>
 
@@ -156,20 +146,19 @@
         }
       },
 
-      deleteComment(confirm) {
-        if (confirm) {
-          this.$refs.confirm.open();
-        } else {
-          this.$refs.confirm.close();
-
-          this.$store.dispatch('jobs/deleteComment', this.comment);
-        }
+      deleteComment() {
+        this.$confirm({
+          message: 'Tej operacji nie będzie można cofnąć.',
+          title: 'Usunąć komentarz?',
+          okLabel: 'Tak, usuń'
+        })
+        .then(() => this.$store.dispatch('comments/delete', this.comment));
       },
 
       saveComment(comment) {
         this.isSubmitting = true;
 
-        this.$store.dispatch('jobs/saveComment', comment)
+        this.$store.dispatch('comments/save', comment)
           .then(response => {
             this.isEditing = false;
             this.isReplying = false;

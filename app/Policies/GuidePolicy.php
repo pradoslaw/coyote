@@ -29,13 +29,4 @@ class GuidePolicy
     {
         return $user->id === $guide->user_id || $user->can('guide-delete');
     }
-
-//    /**
-//     * @param User $user
-//     * @return bool
-//     */
-//    public function moderate(User $user): bool
-//    {
-//        return $user->can('microblog-update');
-//    }
 }

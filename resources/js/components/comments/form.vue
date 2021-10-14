@@ -5,7 +5,7 @@
         <div class="media">
           <div class="mr-2">
             <a v-profile="user.id">
-              <vue-avatar v-bind="user" :is-online="user.is_online" class="img-thumbnail media-object"></vue-avatar>
+              <vue-avatar :name="user.name" :photo="user.photo" :id="user.id" :is-online="user.is_online" class="img-thumbnail media-object i-38"></vue-avatar>
             </a>
           </div>
 

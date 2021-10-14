@@ -69,7 +69,7 @@ class Guide extends Model
             ->orderBy('id', 'DESC')
             ->with([
                 'children' => function ($builder) use ($userRelation) {
-                    return $builder->with(['user' => $userRelation]);
+                    return $builder->orderBy('id')->with(['user' => $userRelation]);
                 },
                 'user' => $userRelation
             ]);

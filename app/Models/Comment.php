@@ -3,6 +3,7 @@
 namespace Coyote;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $id
@@ -21,10 +22,12 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Comment extends Model
 {
+    use SoftDeletes;
+
     /**
      * @var string[]
      */
-    protected $fillable = ['user_id', 'resource_id', 'resource_type', 'email', 'parent_id', 'text'];
+    protected $fillable = ['user_id', 'email', 'parent_id', 'text'];
 
     /**
      * @var string
@@ -62,6 +65,11 @@ class Comment extends Model
     public function children()
     {
         return $this->hasMany(Comment::class, 'parent_id', 'id');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(Comment::class);
     }
 
     /**

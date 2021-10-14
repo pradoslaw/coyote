@@ -8,11 +8,13 @@ import VuePaste from "../plugins/paste";
 import { Guide, Paginator } from "@/types/models";
 import { default as axiosErrorHandler } from '@/libs/axios-error-handler';
 import VueNotifications from "vue-notification";
+import VueModals from "@/plugins/modals";
 
 axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 
 Vue.use(VuePaste, {url: '/assets'});
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
+Vue.use(VueModals);
 
 declare global {
   interface Window {

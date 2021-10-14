@@ -35,7 +35,7 @@ class GuideResource extends JsonResource
                 'user'          => new UserResource($this->user),
                 'tags'          => TagResource::collection($this->tags),
                 'permissions'   => [
-                    'update'    => true
+                    'update'    => $request->user()?->can('update', $this->resource)
                 ],
 
                 'comments_count'    => $this->comments_count,

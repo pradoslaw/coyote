@@ -2,9 +2,7 @@ import axios from "axios";
 import Vue from "vue";
 import { Comment } from '@/types/models';
 
-const state = {
-
-}
+const state = {};
 
 const mutations = {
   INIT(state, comments) {
@@ -12,16 +10,8 @@ const mutations = {
   },
 
   UPDATE(state, comment: Comment) {
-    // if (Array.isArray(state.comments)) {
-    //   Vue.set(state, "comments", {});
-    // }
-
     if (comment.parent_id) {
       const parent = state[comment.parent_id];
-
-      // if (Array.isArray(parent.children)) {
-      //   Vue.set(parent, "children", {});
-      // }
 
       Vue.set(parent.children, comment.id, comment);
     } else {
@@ -42,10 +32,7 @@ const mutations = {
 
 const actions = {
   save({ commit }, comment) {
-    return axios.post(`/Comment/${comment.id || ''}`, comment).then(response => {
-        commit('UPDATE', response.data);
-
-      });
+    return axios.post(`/Comment/${comment.id || ''}`, comment).then(response => (commit('UPDATE', response.data), response));
   },
 
   delete({ commit }, comment) {

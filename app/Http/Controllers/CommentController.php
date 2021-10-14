@@ -12,8 +12,6 @@ use Illuminate\Contracts\Notifications\Dispatcher;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
-use Coyote\Services\Stream\Objects\Job as Stream_Job;
-use Coyote\Services\Stream\Objects\Guide as Stream_Guide;
 use Coyote\Services\Stream\Objects\Comment as Stream_Comment;
 
 class CommentController extends Controller
@@ -29,9 +27,14 @@ class CommentController extends Controller
     {
         $this->authorize('update', $comment);
 
-        $comment->fill($request->all())->creating(function (Comment $model) {
+        $comment->fill($request->all())->creating(function (Comment $model) use ($request) {
             $model->user_id = $this->userId;
+            $model->forceFill($request->only(['resource_id', 'resource_type']));
         });
+
+        if ($comment->parent_id) {
+            $comment->forceFill($comment->parent->only(['resource_id', 'resource_type']));
+        }
 
         $actor = new Stream_Actor($this->auth);
 

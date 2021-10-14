@@ -26,6 +26,9 @@ class CommentRequest extends FormRequest
      */
     public function rules()
     {
+        $comment = $this->route('comment');
+        $requireResource = Rule::requiredIf(fn () => $comment === null);
+
         return [
             'text' => 'required|string',
             'parent_id' => [
@@ -33,9 +36,12 @@ class CommentRequest extends FormRequest
                 'int',
                 Rule::exists('comments', 'id')->whereNull('parent_id')
             ],
-            'resource_id' => 'required|int',
+            'resource_id' => [
+                $requireResource,
+                'int'
+            ],
             'resource_type' => [
-                'required',
+                $requireResource,
                 Rule::in([Guide::class, Job::class])
             ]
         ];

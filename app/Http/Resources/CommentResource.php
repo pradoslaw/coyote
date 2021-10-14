@@ -29,7 +29,7 @@ class CommentResource extends JsonResource
     public function toArray($request)
     {
         return array_merge(
-            array_only(parent::toArray($request), ['id', 'text', 'email', 'html']),
+            array_only(parent::toArray($request), ['id', 'text', 'email', 'html', 'parent_id']),
             [
                 'created_at'    => $this->created_at->toIso8601String(),
                 'children'      => CommentResource::collection($this->children)->keyBy('id'),
@@ -41,7 +41,8 @@ class CommentResource extends JsonResource
                 'user'          => new UserResource($this->user ?: (new User)->forceFill($this->anonymous())),
 
                 'permissions'   => [
-                    'update'    => $this->user_id == $request->user()?->id || $request->user()?->can('comment-update')
+                    'update'    => $request->user()?->can('update', $this->resource),
+                    'delete'    => $request->user()?->can('delete', $this->resource)
                 ]
             ]
         );
