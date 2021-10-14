@@ -2,6 +2,7 @@
 
 namespace Coyote;
 
+use Coyote\Models\Subscription;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -30,6 +31,11 @@ class Guide extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function subscribers()
+    {
+        return $this->morphMany(Subscription::class, 'resource');
     }
 
     /**

@@ -61,7 +61,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->router->pattern('job', '[0-9]+');
         $this->router->pattern('pm', '[0-9]+');
         $this->router->pattern('asset', '[0-9]+');
-        $this->router->pattern('question', '[0-9]+');
+        $this->router->pattern('guide', '[0-9]+');
         $this->router->pattern('payment', '[0-9a-z\-]+');
 
         $this->router->pattern('forum', '[A-Za-ząęśćłźżóń\-\_\/\.\+]+');
@@ -157,6 +157,7 @@ class RouteServiceProvider extends ServiceProvider
             require base_path('routes/pastebin.php');
             require base_path('routes/adm.php');
             require base_path('routes/guide.php');
+            require base_path('routes/comment.php');
             require base_path('routes/wiki.php'); // must be at the end
         });
     }

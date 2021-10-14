@@ -15,7 +15,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property Job $job
  * @property Comment $parent
  * @property string $html
- * @property \Coyote\Job|\Coyote\Models\Guide $resource
+ * @property \Coyote\Job|\Coyote\Guide $resource
+ * @property string $resource_type
+ * @property int $resource_id
  */
 class Comment extends Model
 {

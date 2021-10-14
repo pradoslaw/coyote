@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Http\Requests\Job;
+namespace Coyote\Http\Requests;
 
 use Coyote\Job;
 use Coyote\Guide;

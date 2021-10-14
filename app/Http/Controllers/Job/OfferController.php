@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Job;
 
+use Coyote\Comment;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Resources\AssetsResource;
 use Coyote\Http\Resources\CommentCollection;
@@ -96,7 +97,7 @@ class OfferController extends Controller
 
     private function flags()
     {
-        $flags = resolve(Flags::class)->fromModels([Job::class, Job\Comment::class])->permission('job-delete')->get();
+        $flags = resolve(Flags::class)->fromModels([Job::class, Comment::class])->permission('job-delete')->get();
 
         return FlagResource::collection($flags)->toArray($this->request);
     }

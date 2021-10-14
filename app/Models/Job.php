@@ -3,7 +3,6 @@
 namespace Coyote;
 
 use Carbon\Carbon;
-use Coyote\Job\Comment;
 use Coyote\Job\Location;
 use Coyote\Models\Scopes\ForUser;
 use Coyote\Models\Subscription;

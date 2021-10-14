@@ -3,7 +3,7 @@
 namespace Coyote\Http\Middleware;
 
 use Closure;
-use Coyote\Job\Comment;
+use Coyote\Comment;
 use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Coyote\Repositories\Contracts\RepositoryInterface;
 use Coyote\Repositories\Contracts\TagRepositoryInterface;

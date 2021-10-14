@@ -3,6 +3,7 @@
 namespace Coyote\Services\Stream\Objects;
 
 use Coyote\Services\UrlBuilder;
+use Coyote\Comment as Model;
 
 class Comment extends ObjectAbstract
 {
@@ -58,14 +59,12 @@ class Comment extends ObjectAbstract
         $this->url = UrlBuilder::wikiComment($wiki, $comment->id);
     }
 
-    /**
-     * @param \Coyote\Job $job
-     * @param \Coyote\Job\Comment $comment
-     */
-    private function job($job, $comment)
+    public function comment(Model $comment)
     {
         $this->id = $comment->id;
         $this->displayName = excerpt($comment->html);
-        $this->url = UrlBuilder::jobComment($job, $comment->id);
+        $this->url = UrlBuilder::url($comment->resource) . '#comment-' . $comment->id;
+
+        return $this;
     }
 }

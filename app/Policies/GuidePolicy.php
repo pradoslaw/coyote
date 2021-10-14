@@ -17,7 +17,7 @@ class GuidePolicy
      */
     public function update(User $user, Guide $guide): bool
     {
-        return $user->id === $guide->user_id || $user->can('microblog-update');
+        return $user->id === $guide->user_id || $user->can('guide-update');
     }
 
     /**
@@ -27,15 +27,15 @@ class GuidePolicy
      */
     public function delete(User $user, Guide $guide): bool
     {
-        return $user->id === $guide->user_id || $user->can('microblog-delete');
+        return $user->id === $guide->user_id || $user->can('guide-delete');
     }
 
-    /**
-     * @param User $user
-     * @return bool
-     */
-    public function moderate(User $user): bool
-    {
-        return $user->can('microblog-update');
-    }
+//    /**
+//     * @param User $user
+//     * @return bool
+//     */
+//    public function moderate(User $user): bool
+//    {
+//        return $user->can('microblog-update');
+//    }
 }

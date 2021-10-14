@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Controllers;
 
-use Coyote\Http\Requests\Job\CommentRequest;
+use Coyote\Http\Requests\CommentRequest;
 use Coyote\Http\Resources\CommentResource;
 use Coyote\Comment;
 use Coyote\Notifications\Job\CommentedNotification;
@@ -13,6 +13,7 @@ use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Objects\Job as Stream_Job;
+use Coyote\Services\Stream\Objects\Guide as Stream_Guide;
 use Coyote\Services\Stream\Objects\Comment as Stream_Comment;
 
 class CommentController extends Controller
@@ -22,12 +23,11 @@ class CommentController extends Controller
      * @param Dispatcher $dispatcher
      * @param Comment|null $comment
      * @return CommentResource
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function save(CommentRequest $request, Dispatcher $dispatcher, Comment $comment = null)
     {
-//        if ($comment->exists) {
-//            $this->checkAbility();
-//        }
+        $this->authorize('update', $comment);
 
         $comment->fill($request->all())->creating(function (Comment $model) {
             $model->user_id = $this->userId;
@@ -37,12 +37,13 @@ class CommentController extends Controller
 
         $this->transaction(function () use ($comment, $dispatcher, $actor) {
             $comment->save();
+            $target = $this->target($comment);
 
-//            stream(
-//                $comment->wasRecentlyCreated ? new Stream_Create($actor) : new Stream_Update($actor),
-//                (new Stream_Comment())->map($comment->job, $comment),
-//                (new Stream_Job())->map($comment->job)
-//            );
+            stream(
+                $comment->wasRecentlyCreated ? new Stream_Create($actor) : new Stream_Update($actor),
+                (new Stream_Comment())->comment($comment),
+                (new $target)->map($comment->resource)
+            );
         });
 
         if ($comment->wasRecentlyCreated) {
@@ -51,15 +52,14 @@ class CommentController extends Controller
                 ->subscribers()
                 ->with('user')
                 ->get()
-                ->pluck('user') // get all job's subscribers
-                ->push($comment->job->user) // push job's author
+                ->pluck('user') // get all subscribers
                 ->exceptUser($this->auth); // exclude current logged user
 
             $dispatcher->send($subscribers, new CommentedNotification($comment));
 
-            if ($comment->parent_id && $comment->user_id !== $comment->parent->user_id) {
-                $comment->parent->notify(new RepliedNotification($comment));
-            }
+//            if ($comment->parent_id && $comment->user_id !== $comment->parent->user_id) {
+//                $comment->parent->notify(new RepliedNotification($comment));
+//            }
         }
 
         CommentResource::withoutWrapping();
@@ -69,7 +69,7 @@ class CommentController extends Controller
 
     public function delete(Comment $comment)
     {
-        $this->checkAbility();
+        $this->authorize('delete', $comment);
 
         $this->transaction(function () use ($comment) {
             $comment->children->each(function ($child) {
@@ -77,18 +77,18 @@ class CommentController extends Controller
             });
 
             $comment->delete();
+            $target = $this->target($comment);
 
             stream(
                 Stream_Delete::class,
-                (new Stream_Comment())->map($comment->job, $comment),
-                (new Stream_Job())->map($comment->job)
+                (new Stream_Comment())->comment($comment),
+                (new $target)->map($comment->resource)
             );
         });
     }
 
-    private function checkAbility()
+    private function target(Comment $comment): string
     {
-        // todo: przeniesc ten kod do policies
-        abort_unless($this->userId == $this->request->user()->id || $this->request->user()->can('job-update'), 403);
+        return 'Coyote\\Services\\Stream\\Objects\\' . class_basename($comment->resource_type);
     }
 }
