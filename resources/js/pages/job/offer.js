@@ -34,48 +34,6 @@ new Vue({
   }
 });
 
-// new Vue({
-//   el: '#comments',
-//   delimiters: ['${', '}'],
-//   mixins: [ mixins ],
-//   components: {
-//     'vue-comment': VueComment,
-//     'vue-modal': VueModal,
-//     'vue-prompt': VuePrompt,
-//     'vue-button': VueButton
-//   },
-//   data: {
-//     comment: {
-//       text: ''
-//     },
-//     textFocused: false,
-//     isSubmitting: false
-//   },
-//   store,
-//   created() {
-//     // fill vuex with data passed from controller to view
-//     store.commit('jobs/SET_COMMENTS', window.comments);
-//   },
-//   methods: {
-//     saveComment() {
-//       this.isSubmitting = true;
-//
-//       store
-//         .dispatch('jobs/saveComment', Object.assign(this.comment, {'job_id': window.job.id}))
-//         .then(() => this.comment = { text: '' })
-//         .finally(() => this.isSubmitting = false);
-//     },
-//
-//     showForm() {
-//       this.textFocused = true;
-//     }
-//   },
-//   computed: {
-//     ...mapState('jobs', ['comments']),
-//     ...mapGetters('user', ['isAuthorized'])
-//   }
-// });
-
 new Vue({
   el: '#map',
   delimiters: ['${', '}'],
