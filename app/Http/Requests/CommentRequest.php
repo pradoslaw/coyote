@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Requests;
 
+use Coyote\Comment;
 use Coyote\Job;
 use Coyote\Guide;
 use Illuminate\Foundation\Http\FormRequest;
@@ -26,8 +27,9 @@ class CommentRequest extends FormRequest
      */
     public function rules()
     {
+        /** @var Comment $comment */
         $comment = $this->route('comment');
-        $requireResource = Rule::requiredIf(fn () => $comment === null);
+        $rule = Rule::requiredIf(!$comment->exists && !$this->input('parent_id'));
 
         return [
             'text' => 'required|string',
@@ -37,11 +39,14 @@ class CommentRequest extends FormRequest
                 Rule::exists('comments', 'id')->whereNull('parent_id')
             ],
             'resource_id' => [
-                $requireResource,
+                'bail',
+                $rule,
+                'nullable',
                 'int'
             ],
             'resource_type' => [
-                $requireResource,
+                'bail',
+                $rule,
                 Rule::in([Guide::class, Job::class])
             ]
         ];

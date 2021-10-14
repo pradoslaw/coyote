@@ -13,6 +13,10 @@ const mutations = {
     if (comment.parent_id) {
       const parent = state[comment.parent_id];
 
+      if (Array.isArray(parent.children)) {
+        Vue.set(parent, "children", {});
+      }
+
       Vue.set(parent.children, comment.id, comment);
     } else {
       Vue.set(state, comment.id, comment);

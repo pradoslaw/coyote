@@ -162,6 +162,7 @@
           .then(response => {
             this.isEditing = false;
             this.isReplying = false;
+            this.replyForm.text = '';
 
             this.scrollIntoView(response.data);
           })

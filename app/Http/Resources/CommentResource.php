@@ -35,7 +35,7 @@ class CommentResource extends JsonResource
                 'children'      => CommentResource::collection($this->children)->keyBy('id'),
                 'is_owner'      => $this->resource->resource->user_id === $this->user_id,
 
-                'url'           => UrlBuilder::url($this->resource->resource),
+                'url'           => UrlBuilder::url($this->resource->resource) . '#comment-' . $this->id,
                 'metadata'      => encrypt([Comment::class => $this->id]),
 
                 'user'          => new UserResource($this->user ?: (new User)->forceFill($this->anonymous())),
