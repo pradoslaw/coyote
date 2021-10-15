@@ -15,7 +15,7 @@
         "autosize": "^4.0.2",
         "axios": "^0.21.4",
         "babel-loader": "8.1.0",
-        "babel-plugin-prismjs": "1.0.2",
+        "babel-plugin-prismjs": "^2.1.0",
         "balloon-css": "^1.2.0",
         "bootstrap": "^4.4.1",
         "bootstrap5": "npm:bootstrap@5.0.0-alpha2",
