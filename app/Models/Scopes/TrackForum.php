@@ -2,7 +2,6 @@
 
 namespace Coyote\Models\Scopes;
 
-use Coyote\Str;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Database\Query\JoinClause;
@@ -28,8 +27,10 @@ trait TrackForum
             ->leftJoin('forum_track', function (JoinClause $join) use ($guestId) {
                 $join
                     ->on('forum_track.forum_id', '=', 'forums.id')
-                    ->on('forum_track.guest_id', '=', new Str($guestId));
+                    ->where('forum_track.guest_id', '=', $guestId);
             })
-            ->leftJoin('guests', 'guests.id', '=', new Str($guestId));
+            ->leftJoin('guests', function (JoinClause $join) use ($guestId) {
+                $join->where('guests.id', '=', $guestId);
+            });
     }
 }

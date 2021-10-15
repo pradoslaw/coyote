@@ -2,7 +2,6 @@
 
 namespace Coyote\Models\Scopes;
 
-use Coyote\Str;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
 
@@ -27,7 +26,7 @@ trait TrackTopic
             ->leftJoin('topic_track', function (JoinClause $join) use ($guestId) {
                 $join
                     ->on('topic_track.topic_id', '=', 'topics.id')
-                    ->on('topic_track.guest_id', '=', new Str($guestId));
+                    ->where('topic_track.guest_id', '=', $guestId);
             });
     }
 }

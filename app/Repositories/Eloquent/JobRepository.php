@@ -5,7 +5,6 @@ namespace Coyote\Repositories\Eloquent;
 use Coyote\Feature;
 use Coyote\Repositories\Contracts\JobRepositoryInterface;
 use Coyote\Job;
-use Coyote\Str;
 use Coyote\Tag;
 use Illuminate\Database\Query\JoinClause;
 
