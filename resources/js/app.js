@@ -7,7 +7,6 @@ import './libs/timeago.js';
 import './components/vcard.js';
 import './plugins/flags.ts';
 import './plugins/sociale.js';
-import 'popper.js'; // must be imported before bootstrap
 import './bootstrap';
 import './libs/csrf'; // setup CSRF token
 import './libs/axios-throttle.ts';

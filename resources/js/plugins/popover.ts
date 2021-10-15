@@ -1,6 +1,6 @@
 import Session from '../libs/session';
 import VuePopover from '../components/popover.vue';
-import Popper from "popper.js";
+import { createPopper } from '@popperjs/core';
 import Vue from 'vue';
 
 const Popover = {
@@ -26,10 +26,10 @@ const Popover = {
       }
 
       if (options.offset) {
-        popperOptions = Object.assign(popperOptions, {modifiers: { offset: { offset: options.offset } }});
+        popperOptions = Object.assign(popperOptions, {modifiers: [{ name: 'offset', options: { offset: options.offset } }]});
       }
 
-      new Popper(node, wrapper.$el, popperOptions);
+      createPopper(node, wrapper.$el as HTMLElement, popperOptions);
     }
 
     function waitForPopover() {

@@ -28,8 +28,7 @@ class SettingsController extends BaseController
         if ($email) {
             $popover = [
                 'message' => "Na adres $email wysłaliśmy link umożliwiający zmianę adresu e-mail.",
-                'placement' => 'top',
-                'offset' => '0,10px'
+                'placement' => 'top'
             ];
 
             $form->get('email')->setAttr(['data-popover' => json_encode($popover)]);

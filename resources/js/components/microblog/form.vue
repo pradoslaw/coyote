@@ -15,7 +15,7 @@
             :tags="microblog.tags"
             placeholder="...inny? kliknij, aby wybrać tag"
             @change="toggleTag"
-            data-popover='{"message": "Sugerowane tagi, które możesz przypisać do tego wpisu.", "placement": "bottom-start", "offset": "0,10px"}'
+            data-popover='{"message": "Sugerowane tagi, które możesz przypisać do tego wpisu.", "placement": "bottom-start"}'
           ></vue-tags-inline>
         </div>
       </template>

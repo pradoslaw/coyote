@@ -1,4 +1,4 @@
-[x-placement] {
+[data-popper-placement] {
   z-index: 1; // add z-index to all popover elements to stay above others
 }
 
@@ -16,6 +16,7 @@
 .alert.bottom-start {
   padding-top: $alert-padding-y / 3;
   padding-bottom: $alert-padding-y / 3;
+  z-index: 1;
 
   @include media-breakpoint-down(lg) {
     display: none !important; // overwrite inline style
