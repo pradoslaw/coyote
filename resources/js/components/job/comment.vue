@@ -9,7 +9,7 @@
 
       <div class="media-body">
         <div class="dropdown float-right" v-if="comment.editable">
-          <button class="btn btn-secondary btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <button class="btn btn-secondary btn-xs dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           </button>
 
           <div class="dropdown-menu dropdown-menu-right">

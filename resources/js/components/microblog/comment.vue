@@ -53,7 +53,7 @@
           </li>
 
           <li class="list-inline-item">
-            <a href="#" class="text-muted" data-toggle="dropdown">
+            <a href="#" class="text-muted" data-bs-toggle="dropdown">
               <i class="fa fa-bars"></i>
             </a>
 
@@ -74,7 +74,7 @@
       </div>
 
       <div v-if="isAuthorized" class="dropdown">
-        <button class="btn btn-xs border-0 text-muted" type="button" data-toggle="dropdown" aria-label="Dropdown"><i class="small fa fa-ellipsis-h"></i></button>
+        <button class="btn btn-xs border-0 text-muted" type="button" data-bs-toggle="dropdown" aria-label="Dropdown"><i class="small fa fa-ellipsis-h"></i></button>
 
         <div class="dropdown-menu dropdown-menu-right">
           <template v-if="comment.permissions.update">

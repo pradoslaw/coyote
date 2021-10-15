@@ -29,7 +29,7 @@
             </div>
 
             <div v-if="isAuthorized" class="dropdown">
-              <button class="btn btn-xs border-0 text-muted" type="button" data-toggle="dropdown" aria-label="Dropdown"><i class="fa fa-ellipsis-h"></i></button>
+              <button class="btn btn-xs border-0 text-muted" type="button" data-bs-toggle="dropdown" aria-label="Dropdown"><i class="fa fa-ellipsis-h"></i></button>
 
               <div class="dropdown-menu dropdown-menu-right">
                 <template v-if="microblog.permissions.update">

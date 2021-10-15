@@ -252,7 +252,7 @@
             </a>
 
             <div v-if="post.permissions.merge || post.permissions.adm_access" class="dropdown float-right">
-              <button class="btn btn-sm" data-toggle="dropdown">
+              <button class="btn btn-sm" data-bs-toggle="dropdown">
                 <i class="fas fa-fw fa-ellipsis-h"></i>
               </button>
 
