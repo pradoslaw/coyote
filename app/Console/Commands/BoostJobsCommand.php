@@ -57,6 +57,7 @@ class BoostJobsCommand extends Command
                 $payment->job->boost_at = $then;
                 $payment->job->save();
 
+                var_dump("Boosting {$payment->job->title}");
                 $this->info("Boosting {$payment->job->title}");
 
                 $crawler->index($payment->job);
