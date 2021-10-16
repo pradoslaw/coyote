@@ -24,27 +24,27 @@ class BoostJobsCommandTest extends TestCase
         Notification::fake();
     }
 
-//    public function testBoostJobWithPlusPlan()
-//    {
-//        $plan = Plan::where('name', 'Plus')->get()->first();
-//
-//        /** @var Job $job */
-//        $job = factory(Job::class)->create(['plan_id' => $plan->id]);
-//
-//        event(new PaymentPaid($job->getUnpaidPayment()));
-//
-//        Notification::assertSentTo([$job->user], SuccessfulPaymentNotification::class);
-//
-//        $now = now();
-//
-//        for ($i = 1; $i <= 40; $i++) {
-//            Carbon::setTestNow($now->addDay());
-//            $output = $i === 20 ? "Boosting " . $job->title : "Done.";
-//
-//            $this->artisan('job:boost')
-//                ->expectsOutput($output);
-//        }
-//    }
+    public function testBoostJobWithPlusPlan()
+    {
+        $plan = Plan::where('name', 'Plus')->get()->first();
+
+        /** @var Job $job */
+        $job = factory(Job::class)->create(['plan_id' => $plan->id]);
+
+        event(new PaymentPaid($job->getUnpaidPayment()));
+
+        Notification::assertSentTo([$job->user], SuccessfulPaymentNotification::class);
+
+        $now = now();
+
+        for ($i = 1; $i <= 40; $i++) {
+            Carbon::setTestNow($now->addDay());
+            $output = $i === 20 ? "Boosting " . $job->title : "Done.";
+
+            $this->artisan('job:boost')
+                ->expectsOutput($output);
+        }
+    }
 
     public function testBoostJobWithPremiumPlan()
     {
@@ -65,9 +65,8 @@ class BoostJobsCommandTest extends TestCase
 
         for ($i = 1; $i <= $plan->length; $i++) {
             Carbon::setTestNow($now->addDay());
-            $shouldBoost = $i == 10 || $i == 20 || $i == 30;
 
-//            var_dump($i . ') ' . Carbon::getTestNow()->format('Y-m-d H:i'));
+            $shouldBoost = $i == 10 || $i == 20 || $i == 30;
             $output = $shouldBoost ? "Boosting " . $job->title : "Done.";
 
             $this->artisan('job:boost')->expectsOutput($output);
@@ -75,7 +74,7 @@ class BoostJobsCommandTest extends TestCase
             $job->refresh();
 
             if ($shouldBoost) {
-//                $this->assertTrue($job->boost_at->isSameDay($now));
+                $this->assertTrue($job->boost_at->isSameDay($now));
             }
         }
     }
