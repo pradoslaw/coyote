@@ -62,7 +62,8 @@
 
       <vue-error :message="error"></vue-error>
     </vue-prompt>
-    <div @click="showPreview" v-show="isPreview" v-html="previewHtml" class="preview post-content"></div>
+
+    <div v-show="isPreview" v-html="previewHtml" class="preview post-content"></div>
 
     <hr class="m-0">
 
