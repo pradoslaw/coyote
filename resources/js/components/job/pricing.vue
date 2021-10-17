@@ -6,11 +6,11 @@
           <div>Publikacja ogłoszenia na okres <strong>40 dni</strong></div>
         </li>
         <li>
-          <div>Promocja ogłoszenia w kanałach social media <i class="fa fa-question-circle" data-toggle="tooltip" title="Jedynie ogłoszenia z określonym wynagrodzeniem"></i></div>
+          <div>Promocja ogłoszenia w kanałach social media <i class="fa fa-question-circle" data-bs-toggle="tooltip" title="Jedynie ogłoszenia z określonym wynagrodzeniem"></i></div>
         </li>
         <li>
           <div><strong>Podbicie</strong> ogłoszenia
-            <i class="fa fa-question-circle" data-toggle="tooltip" title="W okresie promowania oferty, podbijemy Twoje ogłoszenie na górę listy. Dzięki temu więcej ludzi będzie mogło je zobaczyć."></i>
+            <i class="fa fa-question-circle" data-bs-toggle="tooltip" title="W okresie promowania oferty, podbijemy Twoje ogłoszenie na górę listy. Dzięki temu więcej ludzi będzie mogło je zobaczyć."></i>
           </div>
         </li>
 
@@ -27,7 +27,7 @@
         </li>
         <li>
           <div><strong>Wyróżnienie</strong> kolorem
-            <i class="fa fa-question-circle" data-toggle="tooltip" title="Twoje ogłoszenie otrzyma dodatkowe tło, które odróżni je od standardowych ogłoszeń na liście."></i></div>
+            <i class="fa fa-question-circle" data-bs-toggle="tooltip" title="Twoje ogłoszenie otrzyma dodatkowe tło, które odróżni je od standardowych ogłoszeń na liście."></i></div>
         </li>
         <li>
           <div>Wyróżnienie ogłoszenia <strong>na górze listy</strong> wyszukiwania</div>
