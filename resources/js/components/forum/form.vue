@@ -36,7 +36,7 @@
         ref="markdown"
       >
         <template v-if="isFirstPost" v-slot:options>
-          <a href="javascript:" data-target="#js-poll-form" data-toggle="collapse" class="ml-1 small text-muted">
+          <a href="javascript:" data-bs-target="#js-poll-form" data-bs-toggle="collapse" class="ml-1 small text-muted">
             <i class="fa fa-poll-h"></i>
 
             <span class="d-none d-sm-inline">Ankieta</span>

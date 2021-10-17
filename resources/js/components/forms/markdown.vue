@@ -87,7 +87,7 @@
       </div>
 
       <div class="small ml-auto">
-        <a href="#js-wiki-help" tabindex="-1" data-toggle="collapse" class="small text-muted"><i class="fa fab fa-markdown"></i> Markdown jest obsługiwany.</a>
+        <a href="#js-wiki-help" tabindex="-1" data-bs-toggle="collapse" class="small text-muted"><i class="fa fab fa-markdown"></i> Markdown jest obsługiwany.</a>
       </div>
     </div>
 
