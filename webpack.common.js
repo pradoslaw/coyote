@@ -1,6 +1,6 @@
 var path = require('path');
 const webpack = require('webpack');
-const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
+const ManifestPlugin = require('webpack-manifest-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
@@ -141,7 +141,7 @@ module.exports = {
       filename: "css/[name]-[contenthash].css"
     }),
 
-    new WebpackManifestPlugin({
+    new ManifestPlugin({
       fileName: 'manifest.json'
     }),
 
