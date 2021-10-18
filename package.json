@@ -6,9 +6,9 @@
         "watch": "yarn webpack --watch --config webpack.dev.js"
     },
     "dependencies": {
-        "@babel/core": "^7.11.0",
-        "@babel/preset-env": "^7.11.0",
-        "@babel/runtime": "^7.11.0",
+        "@babel/core": "^7.15.8",
+        "@babel/preset-env": "^7.15.8",
+        "@babel/runtime": "^7.15.4",
         "@fortawesome/fontawesome-free": "^5.11.2",
         "@popperjs/core": "^2.10.2",
         "@tinymce/tinymce-vue": "^3.0.1",
