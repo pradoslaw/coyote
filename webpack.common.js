@@ -1,6 +1,6 @@
 var path = require('path');
 const webpack = require('webpack');
-const ManifestPlugin = require('webpack-manifest-plugin');
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
@@ -58,11 +58,7 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: {
-          test: /node_modules/, // Exclude libraries in node_modules ...
-          not: [
-            // Except for a few of them that needs to be transpiled because they use modern syntax
-            /bootstrap5/
-          ]
+          test: /node_modules/
         },
         use: {
           loader: 'babel-loader',
@@ -145,7 +141,7 @@ module.exports = {
       filename: "css/[name]-[contenthash].css"
     }),
 
-    new ManifestPlugin({
+    new WebpackManifestPlugin({
       fileName: 'manifest.json'
     }),
 
