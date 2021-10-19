@@ -71,13 +71,6 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
         'middleware' => 'can:access,forum'
     ]);
 
-    // obserwowanie danego watku na forum
-    $this->post('Topic/Subscribe/{topic}', [
-        'uses' => 'TopicController@subscribe',
-        'as' => 'topic.subscribe',
-        'middleware' => 'auth'
-    ]);
-
     // blokowanie watku
     $this->post('Topic/Lock/{topic}', ['uses' => 'LockController@index', 'as' => 'lock', 'middleware' => 'auth']);
     // przeniesienie watku do innej kategorii
@@ -106,13 +99,6 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     $this->post('Post/Restore/{id}', [
         'uses' => 'RestoreController@index',
         'as' => 'post.restore',
-        'middleware' => 'auth'
-    ]);
-
-    // obserwowanie posta
-    $this->post('Post/Subscribe/{post}', [
-        'uses' => 'PostController@subscribe',
-        'as' => 'post.subscribe',
         'middleware' => 'auth'
     ]);
 
@@ -180,5 +166,16 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     $this->get('{id}', ['uses' => 'ShareController@index', 'as' => 'share']);
 });
 
+// obserwowanie danego watku na forum
+$this->post('Forum/Topic/Subscribe/{topic}', [
+    'uses' => 'SubscribeController@topic',
+    'as' => 'topic.subscribe',
+    'middleware' => 'auth'
+]);
 
-
+// obserwowanie posta
+$this->post('Forum/Post/Subscribe/{post}', [
+    'uses' => 'SubscribeController@post',
+    'as' => 'post.subscribe',
+    'middleware' => 'auth'
+]);

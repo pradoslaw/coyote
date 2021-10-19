@@ -10,7 +10,6 @@ $this->group(['namespace' => 'Microblog', 'prefix' => 'Mikroblogi', 'as' => 'mic
     $this->get('View/{id}', ['uses' => 'HomeController@show', 'as' => 'view']);
     $this->post('Vote/{microblog}', ['uses' => 'VoteController@post', 'as' => 'vote']);
     $this->get('Voters/{any_microblog}', ['uses' => 'VoteController@voters']);
-    $this->post('Subscribe/{any_microblog}', ['uses' => 'SubscribeController@post', 'as' => 'subscribe', 'middleware' => 'auth']);
     $this->delete('Delete/{microblog}', ['uses' => 'SubmitController@delete', 'as' => 'delete', 'middleware' => 'auth']);
     $this->post('Restore/{id}', ['uses' => 'SubmitController@restore', 'as' => 'restore', 'middleware' => 'auth']);
     $this->post('Sponsored/{microblog}', ['uses' => 'SubmitController@toggleSponsored', 'middleware' => 'auth']);
@@ -26,3 +25,5 @@ $this->group(['namespace' => 'Microblog', 'prefix' => 'Mikroblogi', 'as' => 'mic
     $this->get('{tag_name}', ['uses' => 'HomeController@tag', 'as' => 'tag']);
 });
 
+// this route refers to a different namespace than above ones
+$this->post('Mikroblogi/Subscribe/{any_microblog}', ['uses' => 'SubscribeController@microblog', 'middleware' => 'auth']);

@@ -9,7 +9,7 @@
 
       <div class="media-body">
         <div class="dropdown float-right" v-if="comment.permissions.update">
-          <button class="btn btn-xs border-0 text-muted mt-2" type="button" data-toggle="dropdown" aria-label="Dropdown"><i class="fa fa-ellipsis-h"></i></button>
+          <button class="btn btn-xs border-0 text-muted mt-2" type="button" data-bs-toggle="dropdown" aria-label="Dropdown"><i class="fa fa-ellipsis-h"></i></button>
 
           <div class="dropdown-menu dropdown-menu-right">
             <a @click="edit" href="javascript:" class="dropdown-item"><i class="fa fa-edit fa-fw"></i> Edytuj</a>

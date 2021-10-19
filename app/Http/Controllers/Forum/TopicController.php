@@ -169,29 +169,6 @@ class TopicController extends BaseController
 
     /**
      * @param \Coyote\Topic $topic
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function subscribe($topic)
-    {
-        $subscriber = $topic->subscribers()->forUser($this->userId)->first();
-
-        if ($subscriber) {
-            $subscriber->delete();
-
-            logger()->debug(sprintf("Wątek %s został usunięty z obserwowanych przez %s.", $topic->title, $this->auth->name));
-        } else {
-            $topic->subscribers()->create(['user_id' => $this->userId]);
-
-            logger()->debug(sprintf("Wątek %s został dodany do obserwowanych przez %s.", $topic->title, $this->auth->name));
-        }
-
-        event(new TopicSaved($topic));
-
-        return response($topic->subscribers()->count());
-    }
-
-    /**
-     * @param \Coyote\Topic $topic
      */
     public function mark($topic)
     {
