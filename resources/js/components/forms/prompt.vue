@@ -11,6 +11,7 @@
   import { SpecialKeys } from '@/types/keys';
   import store from '@/store';
   import useBrackets from "@/libs/prompt";
+  import Textarea from "@/libs/textarea";
 
   export default {
     components: { 'vue-dropdown': VueDropdown },
@@ -125,7 +126,18 @@
       },
 
       lookupName(name) {
-        store.dispatch('prompt/request', { source: this.source, value: name }).then(items => this.items = items);
+        store.dispatch('prompt/request', { source: this.source, value: name }).then(items => {
+          this.items = items;
+
+          if (!(this.input instanceof HTMLTextAreaElement)) {
+            return;
+          }
+
+          const rect = new Textarea(this.input).getCaretCoordinates();
+
+          this.$refs['dropdown'].$el.style.top = rect.top + 'px';
+          this.$refs['dropdown'].$el.style.left = rect.left + 'px';
+        });
       },
 
       applySelected(text, startIndex, caretPosition) {
