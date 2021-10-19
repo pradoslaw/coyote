@@ -1,5 +1,7 @@
 class Textarea {
-  constructor(textarea) {
+  private readonly textarea: HTMLTextAreaElement;
+
+  constructor(textarea: HTMLTextAreaElement) {
     this.textarea = textarea;
   }
 
@@ -8,9 +10,9 @@ class Textarea {
    *
    * @return {string}
    */
-  getSelection() {
-    let startPos = this.textarea.selectionStart;
-    let endPos = this.textarea.selectionEnd;
+  getSelection(): string {
+    const startPos = this.textarea.selectionStart;
+    const endPos = this.textarea.selectionEnd;
 
     return this.textarea.value.substring(startPos, endPos);
   }
@@ -22,10 +24,10 @@ class Textarea {
    * @param {string} endsWith
    * @param {string} value
    */
-  insertAtCaret(startsWith, endsWith, value) {
-    let startPos = this.textarea.selectionStart;
-    let endPos = this.textarea.selectionEnd;
-    let scrollTop = this.textarea.scrollTop;
+  insertAtCaret(startsWith: string, endsWith: string, value: string): void {
+    const startPos = this.textarea.selectionStart;
+    const endPos = this.textarea.selectionEnd;
+    const scrollTop = this.textarea.scrollTop;
 
     value = startsWith + value + endsWith;
 
@@ -42,11 +44,11 @@ class Textarea {
    *
    * @return {boolean}
    */
-  isSelected() {
+  isSelected(): boolean {
     return (this.textarea.selectionEnd - this.textarea.selectionStart) > 0;
   }
 
-  getCaretCoordinates() {
+  getCaretCoordinates(): DOMRect {
     const phantom = document.createElement('div');
     const styles = window.getComputedStyle(this.textarea);
 
@@ -66,17 +68,20 @@ class Textarea {
     caret.textContent = this.textarea.value.substring(this.textarea.selectionStart) || '.';
     phantom.appendChild(caret);
 
-    const coordinates = {
-        top: caret.offsetTop + parseInt(styles.paddingTop) + parseInt(styles.lineHeight),
-        left: caret.offsetLeft + parseInt(styles.paddingLeft)
-    };
+    const rect = new DOMRect(
+      caret.offsetLeft + parseInt(styles.paddingLeft),
+      // add padding and line-height (get position in next line)
+      caret.offsetTop + parseInt(styles.paddingTop) + parseInt(styles.lineHeight),
+      0,
+      0
+    );
 
     document.body.removeChild(phantom);
 
-    return coordinates;
+    return rect;
   }
 
-  get value() {
+  get value(): string {
     return this.textarea.value;
   }
 }

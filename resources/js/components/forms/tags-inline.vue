@@ -51,7 +51,7 @@
       name="tags"
     >
 
-    <vue-dropdown :items="filteredTags" @select="toggleTag" ref="dropdown" class="tag-dropdown mt-2">
+    <vue-dropdown :items="filteredTags" @select="toggleTag" ref="dropdown" class="tag-dropdown mt-2 w-100">
       <template v-slot:item="slot">
         <span>{{ slot.item.name }}</span>
         <small>×{{ slot.item.topics + slot.item.microblogs + slot.item.jobs }}</small>
