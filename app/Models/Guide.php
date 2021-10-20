@@ -2,6 +2,7 @@
 
 namespace Coyote;
 
+use Coyote\Guide\Vote;
 use Coyote\Models\Subscription;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,6 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Comment[] $comments
  * @property Comment[] $commentsWithChildren
  * @property string $slug
+ * @property int $votes
  */
 class Guide extends Model
 {
@@ -26,6 +28,14 @@ class Guide extends Model
     public function getSlugAttribute(): string
     {
         return str_slug($this->title, '_');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function voters()
+    {
+        return $this->hasMany(Vote::class);
     }
 
     public function user()
@@ -73,5 +83,14 @@ class Guide extends Model
                 },
                 'user' => $userRelation
             ]);
+    }
+
+    public function loadUserVoterRelation(?int $userId)
+    {
+        if (!$userId) {
+            return;
+        }
+
+        $this->load(['voters' => fn ($builder) => $builder->select(['id', 'guide_id', 'user_id'])->where('user_id', $userId)]);
     }
 }

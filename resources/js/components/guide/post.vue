@@ -63,8 +63,9 @@
       <div class="mt-3 pt-3 qa-options">
         <ul class="list-inline mb-2">
           <li class="list-inline-item">
-            <a href="#">
-              <i class="fa text-primary fa-fw fa-thumbs-up"></i>
+            <a @click="vote(guide)" href="javascript:">
+              <i :class="{'fa text-primary': guide.is_voted, 'far': !guide.is_voted}" class="fa fa-fw fa-thumbs-up"></i>
+
               {{ guide.votes }} {{ guide.votes | declination(['głos', 'głosy', 'głosów']) }}
             </a>
           </li>
@@ -86,12 +87,12 @@
   import Vue from 'vue';
   import Component from "vue-class-component";
   import VueForm from './form.vue';
-  import VueUserName from '@/components/user-name';
+  import VueUserName from '@/components/user-name.vue';
   import { Prop } from "vue-property-decorator";
   import { Guide } from '@/types/models';
   import { default as mixins } from '../mixins/user';
   import VueTags from "@/components/tags.vue";
-  import { mapState } from 'vuex';
+  import {mapActions, mapState} from 'vuex';
 
   @Component({
     mixins: [ mixins ],
@@ -102,6 +103,9 @@
     },
     computed: {
       ...mapState('guides', ['guide'])
+    },
+    methods: {
+      ...mapActions('guides', ['vote'])
     }
   })
   export default class VuePost extends Vue {

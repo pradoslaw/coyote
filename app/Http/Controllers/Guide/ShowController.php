@@ -19,6 +19,8 @@ class ShowController extends Controller
         $this->breadcrumb->push('Pytania kwalifikacyjne');
 
         $guide->loadCount('comments');
+        $guide->load('commentsWithChildren');
+        $guide->loadUserVoterRelation($this->userId);
 
         return $this->view('guide.show', [
             'guide'         => new GuideResource($guide),

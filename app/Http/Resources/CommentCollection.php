@@ -32,11 +32,17 @@ class CommentCollection extends ResourceCollection
      */
     public function toArray($request)
     {
+        $owner = (clone $this->owner)->unsetRelations();
+
         return $this
             ->collection
-            ->map(function (CommentResource $resource) use ($request) {
+            ->map(function (CommentResource $resource) use ($request, $owner) {
                 $comment = $resource->resource;
-                $comment->setRelation('resource', (clone $this->owner)->unsetRelations());
+                $comment->setRelation('resource', $owner);
+
+                foreach ($comment->children as $child) {
+                    $child->setRelation('resource', $owner);
+                }
 
                 return $resource;
             })

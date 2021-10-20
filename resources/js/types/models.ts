@@ -359,4 +359,6 @@ export interface Guide {
   permissions: GuidePermission;
   is_editing: boolean;
   comments: Comment[];
+  votes: number;
+  is_voted: boolean;
 }

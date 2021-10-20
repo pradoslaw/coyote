@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Resources;
 
-use Coyote\Models\Comment;
+use Coyote\Comment;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -15,6 +15,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property Comment[] $commentsWithChildren
  * @property Comment[] $comments
  * @property int $comments_count
+ * @property \Coyote\Guide\Vote[]|\Illuminate\Support\Collection $voters[]
  */
 class GuideResource extends JsonResource
 {
@@ -50,7 +51,16 @@ class GuideResource extends JsonResource
                 }),
 
 
-                'comments'          => $this->whenLoaded('commentsWithChildren', (new CommentCollection($this->commentsWithChildren))->setOwner($this->resource))
+                $this->mergeWhen($request->user() && $this->resource->relationLoaded('voters'), function () use ($request) {
+                    return [
+                        'is_voted'      => $this->voters->contains('user_id', $request->user()->id)
+                    ];
+                }),
+
+                // default values
+                'is_voted'          => false,
+
+                'comments'          => $this->whenLoaded('commentsWithChildren', fn () => (new CommentCollection($this->commentsWithChildren))->setOwner($this->resource))
             ]
         );
     }
