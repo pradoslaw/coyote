@@ -31,27 +31,17 @@
         </div>
 
         <div class="mt-2" v-if="isEditing">
-          <div class="form-group">
-            <textarea
-              v-autosize
-              name="text"
-              class="form-control"
-              ref="submitText"
-              v-model="comment.text"
-              @keydown.ctrl.enter="saveComment(comment)"
-              rows="1"
-              tabindex="1"
-            ></textarea>
-          </div>
+          <vue-markdown
+            v-model="comment.text"
+            @save="saveComment(comment)"
+            ref="submitText"
+            preview-url="/Mikroblogi/Preview"
+          />
 
-          <div class="row">
-            <div class="form-group col-12">
-              <vue-button :disabled="isSubmitting" @click.native="saveComment(comment)" class="btn btn-primary btn-sm float-right ml-1">Zapisz</vue-button>
-              <button type="button" class="btn btn-danger btn-sm float-right" @click="isEditing = false">Anuluj</button>
-            </div>
+          <div class="d-flex mt-2 justify-content-end">
+            <vue-button :disabled="isSubmitting" @click.native="saveComment(comment)" class="btn btn-primary btn-sm">Zapisz</vue-button>
+            <button type="button" class="btn btn-danger btn-sm ml-1" @click="isEditing = false">Anuluj</button>
           </div>
-
-          <div class="clearfix"></div>
         </div>
 
         <ul class="list-inline list-inline-bullet mb-0">
@@ -65,26 +55,19 @@
 
     <div class="comment">
       <div v-if="isReplying">
-        <div class="form-group">
-          <textarea
-            v-autosize
-            v-model="replyForm.text"
-            class="form-control"
-            ref="replyText"
-            @keydown.ctrl.enter="saveComment(replyForm)"
-            rows="1"
-            tabindex="1"
-          ></textarea>
-        </div>
+        <vue-markdown
+          v-model="replyForm.text"
+          @save="saveComment(replyForm)"
+          ref="replyText"
+          preview-url="/Mikroblogi/Preview"
+        />
 
-        <div class="row">
-          <div class="form-group col-12">
-            <vue-button @click.native="saveComment(replyForm)" :disabled="isSubmitting" type="submit" class="btn btn-primary btn-sm float-right ml-1" title="Ctrl+Enter aby opublikować">
-              Zapisz
-            </vue-button>
-            <button type="button" class="btn btn-danger btn-sm float-right" @click="isReplying = false">Anuluj
-            </button>
-          </div>
+        <div class="d-flex mt-2 justify-content-end">
+          <vue-button @click.native="saveComment(replyForm)" :disabled="isSubmitting" type="submit" class="btn btn-primary btn-sm" title="Ctrl+Enter aby opublikować">
+            Zapisz
+          </vue-button>
+
+          <button type="button" class="btn btn-danger btn-sm ml-1" @click="isReplying = false">Anuluj</button>
         </div>
       </div>
     </div>
@@ -104,6 +87,7 @@
   import VueUserName from '../user-name.vue';
   import VueButton from '../forms/button.vue';
   import VueFlag from '../flags/flag.vue';
+  import VueMarkdown from '../forms/markdown.vue';
   import { default as mixins } from '../mixins/user';
   import { mapGetters } from 'vuex';
 
@@ -115,7 +99,8 @@
       'vue-avatar': VueAvatar,
       'vue-username': VueUserName,
       'vue-button': VueButton,
-      'vue-flag': VueFlag
+      'vue-flag': VueFlag,
+      'vue-markdown': VueMarkdown
     },
     mixins: [ mixins ],
     data() {
