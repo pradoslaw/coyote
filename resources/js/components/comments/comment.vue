@@ -26,9 +26,7 @@
 
         <vue-flag v-for="flag in flags" :key="flag.id" :flag="flag"></vue-flag>
 
-        <div class="mt-2" v-if="!isEditing" v-html="comment.html">
-          {{ comment.html }}
-        </div>
+        <div class="mt-2" v-if="!isEditing" v-html="comment.html"></div>
 
         <div class="mt-2" v-if="isEditing">
           <vue-markdown

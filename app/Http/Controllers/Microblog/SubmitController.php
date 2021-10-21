@@ -165,6 +165,6 @@ class SubmitController extends Controller
      */
     private function getParser()
     {
-        return app('parser.microblog');
+        return app('parser.post');
     }
 }

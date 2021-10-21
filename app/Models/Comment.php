@@ -80,7 +80,7 @@ class Comment extends Model
             return $this->html;
         }
 
-        return $this->html = app('parser.job.comment')->parse($this->text);
+        return $this->html = app('parser.post')->parse($this->text);
     }
 
     /**
