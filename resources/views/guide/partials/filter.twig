@@ -6,7 +6,7 @@
     <ol class="qa-categories list-unstyled">
       {% for tag in tags %}
         <li>
-          <a href="#">
+          <a href="{{ route('guide.tag', [tag.name|url_encode]) }}">
             {% if tag.logo.getName() %}
               <img alt="{{ tag.name }}" src="{{ tag.logo }}">
             {% endif %}
