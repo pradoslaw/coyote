@@ -19,9 +19,8 @@ if [[ "$ENABLE_XDEBUG" == "1" ]]; then
                 echo "xdebug.mode=debug " >>$XdebugFile
                 echo "xdebug.client_host=${XDEBUG_HOST}" >>$XdebugFile
                 echo "xdebug.client_port=${XDEBUG_PORT}" >>$XdebugFile
-                echo "xdebug.mode=profile" >>$XdebugFile
-                echo "xdebug.start_with_request=trigger" >>$XdebugFile
-                echo "xdebug.remote_autostart=false " >>$XdebugFile
+                echo "xdebug.start_with_request=yes" >>$XdebugFile
+                echo "xdebug.start_upon_error=yes" >>$XdebugFile
             fi
         fi
     fi
