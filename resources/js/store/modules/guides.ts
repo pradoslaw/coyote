@@ -1,4 +1,4 @@
-import {Paginator, Guide, Tag, Microblog} from "@/types/models";
+import {Paginator, Guide, Tag} from "@/types/models";
 import axios from 'axios';
 import Vue from 'vue';
 
@@ -27,15 +27,14 @@ const mutations = {
   },
 
   VOTE(state, guide: Guide) {
-    if (guide.is_voted) {
-      guide.is_voted = false;
-      guide.votes -= 1;
-    }
-    else {
-      guide.is_voted = true;
-      guide.votes += 1;
-    }
+    guide.is_voted = !guide.is_voted;
+    guide.votes += (guide.is_voted ? 1 : -1);
   },
+
+  SUBSCRIBE(vote, guide: Guide) {
+    guide.is_subscribed = !guide.is_subscribed;
+    guide.subscribers += (guide.is_subscribed ? 1 : -1);
+  }
 }
 
 const actions = {
@@ -49,8 +48,13 @@ const actions = {
   vote({ commit, dispatch }, guide: Guide) {
     commit('VOTE', guide);
 
-    return axios.post(`/Guide/Vote/${guide.id}`)
-      .catch(() => commit('VOTE', guide));
+    return axios.post(`/Guide/Vote/${guide.id}`).catch(() => commit('VOTE', guide));
+  },
+
+  subscribe({ commit }, guide: Guide) {
+    commit('SUBSCRIBE', guide);
+
+    axios.post(`/Guide/Subscribe/${guide.id}`).catch(() => commit('SUBSCRIBE', guide));
   },
 }
 

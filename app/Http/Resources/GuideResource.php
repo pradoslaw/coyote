@@ -16,6 +16,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property Comment[] $comments
  * @property int $comments_count
  * @property \Coyote\Guide\Vote[]|\Illuminate\Support\Collection $voters[]
+ * @property \Coyote\Models\Subscription[]|\Illuminate\Support\Collection $subscribers
  */
 class GuideResource extends JsonResource
 {
@@ -27,6 +28,7 @@ class GuideResource extends JsonResource
      */
     public function toArray($request)
     {
+        $user = $request->user();
 
         return array_merge(
             parent::toArray($request),
@@ -39,7 +41,8 @@ class GuideResource extends JsonResource
                     'update'    => $request->user()?->can('update', $this->resource)
                 ],
 
-                'comments_count'    => $this->comments_count,
+                'comments_count'=> $this->comments_count,
+                'subscribers'   => $this->subscribers()->count(),
 
                 $this->mergeWhen($this->text && $this->excerpt, function () {
                     $parser = resolve('parser.post');
@@ -50,15 +53,8 @@ class GuideResource extends JsonResource
                     ];
                 }),
 
-
-                $this->mergeWhen($request->user() && $this->resource->relationLoaded('voters'), function () use ($request) {
-                    return [
-                        'is_voted'      => $this->voters->contains('user_id', $request->user()->id)
-                    ];
-                }),
-
-                // default values
-                'is_voted'          => false,
+                'is_voted'          => $this->when($user, fn () => $this->voters->contains('user_id', $user->id), false),
+                'is_subscribed'     => $this->when($user, fn () => $this->subscribers->contains('user_id', $user->id), false),
 
                 'comments'          => $this->whenLoaded('commentsWithChildren', fn () => (new CommentCollection($this->commentsWithChildren))->setOwner($this->resource))
             ]

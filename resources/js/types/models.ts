@@ -360,5 +360,7 @@ export interface Guide {
   is_editing: boolean;
   comments: Comment[];
   votes: number;
+  subscribers: number;
   is_voted: boolean;
+  is_subscribed: boolean;
 }

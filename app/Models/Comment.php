@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $email
  * @property string $text
  * @property \Coyote\Comment[]|\Illuminate\Support\Collection $children
- * @property Job $job
  * @property Comment $parent
  * @property string $html
  * @property \Coyote\Job|\Coyote\Guide $resource

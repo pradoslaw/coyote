@@ -63,18 +63,18 @@
       <div class="mt-3 pt-3 qa-options">
         <ul class="list-inline mb-2">
           <li class="list-inline-item">
-            <a @click="vote(guide)" href="javascript:">
-              <i :class="{'fa text-primary': guide.is_voted, 'far': !guide.is_voted}" class="fa fa-fw fa-thumbs-up"></i>
+            <a @click="checkAuth(vote, guide)" href="javascript:" title="Kliknij jeżeli uważasz ten wpis za wartościowy">
+              <i :class="{'fa text-primary': guide.is_voted, 'far': !guide.is_voted}" class="fa-fw fa-thumbs-up"></i>
 
               {{ guide.votes }} {{ guide.votes | declination(['głos', 'głosy', 'głosów']) }}
             </a>
           </li>
 
           <li class="list-inline-item">
-            <a href="#">
-              <i class="far fa-fw fa-star"></i>
+            <a @click="checkAuth(subscribe, guide)" href="javascript:" title="Otrzymuj powiadomienia o zmianach na tej stronie">
+              <i :class="{'fa text-primary': guide.is_subscribed, 'far': !guide.is_subscribed}" class="fa-fw fa-bell"></i>
 
-              10 obserwatorów
+              {{ guide.subscribers }} {{ guide.subscribers | declination(['obserwator', 'obserwatorów', 'obserwatorów']) }}
             </a>
           </li>
         </ul>
@@ -105,7 +105,7 @@
       ...mapState('guides', ['guide'])
     },
     methods: {
-      ...mapActions('guides', ['vote'])
+      ...mapActions('guides', ['vote', 'subscribe'])
     }
   })
   export default class VuePost extends Vue {

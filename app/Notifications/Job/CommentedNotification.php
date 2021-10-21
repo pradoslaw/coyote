@@ -111,7 +111,7 @@ class CommentedNotification extends Notification implements ShouldQueue, ShouldB
             ->title($this->getMailSubject())
             ->icon('/img/favicon.png')
             ->tag($this->redirectionUrl())
-            ->body($this->comment->job->title)
+            ->body($this->comment->resource->title)
             ->data(['url' => $this->redirectionUrl()])
             ->options(['TTL' => 1000]);
     }
