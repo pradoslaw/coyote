@@ -23,7 +23,7 @@ const mutations = {
   },
 
   REMOVE_RELATION(state, { userId, isBlocked }) {
-    state.followers.splice(state.followers.findIndex(follower => follower.user_id === userId && follower.is_blocked === isBlocked));
+    state.followers.splice(state.followers.findIndex(follower => follower.user_id === userId && follower.is_blocked === isBlocked), 1);
   }
 };
 
