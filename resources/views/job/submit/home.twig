@@ -36,27 +36,27 @@
           <div class="container-xxl">
             <div class="row">
               <div class="col-12 col-lg-9">
-                <vue-button v-if="currentTab > 0" @click.native="switchTab(currentTab - 1)" :disabled="isSubmitting" class="btn btn-secondary float-left">
+                <vue-button v-if="currentTab > 0" @click.native="switchTab(currentTab - 1)" :disabled="isSubmitting" class="btn btn-outline-primary text-body float-left">
                   <i class="fas fa-angle-left"></i>
 
                   ${ tabs[currentTab - 1] }
+                </vue-button>
+
+                <vue-button :disabled="isSubmitting" @click.native="submitForm" class="btn btn-primary float-right btn-save ml-2" title="Zapisz tę ofertę">
+                  <i class="fas fa-save"></i> Zapisz
+
+                  <template v-if="job.firm.name">jako ${ job.firm.name }</template>
                 </vue-button>
 
                 <vue-button
                   v-if="currentTab < 1"
                   @click.native="switchTab(currentTab + 1)"
                   :disabled="isSubmitting"
-                  class="btn btn-secondary float-right"
+                  class="btn btn-outline-primary float-right text-body"
                 >
                   ${ tabs[currentTab + 1] }
 
                   <i class="fas fa-angle-right"></i>
-                </vue-button>
-
-                <vue-button :disabled="isSubmitting" @click.native="submitForm" class="btn btn-primary float-right btn-save mr-2" title="Zapisz tę ofertę">
-                  <i class="fas fa-save"></i> Zapisz
-
-                  <template v-if="job.firm.name">jako ${ job.firm.name }</template>
                 </vue-button>
               </div>
             </div>
