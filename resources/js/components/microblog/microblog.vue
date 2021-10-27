@@ -227,8 +227,8 @@
     }
 
     reply(user: User) {
-      this.commentForm.markdown.value += `@${useBrackets(user.name)}: `;
-      this.commentForm.markdown.focus();
+      this.commentForm.textarea.value += `@${useBrackets(user.name)}: `;
+      this.commentForm.textarea.focus();
     }
 
     unwrap() {
