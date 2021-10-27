@@ -132,7 +132,7 @@ class Microblog extends Model
             return $this->html;
         }
 
-        return $this->html = app('parser.microblog')->parse($this->text);
+        return $this->html = app('parser.post')->parse($this->text);
     }
 
     /**
