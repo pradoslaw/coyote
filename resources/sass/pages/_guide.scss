@@ -33,16 +33,3 @@
   color: $gray-light;
   font-size: 12px;
 }
-
-.qa-options {
-  border-top: 1px solid $border-color;
-
-  .list-inline {
-    color: $gray;
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-  }
-}

@@ -84,31 +84,31 @@
 
           <vue-form v-if="microblog.is_editing" ref="form" :microblog="microblog" class="mt-2 mb-2" @cancel="edit(microblog)" @save="edit(microblog)"></vue-form>
 
-          <a @click="checkAuth(vote, microblog)" @mouseenter.once="loadVoters(microblog)" :aria-label="voters" href="javascript:" class="btn btn-thumbs" data-balloon-pos="up" data-balloon-break>
+          <a @click="checkAuth(vote, microblog)" @mouseenter.once="loadVoters(microblog)" :aria-label="voters" href="javascript:" class="btn btn-gradient" data-balloon-pos="up" data-balloon-break>
             <i :class="{'fas text-primary': microblog.is_voted, 'far': !microblog.is_voted}" class="fa-fw fa-thumbs-up"></i>
 
             {{ microblog.votes }} {{ microblog.votes | declination(['głos', 'głosy', 'głosów']) }}
           </a>
 
-          <a @click="checkAuth(subscribe, microblog)" href="javascript:" class="btn btn-subscribe" title="Wł/Wył obserwowanie tego wpisu">
+          <a @click="checkAuth(subscribe, microblog)" href="javascript:" class="btn btn-gradient" title="Wł/Wył obserwowanie tego wpisu">
             <i :class="{'fas text-primary': microblog.is_subscribed, 'far': !microblog.is_subscribed}" class="fa-fw fa-bell"></i>
 
             <span class="d-none d-sm-inline">Obserwuj</span>
           </a>
 
-          <a @click="checkAuth(reply, microblog.user)" href="javascript:" class="btn btn-reply" title="Odpowiedz na ten wpis">
+          <a @click="checkAuth(reply, microblog.user)" href="javascript:" class="btn btn-gradient" title="Odpowiedz na ten wpis">
             <i class="far fa-fw fa-comment"></i>
 
             <span class="d-none d-sm-inline">Komentuj</span>
           </a>
 
-          <a @click.prevent="copy" :href="microblog.url" class="btn btn-share" title="Kopiuj link do schowka">
+          <a @click.prevent="copy" :href="microblog.url" class="btn btn-gradient" title="Kopiuj link do schowka">
             <i class="fas fa-share-alt"></i>
 
             <span class="d-none d-sm-inline">Udostępnij</span>
           </a>
 
-          <a v-if="isAuthorized" href="javascript:" :data-metadata="microblog.metadata" :data-url="microblog.url" class="btn btn-share" title="Zgłoś ten wpis">
+          <a v-if="isAuthorized" href="javascript:" :data-metadata="microblog.metadata" :data-url="microblog.url" class="btn btn-gradient" title="Zgłoś ten wpis">
             <i class="fas fa-flag"></i>
 
             <span class="d-none d-sm-inline">Zgłoś</span>

@@ -5,7 +5,7 @@
     <div v-if="!guide.is_editing" class="card-body">
 
       <div v-if="guide.permissions.update" class="dropdown float-right">
-        <button class="btn btn-xs border-0 text-muted mt-2" type="button" data-toggle="dropdown" aria-label="Dropdown"><i class="fa fa-ellipsis-h"></i></button>
+        <button class="btn btn-xs border-0 text-muted mt-2" type="button" data-bs-toggle="dropdown" aria-label="Dropdown"><i class="fa fa-ellipsis-h"></i></button>
 
         <div class="dropdown-menu dropdown-menu-right">
           <a @click="edit" class="dropdown-item" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
@@ -60,10 +60,10 @@
         <button v-if="!isShowing" @click="isShowing = true" class="btn btn-primary">Zobacz odpowiedź</button>
       </div>
 
-      <div class="mt-3 pt-3 qa-options">
+      <div class="mt-3 pt-3 border-top">
         <ul class="list-inline mb-2">
           <li class="list-inline-item">
-            <a @click="checkAuth(vote, guide)" href="javascript:" title="Kliknij jeżeli uważasz ten wpis za wartościowy">
+            <a @click="checkAuth(vote, guide)" href="javascript:" title="Kliknij jeżeli uważasz ten wpis za wartościowy" class="btn btn-gradient">
               <i :class="{'fa text-primary': guide.is_voted, 'far': !guide.is_voted}" class="fa-fw fa-thumbs-up"></i>
 
               {{ guide.votes }} {{ guide.votes | declination(['głos', 'głosy', 'głosów']) }}
@@ -71,7 +71,7 @@
           </li>
 
           <li class="list-inline-item">
-            <a @click="checkAuth(subscribe, guide)" href="javascript:" title="Otrzymuj powiadomienia o zmianach na tej stronie">
+            <a @click="checkAuth(subscribe, guide)" href="javascript:" title="Otrzymuj powiadomienia o zmianach na tej stronie" class="btn btn-gradient">
               <i :class="{'fa text-primary': guide.is_subscribed, 'far': !guide.is_subscribed}" class="fa-fw fa-bell"></i>
 
               {{ guide.subscribers }} {{ guide.subscribers | declination(['obserwator', 'obserwatorów', 'obserwatorów']) }}

@@ -24,3 +24,14 @@
     }
   }
 }
+
+.btn-gradient {
+  padding: 2px 7px;
+  color: $gray-light;
+  position: relative;
+
+  &:hover {
+    border: 1px solid $card-border-color;
+    @include gradient-y(#fff, $gray-lighter);
+  }
+}
