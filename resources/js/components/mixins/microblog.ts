@@ -74,9 +74,6 @@ export class MicroblogFormMixin extends Vue {
   }})
   microblog!: Microblog;
 
-  @Ref()
-  readonly textarea!: HTMLTextAreaElement;
-
   @Emit()
   cancel() {
     //

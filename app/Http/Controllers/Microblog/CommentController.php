@@ -65,8 +65,9 @@ class CommentController extends BaseController
 
         $isSubscribed = false;
 
-        $this->transaction(function () use ($microblog, &$isSubscribed) {
+        $this->transaction(function () use ($request, $microblog, &$isSubscribed) {
             $microblog->save();
+            $microblog->assets()->sync($request->input('assets'));
 
             // we need to get parent entry only for notification
             $parent = $microblog->parent;
@@ -100,6 +101,9 @@ class CommentController extends BaseController
         broadcast(new MicroblogSaved($microblog))->toOthers();
 
         MicroblogResource::withoutWrapping();
+
+        $microblog->unsetRelation('assets');
+        $microblog->load(['assets']);
 
         return (new MicroblogResource($microblog))->additional(['is_subscribed' => $isSubscribed]);
     }

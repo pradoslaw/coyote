@@ -7,7 +7,14 @@
     </div>
 
     <div class="media-body d-flex">
-      <vue-comment-form v-if="comment.is_editing" :microblog="comment" ref="form" class="w-100 mr-1" @cancel="edit(comment)" @save="edit(comment)"></vue-comment-form>
+      <vue-comment-form
+        v-if="comment.is_editing"
+        :microblog="comment"
+        ref="form"
+        class="w-100 mr-1"
+        @cancel="edit(comment)"
+        @save="edit(comment)"
+      />
 
       <div v-if="!comment.is_editing" class="w-100">
         <h6><vue-username :user="comment.user"></vue-username></h6>

@@ -192,7 +192,7 @@
   })
   export default class VueMicroblog extends Mixins(MicroblogMixin) {
     private index: number | null = null;
-    private commentDefault = { parent_id: this.microblog.id, text: '' };
+    private commentDefault = { parent_id: this.microblog.id, text: '', assets: [] };
 
     @Ref('comment-form')
     readonly commentForm!: VueCommentForm;

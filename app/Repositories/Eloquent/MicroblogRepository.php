@@ -83,7 +83,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     public function findById(int $id)
     {
         return $this->applyCriteria(function () use ($id) {
-            return $this->model->with('user')->withCount('comments')->with(['assets', 'tags'])->withoutGlobalScope(UserRelationsScope::class)->where('microblogs.id', $id)->firstOrFail();
+            return $this->model->withCount('comments')->with(['user', 'assets', 'tags'])->withoutGlobalScope(UserRelationsScope::class)->where('microblogs.id', $id)->firstOrFail();
         });
     }
 
@@ -93,7 +93,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     public function getComments($parentId)
     {
         return $this->applyCriteria(function () use ($parentId) {
-            return $this->model->with('user')->where('parent_id', $parentId)->orderBy('id')->get();
+            return $this->model->with(['user', 'assets'])->where('parent_id', $parentId)->orderBy('id')->get();
         });
     }
 
@@ -108,7 +108,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
         return $this->applyCriteria(function () use ($parentIds, $sub) {
             return $this
                 ->model
-                ->with('user')
+                ->with(['user', 'assets'])
                 ->withTrashed()
                 ->withoutGlobalScope(UserRelationsScope::class)
                 ->fromRaw('(' . $sub->toSql() . ') AS microblogs', $sub->getBindings())
