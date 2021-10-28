@@ -365,4 +365,6 @@ export interface Guide {
   is_voted: boolean;
   is_subscribed: boolean;
   tags: Tag[];
+  user: User;
+  created_at: Date;
 }

@@ -3,6 +3,8 @@
     <div class="card-body">
       <h4 class="m-0"><a :href="guide.url">{{ guide.title }}</a></h4>
 
+      <vue-metadata :guide="guide"></vue-metadata>
+
       <div class="row no-gutters">
         <vue-tags :tags="guide.tags" class="tag-clouds-skills mt-2 mb-2"></vue-tags>
 
@@ -21,7 +23,8 @@
   import Component from "vue-class-component";
   import VueTags from "@/components/tags.vue";
   import VueUserName from "@/components/user-name.vue";
-  import {mapActions, mapState} from "vuex";
+  import VueMetadata from './metadata.vue';
+  import { mapActions, mapState } from "vuex";
   import { default as mixins } from '../mixins/user';
   import { Prop } from "vue-property-decorator";
   import { Guide } from '@/types/models';
@@ -30,7 +33,8 @@
     mixins: [ mixins ],
     components: {
       'vue-tags': VueTags,
-      'vue-user-name': VueUserName
+      'vue-user-name': VueUserName,
+      'vue-metadata': VueMetadata
     },
     methods: {
       ...mapActions('guides', ['vote', 'subscribe'])

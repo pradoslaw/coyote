@@ -14,25 +14,7 @@
 
       <h1 class="m-0"><a :href="guide.url">{{ guide.title }}</a></h1>
 
-      <ul class="metadata list-inline">
-        <li class="list-inline-item">
-          <i class="fa fa-user-alt"></i> <vue-user-name :user="guide.user" />
-        </li>
-
-        <li class="list-inline-item">
-          <i class="far fa-calendar-alt"></i> <vue-timeago :datetime="guide.created_at"></vue-timeago>
-        </li>
-
-        <li class="list-inline-item">
-          <i class="far fa-comments"></i> {{ guide.comments_count }} {{ guide.comments_count | declination(['komentarz', 'komentarze', 'komentarzy']) }}
-        </li>
-
-        <li class="list-inline-item">
-          <i class="far fa-eye"></i>
-
-          {{ guide.views }} {{ guide.views | declination(['wyświetlenie', 'wyświetlenia', 'wyświetleń']) }}
-        </li>
-      </ul>
+      <vue-metadata :guide="guide"></vue-metadata>
 
       <div class="row no-gutters">
         <vue-tags :tags="guide.tags" class="tag-clouds-skills mt-2 mb-2"></vue-tags>
@@ -79,9 +61,7 @@
   import Vue from 'vue';
   import Component from "vue-class-component";
   import VueForm from './form.vue';
-  import VueUserName from '@/components/user-name.vue';
-  import { Prop } from "vue-property-decorator";
-  import { Guide } from '@/types/models';
+  import VueMetadata from './metadata.vue';
   import { default as mixins } from '../mixins/user';
   import VueTags from "@/components/tags.vue";
   import {mapActions, mapGetters, mapState} from 'vuex';
@@ -91,7 +71,7 @@
     components: {
       'vue-tags': VueTags,
       'vue-form': VueForm,
-      'vue-user-name': VueUserName
+      'vue-metadata': VueMetadata
     },
     computed: {
       ...mapGetters('user', ['isAuthorized']),
