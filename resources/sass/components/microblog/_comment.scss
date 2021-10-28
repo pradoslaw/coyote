@@ -11,20 +11,18 @@
     padding: 10px 5px 6px 5px;
     margin-top: 5px;
 
-    // User name
-    // ---------------------
-
-    h6 {
-      @include link-color-darker;
-
-      font-size: 13px;
-      display: inline;
-      margin-right: 3px;
-    }
-
     &.not-read {
       @include not-read-border;
     }
+  }
+
+  // User name in comment
+  // ---------------------
+  .media-body a[data-user-id] {
+    color: $link-color-darker;
+
+    margin-right: 3px;
+    vertical-align: top;
   }
 
   // Comment text

@@ -17,7 +17,7 @@
       />
 
       <div v-if="!comment.is_editing" class="w-100">
-        <h6><vue-username :user="comment.user"></vue-username></h6>
+        <vue-username :user="comment.user"></vue-username>
 
         <vue-flag v-for="flag in flags" :key="flag.id" :flag="flag"></vue-flag>
 
