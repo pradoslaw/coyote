@@ -2,12 +2,19 @@
 
 namespace Coyote\Http\Controllers\Guide;
 
-use Coyote\Http\Controllers\Controller;
+use Coyote\Http\Resources\GuideResource;
+use Coyote\Repositories\Contracts\GuideRepositoryInterface as GuideRepository;
 
-class HomeController extends Controller
+class HomeController extends BaseController
 {
-    public function index()
+    public function index(GuideRepository $repository)
     {
-        return $this->view('guide.home');
+
+
+        $paginator = $repository->paginate();
+
+        return $this->view('guide.home', [
+            'pagination'                => GuideResource::collection($paginator)->response()->getData(true)
+        ]);
     }
 }

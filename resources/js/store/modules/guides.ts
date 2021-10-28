@@ -7,9 +7,18 @@ const state = {
   guide: null
 }
 
+const getters = {
+  currentPage: state => state.pagination.meta.current_page,
+  totalPages: state => state.pagination.meta.last_page
+}
+
 const mutations = {
   INIT(state, { guide }) {
     state.guide = guide;
+  },
+
+  INIT_PAGINATION(state, pagination) {
+    state.pagination = pagination;
   },
 
   EDIT(state) {
@@ -42,6 +51,8 @@ const actions = {
     return axios.post(`/Guide/Submit/${state.guide.id || ''}`, state.guide).then(response => {
       commit('EDIT');
       commit('SAVE', response.data);
+
+      return response;
     });
   },
 
@@ -61,6 +72,7 @@ const actions = {
 export default {
   namespaced: true,
   state,
+  getters,
   mutations,
   actions
 };

@@ -8,14 +8,20 @@
       {% include 'guide.partials.filter' %}
     </div>
 
-    <div id="js-guide" class="col-lg-7">
-      <vue-post></vue-post>
+    <div id="js-homepage" class="col-lg-7">
+      <vue-pagination :current-page="currentPage" :total-pages="totalPages"></vue-pagination>
+
+      <vue-headline
+        v-for="guide in guides"
+        :key="guide.id"
+        :guide="guide"
+      />
 
       <vue-notifications position="bottom right"/>
     </div>
   </div>
 
   <script>
-    var guide = {{ guide|json_encode|raw }};
+    var pagination = {{ pagination|json_encode|raw }};
   </script>
 {% endblock %}

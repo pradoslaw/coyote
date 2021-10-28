@@ -3,7 +3,6 @@
     <vue-form v-if="guide.is_editing" class="card-body"></vue-form>
 
     <div v-if="!guide.is_editing" class="card-body">
-
       <div v-if="guide.permissions.update" class="dropdown float-right">
         <button class="btn btn-xs border-0 text-muted mt-2" type="button" data-bs-toggle="dropdown" aria-label="Dropdown"><i class="fa fa-ellipsis-h"></i></button>
 
@@ -41,15 +40,8 @@
         <div class="ml-auto text-right">
           <p class="text-muted font-weight-bold mb-1"><i class="fas fa-fw fa-chart-line"></i> Mid-level</p>
 
-
           <i class="fas fa-circle text-primary" title="zaawansowany" style="font-size: 10px; margin-right: 4px;"></i><i class="fas fa-circle text-primary" title="zaawansowany" style="font-size: 10px; margin-right: 4px;"></i><i class="fas fa-circle text-muted" title="zaawansowany" style="font-size: 10px; margin-right: 4px;"></i>
-<!--          <div class="btn-group btn-group-sm" role="group">-->
-<!--            <button type="button" class="btn btn-primary">Junior</button>-->
-<!--            <button type="button" class="btn btn-warning">Mid-level</button>-->
-<!--            <button type="button" class="btn btn-danger">Senior</button>-->
-<!--          </div>-->
         </div>
-
       </div>
 
       <div v-html="guide.excerpt_html" class="mt-3"></div>
@@ -92,7 +84,7 @@
   import { Guide } from '@/types/models';
   import { default as mixins } from '../mixins/user';
   import VueTags from "@/components/tags.vue";
-  import {mapActions, mapState} from 'vuex';
+  import {mapActions, mapGetters, mapState} from 'vuex';
 
   @Component({
     mixins: [ mixins ],
@@ -102,6 +94,7 @@
       'vue-user-name': VueUserName
     },
     computed: {
+      ...mapGetters('user', ['isAuthorized']),
       ...mapState('guides', ['guide'])
     },
     methods: {

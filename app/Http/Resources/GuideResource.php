@@ -3,6 +3,7 @@
 namespace Coyote\Http\Resources;
 
 use Coyote\Comment;
+use Coyote\Services\UrlBuilder;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -34,6 +35,7 @@ class GuideResource extends JsonResource
             parent::toArray($request),
             [
                 'slug'          => $this->slug,
+                'url'           => UrlBuilder::guide($this->resource),
 
                 'user'          => new UserResource($this->user),
                 'tags'          => TagResource::collection($this->tags),
@@ -44,12 +46,12 @@ class GuideResource extends JsonResource
                 'comments_count'=> $this->comments_count,
                 'subscribers'   => $this->subscribers()->count(),
 
-                $this->mergeWhen($this->text && $this->excerpt, function () {
+                $this->mergeWhen($this->text || $this->excerpt, function () {
                     $parser = resolve('parser.post');
 
                     return [
-                        'html'          => $parser->parse($this->text),
-                        'excerpt_html'  => $parser->parse($this->excerpt)
+                        'html'          => $parser->parse((string) $this->text),
+                        'excerpt_html'  => $parser->parse((string) $this->excerpt)
                     ];
                 }),
 

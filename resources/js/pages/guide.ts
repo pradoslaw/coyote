@@ -1,14 +1,17 @@
 import Vue from 'vue';
 import VuePost from '@/components/guide/post.vue';
 import VueForm from '@/components/guide/form.vue';
+import VueHeadline from '@/components/guide/headline.vue';
 import VueComment from '@/components/comments/comment.vue';
 import VueCommentForm from '@/components/comments/form.vue';
+import VuePagination from '@/components/pagination.vue';
 import store from '@/store';
 import VuePaste from "../plugins/paste";
 import { Guide, Paginator } from "@/types/models";
 import { default as axiosErrorHandler } from '@/libs/axios-error-handler';
 import VueNotifications from "vue-notification";
 import VueModals from "@/plugins/modals";
+import {mapGetters} from "vuex";
 
 axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 
@@ -25,7 +28,19 @@ declare global {
 
 new Vue({
   el: '#js-homepage',
+  store,
   delimiters: ['${', '}'],
+  components: { 'vue-headline': VueHeadline, 'vue-pagination': VuePagination },
+  created() {
+    store.commit('guides/INIT_PAGINATION', window.pagination);
+  },
+  computed: {
+    guides() {
+      return store.state.guides.pagination.data;
+    },
+
+    ...mapGetters('guides', ['totalPages', 'currentPage'])
+  }
 });
 
 new Vue({

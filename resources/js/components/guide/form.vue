@@ -102,8 +102,12 @@
       this.isProcessing = true;
 
       return store.dispatch('guides/save')
-        .then(() => {
+        .then(response => {
           this.$emit('save');
+
+          if (response.status === 201) {
+            window.location.href = response.data.url;
+          }
         })
         .catch(err => {
           if (err.response?.status !== 422) {

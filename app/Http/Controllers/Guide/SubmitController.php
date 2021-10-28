@@ -3,15 +3,16 @@
 namespace Coyote\Http\Controllers\Guide;
 
 use Coyote\Events\GuideSaved;
-use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Requests\GuideRequest;
 use Coyote\Http\Resources\GuideResource;
 use Coyote\Guide;
 
-class SubmitController extends Controller
+class SubmitController extends BaseController
 {
     public function form()
     {
+        $this->breadcrumb->push('Dodaj nowy post', route('guide.submit'));
+
         return $this->view('guide.form');
     }
 
@@ -36,6 +37,5 @@ class SubmitController extends Controller
         GuideResource::withoutWrapping();
 
         return new GuideResource($guide);
-
     }
 }
