@@ -2,9 +2,7 @@ export const install = (Vue) => {
   const currentTime = new Date().getTime() / 1000;
 
   function gc() {
-    const items = { ...localStorage };
-
-    for (let item in items) {
+    for (let item in localStorage) {
       try {
         const data = JSON.parse(localStorage.getItem(item) as string);
 

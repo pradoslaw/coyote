@@ -45,6 +45,8 @@ function handler(event) {
   for (const item of items) {
     if (item.type.indexOf('image') === 0) {
       blob = item.getAsFile();
+      // default browser behaviour is to paste path to the file. we prevent that.
+      event.preventDefault();
 
       if (blob) {
         fr.readAsDataURL(blob);
