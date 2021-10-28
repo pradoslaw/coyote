@@ -352,6 +352,7 @@ export interface Guide {
   id: number;
   title: string;
   slug: string;
+  url: string;
   excerpt: string;
   excerpt_html: string;
   text: string;
@@ -363,4 +364,5 @@ export interface Guide {
   subscribers: number;
   is_voted: boolean;
   is_subscribed: boolean;
+  tags: Tag[];
 }

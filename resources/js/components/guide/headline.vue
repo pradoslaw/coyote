@@ -1,7 +1,7 @@
 <template>
   <div class="card card-default">
     <div class="card-body">
-      <h4 class="m-0"><a :href="`/Guide/${guide.id}-${guide.slug}`">{{ guide.title }}</a></h4>
+      <h4 class="m-0"><a :href="guide.url">{{ guide.title }}</a></h4>
 
       <div class="row no-gutters">
         <vue-tags :tags="guide.tags" class="tag-clouds-skills mt-2 mb-2"></vue-tags>
@@ -22,11 +22,12 @@
   import VueTags from "@/components/tags.vue";
   import VueUserName from "@/components/user-name.vue";
   import {mapActions, mapState} from "vuex";
+  import { default as mixins } from '../mixins/user';
   import { Prop } from "vue-property-decorator";
   import { Guide } from '@/types/models';
 
   @Component({
-    // mixins: [ mixins ],
+    mixins: [ mixins ],
     components: {
       'vue-tags': VueTags,
       'vue-user-name': VueUserName

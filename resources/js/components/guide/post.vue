@@ -12,7 +12,7 @@
         </div>
       </div>
 
-      <h1 class="m-0"><a :href="`/Guide/${guide.id}-${guide.slug}`">{{ guide.title }}</a></h1>
+      <h1 class="m-0"><a :href="guide.url">{{ guide.title }}</a></h1>
 
       <ul class="metadata list-inline">
         <li class="list-inline-item">
