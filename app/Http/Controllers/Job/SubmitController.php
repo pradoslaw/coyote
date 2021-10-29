@@ -79,7 +79,7 @@ class SubmitController extends Controller
 
         $firms = FirmResource::collection($this->firm->findAllBy('user_id', $this->userId));
 
-        return $this->view('job.submit.home', [
+        return $this->view('job.submit', [
             'job'               => new JobFormResource($job),
             'firms'             => $firms,
 
