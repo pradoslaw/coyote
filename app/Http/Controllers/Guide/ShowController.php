@@ -4,7 +4,6 @@ namespace Coyote\Http\Controllers\Guide;
 
 use Coyote\Http\Resources\GuideResource;
 use Coyote\Guide;
-use Coyote\Http\Resources\TagResource;
 use Coyote\Services\UrlBuilder;
 
 class ShowController extends BaseController
@@ -12,8 +11,6 @@ class ShowController extends BaseController
     public function index(Guide $guide)
     {
         $this->breadcrumb->push($guide->title, UrlBuilder::guide($guide));
-
-        TagResource::urlResolver(fn (string $name) => route('guide.tag', [urlencode($name)]));
 
         $guide->loadCount('comments');
         $guide->load(['commentsWithChildren', 'subscribers']);

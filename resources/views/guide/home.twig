@@ -1,6 +1,6 @@
 {% extends 'layout' %}
 
-{% block title %}{{ guide.title }}{{ parent() }}{% endblock %}
+{% block title %}Rekrutacyjne Q&A {{ tag ? ' :: ' ~ tag }}{{ parent() }}{% endblock %}
 
 {% block container %}
   <div class="row mt-1">

@@ -23,9 +23,10 @@ class HomeController extends BaseController
 
     public function filterByTags(string $tag)
     {
+        $this->breadcrumb->push($tag, route('guide.tag', [$tag]));
         $this->guideRepository->pushCriteria(new WithTags([$tag]));
 
-        return $this->load();
+        return $this->load()->with('tag', $tag);
     }
 
     private function load()
