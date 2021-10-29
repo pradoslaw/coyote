@@ -16,7 +16,7 @@ use Coyote\Repositories\Criteria\Topic\SkipForum;
 use Coyote\Repositories\Criteria\Topic\SkipLockedCategories;
 use Coyote\Repositories\Criteria\Topic\Subscribes;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
-use Coyote\Repositories\Criteria\Topic\WithTags;
+use Coyote\Repositories\Criteria\WithTags;
 use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Services\Flags;
 use Coyote\Services\Guest;
