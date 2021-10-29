@@ -11,11 +11,15 @@
     <div id="js-guide" class="col-lg-7">
       <vue-post></vue-post>
 
-      <h3 class="mt-2 mb-2">Komentarze</h3>
+      <h4 v-if="isAuthorized || commentsCount" class="mt-2 mb-2">Komentarze</h4>
 
-      <vue-comment-form resource-id="{{ guide.id }}" resource="Coyote\Guide"></vue-comment-form>
+      <vue-comment-form
+        v-if="isAuthorized"
+        resource-id="{{ guide.id }}"
+        resource="Coyote\Guide"
+      ></vue-comment-form>
 
-      <div class="card card-default">
+      <div v-if="commentsCount > 0" class="card card-default">
         <div class="card-body">
           <vue-comment
             v-for="comment in comments"

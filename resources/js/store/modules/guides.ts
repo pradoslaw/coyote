@@ -40,9 +40,13 @@ const mutations = {
     guide.votes += (guide.is_voted ? 1 : -1);
   },
 
-  SUBSCRIBE(vote, guide: Guide) {
+  SUBSCRIBE(state, guide: Guide) {
     guide.is_subscribed = !guide.is_subscribed;
     guide.subscribers += (guide.is_subscribed ? 1 : -1);
+  },
+
+  SET_COMMENTS_COUNT(state, { guide, count} ) {
+    guide.comments_count = count;
   }
 }
 

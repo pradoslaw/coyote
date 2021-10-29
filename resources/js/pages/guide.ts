@@ -11,7 +11,7 @@ import { Guide, Paginator } from "@/types/models";
 import { default as axiosErrorHandler } from '@/libs/axios-error-handler';
 import VueNotifications from "vue-notification";
 import VueModals from "@/plugins/modals";
-import {mapGetters} from "vuex";
+import { mapGetters, mapState, mapMutations } from "vuex";
 
 axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 
@@ -59,6 +59,18 @@ new Vue({
   computed: {
     comments() {
       return store.state.comments;
+    },
+
+    commentsCount() {
+      return store.state.guides.guide.comments_count;
+    },
+
+    ...mapGetters('user', ['isAuthorized']),
+    ...mapState('guides', ['guide'])
+  },
+  watch: {
+    comments(newValue) {
+      store.commit('guides/SET_COMMENTS_COUNT', { guide: this.guide, count: Object.keys(newValue).length });
     }
   }
 });

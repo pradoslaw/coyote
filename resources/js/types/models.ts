@@ -367,4 +367,5 @@ export interface Guide {
   tags: Tag[];
   user: User;
   created_at: Date;
+  comments_count: number;
 }

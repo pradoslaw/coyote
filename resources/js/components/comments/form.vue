@@ -63,7 +63,6 @@
       this.$store.dispatch('comments/save', { text: this.defaultText, resource_type: this.resource, resource_id: this.resourceId })
         .then(response => {
           this.defaultText = '';
-
           this.scrollIntoView(response.data);
         })
         .finally(() => this.isSubmitting = false);
