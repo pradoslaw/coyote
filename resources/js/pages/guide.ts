@@ -56,6 +56,9 @@ new Vue({
     store.commit('guides/INIT', { guide: window.guide });
     store.commit('comments/INIT', window.guide?.comments);
   },
+  mounted() {
+    document.getElementById('js-skeleton')?.remove();
+  },
   computed: {
     commentsCount() {
       return store.state.guides.guide.comments_count;
@@ -67,6 +70,10 @@ new Vue({
   },
   watch: {
     comments(newValue) {
+      if (!newValue) {
+        return;
+      }
+
       store.commit('guides/SET_COMMENTS_COUNT', { guide: this.guide, count: Object.keys(newValue).length });
     }
   }

@@ -16,8 +16,10 @@ class ShowController extends BaseController
         $guide->load(['commentsWithChildren', 'subscribers']);
         $guide->loadUserVoterRelation($this->userId);
 
+        GuideResource::withoutWrapping();
+
         return $this->view('guide.show', [
-            'guide'         => new GuideResource($guide)
+            'guide'         => (new GuideResource($guide))->toResponse($this->request)->getData(true)
         ]);
     }
 }
