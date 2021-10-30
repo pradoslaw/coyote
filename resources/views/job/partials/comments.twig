@@ -1,7 +1,11 @@
-<div id="comments" v-cloak>
+<div id="js-comments" v-cloak>
   <h3><i class="fas fa-question-circle-o"></i> Pytania i odpowiedzi</h3>
 
-
+  <vue-comment-form
+    v-if="isAuthorized"
+    resource-id="{{ job.id }}"
+    resource="Coyote\Job"
+  ></vue-comment-form>
 
   <div v-if="Object.keys(comments).length > 0" class="card card-default">
     <div class="card-body">

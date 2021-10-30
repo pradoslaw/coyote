@@ -32,7 +32,7 @@ class CommentResource extends JsonResource
             array_only(parent::toArray($request), ['id', 'text', 'email', 'html', 'parent_id']),
             [
                 'created_at'    => $this->created_at->toIso8601String(),
-                'children'      => $this->whenLoaded('children', fn () => CommentResource::collection($this->children)->keyBy('id')),
+                'children'      => $this->whenLoaded('children', fn () => CommentResource::collection($this->children)->keyBy('id'), []),
                 'is_owner'      => $this->resource->resource->user_id === $this->user_id,
 
                 'url'           => UrlBuilder::url($this->resource->resource) . '#comment-' . $this->id,

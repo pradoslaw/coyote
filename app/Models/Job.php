@@ -382,31 +382,30 @@ class Job extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function comments()
     {
-        return $this->hasMany(Comment::class);
+        return $this->morphMany(Comment::class, 'resource');
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @todo duplikat z modelem Guide.php
      */
     public function commentsWithChildren()
     {
+        $userRelation = fn ($builder) => $builder->select(['id', 'name', 'photo', 'deleted_at', 'is_blocked', 'is_online'])->withTrashed();
+
         return $this
             ->comments()
             ->whereNull('parent_id')
             ->orderBy('id', 'DESC')
             ->with([
-                'children' => function ($builder) {
-                    return $builder->with(['user' => function ($query) {
-                        return $query->select(['id', 'name', 'photo', 'deleted_at', 'is_blocked'])->withTrashed();
-                    }]);
+                'children' => function ($builder) use ($userRelation) {
+                    return $builder->orderBy('id')->with(['user' => $userRelation]);
                 },
-                'user' => function ($builder) {
-                    return $builder->select(['id', 'name', 'photo', 'deleted_at', 'is_blocked'])->withTrashed();
-                }
+                'user' => $userRelation
             ]);
     }
 

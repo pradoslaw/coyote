@@ -1,9 +1,7 @@
 import Vue from 'vue';
 import VueComment from '../../components/comments/comment.vue';
-import VueModal from '../../components/modal.vue';
 import VueAutosize from '../../plugins/autosize';
-import VuePrompt from '../../components/forms/prompt.vue';
-import VueButton from '../../components/forms/button.vue';
+import VuePaste from "@/plugins/paste";
 import store from '../../store';
 import VueMap from '../../components/google-maps/map.vue';
 import VueMarker from '../../components/google-maps/marker.vue';
@@ -12,9 +10,11 @@ import VueFlag from '../../components/flags/flag.vue';
 import { default as axiosErrorHandler } from '../../libs/axios-error-handler';
 import { mapGetters, mapState, mapActions } from 'vuex';
 import { default as mixins } from '@/components/mixins/user';
+import VueCommentForm from "@/components/comments/form";
 
 Vue.use(VueAutosize);
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
+Vue.use(VuePaste, {url: '/assets'});
 
 axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 
@@ -63,3 +63,23 @@ new Vue({
   }
 });
 
+new Vue({
+  el: '#js-comments',
+  delimiters: ['${', '}'],
+  mixins: [ mixins ],
+  components: {
+    'vue-comment': VueComment,
+    'vue-comment-form': VueCommentForm
+  },
+  store,
+  created() {
+    store.commit('comments/INIT', window.comments);
+  },
+  computed: {
+    comments() {
+      return store.state.comments;
+    },
+
+    ...mapGetters('user', ['isAuthorized'])
+  }
+});
