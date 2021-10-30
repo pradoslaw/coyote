@@ -27,6 +27,7 @@ class GuideRequest extends FormRequest
             'title' => 'required|string|max:200',
             'excerpt' => 'nullable|string',
             'text' => 'required|string',
+            'tags' => 'required|max:6',
             'tags.*.name'   => [
                 'bail',
                 'max:25',

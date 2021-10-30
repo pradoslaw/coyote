@@ -5,6 +5,8 @@ namespace Coyote\Http\Controllers\Guide;
 use Coyote\Http\Resources\GuideResource;
 use Coyote\Repositories\Contracts\GuideRepositoryInterface as GuideRepository;
 use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
+use Coyote\Repositories\Criteria\EagerLoading;
+use Coyote\Repositories\Criteria\EagerLoadingWithCount;
 use Coyote\Repositories\Criteria\WithTags;
 
 class HomeController extends BaseController
@@ -24,6 +26,7 @@ class HomeController extends BaseController
     public function filterByTags(string $tag)
     {
         $this->breadcrumb->push($tag, route('guide.tag', [$tag]));
+
         $this->guideRepository->pushCriteria(new WithTags([$tag]));
 
         return $this->load()->with('tag', $tag);
@@ -31,6 +34,8 @@ class HomeController extends BaseController
 
     private function load()
     {
+        $this->guideRepository->pushCriteria(new EagerLoading(['subscribers', 'voters']));
+
         $paginator = $this->guideRepository->paginate();
 
         return $this->view('guide.home', [
