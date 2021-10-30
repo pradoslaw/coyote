@@ -67,7 +67,7 @@ class CommentController extends Controller
 
         CommentResource::withoutWrapping();
 
-        return new CommentResource($comment->load('user'));
+        return new CommentResource($comment->load(['user', 'children']));
     }
 
     public function delete(Comment $comment)

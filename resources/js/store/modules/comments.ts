@@ -2,16 +2,16 @@ import axios from "axios";
 import Vue from "vue";
 import { Comment } from '@/types/models';
 
-const state = {};
+const state = { comments: [] };
 
 const mutations = {
   INIT(state, comments) {
-    state = Object.assign(state, comments);
+    state.comments = comments;
   },
 
   UPDATE(state, comment: Comment) {
     if (comment.parent_id) {
-      const parent = state[comment.parent_id];
+      const parent = state.comments[comment.parent_id];
 
       if (Array.isArray(parent.children)) {
         Vue.set(parent, "children", {});
@@ -19,17 +19,18 @@ const mutations = {
 
       Vue.set(parent.children, comment.id, comment);
     } else {
-      Vue.set(state, comment.id, comment);
+      Vue.set(state.comments, comment.id, comment);
     }
   },
 
   DELETE(state, comment) {
     if (comment.parent_id) {
-      let parent = state[comment.parent_id];
+      let parent = state.comments[comment.parent_id];
 
       Vue.delete(parent.children, comment.id);
+      console.log(parent)
     } else {
-      Vue.delete(state, comment.id);
+      Vue.delete(state.comments, comment.id);
     }
   }
 }

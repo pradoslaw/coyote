@@ -345,7 +345,8 @@ export interface Comment {
   id: number;
   parent_id: number;
   text: string;
-
+  html: string;
+  assets: Asset[];
 }
 
 export interface Guide {

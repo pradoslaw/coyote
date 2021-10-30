@@ -57,16 +57,13 @@ new Vue({
     store.commit('comments/INIT', window.guide?.comments);
   },
   computed: {
-    comments() {
-      return store.state.comments;
-    },
-
     commentsCount() {
       return store.state.guides.guide.comments_count;
     },
 
     ...mapGetters('user', ['isAuthorized']),
-    ...mapState('guides', ['guide'])
+    ...mapState('guides', ['guide']),
+    ...mapState('comments', ['comments'])
   },
   watch: {
     comments(newValue) {

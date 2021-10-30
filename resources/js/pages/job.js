@@ -1,10 +1,13 @@
-// import '../legacy/subscribe';
 import Router from '../libs/router';
 import Vue from "vue";
 import VueNotifications from "vue-notification";
 import {default as axiosErrorHandler} from "@/libs/axios-error-handler";
+import VueModals from "@/plugins/modals";
+import VuePaste from "@/plugins/paste";
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
+Vue.use(VueModals);
+Vue.use(VuePaste, {url: '/assets'});
 
 axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 
