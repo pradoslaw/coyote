@@ -219,8 +219,8 @@ class Post extends Model
     {
         return (new static)
             ->where('topic_id', $this->topic_id)
-            ->where('id', '<', $this->id)
-            ->orderBy('id', 'DESC')
+            ->where('created_at', '<', $this->created_at)
+            ->orderBy('created_at', 'DESC')
             ->first();
     }
 
