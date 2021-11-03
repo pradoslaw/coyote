@@ -9,27 +9,12 @@
         <a v-if="editable" @click="deleteTag(tag)" class="remove"><i class="fa fa-times"></i></a>
       </component>
 
-      <div v-if="editable" class="d-inline" @mouseleave="hover = null">
-        <span
-          v-for="i in [1, 2, 3]"
-          :aria-label="tooltips[i - 1]"
-          @mouseover="hover = i"
-          @click="setPriority(tag, i)"
-          data-balloon-pos="down"
-        >
-          <i class="fas fa-circle" :class="{'text-primary': tag.priority >= i, 'text-muted': tag.priority < i}"></i>
-        </span>
-      </div>
-
-      <div v-else-if="tag.priority" class="d-inline">
-        <span
-          v-for="i in [1, 2, 3]"
-          :aria-label="tooltips[i - 1]"
-          data-balloon-pos="down"
-        >
-          <i class="fas fa-circle" :class="{'text-primary': tag.priority >= i, 'text-muted': tag.priority < i}"></i>
-        </span>
-      </div>
+      <vue-progress-bar
+        v-if="editable || tag.priority"
+        :editable="editable"
+        v-model="tag.priority"
+        @input="emitChange(tag, ...arguments)"
+      ></vue-progress-bar>
     </li>
   </ul>
 </template>
@@ -39,24 +24,20 @@
   import Component from "vue-class-component";
   import { Prop, Emit } from "vue-property-decorator";
   import { Tag } from '@/types/models';
+  import VueProgressBar from "@/components/progress-bar.vue";
 
-  @Component
+  @Component({
+    components: { 'vue-progress-bar': VueProgressBar }
+  })
   export default class VueTags extends Vue {
-    private hover: number | null = null;
-
     @Prop({default: () => []})
     readonly tags!: Tag[];
 
     @Prop({default: false})
     readonly editable!: boolean;
 
-    @Prop({default: () => ['podstawy', 'średnio zaawansowany', 'zaawansowany']})
-    readonly tooltips!: string[];
-
-    @Emit('priority')
-    setPriority(tag: Tag, priority: number) {
-      tag.priority = priority;
-
+    @Emit('change')
+    emitChange(tag: Tag) {
       return tag;
     }
 
