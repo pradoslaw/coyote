@@ -45,7 +45,7 @@
         "mpdf/mpdf": "dev-development",
         "paylane/client": "^1.1",
         "predis/predis": "^1.0",
-        "rawr/t-regx": "^v0.13.8",
+        "rawr/t-regx": "^v0.17.0",
         "rcrowe/twigbridge": "^0.12",
         "sentry/sentry-laravel": "^2.3",
         "stripe/stripe-php": "^7.66",
