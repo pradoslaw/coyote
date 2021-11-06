@@ -14,7 +14,7 @@
           <vue-pricing :plans="plans" :value.sync="job.plan_id" email="{{ config('mail.from.address') }}"></vue-pricing>
         {% endif %}
 
-        <vue-tabs @click="switchTab" :items="tabs" :current-tab="currentTab" class="mt-2 mb-4"></vue-tabs>
+        <vue-tabs @click="switchTab" :items="tabs" :current-tab="currentTab" id="js-tabs" class="mt-2 mb-4"></vue-tabs>
 
         <vue-job-form
           v-show="currentTab === 0"

@@ -39,7 +39,7 @@ new Vue({
     switchTab(tab) {
       this.currentTab = tab;
 
-      window.scrollTo(0, 0);
+      window.scrollTo(0, document.getElementById('js-tabs').offsetTop);
     },
 
     submitForm() {

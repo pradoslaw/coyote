@@ -143,7 +143,7 @@
           <li class="list-group-item w-50 checked">
             <i class="fas fa-fw fa-check"></i>
 
-            <input v-model="benefit" type="text" maxlength="100" class="form-control form-control-sm" @keydown.enter.prevent="addBenefit" placeholder="Naciśnij Enter, aby dodać">
+            <input v-model="benefit" type="text" maxlength="100" class="form-control form-control-sm" @keydown.enter.prevent="addBenefit" placeholder="Wpisz tekst i naciśnij Enter, aby dodać">
           </li>
         </ol>
 
