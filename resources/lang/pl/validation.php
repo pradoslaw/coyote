@@ -200,6 +200,7 @@ return [
     'attributes' => [
         'password'                  => 'hasło',
         'name'                      => 'nazwa użytkownika',
-        'firm.name'                 => 'nazwa firmy'
+        'firm.name'                 => 'nazwa firmy',
+        'invoice.country_id'        => 'kod kraju'
     ],
 ];

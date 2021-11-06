@@ -75,14 +75,12 @@
             </div>
 
             <div class="col-sm-5">
-              <label class="col-form-label">NIP (opcjonalnie)</label>
-
               <div class="row">
-                <vue-form-group :errors="errors['invoice.country_id']" class="col-4">
+                <vue-form-group :errors="errors['invoice.country_id']" label="Kraj" class="col-4">
                   <vue-select :is-invalid="'invoice.country_id' in errors" :options="countries" v-model="form.invoice.country_id" name="invoice[country_id]"></vue-select>
                 </vue-form-group>
 
-                <vue-form-group :errors="errors['invoice.vat_id']" class="col-8">
+                <vue-form-group :errors="errors['invoice.vat_id']" label="NIP / VAT-ID" class="col-8">
                   <vue-text :is-invalid="'invoice.vat_id' in errors" v-model="form.invoice.vat_id" name="invoice[vat_id]" autocomplete="off"></vue-text>
                 </vue-form-group>
               </div>
