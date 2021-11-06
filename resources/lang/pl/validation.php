@@ -201,6 +201,11 @@ return [
         'password'                  => 'hasło',
         'name'                      => 'nazwa użytkownika',
         'firm.name'                 => 'nazwa firmy',
-        'invoice.country_id'        => 'kod kraju'
+        'invoice.country_id'        => 'kraj',
+        'invoice.name'              => 'nazwa',
+        'invoice.vat_id'            => 'NIP',
+        'invoice.address'           => 'adres',
+        'invoice.postal_code'       => 'kod pocztowy',
+        'invoice.city'              => 'miasto'
     ],
 ];

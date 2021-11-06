@@ -69,8 +69,8 @@ class PaymentController extends Controller
                 /** @var \Coyote\Payment $payment */
                 $payment = $request->route('payment');
 
-                if ($payment !== null && $payment instanceof Payment) {
-                    abort_if($payment->status_id == Payment::PAID, 404);
+                if ($payment instanceof Payment) {
+                    abort_if($payment->status_id === Payment::PAID, 404);
                 }
 
                 return $next($request);
@@ -97,7 +97,7 @@ class PaymentController extends Controller
             $geoIp = app('geo-ip');
             $result = $geoIp->ip($this->request->ip());
 
-            $firm->country = $result->country_code ?? '';
+            $firm->country = $result->country_code ?? null;
         }
 
         // calculate price based on payment details

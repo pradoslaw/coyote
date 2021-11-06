@@ -77,7 +77,13 @@
             <div class="col-sm-5">
               <div class="row">
                 <vue-form-group :errors="errors['invoice.country_id']" label="Kraj" class="col-4">
-                  <vue-select :is-invalid="'invoice.country_id' in errors" :options="countries" v-model="form.invoice.country_id" name="invoice[country_id]"></vue-select>
+                  <vue-select
+                    :is-invalid="'invoice.country_id' in errors"
+                    :options="countries"
+                    placeholder="--"
+                    v-model="form.invoice.country_id"
+                    name="invoice[country_id]"
+                  />
                 </vue-form-group>
 
                 <vue-form-group :errors="errors['invoice.vat_id']" label="NIP / VAT-ID" class="col-8">
@@ -210,7 +216,7 @@
         postal_code: '{{ firm.postcode }}',
         city: '{{ firm.city }}',
         vat_id: '{{ firm.vat_id }}',
-        country_id: '{{ firm.country_id }}',
+        country_id: {{ firm.country_id|default('null') }},
         email: '{{ user('email') }}'
       }
     };

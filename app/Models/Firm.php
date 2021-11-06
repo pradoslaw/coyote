@@ -180,13 +180,14 @@ class Firm extends Model
     }
 
     /**
-     * @param string $country
+     * @param string|null $country
      */
-    public function setCountryAttribute($country)
+    public function setCountryAttribute(?string $country)
     {
-        if ($country) {
-            $this->setAttribute('country_id', (new Country())->where('name', $country)->orWhere('code', $country)->value('id'));
-        }
+        $this->setAttribute(
+            'country_id',
+            $country ? (new Country())->where('name', $country)->orWhere('code', $country)->value('id') : null
+        );
     }
 
     /**

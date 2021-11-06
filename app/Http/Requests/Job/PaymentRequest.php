@@ -42,21 +42,11 @@ class PaymentRequest extends FormRequest
             'invoice.address' => ['bail', $priceRule, 'nullable', 'string', 'max:200'],
             'invoice.city' => ['bail', $priceRule, 'nullable', 'string', 'max:200'],
             'invoice.postal_code' => ['bail', $priceRule, 'nullable', 'string', 'max:30'],
-            'invoice.country_id' => ['bail', $priceRule, 'nullable', Rule::in(array_flip($codes))]
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function attributes()
-    {
-        return [
-            'invoice.name'      => 'nazwa',
-            'invoice.vat_id'    => 'NIP',
-            'invoice.address'   => 'adres',
-            'invoice.postal_code'=> 'kod pocztowy',
-            'invoice.city'      => 'miasto'
+            'invoice.country_id' => [
+                'nullable',
+                Rule::requiredIf($this->input('invoice.vat_id') !== null),
+                Rule::in(array_flip($codes))
+            ]
         ];
     }
 }

@@ -54,7 +54,7 @@ class PaymentControllerTest extends TestCase
 
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(
-            ['invoice.address', 'invoice.name', 'invoice.city', 'invoice.country_id', 'invoice.postal_code']
+            ['invoice.address', 'invoice.name', 'invoice.city', 'invoice.postal_code']
         );
 
         $response->assertJson([
@@ -63,13 +63,12 @@ class PaymentControllerTest extends TestCase
                 'invoice.name' => ['Pole nazwa jest wymagane.'],
                 'invoice.address' => ['Pole adres jest wymagane.'],
                 'invoice.city' => ['Pole miasto jest wymagane.'],
-                'invoice.postal_code' => ['Pole kod pocztowy jest wymagane.'],
-                'invoice.country_id' => ['Pole kod kraju jest wymagane.'],
+                'invoice.postal_code' => ['Pole kod pocztowy jest wymagane.']
             ]
         ]);
     }
 
-    public function testSubmitValidFormWithoutInvoice()
+    public function testSubmitFormWithoutCountryId()
     {
         $payment = $this->job->getUnpaidPayment();
 
@@ -78,11 +77,28 @@ class PaymentControllerTest extends TestCase
             "/Praca/Payment/{$payment->id}",
             [
                 'payment_method' => 'card',
-                'price' => $payment->plan->gross_price
+                'price' => $payment->plan->gross_price,
+                'invoice' => [
+                    'name' => $this->faker->company,
+                    'vat_id' => '123123123',
+                    'address' => $this->faker->address,
+                    'city' => $this->faker->city,
+                    'postal_code' => $this->faker->postcode
+                ]
             ]
         );
 
         $response->assertStatus(422);
+        $response->assertJsonValidationErrors(
+            ['invoice.country_id']
+        );
+
+        $response->assertJson([
+            'message' => 'The given data was invalid.',
+            'errors' => [
+                'invoice.country_id' => ['Pole kraj jest wymagane.']
+            ]
+        ]);
     }
 
     public function testSubmitValidFormWithInvoice()
@@ -98,7 +114,6 @@ class PaymentControllerTest extends TestCase
             [
                 'payment_method' => 'card',
                 'price' => $payment->plan->gross_price,
-                'enable_invoice' => true,
                 'invoice' => [
                     'name' => $name = $faker->company,
                     'vat_id' => $vat = '123123123',
