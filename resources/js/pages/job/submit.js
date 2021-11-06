@@ -38,6 +38,8 @@ new Vue({
   methods: {
     switchTab(tab) {
       this.currentTab = tab;
+
+      window.scrollTo(0, 0);
     },
 
     submitForm() {

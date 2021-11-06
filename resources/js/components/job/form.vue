@@ -113,13 +113,13 @@
           <ol class="features list-group list-group-horizontal d-flex flex-row flex-wrap">
             <li class="list-group-item w-50" v-for="(feature, index) in job.features" :class="{checked: feature.checked}">
               <div class="row form-group">
-                <div class="col-7" @click="TOGGLE_FEATURE(feature)">
+                <div class="col-6" @click="TOGGLE_FEATURE(feature)">
                   <i class="fas fa-fw " :class="{'fa-check': feature.checked, 'fa-times': !feature.checked}"></i>
 
                   {{ feature.name }}
                 </div>
 
-                <div class="col-5" v-show="feature.checked && feature.default">
+                <div class="col-6" v-show="feature.checked && feature.default">
                   <input type="text" class="form-control form-control-sm" :placeholder="feature.default" v-model="feature.value">
                 </div>
               </div>
