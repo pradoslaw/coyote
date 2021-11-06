@@ -78,6 +78,10 @@
     width: 100%;
   }
 
+  select[name=currency] {
+    width: 100px;
+  }
+
   .form-control {
     border: none;
     box-shadow: none;

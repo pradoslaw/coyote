@@ -103,9 +103,11 @@
                   tabindex="3"
                 >
 
-                <a @click="selectTab('salary')" href="javascript:">
-                  <i class="fas fa-icon" :class="getTabDropdownClass('salary')"></i>
-                </a>
+                <select v-model="defaultCurrency" name="currency" class="form-control">
+                  <option v-for="currency in currencies" :key="currency.id" :value="currency.id">
+                    ${ currency.name + ' (' + currency.symbol + ')' }
+                  </option>
+                </select>
               </div>
 
               <div class="input-item button-search d-none d-md-block">
@@ -150,23 +152,6 @@
                     </a>
                   </li>
                 </ul>
-              </div>
-
-
-              <div v-show="isTabSelected('salary')" class="filters">
-                <div class="form-inline">
-                  <div class="form-group form-group-salary">
-                    <strong>waluta: </strong>
-
-                    <select v-model="defaultCurrency" name="currency" class="form-control form-control-sm" style="height: 27px">
-                      <option v-for="currency in currencies" :key="currency.id" :value="currency.id">
-                        ${ currency.name + ' (' + currency.symbol + ')' }
-                      </option>
-                    </select>
-                  </div>
-
-                  <div class="clearfix"></div>
-                </div>
               </div>
             </div>
           </div>
