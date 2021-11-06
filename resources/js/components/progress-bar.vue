@@ -1,8 +1,9 @@
 <template>
-  <div class="d-inline" @mouseleave="hover = null">
+  <div class="progress-bar-dotted" @mouseleave="hover = null">
     <span
       v-for="i in max"
       :aria-label="tooltips[i - 1]"
+      :class="{'editable': editable}"
       @mouseover="setHover(i)"
       @click="setValue(i)"
       data-balloon-pos="down"
@@ -33,7 +34,7 @@
     @Prop({default: 3})
     readonly max!: number;
 
-    @Prop({default: () => ['podstawy', 'średnio zaawansowany', 'zaawansowany']})
+    @Prop({default: ['podstawy', 'średnio zaawansowany', 'zaawansowany']})
     readonly tooltips!: string[];
 
     setHover(value: number) {

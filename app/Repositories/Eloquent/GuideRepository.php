@@ -18,7 +18,7 @@ class GuideRepository extends Repository implements GuideRepositoryInterface
     public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
         return $this->applyCriteria(function () use ($perPage) {
-            return $this->model->select(['id', 'title', 'created_at', 'user_id', 'views', 'votes'])->with(['user', 'tags'])->withCount('comments')->paginate($perPage);
+            return $this->model->select(['id', 'title', 'created_at', 'user_id', 'views', 'votes', 'seniority'])->with(['user', 'tags'])->withCount('comments')->paginate($perPage);
         });
     }
 }

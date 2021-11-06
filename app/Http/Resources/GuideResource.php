@@ -32,7 +32,7 @@ class GuideResource extends JsonResource
         $user = $request->user();
 
         return array_merge(
-            $this->resource->only(['id', 'title', 'created_at', 'votes', 'views']),
+            $this->resource->only(['id', 'title', 'created_at', 'votes', 'views', 'seniority']),
             [
                 'slug'          => $this->slug,
                 'url'           => UrlBuilder::guide($this->resource),

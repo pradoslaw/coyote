@@ -36,7 +36,7 @@
           <span v-if="job.is_new" class="badge label-new float-right mt-2">Nowe</span>
           <small v-else class="text-muted float-right">{{ job.boost_at }}</small>
 
-          <ul class="tag-clouds tag-clouds-sm tag-clouds-skills">
+          <ul class="tag-clouds tag-clouds-sm">
             <li v-for="tag in limitedTags">
               <a :href="tag.url" :title="'Znajdź oferty zawierające ' + tag.name">
                 <img v-if="tag.logo" :alt="tag.name" :src="tag.logo">

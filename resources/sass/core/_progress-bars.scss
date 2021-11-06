@@ -38,3 +38,16 @@
   background: linear-gradient(to bottom, #aed91d 50%, #abd600 100%);
   box-shadow: inset 1px 1px 1px #fff;
 }
+
+.progress-bar-dotted {
+  display: inline;
+
+  .fa-circle {
+    font-size: 10px;
+    margin-right: 4px;
+  }
+
+  span:not(.editable) {
+    cursor: default;
+  }
+}

@@ -6,12 +6,12 @@
       <vue-metadata :guide="guide"></vue-metadata>
 
       <div class="row no-gutters">
-        <vue-tags :tags="guide.tags" class="tag-clouds-skills mt-2 mb-2"></vue-tags>
+        <vue-tags :tags="guide.tags" class="mt-2 mb-2"></vue-tags>
 
         <div class="ml-auto text-right">
-          <p class="text-muted font-weight-bold mb-1"><i class="fas fa-fw fa-chart-line"></i> Mid-level</p>
+          <p class="text-muted font-weight-bold mb-1"><i class="fas fa-fw fa-chart-line"></i> {{ seniorityLabel }}</p>
 
-          <i class="fas fa-circle text-primary" title="zaawansowany" style="font-size: 10px; margin-right: 4px;"></i><i class="fas fa-circle text-primary" title="zaawansowany" style="font-size: 10px; margin-right: 4px;"></i><i class="fas fa-circle text-muted" title="zaawansowany" style="font-size: 10px; margin-right: 4px;"></i>
+          <vue-progress-bar v-model="progressBarValue" :editable="true" :tooltips="seniorityTooltips"></vue-progress-bar>
         </div>
       </div>
 
@@ -37,30 +37,32 @@
 </template>
 
 <script lang="ts">
-  import Vue from "vue";
   import Component from "vue-class-component";
   import VueTags from "@/components/tags.vue";
   import VueUserName from "@/components/user-name.vue";
   import VueMetadata from './metadata.vue';
-  import {mapActions, mapGetters, mapState} from "vuex";
-  import {default as mixins} from '../mixins/user';
-  import {Prop} from "vue-property-decorator";
-  import {Guide} from '@/types/models';
+  import { mapActions, mapGetters } from "vuex";
+  import { default as mixins } from '../mixins/user';
+  import { Mixins, Prop } from "vue-property-decorator";
+  import { Guide } from '@/types/models';
+  import { GuideMixin } from "@/components/mixins/guide";
+  import VueProgressBar from "@/components/progress-bar.vue";
 
   @Component({
     mixins: [mixins],
     components: {
       'vue-tags': VueTags,
       'vue-user-name': VueUserName,
-      'vue-metadata': VueMetadata
+      'vue-metadata': VueMetadata,
+      'vue-progress-bar': VueProgressBar
     },
     methods: {
       ...mapGetters('user', ['isAuthorized']),
       ...mapActions('guides', ['vote', 'subscribe'])
     }
   })
-  export default class VueHeadline extends Vue {
+  export default class VueHeadline extends Mixins(GuideMixin) {
     @Prop()
-    readonly guide!: Guide;
+    protected readonly guide!: Guide;
   }
 </script>
