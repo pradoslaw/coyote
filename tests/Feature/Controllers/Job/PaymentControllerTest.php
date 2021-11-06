@@ -64,7 +64,7 @@ class PaymentControllerTest extends TestCase
                 'invoice.address' => ['Pole adres jest wymagane.'],
                 'invoice.city' => ['Pole miasto jest wymagane.'],
                 'invoice.postal_code' => ['Pole kod pocztowy jest wymagane.'],
-                'invoice.country_id' => ['Pole invoice.country id jest wymagane.'],
+                'invoice.country_id' => ['Pole kod kraju jest wymagane.'],
             ]
         ]);
     }

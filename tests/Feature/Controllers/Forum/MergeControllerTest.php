@@ -36,7 +36,7 @@ class MergeControllerTest extends TestCase
         $this->forum->permissions()->create(['value' => 1, 'group_id' => $this->user->groups()->first()->id, 'permission_id' => Permission::where('name', 'forum-merge')->get()->first()->id]);
 
         $topic = $this->createTopic($this->forum->id);
-        $post = factory(Post::class)->create(['topic_id' => $topic->id, 'forum_id' => $this->forum->id]);
+        $post = factory(Post::class)->create(['topic_id' => $topic->id, 'forum_id' => $this->forum->id, 'created_at' => now()->addSecond()]);
 
         $topic->refresh();
 
