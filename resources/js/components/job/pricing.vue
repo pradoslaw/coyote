@@ -6,11 +6,17 @@
           <div>Publikacja ogłoszenia na okres <strong>40 dni</strong></div>
         </li>
         <li>
-          <div>Promocja ogłoszenia w kanałach social media <i class="fa fa-question-circle" data-bs-toggle="tooltip" title="Jedynie ogłoszenia z określonym wynagrodzeniem"></i></div>
+          <div>
+            Promocja ogłoszenia w kanałach social media
+
+            <span data-balloon-pos="up" aria-label="Jedynie ogłoszenia z podanymi widełkami płacowymi"><i class="fa fa-question-circle"></i></span>
+          </div>
         </li>
         <li>
-          <div><strong>Podbicie</strong> ogłoszenia
-            <i class="fa fa-question-circle" data-bs-toggle="tooltip" title="W okresie promowania oferty, podbijemy Twoje ogłoszenie na górę listy. Dzięki temu więcej ludzi będzie mogło je zobaczyć."></i>
+          <div>
+            <strong>Podbicie</strong> ogłoszenia
+
+            <span data-balloon-pos="right" aria-label="W okresie promowania oferty, podbijemy Twoje ogłoszenie na górę listy ogłoszeń. Dzięki temu więcej ludzi będzie mogło je zobaczyć."><i class="fa fa-question-circle"></i></span>
           </div>
         </li>
 
@@ -26,16 +32,23 @@
           </div>
         </li>
         <li>
-          <div><strong>Wyróżnienie</strong> kolorem
-            <i class="fa fa-question-circle" data-bs-toggle="tooltip" title="Twoje ogłoszenie otrzyma dodatkowe tło, które odróżni je od standardowych ogłoszeń na liście."></i></div>
+          <div>
+            <strong>Wyróżnienie</strong> kolorem
+
+            <a href="javascript:" class="plan-tooltip-wrapper">
+              <i class="fa fa-question-circle"></i>
+
+              <div class="plan-tooltip"><img src="/img/offer-color-example.png"></div>
+            </a>
+          </div>
         </li>
         <li>
           <div>Wyróżnienie ogłoszenia <strong>na górze listy</strong> wyszukiwania</div>
         </li>
       </ul>
 
-      <div class="plan" v-for="plan in plans" :class="{'selected': valueLocal === plan.id}">
-        <div class="plan-header" @click="changePlan(plan.id)">
+      <div class="plan" v-for="plan in plans" :class="{'selected': valueLocal === plan.id}" @click="changePlan(plan.id)">
+        <div class="plan-header">
           <h4 class="plan-name">Ogłoszenie<br><strong>{{ plan.name }}</strong></h4>
 
           <div class="plan-price"><strong>{{ plan.price - (plan.discount > 0 ? (plan.price * plan.discount) : 0) }} zł</strong></div>
