@@ -29,8 +29,8 @@
             <div class="col-sm-12">
               <div class="input-group">
                 <div class="input-group-prepend">
-                  <a class="input-group-text text-decoration-none" href="javascript:" @click="ADD_LOCATION"><i class="fas fa-fw fa-plus-circle"></i></a>
-                  <a class="input-group-text text-decoration-none" href="javascript:" @click="REMOVE_LOCATION(location)" v-if="job.locations.length > 1"><i class="fas fa-fw fa-minus-circle text-danger"></i></a>
+                  <a title="Dodaj więcej lokalizacji" class="input-group-text text-decoration-none" href="javascript:" @click="ADD_LOCATION"><i class="fas fa-fw fa-plus-circle"></i></a>
+                  <a title="Usuń lokalizację" class="input-group-text text-decoration-none" href="javascript:" @click="REMOVE_LOCATION(location)" v-if="job.locations.length > 1"><i class="fas fa-fw fa-minus-circle text-danger"></i></a>
                 </div>
 
                 <vue-google-place @change="setLocation(index, ...arguments)" :label="location.label"></vue-google-place>
@@ -54,10 +54,10 @@
 
           <div>
             od
-            <vue-text name="salary_from" class="d-inline-block" v-model="job.salary_from" :is-invalid="'salary_from' in errors"></vue-text>
+            <vue-text type="number" name="salary_from" class="d-inline-block" v-model="job.salary_from" :is-invalid="'salary_from' in errors"></vue-text>
 
             do
-            <vue-text name="salary_to" class="d-inline-block" v-model="job.salary_to" :is-invalid="'salary_to' in errors"></vue-text>
+            <vue-text type="number" name="salary_to" class="d-inline-block" v-model="job.salary_to" :is-invalid="'salary_to' in errors"></vue-text>
 
             <vue-select name="currency_id" class="d-inline-block" :options="currenciesValues" v-model="job.currency_id"></vue-select>
 
