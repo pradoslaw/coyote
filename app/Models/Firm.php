@@ -229,9 +229,4 @@ class Firm extends Model
 
         return 'https://www.youtube.com/embed/' . $query['v'];
     }
-
-    private function basename(string $url): string
-    {
-        return basename(parse_url($url, PHP_URL_PATH));
-    }
 }
