@@ -24,7 +24,7 @@ class CreateGuideRolesTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('no action');
         });
 
-        $sql = "ALTER TABLE guide_roles ADD COLUMN seniority seniority DEFAULT NULL";
+        $sql = "ALTER TABLE guide_roles ADD COLUMN role seniority DEFAULT NULL";
         $this->db->unprepared($sql);
     }
 

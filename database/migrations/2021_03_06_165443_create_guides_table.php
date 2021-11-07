@@ -27,7 +27,7 @@ class CreateGuidesTable extends Migration
             $table->integer('views')->default(0);
         });
 
-        $sql = "ALTER TABLE guides ADD COLUMN seniority seniority DEFAULT NULL";
+        $sql = "ALTER TABLE guides ADD COLUMN role seniority DEFAULT NULL";
         $this->db->unprepared($sql);
     }
 

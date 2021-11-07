@@ -23,6 +23,6 @@ export class GuideMixin extends Vue {
   }
 
   get seniorityLabel(): string {
-    return Seniority[this.guide.seniority];
+    return Seniority[this.guide.role];
   }
 }

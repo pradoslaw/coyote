@@ -369,5 +369,5 @@ export interface Guide {
   user: User;
   created_at: Date;
   comments_count: number;
-  seniority: Seniority;
+  role: Seniority;
 }
