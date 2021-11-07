@@ -16,7 +16,7 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from "vue-class-component";
-  import { Prop, PropSync } from "vue-property-decorator";
+  import {Emit, Prop, PropSync} from "vue-property-decorator";
   import { default as mixin } from '@/components/mixins/form.js';
 
   @Component({
@@ -50,8 +50,9 @@
         return;
       }
 
+      this.$emit('click', value);
       // @ts-ignore
-      this.valueLocal = value;
+      // this.valueLocal = value;
     }
   }
 </script>

@@ -22,7 +22,12 @@
         <div class="ml-auto text-right">
           <p class="text-muted font-weight-bold mb-1"><i class="fas fa-fw fa-chart-line"></i> {{ seniorityLabel }}</p>
 
-          <vue-progress-bar v-model="progressBarValue" :editable="true" :tooltips="seniorityTooltips"></vue-progress-bar>
+          <vue-progress-bar
+            v-model="progressBarValue"
+            :editable="true"
+            :tooltips="seniorityTooltips"
+            @click="setRole"
+          />
         </div>
       </div>
 
@@ -89,6 +94,12 @@
 
     edit() {
       this.$store.commit('guides/EDIT');
+    }
+
+    setRole(value: number) {
+      const role = this.seniorityTooltips[value - 1].toLowerCase();
+
+      this.$store.dispatch('guides/setRole', { guide: this.guide, role });
     }
 
     deleteItem() { }

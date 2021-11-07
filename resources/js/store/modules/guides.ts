@@ -1,4 +1,4 @@
-import {Paginator, Guide, Tag} from "@/types/models";
+import { Guide, Tag, Seniority } from "@/types/models";
 import axios from 'axios';
 import Vue from 'vue';
 
@@ -47,6 +47,10 @@ const mutations = {
 
   SET_COMMENTS_COUNT(state, { guide, count} ) {
     guide.comments_count = count;
+  },
+
+  SET_ROLE(state, { guide, role }: { guide: Guide, role: Seniority }) {
+    guide.role = role;
   }
 }
 
@@ -71,6 +75,12 @@ const actions = {
 
     axios.post(`/Guide/Subscribe/${guide.id}`).catch(() => commit('SUBSCRIBE', guide));
   },
+
+  setRole({ commit }, { guide, role }: { guide: Guide, role: Seniority }) {
+    commit('SET_ROLE', { guide, role });
+
+    return axios.post(`/Guide/Role/${guide.id}`, { role });
+  }
 }
 
 export default {

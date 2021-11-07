@@ -2,6 +2,7 @@
 
 namespace Coyote;
 
+use Coyote\Guide\Role;
 use Coyote\Guide\Vote;
 use Coyote\Models\Subscription;
 use Illuminate\Database\Eloquent\Model;
@@ -18,6 +19,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property Comment[] $commentsWithChildren
  * @property string $slug
  * @property int $votes
+ * @property string $role
+ * @property Role[] $roles
  */
 class Guide extends Model
 {
@@ -67,6 +70,11 @@ class Guide extends Model
     public function comments()
     {
         return $this->morphMany(Comment::class, 'resource');
+    }
+
+    public function roles()
+    {
+        return $this->hasMany(Role::class);
     }
 
     public function commentsWithChildren()

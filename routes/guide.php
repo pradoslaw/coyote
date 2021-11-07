@@ -10,6 +10,7 @@ $this->group(['namespace' => 'Guide', 'prefix' => 'Guide', 'as' => 'guide.'], fu
 
     $this->get('{guide}-{slug}', ['uses' => 'ShowController@index', 'middleware' => ['page.hit'], 'as' => 'show']);
     $this->post('Vote/{guide?}', ['uses' => 'VoteController@vote', 'middleware' => ['auth']]);
+    $this->post('Role/{guide?}', ['uses' => 'RoleController@update', 'middleware' => ['auth']]);
 
     $this->get('{name}', ['uses' => 'HomeController@filterByTags', 'as' => 'tag']);
 });
