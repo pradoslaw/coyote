@@ -8,8 +8,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @property string $title
- * @property string $text
- * @property string $excerpt
+ * @property ?string $text
+ * @property ?string $excerpt
  * @property string $slug
  * @property \Coyote\User $user
  * @property \Coyote\Tag[] $tags
@@ -17,7 +17,9 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property Comment[] $comments
  * @property int $comments_count
  * @property \Coyote\Guide\Vote[]|\Illuminate\Support\Collection $voters[]
+ * @property \Coyote\Guide\Role[]|\Illuminate\Support\Collection $roles[]
  * @property \Coyote\Models\Subscription[]|\Illuminate\Support\Collection $subscribers
+ * @property string $role
  */
 class GuideResource extends JsonResource
 {
@@ -32,7 +34,7 @@ class GuideResource extends JsonResource
         $user = $request->user();
 
         return array_merge(
-            $this->resource->only(['id', 'title', 'created_at', 'votes', 'views', 'role']),
+            $this->resource->only(['id', 'title', 'created_at', 'votes', 'views']),
             [
                 'slug'          => $this->slug,
                 'url'           => UrlBuilder::guide($this->resource),
@@ -58,8 +60,19 @@ class GuideResource extends JsonResource
                 'is_voted'          => $this->when($user, fn () => $this->voters->contains('user_id', $user->id), false),
                 'is_subscribed'     => $this->when($user, fn () => $this->subscribers->contains('user_id', $user->id), false),
 
-                'comments'          => $this->whenLoaded('commentsWithChildren', fn () => (new CommentCollection($this->commentsWithChildren))->setOwner($this->resource))
+                'comments'          => $this->whenLoaded('commentsWithChildren', fn () => (new CommentCollection($this->commentsWithChildren))->setOwner($this->resource)),
+
+                'role'              => $this->getDefaultRole()
             ]
         );
+    }
+
+    private function getDefaultRole(): string
+    {
+        if (!$this->resource->relationLoaded('roles')) {
+            return $this->role;
+        }
+
+        return $this->roles[0]->role ?? $this->role;
     }
 }

@@ -12,7 +12,7 @@ class Role extends Model
     use ForUser;
 
     const JUNIOR = 'Junior';
-    const MIDDLE = 'Mid-Level';
+    const MID = 'Mid-Level';
     const SENIOR = 'Senior';
 
     /**

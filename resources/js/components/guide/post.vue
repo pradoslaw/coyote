@@ -97,7 +97,7 @@
     }
 
     setRole(value: number) {
-      const role = this.seniorityTooltips[value - 1].toLowerCase();
+      const role = this.seniorityTooltips[value - 1];
 
       this.$store.dispatch('guides/setRole', { guide: this.guide, role });
     }

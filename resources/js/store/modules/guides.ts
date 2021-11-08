@@ -77,9 +77,7 @@ const actions = {
   },
 
   setRole({ commit }, { guide, role }: { guide: Guide, role: Seniority }) {
-    commit('SET_ROLE', { guide, role });
-
-    return axios.post(`/Guide/Role/${guide.id}`, { role });
+    return axios.post(`/Guide/Role/${guide.id}`, { role }).then(response => commit('SET_ROLE', { guide, role: response.data }));
   }
 }
 

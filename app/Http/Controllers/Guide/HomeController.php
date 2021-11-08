@@ -13,7 +13,8 @@ class HomeController extends BaseController
 {
     public function __construct(
         protected TagRepository $tagRepository,
-        protected GuideRepository $guideRepository)
+        protected GuideRepository $guideRepository
+    )
     {
         parent::__construct($this->tagRepository);
     }
@@ -34,7 +35,17 @@ class HomeController extends BaseController
 
     private function load()
     {
-        $this->guideRepository->pushCriteria(new EagerLoading(['subscribers', 'voters']));
+        if ($this->userId) {
+            $userScope = fn($builder) => $builder->where('user_id', $this->userId);
+
+            $this->guideRepository->pushCriteria(
+                new EagerLoading([
+                    'subscribers' => $userScope,
+                    'voters' => $userScope,
+                    'roles' => $userScope
+                ])
+            );
+        }
 
         $paginator = $this->guideRepository->paginate();
 

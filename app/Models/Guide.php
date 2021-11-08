@@ -93,12 +93,21 @@ class Guide extends Model
             ]);
     }
 
-    public function loadUserVoterRelation(?int $userId)
+    public function loadUserVoterRelation(?int $userId): void
     {
         if (!$userId) {
             return;
         }
 
         $this->load(['voters' => fn ($builder) => $builder->select(['id', 'guide_id', 'user_id'])->where('user_id', $userId)]);
+    }
+
+    public function loadUserRoleRelation(?int $userId): void
+    {
+        if (!$userId) {
+            return;
+        }
+
+        $this->load(['roles' => fn ($builder) => $builder->select(['id', 'guide_id', 'role'])->where('user_id', $userId)]);
     }
 }
