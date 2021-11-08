@@ -23,7 +23,7 @@
         <i class="fas fa-spinner fa-spin fa-2x"></i>
       </div>
 
-      <input v-show="!url && !isProcessing" @change="upload" class="thumbnail-mask" type="file" ref="input" accept="image/jpeg,image/png,image/gif" />
+      <input v-show="!url && !isProcessing" @change="upload" class="thumbnail-mask" type="file" ref="input" >
     </div>
   </div>
 </template>
