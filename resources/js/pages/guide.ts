@@ -54,7 +54,7 @@ new Vue({
   },
   created() {
     store.commit('guides/INIT', { guide: window.guide });
-    store.commit('comments/INIT', window.guide?.comments);
+    store.commit('comments/INIT', Array.isArray(window.guide?.comments) ? {} : window.guide.comments);
   },
   mounted() {
     document.getElementById('js-skeleton')?.remove();

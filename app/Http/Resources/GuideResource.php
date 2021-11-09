@@ -60,15 +60,13 @@ class GuideResource extends JsonResource
 
                 'is_voted'          => $this->when($user, fn () => $this->voters->contains('user_id', $user->id), false),
                 'is_subscribed'     => $this->when($user, fn () => $this->subscribers->contains('user_id', $user->id), false),
-
                 'comments'          => $this->whenLoaded('commentsWithChildren', fn () => (new CommentCollection($this->commentsWithChildren))->setOwner($this->resource)),
-
-                'role'              => $this->getDefaultRole()
+                'role'              => $this->defaultRole()
             ]
         );
     }
 
-    private function getDefaultRole(): string
+    private function defaultRole(): string
     {
         if (!$this->resource->relationLoaded('roles')) {
             return $this->role;

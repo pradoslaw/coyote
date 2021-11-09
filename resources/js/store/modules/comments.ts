@@ -2,7 +2,7 @@ import axios from "axios";
 import Vue from "vue";
 import { Comment } from '@/types/models';
 
-const state = { comments: [] };
+const state = { comments: {} };
 
 const mutations = {
   INIT(state, comments) {
