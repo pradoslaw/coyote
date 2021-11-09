@@ -11,9 +11,9 @@ class Role extends Model
 {
     use ForUser;
 
-    const JUNIOR = 'Junior';
-    const MID = 'Mid-Level';
-    const SENIOR = 'Senior';
+    const JUNIOR = 'junior';
+    const MID = 'mid';
+    const SENIOR = 'senior';
 
     /**
      * The attributes that are mass assignable.

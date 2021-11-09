@@ -86,7 +86,7 @@ new Vue({
   components: { 'vue-form': VueForm },
   created() {
     if (document.getElementById('js-form')) {
-      store.commit('guides/INIT', { guide: {} });
+      store.commit('guides/INIT', { guide: {tags: []} });
     }
   },
 

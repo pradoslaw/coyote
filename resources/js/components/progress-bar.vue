@@ -51,8 +51,6 @@
       }
 
       this.$emit('click', value);
-      // @ts-ignore
-      // this.valueLocal = value;
     }
   }
 </script>

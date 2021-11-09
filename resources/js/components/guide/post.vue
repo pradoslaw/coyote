@@ -25,7 +25,7 @@
           <vue-progress-bar
             v-model="progressBarValue"
             :editable="true"
-            :tooltips="seniorityTooltips"
+            :tooltips="Object.values(roles)"
             @click="setRole"
           />
         </div>
@@ -67,7 +67,7 @@
   import VueForm from './form.vue';
   import VueMetadata from './metadata.vue';
   import VueProgressBar from "@/components/progress-bar.vue";
-  import {default as mixins} from '../mixins/user';
+  import { default as mixins } from '../mixins/user';
   import VueTags from "@/components/tags.vue";
   import { mapActions, mapGetters, mapState } from 'vuex';
   import { Mixins } from "vue-property-decorator";
@@ -97,7 +97,7 @@
     }
 
     setRole(value: number) {
-      const role = this.seniorityTooltips[value - 1];
+      const role = Object.keys(this.roles)[value - 1]
 
       this.$store.dispatch('guides/setRole', { guide: this.guide, role });
     }

@@ -2,7 +2,9 @@
 
 namespace Coyote\Http\Requests;
 
+use Coyote\Guide\Role;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class GuideRequest extends FormRequest
 {
@@ -28,6 +30,7 @@ class GuideRequest extends FormRequest
             'excerpt' => 'nullable|string',
             'text' => 'required|string',
             'tags' => 'required|max:6',
+            'role' => ['required', Rule::in([Role::JUNIOR, Role::MID, Role::SENIOR])],
             'tags.*.name'   => [
                 'bail',
                 'max:25',

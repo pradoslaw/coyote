@@ -6,6 +6,7 @@ use Coyote\Events\GuideSaved;
 use Coyote\Http\Requests\GuideRequest;
 use Coyote\Http\Resources\GuideResource;
 use Coyote\Guide;
+use Coyote\Services\Guide\RoleCalculator;
 
 class SubmitController extends BaseController
 {
@@ -18,16 +19,19 @@ class SubmitController extends BaseController
 
     public function save(Guide $guide, GuideRequest $request)
     {
-        if (!$guide->exists) {
-            $guide->user()->associate($this->auth);
-        } else {
-            $this->authorize('update', $guide);
-        }
+        $guide->exists && $this->authorize('update', $guide);
 
-        $guide->fill($request->all());
+        $guide
+            ->fill($request->all())
+            ->creating(function (Guide $model) use ($request) {
+                $model->user()->associate($this->auth);
+                $model->role = $request->input('role');
+            });
 
         $this->transaction(function () use ($guide, $request) {
             $guide->save();
+
+            (new RoleCalculator($guide))->setRole($this->userId, $request->input('role'));
 
             $guide->setTags(array_pluck($request->input('tags', []), 'name'));
         });

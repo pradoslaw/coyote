@@ -1,3 +1,6 @@
+export const JUNIOR = 'junior';
+export const MID = 'mid';
+export const SENIOR = 'senior';
 
 export enum Model {
   Topic = 'Topic',

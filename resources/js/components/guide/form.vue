@@ -1,10 +1,20 @@
 <template>
   <form>
-    <vue-form-group :errors="errors['title']" label="Tytuł">
+    <vue-form-group :errors="errors['title']" label="Tytuł *">
       <vue-text
         v-model="guide.title"
         :is-invalid="'title' in errors"
         name="title"
+      />
+    </vue-form-group>
+
+    <vue-form-group :errors="errors['role']" label="Rola *">
+      <vue-select
+        v-model="guide.role"
+        :options="roles"
+        placeholder="--"
+        :is-invalid="'role' in errors"
+        name="role"
       />
     </vue-form-group>
 
@@ -17,7 +27,7 @@
       />
     </vue-form-group>
 
-    <vue-form-group :errors="errors['text']" label="Odpowiedź">
+    <vue-form-group :errors="errors['text']" label="Odpowiedź *">
       <vue-markdown
         @save="save"
         v-model="guide.text"
@@ -53,19 +63,20 @@
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
   import Component from "vue-class-component";
-  import {Prop, ProvideReactive} from "vue-property-decorator";
-  import { Guide, Tag } from '@/types/models';
+  import {Mixins, Prop, ProvideReactive} from "vue-property-decorator";
+  import { Tag } from '@/types/models';
   import { default as mixins } from '../mixins/user';
   import VueButton from '@/components/forms/button.vue';
   import VueTagsInline from '@/components/forms/tags-inline.vue';
   import VueMarkdown from '@/components/forms/markdown.vue';
   import VueText from '@/components/forms/text.vue';
+  import VueSelect from '@/components/forms/select.vue';
   import VueError from '@/components/forms/error.vue';
-  import { mapActions, mapMutations, mapState } from 'vuex';
+  import { mapMutations, mapState } from 'vuex';
   import VueFormGroup from "@/components/forms/form-group.vue";
   import store from '@/store';
+  import { GuideMixin } from "@/components/mixins/guide";
 
   @Component({
     mixins: [ mixins ],
@@ -73,6 +84,7 @@
     components: {
       'vue-form-group': VueFormGroup,
       'vue-text': VueText,
+      'vue-select': VueSelect,
       'vue-markdown': VueMarkdown,
       'vue-button': VueButton,
       'vue-tags-inline': VueTagsInline,
@@ -86,8 +98,8 @@
     },
     inject: []
   })
-  export default class VueForm extends Vue {
-    errors = {};
+  export default class VueForm extends Mixins(GuideMixin) {
+    public errors = {};
     private isProcessing = false;
 
     @Prop({default: () => []})

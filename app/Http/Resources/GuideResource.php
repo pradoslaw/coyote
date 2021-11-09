@@ -52,6 +52,7 @@ class GuideResource extends JsonResource
                     $parser = resolve('parser.post');
 
                     return [
+                        'text'          => $this->text,
                         'html'          => $parser->parse((string) $this->text),
                         'excerpt_html'  => $parser->parse((string) $this->excerpt)
                     ];
