@@ -14,8 +14,7 @@ class HomeController extends BaseController
     public function __construct(
         protected TagRepository $tagRepository,
         protected GuideRepository $guideRepository
-    )
-    {
+    ) {
         parent::__construct($this->tagRepository);
     }
 
@@ -36,7 +35,7 @@ class HomeController extends BaseController
     private function load()
     {
         if ($this->userId) {
-            $userScope = fn($builder) => $builder->where('user_id', $this->userId);
+            $userScope = fn ($builder) => $builder->where('user_id', $this->userId);
 
             $this->guideRepository->pushCriteria(
                 new EagerLoading([
