@@ -7,7 +7,7 @@ export class GuideMixin extends Vue {
   protected readonly guide!: Guide;
 
   get progressBarValue(): number {
-    return Object.fromEntries(Object.entries(Object.keys(this.roles)).map(a => a.reverse()))[this.guide.role] + 1;
+    return parseInt(Object.fromEntries(Object.entries(Object.keys(this.roles)).map(a => a.reverse()))[this.guide.role]) + 1;
   }
 
   get seniorityLabel(): string {

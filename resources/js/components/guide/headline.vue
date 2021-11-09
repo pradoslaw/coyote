@@ -11,7 +11,7 @@
         <div class="ml-auto text-right">
           <p class="text-muted font-weight-bold mb-1"><i class="fas fa-fw fa-chart-line"></i> {{ seniorityLabel }}</p>
 
-          <vue-progress-bar v-model="progressBarValue" :editable="true" :tooltips="seniorityTooltips"></vue-progress-bar>
+          <vue-progress-bar v-model="progressBarValue" :editable="false" :tooltips="Object.values(roles)"></vue-progress-bar>
         </div>
       </div>
 
