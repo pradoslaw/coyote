@@ -4,6 +4,7 @@ namespace Coyote;
 
 use Coyote\Guide\Role;
 use Coyote\Guide\Vote;
+use Coyote\Models\Asset;
 use Coyote\Models\Subscription;
 use Illuminate\Database\Eloquent\Model;
 
@@ -75,6 +76,14 @@ class Guide extends Model
     public function roles()
     {
         return $this->hasMany(Role::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function assets()
+    {
+        return $this->morphMany(Asset::class, 'content');
     }
 
     public function commentsWithChildren()

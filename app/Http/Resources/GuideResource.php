@@ -20,6 +20,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property \Coyote\Guide\Role[]|\Illuminate\Support\Collection $roles[]
  * @property \Coyote\Models\Subscription[]|\Illuminate\Support\Collection $subscribers
  * @property string $role
+ * @property \Coyote\Models\Asset $assets
  */
 class GuideResource extends JsonResource
 {
@@ -61,6 +62,7 @@ class GuideResource extends JsonResource
                 'is_voted'          => $this->when($user, fn () => $this->voters->contains('user_id', $user->id), false),
                 'is_subscribed'     => $this->when($user, fn () => $this->subscribers->contains('user_id', $user->id), false),
                 'comments'          => $this->whenLoaded('commentsWithChildren', fn () => (new CommentCollection($this->commentsWithChildren))->setOwner($this->resource)),
+                'assets'            => $this->whenLoaded('assets', fn () => AssetsResource::collection($this->assets), []),
                 'role'              => $this->defaultRole()
             ]
         );

@@ -30,6 +30,7 @@ class SubmitController extends BaseController
 
         $this->transaction(function () use ($guide, $request) {
             $guide->save();
+            $guide->assets()->sync($request->input('assets'));
 
             (new RoleCalculator($guide))->setRole($this->userId, $request->input('role'));
 
@@ -39,6 +40,9 @@ class SubmitController extends BaseController
         event(new GuideSaved($guide));
 
         GuideResource::withoutWrapping();
+
+        $guide->unsetRelation('assets');
+        $guide->load(['assets', 'tags']);
 
         return new GuideResource($guide);
     }

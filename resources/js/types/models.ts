@@ -373,4 +373,5 @@ export interface Guide {
   created_at: Date;
   comments_count: number;
   role: Seniority;
+  assets: Asset[];
 }

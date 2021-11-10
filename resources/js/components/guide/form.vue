@@ -32,6 +32,7 @@
         @save="save"
         v-model="guide.text"
         :is-invalid="'text' in errors"
+        :assets.sync="guide.assets"
       >
         <template v-slot:bottom>
           <div class="row no-gutters p-1">

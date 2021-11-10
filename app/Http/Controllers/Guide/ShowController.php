@@ -13,7 +13,7 @@ class ShowController extends BaseController
         $this->breadcrumb->push($guide->title, UrlBuilder::guide($guide));
 
         $guide->loadCount('comments');
-        $guide->load(['commentsWithChildren', 'subscribers']);
+        $guide->load(['commentsWithChildren', 'subscribers', 'assets']);
         $guide->loadUserVoterRelation($this->userId);
         $guide->loadUserRoleRelation($this->userId);
 
