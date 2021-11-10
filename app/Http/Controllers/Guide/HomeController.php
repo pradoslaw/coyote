@@ -6,7 +6,6 @@ use Coyote\Http\Resources\GuideResource;
 use Coyote\Repositories\Contracts\GuideRepositoryInterface as GuideRepository;
 use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
 use Coyote\Repositories\Criteria\EagerLoading;
-use Coyote\Repositories\Criteria\EagerLoadingWithCount;
 use Coyote\Repositories\Criteria\WithTags;
 
 class HomeController extends BaseController

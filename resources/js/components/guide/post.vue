@@ -27,6 +27,7 @@
             :editable="true"
             :tooltips="Object.values(roles)"
             @click="setRole"
+            data-popover='{"message": "Możesz zmienić typ tej roli jeżeli się z nią nie zgadzasz.", "placement": "left", "offset": [0, 20]}'
           />
         </div>
       </div>
