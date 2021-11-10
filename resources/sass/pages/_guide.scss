@@ -30,7 +30,17 @@
 
 .blur {
   color: transparent;
-  text-shadow: 0 0 5px rgba(0,0,0,0.5);
+  text-shadow: 0 0 6px rgba(0,0,0,0.5);
+
+  p::selection {
+    text-shadow: inherit;
+    color: transparent;
+  }
+
+  img:not(.img-smile) {
+    @include img-fluid;
+    filter: blur(.5rem);
+  }
 }
 
 .qa-metadata {
