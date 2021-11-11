@@ -11,6 +11,7 @@ module.exports = merge(common, {
   optimization: {
     namedChunks: true,
     minimize: true,
+    usedExports: true,
     minimizer: [
       new TerserPlugin({
         extractComments: false,

@@ -76,7 +76,6 @@ module.exports = {
     publicPath: '/'
   },
   externals: {
-    jquery: "jQuery",
     vue: "Vue"
   },
   optimization: {
@@ -91,7 +90,7 @@ module.exports = {
           minSize: 20000,
           priority: 2
         },
-        // all vendors (except async) goes to vendor.js
+        // all vendors (except async) go to vendor.js
         vendor: {
           test: /[\\/]node_modules[\\/]/,
           name: "vendor",
@@ -127,7 +126,6 @@ module.exports = {
     forum: ['./js/pages/forum.ts'],
     wiki: ['./js/pages/wiki.js'],
     job: ['./js/pages/job.js'],
-    // 'job-submit': './js/pages/job/submit.js',
     adm: './sass/pages/adm.scss'
   },
   plugins: [
