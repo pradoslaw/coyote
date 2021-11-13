@@ -1,18 +1,15 @@
 import Vue from 'vue';
-import VueComment from '../../components/comments/comment.vue';
-import VueAutosize from '../../plugins/autosize';
-import store from '../../store';
-import VueMap from '../../components/google-maps/map.vue';
-import VueMarker from '../../components/google-maps/marker.vue';
-import VueFlag from '../../components/flags/flag.vue';
-import { default as axiosErrorHandler } from '../../libs/axios-error-handler';
-import { mapGetters, mapState, mapActions } from 'vuex';
+import VueComment from '@/components/comments/comment.vue';
+import VueAutosize from '@/plugins/autosize';
+import store from '@/store';
+import VueMap from '@/components/google-maps/map.vue';
+import VueMarker from '@/components/google-maps/marker.vue';
+import VueFlag from '@/components/flags/flag.vue';
+import { mapGetters, mapState } from 'vuex';
 import { default as mixins } from '@/components/mixins/user';
 import VueCommentForm from "@/components/comments/form";
 
 Vue.use(VueAutosize);
-
-axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 
 new Vue({
   el: '#js-flags',
