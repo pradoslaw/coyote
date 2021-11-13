@@ -19,12 +19,12 @@ abstract class AbstractNotification extends Notification implements ShouldBroadc
     /**
      * @var User|null
      */
-    protected ?User $notifier;
+    public ?User $notifier;
 
     /**
      * @var Post
      */
-    protected Post $post;
+    public Post $post;
 
     protected string $postUrl;
 

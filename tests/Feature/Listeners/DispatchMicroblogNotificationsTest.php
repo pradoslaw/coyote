@@ -8,9 +8,11 @@ use Coyote\Microblog;
 use Coyote\Notifications\Microblog\CommentedNotification;
 use Coyote\Notifications\Microblog\SubmittedNotification;
 use Coyote\Notifications\Microblog\UserMentionedNotification;
+use Coyote\Services\Notification\DatabaseChannel;
 use Coyote\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Notification;
+use NotificationChannels\WebPush\WebPushChannel;
 use Tests\TestCase;
 
 class DispatchMicroblogNotificationsTest extends TestCase
@@ -86,7 +88,14 @@ class DispatchMicroblogNotificationsTest extends TestCase
 
         event(new MicroblogSaved($microblog));
 
-        Notification::assertSentTo($user, UserMentionedNotification::class);
+        Notification::assertSentTo($user, function (UserMentionedNotification $notification, $channels) use ($microblog) {
+            $this->assertContains(DatabaseChannel::class, $channels);
+            $this->assertContains(WebPushChannel::class, $channels);
+            $this->assertContains('mail', $channels);
+            $this->assertContains('broadcast', $channels);
+
+            return $notification->notifier->id === $microblog->user_id;
+        });
     }
 
     public function testDoNotDispatchMentionNotificationUserWasBlocked()
@@ -143,7 +152,14 @@ class DispatchMicroblogNotificationsTest extends TestCase
 
         event(new MicroblogSaved($comment));
 
-        Notification::assertSentTo($microblog->user, CommentedNotification::class);
+        Notification::assertSentTo($microblog->user, function (CommentedNotification $notification, $channels) use ($comment) {
+            $this->assertContains(DatabaseChannel::class, $channels);
+            $this->assertContains(WebPushChannel::class, $channels);
+            $this->assertContains('mail', $channels);
+            $this->assertContains('broadcast', $channels);
+
+            return $notification->notifier->id === $comment->user_id;
+        });
     }
 
     public function testDispatchOnlyOneNotification()

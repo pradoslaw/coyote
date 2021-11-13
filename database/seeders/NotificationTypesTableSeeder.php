@@ -98,7 +98,7 @@ class NotificationTypesTableSeeder extends Seeder
             'name' => '...wystąpieniu Twojego loginu w wiadomościach na mikroblogu',
             'headline' => '{sender} wspomniał o Tobie we wpisie mikroblogu',
             'category' => 'Mikroblogi',
-            'default' => '["db", "push"]'
+            'default' => '["db", "push", "mail"]'
         ]);
         Type::forceCreate(['id' => Notification::POST_VOTE,
             'name' => '...ocenie Twojego postu na forum',
@@ -116,13 +116,13 @@ class NotificationTypesTableSeeder extends Seeder
             'name' => '...wpisie obserwowanego użytkownika na mikroblogu',
             'headline' => '{sender} dodał wpis na mikroblogu',
             'category' => 'Mikroblogi',
-            'default' => '["db", "push"]'
+            'default' => '["db", "push", "mail"]'
         ]);
         Type::forceCreate(['id' => Notification::MICROBLOG_COMMENT,
             'name' => '...nowym komentarzu do obserwowanego wpisu',
             'headline' => '{sender} dodał komentarz na mikroblogu',
             'category' => 'Mikroblogi',
-            'default' => '["db", "push"]'
+            'default' => '["db", "push", "mail"]'
         ]);
         Type::forceCreate(['id' => Notification::FLAG,
             'name' => '...o nowym raporcie',
