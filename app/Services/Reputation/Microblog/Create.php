@@ -2,12 +2,10 @@
 
 namespace Coyote\Services\Reputation\Microblog;
 
-use Coyote\Services\Reputation\ReputationInterface;
-
 /**
  * Class Create
  */
-class Create extends Microblog implements ReputationInterface
+class Create extends Microblog
 {
     const ID = \Coyote\Reputation::MICROBLOG;
 

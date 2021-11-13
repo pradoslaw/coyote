@@ -117,6 +117,18 @@ class PermissionsTableSeeder extends Seeder
             'default' => false
         ]);
 
+        $this->db->table('permissions')->insert([
+            'name' => 'guide-delete',
+            'description' => 'Usuwanie wpisów z Q&A',
+            'default' => false
+        ]);
+
+        $this->db->table('permissions')->insert([
+            'name' => 'guide-update',
+            'description' => 'Edycja wpisów z Q&A',
+            'default' => false
+        ]);
+
         $group = \Coyote\Group::where('name', 'Administrator')->first();
         $this->db->table('group_permissions')->where('group_id', '=', $group->id)->update(['value' => true]);
     }

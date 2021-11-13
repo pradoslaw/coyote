@@ -14,6 +14,7 @@ class Reputation extends Model
     const WIKI_UPDATE = 6;
     const CUSTOM = 7;
     const WIKI_RATE = 8;
+    const GUIDE = 9;
 
     const CHINESE = 1;
     const PROFILE_LINK = 50;

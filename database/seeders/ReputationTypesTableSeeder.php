@@ -23,5 +23,6 @@ class ReputationTypesTableSeeder extends Seeder
         Type::create(['id' => Reputation::WIKI_UPDATE, 'name' => 'Edycja strony', 'points' => 15]);
         Type::create(['id' => Reputation::CUSTOM, 'name' => 'Akcja moderatora', 'points' => 1]);
         Type::create(['id' => Reputation::WIKI_RATE, 'name' => 'Ocena strony', 'points' => 5]);
+        Type::create(['id' => Reputation::GUIDE, 'name' => 'Utworzenie wpisu Q&A', 'points' => 25]);
     }
 }

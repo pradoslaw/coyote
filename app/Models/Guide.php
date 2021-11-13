@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $title
  * @property string $excerpt
  * @property string $text
+ * @property string $html
  * @property Tag[] $tags
  * @property int $user_id
  * @property Comment[] $comments
