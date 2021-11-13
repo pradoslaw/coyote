@@ -7,6 +7,7 @@ $this->group(['namespace' => 'Guide', 'prefix' => 'Guide', 'as' => 'guide.'], fu
     // editing, saving post
     $this->get('Submit', ['uses' => 'SubmitController@form', 'middleware' => ['auth'], 'as' => 'submit']);
     $this->post('Submit/{guide?}', ['uses' => 'SubmitController@save', 'middleware' => ['auth']]);
+    $this->delete('Delete/{guide}', ['uses' => 'SubmitController@delete', 'middleware' => ['auth']]);
 
     $this->get('{guide}-{slug}', ['uses' => 'ShowController@index', 'middleware' => ['page.hit'], 'as' => 'show']);
     $this->post('Vote/{guide?}', ['uses' => 'VoteController@vote', 'middleware' => ['auth']]);

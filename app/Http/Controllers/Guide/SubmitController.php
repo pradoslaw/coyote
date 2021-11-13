@@ -77,5 +77,7 @@ class SubmitController extends BaseController
         });
 
         event(new GuideDeleted($guide));
+
+        session()->flash('success', 'Wpis został usunięty.');
     }
 }

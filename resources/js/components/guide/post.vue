@@ -103,6 +103,14 @@
       this.$store.dispatch('guides/setRole', { guide: this.guide, role });
     }
 
-    deleteItem() { }
+    deleteItem() {
+      this.$confirm({
+        message: 'Tej operacji nie będzie można cofnąć.',
+        title: 'Usunąć wpis?',
+        okLabel: 'Tak, usuń'
+      })
+      .then(() => this.$store.dispatch('guides/delete', this.guide))
+      .then(() => window.location.href = '/Guide');
+    }
   }
 </script>

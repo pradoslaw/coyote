@@ -7,6 +7,7 @@ use Coyote\Guide\Vote;
 use Coyote\Models\Asset;
 use Coyote\Models\Subscription;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $id
@@ -26,7 +27,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Guide extends Model
 {
-    use Taggable;
+    use Taggable, SoftDeletes;
 
     protected $fillable = ['title', 'excerpt', 'text'];
 

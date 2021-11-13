@@ -11,7 +11,7 @@ import { Guide, Paginator } from "@/types/models";
 import { default as axiosErrorHandler } from '@/libs/axios-error-handler';
 import VueNotifications from "vue-notification";
 import VueModals from "@/plugins/modals";
-import { mapGetters, mapState, mapMutations } from "vuex";
+import { mapGetters, mapState } from "vuex";
 
 axiosErrorHandler(message => Vue.notify({type: 'error', text: message}));
 
@@ -54,7 +54,7 @@ new Vue({
   },
   created() {
     store.commit('guides/INIT', { guide: window.guide });
-    store.commit('comments/INIT', Array.isArray(window.guide?.comments) ? {} : window.guide.comments);
+    store.commit('comments/INIT', Array.isArray(window.guide?.comments) ? {} : window.guide?.comments);
   },
   mounted() {
     document.getElementById('js-skeleton')?.remove();

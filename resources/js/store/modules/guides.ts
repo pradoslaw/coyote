@@ -64,6 +64,10 @@ const actions = {
     });
   },
 
+  delete({ state }, guide: Guide) {
+    return axios.delete(`/Guide/Delete/${guide.id}`);
+  },
+
   vote({ commit, dispatch }, guide: Guide) {
     commit('VOTE', guide);
 
