@@ -14,7 +14,7 @@ class VoteController extends Controller
 {
     public function vote(Guide $guide, Request $request)
     {
-        /** @var \Coyote\Guide\Vote $vote */
+        /** @var \Coyote\Guide\Vote|null $vote */
         $vote = $guide->voters()->forUser($this->userId)->first();
 
         if (!config('app.debug') && $this->userId === $guide->user_id) {
@@ -34,7 +34,7 @@ class VoteController extends Controller
             $target = null;
 
 
-            $url = UrlBuilder::guide($guide);
+//            $url = UrlBuilder::guide($guide);
             $object = (new Stream_Guide())->map($guide);
 
 //                app('reputation.microblog.vote')->map($microblog)->setUrl($url)->setPositive($vote->wasRecentlyCreated)->save();

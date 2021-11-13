@@ -6,7 +6,6 @@ use Coyote\Http\Requests\CommentRequest;
 use Coyote\Http\Resources\CommentResource;
 use Coyote\Comment;
 use Coyote\Notifications\Job\CommentedNotification;
-use Coyote\Notifications\Job\RepliedNotification;
 use Coyote\Services\Stream\Actor as Stream_Actor;
 use Illuminate\Contracts\Notifications\Dispatcher;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
@@ -19,11 +18,11 @@ class CommentController extends Controller
     /**
      * @param CommentRequest $request
      * @param Dispatcher $dispatcher
-     * @param Comment|null $comment
+     * @param Comment $comment
      * @return CommentResource
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function save(CommentRequest $request, Dispatcher $dispatcher, Comment $comment = null)
+    public function save(CommentRequest $request, Dispatcher $dispatcher, Comment $comment )
     {
         $this->authorize('update', $comment);
 

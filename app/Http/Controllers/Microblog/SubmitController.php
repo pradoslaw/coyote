@@ -161,7 +161,7 @@ class SubmitController extends Controller
     }
 
     /**
-     * @return \Coyote\Services\Parser\Factories\PmFactory
+     * @return \Coyote\Services\Parser\Factories\PostFactory
      */
     private function getParser()
     {

@@ -106,7 +106,7 @@ class Guide extends Model
 
     public function loadUserVoterRelation(?int $userId): void
     {
-        if (!$userId) {
+        if ($userId === null) {
             return;
         }
 
@@ -115,7 +115,7 @@ class Guide extends Model
 
     public function loadUserRoleRelation(?int $userId): void
     {
-        if (!$userId) {
+        if ($userId === null) {
             return;
         }
 

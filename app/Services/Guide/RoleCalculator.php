@@ -26,6 +26,6 @@ class RoleCalculator
         $roles = array_count_values($this->guide->roles()->get(['role'])->pluck('role')->toArray());
         arsort($roles);
 
-        return key($roles);
+        return (string) key($roles);
     }
 }

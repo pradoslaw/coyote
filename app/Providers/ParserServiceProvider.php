@@ -2,10 +2,8 @@
 
 namespace Coyote\Providers;
 
-use Coyote\Services\Parser\Factories\JobCommentFactory;
 use Coyote\Services\Parser\Factories\WikiFactory;
 use Illuminate\Support\ServiceProvider;
-use Coyote\Services\Parser\Factories\MicroblogFactory;
 use Coyote\Services\Parser\Factories\SigFactory;
 use Coyote\Services\Parser\Factories\PmFactory;
 use Coyote\Services\Parser\Factories\PostFactory;
