@@ -17,6 +17,9 @@ up-ci:
 stop-ci:
 	docker-compose -f docker-compose.yaml -f docker-compose.testing.yaml stop
 
+php:
+	docker-compose exec php bash
+
 help:
 	@echo 'make install -- download dependencies and install'
 	@echo 'make install-dev -- download dependencies and install without minifing assets'
@@ -62,3 +65,5 @@ install-passport:
 
 install-push:
 	php artisan webpush:vapid
+
+
