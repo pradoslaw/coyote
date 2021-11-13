@@ -30,40 +30,40 @@ update-repo:
 	git reset --hard
 	git pull origin master
 
-dependency-install:
-	composer install
+composer-install:
+	docker-compose exec -T php composer install
 
 file-permission:
 	chmod -R 777 storage/
 	chmod 777 bootstrap/cache/
 
 migration:
-	php artisan migrate --force
+	docker-compose exec -T php php artisan migrate --force
 
 seed:
-	php artisan db:seed
+	docker-compose exec -T php php artisan db:seed
 
 install-assets:
-	yarn install
+	docker-compose exec -T php yarn install
 
 assets-production:
-	yarn run prod
+	docker-compose exec -T php yarn run prod
 
 assets-dev:
-	yarn run dev
+	docker-compose exec -T php yarn run dev
 
 cache-config:
-	php artisan config:cache
-	php artisan route:cache
+	docker-compose exec -T php php artisan config:cache
+	docker-compose exec -T php php artisan route:cache
 
 install-es:
-	php artisan es:create --force
-	php artisan es:index --force
+	docker-compose exec -T php php artisan es:create --force
+	docker-compose exec -T php php artisan es:index --force
 
 install-passport:
-	php artisan passport:install
+	docker-compose exec -T php php artisan passport:install
 
 install-push:
-	php artisan webpush:vapid
+	docker-compose exec -T php php artisan webpush:vapid
 
 

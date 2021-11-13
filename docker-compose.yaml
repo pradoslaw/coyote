@@ -140,6 +140,35 @@ services:
     networks:
       - coyote
 
+  es:
+    image: 4programmers/coyote-es:latest
+    tty: true
+    networks:
+      - coyote
+    logging:
+      options:
+        max-size: 10m
+    environment:
+      PORT: 3500
+      APP_KEY: $APP_KEY
+      ELASTICSEARCH_HOST: $ELASTICSEARCH_HOST
+      INDEX: $ELASTICSEARCH_INDEX
+
+  websocket:
+    image: 4programmers/websocket:latest
+    tty: true
+    networks:
+      - coyote
+    ports:
+      - 8888:8888
+    logging:
+      options:
+        max-size: 10m
+    environment:
+      PORT: 8888
+      REDIS_HOST: $REDIS_HOST
+      APP_KEY: $APP_KEY
+
 volumes:
   postgres:
   elasticsearch:

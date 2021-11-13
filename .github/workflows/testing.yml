@@ -16,24 +16,24 @@ jobs:
         run: cp .env.default .env
 
       - name: Run docker containers
-        run: docker-compose build && docker-compose -f docker-compose.yaml -f docker-compose.testing.yaml up -d
+        run: make up-ci
         env:
           STRIPE_KEY: ${{ secrets.STRIPE_KEY }}
           STRIPE_SECRET: ${{ secrets.STRIPE_SECRET }}
           STRIPE_ENDPOINT_SECRET: ${{ secrets.STRIPE_ENDPOINT_SECRET }}
 
-      - uses: actions/cache@v2
-        with:
-          path: '**/vendor'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/composer.lock') }}
-
-      - uses: actions/cache@v2
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+#      - uses: actions/cache@v2
+#        with:
+#          path: '**/vendor'
+#          key: ${{ runner.os }}-modules-${{ hashFiles('**/composer.lock') }}
+#
+#      - uses: actions/cache@v2
+#        with:
+#          path: '**/node_modules'
+#          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
       - name: Install packages
-        run: docker-compose exec -T php make install
+        run: make install
 
       - name: Create uploads directory
         run: mkdir public/uploads
