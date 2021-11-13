@@ -8,10 +8,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Add user
-        run: cat /etc/passwd
-      #  run: sudo addgroup --gid 1000 nginx && sudo useradd --uid 1000 -g nginx nginx
-
       - name: Setup config
         run: cp .env.default .env
 
@@ -22,21 +18,18 @@ jobs:
           STRIPE_SECRET: ${{ secrets.STRIPE_SECRET }}
           STRIPE_ENDPOINT_SECRET: ${{ secrets.STRIPE_ENDPOINT_SECRET }}
 
-#      - uses: actions/cache@v2
-#        with:
-#          path: '**/vendor'
-#          key: ${{ runner.os }}-modules-${{ hashFiles('**/composer.lock') }}
-#
-#      - uses: actions/cache@v2
-#        with:
-#          path: '**/node_modules'
-#          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - uses: actions/cache@v2
+        with:
+          path: '**/vendor'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/composer.lock') }}
+
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
       - name: Setup owner
         run: sudo chown -R runneradmin:runneradmin ./
-
-      - name: ls
-        run: ls storage -lsa
 
       - name: Install packages
         run: make install
