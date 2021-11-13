@@ -66,10 +66,14 @@ new Vue({
   },
   store,
   created() {
-    store.commit('comments/INIT', window.comments);
+    store.commit('comments/INIT', Array.isArray(window.comments) ? {} : window.comments);
   },
   computed: {
     ...mapState('comments', ['comments']),
-    ...mapGetters('user', ['isAuthorized'])
+    ...mapGetters('user', ['isAuthorized']),
+
+    commentsCount() {
+      return Object.keys(store.state.comments.comments).length;
+    },
   }
 });

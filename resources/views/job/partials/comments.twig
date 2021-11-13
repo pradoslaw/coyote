@@ -7,7 +7,7 @@
     resource="Coyote\Job"
   ></vue-comment-form>
 
-  <div v-if="Object.keys(comments).length > 0" class="card card-default">
+  <div v-if="commentsCount > 0" class="card card-default">
     <div class="card-body">
       <vue-comment
         v-for="comment in comments"
