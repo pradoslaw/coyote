@@ -41,9 +41,6 @@ jobs:
       - name: Install packages
         run: make install
 
-      - name: Create uploads directory
-        run: mkdir public/uploads
-
       - name: Run tests
         run: docker-compose exec -T --user=nginx:nginx php php vendor/bin/phpunit
 
