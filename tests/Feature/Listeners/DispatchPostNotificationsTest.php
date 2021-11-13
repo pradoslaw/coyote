@@ -7,10 +7,12 @@ use Coyote\Forum;
 use Coyote\Notifications\Post\SubmittedNotification;
 use Coyote\Notifications\Post\UserMentionedNotification;
 use Coyote\Post;
+use Coyote\Services\Notification\DatabaseChannel;
 use Coyote\Topic;
 use Coyote\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Notification;
+use NotificationChannels\WebPush\WebPushChannel;
 use Tests\TestCase;
 
 class DispatchPostNotificationsTest extends TestCase
@@ -40,7 +42,14 @@ class DispatchPostNotificationsTest extends TestCase
 
         event(new PostSaved($post));
 
-        Notification::assertSentTo($user, SubmittedNotification::class);
+        Notification::assertSentTo($user, function (SubmittedNotification $notification, $channels) use ($post) {
+            $this->assertContains(DatabaseChannel::class, $channels);
+            $this->assertContains(WebPushChannel::class, $channels);
+            $this->assertContains('mail', $channels);
+            $this->assertContains('broadcast', $channels);
+
+            return $notification->notifier->id === $post->user_id;
+        });
     }
 
     public function testDispatchMentionNotification()
