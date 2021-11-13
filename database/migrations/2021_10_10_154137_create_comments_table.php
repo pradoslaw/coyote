@@ -24,6 +24,7 @@ class CreateCommentsTable extends Migration
             $table->string('email')->nullable();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('no action');
+            $table->foreign('parent_id')->references('id')->on('comments')->onDelete('cascade');
         });
     }
 
