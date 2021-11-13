@@ -1,7 +1,7 @@
-.PHONY: all update-repo composer-install file-permission migration seed assets-dev assets-production install-es install-passport
+.PHONY: all update-repo file-permission composer-install migration seed assets-dev assets-production install-es install-passport
 
-install: composer-install file-permission migration seed install-assets assets-production install-es install-passport install-push
-install-dev: composer-install file-permission migration seed install-assets assets-dev install-es install-passport install-push
+install: file-permission composer-install migration seed install-assets assets-production install-es install-passport install-push
+install-dev: file-permission composer-install migration seed install-assets assets-dev install-es install-passport install-push
 update: update-repo composer-install migration assets-production cache-config
 update-dev: update-repo composer-install migration assets-dev
 

@@ -36,7 +36,7 @@ jobs:
         run: sudo chown -R runneradmin:runneradmin ./
 
       - name: ls
-        run: ls -lsa
+        run: ls storage -lsa
 
       - name: Install packages
         run: make install
