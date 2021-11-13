@@ -34,8 +34,8 @@ composer-install:
 	docker-compose exec -T php composer install
 
 file-permission:
-	chmod -R 777 storage/
-	chmod 777 bootstrap/cache/
+	docker-compose exec -T php chmod -R 777 storage/
+	docker-compose exec -T php chmod 777 bootstrap/cache/
 
 migration:
 	docker-compose exec -T php php artisan migrate --force
