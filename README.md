@@ -8,8 +8,8 @@ Coyote to nazwa systemu obsługującego serwis 4programmers.net.
 
 ## Wymagania
 
-* Docker
-* docker-compose
+* Docker >= 19.x
+* docker-compose >= 1.29
 
 ## Instalacja
 
