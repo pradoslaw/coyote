@@ -14,9 +14,7 @@ Coyote to nazwa systemu obsługującego serwis 4programmers.net.
 ## Instalacja
 
 1. `cp .env.default .env`
-6. `sudo docker-compose build`
-7. `sudo docker-compose up -d`
-8. `sudo docker-compose exec php make install-dev`
+2. `make install-dev`
 
 Strona jest dostępna w przeglądarce pod adresem: `localhost:8880`
 
