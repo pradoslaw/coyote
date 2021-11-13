@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Job;
 
+use Coyote\Comment;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Resources\AssetsResource;
 use Coyote\Http\Resources\CommentCollection;
@@ -57,9 +58,6 @@ class OfferController extends Controller
         // search related offers
         $mlt = $this->job->search(new MoreLikeThisBuilder($job))->getSource();
 
-        $comments = new CommentCollection($job->commentsWithChildren);
-        $comments->job = $job;
-
         return $this->view('job.offer', [
             'rates_list'        => Job::getRatesList(),
             'employment_list'   => Job::getEmploymentList(),
@@ -71,7 +69,7 @@ class OfferController extends Controller
             'payment'           => $this->userId === $job->user_id ? $job->getUnpaidPayment() : null,
             // tags along with grouped category
             'tags'              => $job->tags()->orderBy('priority', 'DESC')->with('category')->get()->groupCategory(),
-            'comments'          => $comments->toArray($this->request),
+            'comments'          => (new CommentCollection($job->commentsWithChildren))->setOwner($job)->toArray($this->request),
             'applications'      => $this->applications($job),
             'flags'             => $this->flags(),
             'assets'            => AssetsResource::collection($job->firm->assets)->toArray($this->request),
@@ -96,7 +94,7 @@ class OfferController extends Controller
 
     private function flags()
     {
-        $flags = resolve(Flags::class)->fromModels([Job::class, Job\Comment::class])->permission('job-delete')->get();
+        $flags = resolve(Flags::class)->fromModels([Job::class, Comment::class])->permission('job-delete')->get();
 
         return FlagResource::collection($flags)->toArray($this->request);
     }

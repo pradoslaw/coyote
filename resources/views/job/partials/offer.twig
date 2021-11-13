@@ -95,7 +95,7 @@
               <div class="col-sm-{{ cols }} mb-2 mb-sm-auto">
                 <strong>{{ category }}</strong>
 
-                <ul class="tag-clouds tag-clouds-md tag-clouds-skills">
+                <ul class="tag-clouds tag-clouds-md">
                   {% for tag in tags %}
                     <li>
                       <a href="{{ route('job.tag', [tag.name|url_encode]) }}" title="Znajdź oferty zawierające {{ tag.real_name|default(tag.name) }}">{{ tag.real_name|default(tag.name) }}</a>
@@ -103,14 +103,15 @@
                       {% set tooltip = ['mile widziane', 'średnio zaawansowany', 'zaawansowany'][tag.pivot.priority] %}
 
                       {% spaceless %}
-                        {% for i in 1..3 %}
-                          {% if tag.pivot.priority >= i %}
-                            <i class="fas fa-circle text-primary" title="{{ tooltip }}"></i>
-                          {% else %}
-                            <i class="fas fa-circle text-muted" title="{{ tooltip }}"></i>
-                          {% endif %}
-                        {% endfor %}
-
+                        <div class="progress-bar-dotted">
+                          {% for i in 1..3 %}
+                            {% if tag.pivot.priority >= i %}
+                              <i class="fas fa-circle text-primary" title="{{ tooltip }}"></i>
+                            {% else %}
+                              <i class="fas fa-circle text-muted" title="{{ tooltip }}"></i>
+                            {% endif %}
+                          {% endfor %}
+                        </div>
                       {% endspaceless %}
                     </li>
                   {% endfor %}

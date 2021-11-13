@@ -87,7 +87,7 @@
             </template>
           </span>
 
-          <vue-tags :tags.sync="job.tags" :editable="true" @delete="REMOVE_TAG" :tooltips="['mile widziane', 'średnio zaawansowany', 'zaawansowany']" class="tag-clouds-skills tag-clouds-md mt-3"></vue-tags>
+          <vue-tags :tags.sync="job.tags" :editable="true" @delete="REMOVE_TAG" :tooltips="['mile widziane', 'średnio zaawansowany', 'zaawansowany']" class="tag-clouds-md mt-3"></vue-tags>
         </div>
       </div>
     </div>

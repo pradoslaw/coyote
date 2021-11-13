@@ -1,0 +1,17 @@
+.guide-text {
+  margin-top: 8px;
+  position: relative;
+
+  > div {
+    font-size: 15px;
+  }
+
+  > button {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+  }
+}
+
+

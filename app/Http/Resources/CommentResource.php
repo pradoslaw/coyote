@@ -3,8 +3,7 @@
 namespace Coyote\Http\Resources;
 
 use Carbon\Carbon;
-use Coyote\Job;
-use Coyote\Job\Comment;
+use Coyote\Comment;
 use Coyote\Services\UrlBuilder;
 use Coyote\User;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -30,16 +29,21 @@ class CommentResource extends JsonResource
     public function toArray($request)
     {
         return array_merge(
-            parent::toArray($request),
+            array_only(parent::toArray($request), ['id', 'text', 'email', 'html', 'parent_id']),
             [
                 'created_at'    => $this->created_at->toIso8601String(),
-                'editable'      => $request->user() ? $this->user_id == $request->user()->id || $request->user()->can('job-update') : false,
-                'children'      => CommentResource::collection($this->children)->keyBy('id'),
-                'is_author'     => $request->user() ? $this->user_id == $this->job->user_id : false,
-                'url'           => UrlBuilder::jobComment($this->job, $this->id),
-                'metadata'      => encrypt([Comment::class => $this->id, Job::class => $this->job_id]),
+                'children'      => $this->whenLoaded('children', fn () => CommentResource::collection($this->children)->keyBy('id'), []),
+                'is_owner'      => $this->resource->resource->user_id === $this->user_id,
 
-                'user'          => new UserResource($this->user ?: (new User)->forceFill($this->anonymous()))
+                'url'           => UrlBuilder::url($this->resource->resource) . '#comment-' . $this->id,
+                'metadata'      => encrypt([Comment::class => $this->id]),
+
+                'user'          => new UserResource($this->user ?: (new User)->forceFill($this->anonymous())),
+
+                'permissions'   => [
+                    'update'    => $request->user()?->can('update', $this->resource),
+                    'delete'    => $request->user()?->can('delete', $this->resource)
+                ]
             ]
         );
     }

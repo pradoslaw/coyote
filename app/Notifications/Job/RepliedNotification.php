@@ -2,7 +2,7 @@
 
 namespace Coyote\Notifications\Job;
 
-use Coyote\Job\Comment;
+use Coyote\Comment;
 use Coyote\Services\UrlBuilder;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -12,17 +12,8 @@ class RepliedNotification extends Notification
 {
     use Queueable;
 
-    /**
-     * @var Comment
-     */
-    private $comment;
-
-    /**
-     * @param Comment $comment
-     */
-    public function __construct(Comment $comment)
+    public function __construct(private Comment $comment)
     {
-        $this->comment = $comment;
     }
 
     /**
@@ -38,14 +29,16 @@ class RepliedNotification extends Notification
      */
     public function toMail()
     {
+        $url = UrlBuilder::url($this->comment->resource);
+
         return (new MailMessage())
-            ->subject('Odpowiedź do Twojego komentarza w ogłoszeniu ' . $this->comment->job->title)
+            ->subject('Odpowiedź na Twój komentarz na stronie  ' . $this->comment->resource->title)
             ->line(
                 sprintf(
-                    'Udzielono odpowiedzi na Twój komentarz do ogłoszenia <strong>%s</strong>.',
-                    link_to(UrlBuilder::job($this->comment->job), $this->comment->job->title)
+                    'Udzielono odpowiedzi na Twój komentarz na stronie <strong>%s</strong>.',
+                    link_to($url, $this->comment->resource->title)
                 )
             )
-            ->action('Kliknij, aby ją zobaczyć', UrlBuilder::jobComment($this->comment->job, $this->comment->id));
+            ->action('Kliknij, aby ją zobaczyć', "$url#comment-$this->comment->id");
     }
 }

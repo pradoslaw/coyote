@@ -1,0 +1,85 @@
+{% extends 'layout' %}
+
+{% block title %}{{ guide.title }}{{ parent() }}{% endblock %}
+
+{% block container %}
+  <div class="row mt-1">
+    <div class="col-lg-2">
+      {% include 'guide.partials.filter' %}
+    </div>
+
+    <div id="js-guide" class="col-lg-7">
+      <div id="js-skeleton" class="card card-default">
+        <div class="card-body">
+          <h1 class="m-0"><a href="{{ guide.url }}">{{ guide.title }}</a></h1>
+
+          <ul class="metadata list-inline">
+
+          </ul>
+
+          <div class="row no-gutters">
+            <ul class="tag-clouds mt-2 mb-2">
+              {% for tag in guide.tags %}
+                <li><a>{{ tag.name }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+
+          <div class="mt-3">{{ guide.excerpt_html|raw }}</div>
+
+          <div class="guide-text">
+            <div class="blur">{{ guide.html|raw }}</div>
+
+            <button class="btn btn-primary">Zobacz odpowiedź</button>
+          </div>
+
+          <div class="mt-3 pt-3 border-top">
+            <ul class="list-inline mb-2">
+              <li class="list-inline-item">
+                <a class="btn btn-gradient">
+                  <i class="far fa-fw fa-thumbs-up"></i>
+
+                  {{ declination(guide.votes, ['głos', 'głosy', 'głosów']) }}
+                </a>
+              </li>
+
+              <li class="list-inline-item">
+                <a class="btn btn-gradient">
+                  <i class="far fa-fw fa-bell"></i>
+
+                  {{ declination(guide.subscribers, ['obserwator', 'obserwatorów', 'obserwatorów']) }}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <vue-post></vue-post>
+
+      <h4 v-if="isAuthorized || commentsCount" class="mt-2 mb-2">Komentarze</h4>
+
+      <vue-comment-form
+        v-if="isAuthorized"
+        resource-id="{{ guide.id }}"
+        resource="Coyote\Guide"
+      ></vue-comment-form>
+
+      <div v-if="commentsCount > 0" class="card card-default">
+        <div class="card-body">
+          <vue-comment
+            v-for="comment in comments"
+            :comment="comment"
+            :key="comment.id"
+          />
+        </div>
+      </div>
+
+      <vue-notifications position="bottom right"/>
+    </div>
+  </div>
+
+  <script>
+    var guide = {{ guide|json_encode|raw }};
+  </script>
+{% endblock %}

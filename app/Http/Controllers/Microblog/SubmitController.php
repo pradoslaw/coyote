@@ -42,11 +42,11 @@ class SubmitController extends Controller
 
     /**
      * @param MicroblogRequest $request
-     * @param $microblog
+     * @param Microblog $microblog
      * @return MicroblogResource
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function save(MicroblogRequest $request, ?Microblog $microblog)
+    public function save(MicroblogRequest $request, Microblog $microblog)
     {
         $this->user->pushCriteria(new WithTrashed());
 
@@ -165,6 +165,6 @@ class SubmitController extends Controller
      */
     private function getParser()
     {
-        return app('parser.microblog');
+        return app('parser.post');
     }
 }

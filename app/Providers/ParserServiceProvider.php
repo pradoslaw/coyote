@@ -38,10 +38,6 @@ class ParserServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('parser.microblog', function ($app) {
-            return new MicroblogFactory($app);
-        });
-
         $this->app->singleton('parser.sig', function ($app) {
             return new SigFactory($app);
         });
@@ -65,10 +61,6 @@ class ParserServiceProvider extends ServiceProvider
         $this->app->singleton('parser.wiki', function ($app) {
             return new WikiFactory($app);
         });
-
-        $this->app->singleton('parser.job.comment', function ($app) {
-            return new JobCommentFactory($app);
-        });
     }
 
     /**
@@ -82,13 +74,11 @@ class ParserServiceProvider extends ServiceProvider
          * UWAGA! Po dodaniu nowego elementu do tablicy trzeba wykonac php artisan clear-compiled
          */
         return [
-            'parser.microblog',
             'parser.sig',
             'parser.pm',
             'parser.post',
             'parser.comment',
             'parser.job',
-            'parser.job.comment',
             'parser.wiki'
         ];
     }

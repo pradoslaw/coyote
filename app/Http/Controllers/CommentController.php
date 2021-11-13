@@ -1,11 +1,10 @@
 <?php
 
-namespace Coyote\Http\Controllers\Job;
+namespace Coyote\Http\Controllers;
 
-use Coyote\Http\Controllers\Controller;
-use Coyote\Http\Requests\Job\CommentRequest;
+use Coyote\Http\Requests\CommentRequest;
 use Coyote\Http\Resources\CommentResource;
-use Coyote\Job;
+use Coyote\Comment;
 use Coyote\Notifications\Job\CommentedNotification;
 use Coyote\Notifications\Job\RepliedNotification;
 use Coyote\Services\Stream\Actor as Stream_Actor;
@@ -13,7 +12,6 @@ use Illuminate\Contracts\Notifications\Dispatcher;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
-use Coyote\Services\Stream\Objects\Job as Stream_Job;
 use Coyote\Services\Stream\Objects\Comment as Stream_Comment;
 
 class CommentController extends Controller
@@ -21,63 +19,60 @@ class CommentController extends Controller
     /**
      * @param CommentRequest $request
      * @param Dispatcher $dispatcher
-     * @param Job\Comment|null $comment
+     * @param Comment|null $comment
      * @return CommentResource
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function save(CommentRequest $request, Dispatcher $dispatcher, Job\Comment $comment = null)
+    public function save(CommentRequest $request, Dispatcher $dispatcher, Comment $comment = null)
     {
-        if ($comment->exists) {
-            $this->checkAbility();
-        }
+        $this->authorize('update', $comment);
 
-        $comment->fill($request->all())->creating(function (Job\Comment $model) {
+        $comment->fill($request->all())->creating(function (Comment $model) use ($request) {
             $model->user_id = $this->userId;
-
-            if ($model->parent_id) {
-                $model->job_id = $model->parent->job_id;
-            }
+            $model->forceFill($request->only(['resource_id', 'resource_type']));
         });
+
+        if ($comment->parent_id) {
+            $comment->forceFill($comment->parent->only(['resource_id', 'resource_type']));
+        }
 
         $actor = new Stream_Actor($this->auth);
 
         $this->transaction(function () use ($comment, $dispatcher, $actor) {
             $comment->save();
+            $target = $this->target($comment);
 
             stream(
                 $comment->wasRecentlyCreated ? new Stream_Create($actor) : new Stream_Update($actor),
-                (new Stream_Comment())->map($comment->job, $comment),
-                (new Stream_Job())->map($comment->job)
+                (new Stream_Comment())->comment($comment),
+                (new $target)->map($comment->resource)
             );
         });
 
         if ($comment->wasRecentlyCreated) {
             $subscribers = $comment
-                ->job
+                ->resource
                 ->subscribers()
                 ->with('user')
                 ->get()
-                ->pluck('user') // get all job's subscribers
-                ->push($comment->job->user) // push job's author
+                ->pluck('user') // get all subscribers
                 ->exceptUser($this->auth); // exclude current logged user
 
             $dispatcher->send($subscribers, new CommentedNotification($comment));
 
-            if ($comment->parent_id && $comment->user_id !== $comment->parent->user_id) {
-                $comment->parent->notify(new RepliedNotification($comment));
-            }
+//            if ($comment->parent_id && $comment->user_id !== $comment->parent->user_id) {
+//                $comment->parent->notify(new RepliedNotification($comment));
+//            }
         }
 
         CommentResource::withoutWrapping();
 
-        return new CommentResource($comment->load('user'));
+        return new CommentResource($comment->load(['user', 'children']));
     }
 
-    /**
-     * @param Job\Comment $comment
-     */
-    public function delete(Job\Comment $comment)
+    public function delete(Comment $comment)
     {
-        $this->checkAbility();
+        $this->authorize('delete', $comment);
 
         $this->transaction(function () use ($comment) {
             $comment->children->each(function ($child) {
@@ -85,18 +80,18 @@ class CommentController extends Controller
             });
 
             $comment->delete();
+            $target = $this->target($comment);
 
             stream(
                 Stream_Delete::class,
-                (new Stream_Comment())->map($comment->job, $comment),
-                (new Stream_Job())->map($comment->job)
+                (new Stream_Comment())->comment($comment),
+                (new $target)->map($comment->resource)
             );
         });
     }
 
-    private function checkAbility()
+    private function target(Comment $comment): string
     {
-        // todo: przeniesc ten kod do policies
-        abort_unless($this->userId == $this->request->user()->id || $this->request->user()->can('job-update'), 403);
+        return 'Coyote\\Services\\Stream\\Objects\\' . class_basename($comment->resource_type);
     }
 }

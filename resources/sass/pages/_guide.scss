@@ -1,0 +1,49 @@
+
+.qa-filter {
+  h4 {
+    text-transform: uppercase;
+    font-weight: normal;
+    color: $gray-light;
+    font-size: 12px;
+    margin-top: 25px;
+  }
+
+  .qa-categories {
+    margin-top: 15px;
+
+    li {
+      padding: 8px 0;
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+    }
+
+    img {
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+    }
+  }
+}
+
+.blur {
+  color: transparent;
+  text-shadow: 0 0 6px rgba(0,0,0,0.5);
+
+  p::selection {
+    text-shadow: inherit;
+    color: transparent;
+  }
+
+  img:not(.img-smile) {
+    @include img-fluid;
+    filter: blur(.5rem);
+  }
+}
+
+.qa-metadata {
+  color: $gray-light;
+  font-size: 12px;
+}

@@ -1,11 +1,12 @@
 <?php
 
-namespace Coyote\Http\Requests\Job;
+namespace Coyote\Http\Requests;
 
+use Coyote\Guide\Role;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class CommentRequest extends FormRequest
+class GuideRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,16 +26,16 @@ class CommentRequest extends FormRequest
     public function rules()
     {
         return [
+            'title' => 'required|string|max:200',
+            'excerpt' => 'nullable|string',
             'text' => 'required|string',
-            'job_id' => [
-                'sometimes',
-                'int',
-                Rule::exists('jobs', 'id')
-            ],
-            'parent_id' => [
-                'nullable',
-                'int',
-                Rule::exists('job_comments', 'id')->whereNull('parent_id')
+            'tags' => 'required|max:6',
+            'role' => ['required', Rule::in([Role::JUNIOR, Role::MID, Role::SENIOR])],
+            'tags.*.name'   => [
+                'bail',
+                'max:25',
+                'tag',
+                'tag_creation:300'
             ]
         ];
     }

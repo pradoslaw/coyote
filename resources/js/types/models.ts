@@ -1,10 +1,14 @@
+export const JUNIOR = 'junior';
+export const MID = 'mid';
+export const SENIOR = 'senior';
 
 export enum Model {
   Topic = 'Topic',
   User = 'User',
   Microblog = 'Microblog',
   Job = 'Job',
-  Wiki = 'Wiki'
+  Wiki = 'Wiki',
+  Guide = 'Guide'
 }
 
 export interface Flag {
@@ -219,7 +223,7 @@ export interface Message {
 }
 
 export interface Paginator {
-  data: Microblog[] | Post[];
+  data: Microblog[] | Post[] | Guide[];
   current_page: number;
   from: number;
   last_page: number;
@@ -334,4 +338,40 @@ export interface Firm {
   benefits: string[];
   website: string;
   description: string;
+}
+
+interface GuidePermission {
+  update: boolean;
+}
+
+export interface Comment {
+  id: number;
+  parent_id: number;
+  text: string;
+  html: string;
+  assets: Asset[];
+}
+
+export interface Guide {
+  id: number;
+  title: string;
+  slug: string;
+  url: string;
+  excerpt: string;
+  excerpt_html: string;
+  text: string;
+  html: string;
+  permissions: GuidePermission;
+  is_editing: boolean;
+  comments: Comment[];
+  votes: number;
+  subscribers: number;
+  is_voted: boolean;
+  is_subscribed: boolean;
+  tags: Tag[];
+  user: User;
+  created_at: Date;
+  comments_count: number;
+  role: Seniority;
+  assets: Asset[];
 }

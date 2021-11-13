@@ -3,6 +3,7 @@
 namespace Coyote\Providers;
 
 use Coyote\Microblog;
+use Coyote\Guide;
 use Coyote\Repositories\Contracts\BlockRepositoryInterface;
 use Coyote\Repositories\Contracts\FirewallRepositoryInterface;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface;
@@ -60,6 +61,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->router->pattern('job', '[0-9]+');
         $this->router->pattern('pm', '[0-9]+');
         $this->router->pattern('asset', '[0-9]+');
+        $this->router->pattern('guide', '[0-9]+');
         $this->router->pattern('payment', '[0-9a-z\-]+');
 
         $this->router->pattern('forum', '[A-Za-ząęśćłźżóń\-\_\/\.\+]+');
@@ -81,6 +83,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->router->model('payment', PaymentRepositoryInterface::class);
         $this->router->model('tag', TagRepositoryInterface::class);
         $this->router->model('pm', PmRepositoryInterface::class);
+        $this->router->model('guide', Guide::class);
 
         $this->router->bind('forum', function ($slug) {
             return $this->app->make(ForumRepositoryInterface::class, [$this->app])->where('slug', $slug)->firstOrFail();
@@ -153,6 +156,8 @@ class RouteServiceProvider extends ServiceProvider
             require base_path('routes/profile.php');
             require base_path('routes/pastebin.php');
             require base_path('routes/adm.php');
+            require base_path('routes/guide.php');
+            require base_path('routes/comment.php');
             require base_path('routes/wiki.php'); // must be at the end
         });
     }

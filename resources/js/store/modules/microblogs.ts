@@ -91,14 +91,8 @@ const mutations = {
   },
 
   VOTE(state, microblog: Microblog) {
-    if (microblog.is_voted) {
-      microblog.is_voted = false;
-      microblog.votes -= 1;
-    }
-    else {
-      microblog.is_voted = true;
-      microblog.votes += 1;
-    }
+    microblog.is_voted = !microblog.is_voted;
+    microblog.votes += (microblog.is_voted ? 1 : -1);
   },
 
   SET_COMMENTS(state, { microblog, comments }) {

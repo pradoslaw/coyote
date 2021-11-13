@@ -1,9 +1,8 @@
 <?php
 
-namespace Coyote\Repositories\Criteria\Topic;
+namespace Coyote\Repositories\Criteria;
 
 use Coyote\Repositories\Contracts\RepositoryInterface as Repository;
-use Coyote\Repositories\Criteria\Criteria;
 use Coyote\Topic;
 use Illuminate\Database\Query\Builder;
 
@@ -27,18 +26,18 @@ class WithTags extends Criteria
     }
 
     /**
-     * @param \Illuminate\Database\Eloquent\Builder $model
+     * @param \Illuminate\Database\Eloquent\Model $model
      * @param Repository $repository
      * @return mixed
      */
     public function apply($model, Repository $repository)
     {
-        return $model->whereIn('topics.id', function (Builder $builder) {
+        return $model->whereIn($model->getTable() . '.id', function (Builder $builder) use ($model) {
             return $builder
                 ->select('resource_id')
                 ->from('tags')
                 ->join('tag_resources', 'tag_resources.tag_id', '=', 'tags.id')
-                ->where('tag_resources.resource_type', '=', Topic::class)
+                ->where('tag_resources.resource_type', '=', get_class($model))
                 ->whereIn('name', $this->tags);
         });
     }

@@ -1,5 +1,5 @@
 <template>
-  <div class="editor">
+  <div :class="{'is-invalid': isInvalid}" class="editor">
     <vue-tabs @click="switchTab" :items="tabs" :current-tab="tabs.indexOf(currentTab)" type="pills" class="mb-2">
       <div v-if="isContent" class="btn-toolbar ml-auto mt-2 mt-sm-0">
         <div class="btn-group mr-2" role="group" aria-label="...">
@@ -256,6 +256,9 @@
 
     @Prop({default: () => []})
     readonly assets!: Asset[];
+
+    @Prop({default: false})
+    readonly isInvalid!: boolean;
 
     @Emit('save')
     save() {}

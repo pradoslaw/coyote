@@ -102,6 +102,6 @@ class Flag extends Model
 
     public function comments()
     {
-        return $this->morphedByMany(Job\Comment::class, 'resource', 'flag_resources');
+        return $this->morphedByMany(Comment::class, 'resource', 'flag_resources');
     }
 }

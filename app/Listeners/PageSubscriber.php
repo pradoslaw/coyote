@@ -2,6 +2,8 @@
 
 namespace Coyote\Listeners;
 
+use Coyote\Events\GuideDeleted;
+use Coyote\Events\GuideSaved;
 use Coyote\Events\JobDeleted;
 use Coyote\Events\MicroblogDeleted;
 use Coyote\Events\MicroblogSaved;
@@ -15,6 +17,7 @@ use Coyote\Events\WikiDeleted;
 use Coyote\Events\WikiSaved;
 use Coyote\Microblog;
 use Coyote\Job;
+use Coyote\Guide;
 use Coyote\Services\UrlBuilder;
 use Coyote\Topic;
 use Coyote\Forum;
@@ -192,6 +195,24 @@ class PageSubscriber implements ShouldQueue
         $this->page->deleteByContent($event->wiki['id'], Wiki::class);
     }
 
+    public function onGuideSave(GuideSaved $event)
+    {
+        $this->purgePageViews();
+
+        $event->guide->page()->updateOrCreate([
+            'content_id'    => $event->guide->id,
+            'content_type'  => Guide::class,
+        ], [
+            'title'         => $event->guide->title,
+            'path'          => urldecode(UrlBuilder::guide($event->guide))
+        ]);
+    }
+
+    public function onGuideDelete(GuideDeleted $event)
+    {
+        $this->page->deleteByContent($event->guide['id'], Guide::class);
+    }
+
     /**
      * Register the listeners for the subscriber.
      *
@@ -210,7 +231,9 @@ class PageSubscriber implements ShouldQueue
             JobWasSaved::class => 'onJobSave',
             JobDeleted::class => 'onJobDelete',
             WikiSaved::class => 'onWikiSave',
-            WikiDeleted::class => 'onWikiDelete'
+            WikiDeleted::class => 'onWikiDelete',
+            GuideSaved::class => 'onGuideSave',
+            GuideDeleted::class => 'onGuideDelete'
         ];
     }
 

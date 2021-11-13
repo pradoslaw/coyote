@@ -38,9 +38,6 @@ class TopicsController extends Controller
      */
     private $guestId;
 
-    /**
-     * @param Auth $auth
-     */
     public function __construct(Auth $auth, TopicRepository $repository)
     {
         TagResource::urlResolver(fn ($name) => route('forum.tag', [urlencode($name)]));

@@ -7,8 +7,7 @@ const state = {
   links: [],
   meta: [],
   form: {},
-  subscriptions: [],
-  comments: {}
+  subscriptions: []
 }
 
 const getters = {
@@ -74,39 +73,7 @@ const mutations = {
     const index = state.subscriptions.findIndex(item => item.id === job.id);
 
     state.subscriptions.splice(index, 1);
-  },
-
-  SET_COMMENTS(state, comments) {
-    state.comments = comments;
-  },
-
-  UPDATE_COMMENT(state, comment) {
-    if (Array.isArray(state.comments)) {
-      Vue.set(state, "comments", {});
-    }
-
-    if (comment.parent_id) {
-      const parent = state.comments[comment.parent_id];
-
-      if (Array.isArray(parent.children)) {
-        Vue.set(parent, "children", {});
-      }
-
-      Vue.set(parent.children, comment.id, comment);
-    } else {
-      Vue.set(state.comments, comment.id, comment);
-    }
-  },
-
-  DELETE_COMMENT(state, comment) {
-    if (comment.parent_id) {
-      let parent = state.comments[comment.parent_id];
-
-      Vue.delete(parent.children, comment.id);
-    } else {
-      Vue.delete(state.comments, comment.id);
-    }
-  },
+  }
 }
 
 const actions = {
@@ -118,19 +85,6 @@ const actions = {
     getters.isSubscribed(job) ? commit('UNSUBSCRIBE', job) : commit('SUBSCRIBE', job);
 
     return axios.post(`/Praca/Subscribe/${job.id}`);
-  },
-
-  saveComment({ commit }, comment) {
-    return axios.post(`/Praca/Comment/${comment.id || ''}`, comment)
-      .then(result => {
-        commit('UPDATE_COMMENT', result.data);
-
-        return result;
-      });
-  },
-
-  deleteComment({ commit }, comment) {
-    return axios.delete(`/Praca/Comment/${comment.id}`).then(() => commit('DELETE_COMMENT', comment));
   }
 }
 

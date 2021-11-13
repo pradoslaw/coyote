@@ -148,7 +148,7 @@ class SubmitControllerTest extends TestCase
         $topic = factory(Topic::class)->create(['forum_id' => $this->forum->id]);
         $post = factory(Post::class)->make();
 
-        $response = $this->actingAs($this->user)->json('POST', "/Forum/{$this->forum->slug}/Submit/{$topic->id}", ['text' => $post->text]);
+        $this->actingAs($this->user)->json('POST', "/Forum/{$this->forum->slug}/Submit/{$topic->id}", ['text' => $post->text]);
 
         $this->assertFalse($topic->subscribers()->forUser($this->user->id)->exists());
 
@@ -251,7 +251,7 @@ class SubmitControllerTest extends TestCase
             'POST',
             "/Forum/{$this->forum->slug}/Submit/{$topic->id}/{$post->id}",
             [
-                'text' => $text = $faker->text,
+                'text' => $faker->text,
                 'title' => $subject = $faker->text(100)
             ]
         );

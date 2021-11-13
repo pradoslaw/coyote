@@ -2,7 +2,7 @@
 
 namespace Coyote\Services\Parser\Factories;
 
-class JobCommentFactory extends MicroblogFactory
+class QuestionFactory extends PostFactory
 {
     //
 }

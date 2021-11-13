@@ -15,20 +15,6 @@ class TagRepository extends Repository implements TagRepositoryInterface
         return 'Coyote\Tag';
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function lookupName($name)
-    {
-        return $this
-            ->model
-            ->select(['tags.id', 'name', 'topics'])
-            ->where('name', 'ILIKE', $name . '%')
-            ->orderByDesc('topics')
-            ->limit(100)
-            ->get();
-    }
-
     public function exists(string $name): bool
     {
         return $this
@@ -86,5 +72,18 @@ class TagRepository extends Repository implements TagRepositoryInterface
             ->get()
             ->pluck('count', 'name')
             ->toArray();
+    }
+
+    public function popularTags(string $model)
+    {
+        return $this
+            ->model
+            ->select(['tags.id', 'tags.name', 'real_name', 'logo', 'tag_categories.name AS category'])
+            ->addSelect($this->raw("COALESCE(resources ->> '$model', '0')::int AS count"))
+            ->leftJoin('tag_categories', 'tag_categories.id', '=', 'category_id')
+            ->whereRaw("COALESCE(resources ->> '$model', '0')::int > 0")
+            ->orderByRaw('count DESC')
+            ->limit(25)
+            ->get();
     }
 }

@@ -1,6 +1,6 @@
 import Prism from 'prismjs';
 import { Vue, Component, Prop, Emit, Ref } from "vue-property-decorator";
-import store from "../../store";
+import store from "@/store";
 import { Microblog, User } from "@/types/models";
 import VueModal from "../modal.vue";
 import VueForm from "../microblog/form.vue";

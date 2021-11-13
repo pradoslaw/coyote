@@ -1,50 +1,18 @@
-<div id="comments" v-cloak>
+<div id="js-comments" v-cloak>
   <h3><i class="fas fa-question-circle-o"></i> Pytania i odpowiedzi</h3>
 
-  <div class="card card-default">
-
-    <div class="card-body">
-      <div class="comment">
-        <div class="media">
-          <div class="mr-2">
-            <img src="{{ user_photo(user('photo')) }}" class="img-thumbnail media-object">
-          </div>
-
-          <div class="media-body">
-            <div class="form-group">
-              <vue-prompt>
-                <textarea
-                  v-autosize
-                  placeholder="Zadaj pytanie"
-                  name="text"
-                  class="form-control"
-                  ref="textarea"
-                  v-model="comment.text"
-                  @focus="checkAuth(showForm)"
-                  @keydown.ctrl.enter="saveComment"
-                  rows="1"
-                  tabindex="1"
-                ></textarea>
-              </vue-prompt>
-            </div>
-
-            <div class="row" v-show="textFocused">
-              <div class="col-12">
-                <vue-button :disabled="isSubmitting" @click.native="saveComment" class="btn btn-primary btn-sm float-right" tabindex="3" title="Ctrl+Enter aby opublikować">Zapisz</vue-button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <vue-comment-form
+    v-if="isAuthorized"
+    resource-id="{{ job.id }}"
+    resource="Coyote\Job"
+  ></vue-comment-form>
 
   <div v-if="Object.keys(comments).length > 0" class="card card-default">
     <div class="card-body">
       <vue-comment
         v-for="comment in comments"
-        :comment="comment"
         :key="comment.id"
+        :comment="comment"
       ></vue-comment>
     </div>
   </div>

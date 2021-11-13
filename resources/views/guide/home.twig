@@ -1,0 +1,33 @@
+{% extends 'layout' %}
+
+{% block title %}Rekrutacyjne Q&A {{ tag ? ' :: ' ~ tag }}{{ parent() }}{% endblock %}
+
+{% block container %}
+  <div class="row mt-1">
+    <div class="col-lg-2">
+      {% include 'guide.partials.filter' %}
+    </div>
+
+    <div id="js-homepage" class="col-lg-7">
+      <vue-pagination :current-page="currentPage" :total-pages="totalPages"></vue-pagination>
+
+      <vue-headline
+        v-for="guide in guides"
+        :key="guide.id"
+        :guide="guide"
+      />
+
+      <vue-notifications position="bottom right"/>
+    </div>
+
+    <div class="col-lg-3">
+      <span class="edge">
+        <a href="{{ route('guide.submit') }}" class="btn btn-primary">Dodaj nowy post</a>
+      </span>
+    </div>
+  </div>
+
+  <script>
+    var pagination = {{ pagination|json_encode|raw }};
+  </script>
+{% endblock %}

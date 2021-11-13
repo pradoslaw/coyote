@@ -2,11 +2,15 @@
 
 namespace Coyote\Providers;
 
+use Coyote\Comment;
 use Coyote\Forum;
 use Coyote\Job;
 use Coyote\Firm;
 use Coyote\Microblog;
+use Coyote\Guide;
 use Coyote\Pm;
+use Coyote\Policies\CommentPolicy;
+use Coyote\Policies\GuidePolicy;
 use Coyote\Policies\MicroblogPolicy;
 use Coyote\Policies\ForumPolicy;
 use Coyote\Policies\PmPolicy;
@@ -43,7 +47,9 @@ class AuthServiceProvider extends ServiceProvider
         Job::class              => JobPolicy::class,
         Firm::class             => FirmPolicy::class,
         Pm::class               => PmPolicy::class,
-        Wiki\Comment::class     => WikiCommentPolicy::class
+        Wiki\Comment::class     => WikiCommentPolicy::class,
+        Guide::class            => GuidePolicy::class,
+        Comment::class          => CommentPolicy::class
     ];
 
     /**
@@ -69,7 +75,11 @@ class AuthServiceProvider extends ServiceProvider
         'wiki-admin',
         'pastebin-delete',
         'microblog-update',
-        'microblog-delete'
+        'microblog-delete',
+        'guide-update',
+        'guide-delete',
+        'comment-update',
+        'comment-delete'
     ];
 
     /**

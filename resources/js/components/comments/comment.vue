@@ -1,20 +1,19 @@
 <template>
   <div :id="'comment-' + comment.id" class="comment">
-    <div class="media" :class="{author: comment.is_author}">
+    <div class="media" :class="{author: comment.is_owner}">
       <div class="mr-2">
         <a v-profile="comment.user.id">
-          <vue-avatar :photo="comment.user.photo" :name="comment.user.name" :id="comment.user.id" class="img-thumbnail media-object"></vue-avatar>
+          <vue-avatar v-bind="comment.user" :is-online="comment.user.is_online" class="img-thumbnail media-object i-38"></vue-avatar>
         </a>
       </div>
 
       <div class="media-body">
-        <div class="dropdown float-right" v-if="comment.editable">
-          <button class="btn btn-secondary btn-xs dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          </button>
+        <div class="dropdown float-right" v-if="comment.permissions.update">
+          <button class="btn btn-xs border-0 text-muted mt-2" type="button" data-bs-toggle="dropdown" aria-label="Dropdown"><i class="fa fa-ellipsis-h"></i></button>
 
           <div class="dropdown-menu dropdown-menu-right">
-            <a @click="edit" href="javascript:" class="btn-edit dropdown-item"><i class="fa fa-edit fa-fw"></i> Edytuj</a>
-            <a @click="deleteComment(true)" class="dropdown-item" href="javascript:"><i class="fa fa-trash fa-fw"></i> Usuń</a>
+            <a @click="edit" href="javascript:" class="dropdown-item"><i class="fa fa-edit fa-fw"></i> Edytuj</a>
+            <a @click="deleteComment" class="dropdown-item" href="javascript:"><i class="fa fa-times fa-fw"></i> Usuń</a>
           </div>
         </div>
 
@@ -27,32 +26,20 @@
 
         <vue-flag v-for="flag in flags" :key="flag.id" :flag="flag"></vue-flag>
 
-        <div class="mt-2" v-if="!isEditing" v-html="comment.html">
-          {{ comment.html }}
-        </div>
+        <div class="mt-2" v-if="!isEditing" v-html="comment.html"></div>
 
         <div class="mt-2" v-if="isEditing">
-          <div class="form-group">
-            <textarea
-              v-autosize
-              name="text"
-              class="form-control"
-              ref="submitText"
-              v-model="comment.text"
-              @keydown.ctrl.enter="saveComment(comment)"
-              rows="1"
-              tabindex="1"
-            ></textarea>
-          </div>
+          <vue-markdown
+            v-model="comment.text"
+            @save="saveComment(comment)"
+            ref="submitText"
+            preview-url="/Mikroblogi/Preview"
+          />
 
-          <div class="row">
-            <div class="form-group col-12">
-              <vue-button :disabled="isSubmitting" @click.native="saveComment(comment)" class="btn btn-primary btn-sm float-right ml-1">Zapisz</vue-button>
-              <button type="button" class="btn btn-danger btn-sm float-right" @click="isEditing = false">Anuluj</button>
-            </div>
+          <div class="d-flex mt-2 justify-content-end">
+            <button type="button" class="btn btn-danger btn-sm mr-1" @click="isEditing = false">Anuluj</button>
+            <vue-button :disabled="isSubmitting" @click.native="saveComment(comment)" class="btn btn-primary btn-sm">Zapisz</vue-button>
           </div>
-
-          <div class="clearfix"></div>
         </div>
 
         <ul class="list-inline list-inline-bullet mb-0">
@@ -66,26 +53,19 @@
 
     <div class="comment">
       <div v-if="isReplying">
-        <div class="form-group">
-          <textarea
-            v-autosize
-            v-model="replyForm.text"
-            class="form-control"
-            ref="replyText"
-            @keydown.ctrl.enter="saveComment(replyForm)"
-            rows="1"
-            tabindex="1"
-          ></textarea>
-        </div>
+        <vue-markdown
+          v-model="replyForm.text"
+          @save="saveComment(replyForm)"
+          ref="replyText"
+          preview-url="/Mikroblogi/Preview"
+        />
 
-        <div class="row">
-          <div class="form-group col-12">
-            <vue-button @click.native="saveComment(replyForm)" :disabled="isSubmitting" type="submit" class="btn btn-primary btn-sm float-right ml-1" title="Ctrl+Enter aby opublikować">
-              Zapisz
-            </vue-button>
-            <button type="button" class="btn btn-danger btn-sm float-right" @click="isReplying = false">Anuluj
-            </button>
-          </div>
+        <div class="d-flex mt-2 justify-content-end">
+          <button type="button" class="btn btn-danger btn-sm mr-1" @click="isReplying = false">Anuluj</button>
+
+          <vue-button @click.native="saveComment(replyForm)" :disabled="isSubmitting" type="submit" class="btn btn-primary btn-sm" title="Ctrl+Enter aby opublikować">
+            Zapisz
+          </vue-button>
         </div>
       </div>
     </div>
@@ -96,16 +76,6 @@
       :key="child.id"
       :nested="true"
     ></vue-comment>
-
-    <vue-modal ref="confirm">
-      Czy na pewno chcesz usunąć ten komentarz?
-
-      <template slot="buttons">
-        <button @click="$refs.confirm.close()" type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj
-        </button>
-        <button @click="deleteComment(false)" type="submit" class="btn btn-danger danger">Tak, usuń</button>
-      </template>
-    </vue-modal>
   </div>
 </template>
 
@@ -115,6 +85,7 @@
   import VueUserName from '../user-name.vue';
   import VueButton from '../forms/button.vue';
   import VueFlag from '../flags/flag.vue';
+  import VueMarkdown from '../forms/markdown.vue';
   import { default as mixins } from '../mixins/user';
   import { mapGetters } from 'vuex';
 
@@ -126,7 +97,8 @@
       'vue-avatar': VueAvatar,
       'vue-username': VueUserName,
       'vue-button': VueButton,
-      'vue-flag': VueFlag
+      'vue-flag': VueFlag,
+      'vue-markdown': VueMarkdown
     },
     mixins: [ mixins ],
     data() {
@@ -157,23 +129,23 @@
         }
       },
 
-      deleteComment(confirm) {
-        if (confirm) {
-          this.$refs.confirm.open();
-        } else {
-          this.$refs.confirm.close();
-
-          this.$store.dispatch('jobs/deleteComment', this.comment);
-        }
+      deleteComment() {
+        this.$confirm({
+          message: 'Tej operacji nie będzie można cofnąć.',
+          title: 'Usunąć komentarz?',
+          okLabel: 'Tak, usuń'
+        })
+        .then(() => this.$store.dispatch('comments/delete', this.comment));
       },
 
       saveComment(comment) {
         this.isSubmitting = true;
 
-        this.$store.dispatch('jobs/saveComment', comment)
+        this.$store.dispatch('comments/save', comment)
           .then(response => {
             this.isEditing = false;
             this.isReplying = false;
+            this.replyForm.text = '';
 
             this.scrollIntoView(response.data);
           })
@@ -188,7 +160,7 @@
       ...mapGetters('user', ['isAuthorized']),
 
       flags() {
-        return this.$store.getters['flags/filter'](this.comment.id, 'Coyote\\Job\\Comment');
+        return this.$store.getters['flags/filter'](this.comment.id, 'Coyote\\Comment');
       }
     }
   }

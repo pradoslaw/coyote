@@ -103,18 +103,6 @@
   @include tag-variant(1px, 4px, 10px);
 }
 
-.tag-clouds-skills {
-  > li {
-    margin-right: 10px;
-
-    .fas {
-      font-size: 10px;
-      margin-right: 4px;
-      cursor: pointer;
-    }
-  }
-}
-
 .tag-suggestion {
   font-weight: bold;
   text-decoration: underline;
