@@ -14,23 +14,11 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 class DispatchPostCommentNotification implements ShouldQueue
 {
     /**
-     * @var Dispatcher
-     */
-    private $dispatcher;
-
-    /**
-     * @var UserRepository
-     */
-    private $user;
-
-    /**
      * @param Dispatcher $dispatcher
      * @param UserRepository $user
      */
-    public function __construct(Dispatcher $dispatcher, UserRepository $user)
+    public function __construct(private Dispatcher $dispatcher)
     {
-        $this->dispatcher = $dispatcher;
-        $this->user = $user;
     }
 
     public function handle(CommentSaved $event)
@@ -40,7 +28,7 @@ class DispatchPostCommentNotification implements ShouldQueue
         $subscribers = [];
 
         if ($event->wasRecentlyCreated) {
-            $subscribers = $comment->post->subscribers()->with('user:id,name')->get()->pluck('user')->exceptUser($comment->user);
+            $subscribers = $comment->post->subscribers()->with('user')->get()->pluck('user')->exceptUser($comment->user);
 
             $this->dispatcher->send(
                 $subscribers,

@@ -53,7 +53,7 @@ class DispatchMicroblogNotifications implements ShouldQueue
                     // exclude also author of parent entry! @see https://github.com/adam-boduch/coyote/issues/637
                     ->excludeBlocked($microblog->user_id, $microblog->parent->user_id)
                     ->has('user') // <-- make sure to skip records with deleted users
-                    ->with(['user:id,name'])
+                    ->with(['user'])
                     ->get()
                     ->pluck('user');
             } else {
