@@ -44,7 +44,7 @@ ENV fpm_conf /usr/local/etc/php-fpm.d/www.conf
 ENV php_vars /usr/local/etc/php/conf.d/docker-vars.ini
 
 RUN groupadd -g ${GID} nginx
-RUN useradd -u ${UID} -g nginx nginx
+RUN useradd -u ${UID} -m -g nginx nginx
 
 RUN echo "cgi.fix_pathinfo=0" > ${php_vars} &&\
     echo "upload_max_filesize = 50M"  >> ${php_vars} &&\
