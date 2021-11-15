@@ -49,7 +49,15 @@ class DispatchPostNotifications implements ShouldQueue
         if ($event->wasRecentlyCreated) {
             $user = $event->post->user;
 
-            $subscribers = $topic->subscribers()->with('user')->get()->pluck('user')->exceptUser($user);
+            $subscribers = $topic
+                ->subscribers()
+                ->excludeBlocked($user->id)
+                ->has('user') // <-- make sure to skip records with deleted users
+                ->with('user')
+                ->get()
+                ->pluck('user')
+                ->exceptUser($user);
+
             $notification = (new SubmittedNotification($user, $post))->setSender($this->getSender($post));
 
             $subscribers = $subscribers
@@ -82,7 +90,7 @@ class DispatchPostNotifications implements ShouldQueue
 
         if (!empty($usersId)) {
             $this->dispatcher->send(
-                $this->user->findMany($usersId)->exceptUser($user)->exceptUsers($subscribers),
+                $this->user->excludeBlocked($post->user_id)->findMany($usersId)->exceptUser($user)->exceptUsers($subscribers),
                 (new UserMentionedNotification($user, $post))->setSender($senderName)
             );
         }
@@ -94,6 +102,6 @@ class DispatchPostNotifications implements ShouldQueue
      */
     private function getSender(Post $post): string
     {
-        return $post->user ? $post->user->name : $post->user_name;
+        return $post->user->name ?? $post->user_name;
     }
 }
