@@ -22,7 +22,7 @@ class CommentController extends Controller
      * @return CommentResource
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function save(CommentRequest $request, Dispatcher $dispatcher, Comment $comment )
+    public function save(CommentRequest $request, Dispatcher $dispatcher, Comment $comment)
     {
         $this->authorize('update', $comment);
 
