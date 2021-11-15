@@ -4,6 +4,7 @@ namespace Tests\Feature\Listeners;
 
 use Coyote\Events\PostSaved;
 use Coyote\Forum;
+use Coyote\Notifications\Post\ChangedNotification;
 use Coyote\Notifications\Post\SubmittedNotification;
 use Coyote\Notifications\Post\UserMentionedNotification;
 use Coyote\Post;
@@ -98,6 +99,18 @@ class DispatchPostNotificationsTest extends TestCase
         Notification::assertSentTo($user, UserMentionedNotification::class);
     }
 
+    public function testDoNotDispatchMentionNotificationToMyself()
+    {
+        /** @var User $user */
+        $user = factory(User::class)->create();
+
+        $post = factory(Post::class)->create(['user_id' => $user->id, 'text' => "Hello @{{$user->name}}", 'topic_id' => $this->topic->id, 'forum_id' => $this->forum->id]);
+
+        event(new PostSaved($post));
+
+        Notification::assertNothingSent();
+    }
+
     public function testDoNotDispatchMentionNotificationDueToUserWasBlocked()
     {
         /** @var User $user */
@@ -148,5 +161,46 @@ class DispatchPostNotificationsTest extends TestCase
         event(new PostSaved($post));
 
         Notification::assertSentToTimes($follower, SubmittedNotification::class, 1);
+    }
+
+    public function testDispatchChangedNotification()
+    {
+        /** @var User $user */
+        $user = factory(User::class)->create();
+
+        /** @var Post $post */
+        $post = factory(Post::class)->state('user')->create(['topic_id' => $this->topic->id, 'forum_id' => $this->forum->id]);
+        $post->subscribers()->create(['user_id' => $user->id]);
+
+        $post->editor_id = $post->user_id;
+        $post->wasRecentlyCreated = false;
+        $post->save();
+
+        $this->assertEquals($post->user_id, $post->editor_id);
+
+        event(new PostSaved($post));
+
+        Notification::assertSentTo($user, ChangedNotification::class);
+    }
+
+    public function testDoNotDispatchChangedNotificationDueUserWasBlocked()
+    {
+        /** @var User $blocked */
+        $blocked = factory(User::class)->create();
+
+        /** @var Post $post */
+        $post = factory(Post::class)->state('user')->create(['topic_id' => $this->topic->id, 'forum_id' => $this->forum->id]);
+        $post->subscribers()->create(['user_id' => $blocked->id]);
+
+        // post author added some user to blacklist
+        $post->user->relations()->create(['related_user_id' => $blocked->id, 'is_blocked' => true]);
+
+        $post->editor_id = $blocked->id;
+        $post->wasRecentlyCreated = false;
+        $post->save();
+
+        event(new PostSaved($post));
+
+        Notification::assertNothingSent();
     }
 }

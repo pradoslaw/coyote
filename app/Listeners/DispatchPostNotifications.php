@@ -55,8 +55,7 @@ class DispatchPostNotifications implements ShouldQueue
                 ->has('user') // <-- make sure to skip records with deleted users
                 ->with('user')
                 ->get()
-                ->pluck('user')
-                ->exceptUser($user);
+                ->pluck('user');
 
             $notification = (new SubmittedNotification($user, $post))->setSender($this->getSender($post));
 
@@ -69,7 +68,13 @@ class DispatchPostNotifications implements ShouldQueue
             $this->sendUserMentionedNotification($post, $user, $subscribers, $this->getSender($post));
         } elseif ($event->post->editor) {
             $user = $event->post->editor;
-            $subscribers = $post->subscribers()->with('user')->get()->pluck('user')->exceptUser($user);
+
+            $subscribers = $post
+                ->subscribers()
+                ->excludeBlocked($user->id)
+                ->with('user')
+                ->get()
+                ->pluck('user');
 
             $this->dispatcher->send($subscribers, new ChangedNotification($user, $post));
 
@@ -90,7 +95,7 @@ class DispatchPostNotifications implements ShouldQueue
 
         if (!empty($usersId)) {
             $this->dispatcher->send(
-                $this->user->excludeBlocked($post->user_id)->findMany($usersId)->exceptUser($user)->exceptUsers($subscribers),
+                $this->user->excludeBlocked($post->user_id)->findMany($usersId)->exceptUsers($subscribers),
                 (new UserMentionedNotification($user, $post))->setSender($senderName)
             );
         }
