@@ -40,10 +40,6 @@ jobs:
       - name: Run Dusk
         run: docker-compose exec -T --user=nginx:nginx php php artisan dusk
 
-      - name: Show logs
-        if: ${{ always() }}
-        run: docker-compose -f docker-compose.yaml -f docker-compose.testing.yaml logs websocket
-
       - uses: actions/upload-artifact@v2
         if: ${{ always() }}
         with:
