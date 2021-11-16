@@ -6,6 +6,7 @@ WORKDIR /app
 RUN chown -R nginx:nginx /app
 
 USER nginx
+RUN ls / -lsa
 
 COPY package.json yarn.lock babel.config.js .browserslistrc webpack.common.js webpack.dev.js webpack.prod.js tsconfig.json /app/
 RUN yarn install
@@ -16,6 +17,8 @@ COPY resources /app/resources
 RUN true
 COPY public /app/public
 RUN true
+
+RUN ls /app -lsa
 
 RUN yarn run prod
 
