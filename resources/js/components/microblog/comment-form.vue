@@ -7,7 +7,7 @@
         placeholder="Napisz komentarz... (Ctrl+Enter aby wysłać)"
         class="form-control"
         name="text"
-        ref="textarea"
+        ref="markdown"
         rows="1"
         v-model="microblog.text"
         :disabled="isProcessing"
@@ -40,7 +40,7 @@
   })
   export default class VueCommentForm extends Mixins(MicroblogFormMixin) {
     @Ref()
-    readonly textarea!: HTMLTextAreaElement;
+    readonly markdown!: HTMLTextAreaElement;
 
     saveComment() {
       this.save('microblogs/saveComment');
@@ -52,9 +52,9 @@
     }
 
     private insertAssetAtCaret(asset: Asset) {
-      new Textarea(this.textarea).insertAtCaret((IsImage(asset.name!) ? '!' : '') + '[' + asset.name + '](' + asset.url + ')', '', '');
+      new Textarea(this.markdown).insertAtCaret((IsImage(asset.name!) ? '!' : '') + '[' + asset.name + '](' + asset.url + ')', '', '');
 
-      this.textarea.dispatchEvent(new Event('input', {'bubbles': true}));
+      this.markdown.dispatchEvent(new Event('input', {'bubbles': true}));
     }
   }
 </script>

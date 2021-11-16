@@ -7,9 +7,11 @@ import {mapGetters} from "vuex";
 import axios from 'axios';
 import { default as LiveMixin } from './microblog/live';
 import VueModals from "@/plugins/modals";
+import VuePaste from '@/plugins/paste';
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 Vue.use(VueModals);
+Vue.use(VuePaste, {url: '/assets'});
 
 new Vue({
   el: '#js-microblog',
