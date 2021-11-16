@@ -37,7 +37,7 @@ class CommentController extends Controller
 
         $actor = new Stream_Actor($this->auth);
 
-        $this->transaction(function () use ($comment, $dispatcher, $actor) {
+        $this->transaction(function () use ($comment, $actor) {
             $comment->save();
             $target = $this->target($comment);
 
