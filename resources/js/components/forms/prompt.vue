@@ -38,7 +38,7 @@
     },
     computed: {
       isDropdownVisible() {
-        return this.$refs.dropdown.isDropdownVisible;
+        return this.$refs.dropdown?.isDropdownVisible;
       }
     },
     methods: {
