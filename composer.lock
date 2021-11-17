@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "74f9a2e5b613b44d4ac8df061a3dc334",
+    "content-hash": "c49e6e22ea1050e997489d8e710a083c",
     "packages": [
         {
             "name": "adam-boduch/laravel-grid",
@@ -6768,16 +6768,16 @@
         },
         {
             "name": "rawr/t-regx",
-            "version": "v0.13.8",
+            "version": "v0.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/T-Regx/T-Regx.git",
-                "reference": "c246a7163ab29e80a65e72a5e7109d8464400d3a"
+                "reference": "0d71199ee775149e96822678b5bb935dfdf1a020"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/T-Regx/T-Regx/zipball/c246a7163ab29e80a65e72a5e7109d8464400d3a",
-                "reference": "c246a7163ab29e80a65e72a5e7109d8464400d3a",
+                "url": "https://api.github.com/repos/T-Regx/T-Regx/zipball/0d71199ee775149e96822678b5bb935dfdf1a020",
+                "reference": "0d71199ee775149e96822678b5bb935dfdf1a020",
                 "shasum": ""
             },
             "require": {
@@ -6828,7 +6828,7 @@
             ],
             "support": {
                 "issues": "https://github.com/T-Regx/T-Regx/issues",
-                "source": "https://github.com/T-Regx/T-Regx/tree/v0.13.8"
+                "source": "https://github.com/T-Regx/T-Regx/tree/v0.17.0"
             },
             "funding": [
                 {
@@ -6836,7 +6836,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-09-24T19:57:00+00:00"
+            "time": "2021-10-27T17:34:30+00:00"
         },
         {
             "name": "rcrowe/twigbridge",

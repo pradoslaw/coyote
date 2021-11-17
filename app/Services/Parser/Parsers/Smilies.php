@@ -43,7 +43,6 @@ class Smilies extends Parser implements ParserInterface
 
         $text = Pattern::template('(?<=^|[\n \>]|\.)(@)')
             ->alteration(array_keys($this->smilies))
-            ->build()
             ->replace($text)
             ->callback(function (Detail $match) {
                 $smiley = $match->get(1);

@@ -8,6 +8,7 @@ use Coyote\Repositories\Contracts\FirewallRepositoryInterface;
 use Illuminate\Cache\Repository as Cache;
 use Coyote\Firewall;
 use Illuminate\Http\Request;
+use TRegx\CleanRegex\Pattern;
 
 class Rules
 {
@@ -69,7 +70,9 @@ class Rules
             return false;
         }
 
-        return preg_match('/^' . str_replace('\*', '[a-z0-9\:\.]+', preg_quote($ip)) . '$/', $this->request->ip());
+        return Pattern::template('^@$')
+            ->mask($ip, ['*' => '[a-z0-9\:\.]+'])
+            ->test($this->request->ip());
     }
 
     /**
