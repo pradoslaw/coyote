@@ -204,7 +204,7 @@
     wrap!: boolean;
 
     mounted() {
-      if (this.wrap && this.microblogText!.clientHeight > 300) {
+      if (this.wrap && this.microblogText.clientHeight > 300) {
         this.isWrapped = true;
       }
 
