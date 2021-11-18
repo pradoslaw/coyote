@@ -34,7 +34,7 @@ class PostCommentResource extends JsonResource
                 'created_at'    => $this->created_at->toIso8601String(),
                 'updated_at'    => $this->updated_at->toIso8601String(),
                 'user'          => new UserResource($this->user),
-                'url'           => UrlBuilder::topic($this->topic) . '?p=' . $this->post_id . '#comment-' . $this->id,
+                'url'           => UrlBuilder::topic($this->post->topic) . '?p=' . $this->post_id . '#comment-' . $this->id,
 
                 $this->mergeWhen($request->user(), function () use ($request) {
                     return ['editable' => $request->user()->can('update', [$this->resource, $this->forum])];

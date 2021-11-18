@@ -139,7 +139,7 @@ class PostResource extends JsonResource
     {
         $this->resource->comments->each(function (Comment $comment) {
             $comment->setRelation('forum', $this->forum);
-            $comment->setRelation('topic', $this->topic);
+            $comment->setRelation('post', $this->resource);
         });
     }
 }
