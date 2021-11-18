@@ -5,7 +5,7 @@
 
       <vue-username :user="comment.user" :owner="comment.user.id === topic.owner_id"></vue-username>
 
-      <a :href="`#comment-${comment.id}`"><vue-timeago :datetime="comment.created_at" class="text-muted small"></vue-timeago></a>
+      <a :href="comment.url"><vue-timeago :datetime="comment.created_at" class="text-muted small"></vue-timeago></a>
 
       <a v-if="comment.editable" @click="edit" href="javascript:" title="Edytuj ten komentarz" class="btn-comment">
         <i class="fas fa-pencil-alt"></i>

@@ -151,6 +151,7 @@ export interface PostComment {
   editable?: boolean;
   is_read?: boolean;
   is_editing? :boolean;
+  url: string;
 }
 
 export interface Post {
