@@ -13,7 +13,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @property Carbon $updated_at
  * @property User $user
  * @property \Coyote\Forum $forum
- * @property \Coyote\Topic $topic
+ * @property \Coyote\Post $post
  * @property int $user_id
  * @property int $post_id
  * @property string $text
