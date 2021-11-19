@@ -43,6 +43,8 @@ class PaymentRequest extends FormRequest
             'invoice.city' => ['bail', $priceRule, 'nullable', 'string', 'max:200'],
             'invoice.postal_code' => ['bail', $priceRule, 'nullable', 'string', 'max:30'],
             'invoice.country_id' => [
+                'bail',
+                $priceRule,
                 'nullable',
                 Rule::requiredIf($this->input('invoice.vat_id') !== null),
                 Rule::in(array_flip($codes))
