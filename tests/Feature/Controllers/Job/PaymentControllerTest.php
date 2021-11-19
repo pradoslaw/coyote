@@ -246,6 +246,45 @@ class PaymentControllerTest extends TestCase
         $this->assertEmpty($payment->invoice->number);
     }
 
+    public function testSubmitFormWithDiscountAndNoCountryId()
+    {
+        $faker = Factory::create();
+
+        /** @var Plan $plan */
+        $plan = Plan::where('name', 'Premium')->get()->first();
+
+        $payment = $this->job->getUnpaidPayment();
+        $payment->setRelation('plan', $plan);
+        $payment->save();
+
+        $coupon = Coupon::create(['amount' => $plan->price, 'code' => $faker->randomAscii]);
+
+        $response = $this->actingAs($this->job->user)->json(
+            'POST',
+            "/Praca/Payment/{$payment->id}",
+            [
+                'payment_method' => 'card',
+                'price' => 0,
+                'coupon' => $coupon->code,
+                'invoice' => [
+                    'name' => $this->faker->company,
+                    'vat_id' => '123123123',
+                    'address' => $this->faker->address,
+                    'city' => $this->faker->city,
+                    'postal_code' => $this->faker->postcode
+                ]
+            ]
+        );
+
+        $response->assertStatus(201);
+        $response->assertSeeText(UrlBuilder::job($this->job));
+
+        $payment->refresh();
+
+        $this->assertEquals($payment->invoice->grossPrice(), 0);
+        $this->assertEmpty($payment->invoice->number);
+    }
+
     public function testSubmitFormWithTransferMethod()
     {
         $payment = $this->job->getUnpaidPayment();

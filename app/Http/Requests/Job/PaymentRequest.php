@@ -46,7 +46,7 @@ class PaymentRequest extends FormRequest
                 'bail',
                 $priceRule,
                 'nullable',
-                Rule::requiredIf($this->input('invoice.vat_id') !== null),
+                Rule::requiredIf($this->input('invoice.vat_id') !== null && $price > 0),
                 Rule::in(array_flip($codes))
             ]
         ];
