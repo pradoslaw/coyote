@@ -61,8 +61,7 @@ jobs:
 
           # When the flag is set, command will not fail and just exit silently if no new commits for a given release have been found.
           ignore_empty: "true"
-          # Identifier that uniquely identifies the releases. Omit to auto-generate one.
-          version: ${GITHUB_RUN_ID}
+
           # Space-separated list of projects. Defaults to the env variable "SENTRY_PROJECT" if not provided.
           projects: backend
 
