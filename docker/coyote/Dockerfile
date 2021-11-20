@@ -15,6 +15,11 @@ RUN true
 
 RUN ls /app -lsa
 
+ARG FRONTEND_SENTRY_DSN
+ARG VAPID_PUBLIC_KEY
+ARG RELEASE
+ARG SENTRY_API_KEY
+
 RUN yarn run prod
 
 RUN rm -rf node_modules

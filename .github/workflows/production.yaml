@@ -26,7 +26,12 @@ jobs:
         run: ${{ secrets.ENABLE_PLUGIN }}
 
       - name: Build docker
-        run: docker build -t 4programmers/coyote:$GITHUB_SHA -t 4programmers/coyote:latest -f docker/coyote/Dockerfile .
+        run: >
+          docker build -t 4programmers/coyote:$GITHUB_SHA -t 4programmers/coyote:latest -f docker/coyote/Dockerfile \
+            --build-arg FRONTEND_SENTRY_DSN=${{ secrets.FRONTEND_SENTRY_DSN }} \
+            --build-arg VAPID_PUBLIC_KEY=${{ secrets.VAPID_PUBLIC_KEY }} \
+            --build-arg SENTRY_API_KEY=${{ secrets.SENTRY_API_KEY }} \
+            --build-arg RELEASE=$GITHUB_RUN_ID .
 
       - name: Push to registry
         run: docker push -a 4programmers/coyote

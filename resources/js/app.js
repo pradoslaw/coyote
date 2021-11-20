@@ -1,3 +1,4 @@
+import './sentry';
 import './store';
 import './components/scrolltop.js';
 import './components/breadcrumb.js';

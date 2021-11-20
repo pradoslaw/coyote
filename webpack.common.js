@@ -4,12 +4,13 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
-
+const Dotenv = require('dotenv-webpack');
 const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin');
 
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
+  devtool: 'source-map', // slower but better
   module: {
     rules: [
       {
@@ -187,7 +188,9 @@ module.exports = {
       }
     }),
 
+    new Dotenv(),
 
+    new webpack.EnvironmentPlugin(['FRONTEND_SENTRY_DSN', 'VAPID_PUBLIC_KEY'])
 
     // new BundleAnalyzerPlugin()
   ]
