@@ -51,5 +51,10 @@ r.resolve();
 require('./plugins/popover');
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js');
+  try {
+    navigator.serviceWorker.register('/sw.js');
+  }
+  catch (err) {
+    console.log(err);
+  }
 }
