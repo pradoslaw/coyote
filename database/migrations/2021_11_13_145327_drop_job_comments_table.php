@@ -15,7 +15,7 @@ class DropJobCommentsTable extends Migration
      */
     public function up()
     {
-        $comments = $this->db->table('job_comments')->get();
+        $comments = $this->db->table('job_comments')->orderBy('id')->get();
 
         foreach ($comments as $comment) {
             if (!$comment->user_id) {
