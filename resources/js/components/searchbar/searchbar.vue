@@ -301,7 +301,7 @@
       });
 
       return Object.values(result).map(category => {
-        category.children.map(child => Object.assign(child, { index: counter++ }));
+        category.children.forEach(child => Object.assign(child, { index: counter++ }));
 
         return category;
       });
