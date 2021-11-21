@@ -193,7 +193,7 @@ module.exports = {
 
     new webpack.EnvironmentPlugin(['FRONTEND_SENTRY_DSN', 'VAPID_PUBLIC_KEY'])
 
-    // new BundleAnalyzerPlugin()
+    // ,new BundleAnalyzerPlugin({analyzerPort: 3075})
   ]
 };
 
