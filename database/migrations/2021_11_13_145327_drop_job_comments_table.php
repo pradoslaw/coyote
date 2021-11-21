@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 class DropJobCommentsTable extends Migration
 {
@@ -15,21 +14,6 @@ class DropJobCommentsTable extends Migration
      */
     public function up()
     {
-        $comments = $this->db->table('job_comments')->orderBy('id')->get();
-
-        foreach ($comments as $comment) {
-            if (!$comment->user_id) {
-                continue;
-            }
-
-            $data = array_except((array) $comment, ['job_id']);
-
-            $this->db->table('comments')->insert(array_merge($data, [
-                'resource_id' => $comment->job_id,
-                'resource_type' => \Coyote\Job::class
-            ]));
-        }
-
         $this->schema->drop('job_comments');
     }
 
