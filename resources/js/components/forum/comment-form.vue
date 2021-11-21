@@ -31,7 +31,7 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from "vue-class-component";
-  import {Mixins, Prop, Ref} from "vue-property-decorator";
+  import { Prop, Ref } from "vue-property-decorator";
   import store from "../../store";
   import VueAutosize from '../../plugins/autosize';
   import VuePrompt from '../forms/prompt.vue';

@@ -9,9 +9,9 @@
   import Component from "vue-class-component";
   import { mixin as clickaway } from 'vue-clickaway';
 
+  // @ts-ignore
   @Component({
-    name: 'dropdown-menu',
-    mixins: [clickaway]
+    mixins: [ clickaway ]
   })
   export default class VueDropdownMenu extends Vue {
     public isDropdownVisible = false;
@@ -22,7 +22,7 @@
       }
     }
 
-    toggle(): void {
+    toggle() {
       this.isDropdownVisible = !this.isDropdownVisible;
     }
   }

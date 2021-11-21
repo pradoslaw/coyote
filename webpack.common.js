@@ -1,4 +1,4 @@
-var path = require('path');
+const path = require('path');
 const webpack = require('webpack');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -64,7 +64,7 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            "cacheDirectory": true
+            cacheDirectory: true
           }
         }
       }
@@ -76,9 +76,9 @@ module.exports = {
     chunkFilename: 'js/[name]-[contenthash].js',
     publicPath: '/'
   },
-  externals: {
-    vue: "Vue"
-  },
+  // externals: {
+  //   vue: "Vue"
+  // },
   optimization: {
     runtimeChunk: "single",
     splitChunks: {
@@ -116,7 +116,8 @@ module.exports = {
     extensions: [ '.ts', '.tsx', '.js', '.vue' ],
 
     alias: {
-      '@': path.join(__dirname, 'resources/js')
+      '@': path.join(__dirname, 'resources/js'),
+      vue: 'vue/dist/vue.js'
     }
   },
   context: path.join(__dirname, 'resources'),

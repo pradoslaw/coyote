@@ -278,8 +278,8 @@
   import Vue from 'vue';
   import { Prop, Ref } from "vue-property-decorator";
   import Component from "vue-class-component";
-  import { Post, Topic, User, Flag } from '@/types/models';
-  import VueClipboard from '../../plugins/clipboard';
+  import { Post, Topic, User } from '@/types/models';
+  import VueClipboard from '@/plugins/clipboard';
   import VueAvatar from '../avatar.vue';
   import VueUserName from "../user-name.vue";
   import VueComment from './comment.vue';
@@ -294,8 +294,7 @@
   import formatDistanceToNow from 'date-fns/formatDistanceToNow';
   import pl from 'date-fns/locale/pl';
   import { default as mixins } from '../mixins/user';
-  import VueNotifications from 'vue-notification';
-  import store from "../../store";
+  import store from "@/store";
 
   Vue.use(VueClipboard);
 

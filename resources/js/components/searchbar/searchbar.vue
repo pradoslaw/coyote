@@ -90,16 +90,16 @@
   import Component from 'vue-class-component';
   import { Prop, Ref, Watch } from 'vue-property-decorator';
   import { mapGetters } from "vuex";
-  import VueTopicDecorator from './decorators/topic';
+  import VueTopicDecorator from './decorators/topic.vue';
   import VueJobDecorator from './decorators/job';
   import VueMicroblogDecorator from './decorators/microblog';
   import VueWikiDecorator from './decorators/wiki';
-  import VueUserDecorator from './decorators/user';
+  import VueUserDecorator from './decorators/user.vue';
   import { HitCategory, Contexts, Models } from '@/types/search';
 
+  // @ts-ignore
   @Component({
-    name: 'app',
-    mixins: [clickaway],
+    mixins: [ clickaway ],
     store,
     computed: mapGetters('user', ['isAuthorized']),
     components: {

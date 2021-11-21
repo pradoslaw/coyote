@@ -107,7 +107,7 @@
   import Vue from 'vue';
   import VueAvatar from '../avatar.vue';
   import VueUserName from '../user-name.vue';
-  import VueTimeago from '../../plugins/timeago';
+  import VueTimeago from '@/plugins/timeago';
   import VueCommentForm from "./comment-form.vue";
   import VueFlag from '../flags/flag.vue';
   import { default as mixins } from '../mixins/user';
@@ -115,10 +115,10 @@
   import {mapActions, mapGetters, mapState} from "vuex";
   import Component from "vue-class-component";
   import { mixin as clickaway } from "vue-clickaway";
-  import store from "../../store";
+  import store from "@/store";
   import { Microblog } from "@/types/models";
   import { MicroblogMixin } from "../mixins/microblog";
-  import declination from '../../libs/declination';
+  import declination from '@/libs/declination';
 
   Vue.use(VueTimeago);
 
