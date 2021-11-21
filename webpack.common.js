@@ -117,7 +117,7 @@ module.exports = {
 
     alias: {
       '@': path.join(__dirname, 'resources/js'),
-      vue: 'vue/dist/vue.js'
+      vue: 'vue/dist/vue.esm.js'
     }
   },
   context: path.join(__dirname, 'resources'),
