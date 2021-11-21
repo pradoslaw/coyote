@@ -37,8 +37,9 @@
     </ul>
 
     <input
-      v-model="searchText"
+      :value="searchText"
       :placeholder="placeholder"
+      @input="searchText = $event.target.value"
       @keyup.space="setTag"
       @keydown.enter="selectTag"
       @keyup.esc="dropdown.hideDropdown"

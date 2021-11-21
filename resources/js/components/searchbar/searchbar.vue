@@ -10,7 +10,7 @@
           ref="input"
           @focus="showDropdown"
           @keydown.esc.prevent="hideDropdown"
-          @keyup="completion"
+          @input="completion"
           @keyup.up.prevent="up"
           @keyup.down.prevent="down"
           @keydown.enter.prevent="changeUrl"
