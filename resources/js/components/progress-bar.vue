@@ -1,10 +1,9 @@
 <template>
-  <div class="progress-bar-dotted" @mouseleave="hover = null">
+  <div class="progress-bar-dotted">
     <span
       v-for="i in max"
       :aria-label="tooltips[i - 1]"
       :class="{'editable': editable}"
-      @mouseover="setHover(i)"
       @click="setValue(i)"
       data-balloon-pos="down"
     >
@@ -16,15 +15,13 @@
 <script lang="ts">
   import Vue from 'vue';
   import Component from "vue-class-component";
-  import {Emit, Prop, PropSync} from "vue-property-decorator";
+  import { Prop } from "vue-property-decorator";
   import { default as mixin } from '@/components/mixins/form.js';
 
   @Component({
     mixins: [ mixin ]
   })
   export default class VueProgressBar extends Vue {
-    private hover: number | null = null;
-
     @Prop()
     readonly value!: number;
 
@@ -36,14 +33,6 @@
 
     @Prop({default: () => ['podstawy', 'średnio zaawansowany', 'zaawansowany']})
     readonly tooltips!: string[];
-
-    setHover(value: number) {
-      if (!this.editable) {
-        return;
-      }
-
-      this.hover = value;
-    }
 
     setValue(value: number) {
       if (!this.editable) {

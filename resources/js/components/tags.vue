@@ -13,7 +13,7 @@
         v-if="editable || tag.priority"
         :editable="editable"
         v-model="tag.priority"
-        @input="emitChange(tag, ...arguments)"
+        @click="setPriority(tag, ...arguments)"
       ></vue-progress-bar>
     </li>
   </ul>
@@ -37,7 +37,9 @@
     readonly editable!: boolean;
 
     @Emit('change')
-    emitChange(tag: Tag) {
+    setPriority(tag: Tag, priority: number) {
+      tag.priority = priority;
+
       return tag;
     }
 
