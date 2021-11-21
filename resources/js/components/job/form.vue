@@ -223,6 +223,7 @@
         deep: true
       }
     },
+    inject: []
   })
   export default class VueForm extends Vue {
     @Prop(Object)

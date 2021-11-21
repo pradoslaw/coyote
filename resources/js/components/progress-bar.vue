@@ -34,7 +34,7 @@
     @Prop({default: 3})
     readonly max!: number;
 
-    @Prop({default: ['podstawy', 'średnio zaawansowany', 'zaawansowany']})
+    @Prop({default: () => ['podstawy', 'średnio zaawansowany', 'zaawansowany']})
     readonly tooltips!: string[];
 
     setHover(value: number) {

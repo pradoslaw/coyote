@@ -1,4 +1,4 @@
-import Router from '../libs/router';
+import Router from '@/libs/router';
 import Vue from "vue";
 import VueNotifications from "vue-notification";
 import {default as axiosErrorHandler} from "@/libs/axios-error-handler";
