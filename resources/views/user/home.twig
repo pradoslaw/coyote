@@ -10,6 +10,7 @@
             <div id="js-user" class="d-none d-sm-block mr-3">
               <vue-thumbnail
                 :url="url"
+                :only-image="true"
                 upload-url="{{ route('user.photo.upload') }}"
                 @upload="setPhoto"
                 @delete="deletePhoto"

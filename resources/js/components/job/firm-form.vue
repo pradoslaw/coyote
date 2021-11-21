@@ -49,6 +49,7 @@
           <div class="col-sm-2">
             <vue-thumbnail
               :url="firm.logo"
+              :only-image="true"
               name="logo"
               upload-url="/Firma/Logo"
               @upload="addLogo"
@@ -77,6 +78,7 @@
           <div class="col-sm-2" v-for="photo in gallery">
             <vue-thumbnail
               :url="photo.url"
+              :only-image="true"
               @upload="addPhoto"
               @delete="removePhoto">
             </vue-thumbnail>

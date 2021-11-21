@@ -23,7 +23,7 @@
         <i class="fas fa-spinner fa-spin fa-2x"></i>
       </div>
 
-      <input v-show="!url && !isProcessing" @change="upload" class="thumbnail-mask" type="file" ref="input" >
+      <input v-show="!url && !isProcessing" @change="upload" :accept="accept" class="thumbnail-mask" type="file" ref="input" >
     </div>
   </div>
 </template>
@@ -49,6 +49,9 @@ export default class VueThumbnail extends Vue {
   @Prop({default: 'photo'})
   readonly name!: string;
 
+  @Prop({default: false})
+  readonly onlyImage!: boolean;
+
   isProcessing = false;
 
   upload() {
@@ -57,7 +60,7 @@ export default class VueThumbnail extends Vue {
 
     this.isProcessing = true;
 
-    let config = {
+    const config = {
       onUploadProgress: event =>  {
         this.$emit('progress', Math.round((event.loaded * 100) / event.total));
       }
@@ -85,6 +88,10 @@ export default class VueThumbnail extends Vue {
 
   private get isImage() {
     return IsImage(this.url!);
+  }
+
+  get accept() {
+    return this.onlyImage ? 'image/jpeg,image/png,image/gif' : '';
   }
 }
 
