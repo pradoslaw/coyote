@@ -5,6 +5,7 @@ const path = require('path');
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 const PurgecssPlugin = require('purgecss-webpack-plugin');
+const SentryPlugin = require("@sentry/webpack-plugin");
 
 const plugins = [
   new PurgecssPlugin({
@@ -85,6 +86,18 @@ const plugins = [
     }
   })
 ];
+
+if (process.env.RELEASE) {
+  plugins.push(new SentryPlugin({
+    include: "./public",
+    authToken: process.env.SENTRY_API_KEY,
+    release: process.env.RELEASE,
+    ignore: ["node_modules"],
+    debug: true,
+    org: "coyote",
+    project: "frontend"
+  }));
+}
 
 module.exports = merge(common, {
   mode: "production",
