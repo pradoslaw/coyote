@@ -93,7 +93,6 @@ if (process.env.RELEASE) {
     authToken: process.env.SENTRY_API_KEY,
     release: process.env.RELEASE,
     ignore: ["node_modules"],
-    debug: true,
     org: "coyote",
     project: "frontend"
   }));

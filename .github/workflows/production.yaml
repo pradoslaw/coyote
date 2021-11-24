@@ -49,23 +49,6 @@ jobs:
             sudo docker service update --image 4programmers/coyote:$GITHUB_SHA coyote_worker
             sudo docker service update --image 4programmers/coyote:$GITHUB_SHA coyote_cron
 
-#      - name: Sentry Release Backend
-#        uses: getsentry/action-release@v1.1.6
-#        env:
-#          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-#          SENTRY_ORG: coyote
-#          SENTRY_PROJECT: backend
-#        with:
-#          # Set the environment for this release. E.g. "production" or "staging". Omit to skip adding deploy to release.
-#          environment: production
-#
-#          # When the flag is set, command will not fail and just exit silently if no new commits for a given release have been found.
-#          ignore_empty: "true"
-#
-#          # Space-separated list of projects. Defaults to the env variable "SENTRY_PROJECT" if not provided.
-#          projects: backend
-
-
       - name: Sentry Release Frontend
         uses: getsentry/action-release@v1.1.6
         env:
@@ -75,11 +58,6 @@ jobs:
         with:
           # Set the environment for this release. E.g. "production" or "staging". Omit to skip adding deploy to release.
           environment: production
-
-          sourcemaps: "./public/js"
-
           # When the flag is set, command will not fail and just exit silently if no new commits for a given release have been found.
           ignore_empty: "true"
-
-          # Space-separated list of projects. Defaults to the env variable "SENTRY_PROJECT" if not provided.
-          projects: frontend backend
+          projects: backend
