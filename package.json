@@ -12,6 +12,7 @@
     "@fortawesome/fontawesome-free": "^5.11.2",
     "@popperjs/core": "^2.10.2",
     "@sentry/browser": "^6.15.0",
+    "@sentry/webpack-plugin": "^1.18.3",
     "@tinymce/tinymce-vue": "^3.0.1",
     "@types/vue-clickaway": "^2.2.0",
     "autosize": "^4.0.2",
