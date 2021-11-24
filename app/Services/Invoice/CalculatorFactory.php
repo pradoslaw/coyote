@@ -21,10 +21,8 @@ class CalculatorFactory
 
     private static function vat(Payment $payment): float
     {
-        if (!empty($payment->job->firm->country_id)) {
-            return $payment->job->firm->country->vat_rate;
-        }
+        $firm = $payment->job->firm;
 
-        return $payment->plan->vat_rate;
+        return $firm?->country_id && $firm->vat_id ? $firm->country->vat_rate : $payment->plan->vat_rate;
     }
 }

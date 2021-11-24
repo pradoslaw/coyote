@@ -85,7 +85,7 @@ class CommentControllerTest extends TestCase
 
         $response = $this
             ->actingAs($this->user)
-            ->json('POST', "/Forum/Comment", ['text' => $text = $this->faker->realText(), 'post_id' => $this->post->id]);
+            ->json('POST', "/Forum/Comment", ['text' => $this->faker->realText(), 'post_id' => $this->post->id]);
 
         $response->assertStatus(422);
         $response->assertJsonFragment([

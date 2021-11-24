@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c49e6e22ea1050e997489d8e710a083c",
+    "content-hash": "dd2a05868001478c807faca0c829ee94",
     "packages": [
         {
             "name": "adam-boduch/laravel-grid",
@@ -417,6 +417,70 @@
                 }
             ],
             "time": "2020-10-02T12:38:20+00:00"
+        },
+        {
+            "name": "ddeboer/vatin",
+            "version": "2.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ddeboer/vatin.git",
+                "reference": "211d67253eec9105f151793b082a287147917540"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ddeboer/vatin/zipball/211d67253eec9105f151793b082a287147917540",
+                "reference": "211d67253eec9105f151793b082a287147917540",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0"
+            },
+            "require-dev": {
+                "ext-soap": "*",
+                "phpunit/phpunit": "^5.7 || ^6.5"
+            },
+            "suggest": {
+                "ext-soap": "Required if you want to check the VAT number via VIES"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ddeboer\\Vatin\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "David de Boer",
+                    "email": "david@ddeboer.nl",
+                    "homepage": "https://github.com/ddeboer"
+                },
+                {
+                    "name": "Community contributions",
+                    "homepage": "https://github.com/ddeboer/vatin/contributors"
+                }
+            ],
+            "description": "Validate VAT identification numbers",
+            "keywords": [
+                "btw",
+                "tax",
+                "vat",
+                "vies"
+            ],
+            "support": {
+                "issues": "https://github.com/ddeboer/vatin/issues",
+                "source": "https://github.com/ddeboer/vatin/tree/2.2.2"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/ddeboer",
+                    "type": "github"
+                }
+            ],
+            "time": "2020-12-22T11:40:16+00:00"
         },
         {
             "name": "defuse/php-encryption",

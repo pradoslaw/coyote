@@ -17,6 +17,7 @@
         "ext-json": "*",
         "adam-boduch/laravel-grid": "^2.2",
         "barryvdh/laravel-debugbar": "^v3.6",
+        "ddeboer/vatin": "^2.2",
         "doctrine/dbal": "^2.5",
         "elasticsearch/elasticsearch": "~6.7",
         "erusev/parsedown": "^1.7",

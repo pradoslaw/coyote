@@ -25,6 +25,10 @@ $factory->afterCreating(\Coyote\Job::class, function (\Coyote\Job $job, $faker) 
     ]));
 });
 
+$factory->afterMakingState(\Coyote\Job::class, 'firm', function (\Coyote\Job $job, Faker $faker) {
+    $job->firm()->associate(factory(\Coyote\Firm::class)->make(['user_id' => $job->user_id]));
+});
+
 $factory->afterCreatingState(\Coyote\Job::class, 'firm', function (\Coyote\Job $job, Faker $faker) {
     $job->firm()->associate(factory(\Coyote\Firm::class)->create(['user_id' => $job->user_id]));
 });
