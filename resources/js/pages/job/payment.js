@@ -7,6 +7,8 @@ import VueCheckbox from '@/components/forms/checkbox.vue';
 import VueButton from '@/components/forms/button.vue';
 import axios from 'axios';
 
+const VAT_RATE = 1.23;
+
 new Vue({
   el: '#js-payment',
   delimiters: ['${', '}'],
@@ -52,7 +54,9 @@ new Vue({
   methods: {
     calculate() {
       // if VAT ID is empty we must add VAT
-      this.vatRate = this.vatRates[this.form.invoice.country_id];
+      this.vatRate = this.form.invoice.vat_id.trim() !== ''
+        ? (this.vatRates[this.form.invoice.country_id] ?? VAT_RATE)
+          : VAT_RATE;
     },
 
     cardPayment({ token, success_url }) {
@@ -152,6 +156,10 @@ new Vue({
 
     'form.invoice.country_id': function() {
       this.calculate();
-    }
+    },
+
+    'form.invoice.vat_id': function() {
+      this.calculate();
+    },
   }
 });

@@ -133,7 +133,10 @@ class PaymentController extends Controller
         $calculator = CalculatorFactory::payment($payment);
         $calculator->setCoupon($coupon);
 
-        $calculator->setCountry($this->country->find($request->input('invoice.country_id')));
+        $country = $this->country->find($request->input('invoice.country_id'));
+
+        $calculator->vatRate = $request->filled('invoice.vat_id') ? ($country->vat_rate ?? $payment->plan->vat_rate) : $payment->plan->vat_rate;
+
         $invoice = $request->input('invoice', []);
 
         if ($payment->job->firm_id) {
@@ -204,13 +207,8 @@ class PaymentController extends Controller
         Stripe::setApiKey(config('services.stripe.secret'));
 
         $payload = @file_get_contents('php://input');
-        $event = null;
 
-        try {
-            $event = Webhook::constructEvent($payload, $_SERVER['HTTP_STRIPE_SIGNATURE'], config('services.stripe.endpoint_secret'));
-        } catch (\UnexpectedValueException | SignatureVerificationException $e) {
-            throw $e;
-        }
+        $event = Webhook::constructEvent($payload, $_SERVER['HTTP_STRIPE_SIGNATURE'], config('services.stripe.endpoint_secret'));
 
         if ($event->type !== 'payment_intent.succeeded') {
             return;

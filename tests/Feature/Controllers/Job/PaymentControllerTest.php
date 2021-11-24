@@ -335,4 +335,30 @@ class PaymentControllerTest extends TestCase
         $this->assertEquals($payment->invoice->country_id, $countryId);
         $this->assertEquals($payment->invoice->grossPrice(), $this->job->plan->price);
     }
+
+    public function testSubmitFormToForeignCitizen()
+    {
+        $payment = $this->job->getUnpaidPayment();
+
+        $this->actingAs($this->job->user)->json(
+            'POST',
+            "/Praca/Payment/{$payment->id}",
+            [
+                'payment_method' => 'card',
+                'price' => $payment->plan->gross_price,
+                'invoice' => [
+                    'name' => $this->faker->company,
+                    'country_id' => $countryId = 1,
+                    'address' => $this->faker->address,
+                    'city' => $this->faker->city,
+                    'postal_code' => $this->faker->postcode
+                ]
+            ]
+        );
+
+        $payment->refresh();
+
+        $this->assertEquals($payment->invoice->country_id, $countryId);
+        $this->assertEquals($payment->invoice->grossPrice(), $this->job->plan->price * 1.23);
+    }
 }
