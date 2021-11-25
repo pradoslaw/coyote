@@ -23,6 +23,6 @@ class CalculatorFactory
     {
         $firm = $payment->job->firm;
 
-        return $firm?->country_id && $firm->vat_id ? $firm->country->vat_rate : $payment->plan->vat_rate;
+        return (new VatRateCalculator())->vatRate($firm?->country, $firm->vat_id);
     }
 }

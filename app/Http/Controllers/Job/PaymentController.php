@@ -13,6 +13,7 @@ use Coyote\Repositories\Contracts\CountryRepositoryInterface as CountryRepositor
 use Coyote\Repositories\Contracts\CouponRepositoryInterface as CouponRepository;
 use Coyote\Repositories\Contracts\PaymentRepositoryInterface as PaymentRepository;
 use Coyote\Services\Invoice\CalculatorFactory;
+use Coyote\Services\Invoice\VatRateCalculator;
 use Coyote\Services\UrlBuilder;
 use Coyote\Services\Invoice\Generator as InvoiceGenerator;
 use Illuminate\Database\Connection as Db;
@@ -135,7 +136,8 @@ class PaymentController extends Controller
 
         $country = $this->country->find($request->input('invoice.country_id'));
 
-        $calculator->vatRate = $request->filled('invoice.vat_id') ? ($country->vat_rate ?? $payment->plan->vat_rate) : $payment->plan->vat_rate;
+        $vatRateCalculator = new VatRateCalculator();
+        $calculator->vatRate = $vatRateCalculator->vatRate($country, $request->input('invoice.vat_id'));
 
         $invoice = $request->input('invoice', []);
 
