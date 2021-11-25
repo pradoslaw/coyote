@@ -128,7 +128,7 @@ class PaymentController extends Controller
         Stripe::setApiKey(config('services.stripe.secret'));
 
         $coupon = $this->coupon->findBy('code', $request->input('coupon'));
-        $payment->coupon_id = $coupon->id ?? null;
+        $payment->coupon_id = $coupon?->id;
 
         $calculator = CalculatorFactory::payment($payment);
         $calculator->setCoupon($coupon);
