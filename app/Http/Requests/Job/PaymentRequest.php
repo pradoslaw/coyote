@@ -3,6 +3,7 @@
 namespace Coyote\Http\Requests\Job;
 
 use Coyote\Repositories\Contracts\CountryRepositoryInterface as CountryRepository;
+use Coyote\Rules\VatIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -25,9 +26,10 @@ class PaymentRequest extends FormRequest
     public function rules(CountryRepository $country)
     {
         $codes = $country->pluck('code', 'id');
+        $code = $codes[$this->input('invoice.country_id')] ?? '';
 
         $price = $this->input('price');
-        $priceRule = Rule::requiredIf(fn () => $price > 0);
+        $priceRule = Rule::requiredIf($price > 0);
 
         return [
             'payment_method' => 'required|in:card,p24',
@@ -38,7 +40,12 @@ class PaymentRequest extends FormRequest
             ],
 
             'invoice.name' => ['bail', $priceRule, 'nullable', 'string', 'max:200'],
-            'invoice.vat_id' => 'nullable|string|max:20',
+            'invoice.vat_id' => [
+                'nullable',
+                'string',
+                'max:20',
+                new VatIdRule($code)
+            ],
             'invoice.address' => ['bail', $priceRule, 'nullable', 'string', 'max:200'],
             'invoice.city' => ['bail', $priceRule, 'nullable', 'string', 'max:200'],
             'invoice.postal_code' => ['bail', $priceRule, 'nullable', 'string', 'max:30'],
