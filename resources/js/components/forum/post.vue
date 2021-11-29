@@ -104,7 +104,7 @@
           </template>
         </div>
 
-        <div v-if="!post.is_editing" class="col-12 col-lg-10">
+        <div v-show="!post.is_editing" class="col-12 col-lg-10">
           <vue-flag v-for="flag in flags" :key="flag.id" :flag.sync="flag"></vue-flag>
 
           <div class="post-vote">
@@ -190,7 +190,7 @@
         </div>
 
         <vue-form
-          v-else
+          v-if="post.is_editing"
           ref="form"
           class="col-12 col-lg-10 mt-2 mb-2"
           :post="post"
@@ -436,7 +436,7 @@
     }
 
     get totalComments() {
-      return this.post.comments_count! - Object.keys(this.post.comments).length;
+      return this.post.comments_count - Object.keys(this.post.comments).length;
     }
 
     get flags() {
