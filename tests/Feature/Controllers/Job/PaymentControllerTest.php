@@ -116,7 +116,7 @@ class PaymentControllerTest extends TestCase
                 'price' => $payment->plan->gross_price,
                 'invoice' => [
                     'name' => $name = $faker->company,
-                    'vat_id' => $vat = '123123123',
+                    'vat_id' => $vat = '8943139460',
                     'country_id' => $countryId = 14,
                     'address' => $address = $faker->address,
                     'city' => $city = $faker->city,
@@ -160,7 +160,7 @@ class PaymentControllerTest extends TestCase
                 'price' => $payment->plan->gross_price,
                 'invoice' => [
                     'name' => $firm->name,
-                    'vat_id' => $vat = '123123123',
+                    'vat_id' => $vat = '8943139460',
                     'country_id' => $countryId = 14,
                     'address' => $firm->street,
                     'city' => $firm->city,
@@ -199,8 +199,8 @@ class PaymentControllerTest extends TestCase
                 'coupon' => $coupon->code,
                 'invoice' => [
                     'name' => $this->faker->company,
-                    'vat_id' => $vat = '123123123',
-                    'country_id' => $countryId = 14,
+                    'vat_id' => '8943139460',
+                    'country_id' => 14,
                     'address' => $this->faker->address,
                     'city' => $this->faker->city,
                     'postal_code' => $postalCode = $this->faker->postcode
@@ -297,7 +297,7 @@ class PaymentControllerTest extends TestCase
                 'price' => $payment->plan->gross_price,
                 'invoice' => [
                     'name' => $this->faker->company,
-                    'vat_id' => '123123123',
+                    'vat_id' => '8943139460',
                     'country_id' => 14,
                     'address' => $this->faker->address,
                     'city' => $this->faker->city,
@@ -313,7 +313,9 @@ class PaymentControllerTest extends TestCase
     {
         $payment = $this->job->getUnpaidPayment();
 
-        $this->actingAs($this->job->user)->json(
+        $this->assertGreaterThan(0, $payment->plan->gross_price);
+
+        $response = $this->actingAs($this->job->user)->json(
             'POST',
             "/Praca/Payment/{$payment->id}",
             [
@@ -321,7 +323,7 @@ class PaymentControllerTest extends TestCase
                 'price' => $payment->plan->gross_price,
                 'invoice' => [
                     'name' => $this->faker->company,
-                    'vat_id' => '123123123',
+                    'vat_id' => 'U12345678',
                     'country_id' => $countryId = 1,
                     'address' => $this->faker->address,
                     'city' => $this->faker->city,
@@ -329,6 +331,8 @@ class PaymentControllerTest extends TestCase
                 ]
             ]
         );
+
+        $response->assertStatus(200);
 
         $payment->refresh();
 
