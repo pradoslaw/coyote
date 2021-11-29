@@ -57,8 +57,8 @@ class PaymentTest extends DuskTestCase
         $job = factory(Job::class)->create(['is_publish' => false]);
         $faker = Factory::create();
 
-        $country = Country::first();
-        $firm = factory(Firm::class)->create(['vat_id' => '123123123', 'country_id' => $country->id, 'user_id' => $job->user_id]);
+        $country = Country::where('name', 'Polska')->first();
+        $firm = factory(Firm::class)->create(['vat_id' => '8943139460', 'country_id' => $country->id, 'user_id' => $job->user_id]);
 
         $job->firm_id = $firm->id;
         $job->save();
