@@ -93,6 +93,4 @@ RUN apt-get update -yqq && apt-get install -y yarn
 ADD ./docker/php/entrypoint.sh /entrypoint.sh
 RUN chmod 755 /entrypoint.sh
 
-USER nginx
-
 CMD ["/entrypoint.sh"]
