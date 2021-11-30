@@ -31,7 +31,7 @@ class PaymentRequest extends FormRequest
         $price = $this->input('price');
         $priceRule = Rule::requiredIf($price > 0);
 
-        return [
+        $rules = [
             'payment_method' => 'required|in:card,p24',
             'price' => 'required|numeric',
             'coupon' => [
@@ -41,10 +41,11 @@ class PaymentRequest extends FormRequest
 
             'invoice.name' => ['bail', $priceRule, 'nullable', 'string', 'max:200'],
             'invoice.vat_id' => [
+                'bail',
                 'nullable',
                 'string',
                 'max:20',
-                new VatIdRule($code)
+
             ],
             'invoice.address' => ['bail', $priceRule, 'nullable', 'string', 'max:200'],
             'invoice.city' => ['bail', $priceRule, 'nullable', 'string', 'max:200'],
@@ -57,5 +58,11 @@ class PaymentRequest extends FormRequest
                 Rule::in(array_flip($codes))
             ]
         ];
+
+        if ($price > 0) {
+            $rules['invoice.vat_id'][] = new VatIdRule($code);
+        }
+
+        return $rules;
     }
 }

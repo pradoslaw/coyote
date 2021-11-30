@@ -285,6 +285,142 @@ class PaymentControllerTest extends TestCase
         $this->assertEmpty($payment->invoice->number);
     }
 
+    public function testSubmitFreeOfferWithoutVatId()
+    {
+        /** @var Plan $plan */
+        $plan = Plan::where('name', 'Standard')->get()->first();
+
+        $payment = $this->job->getUnpaidPayment();
+        $payment->setRelation('plan', $plan);
+        $payment->save();
+
+        $response = $this->actingAs($this->job->user)->json(
+            'POST',
+            "/Praca/Payment/{$payment->id}",
+            [
+                'payment_method' => 'card',
+                'price' => 0,
+                'invoice' => [
+                    'name' => $this->faker->company,
+                    'address' => $this->faker->address,
+                    'city' => $this->faker->city,
+                    'postal_code' => $this->faker->postcode
+                ]
+            ]
+        );
+
+        $response->assertStatus(201);
+        $response->assertSeeText(UrlBuilder::job($this->job));
+
+        $payment->refresh();
+
+        $this->assertEquals($payment->invoice->grossPrice(), 0);
+        $this->assertEmpty($payment->invoice->number);
+    }
+
+    public function testSubmitFreeOfferWithoutCountryId()
+    {
+        /** @var Plan $plan */
+        $plan = Plan::where('name', 'Standard')->get()->first();
+
+        $payment = $this->job->getUnpaidPayment();
+        $payment->setRelation('plan', $plan);
+        $payment->save();
+
+        $response = $this->actingAs($this->job->user)->json(
+            'POST',
+            "/Praca/Payment/{$payment->id}",
+            [
+                'payment_method' => 'card',
+                'price' => 0,
+                'invoice' => [
+                    'name' => $this->faker->company,
+                    'address' => $this->faker->address,
+                    'city' => $this->faker->city,
+                    'postal_code' => $this->faker->postcode,
+                    'vat_id' => '8943139460'
+                ]
+            ]
+        );
+
+        $response->assertStatus(201);
+        $response->assertSeeText(UrlBuilder::job($this->job));
+
+        $payment->refresh();
+
+        $this->assertEquals($payment->invoice->grossPrice(), 0);
+        $this->assertEmpty($payment->invoice->number);
+    }
+
+    public function testSubmitFreeOfferWithoutValidVatId()
+    {
+        /** @var Plan $plan */
+        $plan = Plan::where('name', 'Standard')->get()->first();
+
+        $payment = $this->job->getUnpaidPayment();
+        $payment->setRelation('plan', $plan);
+        $payment->save();
+
+        $response = $this->actingAs($this->job->user)->json(
+            'POST',
+            "/Praca/Payment/{$payment->id}",
+            [
+                'payment_method' => 'card',
+                'price' => 0,
+                'invoice' => [
+                    'name' => $this->faker->company,
+                    'address' => $this->faker->address,
+                    'city' => $this->faker->city,
+                    'postal_code' => $this->faker->postcode,
+                    'vat_id' => '12312312'
+                ]
+            ]
+        );
+
+        $response->assertStatus(201);
+        $response->assertSeeText(UrlBuilder::job($this->job));
+
+        $payment->refresh();
+
+        $this->assertEquals($payment->invoice->grossPrice(), 0);
+        $this->assertEmpty($payment->invoice->number);
+    }
+
+    public function testSubmitFreeOfferWithoutValidVatIdAndCountryCode()
+    {
+        /** @var Plan $plan */
+        $plan = Plan::where('name', 'Standard')->get()->first();
+
+        $payment = $this->job->getUnpaidPayment();
+        $payment->setRelation('plan', $plan);
+        $payment->save();
+
+        $response = $this->actingAs($this->job->user)->json(
+            'POST',
+            "/Praca/Payment/{$payment->id}",
+            [
+                'payment_method' => 'card',
+                'price' => 0,
+                'invoice' => [
+                    'name' => $this->faker->company,
+                    'address' => $this->faker->address,
+                    'city' => $this->faker->city,
+                    'postal_code' => $this->faker->postcode,
+                    'vat_id' => '12312312',
+                    'country_id' => 14
+                ]
+            ]
+        );
+
+        $response->assertStatus(201);
+        $response->assertSeeText(UrlBuilder::job($this->job));
+
+        $payment->refresh();
+
+        $this->assertEquals($payment->invoice->grossPrice(), 0);
+        $this->assertEmpty($payment->invoice->number);
+    }
+
     public function testSubmitFormWithTransferMethod()
     {
         $payment = $this->job->getUnpaidPayment();
