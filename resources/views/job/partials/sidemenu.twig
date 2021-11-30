@@ -2,7 +2,7 @@
 
 {% if not job.is_expired %}
   <div class="mb-5">
-    {% set attr = is_applied ? {title: 'Już aplikowałeś na tę ofertę pracy', disabled: 'disabled' } : {} %}
+    {% set attr = {} %}
 
     {% if job.enable_apply %}
       {% set url = route('job.application', [job.id]) %}

@@ -20,22 +20,6 @@ class ApplicationController extends Controller
 {
     use MailFactory;
 
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->middleware(
-            function (Request $request, $next) {
-                /** @var \Coyote\Job $job */
-                $job = $request->route('job');
-                abort_if($job->applications()->forGuest($this->guestId)->exists(), 404);
-
-                return $next($request);
-            },
-            ['except' => ['upload', 'downloadApplication']]
-        );
-    }
-
     /**
      * @param Job $job
      * @return \Illuminate\View\View

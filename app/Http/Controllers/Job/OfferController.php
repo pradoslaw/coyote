@@ -64,7 +64,6 @@ class OfferController extends Controller
             'employees_list'    => Firm::getEmployeesList(),
             'seniority_list'    => Job::getSeniorityList(),
             'subscribed'        => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false,
-            'is_applied'        => $job->applications()->forGuest($this->guestId)->exists(),
             'previous_url'      => $this->request->session()->get('current_url'),
             'payment'           => $this->userId === $job->user_id ? $job->getUnpaidPayment() : null,
             // tags along with grouped category
