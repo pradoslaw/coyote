@@ -39,6 +39,7 @@ services:
   cron:
     image: 4programmers/php-node:latest
     working_dir: /var/www
+    user: nginx
     volumes:
       - ./:/var/www
     entrypoint: cron -f -l 8
