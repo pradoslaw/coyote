@@ -15,7 +15,7 @@ class PlansTableSeeder extends Seeder
     {
         \Coyote\Plan::forceCreate([
             'name' => 'Standard',
-            'price' => 39,
+            'price' => 0,
             'vat_rate' => 1.23,
             'discount' => 0,
             'length' => 40,
