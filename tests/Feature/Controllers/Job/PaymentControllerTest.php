@@ -219,10 +219,10 @@ class PaymentControllerTest extends TestCase
         $faker = Factory::create();
 
         /** @var Plan $plan */
-        $plan = Plan::where('name', 'Premium')->get()->first();
+        $plan = Plan::where('name', 'Premium')->first();
 
         $payment = $this->job->getUnpaidPayment();
-        $payment->setRelation('plan', $plan);
+        $payment->plan_id = $plan->id;
         $payment->save();
 
         $coupon = Coupon::create(['amount' => $plan->price, 'code' => $faker->randomAscii]);
@@ -251,10 +251,10 @@ class PaymentControllerTest extends TestCase
         $faker = Factory::create();
 
         /** @var Plan $plan */
-        $plan = Plan::where('name', 'Premium')->get()->first();
+        $plan = Plan::where('name', 'Premium')->first();
 
         $payment = $this->job->getUnpaidPayment();
-        $payment->setRelation('plan', $plan);
+        $payment->plan_id = $plan->id;
         $payment->save();
 
         $coupon = Coupon::create(['amount' => $plan->price, 'code' => $faker->randomAscii]);
@@ -288,10 +288,10 @@ class PaymentControllerTest extends TestCase
     public function testSubmitFreeOfferWithoutVatId()
     {
         /** @var Plan $plan */
-        $plan = Plan::where('name', 'Standard')->get()->first();
+        $plan = Plan::where('name', 'Standard')->first();
 
         $payment = $this->job->getUnpaidPayment();
-        $payment->setRelation('plan', $plan);
+        $payment->plan_id = $plan->id;
         $payment->save();
 
         $response = $this->actingAs($this->job->user)->json(
@@ -321,10 +321,10 @@ class PaymentControllerTest extends TestCase
     public function testSubmitFreeOfferWithoutCountryId()
     {
         /** @var Plan $plan */
-        $plan = Plan::where('name', 'Standard')->get()->first();
+        $plan = Plan::where('name', 'Standard')->first();
 
         $payment = $this->job->getUnpaidPayment();
-        $payment->setRelation('plan', $plan);
+        $payment->plan_id = $plan->id;
         $payment->save();
 
         $response = $this->actingAs($this->job->user)->json(
@@ -355,10 +355,10 @@ class PaymentControllerTest extends TestCase
     public function testSubmitFreeOfferWithoutValidVatId()
     {
         /** @var Plan $plan */
-        $plan = Plan::where('name', 'Standard')->get()->first();
+        $plan = Plan::where('name', 'Standard')->first();
 
         $payment = $this->job->getUnpaidPayment();
-        $payment->setRelation('plan', $plan);
+        $payment->plan_id = $plan->id;
         $payment->save();
 
         $response = $this->actingAs($this->job->user)->json(
@@ -377,7 +377,6 @@ class PaymentControllerTest extends TestCase
             ]
         );
 
-        $response->assertStatus(201);
         $response->assertSeeText(UrlBuilder::job($this->job));
 
         $payment->refresh();
@@ -389,10 +388,10 @@ class PaymentControllerTest extends TestCase
     public function testSubmitFreeOfferWithoutValidVatIdAndCountryCode()
     {
         /** @var Plan $plan */
-        $plan = Plan::where('name', 'Standard')->get()->first();
+        $plan = Plan::where('name', 'Standard')->first();
 
         $payment = $this->job->getUnpaidPayment();
-        $payment->setRelation('plan', $plan);
+        $payment->plan_id = $plan->id;
         $payment->save();
 
         $response = $this->actingAs($this->job->user)->json(

@@ -28,7 +28,7 @@ class Plan extends Model
     /**
      * @var array
      */
-    protected $casts = ['benefits' => 'json'];
+    protected $casts = ['benefits' => 'json', 'price' => 'float', 'vat_rate' => 'float'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne

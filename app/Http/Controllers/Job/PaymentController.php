@@ -127,6 +127,7 @@ class PaymentController extends Controller
     public function makePayment(PaymentRequest $request, Payment $payment)
     {
         Stripe::setApiKey(config('services.stripe.secret'));
+        var_dump($payment->plan_id);
 
         $coupon = $this->coupon->findBy('code', $request->input('coupon'));
         $payment->coupon_id = $coupon?->id;
