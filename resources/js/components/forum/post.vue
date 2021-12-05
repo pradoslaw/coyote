@@ -316,6 +316,7 @@
     methods: mapActions('posts', ['vote', 'accept', 'subscribe', 'loadComments', 'loadVoters']),
     computed: {
       ...mapState('user', ['user']),
+      ...mapState('topics', ['reasons']),
       ...mapGetters('user', ['isAuthorized']),
       ...mapGetters('posts', ['posts']),
       ...mapGetters('topics', ['topic'])
@@ -330,9 +331,6 @@
 
     @Prop()
     readonly uploadMimes!: string;
-
-    @Prop(Object)
-    readonly reasons!: { [key: number]: string };
 
     @Ref()
     readonly form!: VueForm;

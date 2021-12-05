@@ -2,7 +2,8 @@ import axios from "axios";
 import { Tag, Topic } from '@/types/models';
 
 const state = {
-  topics: []
+  topics: [],
+  reasons: []
 };
 
 const getters = {
@@ -12,6 +13,10 @@ const getters = {
 const mutations = {
   init(state, topics: Topic[]) {
     state.topics = topics;
+  },
+
+  setReasons(state, reasons) {
+    state.reasons = reasons;
   },
 
   mark(state, topic: Topic) {

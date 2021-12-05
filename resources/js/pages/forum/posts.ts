@@ -27,6 +27,7 @@ export default Vue.extend({
   created() {
     store.commit('posts/init', window.pagination);
     store.commit('topics/init', [ window.topic ]);
+    store.commit('topics/setReasons', this.reasons);
     store.commit('forums/init', [ window.forum ]);
     store.commit('poll/init', window.poll);
     store.commit('flags/init', window.flags);
