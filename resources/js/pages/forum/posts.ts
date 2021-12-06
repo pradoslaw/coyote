@@ -1,5 +1,5 @@
 import Vue from "vue";
-import VuePost from "@/components/forum/post.vue";
+import VuePostWrapper from "@/components/forum/post-wrapper.vue";
 import VueForm from "@/components/forum/form.vue";
 import VuePoll from "@/components/forum/poll.vue";
 import VuePagination from "@/components/pagination.vue";
@@ -12,7 +12,7 @@ import { Post } from "@/types/models.ts";
 export default Vue.extend({
   delimiters: ['${', '}'],
   components: {
-    'vue-post': VuePost,
+    'vue-post-wrapper': VuePostWrapper,
     'vue-form': VueForm,
     'vue-poll': VuePoll,
     'vue-pagination': VuePagination
