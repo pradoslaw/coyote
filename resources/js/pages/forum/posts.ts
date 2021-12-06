@@ -84,7 +84,8 @@ export default Vue.extend({
       if (scrollIntoForm) {
         document.getElementById('js-submit-form')!.scrollIntoView();
 
-        if (!this.undefinedPost.text!.includes(`[${post.user!.name}`)) {
+        // check if login is used in the quote. [ character means beginning of a markdown link
+        if (!this.undefinedPost.text.includes(`[${post.user!.name}`)) {
           this.undefinedPost.text += `@${useBrackets(post.user!.name)}: `;
         }
 
