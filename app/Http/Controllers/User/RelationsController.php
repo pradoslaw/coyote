@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\User;
 
 use Coyote\Http\Resources\UserResource;
 use Illuminate\Contracts\Cache\Repository as Cache;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class RelationsController extends BaseController
 {
@@ -20,7 +21,7 @@ class RelationsController extends BaseController
 
     public function showRelations()
     {
-        $users = $this->auth->relations()->with('relatedUser')->get()->pluck('relatedUser');
+        $users = $this->auth->relations()->with(['relatedUser' => fn (BelongsTo $builder) => $builder->withTrashed()])->get()->pluck('relatedUser');
 
         return $this->view('user.relations', [
             'users' => UserResource::collection($users)
