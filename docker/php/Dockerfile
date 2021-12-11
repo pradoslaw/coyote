@@ -4,6 +4,11 @@ LABEL maintainer="4programmers.net <support@4programmers.net>"
 
 WORKDIR /var/www
 
+RUN curl -sS https://deb.nodesource.com/setup_16.x | bash -
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+
+RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+
 RUN apt-get update -yqq && apt-get install -y \
     gnupg \
     libmcrypt-dev \
@@ -23,7 +28,9 @@ RUN apt-get update -yqq && apt-get install -y \
     libssl-dev \
     libonig-dev \
     cron \
-    gnupg2
+    gnupg2 \
+    nodejs \
+    yarn
 
 RUN docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ --with-webp \
     && docker-php-ext-install -j$(nproc) pgsql gd soap pdo_pgsql mbstring zip opcache iconv gmp
@@ -51,9 +58,6 @@ RUN echo "cgi.fix_pathinfo=0" > ${php_vars} &&\
     echo "post_max_size = 50M"  >> ${php_vars} &&\
     echo "variables_order = \"EGPCS\""  >> ${php_vars} && \
     echo "memory_limit = 512M"  >> ${php_vars} && \
-    echo "opcache.preload = /var/www/preload.php" >> ${php_vars} && \
-    echo "opcache.preload_user = nginx" >> ${php_vars} && \
-    echo "opcache.preload_user = nginx" >> ${php_vars} && \
     echo "opcache.enable = 1" >> ${php_vars} && \
     echo "opcache.jit_buffer_size = 256M" >> ${php_vars} && \
     sed -i \
@@ -85,10 +89,7 @@ COPY ./docker/php/cron /etc/cron.d/coyote
 RUN chmod 0644 /etc/cron.d/coyote
 RUN crontab /etc/cron.d/coyote
 
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-
-RUN apt-get update -yqq && apt-get install -y yarn && rm -rf /var/lib/apt/lists/*
+RUN rm -rf /var/lib/apt/lists/*
 
 ADD ./docker/php/entrypoint.sh /entrypoint.sh
 RUN chmod 755 /entrypoint.sh
