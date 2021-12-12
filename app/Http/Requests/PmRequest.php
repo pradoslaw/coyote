@@ -26,7 +26,7 @@ class PmRequest extends FormRequest
     {
         return [
             'recipient'          => 'required|user_exist',
-            'text'               => 'required|spam_foreign:1'
+            'text'               => 'required'
         ];
     }
 
