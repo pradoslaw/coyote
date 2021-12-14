@@ -6,6 +6,7 @@ const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 const PurgecssPlugin = require('purgecss-webpack-plugin');
 const SentryPlugin = require("@sentry/webpack-plugin");
+const webpack = require('webpack');
 
 const plugins = [
   new PurgecssPlugin({
