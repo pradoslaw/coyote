@@ -60,11 +60,11 @@ const mutations = {
   updateComment(state, { post, comment}: ParentChild) {
     let { text, html } = comment; // update only text and html version
 
-    Vue.set(post.comments, comment.id!, {...post.comments[comment.id], ...{text, html}});
+    Vue.set(post.comments, comment.id, {...post.comments[comment.id], ...{text, html}});
   },
 
   deleteComment(state, comment: PostComment) {
-    const post = state.data[comment.post_id!];
+    const post = state.data[comment.post_id];
 
     Vue.delete(post.comments, comment.id!);
     post.comments_count! -= 1;

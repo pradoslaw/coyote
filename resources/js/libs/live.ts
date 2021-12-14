@@ -4,7 +4,7 @@ import Prism from "prismjs";
 import store from '../store';
 import Vue from 'vue';
 import Channel from "@/libs/websocket/channel";
-import { getPost } from '@/api';
+import { getPost, getPostComment } from '@/api';
 
 export type Payload = Microblog | Post | PostComment | MicroblogVoters | PostVoters;
 
@@ -72,7 +72,7 @@ export class MicroblogCommentSaved extends MicroblogObserver implements Observer
 export class PostCommentSaved implements Observer {
   update(payload: PostComment) {
     const post = store.state.posts.data[payload.post_id];
-    const existing = post?.comments[payload.id!];
+    const existing = post?.comments[payload.id];
 
     if (!post || existing?.is_editing === true) {
       return;
@@ -80,9 +80,15 @@ export class PostCommentSaved implements Observer {
 
     if (!existing) {
       payload.is_read = false;
+
+      getPostComment(payload.id).then(({ data }) => {
+        store.commit('posts/addComment', { post, comment: data });
+      });
+
+      return;
     }
 
-    store.commit(`posts/${payload.id! in post.comments ? 'updateComment' : 'addComment'}`, { post, comment: payload });
+    store.commit('posts/updateComment', { post, comment: payload });
   }
 }
 

@@ -27,12 +27,11 @@ class CommentController extends Controller
 {
     /**
      * @param PostCommentRequest $request
-     * @param Dispatcher $dispatcher
-     * @param Post\Comment|null $comment
+     * @param Post\Comment $comment
      * @return PostCommentResource
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function save(PostCommentRequest $request, Dispatcher $dispatcher, ?Post\Comment $comment)
+    public function save(PostCommentRequest $request, Post\Comment $comment)
     {
         if (!$comment->exists) {
             $comment->user()->associate($this->auth);
@@ -92,7 +91,7 @@ class CommentController extends Controller
      * @return mixed
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function show(Post $post)
+    public function getAll(Post $post)
     {
         $this->authorize('access', [$post->forum]);
 
@@ -105,6 +104,16 @@ class CommentController extends Controller
         });
 
         return PostCommentResource::collection($post->comments)->keyBy('id');
+    }
+
+    public function show(Post\Comment $comment): PostCommentResource
+    {
+        $this->authorize('access', [$comment->post->forum]);
+        $comment->setRelation('forum', $comment->post->forum);
+
+        PostCommentResource::withoutWrapping();
+
+        return new PostCommentResource($comment);
     }
 
     public function migrate(Post\Comment $comment, TopicRepositoryInterface $repository)

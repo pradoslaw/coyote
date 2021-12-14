@@ -129,13 +129,18 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     ]);
 
     $this->get('Comment/Show/{post}', [
-        'uses' => 'CommentController@show',
+        'uses' => 'CommentController@getAll',
         'as' => 'comment.show'
     ]);
 
     $this->post('Comment/Migrate/{comment}', [
         'uses' => 'CommentController@migrate',
         'as' => 'comment.migrate',
+        'middleware' => ['auth']
+    ]);
+
+    $this->get('Comment/{comment}', [
+        'uses' => 'CommentController@show',
         'middleware' => ['auth']
     ]);
 
