@@ -4,7 +4,7 @@ import Prism from "prismjs";
 import store from '../store';
 import Vue from 'vue';
 import Channel from "@/libs/websocket/channel";
-import axios from 'axios';
+import { getPost } from '@/api';
 
 export type Payload = Microblog | Post | PostComment | MicroblogVoters | PostVoters;
 
@@ -88,7 +88,7 @@ export class PostCommentSaved implements Observer {
 
 export class PostSaved implements Observer {
   update(payload: Post) {
-    const existing = store.state.posts.data[payload.id!];
+    const existing = store.state.posts.data[payload.id];
 
     if (!existing) {
       payload.is_read = false;
@@ -100,12 +100,13 @@ export class PostSaved implements Observer {
     }
 
     if (!existing) {
-      store.commit(`posts/add`, payload);
       const topic = store.getters['topics/topic'];
 
-      Vue.nextTick(() => document.getElementById(`id${payload.id}`)!.addEventListener('mouseover', () => store.dispatch('topics/mark', topic), {once: true}))
+      getPost(payload.id).then(({ data }) => {
+        store.commit(`posts/add`, data);
 
-      axios.get(`/Forum/Post/${payload.id}`).then(response => store.commit('posts/update', response.data));
+        Vue.nextTick(() => document.getElementById(`id${payload.id}`)!.addEventListener('mouseover', () => store.dispatch('topics/mark', topic), {once: true}))
+      });
 
       return;
     }

@@ -84,7 +84,9 @@ const plugins = [
         /revive/
       ]
     }
-  })
+  }),
+
+  new webpack.EnvironmentPlugin(['FRONTEND_SENTRY_DSN', 'VAPID_PUBLIC_KEY'])
 ];
 
 if (process.env.RELEASE) {
