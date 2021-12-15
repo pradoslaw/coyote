@@ -43,6 +43,7 @@
   import {mixin as clickaway} from 'vue-clickaway';
   import VueNotification from './notification.vue';
   import { mapState, mapGetters } from 'vuex';
+  import environment from '@/environment';
 
   function urlBase64ToUint8Array(base64String) {
     const padding = '='.repeat((4 - base64String.length % 4) % 4);
@@ -152,7 +153,7 @@
         }
 
         navigator.serviceWorker.ready.then(registration => {
-            const serverKey = urlBase64ToUint8Array(document.querySelector('meta[name="vapid-public-key"]')?.getAttribute('content'));
+            const serverKey = urlBase64ToUint8Array(environment.vapidKey);
 
             return registration.pushManager.subscribe({
               userVisibleOnly: true,

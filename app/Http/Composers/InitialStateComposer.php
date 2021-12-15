@@ -62,7 +62,6 @@ class InitialStateComposer
 
         $view->with('__INITIAL_STATE', json_encode($state));
         $view->with('__WS_URL', $this->websocketUrl());
-        $view->with('__VAPID_PUBLIC_KEY', config('webpush.vapid.public_key'));
     }
 
     /**
