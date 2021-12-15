@@ -180,6 +180,7 @@
   import VueAutosize from '../../plugins/autosize';
   import VuePrompt from '../forms/prompt.vue';
   import VueTabs from '../tabs.vue';
+  import store from '../../store';
   import VueThumbnail from "../thumbnail.vue";
   import VueError from '../forms/error.vue';
   import VueEditor from './editor.vue';
@@ -294,7 +295,13 @@
     }
 
     autocomplete(nick) {
-      return Promise.resolve([]);
+      return store
+        .dispatch('prompt/request', {value: nick, source: '/completion/prompt/users'})
+        .then(users => users.map(user => ({
+          name: user.name,
+          badge: user.group,
+          avatar: user.photo || '/img/avatar.png',
+        })));
     }
 
     log(a) {
