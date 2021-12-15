@@ -6,7 +6,7 @@ interface Environment {
 
 const environment: Environment = {
   sentryDsn: process.env.FRONTEND_SENTRY_DSN,
-  vapidKey: process.env.VAPID_PUBLIC,
+  vapidKey: process.env.VAPID_PUBLIC_KEY,
   release: process.env.RELEASE
 }
 

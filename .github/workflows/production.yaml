@@ -49,7 +49,7 @@ jobs:
             sudo docker service update --image 4programmers/coyote:$GITHUB_SHA coyote_worker
             sudo docker service update --image 4programmers/coyote:$GITHUB_SHA coyote_cron
 
-      - name: Sentry Release Frontend
+      - name: Sentry Release Backend
         uses: getsentry/action-release@v1.1.6
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
