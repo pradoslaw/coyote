@@ -116,7 +116,7 @@ new Vue({
         .catch(err => {
           console.error(err);
 
-          if (err.response.status !== 422) {
+          if (err.response?.status !== 422) {
             return;
           }
 
