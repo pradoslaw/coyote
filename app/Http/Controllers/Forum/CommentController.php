@@ -108,6 +108,9 @@ class CommentController extends Controller
 
     public function show(Post\Comment $comment): PostCommentResource
     {
+        // post can be already removed.
+        abort_if($comment->post === null, 404);
+
         $this->authorize('access', [$comment->post->forum]);
         $comment->setRelation('forum', $comment->post->forum);
 
