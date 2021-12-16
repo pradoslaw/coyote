@@ -16,18 +16,25 @@ export default class DesktopNotifications {
   }
 
   static notify(title: string, body: string, url: string) {
-    if (this.isSupported && this.isAllowed) {
-      let notification = new Notification(title, {body: body, tag: url, icon: '/img/favicon.png'});
+    if (!this.isSupported || !this.isAllowed) {
+      return false;
+    }
+
+    try {
+      const notification = new Notification(title, {body: body, tag: url, icon: '/img/favicon.png'});
 
       notification.onshow = () => setTimeout(() => notification.close(), 5000);
       notification.onclick = function () {
         window.open(url);
       };
+    } catch (err) {
+      console.error(err);
 
-      return true;
+      // notifications may not work on some mobile devices
+      return false;
     }
 
-    return false;
+    return true;
   }
 }
 
