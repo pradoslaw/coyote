@@ -1,5 +1,5 @@
 <template>
-  <div class="editor-4play" ref="view" style="min-height: 94px;">
+  <div class="editor-4play" ref="view">
   </div>
 </template>
 

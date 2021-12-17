@@ -9,12 +9,20 @@
   }
 
   .preview {
-    padding: $input-padding-y $input-padding-x ;
+    padding: $input-padding-y $input-padding-x;
   }
 
   .img-thumbnail img {
     height: 100px;
     object-fit: cover;
+  }
+
+  .editor-4play {
+    cursor: text;
+
+    .cm-scroller {
+      min-height: 94px;
+    }
   }
 }
 
