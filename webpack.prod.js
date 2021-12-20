@@ -14,6 +14,7 @@ const plugins = [
       path.join(__dirname, 'resources/views/**/*.twig'),
       path.join(__dirname, 'resources/js/components/**/*.vue'),
       path.join(__dirname, 'resources/js/**/*.ts'),
+      path.join(__dirname, 'resources/js/**/*.js'),
     ]),
     safelist: {
       standard: [
@@ -63,13 +64,15 @@ const plugins = [
         'x-placement',
         'tox-notifications-container',
         'fa-arrow-down',
-        'fa-arrow-up'
+        'fa-arrow-up',
+        'editor-4play'
       ],
       deep: [
         /^logo/,
         /^language/,
         /^badge/,
-        /^depth/
+        /^depth/,
+        /^cm/
       ],
       greedy: [
         /hire-me$/,
