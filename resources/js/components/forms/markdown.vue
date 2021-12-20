@@ -328,22 +328,14 @@
 
     makeBold() {
       this.editor.makeBold();
-      this.updateModel();
     }
 
     makeItalics() {
       this.editor.makeItalics();
-      this.updateModel();
     }
 
     makeStrikeThrough() {
       this.editor.makeStrikeThrough();
-      this.updateModel();
-    }
-
-    updateModel() {
-      // this.input.dispatchEvent(new Event('input', {'bubbles': true}));
-      // mam bubblować event w górę? Czy to było tylko pod <textarea>?
     }
 
     focus() {
