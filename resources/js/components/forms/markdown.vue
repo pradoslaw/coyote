@@ -186,7 +186,7 @@
   import VueEditor from './editor.vue';
   import axios from 'axios';
   import Prism from 'prismjs';
-  import IsImage from '../../libs/assets';
+  import isImage from '../../libs/assets';
   import { Editor4Play } from "@riddled/4play/src/Editor.js";
 
   const CONTENT = 'Treść';
@@ -273,7 +273,7 @@
     }
 
     insertAssetAtCaret(asset: Asset) {
-      if (IsImage(asset.name!)) {
+      if (isImage(asset.name!)) {
         this.editor.insertImage(asset.url, asset.name);
       } else {
         // is this ever called for non-images?
