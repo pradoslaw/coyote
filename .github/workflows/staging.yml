@@ -25,8 +25,8 @@ jobs:
             git reset --hard
             git pull
             docker-compose exec -T php composer install --no-dev
-            docker-compose exec -T php make install-assets
-            docker-compose exec -T php make migration
-            docker-compose exec -T php make assets-production
-            docker-compose exec -T php make cache-config
+            make install-assets
+            make migration
+            make assets-production
+            make cache-config
             docker-compose exec -T php php artisan queue:restart
