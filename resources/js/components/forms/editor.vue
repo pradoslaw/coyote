@@ -55,6 +55,14 @@
       }
     },
 
+    watch: {
+      value(newValue) {
+        if (newValue === '') {
+          this.editor.clear();
+        }
+      }
+    },
+
     destroy() {
       this.editor.destroy();
     }
