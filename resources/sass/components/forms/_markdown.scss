@@ -21,7 +21,11 @@
     cursor: text;
 
     .cm-scroller {
-      min-height: 94px;
+      overflow: auto;
+
+      .cm-content {
+        min-height: 94px;
+      }
     }
   }
 }
