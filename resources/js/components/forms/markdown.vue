@@ -276,7 +276,7 @@
       if (isImage(asset.name!)) {
         this.editor.insertImage(asset.url, asset.name);
       } else {
-        // is this ever called for non-images?
+        // TODO add this.editor.insertLink()
       }
     }
 
