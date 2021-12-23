@@ -87,21 +87,6 @@ class PostPolicyTest extends TestCase
         $this->assertFalse($policy->delete($this->user, $this->post));
     }
 
-    public function testDeleteAndRestoreAllowedDueToReputationPoints()
-    {
-        $post = factory(Post::class)->make(['id' => $this->faker->numberBetween()]);
-        $this->topic->last_post_id = $post->id; // last post in topic
-
-        $this->user->reputation = 301;
-
-        $policy = new PostPolicy();
-        $this->assertTrue($policy->delete($this->user, $this->post));
-
-        $this->post->deleted_at = now();
-
-        $this->assertTrue($policy->delete($this->user, $this->post));
-    }
-
     public function testDeleteNotAllowedDueToLockedTopic()
     {
         $this->post->topic->is_locked = true;
@@ -169,14 +154,5 @@ class PostPolicyTest extends TestCase
 
         $policy = new PostPolicy();
         $this->assertFalse($policy->update($this->user, $this->post));
-    }
-
-    public function testDeleteNotAllowedDueToArchiveEventForUserWithHighReputation()
-    {
-        $this->post->created_at = now()->subMonth();
-        $this->user->reputation = Reputation::DELETE_POSTS + 1;
-
-        $policy = new PostPolicy();
-        $this->assertFalse($policy->delete($this->user, $this->post));
     }
 }

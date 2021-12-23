@@ -20,7 +20,7 @@ class PostPolicy
     {
         if (!$this->isLocked($post)
             && $this->isAuthor($user, $post)
-            && ($this->isRecentlyAdded($post) || $this->hasEnoughReputation($user, $post))
+            && ($this->isRecentlyAdded($post) || $this->isLastPost($post))
             && !$this->isArchive($post)) {
             return true;
         }
@@ -37,7 +37,7 @@ class PostPolicy
     {
         if (!$this->isLocked($post)
             && $this->isAuthor($user, $post)
-            && $this->hasEnoughReputation($user, $post)
+            && $this->isLastPost($post)
             && !$this->isArchive($post)) {
             return true;
         }
@@ -82,9 +82,9 @@ class PostPolicy
      * @param Post $post
      * @return bool
      */
-    private function hasEnoughReputation(User $user, Post $post): bool
+    private function isLastPost(Post $post): bool
     {
-        return $post->id == $post->topic->last_post_id || $user->reputation >= Reputation::DELETE_POSTS;
+        return $post->id === $post->topic->last_post_id;
     }
 
     /**

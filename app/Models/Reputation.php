@@ -20,7 +20,6 @@ class Reputation extends Model
     const PROFILE_LINK = 50;
     const SIG_LINK = 50;
     const CREATE_TAGS = 300;
-    const DELETE_POSTS = 300;
     const SHORT_TITLE = 1000;
     const NO_ADS = 1000;
 
