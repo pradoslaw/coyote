@@ -1,7 +1,7 @@
 <template>
   <div :class="{'is-invalid': isInvalid}" class="editor">
     <vue-tabs @click="switchTab" :items="tabs" :current-tab="tabs.indexOf(currentTab)" type="pills" class="mb-2">
-      <div v-if="isContent" class="btn-toolbar ml-auto mt-2 mt-sm-0">
+      <div v-if="isContent" class="btn-toolbar ml-auto">
         <div class="btn-group mr-2" role="group" aria-label="...">
           <button @click="makeBold" type="button" class="btn btn-sm"
                   :title="state.canBold ? 'Dodaj pogrubienie' : 'Dodanie tutaj pogrubienia mogłoby uszkodzić składnię'"
@@ -27,7 +27,8 @@
     </vue-tabs>
 
     <vue-prompt v-show="isContent" :source="promptUrl">
-      <div :class="['form-control', {'is-invalid': error !== null}]" style="height:inherit; outline:none; box-shadow:none; border:none;">
+      <div :class="['form-control', {'is-invalid': error !== null}]"
+           style="height:inherit; outline:none; box-shadow:none; border:none; padding-left:0; padding-right:0;">
         <vue-editor
           ref="editor"
           v-model="valueLocal"
@@ -48,7 +49,7 @@
 
     <slot name="bottom"></slot>
 
-    <div class="row no-gutters pt-1 pl-1 pr-1">
+    <div class="row no-gutters pt-1 pl-2 pr-2">
       <div class="small mr-auto">
         <template v-if="isProcessing">
           <i class="fas fa-spinner fa-spin small"></i>
@@ -72,7 +73,7 @@
       </div>
     </div>
 
-    <div v-if="assets.length" class="row pt-3 pb-3">
+    <div v-if="assets.length" class="row pt-3 pb-3 pl-2 pr-2">
       <div v-for="item in assets" :key="item.id" class="col-sm-2">
         <vue-thumbnail :url="item.url" @delete="deleteAsset(item)" @insert="insertAssetAtCaret(item)"
                        :aria-label="item.name" data-balloon-pos="down" name="asset"></vue-thumbnail>
@@ -263,7 +264,6 @@
     cancel() {
     }
 
-    @Emit('paste')
     addAsset(asset: Asset) {
       this.assets.push(asset);
 
@@ -358,8 +358,8 @@
       });
     }
 
-    errorNotification(err) {
-      this.$notify({'type': 'error', 'text': err});
+    errorNotification(errorMessage) {
+      this.$notify({type: 'error', text: errorMessage});
     }
 
     get uploadTooltip() {
