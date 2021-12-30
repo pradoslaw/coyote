@@ -23,6 +23,19 @@
                   :style="{opacity: state.canBlockQuote ? '1.0' : '0.4', cursor: state.canBlockQuote ? 'pointer' : 'default'}">
             <i class="fas fa-quote-left fa-fw"></i>
           </button>
+
+          <button @click="insertLink" type="button" class="btn btn-sm"
+                  :title="state.canLink ? 'Dodaj link' : 'Dodanie tutaj linka mogłoby uszkodzić składnię'"
+                  :style="{opacity: state.canLink ? '1.0' : '0.4', cursor: state.canLink ? 'pointer' : 'default'}">
+            <i class="fas fa-link fa-fw"></i>
+          </button>
+
+          <button @click="insertImage" type="button" class="btn btn-sm"
+                  :title="state.canImage ? 'Dodaj obraz' : 'Dodanie tutaj obrazu mogłoby uszkodzić składnię'"
+                  :style="{opacity: state.canImage ? '1.0' : '0.4', cursor: state.canImage ? 'pointer' : 'default'}">
+            <i class="fas fa-image fa-fw"></i>
+          </button>
+
           <label style="color:grey; align-self:center; margin: 3px 0 0;" title='"Smart paste" wkleja linki jako markdown'>
             <input type="checkbox" v-model="smartPaste">
             Smart paste
@@ -223,6 +236,8 @@
       canStrikeThrough: false,
       canList: false,
       canBlockQuote: false,
+      canLink: false,
+      canImage: false,
     }
     smartPaste = false;
 
@@ -299,6 +314,8 @@
       this.state.canStrikeThrough = state.canStrikeThrough;
       this.state.canList = state.canList;
       this.state.canBlockQuote = state.canBlockQuote;
+      this.state.canLink = state.canLink;
+      this.state.canImage = state.canImage;
     }
 
     autocomplete(nick) {
@@ -339,6 +356,14 @@
 
     makeStrikeThrough() {
       this.editor.makeStrikeThrough();
+    }
+
+    insertImage() {
+      this.editor.makeImage('http://');
+    }
+
+    insertLink() {
+      this.editor.makeLink('http://');
     }
 
     insertBlockQuote() {

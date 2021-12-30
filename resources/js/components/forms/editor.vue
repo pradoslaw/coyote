@@ -53,6 +53,12 @@
       insertBlockQuote(placeholder) {
         this.editor.insertBlockQuote(placeholder);
       },
+      makeLink(placeholder) {
+        this.editor.makeLink(placeholder);
+      },
+      makeImage(placeholder) {
+        this.editor.makeImage(placeholder);
+      },
       appendBlockQuote(content) {
         this.editor.appendBlockQuote(content);
       },
