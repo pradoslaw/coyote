@@ -40,10 +40,10 @@
           placeholder="Kliknij, aby dodać treść..."
           :autocompleteSource="autocomplete"
           :smartPaste="smartPaste"
+          v-paste:success="addAsset"
           @submit="save"
           @cancel="cancel"
-          @state="updateState"
-          @image="image => log(image)"/>
+          @state="updateState"/>
       </div>
       <vue-error :message="error"></vue-error>
     </vue-prompt>
@@ -309,10 +309,6 @@
           badge: user.group,
           avatar: user.photo || '/img/avatar.png',
         })));
-    }
-
-    log(a) {
-      console.log(a);
     }
 
     deleteAsset(asset: Asset) {
