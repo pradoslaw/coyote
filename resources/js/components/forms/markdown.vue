@@ -18,6 +18,11 @@
                   :style="{opacity: state.canStrikeThrough ? '1.0' : '0.4', cursor: state.canStrikeThrough ? 'pointer' : 'default'}">
             <i class="fas fa-strikethrough fa-fw"></i>
           </button>
+          <button @click="insertBlockQuote" type="button" class="btn btn-sm"
+                  :title="state.canBlockQuote ? 'Dodaj cytat' : 'Dodanie tutaj cytatu mogłoby uszkodzić składnię'"
+                  :style="{opacity: state.canBlockQuote ? '1.0' : '0.4', cursor: state.canBlockQuote ? 'pointer' : 'default'}">
+            <i class="fas fa-quote-left fa-fw"></i>
+          </button>
           <label style="color:grey; align-self:center; margin: 3px 0 0;" title='"Smart paste" wkleja linki jako markdown'>
             <input type="checkbox" v-model="smartPaste">
             Smart paste
@@ -216,7 +221,8 @@
       canBold: false,
       canItalics: false,
       canStrikeThrough: false,
-      canList: false
+      canList: false,
+      canBlockQuote: false,
     }
     smartPaste = false;
 
@@ -292,6 +298,7 @@
       this.state.canItalics = state.canItalics;
       this.state.canStrikeThrough = state.canStrikeThrough;
       this.state.canList = state.canList;
+      this.state.canBlockQuote = state.canBlockQuote;
     }
 
     autocomplete(nick) {
@@ -336,6 +343,10 @@
 
     makeStrikeThrough() {
       this.editor.makeStrikeThrough();
+    }
+
+    insertBlockQuote() {
+      this.editor.insertBlockQuote('Dodaj cytat...');
     }
 
     appendBlockQuote(username, postId, content) {
