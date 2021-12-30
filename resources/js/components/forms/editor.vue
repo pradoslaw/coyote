@@ -50,6 +50,9 @@
       makeStrikeThrough() {
         this.editor.makeStrikeThrough();
       },
+      appendBlockQuote(content) {
+        this.editor.appendBlockQuote(content);
+      },
       focus() {
         this.editor.focus();
       }

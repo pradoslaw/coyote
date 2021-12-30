@@ -175,7 +175,6 @@
   import Component from "vue-class-component";
   import { Asset } from '@/types/models';
   import { Ref, Prop, Emit, Watch } from "vue-property-decorator";
-  import { languages } from '../../libs/textarea';
   import { mixin as clickaway } from 'vue-clickaway';
   import { default as mixin } from '../mixins/form';
   import VueAutosize from '../../plugins/autosize';
@@ -189,6 +188,7 @@
   import Prism from 'prismjs';
   import isImage from '../../libs/assets';
   import { Editor4Play } from "@riddled/4play/src/Editor.js";
+  import { link } from "@riddled/4play/src/markdown";
 
   const CONTENT = 'Treść';
   const PREVIEW = 'Podgląd';
@@ -338,6 +338,13 @@
       this.editor.makeStrikeThrough();
     }
 
+    appendBlockQuote(username, postId, content) {
+      const title = username + ' napisał(a)';
+      const href = '/Forum/' + postId;
+
+      this.editor.appendBlockQuote(`##### ${(link(title, href))}:\n${content}`);
+    }
+
     focus() {
       this.editor.focus();
     }
@@ -372,17 +379,6 @@
 
     get isPreview() {
       return this.currentTab === PREVIEW;
-    }
-
-    get filteredLanguages() {
-      return Object
-        .keys(languages)
-        .filter(language => languages[language].toLowerCase().startsWith(this.searchText.toLowerCase()))
-        .reduce((obj, key) => {
-          obj[key] = languages[key];
-
-          return obj;
-        }, {});
     }
   }
 </script>

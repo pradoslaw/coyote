@@ -93,12 +93,11 @@ export default Vue.extend({
         this.$refs['js-submit-form'].$refs['markdown']!.focus();
       }
       else {
-        let text = `> ##### [${post.user ? post.user.name : post.user_name} napisał(a)](/Forum/${post.id}):`
-        text += "\n" + post.text.replace(/\n/g, "\n> ") + "\n\n"
+        const username = post.user ? post.user.name : post.user_name;
+        // @ts-ignore
+        this.$refs['js-submit-form'].$refs['markdown']!.appendBlockQuote(username, post.id, post.text);
 
-        this.undefinedPost.text += (this.undefinedPost.text.length ? "\n" : '') + text;
-
-        this.$notify({type: 'success', text: 'Cytat został skopiowany do formularza.'});
+        this.$notify({type: 'success', text: 'Cytat został dodany do formularza.'});
       }
     },
 
