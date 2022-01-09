@@ -5,9 +5,9 @@
           $(this).hover(function() {
             var $this = $(this);
 
-            if (!$(this).data('original-title')) {
+            if (!$(this).data('title')) {
               $.getJSON('//geo-ip.pl/1.0/ip/' + $(this).text() + '?callback=?', {}, function(json) {
-                $this.attr('data-original-title', json.country + ', ' + json.city).tooltip('show');
+                $this.attr('title', json.country + ', ' + json.city)
               });
             }
           });
