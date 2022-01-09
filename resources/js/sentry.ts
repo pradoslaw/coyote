@@ -11,6 +11,7 @@ Sentry.init({
     'Request aborted',
     'Request failed with status code 404',
     'Request failed with status code 522',
+    'Request failed with status code 500',
     'timeout of 0ms exceeded'
   ],
   tracesSampleRate: 0.0,
