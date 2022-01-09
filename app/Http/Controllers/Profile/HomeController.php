@@ -133,9 +133,12 @@ class HomeController extends Controller
     {
         $this->post->pushCriteria(new OnlyThoseWithAccess(auth()->user()));
 
+        $pieChart = $this->post->pieChart($user->id);
+
         return view('profile.partials.posts', [
             'user'          => $user,
-            'pie'           => $this->post->pieChart($user->id),
+            'pie'           => $pieChart,
+            'posts'         => array_sum($pieChart),
             'line'          => $this->post->lineChart($user->id),
             'comments'      => $this->post->countComments($user->id),
             'given_votes'   => $this->post->countGivenVotes($user->id),

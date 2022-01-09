@@ -30,7 +30,7 @@
       data: {
         labels: [
           {% for name, count in pie %}
-          '{{ name }}',
+          '{{ name }} ({{ ((count / posts) * 100)|round }}%)',
           {% endfor %}
         ],
         datasets: [{
