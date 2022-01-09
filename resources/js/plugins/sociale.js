@@ -29,7 +29,7 @@ if (el !== null) {
  *
  * @returns {Promise<void>}
  */
-const sessionHandler = () => axios.get('/ping').then(response => setToken(response.data));
+const sessionHandler = () => axios.get('/ping', {errorHandle: false}).then(response => setToken(response.data));
 
 /**
  * Keep session alive every 4 minutes
