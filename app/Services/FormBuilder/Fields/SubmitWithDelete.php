@@ -17,7 +17,7 @@ class SubmitWithDelete extends Field
     /**
      * @var array
      */
-    protected $deleteAttr = ['data-target' => '#modal-delete', 'data-toggle' => 'modal'];
+    protected $deleteAttr = ['data-bs-target' => '#modal-delete', 'data-bs-toggle' => 'modal'];
 
     /**
      * @var bool

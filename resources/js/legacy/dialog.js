@@ -214,7 +214,7 @@ class Dialog {
                 attr: {
                     'class': 'btn btn-secondary',
                     'type': 'button',
-                    'data-dismiss': 'modal'
+                    'data-bs-dismiss': 'modal'
                 }
             }]
         }, options));
@@ -234,7 +234,7 @@ class Dialog {
                 attr: {
                     'class': 'btn btn-secondary',
                     'type': 'button',
-                    'data-dismiss': 'modal'
+                    'data-bs-dismiss': 'modal'
                 }
             }, {
                 label: 'Tak, usuń',

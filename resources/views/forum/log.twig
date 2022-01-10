@@ -77,7 +77,7 @@
             <div class="d-none d-lg-block col-lg-2"></div>
             <div class="col-12 d-flex col-lg-10">
               {% if not loop.first %}
-                <a title="Cofnij do tej wersji" data-bs-toggle="modal" data-target="#confirm" data-href="{{ route('forum.post.rollback', [post.id, log.id]) }}" class="btn btn-sm btn-rollback">
+                <a title="Cofnij do tej wersji" data-bs-toggle="modal" data-bs-target="#confirm" data-href="{{ route('forum.post.rollback', [post.id, log.id]) }}" class="btn btn-sm btn-rollback">
                   <i class="fas fa-undo"></i>
 
                   <span class="d-none d-sm-block">Cofnij do tej wersji</span>

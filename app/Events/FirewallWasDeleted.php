@@ -5,7 +5,7 @@ namespace Coyote\Events;
 use Coyote\Firewall;
 use Illuminate\Queue\SerializesModels;
 
-class FirewallWasDeleted extends Event
+class FirewallWasDeleted
 {
     use SerializesModels;
 

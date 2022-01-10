@@ -95,9 +95,11 @@
         }
       });
 
-      $('#modal-delete').on('shown.bs.modal', function () {
-        $(this).parent().attr('action', $('button[data-toggle="modal"]').data('delete-url'));
-      });
+      var confirmModal = document.getElementById('modal-delete')
+
+      confirmModal.addEventListener('shown.bs.modal', function () {
+        $(this).parent().attr('action', $('button[data-bs-toggle="modal"]').data('delete-url'));
+      })
     });
   </script>
 
