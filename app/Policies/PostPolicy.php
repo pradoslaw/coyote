@@ -20,7 +20,7 @@ class PostPolicy
     {
         if (!$this->isLocked($post)
             && $this->isAuthor($user, $post)
-            && ($this->isRecentlyAdded($post) || $this->isLastPost($post))
+            && ($this->isRecentlyAdded($post) || $this->isLastPost($post) || $this->hasEnoughReputationToEditPost($user))
             && !$this->isArchive($post)) {
             return true;
         }
@@ -99,5 +99,10 @@ class PostPolicy
     private function isArchive(Post $post): bool
     {
         return $post->created_at->diffInMonths(now()) >= 1;
+    }
+
+    private function hasEnoughReputationToEditPost(User $user): bool
+    {
+        return $user->reputation >= Reputation::EDIT_POST;
     }
 }

@@ -21,7 +21,8 @@ class Reputation extends Model
     const SIG_LINK = 50;
     const CREATE_TAGS = 300;
     const SHORT_TITLE = 1000;
-    const NO_ADS = 1000;
+    const NO_ADS = 10000;
+    const EDIT_POST = 10000;
 
     /**
      * The attributes that are mass assignable.
