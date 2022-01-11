@@ -93,7 +93,7 @@ class PostPolicy
      */
     private function isRecentlyAdded(Post $post): bool
     {
-        return $post->created_at->diffInMinutes(now()) < 30;
+        return $post->created_at->diffInHours(now()) <= 24;
     }
 
     private function isArchive(Post $post): bool

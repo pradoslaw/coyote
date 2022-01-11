@@ -130,7 +130,7 @@ class PostPolicyTest extends TestCase
 
     public function testUpdateNotAllowedDueToTimeOfCreation()
     {
-        $this->post->created_at = now()->subMinutes(31);
+        $this->post->created_at = now()->subHours(24);
 
         $policy = new PostPolicy();
         $this->assertFalse($policy->update($this->user, $this->post));
