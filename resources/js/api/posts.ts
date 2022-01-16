@@ -10,5 +10,5 @@ export async function getPostComment(id: number) {
 }
 
 export async function rollback(log: PostLog) {
-  return client.post<{ message: string }>(`/Forum/Post/Rollback/${log.post_id}/${log.id}`);
+  return client.post<{ url: string }>(`/Forum/Post/Rollback/${log.post_id}/${log.id}`);
 }

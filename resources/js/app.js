@@ -1,4 +1,5 @@
 import './sentry';
+import './libs/csrf'; // setup CSRF token
 import './store';
 import './components/scrolltop.js';
 import './components/breadcrumb.js';
@@ -10,7 +11,6 @@ import './plugins/flags.ts';
 import './plugins/sociale.js';
 import '@popperjs/core'; // must be imported before bootstrap
 import './bootstrap';
-import './libs/csrf'; // setup CSRF token
 import './libs/axios-throttle.ts';
 
 import Router from './libs/router';

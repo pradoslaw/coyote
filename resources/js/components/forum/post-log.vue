@@ -39,8 +39,7 @@
         </div>
 
         <div class="col-12 col-lg-10 diff">
-          <div class="post-content" v-html="log.text">
-          </div>
+          <div v-if="isLoaded" class="post-content" v-html="diffStr"></div>
 
 <!--          {% if log.tags %}-->
 <!--          <ul class="tag-clouds">-->
@@ -71,7 +70,7 @@
 
 <script lang="ts">
   import Vue from 'vue';
-  import { Prop, Ref } from "vue-property-decorator";
+  import { Prop } from "vue-property-decorator";
   import { PostLog } from "@/types/models";
   import Component from "vue-class-component";
   import VueUserName from "@/components/user-name.vue";
@@ -87,6 +86,19 @@
     @Prop()
     readonly isRollbackEnabled!: boolean;
 
+    @Prop({default: null})
+    readonly oldStr!: string | null;
+
+    isLoaded = false;
+    private diff: any;
+
+    created() {
+      return import('diff').then((Diff) => {
+        this.diff = Diff;
+        this.isLoaded = true;
+      });
+    }
+
     async rollback() {
       await this.$confirm({
         message: 'Treść postu zostanie zastąpiona. Czy chcesz kontynuować?',
@@ -96,7 +108,28 @@
 
       const { data } = await this.$store.dispatch('posts/rollback', this.log);
 
-      window.location.href = data.message;
+      window.location.href = data.url;
+    }
+
+    get diffStr() {
+      if (!this.oldStr) {
+        return this.log.text;
+      }
+
+      const diff = this.diff.diffChars(this.oldStr, this.log.text);
+      let diffStr = '';
+
+      diff.forEach(part => {
+        if (part.added) {
+          diffStr += `<ins class="text-primary">${part.value}</ins>`;
+        } else if (part.removed) {
+          diffStr += `<del class="text-danger">${part.value}</del>`;
+        } else {
+          diffStr += part.value;
+        }
+      });
+
+      return diffStr.replace("\n", "<br>");
     }
   }
 </script>

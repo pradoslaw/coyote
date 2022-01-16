@@ -9,4 +9,9 @@ export default Vue.extend({
   data: () => ({
     logs: window.logs
   }),
+  methods: {
+    oldStr(logs, index) {
+      return index == logs.length -1 ? null : logs[index + 1].text;
+    }
+  }
 });

@@ -1,7 +1,6 @@
 {% extends 'forum.base' %}
 {% block title %}Historia edycji posta w {{ topic.title }}{{ parent() }}{% endblock %}
 
-{% import 'components.modals' as modal %}
 {% import 'components.widgets' as widgets %}
 
 {% set url = route('forum.post.log', [post.id]) %}
@@ -18,24 +17,9 @@
       :log="log"
       :key="log.id"
       :is-rollback-enabled="index > 0"
+      :old-str="oldStr(logs, index)"
     />
   </main>
-
-{#  {% embed 'forum.partials.sidebar' %}#}
-{#    {% block side_menu %}#}
-{#      <div class="box">#}
-{#        <ul class="side-menu">#}
-{#          <li>#}
-{#            <a id="js-btn-diff" title="Pokaż różnice w postach" href="javascript:"><i class="fa fa-project-diagram fa-fw"></i> Pokaż różnice</a>#}
-{#          </li>#}
-{#        </ul>#}
-{#      </div>#}
-{#    {% endblock %}#}
-{#  {% endembed %}#}
-
-  {{ form_open({'url': '', 'id': 'form-rollback'}) }}
-  {{ modal.confirm('Treść postu zostanie zastąpiona. Czy chcesz kontynuować?', 'Potwierdź operację', 'confirm', 'Tak, cofnij') }}
-  {{ form_close() }}
 
   <script>
     var logs = {{ logs|json_encode|raw }};

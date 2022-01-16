@@ -30,13 +30,13 @@ class LogController extends BaseController
         $raw = $logs->pluck('text')->toJson();
 
         /** @var \Coyote\Services\Parser\Factories\AbstractFactory $parser */
-        $parser = app('parser.post');
-        $parser->cache->setEnable(false);
+//        $parser = app('parser.post');
+//        $parser->cache->setEnable(false);
+//
+//        foreach ($logs as &$log) {
+//            $log->text = $parser->parse($log->text);
+//        }
 
-        foreach ($logs as &$log) {
-            $log->text = $parser->parse($log->text);
-        }
-
-        return $this->view('forum.log')->with(compact('logs', 'post', 'forum', 'topic', 'raw'));
+        return $this->view('forum.log')->with(compact('logs', 'post', 'forum', 'topic'));
     }
 }
