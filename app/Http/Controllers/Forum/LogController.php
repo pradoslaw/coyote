@@ -27,16 +27,6 @@ class LogController extends BaseController
 
         $logs = $this->post->history($post->id);
 
-        $raw = $logs->pluck('text')->toJson();
-
-        /** @var \Coyote\Services\Parser\Factories\AbstractFactory $parser */
-//        $parser = app('parser.post');
-//        $parser->cache->setEnable(false);
-//
-//        foreach ($logs as &$log) {
-//            $log->text = $parser->parse($log->text);
-//        }
-
         return $this->view('forum.log')->with(compact('logs', 'post', 'forum', 'topic'));
     }
 }
