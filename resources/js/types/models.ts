@@ -186,6 +186,18 @@ export interface Post {
   voters?: string[];
 }
 
+export interface PostLog {
+  id: number;
+  post_id: number;
+  text: string;
+  ip: string;
+  browser: string;
+  created_at: Date;
+  user: User;
+  user_name?: string;
+  title: string;
+}
+
 export interface Tag {
   id?: number;
   name: string;

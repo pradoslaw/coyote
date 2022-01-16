@@ -2,6 +2,7 @@
 
 namespace Coyote\Post;
 
+use Coyote\User;
 use Illuminate\Database\Eloquent\Model;
 use Coyote\Post;
 
@@ -58,5 +59,13 @@ class Log extends Model
     public function getTagsAttribute($value)
     {
         return json_decode($value);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class)->withTrashed();
     }
 }

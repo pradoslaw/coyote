@@ -155,17 +155,12 @@ class PostRepository extends Repository implements PostRepositoryInterface
     {
         return Post\Log::select([
             'post_log.id',
-            'post_log.*',
-            'posts.user_name',
-            'users.name AS author_name',
-            $this->raw('users.deleted_at IS NULL AS is_active'),
-            'users.is_blocked',
-            'users.is_online'
+            'post_log.*'
         ])
         ->where('post_id', $postId)
         ->join('posts', 'posts.id', '=', 'post_id')
-        ->leftJoin('users', 'users.id', '=', 'post_log.user_id')
         ->orderBy('post_log.id', 'DESC')
+        ->with('user')
         ->get();
     }
 

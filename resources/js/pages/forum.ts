@@ -6,10 +6,12 @@ import VueModals from "../plugins/modals";
 import VueAutosave from "../plugins/autosave";
 import VueForum from './forum/homepage';
 import VuePosts from './forum/posts';
+import VueLog from './forum/log';
 import * as Models from "../types/models";
 import { default as axiosErrorHandler } from '../libs/axios-error-handler';
 import './forum/sidebar';
 import './forum/tags';
+import { PostLog } from "@/types/models";
 
 Vue.use(VueTimeago);
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
@@ -34,10 +36,11 @@ declare global {
     groupStickyTopics: boolean;
     topics: Models.Paginator;
     popularTags: string[];
+    logs: PostLog[];
   }
 }
 
-const boot = { 'js-forum': VueForum, 'js-post': VuePosts }
+const boot = { 'js-forum': VueForum, 'js-post': VuePosts, 'js-log': VueLog }
 
 for (let el in boot) {
   if (document.getElementById(el)) {

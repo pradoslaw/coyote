@@ -46,8 +46,10 @@ class RollbackController extends Controller
             );
         });
 
-        return redirect()
-            ->to(UrlBuilder::topic($post->topic))
-            ->with('success', 'Post został przywrócony.');
+        session()->put('success', 'Post został przywrócony.');
+
+        return [
+            'url' => UrlBuilder::topic($post->topic)
+        ];
     }
 }

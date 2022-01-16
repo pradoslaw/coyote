@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Post;
+use Coyote\Services\UrlBuilder;
 
 class LogController extends BaseController
 {
@@ -20,7 +21,7 @@ class LogController extends BaseController
 
         $this->breadcrumb($forum);
         $this->breadcrumb->push([
-            $topic->title => route('forum.topic', [$forum->slug, $topic->id, $topic->slug]),
+            $topic->title => UrlBuilder::topic($topic),
             'Historia postu' => route('forum.post.log', [$post->id])
         ]);
 

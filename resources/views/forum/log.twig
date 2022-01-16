@@ -12,82 +12,13 @@
 
   <h1>{{ link_to_route('forum.topic', topic.title, [forum.slug, topic.id, topic.slug]) }}</h1>
 
-  <main class="mainbar">
-    {% for log in logs %}
-      <section class="card card-post">
-        <div class="card-header">
-          <div class="row d-none d-lg-flex">
-            <div class="col-2">
-              <h5 class="mb-0 post-author">
-                {% if log.user_id %}
-                  {{ link_to_profile(log.user_id, log.author_name, log.is_active, log.is_blocked) }}
-                {% else %}
-                  {{ log.user_name }}
-                {% endif %}
-              </h5>
-            </div>
-
-            <div class="col-10">
-              <i class="far fa-file"></i>
-
-              <a id="id{{ log.id }}" href="{{ url }}#id{{ log.id }}">{{ log.title }}</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="card-body">
-          <div class="row">
-            <div class="d-none d-lg-block col-lg-2">
-              <ul class="post-stats list-unstyled">
-                <li>
-                  <strong>Data:</strong>
-                  <small>{{ log.created_at|format_date }}</small>
-                </li>
-
-                <li>
-                  <strong>IP:</strong>
-                  <small>{{ log.ip }}</small>
-                </li>
-
-                <li class="text-truncate">
-                  <strong>Przeglądarka:</strong>
-                  <small title="{{ log.browser }}">{{ log.browser }}</small>
-                </li>
-              </ul>
-            </div>
-
-            <div class="col-12 col-lg-10 diff">
-              <div class="post-content">
-                {{ log.text|raw }}
-              </div>
-
-              {% if log.tags %}
-                <ul class="tag-clouds">
-                  {% for tag in log.tags %}
-                    <li><a href="{{ route('forum.tag', [tag|url_encode]) }}">{{ tag }}</a></li>
-                  {% endfor %}
-                </ul>
-              {% endif %}
-            </div>
-          </div>
-        </div>
-
-        <div class="card-footer">
-          <div class="row">
-            <div class="d-none d-lg-block col-lg-2"></div>
-            <div class="col-12 d-flex col-lg-10">
-              {% if not loop.first %}
-                <a title="Cofnij do tej wersji" data-bs-toggle="modal" data-bs-target="#confirm" data-href="{{ route('forum.post.rollback', [post.id, log.id]) }}" class="btn btn-sm btn-rollback">
-                  <i class="fas fa-undo"></i>
-
-                  <span class="d-none d-sm-block">Cofnij do tej wersji</span>
-                </a>
-              {% endif %}
-            </div>
-          </div>
-        </div>
-      </section>
-    {% endfor %}
+  <main id="js-log" class="mainbar">
+    <vue-log
+      v-for="(log, index) in logs"
+      :log="log"
+      :key="log.id"
+      :is-rollback-enabled="index > 0"
+    />
   </main>
 
 {#  {% embed 'forum.partials.sidebar' %}#}
@@ -105,6 +36,10 @@
   {{ form_open({'url': '', 'id': 'form-rollback'}) }}
   {{ modal.confirm('Treść postu zostanie zastąpiona. Czy chcesz kontynuować?', 'Potwierdź operację', 'confirm', 'Tak, cofnij') }}
   {{ form_close() }}
+
+  <script>
+    var logs = {{ logs|json_encode|raw }};
+  </script>
 
 {% endblock %}
 

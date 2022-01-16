@@ -1,6 +1,7 @@
 import axios from "axios";
-import {Post, PostComment, Paginator, User} from "@/types/models";
+import { Post, PostComment, Paginator, User, PostLog } from "@/types/models";
 import Vue from "vue";
+import { rollback } from '@/api';
 
 type ParentChild = { post: Post, comment: PostComment };
 
@@ -203,6 +204,10 @@ const actions = {
       commit('delete', post);
       commit('update', result.data);
     });
+  },
+
+  rollback({ commit }, log: PostLog) {
+    return rollback(log);
   },
 
   loadComments({ commit }, post: Post) {
