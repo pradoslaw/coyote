@@ -314,9 +314,9 @@ class Topic extends Model
             $this->last_post_created_at = $this->created_at = Carbon::now();
         }
 
-        return min(1000, 200 * (int) $this->score)
-            + min(1000, 100 * (int) $this->replies)
-                + min(1000, 15 * (int) $this->views)
+        return min(1000, 200 * $this->score)
+            + min(1000, 100 * $this->replies)
+                + min(1000, 15 * $this->views)
                     - ((time() - $this->last_post_created_at->timestamp) / 4500)
                         - ((time() - $this->created_at->timestamp) / 1000);
     }
