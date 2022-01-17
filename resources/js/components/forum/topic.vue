@@ -20,7 +20,7 @@
               <a :href="getUrl()" :class="{'font-weight-bold': !topic.is_read}">{{ topic.title }}</a>
               <small v-if="showCategoryName" class="d-inline d-xl-none"> w <a :href="topic.forum.url" class="text-body">{{ topic.forum.name }}</a></small>
 
-              <a v-if="flag != null" :href="flag" title="Przejdź do raportowanego postu"><i class="fa fa-fire"></i></a>
+              <a v-if="flag != null" :href="flag" title="Przejdź do raportowanego posta"><i class="fa fa-fire"></i></a>
             </h5>
 
             <div v-if="totalPages > 1" class="d-none d-sm-inline ml-2 topic-pagination">

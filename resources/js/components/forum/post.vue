@@ -108,7 +108,7 @@
           <vue-flag v-for="flag in flags" :key="flag.id" :flag.sync="flag"></vue-flag>
 
           <div class="post-vote">
-            <strong class="vote-count" title="Ocena postu">{{ post.score }}</strong>
+            <strong class="vote-count" title="Ocena posta">{{ post.score }}</strong>
 
             <a
               v-if="!post.deleted_at"
@@ -157,7 +157,7 @@
 
           <div v-if="post.edit_count" class="edit-info">
             <strong>
-              <a class="btn-history" :title="post.permissions.update ? 'Zobacz historię zmian tego postu' : ''" :href="post.permissions.update ? `/Forum/Post/Log/${post.id}` : ''">
+              <a class="btn-history" :title="post.permissions.update ? 'Zobacz historię zmian tego posta' : ''" :href="post.permissions.update ? `/Forum/Post/Log/${post.id}` : ''">
                 <i class="fas fa-external-link-alt"></i>
               </a>
 

@@ -101,7 +101,7 @@
 
     async rollback() {
       await this.$confirm({
-        message: 'Treść postu zostanie zastąpiona. Czy chcesz kontynuować?',
+        message: 'Treść posta zostanie zastąpiona. Czy chcesz kontynuować?',
         title: 'Potwierdź operację',
         okLabel: 'Tak, przywróć'
       });

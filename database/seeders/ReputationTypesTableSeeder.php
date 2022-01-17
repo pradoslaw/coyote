@@ -15,8 +15,8 @@ class ReputationTypesTableSeeder extends Seeder
      */
     public function run()
     {
-        Type::create(['id' => Reputation::POST_VOTE, 'name' => 'Ocena postu', 'points' => 5]);
-        Type::create(['id' => Reputation::POST_ACCEPT, 'name' => 'Akceptacja postu', 'points' => 15]);
+        Type::create(['id' => Reputation::POST_VOTE, 'name' => 'Ocena posta', 'points' => 5]);
+        Type::create(['id' => Reputation::POST_ACCEPT, 'name' => 'Akceptacja posta', 'points' => 15]);
         Type::create(['id' => Reputation::MICROBLOG, 'name' => 'Wpis na mikroblogu', 'points' => 1]);
         Type::create(['id' => Reputation::MICROBLOG_VOTE, 'name' => 'Ocena wpisu na mikroblogu', 'points' => 5]);
         Type::create(['id' => Reputation::WIKI_CREATE, 'name' => 'Utworzenie nowej strony', 'points' => 15]);

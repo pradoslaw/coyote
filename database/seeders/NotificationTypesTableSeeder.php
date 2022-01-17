@@ -41,14 +41,14 @@ class NotificationTypesTableSeeder extends Seeder
             'default' => '["db", "mail", "push"]'
         ]);
         Type::forceCreate(['id' => Notification::POST_DELETE,
-            'name' => '...usunięciu Twojego postu',
+            'name' => '...usunięciu Twojego posta',
             'headline' => 'Post został usunięty przez {sender}',
             'category' => 'Forum',
             'default' => '["db", "mail", "push"]'
         ]);
         Type::forceCreate(['id' => Notification::POST_COMMENT,
             'name' => '...nowym komentarzu w Twoim poście',
-            'headline' => '{sender} dodał komentarz do postu',
+            'headline' => '{sender} dodał komentarz do posta',
             'category' => 'Forum',
             'default' => '["db", "mail", "push"]'
         ]);
@@ -65,7 +65,7 @@ class NotificationTypesTableSeeder extends Seeder
             'default' => '["db", "mail", "push"]'
         ]);
         Type::forceCreate(['id' => Notification::POST_EDIT,
-            'name' => '...modyfikacji Twojego postu (lub postu, który obserwujesz)',
+            'name' => '...modyfikacji Twojego posta (lub posta, który obserwujesz)',
             'headline' => '{sender} zmodyfikował post',
             'category' => 'Forum',
             'default' => '["db", "mail", "push"]'
@@ -101,7 +101,7 @@ class NotificationTypesTableSeeder extends Seeder
             'default' => '["db", "push", "mail"]'
         ]);
         Type::forceCreate(['id' => Notification::POST_VOTE,
-            'name' => '...ocenie Twojego postu na forum',
+            'name' => '...ocenie Twojego posta na forum',
             'headline' => '{sender} docenił Twój post',
             'category' => 'Forum',
             'default' => '["db", "push"]'

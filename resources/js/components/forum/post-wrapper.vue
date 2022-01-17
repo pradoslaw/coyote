@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isBlocked()" class="card card-post is-deleted"><div class="post-delete card-body">Treść postu została ukryta ponieważ autorem jest zablokowany przez Ciebie użytkownik.</div></div>
+  <div v-if="isBlocked()" class="card card-post is-deleted"><div class="post-delete card-body">Treść posta została ukryta ponieważ autorem jest zablokowany przez Ciebie użytkownik.</div></div>
   <vue-post v-else :post="post" @reply="reply"></vue-post>
 </template>
 

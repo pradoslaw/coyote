@@ -13,7 +13,7 @@ class ForumReasonsTableSeeder extends Seeder
      */
     public function run()
     {
-        \Coyote\Forum\Reason::create(['name' => 'Spam', 'description' => 'Treść postu zawiera spam.']);
+        \Coyote\Forum\Reason::create(['name' => 'Spam', 'description' => 'Treść posta zawiera spam.']);
         \Coyote\Forum\Reason::create(['name' => 'Niepoprawny tytuł wątku', 'description' => 'Aby ułatwić życie użytkownikom forum, prosimy o nadawanie sensownych tematów wątków. Proszę unikać tematów typu "pomoc", "proszę o pomoc", "problem" -- nadawanie sensownych tematów wątków spowoduje, iż Twój temat będzie bardziej atrakcyjny dla użytkowników.
 
 Proszę zapoznać się z zasadami zakładania wątków: http://forum.4programmers.net/Newbie/173798-jak_tytulowac_watki_na_forum']);

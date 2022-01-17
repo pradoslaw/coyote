@@ -30,7 +30,7 @@ class AcceptsGrid extends Grid
                 }
             ])
             ->addColumn('accepted_at', [
-                'title' => 'Data akceptacji postu',
+                'title' => 'Data akceptacji posta',
                 'decorators' => [$this->getDateTimeDecorator()]
             ]);
     }

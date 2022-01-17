@@ -100,6 +100,6 @@ class AcceptControllerTest extends TestCase
         $response = $this->actingAs($this->user)->json('POST', "/Forum/Post/Accept/{$postId}");
 
         $response->assertStatus(500);
-        $response->assertJsonFragment(['message' => 'Nie można zaakceptować pierwszego postu w wątku.']);
+        $response->assertJsonFragment(['message' => 'Nie można zaakceptować pierwszego posta w wątku.']);
     }
 }
