@@ -3,42 +3,19 @@
     <vue-tabs @click="switchTab" :items="tabs" :current-tab="tabs.indexOf(currentTab)" type="pills" class="mb-2">
       <div v-if="isContent" class="btn-toolbar ml-auto">
         <div class="btn-group mr-2" role="group" aria-label="...">
-          <button @click="makeBold" type="button" class="btn btn-sm"
-                  :title="state.canBold ? 'Dodaj pogrubienie' : 'Dodanie tutaj pogrubienia mogłoby uszkodzić składnię'"
-                  :style="{opacity: state.canBold ? '1.0' : '0.4', cursor: state.canStrikeThrough ? 'pointer' : 'default'}">
-            <i class="fas fa-bold fa-fw"></i>
-          </button>
-          <button @click="makeItalics" type="button" class="btn btn-sm"
-                  :title="state.canItalics ? 'Dodaj kursywę' : 'Dodanie tutaj kursywy mogłoby uszkodzić składnię'"
-                  :style="{opacity: state.canItalics ? '1.0' : '0.4', cursor: state.canStrikeThrough ? 'pointer' : 'default'}">
-            <i class="fas fa-italic fa-fw"></i>
-          </button>
-          <button @click="makeStrikeThrough" type="button" class="btn btn-sm"
-                  :title="state.canStrikeThrough ? 'Dodaj przekreślenie' : 'Dodanie tutaj przekreślenia mogłoby uszkodzić składnię'"
-                  :style="{opacity: state.canStrikeThrough ? '1.0' : '0.4', cursor: state.canStrikeThrough ? 'pointer' : 'default'}">
-            <i class="fas fa-strikethrough fa-fw"></i>
-          </button>
-          <button @click="insertBlockQuote" type="button" class="btn btn-sm"
-                  :title="state.canBlockQuote ? 'Dodaj cytat' : 'Dodanie tutaj cytatu mogłoby uszkodzić składnię'"
-                  :style="{opacity: state.canBlockQuote ? '1.0' : '0.4', cursor: state.canBlockQuote ? 'pointer' : 'default'}">
-            <i class="fas fa-quote-left fa-fw"></i>
-          </button>
-
-          <button @click="insertLink" type="button" class="btn btn-sm"
-                  :title="state.canLink ? 'Dodaj link' : 'Dodanie tutaj linka mogłoby uszkodzić składnię'"
-                  :style="{opacity: state.canLink ? '1.0' : '0.4', cursor: state.canLink ? 'pointer' : 'default'}">
-            <i class="fas fa-link fa-fw"></i>
-          </button>
-
-          <button @click="insertImage" type="button" class="btn btn-sm"
-                  :title="state.canImage ? 'Dodaj obraz' : 'Dodanie tutaj obrazu mogłoby uszkodzić składnię'"
-                  :style="{opacity: state.canImage ? '1.0' : '0.4', cursor: state.canImage ? 'pointer' : 'default'}">
-            <i class="fas fa-image fa-fw"></i>
+          <button
+            v-for="button in buttons"
+            @click="button.click"
+            type="button"
+            class="btn btn-sm"
+            :title="button.can ? button.title : button.break"
+            :style="{opacity: button.can ? '1.0' : '0.4', cursor: button.can ? 'pointer' : 'default'}">
+            <i :class="['fas fa-fw', button.icon]"></i>
           </button>
 
           <label style="color:grey; align-self:center; margin: 3px 0 0;" title='"Smart paste" wkleja linki jako markdown'>
             <input type="checkbox" v-model="smartPaste">
-            Smart paste
+            Wklejaj linki jako markdown
           </label>
         </div>
       </div>
@@ -230,16 +207,87 @@
     isProcessing = false;
     progress = 0;
     tabs: string[] = [CONTENT, PREVIEW];
-    state = {
-      canBold: false,
-      canItalics: false,
-      canStrikeThrough: false,
-      canList: false,
-      canBlockQuote: false,
-      canLink: false,
-      canImage: false,
-    }
-    smartPaste = false;
+    buttons = {
+      bold: {
+        click: this.makeBold,
+        can: false,
+        title: 'Pogrub zaznaczony tekst lub dodaj pogrubienie',
+        break: 'Dodanie tutaj pogrubienia mogłoby uszkodzić składnię',
+        icon: 'fa-bold'
+      },
+      italics: {
+        click: this.makeItalics,
+        can: false,
+        title: 'Pochyl tekst lub dodaj pochylenie',
+        break: 'Dodanie tutaj pochylenia mogłoby uszkodzić składnię',
+        icon: 'fa-italic'
+      },
+      underline: {
+        click: this.makeUnderline,
+        can: false,
+        title: 'Podkreśl tekst lub dodaj podkreślenie',
+        break: 'Dodanie tutaj podkreślenia mogłoby uszkodzić składnię',
+        icon: 'fa-underline'
+      },
+      strike: {
+        click: this.makeStrikeThrough,
+        can: false,
+        title: 'Przekreśl tekst lub dodaj przekreślenie',
+        break: 'Dodanie tutaj przekreślenia mogłoby uszkodzić składnię',
+        icon: 'fa-strikethrough'
+      },
+      link: {
+        click: this.makeLink,
+        can: false,
+        title: 'Zamień zaznaczenie w link lub dodaj link',
+        break: 'Dodanie tutaj linku mogłoby uszkodzić składnię',
+        icon: 'fa-link'
+      },
+      image: {
+        click: this.makeImage,
+        can: false,
+        title: 'Zmień zaznaczenie w obraz lub dodaj obraz',
+        break: 'Dodanie tutaj obrazu mogłoby uszkodzić składnię',
+        icon: 'fa-image'
+      },
+      quote: {
+        click: this.insertBlockQuote,
+        can: false,
+        title: 'Zmień zaznaczenie w cytat lub dodaj cytat',
+        break: 'Dodanie tutaj cytatu mogłoby uszkodzić składnię',
+        icon: 'fa-quote-left'
+      },
+      listOrdered: {
+        click: this.insertOrderedList,
+        can: false,
+        title: 'Zmień zaznaczenie w listę lub dodaj listę uporządkowaną',
+        break: 'Dodanie tutaj listy mogłoby uszkodzić składnię',
+        icon: 'fa-list-ol'
+      },
+      listUnordered: {
+        click: this.insertUnorderedList,
+        can: false,
+        title: 'Zmień zaznaczenie w listę lub dodaj listę nieuporządkowaną',
+        break: 'Dodanie tutaj listy mogłoby uszkodzić składnię',
+        icon: 'fa-list-ul'
+      },
+      code: {
+        click: this.insertCode,
+        can: false,
+        title: 'Zmień zaznaczoną treść w kod lub dodaj pusty fragment kodu',
+        break: 'Dodanie tutaj fragmentu kodu mogłoby uszkodzić składnię',
+        icon: 'fa-code',
+      },
+      table: {
+        click: this.insertTable,
+        can: false,
+        title: 'Zmień zaznaczoną treść w tabelkę lub dodaj pustą tabelkę',
+        break: 'Dodanie tutaj tabelki mogłoby spowodować uszkodzenie składni',
+        icon: 'fa-table'
+      },
+    };
+
+    smartPaste = true;
 
     @Ref('editor')
     readonly editor!: Editor4Play;
@@ -297,7 +345,7 @@
       if (isImage(asset.name!)) {
         this.editor.insertImage(asset.url, asset.name);
       } else {
-        // TODO add this.editor.insertLink()
+        this.editor.insertLink(asset.url, asset.name);
       }
     }
 
@@ -309,13 +357,17 @@
     }
 
     updateState(state) {
-      this.state.canBold = state.canBold;
-      this.state.canItalics = state.canItalics;
-      this.state.canStrikeThrough = state.canStrikeThrough;
-      this.state.canList = state.canList;
-      this.state.canBlockQuote = state.canBlockQuote;
-      this.state.canLink = state.canLink;
-      this.state.canImage = state.canImage;
+      this.buttons.bold.can = state.canBold;
+      this.buttons.italics.can = state.canItalics;
+      this.buttons.underline.can = state.canUnderline;
+      this.buttons.strike.can = state.canStrikeThrough;
+      this.buttons.listOrdered.can = state.canList;
+      this.buttons.listUnordered.can = state.canList;
+      this.buttons.code.can = state.canCode;
+      this.buttons.table.can = state.canTable;
+      this.buttons.quote.can = state.canBlockQuote;
+      this.buttons.link.can = state.canLink;
+      this.buttons.image.can = state.canImage;
     }
 
     autocomplete(nick) {
@@ -354,20 +406,40 @@
       this.editor.makeItalics();
     }
 
+    makeUnderline() {
+      this.editor.makeUnderline();
+    }
+
     makeStrikeThrough() {
       this.editor.makeStrikeThrough();
     }
 
-    insertImage() {
+    makeImage() {
       this.editor.makeImage('http://');
     }
 
-    insertLink() {
+    makeLink() {
       this.editor.makeLink('http://');
     }
 
     insertBlockQuote() {
       this.editor.insertBlockQuote('Dodaj cytat...');
+    }
+
+    insertOrderedList() {
+      this.editor.insertListOrdered('Dodaj cytat...');
+    }
+
+    insertUnorderedList() {
+      this.editor.insertListUnordered('Dodaj cytat...');
+    }
+
+    insertCode() {
+      this.editor.insertCodeBlock();
+    }
+
+    insertTable() {
+      this.editor.addTable('Nagłówek', 'Dodaj...')
     }
 
     appendBlockQuote(username, postId, content) {

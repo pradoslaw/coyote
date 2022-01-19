@@ -41,26 +41,44 @@
       insertImage(href, title) {
         this.editor.insertImage(href, title);
       },
+      insertLink(href, title) {
+        this.editor.insertLink(href, title);
+      },
       makeBold() {
-        this.editor.makeBold();
+        this.editor.putBold();
       },
       makeItalics() {
-        this.editor.makeItalics();
+        this.editor.putItalics();
+      },
+      makeUnderline() {
+        this.editor.putUnderline();
       },
       makeStrikeThrough() {
-        this.editor.makeStrikeThrough();
+        this.editor.putStrikeThrough();
       },
       insertBlockQuote(placeholder) {
-        this.editor.insertBlockQuote(placeholder);
+        this.editor.putBlockQuote(placeholder);
       },
       makeLink(placeholder) {
-        this.editor.makeLink(placeholder);
+        this.editor.putLink(placeholder);
       },
       makeImage(placeholder) {
-        this.editor.makeImage(placeholder);
+        this.editor.putImage(placeholder);
       },
       appendBlockQuote(content) {
         this.editor.appendBlockQuote(content);
+      },
+      insertListOrdered(placeholder) {
+        this.editor.putListOrdered(placeholder);
+      },
+      insertListUnordered(placeholder) {
+        this.editor.putListUnordered(placeholder);
+      },
+      insertCodeBlock() {
+        this.editor.putCodeBlock();
+      },
+      addTable(header, placeholder) {
+        this.editor.putTable(index => header + ' ' + (index + 1), placeholder);
       },
       focus() {
         this.editor.focus();
