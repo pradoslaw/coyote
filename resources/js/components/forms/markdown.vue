@@ -21,7 +21,7 @@
       </div>
     </vue-tabs>
 
-    <vue-prompt v-show="isContent" :source="promptUrl">
+    <div v-show="isContent">
       <div :class="['form-control', {'is-invalid': error !== null}]"
            style="height:inherit; outline:none; box-shadow:none; border:none; padding-left:0; padding-right:0;">
         <vue-editor
@@ -36,7 +36,7 @@
           @state="updateState"/>
       </div>
       <vue-error :message="error"></vue-error>
-    </vue-prompt>
+    </div>
 
     <div v-show="isPreview" v-html="previewHtml" class="preview post-content"></div>
 
@@ -297,7 +297,7 @@
 
     autocomplete(nick) {
       return store
-        .dispatch('prompt/request', {value: nick, source: '/completion/prompt/users'})
+        .dispatch('prompt/request', {value: nick, source: this.promptUrl})
         .then(users => users.map(user => ({
           name: user.name,
           badge: user.group,
