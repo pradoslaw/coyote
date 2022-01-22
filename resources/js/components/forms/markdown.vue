@@ -64,7 +64,9 @@
 
       <div class="small ml-auto">
         <a href="#js-wiki-help" tabindex="-1" data-bs-toggle="collapse" class="small text-muted">
-          <i class="fa fab fa-markdown"></i> Markdown jest obsługiwany.</a>
+          <i class="fa fab fa-markdown"/>
+          Markdown jest obsługiwany
+        </a>
       </div>
     </div>
 
@@ -77,87 +79,7 @@
 
     <div id="js-wiki-help" class="row collapse mt-2">
       <div class="col-md-12">
-        <div class="card card-info">
-          <div class="card-header">Pomoc</div>
-          <div class="card-body">
-            <h2>Pogrubienie, kursywa...</h2>
-
-            <p>Możesz używać pogrubienia czy kursywy, aby usprawnić czytelność tekstu: <code>**to jest
-              pogrubienie**</code>, a to
-              <code>*kursywa*</code>.
-            </p>
-
-            <h2>Kod źródłowy</h2>
-
-            <p>Wszelkie jednolinijkowe instrukcje języka programowania (fragmenty kodu) powinny być zawarte pomiędzy
-              obrócone
-              apostrofy
-              lub podwójny cudzysłów, czyli: <code>`kod instrukcji języka programowania`</code>.</p>
-
-            <p><code>```</code> umożliwia kolorowanie większych fragmentów kodu. Możemy nadać nazwę języka
-              programowania,
-              aby system użył konkretnych ustawień kolorowania składnii:
-              <br/><br/>
-              <code>
-                ```javascript<br/>
-                &nbsp;&nbsp;document.write('Hello World');<br/>
-                ```<br/>
-              </code></p>
-
-            <h2>Nagłówki</h2>
-
-            <p>
-              <code>## Nagłówek 2</code><br/>
-              <code>### Nagłówek 3</code><br/>
-              <code>#### Nagłówek 4</code>
-            </p>
-
-            <h2>Wypunktowanie i numerowanie</h2>
-
-            <p>
-              Możliwe jest tworzenie listy numerowanych oraz wypunktowanych. Wystarczy, że pierwszym znakiem linii
-              będzie <code>*</code> lub <code>1. </code>
-            </p>
-
-            <p>
-              <code>1. Lista numerowana</code><br/>
-              <code>2. Lista numerowana</code><br/>
-            </p>
-            <p></p>
-            <p>
-              <code>* Lista wypunktowana</code><br/>
-              <code>* Lista wypunktowana</code><br/>
-              <code>** Lista wypunktowana (drugi poziom)</code><br/>
-            </p>
-
-            <h2>Linki</h2>
-
-            <p>URL umieszczony w tekście zostanie przez system automatycznie wykryty i zamieniony na znacznik <code>
-              &lt;a&gt;</code>.<br/>
-              Jeżeli chcesz, możesz samodzielnie sformatować link: <code>&lt;a href="http://4programmers.net">kliknij
-                tutaj&lt;/a&gt;</code>
-            </p>
-
-            <p>Możesz umieścić odnośnik do wewnętrznej podstrony, używając następującej składnii: <code>[[Delphi/Kompendium]]</code>
-              lub <code>[[Delphi/Kompendium|kliknij, aby przejść do kompendium]]</code></p>
-
-            <h2>Znaczniki HTML</h2>
-
-            <p>Dozwolone jest używanie podstawowych znaczników HTML: &lt;a&gt;, &lt;b&gt;, &lt;i&gt;, &lt;del&gt;, &lt;strong&gt;,
-              &lt;tt&gt;, &lt;dfn&gt;, &lt;ins&gt;, &lt;pre&gt;, &lt;blockquote&gt;, &lt;hr&gt;, &lt;sub&gt;, &lt;sup&gt;,
-              &lt;img&gt;</p>
-
-            <h2>Indeks górny oraz dolny</h2>
-
-            <p>Przykład: wpisując <code>m&lt;sub&gt;2&lt;/sub&gt;,, i m&lt;sup&gt;2&lt;/sup&gt;</code> otrzymasz:
-              m<sub>2</sub>
-              i m<sup>2</sup>.</p>
-
-            <h2>Składnia Tex</h2>
-
-            <p><code>&lt;tex&gt;arcctg(x) = argtan(\frac{1}{x}) = arcsin(\frac{1}{\sqrt{1+x^2}})&lt;/tex&gt;</code></p>
-          </div>
-        </div>
+        <vue-help/>
       </div>
     </div>
 
@@ -167,23 +89,25 @@
 
 <script lang="ts">
   import Vue from 'vue';
-  import Component from "vue-class-component";
-  import { Asset } from '@/types/models';
-  import { Ref, Prop, Emit, Watch } from "vue-property-decorator";
-  import { mixin as clickaway } from 'vue-clickaway';
-  import { default as mixin } from '../mixins/form';
-  import VueAutosize from '../../plugins/autosize';
-  import VuePrompt from '../forms/prompt.vue';
-  import VueTabs from '../tabs.vue';
-  import store from '../../store';
-  import VueThumbnail from "../thumbnail.vue";
-  import VueError from '../forms/error.vue';
-  import VueEditor from './editor.vue';
   import axios from 'axios';
   import Prism from 'prismjs';
-  import isImage from '../../libs/assets';
+  import { Asset } from '@/types/models';
+  import Component from "vue-class-component";
+  import { mixin as clickaway } from 'vue-clickaway';
+  import { Ref, Prop, Emit, Watch } from "vue-property-decorator";
   import { Editor4Play } from "@riddled/4play/src/Editor.js";
   import { link } from "@riddled/4play/src/markdown";
+
+  import { default as mixin } from '../mixins/form';
+  import VueThumbnail from "../thumbnail.vue";
+  import VueAutosize from '../../plugins/autosize';
+  import VuePrompt from '../forms/prompt.vue';
+  import VueEditor from './editor.vue';
+  import VueError from '../forms/error.vue';
+  import VueTabs from '../tabs.vue';
+  import isImage from '../../libs/assets';
+  import VueHelp from './help.vue';
+  import store from '../../store';
 
   const CONTENT = 'Treść';
   const PREVIEW = 'Podgląd';
@@ -197,7 +121,8 @@
       'vue-tabs': VueTabs,
       'vue-thumbnail': VueThumbnail,
       'vue-error': VueError,
-      'vue-editor': VueEditor
+      'vue-editor': VueEditor,
+      'vue-help': VueHelp,
     },
   })
   export default class VueMarkdown extends Vue {

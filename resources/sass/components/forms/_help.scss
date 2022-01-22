@@ -1,0 +1,27 @@
+.markdown-help {
+  padding: 0.375rem;
+
+  h3 {
+    &:first-child {
+      margin-top: 0;
+    }
+
+    margin-top: 20px;
+    margin-bottom: 15px;
+  }
+
+  h4 {
+    &:first-child {
+      margin-top: 0;
+    }
+
+    margin-top: 15px;
+    margin-bottom: 5px;
+  }
+
+  ul {
+    li {
+      margin-bottom: 2px;
+    }
+  }
+}
