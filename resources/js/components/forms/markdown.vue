@@ -352,11 +352,11 @@
     }
 
     insertOrderedList() {
-      this.editor.insertListOrdered('Dodaj cytat...');
+      this.editor.insertListOrdered('Pierwszy element...');
     }
 
     insertUnorderedList() {
-      this.editor.insertListUnordered('Dodaj cytat...');
+      this.editor.insertListUnordered('Pierwszy element...');
     }
 
     insertCode() {
