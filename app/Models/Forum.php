@@ -59,7 +59,8 @@ class Forum extends Model
         'require_tag',
         'enable_reputation',
         'enable_anonymous',
-        'enable_tags'
+        'enable_tags',
+        'enable_homepage'
     ];
 
     /**

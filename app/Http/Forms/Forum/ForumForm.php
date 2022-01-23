@@ -78,6 +78,9 @@ class ForumForm extends Form
             ->add('enable_tags', 'checkbox', [
                 'label' => 'Zezwalaj na dodawanie tagów'
             ])
+            ->add('enable_homepage', 'checkbox', [
+                'label' => 'Zezwalaj na wyświetlanie na stronie głównej'
+            ])
             ->add('access', 'choice', [
                 'label' => 'Dostęp dla grup',
                 'choices' => $this->getGroupsList(),
