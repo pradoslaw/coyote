@@ -251,12 +251,10 @@
     readonly isInvalid!: boolean;
 
     @Emit('save')
-    save() {
-    }
+    save() {}
 
     @Emit('cancel')
-    cancel() {
-    }
+    cancel() {}
 
     addAsset(asset: Asset) {
       this.assets.push(asset);
