@@ -5,7 +5,6 @@ import PerfectScrollbar from '../components/perfect-scrollbar';
 import VuePm from '../components/pm/message.vue';
 import VueAutosave from '../plugins/autosave';
 import VuePrompt from '../components/forms/prompt.vue';
-import VueMarkdown from '../components/forms/markdown.vue';
 import VueButton from '../components/forms/button.vue';
 import VueError from '../components/forms/error.vue';
 import {default as ws} from '../libs/realtime.ts';
@@ -36,7 +35,7 @@ new Vue({
     'vue-pm': VuePm,
     'vue-prompt': VuePrompt,
     'vue-button': VueButton,
-    'vue-markdown': VueMarkdown,
+    'vue-markdown': () => import(/* webpackChunkName: "markdown" */'../components/forms/markdown.vue'),
     'vue-pagination': VuePagination,
     'vue-autocomplete': VueAutocomplete,
     'vue-error': VueError

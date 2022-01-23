@@ -97,10 +97,8 @@
   import { Ref, Prop, Emit, Watch } from "vue-property-decorator";
   import { Editor4Play } from "@riddled/4play/src/Editor.js";
   import { link } from "@riddled/4play/src/markdown";
-
   import { default as mixin } from '../mixins/form';
   import VueThumbnail from "../thumbnail.vue";
-  import VueAutosize from '../../plugins/autosize';
   import VuePrompt from '../forms/prompt.vue';
   import VueEditor from './editor.vue';
   import VueError from '../forms/error.vue';
@@ -111,8 +109,6 @@
 
   const CONTENT = 'Treść';
   const PREVIEW = 'Podgląd';
-
-  Vue.use(VueAutosize);
 
   @Component({
     mixins: [clickaway, mixin],
