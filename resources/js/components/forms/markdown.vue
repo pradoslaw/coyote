@@ -12,11 +12,6 @@
             :style="{opacity: button.can ? '1.0' : '0.4', cursor: button.can ? 'pointer' : 'default'}">
             <i :class="['fas fa-fw', button.icon]"></i>
           </button>
-
-          <label style="color:grey; align-self:center; margin: 3px 0 0;" title='"Smart paste" wkleja linki jako markdown'>
-            <input type="checkbox" v-model="smartPaste">
-            Wklejaj linki jako markdown
-          </label>
         </div>
       </div>
     </vue-tabs>
@@ -79,6 +74,36 @@
 
     <div id="js-wiki-help" class="row collapse mt-2">
       <div class="col-md-12">
+        <div class="p-2">
+          <div class="card card-info">
+            <div class="card-header">Ustawienia</div>
+            <div class="p-3">
+              <ol>
+                <li>
+                  <p>
+                    Edytor reaguje na skrót <kbd>Ctrl+V</kbd>, który wkleja treści zgodznie z ich przeznaczeniem. Jeśli wklejasz
+                    link, edytor wklei go jako link Markdown.
+                  </p>
+                  <p>
+                    <label style="color:grey; align-self:center; margin: 3px 0 0;" title='"Smart paste" wkleja linki jako markdown'>
+                      <input type="checkbox" v-model="smartPaste">
+                      Wklejaj linki jako markdown
+                    </label>
+                  </p>
+                </li>
+                <li>
+                  <p>Jeśli wklejasz link do obrazka, edytor wklei go jako obraz Markdown.</p>
+                  <p>
+                    <label style="color:grey; align-self:center; margin: 3px 0 0;" title='"Smart paste" wkleja linki jako markdown'>
+                      <input type="checkbox" checked="checked" disabled="disabled">
+                      Wklejaj obrazki jako markdown
+                    </label>
+                  </p>
+                </li>
+              </ol>
+            </div>
+          </div>
+        </div>
         <vue-help/>
       </div>
     </div>
@@ -247,10 +272,12 @@
     readonly isInvalid!: boolean;
 
     @Emit('save')
-    save() {}
+    save() {
+    }
 
     @Emit('cancel')
-    cancel() {}
+    cancel() {
+    }
 
     addAsset(asset: Asset) {
       this.assets.push(asset);
