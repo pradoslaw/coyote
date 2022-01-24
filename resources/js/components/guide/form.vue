@@ -70,7 +70,6 @@
   import { default as mixins } from '../mixins/user';
   import VueButton from '@/components/forms/button.vue';
   import VueTagsInline from '@/components/forms/tags-inline.vue';
-  import VueMarkdown from '@/components/forms/markdown.vue';
   import VueText from '@/components/forms/text.vue';
   import VueSelect from '@/components/forms/select.vue';
   import VueError from '@/components/forms/error.vue';
@@ -86,7 +85,7 @@
       'vue-form-group': VueFormGroup,
       'vue-text': VueText,
       'vue-select': VueSelect,
-      'vue-markdown': VueMarkdown,
+      'vue-markdown': () => import(/* webpackChunkName: "markdown" */'../forms/markdown.vue'),
       'vue-button': VueButton,
       'vue-tags-inline': VueTagsInline,
       'vue-error': VueError

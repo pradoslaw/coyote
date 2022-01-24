@@ -37,11 +37,10 @@
 
 <script lang="ts">
   import Component from "vue-class-component";
-  import {Mixins, Prop, ProvideReactive, Ref, Watch} from "vue-property-decorator";
+  import { Mixins, Prop, ProvideReactive, Ref } from "vue-property-decorator";
   import store from "../../store";
   import VuePrompt from '../forms/prompt.vue';
   import VueButton from '../forms/button.vue';
-  import VueMarkdown from '../forms/markdown.vue';
   import VueTagsInline from '../forms/tags-inline.vue';
   import { MicroblogFormMixin } from '../mixins/microblog';
   import { Tag } from "@/types/models";
@@ -55,7 +54,7 @@
     components: {
       'vue-button': VueButton,
       'vue-prompt': VuePrompt,
-      'vue-markdown': VueMarkdown,
+      'vue-markdown': () => import(/* webpackChunkName: "markdown" */'../forms/markdown.vue'),
       'vue-tags-inline': VueTagsInline
     },
     inject: []

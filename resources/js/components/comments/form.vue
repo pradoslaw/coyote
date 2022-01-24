@@ -31,7 +31,6 @@
   import Component from "vue-class-component";
   import VueButton from '../forms/button.vue';
   import VueAvatar from '../avatar.vue';
-  import VueMarkdown from '../forms/markdown.vue';
   import { Model } from '@/types/models';
   import VuePromp from '../forms/prompt.vue';
   import { mapState } from 'vuex';
@@ -42,7 +41,7 @@
       'vue-avatar': VueAvatar,
       'vue-button': VueButton,
       'vue-prompt': VuePromp,
-      'vue-markdown': VueMarkdown
+      'vue-markdown': () => import(/* webpackChunkName: "markdown" */'../forms/markdown.vue')
     },
     mixins: [ mixins ],
     computed: mapState('user', ['user'])

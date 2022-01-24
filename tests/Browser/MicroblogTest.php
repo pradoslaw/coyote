@@ -22,13 +22,15 @@ class MicroblogTest extends DuskTestCase
             $text = $faker->text();
 
             $browser
+                ->resize(1600, 1200)
                 ->loginAs($user)
                 ->visit('/Mikroblogi')
-                ->type('text', $text)
+                ->waitFor('.editor')
+                ->type('.cm-content', $text)
                 ->press('Zapisz')
                 ->waitForText($text)
                 ->assertSee($text)
-                ->assertInputValueIsNot('text', $text);
+                ->assertInputValueIsNot('.cm-content', $text);
 
             $browser->logout();
         });
@@ -67,6 +69,7 @@ class MicroblogTest extends DuskTestCase
             $browser
                 ->loginAs($user)
                 ->visit('/Mikroblogi')
+                ->waitFor('.editor')
                 ->press('Zapisz')
                 ->waitForText('Proszę wpisać treść')
                 ->assertSee('Proszę wpisać treść');

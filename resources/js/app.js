@@ -12,11 +12,14 @@ import './plugins/sociale.js';
 import '@popperjs/core'; // must be imported before bootstrap
 import './bootstrap';
 import './libs/axios-throttle.ts';
-
+import VueAutosize from './plugins/autosize';
 import Router from './libs/router';
 import Prism from 'prismjs';
+import Vue from 'vue';
 
 Prism.highlightAll();
+
+Vue.use(VueAutosize);
 
 let r = new Router();
 

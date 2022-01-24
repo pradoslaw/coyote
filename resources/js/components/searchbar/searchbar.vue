@@ -244,11 +244,19 @@
     }
 
     shortcutSupport(event: KeyboardEvent): void {
-      if (event.key === '?' && event.shiftKey && (!/^(?:input|textarea|select|button)$/i.test((event.target as HTMLElement).tagName))) {
+      if (event.key === '?' && event.shiftKey && this.elementSupportSearchShortcut(event)) {
         event.preventDefault();
 
         (this.$refs.input as HTMLInputElement).focus();
       }
+    }
+
+    private elementSupportSearchShortcut(event: KeyboardEvent) {
+      const htmlElement = event.target as HTMLElement;
+      if (htmlElement.isContentEditable) {
+        return !htmlElement.closest(".editor-4play"); // make sure we found 4play editor
+      }
+      return !/^(?:input|textarea|select|button)$/i.test(htmlElement.tagName);
     }
 
     changeUrl(): void {
@@ -301,7 +309,7 @@
       });
 
       return Object.values(result).map(category => {
-        category.children.forEach(child => Object.assign(child, { index: counter++ }));
+        category.children.forEach(child => Object.assign(child, {index: counter++}));
 
         return category;
       });
