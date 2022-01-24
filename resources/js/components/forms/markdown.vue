@@ -138,6 +138,7 @@
   const CONTENT = 'Treść';
   const PREVIEW = 'Podgląd';
 
+  // @ts-ignore
   @Component({
     mixins: [clickaway, mixin],
     components: {
