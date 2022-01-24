@@ -90,6 +90,9 @@
                       Wklejaj linki jako markdown
                     </label>
                   </p>
+                  <p>
+                    Żeby jednorazowo wkleić link dosłowine, użyj kombinacji <kbd>Ctrl+Shift+V</kbd>.
+                  </p>
                 </li>
                 <li>
                   <p>Jeśli wklejasz link do obrazka, edytor wklei go jako obraz Markdown.</p>
