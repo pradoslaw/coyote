@@ -44,13 +44,14 @@ class ForumTest extends DuskTestCase
             $browser
                 ->loginAs($user)
                 ->visitRoute('forum.topic.submit', ['forum' => $forum])
+                ->waitFor('.editor')
                 ->type('tags', $tag = $faker->word)
                 ->keys('input[name="tags"]', '{space}')
                 ->keys('input[name="tags"]', '{escape}')
                 ->pause(500)
                 ->click('input[name="title"]')
                 ->type('title', $title = $faker->text(50))
-                ->type('text', $text = $faker->realText())
+                ->type('.cm-content', $text = $faker->realText())
                 ->press('Zapisz')
                 ->waitForText('Tak, jestem pewien')
                 ->press('Tak, jestem pewien')
@@ -118,10 +119,11 @@ class ForumTest extends DuskTestCase
                 $browser
                     ->loginAs($user)
                     ->visit(UrlBuilder::topic($topic))
+                    ->waitFor('.editor')
                     ->assertSee('Odpowiedz')
                     ->clickLink('Odpowiedz')
                     ->with('#js-submit-form', function ($form) use ($text) {
-                        $form->type('textarea[name="text"]', $text)
+                        $form->type('.cm-content', $text)
                             ->press('Zapisz');
                     })
                     ->waitForText($text);
