@@ -141,6 +141,7 @@
   import store from "../../store";
   import VueButton from '../forms/button.vue';
   import VueTagsInline from '../forms/tags-inline.vue';
+  import VueMarkdown from '../../components/forms/markdown.vue';
   import { Post, Topic, Tag } from "@/types/models";
   import { mapMutations, mapState, mapGetters } from "vuex";
   import axios from 'axios';
@@ -154,7 +155,7 @@
     store,
     components: {
       'vue-button': VueButton,
-      'vue-markdown': () => import(/* webpackChunkName: "markdown" */'../forms/markdown.vue'),
+      'vue-markdown': VueMarkdown,
       'vue-tags-inline': VueTagsInline,
       'vue-error': VueError,
       'vue-text': VueText,

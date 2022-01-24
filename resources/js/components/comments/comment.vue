@@ -85,6 +85,7 @@
   import VueUserName from '../user-name.vue';
   import VueButton from '../forms/button.vue';
   import VueFlag from '../flags/flag.vue';
+  import VueMarkdown from '../forms/markdown.vue';
   import { default as mixins } from '../mixins/user';
   import { mapGetters } from 'vuex';
 
@@ -97,7 +98,7 @@
       'vue-username': VueUserName,
       'vue-button': VueButton,
       'vue-flag': VueFlag,
-      'vue-markdown': () => import(/* webpackChunkName: "markdown" */'../forms/markdown.vue')
+      'vue-markdown': VueMarkdown
     },
     mixins: [ mixins ],
     data() {

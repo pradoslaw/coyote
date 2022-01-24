@@ -31,17 +31,19 @@
   import Component from "vue-class-component";
   import VueButton from '../forms/button.vue';
   import VueAvatar from '../avatar.vue';
+  import VueMarkdown from '../forms/markdown.vue';
   import { Model } from '@/types/models';
   import VuePromp from '../forms/prompt.vue';
   import { mapState } from 'vuex';
   import { default as mixins } from '../mixins/user';
 
+  // @ts-ignore
   @Component({
     components: {
       'vue-avatar': VueAvatar,
       'vue-button': VueButton,
       'vue-prompt': VuePromp,
-      'vue-markdown': () => import(/* webpackChunkName: "markdown" */'../forms/markdown.vue')
+      'vue-markdown': VueMarkdown
     },
     mixins: [ mixins ],
     computed: mapState('user', ['user'])
