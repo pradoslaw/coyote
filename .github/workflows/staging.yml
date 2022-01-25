@@ -22,7 +22,8 @@ jobs:
           port: 22
           script: |
             cd /var/www/4programmers.dev
-            git reset --hard
+            git fetch
+            git reset origin/staging --hard
             git pull
             docker-compose exec -T php composer install --no-dev
             make install-assets
