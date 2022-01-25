@@ -200,6 +200,13 @@
         break: 'Dodanie tutaj obrazu mogłoby uszkodzić składnię',
         icon: 'fa-image'
       },
+      key: {
+        click: this.insertKeyNotation,
+        can: false,
+        title: 'Dodaj notację klawisza wprowadzonego z klawiatury',
+        break: 'Dodanie tutaj znacznika klawisza mogłoby uszkodzić składnię',
+        icon: 'fa-keyboard',
+      },
       quote: {
         click: this.insertBlockQuote,
         can: false,
@@ -318,6 +325,7 @@
       this.buttons.quote.can = state.canBlockQuote;
       this.buttons.link.can = state.canLink;
       this.buttons.image.can = state.canImage;
+      this.buttons.key.can = state.canKey;
     }
 
     autocomplete(nick) {
@@ -366,6 +374,10 @@
 
     makeImage() {
       this.editor.makeImage('http://');
+    }
+
+    insertKeyNotation() {
+      this.editor.makeKeyNotation('Ctrl');
     }
 
     makeLink() {

@@ -65,6 +65,9 @@
       makeImage(placeholder) {
         this.editor.putImage(placeholder);
       },
+      makeKeyNotation(key) {
+        this.editor.putKey(key);
+      },
       appendBlockQuote(content) {
         this.editor.appendBlockQuote(content);
       },
