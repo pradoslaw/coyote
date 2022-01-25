@@ -28,7 +28,6 @@
         {
           onChange: content => this.$emit('input', content),
           onTextPaste: pasteAsMarkdown => pasteAsMarkdown(this.smartPaste),
-          onImagePaste: file => this.$emit('image', file),
           onSubmit: content => this.$emit('submit', content),
           onCancel: () => this.$emit('cancel'),
           onStateChange: state => this.$emit('state', state),
