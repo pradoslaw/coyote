@@ -151,7 +151,7 @@ new Vue({
         this.timer = setTimeout(() => this.isTyping = false, 1000);
       });
 
-      this.$refs.editor.$refs.input.addEventListener('keyup', this.typing);
+      this.$refs.editor.$refs.editor.$refs.view.addEventListener('keyup', this.typing);
     },
 
     loadMore() {
