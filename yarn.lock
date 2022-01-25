@@ -1673,10 +1673,10 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.10.2.tgz#0798c03351f0dea1a5a4cabddf26a55a7cbee590"
   integrity sha512-IXf3XA7+XyN7CP9gGh/XB0UxVMlvARGEgGXLubFICsUMGz6Q+DU+i4gGlpOxTjKvXjkJDJC8YdqdKkDj9qZHEQ==
 
-"@riddled/4play@1.7.5":
-  version "1.7.5"
-  resolved "https://registry.yarnpkg.com/@riddled/4play/-/4play-1.7.5.tgz#c1065a7d5b0c95e9684915ce4e7f522d89381a93"
-  integrity sha512-qOKh6ywHFyy+ekhoi/Ga5oaCnVOLsCG4tKKUxY14WHpRTR7j9XqU6LH43x6r1eDLUxNC/G/3PTvzEakOvmBYAg==
+"@riddled/4play@1.7.6":
+  version "1.7.6"
+  resolved "https://registry.yarnpkg.com/@riddled/4play/-/4play-1.7.6.tgz#4dcf079fe29d727c40b2a637223217db43574eed"
+  integrity sha512-PpmqLEC333Hhz9V72wfTxjteMIGkkMQ0JHv1DXkD6yrZLDlLzbVIO4boEGTx0hYLfSKxuKNli11Hk/xizrac+w==
   dependencies:
     "@codemirror/autocomplete" "^0.19.0"
     "@codemirror/commands" "^0.19.0"
