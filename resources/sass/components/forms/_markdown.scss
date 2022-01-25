@@ -4,6 +4,11 @@
   border-radius: $border-radius;
   background-color: #fff;
 
+  .btn-control {
+    transition: opacity .5s;
+    transition-delay: 350ms;
+  }
+
   textarea.form-control {
     border: none;
   }

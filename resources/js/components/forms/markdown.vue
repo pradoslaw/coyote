@@ -7,7 +7,7 @@
             v-for="button in buttons"
             @click="button.click"
             type="button"
-            class="btn btn-sm"
+            class="btn btn-sm btn-control"
             :title="button.can ? button.title : button.break"
             :style="{opacity: button.can ? '1.0' : '0.4', cursor: button.can ? 'pointer' : 'default'}">
             <i :class="['fas fa-fw', button.icon]"></i>
