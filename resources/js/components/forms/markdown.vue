@@ -244,7 +244,7 @@
       },
     };
 
-    smartPaste = true;
+    smartPaste = false;
 
     @Ref('editor')
     readonly editor!: Editor4Play;
