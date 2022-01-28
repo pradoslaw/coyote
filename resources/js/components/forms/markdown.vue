@@ -74,39 +74,6 @@
 
     <div id="js-wiki-help" class="row collapse mt-2">
       <div class="col-md-12">
-        <div class="p-2">
-          <div class="card card-info">
-            <div class="card-header">Ustawienia</div>
-            <div class="p-3">
-              <ol>
-                <li>
-                  <p>
-                    Edytor reaguje na skrót <kbd>Ctrl+V</kbd>, który wkleja treści zgodznie z ich przeznaczeniem. Jeśli wklejasz
-                    link, edytor wklei go jako link Markdown.
-                  </p>
-                  <p>
-                    <label style="color:grey; align-self:center; margin: 3px 0 0;" title='"Smart paste" wkleja linki jako markdown'>
-                      <input type="checkbox" v-model="smartPaste">
-                      Wklejaj linki jako markdown
-                    </label>
-                  </p>
-                  <p>
-                    Żeby jednorazowo wkleić link dosłowine, użyj kombinacji <kbd>Ctrl+Shift+V</kbd>.
-                  </p>
-                </li>
-                <li>
-                  <p>Jeśli wklejasz link do obrazka, edytor wklei go jako obraz Markdown.</p>
-                  <p>
-                    <label style="color:grey; align-self:center; margin: 3px 0 0;" title='"Smart paste" wkleja linki jako markdown'>
-                      <input type="checkbox" checked="checked" disabled="disabled">
-                      Wklejaj obrazki jako markdown
-                    </label>
-                  </p>
-                </li>
-              </ol>
-            </div>
-          </div>
-        </div>
         <vue-help/>
       </div>
     </div>
@@ -196,7 +163,7 @@
       image: {
         click: this.makeImage,
         can: false,
-        title: 'Zmień zaznaczenie w obraz lub dodaj obraz',
+        title: 'Dodaj obraz',
         break: 'Dodanie tutaj obrazu mogłoby uszkodzić składnię',
         icon: 'fa-image'
       },

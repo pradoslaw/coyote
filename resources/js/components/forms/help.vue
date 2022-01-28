@@ -67,6 +67,10 @@
               Reprezentuj kombinacje klawiszowe używając taga <code>&lt;kbd&gt;</code>. Oddziel
               klawisze w kombinacji plusem, oraz kombinacje klawiszy od siebie przecinkiem.
             </p>
+            <p>
+              Dodaj kombinację klawiszy komendą notacji klawiszy <i class="fas fa-keyboard"></i>
+              lub skrótem klawiszowym <kbd>Alt+K</kbd>.
+            </p>
             <blockquote>
               W Visual Studio, do przesunięcia linijki użyj code użyj skrótu
               <code>&lt;kbd&gt;Ctrl+K,Ctrl+D&lt;/kbd&gt;</code>.
@@ -188,6 +192,11 @@
               <li><kbd>Ctrl+I</kbd> - dodaj pochylenie lub pochyl zaznaczenie</li>
               <li><kbd>Ctrl+U</kbd> - dodaj podkreślenie lub podkreśl zaznaczenie</li>
               <li><kbd>Ctrl+S</kbd> - dodaj przekreślenie lub przekreśl zaznaczenie</li>
+            </ul>
+
+            <p>Notacja Klawiszy</p>
+            <ul>
+              <li><kbd>Alt+K</kbd> - dodaj notację klawiszy</li>
             </ul>
 
             <p>Skróty operujące na kodzie i linijkach:</p>
