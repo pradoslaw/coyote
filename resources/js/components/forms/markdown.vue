@@ -24,7 +24,6 @@
           v-model="valueLocal"
           placeholder="Kliknij, aby dodać treść..."
           :autocompleteSource="autocomplete"
-          :smartPaste="smartPaste"
           v-paste:success="addAsset"
           @submit="save"
           @cancel="cancel"
@@ -210,8 +209,6 @@
         icon: 'fa-table'
       },
     };
-
-    smartPaste = false;
 
     @Ref('editor')
     readonly editor!: Editor4Play;

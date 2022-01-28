@@ -11,7 +11,6 @@
       value: {type: String, required: true},
       placeholder: {type: String, require: true},
       autocompleteSource: {type: Function, required: true},
-      smartPaste: {type: Boolean, required: true},
     },
 
     data() {
@@ -27,7 +26,6 @@
         this.value,
         {
           onChange: content => this.$emit('input', content),
-          onTextPaste: pasteAsMarkdown => pasteAsMarkdown(this.smartPaste),
           onSubmit: content => this.$emit('submit', content),
           onCancel: () => this.$emit('cancel'),
           onStateChange: state => this.$emit('state', state),
