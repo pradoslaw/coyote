@@ -32,7 +32,8 @@
           onCancel: () => this.$emit('cancel'),
           onStateChange: state => this.$emit('state', state),
         },
-        username => this.autocompleteSource(username)
+        username => this.autocompleteSource(username),
+        'Brak oznacznika'
       );
     },
 
