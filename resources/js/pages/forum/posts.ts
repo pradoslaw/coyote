@@ -1,13 +1,12 @@
-import Vue from "vue";
-import VuePostWrapper from "@/components/forum/post-wrapper.vue";
 import VueForm from "@/components/forum/form.vue";
 import VuePoll from "@/components/forum/poll.vue";
+import VuePostWrapper from "@/components/forum/post-wrapper.vue";
 import VuePagination from "@/components/pagination.vue";
+import {PostCommentSaved, PostSaved, PostVoted, Subscriber} from "@/libs/live";
 import store from "@/store";
-import { Subscriber, PostSaved, PostCommentSaved, PostVoted } from "@/libs/live";
-import useBrackets from "@/libs/prompt";
-import { mapGetters, mapState } from "vuex";
-import { Post } from "@/types/models.ts";
+import {Post} from "@/types/models.ts";
+import Vue from "vue";
+import {mapGetters, mapState} from "vuex";
 
 export default Vue.extend({
   delimiters: ['${', '}'],
@@ -20,15 +19,15 @@ export default Vue.extend({
   store,
   data: () => ({
     showStickyCheckbox: window.showStickyCheckbox,
-    undefinedPost: { text: '', html: '', assets: [] },
+    undefinedPost: {text: '', html: '', assets: []},
     reasons: window.reasons,
     popularTags: window.popularTags
   }),
   created() {
     store.commit('posts/init', window.pagination);
-    store.commit('topics/init', [ window.topic ]);
+    store.commit('topics/init', [window.topic]);
     store.commit('topics/setReasons', this.reasons);
-    store.commit('forums/init', [ window.forum ]);
+    store.commit('forums/init', [window.forum]);
     store.commit('poll/init', window.poll);
     store.commit('flags/init', window.flags);
   },
@@ -81,33 +80,27 @@ export default Vue.extend({
     },
 
     reply(post: Post, scrollIntoForm = true) {
+      const username = post.user ? post.user.name : post.user_name!;
+
       if (scrollIntoForm) {
+        this.markdownRef.appendUserMention(username);
         document.getElementById('js-submit-form')!.scrollIntoView();
-
-        // check if login is used in the quote. [ character means beginning of a markdown link
-        if (!this.undefinedPost.text.includes(`[${post.user!.name}`)) {
-          this.undefinedPost.text += `@${useBrackets(post.user!.name)}: `;
-        }
-
-        // @ts-ignore
-        this.$refs['js-submit-form'].$refs['markdown']!.focus();
-      }
-      else {
-        const username = post.user ? post.user.name : post.user_name;
-        // @ts-ignore
-        this.$refs['js-submit-form'].$refs['markdown']!.appendBlockQuote(username, post.id, post.text);
-
+      } else {
+        this.markdownRef.appendBlockQuote(username, post.id, post.text);
         this.$notify({type: 'success', text: 'Cytat został dodany do formularza.'});
       }
     },
 
     resetPost(post: Post) {
-      this.undefinedPost = { text: '', html: '', assets: [] };
-
+      this.undefinedPost = {text: '', html: '', assets: []};
       window.location.hash = `id${post.id}`;
     }
   },
   computed: {
+    markdownRef(): VueMarkdown {
+      // @ts-ignore
+      return this.$refs['js-submit-form'].$refs['markdown']!;
+    },
     ...mapGetters('posts', ['posts', 'totalPages', 'currentPage']),
     ...mapGetters('topics', ['topic']),
     ...mapGetters('user', ['isAuthorized']),

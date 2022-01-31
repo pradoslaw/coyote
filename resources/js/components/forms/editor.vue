@@ -4,19 +4,19 @@
 </template>
 
 <script>
-  import { Editor4Play } from "@riddled/4play/src/Editor.js";
+import {Editor4Play} from "@riddled/4play/src/Editor.js";
 
-  export default {
-    props: {
-      value: {type: String, required: true},
-      placeholder: {type: String, require: true},
-      autocompleteSource: {type: Function, required: true},
-    },
+export default {
+  props: {
+    value: {type: String, required: true},
+    placeholder: {type: String, require: true},
+    autocompleteSource: {type: Function, required: true},
+  },
 
-    data() {
-      return {
-        editor: null
-      };
+  data() {
+    return {
+      editor: null
+    };
     },
 
     mounted() {
@@ -68,6 +68,9 @@
       },
       appendBlockQuote(content) {
         this.editor.appendBlockQuote(content);
+      },
+      appendUserMention(username) {
+        this.editor.appendUserMention(username);
       },
       insertListOrdered(placeholder) {
         this.editor.putListOrdered(placeholder);

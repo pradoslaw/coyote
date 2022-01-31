@@ -82,34 +82,34 @@
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
-  import axios from 'axios';
-  import Prism from 'prismjs';
-  import { Asset } from '@/types/models';
-  import Component from "vue-class-component";
-  import { mixin as clickaway } from 'vue-clickaway';
-  import { Ref, Prop, Emit, Watch } from "vue-property-decorator";
-  import { Editor4Play } from "@riddled/4play/src/Editor.js";
-  import { link } from "@riddled/4play/src/markdown";
-  import { default as mixin } from '../mixins/form';
-  import VueThumbnail from "../thumbnail.vue";
-  import VuePrompt from '../forms/prompt.vue';
-  import VueEditor from './editor.vue';
-  import VueError from '../forms/error.vue';
-  import VueTabs from '../tabs.vue';
-  import isImage from '../../libs/assets';
-  import VueHelp from './help.vue';
-  import store from '../../store';
+import {Asset} from '@/types/models';
+import {Editor4Play} from "@riddled/4play/src/Editor.js";
+import {link} from "@riddled/4play/src/markdown";
+import axios from 'axios';
+import Prism from 'prismjs';
+import Vue from 'vue';
+import Component from "vue-class-component";
+import {mixin as clickaway} from 'vue-clickaway';
+import {Emit, Prop, Ref, Watch} from "vue-property-decorator";
+import isImage from '../../libs/assets';
+import store from '../../store';
+import VueError from '../forms/error.vue';
+import VuePrompt from '../forms/prompt.vue';
+import {default as mixin} from '../mixins/form';
+import VueTabs from '../tabs.vue';
+import VueThumbnail from "../thumbnail.vue";
+import VueEditor from './editor.vue';
+import VueHelp from './help.vue';
 
-  const CONTENT = 'Treść';
-  const PREVIEW = 'Podgląd';
+const CONTENT = 'Treść';
+const PREVIEW = 'Podgląd';
 
-  // @ts-ignore
-  @Component({
-    mixins: [clickaway, mixin],
-    components: {
-      'vue-prompt': VuePrompt,
-      'vue-tabs': VueTabs,
+// @ts-ignore
+@Component({
+  mixins: [clickaway, mixin],
+  components: {
+    'vue-prompt': VuePrompt,
+    'vue-tabs': VueTabs,
       'vue-thumbnail': VueThumbnail,
       'vue-error': VueError,
       'vue-editor': VueEditor,
@@ -364,26 +364,30 @@
       this.editor.insertCodeBlock();
     }
 
-    insertTable() {
-      this.editor.addTable('Nagłówek', 'Dodaj...')
-    }
+  insertTable() {
+    this.editor.addTable('Nagłówek', 'Dodaj...')
+  }
 
-    appendBlockQuote(username, postId, content) {
-      const title = username + ' napisał(a)';
-      const href = '/Forum/' + postId;
+  appendBlockQuote(username, postId, content) {
+    const title = username + ' napisał(a)';
+    const href = '/Forum/' + postId;
 
-      this.editor.appendBlockQuote(`##### ${(link(title, href))}:\n${content}`);
-    }
+    this.editor.appendBlockQuote(`##### ${(link(title, href))}:\n${content}`);
+  }
 
-    focus() {
-      this.editor.focus();
-    }
+  appendUserMention(username) {
+    this.editor.appendUserMention(username);
+  }
 
-    switchTab(index: number) {
-      this.currentTab = this.tabs[index];
+  focus() {
+    this.editor.focus();
+  }
 
-      if (this.tabs[index] === PREVIEW) {
-        this.showPreview();
+  switchTab(index: number) {
+    this.currentTab = this.tabs[index];
+
+    if (this.tabs[index] === PREVIEW) {
+      this.showPreview();
       }
     }
 
