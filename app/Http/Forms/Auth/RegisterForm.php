@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Forms\Auth;
 
+use Coyote\Rules\ThrottleAccountRule;
 use Coyote\Services\FormBuilder\Form;
 use Coyote\Services\FormBuilder\ValidatesWhenSubmitted;
 
@@ -19,7 +20,14 @@ class RegisterForm extends Form implements ValidatesWhenSubmitted
         $this
             ->setAttr(['id' => 'js-register-form'])
             ->add('name', 'text', [
-                'rules' => 'required|min:2|max:28|username|user_unique',
+                'rules' => [
+                    'required',
+                    'min:2',
+                    'max:28',
+                    'username',
+                    'user_unique',
+                    $this->container[ThrottleAccountRule::class]
+                ],
                 'label' => 'Nazwa użytkownika',
                 'attr' => [
                     'autofocus' => 'autofocus'

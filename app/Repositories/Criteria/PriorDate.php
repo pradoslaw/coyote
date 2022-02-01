@@ -1,10 +1,9 @@
 <?php
 
-namespace Coyote\Repositories\Criteria\Job;
+namespace Coyote\Repositories\Criteria;
 
 use Carbon\Carbon;
 use Coyote\Repositories\Contracts\RepositoryInterface as Repository;
-use Coyote\Repositories\Criteria\Criteria;
 
 class PriorDate extends Criteria
 {
