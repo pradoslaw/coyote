@@ -3,6 +3,7 @@
 namespace Coyote\Http;
 
 use Coyote\Http\Middleware\ForceRootUrl;
+use Coyote\Http\Middleware\ThrottleSubmission;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -56,6 +57,7 @@ class Kernel extends HttpKernel
         'auth.basic'    => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'bindings'      => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'throttle'      => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'throttle.submission'      => ThrottleSubmission::class,
         'can'           => \Illuminate\Auth\Middleware\Authorize::class,
         'guest'         => Middleware\RedirectIfAuthenticated::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,

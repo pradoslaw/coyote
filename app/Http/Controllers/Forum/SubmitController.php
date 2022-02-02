@@ -22,6 +22,7 @@ use Coyote\Services\Stream\Objects\Forum as Stream_Forum;
 use Coyote\Services\Stream\Actor as Stream_Actor;
 use Coyote\Events\PostSaved;
 use Coyote\Events\TopicSaved;
+use Illuminate\Http\Response;
 
 class SubmitController extends BaseController
 {
@@ -46,11 +47,11 @@ class SubmitController extends BaseController
      * @param PostRequest $request
      * @param Forum $forum
      * @param Topic|null $topic
-     * @param Post|null $post
-     * @return array
+     * @param Post $post
+     * @return \Illuminate\Http\JsonResponse|object
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function save(PostRequest $request, Forum $forum, ?Topic $topic, ?Post $post)
+    public function save(PostRequest $request, Forum $forum, ?Topic $topic, Post $post)
     {
         if (!$topic->exists) {
             $topic = $this->topic->makeModel();
@@ -143,12 +144,12 @@ class SubmitController extends BaseController
         // add post to elasticsearch
         broadcast(new PostSaved($post))->toOthers();
 
-        $resource = (new PostResource($post))->setTracker($tracker)->resolve($this->request);
+        $resource = (new PostResource($post))->setTracker($tracker)->response($this->request);
 
         // mark topic as read after publishing
         $post->wasRecentlyCreated ? $tracker->asRead($post->created_at) : null;
 
-        return $resource;
+        return $resource->setStatusCode($post->wasRecentlyCreated ? Response::HTTP_CREATED : Response::HTTP_OK);
     }
 
     /**

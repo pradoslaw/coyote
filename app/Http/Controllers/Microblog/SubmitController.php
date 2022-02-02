@@ -18,6 +18,7 @@ use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Activities\Restore as Stream_Restore;
 use Coyote\Services\Stream\Objects\Microblog as Stream_Microblog;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 /**
  * Class SubmitController
@@ -43,7 +44,7 @@ class SubmitController extends Controller
     /**
      * @param MicroblogRequest $request
      * @param Microblog $microblog
-     * @return MicroblogResource
+     * @return \Illuminate\Http\JsonResponse|object
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function save(MicroblogRequest $request, Microblog $microblog)
@@ -90,7 +91,7 @@ class SubmitController extends Controller
         $microblog->unsetRelation('assets');
         $microblog->load(['assets', 'tags']);
 
-        return new MicroblogResource($microblog);
+        return (new MicroblogResource($microblog))->response($this->request)->setStatusCode($microblog->wasRecentlyCreated ? Response::HTTP_CREATED : Response::HTTP_OK);
     }
 
     /**

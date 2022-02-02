@@ -20,8 +20,11 @@ use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface;
 use Coyote\Topic;
 use Coyote\User;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\RateLimiter;
 use Laravel\Passport\Passport;
 
 class RouteServiceProvider extends ServiceProvider
