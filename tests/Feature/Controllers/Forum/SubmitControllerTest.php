@@ -170,7 +170,7 @@ class SubmitControllerTest extends TestCase
 
     public function testEditExistingPostByAuthor()
     {
-        $this->withoutMiddleware(ThrottleRequests::class);
+        $this->withoutMiddleware('throttle.submission');
 
         $faker = Factory::create();
         $topic = factory(Topic::class)->create(['forum_id' => $this->forum->id]);
