@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controllers\Forum;
 
 use Coyote\Forum;
+use Coyote\Http\Middleware\ThrottleSubmission;
 use Coyote\Permission;
 use Coyote\Post;
 use Coyote\Topic;
@@ -33,9 +34,11 @@ class SubmitControllerTest extends TestCase
         $this->forum = factory(Forum::class)->create();
         $this->user = $this->createUserWithGroup();
 
-        $this->withoutMiddleware(
-            ThrottleRequests::class
-        );
+        $this->withoutMiddleware([
+            ThrottleRequests::class,
+            ThrottleSubmission::class,
+            'throttle.submission'
+        ]);
     }
 
     public function testSubmitWithInvalidTags()
@@ -170,8 +173,6 @@ class SubmitControllerTest extends TestCase
 
     public function testEditExistingPostByAuthor()
     {
-        $this->withoutMiddleware('throttle.submission');
-
         $faker = Factory::create();
         $topic = factory(Topic::class)->create(['forum_id' => $this->forum->id]);
 
