@@ -165,7 +165,7 @@ class SubmitControllerTest extends TestCase
 
         $response = $this->actingAs($this->user)->json('POST', "/Forum/{$this->forum->slug}/Submit/{$topic->id}", ['text' => $post->text]);
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
     }
 
     public function testEditExistingPostByAuthor()
@@ -317,7 +317,7 @@ class SubmitControllerTest extends TestCase
             ]
         );
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
 
         $id = $response->json('id');
 
