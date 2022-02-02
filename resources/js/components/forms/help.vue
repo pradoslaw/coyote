@@ -1,7 +1,7 @@
 <template>
   <div class="markdown-help">
     <div class="card card-info">
-      <div class="card-header">Pomoc</div>
+      <div class="card-header">Pomoc <span class="card-version">1.9.7</span></div>
       <div class="card-body">
         <div class="row">
           <div class="col-md-6">
@@ -118,7 +118,8 @@
             </p>
             <p>
               Możesz zaznaczyć również już wklejony kod w edytorze, i użyć
-              komendy <i class="fas fa-fw fa-code"></i> by zamienić go w kod.
+              komendy&nbsp;<i class="fas fa-fw fa-code"></i> by zamienić go w kod. Możesz użyć też kombinacji
+              <kbd>Alt+C</kbd>, by dodać fragment kodu bez oznaczników języka.
             </p>
 
             <h3>Tabelki</h3>
@@ -199,6 +200,11 @@
               <li><kbd>Alt+K</kbd> - dodaj notację klawiszy</li>
             </ul>
 
+            <p>Fragment kodu bez oznacznika</p>
+            <ul>
+              <li><kbd>Alt+C</kbd> - dodaj pusty fragment kodu</li>
+            </ul>
+
             <p>Skróty operujące na kodzie i linijkach:</p>
             <ul>
               <li><kbd>Alt+L</kbd> - zaznaczenie całej linii</li>
@@ -206,12 +212,8 @@
                 <kbd>Alt+<i class="fas fa-arrow-up"/></kbd>, <kbd>Alt+<i class="fas fa-arrow-down"/></kbd> -
                 przeniesienie linijki w której znajduje się kursor w górę/dół.
               </li>
-            </ul>
-
-            <p>Komendy dodające lub usuwające wcięcie operują na całych linijkach, nawet kiedy nie są zaznaczone:</p>
-            <ul>
-              <li><kbd>Tab</kbd> - wcięcie w prawo</li>
-              <li><kbd>Shit+Tab</kbd> - usunięcie wcięcia</li>
+              <li><kbd>Tab</kbd> - dodaj wcięcie (wcięcie w prawo)</li>
+              <li><kbd>Shit+Tab</kbd> - usunięcie wcięcia (wycięcie w lewo)</li>
             </ul>
 
             <p>Dodawanie postów:</p>
