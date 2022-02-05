@@ -58,21 +58,16 @@ class TopicResource extends JsonResource
                 ],
                 'tags'                  => TagResource::collection($this->whenLoaded('tags')),
                 'is_subscribed'         => $this->isSubscribed($request),
+                'user'                  => new UserResource($this->whenLoaded('user')),
 
-                $this->mergeWhen($this->whenLoaded('user'), function () {
-                    return ['user' => new UserResource($this->user)];
-                }),
-
-                'owner_id'          => $this->whenLoaded('firstPost', function () {
+                'owner_id'              => $this->whenLoaded('firstPost', function () {
                     return $this->firstPost->user_id;
                 }),
 
-                $this->mergeWhen($this->whenLoaded('lastPost'), function () {
+                'last_post'             => $this->whenLoaded('lastPost', function () {
                     $this->lastPost->setRelation('forum', $this->forum)->setRelation('topic', $this->resource);
 
-                    return [
-                        'last_post'            => new PostResource($this->lastPost),
-                    ];
+                    return new PostResource($this->lastPost);
                 })
             ]
         );

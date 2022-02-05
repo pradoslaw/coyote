@@ -131,7 +131,7 @@ class TopicController extends BaseController
         return $this->view('forum.topic', compact('posts', 'forum', 'paginate', 'reasons'))->with([
             'mlt'           => $this->moreLikeThis($topic),
             'model'         => $topic, // we need eloquent model in twig to show information about locked/moved topic
-            'topic'         => (new TopicResource($tracker))->resolve($request),
+            'topic'         => (new TopicResource($tracker))->toResponse($request)->getData(true),
             'poll'          => $topic->poll ? (new PollResource($topic->poll))->resolve($request) : null,
             'is_writeable'  => $this->gate->allows('write', $forum) && $this->gate->allows('write', $topic),
             'all_forums'    => $allForums,

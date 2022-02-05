@@ -1,6 +1,6 @@
 {% extends 'forum.base' %}
 
-{% block title %}{{ topic.title ~ (paginate.currentPage() > 1 ? (' - Strona ' ~ paginate.currentPage())) }}{{ parent() }}{% endblock %}
+{% block title %}{{ model.title ~ (paginate.currentPage() > 1 ? (' - Strona ' ~ paginate.currentPage())) }}{{ parent() }}{% endblock %}
 {% block description %}{{ description }}{% endblock %}
 
 {% import 'components.forms' as forms %}
@@ -188,7 +188,7 @@
 
           {% if can('update', forum) %}
             <li>
-              <a href="{{ route('forum.stream', [topic.id]) }}" title="Zobacz dziennik zdarzeń">
+              <a href="{{ route('forum.stream', [model.id]) }}" title="Zobacz dziennik zdarzeń">
                 <i class="fa fa-chart-pie fa-fw"></i>
 
                 Dziennik zdarzeń
