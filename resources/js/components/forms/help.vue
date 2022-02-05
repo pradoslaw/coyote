@@ -1,12 +1,11 @@
 <template>
   <div class="markdown-help">
     <div class="card card-info">
-      <div class="card-header">Pomoc <span class="card-version">1.9.8</span></div>
+      <div class="card-header">Pomoc <span class="card-version">1.9.11</span></div>
       <div class="card-body">
         <div class="row">
           <div class="col-md-6">
             <h3>Typografia</h3>
-
             <p>
               Edytor obsługuje składnie Markdown, w której pojedynczy akcent <code>*kursywa*</code>
               oraz <code>_kursywa_</code> to pochylenie. Z kolei podwójny akcent <code>**pogrubienie**</code>
