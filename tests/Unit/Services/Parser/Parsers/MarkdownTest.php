@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Services\Parser\Parsers;
 
-use Coyote\Repositories\Contracts\UserRepositoryInterface;
+use Coyote\Page;
 use Coyote\Services\Parser\Parsers\Markdown;
 use Coyote\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -131,5 +131,78 @@ class MarkdownTest extends TestCase
 
         $input = $this->markdown->parse('[test](http://www.google.pl/)');
         $this->assertEquals('<p><a href="http://www.google.pl/">test</a></p>', trim($input));
+
+        $input = $this->markdown->parse('http://4programmers.net');
+        $this->assertEquals('<p><a href="http://4programmers.net">http://4programmers.net</a></p>', trim($input));
+
+        $input = $this->markdown->parse('to: http://4programmers.net.');
+        $this->assertEquals('<p>to: <a href="http://4programmers.net">http://4programmers.net</a>.</p>', trim($input));
+
+        $input = $this->markdown->parse('<http://4programmers.net>');
+        $this->assertEquals('<p><a href="http://4programmers.net">http://4programmers.net</a></p>', trim($input));
+
+        $input = $this->markdown->parse('<a href="http://4programmers.net">http://4programmers.net</a>');
+        $this->assertEquals('<p><a href="http://4programmers.net">http://4programmers.net</a></p>', trim($input));
+
+        $input = $this->markdown->parse('www.4programmers.net');
+        $this->assertEquals('<p><a href="http://www.4programmers.net">www.4programmers.net</a></p>', trim($input));
+
+        $input = $this->markdown->parse('foo@bar.com');
+        $this->assertEquals('<p><a href="mailto:foo@bar.com">foo@bar.com</a></p>', trim($input));
+
+        $input = $this->markdown->parse('<foo@bar.com>');
+        $this->assertEquals('<p><a href="mailto:foo@bar.com">foo@bar.com</a></p>', trim($input));
+
+        $input = '<a href="http://4programmers.net">4programmers</a>.net';
+        $this->assertEquals("<p>$input</p>", trim($this->markdown->parse($input)));
+
+        $input = 'www.4programmers.net';
+        $this->assertEquals('<p><a href="http://www.4programmers.net">www.4programmers.net</a></p>', trim($this->markdown->parse($input)));
+
+        $input = 'asp.net';
+        $this->assertEquals('<p>asp.net</p>', trim($this->markdown->parse($input)));
+
+        $link = 'http://pl.wikipedia.org/wiki/normalna_(bazy_danych)';
+        $this->assertEquals("<p><a href=\"$link\">$link</a></p>", trim($this->markdown->parse($link)));
     }
+
+    public function testParseInternalLinks()
+    {
+        $this->markdown->setConfig([
+            'internal_link' => [
+                'internal_hosts' => '4programmers.net'
+            ]
+        ]);
+
+        $title = '"Kompetentność" uczących się programowania';
+        $path = '/Forum/Spolecznosc/266098-kompetentnosc_uczacych_sie_programowania';
+        $this->createPage($title, $path);
+
+        $input = 'http://4programmers.net' . $path;
+
+        $this->assertEquals(
+            '<p><a href="http://4programmers.net' . $path . '" title="' . htmlspecialchars($title) . '">' . htmlspecialchars($title) . '</a></p>',
+            trim($this->markdown->parse($input))
+        );
+
+        $title = 'łatwo przyszło, łatwo poszło';
+        $path = '/Forum/Spolecznosc/' . str_slug($title);
+        $this->createPage($title, $path);
+
+        $input = 'http://4programmers.net' . $path;
+
+        $this->assertEquals(
+            '<p><a href="http://4programmers.net' . $path . '" title="' . $title . '">' . $title . '</a></p>',
+            trim($this->markdown->parse($input))
+        );
+    }
+
+    private function createPage($title, $path)
+    {
+        $now = new \DateTime('now');
+        Page::forceCreate([
+            'title' => $title, 'path' => $path, 'created_at' => $now, 'updated_at' => $now
+        ]);
+    }
+
 }

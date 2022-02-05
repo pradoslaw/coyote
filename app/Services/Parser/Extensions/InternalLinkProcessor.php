@@ -11,7 +11,7 @@ use League\Config\ConfigurationInterface;
 
 class InternalLinkProcessor
 {
-    private const EXCLUDE_PATHS = ['/Profile'];
+    private const EXCLUDE_PATHS = ['/Profile', '/User'];
 
     public function __construct(private PageRepository $page, private ConfigurationInterface $config)
     {
@@ -28,16 +28,23 @@ class InternalLinkProcessor
 
             $components = parse_url($link->getUrl());
 
+            if (!array_key_exists('host', $components)) {
+                continue;
+            }
+
             if (ExternalLinkProcessor::hostMatches($components['host'], $internalHosts) && $page = $this->realTitle(urldecode($components['path']))) {
                 $link->setTitle($page->title);
+                $link->lastChild()->setLiteral($page->title);
             }
         }
     }
 
     protected function realTitle(string $path): ?Page
     {
-        if (str_starts_with($path, '/Profile')) {
-            return null;
+        foreach (self::EXCLUDE_PATHS as $excludePath) {
+            if (str_starts_with($path, $excludePath)) {
+                return null;
+            }
         }
 
         return $this->page->findByPath($path);

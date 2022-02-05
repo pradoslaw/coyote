@@ -57,21 +57,6 @@ class LinkTest extends TestCase
         $this->parse($url, $title);
     }
 
-    public function testParseInternalLinksWithPolishCharacters()
-    {
-        $host = '4programmers.net';
-        $this->link = new Link($this->repository, $host, $this->htmlBuilder);
-
-        $title = 'łatwo przyszło, łatwo poszło';
-        $path = '/' . str_slug($title);
-
-        $now = new \DateTime('now');
-        Page::forceCreate(['title' => $title, 'path' => $path, 'created_at' => $now, 'updated_at' => $now]);
-
-        $url = 'http://' . $host . $path;
-        $this->parse($url, $title);
-    }
-
     public function testParseInternalAccessors()
     {
         $host = '4programmers.net';
@@ -144,67 +129,12 @@ class LinkTest extends TestCase
         $this->assertStringContainsString('https://youtube.com/embed/vd0zDG4vwOw?start=1107', $parser->parse('https://www.youtube.com/watch?v=vd0zDG4vwOw#t=18m27s'));
     }
 
-    public function testAutolink()
-    {
-        $parser = new Link($this->repository, '4programmers.net', $this->htmlBuilder);
-
-        $input = $parser->parse('http://4programmers.net');
-        $this->assertEquals('<a href="http://4programmers.net">http://4programmers.net</a>', $input);
-
-        $input = $parser->parse('to: http://4programmers.net.');
-        $this->assertEquals('to: <a href="http://4programmers.net">http://4programmers.net</a>.', $input);
-
-        $input = $parser->parse('to:http://4programmers.net.');
-        $this->assertEquals('to:<a href="http://4programmers.net">http://4programmers.net</a>.', $input);
-
-        $input = $parser->parse('<http://4programmers.net>');
-        $this->assertEquals('<<a href="http://4programmers.net">http://4programmers.net</a>>', $input);
-
-        $input = $parser->parse('<a href="http://4programmers.net">http://4programmers.net</a>');
-        $this->assertEquals('<a href="http://4programmers.net">http://4programmers.net</a>', $input);
-
-        $input = $parser->parse('www.4programmers.net');
-        $this->assertEquals('<a href="http://www.4programmers.net">www.4programmers.net</a>', $input);
-
-        $input = $parser->parse('foo@bar.com');
-        $this->assertEquals('<a href="mailto:foo@bar.com">foo@bar.com</a>', $input);
-
-        $input = $parser->parse('<foo@bar.com>');
-        $this->assertEquals('<<a href="mailto:foo@bar.com">foo@bar.com</a>>', $input);
-
-        $input = '@4programmers.net';
-        $this->assertEquals($input, $parser->parse($input));
-
-        $input = '<a href="http://4programmers.net">4programmers</a>.net';
-        $this->assertEquals($input, $parser->parse($input));
-
-        $input = 'www.4programmers.net';
-        $this->assertEquals('<a href="http://www.4programmers.net">www.4programmers.net</a>', $parser->parse($input));
-
-        $input = 'asp.net';
-        $this->assertEquals('asp.net', $parser->parse($input));
-
-        $input = 'asp.net/foobar';
-        $this->assertEquals('<a href="http://asp.net/foobar">asp.net/foobar</a>', $parser->parse($input));
-
-        $link = 'http://pl.wikipedia.org/wiki/normalna_(bazy_danych)';
-        $this->assertEquals("<a href=\"$link\">$link</a>", $parser->parse($link));
-    }
-
     public function testAutolinkLongUrl()
     {
         $parser = new Link($this->repository, '4programmers.net', $this->htmlBuilder);
 
         $input = $parser->parse('https://scrutinizer-ci.com/g/adam-boduch/coyote/inspections/8778b728-ef73-4167-8092-424a57a8e66d');
         $this->assertEquals('<a href="https://scrutinizer-ci.com/g/adam-boduch/coyote/inspections/8778b728-ef73-4167-8092-424a57a8e66d">https://scrutinizer-ci.com/g/[...]8-ef73-4167-8092-424a57a8e66d</a>', $input);
-
-        $title = '"Kompetentność" uczących się programowania';
-        $path = '/Forum/Spolecznosc/266098-kompetentnosc_uczacych_sie_programowania';
-
-        $this->createPage($title, $path);
-
-        $input = $parser->parse('http://4programmers.net/Forum/Spolecznosc/266098-kompetentnosc_uczacych_sie_programowania');
-        $this->assertEquals('<a href="http://4programmers.net/Forum/Spolecznosc/266098-kompetentnosc_uczacych_sie_programowania">&quot;Kompetentność&quot; uczących się programowania</a>', $input);
     }
 
     private function createPage($title, $path)
