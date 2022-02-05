@@ -11,7 +11,7 @@ class Cache
     /**
      * @var bool
      */
-    protected $enable = true;
+    protected $enable = false;
 
     /**
      * @var

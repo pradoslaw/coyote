@@ -36,10 +36,10 @@ class PostFactory extends AbstractFactory
 
             if (!$isInCache) {
                 $text = $this->cache($text, function () use ($parser) {
-                    $parser->attach((new Markdown($this->app[UserRepositoryInterface::class]))->setBreaksEnabled(true));
+                    $parser->attach((new Markdown($this->app[UserRepositoryInterface::class])));
                     $parser->attach(new Latex());
-                    $parser->attach(new Purifier());
-                    $parser->attach(new Link($this->app[PageRepositoryInterface::class], $this->request->getHost(), $this->app['html']));
+//                    $parser->attach(new Purifier());
+//                    $parser->attach(new Link($this->app[PageRepositoryInterface::class], $this->request->getHost(), $this->app['html']));
                     $parser->attach(new Censore($this->app[WordRepositoryInterface::class]));
                     $parser->attach(new Prism());
 

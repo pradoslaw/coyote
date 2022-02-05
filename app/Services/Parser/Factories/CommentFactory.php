@@ -75,16 +75,12 @@ class CommentFactory extends AbstractFactory
 
             if (!$isInCache) {
                 $text = $this->cache($text, function () use ($parser) {
-                    $parser->attach(
-                        (new SimpleMarkdown($this->app[UserRepositoryInterface::class]))
-                            ->setEnableHashParser($this->enableHashParser)
-                            ->setBreaksEnabled($this->enableLineBreaks)
-                    );
+                    $parser->attach(new SimpleMarkdown($this->app[UserRepositoryInterface::class]));
 
-                    $parser->attach(
-                        (new Purifier())->set('HTML.Allowed', $this->getHtmlTags())
-                    );
-                    $parser->attach(new Link($this->app[PageRepositoryInterface::class], $this->request->getHost()));
+//                    $parser->attach(
+//                        (new Purifier())->set('HTML.Allowed', $this->getHtmlTags())
+//                    );
+//                    $parser->attach(new Link($this->app[PageRepositoryInterface::class], $this->request->getHost()));
                     $parser->attach(new Censore($this->app[WordRepositoryInterface::class]));
 
                     if (!empty($this->userId)) {

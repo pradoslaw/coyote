@@ -26,7 +26,7 @@ class Censore extends Parser implements ParserInterface
      * @param string $text
      * @return string
      */
-    public function parse($text)
+    public function parse(string $text): string
     {
         static $result;
 
