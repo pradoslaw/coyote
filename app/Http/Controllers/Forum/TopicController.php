@@ -128,6 +128,8 @@ class TopicController extends BaseController
 
         $topic->load('tags');
 
+        TopicResource::withoutWrapping();
+
         return $this->view('forum.topic', compact('posts', 'forum', 'paginate', 'reasons'))->with([
             'mlt'           => $this->moreLikeThis($topic),
             'model'         => $topic, // we need eloquent model in twig to show information about locked/moved topic

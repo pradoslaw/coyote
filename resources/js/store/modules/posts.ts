@@ -156,10 +156,10 @@ const actions = {
 
     const payload = {
       text: post.text,
-      title: rootGetters['topics/topic'].title,
-      is_sticky: rootGetters['topics/topic'].is_sticky,
+      title: topic.title,
+      is_sticky: topic.is_sticky,
       assets: post.assets,
-      tags: rootGetters['topics/topic'].tags!.map(o => o['name']),
+      tags: topic.tags!.map(o => o['name']),
       poll: rootState.poll.poll
     };
 

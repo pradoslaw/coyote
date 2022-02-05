@@ -7,6 +7,7 @@ use Coyote\Http\Resources\TopicResource;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 use Coyote\Services\Forum\Tracker;
 use Coyote\Services\Guest;
+use Coyote\Tag;
 use Coyote\Topic;
 use Coyote\User;
 use Faker\Factory;
@@ -44,6 +45,7 @@ class TopicResourceTest extends TestCase
         $this->assertEquals(1, $result['meta']['total']);
         $this->assertEquals(1, $result['meta']['current_page']);
         $this->assertEquals($topic['title'], $result['data'][0]['title']);
+        $this->assertArrayNotHasKey('tags', $result);
     }
 
     public function testTransformResource()
@@ -54,19 +56,33 @@ class TopicResourceTest extends TestCase
         $topic = factory(Topic::class)->state('id')->make();
         $topic->firstPost->user_id = $user->id;
 
+        $tag = factory(Tag::class)->make();
+        $topic->setRelation('tags', collect([$tag]));
+
+        $this->assertTrue($topic->isRelation('firstPost'));
+        $this->assertTrue($topic->isRelation('lastPost'));
+        $this->assertTrue($topic->isRelation('tags'));
+
         TopicResource::withoutWrapping();
 
         $tracker = new Tracker($topic, $this->guest);
         $result = (new TopicResource($tracker))->toResponse(request())->getData(true);
 
-        $this->assertTrue(isset($result['owner_id']));
+        $this->assertArrayHasKey('owner_id', $result);
+        $this->assertArrayHasKey('last_post', $result);
+        $this->assertArrayHasKey('tags', $result);
+
         $this->assertEquals($user->id, $result['owner_id']);
+        $this->assertEquals($tag->name, $result['tags'][0]['name']);
+        $this->assertEquals($tag->real_name, $result['tags'][0]['real_name']);
 
         $topic->unsetRelation('firstPost');
+        $topic->unsetRelation('lastPost');
 
         $tracker = new Tracker($topic, $this->guest);
         $result = (new TopicResource($tracker))->toResponse(request())->getData(true);
 
-        $this->assertFalse(isset($result['owner_id']));
+        $this->assertArrayNotHasKey('firstPost', $result);
+        $this->assertArrayNotHasKey('lastPost', $result);
     }
 }
