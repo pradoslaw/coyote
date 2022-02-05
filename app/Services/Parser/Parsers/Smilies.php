@@ -36,7 +36,7 @@ class Smilies extends Parser implements ParserInterface
      * @param string $text
      * @return string
      */
-    public function parse($text)
+    public function parse(string $text): string
     {
         $text = $this->hashBlock($text, ['code', 'a']);
         $text = $this->hashInline($text, 'img');

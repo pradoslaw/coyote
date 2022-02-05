@@ -10,7 +10,7 @@ class Context extends Parser implements ParserInterface
      * @param string $text
      * @return string
      */
-    public function parse($text)
+    public function parse(string $text): string
     {
         if (strpos($text, '{{CONTENT}}') === false) {
             return $text;

@@ -2,6 +2,7 @@
 
 namespace Coyote\Services\Parser\Parsers;
 
+use Coyote\Services\Parser\Extensions\InternalLinkExtension;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\InlinesOnly\InlinesOnlyExtension;
 use League\CommonMark\Extension\Mention\MentionExtension;
@@ -20,6 +21,7 @@ class SimpleMarkdown extends Markdown
         $environment = new Environment($this->defaultConfig());
         $environment->addExtension(new InlinesOnlyExtension());
         $environment->addExtension(new MentionExtension());
+        $environment->addExtension(new InternalLinkExtension($this->page));
 
         $converter = new MarkdownConverter($environment);
 

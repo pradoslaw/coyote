@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  * @property mixed $tags
+ * @property string $title
  */
 class Page extends Model
 {

@@ -50,7 +50,7 @@ class Purifier implements ParserInterface
      * @param string $text
      * @return string
      */
-    public function parse($text)
+    public function parse(string $text): string
     {
         $def = $this->config->getHTMLDefinition(true);
         $def->addAttribute('a', 'data-user-id', 'Number');
