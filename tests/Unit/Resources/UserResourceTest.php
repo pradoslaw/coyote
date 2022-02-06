@@ -39,7 +39,7 @@ class UserResourceTest extends TestCase
         $this->assertArrayHasKey('is_online', $resource);
         $this->assertArrayHasKey('is_blocked', $resource);
 
-        $this->assertEquals($user->sig, $resource['sig']);
+        $this->assertEquals($user->sig, trim($resource['sig']));
         $this->assertFalse($resource['is_online']);
         $this->assertFalse($resource['is_blocked']);
     }
