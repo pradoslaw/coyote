@@ -83,8 +83,7 @@
 
 <script lang="ts">
 import {Asset} from '@/types/models';
-import {Editor4Play} from "@riddled/4play/src/Editor.js";
-import {link} from "@riddled/4play/src/markdown";
+import {Editor4Play, link} from "@riddled/4play";
 import axios from 'axios';
 import Prism from 'prismjs';
 import Vue from 'vue';

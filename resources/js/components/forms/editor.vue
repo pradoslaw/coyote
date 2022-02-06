@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import {Editor4Play} from "@riddled/4play/src/Editor.js";
+import {Editor4Play} from "@riddled/4play";
 
 export default {
   props: {
