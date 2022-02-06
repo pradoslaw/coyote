@@ -6,7 +6,6 @@ use Coyote\Repositories\Contracts\PageRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Services\Parser\Container;
 use Coyote\Services\Parser\Parsers\Prism;
-use Coyote\Services\Parser\Parsers\Link;
 use Coyote\Services\Parser\Parsers\Markdown;
 use Coyote\Services\Parser\Parsers\Purifier;
 use Coyote\Services\Parser\Parsers\Smilies;

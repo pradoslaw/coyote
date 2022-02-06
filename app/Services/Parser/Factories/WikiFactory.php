@@ -9,7 +9,6 @@ use Coyote\Services\Parser\Container;
 use Coyote\Services\Parser\Parsers\Context;
 use Coyote\Services\Parser\Parsers\Prism;
 use Coyote\Services\Parser\Parsers\Latex;
-use Coyote\Services\Parser\Parsers\Link;
 use Coyote\Services\Parser\Parsers\Markdown;
 use Coyote\Services\Parser\Parsers\Purifier;
 use Coyote\Services\Parser\Parsers\Template;

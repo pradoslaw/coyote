@@ -8,7 +8,6 @@ use Coyote\Repositories\Contracts\WordRepositoryInterface;
 use Coyote\Services\Parser\Container;
 use Coyote\Services\Parser\Parsers\Censore;
 use Coyote\Services\Parser\Parsers\Emphasis;
-use Coyote\Services\Parser\Parsers\Link;
 use Coyote\Services\Parser\Parsers\Purifier;
 use Coyote\Services\Parser\Parsers\SimpleMarkdown;
 use Coyote\Services\Parser\Parsers\Smilies;
@@ -80,7 +79,6 @@ class CommentFactory extends AbstractFactory
                     $parser->attach(
                         (new Purifier())->set('HTML.Allowed', $this->getHtmlTags())
                     );
-//                    $parser->attach(new Link($this->app[PageRepositoryInterface::class], $this->request->getHost()));
                     $parser->attach(new Censore($this->app[WordRepositoryInterface::class]));
 
                     if (!empty($this->userId)) {

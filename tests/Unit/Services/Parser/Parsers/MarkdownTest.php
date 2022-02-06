@@ -3,7 +3,6 @@
 namespace Tests\Unit\Services\Parser\Parsers;
 
 use Coyote\Page;
-use Coyote\Services\Parser\Parsers\Link;
 use Coyote\Services\Parser\Parsers\Markdown;
 use Coyote\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
