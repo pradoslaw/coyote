@@ -41,9 +41,8 @@ class Markdown implements ParserInterface
         $environment->addExtension(new TaskListExtension());
         $environment->addExtension(new MentionExtension());
         $environment->addExtension(new InternalLinkExtension($this->page));
-//        $environment->addExtension(new YoutubeLinkExtension());
         $environment->addDelimiterProcessor(new WikiLinkProcessor($this->page));
-//        $environment->addDelimiterProcessor(new WikiLinkProcessor($this->page));
+        $environment->addExtension(new YoutubeLinkExtension());
 
         $converter = new MarkdownConverter($environment);
         $document = $converter->convert($text);

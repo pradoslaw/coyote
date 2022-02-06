@@ -21,6 +21,10 @@ class YoutubeLinkProcessor
             $components = parse_url($link->getUrl());
             $path = trim($components['path'] ?? '', '/');
 
+            if (empty($components['host'])) {
+                continue;
+            }
+
             if (!$this->isYoutubeLink($components['host'], $path) || $link->firstChild()->getLiteral() !== $link->getUrl()) {
                 continue;
             }
