@@ -166,6 +166,28 @@ class MarkdownTest extends TestCase
         $this->assertEquals("<p><a href=\"$link\">$link</a></p>", trim($this->markdown->parse($link)));
     }
 
+    public function testYoutubeVideos()
+    {
+        $this->assertStringContainsString('iframe', $this->markdown->parse('https://www.youtube.com/watch?v=7dU3ybPqV94'));
+        $this->assertStringNotContainsString('iframe', $this->markdown->parse(link_to('https://www.youtube.com/watch?v=7dU3ybPqV94')));
+        $this->assertStringNotContainsString('iframe', $this->markdown->parse(link_to('https://www.youtube.com/watch?v=7dU3ybPqV94#foo')));
+        $this->assertStringContainsString('iframe', $this->markdown->parse('https://youtu.be/enOjqwOE1ec'));
+        $this->assertStringContainsString('iframe', $this->markdown->parse('https://www.youtu.be/enOjqwOE1ec'));
+        $this->assertStringNotContainsString('iframe', $this->markdown->parse('https://youtu.be/'));
+        $this->assertStringNotContainsString('iframe', $this->markdown->parse('https://youtube.com'));
+        $this->assertStringNotContainsString('iframe', $this->markdown->parse('https://www.youtube.com'));
+        $this->assertStringNotContainsString('iframe', $this->markdown->parse(link_to('https://youtu.be/enOjqwOE1ec')));
+        $this->assertStringNotContainsString('iframe', $this->markdown->parse('[test](https://youtu.be/enOjqwOE1ec)'));
+
+        $this->assertEquals('<p><a href="https://www.youtube.com/watch?v=SC9ybxMDGlE">test</a></p>', trim($this->markdown->parse('<a href="https://www.youtube.com/watch?v=SC9ybxMDGlE">test</a>')));
+        $this->assertStringNotContainsString('iframe', $this->markdown->parse('<a href="https://www.youtube.com/watch?v=SC9ybxMDGlE">https://www.youtube.com/watch?v=SC9ybxMDGlE</a>'));
+
+        $this->assertStringContainsString('https://www.youtube.com/watch?v=7dU3ybPqV94', $this->markdown->parse('<code>https://www.youtube.com/watch?v=7dU3ybPqV94</code>'));
+
+        $this->assertStringContainsString('https://youtube.com/embed/vd0zDG4vwOw?start=1107', $this->markdown->parse('https://youtu.be/vd0zDG4vwOw?t=18m27s'));
+        $this->assertStringContainsString('https://youtube.com/embed/vd0zDG4vwOw?start=1107', $this->markdown->parse('https://www.youtube.com/watch?v=vd0zDG4vwOw#t=18m27s'));
+    }
+
     public function testParseInternalLinks()
     {
         $this->markdown->setConfig([

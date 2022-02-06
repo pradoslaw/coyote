@@ -21,7 +21,7 @@
         "doctrine/dbal": "^2.5",
         "elasticsearch/elasticsearch": "~6.7",
         "erusev/parsedown": "^1.7",
-        "ezyang/htmlpurifier": "^v4.13.0",
+        "ezyang/htmlpurifier": "^v4.14.0",
         "fideloper/proxy": "^4.0",
         "filp/whoops": "^2.3",
         "florianv/laravel-swap": "^2.3.0",

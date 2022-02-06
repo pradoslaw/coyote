@@ -108,27 +108,6 @@ class LinkTest extends TestCase
         $this->assertStringContainsString("<pre><code>[[Kim jesteśmy?]]</code></pre>", $input);
     }
 
-    public function testYoutubeVideos()
-    {
-        $parser = new Link($this->repository, '4programmers.net', $this->htmlBuilder);
-
-        $this->assertStringContainsString('iframe', $parser->parse('https://www.youtube.com/watch?v=7dU3ybPqV94'));
-        $this->assertStringContainsString('iframe', $parser->parse(link_to('https://www.youtube.com/watch?v=7dU3ybPqV94')));
-        $this->assertStringContainsString('iframe', $parser->parse(link_to('https://www.youtube.com/watch?v=7dU3ybPqV94#foo')));
-        $this->assertStringContainsString('iframe', $parser->parse('https://youtu.be/enOjqwOE1ec'));
-        $this->assertStringContainsString('iframe', $parser->parse('https://www.youtu.be/enOjqwOE1ec'));
-        $this->assertStringNotContainsString('iframe', $parser->parse('https://youtu.be/'));
-        $this->assertStringContainsString('iframe', $parser->parse(link_to('https://youtu.be/enOjqwOE1ec')));
-
-        $this->assertEquals('<a href="https://www.youtube.com/watch?v=SC9ybxMDGlE">test</a>', $parser->parse('<a href="https://www.youtube.com/watch?v=SC9ybxMDGlE">test</a>'));
-        $this->assertStringContainsString('iframe', $parser->parse('<a href="https://www.youtube.com/watch?v=SC9ybxMDGlE">https://www.youtube.com/watch?v=SC9ybxMDGlE</a>'));
-
-        $this->assertStringContainsString('https://www.youtube.com/watch?v=7dU3ybPqV94', $parser->parse('<code>https://www.youtube.com/watch?v=7dU3ybPqV94</code>'));
-
-        $this->assertStringContainsString('https://youtube.com/embed/vd0zDG4vwOw?start=1107', $parser->parse('https://youtu.be/vd0zDG4vwOw?t=18m27s'));
-        $this->assertStringContainsString('https://youtube.com/embed/vd0zDG4vwOw?start=1107', $parser->parse('https://www.youtube.com/watch?v=vd0zDG4vwOw#t=18m27s'));
-    }
-
     public function testAutolinkLongUrl()
     {
         $parser = new Link($this->repository, '4programmers.net', $this->htmlBuilder);
