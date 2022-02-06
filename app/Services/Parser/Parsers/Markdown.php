@@ -6,6 +6,7 @@ use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Services\Parser\Extensions\InternalLinkExtension;
 use Coyote\Services\Parser\Extensions\PurifierExtension;
+use Coyote\Services\Parser\Extensions\WikiLinkProcessor;
 use Coyote\Services\Parser\Extensions\YoutubeLinkExtension;
 use Coyote\Services\Parser\MentionGenerator;
 use League\CommonMark\Environment\Environment;
@@ -40,7 +41,9 @@ class Markdown implements ParserInterface
         $environment->addExtension(new TaskListExtension());
         $environment->addExtension(new MentionExtension());
         $environment->addExtension(new InternalLinkExtension($this->page));
-        $environment->addExtension(new YoutubeLinkExtension());
+//        $environment->addExtension(new YoutubeLinkExtension());
+        $environment->addDelimiterProcessor(new WikiLinkProcessor($this->page));
+//        $environment->addDelimiterProcessor(new WikiLinkProcessor($this->page));
 
         $converter = new MarkdownConverter($environment);
         $document = $converter->convert($text);

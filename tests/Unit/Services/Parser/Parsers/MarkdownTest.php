@@ -3,6 +3,7 @@
 namespace Tests\Unit\Services\Parser\Parsers;
 
 use Coyote\Page;
+use Coyote\Services\Parser\Parsers\Link;
 use Coyote\Services\Parser\Parsers\Markdown;
 use Coyote\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -217,6 +218,56 @@ class MarkdownTest extends TestCase
             '<p><a href="http://4programmers.net' . $path . '" title="' . $title . '">' . $title . '</a></p>',
             trim($this->markdown->parse($input))
         );
+    }
+
+    public function testParseInternalAccessors()
+    {
+        $host = '4programmers.net';
+
+        $title = 'Forum dyskusyjne';
+        $path = '/Discussion_board';
+
+        $this->createPage($title, $path);
+
+        $input = $this->markdown->parse('[[Discussion board]]');
+        $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "\">$title</a>~", $input);
+
+        $input = $this->markdown->parse('[[Discussion_board]]');
+        $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "\">$title</a>~", $input);
+
+        $input = $this->markdown->parse('[[Discussion board|takie tam forum]]');
+        $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "\">takie tam forum</a>~", $input);
+
+        $input = $this->markdown->parse('[[Discussion board#section|takie tam forum]]');
+        $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "#section\">takie tam forum</a>~", $input);
+
+        $input = $this->markdown->parse('[[Discussion board#section]]');
+        $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "#section\">$title</a>~", $input);
+
+        $title = 'Newbie';
+        $path = '/Discussion_board/Newbie';
+
+        $this->createPage($title, $path);
+
+        $input = $this->markdown->parse('[[Discussion board/Newbie]]');
+        $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "\">$title</a>~", $input);
+
+        $input = $this->markdown->parse('[[Discussion board/Newbie|forum newbie]]');
+        $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "\">forum newbie</a>~", $input);
+
+        $title = 'Kim jesteśmy?';
+        $path = '/Kim_jesteśmy';
+
+        $this->createPage($title, $path);
+
+        $input = $this->markdown->parse('[[Kim jesteśmy?]]');
+        $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "\">" . preg_quote($title) . "</a>~", $input);
+
+//        $input = $this->markdown->parse('<code>[[Kim jesteśmy?]]</code>');
+//        $this->assertStringContainsString("<code>[[Kim jesteśmy?]]</code>", $input);
+//
+//        $input = $this->markdown->parse('<pre><code>[[Kim jesteśmy?]]</code></pre>');
+//        $this->assertStringContainsString("<pre><code>[[Kim jesteśmy?]]</code></pre>", $input);
     }
 
     private function createPage($title, $path)
