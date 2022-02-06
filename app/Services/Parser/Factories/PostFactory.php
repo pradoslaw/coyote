@@ -25,33 +25,25 @@ class PostFactory extends AbstractFactory
     {
         start_measure('parsing', 'Parsing post...');
 
-        $isInCache = $this->cache->has($text);
-        if ($isInCache) {
-            $text = $this->cache->get($text);
+        $parser = new Container();
+
+        $text = $this->cache($text, function () use ($parser) {
+            $parser->attach((new Markdown($this->app[UserRepositoryInterface::class], $this->app[PageRepositoryInterface::class])));
+            $parser->attach(new Latex());
+            $parser->attach(new Purifier());
+            $parser->attach(new Censore($this->app[WordRepositoryInterface::class]));
+            $parser->attach(new Prism());
+
+            return $parser;
+        });
+
+        if ($this->isSmiliesAllowed()) {
+            $parser->attach(new Smilies());
+            $text = $parser->parse($text);
         }
 
-        if (!$isInCache || $this->isSmiliesAllowed()) {
-            $parser = new Container();
-
-            if (!$isInCache) {
-                $text = $this->cache($text, function () use ($parser) {
-                    $parser->attach((new Markdown($this->app[UserRepositoryInterface::class], $this->app[PageRepositoryInterface::class])));
-                    $parser->attach(new Latex());
-                    $parser->attach(new Purifier());
-                    $parser->attach(new Censore($this->app[WordRepositoryInterface::class]));
-                    $parser->attach(new Prism());
-
-                    return $parser;
-                });
-            }
-
-            if ($this->isSmiliesAllowed()) {
-                $parser->attach(new Smilies());
-                $text = $parser->parse($text);
-            }
-        }
         stop_measure('parsing');
 
-        return (string) $text;
+        return $text;
     }
 }

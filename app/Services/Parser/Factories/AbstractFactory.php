@@ -49,27 +49,24 @@ abstract class AbstractFactory
      */
     abstract public function parse(string $text) : string;
 
-    /**
-     * @return bool
-     */
-    public function isSmiliesAllowed()
+    public function isSmiliesAllowed(): bool
     {
         return $this->auth->check() && $this->auth->user()->allow_smilies;
     }
 
     /**
      * Parse text and store it in cache
-     *
-     * @param $text
-     * @param \Closure $closure
-     * @return mixed
      */
-    public function cache($text, \Closure $closure)
+    public function cache(string $text, \Closure $closure): string
     {
+        $key = $this->cache->key($text);
+
+        if ($this->cache->has($key)) {
+            return $this->cache->get($key);
+        }
+
         /** @var \Coyote\Services\Parser\Container $parser */
         $parser = $closure();
-
-        $key = $this->cache->key($text);
         $text = $parser->parse($text);
 
         if ($this->cache->isEnabled()) {

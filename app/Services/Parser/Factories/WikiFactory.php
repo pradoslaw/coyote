@@ -25,31 +25,27 @@ class WikiFactory extends AbstractFactory
     {
         start_measure('parsing', 'Parsing wiki...');
 
-        $isInCache = $this->cache->has($text);
-        if ($isInCache) {
-            $text = $this->cache->get($text);
-        } else {
-            $parser = new Container();
+        $parser = new Container();
 
-            $text = $this->cache($text, function () use ($parser) {
-                $allowedTags = explode(',', config('purifier')['HTML.Allowed']);
-                unset($allowedTags['ul']);
+        $text = $this->cache($text, function () use ($parser) {
+            $allowedTags = explode(',', config('purifier')['HTML.Allowed']);
+            unset($allowedTags['ul']);
 
-                // we add those tags for backward compatibility
-                $allowedTags[] = 'div[class]';
-                $allowedTags[] = 'ul[class]';
-                $allowedTags[] = 'h1';
+            // we add those tags for backward compatibility
+            $allowedTags[] = 'div[class]';
+            $allowedTags[] = 'ul[class]';
+            $allowedTags[] = 'h1';
 
-                $parser->attach(new Template($this->app[WikiRepositoryInterface::class]));
-                $parser->attach(new Markdown($this->app[UserRepositoryInterface::class], $this->app[PageRepositoryInterface::class]));
-                $parser->attach(new Latex());
-                $parser->attach((new Purifier())->set('HTML.Allowed', implode(',', $allowedTags)));
-                $parser->attach(new Context());
-                $parser->attach(new Prism());
+            $parser->attach(new Template($this->app[WikiRepositoryInterface::class]));
+            $parser->attach(new Markdown($this->app[UserRepositoryInterface::class], $this->app[PageRepositoryInterface::class]));
+            $parser->attach(new Latex());
+            $parser->attach((new Purifier())->set('HTML.Allowed', implode(',', $allowedTags)));
+            $parser->attach(new Context());
+            $parser->attach(new Prism());
 
-                return $parser;
-            });
-        }
+            return $parser;
+        });
+
         stop_measure('parsing');
 
         return $text;

@@ -19,19 +19,15 @@ class JobFactory extends AbstractFactory
     {
         start_measure('parsing', 'Parsing job data...');
 
-        $isInCache = $this->cache->has($text);
-        if ($isInCache) {
-            $text = $this->cache->get($text);
-        } else {
-            $parser = new Container();
+        $parser = new Container();
 
-            $text = $this->cache($text, function () use ($parser) {
-                $parser->attach(new Purifier());
-                $parser->attach(new Censore($this->app[WordRepositoryInterface::class]));
+        $text = $this->cache($text, function () use ($parser) {
+            $parser->attach(new Purifier());
+            $parser->attach(new Censore($this->app[WordRepositoryInterface::class]));
 
-                return $parser;
-            });
-        }
+            return $parser;
+        });
+
         stop_measure('parsing');
 
         return $text;
