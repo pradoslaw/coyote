@@ -2,15 +2,17 @@
 
 namespace Coyote\Services\Parser\Parsers;
 
+use TRegx\CleanRegex\Pattern;
+
 class Context extends Parser implements ParserInterface
 {
-    const HEADLINE_REGEXP = "<h([1-6])>(.*?)<\/h\\1>";
+    const HEADLINE_REGEXP = '<h([1-6])>(.*?)</h\1>';
 
     /**
      * @param string $text
      * @return string
      */
-    public function parse($text)
+    public function parse(string $text): string
     {
         if (strpos($text, '{{CONTENT}}') === false) {
             return $text;
@@ -19,13 +21,13 @@ class Context extends Parser implements ParserInterface
         $text = $this->hashBlock($text, ['code', 'a']);
         $text = $this->hashInline($text, 'img');
 
-        preg_match_all('~' . self::HEADLINE_REGEXP . '~', $text, $matches);
+        $pattern = Pattern::of(self::HEADLINE_REGEXP);
         $headlines = '';
 
-        for ($i = 0, $count = count($matches[0]); $i < $count; $i++) {
-            $origin = $matches[0][$i];
-            $indent = $matches[1][$i];
-            $label = $matches[2][$i];
+        foreach ($pattern->match($text) as $match) {
+            $origin = $match->text();
+            $indent = $match->get(1);
+            $label = $match->get(2);
 
             $numbering = $this->numbering($indent);
 

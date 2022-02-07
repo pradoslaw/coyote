@@ -18,11 +18,10 @@
 
 return [
     'Core.Encoding'            => 'UTF-8',
-//    'Cache.SerializerPath'     => getenv('APP_ENV') === 'local' ? null : storage_path('app/purifier'),
     'Cache.SerializerPath'     => storage_path('app/purifier'),
     // zakomentowalem te linie poniewaz przez nia usuwana byla zawartosc znacznika <blockquote>
 //    'HTML.Doctype'             => 'XHTML 1.0 Strict',
-    'HTML.Allowed'             => 'b,strong,i,em,u,a[href|title|data-user-id|class],p,br,ul,ol[start],li,span[style|title],img[width|height|alt|src|title],sub,sup,pre,code[class],div,kbd,h1,h2,h3,h4,h5,h6,blockquote,del,table[summary|class],thead,tbody,tr,th[abbr],td[abbr],hr,dfn,var,samp',
+    'HTML.Allowed'             => 'b,strong,i,em,u,a[href|title|data-user-id|class],p,br,ul,ol[start],li,span[style|title],img[width|height|alt|src|title],sub,sup,pre,code[class],div[class],kbd,h1,h2,h3,h4,h5,h6,blockquote,del,table[summary|class],thead,tbody,tr,th[abbr],td[abbr],hr,dfn,var,samp,iframe[src|class|allowfullscreen]',
     'CSS.AllowedProperties'    => 'font,font-size,font-weight,font-style,font-family,text-decoration,color,background-color,background-image,text-align',
     'AutoFormat.AutoParagraph' => false,
     // nie usuwaj pustych atrybutow typu <a></a>
@@ -38,5 +37,8 @@ return [
     // trzeba monitorowac to ustawienie, poniewaz moze psuc parsowanie atrybutow
     'Core.LexerImpl'            => 'DirectLex',
     'Core.AggressivelyFixLt'    => false,
-    'Output.Newline'            => "\n"
+    'Output.Newline'            => "\n",
+
+    'HTML.SafeIframe'           => true,
+    'URI.SafeIframeRegexp'      => '%^(https?:)?//(youtube(?:-nocookie)?\.com/embed/)%'
 ];

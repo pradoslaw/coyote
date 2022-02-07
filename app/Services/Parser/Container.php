@@ -27,11 +27,7 @@ final class Container
         $this->parsers = [];
     }
 
-    /**
-     * @param $text
-     * @return mixed
-     */
-    public function parse($text)
+    public function parse(string $text): string
     {
         foreach ($this->parsers as $parser) {
             $text = $parser->parse($text);

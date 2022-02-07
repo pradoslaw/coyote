@@ -26,7 +26,7 @@ class Template implements ParserInterface
      * @param string $text
      * @return string
      */
-    public function parse($text)
+    public function parse(string $text): string
     {
         if (!preg_match_all('/' . self::TEMPLATE_REGEXP . '/i', $text, $matches)) {
             return $text;

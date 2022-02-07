@@ -64,39 +64,24 @@ class Cache
         return $this->enable;
     }
 
-    /**
-     * @param string $key
-     * @param string $text
-     */
-    public function put($key, &$text)
+    public function put(string $key, string &$text): void
     {
         $this->repository->put($key, $text, self::CACHE_TTL);
     }
 
-    /**
-     * @param string $text
-     * @return bool
-     */
-    public function has(&$text)
+    public function has(string $key): bool
     {
-        return $this->enable && $this->repository->has($this->key($text));
+        return $this->enable && $this->repository->has($key);
     }
 
-    /**
-     * @param string $text
-     * @return mixed
-     */
-    public function get(&$text)
+    public function get(string $key): string
     {
-        return $this->repository->get($this->key($text));
+        return $this->repository->get($key);
     }
 
-    /**
-     * @param string $text
-     */
-    public function forget($text)
+    public function forget(string $key): void
     {
-        $this->repository->forget($this->key($text));
+        $this->repository->forget($key);
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Services\Parser\Parsers;
 
-use Coyote\Repositories\Contracts\UserRepositoryInterface;
+use Coyote\Page;
 use Coyote\Services\Parser\Parsers\Markdown;
 use Coyote\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -19,147 +19,262 @@ class MarkdownTest extends TestCase
 
     public function setUp(): void
     {
-        parent::setUp();;
+        parent::setUp();
 
-        $user = app(UserRepositoryInterface::class);
-        $this->markdown = new Markdown($user);
+        $this->markdown = $this->app[Markdown::class];
     }
 
     // tests
     public function testParseUserName()
     {
         $input = $this->markdown->parse('@');
-        $this->assertEquals('<p>@</p>', $input);
+        $this->assertEquals('<p>@</p>', trim($input));
 
         $input = $this->markdown->parse('@admin lorem ipsum');
-        $this->assertMatchesRegularExpression('/<a href=".*">@admin<\/a> lorem ipsum/', $input);
+        $this->assertMatchesRegularExpression('/<a class="mention" data-user-id="\d+" href=".*">@admin<\/a> lorem ipsum/', trim($input));
 
         $input = $this->markdown->parse('@admin');
-        $this->assertMatchesRegularExpression('/<a href=".*">@admin<\/a>/', $input);
+        $this->assertMatchesRegularExpression('/<a class="mention" data-user-id="\d+" href=".*">@admin<\/a>/', trim($input));
 
         $input = $this->markdown->parse('(@admin)');
-        $this->assertMatchesRegularExpression('/\(<a href=".*">@admin<\/a>\)/', $input);
+        $this->assertMatchesRegularExpression('/\(<a class="mention" data-user-id="\d+" href=".*">@admin<\/a>\)/', trim($input));
 
         $input = $this->markdown->parse("@admin\n(@admin)");
-        $this->assertMatchesRegularExpression("/<a href=\".*\">@admin<\/a>\n\(<a href=\".*\">@admin<\/a>\)/", $input);
+        $this->assertMatchesRegularExpression("/<a class=\"mention\" data-user-id=\"\d+\" href=\".*\">@admin<\/a><br>\n\(<a class=\"mention\" data-user-id=\"\d+\" href=\".*\">@admin<\/a>\)/", trim($input));
 
         $input = $this->markdown->parse('@admin lorem ipsum `@admin`');
-        $this->assertMatchesRegularExpression('/<a href=".*">@admin<\/a> lorem ipsum <code>@admin<\/code>/', $input);
+        $this->assertMatchesRegularExpression('/<a class="mention" data-user-id="\d+" href=".*">@admin<\/a> lorem ipsum <code>@admin<\/code>/', trim($input));
 
         $input = $this->markdown->parse('@admin: lorem ipsum');
-        $this->assertMatchesRegularExpression('/<a href=".*">@admin<\/a>: lorem ipsum/', $input);
+        $this->assertMatchesRegularExpression('/<a class="mention" data-user-id="\d+" href=".*">@admin<\/a>: lorem ipsum/', trim($input));
 
         $input = $this->markdown->parse('@admin:lorem ipsum');
-        $this->assertMatchesRegularExpression('/<a href=".*">@admin<\/a>:lorem ipsum/', $input);
+        $this->assertMatchesRegularExpression('/<a class="mention" data-user-id="\d+" href=".*">@admin<\/a>:lorem ipsum/', trim($input));
 
         $input = $this->markdown->parse('@admin, lorem ipsum');
-        $this->assertMatchesRegularExpression('/<a href=".*">@admin<\/a>, lorem ipsum/', $input);
+        $this->assertMatchesRegularExpression('/<a class="mention" data-user-id="\d+" href=".*">@admin<\/a>, lorem ipsum/', trim($input));
 
         $input = $this->markdown->parse('@admin. lorem ipsum');
-        $this->assertMatchesRegularExpression('/<a href=".*">@admin<\/a>. lorem ipsum/', $input);
+        $this->assertMatchesRegularExpression('/<a class="mention" data-user-id="\d+" href=".*">@admin<\/a>. lorem ipsum/', trim($input));
 
         $input = $this->markdown->parse('@admin\'s. lorem ipsum');
-        $this->assertMatchesRegularExpression('/<a href=".*">@admin<\/a>\'s. lorem ipsum/', $input);
+        $this->assertMatchesRegularExpression('/<a class="mention" data-user-id="\d+" href=".*">@admin<\/a>\'s. lorem ipsum/', trim($input));
 
         $input = $this->markdown->parse('@admin @admin');
-        $this->assertMatchesRegularExpression('/<a href=".*">@admin<\/a> <a href=".*">@admin<\/a>/', $input);
+        $this->assertMatchesRegularExpression('/<a class="mention" data-user-id="\d+" href=".*">@admin<\/a> <a class="mention" data-user-id="\d+" href=".*">@admin<\/a>/', trim($input));
 
         $input = $this->markdown->parse("@admin\n@admin");
-        $this->assertMatchesRegularExpression("/<a href=\".*\">@admin<\/a>\n<a href=\".*\">@admin<\/a>/", $input);
+        $this->assertMatchesRegularExpression("/<a class=\"mention\" data-user-id=\"\d+\" href=\".*\">@admin<\/a><br>\n<a class=\"mention\" data-user-id=\"\d+\" href=\".*\">@admin<\/a>/", trim($input));
 
-//        $input = $this->markdown->parse("@admin… foo");
-//        $this->assertMatchesRegularExpression("/<strong>@admin…<\/strong> foo/", $input);
+        $input = $this->markdown->parse("@admin… foo");
+        $this->assertMatchesRegularExpression("/<a class=\"mention\" data-user-id=\"\d+\" href=\".*\">@admin<\/a>… foo/", $input);
 
         $now = new \DateTime('now');
         factory(User::class)->create(['name' => 'admin admiński', 'email' => 'foo@bar.com', 'created_at' => $now, 'updated_at' => $now]);
 
         $input = $this->markdown->parse('@{admin} lorem ipsum');
-        $this->assertMatchesRegularExpression('/<a href=".*">@admin<\/a> lorem ipsum/', $input);
+        $this->assertMatchesRegularExpression('/<a class="mention" data-user-id="\d+" href=".*">@admin<\/a> lorem ipsum/', trim($input));
 
         $input = $this->markdown->parse('@{admin admiński} lorem ipsum');
-        $this->assertMatchesRegularExpression('/<a href=".*">@admin admiński<\/a> lorem ipsum/', $input);
+        $this->assertMatchesRegularExpression('/<a class="mention" data-user-id="\d+" href=".*">@admin admiński<\/a> lorem ipsum/', trim($input));
 
         $input = $this->markdown->parse('@{admin admiński}lorem ipsum');
-        $this->assertMatchesRegularExpression('/<a href=".*">@admin admiński<\/a>lorem ipsum/', $input);
+        $this->assertMatchesRegularExpression('/<a class="mention" data-user-id="\d+" href=".*">@admin admiński<\/a>lorem ipsum/', trim($input));
 
         $input = $this->markdown->parse('@{admin admiński}:lorem ipsum');
-        $this->assertMatchesRegularExpression('/<a href=".*">@admin admiński<\/a>:lorem ipsum/', $input);
+        $this->assertMatchesRegularExpression('/<a class="mention" data-user-id="\d+" href=".*">@admin admiński<\/a>:lorem ipsum/', trim($input));
 
         $input = $this->markdown->parse('@admin admiński: lorem ipsum');
-        $this->assertMatchesRegularExpression('/<a href=".*">@admin<\/a> admiński: lorem ipsum/', $input);
+        $this->assertMatchesRegularExpression('/<a class="mention" data-user-id="\d+" href=".*">@admin<\/a> admiński: lorem ipsum/', trim($input));
 
         $input = $this->markdown->parse('@{admin-admiński} lorem ipsum');
-        $this->assertMatchesRegularExpression('/<strong>@admin-admiński<\/strong> lorem ipsum/', $input);
+        $this->assertMatchesRegularExpression('/@admin-admiński lorem ipsum/', trim($input));
 
         $input = $this->markdown->parse('@admin-admiński lorem ipsum');
-        $this->assertMatchesRegularExpression('/<strong>@admin-admiński<\/strong> lorem ipsum/', $input);
+        $this->assertMatchesRegularExpression('/@admin-admiński lorem ipsum/', trim($input));
 
         factory(User::class)->create(['name' => 'p88.yyy', 'email' => 'foo@bar.com', 'created_at' => $now, 'updated_at' => $now]);
 
         $input = $this->markdown->parse('@p88.yyy lorem ipsum');
-        $this->assertMatchesRegularExpression('/<strong>@p88<\/strong>.yyy lorem ipsum/', $input);
+        $this->assertMatchesRegularExpression('/@p88.yyy lorem ipsum/', trim($input));
 
         $input = $this->markdown->parse('@{p88.yyy}: lorem ipsum');
-        $this->assertMatchesRegularExpression('/<a href=".*">@p88.yyy<\/a>: lorem ipsum/', $input);
+        $this->assertMatchesRegularExpression('/<a class="mention" data-user-id="\d+" href=".*">@p88.yyy<\/a>: lorem ipsum/', trim($input));
 
         factory(User::class)->create(['name' => 'somedomain', 'email' => 'support@somedomain.net', 'created_at' => $now, 'updated_at' => $now]);
 
         $input = $this->markdown->parse('support@somedomain.net');
-        $this->assertMatchesRegularExpression('/support@somedomain.net/', $input);
+        $this->assertMatchesRegularExpression('/support@somedomain.net/', trim($input));
 
         $input = $this->markdown->parse('(@somedomain) lorem ipsum');
-        $this->assertMatchesRegularExpression('/\(<a href=".*">@somedomain<\/a>\) lorem ipsum/', $input);
+        $this->assertMatchesRegularExpression('/\(<a class="mention" data-user-id="\d+" href=".*">@somedomain<\/a>\) lorem ipsum/', trim($input));
 
         factory(User::class)->create(['name' => 'First(Name)', 'email' => 'bruno@m.com', 'created_at' => $now, 'updated_at' => $now]);
 
-        $input = $this->markdown->parse('@First(Name): hello');
-        $this->assertMatchesRegularExpression('/<a href=".*">@First\(Name\)<\/a>: hello/', $input);
-
         $input = $this->markdown->parse('@{First(Name)}: hello');
-        $this->assertMatchesRegularExpression('/<a href=".*">@First\(Name\)<\/a>: hello/', $input);
+        $this->assertMatchesRegularExpression('/<a class="mention" data-user-id="\d+" href=".*">@First\(Name\)<\/a>: hello/', trim($input));
 
         $input = $this->markdown->parse('@ 2Ghz');
-        $this->assertStringContainsString('@ 2Ghz', $input);
+        $this->assertStringContainsString('@ 2Ghz', trim($input));
     }
 
     public function testParseLinks()
     {
         $input = '<a href="http://www.google.pl/">http://www.google.pl/</a>';
-        $this->assertEquals("<p>$input</p>", $this->markdown->parse($input));
+        $this->assertEquals("<p>$input</p>", trim($this->markdown->parse($input)));
 
-        $input = 'http://google.pl';
-        $this->assertEquals("<p>$input</p>", $this->markdown->parse($input));
+        $input = '<a href="http://www.google.pl/">http://www.google.pl/</a>';
+        $this->assertEquals("<p>$input</p>", trim($this->markdown->parse($input)));
 
         $input = $this->markdown->parse('[http://www.google.pl/](http://www.google.pl/)');
-        $this->assertEquals('<p><a href="http://www.google.pl/">http://www.google.pl/</a></p>', $input);
+        $this->assertEquals('<p><a href="http://www.google.pl/">http://www.google.pl/</a></p>', trim($input));
 
         $input = $this->markdown->parse('[test](http://www.google.pl/)');
-        $this->assertEquals('<p><a href="http://www.google.pl/">test</a></p>', $input);
+        $this->assertEquals('<p><a href="http://www.google.pl/">test</a></p>', trim($input));
+
+        $input = $this->markdown->parse('http://4programmers.net');
+        $this->assertEquals('<p><a href="http://4programmers.net">http://4programmers.net</a></p>', trim($input));
+
+        $input = $this->markdown->parse('to: http://4programmers.net.');
+        $this->assertEquals('<p>to: <a href="http://4programmers.net">http://4programmers.net</a>.</p>', trim($input));
+
+        $input = $this->markdown->parse('<http://4programmers.net>');
+        $this->assertEquals('<p><a href="http://4programmers.net">http://4programmers.net</a></p>', trim($input));
+
+        $input = $this->markdown->parse('<a href="http://4programmers.net">http://4programmers.net</a>');
+        $this->assertEquals('<p><a href="http://4programmers.net">http://4programmers.net</a></p>', trim($input));
+
+        $input = $this->markdown->parse('www.4programmers.net');
+        $this->assertEquals('<p><a href="http://www.4programmers.net">www.4programmers.net</a></p>', trim($input));
+
+        $input = $this->markdown->parse('foo@bar.com');
+        $this->assertEquals('<p><a href="mailto:foo@bar.com">foo@bar.com</a></p>', trim($input));
+
+        $input = $this->markdown->parse('<foo@bar.com>');
+        $this->assertEquals('<p><a href="mailto:foo@bar.com">foo@bar.com</a></p>', trim($input));
+
+        $input = '<a href="http://4programmers.net">4programmers</a>.net';
+        $this->assertEquals("<p>$input</p>", trim($this->markdown->parse($input)));
+
+        $input = 'www.4programmers.net';
+        $this->assertEquals('<p><a href="http://www.4programmers.net">www.4programmers.net</a></p>', trim($this->markdown->parse($input)));
+
+        $input = 'asp.net';
+        $this->assertEquals('<p>asp.net</p>', trim($this->markdown->parse($input)));
+
+        $link = 'http://pl.wikipedia.org/wiki/normalna_(bazy_danych)';
+        $this->assertEquals("<p><a href=\"$link\">$link</a></p>", trim($this->markdown->parse($link)));
     }
 
-    public function testParseHashTag()
+    public function testYoutubeVideos()
     {
-        $this->markdown->setEnableHashParser(true);
+        $this->assertStringContainsString('iframe', $this->markdown->parse('https://www.youtube.com/watch?v=7dU3ybPqV94'));
+        $this->assertStringNotContainsString('iframe', $this->markdown->parse(link_to('https://www.youtube.com/watch?v=7dU3ybPqV94')));
+        $this->assertStringNotContainsString('iframe', $this->markdown->parse(link_to('https://www.youtube.com/watch?v=7dU3ybPqV94#foo')));
+        $this->assertStringContainsString('iframe', $this->markdown->parse('https://youtu.be/enOjqwOE1ec'));
+        $this->assertStringContainsString('iframe', $this->markdown->parse('https://www.youtu.be/enOjqwOE1ec'));
+        $this->assertStringNotContainsString('iframe', $this->markdown->parse('https://youtu.be/'));
+        $this->assertStringNotContainsString('iframe', $this->markdown->parse('https://youtube.com'));
+        $this->assertStringNotContainsString('iframe', $this->markdown->parse('https://www.youtube.com'));
+        $this->assertStringNotContainsString('iframe', $this->markdown->parse(link_to('https://youtu.be/enOjqwOE1ec')));
+        $this->assertStringNotContainsString('iframe', $this->markdown->parse('[test](https://youtu.be/enOjqwOE1ec)'));
 
-        $input = 'http://4programmers.net#hashtag';
-        $this->assertEquals("<p>$input</p>", $this->markdown->parse($input));
+        $this->assertEquals('<p><a href="https://www.youtube.com/watch?v=SC9ybxMDGlE">test</a></p>', trim($this->markdown->parse('<a href="https://www.youtube.com/watch?v=SC9ybxMDGlE">test</a>')));
+        $this->assertStringNotContainsString('iframe', $this->markdown->parse('<a href="https://www.youtube.com/watch?v=SC9ybxMDGlE">https://www.youtube.com/watch?v=SC9ybxMDGlE</a>'));
 
-        $input = '#';
-        $this->assertEquals("<p>$input</p>", $this->markdown->parse($input));
+        $this->assertStringContainsString('https://www.youtube.com/watch?v=7dU3ybPqV94', $this->markdown->parse('<code>https://www.youtube.com/watch?v=7dU3ybPqV94</code>'));
 
-        $input = 'test#';
-        $this->assertEquals("<p>$input</p>", $this->markdown->parse($input));
-
-        $input = $this->markdown->parse('#coyote');
-        $this->assertMatchesRegularExpression('/<a href=".*">#coyote<\/a>/', $input);
-
-        $input = $this->markdown->parse('(#coyote)');
-        $this->assertMatchesRegularExpression('/\(<a href=".*">#coyote<\/a>\)/', $input);
-
-        $input = $this->markdown->parse('#coyote #4programmers.net');
-        $this->assertMatchesRegularExpression('/<a href=".*">#coyote<\/a> <a href=".*">#4programmers.net<\/a>/', $input);
-
-        $input = $this->markdown->parse("#coyote\n#4programmers.net");
-        $this->assertMatchesRegularExpression("/<a href=\".*\">#coyote<\/a>\n<a href=\".*\">#4programmers.net<\/a>/", $input);
+        $this->assertStringContainsString('https://youtube.com/embed/vd0zDG4vwOw?start=1107', $this->markdown->parse('https://youtu.be/vd0zDG4vwOw?t=18m27s'));
+        $this->assertStringContainsString('https://youtube.com/embed/vd0zDG4vwOw?start=1107', $this->markdown->parse('https://www.youtube.com/watch?v=vd0zDG4vwOw#t=18m27s'));
     }
+
+    public function testParseInternalLinks()
+    {
+        $this->markdown->setConfig([
+            'internal_link' => [
+                'internal_hosts' => '4programmers.net'
+            ]
+        ]);
+
+        $title = '"Kompetentność" uczących się programowania';
+        $path = '/Forum/Spolecznosc/266098-kompetentnosc_uczacych_sie_programowania';
+        $this->createPage($title, $path);
+
+        $input = 'http://4programmers.net' . $path;
+
+        $this->assertEquals(
+            '<p><a href="http://4programmers.net' . $path . '" title="' . htmlspecialchars($title) . '">' . htmlspecialchars($title) . '</a></p>',
+            trim($this->markdown->parse($input))
+        );
+
+        $title = 'łatwo przyszło, łatwo poszło';
+        $path = '/Forum/Spolecznosc/' . str_slug($title);
+        $this->createPage($title, $path);
+
+        $input = 'http://4programmers.net' . $path;
+
+        $this->assertEquals(
+            '<p><a href="http://4programmers.net' . $path . '" title="' . $title . '">' . $title . '</a></p>',
+            trim($this->markdown->parse($input))
+        );
+    }
+
+    public function testParseInternalAccessors()
+    {
+        $host = '4programmers.net';
+
+        $title = 'Forum dyskusyjne';
+        $path = '/Discussion_board';
+
+        $this->createPage($title, $path);
+
+        $input = $this->markdown->parse('[[Discussion board]]');
+        $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "\">$title</a>~", $input);
+
+        $input = $this->markdown->parse('[[Discussion_board]]');
+        $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "\">$title</a>~", $input);
+
+        $input = $this->markdown->parse('[[Discussion board|takie tam forum]]');
+        $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "\">takie tam forum</a>~", $input);
+
+        $input = $this->markdown->parse('[[Discussion board#section|takie tam forum]]');
+        $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "#section\">takie tam forum</a>~", $input);
+
+        $input = $this->markdown->parse('[[Discussion board#section]]');
+        $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "#section\">$title</a>~", $input);
+
+        $title = 'Newbie';
+        $path = '/Discussion_board/Newbie';
+
+        $this->createPage($title, $path);
+
+        $input = $this->markdown->parse('[[Discussion board/Newbie]]');
+        $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "\">$title</a>~", $input);
+
+        $input = $this->markdown->parse('[[Discussion board/Newbie|forum newbie]]');
+        $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "\">forum newbie</a>~", $input);
+
+        $title = 'Kim jesteśmy?';
+        $path = '/Kim_jesteśmy';
+
+        $this->createPage($title, $path);
+
+        $input = $this->markdown->parse('[[Kim jesteśmy?]]');
+        $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "\">" . preg_quote($title) . "</a>~", $input);
+
+//        $input = $this->markdown->parse('<code>[[Kim jesteśmy?]]</code>');
+//        $this->assertStringContainsString("<code>[[Kim jesteśmy?]]</code>", $input);
+//
+//        $input = $this->markdown->parse('<pre><code>[[Kim jesteśmy?]]</code></pre>');
+//        $this->assertStringContainsString("<pre><code>[[Kim jesteśmy?]]</code></pre>", $input);
+    }
+
+    private function createPage($title, $path)
+    {
+        $now = new \DateTime('now');
+        Page::forceCreate([
+            'title' => $title, 'path' => $path, 'created_at' => $now, 'updated_at' => $now
+        ]);
+    }
+
 }

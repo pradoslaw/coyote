@@ -2,25 +2,19 @@
 
 namespace Coyote\Services\Parser\Parsers;
 
+use TRegx\CleanRegex\Pattern;
+
 class Prism implements ParserInterface
 {
     const ALIAS = ['c#' => 'csharp', 'delphi' => 'pascal', 'asm' => 'asm6502', 'bf' => 'brainfuck', 'jquery' => 'javascript', 'vb' => 'visual-basic'];
 
-    /**
-     * @param string $text
-     * @return string
-     */
-    public function parse($text)
+    public function parse(string $text): string
     {
-        preg_match_all('|<pre><code class="([a-z\d#-]+)">(.+?)<\/code><\/pre>|s', $text, $matches);
+        $pattern = Pattern::of('<pre><code class="([a-z\d#-]+)">(.+?)</code></pre>', 's');
 
-        if (!$matches[1]) {
-            return $text;
-        }
-
-        for ($i = 0, $count = count($matches[1]); $i < $count; $i++) {
-            $class = $originalClass = $matches[1][$i];
-            $code = &$matches[2][$i];
+        foreach ($pattern->match($text) as $match) {
+            $class = $originalClass = $match->get(1);
+            $code = $match->get(2);
 
             // class may have prefix "language". omit it.
             if (substr($class, 0, 8) === 'language') {
@@ -40,12 +34,7 @@ class Prism implements ParserInterface
         return $text;
     }
 
-    /**
-     * @param string $class
-     * @param string $code
-     * @return string
-     */
-    private function tag($class, $code)
+    private function tag(string $class, string $code): string
     {
         return sprintf('<pre><code class="%s">%s</code></pre>', $class, $code);
     }

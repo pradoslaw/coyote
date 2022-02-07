@@ -12,17 +12,17 @@ class Emphasis extends Parser implements ParserInterface
     /**
      * @var int
      */
-    protected $userId;
+    protected int $userId;
 
     /**
      * @var string
      */
-    protected $ability;
+    protected string $ability;
 
     /**
      * @var UserRepository
      */
-    protected $user;
+    protected UserRepository $user;
 
     /**
      * @param UserRepository $user
@@ -36,7 +36,7 @@ class Emphasis extends Parser implements ParserInterface
      * @param string $ability
      * @return $this
      */
-    public function setAbility($ability)
+    public function setAbility(string $ability): static
     {
         $this->ability = $ability;
 
@@ -47,7 +47,7 @@ class Emphasis extends Parser implements ParserInterface
      * @param int $userId
      * @return $this
      */
-    public function setUserId($userId)
+    public function setUserId(int $userId): static
     {
         $this->userId = $userId;
 
@@ -58,9 +58,9 @@ class Emphasis extends Parser implements ParserInterface
      * @param string $text
      * @return string
      */
-    public function parse($text)
+    public function parse(string $text): string
     {
-        if (substr($text, 0, 1) !== '!') {
+        if (!str_starts_with($text, '!')) {
             return $text;
         }
 
@@ -70,18 +70,14 @@ class Emphasis extends Parser implements ParserInterface
             return $text;
         }
 
-        if ('!!' === substr($text, 0, 2)) {
-            return $this->emphasisWithColor($text);
-        } else {
-            return $this->emphasisWithBold($text);
-        }
+        return (str_starts_with($text, '!!')) ? $this->emphasisWithColor($text) : $this->emphasisWithBold($text);
     }
 
     /**
      * @param string $text
      * @return string
      */
-    private function emphasisWithBold($text)
+    private function emphasisWithBold(string $text): string
     {
         return $this->emphasis($text);
     }
@@ -90,7 +86,7 @@ class Emphasis extends Parser implements ParserInterface
      * @param string $text
      * @return string
      */
-    private function emphasisWithColor($text)
+    private function emphasisWithColor(string $text): string
     {
         return $this->emphasis($text, ['style' => 'color: ' . self::COLOR]);
     }
@@ -100,7 +96,7 @@ class Emphasis extends Parser implements ParserInterface
      * @param array $attributes
      * @return string
      */
-    private function emphasis($text, array $attributes = [])
+    private function emphasis(string $text, array $attributes = []): string
     {
         return (string) $this->getHtml()->tag('strong', ltrim($text, '!'), $attributes);
     }
@@ -108,7 +104,7 @@ class Emphasis extends Parser implements ParserInterface
     /**
      * @return HtmlBuilder
      */
-    protected function getHtml()
+    protected function getHtml(): HtmlBuilder
     {
         return app(HtmlBuilder::class);
     }

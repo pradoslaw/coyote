@@ -28,14 +28,6 @@ class Purifier implements ParserInterface
     }
 
     /**
-     * @param $config
-     */
-    public function setConfig($config)
-    {
-        $this->config = $config;
-    }
-
-    /**
      * @param $key
      * @param $value
      * @return $this
@@ -50,10 +42,11 @@ class Purifier implements ParserInterface
      * @param string $text
      * @return string
      */
-    public function parse($text)
+    public function parse(string $text): string
     {
         $def = $this->config->getHTMLDefinition(true);
         $def->addAttribute('a', 'data-user-id', 'Number');
+        $def->addAttribute('iframe', 'allowfullscreen', 'Bool');
 
         return (new HTMLPurifier())->purify($text, $this->config);
     }

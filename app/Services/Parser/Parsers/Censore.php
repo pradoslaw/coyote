@@ -3,30 +3,15 @@
 namespace Coyote\Services\Parser\Parsers;
 
 use Coyote\Repositories\Contracts\WordRepositoryInterface as WordRepository;
+use TRegx\CleanRegex\Pattern;
 
-/**
- * Class Censore
- */
 class Censore extends Parser implements ParserInterface
 {
-    /**
-     * @var WordRepository
-     */
-    private $word;
-
-    /**
-     * @param WordRepository $word
-     */
-    public function __construct(WordRepository $word)
+    public function __construct(private WordRepository $word)
     {
-        $this->word = $word;
     }
 
-    /**
-     * @param string $text
-     * @return string
-     */
-    public function parse($text)
+    public function parse(string $text): string
     {
         static $result;
 
@@ -38,8 +23,11 @@ class Censore extends Parser implements ParserInterface
         }
         $words = [];
 
+        $template = Pattern::template('(?<![\p{L}\p{N}_])@(?![\p{L}\p{N}_])', 'iu');
+
         foreach ($result as $row) {
-            $word = '#(?<![\p{L}\p{N}_])' . str_replace('\*', '(\p{L}*?)', preg_quote($row->word)) . '(?![\p{L}\p{N}_])#iu';
+            $pattern = $template->mask($row->word, ['*' => '(\p{L}*?)']);
+            $word = $pattern->delimited();
             $words[$word] = $row->replacement;
         }
 

@@ -156,9 +156,7 @@ class TopicController extends BaseController
             $builder = new MoreLikeThisBuilder($topic, $this->forum->pluck('id'));
 
             // search related topics
-            $mlt = $this->topic->search($builder);
-
-            return $mlt;
+            return $this->topic->search($builder);
         });
     }
 

@@ -8,7 +8,6 @@ use Coyote\Repositories\Contracts\WordRepositoryInterface;
 use Coyote\Services\Parser\Container;
 use Coyote\Services\Parser\Parsers\Censore;
 use Coyote\Services\Parser\Parsers\Emphasis;
-use Coyote\Services\Parser\Parsers\Link;
 use Coyote\Services\Parser\Parsers\Purifier;
 use Coyote\Services\Parser\Parsers\SimpleMarkdown;
 use Coyote\Services\Parser\Parsers\Smilies;
@@ -20,25 +19,8 @@ class CommentFactory extends AbstractFactory
      */
     const PERMISSION = 'forum-emphasis';
 
-    /**
-     * @var array
-     */
-    protected $htmlTags = ['b', 'strong', 'i', 'em', 'del', 'a[href|title|data-user-id|class]', 'code'];
-
-    /**
-     * @var bool
-     */
-    protected $enableHashParser = false;
-
-    /**
-     * @var bool
-     */
-    protected $enableLineBreaks = false;
-
-    /**
-     * @var int
-     */
-    protected $userId;
+    protected array $htmlTags = ['b', 'strong', 'i', 'em', 'del', 'a[href|title|data-user-id|class]', 'code'];
+    protected ?int $userId = null;
 
     /**
      * Set comment's author ID.
@@ -46,7 +28,7 @@ class CommentFactory extends AbstractFactory
      * @param int $userId
      * @return $this
      */
-    public function setUserId($userId)
+    public function setUserId(int $userId): static
     {
         $this->userId = $userId;
 
@@ -65,44 +47,30 @@ class CommentFactory extends AbstractFactory
 
         $this->cache->setId(class_basename($this) . $this->userId);
 
-        $isInCache = $this->cache->has($text);
-        if ($isInCache) {
-            $text = $this->cache->get($text);
-        }
+        $parser = new Container();
 
-        if (!$isInCache || $this->isSmiliesAllowed()) {
-            $parser = new Container();
+        $text = $this->cache($text, function () use ($parser) {
+            $parser->attach(new SimpleMarkdown($this->app[UserRepositoryInterface::class], $this->app[PageRepositoryInterface::class]));
 
-            if (!$isInCache) {
-                $text = $this->cache($text, function () use ($parser) {
-                    $parser->attach(
-                        (new SimpleMarkdown($this->app[UserRepositoryInterface::class]))
-                            ->setEnableHashParser($this->enableHashParser)
-                            ->setBreaksEnabled($this->enableLineBreaks)
-                    );
+            $parser->attach(
+                (new Purifier())->set('HTML.Allowed', $this->getHtmlTags())
+            );
+            $parser->attach(new Censore($this->app[WordRepositoryInterface::class]));
 
-                    $parser->attach(
-                        (new Purifier())->set('HTML.Allowed', $this->getHtmlTags())
-                    );
-                    $parser->attach(new Link($this->app[PageRepositoryInterface::class], $this->request->getHost()));
-                    $parser->attach(new Censore($this->app[WordRepositoryInterface::class]));
-
-                    if (!empty($this->userId)) {
-                        $parser->attach(
-                            (new Emphasis($this->app[UserRepositoryInterface::class]))
-                                ->setUserId($this->userId)
-                                ->setAbility(self::PERMISSION)
-                        );
-                    }
-
-                    return $parser;
-                });
+            if (!empty($this->userId)) {
+                $parser->attach(
+                    (new Emphasis($this->app[UserRepositoryInterface::class]))
+                        ->setUserId($this->userId)
+                        ->setAbility(self::PERMISSION)
+                );
             }
 
-            if ($this->isSmiliesAllowed()) {
-                $parser->attach(new Smilies());
-                $text = $parser->parse($text);
-            }
+            return $parser;
+        });
+
+        if ($this->isSmiliesAllowed()) {
+            $parser->attach(new Smilies());
+            $text = $parser->parse($text);
         }
 
         stop_measure('parsing');
@@ -112,6 +80,6 @@ class CommentFactory extends AbstractFactory
 
     protected function getHtmlTags(): string
     {
-        return implode(',', $this->enableLineBreaks ? array_merge($this->htmlTags, ['br']) : $this->htmlTags);
+        return implode(',', $this->htmlTags);
     }
 }

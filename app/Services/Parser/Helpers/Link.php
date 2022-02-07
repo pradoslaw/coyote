@@ -2,23 +2,15 @@
 
 namespace Coyote\Services\Parser\Helpers;
 
+use TRegx\CleanRegex\Pattern;
+
 class Link
 {
-    /**
-     * @param string $html
-     * @return array
-     */
-    public function filter($html)
+    public function filter(string $html): array
     {
-        $links = [];
+        $regexp = '<a\s[^>]*href=("??)([^" >]*?)\1[^>]*>(.*)<\/a>';
 
-        $regexp = "<a\s[^>]*href=(\"??)([^\" >]*?)\\1[^>]*>(.*)<\/a>";
-
-        if (preg_match_all("/$regexp/siU", $html, $matches, PREG_SET_ORDER)) {
-            for ($i = 0, $count = count($matches); $i < $count; $i++) {
-                $links[] = $matches[$i][2];
-            }
-        }
+        $links = Pattern::of($regexp, 'siU')->match($html)->group(2)->all();
 
         return array_unique($links);
     }
