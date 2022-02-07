@@ -6,6 +6,8 @@ use Coyote\Services\Parser\Iframe;
 use League\CommonMark\Event\DocumentParsedEvent;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Link;
 use League\CommonMark\Extension\ExternalLink\ExternalLinkProcessor;
+use TRegx\CleanRegex\Exception\SubjectNotMatchedException;
+use TRegx\CleanRegex\Pattern;
 
 class YoutubeLinkProcessor
 {
@@ -80,10 +82,14 @@ class YoutubeLinkProcessor
             return null;
         }
 
-        if (preg_match('/(\d+)m(\d+)s/', $time, $match)) {
-            return ($match[1] * 60) + $match[2];
+        $pattern = Pattern::of('(\d+)m(\d+)s');
+
+        try {
+            [$minutes, $seconds] = $pattern->match($time)->tuple(1, 2);
+        } catch (SubjectNotMatchedException) {
+            return $time;
         }
 
-        return $time;
+        return $minutes * 60 + $seconds;
     }
 }
