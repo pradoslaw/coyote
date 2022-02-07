@@ -16,7 +16,7 @@ class YoutubeLinkProcessor
     public function __invoke(DocumentParsedEvent $e): void
     {
         foreach ($e->getDocument()->iterator() as $link) {
-            if (! ($link instanceof Link)) {
+            if (!($link instanceof Link)) {
                 continue;
             }
 

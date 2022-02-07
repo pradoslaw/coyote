@@ -22,7 +22,7 @@ class InternalLinkProcessor
         $internalHosts = $this->config->get('internal_link/internal_hosts');
 
         foreach ($e->getDocument()->iterator() as $link) {
-            if (! ($link instanceof Link)) {
+            if (!($link instanceof Link)) {
                 continue;
             }
 
