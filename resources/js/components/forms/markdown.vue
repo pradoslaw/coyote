@@ -83,7 +83,7 @@
 
 <script lang="ts">
 import {Asset} from '@/types/models';
-import {Editor4Play, link} from "@riddled/4play";
+import {link} from "@riddled/4play/index.js";
 import axios from 'axios';
 import Prism from 'prismjs';
 import Vue from 'vue';
@@ -209,17 +209,17 @@ const PREVIEW = 'Podgląd';
       },
     };
 
-    @Ref('editor')
-    readonly editor!: Editor4Play;
+  @Ref('editor')
+  readonly editor!: VueEditor;
 
-    @Ref('search')
-    readonly search!: HTMLInputElement;
+  @Ref('search')
+  readonly search!: HTMLInputElement;
 
-    @Prop()
-    value!: string;
+  @Prop()
+  value!: string;
 
-    @Prop({required: false})
-    tabIndex!: number;
+  @Prop({required: false})
+  tabIndex!: number;
 
     @Prop({default: 20})
     readonly uploadMaxSize!: number;
