@@ -31,7 +31,13 @@ class Censore extends Parser implements ParserInterface
             $words[$word] = $row->replacement;
         }
 
-        $text = preg_replace(array_keys($words), array_values($words), $text);
+        $censoredText = preg_replace(array_keys($words), array_values($words), $text);
+
+        // $censoredText can be null in case of error
+        if (is_string($censoredText)) {
+            $text = $censoredText;
+        }
+
         $text = $this->unhash($text);
 
         return $text;
