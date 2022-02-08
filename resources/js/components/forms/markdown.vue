@@ -103,111 +103,110 @@ import VueHelp from './help.vue';
 const CONTENT = 'Treść';
 const PREVIEW = 'Podgląd';
 
-// @ts-ignore
 @Component({
   mixins: [clickaway, mixin],
   components: {
     'vue-prompt': VuePrompt,
     'vue-tabs': VueTabs,
-      'vue-thumbnail': VueThumbnail,
-      'vue-error': VueError,
-      'vue-editor': VueEditor,
-      'vue-help': VueHelp,
+    'vue-thumbnail': VueThumbnail,
+    'vue-error': VueError,
+    'vue-editor': VueEditor,
+    'vue-help': VueHelp,
+  },
+})
+export default class VueMarkdown extends Vue {
+  searchText: string = '';
+  previewHtml: string = '';
+  currentTab: string = CONTENT;
+  isProcessing = false;
+  progress = 0;
+  tabs: string[] = [CONTENT, PREVIEW];
+  buttons = {
+    bold: {
+      click: this.makeBold,
+      can: false,
+      title: 'Pogrub zaznaczony tekst lub dodaj pogrubienie',
+      break: 'Dodanie tutaj pogrubienia mogłoby uszkodzić składnię',
+      icon: 'fa-bold'
     },
-  })
-  export default class VueMarkdown extends Vue {
-    searchText: string = '';
-    previewHtml: string = '';
-    currentTab: string = CONTENT;
-    isProcessing = false;
-    progress = 0;
-    tabs: string[] = [CONTENT, PREVIEW];
-    buttons = {
-      bold: {
-        click: this.makeBold,
-        can: false,
-        title: 'Pogrub zaznaczony tekst lub dodaj pogrubienie',
-        break: 'Dodanie tutaj pogrubienia mogłoby uszkodzić składnię',
-        icon: 'fa-bold'
-      },
-      italics: {
-        click: this.makeItalics,
-        can: false,
-        title: 'Pochyl tekst lub dodaj pochylenie',
-        break: 'Dodanie tutaj pochylenia mogłoby uszkodzić składnię',
-        icon: 'fa-italic'
-      },
-      underline: {
-        click: this.makeUnderline,
-        can: false,
-        title: 'Podkreśl tekst lub dodaj podkreślenie',
-        break: 'Dodanie tutaj podkreślenia mogłoby uszkodzić składnię',
-        icon: 'fa-underline'
-      },
-      strike: {
-        click: this.makeStrikeThrough,
-        can: false,
-        title: 'Przekreśl tekst lub dodaj przekreślenie',
-        break: 'Dodanie tutaj przekreślenia mogłoby uszkodzić składnię',
-        icon: 'fa-strikethrough'
-      },
-      link: {
-        click: this.makeLink,
-        can: false,
-        title: 'Zamień zaznaczenie w link lub dodaj link',
-        break: 'Dodanie tutaj linku mogłoby uszkodzić składnię',
-        icon: 'fa-link'
-      },
-      image: {
-        click: this.makeImage,
-        can: false,
-        title: 'Dodaj obraz',
-        break: 'Dodanie tutaj obrazu mogłoby uszkodzić składnię',
-        icon: 'fa-image'
-      },
-      key: {
-        click: this.insertKeyNotation,
-        can: false,
-        title: 'Dodaj notację klawisza wprowadzonego z klawiatury',
-        break: 'Dodanie tutaj znacznika klawisza mogłoby uszkodzić składnię',
-        icon: 'fa-keyboard',
-      },
-      quote: {
-        click: this.insertBlockQuote,
-        can: false,
-        title: 'Zmień zaznaczenie w cytat lub dodaj cytat',
-        break: 'Dodanie tutaj cytatu mogłoby uszkodzić składnię',
-        icon: 'fa-quote-left'
-      },
-      listOrdered: {
-        click: this.insertOrderedList,
-        can: false,
-        title: 'Zmień zaznaczenie w listę lub dodaj listę uporządkowaną',
-        break: 'Dodanie tutaj listy mogłoby uszkodzić składnię',
-        icon: 'fa-list-ol'
-      },
-      listUnordered: {
-        click: this.insertUnorderedList,
-        can: false,
-        title: 'Zmień zaznaczenie w listę lub dodaj listę nieuporządkowaną',
-        break: 'Dodanie tutaj listy mogłoby uszkodzić składnię',
-        icon: 'fa-list-ul'
-      },
-      code: {
-        click: this.insertCode,
-        can: false,
-        title: 'Zmień zaznaczoną treść w kod lub dodaj pusty fragment kodu',
-        break: 'Dodanie tutaj fragmentu kodu mogłoby uszkodzić składnię',
-        icon: 'fa-code',
-      },
-      table: {
-        click: this.insertTable,
-        can: false,
-        title: 'Zmień zaznaczoną treść w tabelkę lub dodaj pustą tabelkę',
-        break: 'Dodanie tutaj tabelki mogłoby spowodować uszkodzenie składni',
-        icon: 'fa-table'
-      },
-    };
+    italics: {
+      click: this.makeItalics,
+      can: false,
+      title: 'Pochyl tekst lub dodaj pochylenie',
+      break: 'Dodanie tutaj pochylenia mogłoby uszkodzić składnię',
+      icon: 'fa-italic'
+    },
+    underline: {
+      click: this.makeUnderline,
+      can: false,
+      title: 'Podkreśl tekst lub dodaj podkreślenie',
+      break: 'Dodanie tutaj podkreślenia mogłoby uszkodzić składnię',
+      icon: 'fa-underline'
+    },
+    strike: {
+      click: this.makeStrikeThrough,
+      can: false,
+      title: 'Przekreśl tekst lub dodaj przekreślenie',
+      break: 'Dodanie tutaj przekreślenia mogłoby uszkodzić składnię',
+      icon: 'fa-strikethrough'
+    },
+    link: {
+      click: this.makeLink,
+      can: false,
+      title: 'Zamień zaznaczenie w link lub dodaj link',
+      break: 'Dodanie tutaj linku mogłoby uszkodzić składnię',
+      icon: 'fa-link'
+    },
+    image: {
+      click: this.makeImage,
+      can: false,
+      title: 'Dodaj obraz',
+      break: 'Dodanie tutaj obrazu mogłoby uszkodzić składnię',
+      icon: 'fa-image'
+    },
+    key: {
+      click: this.insertKeyNotation,
+      can: false,
+      title: 'Dodaj notację klawisza wprowadzonego z klawiatury',
+      break: 'Dodanie tutaj znacznika klawisza mogłoby uszkodzić składnię',
+      icon: 'fa-keyboard',
+    },
+    quote: {
+      click: this.insertBlockQuote,
+      can: false,
+      title: 'Zmień zaznaczenie w cytat lub dodaj cytat',
+      break: 'Dodanie tutaj cytatu mogłoby uszkodzić składnię',
+      icon: 'fa-quote-left'
+    },
+    listOrdered: {
+      click: this.insertOrderedList,
+      can: false,
+      title: 'Zmień zaznaczenie w listę lub dodaj listę uporządkowaną',
+      break: 'Dodanie tutaj listy mogłoby uszkodzić składnię',
+      icon: 'fa-list-ol'
+    },
+    listUnordered: {
+      click: this.insertUnorderedList,
+      can: false,
+      title: 'Zmień zaznaczenie w listę lub dodaj listę nieuporządkowaną',
+      break: 'Dodanie tutaj listy mogłoby uszkodzić składnię',
+      icon: 'fa-list-ul'
+    },
+    code: {
+      click: this.insertCode,
+      can: false,
+      title: 'Zmień zaznaczoną treść w kod lub dodaj pusty fragment kodu',
+      break: 'Dodanie tutaj fragmentu kodu mogłoby uszkodzić składnię',
+      icon: 'fa-code',
+    },
+    table: {
+      click: this.insertTable,
+      can: false,
+      title: 'Zmień zaznaczoną treść w tabelkę lub dodaj pustą tabelkę',
+      break: 'Dodanie tutaj tabelki mogłoby spowodować uszkodzenie składni',
+      icon: 'fa-table'
+    },
+  };
 
   @Ref('editor')
   readonly editor!: VueEditor;
@@ -221,147 +220,147 @@ const PREVIEW = 'Podgląd';
   @Prop({required: false})
   tabIndex!: number;
 
-    @Prop({default: 20})
-    readonly uploadMaxSize!: number;
+  @Prop({default: 20})
+  readonly uploadMaxSize!: number;
 
-    @Prop({default: 'jpg, jpeg, gif, png, zip, rar, txt, pdf, doc, docx, xls, xlsx, cpp, 7z, 7zip, patch, webm'})
-    readonly uploadMimes!: string;
+  @Prop({default: 'jpg, jpeg, gif, png, zip, rar, txt, pdf, doc, docx, xls, xlsx, cpp, 7z, 7zip, patch, webm'})
+  readonly uploadMimes!: string;
 
-    @Prop({default: true})
-    readonly autoInsertAssets!: boolean;
+  @Prop({default: true})
+  readonly autoInsertAssets!: boolean;
 
-    @Prop({default: '/completion/prompt/users'})
-    readonly promptUrl!: string;
+  @Prop({default: '/completion/prompt/users'})
+  readonly promptUrl!: string;
 
-    @Prop()
-    readonly previewUrl!: string;
+  @Prop()
+  readonly previewUrl!: string;
 
-    @Prop({default: null})
-    readonly error: string | null = null;
+  @Prop({default: null})
+  readonly error: string | null = null;
 
-    @Prop({default: () => []})
-    readonly assets!: Asset[];
+  @Prop({default: () => []})
+  readonly assets!: Asset[];
 
-    @Prop({default: false})
-    readonly isInvalid!: boolean;
+  @Prop({default: false})
+  readonly isInvalid!: boolean;
 
-    @Emit('save')
-    save() {
+  @Emit('save')
+  save() {
+  }
+
+  @Emit('cancel')
+  cancel() {
+  }
+
+  addAsset(asset: Asset) {
+    this.assets.push(asset);
+
+    if (this.autoInsertAssets) {
+      this.insertAssetAtCaret(asset)
     }
+  }
 
-    @Emit('cancel')
-    cancel() {
+  insertAssetAtCaret(asset: Asset) {
+    if (isImage(asset.name!)) {
+      this.editor.insertImage(asset.url, asset.name);
+    } else {
+      this.editor.insertLink(asset.url, asset.name);
     }
+  }
 
-    addAsset(asset: Asset) {
-      this.assets.push(asset);
-
-      if (this.autoInsertAssets) {
-        this.insertAssetAtCaret(asset)
-      }
+  @Watch('value')
+  clearPreview(value) {
+    if (!value) {
+      this.previewHtml = '';
     }
+  }
 
-    insertAssetAtCaret(asset: Asset) {
-      if (isImage(asset.name!)) {
-        this.editor.insertImage(asset.url, asset.name);
-      } else {
-        this.editor.insertLink(asset.url, asset.name);
-      }
-    }
+  updateState(state) {
+    this.buttons.bold.can = state.canBold;
+    this.buttons.italics.can = state.canItalics;
+    this.buttons.underline.can = state.canUnderline;
+    this.buttons.strike.can = state.canStrikeThrough;
+    this.buttons.listOrdered.can = state.canList;
+    this.buttons.listUnordered.can = state.canList;
+    this.buttons.code.can = state.canCode;
+    this.buttons.table.can = state.canTable;
+    this.buttons.quote.can = state.canBlockQuote;
+    this.buttons.link.can = state.canLink;
+    this.buttons.image.can = state.canImage;
+    this.buttons.key.can = state.canKey;
+  }
 
-    @Watch('value')
-    clearPreview(value) {
-      if (!value) {
-        this.previewHtml = '';
-      }
-    }
+  autocomplete(nick) {
+    return store
+      .dispatch('prompt/request', {value: nick, source: this.promptUrl})
+      .then(users => users.map(user => ({
+        name: user.name,
+        badge: user.group,
+        avatar: user.photo || '/img/avatar.png',
+      })));
+  }
 
-    updateState(state) {
-      this.buttons.bold.can = state.canBold;
-      this.buttons.italics.can = state.canItalics;
-      this.buttons.underline.can = state.canUnderline;
-      this.buttons.strike.can = state.canStrikeThrough;
-      this.buttons.listOrdered.can = state.canList;
-      this.buttons.listUnordered.can = state.canList;
-      this.buttons.code.can = state.canCode;
-      this.buttons.table.can = state.canTable;
-      this.buttons.quote.can = state.canBlockQuote;
-      this.buttons.link.can = state.canLink;
-      this.buttons.image.can = state.canImage;
-      this.buttons.key.can = state.canKey;
-    }
+  deleteAsset(asset: Asset) {
+    this.assets.splice(this.assets.indexOf(asset), 1);
+  }
 
-    autocomplete(nick) {
-      return store
-        .dispatch('prompt/request', {value: nick, source: this.promptUrl})
-        .then(users => users.map(user => ({
-          name: user.name,
-          badge: user.group,
-          avatar: user.photo || '/img/avatar.png',
-        })));
-    }
+  chooseFile() {
+    const Thumbnail = new VueThumbnail({propsData: {name: 'asset'}}).$mount();
 
-    deleteAsset(asset: Asset) {
-      this.assets.splice(this.assets.indexOf(asset), 1);
-    }
+    this.progress = 0;
 
-    chooseFile() {
-      const Thumbnail = new VueThumbnail({propsData: {name: 'asset'}}).$mount();
+    Thumbnail.$on('upload', this.addAsset);
+    Thumbnail.$on('progress', progress => {
+      this.progress = progress;
+      this.isProcessing = progress > 0 && progress < 100
+    });
 
-      this.progress = 0;
+    Thumbnail.openDialog();
+  }
 
-      Thumbnail.$on('upload', this.addAsset);
-      Thumbnail.$on('progress', progress => {
-        this.progress = progress;
-        this.isProcessing = progress > 0 && progress < 100
-      });
+  makeBold() {
+    this.editor.makeBold();
+  }
 
-      Thumbnail.openDialog();
-    }
+  makeItalics() {
+    this.editor.makeItalics();
+  }
 
-    makeBold() {
-      this.editor.makeBold();
-    }
+  makeUnderline() {
+    this.editor.makeUnderline();
+  }
 
-    makeItalics() {
-      this.editor.makeItalics();
-    }
+  makeStrikeThrough() {
+    this.editor.makeStrikeThrough();
+  }
 
-    makeUnderline() {
-      this.editor.makeUnderline();
-    }
+  makeImage() {
+    this.editor.makeImage('http://');
+  }
 
-    makeStrikeThrough() {
-      this.editor.makeStrikeThrough();
-    }
+  insertKeyNotation() {
+    this.editor.makeKeyNotation('Ctrl');
+  }
 
-    makeImage() {
-      this.editor.makeImage('http://');
-    }
+  makeLink() {
+    this.editor.makeLink('http://');
+  }
 
-    insertKeyNotation() {
-      this.editor.makeKeyNotation('Ctrl');
-    }
+  insertBlockQuote() {
+    this.editor.insertBlockQuote('Dodaj cytat...');
+  }
 
-    makeLink() {
-      this.editor.makeLink('http://');
-    }
+  insertOrderedList() {
+    this.editor.insertListOrdered('Pierwszy element...');
+  }
 
-    insertBlockQuote() {
-      this.editor.insertBlockQuote('Dodaj cytat...');
-    }
+  insertUnorderedList() {
+    this.editor.insertListUnordered('Pierwszy element...');
+  }
 
-    insertOrderedList() {
-      this.editor.insertListOrdered('Pierwszy element...');
-    }
-
-    insertUnorderedList() {
-      this.editor.insertListUnordered('Pierwszy element...');
-    }
-
-    insertCode() {
-      this.editor.insertCodeBlock();
-    }
+  insertCode() {
+    this.editor.insertCodeBlock();
+  }
 
   insertTable() {
     this.editor.addTable('Nagłówek', 'Dodaj...')
@@ -387,31 +386,31 @@ const PREVIEW = 'Podgląd';
 
     if (this.tabs[index] === PREVIEW) {
       this.showPreview();
-      }
-    }
-
-    showPreview() {
-      axios.post(this.previewUrl, {text: this.value}).then(response => {
-        this.previewHtml = response.data;
-
-        this.$nextTick(() => Prism.highlightAll());
-      });
-    }
-
-    errorNotification(errorMessage) {
-      this.$notify({type: 'error', text: errorMessage});
-    }
-
-    get uploadTooltip() {
-      return `Maksymalnie ${this.uploadMaxSize}MB. Dostępne rozszerzenia: ${this.uploadMimes}`;
-    }
-
-    get isContent() {
-      return this.currentTab == CONTENT;
-    }
-
-    get isPreview() {
-      return this.currentTab === PREVIEW;
     }
   }
+
+  showPreview() {
+    axios.post(this.previewUrl, {text: this.value}).then(response => {
+      this.previewHtml = response.data;
+
+      this.$nextTick(() => Prism.highlightAll());
+    });
+  }
+
+  errorNotification(errorMessage) {
+    this.$notify({type: 'error', text: errorMessage});
+  }
+
+  get uploadTooltip() {
+    return `Maksymalnie ${this.uploadMaxSize}MB. Dostępne rozszerzenia: ${this.uploadMimes}`;
+  }
+
+  get isContent() {
+    return this.currentTab == CONTENT;
+  }
+
+  get isPreview() {
+    return this.currentTab === PREVIEW;
+  }
+}
 </script>

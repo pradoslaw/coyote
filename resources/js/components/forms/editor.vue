@@ -26,12 +26,12 @@ export default class VueEditor extends Vue {
 
   mounted() {
     this.editor = new Editor4Play(
-        this.view,
-        this.placeholder,
-        this.value,
-        {onChange: this.input, onSubmit: this.submit, onCancel: this.cancel, onStateChange: this.state,},
-        username => this.autocompleteSource(username),
-        'Brak oznacznika'
+      this.view,
+      this.placeholder,
+      this.value,
+      {onChange: this.input, onSubmit: this.submit, onCancel: this.cancel, onStateChange: this.state},
+      username => this.autocompleteSource(username),
+      'Brak oznacznika'
     );
   }
 

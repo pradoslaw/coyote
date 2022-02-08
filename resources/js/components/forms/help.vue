@@ -1,7 +1,7 @@
 <template>
   <div class="markdown-help">
     <div class="card card-info">
-      <div class="card-header">Pomoc <span class="card-version">1.10.6</span></div>
+      <div class="card-header">Pomoc <span class="card-version">1.10.12</span></div>
       <div class="card-body">
         <div class="row">
           <div class="col-md-6">
@@ -118,7 +118,7 @@
             <p>
               Możesz zaznaczyć również już wklejony kod w edytorze, i użyć
               komendy&nbsp;<i class="fas fa-fw fa-code"></i> by zamienić go w kod. Możesz użyć też kombinacji
-              <kbd>Alt+C</kbd>, by dodać fragment kodu bez oznaczników języka.
+              <kbd>Ctrl+Alt+C</kbd>, by dodać fragment kodu bez oznaczników języka.
             </p>
 
             <h3>Tabelki</h3>
@@ -201,7 +201,7 @@
 
             <p>Fragment kodu bez oznacznika</p>
             <ul>
-              <li><kbd>Alt+C</kbd> - dodaj pusty fragment kodu</li>
+              <li><kbd>Ctrl+Alt+C</kbd>/<kbd>⌘+Alt+C</kbd> - dodaj pusty fragment kodu</li>
             </ul>
 
             <p>Skróty operujące na kodzie i linijkach:</p>
