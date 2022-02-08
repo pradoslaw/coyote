@@ -87,7 +87,7 @@ class YoutubeLinkProcessor
         try {
             [$minutes, $seconds] = $pattern->match($time)->tuple(1, 2);
         } catch (SubjectNotMatchedException) {
-            return $time;
+            return (int) $time;
         }
 
         return $minutes * 60 + $seconds;
