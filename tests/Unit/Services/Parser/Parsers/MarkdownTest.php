@@ -178,6 +178,8 @@ class MarkdownTest extends TestCase
         $this->assertStringNotContainsString('iframe', $this->markdown->parse('https://www.youtube.com'));
         $this->assertStringNotContainsString('iframe', $this->markdown->parse(link_to('https://youtu.be/enOjqwOE1ec')));
         $this->assertStringNotContainsString('iframe', $this->markdown->parse('[test](https://youtu.be/enOjqwOE1ec)'));
+        $this->assertStringNotContainsString('iframe', $this->markdown->parse('<i>https://youtu.be/enOjqwOE1ec</i>'));
+        $this->assertStringNotContainsString('iframe', $this->markdown->parse('*https://youtu.be/enOjqwOE1ec*'));
 
         $this->assertEquals('<p><a href="https://www.youtube.com/watch?v=SC9ybxMDGlE">test</a></p>', trim($this->markdown->parse('<a href="https://www.youtube.com/watch?v=SC9ybxMDGlE">test</a>')));
         $this->assertStringNotContainsString('iframe', $this->markdown->parse('<a href="https://www.youtube.com/watch?v=SC9ybxMDGlE">https://www.youtube.com/watch?v=SC9ybxMDGlE</a>'));

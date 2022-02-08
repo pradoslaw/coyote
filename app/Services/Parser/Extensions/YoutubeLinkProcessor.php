@@ -6,6 +6,7 @@ use Coyote\Services\Parser\Iframe;
 use League\CommonMark\Event\DocumentParsedEvent;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Link;
 use League\CommonMark\Extension\ExternalLink\ExternalLinkProcessor;
+use League\CommonMark\Node\Inline\AbstractInline;
 use TRegx\CleanRegex\Exception\SubjectNotMatchedException;
 use TRegx\CleanRegex\Pattern;
 
@@ -16,20 +17,17 @@ class YoutubeLinkProcessor
     public function __invoke(DocumentParsedEvent $e): void
     {
         foreach ($e->getDocument()->iterator() as $link) {
-            if (! ($link instanceof Link)) {
+            if (!($link instanceof Link)) {
                 continue;
             }
 
             $components = parse_url($link->getUrl());
+
+            if (!$this->isYoutubeLink($link, $components)) {
+                continue;
+            }
+
             $path = trim($components['path'] ?? '', '/');
-
-            if (empty($components['host'])) {
-                continue;
-            }
-
-            if (!$this->isYoutubeLink($components['host'], $path) || $link->firstChild()->getLiteral() !== $link->getUrl()) {
-                continue;
-            }
 
             $iframe = $path === 'watch'
                 ? $this->makeIframeFromFullPath($components)
@@ -41,9 +39,22 @@ class YoutubeLinkProcessor
         }
     }
 
-    private function isYoutubeLink(string $host, string $path): bool
+    private function isYoutubeLink(Link $link, array $components): bool
     {
-        return !empty($path) && ExternalLinkProcessor::hostMatches($host, self::YOUTUBE_HOSTS);
+        if (empty($components['host'])
+            || empty($components['path'])
+                // "/" path are not allowed
+                || trim($components['path']) === '/'
+                    || $link->firstChild()->getLiteral() !== $link->getUrl()
+            ) {
+            return false;
+        }
+
+        if ($link->parent() instanceof AbstractInline) {
+            return false;
+        }
+
+        return ExternalLinkProcessor::hostMatches($components['host'], self::YOUTUBE_HOSTS);
     }
 
     private function makeIframeFromFullPath(array $components): ?Iframe
