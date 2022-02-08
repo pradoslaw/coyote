@@ -23,7 +23,7 @@ class YoutubeLinkProcessor
 
             $components = parse_url($link->getUrl());
 
-            if (!$this->isYoutubeLink($link, $components)) {
+            if ($components === false || !$this->isYoutubeLink($link, $components)) {
                 continue;
             }
 
@@ -45,7 +45,7 @@ class YoutubeLinkProcessor
             || empty($components['path'])
                 // "/" path are not allowed
                 || trim($components['path']) === '/'
-                    || $link->firstChild()->getLiteral() !== $link->getUrl()
+                    || $link->firstChild()?->getLiteral() !== $link->getUrl()
             ) {
             return false;
         }

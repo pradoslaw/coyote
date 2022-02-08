@@ -164,6 +164,9 @@ class MarkdownTest extends TestCase
 
         $link = 'http://pl.wikipedia.org/wiki/normalna_(bazy_danych)';
         $this->assertEquals("<p><a href=\"$link\">$link</a></p>", trim($this->markdown->parse($link)));
+
+        $link = 'https://docs.djangoproject.com/en/2.0/#first-steps';
+        $this->assertEquals("<p><a href=\"$link\">$link</a></p>", trim($this->markdown->parse($link)));
     }
 
     public function testYoutubeVideos()
