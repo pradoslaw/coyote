@@ -167,6 +167,9 @@ class MarkdownTest extends TestCase
 
         $link = 'https://docs.djangoproject.com/en/2.0/#first-steps';
         $this->assertEquals("<p><a href=\"$link\">$link</a></p>", trim($this->markdown->parse($link)));
+
+        $link = '[**foo**](https://foo.me/)';
+        $this->assertEquals("<p><a href=\"https://foo.me/\"><strong>foo</strong></a></p>", trim($this->markdown->parse($link)));
     }
 
     public function testYoutubeVideos()
@@ -226,8 +229,6 @@ class MarkdownTest extends TestCase
 
     public function testParseInternalAccessors()
     {
-        $host = '4programmers.net';
-
         $title = 'Forum dyskusyjne';
         $path = '/Discussion_board';
 

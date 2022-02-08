@@ -7,6 +7,7 @@ use League\CommonMark\Event\DocumentParsedEvent;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Link;
 use League\CommonMark\Extension\ExternalLink\ExternalLinkProcessor;
 use League\CommonMark\Node\Inline\AbstractInline;
+use League\CommonMark\Node\Inline\Text;
 use TRegx\CleanRegex\Exception\SubjectNotMatchedException;
 use TRegx\CleanRegex\Pattern;
 
@@ -23,7 +24,7 @@ class YoutubeLinkProcessor
 
             $components = parse_url($link->getUrl());
 
-            if ($components === false || !$this->isYoutubeLink($link, $components)) {
+            if ($components === false || !$this->isYoutubeLink($link, $components) || $this->linkLabelIsDifferent($link)) {
                 continue;
             }
 
@@ -41,12 +42,8 @@ class YoutubeLinkProcessor
 
     private function isYoutubeLink(Link $link, array $components): bool
     {
-        if (empty($components['host'])
-            || empty($components['path'])
-                // "/" path are not allowed
-                || trim($components['path']) === '/'
-                    || $link->firstChild()?->getLiteral() !== $link->getUrl()
-            ) {
+        // "/" path are not allowed
+        if (empty($components['host']) || empty($components['path']) || trim($components['path']) === '/') {
             return false;
         }
 
@@ -55,6 +52,11 @@ class YoutubeLinkProcessor
         }
 
         return ExternalLinkProcessor::hostMatches($components['host'], self::YOUTUBE_HOSTS);
+    }
+
+    private function linkLabelIsDifferent(Link $link): bool
+    {
+        return $link->firstChild() instanceof Text && $link->firstChild()?->getLiteral() !== $link->getUrl();
     }
 
     private function makeIframeFromFullPath(array $components): ?Iframe
