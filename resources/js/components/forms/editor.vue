@@ -3,102 +3,131 @@
   </div>
 </template>
 
-<script>
-import {Editor4Play} from "@riddled/4play";
+<script lang="ts">
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import {Emit, Prop, Ref, Watch} from "vue-property-decorator";
+import {Editor4Play, EditorState} from "@riddled/4play/index.js";
 
-export default {
-  props: {
-    value: {type: String, required: true},
-    placeholder: {type: String, require: true},
-    autocompleteSource: {type: Function, required: true},
-  },
+@Component
+export default class VueEditor extends Vue {
 
-  data() {
-    return {
-      editor: null
-    };
-    },
+  @Prop()
+  readonly value!: string;
+  @Prop()
+  readonly placeholder!: string;
+  @Prop()
+  readonly autocompleteSource!: Function
 
-    mounted() {
-      this.editor = new Editor4Play(
-        this.$refs.view,
+  @Ref('view')
+  readonly view!: HTMLElement;
+
+  editor: Editor4Play | null = null;
+
+  mounted() {
+    this.editor = new Editor4Play(
+        this.view,
         this.placeholder,
         this.value,
-        {
-          onChange: content => this.$emit('input', content),
-          onSubmit: content => this.$emit('submit', content),
-          onCancel: () => this.$emit('cancel'),
-          onStateChange: state => this.$emit('state', state),
-        },
+        {onChange: this.input, onSubmit: this.submit, onCancel: this.cancel, onStateChange: this.state,},
         username => this.autocompleteSource(username),
         'Brak oznacznika'
-      );
-    },
+    );
+  }
 
-    methods: {
-      insertImage(href, title) {
-        this.editor.insertImage(href, title);
-      },
-      insertLink(href, title) {
-        this.editor.insertLink(href, title);
-      },
-      makeBold() {
-        this.editor.putBold();
-      },
-      makeItalics() {
-        this.editor.putItalics();
-      },
-      makeUnderline() {
-        this.editor.putUnderline();
-      },
-      makeStrikeThrough() {
-        this.editor.putStrikeThrough();
-      },
-      insertBlockQuote(placeholder) {
-        this.editor.putBlockQuote(placeholder);
-      },
-      makeLink(placeholder) {
-        this.editor.putLink(placeholder);
-      },
-      makeImage(placeholder) {
-        this.editor.putImage(placeholder);
-      },
-      makeKeyNotation(key) {
-        this.editor.putKey(key);
-      },
-      appendBlockQuote(content) {
-        this.editor.appendBlockQuote(content);
-      },
-      appendUserMention(username) {
-        this.editor.appendUserMention(username);
-      },
-      insertListOrdered(placeholder) {
-        this.editor.putListOrdered(placeholder);
-      },
-      insertListUnordered(placeholder) {
-        this.editor.putListUnordered(placeholder);
-      },
-      insertCodeBlock() {
-        this.editor.putCodeBlock();
-      },
-      addTable(header, placeholder) {
-        this.editor.putTable(index => header + ' ' + (index + 1), placeholder);
-      },
-      focus() {
-        this.editor.focus();
-      }
-    },
+  @Emit()
+  input(content: string) {
+  }
 
-    watch: {
-      value(newValue) {
-        if (newValue === '') {
-          this.editor.clear();
-        }
-      }
-    },
+  @Emit()
+  submit(content: string) {
+  }
 
-    destroy() {
-      this.editor.destroy();
+  @Emit()
+  cancel() {
+  }
+
+  @Emit()
+  state(state: EditorState) {
+  }
+
+  destroy() {
+    this.editor!.destroy();
+  }
+
+  @Watch('value')
+  onValueChanged(newValue: string, oldValue: string) {
+    if (newValue === '') {
+      this.editor!.clear();
     }
-  };
+  }
+
+  insertImage(href, title) {
+    this.editor!.insertImage(href, title);
+  }
+
+  insertLink(href, title) {
+    this.editor!.insertLink(href, title);
+  }
+
+  makeBold() {
+    this.editor!.putBold();
+  }
+
+  makeItalics() {
+    this.editor!.putItalics();
+  }
+
+  makeUnderline() {
+    this.editor!.putUnderline();
+  }
+
+  makeStrikeThrough() {
+    this.editor!.putStrikeThrough();
+  }
+
+  insertBlockQuote(placeholder) {
+    this.editor!.putBlockQuote(placeholder);
+  }
+
+  makeLink(placeholder) {
+    this.editor!.putLink(placeholder);
+  }
+
+  makeImage(placeholder) {
+    this.editor!.putImage(placeholder);
+  }
+
+  makeKeyNotation(key) {
+    this.editor!.putKey(key);
+  }
+
+  appendBlockQuote(content) {
+    this.editor!.appendBlockQuote(content);
+  }
+
+  appendUserMention(username) {
+    this.editor!.appendUserMention(username);
+  }
+
+  insertListOrdered(placeholder) {
+    this.editor!.putListOrdered(placeholder);
+  }
+
+  insertListUnordered(placeholder) {
+    this.editor!.putListUnordered(placeholder);
+  }
+
+  insertCodeBlock() {
+    this.editor!.putCodeBlock();
+  }
+
+  addTable(header, placeholder) {
+    this.editor!.putTable(index => header + ' ' + (index + 1), placeholder);
+  }
+
+  focus() {
+    this.editor!.focus();
+  }
+}
 </script>
