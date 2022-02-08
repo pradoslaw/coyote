@@ -22,13 +22,14 @@ class InternalLinkProcessor
         $internalHosts = $this->config->get('internal_link/internal_hosts');
 
         foreach ($e->getDocument()->iterator() as $link) {
-            if (! ($link instanceof Link)) {
+            if (!($link instanceof Link)) {
                 continue;
             }
 
             $components = parse_url($link->getUrl());
 
-            if (!array_key_exists('host', $components)) {
+            // link is invalid. something went wrong
+            if ($components === false || !array_key_exists('host', $components) || !array_key_exists('path', $components)) {
                 continue;
             }
 
