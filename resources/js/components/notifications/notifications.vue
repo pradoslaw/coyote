@@ -8,8 +8,8 @@
 
     <div ref="dropdown" v-show="isOpen" class="dropdown-alerts dropdown-menu dropdown-menu-right">
       <div class="dropdown-header">
-        <div class="float-right">
-          <a v-if="unreadNotifications.length > 0" @click="openAll" title="Otwórz nowe w nowej karcie" href="javascript:" class="mr-1">
+        <div v-if="unreadNotifications.length > 0" class="float-right">
+          <a @click="openAll" title="Otwórz nowe w nowej karcie" href="javascript:" class="mr-1">
             <i class="fas fa-external-link-alt"></i>
           </a>
 
@@ -148,7 +148,7 @@
       },
 
       subscribeUser() {
-        if (!('PushManager' in window) || !navigator.serviceWorker?.ready) {
+        if (!('PushManager' in window) || !('serviceWorker' in navigator)) {
           return;
         }
 
