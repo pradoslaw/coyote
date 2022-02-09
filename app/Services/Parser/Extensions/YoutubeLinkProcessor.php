@@ -44,11 +44,6 @@ class YoutubeLinkProcessor
 
     private function isYoutubeLink(Link $link, array $components): bool
     {
-        // "/" path are not allowed
-//        if (empty($components['host']) || empty($components['path']) || trim($components['path']) === '/') {
-//            return false;
-//        }
-
         if ($link->parent() instanceof AbstractInline) {
             return false;
         }
