@@ -5,15 +5,9 @@ namespace Coyote\Services\Parser\Parsers;
 use HTMLPurifier;
 use HTMLPurifier_Config;
 
-/**
- * Class Purifier
- */
 class Purifier implements ParserInterface
 {
-    /**
-     * @var HTMLPurifier_Config
-     */
-    private $config;
+    private HTMLPurifier_Config $config;
 
     public function __construct()
     {
@@ -27,21 +21,12 @@ class Purifier implements ParserInterface
         $this->config->autoFinalize = false;
     }
 
-    /**
-     * @param $key
-     * @param $value
-     * @return $this
-     */
-    public function set($key, $value)
+    public function set(string $key, string | bool | array $value): self
     {
         $this->config->set($key, $value);
         return $this;
     }
 
-    /**
-     * @param string $text
-     * @return string
-     */
     public function parse(string $text): string
     {
         $def = $this->config->getHTMLDefinition(true);
