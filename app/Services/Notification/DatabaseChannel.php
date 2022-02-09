@@ -18,6 +18,11 @@ class DatabaseChannel
         $data = $notification->toDatabase($notifiable);
         $user = $this->getUser($notifiable);
 
+        // user was removed?
+        if ($user === null) {
+            return;
+        }
+
         $result = $user->getUnreadNotification($notification->objectId());
 
         if (empty($result->id)) {
