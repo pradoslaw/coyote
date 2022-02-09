@@ -11,6 +11,8 @@ use League\Config\ConfigurationInterface;
 
 class InternalLinkProcessor
 {
+    use LinkSupport;
+
     private const EXCLUDE_PATHS = ['/Profile', '/User'];
 
     public function __construct(private PageRepository $page, private ConfigurationInterface $config)
@@ -29,7 +31,7 @@ class InternalLinkProcessor
             $components = parse_url($link->getUrl());
 
             // link is invalid. something went wrong
-            if ($components === false || !array_key_exists('host', $components) || !array_key_exists('path', $components)) {
+            if (!$this->isValidLink($components) || $this->linkHasLabel($link)) {
                 continue;
             }
 

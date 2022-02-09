@@ -225,6 +225,13 @@ class MarkdownTest extends TestCase
             '<p><a href="http://4programmers.net' . $path . '" title="' . $title . '">' . $title . '</a></p>',
             trim($this->markdown->parse($input))
         );
+
+        $input = '[customowy tytuł](http://4programmers.net' . $path . ')';
+
+        $this->assertEquals(
+            '<p><a href="http://4programmers.net' . $path . '">customowy tytuł</a></p>',
+            trim($this->markdown->parse($input))
+        );
     }
 
     public function testParseInternalAccessors()

@@ -13,6 +13,8 @@ use TRegx\CleanRegex\Pattern;
 
 class YoutubeLinkProcessor
 {
+    use LinkSupport;
+
     private const YOUTUBE_HOSTS = ['youtube.com', 'youtu.be', 'www.youtube.com', 'www.youtu.be'];
 
     public function __invoke(DocumentParsedEvent $e): void
@@ -24,7 +26,7 @@ class YoutubeLinkProcessor
 
             $components = parse_url($link->getUrl());
 
-            if ($components === false || !$this->isYoutubeLink($link, $components) || $this->linkLabelIsDifferent($link)) {
+            if (!$this->isValidLink($components) || !$this->isYoutubeLink($link, $components) || $this->linkHasLabel($link)) {
                 continue;
             }
 
@@ -43,20 +45,15 @@ class YoutubeLinkProcessor
     private function isYoutubeLink(Link $link, array $components): bool
     {
         // "/" path are not allowed
-        if (empty($components['host']) || empty($components['path']) || trim($components['path']) === '/') {
-            return false;
-        }
+//        if (empty($components['host']) || empty($components['path']) || trim($components['path']) === '/') {
+//            return false;
+//        }
 
         if ($link->parent() instanceof AbstractInline) {
             return false;
         }
 
         return ExternalLinkProcessor::hostMatches($components['host'], self::YOUTUBE_HOSTS);
-    }
-
-    private function linkLabelIsDifferent(Link $link): bool
-    {
-        return $link->firstChild() instanceof Text && $link->firstChild()?->getLiteral() !== $link->getUrl();
     }
 
     private function makeIframeFromFullPath(array $components): ?Iframe
