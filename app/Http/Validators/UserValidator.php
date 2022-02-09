@@ -26,14 +26,10 @@ class UserValidator
     /**
      * Walidator sprawdza poprawnosc nazwy uzytkownika pod katem uzytych znakow. Nazwa uzytkownika
      * moze zawierac jedynie okreslony zbior znakow.
-     *
-     * @param $attribute
-     * @param $value
-     * @return int
      */
-    public function validateName($attribute, $value)
+    public function validateName($attribute, $value): bool
     {
-        return preg_match('/^[0-9a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ._ -]+$/', $value);
+        return pattern('^[0-9a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ._ -]+$')->test($value);
     }
 
     /**
