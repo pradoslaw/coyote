@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class PurifierTest extends TestCase
 {
-    // tests
     public function testParseLinks()
     {
         $parser = new Purifier();
@@ -29,6 +28,22 @@ class PurifierTest extends TestCase
         $parser = new Purifier();
 
         $input = '<u>foo</u>';
+        $this->assertEquals($input, $parser->parse($input));
+    }
+
+    public function testAllowKbd()
+    {
+        $parser = new Purifier();
+
+        $input = '<kbd>Ctrl</kbd>';
+        $this->assertEquals($input, $parser->parse($input));
+    }
+
+    public function testAllowMark()
+    {
+        $parser = new Purifier();
+
+        $input = '<mark>Ctrl</mark>';
         $this->assertEquals($input, $parser->parse($input));
     }
 }
