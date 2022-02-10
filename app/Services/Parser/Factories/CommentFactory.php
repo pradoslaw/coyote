@@ -53,7 +53,7 @@ class CommentFactory extends AbstractFactory
             $parser->attach(new SimpleMarkdown($this->app[UserRepositoryInterface::class], $this->app[PageRepositoryInterface::class]));
 
             $parser->attach(
-                (new Purifier())->set('HTML.Allowed', $this->getHtmlTags())
+                (new Purifier())->set('HTML.Allowed', implode(',', $this->htmlTags))
             );
             $parser->attach(new Censore($this->app[WordRepositoryInterface::class]));
 
@@ -76,10 +76,5 @@ class CommentFactory extends AbstractFactory
         stop_measure('parsing');
 
         return $text;
-    }
-
-    protected function getHtmlTags(): string
-    {
-        return implode(',', $this->htmlTags);
     }
 }
