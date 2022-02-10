@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class SpamValidator
 {
-    const REGEXP_URL = '/((([A-Za-z]{3,9}:(?:\/\/)?)[A-Za-z0-9\.\-]+|(?:www\.)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/';
+    const REGEXP_URL = '((([A-Za-z]{3,9}:(?://)?)[A-Za-z0-9\.\-]+|(?:www\.)[A-Za-z0-9\.\-]+)((?:/[\+~%/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!/\\\w]*))?)';
 
     /**
      * @var Guard
@@ -29,13 +29,7 @@ class SpamValidator
         $this->request = $request;
     }
 
-    /**
-     * @param mixed $attribute
-     * @param mixed $value
-     * @param array $parameters
-     * @return bool
-     */
-    public function validateSpamLink($attribute, $value, $parameters): bool
+    public function validateSpamLink($attribute, $value, array $parameters): bool
     {
         if ($this->isContainUrl($value) === false) {
             return true;
@@ -44,13 +38,7 @@ class SpamValidator
         return $this->auth->check() && $this->auth->user()->reputation >= $parameters[0];
     }
 
-    /**
-     * @param mixed $attribute
-     * @param mixed $value
-     * @param array $parameters
-     * @return bool
-     */
-    public function validateSpamForeignLink($attribute, $value, $parameters): bool
+    public function validateSpamForeignLink($attribute, $value, array $parameters): bool
     {
         if (!$this->request->server('HTTP_CF_IPCOUNTRY') || 'PL' === $this->request->server('HTTP_CF_IPCOUNTRY')) {
             return true;
@@ -71,7 +59,7 @@ class SpamValidator
      */
     public function validateSpamChinese($attribute, $value, $parameters): bool
     {
-        if (!$this->isContainChinese($value)) {
+        if (!$this->containsChinese($value)) {
             return true;
         }
 
@@ -102,25 +90,16 @@ class SpamValidator
         return true;
     }
 
-    /**
-     * @param string|null $text
-     * @return bool
-     */
     private function isContainUrl(?string $text): bool
     {
         if (trim($text) === '') {
             return false;
         }
-
-        return (bool) preg_match(self::REGEXP_URL, $text);
+        return pattern(self::REGEXP_URL)->test($text);
     }
 
-    /**
-     * @param string $text
-     * @return bool
-     */
-    private function isContainChinese(string $text): bool
+    private function containsChinese(string $text): bool
     {
-        return ((bool) preg_match("/\p{Hangul}+/u", $text)) || ((bool) preg_match("/\p{Han}+/u", $text));
+        return pattern("\p{Hangul}+", 'u')->test($text) || pattern("\p{Han}+", 'u')->test($text);
     }
 }
