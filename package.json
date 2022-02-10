@@ -33,7 +33,7 @@
     "flatpickr": "^4.6.3",
     "glob-all": "^3.1.0",
     "mini-css-extract-plugin": "^0.9.0",
-    "node-sass": "^6.0.1",
+    "node-sass": "^7.0.0",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "perfect-scrollbar": "^1.5.0",
     "prismjs": "^1.26.0",
