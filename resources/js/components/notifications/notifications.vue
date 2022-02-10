@@ -192,6 +192,10 @@
 
       isOpen(isOpen) {
         if (isOpen) {
+          if (this.notifications === null) {
+            this.loadNotifications();
+          }
+
           this.$refs.scrollbar.$refs.container.addEventListener('ps-y-reach-end', this.loadNotifications);
         }
         else {
