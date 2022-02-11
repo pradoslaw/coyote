@@ -111,8 +111,13 @@
   line-height: 139%;
   overflow: hidden;
   padding-right: 10px;
+  margin-top: -2px;
 
   @include link-color-darker;
+
+  > div {
+    margin-top: 2px;
+  }
 
   hr {
     margin: 15px 0 5px 0;
