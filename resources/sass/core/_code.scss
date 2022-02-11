@@ -3,6 +3,19 @@ a code {
   color: $primary;
 }
 
+kbd {
+  text-shadow: 0 1px 0 white;
+  border: 1px solid #9ea5ae;
+}
+
+mark {
+  padding: 0.2rem 0.4rem;
+  font-size: 87.5%;
+  color: #fff;
+  background-color: #212529;
+  border-radius: 0.2rem;
+}
+
 // @see https://4programmers.net/Forum/Coyote/352953-zliczanie_linii_kodu_skrypt_konczy_zliczanie_po_696_linii
 pre code {
   display: block;

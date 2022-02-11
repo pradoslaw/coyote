@@ -32,6 +32,8 @@ class Purifier implements ParserInterface
         $def = $this->config->getHTMLDefinition(true);
         $def->addAttribute('a', 'data-user-id', 'Number');
         $def->addAttribute('iframe', 'allowfullscreen', 'Bool');
+        $mark = $def->addElement('mark', 'Inline', 'Inline', 'Common', []);
+        $mark->excludes = ['mark' => true];
 
         return (new HTMLPurifier())->purify($text, $this->config);
     }
