@@ -80,6 +80,7 @@ pre {
 /* Inline code */
 :not(pre) > code {
   padding: .1em;
+  box-shadow: 0 0 3px -1px grey;
   border-radius: .3em;
   white-space: normal;
 }
