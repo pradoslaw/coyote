@@ -46,4 +46,13 @@ class PurifierTest extends TestCase
         $input = '<mark>Ctrl</mark>';
         $this->assertEquals($input, $parser->parse($input));
     }
+
+    public function testAllowIframeInsideSpan()
+    {
+        $parser = new Purifier();
+
+        $input = '<p><span class="embed-responsive embed-responsive-16by9"><iframe src="https://youtube.com/embed/enOjqwOE1ec" class="embed-responsive-item"></iframe></span></p>';
+        $this->assertSame($input, $parser->parse($input));
+
+    }
 }
