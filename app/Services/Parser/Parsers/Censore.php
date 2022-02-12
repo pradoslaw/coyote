@@ -3,7 +3,6 @@
 namespace Coyote\Services\Parser\Parsers;
 
 use Coyote\Repositories\Contracts\WordRepositoryInterface as WordRepository;
-use TRegx\CleanRegex\Pattern;
 
 class Censore extends Parser implements ParserInterface
 {
@@ -23,11 +22,8 @@ class Censore extends Parser implements ParserInterface
         }
         $words = [];
 
-        $template = Pattern::template('(?<![\p{L}\p{N}_])@(?![\p{L}\p{N}_])', 'iu');
-
         foreach ($result as $row) {
-            $pattern = $template->mask($row->word, ['*' => '(\p{L}*?)']);
-            $word = $pattern->delimited();
+            $word = '#(?<![\p{L}\p{N}_])' . str_replace('\*', '(\p{L}*?)', preg_quote($row->word)) . '(?![\p{L}\p{N}_])#iu';
             $words[$word] = $row->replacement;
         }
 
