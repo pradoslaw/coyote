@@ -30,8 +30,8 @@ new Vue({
     window.history.pushState({ jobs: window.data.jobs, input: window.data.input }, '', window.location.href);
 
     window.onpopstate = e => {
-      this.jobs = e.state.jobs;
-      this.input = e.state.input;
+      this.jobs = e.state?.jobs || this.jobs;
+      this.input = e.state?.input || this.input;
     };
 
     this.initYScrollbar(document.querySelector('#js-published'));
