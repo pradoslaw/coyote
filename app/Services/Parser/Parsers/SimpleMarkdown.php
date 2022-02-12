@@ -3,7 +3,7 @@
 namespace Coyote\Services\Parser\Parsers;
 
 use Coyote\Services\Parser\Extensions\InternalLinkExtension;
-use Coyote\Services\Parser\Extensions\WikiLinkProcessor;
+use Coyote\Services\Parser\WikiLinksInlineParser;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\Autolink\AutolinkExtension;
 use League\CommonMark\Extension\InlinesOnly\InlinesOnlyExtension;
@@ -25,7 +25,7 @@ class SimpleMarkdown extends Markdown
         $environment->addExtension(new MentionExtension());
         $environment->addExtension(new AutolinkExtension());
         $environment->addExtension(new InternalLinkExtension($this->page));
-        $environment->addDelimiterProcessor(new WikiLinkProcessor($this->page));
+        $environment->addInlineParser(new WikiLinksInlineParser($this->page), 100);
 
         $converter = new MarkdownConverter($environment);
 
