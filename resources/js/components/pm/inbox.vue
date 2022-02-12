@@ -15,7 +15,7 @@
         <a title="Przejdź do listy wiadomości" href="/User/Pm">Wiadomości</a>
       </div>
 
-      <perfect-scrollbar class="dropdown-modal" :options="{wheelPropagation: false}">
+      <perfect-scrollbar class="dropdown-modal" :options="{wheelPropagation: false, useBothWheelAxes: false, suppressScrollX: true}">
         <div v-if="messages === null" class="text-center">
           <i class="fas fa-spinner fa-spin"></i>
         </div>
