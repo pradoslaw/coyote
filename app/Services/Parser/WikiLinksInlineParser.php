@@ -1,58 +1,45 @@
 <?php
 
-namespace Coyote\Services\Parser\Extensions;
+namespace Coyote\Services\Parser;
 
 use Coyote\Page;
 use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
-use League\CommonMark\Delimiter\DelimiterInterface;
-use League\CommonMark\Delimiter\Processor\DelimiterProcessorInterface;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Link;
-use League\CommonMark\Node\Inline\AbstractStringContainer;
+use League\CommonMark\Parser\Inline\InlineParserInterface;
+use League\CommonMark\Parser\Inline\InlineParserMatch;
+use League\CommonMark\Parser\InlineParserContext;
 
-class WikiLinkProcessor implements DelimiterProcessorInterface
+class WikiLinksInlineParser implements InlineParserInterface
 {
     public function __construct(private PageRepository $page)
     {
     }
 
-    public function getOpeningCharacter(): string
+    public function getMatchDefinition(): InlineParserMatch
     {
-        return '[';
+        return InlineParserMatch::regex('\[\[(.*?)(\|(.*?))*\]\]');
     }
 
-    public function getClosingCharacter(): string
+    public function parse(InlineParserContext $inlineContext): bool
     {
-        return ']';
+        $cursor = $inlineContext->getCursor();
+        // This seems to be a valid match
+        // Advance the cursor to the end of the match
+        $cursor->advanceBy($inlineContext->getFullMatchLength());
+
+        // Grab the Twitter handle
+        $match = $inlineContext->getSubMatches();
+
+        $link = $this->createLink(...$match);
+
+        $inlineContext->getContainer()->appendChild($link);
+
+        return true;
     }
 
-    public function getMinLength(): int
+    private function createLink(string $path, string $title = ''): Link
     {
-        return 2;
-    }
-
-    public function getDelimiterUse(DelimiterInterface $opener, DelimiterInterface $closer): int
-    {
-        return 2;
-    }
-
-    public function process(AbstractStringContainer $opener, AbstractStringContainer $closer, int $delimiterUse): void
-    {
-        $next = $opener->next();
-        $innerText = $next->getLiteral();
-
-        $link = $this->createLink($innerText);
-
-        $opener->next()->replaceWith($link);
-    }
-
-    private function createLink(string $innerText): Link
-    {
-        $path = $innerText;
-        $title = '';
-
-        if (str_contains($innerText, '|')) {
-            [$path, $title] = explode('|', $innerText);
-        }
+        $title = ltrim($title, '|');
 
         $path = '/' . str_replace(' ', '_', trim($path, '/?&['));
         $hash = $this->getHashFromPath($path);

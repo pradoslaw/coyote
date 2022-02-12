@@ -242,19 +242,19 @@ class MarkdownTest extends TestCase
         $this->createPage($title, $path);
 
         $input = $this->markdown->parse('[[Discussion board]]');
-        $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "\">$title</a>~", $input);
+        $this->assertMatchesRegularExpression("~<a href=\"" . preg_quote($path) . "\">$title</a>~", $input);
 
         $input = $this->markdown->parse('[[Discussion_board]]');
-        $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "\">$title</a>~", $input);
+        $this->assertMatchesRegularExpression("~<a href=\"" . preg_quote($path) . "\">$title</a>~", $input);
 
         $input = $this->markdown->parse('[[Discussion board|takie tam forum]]');
-        $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "\">takie tam forum</a>~", $input);
+        $this->assertMatchesRegularExpression("~<a href=\"" . preg_quote($path) . "\">takie tam forum</a>~", $input);
 
         $input = $this->markdown->parse('[[Discussion board#section|takie tam forum]]');
-        $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "#section\">takie tam forum</a>~", $input);
+        $this->assertMatchesRegularExpression("~<a href=\"" . preg_quote($path) . "#section\">takie tam forum</a>~", $input);
 
         $input = $this->markdown->parse('[[Discussion board#section]]');
-        $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "#section\">$title</a>~", $input);
+        $this->assertMatchesRegularExpression("~<a href=\"" . preg_quote($path) . "#section\">$title</a>~", $input);
 
         $title = 'Newbie';
         $path = '/Discussion_board/Newbie';
