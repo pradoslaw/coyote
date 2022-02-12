@@ -2,9 +2,6 @@
 
 namespace Coyote\Listeners;
 
-ini_set('memory_limit', '10G');
-set_time_limit(0);
-
 use Coyote\Events\TopicDeleted;
 use Coyote\Events\TopicMoved;
 use Coyote\Events\TopicSaved;
