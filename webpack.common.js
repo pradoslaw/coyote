@@ -14,7 +14,9 @@ module.exports = {
     rules: [
       {
         test: /\.ts(x?)$/,
-        exclude: /node_modules/,
+        exclude: {
+          test: /node_modules\/(?!@riddled)/
+        },
         use: [
           {
             loader: 'babel-loader'
@@ -59,7 +61,7 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: {
-          test: /node_modules/
+          test: /node_modules\/(?!@riddled)/
         },
         use: {
           loader: 'babel-loader',
