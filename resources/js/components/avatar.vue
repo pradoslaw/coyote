@@ -1,6 +1,6 @@
 <template>
   <div class="position-relative">
-    <img :src="url" :alt="name" class="d-block mw-100">
+    <img :src="url" :alt="name" class="d-block mw-100" loading="lazy">
 
     <div v-if="isOnline" class="is-online"></div>
   </div>
