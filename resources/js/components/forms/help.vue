@@ -1,7 +1,7 @@
 <template>
   <div class="markdown-help">
     <div class="card card-info">
-      <div class="card-header">Pomoc <span class="card-version">1.10.12</span></div>
+      <div class="card-header">Pomoc <span class="card-version">1.10.15</span></div>
       <div class="card-body">
         <div class="row">
           <div class="col-md-6">
@@ -211,8 +211,8 @@
                 <kbd>Alt+<i class="fas fa-arrow-up"/></kbd>, <kbd>Alt+<i class="fas fa-arrow-down"/></kbd> -
                 przeniesienie linijki w której znajduje się kursor w górę/dół.
               </li>
-              <li><kbd>Tab</kbd> - dodaj wcięcie (wcięcie w prawo)</li>
-              <li><kbd>Shit+Tab</kbd> - usunięcie wcięcia (wycięcie w lewo)</li>
+              <li><kbd>Tab</kbd>/<kbd>⌘+]</kbd> - dodaj wcięcie (wcięcie w prawo)</li>
+              <li><kbd>Shit+Tab</kbd>/<kbd>⌘+[</kbd> - usunięcie wcięcia (wycięcie w lewo)</li>
             </ul>
 
             <p>Dodawanie postów:</p>
