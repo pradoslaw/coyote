@@ -28,118 +28,136 @@
   </li>
 </template>
 
-<script>
+<script lang="ts">
+  import Vue from 'vue';
+  import Component from "vue-class-component";
   import DesktopNotifications from '../../libs/notifications';
-  import { default as ws } from '../../libs/realtime.ts';
-  import store from '../../store';
+  import { default as ws } from '../../libs/realtime';
   import { default as PerfectScrollbar } from '../perfect-scrollbar';
   import { mixin as clickaway } from 'vue-clickaway';
   import VueMessage from './message-compact.vue';
-  import { mapState, mapGetters, mapMutations } from "vuex";
+  import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+  import { Message, User } from "@/types/models";
+  import store from "@/store";
 
-  export default {
+  @Component({
     mixins: [ clickaway ],
     components: {
       'perfect-scrollbar': PerfectScrollbar,
       'vue-message': VueMessage
     },
-    store,
-    data() {
-      return {
-        isOpen: false,
-        currentTitle: null,
-        animationId: null
-      }
-    },
-    mounted() {
-      this.listenForMessages();
-      this.listenForVisibilityChange();
-    },
     methods: {
-      loadMessages() {
-        this.isOpen = !this.isOpen;
-
-        if (this.isEmpty) {
-          store.dispatch('inbox/get');
-        }
-      },
-
-      hideDropdown() {
-        this.isOpen = false;
-      },
-
-      listenForMessages() {
-        this.channel.on('PmCreated', ({ count, data }) => {
-          this.init(count);
-          this.reset();
-
-          this.isOpen = false;
-
-          DesktopNotifications.notify(data.user.name, data.excerpt, data.url);
-
-          this.startAnimation(data.user);
-        });
-      },
-
-      listenForVisibilityChange() {
-        document.addEventListener('visibilitychange', () => {
-          if (!document.hidden) {
-            this.stopAnimation();
-          }
-        });
-
-        this.channel.on('PmVisible', this.stopAnimation);
-      },
-
-      startAnimation(user) {
-        if (!document.hidden) {
-          // page is not hidden. tell other tabs to stop animation
-          this.stopAnimationOnAllWindows();
-
-          return;
-        }
-
-        // there is an animation still in progress. skip it.
-        if (this.animationId !== null) {
-          return;
-        }
-
-        this.currentTitle = document.title;
-
-        this.animationId = setInterval(() =>
-          document.title = document.title === this.currentTitle ? 'Masz wiadomość od: ' + user.name : this.currentTitle, 2000
-        );
-      },
-
-      stopAnimation() {
-        if (this.animationId === null) {
-          return;
-        }
-
-        // remove animation if exists
-        clearInterval(this.animationId);
-        // restore original title
-        document.title = this.currentTitle;
-
-        this.currentTitle = this.animationId = null;
-
-        this.stopAnimationOnAllWindows();
-      },
-
-      stopAnimationOnAllWindows() {
-        // send event to other tabs
-        this.channel.whisper('PmVisible', {});
-      },
-
-      ...mapMutations('inbox', ['init', 'reset'])
+      ...mapMutations('inbox', ['init', 'reset']),
+      ...mapActions('inbox', ['get']),
     },
     computed: {
       ...mapState('inbox', ['messages', 'count']),
+      ...mapState('user', ['user']),
       ...mapGetters('inbox', ['isEmpty']),
+    }
+  })
+  export default class VueInbox extends Vue {
+    isOpen = false;
+    currentTitle: string | null = null;
+    animationId: null | NodeJS.Timer = null;
+    count!: number;
+    messages!: Message[];
+    isEmpty!: boolean;
+    user!: User;
+    init!: (count: number) => any;
+    reset!: () => any;
+    get!: () => any;
 
-      channel() {
-        return ws.subscribe(`user:${store.state.user.user.id}`);
+    mounted() {
+      this.listenForMessages();
+      this.listenForVisibilityChange();
+    }
+
+    loadMessages() {
+      this.isOpen = !this.isOpen;
+
+      if (this.isEmpty) {
+        this.get();
       }
     }
-  };
+
+    hideDropdown() {
+      this.isOpen = false;
+    }
+
+    listenForMessages() {
+      this.channel.on('PmCreated', ({ count, data }) => {
+        this.init(count);
+        this.reset();
+
+        this.isOpen = false;
+
+        DesktopNotifications.notify(data.user.name, data.excerpt, data.url);
+
+        this.startAnimation(data.user);
+      });
+
+      this.channel.on('PmRead', data => {
+        const message = this.messages.find(item => item.text_id === data.text_id);
+
+        if (message) {
+          store.commit('messages/mark', message);
+        }
+      });
+    }
+
+    listenForVisibilityChange() {
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) {
+          this.stopAnimation();
+        }
+      });
+
+      this.channel.on('PmVisible', this.stopAnimation);
+    }
+
+    startAnimation(user) {
+      if (!document.hidden) {
+        // page is not hidden. tell other tabs to stop animation
+        this.stopAnimationOnAllWindows();
+
+        return;
+      }
+
+      // there is an animation still in progress. skip it.
+      if (this.animationId !== null) {
+        return;
+      }
+
+      this.currentTitle = document.title;
+
+      this.animationId = setInterval(() =>
+        document.title = document.title === this.currentTitle ? 'Masz wiadomość od: ' + user.name : this.currentTitle as string, 2000
+      );
+    }
+
+    stopAnimation() {
+      if (this.animationId === null) {
+        return;
+      }
+
+      // remove animation if exists
+      clearInterval(this.animationId);
+      // restore original title
+      document.title = this.currentTitle as string;
+
+      this.currentTitle = this.animationId = null;
+
+      this.stopAnimationOnAllWindows();
+    }
+
+    stopAnimationOnAllWindows() {
+      // send event to other tabs
+      this.channel.whisper('PmVisible', {});
+    }
+
+    get channel() {
+      return ws.subscribe(`user:${this.user.id}`);
+    }
+  }
 </script>

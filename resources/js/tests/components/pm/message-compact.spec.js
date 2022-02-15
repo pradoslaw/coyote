@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import VueMessageCompact from './message-compact.vue';
+import VueMessageCompact from '../../../components/pm/message-compact.vue';
 
 const message = {
   created_at: "2020-10-13T18:46:59+02:00",

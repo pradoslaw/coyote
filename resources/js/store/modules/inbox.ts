@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getInbox } from '@/api';
 
 const state = {
   messages: null, // initial value must be null to show fa-spinner
@@ -25,7 +26,7 @@ const mutations = {
 
 const actions = {
   get({ commit }) {
-    return axios.get('/User/Pm/Inbox').then(result => commit('set', result.data));
+    return getInbox().then(result => commit('set', result.data));
   }
 };
 

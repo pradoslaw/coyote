@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
-import VueInbox from './inbox.vue';
-import store from '../../store';
+import VueInbox from '../../../components/pm/inbox.vue';
+import store from '../../../store';
 import axios from 'axios';
 
 

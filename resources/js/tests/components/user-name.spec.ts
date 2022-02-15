@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
-import VueUserName from './user-name.vue';
-import {User} from "../types/models";
+import VueUserName from '../../components/user-name.vue';
+import {User} from "../../types/models";
 
 describe('Render component with regular user', () => {
   const user: User = {is_blocked: false, photo: "", id: 1, name: 'Foo'};
