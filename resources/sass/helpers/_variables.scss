@@ -3,13 +3,13 @@
 $primary: #80a41a;
 $success: #5cb85c;
 $info: #5bc0de;
-$warning: #D98D0D;
+$warning: #d98d0d;
 $danger: #d9534f;
 
 $body-bg: #fafafa;
 $text-color: #333; // @deprecated
 $body-color: #333;
-$code-color: #d7661c;
+$code-color: rgba(51, 51, 51, .9);
 
 // bootstrap 3 backward compatibility
 $gray: #555;
@@ -24,7 +24,7 @@ $secondary: #f6f6f6;
 
 $input-border-color: #ccc;
 
-$navbar-dark-color:  #eee;
+$navbar-dark-color: #eee;
 $navbar-dark-hover-color: $primary;
 $navbar-padding-y: .35rem;
 
@@ -32,56 +32,55 @@ $nav-pills-link-active-bg: transparent;
 $nav-pills-border-radius: 0;
 $nav-pills-link-active-color: $body-color;
 
-$font-family-sans-serif:      Arial, Verdana, Helvetica, sans-serif !default;
+$font-family-sans-serif: Arial, Verdana, Helvetica, sans-serif !default;
 
-$font-size-base:              0.85rem;
-$font-size-sm:                0.75rem;
-$h1-font-size:                $font-size-base * 2;
-$h4-font-size:                $font-size-base * 1.4;
-$small-font-size:             92%; // bootstrap 3 backward compatibility
+$font-size-base: 0.85rem;
+$font-size-sm: 0.75rem;
+$h1-font-size: $font-size-base * 2;
+$h4-font-size: $font-size-base * 1.4;
+$small-font-size: 92%; // bootstrap 3 backward compatibility
 
-$input-btn-focus-box-shadow:  none;
+$input-btn-focus-box-shadow: none;
 
-$badge-border-radius:         5px;
-$badge-padding-y:             3px;
-$badge-padding-x:             7px;
-$badge-pill-border-radius:    5rem; // bootstrap 3 backward compatibility
-$badge-font-size:             75%;
+$badge-border-radius: 5px;
+$badge-padding-y: 3px;
+$badge-padding-x: 7px;
+$badge-pill-border-radius: 5rem; // bootstrap 3 backward compatibility
+$badge-font-size: 75%;
 
-$card-border-color:           #ddd;
+$card-border-color: #ddd;
 
-$pagination-bg:               #ddd;
-$pagination-disabled-bg:      $gray-lighter;
-$pagination-color:            $text-color;
-$pagination-border-width:     0;
-$pagination-active-color:     #fff;
-$pagination-active-bg:        $gray-dark;
-$pagination-padding-y:        .3rem;
-$pagination-padding-x:        .55rem;
+$pagination-bg: #ddd;
+$pagination-disabled-bg: $gray-lighter;
+$pagination-color: $text-color;
+$pagination-border-width: 0;
+$pagination-active-color: #fff;
+$pagination-active-bg: $gray-dark;
+$pagination-padding-y: .3rem;
+$pagination-padding-x: .55rem;
 
-$dropdown-link-active-color:        inherit;
-$dropdown-link-active-bg:           inherit;
+$dropdown-link-active-color: inherit;
+$dropdown-link-active-bg: inherit;
 
-$custom-control-indicator-checked-color:    $text-color;
+$custom-control-indicator-checked-color: $text-color;
 $custom-control-indicator-checked-bg: #fff;
 $custom-control-indicator-checked-border-color: #adb5bd;
 
-$list-inline-padding-sm:    .2rem;
+$list-inline-padding-sm: .2rem;
 
-$breadcrumb-bg:             transparent;
-$breadcrumb-font-size:      .75rem;
-$breadcrumb-padding-y:      10px;
-$breadcrumb-padding-x:      0;
-$breadcrumb-divider-color:  $primary;
-$breadcrumb-item-padding:   .2rem;
-$breadcrumb-margin-bottom:  0;
+$breadcrumb-bg: transparent;
+$breadcrumb-font-size: .75rem;
+$breadcrumb-padding-y: 10px;
+$breadcrumb-padding-x: 0;
+$breadcrumb-divider-color: $primary;
+$breadcrumb-item-padding: .2rem;
+$breadcrumb-margin-bottom: 0;
 
-$progress-bg:               $dark;
-$progress-height:           23px;
-$progress-border-radius:    10px;
+$progress-bg: $dark;
+$progress-height: 23px;
+$progress-border-radius: 10px;
 
-$alert-border-width:        2px;
-
+$alert-border-width: 2px;
 
 
 // DEPRECATED!!!
@@ -90,21 +89,21 @@ $alert-border-width:        2px;
 // nieco ciemniszy kolor linkow (w sytuacji gdy wiele linkow jest obok siebie domyslny kolor jest zbyt jasny)
 // -------------------------------------------------------------------------------------------------------
 
-$link-color-darker:         darken($primary, 10%);
+$link-color-darker: darken($primary, 10%);
 
 // alternatywny kolor linkow uzywany po naprowadzeniu kursora myszy nad link
 // uzywany w niewielu sytuacjach w kontrascie do koloru zielonego dominujacego w serwisie
 // -------------------------------------------------------------------------------------
 
-$alt-link-hover-color:      #d7661c;
+$alt-link-hover-color: #d7661c;
 
 // kolor naglowka <h4> znajdujacego sie w elemencie .box (elementy sekcji)
-$box-header-color:          #646466;
+$box-header-color: #646466;
 
 // kolor tla dla nieprzeczytanych elementow
-$unread-bg:                 #FFF3CD;
+$unread-bg: #fff3cd;
 // :hover dla nowych elementow (powiadomienia, wiadomosci)
-$unread-bg-hover:           #FFDCA5;
+$unread-bg-hover: #ffdca5;
 
 // Tag clouds, tag dropdown list and tag editor
 // ----------------------------------------------
