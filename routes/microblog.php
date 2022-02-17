@@ -15,7 +15,7 @@ $this->group(['namespace' => 'Microblog', 'prefix' => 'Mikroblogi', 'as' => 'mic
     $this->post('Sponsored/{microblog}', ['uses' => 'SubmitController@toggleSponsored', 'middleware' => 'auth']);
 
     // edycja/publikacja komentarza oraz jego usuniecie
-    $this->post('Comment/{microblog?}', ['uses' => 'CommentController@save', 'as' => 'comment.save', 'middleware' => 'auth']);
+    $this->post('Comment/{microblog?}', ['uses' => 'CommentController@save', 'as' => 'comment.save', 'middleware' => ['auth', 'throttle.submission:1,5']]);
     $this->delete('Comment/Delete/{microblog}', ['uses' => 'CommentController@delete', 'as' => 'comment.delete', 'middleware' => 'auth']);
     // pokaz reszte komentarzy...
     $this->get('Comment/Show/{id}', ['uses' => 'CommentController@show', 'as' => 'comment.show']);

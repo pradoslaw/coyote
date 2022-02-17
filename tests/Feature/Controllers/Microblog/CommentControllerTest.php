@@ -7,6 +7,7 @@ use Coyote\Notifications\Microblog\DeletedNotification;
 use Coyote\User;
 use Faker\Factory;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
@@ -34,7 +35,7 @@ class CommentControllerTest extends TestCase
         $text = $fake->realText();
 
         $response = $this->actingAs($this->user)->json('POST', '/Mikroblogi/Comment', ['text' => $text, 'parent_id' => $microblog->id]);
-        $response->assertStatus(201);
+        $response->assertStatus(Response::HTTP_CREATED);
 
         $this->assertDatabaseHas('microblogs', ['text' => $text, 'parent_id' => $microblog->id]);
 
@@ -83,7 +84,7 @@ class CommentControllerTest extends TestCase
         $text = $fake->realText();
         $response = $this->actingAs($this->user)->json('POST', '/Mikroblogi/Comment/' . $comment->id, ['text' => $text]);
 
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
 
         $comment->refresh();
 
@@ -102,7 +103,7 @@ class CommentControllerTest extends TestCase
         $fake = Factory::create();
         $response = $this->actingAs($this->user)->json('POST', '/Mikroblogi/Comment/' . $comment->id, ['text' => $fake->realText()]);
 
-        $response->assertStatus(403);
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
 
         $response->assertJson(['message' => 'This action is unauthorized.']);
     }
@@ -119,7 +120,7 @@ class CommentControllerTest extends TestCase
         $this->assertTrue($admin->can('microblog-update'));
         $response = $this->actingAs($admin)->json('DELETE', '/Mikroblogi/Comment/Delete/' . $comment->id);
 
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
 
         Notification::assertSentTo($comment->user, DeletedNotification::class);
     }

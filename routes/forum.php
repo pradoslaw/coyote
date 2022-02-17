@@ -119,7 +119,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     $this->post('Comment/{comment?}', [
         'uses' => 'CommentController@save',
         'as' => 'comment.save',
-        'middleware' => ['auth']
+        'middleware' => ['auth', 'throttle.submission:1,5']
     ]);
 
     $this->delete('Comment/Delete/{comment}', [

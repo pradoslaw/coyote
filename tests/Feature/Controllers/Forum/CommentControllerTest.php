@@ -16,6 +16,7 @@ use Coyote\Topic;
 use Coyote\User;
 use Faker\Factory;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 use Tests\TestCase;
 
@@ -95,12 +96,13 @@ class CommentControllerTest extends TestCase
         ]);
     }
 
-    public function testSubmitValidData()
+    public function testSubmitValidComment()
     {
         $response = $this
             ->actingAs($this->user)
             ->json('POST', "/Forum/Comment", ['text' => $text = $this->faker->realText(), 'post_id' => $this->post->id]);
 
+        $response->assertStatus(Response::HTTP_CREATED);
         $response->assertJsonFragment([
             'text' => $text,
             'editable' => true
@@ -175,7 +177,7 @@ class CommentControllerTest extends TestCase
             ->actingAs($this->user)
             ->json('POST', "/Forum/Comment", ['text' => $text = $this->faker->realText(), 'post_id' => $this->post->id]);
 
-        $response->assertStatus(201);
+        $response->assertStatus(Response::HTTP_CREATED);
     }
 
     public function testSubmitInLockedForumAsAdmin()
@@ -191,7 +193,7 @@ class CommentControllerTest extends TestCase
             ->actingAs($this->user)
             ->json('POST', "/Forum/Comment", ['text' => $text = $this->faker->realText(), 'post_id' => $this->post->id]);
 
-        $response->assertStatus(201);
+        $response->assertStatus(Response::HTTP_CREATED);
     }
 
     public function testUpdateComment()
@@ -202,6 +204,7 @@ class CommentControllerTest extends TestCase
             ->actingAs($this->user)
             ->json('POST', "/Forum/Comment/$comment->id", ['text' => $text = $this->faker->realText(), 'post_id' => $this->post->id]);
 
+        $response->assertStatus(Response::HTTP_OK);
         $data = $response->json('data');
         $this->assertEquals($text, $data['text']);
 
