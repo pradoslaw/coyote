@@ -77,12 +77,18 @@ pre {
   background: #f5f2f0;
 }
 
-/* Inline code */
+blockquote {
+  :not(pre) > code {
+    color: #999;
+  }
+}
+
 :not(pre) > code {
-  padding: .1em;
-  box-shadow: 0 0 3px -1px grey;
-  border-radius: .3em;
+  padding: .1em .2em;
+  border: 1px solid #ededed;
+  border-radius: .15em;
   white-space: normal;
+  color: #666;
 }
 
 .token.comment,
