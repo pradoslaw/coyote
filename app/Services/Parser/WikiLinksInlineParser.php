@@ -40,16 +40,17 @@ class WikiLinksInlineParser implements InlineParserInterface
     private function createLink(string $path, string $title = ''): Link
     {
         $title = ltrim($title, '|');
+        $path = trim($path, '/?&[');
 
-        $path = '/' . str_replace(' ', '_', trim($path, '/?&['));
-        $hash = $this->getHashFromPath($path);
+        $pathWithSlash = '/' . str_replace(' ', '_', $path);
+        $hash = $this->getHashFromPath($pathWithSlash);
 
-        $page = $this->getPath($path);
+        $page = $this->getPath($pathWithSlash);
 
         if ($page) {
             $link = new Link($page->path . ($hash ? '#' . $hash : ''), $title ?: $page->title);
         } else {
-            $link = new Link('Create' . $path, $title, 'Dokument nie istnieje');
+            $link = new Link('Create' . $pathWithSlash, $title ?: $path, 'Dokument nie istnieje');
             $link->data->set('attributes/class', 'link-broken');
         }
 

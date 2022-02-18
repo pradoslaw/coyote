@@ -275,11 +275,8 @@ class MarkdownTest extends TestCase
         $input = $this->markdown->parse('[[Kim jesteśmy?]]');
         $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "\">" . preg_quote($title) . "</a>~", $input);
 
-//        $input = $this->markdown->parse('<code>[[Kim jesteśmy?]]</code>');
-//        $this->assertStringContainsString("<code>[[Kim jesteśmy?]]</code>", $input);
-//
-//        $input = $this->markdown->parse('<pre><code>[[Kim jesteśmy?]]</code></pre>');
-//        $this->assertStringContainsString("<pre><code>[[Kim jesteśmy?]]</code></pre>", $input);
+        $input = $this->markdown->parse('[[Foo Bar]]');
+        $this->assertMatchesRegularExpression('~<a class="link-broken" href="Create/Foo_Bar" title="Dokument nie istnieje">Foo Bar</a>~', $input);
     }
 
     private function createPage($title, $path)
