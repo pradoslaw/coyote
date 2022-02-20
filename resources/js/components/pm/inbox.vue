@@ -47,7 +47,7 @@
       'vue-message': VueMessage
     },
     methods: {
-      ...mapMutations('inbox', ['init', 'reset']),
+      ...mapMutations('inbox', ['SET_COUNT', 'RESET_MESSAGE', 'MARK']),
       ...mapActions('inbox', ['get']),
     },
     computed: {
@@ -64,8 +64,9 @@
     messages!: Message[];
     isEmpty!: boolean;
     user!: User;
-    init!: (count: number) => any;
-    reset!: () => any;
+    SET_COUNT!: (count: number) => void;
+    RESET_MESSAGE!: () => void;
+    MARK!: (message: Message) => void;
     get!: () => any;
 
     mounted() {
@@ -87,8 +88,8 @@
 
     listenForMessages() {
       this.channel.on('PmCreated', ({ count, data }) => {
-        this.init(count);
-        this.reset();
+        this.SET_COUNT(count);
+        this.RESET_MESSAGE();
 
         this.isOpen = false;
 
@@ -98,10 +99,20 @@
       });
 
       this.channel.on('PmRead', data => {
+        if (this.count > 0) {
+          this.SET_COUNT(this.count - 1);
+        }
+
+        this.stopAnimation();
+
+        if (!this.messages) {
+          return;
+        }
+
         const message = this.messages.find(item => item.text_id === data.text_id);
 
         if (message) {
-          store.commit('messages/mark', message);
+          this.MARK(message);
         }
       });
     }

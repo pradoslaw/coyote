@@ -3,9 +3,8 @@
 namespace Coyote\Events;
 
 use Illuminate\Broadcasting\Channel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class PmRead extends PmCreated implements ShouldBroadcast
+class PmRead extends PmCreated
 {
     /**
      * Get the channels the event should broadcast on.
@@ -14,7 +13,10 @@ class PmRead extends PmCreated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('user:' . $this->pm->author_id);
+        return [
+            new Channel('user:' . $this->pm->author_id),
+            new Channel('user:' . $this->pm->user_id)
+        ];
     }
 
     /**

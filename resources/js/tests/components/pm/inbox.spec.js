@@ -11,7 +11,7 @@ jest.mock('../../libs/realtime.ts', () => ({
 jest.mock('axios');
 
 describe('Basic inbox', () => {
-  store.commit('inbox/init', 1);
+  store.commit('inbox/SET_COUNT', 1);
 
   const wrapper = mount(VueInbox);
 
