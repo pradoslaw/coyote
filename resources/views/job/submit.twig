@@ -53,7 +53,7 @@
                   <i class="fas fa-angle-right"></i>
                 </vue-button>
 
-                <vue-button :disabled="isSubmitting" @click.native="submitForm" class="btn btn-primary btn-save ml-2" title="Zapisz tę ofertę">
+                <vue-button v-if="job.firm.name || currentTab === 1" :disabled="isSubmitting" @click.native="submitForm" class="btn btn-primary btn-save ml-2" title="Zapisz tę ofertę">
                   <i class="fas fa-save"></i> Zapisz <template v-if="job.firm.name">jako ${ job.firm.name }</template>
                 </vue-button>
               </div>
