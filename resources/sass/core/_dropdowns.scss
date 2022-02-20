@@ -34,7 +34,7 @@
 }
 
 .dropdown-menu.dropdown-menu-left {
-  @extend .dropdown-menu.dropdown-menu-right;
+  @extend .dropdown-menu, .dropdown-menu-right;
 
   &:after {
     left: 10px;
