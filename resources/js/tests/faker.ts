@@ -1,4 +1,4 @@
-import { Post, Topic } from "./types/models";
+import { Post, Topic } from "../types/models";
 const faker = require('faker');
 
 export function post(props?: any): Post {

@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
-import VueInbox from './inbox.vue';
-import store from '../../store';
+import VueInbox from '../../../components/pm/inbox.vue';
+import store from '../../../store';
 import axios from 'axios';
 
 
@@ -11,7 +11,7 @@ jest.mock('../../libs/realtime.ts', () => ({
 jest.mock('axios');
 
 describe('Basic inbox', () => {
-  store.commit('inbox/init', 1);
+  store.commit('inbox/SET_COUNT', 1);
 
   const wrapper = mount(VueInbox);
 

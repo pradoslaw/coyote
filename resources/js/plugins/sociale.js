@@ -14,14 +14,11 @@ new Vue({
 const el = document.getElementById('nav-auth');
 
 if (el !== null) {
-  store.commit('inbox/init', store.state.user.user.pm_unread);
+  store.commit('inbox/SET_COUNT', store.state.user.user.pm_unread);
   store.commit('notifications/init', {notifications: null, count: store.state.user.user.notifications_unread});
 
-  const NotificationWrapper = Vue.extend(VueNotification);
-  const PmWrapper = Vue.extend(VuePm);
-
-  el.appendChild(new NotificationWrapper().$mount().$el);
-  el.appendChild(new PmWrapper().$mount().$el);
+  el.appendChild(new VueNotification({ store }).$mount().$el);
+  el.appendChild(new VuePm({ store }).$mount().$el);
 }
 
 /**

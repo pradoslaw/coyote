@@ -1,4 +1,4 @@
-import store from "./microblogs";
+import store from "../../../store/modules/microblogs";
 import {Microblog} from "@/types/models";
 const faker = require('faker');
 

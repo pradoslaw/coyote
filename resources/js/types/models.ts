@@ -231,6 +231,7 @@ export interface Message {
   read_at: Date;
   excerpt: string;
   text: string;
+  text_id: number;
   sequential: boolean;
   folder: MessageFolder;
 }
@@ -387,4 +388,8 @@ export interface Guide {
   comments_count: number;
   role: Seniority;
   assets: Asset[];
+}
+
+export interface Notification {
+  id: string;
 }

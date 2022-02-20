@@ -2,7 +2,7 @@ import { shallowMount } from '@vue/test-utils';
 import Vue from 'vue';
 import VuePost from './post.vue';
 import VueTimeago from '../../plugins/timeago';
-import { post as fake, topic } from '../../faker';
+import { post as fake, topic } from '../../tests/faker';
 import store from '../../store';
 
 Vue.use(VueTimeago);

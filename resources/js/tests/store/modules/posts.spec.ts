@@ -1,4 +1,4 @@
-import store from "./posts";
+import store from "../../../store/modules/posts";
 import { post as fake } from '../../faker';
 import axios from 'axios';
 

@@ -177,6 +177,7 @@ class PmRepository extends Repository implements PmRepositoryInterface
                 'author_id AS user_id',
                 'm.folder',
                 'm.read_at',
+                'm.text_id',
                 'pm_text.text',
                 'pm_text.created_at'
             ])

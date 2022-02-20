@@ -1,4 +1,4 @@
-import axios from "axios";
+import { getInbox } from '@/api';
 
 const state = {
   messages: null, // initial value must be null to show fa-spinner
@@ -10,22 +10,29 @@ const getters = {
 };
 
 const mutations = {
-  init(state, count) {
+  SET_COUNT(state, count) {
     state.count = count;
   },
 
-  set(state, messages) {
+  SET_MESSAGES(state, messages) {
     state.messages = messages;
   },
 
-  reset(state) {
+  RESET_MESSAGE(state) {
     state.messages = null;
-  }
+  },
+
+  MARK(state, message) {
+    const date = new Date();
+    date.setSeconds(date.getSeconds() - 1); // subtract one seconds so we can display "1 seconds ago" instade of "0 seconds ago"
+
+    message.read_at = date;
+  },
 };
 
 const actions = {
   get({ commit }) {
-    return axios.get('/User/Pm/Inbox').then(result => commit('set', result.data));
+    return getInbox().then(result => commit('SET_MESSAGES', result.data));
   }
 };
 

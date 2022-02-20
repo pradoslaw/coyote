@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import VueAvatar from './avatar.vue';
+import VueAvatar from '../../components/avatar.vue';
 
 describe('Basic avatar', () => {
   const wrapper = mount(VueAvatar, {propsData: {name: 'Foo'}});
