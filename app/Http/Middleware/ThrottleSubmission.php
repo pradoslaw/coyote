@@ -47,7 +47,7 @@ class ThrottleSubmission extends ThrottleRequests
         $exception = parent::buildException($request, $key, $maxAttempts, $responseCallback);
 
         if ($exception instanceof ThrottleRequestsException) {
-            return new ThrottleRequestsException('Zbyt wiele prób. Oczekaj chwilę.');
+            return new ThrottleRequestsException('Zbyt wiele prób. Spróbuj za chwilę.');
         }
 
         return $exception;
