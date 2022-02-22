@@ -34,6 +34,7 @@ class JobPostingTest extends DuskTestCase
                 ->type('salary_to', $salaryTo = $fake->numberBetween(1000, 2000))
                 ->select('currency_id', Currency::CHF)
                 ->type('email', $fake->email)
+                ->press('Informacje o firmie')
                 ->press('Zapisz')
                 ->waitForText('Powrót do ogłoszenia')
                 ->clickLink('Powrót do ogłoszenia')
@@ -146,9 +147,13 @@ class JobPostingTest extends DuskTestCase
             $browser->visit('/Praca/Submit')
                 ->resize(1920, 1080)
                 ->assertInputValue('email', $this->user->email)
+                ->press('Informacje o firmie')
                 ->press('Zapisz')
                 ->waitForText('Tytuł jest wymagany.')
+                ->press('Oferta pracy')
                 ->type('title', $fake->title)
+                ->press('Informacje o firmie')
+                ->press('Zapisz')
                 ->press('Zapisz');
 
             $browser->logout();
