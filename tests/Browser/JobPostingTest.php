@@ -153,7 +153,6 @@ class JobPostingTest extends DuskTestCase
                 ->press('Oferta pracy')
                 ->type('title', $fake->title)
                 ->press('Informacje o firmie')
-                ->press('Zapisz')
                 ->press('Zapisz');
 
             $browser->logout();
