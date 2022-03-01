@@ -42,15 +42,15 @@ class WikiLinksInlineParser implements InlineParserInterface
         $title = ltrim($title, '|');
         $path = trim($path, '/?&[');
 
-        $pathWithSlash = '/' . str_replace(' ', '_', $path);
-        $hash = $this->getHashFromPath($pathWithSlash);
+        $pathSlug = str_replace(' ', '_', $path);
+        $hash = $this->getHashFromPath($pathSlug);
 
-        $page = $this->getPath($pathWithSlash);
+        $page = $this->getPath($pathSlug);
 
         if ($page) {
             $link = new Link($page->path . ($hash ? '#' . $hash : ''), $title ?: $page->title);
         } else {
-            $link = new Link('Create' . $pathWithSlash, $title ?: $path, 'Dokument nie istnieje');
+            $link = new Link('Create/' . $pathSlug, $title ?: $path, 'Dokument nie istnieje');
             $link->data->set('attributes/class', 'link-broken');
         }
 

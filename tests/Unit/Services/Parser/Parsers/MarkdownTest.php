@@ -237,7 +237,7 @@ class MarkdownTest extends TestCase
     public function testParseInternalAccessors()
     {
         $title = 'Forum dyskusyjne';
-        $path = '/Discussion_board';
+        $path = 'Discussion_board';
 
         $this->createPage($title, $path);
 
@@ -257,7 +257,7 @@ class MarkdownTest extends TestCase
         $this->assertMatchesRegularExpression("~<a href=\"" . preg_quote($path) . "#section\">$title</a>~", $input);
 
         $title = 'Newbie';
-        $path = '/Discussion_board/Newbie';
+        $path = 'Discussion_board/Newbie';
 
         $this->createPage($title, $path);
 
@@ -268,7 +268,7 @@ class MarkdownTest extends TestCase
         $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "\">forum newbie</a>~", $input);
 
         $title = 'Kim jesteśmy?';
-        $path = '/Kim_jesteśmy';
+        $path = 'Kim_jesteśmy';
 
         $this->createPage($title, $path);
 
@@ -277,6 +277,14 @@ class MarkdownTest extends TestCase
 
         $input = $this->markdown->parse('[[Foo Bar]]');
         $this->assertMatchesRegularExpression('~<a class="link-broken" href="Create/Foo_Bar" title="Dokument nie istnieje">Foo Bar</a>~', $input);
+
+        $path = 'Pomoc/Konto/Czy_muszę_utworzyć_konto';
+        $title = 'Czy muszę utworzyć konto?';
+
+        $this->createPage($title, $path);
+
+        $input = $this->markdown->parse('[[Pomoc/Konto/Czy muszę utworzyć konto?]]');
+        $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "\">" . preg_quote($title) . "</a>~", $input);
     }
 
     private function createPage($title, $path)
