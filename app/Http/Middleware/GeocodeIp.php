@@ -26,8 +26,14 @@ class GeocodeIp
                 ])
             ]);
         } else {
-            $geoIp = app('geo-ip');
-            $result = $geoIp->ip($request->ip());
+            $result = null;
+
+            try {
+                $geoIp = app('geo-ip');
+                $result = $geoIp->ip($request->ip());
+            } catch (\Exception $exception) {
+                logger()->error($exception);
+            }
 
             $request->attributes->add(['geocode' => is_array($result) ? new Location($result) : new Location()]);
         }
