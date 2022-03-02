@@ -42,7 +42,7 @@ class WikiLinksInlineParser implements InlineParserInterface
         $title = ltrim($title, '|');
         $path = trim($path, '/?&[');
 
-        $pathSlug = str_replace(' ', '_', $path);
+        $pathSlug = '/' . str_replace(' ', '_', $path);
         $hash = $this->getHashFromPath($pathSlug);
 
         $page = $this->getPath($pathSlug);
@@ -50,7 +50,8 @@ class WikiLinksInlineParser implements InlineParserInterface
         if ($page) {
             $link = new Link($page->path . ($hash ? '#' . $hash : ''), $title ?: $page->title);
         } else {
-            $link = new Link('Create/' . $pathSlug, $title ?: $path, 'Dokument nie istnieje');
+
+            $link = new Link('Create' . $pathSlug, $title ?: $this->getTitleFromPath($path), 'Dokument nie istnieje');
             $link->data->set('attributes/class', 'link-broken');
         }
 
@@ -76,5 +77,10 @@ class WikiLinksInlineParser implements InlineParserInterface
         }
 
         return $hash;
+    }
+
+    private function getTitleFromPath(string $path): string
+    {
+        return str_replace('_', ' ', array_last(explode('/', $path)));
     }
 }
