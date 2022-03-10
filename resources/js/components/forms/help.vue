@@ -1,7 +1,7 @@
 <template>
   <div class="markdown-help">
     <div class="card card-info">
-      <div class="card-header">Pomoc <span class="card-version">1.10.26</span></div>
+      <div class="card-header">Pomoc <span class="card-version">1.10.29</span></div>
       <div class="card-body">
         <div class="row">
           <div class="col-md-6">
@@ -22,7 +22,6 @@
               nie zawiera specjalnej składni dla podkreślenia. Dlatego by dodać
               podkreślenie, użyj <code>&lt;u&gt;underline&lt;/u&gt;</code>.
             </p>
-
             <p>
               Komendy formatujące reagują na skróty klawiszowe: <kbd>Ctrl+B</kbd>,
               <kbd>Ctrl+I</kbd>, <kbd>Ctrl+U</kbd> oraz <kbd>Ctrl+S</kbd>.
