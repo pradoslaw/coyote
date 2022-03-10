@@ -6,11 +6,24 @@ use TRegx\CleanRegex\Pattern;
 
 class Prism implements ParserInterface
 {
-    const ALIAS = ['c#' => 'csharp', 'delphi' => 'pascal', 'asm' => 'asm6502', 'bf' => 'brainfuck', 'jquery' => 'javascript', 'vb' => 'visual-basic'];
+    const ALIAS = [
+        '.net'   => 'dotnet',
+        'asm'    => 'asm6502',
+        'bf'     => 'brainfuck',
+        'bat'    => 'batch',
+        'clj'    => 'clojure',
+        'c++'    => 'cpp',
+        'c#'     => 'csharp',
+        'f#'     => 'fsharp',
+        'delphi' => 'objectpascal',
+        'sh'     => 'shell',
+        'ps'     => 'powershell',
+        'rs'     => 'rust',
+    ];
 
     public function parse(string $text): string
     {
-        $pattern = Pattern::of('<pre><code class="([a-z\d#-]+)">(.+?)</code></pre>', 's');
+        $pattern = Pattern::of('<pre><code class="([a-z\d#.+-]+)">(.+?)</code></pre>', 's');
 
         foreach ($pattern->match($text) as $match) {
             $class = $originalClass = $match->get(1);
