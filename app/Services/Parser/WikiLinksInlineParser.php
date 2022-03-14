@@ -50,7 +50,6 @@ class WikiLinksInlineParser implements InlineParserInterface
         if ($page) {
             $link = new Link($page->path . ($hash ? '#' . $hash : ''), $title ?: $page->title);
         } else {
-
             $link = new Link('Create' . $pathSlug, $title ?: $this->getTitleFromPath($path), 'Dokument nie istnieje');
             $link->data->set('attributes/class', 'link-broken');
         }
