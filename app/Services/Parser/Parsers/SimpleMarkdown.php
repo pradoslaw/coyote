@@ -8,6 +8,7 @@ use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\Autolink\AutolinkExtension;
 use League\CommonMark\Extension\InlinesOnly\InlinesOnlyExtension;
 use League\CommonMark\Extension\Mention\MentionExtension;
+use League\CommonMark\Extension\Strikethrough\StrikethroughExtension;
 use League\CommonMark\MarkdownConverter;
 
 /**
@@ -22,6 +23,7 @@ class SimpleMarkdown extends Markdown
     {
         $environment = new Environment(array_merge($this->defaultConfig(), $this->config));
         $environment->addExtension(new InlinesOnlyExtension());
+        $environment->addExtension(new StrikethroughExtension());
         $environment->addExtension(new MentionExtension());
         $environment->addExtension(new AutolinkExtension());
         $environment->addExtension(new InternalLinkExtension($this->page));
