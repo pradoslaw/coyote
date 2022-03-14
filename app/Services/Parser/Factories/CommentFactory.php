@@ -19,7 +19,7 @@ class CommentFactory extends AbstractFactory
      */
     const PERMISSION = 'forum-emphasis';
 
-    protected array $htmlTags = ['b', 'strong', 'i', 'em', 'del', 'a[href|title|data-user-id|class]', 'code'];
+    protected array $htmlTags = ['b', 'strong', 'i', 'u', 'em', 'del', 'a[href|title|data-user-id|class]', 'code'];
     protected ?int $userId = null;
 
     /**
