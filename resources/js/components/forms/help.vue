@@ -1,7 +1,7 @@
 <template>
   <div class="markdown-help">
     <div class="card card-info">
-      <div class="card-header">Pomoc <span class="card-version">1.10.29</span></div>
+      <div class="card-header">Pomoc <span class="card-version">1.10.31</span></div>
       <div class="card-body">
         <div class="row">
           <div class="col-md-6">
@@ -56,8 +56,10 @@
             <p>
               Dozwolone jest używanie niektórych znaczników HTML: <code>&lt;a&gt;</code>,
               <code>&lt;b&gt;</code>, <code>&lt;i&gt;</code>, <code>&lt;kbd&gt;</code>, <code>&lt;del&gt;</code>,
-              <code>&lt;strong&gt;</code>, <code>&lt;dfn&gt;</code>, <code>&lt;pre&gt;</code>, <code>&lt;blockquote&gt;</code>,
-              <code>&lt;hr/&gt;</code>, <code>&lt;sub&gt;</code>, <code>&lt;sup&gt;</code>, <code>&lt;img/&gt;</code>.
+              <code>&lt;strong&gt;</code>, <code>&lt;dfn&gt;</code>, <code>&lt;pre&gt;</code>,
+              <code>&lt;blockquote&gt;</code>,
+              <code>&lt;hr/&gt;</code>, <code>&lt;sub&gt;</code>, <code>&lt;sup&gt;</code> oraz
+              <code>&lt;img/&gt;</code>.
             </p>
 
             <h4>Skróty klawiszowe</h4>
