@@ -3,6 +3,8 @@
 namespace Coyote\Services\Parser\Parsers;
 
 use Coyote\Repositories\Contracts\WordRepositoryInterface as WordRepository;
+use TRegx\SafeRegex\Exception\PregException;
+use TRegx\SafeRegex\preg;
 
 class Censore extends Parser implements ParserInterface
 {
@@ -27,11 +29,9 @@ class Censore extends Parser implements ParserInterface
             $words[$word] = $row->replacement;
         }
 
-        $censoredText = preg_replace(array_keys($words), array_values($words), $text);
-
-        // $censoredText can be null in case of error
-        if (is_string($censoredText)) {
-            $text = $censoredText;
+        try {
+            $text = preg::replace(array_keys($words), array_values($words), $text);
+        } catch (PregException $ignored) {
         }
 
         $text = $this->unhash($text);
