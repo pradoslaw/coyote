@@ -1,7 +1,7 @@
 <template>
   <div class="markdown-help">
     <div class="card card-info">
-      <div class="card-header">Pomoc <span class="card-version">1.11.4</span></div>
+      <div class="card-header">Pomoc <span class="card-version">1.11.5</span></div>
       <div class="card-body">
         <div class="row">
           <div class="col-md-6">
