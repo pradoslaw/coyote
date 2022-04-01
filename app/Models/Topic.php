@@ -236,7 +236,7 @@ class Topic extends Model
      */
     public function mover()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
     /**
