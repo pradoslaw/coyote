@@ -5,7 +5,7 @@
 use Faker\Generator as Faker;
 
 $factory->define(\Coyote\Tag::class, function (Faker $faker) {
-    $name = $faker->word() . $faker->randomDigitNotNull;
+    $name = $faker->word() . $faker->randomLetter;
 
     return [
         'name' => strtolower($name),
