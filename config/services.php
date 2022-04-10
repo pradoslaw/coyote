@@ -56,7 +56,7 @@ return [
     // -----------------------------------------------------------
 
     'google-maps' => [
-        'key'           => 'AIzaSyCjPih0Ay15fPj2j6KOqqNn2Af902apRz8'
+        'key'           => env('GOOGLE_MAPS_KEY')
     ],
 
     // Host and port to geo-ip.pl microservice to geocode IP and city name.
