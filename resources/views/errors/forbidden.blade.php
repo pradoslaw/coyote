@@ -45,10 +45,6 @@
                 <span>{{ $id }}</span>
             </li>
             <li>
-                <strong>IP:</strong>
-                <span>{{ $ip ?? '--' }}</span>
-            </li>
-            <li>
                 <strong>Reason:</strong>
                 <span>{{ $reason ?? '--' }}</span>
             </li>
