@@ -28,7 +28,7 @@ $this->post('mailgun/permanent-failure', 'MailgunController@permanentFailure');
 
 $this->post('github/sponsorship', 'GithubController@sponsorship');
 
-$this->post('assets', 'AssetsController@upload');
+$this->post('assets', 'AssetsController@upload')->middleware('throttle.submission:1,1');
 $this->get('assets/opg', 'AssetsController@opengraph');
 $this->get('assets/{asset}/{name}', ['uses' => 'AssetsController@download', 'as' => 'assets.download']);
 
