@@ -1,5 +1,5 @@
 <section id="box-who-is-online" class="box text-muted">
-    <h4 class="border-bottom"><i class="fas fa-users fa-fw"></i> {{ total }} użytkowników online, w tym zalogowanych: {{ registered }}, gości: {{ guests }}, botów: {{ robots }}</h4>
+    <h4 class="border-bottom"><i class="fas fa-users fa-fw"></i> {{ total }} użytkowników online, w tym zalogowanych: {{ registered }}, gości: {{ guests }}</h4>
 
     {% for name, users in groups %}
         {% if users|length > 0 %}

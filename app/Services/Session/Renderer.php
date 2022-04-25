@@ -15,7 +15,6 @@ use Illuminate\Support\Collection;
 class Renderer
 {
     const USER = 'Użytkownik';
-    const ROBOT = 'Robot';
 
     /**
      * @var Db
@@ -52,7 +51,7 @@ class Renderer
      */
     public function render($path = null)
     {
-        $groups = [self::USER => [], self::ROBOT => []];
+        $groups = [self::USER => []];
 
         $collection = $this->data($path);
 
@@ -64,19 +63,11 @@ class Renderer
         $registered = $total - $guests;
 
         // zlicza ilosc robotow na stronie
-        $robots = $collection->filter(function ($item) {
-            return $item->robot;
-        })
-        ->sum('count');
+        $robots = $collection->filter(fn ($item) => $item->robot)->sum('count');
 
         // only number of human guests
         $guests -= $robots;
-
-        foreach ($collection->keyBy('robot') as $name => $robot) {
-            if ($name) {
-                $groups[self::ROBOT][] = $name . ($robot->count > 1 ? ' (' . $robot->count . 'x)' : '');
-            }
-        }
+        $total -= $robots;
 
         $collection = $this->map($collection);
 
@@ -98,7 +89,7 @@ class Renderer
         $collection = $this->registered->setup($collection);
 
         foreach ($collection->groupBy('group') as $name => $rowset) {
-            if ($name == '') {
+            if ($name === '') {
                 $name = self::USER;
             } elseif (!isset($groups[$name])) {
                 $groups[$name] = [];
@@ -113,7 +104,7 @@ class Renderer
 
         ksort($groups);
 
-        return view('components.viewers', compact('groups', 'total', 'guests', 'registered', 'robots'));
+        return view('components.viewers', compact('groups', 'total', 'guests', 'registered'));
     }
 
     /**
@@ -124,7 +115,7 @@ class Renderer
      */
     private function data($path): Collection
     {
-        $result = $this
+        return $this
             ->db
             ->table('sessions')
             ->when($path !== null, function (Builder $builder) use ($path) {
@@ -132,8 +123,6 @@ class Renderer
             })
             ->groupBy(['user_id', 'robot'])
             ->get(['user_id', 'robot', new Expression('COUNT(*)')]);
-
-        return $result;
     }
 
     /**
