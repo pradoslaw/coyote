@@ -239,17 +239,19 @@
               </button>
             </template>
 
-            <button v-if="!post.deleted_at" @click="$emit('reply', post, false)" class="btn btn-sm btn-fast-reply" title="Dodaj cytat do pola odpowiedzi">
-              <i class="fa fa-fw fa-quote-left"></i>
-            </button>
+            <template v-if="!post.deleted_at">
+              <button @click="$emit('reply', post)" class="btn btn-sm btn-fast-reply" title="Odpowiedz na ten post">
+                <i class="fa fa-fw fa-at"></i>
+              </button>
 
-            <button v-if="!post.deleted_at" @click="$emit('reply', post)" class="btn btn-sm" title="Odpowiedz na ten post">
-              <i class="fa fa-fw fa-at"></i> <span class="d-none d-sm-inline">Odpowiedz</span>
-            </button>
+              <button @click="$emit('reply', post, false)" class="btn btn-sm" title="Dodaj cytat do pola odpowiedzi">
+                <i class="fa fa-fw fa-quote-left"></i> <span class="d-none d-sm-inline">Odpowiedz</span>
+              </button>
 
-            <a v-if="!post.deleted_at" href="javascript:" :data-metadata="post.metadata" :data-url="post.url" class="btn btn-sm">
-              <i class="fa fa-fw fa-flag"></i> <span class="d-none d-sm-inline">Zgłoś</span>
-            </a>
+              <a href="javascript:" :data-metadata="post.metadata" :data-url="post.url" class="btn btn-sm">
+                <i class="fa fa-fw fa-flag"></i> <span class="d-none d-sm-inline">Zgłoś</span>
+              </a>
+            </template>
 
             <div v-if="post.permissions.merge || post.permissions.adm_access" class="dropdown float-right">
               <button class="btn btn-sm" data-bs-toggle="dropdown">
