@@ -22,12 +22,12 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="row in rows">
+                <tr v-for="(row, key) in rows">
                     <td>${ row.id }</td>
                     <td><input type="text" v-model="row.word" class="form-control" name="word[]"></td>
                     <td><input type="text" v-model="row.replacement" class="form-control" name="replacement[]"></td>
                     <td>
-                        <button class="btn btn-sm btn-danger" @click.prevent="removeRow(row)">
+                        <button class="btn btn-sm btn-danger" @click.prevent="removeRow(key)">
                             <i class="far fa-fw fa-trash-alt"></i>
                         </button>
                     </td>
@@ -52,8 +52,8 @@
                 addRow: function() {
                     this.rows.unshift({word: "", replacement: ""});
                 },
-                removeRow: function(row) {
-                    this.rows.$remove(row);
+                removeRow: function(index) {
+                    this.rows.splice(index, 1);
                 }
             }
         });
