@@ -4,7 +4,7 @@
 /** @var $this \Illuminate\Routing\Router */
 $this->group(['namespace' => 'Microblog', 'prefix' => 'Mikroblogi', 'as' => 'microblog.'], function () {
     $this->get('/', ['uses' => 'HomeController@index', 'as' => 'home']);
-    $this->post('Edit/{microblog?}', ['uses' => 'SubmitController@save', 'as' => 'save', 'middleware' => ['auth', 'throttle.submission:1,5']]);
+    $this->post('Edit/{microblog?}', ['uses' => 'SubmitController@save', 'as' => 'save', 'middleware' => ['auth', 'throttle.submission:1,60']]);
     $this->post('Preview', ['uses' => 'SubmitController@preview', 'middleware' => 'auth']);
 
     $this->get('View/{id}', ['uses' => 'HomeController@show', 'as' => 'view']);
