@@ -59,7 +59,7 @@
       <div class="small ml-auto">
         <a href="#js-wiki-help" tabindex="-1" data-bs-toggle="collapse" class="small text-muted">
           <i class="fa fab fa-markdown"/>
-          Markdown jest obsługiwany
+          Instrukcja obsługi Markdown
         </a>
       </div>
     </div>
