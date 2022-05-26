@@ -3,6 +3,7 @@
 namespace Coyote\Services\Parser\Parsers;
 
 use Coyote\Repositories\Contracts\WordRepositoryInterface as WordRepository;
+use TRegx\CleanRegex\Pattern;
 use TRegx\SafeRegex\Exception\PregException;
 use TRegx\SafeRegex\preg;
 
@@ -20,17 +21,16 @@ class Censore extends Parser implements ParserInterface
         $text = $this->hashInline($text, 'img');
 
         if ($result === null) {
-            $result = $this->word->allWords();
-        }
-        $words = [];
+            $template = Pattern::template('(?<![\p{L}\p{N}_])@(?![\p{L}\p{N}_])', 'iu');
 
-        foreach ($result as $row) {
-            $word = '#(?<![\p{L}\p{N}_])' . str_replace('\*', '(\p{L}*?)', preg_quote($row->word)) . '(?![\p{L}\p{N}_])#iu';
-            $words[$word] = $row->replacement;
+            foreach ($this->word->allWords() as $word) {
+                $pattern = $template->mask($word->word, ['*' => '(\p{L}*?)']);
+                $result["$pattern"] = $word->replacement;
+            }
         }
 
         try {
-            $text = preg::replace(array_keys($words), array_values($words), $text);
+            $text = preg::replace(array_keys($result), array_values($result), $text);
         } catch (PregException $ignored) {
         }
 
