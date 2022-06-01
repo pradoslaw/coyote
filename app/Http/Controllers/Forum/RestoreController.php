@@ -31,20 +31,17 @@ class RestoreController extends BaseController
         if ($post->id === $post->topic->first_post_id) {
             $post->topic->restore();
 
-            event(new TopicSaved($post->topic));
-
             $object = (new Stream_Topic())->map($post->topic, $post->forum);
             $target = (new Stream_Forum())->map($post->forum);
         } else {
             $url .= '?p=' . $post->id . '#id' . $post->id;
             $post->restore();
 
-            // fire the event. add post to search engine
-            event(new PostSaved($post));
-
             $object = (new Stream_Post(['url' => $url]))->map($post);
             $target = (new Stream_Topic())->map($post->topic);
         }
+
+        event(new TopicSaved($post->topic));
 
         stream(Stream_Restore::class, $object, $target);
     }

@@ -21,6 +21,7 @@ use Coyote\Listeners\IndexCategory;
 use Coyote\Listeners\IndexStream;
 use Coyote\Listeners\LogSentMessage;
 use Coyote\Listeners\MicroblogListener;
+use Coyote\Listeners\PostListener;
 use Coyote\Listeners\SendLockoutEmail;
 use Coyote\Listeners\SendSuccessfulLoginEmail;
 use Coyote\Listeners\SetupLoginDate;
@@ -70,7 +71,8 @@ class EventServiceProvider extends ServiceProvider
         SetupWikiLinks::class,
         ActivitySubscriber::class,
         UserSubscriber::class,
-        FlagSubscriber::class
+        FlagSubscriber::class,
+        PostListener::class
     ];
 
     /**
