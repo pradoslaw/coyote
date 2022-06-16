@@ -15,8 +15,10 @@ Sentry.init({
     'Request failed with status code 500',
     'Request failed with status code 520',
     'Request failed with status code 503',
+    'Request failed with status code 502',
     'timeout of 0ms exceeded',
-    'null is not an object (evaluating \'ReaderArticleFinderJS.adoptableArticle().outerHTML\')'
+    'null is not an object (evaluating \'ReaderArticleFinderJS.adoptableArticle().outerHTML\')',
+    'Improper range'
   ],
   tracesSampleRate: 0.0,
 });
