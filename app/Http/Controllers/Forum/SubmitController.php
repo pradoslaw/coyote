@@ -110,7 +110,10 @@ class SubmitController extends BaseController
                 $topic->last_post_id = $post->id;
 
                 $post->subscribe($this->userId, true);
-                $topic->subscribe($this->userId, $this->auth->allow_subscribe);
+
+                if ($this->auth->allow_subscribe) {
+                    $topic->subscribe($this->userId, true);
+                }
             }
 
             // url to the post
