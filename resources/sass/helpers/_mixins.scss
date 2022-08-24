@@ -14,6 +14,7 @@
 @mixin link-color-darker() {
   a:not(.badge) {
     color: $link-color-darker;
+    text-decoration: underline;
   }
 }
 
