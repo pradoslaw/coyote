@@ -5,6 +5,7 @@ namespace Coyote\Http\Requests\Job;
 use Coyote\Repositories\Contracts\CouponRepositoryInterface as CouponRepository;
 use Coyote\Repositories\Contracts\PlanRepositoryInterface as PlanRepository;
 use Coyote\Rules\Base64Image;
+use Coyote\Services\Invoice\Calculator;
 use Coyote\User;
 
 class ApiRequest extends JobRequest
@@ -94,12 +95,12 @@ class ApiRequest extends JobRequest
                 return false;
             }
 
-            if ($plan->price > 0) {
-                if ($this->coupon()->findCoupon($this->user->id, $plan->price) === null) {
-                    $validator->errors()->add('plan', 'No sufficient funds to post this job offer.');
+            $calculator = new Calculator($plan->toArray());
 
-                    return false;
-                }
+            if ($calculator->netPrice() > 0 && $this->coupon()->findCoupon($this->user->id, $plan->price) === null) {
+                $validator->errors()->add('plan', 'No sufficient funds to post this job offer.');
+
+                return false;
             }
 
             return true;

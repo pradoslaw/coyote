@@ -198,4 +198,49 @@ class JobsControllerTest extends TestCase
         $this->assertEquals(422, $response->getStatusCode());
         $response->assertJsonFragment(['errors' => ['plan' => ['No sufficient funds to post this job offer.']]]);
     }
+
+    public function testSuccessfulSubmitWithFreePlan()
+    {
+        $data = [
+            'title' => $this->faker->text(60),
+            'salary_from' => 3000,
+            'salary_to' => 5000,
+            'rate' => 'weekly',
+            'currency' => 'USD',
+            'plan' => 'standard',
+            'seniority' => 'lead',
+            'employment' => 'mandatory',
+            'recruitment' => $this->faker->url,
+            'is_gross' => true,
+            'locations' => [
+                [
+                    'city' => 'Wrocław',
+                    'country' => 'Polska',
+                    'street' => 'Rynek',
+                    'street_number' => '23'
+                ]
+            ]
+        ];
+
+        $response = $this->json('POST', '/v1/jobs', $data, ['Authorization' => 'Bearer ' . $this->token, 'Accept' => 'application/json']);
+
+        $this->assertEquals(201, $response->getStatusCode());
+        $response->assertJsonFragment([
+            'title' => $data['title'],
+            'currency' => $data['currency'],
+            'salary_from' => $data['salary_from'],
+            'salary_to' => $data['salary_to'],
+            'rate' => $data['rate'],
+            'employment' => $data['employment'],
+            'seniority' => $data['seniority'],
+            'is_gross' => true,
+            'is_remote' => false
+        ]);
+
+        /** @var Job $job */
+        $job = Job::find($response->json('id'));
+
+        $payment = $job->payments->first();
+        $this->assertEquals(Payment::PAID, $payment->status_id);
+    }
 }

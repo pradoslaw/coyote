@@ -111,7 +111,7 @@ class JobsController extends Controller
             if ($job->wasRecentlyCreated || !$job->is_publish) {
                 $coupon = $repository->findCoupon($user->id, $job->plan->price);
 
-                $job->payments()->create(['plan_id' => $job->plan_id, 'days' => $job->plan->length, 'coupon_id' => $coupon->id]);
+                $job->payments()->create(['plan_id' => $job->plan_id, 'days' => $job->plan->length, 'coupon_id' => $coupon->id ?? null]);
             }
 
             event(new JobWasSaved($job)); // we don't queue listeners for this event
