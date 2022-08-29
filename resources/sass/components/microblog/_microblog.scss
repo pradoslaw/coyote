@@ -33,6 +33,10 @@
 
   @include link-color-darker;
 
+  a {
+    text-decoration: underline;
+  }
+
   p:last-child {
     margin-bottom: 0;
   }

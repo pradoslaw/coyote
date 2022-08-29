@@ -115,6 +115,10 @@
 
   @include link-color-darker;
 
+  a {
+    text-decoration: underline;
+  }
+
   > div {
     margin-top: 3px;
   }

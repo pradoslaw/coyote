@@ -38,6 +38,10 @@
 
   @include link-color-darker();
 
+  span > a {
+    text-decoration: underline;
+  }
+
   &.not-read {
     @include not-read-border;
     padding-left: 4px;

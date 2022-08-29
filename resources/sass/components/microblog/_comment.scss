@@ -48,6 +48,10 @@
     }
 
     @include link-color-darker;
+
+    a {
+      text-decoration: underline;
+    }
   }
 
   .btn-comment-submit {
