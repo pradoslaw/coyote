@@ -260,10 +260,9 @@ class PageSubscriber implements ShouldQueue
     private function deleteFromIndex(int $contentId, string $contentType)
     {
         $page = Page::where('content_id', $contentId)->where('content_type', $contentType)->first();
-        $page->delete();
 
-        dispatch(function () use ($page) {
-            (new Crawler())->delete($page);
-        });
+        (new Crawler())->delete($page);
+
+        $page->delete();
     }
 }
