@@ -18,6 +18,8 @@ use Coyote\Events\WikiSaved;
 use Coyote\Microblog;
 use Coyote\Job;
 use Coyote\Guide;
+use Coyote\Page;
+use Coyote\Services\Elasticsearch\Crawler;
 use Coyote\Services\UrlBuilder;
 use Coyote\Topic;
 use Coyote\Forum;
@@ -25,6 +27,7 @@ use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
 use Coyote\Wiki;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Contracts\Console\Kernel;
+use Illuminate\Database\Eloquent\Model;
 
 class PageSubscriber implements ShouldQueue
 {
@@ -36,22 +39,15 @@ class PageSubscriber implements ShouldQueue
     public $delay = 10;
 
     /**
-     * @var PageRepository
-     */
-    protected $page;
-
-    /**
      * @var Kernel
      */
     protected $kernel;
 
     /**
-     * @param PageRepository $page
      * @param Kernel $kernel
      */
-    public function __construct(PageRepository $page, Kernel $kernel)
+    public function __construct(Kernel $kernel)
     {
-        $this->page = $page;
         $this->kernel = $kernel;
     }
 
@@ -78,7 +74,7 @@ class PageSubscriber implements ShouldQueue
     {
         $this->purgePageViews();
 
-        $topic->page()->updateOrCreate([
+        $page = $topic->page()->updateOrCreate([
             'content_id'     => $topic->id,
             'content_type'   => Topic::class
         ], [
@@ -87,6 +83,15 @@ class PageSubscriber implements ShouldQueue
             'path'           => UrlBuilder::topic($topic),
             'allow_sitemap'  => !$topic->forum->access()->exists()
         ]);
+
+        $this->index($page);
+    }
+
+    private function index(Page | Model $page): void
+    {
+        dispatch(function () use ($page) {
+            (new Crawler())->index($page);
+        });
     }
 
     /**
@@ -94,7 +99,7 @@ class PageSubscriber implements ShouldQueue
      */
     public function onTopicDelete(TopicDeleted $event)
     {
-        $this->page->deleteByContent($event->topic['id'], Topic::class);
+        $this->deleteFromIndex($event->topic['id'], Topic::class);
     }
 
     /**
@@ -102,13 +107,15 @@ class PageSubscriber implements ShouldQueue
      */
     public function onForumSave(ForumSaved $event)
     {
-        $event->forum->page()->updateOrCreate([
+        $page = $event->forum->page()->updateOrCreate([
             'content_id'    => $event->forum->id,
             'content_type'  => Forum::class
         ], [
             'title'         => $event->forum->name,
             'path'          => UrlBuilder::forum($event->forum)
         ]);
+
+        $this->index($page);
     }
 
     /**
@@ -116,7 +123,7 @@ class PageSubscriber implements ShouldQueue
      */
     public function onForumDelete(ForumDeleted $event)
     {
-        $this->page->deleteByContent($event->forum['id'], Forum::class);
+        $this->deleteFromIndex($event->forum['id'], Forum::class);
     }
 
     /**
@@ -128,7 +135,7 @@ class PageSubscriber implements ShouldQueue
             return;
         }
 
-        $event->microblog->page()->updateOrCreate([
+        $page = $event->microblog->page()->updateOrCreate([
             'content_id'    => $event->microblog->id,
             'content_type'  => Microblog::class,
         ], [
@@ -136,6 +143,8 @@ class PageSubscriber implements ShouldQueue
             'path'          => UrlBuilder::microblog($event->microblog),
             'tags'          => $event->microblog->tags->pluck('name')
         ]);
+
+        $this->index($page);
     }
 
     /**
@@ -143,7 +152,7 @@ class PageSubscriber implements ShouldQueue
      */
     public function onMicroblogDelete(MicroblogDeleted $event)
     {
-        $this->page->deleteByContent($event->microblog['id'], Microblog::class);
+        $this->deleteFromIndex($event->microblog['id'], Microblog::class);
     }
 
     /**
@@ -153,7 +162,7 @@ class PageSubscriber implements ShouldQueue
     {
         $this->purgePageViews();
 
-        $event->job->page()->updateOrCreate([
+        $page = $event->job->page()->updateOrCreate([
             'content_id'    => $event->job->id,
             'content_type'  => Job::class,
         ], [
@@ -161,6 +170,8 @@ class PageSubscriber implements ShouldQueue
             'tags'          => $event->job->tags->pluck('name'),
             'path'          => UrlBuilder::job($event->job)
         ]);
+
+        $this->index($page);
     }
 
     /**
@@ -168,7 +179,7 @@ class PageSubscriber implements ShouldQueue
      */
     public function onJobDelete(JobDeleted $event)
     {
-        $this->page->deleteByContent($event->job['id'], Job::class);
+        $this->deleteFromIndex($event->job['id'], Job::class);
     }
 
     /**
@@ -178,13 +189,15 @@ class PageSubscriber implements ShouldQueue
     {
         $this->purgePageViews();
 
-        $event->wiki->page()->updateOrCreate([
+        $page = $event->wiki->page()->updateOrCreate([
             'content_id'    => $event->wiki->id,
             'content_type'  => Wiki::class,
         ], [
             'title'         => $event->wiki->title,
             'path'          => urldecode(UrlBuilder::wiki($event->wiki))
         ]);
+
+        $this->index($page);
     }
 
     /**
@@ -192,7 +205,7 @@ class PageSubscriber implements ShouldQueue
      */
     public function onWikiDelete(WikiDeleted $event)
     {
-        $this->page->deleteByContent($event->wiki['id'], Wiki::class);
+        $this->deleteFromIndex($event->wiki['id'], Wiki::class);
     }
 
     public function onGuideSave(GuideSaved $event)
@@ -210,7 +223,7 @@ class PageSubscriber implements ShouldQueue
 
     public function onGuideDelete(GuideDeleted $event)
     {
-        $this->page->deleteByContent($event->guide['id'], Guide::class);
+        $this->deleteFromIndex($event->guide['id'], Guide::class);
     }
 
     /**
@@ -243,5 +256,15 @@ class PageSubscriber implements ShouldQueue
         if (!app()->environment('local', 'dev')) {
             $this->kernel->call('coyote:counter');
         }
+    }
+
+    private function deleteFromIndex(int $contentId, string $contentType)
+    {
+        $page = Page::where('content_id', $contentId)->where('content_type', $contentType)->first();
+        $page->delete();
+
+        dispatch(function () use ($page) {
+            (new Crawler())->delete($page);
+        });
     }
 }

@@ -11,13 +11,6 @@ interface PageRepositoryInterface extends RepositoryInterface
     public function findByPath($path);
 
     /**
-     * @param $id
-     * @param $content
-     * @return mixed
-     */
-    public function deleteByContent($id, $content);
-
-    /**
      * Build query for sitemap.
      *
      * @return \Illuminate\Database\Eloquent\Builder
