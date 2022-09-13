@@ -23,7 +23,6 @@ use Coyote\Services\Elasticsearch\Crawler;
 use Coyote\Services\UrlBuilder;
 use Coyote\Topic;
 use Coyote\Forum;
-use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
 use Coyote\Wiki;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Contracts\Console\Kernel;
