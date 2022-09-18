@@ -151,6 +151,10 @@ class PageSubscriber implements ShouldQueue
      */
     public function onMicroblogDelete(MicroblogDeleted $event)
     {
+        if ($event->microblog['parent_id']) {
+            return;
+        }
+
         $this->deleteFromIndex($event->microblog['id'], Microblog::class);
     }
 
