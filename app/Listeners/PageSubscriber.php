@@ -265,6 +265,10 @@ class PageSubscriber implements ShouldQueue
     {
         $page = Page::where('content_id', $contentId)->where('content_type', $contentType)->first();
 
+        if (!$page) {
+            return; // somehow, record does not exist
+        }
+
         (new Crawler())->delete($page);
 
         $page->delete();

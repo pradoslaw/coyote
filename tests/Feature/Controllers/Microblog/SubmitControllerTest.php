@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Controllers\Microblog;
 
+use Coyote\Events\MicroblogSaved;
 use Coyote\Microblog;
 use Coyote\Notifications\Microblog\DeletedNotification;
 use Coyote\Tag;
@@ -107,6 +108,10 @@ class SubmitControllerTest extends TestCase
     {
         $microblog = factory(Microblog::class)->create();
         $user = factory(User::class)->state('admin')->create();
+
+        event(new MicroblogSaved($microblog));
+
+        $this->assertDatabaseHas('pages', ['content_id' => $microblog->id, 'content_type' => Microblog::class]);
 
         Notification::fake();
 
