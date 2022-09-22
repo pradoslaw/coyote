@@ -11,7 +11,7 @@
     "@babel/runtime": "^7.15.4",
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@popperjs/core": "^2.10.2",
-    "@riddled/4play": "1.12.1",
+    "@riddled/4play": "1.12.2",
     "@sentry/browser": "^6.16.1",
     "@sentry/webpack-plugin": "^1.18.3",
     "@tinymce/tinymce-vue": "^3.0.1",

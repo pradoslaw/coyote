@@ -1351,7 +1351,15 @@
   dependencies:
     "@lezer/common" "^1.0.0"
 
-"@lezer/markdown@1.0.1", "@lezer/markdown@^1.0.0":
+"@lezer/markdown@1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@lezer/markdown/-/markdown-1.0.2.tgz#8c804a9f6fe1ccca4a20acd2fd9fbe0fae1ae178"
+  integrity sha512-8CY0OoZ6V5EzPjSPeJ4KLVbtXdLBd8V6sRCooN5kHnO28ytreEGTyrtU/zUwo/XLRzGr/e1g44KlzKi3yWGB5A==
+  dependencies:
+    "@lezer/common" "^1.0.0"
+    "@lezer/highlight" "^1.0.0"
+
+"@lezer/markdown@^1.0.0":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@lezer/markdown/-/markdown-1.0.1.tgz#ea4f50dc4b94a54d2cdae27c34d5cebb6b723f33"
   integrity sha512-LlpNWLqes3XQvd8TwpJTHf9ENl4fI6H32xQkMgltUITFMMdQpOASXQtDawWR03yS6hskh4bkhATQbgjdGMoUvA==
@@ -1364,10 +1372,10 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.2.tgz#830beaec4b4091a9e9398ac50f865ddea52186b9"
   integrity sha512-92FRmppjjqz29VMJ2dn+xdyXZBrMlE42AV6Kq6BwjWV7CNUW1hs2FtxSNLQE+gJhaZ6AAmYuO9y8dshhcBl7vA==
 
-"@riddled/4play@1.12.1":
-  version "1.12.1"
-  resolved "https://registry.yarnpkg.com/@riddled/4play/-/4play-1.12.1.tgz#954072597067b29223ccd39e730447a0f7870e3b"
-  integrity sha512-VyyMATjWATVNEzIBp8xT6/P9xngbasvrmwg3TRrt0w085P4Yh0KTYuEK9bQK/x6YzfCToKKzZvNzl1FQcdum/Q==
+"@riddled/4play@1.12.2":
+  version "1.12.2"
+  resolved "https://registry.yarnpkg.com/@riddled/4play/-/4play-1.12.2.tgz#b8d56e7e46b0d4cd9617ec9ad67282520fcccb27"
+  integrity sha512-uL39N1oGABgdnqZU31YAGOqhuNACLCNszYITnDEXMx4EcAzw5mXPm/SSgV2nZYWmBewJcPW1QYoG5XRGAXidzg==
   dependencies:
     "@codemirror/autocomplete" "6.2.0"
     "@codemirror/commands" "6.1.0"
@@ -1376,7 +1384,7 @@
     "@codemirror/state" "6.1.1"
     "@codemirror/view" "6.2.3"
     "@lezer/highlight" "1.0.0"
-    "@lezer/markdown" "1.0.1"
+    "@lezer/markdown" "1.0.2"
 
 "@sentry/browser@^6.16.1":
   version "6.17.4"
