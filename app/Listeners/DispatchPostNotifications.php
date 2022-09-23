@@ -8,6 +8,7 @@ use Coyote\Notifications\Post\SubmittedNotification;
 use Coyote\Notifications\Post\UserMentionedNotification;
 use Coyote\Post;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
+use Coyote\Reputation;
 use Coyote\Services\Parser\Helpers\Login as LoginHelper;
 use Coyote\User;
 use Illuminate\Contracts\Notifications\Dispatcher;
@@ -92,6 +93,10 @@ class DispatchPostNotifications implements ShouldQueue
     {
         // get id of users that were mentioned in the text
         $usersId = (new LoginHelper())->grab($post->html);
+
+        if ($post->user->reputation < Reputation::USER_MENTION) {
+            return;
+        }
 
         if (!empty($usersId)) {
             $this->dispatcher->send(
