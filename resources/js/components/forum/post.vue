@@ -220,7 +220,7 @@
               <i class="fas fa-fw fa-share-alt"></i> <span class="d-none d-sm-inline">Udostępnij</span>
             </button>
 
-            <button @click="checkAuth(comment)" class="btn btn-sm">
+            <button v-if="!post.is_locked || post.permissions.write" @click="checkAuth(comment)" class="btn btn-sm">
               <i :class="{'fas text-primary': isCommenting, 'far': !isCommenting}" class="fa-fw fa-comment"></i> <span class="d-none d-sm-inline">Komentuj</span>
             </button>
           </div>
