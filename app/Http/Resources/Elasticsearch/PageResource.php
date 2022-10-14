@@ -19,7 +19,7 @@ class PageResource extends ElasticsearchResource
         return array_merge(
             $this->resource->only(['id', 'title', 'path']),
             [
-                $this->mergeWhen($this->content_type === Topic::class, fn () => [
+                $this->mergeWhen($this->content_type === Topic::class && $this->content?->forum, fn () => [
                     'forum' => ['is_prohibited' => $this->content->forum->is_prohibited]
                 ])
             ]
