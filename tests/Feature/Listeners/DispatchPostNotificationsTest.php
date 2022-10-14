@@ -94,6 +94,9 @@ class DispatchPostNotificationsTest extends TestCase
 
         $post = factory(Post::class)->state('user')->create(['text' => "Hello @{{$user->name}}", 'topic_id' => $this->topic->id, 'forum_id' => $this->forum->id]);
 
+        $post->user->reputation = 11;
+        $post->user->save();
+
         event(new PostSaved($post));
 
         Notification::assertSentTo($user, UserMentionedNotification::class);

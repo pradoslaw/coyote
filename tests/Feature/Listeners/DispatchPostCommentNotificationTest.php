@@ -54,6 +54,9 @@ class DispatchPostCommentNotificationTest extends TestCase
 
         $comment = factory(Comment::class)->create(['user_id' => $user->id, 'post_id' => $this->topic->firstPost->id, 'text' => "Hello @{{$subscriber->name}}"]);
 
+        $comment->user->reputation = 11;
+        $comment->user->save();
+
         event(new CommentSaved($comment));
 
         Notification::assertSentTo($subscriber, UserMentionedNotification::class);

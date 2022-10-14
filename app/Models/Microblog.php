@@ -180,7 +180,7 @@ class Microblog extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class)->select(['id', 'name', 'deleted_at', 'is_blocked', 'photo', 'is_online'])->withTrashed();
+        return $this->belongsTo(User::class)->select(['id', 'name', 'deleted_at', 'is_blocked', 'photo', 'is_online', 'reputation'])->withTrashed();
     }
 
     public function scopeIncludeIsSubscribed(Builder $builder, int $userId): Builder
