@@ -143,6 +143,12 @@
   table {
     @extend .table-responsive-sm;
   }
+
+  blockquote {
+    img {
+      opacity: 35%;
+    }
+  }
 }
 
 .edit-info {
