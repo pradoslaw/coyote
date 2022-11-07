@@ -86,6 +86,9 @@ class DispatchMicroblogNotificationsTest extends TestCase
         $microblog = factory(Microblog::class)->create(['text' => "Hello @{{$user->name}}"]);
         $microblog->wasRecentlyCreated = true;
 
+        $microblog->user->reputation = 11;
+        $microblog->user->save();
+
         event(new MicroblogSaved($microblog));
 
         Notification::assertSentTo($user, function (UserMentionedNotification $notification, $channels) use ($microblog) {

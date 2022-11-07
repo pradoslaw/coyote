@@ -8,6 +8,7 @@ use Coyote\Notifications\Microblog\CommentedNotification;
 use Coyote\Notifications\Microblog\SubmittedNotification;
 use Coyote\Notifications\Microblog\UserMentionedNotification;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
+use Coyote\Reputation;
 use Coyote\Services\Parser\Helpers\Login as LoginHelper;
 use Illuminate\Contracts\Notifications\Dispatcher;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -85,6 +86,10 @@ class DispatchMicroblogNotifications implements ShouldQueue
         $helper = new LoginHelper();
         // get id of users that were mentioned in the text
         $usersId = $helper->grab($microblog->html);
+
+        if ($microblog->user->reputation < Reputation::USER_MENTION) {
+            return;
+        }
 
         if (!empty($usersId)) {
             $this->dispatcher->send(

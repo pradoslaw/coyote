@@ -17,7 +17,7 @@ class GithubController extends Controller
 
         abort_unless($this->verify($request->header('X-Hub-Signature-256'), $request->getContent()), 403);
 
-        $sponsorship = $request->input('action') === 'created' ? true : ($request->input('action') === self::CANCELLED ? false : null);
+        $sponsorship = $request->input('action') === 'created';
 
         $repository->sponsorship($sponsorship, $request->input('sender.id'), $request->input('sender.html_url'));
     }
