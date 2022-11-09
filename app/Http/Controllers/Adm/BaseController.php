@@ -53,7 +53,6 @@ class BaseController extends Controller
 
             $menu->add('Faktury i płatności', ['route' => 'adm.payments'])->prepend($fa('fa-shopping-cart fa-fw'))->data('permission', 'adm-payment');
             $menu->add('Tagi', ['route' => 'adm.tags'])->prepend($fa('fa-tag fa-fw'));
-            $menu->add('Mailing', ['route' => 'adm.mailing'])->prepend($fa('fa-envelope fa-fw'));
         })
         ->filter(function ($item) {
             if ($item->data('permission')) {
