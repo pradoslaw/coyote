@@ -146,11 +146,11 @@
 
   blockquote {
     img {
-      opacity: 35%;
+      opacity: 0.35;
     }
 
-    pre.line-numbers {
-      opacity: 50%;
+    pre {
+      opacity: 0.5;
     }
   }
 }
