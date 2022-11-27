@@ -64,17 +64,13 @@
 
             <h4>Skróty klawiszowe</h4>
             <p>
-              Reprezentuj kombinacje klawiszowe używając taga <code>&lt;kbd&gt;</code>. Oddziel
-              klawisze w kombinacji plusem, oraz kombinacje klawiszy od siebie przecinkiem.
-            </p>
-            <p>
               Dodaj kombinację klawiszy komendą notacji klawiszy <i class="fas fa-keyboard"></i>
               lub skrótem klawiszowym <kbd>Alt+K</kbd>.
             </p>
-            <blockquote>
-              W Visual Studio, do przesunięcia linijki użyj code użyj skrótu
-              <code>&lt;kbd&gt;Ctrl+K,Ctrl+D&lt;/kbd&gt;</code>.
-            </blockquote>
+            <p>
+              Reprezentuj kombinacje klawiszowe używając taga <code>&lt;kbd&gt;</code>. Oddziel
+              od siebie klawisze znakiem plus, np <code>&lt;kbd&gt;Alt+Tab&lt;/kbd&gt;</code>.
+            </p>
 
             <h4>Indeks górny oraz dolny</h4>
             <p>
