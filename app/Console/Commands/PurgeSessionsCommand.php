@@ -12,6 +12,8 @@ use Coyote\Session;
 use Illuminate\Console\Command;
 use Illuminate\Database\Connection as Db;
 
+ini_set('memory_limit', '3G');
+
 class PurgeSessionsCommand extends Command
 {
     /**
