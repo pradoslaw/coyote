@@ -117,6 +117,11 @@
 
   a {
     text-decoration: underline;
+    font-weight: normal;
+
+    &.mention {
+      font-weight: bold;
+    }
   }
 
   > div {
