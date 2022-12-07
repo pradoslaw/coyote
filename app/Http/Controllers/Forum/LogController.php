@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Post;
+use Coyote\Services\Parser\Parsers\HtmlEntities;
 use Coyote\Services\UrlBuilder;
 
 class LogController extends BaseController
@@ -25,7 +26,13 @@ class LogController extends BaseController
             'Historia posta' => route('forum.post.log', [$post->id])
         ]);
 
-        $logs = $this->post->history($post->id);
+        $parser = new HtmlEntities();
+
+        $logs = $this->post->history($post->id)->map(function (Post\Log $post) use ($parser) {
+            $post->text = $parser->parse($post->text);
+
+            return $post;
+        });
 
         return $this->view('forum.log')->with(compact('logs', 'post', 'forum', 'topic'));
     }
