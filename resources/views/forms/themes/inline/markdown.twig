@@ -1,0 +1,29 @@
+<div role="tabpanel" class="tab-pane active" id="markdown">
+  <div class="editor-4play" id="editor">
+  </div>
+
+  name:{{ name }}
+  value:{{ value }}
+</div>
+
+{% block body %}
+  <script>
+      $(function () {
+          const {Editor4Play} = riddled_4play;
+
+          const editor = new Editor4Play(
+              document.getElementById('editor'),
+              'Kliknij, aby dodać treść...',
+              'this is some initial value',
+              {
+                  onChange: this.onInput,
+                  onSubmit: this.onSubmit,
+                  onCancel: this.onCancel,
+                  onStateChange: this.onStateChange
+              },
+              username => this.autocompleteSource(username),
+              'Brak oznacznika'
+          );
+      });
+  </script>
+{% endblock %}

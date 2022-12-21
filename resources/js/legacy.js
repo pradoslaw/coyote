@@ -4,4 +4,5 @@ import './legacy/fast-submit';
 // import './legacy/upload';
 import './legacy/input-focus';
 import './legacy/escape';
-import './legacy/wikieditor';
+import './legacy/riddled_4play.4cb8ede83122925b7e42';
+//import './legacy/wikieditor';

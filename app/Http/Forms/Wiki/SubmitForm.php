@@ -76,17 +76,8 @@ class SubmitForm extends Form
                     'rows' => 3
                 ]
             ])
-            ->add('text', 'textarea', [
-                'rules' => 'string',
-                'template' => 'textarea',
-                'attr' => [
-                    'data-paste-url' => ''
-                ],
-                'row_attr' => [
-                    'role' => 'tabpanel',
-                    'class' => 'tab-pane active',
-                    'id' => 'body'
-                ]
+            ->add('text', 'markdown', [
+                'template' => 'markdown',
             ])
             ->add('comment', 'text', [
                 'rules' => 'nullable|string|max:255',
