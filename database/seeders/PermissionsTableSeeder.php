@@ -129,6 +129,18 @@ class PermissionsTableSeeder extends Seeder
             'default' => false
         ]);
 
+        $this->db->table('permissions')->insert([
+            'name' => 'comment-delete',
+            'description' => 'Usuwanie komentarzy',
+            'default' => false
+        ]);
+
+        $this->db->table('permissions')->insert([
+            'name' => 'comment-update',
+            'description' => 'Edycja komentarzy',
+            'default' => false
+        ]);
+
         $group = \Coyote\Group::where('name', 'Administrator')->first();
         $this->db->table('group_permissions')->where('group_id', '=', $group->id)->update(['value' => true]);
     }
