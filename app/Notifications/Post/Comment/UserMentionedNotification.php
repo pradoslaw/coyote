@@ -22,7 +22,7 @@ class UserMentionedNotification extends CommentedNotification
                 sprintf(
                     '<strong>%s</strong> wspomniał o Tobie w komentarzu do posta w wątku: <strong>%s</strong>',
                     $this->notifier->name,
-                    $this->post->topic->title
+                    htmlentities($this->post->topic->title)
                 )
             )
             ->line('<hr>')

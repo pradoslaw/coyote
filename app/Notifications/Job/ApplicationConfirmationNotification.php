@@ -32,11 +32,11 @@ class ApplicationConfirmationNotification extends Notification implements Should
     {
         return (new MailMessage)
             ->greeting($application->name)
-            ->subject(sprintf('Potwierdzenie udziału w rekrutacji na stanowisko %s', $application->job->title))
+            ->subject(sprintf('Potwierdzenie udziału w rekrutacji na stanowisko %s', htmlentities($application->job->title)))
             ->line(
                 sprintf(
                     'Dziękujemy za udział w rekrutacji na stanowisko <b>%s</b>.',
-                    link_to_route('job.offer', $application->job->title, [$application->job->id, $application->job->slug])
+                    link_to_route('job.offer', htmlentities($application->job->title), [$application->job->id, $application->job->slug])
                 )
             )
             ->line(

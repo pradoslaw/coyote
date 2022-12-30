@@ -46,7 +46,7 @@ class ExpiredNotification extends Notification
             ->line(
                 sprintf(
                     'Twoje ogłoszenie <b>%s</b> zostało zakończone i nie jest już wyświetlane w serwisie <b>%s<b>',
-                    link_to_route('job.offer', $this->job->title, [$this->job->id, $this->job->slug]),
+                    link_to_route('job.offer', htmlentities($this->job->title), [$this->job->id, $this->job->slug]),
                     config('app.name')
                 )
             );

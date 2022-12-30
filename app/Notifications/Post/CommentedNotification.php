@@ -57,7 +57,7 @@ class CommentedNotification extends AbstractNotification implements ShouldQueue
                 sprintf(
                     '<strong>%s</strong> dodał komentarz do posta w wątku: <strong>%s</strong>',
                     $this->notifier->name,
-                    $this->post->topic->title
+                    htmlentities($this->post->topic->title)
                 )
             )
             ->line('<hr>')

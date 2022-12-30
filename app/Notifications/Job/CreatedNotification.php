@@ -110,7 +110,7 @@ class CreatedNotification extends Notification implements ShouldQueue
             ->line(
                 sprintf(
                     'Ogłoszenie %s zostało dodane i czeka dokonanie opłaty w kwocie %s zł.',
-                    link_to(UrlBuilder::job($this->job), $this->job->title),
+                    link_to(UrlBuilder::job($this->job), htmlentities($this->job->title)),
                     $this->calculator->netPrice()
                 )
             )

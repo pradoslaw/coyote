@@ -27,7 +27,7 @@ class SubmittedNotification extends AbstractNotification implements ShouldQueue
                 sprintf(
                     '<strong>%s</strong> dodał nowy post w wątku: <strong>%s</strong>',
                     $this->getSender(),
-                    $this->post->topic->title
+                    htmlentities($this->post->topic->title)
                 )
             )
             ->line('<hr>')

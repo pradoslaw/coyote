@@ -18,7 +18,7 @@ class AcceptedNotification extends AbstractNotification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject($this->getMailSubject())
-            ->line(sprintf('%s zaakceptował Twój post w wątku <b>%s</b>', $this->notifier->name, $this->post->topic->title))
+            ->line(sprintf('%s zaakceptował Twój post w wątku <b>%s</b>', $this->notifier->name, htmlentities($this->post->topic->title)))
             ->action('Zobacz post', url($this->redirectionUrl()));
     }
 

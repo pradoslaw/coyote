@@ -58,8 +58,8 @@ class SubjectChangedNotification extends AbstractNotification
             ->subject($this->getMailSubject())
             ->view('emails.notifications.topic.subject', [
                 'sender'        => $this->notifier->name,
-                'title'         => link_to($this->redirectionUrl(), $this->topic->title),
-                'original'      => $this->originalSubject
+                'title'         => link_to($this->redirectionUrl(), htmlentities($this->topic->title)),
+                'original'      => htmlentities($this->originalSubject)
             ]);
     }
 

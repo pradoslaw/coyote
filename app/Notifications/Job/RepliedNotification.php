@@ -36,7 +36,7 @@ class RepliedNotification extends Notification
             ->line(
                 sprintf(
                     'Udzielono odpowiedzi na Twój komentarz na stronie <strong>%s</strong>.',
-                    link_to($url, $this->comment->resource->title)
+                    link_to($url, htmlentities($this->comment->resource->title))
                 )
             )
             ->action('Kliknij, aby ją zobaczyć', "$url#comment-$this->comment->id");

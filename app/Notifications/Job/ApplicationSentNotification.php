@@ -46,7 +46,7 @@ class ApplicationSentNotification extends Notification implements ShouldQueue, N
     public function toMail(Job $job)
     {
         $message = (new MailMessage())
-            ->subject(sprintf('[%s] %s', $this->application->name, $job->title))
+            ->subject(sprintf('[%s] %s', $this->application->name, htmlentities($job->title)))
             ->replyTo($this->application->email, $this->application->name)
             ->view('emails.job.application', [
                 'application' => $this->application->toArray(),

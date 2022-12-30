@@ -83,7 +83,7 @@ class CommentedNotification extends Notification implements ShouldQueue, ShouldB
             ->line(
                 sprintf(
                     'Na stronie <b>%s</b> dodany został nowy komentarz.',
-                    link_to(UrlBuilder::url($this->comment->resource), $this->comment->resource->title)
+                    link_to(UrlBuilder::url($this->comment->resource), htmlentities($this->comment->resource->title))
                 )
             )
             ->action(

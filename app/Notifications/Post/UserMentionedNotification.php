@@ -21,7 +21,7 @@ class UserMentionedNotification extends SubmittedNotification
                 sprintf(
                     '<strong>%s</strong> wspomniał o Tobie w poście w wątku: <strong>%s</strong>',
                     $this->getSender(),
-                    $this->post->topic->title
+                    htmlentities($this->post->topic->title)
                 )
             )
             ->line('<hr>')

@@ -89,7 +89,7 @@ class DeletedNotification extends AbstractNotification implements ShouldQueue
                 sprintf(
                     '<strong>%s</strong> usunał post w wątku: <strong>%s</strong> z powodu: %s.',
                     $this->notifier->name,
-                    $this->post->topic->title,
+                    htmlentities($this->post->topic->title),
                     $this->getReasonName()
                 )
             )
