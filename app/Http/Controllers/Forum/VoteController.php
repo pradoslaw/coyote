@@ -39,6 +39,10 @@ class VoteController extends BaseController
             throw new AuthorizationException('Forum jest zablokowane.');
         }
 
+        if (!$this->auth->is_confirm) {
+            throw new AuthorizationException('Nie możesz oddać głosu na ten post ponieważ nie potwierdziłeś adresu e-mail. <a href="/Confirm">Kliknij, aby zrobić to teraz.</a>.');
+        }
+
         $this->transaction(function () use ($post, $topic, $forum) {
             $vote = $post->votes()->forUser($this->userId)->first();
 

@@ -43,6 +43,10 @@ class VoteController extends Controller
             throw new AuthenticationException('Musisz być zalogowany, aby oddać ten głos.');
         }
 
+        if (!$this->auth->is_confirm) {
+            throw new AuthorizationException('Nie możesz oddać głosu na ten wpis ponieważ nie potwierdziłeś adresu e-mail. <a href="/Confirm">Kliknij, aby zrobić to teraz.</a>.');
+        }
+
         // throw error if parent entry was removed
         abort_if($microblog->parent_id && !$microblog->parent, 404);
 
