@@ -99,7 +99,7 @@ class Block extends Twig_Extension
         }
 
         /** @var Banner $banner */
-        $banner = $campaign->banners->first();
+        $banner = $campaign->banners->random()->first();
 
         if (!$banner) {
             return '';
