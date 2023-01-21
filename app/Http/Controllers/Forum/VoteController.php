@@ -32,7 +32,9 @@ class VoteController extends BaseController
                 throw new AuthorizationException('Nie możesz głosować na wpisy swojego autorstwa.');
             }
             if ($user->reputation < Reputation::VOTE) {
-                throw new AuthorizationException('Nie możesz jeszcze oddawać głosów na wpisy innych.');
+                if ($post->topic->firstPost->user_id !== $this->userId) {
+                    throw new AuthorizationException('Nie możesz jeszcze oddawać głosów na wpisy innych.');
+                }
             }
         }
 
