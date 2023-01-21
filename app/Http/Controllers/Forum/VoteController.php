@@ -5,6 +5,7 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Events\PostVoted;
 use Coyote\Notifications\Post\VotedNotification;
 use Coyote\Post;
+use Coyote\Reputation;
 use Coyote\Services\Stream\Activities\Vote as Stream_Vote;
 use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Services\Stream\Objects\Post as Stream_Post;
@@ -25,8 +26,14 @@ class VoteController extends BaseController
             throw new AuthenticationException('Musisz być zalogowany, aby oddać ten głos.');
         }
 
-        if (!config('app.debug') && auth()->user()->id === $post->user_id) {
-            throw new AuthorizationException('Nie możesz głosować na wpisy swojego autorstwa.');
+        if (!config('app.debug')) {
+            $user = auth()->user();
+            if ($user->id === $post->user_id) {
+                throw new AuthorizationException('Nie możesz głosować na wpisy swojego autorstwa.');
+            }
+            if ($user->reputation < Reputation::VOTE) {
+                throw new AuthorizationException('Nie możesz jeszcze oddawać głosów na wpisy innych.');
+            }
         }
 
         $topic = $post->topic;

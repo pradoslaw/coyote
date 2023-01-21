@@ -7,6 +7,7 @@ use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Resources\MicroblogResource;
 use Coyote\Microblog;
 use Coyote\Notifications\Microblog\VotedNotification;
+use Coyote\Reputation;
 use Coyote\Services\UrlBuilder;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
@@ -53,8 +54,13 @@ class VoteController extends Controller
         /** @var \Coyote\Microblog\Vote $vote */
         $vote = $microblog->voters()->forUser($this->userId)->first();
 
-        if (!config('app.debug') && $this->userId === $microblog->user_id) {
-            throw new AuthorizationException('Nie możesz głosować na wpisy swojego autorstwa.');
+        if (!config('app.debug')) {
+            if ($this->userId === $microblog->user_id) {
+                throw new AuthorizationException('Nie możesz głosować na wpisy swojego autorstwa.');
+            }
+            if ($this->auth->reputation < Reputation::VOTE) {
+                throw new AuthorizationException('Nie możesz jeszcze oddawać głosów na wpisy innych.');
+            }
         }
 
         $vote = $this->transaction(function () use ($vote, $microblog, $request) {

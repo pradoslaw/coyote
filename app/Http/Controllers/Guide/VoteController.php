@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Guide;
 
 use Coyote\Guide;
 use Coyote\Http\Controllers\Controller;
+use Coyote\Reputation;
 use Coyote\Services\UrlBuilder;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
@@ -17,8 +18,13 @@ class VoteController extends Controller
         /** @var \Coyote\Guide\Vote|null $vote */
         $vote = $guide->voters()->forUser($this->userId)->first();
 
-        if (!config('app.debug') && $this->userId === $guide->user_id) {
-            throw new AuthorizationException('Nie możesz głosować na wpisy swojego autorstwa.');
+        if (!config('app.debug')) {
+            if ($this->userId === $guide->user_id) {
+                throw new AuthorizationException('Nie możesz głosować na wpisy swojego autorstwa.');
+            }
+            if ($this->auth->reputation < Reputation::VOTE) {
+                throw new AuthorizationException('Nie możesz jeszcze oddawać głosów na wpisy innych.');
+            }
         }
 
         $this->transaction(function () use ($vote, $guide, $request) {

@@ -18,6 +18,7 @@ class Reputation extends Model
 
     const CHINESE      = 1;
     const USER_MENTION = 10;
+    const VOTE         = 25;
     const PROFILE_LINK = 50;
     const SIG_LINK     = 50;
     const CREATE_TAGS  = 300;
