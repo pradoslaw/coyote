@@ -24,6 +24,7 @@ class VoteControllerTest extends TestCase
         parent::setUp();
 
         $this->user = factory(User::class)->create();
+        $this->user->reputation = 25;
     }
 
     public function testFailedVote()
