@@ -157,6 +157,13 @@ export default class VueMarkdown extends Vue {
       break: 'Dodanie tutaj linku mogłoby uszkodzić składnię',
       icon: 'fa-link'
     },
+    code: {
+      click: this.insertCode,
+      can: false,
+      title: 'Zmień zaznaczoną treść w tekst preformatowany lub dodaj pusty znacznik tekstu preformatowanego (może opisywać kod źródłowy, komunikat błędu, stack-trace, wynik działania programu itp.)',
+      break: 'Dodanie tutaj tekstu preformatowanego mogłoby uszkodzić składnię',
+      icon: 'fa-code',
+    },
     image: {
       click: this.makeImage,
       can: false,
@@ -170,13 +177,6 @@ export default class VueMarkdown extends Vue {
       title: 'Dodaj notację klawisza wprowadzonego z klawiatury',
       break: 'Dodanie tutaj znacznika klawisza mogłoby uszkodzić składnię',
       icon: 'fa-keyboard',
-    },
-    quote: {
-      click: this.insertBlockQuote,
-      can: false,
-      title: 'Zmień zaznaczenie w cytat lub dodaj cytat',
-      break: 'Dodanie tutaj cytatu mogłoby uszkodzić składnię',
-      icon: 'fa-quote-left'
     },
     listOrdered: {
       click: this.insertOrderedList,
@@ -192,12 +192,12 @@ export default class VueMarkdown extends Vue {
       break: 'Dodanie tutaj listy mogłoby uszkodzić składnię',
       icon: 'fa-list-ul'
     },
-    code: {
-      click: this.insertCode,
+    quote: {
+      click: this.insertBlockQuote,
       can: false,
-      title: 'Zmień zaznaczoną treść w kod lub dodaj pusty fragment kodu',
-      break: 'Dodanie tutaj fragmentu kodu mogłoby uszkodzić składnię',
-      icon: 'fa-code',
+      title: 'Cytuj post innego użytkownika lub zmień zaznaczenie w cytat postu',
+      break: 'Dodanie tutaj cytatu mogłoby uszkodzić składnię',
+      icon: 'fa-quote-left'
     },
     table: {
       click: this.insertTable,
