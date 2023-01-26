@@ -31,7 +31,7 @@ export default class VueEditor extends Vue {
       this.value,
       {onChange: this.input, onSubmit: this.submit, onCancel: this.cancel, onStateChange: this.state},
       username => this.autocompleteSource(username),
-      'Brak oznacznika'
+      'Zwykły tekst'
     );
   }
 
