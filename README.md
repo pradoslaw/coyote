@@ -17,7 +17,7 @@ Coyote to nazwa systemu obsługującego serwis 4programmers.net.
 2. `make up`
 3. `make install-dev`
 
-Strona jest dostępna w przeglądarce pod adresem: `localhost:8880`
+Strona jest dostępna w przeglądarce pod adresem: `localhost:8880`. Na użytkownika `admin` można zalogować się hasłem `123`.
 
 ## Zatrzymanie projektu
 
