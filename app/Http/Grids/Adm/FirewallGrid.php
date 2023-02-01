@@ -12,6 +12,8 @@ use Coyote\Services\Grid\Grid;
 use Boduch\Grid\Decorators\Ip;
 use Boduch\Grid\Order;
 use Boduch\Grid\Components\EditButton;
+use Coyote\Services\Grid\Components\PurgeButton;
+
 
 class FirewallGrid extends Grid
 {
@@ -58,6 +60,9 @@ class FirewallGrid extends Grid
                     return link_to_route('adm.users.save', $row->moderator_name, [$row->moderator_id]);
                 }
             ])
+            ->addRowAction(new PurgeButton(function (Firewall $row) {
+                return route('adm.users.judge', [$row->user_id]);
+            }))
             ->addRowAction(new EditButton(function (Firewall $row) {
                 return route('adm.firewall.save', [$row->id]);
             }))

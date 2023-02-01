@@ -1,0 +1,18 @@
+{% extends 'adm.base' %}
+{% block title %}Sąd ostateczny :: {{ user.name }} :: {{ parent() }}{% endblock %}
+
+{% block container %}
+    {{ form_start(form) }}
+
+    <div class="alert alert-danger" role="alert">
+    Czy jesteś <b>ABSOLUTNIE</b> przekonany że chcesz usunąc tego użytkownika
+    razem z wszystkimi jego dokonaniami? Tej operacji <b>nie da się cofnąć</b>.
+    </div>
+
+    <div id="settings" class="card-body tab-pane active">
+        {{ form_row(form.submit) }}
+    </div>
+
+    {{ form_end(form) }}
+
+{% endblock %}
