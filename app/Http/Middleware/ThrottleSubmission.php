@@ -3,6 +3,7 @@
 namespace Coyote\Http\Middleware;
 
 use Closure;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
@@ -24,6 +25,7 @@ class ThrottleSubmission extends ThrottleRequests
             // 1. has the user reached the request limit?
             // 2. whether the optional parameters are filled in (that can suggest that the user is editing existing an resource)
             if ($this->limiter->tooManyAttempts($limit->key, $limit->maxAttempts) && !$this->isOptionalFilled($request->route())) {
+//            if ($this->limiter->tooManyAttempts($limit->key, $limit->maxAttempts) && !$this->isOptionalFilled($request->route())) {
                 throw $this->buildException($request, $limit->key, $limit->maxAttempts, $limit->responseCallback);
             }
         }
@@ -64,8 +66,13 @@ class ThrottleSubmission extends ThrottleRequests
 
     private function isOptionalFilled(Route $route): bool
     {
+        $routeValues = collect($route->parameters())
+            ->map(fn ($parameter) => !($parameter instanceof Model && !$parameter->exists) && !empty($parameter))
+            ->filter()
+            ->keys()
+            ->toArray();
+
         $routeKeys = $route->compiled->getVariables();
-        $routeValues = array_keys($route->parameters());
 
         return $routeKeys === $routeValues;
     }

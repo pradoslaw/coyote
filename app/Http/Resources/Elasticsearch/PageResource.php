@@ -7,6 +7,7 @@ use Coyote\Topic;
 /**
  * @property Topic $content
  * @property string $content_type
+ * @property string $path
  */
 class PageResource extends ElasticsearchResource
 {
@@ -24,5 +25,10 @@ class PageResource extends ElasticsearchResource
                 ])
             ]
         );
+    }
+
+    protected function getDefaultSuggestTitle(): ?string
+    {
+        return $this->path;
     }
 }
