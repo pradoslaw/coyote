@@ -23,7 +23,7 @@ class InterestsCalculatorTest extends TestCase
         $calculator = new \Coyote\Services\Skills\Calculator($json);
         $result = $calculator->toArray();
 
-        $this->assertEquals(['php' => 1, 'python' => 0.48936170212766, 'mysql' => 0.13926499032882], $result['ratio']);
+        $this->assertEquals(['php' => 1, 'python' => 0.48936170212765956, 'mysql' => 0.13926499032882012], $result['ratio']);
     }
 
     public function testCalculateInterestsJson()
