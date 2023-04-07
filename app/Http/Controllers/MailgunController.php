@@ -10,7 +10,6 @@ class MailgunController extends Controller
     /**
      * @param UserRepository $user
      * @param Request $request
-     * @return string
      */
     public function permanentFailure(UserRepository $user, Request $request)
     {
@@ -27,7 +26,7 @@ class MailgunController extends Controller
             $result->save();
         }
 
-        return 'Deactivate ' . $request->input('event-data.recipient');
+        logger()->info('Deactivate ' . $request->input('event-data.recipient') . ' due to permanent failure.');
     }
 
     /**
