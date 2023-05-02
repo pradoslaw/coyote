@@ -37,11 +37,6 @@ class SearchBuilder extends QueryBuilder
     public $tag;
 
     /**
-     * @var string|null
-     */
-    protected $sessionId = null;
-
-    /**
      * @var array
      */
     protected $languages = [];
@@ -69,58 +64,11 @@ class SearchBuilder extends QueryBuilder
     }
 
     /**
-     * @param string $sessionId
-     */
-    public function setSessionId(string $sessionId)
-    {
-        $this->sessionId = $sessionId;
-    }
-
-    /**
-     * @param array $languages
-     */
-    public function setLanguages(array $languages)
-    {
-        $this->languages = $languages;
-    }
-
-    /**
-     * @param \Coyote\Job\Preferences $preferences
-     */
-    public function setPreferences($preferences)
-    {
-        if (!empty($preferences->locations)) {
-            $this->should(new Filters\Job\Location($preferences->locations));
-        }
-
-        if (!empty($preferences->tags)) {
-            $this->should(new Filters\Job\Tag($preferences->tags));
-        }
-
-        if (!empty($preferences->is_remote)) {
-            $this->should(new Filters\Job\Remote());
-        }
-
-        if (!empty($preferences->salary)) {
-            $this->should(new Filters\Range('salary', ['gte' => $preferences->salary]));
-            $this->should(new Filters\Job\Currency($preferences->currency_id));
-        }
-    }
-
-    /**
      * @param string $sort
      */
     public function setSort($sort)
     {
         $this->sort = in_array($sort, ['boost_at', '_score', 'salary']) ? $sort : self::DEFAULT_SORT;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSort()
-    {
-        return $this->sort;
     }
 
     /**
@@ -148,29 +96,11 @@ class SearchBuilder extends QueryBuilder
     }
 
     /**
-     * @param int $salary
-     * @param int $currencyId
-     */
-    public function addSalaryFilter($salary, $currencyId)
-    {
-        $this->must(new Filters\Range('salary', ['gte' => $salary]));
-        $this->must(new Filters\Job\Currency($currencyId));
-    }
-
-    /**
      * @param string $name
      */
     public function addFirmFilter($name)
     {
-        $this->must(new Filters\Job\Firm($name));
-    }
-
-    /**
-     * @param int $userId
-     */
-    public function addUserFilter($userId)
-    {
-        $this->must(new Filters\Term('user_id', $userId));
+        $this->must(new Filters\Job\Firm($this->filterString($name)));
     }
 
     /**
@@ -183,7 +113,7 @@ class SearchBuilder extends QueryBuilder
         if ($this->request->filled('q')) {
             $this->must(
                 new MultiMatch(
-                    $this->request->get('q'),
+                    $this->filterString($this->request->get('q')),
                     ['title^3', 'description', 'recruitment', 'tags^2', 'firm.name']
                 )
             );
@@ -194,26 +124,25 @@ class SearchBuilder extends QueryBuilder
         }
 
         if ($this->request->filled('city')) {
-            $this->city->addCity($this->request->get('city'));
+            $this->city->addCity($this->filterString($this->request->get('city')));
         }
 
         if ($this->request->filled('locations')) {
-            $this->city->addCity(array_filter($this->request->get('locations')));
+            $this->city->addCity(array_filter($this->request->get('locations'), [$this, 'filterString']));
         }
 
         if ($this->request->filled('tags')) {
-            $this->tag->addTag(array_filter($this->request->get('tags')));
+            $this->tag->addTag(array_filter($this->request->get('tags'), [$this, 'filterString']));
         }
 
         if ($this->request->filled('salary')) {
-            $this->addSalaryFilter((int) filter_var($this->request->get('salary'), FILTER_SANITIZE_NUMBER_INT), (int) $this->request->get('currency'));
+            $this->addSalaryFilter($this->filterNumber($this->request->get('salary')), (int) $this->request->get('currency'));
         }
 
         if ($this->request->filled('remote')) {
             $this->addRemoteFilter();
         }
 
-        $this->score(new Random($this->sessionId, 2));
         $this->score(new ScriptScore('_score'));
         $this->sort(new Sort($this->sort, 'desc'));
 
@@ -248,5 +177,25 @@ class SearchBuilder extends QueryBuilder
     {
         $this->aggs(new Aggs\Job\Location());
         $this->aggs(new Aggs\Job\TopSpot());
+    }
+
+    /**
+     * @param int $salary
+     * @param int $currencyId
+     */
+    private function addSalaryFilter($salary, $currencyId)
+    {
+        $this->must(new Filters\Range('salary', ['gte' => $salary]));
+        $this->must(new Filters\Job\Currency($currencyId));
+    }
+
+    private function filterNumber(string $value): int
+    {
+        return filter_var($value, FILTER_SANITIZE_NUMBER_INT);
+    }
+
+    private function filterString(string $value): string
+    {
+        return filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     }
 }
