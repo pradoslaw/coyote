@@ -46,7 +46,7 @@ class PaymentTest extends DuskTestCase
                 ->clickAtXPath('//*[@id="js-payment"]/form/div[1]/div[2]/ul/li[2]/a')
                 ->press('Zapłać i zapisz')
                 ->waitForText('Przelewy24 test payment page', 60)
-                ->clickAtXPath('/html/body/div[2]/main/div[3]/section[1]/div[2]/div/a[1]')
+                ->clickAtXPath('/html/body/div/main/div[3]/section[1]/div[2]/div/a[1]')
                 ->waitForText('Dziękujemy! W momencie zaksięgowania wpłaty, dostaniesz potwierdzenie na adres e-mail.')
                 ->assertRouteIs('job.offer', [$job->id, $job->slug]);
         });
