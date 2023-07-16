@@ -171,7 +171,7 @@ abstract class BaseController extends Controller
      */
     protected function postsPerPage(Request $request)
     {
-        return $this->perPage($request, 'forum.posts_per_page', 10);
+        return $this->perPage($request, 'forum.posts_per_page', 30);
     }
 
     /**
