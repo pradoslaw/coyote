@@ -11,3 +11,4 @@ User-agent: Baiduspider
 Disallow: /
 User-agent: sentibot
 Disallow: /
+Disallow: *Search?q=*
