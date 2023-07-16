@@ -105,6 +105,8 @@
     <aside class="col-md-4">
       {{ render_block('job_ads') }}
 
+      {{ viewers|raw }}
+
       <section class="box mt-2">
         <h4><i class="fas fa-star fa-fw"></i> Reputacja użytkowników</h4>
 
@@ -148,8 +150,6 @@
       {{ patronage|raw }}
 
       {{ whats_new|raw }}
-
-      {{ viewers|raw }}
     </aside>
   </div>
 
