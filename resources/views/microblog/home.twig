@@ -1,6 +1,17 @@
 {% extends 'layout.twig' %}
-{% block title %}Mikroblogi{{ parent() }}{% endblock %}
-{% block description %}Mikroblogi umożliwiają prowadzenie własnego dziennika programistycznego. Jeżeli masz coś ciekawego do zakomunikowania, znalazłeś ciekawy link, chcesz się podzielić fragmentem ciekawego kodu źródłowego, to jest miejsce dla Ciebie.{% endblock %}
+
+{% set current_tag = render_params.tagName|default(null) %}
+
+{% block title %}{% if current_tag %}{{ current_tag }} :: {% endif %}Mikroblogi{{ parent() }}{% endblock %}
+
+{% block description %}
+  {% if current_tag %}
+    {{ current_tag }} w mikroblogach. Sprawdź, co inni użytkownicy piszą o tym temacie. Chcesz podzielić się czymś ciekawym w temacie: {{ current_tag }}? Utwórz wpis w mikroblogu.
+  {% else %}
+  Mikroblogi umożliwiają prowadzenie własnego dziennika programistycznego. Jeżeli masz coś ciekawego do zakomunikowania, znalazłeś ciekawy link, chcesz się podzielić fragmentem ciekawego kodu źródłowego, to jest miejsce dla Ciebie.
+  {% endif %}
+{% endblock %}
+
 {% block keywords %}blog, programista, programiści, newsy{% endblock %}
 
 {% import 'components.modals' as modal %}

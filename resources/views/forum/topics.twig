@@ -1,5 +1,15 @@
 {% extends 'forum.home' %}
 
+{% set current_tag = renderParams.tagName|default(null) %}
+
+{% block title %}
+  {{ current_tag }} | Problemy i Porady :: 4programmers.net
+{% endblock %}
+
+{% block description %}
+  Dowiedz się więcej o {{ current_tag }}. Znajdziesz tu informacje dla początkujących i zaawansowanych użytkowników. Sprawdź więcej.
+{% endblock %}
+
 {% block mainbar %}
     {% include 'forum.partials.topics' %}
 {% endblock %}

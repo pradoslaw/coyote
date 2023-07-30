@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Microblog;
 
+use Coyote\DTO\RenderParams;
 use Coyote\Http\Factories\CacheFactory;
 use Coyote\Http\Resources\MicroblogResource;
 use Coyote\Http\Resources\MicroblogCollection;
@@ -46,7 +47,7 @@ class HomeController extends BaseController
     /**
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(RenderParams $renderParams = null)
     {
         $paginator = $this->builder->orderById()->paginate();
 
@@ -70,7 +71,8 @@ class HomeController extends BaseController
             'tags'                      => [
                 'tech'                  => $tech,
                 'others'                => $others->splice(0, 10)
-            ]
+            ],
+            'render_params' => $renderParams,
         ]);
     }
 
@@ -84,7 +86,10 @@ class HomeController extends BaseController
 
         $this->builder->withTag($tag);
 
-        return $this->index();
+        $renderParams = new RenderParams();
+        $renderParams->tagName = $tag;
+
+        return $this->index($renderParams);
     }
 
     /**
