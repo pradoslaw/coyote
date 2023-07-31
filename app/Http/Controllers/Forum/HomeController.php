@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\DTO\RenderParams;
 use Coyote\Http\Factories\GateFactory;
 use Coyote\Http\Resources\ForumCollection;
 use Coyote\Http\Resources\FlagResource;
@@ -212,7 +213,10 @@ class HomeController extends BaseController
 
         $this->topic->pushCriteria(new WithTags($name));
 
-        return $this->loadAndRender();
+        $renderParams = new RenderParams();
+        $renderParams->tagName = $name;
+
+        return $this->loadAndRender($renderParams);
     }
 
     /**
@@ -267,7 +271,7 @@ class HomeController extends BaseController
      * @param \Illuminate\Contracts\Pagination\LengthAwarePaginator $paginate
      * @return \Illuminate\View\View
      */
-    private function render($paginate)
+    private function render($paginate, RenderParams $renderParams = null)
     {
         $guest = new Guest($this->guestId);
 
@@ -280,14 +284,16 @@ class HomeController extends BaseController
 
         $postsPerPage = $this->postsPerPage($this->request);
 
-        return $this->view('forum.topics')->with(compact('topics', 'flags', 'postsPerPage'));
+        return $this->view('forum.topics')
+            ->with(compact('topics', 'flags', 'postsPerPage'))
+            ->with(compact('renderParams', $renderParams));
     }
 
     /**
      * @return \Illuminate\View\View
      */
-    private function loadAndRender()
+    private function loadAndRender(RenderParams $renderParams = null)
     {
-        return $this->render($this->load());
+        return $this->render($this->load(), $renderParams);
     }
 }

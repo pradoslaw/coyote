@@ -2,8 +2,14 @@
 
 {% set description = excerpt(wiki.excerpt|default(wiki.text|slice(0, 200))) %}
 
-{% block title %}{{ wiki.long_title|default(wiki.title) }}{{ parent() }}{% endblock %}
-{% block description %}{{ description }}{% endblock %}
+{% block title %}FAQ:: {{ wiki.long_title|default(wiki.title) }}{{ parent() }}{% endblock %}
+{% block description %}
+  {% if description %}
+    {{ description }}
+  {% else %}
+    Sprawdź najczęściej zadawane pytania dla {{ wiki.title }}. Dzięki FAQ znajdziesz odpowiedzi na częste pytania związane z tym zagadnieniem.
+  {% endif %}
+{% endblock %}
 {% block keywords %}{{ keywords(description)|join(',') }}{% endblock %}
 
 {% import 'components.modals' as modals %}
