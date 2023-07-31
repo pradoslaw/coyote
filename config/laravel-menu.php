@@ -39,7 +39,11 @@ return [
                 '(X)HTML' => ['url' => '(X)HTML'],
                 'CSS' => ['url' => 'CSS']
             ]
-        ]
+        ],
+        'Coyote' => [
+            'url' => 'https://github.com/pradoslaw/coyote',
+            'title' => 'Link do repozytorium na Github, dyskusja o 4programmers.net',
+        ],
     ],
     // _ na poczatku gdyz ten plugin korzysta z metody share() klasy View, a nazwa "forum" moze
     // wchodzic w konflikt z innymi zmiennymi przekazywanymi do twiga
