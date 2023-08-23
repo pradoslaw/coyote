@@ -3,11 +3,19 @@
 {% set current_tag = renderParams.tagName|default(null) %}
 
 {% block title %}
-  {{ current_tag }} | Problemy i Porady :: 4programmers.net
+  {% if current_tag %}
+    {{ current_tag }} | Problemy i Porady :: 4programmers.net
+  {% else %}
+    {{ parent() }}
+  {% endif %}
 {% endblock %}
 
 {% block description %}
-  Dowiedz się więcej o {{ current_tag }}. Znajdziesz tu informacje dla początkujących i zaawansowanych użytkowników. Sprawdź więcej.
+  {% if current_tag %}
+    Dowiedz się więcej o {{ current_tag }}. Znajdziesz tu informacje dla początkujących i zaawansowanych użytkowników. Sprawdź więcej.
+  {% else %}
+    {{ parent() }}
+  {% endif %}
 {% endblock %}
 
 {% block mainbar %}
