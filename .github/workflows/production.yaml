@@ -19,7 +19,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 2
+          fetch-depth: 0
 
       - name: Login to Docker hub
         run: docker login -u ${{ secrets.DOCKER_LOGIN }} -p ${{ secrets.DOCKER_PASSWORD }}
@@ -62,4 +62,5 @@ jobs:
           environment: production
           # When the flag is set, command will not fail and just exit silently if no new commits for a given release have been found.
           ignore_empty: "true"
+          ignore_missing: "true"
           projects: backend
