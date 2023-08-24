@@ -57,7 +57,7 @@
         {{ form_open({url: route('logout'), name: 'logout-form'}) }}
         {{ form_close() }}
 
-        <nav class="navbar navbar-expand-lg {{ __dark_theme ? 'bg-dark navbar-dark' : 'bg-light navbar-light' }}">
+        <nav id="navbar" class="navbar navbar-expand-lg {{ __dark_theme ? 'bg-dark navbar-dark' : 'bg-light navbar-light' }}">
           <div class="container-xxl d-flex w-100 flex-wrap">
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobile-menu">
             <span class="navbar-toggler-icon"></span>
@@ -87,22 +87,17 @@
                   {% endif %}
                 </li>
               {% endfor %}
+              <li class="d-block d-md-none">
+                <vue-github-star></vue-github-star>
+              </li>
             </ul>
           </div>
 
           <div id="js-searchbar" class="d-flex flex-grow-1 order-1">
             <vue-searchbar value="{{ input_get('q') }}"></vue-searchbar>
           </div>
-
-          <div id="github-star" class="d-flex order-1 align-self-center">
-            <iframe
-            src="https://ghbtns.com/github-btn.html?user=pradoslaw&repo=coyote&type=star&count=true&size=large"
-            frameborder="0"
-            scrolling="0"
-            width="120"
-            height="30"
-            title="GitHub"
-            ></iframe>
+          <div class="d-none d-md-flex order-1 align-self-center">
+            <vue-github-star></vue-github-star>
           </div>
 
           {% if auth_check() %}

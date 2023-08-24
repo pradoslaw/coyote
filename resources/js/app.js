@@ -9,6 +9,7 @@ import './libs/timeago.js';
 import './components/vcard.js';
 import './plugins/flags.ts';
 import './plugins/sociale.js';
+import './plugins/components.ts';
 import '@popperjs/core'; // must be imported before bootstrap
 import './bootstrap';
 import './libs/axios-throttle.ts';
