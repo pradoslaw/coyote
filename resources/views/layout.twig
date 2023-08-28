@@ -11,6 +11,10 @@
     {% block meta_robots %}
     {% endblock %}
 
+    {% block canonical %}
+      <link rel="canonical" href="{% block canonical_href %}{{ app.request.url }}{% endblock %}" />
+    {% endblock %}
+
     {% block head %}
       <title>{%- block title -%} :: 4programmers.net{%- endblock -%}</title>
 
