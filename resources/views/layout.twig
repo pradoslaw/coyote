@@ -44,6 +44,9 @@
     {% block body %}
       {% import 'components.forms' as forms %}
       {% import 'components.widgets' as widgets %}
+      {% import 'components.schema' as schema %}
+
+      {{ schema.organization() }}
 
       <header class="{{ auth_guest() or user('allow_sticky_header') ? ' fixed-top' }}">
         <div class="navbar-border-top"></div>
