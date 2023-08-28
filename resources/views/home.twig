@@ -5,6 +5,12 @@
 
 {% import 'components.modals' as modal %}
 
+{% import 'components.meta' as meta %}
+{% block meta_robots %}
+  {{ meta.robots('index, follow') }}
+  {{ parent() }}
+{% endblock %}
+
 {% block container %}
   <div class="row mt-4">
     <div class="col-12">

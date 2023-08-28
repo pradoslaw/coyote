@@ -1,6 +1,12 @@
 {% extends 'layout' %}
 {% block title %}{{ user.name }} - Profil {{ parent() }}{% endblock %}
 
+{% import 'components.meta' as meta %}
+{% block meta_robots %}
+  {{ meta.robots('index, follow') }}
+  {{ parent() }}
+{% endblock %}
+
 {% block container %}
   <script>
     var user = {{ user|json_encode|raw }};

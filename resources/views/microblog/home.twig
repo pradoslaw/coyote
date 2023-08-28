@@ -4,6 +4,12 @@
 
 {% block title %}{% if current_tag %}{{ current_tag }} :: {% endif %}Mikroblogi{{ parent() }}{% endblock %}
 
+{% import 'components.meta' as meta %}
+{% block meta_robots %}
+  {{ meta.robots('index, follow') }}
+  {{ parent() }}
+{% endblock %}
+
 {% block description %}
   {% if current_tag %}
     {{ current_tag }} w mikroblogach. Sprawdź, co inni użytkownicy piszą o tym temacie. Chcesz podzielić się czymś ciekawym w temacie: {{ current_tag }}? Utwórz wpis w mikroblogu.

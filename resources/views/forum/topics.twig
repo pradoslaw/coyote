@@ -1,5 +1,14 @@
 {% extends 'forum.home' %}
 
+{% import 'components.meta' as meta %}
+{% block meta_robots %}
+  {% set path = app.request.path %}
+  {% if path != 'Forum/Interesting' %}
+    {{ meta.robots('index, follow') }}
+  {% endif %}
+  {{ parent() }}
+{% endblock %}
+
 {% set current_tag = renderParams.tagName|default(null) %}
 
 {% block title %}
