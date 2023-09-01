@@ -8,6 +8,9 @@
 
     {{ render_region('head') }}
 
+    {% block meta_robots %}
+    {% endblock %}
+
     {% block head %}
       <title>{%- block title -%} :: 4programmers.net{%- endblock -%}</title>
 

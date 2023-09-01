@@ -5,6 +5,12 @@
 
 {% import 'components.forms' as forms %}
 
+{% import 'components.meta' as meta %}
+{% block meta_robots %}
+  {{ meta.robots('index, follow') }}
+  {{ parent() }}
+{% endblock %}
+
 {% block content %}
   <h1>{{ link_to_route('forum.category', forum.title|default(forum.name), [forum.slug]) }}</h1>
 
