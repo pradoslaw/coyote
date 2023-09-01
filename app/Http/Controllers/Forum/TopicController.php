@@ -22,6 +22,7 @@ use Coyote\Services\Forum\TreeBuilder\JsonDecorator;
 use Coyote\Services\Forum\TreeBuilder\ListDecorator;
 use Coyote\Topic;
 use Illuminate\Http\Request;
+use Spatie\SchemaOrg\Schema;
 
 class TopicController extends BaseController
 {
@@ -130,6 +131,18 @@ class TopicController extends BaseController
 
         TopicResource::withoutWrapping();
 
+        $author = $topic->firstPost()->get()->first()->user->name;
+        $schema = Schema::discussionForumPosting()
+            ->identifier($request->getUri())
+            ->headline($topic->title)
+            ->author(
+                Schema::person()
+                ->name($author)
+            )->interactionStatistic(
+                Schema::interactionCounter()
+                    ->userInteractionCount($topic->replies)
+            );
+
         return $this->view('forum.topic', compact('posts', 'forum', 'paginate', 'reasons'))->with([
             'mlt'           => $this->moreLikeThis($topic),
             'model'         => $topic, // we need eloquent model in twig to show information about locked/moved topic
@@ -139,7 +152,8 @@ class TopicController extends BaseController
             'all_forums'    => $allForums,
             'user_forums'   => $userForums,
             'description'   => excerpt(array_first($posts['data'])['text'], 100),
-            'flags'         => $this->flags($forum)
+            'flags'         => $this->flags($forum),
+            'schema'        => $schema,
         ]);
     }
 

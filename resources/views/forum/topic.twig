@@ -7,6 +7,7 @@
 {% import 'components.modals' as modals %}
 
 {% block content %}
+  {{ schema.to_script|raw }}
 
   {% if model.locked_at and model.locker.id %}
     <p class="alert alert-warning">
@@ -36,7 +37,6 @@
           </div>
         {% endif %}
       </div>
-
       {% for post in posts.data %}
         <div class="card card-post">
           <div class="card-header d-none d-lg-block">

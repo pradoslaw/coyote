@@ -3,6 +3,7 @@
 namespace Coyote\Services;
 
 use Illuminate\Contracts\Support\Arrayable;
+use Spatie\SchemaOrg\Schema;
 
 /**
  * Prosta klasa sluzaca do budowania elementu obecnego na kazdej podstronie, czyli breadcrumb
@@ -48,7 +49,24 @@ class Breadcrumb implements \Countable, Arrayable
      */
     public function render()
     {
-        return view('components/breadcrumb', ['breadcrumbs' => $this->breadcrumbs]);
+        return view(
+            'components/breadcrumb',
+            [
+                'breadcrumbs' => $this->breadcrumbs,
+                'schema' => Schema::breadcrumbList()
+                    ->itemListElement(array_map(
+                        function ($breadcrumb, int $index) {
+                            return Schema::listItem()
+                                ->position($index + 1)
+                                ->identifier($breadcrumb['url'])
+                                ->name($breadcrumb['name']);
+                        },
+                        $this->breadcrumbs,
+                        array_keys($this->breadcrumbs),
+                    )
+                ),
+            ]
+        );
     }
 
     /**
