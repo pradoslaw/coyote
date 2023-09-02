@@ -131,13 +131,12 @@ class TopicController extends BaseController
 
         TopicResource::withoutWrapping();
 
-        $author = $topic->firstPost()->get()->first()->user->name;
         $schema = Schema::discussionForumPosting()
             ->identifier($request->getUri())
             ->headline($topic->title)
             ->author(
                 Schema::person()
-                ->name($author)
+                ->name($topic->firstPost->user?->name)
             )->interactionStatistic(
                 Schema::interactionCounter()
                     ->userInteractionCount($topic->replies)
