@@ -70,20 +70,6 @@
         </div>
       </div>
     </div>
-
-    <div class="custom-plan clearfix text-center mb-4">
-
-      <h3>Potrzebujesz kilku ogłoszeń?</h3>
-
-      <div class="custom-plan-container">
-        <i class="fa fa-info-circle fa-2x float-left"></i>
-
-        <div class="float-left ml-1 custom-plan-info">
-          Napisz do nas na adres:<br>
-          <a :href="'mailto:' + email + '?subject=Interesuje mnie pakiet ogłoszeń. Proszę o przesłanie szczegółów'">{{ email }}</a>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
