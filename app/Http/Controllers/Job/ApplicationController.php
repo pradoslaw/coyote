@@ -3,23 +3,20 @@
 namespace Coyote\Http\Controllers\Job;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\Http\Factories\MailFactory;
 use Coyote\Http\Requests\ApplicationRequest;
 use Coyote\Job;
 use Coyote\Notifications\Job\ApplicationConfirmationNotification;
 use Coyote\Notifications\Job\ApplicationSentNotification;
+use Coyote\Services\Stream\Activities\Create as Stream_Create;
+use Coyote\Services\Stream\Objects\Application as Stream_Application;
+use Coyote\Services\Stream\Objects\Job as Stream_Job;
 use Coyote\Services\UrlBuilder;
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Http\Request;
-use Coyote\Services\Stream\Activities\Create as Stream_Create;
-use Coyote\Services\Stream\Objects\Job as Stream_Job;
-use Coyote\Services\Stream\Objects\Application as Stream_Application;
 use Illuminate\Support\Str;
 
 class ApplicationController extends Controller
 {
-    use MailFactory;
-
     /**
      * @param Job $job
      * @return \Illuminate\View\View
@@ -29,9 +26,9 @@ class ApplicationController extends Controller
         abort_if(!$job->enable_apply, 404);
 
         $this->breadcrumb->push([
-            'Praca'                             => route('job.home'),
-            $job->title                         => UrlBuilder::job($job),
-            'Aplikuj na to stanowisko pracy'    => null
+          'Praca'                          => route('job.home'),
+          $job->title                      => UrlBuilder::job($job),
+          'Aplikuj na to stanowisko pracy' => null
         ]);
 
         $application = new Job\Application();
@@ -45,11 +42,11 @@ class ApplicationController extends Controller
         $application->text = view('job.partials.application', compact('job'))->render();
 
         if ($this->getSetting('job.application')) {
-            $application->forceFill((array) json_decode($this->getSetting('job.application')));
+            $application->forceFill((array)json_decode($this->getSetting('job.application')));
         }
 
         return $this->view('job.application', compact('job', 'application'))->with([
-            'subscribed' => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false
+          'subscribed' => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false
         ]);
     }
 
@@ -90,15 +87,15 @@ class ApplicationController extends Controller
     {
         $this->validate($request, [
             // only 5 MB file size limit. otherwise postfix may not handle it properly.
-            'cv'             => 'max:' . (5 * 1024) . '|mimes:pdf,doc,docx,rtf'
+          'cv' => 'max:' . (5 * 1024) . '|mimes:pdf,doc,docx,rtf'
         ]);
 
         $filename = uniqid() . '_' . Str::ascii($request->file('cv')->getClientOriginalName());
         $request->file('cv')->storeAs('cv', $filename, 'local');
 
         return response()->json([
-            'filename' => $filename,
-            'name' => $request->file('cv')->getClientOriginalName()
+          'filename' => $filename,
+          'name'     => $request->file('cv')->getClientOriginalName()
         ]);
     }
 
