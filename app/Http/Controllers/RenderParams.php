@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\DTO;
+namespace Coyote\Http\Controllers;
 
 class RenderParams
 {
