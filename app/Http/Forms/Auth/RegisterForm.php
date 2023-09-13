@@ -21,9 +21,7 @@ class RegisterForm extends Form implements ValidatesWhenSubmitted
             ->add('name', 'text', [
                 'rules' => 'required|min:2|max:28|username|user_unique',
                 'label' => 'Nazwa użytkownika',
-                'attr' => [
-                    'autofocus' => 'autofocus'
-                ]
+                'attr' => ['autofocus' => 'autofocus']
             ])
             ->add('password', 'password', [
                 'rules' => 'required|confirmed|min:3',
