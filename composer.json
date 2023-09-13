@@ -13,6 +13,7 @@
     ],
     "require": {
         "php": ">=8.0",
+        "ext-fileinfo": "*",
         "ext-gd": "*",
         "ext-json": "*",
         "adam-boduch/laravel-grid": "^2.2",
