@@ -11,7 +11,7 @@ class MinWordsTest extends TestCase
 {
     public function testShortTextShouldFail()
     {
-        $rule = new MinWords();
+        $rule = new MinWords(3);
 
         $this->assertFalse($rule->passes('', 'test'));
         $this->assertFalse($rule->passes('', 'test test'));
@@ -29,7 +29,7 @@ class MinWordsTest extends TestCase
 
     public function testShortTextShouldPass()
     {
-        $rule = new MinWords();
+        $rule = new MinWords(3);
         $user = factory(User::class)->make(['reputation' => 1000]);
 
         Auth::setUser($user);

@@ -5,21 +5,19 @@ namespace Coyote\Http\Requests\Forum;
 use Coyote\Forum;
 use Coyote\Post;
 use Coyote\Repositories\Contracts\TagRepositoryInterface;
-use Coyote\Rules\TagDeleted;
 use Coyote\Rules\MinWords;
+use Coyote\Rules\TagDeleted;
 use Coyote\Topic;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class PostRequest extends FormRequest
 {
-    const RULE_USER_NAME            = 'required|string|min:2|max:27';
-    const RULE_USER_UNIQUE          = 'unique:users,name';
-    const RULE_TEXT                 = 'required|spam_chinese:1|spam_foreign:1';
-    const RULE_STICKY               = 'nullable|bool';
-    const RULE_TAGS                 = 'array|max:5';
-    const RULE_HUMAN                = 'required';
+    const RULE_USER_NAME   = 'required|string|min:2|max:27';
+    const RULE_USER_UNIQUE = 'unique:users,name';
+    const RULE_TEXT        = 'required|spam_chinese:1|spam_foreign:1';
+    const RULE_STICKY      = 'nullable|bool';
+    const RULE_TAGS        = 'array|max:5';
 
     /**
      * @var Post
@@ -58,20 +56,20 @@ class PostRequest extends FormRequest
         $this->forum = $this->route('forum');
 
         $rules = [
-            'text'          => self::RULE_TEXT
+          'text' => self::RULE_TEXT
         ];
 
         if ($this->canChangeSubject()) {
             $rules = array_merge($rules, [
-                'title'                 => $this->titleRule(),
-                'tags'                  => self::RULE_TAGS,
-                'tags.*'                => [
-                    'bail',
-                    'max:25',
-                    'tag',
-                    new TagDeleted($this->container[TagRepositoryInterface::class]),
-                    'tag_creation:300'
-                ]
+              'title'  => $this->titleRule(),
+              'tags'   => self::RULE_TAGS,
+              'tags.*' => [
+                'bail',
+                'max:25',
+                'tag',
+                new TagDeleted($this->container[TagRepositoryInterface::class]),
+                'tag_creation:300'
+              ]
             ]);
         }
 
@@ -109,18 +107,18 @@ class PostRequest extends FormRequest
     protected function titleRule()
     {
         return [
-            'required',
-            'min:3',
-            'max:200',
-            'spam_chinese:1',
-            'not_regex:/^\[.+\]/',
-            new MinWords()
+          'required',
+          'min:3',
+          'max:200',
+          'spam_chinese:1',
+          'not_regex:/^\[.+\]/',
+          new MinWords(3)
         ];
     }
 
     public function withValidator(Validator $validator)
     {
-        $shouldValidatePoll = fn () => count(array_filter($this->input('poll.items.*.text', []))) >= 1;
+        $shouldValidatePoll = fn() => count(array_filter($this->input('poll.items.*.text', []))) >= 1;
 
         $validator->sometimes('poll.items', ['min:2'], $shouldValidatePoll);
         $validator->sometimes('poll.items.*.text', ['required', 'string', 'max:200'], $shouldValidatePoll);
@@ -147,8 +145,8 @@ class PostRequest extends FormRequest
     public function messages()
     {
         return [
-            'title.not_regex' => 'Wygląda na to, że tytuł zawiera prefiks z nazwą tagu. Użyj dedykowanego pola z możliwością wpisania tagu.',
-            'poll.items.*.text.required' => 'Proszę dodać odpowiedź w ankiecie.'
+          'title.not_regex'            => 'Wygląda na to, że tytuł zawiera prefiks z nazwą tagu. Użyj dedykowanego pola z możliwością wpisania tagu.',
+          'poll.items.*.text.required' => 'Proszę dodać odpowiedź w ankiecie.'
         ];
     }
 }

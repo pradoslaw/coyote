@@ -6,38 +6,25 @@ use Illuminate\Contracts\Validation\Rule;
 
 class Base64Image implements Rule
 {
-    private const VALID_MIME = ['image/png', 'image/jpeg'];
+    /** @var string[] */
+    private array $validMimeTypes = ['image/png', 'image/jpeg'];
+    private string $mimeType;
 
-    /**
-     * @var string
-     */
-    private $mime;
-
-    /**
-     * Determine if the validation rule passes.
-     *
-     * @param  string  $attribute
-     * @param  mixed  $value
-     * @return bool
-     */
-    public function passes($attribute, $value)
+    public function passes($attribute, $value): bool
     {
-        $image = base64_decode($value);
-        $file = finfo_open();
-        $result = finfo_buffer($file, $image, FILEINFO_MIME_TYPE);
-
-        $this->mime = $result;
-
-        return in_array($result, self::VALID_MIME);
+        $mimeType = $this->imageMimeType($value);
+        $this->mimeType = $mimeType;
+        return in_array($mimeType, $this->validMimeTypes);
     }
 
-    /**
-     * Get the validation error message.
-     *
-     * @return string
-     */
-    public function message()
+    public function message(): string
     {
-        return sprintf('The binary data must be a file of type: %s. %s given.', implode(', ', self::VALID_MIME), $this->mime);
+        $types = implode(', ', $this->validMimeTypes);
+        return "The binary data must be a file of type: $types. '$this->mimeType' given.";
+    }
+
+    private function imageMimeType(string $base64Image): ?string
+    {
+        return \fInfo_buffer(\fInfo_open(), \base64_decode($base64Image), \FILEINFO_MIME_TYPE) ?? null;
     }
 }

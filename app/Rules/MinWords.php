@@ -7,36 +7,20 @@ use Illuminate\Contracts\Validation\Rule;
 
 class MinWords implements Rule
 {
-    private int $minWords;
-
-    public function __construct(int $minWords = 3)
+    public function __construct(private int $minimumWords)
     {
-        $this->minWords = $minWords;
     }
 
-    /**
-     * Determine if the validation rule passes.
-     *
-     * @param  string  $attribute
-     * @param  mixed  $value
-     * @return bool
-     */
-    public function passes($attribute, $value)
+    public function passes($attribute, $value): bool
     {
         if (auth()->check() && auth()->user()->reputation >= Reputation::SHORT_TITLE) {
             return true;
         }
-
-        return count(array_filter(preg_split('/\s+/', $value), fn ($word) => strlen($word) > 1)) >= $this->minWords;
+        return \count(\array_filter(\preg_split('/\s+/', $value), fn($word) => \strLen($word) > 1)) >= $this->minimumWords;
     }
 
-    /**
-     * Get the validation error message.
-     *
-     * @return string
-     */
-    public function message()
+    public function message(): string
     {
-        return trans('validation.min.words');
+        return \trans('validation.min.words');
     }
 }
