@@ -27,7 +27,17 @@
               {{ form_row(form.password_confirmation) }}
               {{ form_row(form.email) }}
               {{ form_row(form.email_confirmation) }}
-              {{ form_row(form.terms, {label: '<small>Akceptuję <a href="/Regulamin">regulamin</a> oraz <a href="/Polityka_prywatności">politykę prywatności</a>.</small>'}) }}
+              {{ form_row(form.terms, {
+                label: '<small>Akceptuję <a href="/Regulamin">regulamin</a> oraz <a href="/Polityka_prywatności">politykę prywatności</a>.</small><b>*</b>'
+              }) }}
+              {{ form_row(form.marketing, {
+                label: '<small>Wyrażam zgodę na otrzymywanie, na podany przeze mnie adres e-mail, informacji handlowych kierowanych '~
+                'do mnie przez 4programmers.net (tj. Makana sp. z o.o., z siedzibą przy ul. Krupniczej 13, 50-075 Wrocław). Informacje '~
+                'handlowe dotyczyć będą produktów, usług i działalności realizowanej przez 4programmers.net i jej kontrahentów. Rozumiem, '~
+                'że zgodę mogę wycofać w dowolnym momencie, jednak nie będzie to miało wpływu na przetwarzanie, którego dokonano przed jej '~
+                'wycofaniem. Przedmiotowa zgoda może zostać wycofana poprzez odznaczenie jej w ustawieniach mojego konta albo poprzez '~
+                'wysłanie stosownej wiadomości na adres e-mail: gdpr@4programmers.net lub adres siedziby 4programmers.net.</small>'
+              }) }}
 
               <div class="form-group">
                 <small class="form-text text-muted">
@@ -74,8 +84,8 @@
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
   <script type="text/javascript">
-    function onSubmit() {
-      document.getElementById("js-register-form").submit();
-    }
+      function onSubmit() {
+          document.getElementById("js-register-form").submit();
+      }
   </script>
 {% endblock %}

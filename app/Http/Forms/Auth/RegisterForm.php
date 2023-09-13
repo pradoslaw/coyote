@@ -37,6 +37,7 @@ class RegisterForm extends Form implements ValidatesWhenSubmitted
                 'help' => 'Nie wysyłamy reklam. Twój e-mail nie zostanie nikomu udostępniony.'
             ])
             ->add('terms', 'checkbox', ['rules' => 'accepted'])
+            ->add('marketing', 'checkbox')
             ->add('email_confirmation', 'honeypot')
             ->add('submit', 'submit', [
                 'label' => 'Utwórz konto',
