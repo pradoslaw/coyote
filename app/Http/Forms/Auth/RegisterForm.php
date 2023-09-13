@@ -30,6 +30,7 @@ class RegisterForm extends Form implements ValidatesWhenSubmitted
                 'label' => 'Hasło'
             ])
             ->add('password_confirmation', 'password', [
+                'rules' => 'required',
                 'label' => 'Hasło (powtórnie)'
             ])
             ->add('email', 'text', [
