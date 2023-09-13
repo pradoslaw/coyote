@@ -8,49 +8,41 @@ use Coyote\Services\Stream\Activities\Delete;
 use Coyote\Services\Stream\Objects\Person;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\View\View;
 
 class DeleteAccountController extends BaseController
 {
-    use AuthenticatesUsers{
+    use AuthenticatesUsers {
         logout as traitLogout;
     }
 
     use HomeTrait;
 
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function index()
+    public function index(): View
     {
         return $this->view('user.delete');
     }
 
-    /**
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    public function delete(Request $request, Guard $guard)
+    public function delete(Request $request, Guard $guard): RedirectResponse
     {
         $this->validate($request, [
-            'password' => [
-                'bail',
-                Rule::requiredIf(function () {
-                    return $this->auth->password !== null;
-                }),
-                app(PasswordCheck::class)
-            ]
+          'password' => [
+            'bail',
+            Rule::requiredIf(fn() => $this->auth->password !== null),
+            app(PasswordCheck::class)
+          ]
         ]);
 
         $this->auth->timestamps = false;
         $this->auth->forceFill([
-            'ip'        => $request->ip(),
-            'browser'   => $request->browser(),
-            'visits'    => $this->auth->visits + 1,
-            'visited_at'=> now(),
-            'is_online' => false
+          'ip'         => $request->ip(),
+          'browser'    => $request->browser(),
+          'visits'     => $this->auth->visits + 1,
+          'visited_at' => now(),
+          'is_online'  => false
         ]);
 
         $this->transaction(function () use ($request, $guard) {

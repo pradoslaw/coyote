@@ -2,25 +2,21 @@
 
 namespace Coyote\Http\Controllers\User;
 
-use Coyote\Http\Grids\User\AcceptsGrid;
-use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Boduch\Grid\Source\EloquentSource;
+use Coyote\Http\Grids\User\AcceptsGrid;
+use Coyote\Repositories\Contracts\PostRepositoryInterface;
+use Illuminate\View\View;
 
 class AcceptsController extends BaseController
 {
     use HomeTrait;
 
-    /**
-     * @param PostRepository $post
-     * @return \Illuminate\View\View
-     */
-    public function index(PostRepository $post)
+    public function index(PostRepositoryInterface $post): View
     {
-        $grid = $this
+        return $this->view('user.accepts')
+          ->with('grid', $this
             ->gridBuilder()
             ->createGrid(AcceptsGrid::class)
-            ->setSource(new EloquentSource($post->takeAcceptsForUser($this->userId)));
-
-        return $this->view('user.accepts')->with('grid', $grid);
+            ->setSource(new EloquentSource($post->takeAcceptsForUser($this->userId))));
     }
 }

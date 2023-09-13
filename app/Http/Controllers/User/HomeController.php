@@ -2,69 +2,39 @@
 
 namespace Coyote\Http\Controllers\User;
 
-use Carbon\Carbon;
 use Coyote\Events\UserSaved;
 use Coyote\Http\Factories\MediaFactory;
-use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
-use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
+use Coyote\Repositories\Contracts\UserRepositoryInterface;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Jenssegers\Agent\Agent;
+use Illuminate\View\View;
 
 class HomeController extends BaseController
 {
     use HomeTrait, MediaFactory;
 
-    /**
-     * @param UserRepository $user
-     * @param SessionRepository $session
-     * @return \Illuminate\View\View
-     */
-    public function index(UserRepository $user, SessionRepository $session)
+    public function index(UserRepositoryInterface $user): View
     {
-//        $sessions = $session->all()->where('user_id', $this->userId);
-//
-//        foreach ($sessions as &$row) {
-//            $agent = new Agent();
-//            $agent->setUserAgent($row['browser']);
-//
-//            $row['agent'] = $agent;
-//            $row['updated_at'] = Carbon::createFromTimestamp($row['updated_at']);
-//        }
-
         return $this->view('user.home', [
-            'rank'                  => $user->rank($this->userId),
-            'total_users'           => $user->countUsersWithReputation(),
-            'ip'                    => request()->ip(),
-//            'sessions'              => $sessions
+          'rank'        => $user->rank($this->userId),
+          'total_users' => $user->countUsersWithReputation(),
+          'ip'          => request()->ip()
         ]);
     }
 
-    /**
-     * Upload zdjecia na serwer
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function upload(Request $request)
+    public function upload(Request $request): JsonResponse
     {
         $this->validate($request, [
-            'photo'             => 'required|mimes:jpeg,jpg,png,gif'
+          'photo' => 'required|mimes:jpeg,jpg,png,gif'
         ]);
-
         $media = $this->auth->photo->upload($request->file('photo'));
         $this->auth->save();
-
         event(new UserSaved($this->auth));
-
-        return response()->json([
-            'url' => (string) $media->url()
-        ]);
+        return response()
+          ->json(['url' => (string)$media->url()]);
     }
 
-    /**
-     * Usuniecie zdjecia z serwera
-     */
-    public function delete()
+    public function delete(): void
     {
         $this->auth->photo = null;
         $this->auth->save();

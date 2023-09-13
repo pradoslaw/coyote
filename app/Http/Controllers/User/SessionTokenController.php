@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\User;
 
 use Coyote\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class SessionTokenController extends Controller
@@ -12,33 +13,22 @@ class SessionTokenController extends Controller
         // tymczasowe rozwiazanie - nadpisujemy kontruktor z klasy bazowej
     }
 
-    /**
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
-     */
-    public function generateToken()
+    public function generateToken(): JsonResponse
     {
         $secret = config('app.key');
 
         if (auth()->guest()) {
-            return response()->json([
-                'error' => 'No user logged in',
-            ], 401);
+            return response()->json(['error' => 'No user logged in'], 401);
         }
 
-        $expirationDate = strtotime("+ 1 day");
-        $token = auth()->user()->id . '|' . $expirationDate;
+        $token = auth()->user()->id . '|' . \strToTime('+ 1 day');
         $signedToken = $token . '|' . hash_hmac('sha256', $token, $secret);
 
-        return response()->json([
-            'token' => $signedToken,
-        ]);
+        return response()
+          ->json(['token' => $signedToken]);
     }
 
-    /**
-     * @param Request $request
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
-     */
-    public function verifyToken(Request $request)
+    public function verifyToken(Request $request): JsonResponse
     {
         $secret = config('app.key');
         $input = $request->input('token');
@@ -47,8 +37,7 @@ class SessionTokenController extends Controller
         $signature = $fragments[2];
         $signatureCheck = hash_hmac('sha256', $token, $secret);
 
-        return response()->json([
-            'valid' => $signatureCheck === $signature,
-        ]);
+        return response()
+          ->json(['valid' => $signatureCheck === $signature]);
     }
 }

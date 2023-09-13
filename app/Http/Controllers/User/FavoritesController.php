@@ -6,6 +6,8 @@ use Coyote\Job;
 use Coyote\Microblog;
 use Coyote\Models\Subscription;
 use Coyote\Topic;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use Lavary\Menu\Builder;
 use Lavary\Menu\Menu;
 
@@ -20,79 +22,58 @@ class FavoritesController extends BaseController
         $this->breadcrumb->push('Ulubione i obserwowane strony', route('user.favorites'));
     }
 
-    /**
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function index()
+    public function index(): RedirectResponse
     {
         return redirect()->action('User\FavoritesController@forum');
     }
 
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function forum()
+    public function forum(): View
     {
         $this->breadcrumb->push('Wątki na forum', route('user.favorites.forum'));
-
         return $this->load(Topic::class);
     }
 
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function job()
+    public function job(): View
     {
         $this->breadcrumb->push('Oferty pracy', route('user.favorites.job'));
-
         return $this->load(Job::class);
     }
 
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function microblog()
+    public function microblog(): View
     {
         $this->breadcrumb->push('Mikroblogi', route('user.favorites.microblog'));
-
         return $this->load(Microblog::class);
     }
 
-    /**
-     * @param string $resource
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    protected function load(string $resource)
+    protected function load(string $resource): View
     {
         $subscriptions = Subscription::where('user_id', $this->userId)
-            ->whereHasMorph('resource', [$resource])
-            ->with('resource')
-            ->orderBy('id', 'DESC')
-            ->paginate();
+          ->whereHasMorph('resource', [$resource])
+          ->with('resource')
+          ->orderBy('id', 'DESC')
+          ->paginate();
 
         return $this->view(
-            'user.favorites',
-            [
-                'tabs' => $this->getTabs(),
-                'partial' => $this->request->route()->getName(),
-                'subscriptions' => $subscriptions,
-                'paginate' => $subscriptions->links()
-            ]
+          'user.favorites',
+          [
+            'tabs'          => $this->getTabs(),
+            'partial'       => $this->request->route()->getName(),
+            'subscriptions' => $subscriptions,
+            'paginate'      => $subscriptions->links()
+          ]
         );
     }
 
-    /**
-     * @return mixed
-     */
-    protected function getTabs()
+    protected function getTabs(): Builder
     {
-        return app(Menu::class)->make('favorites', function (Builder $menu) {
+        /** @var Menu $menu */
+        $menu = app(Menu::class);
+        return $menu->make('favorites', function (Builder $menu) {
             $tabs = [
-                'user.favorites.forum' => 'Wątki na forum',
-                'user.favorites.job' => 'Oferty pracy',
-                'user.favorites.microblog' => 'Mikroblogi'
+              'user.favorites.forum'     => 'Wątki na forum',
+              'user.favorites.job'       => 'Oferty pracy',
+              'user.favorites.microblog' => 'Mikroblogi'
             ];
-
             foreach ($tabs as $route => $label) {
                 $item = $menu->add("<span>$label</span>", ['route' => $route]);
                 $item->link->attr(['class' => 'nav-item']);

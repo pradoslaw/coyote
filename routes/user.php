@@ -17,7 +17,7 @@ $this->group(['namespace' => 'User', 'prefix' => 'User', 'middleware' => 'auth',
     $this->get('Notifications/Settings', ['uses' => 'NotificationsController@settings', 'as' => 'notifications.settings']);
     $this->post('Notifications/Settings', 'NotificationsController@save');
     $this->get('Notifications/Ajax', ['uses' => 'NotificationsController@ajax', 'as' => 'notifications.ajax']);
-    $this->post('Notifications/Mark', ['uses' => 'NotificationsController@markAsRead', 'as' => 'notifications.mark']);
+    $this->post('Notifications/Mark', ['uses' => 'NotificationsController@markAllAsRead', 'as' => 'notifications.mark']);
     $this->delete('Notifications/Delete/{uuid}', ['uses' => 'NotificationsController@delete', 'as' => 'notifications.delete']);
 
     $this->get('Pm', ['uses' => 'PmController@index', 'as' => 'pm']);
