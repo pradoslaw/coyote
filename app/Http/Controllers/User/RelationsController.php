@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\User;
 
+use Coyote\Http\Controllers\User\Menu\SettingsMenu;
 use Coyote\Http\Resources\UserResource;
 use Illuminate\Contracts\Cache;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,7 +10,7 @@ use Illuminate\View\View;
 
 class RelationsController extends BaseController
 {
-    use SettingsTrait;
+    use SettingsMenu;
 
     private Cache\Repository $cache;
 

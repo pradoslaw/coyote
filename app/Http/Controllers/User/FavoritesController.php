@@ -2,6 +2,8 @@
 
 namespace Coyote\Http\Controllers\User;
 
+use Coyote\Domain\User\UserMenu;
+use Coyote\Http\Controllers\User\Menu\AccountMenu;
 use Coyote\Job;
 use Coyote\Microblog;
 use Coyote\Models\Subscription;
@@ -13,7 +15,7 @@ use Lavary\Menu\Menu;
 
 class FavoritesController extends BaseController
 {
-    use HomeTrait;
+    use AccountMenu;
 
     public function __construct()
     {
@@ -66,19 +68,16 @@ class FavoritesController extends BaseController
 
     protected function getTabs(): Builder
     {
+        $menuItems = (new UserMenu())->favouriteTabs();
+
         /** @var Menu $menu */
         $menu = app(Menu::class);
-        return $menu->make('favorites', function (Builder $menu) {
-            $tabs = [
-              'user.favorites.forum'     => 'Wątki na forum',
-              'user.favorites.job'       => 'Oferty pracy',
-              'user.favorites.microblog' => 'Mikroblogi'
-            ];
-            foreach ($tabs as $route => $label) {
-                $item = $menu->add("<span>$label</span>", ['route' => $route]);
+        return $menu->make('favorites', function (Builder $menu) use ($menuItems) {
+            foreach ($menuItems as $menuItem) {
+                $item = $menu->add("<span>{$menuItem->title}</span>", ['route' => $menuItem->route]);
                 $item->link->attr(['class' => 'nav-item']);
 
-                if ($route === request()->route()->getName()) {
+                if ($menuItem->routeName === request()->route()->getName()) {
                     $item->link->active();
                 }
             }

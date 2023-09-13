@@ -3,10 +3,11 @@
 namespace Coyote\Http\Controllers\User;
 
 use Coyote\Http\Controllers\Controller;
+use Coyote\Http\Controllers\User\Menu\ProfileNavigation;
 
 abstract class BaseController extends Controller
 {
-    use UserMenuTrait;
+    use ProfileNavigation;
 
     public function __construct()
     {

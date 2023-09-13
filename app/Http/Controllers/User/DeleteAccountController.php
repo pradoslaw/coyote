@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\User;
 
 use Coyote\Events\UserDeleted;
+use Coyote\Http\Controllers\User\Menu\AccountMenu;
 use Coyote\Rules\PasswordCheck;
 use Coyote\Services\Stream\Activities\Delete;
 use Coyote\Services\Stream\Objects\Person;
@@ -19,7 +20,7 @@ class DeleteAccountController extends BaseController
         logout as traitLogout;
     }
 
-    use HomeTrait;
+    use AccountMenu;
 
     public function index(): View
     {

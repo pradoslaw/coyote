@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Controllers\User;
 
+use Coyote\Http\Controllers\User\Menu\SettingsMenu;
 use Coyote\Http\Requests\SkillsRequest;
 use Coyote\Http\Resources\TagResource;
 use Coyote\Tag;
@@ -11,7 +12,7 @@ use Illuminate\View\View;
 
 class SkillsController extends BaseController
 {
-    use SettingsTrait;
+    use SettingsMenu;
 
     public function index(): View
     {

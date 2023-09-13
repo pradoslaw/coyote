@@ -2,13 +2,14 @@
 
 namespace Coyote\Http\Controllers\User;
 
+use Coyote\Http\Controllers\User\Menu\SettingsMenu;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class SecurityController extends BaseController
 {
-    use SettingsTrait;
+    use SettingsMenu;
 
     public function index(): View
     {

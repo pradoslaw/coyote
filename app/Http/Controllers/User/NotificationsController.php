@@ -4,6 +4,8 @@ namespace Coyote\Http\Controllers\User;
 
 use Carbon;
 use Coyote\Events\NotificationRead;
+use Coyote\Http\Controllers\User\Menu\AccountMenu;
+use Coyote\Http\Controllers\User\Menu\SettingsMenu;
 use Coyote\Http\Resources\NotificationResource;
 use Coyote\Notification;
 use Coyote\Repositories\Contracts\NotificationRepositoryInterface;
@@ -17,9 +19,9 @@ use Lavary\Menu\Builder;
 
 class NotificationsController extends BaseController
 {
-    use SettingsTrait, HomeTrait {
-        SettingsTrait::getSideMenu as settingsSideMenu;
-        HomeTrait::getSideMenu as homeSideMenu;
+    use SettingsMenu, AccountMenu {
+        SettingsMenu::getSideMenu as settingsSideMenu;
+        AccountMenu::getSideMenu as homeSideMenu;
     }
 
     public function __construct(private NotificationRepositoryInterface $notification)
@@ -151,7 +153,7 @@ class NotificationsController extends BaseController
     private function markAsReadAndCount(Collection|Paginator $notifications): int
     {
         $unreadNotifications = $notifications
-          ->reject(fn(Notification $notification) => $notification->read_at !== null)
+          ->filter(fn(Notification $notification) => $notification->read_at === null)
           ->pluck('id')
           ->all();
         if (!empty($unreadNotifications)) {
