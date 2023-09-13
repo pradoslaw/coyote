@@ -2,30 +2,30 @@
 
 namespace Coyote\Http\Controllers\Forum;
 
-use Coyote\DTO\RenderParams;
+use Coyote\Http\Controllers\RenderParams;
 use Coyote\Http\Factories\GateFactory;
-use Coyote\Http\Resources\ForumCollection;
 use Coyote\Http\Resources\FlagResource;
+use Coyote\Http\Resources\ForumCollection;
 use Coyote\Http\Resources\TopicCollection;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
+use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
-use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Repositories\Criteria\Topic\OnlyMine;
+use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\Topic\SkipForum;
 use Coyote\Repositories\Criteria\Topic\SkipLockedCategories;
 use Coyote\Repositories\Criteria\Topic\Subscribes;
-use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
 use Coyote\Repositories\Criteria\WithTags;
 use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Services\Flags;
 use Coyote\Services\Guest;
 use Coyote\Topic;
 use Illuminate\Http\Request;
+use Lavary\Menu\Builder;
 use Lavary\Menu\Item;
 use Lavary\Menu\Menu;
-use Lavary\Menu\Builder;
 
 class HomeController extends BaseController
 {
@@ -75,7 +75,7 @@ class HomeController extends BaseController
             });
 
             // currently selected tab
-            list(, $suffix) = explode('.', $request->route()->getName());
+            [, $suffix] = explode('.', $request->route()->getName());
 
             if (in_array($suffix, ['categories', 'all', 'subscribes', 'mine', 'interesting'])) {
                 $this->setSetting('forum.tab', $suffix);
@@ -92,7 +92,7 @@ class HomeController extends BaseController
      */
     protected function view($view = null, $data = [])
     {
-        list(, $suffix) = explode('.', $this->request->route()->getName());
+        [, $suffix] = explode('.', $this->request->route()->getName());
 
         $currentTab = $suffix == 'home' ? $this->getSetting('forum.tab', 'categories') : $suffix;
         $title = null;

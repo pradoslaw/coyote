@@ -2,10 +2,10 @@
 
 namespace Coyote\Http\Controllers\Microblog;
 
-use Coyote\DTO\RenderParams;
+use Coyote\Http\Controllers\RenderParams;
 use Coyote\Http\Factories\CacheFactory;
-use Coyote\Http\Resources\MicroblogResource;
 use Coyote\Http\Resources\MicroblogCollection;
+use Coyote\Http\Resources\MicroblogResource;
 use Coyote\Http\Resources\UserResource;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
 use Coyote\Services\Microblogs\Builder;
@@ -56,7 +56,7 @@ class HomeController extends BaseController
             return $this->microblog->getTags();
         });
 
-        list($tech, $others) = $tags->partition(function (Tag $tag) {
+        [$tech, $others] = $tags->partition(function (Tag $tag) {
             return $tag->category_id === Tag\Category::LANGUAGE;
         });
 
