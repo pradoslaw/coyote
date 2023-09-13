@@ -118,8 +118,6 @@ class HomeController extends BaseController
         /** @var Collection $source */
         $source = $result->getSource();
 
-        ///////////////////////////////////////////////////////////////////
-
         $eagerCriteria = new EagerLoading(['firm', 'locations', 'tags', 'currency']);
 
         $this->job->pushCriteria($eagerCriteria);

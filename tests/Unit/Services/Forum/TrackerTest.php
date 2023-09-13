@@ -118,8 +118,6 @@ class TrackerTest extends TestCase
 
         $tracker->asRead($topic2->last_post_created_at);
 
-        /////////////////
-
         $tracker = $this->factory($topic1, $this->guestId);
 
         $this->assertFalse($tracker->isRead());

@@ -62,15 +62,11 @@ class DispatchMicroblogNotificationsTest extends TestCase
 
         $this->assertFalse($listener->handle($event));
 
-        ////////////////////////////////////////
-
         $microblog->wasRecentlyCreated = true;
 
         $event = new MicroblogSaved($microblog);
 
         $this->assertTrue($listener->handle($event));
-
-        ////////////////////////////////////////
 
         $event->wasContentChanged = true;
 

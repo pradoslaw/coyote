@@ -18,8 +18,6 @@ class MacroTest extends TestCase
         $this->assertEquals(2, $result->first()->id);
         $this->assertEquals(3, $result->last()->id);
 
-        ////////////////////////////////////////////////////////////////////
-
         $users = collect([(new User)->forceFill(['id' => 1])]);
 
         $result = $users->exceptUsers([(new User)->forceFill(['id' => 1]), (new User)->forceFill(['id' => 2]), (new User)->forceFill(['id' => 3])]);
