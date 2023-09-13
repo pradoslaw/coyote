@@ -3,20 +3,18 @@
 namespace Coyote\Http\Controllers\Auth;
 
 use Coyote\Actkey;
-use Coyote\Http\Factories\MailFactory;
+use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Requests\ConfirmRequest;
 use Coyote\Mail\EmailConfirmation;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
-use Coyote\Http\Controllers\Controller;
 use Coyote\Services\Stream\Activities\Confirm as Stream_Confirm;
 use Coyote\Services\Stream\Actor as Stream_Actor;
 use Coyote\Services\Stream\Objects\Person as Stream_Person;
+use Illuminate\Contracts\Mail\MailQueue;
 use Illuminate\Http\Request;
 
 class ConfirmController extends Controller
 {
-    use MailFactory;
-
     /**
      * @var UserRepository
      */
@@ -79,7 +77,7 @@ class ConfirmController extends Controller
         }
 
         $url = Actkey::createLink($userId);
-        $this->getMailFactory()->to($request->input('email'))->queue(new EmailConfirmation($url));
+        app(MailQueue::class)->to($request->input('email'))->queue(new EmailConfirmation($url));
 
         return back()->with('success', 'Na podany adres e-mail został wysłany link aktywacyjny.');
     }

@@ -5,19 +5,19 @@ namespace Coyote\Http\Controllers\User;
 use Coyote\Actkey;
 use Coyote\Events\UserSaved;
 use Coyote\Http\Controllers\User\Menu\SettingsMenu;
-use Coyote\Http\Factories\MailFactory;
 use Coyote\Http\Forms\User\SettingsForm;
 use Coyote\Mail\EmailConfirmation;
 use Coyote\Services\FormBuilder\Form;
 use Coyote\Services\Stream\Activities\Update;
 use Coyote\Services\Stream\Objects\Person;
+use Illuminate\Contracts\Mail\MailQueue;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class SettingsController extends BaseController
 {
-    use SettingsMenu, MailFactory;
+    use SettingsMenu;
 
     public function index(): View
     {
@@ -88,6 +88,6 @@ class SettingsController extends BaseController
         // przed zmiana e-maila trzeba wyslac link potwierdzajacy
         $url = Actkey::createLink($this->auth->id, $email);
 
-        $this->getMailFactory()->to($email)->queue(new EmailConfirmation($url));
+        app(MailQueue::class)->to($email)->queue(new EmailConfirmation($url));
     }
 }

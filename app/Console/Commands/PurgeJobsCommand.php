@@ -2,7 +2,6 @@
 
 namespace Coyote\Console\Commands;
 
-use Coyote\Http\Factories\MailFactory;
 use Coyote\Job;
 use Coyote\Notifications\Job\ExpiredNotification;
 use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
@@ -14,8 +13,6 @@ use Illuminate\Console\Command;
 
 class PurgeJobsCommand extends Command
 {
-    use MailFactory;
-
     /**
      * The name and signature of the console command.
      *

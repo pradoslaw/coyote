@@ -5,18 +5,16 @@ namespace Coyote\Http\Controllers\Auth;
 use Coyote\Actkey;
 use Coyote\Events\UserSaved;
 use Coyote\Http\Controllers\Controller;
-use Coyote\Http\Factories\MailFactory;
 use Coyote\Http\Forms\Auth\RegisterForm;
 use Coyote\Mail\UserRegistered;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Objects\Person as Stream_Person;
 use Coyote\User;
+use Illuminate\Contracts\Mail\MailQueue;
 
 class RegisterController extends Controller
 {
-    use MailFactory;
-
     /**
      * @var UserRepository
      */
@@ -77,7 +75,7 @@ class RegisterController extends Controller
             ]);
 
             $url = Actkey::createLink($user->id);
-            $this->getMailFactory()->to($email)->send(new UserRegistered($url));
+            app(MailQueue::class)->to($email)->send(new UserRegistered($url));
 
             auth()->login($user, true);
 
