@@ -11,22 +11,19 @@ class VatIdRule implements Rule
     {
     }
 
-    public function passes($attribute, $vatId): bool
+    public function passes($attribute, $value): bool
     {
-        // can't validate without country code
         if (!$this->countryCode) {
             return true;
         }
-
         if ($this->countryCode !== 'CH') {
-            $vatId = preg_replace('/[^0-9A-Za-z]/', '', $vatId);
+            $value = \preg_replace('/[^0-9A-Za-z]/', '', $value);
         }
-
-        return (new Validator)->isValid($this->countryCode . $vatId);
+        return (new Validator)->isValid($this->countryCode . $value);
     }
 
-    public function message()
+    public function message(): string
     {
-        return trans('validation.invalid_vat_id');
+        return \trans('validation.invalid_vat_id');
     }
 }

@@ -7,34 +7,17 @@ use Illuminate\Contracts\Validation\Rule;
 
 class EmailExists implements Rule
 {
-    /**
-     * @var UserRepositoryInterface
-     */
-    private $user;
-
-    public function __construct(UserRepositoryInterface $user)
+    public function __construct(private UserRepositoryInterface $user)
     {
-        $this->user = $user;
     }
 
-    /**
-     * Determine if the validation rule passes.
-     *
-     * @param  string  $attribute
-     * @return bool
-     */
-    public function passes($attribute, $email): bool
+    public function passes($attribute, $value): bool
     {
-        return $this->user->whereRaw("LOWER(email) = ?", [mb_strtolower($email)])->exists();
+        return $this->user->whereRaw("LOWER(email) = ?", [\mb_strToLower($value)])->exists();
     }
 
-    /**
-     * Get the validation error message.
-     *
-     * @return string
-     */
-    public function message()
+    public function message(): string
     {
-        return trans('validation.email_exists');
+        return \trans('validation.email_exists');
     }
 }

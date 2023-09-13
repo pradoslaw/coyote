@@ -9,7 +9,7 @@ use Illuminate\Contracts\Validation\Rule;
 class TagDeleted implements Rule
 {
     private TagRepositoryInterface $repository;
-    private string $value;
+    private string $tagName;
 
     public function __construct(TagRepositoryInterface $repository)
     {
@@ -17,32 +17,18 @@ class TagDeleted implements Rule
         $this->repository->pushCriteria(new WithTrashed());
     }
 
-    /**
-     * Determine if the validation rule passes.
-     *
-     * @param  string  $attribute
-     * @param  mixed  $value
-     * @return bool
-     */
-    public function passes($attribute, $value)
+    public function passes($attribute, $value): bool
     {
-        $this->value = $value;
-        $result = $this->repository->findBy('name', $value, ['id', 'deleted_at']);
-
-        if (!$result) {
-            return true;
+        $this->tagName = $value;
+        $tag = $this->repository->findBy('name', $value, ['id', 'deleted_at']);
+        if ($tag) {
+            return null === $tag->deleted_at;
         }
-
-        return null === $result->deleted_at;
+        return true;
     }
 
-    /**
-     * Get the validation error message.
-     *
-     * @return string
-     */
-    public function message()
+    public function message(): string
     {
-        return trans('validation.tag_deleted', ['value' => $this->value]);
+        return \trans('validation.tag_deleted', ['value' => $this->tagName]);
     }
 }
