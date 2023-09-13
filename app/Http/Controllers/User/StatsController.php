@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\User;
 
 use Boduch\Grid\Source\EloquentSource;
+use Coyote\Http\Controllers\User\Menu\AccountMenu;
 use Coyote\Http\Grids\User\StatsGrid;
 use Coyote\Repositories\Contracts\PostRepositoryInterface;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
@@ -10,7 +11,7 @@ use Illuminate\View\View;
 
 class StatsController extends BaseController
 {
-    use HomeTrait;
+    use AccountMenu;
 
     public function index(PostRepositoryInterface $post): View
     {

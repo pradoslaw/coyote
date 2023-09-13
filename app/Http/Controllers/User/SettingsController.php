@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\User;
 
 use Coyote\Actkey;
 use Coyote\Events\UserSaved;
+use Coyote\Http\Controllers\User\Menu\SettingsMenu;
 use Coyote\Http\Factories\MailFactory;
 use Coyote\Http\Forms\User\SettingsForm;
 use Coyote\Mail\EmailConfirmation;
@@ -16,7 +17,7 @@ use Illuminate\View\View;
 
 class SettingsController extends BaseController
 {
-    use SettingsTrait, MailFactory;
+    use SettingsMenu, MailFactory;
 
     public function index(): View
     {

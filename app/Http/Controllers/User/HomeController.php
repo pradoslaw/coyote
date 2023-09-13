@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\User;
 
 use Coyote\Events\UserSaved;
+use Coyote\Http\Controllers\User\Menu\AccountMenu;
 use Coyote\Http\Factories\MediaFactory;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Illuminate\Http\JsonResponse;
@@ -11,7 +12,7 @@ use Illuminate\View\View;
 
 class HomeController extends BaseController
 {
-    use HomeTrait, MediaFactory;
+    use AccountMenu, MediaFactory;
 
     public function index(UserRepositoryInterface $user): View
     {

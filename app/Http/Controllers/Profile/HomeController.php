@@ -3,7 +3,7 @@
 namespace Coyote\Http\Controllers\Profile;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\Http\Controllers\User\UserMenuTrait;
+use Coyote\Http\Controllers\User\Menu\ProfileNavigation;
 use Coyote\Http\Requests\SkillsRequest;
 use Coyote\Http\Resources\MicroblogCollection;
 use Coyote\Http\Resources\TagResource;
@@ -19,7 +19,7 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    use UserMenuTrait;
+    use ProfileNavigation;
 
     /**
      * @var UserRepository

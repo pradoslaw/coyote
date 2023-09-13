@@ -2,11 +2,12 @@
 
 namespace Coyote\Http\Controllers\User;
 
+use Coyote\Http\Controllers\User\Menu\SettingsMenu;
 use Illuminate\View\View;
 
 class TokensController extends BaseController
 {
-    use SettingsTrait;
+    use SettingsMenu;
 
     public function index(): View
     {
