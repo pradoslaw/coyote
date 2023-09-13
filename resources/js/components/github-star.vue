@@ -16,16 +16,25 @@ export default {
     isLoaded: false,
     isMounted: false,
   }),
+  methods: {
+    handleLoad() {
+      this.isLoaded = true;
+    }
+  },
   mounted() {
     if (this.isMounted) {
       return;
     }
 
-    window.addEventListener('load', () => {
-      this.isLoaded = true;
-    })
+    window.addEventListener('load', this.handleLoad)
 
     this.isMounted = true;
+  },
+  unmounted() {
+    window.removeEventListener('load', this.handleLoad)
+
+    this.isMounted = false;
+    this.isLoaded = false;
   }
 }
 </script>
