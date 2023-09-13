@@ -65,9 +65,6 @@ $this->group(
             'uses' => 'Forum\ReasonsController@delete'
         ]);
 
-        ////////////////////////////////////////////////////////////////////////////////////
-
-
         $this->get('Users', 'UsersController@index')->name('users');
         $this->get('Users/Save/{user_trashed}', 'UsersController@edit')->name('users.save');
         $this->post('Users/Save/{user_trashed}', 'UsersController@save');

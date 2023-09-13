@@ -16,8 +16,6 @@ class InterestsCalculatorTest extends TestCase
 
         $this->assertEquals(['php' => 1, 'laravel' => 0.5], $result['ratio']);
 
-        /////////////////////////////////////////////////////////////////////////////////////
-
         $json = json_encode(['tags' => ["mysql" => 144, "python" => 506, "php" => 1034]]);
 
         $calculator = new \Coyote\Services\Skills\Calculator($json);

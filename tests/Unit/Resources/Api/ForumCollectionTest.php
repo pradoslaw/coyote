@@ -3,7 +3,6 @@
 namespace Tests\Unit\Resources\Api;
 
 use Coyote\Forum;
-use Coyote\Http\Resources\Api\ForumResource;
 use Coyote\Http\Resources\ForumCollection;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface;
@@ -11,9 +10,9 @@ use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
 use Coyote\Services\Forum\Tracker;
 use Coyote\Services\Guest;
 use Coyote\Topic;
+use Faker;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
-use Faker;
 
 class ForumCollectionTest extends TestCase
 {
@@ -106,8 +105,6 @@ class ForumCollectionTest extends TestCase
 
         $this->assertFalse($tracker->isRead());
 
-        ////////////////////////////
-
         $result = $this->getCategories($guestId, $guest);
 
         $this->assertFalse($result[$parent->id]['is_read']);
@@ -135,8 +132,6 @@ class ForumCollectionTest extends TestCase
         $tracker = new Tracker($topic, $guest);
 
         $this->assertFalse($tracker->isRead());
-
-        ///////
 
         $result = $this->getCategories($guestId, $guest);
 
