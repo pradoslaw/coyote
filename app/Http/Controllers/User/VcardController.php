@@ -3,20 +3,18 @@
 namespace Coyote\Http\Controllers\User;
 
 use Coyote\Http\Controllers\Controller;
-use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
+use Coyote\Repositories\Contracts\UserRepositoryInterface;
+use Illuminate\View\View;
 
 class VcardController extends Controller
 {
-    /**
-     * @param \Coyote\User
-     * @param UserRepository $repository
-     * @return mixed
-     */
-    public function index($user, UserRepository $repository)
+    public function index(\Coyote\User $user, UserRepositoryInterface $repository): View
     {
-        return view('components.vcard')->with('user', $user)->with([
-            'rank'                  => $repository->rank($user->id),
-            'total_users'           => $repository->countUsersWithReputation()
-        ]);
+        return view('components.vcard')
+          ->with('user', $user)
+          ->with([
+            'rank'        => $repository->rank($user->id),
+            'total_users' => $repository->countUsersWithReputation()
+          ]);
     }
 }

@@ -2,12 +2,18 @@
 
 namespace Coyote\Http\Controllers\User;
 
-use Coyote\Events\NotificationRead;
-use Coyote\Notification;
-use Coyote\Repositories\Contracts\NotificationRepositoryInterface as NotificationRepository;
-use Coyote\Http\Resources\NotificationResource;
-use Illuminate\Http\Request;
 use Carbon;
+use Coyote\Events\NotificationRead;
+use Coyote\Http\Resources\NotificationResource;
+use Coyote\Notification;
+use Coyote\Repositories\Contracts\NotificationRepositoryInterface;
+use Illuminate\Contracts\Pagination\Paginator;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Illuminate\View\View;
+use Lavary\Menu\Builder;
 
 class NotificationsController extends BaseController
 {
@@ -16,93 +22,71 @@ class NotificationsController extends BaseController
         HomeTrait::getSideMenu as homeSideMenu;
     }
 
-    public function __construct(private NotificationRepository $notification)
+    public function __construct(private NotificationRepositoryInterface $notification)
     {
         parent::__construct();
     }
 
-    /**
-     * @return mixed
-     */
-    public function getSideMenu()
+    public function getSideMenu(): Builder
     {
         if ($this->request->route()->getName() == 'user.notifications') {
             return $this->homeSideMenu();
-        } else {
-            return $this->settingsSideMenu();
         }
+        return $this->settingsSideMenu();
     }
 
-    /**
-     * @return \Illuminate\View\View
-     */
-    public function index()
+    public function index(): View
     {
         $this->breadcrumb->push('Powiadomienia', route('user.notifications'));
 
         $pagination = $this->notification->lengthAwarePaginate($this->userId);
-        // mark as read
-        $this->mark($pagination);
-
+        $this->markAsReadAndCount($pagination);
         $pagination->setCollection(
-            collect(NotificationResource::collection($pagination->getCollection())->toArray($this->request))
+          collect(NotificationResource::collection($pagination->getCollection())->toArray($this->request))
         );
 
         return $this->view('user.notifications.home', [
-            'pagination'          => $pagination
+          'pagination' => $pagination
         ]);
     }
 
-    /**
-     * @return \Illuminate\View\View
-     */
-    public function settings()
+    public function settings(): View
     {
         $this->breadcrumb->push('Ustawienia powiadomień', route('user.notifications.settings'));
-
         return $this->view('user.notifications.settings', [
-            'groups'        => $this->notification->notificationTypes()->groupBy('category'),
-            'settings'      => $this->auth->notificationSettings()->get()->sortBy('channel')->groupBy('type_id'),
-            'channels'      => Notification::getChannels()
+          'groups'   => $this->notification->notificationTypes()->groupBy('category'),
+          'settings' => $this->auth->notificationSettings()->get()->sortBy('channel')->groupBy('type_id'),
+          'channels' => Notification::getChannels()
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function save(Request $request)
+    public function save(Request $request): RedirectResponse
     {
         $this->notification->updateSettings($this->userId, $request->input('settings'));
 
         return back()->with('success', 'Zmiany zostały zapisane');
     }
 
-    /**
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function ajax(Request $request)
+    public function ajax(Request $request): JsonResponse
     {
         $unread = $this->auth->notifications_unread;
         $offset = $request->query('offset', 0);
 
         $notifications = $this->notification->takeForUser($this->userId, max(10, $unread), $offset);
-        $unread -= $this->mark($notifications);
-
-        // format notification's headline
-        $notifications = array_filter(NotificationResource::collection($notifications)->toArray($this->request));
+        $unread -= $this->markAsReadAndCount($notifications);
 
         return response()->json([
-            'count'             => $unread,
-            'notifications'     => $notifications
+          'count'         => $unread,
+          'notifications' => $this->formatNotificationsHeadline($notifications)
         ]);
     }
 
-    /**
-     * @param int $id
-     */
-    public function delete($id)
+    private function formatNotificationsHeadline(Collection $notifications): array
+    {
+        return array_filter(NotificationResource::collection($notifications)->toArray($this->request));
+    }
+
+    public function delete(int $id): void
     {
         $this->notification->delete($id);
     }
@@ -110,11 +94,11 @@ class NotificationsController extends BaseController
     /**
      * Marks all alerts as read
      */
-    public function markAsRead()
+    public function markAllAsRead(): void
     {
         if ($this->auth->notifications_unread) {
             $this->notification->where('user_id', $this->userId)->whereNull('read_at')->update([
-                'read_at' => Carbon\Carbon::now()
+              'read_at' => Carbon\Carbon::now()
             ]);
         }
 
@@ -122,14 +106,11 @@ class NotificationsController extends BaseController
     }
 
     /**
-     * @param string $id
-     * @return \Illuminate\Http\RedirectResponse
-     *
      * @deprecated
      */
-    public function url(string $id)
+    public function url(string $id): RedirectResponse
     {
-        /** @var \Coyote\Notification $notification */
+        /** @var Notification $notification */
         $notification = $this->notification->findOrFail($id, ['id', 'url', 'read_at', 'user_id', 'is_clicked']);
 
         $notification->is_clicked = true;
@@ -145,49 +126,37 @@ class NotificationsController extends BaseController
         return redirect()->to($notification->url);
     }
 
-    public function redirectToUrl()
+    public function redirectToUrl(): RedirectResponse
     {
-        $path = urldecode($this->request->get('path'));
+        $path = \urlDecode($this->request->get('path'));
 
         if (!$this->userId) {
             return redirect()->to($path);
         }
 
-        /** @var \Coyote\Notification $notification */
+        /** @var Notification $notification */
         $notification = $this->auth->notifications()->where('url', $path)->first();
 
         if ($notification) {
             $notification->is_clicked = true;
-
             if (!$notification->read_at) {
                 $notification->read_at = now();
-
                 broadcast(new NotificationRead($notification));
             }
-
             $notification->save();
         }
-
         return redirect()->to($path);
     }
 
-    /**
-     * Mark alerts as read and returns number of marked alerts
-     *
-     * @param \Illuminate\Support\Collection $notifications
-     * @return int
-     */
-    private function mark($notifications)
+    private function markAsReadAndCount(Collection|Paginator $notifications): int
     {
-        $ids = $notifications
-            ->reject(fn (Notification $notification) => $notification->read_at !== null)
-            ->pluck('id')
-            ->all();
-
-        if (!empty($ids)) {
-            $this->notification->markAsRead($ids);
+        $unreadNotifications = $notifications
+          ->reject(fn(Notification $notification) => $notification->read_at !== null)
+          ->pluck('id')
+          ->all();
+        if (!empty($unreadNotifications)) {
+            $this->notification->markAsRead($unreadNotifications);
         }
-
-        return count($ids);
+        return count($unreadNotifications);
     }
 }

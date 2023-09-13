@@ -11,38 +11,23 @@ use Coyote\Pm;
 use Coyote\Repositories\Contracts\NotificationRepositoryInterface as NotificationRepository;
 use Coyote\Repositories\Contracts\PmRepositoryInterface as PmRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
-use Coyote\Repositories\Criteria\WithTrashed;
+use Coyote\Services\Parser\Factories\PmFactory;
 use Coyote\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\Response;
+use function app;
 
-/**
- * Class PmController
- * @package Coyote\Http\Controllers\User
- */
 class PmController extends BaseController
 {
     use HomeTrait;
 
-    /**
-     * @var UserRepository
-     */
-    private $user;
+    private UserRepository $user;
+    private NotificationRepository $notification;
+    private PmRepository $pm;
 
-    /**
-     * @var NotificationRepository
-     */
-    private $notification;
-
-    /**
-     * @var PmRepository
-     */
-    private $pm;
-
-    /**
-     * @param UserRepository $user
-     * @param NotificationRepository $notification
-     * @param PmRepository $pm
-     */
     public function __construct(UserRepository $user, NotificationRepository $notification, PmRepository $pm)
     {
         parent::__construct();
@@ -54,148 +39,101 @@ class PmController extends BaseController
         $this->breadcrumb->push('Wiadomości prywatne', route('user.pm'));
     }
 
-    /**
-     * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
-     */
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse|View
     {
         $pm = $this->pm->lengthAwarePaginate($this->userId);
         $messages = PmResource::collection(collect($pm->items()));
-
         $result = [
-            'messages' => $messages->toArray($this->request),
-            'per_page' => $pm->perPage(),
-            'total' => $pm->total(),
-            'current_page' => $pm->currentPage(),
+          'messages'     => $messages->toArray($this->request),
+          'per_page'     => $pm->perPage(),
+          'total'        => $pm->total(),
+          'current_page' => $pm->currentPage(),
         ];
-
         if ($request->wantsJson()) {
             return response()->json($result);
         }
-
         return $this->view('user.pm.home')->with($result);
     }
 
-    /**
-     * @param Pm $pm
-     * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     */
-    public function show(Pm $pm, Request $request)
+    public function show(Pm $pm, Request $request): View
     {
         $this->authorize('show', $pm);
 
-        $talk = $this->pm->conversation($this->userId, $pm->author_id, 10, (int) $request->query('offset', 0));
-        $messages = PmResource::collection($talk);
+        $messages = PmResource::collection($this->pm->conversation(
+          $this->userId,
+          $pm->author_id,
+          10,
+          (int)$request->query('offset', 0)));
 
         $this->markAllAsRead($pm->author);
 
-        return $this->view('user.pm.show')->with(compact('pm', 'messages'))->with('recipient', $pm->author);
+        return $this->view('user.pm.show')
+          ->with(compact('pm', 'messages'))
+          ->with('recipient', $pm->author);
     }
 
-    /**
-     * @param Request $request
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
-     */
-    public function infinity(Request $request)
+    public function infinity(Request $request): ResourceCollection
     {
-        $talk = $this->pm->conversation($this->userId, (int) $request->input('author_id'), 10, (int) $request->query('offset', 0));
-
-        return PmResource::collection($talk);
+        return PmResource::collection($this->pm->conversation(
+          $this->userId,
+          (int)$request->input('author_id'),
+          10,
+          (int)$request->query('offset', 0)));
     }
 
-    /**
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
-     */
-    public function inbox()
+    public function inbox(): ResourceCollection
     {
         $pm = $this->pm->groupByAuthor($this->userId);
-
         PmResource::withoutWrapping();
-
         return PmResource::collection($pm);
     }
 
-    /**
-     * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function submit(Request $request)
+    public function submit(Request $request): View
     {
         $this->breadcrumb->push('Napisz wiadomość', route('user.pm.submit'));
-
         return $this->view('user.pm.show', [
-            'recipient' => $request->has('to') ? $this->user->findByName($this->request->input('to')) : new \stdClass(),
-            'messages' => []
+          'recipient' => $request->has('to') ? $this->user->findByName($this->request->input('to')) : new \stdClass(),
+          'messages'  => []
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function preview(Request $request)
+    public function preview(Request $request): Response
     {
-        return response($this->getParser()->parse((string) $request->get('text')));
+        $text = (string)$request->get('text');
+        /** @var PmFactory $factory */
+        $factory = app('parser.pm');
+        return response($factory->parse($text));
     }
 
-    /**
-     * @param PmRequest $request
-     * @return PmResource
-     */
-    public function save(PmRequest $request)
+    public function save(PmRequest $request): PmResource
     {
         $recipient = $this->user->findByName($request->input('recipient'));
-
         $pm = $this->transaction(function () use ($request, $recipient) {
             $result = $this->pm->submit($this->auth, $request->all() + ['author_id' => $recipient->id]);
             $result[Pm::SENTBOX]->assets()->sync($request->input('assets'));
-
             return $result;
         });
-
         event(new PmCreated($pm[Pm::INBOX]));
-
         $recipient->notify(new PmCreatedNotification($pm[Pm::INBOX]));
-
         PmResource::withoutWrapping();
-
         return new PmResource($pm[Pm::SENTBOX]);
     }
 
-    /**
-     * @param Pm $pm
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     */
-    public function delete(Pm $pm)
+    public function delete(Pm $pm): void
     {
         $this->authorize('show', $pm);
-
         $pm->delete();
     }
 
-    /**
-     * @param Pm $pm
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     */
-    public function mark(Pm $pm)
+    public function mark(Pm $pm): JsonResponse
     {
         $this->authorize('show', $pm);
-
         $this->markAllAsRead($pm->author);
         $this->auth->refresh();
-
         return response()->json(['count' => $this->auth->pm_unread]);
     }
 
-    /**
-     * @param User $author
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     */
-    private function markAllAsRead(User $author)
+    private function markAllAsRead(User $author): void
     {
         $result = $this->pm->getNotRead($this->userId, $author->id);
 
@@ -208,43 +146,25 @@ class PmController extends BaseController
         }
     }
 
-    /**
-     * @param Pm $pm
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     */
-    private function markAsRead(Pm $pm)
+    private function markAsRead(Pm $pm): void
     {
         if ($pm->read_at) {
             return;
         }
-
         // database trigger will decrease pm counter in "users" table.
         $this->pm->markAsRead($pm->text_id);
-
         // IF we have unread alert that is connected with that message... then we also have to mark it as read
         if ($this->auth->notifications_unread) {
             $this->notification->markAsReadByModel($this->userId, $pm);
         }
-
         event(new PmRead($pm));
     }
 
-    /**
-     * @param int $authorId
-     */
-    public function trash($authorId)
+    public function trash(int $authorId): void
     {
         $pm = $this->pm->findWhere(['user_id' => $this->userId, 'author_id' => $authorId]);
         abort_if($pm->count() == 0, 404);
 
         $this->pm->trash($this->userId, $authorId);
-    }
-
-    /**
-     * @return \Coyote\Services\Parser\Factories\PmFactory
-     */
-    private function getParser()
-    {
-        return app('parser.pm');
     }
 }

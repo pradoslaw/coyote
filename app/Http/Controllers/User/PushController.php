@@ -7,14 +7,16 @@ use Illuminate\Http\Request;
 
 class PushController extends Controller
 {
-    public function store(Request $request)
+    public function store(Request $request): void
     {
         $this->validate($request, [
-            'endpoint'    => 'required',
-            'keys.auth'   => 'required',
-            'keys.p256dh' => 'required'
+          'endpoint'    => 'required',
+          'keys.auth'   => 'required',
+          'keys.p256dh' => 'required'
         ]);
-
-        $this->auth->updatePushSubscription($request->post('endpoint'), $request->input('keys.p256dh'), $request->input('keys.auth'));
+        $this->auth->updatePushSubscription(
+          $request->post('endpoint'),
+          $request->input('keys.p256dh'),
+          $request->input('keys.auth'));
     }
 }

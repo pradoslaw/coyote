@@ -2,33 +2,27 @@
 
 namespace Coyote\Http\Controllers\User;
 
-use Coyote\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class SecurityController extends BaseController
 {
     use SettingsTrait;
 
-    /**
-     * @return \Illuminate\View\View
-     */
-    public function index()
+    public function index(): View
     {
         $this->breadcrumb->push('Bezpieczeństwo', route('user.security'));
-
-        return $this->view('user.security', ['ips' => explode('.', auth()->user()->access_ip)]);
+        return $this->view('user.security', [
+          'ips' => explode('.', auth()->user()->access_ip)
+        ]);
     }
 
-    /**
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function save(Request $request)
+    public function save(Request $request): RedirectResponse
     {
         $user = auth()->user();
-
-        $user->alert_login = (bool) $request->get('alert_login');
-        $user->alert_failure = (bool) $request->get('alert_failure');
+        $user->alert_login = (bool)$request->get('alert_login');
+        $user->alert_failure = (bool)$request->get('alert_failure');
 
         $ips = [];
 

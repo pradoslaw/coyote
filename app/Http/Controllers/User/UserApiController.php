@@ -2,21 +2,16 @@
 
 namespace Coyote\Http\Controllers\User;
 
+use Illuminate\Http\JsonResponse;
+
 class UserApiController extends BaseController
 {
     public function __construct()
     {
     }
 
-    /**
-     * @param \Coyote\User $user
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function get($user)
+    public function get(\Coyote\User $user): JsonResponse
     {
-        return response()->json([
-            'id' => $user->id,
-            'name' => $user->name,
-        ]);
+        return response()->json(['id' => $user->id, 'name' => $user->name,]);
     }
 }
