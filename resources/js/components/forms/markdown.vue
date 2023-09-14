@@ -160,7 +160,7 @@ export default class VueMarkdown extends Vue {
     code: {
       click: this.insertCode,
       can: false,
-      title: 'Zmień zaznaczoną treść w tekst preformatowany lub dodaj pusty znacznik tekstu preformatowanego (może opisywać kod źródłowy, komunikat błędu, stack-trace, wynik działania programu itp.)',
+      title: 'Zmień zaznaczoną treść w kod lub dodaj pusty znacznik (kod źródłowy, błąd, stack-trace, wynik działania programu itp.)',
       break: 'Dodanie tutaj tekstu preformatowanego mogłoby uszkodzić składnię',
       icon: 'fa-code',
     },
