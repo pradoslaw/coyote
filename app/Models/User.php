@@ -39,6 +39,7 @@ use Ramsey\Uuid\Uuid;
  * @property int $allow_smilies
  * @property int $allow_sig
  * @property int $allow_sticky_header
+ * @property int $marketing_agreement
  * @property int $birthyear
  * @property int $reputation
  * @property string $name
@@ -112,7 +113,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'allow_smilies',
         'allow_sig',
         'allow_subscribe',
-        'allow_sticky_header'
+        'allow_sticky_header',
+        'marketing_agreement',
     ];
 
     /**
