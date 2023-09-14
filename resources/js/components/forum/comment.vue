@@ -12,7 +12,7 @@
       </a>
 
       <a v-if="comment.editable" @click="deleteComment" href="javascript:" title="Usuń ten komentarz" class="btn-comment">
-        <i class="fas fa-times"></i>
+        <i class="fas fa-trash-alt"></i>
       </a>
 
       <a v-if="comment.editable" @click="migrate" href="javascript:" title="Zamień w post" class="btn-comment">

@@ -6,7 +6,9 @@
 
         {{ tag.real_name || tag.name }}
 
-        <a v-if="editable" @click="deleteTag(tag)" class="remove"><i class="fa fa-times"></i></a>
+        <a v-if="editable" @click="deleteTag(tag)" class="remove">
+          <i class="fa fa-times"></i>
+        </a>
       </component>
 
       <vue-progress-bar

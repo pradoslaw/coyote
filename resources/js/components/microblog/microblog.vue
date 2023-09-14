@@ -36,7 +36,7 @@
 
                   <template v-if="!microblog.deleted_at">
                     <a @click="edit(microblog)" class="dropdown-item" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
-                    <a  @click="deleteItem" class="dropdown-item" href="javascript:"><i class="fas fa-times fa-fw"></i> Usuń</a>
+                    <a  @click="deleteItem" class="dropdown-item" href="javascript:"><i class="fas fa-trash-alt fa-fw"></i> Usuń</a>
                   </template>
 
                   <a v-else @click="restoreItem" class="dropdown-item" href="javascript:"><i class="fas fa-trash-restore fa-fw"></i> Przywróć</a>

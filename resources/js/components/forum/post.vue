@@ -232,7 +232,7 @@
 
             <template v-if="post.permissions.delete">
               <button v-if="!post.deleted_at" @click="deletePost(true)" class="btn btn-sm">
-                <i class="fa fa-fw fa-times"></i> <span class="d-none d-sm-inline">Usuń</span>
+                <i class="fa fa-fw fa-trash-alt"></i> <span class="d-none d-sm-inline">Usuń</span>
               </button>
               <button v-else class="btn btn-sm" @click="restore">
                 <i class="fa fa-fw fa-undo"></i> <span class="d-none d-sm-inline">Przywróć</span>
