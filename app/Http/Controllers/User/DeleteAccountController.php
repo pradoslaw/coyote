@@ -32,7 +32,7 @@ class DeleteAccountController extends BaseController
         $this->validate($request, [
           'password' => [
             'bail',
-            Rule::requiredIf(fn() => $this->auth->password !== null),
+            Rule::requiredIf(fn () => $this->auth->password !== null),
             app(PasswordCheck::class)
           ]
         ]);

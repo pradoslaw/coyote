@@ -54,7 +54,8 @@ class Breadcrumb implements \Countable, Arrayable
             [
                 'breadcrumbs' => $this->breadcrumbs,
                 'schema' => Schema::breadcrumbList()
-                    ->itemListElement(array_map(
+                    ->itemListElement(
+                        array_map(
                         function ($breadcrumb, int $index) {
                             return Schema::listItem()
                                 ->position($index + 1)
@@ -64,7 +65,7 @@ class Breadcrumb implements \Countable, Arrayable
                         $this->breadcrumbs,
                         array_keys($this->breadcrumbs),
                     )
-                ),
+                    ),
             ]
         );
     }

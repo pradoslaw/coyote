@@ -16,7 +16,7 @@ class MinWords implements Rule
         if (auth()->check() && auth()->user()->reputation >= Reputation::SHORT_TITLE) {
             return true;
         }
-        return \count(\array_filter(\preg_split('/\s+/', $value), fn($word) => \strLen($word) > 1)) >= $this->minimumWords;
+        return \count(\array_filter(\preg_split('/\s+/', $value), fn ($word) => \strLen($word) > 1)) >= $this->minimumWords;
     }
 
     public function message(): string

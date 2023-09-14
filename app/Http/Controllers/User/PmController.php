@@ -61,10 +61,11 @@ class PmController extends BaseController
         $this->authorize('show', $pm);
 
         $messages = PmResource::collection($this->pm->conversation(
-          $this->userId,
-          $pm->author_id,
-          10,
-          (int)$request->query('offset', 0)));
+            $this->userId,
+            $pm->author_id,
+            10,
+            (int)$request->query('offset', 0)
+        ));
 
         $this->markAllAsRead($pm->author);
 
@@ -76,10 +77,11 @@ class PmController extends BaseController
     public function infinity(Request $request): ResourceCollection
     {
         return PmResource::collection($this->pm->conversation(
-          $this->userId,
-          (int)$request->input('author_id'),
-          10,
-          (int)$request->query('offset', 0)));
+            $this->userId,
+            (int)$request->input('author_id'),
+            10,
+            (int)$request->query('offset', 0)
+        ));
     }
 
     public function inbox(): ResourceCollection

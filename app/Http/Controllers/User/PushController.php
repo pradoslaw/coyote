@@ -15,8 +15,9 @@ class PushController extends Controller
           'keys.p256dh' => 'required'
         ]);
         $this->auth->updatePushSubscription(
-          $request->post('endpoint'),
-          $request->input('keys.p256dh'),
-          $request->input('keys.auth'));
+            $request->post('endpoint'),
+            $request->input('keys.p256dh'),
+            $request->input('keys.auth')
+        );
     }
 }

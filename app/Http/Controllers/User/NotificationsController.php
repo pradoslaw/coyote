@@ -44,7 +44,7 @@ class NotificationsController extends BaseController
         $pagination = $this->notification->lengthAwarePaginate($this->userId);
         $this->markAsReadAndCount($pagination);
         $pagination->setCollection(
-          collect(NotificationResource::collection($pagination->getCollection())->toArray($this->request))
+            collect(NotificationResource::collection($pagination->getCollection())->toArray($this->request))
         );
 
         return $this->view('user.notifications.home', [
@@ -153,7 +153,7 @@ class NotificationsController extends BaseController
     private function markAsReadAndCount(Collection|Paginator $notifications): int
     {
         $unreadNotifications = $notifications
-          ->filter(fn(Notification $notification) => $notification->read_at === null)
+          ->filter(fn (Notification $notification) => $notification->read_at === null)
           ->pluck('id')
           ->all();
         if (!empty($unreadNotifications)) {

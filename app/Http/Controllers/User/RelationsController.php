@@ -23,7 +23,7 @@ class RelationsController extends BaseController
     public function showRelations(): View
     {
         $users = $this->auth->relations()
-          ->with(['relatedUser' => fn(BelongsTo $builder) => $builder->withTrashed()])
+          ->with(['relatedUser' => fn (BelongsTo $builder) => $builder->withTrashed()])
           ->get()
           ->pluck('relatedUser');
 

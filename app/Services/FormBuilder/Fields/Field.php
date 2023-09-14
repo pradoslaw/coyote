@@ -437,9 +437,9 @@ abstract class Field
             $this->setValue($this->parent->getRequest()->get($this->name));
         } elseif ($this->hasOldInput($this->name)) {
             $this->setValue($this->getOldInput($this->name));
-        // we set value from model/object/array only if current value is empty.
-        // that's because we can set custom value in form class and we DO NOT want
-        // overwrite this here:
+            // we set value from model/object/array only if current value is empty.
+            // that's because we can set custom value in form class and we DO NOT want
+            // overwrite this here:
         } elseif ($this->value === null && !($this instanceof ChildForm)) {
             $this->setValue($this->getDataValue($this->parent->getData(), $this->name));
         }

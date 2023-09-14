@@ -56,13 +56,13 @@ class FavoritesController extends BaseController
           ->paginate();
 
         return $this->view(
-          'user.favorites',
-          [
-            'tabs'          => $this->getTabs(),
-            'partial'       => $this->request->route()->getName(),
-            'subscriptions' => $subscriptions,
-            'paginate'      => $subscriptions->links()
-          ]
+            'user.favorites',
+            [
+              'tabs'          => $this->getTabs(),
+              'partial'       => $this->request->route()->getName(),
+              'subscriptions' => $subscriptions,
+              'paginate'      => $subscriptions->links()
+            ]
         );
     }
 
