@@ -27,7 +27,8 @@
               {{ form_row(form.password_confirmation) }}
               {{ form_row(form.email) }}
               {{ form_row(form.email_confirmation) }}
-              {{ form_row(form.terms, {label: '<small>Akceptuję <a href="/Regulamin">regulamin</a> oraz <a href="/Polityka_prywatności">politykę prywatności</a>.</small>'}) }}
+              {{ form_row(form.terms) }}
+              {{ form_row(form.marketing_agreement) }}
 
               <div class="form-group">
                 <small class="form-text text-muted">
@@ -74,8 +75,8 @@
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
   <script type="text/javascript">
-    function onSubmit() {
-      document.getElementById("js-register-form").submit();
-    }
+      function onSubmit() {
+          document.getElementById("js-register-form").submit();
+      }
   </script>
 {% endblock %}

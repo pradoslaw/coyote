@@ -1,17 +1,5 @@
 <?php
 
-/**
- * This file is part of the TwigBridge package.
- *
- * @copyright Robert Crowe <hello@vivalacrowe.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
-/**
- * Configuration options for Twig.
- */
 return [
 
     'twig'       => [
@@ -23,7 +11,7 @@ return [
         | File extension for Twig view files.
         |
         */
-        'extension' => 'twig',
+        'extension'   => 'twig',
 
         /*
         |--------------------------------------------------------------------------
@@ -38,11 +26,11 @@ return [
             // When set to true, the generated templates have a __toString() method
             // that you can use to display the generated nodes.
             // default: false
-            'debug' => env('APP_DEBUG', false),
+            'debug'               => env('APP_DEBUG', false),
 
             // The charset used by the templates.
             // default: utf-8
-            'charset' => 'utf-8',
+            'charset'             => 'utf-8',
 
             // The base template class to use for generated templates.
             // default: TwigBridge\Twig\Template
@@ -51,64 +39,33 @@ return [
             // An absolute path where to store the compiled templates, or false to disable caching. If null
             // then the cache file path is used.
             // default: cache file storage path
-            'cache' => null,
+            'cache'               => null,
 
             // When developing with Twig, it's useful to recompile the template
             // whenever the source code changes. If you don't provide a value
             // for the auto_reload option, it will be determined automatically based on the debug value.
-            'auto_reload' => true,
+            'auto_reload'         => true,
 
             // If set to false, Twig will silently ignore invalid variables
             // (variables and or attributes/methods that do not exist) and
             // replace them with a null value. When set to true, Twig throws an exception instead.
             // default: false
-            'strict_variables' => false,
+            'strict_variables'    => false,
 
             // If set to true, auto-escaping will be enabled by default for all templates.
             // default: 'html'
-            'autoescape' => 'html',
+            'autoescape'          => 'html',
 
             // A flag that indicates which optimizations to apply
             // (default to -1 -- all optimizations are enabled; set it to 0 to disable)
-            'optimizations' => -1,
+            'optimizations'       => -1,
         ],
 
-        /*
-        |--------------------------------------------------------------------------
-        | Safe Classes
-        |--------------------------------------------------------------------------
-        |
-        | When set, the output of the `__string` method of the following classes will not be escaped.
-        | default: Laravel's Htmlable, which the HtmlString class implements.
-        |
-        */
         'safe_classes' => [
-            \Illuminate\Contracts\Support\Htmlable::class => ['html'],
+            \Coyote\View\Twig\TwigLiteral::class => ['html'],
         ],
-
-        /*
-        |--------------------------------------------------------------------------
-        | Global variables
-        |--------------------------------------------------------------------------
-        |
-        | These will always be passed in and can be accessed as Twig variables.
-        | NOTE: these will be overwritten if you pass data into the view with the same key.
-        |
-        */
-        'globals' => [],
     ],
     'extensions' => [
-
-        /*
-        |--------------------------------------------------------------------------
-        | Extensions
-        |--------------------------------------------------------------------------
-        |
-        | Enabled extensions.
-        |
-        | `Twig_Extension_Debug` is enabled automatically if twig.debug is TRUE.
-        |
-        */
         'enabled'   => [
             'TwigBridge\Extension\Loader\Facades',
             'TwigBridge\Extension\Loader\Filters',
@@ -119,7 +76,6 @@ return [
             'TwigBridge\Extension\Laravel\Session',
             'TwigBridge\Extension\Laravel\Str',
             'TwigBridge\Extension\Laravel\Translator',
-//            'TwigBridge\Extension\Laravel\Url',
             'TwigBridge\Extension\Laravel\Form',
             'TwigBridge\Extension\Laravel\Html',
 
@@ -130,9 +86,6 @@ return [
             'Coyote\Services\TwigBridge\Extensions\Block',
             'Coyote\Services\TwigBridge\Extensions\FormBuilder',
             'Coyote\Services\TwigBridge\Extensions\Media',
-
-            // odkomentuj jezeli potrzebujesz profilera wewnatrz twig. {% stopwatch %} oraz {% endstopwatch %}
-//            'Barryvdh\Debugbar\Twig\Extension\Stopwatch',
         ],
         /*
         |--------------------------------------------------------------------------
@@ -206,12 +159,12 @@ return [
             'public_path',
             'http_build_query',
             'secure_asset',
-            'grid' => ['is_safe' => ['html']],
+            'grid'        => ['is_safe' => ['html']],
             'grid_column' => ['is_safe' => ['html']],
-            'grid_row' => ['is_safe' => ['html']],
-            'grid_cell' => ['is_safe' => ['html']],
+            'grid_row'    => ['is_safe' => ['html']],
+            'grid_cell'   => ['is_safe' => ['html']],
             'grid_filter' => ['is_safe' => ['html']],
-            'grid_empty' => ['is_safe' => ['html']]
+            'grid_empty'  => ['is_safe' => ['html']]
         ],
         /*
         |--------------------------------------------------------------------------

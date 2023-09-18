@@ -7,77 +7,52 @@ use Coyote\Events\UserSaved;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Auth\RegisterForm;
 use Coyote\Mail\UserRegistered;
-use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
+use Coyote\Services\FormBuilder\Form;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Objects\Person as Stream_Person;
 use Coyote\User;
 use Illuminate\Contracts\Mail\MailQueue;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class RegisterController extends Controller
 {
-    /**
-     * @var UserRepository
-     */
-    private $user;
-
-    /**
-     * RegisterController constructor.
-     * @param UserRepository $user
-     */
-    public function __construct(UserRepository $user)
+    public function __construct()
     {
         parent::__construct();
         $this->middleware('guest');
-
-        $this->user = $user;
     }
 
-    /**
-     * @return \Illuminate\View\View
-     */
-    public function index()
+    public function index(): View
     {
         $this->breadcrumb->push('Rejestracja', route('register'));
-
-        $form = $this->getForm();
-
-        return $this->view('auth.register', compact('form'));
+        return $this->view('auth.register', ['form' => $this->form()]);
     }
 
-    /**
-     * @return \Coyote\Services\FormBuilder\Form
-     */
-    private function getForm()
+    private function form(): Form
     {
-        return $this->createForm(RegisterForm::class, null, [
-            'url' => route('register')
-        ]);
+        return $this->createForm(RegisterForm::class, null, ['url' => route('register')]);
     }
 
-    /**
-     * Obsluga formularza rejestracji uzytkownika
-     *
-     * @param  RegisterForm  $form
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function signup(RegisterForm $form)
+    public function signup(RegisterForm $form): RedirectResponse
     {
         $request = $form->getRequest();
 
         $this->transaction(function () use ($request) {
-            $email = $request->input('email');
-
             $user = User::forceCreate([
-                'name'     => $request->input('name'),
-                'email'    => $email,
-                'password' => bcrypt($request->input('password')),
-                'guest_id' => $request->session()->get('guest_id')
+                'name'                => $request->input('name'),
+                'email'               => $request->input('email'),
+                'password'            => bcrypt($request->input('password')),
+                'guest_id'            => $request->session()->get('guest_id'),
+                'marketing_agreement' => $request->input('marketing_agreement')
             ]);
 
-            $url = Actkey::createLink($user->id);
-            app(MailQueue::class)->to($email)->send(new UserRegistered($url));
+            app(MailQueue::class)
+                ->to($request->input('email'))
+                ->send(new UserRegistered(Actkey::createLink($user->id)));
 
-            auth()->login($user, true);
+            auth()
+                ->login($user, true);
 
             stream(Stream_Create::class, new Stream_Person());
 

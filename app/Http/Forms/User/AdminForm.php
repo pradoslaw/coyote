@@ -2,36 +2,17 @@
 
 namespace Coyote\Http\Forms\User;
 
-use Coyote\Repositories\Contracts\GroupRepositoryInterface as GroupRepository;
+use Coyote\Repositories\Contracts\GroupRepositoryInterface;
 use Coyote\Services\Geocoder\GeocoderInterface;
-use Illuminate\Contracts\Auth\Access\Gate;
 
 class AdminForm extends SettingsForm
 {
-    /**
-     * @var GroupRepository
-     */
-    protected $group;
-
-    /**
-     * @var Gate
-     */
-    protected $gate;
-
-    /**
-     * @param GeocoderInterface $geocoder
-     * @param GroupRepository $group
-     * @param Gate $gate
-     */
-    public function __construct(GeocoderInterface $geocoder, GroupRepository $group, Gate $gate)
+    public function __construct(GeocoderInterface $geocoder, private GroupRepositoryInterface $group)
     {
         parent::__construct($geocoder);
-
-        $this->group = $group;
-        $this->gate = $gate;
     }
 
-    public function buildForm()
+    public function buildForm():void
     {
         $this->add('name', 'text', [
             'label' => 'Nazwa użytkownika',
@@ -41,14 +22,6 @@ class AdminForm extends SettingsForm
         parent::buildForm();
 
         $this
-//            ->add('skills', 'collection', [
-//                'label' => 'Umiejętności',
-//                'child_attr' => [
-//                    'type' => 'child_form',
-//                    'class' => SkillsForm::class,
-//                    'value' => $this->data
-//                ]
-//            ])
             ->addAfter('group_id', 'is_confirm', 'checkbox', [
                 'label' => 'Potwierdzony adres e-mail',
                 'rules' => 'bool'
@@ -57,20 +30,21 @@ class AdminForm extends SettingsForm
                 'label' => 'Sponsor',
                 'rules' => 'bool'
             ])
+            ->addAfter('group_id', 'marketing_agreement', 'checkbox', [
+                'label' => 'Zgoda marketingowa',
+                'rules' => 'bool'
+            ])
             ->addAfter('group_id', 'is_active', 'checkbox', [
                 'label' => 'Konto aktywne',
                 'rules' => 'bool'
             ])
             ->addAfter('allow_sticky_header', 'delete_photo', 'checkbox', [
                 'label' => 'Usuń zdjęcie'
+            ])
+            ->add('groups', 'choice', [
+                'label'    => 'Grupy użytkownika',
+                'choices'  => $this->group->pluck('name', 'id'),
+                'property' => 'id'
             ]);
-
-        $groups = $this->group->pluck('name', 'id');
-
-        $this->add('groups', 'choice', [
-            'label' => 'Grupy użytkownika',
-            'choices' => $groups,
-            'property' => 'id'
-        ]);
     }
 }

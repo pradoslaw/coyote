@@ -5,8 +5,12 @@
     {{ form_start(form) }}
 
     <ul class="nav nav-tabs">
-        <li class="nav-item"><a href="#settings" class="nav-link active" data-bs-toggle="tab">Ustawienia</a></li>
-        <li class="nav-item"><a href="#groups" class="nav-link" role="tab" data-bs-toggle="tab">Grupy użytkownika</a></li>
+        <li class="nav-item">
+            <a href="#settings" class="nav-link active" data-bs-toggle="tab">Ustawienia</a>
+        </li>
+        <li class="nav-item">
+            <a href="#groups" class="nav-link" role="tab" data-bs-toggle="tab">Grupy użytkownika</a>
+        </li>
     </ul>
 
 
@@ -24,6 +28,7 @@
             {{ form_row(form.allow_smilies) }}
             {{ form_row(form.allow_subscribe) }}
             {{ form_row(form.allow_sticky_header) }}
+            {{ form_row(form.marketing_agreement) }}
             {{ form_row(form.delete_photo) }}
             {{ form_row(form.firm) }}
             {{ form_row(form.position) }}
@@ -35,11 +40,6 @@
             {{ form_row(form.sig) }}
             {{ form_row(form.submit) }}
         </div>
-
-{#        <div id="skills" class="card-body tab-pane">#}
-{#            {{ form_row(form.skills) }}#}
-{#            {{ form_row(form.submit) }}#}
-{#        </div>#}
 
         <div id="groups" class="card-body tab-pane">
             {{ form_row(form.groups) }}
