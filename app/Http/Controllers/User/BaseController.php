@@ -7,7 +7,7 @@ use Coyote\Http\Controllers\Controller;
 abstract class BaseController extends Controller
 {
     use UserMenuTrait;
-    
+
     public function __construct()
     {
         parent::__construct();
@@ -16,11 +16,7 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * Renders view with breadcrumb
-     *
-     * @param string $view
-     * @param array $data
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @inheritdoc
      */
     protected function view($view = null, $data = [])
     {
@@ -28,7 +24,7 @@ abstract class BaseController extends Controller
         $data['top_menu'] = $this->getUserMenu();
 
         $data['top_menu']->get($data['side_menu']->name)->activate();
-        
+
         return parent::view($view, $data);
     }
 }

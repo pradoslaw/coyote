@@ -13,15 +13,18 @@ abstract class BaseController extends Controller
     {
         parent::__construct();
 
-        TagResource::urlResolver(fn (string $name) => route('guide.tag', [urlencode($name)]));
+        TagResource::urlResolver(fn(string $name) => route('guide.tag', [urlencode($name)]));
 
         $this->breadcrumb->push('Rekrutacyjne Q&A', route('guide.home'));
     }
 
+    /**
+     * @inheritdoc
+     */
     public function view($view = null, $data = [])
     {
         return parent::view($view, $data)->with([
-            'popular_tags'  => $this->tagRepository->popularTags(Guide::class)->groupBy('category')
+          'popular_tags' => $this->tagRepository->popularTags(Guide::class)->groupBy('category')
         ]);
     }
 }

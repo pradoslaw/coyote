@@ -7,11 +7,11 @@ use Coyote\Http\Factories\GateFactory;
 use Coyote\Services\Breadcrumb;
 use Coyote\Services\Guest;
 use Illuminate\Database\Connection;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 abstract class Controller extends BaseController
 {
@@ -68,8 +68,6 @@ abstract class Controller extends BaseController
     }
 
     /**
-     * Renders view with breadcrumb
-     *
      * @param string|null $view
      * @param array $data
      * @return \Illuminate\View\View

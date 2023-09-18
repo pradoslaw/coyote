@@ -6,9 +6,9 @@ use Coyote\Forum;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Resources\TagResource;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
+use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
 use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
-use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
@@ -64,7 +64,7 @@ abstract class BaseController extends Controller
             return $next($request);
         });
 
-        TagResource::urlResolver(fn ($name) => route('forum.tag', [urlencode($name)]));
+        TagResource::urlResolver(fn($name) => route('forum.tag', [urlencode($name)]));
     }
 
     /**
@@ -82,21 +82,17 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * Renders view with breadcrumb
-     *
-     * @param string|null $view
-     * @param array $data
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @inheritdoc
      */
     protected function view($view = null, $data = [])
     {
         return parent::view($view, $data)->with([
-            'tags' => [
-                'popular'   => $this->getTagClouds(),
-                'user'      => $this->getUserTags()
-            ],
-            'viewers' => $this->getViewers(),
-            'sidebar' => $this->getSetting('forum.sidebar', true)
+          'tags'    => [
+            'popular' => $this->getTagClouds(),
+            'user'    => $this->getUserTags()
+          ],
+          'viewers' => $this->getViewers(),
+          'sidebar' => $this->getSetting('forum.sidebar', true)
         ]);
     }
 
@@ -155,7 +151,7 @@ abstract class BaseController extends Controller
     protected function perPage(Request $request, $setting, $default)
     {
         if ($request->filled('perPage')) {
-            $perPage = max(10, min((int) $request->input('perPage'), 50));
+            $perPage = max(10, min((int)$request->input('perPage'), 50));
 
             $this->setSetting($setting, $perPage);
         } else {
