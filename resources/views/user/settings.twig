@@ -1,50 +1,57 @@
 {% extends 'user.base' %}
 {% block title %}Ustawienia{{ parent() }}{% endblock %}
 
-{% import 'components/forms.twig' as forms %}
+{% import 'components.forms' as forms %}
 
-{% block wrapper %}
+{% block content %}
     {{ form_start(form) }}
-        <section class="card card-wrapper">
-            <div class="card-body">
-                <h2>Podstawowa konfiguracja</h2>
 
-                <div class="nav nav-panel">
-                  <a role="tab" class="nav-item active" data-bs-toggle="tab" href="#basic"><span>Podstawowe informacje</span></a>
-                  <a role="tab" class="nav-item" data-bs-toggle="tab" href="#carieer"><span>Kariera</span></a>
-                  <a role="tab" class="nav-item" data-bs-toggle="tab" href="#forum"><span>Forum</span></a>
-                </div>
+    <h2>Ustawienia główne</h2>
+    <section class="card card-default">
+        <div class="card-body">
+            {{ form_row(form.email) }}
+            {{ form_row(form.submit) }}
+        </div>
+    </section>
 
-                <div class="card card-default tab-content">
-                    <div class="card-body tab-pane active" role="tabpanel" id="basic">
-                        {{ form_row(form.email) }}
-                        {{ form_row(form.group_id) }}
-                        {{ form_row(form.date_format) }}
-                        {{ form_row(form.website) }}
-                        {{ form_row(form.allow_smilies) }}
-                        {{ form_row(form.allow_subscribe) }}
-                        {{ form_row(form.allow_sticky_header) }}
-                        {{ form_row(form.submit) }}
-                    </div>
+    <h2>Informacje</h2>
+    <section class="card card-default">
+        <div class="card-body">
+            {{ form_row(form.website) }}
+            {{ form_row(form.github) }}
+            {{ form_row(form.firm) }}
+            {{ form_row(form.position) }}
+            {{ form_row(form.birthyear) }}
+            {{ form_row(form.location) }}
+            {{ form_row(form.bio) }}
 
-                    <div class="card-body tab-pane" role="tabpanel" id="carieer">
-                        {{ form_row(form.firm) }}
-                        {{ form_row(form.position) }}
-                        {{ form_row(form.github) }}
-                        {{ form_row(form.bio) }}
-                        {{ form_row(form.birthyear) }}
-                        {{ form_row(form.location) }}
-                        {{ form_row(form.submit) }}
-                    </div>
+            {{ form_row(form.submit) }}
+        </div>
+    </section>
 
-                    <div class="card-body tab-pane" role="tabpanel" id="forum">
-                        {{ form_row(form.allow_count) }}
-                        {{ form_row(form.allow_sig) }}
-                        {{ form_row(form.sig) }}
-                        {{ form_row(form.submit) }}
-                    </div>
-                </div>
-            </div>
-        </section>
+    <h2>Forum</h2>
+    <section class="card card-default">
+        <div class="card-body">
+            {{ form_row(form.allow_subscribe) }}
+            {{ form_row(form.group_id) }}
+            {{ form_row(form.sig) }}
+
+            {{ form_row(form.submit) }}
+        </div>
+    </section>
+
+    <h2>Widok</h2>
+    <section class="card card-default">
+        <div class="card-body">
+            {{ form_row(form.date_format) }}
+            {{ form_row(form.allow_sticky_header) }}
+            {{ form_row(form.allow_smilies) }}
+            {{ form_row(form.allow_count) }}
+            {{ form_row(form.allow_sig) }}
+
+            {{ form_row(form.submit) }}
+        </div>
+    </section>
+    
     {{ form_close() }}
 {% endblock %}

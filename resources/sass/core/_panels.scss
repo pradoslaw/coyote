@@ -44,6 +44,7 @@
   > .card-body {
     padding: 4px 10px 8px 10px;
 
+    > form > h2,
     > h2 {
       font-size: 14px;
       color: #464646;
@@ -120,7 +121,7 @@
   }
 }
 
-@include media-breakpoint-down(sm)  {
+@include media-breakpoint-down(sm) {
   .card-body {
     padding: 10px;
   }
