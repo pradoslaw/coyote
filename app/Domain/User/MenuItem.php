@@ -10,6 +10,7 @@ class MenuItem
     public function __construct(
       public string  $title,
       public string  $routeName,
+      public ?string $subscript = null,
       array          $routeArguments = [],
       public ?string $htmlId = null,
       public ?string $htmlClass = null,

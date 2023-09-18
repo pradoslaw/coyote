@@ -20,9 +20,9 @@ trait SettingsMenu
                 $builder
                   ->add($menuItem->title, [
                     'id'    => $menuItem->htmlId,
-                    'route' => $menuItem->route
-                  ])
-                  ->prepend("<i class=\"$menuItem->htmlIcon\"></i>");
+                    'route' => $menuItem->route,
+                    'icon'  => $menuItem->htmlIcon,
+                  ]);
             }
         });
     }

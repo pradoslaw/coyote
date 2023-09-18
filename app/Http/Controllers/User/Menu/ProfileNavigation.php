@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\User\Menu;
 
 use Coyote\Domain\User\User;
 use Coyote\Domain\User\UserMenu;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Lavary\Menu\Builder;
 use Lavary\Menu\Menu;
 
@@ -17,7 +18,7 @@ trait ProfileNavigation
         /** @var Menu $menu */
         $menu = app(Menu::class);
 
-        return $menu->make('user.top', function (Builder $menu) use ($menuItems) {
+        return $menu->make('user.top', function (Builder $menu) use ($menuItems): void {
             foreach ($menuItems as $menuItem) {
                 $menu
                   ->add($menuItem->title, [
@@ -34,8 +35,10 @@ trait ProfileNavigation
     private function laravelUser(): User
     {
         if (auth()->check()) {
-            return new User(true, auth()->user()->id);
+            /** @var Authenticatable|\Coyote\User $user */
+            $user = auth()->user();
+            return new LaravelUser($user);
         }
-        return new User(false, null);
+        return new Guest();
     }
 }

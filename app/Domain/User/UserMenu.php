@@ -70,7 +70,7 @@ class UserMenu
     /**
      * @return MenuItem[]
      */
-    public function accountMenu(): array
+    public function accountMenu(User $user): array
     {
         return [
           new MenuItem(
@@ -87,6 +87,7 @@ class UserMenu
           new MenuItem(
             'Wiadomości prywatne',
             'user.pm',
+            subscript: "($user->privateMessagesUnread/$user->privateMessages)",
             htmlId: 'btn-pm',
             htmlIcon: 'fa-envelope'),
           new MenuItem(
