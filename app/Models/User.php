@@ -5,17 +5,17 @@ namespace Coyote;
 use Carbon\Carbon;
 use Coyote\Models\Scopes\ExcludeBlocked;
 use Coyote\Notifications\ResetPasswordNotification;
-use Coyote\Services\Media\Photo;
 use Coyote\Services\Media\Factory as MediaFactory;
+use Coyote\Services\Media\Photo;
 use Coyote\User\Relation;
 use Illuminate\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\Access\Authorizable;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
-use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Notifications\RoutesNotifications;
 use Laravel\Passport\HasApiTokens;
 use NotificationChannels\WebPush\HasPushSubscriptions;
@@ -40,6 +40,7 @@ use Ramsey\Uuid\Uuid;
  * @property int $allow_sig
  * @property int $allow_sticky_header
  * @property bool $marketing_agreement
+ * @property bool $newsletter_agreement
  * @property int $birthyear
  * @property int $reputation
  * @property string $name

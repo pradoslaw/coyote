@@ -18,6 +18,11 @@ class UserSettings
             konta albo poprzez wysłanie stosownej wiadomości na adres e-mail: $gdpr lub adres siedziby $_4programmers.");
     }
 
+    public function newsletterAgreement(): Html
+    {
+        return new Html('Zgadzam się na otrzymywanie newslettera.');
+    }
+
     public function termsAndPrivacyPolicyAgreement(): Html
     {
         $terms = '<a href="/Regulamin">regulamin</a>';

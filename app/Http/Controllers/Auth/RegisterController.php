@@ -40,11 +40,12 @@ class RegisterController extends Controller
 
         $this->transaction(function () use ($request) {
             $user = User::forceCreate([
-                'name'                => $request->input('name'),
-                'email'               => $request->input('email'),
-                'password'            => bcrypt($request->input('password')),
-                'guest_id'            => $request->session()->get('guest_id'),
-                'marketing_agreement' => $request->input('marketing_agreement')
+                'name'                 => $request->input('name'),
+                'email'                => $request->input('email'),
+                'password'             => bcrypt($request->input('password')),
+                'guest_id'             => $request->session()->get('guest_id'),
+                'marketing_agreement'  => $request->input('marketing_agreement'),
+                'newsletter_agreement' => true
             ]);
 
             app(MailQueue::class)

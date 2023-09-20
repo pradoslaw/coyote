@@ -100,6 +100,10 @@ class SettingsForm extends Form
                 'rules' => 'boolean',
                 'label' => new TwigLiteral((new UserSettings)->marketingAgreement())
             ])
+            ->add('newsletter_agreement', 'checkbox', [
+                'rules' => 'boolean',
+                'label' => new TwigLiteral((new UserSettings)->newsletterAgreement())
+            ])
             ->add('firm', 'text', [
                 'rules' => 'nullable|string|max:100',
                 'label' => 'Nazwa firmy',
