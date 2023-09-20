@@ -1,13 +1,17 @@
 <template>
-  <div :id="anchor" :class="{'is-deleted': post.deleted_at, 'not-read': !post.is_read, 'highlight-flash': highlight}" class="card card-post">
-    <a v-if="post.deleted_at" @click="isCollapsed = !isCollapsed" href="javascript:" class="post-delete card-body text-decoration-none">
+  <div :id="anchor" :class="{'is-deleted': post.deleted_at, 'not-read': !post.is_read, 'highlight-flash': highlight}"
+       class="card card-post">
+    <a v-if="post.deleted_at" @click="isCollapsed = !isCollapsed" href="javascript:"
+       class="post-delete card-body text-decoration-none">
       <i class="fas fa-warning"></i>
 
-      Post usunięty <vue-timeago :datetime="post.deleted_at"></vue-timeago>
+      Post usunięty
+      <vue-timeago :datetime="post.deleted_at"></vue-timeago>
 
       <template v-if="post.deleter_name">
         przez {{ post.deleter_name }}
-      </template>.
+      </template>
+      .
 
       <template v-if="post.delete_reason">
         Powód: {{ post.delete_reason }}.
@@ -31,7 +35,9 @@
             <vue-timeago :datetime="post.created_at"></vue-timeago>
           </a>
 
-          <a v-if="post.ip" :href="`/Adm/Stream?ip=${post.ip}`" :title="post.ip" class="text-muted small">{{ post.ip }}</a>
+          <a v-if="post.ip" :href="`/Adm/Stream?ip=${post.ip}`" :title="post.ip" class="text-muted small">
+            {{ post.ip }}
+          </a>
           <small v-if="post.browser" :title="post.browser" class="text-muted">{{ post.browser }}</small>
         </div>
       </div>
@@ -88,7 +94,9 @@
 
               <li>
                 <strong>Ostatnio:</strong>
-                <small>{{ formatDistanceToNow(post.user.visited_at ? post.user.visited_at : post.user.created_at) }}</small>
+                <small>
+                  {{ formatDistanceToNow(post.user.visited_at ? post.user.visited_at : post.user.created_at) }}
+                </small>
               </li>
 
               <li v-if="post.user.location">
@@ -98,7 +106,11 @@
 
               <li v-if="post.user.allow_count">
                 <strong>Postów:</strong>
-                <small><a title="Znajdź posty tego użytkownika" :href="`/Forum/User/${post.user.id}`" style="text-decoration: underline">{{ post.user.posts }}</a></small>
+                <small>
+                  <a title="Znajdź posty tego użytkownika"
+                     :href="`/Forum/User/${post.user.id}`"
+                     style="text-decoration: underline">{{ post.user.posts }}</a>
+                </small>
               </li>
             </ul>
           </template>
@@ -125,10 +137,14 @@
               <i class="fas fa-thumbs-up fa-fw"></i>
             </a>
 
-            <a v-if="!post.deleted_at && post.permissions.accept" :class="{'on': post.is_accepted}" @click="accept(post)" class="vote-accept" href="javascript:" title="Kliknij, aby ustawić tę odpowiedź jako zaakceptowaną (kliknij ponownie, aby cofnąć)">
+            <a v-if="!post.deleted_at && post.permissions.accept"
+               :class="{'on': post.is_accepted}"
+               @click="accept(post)"
+               class="vote-accept"
+               href="javascript:"
+               title="Kliknij, aby ustawić tę odpowiedź jako zaakceptowaną (kliknij ponownie, aby cofnąć)">
               <i class="fas fa-check fa-fw"></i>
             </a>
-
             <span v-else-if="post.is_accepted" class="vote-accept on">
               <i class="fas fa-check fa-fw"></i>
             </span>
@@ -148,7 +164,6 @@
 
             <template v-if="post.user && post.user.sig">
               <hr>
-
               <footer v-html="post.user.sig"></footer>
             </template>
           </div>
@@ -157,19 +172,28 @@
 
           <div v-if="post.edit_count" class="edit-info">
             <strong>
-              <a class="btn-history" :title="post.permissions.update ? 'Zobacz historię zmian tego posta' : ''" :href="post.permissions.update ? `/Forum/Post/Log/${post.id}` : ''">
+              <a class="btn-history"
+                 :title="post.permissions.update ? 'Zobacz historię zmian tego posta' : ''"
+                 :href="post.permissions.update ? `/Forum/Post/Log/${post.id}` : ''">
                 <i class="fas fa-external-link-alt"></i>
               </a>
-
-              edytowany {{ post.edit_count }}x, ostatnio: <vue-username :user="post.editor"></vue-username>
+              edytowany {{ post.edit_count }}x,
+              ostatnio:
+              <vue-username :user="post.editor"></vue-username>
             </strong>
-
             <vue-timeago :datetime="post.updated_at"></vue-timeago>
           </div>
 
           <div class="post-comments">
-            <div v-if="post.comments_count > Object.keys(post.comments).length" class="d-inline-block mb-2 show-all-comments">
-              <a @click="loadComments(post)" href="javascript:"><i class="far fa-comments"></i> Zobacz {{ totalComments | declination(['pozostały', 'pozostałe', 'pozostałe']) }} {{ totalComments }} {{ totalComments | declination(['komentarz', 'komentarze', 'komentarzy']) }}</a>
+            <div v-if="post.comments_count > Object.keys(post.comments).length"
+                 class="d-inline-block mb-2 show-all-comments">
+              <a @click="loadComments(post)" href="javascript:">
+                <i class="far fa-comments"></i>
+                Zobacz
+                {{ totalComments | declination(['pozostały', 'pozostałe', 'pozostałe']) }}
+                {{ totalComments }}
+                {{ totalComments | declination(['komentarz', 'komentarze', 'komentarzy']) }}
+              </a>
             </div>
 
             <vue-comment
@@ -211,7 +235,8 @@
         <div class="col-12 d-flex col-lg-10">
           <div v-if="!post.deleted_at">
             <button @click="checkAuth(subscribe, post)" class="btn btn-sm">
-              <i :class="{'fas text-primary': post.is_subscribed, 'far': !post.is_subscribed}" class="fa-fw fa-bell"></i>
+              <i :class="{'fas text-primary': post.is_subscribed, 'far': !post.is_subscribed}"
+                 class="fa-fw fa-bell"></i>
 
               <span class="d-none d-sm-inline">Obserwuj</span>
             </button>
@@ -221,13 +246,15 @@
             </button>
 
             <button v-if="!post.is_locked || post.permissions.write" @click="checkAuth(comment)" class="btn btn-sm">
-              <i :class="{'fas text-primary': isCommenting, 'far': !isCommenting}" class="fa-fw fa-comment"></i> <span class="d-none d-sm-inline">Komentuj</span>
+              <i :class="{'fas text-primary': isCommenting, 'far': !isCommenting}" class="fa-fw fa-comment"></i>
+              <span class="d-none d-sm-inline">Komentuj</span>
             </button>
           </div>
 
           <div v-if="post.permissions.write" class="ml-auto">
             <button v-if="post.permissions.update && !post.deleted_at" @click="edit" class="btn btn-sm">
-              <i :class="{'text-primary': post.is_editing}" class="fas fa-fw fa-edit"></i> <span class="d-none d-sm-inline">Edytuj</span>
+              <i :class="{'text-primary': post.is_editing}" class="fas fa-fw fa-edit"></i>
+              <span class="d-none d-sm-inline">Edytuj</span>
             </button>
 
             <template v-if="post.permissions.delete">
@@ -240,10 +267,6 @@
             </template>
 
             <template v-if="!post.deleted_at">
-              <button @click="$emit('reply', post)" class="btn btn-sm btn-fast-reply" title="Odpowiedz na ten post">
-                <i class="fa fa-fw fa-at"></i>
-              </button>
-
               <button @click="$emit('reply', post, false)" class="btn btn-sm" title="Dodaj cytat do pola odpowiedzi">
                 <i class="fa fa-fw fa-quote-left"></i> <span class="d-none d-sm-inline">Odpowiedz</span>
               </button>
@@ -259,12 +282,18 @@
               </button>
 
               <div class="dropdown-menu dropdown-menu-right">
-                <a v-if="!post.deleted_at && post.permissions.merge && post.id !== topic.first_post_id" @click="merge" href="javascript:" class="dropdown-item">
-                  <i class="fas fa-compress fa-fw"></i> Połącz z poprzednim
+                <a v-if="!post.deleted_at && post.permissions.merge && post.id !== topic.first_post_id"
+                   @click="merge"
+                   href="javascript:" class="dropdown-item">
+                  <i class="fas fa-compress fa-fw"></i>
+                  Połącz z poprzednim
                 </a>
 
-                <a v-if="post.permissions.adm_access" class="dropdown-item" :href="`/Adm/Firewall/Save?user=${post.user ? post.user.id : ''}&ip=${post.ip}`">
-                  <i class="fas fa-ban fa-fw"></i> Zablokuj użytkownika
+                <a v-if="post.permissions.adm_access"
+                   class="dropdown-item"
+                   :href="`/Adm/Firewall/Save?user=${post.user ? post.user.id : ''}&ip=${post.ip}`">
+                  <i class="fas fa-ban fa-fw"></i>
+                  Zablokuj użytkownika
                 </a>
               </div>
             </div>
@@ -277,171 +306,169 @@
   </div>
 </template>
 <script lang="ts">
-  import Vue from 'vue';
-  import { Prop, Ref } from "vue-property-decorator";
-  import Component from "vue-class-component";
-  import { Post, Topic, User } from '@/types/models';
-  import VueClipboard from '@/plugins/clipboard';
-  import VueAvatar from '../avatar.vue';
-  import VueUserName from "../user-name.vue";
-  import VueComment from './comment.vue';
-  import VueForm from  './form.vue';
-  import VueCommentForm from "./comment-form.vue";
-  import VueSelect from  './../forms/select.vue';
-  import VueButton from  './../forms/button.vue';
-  import VueFlag from './../flags/flag.vue';
-  import { mapActions, mapGetters, mapState } from "vuex";
-  import VueModal from "../delete-modal.vue";
-  import VueTags from '@/components/tags.vue';
-  import formatDistanceToNow from 'date-fns/formatDistanceToNow';
-  import pl from 'date-fns/locale/pl';
-  import { default as mixins } from '../mixins/user';
-  import store from "@/store";
+import Vue from 'vue';
+import {Prop, Ref} from "vue-property-decorator";
+import Component from "vue-class-component";
+import {Post, Topic, User} from '@/types/models';
+import VueClipboard from '@/plugins/clipboard';
+import VueAvatar from '../avatar.vue';
+import VueUserName from "../user-name.vue";
+import VueComment from './comment.vue';
+import VueForm from './form.vue';
+import VueCommentForm from "./comment-form.vue";
+import VueSelect from './../forms/select.vue';
+import VueButton from './../forms/button.vue';
+import VueFlag from './../flags/flag.vue';
+import {mapActions, mapGetters, mapState} from "vuex";
+import VueModal from "../delete-modal.vue";
+import VueTags from '@/components/tags.vue';
+import formatDistanceToNow from 'date-fns/formatDistanceToNow';
+import pl from 'date-fns/locale/pl';
+import {default as mixins} from '../mixins/user';
+import store from "@/store";
 
-  Vue.use(VueClipboard);
+Vue.use(VueClipboard);
 
-  @Component({
-    name: 'post',
-    mixins: [ mixins ],
-    components: {
-      'vue-avatar': VueAvatar,
-      'vue-username': VueUserName,
-      'vue-comment': VueComment,
-      'vue-comment-form': VueCommentForm,
-      'vue-form': VueForm,
-      'vue-modal': VueModal,
-      'vue-select': VueSelect,
-      'vue-button': VueButton,
-      'vue-flag': VueFlag,
-      'vue-tags': VueTags
-    },
-    methods: mapActions('posts', ['vote', 'accept', 'subscribe', 'loadComments', 'loadVoters']),
-    computed: {
-      ...mapState('user', ['user']),
-      ...mapState('topics', ['reasons']),
-      ...mapGetters('user', ['isAuthorized']),
-      ...mapGetters('posts', ['posts']),
-      ...mapGetters('topics', ['topic'])
+@Component({
+  name: 'post',
+  mixins: [mixins],
+  components: {
+    'vue-avatar': VueAvatar,
+    'vue-username': VueUserName,
+    'vue-comment': VueComment,
+    'vue-comment-form': VueCommentForm,
+    'vue-form': VueForm,
+    'vue-modal': VueModal,
+    'vue-select': VueSelect,
+    'vue-button': VueButton,
+    'vue-flag': VueFlag,
+    'vue-tags': VueTags
+  },
+  methods: mapActions('posts', ['vote', 'accept', 'subscribe', 'loadComments', 'loadVoters']),
+  computed: {
+    ...mapState('user', ['user']),
+    ...mapState('topics', ['reasons']),
+    ...mapGetters('user', ['isAuthorized']),
+    ...mapGetters('posts', ['posts']),
+    ...mapGetters('topics', ['topic'])
+  }
+})
+export default class VuePost extends Vue {
+  @Prop(Object)
+  post!: Post;
+
+  @Prop({default: 20})
+  readonly uploadMaxSize!: number;
+
+  @Prop()
+  readonly uploadMimes!: string;
+
+  @Ref()
+  readonly form!: VueForm;
+
+  @Ref('comment-form')
+  readonly commentForm!: VueCommentForm;
+
+  @Ref('delete-modal')
+  readonly deleteModal!: VueModal;
+
+  isProcessing = false;
+  isCollapsed = this.post.deleted_at != null;
+  isCommenting = false;
+
+  readonly topic!: Topic;
+  readonly isAuthorized!: boolean;
+  readonly posts!: Post[];
+  readonly user!: User;
+
+  private commentDefault = {text: '', post_id: this.post.id};
+
+  formatDistanceToNow(date) {
+    return formatDistanceToNow(new Date(date), {locale: pl});
+  }
+
+  copy() {
+    if (this.$copy(this.post.url)) {
+      this.$notify({type: 'success', text: 'Link prawidłowo skopiowany do schowka.'});
+    } else {
+      this.$notify({type: 'error', text: 'Nie można skopiować linku do schowka.'});
     }
-  })
-  export default class VuePost extends Vue {
-    @Prop(Object)
-    post!: Post;
+  }
 
-    @Prop({default: 20})
-    readonly uploadMaxSize!: number;
+  edit() {
+    store.commit('posts/edit', this.post);
 
-    @Prop()
-    readonly uploadMimes!: string;
-
-    @Ref()
-    readonly form!: VueForm;
-
-    @Ref('comment-form')
-    readonly commentForm!: VueCommentForm;
-
-    @Ref('delete-modal')
-    readonly deleteModal!: VueModal;
-
-    isProcessing = false;
-    isCollapsed = this.post.deleted_at != null;
-    isCommenting = false;
-
-    readonly topic!: Topic;
-    readonly isAuthorized! : boolean;
-    readonly posts!: Post[];
-    readonly user!: User;
-
-    private commentDefault = { text: '', post_id: this.post.id };
-
-    formatDistanceToNow(date) {
-      return formatDistanceToNow(new Date(date), { locale: pl });
+    if (this.post.is_editing) {
+      // @ts-ignore
+      this.$nextTick(() => this.form.markdown.focus());
     }
+  }
 
-    copy() {
-      if (this.$copy(this.post.url)) {
-        this.$notify({type: 'success', text: 'Link prawidłowo skopiowany do schowka.'});
-      }
-      else {
-        this.$notify({type: 'error', text: 'Nie można skopiować linku do schowka.'});
-      }
+  comment() {
+    this.isCommenting = !this.isCommenting;
+
+    if (this.isCommenting) {
+      // @ts-ignore
+      this.$nextTick(() => this.commentForm.textarea.focus());
     }
+  }
 
-    edit() {
-      store.commit('posts/edit', this.post);
-
-      if (this.post.is_editing) {
-        // @ts-ignore
-        this.$nextTick(() => this.form.markdown.focus());
-      }
+  deletePost(confirm = false, reasonId: number | null = null) {
+    if (confirm) {
+      // @ts-ignore
+      this.deleteModal.open();
+    } else {
+      // @ts-ignore
+      this.deleteModal.close();
+      store.dispatch('posts/delete', {post: this.post, reasonId}).then(() => this.isCollapsed = true);
     }
+  }
 
-    comment() {
-      this.isCommenting = !this.isCommenting;
-
-      if (this.isCommenting) {
-        // @ts-ignore
-        this.$nextTick(() => this.commentForm.textarea.focus());
-      }
-    }
-
-    deletePost(confirm = false, reasonId: number | null = null) {
-      if (confirm) {
-        // @ts-ignore
-        this.deleteModal.open();
-      }
-      else {
-        // @ts-ignore
-        this.deleteModal.close();
-        store.dispatch('posts/delete', { post: this.post, reasonId }).then(() => this.isCollapsed = true);
-      }
-    }
-
-    merge() {
-      this.$confirm({
-        message: 'Czy chcesz połaczyć ten post z poprzednim?',
-        title: 'Połączyć posty?',
-        okLabel: 'Tak, połącz'
-      })
+  merge() {
+    this.$confirm({
+      message: 'Czy chcesz połaczyć ten post z poprzednim?',
+      title: 'Połączyć posty?',
+      okLabel: 'Tak, połącz'
+    })
       .then(() => {
         this.$store.dispatch('posts/merge', this.post);
       });
-    }
-
-    restore() {
-      this.isCollapsed = false;
-      this.$store.dispatch('posts/restore', this.post);
-    }
-
-    get voters() {
-      const users = this.post.voters;
-
-      if (!users?.length) {
-        return null;
-      }
-
-      return users.length > 10 ? users.splice(0, 10).concat('...').join("\n") : users.join("\n");
-    }
-
-    get tags() {
-      return this.post.id === this.topic.first_post_id ? this.topic.tags : [];
-    }
-
-    get anchor() {
-      return `id${this.post.id}`;
-    }
-
-    get highlight() {
-      return '#' + this.anchor === window.location.hash;
-    }
-
-    get totalComments() {
-      return this.post.comments_count - Object.keys(this.post.comments).length;
-    }
-
-    get flags() {
-      return store.getters['flags/filter'](this.post.id, 'Coyote\\Post');
-    }
   }
+
+  restore() {
+    this.isCollapsed = false;
+    this.$store.dispatch('posts/restore', this.post);
+  }
+
+  get voters() {
+    const users = this.post.voters;
+
+    if (!users?.length) {
+      return null;
+    }
+
+    return users.length > 10 ? users.splice(0, 10).concat('...').join("\n") : users.join("\n");
+  }
+
+  get tags() {
+    return this.post.id === this.topic.first_post_id ? this.topic.tags : [];
+  }
+
+  get anchor() {
+    return `id${this.post.id}`;
+  }
+
+  get highlight() {
+    return '#' + this.anchor === window.location.hash;
+  }
+
+  get totalComments() {
+    return this.post.comments_count - Object.keys(this.post.comments).length;
+  }
+
+  get flags() {
+    return store.getters['flags/filter'](this.post.id, 'Coyote\\Post');
+  }
+}
 </script>
 

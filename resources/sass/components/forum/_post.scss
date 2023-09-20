@@ -11,11 +11,21 @@
 
   .card-footer {
     padding: .25rem;
+
+    .btn.btn-sm {
+      opacity: 0.85;
+      transition: none;
+
+      &:hover {
+        opacity: 1.0;
+        border: 1px solid rgb(224, 224, 224);
+        background-color: white;
+      }
+    }
   }
 
-  // w przypadku gdy post jest usuniety wyswietlamy go na pol-przezroczystym tle
   &.is-deleted {
-    opacity: .6;
+    opacity: .7;
   }
 
   // mobile
@@ -233,9 +243,6 @@
     font-size: $font-size-base + 0.6rem;
   }
 }
-
-// Cytowane posty na forum
-// ----------------------------------------------------------
 
 blockquote {
   color: $gray-light;
