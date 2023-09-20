@@ -36,6 +36,9 @@ class SettingsForm extends Form
                 }
             }
         });
+        $this->addEventListener(FormEvents::POST_SUBMIT, function (Form $form) {
+            $form->remove('terms');
+        });
     }
 
     public function buildForm(): void
@@ -87,6 +90,11 @@ class SettingsForm extends Form
             ->add('allow_sticky_header', 'checkbox', [
                 'rules' => 'boolean',
                 'label' => 'Przyklejony pasek menu',
+            ])
+            ->add('terms', 'checkbox', [
+                'rules' => 'boolean',
+                'label' => new TwigLiteral((new UserSettings)->termsAndPrivacyPolicyAgreement()),
+                'attr'  => ['disabled' => 'disabled', 'checked' => 'checked']
             ])
             ->add('marketing_agreement', 'checkbox', [
                 'rules' => 'boolean',
