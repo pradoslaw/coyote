@@ -267,6 +267,10 @@
             </template>
 
             <template v-if="!post.deleted_at">
+              <button @click="$emit('reply', post)" class="btn btn-sm btn-fast-reply" title="Odpowiedz na ten post">
+                <i class="fa fa-fw fa-at"></i>
+              </button>
+
               <button @click="$emit('reply', post, false)" class="btn btn-sm" title="Dodaj cytat do pola odpowiedzi">
                 <i class="fa fa-fw fa-quote-left"></i> <span class="d-none d-sm-inline">Odpowiedz</span>
               </button>
