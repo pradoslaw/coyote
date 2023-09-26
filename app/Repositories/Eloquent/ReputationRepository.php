@@ -3,9 +3,9 @@
 namespace Coyote\Repositories\Eloquent;
 
 use Carbon\Carbon;
-use Coyote\User;
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface;
 use Coyote\Reputation\Type;
+use Coyote\User;
 
 class ReputationRepository extends Repository implements ReputationRepositoryInterface
 {
@@ -14,7 +14,7 @@ class ReputationRepository extends Repository implements ReputationRepositoryInt
      */
     public function model()
     {
-        return 'Coyote\Reputation';
+        return \Coyote\Reputation::class;
     }
 
     /**

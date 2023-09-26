@@ -8,17 +8,8 @@ use Illuminate\Database\Query\Builder;
 
 class SkipHiddenCategories extends Criteria
 {
-    /**
-     * @var int|null
-     */
-    protected $userId;
-
-    /**
-     * @param int|null $userId
-     */
-    public function __construct(?int $userId)
+    public function __construct(private ?int $userId)
     {
-        $this->userId = $userId;
     }
 
     /**

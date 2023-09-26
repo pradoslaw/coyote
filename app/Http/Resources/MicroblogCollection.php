@@ -2,14 +2,13 @@
 
 namespace Coyote\Http\Resources;
 
-use Coyote\Microblog;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Pagination\AbstractPaginator;
 
 class MicroblogCollection extends ResourceCollection
 {
     /**
-     * DO NOT REMOVE! This will preserver keys from being filtered in data
+     * DO NOT REMOVE! This will preserve keys from being filtered in data
      *
      * @var bool
      */

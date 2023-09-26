@@ -141,12 +141,21 @@
                   </div>
 
                   <div class="media-body">
-                    <span class="mb-1 d-block"><a data-user-id="{{ item.id }}" href="{{ route('profile', [item.id]) }}" class="text-body">{{ item.name }}</a></span>
+                    <span class="mb-1 d-block">
+                      <a data-user-id="{{ item.id }}" href="{{ route('profile', [item.id]) }}" class="text-body">
+                        {{ item.name }}
+                      </a>
+                    </span>
 
                     <div class="progress">
                       <div class="progress-bar" role="progressbar" aria-valuenow="{{ item.percentage|round }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ item.percentage|round }}%;"></div>
 
-                      <span class="rep"><strong>{{ item.reputation|number_format(0, '', ' ') }}</strong> <small>{{ declination(user.reputation, ['punkt', 'punkty', 'punktów'], true) }}</small></span>
+                      <span class="rep">
+                        <strong>{{ item.reputation|number_format(0, '', ' ') }}</strong> 
+                        <small>
+                          {{ declination(user.reputation, ['punkt', 'punkty', 'punktów'], true) }}
+                        </small>
+                      </span>
                     </div>
                   </div>
                 </div>
