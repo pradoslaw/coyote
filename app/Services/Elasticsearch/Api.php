@@ -1,5 +1,4 @@
-<?php declare(strict_types=1);
-
+<?php
 namespace Coyote\Services\Elasticsearch;
 
 use GuzzleHttp\Client;
@@ -46,12 +45,12 @@ class Api
     protected function get(string $path, array $params = []): Hits
     {
         $response = $this->client->get($path, [
-            'base_uri'  => sprintf('http://%s:%d', $this->host, $this->port),
-            'query'     => $params,
-            'headers'   => $this->jwtToken ? ['Authorization' => 'Bearer ' . $this->jwtToken] : []
+            'base_uri' => sprintf('http://%s:%d', $this->host, $this->port),
+            'query'    => $params,
+            'headers'  => $this->jwtToken ? ['Authorization' => 'Bearer ' . $this->jwtToken] : []
         ]);
 
-        $body = json_decode((string) $response->getBody(), true);
+        $body = json_decode((string)$response->getBody(), true);
 
         return new Hits($body['hits'], $body['took'], $body['total']);
     }

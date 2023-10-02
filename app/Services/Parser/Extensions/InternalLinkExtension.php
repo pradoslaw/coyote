@@ -1,14 +1,10 @@
 <?php
-
-declare(strict_types=1);
-
 namespace Coyote\Services\Parser\Extensions;
 
 use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
 use League\CommonMark\Environment\EnvironmentBuilderInterface;
 use League\CommonMark\Event\DocumentParsedEvent;
 use League\CommonMark\Extension\ConfigurableExtensionInterface;
-use League\CommonMark\Extension\ExternalLink\ExternalLinkProcessor;
 use League\Config\ConfigurationBuilderInterface;
 use Nette\Schema\Expect;
 

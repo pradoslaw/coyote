@@ -1,5 +1,4 @@
-<?php declare(strict_types=1);
-
+<?php
 namespace Coyote\Services\Elasticsearch;
 
 use Coyote\Services\Arrayable\ToArray;
