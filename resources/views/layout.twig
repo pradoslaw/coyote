@@ -12,7 +12,7 @@
     {% endblock %}
 
     {% block canonical %}
-      <link rel="canonical" href="{% block canonical_href %}{{ app.request.url }}{% endblock %}" />
+      <link rel="canonical" href="{% block canonical_href %}{{ app.request.url }}{% endblock %}"/>
     {% endblock %}
 
     {% block head %}
@@ -63,90 +63,111 @@
 
         <nav class="navbar navbar-expand-lg {{ __dark_theme ? 'bg-dark navbar-dark' : 'bg-light navbar-light' }}">
           <div class="container-xxl d-flex w-100 flex-wrap">
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobile-menu">
-            <span class="navbar-toggler-icon"></span>
-          </button>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobile-menu">
+              <span class="navbar-toggler-icon"></span>
+            </button>
 
-          <a rel="home" class="navbar-brand order-0" href="{{ route('home') }}" title="4programmers.net - Strona główna">
-            <img alt="4programmers.net" src="{{ cdn('img/logo-mobile.png') }}">
-          </a>
+            <a rel="home" class="navbar-brand order-0" href="{{ route('home') }}" title="4programmers.net - Strona główna">
+              <img alt="4programmers.net" src="{{ cdn('img/logo-mobile.png') }}">
+            </a>
 
-          <div class="collapse navbar-collapse flex-grow-0 order-3 order-lg-1 ml-2" id="mobile-menu">
-            <ul class="navbar-nav">
+            <div class="collapse navbar-collapse flex-grow-0 order-3 order-lg-1 ml-2" id="mobile-menu">
+              <ul class="navbar-nav">
+                {% for item in __master_menu.roots() %}
+                  <li {{ forms.attr(item.attr) }}>
+                    <a href="{{ item.url }}" class="nav-link">{{ item.title|raw }}</a>
 
-              {% for item in __master_menu.roots() %}
-                <li {{ forms.attr(item.attr) }}>
-                  <a href="{{ item.url }}" class="nav-link">{{ item.title|raw }}</a>
+                    {{ item.afterHTML|raw }}
 
-                  {{ item.afterHTML|raw }}
-
-                  {% if item.hasChildren() %}
-                    <div class="dropdown-container">
-                      <div class="dropdown-menu dropdown-menu-left">
-                        {% for children in item.children() %}
-                          <a class="dropdown-item" href="{{ children.url }}">{{ children.title }}</a>
-                        {% endfor %}
+                    {% if item.hasChildren() %}
+                      <div class="dropdown-container">
+                        <div class="dropdown-menu dropdown-menu-left">
+                          {% for children in item.children() %}
+                            <a class="dropdown-item" href="{{ children.url }}">{{ children.title }}</a>
+                          {% endfor %}
+                        </div>
                       </div>
-                    </div>
-                  {% endif %}
-                </li>
-              {% endfor %}
-            </ul>
-          </div>
+                    {% endif %}
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
 
-          <div id="js-searchbar" class="d-flex flex-grow-1 order-1">
-            <vue-searchbar value="{{ input_get('q') }}"></vue-searchbar>
-          </div>
+            <div id="js-searchbar" class="d-flex flex-grow-1 order-1">
+              <vue-searchbar value="{{ input_get('q') }}"></vue-searchbar>
+            </div>
 
-          {% if auth_check() %}
-            <ul id="nav-auth" class="nav-auth navbar-nav order-2"></ul>
+            {% if auth_check() %}
+              <ul id="nav-auth" class="nav-auth navbar-nav order-2"></ul>
 
-            <div class="dropdown nav-avatar order-2">
-              <a href="#" class="dropdown-toggle img-thumbnail d-block i-35" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                <img alt="{{ user('name') }}" src="{{ user_photo(user('photo')) }}" style="width: 100%">
-              </a>
-
-              <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item profile-name" href="{{ route('user.home') }}">
-                  {{ user('name') }}
-
-                  {% if user('is_sponsor') %}
-                    <i class="fa fa-fw fa-medal" title="Konto Premium"></i>
-                  {% endif %}
+              <div class="dropdown nav-avatar order-2">
+                <a href="#" class="dropdown-toggle img-thumbnail d-block i-35" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                  <img alt="{{ user('name') }}" src="{{ user_photo(user('photo')) }}" style="width: 100%">
                 </a>
 
-                <div class="dropdown-divider"></div>
+                <div class="dropdown-menu dropdown-menu-right">
+                  <a class="dropdown-item profile-name" href="{{ route('user.home') }}">
+                    {{ user('name') }}
 
-                <a class="dropdown-item" href="{{ route('user.pm') }}"><i class="fas fa-envelope fa-fw"></i> Wiadomości</a>
-                <a class="dropdown-item" href="{{ route('user.settings') }}"><i class="fas fa-cog fa-fw"></i> Ustawienia</a>
-                <a class="dropdown-item" href="{{ route('profile', [user('id')]) }}"><i class="fas fa-user fa-fw"></i> Profil</a>
-                <a class="dropdown-item" href="{{ url('Pomoc') }}"><i class="fas fa-info-circle fa-fw"></i> Pomoc</a>
+                    {% if user('is_sponsor') %}
+                      <i class="fa fa-fw fa-medal" title="Konto Premium"></i>
+                    {% endif %}
+                  </a>
 
-                {% if can('adm-access') %}
-                  <a class="dropdown-item" href="{{ route('adm.home') }}"><i class="fas fa-user-secret fa-fw"></i> Panel administracyjny</a>
-                {% endif %}
+                  <div class="dropdown-divider"></div>
 
-                <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="{{ route('user.pm') }}">
+                    <i class="fas fa-envelope fa-fw"></i>
+                    Wiadomości
+                  </a>
+                  <a class="dropdown-item" href="{{ route('user.settings') }}">
+                    <i class="fas fa-cog fa-fw"></i>
+                    Ustawienia
+                  </a>
+                  <a class="dropdown-item" href="{{ route('profile', [user('id')]) }}">
+                    <i class="fas fa-user fa-fw"></i>
+                    Profil
+                  </a>
+                  <a class="dropdown-item" href="{{ url('Pomoc') }}">
+                    <i class="fas fa-info-circle fa-fw"></i>
+                    Pomoc
+                  </a>
+                  {% if can('adm-access') %}
+                    <a class="dropdown-item" href="{{ route('adm.home') }}">
+                      <i class="fas fa-user-secret fa-fw"></i>
+                      Panel administracyjny
+                    </a>
+                  {% endif %}
 
-                <div class="dropdown-item">
-                  <div class="custom-control custom-switch">
-                    <input type="checkbox" class="custom-control-input" id="js-dark-theme" {{ __dark_theme ? 'checked' }}>
-                    <label class="custom-control-label" for="js-dark-theme">Ciemne menu</label>
+                  <div class="dropdown-divider"></div>
+
+                  <div class="dropdown-item">
+                    <div class="custom-control custom-switch">
+                      <input type="checkbox" class="custom-control-input" id="js-dark-theme" {{ __dark_theme ? 'checked' }}>
+                      <label class="custom-control-label" for="js-dark-theme">
+                        Ciemne menu
+                      </label>
+                    </div>
                   </div>
+                  <div class="dropdown-divider"></div>
+                  <a href="javascript:" onclick="document['logout-form'].submit()" class="dropdown-item btn-sign-out">
+                    <i class="fas fa-sign-out-alt fa-fw"></i>
+                    Wyloguj
+                  </a>
                 </div>
-
-                <div class="dropdown-divider"></div>
-
-                <a href="javascript:" onclick="document['logout-form'].submit()" class="dropdown-item btn-sign-out"><i class="fas fa-sign-out-alt fa-fw"></i> Wyloguj</a>
               </div>
-            </div>
-          {% else %}
-            <div class="form-inline order-2 ml-auto">
-              <a class="btn btn-sm btn-register" href="{{ route('register') }}"><i class="fas fa-sign-in"></i> Utwórz konto</a>
-              <a class="btn btn-sm btn-login" href="{{ route('login') }}">Logowanie</a>
-            </div>
-          {% endif %}
-        </div>
+            {% else %}
+              <div class="form-inline order-2 ml-auto">
+                <a class="btn btn-sm btn-register" href="{{ route('register') }}">
+                  <i class="fas fa-sign-in"></i>
+                  Utwórz konto
+                </a>
+                <a class="btn btn-sm btn-login" href="{{ route('login') }}">
+                  Logowanie
+                </a>
+              </div>
+            {% endif %}
+          </div>
         </nav>
       </header>
 
@@ -200,9 +221,10 @@
 
       <footer class="container-fluid mt-4">
         <div id="footer-top">
-          <a href="https://www.facebook.com/4programmers.net" id="facebook-button"
-             title="Zobacz nasz profil na facebooku!"></a>
-
+          <a href="https://www.facebook.com/4programmers.net"
+             id="facebook-button"
+             title="Zobacz nasz profil na facebooku!">
+          </a>
           {{ breadcrumb|raw }}
         </div>
 
@@ -213,15 +235,22 @@
             </div>
           </div>
 
-          <a href="javascript:" id="scroll-to-top" title="Powrót na górę"><i class="fas fa-angle-up"></i></a>
+          <a href="javascript:" id="scroll-to-top" title="Powrót na górę">
+            <i class="fas fa-angle-up"></i>
+          </a>
         </div>
 
         <div id="footer-copyright">
           <div class="row container-xxl no-gutters">
-            <div>Copyright © 2000-{{ 'now'|date('Y') }} <a title="4programmers.net -- programowanie" class="logo" href="http://4programmers.net/">4programmers.net - programowanie i tworzenie stron
-                WWW</a></div>
-
-            <div class="ml-auto">Coyote {{ config('app.version') }}: {{ timer() }}</div>
+            <div>
+              Copyright &copy; 2000-{{ 'now'|date('Y') }}
+              <a title="4programmers.net -- programowanie" class="logo" href="http://4programmers.net/">
+                4programmers.net - programowanie i tworzenie stron WWW
+              </a>
+            </div>
+            <div class="ml-auto">
+              Coyote {{ config('app.version') }}: {{ timer() }}
+            </div>
           </div>
         </div>
       </footer>
