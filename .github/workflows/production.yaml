@@ -7,16 +7,10 @@ on:
         description: Git Ref (Optional)
         required: false
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   deploy:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
@@ -58,9 +52,7 @@ jobs:
           SENTRY_ORG: coyote
           SENTRY_PROJECT: backend
         with:
-          # Set the environment for this release. E.g. "production" or "staging". Omit to skip adding deploy to release.
           environment: production
-          # When the flag is set, command will not fail and just exit silently if no new commits for a given release have been found.
           ignore_empty: "true"
           ignore_missing: "true"
           projects: backend

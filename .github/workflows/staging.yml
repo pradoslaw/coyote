@@ -1,4 +1,4 @@
-name: Stagging
+name: Staging
 
 on:
   push:
