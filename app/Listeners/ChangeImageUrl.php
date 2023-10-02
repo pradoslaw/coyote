@@ -6,34 +6,23 @@ use Illuminate\Mail\Events\MessageSending;
 
 class ChangeImageUrl
 {
-    /**
-     * Handle the event.
-     *
-     * @param  MessageSending  $event
-     * @return void
-     */
-    public function handle(MessageSending $event)
+    public function handle(MessageSending $event): void
     {
-        $html = $event->message->getBody();
-        $html = mb_convert_encoding($html, 'HTML-ENTITIES', "UTF-8");
+        $event->message->setBody($this->appendHttps($event->message->getBody()));
+    }
 
-        // ignore html errors
-        libxml_use_internal_errors(true);
-
-        $dom = new \DOMDocument;
-        $dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-
-        $images = $dom->getElementsByTagName('img');
-
-        foreach ($images as $image) {
+    private function appendHttps(string $html): string
+    {
+        $html = \mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
+        \libxml_use_internal_errors(true);
+        $dom = new \DOMDocument();
+        $dom->loadHTML($html, \LIBXML_HTML_NOIMPLIED | \LIBXML_HTML_NODEFDTD);
+        foreach ($dom->getElementsByTagName('img') as $image) {
             $url = $image->getAttribute('src');
-
-            if (!preg_match('#^[\w]+?://.*?#i', $url)) {
-                $url = 'https:' . $url;
-                $image->setAttribute('src', $url);
+            if (!\preg_match('#^\w+?://.*?#i', $url)) {
+                $image->setAttribute('src', "https:$url");
             }
         }
-
-        $event->message->setBody(trim($dom->saveHTML()));
+        return \trim($dom->saveHTML());
     }
 }

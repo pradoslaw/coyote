@@ -16,6 +16,8 @@
         "ext-fileinfo": "*",
         "ext-gd": "*",
         "ext-json": "*",
+        "ext-libxml": "*",
+        "ext-dom": "*",
         "adam-boduch/laravel-grid": "^2.2",
         "barryvdh/laravel-debugbar": "^v3.6",
         "ddeboer/vatin": "^2.2",

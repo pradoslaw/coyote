@@ -2,20 +2,20 @@
 
 namespace Tests\Feature\Listeners;
 
+use Coyote\Listeners\ChangeImageUrl;
+use Illuminate\Mail\Events\MessageSending;
 use Tests\TestCase;
 
 class ChangeImageUrlTest extends TestCase
 {
     public function testFixEmoticonsUrl()
     {
-        $body = '<img src="//static.4programmers.net/img/smilies/sad.gif">';
-
-        $message = new \Swift_Message(null, $body);
-        $event = new \Illuminate\Mail\Events\MessageSending($message);
-
-        $listener = new \Coyote\Listeners\ChangeImageUrl();
-        $listener->handle($event);
-
-        $this->assertMatchesRegularExpression('~<img src="https://static.4programmers.net/img/smilies/sad.gif">~', $message->getBody());
+        // given
+        $message = new \Swift_Message(null, '<img src="//static.4programmers.net/img/smilies/sad.gif">');
+        // when
+        $listener = new ChangeImageUrl();
+        $listener->handle(new MessageSending($message));
+        // then
+        $this->assertSame('<img src="https://static.4programmers.net/img/smilies/sad.gif">', $message->getBody());
     }
 }
