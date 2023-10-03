@@ -22,34 +22,36 @@
       </div>
 
       <perfect-scrollbar ref="scrollbar" class="dropdown-modal" :options="{wheelPropagation: false}">
-        <div v-if="notifications === null" class="text-center">
+        <div v-if="notifications === null" class="text-center p-3">
           <i class="fas fa-spinner fa-spin"></i>
         </div>
 
         <vue-notification v-for="notification in notifications" :notification="notification" :key="notification.id"></vue-notification>
 
-        <div class="text-center" v-if="Array.isArray(notifications) && notifications.length === 0">Brak powiadomień.</div>
+        <div class="text-center p-3" v-if="Array.isArray(notifications) && notifications.length === 0">
+          Brak powiadomień.
+        </div>
       </perfect-scrollbar>
     </div>
   </li>
 </template>
 
 <script lang="ts">
-  import DesktopNotifications from '../../libs/notifications';
-  import {default as ws} from '../../libs/realtime';
-  import Session from '../../libs/session';
-  import store from '../../store';
-  import {default as PerfectScrollbar} from '../perfect-scrollbar';
-  import {mixin as clickaway} from 'vue-clickaway';
-  import VueNotification from './notification.vue';
-  import { mapState, mapGetters } from 'vuex';
-  import environment from '@/environment';
-  import Vue from 'vue';
-  import Component from "vue-class-component";
-  import { Watch, Ref } from "vue-property-decorator";
-  import { Notification } from '@/types/models';
+import DesktopNotifications from '../../libs/notifications';
+import {default as ws} from '../../libs/realtime';
+import Session from '../../libs/session';
+import store from '../../store';
+import {default as PerfectScrollbar} from '../perfect-scrollbar';
+import {mixin as clickaway} from 'vue-clickaway';
+import VueNotification from './notification.vue';
+import {mapGetters, mapState} from 'vuex';
+import environment from '@/environment';
+import Vue from 'vue';
+import Component from "vue-class-component";
+import {Ref, Watch} from "vue-property-decorator";
+import {Notification} from '@/types/models';
 
-  function urlBase64ToUint8Array(base64String) {
+function urlBase64ToUint8Array(base64String) {
     const padding = '='.repeat((4 - base64String.length % 4) % 4);
     const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
 

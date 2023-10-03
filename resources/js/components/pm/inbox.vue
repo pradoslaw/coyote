@@ -16,13 +16,13 @@
       </div>
 
       <perfect-scrollbar class="dropdown-modal" :options="{wheelPropagation: false, useBothWheelAxes: false, suppressScrollX: true}">
-        <div v-if="messages === null" class="text-center">
+        <div v-if="messages === null" class="text-center p-3">
           <i class="fas fa-spinner fa-spin"></i>
         </div>
 
         <vue-message v-for="message in messages" :message="message" :key="message.id"></vue-message>
 
-        <div class="text-center" v-if="Array.isArray(messages) && messages.length === 0">Brak wiadomości prywatnych.</div>
+        <div class="text-center p-3" v-if="Array.isArray(messages) && messages.length === 0">Brak wiadomości prywatnych.</div>
       </perfect-scrollbar>
     </div>
   </li>
