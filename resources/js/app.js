@@ -3,6 +3,7 @@ import Prism from 'prismjs';
 import Vue from 'vue';
 import './bootstrap.js';
 import './components/breadcrumb.js';
+import GithubButton from "./components/github-button.vue";
 import './components/navbar-toggle.js';
 import './components/scrolltop.js';
 import './components/vcard.js';
@@ -21,32 +22,39 @@ Prism.highlightAll();
 Vue.use(VueAutosize);
 
 new Router()
-  .on(['/User', '/User/Skills', '/User/Relations', '/User/Tokens'], () => require('./pages/user'))
-  .on(['/Register', '/Login'], () => require('./pages/auth'))
-  .on(['/Adm/Firewall/*'], () => {
-    require.ensure(['flatpickr', 'flatpickr/dist/l10n/pl'], require => {
-      require('flatpickr');
-      require('../sass/vendor/_flatpickr.scss');
-      $('#expire-at').flatpickr({
-        allowInput: true,
-        locale: require('flatpickr/dist/l10n/pl.js').pl
-      });
-    });
-  })
-  .on(['/Adm/Mailing'], () => require('./libs/tinymce').default())
-  .on(['/User/Pm/Submit', '/User/Pm/Show/*', '/User/Pm'], () => require('./pages/pm'))
-  .on(['/Mikroblogi', '/Mikroblogi/*', '/Profile/*/Microblog'], () => require('./pages/microblog'))
-  .on(['/Profile/*'], () => require('./pages/profile'))
-  .on(['/'], () => require('./pages/homepage'))
-  .on(['/Search'], () => require('./pages/search'))
-  .on(['/Guide', '/Guide/*'], () => require('./pages/guide'))
-  .resolve();
+    .on(['/User', '/User/Skills', '/User/Relations', '/User/Tokens'], () => require('./pages/user'))
+    .on(['/Register', '/Login'], () => require('./pages/auth'))
+    .on(['/Adm/Firewall/*'], () => {
+        require.ensure(['flatpickr', 'flatpickr/dist/l10n/pl'], require => {
+            require('flatpickr');
+            require('../sass/vendor/_flatpickr.scss');
+            $('#expire-at').flatpickr({
+                allowInput: true,
+                locale: require('flatpickr/dist/l10n/pl.js').pl
+            });
+        });
+    })
+    .on(['/Adm/Mailing'], () => require('./libs/tinymce').default())
+    .on(['/User/Pm/Submit', '/User/Pm/Show/*', '/User/Pm'], () => require('./pages/pm'))
+    .on(['/Mikroblogi', '/Mikroblogi/*', '/Profile/*/Microblog'], () => require('./pages/microblog'))
+    .on(['/Profile/*'], () => require('./pages/profile'))
+    .on(['/'], () => require('./pages/homepage'))
+    .on(['/Search'], () => require('./pages/search'))
+    .on(['/Guide', '/Guide/*'], () => require('./pages/guide'))
+    .resolve();
 
 // must be at the end so other vue components can render
 require('./plugins/popover');
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker
-    .register('/sw.js')
-    .catch(error => console.log(error));
+    navigator.serviceWorker
+        .register('/sw.js')
+        .catch(error => console.log(error));
 }
+
+new Vue({
+    el: '#github-button',
+    components: {
+        'vue-github-button': GithubButton,
+    },
+});
