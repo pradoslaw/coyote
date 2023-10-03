@@ -1,8 +1,8 @@
 <template>
   <div class="github-button">
-    <a class="repository"
-       href="https://github.com/pradoslaw/coyote"
-       title="Odwiedź repozytorium Coyote"
+    <a :class="['repository', this.size, this.theme]"
+       :href="repository"
+       :title="title"
        rel="noopener"
        target="_blank">
       <svg class="icon" viewBox="0 0 16 16" width="16" height="16">
@@ -11,13 +11,30 @@
       </svg>
       <span>Coyote</span>
     </a>
-    <a class="stars"
+    <a :class="['stars', this.size, this.theme]"
        href="https://github.com/pradoslaw/coyote/stargazers"
        rel="noopener" target="_blank">
       85
     </a>
   </div>
 </template>
+
+<script>
+function oneOf(...values) {
+  return value => values.indexOf(value) > -1;
+}
+
+export default {
+  data: () => ({
+    title: 'Odwiedź repozytorium Coyote',
+    repository: 'https://github.com/pradoslaw/coyote',
+  }),
+  props: {
+    size: {require: true, validator: oneOf('large', 'small')},
+    theme: {require: true, validator: oneOf('light', 'dark')},
+  }
+};
+</script>
 
 <style lang="scss">
 .github-button {
@@ -47,10 +64,31 @@
     box-sizing: content-box;
     font-weight: 600;
     border: 1px solid;
-    height: 16px;
-    padding: 5px 10px;
-    font-size: 12px;
-    line-height: 16px;
+
+    &.large {
+      height: 16px;
+      padding: 5px 10px;
+      font-size: 12px;
+      line-height: 16px;
+    }
+
+    &.small {
+      height: 14px;
+      font-size: 11px;
+      line-height: 14px;
+
+      &.repository {
+        padding: 1px 5px 3px;
+
+        svg {
+          margin-top: 0.5px;
+        }
+      }
+
+      &.stars {
+        padding: 2px 5px 2px;
+      }
+    }
 
     &:focus-visible {
       outline: 2px solid #0969da;
@@ -66,55 +104,90 @@
   }
 
   .repository {
-    color: #24292f;
-    background-color: #ebf0f4;
-    border-color: #ccd1d5;
-    border-color: rgba(31, 35, 40, .15);
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg'%3e%3clinearGradient id='o' x2='0' y2='1'%3e%3cstop stop-color='%23f6f8fa'/%3e%3cstop offset='90%25' stop-color='%23ebf0f4'/%3e%3c/linearGradient%3e%3crect width='100%25' height='100%25' fill='url(%23o)'/%3e%3c/svg%3e");
-    background-image: -moz-linear-gradient(top, #f6f8fa, #ebf0f4 90%);
-    background-image: linear-gradient(180deg, #f6f8fa, #ebf0f4 90%);
-    filter: progid:DXImageTransform.Microsoft.Gradient(startColorstr='#FFF6F8FA', endColorstr='#FFEAEFF3');
     border-radius: .25em 0 0 .25em;
 
-    &:active {
-      background-color: #e5e9ed;
-      border-color: #c7cbcf;
-      border-color: rgba(31, 35, 40, .15);
-      background-image: none;
-      filter: none;
-    }
-
-    &:hover,
-    &:focus {
-      background-color: #e9ebef;
-      background-position: 0 -0.5em;
-      border-color: #cbcdd1;
-      border-color: rgba(31, 35, 40, .15);
-      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg'%3e%3clinearGradient id='o' x2='0' y2='1'%3e%3cstop stop-color='%23f3f4f6'/%3e%3cstop offset='90%25' stop-color='%23e9ebef'/%3e%3c/linearGradient%3e%3crect width='100%25' height='100%25' fill='url(%23o)'/%3e%3c/svg%3e");
-      background-image: -moz-linear-gradient(top, #f3f4f6, #e9ebef 90%);
-      background-image: linear-gradient(180deg, #f3f4f6, #e9ebef 90%);
-      filter: progid:DXImageTransform.Microsoft.Gradient(startColorstr='#FFF3F4F6', endColorstr='#FFE8EAEE');
+    svg {
+      margin-right: 0.35em;
     }
   }
 
   .stars {
-    color: #24292f;
-    background-color: #fff;
-    border-color: #dddedf;
-    border-color: rgba(31, 35, 40, .15);
-    border-left: 0;
     border-radius: 0 .25em .25em 0;
+    border-left: 0;
+  }
 
-    &:hover,
-    &:focus {
-      color: #0969da
+  a.light {
+    &.repository,
+    &.stars {
+      color: #24292f;
+      border-color: rgba(31, 35, 40, .15);
+    }
+
+    &.repository {
+      background-color: #ebf0f4;
+      background-image: linear-gradient(180deg, #f6f8fa, #ebf0f4 90%);
+
+      &:hover,
+      &:focus {
+        background-color: #e9ebef;
+        background-image: linear-gradient(180deg, #f3f4f6, #e9ebef 90%);
+        background-position: 0 -0.5em;
+      }
+
+      &:active {
+        background-color: #e5e9ed;
+        background-image: none;
+      }
+    }
+
+    &.stars {
+      background-color: white;
+
+      &:hover,
+      &:focus {
+        color: #0969da;
+      }
     }
   }
-}
 
-:root .repository,
-:root .repository:hover,
-:root .repository:focus {
-  filter: none
+  a.dark {
+    &.repository,
+    &.stars {
+      color: white;
+      border-color: hsl(0deg 0% 51%);
+    }
+
+    &.repository {
+      background-color: hsl(0, 0%, 38%);
+      background-image: linear-gradient(180deg,
+        hsl(0, 0%, 42%),
+        hsl(0, 0%, 32%) 90%);
+      border-right-color: hsl(0, 0%, 51%);
+
+      &:hover,
+      &:focus {
+        background-color: hsl(0, 0%, 40.5%);
+        background-image: linear-gradient(180deg,
+          hsl(0, 0%, 45%),
+          hsl(0, 0%, 35%) 90%);
+      }
+
+      &:active {
+        background-color: hsl(0, 0%, 35%);
+        background-image: linear-gradient(180deg,
+          hsl(0, 0%, 40%),
+          hsl(0, 0%, 30%) 90%);
+      }
+    }
+
+    &.stars {
+      background-color: hsl(0deg, 0%, 44%);
+
+      &:hover,
+      &:focus {
+        color: #b3d161;
+      }
+    }
+  }
 }
 </style>
