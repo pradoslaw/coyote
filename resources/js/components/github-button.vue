@@ -14,7 +14,7 @@
     <a :class="['stars', this.size, this.theme]"
        href="https://github.com/pradoslaw/coyote/stargazers"
        rel="noopener" target="_blank">
-      85
+      {{ stars || '?' }}
     </a>
   </div>
 </template>
@@ -28,10 +28,23 @@ export default {
   data: () => ({
     title: 'Odwiedź repozytorium Coyote',
     repository: 'https://github.com/pradoslaw/coyote',
+    stars: null
   }),
   props: {
     size: {require: true, validator: oneOf('large', 'small')},
     theme: {require: true, validator: oneOf('light', 'dark')},
+  },
+  created() {
+    const renderedStars = window.document.body.dataset.githubStars;
+    if (renderedStars !== 'failure') {
+      this.stars = renderedStars;
+    } else {
+      fetch('https://api.github.com/repos/pradoslaw/coyote')
+        .then(response => response.json())
+        .then(response => {
+          this.stars = response.stargazers_count;
+        });
+    }
   }
 };
 </script>

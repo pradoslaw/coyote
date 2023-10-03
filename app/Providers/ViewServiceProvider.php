@@ -6,6 +6,7 @@ use Coyote\Http\Factories\CacheFactory;
 use Coyote\Services\Forum\UserDefined;
 use Coyote\Services\Guest;
 use Illuminate\Contracts\View\View;
+use Illuminate\Contracts\Cache;
 use Illuminate\Support\ServiceProvider;
 use Lavary\Menu\Builder;
 use Lavary\Menu\Menu;
@@ -16,14 +17,15 @@ class ViewServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        $cache = app(Cache\Repository::class);
         $this->app['view']->composer(['layout', 'adm.home'], InitialStateComposer::class);
-
-        $this->app['view']->composer('layout', function (View $view) {
+        $this->app['view']->composer('layout', function (View $view) use ($cache) {
             $view->with([
                 '__master_menu' => $this->buildMasterMenu(),
 
                 // temporary code
-                '__dark_theme'  => $this->app[Guest::class]->getSetting('dark.theme', true)
+                '__dark_theme'  => $this->app[Guest::class]->getSetting('dark.theme', true),
+                'github_stars'  => $cache->remember('homepage:github_stars', 30 * 60, fn() => $this->githubStars())
             ]);
         });
     }
@@ -69,5 +71,22 @@ class ViewServiceProvider extends ServiceProvider
         }
 
         return $sections;
+    }
+
+    private function githubStars(): ?int
+    {
+        $result = @\file_get_contents(
+            'https://api.github.com/repos/pradoslaw/coyote',
+            false,
+            \stream_context_create([
+                'http' => ['header' => 'User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36']
+            ]));
+        if ($result !== false) {
+            $data = @\json_decode($result, true);
+            if ($data !== null) {
+                return $data['stargazers_count'];
+            }
+        }
+        return null;
     }
 }
