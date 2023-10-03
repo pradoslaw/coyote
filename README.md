@@ -76,6 +76,34 @@ polecenie:
    docker-compose exec php yarn run prod
    ```
 
+#### Powolna praca z Vue
+
+Zmiany w szablonach `.twig` są widoczne od razu po przeładowaniu, ale zmiany w plikach `.vue` są
+widoczne dopiero po przebudowaniu `yarn run dev`.
+
+Dla szybkiego developowania, warto stworzyć osobną aplikację Vue, zbudować w niej komponenty, i potem
+po prostu przekopiować do projektu coyote.
+
+```
+# Stwórz nowy folder poza projektem coyote/
+cd ..        
+mkdir spike/
+
+# Stwórz pustą aplikację vue
+cd spike/
+yarn init --yes --private
+yarn add @vue/cli
+yarn run vue create app    # Select preset "Default Vue 2"
+
+# Dodaj SCSS oraz uruchom aplikację
+cd app
+yarn add sass-loader sass
+yarn serve
+```
+
+Możesz teraz po prostu edytować plik `.vue` i pracować na błyskawicznej aplikacji. Po skończeniu, folder `spike/`
+może być usunięty.
+
 ### Testowanie
 
 Aby uruchomić testy w laravel:
