@@ -26,7 +26,7 @@ Coyote to nazwa systemu obsługującego serwis [4programmers.net].
 3. Zainstaluj zależności:
    - Wersja developerska (source mapy):
      ```
-     make install-dev 
+     make install-dev
      ```
    - Wersja produkcyjna (minifikacja zasobów):
      ```
@@ -59,7 +59,7 @@ Nastepnie należy zrestartować wszystkie kontenery.
 
 W projekcie korzystamy z `yarn` oraz `webpack`. Aby skompilować pliki źródłowe do postaci finalnej, należy wykonać
 polecenie:
- - Wersja developerska 
+ - Wersja developerska
    ```
    docker-compose exec php yarn run dev
    ```
@@ -90,6 +90,17 @@ docker-compose exec php php vendor/bin/phpunit
    - Can be fixed with running this command in `php` container:
      ```
      php artisan config:clear
+     ```
+
+2. Niektóre widoki powodują błąd związany z ElasticSearch i brakującymi polami.
+   - Prawdopodobnie początkowe tworzenie indexów się nie powiodło.
+     ```
+     php artisan es:drop
+     ```
+     A następnie stwórz indexy od nowa
+     ```
+     php artisan es:create --force
+     php artisan es:index --force
      ```
 
 ### Zadania uruchomiane w tle
