@@ -62,7 +62,7 @@ class Location extends Model
      */
     public function setCityAttribute($city)
     {
-        $this->attributes['city'] = capitalize($city);
+        $this->attributes['city'] = \mb_convert_case($city, \MB_CASE_TITLE, 'UTF-8');
     }
 
     /**

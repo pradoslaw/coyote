@@ -128,17 +128,6 @@ function manifest($path)
 }
 
 /**
- * Uppercase first character of each word
- *
- * @param string $string
- * @return string
- */
-function capitalize($string)
-{
-    return mb_convert_case($string, MB_CASE_TITLE, 'UTF-8');
-}
-
-/**
  * @param string|\Carbon\Carbon $dateTime
  * @param bool $diffForHumans
  * @return string
