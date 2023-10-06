@@ -77,7 +77,7 @@ services:
   elasticsearch:
     image: elasticsearch:6.8.6
     volumes:
-        - elasticsearch:/usr/share/elasticsearch/data
+      - elasticsearch:/usr/share/elasticsearch/data
     environment:
       - "discovery.type=single-node"
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
@@ -129,11 +129,11 @@ services:
       - minio
     entrypoint: >
       /bin/sh -c "
-      /usr/bin/mc config host add minio http://minio:9000 minio minio123 --api s3v4;
-      /usr/bin/mc mb minio/public;
-      /usr/bin/mc mb minio/local;
-      /usr/bin/mc policy set public minio/public;
-      exit 0;
+        mc config host add minio http://minio:9000 minio minio123 --api s3v4;
+        mc mb minio/public;
+        mc mb minio/local;
+        mc anonymous set public minio/public;
+        exit 0;
       "
     logging:
       options:
