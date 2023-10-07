@@ -296,8 +296,8 @@
                 <a v-if="post.permissions.adm_access"
                    class="dropdown-item"
                    :href="`/Adm/Firewall/Save?user=${post.user ? post.user.id : ''}&ip=${post.ip}`">
-                  <i class="fas fa-ban fa-fw"></i>
-                  Zablokuj użytkownika
+                  <i class="fas fa-user-slash fa-fw"></i>
+                  Zbanuj użytkownika
                 </a>
               </div>
             </div>

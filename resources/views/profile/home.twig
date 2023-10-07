@@ -47,7 +47,7 @@
 
                   <div class="dropdown-menu">
                     <a v-if="isBlocked(user.id)" @click="unblock(user.id)" href="javascript:" class="dropdown-item"><i class="fas fa-fw fa-user"></i> Odlobkuj użytkownika</a>
-                    <a v-else @click="block" href="javascript:" class="dropdown-item"><i class="fas fa-fw fa-ban"></i> Zablokuj użytkownika</a>
+                    <a v-else @click="block" href="javascript:" class="dropdown-item"><i class="fas fa-fw fa-user-slash"></i> Zablokuj użytkownika</a>
                   </div>
                 </div>
               </div>
@@ -174,7 +174,7 @@
         {% if can('adm-access') %}
           {% if not user.is_blocked and user.id != user('id') %}
             <li>
-              <a href="{{ route('adm.firewall.save') }}?user={{ user.id }}"><i class="fas fa-ban fa-fw"></i> Zablokuj tego użytkownika</a>
+              <a href="{{ route('adm.firewall.save') }}?user={{ user.id }}"><i class="fas fa-user-slash fa-fw"></i> Zbanuj tego użytkownika</a>
             </li>
           {% endif %}
 

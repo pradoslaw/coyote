@@ -13,7 +13,7 @@ class FirewallButton extends RowAction
     {
         return (string) $this->tag(
             'a',
-            (string) $this->tag('i', '', ['class' => 'fa fa-fw fa-ban']),
+            (string) $this->tag('i', '', ['class' => 'fa fa-fw fa-user-slash']),
             ['href' => $this->buildActionUrl($this->data), 'class' => 'btn btn-default btn-xs', 'title' => 'Zablokuj tego użytkownika']
         );
     }

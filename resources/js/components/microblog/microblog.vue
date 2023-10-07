@@ -46,7 +46,10 @@
                   <div v-if="microblog.user.id !== user.id" class="dropdown-divider"></div>
                 </template>
 
-                <a v-if="microblog.user.id !== user.id" @click="block(microblog.user)" href="javascript:" class="dropdown-item"><i class="fas fa-fw fa-ban"></i> Zablokuj użytkownika</a>
+                <a v-if="microblog.user.id !== user.id" @click="block(microblog.user)" href="javascript:" class="dropdown-item">
+                  <i class="fas fa-fw fa-user-slash"></i>
+                  Zablokuj użytkownika
+                </a>
                </div>
             </div>
           </div>
