@@ -15,8 +15,8 @@ class UsersTableSeeder extends Seeder
     {
         \Coyote\User::create([
             'name'                  => 'admin',
-            'email'                 => 'admin@4programmers.net',
-            'password'              => bcrypt('123')
+            'email'                 => 'admin@localhost',
+            'password'              => bcrypt('admin')
         ]);
 
         \factory(\Coyote\User::class, 10)->create();
