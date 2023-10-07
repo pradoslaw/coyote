@@ -7,22 +7,10 @@
       <div class="card-body">
         {{ form_start(form) }}
         {{ form_row(form.text) }}
-
-        <div class="form-group row">
-          <div class="col-md-6 offset-md-4">
-            <a class="text-primary" role="button" data-bs-toggle="collapse" href="#advance" aria-expanded="false" aria-controls="collapseExample">
-              Szukanie zaawansowane
-            </a>
-          </div>
-        </div>
-
-        <div class="collapse" id="advance">
-          {{ form_row(form.ip) }}
-          {{ form_row(form.browser) }}
-          {{ form_row(form.fingerprint) }}
-          {{ form_row(form.actor_displayName) }}
-        </div>
-
+        {{ form_row(form.ip) }}
+        {{ form_row(form.browser) }}
+        {{ form_row(form.fingerprint) }}
+        {{ form_row(form.actor_displayName) }}
         {{ form_row(form.submit) }}
         {{ form_end() }}
 

@@ -75,10 +75,6 @@
 
   <script type="text/javascript">
     $(function () {
-      $('.collapse').on('hidden.bs.collapse show.bs.collapse', function () {
-        $(this).parent().find('.arrow').toggleClass('fa-angle-down');
-      });
-
       $('#sidebar-toggle').click(function () {
         var obj = $('#adm-menu');
         var direction = parseInt(obj.css('left')) < 0 ? 'right' : 'left';
