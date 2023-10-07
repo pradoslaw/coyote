@@ -4,7 +4,7 @@ footer {
   background-color: #3e3e3e;
 }
 
-#footer-top {
+.footer-top {
   padding: 10px 0;
   position: relative;
 
@@ -42,7 +42,7 @@ footer {
   z-index: 1;
 }
 
-#footer-inner {
+.footer-inner {
   background-color: $dark;
   overflow: hidden;
   padding: 17px 0 21px;

@@ -66,7 +66,7 @@ class JobPostingTest extends DuskTestCase
                 ->keys('input[name="address"]', '{enter}')
                 ->pause(1000)
                 ->type('firm[youtube_url]', 'https://www.youtube.com/watch?v=fz2OUoJpR7k')
-                ->scrollTo('#footer-top')
+                ->scrollTo('.footer-top')
                 ->press('Zapisz')
                 ->waitForText('Powrót do ogłoszenia')
                 ->clickLink('Powrót do ogłoszenia')
