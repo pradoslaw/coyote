@@ -93,16 +93,16 @@ class SettingsForm extends Form
             ])
             ->add('terms', 'checkbox', [
                 'rules' => 'boolean',
-                'label' => new TwigLiteral((new UserSettings)->termsAndPrivacyPolicyAgreement()),
+                'label' => TwigLiteral::fromHtml((new UserSettings)->termsAndPrivacyPolicyAgreement()),
                 'attr'  => ['disabled' => 'disabled', 'checked' => 'checked']
             ])
             ->add('marketing_agreement', 'checkbox', [
                 'rules' => 'boolean',
-                'label' => new TwigLiteral((new UserSettings)->marketingAgreement())
+                'label' => TwigLiteral::fromHtml((new UserSettings)->marketingAgreement())
             ])
             ->add('newsletter_agreement', 'checkbox', [
                 'rules' => 'boolean',
-                'label' => new TwigLiteral((new UserSettings)->newsletterAgreement())
+                'label' => TwigLiteral::fromHtml((new UserSettings)->newsletterAgreement())
             ])
             ->add('firm', 'text', [
                 'rules' => 'nullable|string|max:100',

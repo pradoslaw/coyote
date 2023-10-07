@@ -37,10 +37,10 @@ class RegisterForm extends Form implements ValidatesWhenSubmitted
             ])
             ->add('terms', 'checkbox', [
                 'rules' => 'accepted',
-                'label' => new TwigLiteral((new UserSettings)->termsAndPrivacyPolicyAgreement())
+                'label' => TwigLiteral::fromHtml((new UserSettings)->termsAndPrivacyPolicyAgreement())
             ])
             ->add('marketing_agreement', 'checkbox', [
-                'label' => new TwigLiteral((new UserSettings)->marketingAgreement())
+                'label' => TwigLiteral::fromHtml((new UserSettings)->marketingAgreement())
             ])
             ->add('email_confirmation', 'honeypot')
             ->add('submit', 'submit', [

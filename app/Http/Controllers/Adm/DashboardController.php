@@ -2,50 +2,43 @@
 
 namespace Coyote\Http\Controllers\Adm;
 
+use Coyote\View\Twig\TwigLiteral;
+use Illuminate\Redis\RedisManager;
+use Illuminate\View\View;
+
 class DashboardController extends BaseController
 {
-    /**
-     * @inheritdoc
-     */
-    public function index()
+    public function index(): View
     {
-        return $this->view('adm.dashboard', ['checklist' => [
-            'Katalog <tt>storage</tt> z prawami do zapisu' => $this->isStorageWriteable(),
-            'Katalog <tt>uploads</tt> z prawami do zapisu' => $this->isPublicWriteable(),
-            'Redis włączony' => $this->isRedisEnabled(),
-            'Redis aktywny' => $this->isRedisWorking()
-        ]]);
+        return $this->view('adm.dashboard', [
+            'checklist' => [
+                $this->directoryWritable('storage/', \storage_path()),
+                $this->directoryWritable('uploads/', \public_path()),
+                [
+                    'label' => 'Redis włączony',
+                    'value' => \config('cache.default')
+                ],
+                [
+                    'label' => 'Redis aktywny',
+                    'value' => $this->redisActive()
+                ],
+            ]
+        ]);
     }
 
-    /**
-     * @return bool
-     */
-    private function isStorageWriteable()
+    private function redisActive(): bool
     {
-        return is_writeable(storage_path());
+        /** @var RedisManager $redis */
+        $redis = \app('redis');
+        return $redis->client()->ping();
     }
 
-    /**
-     * @return bool
-     */
-    private function isPublicWriteable()
+    public function directoryWritable(string $basePath, string $path): array
     {
-        return is_writeable(public_path());
-    }
-
-    /**
-     * @return bool
-     */
-    private function isRedisEnabled()
-    {
-        return config('cache.default') === 'redis';
-    }
-
-    /**
-     * @return bool
-     */
-    private function isRedisWorking()
-    {
-        return (string) app('redis')->ping() === 'PONG';
+        $permission = \decOct(\filePerms($path) & 0777);
+        return [
+            'label' => new TwigLiteral("Katalog <code>$basePath</code> ma prawa do zapisu - <code>$permission</code>"),
+            'value' => \is_writeable(\storage_path())
+        ];
     }
 }

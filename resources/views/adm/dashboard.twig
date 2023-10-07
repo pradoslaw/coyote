@@ -6,14 +6,14 @@
     <div class="card-header">Status systemu</div>
     <div class="card-body">
       <ul class="list-group">
-        {% for label, checked in checklist %}
+        {% for item in checklist %}
           <li class="list-group-item">
-            {% if checked %}
+            {% if item.value %}
               <i class="fas fa-check text-success fa-fw"></i>
             {% else %}
               <i class="fas fa-times text-danger fa-fw"></i>
             {% endif %}
-            <span>{{ label }}</span>
+            <span>{{ item.label }}</span>
           </li>
         {% endfor %}
       </ul>
