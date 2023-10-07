@@ -150,9 +150,11 @@
     background: transparent;
   }
 
-  // emoticons are NOT responsive
   img:not(.img-smile) {
-    @include img-fluid;
+    display: block;
+    margin: 1rem 0;
+    max-width: 100%;
+    object-fit: contain;
   }
 
   table {
