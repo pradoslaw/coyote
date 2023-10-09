@@ -3,6 +3,7 @@
 namespace Coyote\Http\Controllers\User;
 
 use Coyote\Actkey;
+use Coyote\Domain\User\UserSettings;
 use Coyote\Events\UserSaved;
 use Coyote\Http\Controllers\User\Menu\SettingsMenu;
 use Coyote\Http\Forms\User\SettingsForm;
@@ -10,6 +11,7 @@ use Coyote\Mail\EmailConfirmation;
 use Coyote\Services\FormBuilder\Form;
 use Coyote\Services\Stream\Activities\Update;
 use Coyote\Services\Stream\Objects\Person;
+use Coyote\View\Twig\TwigLiteral;
 use Illuminate\Contracts\Mail\MailQueue;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -26,20 +28,21 @@ class SettingsController extends BaseController
         $form = $this->getForm();
         if ($email) {
             $form->get('email')->setAttr(['data-popover' => json_encode([
-              'message'   => "Na adres $email wysłaliśmy link umożliwiający zmianę adresu e-mail.",
-              'placement' => 'top'
+                'message'   => "Na adres $email wysłaliśmy link umożliwiający zmianę adresu e-mail.",
+                'placement' => 'top'
             ])]);
         }
         return $this->view('user.settings', [
-          'email' => $email,
-          'form'  => $form
+            'email'             => $email,
+            'form'              => $form,
+            'informationClause' => TwigLiteral::fromHtml((new UserSettings())->informationClause())
         ]);
     }
 
     protected function getForm(): Form
     {
         return $this->createForm(SettingsForm::class, $this->auth, [
-          'url' => route('user.settings')
+            'url' => route('user.settings')
         ]);
     }
 

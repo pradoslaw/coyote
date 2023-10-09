@@ -10,12 +10,13 @@ class UserSettings
         $gdpr = '<a href="mailto:gdpr@4programmers.net">gdpr@4programmers.net</a>';
         $_4programmers = '<a href="https://4programmers.net/">4programmers.net</a>';
 
-        return new Html("Wyrażam zgodę na otrzymywanie, na podany przeze mnie adres e-mail, informacji handlowych kierowanych do mnie 
-            przez 4programmers.net (tj. Makana sp. z o.o., z siedzibą przy ul. Krupniczej 13, 50-075 Wrocław). Informacje 
-            handlowe dotyczyć będą produktów, usług i działalności realizowanej przez 4programmers.net i jej kontrahentów. 
-            Rozumiem, że zgodę mogę wycofać w dowolnym momencie, jednak nie będzie to miało wpływu na przetwarzanie, którego 
-            dokonano przed jej wycofaniem. Przedmiotowa zgoda może zostać wycofana poprzez odznaczenie jej w ustawieniach mojego 
-            konta albo poprzez wysłanie stosownej wiadomości na adres e-mail: $gdpr lub adres siedziby $_4programmers.");
+        return new Html("Wyrażam zgodę na otrzymywanie, na podany przeze mnie adres e-mail, informacji handlowych
+            kierowanych do mnie przez 4programmers.net (tj. Makana sp. z o.o., z siedzibą przy ul. Krupniczej 13, 50-075
+            Wrocław). Informacje handlowe dotyczyć będą produktów, usług i działalności realizowanej przez
+            4programmers.net i jej kontrahentów. Rozumiem, że zgodę mogę wycofać w dowolnym momencie, jednak nie będzie
+            to miało wpływu na przetwarzanie, którego dokonano przed jej wycofaniem. Przedmiotowa zgoda może zostać
+            wycofana poprzez odznaczenie jej w ustawieniach mojego konta albo poprzez wysłanie stosownej wiadomości na
+            adres e-mail: $gdpr lub adres siedziby $_4programmers.");
     }
 
     public function newsletterAgreement(): Html
@@ -27,7 +28,17 @@ class UserSettings
     {
         $terms = '<a href="/Regulamin">regulamin</a>';
         $privacyPolicy = '<a href="/Polityka_prywatności">politykę prywatności</a>';
-
         return new Html("Akceptuję $terms oraz $privacyPolicy.<b>*</b>");
+    }
+
+    public function informationClause(): Html
+    {
+        $privacyPolicy = '<a href="/Polityka_prywatności">polityce prywatności</a>';
+        return new Html(
+            "Uzupełnieniając pola oznaczone jako dobrowolne oraz klikając \"Zapisz\" wyrażasz swoją dobrowolną
+            zgodę na przetwarzanie wpisanych w nich danych osobowych w celu umieszczenia ich w Twoim profilu. Zgodę
+            można wycofać w każdej chwili poprzez usunięcie danych w koncie, co nie wpływa na zgodność z prawem
+            przetwarzania dokonanego przed jej wycofaniem. Więcej informacji o przetwarzaniu danych osobowych oraz
+            Twoich prawach z tym związanych możesz znaleźć w $privacyPolicy.");
     }
 }

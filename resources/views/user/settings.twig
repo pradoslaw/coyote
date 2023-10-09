@@ -4,64 +4,68 @@
 {% import 'components.forms' as forms %}
 
 {% block content %}
-    {{ form_start(form) }}
+  {{ form_start(form) }}
 
-    <h2>Ustawienia główne</h2>
-    <section class="card card-default">
-        <div class="card-body">
-            {{ form_row(form.email) }}
-            {{ form_row(form.submit) }}
-        </div>
-    </section>
+  <h2>Ustawienia główne</h2>
+  <section class="card card-default">
+    <div class="card-body">
+      {{ form_row(form.email) }}
+      {{ form_row(form.submit) }}
+    </div>
+  </section>
 
-    <h2>Zgody</h2>
-    <section class="card card-default">
-        <div class="card-body">
-            {{ form_row(form.terms) }}
-            {{ form_row(form.marketing_agreement) }}
-            {{ form_row(form.newsletter_agreement) }}
+  <h2>Zgody</h2>
+  <section class="card card-default">
+    <div class="card-body">
+      {{ form_row(form.terms) }}
+      {{ form_row(form.marketing_agreement) }}
+      {{ form_row(form.newsletter_agreement) }}
 
-            {{ form_row(form.submit) }}
-        </div>
-    </section>
+      <div class="col-md-6 offset-md-4 mb-4">
+        {{ informationClause }}
+      </div>
 
-    <h2>Informacje</h2>
-    <section class="card card-default">
-        <div class="card-body">
-            {{ form_row(form.website) }}
-            {{ form_row(form.github) }}
-            {{ form_row(form.firm) }}
-            {{ form_row(form.position) }}
-            {{ form_row(form.birthyear) }}
-            {{ form_row(form.location) }}
-            {{ form_row(form.bio) }}
+      {{ form_row(form.submit) }}
+    </div>
+  </section>
 
-            {{ form_row(form.submit) }}
-        </div>
-    </section>
+  <h2>Informacje</h2>
+  <section class="card card-default">
+    <div class="card-body">
+      {{ form_row(form.website) }}
+      {{ form_row(form.github) }}
+      {{ form_row(form.firm) }}
+      {{ form_row(form.position) }}
+      {{ form_row(form.birthyear) }}
+      {{ form_row(form.location) }}
+      {{ form_row(form.bio) }}
 
-    <h2>Forum</h2>
-    <section class="card card-default">
-        <div class="card-body">
-            {{ form_row(form.allow_subscribe) }}
-            {{ form_row(form.group_id) }}
-            {{ form_row(form.sig) }}
+      {{ form_row(form.submit) }}
+    </div>
+  </section>
 
-            {{ form_row(form.submit) }}
-        </div>
-    </section>
+  <h2>Forum</h2>
+  <section class="card card-default">
+    <div class="card-body">
+      {{ form_row(form.allow_subscribe) }}
+      {{ form_row(form.group_id) }}
+      {{ form_row(form.sig) }}
 
-    <h2>Widok</h2>
-    <section class="card card-default">
-        <div class="card-body">
-            {{ form_row(form.date_format) }}
-            {{ form_row(form.allow_sticky_header) }}
-            {{ form_row(form.allow_smilies) }}
-            {{ form_row(form.allow_count) }}
-            {{ form_row(form.allow_sig) }}
+      {{ form_row(form.submit) }}
+    </div>
+  </section>
 
-            {{ form_row(form.submit) }}
-        </div>
-    </section>
-    {{ form_close() }}
+  <h2>Widok</h2>
+  <section class="card card-default">
+    <div class="card-body">
+      {{ form_row(form.date_format) }}
+      {{ form_row(form.allow_sticky_header) }}
+      {{ form_row(form.allow_smilies) }}
+      {{ form_row(form.allow_count) }}
+      {{ form_row(form.allow_sig) }}
+
+      {{ form_row(form.submit) }}
+    </div>
+  </section>
+  {{ form_close() }}
 {% endblock %}
