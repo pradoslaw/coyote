@@ -1,24 +1,26 @@
 <div class="row container-xxl no-gutters">
-    <div class="col-12">
-        <ul class="breadcrumb text-truncate">
-            <li class="breadcrumb-item">
-                <a href="{{ route('home') }}" class="d-block d-sm-none"><i class="fas fa-home"></i></a>
-                <a href="{{ route('home') }}" class="d-none d-sm-inline-block">{{ config_get('app.name') }}</a>
-            </li>
+  <div class="col-12">
+    <ul class="breadcrumb text-truncate">
+      <li class="breadcrumb-item">
+        <a href="{{ route('home') }}" class="d-block d-sm-none"><i class="fas fa-home"></i></a>
+        <a href="{{ route('home') }}" class="d-none d-sm-inline-block">{{ config_get('app.name') }}</a>
+      </li>
 
-            {% for breadcrumb in breadcrumbs %}
-                <li class="breadcrumb-item" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
-                    <a itemprop="url" href="{{ breadcrumb.url }}">
-                        {% if loop.last %}
-                        <strong itemprop="title">{{ breadcrumb.name }}</strong>
-                        {% else %}
-                        <span itemprop="title">{{ breadcrumb.name }}</span>
-                        {% endif %}
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
+      {% for breadcrumb in breadcrumbs %}
+        <li class="breadcrumb-item" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+          <a itemprop="url" href="{{ breadcrumb.url }}">
+            {% if loop.last %}
+              <strong itemprop="title">{{ breadcrumb.name }}</strong>
+            {% else %}
+              <span itemprop="title">{{ breadcrumb.name }}</span>
+            {% endif %}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
 </div>
 
-{{ schema.toScript()|raw }}
+{% if schema %}
+  {{ schema.toScript()|raw }}
+{% endif %}

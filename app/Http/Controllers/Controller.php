@@ -75,9 +75,7 @@ abstract class Controller extends BaseController
     protected function view($view = null, $data = [])
     {
         if (!$this->request->ajax()) {
-            if (count($this->breadcrumb)) {
-                $data['breadcrumb'] = $this->breadcrumb->render();
-            }
+            $data['breadcrumb'] = $this->breadcrumb->render();
         }
 
         return view($view, $data);

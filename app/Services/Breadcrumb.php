@@ -3,6 +3,7 @@
 namespace Coyote\Services;
 
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\View\View;
 use Spatie\SchemaOrg\Schema;
 
 /**
@@ -37,41 +38,29 @@ class Breadcrumb implements \Countable, Arrayable
             foreach ($name as $key => $value) {
                 $this->push($key, $value);
             }
-        } elseif (is_string($name)) { // we don't want to add empty value
+        } else if (is_string($name)) { // we don't want to add empty value
             $this->breadcrumbs[] = ['name' => $name, 'url' => $url];
         }
     }
 
-    /**
-     * Generowanie okroszkow zgodnych z Bootstrap
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function render()
+    public function render(): View
     {
-        return view(
-            'components/breadcrumb',
-            [
-                'breadcrumbs' => $this->breadcrumbs,
-                'schema' => Schema::breadcrumbList()
-                    ->itemListElement(array_map(
-                        function ($breadcrumb, int $index) {
-                            return Schema::listItem()
-                                ->position($index + 1)
-                                ->identifier($breadcrumb['url'])
-                                ->name($breadcrumb['name']);
-                        },
-                        $this->breadcrumbs,
-                        array_keys($this->breadcrumbs),
-                    )
-                ),
-            ]
+        $schemaBreadcrumbs = \array_map(
+            fn(array $breadcrumb, int $index) => Schema::listItem()
+                ->position($index + 1)
+                ->identifier($breadcrumb['url'])
+                ->name($breadcrumb['name']),
+            $this->breadcrumbs,
+            array_keys($this->breadcrumbs),
         );
+        return view('components/breadcrumb', [
+            'breadcrumbs' => $this->breadcrumbs,
+            'schema'      => empty($schemaBreadcrumbs)
+                ? null
+                : Schema::breadcrumbList()->itemListElement($schemaBreadcrumbs),
+        ]);
     }
 
-    /**
-     * @return array
-     */
     public function toArray(): array
     {
         return $this->breadcrumbs;
