@@ -33,7 +33,7 @@
               <div>
                 {% if user.id != user('id') %}
                   <a class="btn btn-secondary mt-2 w-100" href="{{ route('user.pm.submit') }}?to={{ user.name }}">
-                    <i class="fas fa-envelope"></i>
+                    <i class="far fa-envelope mr-1"></i>
                     Wiadomość
                   </a>
                 {% endif %}
