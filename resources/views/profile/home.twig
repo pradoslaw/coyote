@@ -29,35 +29,38 @@
         <div class="card-body">
           <div class="media">
             <div class="mr-3">
-              <img src="{{ user_photo(user.photo) }}" class="img-thumbnail w-100">
-
-              {% if user.id != user('id') %}
-                <a class="btn btn-secondary btn-sm d-block mt-2" href="{{ route('user.pm.submit') }}?to={{ user.name }}">
-                  <i class="fas fa-envelope"></i> Wiadomość
-                </a>
-              {% endif %}
-
-              <div v-cloak v-if="isAuthorized" class="d-flex mt-2">
-                <div class="flex-1 flex-grow-1">
-                  <vue-follow-button :user-id="{{ user.id }}"></vue-follow-button>
-                </div>
-
-                <div class="flex-shrink-0 ml-2">
-                  <button class="btn btn-secondary d-block" data-bs-toggle="dropdown"><i class="fa fa-ellipsis-h"></i></button>
-
+              <img src="{{ user_photo(user.photo) }}" class="img-thumbnail" style="min-width:128px; max-height:128px;">
+              <div>
+                {% if user.id != user('id') %}
+                  <a class="btn btn-secondary mt-2 w-100" href="{{ route('user.pm.submit') }}?to={{ user.name }}">
+                    <i class="fas fa-envelope"></i>
+                    Wiadomość
+                  </a>
+                {% endif %}
+              </div>
+              <div v-cloak v-if="isAuthorized">
+                <vue-follow-button :user-id="{{ user.id }}" class="mt-2 w-100"></vue-follow-button>
+              </div>
+            </div>
+            <div class="media-body">
+              <div class="d-flex justify-content-between">
+                <h1 class="m-0">{{ user.name }}</h1>
+                <div>
+                  <button class="btn btn-secondary d-block" data-bs-toggle="dropdown">
+                    <i class="fa fa-ellipsis-h"></i>
+                  </button>
                   <div class="dropdown-menu">
-                    <a v-if="isBlocked(user.id)" @click="unblock(user.id)" href="javascript:" class="dropdown-item"><i class="fas fa-fw fa-user"></i> Odlobkuj użytkownika</a>
-                    <a v-else @click="block" href="javascript:" class="dropdown-item"><i class="fas fa-fw fa-user-slash"></i> Zablokuj użytkownika</a>
+                    <a v-if="isBlocked(user.id)" @click="unblock(user.id)" href="javascript:" class="dropdown-item">
+                      <i class="fas fa-fw fa-user"></i>
+                      Odlobkuj użytkownika
+                    </a>
+                    <a v-else @click="block" href="javascript:" class="dropdown-item">
+                      <i class="fas fa-fw fa-user-slash"></i>
+                      Zablokuj użytkownika
+                    </a>
                   </div>
                 </div>
               </div>
-            </div>
-
-            <div class="media-body">
-              <h1>
-                {{ user.name }}
-              </h1>
-
               <ol class="list-inline mb-0">
                 {% if user.position %}
                   <li class="list-inline-item">
@@ -132,25 +135,29 @@
           </div>
         </div>
 
-        <vue-notifications position="bottom right" />
+        <vue-notifications position="bottom right"/>
       </div>
 
       {% if user.posts > 0 %}
         <ul class="nav nav-pills">
           <li class="nav-item">
-            <a title="Sprawdź wykres reputacji użytkownika" href="{{ route('profile', [user.id]) }}" class="nav-link {{ tab == 'reputation' ? 'active"' }}" role="tab">
+            <a title="Sprawdź wykres reputacji użytkownika" href="{{ route('profile', [user.id]) }}"
+               class="nav-link {{ tab == 'reputation' ? 'active"' }}" role="tab">
               Reputacja
             </a>
           </li>
 
           <li class="nav-item">
-            <a title="Zobacz rozkład postów użytkownika" href="{{ route('profile', [user.id, 'Post']) }}" class="nav-link {{ tab == 'post' ? 'active' }}" role="tab">
+            <a title="Zobacz rozkład postów użytkownika" href="{{ route('profile', [user.id, 'Post']) }}"
+               class="nav-link {{ tab == 'post' ? 'active' }}" role="tab">
               Statystyki postów
             </a>
           </li>
 
           <li class="nav-item">
-            <a title="Zobacz wpisy opublikowane na mikroblogu użytkownika" href="{{ route('profile', [user.id, 'Microblog']) }}" class="nav-link {{ tab == 'microblog' ? 'active' }}" role="tab">
+            <a title="Zobacz wpisy opublikowane na mikroblogu użytkownika"
+               href="{{ route('profile', [user.id, 'Microblog']) }}"
+               class="nav-link {{ tab == 'microblog' ? 'active' }}" role="tab">
               Mikroblog
             </a>
           </li>
@@ -165,23 +172,34 @@
       <ul class="side-menu">
         {% if user.id != user('id') %}
           <li>
-            <a href="{{ route('user.pm.submit', {to: user.name}) }}"><i class="fas fa-fw fa-envelope"></i> Wyślij wiadomość</a>
+            <a href="{{ route('user.pm.submit', {to: user.name}) }}">
+              <i class="fas fa-fw fa-envelope"></i>
+              Wyślij wiadomość
+            </a>
           </li>
         {% endif %}
 
         <li>
-          <a href="{{ route('forum.user', [user.id]) }}"><i class="fas fa-fw fa-search"></i> Znajdź posty użytkownika</a>
+          <a href="{{ route('forum.user', [user.id]) }}">
+            <i class="fas fa-fw fa-search"></i>
+            Znajdź posty użytkownika
+          </a>
         </li>
 
         {% if can('adm-access') %}
           {% if not user.is_blocked and user.id != user('id') %}
             <li>
-              <a href="{{ route('adm.firewall.save') }}?user={{ user.id }}"><i class="fas fa-user-slash fa-fw"></i> Zbanuj tego użytkownika</a>
+              <a href="{{ route('adm.firewall.save') }}?user={{ user.id }}">
+                <i class="fas fa-user-slash fa-fw"></i>
+                Zbanuj tego użytkownika</a>
             </li>
           {% endif %}
 
           <li>
-            <a href="{{ route('adm.users.save', [user.id]) }}"><i class="fas fa-cogs fa-fw"></i> Przejdź do panelu administracyjnego</a>
+            <a href="{{ route('adm.users.save', [user.id]) }}">
+              <i class="fas fa-cogs fa-fw"></i>
+              Przejdź do panelu administracyjnego
+            </a>
           </li>
         {% endif %}
       </ul>
@@ -189,7 +207,11 @@
       <div class="box">
         <h4 class="border-bottom"><i class="fa fa-medal"></i> Uprawnienia</h4>
 
-        <p class="mt-4"><a href="/Pomoc/Konto/Reputacja" class="small text-muted"><u>Sprawdź czym są punkty reputacji i jak możesz je zdobyć</u></a></p>
+        <p class="mt-4">
+          <a href="/Pomoc/Konto/Reputacja" class="small text-muted">
+            <u>Sprawdź czym są punkty reputacji i jak możesz je zdobyć</u>
+          </a>
+        </p>
 
         <ul class="list-unstyled">
           {% for name, text in trans('privileges') %}
