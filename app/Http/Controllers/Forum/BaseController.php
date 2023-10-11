@@ -12,9 +12,11 @@ use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
+use Coyote\Services\Session\Renderer;
 use Coyote\Services\UrlBuilder;
 use Coyote\Topic;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 abstract class BaseController extends Controller
 {
@@ -87,12 +89,12 @@ abstract class BaseController extends Controller
     protected function view($view = null, $data = [])
     {
         return parent::view($view, $data)->with([
-          'tags'    => [
-            'popular' => $this->getTagClouds(),
-            'user'    => $this->getUserTags()
-          ],
-          'viewers' => $this->getViewers(),
-          'sidebar' => $this->getSetting('forum.sidebar', true)
+            'tags'    => [
+                'popular' => $this->getTagClouds(),
+                'user'    => $this->getUserTags()
+            ],
+            'viewers' => $this->getViewers(),
+            'sidebar' => $this->getSetting('forum.sidebar', true)
         ]);
     }
 
@@ -108,13 +110,12 @@ abstract class BaseController extends Controller
         $this->forum->pushCriteria(new EagerLoading('tags'));
     }
 
-    /**
-     * @return mixed
-     */
-    protected function getViewers()
+    protected function getViewers(): View
     {
         // create view with online users
-        return app('session.viewers')->render($this->request->getRequestUri());
+        /** @var Renderer $renderer */
+        $renderer = app('session.viewers');
+        return $renderer->render($this->request->getRequestUri());
     }
 
     /**

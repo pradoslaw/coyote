@@ -3,57 +3,27 @@
 namespace Coyote\Services\Session;
 
 use Coyote\Session;
-use Illuminate\Database\Connection as Db;
+use Illuminate\Database;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\View\View;
 
-/**
- * Generuje widok przedstawiajacy liste osob na danej stronie z podzialem na boty, zalogowane osoby itp
- */
 class Renderer
 {
     const USER = 'Użytkownik';
 
-    /**
-     * @var Db
-     */
-    private $db;
-
-    /**
-     * @var Registered
-     */
-    private $registered;
-
-    /**
-     * @var Request
-     */
-    private $request;
-
-    /**
-     * @param Db $db
-     * @param Registered $registered
-     * @param Request $request
-     */
-    public function __construct(Db $db, Registered $registered, Request $request)
+    public function __construct(
+        private Database\Connection $db,
+        private Registered          $registered,
+        private Request             $request)
     {
-        $this->db = $db;
-        $this->registered = $registered;
-        $this->request = $request;
     }
 
-    /**
-     * Generuje widok userow online. W parametrze nalezy podac sciezke - np. /Forum
-     *
-     * @param null $path
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function render($path = null)
+    public function render(string $requestUri = null): View
     {
-        $groups = [self::USER => []];
-
-        $collection = $this->data($path);
+        $collection = $this->data($requestUri);
 
         // zlicza liczbe userow
         $total = $collection->sum('count');
@@ -63,7 +33,7 @@ class Renderer
         $registered = $total - $guests;
 
         // zlicza ilosc robotow na stronie
-        $robots = $collection->filter(fn ($item) => $item->robot)->sum('count');
+        $robots = $collection->filter(fn($item) => $item->robot)->sum('count');
 
         // only number of human guests
         $guests -= $robots;
@@ -73,8 +43,7 @@ class Renderer
 
         if ($this->request->user()) {
             if (!$collection->contains('user_id', $this->request->user()->id)) {
-                $collection->push(new Session(['user_id' => $this->request->user()->id, 'path' => $path]));
-
+                $collection->push(new Session(['user_id' => $this->request->user()->id, 'path' => $requestUri]));
                 $total++;
                 $registered++;
             }
@@ -88,90 +57,57 @@ class Renderer
         $collection = $this->unique($collection);
         $collection = $this->registered->setup($collection);
 
-        foreach ($collection->groupBy('group') as $name => $rowset) {
+        $groups = [self::USER => []];
+        foreach ($collection->groupBy('group') as $name => $users) {
             if ($name === '') {
                 $name = self::USER;
             } elseif (!isset($groups[$name])) {
                 $groups[$name] = [];
             }
-
-            foreach ($rowset as $user) {
+            foreach ($users as $user) {
                 if ($user['user_id'] !== null) {
                     $groups[$name][] = $this->makeProfileLink($user['user_id'], $user['name']);
                 }
             }
         }
 
+        unset($groups[self::USER]);
         ksort($groups);
 
         return view('components.viewers', compact('groups', 'total', 'guests', 'registered'));
     }
 
-    /**
-     * Return raw aggregated data from db.
-     *
-     * @param string|null $path
-     * @return Collection
-     */
-    private function data($path): Collection
+    private function data(?string $requestUri): Collection
     {
         return $this
             ->db
             ->table('sessions')
-            ->when($path !== null, function (Builder $builder) use ($path) {
-                return $builder->where('path', 'LIKE', mb_strtolower(strtok($path, '?')) . '%');
+            ->when($requestUri !== null, function (Builder $builder) use ($requestUri) {
+                return $builder->where('path', 'LIKE', \mb_strToLower(\strTok($requestUri, '?')) . '%');
             })
             ->groupBy(['user_id', 'robot'])
             ->get(['user_id', 'robot', new Expression('COUNT(*)')]);
     }
 
-    /**
-     * Map raw object into Session class model.
-     *
-     * @param Collection $collection
-     * @return Collection
-     */
     private function map(Collection $collection): Collection
     {
-        return $collection->map(function ($item) {
-            return new Session((array) $item);
-        });
+        return $collection->map(fn($item) => new Session((array)$item));
     }
 
-    /**
-     * @param int $userId
-     * @param string $userName
-     * @return string
-     */
-    private function makeProfileLink($userId, $userName)
+    private function makeProfileLink(int $userId, string $userName): string
     {
-        return link_to_route(
-            'profile',
-            $userName,
-            [$userId],
-            ['data-user-id' => $userId]
-        );
+        return link_to_route('profile', $userName, [$userId], ['data-user-id' => $userId]);
     }
 
-    /**
-     * @param Session[] $collection
-     * @return Collection
-     */
-    private function unique(Collection $collection)
+    private function unique(Collection $sessions): Collection
     {
-        $guests = $collection->filter(function (Session $item) {
-            return $item->userId === null;
-        });
-
-        $collection
-            ->filter(function (Session $item) {
-                return $item->userId !== null;
-            })
+        $guests = $sessions->filter(fn(Session $item) => $item->userId === null);
+        $sessions
+            ->filter(fn(Session $item) => $item->userId !== null)
             ->unique('user_id')
             ->each(function (Session $item) use ($guests) {
                 $guests->push($item);
             });
-
         return $guests;
     }
 }
