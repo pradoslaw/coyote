@@ -1,5 +1,4 @@
 <?php
-
 namespace Coyote\Providers;
 
 use Coyote\Http\Composers\InitialStateComposer;
@@ -15,12 +14,7 @@ class ViewServiceProvider extends ServiceProvider
 {
     use CacheFactory;
 
-    /**
-     * Bootstrap the application services.
-     *
-     * @return void
-     */
-    public function boot()
+    public function boot(): void
     {
         $this->app['view']->composer(['layout', 'adm.home'], InitialStateComposer::class);
 
@@ -29,21 +23,21 @@ class ViewServiceProvider extends ServiceProvider
                 '__master_menu' => $this->buildMasterMenu(),
 
                 // temporary code
-                '__dark_theme' => $this->app[Guest::class]->getSetting('dark.theme', true)
+                '__dark_theme'  => $this->app[Guest::class]->getSetting('dark.theme', true)
             ]);
         });
     }
 
-    private function buildMasterMenu()
+    private function buildMasterMenu(): Builder
     {
-        /** @var \Lavary\Menu\Builder $builder */
-        $builder = app(Menu::class)->make('__master_menu___', function (Builder $menu) {
+        /** @var Menu $menu */
+        $menu = app(Menu::class);
+        /** @var Builder $builder */
+        $builder = $menu->make('__master_menu___', function (Builder $menu) {
             foreach (config('laravel-menu.__master_menu___') as $title => $data) {
                 $children = array_pull($data, 'children');
                 $item = $menu->add($title, $data);
-
-                foreach ((array) $children as $key => $child) {
-                    /** @var \Lavary\Menu\Item $item */
+                foreach ((array)$children as $key => $child) {
                     $item->add($key, $child);
                 }
             }
@@ -57,7 +51,7 @@ class ViewServiceProvider extends ServiceProvider
         return $builder;
     }
 
-    public function groupBySections($categories)
+    public function groupBySections($categories): array
     {
         $name = null;
         $sections = [];
