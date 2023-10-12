@@ -17,19 +17,19 @@
         <vue-tabs @click="switchTab" :items="tabs" :current-tab="currentTab" id="js-tabs" class="mt-2 mb-4"></vue-tabs>
 
         <vue-job-form
-          v-show="currentTab === 0"
-          :job="job"
-          :errors="errors"
-          :currencies="currencies"
+            v-show="currentTab === 0"
+            :job="job"
+            :errors="errors"
+            :currencies="currencies"
         ></vue-job-form>
 
         <vue-firm-form
-          v-show="currentTab === 1"
-          :firm="job.firm"
-          :errors="errors"
-          :default-benefits="defaultBenefits"
-          :employees="employees"
-          :firms="firms"
+            v-show="currentTab === 1"
+            :firm="job.firm"
+            :errors="errors"
+            :default-benefits="defaultBenefits"
+            :employees="employees"
+            :firms="firms"
         ></vue-firm-form>
 
         <div id="form-fixed">
@@ -38,30 +38,34 @@
               <div class="col-12 col-lg-9 d-flex justify-content-end">
                 <vue-button v-if="currentTab > 0" @click.native="switchTab(currentTab - 1)" :disabled="isSubmitting" class="btn btn-outline-primary text-body">
                   <i class="fas fa-angle-left"></i>
-
                   ${ tabs[currentTab - 1] }
                 </vue-button>
 
                 <vue-button
-                  v-if="currentTab < 1"
-                  @click.native="switchTab(currentTab + 1)"
-                  :disabled="isSubmitting"
-                  class="btn btn-outline-primary text-body"
-                >
+                    v-if="currentTab < 1"
+                    @click.native="switchTab(currentTab + 1)"
+                    :disabled="isSubmitting"
+                    class="btn btn-outline-primary text-body">
                   ${ tabs[currentTab + 1] }
-
                   <i class="fas fa-angle-right"></i>
                 </vue-button>
 
-                <vue-button v-if="job.firm.name || currentTab === 1" :disabled="isSubmitting" @click.native="submitForm" class="btn btn-primary btn-save ml-2" title="Zapisz tę ofertę">
-                  <i class="fas fa-save"></i> Zapisz <template v-if="job.firm.name">jako ${ job.firm.name }</template>
+                <vue-button
+                    v-if="job.firm.name || currentTab === 1"
+                    :disabled="isSubmitting"
+                    @click.native="submitForm"
+                    class="btn btn-primary btn-save ml-2"
+                    title="Zapisz tę ofertę">
+                  <i class="fas fa-save"></i>
+                  Zapisz
+                  <template v-if="job.firm.name">jako ${ job.firm.name }</template>
                 </vue-button>
               </div>
             </div>
           </div>
         </div>
 
-        <vue-notifications position="bottom right" />
+        <vue-notifications position="bottom right"/>
       </div>
     </main>
 
@@ -69,47 +73,34 @@
       <div id="hint-container">
         <div id="hint-title" class="alert alert-warning">
           <h4>Ile kosztuje dodanie ogłoszenia?</h4>
-
           <p>
             Masz możliwość wyboru jednego z trzech pakietów. Koszt najtańszego pakietu to niecałe <strong>1 zł</strong> za dzień.
           </p>
 
           <h4 class="mt-3">Możliwe opcje promowania oferty pracy</h4>
-
           <p><i class="fas fa-check fa-fw"></i> Ogłoszenie wyświetlane nad tymi darmowymi.</p>
           <p><i class="fas fa-check fa-fw"></i> Reklama na stronie głównej oraz forum.</p>
           <p><i class="fas fa-check fa-fw"></i> Podświetlenie oferty.</p>
           <p><i class="fas fa-check fa-fw"></i> 3x podbicie oferty.</p>
 
           <h4 class="mt-3">Formy płatności</h4>
-
           <p>
             Za opcję promowania zapłacisz kartą Visa, Mastercard lub Maestro jak i również <strong>szybkim</strong> przelewem bankowym.
             Operatorem płatności jest firma PayLane oraz serwis Przelewy24.pl.
           </p>
 
           <h4 class="mt-3">Faktura VAT</h4>
-
           <p>
             Fakturę VAT prześlemy Ci na e-mail. Dane do faktury podasz w ostatnim kroku.
           </p>
 
-          <h4 class="mt-3">Kupno większej ilości pakietów</h4>
-
-          <p>
-            Istnieje możliwość płatności z góry za większą ilość pakietów. Jeżeli chcesz poznać więcej szczegółów,
-            napisz do nas na adres <a href="mailto:{{ config('mail.from.address') }}" style="color: #960202; text-decoration: underline">{{ config('mail.from.address') }}</a>.
-          </p>
-
           <h4 class="mt-3">Pomoc</h4>
-
           <p>
             Jeżeli masz problem z publikacją ogłoszenia lub płatnością, chętnie Ci pomożemy! Napisz do nas na
             <a href="mailto:{{ config('mail.from.address') }}" style="color: #960202; text-decoration: underline">{{ config('mail.from.address') }}</a>.
           </p>
         </div>
       </div>
-
     </aside>
   </div>
 
@@ -127,6 +118,7 @@
 {% block body %}
   {{ parent() }}
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.9.11/tinymce.min.js" integrity="sha512-3tlegnpoIDTv9JHc9yJO8wnkrIkq7WO7QJLi5YfaeTmZHvfrb1twMwqT4C0K8BLBbaiR6MOo77pLXO1/PztcLg==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.9.11/tinymce.min.js"
+          integrity="sha512-3tlegnpoIDTv9JHc9yJO8wnkrIkq7WO7QJLi5YfaeTmZHvfrb1twMwqT4C0K8BLBbaiR6MOo77pLXO1/PztcLg==" crossorigin="anonymous"></script>
 
 {% endblock %}
