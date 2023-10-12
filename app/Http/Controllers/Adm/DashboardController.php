@@ -28,9 +28,7 @@ class DashboardController extends BaseController
 
     private function redisActive(): bool
     {
-        /** @var RedisManager $redis */
-        $redis = \app('redis');
-        return $redis->client()->ping();
+        return false;
     }
 
     public function directoryWritable(string $basePath, string $path): array
