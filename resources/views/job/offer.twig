@@ -92,13 +92,6 @@
                   {{ declination(job.views, ['odsłona', 'odsłony', 'odsłon']) }}
                 </li>
 
-                {% if job.enable_apply %}
-                  <li class="applications" title="Liczba osób, które aplikowały na tę ofertę. Informacja widoczna jedynie dla Ciebie.">
-                    <i class="far fa-file-pdf fa-fw"></i>
-                    {{ declination(job.applications.count(), ['aplikacja', 'aplikacje', 'aplikacji']) }}
-                  </li>
-                {% endif %}
-
                 {% if not job.is_expired %}
                   <li title="Oferta traci ważność z dniem {{ job.deadline_at|format_date(false) }}">
                     <i class="far fa-clock fa-fw"></i>
