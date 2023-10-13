@@ -15,13 +15,10 @@
     padding-bottom: 10px;
     padding-top: 10px;
     position: relative;
-
-    &:last-child {
-      border-bottom: none;
-    }
+    counter-increment: number;
 
     &:after {
-      content: '1';
+      content: counter(number);
       font-size: 40px;
       color: $card-border-color;
       position: absolute;
@@ -29,12 +26,8 @@
       top: 9px;
     }
 
-    &:nth-child(2):after {
-      content: '2';
-    }
-
-    &:nth-child(3):after {
-      content: '3';
+    &:last-child {
+      border-bottom: none;
     }
   }
 }
