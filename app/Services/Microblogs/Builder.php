@@ -1,10 +1,8 @@
 <?php
-
 namespace Coyote\Services\Microblogs;
 
 use Coyote\Microblog;
 use Coyote\Models\Scopes\UserRelationsScope;
-use Coyote\Repositories\Contracts\MicroblogRepositoryInterface;
 use Coyote\Repositories\Criteria\Microblog\LoadUserScope;
 use Coyote\Repositories\Criteria\Microblog\OnlyMine;
 use Coyote\Repositories\Criteria\Microblog\OrderById;
@@ -12,109 +10,69 @@ use Coyote\Repositories\Criteria\Microblog\OrderByScore;
 use Coyote\Repositories\Criteria\Microblog\WithTag;
 use Coyote\Repositories\Criteria\WithoutScope;
 use Coyote\Repositories\Criteria\WithTrashed;
-use Illuminate\Contracts\Auth\Guard;
+use Coyote\Repositories\Eloquent\MicroblogRepository;
 use Coyote\User;
+use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Database\Eloquent;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class Builder
 {
-    /**
-     * @var MicroblogRepositoryInterface
-     */
-    private MicroblogRepositoryInterface $microblog;
-
-    /**
-     * @var User|null
-     */
     private ?User $user;
-
     private bool $isSponsor = false;
 
-    public function __construct(MicroblogRepositoryInterface $microblog, Guard $auth)
+    public function __construct(private MicroblogRepository $microblog, Guard $guard)
     {
-        $this->microblog = $microblog;
-        $this->user = $auth->user();
-
+        $this->user = $guard->user();
         if ($this->user) {
             $this->isSponsor = $this->user->is_sponsor;
         }
     }
 
-    /**
-     * @return $this
-     */
-    public function orderByScore()
+    public function orderByScore(): self
     {
         $this->microblog->pushCriteria(new OrderByScore(!$this->isSponsor));
-
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    public function orderById()
+    public function orderById(): self
     {
         $this->microblog->pushCriteria(new OrderById(!$this->isSponsor));
-
         return $this;
     }
 
-    /**
-     * @param User $user
-     * @return $this
-     */
-    public function onlyUsers(User $user)
+    public function onlyUsers(User $user): self
     {
         $this->microblog->pushCriteria(new OnlyMine($user->id));
         $this->microblog->pushCriteria(new WithoutScope(UserRelationsScope::class));
-
         return $this;
     }
 
-    /**
-     * @param string $tag
-     * @return $this
-     */
-    public function withTag(string $tag)
+    public function withTag(string $tag): self
     {
         $this->microblog->pushCriteria(new WithTag($tag));
-
         return $this;
     }
 
-    /**
-     * @return \Illuminate\Pagination\LengthAwarePaginator
-     */
-    public function paginate()
+    public function paginate(): LengthAwarePaginator
     {
-        $this->microblog->applyCriteria();
-
-        $count = $this->microblog->count();
+        $count = (int)$this->microblog->applyCriteria(fn() => $this->microblog->count());
         $page = LengthAwarePaginator::resolveCurrentPage();
-
-        $this->microblog->resetModel();
-
         $this->loadUserScope();
-        $perPage = 10;
-
-        $result = $this->microblog->forPage($perPage, $page);
-
         $paginator = new LengthAwarePaginator(
-            $result,
+            $this->microblog->forPage(10, $page),
             $count,
-            $perPage,
+            10,
             $page,
             ['path' => LengthAwarePaginator::resolveCurrentPath()]
         );
 
         $this->microblog->resetCriteria();
 
-        /** @var \Illuminate\Database\Eloquent\Collection $microblogs */
+        /** @var Eloquent\Collection $microblogs */
         $microblogs = $paginator->keyBy('id');
 
-        $comments = $this->loadTopComments($microblogs);
-        $microblogs = $this->mergeComments($comments, $microblogs);
+        $microblogs = $this->mergeComments($this->loadTopComments($microblogs), $microblogs);
 
         $paginator->setCollection($microblogs);
 
@@ -132,12 +90,10 @@ class Builder
 
         $this->microblog->resetCriteria();
 
-        /** @var \Illuminate\Database\Eloquent\Collection $microblogs */
+        /** @var Eloquent\Collection $microblogs */
         $microblogs = $result->keyBy('id');
 
-        $comments = $this->loadTopComments($microblogs);
-
-        return $this->mergeComments($comments, $microblogs);
+        return $this->mergeComments($this->loadTopComments($microblogs), $microblogs);
     }
 
     /**
@@ -190,7 +146,7 @@ class Builder
     private function mergeComments($comments, $microblogs)
     {
         foreach ($comments->groupBy('parent_id') as $relations) {
-            /** @var \Coyote\Microblog $microblog  */
+            /** @var \Coyote\Microblog $microblog */
             $microblog = &$microblogs[$relations[0]->parent_id];
             $microblog->setRelation('comments', $relations);
         }
@@ -198,7 +154,7 @@ class Builder
         return $microblogs;
     }
 
-    private function loadUserScope()
+    private function loadUserScope(): void
     {
         if ($this->user) {
             $this->microblog->pushCriteria(new LoadUserScope($this->user));
