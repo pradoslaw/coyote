@@ -33,38 +33,32 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     /**
      * @inheritDoc
      */
-    public function forPage(int $perPage, int $page)
+    public function forPage(int $pageSize, int $pageNumber)
     {
-        return $this->applyCriteria(function () use ($perPage, $page) {
-            return $this->model
-                ->newQuery()
-                ->whereNull('parent_id')
-                ->with(['user', 'assets', 'tags'])
-                ->withCount('comments')
-                ->limit($perPage)
-                ->offset(max(0, $page - 1) * $perPage)
-                ->get();
-        });
+        return $this->applyCriteria(fn() => $this->model
+            ->newQuery()
+            ->whereNull('parent_id')
+            ->with(['user', 'assets', 'tags'])
+            ->withCount('comments')
+            ->limit($pageSize)
+            ->offset(\max(0, $pageNumber - 1) * $pageSize)
+            ->get());
     }
 
     public function recent()
     {
-        return $this->applyCriteria(function () {
-            return $this->model
-                ->newQuery()
-                ->whereNull('parent_id')
-                ->withoutGlobalScope(UserRelationsScope::class)
-                ->limit(5)
-                ->orderBy('id', 'DESC')
-                ->get();
-        });
+        return $this->applyCriteria(fn() => $this->model
+            ->newQuery()
+            ->whereNull('parent_id')
+            ->withoutGlobalScope(UserRelationsScope::class)
+            ->limit(5)
+            ->orderBy('id', 'DESC')
+            ->get());
     }
 
-    public function popular(int $limit): Eloquent\Collection
+    public function popular(int $pageSize, int $pageNumber): Eloquent\Collection
     {
-        $this->applyCriteria();
-        $result = $this
-            ->model
+        return $this->applyCriteria(fn() => $this->model
             ->newQuery()
             ->whereNull('parent_id')
             ->with(['user', 'assets', 'tags'])
@@ -72,13 +66,9 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
             ->where(fn(Builder $query) => $query
                 ->where('votes', '>=', 2)
                 ->orWhere('is_sponsored', true))
-            ->limit($limit)
-            ->get();
-        try {
-            return $result;
-        } finally {
-            $this->resetModel();
-        }
+            ->limit($pageSize)
+            ->offset(\max(0, $pageNumber - 1) * $pageSize)
+            ->get());
     }
 
     /**

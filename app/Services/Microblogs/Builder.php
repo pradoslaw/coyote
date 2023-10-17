@@ -77,7 +77,7 @@ class Builder
     public function popular(): Eloquent\Collection
     {
         $this->loadUserScope();
-        $result = $this->microblog->popular(5);
+        $result = $this->microblog->popular(5, 1);
         $this->microblog->resetCriteria();
         $microblogs = $result->keyBy('id');
         $this->setCommentsRelations($microblogs);
