@@ -33,17 +33,20 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     /**
      * @inheritDoc
      */
-    public function forPage(int $pageSize, int $pageNumber)
+    public function forPage(int $pageSize, int $pageNumber): array
     {
         return $this->applyCriteria(function () use ($pageSize, $pageNumber) {
-            return $this->model
+            $query = $this->model
                 ->newQuery()
                 ->whereNull('parent_id')
                 ->with(['user', 'assets', 'tags'])
-                ->withCount('comments')
+                ->withCount('comments');
+            $count = $query->count();
+            $fetched = $query
                 ->limit($pageSize)
                 ->offset(\max(0, $pageNumber - 1) * $pageSize)
                 ->get();
+            return [$fetched, $count];
         });
     }
 
