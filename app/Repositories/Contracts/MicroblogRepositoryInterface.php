@@ -6,14 +6,7 @@ use Illuminate\Database\Eloquent;
 
 interface MicroblogRepositoryInterface extends RepositoryInterface
 {
-    /**
-     * Pobierz X ostatnich wpisow z mikrobloga przy czym sortowane sa one wedlug oceny. Metoda
-     * ta jest wykorzystywana na stronie glownej serwisu
-     *
-     * @param int $limit
-     * @return Microblog[]
-     */
-    public function popular(int $limit);
+    public function popular(int $limit): Eloquent\Collection;
 
     /**
      * @param int $id
