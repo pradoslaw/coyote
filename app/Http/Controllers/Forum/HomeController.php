@@ -23,6 +23,7 @@ use Coyote\Services\Flags;
 use Coyote\Services\Guest;
 use Coyote\Topic;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Lavary\Menu\Builder;
 use Lavary\Menu\Item;
 use Lavary\Menu\Menu;
@@ -50,9 +51,10 @@ class HomeController extends BaseController
     public function __construct(
         ForumRepository $forum,
         TopicRepository $topic,
-        PostRepository $post,
-        TagRepository $tag
-    ) {
+        PostRepository  $post,
+        TagRepository   $tag
+    )
+    {
         parent::__construct($forum, $topic, $post, $tag);
 
         $this->tabs = app(Menu::class)->make('_forum', function (Builder $menu) {
@@ -193,11 +195,7 @@ class HomeController extends BaseController
         return $this->loadAndRender();
     }
 
-    /**
-     * @param string $name
-     * @return \Illuminate\View\View
-     */
-    public function tag($name)
+    public function tag(string $name): View
     {
         $item = $this
             ->tabs
@@ -213,10 +211,7 @@ class HomeController extends BaseController
 
         $this->topic->pushCriteria(new WithTags($name));
 
-        $renderParams = new RenderParams();
-        $renderParams->tagName = $name;
-
-        return $this->loadAndRender($renderParams);
+        return $this->loadAndRender(new RenderParams($name));
     }
 
     /**

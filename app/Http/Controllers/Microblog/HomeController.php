@@ -48,9 +48,7 @@ class HomeController extends BaseController
     {
         $this->breadcrumb->push('Wpisy z tagiem: ' . $tag, route('microblog.tag', [$tag]));
         $this->builder->withTag($tag);
-        $renderParams = new RenderParams();
-        $renderParams->tagName = $tag;
-        return $this->index($renderParams);
+        return $this->index(new RenderParams($tag));
     }
 
     public function mine(): View

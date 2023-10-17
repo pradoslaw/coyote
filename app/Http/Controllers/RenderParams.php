@@ -1,8 +1,9 @@
 <?php
-
 namespace Coyote\Http\Controllers;
 
 class RenderParams
 {
-    public string|null $tagName = null;
+    public function __construct(public string|null $tagName)
+    {
+    }
 }
