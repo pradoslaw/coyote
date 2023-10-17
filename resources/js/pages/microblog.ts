@@ -35,6 +35,7 @@ declare global {
 new Vue({
   el: '#js-microblog',
   delimiters: ['${', '}'],
+  mixins: [ LiveMixin ],
   components: {
     'vue-microblog': VueMicroblog,
     'vue-pagination': VuePagination,
@@ -43,7 +44,6 @@ new Vue({
     'vue-username': VueUserName,
     'vue-follow-button': VueFollowButton
   },
-  mixins: [ LiveMixin ],
   store,
   data() {
     return { popularTags: window.popularTags, recommendedUsers: window.recommendedUsers }

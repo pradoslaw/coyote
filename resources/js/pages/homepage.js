@@ -2,6 +2,7 @@ import PerfectScrollbar from 'perfect-scrollbar';
 import Vue from "vue";
 import VueNotifications from "vue-notification";
 import VueMicroblog from "../components/microblog/microblog";
+import VuePagination from "../components/pagination.vue";
 import store from "../store";
 import {mapGetters} from "vuex";
 import axios from 'axios';
@@ -17,17 +18,37 @@ new Vue({
   el: '#js-microblog',
   delimiters: ['${', '}'],
   mixins: [ LiveMixin ],
-  components: { 'vue-microblog': VueMicroblog },
+  components: {
+    'vue-microblog': VueMicroblog,
+    'vue-pagination': VuePagination,
+  },
   store,
   created() {
-    Object.keys(window.microblogs).forEach(id => store.commit('microblogs/ADD', window.microblogs[id]));
+    if ('pagination' in window) {
+      store.commit('microblogs/INIT', window.pagination);
+    }
 
     store.commit('flags/init', window.flags);
   },
   mounted() {
     this.liveNotifications();
   },
-  computed: mapGetters('microblogs', ['microblogs'])
+  methods: {
+    changePage(page) {
+      window.location.href = `${window.location.href.split('?')[0]}?page=${page}`;
+    },
+
+    scrollToMicroblog(microblog) {
+      window.location.hash = `#entry-${microblog.id}`;
+    }
+  },
+  computed: {
+    ...mapGetters('microblogs', ['microblogs', 'currentPage', 'totalPages']),
+
+    microblog() {
+      return this.microblogs[Object.keys(this.microblogs)[0]];
+    }
+  }
 });
 
 function switchForumTab(index) {

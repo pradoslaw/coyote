@@ -60,11 +60,11 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
         });
     }
 
-    public function popular(int $pageSize, int $pageNumber): Eloquent\Collection
+    public function popular(int $pageSize, int $pageNumber): array
     {
         $this->applyCriteria();
         try {
-            return $this
+            $query = $this
                 ->model
                 ->newQuery()
                 ->whereNull('parent_id')
@@ -72,10 +72,13 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
                 ->withCount('comments')
                 ->where(fn(Builder $query) => $query
                     ->where('votes', '>=', 1)
-                    ->orWhere('is_sponsored', true))
+                    ->orWhere('is_sponsored', true));
+            $count = $query->count();
+            $fetched = $query
                 ->limit($pageSize)
                 ->offset(\max(0, $pageNumber - 1) * $pageSize)
                 ->get();
+            return [$fetched, $count];
         } finally {
             $this->resetModel();
         }
