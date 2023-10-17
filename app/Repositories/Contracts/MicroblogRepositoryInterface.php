@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent;
 
 interface MicroblogRepositoryInterface extends RepositoryInterface
 {
-    public function popular(int $limit): Eloquent\Collection;
+    public function popular(int $pageSize, int $pageNumber): Eloquent\Collection;
 
     /**
      * @param int $id
@@ -43,11 +43,11 @@ interface MicroblogRepositoryInterface extends RepositoryInterface
     public function countForUser($userId);
 
     /**
-     * @param int $perPage
-     * @param int $page
+     * @param int $pageSize
+     * @param int $pageNumber
      * @return Microblog[]
      */
-    public function forPage(int $perPage, int $page);
+    public function forPage(int $pageSize, int $pageNumber);
 
     /**
      * @param int|null $userId
