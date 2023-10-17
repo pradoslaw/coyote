@@ -12,30 +12,11 @@ use Illuminate\Database\Query\Expression;
 
 abstract class Repository implements RepositoryInterface, CriteriaInterface
 {
-    /**
-     * @var App
-     */
-    protected $app;
+    protected App $app;
+    protected Model|Builder $model;
+    protected array $criteria = [];
+    protected bool $skipCriteria = false;
 
-    /**
-     * @var mixed
-     */
-    protected $model;
-
-    /**
-     * @var array
-     */
-    protected $criteria = [];
-
-    /**
-     * @var bool
-     */
-    protected $skipCriteria = false;
-
-    /**
-     * @param App $app
-     * @throws \Exception
-     */
     public function __construct(App $app)
     {
         $this->app = $app;
@@ -45,26 +26,16 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
 
     abstract protected function model();
 
-    /**
-     * Creates instance of model
-     *
-     * @return Model
-     * @throws \Exception
-     */
-    public function makeModel()
+    public function makeModel(): Model
     {
         $model = $this->app->make($this->model());
-
-        if (!$model instanceof Model) {
-            throw new \Exception("Class {$this->model()} must be an instance of Illuminate\\Database\\Eloquent\\Model");
+        if ($model instanceof Model) {
+            $this->model = $model;
+            return $model;
         }
-
-        return $this->model = $model;
+        throw new \Exception("Class {$this->model()} must be an instance of Illuminate\\Database\\Eloquent\\Model");
     }
 
-    /**
-     * @throws \Exception
-     */
     public function resetModel()
     {
         $this->makeModel();
