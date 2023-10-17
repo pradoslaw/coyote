@@ -118,11 +118,10 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
     public function applyCriteria(callable $callable = null)
     {
         if ($this->skipCriteria === true) {
-            if (!is_null($callable)) {
-                return $callable();
+            if ($callable === null) {
+                return $this;
             }
-
-            return $this;
+            return $callable();
         }
 
         foreach ($this->criteria as $criteria) {
@@ -131,14 +130,12 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
             }
         }
 
-        if (!is_null($callable)) {
-            $result = $callable();
-            $this->resetModel();
-
-            return $result;
+        if ($callable === null) {
+            return $this;
         }
-
-        return $this;
+        $result = $callable();
+        $this->resetModel();
+        return $result;
     }
 
     /**
@@ -162,8 +159,8 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
     }
 
     /**
-     * @param  string $value
-     * @param  string $key
+     * @param string $value
+     * @param string $key
      * @return array
      */
     public function pluck($value, $key = null)
@@ -343,7 +340,7 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
     /**
      * Get a new raw query expression.
      *
-     * @param  mixed  $value
+     * @param mixed $value
      * @return \Illuminate\Database\Query\Expression
      */
     public function raw($value)

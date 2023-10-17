@@ -112,7 +112,7 @@ class Guest
 
     protected function load()
     {
-        if (!is_null($this->model)) {
+        if ($this->model !== null) {
             return;
         }
 

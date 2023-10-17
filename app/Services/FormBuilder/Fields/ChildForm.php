@@ -91,16 +91,17 @@ class ChildForm extends ParentType
      */
     protected function createForm()
     {
-        if (is_null($this->class)) {
+        if ($this->class === null) {
             throw new \InvalidArgumentException('Child form field [' . $this->name . '] requires [class] attribute.');
-        } elseif ($this->class instanceof Form) {
+        }
+        if ($this->class instanceof Form) {
             $this->form = $this->class;
             $this->class = class_basename($this->form);
 
             if (null !== $this->value) {
                 $this->form->setData($this->value);
             }
-        } elseif (is_string($this->class)) {
+        } else if (is_string($this->class)) {
             $this->form = $this->parent->getContainer()->make('form.builder')->createForm(
                 $this->class,
                 $this->value
@@ -119,7 +120,7 @@ class ChildForm extends ParentType
      */
     public function __call($name, $arguments)
     {
-        if (!method_exists($this->form, $name) && is_null($this->form->get($name))) {
+        if (!method_exists($this->form, $name) && $this->form->get($name) === null) {
             throw new \BadMethodCallException(
                 'Method [' . $name . '] does not exist on form [' . get_class($this->form) . ']'
             );

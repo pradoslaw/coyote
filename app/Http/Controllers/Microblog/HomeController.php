@@ -76,7 +76,7 @@ class HomeController extends BaseController
     {
         $microblog = $this->builder->one($id);
 
-        abort_if(!is_null($microblog->parent_id), 404);
+        abort_if($microblog->parent_id !== null, 404);
 
         $excerpt = excerpt($microblog->html);
 

@@ -173,7 +173,7 @@ class HomeController extends BaseController
         $topics = $this->load();
 
         $user = app(UserRepositoryInterface::class)->pushCriteria(new WithTrashed())->find($userId);
-        abort_if(is_null($user), 404);
+        abort_if($user === null, 404);
 
         if ($this->request->route()->getName() == 'forum.user') {
             $item = $this->tabs->add('Posty: ' . $user->name, ['route' => ['forum.user', $userId], 'class' => 'nav-item']);

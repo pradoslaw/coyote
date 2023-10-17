@@ -100,7 +100,7 @@ function cdn($path, $secure = null)
 /**
  * Get the path to a versioned Mix file.
  *
- * @param  string  $path
+ * @param string $path
  * @return string
  *
  * @throws \Exception
@@ -146,7 +146,7 @@ function format_date($dateTime, $diffForHumans = true)
  */
 function carbon($dateTime)
 {
-    if (is_null($dateTime)) {
+    if ($dateTime === null) {
         $dateTime = new \Carbon\Carbon();
     } elseif (!$dateTime instanceof \Carbon\Carbon) {
         $dateTime = new \Carbon\Carbon($dateTime);

@@ -65,7 +65,7 @@ class Collection extends ParentType
     {
         $type = $this->childAttr['type'] ?? null;
 
-        if (is_null($type)) {
+        if ($type === null) {
             throw new \InvalidArgumentException(
                 'Collection field [' . $this->name . '] requires child_attr [type] attribute.'
             );
@@ -81,7 +81,7 @@ class Collection extends ParentType
         }
 
         // data MUST BE an array
-        $data = (array) $data;
+        $data = (array)$data;
         $count = count($data);
 
         // reset array element's index. element could've been deleted in form (like in PRE_RENDER form event)
@@ -94,7 +94,7 @@ class Collection extends ParentType
             $value = $data[$i];
 
             if (!($field instanceof ChildForm)) {
-                if (is_null($this->property)) {
+                if ($this->property === null) {
                     throw new \InvalidArgumentException(
                         'Collection field [' . $this->name . '] requires [property] attribute.'
                     );

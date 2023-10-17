@@ -36,7 +36,7 @@ use Illuminate\Database\Query\Expression;
 class Microblog extends Model
 {
     use SoftDeletes, Taggable, ForUser, SerializeClass;
-    use Searchable{
+    use Searchable {
         getIndexBody as parentGetIndexBody;
     }
 
@@ -115,7 +115,7 @@ class Microblog extends Model
     {
         $timestamp = $this->created_at ? $this->created_at->timestamp : time();
 
-        return (int) (($this->votes * 5) + (($timestamp - 1380153600) / 3600));
+        return (int)(($this->votes * 5) + (($timestamp - 1380153600) / 3600));
     }
 
     public function setHtmlAttribute($value)
@@ -207,7 +207,7 @@ class Microblog extends Model
 
     private function addSelectIfNull(Builder $builder)
     {
-        if (is_null($builder->getQuery()->columns)) {
+        if ($builder->getQuery()->columns === null) {
             $builder->select([$builder->getQuery()->from . '.*']);
         }
     }

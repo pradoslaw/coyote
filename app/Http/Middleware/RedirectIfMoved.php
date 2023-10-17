@@ -24,8 +24,8 @@ class RedirectIfMoved extends AbstractMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  Request  $request
-     * @param  Closure  $next
+     * @param Request $request
+     * @param Closure $next
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
@@ -68,17 +68,13 @@ class RedirectIfMoved extends AbstractMiddleware
         }
     }
 
-    /**
-     * @param Request $request
-     * @return bool
-     */
-    private function isInvalidUrl(Request $request)
+    private function isInvalidUrl(Request $request): bool
     {
         $forum = $request->route('forum');
         $topic = $request->route('topic');
 
-        return (is_null($forum)
+        return $forum === null
             || $forum->id !== $topic->forum_id
-                || ($request->route('slug') !== null && $request->route('slug') !== $topic->slug));
+            || ($request->route('slug') !== null && $request->route('slug') !== $topic->slug);
     }
 }
