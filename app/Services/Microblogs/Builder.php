@@ -66,28 +66,19 @@ class Builder
             $page,
             ['path' => LengthAwarePaginator::resolveCurrentPath()]
         );
-
         $this->microblog->resetCriteria();
-
         /** @var Eloquent\Collection $microblogs */
         $microblogs = $paginator->keyBy('id');
-
         $this->setCommentsRelations($microblogs);
-
         $paginator->setCollection($microblogs);
-
         return $paginator;
     }
 
     public function popular(): Eloquent\Collection
     {
         $this->loadUserScope();
-
         $result = $this->microblog->popular(5);
-
         $this->microblog->resetCriteria();
-
-        /** @var Eloquent\Collection $microblogs */
         $microblogs = $result->keyBy('id');
         $this->setCommentsRelations($microblogs);
         return $microblogs;
