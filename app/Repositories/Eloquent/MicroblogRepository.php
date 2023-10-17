@@ -42,15 +42,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
         });
     }
 
-    /**
-     * Pobierz X ostatnich wpisow z mikrobloga przy czym sortowane sa one wedlug oceny. Metoda
-     * ta jest wykorzystywana na stronie glownej serwisu
-     *
-     * @param int $limit
-     * @return mixed
-     * @throws
-     */
-    public function popular(int $limit)
+    public function popular(int $limit): Eloquent\Collection
     {
         $this->applyCriteria();
 
