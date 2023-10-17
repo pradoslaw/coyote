@@ -47,7 +47,7 @@ interface MicroblogRepositoryInterface extends RepositoryInterface
      * @param int $pageNumber
      * @return Microblog[]
      */
-    public function forPage(int $pageSize, int $pageNumber);
+    public function forPage(int $pageSize, int $pageNumber): array;
 
     /**
      * @param int|null $userId
