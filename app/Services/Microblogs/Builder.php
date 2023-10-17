@@ -69,22 +69,19 @@ class Builder
         $this->microblog->resetCriteria();
         /** @var Eloquent\Collection $microblogs */
         $microblogs = $paginator->keyBy('id');
-        $microblogs = $this->mergeComments($this->loadTopComments($microblogs), $microblogs);
+        $this->setCommentsRelations($microblogs);
         $paginator->setCollection($microblogs);
         return $paginator;
     }
 
-    /**
-     * @return \Coyote\Microblog[]
-     */
-    public function popular()
+    public function popular(): Eloquent\Collection
     {
         $this->loadUserScope();
         $result = $this->microblog->popular(5);
         $this->microblog->resetCriteria();
         $microblogs = $result->keyBy('id');
-
-        return $this->mergeComments($this->loadTopComments($microblogs), $microblogs);
+        $this->setCommentsRelations($microblogs);
+        return $microblogs;
     }
 
     /**
@@ -109,40 +106,22 @@ class Builder
         return $microblog;
     }
 
-    /**
-     * @param \Illuminate\Support\Collection $microblogs
-     * @return \Coyote\Microblog[]
-     */
-    private function loadTopComments($microblogs)
-    {
-        $this->loadUserScope();
-
-        return $this->microblog->getTopComments($microblogs->keys()->toArray());
-    }
-
-    /**
-     * @param Microblog $microblog
-     * @return \Coyote\Microblog[]
-     */
     private function loadComments(Microblog $microblog)
     {
         return $this->microblog->getComments($microblog->id);
     }
 
-    /**
-     * @param \Coyote\Microblog[] $comments
-     * @param \Illuminate\Database\Eloquent\Collection $microblogs
-     * @return \Coyote\Microblog[]
-     */
-    private function mergeComments($comments, $microblogs)
+    private function setCommentsRelations(Eloquent\Collection $microblogs): void
     {
-        foreach ($comments->groupBy('parent_id') as $relations) {
-            /** @var \Coyote\Microblog $microblog */
-            $microblog = &$microblogs[$relations[0]->parent_id];
-            $microblog->setRelation('comments', $relations);
-        }
-
-        return $microblogs;
+        $this->loadUserScope();
+        $this->microblog
+            ->getTopComments($microblogs->keys()->toArray())
+            ->groupBy('parent_id')
+            ->each(static function (Eloquent\Collection $comments) use ($microblogs): void {
+                /** @var Microblog $microblog */
+                $microblog = $microblogs[$comments[0]->parent_id];
+                $microblog->setRelation('comments', $comments);
+            });
     }
 
     private function loadUserScope(): void

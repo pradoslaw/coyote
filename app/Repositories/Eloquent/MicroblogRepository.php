@@ -1,18 +1,13 @@
 <?php
-
 namespace Coyote\Repositories\Eloquent;
 
-use Carbon\Carbon;
 use Coyote\Microblog;
 use Coyote\Models\Scopes\UserRelationsScope;
 use Coyote\Repositories\Contracts\MicroblogRepositoryInterface;
 use Coyote\Tag;
+use Illuminate\Database\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 
-/**
- * Class MicroblogRepository
- * @package Coyote\Repositories\Eloquent
- */
 class MicroblogRepository extends Repository implements MicroblogRepositoryInterface
 {
     public function model()
@@ -97,11 +92,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
         });
     }
 
-    /**
-     * @param int[] $parentIds
-     * @return MicroblogRepository
-     */
-    public function getTopComments($parentIds)
+    public function getTopComments(array $parentIds): Eloquent\Collection
     {
         $sub = $this->model->selectRaw('*, row_number() OVER (PARTITION BY parent_id ORDER BY id DESC)')->whereIn('parent_id', $parentIds);
 
@@ -199,10 +190,10 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     public function getTags()
     {
         return (new Tag())
-                ->select(['name', 'logo', 'category_id'])
-                ->addSelect($this->raw("COALESCE(resources ->> '" . Microblog::class . "', '0')::int AS count"))
-                ->orderByRaw("count DESC")
-                ->limit(30)
-                ->get();
+            ->select(['name', 'logo', 'category_id'])
+            ->addSelect($this->raw("COALESCE(resources ->> '" . Microblog::class . "', '0')::int AS count"))
+            ->orderByRaw("count DESC")
+            ->limit(30)
+            ->get();
     }
 }
