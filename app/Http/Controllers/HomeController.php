@@ -3,7 +3,6 @@
 namespace Coyote\Http\Controllers;
 
 use Coyote\Http\Resources\ActivityResource as ActivityResource;
-use Coyote\Http\Resources\Api\MicroblogResource;
 use Coyote\Http\Resources\FlagResource;
 use Coyote\Http\Resources\MicroblogCollection;
 use Coyote\Microblog;
@@ -39,7 +38,7 @@ class HomeController extends Controller
         $this->topic->pushCriteria(new SkipHiddenCategories($this->userId));
         return $this->view('home', [
             'flags'       => $this->flags(),
-            'microblogs'  => $this->getMicroblogs(),
+            'pagination'  => $this->getMicroblogs(),
             'interesting' => $this->topic->interesting(),
             'newest'      => $this->topic->newest(),
             'viewers'     => $this->getViewers(),
@@ -47,29 +46,26 @@ class HomeController extends Controller
             'reputation'  => $cache->remember('homepage:reputation', 30 * 60, fn() => [
                 'month' => $this->reputation->monthly(),
                 'year'  => $this->reputation->yearly(),
-                'total' => $this->reputation->total()
-            ])
+                'total' => $this->reputation->total(),
+            ]),
         ])
             ->with('settings', $this->getSettings())
             ->with('whats_new', resolve(WhatsNew::class)->render())
             ->with('patronage', resolve(Patronage::class)->render());
     }
 
-    private function getMicroblogs(): array
+    private function getMicroblogs(): MicroblogCollection
     {
         /** @var Builder $builder */
         $builder = app(Builder::class);
-        $microblogs = $builder->orderByScore()->popular();
-        MicroblogResource::withoutWrapping();
-        return (new MicroblogCollection($microblogs))->resolve($this->request);
+        return new MicroblogCollection($builder->orderByScore()->popular());
     }
 
     private function getActivities(): array
     {
         $this->activity->pushCriteria(new OnlyThoseForumsWithAccess($this->auth));
         $this->activity->pushCriteria(new SkipHiddenCategories($this->userId));
-        $result = $this->activity->latest(20);
-        return ActivityResource::collection($result)->toArray($this->request);
+        return ActivityResource::collection($this->activity->latest(20))->toArray($this->request);
     }
 
     private function getViewers(): View

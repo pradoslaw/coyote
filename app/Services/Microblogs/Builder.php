@@ -74,14 +74,24 @@ class Builder
         return $paginator;
     }
 
-    public function popular(): Eloquent\Collection
+    public function popular(): LengthAwarePaginator
     {
+        $page = LengthAwarePaginator::resolveCurrentPage();
         $this->loadUserScope();
-        $result = $this->microblog->popular(5, 1);
+        [$items, $count] = $this->microblog->popular(5, $page);
+        $paginator = new LengthAwarePaginator(
+            $items,
+            $count,
+            5,
+            $page,
+            ['path' => LengthAwarePaginator::resolveCurrentPath()]
+        );
         $this->microblog->resetCriteria();
-        $microblogs = $result->keyBy('id');
+        /** @var Eloquent\Collection $microblogs */
+        $microblogs = $paginator->keyBy('id');
         $this->setCommentsRelations($microblogs);
-        return $microblogs;
+        $paginator->setCollection($microblogs);
+        return $paginator;
     }
 
     /**
