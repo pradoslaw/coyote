@@ -7,17 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 interface RepositoryInterface
 {
-    /**
-     * Creates instance of model
-     *
-     * @return Model
-     * @throws \Exception
-     */
-    public function makeModel();
+    public function makeModel(): Model;
 
-    /**
-     * @throws \Exception
-     */
     public function resetModel();
 
     /**
@@ -55,8 +46,8 @@ interface RepositoryInterface
     public function all($columns = ['*']);
 
     /**
-     * @param  string $value
-     * @param  string $key
+     * @param string $value
+     * @param string $key
      * @return array
      */
     public function pluck($value, $key = null);
@@ -130,10 +121,10 @@ interface RepositoryInterface
     /**
      * Paginate the given query into a simple paginator.
      *
-     * @param  int  $perPage
-     * @param  array  $columns
-     * @param  string  $pageName
-     * @param  int|null $page
+     * @param int $perPage
+     * @param array $columns
+     * @param string $pageName
+     * @param int|null $page
      * @return \Illuminate\Contracts\Pagination\Paginator
      */
     public function simplePaginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null);
@@ -158,7 +149,7 @@ interface RepositoryInterface
     /**
      * Get a new raw query expression.
      *
-     * @param  mixed  $value
+     * @param mixed $value
      * @return \Illuminate\Database\Query\Expression
      */
     public function raw($value);

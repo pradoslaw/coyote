@@ -10,9 +10,9 @@ use Illuminate\Database\Eloquent\Builder;
 
 class MicroblogRepository extends Repository implements MicroblogRepositoryInterface
 {
-    public function model()
+    public function model(): string
     {
-        return 'Coyote\Microblog';
+        return Microblog::class;
     }
 
     /**
@@ -21,7 +21,12 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
         return $this->applyCriteria(function () use ($perPage) {
-            return $this->model->whereNull('parent_id')->with(['user', 'assets', 'tags'])->withCount('comments')->paginate($perPage);
+            return $this->model
+                ->newQuery()
+                ->whereNull('parent_id')
+                ->with(['user', 'assets', 'tags'])
+                ->withCount('comments')
+                ->paginate($perPage);
         });
     }
 
@@ -31,37 +36,49 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     public function forPage(int $perPage, int $page)
     {
         return $this->applyCriteria(function () use ($perPage, $page) {
-            return $this->model->whereNull('parent_id')->with(['user', 'assets', 'tags'])->withCount('comments')->limit($perPage)->offset(max(0, $page - 1) * $perPage)->get();
+            return $this->model
+                ->newQuery()
+                ->whereNull('parent_id')
+                ->with(['user', 'assets', 'tags'])
+                ->withCount('comments')
+                ->limit($perPage)
+                ->offset(max(0, $page - 1) * $perPage)
+                ->get();
         });
     }
 
     public function recent()
     {
         return $this->applyCriteria(function () {
-            return $this->model->whereNull('parent_id')->withoutGlobalScope(UserRelationsScope::class)->limit(5)->orderBy('id', 'DESC')->get();
+            return $this->model
+                ->newQuery()
+                ->whereNull('parent_id')
+                ->withoutGlobalScope(UserRelationsScope::class)
+                ->limit(5)
+                ->orderBy('id', 'DESC')
+                ->get();
         });
     }
 
     public function popular(int $limit): Eloquent\Collection
     {
         $this->applyCriteria();
-
         $result = $this
             ->model
+            ->newQuery()
             ->whereNull('parent_id')
-            ->with('user')
+            ->with(['user', 'assets', 'tags'])
             ->withCount('comments')
-            ->with('assets')
-            ->with('tags')
-            ->where(function (Builder $builder) {
-                return $builder->where('votes', '>=', 2)->orWhere('is_sponsored', true);
-            })
-            ->take($limit)
+            ->where(fn(Builder $query) => $query
+                ->where('votes', '>=', 2)
+                ->orWhere('is_sponsored', true))
+            ->limit($limit)
             ->get();
-
-        $this->resetModel();
-
-        return $result;
+        try {
+            return $result;
+        } finally {
+            $this->resetModel();
+        }
     }
 
     /**
@@ -70,7 +87,13 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     public function findById(int $id)
     {
         return $this->applyCriteria(function () use ($id) {
-            return $this->model->withCount('comments')->with(['user', 'assets', 'tags'])->withoutGlobalScope(UserRelationsScope::class)->where('microblogs.id', $id)->firstOrFail();
+            return $this->model
+                ->newQuery()
+                ->withCount('comments')
+                ->with(['user', 'assets', 'tags'])
+                ->withoutGlobalScope(UserRelationsScope::class)
+                ->where('microblogs.id', $id)
+                ->firstOrFail();
         });
     }
 
@@ -80,7 +103,11 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     public function getComments($parentId)
     {
         return $this->applyCriteria(function () use ($parentId) {
-            return $this->model->with(['user', 'assets'])->where('parent_id', $parentId)->orderBy('id')->get();
+            return $this->model
+                ->with(['user', 'assets'])
+                ->where('parent_id', $parentId)
+                ->orderBy('id')
+                ->get();
         });
     }
 
@@ -115,7 +142,14 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
      */
     public function countForUser($userId)
     {
-        return $userId ? $this->model->whereNull('parent_id')->where('user_id', $userId)->count() : null;
+        if ($userId) {
+            return $this->model
+                ->newQuery()
+                ->whereNull('parent_id')
+                ->where('user_id', $userId)
+                ->count();
+        }
+        return null;
     }
 
     /**
@@ -174,14 +208,10 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
             ->get();
     }
 
-    /**
-     * Pobiera najpopularniejsze tagi w mikroblogach
-     *
-     * @return mixed
-     */
     public function getTags()
     {
         return (new Tag())
+            ->newQuery()
             ->select(['name', 'logo', 'category_id'])
             ->addSelect($this->raw("COALESCE(resources ->> '" . Microblog::class . "', '0')::int AS count"))
             ->orderByRaw("count DESC")
