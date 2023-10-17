@@ -113,7 +113,7 @@ abstract class Repository implements RepositoryInterface, CriteriaInterface
 
     /**
      * @param callable|null $callable
-     * @return $this
+     * @return self|mixed
      */
     public function applyCriteria(callable $callable = null)
     {
