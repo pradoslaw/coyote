@@ -11,6 +11,7 @@ use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepos
 use Coyote\Services\Microblogs\Builder;
 use Coyote\Tag;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class HomeController extends BaseController
 {
@@ -61,35 +62,28 @@ class HomeController extends BaseController
         });
 
         return $this->view('microblog.home', [
-            'flags'                     => $this->flags(),
-            'count'                     => $this->microblog->count(),
-            'count_user'                => $this->microblog->countForUser($this->userId),
-            'pagination'                => new MicroblogCollection($paginator),
-            'route'                     => request()->route()->getName(),
-            'popular_tags'              => $this->microblog->popularTags($this->userId),
-            'recommended_users'         => UserResource::collection($this->microblog->recommendedUsers($this->userId)),
-            'tags'                      => [
-                'tech'                  => $tech,
-                'others'                => $others->splice(0, 10)
+            'flags'             => $this->flags(),
+            'count'             => $this->microblog->count(),
+            'count_user'        => $this->microblog->countForUser($this->userId),
+            'pagination'        => new MicroblogCollection($paginator),
+            'route'             => request()->route()->getName(),
+            'popular_tags'      => $this->microblog->popularTags($this->userId),
+            'recommended_users' => UserResource::collection($this->microblog->recommendedUsers($this->userId)),
+            'tags'              => [
+                'tech'   => $tech,
+                'others' => $others->splice(0, 10)
             ],
-            'render_params' => $renderParams,
+            'render_params'     => $renderParams,
         ]);
     }
 
-    /**
-     * @param string $tag
-     * @return \Illuminate\View\View
-     */
-    public function tag(string $tag)
+    public function tag(string $tag): View
     {
         $this->breadcrumb->push('Wpisy z tagiem: ' . $tag, route('microblog.tag', [$tag]));
 
         $this->builder->withTag($tag);
 
-        $renderParams = new RenderParams();
-        $renderParams->tagName = $tag;
-
-        return $this->index($renderParams);
+        return $this->index(new RenderParams($tag));
     }
 
     /**
@@ -124,9 +118,9 @@ class HomeController extends BaseController
         $resource->preserverKeys();
 
         return $this->view('microblog.view')->with([
-            'flags' => $this->flags(),
+            'flags'     => $this->flags(),
             'microblog' => $resource,
-            'excerpt' => $excerpt
+            'excerpt'   => $excerpt
         ]);
     }
 }
