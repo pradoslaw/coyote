@@ -1,5 +1,4 @@
 <?php
-
 namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\RenderParams;
@@ -7,48 +6,25 @@ use Coyote\Http\Factories\CacheFactory;
 use Coyote\Http\Resources\MicroblogCollection;
 use Coyote\Http\Resources\MicroblogResource;
 use Coyote\Http\Resources\UserResource;
-use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
-use Coyote\Services\Microblogs\Builder;
+use Coyote\Repositories\Eloquent\MicroblogRepository;
+use Coyote\Services\Microblogs;
 use Coyote\Tag;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class HomeController extends BaseController
 {
     use CacheFactory;
 
-    /**
-     * @var MicroblogRepository
-     */
-    private MicroblogRepository $microblog;
-
-    /**
-     * @var Builder
-     */
-    private Builder $builder;
-
-    /**
-     * @param MicroblogRepository $microblog
-     * @param Builder $builder
-     */
-    public function __construct(MicroblogRepository $microblog)
+    public function __construct(
+        private MicroblogRepository $microblog,
+        private Microblogs\Builder  $builder
+    )
     {
         parent::__construct();
-
-        $this->microblog = $microblog;
         $this->breadcrumb->push('Mikroblog', route('microblog.home'));
-
-        $this->middleware(function (Request $request, $next) {
-            $this->builder = resolve(Builder::class);
-
-            return $next($request);
-        });
     }
 
-    /**
-     * @return \Illuminate\View\View
-     */
-    public function index(RenderParams $renderParams = null)
+    public function index(RenderParams $renderParams = null): View
     {
         $paginator = $this->builder->orderById()->paginate();
 
@@ -86,10 +62,7 @@ class HomeController extends BaseController
         return $this->index(new RenderParams($tag));
     }
 
-    /**
-     * @return \Illuminate\View\View
-     */
-    public function mine()
+    public function mine(): View
     {
         $this->breadcrumb->push('Moje wpisy', route('microblog.mine'));
 
@@ -98,11 +71,7 @@ class HomeController extends BaseController
         return $this->index();
     }
 
-    /**
-     * @param $id
-     * @return \Illuminate\View\View
-     */
-    public function show($id)
+    public function show($id): View
     {
         $microblog = $this->builder->one($id);
 
