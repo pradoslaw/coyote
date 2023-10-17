@@ -1,5 +1,4 @@
 <?php
-
 namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Http\Controllers\RenderParams;
@@ -8,25 +7,20 @@ use Coyote\Http\Resources\MicroblogCollection;
 use Coyote\Http\Resources\MicroblogResource;
 use Coyote\Http\Resources\UserResource;
 use Coyote\Repositories\Eloquent\MicroblogRepository;
-use Coyote\Services\Microblogs\Builder;
+use Coyote\Services\Microblogs;
 use Coyote\Tag;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class HomeController extends BaseController
 {
     use CacheFactory;
 
-    private Builder $builder;
-
-    public function __construct(private MicroblogRepository $microblog)
+    public function __construct(
+        private MicroblogRepository $microblog,
+        private Microblogs\Builder  $builder)
     {
         parent::__construct();
         $this->breadcrumb->push('Mikroblog', route('microblog.home'));
-        $this->middleware(function (Request $request, $next) {
-            $this->builder = resolve(Builder::class);
-            return $next($request);
-        });
     }
 
     public function index(RenderParams $renderParams = null): View
