@@ -24,7 +24,26 @@ class HomeController extends BaseController
         $this->breadcrumb->push('Mikroblog', route('microblog.home'));
     }
 
-    public function index(RenderParams $renderParams = null): View
+    public function index(): View
+    {
+        return $this->list(null);
+    }
+
+    public function tag(string $tag): View
+    {
+        $this->breadcrumb->push('Wpisy z tagiem: ' . $tag, route('microblog.tag', [$tag]));
+        $this->builder->withTag($tag);
+        return $this->list(new RenderParams($tag));
+    }
+
+    public function mine(): View
+    {
+        $this->breadcrumb->push('Moje wpisy', route('microblog.mine'));
+        $this->builder->onlyUsers($this->auth);
+        return $this->list(null);
+    }
+
+    private function list(?RenderParams $renderParams): View
     {
         $paginator = $this->builder->orderById()->paginate();
 
@@ -51,24 +70,6 @@ class HomeController extends BaseController
             ],
             'render_params'     => $renderParams,
         ]);
-    }
-
-    public function tag(string $tag): View
-    {
-        $this->breadcrumb->push('Wpisy z tagiem: ' . $tag, route('microblog.tag', [$tag]));
-
-        $this->builder->withTag($tag);
-
-        return $this->index(new RenderParams($tag));
-    }
-
-    public function mine(): View
-    {
-        $this->breadcrumb->push('Moje wpisy', route('microblog.mine'));
-
-        $this->builder->onlyUsers($this->auth);
-
-        return $this->index();
     }
 
     public function show($id): View
