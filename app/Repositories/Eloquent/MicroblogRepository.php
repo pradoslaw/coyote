@@ -33,16 +33,16 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
     /**
      * @inheritDoc
      */
-    public function forPage(int $perPage, int $page)
+    public function forPage(int $pageSize, int $pageNumber)
     {
-        return $this->applyCriteria(function () use ($perPage, $page) {
+        return $this->applyCriteria(function () use ($pageSize, $pageNumber) {
             return $this->model
                 ->newQuery()
                 ->whereNull('parent_id')
                 ->with(['user', 'assets', 'tags'])
                 ->withCount('comments')
-                ->limit($perPage)
-                ->offset(max(0, $page - 1) * $perPage)
+                ->limit($pageSize)
+                ->offset(\max(0, $pageNumber - 1) * $pageSize)
                 ->get();
         });
     }
@@ -60,22 +60,22 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
         });
     }
 
-    public function popular(int $limit): Eloquent\Collection
+    public function popular(int $pageSize, int $pageNumber): Eloquent\Collection
     {
         $this->applyCriteria();
-        $result = $this
-            ->model
-            ->newQuery()
-            ->whereNull('parent_id')
-            ->with(['user', 'assets', 'tags'])
-            ->withCount('comments')
-            ->where(fn(Builder $query) => $query
-                ->where('votes', '>=', 2)
-                ->orWhere('is_sponsored', true))
-            ->limit($limit)
-            ->get();
         try {
-            return $result;
+            return $this
+                ->model
+                ->newQuery()
+                ->whereNull('parent_id')
+                ->with(['user', 'assets', 'tags'])
+                ->withCount('comments')
+                ->where(fn(Builder $query) => $query
+                    ->where('votes', '>=', 1)
+                    ->orWhere('is_sponsored', true))
+                ->limit($pageSize)
+                ->offset(\max(0, $pageNumber - 1) * $pageSize)
+                ->get();
         } finally {
             $this->resetModel();
         }
