@@ -6,7 +6,7 @@
             <img src="{{ user_photo(comment.user.photo) }}" class="img-thumbnail">
         </a>
     </div>
-    <div class="col-sm-11">
+    <div class="col-sm-11 comment-holder">
         <div class="card card-transparent">
             <div class="card-body comment">
                 {% if can('wiki-admin') or comment.user_id == user('id') %}
@@ -20,12 +20,17 @@
                     </div>
                 {% endif %}
 
-                <ul class="list-inline list-inline-bullet">
+                <ul class="list-inline">
                     <li class="list-inline-item text-muted">
                         {{ link_to_profile(comment.user) }}
                     </li>
-                    <li class="list-inline-item">
-                        <a href="#comment-{{ comment.id }}" class="timestamp text-muted" data-timestamp="{{ comment.created_at|timestamp }}">{{ comment.created_at|format_date }}</a>
+                    <li class="list-inline-item comment-date" style="display:none">
+                        &#x2022;
+                        <a href="#comment-{{ comment.id }}"
+                           class="timestamp text-muted"
+                           data-timestamp="{{ comment.created_at|timestamp }}">
+                          {{ comment.created_at|format_date }}
+                        </a>
                     </li>
                 </ul>
 
