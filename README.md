@@ -130,6 +130,9 @@ docker-compose exec php php vendor/bin/phpunit
      php artisan es:create --force
      php artisan es:index --force
      ```
+   - ElasticSearch przełącza się w tryb readonly, kiedy dysk ma zajęte 95% miejsca.
+     Spowoduje to błędy w dodawaniu nowych wartości. Rozwiązaniem na to jest
+     oczywiście zwolnienie miejsca na dysku.
 
 ### Zadania uruchomiane w tle
 
