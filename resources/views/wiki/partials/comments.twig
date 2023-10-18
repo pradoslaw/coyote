@@ -1,38 +1,48 @@
 <div class="clearfix"></div>
 
 <div id="box-comment">
-    <h4>{{ declination(wiki.comments|length, ['komentarz', 'komentarzy', 'komentarzy']) }}</h4>
+  <h4>{{ declination(wiki.comments|length, ['komentarz', 'komentarzy', 'komentarzy']) }}</h4>
 
-    {% if auth_check() %}
-        <div class="row">
-            <div class="col-sm-1 d-none d-sm-block">
-                <a href="{{ route('profile', [user('id')]) }}">
-                    <img src="{{ user_photo(user('photo')) }}" class="img-thumbnail">
-                </a>
+  {% if auth_check() %}
+    <div class="row">
+      <div class="col-sm-1 d-none d-sm-block">
+        <a href="{{ route('profile', [user('id')]) }}">
+          <img src="{{ user_photo(user('photo')) }}" class="img-thumbnail">
+        </a>
+      </div>
+      <div class="col-sm-11">
+        <div class="card card-transparent">
+          <div class="card-body">
+            {{ form_start(form) }}
+
+            <div class="form-group">
+              {{ form_widget(form.text) }}
             </div>
-            <div class="col-sm-11">
-                <div class="card card-transparent">
-                    <div class="card-body">
-                        {{ form_start(form) }}
-
-                        <div class="form-group">
-                            {{ form_widget(form.text) }}
-                        </div>
-                        <div class="form-group">
-                            {{ form_widget(form.submit) }}
-                            <div class="clearfix"></div>
-                        </div>
-
-                        {{ form_end(form) }}
-                    </div>
-                </div>
+            <div class="form-group">
+              {{ form_widget(form.submit) }}
+              <div class="clearfix"></div>
             </div>
+
+            {{ form_end(form) }}
+          </div>
         </div>
-    {% endif %}
-
-    <div id="comments-container">
-        {% for comment in wiki.comments %}
-            {% include 'wiki.partials.comment' %}
-        {% endfor %}
+      </div>
     </div>
+  {% endif %}
+
+  <div id="comments-container">
+    {% for comment in wiki.comments %}
+      {% include 'wiki.partials.comment' %}
+    {% endfor %}
+  </div>
+
+  <script>
+    window.addEventListener("load", function () {
+      Array.from(document.getElementsByClassName("comment-holder"))
+        .forEach(element => element.addEventListener("click", function () {
+            element.querySelector(".comment-date").style.display = "inline-block";
+          }
+        ));
+    });
+  </script>
 </div>
