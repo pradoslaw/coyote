@@ -206,6 +206,20 @@ export default class VueMarkdown extends Vue {
       break: 'Dodanie tutaj tabelki mogłoby spowodować uszkodzenie składni',
       icon: 'fa-table'
     },
+    indentMore: {
+      click: this.indentMore,
+      can: false,
+      title: 'Dodaj wcięcie zaznaczonego tekstu',
+      break: null,
+      icon: 'fa-indent'
+    },
+    indentLess: {
+      click: this.indentLess,
+      can: false,
+      title: 'Usuń wcięcie zaznaczonego tekstu',
+      break: null,
+      icon: 'fa-outdent'
+    },
   };
 
   @Ref('editor')
@@ -288,6 +302,8 @@ export default class VueMarkdown extends Vue {
     this.buttons.link.can = state.canLink;
     this.buttons.image.can = state.canImage;
     this.buttons.key.can = state.canKey;
+    this.buttons.indentMore.can = state.canIndent;
+    this.buttons.indentLess.can = state.canIndent;
   }
 
   autocomplete(nick) {
@@ -364,6 +380,14 @@ export default class VueMarkdown extends Vue {
 
   insertTable() {
     this.editor.addTable('Nagłówek', 'Dodaj...')
+  }
+
+  indentMore() {
+    this.editor.indentMore()
+  }
+
+  indentLess() {
+    this.editor.indentLess()
   }
 
   appendBlockQuote(username, postId, content) {
