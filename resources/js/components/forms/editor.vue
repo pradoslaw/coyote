@@ -122,6 +122,14 @@ export default class VueEditor extends Vue {
     this.editor!.putCodeBlock();
   }
 
+  indentMore() {
+    this.editor!.indentMore();
+  }
+
+  indentLess() {
+    this.editor!.indentLess();
+  }
+
   addTable(header, placeholder) {
     this.editor!.putTable(index => header + ' ' + (index + 1), placeholder);
   }
