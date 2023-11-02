@@ -86,7 +86,7 @@ po prostu przekopiować do projektu coyote.
 
 ```
 # Stwórz nowy folder poza projektem coyote/
-cd ..        
+cd ..
 mkdir spike/
 
 # Stwórz pustą aplikację vue
@@ -133,6 +133,11 @@ docker-compose exec php php vendor/bin/phpunit
    - ElasticSearch przełącza się w tryb readonly, kiedy dysk ma zajęte 95% miejsca.
      Spowoduje to błędy w dodawaniu nowych wartości. Rozwiązaniem na to jest
      oczywiście zwolnienie miejsca na dysku.
+   - ElasticSearch możliwe że jest trybie readonly, i sam z niego nie wyjdzie.
+     Wtedy należy się przełączyć na kontener, i wykonać
+     ```
+     curl -XPUT -H "Content-Type: application/json" http://localhost:9200/_all/_settings -d '{"index.blocks.read_only_allow_delete": null}'
+     ```
 
 ### Zadania uruchomiane w tle
 
