@@ -7,7 +7,6 @@ use TRegx\CleanRegex\Pattern;
 class Prism implements ParserInterface
 {
     const ALIAS = [
-        '.net'   => 'dotnet',
         'asm'    => 'asm6502',
         'bf'     => 'brainfuck',
         'bat'    => 'batch',
