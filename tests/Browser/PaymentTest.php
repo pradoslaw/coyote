@@ -43,7 +43,7 @@ class PaymentTest extends DuskTestCase
                 ->type('invoice[city]', $this->faker->city)
                 ->select('invoice[country_id]', 12)
                 ->type('invoice[vat_id]', '123123123')
-                ->clickAtXPath('//*[@id="js-payment"]/form/div[1]/div[2]/ul/li[2]/a')
+                ->clickAtXPath('//*[@id="payment-methods"]/ul/li[2]/a')
                 ->press('Zapłać i zapisz')
                 ->waitForText('Przelewy24 test payment page', 60)
                 ->clickAtXPath('/html/body/div/main/div[3]/section[1]/div[2]/div/a[1]')

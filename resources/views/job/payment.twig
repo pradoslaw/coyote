@@ -7,12 +7,21 @@
 
   <div id="js-payment" class="row" v-cloak>
     <form @submit.prevent="makePayment" class="col-md-9">
+      <div v-if="hasPaymentError" class="alert alert-danger alert-report">
+        <p class="mb-3">
+          <i class="fas fa-exclamation-triangle mr-1"></i>
+          <b>Wystąpił nieoczekiwany błąd podczas przetwarzania płatności.</b>
+        </p>
+        <p class="mb-0">
+          Spróbuj innej metody platności bądź skontaktuj się z administracją serwisu.
+        </p>
+      </div>
       <div class="card card-default">
         <div class="card-header">
           <i class="fas fa-lock fa-fw"></i> Płatność poprzez bezpieczne połączenie
         </div>
 
-        <div class="card-body" v-show="grossPrice > 0">
+        <div class="card-body" id="payment-methods" v-show="grossPrice > 0">
           <ul class="nav nav-tabs mb-3">
             <li class="nav-item">
               <a @click="setPaymentMethod('card')" :class="{'active': form.payment_method === 'card'}" href="javascript:" class="nav-link bg-white">
@@ -78,11 +87,11 @@
               <div class="row">
                 <vue-form-group :errors="errors['invoice.country_id']" label="Kraj" class="col-4">
                   <vue-select
-                    :is-invalid="'invoice.country_id' in errors"
-                    :options="countries"
-                    placeholder="--"
-                    v-model="form.invoice.country_id"
-                    name="invoice[country_id]"
+                      :is-invalid="'invoice.country_id' in errors"
+                      :options="countries"
+                      placeholder="--"
+                      v-model="form.invoice.country_id"
+                      name="invoice[country_id]"
                   />
                 </vue-form-group>
 
@@ -114,7 +123,8 @@
           </div>
 
           <div>
-            <a href="{{ route('job.offer', [payment.job.id, payment.job.slug]) }}" class="btn btn-secondary float-left"><i class="fas fa-angle-left"></i> Powrót do ogłoszenia</a>
+            <a href="{{ route('job.offer', [payment.job.id, payment.job.slug]) }}" class="btn btn-secondary float-left"><i class="fas fa-angle-left"></i> Powrót
+              do ogłoszenia</a>
 
             <vue-button :disabled="isProcessing" class="btn btn-primary float-right">Zapłać i zapisz <i class="fas fa-angle-right"></i></vue-button>
           </div>
