@@ -139,6 +139,26 @@ docker-compose exec php php vendor/bin/phpunit
      curl -XPUT -H "Content-Type: application/json" http://localhost:9200/_all/_settings -d '{"index.blocks.read_only_allow_delete": null}'
      ```
 
+3. Running containers listening on high ports fails.
+
+   If you're running Windows, it's possible that random dynamic ports for IANA are
+   blocking docker containers.
+
+   To verify:
+   ```
+   netsh int ipv4 show dynamicport tcp
+   ```
+   If the starting port is low-ish (between 1000-2000), then it's possible that the
+   dynamic ports are blocking the docker containers.
+
+   To change:
+   1. ```
+      netsh int ipv4 set dynamic tcp start=49152 num=16384
+      netsh int ipv6 set dynamic tcp start=49152 num=16384
+      ```
+   2. Reboot.
+
+
 ### Zadania uruchomiane w tle
 
 Na serwerze produkcyjnym niektóre zadanie wykonywane są w tle. Dodawane są one do kolejki oraz wykonywane przez proces działający w tle.
