@@ -22,7 +22,6 @@ jobs:
             cd /var/www/4programmers.dev
             git fetch
             git reset origin/staging --hard
-            git pull
             docker-compose exec -T php composer install --no-dev
             make install-assets
             make migration
