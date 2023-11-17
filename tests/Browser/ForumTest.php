@@ -6,7 +6,6 @@ use Coyote\Permission;
 use Coyote\Services\UrlBuilder;
 use Coyote\User;
 use Faker\Factory;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 
@@ -140,13 +139,13 @@ class ForumTest extends DuskTestCase
         $user = $this->createUserWithGroup();
         $forum = $this->createForum([], $user->groups()->first()->id);
 
-        $this->browse(function (Browser $browser) use ($user, $forum) {
+        $this->browse(function (Browser $browser) use ($user, $forum): void {
             try {
                 $browser
                     ->visit('/Forum')
                     ->assertDontSeeIn('h3', $forum->name)
                     ->visit('/Forum/' . $forum->slug)
-                    ->assertSee('401')
+                    ->assertSee('403')
                     ->loginAs($user)
                     ->visit('/Forum')
                     ->assertSee($forum->name)

@@ -1,1 +1,12 @@
-{% extends 'errors.401' %}
+{% extends 'layout.twig' %}
+{% block title %}403{{ parent() }}{% endblock %}
+
+{% block container %}
+  <div id="page-404" class="row" style="margin-top: 20px">
+    <div class="col-12">
+      <h1>403</h1>
+      <h4>Strona niedostępna, z powodu braku uprawnień.</h4>
+      {% include 'errors/tips.twig' %}
+    </div>
+  </div>
+{% endblock %}
