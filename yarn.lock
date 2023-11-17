@@ -956,7 +956,7 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@codemirror/autocomplete@^6.0.0", "@codemirror/autocomplete@^6.11.0", "@codemirror/autocomplete@^6.7.1":
+"@codemirror/autocomplete@*", "@codemirror/autocomplete@^6.0.0", "@codemirror/autocomplete@^6.7.1":
   version "6.11.0"
   resolved "https://registry.yarnpkg.com/@codemirror/autocomplete/-/autocomplete-6.11.0.tgz#406dee8bf5342dfb48920ad75454d3406ddf9963"
   integrity sha512-LCPH3W+hl5vcO7OzEQgX6NpKuKVyiKFLGAy7FXROF6nUpsWUdQEgUb3fe/g7B0E1KZCRFfgzdKASt6Wly2UOBg==
@@ -1310,7 +1310,7 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@lezer/common@^1.0.0", "@lezer/common@^1.0.2", "@lezer/common@^1.1.0":
+"@lezer/common@*", "@lezer/common@^1.0.0", "@lezer/common@^1.0.2", "@lezer/common@^1.1.0":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@lezer/common/-/common-1.1.1.tgz#4a06a0e1b9214d7eb2ea4a9354d47a63044cee49"
   integrity sha512-aAPB9YbvZHqAW+bIwiuuTDGB4DG0sYNRObGLxud8cW7osw1ZQxfDuTZ8KQiqfZ0QJGcR34CvpTMDXEyo/+Htgg==
@@ -1354,7 +1354,15 @@
   dependencies:
     "@lezer/common" "^1.0.0"
 
-"@lezer/markdown@*", "@lezer/markdown@^1.0.0":
+"@lezer/markdown@1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@lezer/markdown/-/markdown-1.1.1.tgz#9176ab0fd2ce106baa5cf09b0cd14ac433cd95fa"
+  integrity sha512-kmxvLnXCogUx2mexslWwVME1W2GQP76pwUODcFXLsuubuK41TcEJhKRm2FTKugNfEkUIspJNq9+jNo6b7dxVLA==
+  dependencies:
+    "@lezer/common" "^1.0.0"
+    "@lezer/highlight" "^1.0.0"
+
+"@lezer/markdown@^1.0.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@lezer/markdown/-/markdown-1.1.0.tgz#5cee104ef353a3442ecee023ff1912826fac8658"
   integrity sha512-JYOI6Lkqbl83semCANkO3CKbKc0pONwinyagBufWBm+k4yhIcqfCF8B8fpEpvJLmIy7CAfwiq7dQ/PzUZA340g==
@@ -1367,19 +1375,20 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.2.tgz#830beaec4b4091a9e9398ac50f865ddea52186b9"
   integrity sha512-92FRmppjjqz29VMJ2dn+xdyXZBrMlE42AV6Kq6BwjWV7CNUW1hs2FtxSNLQE+gJhaZ6AAmYuO9y8dshhcBl7vA==
 
-"@riddled/4play@1.15.3":
-  version "1.15.3"
-  resolved "https://registry.yarnpkg.com/@riddled/4play/-/4play-1.15.3.tgz#839a1f94a11f8ab10e00edadc3099374d166dbf5"
-  integrity sha512-uG1ATl+gCQWtJTIAX/OSQ6OcIJc7MxyLwXHjspBWUO9H/c0Q07amCMzxdD4qMAxd6wXhj5v++GZ10L/XdPe8+w==
+"@riddled/4play@1.15.5":
+  version "1.15.5"
+  resolved "https://registry.yarnpkg.com/@riddled/4play/-/4play-1.15.5.tgz#5924da02d0870837bb4387c23325d9cdf1c5007b"
+  integrity sha512-b+I1cGmn7CfL+DJSL+ysv4NE3gZg3wtC6beWrOv9DTK9Gg2j8/LixoMfisrDLV0cyRFKSchTGuz8S3d+UuAZEA==
   dependencies:
-    "@codemirror/autocomplete" "^6.11.0"
+    "@codemirror/autocomplete" "*"
     "@codemirror/commands" "^6.3.0"
     "@codemirror/lang-markdown" "^6.2.2"
     "@codemirror/language" "*"
     "@codemirror/state" "*"
     "@codemirror/view" "^6.22.0"
+    "@lezer/common" "*"
     "@lezer/highlight" "*"
-    "@lezer/markdown" "*"
+    "@lezer/markdown" "1.1.1"
 
 "@sentry/browser@^6.16.1":
   version "6.17.4"
