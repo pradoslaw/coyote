@@ -28,10 +28,6 @@
 .editorconfig
 .gitignore
 .gitattributes
-.codeception.yml
 CHANGELOG.md
 LICENSE
 phpunit.xml
-phpspec.yml
-.styleci.yml
-.travis.yml

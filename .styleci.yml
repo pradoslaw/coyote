@@ -1,9 +1,0 @@
-preset: psr2
-version: 8
-
-disabled:
-  - eof_ending
-
-finder:
-  exclude:
-    - "tests"
