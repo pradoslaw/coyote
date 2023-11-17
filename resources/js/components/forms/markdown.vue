@@ -206,19 +206,19 @@ export default class VueMarkdown extends Vue {
       break: 'Dodanie tutaj tabelki mogłoby spowodować uszkodzenie składni',
       icon: 'fa-table'
     },
-    indentMore: {
-      click: this.indentMore,
-      can: false,
-      title: 'Dodaj wcięcie zaznaczonego tekstu',
-      break: null,
-      icon: 'fa-indent'
-    },
     indentLess: {
       click: this.indentLess,
       can: false,
       title: 'Usuń wcięcie zaznaczonego tekstu',
       break: null,
       icon: 'fa-outdent'
+    },
+    indentMore: {
+      click: this.indentMore,
+      can: false,
+      title: 'Dodaj wcięcie zaznaczonego tekstu',
+      break: null,
+      icon: 'fa-indent'
     },
   };
 
