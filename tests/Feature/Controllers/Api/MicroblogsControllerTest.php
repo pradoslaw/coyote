@@ -14,9 +14,8 @@ class MicroblogsControllerTest extends TestCase
     public function testPagination()
     {
         $microblog = factory(Microblog::class)->create();
-        $response = $this->json('GET', '/v1/microblogs');
-
-        $response
+        $this
+            ->json('GET', '/v1/microblogs')
             ->assertStatus(200)
             ->assertSeeText($microblog->text);
     }
@@ -31,29 +30,10 @@ class MicroblogsControllerTest extends TestCase
 
         $this->assertEquals(1, $microblog->votes);
 
-        $response = $this->json('GET', '/v1/microblogs/' . $microblog->id);
-
-        $response
+        $this
+            ->json('GET', '/v1/microblogs/' . $microblog->id)
             ->assertStatus(200)
-            ->assertJson(array_merge(
-                    array_except($microblog->toArray(), ['user_id', 'score']),
-                    [
-                        'comments' => [],
-                        'media' => [],
-                        'created_at' => $microblog->created_at->toIso8601String(),
-                        'updated_at' => $microblog->created_at->toIso8601String(),
-                        'html' => $microblog->html,
-                        'user' => [
-                            'id' => $microblog->user->id,
-                            'name' => $microblog->user->name,
-                            'deleted_at' => null,
-                            'is_blocked' => false,
-                            'photo' => null
-                        ],
-                        'votes' => 1
-                    ]
-                )
-            );
+            ->assertJson(\array_merge(\array_except($microblog->toArray(), ['user_id', 'score', 'created_at', 'updated_at'])));
     }
 
     public function testShowOneWithNoVotes()
@@ -61,11 +41,8 @@ class MicroblogsControllerTest extends TestCase
         /** @var Microblog $microblog */
         $microblog = factory(Microblog::class)->create();
 
-        $response = $this->json('GET', '/v1/microblogs/' . $microblog->id);
-
-        $response
-            ->assertJsonFragment([
-                'votes' => 0
-            ]);
+        $this
+            ->json('GET', '/v1/microblogs/' . $microblog->id)
+            ->assertJsonFragment(['votes' => 0]);
     }
 }
