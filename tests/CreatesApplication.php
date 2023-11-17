@@ -1,5 +1,4 @@
 <?php
-
 namespace Tests;
 
 use Coyote\Forum;
@@ -8,20 +7,14 @@ use Coyote\Permission;
 use Coyote\Topic;
 use Coyote\User;
 use Illuminate\Contracts\Console\Kernel;
+use Illuminate\Foundation\Application;
 
 trait CreatesApplication
 {
-    /**
-     * Creates the application.
-     *
-     * @return \Illuminate\Foundation\Application
-     */
-    public function createApplication()
+    public function createApplication(): Application
     {
-        $app = require __DIR__.'/../bootstrap/app.php';
-
+        $app = require __DIR__ . '/../bootstrap/app.php';
         $app->make(Kernel::class)->bootstrap();
-
         return $app;
     }
 
@@ -56,15 +49,11 @@ trait CreatesApplication
         return $forum;
     }
 
-    public function grantAdminAccess(User $user)
+    public function grantAdminAccess(User $user): void
     {
         $group = factory(Group::class)->create();
-
         $group->users()->attach($user->id);
-
-        $permissions = Permission::all();
-
-        foreach ($permissions as $permission) {
+        foreach (Permission::all() as $permission) {
             $group->permissions()->attach($permission->id, ['value' => 1]);
         }
     }
