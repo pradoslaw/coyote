@@ -123,10 +123,14 @@
           </div>
 
           <div>
-            <a href="{{ route('job.offer', [payment.job.id, payment.job.slug]) }}" class="btn btn-secondary float-left"><i class="fas fa-angle-left"></i> Powrót
-              do ogłoszenia</a>
-
-            <vue-button :disabled="isProcessing" class="btn btn-primary float-right">Zapłać i zapisz <i class="fas fa-angle-right"></i></vue-button>
+            <a href="{{ route('job.offer', [payment.job.id, payment.job.slug]) }}" class="btn btn-secondary float-left">
+              <i class="fas fa-angle-left"></i> 
+              Powrót do ogłoszenia
+            </a>
+            <vue-button :disabled="isProcessing" class="btn btn-primary float-right">
+              Zapłać i zapisz
+              <i class="fas fa-angle-right"></i>
+            </vue-button>
           </div>
         </div>
       </div>
