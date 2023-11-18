@@ -3,53 +3,61 @@
 namespace Coyote\Services\Parser\Extensions;
 
 use Coyote\Page;
-use Coyote\Repositories\Contracts\PageRepositoryInterface as PageRepository;
+use Coyote\Repositories\Eloquent\PageRepository;
 use League\CommonMark\Event\DocumentParsedEvent;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Link;
 use League\CommonMark\Extension\ExternalLink\ExternalLinkProcessor;
+use League\CommonMark\Node\Inline\Text;
 use League\Config\ConfigurationInterface;
 
 class InternalLinkProcessor
 {
     use LinkSupport;
 
-    private const EXCLUDE_PATHS = ['/Profile', '/User'];
-
-    public function __construct(private PageRepository $page, private ConfigurationInterface $config)
+    public function __construct(
+        private PageRepository         $page,
+        private ConfigurationInterface $config)
     {
     }
 
-    public function __invoke(DocumentParsedEvent $e): void
+    public function __invoke(DocumentParsedEvent $event): void
     {
         $internalHosts = $this->config->get('internal_link/internal_hosts');
-
-        foreach ($e->getDocument()->iterator() as $link) {
-            if (!($link instanceof Link)) {
-                continue;
-            }
-
-            $components = parse_url($link->getUrl());
-
-            // link is invalid. something went wrong
-            if (!$this->isValidLink($components) || $this->linkHasLabel($link)) {
-                continue;
-            }
-
-            if (ExternalLinkProcessor::hostMatches($components['host'], $internalHosts) && $page = $this->realTitle(urldecode($components['path']))) {
-                $link->setTitle($page->title);
-                $link->lastChild()->setLiteral($page->title);
+        $document = $event->getDocument();
+        foreach ($document->iterator() as $node) {
+            if ($node instanceof Link) {
+                $this->setLinkNameOfPageTitle($node, $internalHosts);
             }
         }
     }
 
-    protected function realTitle(string $path): ?Page
+    private function setLinkNameOfPageTitle(Link $link, mixed $internalHosts): void
     {
-        foreach (self::EXCLUDE_PATHS as $excludePath) {
+        $components = parse_url($link->getUrl());
+        if (!$this->isValidLink($components) || $this->linkHasLabel($link)) {
+            return;
+        }
+        if (!ExternalLinkProcessor::hostMatches($components['host'], $internalHosts)) {
+            return;
+        }
+        $page = $this->pageByPath(urldecode($components['path']));
+        if (!$page) {
+            return;
+        }
+        $link->setTitle($page->title);
+        $lastChild = $link->lastChild();
+        if ($lastChild instanceof Text) {
+            $lastChild->setLiteral($page->title);
+        }
+    }
+
+    protected function pageByPath(string $path): ?Page
+    {
+        foreach (['/Profile', '/User'] as $excludePath) {
             if (str_starts_with($path, $excludePath)) {
                 return null;
             }
         }
-
         return $this->page->findByPath($path);
     }
 }

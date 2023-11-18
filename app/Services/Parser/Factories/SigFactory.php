@@ -15,19 +15,15 @@ class SigFactory extends AbstractFactory
 {
     protected array $htmlTags = ['b', 'strong', 'i', 'em', 'del', 'a[href|title|data-user-id|class]', 'code', 'br'];
 
-    public function parse(string $text) : string
+    public function parse(string $text): string
     {
         start_measure('parsing', get_class($this));
 
         $parser = new Container();
 
-        $text = $this->cache($text, function () use ($parser) {
+        $text = $this->cache($text, function () use ($parser): Container {
             $markdown = new SimpleMarkdown($this->app[UserRepositoryInterface::class], $this->app[PageRepositoryInterface::class]);
-            $markdown->setConfig([
-                'renderer' => [
-                    'soft_break'      => "<br>\n",
-                ]
-            ]);
+            $markdown->setConfig(['renderer' => ['soft_break' => "<br>\n"]]);
             $parser->attach($markdown);
 
             $parser->attach(

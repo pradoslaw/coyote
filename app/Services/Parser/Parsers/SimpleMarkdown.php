@@ -14,8 +14,6 @@ use League\CommonMark\MarkdownConverter;
 /**
  * Uproszczony Markdown, np. dla komentarzy na forum czy stopek w postach gdzie nie mozemy sobie pozwolic
  * na obsluge pelnego markdowna
- *
- * Class SimpleMarkdown
  */
 class SimpleMarkdown extends Markdown
 {
@@ -31,15 +29,11 @@ class SimpleMarkdown extends Markdown
 
         $converter = new MarkdownConverter($environment);
 
-        return (string) $converter->convert($text);
+        return $converter->convert($text);
     }
 
     protected function defaultConfig(): array
     {
-        return array_merge(parent::defaultConfig(), [
-            'renderer' => [
-                'soft_break'      => "\n",
-            ]
-        ]);
+        return array_merge(parent::defaultConfig(), ['renderer' => ['soft_break' => "\n"]]);
     }
 }
