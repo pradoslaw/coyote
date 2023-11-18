@@ -157,7 +157,14 @@ docker-compose exec php php vendor/bin/phpunit
       netsh int ipv6 set dynamic tcp start=49152 num=16384
       ```
    2. Reboot.
+4. Random unrelated tests start to fail.
+   
+   Many Dusk tests aren't properly constructed to expect debug features like Debugbar.
 
+   To fix:
+   ```
+   APP_DEBUG=false
+   ```
 
 ### Zadania uruchomiane w tle
 
