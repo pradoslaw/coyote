@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Services\Parser\Helpers;
+namespace Coyote\Services\Helper;
 
 class City
 {

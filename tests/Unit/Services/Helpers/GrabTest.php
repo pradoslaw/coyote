@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Services\Parser\Helpers;
+namespace Tests\Unit\Services\Helpers;
 
 use Tests\TestCase;
 
@@ -8,7 +8,7 @@ class GrabTest extends TestCase
 {
     public function testGrabCityName()
     {
-        $city = new \Coyote\Services\Parser\Helpers\City();
+        $city = new \Coyote\Services\Helper\City();
 
         $cities = $city->grab('Wrocław, Warszawa');
         $this->assertEquals(2, count($cities));
@@ -29,7 +29,7 @@ class GrabTest extends TestCase
 
     public function testTryToGrabLoginAndReturnNoError()
     {
-        $helper = new \Coyote\Services\Parser\Helpers\Login();
+        $helper = new \Coyote\Services\Helper\Login();
 
         $input = '"test" A < B <b>test</b> <bald>';
         $this->assertEquals([], $helper->grab($input));

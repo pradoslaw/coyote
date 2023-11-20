@@ -9,7 +9,7 @@ use Coyote\Notifications\Post\UserMentionedNotification;
 use Coyote\Post;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Reputation;
-use Coyote\Services\Parser\Helpers\Login as LoginHelper;
+use Coyote\Services\Helper\Login as LoginHelper;
 use Coyote\User;
 use Illuminate\Contracts\Notifications\Dispatcher;
 use Illuminate\Contracts\Queue\ShouldQueue;

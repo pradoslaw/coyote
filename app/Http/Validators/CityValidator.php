@@ -2,7 +2,7 @@
 
 namespace Coyote\Http\Validators;
 
-use Coyote\Services\Parser\Helpers\City;
+use Coyote\Services\Helper\City;
 use Illuminate\Validation\Validator;
 
 class CityValidator

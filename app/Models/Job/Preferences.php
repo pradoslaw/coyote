@@ -3,7 +3,7 @@
 namespace Coyote\Job;
 
 use Coyote\Services\Geocoder\GeocoderInterface;
-use Coyote\Services\Parser\Helpers\City;
+use Coyote\Services\Helper\City;
 
 /**
  * @property array $locations

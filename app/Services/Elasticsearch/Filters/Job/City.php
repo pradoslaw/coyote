@@ -6,7 +6,6 @@ use Coyote\Services\Elasticsearch\DslInterface;
 use Coyote\Services\Elasticsearch\Filter;
 use Coyote\Services\Elasticsearch\QueryBuilderInterface;
 use Coyote\Services\Parser\Helpers;
-use Illuminate\Support\Str;
 
 class City extends Filter implements DslInterface
 {
@@ -34,7 +33,7 @@ class City extends Filter implements DslInterface
                 $this->addCity($value);
             }
         } else {
-            $city = (new Helpers\City())->grab($city);
+            $city = (new \Coyote\Services\Helper\City())->grab($city);
             $this->cities = array_merge($this->cities, $city);
         }
     }
