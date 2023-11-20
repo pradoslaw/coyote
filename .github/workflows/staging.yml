@@ -2,7 +2,8 @@ name: Staging
 
 on:
   push:
-    branches: [ master, staging ]
+    branches:
+      staging
 
 jobs:
   build:
@@ -11,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: executing remote ssh commands using password
+      - name: Deploy
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.STAGGING_IP }}

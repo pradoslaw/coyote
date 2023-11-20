@@ -1,4 +1,5 @@
-name: Testing
+name: Tests
+
 on:
   pull_request:
     types: [opened]
@@ -46,7 +47,7 @@ jobs:
       - name: Run tests
         run: docker-compose exec -T -u nginx php php vendor/bin/phpunit
 
-      - name: Run Dusk
+      - name: Run dusk
         run: docker-compose exec -T -u nginx php php artisan dusk
 
       - uses: actions/upload-artifact@v2
