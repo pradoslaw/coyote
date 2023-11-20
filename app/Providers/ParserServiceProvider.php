@@ -48,10 +48,6 @@ class ParserServiceProvider extends ServiceProvider
             return new PostFactory($app);
         });
 
-        $this->app->singleton('parser.comment', function ($app) {
-            return new CommentFactory($app);
-        });
-
         $this->app->singleton('parser.job', function ($app) {
             return new JobFactory($app);
         });

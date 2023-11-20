@@ -12,8 +12,6 @@ use Coyote\Services\Parser\Parsers\Smilies;
 
 class SigFactory extends AbstractFactory
 {
-    protected array $htmlTags = ['b', 'strong', 'i', 'em', 'del', 'a[href|title|data-user-id|class]', 'code', 'br'];
-
     public function parse(string $text): string
     {
         start_measure('parsing', get_class($this));
@@ -24,7 +22,7 @@ class SigFactory extends AbstractFactory
             $markdown = new SimpleMarkdown($this->container[UserRepositoryInterface::class], $this->container[PageRepositoryInterface::class]);
             $markdown->setConfig(['renderer' => ['soft_break' => "<br>\n"]]);
             $parser->attach($markdown);
-            $parser->attach(new Purifier($this->htmlTags));
+            $parser->attach(new Purifier(['b', 'strong', 'i', 'em', 'del', 'a[href|title|data-user-id|class]', 'code', 'br']));
             $parser->attach(new Censore($this->container[WordRepositoryInterface::class]));
 
             return $parser;

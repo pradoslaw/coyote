@@ -1,27 +1,24 @@
 <?php
-
 namespace Coyote\Services\Parser\Parsers;
 
 use TRegx\CleanRegex\Pattern;
 
 class Context extends HashParser implements Parser
 {
-    const HEADLINE_REGEXP = '<h([1-6])>(.*?)</h\1>';
-
-    /**
-     * @param string $text
-     * @return string
-     */
     public function parse(string $text): string
     {
         if (strpos($text, '{{CONTENT}}') === false) {
             return $text;
         }
-
         $text = $this->hashBlock($text, ['code', 'a']);
         $text = $this->hashInline($text, 'img');
+        $text = $this->parseHashed($text);
+        return $this->unhash($text);
+    }
 
-        $pattern = Pattern::of(self::HEADLINE_REGEXP);
+    private function parseHashed(string $text): string
+    {
+        $pattern = Pattern::of('<h([1-6])>(.*?)</h\1>');
         $headlines = '';
 
         foreach ($pattern->match($text) as $match) {
@@ -37,10 +34,7 @@ class Context extends HashParser implements Parser
             $headlines .= str_repeat('&nbsp;', 5 * ($indent - 1)) . link_to('#' . $anchor, $numbering . ' ' . $label) . '<br>';
         }
 
-        $text = str_replace('{{CONTENT}}', $headlines, $text);
-        $text = $this->unhash($text);
-
-        return $text;
+        return str_replace('{{CONTENT}}', $headlines, $text);
     }
 
     /**
@@ -61,8 +55,10 @@ class Context extends HashParser implements Parser
 
         if ($prev && $indent > $prev) {
             $sub[$indent] = 0;
-        } elseif ($indent < $prev) {
-            $sub[$indent + 1] = 0;
+        } else {
+            if ($indent < $prev) {
+                $sub[$indent + 1] = 0;
+            }
         }
 
         if (isset($sub[$indent])) {

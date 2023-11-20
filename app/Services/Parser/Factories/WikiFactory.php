@@ -18,9 +18,7 @@ class WikiFactory extends AbstractFactory
     {
         start_measure('parsing', 'Parsing wiki...');
 
-        $parser = new CompositeParser();
-
-        $text = $this->parseAndCache($text, function () use ($parser) {
+        $text = $this->parseAndCache($text, function () {
             $allowedTags = explode(',', config('purifier')['HTML.Allowed']);
             unset($allowedTags['ul']);
 
@@ -29,13 +27,13 @@ class WikiFactory extends AbstractFactory
             $allowedTags[] = 'ul[class]';
             $allowedTags[] = 'h1';
 
+            $parser = new CompositeParser();
             $parser->attach(new Template($this->container[WikiRepositoryInterface::class]));
             $parser->attach(new Markdown($this->container[UserRepositoryInterface::class], $this->container[PageRepositoryInterface::class]));
             $parser->attach(new Latex());
             $parser->attach(new Purifier($allowedTags));
             $parser->attach(new Context());
             $parser->attach(new Prism());
-
             return $parser;
         });
 

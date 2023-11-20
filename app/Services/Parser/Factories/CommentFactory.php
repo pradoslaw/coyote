@@ -1,5 +1,4 @@
 <?php
-
 namespace Coyote\Services\Parser\Factories;
 
 use Coyote\Repositories\Contracts\PageRepositoryInterface;
@@ -11,21 +10,15 @@ use Coyote\Services\Parser\Parsers\Emphasis;
 use Coyote\Services\Parser\Parsers\Purifier;
 use Coyote\Services\Parser\Parsers\SimpleMarkdown;
 use Coyote\Services\Parser\Parsers\Smilies;
+use Illuminate\Container\Container;
 
 class CommentFactory extends AbstractFactory
 {
-    /**
-     * permission that is required for comment's author to run Emphasis parser
-     */
-    const PERMISSION = 'forum-emphasis';
-
-    protected array $htmlTags = ['b', 'strong', 'i', 'u', 'em', 'del', 'a[href|title|data-user-id|class]', 'code'];
-    protected ?int $userId = null;
-
-    public function setUserId(int $userId): static
+    public function __construct(
+        Container   $container,
+        private int $userId)
     {
-        $this->userId = $userId;
-        return $this;
+        parent::__construct($container);
     }
 
     public function parse(string $text): string
@@ -38,15 +31,11 @@ class CommentFactory extends AbstractFactory
 
         $text = $this->parseAndCache($text, function () use ($parser) {
             $parser->attach(new SimpleMarkdown($this->container[UserRepositoryInterface::class], $this->container[PageRepositoryInterface::class]));
-            $parser->attach(new Purifier($this->htmlTags));
+            $parser->attach(new Purifier(['b', 'strong', 'i', 'u', 'em', 'del', 'a[href|title|data-user-id|class]', 'code']));
             $parser->attach(new Censore($this->container[WordRepositoryInterface::class]));
 
             if (!empty($this->userId)) {
-                $parser->attach(
-                    (new Emphasis($this->container[UserRepositoryInterface::class]))
-                        ->setUserId($this->userId)
-                        ->setAbility(self::PERMISSION)
-                );
+                $parser->attach(new Emphasis($this->userId, $this->container[UserRepositoryInterface::class]));
             }
 
             return $parser;

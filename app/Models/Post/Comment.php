@@ -3,6 +3,7 @@
 namespace Coyote\Post;
 
 use Coyote\Post;
+use Coyote\Services\Parser\Factories\CommentFactory;
 use Coyote\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -66,15 +67,12 @@ class Comment extends Model
         return $this->belongsTo(User::class)->select(['id', 'name', 'photo', 'is_blocked', 'deleted_at', 'reputation'])->withTrashed();
     }
 
-    /**
-     * @return null|string
-     */
-    public function getHtmlAttribute()
+    public function getHtmlAttribute(): string
     {
-        if ($this->html !== null) {
-            return $this->html;
+        if ($this->html === null) {
+            $app = new CommentFactory(app(), $this->user_id);
+            $this->html = $app->parse($this->text);
         }
-
-        return $this->html = app('parser.comment')->setUserId($this->user_id)->parse($this->text);
+        return $this->html;
     }
 }

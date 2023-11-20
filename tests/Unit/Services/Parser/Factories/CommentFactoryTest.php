@@ -1,5 +1,4 @@
 <?php
-
 namespace Tests\Unit\Services\Parser\Factories;
 
 use Coyote\Services\Parser\Factories\CommentFactory;
@@ -10,9 +9,9 @@ class CommentFactoryTest extends TestCase
 {
     use WithFaker;
 
-    public function testParseCommentWithLineBreakingsIsNotAllowed()
+    public function testParseCommentWithLineBreaksIsNotAllowed()
     {
-        $parser = new CommentFactory($this->app);
+        $parser = new CommentFactory($this->app, 0);
 
         $input = "one\ntwo";
         $this->assertEquals($input, trim($parser->parse($input)));
