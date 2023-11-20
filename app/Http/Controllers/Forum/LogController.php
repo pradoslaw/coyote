@@ -3,37 +3,28 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Post;
-use Coyote\Services\Parser\Parsers\HtmlEntities;
 use Coyote\Services\UrlBuilder;
+use Illuminate\View\View;
 
 class LogController extends BaseController
 {
-    /**
-     * @param Post $post
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     */
-    public function log(Post $post)
+    public function log(Post $post): View
     {
-        $topic = $post->topic;
-        $forum = $topic->forum;
-
-        $this->authorize('update', $forum);
-
-        $this->breadcrumb($forum);
+        $this->authorize('update', $post->topic->forum);
+        $this->breadcrumb($post->topic->forum);
         $this->breadcrumb->push([
-            $topic->title => UrlBuilder::topic($topic),
-            'Historia posta' => route('forum.post.log', [$post->id])
+            $post->topic->title => UrlBuilder::topic($post->topic),
+            'Historia posta'    => route('forum.post.log', [$post->id]),
         ]);
-
-        $parser = new HtmlEntities();
-
-        $logs = $this->post->history($post->id)->map(function (Post\Log $post) use ($parser) {
-            $post->text = $parser->parse($post->text);
-
-            return $post;
+        $logs = $this->post->history($post->id)->map(function (Post\Log $log): Post\Log {
+            $log->text = \htmlEntities($log->text);
+            return $log;
         });
-
-        return $this->view('forum.log')->with(compact('logs', 'post', 'forum', 'topic'));
+        return $this->view('forum.log')->with([
+            'logs'  => $logs,
+            'post'  => $post,
+            'forum' => $post->topic->forum,
+            'topic' => $post->topic,
+        ]);
     }
 }
