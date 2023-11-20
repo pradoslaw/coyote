@@ -5,9 +5,9 @@ namespace Coyote\Listeners;
 use Coyote\Events\WikiDeleted;
 use Coyote\Events\WikiSaved;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
-use Coyote\Services\Parser\Helpers\Link;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
+use TRegx\CleanRegex\Pattern;
 
 class SetupWikiLinks implements ShouldQueue
 {
@@ -27,7 +27,7 @@ class SetupWikiLinks implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param  WikiSaved  $event
+     * @param WikiSaved $event
      * @return void
      */
     public function onWikiSave(WikiSaved $event)
@@ -80,7 +80,7 @@ class SetupWikiLinks implements ShouldQueue
     /**
      * Register the listeners for the subscriber.
      *
-     * @param  \Illuminate\Events\Dispatcher  $events
+     * @param \Illuminate\Events\Dispatcher $events
      */
     public function subscribe($events)
     {
@@ -102,12 +102,17 @@ class SetupWikiLinks implements ShouldQueue
      */
     private function grabInternalLinks($host, $html)
     {
-        $helper = new Link();
-        $links = collect($helper->filter($html)); // convert array to collection
-
+        $links = collect($this->filter($html)); // convert array to collection
         return $links->filter(function ($url) use ($host) {
             return $host === strtolower(parse_url($url, PHP_URL_HOST));
         });
+    }
+
+    private function filter(string $html): array
+    {
+        $regexp = '<a\s[^>]*href=("??)([^" >]*?)\1[^>]*>(.*)<\/a>';
+        $links = Pattern::of($regexp, 'siU')->match($html)->group(2)->all();
+        return array_unique($links);
     }
 
     /**
