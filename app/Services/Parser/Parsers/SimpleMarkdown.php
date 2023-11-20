@@ -12,13 +12,9 @@ use League\CommonMark\Extension\InlinesOnly\InlinesOnlyExtension;
 use League\CommonMark\Extension\Strikethrough\StrikethroughExtension;
 use League\CommonMark\MarkdownConverter;
 
-/**
- * Uproszczony Markdown, np. dla komentarzy na forum czy stopek w postach gdzie nie mozemy sobie pozwolic
- * na obsluge pelnego markdowna
- */
 class SimpleMarkdown extends Markdown
 {
-    private array $config;
+    private bool $singleLine;
 
     public function __construct(
         UserRepository $user,
@@ -27,21 +23,19 @@ class SimpleMarkdown extends Markdown
         bool           $singleLine)
     {
         parent::__construct($user, $page, $host);
-        if ($singleLine) {
-            $this->config = ['renderer' => ['soft_break' => "\n"]];
-        } else {
-            $this->config = ['renderer' => ['soft_break' => "<br>\n"]];
-        }
+        $this->singleLine = $singleLine;
     }
 
     public function parse(string $text): string
     {
-        $environment = new Environment(\array_merge($this->defaultConfig(), $this->config));
+        $environment = new Environment(['renderer' => [
+            'soft_break' => $this->singleLine ? "\n" : "<br>\n",
+        ]]);
         $environment->addExtension(new InlinesOnlyExtension());
         $environment->addExtension(new StrikethroughExtension());
         $environment->addExtension(new MentionExtension($this->user));
         $environment->addExtension(new AutolinkExtension());
-        $environment->addExtension(new InternalLinkExtension($this->page));
+        $environment->addExtension(new InternalLinkExtension($this->page, $this->host));
         $environment->addInlineParser(new WikiLinksInlineParser($this->page), 100);
         $converter = new MarkdownConverter($environment);
         return $converter->convert($text);

@@ -4,27 +4,18 @@ namespace Coyote\Services\Parser\Extensions;
 use Coyote\Repositories\Eloquent\PageRepository;
 use League\CommonMark\Environment\EnvironmentBuilderInterface;
 use League\CommonMark\Event\DocumentParsedEvent;
-use League\CommonMark\Extension\ConfigurableExtensionInterface;
-use League\Config\ConfigurationBuilderInterface;
-use Nette\Schema\Expect;
+use League\CommonMark\Extension\ExtensionInterface;
 
-class InternalLinkExtension implements ConfigurableExtensionInterface
+class InternalLinkExtension implements ExtensionInterface
 {
-    public function __construct(private PageRepository $page)
+    public function __construct(private PageRepository $page, private string $host)
     {
-    }
-
-    public function configureSchema(ConfigurationBuilderInterface $builder): void
-    {
-        $builder->addSchema('internal_link', Expect::structure([
-            'internal_hosts' => Expect::type('string|string[]'),
-        ]));
     }
 
     public function register(EnvironmentBuilderInterface $environment): void
     {
         $environment->addEventListener(DocumentParsedEvent::class,
-            new InternalLinkProcessor($this->page, $environment->getConfiguration()),
+            new InternalLinkProcessor($this->page, $environment->getConfiguration(), $this->host),
             -50);
     }
 }

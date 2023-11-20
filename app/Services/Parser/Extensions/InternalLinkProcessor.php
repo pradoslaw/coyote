@@ -1,5 +1,4 @@
 <?php
-
 namespace Coyote\Services\Parser\Extensions;
 
 use Coyote\Page;
@@ -16,28 +15,28 @@ class InternalLinkProcessor
 
     public function __construct(
         private PageRepository         $page,
-        private ConfigurationInterface $config)
+        private ConfigurationInterface $config,
+        private string                 $host)
     {
     }
 
     public function __invoke(DocumentParsedEvent $event): void
     {
-        $internalHosts = $this->config->get('internal_link/internal_hosts');
         $document = $event->getDocument();
         foreach ($document->iterator() as $node) {
             if ($node instanceof Link) {
-                $this->setLinkNameOfPageTitle($node, $internalHosts);
+                $this->setLinkNameOfPageTitle($node);
             }
         }
     }
 
-    private function setLinkNameOfPageTitle(Link $link, mixed $internalHosts): void
+    private function setLinkNameOfPageTitle(Link $link): void
     {
         $components = parse_url($link->getUrl());
         if (!$this->isValidLink($components) || $this->linkHasLabel($link)) {
             return;
         }
-        if (!ExternalLinkProcessor::hostMatches($components['host'], $internalHosts)) {
+        if (!ExternalLinkProcessor::hostMatches($components['host'], $this->host)) {
             return;
         }
         $page = $this->pageByPath(urldecode($components['path']));

@@ -12,6 +12,7 @@ use League\CommonMark\Extension\Autolink\AutolinkExtension;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Extension\Strikethrough\StrikethroughExtension;
 use League\CommonMark\Extension\Table\TableExtension;
+use League\CommonMark\Extension\TaskList\TaskListExtension;
 use League\CommonMark\MarkdownConverter;
 
 class Markdown implements Parser
@@ -19,35 +20,25 @@ class Markdown implements Parser
     public function __construct(
         protected UserRepository $user,
         protected PageRepository $page,
-        private string           $host)
+        protected string         $host)
     {
     }
 
     public function parse(string $text): string
     {
-        $environment = new Environment($this->defaultConfig());
+        $environment = new Environment(['renderer' => ['soft_break' => "<br>\n"]]);
         $environment->addExtension(new CommonMarkCoreExtension());
         $environment->addExtension(new AutolinkExtension());
         $environment->addExtension(new StrikethroughExtension());
         $environment->addExtension(new TableExtension());
+        $environment->addExtension(new TaskListExtension());
         $environment->addExtension(new MentionExtension($this->user));
-        $environment->addExtension(new InternalLinkExtension($this->page));
+        $environment->addExtension(new InternalLinkExtension($this->page, $this->host));
         $environment->addInlineParser(new WikiLinksInlineParser($this->page), 100);
         $environment->addExtension(new YoutubeLinkExtension());
 
         $converter = new MarkdownConverter($environment);
-        return $converter->convert($text);
-    }
 
-    protected function defaultConfig(): array
-    {
-        return [
-            'renderer'      => [
-                'soft_break' => "<br>\n",
-            ],
-            'internal_link' => [
-                'internal_hosts' => $this->host,
-            ],
-        ];
+        return $converter->convert($text);
     }
 }
