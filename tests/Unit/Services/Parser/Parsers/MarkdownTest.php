@@ -198,12 +198,6 @@ class MarkdownTest extends TestCase
 
     public function testParseInternalLinks()
     {
-        $this->markdown->setConfig([
-            'internal_link' => [
-                'internal_hosts' => '4programmers.net',
-            ],
-        ]);
-
         $title = '"Kompetentność" uczących się programowania';
         $path = '/Forum/Spolecznosc/266098-kompetentnosc_uczacych_sie_programowania';
         $this->createPage($title, $path);

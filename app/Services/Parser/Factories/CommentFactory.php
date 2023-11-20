@@ -33,7 +33,8 @@ class CommentFactory extends AbstractFactory
             $parser->attach(new SimpleMarkdown(
                 $this->container[UserRepositoryInterface::class],
                 $this->container[PageRepositoryInterface::class],
-                request()->getHost()));
+                request()->getHost(),
+                singleLine: true));
             $parser->attach(new Purifier(['b', 'strong', 'i', 'u', 'em', 'del', 'a[href|title|data-user-id|class]', 'code']));
             $parser->attach(new Censore($this->container[WordRepositoryInterface::class]));
 

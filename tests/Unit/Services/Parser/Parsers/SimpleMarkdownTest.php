@@ -9,13 +9,21 @@ class SimpleMarkdownTest extends \Tests\TestCase
 {
     public function testDoNotChangeLineBreaks()
     {
-        $markdown = new SimpleMarkdown($this->app[UserRepository::class], $this->app[PageRepository::class], 'host');
+        $markdown = new SimpleMarkdown(
+            $this->app[UserRepository::class],
+            $this->app[PageRepository::class],
+            'host',
+            singleLine: true);
         $this->assertIdentity($markdown, "one\ntwo\nthree\n");
     }
 
     public function testAutolinkExtension()
     {
-        $markdown = new SimpleMarkdown($this->app[UserRepository::class], $this->app[PageRepository::class], 'host');
+        $markdown = new SimpleMarkdown(
+            $this->app[UserRepository::class],
+            $this->app[PageRepository::class],
+            'host',
+            singleLine: false);
         $link = 'https://docs.djangoproject.com/en/2.0/#first-steps';
         $this->assertEquals("<a href=\"$link\">$link</a>\n", $markdown->parse($link));
     }

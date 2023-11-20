@@ -17,8 +17,6 @@ use League\CommonMark\MarkdownConverter;
 
 class Markdown implements Parser
 {
-    protected array $config = [];
-
     public function __construct(
         protected UserRepository $user,
         protected PageRepository $page,
@@ -26,14 +24,9 @@ class Markdown implements Parser
     {
     }
 
-    public function setConfig(array $config): void
-    {
-        $this->config = $config;
-    }
-
     public function parse(string $text): string
     {
-        $environment = new Environment(array_merge($this->defaultConfig(), $this->config));
+        $environment = new Environment($this->defaultConfig());
         $environment->addExtension(new CommonMarkCoreExtension());
         $environment->addExtension(new AutolinkExtension());
         $environment->addExtension(new StrikethroughExtension());
