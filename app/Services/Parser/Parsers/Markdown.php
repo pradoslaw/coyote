@@ -19,7 +19,7 @@ use League\CommonMark\Extension\Table\TableExtension;
 use League\CommonMark\Extension\TaskList\TaskListExtension;
 use League\CommonMark\MarkdownConverter;
 
-class Markdown implements ParserInterface
+class Markdown implements Parser
 {
     protected array $config = [];
 

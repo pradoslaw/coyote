@@ -4,7 +4,7 @@ namespace Coyote\Services\Parser\Parsers;
 
 use TRegx\CleanRegex\Pattern;
 
-class Prism implements ParserInterface
+class Prism implements Parser
 {
     const ALIAS = [
         'asm'    => 'asm6502',

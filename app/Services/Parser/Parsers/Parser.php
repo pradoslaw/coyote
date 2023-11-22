@@ -1,8 +1,7 @@
 <?php
-
 namespace Coyote\Services\Parser\Parsers;
 
-interface ParserInterface
+interface Parser
 {
     public function parse(string $text): string;
 }

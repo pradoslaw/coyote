@@ -5,7 +5,7 @@ namespace Coyote\Services\Parser\Parsers;
 use HTMLPurifier;
 use HTMLPurifier_Config;
 
-class Purifier implements ParserInterface
+class Purifier implements Parser
 {
     private HTMLPurifier_Config $config;
 

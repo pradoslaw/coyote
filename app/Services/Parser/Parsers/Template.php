@@ -4,7 +4,7 @@ namespace Coyote\Services\Parser\Parsers;
 
 use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
 
-class Template implements ParserInterface
+class Template implements Parser
 {
     const TEMPLATE_REGEXP = "{{Template:(.*?)(\|(.*))*}}";
 
