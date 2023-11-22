@@ -6,7 +6,6 @@ use Coyote\User;
 use Faker\Factory;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Dusk\Browser;
-use Tests\DuskTestCase;
 
 class UserAccountTest extends DuskTestCase
 {

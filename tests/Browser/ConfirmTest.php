@@ -2,12 +2,9 @@
 
 namespace Tests\Browser;
 
-use Coyote\Mail\EmailConfirmation;
 use Coyote\User;
 use Faker\Factory;
-use Illuminate\Support\Facades\Mail;
 use Laravel\Dusk\Browser;
-use Tests\DuskTestCase;
 
 class ConfirmTest extends DuskTestCase
 {

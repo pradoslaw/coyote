@@ -7,7 +7,6 @@ use Coyote\User;
 use Faker\Factory;
 use Illuminate\Foundation\Testing\WithFaker;
 use Laravel\Dusk\Browser;
-use Tests\DuskTestCase;
 
 class MicroblogTest extends DuskTestCase
 {

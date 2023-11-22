@@ -5,9 +5,8 @@ namespace Tests\Browser;
 use Coyote\Currency;
 use Coyote\Firm;
 use Coyote\User;
-use Laravel\Dusk\Browser;
-use Tests\DuskTestCase;
 use Faker\Factory;
+use Laravel\Dusk\Browser;
 
 class JobPostingTest extends DuskTestCase
 {

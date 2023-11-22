@@ -4,9 +4,8 @@ namespace Tests\Browser;
 
 use Carbon\Carbon;
 use Coyote\User;
-use Tests\DuskTestCase;
-use Laravel\Dusk\Browser;
 use Faker\Factory;
+use Laravel\Dusk\Browser;
 
 class RegisterTest extends DuskTestCase
 {

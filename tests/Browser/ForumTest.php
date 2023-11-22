@@ -7,7 +7,6 @@ use Coyote\Services\UrlBuilder;
 use Coyote\User;
 use Faker\Factory;
 use Laravel\Dusk\Browser;
-use Tests\DuskTestCase;
 
 class ForumTest extends DuskTestCase
 {

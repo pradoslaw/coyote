@@ -5,7 +5,6 @@ namespace Tests\Browser;
 use Coyote\User;
 use Faker\Factory;
 use Laravel\Dusk\Browser;
-use Tests\DuskTestCase;
 
 class LoginTest extends DuskTestCase
 {

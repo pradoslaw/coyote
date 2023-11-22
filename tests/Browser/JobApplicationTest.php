@@ -2,12 +2,10 @@
 
 namespace Tests\Browser;
 
-use Coyote\Currency;
 use Coyote\Job;
 use Illuminate\Foundation\Testing\WithFaker;
 use Laravel\Dusk\Browser;
 use Mpdf\Mpdf;
-use Tests\DuskTestCase;
 
 class JobApplicationTest extends DuskTestCase
 {

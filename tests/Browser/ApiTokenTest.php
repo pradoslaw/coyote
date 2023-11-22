@@ -5,7 +5,6 @@ namespace Tests\Browser;
 use Coyote\User;
 use Illuminate\Foundation\Testing\WithFaker;
 use Laravel\Dusk\Browser;
-use Tests\DuskTestCase;
 
 class ApiTokenTest extends DuskTestCase
 {

@@ -6,12 +6,10 @@ use Coyote\Country;
 use Coyote\Coupon;
 use Coyote\Firm;
 use Coyote\Job;
-use Coyote\Payment;
 use Coyote\Plan;
 use Faker\Factory;
 use Illuminate\Foundation\Testing\WithFaker;
 use Laravel\Dusk\Browser;
-use Tests\DuskTestCase;
 
 class PaymentTest extends DuskTestCase
 {
