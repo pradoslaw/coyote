@@ -7,7 +7,7 @@ use TRegx\CleanRegex\Pattern;
 use TRegx\SafeRegex\Exception\PregException;
 use TRegx\SafeRegex\preg;
 
-class Censore extends Parser implements ParserInterface
+class Censore extends HashParser implements ParserInterface
 {
     public function __construct(private WordRepository $word)
     {

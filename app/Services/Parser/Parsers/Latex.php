@@ -2,7 +2,7 @@
 
 namespace Coyote\Services\Parser\Parsers;
 
-class Latex extends Parser implements ParserInterface
+class Latex extends HashParser implements ParserInterface
 {
     public function parse(string $text): string
     {

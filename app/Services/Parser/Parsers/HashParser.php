@@ -1,13 +1,9 @@
 <?php
-
 namespace Coyote\Services\Parser\Parsers;
 
-abstract class Parser
+abstract class HashParser
 {
-    /**
-     * @var array
-     */
-    protected $hash = [];
+    protected array $hash = [];
 
     /**
      * @param string $text
@@ -101,13 +97,7 @@ abstract class Parser
         return $text;
     }
 
-    /**
-     * @param string $text
-     * @param int $start
-     * @param int $end
-     * @return string
-     */
-    protected function hashPart(string $text, int $start, int $end)
+    protected function hashPart(string $text, int $start, int $end): string
     {
         $uniqId = uniqid('', true);
         $length = $end - $start;

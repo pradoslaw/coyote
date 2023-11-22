@@ -4,7 +4,7 @@ namespace Coyote\Services\Parser\Parsers;
 
 use TRegx\CleanRegex\Pattern;
 
-class Context extends Parser implements ParserInterface
+class Context extends HashParser implements ParserInterface
 {
     const HEADLINE_REGEXP = '<h([1-6])>(.*?)</h\1>';
 

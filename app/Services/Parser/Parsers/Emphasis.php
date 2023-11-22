@@ -5,7 +5,7 @@ namespace Coyote\Services\Parser\Parsers;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Collective\Html\HtmlBuilder;
 
-class Emphasis extends Parser implements ParserInterface
+class Emphasis extends HashParser implements ParserInterface
 {
     const COLOR = '#B60016';
 

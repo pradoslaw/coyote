@@ -8,7 +8,7 @@ use TRegx\CleanRegex\Pattern;
 /**
  * Class Smilies
  */
-class Smilies extends Parser implements ParserInterface
+class Smilies extends HashParser implements ParserInterface
 {
     private $smilies = [
         ':)'        => 'smile.gif',
