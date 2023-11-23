@@ -2,12 +2,10 @@
 
 namespace Coyote\Services\Parser\Extensions;
 
-use Coyote\Services\Parser\Iframe;
 use League\CommonMark\Event\DocumentParsedEvent;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Link;
 use League\CommonMark\Extension\ExternalLink\ExternalLinkProcessor;
 use League\CommonMark\Node\Inline\AbstractInline;
-use League\CommonMark\Node\Inline\Text;
 use TRegx\CleanRegex\Exception\SubjectNotMatchedException;
 use TRegx\CleanRegex\Pattern;
 

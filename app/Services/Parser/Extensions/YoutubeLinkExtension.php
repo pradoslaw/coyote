@@ -2,7 +2,6 @@
 
 namespace Coyote\Services\Parser\Extensions;
 
-use Coyote\Services\Parser\Iframe;
 use League\CommonMark\Environment\EnvironmentBuilderInterface;
 use League\CommonMark\Event\DocumentParsedEvent;
 use League\CommonMark\Extension\ExtensionInterface;
