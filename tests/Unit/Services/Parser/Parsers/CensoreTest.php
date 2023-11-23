@@ -1,39 +1,33 @@
 <?php
-
 namespace Tests\Unit\Services\Parser\Parsers;
 
-use Tests\TestCase;
+use Coyote\Repositories\Eloquent\WordRepository;
+use Coyote\Services\Parser\Parsers\Censore;
 
-class CensoreTest extends TestCase
+class CensoreTest extends \Tests\TestCase
 {
-    /**
-     * @var \Coyote\Services\Parser\Parsers\Censore
-     */
-    protected $parser;
+    protected Censore $parser;
 
     protected function setUp(): void
     {
         parent::setUp();
-
-        $word = new \Coyote\Repositories\Eloquent\WordRepository(app());
-        $this->parser = new \Coyote\Services\Parser\Parsers\Censore($word);
+        $this->parser = new Censore(new WordRepository(app()));
     }
 
+    /**
+     * @test
+     */
     public function testHashCodeTag()
     {
-        $text = '<code></code><code>kurczak';
+        $this->assertIdentity('<code></code><code>kurczak');
+        $this->assertIdentity('<code><code><code></code><code>kurczak');
+        $this->assertIdentity('</code></code><code>kurczak');
+    }
 
-        $result = $this->parser->parse($text);
-        $this->assertEquals($result, $text);
-
-        $text = '<code><code><code></code><code>kurczak';
-
-        $result = $this->parser->parse($text);
-        $this->assertEquals($result, $text);
-
-        $text = '</code></code><code>kurczak';
-
-        $result = $this->parser->parse($text);
-        $this->assertEquals($result, $text);
+    private function assertIdentity(string $content): void
+    {
+        $this->assertSame(
+            $this->parser->parse($content),
+            $content);
     }
 }

@@ -1,20 +1,46 @@
 <?php
-
 namespace Tests\Unit\Services\Parser\Parsers;
 
 use Coyote\Services\Parser\Parsers\Smilies;
-use Tests\TestCase;
 
-class SmiliesTest extends TestCase
+class SmiliesTest extends \Tests\TestCase
 {
-    // tests
-    public function testParseSmilies()
+    /**
+     * @test
+     */
+    public function test()
     {
         $parser = new Smilies();
+        $this->assertSame('<img class="img-smile" alt=":)" title=":)" src="/img/smilies/smile.gif">', $parser->parse(':)'));
+    }
 
-        $this->assertMatchesRegularExpression('/<img class="img-smile" alt="\:\)" title="\:\)" src=\"\/img\/smilies\/smile\.gif\">/', $parser->parse(':)'));
-        $this->assertMatchesRegularExpression('/<p><img class="img-smile" alt="\:\)" title="\:\)" src="\/img\/smilies\/smile.gif"><\/p>/', $parser->parse('<p>:)</p>'));
-        $this->assertMatchesRegularExpression('/\(\:\)\)/', $parser->parse('(:))'));
-        $this->assertEquals('admin:)', $parser->parse('admin:)'));
+    /**
+     * @test
+     */
+    public function smileInParenthesis()
+    {
+        $this->assertIdentity(new Smilies(), '(:))');
+    }
+
+    /**
+     * @test
+     */
+    public function smileInParagraph()
+    {
+        $parser = new Smilies();
+        $this->assertSame('<p><img class="img-smile" alt=":)" title=":)" src="/img/smilies/smile.gif"></p>', $parser->parse('<p>:)</p>'));
+    }
+
+    /**
+     * @test
+     */
+    public function smileAfterWord()
+    {
+        $this->assertIdentity(new Smilies(), 'admin:)');
+    }
+
+    private function assertIdentity(Smilies $parser, string $text): void
+    {
+        $this->assertEquals($text, $parser->parse($text));
     }
 }
