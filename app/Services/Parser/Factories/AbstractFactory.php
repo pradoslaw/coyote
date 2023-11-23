@@ -65,7 +65,7 @@ abstract class AbstractFactory
             return $this->cache->get($key);
         }
 
-        /** @var \Coyote\Services\Parser\Container $parser */
+        /** @var \Coyote\Services\Parser\CompositeParser $parser */
         $parser = $closure();
         $text = $parser->parse($text);
 

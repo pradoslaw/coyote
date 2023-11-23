@@ -3,7 +3,7 @@
 namespace Coyote\Services\Parser\Factories;
 
 use Coyote\Repositories\Contracts\WordRepositoryInterface;
-use Coyote\Services\Parser\Container;
+use Coyote\Services\Parser\CompositeParser;
 use Coyote\Services\Parser\Parsers\Censore;
 use Coyote\Services\Parser\Parsers\Purifier;
 
@@ -19,7 +19,7 @@ class JobFactory extends AbstractFactory
     {
         start_measure('parsing', 'Parsing job data...');
 
-        $parser = new Container();
+        $parser = new CompositeParser();
 
         $text = $this->cache($text, function () use ($parser) {
             $parser->attach(new Purifier());

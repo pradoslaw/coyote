@@ -5,7 +5,7 @@ namespace Coyote\Services\Parser\Factories;
 use Coyote\Repositories\Contracts\PageRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Repositories\Contracts\WordRepositoryInterface;
-use Coyote\Services\Parser\Container;
+use Coyote\Services\Parser\CompositeParser;
 use Coyote\Services\Parser\Parsers\Censore;
 use Coyote\Services\Parser\Parsers\Emphasis;
 use Coyote\Services\Parser\Parsers\Purifier;
@@ -47,7 +47,7 @@ class CommentFactory extends AbstractFactory
 
         $this->cache->setId(class_basename($this) . $this->userId);
 
-        $parser = new Container();
+        $parser = new CompositeParser();
 
         $text = $this->cache($text, function () use ($parser) {
             $parser->attach(new SimpleMarkdown($this->app[UserRepositoryInterface::class], $this->app[PageRepositoryInterface::class]));

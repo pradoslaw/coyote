@@ -4,7 +4,7 @@ namespace Coyote\Services\Parser\Factories;
 
 use Coyote\Repositories\Contracts\PageRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
-use Coyote\Services\Parser\Container;
+use Coyote\Services\Parser\CompositeParser;
 use Coyote\Services\Parser\Parsers\Prism;
 use Coyote\Services\Parser\Parsers\Markdown;
 use Coyote\Services\Parser\Parsers\Purifier;
@@ -22,7 +22,7 @@ class PmFactory extends AbstractFactory
     {
         start_measure('parsing', 'Parsing private message...');
 
-        $parser = new Container();
+        $parser = new CompositeParser();
 
         // we don't want to cache user's private messages
         $parser->attach(new Markdown($this->app[UserRepositoryInterface::class], $this->app[PageRepositoryInterface::class]));

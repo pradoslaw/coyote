@@ -5,7 +5,7 @@ namespace Coyote\Services\Parser\Factories;
 use Coyote\Repositories\Contracts\PageRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Repositories\Contracts\WordRepositoryInterface;
-use Coyote\Services\Parser\Container;
+use Coyote\Services\Parser\CompositeParser;
 use Coyote\Services\Parser\Parsers\Censore;
 use Coyote\Services\Parser\Parsers\Prism;
 use Coyote\Services\Parser\Parsers\Latex;
@@ -25,7 +25,7 @@ class PostFactory extends AbstractFactory
     {
         start_measure('parsing', 'Parsing post...');
 
-        $parser = new Container();
+        $parser = new CompositeParser();
 
         $text = $this->cache($text, function () use ($parser) {
             $parser->attach((new Markdown($this->app[UserRepositoryInterface::class], $this->app[PageRepositoryInterface::class])));

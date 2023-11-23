@@ -1,10 +1,9 @@
 <?php
-
 namespace Coyote\Services\Parser;
 
 use Coyote\Services\Parser\Parsers\Parser;
 
-final class Container
+class CompositeParser
 {
     /**
      * @var Parser[]
