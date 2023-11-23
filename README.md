@@ -1,8 +1,6 @@
 # Coyote
 
-[![StyleCI](https://styleci.io/repos/30256872/shield)](https://styleci.io/repos/30256872)
 [![Build Status](https://travis-ci.org/adam-boduch/coyote.svg?branch=master)](https://travis-ci.org/adam-boduch/coyote)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/adam-boduch/coyote/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/adam-boduch/coyote/?branch=master)
 
 Coyote to nazwa systemu obsługującego serwis [4programmers.net].
 
