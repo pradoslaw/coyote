@@ -22,26 +22,13 @@ class CommentFactory extends AbstractFactory
     protected array $htmlTags = ['b', 'strong', 'i', 'u', 'em', 'del', 'a[href|title|data-user-id|class]', 'code'];
     protected ?int $userId = null;
 
-    /**
-     * Set comment's author ID.
-     *
-     * @param int $userId
-     * @return $this
-     */
     public function setUserId(int $userId): static
     {
         $this->userId = $userId;
-
         return $this;
     }
 
-    /**
-     * Parse comment
-     *
-     * @param string $text
-     * @return string
-     */
-    public function parse(string $text) : string
+    public function parse(string $text): string
     {
         start_measure('parsing', get_class($this));
 
@@ -51,10 +38,7 @@ class CommentFactory extends AbstractFactory
 
         $text = $this->cache($text, function () use ($parser) {
             $parser->attach(new SimpleMarkdown($this->app[UserRepositoryInterface::class], $this->app[PageRepositoryInterface::class]));
-
-            $parser->attach(
-                (new Purifier())->set('HTML.Allowed', implode(',', $this->htmlTags))
-            );
+            $parser->attach(new Purifier($this->htmlTags));
             $parser->attach(new Censore($this->app[WordRepositoryInterface::class]));
 
             if (!empty($this->userId)) {

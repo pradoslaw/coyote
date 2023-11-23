@@ -1,5 +1,4 @@
 <?php
-
 namespace Coyote\Services\Parser\Factories;
 
 use Coyote\Repositories\Contracts\PageRepositoryInterface;
@@ -25,10 +24,7 @@ class SigFactory extends AbstractFactory
             $markdown = new SimpleMarkdown($this->app[UserRepositoryInterface::class], $this->app[PageRepositoryInterface::class]);
             $markdown->setConfig(['renderer' => ['soft_break' => "<br>\n"]]);
             $parser->attach($markdown);
-
-            $parser->attach(
-                (new Purifier())->set('HTML.Allowed', implode(',', $this->htmlTags))
-            );
+            $parser->attach(new Purifier($this->htmlTags));
             $parser->attach(new Censore($this->app[WordRepositoryInterface::class]));
 
             return $parser;

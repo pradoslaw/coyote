@@ -1,5 +1,4 @@
 <?php
-
 namespace Coyote\Services\Parser\Parsers;
 
 use HTMLPurifier;
@@ -9,22 +8,17 @@ class Purifier implements Parser
 {
     private HTMLPurifier_Config $config;
 
-    public function __construct()
+    public function __construct(array $overrideAllowedHtml = null)
     {
-        // Create a new configuration object
         $config = HTMLPurifier_Config::createDefault();
         $config->autoFinalize = false;
-
         $config->loadArray(config('purifier'));
 
         $this->config = HTMLPurifier_Config::inherit($config);
         $this->config->autoFinalize = false;
-    }
-
-    public function set(string $key, string | bool | array $value): self
-    {
-        $this->config->set($key, $value);
-        return $this;
+        if ($overrideAllowedHtml !== null) {
+            $this->config->set('HTML.Allowed', implode(',', $overrideAllowedHtml));
+        }
     }
 
     public function parse(string $text): string
@@ -32,9 +26,10 @@ class Purifier implements Parser
         $def = $this->config->getHTMLDefinition(true);
         $def->addAttribute('a', 'data-user-id', 'Number');
         $def->addAttribute('iframe', 'allowfullscreen', 'Bool');
-        $mark = $def->addElement('mark', 'Inline', 'Inline', 'Common', []);
+
+        $mark = $def->addElement('mark', 'Inline', 'Inline', 'Common');
         $mark->excludes = ['mark' => true];
 
-        return (new HTMLPurifier())->purify($text, $this->config);
+        return (new HTMLPurifier)->purify($text, $this->config);
     }
 }
