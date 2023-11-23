@@ -29,8 +29,8 @@ class WikiFactory extends AbstractFactory
             $allowedTags[] = 'ul[class]';
             $allowedTags[] = 'h1';
 
-            $parser->attach(new Template($this->app[WikiRepositoryInterface::class]));
-            $parser->attach(new Markdown($this->app[UserRepositoryInterface::class], $this->app[PageRepositoryInterface::class]));
+            $parser->attach(new Template($this->container[WikiRepositoryInterface::class]));
+            $parser->attach(new Markdown($this->container[UserRepositoryInterface::class], $this->container[PageRepositoryInterface::class]));
             $parser->attach(new Latex());
             $parser->attach(new Purifier($allowedTags));
             $parser->attach(new Context());

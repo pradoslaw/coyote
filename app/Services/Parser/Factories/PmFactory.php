@@ -25,7 +25,7 @@ class PmFactory extends AbstractFactory
         $parser = new CompositeParser();
 
         // we don't want to cache user's private messages
-        $parser->attach(new Markdown($this->app[UserRepositoryInterface::class], $this->app[PageRepositoryInterface::class]));
+        $parser->attach(new Markdown($this->container[UserRepositoryInterface::class], $this->container[PageRepositoryInterface::class]));
         $parser->attach(new Purifier());
         $parser->attach(new Prism());
 

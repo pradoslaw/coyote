@@ -37,13 +37,13 @@ class CommentFactory extends AbstractFactory
         $parser = new CompositeParser();
 
         $text = $this->cache($text, function () use ($parser) {
-            $parser->attach(new SimpleMarkdown($this->app[UserRepositoryInterface::class], $this->app[PageRepositoryInterface::class]));
+            $parser->attach(new SimpleMarkdown($this->container[UserRepositoryInterface::class], $this->container[PageRepositoryInterface::class]));
             $parser->attach(new Purifier($this->htmlTags));
-            $parser->attach(new Censore($this->app[WordRepositoryInterface::class]));
+            $parser->attach(new Censore($this->container[WordRepositoryInterface::class]));
 
             if (!empty($this->userId)) {
                 $parser->attach(
-                    (new Emphasis($this->app[UserRepositoryInterface::class]))
+                    (new Emphasis($this->container[UserRepositoryInterface::class]))
                         ->setUserId($this->userId)
                         ->setAbility(self::PERMISSION)
                 );

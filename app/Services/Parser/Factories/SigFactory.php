@@ -21,11 +21,11 @@ class SigFactory extends AbstractFactory
         $parser = new CompositeParser();
 
         $text = $this->cache($text, function () use ($parser): CompositeParser {
-            $markdown = new SimpleMarkdown($this->app[UserRepositoryInterface::class], $this->app[PageRepositoryInterface::class]);
+            $markdown = new SimpleMarkdown($this->container[UserRepositoryInterface::class], $this->container[PageRepositoryInterface::class]);
             $markdown->setConfig(['renderer' => ['soft_break' => "<br>\n"]]);
             $parser->attach($markdown);
             $parser->attach(new Purifier($this->htmlTags));
-            $parser->attach(new Censore($this->app[WordRepositoryInterface::class]));
+            $parser->attach(new Censore($this->container[WordRepositoryInterface::class]));
 
             return $parser;
         });

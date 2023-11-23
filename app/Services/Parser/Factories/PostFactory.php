@@ -28,10 +28,10 @@ class PostFactory extends AbstractFactory
         $parser = new CompositeParser();
 
         $text = $this->cache($text, function () use ($parser) {
-            $parser->attach((new Markdown($this->app[UserRepositoryInterface::class], $this->app[PageRepositoryInterface::class])));
+            $parser->attach((new Markdown($this->container[UserRepositoryInterface::class], $this->container[PageRepositoryInterface::class])));
             $parser->attach(new Latex());
             $parser->attach(new Purifier());
-            $parser->attach(new Censore($this->app[WordRepositoryInterface::class]));
+            $parser->attach(new Censore($this->container[WordRepositoryInterface::class]));
             $parser->attach(new Prism());
 
             return $parser;

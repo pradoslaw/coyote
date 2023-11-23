@@ -23,7 +23,7 @@ class JobFactory extends AbstractFactory
 
         $text = $this->cache($text, function () use ($parser) {
             $parser->attach(new Purifier());
-            $parser->attach(new Censore($this->app[WordRepositoryInterface::class]));
+            $parser->attach(new Censore($this->container[WordRepositoryInterface::class]));
 
             return $parser;
         });
