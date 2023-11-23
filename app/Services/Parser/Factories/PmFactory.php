@@ -29,7 +29,7 @@ class PmFactory extends AbstractFactory
         $parser->attach(new Purifier());
         $parser->attach(new Prism());
 
-        if ($this->isSmiliesAllowed()) {
+        if ($this->smiliesAllowed()) {
             $parser->attach(new Smilies());
         }
 

@@ -21,7 +21,7 @@ class JobFactory extends AbstractFactory
 
         $parser = new CompositeParser();
 
-        $text = $this->cache($text, function () use ($parser) {
+        $text = $this->parseAndCache($text, function () use ($parser) {
             $parser->attach(new Purifier());
             $parser->attach(new Censore($this->container[WordRepositoryInterface::class]));
 

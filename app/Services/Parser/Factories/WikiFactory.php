@@ -20,7 +20,7 @@ class WikiFactory extends AbstractFactory
 
         $parser = new CompositeParser();
 
-        $text = $this->cache($text, function () use ($parser) {
+        $text = $this->parseAndCache($text, function () use ($parser) {
             $allowedTags = explode(',', config('purifier')['HTML.Allowed']);
             unset($allowedTags['ul']);
 

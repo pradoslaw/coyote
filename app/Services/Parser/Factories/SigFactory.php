@@ -20,7 +20,7 @@ class SigFactory extends AbstractFactory
 
         $parser = new CompositeParser();
 
-        $text = $this->cache($text, function () use ($parser): CompositeParser {
+        $text = $this->parseAndCache($text, function () use ($parser): CompositeParser {
             $markdown = new SimpleMarkdown($this->container[UserRepositoryInterface::class], $this->container[PageRepositoryInterface::class]);
             $markdown->setConfig(['renderer' => ['soft_break' => "<br>\n"]]);
             $parser->attach($markdown);
@@ -30,7 +30,7 @@ class SigFactory extends AbstractFactory
             return $parser;
         });
 
-        if ($this->isSmiliesAllowed()) {
+        if ($this->smiliesAllowed()) {
             $parser->attach(new Smilies());
             $text = $parser->parse($text);
         }

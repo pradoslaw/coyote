@@ -22,12 +22,12 @@ abstract class AbstractFactory
 
     abstract public function parse(string $text): string;
 
-    public function isSmiliesAllowed(): bool
+    public function smiliesAllowed(): bool
     {
         return $this->auth->check() && $this->auth->user()->allow_smilies;
     }
 
-    public function cache(string $text, callable $closure): string
+    public function parseAndCache(string $text, callable $closure): string
     {
         $key = $this->cache->key($text);
 

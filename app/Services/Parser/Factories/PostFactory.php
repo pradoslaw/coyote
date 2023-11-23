@@ -27,7 +27,7 @@ class PostFactory extends AbstractFactory
 
         $parser = new CompositeParser();
 
-        $text = $this->cache($text, function () use ($parser) {
+        $text = $this->parseAndCache($text, function () use ($parser) {
             $parser->attach((new Markdown($this->container[UserRepositoryInterface::class], $this->container[PageRepositoryInterface::class])));
             $parser->attach(new Latex());
             $parser->attach(new Purifier());
@@ -37,7 +37,7 @@ class PostFactory extends AbstractFactory
             return $parser;
         });
 
-        if ($this->isSmiliesAllowed()) {
+        if ($this->smiliesAllowed()) {
             $parser->attach(new Smilies());
             $text = $parser->parse($text);
         }

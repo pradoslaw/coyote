@@ -36,7 +36,7 @@ class CommentFactory extends AbstractFactory
 
         $parser = new CompositeParser();
 
-        $text = $this->cache($text, function () use ($parser) {
+        $text = $this->parseAndCache($text, function () use ($parser) {
             $parser->attach(new SimpleMarkdown($this->container[UserRepositoryInterface::class], $this->container[PageRepositoryInterface::class]));
             $parser->attach(new Purifier($this->htmlTags));
             $parser->attach(new Censore($this->container[WordRepositoryInterface::class]));
@@ -52,7 +52,7 @@ class CommentFactory extends AbstractFactory
             return $parser;
         });
 
-        if ($this->isSmiliesAllowed()) {
+        if ($this->smiliesAllowed()) {
             $parser->attach(new Smilies());
             $text = $parser->parse($text);
         }
