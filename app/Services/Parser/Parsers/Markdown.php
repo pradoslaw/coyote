@@ -21,7 +21,8 @@ class Markdown implements Parser
 
     public function __construct(
         protected UserRepository $user,
-        protected PageRepository $page)
+        protected PageRepository $page,
+        private string           $host)
     {
     }
 
@@ -53,7 +54,7 @@ class Markdown implements Parser
                 'soft_break' => "<br>\n",
             ],
             'internal_link' => [
-                'internal_hosts' => request()->getHost(),
+                'internal_hosts' => $this->host,
             ],
             'mentions'      => [
                 'basic'    => [

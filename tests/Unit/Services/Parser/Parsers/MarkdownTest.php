@@ -3,6 +3,8 @@
 namespace Tests\Unit\Services\Parser\Parsers;
 
 use Coyote\Page;
+use Coyote\Repositories\Contracts\PageRepositoryInterface;
+use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Services\Parser\Parsers\Markdown;
 use Coyote\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -12,19 +14,17 @@ class MarkdownTest extends TestCase
 {
     use DatabaseTransactions;
 
-    /**
-     * @var Markdown
-     */
-    protected $markdown;
+    private Markdown $markdown;
 
     public function setUp(): void
     {
         parent::setUp();
-
-        $this->markdown = $this->app[Markdown::class];
+        $this->markdown = new Markdown(
+            $this->app[UserRepositoryInterface::class],
+            $this->app[PageRepositoryInterface::class],
+            '4programmers.net');
     }
 
-    // tests
     public function testParseUserName()
     {
         $input = $this->markdown->parse('@');
@@ -200,8 +200,8 @@ class MarkdownTest extends TestCase
     {
         $this->markdown->setConfig([
             'internal_link' => [
-                'internal_hosts' => '4programmers.net'
-            ]
+                'internal_hosts' => '4programmers.net',
+            ],
         ]);
 
         $title = '"Kompetentność" uczących się programowania';
@@ -297,7 +297,7 @@ class MarkdownTest extends TestCase
     {
         $now = new \DateTime('now');
         Page::forceCreate([
-            'title' => $title, 'path' => $path, 'created_at' => $now, 'updated_at' => $now
+            'title' => $title, 'path' => $path, 'created_at' => $now, 'updated_at' => $now,
         ]);
     }
 

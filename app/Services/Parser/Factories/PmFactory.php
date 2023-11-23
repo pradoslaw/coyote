@@ -16,7 +16,10 @@ class PmFactory extends AbstractFactory
         start_measure('parsing', 'Parsing private message...');
 
         $parser = new CompositeParser();
-        $parser->attach(new Markdown($this->container[UserRepositoryInterface::class], $this->container[PageRepositoryInterface::class]));
+        $parser->attach(new Markdown(
+            $this->container[UserRepositoryInterface::class],
+            $this->container[PageRepositoryInterface::class],
+            request()->getHost()));
         $parser->attach(new Purifier());
         $parser->attach(new Prism());
         if ($this->smiliesAllowed()) {

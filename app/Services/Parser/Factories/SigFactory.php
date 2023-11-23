@@ -19,7 +19,10 @@ class SigFactory extends AbstractFactory
         $parser = new CompositeParser();
 
         $text = $this->parseAndCache($text, function () use ($parser): CompositeParser {
-            $markdown = new SimpleMarkdown($this->container[UserRepositoryInterface::class], $this->container[PageRepositoryInterface::class]);
+            $markdown = new SimpleMarkdown(
+                $this->container[UserRepositoryInterface::class],
+                $this->container[PageRepositoryInterface::class],
+                request()->getHost());
             $markdown->setConfig(['renderer' => ['soft_break' => "<br>\n"]]);
             $parser->attach($markdown);
             $parser->attach(new Purifier(['b', 'strong', 'i', 'em', 'del', 'a[href|title|data-user-id|class]', 'code', 'br']));
