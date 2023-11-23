@@ -43,7 +43,7 @@ abstract class AbstractFactory
             $this->cache->put($key, $text);
         }
 
-        $parser->detach();
+        $parser->removeAll();
 
         return $text;
     }

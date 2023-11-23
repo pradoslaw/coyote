@@ -5,23 +5,14 @@ use Coyote\Services\Parser\Parsers\Parser;
 
 class CompositeParser
 {
-    /**
-     * @var Parser[]
-     */
-    private $parsers = [];
+    private array $parsers = [];
 
-    /**
-     * @param Parser $parser
-     */
-    public function attach(Parser $parser)
+    public function attach(Parser $parser): void
     {
         $this->parsers[] = $parser;
     }
 
-    /**
-     * Remove all parsers from container
-     */
-    public function detach()
+    public function removeAll(): void
     {
         $this->parsers = [];
     }
@@ -31,7 +22,6 @@ class CompositeParser
         foreach ($this->parsers as $parser) {
             $text = $parser->parse($text);
         }
-
         return $text;
     }
 }
