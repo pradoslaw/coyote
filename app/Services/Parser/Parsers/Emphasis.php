@@ -4,7 +4,7 @@ namespace Coyote\Services\Parser\Parsers;
 use Collective\Html\HtmlBuilder;
 use Coyote\Repositories\Eloquent\UserRepository;
 
-class Emphasis extends HashParser implements Parser
+class Emphasis implements Parser
 {
     public function __construct(
         private int            $userId,

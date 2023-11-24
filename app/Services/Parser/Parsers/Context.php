@@ -7,16 +7,13 @@ class Context extends HashParser implements Parser
 {
     public function parse(string $text): string
     {
-        if (strpos($text, '{{CONTENT}}') === false) {
+        if (!\str_contains($text, '{{CONTENT}}')) {
             return $text;
         }
-        $text = $this->hashBlock($text, ['code', 'a']);
-        $text = $this->hashInline($text, 'img');
-        $text = $this->parseHashed($text);
-        return $this->unhash($text);
+        return parent::parse($text);
     }
 
-    private function parseHashed(string $text): string
+    protected function parseHashed(string $text): string
     {
         $pattern = Pattern::of('<h([1-6])>(.*?)</h\1>');
         $headlines = '';

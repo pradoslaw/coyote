@@ -1,15 +1,11 @@
 <?php
-
 namespace Coyote\Services\Parser\Parsers;
 
 class Latex extends HashParser implements Parser
 {
-    public function parse(string $text): string
+    protected function parseHashed(string $text): string
     {
-        $text = $this->hashBlock($text, ['code', 'a']);
-        $text = $this->hashInline($text, 'img');
-
-        $text = preg_replace_callback(
+        return \preg_replace_callback(
             "#<tex>(.*?)</tex>#si",
             function ($match) {
                 return sprintf(
@@ -20,9 +16,5 @@ class Latex extends HashParser implements Parser
             },
             $text
         );
-
-        $text = $this->unhash($text);
-
-        return $text;
     }
 }

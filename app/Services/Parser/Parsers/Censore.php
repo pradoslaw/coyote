@@ -12,15 +12,7 @@ class Censore extends HashParser implements Parser
     {
     }
 
-    public function parse(string $text): string
-    {
-        $text = $this->hashBlock($text, ['code', 'a']);
-        $text = $this->hashInline($text, 'img');
-        $text = $this->parseHashed($text);
-        return $this->unhash($text);
-    }
-
-    private function parseHashed(string $text): string|array
+    protected function parseHashed(string $text): string
     {
         static $result;
 

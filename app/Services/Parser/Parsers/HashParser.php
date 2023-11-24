@@ -5,6 +5,16 @@ abstract class HashParser
 {
     protected array $hash = [];
 
+    public function parse(string $text): string
+    {
+        $text = $this->hashBlock($text, ['code', 'a']);
+        $text = $this->hashInline($text, 'img');
+        $text = $this->parseHashed($text);
+        return $this->unhash($text);
+    }
+
+    abstract protected function parseHashed(string $text): string;
+
     /**
      * @param string $text
      * @param array|string $element
