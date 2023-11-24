@@ -45,7 +45,8 @@ class RegisterController extends Controller
                 'password'             => bcrypt($request->input('password')),
                 'guest_id'             => $request->session()->get('guest_id'),
                 'marketing_agreement'  => $request->input('marketing_agreement'),
-                'newsletter_agreement' => true
+                'newsletter_agreement' => true,
+                'allow_smilies'        => true,
             ]);
 
             app(MailQueue::class)
