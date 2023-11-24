@@ -156,7 +156,11 @@
     max-width: 100%;
     object-fit: contain;
   }
-
+  
+  img.img-smile {
+    width: 18px;
+  }
+  
   table {
     @extend .table-responsive-sm;
   }
@@ -169,6 +173,12 @@
     pre {
       opacity: 0.5;
     }
+  }
+}
+
+.post-comment {
+  img.img-smile {
+    width: 18px;
   }
 }
 

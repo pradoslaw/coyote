@@ -48,6 +48,10 @@
   img:not(.img-smile) {
     @include img-fluid();
   }
+
+  img.img-smile {
+    width: 18px;
+  }
 }
 
 .microblog-opg {

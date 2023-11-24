@@ -117,6 +117,10 @@ article > header {
     @include img-fluid;
   }
 
+  img.img-smile {
+    width: 18px;
+  }
+
   @include link-color-darker;
 }
 

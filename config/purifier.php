@@ -22,7 +22,7 @@ return [
 
     // 'HTML.Doctype'                => 'XHTML 1.0 Strict', // przez ta linie usuwana byla zawartosc znacznika <blockquote>
 
-    'HTML.Allowed'                   => 'b,strong,i,em,u,a[href|title|data-user-id|class],p,br,ul,ol[start],li,span[style|title|class],img[width|height|alt|src|title],sub,sup,pre,code[class],div[class],kbd,mark,h1,h2,h3,h4,h5,h6,blockquote,del,table[summary|class],thead,tbody,tr,th[abbr],td[abbr],hr,dfn,var,samp,iframe[src|class|allowfullscreen]',
+    'HTML.Allowed'                   => 'b,strong,i,em,u,a[href|title|data-user-id|class],p,br,ul,ol[start],li,span[style|title|class],img[width|height|alt|src|title|class],sub,sup,pre,code[class],div[class],kbd,mark,h1,h2,h3,h4,h5,h6,blockquote,del,table[summary|class],thead,tbody,tr,th[abbr],td[abbr],hr,dfn,var,samp,iframe[src|class|allowfullscreen]',
     'CSS.AllowedProperties'          => 'font,font-size,font-weight,font-style,font-family,text-decoration,color,background-color,background-image,text-align',
     'AutoFormat.AutoParagraph'       => false,
     'AutoFormat.RemoveEmpty'         => false, // nie usuwaj pustych atrybutow typu <a></a>

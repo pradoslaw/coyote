@@ -41,6 +41,10 @@
     @include img-fluid;
     filter: blur(.5rem);
   }
+
+  img.img-smile {
+    width: 18px;
+  }
 }
 
 .qa-metadata {

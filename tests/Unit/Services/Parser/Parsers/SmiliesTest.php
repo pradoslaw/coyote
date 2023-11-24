@@ -11,7 +11,7 @@ class SmiliesTest extends \Tests\TestCase
     public function test()
     {
         $parser = new Smilies();
-        $this->assertSame('<img class="img-smile" alt=":)" title=":)" src="/img/smilies/smile.gif">', $parser->parse(':)'));
+        $this->assertSame("<img class='img-smile' alt='😀' title='Smiling Face' src='https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f600.svg'>", $parser->parse(':)'));
     }
 
     /**
@@ -28,7 +28,7 @@ class SmiliesTest extends \Tests\TestCase
     public function smileInParagraph()
     {
         $parser = new Smilies();
-        $this->assertSame('<p><img class="img-smile" alt=":)" title=":)" src="/img/smilies/smile.gif"></p>', $parser->parse('<p>:)</p>'));
+        $this->assertSame("<p><img class='img-smile' alt='😀' title='Smiling Face' src='https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f600.svg'></p>", $parser->parse('<p>:)</p>'));
     }
 
     /**

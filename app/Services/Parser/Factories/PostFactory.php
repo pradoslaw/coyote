@@ -19,10 +19,10 @@ class PostFactory extends AbstractFactory
         start_measure('parsing', 'Parsing post...');
         $parser = new CompositeParser();
         $text = $this->parseAndCache($text, function () use ($parser) {
-            $parser->attach((new Markdown(
+            $parser->attach(new Markdown(
                 $this->container[UserRepositoryInterface::class],
                 $this->container[PageRepositoryInterface::class],
-                request()->getHost())));
+                request()->getHost()));
             $parser->attach(new Latex());
             $parser->attach(new Purifier());
             $parser->attach(new Censore($this->container[WordRepositoryInterface::class]));
