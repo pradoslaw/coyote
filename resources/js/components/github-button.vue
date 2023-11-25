@@ -49,6 +49,12 @@ export default {
 };
 </script>
 
+<!--
+ This style is only working, because we
+ initialize outside of router. Inside router
+ for some unknown reasons, <style> in .vue files
+ doesn't work. 
+-->
 <style lang="scss">
 .github-button {
   box-sizing: content-box;
