@@ -18,6 +18,7 @@ use Coyote\Services\Forum\Tracker;
 use Coyote\Services\Forum\TreeBuilder\Builder;
 use Coyote\Services\Forum\TreeBuilder\JsonDecorator;
 use Coyote\Services\Forum\TreeBuilder\ListDecorator;
+use Coyote\Services\Parser\Extensions\Emoji;
 use Coyote\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -119,6 +120,7 @@ class TopicController extends BaseController
                 'poll'         => $topic->poll ? (new PollResource($topic->poll))->resolve($request) : null,
                 'is_writeable' => $gate->allows('write', $forum) && $gate->allows('write', $topic),
                 'all_forums'   => $allForums,
+                'emojis'       => Emoji::all(),
                 'user_forums'  => $userForums,
                 'description'  => excerpt(array_first($posts['data'])['text'], 100),
                 'flags'        => $this->flags($forum),

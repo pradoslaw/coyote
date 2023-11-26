@@ -1,5 +1,8 @@
 <template>
-  <div :class="{'is-invalid': isInvalid}" class="editor">
+  <div :class="{'is-invalid': isInvalid}" class="editor" style="position:relative">
+    <div style="position:absolute; right:5px;">
+      <vue-emoji-picker :emojis="emojis"/>
+    </div>
     <vue-tabs @click="switchTab" :items="tabs" :current-tab="tabs.indexOf(currentTab)" type="pills" class="mb-2">
       <div v-if="isContent" class="btn-toolbar ml-auto">
         <div class="btn-group d-inline mr-2 ml-2 mt-1" role="group" aria-label="...">
@@ -82,7 +85,7 @@
 </template>
 
 <script lang="ts">
-import {Asset} from '@/types/models';
+import {Asset, Emojis} from '@/types/models';
 import {EditorState, link} from "@riddled/4play/index.js";
 import axios from 'axios';
 import Prism from 'prismjs';
@@ -99,6 +102,7 @@ import VueTabs from '../tabs.vue';
 import VueThumbnail from "../thumbnail.vue";
 import VueEditor from './editor.vue';
 import VueHelp from './help.vue';
+import VueEmojiPicker from './emoji-picker.vue';
 
 const CONTENT = 'Treść';
 const PREVIEW = 'Podgląd';
@@ -112,6 +116,7 @@ const PREVIEW = 'Podgląd';
     'vue-error': VueError,
     'vue-editor': VueEditor,
     'vue-help': VueHelp,
+    'vue-emoji-picker': VueEmojiPicker,
   },
 })
 export default class VueMarkdown extends Vue {
@@ -257,6 +262,9 @@ export default class VueMarkdown extends Vue {
 
   @Prop({default: false})
   readonly isInvalid!: boolean;
+
+  @Prop()
+  readonly emojis?: Emojis;
 
   @Emit('save')
   save() {

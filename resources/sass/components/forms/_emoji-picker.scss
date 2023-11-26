@@ -1,0 +1,98 @@
+.emoji-picker {
+  position: relative;
+  z-index: 2;
+  width: 430px;
+  // We can't easily relate emoji width to
+  // the panel width, because there's no 
+  // way to subtract scrollbar width in pure CSS.
+
+  .card {
+    padding: 0.75rem 0 0.75rem 0.75rem;
+
+    .panel {
+      position: relative;
+      padding-right: 1.35rem;
+
+      .footer {
+        box-sizing: border-box;
+        padding: 0.25rem 0.5rem;
+        width: 100%;
+        background-color: #fbfbfb;
+        border: 1px solid #eee;
+        overflow: hidden;
+        border-radius: 0.25rem 0.5rem;
+
+        .emoji-details {
+          display: flex;
+          justify-content: space-between;
+          flex-wrap: wrap;
+
+          p.name {
+            margin: 0;
+          }
+
+          code.id {
+            margin-left: auto;
+            font-weight: bold;
+          }
+        }
+
+        $height: 43px;
+
+        > div {
+          min-height: $height;
+        }
+
+        small {
+          font-size: 0.85em;
+          color: darkGray;
+
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          font-family: monospace;
+        }
+
+        .placeholder {
+          text-align: center;
+          margin: 0;
+          line-height: $height;
+          color: lightGray;
+        }
+      }
+    }
+
+    .scroll {
+      overflow-y: scroll;
+      height: 285px;
+      padding-right: 0.5rem;
+
+      .category {
+        &:last-child {
+          margin-bottom: 10px;
+        }
+
+        h5 {
+          margin: 0.5rem 0 0.25rem;
+          color: #666666;
+          font-weight: bold;
+          font-size: 0.85em;
+          border-bottom: 1px solid #e0e0e0;
+        }
+
+        img.emoji {
+          $emojiSize: 32px;
+          box-sizing: border-box;
+          width: $emojiSize;
+          height: $emojiSize;
+          padding: 4px;
+          border-radius: 4px;
+          cursor: pointer;
+
+          &:hover {
+            background-color: #e5e5e5;
+          }
+        }
+      }
+    }
+  }
+}

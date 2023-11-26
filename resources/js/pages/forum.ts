@@ -28,6 +28,7 @@ declare global {
     forum: Models.Forum;
     poll: Models.Poll;
     tags: Models.Tag[];
+    emojis: Models.Emojis;
     showStickyCheckbox: boolean;
     reasons: string[];
     allForums: Models.Forum[];

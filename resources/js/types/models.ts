@@ -393,3 +393,26 @@ export interface Guide {
 export interface Notification {
   id: string;
 }
+
+export interface Emojis {
+  categories: Category[],
+  subcategories: Subcategory[],
+  emoticons: { [key: string]: Emoji }
+}
+
+interface Category {
+  name: string,
+  subcategories: string[]
+}
+
+interface Subcategory {
+  name: string;
+  emojis: string[]
+}
+
+export interface Emoji {
+  id: string;
+  name: string;
+  keywords: string[];
+  unified: string;
+}

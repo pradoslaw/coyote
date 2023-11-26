@@ -18,6 +18,11 @@ class Emoji
         return null;
     }
 
+    public static function all(): array
+    {
+        return self::resourceFile();
+    }
+
     private static function resourceFile(): array
     {
         static $resourceFile;

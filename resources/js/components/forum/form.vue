@@ -32,6 +32,7 @@
         :prompt-url="`/completion/prompt/users/${topic.id || ''}`"
         :error="errors['text']"
         :assets.sync="post.assets"
+        :emojis="emojis"
         preview-url="/Forum/Preview"
         @save="save"
         @cancel="cancel"
@@ -142,7 +143,7 @@ import store from "../../store";
 import VueButton from '../forms/button.vue';
 import VueTagsInline from '../forms/tags-inline.vue';
 import VueMarkdown from '../../components/forms/markdown.vue';
-import {Post, Tag, Topic} from "@/types/models";
+import {Emojis, Post, Tag, Topic} from "@/types/models";
 import {mapGetters, mapMutations, mapState} from "vuex";
 import axios from 'axios';
 import VueError from '../forms/error.vue';
@@ -188,6 +189,7 @@ export default class VueForm extends Vue {
   readonly topic!: Topic;
   readonly totalPages!: number;
   readonly currentPage!: number;
+  emojis?: Emojis;
 
   @Ref('markdown')
   readonly markdown!: VueMarkdown;
@@ -219,10 +221,10 @@ export default class VueForm extends Vue {
   }
 
   created() {
+    this.emojis = window.emojis;
     if (this.exists) {
       return;
     }
-
     this.post.text = this.$loadDraft(this.draftKey) as string;
     this.$watch('post.text', newValue => this.$saveDraft(this.draftKey, newValue));
   }
