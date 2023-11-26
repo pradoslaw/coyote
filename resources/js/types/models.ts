@@ -150,7 +150,7 @@ export interface PostComment {
   user: User;
   editable?: boolean;
   is_read?: boolean;
-  is_editing? :boolean;
+  is_editing?: boolean;
   url: string;
 }
 
