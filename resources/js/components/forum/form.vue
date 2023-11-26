@@ -16,7 +16,9 @@
             <li v-for="topic in similar">
               <a :href="topic.url">
                 <strong>{{ topic.title }}</strong>
-                <small><vue-timeago :datetime="topic.last_post_created_at"></vue-timeago></small>
+                <small>
+                  <vue-timeago :datetime="topic.last_post_created_at"/>
+                </small>
               </a>
             </li>
           </perfect-scrollbar>
@@ -33,13 +35,13 @@
         preview-url="/Forum/Preview"
         @save="save"
         @cancel="cancel"
-        ref="markdown"
-      >
+        ref="markdown">
         <template v-if="isFirstPost" v-slot:options>
           <a href="javascript:" data-bs-target="#js-poll-form" data-bs-toggle="collapse" class="ml-1 small text-muted">
-            <i class="fa fa-poll-h"></i>
-
-            <span class="d-none d-sm-inline">Ankieta</span>
+            <i class="fa fa-poll-h"/>
+            <span class="d-none d-sm-inline">
+              Ankieta
+            </span>
           </a>
         </template>
 
@@ -61,8 +63,7 @@
                   ref="poll-items"
                   class="input-sm"
                   @keydown.enter.native.prevent="addItem"
-                  placeholder="Naciśnij Enter, aby dodać kolejną pozycję"
-                ></vue-text>
+                  placeholder="Naciśnij Enter, aby dodać kolejną pozycję"/>
 
                 <vue-error :message="errors[`poll.items.${index}.text`]"></vue-error>
               </div>
@@ -74,8 +75,7 @@
 
             <div class="col-md-6">
               <vue-text v-model="poll.max_items" :is-invalid="`poll.max_items` in errors" class="input-sm"></vue-text>
-              <vue-error :message="errors['poll.max_items']"></vue-error>
-
+              <vue-error :message="errors['poll.max_items']"/>
               <span class="form-text text-muted">Minimalnie jedna możliwa odpowiedź w ankiecie.</span>
             </div>
           </div>
@@ -93,7 +93,9 @@
 
           <div v-if="poll.id" class="form-group row">
             <div class="col-md-6 offset-md-4">
-              <button @click="resetDefaults" class="btn btn-danger btn-sm">Usuń ankietę</button>
+              <button @click="resetDefaults" class="btn btn-danger btn-sm">
+                Usuń ankietę
+              </button>
             </div>
           </div>
         </div>
@@ -104,10 +106,8 @@
               :tags="topic.tags"
               :class="{'is-invalid': 'tags' in errors}"
               :placeholder="requireTag ? 'Minimum 1 tag jest wymagany': '...inny? kliknij, aby wybrać tag'"
-              @change="toggleTag"
-            ></vue-tags-inline>
-
-            <vue-error :message="errors['tags']"></vue-error>
+              @change="toggleTag"/>
+            <vue-error :message="errors['tags']"/>
           </div>
         </template>
       </vue-markdown>
@@ -135,186 +135,184 @@
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
-  import Component from "vue-class-component";
-  import {Ref, Prop, Emit, ProvideReactive} from "vue-property-decorator";
-  import store from "../../store";
-  import VueButton from '../forms/button.vue';
-  import VueTagsInline from '../forms/tags-inline.vue';
-  import VueMarkdown from '../../components/forms/markdown.vue';
-  import { Post, Topic, Tag } from "@/types/models";
-  import { mapMutations, mapState, mapGetters } from "vuex";
-  import axios from 'axios';
-  import VueError from '../forms/error.vue';
-  import VueText from '../forms/text.vue';
-  import Prism from 'prismjs';
-  import {default as PerfectScrollbar} from '../perfect-scrollbar';
+import Vue from 'vue';
+import Component from "vue-class-component";
+import {Emit, Prop, ProvideReactive, Ref} from "vue-property-decorator";
+import store from "../../store";
+import VueButton from '../forms/button.vue';
+import VueTagsInline from '../forms/tags-inline.vue';
+import VueMarkdown from '../../components/forms/markdown.vue';
+import {Post, Tag, Topic} from "@/types/models";
+import {mapGetters, mapMutations, mapState} from "vuex";
+import axios from 'axios';
+import VueError from '../forms/error.vue';
+import VueText from '../forms/text.vue';
+import Prism from 'prismjs';
+import {default as PerfectScrollbar} from '../perfect-scrollbar.js';
 
-  @Component({
-    name: 'forum-form',
-    store,
-    components: {
-      'vue-button': VueButton,
-      'vue-markdown': VueMarkdown,
-      'vue-tags-inline': VueTagsInline,
-      'vue-error': VueError,
-      'vue-text': VueText,
-      'perfect-scrollbar': PerfectScrollbar
-    },
-    computed: {
-      ...mapGetters('topics', ['topic']),
-      ...mapState('poll', ['poll']),
-      ...mapGetters('posts', ['totalPages', 'currentPage'])
-    },
-    watch: {
-      poll: {
-        handler(poll) {
-          store.commit('poll/init', poll);
-        },
-        deep: true
-      }
-    },
-    methods: {
-      ...mapMutations('poll', ['removeItem', 'resetDefaults']),
-      ...mapMutations('posts', ['deleteAttachment', 'changePage'])
-    },
-    inject: []
-  })
-  export default class VueForm extends Vue {
-    isProcessing = false;
-    currentTab: number = 0;
-    errors = {};
-    similar: Topic[] = [];
-    readonly topic!: Topic;
-    readonly totalPages!: number;
-    readonly currentPage!: number;
+@Component({
+  name: 'forum-form',
+  store,
+  components: {
+    'vue-button': VueButton,
+    'vue-markdown': VueMarkdown,
+    'vue-tags-inline': VueTagsInline,
+    'vue-error': VueError,
+    'vue-text': VueText,
+    'perfect-scrollbar': PerfectScrollbar
+  },
+  computed: {
+    ...mapGetters('topics', ['topic']),
+    ...mapState('poll', ['poll']),
+    ...mapGetters('posts', ['totalPages', 'currentPage'])
+  },
+  watch: {
+    poll: {
+      handler(poll) {
+        store.commit('poll/init', poll);
+      },
+      deep: true
+    }
+  },
+  methods: {
+    ...mapMutations('poll', ['removeItem', 'resetDefaults']),
+    ...mapMutations('posts', ['deleteAttachment', 'changePage'])
+  },
+  inject: []
+})
+export default class VueForm extends Vue {
+  isProcessing = false;
+  currentTab: number = 0;
+  errors = {};
+  similar: Topic[] = [];
+  readonly topic!: Topic;
+  readonly totalPages!: number;
+  readonly currentPage!: number;
 
-    @Ref('markdown')
-    readonly markdown!: VueMarkdown;
+  @Ref('markdown')
+  readonly markdown!: VueMarkdown;
 
-    @Ref('attachment')
-    readonly attachment!: HTMLInputElement;
+  @Ref('attachment')
+  readonly attachment!: HTMLInputElement;
 
-    @Prop({default: false})
-    readonly showTitleInput!: boolean;
+  @Prop({default: false})
+  readonly showTitleInput!: boolean;
 
-    @Prop({default: false})
-    readonly showTagsInput!: boolean;
+  @Prop({default: false})
+  readonly showTagsInput!: boolean;
 
-    @Prop({default: false})
-    readonly showStickyCheckbox!: boolean;
+  @Prop({default: false})
+  readonly showStickyCheckbox!: boolean;
 
-    @Prop({default: false})
-    readonly requireTag!: boolean;
+  @Prop({default: false})
+  readonly requireTag!: boolean;
 
-    @Prop({default: () => []})
-    @ProvideReactive('popularTags')
-    readonly popularTags!: string[];
+  @Prop({default: () => []})
+  @ProvideReactive('popularTags')
+  readonly popularTags!: string[];
 
-    @Prop({required: true})
-    post!: Post;
+  @Prop({required: true})
+  post!: Post;
 
-    @Emit()
-    cancel() { }
+  @Emit()
+  cancel() {
+  }
 
-    created() {
-      if (this.exists) {
-        return;
-      }
-
-      this.post.text = this.$loadDraft(this.draftKey) as string;
-      this.$watch('post.text', newValue => this.$saveDraft(this.draftKey, newValue));
+  created() {
+    if (this.exists) {
+      return;
     }
 
-    async save() {
-      await this.validateTags();
+    this.post.text = this.$loadDraft(this.draftKey) as string;
+    this.$watch('post.text', newValue => this.$saveDraft(this.draftKey, newValue));
+  }
 
-      this.isProcessing = true;
-      this.errors = {};
+  async save() {
+    await this.validateTags();
 
-      await this.lastPage();
+    this.isProcessing = true;
+    this.errors = {};
 
-      store.dispatch('posts/save', this.post)
-        .then(result => {
-          this.$emit('save', result.data);
+    await this.lastPage();
 
-          this.$nextTick(() => {
-            // remove local storage data after clearing input
-            this.$removeDraft(this.draftKey);
+    store.dispatch('posts/save', this.post)
+      .then(result => {
+        this.$emit('save', result.data);
 
-            Prism.highlightAll();
-          });
-        })
-        .catch(err => {
-          if (err.response?.status !== 422) {
-            return;
-          }
+        this.$nextTick(() => {
+          // remove local storage data after clearing input
+          this.$removeDraft(this.draftKey);
+          Prism.highlightAll();
+        });
+      })
+      .catch(err => {
+        if (err.response?.status !== 422) {
+          return;
+        }
+        this.errors = err.response?.data.errors;
+      })
+      .finally(() => this.isProcessing = false);
+  }
 
-          this.errors = err.response?.data.errors;
-        })
-        .finally(() => this.isProcessing = false);
+  openDialog() {
+    (this.$refs.attachment as HTMLInputElement).click();
+  }
+
+  toggleTag(tag: Tag) {
+    store.commit('topics/toggleTag', {topic: this.topic, tag});
+  }
+
+  findSimilar() {
+    if (!this.topic.title) {
+      return;
     }
+    axios.get('/completion/similar', {params: {q: this.topic.title}}).then(response => this.similar = response.data.hits);
+  }
 
-    openDialog() {
-      (this.$refs.attachment as HTMLInputElement).click();
-    }
+  addItem() {
+    store.commit('poll/addItem');
 
-    toggleTag(tag: Tag) {
-      store.commit('topics/toggleTag', { topic: this.topic, tag });
-    }
+    // @ts-ignore
+    this.$nextTick(() => this.$refs['poll-items'][this.$refs['poll-items'].length - 1].$el.focus());
+  }
 
-    findSimilar() {
-      if (!this.topic.title) {
-        return;
-      }
+  async lastPage() {
+    if (!this.exists && this.currentPage < this.totalPages) {
+      history.pushState({page: this.totalPages}, '', `?page=${this.totalPages}`);
 
-      axios.get('/completion/similar', { params: { q: this.topic.title }}).then(response => this.similar = response.data.hits);
-    }
-
-    addItem() {
-      store.commit('poll/addItem');
-
-      // @ts-ignore
-      this.$nextTick(() => this.$refs['poll-items'][this.$refs['poll-items'].length - 1].$el.focus());
-    }
-
-    async lastPage() {
-      if (!this.exists && this.currentPage < this.totalPages) {
-        history.pushState({ page: this.totalPages }, '', `?page=${this.totalPages}`);
-
-        await store.dispatch('posts/changePage', this.totalPages);
-      }
-    }
-
-    async validateTags() {
-      if (!this.topic.tags?.length || !this.isFirstPost) {
-        return;
-      }
-
-      this.isProcessing = true;
-      const response = await axios.post('/Forum/Tag/Validation', { tags: this.topic.tags.map(tag => tag.name) });
-
-      this.isProcessing = false;
-
-      if (!response.data.warning) {
-        return;
-      }
-
-      await this.$confirm({ message: response.data.message, title: 'Czy to tag techniczny?', okLabel: 'Tak, jestem pewien' });
-
-      return true;
-    }
-
-    private get isFirstPost() {
-      return !this.topic || this.topic.first_post_id === this.post.id;
-    }
-
-    private get draftKey(): string {
-      return `topic-${this.topic.id ? this.topic.id : ''}`
-    }
-
-    private get exists(): boolean {
-      return this.post.id !== undefined;
+      await store.dispatch('posts/changePage', this.totalPages);
     }
   }
+
+  async validateTags() {
+    if (!this.topic.tags?.length || !this.isFirstPost) {
+      return;
+    }
+
+    this.isProcessing = true;
+    const response = await axios.post('/Forum/Tag/Validation', {tags: this.topic.tags.map(tag => tag.name)});
+
+    this.isProcessing = false;
+
+    if (!response.data.warning) {
+      return;
+    }
+
+    await this.$confirm({message: response.data.message, title: 'Czy to tag techniczny?', okLabel: 'Tak, jestem pewien'});
+
+    return true;
+  }
+
+  private get isFirstPost() {
+    return !this.topic || this.topic.first_post_id === this.post.id;
+  }
+
+  private get draftKey(): string {
+    return `topic-${this.topic.id ? this.topic.id : ''}`
+  }
+
+  private get exists(): boolean {
+    return this.post.id !== undefined;
+  }
+}
 </script>
