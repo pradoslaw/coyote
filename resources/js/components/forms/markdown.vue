@@ -88,13 +88,13 @@ import axios from 'axios';
 import Prism from 'prismjs';
 import Vue from 'vue';
 import Component from "vue-class-component";
-import {mixin as clickaway} from 'vue-clickaway';
+import {mixin as clickAway} from 'vue-clickaway';
 import {Emit, Prop, Ref, Watch} from "vue-property-decorator";
 import isImage from '../../libs/assets';
 import store from '../../store';
 import VueError from '../forms/error.vue';
 import VuePrompt from '../forms/prompt.vue';
-import {default as mixin} from '../mixins/form';
+import {default as formMixin} from '../mixins/form.js';
 import VueTabs from '../tabs.vue';
 import VueThumbnail from "../thumbnail.vue";
 import VueEditor from './editor.vue';
@@ -104,7 +104,7 @@ const CONTENT = 'Treść';
 const PREVIEW = 'Podgląd';
 
 @Component({
-  mixins: [clickaway, mixin],
+  mixins: [clickAway, formMixin],
   components: {
     'vue-prompt': VuePrompt,
     'vue-tabs': VueTabs,
@@ -306,7 +306,7 @@ export default class VueMarkdown extends Vue {
     this.buttons.indentLess.can = state.canIndent;
   }
 
-  autocomplete(nick) {
+  autocomplete(nick: string) {
     return store
       .dispatch('prompt/request', {value: nick, source: this.promptUrl})
       .then(users => users.map(user => ({
@@ -390,14 +390,14 @@ export default class VueMarkdown extends Vue {
     this.editor.indentLess()
   }
 
-  appendBlockQuote(username, postId, content) {
+  appendBlockQuote(username: string, postId: number, content: string) {
     const title = username + ' napisał(a)';
     const href = '/Forum/' + postId;
 
     this.editor.appendBlockQuote(`##### ${(link(title, href))}:\n${content}`);
   }
 
-  appendUserMention(username) {
+  appendUserMention(username: string) {
     this.editor.appendUserMention(username);
   }
 
