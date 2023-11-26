@@ -1,8 +1,5 @@
 <template>
-  <div :class="{'is-invalid': isInvalid}" class="editor" style="position:relative">
-    <div style="position:absolute; right:5px;">
-      <vue-emoji-picker :emojis="emojis"/>
-    </div>
+  <div :class="{'is-invalid': isInvalid}" class="editor">
     <vue-tabs @click="switchTab" :items="tabs" :current-tab="tabs.indexOf(currentTab)" type="pills" class="mb-2">
       <div v-if="isContent" class="btn-toolbar ml-auto">
         <div class="btn-group d-inline mr-2 ml-2 mt-1" role="group" aria-label="...">
@@ -13,55 +10,59 @@
             class="btn btn-sm btn-control"
             :title="button.can ? button.title : button.break"
             :style="{opacity: button.can ? '1.0' : '0.4', cursor: button.can ? 'pointer' : 'default'}">
-            <i :class="['fas fa-fw', button.icon]"></i>
+            <i :class="['fas fa-fw', button.icon]"/>
           </button>
         </div>
       </div>
     </vue-tabs>
 
-    <div v-show="isContent">
-      <div :class="['form-control', {'is-invalid': error !== null}]"
-           style="height:inherit; outline:none; box-shadow:none; border:none; padding-left:0; padding-right:0;">
-        <vue-editor
-          ref="editor"
-          v-model="valueLocal"
-          placeholder="Kliknij, aby dodać treść..."
-          :autocompleteSource="autocomplete"
-          v-paste:success="addAsset"
-          @submit="save"
-          @cancel="cancel"
-          @state="updateState"/>
+    <div style="position:relative">
+      <div v-show="isContent">
+        <div :class="['form-control', {'is-invalid': error !== null}]"
+             style="height:inherit; outline:none; box-shadow:none; border:none; padding-left:0; padding-right:0;">
+          <vue-editor
+            ref="editor"
+            v-model="valueLocal"
+            placeholder="Kliknij, aby dodać treść..."
+            :autocompleteSource="autocomplete"
+            v-paste:success="addAsset"
+            @submit="save"
+            @cancel="cancel"
+            @state="updateState"/>
+        </div>
+        <vue-error :message="error"/>
       </div>
-      <vue-error :message="error"></vue-error>
+
+      <div v-show="isPreview" v-html="previewHtml" class="preview post-content"/>
+
+      <div class="emoji-picker-container">
+        <div class="triangle"/>
+        <vue-emoji-picker :emojis="emojis"/>
+      </div>
     </div>
 
-    <div v-show="isPreview" v-html="previewHtml" class="preview post-content"></div>
-
-    <hr class="m-0">
-
-    <slot name="bottom"></slot>
+    <hr class="m-0"/>
+    <slot name="bottom"/>
 
     <div class="row no-gutters pt-1 pl-2 pr-2">
       <div class="small mr-auto">
         <template v-if="isProcessing">
-          <i class="fas fa-spinner fa-spin small"></i>
-
+          <i class="fas fa-spinner fa-spin small"/>
           <span class="small">{{ progress }}%</span>
         </template>
 
         <a v-else :aria-label="uploadTooltip" tabindex="-1" data-balloon-length="large" data-balloon-pos="up-left"
            data-balloon-nofocus href="javascript:" class="small text-muted" @click="chooseFile">
-          <i class="far fa-image"></i>
-
+          <i class="far fa-image"/>
           <span class="d-none d-sm-inline">Kliknij, aby dodać załącznik lub wklej ze schowka.</span>
         </a>
 
-        <slot name="options"></slot>
+        <slot name="options"/>
       </div>
 
       <div class="small ml-auto">
         <a href="#js-wiki-help" tabindex="-1" data-bs-toggle="collapse" class="small text-muted">
-          <i class="fa fab fa-markdown"/>
+          <i class="fab fa-markdown"/>
           Instrukcja obsługi Markdown
         </a>
       </div>
@@ -69,8 +70,13 @@
 
     <div v-if="assets.length" class="row pt-3 pb-3 pl-2 pr-2">
       <div v-for="item in assets" :key="item.id" class="col-sm-2">
-        <vue-thumbnail :url="item.url" @delete="deleteAsset(item)" @insert="insertAssetAtCaret(item)"
-                       :aria-label="item.name" data-balloon-pos="down" name="asset"></vue-thumbnail>
+        <vue-thumbnail
+          name="asset"
+          data-balloon-pos="down"
+          :url="item.url"
+          :aria-label="item.name"
+          @delete="deleteAsset(item)"
+          @insert="insertAssetAtCaret(item)"/>
       </div>
     </div>
 
@@ -80,7 +86,7 @@
       </div>
     </div>
 
-    <slot></slot>
+    <slot/>
   </div>
 </template>
 
@@ -225,6 +231,14 @@ export default class VueMarkdown extends Vue {
       break: null,
       icon: 'fa-indent'
     },
+    insertEmoji: {
+      click: () => {
+      },
+      can: false,
+      title: 'Dodaj emotikonę',
+      break: 'Dodanie tutaj emotikony mogłoby spowodować uszkodzenie składni',
+      icon: 'fa-smile-beam',
+    }
   };
 
   @Ref('editor')
@@ -312,6 +326,7 @@ export default class VueMarkdown extends Vue {
     this.buttons.key.can = state.canKey;
     this.buttons.indentMore.can = state.canIndent;
     this.buttons.indentLess.can = state.canIndent;
+    this.buttons.insertEmoji.can = true;
   }
 
   autocomplete(nick: string) {

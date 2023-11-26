@@ -1,36 +1,46 @@
 <template>
   <div class="emoji-picker">
     <div class="card card-body">
-      <div class="panel">
-        <input class="form-control" placeholder="Wyszukaj emoji..." v-model="searchPhrase"/>
-      </div>
-
-      <div class="scroll" @mouseleave="mouseLeave">
-        <div class="category" v-for="category in emojis.categories">
-          <h5>{{ category.name }}</h5>
-          <template v-for="name in category.subcategories">
-            <img
-                v-for="code in emojis.subcategories[name]"
-                v-show="visible(emojis.emoticons[code])"
-                class="emoji"
-                :src="url(emojis.emoticons[code])"
-                :title="emojis.emoticons[code].name"
-                :alt="emojis.emoticons[code].native"
-                @mouseover="mouseOver(emojis.emoticons[code])"/>
-          </template>
-        </div>
-      </div>
-
-      <div class="panel">
-        <div class="footer">
-          <div v-show="emoji">
-            <div class="emoji-details">
-              <p class="name">{{ emoji && emoji.name }}</p>
-              <code class="id">:{{ emoji && emoji.id }}:</code>
+      <div style="display:flex; flex-direction:column;">
+        <div class="emoji-grid">
+          <div class="emoji-scroll" @mouseleave="mouseLeave">
+            <div class="category" v-for="category in emojis.categories">
+              <h5>{{ category.name }}</h5>
+              <div class="category-emojis">
+                <template v-for="name in category.subcategories">
+                  <img
+                    v-for="code in emojis.subcategories[name]"
+                    v-show="visible(emojis.emoticons[code])"
+                    class="emoji"
+                    :src="url(emojis.emoticons[code])"
+                    :title="emojis.emoticons[code].name"
+                    :alt="emojis.emoticons[code].native"
+                    @mouseover="mouseOver(emojis.emoticons[code])"/>
+                </template>
+              </div>
             </div>
-            <small>{{ keywords(emoji) }}</small>
           </div>
-          <p v-show="!emoji" class="placeholder">Wybierz emoji</p>
+
+          <div class="emoji-preview-box">
+            <div v-show="emoji" class="emoji-preview">
+              <div class="emoji-name">
+                <p class="title">{{ emoji && emoji.name }}</p>
+                <code class="id">:{{ emoji && emoji.id }}:</code>
+              </div>
+              <small>{{ keywords(emoji) }}</small>
+            </div>
+            <p v-show="!emoji" class="emoji-placeholder">
+              Wybierz emoji
+            </p>
+          </div>
+        </div>
+
+        <div class="search-box">
+          <input class="form-control" v-model="searchPhrase" placeholder="Wyszukaj emoji..."/>
+          <button class="btn btn-primary" type="button">
+            <i class="fas fa-times"/>
+            Zamknij
+          </button>
         </div>
       </div>
     </div>
@@ -56,11 +66,11 @@ export default {
       return `:${emoji.id}:, ${emoji.name}`;
     },
     visible(emoji) {
-      if (emoji.id.includes(this.searchPhrase)) {
+      if (containsWords(emoji.id, this.searchSlug)) {
         return true;
       }
       for (const keyword of emoji.keywords) {
-        if (keyword.includes(this.searchPhrase)) {
+        if (containsWords(keyword, this.searchSlug)) {
           return true;
         }
       }
@@ -78,6 +88,15 @@ export default {
     mouseLeave() {
       this.emoji = null;
     }
+  },
+  computed: {
+    searchSlug() {
+      return this.searchPhrase.replaceAll(/[^a-z0-9]/gi, '');
+    }
   }
 };
+
+function containsWords(subject, searchPhrase) {
+  return subject.replaceAll(/[-_]/g, '').includes(searchPhrase);
+}
 </script>
