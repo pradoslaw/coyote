@@ -1,5 +1,5 @@
 <template>
-  <div class="emoji-picker">
+  <div class="emoji-picker" v-on-clickaway="blur">
     <div class="card card-body">
       <div style="display:flex; flex-direction:column;">
         <div class="emoji-grid">
@@ -15,7 +15,8 @@
                     :src="url(emojis.emoticons[code])"
                     :title="emojis.emoticons[code].name"
                     :alt="emojis.emoticons[code].native"
-                    @mouseover="mouseOver(emojis.emoticons[code])"/>
+                    @mouseover="mouseOver(emojis.emoticons[code])"
+                    @click="select(code)"/>
                 </template>
               </div>
             </div>
@@ -37,7 +38,7 @@
 
         <div class="search-box">
           <input class="form-control" v-model="searchPhrase" placeholder="Wyszukaj emoji..."/>
-          <button class="btn btn-primary" type="button">
+          <button class="btn btn-primary" type="button" ref="close-button" @click="close">
             <i class="fas fa-times"/>
             Zamknij
           </button>
@@ -48,7 +49,10 @@
 </template>
 
 <script>
+import {mixin as clickAway} from 'vue-clickaway';
+
 export default {
+  mixins: [clickAway],
   props: {
     emojis: {require: true},
   },
@@ -59,6 +63,17 @@ export default {
     };
   },
   methods: {
+    select(emoji) {
+      this.$emit('input', emoji);
+    },
+    blur(blurEvent) {
+      if (this.isDesktop()) {
+        this.$emit('blur', blurEvent);
+      }
+    },
+    close(closeEvent) {
+      this.$emit('close', closeEvent);
+    },
     url(emoji) {
       return 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/' + emoji.unified + '.svg';
     },
@@ -76,6 +91,9 @@ export default {
       }
       return false;
     },
+    clearSearchPhrase() {
+      this.searchPhrase = '';
+    },
     keywords(emoji) {
       if (emoji) {
         return emoji.keywords.map(keyword => '"' + keyword + '"').join(", ");
@@ -87,6 +105,14 @@ export default {
     },
     mouseLeave() {
       this.emoji = null;
+    },
+    isDesktop() {
+      const closeButton = this.$refs["close-button"];
+      if (closeButton) {
+        const style = window.getComputedStyle(closeButton);
+        return style.display === 'none';
+      }
+      return false;
     }
   },
   computed: {

@@ -63,11 +63,11 @@ export default class VueEditor extends Vue {
     }
   }
 
-  insertImage(href, title) {
+  insertImage(href: string, title: string) {
     this.editor!.insertImage(href, title);
   }
 
-  insertLink(href, title) {
+  insertLink(href: string, title: string) {
     this.editor!.insertLink(href, title);
   }
 
@@ -87,35 +87,35 @@ export default class VueEditor extends Vue {
     this.editor!.putStrikeThrough();
   }
 
-  insertBlockQuote(placeholder) {
+  insertBlockQuote(placeholder: string) {
     this.editor!.putBlockQuote(placeholder);
   }
 
-  makeLink(placeholder) {
+  makeLink(placeholder: string) {
     this.editor!.putLink(placeholder);
   }
 
-  makeImage(placeholder) {
+  makeImage(placeholder: string) {
     this.editor!.putImage(placeholder);
   }
 
-  makeKeyNotation(key) {
+  makeKeyNotation(key: string) {
     this.editor!.putKey(key);
   }
 
-  appendBlockQuote(content) {
+  appendBlockQuote(content: string) {
     this.editor!.appendBlockQuote(content);
   }
 
-  appendUserMention(username) {
+  appendUserMention(username: string) {
     this.editor!.appendUserMention(username);
   }
 
-  insertListOrdered(placeholder) {
+  insertListOrdered(placeholder: string) {
     this.editor!.putListOrdered(placeholder);
   }
 
-  insertListUnordered(placeholder) {
+  insertListUnordered(placeholder: string) {
     this.editor!.putListUnordered(placeholder);
   }
 
@@ -131,8 +131,12 @@ export default class VueEditor extends Vue {
     this.editor!.indentLess();
   }
 
-  addTable(header, placeholder) {
+  addTable(header: string, placeholder: string) {
     this.editor!.putTable(index => header + ' ' + (index + 1), placeholder);
+  }
+
+  insertEmoji(emojiName: string) {
+    this.editor!.insertEmoji(emojiName);
   }
 
   focus() {

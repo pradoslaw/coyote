@@ -35,9 +35,14 @@
 
       <div v-show="isPreview" v-html="previewHtml" class="preview post-content"/>
 
-      <div class="emoji-picker-container">
+      <div v-if="emojiPickerOpen" class="emoji-picker-container">
         <div class="triangle"/>
-        <vue-emoji-picker :emojis="emojis"/>
+        <vue-emoji-picker
+          ref="emoji-picker"
+          :emojis="emojis"
+          @input="insertEmoji"
+          @blur="blurEmojiPicker"
+          @close="closeEmojiPicker"/>
       </div>
     </div>
 
@@ -132,6 +137,7 @@ export default class VueMarkdown extends Vue {
   isProcessing = false;
   progress = 0;
   tabs: string[] = [CONTENT, PREVIEW];
+  emojiPickerOpen = false;
   buttons = {
     bold: {
       click: this.makeBold,
@@ -232,8 +238,7 @@ export default class VueMarkdown extends Vue {
       icon: 'fa-indent'
     },
     insertEmoji: {
-      click: () => {
-      },
+      click: this.toggleEmojiPicker,
       can: false,
       title: 'Dodaj emotikonę',
       break: 'Dodanie tutaj emotikony mogłoby spowodować uszkodzenie składni',
@@ -246,6 +251,9 @@ export default class VueMarkdown extends Vue {
 
   @Ref('search')
   readonly search!: HTMLInputElement;
+
+  @Ref('emoji-picker')
+  readonly emojiPicker!: any;
 
   @Prop()
   value!: string;
@@ -298,9 +306,9 @@ export default class VueMarkdown extends Vue {
 
   insertAssetAtCaret(asset: Asset) {
     if (isImage(asset.name!)) {
-      this.editor.insertImage(asset.url, asset.name);
+      this.editor.insertImage(asset.url, asset.name!);
     } else {
-      this.editor.insertLink(asset.url, asset.name);
+      this.editor.insertLink(asset.url, asset.name!);
     }
   }
 
@@ -326,7 +334,7 @@ export default class VueMarkdown extends Vue {
     this.buttons.key.can = state.canKey;
     this.buttons.indentMore.can = state.canIndent;
     this.buttons.indentLess.can = state.canIndent;
-    this.buttons.insertEmoji.can = true;
+    this.buttons.insertEmoji.can = state.canEmoji;
   }
 
   autocomplete(nick: string) {
@@ -413,6 +421,10 @@ export default class VueMarkdown extends Vue {
     this.editor.indentLess()
   }
 
+  insertEmoji(emoji: string) {
+    this.editor.insertEmoji(emoji);
+  }
+
   appendBlockQuote(username: string, postId: number, content: string) {
     const title = username + ' napisał(a)';
     const href = '/Forum/' + postId;
@@ -422,6 +434,37 @@ export default class VueMarkdown extends Vue {
 
   appendUserMention(username: string) {
     this.editor.appendUserMention(username);
+  }
+
+  toggleEmojiPicker() {
+    this.emojiPickerOpen = !this.emojiPickerOpen;
+    this.$nextTick(() => {
+      if (this.emojiPicker) {
+        this.emojiPicker.clearSearchPhrase();
+      }
+    });
+  }
+
+  blurEmojiPicker(event: Event) {
+    if (!this.isEmojiToggleControl(event.target as HTMLElement)) {
+      this.closeEmojiPicker();
+    }
+  }
+
+  closeEmojiPicker() {
+    this.emojiPickerOpen = false;
+  }
+
+  isEmojiToggleControl(element: HTMLElement) {
+    if (element.title === 'Dodaj emotikonę') {
+      return true;
+    }
+    if (element.parentElement) {
+      if (element.parentElement.title === 'Dodaj emotikonę') {
+        return true;
+      }
+    }
+    return false;
   }
 
   focus() {
