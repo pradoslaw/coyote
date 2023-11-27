@@ -83,7 +83,7 @@
 
 <script lang="ts">
 import {Asset} from '@/types/models';
-import {link} from "@riddled/4play/index.js";
+import {EditorState, link} from "@riddled/4play/index.js";
 import axios from 'axios';
 import Prism from 'prismjs';
 import Vue from 'vue';
@@ -289,7 +289,7 @@ export default class VueMarkdown extends Vue {
     }
   }
 
-  updateState(state) {
+  updateState(state: EditorState) {
     this.buttons.bold.can = state.canBold;
     this.buttons.italics.can = state.canItalics;
     this.buttons.underline.can = state.canUnderline;
@@ -421,7 +421,7 @@ export default class VueMarkdown extends Vue {
     });
   }
 
-  errorNotification(errorMessage) {
+  errorNotification(errorMessage: string) {
     this.$notify({type: 'error', text: errorMessage});
   }
 
