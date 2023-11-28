@@ -22,7 +22,10 @@
   <div class="row mt-4">
     <div class="col-12">
       <div class="box">
-        <h2 class="h4"><i class="fas fa-star fa-fw"></i> Co nowego na forum?</h2>
+        <h2 class="h4">
+          <i class="fas fa-star fa-fw"></i>
+          Co nowego na forum?
+        </h2>
       </div>
     </div>
   </div>
@@ -57,15 +60,24 @@
                       {% for topic in interesting %}
                         <div class="row">
                           <span class="col-sm-2 d-none d-sm-block">
-                              <strong class="text-nowrap">{{ topic.views }}</strong>
-                              <small class="text-nowrap">{{ declination(topic.views, ['wyświetlenie', 'wyświetlenia', 'wyświetleń'], true) }}</small>
+                            <strong class="text-nowrap">{{ topic.views }}</strong>
+                            <small class="text-nowrap">
+                              {{ declination(topic.views, ['wyświetlenie', 'wyświetlenia', 'wyświetleń'], true) }}
+                            </small>
                           </span>
 
                           <div class="col-sm-10 col-12">
-                            <a title="[{{ topic.last_post_created_at|format_date }}] {{ topic.title }}" href="{{ route('forum.topic', [topic.forum_slug, topic.id, topic.slug]) }}"
-                               class="title">{{ topic.title }}</a>
-                            <a href="{{ route('forum.category', [topic.forum_slug]) }}" class="category">{{ topic.forum }}</a>
-                            <small class="float-right">{{ topic.last_post_created_at|format_date }}</small>
+                            <a title="[{{ topic.last_post_created_at|format_date }}] {{ topic.title }}"
+                               href="{{ route('forum.topic', [topic.forum_slug, topic.id, topic.slug]) }}"
+                               class="title">
+                              {{ topic.title }}
+                            </a>
+                            <a href="{{ route('forum.category', [topic.forum_slug]) }}" class="category">
+                              {{ topic.forum }}
+                            </a>
+                            <small class="float-right">
+                              {{ topic.last_post_created_at|format_date }}
+                            </small>
                           </div>
                         </div>
                       {% endfor %}
@@ -75,15 +87,24 @@
                       {% for topic in newest %}
                         <div class="row">
                           <span class="col-sm-2 d-none d-sm-block">
-                              <strong class="text-nowrap">{{ topic.views }}</strong>
-                              <small class="text-nowrap">{{ declination(topic.views, ['wyświetlenie', 'wyświetlenia', 'wyświetleń'], true) }}</small>
+                            <strong class="text-nowrap">{{ topic.views }}</strong>
+                            <small class="text-nowrap">
+                              {{ declination(topic.views, ['wyświetlenie', 'wyświetlenia', 'wyświetleń'], true) }}
+                            </small>
                           </span>
 
                           <div class="col-sm-10 col-12">
-                            <a title="[{{ topic.last_post_created_at|format_date }}] {{ topic.title }}" href="{{ route('forum.topic', [topic.forum_slug, topic.id, topic.slug]) }}"
-                               class="title">{{ topic.title }}</a>
-                            <a href="{{ route('forum.category', [topic.forum_slug]) }}" class="category">{{ topic.forum }}</a>
-                            <small class="float-right">{{ topic.last_post_created_at|format_date }}</small>
+                            <a title="[{{ topic.last_post_created_at|format_date }}] {{ topic.title }}"
+                               href="{{ route('forum.topic', [topic.forum_slug, topic.id, topic.slug]) }}"
+                               class="title">
+                              {{ topic.title }}
+                            </a>
+                            <a href="{{ route('forum.category', [topic.forum_slug]) }}" class="category">
+                              {{ topic.forum }}
+                            </a>
+                            <small class="float-right">
+                              {{ topic.last_post_created_at|format_date }}
+                            </small>
                           </div>
                         </div>
                       {% endfor %}
@@ -97,7 +118,8 @@
                   <div class="overview">
                     {% for activity in activities %}
                       <div class="media">
-                        <span class="{{ activity.object }} d-none d-sm-block" title="{{ activity.headline|striptags|unescape }}"></span>
+                        <span class="{{ activity.object }} d-none d-sm-block" title="{{ activity.headline|striptags|unescape }}">
+                        </span>
 
                         <div class="d-none d-sm-block mr-2">
                           <a href="{{ route('profile', [activity.user_id]) }}">
@@ -107,7 +129,6 @@
                         <div class="media-body">
                           <p>{{ activity.headline|raw }}</p>
                           <small>{{ activity.created_at|format_date }}</small>
-
                           <strong>{{ activity.excerpt }}</strong>
                         </div>
                       </div>
@@ -122,10 +143,15 @@
       </section>
 
       <section id="js-microblog" class="box">
-        <h4><i class="far fa-comments fa-fw"></i> <a href="{{ route('microblog.home') }}">Popularne wpisy na mikroblogu</a></h4>
-
-        <vue-microblog v-for="microblog in microblogs" :key="microblog.id" :microblog="microblog" :wrap="true"></vue-microblog>
-
+        <h4>
+          <i class="far fa-comments fa-fw"></i>
+          <a href="{{ route('microblog.home') }}">
+            Popularne wpisy na mikroblogu
+          </a>
+        </h4>
+        <vue-microblog
+            v-for="microblog in microblogs" :key="microblog.id" :microblog="microblog"
+            :wrap="true"></vue-microblog>
         <vue-notifications position="bottom right"/>
       </section>
     </main>
@@ -135,16 +161,26 @@
         <div class="mb-4">
           {{ viewers|raw }}
         </div>
-
         {{ render_block('job_ads') }}
-
         <section class="box mt-4">
-          <h4><i class="fas fa-star fa-fw"></i> Reputacja użytkowników</h4>
+          <h4>
+            <i class="fas fa-star fa-fw"></i>
+            Reputacja użytkowników
+          </h4>
 
           <div id="reputation-tabs" class="nav nav-panel">
-            <a role="tab" data-bs-toggle="tab" href="#month" class="nav-item {{ settings['homepage.reputation'] == 0 ? 'active' }}"><span>W tym miesiącu</span></a>
-            <a role="tab" data-bs-toggle="tab" href="#year" class="nav-item {{ settings['homepage.reputation'] == 1 ? 'active' }}"><span>W tym roku</span></a>
-            <a role="tab" data-bs-toggle="tab" href="#total" class="nav-item {{ settings['homepage.reputation'] == 2 ? 'active' }}"><span>Ogólnie</span></a>
+            <a role="tab" data-bs-toggle="tab" href="#month"
+               class="nav-item {{ settings['homepage.reputation'] == 0 ? 'active' }}">
+              <span>W tym miesiącu</span>
+            </a>
+            <a role="tab" data-bs-toggle="tab" href="#year"
+               class="nav-item {{ settings['homepage.reputation'] == 1 ? 'active' }}">
+              <span>W tym roku</span>
+            </a>
+            <a role="tab" data-bs-toggle="tab" href="#total"
+               class="nav-item {{ settings['homepage.reputation'] == 2 ? 'active' }}">
+              <span>Ogólnie</span>
+            </a>
           </div>
 
           <div class="card card-default card-reputation tab-content">
@@ -159,11 +195,11 @@
                     </div>
 
                     <div class="media-body">
-                    <span class="mb-1 d-block">
-                      <a data-user-id="{{ item.id }}" href="{{ route('profile', [item.id]) }}" class="text-body">
-                        {{ item.name }}
-                      </a>
-                    </span>
+                      <span class="mb-1 d-block">
+                        <a data-user-id="{{ item.id }}" href="{{ route('profile', [item.id]) }}" class="text-body">
+                          {{ item.name }}
+                        </a>
+                      </span>
 
                       <div class="progress">
                         <div class="progress-bar" role="progressbar"
@@ -173,11 +209,11 @@
                              style="width: {{ item.percentage|round }}%;"></div>
 
                         <span class="rep">
-                        <strong>{{ item.reputation|number_format(0, '', ' ') }}</strong> 
-                        <small>
-                          {{ declination(item.reputation, ['punkt', 'punkty', 'punktów'], true) }}
-                        </small>
-                      </span>
+                          <strong>{{ item.reputation|number_format(0, '', ' ') }}</strong>
+                          <small>
+                            {{ declination(item.reputation, ['punkt', 'punkty', 'punktów'], true) }}
+                          </small>
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -190,9 +226,7 @@
             {% endfor %}
           </div>
         </section>
-
         {{ patronage|raw }}
-
         {{ whats_new|raw }}
       </aside>
     </div>

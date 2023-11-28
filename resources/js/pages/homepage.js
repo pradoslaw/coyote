@@ -1,13 +1,14 @@
+import axios from 'axios';
 import PerfectScrollbar from 'perfect-scrollbar';
 import Vue from "vue";
 import VueNotifications from "vue-notification";
-import VueMicroblog from "../components/microblog/microblog";
-import store from "../store";
 import {mapGetters} from "vuex";
-import axios from 'axios';
-import { default as LiveMixin } from './microblog/live';
-import VueModals from "@/plugins/modals";
-import VuePaste from '@/plugins/paste';
+
+import VueMicroblog from "../components/microblog/microblog";
+import VueModals from "../plugins/modals.ts";
+import VuePaste from '../plugins/paste.js';
+import store from "../store/index.ts";
+import {default as LiveMixin} from './microblog/live';
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 Vue.use(VueModals);
@@ -16,8 +17,8 @@ Vue.use(VuePaste, {url: '/assets'});
 new Vue({
   el: '#js-microblog',
   delimiters: ['${', '}'],
-  mixins: [ LiveMixin ],
-  components: { 'vue-microblog': VueMicroblog },
+  mixins: [LiveMixin],
+  components: {'vue-microblog': VueMicroblog},
   store,
   created() {
     Object.keys(window.microblogs).forEach(id => store.commit('microblogs/ADD', window.microblogs[id]));
@@ -39,17 +40,15 @@ function switchReputationTab(index) {
 }
 
 (function () {
-    new PerfectScrollbar(document.getElementById('stream'));
+  new PerfectScrollbar(document.getElementById('stream'));
 
-    let tabs = document.querySelectorAll('#forum-tabs .nav-link');
+  const forumTabs = document.querySelectorAll('#forum-tabs .nav-link');
+  for (let i = 0; i < forumTabs.length; i++) {
+    forumTabs[i].addEventListener('click', () => switchForumTab(i));
+  }
 
-    for (let i = 0; i < tabs.length; i++) {
-      tabs[i].addEventListener('click', () => switchForumTab(i));
-    }
-
-    tabs = document.querySelectorAll('#reputation-tabs .nav-item');
-
-    for (let i = 0; i < tabs.length; i++) {
-      tabs[i].addEventListener('click', () => switchReputationTab(i));
-    }
+  const reputationTabs = document.querySelectorAll('#reputation-tabs .nav-item');
+  for (let i = 0; i < reputationTabs.length; i++) {
+    reputationTabs[i].addEventListener('click', () => switchReputationTab(i));
+  }
 })();
