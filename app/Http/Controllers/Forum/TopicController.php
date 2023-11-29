@@ -28,7 +28,7 @@ class TopicController extends BaseController
 {
     use CacheFactory;
 
-    public function index(Request $request, Forum $forum, Topic $topic): Collection|View
+    public function index(Request $request, Forum $forum, Topic $topic): Collection|View|array
     {
         $this->breadcrumb->push($topic->title, route('forum.topic', [$forum->slug, $topic->id, $topic->slug]));
 
