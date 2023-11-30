@@ -7,7 +7,7 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import {Emit, Prop, Ref, Watch} from "vue-property-decorator";
-import {Editor4Play, EditorState} from "@riddled/4play/index.js";
+import {CodeBlockLanguages, Editor4Play, EditorState} from "@riddled/4play";
 
 @Component
 export default class VueEditor extends Vue {
@@ -31,7 +31,8 @@ export default class VueEditor extends Vue {
       this.value,
       {onChange: this.input, onSubmit: this.submit, onCancel: this.cancel, onStateChange: this.state},
       username => this.autocompleteSource(username),
-      'Zwykły tekst'
+      'Zwykły tekst',
+      this.codeBlockLanguages(),
     );
   }
 
@@ -136,6 +137,74 @@ export default class VueEditor extends Vue {
 
   focus() {
     this.editor!.focus();
+  }
+
+  codeBlockLanguages(): CodeBlockLanguages {
+    return Object.fromEntries(
+      languages()
+        .flatMap(({title, codes}) => codes.map(code => [code, title])));
+
+    function languages() {
+      function language(title: string, codes: string[]) {
+        return {title, codes};
+      }
+
+      return [
+        language('Ada', ['ada']),
+        language('Asembler', ['asm']),
+        language('Basic', ['basic']),
+        language('Plik wsadowy', ['batch', 'bat']),
+        language('BrainFuck', ['brainfuck', 'bf']),
+        language('Język C', ['c']),
+        language('C++', ['c++', 'cpp']),
+        language('C#', ['c#', 'cs']),
+        language('Clojure', ['clojure', 'clj']),
+        language('Format CSV', ['csv']),
+        language('Delphi/Pascal', ['pascal', 'delphi']),
+        language('Format Dockerfile', ['dockerfile']),
+        language('Elixir', ['elixir']),
+        language('Erlang', ['erlang']),
+        language('F#', ['f#', 'fsharp']),
+        language('Fortran', ['fortran']),
+        language('Go', ['go']),
+        language('Groovy', ['groovy']),
+        language('GraphQL', ['graphql']),
+        language('HTML', ['html']),
+        language('Haskell', ['hs', 'haskell']),
+        language('Format INI', ['ini']),
+        language('Java', ['java']),
+        language('JavaScript', ['js']),
+        language('Format JSON', ['json']),
+        language('Julia', ['julia']),
+        language('JSX', ['jsx']),
+        language('Kotlin', ['kt', 'kotlin']),
+        language('Składnia LaTeX', ['latex', 'tex']),
+        language('Lisp', ['lisp']),
+        language('Lua', ['lua']),
+        language('Markdown', ['markdown', 'md']),
+        language('MatLab', ['matlab']),
+        language('Perl', ['perl']),
+        language('PHP', ['php']),
+        language('Prolog', ['prolog']),
+        language('PowerShell', ['powershell', 'ps']),
+        language('Python', ['py', 'python']),
+        language('Język R', ['r']),
+        language('Rust', ['rs', 'rust']),
+        language('Ruby', ['rb', 'ruby']),
+        language('RSS', ['atom', 'rss']),
+        language('Scala', ['scala']),
+        language('Skrypt powłoki', ['bash', 'sh']),
+        language('Arkusz stylów', ['css', 'scss', 'sass', 'less']),
+        language('Język SQL', ['sql']),
+        language('Szablon Twig', ['twig']),
+        language('TypeScript/JSX', ['tsx']),
+        language('TypeScript', ['ts']),
+        language('Visual Basic', ['vb']),
+        language('Format XML', ['xml', 'svg']),
+        language('Format YAML', ['yaml', 'yml']),
+      ];
+    }
+
   }
 }
 </script>
