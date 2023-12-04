@@ -1,16 +1,14 @@
 <?php
-
 namespace Coyote\Services\Elasticsearch\Builders\Job;
 
 use Coyote\Services\Elasticsearch\Aggs;
+use Coyote\Services\Elasticsearch\Filters;
 use Coyote\Services\Elasticsearch\Functions\Decay;
 use Coyote\Services\Elasticsearch\Functions\FieldValueFactor;
-use Coyote\Services\Elasticsearch\Functions\Random;
 use Coyote\Services\Elasticsearch\Functions\ScriptScore;
 use Coyote\Services\Elasticsearch\MatchAll;
 use Coyote\Services\Elasticsearch\MultiMatch;
 use Coyote\Services\Elasticsearch\QueryBuilder;
-use Coyote\Services\Elasticsearch\Filters;
 use Coyote\Services\Elasticsearch\Sort;
 use Coyote\Services\Geocoder\Location;
 use Illuminate\Http\Request;
@@ -124,7 +122,12 @@ class SearchBuilder extends QueryBuilder
         }
 
         if ($this->request->filled('city')) {
-            $this->city->addCity($this->filterString($this->request->get('city')));
+            $value = $this->request->get('city');
+            if (\is_array($value)) {
+                $this->city->addCity(\array_map([$this, 'filterString'], $value));
+            } else {
+                $this->city->addCity($this->filterString($value));
+            }
         }
 
         if ($this->request->filled('locations')) {
@@ -136,7 +139,7 @@ class SearchBuilder extends QueryBuilder
         }
 
         if ($this->request->filled('salary')) {
-            $this->addSalaryFilter($this->filterNumber($this->request->get('salary')), (int) $this->request->get('currency'));
+            $this->addSalaryFilter($this->filterNumber($this->request->get('salary')), (int)$this->request->get('currency'));
         }
 
         if ($this->request->filled('remote')) {
@@ -151,7 +154,7 @@ class SearchBuilder extends QueryBuilder
         // facet search
         $this->setupAggregations();
 
-        $this->size(self::PER_PAGE * (max(0, (int) $this->request->get('page', 1) - 1)), self::PER_PAGE);
+        $this->size(self::PER_PAGE * (max(0, (int)$this->request->get('page', 1) - 1)), self::PER_PAGE);
         $this->source(['id']);
 
         return parent::build();
