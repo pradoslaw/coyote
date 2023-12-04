@@ -8,6 +8,7 @@ use Coyote\Services\Assets\Thumbnail;
 use Coyote\Services\Assets\Url;
 use Coyote\Services\Media\Filters\Opg;
 use Fusonic\OpenGraph\Consumer;
+use Fusonic\OpenGraph\Objects\ObjectBase;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
@@ -22,7 +23,7 @@ class AssetsController extends Controller
     public function opengraph(Request $request, Connection $db, Thumbnail $thumbnail)
     {
         $this->validate($request, [
-            'url' => 'required|url'
+            'url' => 'required|url',
         ]);
 
         $client = new Client(['headers' => ['User-Agent' => 'facebookexternalhit/1.1']]);
@@ -58,8 +59,8 @@ class AssetsController extends Controller
                 'metadata' => [
                     'title'       => $object->title,
                     'description' => $object->description,
-                    'url'         => $this->hasDomainOrReturn($object->url, $url)
-                ]
+                    'url'         => $this->hasDomainOrReturn($object, $url),
+                ],
             ]);
 
             $db->commit();
@@ -88,7 +89,7 @@ class AssetsController extends Controller
             'name' => $uploadedFile->getClientOriginalName() !== 'blob' ? $uploadedFile->getClientOriginalName() : $this->humanName($path),
             'path' => $path,
             'size' => $uploadedFile->getSize(),
-            'mime' => $uploadedFile->getMimeType()
+            'mime' => $uploadedFile->getMimeType(),
         ]);
 
         return array_merge($asset->toArray(), ['url' => (string)Url::make($asset)]);
@@ -108,7 +109,7 @@ class AssetsController extends Controller
         $asset->save();
 
         $headers = [
-            'Content-Type' => 'Content-Type: ' . $asset->mime
+            'Content-Type' => 'Content-Type: ' . $asset->mime,
         ];
 
         if (!$asset->isImage()) {
@@ -124,10 +125,13 @@ class AssetsController extends Controller
         return 'screenshot-' . date('YmdHis') . '.' . \strToLower($extension);
     }
 
-    private function hasDomainOrReturn(string $subjectUrl, string $originalUrl): string
+    private function hasDomainOrReturn(ObjectBase $subject, string $originalUrl): string
     {
-        if (\array_key_exists('host', \parse_url($subjectUrl))) {
-            return $subjectUrl;
+        if ($subject->url === null) {
+            return $originalUrl;
+        }
+        if (\array_key_exists('host', \parse_url($subject->url))) {
+            return $subject->url;
         }
         return $originalUrl;
     }
