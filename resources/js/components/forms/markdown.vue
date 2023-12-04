@@ -26,6 +26,8 @@
             placeholder="Kliknij, aby dodać treść..."
             :autocompleteSource="autocomplete"
             v-paste:success="addAsset"
+            :emojiUrl="emojiUrl"
+            :emojis="emojisProperty"
             @submit="save"
             @cancel="cancel"
             @state="updateState"/>
@@ -96,7 +98,7 @@
 </template>
 
 <script lang="ts">
-import {Asset, Emojis} from '@/types/models';
+import {Asset, Emoji, Emojis} from '@/types/models';
 import {EditorState, link} from "@riddled/4play/index.js";
 import axios from 'axios';
 import Prism from 'prismjs';
@@ -465,6 +467,20 @@ export default class VueMarkdown extends Vue {
       }
     }
     return false;
+  }
+
+  emojiUrl(emojiName: string): string | null {
+    const emoticon = this.emojis?.emoticons[emojiName];
+    if (emoticon) {
+      return 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/' + emoticon.unified + '.svg'
+    }
+    return null;
+  }
+
+  get emojisProperty() {
+    return Object.fromEntries(Object
+      .values(this.emojis!.emoticons)
+      .map((emoji: Emoji) => [':' + emoji.id + ':', emoji.name]));
   }
 
   focus() {

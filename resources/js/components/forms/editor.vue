@@ -7,7 +7,7 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import {Emit, Prop, Ref, Watch} from "vue-property-decorator";
-import {CodeBlockLanguages, Editor4Play, EditorState} from "@riddled/4play";
+import {CodeBlockLanguages, Editor4Play, EditorState, Emojis, EmojiUrl} from "@riddled/4play";
 
 @Component
 export default class VueEditor extends Vue {
@@ -18,6 +18,10 @@ export default class VueEditor extends Vue {
   readonly placeholder!: string;
   @Prop()
   readonly autocompleteSource!: Function
+  @Prop()
+  readonly emojiUrl!: EmojiUrl
+  @Prop()
+  readonly emojis!: Emojis
 
   @Ref('view')
   readonly view!: HTMLElement;
@@ -33,6 +37,8 @@ export default class VueEditor extends Vue {
       username => this.autocompleteSource(username),
       'Zwykły tekst',
       this.codeBlockLanguages(),
+      this.emojiUrl,
+      this.emojis,
     );
   }
 
