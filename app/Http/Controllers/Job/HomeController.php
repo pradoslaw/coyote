@@ -2,108 +2,73 @@
 
 namespace Coyote\Http\Controllers\Job;
 
+use Coyote\Currency;
 use Coyote\Http\Resources\JobResource;
 use Coyote\Http\Resources\TagResource;
-use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
 use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Repositories\Criteria\EagerLoadingWithCount;
 use Coyote\Repositories\Criteria\Job\IncludeSubscribers;
 use Coyote\Repositories\Criteria\Job\PriorDeadline;
 use Coyote\Repositories\Criteria\Tag\ForCategory;
+use Coyote\Repositories\Eloquent\JobRepository;
+use Coyote\Repositories\Eloquent\TagRepository;
 use Coyote\Services\Elasticsearch\Builders\Job\SearchBuilder;
-use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Tag;
 use Illuminate\Http\Request;
-use Coyote\Currency;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 class HomeController extends BaseController
 {
-    /**
-     * @var TagRepository
-     */
-    private $tag;
-
     /**
      * @var string
      */
     private $firmName;
 
-    /**
-     * @param JobRepository $job
-     * @param TagRepository $tag
-     */
-    public function __construct(JobRepository $job, TagRepository $tag)
+    public function __construct(JobRepository $job, private TagRepository $tag)
     {
-        parent::__construct($job);
-        $this->tag = $tag;
-
+        parent::__construct($job);        
+        $this->breadcrumb->push('Praca', route('job.home'));
         $this->middleware(function (Request $request, $next) {
             $this->builder = new SearchBuilder($request);
-
             return $next($request);
         });
     }
 
-    /**
-     * @return \Illuminate\View\View
-     */
-    public function index()
+    public function index(): View
     {
         return $this->load();
     }
 
-    /**
-     * @param $name
-     * @return \Illuminate\View\View
-     */
-    public function city($name)
+    public function city($name): View
     {
         $this->builder->city->addCity($name);
-
         return $this->load();
     }
 
-    /**
-     * @param $name
-     * @return \Illuminate\View\View
-     */
-    public function tag($name)
+    public function tag($name): View
     {
         $this->builder->tag->addTag(Str::lower($name));
-
         return $this->load();
     }
 
-    /**
-     * @param $slug
-     * @return \Illuminate\View\View
-     */
-    public function firm($slug)
+    public function firm($slug): View
     {
         $this->builder->addFirmFilter($slug);
         $this->firmName = $slug;
-
         return $this->load();
     }
 
-    /**
-     * @return \Illuminate\View\View
-     */
-    public function remote()
+    public function remote(): View
     {
         $this->builder->addRemoteFilter();
-
         return $this->load();
     }
 
-    /**
-     * @return \Illuminate\View\View
-     */
-    private function load()
+    private function load(): View
     {
         // set sort by score if keyword was provided and no sort was specified
         $defaultSort = $this->request->input('sort', $this->request->filled('q') ? SearchBuilder::SCORE : SearchBuilder::DEFAULT_SORT);
@@ -162,55 +127,50 @@ class HomeController extends BaseController
         $input = array_merge(
             $this->request->all('q', 'city', 'sort', 'salary', 'currency', 'remote_range', 'page'),
             [
-                'tags'          => $this->builder->tag->getTags(),
-                'locations'     => $this->builder->city->getCities(),
-                'remote'        => $this->request->filled('remote') || $this->request->route()->getName() === 'job.remote' ? true : null,
+                'tags'      => $this->builder->tag->getTags(),
+                'locations' => $this->builder->city->getCities(),
+                'remote'    => $this->request->filled('remote') || $this->request->route()->getName() === 'job.remote' ? true : null,
             ]
         );
 
         $data = [
-            'input'             => $input,
-            'url'               => $this->fullUrl($this->request->except('timestamp')),
+            'input' => $input,
+            'url'   => $this->fullUrl($this->request->except('timestamp')),
 
-            'defaults'           => [
-                'sort'                  => $defaultSort,
-                'currency'              => Currency::PLN
+            'defaults' => [
+                'sort'     => $defaultSort,
+                'currency' => Currency::PLN,
             ],
 
-            'locations'         => $result->getAggregationCount("global.locations.locations_city_original")->slice(0, 10)->filter(),
-            'tags'              => TagResource::collection($tags)->toArray($this->request),
-            'jobs'              => JobResource::collection($pagination)->toResponse($this->request)->getData(true),
-            'subscribed'        => $this->getSubscribed()
+            'locations'  => $result->getAggregationCount("global.locations.locations_city_original")->slice(0, 10)->filter(),
+            'tags'       => TagResource::collection($tags)->toArray($this->request),
+            'jobs'       => JobResource::collection($pagination)->toResponse($this->request)->getData(true),
+            'subscribed' => $this->getSubscribed(),
         ];
 
         $this->request->session()->put('current_url', $this->request->fullUrl());
 
         return $this->view('job.home', $data + [
-            'currencies'    => (object) Currency::all('name', 'id', 'symbol')->keyBy('id'),
-            'firm'          => $this->firmName
-        ]);
+                'currencies' => (object)Currency::all('name', 'id', 'symbol')->keyBy('id'),
+                'firm'       => $this->firmName,
+            ]);
     }
 
-    /**
-     * @return array
-     */
     private function getSubscribed(): array
     {
         if (!$this->userId) {
             return [];
         }
-
         return JobResource::collection($this->job->subscribes($this->userId))->toArray($this->request);
     }
 
-    /**
-     * @param array $query
-     * @return string
-     */
     private function fullUrl(array $query): string
     {
-        $question = $this->request->getBaseUrl() . $this->request->getPathInfo() === '/' ? '/?' : '?';
-
+        if ($this->request->getBaseUrl() . $this->request->getPathInfo() === '/') {
+            $question = '/?';
+        } else {
+            $question = '?';
+        }
         return $this->request->url() . (count($query) ? ($question . Arr::query($query)) : '');
     }
 }
