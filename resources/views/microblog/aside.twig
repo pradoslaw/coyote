@@ -1,0 +1,62 @@
+<aside class="col-md-3">
+  <div class="box recommended-users">
+    <h4>
+      <i class="fas fa-tag fa-fw"></i>
+      Zacznij obserwować
+    </h4>
+
+    <div id="js-skeleton" class="card card-body mt-2" style="min-height: 300px">
+    </div>
+
+    <div v-cloak class="card card-body mt-2">
+      <div v-for="user in recommendedUsers" class="media">
+        <vue-avatar :id="user.id" :photo="user.photo" :name="user.name" class="d-none d-xl-block i-45 mr-2">
+        </vue-avatar>
+
+        <div class="media-body">
+          <span class="d-block mb-1">
+            <vue-username :user="user" class="text-body"></vue-username>
+          </span>
+          <vue-follow-button :user-id="user.id" class="btn-sm"></vue-follow-button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="box mt-2">
+    <h4 class="border-bottom">
+      <i class="fas fa-tag fa-fw"></i>
+      Popularne tematy
+    </h4>
+    <div class="pt-2 pb-2">
+      <ul class="tag-clouds">
+        {% for tag in tags.others %}
+          <li class="d-block mb-1">
+            <a href="{{ route('microblog.tag', [tag.name]) }}">{{ tag.name }}</a>
+            <small>&times; {{ tag.count }}</small>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="box mt-2">
+    <h4 class="border-bottom">
+      <i class="fas fa-wrench fa-fw"></i>
+      Technologie
+    </h4>
+    <ul class="tag-clouds tag-clouds-md">
+      {% for tag in tags.tech %}
+        <li class="d-block mb-1">
+          <a href="{{ route('microblog.tag', [tag.name]) }}">
+            {% if tag.logo.filename %}
+              <img alt="{{ tag.name }}" src="{{ logo(tag.logo) }}"/>
+            {% endif %}
+            {{ tag.name }}
+          </a>
+          <small>&times; {{ tag.count }}</small>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</aside>
