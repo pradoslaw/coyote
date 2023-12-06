@@ -108,7 +108,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     // akceptowanie danego posta jako poprawna odpowiedz w watku
     $this->post('Post/Accept/{post}', ['uses' => 'AcceptController@index', 'as' => 'post.accept', 'middleware' => 'auth']);
     // historia edycji danego posta
-    $this->get('Post/Log/{post}', ['uses' => 'LogController@log', 'as' => 'post.log']);
+    $this->get('Post/Log/{id}', ['uses' => 'LogController@log', 'as' => 'post.log']);
     // przywrocenie poprzedniej wersji posta
     $this->post('Post/Rollback/{post}/{id}', ['uses' => 'RollbackController@rollback', 'as' => 'post.rollback']);
     // mergowanie posta z poprzednim

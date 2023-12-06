@@ -11,8 +11,9 @@
 
         <div class="col-10">
           <i class="far fa-file"></i>
-
-          <a :href="`#id${log.id}`">{{ log.title }}</a>
+          <a :href="`#id${log.id}`">
+            {{ log.title }}
+          </a>
         </div>
       </div>
     </div>
@@ -23,14 +24,14 @@
           <ul class="post-stats list-unstyled">
             <li>
               <strong>Data:</strong>
-              <small><vue-timeago :datetime="log.created_at"></vue-timeago></small>
+              <small>
+                <vue-timeago :datetime="log.created_at"/>
+              </small>
             </li>
-
             <li>
               <strong>IP:</strong>
               <small>{{ log.ip }}</small>
             </li>
-
             <li class="text-truncate">
               <strong>Przeglądarka:</strong>
               <small :title="log.browser">{{ log.browser }}</small>
@@ -39,15 +40,7 @@
         </div>
 
         <div class="col-12 col-lg-10 diff">
-          <div v-if="isLoaded" class="post-content" v-html="diffStr"></div>
-
-<!--          {% if log.tags %}-->
-<!--          <ul class="tag-clouds">-->
-<!--            {% for tag in log.tags %}-->
-<!--            <li><a href="{{ route('forum.tag', [tag|url_encode]) }}">{{ tag }}</a></li>-->
-<!--            {% endfor %}-->
-<!--          </ul>-->
-<!--          {% endif %}-->
+          <div v-if="isLoaded" class="post-content" v-html="diffStr" style="white-space: pre-wrap"/>
         </div>
       </div>
     </div>
@@ -56,11 +49,13 @@
       <div class="row">
         <div class="d-none d-lg-block col-lg-2"></div>
         <div class="col-12 d-flex col-lg-10">
-
           <a v-if="isRollbackEnabled" @click="rollback" title="Cofnij do tej wersji" class="btn btn-sm btn-rollback">
-            <i class="fas fa-undo"></i>
-
+            <i class="fas fa-undo"/>
             Cofnij do tej wersji
+          </a>
+          <a v-else class="btn btn-sm" :href="this.topicLink">
+            <i class="fas fa-eye"/>
+            Pokaż aktualną wersję
           </a>
         </div>
       </div>
@@ -69,67 +64,74 @@
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
-  import { Prop } from "vue-property-decorator";
-  import { PostLog } from "@/types/models";
-  import Component from "vue-class-component";
-  import VueUserName from "@/components/user-name.vue";
-  import VueModal from "@/components/delete-modal.vue";
+import Vue from 'vue';
+import {Prop} from "vue-property-decorator";
+import {PostLog} from "@/types/models";
+import Component from "vue-class-component";
+import VueUserName from "@/components/user-name.vue";
+import VueModal from "@/components/delete-modal.vue";
 
-  @Component({
-    components: { 'vue-username': VueUserName, 'vue-modal': VueModal }
-  })
-  export default class VuePostLog extends Vue {
-    @Prop()
-    readonly log!: PostLog;
+@Component({
+  components: {'vue-username': VueUserName, 'vue-modal': VueModal}
+})
+export default class VuePostLog extends Vue {
+  @Prop()
+  readonly log!: PostLog;
+  @Prop()
+  readonly topicLink!: string;
 
-    @Prop()
-    readonly isRollbackEnabled!: boolean;
+  @Prop()
+  readonly isRollbackEnabled!: boolean;
 
-    @Prop({default: null})
-    readonly oldStr!: string | null;
+  @Prop({default: null})
+  readonly oldStr!: string | null;
 
-    isLoaded = false;
-    private diff: any;
+  isLoaded = false;
+  private diff: any;
 
-    created() {
-      return import('diff').then((Diff) => {
-        this.diff = Diff;
-        this.isLoaded = true;
-      });
-    }
-
-    async rollback() {
-      await this.$confirm({
-        message: 'Treść posta zostanie zastąpiona. Czy chcesz kontynuować?',
-        title: 'Potwierdź operację',
-        okLabel: 'Tak, przywróć'
-      });
-
-      const { data } = await this.$store.dispatch('posts/rollback', this.log);
-
-      window.location.href = data.url;
-    }
-
-    get diffStr() {
-      if (!this.oldStr) {
-        return this.log.text;
-      }
-
-      const diff = this.diff.diffChars(this.oldStr, this.log.text);
-      let diffStr = '';
-
-      diff.forEach(part => {
-        if (part.added) {
-          diffStr += `<ins class="text-primary">${part.value}</ins>`;
-        } else if (part.removed) {
-          diffStr += `<del class="text-danger">${part.value}</del>`;
-        } else {
-          diffStr += part.value;
-        }
-      });
-
-      return diffStr.replace("\n", "<br>");
-    }
+  created() {
+    return import('diff').then((diff) => {
+      this.diff = diff;
+      this.isLoaded = true;
+    });
   }
+
+  async rollback() {
+    await this.$confirm({
+      message: 'Treść posta zostanie zastąpiona. Czy chcesz kontynuować?',
+      title: 'Potwierdź operację',
+      okLabel: 'Tak, przywróć'
+    });
+
+    const {data} = await this.$store.dispatch('posts/rollback', this.log);
+
+    window.location.href = data.url;
+  }
+
+  get diffStr() {
+    if (!this.oldStr) {
+      return this.log.text;
+    }
+    const diff = this.diff.diffWords(
+      encodeHtml(this.oldStr),
+      encodeHtml(this.log.text));
+
+    return diff.reduce((acc: string, part): string => {
+      if (part.added) {
+        return acc + `<ins class="text-primary">${part.value}</ins>`;
+      }
+      if (part.removed) {
+        return acc + `<del class="text-danger">${part.value}</del>`;
+      }
+      return acc + part.value;
+    }, '');
+  }
+}
+
+const tmp = document.createElement("div");
+
+function encodeHtml(text: string): string {
+  tmp.innerText = text;
+  return tmp.innerHTML;
+}
 </script>

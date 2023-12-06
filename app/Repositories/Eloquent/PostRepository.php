@@ -75,6 +75,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
      */
     public function getPage($postId, $topicId, $perPage = 10)
     {
+        /** @var int $count */
         $count = $this->applyCriteria(function () use ($topicId, $postId) {
             return $this
                 ->model
@@ -145,23 +146,6 @@ class PostRepository extends Repository implements PostRepositoryInterface
         $post->delete();
 
         return $previous;
-    }
-
-    /**
-     * @param int $postId
-     * @return mixed
-     */
-    public function history(int $postId)
-    {
-        return Post\Log::select([
-            'post_log.id',
-            'post_log.*'
-        ])
-        ->where('post_id', $postId)
-        ->join('posts', 'posts.id', '=', 'post_id')
-        ->orderBy('post_log.id', 'DESC')
-        ->with('user')
-        ->get();
     }
 
     /**

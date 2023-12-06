@@ -36,6 +36,7 @@ declare global {
     topics: Models.Paginator;
     popularTags: string[];
     logs: Models.PostLog[];
+    topicLink: string;
   }
 }
 

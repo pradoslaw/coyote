@@ -4,14 +4,18 @@ import store from '@/store';
 
 export default Vue.extend({
   delimiters: ['${', '}'],
-  components: { 'vue-log': VuePostLog },
+  components: {'vue-log': VuePostLog},
   store,
   data: () => ({
-    logs: window.logs
+    logs: window.logs,
+    topicLink: window.topicLink,
   }),
   methods: {
     oldStr(logs, index) {
-      return index == logs.length -1 ? null : logs[index + 1].text;
+      if (index == logs.length - 1) {
+        return null;
+      }
+      return logs[index + 1].text;
     }
   }
 });

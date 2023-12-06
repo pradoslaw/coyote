@@ -1,29 +1,25 @@
 {% extends 'forum.base' %}
 {% block title %}Historia edycji posta w {{ topic.title }}{{ parent() }}{% endblock %}
-
 {% import 'components.widgets' as widgets %}
-
 {% set url = route('forum.post.log', [post.id]) %}
-
 {% block content %}
-
   {% include "forum.partials.top" %}
-
-  <h1>{{ link_to_route('forum.topic', topic.title, [forum.slug, topic.id, topic.slug]) }}</h1>
-
+  <h1>
+    {{ link_to_route('forum.topic', topic.title, [forum.slug, topic.id, topic.slug]) }}
+  </h1>
   <main id="js-log" class="mainbar">
     <vue-log
-      v-for="(log, index) in logs"
-      :log="log"
-      :key="log.id"
-      :is-rollback-enabled="index > 0"
-      :old-str="oldStr(logs, index)"
+        v-for="(log, index) in logs"
+        v-if="log.text !== oldStr(logs, index)"
+        :log="log"
+        :key="log.id"
+        :topic-link="topicLink"
+        :is-rollback-enabled="index > 0"
+        :old-str="oldStr(logs, index)"
     />
   </main>
-
   <script>
     var logs = {{ logs|json_encode|raw }};
+    var topicLink = {{ topicLink|json_encode|raw }};
   </script>
-
 {% endblock %}
-

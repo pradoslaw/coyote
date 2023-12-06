@@ -46,12 +46,6 @@ interface PostRepositoryInterface extends RepositoryInterface
     public function merge($userId, $post);
 
     /**
-     * @param int $postId
-     * @return mixed
-     */
-    public function history(int $postId);
-
-    /**
      * @param int $userId
      * @return mixed
      */
