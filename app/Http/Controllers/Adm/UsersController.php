@@ -98,6 +98,48 @@ class UsersController extends BaseController
 
     /**
      * @param \Coyote\User $user
+     * @return \Illuminate\View\View
+     */
+    public function judge($user)
+    {
+        $this->breadcrumb->push("Sąd ostateczny nad " . $user->name, route('adm.users.judge', [$user->id]));
+
+        $form = $this->createForm(AdminForm::class, $user, [
+            'url' => route('adm.users.judge', [$user->id])
+        ]);
+
+        return $this->view('adm.users.purge', [
+            'user' => $user,
+            'form' => $form,
+        ]);
+    }
+
+    /**
+     * @param \Coyote\User $user
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function purge($user)
+    {
+        $form = $this->getForm($user);
+
+        $this->transaction(function () use ($user, $form) {
+            $user->hasMany('Coyote\Post')->delete();
+            $user->permissions()->delete();
+            $user->actkey()->delete();
+            $user->skills()->delete();
+            $user->invoices()->delete();
+            $user->notifications()->delete();
+            $user->relations()->delete();
+            $user->followers()->delete();
+            $user->notificationSettings()->delete();
+            $user->delete();
+        });
+
+        return back()->with('success', 'Zmiany zostały poprawie zapisane');
+    }
+
+    /**
+     * @param \Coyote\User $user
      * @return \Coyote\Services\FormBuilder\Form
      */
     protected function getForm($user)
