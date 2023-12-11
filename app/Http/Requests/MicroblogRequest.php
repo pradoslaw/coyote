@@ -1,5 +1,4 @@
 <?php
-
 namespace Coyote\Http\Requests;
 
 use Coyote\Repositories\Contracts\TagRepositoryInterface;
@@ -9,34 +8,24 @@ use Illuminate\Validation\Rule;
 
 class MicroblogRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
+    public function rules(): array
     {
         return [
-            'parent_id'     => ['nullable', 'integer', Rule::exists('microblogs', 'id')->whereNull('deleted_at')],
-            'text'          => 'required|string|max:12000',
-            'tags'          => 'array|max:5',
-            'tags.*.name'   => [
+            'parent_id'   => ['nullable', 'integer', Rule::exists('microblogs', 'id')->whereNull('deleted_at')],
+            'text'        => 'required|string|max:20000',
+            'tags'        => 'array|max:5',
+            'tags.*.name' => [
                 'bail',
                 'max:25',
                 'tag',
                 new TagDeleted($this->container[TagRepositoryInterface::class]),
-                'tag_creation:300'
-            ]
+                'tag_creation:300',
+            ],
         ];
     }
 }
