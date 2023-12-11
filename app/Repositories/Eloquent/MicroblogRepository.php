@@ -58,19 +58,24 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
             ->get());
     }
 
-    public function popular(int $pageSize, int $pageNumber): Eloquent\Collection
+    public function popular(int $pageSize, int $pageNumber): array
     {
-        return $this->applyCriteria(fn() => $this->model
-            ->newQuery()
-            ->whereNull('parent_id')
-            ->with(['user', 'assets', 'tags'])
-            ->withCount('comments')
-            ->where(fn(Builder $query) => $query
-                ->where('votes', '>=', 2)
-                ->orWhere('is_sponsored', true))
-            ->limit($pageSize)
-            ->offset(\max(0, $pageNumber - 1) * $pageSize)
-            ->get());
+        return $this->applyCriteria(function () use ($pageNumber, $pageSize) {
+            $query = $this->model
+                ->newQuery()
+                ->whereNull('parent_id')
+                ->with(['user', 'assets', 'tags'])
+                ->withCount('comments')
+                ->where(fn(Builder $query) => $query
+                    ->where('votes', '>=', 2)
+                    ->orWhere('is_sponsored', true));
+            $count = $query->count();
+            $result = $query
+                ->limit($pageSize)
+                ->offset(\max(0, $pageNumber - 1) * $pageSize)
+                ->get();
+            return [$result, $count];
+        });
     }
 
     /**
