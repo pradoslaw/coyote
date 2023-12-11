@@ -1,19 +1,20 @@
 import Vue from 'vue';
+import VueNotifications from 'vue-notification';
+import {mapGetters} from 'vuex';
+
+import VueAvatar from '../components/avatar.vue';
+import VueFollowButton from "../components/forms/follow-button.vue";
+import VueForm from '../components/microblog/form.vue';
 import VueMicroblog from "../components/microblog/microblog.vue";
 import VuePagination from '../components/pagination.vue';
-import VueAvatar from '../components/avatar.vue';
-import VueForm from '../components/microblog/form.vue';
-import VueNotifications from 'vue-notification';
+import VueUserName from "../components/user-name.vue";
+import {default as axiosErrorHandler} from '../libs/axios-error-handler.js';
+import VueAutosave from "../plugins/autosave";
 import VueModals from '../plugins/modals';
 import VuePaste from '../plugins/paste.js';
 import store from '../store';
-import { mapGetters } from 'vuex';
-import { default as axiosErrorHandler } from '../libs/axios-error-handler';
-import {Microblog, Paginator, Flag, User} from "@/types/models";
-import { default as LiveMixin } from './microblog/live';
-import VueAutosave from "../plugins/autosave";
-import VueUserName from "@/components/user-name.vue";
-import VueFollowButton from "@/components/forms/follow-button.vue";
+import {Flag, Microblog, Paginator, User} from "../types/models";
+import {default as LiveMixin} from './microblog/live';
 
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
 Vue.use(VueModals);
@@ -35,6 +36,7 @@ declare global {
 new Vue({
   el: '#js-microblog',
   delimiters: ['${', '}'],
+  mixins: [LiveMixin],
   components: {
     'vue-microblog': VueMicroblog,
     'vue-pagination': VuePagination,
@@ -43,10 +45,9 @@ new Vue({
     'vue-username': VueUserName,
     'vue-follow-button': VueFollowButton
   },
-  mixins: [ LiveMixin ],
   store,
   data() {
-    return { popularTags: window.popularTags, recommendedUsers: window.recommendedUsers }
+    return {popularTags: window.popularTags, recommendedUsers: window.recommendedUsers}
   },
   created() {
     if ('pagination' in window) {
