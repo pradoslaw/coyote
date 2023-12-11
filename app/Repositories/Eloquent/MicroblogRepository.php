@@ -30,19 +30,21 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
         });
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function forPage(int $pageSize, int $pageNumber)
+    public function forPage(int $pageSize, int $pageNumber): array
     {
-        return $this->applyCriteria(fn() => $this->model
-            ->newQuery()
-            ->whereNull('parent_id')
-            ->with(['user', 'assets', 'tags'])
-            ->withCount('comments')
-            ->limit($pageSize)
-            ->offset(\max(0, $pageNumber - 1) * $pageSize)
-            ->get());
+        return $this->applyCriteria(function () use ($pageSize, $pageNumber): array {
+            $model = $this->model
+                ->newQuery()
+                ->whereNull('parent_id')
+                ->with(['user', 'assets', 'tags'])
+                ->withCount('comments');
+            $count = $model->count();
+            $result = $model
+                ->limit($pageSize)
+                ->offset(\max(0, $pageNumber - 1) * $pageSize)
+                ->get();
+            return [$result, $count];
+        });
     }
 
     public function recent()

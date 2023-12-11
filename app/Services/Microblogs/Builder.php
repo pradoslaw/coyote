@@ -56,13 +56,13 @@ class Builder
 
     public function paginate(): LengthAwarePaginator
     {
-        $count = (int)$this->microblog->applyCriteria(fn() => $this->microblog->count());
         $page = LengthAwarePaginator::resolveCurrentPage();
         $this->loadUserScope();
+        [$items, $count] = $this->microblog->forPage(6, $page);
         $paginator = new LengthAwarePaginator(
-            $this->microblog->forPage(10, $page),
+            $items,
             $count,
-            10,
+            6,
             $page,
             ['path' => LengthAwarePaginator::resolveCurrentPath()]
         );
