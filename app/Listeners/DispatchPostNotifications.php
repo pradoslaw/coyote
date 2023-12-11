@@ -1,5 +1,4 @@
 <?php
-
 namespace Coyote\Listeners;
 
 use Coyote\Events\PostSaved;
@@ -7,92 +6,65 @@ use Coyote\Notifications\Post\ChangedNotification;
 use Coyote\Notifications\Post\SubmittedNotification;
 use Coyote\Notifications\Post\UserMentionedNotification;
 use Coyote\Post;
-use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
+use Coyote\Repositories\Eloquent\UserRepository;
 use Coyote\Reputation;
-use Coyote\Services\Helper\Login as LoginHelper;
+use Coyote\Services\Helper;
 use Coyote\User;
 use Illuminate\Contracts\Notifications\Dispatcher;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support;
 
 class DispatchPostNotifications implements ShouldQueue
 {
-    /**
-     * @var Dispatcher
-     */
-    private $dispatcher;
-
-    /**
-     * @var UserRepository
-     */
-    private $user;
-
-    /**
-     * @param Dispatcher $dispatcher
-     * @param UserRepository $user
-     */
-    public function __construct(Dispatcher $dispatcher, UserRepository $user)
+    public function __construct(
+        private Dispatcher     $dispatcher,
+        private UserRepository $user)
     {
-        $this->dispatcher = $dispatcher;
-        $this->user = $user;
     }
 
-    /**
-     * Handle the event.
-     *
-     * @param  PostSaved  $event
-     * @return void
-     */
-    public function handle(PostSaved $event)
+    public function handle(PostSaved $event): void
     {
         $post = $event->post;
-        $topic = $event->post->topic;
-
+        
         if ($event->wasRecentlyCreated) {
-            $user = $event->post->user;
-
-            $subscribers = $topic
+            $user = $post->user;
+            $subscribers = $post->topic
                 ->subscribers()
                 ->excludeBlocked($user->id)
                 ->has('user') // <-- make sure to skip records with deleted users
                 ->with('user')
                 ->get()
                 ->pluck('user');
-
-            $notification = (new SubmittedNotification($user, $post))->setSender($this->getSender($post));
-
+            $notification = (new SubmittedNotification($user, $post))->setSender($this->postUsername($post));
             $subscribers = $subscribers
                 ->merge($user->followers)
                 ->unique('id');
-
             $this->dispatcher->send($subscribers, $notification);
-
-            $this->sendUserMentionedNotification($post, $user, $subscribers, $this->getSender($post));
-        } elseif ($event->post->editor) {
-            $user = $event->post->editor;
-
-            $subscribers = $post
-                ->subscribers()
-                ->excludeBlocked($user->id)
-                ->with('user')
-                ->get()
-                ->pluck('user');
-
-            $this->dispatcher->send($subscribers, new ChangedNotification($user, $post));
-
-            $this->sendUserMentionedNotification($post, $user, $subscribers, $user->name);
+            $this->sendUserMentionedNotification($post, $user, $subscribers, $this->postUsername($post));
+        } else {
+            if ($post->editor) {
+                $user = $post->editor;
+                $subscribers = $post
+                    ->subscribers()
+                    ->excludeBlocked($user->id)
+                    ->has('user') // <-- make sure to skip records with deleted users
+                    ->with('user')
+                    ->get()
+                    ->pluck('user');
+                $this->dispatcher->send($subscribers, new ChangedNotification($user, $post));
+                $this->sendUserMentionedNotification($post, $user, $subscribers, $user->name);
+            }
         }
     }
 
-    /**
-     * @param Post $post
-     * @param User|null $user
-     * @param array $subscribers
-     * @param string $senderName
-     */
-    private function sendUserMentionedNotification(Post $post, ?User $user, $subscribers, string $senderName): void
+    private function sendUserMentionedNotification(
+        Post               $post,
+        ?User              $user,
+        Support\Collection $subscribers,
+        string             $senderName): void
     {
         // get id of users that were mentioned in the text
-        $usersId = (new LoginHelper())->grab($post->html);
+        $usersId = (new Helper\Login)->grab($post->html);
 
         if ($post->user->reputation < Reputation::USER_MENTION) {
             return;
@@ -106,11 +78,7 @@ class DispatchPostNotifications implements ShouldQueue
         }
     }
 
-    /**
-     * @param Post $post
-     * @return string
-     */
-    private function getSender(Post $post): string
+    private function postUsername(Post $post): string
     {
         return $post->user->name ?? $post->user_name;
     }
