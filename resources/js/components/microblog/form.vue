@@ -3,6 +3,7 @@
     <vue-markdown
       v-model="microblog.text"
       :assets.sync="microblog.assets"
+      :emojis="emojis"
       :auto-insert-assets="false"
       @save="saveMicroblog"
       @cancel="cancel"
@@ -23,7 +24,13 @@
 
     <div class="row mt-2">
       <div class="col-12">
-        <vue-button :disabled="isProcessing" @click.native.prevent="saveMicroblog" title="Kliknij, aby wysłać (Ctrl+Enter)" class="btn btn-sm btn-primary float-right" tabindex="2" type="submit">
+        <vue-button
+          :disabled="isProcessing"
+          @click.native.prevent="saveMicroblog"
+          title="Kliknij, aby wysłać (Ctrl+Enter)"
+          class="btn btn-sm btn-primary float-right"
+          tabindex="2"
+          type="submit">
           Zapisz
         </vue-button>
 
@@ -36,91 +43,90 @@
 </template>
 
 <script lang="ts">
-  import Component from "vue-class-component";
-  import {Mixins, Prop, ProvideReactive, Ref, Watch} from "vue-property-decorator";
-  import store from "../../store";
-  import VuePrompt from '../forms/prompt.vue';
-  import VueButton from '../forms/button.vue';
-  import VueMarkdown from '../forms/markdown.vue';
-  import VueTagsInline from '../forms/tags-inline.vue';
-  import { MicroblogFormMixin } from '../mixins/microblog';
-  import { Tag } from "@/types/models";
-  import axios, { CancelTokenSource } from 'axios';
+import axios, {CancelTokenSource} from 'axios';
+import Component from "vue-class-component";
+import {Mixins, Prop, ProvideReactive, Ref} from "vue-property-decorator";
 
-  const DRAFT_KEY = 'microblog';
+import store from "../../store";
+import {Emojis, Tag} from "../../types/models";
+import VueButton from '../forms/button.vue';
+import VueMarkdown from '../forms/markdown.vue';
+import VuePrompt from '../forms/prompt.vue';
+import VueTagsInline from '../forms/tags-inline.vue';
+import {MicroblogFormMixin} from '../mixins/microblog';
 
-  // @ts-ignore
-  @Component({
-    name: 'microblog-form',
-    store,
-    components: {
-      'vue-button': VueButton,
-      'vue-prompt': VuePrompt,
-      'vue-markdown': VueMarkdown,
-      'vue-tags-inline': VueTagsInline
-    },
-    inject: []
-  })
-  export default class VueForm extends Mixins(MicroblogFormMixin) {
-    private timeoutId?: number;
-    private urlDetector: any;
-    private cancelTokenSource?: CancelTokenSource;
+const DRAFT_KEY = 'microblog';
 
-    @Ref('markdown')
-    public markdown!: VueMarkdown;
+@Component({
+  name: 'microblog-form',
+  store,
+  components: {
+    'vue-button': VueButton,
+    'vue-prompt': VuePrompt,
+    'vue-markdown': VueMarkdown,
+    'vue-tags-inline': VueTagsInline
+  },
+  inject: []
+})
+export default class VueForm extends Mixins(MicroblogFormMixin) {
+  private timeoutId?: number;
+  private urlDetector: any;
+  private cancelTokenSource?: CancelTokenSource;
+  emojis?: Emojis;
 
-    @Prop({default: () => []})
-    @ProvideReactive('popularTags')
-    readonly popularTags!: Tag[];
+  @Ref('markdown')
+  public markdown!: VueMarkdown;
 
-    detectUrl() {
-      const handler = () => {
-        const matches = this.microblog.text.match(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig);
+  @Prop({default: () => []})
+  @ProvideReactive('popularTags')
+  readonly popularTags!: Tag[];
 
-        if (!matches) {
-          return;
-        }
+  detectUrl() {
+    const handler = () => {
+      const matches = this.microblog.text.match(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig);
 
-        this.urlDetector(); // remove watcher
-
-        this.cancelTokenSource = axios.CancelToken.source();
-
-        axios.get('/assets/opg', { params: { url: matches[0] }, errorHandle: false, cancelToken: this.cancelTokenSource.token })
-          .then(response => this.microblog.assets.push(response.data))
-          .catch(this.startUrlDetector);
-      };
-
-      clearTimeout(this.timeoutId);
-      this.timeoutId = window.setTimeout(handler, 500);
-    }
-
-    created() {
-      if (this.microblog.id) {
+      if (!matches) {
         return;
       }
 
-      this.$set(this.microblog, 'text', this.$loadDraft(DRAFT_KEY));
-      this.$watch('microblog.text', newValue => this.$saveDraft(DRAFT_KEY, newValue));
+      this.urlDetector(); // remove watcher
 
-      this.startUrlDetector();
-    }
+      this.cancelTokenSource = axios.CancelToken.source();
 
-    saveMicroblog() {
-      if (this.cancelTokenSource) {
-        this.cancelTokenSource.cancel();
-      }
+      axios.get('/assets/opg', {params: {url: matches[0]}, errorHandle: false, cancelToken: this.cancelTokenSource.token})
+        .then(response => this.microblog.assets.push(response.data))
+        .catch(this.startUrlDetector);
+    };
 
-      this.save('microblogs/save').then(() => this.$removeDraft(DRAFT_KEY))
-    }
-
-    toggleTag(tag: Tag) {
-      store.commit('microblogs/TOGGLE_TAG', { microblog: this.microblog, tag });
-    }
-
-    startUrlDetector() {
-      this.urlDetector = this.$watch('microblog.text', this.detectUrl);
-    }
+    clearTimeout(this.timeoutId);
+    this.timeoutId = window.setTimeout(handler, 500);
   }
+
+  created() {
+    this.emojis = window.emojis;
+    if (this.microblog.id) {
+      return;
+    }
+    this.$set(this.microblog, 'text', this.$loadDraft(DRAFT_KEY));
+    this.$watch('microblog.text', newValue => this.$saveDraft(DRAFT_KEY, newValue));
+
+    this.startUrlDetector();
+  }
+
+  saveMicroblog() {
+    if (this.cancelTokenSource) {
+      this.cancelTokenSource.cancel();
+    }
+
+    this.save('microblogs/save').then(() => this.$removeDraft(DRAFT_KEY))
+  }
+
+  toggleTag(tag: Tag) {
+    store.commit('microblogs/TOGGLE_TAG', {microblog: this.microblog, tag});
+  }
+
+  startUrlDetector() {
+    this.urlDetector = this.$watch('microblog.text', this.detectUrl);
+  }
+}
 </script>
-
-

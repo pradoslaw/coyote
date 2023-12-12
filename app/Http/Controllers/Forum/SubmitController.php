@@ -1,7 +1,8 @@
 <?php
-
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Events\PostSaved;
+use Coyote\Events\TopicSaved;
 use Coyote\Forum;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Requests\Forum\PostRequest;
@@ -11,36 +12,35 @@ use Coyote\Notifications\Topic\SubjectChangedNotification;
 use Coyote\Post;
 use Coyote\Repositories\Contracts\PollRepositoryInterface;
 use Coyote\Services\Forum\Tracker;
+use Coyote\Services\Parser\Extensions\Emoji;
+use Coyote\Services\Stream\Activities\Create as Stream_Create;
+use Coyote\Services\Stream\Activities\Update as Stream_Update;
+use Coyote\Services\Stream\Actor as Stream_Actor;
+use Coyote\Services\Stream\Objects\Forum as Stream_Forum;
+use Coyote\Services\Stream\Objects\Post as Stream_Post;
+use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
 use Coyote\Services\UrlBuilder;
 use Coyote\Topic;
 use Illuminate\Http\Request;
-use Coyote\Services\Stream\Activities\Create as Stream_Create;
-use Coyote\Services\Stream\Activities\Update as Stream_Update;
-use Coyote\Services\Stream\Objects\Topic as Stream_Topic;
-use Coyote\Services\Stream\Objects\Post as Stream_Post;
-use Coyote\Services\Stream\Objects\Forum as Stream_Forum;
-use Coyote\Services\Stream\Actor as Stream_Actor;
-use Coyote\Events\PostSaved;
-use Coyote\Events\TopicSaved;
 use Illuminate\Http\Response;
+use Illuminate\View\View;
 
 class SubmitController extends BaseController
 {
-    /**
-     * Show new post/edit form
-     *
-     * @param \Coyote\Forum $forum
-     * @return \Illuminate\View\View
-     */
-    public function index($forum)
+    public function index(Forum $forum): View
     {
         $this->breadcrumb->push('Nowy wątek', route('forum.topic.submit', [$forum->slug]));
-
         return Controller::view('forum.submit', [
-            'forum' => $forum,
-            'show_sticky_checkbox' => (int) ($this->userId ? $this->auth->can('sticky', $forum) : false),
-            'popular_tags' => $this->forum->popularTags($forum->id)
+            'forum'                => $forum,
+            'show_sticky_checkbox' => (int)$this->stickyNavbar($forum),
+            'popular_tags'         => $this->forum->popularTags($forum->id),
+            'emojis'               => Emoji::all(),
         ]);
+    }
+
+    private function stickyNavbar(Forum $forum): bool
+    {
+        return $this->userId && $this->auth->can('sticky', $forum);
     }
 
     /**
@@ -79,7 +79,8 @@ class SubmitController extends BaseController
 
         if ($post->isDirtyWithRelations() && $post->exists) {
             $post->fill([
-                'edit_count' => $post->edit_count + 1, 'editor_id' => $this->auth->id
+                'edit_count' => $post->edit_count + 1,
+                'editor_id'  => $this->auth->id,
             ]);
         }
 
@@ -123,7 +124,7 @@ class SubmitController extends BaseController
                 $object = (new Stream_Topic)->map($topic, $post->html);
                 $target = (new Stream_Forum)->map($forum);
 
-                $tags = array_unique((array) $request->input('tags', []));
+                $tags = array_unique((array)$request->input('tags', []));
                 $topic->setTags($tags);
             } else {
                 $object = (new Stream_Post(['url' => $url]))->map($post);
@@ -164,12 +165,15 @@ class SubmitController extends BaseController
     {
         $items = array_filter($request->input('poll.items.*.text', []));
 
-        if (!$items && $pollId) {
+        if ($items || !$pollId) {
+            if ($items) {
+                return $this->getPollRepository()->updateOrCreate($pollId, $request->input('poll'));
+            }
+            if ($pollId) {
+                return $this->getPollRepository()->find($pollId);
+            }
+        } else {
             $this->getPollRepository()->delete($pollId);
-        } elseif ($items) {
-            return $this->getPollRepository()->updateOrCreate($pollId, $request->input('poll'));
-        } elseif ($pollId) {
-            return $this->getPollRepository()->find($pollId);
         }
 
         return null;
@@ -226,9 +230,7 @@ class SubmitController extends BaseController
             );
         });
 
-        // fire the event. it can be used to index a content and/or add page path to "pages" table
         event(new TopicSaved($topic));
-        // add post to elasticsearch
         event(new PostSaved($post));
 
         return response()->json(['url' => UrlBuilder::topic($topic)]);
@@ -243,6 +245,6 @@ class SubmitController extends BaseController
         $parser = app('parser.post');
         $parser->cache->setEnable(false);
 
-        return response($parser->parse((string) $request->get('text')));
+        return response($parser->parse((string)$request->get('text')));
     }
 }
