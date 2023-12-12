@@ -4,6 +4,7 @@
       v-model="text"
       :assets.sync="assets"
       :error="errors.text"
+      :emojis="emojis"
       @save="sendMessage"
       ref="editor"
       preview-url="/User/Pm/Preview"

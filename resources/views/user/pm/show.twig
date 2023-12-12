@@ -5,30 +5,34 @@
   <div v-if="!messages.length" class="row">
     <div class="col-12">
       <vue-autocomplete
-        ref="autocomplete"
-        :tabindex="1"
-        :value.sync="recipient.name"
-        :errors="errors.recipient"
-        placeholder="Odbiorca..."
-        @select="selectName"
-      ></vue-autocomplete>
+          ref="autocomplete"
+          :tabindex="1"
+          :value.sync="recipient.name"
+          :errors="errors.recipient"
+          placeholder="Odbiorca..."
+          @select="selectName">
+      </vue-autocomplete>
     </div>
   </div>
 
   <perfect-scrollbar v-if="messages.length" id="wrap" ref="scrollbar">
     <div id="overview">
       <vue-pm
-        v-for="(message, index) in sequentialMessages"
-        :message="message"
-        :key="message.id"
-        :last="index + 1 === messages.length"
-      >
+          v-for="(message, index) in sequentialMessages"
+          :message="message"
+          :key="message.id"
+          :last="index + 1 === messages.length">
       </vue-pm>
     </div>
   </perfect-scrollbar>
 
   <div v-cloak class="typing">
-    <div v-if="isTyping" class="small pt-1"><small><i class="far fa-comment-dots"></i> <em>${ recipient.name } pisze...</em></small></div>
+    <div v-if="isTyping" class="small pt-1">
+      <small>
+        <i class="far fa-comment-dots"></i>
+        <em>${ recipient.name } pisze...</em>
+      </small>
+    </div>
   </div>
 
   {% include 'user.pm.partials.form' %}
@@ -39,9 +43,9 @@
     var data = {
       messages: {{ messages|json_encode|raw }},
       recipient: {{ recipient|json_encode|raw }},
-      sender: {{ {id: user('id'), name: user('name')}|json_encode|raw  }}
+      sender: {{ {id: user('id'), name: user('name')}|json_encode|raw }}
     };
+    var emojis = {{ emojis|json_encode|raw }};
   </script>
-
   {{ parent() }}
 {% endblock %}

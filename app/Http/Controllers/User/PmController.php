@@ -12,6 +12,7 @@ use Coyote\Pm;
 use Coyote\Repositories\Contracts\NotificationRepositoryInterface as NotificationRepository;
 use Coyote\Repositories\Contracts\PmRepositoryInterface as PmRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
+use Coyote\Services\Parser\Extensions\Emoji;
 use Coyote\Services\Parser\Factories\PmFactory;
 use Coyote\User;
 use Illuminate\Http\JsonResponse;
@@ -45,10 +46,10 @@ class PmController extends BaseController
         $pm = $this->pm->lengthAwarePaginate($this->userId);
         $messages = PmResource::collection(collect($pm->items()));
         $result = [
-          'messages'     => $messages->toArray($this->request),
-          'per_page'     => $pm->perPage(),
-          'total'        => $pm->total(),
-          'current_page' => $pm->currentPage(),
+            'messages'     => $messages->toArray($this->request),
+            'per_page'     => $pm->perPage(),
+            'total'        => $pm->total(),
+            'current_page' => $pm->currentPage(),
         ];
         if ($request->wantsJson()) {
             return response()->json($result);
@@ -61,25 +62,28 @@ class PmController extends BaseController
         $this->authorize('show', $pm);
 
         $messages = PmResource::collection($this->pm->conversation(
-          $this->userId,
-          $pm->author_id,
-          10,
-          (int)$request->query('offset', 0)));
+            $this->userId,
+            $pm->author_id,
+            10,
+            (int)$request->query('offset', 0)));
 
         $this->markAllAsRead($pm->author);
 
-        return $this->view('user.pm.show')
-          ->with(compact('pm', 'messages'))
-          ->with('recipient', $pm->author);
+        return $this->view('user.pm.show', [
+            'pm'        => $pm,
+            'messages'  => $messages,
+            'recipient' => $pm->author,
+            'emojis'    => Emoji::all(),
+        ]);
     }
 
     public function infinity(Request $request): ResourceCollection
     {
         return PmResource::collection($this->pm->conversation(
-          $this->userId,
-          (int)$request->input('author_id'),
-          10,
-          (int)$request->query('offset', 0)));
+            $this->userId,
+            (int)$request->input('author_id'),
+            10,
+            (int)$request->query('offset', 0)));
     }
 
     public function inbox(): ResourceCollection
@@ -93,8 +97,11 @@ class PmController extends BaseController
     {
         $this->breadcrumb->push('Napisz wiadomość', route('user.pm.submit'));
         return $this->view('user.pm.show', [
-          'recipient' => $request->has('to') ? $this->user->findByName($this->request->input('to')) : new \stdClass(),
-          'messages'  => []
+            'recipient' => $request->has('to')
+                ? $this->user->findByName($this->request->input('to'))
+                : new \stdClass(),
+            'messages'  => [],
+            'emojis'    => Emoji::all(),
         ]);
     }
 

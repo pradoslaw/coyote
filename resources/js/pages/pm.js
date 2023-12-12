@@ -1,22 +1,23 @@
-import store from '../store';
-import { mapState } from 'vuex';
-import Vue from 'vue';
-import PerfectScrollbar from '../components/perfect-scrollbar';
-import VuePm from '../components/pm/message.vue';
-import VueAutosave from '../plugins/autosave';
-import VuePrompt from '../components/forms/prompt.vue';
-import VueMarkdown from '../components/forms/markdown.vue';
-import VueButton from '../components/forms/button.vue';
-import VueError from '../components/forms/error.vue';
-import {default as ws} from '../libs/realtime.ts';
-import VuePaste from '../plugins/paste.js';
-import VuePagination from '../components/pagination.vue';
-import VueAutocomplete from '../components/forms/autocomplete.vue';
 import differenceInMinutes from 'date-fns/differenceInMinutes';
 import parseISO from 'date-fns/parseISO';
-import {default as axiosErrorHandler} from "@/libs/axios-error-handler";
+import Vue from 'vue';
 import VueNotifications from "vue-notification";
-import VueModals from '@/plugins/modals';
+import {mapState} from 'vuex';
+
+import VueAutocomplete from '../components/forms/autocomplete.vue';
+import VueButton from '../components/forms/button.vue';
+import VueError from '../components/forms/error.vue';
+import VueMarkdown from '../components/forms/markdown.vue';
+import VuePrompt from '../components/forms/prompt.vue';
+import VuePagination from '../components/pagination.vue';
+import PerfectScrollbar from '../components/perfect-scrollbar';
+import VuePm from '../components/pm/message.vue';
+import {default as axiosErrorHandler} from "../libs/axios-error-handler.js";
+import {default as ws} from '../libs/realtime.ts';
+import VueAutosave from '../plugins/autosave';
+import VueModals from '../plugins/modals';
+import VuePaste from '../plugins/paste.js';
+import store from '../store';
 
 Vue.use(VueAutosave);
 Vue.use(VueNotifications, {componentName: 'vue-notifications'});
@@ -45,6 +46,7 @@ new Vue({
     return {
       recipient: window.data.recipient,
       sender: window.data.sender,
+      emojis: window.emojis,
       text: '',
       isProcessing: false,
       errors: {},
@@ -111,7 +113,7 @@ new Vue({
     },
 
     listenForMessage() {
-      this.channel().on('PmCreated', ({ data }) => {
+      this.channel().on('PmCreated', ({data}) => {
         if (data.user.id === this.recipient.id) {
           store.commit('messages/add', data);
 
