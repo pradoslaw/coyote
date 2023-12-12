@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3d52844743640a80171e2be400826c00",
+    "content-hash": "520e5ff694681d9ad8d29a35edc05e45",
     "packages": [
         {
             "name": "adam-boduch/laravel-grid",
@@ -2880,6 +2880,54 @@
                 "source": "https://github.com/http-interop/http-factory-guzzle/tree/1.2.0"
             },
             "time": "2021-07-21T13:50:14+00:00"
+        },
+        {
+            "name": "incenteev/emoji-pattern",
+            "version": "v1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Incenteev/emoji-pattern.git",
+                "reference": "51991112351943f4906d5d8ea345dc9e89fbf851"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Incenteev/emoji-pattern/zipball/51991112351943f4906d5d8ea345dc9e89fbf851",
+                "reference": "51991112351943f4906d5d8ea345dc9e89fbf851",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.4"
+            },
+            "require-dev": {
+                "ext-mbstring": "*",
+                "phpstan/phpstan": "^1.10.39",
+                "phpstan/phpstan-deprecation-rules": "^1.1.4",
+                "phpstan/phpstan-phpunit": "^1.3.15",
+                "phpunit/phpunit": "^9.6.13",
+                "symfony/http-client": "^5.4.29 || ^6.3.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Incenteev\\EmojiPattern\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christophe Coevoet",
+                    "email": "stof@notk.org"
+                }
+            ],
+            "description": "PHP regexp pattern matching Unicode emojis",
+            "support": {
+                "issues": "https://github.com/Incenteev/emoji-pattern/issues",
+                "source": "https://github.com/Incenteev/emoji-pattern/tree/v1.3.0"
+            },
+            "time": "2023-10-20T13:53:22+00:00"
         },
         {
             "name": "intervention/image",
@@ -13570,8 +13618,11 @@
     "prefer-lowest": false,
     "platform": {
         "php": ">=8.0",
+        "ext-dom": "*",
+        "ext-fileinfo": "*",
         "ext-gd": "*",
-        "ext-json": "*"
+        "ext-json": "*",
+        "ext-libxml": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.1.0"

@@ -19,22 +19,22 @@ class EmojiRenderer implements NodeRendererInterface
     private function renderEmoji(EmojiNode $emoji): HtmlElement|string
     {
         if (Emoji::exists($emoji->code)) {
-            return $this->htmlElement(new Emoji($emoji->code));
+            return self::htmlElement(new Emoji($emoji->code));
         }
         return '';
     }
 
-    private function htmlElement(Emoji $emoji): HtmlElement
+    public static function htmlElement(Emoji $emoji): HtmlElement
     {
         return new HtmlElement('img', [
             'class' => 'img-smile',
-            'src'   => $this->cdnUrl($emoji),
+            'src'   => self::cdnUrl($emoji),
             'alt'   => $emoji->unicodeCharacter,
             'title' => $emoji->title,
         ], '', selfClosing: true);
     }
 
-    private function cdnUrl(Emoji $emoji): string
+    private static function cdnUrl(Emoji $emoji): string
     {
         return "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/$emoji->unified.svg";
     }

@@ -11,6 +11,7 @@ use Coyote\Services\Parser\Parsers\Markdown;
 use Coyote\Services\Parser\Parsers\Prism;
 use Coyote\Services\Parser\Parsers\Purifier;
 use Coyote\Services\Parser\Parsers\Smilies;
+use Coyote\Services\Parser\Parsers\UnicodeEmojiSvg;
 
 class PostFactory extends AbstractFactory
 {
@@ -27,6 +28,7 @@ class PostFactory extends AbstractFactory
             $parser->attach(new Purifier());
             $parser->attach(new Censore($this->container[WordRepositoryInterface::class]));
             $parser->attach(new Prism());
+            $parser->attach(new UnicodeEmojiSvg());
             return $parser;
         });
         if ($this->smiliesAllowed()) {

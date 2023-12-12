@@ -8,6 +8,16 @@ class Emoji
         return \array_key_exists($code, self::resourceFile()['emoticons']);
     }
 
+    public static function fromUnicodeCharacter(string $unicode): ?Emoji
+    {
+        foreach (self::resourceFile()['emoticons'] as $emoticon) {
+            if ($emoticon['native'] === $unicode) {
+                return new Emoji($emoticon['id']);
+            }
+        }
+        return null;
+    }
+
     private static function resourceFile(): array
     {
         static $resourceFile;
