@@ -89,6 +89,14 @@
                   background-color: #e5e5e5;
                 }
               }
+
+              &:empty {
+                &:after {
+                  font-size: 0.75em;
+                  padding: 0.5rem;
+                  content: 'Loading...';
+                }
+              }
             }
           }
         }

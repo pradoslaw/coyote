@@ -7,7 +7,7 @@
             <div class="category" v-for="category in emojis.categories">
               <h5>{{ category.name }}</h5>
               <div class="category-emojis">
-                <template v-for="name in category.subcategories">
+                <template v-for="name in category.subcategories" v-if="subcategoryVisible(name)">
                   <img
                     v-for="code in emojis.subcategories[name]"
                     v-show="visible(emojis.emoticons[code])"
@@ -51,6 +51,14 @@
 <script>
 import {mixin as clickAway} from 'vue-clickaway';
 
+function onIdle(callback) {
+  if ("requestIdleCallback" in window) {
+    window.requestIdleCallback(callback);
+  } else {
+    setTimeout(callback, 2000);
+  }
+}
+
 export default {
   mixins: [clickAway],
   props: {
@@ -60,9 +68,25 @@ export default {
     return {
       searchPhrase: '',
       emoji: null,
+      visibleCategories: 0,
+      categoryNames: Object.keys(this.emojis.subcategories),
     };
   },
+  mounted() {
+    const showSubcategoriesOnIdle = (current, limit) => {
+      if (current < limit) {
+        onIdle(() => {
+          this.visibleCategories = current;
+          showSubcategoriesOnIdle(current + 1, limit);
+        });
+      }
+    }
+    showSubcategoriesOnIdle(1, this.categoryNames.length);
+  },
   methods: {
+    subcategoryVisible(name) {
+      return this.categoryNames.indexOf(name) < this.visibleCategories;
+    },
     select(emoji) {
       this.$emit('input', emoji);
     },

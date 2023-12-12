@@ -37,7 +37,7 @@
 
       <div v-show="isPreview" v-html="previewHtml" class="preview post-content"/>
 
-      <div v-if="emojiPickerOpen" class="emoji-picker-container">
+      <div v-show="emojiPickerOpen" class="emoji-picker-container">
         <div class="triangle"/>
         <vue-emoji-picker
           ref="emoji-picker"
