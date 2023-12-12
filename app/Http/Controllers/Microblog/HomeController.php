@@ -8,6 +8,7 @@ use Coyote\Http\Resources\MicroblogResource;
 use Coyote\Http\Resources\UserResource;
 use Coyote\Repositories\Eloquent\MicroblogRepository;
 use Coyote\Services\Microblogs;
+use Coyote\Services\Parser\Extensions\Emoji;
 use Coyote\Tag;
 use Illuminate\View\View;
 
@@ -54,6 +55,7 @@ class HomeController extends BaseController
             'recommended_users' => UserResource::collection($this->microblog->recommendedUsers($this->userId)),
             'tags'              => $this->tags(),
             'render_params'     => $renderParams,
+            'emojis'            => Emoji::all(),
         ]);
     }
 
@@ -73,6 +75,7 @@ class HomeController extends BaseController
             'popular_tags'      => $this->microblog->popularTags($this->userId),
             'recommended_users' => UserResource::collection($this->microblog->recommendedUsers($this->userId)),
             'tags'              => $this->tags(),
+            'emojis'            => Emoji::all(),
         ]);
     }
 
