@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Forms\User;
 
+use Coyote\Domain\Html;
 use Coyote\Domain\User\UserSettings;
 use Coyote\Services\FormBuilder\Form;
 use Coyote\Services\FormBuilder\FormEvents;
@@ -81,7 +82,7 @@ class SettingsForm extends Form
             ])
             ->add('allow_smilies', 'checkbox', [
                 'rules' => 'boolean',
-                'label' => 'Pokazuj emotikony'
+                'label' => TwigLiteral::fromHtml(new Html('Pokazuj emotikony jako obrazki (np. <code>:)</code>, <code>:D</code>)')),
             ])
             ->add('allow_subscribe', 'checkbox', [
                 'rules' => 'boolean',
