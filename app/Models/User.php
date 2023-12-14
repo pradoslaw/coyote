@@ -139,14 +139,14 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $casts = [
-        'allow_smilies' => 'int',
-        'allow_sig' => 'int',
-        'allow_count' => 'int',
-        'allow_subscribe' => 'bool',
+        'allow_smilies'       => 'int',
+        'allow_sig'           => 'int',
+        'allow_count'         => 'int',
+        'allow_subscribe'     => 'bool',
         'allow_sticky_header' => 'int',
-        'is_confirm' => 'int',
-        'is_blocked' => 'bool',
-        'is_online' => 'bool'
+        'is_confirm'          => 'int',
+        'is_blocked'          => 'bool',
+        'is_online'           => 'bool',
     ];
 
     public static function boot()
@@ -155,7 +155,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
         static::creating(function (User $model) {
             if (empty($model->guest_id)) {
-                $model->guest_id = (string) Uuid::uuid4();
+                $model->guest_id = (string)Uuid::uuid4();
             }
         });
 
@@ -181,12 +181,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $result;
     }
 
-    /**
-     * Generuje liste mozliwych formatow daty do ustawienia w panelu uzytkownika
-     *
-     * @return array
-     */
-    public static function dateFormatList()
+    public static function dateFormatList(): array
     {
         $dateFormats = [
             '%d-%m-%Y %H:%M',
@@ -194,12 +189,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
             '%m/%d/%y %H:%M',
             '%d-%m-%y %H:%M',
             '%d %b %y %H:%M',
-            '%d %B %Y, %H:%M'
+            '%d %B %Y, %H:%M',
         ];
-
-        return array_combine($dateFormats, array_map(function ($value) {
-            return strftime($value);
-        }, $dateFormats));
+        return \array_combine($dateFormats, \array_map('\strFTime', $dateFormats));
     }
 
     /**
@@ -368,7 +360,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     /**
      * Send the password reset notification.
      *
-     * @param  string  $token
+     * @param string $token
      * @return void
      */
     public function sendPasswordResetNotification($token)
