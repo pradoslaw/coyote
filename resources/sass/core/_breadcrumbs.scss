@@ -3,17 +3,16 @@
     color: $gray;
   }
 
-  // The separator between breadcrumbs (by default, a forward-slash: "/")
   + .breadcrumb-item {
-
     &::before {
       content: "»";
     }
   }
-}
 
-// "Plywajacy" breadcrumb
-// ---------------------------
+  &:last-of-type a {
+    font-weight: bold;
+  }
+}
 
 #breadcrumb-fixed {
   position: fixed;

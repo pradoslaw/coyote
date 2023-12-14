@@ -2,18 +2,18 @@
   <div class="col-12">
     <ul class="breadcrumb text-truncate">
       <li class="breadcrumb-item">
-        <a href="{{ route('home') }}" class="d-block d-sm-none"><i class="fas fa-home"></i></a>
-        <a href="{{ route('home') }}" class="d-none d-sm-inline-block">{{ config_get('app.name') }}</a>
+        <a href="{{ route('home') }}" class="d-block d-sm-none">
+          <i class="fas fa-home"></i>
+        </a>
+        <a href="{{ route('home') }}" class="d-none d-sm-inline-block">
+          {{ config_get('app.name') }}
+        </a>
       </li>
 
       {% for breadcrumb in breadcrumbs %}
-        <li class="breadcrumb-item" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
-          <a itemprop="url" href="{{ breadcrumb.url }}">
-            {% if loop.last %}
-              <strong itemprop="title">{{ breadcrumb.name }}</strong>
-            {% else %}
-              <span itemprop="title">{{ breadcrumb.name }}</span>
-            {% endif %}
+        <li class="breadcrumb-item">
+          <a href="{{ breadcrumb.url }}">
+            {{ breadcrumb.name }}
           </a>
         </li>
       {% endfor %}
