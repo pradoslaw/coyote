@@ -1,7 +1,9 @@
 <template>
   <div class="markdown-help">
     <div class="card card-info">
-      <div class="card-header">Pomoc <span class="card-version">1.16.8</span></div>
+      <div class="card-header">
+        Pomoc <span class="card-version">1.16.9</span>
+      </div>
       <div class="card-body">
         <div class="row">
           <div class="col-md-6">
