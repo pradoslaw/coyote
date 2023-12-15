@@ -1,18 +1,18 @@
 <?php
-
 namespace Coyote\Http\Controllers\Job;
 
 use Coyote\Comment;
+use Coyote\Firm;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Resources\AssetsResource;
 use Coyote\Http\Resources\CommentCollection;
 use Coyote\Http\Resources\FlagResource;
 use Coyote\Http\Resources\JobResource;
-use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
-use Coyote\Firm;
 use Coyote\Job;
+use Coyote\Repositories\Contracts\JobRepositoryInterface as JobRepository;
 use Coyote\Services\Elasticsearch\Builders\Job\MoreLikeThisBuilder;
 use Coyote\Services\Flags;
+use Coyote\Services\Parser\Extensions\Emoji;
 use Coyote\Services\UrlBuilder;
 
 class OfferController extends Controller
@@ -50,7 +50,7 @@ class OfferController extends Controller
         }
 
         if ($job->firm_id) {
-            $job->firm->description = $parser->parse((string) $job->firm->description);
+            $job->firm->description = $parser->parse((string)$job->firm->description);
         }
 
         $job->addReferer(url()->previous());
@@ -59,20 +59,21 @@ class OfferController extends Controller
         $mlt = $this->job->search(new MoreLikeThisBuilder($job))->getSource();
 
         return $this->view('job.offer', [
-            'rates_list'        => Job::getRatesList(),
-            'employment_list'   => Job::getEmploymentList(),
-            'employees_list'    => Firm::getEmployeesList(),
-            'seniority_list'    => Job::getSeniorityList(),
-            'subscribed'        => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false,
-            'previous_url'      => $this->request->session()->get('current_url'),
-            'payment'           => $this->userId === $job->user_id ? $job->getUnpaidPayment() : null,
+            'rates_list'      => Job::getRatesList(),
+            'employment_list' => Job::getEmploymentList(),
+            'employees_list'  => Firm::getEmployeesList(),
+            'seniority_list'  => Job::getSeniorityList(),
+            'subscribed'      => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false,
+            'previous_url'    => $this->request->session()->get('current_url'),
+            'payment'         => $this->userId === $job->user_id ? $job->getUnpaidPayment() : null,
             // tags along with grouped category
-            'tags'              => $job->tags()->orderBy('priority', 'DESC')->with('category')->get()->groupCategory(),
-            'comments'          => (new CommentCollection($job->commentsWithChildren))->setOwner($job)->toArray($this->request),
-            'applications'      => $this->applications($job),
-            'flags'             => $this->flags(),
-            'assets'            => AssetsResource::collection($job->firm->assets)->toArray($this->request),
-            'subscriptions'     => $this->subscriptions()
+            'tags'            => $job->tags()->orderBy('priority', 'DESC')->with('category')->get()->groupCategory(),
+            'comments'        => (new CommentCollection($job->commentsWithChildren))->setOwner($job)->toArray($this->request),
+            'applications'    => $this->applications($job),
+            'flags'           => $this->flags(),
+            'assets'          => AssetsResource::collection($job->firm->assets)->toArray($this->request),
+            'subscriptions'   => $this->subscriptions(),
+            'emojis'          => Emoji::all(),
         ])->with(
             compact('job', 'mlt')
         );

@@ -11,10 +11,10 @@
         <div class="media-body">
           <vue-markdown
             v-model="defaultText"
+            :emojis="emojis"
             @save="saveComment"
             ref="markdown"
-            preview-url="/Mikroblogi/Preview"
-          />
+            preview-url="/Mikroblogi/Preview"/>
 
           <div class="d-flex mt-2 justify-content-end">
             <vue-button :disabled="isSubmitting" @click.native="saveComment" class="btn btn-primary btn-sm" tabindex="3" title="Ctrl+Enter aby opublikować">Zapisz</vue-button>
@@ -26,51 +26,57 @@
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
-  import { Prop } from "vue-property-decorator";
-  import Component from "vue-class-component";
-  import VueButton from '../forms/button.vue';
-  import VueAvatar from '../avatar.vue';
-  import VueMarkdown from '../forms/markdown.vue';
-  import { Model } from '@/types/models';
-  import VuePromp from '../forms/prompt.vue';
-  import { mapState } from 'vuex';
-  import { default as mixins } from '../mixins/user';
+import {Emojis, Model} from '@/types/models';
+import Vue from 'vue';
+import Component from "vue-class-component";
+import {Prop} from "vue-property-decorator";
+import {mapState} from 'vuex';
+import VueAvatar from '../avatar.vue';
+import VueButton from '../forms/button.vue';
+import VueMarkdown from '../forms/markdown.vue';
+import VuePromp from '../forms/prompt.vue';
+import {default as mixins} from '../mixins/user';
 
-  // @ts-ignore
-  @Component({
-    components: {
-      'vue-avatar': VueAvatar,
-      'vue-button': VueButton,
-      'vue-prompt': VuePromp,
-      'vue-markdown': VueMarkdown
-    },
-    mixins: [ mixins ],
-    computed: mapState('user', ['user'])
-  })
-  export default class VueForm extends Vue {
-    @Prop()
-    readonly resource!: Model;
+// @ts-ignore
+@Component({
+  components: {
+    'vue-avatar': VueAvatar,
+    'vue-button': VueButton,
+    'vue-prompt': VuePromp,
+    'vue-markdown': VueMarkdown
+  },
+  mixins: [mixins],
+  computed: mapState('user', ['user'])
+})
+export default class VueForm extends Vue {
+  public emojis!: Emojis;
 
-    @Prop()
-    readonly resourceId!: number;
+  @Prop()
+  readonly resource!: Model;
 
-    isSubmitting = false;
-    defaultText = '';
+  @Prop()
+  readonly resourceId!: number;
 
-    saveComment() {
-      this.isSubmitting = true;
+  isSubmitting = false;
+  defaultText = '';
 
-      this.$store.dispatch('comments/save', { text: this.defaultText, resource_type: this.resource, resource_id: this.resourceId })
-        .then(response => {
-          this.defaultText = '';
-          this.scrollIntoView(response.data);
-        })
-        .finally(() => this.isSubmitting = false);
-    }
-
-    scrollIntoView(comment) {
-      this.$nextTick(() => window.location.hash = `comment-${comment.id}`);
-    }
+  created() {
+    this.emojis = window.emojis;
   }
+
+  saveComment() {
+    this.isSubmitting = true;
+
+    this.$store.dispatch('comments/save', {text: this.defaultText, resource_type: this.resource, resource_id: this.resourceId})
+      .then(response => {
+        this.defaultText = '';
+        this.scrollIntoView(response.data);
+      })
+      .finally(() => this.isSubmitting = false);
+  }
+
+  scrollIntoView(comment) {
+    this.$nextTick(() => window.location.hash = `comment-${comment.id}`);
+  }
+}
 </script>

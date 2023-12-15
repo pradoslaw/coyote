@@ -1,21 +1,21 @@
-import Vue from 'vue';
 import VueComment from '@/components/comments/comment.vue';
-import VueAutosize from '@/plugins/autosize';
-import store from '@/store';
+import VueFlag from '@/components/flags/flag.vue';
 import VueMap from '@/components/google-maps/map.vue';
 import VueMarker from '@/components/google-maps/marker.vue';
-import VueFlag from '@/components/flags/flag.vue';
-import { mapGetters, mapState } from 'vuex';
-import { default as mixins } from '@/components/mixins/user';
-import VueCommentForm from "@/components/comments/form";
+import {default as mixins} from '@/components/mixins/user';
+import VueAutosize from '@/plugins/autosize';
+import store from '@/store';
+import Vue from 'vue';
+import {mapGetters, mapState} from 'vuex';
+import VueCommentForm from "../../components/comments/form.vue";
 
 Vue.use(VueAutosize);
 
 new Vue({
   el: '#js-flags',
   delimiters: ['${', '}'],
-  data: { job: window.job },
-  components: { 'vue-flag': VueFlag },
+  data: {job: window.job},
+  components: {'vue-flag': VueFlag},
   store,
   created() {
     store.commit('flags/init', window.flags);
@@ -39,9 +39,9 @@ new Vue({
 new Vue({
   el: '#js-sidemenu',
   delimiters: ['${', '}'],
-  data: { job: window.job },
+  data: {job: window.job},
   store,
-  mixins: [ mixins ],
+  mixins: [mixins],
   created() {
     store.state.jobs.subscriptions = window.subscriptions;
   },
@@ -59,7 +59,7 @@ new Vue({
 new Vue({
   el: '#js-comments',
   delimiters: ['${', '}'],
-  mixins: [ mixins ],
+  mixins: [mixins],
   components: {
     'vue-comment': VueComment,
     'vue-comment-form': VueCommentForm
