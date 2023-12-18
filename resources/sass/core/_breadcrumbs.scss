@@ -9,7 +9,7 @@
     }
   }
 
-  &:last-of-type a {
+  &:last-child:not(:first-child) a {
     font-weight: bold;
   }
 }
