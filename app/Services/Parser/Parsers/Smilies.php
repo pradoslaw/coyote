@@ -25,7 +25,7 @@ class Smilies extends HashParser implements Parser
         ':['  => 'rage',
         ':-[' => 'rage',
         ':|'  => 'raised_eyebrow',
-        ':]'  => 'sunglasses',
+        ':]'  => 'smirk',
         ':d'  => 'happy',
     ];
 
