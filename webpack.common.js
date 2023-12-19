@@ -6,8 +6,6 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin');
 
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-
 module.exports = {
   devtool: 'source-map', // slower but better
   module: {
@@ -78,9 +76,6 @@ module.exports = {
     chunkFilename: 'js/[name]-[contenthash].js',
     publicPath: '/'
   },
-  // externals: {
-  //   vue: "Vue"
-  // },
   optimization: {
     runtimeChunk: "single",
     splitChunks: {
@@ -115,8 +110,7 @@ module.exports = {
   },
   resolve: {
     mainFields: ['main', 'module'],
-    extensions: [ '.ts', '.tsx', '.js', '.vue' ],
-
+    extensions: ['.ts', '.tsx', '.js', '.vue'],
     alias: {
       '@': path.join(__dirname, 'resources/js'),
       vue: 'vue/dist/vue.esm.js'
@@ -148,7 +142,6 @@ module.exports = {
     }),
 
     new SVGSpritemapPlugin([
-      // 'resources/images/logos/logo-python.svg',
       'resources/images/logos/logo-php.svg',
       'resources/images/logos/logo-java.svg',
       'resources/images/logos/logo-javascript.svg',
@@ -161,7 +154,7 @@ module.exports = {
       'resources/images/logos/logo-rust.svg',
       'resources/images/logos/logo-go.svg',
       'resources/images/logos/logo-unity.svg',
-      ], {
+    ], {
       output: {
         filename: 'img/sprites-[contenthash].svg',
 
@@ -174,11 +167,11 @@ module.exports = {
       },
       sprite: {
         generate: {
-          // Generate <use> tags within the spritemap as the <view> tag will use this
+          // Generate <use> tags within the sprite map as the <view> tag will use this
           use: true,
 
           // Generate <view> tags within the svg to use in css via fragment identifier url
-          // and add -fragment suffix for the identifier to prevent naming colissions with the symbol identifier
+          // and add -fragment suffix for the identifier to prevent naming collisions with the symbol identifier
           view: '-fragment',
 
           // Generate <symbol> tags within the SVG to use in HTML via <use> tag
@@ -190,9 +183,5 @@ module.exports = {
         filename: path.join(__dirname, 'resources/sass/helpers/_sprites.scss')
       }
     }),
-
-    // ,new BundleAnalyzerPlugin({analyzerPort: 3075})
   ]
 };
-
-
