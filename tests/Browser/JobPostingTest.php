@@ -16,7 +16,7 @@ class JobPostingTest extends DuskTestCase
     {
         parent::setUp();
 
-        $this->user = factory(User::class)->create();
+        $this->user = factory(User::class)->create(['gdpr' => '{}']);
     }
 
     public function testSubmitWithoutFirm()
@@ -24,9 +24,9 @@ class JobPostingTest extends DuskTestCase
         $fake = Factory::create();
 
         $this->browse(function (Browser $browser) use ($fake) {
-            $browser->loginAs($this->user);
-
-            $browser->visit('/Praca/Submit')
+            $browser
+                ->loginAs($this->user)
+                ->visit('/Praca/Submit')
                 ->resize(1920, 1080)
                 ->type('title', $title = $fake->text(50))
                 ->type('salary_from', $salaryFrom = $fake->numberBetween(0, 999))
@@ -39,9 +39,8 @@ class JobPostingTest extends DuskTestCase
                 ->clickLink('Powrót do ogłoszenia')
                 ->assertSeeIn('.media-heading', $title)
                 ->assertSeeIn('.salary', $salaryFrom)
-                ->assertSeeIn('.salary', '₣');
-
-            $browser->logout();
+                ->assertSeeIn('.salary', '₣')
+                ->logout();
         });
     }
 

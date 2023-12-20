@@ -48,9 +48,20 @@ abstract class Controller extends BaseController
     {
         if (!$this->request->ajax()) {
             $data['breadcrumb'] = $this->breadcrumb->render();
+            $data['gdpr'] = [
+                'content'  => TwigLiteral::fromHtml((new UserSettings)->cookieAgreement()),
+                'accepted' => $this->gdprAccepted(),
+            ];
         }
-
         return view($view, $data);
+    }
+
+    private function gdprAccepted(): bool
+    {
+        if ($this->request->user()) {
+            return (bool)$this->auth->gdpr;
+        }
+        return false;
     }
 
     /**

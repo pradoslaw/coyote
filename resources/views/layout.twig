@@ -55,6 +55,8 @@
 
   {{ schema.organization() }}
 
+  {% include 'components.gdpr' %}
+
   <header class="{{ auth_guest() or user('allow_sticky_header') ? ' fixed-top' }}">
     <div class="navbar-border-top"></div>
 

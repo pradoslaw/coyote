@@ -1,0 +1,57 @@
+{% if not gdpr.accepted %}
+  <div class="gdpr-modal modal" tabindex="-1" role="dialog" style="display:none;">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            Dbamy o Waszą prywatność
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">{{ gdpr.content }}</div>
+        <div>
+          <ul class="list-group">
+            <li class="list-group-item">
+              <div class="custom-control custom-checkbox">
+                <input id="required" type="checkbox" class="custom-control-input" disabled="disabled" checked="checked"/>
+                <label for="required" class="custom-control-label">
+                  Niezbędne (zawsze aktywne)
+                </label>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div class="custom-control custom-checkbox">
+                <input id="advertising" type="checkbox" class="custom-control-input" checked="checked"/>
+                <label for="advertising" class="custom-control-label">
+                  Reklamowe
+                </label>
+              </div>
+            </li>
+            <li class="list-group-item">
+              <div class="custom-control custom-checkbox">
+                <input id="analytics" type="checkbox" class="custom-control-input" checked="checked"/>
+                <label for="analytics" class="custom-control-label">
+                  Analityczne
+                </label>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="gdpr-none">
+            Zaakceptuj niezbędne
+          </button>
+          <button type="button" class="btn btn-secondary" id="gdpr-all">
+            Zaakceptuj wszystkie
+          </button>
+          <button type="button" class="btn btn-primary" id="gdpr-selected">
+            Zaakceptuj zaznaczone
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}

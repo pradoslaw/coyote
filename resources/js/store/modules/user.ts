@@ -5,6 +5,8 @@ const state = {
   followers: window["__INITIAL_STATE"]?.followers || []
 };
 
+export const guest = !('name' in window['__INITIAL_STATE'].user);
+
 const getters = {
   isAuthorized: state => state.user.id !== undefined,
   dateFormat: state => (defaultFormat = null) => state.user.date_format ?? defaultFormat,
@@ -18,33 +20,33 @@ const mutations = {
     state.user = Object.assign(state.user, payload);
   },
 
-  ADD_RELATION(state, { userId, isBlocked }) {
-    state.followers.push({ is_blocked: isBlocked, user_id: userId });
+  ADD_RELATION(state, {userId, isBlocked}) {
+    state.followers.push({is_blocked: isBlocked, user_id: userId});
   },
 
-  REMOVE_RELATION(state, { userId, isBlocked }) {
+  REMOVE_RELATION(state, {userId, isBlocked}) {
     state.followers.splice(state.followers.findIndex(follower => follower.user_id === userId && follower.is_blocked === isBlocked), 1);
   }
 };
 
 const actions = {
-  block({ commit }, relatedUserId: number) {
-    return axios.post(`/User/Block/${relatedUserId}`).then(() => commit('ADD_RELATION', { userId: relatedUserId, isBlocked: true }));
+  block({commit}, relatedUserId: number) {
+    return axios.post(`/User/Block/${relatedUserId}`).then(() => commit('ADD_RELATION', {userId: relatedUserId, isBlocked: true}));
   },
 
-  unblock({ commit }, relatedUserId: number) {
-    return axios.post(`/User/Unblock/${relatedUserId}`).then(() => commit('REMOVE_RELATION', { userId: relatedUserId, isBlocked: true }));
+  unblock({commit}, relatedUserId: number) {
+    return axios.post(`/User/Unblock/${relatedUserId}`).then(() => commit('REMOVE_RELATION', {userId: relatedUserId, isBlocked: true}));
   },
 
-  follow({ commit }, relatedUserId: number) {
-    return axios.post(`/User/Follow/${relatedUserId}`).then(() => commit('ADD_RELATION', { userId: relatedUserId, isBlocked: false }));
+  follow({commit}, relatedUserId: number) {
+    return axios.post(`/User/Follow/${relatedUserId}`).then(() => commit('ADD_RELATION', {userId: relatedUserId, isBlocked: false}));
   },
 
-  unfollow({ commit }, relatedUserId: number) {
-    return axios.post(`/User/Unfollow/${relatedUserId}`).then(() => commit('REMOVE_RELATION', { userId: relatedUserId, isBlocked: false }));
+  unfollow({commit}, relatedUserId: number) {
+    return axios.post(`/User/Unfollow/${relatedUserId}`).then(() => commit('REMOVE_RELATION', {userId: relatedUserId, isBlocked: false}));
   },
 
-  pushSubscription({ commit }, pushSubscription) {
+  pushSubscription({commit}, pushSubscription) {
     return axios.post('/User/push', pushSubscription);
   }
 }

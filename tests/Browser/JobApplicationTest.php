@@ -13,8 +13,6 @@ class JobApplicationTest extends DuskTestCase
 
     public function testSuccessfulSubmitJobApplication()
     {
-
-
         try {
             $mpdf = new Mpdf(['tempDir' => storage_path('app')]);
             $mpdf->WriteHTML($this->faker->text);
@@ -24,16 +22,15 @@ class JobApplicationTest extends DuskTestCase
             $this->browse(function (Browser $browser) {
                 $job = factory(Job::class)->create(['email' => $this->faker->email]);
 
-                $browser->visit('/Praca/Application/' . $job->id)
+                $browser
+                    ->visit('/Praca/Application/' . $job->id)
                     ->resize(1920, 1080)
                     ->check('label[for="enable-invoice"]')
                     ->attach('.thumbnail-mask', storage_path('demo.pdf'))
-
                     ->type('name', $name = $this->faker->name)
                     ->type('email', $email = $this->faker->email)
                     ->type('phone', $phone = $this->faker->phoneNumber)
                     ->type('github', $url = $this->faker->url)
-
                     ->press('Wyślij')
                     ->waitForText('Zgłoszenie zostało prawidłowo wysłane.');
 

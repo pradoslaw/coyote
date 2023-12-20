@@ -11,7 +11,7 @@ class UserAccountTest extends DuskTestCase
 {
     public function testDeleteAccountWithPassword()
     {
-        $user = factory(User::class)->create(['password' => Hash::make('123')]);
+        $user = factory(User::class)->create(['password' => Hash::make('123'), 'gdpr' => '{}']);
 
         $this->browse(function (Browser $browser) use ($user) {
             $faker = Factory::create();
@@ -34,7 +34,7 @@ class UserAccountTest extends DuskTestCase
 
     public function testDeleteAccountWithoutPassword()
     {
-        $user = factory(User::class)->create(['password' => null]);
+        $user = factory(User::class)->create(['password' => null, 'gdpr' => '{}']);
 
         $this->browse(function (Browser $browser) use ($user) {
             $browser

@@ -74,6 +74,7 @@ use Ramsey\Uuid\Uuid;
  * @property bool $is_sponsor
  * @property User[] $followers
  * @property Tag[] $skills
+ * @property string|null $gdpr
  */
 class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {

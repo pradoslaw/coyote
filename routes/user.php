@@ -1,6 +1,9 @@
 <?php
 
 /** @var $this \Illuminate\Routing\Router */
+
+use Coyote\Http\Controllers\User\PrivacyController;
+
 $this->group(['namespace' => 'User', 'prefix' => 'User', 'middleware' => 'auth', 'as' => 'user.'], function () {
     /** @var $this \Illuminate\Routing\Router */
     // strona glowna panelu uzytkownika
@@ -71,6 +74,9 @@ $this->group(['namespace' => 'User', 'prefix' => 'User', 'middleware' => 'auth',
     $this->post('push', ['uses' => 'PushController@store']);
 });
 
+$this->put('User/Privacy', [PrivacyController::class, 'set']);
+$this->get('User/Privacy/Reset', [PrivacyController::class, 'reset']);
+
 // wizytowka usera. komponent ktory pojawia sie po naprowadzenia kursora nad login usera
 $this->get('User/Vcard/{user}', ['uses' => 'User\VcardController@index', 'as' => 'user.vcard']);
 // zadanie AJAX z lista loginow (podpowiedzi)
@@ -83,4 +89,3 @@ $this->post('User/Settings/Ajax', ['uses' => 'User\SettingsController@ajax', 'as
 $this->get('notification/{uuid}', ['uses' => 'User\NotificationsController@url'])->name('user.notifications.url');
 $this->get('Notification', ['uses' => 'User\NotificationsController@redirectToUrl'])->name('user.notifications.redirect');
 $this->get('ping', ['uses' => 'User\PingController@index'])->name('ping');
-

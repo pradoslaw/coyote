@@ -12,7 +12,7 @@ class ApiTokenTest extends DuskTestCase
 
     public function testCreateToken()
     {
-        $user = factory(User::class)->create();
+        $user = factory(User::class)->create(['gdpr' => '{}']);
 
         $this->browse(function (Browser $browser) use ($user) {
             $browser
@@ -22,9 +22,8 @@ class ApiTokenTest extends DuskTestCase
                 ->press('Dodaj')
                 ->waitForText('Twój nowy token')
                 ->press('OK')
-                ->assertSee($token);
-
-            $browser->logout();
+                ->assertSee($token)
+                ->logout();
         });
     }
 }

@@ -34,7 +34,7 @@ class ForumTest extends DuskTestCase
     public function testWriteTopic()
     {
         $forum = $this->createForum();
-        $user = factory(User::class)->create(['reputation' => 5000]);
+        $user = factory(User::class)->create(['reputation' => 5000, 'gdpr' => '{}']);
 
         $this->browse(function (Browser $browser) use ($forum, $user) {
             $faker = Factory::create();

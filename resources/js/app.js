@@ -17,6 +17,7 @@ import './plugins/flags.ts';
 import './plugins/sociale.js';
 import './sentry.ts';
 import './store/index.ts';
+import './gdpr.ts';
 
 Prism.highlightAll();
 Vue.use(VueAutosize);

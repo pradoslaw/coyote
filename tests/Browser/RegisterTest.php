@@ -14,16 +14,18 @@ class RegisterTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $faker = Factory::create();
 
-            $browser->visit('/Register')
-                    ->type('name', $faker->userName)
-                    ->type('email', $faker->email)
-                    ->type('password', $password = $faker->password)
-                    ->type('password_confirmation', $password)
-                    ->check('label[for="terms"]')
-                    ->press('Utwórz konto')
-                    ->assertPathIs('/User');
-
-            $browser->logout();
+            $browser
+                ->visit('/Register')
+                ->click('#gdpr-all')
+                ->waitUntilMissing('.gdpr-modal')
+                ->type('name', $faker->userName)
+                ->type('email', $faker->email)
+                ->type('password', $password = $faker->password)
+                ->type('password_confirmation', $password)
+                ->check('label[for="terms"]')
+                ->press('Utwórz konto')
+                ->assertPathIs('/User')
+                ->logout();
         });
     }
 

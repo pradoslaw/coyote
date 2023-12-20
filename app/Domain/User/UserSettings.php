@@ -8,7 +8,7 @@ class UserSettings
     public function marketingAgreement(): Html
     {
         $gdpr = '<a href="mailto:gdpr@4programmers.net">gdpr@4programmers.net</a>';
-        $_4programmers = '<a href="https://4programmers.net/">4programmers.net</a>';
+        $_4programmers = '<a href="/">4programmers.net</a>';
 
         return new Html("Wyrażam zgodę na otrzymywanie, na podany przeze mnie adres e-mail, informacji handlowych
             kierowanych do mnie przez 4programmers.net (tj. Makana sp. z o.o., z siedzibą przy ul. Krupniczej 13, 50-075
@@ -40,5 +40,20 @@ class UserSettings
             można wycofać w każdej chwili poprzez usunięcie danych w koncie, co nie wpływa na zgodność z prawem
             przetwarzania dokonanego przed jej wycofaniem. Więcej informacji o przetwarzaniu danych osobowych oraz
             Twoich prawach z tym związanych możesz znaleźć w $privacyPolicy.");
+    }
+
+    public function cookieAgreement(): Html
+    {
+        $_4programmers = '<a href="/">4programmers.net</a>';
+        $privacyPolicy = '<a href="/Polityka_prywatności">polityce prywatności</a>';
+
+        return new Html(
+            "Na forum $_4programmers korzystamy z plików cookies. Część z nich jest niezbędna do funkcjonowania
+             naszego forum, natomiast wykorzystanie pozostałych zależy od Twojej dobrowolnej zgody, którą możesz 
+             wyrazić poniżej. Klikając „Zaakceptuj Wszystkie” zgadzasz się na wykorzystywanie przez nas plików cookies 
+             analitycznych oraz reklamowych, jeżeli nie chcesz udzielić nam swojej zgody kliknij „Tylko niezbędne”. 
+             Możesz także wyrazić swoją zgodę odrębnie dla plików cookies analitycznych lub reklamowych w tym celu 
+             ustaw odpowiednio suwaki i kliknij „Zaakceptuj Zaznaczone”. Więcej informacji o technologii cookie znajduje
+              się w naszej $privacyPolicy.");
     }
 }
