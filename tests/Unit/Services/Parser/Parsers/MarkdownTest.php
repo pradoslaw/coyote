@@ -287,6 +287,15 @@ class MarkdownTest extends TestCase
         $this->assertMatchesRegularExpression("~<a href=\".*" . preg_quote($path) . "\">" . preg_quote($title) . "</a>~", $input);
     }
 
+    /**
+     * @test
+     * @doesNotPerformAssertions
+     */
+    public function inlineEmoji()
+    {
+        $this->markdown->parse('*:emoji:*');
+    }
+
     private function createPage($title, $path)
     {
         $now = new \DateTime('now');
@@ -294,5 +303,4 @@ class MarkdownTest extends TestCase
             'title' => $title, 'path' => $path, 'created_at' => $now, 'updated_at' => $now,
         ]);
     }
-
 }

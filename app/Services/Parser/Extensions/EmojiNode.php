@@ -1,9 +1,9 @@
 <?php
 namespace Coyote\Services\Parser\Extensions;
 
-use League\CommonMark\Node\Block\AbstractBlock;
+use League\CommonMark\Node\Inline\AbstractInline;
 
-class EmojiNode extends AbstractBlock
+class EmojiNode extends AbstractInline
 {
     public function __construct(public string $code)
     {
