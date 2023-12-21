@@ -52,8 +52,8 @@ class UserSettings
              naszego forum, natomiast wykorzystanie pozostałych zależy od Twojej dobrowolnej zgody, którą możesz 
              wyrazić poniżej. Klikając „Zaakceptuj Wszystkie” zgadzasz się na wykorzystywanie przez nas plików cookies 
              analitycznych oraz reklamowych, jeżeli nie chcesz udzielić nam swojej zgody kliknij „Tylko niezbędne”. 
-             Możesz także wyrazić swoją zgodę odrębnie dla plików cookies analitycznych lub reklamowych w tym celu 
-             ustaw odpowiednio suwaki i kliknij „Zaakceptuj Zaznaczone”. Więcej informacji o technologii cookie znajduje
-              się w naszej $privacyPolicy.");
+             Możesz także wyrazić swoją zgodę odrębnie dla plików cookies analitycznych lub reklamowych. W tym celu 
+             ustaw odpowiednio pola wyboru i kliknij „Zaakceptuj Zaznaczone”. Więcej informacji o technologii cookie 
+             znajduje się w naszej $privacyPolicy.");
     }
 }
