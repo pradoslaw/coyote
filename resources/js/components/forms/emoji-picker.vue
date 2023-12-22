@@ -63,6 +63,7 @@ export default {
   mixins: [clickAway],
   props: {
     emojis: {require: true},
+    open: {require: true},
   },
   data() {
     return {
@@ -72,18 +73,27 @@ export default {
       categoryNames: Object.keys(this.emojis.subcategories),
     };
   },
-  mounted() {
-    const showSubcategoriesOnIdle = (current, limit) => {
-      if (current < limit) {
-        onIdle(() => {
-          this.visibleCategories = current;
-          showSubcategoriesOnIdle(current + 1, limit);
-        });
+  watch: {
+    open(newValue) {
+      if (newValue) {
+        this.loadEmojis();
       }
-    }
-    showSubcategoriesOnIdle(1, this.categoryNames.length);
+    },
   },
   methods: {
+    loadEmojis() {
+      const limit = this.categoryNames.length;
+
+      const showSubcategoriesOnIdle = (current) => {
+        if (this.open && current < limit) {
+          onIdle(() => {
+            this.visibleCategories = current;
+            showSubcategoriesOnIdle(current + 1);
+          });
+        }
+      }
+      showSubcategoriesOnIdle(this.visibleCategories + 1);
+    },
     subcategoryVisible(name) {
       return this.categoryNames.indexOf(name) < this.visibleCategories;
     },
@@ -137,13 +147,13 @@ export default {
         return style.display === 'none';
       }
       return false;
-    }
+    },
   },
   computed: {
     searchSlug() {
       return this.searchPhrase.replaceAll(/[^a-z0-9]/gi, '');
-    }
-  }
+    },
+  },
 };
 
 function containsWords(subject, searchPhrase) {

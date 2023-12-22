@@ -42,6 +42,7 @@
         <vue-emoji-picker
           ref="emoji-picker"
           :emojis="emojis"
+          :open="emojiPickerOpen"
           @input="insertEmoji"
           @blur="blurEmojiPicker"
           @close="closeEmojiPicker"/>
