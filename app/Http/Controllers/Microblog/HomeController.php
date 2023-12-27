@@ -6,6 +6,7 @@ use Coyote\Http\Factories\CacheFactory;
 use Coyote\Http\Resources\MicroblogCollection;
 use Coyote\Http\Resources\MicroblogResource;
 use Coyote\Http\Resources\UserResource;
+use Coyote\Microblog;
 use Coyote\Repositories\Eloquent\MicroblogRepository;
 use Coyote\Services\Microblogs;
 use Coyote\Services\Parser\Extensions\Emoji;
@@ -63,7 +64,7 @@ class HomeController extends BaseController
     {
         $microblog = $this->builder->one($id);
         abort_if(!is_null($microblog->parent_id), 404);
-        $excerpt = excerpt($microblog->html);
+        $excerpt = $this->title($microblog);
         $this->breadcrumb->push($excerpt, route('microblog.view', [$microblog->id]));
         MicroblogResource::withoutWrapping();
         $resource = new MicroblogResource($microblog);
@@ -77,6 +78,15 @@ class HomeController extends BaseController
             'tags'              => $this->tags(),
             'emojis'            => Emoji::all(),
         ]);
+    }
+
+    private function title(Microblog $microblog): string
+    {
+        $excerpt = excerpt($microblog->html);
+        if ($excerpt) {
+            return $excerpt;
+        }
+        return 'Wpis użytkownika: ' . $microblog->user->name;
     }
 
     private function tags(): array

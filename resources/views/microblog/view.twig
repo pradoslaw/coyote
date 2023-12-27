@@ -1,9 +1,11 @@
 {% extends 'layout' %}
-{% block title %}{{ excerpt }}{{ parent() }}{% endblock %}
+
+{% block title %}{{ excerpt }} {{ parent() }}{% endblock %}
 {% block description %}{{ excerpt }}{% endblock %}
 {% block keywords %}{{ keywords(microblog.text)|join(',') }}{% endblock %}
 
 {% import 'components.meta' as meta %}
+
 {% block meta_robots %}
   {{ meta.robots('index, follow') }}
   {{ parent() }}
@@ -15,7 +17,7 @@
       <vue-microblog :microblog="microblog" :wrap="false"></vue-microblog>
     </div>
     {% include 'microblog.aside' %}
-    <vue-notifications position="bottom right" />
+    <vue-notifications position="bottom right"></vue-notifications>
   </div>
 
   <script>
