@@ -3,65 +3,48 @@
 namespace Coyote\Services\Stream\Objects;
 
 use Coyote\Services\UrlBuilder;
-use Coyote\Comment as Model;
 
 class Comment extends ObjectAbstract
 {
     private const EXCERPT_SIZE = 1024;
 
     /**
-     * @param array ...$args
+     * @param mixed ...$args
      * @return $this
      * @throws \Exception
      */
     public function map(...$args)
     {
-        $object = $args[0];
-
-        $class = class_basename($object);
+        $class = class_basename($args[0]);
         if (!method_exists($this, $class)) {
             throw new \Exception("There is not method called $class");
         }
-
         $this->$class(...$args);
-
         return $this;
     }
 
-    /**
-     * @param \Coyote\Microblog $microblog
-     */
-    private function microblog($microblog)
+    private function microblog(\Coyote\Microblog $microblog): void
     {
         $this->id = $microblog->id;
         $this->url = UrlBuilder::microblogComment($microblog);
         $this->displayName = excerpt($microblog->html, self::EXCERPT_SIZE);
     }
 
-    /**
-     * @param \Coyote\Post $post
-     * @param \Coyote\Post\Comment $comment
-     * @param \Coyote\Topic $topic
-     */
-    private function post($post, $comment, $topic)
+    private function post(\Coyote\Post $post, \Coyote\Post\Comment $comment, \Coyote\Topic $topic): void
     {
         $this->id = $comment->id;
         $this->displayName = excerpt($comment->html, self::EXCERPT_SIZE);
         $this->url = UrlBuilder::topic($topic) . '?p=' . $post->id . '#comment-' . $comment->id;
     }
 
-    /**
-     * @param \Coyote\Wiki $wiki
-     * @param \Coyote\Wiki\Comment $comment
-     */
-    private function wiki($wiki, $comment)
+    private function wiki(\Coyote\Wiki $wiki, \Coyote\Wiki\Comment $comment): void
     {
         $this->id = $comment->id;
         $this->displayName = excerpt($comment->html, self::EXCERPT_SIZE);
         $this->url = UrlBuilder::wikiComment($wiki, $comment->id);
     }
 
-    public function comment(Model $comment)
+    public function comment(\Coyote\Comment $comment)
     {
         $this->id = $comment->id;
         $this->displayName = excerpt($comment->html, self::EXCERPT_SIZE);
