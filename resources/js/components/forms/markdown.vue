@@ -99,7 +99,7 @@
 </template>
 
 <script lang="ts">
-import {Asset, Emoji, Emojis} from '@/types/models';
+import {Asset, Emojis} from '@/types/models';
 import {EditorState, link} from "@riddled/4play/index.js";
 import axios from 'axios';
 import Prism from 'prismjs';
@@ -115,8 +115,8 @@ import {default as formMixin} from '../mixins/form.js';
 import VueTabs from '../tabs.vue';
 import VueThumbnail from "../thumbnail.vue";
 import VueEditor from './editor.vue';
-import VueHelp from './help.vue';
 import VueEmojiPicker from './emoji-picker.vue';
+import VueHelp from './help.vue';
 
 const CONTENT = 'Treść';
 const PREVIEW = 'Podgląd';
@@ -479,9 +479,17 @@ export default class VueMarkdown extends Vue {
   }
 
   get emojisProperty() {
-    return Object.fromEntries(Object
-      .values(this.emojis!.emoticons)
-      .map((emoji: Emoji) => [':' + emoji.id + ':', emoji.name]));
+    const {categories, subcategories, emoticons} = this.emojis!;
+    const emojis = {};
+    for (const category of categories) {
+      for (const subcategory of category.subcategories) {
+        for (const emoticon of subcategories[subcategory]) {
+          const emoji = emoticons[emoticon];
+          emojis[':' + emoji.id + ':'] = emoji.name
+        }
+      }
+    }
+    return emojis;
   }
 
   focus() {
