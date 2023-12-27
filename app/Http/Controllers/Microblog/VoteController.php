@@ -8,13 +8,13 @@ use Coyote\Http\Resources\MicroblogResource;
 use Coyote\Microblog;
 use Coyote\Notifications\Microblog\VotedNotification;
 use Coyote\Reputation;
+use Coyote\Services\Stream\Activities\Vote as Stream_Vote;
+use Coyote\Services\Stream\Objects\Comment as Stream_Comment;
+use Coyote\Services\Stream\Objects\Microblog as Stream_Microblog;
 use Coyote\Services\UrlBuilder;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
-use Coyote\Services\Stream\Activities\Vote as Stream_Vote;
-use Coyote\Services\Stream\Objects\Microblog as Stream_Microblog;
-use Coyote\Services\Stream\Objects\Comment as Stream_Comment;
 
 /**
  * Ocena glosow na dany wpis na mikro (lub wyswietlanie loginow ktorzy oddali ow glos)
@@ -73,7 +73,7 @@ class VoteController extends Controller
                 $microblog->votes++;
             }
 
-            $microblog->score = $microblog->getScore();
+            $microblog->resetScore();
             $target = null;
 
             // reputacje przypisujemy tylko za ocene wpisu a nie komentarza!!
@@ -108,7 +108,7 @@ class VoteController extends Controller
 
     public function voters(Microblog $microblog)
     {
-        $microblog->load(['voters', 'voters.user' => fn ($query) => $query->select('id', 'name')->withTrashed()]);
+        $microblog->load(['voters', 'voters.user' => fn($query) => $query->select('id', 'name')->withTrashed()]);
 
         return ['id' => $microblog->id, 'parent_id' => $microblog->parent_id, 'users' => $microblog->voters->pluck('user.name')];
     }

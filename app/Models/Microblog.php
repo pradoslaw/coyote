@@ -1,7 +1,7 @@
 <?php
-
 namespace Coyote;
 
+use Carbon\Carbon;
 use Coyote\Microblog\Vote;
 use Coyote\Models\Asset;
 use Coyote\Models\Scopes\ForUser;
@@ -10,8 +10,16 @@ use Coyote\Models\Subscription;
 use Coyote\Services\Media\SerializeClass;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Expression;
+use Illuminate\Database\Query\JoinClause;
+use Illuminate\Support;
 
 /**
  * @property int $id
@@ -20,8 +28,8 @@ use Illuminate\Database\Query\Expression;
  * @property int $votes
  * @property int $score
  * @property int $is_sponsored
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  * @property string $deleted_at
  * @property string $text
  * @property string $html
@@ -30,184 +38,129 @@ use Illuminate\Database\Query\Expression;
  * @property Tag[] $tags
  * @property User $user
  * @property Microblog[] $children
- * @property Microblog\Vote[]|\Illuminate\Support\Collection $voters
- * @property Asset[]|\Illuminate\Support\Collection $assets
+ * @property Microblog\Vote[]|Support\Collection $voters
+ * @property Asset[]|Support\Collection $assets
  */
 class Microblog extends Model
 {
     use SoftDeletes, Taggable, ForUser, SerializeClass;
-    use Searchable{
+    use Searchable {
         getIndexBody as parentGetIndexBody;
     }
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = ['parent_id', 'user_id', 'text'];
-
-    /**
-     * @var string
-     */
     protected $dateFormat = 'Y-m-d H:i:se';
-
-    /**
-     * The attributes that should be mutated to dates.
-     *
-     * @var array
-     */
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
-
-    /**
-     * @var string[]
-     */
     protected $casts = ['is_sponsored' => 'bool'];
+    protected $attributes = [
+        'votes' => 0,
+        'views' => 1,
+    ];
 
-    /**
-     * Domyslne wartosci dla nowego modelu
-     *
-     * @var array
-     */
-    protected $attributes = ['votes' => 0, 'views' => 1];
-
-    /**
-     * Html version of the entry.
-     *
-     * @var null|string
-     */
-    private $html = null;
+    private ?string $html = null;
 
     public static function boot()
     {
         parent::boot();
-
-        static::creating(function (Microblog $model) {
-            // nadajemy domyslna wartosc sortowania przy dodawaniu elementu
-            $model->score = $model->getScore();
-        });
-
+        static::creating(fn(Microblog $model) => $model->resetScore());
         static::addGlobalScope(resolve(UserRelationsScope::class));
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
-     */
-    public function assets()
+    public function assets(): MorphMany
     {
         return $this->morphMany(Asset::class, 'content');
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
-     */
-    public function tags()
+    public function tags(): MorphToMany
     {
         return $this->morphToMany(Tag::class, 'resource', 'tag_resources');
     }
 
-    /**
-     * Prosty "algorytm" do generowania rankingu danego wpisu na podstawie ocen i czasu dodania
-     *
-     * @return int
-     */
-    public function getScore()
+    public function resetScore(): void
+    {
+        $this->score = $this->getScore();
+    }
+
+    private function getScore(): int
     {
         $timestamp = $this->created_at ? $this->created_at->timestamp : time();
-
-        return (int) (($this->votes * 5) + (($timestamp - 1380153600) / 3600));
+        $hours = (int)($timestamp - 1380153600) / 3600; // since 26 september, 2023.
+        return $this->votes * 5 + $hours;
     }
 
-    public function setHtmlAttribute($value)
+    public function comments(): HasMany
     {
-        $this->html = $value;
+        return $this
+            ->hasMany(self::class, 'parent_id', 'id')
+            ->orderBy('microblogs.id', 'ASC');
     }
 
-    /**
-     * @return null|string
-     */
-    public function getHtmlAttribute()
-    {
-        if ($this->html !== null) {
-            return $this->html;
-        }
-
-        return $this->html = app('parser.post')->parse($this->text);
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function comments()
-    {
-        return $this->hasMany(self::class, 'parent_id', 'id')->orderBy('microblogs.id', 'ASC');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
-     */
-    public function subscribers()
+    public function subscribers(): MorphMany
     {
         return $this->morphMany(Subscription::class, 'resource');
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function voters()
+    public function voters(): HasMany
     {
         return $this->hasMany(Vote::class);
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\MorphOne
-     */
-    public function page()
+    public function page(): MorphOne
     {
-        return $this->morphOne('Coyote\Page', 'content');
+        return $this->morphOne(Page::class, 'content');
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function parent()
+    public function parent(): HasOne
     {
-        return $this->hasOne('Coyote\Microblog', 'id', 'parent_id')->withoutGlobalScope(UserRelationsScope::class);
+        return $this
+            ->hasOne(Microblog::class, 'id', 'parent_id')
+            ->withoutGlobalScope(UserRelationsScope::class);
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function user()
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class)->select(['id', 'name', 'deleted_at', 'is_blocked', 'photo', 'is_online', 'reputation'])->withTrashed();
+        return $this->belongsTo(User::class)
+            ->select(['id', 'name', 'deleted_at', 'is_blocked', 'photo', 'is_online', 'reputation'])
+            ->withTrashed();
+    }
+
+    public function setHtmlAttribute(string $value): void
+    {
+        $this->html = $value;
+    }
+
+    public function getHtmlAttribute(): string
+    {
+        if ($this->html === null) {
+            $this->html = app('parser.post')->parse($this->text);
+        }
+        return $this->html;
     }
 
     public function scopeIncludeIsSubscribed(Builder $builder, int $userId): Builder
     {
         $this->addSelectIfNull($builder);
-
         return $builder
             ->addSelect(new Expression('CASE WHEN mw.user_id IS NULL THEN false ELSE true END AS is_subscribed'))
-            ->leftJoin('subscriptions AS mw', function ($join) use ($userId) {
-                $join->on('mw.resource_id', '=', 'microblogs.id')->where('mw.resource_type', '=', static::class)->where('mw.user_id', '=', $userId);
-            });
+            ->leftJoin('subscriptions AS mw', fn(JoinClause $join) => $join
+                ->on('mw.resource_id', '=', 'microblogs.id')
+                ->where('mw.resource_type', '=', static::class)
+                ->where('mw.user_id', '=', $userId));
     }
 
     public function scopeIncludeIsVoted(Builder $builder, int $userId): Builder
     {
         $this->addSelectIfNull($builder);
-
         return $builder
             ->addSelect(new Expression('CASE WHEN mv.id IS NULL THEN false ELSE true END AS is_voted'))
-            ->leftJoin('microblog_votes AS mv', function ($join) use ($userId) {
-                $join->on('mv.microblog_id', '=', 'microblogs.id')->where('mv.user_id', '=', $userId);
-            });
+            ->leftJoin('microblog_votes AS mv', fn(JoinClause $join) => $join
+                ->on('mv.microblog_id', '=', 'microblogs.id')
+                ->where('mv.user_id', '=', $userId));
     }
 
-    private function addSelectIfNull(Builder $builder)
+    private function addSelectIfNull(Builder $builder): void
     {
-        if (is_null($builder->getQuery()->columns)) {
+        if ($builder->getQuery()->columns === null) {
             $builder->select([$builder->getQuery()->from . '.*']);
         }
     }
