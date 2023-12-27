@@ -2,13 +2,17 @@ User-agent: *
 Allow: /
 Disallow: /User/
 Disallow: /Szukaj/
+Disallow: *Search?q=*
 Sitemap: https://4programmers.net/sitemap
+
 User-agent: AhrefsBot
 Disallow: /
+
 User-agent: proximic
 Disallow: /
+
 User-agent: Baiduspider
 Disallow: /
+
 User-agent: sentibot
 Disallow: /
-Disallow: *Search?q=*
