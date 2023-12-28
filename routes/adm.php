@@ -1,20 +1,24 @@
 <?php
 
+use Illuminate\Routing\Router;
+
 // logowanie do panelu administracyjnego (ponowne wpisanie hasla)
-/** @var $this \Illuminate\Routing\Router */
+/** @var $this Router */
 $this->match(['get', 'post'], 'Adm', [
-    'uses' => 'Adm\HomeController@index',
-    'as' => 'adm.home',
-    'middleware' => [
-        'auth', 'can:adm-access', 'adm:0'
-    ]
+    'uses'       => 'Adm\HomeController@index',
+    'as'         => 'adm.home',
+    'middleware' => ['auth', 'can:adm-access', 'adm:0'],
 ]);
 
-// dostep do panelu administracyjnego
 $this->group(
-    ['namespace' => 'Adm', 'middleware' => ['auth', 'can:adm-access', 'adm:1'], 'prefix' => 'Adm', 'as' => 'adm.'],
+    [
+        'namespace'  => 'Adm',
+        'middleware' => ['auth', 'can:adm-access', 'adm:1'],
+        'prefix'     => 'Adm',
+        'as'         => 'adm.',
+    ],
     function () {
-        /** @var $this \Illuminate\Routing\Router */
+        /** @var $this Router */
         $this->get('Dashboard', 'DashboardController@index')->name('dashboard');
         $this->get('Exit', 'ExitController@index')->name('exit');
 
@@ -22,30 +26,30 @@ $this->group(
 
         $this->get('Forum/Categories/Save/{id?}', [
             'uses' => 'Forum\CategoriesController@edit',
-            'as' => 'forum.categories.save'
+            'as'   => 'forum.categories.save',
         ]);
 
         $this->post('Forum/Categories/Save/{id?}', ['uses' => 'Forum\CategoriesController@save']);
         $this->get('Forum/Categories/Move/{id}', [
             'uses' => 'Forum\CategoriesController@move',
-            'as' => 'forum.categories.move'
+            'as'   => 'forum.categories.move',
         ]);
 
         $this->get('Forum/Permissions', [
-            'as' => 'forum.permissions',
-            'uses' => 'Forum\PermissionsController@index',
-            'middleware' => 'can:adm-group'
+            'as'         => 'forum.permissions',
+            'uses'       => 'Forum\PermissionsController@index',
+            'middleware' => 'can:adm-group',
         ]);
 
         $this->get('Forum/Permissions/Save', [
-            'as' => 'forum.permissions.save',
-            'uses' => 'Forum\PermissionsController@edit',
-            'middleware' => 'can:adm-group'
+            'as'         => 'forum.permissions.save',
+            'uses'       => 'Forum\PermissionsController@edit',
+            'middleware' => 'can:adm-group',
         ]);
 
         $this->post('Forum/Permissions/Save', [
-            'uses' => 'Forum\PermissionsController@save',
-            'middleware' => 'can:adm-group'
+            'uses'       => 'Forum\PermissionsController@save',
+            'middleware' => 'can:adm-group',
         ]);
 
         /*
@@ -56,13 +60,13 @@ $this->group(
 
         $this->get('Forum/Reasons/Save/{id?}', [
             'uses' => 'Forum\ReasonsController@edit',
-            'as' => 'forum.reasons.save'
+            'as'   => 'forum.reasons.save',
         ]);
 
         $this->post('Forum/Reasons/Save/{id?}', ['uses' => 'Forum\ReasonsController@save']);
         $this->post('Forum/Reasons/Delete/{id}', [
-            'as' => 'forum.reasons.delete',
-            'uses' => 'Forum\ReasonsController@delete'
+            'as'   => 'forum.reasons.delete',
+            'uses' => 'Forum\ReasonsController@delete',
         ]);
 
         $this->get('Users', 'UsersController@index')->name('users');
@@ -81,20 +85,20 @@ $this->group(
         $this->get('Groups', ['uses' => 'GroupsController@index', 'middleware' => 'can:adm-group'])->name('groups');
 
         $this->get('Groups/Save/{group?}', [
-            'uses' => 'GroupsController@edit',
+            'uses'       => 'GroupsController@edit',
             'middleware' => 'can:adm-group',
-            'as' => 'groups.save'
+            'as'         => 'groups.save',
         ]);
 
         $this->post('Groups/Save/{group?}', [
-            'uses' => 'GroupsController@save',
+            'uses'       => 'GroupsController@save',
             'middleware' => 'can:adm-group',
         ]);
 
         $this->post('Groups/Delete/{group}', [
-            'uses' => 'GroupsController@delete',
+            'uses'       => 'GroupsController@delete',
             'middleware' => 'can:adm-group',
-            'as' => 'groups.delete'
+            'as'         => 'groups.delete',
         ]);
 
         $this->get('Sessions', ['uses' => 'SessionsController@index'])->name('sessions');
@@ -108,27 +112,27 @@ $this->group(
         $this->post('Blocks/Delete/{block}', 'BlocksController@delete')->name('blocks.delete');
 
         $this->get('Payments', [
-            'uses' => 'PaymentsController@index',
+            'uses'       => 'PaymentsController@index',
             'middleware' => 'can:adm-payment',
-            'as' => 'payments'
+            'as'         => 'payments',
         ]);
 
         $this->get('Payments/Show/{payment}', [
-            'uses' => 'PaymentsController@show',
+            'uses'       => 'PaymentsController@show',
             'middleware' => 'can:adm-payment',
-            'as' => 'payments.show'
+            'as'         => 'payments.show',
         ]);
 
         $this->get('Payments/Invoice/{payment}', [
-            'uses' => 'PaymentsController@invoice',
+            'uses'       => 'PaymentsController@invoice',
             'middleware' => 'can:adm-payment',
-            'as' => 'payments.invoice'
+            'as'         => 'payments.invoice',
         ]);
 
         $this->get('Payments/Paid/{payment}', [
-            'uses' => 'PaymentsController@paid',
+            'uses'       => 'PaymentsController@paid',
             'middleware' => 'can:adm-payment',
-            'as' => 'payments.paid'
+            'as'         => 'payments.paid',
         ]);
 
         $this->get('Tags', ['uses' => 'TagsController@index'])->name('tags');
