@@ -2,22 +2,20 @@
 
 namespace Tests\Unit\Services\FormBuilder;
 
-use Illuminate\Routing\Redirector;
 use Faker\Factory;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Routing\Redirector;
 use Tests\TestCase;
 
 class TestForm extends \Coyote\Services\FormBuilder\Form
 {
     public function buildForm()
     {
-        // TODO: Implement buildForm() method.
     }
 
-    // don't throw validate exception
     protected function failedValidation(Validator $validator)
     {
-        //
+        // don't throw validate exception
     }
 }
 
@@ -31,16 +29,16 @@ class SampleForm extends \Coyote\Services\FormBuilder\Form
             ->add('group_id', 'select', [
                 'choices' => [
                     1 => 'Admin',
-                    2 => 'Moderator'
-                ]
+                    2 => 'Moderator',
+                ],
             ])
             ->add('bio', 'textarea')
             ->add('groups', 'choice', [
                 'choices' => [
                     2 => 'Admin',
                     4 => 'Moderator',
-                    8 => 'Unassigned Group'
-                ]
+                    8 => 'Unassigned Group',
+                ],
             ]);
     }
 }
@@ -64,13 +62,13 @@ class SkillsForm extends \Coyote\Services\FormBuilder\Form
             ->add('name', 'text', [
                 'label' => 'Nazwa',
                 'rules' => 'required|string|max:100',
-                'attr' => [
-                    'placeholder' => 'Np. java, c#'
-                ]
+                'attr'  => [
+                    'placeholder' => 'Np. java, c#',
+                ],
             ])
             ->add('rate', 'text', [
                 'label' => 'Ocena',
-                'rules' => 'required|integer|min:1|max:6'
+                'rules' => 'required|integer|min:1|max:6',
             ])
             ->add('order', 'hidden');
     }
@@ -97,7 +95,7 @@ class Model
     {
         return collect([
             ['id' => 2, 'name' => 'Admin'],
-            ['id' => 8, 'name' => 'Unassigned Group']
+            ['id' => 8, 'name' => 'Unassigned Group'],
         ]);
     }
 
@@ -161,29 +159,29 @@ class FormTest extends TestCase
 
         $tags = collect([
             ['id' => 1, 'name' => 'c++'],
-            ['id' => 2, 'name' => 'c#']
+            ['id' => 2, 'name' => 'c#'],
         ]);
 
         $form->add('name', 'text', ['value' => 'Admin']);
         $form->add('genre', 'select', [
-            'choices' => [
-                'male' => 'Male', 'female' => 'Female'
+            'choices'     => [
+                'male' => 'Male', 'female' => 'Female',
             ],
             'empty_value' => '-- choose --',
-            'value' => 'female'
+            'value'       => 'female',
         ]);
         $form->add('confirm', 'checkbox', [
-            'value' => 1
+            'value' => 1,
         ]);
         $form->add('tags', 'collection', [
-            'property' => 'name',
-            'value' => $tags,
+            'property'   => 'name',
+            'value'      => $tags,
             'child_attr' => [
-                'type' => 'text'
-            ]
+                'type' => 'text',
+            ],
         ]);
         $form->add('experience', 'text', [
-            'value' => 0
+            'value' => 0,
         ]);
 
         $form->buildForm();
@@ -227,7 +225,7 @@ class FormTest extends TestCase
 
         $tags = collect([
             ['id' => 1, 'name' => 'pascal'],
-            ['id' => 2, 'name' => 'coyote']
+            ['id' => 2, 'name' => 'coyote'],
         ]);
 
         $form->get('tags')->setValue($tags);
@@ -243,22 +241,22 @@ class FormTest extends TestCase
         $form = $this->createForm(TestForm::class);
         $tags = collect([
             ['id' => 1, 'name' => 'c++'],
-            ['id' => 2, 'name' => 'c#']
+            ['id' => 2, 'name' => 'c#'],
         ]);
 
         $form->add('tags_v1', 'collection', [
-            'property' => 'name',
-            'value' => $tags,
+            'property'   => 'name',
+            'value'      => $tags,
             'child_attr' => [
-                'type' => 'text'
-            ]
+                'type' => 'text',
+            ],
         ]);
         $form->add('tags_v2', 'collection', [
-            'property' => 'name',
+            'property'   => 'name',
             'child_attr' => [
-                'type' => 'text'
+                'type' => 'text',
             ],
-            'value' => $tags
+            'value'      => $tags,
         ]);
 
         $form->buildForm();
@@ -275,17 +273,17 @@ class FormTest extends TestCase
         $form = $this->createForm(TestForm::class);
 
         $form->add('tags', 'collection', [
-            'property' => 'name',
+            'property'   => 'name',
             'child_attr' => [
-                'type' => 'text'
-            ]
+                'type' => 'text',
+            ],
         ]);
 
         $this->assertEmpty($form->get('tags')->getChildren());
 
         $tags = collect([
             ['id' => 1, 'name' => 'c++'],
-            ['id' => 2, 'name' => 'c#']
+            ['id' => 2, 'name' => 'c#'],
         ]);
 
         $form->get('tags')->setValue($tags);
@@ -300,23 +298,17 @@ class FormTest extends TestCase
         $form = $this->createForm(TestForm::class);
         $form
             ->add('name', 'text', [
-                'value' => 'Adam Boduch'
+                'value' => 'Adam Boduch',
             ])
             ->add('skills', 'collection', [
-                'label' => 'Umiejętności',
+                'label'      => 'Umiejętności',
                 'child_attr' => [
-                    'type' => 'child_form',
+                    'type'  => 'child_form',
                     'class' => $this->createForm(SkillsForm::class),
-                ]
+                ],
             ]);
 
         $this->assertTrue($form->get('skills') instanceof \Coyote\Services\FormBuilder\Fields\Collection);
-
-//        $form->get('skills')->setValue([
-//            ['name' => 'c++', 'rate' => 5, 'order' => 1],
-//            ['name' => 'java', 'rate' => 2, 'order' => 2],
-//            ['name' => '.net', 'rate' => 3, 'order' => 3],
-//        ]);
     }
 
     public function testBuildFormWithEmptyChildForm()
@@ -364,7 +356,7 @@ class FormTest extends TestCase
 
         $form->add('poll', 'child_form', [
             'class' => $child,
-            'value' => $value
+            'value' => $value,
         ]);
         $form->buildForm();
 
@@ -377,12 +369,12 @@ class FormTest extends TestCase
     {
         $fake = Factory::create();
 
-        $data = (object) [
-            'name' => $fake->name,
-            'email' => $fake->email,
-            'bio' => $fake->text,
+        $data = (object)[
+            'name'     => $fake->name,
+            'email'    => $fake->email,
+            'bio'      => $fake->text,
             'group_id' => 2,
-            'groups' => [2, 8]
+            'groups'   => [2, 8],
         ];
 
         // wypelnienie danymi
@@ -394,11 +386,11 @@ class FormTest extends TestCase
         $fake = Factory::create();
 
         $data = [
-            'name' => $fake->name,
-            'email' => $fake->email,
-            'bio' => $fake->text,
+            'name'     => $fake->name,
+            'email'    => $fake->email,
+            'bio'      => $fake->text,
             'group_id' => 2,
-            'groups' => [2, 8]
+            'groups'   => [2, 8],
         ];
 
         $this->fillWithData($data);
@@ -409,11 +401,11 @@ class FormTest extends TestCase
         $faker = Factory::create();
 
         $data = collect([
-            'name' => $faker->name,
-            'email' => $faker->email,
-            'bio' => $faker->text(),
+            'name'     => $faker->name,
+            'email'    => $faker->email,
+            'bio'      => $faker->text(),
             'group_id' => 1,
-            'groups' => [2, 8]
+            'groups'   => [2, 8],
         ]);
 
         $form = $this->createForm(SampleForm::class, $data);
@@ -435,12 +427,12 @@ class FormTest extends TestCase
 
         $form->remove('groups');
         $form->add('groups', 'choice', [
-            'choices' => [
+            'choices'  => [
                 2 => 'Admin',
                 4 => 'Moderator',
-                8 => 'Unassigned Group'
+                8 => 'Unassigned Group',
             ],
-            'property' => 'id'
+            'property' => 'id',
         ]);
 
         $this->assertValue('name', $model->name, $form);
@@ -475,10 +467,10 @@ class FormTest extends TestCase
         $form
             ->setMethod('GET')
             ->add('name', 'text', [
-                'rules' => 'required|min:5'
+                'rules' => 'required|min:5',
             ])
             ->add('description', 'textarea', [
-                'rules' => 'max:10'
+                'rules' => 'max:10',
             ]);
 
         $this->assertTrue($form->isValid());
@@ -503,10 +495,10 @@ class FormTest extends TestCase
         $form
             ->setMethod('GET')
             ->add('name', 'text', [
-                'rules' => 'required|min:5'
+                'rules' => 'required|min:5',
             ])
             ->add('description', 'textarea', [
-                'rules' => 'max:10'
+                'rules' => 'max:10',
             ]);
 
         $validator = $form->validate();
@@ -525,7 +517,7 @@ class FormTest extends TestCase
             ->setMethod('GET')
             ->add('name', 'text', [
                 'required' => true,
-                'rules' => 'min:5'
+                'rules'    => 'min:5',
             ]);
 
         $this->assertTrue($form->get('name')->isRequired());
@@ -545,10 +537,10 @@ class FormTest extends TestCase
         $form = $this->createForm(TestForm::class);
         $form
             ->add('description', 'textarea', [
-                'attr' => [
-                    'tabindex' => 3
+                'attr'  => [
+                    'tabindex' => 3,
                 ],
-                'rules' => 'max:10'
+                'rules' => 'max:10',
             ])
             ->add('title', 'text');
 
@@ -570,12 +562,8 @@ class FormTest extends TestCase
 
     private function fillWithData($data)
     {
-        // utworzenie instancji klasy
         $form = $this->createForm(SampleForm::class);
-        // utworzenie pol i wypelnienie ich danymi
         $form->buildForm();
-
-        // wypelnienie danymi
         $form->setData($data);
 
         $this->assertInstanceOf(\Coyote\Services\FormBuilder\Fields\Text::class, $form->get('name'));
@@ -584,7 +572,7 @@ class FormTest extends TestCase
         $this->assertInstanceOf(\Coyote\Services\FormBuilder\Fields\Select::class, $form->get('group_id'));
         $this->assertInstanceOf(\Coyote\Services\FormBuilder\Fields\Choice::class, $form->get('groups'));
 
-        $data = (array) $data;
+        $data = (array)$data;
 
         $this->assertValue('name', $data['name'], $form);
         $this->assertValue('email', $data['email'], $form);
