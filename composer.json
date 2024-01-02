@@ -55,7 +55,6 @@
     "rawr/t-regx": "^v0.17.0",
     "rcrowe/twigbridge": "^0.12",
     "sentry/sentry-laravel": "^2.3",
-    "spatie/schema-org": "^3.14",
     "stripe/stripe-php": "^7.66",
     "twig/extensions": "^1.5"
   },

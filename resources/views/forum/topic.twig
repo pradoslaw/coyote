@@ -7,7 +7,7 @@
 {% import 'components.modals' as modals %}
 
 {% block content %}
-  {{ schema.to_script|raw }}
+  {{ schema_topic }}
 
   {% if model.locked_at and model.locker.id %}
     <p class="alert alert-warning">

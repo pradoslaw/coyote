@@ -4,7 +4,7 @@ namespace Coyote\Http\Controllers;
 use Coyote\Domain\User\UserSettings;
 use Coyote\Http\Factories\CacheFactory;
 use Coyote\Http\Factories\GateFactory;
-use Coyote\Services\Breadcrumb;
+use Coyote\Services\Breadcrumbs;
 use Coyote\Services\Guest;
 use Coyote\User;
 use Coyote\View\Twig\TwigLiteral;
@@ -20,7 +20,7 @@ abstract class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests, GateFactory, CacheFactory;
 
-    protected Breadcrumb $breadcrumb;
+    protected Breadcrumbs $breadcrumb;
     protected ?int $userId;
     protected ?User $auth;
     protected string $guestId;
@@ -29,7 +29,7 @@ abstract class Controller extends BaseController
 
     public function __construct()
     {
-        $this->breadcrumb = new Breadcrumb();
+        $this->breadcrumb = new Breadcrumbs();
         $this->middleware(function (Request $request, $next) {
             $this->auth = $request->user();
             $this->userId = $request->user() ? $this->auth->id : null;

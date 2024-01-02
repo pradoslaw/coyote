@@ -29,10 +29,12 @@ function plain($value)
  */
 function excerpt($value, $limit = 84)
 {
-    $value = str_replace(["\n", "\t", "\r"], ' ', plain($value));
-    $value = trim(preg_replace('/ {2,}/', ' ', $value));
+    return str_limit(reduce_whitespace(plain($value)), $limit);
+}
 
-    return str_limit($value, $limit);
+function reduce_whitespace(string $string): string
+{
+    return \trim(\preg_replace('/\s+/', ' ', $string));
 }
 
 /**
@@ -100,7 +102,7 @@ function cdn($path, $secure = null)
 /**
  * Get the path to a versioned Mix file.
  *
- * @param  string  $path
+ * @param string $path
  * @return string
  *
  * @throws \Exception
@@ -148,7 +150,7 @@ function carbon($dateTime)
 {
     if (is_null($dateTime)) {
         $dateTime = new \Carbon\Carbon();
-    } elseif (!$dateTime instanceof \Carbon\Carbon) {
+    } else if (!$dateTime instanceof \Carbon\Carbon) {
         $dateTime = new \Carbon\Carbon($dateTime);
     }
 

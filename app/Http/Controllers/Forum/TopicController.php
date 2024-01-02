@@ -1,6 +1,8 @@
 <?php
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Domain\Seo;
+use Coyote\Domain\Seo\Schema\DiscussionForumPosting;
 use Coyote\Forum;
 use Coyote\Forum\Reason;
 use Coyote\Http\Factories\CacheFactory;
@@ -20,10 +22,10 @@ use Coyote\Services\Forum\TreeBuilder\JsonDecorator;
 use Coyote\Services\Forum\TreeBuilder\ListDecorator;
 use Coyote\Services\Parser\Extensions\Emoji;
 use Coyote\Topic;
+use Coyote\View\Twig\TwigLiteral;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
-use Spatie\SchemaOrg\Schema;
 
 class TopicController extends BaseController
 {
@@ -111,6 +113,8 @@ class TopicController extends BaseController
 
         TopicResource::withoutWrapping();
 
+        $firstPost = array_first($posts['data']);
+
         return $this
             ->view('forum.topic', compact('posts', 'forum', 'paginate', 'reasons'))
             ->with([
@@ -122,14 +126,38 @@ class TopicController extends BaseController
                 'all_forums'   => $allForums,
                 'emojis'       => Emoji::all(),
                 'user_forums'  => $userForums,
-                'description'  => excerpt(array_first($posts['data'])['text'], 100),
+                'description'  => excerpt($firstPost['text'], 100),
                 'flags'        => $this->flags($forum),
-                'schema'       => Schema::discussionForumPosting()
-                    ->identifier($request->getUri())
-                    ->headline($topic->title)
-                    ->author(Schema::person()->name($topic->firstPost->user?->name))
-                    ->interactionStatistic(Schema::interactionCounter()->userInteractionCount($topic->replies)),
+                'schema_topic' => TwigLiteral::fromHtml($this->topicSchema(
+                    $forum,
+                    $topic,
+                    reduce_whitespace(plain($firstPost['html'])))),
             ]);
+    }
+
+    private function topicSchema(Forum $forum, Topic $topic, string $content): Seo\Schema
+    {
+        [$username, $uri] = $this->author($topic);
+        return new Seo\Schema(new DiscussionForumPosting(
+            $topic->title,
+            $content,
+            route('forum.topic', [$forum, $topic, $topic->slug]),
+            $topic->created_at,
+            $username,
+            $uri,
+            $topic->views,
+            $topic->score,
+            $topic->replies,
+        ));
+    }
+
+    private function author(Topic $topic): array
+    {
+        $user = $topic->firstPost->user;
+        if ($user) {
+            return [$user->name, route('profile', ['user_trashed' => $user])];
+        }
+        return [$topic->firstPost->user_name, null];
     }
 
     private function moreLikeThis(Topic $topic)
