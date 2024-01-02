@@ -1,5 +1,4 @@
 <?php
-
 namespace Coyote\Http\Resources\Elasticsearch;
 
 use Coyote\Job;
@@ -8,6 +7,7 @@ use Coyote\Services\Breadcrumb;
 use Coyote\Topic;
 use Coyote\User;
 use Coyote\Wiki;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class HitResource extends JsonResource
@@ -15,7 +15,7 @@ class HitResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
     public function toArray($request)
@@ -36,11 +36,10 @@ class HitResource extends JsonResource
         if (!$text) {
             return false;
         }
-
         return str_contains($text, '<em>');
     }
 
-    private function breadcrumb()
+    private function breadcrumb(): array
     {
         $baseName = class_basename($this->resource['model']);
 

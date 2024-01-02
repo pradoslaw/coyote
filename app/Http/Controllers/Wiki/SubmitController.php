@@ -5,39 +5,40 @@ namespace Coyote\Http\Controllers\Wiki;
 use Coyote\Events\WikiSaved;
 use Coyote\Http\Forms\Wiki\SubmitForm;
 use Coyote\Notifications\Wiki\ContentChangedNotification;
-use Coyote\Services\Stream\Objects\Wiki as Stream_Wiki;
+use Coyote\Services\FormBuilder\Form;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Update as Stream_Update;
+use Coyote\Services\Stream\Objects\Wiki as Stream_Wiki;
+use Coyote\Wiki;
 use Illuminate\Contracts\Notifications\Dispatcher;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class SubmitController extends BaseController
 {
-    /**
-     * @param \Coyote\Wiki $wiki
-     * @param Request $request
-     * @return \Illuminate\View\View
-     */
-    public function index($wiki, Request $request)
+    public function index(Wiki $wiki, Request $request): View
     {
         $form = $this->getForm($wiki);
         $this->request->attributes->set('upload_url', route('wiki.upload'));
 
-        if (!$wiki->exists) {
-            $form->get('parent_id')->setValue($request->input('parentId'));
+        if ($wiki->exists) {
+            $this->breadcrumb->push($wiki->title, url($wiki->path));
+            $this->breadcrumb->push(
+                'Edycja strony',
+                route('wiki.edit', ['wiki' => $wiki->id]));
+        } else {
+            $parentId = $request->input('parentId');
+            $form->get('parent_id')->setValue($parentId);
+            $this->breadcrumb->push(
+                'Dodaj nową stronę',
+                route('wiki.submit', ['parentId' => $parentId]));
         }
-
-        $this->breadcrumb->push($wiki->title, url($wiki->path));
-        $this->breadcrumb->push($wiki->exists ? 'Edycja strony' : 'Dodaj nową stronę');
 
         return $this->view('wiki.submit')->with(compact('form', 'wiki'));
     }
 
-    /**
-     * @param string $path
-     * @return \Illuminate\View\View
-     */
-    public function create($path)
+    public function create(string $path): View
     {
         $form = $this->getForm($this->wiki->newInstance());
         $segments = explode('/', trim($path, '/'));
@@ -52,12 +53,7 @@ class SubmitController extends BaseController
         return $this->view('wiki.submit')->with(compact('form'));
     }
 
-    /**
-     * @param Dispatcher $dispatcher
-     * @param \Coyote\Wiki $wiki
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function save(Dispatcher $dispatcher, $wiki)
+    public function save(Dispatcher $dispatcher, Wiki $wiki): RedirectResponse
     {
         $form = $this->getForm($wiki);
         $form->validate();
@@ -91,7 +87,9 @@ class SubmitController extends BaseController
         // add to elasticsearch index and pages table...
         event(new WikiSaved($wiki));
 
-        return redirect()->to($wiki->path)->with('success', 'Zmiany zostały zapisane.');
+        return redirect()
+            ->to($wiki->path)
+            ->with('success', 'Zmiany zostały zapisane.');
     }
 
     /**
@@ -103,17 +101,13 @@ class SubmitController extends BaseController
         $parser = $this->getParser();
         $parser->cache->setEnable(false);
 
-        return response($parser->parse((string) $request->input('text')));
+        return response($parser->parse((string)$request->input('text')));
     }
 
-    /**
-     * @param \Coyote\Wiki $wiki
-     * @return \Coyote\Services\FormBuilder\Form
-     */
-    protected function getForm($wiki)
+    private function getForm(Wiki $wiki): Form
     {
         return $this->createForm(SubmitForm::class, $wiki, [
-            'url' => route('wiki.submit', [$wiki->id])
+            'url' => route('wiki.submit', [$wiki->id]),
         ]);
     }
 }

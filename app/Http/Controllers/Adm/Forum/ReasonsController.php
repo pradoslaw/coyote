@@ -14,9 +14,9 @@ class ReasonsController extends BaseController
     {
         parent::__construct();
 
-        $this->breadcrumb->push([
-            'Forum' => route('adm.forum.categories'),
-            'Powody moderacji' => route('adm.forum.reasons')
+        $this->breadcrumb->pushMany([
+            'Forum'            => route('adm.forum.categories'),
+            'Powody moderacji' => route('adm.forum.reasons'),
         ]);
     }
 
@@ -41,7 +41,7 @@ class ReasonsController extends BaseController
     public function edit($id = null)
     {
         $reason = Reason::findOrNew($id);
-        $this->breadcrumb->push($reason->name ?? 'Dodaj nowy');
+        $this->breadcrumb->push($reason->name ?? 'Dodaj nowy', route('adm.forum.reasons.save'));
 
         return $this->view('adm.forum.reasons.save')->with('form', $this->getForm($reason));
     }

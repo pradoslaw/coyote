@@ -15,7 +15,7 @@ $this->group(['namespace' => 'Wiki', 'prefix' => '', 'as' => 'wiki.'], function 
 
     $this->get('Create/{path}', ['as' => 'create', 'uses' => 'SubmitController@create', 'middleware' => ['auth']]);
 
-    $this->post('Edit/{wiki?}', ['uses' => 'SubmitController@save', 'middleware' => ['auth', 'wiki.lock']]);
+    $this->post('Edit/{wiki?}', ['as' => 'edit', 'uses' => 'SubmitController@save', 'middleware' => ['auth', 'wiki.lock']]);
     $this->post('Edit/Preview', ['as' => 'preview', 'uses' => 'SubmitController@preview', 'middleware' => 'auth']);
 
     $this->post('Upload', ['uses' => 'AttachmentController@upload', 'as' => 'upload']);

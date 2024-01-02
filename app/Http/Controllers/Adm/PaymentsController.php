@@ -1,36 +1,27 @@
 <?php
-
 namespace Coyote\Http\Controllers\Adm;
 
 use Boduch\Grid\Source\EloquentSource;
 use Coyote\Events\PaymentPaid;
 use Coyote\Http\Grids\Adm\PaymentsGrid;
+use Coyote\Invoice;
 use Coyote\Payment;
-use Coyote\Repositories\Contracts\PaymentRepositoryInterface as PaymentRepository;
+use Coyote\Repositories\Eloquent\PaymentRepository;
 use Coyote\Services\Invoice\Pdf;
 use Coyote\Services\UrlBuilder;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\Response;
 
 class PaymentsController extends BaseController
 {
-    /**
-     * @var PaymentRepository
-     */
-    private $payment;
-
-    /**
-     * @param PaymentRepository $payment
-     */
-    public function __construct(PaymentRepository $payment)
+    public function __construct(private PaymentRepository $payment)
     {
         parent::__construct();
-
-        $this->payment = $payment;
     }
 
-    /**
-     * @return \Illuminate\View\View
-     */
-    public function index()
+    public function index(): View
     {
         $this->breadcrumb->push('Faktury i płatności', route('adm.payments'));
 
@@ -41,45 +32,33 @@ class PaymentsController extends BaseController
         return $this->view('adm.payments.home')->with('grid', $grid);
     }
 
-    /**
-     * @param Payment $payment
-     * @return \Illuminate\View\View
-     */
-    public function show(Payment $payment)
+    public function show(Payment $payment): View
     {
-        $this->breadcrumb->push('Szczegóły płatności');
+        $this->breadcrumb->push('Szczegóły płatności', route('adm.payments.show', ['payment' => $payment]));
 
         // load coupons even if they are deleted
-        $payment->load([
-            'coupon' => function ($query) {
-                return $query->withTrashed();
-            }
-        ]);
+        $payment->load(['coupon' => fn($query) => $query->withTrashed()]);
 
         return $this->view('adm.payments.show')->with([
-            'payment'       => $payment,
-            'payment_list'  => Payment::getPaymentStatusesList()
+            'payment'      => $payment,
+            'payment_list' => Payment::getPaymentStatusesList(),
         ]);
     }
 
     /**
      * @param Payment $payment
      * @param Pdf $pdf
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     * @return ResponseFactory|Response
      */
     public function invoice(Payment $payment, Pdf $pdf)
     {
         return response($pdf->create($payment), 200, [
-            'Content-Type'          => 'application/pdf',
-            'Content-Disposition'   => 'attachment; filename="' . $this->getFilename($payment->invoice) . '"'
+            'Content-Type'        => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="' . $this->getFilename($payment->invoice) . '"',
         ]);
     }
 
-    /**
-     * @param Payment $payment
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function paid(Payment $payment)
+    public function paid(Payment $payment): RedirectResponse
     {
         if ($payment->status_id === Payment::PAID && $payment->invoice_id) {
             abort(404);
@@ -95,11 +74,7 @@ class PaymentsController extends BaseController
             ->with('success', 'Płatność została ustawiona.');
     }
 
-    /**
-     * @param \Coyote\Invoice $invoice
-     * @return string
-     */
-    private function getFilename($invoice): string
+    private function getFilename(Invoice $invoice): string
     {
         return str_replace('/', '_', $invoice->number) . '.pdf';
     }

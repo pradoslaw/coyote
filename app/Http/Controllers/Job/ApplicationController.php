@@ -1,10 +1,10 @@
 <?php
-
 namespace Coyote\Http\Controllers\Job;
 
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Requests\ApplicationRequest;
 use Coyote\Job;
+use Coyote\Job\Application;
 use Coyote\Notifications\Job\ApplicationConfirmationNotification;
 use Coyote\Notifications\Job\ApplicationSentNotification;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
@@ -12,26 +12,24 @@ use Coyote\Services\Stream\Objects\Application as Stream_Application;
 use Coyote\Services\Stream\Objects\Job as Stream_Job;
 use Coyote\Services\UrlBuilder;
 use Illuminate\Filesystem\FilesystemManager;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 class ApplicationController extends Controller
 {
-    /**
-     * @param Job $job
-     * @return \Illuminate\View\View
-     */
-    public function submit($job)
+    public function submit(Job $job): View
     {
         abort_if(!$job->enable_apply, 404);
 
-        $this->breadcrumb->push([
-          'Praca'                          => route('job.home'),
-          $job->title                      => UrlBuilder::job($job),
-          'Aplikuj na to stanowisko pracy' => null
+        $this->breadcrumb->pushMany([
+            'Praca'                          => route('job.home'),
+            $job->title                      => UrlBuilder::job($job),
+            'Aplikuj na to stanowisko pracy' => route('job.application', ['job' => $job]),
         ]);
 
-        $application = new Job\Application();
+        $application = new Application();
 
         if ($this->userId) {
             $application->email = $this->auth->email;
@@ -46,7 +44,7 @@ class ApplicationController extends Controller
         }
 
         return $this->view('job.application', compact('job', 'application'))->with([
-          'subscribed' => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false
+            'subscribed' => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false,
         ]);
     }
 
@@ -60,7 +58,7 @@ class ApplicationController extends Controller
         $application = $this->transaction(function () use ($job, $request) {
             $target = (new Stream_Job)->map($job);
 
-            /** @var \Coyote\Job\Application $application */
+            /** @var Application $application */
             $application = $job->applications()->create($request->all() + ['guest_id' => $this->guestId]);
             $this->setSetting('job.application', $request->get('remember') ? json_encode($request->all()) : '');
 
@@ -77,25 +75,19 @@ class ApplicationController extends Controller
         return UrlBuilder::job($job);
     }
 
-    /**
-     * Upload cv/resume
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function upload(Request $request)
+    public function upload(Request $request): JsonResponse
     {
         $this->validate($request, [
             // only 5 MB file size limit. otherwise postfix may not handle it properly.
-          'cv' => 'max:' . (5 * 1024) . '|mimes:pdf,doc,docx,rtf'
+            'cv' => 'max:' . (5 * 1024) . '|mimes:pdf,doc,docx,rtf',
         ]);
 
         $filename = uniqid() . '_' . Str::ascii($request->file('cv')->getClientOriginalName());
         $request->file('cv')->storeAs('cv', $filename, 'local');
 
         return response()->json([
-          'filename' => $filename,
-          'name'     => $request->file('cv')->getClientOriginalName()
+            'filename' => $filename,
+            'name'     => $request->file('cv')->getClientOriginalName(),
         ]);
     }
 
@@ -109,7 +101,7 @@ class ApplicationController extends Controller
     {
         abort_if($job->user_id !== $this->userId, 403);
 
-        /** @var \Coyote\Job\Application $application */
+        /** @var Application $application */
         $application = $job->applications()->find($id);
 
         return $filesystem->disk('local')->download('cv/' . $application->cv, $application->realFilename());

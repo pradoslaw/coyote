@@ -2,17 +2,19 @@
 
 namespace Coyote\Http\Controllers\Adm;
 
+use Boduch\Grid\Source\EloquentSource;
 use Coyote\Events\FirewallWasDeleted;
 use Coyote\Events\FirewallWasSaved;
+use Coyote\Firewall;
 use Coyote\Http\Forms\FirewallForm;
 use Coyote\Http\Grids\Adm\FirewallGrid;
 use Coyote\Repositories\Contracts\FirewallRepositoryInterface as FirewallRepository;
 use Coyote\Repositories\Criteria\FirewallList;
-use Boduch\Grid\Source\EloquentSource;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
-use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
+use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Objects\Firewall as Stream_Firewall;
+use Illuminate\View\View;
 
 class FirewallController extends BaseController
 {
@@ -46,20 +48,16 @@ class FirewallController extends BaseController
         return $this->view('adm.firewall.home', ['grid' => $grid]);
     }
 
-    /**
-     * @param \Coyote\Firewall $firewall
-     * @return \Illuminate\View\View
-     */
-    public function edit($firewall)
+    public function edit(Firewall $firewall): View
     {
-        $this->breadcrumb->push('Edycja');
+        $this->breadcrumb->push('Edycja', route('adm.firewall.save', ['firewall' => $firewall]));
         $form = $this->createForm(FirewallForm::class, $firewall);
 
         return $this->view('adm.firewall.save', ['form' => $form]);
     }
 
     /**
-     * @param \Coyote\Firewall $firewall
+     * @param Firewall $firewall
      * @param FirewallForm $form
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -85,7 +83,7 @@ class FirewallController extends BaseController
     }
 
     /**
-     * @param \Coyote\Firewall $firewall
+     * @param Firewall $firewall
      * @return \Illuminate\Http\RedirectResponse
      */
     public function delete($firewall)

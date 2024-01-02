@@ -3,62 +3,43 @@
 namespace Coyote\Http\Controllers\Adm;
 
 use Boduch\Grid\Source\EloquentSource;
+use Coyote\Block;
 use Coyote\Http\Factories\CacheFactory;
 use Coyote\Http\Forms\BlockForm;
 use Coyote\Http\Grids\Adm\BlockGrid;
-use Coyote\Repositories\Contracts\BlockRepositoryInterface as BlockRepository;
-use Coyote\Services\Stream\Objects\Block as Stream_Block;
+use Coyote\Repositories\Eloquent\BlockRepository;
+use Coyote\Services\FormBuilder\Form;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
-use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
+use Coyote\Services\Stream\Activities\Update as Stream_Update;
+use Coyote\Services\Stream\Objects\Block as Stream_Block;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class BlocksController extends BaseController
 {
     use CacheFactory;
 
-    /**
-     * @var BlockRepository
-     */
-    private $block;
-
-    /**
-     * @param BlockRepository $block
-     */
-    public function __construct(BlockRepository $block)
+    public function __construct(private BlockRepository $block)
     {
         parent::__construct();
-
-        $this->block = $block;
         $this->breadcrumb->push('Bloki statyczne', route('adm.blocks'));
     }
 
-    /**
-     * @return \Illuminate\View\View
-     */
-    public function index()
+    public function index(): View
     {
         $grid = $this->gridBuilder()->createGrid(BlockGrid::class)->setSource(new EloquentSource($this->block));
-
         return $this->view('adm.blocks.home')->with('grid', $grid);
     }
 
-    /**
-     * @param \Coyote\Block $block
-     * @return \Illuminate\View\View
-     */
-    public function edit($block)
+    public function edit(Block $block): View
     {
-        $this->breadcrumb->push('Edycja');
+        $this->breadcrumb->push('Edycja', route('adm.blocks.save', ['block' => $block]));
         $form = $this->getForm($block);
-
         return $this->view('adm.blocks.save', ['form' => $form]);
     }
 
-    /**
-     * @param \Coyote\Block $block
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function save($block)
+    public function save(Block $block): RedirectResponse
     {
         $form = $this->getForm($block);
         $form->validate();
@@ -78,27 +59,17 @@ class BlocksController extends BaseController
         return redirect()->route('adm.blocks')->with('success', 'Zmiany w bloku zostały zapisane.');
     }
 
-    /**
-     * @param \Coyote\Block $block
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function delete($block)
+    public function delete(Block $block): RedirectResponse
     {
         $this->transaction(function () use ($block) {
             $block->delete();
-
             stream(Stream_Delete::class, (new Stream_Block())->map($block));
             $this->flushCache();
         });
-
         return redirect()->route('adm.blocks')->with('success', 'Block został prawidłowo usunięty.');
     }
 
-    /**
-     * @param \Coyote\Block $block
-     * @return \Coyote\Services\FormBuilder\Form
-     */
-    private function getForm($block)
+    private function getForm(Block $block): Form
     {
         return $this->createForm(BlockForm::class, $block);
     }

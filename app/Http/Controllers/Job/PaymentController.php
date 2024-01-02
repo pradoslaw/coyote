@@ -1,5 +1,4 @@
 <?php
-
 namespace Coyote\Http\Controllers\Job;
 
 use Coyote\Events\PaymentPaid;
@@ -55,7 +54,7 @@ class PaymentController extends Controller
     public function index(Payment $payment): View
     {
         $this->breadcrumb->push($payment->job->title, UrlBuilder::job($payment->job));
-        $this->breadcrumb->push('Płatność');
+        $this->breadcrumb->push('Płatność', route('job.payment', ['payment' => $payment]));
 
         $firm = $payment->job->firm ?? new Firm();
 
@@ -75,7 +74,7 @@ class PaymentController extends Controller
             'net_price'  => $calculator->netPrice(),
             'firm'       => $firm,
             'countries'  => $this->country->pluck('code', 'id'),
-            'stripe_key' => config('services.stripe.key')
+            'stripe_key' => config('services.stripe.key'),
         ]);
     }
 
@@ -133,13 +132,13 @@ class PaymentController extends Controller
             'amount'               => $payment->invoice->grossPrice() * 100,
             'currency'             => strtolower($payment->invoice->currency->name),
             'metadata'             => ['id' => $payment->id],
-            'payment_method_types' => [$request->input('payment_method')]
+            'payment_method_types' => [$request->input('payment_method')],
         ]);
 
         return [
             'token'       => $intent->client_secret,
             'success_url' => route('job.payment.success', [$payment]),
-            'status_url'  => route('job.payment.status', [$payment])
+            'status_url'  => route('job.payment.status', [$payment]),
         ];
     }
 

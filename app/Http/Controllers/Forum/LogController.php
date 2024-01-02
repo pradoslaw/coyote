@@ -19,7 +19,7 @@ class LogController extends BaseController
         $forum = $topic->forum;
         $this->authorize('update', $forum);
         $this->breadcrumb($forum);
-        $this->breadcrumb->push([
+        $this->breadcrumb->pushMany([
             $topic->title    => UrlBuilder::topic($topic),
             'Historia posta' => route('forum.post.log', [$post->id]),
         ]);

@@ -1,33 +1,24 @@
 <?php
-
 namespace Coyote\Http\Controllers\Adm;
 
 use Boduch\Grid\Source\EloquentSource;
 use Coyote\Http\Forms\TagForm;
 use Coyote\Http\Grids\Adm\TagsGrid;
-use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
+use Coyote\Repositories\Eloquent\TagRepository;
 use Coyote\Services\Elasticsearch\Crawler;
-use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
+use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Objects\Tag as Stream_Tag;
 use Coyote\Tag;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class TagsController extends BaseController
 {
-    /**
-     * @var TagRepository
-     */
-    private $tag;
-
-    /**
-     * @param TagRepository $tag
-     */
-    public function __construct(TagRepository $tag)
+    public function __construct(private TagRepository $tag)
     {
         parent::__construct();
-
-        $this->tag = $tag;
         $this->breadcrumb->push('Tagi', route('adm.tags'));
     }
 
@@ -51,23 +42,15 @@ class TagsController extends BaseController
         return $this->view('adm.tags.home')->with('grid', $grid);
     }
 
-    /**
-     * @param \Coyote\Tag $tag
-     * @return \Illuminate\View\View
-     */
-    public function edit($tag)
+    public function edit(Tag $tag): View
     {
-        $this->breadcrumb->push('Edycja');
+        $this->breadcrumb->push('Edycja', route('adm.tags.save', ['tag' => $tag]));
         $form = $this->createForm(TagForm::class, $tag);
 
         return $this->view('adm.tags.save')->with('form', $form);
     }
 
-    /**
-     * @param \Coyote\Tag $tag
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function save($tag)
+    public function save(Tag $tag): RedirectResponse
     {
         $form = $this->createForm(TagForm::class, $tag);
         $form->validate();
@@ -89,7 +72,7 @@ class TagsController extends BaseController
         return redirect()->route('adm.tags')->with('success', 'Zmiany zostały zapisane.');
     }
 
-    public function delete(Tag $tag)
+    public function delete(Tag $tag): RedirectResponse
     {
         $tag->delete();
 

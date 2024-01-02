@@ -36,7 +36,7 @@ class StreamController extends BaseController
         (new Renderer($paginator->items()))->render();
 
         $this->breadcrumb($topic->forum);
-        $this->breadcrumb->push([
+        $this->breadcrumb->pushMany([
             $topic->title     => UrlBuilder::topic($topic),
             'Dziennik zdarzeń'  => route('forum.stream', [$topic->id])
         ]);
