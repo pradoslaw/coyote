@@ -82,7 +82,8 @@
     "psr-4": {
       "Tests\\": "tests/",
       "Tests\\Browser\\": "tests/Browser/",
-      "Tests\\Legacy\\": "tests/Legacy/"
+      "Tests\\Legacy\\": "tests/Legacy/",
+      "Tests\\Unit\\": "tests/Unit/"
     }
   },
   "scripts": {
