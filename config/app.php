@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'env' => env('APP_ENV', 'production'),
+    'env'     => env('APP_ENV', 'production'),
 
     /*
     |--------------------------------------------------------------------------
@@ -34,7 +34,7 @@ return [
     |
     */
 
-    'debug'           => env('APP_DEBUG'),
+    'debug' => env('APP_DEBUG'),
     /*
     |--------------------------------------------------------------------------
     | Application URL
@@ -46,22 +46,22 @@ return [
     |
     */
 
-    'url'             => env('APP_URL', docker_secret('APP_URL_FILE')),
-    'asset_url'       => env('ASSET_URL', null),
+    'url'       => env('APP_URL', docker_secret('APP_URL_FILE')),
+    'asset_url' => env('ASSET_URL', null),
 
     /*
     |--------------------------------------------------------------------------
     | Application name
     |--------------------------------------------------------------------------
     */
-    'name'            => '4programmers.net',
+    'name'      => '4programmers.net',
 
     /*
     |--------------------------------------------------------------------------
     | Content Delivery Network for assets
     |--------------------------------------------------------------------------
     */
-    'cdn'             => env('CDN', ''),
+    'cdn'       => env('CDN', ''),
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
@@ -73,7 +73,7 @@ return [
     |
     */
 
-    'timezone'        => 'Europe/Warsaw',
+    'timezone' => 'Europe/Warsaw',
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration
@@ -85,7 +85,7 @@ return [
     |
     */
 
-    'locale'          => 'pl',
+    'locale' => 'pl',
     /*
     |--------------------------------------------------------------------------
     | Application Fallback Locale
@@ -109,7 +109,7 @@ return [
     | localized telephone numbers, street address information and more.
     |
     */
-    'faker_locale' => 'pl_PL',
+    'faker_locale'    => 'pl_PL',
 
     /*
     |--------------------------------------------------------------------------
@@ -122,8 +122,8 @@ return [
     |
     */
 
-    'key'             => env('APP_KEY', docker_secret('APP_KEY_FILE')),
-    'cipher'          => 'AES-256-CBC',
+    'key'    => env('APP_KEY', docker_secret('APP_KEY_FILE')),
+    'cipher' => 'AES-256-CBC',
 
     /*
     |--------------------------------------------------------------------------
@@ -138,7 +138,7 @@ return [
     |
     */
 
-    'log'             => 'daily',
+    'log' => 'daily',
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
@@ -150,7 +150,7 @@ return [
     |
     */
 
-    'providers'       => [
+    'providers' => [
 
         /*
          * Laravel Framework Service Providers...
@@ -234,7 +234,7 @@ return [
         // Pakiet Laravel Grid do budowania tabel oraz filtrowania i sortowania
         Boduch\Grid\GridServiceProvider::class,
         // kursy wymiany walut
-        Swap\Laravel\SwapServiceProvider::class
+        Swap\Laravel\SwapServiceProvider::class,
     ],
     /*
     |--------------------------------------------------------------------------
@@ -247,49 +247,16 @@ return [
     |
     */
 
-    'aliases'         => [
-
-//        'App'       => Illuminate\Support\Facades\App::class,
-//        'Artisan'   => Illuminate\Support\Facades\Artisan::class,
-        'Auth'      => Illuminate\Support\Facades\Auth::class,
-        'Blade'     => Illuminate\Support\Facades\Blade::class,
-//        'Bus'       => Illuminate\Support\Facades\Bus::class,
-//        'Cache'     => Illuminate\Support\Facades\Cache::class,
-//        'Config'    => Illuminate\Support\Facades\Config::class,
-//        'Cookie'    => Illuminate\Support\Facades\Cookie::class,
-//        'Crypt'     => Illuminate\Support\Facades\Crypt::class,
-        'DB'        => Illuminate\Support\Facades\DB::class,
-//        'Eloquent'  => Illuminate\Database\Eloquent\Model::class,
-//        'Event'     => Illuminate\Support\Facades\Event::class,
-//        'File'      => Illuminate\Support\Facades\File::class,
-//        'Gate'      => Illuminate\Support\Facades\Gate::class,
-//        'Hash'      => Illuminate\Support\Facades\Hash::class,
-//        'Input'     => Illuminate\Support\Facades\Input::class,
-//        'Inspiring' => Illuminate\Foundation\Inspiring::class,
-//        'Lang'      => Illuminate\Support\Facades\Lang::class,
-//        'Log'       => Illuminate\Support\Facades\Log::class,
-        'Mail'      => Illuminate\Support\Facades\Mail::class,
-        'Password'  => Illuminate\Support\Facades\Password::class,
-//        'Queue'     => Illuminate\Support\Facades\Queue::class,
-//        'Redirect'  => Illuminate\Support\Facades\Redirect::class,
-//        'Redis'     => Illuminate\Support\Facades\Redis::class,
-        'Request'   => Illuminate\Support\Facades\Request::class,
-//        'Response'  => Illuminate\Support\Facades\Response::class,
-//        'Route'     => Illuminate\Support\Facades\Route::class,
-        'Schema'    => Illuminate\Support\Facades\Schema::class,
-        'Session'   => Illuminate\Support\Facades\Session::class,
-//        'Storage'   => Illuminate\Support\Facades\Storage::class,
-        'URL'       => Illuminate\Support\Facades\URL::class,
-//        'Validator' => Illuminate\Support\Facades\Validator::class,
-        'View'      => Illuminate\Support\Facades\View::class,
-
-//        'Debugbar'  => Barryvdh\Debugbar\Facade::class,
-//        'Twig'      => TwigBridge\Facade\Twig::class,
-//        'Form'      => Collective\Html\FormFacade::class,
-//        'Html'      => Collective\Html\HtmlFacade::class,
-//        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
-//        'Image'     => Folklore\Image\Facades\Image::class,
-//        'Menu'      => Lavary\Menu\Facade::class,
+    'aliases' => [
+        'Auth'     => Illuminate\Support\Facades\Auth::class,
+        'Blade'    => Illuminate\Support\Facades\Blade::class,
+        'DB'       => Illuminate\Support\Facades\DB::class,
+        'Mail'     => Illuminate\Support\Facades\Mail::class,
+        'Password' => Illuminate\Support\Facades\Password::class,
+        'Request'  => Illuminate\Support\Facades\Request::class,
+        'Schema'   => Illuminate\Support\Facades\Schema::class,
+        'Session'  => Illuminate\Support\Facades\Session::class,
+        'URL'      => Illuminate\Support\Facades\URL::class,
+        'View'     => Illuminate\Support\Facades\View::class,
     ],
-
 ];
