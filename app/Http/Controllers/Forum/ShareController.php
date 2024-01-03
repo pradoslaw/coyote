@@ -1,26 +1,27 @@
 <?php
-
 namespace Coyote\Http\Controllers\Forum;
 
-/**
- * Class ShareController
- * @package Coyote\Http\Controllers\Forum
- */
+use Coyote\Post;
+use Illuminate\Contracts\Auth\Access\Gate;
+use Illuminate\Http\RedirectResponse;
+
 class ShareController extends BaseController
 {
     /**
      * @param int $id
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function index($id)
     {
-        /** @var \Coyote\Post $post */
+        /** @var Post $post */
         $post = $this->post->withTrashed()->find($id, ['id', 'topic_id', 'forum_id', 'deleted_at']);
         if (!$post || !$post->topic) {
             abort(404);
         }
 
-        if ($post->deleted_at !== null && $this->getGateFactory()->denies('delete', $post->forum)) {
+        /** @var Gate $gate */
+        $gate = app(Gate::class);
+        if ($post->deleted_at !== null && $gate->denies('delete', $post->forum)) {
             abort(404);
         }
 

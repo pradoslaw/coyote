@@ -2,14 +2,12 @@
 
 namespace Coyote\Services\TwigBridge\Extensions;
 
-use Coyote\Http\Factories\GateFactory;
+use Illuminate\Contracts\Auth\Access\Gate;
 use Twig_Extension;
 use Twig_SimpleFunction;
 
 class User extends Twig_Extension
 {
-    use GateFactory;
-
     /**
      * {@inheritDoc}
      */
@@ -34,7 +32,7 @@ class User extends Twig_Extension
             // jest zablokowany lub zbanowany
             new Twig_SimpleFunction('link_to_profile', [&$this, 'linkToProfile'], ['is_safe' => ['html']]),
             new Twig_SimpleFunction('can', [&$this, 'can'], ['is_safe' => ['html']]),
-            new Twig_SimpleFunction('creator_badge', [&$this, 'creatorBadge'], ['is_safe' => ['html']])
+            new Twig_SimpleFunction('creator_badge', [&$this, 'creatorBadge'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -51,7 +49,7 @@ class User extends Twig_Extension
         }
 
         if (strpos($name, '.') !== false) {
-            list($name, $key) = explode('.', $name);
+            [$name, $key] = explode('.', $name);
         }
 
         $element = auth()->user()->$name;
@@ -66,7 +64,7 @@ class User extends Twig_Extension
      * @param array ...$args
      * @return string
      */
-    public function linkToProfile(... $args)
+    public function linkToProfile(...$args)
     {
         $user = $args[0];
 
@@ -75,18 +73,18 @@ class User extends Twig_Extension
         }
 
         if (is_array($user)) {
-            $userId     = isset($user['user_id']) ? $user['user_id'] : $user['id'];
-            $name       = isset($user['user_name']) ? $user['user_name'] : $user['name'];
-            $isActive   = !$user['deleted_at'];
-            $isBlocked  = $user['is_blocked'];
+            $userId = isset($user['user_id']) ? $user['user_id'] : $user['id'];
+            $name = isset($user['user_name']) ? $user['user_name'] : $user['name'];
+            $isActive = !$user['deleted_at'];
+            $isBlocked = $user['is_blocked'];
         } else {
-            $userId     = array_shift($args);
-            $name       = array_shift($args);
-            $isActive   = array_shift($args);
-            $isBlocked  = array_shift($args);
+            $userId = array_shift($args);
+            $name = array_shift($args);
+            $isActive = array_shift($args);
+            $isBlocked = array_shift($args);
         }
 
-        $attributes     = ['data-user-id' => $userId];
+        $attributes = ['data-user-id' => $userId];
         if ($isBlocked || !$isActive) {
             $attributes['class'] = 'user-deleted';
         }
@@ -107,7 +105,9 @@ class User extends Twig_Extension
         }
 
         if ($policy === null) {
-            return $this->getGateFactory()->allows($ability);
+            /** @var Gate $gate */
+            $gate = app(Gate::class);
+            return $gate->allows($ability);
         }
 
         return policy($policy)->$ability(auth()->user(), $policy, $object);

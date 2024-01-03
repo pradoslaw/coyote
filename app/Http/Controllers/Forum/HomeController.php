@@ -2,7 +2,6 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Controllers\RenderParams;
-use Coyote\Http\Factories\GateFactory;
 use Coyote\Http\Resources\FlagResource;
 use Coyote\Http\Resources\ForumCollection;
 use Coyote\Http\Resources\TopicCollection;
@@ -29,8 +28,6 @@ use Lavary\Menu\Menu;
 
 class HomeController extends BaseController
 {
-    use GateFactory;
-
     private ?Builder $tabs;
 
     public function __construct(

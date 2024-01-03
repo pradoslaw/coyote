@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Post;
 use Coyote\Services\UrlBuilder;
+use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Database\Eloquent;
 use Illuminate\View\View;
 
@@ -41,7 +42,9 @@ class LogController extends BaseController
         if ($post->deleted_at === null) {
             return $post;
         }
-        if ($this->getGateFactory()->allows('delete', $post->topic->forum)) {
+        /** @var Gate $app */
+        $app = app(Gate::class);
+        if ($app->allows('delete', $post->topic->forum)) {
             return $post;
         }
         return null;
