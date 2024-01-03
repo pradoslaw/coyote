@@ -1,41 +1,26 @@
 <?php
-
 namespace Coyote\Http\Middleware\Forum;
 
 use Closure;
-use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
+use Coyote\Repositories\Eloquent\ForumRepository;
+use Coyote\Topic;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation;
 
 class RedirectIfMoved extends AbstractMiddleware
 {
-    /**
-     * @var ForumRepository
-     */
-    private $forum;
-
-    /**
-     * @param ForumRepository $forum
-     */
-    public function __construct(ForumRepository $forum)
+    public function __construct(private ForumRepository $forum)
     {
-        $this->forum = $forum;
     }
 
-    /**
-     * Handle an incoming request.
-     *
-     * @param  Request  $request
-     * @param  Closure  $next
-     * @return mixed
-     */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): HttpFoundation\Response
     {
         // check if url is invalid if category was changed or slug was changed
         if (!$this->isInvalidUrl($request)) {
             return $next($request);
         }
 
-        /** @var \Coyote\Topic $topic */
+        /** @var Topic $topic */
         $topic = $request->route('topic');
 
         // get current topic's category
@@ -54,13 +39,6 @@ class RedirectIfMoved extends AbstractMiddleware
         return $next($request);
     }
 
-    /**
-     * Replace parameter only if it exists in URL! Otherwise request will be broken
-     *
-     * @param Request $request
-     * @param string $name
-     * @param $value
-     */
     private function replaceParameter(Request $request, string $name, $value)
     {
         if ($request->route()->hasParameter($name)) {
@@ -68,17 +46,13 @@ class RedirectIfMoved extends AbstractMiddleware
         }
     }
 
-    /**
-     * @param Request $request
-     * @return bool
-     */
-    private function isInvalidUrl(Request $request)
+    private function isInvalidUrl(Request $request): bool
     {
         $forum = $request->route('forum');
         $topic = $request->route('topic');
 
         return (is_null($forum)
             || $forum->id !== $topic->forum_id
-                || ($request->route('slug') !== null && $request->route('slug') !== $topic->slug));
+            || ($request->route('slug') !== null && $request->route('slug') !== $topic->slug));
     }
 }

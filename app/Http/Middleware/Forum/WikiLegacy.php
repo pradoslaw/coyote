@@ -1,47 +1,35 @@
 <?php
-
 namespace Coyote\Http\Middleware\Forum;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation;
 
 class WikiLegacy extends AbstractMiddleware
 {
-    /**
-     * @param Request $request
-     * @param Closure $next
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
-     */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): HttpFoundation\Response
     {
-        /** @var \Illuminate\Http\Response $response */
+        /** @var Response $response */
         $response = $next($request);
 
         if ($response->original === null || is_string($response->original)) {
             return $response;
         }
 
-        $url = $this->getRedirectedUrl($response->original->getData()['wiki']->text);
-
-        if ($url !== null) {
-            return redirect()->to($url);
+        $url = $this->redirectedUrl($response->original->getData()['wiki']->text);
+        if ($url === null) {
+            return $response;
         }
-
-        return $response;
+        return redirect()->to($url);
     }
 
-    /**
-     * @param string $content
-     * @return string|null
-     */
-    private function getRedirectedUrl(string $content): ?string
+    private function redirectedUrl(string $content): ?string
     {
         $plain = strip_tags($content);
-
-        if (substr($plain, 0, 9) !== '#REDIRECT') {
-            return null;
+        if (str_starts_with($plain, '#REDIRECT')) {
+            return trim(substr($plain, 9));
         }
-
-        return trim(substr($plain, 9));
+        return null;
     }
 }
