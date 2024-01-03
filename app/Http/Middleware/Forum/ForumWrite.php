@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Http\Middleware;
+namespace Coyote\Http\Middleware\Forum;
 
 use Closure;
 use Illuminate\Contracts\Auth\Access\Gate;

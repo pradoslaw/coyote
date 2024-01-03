@@ -1,6 +1,6 @@
 <?php
 
-namespace Coyote\Http\Middleware;
+namespace Coyote\Http\Middleware\Forum;
 
 use Illuminate\Http\Request;
 
