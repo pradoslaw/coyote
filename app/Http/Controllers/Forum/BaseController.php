@@ -5,96 +5,60 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Forum;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Resources\TagResource;
-use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
-use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
-use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
-use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
+use Coyote\Repositories\Eloquent\ForumRepository;
+use Coyote\Repositories\Eloquent\PostRepository;
+use Coyote\Repositories\Eloquent\TagRepository;
+use Coyote\Repositories\Eloquent\TopicRepository;
 use Coyote\Services\Session\Renderer;
-use Coyote\Services\UrlBuilder;
 use Coyote\Topic;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 abstract class BaseController extends Controller
 {
-    /**
-     * @var ForumRepository
-     */
-    protected $forum;
-
-    /**
-     * @var TopicRepository
-     */
-    protected $topic;
-
-    /**
-     * @var PostRepository
-     */
-    protected $post;
-
-    /**
-     * @var TagRepository
-     */
-    protected $tag;
-
-    /**
-     * @param ForumRepository $forum
-     * @param TopicRepository $topic
-     * @param PostRepository $post
-     * @param TagRepository $tag
-     */
-    public function __construct(ForumRepository $forum, TopicRepository $topic, PostRepository $post, TagRepository $tag)
+    public function __construct(
+        protected ForumRepository $forum,
+        protected TopicRepository $topic,
+        protected PostRepository  $post,
+        protected TagRepository   $tag)
     {
         parent::__construct();
-
-        $this->forum = $forum;
-        $this->topic = $topic;
-        $this->post = $post;
-        $this->tag = $tag;
-
         $this->middleware(function (Request $request, $next) {
             $this->breadcrumb->push('Forum', route('forum.home'));
             $forum = $request->route('forum');
-
             if ($forum instanceof Forum) {
                 $this->breadcrumb($forum);
             }
-
             return $next($request);
         });
-
         TagResource::urlResolver(fn($name) => route('forum.tag', [urlencode($name)]));
     }
 
-    /**
-     * Builds breadcrumb for this category
-     *
-     * @param \Coyote\Forum $forum
-     */
-    public function breadcrumb($forum)
+    public function breadcrumb(Forum $forum): void
     {
         if ($forum->parent_id) {
-            $this->breadcrumb->push($forum->parent->name, UrlBuilder::forum($forum->parent));
+            $this->pushBreadcrumb($forum->parent);
         }
-
-        $this->breadcrumb->push($forum->name, UrlBuilder::forum($forum));
+        $this->pushBreadcrumb($forum);
     }
 
-    /**
-     * @inheritdoc
-     */
+    private function pushBreadcrumb(Forum $forum): void
+    {
+        $this->breadcrumb->push($forum->name, route('forum.category', [$forum->slug]));
+    }
+
     protected function view($view = null, $data = [])
     {
         return parent::view($view, $data)->with([
             'tags'    => [
                 'popular' => $this->getTagClouds(),
-                'user'    => $this->getUserTags()
+                'user'    => $this->getUserTags(),
             ],
             'viewers' => $this->getViewers(),
-            'sidebar' => $this->getSetting('forum.sidebar', true)
+            'sidebar' => $this->getSetting('forum.sidebar', true),
         ]);
     }
 
@@ -103,7 +67,7 @@ abstract class BaseController extends Controller
      *
      * @param bool $ignoreHidden
      */
-    protected function pushForumCriteria(bool $ignoreHidden = false)
+    protected function pushForumCriteria(bool $ignoreHidden = false): void
     {
         $this->forum->pushCriteria(new OnlyThoseWithAccess($this->auth));
         $this->forum->pushCriteria(new AccordingToUserOrder($this->userId, $ignoreHidden));

@@ -1,5 +1,4 @@
 <?php
-
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Controllers\RenderParams;
@@ -7,10 +6,6 @@ use Coyote\Http\Factories\GateFactory;
 use Coyote\Http\Resources\FlagResource;
 use Coyote\Http\Resources\ForumCollection;
 use Coyote\Http\Resources\TopicCollection;
-use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
-use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
-use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
-use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Repositories\Criteria\Topic\OnlyMine;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess;
@@ -19,6 +14,10 @@ use Coyote\Repositories\Criteria\Topic\SkipLockedCategories;
 use Coyote\Repositories\Criteria\Topic\Subscribes;
 use Coyote\Repositories\Criteria\WithTags;
 use Coyote\Repositories\Criteria\WithTrashed;
+use Coyote\Repositories\Eloquent\ForumRepository;
+use Coyote\Repositories\Eloquent\PostRepository;
+use Coyote\Repositories\Eloquent\TagRepository;
+use Coyote\Repositories\Eloquent\TopicRepository;
 use Coyote\Services\Flags;
 use Coyote\Services\Guest;
 use Coyote\Topic;
@@ -32,47 +31,31 @@ class HomeController extends BaseController
 {
     use GateFactory;
 
-    /**
-     * @var Builder
-     */
-    private $tabs;
+    private ?Builder $tabs;
 
-    /**
-     * @var TagRepository
-     */
-    protected $tag;
-
-    /**
-     * @param ForumRepository $forum
-     * @param TopicRepository $topic
-     * @param PostRepository $post
-     * @param TagRepository $tag
-     */
     public function __construct(
         ForumRepository $forum,
         TopicRepository $topic,
         PostRepository  $post,
-        TagRepository   $tag
-    )
+        TagRepository   $tag)
     {
         parent::__construct($forum, $topic, $post, $tag);
 
-        $this->tabs = app(Menu::class)->make('_forum', function (Builder $menu) {
+        /** @var Menu $app */
+        $app = app(Menu::class);
+        $this->tabs = $app->make('_forum', function (Builder $menu) {
             foreach (config('laravel-menu._forum') as $title => $row) {
                 $data = array_pull($row, 'data');
                 $item = $menu->add($title, $row);
-
                 $item->link->attr(['class' => 'nav-link']);
                 $item->data($data);
             }
         });
-
         $this->middleware(function (Request $request, $next) {
             $this->tabs->filter(function (Item $item) {
                 if ($item->data('role') === true) {
                     return $this->userId !== null;
                 }
-
                 return true;
             });
 
@@ -201,9 +184,9 @@ class HomeController extends BaseController
             ->tabs
             ->add('Wątki z: ' . $name, [
                 'route' => [
-                    'forum.tag', urlencode($this->request->route('tag'))
+                    'forum.tag', urlencode($this->request->route('tag')),
                 ],
-                'class' => 'nav-item'
+                'class' => 'nav-item',
             ]);
 
         $item->link->attr(['class' => 'nav-link']);
