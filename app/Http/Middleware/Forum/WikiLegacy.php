@@ -1,9 +1,9 @@
 <?php
 
-namespace Coyote\Http\Middleware;
+namespace Coyote\Http\Middleware\Forum;
 
-use Illuminate\Http\Request;
 use Closure;
+use Illuminate\Http\Request;
 
 class WikiLegacy extends AbstractMiddleware
 {
