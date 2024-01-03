@@ -1,34 +1,18 @@
 <?php
-
 namespace Coyote\Http\Middleware\Forum;
 
 use Closure;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation;
 
 class ForumWrite extends AbstractMiddleware
 {
-    /**
-     * @var Gate
-     */
-    protected $gate;
-
-    /**
-     * @param Gate $gate
-     */
-    public function __construct(Gate $gate)
+    public function __construct(private Gate $gate)
     {
-        $this->gate = $gate;
     }
 
-    /**
-     * Handle an incoming request.
-     *
-     * @param  Request  $request
-     * @param  Closure  $next
-     * @return mixed
-     */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): HttpFoundation\Response
     {
         $forum = $request->route('forum');
 

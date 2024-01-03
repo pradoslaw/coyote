@@ -1,42 +1,29 @@
 <?php
-
 namespace Coyote\Http\Middleware\Forum;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation;
 
 abstract class AbstractMiddleware
 {
-    /**
-     * @param Request $request
-     * @return mixed
-     */
-    protected function unauthorized(Request $request)
+    protected function unauthorized(Request $request): HttpFoundation\Response
     {
         if ($request->ajax() || $request->wantsJson()) {
             return response('Unauthorized.', 401);
         }
-
         abort(401, 'Unauthorized');
     }
 
-    /**
-     * @param Request $request
-     * @return mixed
-     */
-    protected function login(Request $request)
+    protected function login(Request $request): HttpFoundation\Response
     {
         if ($request->ajax() || $request->wantsJson()) {
             return response('Unauthorized.', 401);
         }
-
         return redirect()->guest(route('login'));
     }
 
-    /**
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    protected function redirect(Request $request)
+    protected function redirect(Request $request): RedirectResponse
     {
         return redirect()->route(
             $request->route()->getName(),
