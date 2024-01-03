@@ -23,6 +23,7 @@ use Coyote\Services\Forum\TreeBuilder\ListDecorator;
 use Coyote\Services\Parser\Extensions\Emoji;
 use Coyote\Topic;
 use Coyote\View\Twig\TwigLiteral;
+use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
@@ -38,7 +39,8 @@ class TopicController extends BaseController
         // get the topic (and forum) mark time value from middleware
         $markTime = $request->attributes->get('mark_time');
 
-        $gate = $this->getGateFactory();
+        /** @var Gate $gate */
+        $gate = app(Gate::class);
 
         $page = (int)$request->get('page');
         $perPage = $this->postsPerPage($request);

@@ -1,13 +1,10 @@
 <?php
 namespace Coyote\Http\Controllers;
 
-use Coyote\Domain\User\UserSettings;
 use Coyote\Http\Factories\CacheFactory;
-use Coyote\Http\Factories\GateFactory;
 use Coyote\Services\Breadcrumbs;
 use Coyote\Services\Guest;
 use Coyote\User;
-use Coyote\View\Twig\TwigLiteral;
 use Illuminate\Database\Connection;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -18,7 +15,7 @@ use Illuminate\View\View;
 
 abstract class Controller extends BaseController
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests, GateFactory, CacheFactory;
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests, CacheFactory;
 
     protected Breadcrumbs $breadcrumb;
     protected ?int $userId;

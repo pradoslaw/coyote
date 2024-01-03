@@ -3,24 +3,24 @@
 namespace Coyote\Http\Middleware;
 
 use Closure;
-use Coyote\Http\Factories\GateFactory;
+use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Http\Request;
 
 class AdmAccess
 {
-    use GateFactory;
-
     /**
      * Handle an incoming request.
      *
-     * @param   Request  $request
-     * @param   Closure  $next
-     * @param   bool    $isLogged
+     * @param Request $request
+     * @param Closure $next
+     * @param bool $isLogged
      * @return mixed
      */
     public function handle(Request $request, Closure $next, $isLogged)
     {
-        if ($this->getGateFactory()->denies('adm-access')) {
+        /** @var Gate $gate */
+        $gate = app(Gate::class);
+        if ($gate->denies('adm-access')) {
             abort(401);
         }
 

@@ -3,7 +3,6 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Http\Controllers\RenderParams;
-use Coyote\Http\Factories\GateFactory;
 use Coyote\Http\Resources\FlagResource;
 use Coyote\Http\Resources\ForumCollection;
 use Coyote\Http\Resources\TopicCollection;
@@ -30,12 +29,7 @@ use Lavary\Menu\Menu;
 
 class HomeController extends BaseController
 {
-    use GateFactory;
-
-    /**
-     * @var Builder
-     */
-    private $tabs;
+    private ?Builder $tabs;
 
     /**
      * @var TagRepository
@@ -52,16 +46,17 @@ class HomeController extends BaseController
         ForumRepository $forum,
         TopicRepository $topic,
         PostRepository  $post,
-        TagRepository   $tag
+        TagRepository   $tag,
     )
     {
         parent::__construct($forum, $topic, $post, $tag);
 
-        $this->tabs = app(Menu::class)->make('_forum', function (Builder $menu) {
+        /** @var Menu $app */
+        $app = app(Menu::class);
+        $this->tabs = $app->make('_forum', function (Builder $menu) {
             foreach (config('laravel-menu._forum') as $title => $row) {
                 $data = array_pull($row, 'data');
                 $item = $menu->add($title, $row);
-
                 $item->link->attr(['class' => 'nav-link']);
                 $item->data($data);
             }
@@ -201,9 +196,9 @@ class HomeController extends BaseController
             ->tabs
             ->add('Wątki z: ' . $name, [
                 'route' => [
-                    'forum.tag', urlencode($this->request->route('tag'))
+                    'forum.tag', urlencode($this->request->route('tag')),
                 ],
-                'class' => 'nav-item'
+                'class' => 'nav-item',
             ]);
 
         $item->link->attr(['class' => 'nav-link']);
@@ -257,7 +252,7 @@ class HomeController extends BaseController
                 $this->guestId,
                 'topics.last_post_id',
                 'DESC',
-                $this->topicsPerPage($this->request)
+                $this->topicsPerPage($this->request),
             )
             ->appends($this->request->except('page'));
     }

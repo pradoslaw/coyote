@@ -9,10 +9,11 @@ use Coyote\Notifications\FlagCreatedNotification;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Repositories\Criteria\HasPermission;
-use Illuminate\Http\Request;
-use Coyote\Services\Stream\Objects\Flag as Stream_Flag;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
+use Coyote\Services\Stream\Objects\Flag as Stream_Flag;
+use Illuminate\Contracts\Auth\Access\Gate;
+use Illuminate\Http\Request;
 
 class FlagController extends Controller
 {
@@ -52,11 +53,11 @@ class FlagController extends Controller
     public function save(Request $request)
     {
         $this->validate($request, [
-            'url'           => 'required|string',
-            'metadata'      => 'required',
-            'type_id'       => 'integer|exists:flag_types,id',
-            'text'          => 'nullable|string',
-            '_token'        => 'throttle'
+            'url'      => 'required|string',
+            'metadata' => 'required',
+            'type_id'  => 'integer|exists:flag_types,id',
+            'text'     => 'nullable|string',
+            '_token'   => 'throttle',
         ]);
 
         $metadata = decrypt($request->input('metadata'));
@@ -126,22 +127,20 @@ class FlagController extends Controller
         });
     }
 
-    /**
-     * @param \Coyote\Flag $flag
-     * @return bool
-     */
-    private function isAuthorized(Flag $flag)
+    private function isAuthorized(Flag $flag): bool
     {
-        $gate = $this->getGateFactory();
+        /** @var Gate $gate */
+        $gate = app(Gate::class);
 
         if (count($flag->forums)) {
             return $gate->allows('delete', $flag->forums[0]);
-        } elseif (count($flag->microblogs)) {
-            return $gate->allows('microblog-delete');
-        } elseif (count($flag->jobs)) {
-            return $gate->allows('job-delete');
-        } else {
-            return false;
         }
+        if (count($flag->microblogs)) {
+            return $gate->allows('microblog-delete');
+        }
+        if (count($flag->jobs)) {
+            return $gate->allows('job-delete');
+        }
+        return false;
     }
 }

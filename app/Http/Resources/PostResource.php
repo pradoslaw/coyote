@@ -1,16 +1,16 @@
 <?php
-
 namespace Coyote\Http\Resources;
 
 use Carbon\Carbon;
 use Coyote\Forum;
-use Coyote\Http\Factories\GateFactory;
 use Coyote\Post;
 use Coyote\Post\Comment;
 use Coyote\Services\Forum\Tracker;
 use Coyote\Services\UrlBuilder;
 use Coyote\Topic;
 use Coyote\User;
+use Illuminate\Contracts\Auth\Access\Gate;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -38,45 +38,23 @@ use Illuminate\Http\Resources\Json\JsonResource;
  */
 class PostResource extends JsonResource
 {
-    use GateFactory;
-
-    /**
-     * @var Tracker
-     */
-    protected $tracker;
-
-    /**
-     * @var \Coyote\Flag[]
-     */
-    protected $flags;
-
-    /**
-     * @var \Illuminate\Contracts\Auth\Access\Gate
-     */
-    protected $gate;
+    private Gate $gate;
+    private ?Tracker $tracker = null;
 
     public function __construct($resource)
     {
         parent::__construct($resource);
-
-        $this->gate = $this->getGateFactory();
+        $this->gate = app(Gate::class);
     }
 
-    /**
-     * @param Tracker $tracker
-     * @return $this
-     */
-    public function setTracker(Tracker $tracker)
+    public function setTracker(Tracker $tracker): self
     {
         $this->tracker = $tracker;
-
         return $this;
     }
 
     /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return array
      */
     public function toArray($request): array
@@ -92,13 +70,13 @@ class PostResource extends JsonResource
         $comments = $request->get('p') == $this->id ? $this->resource->comments : $this->resource->comments->slice(-5, null, true);
 
         return array_merge($only, [
-            'created_at'    => $this->created_at->toIso8601String(),
-            'updated_at'    => $this->updated_at ? $this->updated_at->toIso8601String() : null,
-            'deleted_at'    => $this->deleted_at ? Carbon::parse($this->deleted_at)->toIso8601String() : null,
-            'user'          => UserResource::make($this->user),
-            'html'          => $html,
-            'url'           => UrlBuilder::post($this->resource, true),
-            'is_locked'     => $this->topic->is_locked || $this->forum->is_locked,
+            'created_at' => $this->created_at->toIso8601String(),
+            'updated_at' => $this->updated_at ? $this->updated_at->toIso8601String() : null,
+            'deleted_at' => $this->deleted_at ? Carbon::parse($this->deleted_at)->toIso8601String() : null,
+            'user'       => UserResource::make($this->user),
+            'html'       => $html,
+            'url'        => UrlBuilder::post($this->resource, true),
+            'is_locked'  => $this->topic->is_locked || $this->forum->is_locked,
 
             $this->mergeWhen($this->tracker !== null, function () {
                 return ['is_read' => $this->tracker->getMarkTime() >= $this->created_at];
@@ -106,8 +84,8 @@ class PostResource extends JsonResource
 
             // only for moderators
             $this->mergeWhen($this->gate->allows('delete', $this->forum), [
-                'ip'         => $this->ip,
-                'browser'    => $this->browser
+                'ip'      => $this->ip,
+                'browser' => $this->browser,
             ]),
 
             $this->mergeWhen($this->editor !== null, function () {
@@ -115,23 +93,23 @@ class PostResource extends JsonResource
             }),
 
             'permissions' => [
-                'write'             => $this->gate->allows('write', $this->topic) && $this->gate->allows('write', $this->forum),
-                'delete'            => $this->gate->allows('delete', $this->resource) || $this->gate->allows('delete', $this->forum),
-                'update'            => $this->gate->allows('update', $this->resource),
-                'merge'             => $this->gate->allows('merge', $this->forum),
-                'sticky'            => $this->gate->allows('sticky', $this->forum),
-                'adm_access'        => $this->gate->allows('adm-access'),
-                'accept'            => $this->gate->allows('accept', $this->resource)
+                'write'      => $this->gate->allows('write', $this->topic) && $this->gate->allows('write', $this->forum),
+                'delete'     => $this->gate->allows('delete', $this->resource) || $this->gate->allows('delete', $this->forum),
+                'update'     => $this->gate->allows('update', $this->resource),
+                'merge'      => $this->gate->allows('merge', $this->forum),
+                'sticky'     => $this->gate->allows('sticky', $this->forum),
+                'adm_access' => $this->gate->allows('adm-access'),
+                'accept'     => $this->gate->allows('accept', $this->resource),
             ],
 
-            'comments'      => PostCommentResource::collection($comments)->keyBy('id'),
-            'comments_count'=> $commentsCount,
-            'assets'        => AssetsResource::collection($this->resource->assets),
-            'metadata'      => encrypt([
-                Post::class     => $this->id,
-                Topic::class    => $this->topic_id,
-                Forum::class    => $this->forum_id
-            ])
+            'comments'       => PostCommentResource::collection($comments)->keyBy('id'),
+            'comments_count' => $commentsCount,
+            'assets'         => AssetsResource::collection($this->resource->assets),
+            'metadata'       => encrypt([
+                Post::class  => $this->id,
+                Topic::class => $this->topic_id,
+                Forum::class => $this->forum_id,
+            ]),
         ]);
     }
 
