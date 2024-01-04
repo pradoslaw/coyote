@@ -3,7 +3,6 @@ namespace Tests;
 
 use Coyote\Forum;
 use Coyote\Group;
-use Coyote\Permission;
 use Coyote\Topic;
 use Coyote\User;
 use Illuminate\Contracts\Console\Kernel;
@@ -39,22 +38,10 @@ trait CreatesApplication
         if ($groupId) {
             $data['is_prohibited'] = true;
         }
-
         $forum = factory(Forum::class)->create($data);
-
         if ($groupId) {
             $forum->access()->create(['group_id' => $groupId]);
         }
-
         return $forum;
-    }
-
-    public function grantAdminAccess(User $user): void
-    {
-        $group = factory(Group::class)->create();
-        $group->users()->attach($user->id);
-        foreach (Permission::all() as $permission) {
-            $group->permissions()->attach($permission->id, ['value' => 1]);
-        }
     }
 }
