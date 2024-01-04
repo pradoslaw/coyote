@@ -7,6 +7,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PingController extends Controller
 {
+    /**
+     * @deprecated
+     */
     public function index(): Response
     {
         return \response(\csrf_token());

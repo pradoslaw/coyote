@@ -128,6 +128,9 @@ class NotificationsController extends BaseController
         return redirect()->to($notification->url);
     }
 
+    /**
+     * @deprecated
+     */
     public function redirectToUrl(): RedirectResponse
     {
         $path = \urlDecode($this->request->get('path'));
