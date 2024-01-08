@@ -18,26 +18,22 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class Builder
 {
-    private ?User $user;
-    private bool $isSponsor = false;
-
-    public function __construct(private MicroblogRepository $microblog, Guard $guard)
+    public function __construct(
+        private MicroblogRepository $microblog,
+        private Guard               $guard,
+    )
     {
-        $this->user = $guard->user();
-        if ($this->user) {
-            $this->isSponsor = $this->user->is_sponsor;
-        }
     }
 
     public function orderByScore(): self
     {
-        $this->microblog->pushCriteria(new OrderByScore(!$this->isSponsor));
+        $this->microblog->pushCriteria(new OrderByScore(!$this->sponsor()));
         return $this;
     }
 
     public function orderById(): self
     {
-        $this->microblog->pushCriteria(new OrderById(!$this->isSponsor));
+        $this->microblog->pushCriteria(new OrderById(!$this->sponsor()));
         return $this;
     }
 
@@ -102,7 +98,7 @@ class Builder
     {
         $this->loadUserScope();
 
-        if ($this->user && $this->user->can('microblog-delete')) {
+        if ($this->canUserDelete()) {
             $this->microblog->pushCriteria(new WithTrashed());
         }
 
@@ -136,8 +132,27 @@ class Builder
 
     private function loadUserScope(): void
     {
-        if ($this->user) {
-            $this->microblog->pushCriteria(new LoadUserScope($this->user));
+        /** @var User|null $user */
+        $user = $this->guard->user();
+        if ($user) {
+            $this->microblog->pushCriteria(new LoadUserScope($user));
         }
+    }
+
+    private function canUserDelete(): bool
+    {
+        /** @var User|null $user */
+        $user = $this->guard->user();
+        if ($user) {
+            return $user->can('microblog-delete');
+        }
+        return false;
+    }
+
+    private function sponsor(): bool
+    {
+        /** @var User|null $user */
+        $user = $this->guard->user();
+        return $user && $user->is_sponsor;
     }
 }
