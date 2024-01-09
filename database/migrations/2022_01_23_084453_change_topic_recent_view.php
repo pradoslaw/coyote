@@ -54,7 +54,7 @@ class ChangeTopicRecentView extends Migration
     {
         $this->db->statement('DROP MATERIALIZED VIEW topic_recent');
 
-        $sql = 'CREATE OR REPLACE MATERIALIZED VIEW topic_recent AS
+        $sql = 'CREATE MATERIALIZED VIEW IF NOT EXISTS topic_recent AS
          SELECT
             topics.id AS id,
             forum_id,
