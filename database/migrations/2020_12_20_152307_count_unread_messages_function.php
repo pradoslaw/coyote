@@ -38,6 +38,6 @@ $$ LANGUAGE plpgsql;
     public function down()
     {
         $this->db->unprepared('DROP FUNCTION count_unread_messages');
-        $this->db->unprepared('UPDATE users SET pm_unread = (SELECT COUNT(*) FROM pm.user_id = users.id AND pm.folder = 1 AND read_at IS NULL) WHERE pm > 0');
+        $this->db->unprepared('UPDATE users SET pm_unread = (SELECT COUNT(*) FROM pm WHERE pm.user_id = users.id AND pm.folder = 1 AND read_at IS NULL) WHERE pm > 0');
     }
 }
