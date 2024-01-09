@@ -1,24 +1,27 @@
 <?php
-
 namespace Database\Seeders;
 
+use Coyote\User;
 use Illuminate\Database\Seeder;
 
 class UsersTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
+    public function run(): void
     {
-        \Coyote\User::create([
-            'name'                  => 'admin',
-            'email'                 => 'admin@localhost',
-            'password'              => bcrypt('admin')
+        User::create([
+            'name'       => 'admin',
+            'email'      => 'admin@localhost',
+            'password'   => bcrypt('admin'),
+            'reputation' => 400,
         ]);
 
-        \factory(\Coyote\User::class, 10)->create();
+        User::create([
+            'name'       => 'user',
+            'email'      => 'user@localhost',
+            'password'   => bcrypt('user'),
+            'reputation' => 100,
+        ]);
+
+        \factory(User::class, 10)->create();
     }
 }
