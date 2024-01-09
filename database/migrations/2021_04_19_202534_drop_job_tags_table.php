@@ -36,6 +36,7 @@ class DropJobTagsTable extends Migration
             $table->integer('job_id');
             $table->integer('tag_id');
             $table->smallInteger('priority')->nullable();
+            $table->addColumn('smallInteger', 'order')->default(0);
 
             $table->index('job_id');
 
