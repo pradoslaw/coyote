@@ -25,7 +25,7 @@ class DropBeforeTopicUpdateTrigger extends Migration
     public function down()
     {
         $this->db->unprepared('
-CREATE FUNCTION before_topic_update() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION before_topic_update() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
  	IF NEW.forum_id != OLD.forum_id THEN
  		NEW.prev_forum_id = OLD.forum_id;

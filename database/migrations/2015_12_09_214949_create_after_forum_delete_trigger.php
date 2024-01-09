@@ -12,7 +12,7 @@ class CreateAfterForumDeleteTrigger extends Migration
     public function up()
     {
         DB::unprepared('
-CREATE FUNCTION after_forum_delete() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_forum_delete() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
   	UPDATE forums SET "order" = "order" - 1 WHERE COALESCE(parent_id, 0) = COALESCE(OLD.parent_id, 0) AND "order" > OLD."order";
 

@@ -12,7 +12,7 @@ class CreateAfterReputationInsertTrigger extends Migration
     public function up()
     {
         DB::unprepared('
-CREATE FUNCTION after_reputation_insert() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_reputation_insert() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
  	UPDATE users SET reputation = reputation + NEW."value" WHERE "id" = NEW.user_id;
 	RETURN NEW;

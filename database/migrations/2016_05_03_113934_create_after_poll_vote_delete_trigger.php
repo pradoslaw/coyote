@@ -12,7 +12,7 @@ class CreateAfterPollVoteDeleteTrigger extends Migration
     public function up()
     {
         DB::unprepared('
-CREATE FUNCTION after_poll_vote_delete() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_poll_vote_delete() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
  	UPDATE poll_items SET total = total - 1 WHERE "id" = OLD.item_id;
 

@@ -14,7 +14,7 @@ class CreateAfterSessionInsertTrigger extends Migration
     public function up()
     {
         $this->db->unprepared('
-CREATE FUNCTION after_session_insert() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_session_insert() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
 	IF NEW.user_id IS NOT NULL THEN
 	    UPDATE users SET is_online = 1 WHERE "id" = NEW.user_id;

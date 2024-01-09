@@ -16,7 +16,7 @@ class CreateAfterTopicSubscribeInsertTrigger extends Migration
     public function up()
     {
         $this->db->unprepared('
-CREATE FUNCTION after_topic_subscribe_insert() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_topic_subscribe_insert() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
     UPDATE topics SET subscribers = subscribers + 1 WHERE id = NEW.topic_id;
 

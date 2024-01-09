@@ -12,7 +12,7 @@ class CreateAfterPostDeleteTrigger extends Migration
     public function up()
     {
         DB::unprepared('
-CREATE FUNCTION after_post_delete() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_post_delete() RETURNS trigger LANGUAGE plpgsql AS $$
 DECLARE
 	_post_id INTEGER;
 	_post_time TIMESTAMP WITH TIME ZONE;

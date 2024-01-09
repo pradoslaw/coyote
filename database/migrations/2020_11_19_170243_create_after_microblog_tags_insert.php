@@ -16,7 +16,7 @@ class CreateAfterMicroblogTagsInsert extends Migration
     public function up()
     {
         $this->db->unprepared('
-CREATE FUNCTION after_microblog_tags_insert() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_microblog_tags_insert() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
  	UPDATE tags SET microblogs = microblogs + 1, last_used_at = now() WHERE id = NEW.tag_id;
 

@@ -12,7 +12,7 @@ class CreateAfterTopicDeleteTrigger extends Migration
     public function up()
     {
         DB::unprepared('
-CREATE FUNCTION after_topic_delete() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_topic_delete() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
  	UPDATE forums SET last_post_id = get_forum_last_post_id(OLD.forum_id), topics = (topics - 1) WHERE "id" = OLD.forum_id;
 	RETURN NEW;

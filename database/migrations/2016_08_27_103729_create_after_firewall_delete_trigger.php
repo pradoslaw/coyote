@@ -12,7 +12,7 @@ class CreateAfterFirewallDeleteTrigger extends Migration
     public function up()
     {
         DB::unprepared('
-CREATE FUNCTION after_firewall_delete() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_firewall_delete() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
  	IF OLD.user_id IS NOT NULL THEN
  	    IF (SELECT COUNT(*) FROM firewall WHERE user_id = OLD.user_id) = 0 THEN

@@ -16,7 +16,7 @@ class CreateBeforeFeatureInsertTrigger extends Migration
     public function up()
     {
         $this->db->unprepared('
-CREATE FUNCTION before_feature_insert() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION before_feature_insert() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
  	NEW."order" := (SELECT COALESCE(MAX("order"), 0) FROM features) + 1;
 

@@ -41,7 +41,7 @@ class RenameAlertsTable extends Migration
         });
 
         DB::unprepared('
-CREATE FUNCTION after_notification_type_insert() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_notification_type_insert() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
 	INSERT INTO notification_settings (type_id, user_id, profile, email)
 	SELECT NEW."id", "id", NEW.profile, NEW.email
@@ -54,7 +54,7 @@ CREATE TRIGGER after_notification_type_insert AFTER INSERT ON notification_types
         ');
 
         DB::unprepared('
-CREATE FUNCTION after_notification_insert() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_notification_insert() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
 	UPDATE users
  	SET notifications = (notifications + 1), notifications_unread = (notifications_unread + 1)
@@ -67,7 +67,7 @@ CREATE TRIGGER after_notification_insert AFTER INSERT ON notifications FOR EACH 
         ');
 
         DB::unprepared('
-CREATE FUNCTION after_notification_update() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_notification_update() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
 	IF NEW.read_at IS NOT NULL AND OLD.read_at IS NULL THEN
  		UPDATE users SET notifications_unread = notifications_unread -1
@@ -81,7 +81,7 @@ CREATE TRIGGER after_notification_update AFTER UPDATE ON notifications FOR EACH 
         ');
 
         DB::unprepared('
-CREATE FUNCTION after_notification_delete() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_notification_delete() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
 	UPDATE users
  	SET notifications = (notifications -1), notifications_unread = (notifications_unread - CASE WHEN OLD.read_at IS NOT NULL THEN 0 ELSE 1 END)
@@ -130,7 +130,7 @@ END;$$;
         DB::unprepared('DROP FUNCTION after_notification_type_insert();');
 
         DB::unprepared('
-CREATE FUNCTION after_alert_type_insert() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_alert_type_insert() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
 	INSERT INTO alert_settings (type_id, user_id, profile, email)
 	SELECT NEW."id", "id", NEW.profile, NEW.email
@@ -146,7 +146,7 @@ CREATE TRIGGER after_alert_type_insert AFTER INSERT ON alert_types FOR EACH ROW 
         DB::unprepared('DROP FUNCTION after_notification_insert();');
 
         DB::unprepared('
-CREATE FUNCTION after_alert_insert() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_alert_insert() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
 	UPDATE users
  	SET alerts = (alerts + 1), alerts_unread = (alerts_unread + 1)
@@ -162,7 +162,7 @@ CREATE TRIGGER after_alert_insert AFTER INSERT ON alerts FOR EACH ROW EXECUTE PR
         DB::unprepared('DROP FUNCTION after_notification_update();');
 
         DB::unprepared('
-CREATE FUNCTION after_alert_update() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_alert_update() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
 	IF NEW.read_at IS NOT NULL AND OLD.read_at IS NULL THEN
  		UPDATE users SET alerts_unread = alerts_unread -1
@@ -179,7 +179,7 @@ CREATE TRIGGER after_alert_update AFTER UPDATE ON alerts FOR EACH ROW EXECUTE PR
         DB::unprepared('DROP FUNCTION after_notification_delete();');
 
         DB::unprepared('
-CREATE FUNCTION after_alert_delete() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_alert_delete() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
 	UPDATE users
  	SET alerts = (alerts -1), alerts_unread = (alerts_unread - CASE WHEN OLD.read_at IS NOT NULL THEN 0 ELSE 1 END)

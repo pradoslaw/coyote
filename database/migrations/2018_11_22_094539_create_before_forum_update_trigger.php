@@ -14,7 +14,7 @@ class CreateBeforeForumUpdateTrigger extends Migration
     public function up()
     {
         $this->db->unprepared('
-CREATE FUNCTION before_forum_update() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION before_forum_update() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
     IF COALESCE(NEW.parent_id, 0) != COALESCE(OLD.parent_id, 0) THEN
 	    NEW."order" := (SELECT COALESCE(MAX("order"), 0) FROM forums WHERE COALESCE(parent_id, 0) = COALESCE(NEW.parent_id, 0)) + 1;

@@ -12,7 +12,7 @@ class CreateAfterUserSkillDeleteTrigger extends Migration
     public function up()
     {
         DB::unprepared('
-CREATE FUNCTION after_user_skill_delete() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_user_skill_delete() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
   	UPDATE user_skills SET "order" = "order" - 1 WHERE user_id = OLD.user_id AND "order" > OLD."order";
 
