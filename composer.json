@@ -1,10 +1,9 @@
 {
+  "type": "project",
   "name": "adam-boduch/coyote",
   "description": "4programmers.net",
-  "version": "2.5",
   "homepage": "http://4programmers.net",
   "license": "MIT",
-  "type": "project",
   "authors": [
     {
       "name": "Adam Boduch",
@@ -83,8 +82,7 @@
     "psr-4": {
       "Tests\\": "tests/",
       "Tests\\Browser\\": "tests/Browser/",
-      "Tests\\Feature\\": "tests/Feature/",
-      "Tests\\Unit\\": "tests/Unit/"
+      "Tests\\Legacy\\": "tests/Legacy/"
     }
   },
   "scripts": {
