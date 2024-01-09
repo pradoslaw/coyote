@@ -29,9 +29,10 @@ class DropSettingsTable extends Migration
             $table->string('name');
             $table->text('value');
             $table->integer('user_id')->nullable();
-            $table->string('session_id')->nullable();
+            $table->string('guest_id')->nullable();
 
-            $table->index(['name', 'user_id', 'session_id']);
+            $table->index(['name', 'user_id', 'guest_id'],
+                'settings_user_id_session_id_index');
         });
     }
 }
