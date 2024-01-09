@@ -12,7 +12,7 @@ class CreateAfterPostUpdateTrigger extends Migration
     public function up()
     {
         DB::unprepared('
-CREATE FUNCTION after_post_update() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_post_update() RETURNS trigger LANGUAGE plpgsql AS $$
 DECLARE
 	_post_id INTEGER;
 	_post_time TIMESTAMP WITH TIME ZONE;

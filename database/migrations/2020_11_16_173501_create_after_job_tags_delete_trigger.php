@@ -14,7 +14,7 @@ class CreateAfterJobTagsDeleteTrigger extends Migration
     public function up()
     {
         $this->db->unprepared('
-CREATE FUNCTION after_job_tags_delete() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_job_tags_delete() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
  	UPDATE tags SET jobs = jobs - 1 WHERE id = OLD.tag_id;
 

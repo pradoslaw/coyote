@@ -12,7 +12,7 @@ class CreateAfterPmInsertTrigger extends Migration
     public function up()
     {
         DB::unprepared('
-CREATE FUNCTION after_pm_insert() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_pm_insert() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
  	IF NEW.folder = 1 THEN
  		UPDATE users SET pm = pm + 1, pm_unread = pm_unread + 1 WHERE "id" = NEW.user_id;

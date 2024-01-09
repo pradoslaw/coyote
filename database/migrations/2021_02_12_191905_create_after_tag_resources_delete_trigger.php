@@ -16,7 +16,7 @@ class CreateAfterTagResourcesDeleteTrigger extends Migration
     public function up()
     {
         $this->db->unprepared("
-CREATE FUNCTION after_tag_resources_delete() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_tag_resources_delete() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
  	EXECUTE format('UPDATE tags
     SET resources = jsonb_set(resources, ''{%s}'', (COALESCE(resources->>''%s'', ''0'')::int - 1)::text::jsonb)

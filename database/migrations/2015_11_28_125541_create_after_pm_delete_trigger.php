@@ -12,7 +12,7 @@ class CreateAfterPmDeleteTrigger extends Migration
     public function up()
     {
         DB::unprepared('
-CREATE FUNCTION after_pm_delete() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_pm_delete() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
  	IF (SELECT COUNT(*) FROM pm WHERE text_id = OLD.text_id) = 0 THEN
  	   DELETE FROM pm_text WHERE "id" = OLD.text_id;

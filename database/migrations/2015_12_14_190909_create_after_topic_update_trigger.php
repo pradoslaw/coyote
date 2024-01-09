@@ -12,7 +12,7 @@ class CreateAfterTopicUpdateTrigger extends Migration
     public function up()
     {
         DB::unprepared('
-CREATE FUNCTION after_topic_update() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_topic_update() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
 	IF OLD.deleted_at IS NULL AND NEW.deleted_at IS NOT NULL THEN -- kasowanie watku
 		UPDATE posts SET deleted_at = NOW() WHERE topic_id = OLD."id" AND deleted_at IS NULL;

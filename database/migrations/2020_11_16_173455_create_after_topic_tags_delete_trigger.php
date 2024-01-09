@@ -14,7 +14,7 @@ class CreateAfterTopicTagsDeleteTrigger extends Migration
     public function up()
     {
         $this->db->unprepared('
-CREATE FUNCTION after_topic_tags_delete() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_topic_tags_delete() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
  	UPDATE tags SET topics = topics - 1 WHERE id = OLD.tag_id;
 

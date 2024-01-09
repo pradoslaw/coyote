@@ -12,7 +12,7 @@ class CreateAfterAlertDeleteTrigger extends Migration
     public function up()
     {
         DB::unprepared('
-CREATE FUNCTION after_alert_delete() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_alert_delete() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
 	UPDATE users
  	SET alerts = (alerts -1), alerts_unread = (alerts_unread - CASE WHEN OLD.read_at IS NOT NULL THEN 0 ELSE 1 END)

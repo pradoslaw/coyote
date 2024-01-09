@@ -12,7 +12,7 @@ class CreateAfterAlertTypeInsertTrigger extends Migration
     public function up()
     {
         DB::unprepared('
-CREATE FUNCTION after_alert_type_insert() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_alert_type_insert() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
 	INSERT INTO alert_settings (type_id, user_id, profile, email)
 	SELECT NEW."id", "id", NEW.profile, NEW.email

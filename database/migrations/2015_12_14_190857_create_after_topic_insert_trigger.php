@@ -12,7 +12,7 @@ class CreateAfterTopicInsertTrigger extends Migration
     public function up()
     {
         DB::unprepared('
-CREATE FUNCTION after_topic_insert() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_topic_insert() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
   	UPDATE forums SET topics = (topics + 1) WHERE "id" = NEW.forum_id;
 	RETURN NEW;

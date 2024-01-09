@@ -12,7 +12,7 @@ class CreateAfterPollVoteInsertTrigger extends Migration
     public function up()
     {
         DB::unprepared('
-CREATE FUNCTION after_poll_vote_insert() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_poll_vote_insert() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
  	UPDATE poll_items SET total = total + 1 WHERE "id" = NEW.item_id;
 

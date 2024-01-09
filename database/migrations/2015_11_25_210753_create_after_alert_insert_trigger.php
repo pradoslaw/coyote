@@ -12,7 +12,7 @@ class CreateAfterAlertInsertTrigger extends Migration
     public function up()
     {
         DB::unprepared('
-CREATE FUNCTION after_alert_insert() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_alert_insert() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
 	UPDATE users
  	SET alerts = (alerts + 1), alerts_unread = (alerts_unread + 1)

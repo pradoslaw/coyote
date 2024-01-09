@@ -16,7 +16,7 @@ class CreateAfterTopicSubscribeDeleteTrigger extends Migration
     public function up()
     {
         $this->db->unprepared('
-CREATE FUNCTION after_topic_subscribe_delete() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_topic_subscribe_delete() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
     UPDATE topics SET subscribers = subscribers - 1 WHERE id = OLD.topic_id;
 

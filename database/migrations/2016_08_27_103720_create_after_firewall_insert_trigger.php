@@ -12,7 +12,7 @@ class CreateAfterFirewallInsertTrigger extends Migration
     public function up()
     {
         DB::unprepared('
-CREATE FUNCTION after_firewall_insert() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_firewall_insert() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
     IF NEW.user_id IS NOT NULL THEN
  	    UPDATE users SET is_blocked = 1 WHERE "id" = NEW.user_id;

@@ -12,7 +12,7 @@ class CreateAfterPostVoteInsertTrigger extends Migration
     public function up()
     {
         DB::unprepared('
-CREATE FUNCTION after_post_vote_insert() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_post_vote_insert() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
  	UPDATE posts SET score = score + 1 WHERE "id" = NEW.post_id;
  	UPDATE topics SET score = score + 1 WHERE first_post_id = NEW.post_id;

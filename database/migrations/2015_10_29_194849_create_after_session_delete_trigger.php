@@ -13,7 +13,7 @@ class CreateAfterSessionDeleteTrigger extends Migration
     public function up()
     {
         DB::unprepared('
-CREATE FUNCTION before_session_delete() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION before_session_delete() RETURNS trigger LANGUAGE plpgsql AS $$
 DECLARE
 	affected INTEGER;
 BEGIN

@@ -12,7 +12,7 @@ class CreateAfterPermissionInsertTrigger extends Migration
     public function up()
     {
         DB::unprepared('
-CREATE FUNCTION after_permission_insert() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_permission_insert() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
  	INSERT INTO group_permissions (group_id, permission_id, "value") SELECT "id", NEW."id", NEW."default" FROM groups;
 

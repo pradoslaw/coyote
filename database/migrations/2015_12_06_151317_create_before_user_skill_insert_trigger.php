@@ -12,7 +12,7 @@ class CreateBeforeUserSkillInsertTrigger extends Migration
     public function up()
     {
         DB::unprepared('
-CREATE FUNCTION before_user_skill_insert() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION before_user_skill_insert() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
 	NEW."order" := (SELECT COALESCE(MAX("order"), 0) FROM user_skills WHERE user_id = NEW.user_id) + 1;
 

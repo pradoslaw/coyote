@@ -14,7 +14,7 @@ class CreateAfterFeatureDeleteTrigger extends Migration
     public function up()
     {
         $this->db->unprepared('
-CREATE FUNCTION after_features_delete() RETURNS trigger LANGUAGE plpgsql AS $$
+CREATE OR REPLACE FUNCTION after_features_delete() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN
  	UPDATE features SET "order" = "order" - 1 WHERE "order" > OLD."order";
 
