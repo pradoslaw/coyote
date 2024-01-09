@@ -21,20 +21,11 @@ class AddChannelToNotificationSettingsTable extends Migration
             $table->smallInteger('email')->nullable()->change();
         });
 
-        $sql = "ALTER TABLE notification_settings ADD COLUMN channel channel DEFAULT NULL";
-        $this->db->unprepared($sql);
-
-        $sql = "INSERT INTO notification_settings (type_id, user_id, channel, is_enabled) SELECT type_id, user_id, 'db', profile::int::bool FROM notification_settings WHERE channel IS NULL";
-        $this->db->unprepared($sql);
-
-        $sql = "INSERT INTO notification_settings (type_id, user_id, channel, is_enabled) SELECT type_id, user_id, 'mail', email::int::bool FROM notification_settings WHERE channel IS NULL";
-        $this->db->unprepared($sql);
-
-        $sql = "INSERT INTO notification_settings (type_id, user_id, channel, is_enabled) SELECT type_id, user_id, 'push', true FROM notification_settings WHERE channel IS NULL";
-        $this->db->unprepared($sql);
-
-        $sql = "DELETE FROM notification_settings WHERE channel is null";
-        $this->db->unprepared($sql);
+        $this->db->unprepared("ALTER TABLE notification_settings ADD COLUMN channel channel DEFAULT NULL");
+        $this->db->unprepared("INSERT INTO notification_settings (type_id, user_id, channel, is_enabled) SELECT type_id, user_id, 'db', profile::int::bool FROM notification_settings WHERE channel IS NULL");
+        $this->db->unprepared("INSERT INTO notification_settings (type_id, user_id, channel, is_enabled) SELECT type_id, user_id, 'mail', email::int::bool FROM notification_settings WHERE channel IS NULL");
+        $this->db->unprepared("INSERT INTO notification_settings (type_id, user_id, channel, is_enabled) SELECT type_id, user_id, 'push', true FROM notification_settings WHERE channel IS NULL");
+        $this->db->unprepared("DELETE FROM notification_settings WHERE channel is null");
 
         Schema::table('notification_settings', function (Blueprint $table) {
             $table->dropColumn(['profile', 'email']);
@@ -48,13 +39,18 @@ class AddChannelToNotificationSettingsTable extends Migration
      */
     public function down()
     {
-        $sql = "ALTER TABLE notification_settings DROP COLUMN channel";
-        $this->db->unprepared($sql);
+        Schema::table('notification_settings', function (Blueprint $table) {
+            $table->smallInteger('profile')->nullable();
+            $table->smallInteger('email')->nullable();
+        });
+
+        $this->db->unprepared("DELETE FROM notification_settings WHERE profile IS NULL");
+        $this->db->unprepared('ALTER TABLE notification_settings DROP COLUMN channel');
 
         Schema::table('notification_settings', function (Blueprint $table) {
+            $table->smallInteger('email')->nullable(false)->change();
+            $table->smallInteger('profile')->nullable(false)->change();
             $table->dropColumn('is_enabled');
-            $table->smallInteger('profile');
-            $table->smallInteger('email');
         });
     }
 }

@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 class CreateChannelType extends Migration
 {
@@ -15,6 +13,7 @@ class CreateChannelType extends Migration
      */
     public function up()
     {
+        $this->db->unprepared('DROP TYPE IF EXISTS "channel"');
         $this->db->unprepared('CREATE TYPE "channel" AS ENUM (\'db\', \'mail\', \'push\');');
     }
 
@@ -25,6 +24,6 @@ class CreateChannelType extends Migration
      */
     public function down()
     {
-        $this->db->unprepared('DROP TYPE "channel"');
+        $this->db->unprepared('DROP TYPE IF EXISTS "channel"');
     }
 }

@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateRateType extends Migration
 {
@@ -15,6 +14,7 @@ class CreateRateType extends Migration
      */
     public function up()
     {
+        $this->dropTypes();
         $this->db->unprepared('CREATE TYPE "rate" AS ENUM (\'hourly\', \'weekly\', \'monthly\', \'yearly\');');
         $this->db->unprepared('CREATE TYPE "seniority" AS ENUM (\'student\', \'junior\', \'mid\', \'senior\', \'lead\', \'manager\');');
         $this->db->unprepared('CREATE TYPE "employment" AS ENUM (\'employment\', \'mandatory\', \'contract\', \'b2b\');');
@@ -61,9 +61,13 @@ class CreateRateType extends Migration
         $this->schema->table('jobs', function (Blueprint $table) {
             $table->dropColumn('rate', 'seniority', 'employment');
         });
+        $this->dropTypes();
+    }
 
-        $this->db->unprepared('DROP TYPE "rate"');
-        $this->db->unprepared('DROP TYPE "seniority"');
-        $this->db->unprepared('DROP TYPE "employment"');
+    private function dropTypes(): void
+    {
+        $this->db->unprepared('DROP TYPE IF EXISTS "rate"');
+        $this->db->unprepared('DROP TYPE IF EXISTS "seniority"');
+        $this->db->unprepared('DROP TYPE IF EXISTS "employment"');
     }
 }
