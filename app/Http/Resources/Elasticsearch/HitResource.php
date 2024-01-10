@@ -3,7 +3,7 @@ namespace Coyote\Http\Resources\Elasticsearch;
 
 use Coyote\Job;
 use Coyote\Microblog;
-use Coyote\Services\Breadcrumb;
+use Coyote\Services\Breadcrumbs;
 use Coyote\Topic;
 use Coyote\User;
 use Coyote\Wiki;
@@ -47,7 +47,7 @@ class HitResource extends JsonResource
         $name = array_combine($models, ['Forum', 'Praca', 'Kompendium', 'Mikroblog', 'Użytkownicy']);
         $routes = array_combine($models, [route('forum.home'), route('job.home'), url('Kompendium'), route('microblog.home'), 'javascript:']);
 
-        $breadcrumb = new Breadcrumb();
+        $breadcrumb = new Breadcrumbs();
         $breadcrumb->push($name[$baseName], $routes[$baseName]);
 
         if (!empty($this->resource['forum'])) {

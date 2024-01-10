@@ -5,7 +5,7 @@ use Illuminate\View\View;
 use Spatie\SchemaOrg\BreadcrumbList;
 use Spatie\SchemaOrg\Schema;
 
-class Breadcrumb
+class Breadcrumbs
 {
     private array $breadcrumbs = [];
 
