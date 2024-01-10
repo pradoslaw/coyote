@@ -1,11 +1,13 @@
 <?php
 
+use Illuminate\Routing\Router;
+
 // sciaganie zalacznika (stara regula routingu
 $this->get('Forum/Download/{asset}', ['uses' => 'AssetsController@download', 'as' => 'download']);
 
-/** @var $this \Illuminate\Routing\Router */
+/** @var $this Router */
 $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], function () {
-    // strona glowna forum
+    /** @var $this Router */
     $this->get('/', ['uses' => 'HomeController@index', 'as' => 'home']);
 
     $this->post('Preview', ['uses' => 'SubmitController@preview', 'as' => 'preview']);
@@ -24,51 +26,41 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     // Add or edit topic's post
     // ----------------------------------------------------
     $this->get('{forum}/Submit/{topic}/{post?}', [
-        'uses' => 'SubmitController@index',
-        'as' => 'post.submit',
-        'middleware' => [
-            // topic.access must be first
-            'topic.access', 'can:access,forum', 'forum.write'
-        ]
+        'uses'       => 'SubmitController@index',
+        'as'         => 'post.submit',
+        'middleware' => ['topic.access', 'can:access,forum', 'forum.write'],
     ]);
 
     $this->post('{forum}/Submit/{topic}/{post?}', [
-        'uses' => 'SubmitController@save',
-        'middleware' => [
-            // topic.access must be first
-            'topic.access', 'can:access,forum', 'forum.write', 'throttle.submission:1,5'
-        ]
+        'uses'       => 'SubmitController@save',
+        'middleware' => ['topic.access', 'can:access,forum', 'forum.write', 'throttle.submission:1,5'],
     ]);
 
     // Add new topic
     // -------------------------------------------------
     $this->get('{forum}/Submit/{topic?}', [
-        'uses' => 'SubmitController@index',
-        'as' => 'topic.submit',
-        'middleware' => [
-            'can:access,forum', 'forum.write', 'forum.url'
-        ]
+        'uses'       => 'SubmitController@index',
+        'as'         => 'topic.submit',
+        'middleware' => ['can:access,forum', 'forum.write', 'forum.url'],
     ]);
 
     $this->post('{forum}/Submit/{topic?}', [
-        'uses' => 'SubmitController@save',
-        'middleware' => [
-            'can:access,forum', 'forum.write', 'forum.url', 'throttle.submission:1,5'
-        ]
+        'uses'       => 'SubmitController@save',
+        'middleware' => ['can:access,forum', 'forum.write', 'forum.url', 'throttle.submission:1,5'],
     ]);
 
     // Change topic's title
     // ----------------------------------------------
     $this->post('Topic/Subject/{topic}', [
-        'uses' => 'SubmitController@subject',
-        'as' => 'topic.subject',
-        'middleware' => 'auth'
+        'uses'       => 'SubmitController@subject',
+        'as'         => 'topic.subject',
+        'middleware' => 'auth',
     ]);
 
     $this->post('{forum}/Mark', [
-        'uses' => 'CategoryController@mark',
-        'as' => 'category.mark',
-        'middleware' => 'can:access,forum'
+        'uses'       => 'CategoryController@mark',
+        'as'         => 'category.mark',
+        'middleware' => 'can:access,forum',
     ]);
 
     // blokowanie watku
@@ -83,23 +75,23 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
 
     // widok kategorii forum
     $this->get('{forum}', [
-        'uses' => 'CategoryController@index',
-        'as' => 'category',
-        'middleware' => ['can:access,forum', 'forum.url']
+        'uses'       => 'CategoryController@index',
+        'as'         => 'category',
+        'middleware' => ['can:access,forum', 'forum.url'],
     ]);
 
     // usuwanie posta
     $this->delete('Post/Delete/{post}', [
-        'uses' => 'DeleteController@index',
-        'as' => 'post.delete',
-        'middleware' => 'auth'
+        'uses'       => 'DeleteController@index',
+        'as'         => 'post.delete',
+        'middleware' => 'auth',
     ]);
 
     // przywracanie posta
     $this->post('Post/Restore/{id}', [
-        'uses' => 'RestoreController@index',
-        'as' => 'post.restore',
-        'middleware' => 'auth'
+        'uses'       => 'RestoreController@index',
+        'as'         => 'post.restore',
+        'middleware' => 'auth',
     ]);
 
     // glosowanie na dany post
@@ -117,40 +109,38 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
 
     // edycja/publikacja komentarza oraz jego usuniecie
     $this->post('Comment/{comment?}', [
-        'uses' => 'CommentController@save',
-        'as' => 'comment.save',
-        'middleware' => ['auth', 'throttle.submission:1,5']
+        'uses'       => 'CommentController@save',
+        'as'         => 'comment.save',
+        'middleware' => ['auth', 'throttle.submission:1,5'],
     ]);
 
     $this->delete('Comment/Delete/{comment}', [
-        'uses' => 'CommentController@delete',
-        'as' => 'comment.delete',
-        'middleware' => ['auth']
+        'uses'       => 'CommentController@delete',
+        'as'         => 'comment.delete',
+        'middleware' => ['auth'],
     ]);
 
     $this->get('Comment/Show/{post}', [
         'uses' => 'CommentController@getAll',
-        'as' => 'comment.show'
+        'as'   => 'comment.show',
     ]);
 
     $this->post('Comment/Migrate/{comment}', [
-        'uses' => 'CommentController@migrate',
-        'as' => 'comment.migrate',
-        'middleware' => ['auth']
+        'uses'       => 'CommentController@migrate',
+        'as'         => 'comment.migrate',
+        'middleware' => ['auth'],
     ]);
 
     $this->get('Comment/{comment}', [
-        'uses' => 'CommentController@show',
-        'middleware' => ['auth']
+        'uses'       => 'CommentController@show',
+        'middleware' => ['auth'],
     ]);
 
     // glosowanie w ankiecie
     $this->post('Poll/{poll}', [
-        'uses' => 'PollController@vote',
-        'as' => 'poll.vote',
-        'middleware' => [
-            'auth'
-        ]
+        'uses'       => 'PollController@vote',
+        'as'         => 'poll.vote',
+        'middleware' => ['auth'],
     ]);
 
     // change category order
@@ -160,11 +150,9 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
     // Show topic
     // -------------------------------------------------------
     $this->get('{forum}/{topic}-{slug?}', [
-        'uses' => 'TopicController@index',
-        'as' => 'topic',
-        'middleware' => [
-            'topic.access', 'can:access,forum', 'topic.scroll', 'page.hit', 'json'
-        ]
+        'uses'       => 'TopicController@index',
+        'as'         => 'topic',
+        'middleware' => ['topic.access', 'can:access,forum', 'topic.scroll', 'page.hit', 'json'],
     ]);
 
     // skrocony link do posta
@@ -173,14 +161,14 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
 
 // obserwowanie danego watku na forum
 $this->post('Forum/Topic/Subscribe/{topic}', [
-    'uses' => 'SubscribeController@topic',
-    'as' => 'topic.subscribe',
-    'middleware' => 'auth'
+    'uses'       => 'SubscribeController@topic',
+    'as'         => 'topic.subscribe',
+    'middleware' => 'auth',
 ]);
 
 // obserwowanie posta
 $this->post('Forum/Post/Subscribe/{post}', [
-    'uses' => 'SubscribeController@post',
-    'as' => 'post.subscribe',
-    'middleware' => 'auth'
+    'uses'       => 'SubscribeController@post',
+    'as'         => 'post.subscribe',
+    'middleware' => 'auth',
 ]);
