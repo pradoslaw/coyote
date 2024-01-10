@@ -1,26 +1,39 @@
 <?php
 namespace Tests\Unit\OpenGraph;
 
-use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture\Laravel;
+use Tests\Unit\OpenGraph\Fixture\IsRelativeUri;
+use Tests\Unit\OpenGraph\Fixture\ViewFixture;
 
 class Test extends TestCase
 {
     use Laravel\Application;
 
-    public function test()
+    /**
+     * @test
+     */
+    public function type()
     {
-        $view = $this->view('/');
-        Assert::assertSame(
-            'website',
-            $view->metaProperty('og:type'),
-        );
+        $this->assertThat(
+            $this->ogProperty('og:type', uri:'/'),
+            $this->identicalTo('website'));
     }
 
-    private function view(string $uri): ViewFixture
+    /**
+     * @test
+     */
+    public function url()
     {
-        return new ViewFixture($this->htmlView($uri));
+        $this->assertThat(
+            $this->ogProperty('og:url', uri:'/Forum'),
+            new IsRelativeUri('/Forum', $this->laravel));
+    }
+
+    private function ogProperty(string $property, string $uri): string
+    {
+        $view = new ViewFixture($this->htmlView($uri));
+        return $view->metaProperty($property);
     }
 
     private function htmlView(string $uri): string

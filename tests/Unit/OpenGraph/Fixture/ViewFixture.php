@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Unit\OpenGraph;
+namespace Tests\Unit\OpenGraph\Fixture;
 
 use DOMDocument;
 use DOMXPath;
