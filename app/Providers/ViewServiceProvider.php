@@ -11,6 +11,7 @@ use Coyote\View\Twig\TwigLiteral;
 use Illuminate\Contracts\Cache;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\Factory;
 use Lavary\Menu\Builder;
@@ -33,8 +34,8 @@ class ViewServiceProvider extends ServiceProvider
                 // temporary code
                 '__dark_theme'  => $this->app[Guest::class]->getSetting('dark.theme', true),
                 'github_stars'  => $cache->remember('homepage:github_stars', 30 * 60, fn() => $this->githubStars()),
-                
-                'gdpr'          => [
+
+                'gdpr' => [
                     'content'  => TwigLiteral::fromHtml((new UserSettings)->cookieAgreement()),
                     'accepted' => $this->gdprAccepted(),
                 ],
@@ -77,23 +78,16 @@ class ViewServiceProvider extends ServiceProvider
         return $builder;
     }
 
-    public function groupBySections($categories): array
+    public function groupBySections(Support\Collection $categories): array
     {
-        $name = null;
+        $previousName = null;
         $sections = [];
-
         foreach ($categories as $category) {
-            if ($name === null || ($category['section'] !== $name && $category['section'])) {
-                $name = $category['section'];
+            if ($previousName === null || (($category['section'] !== $previousName) && $category['section'])) {
+                $previousName = $category['section'];
             }
-
-            if (!isset($sections[$name])) {
-                $sections[$name] = [];
-            }
-
-            array_push($sections[$name], $category);
+            $sections[$previousName][] = $category;
         }
-
         return $sections;
     }
 
