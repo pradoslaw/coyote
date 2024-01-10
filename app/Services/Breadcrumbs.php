@@ -44,9 +44,4 @@ class Breadcrumbs
                 array_keys($this->breadcrumbs),
             ));
     }
-
-    public function toArray(): array
-    {
-        return $this->breadcrumbs;
-    }
 }
