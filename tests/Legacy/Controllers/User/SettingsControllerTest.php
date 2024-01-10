@@ -4,7 +4,7 @@ namespace Tests\Legacy\Controllers\User;
 
 use Coyote\User;
 use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class SettingsControllerTest extends TestCase
 {

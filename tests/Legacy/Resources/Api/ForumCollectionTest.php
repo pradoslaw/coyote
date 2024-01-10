@@ -12,7 +12,7 @@ use Coyote\Services\Guest;
 use Coyote\Topic;
 use Faker;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class ForumCollectionTest extends TestCase
 {

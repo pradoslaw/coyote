@@ -3,7 +3,7 @@ namespace Tests\Legacy\Services\Parser\Parsers;
 
 use Coyote\Services\Parser\Parsers\Smilies;
 
-class SmiliesTest extends \Tests\TestCase
+class SmiliesTest extends \Tests\Legacy\TestCase
 {
     /**
      * @test

@@ -4,7 +4,6 @@ namespace Tests\Legacy\Policies;
 
 use Coyote\Topic;
 use Illuminate\Support\Facades\Gate;
-use Tests\TestCase;
 
 class TopicPolicyTest extends ForumPolicyTest
 {

@@ -8,7 +8,7 @@ use Coyote\Post;
 use Coyote\Topic;
 use Coyote\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class PostsControllerTest extends TestCase
 {

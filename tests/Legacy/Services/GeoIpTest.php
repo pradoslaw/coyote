@@ -2,7 +2,7 @@
 
 namespace Tests\Legacy\Services;
 
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class GeoIpTest extends TestCase
 {

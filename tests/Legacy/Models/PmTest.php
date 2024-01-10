@@ -8,8 +8,7 @@ use Coyote\Repositories\Contracts\PmRepositoryInterface;
 use Coyote\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use Faker\Factory;
+use Tests\Legacy\TestCase;
 
 class PmTest extends TestCase
 {

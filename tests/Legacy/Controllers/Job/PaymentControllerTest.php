@@ -10,7 +10,7 @@ use Coyote\Services\UrlBuilder;
 use Faker\Factory;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class PaymentControllerTest extends TestCase
 {

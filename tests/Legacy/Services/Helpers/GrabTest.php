@@ -2,7 +2,7 @@
 
 namespace Tests\Legacy\Services\Helpers;
 
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class GrabTest extends TestCase
 {

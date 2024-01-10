@@ -9,7 +9,6 @@ use Coyote\Notifications\SuccessfulPaymentNotification;
 use Coyote\Plan;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Notification;
-use Tests\TestCase;
 
 class BoostJobsCommandTest extends TestCase
 {

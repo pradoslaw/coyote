@@ -7,7 +7,7 @@ use Coyote\Notifications\Job\ApplicationConfirmationNotification;
 use Coyote\Notifications\Job\ApplicationSentNotification;
 use Faker\Factory;
 use Illuminate\Support\Facades\Notification;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class ApplicationControllerTest extends TestCase
 {

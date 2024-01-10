@@ -15,7 +15,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class PostResourceTest extends TestCase
 {

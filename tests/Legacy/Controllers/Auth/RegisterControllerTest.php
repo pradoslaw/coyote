@@ -2,7 +2,7 @@
 
 namespace Tests\Legacy\Controllers\Auth;
 
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class RegisterControllerTest extends TestCase
 {

@@ -6,7 +6,7 @@ use Coyote\Group;
 use Coyote\Permission;
 use Coyote\User;
 use Faker\Factory;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class GroupTest extends TestCase
 {

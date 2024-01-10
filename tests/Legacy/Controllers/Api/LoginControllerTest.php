@@ -4,7 +4,7 @@ namespace Tests\Legacy\Controllers\Api;
 
 use Coyote\User;
 use Illuminate\Support\Facades\Hash;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class LoginControllerTest extends TestCase
 {

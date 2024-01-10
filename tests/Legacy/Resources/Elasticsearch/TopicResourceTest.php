@@ -6,7 +6,7 @@ namespace Tests\Legacy\Resources\Elasticsearch;
 use Carbon\Carbon;
 use Coyote\Http\Resources\Elasticsearch\TopicResource;
 use Coyote\Topic;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class TopicResourceTest extends TestCase
 {

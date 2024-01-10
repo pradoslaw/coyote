@@ -14,7 +14,7 @@ use Coyote\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Notification;
 use NotificationChannels\WebPush\WebPushChannel;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class DispatchPostNotificationsTest extends TestCase
 {

@@ -7,7 +7,7 @@ use Coyote\Job;
 use Coyote\Microblog;
 use Coyote\Tag;
 use Coyote\Topic;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class TagResourceTest extends TestCase
 {

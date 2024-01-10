@@ -4,7 +4,7 @@ namespace Tests\Legacy\Resources\Elasticsearch;
 
 use Coyote\Http\Resources\Elasticsearch\HitResource;
 use Faker\Factory;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class HitResourceTest extends TestCase
 {

@@ -5,7 +5,7 @@ namespace Tests\Legacy\Controllers\Forum;
 use Coyote\Permission;
 use Coyote\Post;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class MergeControllerTest extends TestCase
 {

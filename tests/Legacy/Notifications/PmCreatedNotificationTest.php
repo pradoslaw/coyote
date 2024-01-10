@@ -8,7 +8,7 @@ use Coyote\Pm;
 use Coyote\User;
 use Faker\Factory;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class PmCreatedNotificationTest extends TestCase
 {

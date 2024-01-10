@@ -5,7 +5,7 @@ namespace Tests\Legacy\Rules;
 use Coyote\Rules\MinWords;
 use Coyote\User;
 use Illuminate\Support\Facades\Auth;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class MinWordsTest extends TestCase
 {

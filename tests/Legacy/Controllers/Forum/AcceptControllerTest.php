@@ -9,7 +9,7 @@ use Coyote\User;
 use Faker\Factory;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Gate;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class AcceptControllerTest extends TestCase
 {

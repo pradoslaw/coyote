@@ -6,7 +6,7 @@ use Coyote\Events\NotificationRead;
 use Coyote\Notification;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Event;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class NotificationsControllerTest extends TestCase
 {

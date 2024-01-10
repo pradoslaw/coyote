@@ -8,7 +8,7 @@ use Coyote\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Notification;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class VoteControllerTest extends TestCase
 {

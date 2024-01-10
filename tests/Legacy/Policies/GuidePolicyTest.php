@@ -7,7 +7,7 @@ use Coyote\Policies\GuidePolicy;
 use Coyote\User;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Gate;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class GuidePolicyTest extends TestCase
 {

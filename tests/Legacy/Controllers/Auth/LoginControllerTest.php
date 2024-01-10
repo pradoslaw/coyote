@@ -4,7 +4,7 @@ namespace Tests\Legacy\Controllers\Auth;
 
 use Coyote\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class LoginControllerTest extends TestCase
 {

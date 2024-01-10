@@ -6,7 +6,7 @@ use Coyote\Microblog;
 use Coyote\Notifications\Microblog\CommentedNotification;
 use Coyote\User;
 use Faker\Factory;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class CommentedNotificationTest extends TestCase
 {

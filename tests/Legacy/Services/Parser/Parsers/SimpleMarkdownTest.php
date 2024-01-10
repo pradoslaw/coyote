@@ -5,7 +5,7 @@ use Coyote\Repositories\Eloquent\PageRepository;
 use Coyote\Repositories\Eloquent\UserRepository;
 use Coyote\Services\Parser\Parsers\SimpleMarkdown;
 
-class SimpleMarkdownTest extends \Tests\TestCase
+class SimpleMarkdownTest extends \Tests\Legacy\TestCase
 {
     public function testDoNotChangeLineBreaks()
     {

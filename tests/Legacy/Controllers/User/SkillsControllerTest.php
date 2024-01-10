@@ -5,7 +5,7 @@ namespace Tests\Legacy\Controllers\User;
 use Coyote\Tag;
 use Coyote\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class SkillsControllerTest extends TestCase
 {

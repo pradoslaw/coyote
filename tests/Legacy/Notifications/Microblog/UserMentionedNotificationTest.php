@@ -7,9 +7,8 @@ use Coyote\Notification;
 use Coyote\Notifications\Microblog\UserMentionedNotification;
 use Coyote\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Mail;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class UserMentionedNotificationTest extends TestCase
 {

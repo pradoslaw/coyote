@@ -4,7 +4,7 @@ namespace Tests\Legacy\Resources;
 
 use Coyote\Http\Resources\PmResource;
 use Coyote\Pm;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class PmResourceTest extends TestCase
 {

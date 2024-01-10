@@ -11,7 +11,7 @@ use Coyote\User;
 use Faker\Factory;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Routing\Middleware\ThrottleRequests;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class SubmitControllerTest extends TestCase
 {

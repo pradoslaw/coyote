@@ -8,7 +8,7 @@ use Coyote\Services\Invoice\Enumerator;
 use Coyote\User;
 use Faker\Factory;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class InvoiceEnumeratorTest extends TestCase
 {

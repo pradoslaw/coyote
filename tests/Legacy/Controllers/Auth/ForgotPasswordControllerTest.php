@@ -4,7 +4,7 @@ namespace Tests\Legacy\Controllers\Auth;
 
 use Coyote\User;
 use Faker\Factory;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class ForgotPasswordControllerTest extends TestCase
 {

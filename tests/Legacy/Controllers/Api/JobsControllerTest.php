@@ -8,7 +8,7 @@ use Coyote\Job;
 use Coyote\Payment;
 use Coyote\User;
 use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class JobsControllerTest extends TestCase
 {

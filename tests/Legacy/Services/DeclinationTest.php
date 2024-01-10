@@ -3,7 +3,7 @@
 namespace Tests\Legacy\Services;
 
 use Coyote\Services\Declination;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class DeclinationTest extends TestCase
 {

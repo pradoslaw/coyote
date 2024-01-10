@@ -2,10 +2,9 @@
 
 namespace Tests\Legacy\Services;
 
-use Coyote\Forum;
 use Coyote\Services\UrlBuilder;
 use Coyote\Topic;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class UrlBuilderTest extends TestCase
 {

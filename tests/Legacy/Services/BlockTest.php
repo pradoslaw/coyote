@@ -11,7 +11,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Auth;
 use Mockery\MockInterface;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class BlockTest extends TestCase
 {

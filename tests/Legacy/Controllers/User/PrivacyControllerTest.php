@@ -2,7 +2,7 @@
 namespace Tests\Legacy\Controllers\User;
 
 use Coyote\User;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class PrivacyControllerTest extends TestCase
 {

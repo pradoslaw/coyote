@@ -4,7 +4,7 @@ namespace Tests\Legacy\Services\Parser\Parsers;
 use Coyote\Repositories\Eloquent\WordRepository;
 use Coyote\Services\Parser\Parsers\Censore;
 
-class CensoreTest extends \Tests\TestCase
+class CensoreTest extends \Tests\Legacy\TestCase
 {
     protected Censore $parser;
 

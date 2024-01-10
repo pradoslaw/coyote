@@ -4,7 +4,7 @@ namespace Tests\Legacy\Resources;
 
 use Coyote\Http\Resources\UserResource;
 use Coyote\User;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class UserResourceTest extends TestCase
 {

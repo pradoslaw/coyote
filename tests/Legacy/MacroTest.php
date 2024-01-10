@@ -3,7 +3,6 @@
 namespace Tests\Legacy;
 
 use Coyote\User;
-use Tests\TestCase;
 
 class MacroTest extends TestCase
 {

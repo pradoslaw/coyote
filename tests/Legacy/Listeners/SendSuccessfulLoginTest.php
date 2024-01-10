@@ -7,7 +7,7 @@ use Coyote\Stream;
 use Coyote\User;
 use Faker\Factory;
 use Illuminate\Support\Facades\Mail;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class SendSuccessfulLoginTest extends TestCase
 {

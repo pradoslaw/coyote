@@ -5,7 +5,7 @@ namespace Tests\Legacy\Services\FormBuilder;
 use Faker\Factory;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Routing\Redirector;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class TestForm extends \Coyote\Services\FormBuilder\Form
 {

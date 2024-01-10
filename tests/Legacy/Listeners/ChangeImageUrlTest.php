@@ -4,7 +4,7 @@ namespace Tests\Legacy\Listeners;
 
 use Coyote\Listeners\ChangeImageUrl;
 use Illuminate\Mail\Events\MessageSending;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class ChangeImageUrlTest extends TestCase
 {

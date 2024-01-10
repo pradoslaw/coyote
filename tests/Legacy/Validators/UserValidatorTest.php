@@ -4,7 +4,7 @@ namespace Tests\Legacy\Validators;
 
 use Coyote\Http\Validators\UserValidator;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class UserValidatorTest extends TestCase
 {

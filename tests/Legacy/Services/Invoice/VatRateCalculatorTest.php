@@ -4,7 +4,7 @@ namespace Tests\Legacy\Services\Invoice;
 
 use Coyote\Country;
 use Coyote\Services\Invoice\VatRateCalculator;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class VatRateCalculatorTest extends TestCase
 {

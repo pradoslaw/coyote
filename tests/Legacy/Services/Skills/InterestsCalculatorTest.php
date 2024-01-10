@@ -2,7 +2,7 @@
 
 namespace Tests\Legacy\Services\Skills;
 
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class InterestsCalculatorTest extends TestCase
 {

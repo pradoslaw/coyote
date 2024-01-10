@@ -6,12 +6,9 @@ use Coyote\Forum;
 use Coyote\Group;
 use Coyote\User;
 use Faker\Factory;
-
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Mockery;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class ForumPolicyTest extends TestCase
 {

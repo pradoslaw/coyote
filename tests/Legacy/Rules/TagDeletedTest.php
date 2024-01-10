@@ -5,7 +5,7 @@ namespace Tests\Legacy\Rules;
 use Coyote\Repositories\Contracts\TagRepositoryInterface;
 use Coyote\Rules\TagDeleted;
 use Coyote\Tag;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class TagDeletedTest extends TestCase
 {

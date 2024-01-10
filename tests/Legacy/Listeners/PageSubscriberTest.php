@@ -10,7 +10,7 @@ use Coyote\Microblog;
 use Coyote\Services\UrlBuilder;
 use Coyote\Topic;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class PageSubscriberTest extends TestCase
 {

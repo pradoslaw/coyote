@@ -3,7 +3,7 @@ namespace Tests\Legacy\Services\Parser\Parsers;
 
 use Coyote\Services\Parser\Parsers\Purifier;
 
-class PurifierTest extends \Tests\TestCase
+class PurifierTest extends \Tests\Legacy\TestCase
 {
     public function testParseLinks()
     {

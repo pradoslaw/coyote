@@ -4,7 +4,7 @@ namespace Tests\Legacy\Models;
 
 use Coyote\Forum;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class ForumTest extends TestCase
 {

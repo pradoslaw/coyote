@@ -3,7 +3,7 @@ namespace Tests\Legacy\Services\Parser\Factories;
 
 use Coyote\Services\Parser\Factories\CommentFactory;
 use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class CommentFactoryTest extends TestCase
 {

@@ -8,7 +8,7 @@ use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Services\Parser\Parsers\Markdown;
 use Coyote\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class MarkdownTest extends TestCase
 {

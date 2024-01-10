@@ -7,7 +7,7 @@ use Coyote\Guest;
 use Coyote\Topic;
 use Coyote\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class ForumsControllerTest extends TestCase
 {

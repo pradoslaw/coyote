@@ -9,7 +9,7 @@ use Illuminate\Cache\Repository;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Request;
 use Mockery\MockInterface;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class RulesTest extends TestCase
 {

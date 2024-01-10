@@ -5,7 +5,7 @@ namespace Tests\Legacy\Models\Job;
 use Coyote\Job;
 use Coyote\Tag;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class TagTest extends TestCase
 {

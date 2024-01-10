@@ -5,7 +5,7 @@ namespace Tests\Legacy\Controllers;
 use Coyote\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class GithubControllerTest extends TestCase
 {

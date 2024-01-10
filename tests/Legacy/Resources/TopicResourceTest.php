@@ -12,7 +12,7 @@ use Coyote\Topic;
 use Coyote\User;
 use Faker\Factory;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class TopicResourceTest extends TestCase
 {

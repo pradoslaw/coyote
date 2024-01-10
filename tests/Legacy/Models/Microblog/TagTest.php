@@ -5,7 +5,7 @@ namespace Tests\Legacy\Models\Microblog;
 use Coyote\Microblog;
 use Coyote\Tag;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class TagTest extends TestCase
 {

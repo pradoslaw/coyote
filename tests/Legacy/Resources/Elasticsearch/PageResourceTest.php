@@ -8,7 +8,7 @@ use Coyote\Microblog;
 use Coyote\Page;
 use Coyote\Topic;
 use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class PageResourceTest extends TestCase
 {

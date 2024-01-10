@@ -5,7 +5,7 @@ namespace Tests\Legacy\Controllers\Api;
 use Coyote\Microblog;
 use Coyote\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class MicroblogsControllerTest extends TestCase
 {

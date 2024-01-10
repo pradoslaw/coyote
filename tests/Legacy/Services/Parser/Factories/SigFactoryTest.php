@@ -2,9 +2,9 @@
 
 namespace Tests\Legacy\Services\Parser\Factories;
 
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use Coyote\Services\Parser\Factories\SigFactory;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\Legacy\TestCase;
 
 class SigFactoryTest extends TestCase
 {

@@ -11,7 +11,7 @@ use Coyote\Topic;
 use Coyote\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Notification;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class DispatchPostCommentNotificationTest extends TestCase
 {

@@ -5,7 +5,7 @@ namespace Tests\Legacy\Resources;
 use Coyote\Http\Resources\NotificationResource;
 use Coyote\Notification;
 use Faker\Factory;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class NotificationResourceTest extends TestCase
 {

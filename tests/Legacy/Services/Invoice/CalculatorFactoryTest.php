@@ -6,7 +6,7 @@ use Coyote\Country;
 use Coyote\Job;
 use Coyote\Payment;
 use Coyote\Services\Invoice\CalculatorFactory;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class CalculatorFactoryTest extends TestCase
 {

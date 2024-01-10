@@ -2,8 +2,8 @@
 
 namespace Tests\Legacy\Validators;
 
-use Tests\TestCase;
 use Mockery;
+use Tests\Legacy\TestCase;
 
 class SpamValidatorTest extends TestCase
 {

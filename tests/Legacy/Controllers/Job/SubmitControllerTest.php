@@ -10,7 +10,7 @@ use Coyote\Plan;
 use Coyote\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class SubmitControllerTest extends TestCase
 {

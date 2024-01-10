@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Mockery\MockInterface;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
-use Tests\TestCase;
+use Tests\Legacy\TestCase;
 
 class PredictionsTest extends TestCase
 {
