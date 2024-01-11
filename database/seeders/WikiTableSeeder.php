@@ -1,27 +1,30 @@
 <?php
-
 namespace Database\Seeders;
 
+use Coyote\User;
+use Coyote\Wiki\Page;
 use Illuminate\Database\Seeder;
 
 class WikiTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
+    public function run(): void
     {
-        $this->create('Blog', 'Blog', 'blog.home');
-        $this->create('Pomoc', 'Pomoc', 'help.home');
-        $this->create('Patronat', 'Patronat', 'category');
+        /** @var User $creator */
+        $creator = User::query()->create([
+            'name'  => 'Editor',
+            'email' => 'editor@host',
+        ]);
+
+        $this->create($creator, 'Blog', 'Blog', 'blog.home');
+        $this->create($creator, 'Pomoc', 'Pomoc', 'help.home');
+        $this->create($creator, 'Patronat', 'Patronat', 'category');
     }
 
-    private function create($title, $path, $template)
+    private function create(User $user, string $title, string $path, string $template): void
     {
-        $wiki = \Coyote\Wiki\Page::create(['title' => $title, 'template' => $template]);
-        $wiki->logs()->create(['user_id' => 1, 'title' => $title, 'ip' => 'localhost', 'browser' => '(none)', 'host' => '(none)']);
+        /** @var Page $wiki */
+        $wiki = Page::query()->create(['title' => $title, 'template' => $template]);
+        $wiki->logs()->create(['user_id' => $user->id, 'title' => $title, 'ip' => 'localhost', 'browser' => '(none)', 'host' => '(none)']);
         $wiki->paths()->create(['path' => $path]);
     }
 }
