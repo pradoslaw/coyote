@@ -23,15 +23,17 @@ class BreadcrumbList implements Thing
 
     private function listItems(): array
     {
-        return \array_map([$this, 'listItem'], $this->breadcrumbs);
+        return \array_map([$this, 'listItem'], $this->breadcrumbs, \array_keys($this->breadcrumbs));
     }
 
-    private function listItem(Breadcrumb $breadcrumb): array
+    private function listItem(Breadcrumb $breadcrumb, int $index): array
     {
         return [
-            '@type' => 'ListItem',
-            '@id'   => $breadcrumb->url,
-            'name'  => $breadcrumb->name,
+            '@type'    => 'ListItem',
+            '@id'      => $breadcrumb->url,
+            'name'     => $breadcrumb->name,
+            'item'     => $breadcrumb->url,
+            'position' => $index + 1,
         ];
     }
 }

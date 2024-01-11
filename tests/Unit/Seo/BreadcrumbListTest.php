@@ -21,6 +21,8 @@ class BreadcrumbListTest extends TestCase
             $this->logicalAnd(
                 new ArrayKey('name', $this->identicalTo('Forum')),
                 new ArrayKey('@id', $this->relativeUri('/Forum')),
+                new ArrayKey('item', $this->relativeUri('/Forum')),
+                new ArrayKey('position', $this->identicalTo(1)),
             ));
     }
 
@@ -35,6 +37,8 @@ class BreadcrumbListTest extends TestCase
             $this->logicalAnd(
                 new ArrayKey('name', $this->identicalTo('Orange category')),
                 new ArrayKey('@id', $this->relativeUri('/Forum/orange-category')),
+                new ArrayKey('item', $this->relativeUri('/Forum/orange-category')),
+                new ArrayKey('position', $this->identicalTo(2)),
             ));
     }
 
@@ -49,6 +53,8 @@ class BreadcrumbListTest extends TestCase
             $this->logicalAnd(
                 new ArrayKey('name', $this->identicalTo('Apple topic')),
                 new ArrayKey('@id', $this->relativeUri("/Forum/apple-category/$topicId-apple_topic")),
+                new ArrayKey('item', $this->relativeUri("/Forum/apple-category/$topicId-apple_topic")),
+                new ArrayKey('position', $this->identicalTo(3)),
             ));
     }
 }
