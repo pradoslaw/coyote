@@ -2,11 +2,11 @@
 namespace Tests\Unit\OpenGraph;
 
 use PHPUnit\Framework\TestCase;
-use Tests\Unit\OpenGraph\Fixture\IsRelativeUri;
+use Tests\Unit\BaseFixture;
 
 class Test extends TestCase
 {
-    use Fixture\OpenGraph;
+    use BaseFixture\RelativeUri, Fixture\OpenGraph;
 
     /**
      * @test
@@ -25,7 +25,7 @@ class Test extends TestCase
     {
         $this->assertThat(
             $this->ogProperty('og:url', uri:'/Forum'),
-            new IsRelativeUri('/Forum', $this->laravel));
+            $this->relativeUri('/Forum'));
     }
 
     /**

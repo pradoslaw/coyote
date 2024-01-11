@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Unit\OpenGraph\Fixture;
+namespace Tests\Unit\BaseFixture\Constraint;
 
 use PHPUnit\Framework\Constraint\Constraint;
 use Tests\Unit\BaseFixture\Laravel;
