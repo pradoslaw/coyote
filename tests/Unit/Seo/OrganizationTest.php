@@ -60,4 +60,19 @@ class OrganizationTest extends TestCase
                 'https://github.com/pradoslaw/coyote',
             ]));
     }
+
+    /**
+     * @test
+     * @depends organization
+     */
+    public function address(array $organization): void
+    {
+        $address = $organization['address'];
+        $this->assertSame('PostalAddress', $address['@type']);
+        $this->assertSame('ul. Krupnicza 13', $address['streetAddress']);
+        $this->assertSame('50-075', $address['postalCode']);
+        $this->assertSame('Wrocław', $address['addressLocality']);
+        $this->assertSame('Dolnośląskie', $address['addressRegion']);
+        $this->assertSame('PL', $address['addressCountry']);
+    }
 }
