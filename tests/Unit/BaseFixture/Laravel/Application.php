@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Unit\BaseFixture\Laravel;
 
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\Unit\BaseFixture\Laravel;
 
 trait Application
@@ -12,7 +13,7 @@ trait Application
      */
     function initializeApplication(): void
     {
-        $this->laravel = new Laravel\TestCase();
+        $this->laravel = $this->instance();
         $this->laravel->setUp();
     }
 
@@ -22,5 +23,20 @@ trait Application
     function finalizeApplication(): void
     {
         $this->laravel->tearDown();
+    }
+
+    function instance(): Laravel\TestCase
+    {
+        if ($this->hasTransactionalMarker()) {
+            return new class extends Laravel\TestCase {
+                use DatabaseTransactions;
+            };
+        }
+        return new Laravel\TestCase();
+    }
+
+    function hasTransactionalMarker(): bool
+    {
+        return \in_array(Transactional::class, \class_uses_recursive(static::class));
     }
 }

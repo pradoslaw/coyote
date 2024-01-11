@@ -80,7 +80,7 @@ abstract class BaseController extends Controller
             $this->breadcrumb->push($forum->parent->name, UrlBuilder::forum($forum->parent));
         }
 
-        $this->breadcrumb->push($forum->name, UrlBuilder::forum($forum));
+        $this->breadcrumb->push($forum->name, route('forum.category', [$forum->slug]));
     }
 
     /**
@@ -91,10 +91,10 @@ abstract class BaseController extends Controller
         return parent::view($view, $data)->with([
             'tags'    => [
                 'popular' => $this->getTagClouds(),
-                'user'    => $this->getUserTags()
+                'user'    => $this->getUserTags(),
             ],
             'viewers' => $this->getViewers(),
-            'sidebar' => $this->getSetting('forum.sidebar', true)
+            'sidebar' => $this->getSetting('forum.sidebar', true),
         ]);
     }
 
