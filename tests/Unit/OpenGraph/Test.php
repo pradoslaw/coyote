@@ -2,13 +2,11 @@
 namespace Tests\Unit\OpenGraph;
 
 use PHPUnit\Framework\TestCase;
-use Tests\Unit\BaseFixture\Laravel;
 use Tests\Unit\OpenGraph\Fixture\IsRelativeUri;
-use Tests\Unit\OpenGraph\Fixture\ViewFixture;
 
 class Test extends TestCase
 {
-    use Laravel\Application;
+    use Fixture\OpenGraph;
 
     /**
      * @test
@@ -30,14 +28,13 @@ class Test extends TestCase
             new IsRelativeUri('/Forum', $this->laravel));
     }
 
-    private function ogProperty(string $property, string $uri): string
+    /**
+     * @test
+     */
+    public function locale()
     {
-        $view = new ViewFixture($this->htmlView($uri));
-        return $view->metaProperty($property);
-    }
-
-    private function htmlView(string $uri): string
-    {
-        return $this->laravel->get($uri)->content();
+        $this->assertThat(
+            $this->ogProperty('og:locale', uri:'/'),
+            $this->identicalTo('pl_PL'));
     }
 }
