@@ -235,6 +235,7 @@ return [
         Boduch\Grid\GridServiceProvider::class,
         // kursy wymiany walut
         Swap\Laravel\SwapServiceProvider::class,
+        Coyote\Providers\SeoServiceProvider::class,
     ],
     /*
     |--------------------------------------------------------------------------

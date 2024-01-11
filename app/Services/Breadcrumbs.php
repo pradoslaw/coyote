@@ -1,9 +1,12 @@
 <?php
 namespace Coyote\Services;
 
+use Coyote\Domain\Breadcrumb;
+use Coyote\Domain\Html;
+use Coyote\Domain\Seo;
+use Coyote\Domain\Seo\Schema\BreadcrumbList;
+use Coyote\View\Twig\TwigLiteral;
 use Illuminate\View\View;
-use Spatie\SchemaOrg\BreadcrumbList;
-use Spatie\SchemaOrg\Schema;
 
 class Breadcrumbs
 {
@@ -18,30 +21,22 @@ class Breadcrumbs
 
     public function push(string $name, string $url): void
     {
-        $this->breadcrumbs[] = ['name' => $name, 'url' => $url];
+        $this->breadcrumbs[] = new Breadcrumb($name, $url);
     }
 
     public function render(): View
     {
         return view('components/breadcrumb', [
-            'breadcrumbs' => $this->breadcrumbs,
-            'schema'      => $this->schema(),
+            'breadcrumbs'       => $this->breadcrumbs,
+            'schema_breadcrumb' => TwigLiteral::fromHtml($this->schema()),
         ]);
     }
 
-    private function schema(): ?BreadcrumbList
+    private function schema(): Html
     {
         if (empty($this->breadcrumbs)) {
-            return null;
+            return new Html('');
         }
-        return Schema::breadcrumbList()
-            ->itemListElement(\array_map(
-                fn(array $breadcrumb, int $index) => Schema::listItem()
-                    ->position($index + 1)
-                    ->identifier($breadcrumb['url'])
-                    ->name($breadcrumb['name']),
-                $this->breadcrumbs,
-                array_keys($this->breadcrumbs),
-            ));
+        return new Seo\Schema(new BreadcrumbList($this->breadcrumbs));
     }
 }

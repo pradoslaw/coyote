@@ -1,6 +1,8 @@
 <?php
 namespace Coyote\Http\Controllers\Forum;
 
+use Coyote\Domain\Seo;
+use Coyote\Domain\Seo\Schema\DiscussionForumPosting;
 use Coyote\Forum;
 use Coyote\Forum\Reason;
 use Coyote\Http\Factories\CacheFactory;
@@ -20,10 +22,10 @@ use Coyote\Services\Forum\TreeBuilder\JsonDecorator;
 use Coyote\Services\Forum\TreeBuilder\ListDecorator;
 use Coyote\Services\Parser\Extensions\Emoji;
 use Coyote\Topic;
+use Coyote\View\Twig\TwigLiteral;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
-use Spatie\SchemaOrg\Schema;
 
 class TopicController extends BaseController
 {
@@ -123,11 +125,12 @@ class TopicController extends BaseController
                 'user_forums'  => $userForums,
                 'description'  => excerpt(array_first($posts['data'])['text'], 100),
                 'flags'        => $this->flags($forum),
-                'schema'       => Schema::discussionForumPosting()
-                    ->identifier($request->getUri())
-                    ->headline($topic->title)
-                    ->author(Schema::person()->name($topic->firstPost->user?->name ?? $topic->firstPost->user_name))
-                    ->interactionStatistic(Schema::interactionCounter()->userInteractionCount($topic->replies)),
+                'schema_topic' => TwigLiteral::fromHtml(new Seo\Schema(new DiscussionForumPosting(
+                    $request->getUri(),
+                    $topic->title,
+                    $topic->firstPost->user?->name ?? $topic->firstPost->user_name,
+                    $topic->replies,
+                ))),
             ]);
     }
 

@@ -46,6 +46,7 @@ trait Store
         $post = new Post;
         $post->text = 'irrelevant';
         $post->ip = 'irrelevant';
+        $post->user_name = 'irrelevant';
         $post->topic_id = $topic->id;
         $post->forum_id = $topic->forum_id;
         $post->save();
