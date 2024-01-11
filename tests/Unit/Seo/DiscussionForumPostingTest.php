@@ -4,6 +4,7 @@ namespace Tests\Unit\Seo;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture;
 use Tests\Unit\Seo;
+use TRegx\PhpUnit\DataProviders\DataProvider;
 
 class DiscussionForumPostingTest extends TestCase
 {
@@ -11,13 +12,19 @@ class DiscussionForumPostingTest extends TestCase
 
     /**
      * @test
+     * @dataProvider fields
      */
-    public function id()
+    public function canonical(string $field)
     {
         [$schema, $topicId] = $this->schemaTopicInForum('Banana topic', 'apple-forum');
         $this->assertThat(
-            $schema['@id'],
+            $schema[$field],
             $this->relativeUri("/Forum/apple-forum/$topicId-banana_topic"));
+    }
+
+    public function fields(): DataProvider
+    {
+        return DataProvider::list('@id', 'url');
     }
 
     /**

@@ -17,6 +17,7 @@ class DiscussionForumPosting implements Thing
             '@context'             => 'https://schema.org',
             '@type'                => 'DiscussionForumPosting',
             '@id'                  => $this->url,
+            'url'                  => $this->url,
             'headline'             => $this->title,
             'author'               => [
                 '@type' => 'Person',

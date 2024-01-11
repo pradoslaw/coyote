@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7aa5fadf3b6798f095cfe0c2c6c98ff2",
+    "content-hash": "829548f73552558060f44c89cb206333",
     "packages": [
         {
             "name": "adam-boduch/laravel-grid",
@@ -12520,6 +12520,55 @@
                 }
             ],
             "time": "2023-04-14T08:58:40+00:00"
+        },
+        {
+            "name": "rawr/phpunit-data-provider",
+            "version": "3.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/t-regx/phpunit-data-provider.git",
+                "reference": "69b1c46e542e94beb140a7a004dce148778f49d9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/t-regx/phpunit-data-provider/zipball/69b1c46e542e94beb140a7a004dce148778f49d9",
+                "reference": "69b1c46e542e94beb140a7a004dce148778f49d9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5.4 || ^8.0 || ^7.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "TRegx\\PhpUnit\\DataProviders\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Daniel Wilkowski",
+                    "homepage": "https://t-regx.com/"
+                }
+            ],
+            "description": "Lightweight builder for PhpUnit data providers",
+            "support": {
+                "issues": "https://github.com/t-regx/phpunit-data-provider/issues",
+                "source": "https://github.com/t-regx/phpunit-data-provider/tree/3.3.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/danon",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-11-18T16:20:03+00:00"
         },
         {
             "name": "sebastian/cli-parser",
