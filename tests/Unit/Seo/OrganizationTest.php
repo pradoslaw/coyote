@@ -24,7 +24,7 @@ class OrganizationTest extends TestCase
     public function name(array $organization): void
     {
         $this->assertThat($organization['name'],
-            $this->identicalTo('4programmers.net'));
+            $this->identicalTo('Makana Sp. z o.o.'));
     }
 
     /**
@@ -44,7 +44,7 @@ class OrganizationTest extends TestCase
     public function logo(array $organization): void
     {
         $this->assertThat($organization['logo'],
-            $this->identicalTo('https://www.4programmers.net/img/logo-mobile.png'));
+            $this->identicalTo('https://www.4programmers.net/img/apple-touch.png'));
     }
 
     /**
@@ -54,8 +54,10 @@ class OrganizationTest extends TestCase
     public function socialLinks(array $organization): void
     {
         $this->assertThat($organization['sameAs'],
-            $this->identicalTo(
-                ['https://www.facebook.com/4programmers.net'],
-            ));
+            $this->identicalTo([
+                'https://www.facebook.com/4programmers.net/',
+                'https://www.linkedin.com/company/4programmers/about/',
+                'https://github.com/pradoslaw/coyote',
+            ]));
     }
 }
