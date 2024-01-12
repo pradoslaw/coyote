@@ -103,6 +103,16 @@ class DiscussionForumPostingTest extends TestCase
     /**
      * @test
      */
+    public function contentLong()
+    {
+        $text = \str_repeat('Lorem ipsum', 10);
+        $schema = $this->schemaTopicContent($text);
+        $this->assertSame($text, $schema['text']);
+    }
+
+    /**
+     * @test
+     */
     public function authorUser()
     {
         $schema = $this->postingSchema($this->newTopicAuthorUsername('mark'));

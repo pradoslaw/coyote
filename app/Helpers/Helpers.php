@@ -29,10 +29,12 @@ function plain($value)
  */
 function excerpt($value, $limit = 84)
 {
-    $value = str_replace(["\n", "\t", "\r"], ' ', plain($value));
-    $value = trim(preg_replace('/ {2,}/', ' ', $value));
+    return str_limit(reduced_whitespace(plain($value)), $limit);
+}
 
-    return str_limit($value, $limit);
+function reduced_whitespace(string $string): string
+{
+    return \trim(\preg_replace('/\s+/', ' ', $string));
 }
 
 /**
@@ -100,7 +102,7 @@ function cdn($path, $secure = null)
 /**
  * Get the path to a versioned Mix file.
  *
- * @param  string  $path
+ * @param string $path
  * @return string
  *
  * @throws \Exception
@@ -120,7 +122,7 @@ function manifest($path)
     if (!isset($manifest[$path])) {
         throw new Exception(
             "Unable to locate webpack mix file: {$path}. Please check your " .
-            'webpack.mix.js output paths and try again.'
+            'webpack.mix.js output paths and try again.',
         );
     }
 
@@ -148,7 +150,7 @@ function carbon($dateTime)
 {
     if (is_null($dateTime)) {
         $dateTime = new \Carbon\Carbon();
-    } elseif (!$dateTime instanceof \Carbon\Carbon) {
+    } else if (!$dateTime instanceof \Carbon\Carbon) {
         $dateTime = new \Carbon\Carbon($dateTime);
     }
 
