@@ -129,7 +129,7 @@ class TopicController extends BaseController
                 'schema_topic' => TwigLiteral::fromHtml(new Seo\Schema(new DiscussionForumPosting(
                     route('forum.topic', [$forum, $topic, $topic->slug]),
                     $topic->title,
-                    \trim(\strip_tags($post['html'])),
+                    \trim(\plain($post['html'])),
                     $topic->firstPost->user?->name ?? $topic->firstPost->user_name,
                     $topic->replies,
                 ))),

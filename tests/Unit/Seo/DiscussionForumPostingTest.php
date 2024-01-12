@@ -50,8 +50,17 @@ class DiscussionForumPostingTest extends TestCase
      */
     public function contentHtml()
     {
-        $schema = $this->schemaTopicContent('Lorem <b>ipsum</b>.');
-        $this->assertSame('Lorem ipsum.', $schema['text']);
+        $schema = $this->schemaTopicContent('Lorem <b>ipsum</b> &copy;.');
+        $this->assertSame('Lorem ipsum ©.', $schema['text']);
+    }
+
+    /**
+     * @test
+     */
+    public function contentHtmlEntity()
+    {
+        $schema = $this->schemaTopicContent('&lt;Lorem&gt;');
+        $this->assertSame('<Lorem>', $schema['text']);
     }
 
     /**
