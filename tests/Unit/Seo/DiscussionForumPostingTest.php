@@ -52,6 +52,15 @@ class DiscussionForumPostingTest extends TestCase
     /**
      * @test
      */
+    public function contentWhiteSpace()
+    {
+        $schema = $this->schemaTopicContent("Lorem\n\n\nipsum");
+        $this->assertSame('Lorem ipsum', $schema['text']);
+    }
+
+    /**
+     * @test
+     */
     public function contentHtml()
     {
         $schema = $this->schemaTopicContent('Lorem <b>ipsum</b> &copy;.');

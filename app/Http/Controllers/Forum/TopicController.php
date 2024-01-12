@@ -138,7 +138,7 @@ class TopicController extends BaseController
         return new Seo\Schema(new DiscussionForumPosting(
             route('forum.topic', [$topic->forum, $topic, $topic->slug]),
             $topic->title,
-            \trim(plain($html)),
+            \excerpt($html),
             $user?->name ?? $topic->firstPost->user_name,
             $user ? route('profile', ['user_trashed' => $user->id]) : null,
             $topic->replies,
