@@ -112,7 +112,7 @@ class TopicController extends BaseController
 
         $topic->load('tags');
 
-        $postText = array_first($posts['data'])['text'];
+        $post = array_first($posts['data']);
         return $this
             ->view('forum.topic', compact('posts', 'forum', 'paginate', 'reasons'))
             ->with([
@@ -124,12 +124,12 @@ class TopicController extends BaseController
                 'all_forums'   => $allForums,
                 'emojis'       => Emoji::all(),
                 'user_forums'  => $userForums,
-                'description'  => excerpt($postText, 100),
+                'description'  => excerpt($post['text'], 100),
                 'flags'        => $this->flags($forum),
                 'schema_topic' => TwigLiteral::fromHtml(new Seo\Schema(new DiscussionForumPosting(
                     route('forum.topic', [$forum, $topic, $topic->slug]),
                     $topic->title,
-                    $postText,
+                    \trim(\strip_tags($post['html'])),
                     $topic->firstPost->user?->name ?? $topic->firstPost->user_name,
                     $topic->replies,
                 ))),
