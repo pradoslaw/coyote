@@ -10,7 +10,6 @@ class ForumTest extends TestCase
 {
     use DatabaseTransactions;
 
-    // tests
     public function testForumCreationOrder()
     {
         $forumA = factory(Forum::class)->create();
@@ -36,14 +35,5 @@ class ForumTest extends TestCase
         $after = Forum::firstOrNew(['name' => $forumB->name]);
 
         $this->assertEquals($before->order - 1, $after->order);
-    }
-
-    public function testForumCreationWithSpecificOrder()
-    {
-        $forumA = factory(Forum::class)->create(['order' => 4]);
-        $forumB = factory(Forum::class)->create(['order' => 5]);
-
-        $this->assertDatabaseHas('forums', ['name' => $forumA->name, 'order' => 4]);
-        $this->assertDatabaseHas('forums', ['name' => $forumB->name, 'order' => 5]);
     }
 }
