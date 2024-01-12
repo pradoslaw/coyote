@@ -95,9 +95,10 @@ class TopicController extends BaseController
             ->setTracker($tracker);
 
         $dateTime = $paginate->last()->created_at;
-        // first, build array of posts with info which posts have been read
-        // assign array ot posts variable. this is our skeleton! do not remove
+
+        TopicResource::wrap('data');
         $posts = $resource->toResponse($this->request)->getData(true);
+        TopicResource::withoutWrapping();
 
         if ($markTime < $dateTime) {
             $tracker->asRead($dateTime);
@@ -108,8 +109,6 @@ class TopicController extends BaseController
         }
 
         $topic->load('tags');
-
-        TopicResource::withoutWrapping();
 
         return $this
             ->view('forum.topic', compact('posts', 'forum', 'paginate', 'reasons'))
