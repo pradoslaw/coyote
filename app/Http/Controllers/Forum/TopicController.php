@@ -126,18 +126,24 @@ class TopicController extends BaseController
                 'user_forums'  => $userForums,
                 'description'  => excerpt($post['text'], 100),
                 'flags'        => $this->flags($forum),
-                'schema_topic' => TwigLiteral::fromHtml(new Seo\Schema(new DiscussionForumPosting(
-                    route('forum.topic', [$forum, $topic, $topic->slug]),
-                    $topic->title,
-                    \trim(\plain($post['html'])),
-                    $topic->firstPost->user?->name ?? $topic->firstPost->user_name,
-                    $topic->firstPost->user ? route('profile', ['user_trashed' => $topic->firstPost->user?->id]) : null,
-                    $topic->replies,
-                    $topic->score,
-                    $topic->views,
-                    $topic->created_at,
-                ))),
+                'schema_topic' => TwigLiteral::fromHtml($this->discussionForumPosting($topic, $post['html'])),
             ]);
+    }
+
+    private function discussionForumPosting(Topic $topic, string $html): Seo\Schema
+    {
+        $user = $topic->firstPost->user;
+        return new Seo\Schema(new DiscussionForumPosting(
+            route('forum.topic', [$topic->forum, $topic, $topic->slug]),
+            $topic->title,
+            \trim(plain($html)),
+            $user?->name ?? $topic->firstPost->user_name,
+            $user ? route('profile', ['user_trashed' => $user->id]) : null,
+            $topic->replies,
+            $topic->score,
+            $topic->views,
+            $topic->created_at,
+        ));
     }
 
     private function moreLikeThis(Topic $topic)
