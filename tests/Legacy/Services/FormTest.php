@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Legacy\Services\FormBuilder;
+namespace Tests\Legacy\Services;
 
 use Faker\Factory;
 use Illuminate\Contracts\Validation\Validator;
@@ -477,12 +477,12 @@ class FormTest extends TestCase
 
         $this->assertEquals(
             ['name' => 'required|min:5', 'description' => 'max:10'],
-            $form->rules()
+            $form->rules(),
         );
 
         $this->assertEquals(
             ['name' => $this->request['name'], 'description' => $this->request['description']],
-            $form->all()
+            $form->all(),
         );
     }
 
@@ -528,7 +528,7 @@ class FormTest extends TestCase
         $this->assertTrue($validator->errors()->has('name'));
         $this->assertEquals(
             ['name' => 'required|min:5'],
-            $form->rules()
+            $form->rules(),
         );
     }
 
