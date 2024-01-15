@@ -8,6 +8,9 @@ use Tests\Unit\Seo;
 use Tests\Unit\Seo\Fixture\Constraint\ArrayKey;
 use TRegx\PhpUnit\DataProviders\DataProvider;
 
+/**
+ * @see https://developers.google.com/search/docs/appearance/structured-data/discussion-forum
+ */
 class DiscussionForumPostingTest extends TestCase
 {
     use Seo\DiscussionForumPosting\Fixture,

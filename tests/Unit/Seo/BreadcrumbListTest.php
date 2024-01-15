@@ -6,6 +6,9 @@ use Tests\Unit\BaseFixture;
 use Tests\Unit\Seo;
 use Tests\Unit\Seo\Fixture\Constraint\ArrayKey;
 
+/**
+ * @see https://developers.google.com/search/docs/appearance/structured-data/breadcrumb
+ */
 class BreadcrumbListTest extends TestCase
 {
     use Seo\BreadcrumbList\Fixture, BaseFixture\RelativeUri;

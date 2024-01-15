@@ -3,6 +3,9 @@ namespace Tests\Unit\Seo;
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @see https://developers.google.com/search/docs/appearance/structured-data/organization
+ */
 class OrganizationTest extends TestCase
 {
     use Fixture\Schema;
