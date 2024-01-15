@@ -4,6 +4,7 @@ namespace Tests\Unit\Seo\DiscussionForumPosting;
 use Coyote\Forum;
 use Coyote\Post;
 use Coyote\Topic;
+use Coyote\User;
 use Tests\Unit\Seo;
 
 trait Models
@@ -20,9 +21,18 @@ trait Models
         return $this->storeThread(new Forum, new Topic(['title' => $title]));
     }
 
-    function newTopicUsername(string $username): Topic
+    function newTopicAuthorLegacyGuest(string $username): Topic
     {
         return $this->storeThread(new Forum, new Topic, new Post(['user_name' => $username]));
+    }
+
+    function newTopicAuthorUsername(string $username): Topic
+    {
+        $user = new User;
+        $user->name = $username;
+        $user->email = 'irrelevant';
+        $user->save();
+        return $this->storeThread(new Forum, new Topic, new Post(['user_id' => $user->id]));
     }
 
     function newTopicReplies(int $replies): Topic

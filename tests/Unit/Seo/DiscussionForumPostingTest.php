@@ -43,11 +43,22 @@ class DiscussionForumPostingTest extends TestCase
     /**
      * @test
      */
-    public function author()
+    public function authorUser()
     {
-        $schema = $this->schemaTopicByUser('mark');
+        $schema = $this->postingSchema($this->newTopicAuthorUsername('mark'));
         $this->assertThat(
             $schema['author'],
             $this->identicalTo(['@type' => 'Person', 'name' => 'mark']));
+    }
+
+    /**
+     * @test
+     */
+    public function authorLegacyGuest()
+    {
+        $schema = $this->postingSchema($this->newTopicAuthorLegacyGuest('john'));
+        $this->assertThat(
+            $schema['author'],
+            $this->identicalTo(['@type' => 'Person', 'name' => 'john']));
     }
 }

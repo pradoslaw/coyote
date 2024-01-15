@@ -19,11 +19,6 @@ trait Fixture
         return $this->postingSchema($this->newTopicTitle($title));
     }
 
-    function schemaTopicByUser(string $username): array
-    {
-        return $this->postingSchema($this->newTopicUsername($username));
-    }
-
     function schemaForumReplies(int $replies): array
     {
         return $this->postingSchema($this->newTopicReplies($replies));
