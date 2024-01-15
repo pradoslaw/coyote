@@ -19,6 +19,7 @@ class Censore extends HashParser implements Parser
         if ($result === null) {
             $template = Pattern::template('(?<![\p{L}\p{N}_])@(?![\p{L}\p{N}_])', 'iu');
 
+            $result = [];
             foreach ($this->word->allWords() as $word) {
                 $pattern = $template->mask($word->word, ['*' => '(\p{L}*?)']);
                 $result["$pattern"] = $word->replacement;

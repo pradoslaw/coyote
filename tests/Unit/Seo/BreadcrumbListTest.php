@@ -28,12 +28,26 @@ class BreadcrumbListTest extends TestCase
      */
     public function category(): void
     {
-        $breadcrumbList = $this->categoryBreadcrumbsSchema('Orange category', 'orange-category');
+        $breadcrumbList = $this->categorySchema('Orange category', 'orange-category');
         $this->assertThat(
             $breadcrumbList['itemListElement'][1],
             $this->logicalAnd(
                 new ArrayKey('name', $this->identicalTo('Orange category')),
                 new ArrayKey('@id', $this->relativeUri('/Forum/orange-category')),
+            ));
+    }
+
+    /**
+     * @test
+     */
+    public function topic(): void
+    {
+        [$breadcrumbList, $topicId] = $this->topicSchema('Apple topic', 'apple-category');
+        $this->assertThat(
+            $breadcrumbList['itemListElement'][2],
+            $this->logicalAnd(
+                new ArrayKey('name', $this->identicalTo('Apple topic')),
+                new ArrayKey('@id', $this->relativeUri("/Forum/apple-category/$topicId-apple_topic")),
             ));
     }
 }

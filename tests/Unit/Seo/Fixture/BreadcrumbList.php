@@ -1,32 +1,29 @@
 <?php
 namespace Tests\Unit\Seo\Fixture;
 
-use Coyote\Forum;
-use Tests\Unit\BaseFixture\Laravel;
-use Tests\Unit\Seo\Fixture;
+use Tests\Unit\Seo;
 
 trait BreadcrumbList
 {
-    use Fixture\Schema, Laravel\Transactional;
+    use Seo\Fixture\Schema, Seo\Fixture\Models;
 
     function breadcrumbsSchema(): array
     {
         return $this->schema('/Forum', type:'BreadcrumbList');
     }
 
-    function categoryBreadcrumbsSchema(string $forumName, string $forumSlug): array
+    function categorySchema(string $forumName, string $forumSlug): array
     {
         $this->newForum($forumName, $forumSlug);
         return $this->schema("/Forum/$forumSlug", 'BreadcrumbList');
     }
 
-    function newForum(string $name, string $slug): void
+    function topicSchema(string $topicTitle, string $forumSlug): array
     {
-        $forum = new Forum([
-            'name'        => $name,
-            'slug'        => $slug,
-            'description' => 'irrelevant',
-        ]);
-        $forum->save();
+        $topicId = $this->newThread($topicTitle, $forumSlug);
+        return [
+            $this->schema("/Forum/$forumSlug/$topicId", 'BreadcrumbList'),
+            $topicId,
+        ];
     }
 }
