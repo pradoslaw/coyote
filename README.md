@@ -164,6 +164,11 @@ docker-compose exec php php vendor/bin/phpunit
    APP_DEBUG=false
    ```
 
+5. Różnice w środowiskach
+
+   Pamiętaj, że uruchomienie `docker compose up` (bez przekazania `-f`) domyślnie
+   skorzysta z plików `docker-compose.yaml` **oraz** `docker-compose.override.yaml`.
+
 ### Zadania uruchomiane w tle
 
 Na serwerze produkcyjnym niektóre zadanie wykonywane są w tle. Dodawane są one do kolejki oraz wykonywane przez proces działający w tle.
