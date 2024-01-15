@@ -2,13 +2,16 @@
 
 namespace Coyote\Http\Controllers\Adm;
 
+use Boduch\Grid\Source\EloquentSource;
+use Coyote\Group;
 use Coyote\Http\Forms\Group\GroupForm;
 use Coyote\Http\Grids\Adm\GroupsGrid;
 use Coyote\Repositories\Contracts\GroupRepositoryInterface as GroupRepository;
-use Boduch\Grid\Source\EloquentSource;
-use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
+use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Objects\Group as Stream_Group;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class GroupsController extends BaseController
 {
@@ -39,23 +42,15 @@ class GroupsController extends BaseController
         return $this->view('adm.groups.home')->with('grid', $grid);
     }
 
-    /**
-     * @param \Coyote\Group $group
-     * @return \Illuminate\View\View
-     */
-    public function edit($group)
+    public function edit(Group $group): View
     {
-        $this->breadcrumb->push($group->name ?? 'Dodaj nową');
+        $this->breadcrumb->push($group->name ?? 'Dodaj nową', route('adm.groups.save', ['group' => $group]));
         $form = $this->getForm($group);
 
         return $this->view('adm.groups.save')->with('form', $form);
     }
 
-    /**
-     * @param \Coyote\Group $group
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function save($group)
+    public function save(Group $group): RedirectResponse
     {
         $form = $this->getForm($group);
         $form->validate();
@@ -68,11 +63,11 @@ class GroupsController extends BaseController
             foreach ($group->permissions()->get() as $permission) {
                 $group->permissions()->updateExistingPivot(
                     $permission->id,
-                    ['value' => in_array($permission->id, $form->permissions->getValue())]
+                    ['value' => in_array($permission->id, $form->permissions->getValue())],
                 );
             }
 
-            $group->users()->sync((array) $form->users->getValue()); // array can be empty
+            $group->users()->sync((array)$form->users->getValue()); // array can be empty
             // update group name in users table
             $group->users()->where('users.group_id', $group->id)->update(['group_name' => $group->name]);
 
@@ -85,8 +80,8 @@ class GroupsController extends BaseController
     }
 
     /**
-     * @param \Coyote\Group $group
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Group $group
+     * @return RedirectResponse
      */
     public function delete($group)
     {
@@ -105,7 +100,7 @@ class GroupsController extends BaseController
     }
 
     /**
-     * @param \Coyote\Group $group
+     * @param Group $group
      * @return \Coyote\Services\FormBuilder\Form
      */
     private function getForm($group)

@@ -2,16 +2,18 @@
 
 namespace Coyote\Http\Controllers\Adm\Forum;
 
+use Boduch\Grid\Source\CollectionSource;
 use Coyote\Events\ForumSaved;
+use Coyote\Forum;
 use Coyote\Http\Controllers\Adm\BaseController;
 use Coyote\Http\Grids\Adm\Forum\PermissionsGrid;
 use Coyote\Permission;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
 use Coyote\Repositories\Contracts\GroupRepositoryInterface as GroupRepository;
-use Boduch\Grid\Source\CollectionSource;
 use Coyote\Services\Forum\TreeBuilder\Builder;
 use Coyote\Services\Forum\TreeBuilder\ListDecorator;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class PermissionsController extends BaseController
 {
@@ -38,37 +40,30 @@ class PermissionsController extends BaseController
         $this->breadcrumb->push('Prawa dostępu', route('adm.forum.permissions'));
     }
 
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function index()
+    public function index(): View
     {
         $categoriesList = new ListDecorator(new Builder($this->forum->list()));
 
         return $this->view('adm.forum.permissions.home')->with('categoriesList', $categoriesList->setKey('id')->build());
     }
 
-    /**
-     * @param Request $request
-     * @return \Illuminate\View\View
-     */
-    public function edit(Request $request)
+    public function edit(Request $request): View
     {
-        /** @var \Coyote\Forum $forum */
-        $forum = $this->forum->findOrFail((int) $request->input('id'));
+        /** @var Forum $forum */
+        $forum = $this->forum->findOrFail((int)$request->input('id'));
         $permissions = $forum->permissions()->get();
         $groups = $this->group->all();
 
-        $this->breadcrumb->push($forum->name);
+        $this->breadcrumb->push($forum->name, route('forum.category', ['forum' => $forum]));
 
         $data = collect();
 
         // ugly way to get only forum permissions
         foreach (Permission::where('name', 'ilike', 'forum%')->get() as $permission) {
             $row = collect([
-                'name' => $permission->name,
-                'description' => $permission->description,
-                'permission_id' => $permission->id
+                'name'          => $permission->name,
+                'description'   => $permission->description,
+                'permission_id' => $permission->id,
             ]);
 
             foreach ($groups as $group) {
@@ -92,8 +87,8 @@ class PermissionsController extends BaseController
         $builder = new Builder($this->forum->list());
 
         return $this->view('adm.forum.permissions.home', [
-            'grid' => $grid,
-            'categoriesList' => (new ListDecorator($builder))->build()
+            'grid'           => $grid,
+            'categoriesList' => (new ListDecorator($builder))->build(),
         ]);
     }
 
@@ -103,7 +98,7 @@ class PermissionsController extends BaseController
      */
     public function save(Request $request)
     {
-        /** @var \Coyote\Forum $forum */
+        /** @var Forum $forum */
         $forum = $this->forum->findOrFail($request->input('id'));
 
         $this->transaction(function () use ($forum, $request) {
@@ -112,9 +107,9 @@ class PermissionsController extends BaseController
             foreach ($request->input('group') as $groupId => $permissions) {
                 foreach ($permissions as $permissionId => $value) {
                     $forum->permissions()->create([
-                        'group_id' => $groupId,
+                        'group_id'      => $groupId,
                         'permission_id' => $permissionId,
-                        'value' => $value
+                        'value'         => $value,
                     ]);
                 }
             }

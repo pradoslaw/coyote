@@ -12,6 +12,7 @@ use Coyote\Services\Forum\TreeBuilder\Builder;
 use Coyote\Services\Forum\TreeBuilder\FlatDecorator;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class CategoriesController extends BaseController
 {
@@ -31,10 +32,7 @@ class CategoriesController extends BaseController
         $this->breadcrumb->push('Forum', route('adm.forum.categories'));
     }
 
-    /**
-     * @return \Illuminate\View\View
-     */
-    public function index()
+    public function index(): View
     {
         $treeBuilder = new FlatDecorator(new Builder($this->forum->orderBy('order')->get()));
 
@@ -47,14 +45,10 @@ class CategoriesController extends BaseController
         return $this->view('adm.forum.categories.home')->with('grid', $grid);
     }
 
-    /**
-     * @param int|null $id
-     * @return \Illuminate\View\View
-     */
-    public function edit($id = null)
+    public function edit(?int $id): View
     {
         $forum = $this->forum->findOrNew($id);
-        $this->breadcrumb->push($forum->name ?? 'Dodaj nową');
+        $this->breadcrumb->push($forum->name ?? 'Dodaj nową', route('forum.category', ['forum' => $forum]));
 
         return $this->view('adm.forum.categories.save')->with('form', $this->getForm($forum));
     }
@@ -75,7 +69,7 @@ class CategoriesController extends BaseController
         $forum->fill($form->all());
 
         $this->transaction(function () use ($form, $forum) {
-            $groups = (array) $form->get('access')->getValue();
+            $groups = (array)$form->get('access')->getValue();
 
             $forum->is_prohibited = count($groups);
             $forum->save();
