@@ -8,9 +8,9 @@ trait Fixture
 {
     use Seo\Fixture\Schema, Seo\DiscussionForumPosting\Models;
 
-    function schemaForumSlug(string $forumSlug): array
+    function schemaTopicInForum(string $topicTitle, string $forumSlug): array
     {
-        $topic = $this->newTopicForumSlug($forumSlug);
+        $topic = $this->newThread($topicTitle, $forumSlug);
         return [$this->postingSchema($topic), $topic->id];
     }
 

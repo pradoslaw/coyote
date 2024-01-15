@@ -126,7 +126,7 @@ class TopicController extends BaseController
                 'description'  => excerpt(array_first($posts['data'])['text'], 100),
                 'flags'        => $this->flags($forum),
                 'schema_topic' => TwigLiteral::fromHtml(new Seo\Schema(new DiscussionForumPosting(
-                    $request->getUri(),
+                    route('forum.topic', [$forum, $topic, $topic->slug]),
                     $topic->title,
                     $topic->firstPost->user?->name ?? $topic->firstPost->user_name,
                     $topic->replies,

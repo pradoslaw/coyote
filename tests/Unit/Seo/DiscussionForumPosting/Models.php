@@ -11,9 +11,11 @@ trait Models
 {
     use Seo\Fixture\Store;
 
-    function newTopicForumSlug(string $forumSlug): Topic
+    function newThread(string $topicTitle, string $forumSlug): Topic
     {
-        return $this->storeThread(new Forum(['slug' => $forumSlug]), new Topic);
+        return $this->storeThread(
+            new Forum(['slug' => $forumSlug]),
+            new Topic(['title' => $topicTitle]));
     }
 
     function newTopicTitle(string $title): Topic

@@ -14,10 +14,10 @@ class DiscussionForumPostingTest extends TestCase
      */
     public function id()
     {
-        [$schema, $topicId] = $this->schemaForumSlug('apple-forum');
+        [$schema, $topicId] = $this->schemaTopicInForum('Banana topic', 'apple-forum');
         $this->assertThat(
             $schema['@id'],
-            $this->relativeUri("/Forum/apple-forum/$topicId"));
+            $this->relativeUri("/Forum/apple-forum/$topicId-banana_topic"));
     }
 
     /**
