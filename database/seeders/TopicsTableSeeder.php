@@ -2,24 +2,24 @@
 
 namespace Database\Seeders;
 
+use Coyote\Post;
+use Coyote\Post\Log;
+use Coyote\Topic;
+use Coyote\User;
 use Illuminate\Database\Seeder;
 
 class TopicsTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
+    public function run(): void
     {
-        \Coyote\Post\Log::reguard();
+        Log::reguard();
 
-        \factory(\Coyote\Topic::class, 50)->create()->each(function (\Coyote\Topic $topic) {
+        \factory(Topic::class, 30)->create()->each(function (Topic $topic) {
             for ($i = 1; $i <= rand(1, 10); $i++) {
-                $user = \Coyote\User::inRandomOrder()->first();
-
-                $topic->posts()->save(\factory(\Coyote\Post::class)->make(['forum_id' => $topic->forum_id, 'user_id' => $user->id]));
+                $user = User::inRandomOrder()->first();
+                $post = \factory(Post::class)
+                    ->make(['forum_id' => $topic->forum_id, 'user_id' => $user->id]);
+                $topic->posts()->save($post);
             }
         });
     }
