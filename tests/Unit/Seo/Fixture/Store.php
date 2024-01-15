@@ -27,15 +27,17 @@ trait Store
         $topic->save();
 
         if ($post) {
-            $post->text = 'irrelevant';
+            $post->text ??= 'irrelevant';
+            $post->user_name ??= 'irrelevant';
             $post->ip = 'irrelevant';
             $post->forum_id = $forum->id;
             $post->topic_id = $topic->id;
             $post->save();
-            $topic->first_post_id = $post->id;
+            $topicPost = $post;
         } else {
-            $topic->first_post_id = $this->placeholderPost($topic)->id;
+            $topicPost = $this->placeholderPost($topic);
         }
+        $topic->first_post_id = $topicPost->id;
 
         $topic->save();
         return $topic;

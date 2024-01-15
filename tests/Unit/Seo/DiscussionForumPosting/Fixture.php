@@ -24,6 +24,11 @@ trait Fixture
         return $this->postingSchema($this->newTopicReplies($replies));
     }
 
+    function schemaTopicContent(string $content): array
+    {
+        return $this->postingSchema($this->newThreadPostContent($content));
+    }
+
     function postingSchema(Topic $topic): array
     {
         return $this->schema("/Forum/{$topic->forum->slug}/$topic->id", 'DiscussionForumPosting');

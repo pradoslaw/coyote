@@ -43,4 +43,9 @@ trait Models
         $topic->replies = $replies;
         return $this->storeThread(new Forum, $topic);
     }
+
+    function newThreadPostContent(string $content): Topic
+    {
+        return $this->storeThread(new Forum, new Topic, new Post(['text' => $content]));
+    }
 }

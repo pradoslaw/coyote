@@ -39,6 +39,15 @@ class DiscussionForumPostingTest extends TestCase
     /**
      * @test
      */
+    public function content()
+    {
+        $schema = $this->schemaTopicContent('Lorem ipsum');
+        $this->assertSame('Lorem ipsum', $schema['text']);
+    }
+
+    /**
+     * @test
+     */
     public function replies()
     {
         $schema = $this->schemaForumReplies(replies:7);
