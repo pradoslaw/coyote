@@ -48,6 +48,22 @@ class BreadcrumbListTest extends TestCase
     /**
      * @test
      */
+    public function categoryParent(): void
+    {
+        $breadcrumbList = $this->categoryWithParentSchema('Banana category', 'banana_category');
+        $this->assertThat(
+            $breadcrumbList['itemListElement'][1],
+            $this->logicalAnd(
+                new ArrayKey('name', $this->identicalTo('Banana category')),
+                new ArrayKey('@id', $this->relativeUri('/Forum/banana_category')),
+                new ArrayKey('item', $this->relativeUri('/Forum/banana_category')),
+                new ArrayKey('position', $this->identicalTo(2)),
+            ));
+    }
+
+    /**
+     * @test
+     */
     public function topic(): void
     {
         [$breadcrumbList, $topicId] = $this->topicSchema('Apple topic', 'apple-category');

@@ -13,7 +13,6 @@ use Coyote\Repositories\Eloquent\PostRepository;
 use Coyote\Repositories\Eloquent\TagRepository;
 use Coyote\Repositories\Eloquent\TopicRepository;
 use Coyote\Services\Session\Renderer;
-use Coyote\Services\UrlBuilder;
 use Coyote\Topic;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -41,18 +40,17 @@ abstract class BaseController extends Controller
         TagResource::urlResolver(fn($name) => route('forum.tag', [urlencode($name)]));
     }
 
-    /**
-     * Builds breadcrumb for this category
-     *
-     * @param \Coyote\Forum $forum
-     */
-    public function breadcrumb($forum)
+    public function breadcrumb(Forum $forum): void
     {
         if ($forum->parent_id) {
-            $this->breadcrumb->push($forum->parent->name, UrlBuilder::forum($forum->parent));
+            $this->pushBreadcrumb($forum->parent);
         }
+        $this->pushBreadcrumb($forum);
+    }
 
-        $this->breadcrumb->push($forum->name, route('forum.category', [$forum->slug]));
+    private function pushBreadcrumb(Forum $forum): void
+    {
+        $this->breadcrumb->push($forum->name, route('forum.category', [$forum]));
     }
 
     /**

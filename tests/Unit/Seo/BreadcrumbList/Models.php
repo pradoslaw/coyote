@@ -26,4 +26,24 @@ trait Models
         ]);
         $forum->save();
     }
+
+    function newChildForum(string $parentName, string $parentSlug): string
+    {
+        $parent = new Forum([
+            'name'        => $parentName,
+            'slug'        => $parentSlug,
+            'description' => 'irrelevant',
+        ]);
+        $parent->save();
+
+        $child = new Forum([
+            'name'        => 'child',
+            'slug'        => "$parent->slug/child",
+            'description' => 'irrelevant',
+            'parent_id'   => $parent->id,
+        ]);
+        $child->save();
+
+        return $child->slug;
+    }
 }
