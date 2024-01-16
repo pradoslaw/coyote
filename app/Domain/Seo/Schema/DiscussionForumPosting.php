@@ -6,12 +6,13 @@ use Carbon\Carbon;
 class DiscussionForumPosting implements Thing
 {
     public function __construct(
-        private string $url,
-        private string $title,
-        private string $content,
-        private string $authorUsername,
-        private int    $replies,
-        private Carbon $datePublished)
+        private string  $url,
+        private string  $title,
+        private string  $content,
+        private string  $authorUsername,
+        private ?string $authorUrl,
+        private int     $replies,
+        private Carbon  $datePublished)
     {
     }
 
@@ -25,14 +26,20 @@ class DiscussionForumPosting implements Thing
             'headline'             => $this->title,
             'text'                 => $this->content,
             'datePublished'        => $this->datePublished->toIso8601String(),
-            'author'               => [
-                '@type' => 'Person',
-                'name'  => $this->authorUsername,
-            ],
+            'author'               => $this->author(),
             'interactionStatistic' => [
                 '@type'                => 'InteractionCounter',
                 'userInteractionCount' => $this->replies,
             ],
         ];
+    }
+
+    private function author(): array
+    {
+        $author = ['@type' => 'Person', 'name' => $this->authorUsername];
+        if ($this->authorUrl) {
+            return $author + ['url' => $this->authorUrl];
+        }
+        return $author;
     }
 }

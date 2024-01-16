@@ -35,6 +35,20 @@ trait Models
         $user->name = $username;
         $user->email = 'irrelevant';
         $user->save();
+        return $this->newTopicAuthorUser($user);
+    }
+
+    function newUser(): User
+    {
+        $user = new User;
+        $user->name = 'irrelevant';
+        $user->email = 'email@irrelevant';
+        $user->save();
+        return $user;
+    }
+
+    function newTopicAuthorUser(User $user): Topic
+    {
         return $this->storeThread(new Forum, new Topic, new Post(['user_id' => $user->id]));
     }
 

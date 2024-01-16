@@ -4,6 +4,7 @@ namespace Tests\Unit\Seo;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture;
 use Tests\Unit\Seo;
+use Tests\Unit\Seo\Fixture\Constraint\ArrayKey;
 use TRegx\PhpUnit\DataProviders\DataProvider;
 
 class DiscussionForumPostingTest extends TestCase
@@ -84,7 +85,10 @@ class DiscussionForumPostingTest extends TestCase
         $schema = $this->postingSchema($this->newTopicAuthorUsername('mark'));
         $this->assertThat(
             $schema['author'],
-            $this->identicalTo(['@type' => 'Person', 'name' => 'mark']));
+            $this->logicalAnd(
+                new ArrayKey('@type', $this->identicalTo('Person')),
+                new ArrayKey('name', $this->identicalTo('mark')),
+            ));
     }
 
     /**
@@ -96,6 +100,18 @@ class DiscussionForumPostingTest extends TestCase
         $this->assertThat(
             $schema['author'],
             $this->identicalTo(['@type' => 'Person', 'name' => 'john']));
+    }
+
+    /**
+     * @test
+     */
+    public function authorUserUrl()
+    {
+        $user = $this->newUser();
+        $schema = $this->postingSchema($this->newTopicAuthorUser($user));
+        $this->assertThat(
+            $schema['author']['url'],
+            $this->relativeUri("/Profile/$user->id"));
     }
 
     /**
