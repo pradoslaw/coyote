@@ -8,7 +8,9 @@ use TRegx\PhpUnit\DataProviders\DataProvider;
 
 class DiscussionForumPostingTest extends TestCase
 {
-    use Seo\DiscussionForumPosting\Fixture, BaseFixture\RelativeUri;
+    use Seo\DiscussionForumPosting\Fixture,
+        Seo\DiscussionForumPosting\SystemDatabase,
+        BaseFixture\RelativeUri;
 
     /**
      * @test
@@ -94,5 +96,16 @@ class DiscussionForumPostingTest extends TestCase
         $this->assertThat(
             $schema['author'],
             $this->identicalTo(['@type' => 'Person', 'name' => 'john']));
+    }
+
+    /**
+     * @test
+     */
+    public function datePublished()
+    {
+        $this->systemDatabaseTimezone('America/Los_Angeles');
+        $schema = $this->schemaTopicCreatedAt('2016-01-23 11:53:20', timezone:'Europe/Stockholm');
+        $this->assertThat($schema['datePublished'],
+            $this->identicalTo('2016-01-23T02:53:20-08:00'));
     }
 }

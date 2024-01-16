@@ -29,6 +29,11 @@ trait Fixture
         return $this->postingSchema($this->newThreadPostContent($content));
     }
 
+    function schemaTopicCreatedAt(string $date, string $timezone): array
+    {
+        return $this->postingSchema($this->newTopicCreatedAt($date, $timezone));
+    }
+
     function postingSchema(Topic $topic): array
     {
         return $this->schema("/Forum/{$topic->forum->slug}/$topic->id", 'DiscussionForumPosting');

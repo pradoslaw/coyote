@@ -1,6 +1,8 @@
 <?php
 namespace Coyote\Domain\Seo\Schema;
 
+use Carbon\Carbon;
+
 class DiscussionForumPosting implements Thing
 {
     public function __construct(
@@ -8,7 +10,8 @@ class DiscussionForumPosting implements Thing
         private string $title,
         private string $content,
         private string $authorUsername,
-        private int    $replies)
+        private int    $replies,
+        private Carbon $datePublished)
     {
     }
 
@@ -21,6 +24,7 @@ class DiscussionForumPosting implements Thing
             'url'                  => $this->url,
             'headline'             => $this->title,
             'text'                 => $this->content,
+            'datePublished'        => $this->datePublished->toIso8601String(),
             'author'               => [
                 '@type' => 'Person',
                 'name'  => $this->authorUsername,

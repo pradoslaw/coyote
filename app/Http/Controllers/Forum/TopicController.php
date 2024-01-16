@@ -132,6 +132,7 @@ class TopicController extends BaseController
                     \trim(\plain($post['html'])),
                     $topic->firstPost->user?->name ?? $topic->firstPost->user_name,
                     $topic->replies,
+                    $topic->created_at,
                 ))),
             ]);
     }
