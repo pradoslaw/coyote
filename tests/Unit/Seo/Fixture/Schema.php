@@ -2,6 +2,7 @@
 namespace Tests\Unit\Seo\Fixture;
 
 use Tests\Unit\BaseFixture\Laravel;
+use Tests\Unit\BaseFixture\ViewFixture;
 
 trait Schema
 {

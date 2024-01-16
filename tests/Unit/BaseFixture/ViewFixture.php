@@ -1,7 +1,7 @@
 <?php
-namespace Tests\Unit\Seo\Fixture;
+namespace Tests\Unit\BaseFixture;
 
-use Tests\Unit\BaseFixture\ViewDom;
+use Tests\Unit\Seo\Fixture\Script;
 
 class ViewFixture
 {
