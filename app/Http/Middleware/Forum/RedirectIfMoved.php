@@ -4,6 +4,7 @@ namespace Coyote\Http\Middleware\Forum;
 use Closure;
 use Coyote\Repositories\Eloquent\ForumRepository;
 use Coyote\Topic;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation;
 
@@ -54,5 +55,13 @@ class RedirectIfMoved extends AbstractMiddleware
         return (is_null($forum)
             || $forum->id !== $topic->forum_id
             || ($request->route('slug') !== null && $request->route('slug') !== $topic->slug));
+    }
+
+    private function redirect(Request $request): RedirectResponse
+    {
+        return redirect()->route(
+            $request->route()->getName(),
+            \array_merge($request->route()->parameters(), $request->query()),
+            status:301);
     }
 }

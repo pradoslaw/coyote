@@ -1,7 +1,6 @@
 <?php
 namespace Coyote\Http\Middleware\Forum;
 
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation;
 
@@ -21,14 +20,5 @@ abstract class AbstractMiddleware
             return response('Unauthorized.', 401);
         }
         return redirect()->guest(route('login'));
-    }
-
-    protected function redirect(Request $request): RedirectResponse
-    {
-        return redirect()->route(
-            $request->route()->getName(),
-            array_merge($request->route()->parameters(), $request->query()),
-            301
-        );
     }
 }
