@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Unit\Seo\Fixture;
+namespace Tests\Unit\BaseFixture\Forum;
 
 use Coyote\Forum;
 use Coyote\Post;

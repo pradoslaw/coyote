@@ -1,17 +1,16 @@
 <?php
 namespace Tests\Unit\Topic\Fixture;
 
+use Coyote\Forum;
 use Coyote\Topic;
-use Tests\Unit\Seo;
+use Tests\Unit\BaseFixture;
 
 trait Models
 {
-    use Seo\DiscussionForumPosting\Models {
-        Seo\DiscussionForumPosting\Models::newTopicTitle as _newTopicTitle;
-    }
+    use BaseFixture\Forum\Store;
 
     function newTopicTitle(string $title): Topic
     {
-        return $this->_newTopicTitle($title);
+        return $this->storeThread(new Forum, new Topic(['title' => $title]));
     }
 }

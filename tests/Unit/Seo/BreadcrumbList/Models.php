@@ -3,11 +3,11 @@ namespace Tests\Unit\Seo\BreadcrumbList;
 
 use Coyote\Forum;
 use Coyote\Topic;
-use Tests\Unit\Seo;
+use Tests\Unit\BaseFixture;
 
 trait Models
 {
-    use Seo\Fixture\Store;
+    use BaseFixture\Forum\Store;
 
     function newThread(string $topicTitle, string $forumSlug): int
     {
