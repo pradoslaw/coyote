@@ -6,6 +6,7 @@
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          processIsolation="false"
+         executionOrder="random"
          stopOnFailure="false">
     <testsuites>
         <testsuite name="Legacy">
