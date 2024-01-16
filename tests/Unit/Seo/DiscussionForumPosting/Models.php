@@ -52,10 +52,12 @@ trait Models
         return $this->storeThread(new Forum, new Topic, new Post(['user_id' => $user->id]));
     }
 
-    function newTopicReplies(int $replies): Topic
+    function newTopicStatistic(int $replies, int $likes, int $views): Topic
     {
         $topic = new Topic;
         $topic->replies = $replies;
+        $topic->score = $likes;
+        $topic->views = $views;
         return $this->storeThread(new Forum, $topic);
     }
 

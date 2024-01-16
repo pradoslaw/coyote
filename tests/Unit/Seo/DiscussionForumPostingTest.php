@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Unit\Seo;
 
+use PHPUnit\Framework\Constraint\Constraint;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture;
 use Tests\Unit\Seo;
@@ -69,12 +70,25 @@ class DiscussionForumPostingTest extends TestCase
     /**
      * @test
      */
-    public function replies()
+    public function statistics()
     {
-        $schema = $this->schemaForumReplies(replies:7);
+        $schema = $this->schemaForumStatistic(replies:7, likes:5, views:13);
         $this->assertThat(
             $schema['interactionStatistic'],
-            $this->identicalTo(['@type' => 'InteractionCounter', 'userInteractionCount' => 7]));
+            $this->logicalAnd(
+                $this->interaction('ViewAction', 13),
+                $this->interaction('LikeAction', 5),
+                $this->interaction('CommentAction', 7),
+            ));
+    }
+
+    private function interaction(string $type, int $count): Constraint
+    {
+        return $this->containsEqual([
+            '@type'                => 'InteractionCounter',
+            'interactionType'      => "https://schema.org/$type",
+            'userInteractionCount' => $count,
+        ]);
     }
 
     /**

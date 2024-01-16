@@ -133,6 +133,8 @@ class TopicController extends BaseController
                     $topic->firstPost->user?->name ?? $topic->firstPost->user_name,
                     $topic->firstPost->user ? route('profile', ['user_trashed' => $topic->firstPost->user?->id]) : null,
                     $topic->replies,
+                    $topic->score,
+                    $topic->views,
                     $topic->created_at,
                 ))),
             ]);

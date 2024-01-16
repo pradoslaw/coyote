@@ -12,6 +12,8 @@ class DiscussionForumPosting implements Thing
         private string  $authorUsername,
         private ?string $authorUrl,
         private int     $replies,
+        private int     $likes,
+        private int     $views,
         private Carbon  $datePublished)
     {
     }
@@ -28,8 +30,21 @@ class DiscussionForumPosting implements Thing
             'datePublished'        => $this->datePublished->toIso8601String(),
             'author'               => $this->author(),
             'interactionStatistic' => [
-                '@type'                => 'InteractionCounter',
-                'userInteractionCount' => $this->replies,
+                [
+                    '@type'                => 'InteractionCounter',
+                    'interactionType'      => 'https://schema.org/CommentAction',
+                    'userInteractionCount' => $this->replies,
+                ],
+                [
+                    '@type'                => 'InteractionCounter',
+                    'interactionType'      => 'https://schema.org/LikeAction',
+                    'userInteractionCount' => $this->likes,
+                ],
+                [
+                    '@type'                => 'InteractionCounter',
+                    'interactionType'      => 'https://schema.org/ViewAction',
+                    'userInteractionCount' => $this->views,
+                ],
             ],
         ];
     }

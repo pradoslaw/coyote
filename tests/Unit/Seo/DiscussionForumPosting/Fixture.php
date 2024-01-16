@@ -19,9 +19,9 @@ trait Fixture
         return $this->postingSchema($this->newTopicTitle($title));
     }
 
-    function schemaForumReplies(int $replies): array
+    function schemaForumStatistic(int $replies, int $likes, int $views): array
     {
-        return $this->postingSchema($this->newTopicReplies($replies));
+        return $this->postingSchema($this->newTopicStatistic($replies, $likes, $views));
     }
 
     function schemaTopicContent(string $content): array
