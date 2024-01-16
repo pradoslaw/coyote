@@ -5,13 +5,13 @@ namespace Coyote\Http\Controllers\Forum;
 use Coyote\Forum;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Resources\TagResource;
-use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
-use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
-use Coyote\Repositories\Contracts\TagRepositoryInterface as TagRepository;
-use Coyote\Repositories\Contracts\TopicRepositoryInterface as TopicRepository;
 use Coyote\Repositories\Criteria\EagerLoading;
 use Coyote\Repositories\Criteria\Forum\AccordingToUserOrder;
 use Coyote\Repositories\Criteria\Forum\OnlyThoseWithAccess;
+use Coyote\Repositories\Eloquent\ForumRepository;
+use Coyote\Repositories\Eloquent\PostRepository;
+use Coyote\Repositories\Eloquent\TagRepository;
+use Coyote\Repositories\Eloquent\TopicRepository;
 use Coyote\Services\Session\Renderer;
 use Coyote\Services\UrlBuilder;
 use Coyote\Topic;
@@ -20,41 +20,13 @@ use Illuminate\View\View;
 
 abstract class BaseController extends Controller
 {
-    /**
-     * @var ForumRepository
-     */
-    protected $forum;
-
-    /**
-     * @var TopicRepository
-     */
-    protected $topic;
-
-    /**
-     * @var PostRepository
-     */
-    protected $post;
-
-    /**
-     * @var TagRepository
-     */
-    protected $tag;
-
-    /**
-     * @param ForumRepository $forum
-     * @param TopicRepository $topic
-     * @param PostRepository $post
-     * @param TagRepository $tag
-     */
-    public function __construct(ForumRepository $forum, TopicRepository $topic, PostRepository $post, TagRepository $tag)
+    public function __construct(
+        protected ForumRepository $forum,
+        protected TopicRepository $topic,
+        protected PostRepository  $post,
+        protected TagRepository   $tag)
     {
         parent::__construct();
-
-        $this->forum = $forum;
-        $this->topic = $topic;
-        $this->post = $post;
-        $this->tag = $tag;
-
         $this->middleware(function (Request $request, $next) {
             $this->breadcrumb->push('Forum', route('forum.home'));
             $forum = $request->route('forum');
