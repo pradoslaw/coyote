@@ -3,11 +3,12 @@ namespace Tests\Unit\Seo;
 
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture;
+use Tests\Unit\Seo;
 use Tests\Unit\Seo\Fixture\Constraint\ArrayKey;
 
 class BreadcrumbListTest extends TestCase
 {
-    use Fixture\BreadcrumbList, BaseFixture\RelativeUri;
+    use Seo\BreadcrumbList\Fixture, BaseFixture\RelativeUri;
 
     /**
      * @test
