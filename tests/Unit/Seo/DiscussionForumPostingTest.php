@@ -39,4 +39,15 @@ class DiscussionForumPostingTest extends TestCase
             $schema['interactionStatistic'],
             $this->identicalTo(['@type' => 'InteractionCounter', 'userInteractionCount' => 7]));
     }
+
+    /**
+     * @test
+     */
+    public function author()
+    {
+        $schema = $this->schemaTopicByUser('mark');
+        $this->assertThat(
+            $schema['author'],
+            $this->identicalTo(['@type' => 'Person', 'name' => 'mark']));
+    }
 }

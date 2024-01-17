@@ -126,7 +126,7 @@ class TopicController extends BaseController
                 'schema'       => Schema::discussionForumPosting()
                     ->identifier($request->getUri())
                     ->headline($topic->title)
-                    ->author(Schema::person()->name($topic->firstPost->user?->name))
+                    ->author(Schema::person()->name($topic->firstPost->user_name))
                     ->interactionStatistic(Schema::interactionCounter()->userInteractionCount($topic->replies)),
             ]);
     }
