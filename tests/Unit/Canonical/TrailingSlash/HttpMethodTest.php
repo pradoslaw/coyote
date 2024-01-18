@@ -1,10 +1,10 @@
 <?php
-namespace Tests\Unit\Canonical;
+namespace Tests\Unit\Canonical\TrailingSlash;
 
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\Canonical;
 
-class TrailingSlashTest extends TestCase
+class HttpMethodTest extends TestCase
 {
     use Canonical\Fixture\Assertion;
 
