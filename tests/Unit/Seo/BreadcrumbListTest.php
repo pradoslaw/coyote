@@ -11,7 +11,7 @@ use Tests\Unit\Seo\Fixture\Constraint\ArrayKey;
  */
 class BreadcrumbListTest extends TestCase
 {
-    use Seo\BreadcrumbList\Fixture, BaseFixture\RelativeUri;
+    use Seo\BreadcrumbList\Fixture, BaseFixture\Server\RelativeUri;
 
     /**
      * @test

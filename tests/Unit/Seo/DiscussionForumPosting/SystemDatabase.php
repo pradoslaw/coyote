@@ -2,7 +2,7 @@
 namespace Tests\Unit\Seo\DiscussionForumPosting;
 
 use Illuminate\Support\Facades\DB;
-use Tests\Unit\BaseFixture\Laravel;
+use Tests\Unit\BaseFixture\Server\Laravel;
 
 trait SystemDatabase
 {

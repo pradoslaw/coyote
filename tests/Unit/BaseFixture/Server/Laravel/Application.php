@@ -1,8 +1,8 @@
 <?php
-namespace Tests\Unit\BaseFixture\Laravel;
+namespace Tests\Unit\BaseFixture\Server\Laravel;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\Unit\BaseFixture\Laravel;
+use Tests\Unit\BaseFixture\Server\Laravel;
 
 trait Application
 {

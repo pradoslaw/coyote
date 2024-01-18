@@ -4,7 +4,7 @@ namespace Tests\Unit\BaseFixture\Forum;
 use Coyote\Forum;
 use Coyote\Post;
 use Coyote\Topic;
-use Tests\Unit\BaseFixture\Laravel;
+use Tests\Unit\BaseFixture\Server\Laravel;
 
 trait Store
 {

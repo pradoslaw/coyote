@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Unit\OpenGraph\Fixture;
 
-use Tests\Unit\BaseFixture\Laravel;
+use Tests\Unit\BaseFixture\Server\Laravel;
 
 trait OpenGraph
 {

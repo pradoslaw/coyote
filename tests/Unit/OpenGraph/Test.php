@@ -6,7 +6,7 @@ use Tests\Unit\BaseFixture;
 
 class Test extends TestCase
 {
-    use BaseFixture\RelativeUri, Fixture\OpenGraph;
+    use BaseFixture\Server\RelativeUri, Fixture\OpenGraph;
 
     /**
      * @test

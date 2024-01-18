@@ -2,7 +2,7 @@
 namespace Tests\Unit\Topic;
 
 use PHPUnit\Framework\TestCase;
-use Tests\Unit\BaseFixture\Laravel;
+use Tests\Unit\BaseFixture\Server\Laravel;
 use Tests\Unit\Seo\Fixture\Constraint\ArrayKey;
 use Tests\Unit\Topic;
 use Tests\Unit\Topic\Fixture\SpaView;

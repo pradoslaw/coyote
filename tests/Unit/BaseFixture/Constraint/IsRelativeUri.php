@@ -2,7 +2,7 @@
 namespace Tests\Unit\BaseFixture\Constraint;
 
 use PHPUnit\Framework\Constraint\Constraint;
-use Tests\Unit\BaseFixture\Laravel;
+use Tests\Unit\BaseFixture\Server\Laravel;
 
 class IsRelativeUri extends Constraint
 {

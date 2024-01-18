@@ -15,7 +15,7 @@ class DiscussionForumPostingTest extends TestCase
 {
     use Seo\DiscussionForumPosting\Fixture,
         Seo\DiscussionForumPosting\SystemDatabase,
-        BaseFixture\RelativeUri;
+        BaseFixture\Server\RelativeUri;
 
     /**
      * @test
