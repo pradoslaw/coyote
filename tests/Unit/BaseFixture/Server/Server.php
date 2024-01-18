@@ -14,11 +14,11 @@ class Server
 
     public function get(string $uri): TestResponse
     {
-        return $this->laravel->get($this->baseUrl . $uri);
+        return $this->call('GET', $uri);
     }
 
-    public function post(string $uri): TestResponse
+    public function call(string $method, string $uri): TestResponse
     {
-        return $this->laravel->post($this->baseUrl . $uri);
+        return $this->laravel->call($method, $this->baseUrl . $uri);
     }
 }

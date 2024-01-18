@@ -42,4 +42,20 @@ class TrailingSlashTest extends TestCase
             '/Forum/Preview',
             status:308);
     }
+
+    /**
+     * @test
+     */
+    public function headCanonical()
+    {
+        $this->assertCanonical($this->head('/Forum'));
+    }
+
+    /**
+     * @test
+     */
+    public function headTrailingSlash()
+    {
+        $this->assertRedirect($this->head('/Forum/'), '/Forum', status:308);
+    }
 }

@@ -21,14 +21,19 @@ trait Assertion
         $this->assertStatusCode($status, $response->getStatusCode());
     }
 
+    function head(string $requestUri): TestResponse
+    {
+        return $this->server->call('HEAD', $requestUri);
+    }
+
     function get(string $requestUri): TestResponse
     {
-        return $this->server->get($requestUri);
+        return $this->server->call('GET', $requestUri);
     }
 
     function post(string $requestUri): TestResponse
     {
-        return $this->server->post($requestUri);
+        return $this->server->call('POST', $requestUri);
     }
 
     function assertRelativeUri(string $expected, string $actual): void
