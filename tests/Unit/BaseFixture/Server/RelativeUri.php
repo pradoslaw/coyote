@@ -2,10 +2,11 @@
 namespace Tests\Unit\BaseFixture\Server;
 
 use Tests\Unit\BaseFixture\Constraint\IsRelativeUri;
+use Tests\Unit\BaseFixture\Server;
 
 trait RelativeUri
 {
-    use Laravel\Application;
+    use Server\Http;
 
     function relativeUri(string $relativeUri): IsRelativeUri
     {

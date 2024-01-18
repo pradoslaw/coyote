@@ -1,11 +1,11 @@
 <?php
 namespace Tests\Unit\OpenGraph\Fixture;
 
-use Tests\Unit\BaseFixture\Server\Laravel;
+use Tests\Unit\BaseFixture\Server;
 
 trait OpenGraph
 {
-    use Laravel\Application;
+    use Server\Http;
 
     function ogProperty(string $property, string $uri): string
     {
@@ -15,6 +15,6 @@ trait OpenGraph
 
     function htmlView(string $uri): string
     {
-        return $this->laravel->get($uri)->assertSuccessful()->content();
+        return $this->server->get($uri)->assertSuccessful()->content();
     }
 }

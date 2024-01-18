@@ -2,14 +2,14 @@
 namespace Tests\Unit\Topic;
 
 use PHPUnit\Framework\TestCase;
-use Tests\Unit\BaseFixture\Server\Laravel;
+use Tests\Unit\BaseFixture\Server;
 use Tests\Unit\Seo\Fixture\Constraint\ArrayKey;
 use Tests\Unit\Topic;
 use Tests\Unit\Topic\Fixture\SpaView;
 
 class Test extends TestCase
 {
-    use Topic\Fixture\Models, Laravel\Application;
+    use Topic\Fixture\Models, Server\Http;
 
     public function test()
     {
@@ -26,7 +26,7 @@ class Test extends TestCase
 
     private function topicViewVariable(string $uri): array
     {
-        $view = new SpaView($this->laravel->get($uri)->assertSuccessful()->content());
+        $view = new SpaView($this->server->get($uri)->assertSuccessful()->content());
         $viewVariables = $view->jsVariables();
         return $viewVariables['topic'];
     }

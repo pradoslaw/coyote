@@ -1,12 +1,12 @@
 <?php
 namespace Tests\Unit\Seo\Fixture;
 
-use Tests\Unit\BaseFixture\Server\Laravel;
+use Tests\Unit\BaseFixture\Server;
 use Tests\Unit\BaseFixture\ViewFixture;
 
 trait Schema
 {
-    use Laravel\Application;
+    use Server\Http;
 
     function schema(string $uri, string $type): ?array
     {
@@ -15,7 +15,7 @@ trait Schema
 
     function viewHtml(string $uri): string
     {
-        return $this->laravel->get($uri)->assertSuccessful()->content();
+        return $this->server->get($uri)->assertSuccessful()->content();
     }
 
     function firstSchema(ViewFixture $viewFixture, string $type): ?array
