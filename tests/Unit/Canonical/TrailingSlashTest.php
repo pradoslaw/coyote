@@ -13,7 +13,7 @@ class TrailingSlashTest extends TestCase
      */
     public function canonical()
     {
-        $this->assertCanonical('/Forum');
+        $this->assertCanonical($this->get('/Forum'));
     }
 
     /**
@@ -21,6 +21,25 @@ class TrailingSlashTest extends TestCase
      */
     public function trailingSlash()
     {
-        $this->assertRedirect('/Forum/', '/Forum');
+        $this->assertRedirect($this->get('/Forum/'), '/Forum', status:301);
+    }
+
+    /**
+     * @test
+     */
+    public function postCanonical()
+    {
+        $this->assertCanonical($this->post('/Forum/Preview'));
+    }
+
+    /**
+     * @test
+     */
+    public function postTrailingSlash()
+    {
+        $this->assertRedirect(
+            $this->post('/Forum/Preview/'),
+            '/Forum/Preview',
+            status:308);
     }
 }

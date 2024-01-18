@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Unit\Canonical\Fixture;
 
+use Illuminate\Testing\TestResponse;
 use PHPUnit\Framework\Assert;
 use Tests\Unit\BaseFixture\Server;
 
@@ -8,16 +9,26 @@ trait Assertion
 {
     use Server\Http, Server\RelativeUri;
 
-    function assertCanonical(string $requestUri): void
+    function assertCanonical(TestResponse $response): void
     {
-        $this->server->get($requestUri)->assertStatus(200);
+        $response->assertStatus(200);
     }
 
-    function assertRedirect(string $requestUri, string $expectedRedirect): void
+    function assertRedirect(TestResponse $response, string $location, int $status): void
     {
-        $response = $this->server->get($requestUri)->assertRedirect();
-        $this->assertRelativeUri($expectedRedirect, $response->headers->get('Location'));
-        $this->assertStatusCode(301, $response->getStatusCode(), $requestUri);
+        $response->assertRedirect();
+        $this->assertRelativeUri($location, $response->headers->get('Location'));
+        $this->assertStatusCode($status, $response->getStatusCode());
+    }
+
+    function get(string $requestUri): TestResponse
+    {
+        return $this->server->get($requestUri);
+    }
+
+    function post(string $requestUri): TestResponse
+    {
+        return $this->server->post($requestUri);
     }
 
     function assertRelativeUri(string $expected, string $actual): void
@@ -26,9 +37,9 @@ trait Assertion
             "Failed asserting redirect to: $expected (instead redirected to $actual).");
     }
 
-    function assertStatusCode(int $expected, int $actual, string $uri): void
+    function assertStatusCode(int $expected, int $actual): void
     {
         Assert::assertSame($expected, $actual,
-            "Failed asserting redirect of '$uri' returns status code [$expected] (actually was [$actual]).");
+            "Failed asserting redirect returns status code [$expected] (actually was [$actual]).");
     }
 }

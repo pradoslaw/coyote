@@ -16,4 +16,9 @@ class Server
     {
         return $this->laravel->get($this->baseUrl . $uri);
     }
+
+    public function post(string $uri): TestResponse
+    {
+        return $this->laravel->post($this->baseUrl . $uri);
+    }
 }
