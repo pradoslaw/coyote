@@ -8,7 +8,7 @@ use Tests\Unit\BaseFixture\Server\Laravel;
 
 trait Store
 {
-    use Laravel\Application, Laravel\Transactional;
+    use Laravel\Transactional;
 
     function storeThread(Forum $forum, Topic $topic, ?Post $post = null): Topic
     {

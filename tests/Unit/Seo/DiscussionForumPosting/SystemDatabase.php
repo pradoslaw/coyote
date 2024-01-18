@@ -6,7 +6,7 @@ use Tests\Unit\BaseFixture\Server\Laravel;
 
 trait SystemDatabase
 {
-    use Laravel\Application, Laravel\Transactional;
+    use Laravel\Transactional;
 
     function systemDatabaseTimezone(string $timezone): void
     {
