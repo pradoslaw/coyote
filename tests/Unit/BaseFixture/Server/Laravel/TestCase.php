@@ -27,4 +27,9 @@ class TestCase extends \Illuminate\Foundation\Testing\TestCase
         $kernel->bootstrap();
         return $app;
     }
+
+    protected function prepareUrlForRequest($uri): string
+    {
+        return $uri;
+    }
 }
