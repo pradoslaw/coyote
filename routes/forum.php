@@ -1,6 +1,5 @@
 <?php
 
-use Coyote\Http\Middleware\RemoveTrailingSlash;
 use Illuminate\Routing\Router;
 
 // sciaganie zalacznika (stara regula routingu
@@ -9,9 +8,9 @@ $this->get('Forum/Download/{asset}', ['uses' => 'AssetsController@download', 'as
 /** @var $this Router */
 $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], function () {
     /** @var $this Router */
-    $this->get('/', ['uses' => 'HomeController@index', 'as' => 'home', 'middleware' => RemoveTrailingSlash::class]);
+    $this->get('/', ['uses' => 'HomeController@index', 'as' => 'home']);
 
-    $this->post('Preview', ['uses' => 'SubmitController@preview', 'as' => 'preview', 'middleware' => RemoveTrailingSlash::class]);
+    $this->post('Preview', ['uses' => 'SubmitController@preview', 'as' => 'preview']);
 
     $this->get('Tag/{tag_name}', ['uses' => 'HomeController@tag', 'as' => 'tag']);
     $this->post('Tag/Save', ['uses' => 'TagController@save', 'as' => 'tag.save']);

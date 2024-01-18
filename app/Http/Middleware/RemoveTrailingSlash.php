@@ -17,6 +17,9 @@ class RemoveTrailingSlash
 
     private function hasTrailingSlash(Request $request): bool
     {
+        if ($request->getRequestUri() === '/') {
+            return false;
+        }
         return \str_ends_with($request->getUri(), '/');
     }
 

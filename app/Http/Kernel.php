@@ -46,6 +46,7 @@ class Kernel extends Foundation\Http\Kernel
             Middleware\DefaultBindings::class,
             Middleware\FirewallBlacklist::class,
             Middleware\SurveilRoutes::class,
+            Middleware\RemoveTrailingSlash::class,
         ],
         'api' => [
             'throttle:60,1',
