@@ -2,13 +2,12 @@
 namespace Tests\Unit\BaseFixture\Constraint;
 
 use PHPUnit\Framework\Constraint\Constraint;
-use Tests\Unit\BaseFixture\Server\Laravel;
 
 class IsRelativeUri extends Constraint
 {
     public function __construct(
-        private string           $relativeUri,
-        private Laravel\TestCase $laravel)
+        private string $relativeUri,
+        private string $baseUrl)
     {
     }
 
@@ -19,11 +18,10 @@ class IsRelativeUri extends Constraint
 
     private function relativeUri(string $url): string
     {
-        $basePath = $this->laravel->app->make('config')->get('app.url');
-        if (\str_starts_with($url, $basePath)) {
-            return \subStr($url, \strLen($basePath));
+        if (\str_starts_with($url, $this->baseUrl)) {
+            return \subStr($url, \strLen($this->baseUrl));
         }
-        throw new \AssertionError("Failed to assert that uri $url starts with $basePath");
+        throw new \AssertionError("Failed to assert that uri $url starts with $this->baseUrl");
     }
 
     public function toString(): string
