@@ -1,10 +1,10 @@
 <?php
 
-/*
- * Modul "Praca"
- */
-/** @var $this \Illuminate\Routing\Router */
+use Illuminate\Routing\Router;
+
+/** @var $this Router */
 $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], function () {
+    /** @var $this Router */
     $this->get('/', ['uses' => 'HomeController@index', 'as' => 'home', 'middleware' => 'json']);
 
     $this->get('Submit/{job?}', ['uses' => 'SubmitController@index', 'as' => 'submit', 'middleware' => 'auth']);
@@ -24,9 +24,9 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
     $this->get('{job}-{slug}', ['uses' => 'OfferController@index', 'as' => 'offer', 'middleware' => 'page.hit']);
 
     $this->post('Subscribe/{job}', [
-        'uses' => 'SubscribeController@index',
-        'as' => 'subscribe',
-        'middleware' => 'auth'
+        'uses'       => 'SubscribeController@index',
+        'as'         => 'subscribe',
+        'middleware' => 'auth',
     ]);
 
     $this->post('Preferences', ['uses' => 'PreferencesController@index', 'as' => 'preferences']);
@@ -42,20 +42,20 @@ $this->group(['namespace' => 'Job', 'prefix' => 'Praca', 'as' => 'job.'], functi
     // -----------------------------
     $this->any('Payment/Status', [
         'uses' => 'PaymentController@paymentStatus',
-        'as' => 'payment.status'
+        'as'   => 'payment.status',
     ]);
 
     $this->get('Payment/{payment}', [
-        'uses' => 'PaymentController@index',
-        'as' => 'payment',
-        'middleware' => 'auth'
+        'uses'       => 'PaymentController@index',
+        'as'         => 'payment',
+        'middleware' => 'auth',
     ]);
 
     $this->post('Payment/{payment}', ['uses' => 'PaymentController@makePayment', 'middleware' => 'auth']);
 
     $this->get('Payment/{payment}/Success', [
         'uses' => 'PaymentController@success',
-        'as' => 'payment.success'
+        'as'   => 'payment.success',
     ]);
 
     $this->get('Coupon/Validate', ['uses' => 'CouponController@validateCode', 'as' => 'coupon']);
