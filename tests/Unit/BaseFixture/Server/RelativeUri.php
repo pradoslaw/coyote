@@ -10,7 +10,6 @@ trait RelativeUri
 
     function relativeUri(string $relativeUri): IsRelativeUri
     {
-        return new IsRelativeUri($relativeUri,
-            $this->laravel->app->make('config')->get('app.url'));
+        return new IsRelativeUri($relativeUri, $this->server->baseUrl);
     }
 }
