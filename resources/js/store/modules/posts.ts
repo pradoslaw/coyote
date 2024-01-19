@@ -1,5 +1,5 @@
 import {rollback} from '@/api';
-import {Paginator, Post, PostComment, PostLog, User} from "@/types/models";
+import {Forum, Paginator, Post, PostComment, PostLog, Topic, User} from "@/types/models";
 import axios from "axios";
 import Vue from "vue";
 
@@ -126,6 +126,13 @@ const mutations = {
   }
 }
 
+function savePostUrl(forum: Forum, topic: Topic, post: Post) {
+  if (post.id) {
+    return `/Forum/${forum.slug}/Submit/${topic?.id || ''}/${post.id}`;
+  }
+  return `/Forum/${forum.slug}/Submit/${topic?.id || ''}`;
+}
+
 const actions = {
   vote({commit, dispatch}, post: Post) {
     commit('vote', post);
@@ -160,10 +167,8 @@ const actions = {
       tags: topic.tags!.map(o => o['name']),
       poll: rootState.poll.poll
     };
-
-    return axios.post(`/Forum/${forum.slug}/Submit/${topic?.id || ''}/${post?.id || ''}`, payload).then(result => {
+    return axios.post(savePostUrl(forum, topic, post), payload).then(result => {
       commit(getters.exists(result.data.id) ? 'update' : 'add', result.data);
-
       return result;
     });
   },
