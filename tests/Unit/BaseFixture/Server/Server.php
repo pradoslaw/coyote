@@ -19,6 +19,8 @@ class Server
 
     public function call(string $method, string $uri): TestResponse
     {
-        return $this->laravel->call($method, $this->baseUrl . $uri);
+        return $this->laravel->call($method, $this->baseUrl . $uri, server:[
+            'SCRIPT_FILENAME' => 'index.php',
+        ]);
     }
 }
