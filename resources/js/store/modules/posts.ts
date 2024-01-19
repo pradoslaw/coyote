@@ -1,7 +1,7 @@
+import {rollback} from '@/api';
+import {Paginator, Post, PostComment, PostLog, User} from "@/types/models";
 import axios from "axios";
-import { Post, PostComment, Paginator, User, PostLog } from "@/types/models";
 import Vue from "vue";
-import { rollback } from '@/api';
 
 type ParentChild = { post: Post, comment: PostComment };
 
@@ -34,9 +34,9 @@ const mutations = {
 
   update(state, post: Post) {
     // fields to update
-    const { text, html, assets, editor, updated_at, edit_count, score } = post;
+    const {text, html, assets, editor, updated_at, edit_count, score} = post;
 
-    Vue.set(state.data, post.id, {...state.data[post.id], ...{ text, html, assets, editor, updated_at, edit_count, score }})
+    Vue.set(state.data, post.id, {...state.data[post.id], ...{text, html, assets, editor, updated_at, edit_count, score}})
   },
 
   delete(state, post: Post) {
@@ -48,7 +48,7 @@ const mutations = {
     Vue.set(editable, 'is_editing', !editable.is_editing);
   },
 
-  addComment(state, { post, comment }: ParentChild) {
+  addComment(state, {post, comment}: ParentChild) {
     if (Array.isArray(post.comments)) {
       Vue.set(post, "comments", {});
     }
@@ -58,8 +58,8 @@ const mutations = {
     post.comments_count! += 1;
   },
 
-  updateComment(state, { post, comment}: ParentChild) {
-    let { text, html } = comment; // update only text and html version
+  updateComment(state, {post, comment}: ParentChild) {
+    let {text, html} = comment; // update only text and html version
 
     Vue.set(post.comments, comment.id, {...post.comments[comment.id], ...{text, html}});
   },
@@ -71,7 +71,7 @@ const mutations = {
     post.comments_count! -= 1;
   },
 
-  setComments(state, { post, comments }) {
+  setComments(state, {post, comments}) {
     post.comments = comments;
     post.comments_count = comments.length;
   },
@@ -87,8 +87,7 @@ const mutations = {
     if (post.is_voted) {
       post.is_voted = false;
       post.score -= 1;
-    }
-    else {
+    } else {
       post.is_voted = true;
       post.score += 1;
     }
@@ -97,8 +96,7 @@ const mutations = {
   accept(state, post: Post) {
     if (post.is_accepted) {
       post.is_accepted = false;
-    }
-    else {
+    } else {
       let values: Post[] = Object.values(state.data);
 
       // user choose different option
@@ -120,37 +118,37 @@ const mutations = {
     post.is_subscribed = false;
   },
 
-  updateVoters(state, { post, users, user }: { post: Post, users: string[], user?: User }) {
+  updateVoters(state, {post, users, user}: { post: Post, users: string[], user?: User }) {
     Vue.set(post, 'voters', users);
 
     post.score = users.length;
-    post.is_voted = users.includes(<string> user?.name);
+    post.is_voted = users.includes(<string>user?.name);
   }
 }
 
 const actions = {
-  vote({ commit, dispatch }, post: Post) {
+  vote({commit, dispatch}, post: Post) {
     commit('vote', post);
 
     return axios.post(`/Forum/Post/Vote/${post.id}`)
-      .then(response => dispatch('updateVoters', { post, users: response.data.users }))
+      .then(response => dispatch('updateVoters', {post, users: response.data.users}))
       .catch(() => commit('vote', post));
   },
 
-  accept({ commit, getters }, post: Post) {
+  accept({commit, getters}, post: Post) {
     commit('accept', post);
 
     return axios.post(`/Forum/Post/Accept/${post.id}`).catch(() => commit('accept', post));
   },
 
-  subscribe({ commit }, post: Post) {
+  subscribe({commit}, post: Post) {
     const subscribe = () => commit(post.is_subscribed ? 'unsubscribe' : 'subscribe', post);
     subscribe();
 
     return axios.post(`/Forum/Post/Subscribe/${post.id}`).catch(subscribe);
   },
 
-  save({ commit, state, getters, rootState, rootGetters }, post: Post) {
+  save({commit, state, getters, rootState, rootGetters}, post: Post) {
     const topic = rootGetters['topics/topic'];
     const forum = rootGetters['forums/forum'];
 
@@ -170,24 +168,24 @@ const actions = {
     });
   },
 
-  saveComment({ state, commit, getters }, comment: PostComment) {
+  saveComment({state, commit, getters}, comment: PostComment) {
     return axios.post(`/Forum/Comment/${comment.id || ''}`, comment).then(result => {
       const post = state.data[result.data.data.post_id!];
 
       commit(result.data.is_subscribed ? 'subscribe' : 'unsubscribe', post);
-      commit(post.comments[result.data.data.id!] ? 'updateComment' : 'addComment', { post, comment: result.data.data });
+      commit(post.comments[result.data.data.id!] ? 'updateComment' : 'addComment', {post, comment: result.data.data});
     });
   },
 
-  delete({ commit }, { post, reasonId }: { post: Post, reasonId: number | null }) {
-    return axios.delete(`/Forum/Post/Delete/${post.id}`, { data: { reason: reasonId } }).then(() => commit('delete', post));
+  delete({commit}, {post, reasonId}: { post: Post, reasonId: number | null }) {
+    return axios.delete(`/Forum/Post/Delete/${post.id}`, {data: {reason: reasonId}}).then(() => commit('delete', post));
   },
 
-  deleteComment({ commit }, comment: PostComment) {
+  deleteComment({commit}, comment: PostComment) {
     return axios.delete(`/Forum/Comment/Delete/${comment.id}`).then(() => commit('deleteComment', comment));
   },
 
-  migrateComment({ commit }, comment: PostComment) {
+  migrateComment({commit}, comment: PostComment) {
     return axios.post(`/Forum/Comment/Migrate/${comment.id}`).then(response => {
       commit('deleteComment', comment);
 
@@ -195,50 +193,50 @@ const actions = {
     });
   },
 
-  restore({ commit }, post: Post) {
+  restore({commit}, post: Post) {
     return axios.post(`/Forum/Post/Restore/${post.id}`).then(() => commit('restore', post));
   },
 
-  merge({ commit, getters }, post: Post) {
+  merge({commit, getters}, post: Post) {
     return axios.post(`/Forum/Post/Merge/${post.id}`).then(result => {
       commit('delete', post);
       commit('update', result.data);
     });
   },
 
-  rollback({ commit }, log: PostLog) {
+  rollback({commit}, log: PostLog) {
     return rollback(log);
   },
 
-  loadComments({ commit }, post: Post) {
+  loadComments({commit}, post: Post) {
     axios.get(`/Forum/Comment/Show/${post.id}`).then(result => {
-      commit('setComments', { post, comments: result.data });
+      commit('setComments', {post, comments: result.data});
     })
   },
 
-  changePage({ commit, rootGetters }, page: number) {
+  changePage({commit, rootGetters}, page: number) {
     const topic = rootGetters['topics/topic'];
     const forum = rootGetters['forums/forum'];
 
-    return axios.get(`/Forum/${forum.slug}/${topic.id}-${topic.slug}`, { params: { page }}).then(result => {
+    return axios.get(`/Forum/${forum.slug}/${topic.id}-${topic.slug}`, {params: {page}}).then(result => {
       commit('init', result.data);
 
       return result;
     });
   },
 
-  loadVoters({ dispatch }, post: Post) {
+  loadVoters({dispatch}, post: Post) {
     if (!post.score) {
       return;
     }
 
     return axios.get(`/Forum/Post/Voters/${post.id}`).then(response => {
-      dispatch('updateVoters', { post, users: response.data.users });
+      dispatch('updateVoters', {post, users: response.data.users});
     });
   },
 
-  updateVoters({ commit, rootState }, { post, users }: { post: Post, users: string[] }) {
-    commit('updateVoters', { post, users, user: rootState.user.user });
+  updateVoters({commit, rootState}, {post, users}: { post: Post, users: string[] }) {
+    commit('updateVoters', {post, users, user: rootState.user.user});
   }
 }
 
