@@ -5,7 +5,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation;
 
-class RemoveTrailingSlash
+class RedirectToCanonicalUrl
 {
     public function handle(Request $request, callable $next): HttpFoundation\Response
     {
