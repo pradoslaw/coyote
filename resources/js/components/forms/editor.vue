@@ -4,10 +4,10 @@
 </template>
 
 <script lang="ts">
+import {CodeBlockLanguages, Editor4Play, EditorState, Emojis, EmojiUrl} from "@riddled/4play";
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import {Emit, Prop, Ref, Watch} from "vue-property-decorator";
-import {CodeBlockLanguages, Editor4Play, EditorState, Emojis, EmojiUrl} from "@riddled/4play";
 
 @Component
 export default class VueEditor extends Vue {
@@ -35,10 +35,13 @@ export default class VueEditor extends Vue {
       this.value,
       {onChange: this.input, onSubmit: this.submit, onCancel: this.cancel, onStateChange: this.state},
       username => this.autocompleteSource(username),
-      'Zwykły tekst',
+      'Brak kolorowania',
       this.codeBlockLanguages(),
       this.emojiUrl,
       this.emojis,
+      'Emotikony',
+      'Użytkownicy',
+      'Kolorowanie składni',
     );
   }
 
