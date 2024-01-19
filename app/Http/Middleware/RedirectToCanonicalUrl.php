@@ -9,7 +9,7 @@ class RedirectToCanonicalUrl
 {
     public function handle(Request $request, callable $next): HttpFoundation\Response
     {
-        if ($this->hasTrailingSlash($request)) {
+        if ($this->hasTrailingSlash($request) || $this->hasScriptFile($request)) {
             return $this->redirectToCanonical($request);
         }
         return $next($request);
@@ -21,6 +21,11 @@ class RedirectToCanonicalUrl
             return false;
         }
         return \str_ends_with($request->getUri(), '/');
+    }
+
+    private function hasScriptFile(Request $request): bool
+    {
+        return $request->getBaseUrl() === '/index.php';
     }
 
     private function redirectToCanonical(Request $request): RedirectResponse
@@ -41,7 +46,10 @@ class RedirectToCanonicalUrl
         if ($uri === '/') {
             return $uri;
         }
-        return \subStr($uri, 0, -1);
+        if (\str_ends_with($uri, '/')) {
+            return \subStr($uri, 0, -1);
+        }
+        return $uri;
     }
 
     private function statusCode(Request $request): int

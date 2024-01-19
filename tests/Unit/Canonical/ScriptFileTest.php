@@ -23,4 +23,20 @@ class ScriptFileTest extends TestCase
     {
         $this->assertRedirectGet('/index.php/', '/');
     }
+
+    /**
+     * @test
+     */
+    public function forum()
+    {
+        $this->assertRedirectGet('/index.php/Forum', '/Forum');
+    }
+
+    /**
+     * @test
+     */
+    public function forumTrailingSlash()
+    {
+        $this->assertRedirectGet('/index.php/Forum/', '/Forum');
+    }
 }
