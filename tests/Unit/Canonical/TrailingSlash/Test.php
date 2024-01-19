@@ -13,7 +13,7 @@ class Test extends TestCase
      */
     public function forumCategories()
     {
-        $this->assertRedirect($this->get('/Forum/Categories/'), '/Forum/Categories', status:301);
+        $this->assertRedirectGet('/Forum/Categories/', '/Forum/Categories');
     }
 
     /**
@@ -21,7 +21,7 @@ class Test extends TestCase
      */
     public function job()
     {
-        $this->assertRedirect($this->get('/Praca/'), '/Praca', status:301);
+        $this->assertRedirectGet('/Praca/', '/Praca');
     }
 
     /**
@@ -29,7 +29,7 @@ class Test extends TestCase
      */
     public function microblog()
     {
-        $this->assertRedirect($this->get('/Mikroblogi/'), '/Mikroblogi', status:301);
+        $this->assertRedirectGet('/Mikroblogi/', '/Mikroblogi');
     }
 
     /**
@@ -37,6 +37,6 @@ class Test extends TestCase
      */
     public function homepage()
     {
-        $this->assertCanonical($this->get('/'));
+        $this->assertCanonicalGet('/');
     }
 }

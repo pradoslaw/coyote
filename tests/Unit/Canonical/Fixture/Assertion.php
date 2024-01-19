@@ -9,6 +9,16 @@ trait Assertion
 {
     use Server\Http, Server\RelativeUri;
 
+    function assertRedirectGet(string $requestUri, string $expectedRedirect): void
+    {
+        $this->assertRedirect($this->get($requestUri), $expectedRedirect, status:301);
+    }
+
+    function assertCanonicalGet(string $requestUri): void
+    {
+        $this->assertCanonical($this->get($requestUri));
+    }
+
     function assertCanonical(TestResponse $response): void
     {
         $response->assertStatus(200);
