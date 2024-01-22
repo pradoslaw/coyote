@@ -2,7 +2,7 @@
   <div class="markdown-help">
     <div class="card card-info">
       <div class="card-header">
-        Pomoc <span class="card-version">1.16.12</span>
+        Pomoc <span class="card-version">1.17.8</span>
       </div>
       <div class="card-body">
         <div class="row">

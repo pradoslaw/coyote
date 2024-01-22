@@ -42,6 +42,8 @@ export default class VueEditor extends Vue {
       'Emotikony',
       'Użytkownicy',
       'Kolorowanie składni',
+      '',
+      {}
     );
   }
 
