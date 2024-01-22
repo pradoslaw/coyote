@@ -42,8 +42,32 @@ export default class VueEditor extends Vue {
       'Emotikony',
       'Użytkownicy',
       'Kolorowanie składni',
-      '',
-      {}
+      'Krótkie emotikony',
+      {
+        ':)': [':smile:', ':twinkle:', ':slight_smile:', ':upside_down_face:', ':innocent:'],
+        ';)': [':wink:', ':smile_tear:'],
+        ':D': [':laugh:', ':sweat_smile:', ':lol:', ':joy:', ':rotfl:'],
+        ':>': [':happy:'],
+        ':P': [':tongue:', ':tongue_closed_eyes:'],
+        ';P': [':tongue_wink:', ':zany_face:'],
+        ':*': [':kissing:', ':kissing_heart:', ':kissing_closed_eyes:', ':kissing_smiling:'],
+        ';*': [':kissing_heart:'],
+        ':(': [':frown:', ':unhappy:', ':sad:', ':upset:', ':worried:', ':nervous:', ':scared:', ':cold_sweat:'],
+        ';(': [':cry:', ':sob:'],
+        ':c': [':disappointed:'],
+        ':o': [':surprised:', ':open_mouth:', ':peeking_eye:', ':astonished:', ':head_explode:', ':scream:', ':dizzy:'],
+        ':x': [':zipper_mouth:', ':no_mouth:', ':shush:'],
+        ':<': [':weary:', ':tired:', ':angry:', ':rage:', ':symbols_on_mouth:'],
+        ':/': [':confused:', ':diagonal_mouth:', ':grimacing:'],
+        ':|': [':neutral:', ':raised_eyebrow:', ':monocle:', ':expressionless:', ':dotted_face:'],
+        ':]': [':smirk:', ':sunglasses:', ':yum:'],
+        '<3': [
+          ':heart:',
+          ':heart_smile:', ':heart_eyes:', ':heartpulse:', ':heart_on_fire:', ':heart_hands:',
+          ':black_heart:', ':brown_heart:', ':orange_heart:', ':green_heart:', ':blue_heart:', ':purple_heart:', ':white_heart:',
+        ],
+        '^^': [':relaxed:', ':blush:'],
+      }
     );
   }
 
