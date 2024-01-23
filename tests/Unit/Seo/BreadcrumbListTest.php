@@ -3,8 +3,8 @@ namespace Tests\Unit\Seo;
 
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture;
+use Tests\Unit\BaseFixture\Constraint\ArrayKey;
 use Tests\Unit\Seo;
-use Tests\Unit\Seo\Fixture\Constraint\ArrayKey;
 
 /**
  * @see https://developers.google.com/search/docs/appearance/structured-data/breadcrumb

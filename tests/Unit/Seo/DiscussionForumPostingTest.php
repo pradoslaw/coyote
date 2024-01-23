@@ -4,8 +4,8 @@ namespace Tests\Unit\Seo;
 use PHPUnit\Framework\Constraint\Constraint;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture;
+use Tests\Unit\BaseFixture\Constraint\ArrayKey;
 use Tests\Unit\Seo;
-use Tests\Unit\Seo\Fixture\Constraint\ArrayKey;
 use TRegx\PhpUnit\DataProviders\DataProvider;
 
 /**

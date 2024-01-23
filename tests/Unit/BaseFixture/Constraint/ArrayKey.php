@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Unit\Seo\Fixture\Constraint;
+namespace Tests\Unit\BaseFixture\Constraint;
 
 use PHPUnit\Framework\Constraint\ArrayHasKey;
 use PHPUnit\Framework\Constraint\Constraint;
