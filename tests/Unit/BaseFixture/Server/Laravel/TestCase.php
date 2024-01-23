@@ -3,9 +3,12 @@ namespace Tests\Unit\BaseFixture\Server\Laravel;
 
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Application;
+use Symfony\Component\HttpFoundation;
 
 class TestCase extends \Illuminate\Foundation\Testing\TestCase
 {
+    use OverridesSymfonyRequest;
+
     /** @var Application */
     public $app;
 
@@ -31,5 +34,13 @@ class TestCase extends \Illuminate\Foundation\Testing\TestCase
     protected function prepareUrlForRequest($uri): string
     {
         return $uri;
+    }
+
+    protected function mapSymfonyRequest(string $uri, HttpFoundation\Request $request): HttpFoundation\Request
+    {
+        if (\str_ends_with($uri, '?')) {
+            $request->server->set('REQUEST_URI', $request->server->get('REQUEST_URI') . '?');
+        }
+        return $request;
     }
 }
