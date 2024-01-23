@@ -5,11 +5,13 @@ use Illuminate\Testing\TestResponse;
 
 class Server
 {
+    private string $hostname;
     public string $baseUrl;
 
     public function __construct(private Laravel\TestCase $laravel)
     {
-        $this->baseUrl = 'http://4programmers.local';
+        $this->hostname = '4programmers.local';
+        $this->baseUrl = "http://$this->hostname";
     }
 
     public function get(string $uri): TestResponse
@@ -19,8 +21,10 @@ class Server
 
     public function call(string $method, string $uri): TestResponse
     {
-        return $this->laravel->call($method, $this->baseUrl . $uri, server:[
-            'SCRIPT_FILENAME' => 'index.php',
-        ]);
+        return $this->laravel->call(
+            method:$method,
+            uri:new Url($this->hostname, $uri),
+            server:['SCRIPT_FILENAME' => 'index.php'],
+        );
     }
 }
