@@ -1,14 +1,15 @@
 <?php
-namespace Tests\Unit\Seo;
+namespace Tests\Unit\Seo\Organization;
 
 use PHPUnit\Framework\TestCase;
+use Tests\Unit\Seo;
 
 /**
  * @see https://developers.google.com/search/docs/appearance/structured-data/organization
  */
-class OrganizationTest extends TestCase
+class Test extends TestCase
 {
-    use Fixture\Schema;
+    use Seo\Fixture\Schema;
 
     /**
      * @test

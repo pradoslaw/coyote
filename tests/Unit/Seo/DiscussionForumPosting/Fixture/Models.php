@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Unit\Seo\DiscussionForumPosting;
+namespace Tests\Unit\Seo\DiscussionForumPosting\Fixture;
 
 use Carbon\Carbon;
 use Coyote\Forum;

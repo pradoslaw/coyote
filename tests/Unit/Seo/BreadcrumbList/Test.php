@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Unit\Seo;
+namespace Tests\Unit\Seo\BreadcrumbList;
 
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture;
@@ -9,9 +9,9 @@ use Tests\Unit\Seo;
 /**
  * @see https://developers.google.com/search/docs/appearance/structured-data/breadcrumb
  */
-class BreadcrumbListTest extends TestCase
+class Test extends TestCase
 {
-    use Seo\BreadcrumbList\Fixture, BaseFixture\Server\RelativeUri;
+    use Seo\BreadcrumbList\Fixture\Schema, BaseFixture\Server\RelativeUri;
 
     /**
      * @test

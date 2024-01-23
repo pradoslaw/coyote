@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Unit\Seo\BreadcrumbList;
+namespace Tests\Unit\Seo\BreadcrumbList\Fixture;
 
 use Coyote\Forum;
 use Coyote\Topic;
