@@ -1,8 +1,5 @@
 {% extends 'job.base' %}
-{% block title %}
-  Aplikuj na stanowisko "{{ job.title }}"
-  {{ parent() }}
-{% endblock %}
+{% block title %}Aplikuj na stanowisko {{ job.title }}{{ parent() }}{% endblock %}
 
 {% import 'components.widgets' as widgets %}
 

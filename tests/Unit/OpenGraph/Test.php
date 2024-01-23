@@ -37,4 +37,14 @@ class Test extends TestCase
             $this->ogProperty('og:locale', uri:'/'),
             $this->identicalTo('pl_PL'));
     }
+
+    /**
+     * @test
+     */
+    public function title()
+    {
+        $this->assertThat(
+            $this->ogProperty('og:title', uri:'/'),
+            $this->identicalTo('Programowanie: serwis dla programistów'));
+    }
 }
