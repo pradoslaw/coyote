@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Unit\Seo\Fixture;
+namespace Tests\Unit\BaseFixture;
 
 class Script
 {
