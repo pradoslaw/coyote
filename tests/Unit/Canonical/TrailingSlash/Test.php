@@ -39,4 +39,12 @@ class Test extends TestCase
     {
         $this->assertCanonicalGet('/');
     }
+
+    /**
+     * @test
+     */
+    public function queryParam()
+    {
+        $this->assertRedirectGet('/Forum/?query=param', '/Forum?query=param');
+    }
 }

@@ -20,7 +20,7 @@ class RedirectToCanonicalUrl
         if ($request->getRequestUri() === '/') {
             return false;
         }
-        return \str_ends_with($request->getUri(), '/');
+        return \str_ends_with($request->getPathInfo(), '/');
     }
 
     private function hasScriptFile(Request $request): bool
@@ -36,6 +36,12 @@ class RedirectToCanonicalUrl
     }
 
     private function canonicalUrl(Request $request): string
+    {
+        return $this->canonicalBasePath($request) .
+            \rTrim('?' . $request->getQueryString(), '?');
+    }
+
+    private function canonicalBasePath(Request $request): string
     {
         return $request->getSchemeAndHttpHost() . $this->canonicalUri($request);
     }
