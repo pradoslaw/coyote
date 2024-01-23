@@ -25,7 +25,7 @@ class ApplicationController extends Controller
 
         $this->breadcrumb->pushMany([
             'Praca'                          => route('job.home'),
-            $job->title                      => UrlBuilder::job($job),
+            $job->title                      => UrlBuilder::job($job, true),
             'Aplikuj na to stanowisko pracy' => route('job.application', ['job' => $job]),
         ]);
 
