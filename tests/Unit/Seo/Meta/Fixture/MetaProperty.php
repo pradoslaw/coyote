@@ -2,7 +2,7 @@
 namespace Tests\Unit\Seo\Meta\Fixture;
 
 use Tests\Unit\BaseFixture\Server;
-use Tests\Unit\BaseFixture\View\ViewFixture;
+use Tests\Unit\BaseFixture\View\HtmlFixture;
 
 trait MetaProperty
 {
@@ -10,16 +10,15 @@ trait MetaProperty
 
     function metaProperty(string $property, string $uri): string
     {
-        $view = new ViewFixture($this->htmlView($uri));
-        return $this->attributeByName($view, $property);
+        $html = new HtmlFixture($this->htmlView($uri));
+        return $this->attributeByName($html, $property);
     }
 
-    function attributeByName(ViewFixture $view, string $name): mixed
+    function attributeByName(HtmlFixture $html, string $name): mixed
     {
-        $metaDeclarations = $view->metaDeclarations();
-        foreach ($metaDeclarations as $element) {
-            if ($element['name'] === $name) {
-                return $element['content'];
+        foreach ($html->metaDeclarations() as $meta) {
+            if ($meta['name'] === $name) {
+                return $meta['content'];
             }
         }
         throw new \Exception("Failed to recognize in view meta name: $name");

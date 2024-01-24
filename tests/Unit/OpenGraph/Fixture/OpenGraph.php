@@ -2,7 +2,7 @@
 namespace Tests\Unit\OpenGraph\Fixture;
 
 use Tests\Unit\BaseFixture\Server;
-use Tests\Unit\BaseFixture\View\ViewFixture;
+use Tests\Unit\BaseFixture\View\HtmlFixture;
 
 trait OpenGraph
 {
@@ -10,15 +10,15 @@ trait OpenGraph
 
     function metaProperty(string $property, string $uri): string
     {
-        $view = new ViewFixture($this->htmlView($uri));
-        return $this->attributeByProperty($view, $property);
+        $html = new HtmlFixture($this->htmlView($uri));
+        return $this->attributeByProperty($html, $property);
     }
 
-    function attributeByProperty(ViewFixture $view, string $property): mixed
+    function attributeByProperty(HtmlFixture $html, string $property): mixed
     {
-        foreach ($view->metaDeclarations() as $element) {
-            if ($element['property'] === $property) {
-                return $element['content'];
+        foreach ($html->metaDeclarations() as $meta) {
+            if ($meta['property'] === $property) {
+                return $meta['content'];
             }
         }
         throw new \Exception("Failed to recognize in view meta property: $property");
