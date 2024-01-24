@@ -18,7 +18,7 @@ class SeoServiceProvider extends ServiceProvider
             $view->with([
                 'schema_organization' => TwigLiteral::fromHtml(new Schema(new Schema\Organization())),
                 'meta_robots'         => $this->metaRobots(),
-                'meta_canonical'      => 'http://4programmers.local/',
+                'meta_canonical'      => $this->metaCanonical(),
             ]);
         });
     }
@@ -37,5 +37,12 @@ class SeoServiceProvider extends ServiceProvider
             return 'noindex,nofollow';
         }
         return 'index,follow';
+    }
+
+    function metaCanonical(): string
+    {
+        /** @var Request $request */
+        $request = $this->app['request'];
+        return 'http://' . $request->getHost() . $request->getRequestUri();
     }
 }
