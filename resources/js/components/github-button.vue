@@ -1,9 +1,9 @@
 <template>
   <div class="github-button">
     <a :class="['repository', this.size, this.theme]"
-       :href="repository"
-       :title="title"
-       rel="noopener"
+       href="https://github.com/pradoslaw/coyote"
+       title="Odwiedź repozytorium Coyote"
+       rel="noopener,nofollow"
        target="_blank">
       <svg class="icon" viewBox="0 0 16 16" width="16" height="16">
         <path
@@ -13,7 +13,7 @@
     </a>
     <a :class="['stars', this.size, this.theme]"
        href="https://github.com/pradoslaw/coyote/stargazers"
-       rel="noopener" target="_blank">
+       rel="noopener,nofollow" target="_blank">
       {{ stars || '?' }}
     </a>
   </div>
@@ -25,11 +25,7 @@ function oneOf(...values) {
 }
 
 export default {
-  data: () => ({
-    title: 'Odwiedź repozytorium Coyote',
-    repository: 'https://github.com/pradoslaw/coyote',
-    stars: null
-  }),
+  data: () => ({stars: null}),
   props: {
     size: {require: true, validator: oneOf('large', 'small')},
     theme: {require: true, validator: oneOf('light', 'dark')},
@@ -45,7 +41,7 @@ export default {
           this.stars = response.stargazers_count;
         });
     }
-  }
+  },
 };
 </script>
 
