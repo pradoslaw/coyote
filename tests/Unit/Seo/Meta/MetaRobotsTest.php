@@ -6,15 +6,14 @@ use Tests\Unit\Seo;
 
 class MetaRobotsTest extends TestCase
 {
-    use Seo\Meta\Fixture\MetaProperty;
+    use Seo\Meta\Fixture\Assertion;
 
     /**
      * @test
      */
     public function homepage()
     {
-        $this->assertSame('index,follow',
-            $this->metaProperty('robots', uri:'/'));
+        $this->assertIndexable('/');
     }
 
     /**
@@ -22,7 +21,6 @@ class MetaRobotsTest extends TestCase
      */
     public function userTags()
     {
-        $this->assertSame('noindex,nofollow',
-            $this->metaProperty('robots', uri:'/Forum/Interesting'));
+        $this->assertNoIndexable('/Forum/Interesting');
     }
 }
