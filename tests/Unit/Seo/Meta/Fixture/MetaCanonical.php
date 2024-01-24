@@ -17,6 +17,11 @@ trait MetaCanonical
             $this->relativeUri($uri));
     }
 
+    function assertSelfCanonicalAbsolute(string $url): void
+    {
+        Assert::assertSame($url, $this->metaCanonical($url));
+    }
+
     function metaCanonical(string $uri): string
     {
         $dom = new ViewDom($this->htmlView($uri));

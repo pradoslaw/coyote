@@ -23,4 +23,12 @@ class MetaCanonicalTest extends TestCase
     {
         $this->assertSelfCanonical('/Forum');
     }
+
+    /**
+     * @test
+     */
+    public function https()
+    {
+        $this->assertSelfCanonicalAbsolute('https://4programmers.local/');
+    }
 }
