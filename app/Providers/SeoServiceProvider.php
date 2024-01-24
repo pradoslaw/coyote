@@ -18,6 +18,7 @@ class SeoServiceProvider extends ServiceProvider
             $view->with([
                 'schema_organization' => TwigLiteral::fromHtml(new Schema(new Schema\Organization())),
                 'meta_robots'         => $this->metaRobots(),
+                'meta_canonical'      => 'http://4programmers.local/',
             ]);
         });
     }

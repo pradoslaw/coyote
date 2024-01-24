@@ -9,20 +9,23 @@ use Tests\Unit\Seo;
 class MetaCanonicalTest extends TestCase
 {
     use Server\Http;
+    use Server\RelativeUri;
 
     /**
      * @test
      */
     public function canonical()
     {
-        $this->assertMetaCanonical('/');
+        $this->assertThat(
+            $this->metaCanonical('/'),
+            $this->relativeUri('/'));
     }
 
-    function assertMetaCanonical(string $uri): void
+    function metaCanonical(string $uri): string
     {
         $dom = new ViewDom($this->htmlView($uri));
         foreach ($dom->elements(xPath:"/html/head/link[@rel='canonical']") as $canonical) {
-            return;
+            return $canonical->getAttribute('href');
         }
         throw new \AssertionError('Failed finding <link rel="canonical"> tag.');
     }
