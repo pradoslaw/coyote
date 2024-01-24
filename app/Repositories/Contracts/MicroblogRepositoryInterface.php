@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent;
 
 interface MicroblogRepositoryInterface extends RepositoryInterface
 {
-    public function popular(int $pageSize, int $pageNumber): array;
+    public function popular(int $pageSize, int $pageNumber): Eloquent\Collection;
 
     /**
      * @param int $id
