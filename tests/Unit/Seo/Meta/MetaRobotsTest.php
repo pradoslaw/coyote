@@ -23,4 +23,12 @@ class MetaRobotsTest extends TestCase
     {
         $this->assertNoIndexable('/Forum/Interesting');
     }
+
+    /**
+     * @test
+     */
+    public function category()
+    {
+        $this->assertIndexable('/Forum');
+    }
 }

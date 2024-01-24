@@ -23,9 +23,9 @@ class SeoServiceProvider extends ServiceProvider
 
     private function metaRobots(): string
     {
-        if ($this->app['request']->getRequestUri() === '/') {
-            return 'index,follow';
+        if ($this->app['request']->getRequestUri() === '/Forum/Interesting') {
+            return 'noindex,nofollow';
         }
-        return 'noindex,nofollow';
+        return 'index,follow';
     }
 }
