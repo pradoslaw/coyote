@@ -13,8 +13,7 @@ class Test extends TestCase
      */
     public function robots()
     {
-        $this->assertSame(
-            'index, follow',
+        $this->assertSame('index,follow',
             $this->metaProperty('robots', uri:'/'));
     }
 }
