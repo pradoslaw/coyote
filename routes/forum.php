@@ -33,6 +33,7 @@ $this->group(['namespace' => 'Forum', 'prefix' => 'Forum', 'as' => 'forum.'], fu
 
     $this->post('{forum}/Submit/{topic}/{post?}', [
         'uses'       => 'SubmitController@save',
+        'as'         => 'topic.save',
         'middleware' => ['topic.access', 'can:access,forum', 'forum.write', 'throttle.submission:1,5'],
     ]);
 

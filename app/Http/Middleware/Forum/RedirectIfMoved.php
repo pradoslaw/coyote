@@ -31,21 +31,21 @@ class RedirectIfMoved extends AbstractMiddleware
         callable $next): HttpFoundation\Response
     {
         $route = $request->route();
-        if ($this->isCanonicalUrl($forum, $topic, $slug)) {
+        if ($this->isCanonicalUrl($route, $forum, $topic, $slug)) {
             return $next($request);
         }
         return $this->redirectToCanonical($route, $topic, $request);
     }
 
-    private function isCanonicalUrl(Forum $forum, Topic $topic, ?string $slug): bool
+    private function isCanonicalUrl(Route $route, Forum $forum, Topic $topic, ?string $slug): bool
     {
-        return !$this->mismatchedArguments($forum, $topic, $slug);
+        return !$this->mismatchedArguments($route, $forum, $topic, $slug);
     }
 
-    private function mismatchedArguments(Forum $forum, Topic $topic, ?string $slug): bool
+    private function mismatchedArguments(Route $route, Forum $forum, Topic $topic, ?string $slug): bool
     {
         return $this->mismatchedCategory($topic, $forum)
-            || $this->mismatchedTopicSlug($topic, $slug);
+            || $this->mismatchedTopicSlug($route, $topic, $slug);
     }
 
     private function mismatchedCategory(Topic $topic, Forum $forum): bool
@@ -53,16 +53,26 @@ class RedirectIfMoved extends AbstractMiddleware
         return $topic->forum->id !== $forum->id;
     }
 
-    private function mismatchedTopicSlug(Topic $topic, ?string $slug): bool
+    private function mismatchedTopicSlug(Route $route, Topic $topic, ?string $slug): bool
     {
-        return $topic->slug !== $slug;
+        if ($this->routeHasArgument($route, 'slug')) {
+            return $topic->slug !== $slug;
+        }
+        return false;
     }
 
     private function redirectToCanonical(Route $route, Topic $topic, Request $request): RedirectResponse
     {
         $route->setParameter('forum', $topic->forum);
-        $route->setParameter('slug', $topic->slug);
+        if ($this->routeHasArgument($route, 'slug')) {
+            $route->setParameter('slug', $topic->slug);
+        }
         return $this->redirect($request);
+    }
+
+    private function routeHasArgument(Route $route, string $argument): bool
+    {
+        return \in_array($argument, $route->parameterNames());
     }
 
     private function redirect(Request $request): RedirectResponse
@@ -70,6 +80,14 @@ class RedirectIfMoved extends AbstractMiddleware
         return redirect()->route(
             $request->route()->getName(),
             $request->route()->parameters() + $request->query(),
-            status:301);
+            $this->redirectionStatusCode($request));
+    }
+
+    private function redirectionStatusCode(Request $request): int
+    {
+        if ($request->isMethod('POST')) {
+            return 308;
+        }
+        return 301;
     }
 }

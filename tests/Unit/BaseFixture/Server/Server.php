@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Unit\BaseFixture\Server;
 
+use Coyote\User;
 use Illuminate\Testing\TestResponse;
 
 class Server
@@ -26,5 +27,14 @@ class Server
             uri:new Url($this->hostname, $uri),
             server:['SCRIPT_FILENAME' => 'index.php'],
         );
+    }
+
+    public function postJson(string $uri, array $body, User $user): TestResponse
+    {
+        $this->laravel->actingAs($user);
+        return $this->laravel->json(
+            method:'POST',
+            uri:new Url($this->hostname, $uri),
+            data:$body);
     }
 }
