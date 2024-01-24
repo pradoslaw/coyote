@@ -11,6 +11,12 @@ trait Models
 {
     use BaseFixture\Forum\Store;
 
+    function newPost(): array
+    {
+        $topic = $this->storeThread(new Forum, new Topic);
+        return [$topic->id, $topic->firstPost->id];
+    }
+
     function newPostWithAuthor(string $forumSlug): array
     {
         $topic = $this->storeThread(

@@ -28,7 +28,30 @@ class PostEditTest extends TestCase
         $this->assertRedirectPostEdit(
             $author,
             "/Forum/apple-category/Submit/$topicId/$postId",
-            "/Forum/pear-category/Submit/$topicId/$postId",
-            status:308);
+            "/Forum/pear-category/Submit/$topicId/$postId");
+    }
+
+    /**
+     * @test
+     */
+    public function httpMethodPost()
+    {
+        // given
+        $this->newForumSlug('banana-category');
+        [$topicId, $postId] = $this->newPost();
+        // when
+        $this->assertRedirectPostStatus("/Forum/banana-category/Submit/$topicId/$postId", status:308);
+    }
+
+    /**
+     * @test
+     */
+    public function httpMethodHead()
+    {
+        // given
+        $this->newForumSlug('kiwi-category');
+        [$topicId, $postId] = $this->newPost();
+        // when
+        $this->assertRedirectHeadStatus("/Forum/kiwi-category/Submit/$topicId/$postId", status:308);
     }
 }

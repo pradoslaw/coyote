@@ -10,6 +10,20 @@ trait Assertion
 {
     use BaseFixture\Server\RelativeUri;
 
+    function assertRedirectHeadStatus(string $uri, int $status): void
+    {
+        $this->server->call('HEAD', $uri)
+            ->assertRedirect()
+            ->assertStatus($status);
+    }
+
+    function assertRedirectPostStatus(string $uri, int $status): void
+    {
+        $this->server->call('POST', $uri)
+            ->assertRedirect()
+            ->assertStatus($status);
+    }
+
     function assertCanonicalPostEdit(User $author, string $uri): void
     {
         $this->request($uri, $author)
@@ -17,11 +31,9 @@ trait Assertion
             ->assertStatus(200);
     }
 
-    function assertRedirectPostEdit(User $author, string $uri, string $expectedRedirect, int $status): void
+    function assertRedirectPostEdit(User $author, string $uri, string $expectedRedirect): void
     {
-        $response = $this->request($uri, $author)
-            ->assertRedirect()
-            ->assertStatus($status);
+        $response = $this->request($uri, $author)->assertRedirect();
         Assert::assertThat(
             $response->headers->get('Location'),
             $this->relativeUri($expectedRedirect));

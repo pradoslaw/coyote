@@ -85,9 +85,9 @@ class RedirectIfMoved extends AbstractMiddleware
 
     private function redirectionStatusCode(Request $request): int
     {
-        if ($request->isMethod('POST')) {
-            return 308;
+        if ($request->isMethod('GET')) {
+            return 301;
         }
-        return 301;
+        return 308;
     }
 }
