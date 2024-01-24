@@ -31,4 +31,12 @@ class MetaRobotsTest extends TestCase
     {
         $this->assertIndexable('/Forum');
     }
+
+    /**
+     * @test
+     */
+    public function developerEnvironment()
+    {
+        $this->assertNoIndexable('http://4programmers.dev/');
+    }
 }

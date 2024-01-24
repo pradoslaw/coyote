@@ -4,6 +4,7 @@ namespace Coyote\Providers;
 use Coyote\Domain\Seo\Schema;
 use Coyote\View\Twig\TwigLiteral;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\Factory;
 
@@ -23,7 +24,12 @@ class SeoServiceProvider extends ServiceProvider
 
     private function metaRobots(): string
     {
-        if ($this->app['request']->getRequestUri() === '/Forum/Interesting') {
+        /** @var Request $request */
+        $request = $this->app['request'];
+        if ($request->getHost() === '4programmers.dev') {
+            return 'noindex,nofollow';
+        }
+        if ($request->getRequestUri() === '/Forum/Interesting') {
             return 'noindex,nofollow';
         }
         return 'index,follow';
