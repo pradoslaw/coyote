@@ -14,7 +14,7 @@ class Test extends TestCase
     public function type()
     {
         $this->assertThat(
-            $this->ogProperty('og:type', uri:'/'),
+            $this->metaProperty('og:type', uri:'/'),
             $this->identicalTo('website'));
     }
 
@@ -24,7 +24,7 @@ class Test extends TestCase
     public function url()
     {
         $this->assertThat(
-            $this->ogProperty('og:url', uri:'/Forum'),
+            $this->metaProperty('og:url', uri:'/Forum'),
             $this->relativeUri('/Forum'));
     }
 
@@ -34,7 +34,7 @@ class Test extends TestCase
     public function locale()
     {
         $this->assertThat(
-            $this->ogProperty('og:locale', uri:'/'),
+            $this->metaProperty('og:locale', uri:'/'),
             $this->identicalTo('pl_PL'));
     }
 
@@ -44,7 +44,7 @@ class Test extends TestCase
     public function title()
     {
         $this->assertThat(
-            $this->ogProperty('og:title', uri:'/'),
+            $this->metaProperty('og:title', uri:'/'),
             $this->identicalTo('Programowanie: serwis dla programistów'));
     }
 }

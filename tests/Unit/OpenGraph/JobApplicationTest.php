@@ -19,7 +19,7 @@ class JobApplicationTest extends TestCase
     {
         $job = $this->newJobOffer('Banana offer');
         $this->assertThat(
-            $this->ogProperty('og:title', uri:"/Praca/Application/$job->id"),
+            $this->metaProperty('og:title', uri:"/Praca/Application/$job->id"),
             $this->identicalTo("Aplikuj na stanowisko Banana offer :: 4programmers.net"));
     }
 }

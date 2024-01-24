@@ -8,7 +8,7 @@ trait OpenGraph
 {
     use Server\Http;
 
-    function ogProperty(string $property, string $uri): string
+    function metaProperty(string $property, string $uri): string
     {
         $view = new ViewFixture($this->htmlView($uri));
         return $this->attributeByProperty($view, $property);
