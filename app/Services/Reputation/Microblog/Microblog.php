@@ -1,14 +1,10 @@
 <?php
-
 namespace Coyote\Services\Reputation\Microblog;
 
-use Coyote\Services\Reputation\Reputation;
 use Coyote\Microblog as Model;
+use Coyote\Services\Reputation\Reputation;
 use Coyote\Services\UrlBuilder;
 
-/**
- * Class Microblog
- */
 abstract class Microblog extends Reputation
 {
     /**

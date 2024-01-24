@@ -1,13 +1,9 @@
 <?php
-
 namespace Coyote\Services\Reputation\Post;
 
-use Coyote\Services\Reputation\ReputationInterface;
 use Coyote\Services\Reputation\Reputation;
+use Coyote\Services\Reputation\ReputationInterface;
 
-/**
- * Class Accept
- */
 class Accept extends Reputation implements ReputationInterface
 {
     const ID = \Coyote\Reputation::POST_ACCEPT;

@@ -1,14 +1,9 @@
 <?php
-
 namespace Coyote\Http\Controllers\Adm;
 
 use Coyote\Http\Controllers\Controller;
 use Lavary\Menu\Menu;
 
-/**
- * Class BaseController
- * @package Coyote\Http\Controllers\Adm
- */
 class BaseController extends Controller
 {
     public function __construct()
@@ -54,13 +49,13 @@ class BaseController extends Controller
             $menu->add('Faktury i płatności', ['route' => 'adm.payments'])->prepend($fa('fa-shopping-cart fa-fw'))->data('permission', 'adm-payment');
             $menu->add('Tagi', ['route' => 'adm.tags'])->prepend($fa('fa-tag fa-fw'));
         })
-        ->filter(function ($item) {
-            if ($item->data('permission')) {
-                return auth()->user()->can($item->data('permission'));
-            }
+            ->filter(function ($item) {
+                if ($item->data('permission')) {
+                    return auth()->user()->can($item->data('permission'));
+                }
 
-            return true;
-        });
+                return true;
+            });
     }
 
     /**

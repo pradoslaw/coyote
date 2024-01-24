@@ -1,5 +1,4 @@
 <?php
-
 namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Events\MicroblogVoted;
@@ -16,12 +15,6 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 
-/**
- * Ocena glosow na dany wpis na mikro (lub wyswietlanie loginow ktorzy oddali ow glos)
- *
- * Class VoteController
- * @package Coyote\Http\Controllers\Microblog
- */
 class VoteController extends Controller
 {
     public function __construct()

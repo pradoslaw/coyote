@@ -1,10 +1,6 @@
 <?php
-
 namespace Coyote\Services\Reputation\Wiki;
 
-/**
- * Class Update
- */
 class Update extends Wiki
 {
     const ID = \Coyote\Reputation::WIKI_UPDATE;
@@ -48,7 +44,7 @@ class Update extends Wiki
 
         if ($this->isFlooded($logs)) {
             $this->setValue($value);
-        } elseif ($length > 1200 && $percentage >= 10) {
+        } else if ($length > 1200 && $percentage >= 10) {
             $this->setValue(1);
         } else {
             $this->setValue(0);

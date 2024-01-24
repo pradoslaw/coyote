@@ -1,5 +1,4 @@
 <?php
-
 namespace Coyote\Http\Controllers\Microblog;
 
 use Coyote\Events\MicroblogDeleted;
@@ -9,21 +8,16 @@ use Coyote\Http\Requests\MicroblogRequest;
 use Coyote\Http\Resources\MicroblogResource;
 use Coyote\Microblog;
 use Coyote\Notifications\Microblog\DeletedNotification;
-use Coyote\Repositories\Contracts\MicroblogRepositoryInterface;
-use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
+use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
-use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Activities\Restore as Stream_Restore;
+use Coyote\Services\Stream\Activities\Update as Stream_Update;
 use Coyote\Services\Stream\Objects\Microblog as Stream_Microblog;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-/**
- * Class SubmitController
- * @package Coyote\Http\Controllers\Microblog
- */
 class SubmitController extends Controller
 {
     /**
@@ -146,7 +140,7 @@ class SubmitController extends Controller
      */
     public function preview(Request $request)
     {
-        return response($this->getParser()->parse((string) $request->get('text')));
+        return response($this->getParser()->parse((string)$request->get('text')));
     }
 
     /**

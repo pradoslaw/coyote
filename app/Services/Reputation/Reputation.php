@@ -1,12 +1,8 @@
 <?php
-
 namespace Coyote\Services\Reputation;
 
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface;
 
-/**
- * Class Reputation
- */
 abstract class Reputation implements ReputationInterface
 {
     protected $typeId;
@@ -133,12 +129,12 @@ abstract class Reputation implements ReputationInterface
 
         if ($this->getValue()) {
             $this->reputation->create([
-                'type_id'           => $this->typeId,
-                'user_id'           => $this->getUserId(),
-                'value'             => $this->isPositive() ? $this->getValue() : -$this->getValue(),
-                'excerpt'           => $this->getExcerpt(),
-                'url'               => $this->getUrl(),
-                'metadata'          => $this->getMetadata()
+                'type_id'  => $this->typeId,
+                'user_id'  => $this->getUserId(),
+                'value'    => $this->isPositive() ? $this->getValue() : -$this->getValue(),
+                'excerpt'  => $this->getExcerpt(),
+                'url'      => $this->getUrl(),
+                'metadata' => $this->getMetadata(),
             ]);
         }
 

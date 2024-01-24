@@ -1,12 +1,8 @@
 <?php
-
 namespace Coyote\Http\Validators;
 
 use Illuminate\Validation\Validator;
 
-/**
- * Class EmailValidator
- */
 class EmailValidator extends UserValidator
 {
     /**
@@ -19,7 +15,7 @@ class EmailValidator extends UserValidator
      */
     public function validateUnique($attribute, $value, $parameters)
     {
-        return $this->validateBy('email', $value, (int) ($parameters[0] ?? null));
+        return $this->validateBy('email', $value, (int)($parameters[0] ?? null));
     }
 
     /**

@@ -1,10 +1,6 @@
 <?php
-
 namespace Coyote\Services\Reputation\Wiki;
 
-/**
- * Class Create
- */
 class Create extends Wiki
 {
     const ID = \Coyote\Reputation::WIKI_CREATE;

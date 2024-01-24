@@ -1,16 +1,11 @@
 <?php
-
 namespace Coyote\Repositories\Eloquent;
 
-use Coyote\Repositories\Contracts\PmRepositoryInterface;
 use Coyote\Pm;
+use Coyote\Repositories\Contracts\PmRepositoryInterface;
 use Coyote\User;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-/**
- * Class PmRepository
- * @package Coyote\Repositories\Eloquent
- */
 class PmRepository extends Repository implements PmRepositoryInterface
 {
     /**
@@ -41,23 +36,23 @@ class PmRepository extends Repository implements PmRepositoryInterface
     public function lengthAwarePaginate($userId, $perPage = 10)
     {
         $count = $this->model
-                ->selectRaw('COUNT(*)')
-                ->where('user_id', $userId)
-                ->groupBy('author_id')
-                ->get()
-                ->count();
+            ->selectRaw('COUNT(*)')
+            ->where('user_id', $userId)
+            ->groupBy('author_id')
+            ->get()
+            ->count();
 
         $result = $this->prepare($userId)
-                ->limit($perPage)
-                ->skip((request('page') - 1) * $perPage)
-                ->get();
+            ->limit($perPage)
+            ->skip((request('page') - 1) * $perPage)
+            ->get();
 
         return new LengthAwarePaginator(
             $result,
             $count,
             $perPage,
             LengthAwarePaginator::resolveCurrentPage(),
-            ['path' => LengthAwarePaginator::resolveCurrentPath()]
+            ['path' => LengthAwarePaginator::resolveCurrentPath()],
         );
     }
 
@@ -80,8 +75,8 @@ class PmRepository extends Repository implements PmRepositoryInterface
                 'pm.folder',
                 'pm.read_at',
                 $this->raw(
-                    sprintf('(CASE WHEN folder = %d THEN user_id ELSE author_id END) AS user_id', Pm::SENTBOX)
-                )
+                    sprintf('(CASE WHEN folder = %d THEN user_id ELSE author_id END) AS user_id', Pm::SENTBOX),
+                ),
             ])
             ->where('user_id', $userId)
             ->where('author_id', $authorId)
@@ -93,15 +88,15 @@ class PmRepository extends Repository implements PmRepositoryInterface
             'pm.*',
             'pm_text.text',
             'pm_text.created_at',
-            'pm.user_id'
+            'pm.user_id',
         ])
-        ->from($this->raw('(' . $this->toSql($builder) . ') AS pm'))
-        ->join('pm_text', 'pm_text.id', '=', 'text_id')
-        ->with(['user' => function ($builder) {
-            return $builder->select(['id', 'name', 'photo', 'is_blocked', 'deleted_at'])->withTrashed();
-        }])
-        ->orderBy('pm.id', 'DESC')
-        ->get();
+            ->from($this->raw('(' . $this->toSql($builder) . ') AS pm'))
+            ->join('pm_text', 'pm_text.id', '=', 'text_id')
+            ->with(['user' => function ($builder) {
+                return $builder->select(['id', 'name', 'photo', 'is_blocked', 'deleted_at'])->withTrashed();
+            }])
+            ->orderBy('pm.id', 'DESC')
+            ->get();
 
         return $result->reverse()->values();
     }
@@ -131,7 +126,7 @@ class PmRepository extends Repository implements PmRepositoryInterface
         $text = Pm\Text::create(['text' => $payload['text']]);
 
         $fill = [
-            'text_id' => $text->id
+            'text_id' => $text->id,
         ];
 
         $result = [];
@@ -179,7 +174,7 @@ class PmRepository extends Repository implements PmRepositoryInterface
                 'm.read_at',
                 'm.text_id',
                 'pm_text.text',
-                'pm_text.created_at'
+                'pm_text.created_at',
             ])
             ->from($this->raw('(' . $this->toSql($this->subSql($userId)) . ') AS m'))
             ->join('pm_text', 'pm_text.id', '=', 'text_id')

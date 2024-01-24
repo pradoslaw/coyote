@@ -1,13 +1,9 @@
 <?php
-
 namespace Coyote\Services\Stream\Render;
 
 use Coyote\Stream as Model;
 use Jenssegers\Agent\Agent;
 
-/**
- * Class Render
- */
 abstract class Render
 {
     /**
@@ -82,7 +78,7 @@ abstract class Render
         return link_to(
             array_get($this->stream, 'actor.url'),
             array_get($this->stream, 'actor.displayName'),
-            ['data-user-id' => array_get($this->stream, 'actor.id')]
+            ['data-user-id' => array_get($this->stream, 'actor.id')],
         );
     }
 
@@ -109,7 +105,7 @@ abstract class Render
     {
         return link_to(
             array_get($this->stream, 'object.url'),
-            (string) trans('stream.nouns.' . array_get($this->stream, 'object.objectType'))
+            (string)trans('stream.nouns.' . array_get($this->stream, 'object.objectType')),
         );
     }
 
@@ -121,7 +117,7 @@ abstract class Render
         return link_to(
             array_get($this->stream, 'target.url'),
             str_limit(array_get($this->stream, 'target.displayName'), 64),
-            ['title' => array_get($this->stream, 'target.displayName')]
+            ['title' => array_get($this->stream, 'target.displayName')],
         );
     }
 
@@ -133,7 +129,7 @@ abstract class Render
         return link_to(
             array_get($this->stream, 'object.url'),
             array_get($this->stream, 'object.displayName'),
-            ['title' => array_get($this->stream, 'object.displayName')]
+            ['title' => array_get($this->stream, 'object.displayName')],
         );
     }
 }

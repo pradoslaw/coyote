@@ -1,12 +1,8 @@
 <?php
-
 namespace Coyote\Http\Validators;
 
 use Illuminate\Contracts\Auth\Guard;
 
-/**
- * Class ReputationValidator
- */
 class ReputationValidator
 {
     /**

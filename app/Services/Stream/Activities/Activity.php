@@ -1,13 +1,9 @@
 <?php
-
 namespace Coyote\Services\Stream\Activities;
 
 use Coyote\Services\Arrayable\ToArray;
 use Coyote\Services\Stream\Objects\ObjectInterface;
 
-/**
- * Class Activity
- */
 abstract class Activity implements ObjectInterface
 {
     use ToArray{

@@ -1,15 +1,9 @@
 <?php
-
 namespace Coyote\Http\Validators;
 
-use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Contracts\Hashing\Hasher;
 
-/**
- * Walidator sprawdza poprawnosc obecnego hasla (porownuje hash w bazie danych)
- *
- * Class PasswordValidator
- */
 class PasswordValidator
 {
     /**

@@ -1,13 +1,9 @@
 <?php
-
 namespace Coyote\Http\Validators;
 
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Repositories\Criteria\WithTrashed;
 
-/**
- * Class UserValidator
- */
 class UserValidator
 {
     /**
@@ -44,7 +40,7 @@ class UserValidator
     {
         $this->user->pushCriteria(new WithTrashed());
 
-        $result = $this->validateBy('name', $value, (int) ($parameters[0] ?? null));
+        $result = $this->validateBy('name', $value, (int)($parameters[0] ?? null));
         $this->user->resetCriteria();
 
         return $result;
