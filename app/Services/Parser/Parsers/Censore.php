@@ -2,7 +2,7 @@
 namespace Coyote\Services\Parser\Parsers;
 
 use Coyote\Repositories\Eloquent\WordRepository;
-use TRegx\CleanRegex\Pattern;
+use Illuminate\Support;
 use TRegx\SafeRegex\Exception\PregException;
 use TRegx\SafeRegex\preg;
 
@@ -14,22 +14,25 @@ class Censore extends HashParser implements Parser
 
     protected function parseHashed(string $text): string
     {
-        static $result;
-
-        if ($result === null) {
-            $template = Pattern::template('(?<![\p{L}\p{N}_])@(?![\p{L}\p{N}_])', 'iu');
-
-            $result = [];
-            foreach ($this->word->allWords() as $word) {
-                $pattern = $template->mask($word->word, ['*' => '(\p{L}*?)']);
-                $result["$pattern"] = $word->replacement;
-            }
+        $words = [];
+        foreach ($this->censoreRules() as $rule) {
+            $wordPattern = str_replace('\*', '(\p{L}*?)', preg_quote($rule->word));
+            $word = '#(?<![\p{L}\p{N}_])' . $wordPattern . '(?![\p{L}\p{N}_])#iu';
+            $words[$word] = $rule->replacement;
         }
-
         try {
-            return preg::replace(array_keys($result), array_values($result), $text);
+            $text = preg::replace(array_keys($words), array_values($words), $text);
         } catch (PregException $ignored) {
         }
         return $text;
+    }
+
+    private function censoreRules(): Support\Collection
+    {
+        static $result;
+        if ($result === null) {
+            $result = $this->word->allWords();
+        }
+        return $result;
     }
 }
