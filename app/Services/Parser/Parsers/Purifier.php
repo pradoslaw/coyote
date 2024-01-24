@@ -24,6 +24,10 @@ class Purifier implements Parser
     public function parse(string $text): string
     {
         $def = $this->config->getHTMLDefinition(true);
+
+        $anchor = $def->addBlankElement('a');
+        $anchor->attr_transform_post[] = new SetAttribute('rel', 'ugc,nofollow');
+
         $def->addAttribute('a', 'data-user-id', 'Number');
         $def->addAttribute('iframe', 'allowfullscreen', 'Bool');
 

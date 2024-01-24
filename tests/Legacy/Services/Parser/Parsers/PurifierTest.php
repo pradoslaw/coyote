@@ -7,7 +7,9 @@ class PurifierTest extends \Tests\Legacy\TestCase
 {
     public function testParseLinks()
     {
-        $this->assertIdentity('<a href="http://www.wp.pl">http://www.wp.pl</a>');
+        $this->assertHtmlTransformation(
+            '<a href="http://www.wp.pl">http://www.wp.pl</a>',
+            '<a href="http://www.wp.pl" rel="ugc,nofollow">http://www.wp.pl</a>');
     }
 
     public function testParseBlockquotes()
@@ -37,6 +39,11 @@ class PurifierTest extends \Tests\Legacy\TestCase
 
     private function assertIdentity(string $input): void
     {
-        $this->assertEquals($input, (new Purifier())->parse($input));
+        $this->assertHtmlTransformation($input, $input);
+    }
+
+    private function assertHtmlTransformation(string $input, $expected): void
+    {
+        $this->assertEquals($expected, (new Purifier())->parse($input));
     }
 }
