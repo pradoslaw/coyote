@@ -9,7 +9,7 @@ class JobApplicationTest extends TestCase
 {
     use BaseFixture\Server\RelativeUri;
     use BaseFixture\Server\Laravel\Transactional;
-    use Seo\Fixture\JobOffer;
+    use Seo\Schema\Fixture\JobOffer;
     use Fixture\OpenGraph;
 
     /**

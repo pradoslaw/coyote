@@ -1,12 +1,12 @@
 <?php
-namespace Tests\Unit\Seo\DiscussionForumPosting\Fixture;
+namespace Tests\Unit\Seo\Schema\DiscussionForumPosting\Fixture;
 
 use Coyote\Topic;
 use Tests\Unit\Seo;
 
 trait Schema
 {
-    use Seo\Fixture\Schema, Seo\DiscussionForumPosting\Fixture\Models;
+    use Seo\Schema\Fixture\Schema, Seo\Schema\DiscussionForumPosting\Fixture\Models;
 
     function schemaTopicInForum(string $topicTitle, string $forumSlug): array
     {

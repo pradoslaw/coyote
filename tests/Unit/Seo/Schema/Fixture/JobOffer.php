@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Unit\Seo\Fixture;
+namespace Tests\Unit\Seo\Schema\Fixture;
 
 use Coyote\Currency;
 use Coyote\Job;
@@ -10,7 +10,7 @@ use Tests\Unit\Seo;
 
 trait JobOffer
 {
-    use Seo\Fixture\Schema;
+    use Seo\Schema\Fixture\Schema;
     use BaseFixture\Server\Laravel\Transactional;
 
     function jobOfferSchema(string $title): array

@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Unit\Seo\BreadcrumbList;
+namespace Tests\Unit\Seo\Schema\BreadcrumbList;
 
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture;
@@ -11,7 +11,7 @@ use Tests\Unit\Seo;
  */
 class Test extends TestCase
 {
-    use Seo\BreadcrumbList\Fixture\Schema, BaseFixture\Server\RelativeUri;
+    use Seo\Schema\BreadcrumbList\Fixture\Schema, BaseFixture\Server\RelativeUri;
 
     /**
      * @test

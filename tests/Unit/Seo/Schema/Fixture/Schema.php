@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Unit\Seo\Fixture;
+namespace Tests\Unit\Seo\Schema\Fixture;
 
 use Tests\Unit\BaseFixture\Server;
 use Tests\Unit\BaseFixture\ViewFixture;

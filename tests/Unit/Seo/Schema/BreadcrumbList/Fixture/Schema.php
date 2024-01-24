@@ -1,11 +1,11 @@
 <?php
-namespace Tests\Unit\Seo\BreadcrumbList\Fixture;
+namespace Tests\Unit\Seo\Schema\BreadcrumbList\Fixture;
 
 use Tests\Unit\Seo;
 
 trait Schema
 {
-    use Seo\Fixture\Schema, Seo\BreadcrumbList\Fixture\Models;
+    use Seo\Schema\Fixture\Schema, Seo\Schema\BreadcrumbList\Fixture\Models;
 
     function breadcrumbsSchema(): array
     {

@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Unit\Seo\Organization;
+namespace Tests\Unit\Seo\Schema\Organization;
 
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\Seo;
@@ -9,7 +9,7 @@ use Tests\Unit\Seo;
  */
 class Test extends TestCase
 {
-    use Seo\Fixture\Schema;
+    use Seo\Schema\Fixture\Schema;
 
     /**
      * @test

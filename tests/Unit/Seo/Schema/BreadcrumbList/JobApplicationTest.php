@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Unit\Seo\BreadcrumbList;
+namespace Tests\Unit\Seo\Schema\BreadcrumbList;
 
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture;
@@ -9,7 +9,7 @@ use Tests\Unit\Seo;
 class JobApplicationTest extends TestCase
 {
     use BaseFixture\Server\RelativeUri;
-    use Seo\Fixture\JobOffer;
+    use Seo\Schema\Fixture\JobOffer;
 
     public function test(): void
     {

@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Unit\Seo\DiscussionForumPosting;
+namespace Tests\Unit\Seo\Schema\DiscussionForumPosting;
 
 use PHPUnit\Framework\Constraint\Constraint;
 use PHPUnit\Framework\TestCase;
@@ -13,8 +13,8 @@ use TRegx\PhpUnit\DataProviders\DataProvider;
  */
 class Test extends TestCase
 {
-    use Seo\DiscussionForumPosting\Fixture\Schema,
-        Seo\DiscussionForumPosting\Fixture\SystemDatabase,
+    use Seo\Schema\DiscussionForumPosting\Fixture\Schema,
+        Seo\Schema\DiscussionForumPosting\Fixture\SystemDatabase,
         BaseFixture\Server\RelativeUri;
 
     /**
