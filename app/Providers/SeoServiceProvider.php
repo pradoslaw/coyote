@@ -14,7 +14,18 @@ class SeoServiceProvider extends ServiceProvider
         /** @var Factory $view */
         $view = $this->app['view'];
         $view->composer('layout', function (View $view): void {
-            $view->with(['schema_organization' => TwigLiteral::fromHtml(new Schema(new Schema\Organization()))]);
+            $view->with([
+                'schema_organization' => TwigLiteral::fromHtml(new Schema(new Schema\Organization())),
+                'meta_robots'         => $this->metaRobots(),
+            ]);
         });
+    }
+
+    private function metaRobots(): string
+    {
+        if ($this->app['request']->getRequestUri() === '/') {
+            return 'index,follow';
+        }
+        return 'noindex,nofollow';
     }
 }
