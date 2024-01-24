@@ -2,66 +2,74 @@
 namespace Coyote\Http\Middleware\Forum;
 
 use Closure;
-use Coyote\Repositories\Eloquent\ForumRepository;
+use Coyote\Forum;
 use Coyote\Topic;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 use Symfony\Component\HttpFoundation;
 
 class RedirectIfMoved extends AbstractMiddleware
 {
-    public function __construct(private ForumRepository $forum)
-    {
-    }
-
     public function handle(Request $request, Closure $next): HttpFoundation\Response
     {
-        // check if url is invalid if category was changed or slug was changed
-        if (!$this->isInvalidUrl($request)) {
-            return $next($request);
-        }
-
+        /** @var Forum $forum */
+        $forum = $request->route('forum');
         /** @var Topic $topic */
         $topic = $request->route('topic');
+        /** @var string|null $slug */
+        $slug = $request->route('slug');
 
-        // get current topic's category
-        $forum = $this->forum->find($topic->forum_id);
-
-        // replace original route parameters with new ones
-        $this->replaceParameter($request, 'forum', $forum);
-        $this->replaceParameter($request, 'topic', $topic);
-        $this->replaceParameter($request, 'slug', $topic->slug);
-
-        // if this is GET request, simply redirect
-        if ($request->isMethod('get')) {
-            return $this->redirect($request);
-        }
-
-        return $next($request);
+        return $this->handleRedirect($forum, $topic, $slug, $request, $next);
     }
 
-    private function replaceParameter(Request $request, string $name, $value)
+    private function handleRedirect(
+        Forum    $forum,
+        Topic    $topic,
+        ?string  $slug,
+        Request  $request,
+        callable $next): HttpFoundation\Response
     {
-        if ($request->route()->hasParameter($name)) {
-            $request->route()->setParameter($name, $value);
+        $route = $request->route();
+        if ($this->isCanonicalUrl($forum, $topic, $slug)) {
+            return $next($request);
         }
+        return $this->redirectToCanonical($route, $topic, $request);
     }
 
-    private function isInvalidUrl(Request $request): bool
+    private function isCanonicalUrl(Forum $forum, Topic $topic, ?string $slug): bool
     {
-        $forum = $request->route('forum');
-        $topic = $request->route('topic');
+        return !$this->mismatchedArguments($forum, $topic, $slug);
+    }
 
-        return (is_null($forum)
-            || $forum->id !== $topic->forum_id
-            || ($request->route('slug') !== null && $request->route('slug') !== $topic->slug));
+    private function mismatchedArguments(Forum $forum, Topic $topic, ?string $slug): bool
+    {
+        return $this->mismatchedCategory($topic, $forum)
+            || $this->mismatchedTopicSlug($topic, $slug);
+    }
+
+    private function mismatchedCategory(Topic $topic, Forum $forum): bool
+    {
+        return $topic->forum->id !== $forum->id;
+    }
+
+    private function mismatchedTopicSlug(Topic $topic, ?string $slug): bool
+    {
+        return $topic->slug !== $slug;
+    }
+
+    private function redirectToCanonical(Route $route, Topic $topic, Request $request): RedirectResponse
+    {
+        $route->setParameter('forum', $topic->forum);
+        $route->setParameter('slug', $topic->slug);
+        return $this->redirect($request);
     }
 
     private function redirect(Request $request): RedirectResponse
     {
         return redirect()->route(
             $request->route()->getName(),
-            \array_merge($request->route()->parameters(), $request->query()),
+            $request->route()->parameters() + $request->query(),
             status:301);
     }
 }

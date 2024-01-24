@@ -26,10 +26,10 @@ trait Schema
 
     function topicSchema(string $topicTitle, string $forumSlug): array
     {
-        $topicId = $this->newThread($topicTitle, $forumSlug);
+        $topic = $this->newThread($topicTitle, $forumSlug);
         return [
-            $this->schema("/Forum/$forumSlug/$topicId", 'BreadcrumbList'),
-            $topicId,
+            $this->schema("/Forum/$forumSlug/{$topic->id}-{$topic->slug}", 'BreadcrumbList'),
+            $topic->id,
         ];
     }
 }

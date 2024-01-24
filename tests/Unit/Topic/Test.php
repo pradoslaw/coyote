@@ -21,7 +21,7 @@ class Test extends TestCase
     private function topicView(string $topicTitle): array
     {
         $topic = $this->newTopicTitle($topicTitle);
-        return $this->topicViewVariable("/Forum/{$topic->forum->slug}/$topic->id");
+        return $this->topicViewVariable("/Forum/{$topic->forum->slug}/$topic->id-{$topic->slug}");
     }
 
     private function topicViewVariable(string $uri): array

@@ -36,6 +36,6 @@ trait Schema
 
     function postingSchema(Topic $topic): array
     {
-        return $this->schema("/Forum/{$topic->forum->slug}/$topic->id", 'DiscussionForumPosting');
+        return $this->schema("/Forum/{$topic->forum->slug}/$topic->id-{$topic->slug}", 'DiscussionForumPosting');
     }
 }
