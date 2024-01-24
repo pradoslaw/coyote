@@ -168,7 +168,7 @@ class MicroblogRepository extends Repository implements MicroblogRepositoryInter
                             ->groupBy('tags.id')
                             ->groupBy('tags.name')
                             ->orderByRaw('"count" DESC')
-                            ->limit(3)
+                            ->limit(3),
                     );
             })
             ->orderByRaw('"order" ASC, "count" DESC')

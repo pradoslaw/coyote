@@ -60,7 +60,7 @@ class Builder
             $count,
             6,
             $page,
-            ['path' => LengthAwarePaginator::resolveCurrentPath()]
+            ['path' => LengthAwarePaginator::resolveCurrentPath()],
         );
         $this->microblog->resetCriteria();
         /** @var Eloquent\Collection $microblogs */

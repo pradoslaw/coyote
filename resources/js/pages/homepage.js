@@ -28,7 +28,7 @@ new Vue({
   mounted() {
     this.liveNotifications();
   },
-  computed: mapGetters('microblogs', ['microblogs'])
+  computed: mapGetters('microblogs', ['microblogs']),
 });
 
 function switchForumTab(index) {

@@ -1,5 +1,4 @@
 <?php
-
 namespace Coyote\Http\Controllers;
 
 use Coyote\Http\Resources\ActivityResource as ActivityResource;
@@ -47,8 +46,8 @@ class HomeController extends Controller
             'reputation'  => $cache->remember('homepage:reputation', 30 * 60, fn() => [
                 'month' => $this->reputation->monthly(),
                 'year'  => $this->reputation->yearly(),
-                'total' => $this->reputation->total()
-            ])
+                'total' => $this->reputation->total(),
+            ]),
         ])
             ->with('settings', $this->getSettings())
             ->with('whats_new', resolve(WhatsNew::class)->render())
