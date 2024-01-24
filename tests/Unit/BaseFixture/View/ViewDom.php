@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Unit\BaseFixture;
+namespace Tests\Unit\BaseFixture\View;
 
 use DOMDocument;
 use DOMXPath;

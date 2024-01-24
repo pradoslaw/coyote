@@ -2,7 +2,7 @@
 namespace Tests\Unit\Seo\Meta\Fixture;
 
 use Tests\Unit\BaseFixture\Server;
-use Tests\Unit\BaseFixture\ViewFixture;
+use Tests\Unit\BaseFixture\View\ViewFixture;
 
 trait MetaProperty
 {

@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Unit\Topic\Fixture;
 
-use Tests\Unit\BaseFixture\ViewFixture;
+use Tests\Unit\BaseFixture\View\ViewFixture;
 
 class SpaView
 {
