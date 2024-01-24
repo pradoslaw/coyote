@@ -1,7 +1,7 @@
 <?php
 namespace Tests\Unit\BaseFixture\View;
 
-class ViewFixture
+class JavaScriptFixture
 {
     private ViewDom $dom;
 
@@ -13,7 +13,7 @@ class ViewFixture
     /**
      * @return Script[]
      */
-    public function javaScriptDeclarations(): array
+    public function scriptDeclarations(): array
     {
         $declarations = [];
         foreach ($this->scriptTags() as $script) {

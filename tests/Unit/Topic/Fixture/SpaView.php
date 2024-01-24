@@ -1,15 +1,15 @@
 <?php
 namespace Tests\Unit\Topic\Fixture;
 
-use Tests\Unit\BaseFixture\View\ViewFixture;
+use Tests\Unit\BaseFixture\View\JavaScriptFixture;
 
 class SpaView
 {
-    private ViewFixture $view;
+    private JavaScriptFixture $view;
 
     public function __construct(private string $html)
     {
-        $this->view = new ViewFixture($this->html);
+        $this->view = new JavaScriptFixture($this->html);
     }
 
     public function jsVariables(): array
@@ -26,7 +26,7 @@ class SpaView
 
     private function javaScriptVariableDeclarations(): \Iterator
     {
-        foreach ($this->view->javaScriptDeclarations() as $script) {
+        foreach ($this->view->scriptDeclarations() as $script) {
             if ($script->type() === 'application/ld+json') {
                 continue;
             }

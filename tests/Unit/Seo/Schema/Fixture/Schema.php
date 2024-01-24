@@ -2,7 +2,7 @@
 namespace Tests\Unit\Seo\Schema\Fixture;
 
 use Tests\Unit\BaseFixture\Server;
-use Tests\Unit\BaseFixture\View\ViewFixture;
+use Tests\Unit\BaseFixture\View\JavaScriptFixture;
 
 trait Schema
 {
@@ -10,7 +10,7 @@ trait Schema
 
     function schema(string $uri, string $type): ?array
     {
-        return $this->firstSchema(new ViewFixture($this->viewHtml($uri)), $type);
+        return $this->firstSchema(new JavaScriptFixture($this->viewHtml($uri)), $type);
     }
 
     function viewHtml(string $uri): string
@@ -18,7 +18,7 @@ trait Schema
         return $this->server->get($uri)->assertSuccessful()->content();
     }
 
-    function firstSchema(ViewFixture $viewFixture, string $type): ?array
+    function firstSchema(JavaScriptFixture $viewFixture, string $type): ?array
     {
         foreach ($this->schemaObjects($viewFixture) as $schema) {
             if ($schema['@type'] === $type) {
@@ -28,9 +28,9 @@ trait Schema
         return null;
     }
 
-    function schemaObjects(ViewFixture $viewFixture): iterable
+    function schemaObjects(JavaScriptFixture $viewFixture): iterable
     {
-        foreach ($viewFixture->javaScriptDeclarations() as $declaration) {
+        foreach ($viewFixture->scriptDeclarations() as $declaration) {
             if ($declaration->type() === 'application/ld+json') {
                 yield $declaration->object();
             }
