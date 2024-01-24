@@ -1,12 +1,6 @@
 {% extends 'layout' %}
 {% block title %}Kompendium wiedzy{{ parent() }}{% endblock %}
 
-{% import 'components.meta' as meta %}
-{% block meta_robots %}
-    {{ meta.robots('index, follow') }}
-    {{ parent() }}
-{% endblock %}
-
 {% block container %}
 
   <div class="row">

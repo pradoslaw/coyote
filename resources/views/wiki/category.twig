@@ -2,12 +2,6 @@
 
 {% import 'components.forms' as forms %}
 
-{% import 'components.meta' as meta %}
-{% block meta_robots %}
-    {{ meta.robots('index, follow') }}
-    {{ parent() }}
-{% endblock %}
-
 {% block container %}
     <div class="box">
         <div class="nav nav-panel">

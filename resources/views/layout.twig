@@ -8,9 +8,6 @@
 
   {{ render_region('head') }}
 
-  {% block meta_robots %}
-  {% endblock %}
-
   {% block canonical %}
     <link rel="canonical" href="{% block canonical_href %}{{ app.request.url }}{% endblock %}"/>
   {% endblock %}
