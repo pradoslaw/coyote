@@ -20,10 +20,11 @@ class RedirectToCanonicalUrl
 
     private function hasTrailingSlash(Request $request): bool
     {
-        if ($request->getRequestUri() === '/') {
+        $uri = $request->getPathInfo();
+        if ($uri === '/') {
             return false;
         }
-        return \str_ends_with($request->getPathInfo(), '/');
+        return \str_ends_with($uri, '/');
     }
 
     private function hasTrailingQuerySeparator(Request $request): bool
