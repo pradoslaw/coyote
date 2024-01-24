@@ -20,7 +20,7 @@ class Url
     private function components(string $defaultHostname, string $url): array
     {
         return \parse_url($url) + [
-                'scheme' => 'http',
+                'scheme' => 'https',
                 'host'   => $defaultHostname,
                 'path'   => null,
                 'query'  => null,

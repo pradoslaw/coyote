@@ -12,7 +12,7 @@ class Server
     public function __construct(private Laravel\TestCase $laravel)
     {
         $this->hostname = '4programmers.local';
-        $this->baseUrl = "http://$this->hostname";
+        $this->baseUrl = "https://$this->hostname";
     }
 
     public function get(string $uri): TestResponse

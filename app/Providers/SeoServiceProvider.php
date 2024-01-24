@@ -43,6 +43,6 @@ class SeoServiceProvider extends ServiceProvider
     {
         /** @var Request $request */
         $request = $this->app['request'];
-        return $request->getSchemeAndHttpHost() . $request->getRequestUri();
+        return 'https://' . $request->getHost() . $request->getRequestUri();
     }
 }
