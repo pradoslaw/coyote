@@ -1,8 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /User/
-Disallow: /Szukaj/
-Disallow: *Search?q=*
+Disallow: /Search
 Sitemap: https://4programmers.net/sitemap
 
 User-agent: AhrefsBot
