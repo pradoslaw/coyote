@@ -7,6 +7,7 @@ use Tests\Unit\Seo;
 class MetaCanonicalTest extends TestCase
 {
     use Seo\Meta\Fixture\MetaCanonical;
+    use Seo\Meta\Fixture\Models;
 
     /**
      * @test
@@ -22,6 +23,15 @@ class MetaCanonicalTest extends TestCase
     public function categories()
     {
         $this->assertSelfCanonical('/Forum');
+    }
+
+    /**
+     * @test
+     */
+    public function topicPage()
+    {
+        [$category, $topic] = $this->newTopic();
+        $this->assertSelfCanonical("/Forum/$category/$topic?page=2");
     }
 
     /**

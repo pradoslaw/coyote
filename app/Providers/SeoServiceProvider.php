@@ -43,6 +43,17 @@ class SeoServiceProvider extends ServiceProvider
     {
         /** @var Request $request */
         $request = $this->app['request'];
-        return 'https://' . $request->getHost() . $request->getPathInfo();
+        return 'https://' .
+            $request->getHost() .
+            $request->getPathInfo() .
+            $this->queryString($request);
+    }
+
+    private function queryString(Request $request): string
+    {
+        if (\str_starts_with($request->getPathInfo(), '/Forum')) {
+            return \rTrim('?' . $request->getQueryString(), '?');
+        }
+        return '';
     }
 }
