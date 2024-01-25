@@ -132,10 +132,10 @@
       </template>
 
       <vue-post-wrapper
-        v-for="post in posts"
-        :key="post.id"
-        :post="post"
-        @reply="reply"
+          v-for="post in posts"
+          :key="post.id"
+          :post="post"
+          @reply="reply"
       ></vue-post-wrapper>
 
       <div class="row no-gutters mb-3">
@@ -148,10 +148,10 @@
 
       {% if is_writeable %}
         <vue-form
-          id="js-submit-form"
-          ref="js-submit-form"
-          :post="undefinedPost"
-          @save="resetPost"
+            id="js-submit-form"
+            ref="js-submit-form"
+            :post="undefinedPost"
+            @save="resetPost"
         ></vue-form>
       {% endif %}
 
@@ -177,10 +177,9 @@
     {% block side_menu %}
       <div id="js-sidebar" class="box" v-cloak>
         <ul class="side-menu mt-2">
-          <li v-if="isAuthorized" :class="{'on': topic.is_subscribed}" class="btn-subscribe">
-            <a @click="subscribe(topic)" href="javascript:">
+          <li v-if="isAuthorized" :class="{'on': topic.is_subscribed}" class="btn-subscribe" @click="subscribe(topic)">
+            <a>
               <i :class="{'fas': topic.is_subscribed, 'far': !topic.is_subscribed}" class="fa-star fa-fw"></i>
-
               <span v-if="topic.is_subscribed">Zakończ obserwację</span>
               <span v-else>Obserwuj wątek</span>
             </a>

@@ -35,7 +35,7 @@
         <li>
           {% set labels = ['Usuń z ulubionych', 'Dodaj do ulubionych'] %}
           <a class="btn-subscribe {{ subscribed ? 'on' }}"
-             href="{{ route('wiki.subscribe', [wiki.id]) }}"
+             data-href="{{ route('wiki.subscribe', [wiki.id]) }}"
              data-off="{{ labels[0] }}"
              data-on="{{ labels[1] }}"
              title="Obserwując tę stronę będziesz otrzymywał powiadomienia o jej zmianach">

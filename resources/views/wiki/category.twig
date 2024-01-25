@@ -18,10 +18,18 @@
         </a>
       {% endif %}
 
-      <a class="nav-item" href="{{ route('wiki.submit') }}?parentId={{ wiki.id }}" title="Dodaj nową stronę w tej kategorii"><span>Napisz nowy artykuł w tym dziale</span></a>
-      <a class="nav-item" href="{{ route('wiki.subscribe', [wiki.id]) }}" class="btn-subscribe {{ subscribed ? 'on' }}" data-off="{{ labels[0] }}" data-on="{{ labels[1] }}"
+      <a class="nav-item"
+         href="{{ route('wiki.submit') }}?parentId={{ wiki.id }}"
+         title="Dodaj nową stronę w tej kategorii">
+        <span>Napisz nowy artykuł w tym dziale</span>
+      </a>
+
+      {% set labels = ['Usuń z ulubionych', 'Dodaj do ulubionych'] %}
+      <a class="nav-item btn-subscribe {{ subscribed ? 'on' }}"
+         data-href="{{ route('wiki.subscribe', [wiki.id]) }}"
+         data-off="{{ labels[0] }}"
+         data-on="{{ labels[1] }}"
          title="Obserwując tę stronę będziesz otrzymywał powiadomienia o jej zmianach">
-        {% set labels = ['Usuń z ulubionych', 'Dodaj do ulubionych'] %}
         <span>{{ labels[not subscribed] }}</span>
       </a>
 
