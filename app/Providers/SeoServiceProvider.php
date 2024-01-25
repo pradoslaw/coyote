@@ -29,7 +29,10 @@ class SeoServiceProvider extends ServiceProvider
         if ($request->getHost() === '4programmers.dev') {
             return 'noindex,nofollow';
         }
-        if ($request->getRequestUri() === '/Forum/Interesting') {
+        if ($request->getPathInfo() === '/Search') {
+            return 'noindex,follow';
+        }
+        if ($request->getPathInfo() === '/Forum/Interesting') {
             return 'noindex,nofollow';
         }
         return 'index,follow';

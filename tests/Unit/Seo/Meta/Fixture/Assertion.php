@@ -18,6 +18,11 @@ trait Assertion
         $this->assertMetaRobots($uri, 'noindex,nofollow');
     }
 
+    function assertCrawlable(string $uri): void
+    {
+        $this->assertMetaRobots($uri, 'noindex,follow');
+    }
+
     function assertMetaRobots(string $uri, string $metaRobots): void
     {
         Assert::assertSame($metaRobots, $this->metaProperty('robots', $uri));

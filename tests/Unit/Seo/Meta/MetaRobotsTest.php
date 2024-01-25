@@ -21,7 +21,7 @@ class MetaRobotsTest extends TestCase
      */
     public function userTags()
     {
-        $this->assertNoIndexable('/Forum/Interesting');
+        $this->assertNoIndexable('/Forum/Interesting?query');
     }
 
     /**
@@ -38,5 +38,13 @@ class MetaRobotsTest extends TestCase
     public function developerEnvironment()
     {
         $this->assertNoIndexable('http://4programmers.dev/');
+    }
+
+    /**
+     * @test
+     */
+    public function search()
+    {
+        $this->assertCrawlable('/Search?query');
     }
 }
