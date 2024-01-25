@@ -27,6 +27,14 @@ class MetaCanonicalTest extends TestCase
     /**
      * @test
      */
+    public function ignoreQueryParam()
+    {
+        $this->assertCanonical('/Praca?query=param', '/Praca');
+    }
+
+    /**
+     * @test
+     */
     public function https()
     {
         $this->assertSelfCanonicalAbsolute('https://4programmers.local/');

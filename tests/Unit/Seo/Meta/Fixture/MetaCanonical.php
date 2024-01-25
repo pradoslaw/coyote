@@ -12,9 +12,14 @@ trait MetaCanonical
 
     function assertSelfCanonical(string $uri): void
     {
+        $this->assertCanonical($uri, $uri);
+    }
+
+    function assertCanonical(string $uri, string $canonical): void
+    {
         Assert::assertThat(
             $this->metaCanonical($uri),
-            $this->relativeUri($uri));
+            $this->relativeUri($canonical));
     }
 
     function assertSelfCanonicalAbsolute(string $url): void
