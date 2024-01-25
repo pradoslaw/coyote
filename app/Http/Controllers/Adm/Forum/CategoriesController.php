@@ -4,6 +4,7 @@ namespace Coyote\Http\Controllers\Adm\Forum;
 
 use Boduch\Grid\Source\CollectionSource;
 use Coyote\Events\ForumSaved;
+use Coyote\Forum;
 use Coyote\Http\Controllers\Adm\BaseController;
 use Coyote\Http\Forms\Forum\ForumForm;
 use Coyote\Http\Grids\Adm\Forum\CategoriesGrid;
@@ -45,10 +46,15 @@ class CategoriesController extends BaseController
         return $this->view('adm.forum.categories.home')->with('grid', $grid);
     }
 
-    public function edit(?int $id): View
+    public function edit(int $id = null): View
     {
-        $forum = $this->forum->findOrNew($id);
-        $this->breadcrumb->push($forum->name ?? 'Dodaj nową', route('forum.category', ['forum' => $forum]));
+        if ($id) {
+            $forum = $this->forum->findOrNew($id);
+            $this->breadcrumb->push($forum->name, route('forum.category', ['forum' => $forum]));
+        } else {
+            $forum = new Forum;
+            $this->breadcrumb->push('Dodaj nową', route('adm.forum.categories.save'));
+        }
 
         return $this->view('adm.forum.categories.save')->with('form', $this->getForm($forum));
     }
