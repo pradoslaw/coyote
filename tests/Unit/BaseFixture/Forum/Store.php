@@ -12,15 +12,7 @@ trait Store
 
     function storeThread(Forum $forum, Topic $topic, ?Post $post = null): Topic
     {
-        $forum->description = 'irrelevant';
-        $forum->slug ??= 'irrelevant_' . \preg_replace('/\d+/', 'x', uniqid());
-        /** We can't set duplicated slug, because RedirectIfMoved
-         * doesn't properly handle duplicated slugs and infinite
-         * redirects occur. Additionally, {forum} pattern in routes
-         * doesn't accept digits. */
-        $forum->title ??= 'irrelevant';
-        $forum->name ??= 'irrelevant';
-        $forum->save();
+        $this->storeForum($forum);
 
         $topic->forum_id = $forum->id;
         $topic->title ??= 'irrelevant';
@@ -41,6 +33,19 @@ trait Store
 
         $topic->save();
         return $topic;
+    }
+
+    function storeForum(Forum $forum): void
+    {
+        $forum->description = 'irrelevant';
+        $forum->slug ??= 'irrelevant_' . \preg_replace('/\d+/', 'x', uniqid());
+        /** We can't set duplicated slug, because RedirectIfMoved
+         * doesn't properly handle duplicated slugs and infinite
+         * redirects occur. Additionally, {forum} pattern in routes
+         * doesn't accept digits. */
+        $forum->title ??= 'irrelevant';
+        $forum->name ??= 'irrelevant';
+        $forum->save();
     }
 
     function placeholderPost(Topic $topic): Post

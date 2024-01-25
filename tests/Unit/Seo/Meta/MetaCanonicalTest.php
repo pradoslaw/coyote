@@ -28,6 +28,23 @@ class MetaCanonicalTest extends TestCase
     /**
      * @test
      */
+    public function categoriesNoPage()
+    {
+        $this->assertCanonical('/Forum?page=2', '/Forum');
+    }
+
+    /**
+     * @test
+     */
+    public function categoryPage()
+    {
+        $this->newCategory('Fruits');
+        $this->assertSelfCanonical('/Forum/Fruits?page=2');
+    }
+
+    /**
+     * @test
+     */
     public function topicPage()
     {
         [$category, $topic] = $this->newTopic();

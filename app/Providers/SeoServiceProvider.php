@@ -51,9 +51,18 @@ class SeoServiceProvider extends ServiceProvider
 
     private function queryString(Request $request): string
     {
-        if (\str_starts_with($request->getPathInfo(), '/Forum')) {
+        if ($this->allowQueryParam($request)) {
             return \rTrim('?' . $request->getQueryString(), '?');
         }
         return '';
+    }
+
+    private function allowQueryParam(Request $request): bool
+    {
+        $uri = $request->getPathInfo();
+        if ($uri === '/Forum') {
+            return false;
+        }
+        return \str_starts_with($uri, '/Forum');
     }
 }
