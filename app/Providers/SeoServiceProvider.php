@@ -51,10 +51,19 @@ class SeoServiceProvider extends ServiceProvider
 
     private function queryString(Request $request): string
     {
-        if ($this->allowQueryParam($request)) {
-            return \rTrim('?' . $request->getQueryString(), '?');
+        return \rTrim('?' . \http_build_query($this->queryStringParams($request)), '?');
+    }
+
+    private function queryStringParams(Request $request): array
+    {
+        if (!$this->allowQueryParam($request)) {
+            return [];
         }
-        return '';
+        $queryParams = $this->queryParams($request);
+        if (\array_key_exists('page', $queryParams)) {
+            return ['page' => $queryParams['page']];
+        }
+        return [];
     }
 
     private function allowQueryParam(Request $request): bool
@@ -64,5 +73,11 @@ class SeoServiceProvider extends ServiceProvider
             return false;
         }
         return \str_starts_with($uri, '/Forum');
+    }
+
+    private function queryParams(Request $request): array
+    {
+        \parse_str($request->getQueryString(), $queryParams);
+        return $queryParams;
     }
 }

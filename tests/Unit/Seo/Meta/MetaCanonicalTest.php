@@ -45,6 +45,24 @@ class MetaCanonicalTest extends TestCase
     /**
      * @test
      */
+    public function categoryIgnoreQueryParam()
+    {
+        $this->newCategory('Cars');
+        $this->assertCanonical('/Forum/Cars?sort=id&order=asc', '/Forum/Cars');
+    }
+
+    /**
+     * @test
+     */
+    public function categoryIgnoreQueryParamPreservePage()
+    {
+        $this->newCategory('Cars');
+        $this->assertCanonical('/Forum/Cars?sort=id&page=2&order=asc', '/Forum/Cars?page=2');
+    }
+
+    /**
+     * @test
+     */
     public function topicPage()
     {
         [$category, $topic] = $this->newTopic();
