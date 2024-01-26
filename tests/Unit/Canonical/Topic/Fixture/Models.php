@@ -9,6 +9,12 @@ trait Models
 {
     use BaseFixture\Forum\Store;
 
+    function newTopic(): string
+    {
+        $topic = $this->storeThread(new Forum, new Topic);
+        return "{$topic->forum->slug}/{$topic->id}-{$topic->slug}";
+    }
+
     function newForumTopic(string $forumSlug, string $topicTitle): int
     {
         $topic = $this->storeThread(
