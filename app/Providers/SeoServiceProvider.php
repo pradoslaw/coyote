@@ -30,6 +30,9 @@ class SeoServiceProvider extends ServiceProvider
         if ($request->getHost() === '4programmers.dev') {
             return 'noindex,nofollow';
         }
+        if ($request->getPathInfo() === '/Mikroblogi') {
+            return 'noindex,follow';
+        }
         if ($request->getPathInfo() === '/Search') {
             return 'noindex,follow';
         }

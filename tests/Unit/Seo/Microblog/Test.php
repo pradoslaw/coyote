@@ -9,6 +9,7 @@ class Test extends TestCase
     use Seo\Microblog\Fixture\Assertion;
     use Seo\Microblog\Fixture\Models;
     use Seo\Meta\Fixture\MetaCanonical;
+    use Seo\Meta\Fixture\Assertion;
 
     /**
      * @test
@@ -25,5 +26,22 @@ class Test extends TestCase
     {
         $id = $this->newMicroblog();
         $this->assertSelfCanonical("/Mikroblogi/View/$id");
+    }
+
+    /**
+     * @test
+     */
+    public function pagination()
+    {
+        $this->assertCrawlable('/Mikroblogi');
+    }
+
+    /**
+     * @test
+     */
+    public function microblogIndexable()
+    {
+        $id = $this->newMicroblog();
+        $this->assertIndexable("/Mikroblogi/View/$id");
     }
 }
