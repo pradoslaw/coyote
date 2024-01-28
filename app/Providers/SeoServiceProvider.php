@@ -48,7 +48,7 @@ class SeoServiceProvider extends ServiceProvider
 
     private function metaCanonical(Request $request): ?string
     {
-        if (\str_starts_with($request->getPathInfo(), '/Mikroblogi')) {
+        if ($request->getPathInfo() === '/Mikroblogi') {
             return null;
         }
         return 'https://' .
