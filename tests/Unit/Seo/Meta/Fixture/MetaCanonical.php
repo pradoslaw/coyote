@@ -3,11 +3,12 @@ namespace Tests\Unit\Seo\Meta\Fixture;
 
 use PHPUnit\Framework\Assert;
 use Tests\Unit\BaseFixture\Server;
+use Tests\Unit\BaseFixture\View;
 use Tests\Unit\BaseFixture\View\ViewDom;
 
 trait MetaCanonical
 {
-    use Server\Http;
+    use View\HtmlView;
     use Server\RelativeUri;
 
     function assertSelfCanonical(string $uri): void
@@ -34,10 +35,5 @@ trait MetaCanonical
             return $canonical->getAttribute('href');
         }
         return null;
-    }
-
-    function htmlView(string $uri): string
-    {
-        return $this->server->get($uri)->assertSuccessful()->content();
     }
 }

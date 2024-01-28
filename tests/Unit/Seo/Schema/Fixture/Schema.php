@@ -1,21 +1,16 @@
 <?php
 namespace Tests\Unit\Seo\Schema\Fixture;
 
-use Tests\Unit\BaseFixture\Server;
+use Tests\Unit\BaseFixture\View;
 use Tests\Unit\BaseFixture\View\JavaScriptFixture;
 
 trait Schema
 {
-    use Server\Http;
+    use View\HtmlView;
 
     function schema(string $uri, string $type): ?array
     {
-        return $this->firstSchema(new JavaScriptFixture($this->viewHtml($uri)), $type);
-    }
-
-    function viewHtml(string $uri): string
-    {
-        return $this->server->get($uri)->assertSuccessful()->content();
+        return $this->firstSchema(new JavaScriptFixture($this->htmlView($uri)), $type);
     }
 
     function firstSchema(JavaScriptFixture $viewFixture, string $type): ?array

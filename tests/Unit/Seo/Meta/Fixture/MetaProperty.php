@@ -1,12 +1,12 @@
 <?php
 namespace Tests\Unit\Seo\Meta\Fixture;
 
-use Tests\Unit\BaseFixture\Server;
+use Tests\Unit\BaseFixture\View;
 use Tests\Unit\BaseFixture\View\HtmlFixture;
 
 trait MetaProperty
 {
-    use Server\Http;
+    use View\HtmlView;
 
     function metaProperty(string $property, string $uri): string
     {
@@ -22,10 +22,5 @@ trait MetaProperty
             }
         }
         throw new \Exception("Failed to recognize in view meta name: $name");
-    }
-
-    function htmlView(string $uri): string
-    {
-        return $this->server->get($uri)->assertSuccessful()->content();
     }
 }

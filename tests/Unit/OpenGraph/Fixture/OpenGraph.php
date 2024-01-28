@@ -1,12 +1,12 @@
 <?php
 namespace Tests\Unit\OpenGraph\Fixture;
 
-use Tests\Unit\BaseFixture\Server;
+use Tests\Unit\BaseFixture\View;
 use Tests\Unit\BaseFixture\View\HtmlFixture;
 
 trait OpenGraph
 {
-    use Server\Http;
+    use View\HtmlView;
 
     function metaProperty(string $property, string $uri): string
     {
@@ -22,10 +22,5 @@ trait OpenGraph
             }
         }
         throw new \Exception("Failed to recognize in view meta property: $property");
-    }
-
-    function htmlView(string $uri): string
-    {
-        return $this->server->get($uri)->assertSuccessful()->content();
     }
 }
