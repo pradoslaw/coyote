@@ -41,6 +41,17 @@ class RemoveFirstPageTest extends TestCase
     /**
      * @test
      */
+    public function queryParamPreserveOrder()
+    {
+        $uri = $this->newTopic();
+        $this->assertRedirectGet(
+            "/Forum/{$uri}?bbb=222&page=1&aaa=111",
+            "/Forum/{$uri}?bbb=222&aaa=111");
+    }
+
+    /**
+     * @test
+     */
     public function pageSecond()
     {
         $uri = $this->newTopic();

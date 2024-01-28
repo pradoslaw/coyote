@@ -102,7 +102,7 @@ class RedirectToCanonicalUrl
 
     private function queryParams(Request $request): array
     {
-        \parse_str($request->getQueryString(), $queryParams);
+        \parse_str($request->server->get('QUERY_STRING'), $queryParams);
         return $queryParams;
     }
 }
