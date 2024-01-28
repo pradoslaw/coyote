@@ -37,7 +37,7 @@ class Test extends TestCase
      */
     public function homepage()
     {
-        $this->assertCanonicalGet('/');
+        $this->assertNoRedirectGet('/');
     }
 
     /**
@@ -45,7 +45,7 @@ class Test extends TestCase
      */
     public function homepageQueryParam()
     {
-        $this->assertCanonicalGet('/?query=param');
+        $this->assertNoRedirectGet('/?query=param');
     }
 
     /**

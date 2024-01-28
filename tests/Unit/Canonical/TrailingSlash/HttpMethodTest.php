@@ -13,7 +13,7 @@ class HttpMethodTest extends TestCase
      */
     public function canonical()
     {
-        $this->assertCanonical($this->get('/Forum'));
+        $this->assertNoRedirect($this->get('/Forum'));
     }
 
     /**
@@ -29,7 +29,7 @@ class HttpMethodTest extends TestCase
      */
     public function postCanonical()
     {
-        $this->assertCanonical($this->post('/Forum/Preview'));
+        $this->assertNoRedirect($this->post('/Forum/Preview'));
     }
 
     /**
@@ -48,7 +48,7 @@ class HttpMethodTest extends TestCase
      */
     public function headCanonical()
     {
-        $this->assertCanonical($this->head('/Forum'));
+        $this->assertNoRedirect($this->head('/Forum'));
     }
 
     /**

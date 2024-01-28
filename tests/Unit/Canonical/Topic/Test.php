@@ -15,7 +15,7 @@ class Test extends TestCase
     public function canonical()
     {
         $topicId = $this->newForumTopic('apple-category', 'Apple thread');
-        $this->assertCanonicalGet("/Forum/apple-category/$topicId-apple_thread");
+        $this->assertNoRedirectGet("/Forum/apple-category/$topicId-apple_thread");
     }
 
     /**

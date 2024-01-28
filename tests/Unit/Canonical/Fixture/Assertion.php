@@ -14,12 +14,12 @@ trait Assertion
         $this->assertRedirect($this->get($requestUri), $expectedRedirect, status:301);
     }
 
-    function assertCanonicalGet(string $requestUri): void
+    function assertNoRedirectGet(string $requestUri): void
     {
-        $this->assertCanonical($this->get($requestUri));
+        $this->assertNoRedirect($this->get($requestUri));
     }
 
-    function assertCanonical(TestResponse $response): void
+    function assertNoRedirect(TestResponse $response): void
     {
         $response->assertStatus(200);
     }
