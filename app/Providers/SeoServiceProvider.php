@@ -18,7 +18,7 @@ class SeoServiceProvider extends ServiceProvider
             $view->with([
                 'schema_organization' => TwigLiteral::fromHtml(new Schema(new Schema\Organization())),
                 'meta_robots'         => $this->metaRobots(),
-                'meta_canonical'      => $this->metaCanonical(),
+                'meta_canonical'      => $this->metaCanonicalForRequest(),
             ]);
         });
     }
@@ -39,10 +39,18 @@ class SeoServiceProvider extends ServiceProvider
         return 'index,follow';
     }
 
-    function metaCanonical(): string
+    private function metaCanonicalForRequest(): ?string
     {
         /** @var Request $request */
         $request = $this->app['request'];
+        return $this->metaCanonical($request);
+    }
+
+    private function metaCanonical(Request $request): ?string
+    {
+        if (\str_starts_with($request->getPathInfo(), '/Mikroblogi')) {
+            return null;
+        }
         return 'https://' .
             $request->getHost() .
             $request->getPathInfo() .

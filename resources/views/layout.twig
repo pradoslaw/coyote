@@ -11,7 +11,9 @@
   {% block head %}
     <title>{% block title %} :: 4programmers.net{% endblock %}</title>
 
-    <link rel="canonical" href="{{ meta_canonical }}">
+    {% if meta_canonical %}
+      <link rel="canonical" href="{{ meta_canonical }}">
+    {% endif %}
 
     <meta name="description" content="{% block description %}{% endblock %}">
     <meta name="keywords" content="{% block keywords %}{% endblock %}">

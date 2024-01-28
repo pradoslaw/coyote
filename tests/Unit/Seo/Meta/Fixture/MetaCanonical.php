@@ -27,13 +27,13 @@ trait MetaCanonical
         Assert::assertSame($url, $this->metaCanonical($url));
     }
 
-    function metaCanonical(string $uri): string
+    function metaCanonical(string $uri): ?string
     {
         $dom = new ViewDom($this->htmlView($uri));
         foreach ($dom->elements(xPath:"/html/head/link[@rel='canonical']") as $canonical) {
             return $canonical->getAttribute('href');
         }
-        throw new \AssertionError('Failed finding <link rel="canonical"> tag.');
+        return null;
     }
 
     function htmlView(string $uri): string
