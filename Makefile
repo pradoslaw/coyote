@@ -1,5 +1,5 @@
-install:     file-permission composer-install migration seed install-assets assets-production install-es install-passport install-push
-install-dev: file-permission composer-install migration seed install-assets assets-dev        install-es install-passport install-push
+install:     file-permission composer-install migration es-create seed es-index install-assets assets-production install-passport install-push
+install-dev: file-permission composer-install migration es-create seed es-index install-assets assets-dev        install-passport install-push
 update:      update-repo composer-install migration assets-production cache-config
 update-dev:  update-repo composer-install migration assets-dev
 
@@ -45,8 +45,10 @@ cache-config:
 	docker-compose exec -T -u nginx php php artisan config:cache
 	docker-compose exec -T -u nginx php php artisan route:cache
 
-install-es:
+es-create:
 	docker-compose exec -T -u nginx php php artisan es:create --force
+
+es-index:
 	docker-compose exec -T -u nginx php php artisan es:index --force
 
 install-passport:
