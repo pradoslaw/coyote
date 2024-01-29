@@ -109,11 +109,9 @@ class SearchBuilder extends QueryBuilder
         $this->must(new Filters\Term('model', class_basename(\Coyote\Job::class)));
 
         if ($this->request->filled('q')) {
-            $this->must(
-                new MultiMatch(
-                    $this->filterString($this->request->get('q')),
-                    ['title^3', 'description', 'recruitment', 'tags^2', 'firm.name']
-                )
+            $this->must(new MultiMatch(
+                $this->filterString($this->request->get('q')),
+                ['title^3', 'description', 'recruitment', 'tags^2', 'firm.name']),
             );
         } else {
             // no keywords were provided -- let's calculate score based on score functions
@@ -139,7 +137,10 @@ class SearchBuilder extends QueryBuilder
         }
 
         if ($this->request->filled('salary')) {
-            $this->addSalaryFilter($this->filterNumber($this->request->get('salary')), (int)$this->request->get('currency'));
+            $salary = $this->request->get('salary');
+            if (\is_string($salary)) {
+                $this->addSalaryFilter($this->filterNumber($salary), (int)$this->request->get('currency'));
+            }
         }
 
         if ($this->request->filled('remote')) {
