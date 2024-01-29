@@ -1,6 +1,10 @@
 version: '3.5'
 
 services:
+  php:
+    environment:
+      - PHP_IDE_CONFIG=serverName=coyote
+
   db:
     command: postgres -c config_file=/etc/postgresql.conf
     volumes:
