@@ -47,7 +47,7 @@ export default class VueEditor extends Vue {
         ':)': [':smile:', ':twinkle:', ':slight_smile:', ':upside_down_face:', ':innocent:'],
         ';)': [':wink:', ':smile_tear:'],
         ':D': [':laugh:', ':sweat_smile:', ':lol:', ':joy:', ':rotfl:'],
-        ':>': [':happy:'],
+        ':>': [':happy:', ':hugging_face:'],
         ':P': [':tongue:', ':tongue_closed_eyes:'],
         ';P': [':tongue_wink:', ':zany_face:'],
         ':*': [':kissing:', ':kissing_heart:', ':kissing_closed_eyes:', ':kissing_smiling:'],
@@ -67,6 +67,7 @@ export default class VueEditor extends Vue {
           ':black_heart:', ':brown_heart:', ':orange_heart:', ':green_heart:', ':blue_heart:', ':purple_heart:', ':white_heart:',
         ],
         '^^': [':relaxed:', ':blush:'],
+        ':?': [':thinking:', ':yawn:'],
       }
     );
   }
