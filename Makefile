@@ -1,15 +1,7 @@
-.PHONY: all update-repo file-permission composer-install migration seed assets-dev assets-production install-es install-passport
-
-install: file-permission composer-install migration seed install-assets assets-production install-es install-passport install-push
-install-dev: file-permission composer-install migration seed install-assets assets-dev install-es install-passport install-push
-update: update-repo composer-install migration assets-production cache-config
-update-dev: update-repo composer-install migration assets-dev
-
-help:
-	@echo 'make install -- download dependencies and install'
-	@echo 'make install-dev -- download dependencies and install without minifing assets'
-	@echo 'make update-dev -- pull repo and rebuild assets'
-	@echo 'make update -- pull repo and rebuild assets without minifing'
+install:     file-permission composer-install migration seed install-assets assets-production install-es install-passport install-push
+install-dev: file-permission composer-install migration seed install-assets assets-dev        install-es install-passport install-push
+update:      update-repo composer-install migration assets-production cache-config
+update-dev:  update-repo composer-install migration assets-dev
 
 up:
 	docker-compose up -d
@@ -22,9 +14,6 @@ up-ci:
 
 stop-ci:
 	docker-compose -f docker-compose.yaml -f docker-compose.testing.yaml stop
-
-php:
-	docker-compose exec -u nginx php bash
 
 update-repo:
 	git reset --hard
@@ -65,5 +54,3 @@ install-passport:
 
 install-push:
 	docker-compose exec -T -u nginx php php artisan webpush:vapid
-
-
