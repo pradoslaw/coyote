@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       git-ref:
-        description: Git Ref (Optional)
+        description: Git revision (optional)
         required: false
 
 jobs:
@@ -15,13 +15,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Login to Docker hub
+      - name: Login to DockerHub
         run: docker login -u ${{ secrets.DOCKER_LOGIN }} -p ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build plugin
+      - name: Additional plugins
         run: ${{ secrets.ENABLE_PLUGIN }}
 
-      - name: Build docker
+      - name: Build docker image
         run: >
           docker build -t 4programmers/coyote:$GITHUB_SHA -t 4programmers/coyote:latest -f docker/coyote/Dockerfile \
             --build-arg FRONTEND_SENTRY_DSN=${{ secrets.FRONTEND_SENTRY_DSN }} \
@@ -29,10 +29,10 @@ jobs:
             --build-arg SENTRY_API_KEY=${{ secrets.SENTRY_API_KEY }} \
             --build-arg RELEASE=$GITHUB_RUN_ID .
 
-      - name: Push to registry
+      - name: Push to docker registry
         run: docker push -a 4programmers/coyote
 
-      - name: executing remote ssh commands using password
+      - name: Update production docker images
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.PRODUCTION_IP }}
@@ -45,7 +45,7 @@ jobs:
             sudo docker service update --image 4programmers/coyote:$GITHUB_SHA coyote_worker
             sudo docker service update --image 4programmers/coyote:$GITHUB_SHA coyote_cron
 
-      - name: Sentry Release Backend
+      - name: Notify sentry
         uses: getsentry/action-release@v1.1.6
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
