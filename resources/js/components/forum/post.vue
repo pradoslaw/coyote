@@ -413,7 +413,7 @@ export default class VuePost extends Vue {
 
     if (this.isCommenting) {
       // @ts-ignore
-      this.$nextTick(() => this.commentForm.textarea.focus());
+      this.$nextTick(() => this.commentForm.focus());
     }
   }
 

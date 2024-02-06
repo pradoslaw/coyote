@@ -72,6 +72,10 @@ export default class VueCommentForm extends Vue {
       .finally(() => this.isProcessing = false);
   }
 
+  focus() {
+    this.textarea.focus();
+  }
+
   cancel() {
     this.$emit('cancel');
   }
