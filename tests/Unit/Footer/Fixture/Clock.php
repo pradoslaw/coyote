@@ -21,4 +21,9 @@ trait Clock
     {
         $this->clock->setYear($year);
     }
+
+    function fixedExecutionTime(float $seconds): void
+    {
+        $this->clock->setExecutionTime($seconds);
+    }
 }

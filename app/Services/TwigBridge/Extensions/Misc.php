@@ -1,14 +1,18 @@
 <?php
-
 namespace Coyote\Services\TwigBridge\Extensions;
 
+use Coyote\Domain\Clock;
 use Coyote\Services\Declination;
 use Twig_Extension;
-use Twig_SimpleFunction;
 use Twig_SimpleFilter;
+use Twig_SimpleFunction;
 
 class Misc extends Twig_Extension
 {
+    public function __construct(private Clock $clock)
+    {
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -28,7 +32,7 @@ class Misc extends Twig_Extension
             new Twig_SimpleFunction('declination', [Declination::class, 'format']),
             new Twig_SimpleFunction('sortable', [$this, 'sortable'], ['is_safe' => ['html']]),
             new Twig_SimpleFunction('is_url', [$this, 'isUrl'], ['is_safe' => ['html']]),
-            new Twig_SimpleFunction('current_url', [$this, 'currentUrl'])
+            new Twig_SimpleFunction('current_url', [$this, 'currentUrl']),
         ];
     }
 
@@ -44,7 +48,7 @@ class Misc extends Twig_Extension
             // uzywane w szablonie home.twig do poprawnego wyswietlania title w sekcji "ostatnie zmiany na forum"
             new Twig_SimpleFilter('unescape', function ($value) {
                 return html_entity_decode($value, ENT_QUOTES, 'UTF-8');
-            })
+            }),
         ];
     }
 
@@ -55,18 +59,11 @@ class Misc extends Twig_Extension
      */
     public function totalRuntime()
     {
-        // w przypadku testow funkcjonalnych, stala ta nie jest deklarowana
-        if (!defined('LARAVEL_START')) {
-            return false;
-        }
-
-        $timer = microtime(true) - LARAVEL_START;
-
+        $timer = $this->clock->executionTime();
         if ($timer < 1) {
-            return (int) substr((string) $timer, 2, 3) . ' ms';
-        } else {
-            return number_format($timer, 2) . ' s';
+            return (int)substr((string)$timer, 2, 3) . ' ms';
         }
+        return number_format($timer, 2) . ' s';
     }
 
     /**
@@ -103,13 +100,13 @@ class Misc extends Twig_Extension
 
         $parameters = array_merge(
             request()->all(),
-            ['sort' => $column, 'order' => $order == 'desc' ? 'asc' : 'desc']
+            ['sort' => $column, 'order' => $order == 'desc' ? 'asc' : 'desc'],
         );
 
         return link_to(
             request()->path() . '?' . http_build_query($parameters),
             $title,
-            ['class' => "sort " . ($sort == $column ? strtolower($order) : '')]
+            ['class' => "sort " . ($sort == $column ? strtolower($order) : '')],
         );
     }
 

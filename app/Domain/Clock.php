@@ -7,4 +7,12 @@ class Clock
     {
         return date('Y');
     }
+
+    public function executionTime(): float
+    {
+        if (defined('LARAVEL_START')) {
+            return \microtime(true) - \LARAVEL_START;
+        }
+        return 0;
+    }
 }
