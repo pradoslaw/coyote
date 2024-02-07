@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Unit\BaseFixture\Server\Laravel\PhpUnit;
 
+use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use PHPUnit\Framework\Test;
 use Tests\Unit\BaseFixture\Server\Laravel;
@@ -21,11 +22,28 @@ class TestRun
     private function instance(): Laravel\TestCase
     {
         if ($this->isTransactional()) {
-            return new class extends Laravel\TestCase {
+            return new class ($this) extends Laravel\TestCase {
                 use DatabaseTransactions;
             };
         }
-        return new Laravel\TestCase();
+        return new Laravel\TestCase($this);
+    }
+
+    public function beforeBoot(Application $app): void
+    {
+        /**
+         * In order to polymorphically call {@see Test::beforeBoot},
+         * there would have to be a feature in PhpUnit which allows
+         * to call a "register" method before setting up laravel
+         * application.
+         *
+         * This is a workaround, but at least when we override this method,
+         * PHP type system will check it, since traits can't have duplicated
+         * methods.
+         */
+        if (\method_exists($this->test, 'beforeBoot')) {
+            $this->test->beforeBoot($app);
+        }
     }
 
     private function isLaravelApplication(): bool

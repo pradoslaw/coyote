@@ -1,6 +1,7 @@
 <?php
 namespace Coyote\Providers;
 
+use Coyote\Domain\Clock;
 use Coyote\Domain\User\UserSettings;
 use Coyote\Http\Composers\InitialStateComposer;
 use Coyote\Http\Factories\CacheFactory;
@@ -23,11 +24,14 @@ class ViewServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        /** @var Cache\Repository $cache */
         $cache = app(Cache\Repository::class);
+        /** @var Clock $clock */
+        $clock = app(Clock::class);
         /** @var Factory $view */
         $view = $this->app['view'];
         $view->composer(['layout', 'adm.home'], InitialStateComposer::class);
-        $view->composer('layout', function (View $view) use ($cache) {
+        $view->composer('layout', function (View $view) use ($clock, $cache) {
             $view->with([
                 '__master_menu' => $this->buildMasterMenu(),
 
@@ -39,6 +43,8 @@ class ViewServiceProvider extends ServiceProvider
                     'content'  => TwigLiteral::fromHtml((new UserSettings)->cookieAgreement()),
                     'accepted' => $this->gdprAccepted(),
                 ],
+
+                'year' => $clock->year(),
             ]);
         });
     }
