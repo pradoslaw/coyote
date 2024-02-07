@@ -4,9 +4,9 @@ namespace Tests\Unit\WhatsNew;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture;
 use Tests\Unit\BaseFixture\Constraint\ArrayKey;
+use Tests\Unit\BaseFixture\Constraint\TrimmedString;
 use Tests\Unit\Seo;
 use Tests\Unit\WhatsNew;
-use Tests\Unit\WhatsNew\Fixture\TrimmedString;
 
 class Test extends TestCase
 {
