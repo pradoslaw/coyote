@@ -21,10 +21,10 @@ class Test extends TestCase
     /**
      * @test
      */
-    public function url()
+    public function urlCanonical()
     {
         $this->assertThat(
-            $this->metaProperty('og:url', uri:'/Forum'),
+            $this->metaProperty('og:url', uri:'/Forum?sort=id&page=2'),
             $this->relativeUri('/Forum'));
     }
 
