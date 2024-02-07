@@ -29,51 +29,51 @@
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
-  import Component from "vue-class-component";
-  import { Prop, Ref } from "vue-property-decorator";
-  import store from "../../store";
-  import VueAutosize from '../../plugins/autosize';
-  import VuePrompt from '../forms/prompt.vue';
-  import VueButton from '../forms/button.vue';
-  import { PostComment } from "@/types/models";
+import {PostComment} from "@/types/models";
+import Vue from 'vue';
+import Component from "vue-class-component";
+import {Prop, Ref} from "vue-property-decorator";
+import VueAutosize from '../../plugins/autosize';
+import store from "../../store";
+import VueButton from '../forms/button.vue';
+import VuePrompt from '../forms/prompt.vue';
 
-  Vue.use(VueAutosize);
+Vue.use(VueAutosize);
 
-  @Component({
-    name: 'post-comment-form',
-    store,
-    components: {
-      'vue-prompt': VuePrompt,
-      'vue-button': VueButton
-    }
-  })
-  export default class VueCommentForm extends Vue {
-    @Prop(Object)
-    comment!: PostComment;
+@Component({
+  name: 'post-comment-form',
+  store,
+  components: {
+    'vue-prompt': VuePrompt,
+    'vue-button': VueButton,
+  },
+})
+export default class VueCommentForm extends Vue {
+  @Prop(Object)
+  comment!: PostComment;
 
-    @Ref()
-    readonly textarea!: HTMLTextAreaElement;
+  @Ref()
+  readonly textarea!: HTMLTextAreaElement;
 
-    private isProcessing = false;
-    private readonly maxLength = 580;
+  private isProcessing = false;
+  private readonly maxLength = 580;
 
-    saveComment() {
-      this.isProcessing = true;
+  saveComment() {
+    this.isProcessing = true;
 
-      store.dispatch('posts/saveComment', this.comment)
-        .then(() => {
-          this.$emit('save');
+    store.dispatch('posts/saveComment', this.comment)
+      .then(() => {
+        this.$emit('save');
 
-          if (!this.comment.id) {
-            this.comment.text = '';
-          }
-        })
-        .finally(() => this.isProcessing = false);
-    }
-
-    cancel() {
-      this.$emit('cancel');
-    }
+        if (!this.comment.id) {
+          this.comment.text = '';
+        }
+      })
+      .finally(() => this.isProcessing = false);
   }
+
+  cancel() {
+    this.$emit('cancel');
+  }
+}
 </script>
