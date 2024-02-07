@@ -1,12 +1,21 @@
 <div class="card bg-dark">
   <div class="card-body">
-    <h5 class="card-title"><a class="text-light" title="Zobacz zmiany w serwisie 4programmers.net" href="{{ route('microblog.tag', ['4programmers.net']) }}">Nowości od #4programmers.net</a></h5>
-
+    <h5 class="card-title">
+      <a class="text-light"
+         title="Zobacz zmiany w serwisie 4programmers.net"
+         href="{{ href }}">
+        Nowości od #4programmers.net
+      </a>
+    </h5>
     <ul class="list-unstyled mb-0">
       {% for microblog in microblogs %}
         <li class="pt-1 pb-2">
-          <a class="d-block text-white-50 text-truncate" href="{{ route('microblog.view', [microblog.id]) }}">{{ excerpt(microblog.html) }}</a>
-          <small class="d-block text-light" style="font-size: 11px">— {{ microblog.created_at|date_localized('%d %b %y') }}</small>
+          <a class="d-block text-white-50 text-truncate" href="{{ microblog.href }}">
+            {{ microblog.summary }}
+          </a>
+          <div class="text-light" style="font-size: 11px">
+            — {{ microblog.date }}
+          </div>
         </li>
       {% endfor %}
     </ul>

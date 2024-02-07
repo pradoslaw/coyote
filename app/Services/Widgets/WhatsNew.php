@@ -1,38 +1,55 @@
 <?php
-
 namespace Coyote\Services\Widgets;
 
-use Coyote\Repositories\Contracts\MicroblogRepositoryInterface as MicroblogRepository;
-use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
+use Coyote\Microblog;
 use Coyote\Repositories\Criteria\Microblog\OnlyMine;
 use Coyote\Repositories\Criteria\Microblog\WithTag;
-use Illuminate\Contracts\Cache\Repository as Cache;
+use Coyote\Repositories\Eloquent\MicroblogRepository;
+use Coyote\User;
+use Illuminate\Contracts\Cache;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support;
 
 class WhatsNew
 {
-    protected MicroblogRepository $microblog;
-    protected UserRepository $user;
-    protected Cache $cache;
-
-    public function __construct(MicroblogRepository $microblog, UserRepository $user, Cache $cache)
+    public function __construct(
+        protected MicroblogRepository $microblog,
+        protected Cache\Repository    $cache)
     {
-        $this->microblog = $microblog;
-        $this->user = $user;
-        $this->cache = $cache;
     }
 
     public function render(): string
     {
-        return $this->cache->remember('widget:whats-new', now()->addHour(), function () {
-            $this->user->resetCriteria();
+        return $this->cache->remember(
+            'widget:whats-new',
+            now()->addHour(),
+            fn() => $this->widgetView()->render());
+    }
 
-            $user = $this->user->findBy('name', '4programmers.net', ['id']);
+    private function widgetView(): View
+    {
+        return view('homepage.whats-new', [
+            'href'       => route('microblog.tag', ['4programmers.net']),
+            'microblogs' => $this->microblogs(fn(Microblog $microblog) => [
+                'id'      => $microblog->id,
+                'summary' => excerpt($microblog->html),
+                'href'    => route('microblog.view', [$microblog->id]),
+                'date'    => $microblog->created_at->formatLocalized('%d %b %y'),
+            ]),
+        ]);
+    }
 
-            $this->microblog->resetCriteria();
-            $this->microblog->pushCriteria(new WithTag('4programmers.net'));
-            $this->microblog->pushCriteria(new OnlyMine($user->id ?? null));
+    private function microblogs(callable $callback): Support\Collection
+    {
+        $this->microblog->resetCriteria();
+        $this->microblog->pushCriteria(new WithTag('4programmers.net'));
+        $this->microblog->pushCriteria(new OnlyMine($this->userIdByName('4programmers.net')));
+        return $this->microblog->recent()->map($callback);
+    }
 
-            return view('homepage.whats-new', ['microblogs' => $this->microblog->recent()])->render();
-        });
+    protected function userIdByName(string $name): ?int
+    {
+        $user = User::query()->where('name', '=', $name)->first(['id']);
+        return $user->id ?? null;
     }
 }

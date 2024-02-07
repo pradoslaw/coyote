@@ -2,23 +2,14 @@
 namespace Tests\Unit\Seo\Link\Fixture;
 
 use Coyote\Services\Parser\Factories\PostFactory;
-use Illuminate\Contracts\Cache;
 use PHPUnit\Framework\Assert;
+use Tests\Unit\BaseFixture;
 use Tests\Unit\BaseFixture\Server\Laravel;
 
 trait Assertion
 {
     use Laravel\Application;
-
-    /**
-     * @before
-     */
-    function clearCache(): void
-    {
-        /** @var Cache\Repository $cache */
-        $cache = $this->laravel->app[Cache\Repository::class];
-        $cache->clear();
-    }
+    use BaseFixture\ClearedCache;
 
     function assertRenderPost(string $text, string $expected): void
     {

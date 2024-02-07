@@ -17,9 +17,6 @@ class DateTime extends Twig_Extension
             new Twig_SimpleFilter('format_date', function ($dateTime, $diffForHumans = true) {
                 return format_date($dateTime, $diffForHumans);
             }),
-            new Twig_SimpleFilter('date_localized', function ($dateTime, $format) {
-                return carbon($dateTime)->formatLocalized($format);
-            }),
         ];
     }
 }
