@@ -1,5 +1,4 @@
 <?php
-
 namespace Coyote\Services\TwigBridge\Extensions;
 
 use Illuminate\Contracts\Auth\Access\Gate;
@@ -8,18 +7,12 @@ use Twig_SimpleFunction;
 
 class User extends Twig_Extension
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function getName()
+    public function getName(): string
     {
         return 'TwigBridge_Extension_User';
     }
 
-    /**
-     * @return Twig_SimpleFunction[]
-     */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             // umozliwia szybki dostep do danych zalogowanego uzytkownika. zamiast:
@@ -32,7 +25,6 @@ class User extends Twig_Extension
             // jest zablokowany lub zbanowany
             new Twig_SimpleFunction('link_to_profile', [&$this, 'linkToProfile'], ['is_safe' => ['html']]),
             new Twig_SimpleFunction('can', [&$this, 'can'], ['is_safe' => ['html']]),
-            new Twig_SimpleFunction('creator_badge', [&$this, 'creatorBadge'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -47,16 +39,13 @@ class User extends Twig_Extension
         if (auth()->guest()) {
             return null;
         }
-
         if (strpos($name, '.') !== false) {
             [$name, $key] = explode('.', $name);
         }
-
         $element = auth()->user()->$name;
         if (isset($key)) {
             $element = isset($element[$key]) ? $element[$key] : '';
         }
-
         return $element;
     }
 
@@ -67,11 +56,9 @@ class User extends Twig_Extension
     public function linkToProfile(...$args)
     {
         $user = $args[0];
-
         if ($user instanceof \Coyote\User) {
             $user = $user->toArray();
         }
-
         if (is_array($user)) {
             $userId = isset($user['user_id']) ? $user['user_id'] : $user['id'];
             $name = isset($user['user_name']) ? $user['user_name'] : $user['name'];
@@ -83,12 +70,10 @@ class User extends Twig_Extension
             $isActive = array_shift($args);
             $isBlocked = array_shift($args);
         }
-
         $attributes = ['data-user-id' => $userId];
         if ($isBlocked || !$isActive) {
             $attributes['class'] = 'user-deleted';
         }
-
         return link_to_route('profile', $name, $userId, $attributes);
     }
 
@@ -103,27 +88,11 @@ class User extends Twig_Extension
         if (auth()->guest()) {
             return false;
         }
-
         if ($policy === null) {
             /** @var Gate $gate */
             $gate = app(Gate::class);
             return $gate->allows($ability);
         }
-
         return policy($policy)->$ability(auth()->user(), $policy, $object);
-    }
-
-    /**
-     * @param string $html
-     * @param bool $boolean
-     * @return string
-     */
-    public function creatorBadge($html, $boolean)
-    {
-        if (!$boolean) {
-            return $html;
-        }
-
-        return '<span class="badge badge-primary">' . $html . '</span>';
     }
 }

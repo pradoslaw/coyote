@@ -13,18 +13,12 @@ class Misc extends Twig_Extension
     {
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getName()
+    public function getName(): string
     {
         return 'TwigBridge_Extension_Misc';
     }
 
-    /**
-     * @return Twig_SimpleFunction[]
-     */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new Twig_SimpleFunction('timer', [$this, 'totalRuntime']),
@@ -36,10 +30,7 @@ class Misc extends Twig_Extension
         ];
     }
 
-    /**
-     * @return Twig_SimpleFilter[]
-     */
-    public function getFilters()
+    public function getFilters(): array
     {
         return [
             new Twig_SimpleFilter('encrypt', function ($data) {
@@ -52,12 +43,7 @@ class Misc extends Twig_Extension
         ];
     }
 
-    /**
-     * Zwraca czas generowania strony w sekundach lub milisekundach
-     *
-     * @return string
-     */
-    public function totalRuntime()
+    public function totalRuntime(): string
     {
         $timer = $this->clock->executionTime();
         if ($timer < 1) {
@@ -75,12 +61,10 @@ class Misc extends Twig_Extension
         if (!$url) {
             return '';
         }
-
         $path = parse_url($url, PHP_URL_PATH);
         if (!$path) {
             return '';
         }
-
         return trim($path, '/');
     }
 

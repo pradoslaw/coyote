@@ -82,7 +82,6 @@ return [
             'Coyote\Services\TwigBridge\Extensions\User',
             'Coyote\Services\TwigBridge\Extensions\DateTime',
             'Coyote\Services\TwigBridge\Extensions\Misc',
-            'Coyote\Services\TwigBridge\Extensions\Elasticsearch',
             'Coyote\Services\TwigBridge\Extensions\Block',
             'Coyote\Services\TwigBridge\Extensions\FormBuilder',
             'Coyote\Services\TwigBridge\Extensions\Media',
