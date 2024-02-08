@@ -53,14 +53,14 @@
                     <div role="tabpanel" class="tab-pane {{ settings['homepage.mode'] == 0 ? 'active' }}" id="interesting">
                       {% for topic in interesting %}
                         <div class="row">
-                          <span class="col-sm-2 d-none d-sm-block">
+                          <span class="display-count col-sm-2 col-lg-3 col-xl-2 d-none d-sm-block p-0">
                             <strong class="text-nowrap">{{ topic.views }}</strong>
                             <small class="text-nowrap">
                               {{ declination(topic.views, ['wyświetlenie', 'wyświetlenia', 'wyświetleń'], true) }}
                             </small>
                           </span>
 
-                          <div class="col-sm-10 col-12">
+                          <div class="col-12 col-sm-10 col-lg-9 col-xl-10">
                             <a title="[{{ topic.last_post_created_at|format_date }}] {{ topic.title }}"
                                href="{{ route('forum.topic', [topic.forum_slug, topic.id, topic.slug]) }}"
                                class="title">
@@ -80,14 +80,14 @@
                     <div role="tabpanel" class="tab-pane {{ settings['homepage.mode'] == 1 ? 'active' }}" id="newest">
                       {% for topic in newest %}
                         <div class="row">
-                          <span class="col-sm-2 d-none d-sm-block">
+                          <span class="display-count col-sm-2 col-lg-3 col-xl-2 d-none d-sm-block p-0">
                             <strong class="text-nowrap">{{ topic.views }}</strong>
                             <small class="text-nowrap">
                               {{ declination(topic.views, ['wyświetlenie', 'wyświetlenia', 'wyświetleń'], true) }}
                             </small>
                           </span>
 
-                          <div class="col-sm-10 col-12">
+                          <div class="col-12 col-sm-10 col-lg-9 col-xl-10">
                             <a title="[{{ topic.last_post_created_at|format_date }}] {{ topic.title }}"
                                href="{{ route('forum.topic', [topic.forum_slug, topic.id, topic.slug]) }}"
                                class="title">
