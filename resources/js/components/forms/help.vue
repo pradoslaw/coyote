@@ -200,7 +200,7 @@
 
             <p>Fragment kodu bez oznacznika</p>
             <ul>
-              <li><kbd>Alt+C</kbd>/<kbd>Alt+C</kbd> - dodaj pusty fragment kodu</li>
+              <li><kbd>Alt+C</kbd> - dodaj pusty fragment kodu</li>
             </ul>
 
             <p>Skróty operujące na kodzie i linijkach:</p>
