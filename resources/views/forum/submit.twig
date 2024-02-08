@@ -1,6 +1,6 @@
 {% extends 'forum.base' %}
 {% block title %}
-  {% spaceless %}
+  {% apply spaceless %}
     {% if topic.id is null %}
       Nowy wątek
     {% elseif post.id is null %}
@@ -10,7 +10,7 @@
     {% endif %}
 
     {{ parent() }}
-  {% endspaceless %}
+  {% endapply %}
 {% endblock %}
 
 {% import 'components.forms' as forms %}

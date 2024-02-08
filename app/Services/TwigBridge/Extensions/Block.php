@@ -3,18 +3,17 @@
 namespace Coyote\Services\TwigBridge\Extensions;
 
 use Coyote\Banner;
+use Coyote\Campaign as CampaignModel;
 use Coyote\Http\Factories\CacheFactory;
 use Coyote\Repositories\Contracts\BlockRepositoryInterface as BlockRepository;
 use Coyote\Repositories\Contracts\CampaignRepositoryInterface as CampaignRepository;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface as WikiRepository;
-use Coyote\Block as BlockModel;
-use Coyote\Campaign as CampaignModel;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
-use Twig_Extension;
-use Twig_SimpleFunction;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class Block extends Twig_Extension
+class Block extends AbstractExtension
 {
     use CacheFactory;
 
@@ -31,26 +30,15 @@ class Block extends Twig_Extension
         $this->wikiRepository = $wikiRepository;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getName()
-    {
-        return 'TwigBridge_Extension_Block';
-    }
-
-    /**
-     * @return Twig_SimpleFunction[]
-     */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             /**
              * Read the block content from database (or cache)
              */
-            new Twig_SimpleFunction('render_region', [&$this, 'renderRegion'], ['is_safe' => ['html']]),
-            new Twig_SimpleFunction('render_block', [&$this, 'renderBlock'], ['is_safe' => ['html']]),
-            new Twig_SimpleFunction('render_help_context', [&$this, 'renderHelpContext'], ['is_safe' => ['html']])
+            new TwigFunction('render_region', [&$this, 'renderRegion'], ['is_safe' => ['html']]),
+            new TwigFunction('render_block', [&$this, 'renderBlock'], ['is_safe' => ['html']]),
+            new TwigFunction('render_help_context', [&$this, 'renderHelpContext'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -108,12 +96,12 @@ class Block extends Twig_Extension
         $banner->increment('impressions');
         $html = app('html');
 
-        return (string) $html->link(
+        return (string)$html->link(
             route('campaign.redirect', ['banner' => $banner->id]),
             $html->image($this->filesystem->url($banner->filename), null, ['width' => 728, 'height' => 91]),
             ['class' => 'revive', 'target' => '_blank'],
             null,
-            false
+            false,
         );
     }
 

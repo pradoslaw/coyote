@@ -2,35 +2,24 @@
 
 namespace Coyote\Services\TwigBridge\Extensions;
 
-use Coyote\Services\FormBuilder\Fields\Field;
 use Coyote\Services\FormBuilder\Fields\ChildForm as ChildForm;
+use Coyote\Services\FormBuilder\Fields\Field;
 use Coyote\Services\FormBuilder\Form;
-use Twig_Extension;
-use Twig_SimpleFunction;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class FormBuilder extends Twig_Extension
+class FormBuilder extends AbstractExtension
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function getName()
-    {
-        return 'TwigBridge_Extension_FormBuilder';
-    }
-
-    /**
-     * @return array
-     */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
-            new Twig_SimpleFunction('form', [&$this, 'form'], ['is_safe' => ['html']]),
-            new Twig_SimpleFunction('form_start', [&$this, 'formStart'], ['is_safe' => ['html']]),
-            new Twig_SimpleFunction('form_end', [&$this, 'formEnd'], ['is_safe' => ['html']]),
-            new Twig_SimpleFunction('form_row', [&$this, 'formRow'], ['is_safe' => ['html']]),
-            new Twig_SimpleFunction('form_label', [&$this, 'formLabel'], ['is_safe' => ['html']]),
-            new Twig_SimpleFunction('form_widget', [&$this, 'formWidget'], ['is_safe' => ['html']]),
-            new Twig_SimpleFunction('form_error', [&$this, 'formError'], ['is_safe' => ['html']]),
+            new TwigFunction('form', [&$this, 'form'], ['is_safe' => ['html']]),
+            new TwigFunction('form_start', [&$this, 'formStart'], ['is_safe' => ['html']]),
+            new TwigFunction('form_end', [&$this, 'formEnd'], ['is_safe' => ['html']]),
+            new TwigFunction('form_row', [&$this, 'formRow'], ['is_safe' => ['html']]),
+            new TwigFunction('form_label', [&$this, 'formLabel'], ['is_safe' => ['html']]),
+            new TwigFunction('form_widget', [&$this, 'formWidget'], ['is_safe' => ['html']]),
+            new TwigFunction('form_error', [&$this, 'formError'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -38,10 +27,10 @@ class FormBuilder extends Twig_Extension
     {
         if ($form instanceof Form) {
             return $form->render();
-        } elseif ($form instanceof ChildForm) {
+        }
+        if ($form instanceof ChildForm) {
             return $form->getForm()->render();
         }
-        
         return null;
     }
 

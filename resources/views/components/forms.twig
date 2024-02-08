@@ -1,9 +1,9 @@
 {% macro attr(attr) %}
-    {% spaceless %}
+    {% apply spaceless %}
     {% for key, value in attr %}
         {{ key }}="{{ value }}"
     {% endfor %}
-    {% endspaceless %}
+    {% endapply %}
 {% endmacro %}
 
 {% macro element(html, label, error, attr, help) %}

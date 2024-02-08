@@ -1,6 +1,6 @@
 {% extends 'wiki.base' %}
 {% block title %}
-    {% spaceless %}
+    {% apply spaceless %}
         {% if wiki.id is not null %}
             Edycja strony {{ wiki.title }}
         {% else %}
@@ -8,7 +8,7 @@
         {% endif %}
 
         {{ parent() }}
-    {% endspaceless %}
+    {% endapply %}
 {% endblock %}
 
 {% block container %}

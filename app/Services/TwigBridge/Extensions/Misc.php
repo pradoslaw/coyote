@@ -3,40 +3,35 @@ namespace Coyote\Services\TwigBridge\Extensions;
 
 use Coyote\Domain\Clock;
 use Coyote\Services\Declination;
-use Twig_Extension;
-use Twig_SimpleFilter;
-use Twig_SimpleFunction;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
+use Twig\TwigFunction;
 
-class Misc extends Twig_Extension
+class Misc extends AbstractExtension
 {
     public function __construct(private Clock $clock)
     {
     }
 
-    public function getName(): string
-    {
-        return 'TwigBridge_Extension_Misc';
-    }
-
     public function getFunctions(): array
     {
         return [
-            new Twig_SimpleFunction('timer', [$this, 'totalRuntime']),
-            new Twig_SimpleFunction('github', [$this, 'githubAccountName']),
-            new Twig_SimpleFunction('declination', [Declination::class, 'format']),
-            new Twig_SimpleFunction('sortable', [$this, 'sortable'], ['is_safe' => ['html']]),
-            new Twig_SimpleFunction('is_url', [$this, 'isUrl'], ['is_safe' => ['html']]),
+            new TwigFunction('timer', [$this, 'totalRuntime']),
+            new TwigFunction('github', [$this, 'githubAccountName']),
+            new TwigFunction('declination', [Declination::class, 'format']),
+            new TwigFunction('sortable', [$this, 'sortable'], ['is_safe' => ['html']]),
+            new TwigFunction('is_url', [$this, 'isUrl'], ['is_safe' => ['html']]),
         ];
     }
 
     public function getFilters(): array
     {
         return [
-            new Twig_SimpleFilter('encrypt', function ($data) {
+            new TwigFilter('encrypt', function ($data) {
                 return app('encrypter')->encrypt($data);
             }),
             // uzywane w szablonie home.twig do poprawnego wyswietlania title w sekcji "ostatnie zmiany na forum"
-            new Twig_SimpleFilter('unescape', function ($value) {
+            new TwigFilter('unescape', function ($value) {
                 return html_entity_decode($value, ENT_QUOTES, 'UTF-8');
             }),
         ];
@@ -67,10 +62,7 @@ class Misc extends Twig_Extension
         return trim($path, '/');
     }
 
-    /**
-     * @return string
-     */
-    public function sortable()
+    public function sortable(): string
     {
         $args = func_get_args();
 

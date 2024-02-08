@@ -2,29 +2,24 @@
 namespace Coyote\Services\TwigBridge\Extensions;
 
 use Illuminate\Contracts\Auth\Access\Gate;
-use Twig_Extension;
-use Twig_SimpleFunction;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class User extends Twig_Extension
+class User extends AbstractExtension
 {
-    public function getName(): string
-    {
-        return 'TwigBridge_Extension_User';
-    }
-
     public function getFunctions(): array
     {
         return [
             // umozliwia szybki dostep do danych zalogowanego uzytkownika. zamiast:
             // auth()->user()->name mozemy napisac user('name')
-            new Twig_SimpleFunction('user', [$this, 'getUserValue'], ['is_safe' => ['html']]),
+            new TwigFunction('user', [$this, 'getUserValue'], ['is_safe' => ['html']]),
 
             // w calym serwisie ciagle trzeba generowac link do profilu usera. ta funkcja umozliwia
             // generowanie linku do profilu na podstawie dostarczonych parametrow. parametrzem moze
             // byc albo tablica albo poszczegolne dane takie jak ID, login oraz informacje czy uzytkownik
             // jest zablokowany lub zbanowany
-            new Twig_SimpleFunction('link_to_profile', [&$this, 'linkToProfile'], ['is_safe' => ['html']]),
-            new Twig_SimpleFunction('can', [&$this, 'can'], ['is_safe' => ['html']]),
+            new TwigFunction('link_to_profile', [&$this, 'linkToProfile'], ['is_safe' => ['html']]),
+            new TwigFunction('can', [&$this, 'can'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -49,11 +44,7 @@ class User extends Twig_Extension
         return $element;
     }
 
-    /**
-     * @param array ...$args
-     * @return string
-     */
-    public function linkToProfile(...$args)
+    public function linkToProfile(...$args): string
     {
         $user = $args[0];
         if ($user instanceof \Coyote\User) {

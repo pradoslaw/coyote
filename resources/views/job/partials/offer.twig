@@ -102,7 +102,7 @@
 
                       {% set tooltip = ['mile widziane', 'średnio zaawansowany', 'zaawansowany'][tag.pivot.priority] %}
 
-                      {% spaceless %}
+                      {% apply spaceless %}
                         <div class="progress-bar-dotted">
                           {% for i in 1..3 %}
                             {% if tag.pivot.priority >= i %}
@@ -112,7 +112,7 @@
                             {% endif %}
                           {% endfor %}
                         </div>
-                      {% endspaceless %}
+                      {% endapply %}
                     </li>
                   {% endfor %}
                 </ul>

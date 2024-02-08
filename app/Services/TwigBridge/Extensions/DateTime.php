@@ -1,20 +1,15 @@
 <?php
 namespace Coyote\Services\TwigBridge\Extensions;
 
-use Twig_Extension;
-use Twig_SimpleFilter;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 
-class DateTime extends Twig_Extension
+class DateTime extends AbstractExtension
 {
-    public function getName(): string
-    {
-        return 'TwigBridge_Extension_DateTime';
-    }
-
     public function getFilters(): array
     {
         return [
-            new Twig_SimpleFilter('format_date', function ($dateTime, $diffForHumans = true) {
+            new TwigFilter('format_date', function ($dateTime, $diffForHumans = true) {
                 return format_date($dateTime, $diffForHumans);
             }),
         ];
