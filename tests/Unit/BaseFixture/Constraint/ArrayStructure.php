@@ -76,18 +76,25 @@ class ArrayStructure extends Constraint
     {
         parent::fail($other, $description,
             new ComparisonFailure(null, null,
-                $this->expectedAsString(),
+                $this->expectedAsString($other),
                 $this->exporter()->export($other)));
     }
 
-    private function expectedAsString(): string
+    private function expectedAsString(array $other): string
     {
         $lines = [];
-        foreach ($this->structure as $key => $value) {
+        foreach ($this->structureInArgumentOrder($other) as $key => $value) {
             $lines[] = "    {$this->exporter()->export($key)} => {$this->constraintString($value)}";
         }
         $content = \implode("\n", $lines);
         return "Array &0 (\n$content\n)";
+    }
+
+    private function structureInArgumentOrder(array $other): array
+    {
+        return \array_replace(
+            \array_intersect_key($other, $this->structure),
+            $this->structure);
     }
 
     private function constraintString(Constraint $constraint): string

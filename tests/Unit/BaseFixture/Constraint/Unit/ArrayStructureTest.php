@@ -164,4 +164,31 @@ class ArrayStructureTest extends TestCase
     'four' => has relative uri '444'
 )");
     }
+
+    /**
+     * @test
+     */
+    public function rejectCompareExpectedArgumentOrder()
+    {
+        $constraint = new ArrayStructure([
+            'one'   => '111',
+            'two'   => $this->identicalTo('222'),
+            'three' => new IsRelativeUri('333', 'host'),
+            'four'  => new TrimmedString('444'),
+        ]);
+
+        $argument = [
+            'two'  => '2',
+            'four' => '3',
+            'one'  => '1',
+            'five' => '5',
+        ];
+
+        $this->assertRejectsExpected($constraint, $argument, "Array &0 (
+    'two' => '222'
+    'four' => trimmed is '444'
+    'one' => '111'
+    'three' => has relative uri '333'
+)");
+    }
 }
