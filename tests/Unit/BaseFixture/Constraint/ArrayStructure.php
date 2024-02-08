@@ -3,6 +3,8 @@ namespace Tests\Unit\BaseFixture\Constraint;
 
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Constraint\Constraint;
+use PHPUnit\Framework\Constraint\IsIdentical;
+use SebastianBergmann\Comparator\ComparisonFailure;
 
 class ArrayStructure extends Constraint
 {
@@ -68,5 +70,31 @@ class ArrayStructure extends Constraint
             }
         }
         return $messages;
+    }
+
+    protected function fail($other, $description, ComparisonFailure $comparisonFailure = null): void
+    {
+        parent::fail($other, $description,
+            new ComparisonFailure(null, null,
+                $this->expectedAsString(),
+                $this->exporter()->export($other)));
+    }
+
+    private function expectedAsString(): string
+    {
+        $lines = [];
+        foreach ($this->structure as $key => $value) {
+            $lines[] = "    {$this->exporter()->export($key)} => {$this->constraintString($value)}";
+        }
+        $content = \implode("\n", $lines);
+        return "Array &0 (\n$content\n)";
+    }
+
+    private function constraintString(Constraint $constraint): string
+    {
+        if ($constraint instanceof IsIdentical) {
+            return \subStr($constraint->toString(), \strLen('is identical to '));
+        }
+        return $constraint->toString();
     }
 }

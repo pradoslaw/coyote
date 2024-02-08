@@ -109,4 +109,59 @@ class ArrayStructureTest extends TestCase
     'key' => 'other'
 ) value at 'key' is identical to 'value' and value at 'foo' is identical to 'bar'.");
     }
+
+    /**
+     * @test
+     */
+    public function rejectCompareActual()
+    {
+        $constraint = new ArrayStructure(['key' => 'value']);
+
+        $this->assertRejectsActual(
+            $constraint,
+            ['one' => '11x1', 'two' => '222', 'three' => '333'],
+            "Array &0 (
+    'one' => '11x1'
+    'two' => '222'
+    'three' => '333'
+)");
+    }
+
+    /**
+     * @test
+     */
+    public function rejectCompareExpectedIdentity()
+    {
+        $constraint = new ArrayStructure([
+            'one'   => '111',
+            'two'   => '222',
+            'three' => '333',
+        ]);
+
+        $this->assertRejectsExpected($constraint, [], "Array &0 (
+    'one' => '111'
+    'two' => '222'
+    'three' => '333'
+)");
+    }
+
+    /**
+     * @test
+     */
+    public function rejectCompareExpectedMany()
+    {
+        $constraint = new ArrayStructure([
+            'one'   => '111',
+            'two'   => $this->identicalTo('222'),
+            'three' => new TrimmedString('333'),
+            'four'  => new IsRelativeUri('444', 'host'),
+        ]);
+
+        $this->assertRejectsExpected($constraint, [], "Array &0 (
+    'one' => '111'
+    'two' => '222'
+    'three' => trimmed is '333'
+    'four' => has relative uri '444'
+)");
+    }
 }

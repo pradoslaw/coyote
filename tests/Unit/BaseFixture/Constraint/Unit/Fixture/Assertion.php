@@ -4,6 +4,7 @@ namespace Tests\Unit\BaseFixture\Constraint\Unit\Fixture;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Constraint\Constraint;
 use PHPUnit\Framework\ExpectationFailedException;
+use SebastianBergmann\Comparator\ComparisonFailure;
 
 trait Assertion
 {
@@ -21,36 +22,52 @@ trait Assertion
         }
     }
 
-    function assertRejectsCompare(
+    function assertRejectsMessageCompare(
         Constraint $constraint,
         mixed      $argument,
         string     $failMessage,
         ?string    $failExpected,
         ?string    $failActual): void
     {
-        try {
-            $this->execute($constraint, $argument);
-        } catch (ExpectationFailedException $exception) {
-            $comparison = $exception->getComparisonFailure();
-            Assert::assertSame(
-                ['message' => $failMessage, 'expected' => $failExpected, 'actual' => $failActual],
-                [
-                    'message'  => $exception->getMessage(),
-                    'expected' => $comparison?->getExpectedAsString(),
-                    'actual'   => $comparison?->getActualAsString(),
-                ]);
-        }
+        $exception = $this->failException($constraint, $argument);
+        $comparison = $exception->getComparisonFailure();
+        Assert::assertSame(
+            ['message' => $failMessage, 'expected' => $failExpected, 'actual' => $failActual],
+            [
+                'message'  => $exception->getMessage(),
+                'expected' => $comparison?->getExpectedAsString(),
+                'actual'   => $comparison?->getActualAsString(),
+            ]);
     }
 
-    function assertRejectMessage(
-        Constraint $constraint,
-        mixed      $argument,
-        string     $failMessage): void
+    function assertRejectMessage(Constraint $constraint, mixed $argument, string $message): void
+    {
+        Assert::assertSame($message, $this->failException($constraint, $argument)->getMessage());
+    }
+
+    function assertRejectsExpected(Constraint $constraint, mixed $argument, string $expected): void
+    {
+        $comparison = $this->comparisonFailure($constraint, $argument);
+        Assert::assertSame($expected, $comparison?->getExpectedAsString());
+    }
+
+    function assertRejectsActual(Constraint $constraint, mixed $argument, string $actual): void
+    {
+        $comparison = $this->comparisonFailure($constraint, $argument);
+        Assert::assertSame($actual, $comparison?->getActualAsString());
+    }
+
+    function comparisonFailure(Constraint $constraint, mixed $argument): ComparisonFailure
+    {
+        return $this->failException($constraint, $argument)->getComparisonFailure();
+    }
+
+    function failException(Constraint $constraint, mixed $argument): ExpectationFailedException
     {
         try {
             $this->execute($constraint, $argument);
         } catch (ExpectationFailedException $exception) {
-            Assert::assertSame($failMessage, $exception->getMessage());
+            return $exception;
         }
     }
 

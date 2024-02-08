@@ -21,7 +21,7 @@ class IsRelativeUriTest extends TestCase
      */
     public function rejectPath()
     {
-        $this->assertRejectsCompare(
+        $this->assertRejectsMessageCompare(
             new IsRelativeUri('/foo', 'http://host'),
             'http://host/123',
             "Failed asserting that 'http://host/123' has relative uri '/foo'.",
@@ -34,7 +34,7 @@ class IsRelativeUriTest extends TestCase
      */
     public function rejectHost()
     {
-        $this->assertRejectsCompare(
+        $this->assertRejectsMessageCompare(
             new IsRelativeUri('/abc', 'http://host'),
             'http://other/abc',
             "Failed asserting that 'http://other/abc' has relative uri '/abc'.",
@@ -47,7 +47,7 @@ class IsRelativeUriTest extends TestCase
      */
     public function rejectInteger()
     {
-        $this->assertRejectsCompare(
+        $this->assertRejectsMessageCompare(
             new IsRelativeUri('/', 'http://host'),
             2,
             "Failed asserting that 2 has relative uri '/'.",
