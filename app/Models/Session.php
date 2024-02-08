@@ -7,7 +7,7 @@ use Illuminate\Contracts\Support\Arrayable;
 
 class Session implements \ArrayAccess, Arrayable
 {
-    use ToArray{
+    use ToArray {
         toArray as parentToArray;
     }
 
@@ -98,20 +98,12 @@ class Session implements \ArrayAccess, Arrayable
         return property_exists($this, camel_case($offset));
     }
 
-    /**
-     * @param mixed $offset
-     * @return mixed
-     */
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return $this->{camel_case($offset)};
     }
 
-    /**
-     * @param mixed $offset
-     * @param mixed $value
-     */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->{camel_case($offset)} = $value;
     }

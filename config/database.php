@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'fetch'       => PDO::FETCH_CLASS,
+    'fetch' => PDO::FETCH_CLASS,
     /*
     |--------------------------------------------------------------------------
     | Default Database Connection Name
@@ -25,7 +25,7 @@ return [
     |
     */
 
-    'default'     => 'pgsql',
+    'default' => 'pgsql',
     /*
     |--------------------------------------------------------------------------
     | Database Connections
@@ -44,16 +44,16 @@ return [
 
     'connections' => [
 
-        'pgsql'  => [
-            'driver'   => 'pgsql',
-            'host'     => env('DB_HOST', 'localhost'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', docker_secret('POSTGRES_PASSWORD_FILE')),
-            'charset'  => 'utf8',
-            'prefix'   => '',
-            'schema'   => 'public',
-        ]
+        'pgsql' => [
+            'driver'      => 'pgsql',
+            'host'        => env('DB_HOST', 'localhost'),
+            'database'    => env('DB_DATABASE', 'forge'),
+            'username'    => env('DB_USERNAME', 'forge'),
+            'password'    => env('DB_PASSWORD', docker_secret('POSTGRES_PASSWORD_FILE')),
+            'charset'     => 'utf8',
+            'prefix'      => '',
+            'search_path' => 'public',
+        ],
     ],
     /*
     |--------------------------------------------------------------------------
@@ -66,7 +66,7 @@ return [
     |
     */
 
-    'migrations'  => 'migrations',
+    'migrations' => 'migrations',
     /*
     |--------------------------------------------------------------------------
     | Redis Databases
@@ -84,22 +84,22 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => '',
+            'prefix'  => '',
         ],
 
         'default' => [
-            'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', 'localhost'),
+            'url'      => env('REDIS_URL'),
+            'host'     => env('REDIS_HOST', 'localhost'),
             'password' => env('REDIS_PASSWORD', null),
-            'port' => env('REDIS_PORT', '6379'),
+            'port'     => env('REDIS_PORT', '6379'),
             'database' => env('REDIS_DB', '0'),
         ],
 
         'cache' => [
-            'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', 'localhost'),
+            'url'      => env('REDIS_URL'),
+            'host'     => env('REDIS_HOST', 'localhost'),
             'password' => env('REDIS_PASSWORD', null),
-            'port' => env('REDIS_PORT', '6379'),
+            'port'     => env('REDIS_PORT', '6379'),
             'database' => env('REDIS_CACHE_DB', '1'),
         ],
 

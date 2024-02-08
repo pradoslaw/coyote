@@ -28,7 +28,7 @@ return [
     |
     */
 
-    'cloud'   => 's3',
+    'cloud' => 's3',
     /*
     |--------------------------------------------------------------------------
     | Filesystem Disks
@@ -40,43 +40,47 @@ return [
     |
     */
 
-    'disks'   => [
-        'public_fs'     => [
+    'disks'           => [
+        'public_fs' => [
             'driver' => 'local',
             'root'   => public_path() . '/uploads',
+            'throw' => true,
         ],
-        'local_fs'        => [
+        'local_fs'  => [
             'driver' => 'local',
-            'root'   => storage_path() . '/app'
+            'root'   => storage_path() . '/app',
+            'throw' => true,
         ],
 
-        'local'     => [
-            'driver' => 's3',
+        'local'  => [
+            'driver'                  => 's3',
             'use_path_style_endpoint' => true,
-            'key' => env('AWS_ACCESS_KEY_ID', docker_secret('AWS_ACCESS_KEY_ID_FILE')),
-            'secret' => env('AWS_SECRET_ACCESS_KEY', docker_secret('AWS_SECRET_ACCESS_KEY_FILE')),
-            'region' => 'us-east-1',
-            'bucket' => 'local',
-            'endpoint' => env('MINIO_ENDPOINT', docker_secret('MINIO_ENDPOINT_FILE')),
-            'disable_asserts' => true
+            'key'                     => env('AWS_ACCESS_KEY_ID', docker_secret('AWS_ACCESS_KEY_ID_FILE')),
+            'secret'                  => env('AWS_SECRET_ACCESS_KEY', docker_secret('AWS_SECRET_ACCESS_KEY_FILE')),
+            'region'                  => 'us-east-1',
+            'bucket'                  => 'local',
+            'endpoint'                => env('MINIO_ENDPOINT', docker_secret('MINIO_ENDPOINT_FILE')),
+            'disable_asserts'         => true,
+            'throw' => true,
         ],
-        'public'     => [
-            'driver' => 's3',
+        'public' => [
+            'driver'                  => 's3',
             'use_path_style_endpoint' => true,
-            'key' => env('AWS_ACCESS_KEY_ID', docker_secret('AWS_ACCESS_KEY_ID_FILE')),
-            'secret' => env('AWS_SECRET_ACCESS_KEY', docker_secret('AWS_SECRET_ACCESS_KEY_FILE')),
-            'region' => 'us-east-1',
-            'bucket' => 'public',
-            'endpoint' => env('MINIO_ENDPOINT', docker_secret('MINIO_ENDPOINT_FILE')),
-            'disable_asserts' => true,
-            'url' => env('AWS_URL', docker_secret('AWS_URL_FILE')),
+            'key'                     => env('AWS_ACCESS_KEY_ID', docker_secret('AWS_ACCESS_KEY_ID_FILE')),
+            'secret'                  => env('AWS_SECRET_ACCESS_KEY', docker_secret('AWS_SECRET_ACCESS_KEY_FILE')),
+            'region'                  => 'us-east-1',
+            'bucket'                  => 'public',
+            'endpoint'                => env('MINIO_ENDPOINT', docker_secret('MINIO_ENDPOINT_FILE')),
+            'disable_asserts'         => true,
+            'url'                     => env('AWS_URL', docker_secret('AWS_URL_FILE')),
+            'throw' => true,
 
             'cache' => [
-                'store' => 'redis',
+                'store'  => 'redis',
                 'expire' => 600,
                 'prefix' => 's3',
-            ]
-        ]
+            ],
+        ],
     ],
 
     /*
@@ -86,7 +90,7 @@ return [
     |
     | List of allowed extensions
     */
-    'upload_mimes' => 'jpg,jpeg,gif,png,zip,rar,txt,pdf,doc,docx,xls,xlsx,cpp,7z,7zip,patch,webm,webp',
+    'upload_mimes'    => 'jpg,jpeg,gif,png,zip,rar,txt,pdf,doc,docx,xls,xlsx,cpp,7z,7zip,patch,webm,webp',
 
     /*
     | --------------------------------------------------------------------------
@@ -95,6 +99,6 @@ return [
     |
     | Max allowed file size (in Mb)
     */
-    'upload_max_size' => '20'
+    'upload_max_size' => '20',
 
 ];

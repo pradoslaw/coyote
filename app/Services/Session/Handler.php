@@ -1,5 +1,4 @@
 <?php
-
 namespace Coyote\Services\Session;
 
 use Coyote\Repositories\Contracts\SessionRepositoryInterface as SessionRepository;
@@ -29,65 +28,44 @@ class Handler implements \SessionHandlerInterface
         $this->container = $container;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function open($savePath, $sessionName)
+    public function open(string $path, string $name): bool
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function close()
+    public function close(): bool
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function read($sessionId)
+    public function read(string $id): string|false
     {
-        return $this->repository->get($sessionId);
+        return $this->repository->get($id);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function write($sessionId, $payload)
+    public function write(string $id, string $data): bool
     {
-        $payload = unserialize($payload);
-        $payload = ['id' => $sessionId] + $this->getDefaultPayload($payload);
-
-        $this->repository->set($sessionId, $payload);
-
+        $payload = unserialize($data);
+        $payload = ['id' => $id] + $this->getDefaultPayload($payload);
+        $this->repository->set($id, $payload);
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function destroy($sessionId)
+    public function destroy(string $id): bool
     {
-        $this->repository->destroy($sessionId);
-
+        $this->repository->destroy($id);
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function gc($lifetime)
+    public function gc(int $max_lifetime): int
     {
-        return true;
+        return 1;
     }
 
     /**
      * Get the default payload for the session.
      *
-     * @param  array  $payload
+     * @param array $payload
      * @return array
      */
     protected function getDefaultPayload($payload)
@@ -111,7 +89,7 @@ class Handler implements \SessionHandlerInterface
             $request = $container->make('request');
 
             $payload['ip'] = $request->ip();
-            $payload['browser'] = substr((string) $request->header('User-Agent'), 0, 500);
+            $payload['browser'] = substr((string)$request->header('User-Agent'), 0, 500);
             $payload['robot'] = $this->robot($payload['browser']);
 
             if (!$request->ajax()) {

@@ -1,5 +1,4 @@
 <?php
-
 namespace Coyote\Listeners;
 
 use Illuminate\Mail\Events\MessageSending;
@@ -8,7 +7,7 @@ class ChangeImageUrl
 {
     public function handle(MessageSending $event): void
     {
-        $event->message->setBody($this->appendHttps($event->message->getBody()));
+        $event->message->html($this->appendHttps($event->message->getHtmlBody()));
     }
 
     private function appendHttps(string $html): string

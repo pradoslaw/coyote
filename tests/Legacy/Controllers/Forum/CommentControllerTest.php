@@ -72,11 +72,11 @@ class CommentControllerTest extends TestCase
         $response->assertJsonValidationErrors(['post_id', 'text']);
 
         $response->assertJson([
-            'message' => 'The given data was invalid.',
-            'errors' => [
-                'text' => ['Proszę wpisać treść.'],
-                'post_id' => ['Pole post id jest wymagane.']
-            ]
+            'message' => 'Proszę wpisać treść. (and 1 more error)',
+            'errors'  => [
+                'text'    => ['Proszę wpisać treść.'],
+                'post_id' => ['Pole post id jest wymagane.'],
+            ],
         ]);
     }
 
@@ -91,8 +91,8 @@ class CommentControllerTest extends TestCase
         $response->assertStatus(422);
         $response->assertJsonFragment([
             'errors' => [
-                'post_id' => ['Post nie istnieje lub został usunięty.']
-            ]
+                'post_id' => ['Post nie istnieje lub został usunięty.'],
+            ],
         ]);
     }
 
@@ -104,8 +104,8 @@ class CommentControllerTest extends TestCase
 
         $response->assertStatus(Response::HTTP_CREATED);
         $response->assertJsonFragment([
-            'text' => $text,
-            'editable' => true
+            'text'     => $text,
+            'editable' => true,
         ]);
 
         $id = $response->json('data.id');
@@ -118,7 +118,7 @@ class CommentControllerTest extends TestCase
     public function testSubmitAsAnonymousUser()
     {
         $response = $this
-            ->json('POST', "/Forum/Comment", ['text' =>  $this->faker->realText(), 'post_id' => $this->post->id]);
+            ->json('POST', "/Forum/Comment", ['text' => $this->faker->realText(), 'post_id' => $this->post->id]);
 
         $response->assertStatus(401);
     }
@@ -297,7 +297,7 @@ class CommentControllerTest extends TestCase
         $response->assertStatus(200);
 
         $response->assertJsonFragment([
-            'text' => $comment->text
+            'text' => $comment->text,
         ]);
 
         $this->assertEquals($response->json('id'), $this->topic->last_post_id);

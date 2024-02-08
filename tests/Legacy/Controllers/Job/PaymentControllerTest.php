@@ -38,7 +38,7 @@ class PaymentControllerTest extends TestCase
 
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(
-            ['payment_method']
+            ['payment_method'],
         );
     }
 
@@ -49,22 +49,22 @@ class PaymentControllerTest extends TestCase
         $response = $this->actingAs($this->job->user)->json(
             'POST',
             "/Praca/Payment/{$payment->id}",
-            ['payment_method' => 'card', 'price' => $payment->plan->gross_price]
+            ['payment_method' => 'card', 'price' => $payment->plan->gross_price],
         );
 
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(
-            ['invoice.address', 'invoice.name', 'invoice.city', 'invoice.postal_code']
+            ['invoice.address', 'invoice.name', 'invoice.city', 'invoice.postal_code'],
         );
 
         $response->assertJson([
-            'message' => 'The given data was invalid.',
-            'errors' => [
-                'invoice.name' => ['Pole nazwa jest wymagane.'],
-                'invoice.address' => ['Pole adres jest wymagane.'],
-                'invoice.city' => ['Pole miasto jest wymagane.'],
-                'invoice.postal_code' => ['Pole kod pocztowy jest wymagane.']
-            ]
+            'message' => 'Pole nazwa jest wymagane. (and 4 more errors)',
+            'errors'  => [
+                'invoice.name'        => ['Pole nazwa jest wymagane.'],
+                'invoice.address'     => ['Pole adres jest wymagane.'],
+                'invoice.city'        => ['Pole miasto jest wymagane.'],
+                'invoice.postal_code' => ['Pole kod pocztowy jest wymagane.'],
+            ],
         ]);
     }
 
@@ -77,27 +77,26 @@ class PaymentControllerTest extends TestCase
             "/Praca/Payment/{$payment->id}",
             [
                 'payment_method' => 'card',
-                'price' => $payment->plan->gross_price,
-                'invoice' => [
-                    'name' => $this->faker->company,
-                    'vat_id' => '123123123',
-                    'address' => $this->faker->address,
-                    'city' => $this->faker->city,
-                    'postal_code' => $this->faker->postcode
-                ]
-            ]
-        );
+                'price'          => $payment->plan->gross_price,
+                'invoice'        => [
+                    'name'        => $this->faker->company,
+                    'vat_id'      => '123123123',
+                    'address'     => $this->faker->address,
+                    'city'        => $this->faker->city,
+                    'postal_code' => $this->faker->postcode,
+                ],
+            ]);
 
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(
-            ['invoice.country_id']
+            ['invoice.country_id'],
         );
 
         $response->assertJson([
-            'message' => 'The given data was invalid.',
-            'errors' => [
-                'invoice.country_id' => ['Pole kraj jest wymagane.']
-            ]
+            'message' => 'Pole kraj jest wymagane.',
+            'errors'  => [
+                'invoice.country_id' => ['Pole kraj jest wymagane.'],
+            ],
         ]);
     }
 
@@ -113,17 +112,16 @@ class PaymentControllerTest extends TestCase
             "/Praca/Payment/{$payment->id}",
             [
                 'payment_method' => 'card',
-                'price' => $payment->plan->gross_price,
-                'invoice' => [
-                    'name' => $name = $faker->company,
-                    'vat_id' => $vat = '8943139460',
-                    'country_id' => $countryId = 14,
-                    'address' => $address = $faker->address,
-                    'city' => $city = $faker->city,
-                    'postal_code' => $postalCode = $faker->postcode
-                ]
-            ]
-        );
+                'price'          => $payment->plan->gross_price,
+                'invoice'        => [
+                    'name'        => $name = $faker->company,
+                    'vat_id'      => $vat = '8943139460',
+                    'country_id'  => $countryId = 14,
+                    'address'     => $address = $faker->address,
+                    'city'        => $city = $faker->city,
+                    'postal_code' => $postalCode = $faker->postcode,
+                ],
+            ]);
 
         $response->assertStatus(200);
 
@@ -157,17 +155,16 @@ class PaymentControllerTest extends TestCase
             "/Praca/Payment/{$payment->id}",
             [
                 'payment_method' => 'card',
-                'price' => $payment->plan->gross_price,
-                'invoice' => [
-                    'name' => $firm->name,
-                    'vat_id' => $vat = '8943139460',
-                    'country_id' => $countryId = 14,
-                    'address' => $firm->street,
-                    'city' => $firm->city,
-                    'postal_code' => $postalCode = $faker->postcode
-                ]
-            ]
-        );
+                'price'          => $payment->plan->gross_price,
+                'invoice'        => [
+                    'name'        => $firm->name,
+                    'vat_id'      => $vat = '8943139460',
+                    'country_id'  => $countryId = 14,
+                    'address'     => $firm->street,
+                    'city'        => $firm->city,
+                    'postal_code' => $postalCode = $faker->postcode,
+                ],
+            ]);
 
         $firm->refresh();
         $payment->refresh();
@@ -195,18 +192,17 @@ class PaymentControllerTest extends TestCase
             "/Praca/Payment/{$payment->id}",
             [
                 'payment_method' => 'card',
-                'price' => $payment->plan->gross_price,
-                'coupon' => $coupon->code,
-                'invoice' => [
-                    'name' => $this->faker->company,
-                    'vat_id' => '8943139460',
-                    'country_id' => 14,
-                    'address' => $this->faker->address,
-                    'city' => $this->faker->city,
-                    'postal_code' => $postalCode = $this->faker->postcode
-                ]
-            ]
-        );
+                'price'          => $payment->plan->gross_price,
+                'coupon'         => $coupon->code,
+                'invoice'        => [
+                    'name'        => $this->faker->company,
+                    'vat_id'      => '8943139460',
+                    'country_id'  => 14,
+                    'address'     => $this->faker->address,
+                    'city'        => $this->faker->city,
+                    'postal_code' => $postalCode = $this->faker->postcode,
+                ],
+            ]);
 
         $response->assertStatus(200);
         $payment->refresh();
@@ -232,9 +228,9 @@ class PaymentControllerTest extends TestCase
             "/Praca/Payment/{$payment->id}",
             [
                 'payment_method' => 'card',
-                'price' => 0,
-                'coupon' => $coupon->code
-            ]
+                'price'          => 0,
+                'coupon'         => $coupon->code,
+            ],
         );
 
         $response->assertStatus(201);
@@ -264,16 +260,16 @@ class PaymentControllerTest extends TestCase
             "/Praca/Payment/{$payment->id}",
             [
                 'payment_method' => 'card',
-                'price' => 0,
-                'coupon' => $coupon->code,
-                'invoice' => [
-                    'name' => $this->faker->company,
-                    'vat_id' => '123123123',
-                    'address' => $this->faker->address,
-                    'city' => $this->faker->city,
-                    'postal_code' => $this->faker->postcode
-                ]
-            ]
+                'price'          => 0,
+                'coupon'         => $coupon->code,
+                'invoice'        => [
+                    'name'        => $this->faker->company,
+                    'vat_id'      => '123123123',
+                    'address'     => $this->faker->address,
+                    'city'        => $this->faker->city,
+                    'postal_code' => $this->faker->postcode,
+                ],
+            ],
         );
 
         $response->assertStatus(201);
@@ -299,14 +295,14 @@ class PaymentControllerTest extends TestCase
             "/Praca/Payment/{$payment->id}",
             [
                 'payment_method' => 'card',
-                'price' => 0,
-                'invoice' => [
-                    'name' => $this->faker->company,
-                    'address' => $this->faker->address,
-                    'city' => $this->faker->city,
-                    'postal_code' => $this->faker->postcode
-                ]
-            ]
+                'price'          => 0,
+                'invoice'        => [
+                    'name'        => $this->faker->company,
+                    'address'     => $this->faker->address,
+                    'city'        => $this->faker->city,
+                    'postal_code' => $this->faker->postcode,
+                ],
+            ],
         );
 
         $response->assertStatus(201);
@@ -332,15 +328,15 @@ class PaymentControllerTest extends TestCase
             "/Praca/Payment/{$payment->id}",
             [
                 'payment_method' => 'card',
-                'price' => 0,
-                'invoice' => [
-                    'name' => $this->faker->company,
-                    'address' => $this->faker->address,
-                    'city' => $this->faker->city,
+                'price'          => 0,
+                'invoice'        => [
+                    'name'        => $this->faker->company,
+                    'address'     => $this->faker->address,
+                    'city'        => $this->faker->city,
                     'postal_code' => $this->faker->postcode,
-                    'vat_id' => '8943139460'
-                ]
-            ]
+                    'vat_id'      => '8943139460',
+                ],
+            ],
         );
 
         $response->assertStatus(201);
@@ -366,15 +362,15 @@ class PaymentControllerTest extends TestCase
             "/Praca/Payment/{$payment->id}",
             [
                 'payment_method' => 'card',
-                'price' => 0,
-                'invoice' => [
-                    'name' => $this->faker->company,
-                    'address' => $this->faker->address,
-                    'city' => $this->faker->city,
+                'price'          => 0,
+                'invoice'        => [
+                    'name'        => $this->faker->company,
+                    'address'     => $this->faker->address,
+                    'city'        => $this->faker->city,
                     'postal_code' => $this->faker->postcode,
-                    'vat_id' => '12312312'
-                ]
-            ]
+                    'vat_id'      => '12312312',
+                ],
+            ],
         );
 
         $response->assertSeeText(UrlBuilder::job($this->job));
@@ -399,16 +395,16 @@ class PaymentControllerTest extends TestCase
             "/Praca/Payment/{$payment->id}",
             [
                 'payment_method' => 'card',
-                'price' => 0,
-                'invoice' => [
-                    'name' => $this->faker->company,
-                    'address' => $this->faker->address,
-                    'city' => $this->faker->city,
+                'price'          => 0,
+                'invoice'        => [
+                    'name'        => $this->faker->company,
+                    'address'     => $this->faker->address,
+                    'city'        => $this->faker->city,
                     'postal_code' => $this->faker->postcode,
-                    'vat_id' => '12312312',
-                    'country_id' => 14
-                ]
-            ]
+                    'vat_id'      => '12312312',
+                    'country_id'  => 14,
+                ],
+            ],
         );
 
         $response->assertStatus(201);
@@ -429,16 +425,16 @@ class PaymentControllerTest extends TestCase
             "/Praca/Payment/{$payment->id}",
             [
                 'payment_method' => 'p24',
-                'price' => $payment->plan->gross_price,
-                'invoice' => [
-                    'name' => $this->faker->company,
-                    'vat_id' => '8943139460',
-                    'country_id' => 14,
-                    'address' => $this->faker->address,
-                    'city' => $this->faker->city,
-                    'postal_code' => $this->faker->postcode
-                ]
-            ]
+                'price'          => $payment->plan->gross_price,
+                'invoice'        => [
+                    'name'        => $this->faker->company,
+                    'vat_id'      => '8943139460',
+                    'country_id'  => 14,
+                    'address'     => $this->faker->address,
+                    'city'        => $this->faker->city,
+                    'postal_code' => $this->faker->postcode,
+                ],
+            ],
         );
 
         $response->assertStatus(200);
@@ -455,16 +451,16 @@ class PaymentControllerTest extends TestCase
             "/Praca/Payment/{$payment->id}",
             [
                 'payment_method' => 'card',
-                'price' => $payment->plan->gross_price,
-                'invoice' => [
-                    'name' => $this->faker->company,
-                    'vat_id' => 'U12345678',
-                    'country_id' => $countryId = 1,
-                    'address' => $this->faker->address,
-                    'city' => $this->faker->city,
-                    'postal_code' => $this->faker->postcode
-                ]
-            ]
+                'price'          => $payment->plan->gross_price,
+                'invoice'        => [
+                    'name'        => $this->faker->company,
+                    'vat_id'      => 'U12345678',
+                    'country_id'  => $countryId = 1,
+                    'address'     => $this->faker->address,
+                    'city'        => $this->faker->city,
+                    'postal_code' => $this->faker->postcode,
+                ],
+            ],
         );
 
         $response->assertStatus(200);
@@ -484,15 +480,15 @@ class PaymentControllerTest extends TestCase
             "/Praca/Payment/{$payment->id}",
             [
                 'payment_method' => 'card',
-                'price' => $payment->plan->gross_price,
-                'invoice' => [
-                    'name' => $this->faker->company,
-                    'country_id' => $countryId = 1,
-                    'address' => $this->faker->address,
-                    'city' => $this->faker->city,
-                    'postal_code' => $this->faker->postcode
-                ]
-            ]
+                'price'          => $payment->plan->gross_price,
+                'invoice'        => [
+                    'name'        => $this->faker->company,
+                    'country_id'  => $countryId = 1,
+                    'address'     => $this->faker->address,
+                    'city'        => $this->faker->city,
+                    'postal_code' => $this->faker->postcode,
+                ],
+            ],
         );
 
         $payment->refresh();

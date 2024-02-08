@@ -79,7 +79,7 @@ class JobsControllerTest extends TestCase
 
         $response->assertJsonValidationErrors(['plan']);
         $response->assertJson([
-            'message' => 'The given data was invalid.',
+            'message' => 'Invalid plan name.',
             'errors'  => [
                 'plan' => ['Invalid plan name.'],
             ],
