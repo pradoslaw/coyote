@@ -1,15 +1,19 @@
 <?php
+namespace Tests\Grid;
 
-use Orchestra\Testbench\TestCase;
-use Collective\Html\HtmlBuilder;
+use Boduch\Grid\GridHelper;
 use Collective\Html\FormBuilder;
-use Illuminate\Http\Request;
+use Collective\Html\HtmlBuilder;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 use Illuminate\Contracts\View\Factory as ViewFactory;
-use Boduch\Grid\GridHelper;
+use Illuminate\Http\Request;
+use PHPUnit\Framework\TestCase;
+use Tests\Unit\BaseFixture\Server\Laravel;
 
 abstract class GridBuilderTestCase extends TestCase
 {
+    use Laravel\Application;
+    
     /**
      * @var ViewFactory
      */
@@ -44,12 +48,12 @@ abstract class GridBuilderTestCase extends TestCase
     {
         parent::setUp();
 
-        $this->view = $this->app['view'];
-        $this->request = $this->app['request'];
-        $this->request->setLaravelSession($this->app['session.store']);
-        $this->validator = $this->app['validator'];
-        $this->htmlBuilder = new HtmlBuilder($this->app['url'], $this->view);
-        $this->formBuilder = new FormBuilder($this->htmlBuilder, $this->app['url'], $this->view, $this->request->session()->token());
+        $this->view = $this->laravel->app['view'];
+        $this->request = $this->laravel->app['request'];
+        $this->request->setLaravelSession($this->laravel->app['session.store']);
+        $this->validator = $this->laravel->app['validator'];
+        $this->htmlBuilder = new HtmlBuilder($this->laravel->app['url'], $this->view);
+        $this->formBuilder = new FormBuilder($this->htmlBuilder, $this->laravel->app['url'], $this->view, $this->request->session()->token());
 
         $this->gridHelper = new GridHelper($this->request, $this->validator, $this->view, $this->htmlBuilder, $this->formBuilder);
     }

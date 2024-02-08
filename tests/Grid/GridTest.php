@@ -1,4 +1,5 @@
 <?php
+namespace Tests\Grid;
 
 use Boduch\Grid\Grid;
 
@@ -68,7 +69,7 @@ class GridTest extends GridBuilderTestCase
     public function testBuildGridWithEachCallbackAndModifyColumnValue()
     {
         $grid = $this->getSampleGrid();
-        $grid->after(function (Boduch\Grid\Row $row) {
+        $grid->after(function (\Boduch\Grid\Row $row) {
             $row->get('website')->setValue('');
         });
 
@@ -80,7 +81,7 @@ class GridTest extends GridBuilderTestCase
     public function testBuildGridAndAddRowClass()
     {
         $grid = $this->getSampleGrid();
-        $grid->after(function (Boduch\Grid\Row $row) {
+        $grid->after(function (\Boduch\Grid\Row $row) {
             $row->class = 'foo';
         });
 
@@ -166,7 +167,7 @@ class GridTest extends GridBuilderTestCase
             }
         ]);
 
-        $source = new Boduch\Grid\Source\CollectionSource($collection);
+        $source = new \Boduch\Grid\Source\CollectionSource($collection);
         $grid->setSource($source);
 
         return $grid;

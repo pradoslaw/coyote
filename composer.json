@@ -74,13 +74,15 @@
       "Database\\Seeders\\": "database/seeders/"
     },
     "files": [
-      "app/Helpers/Helpers.php"
+      "app/Helpers/Helpers.php",
+      "grid/helpers.php"
     ]
   },
   "autoload-dev": {
     "psr-4": {
       "Tests\\": "tests/",
       "Tests\\Browser\\": "tests/Browser/",
+      "Tests\\Grid\\": "tests/Grid/",
       "Tests\\Legacy\\": "tests/Legacy/",
       "Tests\\Unit\\": "tests/Unit/"
     }
