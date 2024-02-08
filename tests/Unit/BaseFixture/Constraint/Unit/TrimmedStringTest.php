@@ -19,7 +19,7 @@ class TrimmedStringTest extends TestCase
      */
     public function rejectString()
     {
-        $this->assertRejects(
+        $this->assertRejectsCompare(
             new TrimmedString('bar'),
             '  foo  ',
             "Failed asserting that '  foo  ' trimmed is 'bar'.",
@@ -32,7 +32,7 @@ class TrimmedStringTest extends TestCase
      */
     public function rejectInteger()
     {
-        $this->assertRejects(
+        $this->assertRejectsCompare(
             new TrimmedString('14'),
             14,
             "Failed asserting that 14 trimmed is '14'.",

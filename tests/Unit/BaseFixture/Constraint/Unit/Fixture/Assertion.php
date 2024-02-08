@@ -12,7 +12,16 @@ trait Assertion
         Assert::assertThat($actual, $constraint);
     }
 
-    function assertRejects(
+    function assertRejects(Constraint $constraint, mixed $argument): void
+    {
+        try {
+            $this->execute($constraint, $argument);
+        } catch (ExpectationFailedException) {
+            Assert::assertTrue(true);
+        }
+    }
+
+    function assertRejectsCompare(
         Constraint $constraint,
         mixed      $argument,
         string     $failMessage,
@@ -20,8 +29,7 @@ trait Assertion
         ?string    $failActual): void
     {
         try {
-            Assert::assertThat($argument, $constraint);
-            throw new \AssertionError('Failed to assert that constraint was not matched');
+            $this->execute($constraint, $argument);
         } catch (ExpectationFailedException $exception) {
             $comparison = $exception->getComparisonFailure();
             Assert::assertSame(
@@ -32,5 +40,23 @@ trait Assertion
                     'actual'   => $comparison?->getActualAsString(),
                 ]);
         }
+    }
+
+    function assertRejectMessage(
+        Constraint $constraint,
+        mixed      $argument,
+        string     $failMessage): void
+    {
+        try {
+            $this->execute($constraint, $argument);
+        } catch (ExpectationFailedException $exception) {
+            Assert::assertSame($failMessage, $exception->getMessage());
+        }
+    }
+
+    function execute(Constraint $constraint, mixed $argument): void
+    {
+        Assert::assertThat($argument, $constraint);
+        throw new \AssertionError('Failed to assert that constraint was not matched');
     }
 }
