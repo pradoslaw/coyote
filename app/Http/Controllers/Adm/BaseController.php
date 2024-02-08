@@ -1,6 +1,7 @@
 <?php
 namespace Coyote\Http\Controllers\Adm;
 
+use Collective\Html\HtmlBuilder;
 use Coyote\Http\Controllers\Controller;
 use Lavary\Menu\Menu;
 
@@ -19,6 +20,7 @@ class BaseController extends Controller
     protected function buildMenu()
     {
         return $this->getMenuFactory()->make('adm', function ($menu) {
+            /** @var HtmlBuilder $html */
             $html = app('html');
             $fa = function ($icon) use ($html) {
                 return $html->tag('i', '', ['class' => "fa $icon"]);
