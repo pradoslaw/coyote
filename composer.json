@@ -26,10 +26,10 @@
     },
     "autoload": {
         "psr-4": {
-            "Boduch\\Grid\\": "src"
+            "Boduch\\Grid\\": "grid"
         },
         "files": [
-          "src/helpers.php"
+          "grid/helpers.php"
         ]
     }
 }
