@@ -4,63 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4c493d45058e5620b859ee630292a890",
+    "content-hash": "d01284162da78d78d6fe5b8a5f7ff701",
     "packages": [
-        {
-            "name": "adam-boduch/laravel-grid",
-            "version": "v2.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/adam-boduch/laravel-grid.git",
-                "reference": "581715905648d76455d813ae2d25fc41fcee933f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/adam-boduch/laravel-grid/zipball/581715905648d76455d813ae2d25fc41fcee933f",
-                "reference": "581715905648d76455d813ae2d25fc41fcee933f",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/http": "5.8|6.*|7.*|8.*",
-                "illuminate/pagination": "5.8|6.*|7.*|8.*",
-                "illuminate/support": "5.8|6.*|7.*|8.*",
-                "illuminate/validation": "5.8|6.*|7.*|8.*",
-                "illuminate/view": "5.8|6.*|7.*|8.*",
-                "laravel/helpers": "^1.3",
-                "laravelcollective/html": "5.8|6.*",
-                "nesbot/carbon": "^2.32.0",
-                "php": ">=7.2.0"
-            },
-            "require-dev": {
-                "orchestra/testbench": "~4",
-                "phpunit/phpunit": "~8.5"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "src/helpers.php"
-                ],
-                "psr-4": {
-                    "Boduch\\Grid\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Adam Boduch",
-                    "email": "adam@boduch.net"
-                }
-            ],
-            "description": "Laravel grid package",
-            "support": {
-                "issues": "https://github.com/adam-boduch/laravel-grid/issues",
-                "source": "https://github.com/adam-boduch/laravel-grid/tree/v2.2"
-            },
-            "time": "2020-11-05T10:26:34+00:00"
-        },
         {
             "name": "asm89/stack-cors",
             "version": "v2.1.1",

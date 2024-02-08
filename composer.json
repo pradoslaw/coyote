@@ -18,7 +18,6 @@
     "ext-json": "*",
     "ext-libxml": "*",
     "ext-simplexml": "*",
-    "adam-boduch/laravel-grid": "^2.2",
     "barryvdh/laravel-debugbar": "^v3.6",
     "ddeboer/vatin": "^2.2",
     "doctrine/dbal": "^2.5",
@@ -70,6 +69,7 @@
       "app/Plugins"
     ],
     "psr-4": {
+      "Boduch\\Grid\\": "grid/",
       "Coyote\\": "app/",
       "Database\\Seeders\\": "database/seeders/"
     },
