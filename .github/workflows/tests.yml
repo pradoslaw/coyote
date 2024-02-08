@@ -2,7 +2,7 @@ name: Tests
 
 on:
   pull_request:
-    types: [opened]
+    types: [ opened ]
   push:
     branches:
       - master
@@ -10,6 +10,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    concurrency:
+      group: tests
+      cancel-in-progress: true
 
     steps:
       - uses: actions/checkout@v2
