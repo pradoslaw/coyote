@@ -39,6 +39,7 @@ const plugins = [
         'fade',
         'fa-desktop',
         'fa-newspaper',
+        'fa-ban',
         'fa-bolt',
         'fa-column',
         'fa-shopping-cart',
