@@ -4,7 +4,7 @@ namespace Tests\Unit\Seo\Schema\DiscussionForumPosting;
 use PHPUnit\Framework\Constraint\Constraint;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture;
-use Tests\Unit\BaseFixture\Constraint\ArrayKey;
+use Tests\Unit\BaseFixture\Constraint\ArrayStructure;
 use Tests\Unit\Seo;
 use TRegx\PhpUnit\DataProviders\DataProvider;
 
@@ -121,10 +121,10 @@ class Test extends TestCase
         $schema = $this->postingSchema($this->newTopicAuthorUsername('mark'));
         $this->assertThat(
             $schema['author'],
-            $this->logicalAnd(
-                new ArrayKey('@type', $this->identicalTo('Person')),
-                new ArrayKey('name', $this->identicalTo('mark')),
-            ));
+            new ArrayStructure([
+                '@type' => 'Person',
+                'name'  => 'mark',
+            ]));
     }
 
     /**

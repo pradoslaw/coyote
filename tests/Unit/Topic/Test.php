@@ -2,7 +2,7 @@
 namespace Tests\Unit\Topic;
 
 use PHPUnit\Framework\TestCase;
-use Tests\Unit\BaseFixture\Constraint\ArrayKey;
+use Tests\Unit\BaseFixture\Constraint\ArrayStructure;
 use Tests\Unit\BaseFixture\Server;
 use Tests\Unit\Topic;
 use Tests\Unit\Topic\Fixture\SpaView;
@@ -15,7 +15,7 @@ class Test extends TestCase
     {
         $topicView = $this->topicView('Orange topic');
         $this->assertThat($topicView,
-            new ArrayKey('title', $this->identicalTo('Orange topic')));
+            new ArrayStructure(['title' => 'Orange topic']));
     }
 
     private function topicView(string $topicTitle): array
