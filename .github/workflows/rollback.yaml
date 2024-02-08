@@ -1,0 +1,30 @@
+name: Production rollback
+
+on:
+  workflow_dispatch:
+    inputs:
+      git-revision:
+        description: Git revision (image tag on hub.docker.com)
+
+jobs:
+  rollback:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Login to DockerHub
+        run: docker login -u ${{ secrets.DOCKER_LOGIN }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Update production docker images
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.PRODUCTION_IP }}
+          username: ${{ secrets.PRODUCTION_LOGIN }}
+          key: ${{ secrets.PRODUCTION_KEY }}
+          port: 22
+          script: |
+            sudo docker service update --image 4programmers/coyote:${{ inputs.git-revision }} coyote_php
+            sudo docker service update --image 4programmers/coyote:${{ inputs.git-revision }} coyote_worker
+            sudo docker service update --image 4programmers/coyote:${{ inputs.git-revision }} coyote_cron
