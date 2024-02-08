@@ -11,9 +11,8 @@ class SurveilRoutes
     public function handle(Request $request, Closure $next)
     {
         $requestRoute = Route::current();
-        $controller = \get_class($requestRoute->controller);
         $this->updateOrInsert(
-            route:$controller . '@' . $requestRoute->getActionMethod(),
+            route:$this->route($requestRoute),
             method:\implode('|', $requestRoute->methods));
 
         return $next($request);
@@ -33,5 +32,14 @@ class SurveilRoutes
                SELECT :route, :method, 1
                WHERE NOT EXISTS (SELECT 1 FROM route_track WHERE route=:route AND method=:method);',
             $bindings);
+    }
+
+    private function route(\Illuminate\Routing\Route $route): string
+    {
+        if ($route->controller === null) {
+            return '@' . $route->getActionMethod();
+        }
+        $controller = \get_class($route->controller);
+        return $controller . '@' . $route->getActionMethod();
     }
 }
