@@ -18,6 +18,7 @@ Sentry.init({
     'Request failed with status code 502',
     'timeout of 0ms exceeded',
     'null is not an object (evaluating \'ReaderArticleFinderJS.adoptableArticle().outerHTML\')',
+    'null is not an object (evaluating \'o.itemSize=3\')',
     'Improper range'
   ],
   tracesSampleRate: 0.0,
