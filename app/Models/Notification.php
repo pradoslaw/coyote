@@ -81,7 +81,7 @@ class Notification extends Model
     /**
      * @var array
      */
-    protected $dates = ['created_at', 'read_at'];
+    protected $casts = ['created_at' => 'datetime', 'read_at' => 'datetime'];
 
     public static function getChannels()
     {

@@ -40,7 +40,12 @@ class Payment extends Model
     /**
      * @var array
      */
-    protected $dates = ['created_at', 'updated_at', 'starts_at', 'ends_at'];
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'starts_at' => 'datetime',
+        'ends_at' => 'datetime',
+    ];
 
     /**
      * @var string

@@ -64,29 +64,29 @@ class Job extends Model
         getIndexBody as parentGetIndexBody;
     }
 
-    const MONTHLY           = 'monthly';
-    const YEARLY            = 'yearly';
-    const WEEKLY            = 'weekly';
-    const HOURLY            = 'hourly';
+    const MONTHLY = 'monthly';
+    const YEARLY = 'yearly';
+    const WEEKLY = 'weekly';
+    const HOURLY = 'hourly';
 
-    const STUDENT           = 'student';
-    const JUNIOR            = 'junior';
-    const MID               = 'mid';
-    const SENIOR            = 'senior';
-    const LEAD              = 'lead';
-    const MANAGER           = 'manager';
+    const STUDENT = 'student';
+    const JUNIOR = 'junior';
+    const MID = 'mid';
+    const SENIOR = 'senior';
+    const LEAD = 'lead';
+    const MANAGER = 'manager';
 
-    const EMPLOYMENT      = 'employment';
-    const MANDATORY       = 'mandatory';
-    const CONTRACT        = 'contract';
-    const B2B             = 'b2b';
+    const EMPLOYMENT = 'employment';
+    const MANDATORY = 'mandatory';
+    const CONTRACT = 'contract';
+    const B2B = 'b2b';
 
     /**
      * Filling each field adds points to job offer score.
      */
     const SCORE_CONFIG = [
-        'job'             => ['salary_from' => 25, 'salary_to' => 25, 'city' => 15, 'seniority' => 5],
-        'firm'            => ['name' => 15, 'logo' => 5, 'website' => 1, 'description' => 5]
+        'job'  => ['salary_from' => 25, 'salary_to' => 25, 'city' => 15, 'seniority' => 5],
+        'firm' => ['name' => 15, 'logo' => 5, 'website' => 1, 'description' => 5],
     ];
 
     /**
@@ -124,14 +124,14 @@ class Job extends Model
      * @var array
      */
     protected $attributes = [
-        'enable_apply'      => true,
-        'is_remote'         => false,
-        'title'             => '',
-        'remote_range'      => 100,
-        'currency_id'       => Currency::PLN,
-        'is_gross'          => false,
-        'rate'              => self::MONTHLY,
-        'employment'        => self::EMPLOYMENT
+        'enable_apply' => true,
+        'is_remote'    => false,
+        'title'        => '',
+        'remote_range' => 100,
+        'currency_id'  => Currency::PLN,
+        'is_gross'     => false,
+        'rate'         => self::MONTHLY,
+        'employment'   => self::EMPLOYMENT,
     ];
 
     /**
@@ -140,27 +140,23 @@ class Job extends Model
      * @var array
      */
     protected $casts = [
-        'is_remote'         => 'boolean',
-        'is_boost'          => 'boolean',
-        'is_gross'          => 'boolean',
-        'is_publish'        => 'boolean',
-        'is_ads'            => 'boolean',
-        'is_highlight'      => 'boolean',
-        'is_on_top'         => 'boolean',
-        'plan_id'           => 'int',
-        'score'             => 'int',
-        'enable_apply'      => 'boolean'
+        'is_remote'    => 'boolean',
+        'is_boost'     => 'boolean',
+        'is_gross'     => 'boolean',
+        'is_publish'   => 'boolean',
+        'is_ads'       => 'boolean',
+        'is_highlight' => 'boolean',
+        'is_on_top'    => 'boolean',
+        'plan_id'      => 'int',
+        'score'        => 'int',
+        'enable_apply' => 'boolean',
+        'created_at'   => 'datetime',
+        'updated_at'   => 'datetime',
+        'deadline_at'  => 'datetime',
+        'boost_at'     => 'datetime',
     ];
 
-    /**
-     * @var string
-     */
     protected $dateFormat = 'Y-m-d H:i:se';
-
-    /**
-     * @var array
-     */
-    protected $dates = ['created_at', 'updated_at', 'deadline_at', 'boost_at'];
 
     /**
      * We need to set firm id to null offer is private
@@ -395,7 +391,7 @@ class Job extends Model
      */
     public function commentsWithChildren()
     {
-        $userRelation = fn ($builder) => $builder->select(['id', 'name', 'photo', 'deleted_at', 'is_blocked', 'is_online'])->withTrashed();
+        $userRelation = fn($builder) => $builder->select(['id', 'name', 'photo', 'deleted_at', 'is_blocked', 'is_online'])->withTrashed();
 
         return $this
             ->comments()
@@ -405,7 +401,7 @@ class Job extends Model
                 'children' => function ($builder) use ($userRelation) {
                     return $builder->orderBy('id')->with(['user' => $userRelation]);
                 },
-                'user' => $userRelation
+                'user'     => $userRelation,
             ]);
     }
 
@@ -425,7 +421,7 @@ class Job extends Model
      */
     public function setSalaryFromAttribute($value)
     {
-        $this->attributes['salary_from'] = $value === null ? null : (int) trim($value);
+        $this->attributes['salary_from'] = $value === null ? null : (int)trim($value);
     }
 
     /**
@@ -433,7 +429,7 @@ class Job extends Model
      */
     public function setSalaryToAttribute($value)
     {
-        $this->attributes['salary_to'] = $value === null ? null : (int) trim($value);
+        $this->attributes['salary_to'] = $value === null ? null : (int)trim($value);
     }
 
     /**
@@ -563,9 +559,9 @@ class Job extends Model
         // we need to calculate monthly salary in order to sorting data by salary
         if ($this->rate == self::YEARLY) {
             $salary = round($salary / 12);
-        } elseif ($this->rate == self::WEEKLY) {
+        } else if ($this->rate == self::WEEKLY) {
             $salary = round($salary * 4);
-        } elseif ($this->rate == self::HOURLY) {
+        } else if ($this->rate == self::HOURLY) {
             $salary = round($salary * 8 * 5 * 4);
         }
 

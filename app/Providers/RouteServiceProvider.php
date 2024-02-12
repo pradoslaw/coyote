@@ -2,8 +2,8 @@
 
 namespace Coyote\Providers;
 
-use Coyote\Microblog;
 use Coyote\Guide;
+use Coyote\Microblog;
 use Coyote\Repositories\Contracts\BlockRepositoryInterface;
 use Coyote\Repositories\Contracts\FirewallRepositoryInterface;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface;
@@ -15,17 +15,12 @@ use Coyote\Repositories\Contracts\PaymentRepositoryInterface;
 use Coyote\Repositories\Contracts\PmRepositoryInterface;
 use Coyote\Repositories\Contracts\PostRepositoryInterface;
 use Coyote\Repositories\Contracts\TagRepositoryInterface;
-use Coyote\Repositories\Contracts\TopicRepositoryInterface;
 use Coyote\Repositories\Contracts\UserRepositoryInterface;
 use Coyote\Repositories\Contracts\WikiRepositoryInterface;
 use Coyote\Topic;
 use Coyote\User;
-use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
-use Illuminate\Support\Facades\RateLimiter;
-use Laravel\Passport\Passport;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -135,8 +130,6 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
-        Passport::routes();
-
         $this->mapApiRoutes();
         $this->mapWebRoutes();
     }

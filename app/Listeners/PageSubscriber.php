@@ -88,7 +88,7 @@ class PageSubscriber implements ShouldQueue
 
     private function index(Page | Model $page): void
     {
-        dispatch(function () use ($page) {
+        dispatch_sync(function () use ($page) {
             (new Crawler())->index($page);
         });
     }

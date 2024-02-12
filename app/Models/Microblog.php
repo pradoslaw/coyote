@@ -49,9 +49,16 @@ class Microblog extends Model
     }
 
     protected $fillable = ['parent_id', 'user_id', 'text'];
+
     protected $dateFormat = 'Y-m-d H:i:se';
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
-    protected $casts = ['is_sponsored' => 'bool'];
+
+    protected $casts = [
+        'is_sponsored' => 'bool',
+        'created_at'   => 'datetime',
+        'updated_at'   => 'datetime',
+        'deleted_at'   => 'datetime',
+    ];
+
     protected $attributes = [
         'votes' => 0,
         'views' => 1,
@@ -59,7 +66,7 @@ class Microblog extends Model
 
     private ?string $html = null;
 
-    public static function boot()
+    public static function boot(): void
     {
         parent::boot();
         static::creating(fn(Microblog $model) => $model->resetScore());

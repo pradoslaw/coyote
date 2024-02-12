@@ -33,5 +33,5 @@ class Track extends Model
     /**
      * @var array
      */
-    public $dates = ['marked_at'];
+    public $casts = ['marked_at' => 'datetime'];
 }

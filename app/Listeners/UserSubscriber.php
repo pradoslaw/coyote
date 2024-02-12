@@ -38,7 +38,7 @@ class UserSubscriber
     {
         $user = $event->user;
 
-        dispatch(function () use ($user) {
+        dispatch_sync(function () use ($user) {
             (new Crawler())->index($user);
         });
     }
@@ -47,7 +47,7 @@ class UserSubscriber
     {
         $user = (new User())->forceFill($event->user);
 
-        dispatch(function () use ($user) {
+        dispatch_sync(function () use ($user) {
             (new Crawler())->delete($user);
         });
     }

@@ -163,7 +163,7 @@ class PurgeSessionsCommand extends Command
         }
 
         // reindex user data in elasticsearch so we can sort users by last activity date
-        dispatch(function () use ($user) {
+        dispatch_sync(function () use ($user) {
             (new Crawler())->index($user);
         });
     }

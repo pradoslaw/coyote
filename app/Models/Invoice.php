@@ -23,15 +23,12 @@ class Invoice extends Model
 {
     const UPDATED_AT = null;
 
-    /**
-     * @var array
-     */
     protected $fillable = ['user_id', 'name', 'number', 'vat_id', 'address', 'city', 'postal_code', 'currency_id', 'country_id'];
 
-    /**
-     * @var array
-     */
-    protected $dates = ['created_at', 'updated_at'];
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
 
     /**
      * @var string

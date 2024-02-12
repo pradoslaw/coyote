@@ -134,11 +134,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     /**
      * @var array
      */
-    protected $dates = ['created_at', 'updated_at', 'visited_at', 'deleted_at'];
-
-    /**
-     * @var array
-     */
     protected $casts = [
         'allow_smilies'       => 'int',
         'allow_sig'           => 'int',
@@ -148,6 +143,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'is_confirm'          => 'int',
         'is_blocked'          => 'bool',
         'is_online'           => 'bool',
+        'created_at'          => 'datetime',
+        'updated_at'          => 'datetime',
+        'visited_at'          => 'datetime',
+        'deleted_at'          => 'datetime',
     ];
 
     public static function boot()

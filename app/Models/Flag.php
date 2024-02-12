@@ -43,16 +43,11 @@ class Flag extends Model
     protected $dateFormat = 'Y-m-d H:i:se';
 
     /**
-     * @var string[]
-     */
-    protected $dates = ['created_at'];
-
-    /**
      * Related to Laravel 5.8. deleted_at has different date format that created_at and carbon throws exception
      *
      * @var string[]
      */
-    protected $casts = ['deleted_at' => 'string'];
+    protected $casts = ['deleted_at' => 'string', 'created_at' => 'datetime'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

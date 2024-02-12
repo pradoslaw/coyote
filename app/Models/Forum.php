@@ -2,10 +2,8 @@
 
 namespace Coyote;
 
-use Carbon\Carbon;
 use Coyote\Forum\Access;
 use Coyote\Models\Scopes\TrackForum;
-use Coyote\Models\Scopes\TrackTopic;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -60,26 +58,22 @@ class Forum extends Model
         'enable_reputation',
         'enable_anonymous',
         'enable_tags',
-        'enable_homepage'
+        'enable_homepage',
     ];
 
     /**
      * @var array
      */
     protected $casts = [
-        'redirects' => 'int',
-        'is_locked' => 'bool',
-        'is_prohibited' => 'bool',
-        'require_tag' => 'bool',
+        'redirects'         => 'int',
+        'is_locked'         => 'bool',
+        'is_prohibited'     => 'bool',
+        'require_tag'       => 'bool',
         'enable_reputation' => 'bool',
-        'enable_anonymous' => 'bool',
-        'enable_prune' => 'bool'
+        'enable_anonymous'  => 'bool',
+        'enable_prune'      => 'bool',
+        'read_at'           => 'datetime',
     ];
-
-    /**
-     * @var array
-     */
-    protected $dates = ['read_at'];
 
     /**
      * @var string
@@ -187,12 +181,12 @@ class Forum extends Model
 
         if (!isset($acl[$userId])) {
             $acl[$userId] = $this->permissions()
-                        ->join('permissions AS p', 'p.id', '=', 'forum_permissions.permission_id')
-                        ->join('group_users AS ug', 'ug.group_id', '=', 'forum_permissions.group_id')
-                        ->where('ug.user_id', $userId)
-                        ->orderBy('value')
-                        ->select(['name', 'value'])
-                        ->pluck('value', 'name');
+                ->join('permissions AS p', 'p.id', '=', 'forum_permissions.permission_id')
+                ->join('group_users AS ug', 'ug.group_id', '=', 'forum_permissions.group_id')
+                ->where('ug.user_id', $userId)
+                ->orderBy('value')
+                ->select(['name', 'value'])
+                ->pluck('value', 'name');
         }
 
         return isset($acl[$userId][$name]) ? $acl[$userId][$name] : false;
@@ -205,7 +199,10 @@ class Forum extends Model
     public function markTime(?string $guestId)
     {
         if ($guestId !== null && !array_key_exists('read_at', $this->attributes)) {
-            $this->attributes['read_at'] = $this->tracks()->select('marked_at')->where('guest_id', $guestId)->value('marked_at');
+            $this->attributes['read_at'] = $this->tracks()
+                ->select('marked_at')
+                ->where('guest_id', $guestId)
+                ->value('marked_at');
         }
 
         return $this->read_at;

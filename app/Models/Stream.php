@@ -18,12 +18,12 @@ class Stream extends Model
     /**
      * @var array
      */
-    protected $casts = ['actor' => 'array', 'object' => 'array', 'target' => 'array'];
-
-    /**
-     * @var array
-     */
-    protected $dates = ['created_at'];
+    protected $casts = [
+        'actor'      => 'array',
+        'object'     => 'array',
+        'target'     => 'array',
+        'created_at' => 'datetime',
+    ];
 
     /**
      * @var array
@@ -37,6 +37,6 @@ class Stream extends Model
         'browser',
         'fingerprint',
         'login',
-        'email'
+        'email',
     ];
 }

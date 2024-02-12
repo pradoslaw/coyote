@@ -3,26 +3,26 @@
 namespace Coyote\Providers;
 
 use Coyote\Comment;
-use Coyote\Forum;
-use Coyote\Job;
 use Coyote\Firm;
-use Coyote\Microblog;
+use Coyote\Forum;
 use Coyote\Guide;
+use Coyote\Job;
+use Coyote\Microblog;
 use Coyote\Pm;
 use Coyote\Policies\CommentPolicy;
-use Coyote\Policies\GuidePolicy;
-use Coyote\Policies\MicroblogPolicy;
-use Coyote\Policies\ForumPolicy;
-use Coyote\Policies\PmPolicy;
-use Coyote\Policies\PostPolicy;
-use Coyote\Policies\JobPolicy;
 use Coyote\Policies\FirmPolicy;
+use Coyote\Policies\ForumPolicy;
+use Coyote\Policies\GuidePolicy;
+use Coyote\Policies\JobPolicy;
+use Coyote\Policies\MicroblogPolicy;
+use Coyote\Policies\PmPolicy;
 use Coyote\Policies\PostCommentPolicy;
+use Coyote\Policies\PostPolicy;
 use Coyote\Policies\TopicPolicy;
 use Coyote\Policies\WikiCommentPolicy;
 use Coyote\Post;
-use Coyote\User;
 use Coyote\Topic;
+use Coyote\User;
 use Coyote\Wiki;
 use Illuminate\Cache\CacheManager;
 use Illuminate\Contracts\Auth\Access\Gate;
@@ -39,17 +39,17 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        Microblog::class        => MicroblogPolicy::class,
-        Forum::class            => ForumPolicy::class,
-        Topic::class            => TopicPolicy::class,
-        Post::class             => PostPolicy::class,
-        Post\Comment::class     => PostCommentPolicy::class,
-        Job::class              => JobPolicy::class,
-        Firm::class             => FirmPolicy::class,
-        Pm::class               => PmPolicy::class,
-        Wiki\Comment::class     => WikiCommentPolicy::class,
-        Guide::class            => GuidePolicy::class,
-        Comment::class          => CommentPolicy::class
+        Microblog::class    => MicroblogPolicy::class,
+        Forum::class        => ForumPolicy::class,
+        Topic::class        => TopicPolicy::class,
+        Post::class         => PostPolicy::class,
+        Post\Comment::class => PostCommentPolicy::class,
+        Job::class          => JobPolicy::class,
+        Firm::class         => FirmPolicy::class,
+        Pm::class           => PmPolicy::class,
+        Wiki\Comment::class => WikiCommentPolicy::class,
+        Guide::class        => GuidePolicy::class,
+        Comment::class      => CommentPolicy::class,
     ];
 
     /**
@@ -79,7 +79,7 @@ class AuthServiceProvider extends ServiceProvider
         'guide-update',
         'guide-delete',
         'comment-update',
-        'comment-delete'
+        'comment-delete',
     ];
 
     /**
@@ -90,14 +90,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $permissions = [];
 
-    /**
-     * Register any application authentication / authorization services.
-     *
-     * @return void
-     */
-    public function boot()
+    public function boot(): void
     {
-        $this->registerPolicies();
         /** @var Gate $gate */
         $gate = $this->app[Gate::class];
 
@@ -108,9 +102,6 @@ class AuthServiceProvider extends ServiceProvider
                 return $permissions[$ability] ?? false;
             });
         }
-
-//        Passport::personalAccessClientId(1);
-//        Passport::personalAccessClientSecret(config('app.key'));
     }
 
     /**

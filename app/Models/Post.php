@@ -41,29 +41,20 @@ class Post extends Model
 
     protected $attributes = ['score' => 0];
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = ['topic_id', 'forum_id', 'user_id', 'user_name', 'text', 'ip', 'browser', 'edit_count', 'editor_id'];
 
-    /**
-     * @var string
-     */
     protected $dateFormat = 'Y-m-d H:i:se';
-
-    /**
-     * @var array
-     */
-    protected $dates = ['created_at', 'updated_at'];
 
     /**
      * Related to Laravel 5.8. deleted_at has different date format that created_at and carbon throws exception
      *
      * @var string[]
      */
-    protected $casts = ['deleted_at' => 'string'];
+    protected $casts = [
+        'deleted_at' => 'string',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
 
     /**
      * Html version of the post.
@@ -88,8 +79,8 @@ class Post extends Model
                 $post->logs()->create(
                     array_merge(
                         $post->only(['user_id', 'text', 'ip', 'browser']),
-                        ['title' => $topic->title, 'user_id' => $post->editor_id ?: $post->user_id]
-                    )
+                        ['title' => $topic->title, 'user_id' => $post->editor_id ?: $post->user_id],
+                    ),
                 );
             }
         });

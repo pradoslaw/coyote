@@ -31,34 +31,22 @@ class Wiki extends Model
         getIndexBody as parentGetIndexBody;
     }
 
-    /**
-     * @var string
-     */
     protected $table = 'wiki';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = ['title', 'long_title', 'excerpt', 'text'];
 
-    /**
-     * @var string
-     */
     protected $dateFormat = 'Y-m-d H:i:se';
-
-    /**
-     * @var array
-     */
-    protected $dates = ['created_at', 'updated_at'];
 
     /**
      * Related to Laravel 5.8. deleted_at has different date format that created_at and carbon throws exception
      *
      * @var string[]
      */
-    protected $casts = ['deleted_at' => 'string'];
+    protected $casts = [
+        'deleted_at' => 'string',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
 
     /**
      * Html version of the post.
@@ -79,7 +67,7 @@ class Wiki extends Model
         $title = str_replace(
             ['^', '$', ';', '#', '&', '(', ')', '`', '\\', '|', ',', '?', '%', '~', '[', ']', '{', '}', ':', '\/', '=', '!', '"', "'", '<', '>'],
             '',
-            $title
+            $title,
         );
 
         $title = ucfirst(mb_strtolower($title));

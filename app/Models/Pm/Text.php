@@ -23,7 +23,7 @@ class Text extends Model
     /**
      * @var array
      */
-    public $dates = ['created_at'];
+    public $casts = ['created_at' => 'datetime'];
 
     /**
      * @var string

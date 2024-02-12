@@ -3,13 +3,12 @@
 namespace Coyote;
 
 use Carbon\Carbon;
+use Coyote\Models\Scopes\Sortable;
 use Coyote\Models\Scopes\TrackForum;
 use Coyote\Models\Scopes\TrackTopic;
 use Coyote\Models\Subscription;
-use Coyote\Tag\Resource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Coyote\Models\Scopes\Sortable;
 use Illuminate\Database\Query\Builder;
 
 /**
@@ -46,7 +45,7 @@ use Illuminate\Database\Query\Builder;
 class Topic extends Model
 {
     use SoftDeletes, Sortable, Taggable, TrackTopic, TrackForum;
-    use Searchable{
+    use Searchable {
         getIndexBody as parentGetIndexBody;
     }
 
@@ -73,12 +72,17 @@ class Topic extends Model
     /**
      * @var array
      */
-    protected $casts = ['is_locked' => 'bool', 'is_sticky' => 'bool'];
-
-    /**
-     * @var array
-     */
-    protected $dates = ['created_at', 'updated_at', 'deleted_at', 'last_post_created_at', 'moved_at', 'locked_at', 'read_at'];
+    protected $casts = [
+        'is_locked'            => 'bool',
+        'is_sticky'            => 'bool',
+        'created_at'           => 'datetime',
+        'updated_at'           => 'datetime',
+        'deleted_at'           => 'datetime',
+        'last_post_created_at' => 'datetime',
+        'moved_at'             => 'datetime',
+        'locked_at'            => 'datetime',
+        'read_at'              => 'datetime',
+    ];
 
     public static function boot()
     {
@@ -316,9 +320,9 @@ class Topic extends Model
 
         return min(1000, 200 * $this->score)
             + min(1000, 100 * $this->replies)
-                + min(1000, 15 * $this->views)
-                    - ((time() - $this->last_post_created_at->timestamp) / 4500)
-                        - ((time() - $this->created_at->timestamp) / 1000);
+            + min(1000, 15 * $this->views)
+            - ((time() - $this->last_post_created_at->timestamp) / 4500)
+            - ((time() - $this->created_at->timestamp) / 1000);
     }
 
     /**

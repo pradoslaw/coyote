@@ -13,15 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Mail extends Model
 {
-    const UPDATED_AT = null;
-
-    /**
-     * @var array
-     */
     protected $fillable = ['subject', 'email'];
 
-    /**
-     * @var array
-     */
-    protected $dates = ['created_at'];
+    protected $casts = ['created_at' => 'datetime'];
 }

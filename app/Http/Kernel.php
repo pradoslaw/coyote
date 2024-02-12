@@ -57,7 +57,7 @@ class Kernel extends Foundation\Http\Kernel
     ];
 
     /** @var array */
-    protected $routeMiddleware = [
+    protected $middlewareAliases = [
         'auth'                => Middleware\Authenticate::class,
         'auth.basic'          => AuthenticateWithBasicAuth::class,
         'bindings'            => SubstituteBindings::class,
