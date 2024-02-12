@@ -10,7 +10,6 @@ class RedirectToCanonicalUrl
     public function handle(Request $request, callable $next): HttpFoundation\Response
     {
         if ($this->hasTrailingSlash($request)
-            || $this->hasTrailingQuerySeparator($request)
             || $this->hasScriptFile($request)
             || $this->hasWww($request)
             || $this->hasFirstPage($request)) {
@@ -26,11 +25,6 @@ class RedirectToCanonicalUrl
             return false;
         }
         return \str_ends_with($uri, '/');
-    }
-
-    private function hasTrailingQuerySeparator(Request $request): bool
-    {
-        return \str_ends_with($request->getRequestUri(), '?');
     }
 
     private function hasScriptFile(Request $request): bool

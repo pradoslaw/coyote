@@ -13,6 +13,6 @@ class Test extends TestCase
      */
     public function emptyQueryParams()
     {
-        $this->assertRedirectGet('/Forum?', '/Forum');
+        $this->assertNoRedirectGet('/Forum?');
     }
 }
