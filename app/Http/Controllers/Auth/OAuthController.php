@@ -1,6 +1,7 @@
 <?php
 namespace Coyote\Http\Controllers\Auth;
 
+use Coyote\Domain\OAuth\OAuth;
 use Coyote\Events\UserSaved;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Factories\MediaFactory;
@@ -16,14 +17,14 @@ class OAuthController extends Controller
 {
     use MediaFactory;
 
-    public function __construct(private UserRepository $users)
+    public function __construct(private UserRepository $users, private OAuth $oAuth)
     {
         parent::__construct();
     }
 
-    public function login(string $provider): \Symfony\Component\HttpFoundation\RedirectResponse
+    public function login(string $provider): RedirectResponse
     {
-        return $this->getSocialiteFactory()->driver($provider)->redirect();
+        return redirect()->to($this->oAuth->loginUrl($provider));
     }
 
     public function callback(string $provider): RedirectResponse

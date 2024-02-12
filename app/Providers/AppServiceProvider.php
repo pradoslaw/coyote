@@ -3,6 +3,8 @@
 namespace Coyote\Providers;
 
 use Carbon\Carbon;
+use Coyote\Laravel\SocialiteOAuth;
+use Coyote\Domain\OAuth\OAuth;
 use Coyote\Forum;
 use Coyote\Models\Asset;
 use Coyote\Services\Elasticsearch\Api as EsApi;
@@ -122,6 +124,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->resolving(Invoice\Pdf::class, function (Invoice\Pdf $pdf, $app) {
             $pdf->setVendor($app['config']->get('vendor'));
         });
+        
+        $this->app->singleton(OAuth::class, SocialiteOAuth::class);
     }
 
     private function registerMacros()
