@@ -22,25 +22,22 @@ trait Assertion
         }
     }
 
-    function assertRejectsMessageCompare(
+    function assertRejectsCompare(
         Constraint $constraint,
         mixed      $argument,
-        string     $failMessage,
         ?string    $failExpected,
         ?string    $failActual): void
     {
-        $exception = $this->failException($constraint, $argument);
-        $comparison = $exception->getComparisonFailure();
+        $comparison = $this->comparisonFailure($constraint, $argument);
         Assert::assertSame(
-            ['message' => $failMessage, 'expected' => $failExpected, 'actual' => $failActual],
+            ['expected' => $failExpected, 'actual' => $failActual],
             [
-                'message'  => $exception->getMessage(),
-                'expected' => $comparison?->getExpectedAsString(),
-                'actual'   => $comparison?->getActualAsString(),
+                'expected' => $comparison->getExpectedAsString(),
+                'actual'   => $comparison->getActualAsString(),
             ]);
     }
 
-    function assertRejectMessage(Constraint $constraint, mixed $argument, string $message): void
+    function assertRejectsMessage(Constraint $constraint, mixed $argument, string $message): void
     {
         Assert::assertSame($message, $this->failException($constraint, $argument)->getMessage());
     }
@@ -54,7 +51,7 @@ trait Assertion
     function assertRejectsActual(Constraint $constraint, mixed $argument, string $actual): void
     {
         $comparison = $this->comparisonFailure($constraint, $argument);
-        Assert::assertSame($actual, $comparison?->getActualAsString());
+        Assert::assertSame($actual, $comparison->getActualAsString());
     }
 
     function comparisonFailure(Constraint $constraint, mixed $argument): ComparisonFailure

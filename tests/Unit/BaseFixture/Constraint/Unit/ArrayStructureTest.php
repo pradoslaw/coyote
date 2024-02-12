@@ -40,7 +40,7 @@ class ArrayStructureTest extends TestCase
     {
         $constraint = new ArrayStructure(['key' => 'value']);
 
-        $this->assertRejectMessage($constraint, ['other' => 'other'],
+        $this->assertRejectsMessage($constraint, ['other' => 'other'],
             "Failed asserting that value at 'key' is identical to 'value'.");
     }
 
@@ -51,7 +51,7 @@ class ArrayStructureTest extends TestCase
     {
         $constraint = new ArrayStructure(['key' => $this->identicalTo('value')]);
 
-        $this->assertRejectMessage($constraint, ['other' => 'other'],
+        $this->assertRejectsMessage($constraint, ['other' => 'other'],
             "Failed asserting that value at 'key' is identical to 'value'.");
     }
 
@@ -62,7 +62,7 @@ class ArrayStructureTest extends TestCase
     {
         $constraint = new ArrayStructure(['key' => new TrimmedString('value')]);
 
-        $this->assertRejectMessage($constraint, ['foo' => '  bar  '],
+        $this->assertRejectsMessage($constraint, ['foo' => '  bar  '],
             "Failed asserting that value at 'key' trimmed is 'value'.");
     }
 
@@ -73,7 +73,7 @@ class ArrayStructureTest extends TestCase
     {
         $constraint = new ArrayStructure(['key' => new IsRelativeUri('/foo', 'host')]);
 
-        $this->assertRejectMessage($constraint, ['other' => '/bar'],
+        $this->assertRejectsMessage($constraint, ['other' => '/bar'],
             "Failed asserting that value at 'key' has relative uri '/foo'.");
     }
 
@@ -89,7 +89,7 @@ class ArrayStructureTest extends TestCase
             'four'  => '444',
         ]);
 
-        $this->assertRejectMessage($constraint,
+        $this->assertRejectsMessage($constraint,
             ['two' => '222', 'four' => '444'],
             "Failed asserting that value at 'one' is identical to '111' and value at 'three' is identical to '333'.");
     }
@@ -104,7 +104,7 @@ class ArrayStructureTest extends TestCase
             'foo' => 'bar',
         ]);
 
-        $this->assertRejectMessage($this->logicalAnd($constraint), ['key' => 'other'],
+        $this->assertRejectsMessage($this->logicalAnd($constraint), ['key' => 'other'],
             "Failed asserting that Array &0 (
     'key' => 'other'
 ) value at 'key' is identical to 'value' and value at 'foo' is identical to 'bar'.");
