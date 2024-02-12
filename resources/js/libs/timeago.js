@@ -48,19 +48,16 @@ const timeago = (timestamp) => {
   return null;
 };
 
-const countTime = () => {
-  // use Array.from to convert NodeList[] to Array. Next we can use polyfill to simulate Array.forEach on older browsers
-  let dates = Array.from(document.querySelectorAll('.timestamp[data-timestamp]'));
-
-  dates.forEach(date => {
-    const timestamp = date.getAttribute('data-timestamp');
-    const value = timeago(timestamp);
-
-    if (value) {
-      date.textContent = value;
-    }
-  });
-};
+function countTime() {
+  Array.from(document.querySelectorAll('.timestamp[data-time-ago]'))
+    .forEach(date => {
+      const timestamp = date.getAttribute('data-time-ago');
+      const value = timeago(timestamp);
+      if (value) {
+        date.textContent = value;
+      }
+    });
+}
 
 setInterval(countTime, 30000); // 30 sek
 

@@ -28,7 +28,7 @@
                         &#x2022;
                         <a href="#comment-{{ comment.id }}"
                            class="timestamp text-muted"
-                           data-timestamp="{{ comment.created_at|timestamp }}">
+                           data-time-ago="{{ comment.created_at }}">
                           {{ comment.created_at|format_date }}
                         </a>
                     </li>
