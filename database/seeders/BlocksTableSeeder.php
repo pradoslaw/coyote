@@ -70,7 +70,7 @@ class BlocksTableSeeder extends Seeder
 
             <ol>
                 <li><a title="Skontaktuj się poprzez email" href="/Kontakt"><i class="fa fa-info-circle fa-fw"></i>  Napisz do nas</a></li>
-                <li><a title="Skontaktuj się poprzez email" href="https://www.facebook.com/4programmers.net"><i class="fa fa-facebook fa-fw"></i> Odwiedź nas na Facebooku</a></li>
+                <li><a title="Skontaktuj się poprzez email" href="https://www.facebook.com/4programmers.net"><i class="fab fa-facebook fa-fw"></i> Odwiedź nas na Facebooku</a></li>
             </ol>
         </div>
     </div>
