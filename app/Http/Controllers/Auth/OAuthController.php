@@ -11,7 +11,6 @@ use Coyote\Services\Stream\Activities\Login as Stream_Login;
 use Coyote\Services\Stream\Objects\Person as Stream_Person;
 use Coyote\User;
 use Illuminate\Http\RedirectResponse;
-use Laravel\Socialite\Contracts\Factory as Socialite;
 
 class OAuthController extends Controller
 {
@@ -33,19 +32,19 @@ class OAuthController extends Controller
             return redirect()->route('login', ['error' => $this->request->input('error_description')]);
         }
 
-        $oauth = $this->getSocialiteFactory()->driver($provider)->stateless()->user();
-        $user = $this->users->findWhere(['provider' => $provider, 'provider_id' => $oauth->getId()])->first();
+        $oAuth = $this->oAuth->user($provider);
+        $user = $this->users->findWhere(['provider' => $provider, 'provider_id' => $oAuth->providerId])->first();
 
         if (!$user) {
-            $user = $this->users->findByEmail($oauth->getEmail());
+            $user = $this->users->findByEmail($oAuth->email);
 
             if ($user !== null) {
                 // merge with existing user account
                 $user->provider = $provider;
-                $user->provider_id = $oauth->getId();
+                $user->provider_id = $oAuth->providerId;
                 $user->save();
             } else {
-                $name = trim($oauth->getName() ?: $oauth->getNickName());
+                $name = trim($oAuth->name);
 
                 // it's important to check login name using case insensitive...
                 if ($this->users->findByName($name)) {
@@ -55,7 +54,7 @@ class OAuthController extends Controller
                 }
 
                 // create new user in database
-                $photoUrl = isset($oauth->avatar_original) ? $oauth->avatar_original : $oauth->getAvatar();
+                $photoUrl = $oAuth->photoUrl;
                 $filename = null;
 
                 if ($photoUrl) {
@@ -65,11 +64,11 @@ class OAuthController extends Controller
 
                 $user = User::query()->forceCreate([
                     'name'        => $name,
-                    'email'       => $oauth->getEmail(),
+                    'email'       => $oAuth->email,
                     'photo'       => $filename,
                     'is_confirm'  => 1,
                     'provider'    => $provider,
-                    'provider_id' => $oauth->getId(),
+                    'provider_id' => $oAuth->providerId,
                     'guest_id'    => $this->request->session()->get('guest_id'),
                 ]);
             }
@@ -84,13 +83,5 @@ class OAuthController extends Controller
         }
         stream(Stream_Login::class);
         return redirect()->intended(route('home'));
-    }
-
-    /**
-     * @return Socialite
-     */
-    public function getSocialiteFactory()
-    {
-        return app(Socialite::class);
     }
 }
