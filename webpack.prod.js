@@ -40,6 +40,7 @@ const plugins = [
         'fa-desktop',
         'fa-newspaper',
         'fa-ban',
+        'fa-facebook',
         'fa-bolt',
         'fa-column',
         'fa-shopping-cart',
