@@ -25,4 +25,13 @@ trait Models
         $user->save();
         return $user->id;
     }
+
+    function newUserDeleted(string $username): void
+    {
+        $user = new User;
+        $user->name = $username;
+        $user->email = 'irrelevant';
+        $user->deleted_at = 1;
+        $user->save();
+    }
 }

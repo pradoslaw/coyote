@@ -34,9 +34,9 @@ class UserRepository extends Repository implements UserRepositoryInterface
                 $this->raw('(VALUES (' . implode(',', $userIds) . ')) AS x (user_id)'),
                 'x.user_id',
                 '=',
-                'users.id'
+                'users.id',
             )
-            ->orderBy($this->raw('CASE WHEN x.user_id IS NULL THEN 0 ELSE 1 END'), 'DESC');
+                ->orderBy($this->raw('CASE WHEN x.user_id IS NULL THEN 0 ELSE 1 END'), 'DESC');
         }
 
         return $sql->orderBy('reputation', 'DESC')->orderByRaw('visited_at DESC NULLS LAST')->limit(5)->get();
@@ -46,18 +46,25 @@ class UserRepository extends Repository implements UserRepositoryInterface
      * Find by user name (case insensitive)
      *
      * @param $name
-     * @return \Coyote\User|null
+     * @return User|null
      */
     public function findByName($name)
     {
         return $this->getQueryBuilder('name', $name)->first();
     }
 
+    public function findByNameWithTrashed(string $name): ?User
+    {
+        return $this->getQueryBuilder('name', $name)
+            ->withTrashed()
+            ->first();
+    }
+
     /**
      * Find by user email (case insensitive). Return only user with confirmed email.
      *
      * @param $email
-     * @return \Coyote\User|null
+     * @return User|null
      */
     public function findByEmail($email)
     {
@@ -118,7 +125,7 @@ class UserRepository extends Repository implements UserRepositoryInterface
         return $this
             ->model
             ->where('github', $url)
-            ->orWhere(fn ($query) => $query->where('provider', 'Github')->where('provider_id', $githubId))
+            ->orWhere(fn($query) => $query->where('provider', 'Github')->where('provider_id', $githubId))
             ->update(['is_sponsor' => $flag]);
     }
 
@@ -141,7 +148,7 @@ class UserRepository extends Repository implements UserRepositoryInterface
                     'is_blocked',
                     'is_confirm',
                     'alert_failure',
-                    'access_ip'
+                    'access_ip',
                 ])
                 ->whereRaw("LOWER($field) = ?", [mb_strtolower($value)]);
         });

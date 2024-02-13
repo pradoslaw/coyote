@@ -47,7 +47,7 @@ class OAuthController extends Controller
                 $name = trim($oAuth->name);
 
                 // it's important to check login name using case insensitive...
-                if ($this->users->findByName($name)) {
+                if ($this->users->findByNameWithTrashed($name)) {
                     return redirect()->route('register', [
                         'error' => "Uuups. Niestety login $name jest już zajęty.",
                     ]);

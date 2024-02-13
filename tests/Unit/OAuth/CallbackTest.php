@@ -88,4 +88,17 @@ class CallbackTest extends TestCase
         $this->assertUserProvider($userId, 'github');
         $this->assertUserProviderId($userId, 'provided-id');
     }
+
+    /**
+     * @test
+     */
+    public function failureDuplicateNameDeleted()
+    {
+        $this->newUserDeleted('Mark');
+        $this->assertThat(
+            $this->oAuthCallbackUsername('Mark'),
+            $this->redirect(new UrlContainsQuery([
+                'error' => 'Uuups. Niestety login Mark jest już zajęty.',
+            ])));
+    }
 }
