@@ -1,4 +1,4 @@
-FROM 4programmers/php-node:8.1.20 as backend
+FROM 4programmers/php-node:8.2.7 as backend
 
 USER root
 WORKDIR /app
