@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class ChangeIdInNotificationsTable extends Migration
 {
@@ -38,7 +37,8 @@ class ChangeIdInNotificationsTable extends Migration
             $table->string('content_type')->nullable();
 
             $table->primary('id');
-            $table->index(['user_id', $this->db->raw('created_at DESC')]);
+            $table->index(['user_id', $this->db->raw('created_at DESC')],
+                'notifications_user_id_created_at desc_index');
             $table->index('object_id');
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
@@ -60,13 +60,11 @@ class ChangeIdInNotificationsTable extends Migration
 
         $this->db->statement('INSERT INTO notifications SELECT guid::uuid AS id, type_id, user_id, created_at, subject, excerpt, url, object_id, read_at, is_clicked FROM notifications_backup ORDER BY id ASC');
 
-        $sql ='INSERT INTO notification_senders (notification_id, user_id, created_at, name)
+        $this->db->statement('INSERT INTO notification_senders (notification_id, user_id, created_at, name)
                 SELECT notifications_backup.guid::uuid AS notification_id, notification_senders_backup.user_id, notification_senders_backup.created_at, name
                 FROM notification_senders_backup
                  LEFT JOIN notifications_backup ON notifications_backup.id = notification_senders_backup.notification_id
-                  ORDER BY notifications_backup.id ASC';
-
-        $this->db->statement($sql);
+                  ORDER BY notifications_backup.id ASC');
 
         $this->db->statement('CREATE TRIGGER after_notification_insert AFTER INSERT ON notifications FOR EACH ROW EXECUTE PROCEDURE "after_notification_insert"();');
         $this->db->statement('CREATE TRIGGER after_notification_update AFTER UPDATE ON notifications FOR EACH ROW EXECUTE PROCEDURE "after_notification_update"();');

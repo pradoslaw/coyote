@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class AddIndexToActivitiesTable extends Migration
 {
@@ -15,7 +15,8 @@ class AddIndexToActivitiesTable extends Migration
     public function up()
     {
         $this->schema->table('activities', function (Blueprint $table) {
-            $table->index([$this->db->raw('created_at DESC')]);
+            $table->index([$this->db->raw('created_at DESC')],
+                'activities_created_at desc_index');
         });
     }
 

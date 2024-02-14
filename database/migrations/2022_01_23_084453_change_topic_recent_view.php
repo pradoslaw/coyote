@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 class ChangeTopicRecentView extends Migration
 {
@@ -17,7 +16,7 @@ class ChangeTopicRecentView extends Migration
     {
         $this->db->statement('DROP MATERIALIZED VIEW topic_recent');
 
-        $sql = 'CREATE MATERIALIZED VIEW topic_recent AS
+        $this->db->statement('CREATE MATERIALIZED VIEW topic_recent AS
          SELECT
             topics.id AS id,
             forum_id,
@@ -35,13 +34,12 @@ class ChangeTopicRecentView extends Migration
          FROM topics
          JOIN forums ON forums.id = forum_id
          WHERE topics.is_locked = 0 AND forums.is_locked = 0 AND enable_homepage = true
-         ORDER BY topics.id DESC LIMIT 3000';
-
-        $this->db->statement($sql);
+         ORDER BY topics.id DESC LIMIT 3000');
 
         $this->schema->table('topic_recent', function (Blueprint $table) {
-            $table->index($this->db->raw('id'));
-            $table->index(['replies', $this->db->raw('rank DESC')]);
+            $table->index('id');
+            $table->index(['replies', $this->db->raw('rank DESC')],
+                'topic_recent_replies_rank desc_index');
         });
     }
 
@@ -54,7 +52,7 @@ class ChangeTopicRecentView extends Migration
     {
         $this->db->statement('DROP MATERIALIZED VIEW topic_recent');
 
-        $sql = 'CREATE MATERIALIZED VIEW IF NOT EXISTS topic_recent AS
+        $this->db->statement('CREATE MATERIALIZED VIEW IF NOT EXISTS topic_recent AS
          SELECT
             topics.id AS id,
             forum_id,
@@ -72,13 +70,12 @@ class ChangeTopicRecentView extends Migration
          FROM topics
          JOIN forums ON forums.id = forum_id
          WHERE topics.is_locked = 0 AND forums.is_locked = 0
-         ORDER BY topics.id DESC LIMIT 3000';
-
-        $this->db->statement($sql);
+         ORDER BY topics.id DESC LIMIT 3000');
 
         $this->schema->table('topic_recent', function (Blueprint $table) {
-            $table->index($this->db->raw('id'));
-            $table->index(['replies', $this->db->raw('rank DESC')]);
+            $table->index('id');
+            $table->index(['replies', $this->db->raw('rank DESC')],
+                'topic_recent_replies_rank desc_index');
         });
     }
 }
