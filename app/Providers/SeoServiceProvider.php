@@ -36,7 +36,7 @@ class SeoServiceProvider extends ServiceProvider
         if ($request->getPathInfo() === '/Search') {
             return 'noindex,follow';
         }
-        if ($request->getPathInfo() === '/Forum/Interesting') {
+        if (\in_array($request->getPathInfo(), ['/Forum/Interesting', '/Pastebin'])) {
             return 'noindex,nofollow';
         }
         return 'index,follow';
