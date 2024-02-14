@@ -3,10 +3,10 @@ name: Staging
 on:
   push:
     branches:
-      staging
+    - staging
 
 jobs:
-  build:
+  staging:
     runs-on: ubuntu-latest
 
     concurrency:
@@ -28,8 +28,9 @@ jobs:
             git fetch
             git reset origin/staging --hard
             docker-compose exec -T php composer install --no-dev
-            make install-assets
-            make migration
-            make assets-production
-            make cache-config
+            docker-compose exec -T php php artisan migrate --force
+            docker-compose exec -T php php artisan config:cache
+            docker-compose exec -T php php artisan route:cache
             docker-compose exec -T php php artisan queue:restart
+            docker-compose exec -T php yarn install
+            docker-compose exec -T php yarn run prod

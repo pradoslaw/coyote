@@ -1,30 +1,14 @@
-install:     file-permission composer-install migration es-create seed es-index install-assets assets-production install-passport install-push
-install-dev: file-permission composer-install migration es-create seed es-index install-assets assets-dev        install-passport install-push
-update:      update-repo composer-install migration assets-production cache-config
-update-dev:  update-repo composer-install migration assets-dev
+install: file-permission composer-install migration es-create seed es-index yarn-install yarn-prod install-passport install-push
 
-up:
-	docker-compose up -d
-
-stop:
-	docker-compose stop
-
-up-ci:
-	docker-compose -f docker-compose.yaml -f docker-compose.testing.yaml up -d
-
-stop-ci:
-	docker-compose -f docker-compose.yaml -f docker-compose.testing.yaml stop
-
-update-repo:
-	git reset --hard
-	git pull origin master
+bash:
+	docker-compose exec php bash
 
 composer-install:
 	docker-compose exec -T -u nginx php composer install
 
 file-permission:
-	docker-compose exec -T -u nginx php chmod -R 777 storage/
-	docker-compose exec -T -u nginx php chmod 777 bootstrap/cache/
+	docker-compose exec -T php chmod -R 777 storage/
+	docker-compose exec -T php chmod 777 bootstrap/cache/
 
 migration:
 	docker-compose exec -T -u nginx php php artisan migrate --force
@@ -32,14 +16,14 @@ migration:
 seed:
 	docker-compose exec -T -u nginx php php artisan db:seed
 
-install-assets:
+yarn-install:
 	docker-compose exec -T -u nginx php yarn install
 
-assets-production:
+yarn-prod:
 	docker-compose exec -T -u nginx php yarn run prod
 
-assets-dev:
-	docker-compose exec -T -u nginx php yarn run dev
+yarn-watch:
+	docker-compose exec -T -u nginx php yarn run watch
 
 cache-config:
 	docker-compose exec -T -u nginx php php artisan config:cache

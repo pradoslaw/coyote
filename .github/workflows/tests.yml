@@ -8,7 +8,7 @@ on:
       - master
 
 jobs:
-  build:
+  tests:
     runs-on: ubuntu-latest
 
     concurrency:
@@ -22,19 +22,21 @@ jobs:
         run: cp .env.default .env
 
       - name: Run docker containers
-        run: make up-ci
+        run: docker-compose -f docker-compose.yaml -f docker-compose.testing.yaml up -d
         env:
           STRIPE_KEY: ${{ secrets.STRIPE_KEY }}
           STRIPE_SECRET: ${{ secrets.STRIPE_SECRET }}
           STRIPE_ENDPOINT_SECRET: ${{ secrets.STRIPE_ENDPOINT_SECRET }}
           GOOGLE_MAPS_KEY: ${{ secrets.GOOGLE_MAPS_KEY }}
 
-      - uses: actions/cache@v2
+      - name: Cache composer dependencies
+        uses: actions/cache@v2
         with:
           path: '**/vendor'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/composer.lock') }}
 
-      - uses: actions/cache@v2
+      - name: Cache node dependencies
+        uses: actions/cache@v2
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
@@ -45,32 +47,5 @@ jobs:
       - name: Install packages
         run: make install
 
-      - name: ls
-        run: ls -lsa storage/logs
-
       - name: Run tests
         run: docker-compose exec -T -u nginx php php vendor/bin/phpunit
-
-      - name: Run dusk
-        run: docker-compose exec -T -u nginx php php artisan dusk
-
-      - uses: actions/upload-artifact@v2
-        if: ${{ always() }}
-        with:
-          name: logs
-          path: storage/logs/
-          retention-days: 5
-
-      - uses: actions/upload-artifact@v2
-        if: ${{ always() }}
-        with:
-          name: screenshots
-          path: tests/Browser/screenshots/
-          retention-days: 5
-
-      - uses: actions/upload-artifact@v2
-        if: ${{ always() }}
-        with:
-          name: console
-          path: tests/Browser/console/
-          retention-days: 5
