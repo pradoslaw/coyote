@@ -37,7 +37,10 @@ class HomeController extends BaseController
             return $this->wiki->children();
         });
 
-        return $this->view('wiki.home')->with(compact('grid', 'categories'));
+        return $this->view('wiki.home')->with([
+            'grid'       => $grid,
+            'categories' => $categories,
+        ]);
     }
 
     /**
@@ -45,7 +48,7 @@ class HomeController extends BaseController
      */
     private function grid()
     {
-        return (string) $this
+        return (string)$this
             ->gridBuilder()
             ->createGrid(LogGrid::class)
             ->setSource(new EloquentSource($this->wiki->getLogBuilder()))

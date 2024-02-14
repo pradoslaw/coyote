@@ -6,17 +6,17 @@ use Carbon\Carbon;
 use Coyote\Events\SuccessfulLogin;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Forms\Auth\LoginForm;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Http\Request;
 use Coyote\Services\Stream\Activities\Login as Stream_Login;
 use Coyote\Services\Stream\Activities\Logout as Stream_Logout;
 use Coyote\Services\Stream\Activities\Throttle as Stream_Throttle;
 use Coyote\Services\Stream\Actor;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
-    use AuthenticatesUsers{
+    use AuthenticatesUsers {
         logout as traitLogout;
     }
 
@@ -53,17 +53,17 @@ class LoginController extends Controller
         }
 
         $form = $this->createForm(LoginForm::class, null, [
-            'url' => route('login')
+            'url' => route('login'),
         ]);
 
-        return $this->view('auth.login', compact('form'));
+        return $this->view('auth.login', ['form' => $form]);
     }
 
     /**
      * The user has been authenticated.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  mixed  $user
+     * @param \Illuminate\Http\Request $request
+     * @param mixed $user
      */
     protected function authenticated(Request $request, $user)
     {
@@ -71,13 +71,13 @@ class LoginController extends Controller
         stream(Stream_Login::class);
 
         // send notification about new signin
-        event(new SuccessfulLogin($user, $request->ip(), substr((string) $request->header('User-Agent'), 0, 900)));
+        event(new SuccessfulLogin($user, $request->ip(), substr((string)$request->header('User-Agent'), 0, 900)));
     }
 
     /**
      * Get the failed login response instance.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @throws \Illuminate\Validation\ValidationException
@@ -95,7 +95,7 @@ class LoginController extends Controller
     /**
      * Validate the user login request.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return void
      */
     protected function validateLogin(Request $request)
@@ -107,14 +107,14 @@ class LoginController extends Controller
     /**
      * Attempt to log the user into the application.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return bool
      */
     protected function attemptLogin(Request $request)
     {
         return $this->guard()->attempt(
             $this->credentials($request),
-            true
+            true,
         );
     }
 
@@ -170,7 +170,7 @@ class LoginController extends Controller
         $field = filter_var($request->input('name'), FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
 
         return [
-            $field => $request->input('name'),
+            $field     => $request->input('name'),
             'password' => $request->input('password'),
         ];
     }

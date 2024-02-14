@@ -35,7 +35,10 @@ class SubmitController extends BaseController
                 route('wiki.submit', ['parentId' => $parentId]));
         }
 
-        return $this->view('wiki.submit')->with(compact('form', 'wiki'));
+        return $this->view('wiki.submit')->with([
+            'form' => $form,
+            'wiki' => $wiki,
+        ]);
     }
 
     public function create(string $path): View
@@ -50,7 +53,7 @@ class SubmitController extends BaseController
             $form->get('parent_id')->setValue($parent->id);
         }
 
-        return $this->view('wiki.submit')->with(compact('form'));
+        return $this->view('wiki.submit')->with(['form' => $form]);
     }
 
     public function save(Dispatcher $dispatcher, Wiki $wiki): RedirectResponse
@@ -75,13 +78,13 @@ class SubmitController extends BaseController
 
             stream(
                 $wiki->wasRecentlyCreated ? Stream_Create::class : Stream_Update::class,
-                (new Stream_Wiki())->map($wiki)
+                (new Stream_Wiki())->map($wiki),
             );
         });
 
         $dispatcher->send(
             $subscribers->exceptUser($this->auth),
-            new ContentChangedNotification($wiki)
+            new ContentChangedNotification($wiki),
         );
 
         // add to elasticsearch index and pages table...

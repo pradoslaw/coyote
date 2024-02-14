@@ -116,10 +116,11 @@ class HomeController extends BaseController
             ->categories($this->guestId)
             ->mapCategory();
 
-        $forums = ForumCollection::factory($forums);
-        $collapse = $this->collapse();
-
-        return $this->view('forum.home')->with(compact('forums', 'collapse'));
+        return $this->view('forum.home')
+            ->with([
+                'forums'   => ForumCollection::factory($forums),
+                'collapse' => $this->collapse(),
+            ]);
     }
 
     /**
@@ -258,13 +259,14 @@ class HomeController extends BaseController
             ->setRepository($this->topic);
 
         $flags = resolve(Flags::class)->fromModels([Topic::class])->permission('forum-delete')->get();
-        $flags = FlagResource::collection($flags);
-
-        $postsPerPage = $this->postsPerPage($this->request);
 
         return $this->view('forum.topics')
-            ->with(compact('topics', 'flags', 'postsPerPage'))
-            ->with(compact('renderParams', $renderParams));
+            ->with([
+                'topics'       => $topics,
+                'flags'        => FlagResource::collection($flags),
+                'postsPerPage' => $this->postsPerPage($this->request),
+                'renderParams' => $renderParams,
+            ]);
     }
 
     /**

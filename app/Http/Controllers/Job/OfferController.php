@@ -74,9 +74,10 @@ class OfferController extends Controller
             'assets'          => AssetsResource::collection($job->firm->assets)->toArray($this->request),
             'subscriptions'   => $this->subscriptions(),
             'emojis'          => Emoji::all(),
-        ])->with(
-            compact('job', 'mlt')
-        );
+        ])->with([
+            'job' => $job,
+            'mlt' => $mlt,
+        ]);
     }
 
     /**

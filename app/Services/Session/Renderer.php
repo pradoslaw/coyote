@@ -47,7 +47,7 @@ class Renderer
                 $total++;
                 $registered++;
             }
-        } elseif ($collection->count() === 0) {
+        } else if ($collection->count() === 0) {
             // we keep session in redis but also  - list of online users - in postgres.
             // we refresh table every 1 minute, so info about user's current page might be sometimes outdated.
             $total++;
@@ -61,7 +61,7 @@ class Renderer
         foreach ($collection->groupBy('group') as $name => $users) {
             if ($name === '') {
                 $name = self::USER;
-            } elseif (!isset($groups[$name])) {
+            } else if (!isset($groups[$name])) {
                 $groups[$name] = [];
             }
             foreach ($users as $user) {
@@ -74,7 +74,12 @@ class Renderer
         unset($groups[self::USER]);
         ksort($groups);
 
-        return view('components.viewers', compact('groups', 'total', 'guests', 'registered'));
+        return view('components.viewers', [
+            'groups'     => $groups,
+            'total'      => $total,
+            'guests'     => $guests,
+            'registered' => $registered,
+        ]);
     }
 
     private function data(?string $requestUri): Collection

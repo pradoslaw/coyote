@@ -3,8 +3,8 @@
 namespace Coyote\Http\Controllers\Forum;
 
 use Coyote\Events\UserSaved;
-use Coyote\Http\Resources\ForumCollection;
 use Coyote\Http\Resources\FlagResource;
+use Coyote\Http\Resources\ForumCollection;
 use Coyote\Http\Resources\TopicCollection;
 use Coyote\Repositories\Criteria\Topic\BelongsToForum;
 use Coyote\Repositories\Criteria\Topic\StickyGoesFirst;
@@ -47,7 +47,7 @@ class CategoryController extends BaseController
                 $this->guestId,
                 'topics.last_post_id',
                 'DESC',
-                $this->topicsPerPage($request)
+                $this->topicsPerPage($request),
             )
             ->appends($request->except('page'));
 
@@ -63,9 +63,15 @@ class CategoryController extends BaseController
         $collapse = $this->collapse();
         $postsPerPage = $this->postsPerPage($this->request);
 
-        return $this->view('forum.category')->with(
-            compact('forumList', 'forum', 'topics', 'forums', 'collapse', 'flags', 'postsPerPage')
-        );
+        return $this->view('forum.category')->with([
+            'forumList'    => $forumList,
+            'forum'        => $forum,
+            'topics'       => $topics,
+            'forums'       => $forums,
+            'collapse'     => $collapse,
+            'flags'        => $flags,
+            'postsPerPage' => $postsPerPage,
+        ]);
     }
 
     /**
@@ -96,7 +102,7 @@ class CategoryController extends BaseController
             $collapse = unserialize($collapse);
         }
 
-        $collapse[$forum->id] = (int) !($collapse[$forum->id] ?? false);
+        $collapse[$forum->id] = (int)!($collapse[$forum->id] ?? false);
         $this->setSetting('forum.collapse', serialize($collapse));
     }
 

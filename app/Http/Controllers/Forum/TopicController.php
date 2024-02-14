@@ -116,7 +116,12 @@ class TopicController extends BaseController
 
         $post = array_first($posts['data']);
         return $this
-            ->view('forum.topic', compact('posts', 'forum', 'paginate', 'reasons'))
+            ->view('forum.topic', [
+                'posts'    => $posts,
+                'forum'    => $forum,
+                'paginate' => $paginate,
+                'reasons'  => $reasons,
+            ])
             ->with([
                 'mlt'          => $this->moreLikeThis($topic),
                 'model'        => $topic, // we need eloquent model in twig to show information about locked/moved topic

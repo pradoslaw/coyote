@@ -37,15 +37,19 @@ class ApplicationController extends Controller
         }
 
         // set default message
-        $application->text = view('job.partials.application', compact('job'))->render();
+        $application->text = view('job.partials.application', ['job' => $job])->render();
 
         if ($this->getSetting('job.application')) {
             $application->forceFill((array)json_decode($this->getSetting('job.application')));
         }
 
-        return $this->view('job.application', compact('job', 'application'))->with([
-            'subscribed' => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false,
-        ]);
+        return $this->view('job.application', [
+            'job'         => $job,
+            'application' => $application,
+        ])
+            ->with([
+                'subscribed' => $this->userId ? $job->subscribers()->forUser($this->userId)->exists() : false,
+            ]);
     }
 
     /**

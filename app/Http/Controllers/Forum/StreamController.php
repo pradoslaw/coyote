@@ -30,17 +30,20 @@ class StreamController extends BaseController
             $result->getSource(),
             TopicBuilder::PER_PAGE,
             $this->request->get('page'),
-            ['path' => Paginator::resolveCurrentPath()]
+            ['path' => Paginator::resolveCurrentPath()],
         );
 
         (new Renderer($paginator->items()))->render();
 
         $this->breadcrumb($topic->forum);
         $this->breadcrumb->pushMany([
-            $topic->title     => UrlBuilder::topic($topic),
-            'Dziennik zdarzeń'  => route('forum.stream', [$topic->id])
+            $topic->title      => UrlBuilder::topic($topic),
+            'Dziennik zdarzeń' => route('forum.stream', [$topic->id]),
         ]);
 
-        return $this->view('forum.stream')->with(compact('topic', 'paginator'));
+        return $this->view('forum.stream')->with([
+            'topic'     => $topic,
+            'paginator' => $paginator,
+        ]);
     }
 }

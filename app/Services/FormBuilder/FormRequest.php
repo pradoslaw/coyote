@@ -2,14 +2,14 @@
 
 namespace Coyote\Services\FormBuilder;
 
+use Illuminate\Container\Container;
+use Illuminate\Contracts\Validation\Factory as ValidationFactory;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
-use Illuminate\Container\Container;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 use Illuminate\Validation\ValidationException;
 
 abstract class FormRequest
@@ -123,7 +123,7 @@ abstract class FormRequest
     /**
      * Set the Redirector instance.
      *
-     * @param  \Illuminate\Routing\Redirector  $redirector
+     * @param \Illuminate\Routing\Redirector $redirector
      * @return $this
      */
     public function setRedirector(Redirector $redirector)
@@ -136,7 +136,7 @@ abstract class FormRequest
     /**
      * Set the container implementation.
      *
-     * @param  \Illuminate\Container\Container  $container
+     * @param \Illuminate\Container\Container $container
      * @return $this
      */
     public function setContainer(Container $container)
@@ -168,7 +168,7 @@ abstract class FormRequest
      */
     public function setEnableValidation($flag)
     {
-        $this->enableValidation = (bool) $flag;
+        $this->enableValidation = (bool)$flag;
 
         return $this;
     }
@@ -185,9 +185,9 @@ abstract class FormRequest
 
         if (!$this->authorize()) {
             $this->failedAuthorization();
-        } elseif ($instance->fails()) {
+        } else if ($instance->fails()) {
             $this->failedValidation($instance);
-        } elseif ($instance->passes()) {
+        } else if ($instance->passes()) {
             $this->events->dispatch(FormEvents::POST_SUBMIT);
         }
 
@@ -217,7 +217,7 @@ abstract class FormRequest
         }
 
         if (method_exists($this, 'validator')) {
-            return $this->container->call([$this, 'validator'], compact('factory'));
+            return $this->container->call([$this, 'validator'], ['factory' => $factory]);
         }
 
         return $this->makeValidatorInstance($factory);
@@ -233,7 +233,7 @@ abstract class FormRequest
             $this->request->all(),
             $this->container->call([$this, 'rules']),
             $this->messages(),
-            $this->attributes()
+            $this->attributes(),
         );
     }
 
@@ -268,7 +268,7 @@ abstract class FormRequest
     /**
      * Get the proper failed validation response for the request.
      *
-     * @param  array  $errors
+     * @param array $errors
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function response(array $errors)
@@ -285,7 +285,7 @@ abstract class FormRequest
     /**
      * Handle a failed validation attempt.
      *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
+     * @param \Illuminate\Contracts\Validation\Validator $validator
      * @return void
      *
      * @throws \Illuminate\Http\Exceptions\HttpResponseException
@@ -310,7 +310,7 @@ abstract class FormRequest
     /**
      * Format the errors from the given Validator instance.
      *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
+     * @param \Illuminate\Contracts\Validation\Validator $validator
      * @return array
      */
     protected function formatErrors(Validator $validator)
@@ -329,9 +329,9 @@ abstract class FormRequest
 
         if ($this->redirect) {
             return $url->to($this->redirect);
-        } elseif ($this->redirectRoute) {
+        } else if ($this->redirectRoute) {
             return $url->route($this->redirectRoute);
-        } elseif ($this->redirectAction) {
+        } else if ($this->redirectAction) {
             return $url->action($this->redirectAction);
         }
 

@@ -22,7 +22,7 @@ class LogController extends BaseController
                 ->wiki
                 ->getLogBuilder()
                 ->where('wiki_log.wiki_id', $wiki->wiki_id)
-                ->where('wiki_paths.path_id', $wiki->id)
+                ->where('wiki_paths.path_id', $wiki->id),
         );
 
         /** @var LogGrid $grid */
@@ -35,7 +35,12 @@ class LogController extends BaseController
 
         $diff = $this->diff($wiki, $request);
 
-        return $this->view('wiki.log')->with(compact('grid', 'wiki', 'diff'));
+        return $this->view('wiki.log')
+            ->with([
+                'grid' => $grid,
+                'wiki' => $wiki,
+                'diff' => $diff,
+            ]);
     }
 
     /**
@@ -51,7 +56,7 @@ class LogController extends BaseController
 
         return [
             'before' => htmlspecialchars($wiki->logs->find($request->get('r1'), ['text'])->text),
-            'after' => htmlspecialchars($wiki->logs->find($request->get('r2'), ['text'])->text)
+            'after'  => htmlspecialchars($wiki->logs->find($request->get('r2'), ['text'])->text),
         ];
     }
 }
