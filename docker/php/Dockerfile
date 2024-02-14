@@ -1,4 +1,4 @@
-FROM php:8.2.7-fpm-buster as backend
+FROM php:8.3.2-fpm-bullseye as backend
 
 LABEL maintainer="4programmers.net <support@4programmers.net>"
 
