@@ -27,7 +27,6 @@
     "filp/whoops": "^2.3",
     "florianv/laravel-swap": "^2.3.0",
     "freelancehunt/php-credit-card-validator": "^3.2",
-    "fruitcake/laravel-cors": "^2.0",
     "fusonic/opengraph": "^2.0",
     "hedii/laravel-gelf-logger": "^7.0.0",
     "incenteev/emoji-pattern": "^1.3",
