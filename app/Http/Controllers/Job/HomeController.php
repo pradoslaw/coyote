@@ -16,7 +16,6 @@ use Coyote\Services\Elasticsearch\Builders\Job\SearchBuilder;
 use Coyote\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -30,7 +29,7 @@ class HomeController extends BaseController
 
     public function __construct(JobRepository $job, private TagRepository $tag)
     {
-        parent::__construct($job);        
+        parent::__construct($job);
         $this->breadcrumb->push('Praca', route('job.home'));
         $this->middleware(function (Request $request, $next) {
             $this->builder = new SearchBuilder($request);
@@ -108,7 +107,7 @@ class HomeController extends BaseController
             $result->total(),
             SearchBuilder::PER_PAGE,
             LengthAwarePaginator::resolveCurrentPage(),
-            ['path' => LengthAwarePaginator::resolveCurrentPath()]
+            ['path' => LengthAwarePaginator::resolveCurrentPath()],
         );
 
         $pagination->appends($this->request->except('page'));
@@ -130,7 +129,7 @@ class HomeController extends BaseController
                 'tags'      => $this->builder->tag->getTags(),
                 'locations' => $this->builder->city->getCities(),
                 'remote'    => $this->request->filled('remote') || $this->request->route()->getName() === 'job.remote' ? true : null,
-            ]
+            ],
         );
 
         $data = [
@@ -171,6 +170,14 @@ class HomeController extends BaseController
         } else {
             $question = '?';
         }
-        return $this->request->url() . (count($query) ? ($question . Arr::query($query)) : '');
+        return $this->request->url() . $this->query($query, $question);
+    }
+
+    private function query(array $query, string $question): string
+    {
+        if (count($query)) {
+            return $question . http_build_query($query);
+        }
+        return '';
     }
 }
