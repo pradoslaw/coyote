@@ -1,12 +1,14 @@
 <?php
-
 namespace Coyote\Exceptions;
 
 use Coyote\Repositories\Contracts\PageRepositoryInterface;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Session\TokenMismatchException;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
@@ -15,43 +17,25 @@ use Throwable;
 
 class Handler extends ExceptionHandler
 {
-    /**
-     * A list of the exception types that should not be reported.
-     *
-     * @var array
-     */
     protected $dontReport = [
         ForbiddenException::class,
         CommandNotFoundException::class,
-        PaymentFailedException::class
+        PaymentFailedException::class,
     ];
 
-    /**
-     * A list of the inputs that are never flashed for validation exceptions.
-     *
-     * @var array
-     */
     protected $dontFlash = [
         'password',
         'password_confirmation',
     ];
 
-    /**
-     * Report or log an exception.
-     *
-     * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
-     *
-     * @param  \Exception $exception
-     * @return void
-     */
-    public function report(Throwable $exception)
+    public function report(Throwable $e)
     {
-        if ($this->shouldReport($exception) && app()->bound('sentry') && app()->environment('production')) {
+        if ($this->shouldReport($e) && app()->bound('sentry') && app()->environment('production')) {
             // send report to sentry
-            app('sentry')->captureException($exception);
+            app('sentry')->captureException($e);
         }
 
-        parent::report($exception);
+        parent::report($e);
     }
 
     protected function context()
@@ -62,35 +46,33 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Exception $exception
-     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse|\Symfony\Component\HttpFoundation\Response
+     * @param Request $request
+     * @param Throwable $e
+     * @return Response|JsonResponse|Response
+     * @throws Throwable
      */
-    public function render($request, Throwable $exception)
+    public function render($request, Throwable $e)
     {
-        if ($exception instanceof TokenMismatchException) {
-            return $this->renderTokenMismatchException($request, $exception);
-        } elseif (($exception instanceof HttpException && $exception->getStatusCode() === 404) || $exception instanceof ModelNotFoundException) {
-            return $this->renderHttpErrorException($request, $exception);
+        if ($e instanceof TokenMismatchException) {
+            return $this->renderTokenMismatchException($request, $e);
+        }
+        if (($e instanceof HttpException && $e->getStatusCode() === 404) || $e instanceof ModelNotFoundException) {
+            return $this->renderHttpErrorException($request, $e);
         }
 
-        return parent::render($request, $exception);
+        return parent::render($request, $e);
     }
 
     /**
      * @param Request $request
      * @param TokenMismatchException $e
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     * @return JsonResponse|RedirectResponse
      */
-    protected function renderTokenMismatchException(Request $request, $e)
+    protected function renderTokenMismatchException(Request $request, TokenMismatchException $e)
     {
         if ($request->expectsJson()) {
-            return response()->json(
-                ['message' => 'Twoja sesja wygasła. Proszę odświeżyć stronę i spróbować ponownie.'],
-                $this->isHttpException($e) ? $e->getStatusCode() : 500
-            );
+            return response()->json(['message' => 'Twoja sesja wygasła. Proszę odświeżyć stronę i spróbować ponownie.'], 403);
         }
-
         return redirect($request->fullUrl())
             ->withInput($request->except('_token'))
             ->with('error', 'Wygląda na to, że nie wysłałeś tego formularza przez dłuższy czas. Spróbuj ponownie!');
@@ -99,7 +81,7 @@ class Handler extends ExceptionHandler
     /**
      * @param Request $request
      * @param Exception $e
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|SymfonyResponse
+     * @return RedirectResponse|SymfonyResponse
      */
     protected function renderHttpErrorException(Request $request, $e)
     {
