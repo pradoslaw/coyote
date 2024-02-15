@@ -186,30 +186,11 @@ class Grid
     }
 
     /**
-     * @return int
-     */
-    public function getPerPage()
-    {
-        return $this->perPage;
-    }
-
-    /**
      * @return string
      */
     public function getEmptyMessage()
     {
         return $this->emptyMessage;
-    }
-
-    /**
-     * @param string $emptyMessage
-     * @return $this
-     */
-    public function setEmptyMessage($emptyMessage)
-    {
-        $this->emptyMessage = $emptyMessage;
-
-        return $this;
     }
 
     /**
@@ -236,13 +217,6 @@ class Grid
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isPaginationEnabled()
-    {
-        return $this->enablePagination;
-    }
 
     /**
      * @param callable $callback

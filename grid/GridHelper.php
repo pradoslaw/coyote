@@ -73,14 +73,6 @@ class GridHelper
     }
 
     /**
-     * @return ValidationFactory
-     */
-    public function getValidator()
-    {
-        return $this->validator;
-    }
-
-    /**
      * @return HtmlBuilder
      */
     public function getHtmlBuilder()

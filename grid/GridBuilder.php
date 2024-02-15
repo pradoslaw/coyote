@@ -43,12 +43,4 @@ class GridBuilder
 
         return $grid;
     }
-
-    /**
-     * @return Grid
-     */
-    public function createBuilder()
-    {
-        return $this->createGrid(Grid::class);
-    }
 }

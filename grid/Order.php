@@ -33,26 +33,10 @@ class Order
     }
 
     /**
-     * @param string $column
-     */
-    public function setColumn($column)
-    {
-        $this->column = $column;
-    }
-
-    /**
      * @return string
      */
     public function getDirection()
     {
         return $this->direction;
-    }
-
-    /**
-     * @param string $direction
-     */
-    public function setDirection($direction)
-    {
-        $this->direction = $direction;
     }
 }

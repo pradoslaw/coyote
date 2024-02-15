@@ -35,36 +35,6 @@ class DateRange extends Filter
     }
 
     /**
-     * @param string $template
-     * @return $this
-     */
-    public function setTemplate(string $template)
-    {
-        $this->template = $template;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSeparator(): string
-    {
-        return $this->separator;
-    }
-
-    /**
-     * @param string $separator
-     * @return $this
-     */
-    public function setSeparator(string $separator)
-    {
-        $this->separator = $separator;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getOperator()
