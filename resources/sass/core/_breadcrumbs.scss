@@ -1,5 +1,5 @@
 .breadcrumb-item {
-  a {
+  a, span {
     color: $gray;
   }
 
@@ -9,8 +9,10 @@
     }
   }
 
-  &:last-child:not(:first-child) a {
-    font-weight: bold;
+  &:last-child:not(:first-child) {
+    a, span {
+      font-weight: bold;
+    }
   }
 }
 

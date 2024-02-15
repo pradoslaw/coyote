@@ -24,9 +24,14 @@ class Server
     {
         return $this->laravel->call(
             method:$method,
-            uri:new Url($this->hostname, $uri),
+            uri:$this->absoluteUrl($uri),
             server:['SCRIPT_FILENAME' => 'index.php'],
         );
+    }
+
+    public function absoluteUrl(string $uri): string
+    {
+        return new Url($this->hostname, $uri);
     }
 
     public function postJson(string $uri, array $body, User $user): TestResponse
