@@ -27,9 +27,16 @@ trait Schema
     function topicSchema(string $topicTitle, string $forumSlug): array
     {
         $topic = $this->newThread($topicTitle, $forumSlug);
-        return [
-            $this->schema("/Forum/$forumSlug/{$topic->id}-{$topic->slug}", 'BreadcrumbList'),
-            $topic->id,
-        ];
+        return $this->schema("/Forum/{$topic->forum->slug}/{$topic->id}-{$topic->slug}", 'BreadcrumbList');
+    }
+
+    function categorySchemaAny(): array
+    {
+        return $this->categorySchema('irrelevant', 'irrelevant');
+    }
+
+    function topicSchemaAny(): array
+    {
+        return $this->topicSchema('irrelevant', 'irrelevant');
     }
 }

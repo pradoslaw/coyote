@@ -15,10 +15,10 @@ class ArrayStructure extends Constraint
 
     public function __construct(array $structure)
     {
-        $this->structure = \array_map([$this, 'constraint'], $structure);
+        $this->structure = \array_map($this->constraint(...), $structure);
     }
 
-    public function constraint(mixed $constraint): Constraint
+    private function constraint(mixed $constraint): Constraint
     {
         if ($constraint instanceof Constraint) {
             return $constraint;

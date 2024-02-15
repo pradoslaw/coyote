@@ -3,7 +3,7 @@ namespace Coyote\Domain\Seo\Schema;
 
 use Coyote\Domain\Breadcrumb;
 
-class BreadcrumbList implements Thing
+readonly class BreadcrumbList implements Thing
 {
     /**
      * @param Breadcrumb[] $breadcrumbs
@@ -23,17 +23,28 @@ class BreadcrumbList implements Thing
 
     private function listItems(): array
     {
-        return \array_map([$this, 'listItem'], $this->breadcrumbs, \array_keys($this->breadcrumbs));
+        return \array_map($this->listItem(...), $this->breadcrumbs, \array_keys($this->breadcrumbs));
     }
 
     private function listItem(Breadcrumb $breadcrumb, int $index): array
     {
+        if ($this->lastItem($index)) {
+            return [
+                '@type'    => 'ListItem',
+                'name'     => $breadcrumb->name,
+                'position' => $index + 1,
+            ];
+        }
         return [
             '@type'    => 'ListItem',
-            '@id'      => $breadcrumb->url,
             'name'     => $breadcrumb->name,
             'item'     => $breadcrumb->url,
             'position' => $index + 1,
         ];
+    }
+
+    private function lastItem(int $index): bool
+    {
+        return count($this->breadcrumbs) - 1 === $index;
     }
 }

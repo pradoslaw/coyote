@@ -23,8 +23,6 @@ class Test extends TestCase
             $breadcrumbList['itemListElement'][0],
             new ArrayStructure([
                 'name'     => 'Forum',
-                '@id'      => $this->relativeUri('/Forum'),
-                'item'     => $this->relativeUri('/Forum'),
                 'position' => 1,
             ]));
     }
@@ -39,8 +37,6 @@ class Test extends TestCase
             $breadcrumbList['itemListElement'][1],
             new ArrayStructure([
                 'name'     => 'Orange category',
-                '@id'      => $this->relativeUri('/Forum/orange-category'),
-                'item'     => $this->relativeUri('/Forum/orange-category'),
                 'position' => 2,
             ]));
     }
@@ -55,7 +51,6 @@ class Test extends TestCase
             $breadcrumbList['itemListElement'][1],
             new ArrayStructure([
                 'name'     => 'Banana category',
-                '@id'      => $this->relativeUri('/Forum/banana_category'),
                 'item'     => $this->relativeUri('/Forum/banana_category'),
                 'position' => 2,
             ]));
@@ -66,14 +61,40 @@ class Test extends TestCase
      */
     public function topic(): void
     {
-        [$breadcrumbList, $topicId] = $this->topicSchema('Apple topic', 'apple-category');
+        $breadcrumbList = $this->topicSchema('Apple topic', 'apple-category');
         $this->assertThat(
             $breadcrumbList['itemListElement'][2],
             new ArrayStructure([
                 'name'     => 'Apple topic',
-                '@id'      => $this->relativeUri("/Forum/apple-category/$topicId-apple_topic"),
-                'item'     => $this->relativeUri("/Forum/apple-category/$topicId-apple_topic"),
                 'position' => 3,
             ]));
+    }
+
+    /**
+     * @test
+     */
+    public function categoryLastItemNoUrl(): void
+    {
+        $breadcrumbList = $this->categorySchemaAny();
+        $this->assertThat(
+            $breadcrumbList['itemListElement'][1],
+            $this->logicalAnd(
+                $this->logicalNot($this->arrayHasKey('@id')),
+                $this->logicalNot($this->arrayHasKey('item')),
+            ));
+    }
+
+    /**
+     * @test
+     */
+    public function topicLastItemNoUrl(): void
+    {
+        $breadcrumbList = $this->topicSchemaAny();
+        $this->assertThat(
+            $breadcrumbList['itemListElement'][2],
+            $this->logicalAnd(
+                $this->logicalNot($this->arrayHasKey('@id')),
+                $this->logicalNot($this->arrayHasKey('item')),
+            ));
     }
 }

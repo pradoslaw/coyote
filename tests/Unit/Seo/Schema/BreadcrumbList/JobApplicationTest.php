@@ -17,7 +17,6 @@ class JobApplicationTest extends TestCase
         $this->assertThat(
             $breadcrumbList['itemListElement'][1],
             new ArrayStructure([
-                '@id'  => $this->relativeUri("/Praca/$id-orange_offer"),
                 'item' => $this->relativeUri("/Praca/$id-orange_offer"),
             ]));
     }
