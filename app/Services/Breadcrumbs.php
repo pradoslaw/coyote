@@ -27,6 +27,8 @@ class Breadcrumbs
     public function render(): View
     {
         return view('components/breadcrumb', [
+            'root_name'         => config('app.name'),
+            'root_href'         => route('home'),
             'breadcrumbs'       => $this->breadcrumbs,
             'schema_breadcrumb' => TwigLiteral::fromHtml($this->schema()),
         ]);

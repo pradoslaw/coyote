@@ -9,8 +9,22 @@ use Tests\Unit\Breadcrumbs\Fixture\Breadcrumb;
 class Test extends TestCase
 {
     use Server\Http;
+    use Breadcrumbs\Fixture\SystemApplication;
     use Breadcrumbs\Fixture\Assertion;
     use Breadcrumbs\Fixture\Models;
+
+    /**
+     * @test
+     */
+    public function home()
+    {
+        $this->systemApplicationName('4programmers.org');
+        $this->assertThat(
+            $this->breadcrumbs('/'),
+            $this->equalTo([
+                new Breadcrumb('4programmers.org', false),
+            ]));
+    }
 
     /**
      * @test
