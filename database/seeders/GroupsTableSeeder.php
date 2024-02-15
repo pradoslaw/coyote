@@ -1,33 +1,31 @@
 <?php
-
 namespace Database\Seeders;
 
+use Coyote;
+use Coyote\Group;
+use Coyote\User;
 use Illuminate\Database\Seeder;
 
 class GroupsTableSeeder extends Seeder
 {
     use \SchemaBuilder;
 
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
+    public function run(): void
     {
-        $group = new \Coyote\Group;
-        $group->fill([
-           'name'           => 'Administrator'
-        ]);
-
+        $group = new Group(['name' => 'Administrator']);
         $group->system = true;
         $group->save();
 
-        $user = $this->db->table('users')->orderBy('id')->first();
+        $user = User::query()->create([
+            'name'       => 'admin',
+            'email'      => 'admin@localhost',
+            'password'   => bcrypt('admin'),
+            'reputation' => 400,
+        ]);
 
-        \Coyote\Group\User::create([
-           'group_id'       => $group->id,
-           'user_id'        => $user->id
+        Coyote\Group\User::query()->create([
+            'group_id' => $group->id,
+            'user_id'  => $user->id,
         ]);
     }
 }
