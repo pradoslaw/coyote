@@ -1,4 +1,3 @@
-import {rollback} from '@/api';
 import {Forum, Paginator, Post, PostComment, PostLog, Topic, User} from "@/types/models";
 import axios from "axios";
 import Vue from "vue";
@@ -210,7 +209,7 @@ const actions = {
   },
 
   rollback({commit}, log: PostLog) {
-    return rollback(log);
+    return axios.post<{ url: string }>(`/Forum/Post/Rollback/${log.post_id}/${log.id}`);
   },
 
   loadComments({commit}, post: Post) {
