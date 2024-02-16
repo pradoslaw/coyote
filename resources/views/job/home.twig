@@ -51,16 +51,16 @@
                   </li>
                 </ul>
                 <input
-                    v-model="input.q"
-                    @focus="selectTab('tech')"
-                    tabindex="1"
-                    ref="q"
-                    name="q"
-                    type="search"
-                    class="form-control"
-                    placeholder="Szukaj po tytule, nazwie firmy"
-                    autocomplete="off"
-                    autofocus>
+                  v-model="input.q"
+                  @focus="selectTab('tech')"
+                  tabindex="1"
+                  ref="q"
+                  name="q"
+                  type="search"
+                  class="form-control"
+                  placeholder="Szukaj po tytule, nazwie firmy"
+                  autocomplete="off"
+                  autofocus>
                 <a @click="selectTab('tech')" href="javascript:" rel="nofollow">
                   <i class="fas fa-icon" :class="getTabDropdownClass('tech')"></i>
                 </a>
@@ -84,14 +84,14 @@
                 </ul>
 
                 <input
-                    v-model="input.city"
-                    @focus="selectTab('location')"
-                    tabindex="2"
-                    ref="city"
-                    type="search"
-                    class="form-control"
-                    placeholder="Nazwa miejscowości"
-                    autocomplete="off"
+                  v-model="input.city"
+                  @focus="selectTab('location')"
+                  tabindex="2"
+                  ref="city"
+                  type="search"
+                  class="form-control"
+                  placeholder="Nazwa miejscowości"
+                  autocomplete="off"
                 >
 
                 <a @click="selectTab('location')" href="javascript:" rel="nofollow">
@@ -103,12 +103,12 @@
                 <i class="far fa-fw fa-credit-card fa-icon"></i>
 
                 <input
-                    v-model.number="input.salary"
-                    @focus="selectTab('salary')"
-                    placeholder="> 0"
-                    type="text"
-                    class="form-control"
-                    tabindex="3"
+                  v-model.number="input.salary"
+                  @focus="selectTab('salary')"
+                  placeholder="> 0"
+                  type="text"
+                  class="form-control"
+                  tabindex="3"
                 >
 
                 <select v-model="defaultCurrency" name="currency" class="form-control">
@@ -130,12 +130,11 @@
                 <ul class="list-group list-group-horizontal list-group-tech">
                   <li v-for="tag in tags" :key="tag.id" class="list-group-item">
                     <input type="hidden" name="tags[]" :value="tag.name" :checked="includesTag(tag.name)">
-
-                    <a @click.prevent="toggleTag(tag.name)" :href="tag.url" :class="{'disabled': input.tags.length && includesTag(tag.name)}">
+                    <button @click.prevent="toggleTag(tag.name)" :class="['job-tag',
+                      {'disabled': input.tags.length && includesTag(tag.name)}]">
                       <img :alt="tag.name" :src="tag.logo">
-
                       ${ tag.real_name || tag.name }
-                    </a>
+                    </button>
                   </li>
                 </ul>
               </div>

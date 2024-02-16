@@ -47,12 +47,13 @@
 
   .list-group-item {
     display: inline-block;
-    border-radius: $border-radius-lg;
+    border-radius: $border-radius-lg !important;
     margin-right: 5px;
     background: darken($tag-bg, 2%);
     border: none;
     padding: 0;
 
+    button.job-tag,
     a {
       color: $gray-light;
       font-size: $font-size-sm;
@@ -60,6 +61,8 @@
       padding: 5px;
       text-decoration: none;
       white-space: nowrap;
+      border: none;
+      outline: none;
 
       &.disabled {
         opacity: .7;
