@@ -12,7 +12,7 @@ use Fusonic\OpenGraph\Objects\ObjectBase;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
-use Http\Factory\Guzzle\RequestFactory;
+use GuzzleHttp\Psr7\HttpFactory;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Database\Connection;
 use Illuminate\Http\Request;
@@ -27,7 +27,7 @@ class AssetsController extends Controller
         ]);
 
         $client = new Client(['headers' => ['User-Agent' => 'facebookexternalhit/1.1']]);
-        $consumer = new Consumer($client, new RequestFactory());
+        $consumer = new Consumer($client, new HttpFactory());
 
         $url = $request->get('url');
         try {
