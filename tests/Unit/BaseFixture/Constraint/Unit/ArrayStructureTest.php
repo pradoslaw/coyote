@@ -36,11 +36,11 @@ class ArrayStructureTest extends TestCase
     /**
      * @test
      */
-    public function rejectMessageIdentity()
+    public function rejectMessageStringLiteral()
     {
         $constraint = new ArrayStructure(['key' => 'value']);
 
-        $this->assertRejectsMessage($constraint, ['other' => 'other'],
+        $this->assertRejectsMessage($constraint, ['key' => 'other'],
             "Failed asserting that value at 'key' is identical to 'value'.");
     }
 
@@ -51,7 +51,7 @@ class ArrayStructureTest extends TestCase
     {
         $constraint = new ArrayStructure(['key' => $this->identicalTo('value')]);
 
-        $this->assertRejectsMessage($constraint, ['other' => 'other'],
+        $this->assertRejectsMessage($constraint, ['key' => 'other'],
             "Failed asserting that value at 'key' is identical to 'value'.");
     }
 
@@ -60,10 +60,10 @@ class ArrayStructureTest extends TestCase
      */
     public function rejectMessageTrimmed()
     {
-        $constraint = new ArrayStructure(['key' => new TrimmedString('value')]);
+        $constraint = new ArrayStructure(['foo' => new TrimmedString('value')]);
 
         $this->assertRejectsMessage($constraint, ['foo' => '  bar  '],
-            "Failed asserting that value at 'key' trimmed is 'value'.");
+            "Failed asserting that value at 'foo' trimmed is 'value'.");
     }
 
     /**
@@ -73,7 +73,7 @@ class ArrayStructureTest extends TestCase
     {
         $constraint = new ArrayStructure(['key' => new UrlPathEquals('ftp://host', '/foo')]);
 
-        $this->assertRejectsMessage($constraint, ['other' => '/bar'],
+        $this->assertRejectsMessage($constraint, ['key' => '/bar'],
             "Failed asserting that value at 'key' is relative uri of 'ftp://host/foo'.");
     }
 
@@ -91,7 +91,8 @@ class ArrayStructureTest extends TestCase
 
         $this->assertRejectsMessage($constraint,
             ['two' => '222', 'four' => '444'],
-            "Failed asserting that value at 'one' is identical to '111' and value at 'three' is identical to '333'.");
+            "Failed asserting that value at 'one' is identical to '111' and value at 'three' is identical to '333'.
+In fact, keys ['one', 'three'] are not even present.");
     }
 
     /**
@@ -190,5 +191,29 @@ class ArrayStructureTest extends TestCase
     'one' => '111'
     'three' => is relative uri of 'http://host/333'
 )");
+    }
+
+    /**
+     * @test
+     */
+    public function rejectMessageKeyMissing()
+    {
+        $constraint = new ArrayStructure(['key' => $this->identicalTo('value')]);
+
+        $this->assertRejectsMessage($constraint, ['other' => 'other'],
+            "Failed asserting that value at 'key' is identical to 'value'.
+In fact, key 'key' is not even present.");
+    }
+
+    /**
+     * @test
+     */
+    public function rejectMessageKeyMissingMany()
+    {
+        $constraint = new ArrayStructure(['one' => '1', 'two' => '2', 'three' => '3']);
+
+        $this->assertRejectsMessage($constraint, ['one' => '1'],
+            "Failed asserting that value at 'two' is identical to '2' and value at 'three' is identical to '3'.
+In fact, keys ['two', 'three'] are not even present.");
     }
 }

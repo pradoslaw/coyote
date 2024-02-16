@@ -85,8 +85,9 @@ class AssetsController extends Controller
         $uploadedFile = $request->file('asset');
         $path = $uploadedFile->store($this->userId);
 
-        $asset = Asset::create([
-            'name' => $uploadedFile->getClientOriginalName() !== 'blob' ? $uploadedFile->getClientOriginalName() : $this->humanName($path),
+        /** @var Asset $asset */
+        $asset = Asset::query()->create([
+            'name' => $uploadedFile->getClientOriginalName() === 'blob' ? $this->humanName($path) : $uploadedFile->getClientOriginalName(),
             'path' => $path,
             'size' => $uploadedFile->getSize(),
             'mime' => $uploadedFile->getMimeType(),
@@ -110,6 +111,7 @@ class AssetsController extends Controller
 
         $headers = [
             'Content-Type' => 'Content-Type: ' . $asset->mime,
+            'X-Robots-Tag' => 'noindex',
         ];
 
         if (!$asset->isImage()) {

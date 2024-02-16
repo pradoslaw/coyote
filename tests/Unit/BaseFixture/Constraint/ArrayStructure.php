@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Unit\BaseFixture\Constraint;
 
+use Override;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Constraint\Constraint;
 use PHPUnit\Framework\Constraint\IsIdentical;
@@ -103,5 +104,29 @@ class ArrayStructure extends Constraint
             return \subStr($constraint->toString(), \strLen('is identical to '));
         }
         return $constraint->toString();
+    }
+
+    #[Override]
+    protected function additionalFailureDescription($other): string
+    {
+        $keys = \array_keys(\array_diff_key($this->structure, $other));
+
+        if (count($keys) === 1) {
+            return 'In fact, key ' . $this->formatKey($keys[0]) . ' is not even present.';
+        }
+        if (count($keys) > 1) {
+            return 'In fact, keys ' . $this->formatKeys($keys) . ' are not even present.';
+        }
+        return '';
+    }
+
+    public function formatKey($keys): string
+    {
+        return $this->exporter()->export($keys);
+    }
+
+    public function formatKeys(array $keys): string
+    {
+        return '[' . implode(', ', \array_map($this->exporter()->export(...), $keys)) . ']';
     }
 }
