@@ -56,8 +56,16 @@ class SeoServiceProvider extends ServiceProvider
         }
         return 'https://' .
             $request->getHost() .
-            $request->getPathInfo() .
+            $this->canonicalPath($request->getPathInfo()) .
             $this->queryString($request);
+    }
+
+    private function canonicalPath(string $path): string
+    {
+        if (\starts_with($path, '/Praca/Technologia')) {
+            return '/Praca';
+        }
+        return $path;
     }
 
     private function queryString(Request $request): string
@@ -83,7 +91,7 @@ class SeoServiceProvider extends ServiceProvider
         if ($uri === '/Forum') {
             return false;
         }
-        return \str_starts_with($uri, '/Forum');
+        return \str_starts_with($uri, '/Forum') || \str_starts_with($uri, '/Praca');
     }
 
     private function queryParams(Request $request): array

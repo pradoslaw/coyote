@@ -4,7 +4,7 @@ namespace Tests\Unit\BaseFixture\Constraint\Unit;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture\Constraint;
 use Tests\Unit\BaseFixture\Constraint\ArrayStructure;
-use Tests\Unit\BaseFixture\Constraint\IsRelativeUri;
+use Tests\Unit\BaseFixture\Constraint\UrlPathEquals;
 use Tests\Unit\BaseFixture\Constraint\TrimmedString;
 
 class ArrayStructureTest extends TestCase
@@ -71,10 +71,10 @@ class ArrayStructureTest extends TestCase
      */
     public function rejectMessageRelativeUri()
     {
-        $constraint = new ArrayStructure(['key' => new IsRelativeUri('/foo', 'host')]);
+        $constraint = new ArrayStructure(['key' => new UrlPathEquals('ftp://host', '/foo')]);
 
         $this->assertRejectsMessage($constraint, ['other' => '/bar'],
-            "Failed asserting that value at 'key' has relative uri '/foo'.");
+            "Failed asserting that value at 'key' is relative uri of 'ftp://host/foo'.");
     }
 
     /**
@@ -154,14 +154,14 @@ class ArrayStructureTest extends TestCase
             'one'   => '111',
             'two'   => $this->identicalTo('222'),
             'three' => new TrimmedString('333'),
-            'four'  => new IsRelativeUri('444', 'host'),
+            'four'  => new UrlPathEquals('ftp://host/', '444'),
         ]);
 
         $this->assertRejectsExpected($constraint, [], "Array &0 (
     'one' => '111'
     'two' => '222'
     'three' => trimmed is '333'
-    'four' => has relative uri '444'
+    'four' => is relative uri of 'ftp://host/444'
 )");
     }
 
@@ -173,7 +173,7 @@ class ArrayStructureTest extends TestCase
         $constraint = new ArrayStructure([
             'one'   => '111',
             'two'   => $this->identicalTo('222'),
-            'three' => new IsRelativeUri('333', 'host'),
+            'three' => new UrlPathEquals('http://host', '/333'),
             'four'  => new TrimmedString('444'),
         ]);
 
@@ -188,7 +188,7 @@ class ArrayStructureTest extends TestCase
     'two' => '222'
     'four' => trimmed is '444'
     'one' => '111'
-    'three' => has relative uri '333'
+    'three' => is relative uri of 'http://host/333'
 )");
     }
 }

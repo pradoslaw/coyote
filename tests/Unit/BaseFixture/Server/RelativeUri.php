@@ -1,15 +1,15 @@
 <?php
 namespace Tests\Unit\BaseFixture\Server;
 
-use Tests\Unit\BaseFixture\Constraint\IsRelativeUri;
+use Tests\Unit\BaseFixture\Constraint\UrlPathEquals;
 use Tests\Unit\BaseFixture\Server;
 
 trait RelativeUri
 {
     use Server\Http;
 
-    function relativeUri(string $relativeUri): IsRelativeUri
+    function relativeUri(string $relativeUri): UrlPathEquals
     {
-        return new IsRelativeUri($relativeUri, $this->server->baseUrl);
+        return new UrlPathEquals($this->server->baseUrl, $relativeUri);
     }
 }
