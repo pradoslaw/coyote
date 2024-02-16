@@ -86,13 +86,12 @@ class ViewServiceProvider extends ServiceProvider
 
     public function groupBySections(Support\Collection $categories): array
     {
-        $previousName = null;
         $sections = [];
         foreach ($categories as $category) {
-            if ($previousName === null || (($category['section'] !== $previousName) && $category['section'])) {
-                $previousName = $category['section'];
+            if ($category['section'] === null) {
+                continue;
             }
-            $sections[$previousName][] = $category;
+            $sections[$category['section']][] = $category;
         }
         return $sections;
     }
