@@ -44,11 +44,11 @@
                     <i class="fa fa-ellipsis-h"></i>
                   </button>
                   <div class="dropdown-menu">
-                    <a v-if="isBlocked(user.id)" @click="unblock(user.id)" href="javascript:" class="dropdown-item">
+                    <a v-if="isBlocked(user.id)" @click="unblock(user.id)" href="javascript:" class="dropdown-item" rel="nofollow">
                       <i class="fas fa-fw fa-user"></i>
                       Odlobkuj użytkownika
                     </a>
-                    <a v-else @click="block" href="javascript:" class="dropdown-item">
+                    <a v-else @click="block" href="javascript:" class="dropdown-item" rel="nofollow">
                       <i class="fas fa-fw fa-user-slash"></i>
                       Zablokuj użytkownika
                     </a>

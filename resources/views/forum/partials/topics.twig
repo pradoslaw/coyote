@@ -4,7 +4,7 @@
   <li>{{ sortable('replies', 'Odpowiedzi', ['last', 'desc']) }}</li>
   <li>{{ sortable('views', 'Wyświetleń', ['last', 'desc']) }}</li>
   <li>{{ sortable('score', 'Głosów', ['last', 'desc']) }}</li>
-  {#<li class="filter"><a href="javascript:">Filtruj</a></li>#}
+  {# <li class="filter"><a href="javascript:">Filtruj</a></li> #}
 </ul>
 
 {% if forum is defined and not forum.is_locked %}
@@ -15,12 +15,12 @@
 
 <div v-for="topics in groups" class="card card-default card-topics">
   <vue-topic
-    v-for="topic in topics"
-    :key="topic.id"
-    :topic="topic"
-    :highlight="containsUserTags(topic)"
-    :posts-per-page="postsPerPage"
-    :show-category-name="showCategoryName"
+      v-for="topic in topics"
+      :key="topic.id"
+      :topic="topic"
+      :highlight="containsUserTags(topic)"
+      :posts-per-page="postsPerPage"
+      :show-category-name="showCategoryName"
   ></vue-topic>
 </div>
 
@@ -33,7 +33,7 @@
     <div class="ml-auto">
       {{ form_select('forum', forumList, forum.slug, {'id': 'js-forum-list', 'class': 'form-control d-inline w-auto'}) }}
 
-      <a class="btn" href="javascript:" id="js-reload">
+      <a class="btn" href="javascript:" id="js-reload" rel="nofollow">
         <i class="fas fa-arrow-circle-right"></i>
       </a>
     </div>

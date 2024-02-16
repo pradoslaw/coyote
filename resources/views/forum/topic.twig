@@ -162,7 +162,7 @@
           <div class="ml-auto">
             {{ form_select('forum', user_forums, forum.slug, {'id': 'js-forum-list', 'class': 'form-control d-inline w-auto', 'data-url': route('forum.home')}) }}
 
-            <a class="btn" href="javascript:" id="js-reload">
+            <a class="btn" href="javascript:" id="js-reload" rel="nofollow">
               <i class="fas fa-arrow-circle-right"></i>
             </a>
           </div>
@@ -197,7 +197,7 @@
             </li>
 
             <li>
-              <a @click="$refs['update-modal'].open()" href="javascript:" title="Kliknij, aby szybko zmienić tytuł wątku">
+              <a @click="$refs['update-modal'].open()" href="javascript:" title="Kliknij, aby szybko zmienić tytuł wątku" rel="nofollow">
                 <i class="fa fa-pencil-alt fa-fw"></i>
 
                 Zmień tytuł
@@ -207,9 +207,8 @@
 
           {% if can('lock', forum) %}
             <li>
-              <a @click="lock" href="javascript:" title="Kliknij, aby zablokować wątek">
+              <a @click="lock" href="javascript:" title="Kliknij, aby zablokować wątek" rel="nofollow">
                 <i :class="{'fa-lock': !topic.is_locked, 'fa-unlock': topic.is_locked}" class="fa fa-lock fa-fw"></i>
-
                 <span v-if="topic.is_locked">Odblokuj wątek</span>
                 <span v-else>Zablokuj wątek</span>
               </a>
@@ -218,7 +217,7 @@
 
           {% if can('move', forum) %}
             <li>
-              <a @click="$refs['forum-modal'].open();" title="Przenieść ten temat do innej kategorii forum" href="javascript:">
+              <a @click="$refs['forum-modal'].open();" title="Przenieść ten temat do innej kategorii forum" href="javascript:" rel="nofollow">
                 <i class="fa fa-arrow-circle-right fa-fw"></i>
 
                 Przenieś wątek

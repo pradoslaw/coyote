@@ -28,7 +28,7 @@
   <div id="js-job">
     <div class="row">
       <div class="col-md-12">
-      <h1>Praca</h1>
+        <h1>Praca</h1>
       </div>
     </div>
     <div class="row">
@@ -45,24 +45,23 @@
 
                 <ul v-cloak class="list-group list-group-tech inline">
                   <li v-for="tag in input.tags" class="list-group-item">
-                    <a @click.prevent="toggleTag(tag)" href="javascript:"> ${ tag }</a>
+                    <a @click.prevent="toggleTag(tag)" href="javascript:" rel="nofollow">
+                      ${ tag }
+                    </a>
                   </li>
                 </ul>
-
                 <input
-                  v-model="input.q"
-                  @focus="selectTab('tech')"
-                  tabindex="1"
-                  ref="q"
-                  name="q"
-                  type="search"
-                  class="form-control"
-                  placeholder="Szukaj po tytule, nazwie firmy"
-                  autocomplete="off"
-                  autofocus
-                >
-
-                <a @click="selectTab('tech')" href="javascript:">
+                    v-model="input.q"
+                    @focus="selectTab('tech')"
+                    tabindex="1"
+                    ref="q"
+                    name="q"
+                    type="search"
+                    class="form-control"
+                    placeholder="Szukaj po tytule, nazwie firmy"
+                    autocomplete="off"
+                    autofocus>
+                <a @click="selectTab('tech')" href="javascript:" rel="nofollow">
                   <i class="fas fa-icon" :class="getTabDropdownClass('tech')"></i>
                 </a>
               </div>
@@ -72,26 +71,30 @@
 
                 <ul v-cloak class="list-group list-group-tech inline">
                   <li v-if="input.remote" class="list-group-item">
-                    <a @click.prevent="toggleRemote" href="javascript:">Praca zdalna</a>
+                    <a @click.prevent="toggleRemote" href="javascript:" rel="nofollow">
+                      Praca zdalna
+                    </a>
                   </li>
 
                   <li v-for="location in input.locations" class="list-group-item">
-                    <a @click.prevent="toggleLocation(location)" href="javascript:"> ${ location|capitalize }</a>
+                    <a @click.prevent="toggleLocation(location)" href="javascript:" rel="nofollow">
+                      ${ location|capitalize }
+                    </a>
                   </li>
                 </ul>
 
                 <input
-                  v-model="input.city"
-                  @focus="selectTab('location')"
-                  tabindex="2"
-                  ref="city"
-                  type="search"
-                  class="form-control"
-                  placeholder="Nazwa miejscowości"
-                  autocomplete="off"
+                    v-model="input.city"
+                    @focus="selectTab('location')"
+                    tabindex="2"
+                    ref="city"
+                    type="search"
+                    class="form-control"
+                    placeholder="Nazwa miejscowości"
+                    autocomplete="off"
                 >
 
-                <a @click="selectTab('location')" href="javascript:">
+                <a @click="selectTab('location')" href="javascript:" rel="nofollow">
                   <i class="fas fa-icon" :class="getTabDropdownClass('location')"></i>
                 </a>
               </div>
@@ -100,12 +103,12 @@
                 <i class="far fa-fw fa-credit-card fa-icon"></i>
 
                 <input
-                  v-model.number="input.salary"
-                  @focus="selectTab('salary')"
-                  placeholder="> 0"
-                  type="text"
-                  class="form-control"
-                  tabindex="3"
+                    v-model.number="input.salary"
+                    @focus="selectTab('salary')"
+                    placeholder="> 0"
+                    type="text"
+                    class="form-control"
+                    tabindex="3"
                 >
 
                 <select v-model="defaultCurrency" name="currency" class="form-control">
@@ -142,7 +145,7 @@
                   <li class="list-group-item">
                     <input type="hidden" name="remote" :checked="input.remote">
 
-                    <a @click.prevent="toggleRemote" href="javascript:">
+                    <a @click.prevent="toggleRemote" href="javascript:" rel="nofollow">
                       <i class="fas fa-fw fa-wifi" :class="{'text-primary': input.remote !== null}"></i>
 
                       Praca zdalna
@@ -152,7 +155,7 @@
                   <li v-for="(location, index) in locations" :key="index" class="list-group-item">
                     <input type="hidden" name="locations[]" :value="location" :checked="includesLocation(location)">
 
-                    <a @click.prevent="toggleLocation(location)" href="javascript:" :class="{'disabled': input.locations.length && includesLocation(location)}">
+                    <a @click.prevent="toggleLocation(location)" href="javascript:" :class="{'disabled': input.locations.length && includesLocation(location)}" rel="nofollow">
                       ${ location|capitalize }
                     </a>
                   </li>
@@ -209,7 +212,7 @@
       </div>
     </div>
 
-    <vue-notifications position="bottom right" />
+    <vue-notifications position="bottom right"/>
   </div>
 
   <script type="text/javascript">
@@ -222,7 +225,7 @@
       currencies: {{ currencies|json_encode|raw }},
       subscribed: {{ subscribed|json_encode|raw }},
       selectedTab: 'tech',
-      skeleton: false
+      skeleton: false,
     }
   </script>
 {% endblock %}

@@ -12,7 +12,7 @@
     <title>{% block title %} :: 4programmers.net{% endblock %}</title>
 
     {% if meta_canonical %}
-      <link rel="canonical" href="{{ meta_canonical }}">
+  <link rel="canonical" href="{{ meta_canonical }}">
     {% endif %}
 
     <meta name="description" content="{% block description %}{% endblock %}">
@@ -158,7 +158,7 @@
                 </div>
               </div>
               <div class="dropdown-divider"></div>
-              <a href="javascript:" onclick="document['logout-form'].submit()" class="dropdown-item btn-sign-out">
+              <a href="javascript:" onclick="document['logout-form'].submit()" class="dropdown-item btn-sign-out" rel="nofollow">
                 <i class="fas fa-sign-out-alt fa-fw"></i>
                 Wyloguj
               </a>
@@ -239,7 +239,7 @@
         </div>
       </div>
 
-      <a href="javascript:" id="scroll-to-top" title="Powrót na górę">
+      <a href="javascript:" id="scroll-to-top" title="Powrót na górę" rel="nofollow">
         <i class="fas fa-angle-up"></i>
       </a>
     </div>

@@ -1,114 +1,126 @@
 {% macro attr(attr) %}
-    {% apply spaceless %}
+  {% apply spaceless %}
     {% for key, value in attr %}
-        {{ key }}="{{ value }}"
+      {{ key }}="{{ value }}"
     {% endfor %}
-    {% endapply %}
+  {% endapply %}
 {% endmacro %}
 
 {% macro element(html, label, error, attr, help) %}
-    <div class="form-group row" {{ _self.attr(attr) }}>
-        <label class="col-md-4 col-form-label text-right">{{ label }}</label>
-        <div class="col-md-6">
-            {{ html|raw }}
+  <div class="form-group row" {{ _self.attr(attr) }}>
+    <label class="col-md-4 col-form-label text-right">{{ label }}</label>
+    <div class="col-md-6">
+      {{ html|raw }}
 
-            {% if error %}
-            <span class="invalid-feedback">{{ error }}</span>
-            {% elseif help %}
-            <span class="form-text text-muted">{{ help }}</span>
-            {% endif %}
-        </div>
+      {% if error %}
+        <span class="invalid-feedback">{{ error }}</span>
+      {% elseif help %}
+        <span class="form-text text-muted">{{ help }}</span>
+      {% endif %}
     </div>
+  </div>
 {% endmacro %}
 
 {% macro inline(html, label, error, help) %}
-    <div class="form-group row {{ error ? 'has-error' }}">
-        <label>{{ label }}</label>
+  <div class="form-group row {{ error ? 'has-error' }}">
+    <label>{{ label }}</label>
 
-        {{ html|raw }}
+    {{ html|raw }}
 
-        {% if error %}
-            <span class="invalid-feedback">{{ error }}</span>
-        {% elseif help %}
-            <span class="form-text text-muted">{{ help }}</span>
-        {% endif %}
-    </div>
+    {% if error %}
+      <span class="invalid-feedback">{{ error }}</span>
+    {% elseif help %}
+      <span class="form-text text-muted">{{ help }}</span>
+    {% endif %}
+  </div>
 {% endmacro %}
 
 {% macro text(name, label, value, attr, help) %}
-    {{ _self.element(form_text(name, value, {'class': 'form-control' ~ (session_get('errors').first(name) ? ' is-invalid')}), label, session_get('errors').first(name), attr, help) }}
+  {{ _self.element(form_text(name, value, {'class': 'form-control' ~ (session_get('errors').first(name) ? ' is-invalid')}), label, session_get('errors').first(name), attr, help) }}
 {% endmacro %}
 
 {% macro password(name, label, value, attr, help) %}
-    {{ _self.element(form_password(name, {'class': 'form-control' ~ (session_get('errors').first(name) ? ' is-invalid')}), label, session_get('errors').first(name), attr, help) }}
+  {{ _self.element(form_password(name, {'class': 'form-control' ~ (session_get('errors').first(name) ? ' is-invalid')}), label, session_get('errors').first(name), attr, help) }}
 {% endmacro %}
 
 {% macro select(name, label, items, value, attr, help) %}
-    {{ _self.element(form_select(name, items, value, {'class': 'form-control' ~ (session_get('errors').first(name) ? ' is-invalid')}), label, session_get('errors').first(name), attr, help) }}
+  {{ _self.element(form_select(name, items, value, {'class': 'form-control' ~ (session_get('errors').first(name) ? ' is-invalid')}), label, session_get('errors').first(name), attr, help) }}
 {% endmacro %}
 
 {% macro textarea(name, label, value, rows = 10, attr, help) %}
-    {{ _self.element(form_textarea(name, value, {'class': 'form-control' ~ (session_get('errors').first(name) ? ' is-invalid'), 'rows': rows}), label, session_get('errors').first(name), attr, help) }}
+  {{ _self.element(form_textarea(name, value, {'class': 'form-control' ~ (session_get('errors').first(name) ? ' is-invalid'), 'rows': rows}), label, session_get('errors').first(name), attr, help) }}
 {% endmacro %}
 
 {% macro checkbox(name, label, value, checked, attr, help) %}
-    {% if not ('[]' in name) %}
-        {{ form_hidden(name, 0) }}
+  {% if not ('[]' in name) %}
+    {{ form_hidden(name, 0) }}
+  {% endif %}
+
+  <div class="form-group row" {{ _self.attr(attr) }}>
+
+    {% if not attr.id %}
+      {% set attr = {'id': 'id' ~ random()} %}
     {% endif %}
 
-    <div class="form-group row" {{ _self.attr(attr) }}>
+    <div class="col-md-6 offset-md-4">
+      <div class="checkbox">
+        {{ form_checkbox(name, value, checked, attr|merge({class: 'styled'}), help) }}
 
-        {% if not attr.id %}
-            {% set attr = {'id': 'id' ~ random()} %}
-        {% endif %}
+        <label for="{{ attr.id }}">
+          {{ label }}
+        </label>
+      </div>
 
-        <div class="col-md-6 offset-md-4">
-            <div class="checkbox">
-                {{ form_checkbox(name, value, checked, attr|merge({class: 'styled'}), help) }}
-
-                <label for="{{ attr.id }}">
-                    {{ label }}
-                </label>
-            </div>
-
-            {% if session_get('errors').has(name) %}
-                <span class="invalid-feedback">{{ session_get('errors').first(name) }}</span>
-            {% elseif help %}
-                <span class="form-text text-muted">{{ help }}</span>
-            {% endif %}
-        </div>
+      {% if session_get('errors').has(name) %}
+        <span class="invalid-feedback">{{ session_get('errors').first(name) }}</span>
+      {% elseif help %}
+        <span class="form-text text-muted">{{ help }}</span>
+      {% endif %}
     </div>
+  </div>
 {% endmacro %}
 
 {% macro submit(value, state) %}
-    <div class="form-group row">
-        <div class="col-md-6 offset-md-4">
-            <button type="submit" class="btn btn-primary" style="margin-right: 15px;" data-submit-state="{{ state|default(value) }}">
-                {{ value }}
-            </button>
-        </div>
+  <div class="form-group row">
+    <div class="col-md-6 offset-md-4">
+      <button type="submit" class="btn btn-primary" style="margin-right: 15px;" data-submit-state="{{ state|default(value) }}">
+        {{ value }}
+      </button>
     </div>
+  </div>
 {% endmacro %}
 
 {% macro submit_delete(label, delete_url) %}
-    <div class="form-group row">
-        <div class="col-md-10 offset-md-2">
-            <a class="btn btn-secondary" href="javascript:window.history.back()"><i class="fas fa-undo"></i> Powrót</a>
-            <input type="submit" value="{{ label }}" class="btn btn-primary">
-
-            {% if delete_url %}
-                <a class="btn btn-danger" data-url="{{ delete_url }}" href="javascript:" data-bs-toggle="modal" data-bs-target="#confirm-delete"><i class="fas fa-trash-alt"></i> Usuń</a>
-            {% endif %}
-        </div>
+  <div class="form-group row">
+    <div class="col-md-10 offset-md-2">
+      <a class="btn btn-secondary" href="javascript:window.history.back()" rel="nofollow">
+        <i class="fas fa-undo"></i> Powrót
+      </a>
+      <input type="submit" value="{{ label }}" class="btn btn-primary">
+      {% if delete_url %}
+        <a class="btn btn-danger"
+           href="javascript:"
+           rel="nofollow"
+           data-url="{{ delete_url }}"
+           data-bs-toggle="modal"
+           data-bs-target="#confirm-delete">
+          <i class="fas fa-trash-alt"></i>
+          Usuń
+        </a>
+      {% endif %}
     </div>
+  </div>
 {% endmacro %}
 
 {% macro back(url) %}
-    <div class="form-group row">
-        <div class="col-sm-10 col-sm-offset-2">
-            <a class="btn btn-secondary" href="{{ url ? url : 'javascript:window.history.back()' }}"><i class="fas fa-undo"></i> Powrót</a>
-        </div>
+  <div class="form-group row">
+    <div class="col-sm-10 col-sm-offset-2">
+      <a class="btn btn-secondary" href="{{ url ? url : 'javascript:window.history.back()' }}" rel="nofollow">
+        <i class="fas fa-undo"></i>
+        Powrót
+      </a>
     </div>
+  </div>
 {% endmacro %}
 
 
