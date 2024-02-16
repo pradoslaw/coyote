@@ -4,6 +4,8 @@ services:
   php:
     environment:
       - PHP_IDE_CONFIG=serverName=coyote
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   db:
     command: postgres -c config_file=/etc/postgresql.conf
