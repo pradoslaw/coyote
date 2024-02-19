@@ -19,7 +19,8 @@ Sentry.init({
     'timeout of 0ms exceeded',
     'null is not an object (evaluating \'ReaderArticleFinderJS.adoptableArticle().outerHTML\')',
     'null is not an object (evaluating \'o.itemSize=3\')',
-    'Improper range'
+    'Improper range',
+    'undefined is not an object (evaluating \'hj.settings.site_id\')',
   ],
   tracesSampleRate: 0.0,
 });
