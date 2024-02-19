@@ -15,7 +15,7 @@ class InternalLinkExtension implements ExtensionInterface
     public function register(EnvironmentBuilderInterface $environment): void
     {
         $environment->addEventListener(DocumentParsedEvent::class,
-            new InternalLinkProcessor($this->page, $environment->getConfiguration(), $this->host),
+            new InternalLinkProcessor($this->page, $this->host),
             -50);
     }
 }
