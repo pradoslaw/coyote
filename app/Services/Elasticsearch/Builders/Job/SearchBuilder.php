@@ -1,6 +1,7 @@
 <?php
 namespace Coyote\Services\Elasticsearch\Builders\Job;
 
+use Coyote\Job;
 use Coyote\Services\Elasticsearch\Aggs;
 use Coyote\Services\Elasticsearch\Filters;
 use Coyote\Services\Elasticsearch\Functions\Decay;
@@ -101,12 +102,9 @@ class SearchBuilder extends QueryBuilder
         $this->must(new Filters\Job\Firm($this->filterString($name)));
     }
 
-    /**
-     * @return array
-     */
-    public function build()
+    public function build(): array
     {
-        $this->must(new Filters\Term('model', class_basename(\Coyote\Job::class)));
+        $this->must(new Filters\Term('model', class_basename(Job::class)));
 
         if ($this->request->filled('q')) {
             $this->must(new MultiMatch(
@@ -120,20 +118,23 @@ class SearchBuilder extends QueryBuilder
         }
 
         if ($this->request->filled('city')) {
-            $value = $this->request->get('city');
-            if (\is_array($value)) {
-                $this->city->addCity(\array_map([$this, 'filterString'], $value));
-            } else {
-                $this->city->addCity($this->filterString($value));
+            $cities = $this->request->get('city');
+            if (!\is_array($cities)) {
+                $cities = [$cities];
+            }
+            foreach ($cities as $city) {
+                if ($city) {
+                    $this->city->addCity($this->filterString($city));
+                }
             }
         }
 
         if ($this->request->filled('locations')) {
-            $this->city->addCity(array_filter($this->request->get('locations'), [$this, 'filterString']));
+            $this->city->addCity(array_filter($this->request->get('locations')));
         }
 
         if ($this->request->filled('tags')) {
-            $this->tag->addTag(array_filter($this->request->get('tags'), [$this, 'filterString']));
+            $this->tag->addTag(array_filter($this->request->get('tags')));
         }
 
         if ($this->request->filled('salary')) {
@@ -149,12 +150,8 @@ class SearchBuilder extends QueryBuilder
 
         $this->score(new ScriptScore('_score'));
         $this->sort(new Sort($this->sort, 'desc'));
-
         $this->setupFilters();
-
-        // facet search
         $this->setupAggregations();
-
         $this->size(self::PER_PAGE * (max(0, (int)$this->request->get('page', 1) - 1)), self::PER_PAGE);
         $this->source(['id']);
 

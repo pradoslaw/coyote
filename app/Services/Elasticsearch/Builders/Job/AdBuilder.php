@@ -1,5 +1,4 @@
 <?php
-
 namespace Coyote\Services\Elasticsearch\Builders\Job;
 
 use Coyote\Job;
@@ -19,10 +18,7 @@ class AdBuilder extends SearchBuilder
         $this->must(new SimpleQueryString($tag, ['title^2', 'tags.original'], 3));
     }
 
-    /**
-     * @return array
-     */
-    public function build()
+    public function build(): array
     {
         // only premium offers
         $this->must(new Term('is_ads', true));
@@ -43,7 +39,7 @@ class AdBuilder extends SearchBuilder
             'tags',
             'currency_symbol',
             'salary_from',
-            'salary_to'
+            'salary_to',
         ]);
 
         return QueryBuilder::build();
