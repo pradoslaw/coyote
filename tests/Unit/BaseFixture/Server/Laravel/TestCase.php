@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Unit\BaseFixture\Server\Laravel;
 
+use Coyote\Domain\Github\GithubStars;
 use Illuminate\Config;
 use Illuminate\Config\Repository;
 use Illuminate\Contracts\Console\Kernel;
@@ -38,9 +39,15 @@ class TestCase extends \Illuminate\Foundation\Testing\TestCase
         $this->run->beforeBoot($app);
         /** @var Kernel $kernel */
         $kernel = $app->make(Kernel::class);
-        $app->afterBootstrapping(LoadConfiguration::class, $this->disableSentry(...));
+        $this->beforeBoot($app);
         $kernel->bootstrap();
         return $app;
+    }
+
+    private function beforeBoot(Application $app): void
+    {
+        $app->afterBootstrapping(LoadConfiguration::class, $this->disableSentry(...));
+        $app->singleton(GithubStars::class, fn() => new Fake\GithubStars());
     }
 
     private function disableSentry(Application $app): void
