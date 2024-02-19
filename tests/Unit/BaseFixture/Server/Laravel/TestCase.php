@@ -1,8 +1,11 @@
 <?php
 namespace Tests\Unit\BaseFixture\Server\Laravel;
 
+use Illuminate\Config;
+use Illuminate\Config\Repository;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Application;
+use Illuminate\Foundation\Bootstrap\LoadConfiguration;
 use Symfony\Component\HttpFoundation;
 use Tests\Unit\BaseFixture\Server\Laravel\PhpUnit\TestRun;
 
@@ -35,8 +38,16 @@ class TestCase extends \Illuminate\Foundation\Testing\TestCase
         $this->run->beforeBoot($app);
         /** @var Kernel $kernel */
         $kernel = $app->make(Kernel::class);
+        $app->afterBootstrapping(LoadConfiguration::class, $this->disableSentry(...));
         $kernel->bootstrap();
         return $app;
+    }
+
+    private function disableSentry(Application $app): void
+    {
+        /** @var Repository $config */
+        $config = $app[Config\Repository::class];
+        $config->set('sentry.dsn', '');
     }
 
     protected function prepareUrlForRequest($uri): string
