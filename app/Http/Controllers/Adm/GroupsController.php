@@ -60,10 +60,11 @@ class GroupsController extends BaseController
         $this->transaction(function () use ($group, $form) {
             $group->save();
 
+            $permissions = $form->permissions->getValue() ?? [];
             foreach ($group->permissions()->get() as $permission) {
                 $group->permissions()->updateExistingPivot(
                     $permission->id,
-                    ['value' => in_array($permission->id, $form->permissions->getValue())],
+                    ['value' => in_array($permission->id, $permissions)],
                 );
             }
 
