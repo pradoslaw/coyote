@@ -54,10 +54,10 @@
 
           <div class="row no-gutters mt-1">
             <div class="d-none d-lg-inline small text-truncate">
-              <a :href="topic.url + `?p=${topic.first_post_id}#id${topic.first_post_id}`" class="text-muted"><vue-timeago :datetime="topic.created_at"></vue-timeago></a>,
+              <a :href="topic.url + `?p=${topic.first_post_id}#id${topic.first_post_id}`" class="text-muted topic-date"><vue-timeago :datetime="topic.created_at"></vue-timeago></a>,
 
-              <vue-username v-if="topic.user" :user="topic.user" class="mt-1 text-body"></vue-username>
-              <span v-else>{{ topic.user_name }}</span>
+              <vue-username v-if="topic.user" :user="topic.user" class="mt-1 topic-username"></vue-username>
+              <span v-else class="topic-username">{{ topic.user_name }}</span>
             </div>
 
             <ul v-if="topic.tags.length" class="tag-clouds tag-clouds-xs">
