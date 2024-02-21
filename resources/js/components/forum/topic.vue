@@ -37,7 +37,7 @@
               <template v-for="i in paginatorPages"><a :href="topic.url + '?page=' + i">{{ i }}</a>&nbsp;</template>
             </div>
 
-            <ul class="list-inline small text-muted mt-1 mt-sm-0 mb-0 d-block d-sm-inline ml-sm-auto flex-sm-shrink-0">
+            <ul class="topic-statistic list-inline small mt-1 mt-sm-0 mb-0 d-block d-sm-inline ml-sm-auto flex-sm-shrink-0">
               <li class="list-inline-item small" title="Liczba odpowiedzi">
                 <i :class="{'fas text-primary': topic.is_replied, 'far': !topic.is_replied}" class="fa-fw fa-comments"></i> {{ topic.replies | number }}
               </li>
@@ -77,8 +77,8 @@
 
           <div class="media-body small text-truncate">
             <p class="mb-0 d-inline d-md-block">
-              <vue-username v-if="topic.last_post.user" :user="topic.last_post.user"></vue-username>
-              <span v-else>{{ topic.last_post.user_name }}</span>
+              <vue-username v-if="topic.last_post.user" :user="topic.last_post.user" class="topic-username"></vue-username>
+              <span class="topic-username" v-else>{{ topic.last_post.user_name }}</span>
             </p>
 
             <a :href="topic.url + `?p=${topic.last_post.id}#id${topic.last_post.id}`" title="Zobacz ostatni post" class="text-muted"><vue-timeago :datetime="topic.last_post.created_at"></vue-timeago></a>
