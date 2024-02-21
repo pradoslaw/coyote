@@ -5,7 +5,7 @@
   {{ render_block('job_ads') }}
 
   <div id="js-tags" class="box">
-    <h4 class="border-bottom">
+    <h4 class="heading">
       <i class="fas fa-tag fa-fw"></i> Moje tagi
 
       <a @click="toggleEdit" href="javascript:" class="btn btn-secondary btn-sm float-right" style="margin-top: -4px" rel="nofollow">
@@ -40,7 +40,7 @@
   </div>
 
   <div class="box mt-4">
-    <h4 class="border-bottom"><i class="fas fa-tag fa-fw"></i> Popularne tagi</h4>
+    <h4 class="heading"><i class="fas fa-tag fa-fw"></i> Popularne tagi</h4>
 
     {% include 'forum.partials.tags' with {'tags': tags.popular} %}
   </div>

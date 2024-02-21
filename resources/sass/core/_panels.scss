@@ -18,7 +18,8 @@
       color: inherit;
     }
 
-    &.border-bottom {
+    &.border-bottom,
+    &.heading {
       padding: 0 0 10px 0;
       box-shadow: 0 2px 0 #FFF;
     }
