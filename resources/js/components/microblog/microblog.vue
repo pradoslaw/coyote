@@ -125,7 +125,7 @@
             <vue-comment v-for="comment in microblog.comments" :key="comment.id" :comment="comment" @reply="reply"></vue-comment>
 
             <form v-if="isAuthorized" method="POST">
-              <div class="media bg-light rounded border-top-0">
+              <div class="media microblog-input rounded border-top-0">
                 <div class="mr-2">
                   <a v-profile="user.id">
                     <vue-avatar :photo="user.photo" :name="user.name" class="i-35 d-block img-thumbnail"></vue-avatar>
