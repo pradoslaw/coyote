@@ -15,12 +15,23 @@
         <div class="media-body">
           <div class="d-flex flex-nowrap">
             <div class="flex-shrink-0 mr-auto">
-              <h5 class="media-heading"><vue-username :user="microblog.user"></vue-username></h5>
+              <h5 class="media-heading">
+                <vue-username :user="microblog.user"></vue-username>
+              </h5>
 
-              <ul class="list-inline mb-0 list-inline-bullet-sm text-muted">
-                <li class="list-inline-item"><a :href="microblog.url" class="text-muted small"><vue-timeago :datetime="microblog.created_at"></vue-timeago></a></li>
-                <li class="list-inline-item small">{{ microblog.views }} {{ microblog.views | declination(['wyświetlenie', 'wyświetlenia', 'wyświetleń']) }}</li>
-                <li v-if="microblog.is_sponsored" class="list-inline-item small">Sponsorowane</li>
+              <ul class="list-inline mb-0 list-inline-bullet-sm microblog-statistic">
+                <li class="list-inline-item">
+                  <a :href="microblog.url" class="small">
+                    <vue-timeago :datetime="microblog.created_at"></vue-timeago>
+                  </a>
+                </li>
+                <li class="list-inline-item small">
+                  {{ microblog.views }}
+                  {{ microblog.views | declination(['wyświetlenie', 'wyświetlenia', 'wyświetleń']) }}
+                </li>
+                <li v-if="microblog.is_sponsored" class="list-inline-item small">
+                  Sponsorowane
+                </li>
               </ul>
             </div>
 
@@ -36,12 +47,17 @@
 
                   <template v-if="!microblog.deleted_at">
                     <a @click="edit(microblog)" class="dropdown-item" href="javascript:"><i class="fas fa-edit fa-fw"></i> Edytuj</a>
-                    <a  @click="deleteItem" class="dropdown-item" href="javascript:"><i class="fas fa-trash-alt fa-fw"></i> Usuń</a>
+                    <a @click="deleteItem" class="dropdown-item" href="javascript:"><i class="fas fa-trash-alt fa-fw"></i> Usuń</a>
                   </template>
 
                   <a v-else @click="restoreItem" class="dropdown-item" href="javascript:"><i class="fas fa-trash-restore fa-fw"></i> Przywróć</a>
 
-                  <a v-if="microblog.permissions.moderate && !microblog.deleted_at" @click="toggleSponsored(microblog)" class="dropdown-item" href="javascript:"><i class="fas fa-dollar-sign fa-fw"></i> Sponsorowany</a>
+                  <a v-if="microblog.permissions.moderate && !microblog.deleted_at"
+                     @click="toggleSponsored(microblog)"
+                     class="dropdown-item" href="javascript:">
+                    <i class="fas fa-dollar-sign fa-fw"></i>
+                    Sponsorowany
+                  </a>
 
                   <div v-if="microblog.user.id !== user.id" class="dropdown-divider"></div>
                 </template>
@@ -50,7 +66,7 @@
                   <i class="fas fa-fw fa-user-slash"></i>
                   Zablokuj użytkownika
                 </a>
-               </div>
+              </div>
             </div>
           </div>
 
@@ -87,39 +103,42 @@
 
           <vue-form v-if="microblog.is_editing" ref="form" :microblog="microblog" class="mt-2 mb-2" @cancel="edit(microblog)" @save="edit(microblog)"></vue-form>
 
-          <a @click="checkAuth(vote, microblog)" @mouseenter.once="loadVoters(microblog)" :aria-label="voters" href="javascript:" class="btn btn-gradient" data-balloon-pos="up" data-balloon-break>
-            <i :class="{'fas text-primary': microblog.is_voted, 'far': !microblog.is_voted}" class="fa-fw fa-thumbs-up"></i>
+          <div class="microblog-actions">
+            <a @click="checkAuth(vote, microblog)" @mouseenter.once="loadVoters(microblog)" :aria-label="voters" href="javascript:" class="btn btn-gradient" data-balloon-pos="up"
+               data-balloon-break>
+              <i :class="{'fas text-primary': microblog.is_voted, 'far': !microblog.is_voted}" class="fa-fw fa-thumbs-up"></i>
 
-            {{ microblog.votes }} {{ microblog.votes | declination(['głos', 'głosy', 'głosów']) }}
-          </a>
+              {{ microblog.votes }} {{ microblog.votes | declination(['głos', 'głosy', 'głosów']) }}
+            </a>
 
-          <a @click="checkAuth(subscribe, microblog)" href="javascript:" class="btn btn-gradient" title="Wł/Wył obserwowanie tego wpisu">
-            <i :class="{'fas text-primary': microblog.is_subscribed, 'far': !microblog.is_subscribed}" class="fa-fw fa-bell"></i>
+            <a @click="checkAuth(subscribe, microblog)" href="javascript:" class="btn btn-gradient" title="Wł/Wył obserwowanie tego wpisu">
+              <i :class="{'fas text-primary': microblog.is_subscribed, 'far': !microblog.is_subscribed}" class="fa-fw fa-bell"></i>
 
-            <span class="d-none d-sm-inline">Obserwuj</span>
-          </a>
+              <span class="d-none d-sm-inline">Obserwuj</span>
+            </a>
 
-          <a @click="checkAuth(reply, microblog.user)" href="javascript:" class="btn btn-gradient" title="Odpowiedz na ten wpis">
-            <i class="far fa-fw fa-comment"></i>
+            <a @click="checkAuth(reply, microblog.user)" href="javascript:" class="btn btn-gradient" title="Odpowiedz na ten wpis">
+              <i class="far fa-fw fa-comment"></i>
 
-            <span class="d-none d-sm-inline">Komentuj</span>
-          </a>
+              <span class="d-none d-sm-inline">Komentuj</span>
+            </a>
 
-          <a @click.prevent="copy" :href="microblog.url" class="btn btn-gradient" title="Kopiuj link do schowka">
-            <i class="fas fa-share-alt"></i>
+            <a @click.prevent="copy" :href="microblog.url" class="btn btn-gradient" title="Kopiuj link do schowka">
+              <i class="fas fa-share-alt"></i>
 
-            <span class="d-none d-sm-inline">Udostępnij</span>
-          </a>
+              <span class="d-none d-sm-inline">Udostępnij</span>
+            </a>
 
-          <a v-if="isAuthorized" href="javascript:" :data-metadata="microblog.metadata" :data-url="microblog.url" class="btn btn-gradient" title="Zgłoś ten wpis">
-            <i class="fas fa-flag"></i>
+            <a v-if="isAuthorized" href="javascript:" :data-metadata="microblog.metadata" :data-url="microblog.url" class="btn btn-gradient" title="Zgłoś ten wpis">
+              <i class="fas fa-flag"></i>
 
-            <span class="d-none d-sm-inline">Zgłoś</span>
-          </a>
-
+              <span class="d-none d-sm-inline">Zgłoś</span>
+            </a>
+          </div>
           <div ref="comments" class="microblog-comments">
             <div v-if="microblog.comments_count > Object.keys(microblog.comments).length" class="show-all-comments">
-              <a @click="loadComments(microblog)" href="javascript:"><i class="far fa-comments"></i> Zobacz {{ totalComments | declination(['pozostały', 'pozostałe', 'pozostałe']) }} {{ totalComments }} {{ totalComments | declination(['komentarz', 'komentarze', 'komentarzy']) }}</a>
+              <a @click="loadComments(microblog)" href="javascript:"><i class="far fa-comments"></i> Zobacz {{ totalComments | declination(['pozostały', 'pozostałe', 'pozostałe']) }}
+                {{ totalComments }} {{ totalComments | declination(['komentarz', 'komentarze', 'komentarzy']) }}</a>
             </div>
 
             <vue-comment v-for="comment in microblog.comments" :key="comment.id" :comment="comment" @reply="reply"></vue-comment>
@@ -146,143 +165,142 @@
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
-  import VueAvatar from '../avatar.vue';
-  import VueTimeago from '../../plugins/timeago';
-  import VueClipboard from '../../plugins/clipboard';
-  import VueLightbox from 'vue-cool-lightbox';
-  import VueComment from "./comment.vue";
-  import VueCommentForm from './comment-form.vue';
-  import VueForm from './form.vue';
-  import VueFlag from '../flags/flag.vue';
-  import { default as mixins } from '../mixins/user';
-  import { Prop, Ref, Mixins } from "vue-property-decorator";
-  import { mapGetters, mapState, mapActions } from "vuex";
-  import Component from "vue-class-component";
-  import { mixin as clickaway } from "vue-clickaway";
-  import store from "../../store";
-  import VueUserName from "../user-name.vue";
-  import VueTags from '../tags.vue';
-  import { MicroblogMixin } from "../mixins/microblog";
-  import { User } from '@/types/models';
-  import useBrackets from "@/libs/prompt";
-  import IsImage from '@/libs/assets';
+import IsImage from '@/libs/assets';
+import useBrackets from "@/libs/prompt";
+import {User} from '@/types/models';
+import Vue from 'vue';
+import Component from "vue-class-component";
+import {mixin as clickaway} from "vue-clickaway";
+import VueLightbox from 'vue-cool-lightbox';
+import {Mixins, Prop, Ref} from "vue-property-decorator";
+import {mapActions, mapGetters, mapState} from "vuex";
+import VueClipboard from '../../plugins/clipboard';
+import VueTimeago from '../../plugins/timeago';
+import store from "../../store";
+import VueAvatar from '../avatar.vue';
+import VueFlag from '../flags/flag.vue';
+import {MicroblogMixin} from "../mixins/microblog";
+import {default as mixins} from '../mixins/user';
+import VueTags from '../tags.vue';
+import VueUserName from "../user-name.vue";
+import VueCommentForm from './comment-form.vue';
+import VueComment from "./comment.vue";
+import VueForm from './form.vue';
 
-  Vue.use(VueTimeago);
-  Vue.use(VueClipboard);
+Vue.use(VueTimeago);
+Vue.use(VueClipboard);
 
-  @Component({
-    name: 'microblog',
-    mixins: [clickaway, mixins],
-    store,
-    components: {
-      'vue-avatar': VueAvatar,
-      'vue-username': VueUserName,
-      'vue-comment': VueComment,
-      'vue-form': VueForm,
-      'vue-comment-form': VueCommentForm,
-      'vue-gallery': VueLightbox,
-      'vue-flag': VueFlag,
-      'vue-tags': VueTags
-    },
-    computed: {
-      ...mapGetters('user', ['isAuthorized']),
-      ...mapState('user', ['user'])
-    },
-    methods: {
-      ...mapActions('microblogs', ['vote', 'subscribe', 'loadVoters', 'loadComments', 'toggleSponsored'])
+@Component({
+  name: 'microblog',
+  mixins: [clickaway, mixins],
+  store,
+  components: {
+    'vue-avatar': VueAvatar,
+    'vue-username': VueUserName,
+    'vue-comment': VueComment,
+    'vue-form': VueForm,
+    'vue-comment-form': VueCommentForm,
+    'vue-gallery': VueLightbox,
+    'vue-flag': VueFlag,
+    'vue-tags': VueTags,
+  },
+  computed: {
+    ...mapGetters('user', ['isAuthorized']),
+    ...mapState('user', ['user']),
+  },
+  methods: {
+    ...mapActions('microblogs', ['vote', 'subscribe', 'loadVoters', 'loadComments', 'toggleSponsored']),
+  },
+})
+export default class VueMicroblog extends Mixins(MicroblogMixin) {
+  private index: number | null = null;
+  private commentDefault = {parent_id: this.microblog.id, text: '', assets: []};
+
+  @Ref('comment-form')
+  readonly commentForm!: VueCommentForm;
+
+  @Ref('microblog-text')
+  readonly microblogText!: Element;
+
+  @Prop()
+  wrap!: boolean;
+
+  mounted() {
+    if (this.wrap && this.microblogText.clientHeight > 300) {
+      this.isWrapped = true;
     }
-  })
-  export default class VueMicroblog extends Mixins(MicroblogMixin) {
-    private index: number | null = null;
-    private commentDefault = { parent_id: this.microblog.id, text: '', assets: [] };
 
-    @Ref('comment-form')
-    readonly commentForm!: VueCommentForm;
+    const pageHitHandler = () => {
+      const rect = this.microblogText.getBoundingClientRect();
 
-    @Ref('microblog-text')
-    readonly microblogText!: Element;
+      if (rect.top >= 0 && rect.top <= window.innerHeight) {
+        document.removeEventListener('scroll', pageHitHandler);
+        store.dispatch('microblogs/hit', this.microblog);
 
-    @Prop()
-    wrap!: boolean;
-
-    mounted() {
-      if (this.wrap && this.microblogText.clientHeight > 300) {
-        this.isWrapped = true;
+        return true;
       }
 
-      const pageHitHandler = () => {
-        const rect = this.microblogText.getBoundingClientRect();
-
-        if (rect.top >= 0 && rect.top <= window.innerHeight) {
-          document.removeEventListener('scroll', pageHitHandler);
-          store.dispatch('microblogs/hit', this.microblog);
-
-          return true;
-        }
-
-        return false;
-      }
-
-      if (!pageHitHandler()) {
-        document.addEventListener('scroll', pageHitHandler);
-      }
+      return false;
     }
 
-    reply(user: User) {
-      this.commentForm.markdown.value += `@${useBrackets(user.name)}: `;
-      this.commentForm.markdown.focus();
-    }
-
-    unwrap() {
-      this.isWrapped = false;
-    }
-
-    deleteItem() {
-      this.delete('microblogs/delete', this.microblog);
-    }
-
-    restoreItem() {
-      store.dispatch('microblogs/restore', this.microblog);
-    }
-
-    copy() {
-      if (this.$copy(this.microblog.url)) {
-        this.$notify({type: 'success', text: 'Link prawidłowo skopiowany do schowka.'});
-      }
-      else {
-        this.$notify({type: 'error', text: 'Nie można skopiować linku do schowka.'});
-      }
-    }
-
-    get voters() {
-      return this.splice(this.microblog.voters);
-    }
-
-    get totalComments() {
-      return this.microblog.comments_count! - Object.keys(this.microblog.comments).length;
-    }
-
-    get images() {
-      return this
-        .microblog
-        .assets
-        .filter(asset => IsImage(asset.name!) && !asset.metadata)
-        .map(asset => {
-          return { src: asset.url, thumb: asset.thumbnail, url: asset.url };
-        });
-    }
-
-    get opg() {
-      return this
-        .microblog
-        .assets
-        .find(asset => asset.metadata !== null)
-    }
-
-    get flags() {
-      return store.getters['flags/filter'](this.microblog.id, 'Coyote\\Microblog');
+    if (!pageHitHandler()) {
+      document.addEventListener('scroll', pageHitHandler);
     }
   }
+
+  reply(user: User) {
+    this.commentForm.markdown.value += `@${useBrackets(user.name)}: `;
+    this.commentForm.markdown.focus();
+  }
+
+  unwrap() {
+    this.isWrapped = false;
+  }
+
+  deleteItem() {
+    this.delete('microblogs/delete', this.microblog);
+  }
+
+  restoreItem() {
+    store.dispatch('microblogs/restore', this.microblog);
+  }
+
+  copy() {
+    if (this.$copy(this.microblog.url)) {
+      this.$notify({type: 'success', text: 'Link prawidłowo skopiowany do schowka.'});
+    } else {
+      this.$notify({type: 'error', text: 'Nie można skopiować linku do schowka.'});
+    }
+  }
+
+  get voters() {
+    return this.splice(this.microblog.voters);
+  }
+
+  get totalComments() {
+    return this.microblog.comments_count! - Object.keys(this.microblog.comments).length;
+  }
+
+  get images() {
+    return this
+      .microblog
+      .assets
+      .filter(asset => IsImage(asset.name!) && !asset.metadata)
+      .map(asset => {
+        return {src: asset.url, thumb: asset.thumbnail, url: asset.url};
+      });
+  }
+
+  get opg() {
+    return this
+      .microblog
+      .assets
+      .find(asset => asset.metadata !== null)
+  }
+
+  get flags() {
+    return store.getters['flags/filter'](this.microblog.id, 'Coyote\\Microblog');
+  }
+}
 </script>
 
