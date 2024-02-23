@@ -27,18 +27,18 @@
           <button @click="deleteToken(token.id)" class="btn btn-sm btn-danger float-right mt-1">Usuń</button>
           <h5 class="mb-0">${ token.name }</h5>
 
-          <vue-timeago :datetime="token.created_at" class="text-muted small"></vue-timeago>
+          <vue-timeago :datetime="token.created_at" class="small"></vue-timeago>
         </div>
 
         <div class="form-group row mt-4">
           <div class="col">
             <input
-              v-model="tokenName"
-              @keyup.enter="addToken"
-              placeholder="Nazwa tokenu"
-              class="form-control"
-              type="text"
-              name="token"
+                v-model="tokenName"
+                @keyup.enter="addToken"
+                placeholder="Nazwa tokenu"
+                class="form-control"
+                type="text"
+                name="token"
             >
           </div>
           <div class="col">

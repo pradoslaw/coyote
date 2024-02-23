@@ -2,7 +2,7 @@
   <component
     :is="tagName"
     v-profile="user.id"
-    :class="{'badge badge-primary': owner}"
+    :class="[{'badge badge-primary': owner}, 'username']"
     :style="{textDecoration: this.user.is_blocked ? 'line-through' : ''}"
   >{{ user.name }}</component>
 </template>
@@ -30,4 +30,3 @@
     }
   }
 </script>
-

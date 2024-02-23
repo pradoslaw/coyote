@@ -23,9 +23,9 @@
 
         <div class="comment-text" v-html="comment.html"></div>
 
-        <ul class="d-none d-sm-block list-inline list-inline-bullet-sm text-muted small m-0">
+        <ul class="d-none d-sm-block list-inline list-inline-bullet-sm microblog-comment-list small m-0">
           <li class="list-inline-item">
-            <a :href="comment.url" class="text-muted">
+            <a :href="comment.url">
               <vue-timeago :datetime="comment.created_at"></vue-timeago>
             </a>
           </li>
@@ -35,7 +35,7 @@
               @click="checkAuth(vote, comment)"
               @mouseenter.once="loadVoters(comment)"
               :aria-label="commentVoters"
-              :class="{'text-primary': comment.is_voted, 'text-muted': !comment.is_voted}"
+              :class="{'vote-active': comment.is_voted}"
               href="javascript:"
               data-balloon-pos="up"
               data-balloon-break>
@@ -44,11 +44,11 @@
           </li>
 
           <li class="list-inline-item">
-            <a @click="checkAuth(reply)" href="javascript:" class="text-muted">Odpowiedz</a>
+            <a @click="checkAuth(reply)" href="javascript:">Odpowiedz</a>
           </li>
 
           <li v-if="isAuthorized" class="list-inline-item">
-            <a href="javascript:" :data-metadata="comment.metadata" :data-url="comment.url" class="text-muted">Zgłoś</a>
+            <a href="javascript:" :data-metadata="comment.metadata" :data-url="comment.url">Zgłoś</a>
           </li>
         </ul>
 
@@ -107,76 +107,76 @@
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
-  import VueAvatar from '../avatar.vue';
-  import VueUserName from '../user-name.vue';
-  import VueTimeago from '@/plugins/timeago';
-  import VueCommentForm from "./comment-form.vue";
-  import VueFlag from '../flags/flag.vue';
-  import { default as mixins } from '../mixins/user';
-  import { Prop, Mixins } from "vue-property-decorator";
-  import {mapActions, mapGetters, mapState} from "vuex";
-  import Component from "vue-class-component";
-  import { mixin as clickaway } from "vue-clickaway";
-  import store from "@/store";
-  import { Microblog } from "@/types/models";
-  import { MicroblogMixin } from "../mixins/microblog";
-  import declination from '@/libs/declination';
+import declination from '@/libs/declination';
+import VueTimeago from '@/plugins/timeago';
+import store from "@/store";
+import {Microblog} from "@/types/models";
+import Vue from 'vue';
+import Component from "vue-class-component";
+import {mixin as clickaway} from "vue-clickaway";
+import {Mixins, Prop} from "vue-property-decorator";
+import {mapActions, mapGetters, mapState} from "vuex";
+import VueAvatar from '../avatar.vue';
+import VueFlag from '../flags/flag.vue';
+import {MicroblogMixin} from "../mixins/microblog";
+import {default as mixins} from '../mixins/user';
+import VueUserName from '../user-name.vue';
+import VueCommentForm from "./comment-form.vue";
 
-  Vue.use(VueTimeago);
+Vue.use(VueTimeago);
 
-  @Component({
-    name: 'comment',
-    mixins: [clickaway, mixins],
-    store,
-    components: {
-      'vue-avatar': VueAvatar,
-      'vue-username': VueUserName,
-      'vue-comment-form': VueCommentForm,
-      'vue-flag': VueFlag
-    },
-    computed: {
-      ...mapState('user', ['user']),
-      ...mapGetters('user', ['isAuthorized'])
-    },
-    methods: {
-      ...mapActions('microblogs', ['vote', 'loadVoters'])
-    }
-  })
-  export default class VueComment extends Mixins(MicroblogMixin) {
-    @Prop(Object)
-    comment!: Microblog;
+@Component({
+  name: 'comment',
+  mixins: [clickaway, mixins],
+  store,
+  components: {
+    'vue-avatar': VueAvatar,
+    'vue-username': VueUserName,
+    'vue-comment-form': VueCommentForm,
+    'vue-flag': VueFlag,
+  },
+  computed: {
+    ...mapState('user', ['user']),
+    ...mapGetters('user', ['isAuthorized']),
+  },
+  methods: {
+    ...mapActions('microblogs', ['vote', 'loadVoters']),
+  },
+})
+export default class VueComment extends Mixins(MicroblogMixin) {
+  @Prop(Object)
+  comment!: Microblog;
 
-    reply() {
-      this.$emit('reply', this.comment.user);
-    }
-
-    deleteItem() {
-      this.delete('microblogs/deleteComment', this.comment);
-    }
-
-    restoreItem() {
-      store.dispatch('microblogs/restoreComment', this.comment);
-    }
-
-    get anchor() {
-      return `comment-${this.comment.id}`;
-    }
-
-    get highlight() {
-      return '#' + this.anchor === window.location.hash;
-    }
-
-    get commentLabel() {
-      return this.comment.votes + ' ' + declination(this.comment.votes, ['głos', 'głosy', 'głosów']);
-    }
-
-    get commentVoters() {
-      return this.splice(this.comment.voters);
-    }
-
-    get flags() {
-      return store.getters['flags/filter'](this.comment.id, 'Coyote\\Microblog');
-    }
+  reply() {
+    this.$emit('reply', this.comment.user);
   }
+
+  deleteItem() {
+    this.delete('microblogs/deleteComment', this.comment);
+  }
+
+  restoreItem() {
+    store.dispatch('microblogs/restoreComment', this.comment);
+  }
+
+  get anchor() {
+    return `comment-${this.comment.id}`;
+  }
+
+  get highlight() {
+    return '#' + this.anchor === window.location.hash;
+  }
+
+  get commentLabel() {
+    return this.comment.votes + ' ' + declination(this.comment.votes, ['głos', 'głosy', 'głosów']);
+  }
+
+  get commentVoters() {
+    return this.splice(this.comment.voters);
+  }
+
+  get flags() {
+    return store.getters['flags/filter'](this.comment.id, 'Coyote\\Microblog');
+  }
+}
 </script>

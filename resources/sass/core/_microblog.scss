@@ -5,3 +5,21 @@
 .microblog-statistic {
   color: #6c757d;
 }
+
+ul.microblog-comment-list {
+  li a {
+    color: #6c757d;
+
+    &:hover {
+      color: #4c6210;
+    }
+
+    &.vote-active {
+      color: #90ba1d;
+
+      &:hover {
+        color: #4c6210;
+      }
+    }
+  }
+}
