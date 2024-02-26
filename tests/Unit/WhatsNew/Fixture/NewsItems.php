@@ -12,7 +12,7 @@ trait NewsItems
     {
         $dom = new ViewDom($this->htmlView('/'));
         /** @var \DOMElement $listItem */
-        foreach ($dom->elements(xPath:'//aside//div[@class="card bg-dark"]//ul/li') as $listItem) {
+        foreach ($dom->elements(xPath:'//aside/section[@id="whats-new"]//ul/li') as $listItem) {
             return $this->listItem($listItem);
         }
         throw new \AssertionError("Failed finding news item.");
