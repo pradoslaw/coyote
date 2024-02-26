@@ -18,9 +18,16 @@
               <a v-if="topic.accepted_id" :href="topic.url + `?p=${topic.accepted_id}#id${topic.accepted_id}`"><i class="fas fa-check"></i></a>
 
               <a :href="getUrl()" :class="{'font-weight-bold': !topic.is_read}">{{ topic.title }}</a>
-              <small v-if="showCategoryName" class="d-inline d-xl-none"> w <a :href="topic.forum.url" class="text-body">{{ topic.forum.name }}</a></small>
+              <small v-if="showCategoryName" class="d-inline d-xl-none">
+                w
+                <a :href="topic.forum.url">
+                  {{ topic.forum.name }}
+                </a>
+              </small>
 
-              <a v-if="flag != null" :href="flag" title="Przejdź do raportowanego posta"><i class="fa fa-fire"></i></a>
+              <a v-if="flag != null" :href="flag" title="Przejdź do raportowanego posta">
+                <i class="fa fa-fire"></i>
+              </a>
             </h5>
 
             <div v-if="totalPages > 1" class="d-none d-sm-inline ml-2 topic-pagination">
@@ -29,7 +36,7 @@
               <a :href="topic.url + '?page=1'">1</a>
 
               <template v-if="totalPages > 4">
-              ...
+                ...
               </template>
 
               <a v-if="totalPages === 4" :href="topic.url + '?page=2'">2</a>
@@ -54,14 +61,17 @@
 
           <div class="row no-gutters mt-1">
             <div class="d-none d-lg-inline small text-truncate">
-              <a :href="topic.url + `?p=${topic.first_post_id}#id${topic.first_post_id}`" class="text-muted topic-date"><vue-timeago :datetime="topic.created_at"></vue-timeago></a>,
+              <a :href="topic.url + `?p=${topic.first_post_id}#id${topic.first_post_id}`" 
+                 class="text-muted topic-date">
+                <vue-timeago :datetime="topic.created_at"></vue-timeago>
+              </a>,
 
               <vue-username v-if="topic.user" :user="topic.user" class="mt-1 topic-username"></vue-username>
               <span v-else class="topic-username">{{ topic.user_name }}</span>
             </div>
 
             <ul v-if="topic.tags.length" class="tag-clouds tag-clouds-xs">
-              <li v-for="tag in topic.tags" ><a :href="tag.url">{{ tag.name }}</a></li>
+              <li v-for="tag in topic.tags"><a :href="tag.url">{{ tag.name }}</a></li>
             </ul>
           </div>
         </div>
@@ -73,7 +83,9 @@
 
       <div class="col-xl-2 col-lg-2 col-md-12">
         <div class="media m-md-0">
-          <a v-profile="this.topic.last_post.user ? this.topic.last_post.user.id : null"><vue-avatar v-bind="topic.last_post.user" class="i-35 mr-2 d-none d-md-inline-block position-relative img-thumbnail"></vue-avatar></a>
+          <a v-profile="this.topic.last_post.user ? this.topic.last_post.user.id : null">
+            <vue-avatar v-bind="topic.last_post.user" class="i-35 mr-2 d-none d-md-inline-block position-relative img-thumbnail"></vue-avatar>
+          </a>
 
           <div class="media-body small text-truncate">
             <p class="mb-0 d-inline d-md-block">
@@ -81,7 +93,9 @@
               <span class="topic-username" v-else>{{ topic.last_post.user_name }}</span>
             </p>
 
-            <a :href="topic.url + `?p=${topic.last_post.id}#id${topic.last_post.id}`" title="Zobacz ostatni post" class="text-muted"><vue-timeago :datetime="topic.last_post.created_at"></vue-timeago></a>
+            <a :href="topic.url + `?p=${topic.last_post.id}#id${topic.last_post.id}`" title="Zobacz ostatni post" class="text-muted">
+              <vue-timeago :datetime="topic.last_post.created_at"></vue-timeago>
+            </a>
           </div>
         </div>
       </div>
@@ -90,77 +104,77 @@
 </template>
 
 <script>
-  import { default as mixins } from '../mixins/user';
-  import VueAvatar from '../avatar.vue';
-  import VueUserName from '../user-name.vue';
-  import { mixin as clickaway } from 'vue-clickaway';
-  import { mapActions, mapGetters } from "vuex";
+import {mixin as clickaway} from 'vue-clickaway';
+import {mapActions, mapGetters} from "vuex";
+import VueAvatar from '../avatar.vue';
+import {default as mixins} from '../mixins/user';
+import VueUserName from '../user-name.vue';
 
-  export default {
-    mixins: [ mixins, clickaway ],
-    components: { 'vue-avatar': VueAvatar, 'vue-username': VueUserName },
-    props: {
-      topic: {
-        type: Object,
-        require: true
-      },
-      postsPerPage: {
-        type: Number,
-        default: 10
-      },
-      highlight: {
-        type: Boolean
-      },
-      showCategoryName: {
-        type: Boolean
+export default {
+  mixins: [mixins, clickaway],
+  components: {'vue-avatar': VueAvatar, 'vue-username': VueUserName},
+  props: {
+    topic: {
+      type: Object,
+      require: true,
+    },
+    postsPerPage: {
+      type: Number,
+      default: 10,
+    },
+    highlight: {
+      type: Boolean,
+    },
+    showCategoryName: {
+      type: Boolean,
+    },
+  },
+  methods: {
+    getUrl() {
+      const urlFragment = id => `${this.topic.url}?p=${id}#id${id}`;
+
+      // redirect straight to specific post if this field is present
+      if (this.topic.user_post_id) {
+        return urlFragment(this.topic.user_post_id);
       }
+
+      // redirect to last post if topic has been read by registered user.
+      return (this.topic.is_read && (this.isAuthorized && this.topic.last_post_created_at > this.$store.state.user.user.created_at) ? urlFragment(this.topic.last_post.id) : this.topic.url);
     },
-    methods: {
-      getUrl() {
-        const urlFragment = id =>  `${this.topic.url}?p=${id}#id${id}`;
 
-        // redirect straight to specific post if this field is present
-        if (this.topic.user_post_id) {
-          return urlFragment(this.topic.user_post_id);
-        }
+    mark(event) {
+      if (this.topic.is_read) {
+        return;
+      }
 
-        // redirect to last post if topic has been read by registered user.
-        return (this.topic.is_read && (this.isAuthorized && this.topic.last_post_created_at > this.$store.state.user.user.created_at) ? urlFragment(this.topic.last_post.id) : this.topic.url);
-      },
-
-      mark(event) {
-        if (this.topic.is_read) {
-          return;
-        }
-
-        this.$store.dispatch('topics/mark', this.topic);
-        event.preventDefault();
-      },
-
-      ...mapActions('topics', ['subscribe'])
+      this.$store.dispatch('topics/mark', this.topic);
+      event.preventDefault();
     },
-    computed: {
-      totalPages() {
-        return Math.ceil((this.topic.replies + 1) / this.postsPerPage);
-      },
 
-      paginatorPages() {
-        let pages = [];
+    ...mapActions('topics', ['subscribe']),
+  },
+  computed: {
+    totalPages() {
+      return Math.ceil((this.topic.replies + 1) / this.postsPerPage);
+    },
 
-        for (let i = Math.max(2, this.totalPages - 1); i <= this.totalPages; i++) {
-          pages.push(i);
-        }
+    paginatorPages() {
+      let pages = [];
 
-        return pages;
-      },
+      for (let i = Math.max(2, this.totalPages - 1); i <= this.totalPages; i++) {
+        pages.push(i);
+      }
 
-      flag() {
-        const flags = this.$store.getters['flags/filter'](this.topic.id, 'Coyote\\Topic');
+      return pages;
+    },
 
-        return flags.length ? flags[0].url : null;
-      },
+    flag() {
+      const flags = this.$store.getters['flags/filter'](this.topic.id, 'Coyote\\Topic');
 
-      ...mapGetters('user', ['isAuthorized'])
-    }
-  }
+      return flags.length ? flags[0].url : null;
+    },
+
+    ...mapGetters('user', ['isAuthorized']),
+  },
+}
 </script>

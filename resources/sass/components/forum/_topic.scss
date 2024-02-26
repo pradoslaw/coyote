@@ -24,6 +24,14 @@
       font-style: normal;
       font-weight: bold;
     }
+
+    > small {
+      color: #333;
+
+      a {
+        color: inherit;
+      }
+    }
   }
 
   .topic-container {
