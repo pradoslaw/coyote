@@ -28,7 +28,7 @@
 
         <vue-notification v-for="notification in notifications" :notification="notification" :key="notification.id"></vue-notification>
 
-        <div class="text-center p-3" v-if="Array.isArray(notifications) && notifications.length === 0">
+        <div class="text-center p-3 empty-placeholder" v-if="Array.isArray(notifications) && notifications.length === 0">
           Brak powiadomień.
         </div>
       </perfect-scrollbar>

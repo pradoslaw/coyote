@@ -22,7 +22,9 @@
 
         <vue-message v-for="message in messages" :message="message" :key="message.id"></vue-message>
 
-        <div class="text-center p-3" v-if="Array.isArray(messages) && messages.length === 0">Brak wiadomości prywatnych.</div>
+        <div class="text-center p-3 empty-placeholder" v-if="Array.isArray(messages) && messages.length === 0">
+          Brak wiadomości prywatnych.
+        </div>
       </perfect-scrollbar>
     </div>
   </li>

@@ -6,12 +6,12 @@
       </a>
 
       <a :href="message.url" class="media-body">
-        <header class="text-truncate">
+        <header class="text-truncate notification-header">
           <h4>{{ message.user.name }}</h4>
           <small><vue-timeago :datetime="message.created_at"></vue-timeago></small>
         </header>
 
-        <p class="text-truncate">
+        <p class="text-truncate notification-content">
           <template v-if="message.folder === SENTBOX">
             <i v-if="message.read_at" class="fas fa-check"></i>
             <span v-else>Ty: </span>

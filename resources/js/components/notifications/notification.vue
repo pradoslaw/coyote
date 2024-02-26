@@ -6,13 +6,13 @@
       </a>
 
       <a @mousedown="markAsRead(notification)" @touchstart="markAsRead(notification)" :href="notification.url" class="media-body text-truncate">
-        <header>
+        <header class="notification-header">
           <h4 class="text-truncate">{{ notification.headline }}</h4>
           <small><vue-timeago :datetime="notification.created_at"></vue-timeago></small>
         </header>
 
-        <h3 class="text-truncate">{{ notification.subject }}</h3>
-        <p class="text-truncate">{{ notification.excerpt }}</p>
+        <h3 class="notification-subject text-truncate">{{ notification.subject }}</h3>
+        <p class="notification-content text-truncate">{{ notification.excerpt }}</p>
       </a>
     </div>
 
