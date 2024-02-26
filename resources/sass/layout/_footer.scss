@@ -2,153 +2,145 @@
 
 footer {
   background-color: #3e3e3e;
-}
 
-.footer-top {
-  padding: 10px 0;
-  position: relative;
+  .footer-top {
+    padding: 10px 0;
+    position: relative;
 
-  ul.breadcrumb {
-    @include media-breakpoint-up(sm) {
-      background: url('/img/home-white.png') no-repeat 0 3px;
-      padding: 2px 0 2px 22px;
-    }
-
-    li {
-      display: inline;
-      color: #f2f2f2;
-      a {
-        color: #969696;
+    ul.breadcrumb {
+      @include media-breakpoint-up(sm) {
+        background: url('/img/home-white.png') no-repeat 0 3px;
+        padding: 2px 0 2px 22px;
       }
-      &:last-child a {
+
+      li {
+        display: inline;
+        color: #f2f2f2;
+
+        a {
+          color: #969696;
+        }
+
+        &:last-child a {
+          color: #f2f2f2;
+        }
+      }
+
+      li + li:before {
         color: #f2f2f2;
       }
     }
-
-    li + li:before {
-      color: #f2f2f2;
-    }
-  }
-}
-
-#facebook-button {
-  position: absolute;
-  display: block;
-  width: 39px;
-  height: 53px;
-  background: url('/img/facebook-image.png') no-repeat;
-  top: 0;
-  right: 50px;
-  z-index: 1;
-}
-
-.footer-inner {
-  background-color: $dark;
-  overflow: hidden;
-  padding: 17px 0 21px;
-
-  ul {
-    list-style-type: none;
-
-    padding-left: 3px;
-
-    li {
-      padding: 4px 0 4px 0;
-    }
   }
 
-  h6 {
-    color: $gray-lighter;
-    text-transform: uppercase;
+  .footer-inner {
+    background-color: $dark;
+    overflow: hidden;
+    padding: 17px 0 21px;
+
+    ul {
+      list-style-type: none;
+
+      padding-left: 3px;
+
+      li {
+        padding: 4px 0 4px 0;
+      }
+    }
+
+    h6 {
+      color: $gray-lighter;
+      text-transform: uppercase;
+
+      a {
+        color: inherit;
+      }
+    }
+
+    a {
+      font-size: $font-size-sm;
+      color: lighten($gray-light, 15%);
+    }
+
+    @include media-breakpoint-up('md') {
+      .col-md-2 {
+        border-left: 1px solid #575757;
+
+        &:first-child {
+          border-left: none;
+
+          ul {
+            margin-left: 0;
+          }
+        }
+      }
+
+      ul {
+        margin: 0 0 0 15px;
+      }
+    }
+
+    .footer-bubble {
+      background-color: $gray-light;
+      border-radius: 20px;
+      padding: 10px 20px;
+      position: relative;
+      max-width: 280px;
+      margin: 35px 0;
+
+      ol {
+        margin: 11px 0;
+        list-style-type: none;
+        padding: 0;
+
+        li {
+          padding: 6px 0;
+
+          a {
+            color: #CACACA;
+          }
+        }
+      }
+    }
+  }
+
+  #footer-copyright {
+    font-size: 11px;
+    color: $gray-light;
+    padding: 10px 0;
 
     a {
       color: inherit;
     }
-  }
 
-  a {
-    font-size: $font-size-sm;
-    color: lighten($gray-light, 15%);
-  }
-
-  @include media-breakpoint-up('md') {
-    .col-md-2 {
-      border-left: 1px solid #575757;
-
-      &:first-child {
-        border-left: none;
-
-        ul {
-          margin-left: 0;
-        }
-      }
-    }
-
-    ul {
-      margin: 0 0 0 15px;
+    .logo {
+      background: url('/img/logo-small.png') no-repeat 10px 0;
+      width: 110px;
+      height: 14px;
+      text-indent: -9999px;
+      white-space: nowrap;
+      display: inline-block;
     }
   }
 
-  .footer-bubble {
-    background-color: $gray-light;
-    border-radius: 20px;
-    padding: 10px 20px;
-    position: relative;
-    max-width: 280px;
-    margin: 35px 0;
+  a#scroll-to-top {
+    display: none;
+    color: #fff;
+    font-size: 54px;
+    width: 60px;
+    height: 60px;
+    line-height: 1em;
+    position: fixed;
+    z-index: 999;
+    right: 15px;
+    bottom: 40px;
+    background: #000 no-repeat center 43%;
+    border-radius: 30px;
+    text-align: center;
+    opacity: 0.3;
 
-    ol {
-      margin: 11px 0;
-      list-style-type: none;
-      padding: 0;
-
-      li {
-        padding: 6px 0;
-        a {
-          color: #CACACA;
-        }
-      }
+    &:hover {
+      opacity: 0.5;
+      background-color: #000;
     }
-  }
-}
-
-#footer-copyright {
-  font-size: 11px;
-  color: $gray-light;
-  padding: 10px 0;
-
-  a {
-    color: inherit;
-  }
-
-  .logo {
-    background: url('/img/logo-small.png') no-repeat 10px 0;
-    width: 110px;
-    height: 14px;
-    text-indent: -9999px;
-    white-space: nowrap;
-    display: inline-block;
-  }
-}
-
-a#scroll-to-top {
-  display: none;
-  color: #fff;
-  font-size: 54px;
-  width: 60px;
-  height: 60px;
-  line-height: 1em;
-  position: fixed;
-  z-index: 999;
-  right: 15px;
-  bottom: 40px;
-  background: #000 no-repeat center 43%;
-  border-radius: 30px;
-  text-align: center;
-  opacity: 0.3;
-
-  &:hover {
-    opacity: 0.5;
-    background-color: #000;
   }
 }
