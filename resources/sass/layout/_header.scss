@@ -59,10 +59,6 @@ body.padding-top {
     top: -9px;
     right: -1px;
   }
-
-  .dropdown-menu {
-    margin-top: -1px; // there is no space between navbar and menu
-  }
 }
 
 .navbar-nav {
@@ -75,7 +71,7 @@ body.padding-top {
 
     .dropdown-menu {
       display: block;
-      position: static;
+      position: relative;
 
       &:after, &:before {
         bottom: calc(100% - 5px);
@@ -271,14 +267,6 @@ body.padding-top {
   .nav-avatar {
     .img-thumbnail {
       background-color: #717171 !important;
-      border: none;
-    }
-  }
-
-  .dropdown-alerts {
-    border-top: 0;
-
-    &:after, &:before {
       border: none;
     }
   }
