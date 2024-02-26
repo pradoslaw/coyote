@@ -3,10 +3,10 @@
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
   top: 116%;
 
-   > li > a {
-     padding: 5px 20px;
-     font-size: 13px;
-   }
+  > li > a {
+    padding: 5px 20px;
+    font-size: 13px;
+  }
 }
 
 .dropdown-menu.dropdown-menu-right {
@@ -42,5 +42,13 @@
 
   &:before {
     left: 9px;
+  }
+}
+
+.dropdown-menu.dropdown-alerts {
+  .dropdown-modal {
+    .notification + .notification {
+      border-bottom: none;
+    }
   }
 }
