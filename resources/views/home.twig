@@ -266,7 +266,7 @@
           }
         }
 
-        window.addEventListener("resize", reposition);
+        window.addEventListener("resize", reposition, {passive: true});
         reposition();
         [0, 1000, 4000, 6000, 1000].forEach(time => setTimeout(reposition, time));
       })();
