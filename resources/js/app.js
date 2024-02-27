@@ -3,7 +3,6 @@ import Prism from 'prismjs';
 import Vue from 'vue';
 import './bootstrap.js';
 import './components/breadcrumb.js';
-import GithubButton from "./components/github-button.vue";
 import './components/navbar-toggle.js';
 import './components/scrolltop.js';
 import './components/vcard.js';
@@ -52,5 +51,3 @@ if ('serviceWorker' in navigator) {
     .register('/sw.js')
     .catch(error => console.log(error));
 }
-
-new Vue({el: '#github-button', components: {'vue-github-button': GithubButton}});

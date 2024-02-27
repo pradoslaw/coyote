@@ -44,7 +44,7 @@
   <link rel="preload" href="/fonts/font-awesome/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/fonts/font-awesome/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin>
 </head>
-<body class="{{ auth_guest() or user('allow_sticky_header') ? 'padding-top' }}" data-github-stars="{{ github_stars|default("failure") }}">
+<body class="{{ auth_guest() or user('allow_sticky_header') ? 'padding-top' }} {{ __dark_theme ? 'theme-dark' : 'theme-light' }}" data-github-stars="{{ github_stars|default("failure") }}">
 {{ render_region('body') }}
 
 {% block body %}
@@ -100,8 +100,16 @@
           </vue-searchbar>
         </div>
 
-        <div style="align-items:center;" class="order-2 pr-3 d-none d-xl-flex">
-          <vue-github-button id="github-button" size="large" theme="{{ __dark_theme ? 'dark' : 'light' }}">
+        <div class="form-inline order-2 ml-auto">
+          <a class="btn btn-sm btn-toggle-theme" href="#" id="">
+            <i class="fas fa-moon enable-theme-light"></i>
+            <i class="fas fa-sun enable-theme-dark"></i>
+            <span class="d-none d-md-inline">Przełącz motyw</span>
+          </a>
+        </div>
+
+        <div style="align-items:center;" class="order-2 mx-2 d-none d-xl-flex">
+          <vue-github-button id="github-button" size="large" :theme="theme">
           </vue-github-button>
         </div>
 
@@ -149,15 +157,6 @@
 
               <div class="dropdown-divider"></div>
 
-              <div class="dropdown-item">
-                <div class="custom-control custom-switch">
-                  <input type="checkbox" class="custom-control-input" id="js-dark-theme" {{ __dark_theme ? 'checked' }}>
-                  <label class="custom-control-label" for="js-dark-theme">
-                    Ciemne menu
-                  </label>
-                </div>
-              </div>
-              <div class="dropdown-divider"></div>
               <a href="javascript:" onclick="document['logout-form'].submit()" class="dropdown-item btn-sign-out" rel="nofollow">
                 <i class="fas fa-sign-out-alt fa-fw"></i>
                 Wyloguj

@@ -168,39 +168,39 @@ export default {
   a.dark {
     &.repository,
     &.stars {
-      color: white;
-      border-color: hsl(0deg 0% 51%);
+      color: #eee;
+      border-color: hsl(0deg 0% 31%);
     }
 
     &.repository {
-      background-color: hsl(0, 0%, 38%);
+      background-color: hsl(0, 0%, 26%);
       background-image: linear-gradient(180deg,
-        hsl(0, 0%, 42%),
-        hsl(0, 0%, 32%) 90%);
-      border-right-color: hsl(0, 0%, 51%);
+        hsl(0, 0%, 31%),
+        hsl(0, 0%, 21%) 90%);
+      border-right-color: hsl(0, 0%, 35%);
 
       &:hover,
       &:focus {
         background-color: hsl(0, 0%, 40.5%);
         background-image: linear-gradient(180deg,
-          hsl(0, 0%, 45%),
-          hsl(0, 0%, 35%) 90%);
+          hsl(0, 0%, 35%),
+          hsl(0, 0%, 25%) 90%);
       }
 
       &:active {
-        background-color: hsl(0, 0%, 35%);
+        background-color: hsl(0, 0%, 25%);
         background-image: linear-gradient(180deg,
-          hsl(0, 0%, 40%),
-          hsl(0, 0%, 30%) 90%);
+          hsl(0, 0%, 28%),
+          hsl(0, 0%, 18%) 90%);
       }
     }
 
     &.stars {
-      background-color: hsl(0deg, 0%, 44%);
+      background-color: hsl(0deg, 0%, 20%);
 
       &:hover,
       &:focus {
-        color: #b3d161;
+        color: #90ba1d;
       }
     }
   }

@@ -1,0 +1,28 @@
+body.theme-dark {
+  .alert {
+    border: none;
+
+    a, strong, h4 {
+      color: white;
+    }
+
+    &.alert-warning {
+      color: #f7e8cf;
+      background-color: #b45309;
+    }
+
+    &.alert-danger {
+      color: #f7dddc;
+      background-color: #712b29;
+    }
+
+    button.close {
+      color: white;
+      opacity: 0.7;
+
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+  }
+}

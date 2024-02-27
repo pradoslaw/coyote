@@ -1,0 +1,21 @@
+body.theme-dark {
+  input.form-control {
+    color: #acacac;
+    background-color: #272727;
+    border-color: #242a30;
+
+    &:focus {
+      border-color: #90ba1d;
+    }
+  }
+
+  textarea.form-control {
+    color: #acacac;
+    background-color: #272727;
+    border-color: #242a30;
+
+    &:focus {
+      border-color: #90ba1d;
+    }
+  }
+}

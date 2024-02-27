@@ -1,0 +1,48 @@
+.btn-toggle-theme {
+  color: var(--header-color);
+
+  span {
+    transition: inherit;
+  }
+
+  i {
+    color: rgb(0, 0, 0, 0.5);
+    transition: inherit;
+
+    &:before {
+      transition: inherit;
+    }
+  }
+
+  &:hover {
+    color: #80a41a;
+
+    i {
+      color: #80a41a;
+    }
+  }
+}
+
+body.theme-light {
+  .btn-toggle-theme {
+    i.enable-theme-light {
+      display: inline;
+    }
+
+    i.enable-theme-dark {
+      display: none;
+    }
+  }
+}
+
+body.theme-dark {
+  .btn-toggle-theme {
+    i.enable-theme-light {
+      display: none;
+    }
+
+    i.enable-theme-dark {
+      display: inline;
+    }
+  }
+}

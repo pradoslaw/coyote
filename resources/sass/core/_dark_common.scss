@@ -1,0 +1,26 @@
+body.theme-dark {
+  .tag-clouds {
+    color: #8f9ba5;
+
+    li {
+      a {
+        color: #acacac;
+        background: #1e1e1e;
+      }
+
+      small {
+        color: #9f9f9f;
+      }
+    }
+  }
+
+  h4.heading {
+    box-shadow: none;
+    color: #c8c8c8;
+    border-bottom: 2px solid #2f2f2f;
+  }
+
+  .progress-bar {
+    background: #90ba1d;
+  }
+}

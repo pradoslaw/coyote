@@ -11,6 +11,7 @@
 @import "layout/grid";
 @import "layout/header";
 @import "layout/footer";
+@import "layout/theme";
 
 @import "core/breadcrumbs";
 @import "core/buttons";
@@ -31,6 +32,20 @@
 @import "core/sidemenu";
 @import "core/metadata";
 @import "core/stream";
+
+@import "core/dark_4play";
+@import "core/dark_alert";
+@import "core/dark_common";
+@import "core/dark_editor";
+@import "core/dark_footer";
+@import "core/dark_header";
+@import "core/dark_homepage";
+@import "core/dark_input";
+@import "core/dark_markdown";
+@import "core/dark_microblog";
+@import "core/dark_modal";
+@import "core/dark_settings";
+@import "core/dark_topic";
 
 @import "components/tags";
 @import "components/forum/post"; // it needs to be here because post's placeholder use styles in this specific file

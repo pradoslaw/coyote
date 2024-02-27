@@ -1,0 +1,155 @@
+body.theme-dark {
+  #box-forum {
+    .card.card-forum {
+      .nav.nav-forum {
+        border-bottom: 1px solid #2f2f2f;
+
+        .nav-item .nav-link {
+          color: #acacac;
+
+          &:hover {
+            border-color: #404040;
+          }
+
+          &.active {
+            color: #dedede;
+            border-bottom: 2px solid #d7661c;
+          }
+        }
+      }
+
+      #box-forum-headline {
+        .tab-content .tab-pane {
+          .row {
+            border-bottom: 1px solid #2f2f2f;
+
+            &:nth-child(even) {
+              background-color: unset;
+            }
+          }
+
+          a.title {
+            color: #acacac;
+          }
+
+          small {
+            color: #7d7d7d;
+          }
+        }
+      }
+
+      #stream-wrapper {
+        .media {
+          img.media-object {
+            border: 1px solid #242a30;
+            background: #121212;
+          }
+
+          span.post,
+          span.comment {
+            color: #acacac;
+            border-color: #2f2f2f;
+            background: #121212;
+            box-shadow: 0 1px 2px 0 #121212;
+
+            &:after {
+              color: inherit;
+            }
+          }
+        }
+
+        .overview {
+          border-left-color: #242a30;
+        }
+
+        small {
+          color: #7d7d7d;
+        }
+
+        strong {
+          border-left-color: #2f2f2f;
+        }
+      }
+    }
+  }
+
+  #reputation-tabs {
+    &:before,
+    &:after {
+      display: none;
+    }
+
+    a.nav-item {
+      color: #acacac;
+      background: #3c3c3c;
+      border-color: #2f2f2f;
+      border-bottom: none;
+      background: linear-gradient(180deg, #212121 50%, #151515 100%);
+      box-shadow: 0 3px 3px rgba(0, 0, 0, 0.4), inset 0 1px 0 black;
+
+      &.active {
+        background: #1a1a1a;
+        box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.4);
+      }
+
+      &:before,
+      &:after {
+        display: none;
+      }
+
+      span {
+        color: #acacac;
+      }
+
+    }
+  }
+
+  .card-reputation {
+    background-color: #1a1a1a;
+
+    .media-body {
+      a.reputation-username {
+        color: #acacac;
+      }
+    }
+
+    .media {
+      border-bottom-color: #2f2f2f;
+
+      &:after {
+        color: #2f2f2f;
+      }
+    }
+  }
+
+  h2.h4,
+  h4 {
+    color: #C8C8C8;
+  }
+
+  .btn-toggle-theme {
+    color: #eee;
+  }
+
+  .card.card-patronage {
+    .patronage-text {
+      color: #acacac;
+    }
+
+    .patronage-body {
+      &:after {
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0, #1a1a1a 65%);
+      }
+    }
+
+    .card-footer {
+      border-color: #2f2f2f;
+    }
+  }
+
+  .microblog-wrap {
+    &:after {
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0, #1a1a1a 65%);
+    }
+  }
+}

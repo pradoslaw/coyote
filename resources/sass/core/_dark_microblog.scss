@@ -1,0 +1,98 @@
+body.theme-dark {
+  .microblog .card-body {
+    color: #acacac;
+
+    .media {
+      > .media-body {
+
+        .media-heading a {
+          color: #90ba1d;
+        }
+
+        .microblog-statistic {
+          color: #8F9BA5;
+
+          a {
+            color: inherit;
+          }
+        }
+
+        .microblog-actions {
+          a.btn {
+            color: inherit;
+
+            &:hover {
+              border: 1px solid #2F2F2F;
+              background-image: linear-gradient(to bottom, #2F2F2F 0%, #212121 100%);
+              color: #acacac;
+            }
+          }
+        }
+
+        .microblog-comments {
+          .show-all-comments a {
+            color: #acacac;
+
+            &:hover {
+              color: #d7661c;
+            }
+          }
+
+          .media {
+            border-color: #2F2F2F;
+
+            a.username, a.username:hover {
+              color: #90ba1d;
+            }
+
+            ul.microblog-comment-list {
+              li {
+                a, a:hover {
+                  color: #8f9ba5;
+
+                  &.vote-active, .vote-active:hover {
+                    color: #90ba1d;
+                  }
+                }
+              }
+            }
+          }
+
+          .microblog-input {
+            background-color: #1e1e1e;
+
+            .btn-comment-submit {
+              color: #acacac;
+            }
+          }
+        }
+      }
+    }
+
+    .dropdown-menu {
+      background-color: #272727;
+      border-color: #404040;
+      box-shadow: 0 0 10px rgb(0 0 0 / 25%);
+
+      &:before {
+        border-bottom-color: #404040;
+      }
+
+      &:after {
+        border-bottom-color: #272727;
+      }
+
+      .dropdown-item {
+        color: #bcbcbc;
+
+        &:hover {
+          background-color: #303030;
+        }
+      }
+
+      .dropdown-divider {
+        border-color: #505050;
+      }
+    }
+  }
+}
