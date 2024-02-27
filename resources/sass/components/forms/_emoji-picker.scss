@@ -6,20 +6,6 @@
     right: -2px;
     top: -5px;
     padding: 0;
-
-    .triangle {
-      position: absolute;
-      top: -5px;
-      right: 21px;
-      z-index: 3;
-      width: 10px;
-      height: 10px;
-      border: 1px solid #ccc;
-      background-color: white;
-      border-right: none;
-      border-bottom: none;
-      transform: rotate(45deg);
-    }
   }
 
   .emoji-picker {
@@ -38,6 +24,20 @@
     .card {
       @include media-breakpoint-up(sm) {
         padding: 0.75rem;
+
+        .triangle {
+          position: absolute;
+          top: -5px;
+          right: 12px;
+          z-index: 3;
+          width: 10px;
+          height: 10px;
+          border: inherit;
+          background-color: inherit;
+          border-right: none;
+          border-bottom: none;
+          transform: rotate(45deg);
+        }
       }
 
       @include media-breakpoint-down(xs) {

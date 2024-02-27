@@ -1,6 +1,7 @@
 <template>
   <div class="emoji-picker" v-on-clickaway="blur">
     <div class="card card-body">
+      <div class="triangle"/>
       <div style="display:flex; flex-direction:column;">
         <div class="emoji-grid">
           <div class="emoji-scroll" @mouseleave="mouseLeave">
