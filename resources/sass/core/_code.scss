@@ -1,34 +1,6 @@
-// <code> inside </a>
-a code {
-  color: $primary;
-}
-
-kbd {
-  text-shadow: 0 1px 0 white;
-  border: 1px solid #9ea5ae;
-  box-shadow: 0 1px 1px hsla(210, 8%, 5%, 0.15), inset 0 1px 0 0 hsl(0deg, 0%, 100%);
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: initial;
-}
-
-mark {
-  background-color: #fffe9e;
-}
-
-// @see https://4programmers.net/Forum/Coyote/352953-zliczanie_linii_kodu_skrypt_konczy_zliczanie_po_696_linii
 pre code {
   display: block;
 }
-
-
-/* PrismJS 1.15.0
-https://prismjs.com/download.html#themes=prism&languages=markup+css+clike+javascript+csharp+pascal&plugins=line-numbers */
-/**
- * prism.js default theme for JavaScript, CSS and HTML
- * Based on dabblet (http://dabblet.com)
- * @author Lea Verou
- */
 
 pre {
   color: black;
@@ -64,7 +36,6 @@ code::selection {
   background: #b3d4fc;
 }
 
-/* Code blocks */
 pre {
   padding: 1em;
   margin: .5em 0;
@@ -94,7 +65,7 @@ blockquote {
 .token.prolog,
 .token.doctype,
 .token.cdata {
-  color: slategray;
+  color: slateGray;
 }
 
 .token.punctuation {
@@ -141,7 +112,7 @@ blockquote {
 
 .token.function,
 .token.class-name {
-  color: #DD4A68;
+  color: #dd4a68;
 }
 
 .token.regex,
@@ -154,6 +125,7 @@ blockquote {
 .token.bold {
   font-weight: bold;
 }
+
 .token.italic {
   font-style: italic;
 }
@@ -187,7 +159,6 @@ pre[class*="language-"].line-numbers > code {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-
 }
 
 .line-numbers-rows > span {
@@ -203,4 +174,3 @@ pre[class*="language-"].line-numbers > code {
   padding-right: 0.8em;
   text-align: right;
 }
-
