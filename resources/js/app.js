@@ -54,4 +54,3 @@ if ('serviceWorker' in navigator) {
 }
 
 new Vue({el: '#github-button', components: {'vue-github-button': GithubButton}});
-new Vue({el: '#github-button-footer', components: {'vue-github-button': GithubButton}});
