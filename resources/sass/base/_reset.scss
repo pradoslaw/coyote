@@ -3,55 +3,16 @@
 ::selection {
   background-color: #444;
   color: #fff;
+  text-shadow: none;
 }
 
-::-webkit-input-placeholder, :-moz-placeholder, ::-moz-placeholder, :-ms-input-placeholder {
+::-webkit-input-placeholder,
+:-moz-placeholder, 
+::-moz-placeholder,
+:-ms-input-placeholder {
   color: #999;
 }
 
-// @login type links
-// --------------------
-
-.mention {
-  font-weight: bold;
-  text-decoration: underline;
-}
-
-// Deleted user
-// ----------------
-
-a.user-deleted {
-  color: $gray-light;
-  text-decoration: line-through;
-}
-
-// Vue.js style
-// -------------
-
 [v-cloak] {
   display: none !important;
-}
-
-// Definition. Backward compatible.
-// -----------------------------------
-
-dfn {
-  border-top: 1px solid $card-border-color;
-  display: block;
-  padding: 10px 0 15px 30px;
-  min-height: 30px;
-  position: relative;
-
-  &:before {
-    @include font-awesome($fa-var-info);
-    left: 0;
-    top: 7px;
-    font-size: $font-size-lg;
-    font-weight: 700;
-  }
-}
-
-blockquote {
-  border-left: 4px solid $card-border-color;
-  padding: 2px 0 2px 20px;
 }

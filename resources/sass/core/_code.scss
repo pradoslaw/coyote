@@ -1,7 +1,3 @@
-pre code {
-  display: block;
-}
-
 pre {
   color: black;
   background: none;
@@ -13,44 +9,26 @@ pre {
   word-break: normal;
   word-wrap: normal;
   line-height: 1.5;
-
-  -moz-tab-size: 4;
-  -o-tab-size: 4;
   tab-size: 4;
-
-  -webkit-hyphens: none;
-  -moz-hyphens: none;
-  -ms-hyphens: none;
   hyphens: none;
-}
-
-pre::-moz-selection, pre ::-moz-selection,
-code::-moz-selection, code ::-moz-selection {
-  text-shadow: none;
-  background: #b3d4fc;
-}
-
-pre ::selection,
-code::selection {
-  text-shadow: none;
-  background: #b3d4fc;
-}
-
-pre {
   padding: 1em;
   margin: .5em 0;
   overflow: auto;
+
+  > code {
+    display: block;
+  }
+}
+
+pre *, code {
+  &::selection {
+    background: #b3d4fc;
+  }
 }
 
 :not(pre) > code,
 pre {
   background: #f5f2f0;
-}
-
-blockquote {
-  :not(pre) > code {
-    color: #999;
-  }
 }
 
 :not(pre) > code {
@@ -59,6 +37,12 @@ blockquote {
   border-radius: .15em;
   white-space: normal;
   color: #666;
+}
+
+blockquote {
+  :not(pre) > code {
+    color: #999;
+  }
 }
 
 .token.comment,
@@ -72,7 +56,7 @@ blockquote {
   color: #999;
 }
 
-.namespace {
+.token.namespace {
   opacity: .7;
 }
 
@@ -130,19 +114,15 @@ blockquote {
   font-style: italic;
 }
 
-.token.entity {
-  cursor: help;
-}
-
 pre[class*="language-"].line-numbers {
   position: relative;
   padding-left: 3.8em;
-  counter-reset: linenumber;
-}
+  counter-reset: lineNumber;
 
-pre[class*="language-"].line-numbers > code {
-  position: relative;
-  white-space: inherit;
+  > code {
+    position: relative;
+    white-space: inherit;
+  }
 }
 
 .line-numbers .line-numbers-rows {
@@ -159,18 +139,18 @@ pre[class*="language-"].line-numbers > code {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-}
 
-.line-numbers-rows > span {
-  pointer-events: none;
-  display: block;
-  counter-increment: linenumber;
-}
+  > span {
+    pointer-events: none;
+    display: block;
+    counter-increment: lineNumber;
 
-.line-numbers-rows > span:before {
-  content: counter(linenumber);
-  color: #999;
-  display: block;
-  padding-right: 0.8em;
-  text-align: right;
+    &:before {
+      content: counter(lineNumber);
+      color: #999;
+      display: block;
+      padding-right: 0.8em;
+      text-align: right;
+    }
+  }
 }
