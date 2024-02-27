@@ -46,7 +46,7 @@
 
             <ul class="topic-statistic list-inline small mt-1 mt-sm-0 mb-0 d-block d-sm-inline ml-sm-auto flex-sm-shrink-0">
               <li class="list-inline-item small" title="Liczba odpowiedzi">
-                <i :class="{'fas text-primary': topic.is_replied, 'far': !topic.is_replied}" class="fa-fw fa-comments"></i> {{ topic.replies | number }}
+                <i :class="{'fas topic-has-reply': topic.is_replied, 'far': !topic.is_replied}" class="fa-fw fa-comments"></i> {{ topic.replies | number }}
               </li>
 
               <li class="list-inline-item small" title="Liczba wyświetleń">
