@@ -1,0 +1,17 @@
+header nav {
+  .logo {
+    height: 30px;
+
+    body.theme-dark & {
+      &.light {
+        display: none;
+      }
+    }
+
+    body.theme-light & {
+      &.dark {
+        display: none;
+      }
+    }
+  }
+}

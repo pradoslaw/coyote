@@ -25,7 +25,7 @@
     <meta property="og:locale" content="pl_PL">
     <meta property="og:title" content="{{ block('ogtitle') is defined ? block('ogtitle') : block('title') }}">
     <meta property="og:description" content="{{ block('description') }}">
-    <meta property="og:image" content="{{ block('logo') is defined ? block ('logo') : secure_asset('img/apple-touch.png') }}">
+    <meta property="og:image" content="{{ block('logo') is defined ? block ('logo') : secure_asset('img/logo/apple-touch.png') }}">
 
     <link rel="stylesheet" href="{{ cdn('css/core.css') }}">
 
@@ -36,8 +36,8 @@
     <meta name="websocket-url" content="{{ __WS_URL }}">
   {% endif %}
 
-  <link rel="apple-touch-icon" href="{{ asset('img/apple-touch.png') }}">
-  <link rel="shortcut icon" href="{{ asset('img/favicon.png') }}" type="image/png">
+  <link rel="apple-touch-icon" href="{{ asset('img/logo/apple-touch.png') }}">
+  <link rel="shortcut icon" href="{{ asset('img/logo/favicon.png') }}" type="image/png">
 
   <link rel="stylesheet preload prefetch" href="//fonts.googleapis.com/css?family=Open+Sans:400,300&subset=latin,latin-ext&display=swap" as="style" crossorigin>
   <link rel="preload" href="/fonts/font-awesome/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -68,7 +68,8 @@
         </button>
 
         <a rel="home" class="navbar-brand order-0" href="{{ route('home') }}" title="4programmers.net - Strona główna">
-          <img alt="4programmers.net" src="{{ cdn('img/logo-mobile.png') }}"/>
+          <img class="logo light" alt="4programmers.net" src="{{ cdn('img/logo/light.svg') }}" style="height:30px;"/>
+          <img class="logo dark" alt="4programmers.net" src="{{ cdn('img/logo/dark.svg') }}" style="height:30px;"/>
         </a>
 
         <div class="collapse navbar-collapse flex-grow-0 order-3 order-lg-1 ml-2" id="mobile-menu">
