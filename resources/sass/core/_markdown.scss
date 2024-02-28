@@ -40,3 +40,15 @@ dfn {
     font-weight: 700;
   }
 }
+
+.post-content video,
+.microblog video {
+  max-width: 100%;
+}
+
+@include media-breakpoint-up(sm) {
+  .post-content video,
+  .microblog video {
+    max-width: 300px;
+  }
+}

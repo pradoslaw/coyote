@@ -25,7 +25,7 @@ class PostFactory extends AbstractFactory
                 $this->container[PageRepositoryInterface::class],
                 request()->getHost()));
             $parser->attach(new Latex());
-            $parser->attach(new Purifier());
+            $parser->attach(new Purifier(null, $this->videoAllowed()));
             $parser->attach(new Censore($this->container[WordRepositoryInterface::class]));
             $parser->attach(new Prism());
             $parser->attach(new UnicodeEmojiSvg());

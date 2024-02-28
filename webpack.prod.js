@@ -56,6 +56,7 @@ const plugins = [
         'pre',
         'kbd',
         'code',
+        'video',
         'breadcrumb-fixed',
         'mention',
         'user-deleted',

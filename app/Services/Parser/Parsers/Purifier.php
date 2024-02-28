@@ -8,7 +8,7 @@ class Purifier implements Parser
 {
     private HTMLPurifier_Config $config;
 
-    public function __construct(array $overrideAllowedHtml = null)
+    public function __construct(array $overrideAllowedHtml = null, private bool $canAddVideo = false)
     {
         $config = HTMLPurifier_Config::createDefault();
         $config->autoFinalize = false;
@@ -18,6 +18,9 @@ class Purifier implements Parser
         $this->config->autoFinalize = false;
         if ($overrideAllowedHtml !== null) {
             $this->config->set('HTML.Allowed', implode(',', $overrideAllowedHtml));
+        }
+        if ($this->canAddVideo) {
+            $this->config->set('HTML.Allowed', $this->config->get('HTML.Allowed') . ',video[src]');
         }
     }
 
@@ -34,6 +37,13 @@ class Purifier implements Parser
         $mark = $def->addElement('mark', 'Inline', 'Inline', 'Common');
         $mark->excludes = ['mark' => true];
 
+        if ($this->canAddVideo) {
+            $video = $def->addElement('video', 'Inline', 'Inline', 'Common', [
+                'src' => 'URI',
+            ]);
+            $video->excludes = ['video' => true];
+            $video->attr_transform_post[] = new SetAttribute('controls', 'controls');
+        }
         return (new HTMLPurifier)->purify($text, $this->config);
     }
 }

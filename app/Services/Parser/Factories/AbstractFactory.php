@@ -27,6 +27,15 @@ abstract class AbstractFactory
         return $this->auth->check() && $this->auth->user()->allow_smilies;
     }
 
+    public function videoAllowed(): bool
+    {
+        if ($this->auth->check()) {
+            $user = $this->auth->user();
+            return $user->can('forum-emphasis');
+        }
+        return false;
+    }
+
     public function parseAndCache(string $text, callable $closure): string
     {
         $key = $this->cache->key($text);
