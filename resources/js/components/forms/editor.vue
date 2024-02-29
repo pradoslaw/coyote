@@ -68,7 +68,8 @@ export default class VueEditor extends Vue {
         ],
         '^^': [':relaxed:', ':blush:'],
         ':?': [':thinking:', ':yawn:'],
-      }
+      },
+      false,
     );
   }
 
