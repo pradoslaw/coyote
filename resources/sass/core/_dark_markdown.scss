@@ -20,6 +20,10 @@ body.theme-dark {
 
   table {
     color: #acacac;
+    th,
+    td {
+      border-color: #2f2f2f !important;
+    }
   }
 
   pre[class*="language-"] {
