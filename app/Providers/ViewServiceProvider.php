@@ -34,11 +34,10 @@ class ViewServiceProvider extends ServiceProvider
         $view->composer(['layout', 'adm.home'], InitialStateComposer::class);
         $view->composer('layout', function (View $view) use ($clock, $cache) {
             $view->with([
-                '__master_menu' => $this->buildMasterMenu(),
-
-                // temporary code
-                '__dark_theme'  => $this->app[Guest::class]->getSetting('dark.theme', true),
-                'github_stars'  => $cache->remember('homepage:github_stars', 30 * 60, fn() => $this->githubStars()),
+                '__master_menu'    => $this->buildMasterMenu(),
+                '__dark_theme'     => $this->darkTheme() && !$this->wip(),
+                '__dark_theme_wip' => $this->wip(),
+                'github_stars'     => $cache->remember('homepage:github_stars', 30 * 60, fn() => $this->githubStars()),
 
                 'gdpr' => [
                     'content'  => TwigLiteral::fromHtml((new UserSettings)->cookieAgreement()),
@@ -102,5 +101,31 @@ class ViewServiceProvider extends ServiceProvider
         /** @var GithubStars $github */
         $github = $this->app->make(GithubStars::class);
         return $github->fetchStars();
+    }
+
+    private function darkTheme(): bool
+    {
+        return $this->app[Guest::class]->getSetting('dark.theme', true);
+    }
+
+    private function wip(): bool
+    {
+        $path = $this->app[Request::class]->getPathInfo();
+        if (\str_starts_with($path, '/Profile')) {
+            return true;
+        }
+        if ($path === '/User/Settings') {
+            return false;
+        }
+        if ($path === '/Kategorie') {
+            return true;
+        }
+        if (\str_starts_with($path, '/User')) {
+            return true;
+        }
+        if (\str_starts_with($path, '/Praca')) {
+            return true;
+        }
+        return false;
     }
 }

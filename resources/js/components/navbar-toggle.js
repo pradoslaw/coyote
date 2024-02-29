@@ -8,15 +8,17 @@ Array.from(document
   .forEach(button => {
     button.addEventListener('click', event => {
       event.preventDefault();
-      changeTheme(!document.body.classList.contains('theme-dark'));
+      setTheme(!document.body.classList.contains('theme-dark'));
     });
   });
 
-document
-  .getElementById('js-dark-theme')
-  ?.addEventListener('change', event => {
-    changeTheme(event.target.checked);
-  });
+function setTheme(dark) {
+  if (document.body.classList.contains('theme-dark-wip')) {
+    changeTheme(false);
+  } else {
+    changeTheme(dark);
+  }
+}
 
 function changeTheme(isDark) {
   document.body.classList.toggle('theme-dark', isDark);
