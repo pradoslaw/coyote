@@ -1,4 +1,35 @@
 body.theme-dark {
+  header {
+    nav.navbar {
+      .nav-search {
+        .search-bar {
+          background-color: #272727;
+          color: #fff;
+          input {
+            background-color: #272727;
+            color: #fff;
+          }
+        }
+      }
+    }
+  }
+  .search-dropdown {
+    background: #272727;
+    .title {
+      background: linear-gradient(180deg,#272727 47%,#fff 50%,#272727 52%);
+      > span {
+        background: #272727;
+      }
+    }
+    li {
+      &.hover {
+        background: #90ba1d;
+      }
+      > a {
+        color: #fff;
+      }
+    }
+  }
   .dropdown-menu {
     &:before,
     &:after {
