@@ -19,6 +19,19 @@ body.theme-dark {
     border-color: #2f2f2f;
   }
 
+  table {
+    color: #acacac;
+    th,
+    td {
+      border-top-color: #2f2f2f;
+    }
+    thead {
+      th {
+        border-bottom-color: #2f2f2f;
+      }
+    }
+  }
+
   pre[class*="language-"] {
     .token.operator {
       color: #d2a26a;
