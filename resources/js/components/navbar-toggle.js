@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Vue from 'vue';
+import store from "../store/index";
 import GithubButton from './github-button.vue';
 
 Array.from(document
@@ -28,6 +29,8 @@ function changeTheme(isDark) {
   header.classList.toggle('bg-light', !isDark);
 
   setGithubButtonTheme(isDark);
+
+  store.commit('theme/CHANGE_THEME', isDark);
 
   axios.post('/User/Settings/Ajax',
     {'dark_theme': header.classList.contains('navbar-dark') ? 1 : 0});

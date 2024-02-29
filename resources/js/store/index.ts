@@ -1,19 +1,20 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import messages from './modules/messages';
-import inbox from './modules/inbox';
-import notifications from './modules/notifications';
-import forums from './modules/forums';
-import topics from './modules/topics';
-import posts from './modules/posts';
-import user from './modules/user';
-import microblogs from './modules/microblogs';
-import prompt from './modules/prompt';
-import poll from './modules/poll';
-import flags from './modules/flags';
-import jobs from './modules/jobs';
-import guides from './modules/guides';
 import comments from './modules/comments';
+import flags from './modules/flags';
+import forums from './modules/forums';
+import guides from './modules/guides';
+import inbox from './modules/inbox';
+import jobs from './modules/jobs';
+import messages from './modules/messages';
+import microblogs from './modules/microblogs';
+import notifications from './modules/notifications';
+import poll from './modules/poll';
+import posts from './modules/posts';
+import prompt from './modules/prompt';
+import theme from './modules/theme';
+import topics from './modules/topics';
+import user from './modules/user';
 
 Vue.use(Vuex);
 
@@ -21,6 +22,7 @@ export default new Vuex.Store({
   modules: {
     messages,
     inbox,
+    theme,
     notifications,
     forums,
     topics,
@@ -32,6 +34,6 @@ export default new Vuex.Store({
     flags,
     jobs,
     guides,
-    comments
-  }
+    comments,
+  },
 });

@@ -69,7 +69,7 @@ export default class VueEditor extends Vue {
         '^^': [':relaxed:', ':blush:'],
         ':?': [':thinking:', ':yawn:'],
       },
-      false,
+      this.dark,
     );
   }
 
@@ -87,6 +87,18 @@ export default class VueEditor extends Vue {
 
   @Emit()
   state(state: EditorState) {
+  }
+
+  created(): void {
+    this.$store.subscribe((mutation, state) => {
+      if (mutation.type === 'theme/CHANGE_THEME') {
+        this.editor!.changeTheme(state.theme.darkTheme);
+      }
+    });
+  }
+
+  get dark(): boolean {
+    return this.$store.state.theme.darkTheme;
   }
 
   destroy() {
