@@ -21,14 +21,9 @@ body.theme-dark {
 
   table {
     color: #acacac;
-    th,
-    td {
-      border-top-color: #2f2f2f;
-    }
-    thead {
-      th {
-        border-bottom-color: #2f2f2f;
-      }
+
+    thead th, tbody td {
+      border-color: #2f2f2f;
     }
   }
 
