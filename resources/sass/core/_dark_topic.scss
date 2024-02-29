@@ -10,6 +10,10 @@ body.theme-dark {
     color: #dedede;
   }
 
+  table {
+    color: #acacac;
+  }
+
   header {
     nav.navbar {
       border-bottom: none;
@@ -112,16 +116,14 @@ body.theme-dark {
 
         a time,
         .topic-statistic,
-        .topic-statistic .topic-has-reply,
-        {
+        .topic-statistic .topic-has-reply {
           color: #acacac;
         }
 
         a,
         a.username,
         .topic-pagination,
-        .topic-pagination i,
-        {
+        .topic-pagination i {
           color: inherit;
         }
       }
@@ -285,7 +287,6 @@ body.theme-dark {
 
       .page-pagination {
         .page-page-selector {
-
         }
       }
 
@@ -350,9 +351,7 @@ body.theme-dark {
 
     .btn.btn-secondary.btn-sm {
       border: 1px solid #404040;
-      background: linear-gradient(180deg,
-              #000 0%,
-              rgba(22, 22, 22, 0.00) 100%);
+      background: linear-gradient(180deg, #000 0%, rgba(22, 22, 22, 0) 100%);
 
       &:hover {
         color: #90ba1d;
