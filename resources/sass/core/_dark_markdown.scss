@@ -22,7 +22,12 @@ body.theme-dark {
     color: #acacac;
     th,
     td {
-      border-color: #2f2f2f !important;
+      border-top-color: #2f2f2f;
+    }
+    thead {
+      th {
+        border-bottom-color: #2f2f2f;
+      }
     }
   }
 
