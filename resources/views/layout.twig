@@ -109,12 +109,7 @@
         </div>
 
         <div class="form-inline order-2 ml-auto">
-          {% if __dark_theme_wip %}
-            <span class="d-none d-md-inline text-muted" style="cursor:default;" title="Ciemny motyw jeszcze nie jest dostępny na tej stronie.">
-              <i class="fas fa-ban"></i>
-              Przełącz motyw
-            </span>
-          {% else %}
+          {% if not __dark_theme_wip %}
             <a class="btn btn-sm btn-toggle-theme" href="#" id="">
               <i class="fas fa-moon enable-theme-light"></i>
               <i class="fas fa-sun enable-theme-dark"></i>
@@ -231,6 +226,26 @@
                 {{ session_get('error') }}
               </div>
             </div>
+          </div>
+        {% endif %}
+
+        {% if __dark_theme_notice %}
+          <div class="theme-notice">
+            <p class="alert alert-info">
+              Aktualny motyw serwisu: <strong>ciemny</strong> (tymczasowo niedostępny na tej <strong>podstronie</strong> <i class="fa fa-tools"></i>)
+            </p>
+            <p class="alert alert-warning">
+              Zauważyliśmy, że Twój aktualny motyw serwisu to: <i class="fa fa-moon"></i> <strong>ciemny</strong>.
+              Ta <strong>podstrona</strong> nie jest jeszcze gotowa do przejścia na ciemną stronę Mocy, ale nasze droidy dzielnie nad tym pracują.
+              Wkrótce Twoje preferencje zostaną uwzględnione na wszystkich podstronach.
+              Przeczytaj więcej o aktualnych zmianach <a href="https://4programmers.net/Forum/1952566">tutaj</a>.
+              <br>
+              Możesz <strong>wyłączyć</strong> to powiadomienie, zmieniając motyw serwisu na jasny.
+              <span class="disable-theme-notice" style="cursor:pointer">
+                <i class="fa fa-sun"></i>
+                <u>Zmień motyw strony na jasny</u>
+              </span>
+            </p>
           </div>
         {% endif %}
 

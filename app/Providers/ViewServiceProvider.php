@@ -34,10 +34,11 @@ class ViewServiceProvider extends ServiceProvider
         $view->composer(['layout', 'adm.home'], InitialStateComposer::class);
         $view->composer('layout', function (View $view) use ($clock, $cache) {
             $view->with([
-                '__master_menu'    => $this->buildMasterMenu(),
-                '__dark_theme'     => $this->darkTheme() && !$this->wip(),
-                '__dark_theme_wip' => $this->wip(),
-                'github_stars'     => $cache->remember('homepage:github_stars', 30 * 60, fn() => $this->githubStars()),
+                '__master_menu'       => $this->buildMasterMenu(),
+                '__dark_theme'        => $this->darkTheme() && !$this->wip(),
+                '__dark_theme_wip'    => $this->wip(),
+                '__dark_theme_notice' => $this->wip() && $this->darkTheme(),
+                'github_stars'        => $cache->remember('homepage:github_stars', 30 * 60, fn() => $this->githubStars()),
 
                 'gdpr' => [
                     'content'  => TwigLiteral::fromHtml((new UserSettings)->cookieAgreement()),
