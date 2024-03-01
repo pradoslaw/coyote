@@ -6,11 +6,11 @@ body.theme-dark {
       > .media-body {
 
         .media-heading a {
-          color: #789B17;
+          color: #789b17;
         }
 
         .microblog-statistic {
-          color: #8F9BA5;
+          color: #8f9ba5;
 
           a {
             color: inherit;
@@ -22,8 +22,8 @@ body.theme-dark {
             color: inherit;
 
             &:hover {
-              border: 1px solid #2F2F2F;
-              background-image: linear-gradient(to bottom, #2F2F2F 0%, #212121 100%);
+              border: 1px solid #2f2f2f;
+              background-image: linear-gradient(to bottom, #2f2f2f 0%, #212121 100%);
               color: #acacac;
             }
           }
@@ -39,10 +39,10 @@ body.theme-dark {
           }
 
           .media {
-            border-color: #2F2F2F;
+            border-color: #2f2f2f;
 
             a.username, a.username:hover {
-              color: #789B17;
+              color: #789b17;
             }
 
             ul.microblog-comment-list {
@@ -51,7 +51,7 @@ body.theme-dark {
                   color: #8f9ba5;
 
                   &.vote-active, .vote-active:hover {
-                    color: #789B17;
+                    color: #789b17;
                   }
                 }
               }
@@ -67,6 +67,12 @@ body.theme-dark {
           }
         }
       }
+    }
+
+    .microblog-text a:not(.badge),
+    .microblog-comments .comment-text a:not(.badge),
+    {
+      color: #789b17;
     }
 
     .dropdown-menu {
