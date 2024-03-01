@@ -26,7 +26,7 @@ body.theme-dark {
       }
 
       .btn-register {
-        background-color: #90ba1d;
+        background-color: #789B17;
         color: #1a1a1a;
       }
     }
@@ -39,7 +39,7 @@ body.theme-dark {
       }
 
       & + li.breadcrumb-item:before {
-        color: #90ba1d;
+        color: #789B17;
       }
     }
   }
@@ -83,7 +83,7 @@ body.theme-dark {
 
       ul.list-sub .list-inline-item {
         i {
-          color: #90ba1d;
+          color: #789B17;
         }
 
         a {
@@ -95,7 +95,7 @@ body.theme-dark {
     .card.card-topics {
       a.small,
       a.topic-icon {
-        color: #90ba1d;
+        color: #789B17;
       }
 
       a time {
@@ -141,7 +141,7 @@ body.theme-dark {
     div {
       section.page-topic-controls {
         a {
-          background-color: #90ba1d;
+          background-color: #789B17;
           color: #1d1d1d;
         }
       }
@@ -151,11 +151,11 @@ body.theme-dark {
           .post-author {
             .badge.badge-primary {
               color: #1d1d1d;
-              background-color: #90ba1d;
+              background-color: #789B17;
             }
 
             a:not(.badge) {
-              color: #90ba1d;
+              color: #789B17;
             }
           }
 
@@ -184,7 +184,7 @@ body.theme-dark {
             color: #acacac;
 
             a {
-              color: #90ba1d;
+              color: #789B17;
             }
 
             footer {
@@ -202,7 +202,7 @@ body.theme-dark {
               color: #919191;
 
               &.on {
-                color: #90ba1d;
+                color: #789B17;
               }
             }
 
@@ -220,12 +220,8 @@ body.theme-dark {
               color: #acacac;
               border-top: 1px solid #2f2f2f;
 
-              &.highlight-flash {
-                animation: flash-dark 10s ease-in-out;
-              }
-
               a {
-                color: #90ba1d;
+                color: #789B17;
 
                 &.badge.badge-primary {
                   color: #1d1d1d;
@@ -246,7 +242,7 @@ body.theme-dark {
             color: #acacac;
 
             a {
-              color: #90ba1d;
+              color: #789B17;
             }
           }
 
@@ -285,10 +281,6 @@ body.theme-dark {
             }
           }
         }
-
-        &.highlight-flash {
-          animation: flash-dark 10s ease-in-out;
-        }
       }
 
       .page-pagination {
@@ -300,7 +292,7 @@ body.theme-dark {
       form {
         .btn.btn-primary {
           color: #1d1d1d;
-          background-color: #90ba1d;
+          background-color: #789B17;
           border: none;
         }
 
@@ -324,7 +316,7 @@ body.theme-dark {
           &:focus {
             color: #c8c8c8;
             background-color: #323232;
-            border-color: #90ba1d;
+            border-color: #789B17;
           }
         }
       }
@@ -341,7 +333,7 @@ body.theme-dark {
 
         &:hover {
           i {
-            color: #90ba1d;
+            color: #789B17;
           }
         }
       }
@@ -351,7 +343,7 @@ body.theme-dark {
   aside {
     &#sidebar {
       background-color: #252525;
-      border-color: #90ba1d;
+      border-color: #789B17;
       border-width: 1px;
       box-shadow: none;
     }
@@ -363,7 +355,7 @@ body.theme-dark {
               rgba(22, 22, 22, 0.00) 100%);
 
       &:hover {
-        color: #90ba1d;
+        color: #789B17;
       }
     }
   }
@@ -399,7 +391,7 @@ body.theme-dark {
 
       .topic-pagination {
         i {
-          color: #90ba1d;
+          color: #789B17;
         }
       }
     }
@@ -484,7 +476,7 @@ body.theme-dark {
   }
 
   .btn.btn-primary {
-    background-color: #90ba1d;
+    background-color: #789B17;
     color: #1a1a1a;
   }
 
@@ -503,7 +495,7 @@ body.theme-dark {
     &:focus {
       color: #c8c8c8;
       background-color: #323232;
-      border-color: #90ba1d;
+      border-color: #789B17;
     }
   }
 
@@ -528,15 +520,6 @@ body.theme-dark {
         }
       }
     }
-  }
-}
-
-@keyframes flash-dark {
-  99% {
-    background-color: #1a1a1a;
-  }
-  from {
-    background-color: #122201;
   }
 }
 

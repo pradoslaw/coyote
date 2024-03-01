@@ -21,21 +21,34 @@ function setTheme(dark) {
 }
 
 function changeTheme(isDark) {
-  document.body.classList.toggle('theme-dark', isDark);
-  document.body.classList.toggle('theme-light', !isDark);
+  setBodyTheme(isDark);
+  setBootstrapNavigationBarTheme(isDark);
   setGithubButtonTheme(isDark);
   store.commit('theme/CHANGE_THEME', isDark);
   axios.post('/User/Settings/Ajax', {'dark_theme': isDark});
 }
 
-function data() {
-  return {
-    theme: document.body.classList.contains('theme-dark') ? 'dark' : 'light',
-  }
+function setBodyTheme(isDark) {
+  document.body.classList.toggle('theme-dark', isDark);
+  document.body.classList.toggle('theme-light', !isDark);
 }
 
-const githubButton = new Vue({el: '#github-button', components: {'vue-github-button': GithubButton}, data});
+function setBootstrapNavigationBarTheme(isDark) {
+  const header = document.getElementsByClassName('navbar')[0];
+  header.classList.toggle('navbar-dark', isDark);
+  header.classList.toggle('navbar-light', !isDark);
+}
 
 function setGithubButtonTheme(dark) {
   githubButton.theme = dark ? 'dark' : 'light';
 }
+
+const githubButton = new Vue({
+  el: '#github-button',
+  components: {'vue-github-button': GithubButton},
+  data() {
+    return {
+      theme: document.body.classList.contains('theme-dark') ? 'dark' : 'light',
+    }
+  },
+});

@@ -14,23 +14,9 @@
     &:last-child {
       border-bottom: none;
     }
+
+    a.username {
+      color: #333;
+    }
   }
 }
-
-
-// @todo to przeniesc poniewaz nie dotyczy to tylko mikroblogow, ale to styl globalny
-.highlight-flash {
-  animation: flash 10s ease-in-out;
-}
-
-@keyframes flash {
-  99% {
-    background-color: #fff;
-  }
-  from {
-    background-color: $unread-bg;
-  }
-}
-
-
-

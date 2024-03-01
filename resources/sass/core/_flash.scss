@@ -1,0 +1,12 @@
+.highlight-flash {
+  animation: flash 10s ease-in-out;
+}
+
+@keyframes flash {
+  99% {
+    background-color: #fff;
+  }
+  from {
+    background-color: $unread-bg;
+  }
+}

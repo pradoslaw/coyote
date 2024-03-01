@@ -1,12 +1,8 @@
 body.theme-dark {
-  header {
-    .navbar {
-      .nav-link {
-        color: #eee;
-        font-weight: 700;
-        font-size: .81rem;
-        font-family: Open Sans, Arial, sans-serif;
-      }
+  .dropdown-menu {
+    &:before,
+    &:after {
+      border-bottom-color: #2f2f2f;
     }
 
     .dropdown-menu {
@@ -27,38 +23,26 @@ body.theme-dark {
           border-bottom-color: #404040;
         }
 
-        .dropdown-header {
-          a {
-            color: #c8c8c8;
+        .notification {
+          border-bottom-color: #2f2f2f;
+
+          &:hover,
+          &:active,
+          {
+            background: #2f2f2f;
           }
-        }
 
         .dropdown-modal {
           background: #191919;
 
-          .notification {
-            border-bottom-color: #2f2f2f;
-
-            &.unread {
-              background-color: #122201;
-
-              .media-body {
-                header.notification-header h4 {
-                  color: #787878;
-                }
-              }
+            &:hover,
+            &:active,
+            {
+              background: #1a3103;
             }
 
-            .media {
-              > a:first-of-type {
-                > div {
-                  .user-avatar {
-                    max-height: 35px;
-                    margin: 0 auto;
-                  }
-                }
-              }
-              header.notification-header {
+            .media-body {
+              header.notification-header h4 {
                 color: #787878;
 
                 small time {
@@ -127,27 +111,6 @@ body.theme-dark {
     }
   }
 
-  .mega-menu {
-    li > a {
-      color: #9d9d9d;
-    }
-
-    .mega-menu-title {
-      color: $gray-lighter;
-      border-bottom: none;
-      font-weight: 400;
-    }
-
-    .mega-menu-body {
-      border-right-color: #575757;
-    }
-  }
-
-  .nav-avatar .img-thumbnail {
-    border: none;
-    background-color: #717171;
-  }
-
   .nav-search {
     .search-bar {
       border: none;
@@ -192,11 +155,5 @@ body.theme-dark {
         }
       }
     }
-  }
-
-  .nav-link {
-    font-weight: bold;
-    font-family: "Open Sans", Arial, sans-serif;
-    font-size: .81rem;
   }
 }

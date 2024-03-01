@@ -8,35 +8,38 @@
 
 @import "base/reset";
 
+@import "layout/footer";
 @import "layout/grid";
 @import "layout/header";
-@import "layout/footer";
 @import "layout/theme";
 
-@import "core/breadcrumbs";
-@import "core/buttons";
 @import "core/alerts";
 @import "core/badges";
-@import "core/panels";
-@import "core/progress-bars";
+@import "core/breadcrumbs";
+@import "core/buttons";
+@import "core/code";
+@import "core/dropdowns";
+@import "core/flash";
+@import "core/forms";
+@import "core/markdown";
+@import "core/metadata";
+@import "core/microblog";
 @import "core/navs";
 @import "core/pagination";
-@import "core/dropdowns";
-@import "core/microblog";
-@import "core/forms";
-@import "core/tables";
-@import "core/code";
-@import "core/markdown";
-@import "core/skeleteon";
+@import "core/panels";
+@import "core/progress-bars";
 @import "core/related";
 @import "core/sidemenu";
-@import "core/metadata";
+@import "core/skeleteon";
 @import "core/stream";
+@import "core/tables";
 
 @import "core/dark_4play";
 @import "core/dark_alert";
+@import "core/dark_box";
 @import "core/dark_common";
 @import "core/dark_editor";
+@import "core/dark_flash";
 @import "core/dark_footer";
 @import "core/dark_header";
 @import "core/dark_homepage";
@@ -51,18 +54,17 @@
 @import "components/forum/post"; // it needs to be here because post's placeholder use styles in this specific file
 
 @import "pages/auth";
-@import "pages/user";
-@import "pages/profile";
-@import "pages/homepage";
-@import "pages/wiki";
 @import "pages/errors";
-@import "pages/search";
-@import "pages/help";
 @import "pages/forum";
-@import "pages/microblog";
-@import "pages/job";
-@import "pages/pm";
 @import "pages/guide";
+@import "pages/help";
+@import "pages/homepage";
+@import "pages/job";
+@import "pages/microblog";
+@import "pages/pm";
+@import "pages/profile";
+@import "pages/search";
+@import "pages/user";
+@import "pages/wiki";
 
 @import "../../node_modules/@riddled/4play/src/style";
-
