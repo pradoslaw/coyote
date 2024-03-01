@@ -30,8 +30,7 @@ body.theme-dark {
           border-bottom-color: #2f2f2f;
 
           &:hover,
-          &:active,
-          {
+          &:active {
             background: #2f2f2f;
           }
 
@@ -39,8 +38,7 @@ body.theme-dark {
             background-color: #122201;
 
             &:hover,
-            &:active,
-            {
+            &:active {
               background: #1a3103;
             }
 
@@ -52,6 +50,15 @@ body.theme-dark {
           }
 
           .media {
+            > a:first-of-type {
+              > div {
+                .user-avatar {
+                  max-height: 35px;
+                  margin: 0 auto;
+                }
+              }
+            }
+
             header.notification-header {
               color: #787878;
 
@@ -124,7 +131,7 @@ body.theme-dark {
           background: linear-gradient(180deg, #1a1a1a 47%, #2f2f2f 50%, #1a1a1a 52%);
         }
 
-        li.title span, {
+        li.title span {
           background: #1a1a1a;
         }
 
