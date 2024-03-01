@@ -200,7 +200,7 @@ export default {
 
       &:hover,
       &:focus {
-        color: #90ba1d;
+        color: #789B17;
       }
     }
   }
