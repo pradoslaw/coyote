@@ -12,6 +12,17 @@ Array.from(document
     });
   });
 
+Array
+  .from(document.querySelectorAll('.disable-theme-notice'))
+  .forEach(button => {
+    button.addEventListener('click', function () {
+      Array.from(document.querySelectorAll(".theme-notice")).forEach(div => {
+        div.style.display = 'none';
+      })
+      setTheme(false);
+    });
+  })
+
 function setTheme(dark) {
   if (document.body.classList.contains('theme-dark-wip')) {
     changeTheme(false);
