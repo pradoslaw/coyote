@@ -14,9 +14,12 @@
     &:last-child {
       border-bottom: none;
     }
+
+    a.username {
+      color: #333;
+    }
   }
 }
-
 
 // @todo to przeniesc poniewaz nie dotyczy to tylko mikroblogow, ale to styl globalny
 .highlight-flash {
@@ -31,6 +34,3 @@
     background-color: $unread-bg;
   }
 }
-
-
-
