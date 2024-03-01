@@ -29,8 +29,20 @@ body.theme-dark {
         .notification {
           border-bottom-color: #2f2f2f;
 
+          &:hover,
+          &:active,
+          {
+            background: #2f2f2f;
+          }
+
           &.unread {
             background-color: #122201;
+
+            &:hover,
+            &:active,
+            {
+              background: #1a3103;
+            }
 
             .media-body {
               header.notification-header h4 {
