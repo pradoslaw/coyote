@@ -1,0 +1,14 @@
+body.theme-dark {
+  .highlight-flash {
+    animation: flash-dark 10s ease-in-out;
+  }
+}
+
+@keyframes flash-dark {
+  99% {
+    background-color: #1a1a1a;
+  }
+  from {
+    background-color: #122201;
+  }
+}

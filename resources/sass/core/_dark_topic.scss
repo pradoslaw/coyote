@@ -220,10 +220,6 @@ body.theme-dark {
               color: #acacac;
               border-top: 1px solid #2f2f2f;
 
-              &.highlight-flash {
-                animation: flash-dark 10s ease-in-out;
-              }
-
               a {
                 color: #90ba1d;
 
@@ -284,10 +280,6 @@ body.theme-dark {
               border-color: #323232;
             }
           }
-        }
-
-        &.highlight-flash {
-          animation: flash-dark 10s ease-in-out;
         }
       }
 
@@ -528,15 +520,6 @@ body.theme-dark {
         }
       }
     }
-  }
-}
-
-@keyframes flash-dark {
-  99% {
-    background-color: #1a1a1a;
-  }
-  from {
-    background-color: #122201;
   }
 }
 
