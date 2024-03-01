@@ -2,7 +2,7 @@ body.theme-dark {
   .dropdown-menu {
     &:before,
     &:after {
-      border-bottom-color: #2F2F2F;
+      border-bottom-color: #2f2f2f;
     }
 
     &.dropdown-alerts {
@@ -27,7 +27,7 @@ body.theme-dark {
         background: #191919;
 
         .notification {
-          border-bottom-color: #2F2F2F;
+          border-bottom-color: #2f2f2f;
 
           &.unread {
             background-color: #122201;
@@ -88,6 +88,52 @@ body.theme-dark {
 
       i {
         color: #80a41a;
+      }
+    }
+  }
+
+  .nav-search {
+    .search-bar {
+      border: none;
+
+      input {
+        color: #acacac;
+      }
+
+      i, &:after {
+        color: #505050;
+      }
+
+      .search-dropdown {
+        background: #1a1a1a;
+        border-color: #2f2f2f;
+
+        li.title {
+          background: linear-gradient(180deg, #1a1a1a 47%, #2f2f2f 50%, #1a1a1a 52%);
+        }
+
+        li.title span, {
+          background: #1a1a1a;
+        }
+
+        li.hover a,
+        li:hover a {
+          background-color: #202020;
+        }
+
+        a {
+          span {
+            color: #acacac;
+          }
+
+          .item-options i {
+            color: #8f9ba5;
+
+            &:hover {
+              color: white;
+            }
+          }
+        }
       }
     }
   }
