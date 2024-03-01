@@ -50,6 +50,14 @@ body.theme-dark {
             }
 
             .media {
+              > a:first-of-type {
+                > div {
+                  .mw-100 {
+                    max-height: 35px;
+                    margin: 0 auto;
+                  }
+                }
+              }
               header.notification-header {
                 color: #787878;
 
