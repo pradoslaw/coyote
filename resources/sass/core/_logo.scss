@@ -1,17 +1,12 @@
 header nav {
   .logo {
+    background: url('/img/logo/light.svg') no-repeat;
+    background-size: contain;
     height: 30px;
+    width: 22.5px;
 
     body.theme-dark & {
-      &.light {
-        display: none;
-      }
-    }
-
-    body.theme-light & {
-      &.dark {
-        display: none;
-      }
+      background-image: url('/img/logo/dark.svg');
     }
   }
 }

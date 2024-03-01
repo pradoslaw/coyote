@@ -69,8 +69,14 @@
         </button>
 
         <a rel="home" class="navbar-brand order-0" href="{{ route('home') }}" title="4programmers.net - Strona główna">
-          <img class="logo light" alt="4programmers.net" src="{{ cdn('img/logo/light.svg') }}" style="height:30px;"/>
-          <img class="logo dark" alt="4programmers.net" src="{{ cdn('img/logo/dark.svg') }}" style="height:30px;"/>
+          <img
+              class="logo"
+              alt="4programmers.net"
+              style="height:30px;"
+              data-src-light="{{ cdn('img/logo/light.svg') }}"
+              data-src-dark="{{ cdn('img/logo/dark.svg') }}"
+              src="{{ __dark_theme ? cdn('img/logo/dark.svg') : cdn('img/logo/light.svg') }}"
+          />
         </a>
 
         <div class="collapse navbar-collapse flex-grow-0 order-3 order-lg-1 ml-2" id="mobile-menu">
