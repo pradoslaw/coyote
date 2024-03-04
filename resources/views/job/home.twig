@@ -184,7 +184,7 @@
       <div class="col-md-9 col-12">
         {% include 'job.partials.skeletons' %}
 
-        <div v-cloak v-if="jobs.data.length === 0" class="card card-body bg-light p-2">
+        <div v-cloak v-if="jobs.data.length === 0" class="card card-body card-job-missing p-2">
           <p class="text-center lead mt-4">
             Nie znaleźliśmy ofert, które spełniają Twoje kryteria.<br>
             <a href="{{ route('job.home') }}">Zobacz wszystkie oferty</a>, a być może znajdziesz coś dla siebie!

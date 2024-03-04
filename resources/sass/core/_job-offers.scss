@@ -116,3 +116,15 @@
     }
   }
 }
+
+.card-job {
+  .media {
+    p.location {
+      border-bottom: 1px solid #dee2e6;
+    }
+  }
+}
+
+.card-job-missing {
+  background-color: #eee;
+}
