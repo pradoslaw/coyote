@@ -50,8 +50,8 @@ body.theme-dark {
           }
 
           .media {
-            > a:first-of-type {
-              > div {
+            .user-avatar-link {
+              .user-avatar-container {
                 .user-avatar {
                   max-height: 35px;
                   margin: 0 auto;

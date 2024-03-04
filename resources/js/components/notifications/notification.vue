@@ -1,7 +1,7 @@
 <template>
   <div :class="{'unread': ! notification.is_read}" class="notification">
     <div :title="notification.headline" class="media">
-      <a :href="`/Profile/${notification.user_id}`" title="Kliknij, aby wyświetlić profil użytkownika">
+      <a class="user-avatar-link" :href="`/Profile/${notification.user_id}`" title="Kliknij, aby wyświetlić profil użytkownika">
         <vue-avatar :photo="notification.photo" class="i-35 mr-2"></vue-avatar>
       </a>
 
