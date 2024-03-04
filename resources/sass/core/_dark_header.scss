@@ -1,4 +1,10 @@
 body.theme-dark {
+  nav.navbar {
+    .img-thumbnail {
+      background-color: #121212;
+    }
+  }
+
   .dropdown-menu {
     &:before,
     &:after {
