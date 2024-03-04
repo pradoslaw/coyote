@@ -5,9 +5,17 @@
 {% block content %}
   <h2>{{ page_name }}</h2>
 
-  <nav class="nav nav-panel">
-    <a href="{{ route('user.pm') }}" class="nav-item {{ app.make('request').path() != 'User/Pm/Submit' ? 'active' }}"><span>Wiadomości ({{ user('pm_unread') }}/{{ user('pm') }})</span></a>
-    <a href="{{ route('user.pm.submit') }}" class="nav-item {{ app.make('request').path() == 'User/Pm/Submit' ? 'active' }}"><span>Napisz wiadomość</span></a>
+  <nav class="nav nav-panel card-tabs">
+    <a href="{{ route('user.pm') }}" class="nav-item {{ app.make('request').path() != 'User/Pm/Submit' ? 'active' }}">
+      <span>
+        Wiadomości ({{ user('pm_unread') }}/{{ user('pm') }})
+      </span>
+    </a>
+    <a href="{{ route('user.pm.submit') }}" class="nav-item {{ app.make('request').path() == 'User/Pm/Submit' ? 'active' }}">
+      <span>
+        Napisz wiadomość
+      </span>
+    </a>
   </nav>
 
   <div id="app-pm" class="card card-default">

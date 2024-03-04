@@ -1,0 +1,20 @@
+body.theme-dark {
+  #app-pm {
+    .media:not(.sequential) {
+      border-top: 1px solid #2f2f2f;
+    }
+
+    .media.unread {
+      background-color: #122201;
+    }
+
+    .ps .pm-text,
+    .excerpt {
+      color: #acacac;
+    }
+
+    .ps#wrap {
+      border-bottom-color: #2f2f2f;
+    }
+  }
+}
