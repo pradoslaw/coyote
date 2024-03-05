@@ -1,6 +1,7 @@
 <?php
-
 namespace Coyote\Services\Elasticsearch;
+
+use Traversable;
 
 class ResultSet implements \Countable, \IteratorAggregate
 {
@@ -125,10 +126,7 @@ class ResultSet implements \Countable, \IteratorAggregate
         return $this->hits->$name(...$arguments);
     }
 
-    /**
-     * @return int
-     */
-    public function count()
+    public function count(): int
     {
         return $this->hits->count();
     }
@@ -187,12 +185,7 @@ class ResultSet implements \Countable, \IteratorAggregate
         return array_get($this->aggregations, $name);
     }
 
-    /**
-     * Get an iterator for the items.
-     *
-     * @return \ArrayIterator
-     */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return new \ArrayIterator($this->hits->pluck('_source')->toArray());
     }
