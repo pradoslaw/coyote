@@ -24,7 +24,15 @@ body.theme-dark {
     border-top: 1px solid #2f2f2f;
   }
 
-  .progress-bar {
-    background: #789b17;
+  .progress {
+    background: linear-gradient(180deg, #908f8f 49%, #757575 100%);
+
+    span {
+      color: #1a1a1a;
+    }
+
+    .progress-bar {
+      background: linear-gradient(180deg, #aed91d 50%, #abd600 100%);;
+    }
   }
 }
