@@ -26,7 +26,7 @@ body.theme-dark {
       }
 
       .btn-register {
-        background-color: #789B17;
+        background-color: #789b17;
         color: #1a1a1a;
       }
     }
@@ -39,7 +39,7 @@ body.theme-dark {
       }
 
       & + li.breadcrumb-item:before {
-        color: #789B17;
+        color: #789b17;
       }
     }
   }
@@ -83,7 +83,7 @@ body.theme-dark {
 
       ul.list-sub .list-inline-item {
         i {
-          color: #789B17;
+          color: #789b17;
         }
 
         a {
@@ -95,7 +95,7 @@ body.theme-dark {
     .card.card-topics {
       a.small,
       a.topic-icon {
-        color: #789B17;
+        color: #789b17;
       }
 
       a time {
@@ -141,7 +141,7 @@ body.theme-dark {
     div {
       section.page-topic-controls {
         a {
-          background-color: #789B17;
+          background-color: #789b17;
           color: #1d1d1d;
         }
       }
@@ -151,11 +151,11 @@ body.theme-dark {
           .post-author {
             .badge.badge-primary {
               color: #1d1d1d;
-              background-color: #789B17;
+              background-color: #789b17;
             }
 
             a:not(.badge) {
-              color: #789B17;
+              color: #789b17;
             }
           }
 
@@ -184,7 +184,7 @@ body.theme-dark {
             color: #acacac;
 
             a {
-              color: #789B17;
+              color: #789b17;
             }
 
             footer {
@@ -202,7 +202,7 @@ body.theme-dark {
               color: #919191;
 
               &.on {
-                color: #789B17;
+                color: #789b17;
               }
             }
 
@@ -221,7 +221,7 @@ body.theme-dark {
               border-top: 1px solid #2f2f2f;
 
               a {
-                color: #789B17;
+                color: #789b17;
 
                 &.badge.badge-primary {
                   color: #1d1d1d;
@@ -242,7 +242,7 @@ body.theme-dark {
             color: #acacac;
 
             a {
-              color: #789B17;
+              color: #789b17;
             }
           }
 
@@ -292,7 +292,7 @@ body.theme-dark {
       form {
         .btn.btn-primary {
           color: #1d1d1d;
-          background-color: #789B17;
+          background-color: #789b17;
           border: none;
         }
 
@@ -316,7 +316,7 @@ body.theme-dark {
           &:focus {
             color: #c8c8c8;
             background-color: #323232;
-            border-color: #789B17;
+            border-color: #789b17;
           }
         }
       }
@@ -333,7 +333,7 @@ body.theme-dark {
 
         &:hover {
           i {
-            color: #789B17;
+            color: #789b17;
           }
         }
       }
@@ -343,7 +343,7 @@ body.theme-dark {
   aside {
     &#sidebar {
       background-color: #252525;
-      border-color: #789B17;
+      border-color: #789b17;
       border-width: 1px;
       box-shadow: none;
     }
@@ -355,7 +355,7 @@ body.theme-dark {
               rgba(22, 22, 22, 0.00) 100%);
 
       &:hover {
-        color: #789B17;
+        color: #789b17;
       }
     }
   }
@@ -385,13 +385,19 @@ body.theme-dark {
 
   .topic-container {
     .topic-row {
-      .topic-subject small {
-        color: #6c757d;
+      .topic-subject {
+        .topic-unread {
+          color: #d6d6d6;
+        }
+
+        small {
+          color: #6c757d;
+        }
       }
 
       .topic-pagination {
         i {
-          color: #789B17;
+          color: #789b17;
         }
       }
     }
@@ -476,7 +482,7 @@ body.theme-dark {
   }
 
   .btn.btn-primary {
-    background-color: #789B17;
+    background-color: #789b17;
     color: #1a1a1a;
   }
 
@@ -495,7 +501,7 @@ body.theme-dark {
     &:focus {
       color: #c8c8c8;
       background-color: #323232;
-      border-color: #789B17;
+      border-color: #789b17;
     }
   }
 
