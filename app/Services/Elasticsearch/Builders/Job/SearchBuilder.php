@@ -139,8 +139,11 @@ class SearchBuilder extends QueryBuilder
 
         if ($this->request->filled('salary')) {
             $salary = $this->request->get('salary');
-            if (\is_string($salary)) {
-                $this->addSalaryFilter($this->filterNumber($salary), (int)$this->request->get('currency'));
+            if (\is_string($salary) && \ctype_digit($salary)) {
+                $this->addSalaryFilter(
+                    (int)$salary,
+                    (int)$this->request->get('currency'),
+                );
             }
         }
 
@@ -174,29 +177,20 @@ class SearchBuilder extends QueryBuilder
         $this->score(new Decay('boost_at', '14d', 0.1, '2h'));
     }
 
-    protected function setupAggregations()
+    protected function setupAggregations(): void
     {
         $this->aggs(new Aggs\Job\Location());
         $this->aggs(new Aggs\Job\TopSpot());
     }
 
-    /**
-     * @param int $salary
-     * @param int $currencyId
-     */
-    private function addSalaryFilter($salary, $currencyId)
+    private function addSalaryFilter(int $salary, int $currencyId): void
     {
         $this->must(new Filters\Range('salary', ['gte' => $salary]));
         $this->must(new Filters\Job\Currency($currencyId));
     }
 
-    private function filterNumber(string $value): int
-    {
-        return filter_var($value, FILTER_SANITIZE_NUMBER_INT);
-    }
-
     private function filterString(string $value): string
     {
-        return filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        return \filter_var($value, \FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     }
 }
