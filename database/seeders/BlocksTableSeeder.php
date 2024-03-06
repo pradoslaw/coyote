@@ -1,17 +1,17 @@
 <?php
-
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
 class BlocksTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
+    public function run(): void
+    {
+        $this->addFooterBlock();
+        $this->addBlogSidebar();
+    }
+
+    private function addFooterBlock(): void
     {
         $content = <<<EOF
 <div class="row max-width">
@@ -77,12 +77,15 @@ class BlocksTableSeeder extends Seeder
 </div>
 EOF;
 
-        \Coyote\Block::create([
-            'name' => 'footer',
-            'region' => 'footer',
-            'content' => $content
+        \Coyote\Block::query()->create([
+            'name'    => 'footer',
+            'region'  => 'footer',
+            'content' => $content,
         ]);
+    }
 
+    private function addBlogSidebar(): void
+    {
         $content = <<<EOF
 <p>
     <strong>Błędy, uwagi ogólne</strong><br>
@@ -95,9 +98,9 @@ EOF;
 </p>
 EOF;
 
-        \Coyote\Block::create([
-            'name' => 'blog_sidebar',
-            'content' => $content
+        \Coyote\Block::query()->create([
+            'name'    => 'blog_sidebar',
+            'content' => $content,
         ]);
     }
 }

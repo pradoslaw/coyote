@@ -20,7 +20,7 @@ class GroupsTableSeeder extends Seeder
             'name'       => 'admin',
             'email'      => 'admin@localhost',
             'password'   => bcrypt('admin'),
-            'reputation' => 400,
+            'reputation' => 10000,
         ]);
 
         Coyote\Group\User::query()->create([
