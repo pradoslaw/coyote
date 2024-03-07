@@ -112,9 +112,6 @@ class ViewServiceProvider extends ServiceProvider
     private function wip(): bool
     {
         $path = $this->app[Request::class]->getPathInfo();
-        if (\str_starts_with($path, '/Profile')) {
-            return true;
-        }
         if ($path === '/User/Settings') {
             return false;
         }

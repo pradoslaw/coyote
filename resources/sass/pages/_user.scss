@@ -82,6 +82,10 @@
   padding-bottom: 10px;
   position: relative;
   max-height: 430px;
+
+  body.theme-dark & {
+    border-bottom-color: #2f2f2f;
+  }
 }
 
 #overview {

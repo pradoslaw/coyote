@@ -1,14 +1,24 @@
 {% for item in reputation %}
-    <div class="reputation-item">
-        <div>
-            <strong class="{{ item.value > 0 ? 'text-success' : 'text-danger' }}"><i class="fas fa-level-{{ item.value > 0 ? 'up' : 'down' }}"></i> {{ item.value }} pkt</strong> za
-            <strong>{{ (item.url ? link_to(item.url, item.name, {class: 'headline'}) : item.name)|raw }}</strong>
-        </div>
-
-        <small class="text-muted">{{ item.created_at|format_date }}</small>
-
-        {% if item.excerpt %}
-            <p class="card card-body bg-light p-2">{{ item.excerpt }}</p>
-        {% endif %}
+  <div class="reputation-item">
+    <div>
+      <strong class="{{ item.value > 0 ? 'text-success' : 'text-danger' }}">
+        <i class="fas fa-level-{{ item.value > 0 ? 'up' : 'down' }}"></i>
+        {{ item.value }} pkt
+      </strong>
+      za
+      <strong>
+        {{ (item.url ? link_to(item.url, item.name, {class: 'headline'}) : item.name)|raw }}
+      </strong>
     </div>
+
+    <small class="text-muted">
+      {{ item.created_at|format_date }}
+    </small>
+
+    {% if item.excerpt %}
+      <p class="card card-body card-reputation-item p-2">
+        {{ item.excerpt }}
+      </p>
+    {% endif %}
+  </div>
 {% endfor %}
