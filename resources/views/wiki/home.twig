@@ -2,33 +2,35 @@
 {% block title %}Kompendium wiedzy{{ parent() }}{% endblock %}
 
 {% block container %}
-
   <div class="row">
     <div class="col-md-12">
       <h1>Kompendium</h1>
     </div>
   </div>
-    <div class="row">
-        <div class="col-sm-2">
-            <ul class="root-map">
-                {% for category in categories %}
-                    <li class="list-unstyled depth-{{ category.depth }}">
-                        <a href="{{ url(category.path) }}">{{ category.title }}</a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
 
-        <div class="col-sm-10">
-            <div class="box">
-                <h4><i class="far fa-calendar-o"></i> Ostatnie zmiany w tekstach</h4>
-            </div>
-
-            <div class="card card-default">
-                <div class="card-body wiki-log">
-                    {{ grid|raw }}
-                </div>
-            </div>
-        </div>
+  <div class="row">
+    <div class="col-sm-2">
+      <ul class="root-map">
+        {% for category in categories %}
+          <li class="list-unstyled depth-{{ category.depth }}">
+            <a href="{{ url(category.path) }}">{{ category.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
     </div>
+
+    <div class="col-sm-10">
+      <div class="box">
+        <h4>
+          <i class="far fa-calendar-o"></i>
+          Ostatnie zmiany w tekstach
+        </h4>
+      </div>
+      <div class="card card-default">
+        <div class="card-body wiki-log">
+          {{ grid|raw }}
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}

@@ -22,7 +22,7 @@ body.theme-dark {
   table {
     color: #acacac;
 
-    thead th, tbody td {
+    th, td, thead th, tbody td, tbody th {
       border-color: #2f2f2f;
     }
   }
@@ -40,7 +40,7 @@ body.theme-dark {
     }
 
     .token.regex, .token.important, .token.variable {
-      color: #FFCD73;
+      color: #ffcd73;
     }
 
     .token.function,

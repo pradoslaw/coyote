@@ -1,0 +1,40 @@
+body.theme-dark {
+  .card-wiki {
+    article {
+      header {
+        h5 a {
+          color: #acacac;
+        }
+
+        .metadata {
+          border-top-color: #2f2f2f;
+        }
+      }
+
+    }
+
+    .wiki-text {
+      color: #acacac;
+    }
+  }
+
+  .card-catalog h4 a {
+    color: #acacac;
+  }
+
+  .root-map a {
+    color: #acacac;
+  }
+
+  #box-authors ul li {
+    border-bottom-color: #2f2f2f;
+
+    a {
+      color: #acacac;
+    }
+  }
+
+  #help-sidebar ul li a {
+    color: #acacac;
+  }
+}

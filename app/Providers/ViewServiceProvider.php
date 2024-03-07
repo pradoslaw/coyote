@@ -118,9 +118,6 @@ class ViewServiceProvider extends ServiceProvider
         if ($path === '/User/Settings') {
             return false;
         }
-        if ($path === '/Kategorie') {
-            return true;
-        }
         if (\str_starts_with($path, '/User/Pm')) {
             return false;
         }

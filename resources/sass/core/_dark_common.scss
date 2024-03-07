@@ -59,4 +59,12 @@ body.theme-dark {
   .badge-secondary {
     background-color: #404040;
   }
+
+  .nav-pills {
+    .nav-link.active {
+      &, &:active, &:focus, &:hover {
+        color: #acacac;
+      }
+    }
+  }
 }
