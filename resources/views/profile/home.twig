@@ -119,9 +119,8 @@
               {% endif %}
 
               <div v-cloak class="row">
-                <div v-for="(skills, name) in groupedSkills" class="col-sm mb-2 mb-sm-0">
-                  <strong class="d-block text-muted border-bottom mb-3">${ name }</strong>
-
+                <div v-for="(skills, name) in groupedSkills" class="col-sm mb-2 mb-sm-0 profile-user-skill">
+                  <strong class="d-block text-muted mb-3">${ name }</strong>
                   <vue-tags :tags="skills" class="tag-clouds-md"></vue-tags>
                 </div>
               </div>

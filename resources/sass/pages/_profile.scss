@@ -83,3 +83,11 @@
     background: #101010;
   }
 }
+
+.profile-user-skill strong {
+  border-bottom: 1px solid #dee2e6;
+
+  body.theme-dark & {
+    border-bottom-color: #2f2f2f;
+  }
+}
