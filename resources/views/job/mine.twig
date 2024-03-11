@@ -14,9 +14,10 @@
 
         {% include 'job.partials.skeletons' %}
 
-        <div v-cloak v-if="jobs.data.length === 0" class="card card-body bg-light p-2">
+        <div v-cloak v-if="jobs.data.length === 0" class="card card-body p-2">
           <p class="text-center lead mt-4">
-            Nie znaleźliśmy żadnych Twoich ogłoszeń. <a href="{{ route('job.submit') }}">Dodaj swoje pierwsze ogłoszenie już teraz.</a>
+            Nie znaleźliśmy żadnych Twoich ogłoszeń.
+            <a href="{{ route('job.submit') }}">Dodaj swoje pierwsze ogłoszenie już teraz.</a>
           </p>
         </div>
 
@@ -30,7 +31,7 @@
       {{ render_block('job_ads') }}
     </div>
 
-    <vue-notifications position="bottom right" />
+    <vue-notifications position="bottom right"/>
   </div>
 
   <script type="text/javascript">
@@ -38,7 +39,7 @@
       jobs: {{ jobs|json_encode|raw }},
       subscribed: {{ subscribed|json_encode|raw }},
       input: {{ input|json_encode|raw }},
-      skeleton: false
+      skeleton: false,
     }
   </script>
 {% endblock %}
