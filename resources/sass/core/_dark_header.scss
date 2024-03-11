@@ -58,6 +58,15 @@ body.theme-dark {
           }
 
           .media {
+            a.user-link {
+              .user-avatar {
+                img {
+                  max-height: 35px;
+                  margin: 0 auto;
+                }
+              }
+            }
+
             header.notification-header {
               color: #787878;
 
@@ -130,7 +139,7 @@ body.theme-dark {
           background: linear-gradient(180deg, #1a1a1a 47%, #2f2f2f 50%, #1a1a1a 52%);
         }
 
-        li.title span, {
+        li.title span {
           background: #1a1a1a;
         }
 
