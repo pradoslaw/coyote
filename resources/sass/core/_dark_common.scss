@@ -20,7 +20,43 @@ body.theme-dark {
     border-bottom: 2px solid #2f2f2f;
   }
 
-  .progress-bar {
-    background: #789B17;
+  .card-footer {
+    border-top: 1px solid #2f2f2f;
+  }
+
+  .progress {
+    background: linear-gradient(180deg, #908f8f 49%, #757575 100%);
+
+    span {
+      color: #1a1a1a;
+    }
+
+    .progress-bar {
+      background: linear-gradient(180deg, #aed91d 50%, #abd600 100%);;
+    }
+  }
+
+  .related ul li {
+    border-bottom-color: #2f2f2f;
+
+    a {
+      strong {
+        color: #acacac;
+        font-weight: normal;
+
+        &:hover {
+          text-decoration: underline;
+          text-decoration-color: #90ba1d;
+        }
+      }
+
+      small {
+        color: #8f9ba5;
+      }
+    }
+  }
+
+  .badge-secondary {
+    background-color: #404040;
   }
 }

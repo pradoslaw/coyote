@@ -54,7 +54,10 @@
 
       {% if author.bio %}
         <section id="box-author" class="box">
-          <h4 class="border-bottom"><i class="fas fa-male fa-fw"></i> O autorze</h4>
+          <h4 class="heading">
+            <i class="fas fa-male fa-fw"></i> 
+            O autorze
+          </h4>
 
           <div class="media">
             <a href="{{ route('profile', [author.id]) }}" class="mr-2">
@@ -72,7 +75,10 @@
 
       {% if authors|length > 0 %}
         <section id="box-authors" class="box mt-3">
-          <h4 class="border-bottom"><i class="fas fa-users fa-fw"></i> Stronę współtworzą</h4>
+          <h4 class="heading">
+            <i class="fas fa-users fa-fw"></i>
+            Stronę współtworzą
+          </h4>
 
           <ul>
             {% for author in authors %}
@@ -94,7 +100,6 @@
 
       {% include 'wiki.partials.mlt' %}
       {% include 'wiki.partials.related' %}
-
     </aside>
   </div>
 {% endblock %}

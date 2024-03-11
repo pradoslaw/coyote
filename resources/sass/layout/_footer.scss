@@ -106,12 +106,16 @@ footer {
     }
 
     .logo {
-      background: url('/img/logo-small.png') no-repeat 10px 0;
+      background: url('/img/logo-footer-light.svg') no-repeat 10px 0;
       width: 110px;
       height: 14px;
       text-indent: -9999px;
       white-space: nowrap;
       display: inline-block;
+
+      body.theme-dark & {
+        background-image: url('/img/logo-footer-dark.svg');
+      }
     }
   }
 

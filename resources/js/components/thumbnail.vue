@@ -4,7 +4,7 @@
       <template v-if="url">
         <img v-if="isImage" :src="url" class="mw-100">
 
-        <div v-else class="bg-light placeholder-mask">
+        <div v-else class="placeholder-mask">
           <i class="far fa-file fa-2x"></i>
         </div>
       </template>
@@ -23,16 +23,16 @@
         <i class="fas fa-spinner fa-spin fa-2x"></i>
       </div>
 
-      <input v-show="!url && !isProcessing" @change="upload" :accept="accept" class="thumbnail-mask" type="file" ref="input" >
+      <input v-show="!url && !isProcessing" @change="upload" :accept="accept" class="thumbnail-mask" type="file" ref="input">
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import axios from 'axios';
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { Prop, Ref, Emit } from 'vue-property-decorator';
-import axios from 'axios';
+import {Emit, Prop, Ref} from 'vue-property-decorator';
 import IsImage from '../libs/assets';
 
 @Component
@@ -61,9 +61,9 @@ export default class VueThumbnail extends Vue {
     this.isProcessing = true;
 
     const config = {
-      onUploadProgress: event =>  {
+      onUploadProgress: event => {
         this.$emit('progress', Math.round((event.loaded * 100) / event.total));
-      }
+      },
     };
 
     return axios.post(this.uploadUrl, formData, config)

@@ -1,8 +1,5 @@
 @charset "UTF-8";
 
-// Styl dla linkow do stron, ktore nie istnieja
-// ----------------------------------------------
-
 .link-broken {
   color: $alt-link-hover-color !important;
   border-bottom: 1px dotted $alt-link-hover-color;
@@ -12,11 +9,8 @@
   }
 }
 
-// Style zwiazane ze strona prezentujaca kategorie danego tekstu. Zawiera m.in. liste artykulow
-// ----------------------------------------------------------------------------------------------
-
 #interface {
-  background: url('/img/horizontal.png') repeat-x 0 50%,url('/img/vertical.png') no-repeat 0 100%;
+  background: url('/img/horizontal.png') repeat-x 0 50%, url('/img/vertical.png') no-repeat 0 100%;
   margin: 17px 0;
   overflow: hidden;
   width: 52.1%;
@@ -72,9 +66,6 @@
   }
 }
 
-// Wyswietlanie tresci artykulu
-// --------------------------------
-
 article > header {
   h1 {
     margin-top: 0;
@@ -94,9 +85,6 @@ article > header {
   }
 }
 
-// Zajawka artykulu
-// --------------------
-
 .text-excerpt {
   margin-bottom: 0;
 
@@ -105,10 +93,9 @@ article > header {
   }
 }
 
-// Tresc artykulu
-// --------------------
+.wiki-text {
+  color: #333;
 
-.text-body {
   @include media-breakpoint-down(sm) {
     font-size: $font-size-sm;
   }
@@ -124,15 +111,9 @@ article > header {
   @include link-color-darker;
 }
 
-// Przyciski edycji tekstu oraz dodawania nowego artykulu
-// -----------------------------------------------------
-
 #box-maintain {
   margin: 13px 0 20px 0;
 }
-
-// Wyswietlanie informacji o autorze
-// --------------------------------
 
 #box-author {
   blockquote {
@@ -157,9 +138,6 @@ article > header {
   }
 }
 
-// Wyswietlanie informacji o wspolautorach danej strony
-// -----------------------------------------------------
-
 #box-authors {
   ul {
     list-style-type: none;
@@ -177,7 +155,7 @@ article > header {
         padding: 5px 0;
         display: block;
         font-size: $font-size-sm;
-        text-shadow: 1px 1px 1px #FFF;
+        text-shadow: 1px 1px 1px #fff;
         color: $gray;
 
         &:hover {
@@ -212,9 +190,6 @@ article > header {
     margin-top: 16px;
   }
 
-  // Style dla konkretnego, jednego komentarza do tekstu
-  // -------------------------------------------------------
-
   .comment {
     position: relative;
 
@@ -222,7 +197,6 @@ article > header {
       right: 100%;
       top: 22px;
       border: solid transparent;
-      //content: " ";
       height: 0;
       width: 0;
       position: absolute;
@@ -230,20 +204,17 @@ article > header {
     }
 
     &:after {
-      //border-color: rgba(136, 183, 213, 0);
       border-right-color: $body-bg;
       border-width: 8px;
       margin-top: -8px;
     }
 
     &:before {
-      //border-color: rgba(194, 225, 245, 0);
       border-right-color: $card-border-color;
       border-width: 9px;
       margin-top: -9px;
     }
 
-    // formularz edycji komentarza: domyslnie ukryty
     form.comment-form {
       display: none;
 
@@ -253,9 +224,6 @@ article > header {
     }
   }
 }
-
-// Wyswietlanie przyciskow z nazwami kategorii w ktorych znajduje sie dana strona
-// -------------------------------------------------------------------------------
 
 .wiki-categories {
   margin-bottom: 10px;
@@ -268,9 +236,6 @@ article > header {
     margin: 0 5px;
   }
 }
-
-// Wyswietlanie listy wpisow bloga 4programmers.net
-// -------------------------------------------------
 
 #blog {
   margin-top: 20px;

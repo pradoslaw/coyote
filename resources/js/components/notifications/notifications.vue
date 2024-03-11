@@ -196,11 +196,9 @@ function urlBase64ToUint8Array(base64String) {
     @Watch('count')
     setupTitle(value) {
       if (value > 0) {
-        this.setIcon(`/img/xicon/favicon${Math.min(this.count, 6)}.png`);
         this.setTitle(`(${this.count}) ${this.title}`);
       } else {
         this.setTitle(this.title);
-        this.setIcon('/img/favicon.png');
       }
     }
 

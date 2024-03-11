@@ -1,8 +1,10 @@
-<div class="card card-default" style="margin-top: 13px">
+<div class="card card-default card-wiki" style="margin-top: 13px">
   <div class="card-header">
     <strong>
       {% for parent in parents %}
-        <a class="text-body" title="{{ parent.long_title|default(parent.title) }}" href="{{ url(parent.path) }}">{{ parent.title }}</a>
+        <a class="wiki-text" title="{{ parent.long_title|default(parent.title) }}" href="{{ url(parent.path) }}">
+          {{ parent.title }}
+        </a>
 
         {% if not loop.last %}
           <span class="d-none d-sm-inline">»</span>
@@ -52,11 +54,15 @@
       </header>
 
       {% if wiki.excerpt %}
-        <p><strong>{{ wiki.excerpt }}</strong></p>
-        <p class="text-excerpt text-center"><strong>***</strong></p>
+        <p>
+          <strong>{{ wiki.excerpt }}</strong>
+        </p>
+        <p class="text-excerpt text-center">
+          <strong>***</strong>
+        </p>
       {% endif %}
 
-      <div class="text-body">
+      <div class="wiki-text">
         {{ wiki.text|raw }}
       </div>
 

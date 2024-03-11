@@ -17,7 +17,7 @@
 
               <a v-if="topic.accepted_id" :href="topic.url + `?p=${topic.accepted_id}#id${topic.accepted_id}`"><i class="fas fa-check"></i></a>
 
-              <a :href="getUrl()" :class="{'font-weight-bold': !topic.is_read}">{{ topic.title }}</a>
+              <a :href="getUrl()" :class="{'topic-unread': !topic.is_read}">{{ topic.title }}</a>
               <small v-if="showCategoryName" class="d-inline d-xl-none">
                 w
                 <a :href="topic.forum.url">

@@ -1,0 +1,51 @@
+body.theme-dark {
+  .job-search-form {
+    > .input-item {
+
+      &.keyword-search,
+      &.location-search {
+        border-right-color: #404040;
+      }
+
+      &.extended {
+        &:before {
+          border-bottom-color: #404040;
+        }
+
+        &:after {
+          border-bottom-color: #1a1a1a;
+        }
+      }
+    }
+  }
+
+  .job-filter-form.card-footer {
+    border-top-color: #404040;
+
+    .job-tag {
+      color: #acacac;
+      background: #1e1e1e;
+    }
+  }
+
+  .card-job {
+    .media {
+      p.location {
+        border-bottom: 1px solid #2f2f2f;
+      }
+    }
+
+    .skeleton {
+      background: #404040;
+    }
+
+    .top-spot-badge {
+      color: #f7dddc;
+      background-color: #714907;
+    }
+  }
+
+  .edge {
+    background-color: #101010;
+  }
+}

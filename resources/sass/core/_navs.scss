@@ -26,7 +26,7 @@
 
   .nav-item {
     border: 1px solid $card-border-color;
-    background: #D1D1D1;
+    background: #d1d1d1;
     background: -o-linear-gradient(top, #ececec 50%, #d1d1d1 100%);
     background: -ms-linear-gradient(top, #ececec 50%, #d1d1d1 100%);
     background: -moz-linear-gradient(top, #ececec 50%, #d1d1d1 100%);
@@ -38,7 +38,7 @@
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
     box-shadow: 0 3px 3px rgba(0, 0, 0, 0.4), inset 0 1px 0 white;
-    text-shadow: 0 1px #FFF;
+    text-shadow: 0 1px #fff;
     margin: 0 -5px;
     padding: 0 20px;
     cursor: pointer;
@@ -48,35 +48,40 @@
     &:first-child {
       margin: 0;
     }
+
     &:before, &:after {
-      border: 1px solid #D0D0D0;
+      border: 1px solid #d0d0d0;
       position: absolute;
       bottom: -1px;
       width: 5px;
       height: 5px;
       content: " ";
     }
+
     &:before {
       left: -6px;
       border-bottom-right-radius: 6px;
       border-width: 0 1px 1px 0;
-      box-shadow: 2px 2px 0 #D1D1D1;
+      box-shadow: 2px 2px 0 #d1d1d1;
     }
+
     &:after {
       right: -6px;
       border-bottom-left-radius: 6px;
       border-width: 0 0 1px 1px;
       box-shadow: -2px 2px 0 #d1d1d1;
     }
+
     &.active {
-      background: #FFF;
+      background: #fff;
       color: #333;
       z-index: 2;
-      border-bottom-color: #FFF;
+      border-bottom-color: #fff;
 
       &:before {
-        box-shadow: 2px 2px 0 #FFF;
+        box-shadow: 2px 2px 0 #fff;
       }
+
       &:after {
         box-shadow: -2px 2px 0 white;
       }
@@ -101,13 +106,13 @@
     height: 4px;
     display: block;
     z-index: 3;
-    background-color: #D0D0D0;
+    background-color: #d0d0d0;
   }
 }
 
 .nav-panel + .card {
   border-top-left-radius: 0;
-  margin-top:             -1px;
+  margin-top: -1px;
 }
 
 .nav-link {
@@ -128,13 +133,22 @@
   border-bottom: 1px solid $card-border-color;
 
   .nav-link.active {
-    &,
-    &:hover,
-    &:focus,
-    &:active {
+    &, &:hover, &:focus, &:active {
       font-weight: bold;
       border-bottom: 2px solid $alt-link-hover-color;
       margin-bottom: -1px;
+    }
+  }
+}
+
+body.theme-dark {
+  .nav-pills {
+    border-bottom-color: #2f2f2f;
+
+    .nav-link.active {
+      &, &:hover, &:active, &:focus {
+        color: #acacac;
+      }
     }
   }
 }
