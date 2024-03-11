@@ -121,10 +121,7 @@ class ViewServiceProvider extends ServiceProvider
         if (\str_starts_with($path, '/User')) {
             return true;
         }
-        if ($path === '/Praca' || $path === '/Praca/Moje') {
-            return false;
-        }
-        if (\str_starts_with($path, '/Praca')) {
+        if ($path === '/Praca/Submit') {
             return true;
         }
         return false;

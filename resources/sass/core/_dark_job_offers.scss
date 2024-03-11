@@ -42,4 +42,18 @@ body.theme-dark {
       color: #90ba1d;
     }
   }
+
+  #job-offer.card-body {
+    .media {
+      .media-body {
+        section {
+          border-bottom-color: #2f2f2f;
+        }
+      }
+      
+      .requirements strong {
+        border-bottom-color: #2f2f2f;
+      }
+    }
+  }
 }
