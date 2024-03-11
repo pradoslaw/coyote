@@ -50,9 +50,9 @@ body.theme-dark {
           }
 
           .media {
-            .user-avatar-link {
-              .user-avatar-container {
-                .user-avatar {
+            a.user-link {
+              .user-avatar {
+                img {
                   max-height: 35px;
                   margin: 0 auto;
                 }

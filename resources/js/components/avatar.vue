@@ -1,6 +1,6 @@
 <template>
-  <div class="position-relative user-avatar-container">
-    <img :src="url" :alt="name" class="d-block mw-100 user-avatar" loading="lazy">
+  <div class="position-relative user-avatar">
+    <img :src="url" :alt="name" class="d-block mw-100" loading="lazy">
 
     <div v-if="isOnline" class="is-online"></div>
   </div>
