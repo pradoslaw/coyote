@@ -1,19 +1,17 @@
 {% extends 'wiki.page' %}
 
 {% block container %}
-    <div class="card card-default">
-        <div class="card-body">
-            <article>
-                {{ include('wiki.partials.dropdown') }}
-
-                <header>
-                    <h1>{{ wiki.title }}</h1>
-                </header>
-
-                <div class="text-body">
-                    {{ wiki.text|raw }}
-                </div>
-            </article>
+  <div class="card card-default">
+    <div class="card-body">
+      <article>
+        {{ include('wiki.partials.dropdown') }}
+        <header>
+          <h1>{{ wiki.title }}</h1>
+        </header>
+        <div>
+          {{ wiki.text|raw }}
         </div>
+      </article>
     </div>
+  </div>
 {% endblock %}

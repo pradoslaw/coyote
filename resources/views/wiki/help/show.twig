@@ -1,23 +1,23 @@
 {% extends 'wiki.page' %}
 
 {% block container %}
-    <div class="row">
-        <div class="col-sm-9">
-            {% include 'wiki.partials.flag' %}
+  <div class="row">
+    <div class="col-sm-9">
+      {% include 'wiki.partials.flag' %}
 
-            {% embed 'wiki.partials.content' %}
-                {% block author %}{% endblock %}
-                {% block metadata %}{% endblock %}
-                {% block dropdown %}
-                    {{ include('wiki.partials.dropdown') }}
-                {% endblock %}
-            {% endembed %}
+      {% embed 'wiki.partials.content' %}
+        {% block author %}{% endblock %}
+        {% block metadata %}{% endblock %}
+        {% block dropdown %}
+          {{ include('wiki.partials.dropdown') }}
+        {% endblock %}
+      {% endembed %}
 
-            {% include 'wiki.partials.comments' %}
-        </div>
-
-        <aside id="help-sidebar" class="col-sm-3">
-            {{ render_help_context(parents|first.id, wiki) }}
-        </aside>
+      {% include 'wiki.partials.comments' %}
     </div>
+
+    <aside id="help-sidebar" class="col-sm-3">
+      {{ render_help_context(parents|first.id, wiki) }}
+    </aside>
+  </div>
 {% endblock %}
