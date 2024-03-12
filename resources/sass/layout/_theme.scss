@@ -1,16 +1,13 @@
 .btn-toggle-theme {
-  color: var(--header-color);
-
-  i {
-    color: rgb(0, 0, 0, 0.5);
-  }
+  color: rgb(0, 0, 0, 0.5);
+  transition: none;
 
   &:hover {
-    color: #80a41a;
+    color: rgba(0, 0, 0, 0.7);
+  }
 
-    i {
-      color: #80a41a;
-    }
+  i {
+    color: inherit;
   }
 }
 
