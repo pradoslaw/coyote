@@ -108,17 +108,8 @@
           </vue-searchbar>
         </div>
 
-        <div style="align-items:center;" class="order-2 mx-2 d-none d-xl-flex">
-          <div id="github-button"></div>
-        </div>
-
-        <div class="form-inline order-2">
-          {% if not __dark_theme_wip %}
-            <a class="btn btn-sm btn-toggle-theme" href="#" id="">
-              <i class="fas fa-moon enable-theme-light"></i>
-              <i class="fas fa-sun enable-theme-dark"></i>
-            </a>
-          {% endif %}
+        <div class="order-2">
+          <div id="non-alert-controls"></div>
         </div>
 
         {% if auth_check() %}

@@ -3,15 +3,6 @@ import Vue from 'vue';
 import store from "../store/index";
 import GithubButton from './github-button.vue';
 
-Array.from(document
-  .querySelectorAll('a.btn-toggle-theme'))
-  .forEach(button => {
-    button.addEventListener('click', event => {
-      event.preventDefault();
-      setTheme(!document.body.classList.contains('theme-dark'));
-    });
-  });
-
 Array
   .from(document.querySelectorAll('.disable-theme-notice'))
   .forEach(button => {
@@ -20,22 +11,13 @@ Array
         .forEach((div: Element) => {
           (div as HTMLElement).style.display = 'none';
         })
-      setTheme(false);
+      changeTheme(false);
     });
   });
-
-function setTheme(dark: boolean): void {
-  if (document.body.classList.contains('theme-dark-wip')) {
-    changeTheme(false);
-  } else {
-    changeTheme(dark);
-  }
-}
 
 function changeTheme(isDark: boolean): void {
   setBodyTheme(isDark);
   setBootstrapNavigationBarTheme(isDark);
-  setGithubButtonTheme(isDark);
   store.commit('theme/CHANGE_THEME', isDark);
   axios.post('/User/Settings/Ajax', {colorScheme: isDark ? 'dark' : 'light'});
 }
@@ -51,17 +33,33 @@ function setBootstrapNavigationBarTheme(isDark: boolean): void {
   header.classList.toggle('navbar-light', !isDark);
 }
 
-function setGithubButtonTheme(dark: boolean): void {
-  githubButton.theme = dark ? 'dark' : 'light';
-}
+const isDarkTheme = document.body.classList.contains('theme-dark');
+const isDarkThemeWip = document.body.classList.contains('theme-dark-wip');
 
-const githubButton = new Vue({
-  el: '#github-button',
+new Vue({
+  el: '#non-alert-controls',
   components: {'vue-github-button': GithubButton},
-  template: '<vue-github-button size="large" :theme="theme"/>',
   data() {
     return {
-      theme: document.body.classList.contains('theme-dark') ? 'dark' : 'light',
+      wip: isDarkThemeWip,
+      theme: isDarkTheme ? 'dark' : 'light',
     }
   },
+  methods: {
+    toggleTheme(): void {
+      const dark = !isDarkThemeWip && this.theme !== 'dark';
+      changeTheme(dark);
+      this.theme = dark ? 'dark' : 'light';
+    },
+  },
+  template: `
+    <div :class="['d-flex', 'align-items-center', 'h-100']">
+      <div class="d-none d-xl-flex mr-2">
+        <vue-github-button size="large" :theme="theme"/>
+      </div>
+      <span class="btn btn-sm btn-toggle-theme" @click="toggleTheme" v-if="!wip">
+        <i :class="theme !== 'dark' ? 'fas fa-moon' : 'fas fa-sun'"/>
+      </span>
+    </div>
+  `,
 });
