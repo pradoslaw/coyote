@@ -16,14 +16,15 @@ Array
   .from(document.querySelectorAll('.disable-theme-notice'))
   .forEach(button => {
     button.addEventListener('click', function () {
-      Array.from(document.querySelectorAll(".theme-notice")).forEach(div => {
-        div.style.display = 'none';
-      })
+      Array.from(document.querySelectorAll('div.theme-notice'))
+        .forEach((div: Element) => {
+          (div as HTMLElement).style.display = 'none';
+        })
       setTheme(false);
     });
-  })
+  });
 
-function setTheme(dark) {
+function setTheme(dark: boolean): void {
   if (document.body.classList.contains('theme-dark-wip')) {
     changeTheme(false);
   } else {
@@ -31,7 +32,7 @@ function setTheme(dark) {
   }
 }
 
-function changeTheme(isDark) {
+function changeTheme(isDark: boolean): void {
   setBodyTheme(isDark);
   setBootstrapNavigationBarTheme(isDark);
   setGithubButtonTheme(isDark);
@@ -39,18 +40,18 @@ function changeTheme(isDark) {
   axios.post('/User/Settings/Ajax', {'dark_theme': isDark});
 }
 
-function setBodyTheme(isDark) {
+function setBodyTheme(isDark: boolean): void {
   document.body.classList.toggle('theme-dark', isDark);
   document.body.classList.toggle('theme-light', !isDark);
 }
 
-function setBootstrapNavigationBarTheme(isDark) {
-  const header = document.getElementsByClassName('navbar')[0];
+function setBootstrapNavigationBarTheme(isDark: boolean): void {
+  const header: Element = document.getElementsByClassName('navbar')[0];
   header.classList.toggle('navbar-dark', isDark);
   header.classList.toggle('navbar-light', !isDark);
 }
 
-function setGithubButtonTheme(dark) {
+function setGithubButtonTheme(dark: boolean): void {
   githubButton.theme = dark ? 'dark' : 'light';
 }
 

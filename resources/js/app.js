@@ -3,7 +3,7 @@ import Prism from 'prismjs';
 import Vue from 'vue';
 import './bootstrap.js';
 import './components/breadcrumb.js';
-import './components/navbar-toggle.js';
+import './components/navbar-toggle.ts';
 import './components/scrolltop.js';
 import './components/vcard.js';
 import './legacy/state.js';
