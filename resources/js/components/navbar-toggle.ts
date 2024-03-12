@@ -58,6 +58,7 @@ function setGithubButtonTheme(dark: boolean): void {
 const githubButton = new Vue({
   el: '#github-button',
   components: {'vue-github-button': GithubButton},
+  template: '<vue-github-button size="large" :theme="theme"/>',
   data() {
     return {
       theme: document.body.classList.contains('theme-dark') ? 'dark' : 'light',
