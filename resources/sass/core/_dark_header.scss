@@ -95,6 +95,10 @@ body.theme-dark {
       .dropdown-item {
         color: #bcbcbc;
 
+        &.active {
+          color: #bcbcbc;
+        }
+
         &:hover {
           background-color: #404040;
         }
@@ -111,11 +115,16 @@ body.theme-dark {
       color: #eee;
     }
 
+    &.open,
     &:hover {
       color: #80a41a;
+    }
 
-      i {
-        color: #80a41a;
+    .dropdown-menu {
+      .dropdown-item.active {
+        &:hover {
+          background: none;
+        }
       }
     }
   }

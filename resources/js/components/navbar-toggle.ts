@@ -1,5 +1,7 @@
 import axios from 'axios';
-import Vue from 'vue';
+import Vue, {CreateElement, VNode} from 'vue';
+import VueClickAway from "vue-clickaway";
+
 import store from "../store/index";
 import GithubButton from './github-button.vue';
 
@@ -36,29 +38,110 @@ function setBootstrapNavigationBarTheme(isDark: boolean): void {
 const isDarkTheme = document.body.classList.contains('theme-dark');
 const isDarkThemeWip = document.body.classList.contains('theme-dark-wip');
 
-new Vue({
+const icons = {
+  'dark-theme': 'fas fa-moon',
+  'light-theme': 'fas fa-sun',
+  'system-theme': 'fas fa-desktop',
+};
+type Icon = keyof typeof icons;
+
+const VueIcon = Vue.component('vue-icon', {
+  props: ['icon', 'className'],
+  render(h: CreateElement): VNode {
+    return h('i', {class: ['fa-fw', icons[this.icon], this.className]});
+  },
+});
+
+function systemColorSchemeDark(): boolean {
+  return window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches;
+}
+
+function systemThemeDarkListener(listener: (dark: boolean) => void) {
+  window.matchMedia('(prefers-color-scheme:dark)')
+    .addEventListener('change', (event: MediaQueryListEvent): void => {
+      listener(event.matches);
+    });
+}
+
+systemThemeDarkListener(function (dark: boolean): void {
+  controls.systemColorSchemeDark = dark;
+});
+
+type Theme = 'light' | 'dark' | 'system';
+
+const controls = new Vue({
   el: '#non-alert-controls',
-  components: {'vue-github-button': GithubButton},
+  components: {
+    'vue-github-button': GithubButton,
+    'vue-icon': VueIcon,
+  },
   data() {
     return {
-      wip: isDarkThemeWip,
+      toggleEnabled: !isDarkThemeWip,
+      open: false,
       theme: isDarkTheme ? 'dark' : 'light',
-    }
+      systemColorSchemeDark: systemColorSchemeDark(),
+      items: {
+        light: {title: 'Jasny motyw', icon: 'light-theme'},
+        dark: {title: 'Ciemny motyw', icon: 'dark-theme'},
+        system: {title: 'Systemowy:', icon: 'system-theme'},
+      },
+    };
+  },
+  directives: {
+    'away': VueClickAway.directive,
+  },
+  computed: {
+    dark(): boolean {
+      if (this.theme === 'system') {
+        return this.systemColorSchemeDark;
+      }
+      return this.theme === 'dark';
+    },
+    oppositeIcon(): Icon {
+      return this.dark ? 'light-theme' : 'dark-theme';
+    },
+    systemThemeTitle(): string {
+      return this.systemColorSchemeDark ? 'ciemny' : 'jasny';
+    },
+  },
+  watch: {
+    dark(): void {
+      if (this.toggleEnabled) {
+        changeTheme(this.dark);
+      }
+    },
   },
   methods: {
-    toggleTheme(): void {
-      const dark = !isDarkThemeWip && this.theme !== 'dark';
-      changeTheme(dark);
-      this.theme = dark ? 'dark' : 'light';
+    toggleTheme(event: Event, theme: Theme): void {
+      event.stopPropagation();
+      this.theme = theme;
+    },
+    toggleOpen(): void {
+      this.open = !this.open;
+    },
+    close(): void {
+      this.open = false;
     },
   },
   template: `
-    <div :class="['d-flex', 'align-items-center', 'h-100']">
+    <div :class="['d-flex', 'align-items-center', 'h-100']" v-away="close">
       <div class="d-none d-xl-flex mr-2">
-        <vue-github-button size="large" :theme="theme"/>
+        <vue-github-button size="large" :theme="dark ? 'dark' : 'light'"/>
       </div>
-      <span class="btn btn-sm btn-toggle-theme" @click="toggleTheme" v-if="!wip">
-        <i :class="theme !== 'dark' ? 'fas fa-moon' : 'fas fa-sun'"/>
+      <span :class="['position-relative', 'btn','btn-sm', 'btn-toggle-theme', {open}]" @click="toggleOpen" v-if="toggleEnabled">
+        <vue-icon :icon="oppositeIcon"/>
+        <div class="dropdown-menu dropdown-menu-right" style="display:block" v-show="open">
+          <span v-for="(item, itemTheme, index) in items"
+                :class="['dropdown-item', {active: itemTheme === theme}]"
+                @click="event => toggleTheme(event, itemTheme)">
+            <vue-icon :icon="item.icon" className="mr-1"/>
+            {{ item.title }}
+            <span v-if="index === 2" style="opacity:0.75">
+              {{ systemThemeTitle }}
+            </span>
+          </span>
+        </div>
       </span>
     </div>
   `,
