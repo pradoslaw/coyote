@@ -29,20 +29,20 @@ class SettingsController extends BaseController
         if ($email) {
             $form->get('email')->setAttr(['data-popover' => json_encode([
                 'message'   => "Na adres $email wysłaliśmy link umożliwiający zmianę adresu e-mail.",
-                'placement' => 'top'
+                'placement' => 'top',
             ])]);
         }
         return $this->view('user.settings', [
             'email'             => $email,
             'form'              => $form,
-            'informationClause' => TwigLiteral::fromHtml((new UserSettings())->informationClause())
+            'informationClause' => TwigLiteral::fromHtml((new UserSettings())->informationClause()),
         ]);
     }
 
     protected function getForm(): Form
     {
         return $this->createForm(SettingsForm::class, $this->auth, [
-            'url' => route('user.settings')
+            'url' => route('user.settings'),
         ]);
     }
 
@@ -76,11 +76,8 @@ class SettingsController extends BaseController
 
     public function ajax(Request $request): void
     {
-        $name = array_keys($request->all())[0];
-        $name = trim(strip_tags(htmlspecialchars($name)));
-        if (!empty($name)) {
-            $value = trim(strip_tags(htmlspecialchars($request->get($name))));
-            $this->setSetting(str_replace('_', '.', $name), $value);
+        foreach ($request->all() as $key => $value) {
+            $this->setSetting(str_replace('_', '.', $key), $value);
         }
     }
 
