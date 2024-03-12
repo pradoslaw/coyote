@@ -106,7 +106,13 @@ class ViewServiceProvider extends ServiceProvider
 
     private function darkTheme(): bool
     {
-        return $this->app[Guest::class]->getSetting('dark.theme', true);
+        /** @var Guest $guest */
+        $guest = $this->app[Guest::class];
+        $colorScheme = $guest->getSetting('colorScheme');
+        if ($colorScheme !== null) {
+            return $colorScheme === 'dark';
+        }
+        return $guest->getSetting('dark.theme', true);
     }
 
     private function wip(): bool

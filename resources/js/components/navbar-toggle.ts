@@ -37,7 +37,7 @@ function changeTheme(isDark: boolean): void {
   setBootstrapNavigationBarTheme(isDark);
   setGithubButtonTheme(isDark);
   store.commit('theme/CHANGE_THEME', isDark);
-  axios.post('/User/Settings/Ajax', {'dark_theme': isDark});
+  axios.post('/User/Settings/Ajax', {colorScheme: isDark ? 'dark' : 'light'});
 }
 
 function setBodyTheme(isDark: boolean): void {
