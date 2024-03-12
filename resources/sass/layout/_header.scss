@@ -224,9 +224,8 @@ body.padding-top {
 .navbar-dark {
   .dropdown-menu:not(.dropdown-alerts) {
     background-color: $dark;
-    border-radius: 0 0 $border-radius-sm $border-radius-sm;
+    border-radius: $border-radius-sm;
     box-shadow: 0 2px 2px rgba(0, 0, 0, .2), inset 0 4px 10px rgba(0, 0, 0, 0.15);
-    border: none;
 
     .dropdown-item,
     .btn-sign-out {
@@ -237,10 +236,6 @@ body.padding-top {
         color: #cacaca;
         background-color: #717171;
       }
-    }
-
-    &:after, &:before {
-      border: none;
     }
   }
 
