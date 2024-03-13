@@ -35,9 +35,10 @@ class ViewServiceProvider extends ServiceProvider
         $view->composer('layout', function (View $view) use ($clock, $cache) {
             $view->with([
                 '__master_menu'       => $this->buildMasterMenu(),
-                '__dark_theme'        => $this->darkTheme() && !$this->wip(),
+                '__dark_theme'        => $this->initialDarkTheme() && !$this->wip(),
+                '__color_scheme'      => $this->colorScheme(),
                 '__dark_theme_wip'    => $this->wip(),
-                '__dark_theme_notice' => $this->wip() && $this->darkTheme(),
+                '__dark_theme_notice' => $this->wip() && $this->initialDarkTheme(),
                 'github_stars'        => $cache->remember('homepage:github_stars', 30 * 60, fn() => $this->githubStars()),
 
                 'gdpr' => [
@@ -104,15 +105,34 @@ class ViewServiceProvider extends ServiceProvider
         return $github->fetchStars();
     }
 
-    private function darkTheme(): bool
+    private function initialDarkTheme(): bool
+    {
+        /** @var Guest $guest */
+        $guest = $this->app[Guest::class];
+        return $guest->getSetting('lastColorScheme',
+                $this->legacyLastColorScheme()) === 'dark';
+    }
+
+    private function legacyLastColorScheme(): ?string
+    {
+        /** @var Guest $guest */
+        $guest = $this->app[Guest::class];
+        return $guest->getSetting('dark.theme', true) ? 'dark' : 'light';
+    }
+
+    private function colorScheme(): ?string
     {
         /** @var Guest $guest */
         $guest = $this->app[Guest::class];
         $colorScheme = $guest->getSetting('colorScheme');
         if ($colorScheme !== null) {
-            return $colorScheme === 'dark';
+            return $colorScheme;
         }
-        return $guest->getSetting('dark.theme', true);
+        $legacyDarkTheme = $guest->getSetting('dark.theme');
+        if ($legacyDarkTheme === null) {
+            return 'system';
+        }
+        return $legacyDarkTheme ? 'dark' : 'light';
     }
 
     private function wip(): bool

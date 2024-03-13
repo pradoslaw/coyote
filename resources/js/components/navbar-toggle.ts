@@ -13,15 +13,22 @@ Array
         .forEach((div: Element) => {
           (div as HTMLElement).style.display = 'none';
         })
-      changeTheme(false);
+      setViewTheme(false);
+      storeThemeSetting('light', false);
     });
   });
 
-function changeTheme(isDark: boolean): void {
+function storeThemeSetting(colorScheme: Theme, dark: boolean): void {
+  axios.post('/User/Settings/Ajax', {
+    colorScheme: colorScheme,
+    lastColorScheme: dark ? 'dark' : 'light',
+  });
+}
+
+function setViewTheme(isDark: boolean): void {
   setBodyTheme(isDark);
   setBootstrapNavigationBarTheme(isDark);
   store.commit('theme/CHANGE_THEME', isDark);
-  axios.post('/User/Settings/Ajax', {colorScheme: isDark ? 'dark' : 'light'});
 }
 
 function setBodyTheme(isDark: boolean): void {
@@ -37,6 +44,11 @@ function setBootstrapNavigationBarTheme(isDark: boolean): void {
 
 const isDarkTheme = document.body.classList.contains('theme-dark');
 const isDarkThemeWip = document.body.classList.contains('theme-dark-wip');
+
+let colorScheme = document.body.dataset.colorScheme as Theme;
+if (isDarkThemeWip) {
+  colorScheme = 'light';
+}
 
 const icons = {
   'dark-theme': 'fas fa-moon',
@@ -67,6 +79,22 @@ systemThemeDarkListener(function (dark: boolean): void {
   controls.systemColorSchemeDark = dark;
 });
 
+function currentTheme(): boolean {
+  if (colorScheme === 'system') {
+    return systemColorSchemeDark();
+  }
+  return colorScheme === 'dark';
+}
+
+let dark = currentTheme();
+if (dark !== isDarkTheme) {
+  storeThemeSetting(colorScheme, dark);
+}
+
+if (!isDarkThemeWip) {
+  setViewTheme(dark);
+}
+
 type Theme = 'light' | 'dark' | 'system';
 
 const controls = new Vue({
@@ -79,7 +107,7 @@ const controls = new Vue({
     return {
       toggleEnabled: !isDarkThemeWip,
       open: false,
-      theme: isDarkTheme ? 'dark' : 'light',
+      theme: colorScheme,
       systemColorSchemeDark: systemColorSchemeDark(),
       items: {
         light: {title: 'Jasny motyw', icon: 'light-theme'},
@@ -108,7 +136,7 @@ const controls = new Vue({
   watch: {
     dark(): void {
       if (this.toggleEnabled) {
-        changeTheme(this.dark);
+        setViewTheme(this.dark);
       }
     },
   },
@@ -116,6 +144,7 @@ const controls = new Vue({
     toggleTheme(event: Event, theme: Theme): void {
       event.stopPropagation();
       this.theme = theme;
+      storeThemeSetting(theme, this.dark);
     },
     toggleOpen(): void {
       this.open = !this.open;
