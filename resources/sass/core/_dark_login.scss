@@ -1,0 +1,28 @@
+body.theme-dark {
+  #box-register,
+  #box-login {
+    input {
+      background-color: #1a1a1a;
+    }
+
+    .row.separator {
+      span {
+        background-color: #252525;
+      }
+
+      hr {
+        border-top: 1px solid #404040;
+      }
+    }
+  }
+
+  #box-register-sidebar,
+  #box-login-sidebar {
+    border-left-color: #404040;
+  }
+}
+
+#box-register-sidebar,
+#box-login-sidebar {
+  border-left: 1px solid #dee2e6;
+}
