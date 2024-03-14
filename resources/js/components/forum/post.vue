@@ -1,5 +1,5 @@
 <template>
-  <div :id="anchor" :class="{'is-deleted': post.deleted_at, 'not-read': !post.is_read, 'highlight-flash': highlight}"
+  <div :id="anchor" :class="{'is-deleted': post.deleted_at, 'not-read': !post.is_read, 'highlight-flash': highlight, 'post-deleted-collapsed':isCollapsed}"
        class="card card-post">
     <a v-if="post.deleted_at" @click="isCollapsed = !isCollapsed" href="javascript:"
        class="post-delete card-body text-decoration-none">
