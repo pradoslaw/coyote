@@ -9,14 +9,14 @@
           <div class="media">
             <div id="js-user" class="d-none d-sm-block mr-3">
               <vue-thumbnail
-                :url="url"
-                :only-image="true"
-                upload-url="{{ route('user.photo.upload') }}"
-                @upload="setPhoto"
-                @delete="deletePhoto"
+                  :url="url"
+                  :only-image="true"
+                  upload-url="{{ route('user.photo.upload') }}"
+                  @upload="setPhoto"
+                  @delete="deletePhoto"
               ></vue-thumbnail>
 
-              <vue-notifications position="bottom right" />
+              <vue-notifications position="bottom right"/>
             </div>
 
             <div class="media-body">
@@ -45,7 +45,8 @@
                 <div class="progress">
                   <div class="progress-bar" role="progressbar" aria-valuenow="{{ rank.percentage }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ rank.percentage }}%;"></div>
 
-                  <span class="rep"><strong>{{ user('reputation')|number_format(0, '', ' ') }}</strong> <small>{{ declination(user.reputation, ['punkt', 'punkty', 'punktów'], true) }}</small></span>
+                  <span class="rep"><strong>{{ user('reputation')|number_format(0, '', ' ') }}</strong>
+                    <small>{{ declination(user.reputation, ['punkt', 'punkty', 'punktów'], true) }}</small></span>
 
                   {% if total_users > 0 %}
                     <span class="rank" title="Miejsce w rankingu"><strong>#{{ rank.rank }}</strong> <small>/ {{ total_users }}</small></span>
@@ -60,14 +61,15 @@
 
     <div class="col-4">
       <section class="box">
-        <h4 class="border-bottom"><i class="far fa-fw fa-heart"></i> Masz dość reklam?</h4>
-
-        <p>Zostań patronem 4programmers.net na <strong>Github</strong> i wyłącz reklamy na 4programmers.net</p>
-
+        <h4 class="heading">
+          <i class="far fa-fw fa-heart"></i>
+          Masz dość reklam?
+        </h4>
+        <p>
+          Zostań patronem 4programmers.net na <strong>Github</strong> i wyłącz reklamy na 4programmers.net
+        </p>
         <iframe src="https://github.com/sponsors/adam-boduch/button" title="Sponsoruj 4programmers.net" height="35" width="116" style="border: 0;" class="mb-3"></iframe>
       </section>
     </div>
   </div>
-
-
 {% endblock %}

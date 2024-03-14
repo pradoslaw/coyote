@@ -55,6 +55,7 @@
 @import "core/dark_tabs";
 @import "core/dark_topic";
 @import "core/dark_wiki";
+@import "core/dark_user";
 
 @import "components/tags";
 @import "components/forum/post"; // it needs to be here because post's placeholder use styles in this specific file

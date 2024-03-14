@@ -1,0 +1,33 @@
+body.theme-dark {
+  #box-alerts-settings .row {
+    border-bottom-color: #2f2f2f;
+
+    > div {
+      border-right-color: #2f2f2f;
+    }
+
+    &:nth-child(even) {
+      background-color: unset;
+    }
+  }
+
+  .card-skills {
+    .tag-editor {
+      border-bottom-color: #2f2f2f;
+
+      input {
+        color: #eee;
+        background-color: #272727;
+      }
+    }
+
+    .category-name {
+      color: #acacac;
+      border-bottom-color: #2f2f2f;
+    }
+  }
+
+  #box-start .metadata {
+    border-bottom-color: #2f2f2f;
+  }
+}

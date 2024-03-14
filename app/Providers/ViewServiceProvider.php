@@ -138,15 +138,6 @@ class ViewServiceProvider extends ServiceProvider
     private function wip(): bool
     {
         $path = $this->app[Request::class]->getPathInfo();
-        if ($path === '/User/Settings') {
-            return false;
-        }
-        if (\str_starts_with($path, '/User/Pm')) {
-            return false;
-        }
-        if (\str_starts_with($path, '/User')) {
-            return true;
-        }
         if ($path === '/Praca/Submit') {
             return true;
         }
