@@ -24,24 +24,18 @@
         <div class="card-body" id="payment-methods" v-show="grossPrice > 0">
           <ul class="nav nav-tabs mb-3">
             <li class="nav-item">
-              <a @click="setPaymentMethod('card')" :class="{'active': form.payment_method === 'card'}" href="javascript:" class="nav-link bg-white" rel="nofollow">
-                <strong class="d-block mb-1">Karta kredytowa/debetowa</strong>
-
-                <img src="/img/mastercard.png">
-                <img src="/img/visa.png" style="height: 20px">
-                <img src="/img/maestro.png">
+              <a @click="setPaymentMethod('card')" :class="{'active': form.payment_method === 'card'}" href="javascript:" class="nav-link" rel="nofollow">
+                <strong class="d-block mb-1">
+                  Karta kredytowa/debetowa
+                </strong>
               </a>
             </li>
 
             <li class="nav-item">
-              <a @click="setPaymentMethod('p24')" :class="{'active': form.payment_method === 'p24'}" href="javascript:" class="nav-link bg-white" rel="nofollow">
-                <strong class="d-block mb-1">Przelew bankowy</strong>
-
-                <img src="/img/ipko.png" class="mr-1">
-                <img src="/img/mbank.png" class="mr-1">
-                <img src="/img/pekao.png" class="mr-1">
-
-                <i class="fas fa-ellipsis-h"></i>
+              <a @click="setPaymentMethod('p24')" :class="{'active': form.payment_method === 'p24'}" href="javascript:" class="nav-link" rel="nofollow">
+                <strong class="d-block mb-1">
+                  Przelew bankowy
+                </strong>
               </a>
             </li>
           </ul>

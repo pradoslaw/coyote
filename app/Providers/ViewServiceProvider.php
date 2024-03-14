@@ -137,10 +137,6 @@ class ViewServiceProvider extends ServiceProvider
 
     private function wip(): bool
     {
-        $path = $this->app[Request::class]->getPathInfo();
-        if ($path === '/Praca/Submit') {
-            return true;
-        }
         return false;
     }
 }

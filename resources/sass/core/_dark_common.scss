@@ -63,4 +63,20 @@ body.theme-dark {
   .form-control-plaintext {
     color: #acacac;
   }
+
+  .input-group-text {
+    border-color: #2f2f2f;
+    background-color: #101010;
+    color: #acacac;
+  }
+
+  .tag-editor {
+    border-color: #2f2f2f;
+    background-color: unset;
+
+    input {
+      color: #eee;
+      background-color: unset;
+    }
+  }
 }

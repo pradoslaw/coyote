@@ -50,10 +50,54 @@ body.theme-dark {
           border-bottom-color: #2f2f2f;
         }
       }
-      
+
       .requirements strong {
         border-bottom-color: #2f2f2f;
       }
     }
+  }
+
+  #plan-table {
+    .plan-benefits > li {
+      border-bottom-color: #2f2f2f;
+    }
+
+    .plan {
+      background-color: #1a1a1a;
+      border-color: #2f2f2f;
+
+      .plan-header {
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      &.selected {
+        .plan-header {
+          background-color: #80a41a;
+        }
+      }
+    }
+
+    .plan-benefits > li,
+    .plan-features > li {
+      border-bottom-color: #2f2f2f;
+    }
+  }
+
+  #form-fixed {
+    background-color: #101010;
+    border-top-color: #2f2f2f;
+
+    button.next-tab {
+      color: #acacac;
+    }
+  }
+
+  .job-form .col-form-label,
+  .job-form .checkbox label {
+    color: #acacac;
+  }
+
+  .job-navlinks a {
+    color: #acacac;
   }
 }

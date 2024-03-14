@@ -49,11 +49,16 @@
     <div class="col-md-9">
       {% if payment and not session_has('success') %}
         <div class="alert alert-warning">
-          <h4><i class="fas fa-credit-card fa-fw"></i> Oczekiwanie na płatność...</h4>
-
-          <p>Ogłoszenie jest już w naszej bazie. Nie możemy jednak rozpocząć wyświetlania oferty, dopóki nie uregulujesz płatności.</p>
-
-          <a href="{{ route('job.payment', [payment.id]) }}" class="btn btn-sm alert-warning mt-2">Przejdź do płatności</a>
+          <h4>
+            <i class="fas fa-credit-card fa-fw"></i>
+            Oczekiwanie na płatność.
+          </h4>
+          <p>
+            Ogłoszenie jest już w naszej bazie. Nie możemy jednak rozpocząć wyświetlania oferty, dopóki nie uregulujesz płatności.
+          </p>
+          <a href="{{ route('job.payment', [payment.id]) }}" class="mt-2">
+            Przejdź do płatności
+          </a>
         </div>
       {% endif %}
 
@@ -77,7 +82,10 @@
 
       {% if can('job-update') %}
         <section id="box-job-firm" class="box">
-          <h4><i class="fas fa-info-circle fa-fw"></i> Informacje o ofercie</h4>
+          <h4>
+            <i class="fas fa-info-circle fa-fw"></i> 
+            Informacje o ofercie
+          </h4>
 
           <div class="card card-default">
             <div class="card-body">
