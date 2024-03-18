@@ -6,6 +6,8 @@
 {% import 'components.modals' as modal %}
 
 {% block container %}
+  {{ render_block('homepage_banner') }}
+
   <div class="row">
     <div class="col-12">
       <div class="box">
@@ -160,6 +162,8 @@
 
     <div class="col-md-4 position-relative">
       <aside class="sticky-aside">
+        {{ render_block('homepage_banner_side') }}
+        
         <div class="mb-4">
           {{ viewers|raw }}
         </div>
