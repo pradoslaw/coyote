@@ -10,7 +10,7 @@ class Test extends TestCase
 {
     use Server\Http;
     use Breadcrumbs\Fixture\SystemApplication;
-    use Breadcrumbs\Fixture\Assertion;
+    use Breadcrumbs\Fixture\BreadcrumbView;
     use Breadcrumbs\Fixture\Models;
 
     /**

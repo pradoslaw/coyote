@@ -4,7 +4,7 @@ namespace Tests\Unit\Breadcrumbs\Fixture;
 use Tests\Unit\BaseFixture\View;
 use Tests\Unit\BaseFixture\View\ViewDom;
 
-trait Assertion
+trait BreadcrumbView
 {
     use View\HtmlView;
 
