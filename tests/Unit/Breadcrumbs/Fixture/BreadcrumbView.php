@@ -39,4 +39,14 @@ trait BreadcrumbView
         }
         return null;
     }
+
+    function breadcrumbsContainerVisible(string $uri): bool
+    {
+        $dom = new ViewDom($this->htmlView($uri));
+        /** @var \DOMElement $breadcrumb */
+        foreach ($dom->elements(xPath:"//div/div/ul[@class='breadcrumb']") as $container) {
+            return true;
+        }
+        return false;
+    }
 }

@@ -60,6 +60,22 @@ class Test extends TestCase
             ]));
     }
 
+    /**
+     * @test
+     */
+    public function breadcrumbContainer()
+    {
+        $this->assertTrue($this->breadcrumbsContainerVisible('/Forum'));
+    }
+
+    /**
+     * @test
+     */
+    public function breadcrumbContainerHomepage()
+    {
+        $this->assertFalse($this->breadcrumbsContainerVisible('/'));
+    }
+
     private function abs(string $uri): string
     {
         return $this->server->absoluteUrl($uri);

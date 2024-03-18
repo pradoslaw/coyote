@@ -24,10 +24,12 @@ class Breadcrumbs
         $this->breadcrumbs[] = new Breadcrumb($name, $url);
     }
 
-    public function render(): View
+    public function render(): ?View
     {
+        if (empty($this->breadcrumbs)) {
+            return null;
+        }
         return view('components/breadcrumb', [
-            'include_root'      => !empty($this->breadcrumbs),
             'root_name'         => config('app.name'),
             'root_href'         => route('home'),
             'breadcrumbs'       => $this->breadcrumbs,
