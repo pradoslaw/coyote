@@ -61,21 +61,6 @@ class LoginTest extends DuskTestCase
         });
     }
 
-//    public function testSuccessfulLogin()
-//    {
-//        $user = factory(User::class)->create(['password' => bcrypt('123')]);
-//
-//        $this->browse(function (Browser $browser) use ($user) {
-//            $browser->visit('/Login')
-//                ->type('name', $user->name)
-//                ->type('password', '123')
-//                ->press('Logowanie')
-////                ->assertPathIs('/')
-//                ->assertAuthenticated()
-//                ->logout();
-//        });
-//    }
-
     public function testShowThrottleMessageDueToTooManyAttempts()
     {
         $user = factory(User::class)->create(['password' => bcrypt('123')]);
@@ -89,7 +74,7 @@ class LoginTest extends DuskTestCase
                     ->press('Logowanie');
             };
 
-            for ($i = 1; $i <=3; $i++) {
+            for ($i = 1; $i <= 3; $i++) {
                 $attempt();
             }
 
