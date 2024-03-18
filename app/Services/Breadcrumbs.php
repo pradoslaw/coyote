@@ -2,7 +2,6 @@
 namespace Coyote\Services;
 
 use Coyote\Domain\Breadcrumb;
-use Coyote\Domain\Html;
 use Coyote\Domain\Seo;
 use Coyote\Domain\Seo\Schema\BreadcrumbList;
 use Coyote\View\Twig\TwigLiteral;
@@ -33,15 +32,7 @@ class Breadcrumbs
             'root_name'         => config('app.name'),
             'root_href'         => route('home'),
             'breadcrumbs'       => $this->breadcrumbs,
-            'schema_breadcrumb' => TwigLiteral::fromHtml($this->schema()),
+            'schema_breadcrumb' => TwigLiteral::fromHtml(new Seo\Schema(new BreadcrumbList($this->breadcrumbs))),
         ]);
-    }
-
-    private function schema(): Html
-    {
-        if (empty($this->breadcrumbs)) {
-            return new Html('');
-        }
-        return new Seo\Schema(new BreadcrumbList($this->breadcrumbs));
     }
 }
