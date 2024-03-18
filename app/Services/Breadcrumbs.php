@@ -27,6 +27,7 @@ class Breadcrumbs
     public function render(): View
     {
         return view('components/breadcrumb', [
+            'include_root'      => !empty($this->breadcrumbs),
             'root_name'         => config('app.name'),
             'root_href'         => route('home'),
             'breadcrumbs'       => $this->breadcrumbs,

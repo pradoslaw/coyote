@@ -9,7 +9,6 @@ use Tests\Unit\Breadcrumbs\Fixture\Breadcrumb;
 class Test extends TestCase
 {
     use Server\Http;
-    use Breadcrumbs\Fixture\SystemApplication;
     use Breadcrumbs\Fixture\BreadcrumbView;
     use Breadcrumbs\Fixture\Models;
 
@@ -18,12 +17,7 @@ class Test extends TestCase
      */
     public function home()
     {
-        $this->systemApplicationName('4programmers.org');
-        $this->assertThat(
-            $this->breadcrumbs('/'),
-            $this->equalTo([
-                new Breadcrumb('4programmers.org', false),
-            ]));
+        $this->assertSame([], $this->breadcrumbs('/'));
     }
 
     /**

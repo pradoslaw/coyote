@@ -1,19 +1,21 @@
 <div class="row container-xxl no-gutters">
   <div class="col-12">
     <ul class="breadcrumb text-truncate">
-      <li class="breadcrumb-item">
-        {% if breadcrumbs is empty %}
-          <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
-          <span class="d-none d-sm-inline-block">{{ root_name }}</span>
-        {% else %}
-          <a href="{{ root_href }}" class="d-block d-sm-none">
-            <i class="fas fa-home"></i>
-          </a>
-          <a href="{{ root_href }}" class="d-none d-sm-inline-block">
-            {{ root_name }}
-          </a>
-        {% endif %}
-      </li>
+      {% if include_root %}
+        <li class="breadcrumb-item">
+          {% if breadcrumbs is empty %}
+            <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+            <span class="d-none d-sm-inline-block">{{ root_name }}</span>
+          {% else %}
+            <a href="{{ root_href }}" class="d-block d-sm-none">
+              <i class="fas fa-home"></i>
+            </a>
+            <a href="{{ root_href }}" class="d-none d-sm-inline-block">
+              {{ root_name }}
+            </a>
+          {% endif %}
+        </li>
+      {% endif %}
 
       {% for breadcrumb in breadcrumbs %}
         <li class="breadcrumb-item">
