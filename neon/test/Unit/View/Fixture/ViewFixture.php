@@ -6,9 +6,18 @@ use Neon\Test\BaseFixture\View\ViewDom;
 
 trait ViewFixture
 {
-    function view(string $title): Neon\View
+    function view(array $fields): Neon\View
     {
-        return new Neon\View($title);
+        return new Neon\View(
+            $fields['applicationName'] ?? '',
+            $fields['sectionTitle'] ?? '',
+        );
+    }
+
+    function text(Neon\View $view, string $xPath): string
+    {
+        $dom = new ViewDom($view->html());
+        return $dom->find($xPath);
     }
 
     function texts(Neon\View $view, string $xPath): array

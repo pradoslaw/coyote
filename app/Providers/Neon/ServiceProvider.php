@@ -9,7 +9,7 @@ class ServiceProvider extends RouteServiceProvider
     public function register(): void
     {
         parent::register();
-        $this->app->instance(View::class, new View(''));
+        $this->app->instance(View::class, new View('', ''));
     }
 
     public function loadRoutes(): void

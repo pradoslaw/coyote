@@ -1,9 +1,12 @@
 <?php
 namespace Neon;
 
-class View
+readonly class View
 {
-    public function __construct(readonly private string $title)
+    public function __construct(
+        private string $applicationName,
+        private string $sectionTitle,
+    )
     {
     }
 
@@ -14,15 +17,16 @@ class View
             <html>
             <head>
               <meta charset="utf-8">
-              <title>$this->title</title>
+              <title>$this->applicationName</title>
             </head>
             <body>
               <nav>
                 <ul>
-                  <li>$this->title</li>
+                  <li>$this->applicationName</li>
                   <li>Events</li>
                 </ul>
               </nav>
+              <h1>$this->sectionTitle</h1>
             </body>
             </html>
             html;
