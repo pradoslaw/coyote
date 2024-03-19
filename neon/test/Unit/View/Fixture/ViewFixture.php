@@ -11,6 +11,7 @@ trait ViewFixture
         return new Neon\View(
             $fields['applicationName'] ?? '',
             $fields['sectionTitle'] ?? '',
+            [],
         );
     }
 

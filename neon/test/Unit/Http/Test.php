@@ -1,7 +1,7 @@
 <?php
 namespace Neon\Test\Unit\Http;
 
-use Neon\View;
+use Neon\Application;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture;
 
@@ -20,7 +20,7 @@ class Test extends TestCase
 
     private function assertRendersView(string $uri): void
     {
-        $this->laravel->app->instance(View::class, new View('Ours is the fury', ''));
+        $this->laravel->app->instance(Application::class, new Application('Ours is the fury'));
         $response = $this->server->get($uri)
             ->assertSuccessful()
             ->getContent();

@@ -1,34 +1,31 @@
 <?php
 namespace Neon;
 
-readonly class View
+use Neon\View\Page;
+
+class View
 {
+    private Page $page;
+
     public function __construct(
-        private string $applicationName,
-        private string $sectionTitle,
-    )
+        string $applicationName,
+        string $sectionTitle,
+        array  $events)
     {
+        $this->page = new Page(
+            $applicationName,
+            $sectionTitle,
+            $events);
     }
 
     public function html(): string
     {
-        return <<<html
-            <!DOCTYPE html>
-            <html>
-            <head>
-              <meta charset="utf-8">
-              <title>$this->applicationName</title>
-            </head>
-            <body>
-              <nav>
-                <ul>
-                  <li>$this->applicationName</li>
-                  <li>Events</li>
-                </ul>
-              </nav>
-              <h1>$this->sectionTitle</h1>
-            </body>
-            </html>
-            html;
+        return $this->page->html($this->render(...));
+    }
+
+    private function render(string $tag, array $children): string
+    {
+        $content = \implode('', $children);
+        return "<$tag>$content</$tag>";
     }
 }

@@ -50,6 +50,6 @@ class Test extends TestCase
 
     private function viewHtml(string $title): string
     {
-        return (new View($title, ''))->html();
+        return (new View($title, '', []))->html();
     }
 }
