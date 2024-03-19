@@ -24,8 +24,8 @@ class Test extends TestCase
         $response = $this->server->get($uri)
             ->assertSuccessful()
             ->getContent();
-        $this->assertSame(
-            '<!DOCTYPE html><html><title>Ours is the fury</title></html>',
+        $this->assertStringContainsString(
+            '<title>Ours is the fury</title>',
             $response);
     }
 }

@@ -12,7 +12,7 @@ class Test extends TestCase
      */
     public function docType(): void
     {
-        $dom = new ViewDom($this->view(''));
+        $dom = new ViewDom($this->viewHtml(''));
         $this->assertSame('<!DOCTYPE html>', $dom->docType());
     }
 
@@ -21,13 +21,34 @@ class Test extends TestCase
      */
     public function title(): void
     {
-        $dom = new ViewDom($this->view('Winter is coming'));
+        $dom = new ViewDom($this->viewHtml('Winter is coming'));
         $this->assertSame(
             'Winter is coming',
             $dom->find('/html/head/title'));
     }
 
-    private function view(string $title): string
+    /**
+     * @test
+     */
+    public function unicode(): void
+    {
+        $dom = new ViewDom($this->viewHtml('€ść'));
+        $this->assertSame(
+            '€ść',
+            $dom->find('/html/head/title'));
+    }
+
+    /**
+     * @test
+     */
+    public function unicodeHtml(): void
+    {
+        $this->assertStringContainsString(
+            'Kraków',
+            $this->viewHtml('Kraków'));
+    }
+
+    private function viewHtml(string $title): string
     {
         return (new View($title))->html();
     }
