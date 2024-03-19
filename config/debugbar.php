@@ -11,7 +11,7 @@ return array(
      |
      */
 
-    'enabled'         => config('app.debug'),
+    'enabled'         => env('DEBUGBAR_ENABLED', false),
     /*
      |--------------------------------------------------------------------------
      | Storage settings
