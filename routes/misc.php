@@ -11,7 +11,11 @@
 |
 */
 
-/** @var $this \Illuminate\Routing\Router */
+use Illuminate\Http\Request;
+use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\DB;
+
+/** @var $this Router */
 $this->get('/', ['as' => 'home', 'uses' => 'HomeController@index']);
 
 $this->get('Flag', ['uses' => 'FlagController@index', 'as' => 'flag', 'middleware' => 'auth']);
@@ -32,3 +36,22 @@ $this->get('assets/opg', 'AssetsController@opengraph');
 $this->get('assets/{asset}/{name}', ['uses' => 'AssetsController@download', 'as' => 'assets.download']);
 
 $this->get('campaign/{banner}', ['uses' => 'CampaignController@redirect', 'as' => 'campaign.redirect']);
+
+$this->post('Settings/Ajax', [
+    'uses' => function (Request $request) {
+        $key = $request->get('key');
+        if ($key === null) {
+            return response([], 400);
+        }
+        $settings = DB::table('settings_key_value');
+        $setting = $settings->where(['key' => $key])->first();
+        if ($setting === null) {
+            $settings->insert(['key' => $key, 'value' => '1']);
+        } else {
+            $value = (int)$setting->value;
+            $settings
+                ->where(['key' => $key])
+                ->update(['value' => (string)($value + 1)]);
+        }
+    },
+]);

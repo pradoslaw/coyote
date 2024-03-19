@@ -37,6 +37,11 @@ class Server
     public function postAs(string $uri, array $body, User $user): TestResponse
     {
         $this->laravel->actingAs($user);
+        return $this->post($uri, $body);
+    }
+
+    public function post(string $uri, array $body): TestResponse
+    {
         return $this->laravel->json(
             method:'POST',
             uri:new Url($this->hostname, $uri),
