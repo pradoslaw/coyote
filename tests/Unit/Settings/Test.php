@@ -1,5 +1,5 @@
 <?php
-namespace Settings;
+namespace Tests\Unit\Settings;
 
 use Coyote\Services\Guest;
 use PHPUnit\Framework\TestCase;
