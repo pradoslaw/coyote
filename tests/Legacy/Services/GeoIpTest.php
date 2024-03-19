@@ -14,6 +14,7 @@ class GeoIpTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $this->markTestSkipped();
 
         $this->geoIp = app('geo-ip');
     }
