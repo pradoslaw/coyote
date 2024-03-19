@@ -34,7 +34,7 @@ class Server
         return new Url($this->hostname, $uri);
     }
 
-    public function postJson(string $uri, array $body, User $user): TestResponse
+    public function postAs(string $uri, array $body, User $user): TestResponse
     {
         $this->laravel->actingAs($user);
         return $this->laravel->json(

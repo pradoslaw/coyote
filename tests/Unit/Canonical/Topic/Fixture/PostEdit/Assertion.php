@@ -41,7 +41,7 @@ trait Assertion
 
     function request(string $uri, User $author): TestResponse
     {
-        return $this->server->postJson($uri,
+        return $this->server->postAs($uri,
             body:['title' => 'irrelevant irrelevant irrelevant', 'text' => 'irrelevant'],
             user:$author);
     }
