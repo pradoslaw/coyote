@@ -15,6 +15,15 @@ readonly class ViewDom
         $this->xPath = new \DOMXPath($this->document);
     }
 
+    public function findMany(string $xPath): array
+    {
+        $texts = [];
+        foreach ($this->xPath->query($xPath) as $child) {
+            $texts[] = $child->textContent;
+        }
+        return $texts;
+    }
+
     public function find(string $xPath): string
     {
         $first = $this->first($this->xPath->query($xPath), $xPath);

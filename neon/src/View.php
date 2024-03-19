@@ -16,6 +16,14 @@ class View
               <meta charset="utf-8">
               <title>$this->title</title>
             </head>
+            <body>
+              <nav>
+                <ul>
+                  <li>$this->title</li>
+                  <li>Events</li>
+                </ul>
+              </nav>
+            </body>
             </html>
             html;
     }
