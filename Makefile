@@ -1,5 +1,8 @@
 install: file-permission composer-install migration es-create seed es-index yarn-install yarn-prod install-passport install-push
 
+up:
+	docker-compose up -d
+
 bash:
 	docker-compose exec php bash
 
