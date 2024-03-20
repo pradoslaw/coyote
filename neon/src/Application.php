@@ -1,6 +1,7 @@
 <?php
 namespace Neon;
 
+use Neon\View\Navigation;
 use Neon\View\Section;
 
 readonly class Application
@@ -21,6 +22,13 @@ readonly class Application
                 \Neon\Domain\EventKind::Conference,
             )));
         $view = new \Neon\View($this->applicationName, [
+            new Navigation(new \Neon\ViewModel\Navigation(
+                ['Forum', 'Microblogs', 'Jobs', 'Wiki'],
+                '',
+                'Coyote',
+                '?',
+                ['Register', 'Login'],
+            )),
             new Section($this->applicationName,
                 'Incoming events',
                 [$event, $event]),
