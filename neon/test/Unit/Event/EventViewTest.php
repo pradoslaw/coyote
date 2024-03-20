@@ -18,7 +18,7 @@ class EventViewTest extends TestCase
         $view = $this->view(['eventTitle' => 'Ours is the Fury']);
         $this->assertSame(
             'Ours is the Fury',
-            $this->text($view, '/html/body/div/h2'));
+            $this->text($view, '/html/body/div[@class="event"]/div/h2'));
     }
 
     /**
@@ -29,7 +29,7 @@ class EventViewTest extends TestCase
         $view = $this->view(['eventDate' => new Domain\Date(2024, 3, 18)]);
         $this->assertSame(
             ['03.18', 'Mon'],
-            $this->texts($view, '/html/body/div/span'));
+            $this->texts($view, '/html/body/div[@class="event"]/div/span'));
     }
 
     /**
@@ -40,7 +40,7 @@ class EventViewTest extends TestCase
         $view = $this->view(['eventTags' => ['rust', 'dart']]);
         $this->assertSame(
             ['rust', 'dart'],
-            $this->texts($view, '/html/body/div/ul/li'));
+            $this->texts($view, '/html/body/div[@class="event"]/div/ul/li'));
     }
 
     /**
@@ -55,6 +55,6 @@ class EventViewTest extends TestCase
         ]);
         $this->assertSame(
             ['Winterfell', 'Hackaton', 'Paid'],
-            $this->texts($view, '/html/body/div/div'));
+            $this->texts($view, '/html/body/div[@class="event"]/div/div'));
     }
 }

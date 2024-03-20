@@ -23,9 +23,12 @@ class View
         return $this->page->html($this->render(...));
     }
 
-    private function render(string $tag, array $children): string
+    private function render(string $tag, array $children, string $className = null): string
     {
         $content = \implode('', $children);
-        return "<$tag>$content</$tag>";
+        if ($className === null) {
+            return "<$tag>$content</$tag>";
+        }
+        return "<$tag class=\"$className\">$content</$tag>";
     }
 }

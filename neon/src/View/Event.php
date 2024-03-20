@@ -12,15 +12,21 @@ readonly class Event
     public function html(callable $h): string
     {
         return $h('div', [
-            $h('span', [$this->event->date]),
-            $h('span', [$this->event->dayShortName]),
-            $h('h2', [$this->event->title]),
-            $h('ul', \array_map(
-                fn($tag) => $h('li', [$tag]),
-                $this->event->tags)),
-            $h('div', [$this->event->city]),
-            $h('div', [$this->event->kind]),
-            $h('div', [$this->event->pricing]),
-        ]);
+            $h('div', [
+                $h('span', [$this->event->date]),
+                $h('span', [$this->event->dayShortName]),
+            ]),
+            $h('div', [
+                $h('h2', [$this->event->title]),
+                $h('ul', \array_map(
+                    fn($tag) => $h('li', [$tag]),
+                    $this->event->tags)),
+            ]),
+            $h('div', [
+                $h('div', [$this->event->city]),
+                $h('div', [$this->event->kind]),
+                $h('div', [$this->event->pricing]),
+            ]),
+        ], 'event');
     }
 }
