@@ -18,7 +18,7 @@ readonly class ViewDom
     public function findMany(string $xPath): array
     {
         $texts = [];
-        foreach ($this->xPath->query($xPath) as $child) {
+        foreach ($this->query($xPath) as $child) {
             $texts[] = $this->text($child);
         }
         return $texts;
@@ -26,7 +26,16 @@ readonly class ViewDom
 
     public function find(string $xPath): string
     {
-        return $this->text($this->first($this->xPath->query($xPath), $xPath));
+        return $this->text($this->first($this->query($xPath), $xPath));
+    }
+
+    private function query(string $xPath): \DOMNodeList
+    {
+        $result = $this->xPath->query($xPath);
+        if ($result === false) {
+            throw new \Exception("Failed to execute malformed xPath: $xPath");
+        }
+        return $result;
     }
 
     private function text(\DOMText|\DOMElement $node): string
