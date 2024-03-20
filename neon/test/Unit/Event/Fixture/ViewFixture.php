@@ -4,6 +4,7 @@ namespace Neon\Test\Unit\Event\Fixture;
 use Neon;
 use Neon\Domain;
 use Neon\Domain\EventKind;
+use Neon\Test\BaseFixture\Selector\Selector;
 use Neon\Test\BaseFixture\View\ViewDom;
 use Neon\View;
 use Neon\ViewModel;
@@ -19,16 +20,16 @@ trait ViewFixture
         );
     }
 
-    function text(Neon\View $view, string $xPath): string
+    function text(Neon\View $view, Selector $selector): string
     {
         $dom = new ViewDom($view->html());
-        return $dom->find($xPath);
+        return $dom->find($selector->xPath());
     }
 
-    function texts(Neon\View $view, string $xPath): array
+    function texts(Neon\View $view, Selector $selector): array
     {
         $dom = new ViewDom($view->html());
-        return $dom->findMany($xPath);
+        return $dom->findMany($selector->xPath());
     }
 
     function viewEvent(array $fields): ViewModel\Event

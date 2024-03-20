@@ -1,6 +1,7 @@
 <?php
 namespace Neon\Test\Unit\Event;
 
+use Neon\Test\BaseFixture\Selector\Selector;
 use Neon\View;
 use PHPUnit\Framework\TestCase;
 
@@ -21,6 +22,6 @@ class SectionViewTest extends TestCase
         ]);
         $this->assertSame(
             ['Hear me roar', 'Ours is the fury'],
-            $this->texts($view, '/html/body/div[@class="event"]/div/h2/text()'));
+            $this->texts($view, new Selector('html', 'body', 'div.event', 'div', 'h2')));
     }
 }
