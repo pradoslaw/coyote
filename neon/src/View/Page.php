@@ -15,7 +15,10 @@ readonly class Page
                     '<meta charset="utf-8">',
                     $h('title', [$this->title]),
                 ]),
-                $h('body', isset($this->sections[0]) ? $this->sections[0]->html($h) : []),
+                $h('body', \array_merge(
+                    ...\array_map(
+                    fn(Section $section) => $section->html($h),
+                    $this->sections))),
             ]);
     }
 }
