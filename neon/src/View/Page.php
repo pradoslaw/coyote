@@ -17,7 +17,7 @@ readonly class Page
                 ]),
                 $h('body', \array_merge(
                     ...\array_map(
-                    fn(Section|Navigation $section) => $section->html($h),
+                    fn(Item $item) => $item->html($h),
                     $this->sections))),
             ]);
     }

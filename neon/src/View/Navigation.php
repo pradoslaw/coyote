@@ -3,7 +3,7 @@ namespace Neon\View;
 
 use Neon\ViewModel;
 
-readonly class Navigation
+readonly class Navigation implements Item
 {
     public function __construct(private ViewModel\Navigation $navigation)
     {

@@ -1,7 +1,7 @@
 <?php
 namespace Neon\View;
 
-readonly class Section
+readonly class Section implements Item
 {
     public function __construct(
         private string $rootBreadcrumb,
