@@ -3,11 +3,7 @@ namespace Neon\View;
 
 readonly class Page
 {
-    public function __construct(
-        private string $applicationName,
-        private string $sectionTitle,
-        private array  $events,
-    )
+    public function __construct(private string $title, private Section $section)
     {
     }
 
@@ -17,18 +13,9 @@ readonly class Page
             $h('html', [
                 $h('head', [
                     '<meta charset="utf-8">',
-                    $h('title', [$this->applicationName]),
+                    $h('title', [$this->title]),
                 ]),
-                $h('body', [
-                    $h('nav', [$h('ul', [
-                        $h('li', [$this->applicationName]),
-                        $h('li', ['Events']),
-                    ])]),
-                    $h('h1', [$this->sectionTitle]),
-                    ...\array_map(
-                        fn(Event $event) => $event->html($h),
-                        $this->events),
-                ]),
+                $h('body', $this->section->html($h)),
             ]);
     }
 }

@@ -14,14 +14,26 @@ class SectionViewTest extends TestCase
      */
     public function manyEvents(): void
     {
-        $view = new View(
-            '',
-            '', [
-            new View\Event($this->viewEvent(['eventTitle' => 'Hear me roar'])),
-            new View\Event($this->viewEvent(['eventTitle' => 'Ours is the fury'])),
-        ]);
+        $view = $this->viewWithEvents(['Hear me roar', 'Ours is the fury']);
+        $this->assertEventTitles(['Hear me roar', 'Ours is the fury'], $view);
+    }
+
+    private function assertEventTitles(array $expected, View $view): void
+    {
         $this->assertSame(
-            ['Hear me roar', 'Ours is the fury'],
+            $expected,
             $this->texts($view, new Selector('html', 'body', 'div.event', 'div', 'h2')));
+    }
+
+    private function viewWithEvents(array $titles): View
+    {
+        return new View(
+            '',
+            new View\Section('', '',
+                \array_map(
+                    fn(string $title) => new View\Event(
+                        $this->viewEvent(['eventTitle' => $title])),
+                    $titles),
+            ));
     }
 }

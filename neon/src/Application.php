@@ -1,6 +1,8 @@
 <?php
 namespace Neon;
 
+use Neon\View\Section;
+
 readonly class Application
 {
     public function __construct(private string $applicationName)
@@ -20,8 +22,9 @@ readonly class Application
             )));
         $view = new \Neon\View(
             $this->applicationName,
-            'Incoming events',
-            [$event, $event]);
+            new Section($this->applicationName,
+                'Incoming events',
+                [$event, $event]));
         return $view->html();
     }
 }

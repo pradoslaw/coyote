@@ -14,10 +14,11 @@ trait ViewFixture
     function view(array $fields): Neon\View
     {
         return new Neon\View(
-            $fields['applicationName'] ?? '',
-            $fields['sectionTitle'] ?? '',
-            [new View\Event($this->viewEvent($fields))],
-        );
+            '',
+            new View\Section(
+                '',
+                $fields['sectionTitle'] ?? '',
+                [new View\Event($this->viewEvent($fields))]));
     }
 
     function text(Neon\View $view, Selector $selector): string

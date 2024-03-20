@@ -9,10 +9,12 @@ trait ViewFixture
     function view(array $fields): Neon\View
     {
         return new Neon\View(
-            $fields['applicationName'] ?? '',
-            $fields['sectionTitle'] ?? '',
-            [],
-        );
+            '',
+            new Neon\View\Section(
+                $fields['root'] ?? '',
+                $fields['sectionTitle'] ?? '',
+                [],
+            ));
     }
 
     function text(Neon\View $view, string $xPath): string

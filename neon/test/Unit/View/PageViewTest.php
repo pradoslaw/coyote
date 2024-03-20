@@ -12,7 +12,7 @@ class PageViewTest extends TestCase
      */
     public function breadcrumbs(): void
     {
-        $view = $this->view(['applicationName' => 'Greyjoy']);
+        $view = $this->view(['root' => 'Greyjoy']);
         $this->assertSame(
             ['Greyjoy', 'Events'],
             $this->texts($view, '/html/body/nav/ul/li/text()'));

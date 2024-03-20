@@ -2,20 +2,15 @@
 namespace Neon;
 
 use Neon\View\Page;
+use Neon\View\Section;
 
 class View
 {
     private Page $page;
 
-    public function __construct(
-        string $applicationName,
-        string $sectionTitle,
-        array  $events)
+    public function __construct(string $title, Section $section)
     {
-        $this->page = new Page(
-            $applicationName,
-            $sectionTitle,
-            $events);
+        $this->page = new Page($title, $section);
     }
 
     public function html(): string
