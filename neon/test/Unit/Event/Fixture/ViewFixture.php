@@ -13,12 +13,12 @@ trait ViewFixture
 {
     function view(array $fields): Neon\View
     {
-        return new Neon\View(
-            '',
+        return new Neon\View('', [
             new View\Section(
                 '',
                 $fields['sectionTitle'] ?? '',
-                [new View\Event($this->viewEvent($fields))]));
+                [new View\Event($this->viewEvent($fields))]),
+        ]);
     }
 
     function text(Neon\View $view, Selector $selector): string

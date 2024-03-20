@@ -3,7 +3,7 @@ namespace Neon\View;
 
 readonly class Page
 {
-    public function __construct(private string $title, private Section $section)
+    public function __construct(private string $title, private array $sections)
     {
     }
 
@@ -15,7 +15,7 @@ readonly class Page
                     '<meta charset="utf-8">',
                     $h('title', [$this->title]),
                 ]),
-                $h('body', $this->section->html($h)),
+                $h('body', isset($this->sections[0]) ? $this->sections[0]->html($h) : []),
             ]);
     }
 }

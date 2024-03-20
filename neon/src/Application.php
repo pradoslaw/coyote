@@ -20,11 +20,11 @@ readonly class Application
                 new \Neon\Domain\Date(2024, 12, 1),
                 \Neon\Domain\EventKind::Conference,
             )));
-        $view = new \Neon\View(
-            $this->applicationName,
+        $view = new \Neon\View($this->applicationName, [
             new Section($this->applicationName,
                 'Incoming events',
-                [$event, $event]));
+                [$event, $event]),
+        ]);
         return $view->html();
     }
 }

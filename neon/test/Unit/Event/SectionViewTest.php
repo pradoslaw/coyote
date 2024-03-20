@@ -27,13 +27,12 @@ class SectionViewTest extends TestCase
 
     private function viewWithEvents(array $titles): View
     {
-        return new View(
-            '',
+        return new View('', [
             new View\Section('', '',
                 \array_map(
                     fn(string $title) => new View\Event(
                         $this->viewEvent(['eventTitle' => $title])),
-                    $titles),
-            ));
+                    $titles)),
+        ]);
     }
 }
