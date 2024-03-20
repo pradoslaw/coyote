@@ -21,6 +21,6 @@ class SectionViewTest extends TestCase
         ]);
         $this->assertSame(
             ['Hear me roar', 'Ours is the fury'],
-            $this->texts($view, '/html/body/div[@class="event"]/div/h2'));
+            $this->texts($view, '/html/body/div[@class="event"]/div/h2/text()'));
     }
 }

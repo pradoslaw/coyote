@@ -15,7 +15,7 @@ class PageViewTest extends TestCase
         $view = $this->view(['applicationName' => 'Greyjoy']);
         $this->assertSame(
             ['Greyjoy', 'Events'],
-            $this->texts($view, '/html/body/nav/ul/li'));
+            $this->texts($view, '/html/body/nav/ul/li/text()'));
     }
 
     /**
@@ -26,6 +26,6 @@ class PageViewTest extends TestCase
         $view = $this->view(['sectionTitle' => 'Ours is the Fury']);
         $this->assertSame(
             'Ours is the Fury',
-            $this->text($view, '/html/body/h1'));
+            $this->text($view, '/html/body/h1/text()'));
     }
 }

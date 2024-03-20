@@ -17,7 +17,7 @@ class ApplicationTest extends TestCase
         $dom = $this->dom('/events');
         $this->assertSame(
             'Incoming events',
-            $dom->find('/html/body/h1'));
+            $dom->find('/html/body/h1/text()'));
     }
 
     private function dom(string $uri): ViewDom

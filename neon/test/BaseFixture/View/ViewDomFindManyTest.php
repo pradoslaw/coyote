@@ -2,6 +2,7 @@
 namespace Neon\Test\BaseFixture\View;
 
 use PHPUnit\Framework\TestCase;
+use function Neon\Test\BaseFixture\Caught\caught;
 
 class ViewDomFindManyTest extends TestCase
 {
@@ -15,11 +16,21 @@ class ViewDomFindManyTest extends TestCase
             <li>We do not sow</li>
         <ul>');
         $this->assertThat(
-            $dom->findMany('/html/body/ul/li'),
+            $dom->findMany('/html/body/ul/li/text()'),
             $this->equalTo([
                 'Ours is the fury',
                 'We do not sow',
             ]),
         );
+    }
+
+    /**
+     * @test
+     */
+    public function throwForElement(): void
+    {
+        $dom = new ViewDom('<ul></ul>');
+        $exception = caught(fn() => $dom->findMany('/html/body/ul'));
+        $this->assertSame('Failed to get text of element: <ul>', $exception->getMessage());
     }
 }

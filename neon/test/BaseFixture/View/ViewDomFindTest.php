@@ -12,7 +12,7 @@ class ViewDomFindTest extends TestCase
     public function textContent(): void
     {
         $dom = new ViewDom('<ul><li>Winter is coming</li><ul>');
-        $this->assertSame('Winter is coming', $dom->find('/html/body/ul/li'));
+        $this->assertSame('Winter is coming', $dom->find('/html/body/ul/li/text()'));
     }
 
     /**
@@ -73,6 +73,16 @@ class ViewDomFindTest extends TestCase
         $this->assertStringEndsWith(
             'html(body(ul(li,li)))',
             $throwable->getMessage());
+    }
+
+    /**
+     * @test
+     */
+    public function throwForElement(): void
+    {
+        $dom = new ViewDom('<ul></ul>');
+        $exception = caught(fn() => $dom->find('/html/body/ul'));
+        $this->assertSame('Failed to get text of element: <ul>', $exception->getMessage());
     }
 
     private function listItemException(string $html): \Throwable
