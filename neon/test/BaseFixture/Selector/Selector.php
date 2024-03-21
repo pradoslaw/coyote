@@ -19,7 +19,7 @@ readonly class Selector
     public function xPath(): string
     {
         $selectors = \array_map($this->selector(...), $this->selectors);
-        return '/' . \implode('/', $selectors);
+        return '//' . \implode('/', $selectors);
     }
 
     private function selector(string $selector): string

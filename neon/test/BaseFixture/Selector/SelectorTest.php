@@ -21,11 +21,11 @@ class SelectorTest extends TestCase
     /**
      * @test
      */
-    public function noRelative(): void
+    public function relative(): void
     {
-        $this->assertNotFound(
-            new Selector('body', 'div'),
-            '<div>Cat</div>');
+        $this->assertSame(['Cat'], $this->find(
+            new Selector('div'),
+            '<div>Cat</div>'));
     }
 
     /**
