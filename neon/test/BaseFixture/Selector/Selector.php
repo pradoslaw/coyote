@@ -13,7 +13,25 @@ readonly class Selector
                 throw new \Exception('Failed to accept empty string selector.');
             }
         }
-        $this->selectors = [...$selectors, 'text()'];
+        $this->selectors = $this->selectorOrText($selectors);
+    }
+
+    private function selectorOrText(array $selectors): array
+    {
+        if ($this->isAttribute($this->last($selectors))) {
+            return $selectors;
+        }
+        return [...$selectors, 'text()'];
+    }
+
+    private function last(array $array): string
+    {
+        return \end($array);
+    }
+
+    private function isAttribute(string $selector): bool
+    {
+        return $selector[0] === '@';
     }
 
     public function xPath(): string

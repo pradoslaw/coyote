@@ -85,6 +85,16 @@ class ViewDomFindTest extends TestCase
         $this->assertSame('Failed to get text of element: <ul>', $exception->getMessage());
     }
 
+    /**
+     * @test
+     */
+    public function attribute(): void
+    {
+        $dom = new ViewDom('<a href="foo"></a>');
+        $attribute = $dom->find('/html/body/a/@href');
+        $this->assertSame('foo', $attribute);
+    }
+
     private function listItemException(string $html): \Throwable
     {
         return caught(fn() => (new ViewDom($html))->find('/html/body/ul/li'));

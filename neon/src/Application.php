@@ -74,7 +74,12 @@ readonly class Application
         ],
             [
                 new Navigation(new \Neon\ViewModel\Navigation(
-                    ['Forum', 'Microblogs', 'Jobs', 'Wiki'],
+                    [
+                        'Forum'      => '/Forum',
+                        'Microblogs' => '/Mikroblogi',
+                        'Jobs'       => '/Praca',
+                        'Wiki'       => '/Kategorie',
+                    ],
                     '',
                     'Coyote',
                     '14',
