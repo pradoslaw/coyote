@@ -15,6 +15,11 @@ readonly class ViewDom
         $this->xPath = new \DOMXPath($this->document);
     }
 
+    public function html(string $xPath): string
+    {
+        return $this->document->saveHTML($this->first($this->query($xPath), $xPath));
+    }
+
     public function findMany(string $xPath): array
     {
         $texts = [];

@@ -61,6 +61,17 @@ class ApplicationTest extends TestCase
             $this->findMany('ul.controls', 'li'));
     }
 
+    /**
+     * @test
+     */
+    public function favicon(): void
+    {
+        $this->assertSame(
+            '<link rel="shortcut icon" href="https://4programmers.net/img/favicon.png" type="image/png">',
+            $this->dom('/events')
+                ->html('/html/head/link[@rel="shortcut icon"]'));
+    }
+
     private function findMany(string...$selectors): array
     {
         $selector = new Selector(...$selectors);
@@ -71,8 +82,7 @@ class ApplicationTest extends TestCase
     private function find(string...$selectors): string
     {
         $selector = new Selector(...$selectors);
-        return $this->dom('/events')
-            ->find($selector->xPath());
+        return $this->dom('/events')->find($selector->xPath());
     }
 
     private function dom(string $uri): ViewDom

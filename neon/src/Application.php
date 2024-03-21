@@ -1,6 +1,7 @@
 <?php
 namespace Neon;
 
+use Neon\View\Favicon;
 use Neon\View\Navigation;
 use Neon\View\Section;
 
@@ -55,7 +56,8 @@ readonly class Application
                 ['Create account', 'Login'],
             )),
             new Section($this->applicationName, 'Incoming events', $events),
-        ]);
+        ],
+            new Favicon('https://4programmers.net/img/favicon.png'));
         return $view->html();
     }
 }

@@ -3,7 +3,10 @@ namespace Neon\View;
 
 readonly class Page
 {
-    public function __construct(private string $title, private array $sections)
+    public function __construct(
+        private string   $title,
+        private array    $sections,
+        private ?Favicon $favicon)
     {
     }
 
@@ -16,6 +19,7 @@ readonly class Page
                     $h('title', [$this->title]),
                     '<script src="https://cdn.tailwindcss.com"></script>',
                     '<link rel="stylesheet" type="text/css" href="fonts/switzer/switzer.css"/>',
+                    $this->favicon?->html(),
                 ]),
                 $h('body',
                     \array_merge(...\array_map(

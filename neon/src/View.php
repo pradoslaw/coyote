@@ -1,15 +1,16 @@
 <?php
 namespace Neon;
 
+use Neon\View\Favicon;
 use Neon\View\Page;
 
 class View
 {
     private Page $page;
 
-    public function __construct(string $title, array $sections)
+    public function __construct(string $title, array $sections, Favicon $favicon = null)
     {
-        $this->page = new Page($title, $sections);
+        $this->page = new Page($title, $sections, $favicon);
     }
 
     public function html(): string
