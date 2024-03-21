@@ -62,11 +62,19 @@ starIcon;
         };
 
         return $h('div', [
-            $h('span', [
+            $h('a', [
                 $icon('w-4 h-4'),
                 $this->navigation->githubName,
-            ], 'name px-2.5 py-1.5 flex gap-x-2'),
-            $h('span', [$this->navigation->githubStars], 'stars px-2.5 py-1.5 inline-block'),
+            ], [
+                'class' => 'name px-2.5 py-1.5 flex gap-x-2',
+                'href'  => $this->navigation->githubUrl,
+            ]),
+            $h('a',
+                [$this->navigation->githubStars],
+                [
+                    'class' => 'stars px-2.5 py-1.5 inline-block',
+                    'href'  => $this->navigation->githubStarsUrl,
+                ]),
         ], 'github flex border border-solid border-[#E2E2E2] rounded divide-x font-[Helvetica] font-bold text-xs self-center ' . $className);
     }
 

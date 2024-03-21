@@ -54,6 +54,16 @@ class ApplicationTest extends TestCase
     /**
      * @test
      */
+    public function githubUrl(): void
+    {
+        $this->assertSame(
+            'https://github.com/pradoslaw/coyote',
+            $this->find('.github', '.name', '@href'));
+    }
+
+    /**
+     * @test
+     */
     public function githubStars(): void
     {
         $this->assertSame(

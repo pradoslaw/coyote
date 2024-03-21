@@ -33,6 +33,7 @@ trait ViewFixture
         return new ViewModel\Navigation(
             $fields['items'] ?? [],
             $fields['githubUrl'] ?? '',
+            $fields['githubStarsUrl'] ?? '',
             $fields['githubName'] ?? '',
             $fields['githubStars'] ?? -1,
             $fields['controls'] ?? [],
