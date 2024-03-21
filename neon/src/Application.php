@@ -1,7 +1,8 @@
 <?php
 namespace Neon;
 
-use Neon\View\Favicon;
+use Neon\View\Head\Favicon;
+use Neon\View\Head\Title;
 use Neon\View\Navigation;
 use Neon\View\Section;
 
@@ -67,17 +68,20 @@ readonly class Application
             $foundersMind,
         ];
 
-        $view = new \Neon\View($this->applicationName, [
-            new Navigation(new \Neon\ViewModel\Navigation(
-                ['Forum', 'Microblogs', 'Jobs', 'Wiki'],
-                '',
-                'Coyote',
-                '14',
-                ['Create account', 'Login'],
-            )),
-            new Section($this->applicationName, 'Incoming events', $events),
+        $view = new \Neon\View([
+            new Title($this->applicationName),
+            new Favicon('https://4programmers.net/img/favicon.png'),
         ],
-            new Favicon('https://4programmers.net/img/favicon.png'));
+            [
+                new Navigation(new \Neon\ViewModel\Navigation(
+                    ['Forum', 'Microblogs', 'Jobs', 'Wiki'],
+                    '',
+                    'Coyote',
+                    '14',
+                    ['Create account', 'Login'],
+                )),
+                new Section($this->applicationName, 'Incoming events', $events),
+            ]);
         return $view->html();
     }
 }

@@ -3,6 +3,7 @@ namespace Neon\Test\Unit\View;
 
 use Neon\Test\BaseFixture\View\ViewDom;
 use Neon\View;
+use Neon\View\Head\Title;
 use PHPUnit\Framework\TestCase;
 
 class Test extends TestCase
@@ -50,6 +51,6 @@ class Test extends TestCase
 
     private function viewHtml(string $title): string
     {
-        return (new View($title, []))->html();
+        return (new View([new Title($title)], []))->html();
     }
 }

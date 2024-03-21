@@ -13,7 +13,7 @@ trait ViewFixture
 {
     function view(array $fields): Neon\View
     {
-        return new Neon\View('', [
+        return new Neon\View([], [
             new View\Section(
                 '',
                 $fields['sectionTitle'] ?? '',
