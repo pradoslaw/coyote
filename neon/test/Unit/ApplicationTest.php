@@ -18,7 +18,7 @@ class ApplicationTest extends TestCase
         $dom = $this->dom('/events');
         $this->assertSame(
             'Incoming events',
-            $dom->find('/html/body/h1/text()'));
+            $dom->find('/html/body//h1/text()'));
     }
 
     /**
@@ -38,7 +38,7 @@ class ApplicationTest extends TestCase
     {
         $this->assertSame(
             'Coyote',
-            $this->find('html', 'body', 'header', '.github'));
+            $this->find('.github', '.name'));
     }
 
     /**
@@ -47,8 +47,8 @@ class ApplicationTest extends TestCase
     public function githubStars(): void
     {
         $this->assertSame(
-            '?',
-            $this->find('html', 'body', 'header', '.github', '.stars'));
+            '14',
+            $this->find('.github', '.stars'));
     }
 
     /**
@@ -57,8 +57,8 @@ class ApplicationTest extends TestCase
     public function headerControls(): void
     {
         $this->assertSame(
-            ['Register', 'Login'],
-            $this->findMany('html', 'body', 'header', 'ul', 'li'));
+            ['Create account', 'Login'],
+            $this->findMany('ul.controls', 'li'));
     }
 
     private function findMany(string...$selectors): array

@@ -17,7 +17,7 @@ class PageViewTest extends TestCase
         $view = $this->view(['root' => 'Greyjoy']);
         $this->assertSame(
             ['Greyjoy', 'Events'],
-            $this->texts($view, '/html/body/nav/ul/li/text()'));
+            $this->texts($view, '/html/body//nav/ul/li/text()'));
     }
 
     /**
@@ -28,7 +28,7 @@ class PageViewTest extends TestCase
         $view = $this->view(['sectionTitle' => 'Ours is the Fury']);
         $this->assertSame(
             'Ours is the Fury',
-            $this->text($view, '/html/body/h1/text()'));
+            $this->text($view, '/html/body//h1/text()'));
     }
 
     /**
@@ -46,6 +46,6 @@ class PageViewTest extends TestCase
     private function assertSectionTitles(array $array, Neon\View $view): void
     {
         $dom = new ViewDom($view->html());
-        $this->assertSame($array, $dom->findMany('/html/body/h1/text()'));
+        $this->assertSame($array, $dom->findMany('/html/body//h1/text()'));
     }
 }

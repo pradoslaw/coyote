@@ -29,7 +29,7 @@ class NavigationViewTest extends TestCase
         $this->assertSame(
             ['Register', 'Login'],
             $this->texts($view,
-                new Selector('html', 'body', 'header', 'ul', 'li')));
+                new Selector('ul.controls', 'li')));
     }
 
     /**
@@ -40,7 +40,7 @@ class NavigationViewTest extends TestCase
         $view = $this->navigationView(['githubName' => 'Joe']);
         $this->assertSame('Joe',
             $this->text($view,
-                new Selector('html', 'body', 'header', '.github')));
+                new Selector('.github', '.name')));
     }
 
     /**
@@ -52,6 +52,6 @@ class NavigationViewTest extends TestCase
         $this->assertSame(
             '4',
             $this->text($view,
-                new Selector('html', 'body', 'header', '.github', '.stars')));
+                new Selector('.github', '.stars')));
     }
 }
