@@ -28,7 +28,7 @@ class ApplicationTest extends TestCase
     {
         $this->assertSame(
             ['Forum', 'Microblogs', 'Jobs', 'Wiki'],
-            $this->findMany('html', 'body', 'header', 'nav', 'ul', 'li'));
+            $this->findMany('nav', 'ul.menu-items', 'li'));
     }
 
     /**
