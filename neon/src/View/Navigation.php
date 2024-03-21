@@ -72,10 +72,15 @@ starIcon;
 
     private function controls(callable $h): string
     {
-        [$big, $small] = $this->navigation->controls + ['', ''];
+        $controls = $this->navigation->controls + ['', ''];
+        [$big, $small] = \array_keys($controls);
         return $h('ul', [
-            $h('li', [$big], 'px-2 py-1.5 self-center rounded bg-[#00A538] text-white '),
-            $h('li', [$small], 'px-2 py-1.5 self-center'),
+            $h('li', [
+                $h('a', [$big], ['href' => $controls[$big]]),
+            ], 'px-2 py-1.5 self-center rounded bg-[#00A538] text-white'),
+            $h('li', [
+                $h('a', [$small], ['href' => $controls[$small]]),
+            ], 'px-2 py-1.5 self-center'),
         ],
             'controls flex');
     }

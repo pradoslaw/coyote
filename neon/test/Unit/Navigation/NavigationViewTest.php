@@ -39,11 +39,26 @@ class NavigationViewTest extends TestCase
      */
     public function controls(): void
     {
-        $view = $this->navigationView(['controls' => ['Register', 'Login']]);
+        $view = $this->navigationView(['controls' => ['Register' => '', 'Login' => '']]);
         $this->assertSame(
             ['Register', 'Login'],
             $this->texts($view,
-                new Selector('ul.controls', 'li')));
+                new Selector('ul.controls', 'li', 'a')));
+    }
+
+    /**
+     * @test
+     */
+    public function controlsLinks(): void
+    {
+        $view = $this->navigationView(['controls' => [
+            'Register' => '/account',
+            'Login'    => '/login',
+        ]]);
+        $this->assertSame(
+            ['/account', '/login'],
+            $this->texts($view,
+                new Selector('ul.controls', 'li', 'a', '@href')));
     }
 
     /**

@@ -68,7 +68,7 @@ class ApplicationTest extends TestCase
     {
         $this->assertSame(
             ['Create account', 'Login'],
-            $this->findMany('ul.controls', 'li'));
+            $this->findMany('ul.controls', 'li', 'a'));
     }
 
     /**
