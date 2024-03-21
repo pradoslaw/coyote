@@ -11,7 +11,7 @@ trait ViewFixture
 {
     function navigationView(array $fields): Neon\View
     {
-        return new Neon\View('', [
+        return new Neon\View([], [
             new Navigation($this->viewModel($fields)),
         ]);
     }

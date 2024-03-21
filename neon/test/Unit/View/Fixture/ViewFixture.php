@@ -8,7 +8,7 @@ trait ViewFixture
 {
     function view(array $fields): Neon\View
     {
-        return new Neon\View('', [
+        return new Neon\View([], [
             new Neon\View\Section(
                 $fields['root'] ?? '',
                 $fields['sectionTitle'] ?? '',

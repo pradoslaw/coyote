@@ -36,7 +36,7 @@ class PageViewTest extends TestCase
      */
     public function twoSections(): void
     {
-        $view = new Neon\View('', [
+        $view = new Neon\View([], [
             new Neon\View\Section('', 'Foo', []),
             new Neon\View\Section('', 'Bar', []),
         ]);

@@ -1,13 +1,13 @@
 <?php
-namespace Neon\View;
+namespace Neon\View\Head;
 
-readonly class Favicon
+readonly class Favicon implements Head
 {
     public function __construct(private string $faviconUrl)
     {
     }
 
-    public function html(): string
+    public function headHtml(callable $h): string
     {
         return <<<favicon
             <link rel="shortcut icon" href="$this->faviconUrl" type="image/png">

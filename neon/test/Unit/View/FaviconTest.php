@@ -3,7 +3,7 @@ namespace Neon\Test\Unit\View;
 
 use Neon\Test\BaseFixture\View\ViewDom;
 use Neon\View;
-use Neon\View\Favicon;
+use Neon\View\Head\Favicon;
 use PHPUnit\Framework\TestCase;
 
 class FaviconTest extends TestCase
@@ -13,9 +13,8 @@ class FaviconTest extends TestCase
      */
     public function test(): void
     {
-        $view = new View('title',
-            [],
-            new Favicon('https://host/favicon.png'));
+        $view = new View([new Favicon('https://host/favicon.png')],
+            []);
 
         $this->assertSame(
             '<link rel="shortcut icon" href="https://host/favicon.png" type="image/png">',
