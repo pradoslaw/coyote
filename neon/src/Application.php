@@ -63,7 +63,10 @@ readonly class Application
                     '',
                     'Coyote',
                     '14',
-                    ['Create account', 'Login'],
+                    [
+                        'Create account' => '/Register',
+                        'Login'          => '/Login',
+                    ],
                 )),
                 new Section($this->applicationName, 'Incoming events', $events),
             ]);
