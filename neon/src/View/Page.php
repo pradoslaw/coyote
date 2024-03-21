@@ -24,7 +24,7 @@ readonly class Page
         return '<!DOCTYPE html>' .
             $h('html', [
                 $h('head', [
-                    '<meta charset="utf-8">',
+                    $h('meta', [], ['charset' => 'utf-8']),
                     ...\array_map(
                         fn(Head $head) => $head->headHtml($h),
                         $this->heads),
