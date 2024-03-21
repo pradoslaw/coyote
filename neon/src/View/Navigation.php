@@ -39,7 +39,10 @@ readonly class Navigation implements Item
         return $h('nav', [
             $h('ul', \array_map(
                 fn(string $item, string $href) => $h('li', [
-                    '<a href="' . $href . '" class="px-2 py-4 inline-block">' . $item . '</a>',
+                    $h('a', [$item], [
+                        'href'  => $href,
+                        'class' => 'px-2 py-4 inline-block',
+                    ]),
                 ]),
                 \array_keys($this->navigation->items),
                 $this->navigation->items,

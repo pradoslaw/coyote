@@ -9,6 +9,10 @@ readonly class Style implements Head
 
     public function headHtml(callable $h): string
     {
-        return '<link rel="stylesheet" type="text/css" href="' . $this->url . '"/>';
+        return $h('link', [], [
+            'rel'  => 'stylesheet',
+            'type' => 'text/css',
+            'href' => $this->url,
+        ]);
     }
 }

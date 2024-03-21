@@ -9,6 +9,6 @@ readonly class Script implements Head
 
     public function headHtml(callable $h): string
     {
-        return '<script src="' . $this->url . '"></script>';
+        return $h('script', [], ['src' => $this->url]);
     }
 }
