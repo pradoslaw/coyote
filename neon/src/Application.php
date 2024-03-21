@@ -60,7 +60,8 @@ readonly class Application
                         'Jobs'       => '/Praca',
                         'Wiki'       => '/Kategorie',
                     ],
-                    '',
+                    'https://github.com/pradoslaw/coyote',
+                    'https://github.com/pradoslaw/coyote/stargazers',
                     'Coyote',
                     '14',
                     [

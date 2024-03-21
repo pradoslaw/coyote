@@ -75,6 +75,17 @@ class NavigationViewTest extends TestCase
     /**
      * @test
      */
+    public function githubUrl(): void
+    {
+        $view = $this->navigationView(['githubUrl' => 'http://github.com/Foo']);
+        $this->assertSame('http://github.com/Foo',
+            $this->text($view,
+                new Selector('.github', 'a.name', '@href')));
+    }
+
+    /**
+     * @test
+     */
     public function githubStars(): void
     {
         $view = $this->navigationView(['githubStars' => '4']);
@@ -82,5 +93,16 @@ class NavigationViewTest extends TestCase
             '4',
             $this->text($view,
                 new Selector('.github', '.stars')));
+    }
+
+    /**
+     * @test
+     */
+    public function githubStarsUrl(): void
+    {
+        $view = $this->navigationView(['githubStarsUrl' => 'http://github.com/Bar']);
+        $this->assertSame('http://github.com/Bar',
+            $this->text($view,
+                new Selector('.github', 'a.stars', '@href')));
     }
 }
