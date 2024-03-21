@@ -17,7 +17,7 @@ class NavigationViewTest extends TestCase
         $this->assertSame(
             ['Foo', 'Bar', 'Cat'],
             $this->texts($view,
-                new Selector('html', 'body', 'header', 'nav', 'ul', 'li')));
+                new Selector('nav', 'ul.menu-items', 'li')));
     }
 
     /**
