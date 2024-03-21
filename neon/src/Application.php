@@ -12,15 +12,60 @@ readonly class Application
 
     public function html(): string
     {
-        $event = new \Neon\View\Event(
+        $sForce = new \Neon\View\Event(
             new \Neon\ViewModel\Event(new \Neon\Domain\Event(
-                'Global Day of Coderetreat 2023 (Software Crafers)',
-                'Kraków',
+                'SForce Day 2024',
+                'Warszawa',
                 true,
-                ['IT', 'BigData', 'Analityka', 'AI'],
-                new \Neon\Domain\Date(2024, 12, 1),
+                ['Salesforce'],
+                new \Neon\Domain\Date(2024, 3, 26),
                 \Neon\Domain\EventKind::Conference,
             )));
+        $azureSummit = new \Neon\View\Event(
+            new \Neon\ViewModel\Event(new \Neon\Domain\Event(
+                'Azure Summit 2024',
+                'Online',
+                true,
+                ['Azure', 'Microsoft'],
+                new \Neon\Domain\Date(2024, 3, 28),
+                \Neon\Domain\EventKind::Conference,
+            )));
+        $_4developers = new \Neon\View\Event(
+            new \Neon\ViewModel\Event(new \Neon\Domain\Event(
+                '4DEVELOPERS',
+                'Warszawa',
+                false,
+                ['Software', 'Hardware'],
+                new \Neon\Domain\Date(2024, 4, 16),
+                \Neon\Domain\EventKind::Conference,
+            )));
+        $foundersMind = new \Neon\View\Event(
+            new \Neon\ViewModel\Event(new \Neon\Domain\Event(
+                'Founders Mind VII',
+                'Warszawa',
+                false,
+                ['Biznes', 'Networking'],
+                new \Neon\Domain\Date(2024, 5, 14),
+                \Neon\Domain\EventKind::Conference,
+            )));
+        $hackingLeague = new \Neon\View\Event(
+            new \Neon\ViewModel\Event(new \Neon\Domain\Event(
+                'Best Hacking League',
+                'Warszawa',
+                true,
+                ['Software', 'Hardware', 'AI', 'Cybersecurity'],
+                new \Neon\Domain\Date(2024, 4, 20),
+                \Neon\Domain\EventKind::Hackaton,
+            )));
+
+        $events = [
+            $sForce,
+            $azureSummit,
+            $_4developers,
+            $hackingLeague,
+            $foundersMind,
+        ];
+
         $view = new \Neon\View($this->applicationName, [
             new Navigation(new \Neon\ViewModel\Navigation(
                 ['Forum', 'Microblogs', 'Jobs', 'Wiki'],
@@ -29,9 +74,7 @@ readonly class Application
                 '14',
                 ['Create account', 'Login'],
             )),
-            new Section($this->applicationName,
-                'Incoming events',
-                [$event, $event]),
+            new Section($this->applicationName, 'Incoming events', $events),
         ]);
         return $view->html();
     }
