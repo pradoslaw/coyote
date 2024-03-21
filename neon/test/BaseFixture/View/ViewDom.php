@@ -43,8 +43,11 @@ readonly class ViewDom
         return $result;
     }
 
-    private function text(\DOMText|\DOMElement $node): string
+    private function text(\DOMText|\DOMElement|\DOMAttr $node): string
     {
+        if ($node->nodeType === \XML_ATTRIBUTE_NODE) {
+            return $node->textContent;
+        }
         if ($node->nodeType === \XML_TEXT_NODE) {
             return $node->textContent;
         }
@@ -52,7 +55,7 @@ readonly class ViewDom
         throw new \Exception("Failed to get text of element: <$tagName>");
     }
 
-    private function first(\DOMNodeList $nodes, string $xPath): \DOMElement|\DOMText
+    private function first(\DOMNodeList $nodes, string $xPath): \DOMElement|\DOMText|\DOMAttr
     {
         $count = $nodes->count();
         if ($count === 0) {

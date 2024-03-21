@@ -13,11 +13,25 @@ class NavigationViewTest extends TestCase
      */
     public function menuItems(): void
     {
-        $view = $this->navigationView(['items' => ['Foo', 'Bar', 'Cat']]);
+        $view = $this->navigationView(['items' => ['Foo' => '', 'Bar' => '']]);
         $this->assertSame(
-            ['Foo', 'Bar', 'Cat'],
+            ['Foo', 'Bar'],
             $this->texts($view,
-                new Selector('nav', 'ul.menu-items', 'li')));
+                new Selector('nav', 'ul.menu-items', 'li', 'a')));
+    }
+
+    /**
+     * @test
+     */
+    public function menuItemLinks(): void
+    {
+        $view = $this->navigationView(['items' => [
+            'Foo' => 'foo.png', 'Bar' => 'bar.jpg',
+        ]]);
+        $this->assertSame(
+            ['foo.png', 'bar.jpg'],
+            $this->texts($view,
+                new Selector('nav', 'ul.menu-items', 'li', 'a', '@href')));
     }
 
     /**

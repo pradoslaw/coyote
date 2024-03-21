@@ -27,8 +27,18 @@ class ApplicationTest extends TestCase
     public function navigationItems(): void
     {
         $this->assertSame(
-            ['Forum', 'Microblogs', 'Jobs', 'Wiki'],
-            $this->findMany('nav', 'ul.menu-items', 'li'));
+            ['Forum', 'Microblogs', 'Jobs', 'Wiki',],
+            $this->findMany('nav', 'ul.menu-items', 'li', 'a'));
+    }
+
+    /**
+     * @test
+     */
+    public function navigationItemsLinks(): void
+    {
+        $this->assertSame(
+            ['/Forum', '/Mikroblogi', '/Praca', '/Kategorie'],
+            $this->findMany('nav', 'ul.menu-items', 'li', 'a', '@href'));
     }
 
     /**
