@@ -2,7 +2,6 @@
 namespace Neon\View;
 
 use Neon\View\Head\Head;
-use Neon\View\Head\Script;
 use Neon\View\Head\Style;
 
 readonly class Page
@@ -14,7 +13,7 @@ readonly class Page
     {
         $this->heads = [
             ...$head,
-            new Script('https://cdn.tailwindcss.com'),
+            new Style('css/neon.css'),
             new Style('fonts/switzer/switzer.css'),
         ];
     }
