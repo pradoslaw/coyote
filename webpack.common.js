@@ -5,6 +5,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const SVGSpritemapPlugin = require('svg-spritemap-webpack-plugin');
+const exec = require('child_process').exec;
 
 module.exports = {
   devtool: 'source-map', // slower but better
@@ -13,28 +14,28 @@ module.exports = {
       {
         test: /\.ts(x?)$/,
         exclude: {
-          test: /node_modules\/(?!@riddled)/
+          test: /node_modules\/(?!@riddled)/,
         },
         use: [
           {
-            loader: 'babel-loader'
+            loader: 'babel-loader',
           },
           {
             loader: 'ts-loader',
             options: {
               appendTsSuffixTo: [/\.vue$/],
-            }
-          }
-        ]
+            },
+          },
+        ],
       },
       {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
           loaders: {
-            ts: 'babel-loader!ts-loader'
-          }
-        }
+            ts: 'babel-loader!ts-loader',
+          },
+        },
       },
       {
         test: /\.(sass|scss|css)$/,
@@ -45,36 +46,36 @@ module.exports = {
             loader: 'css-loader',
             options: {
               sourceMap: true,
-              url: false
+              url: false,
             },
           },
           {
             loader: 'sass-loader',
             options: {
               sourceMap: true,
-            }
-          }
-        ]
+            },
+          },
+        ],
       },
       {
         test: /\.js$/,
         exclude: {
-          test: /node_modules\/(?!@riddled)/
+          test: /node_modules\/(?!@riddled)/,
         },
         use: {
           loader: 'babel-loader',
           options: {
-            cacheDirectory: true
-          }
-        }
-      }
+            cacheDirectory: true,
+          },
+        },
+      },
     ],
   },
   output: {
     path: path.join(__dirname, 'public'),
     filename: 'js/[name]-[contenthash].js',
     chunkFilename: 'js/[name]-[contenthash].js',
-    publicPath: '/'
+    publicPath: '/',
   },
   optimization: {
     runtimeChunk: "single",
@@ -86,14 +87,14 @@ module.exports = {
           chunks: "async",
           minChunks: 1,
           minSize: 20000,
-          priority: 2
+          priority: 2,
         },
         // all vendors (except async) go to vendor.js
         vendor: {
           test: /[\\/]node_modules[\\/]/,
           name: "vendor",
           chunks: "all",
-          priority: 1
+          priority: 1,
         },
         // all common code across entry points
         common: {
@@ -102,19 +103,19 @@ module.exports = {
           name: "common",
           chunks: "all",
           priority: 0,
-          enforce: true
+          enforce: true,
         },
-        default: false // overwrite default settings
-      }
-    }
+        default: false, // overwrite default settings
+      },
+    },
   },
   resolve: {
     mainFields: ['main', 'module'],
     extensions: ['.ts', '.tsx', '.js', '.vue'],
     alias: {
       '@': path.join(__dirname, 'resources/js'),
-      vue: 'vue/dist/vue.esm.js'
-    }
+      vue: 'vue/dist/vue.esm.js',
+    },
   },
   context: path.join(__dirname, 'resources'),
   entry: {
@@ -124,7 +125,7 @@ module.exports = {
     forum: ['./js/pages/forum.ts'],
     wiki: ['./js/pages/wiki.js'],
     job: ['./js/pages/job.js'],
-    adm: './sass/pages/adm.scss'
+    adm: './sass/pages/adm.scss',
   },
   plugins: [
     new VueLoaderPlugin(),
@@ -134,11 +135,11 @@ module.exports = {
     new webpack.HashedModuleIdsPlugin(),
 
     new MiniCssExtractPlugin({
-      filename: "css/[name]-[contenthash].css"
+      filename: "css/[name]-[contenthash].css",
     }),
 
     new ManifestPlugin({
-      fileName: 'manifest.json'
+      fileName: 'manifest.json',
     }),
 
     new SVGSpritemapPlugin([
@@ -161,9 +162,9 @@ module.exports = {
         svg: {
           // Disable `width` and `height` attributes on the root SVG element
           // as these will skew the sprites when using the <view> via fragment identifiers
-          sizes: false
+          sizes: false,
         },
-        svgo: false
+        svgo: false,
       },
       sprite: {
         generate: {
@@ -175,13 +176,24 @@ module.exports = {
           view: '-fragment',
 
           // Generate <symbol> tags within the SVG to use in HTML via <use> tag
-          symbol: true
-        }
+          symbol: true,
+        },
       },
       styles: {
         format: 'fragment',
-        filename: path.join(__dirname, 'resources/sass/helpers/_sprites.scss')
-      }
+        filename: path.join(__dirname, 'resources/sass/helpers/_sprites.scss'),
+      },
     }),
-  ]
+
+    {
+      apply(compiler) {
+        compiler.hooks.afterEmit.tap('AfterEmitPlugin', (compilation) => {
+          exec('./neon/buildStyle.sh', (err, stdout, stderr) => {
+            if (stdout) process.stdout.write(stdout);
+            if (stderr) process.stderr.write(stderr);
+          });
+        });
+      },
+    },
+  ],
 };
