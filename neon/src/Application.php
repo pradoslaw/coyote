@@ -1,8 +1,10 @@
 <?php
 namespace Neon;
 
+use Neon\View\Attendance;
 use Neon\View\Head\Favicon;
 use Neon\View\Head\Title;
+use Neon\View\Item;
 use Neon\View\Navigation;
 use Neon\View\Section;
 
@@ -13,6 +15,51 @@ readonly class Application
     }
 
     public function html(): string
+    {
+        $view = new \Neon\View([
+            new Title($this->applicationName),
+            new Favicon('https://4programmers.net/img/favicon.png'),
+        ],
+            [
+                new Navigation(new \Neon\ViewModel\Navigation(
+                    [
+                        'Forum'      => '/Forum',
+                        'Microblogs' => '/Mikroblogi',
+                        'Jobs'       => '/Praca',
+                        'Wiki'       => '/Kategorie',
+                    ],
+                    'https://github.com/pradoslaw/coyote',
+                    'https://github.com/pradoslaw/coyote/stargazers',
+                    'Coyote',
+                    '14',
+                    [
+                        'Create account' => '/Register',
+                        'Login'          => '/Login',
+                    ],
+                )),
+                $this->asideMain(
+                    new Attendance(
+                        '116.408', '124',
+                        'Users', 'Online'),
+                    new Section(
+                        $this->applicationName,
+                        'Incoming events',
+                        $this->events())),
+            ]);
+        return $view->html();
+    }
+
+    private function asideMain(Item $aside, Item $main): Item
+    {
+        return new UntypedItem(fn(callable $h): array => [
+            $h('div', [
+                $h('aside', $aside->html($h), 'lg:w-1/4 lg:pr-2 mb-4 lg:mb-0'),
+                $h('main', $main->html($h), 'lg:w-3/4 lg:pl-2'),
+            ], 'lg:flex container mx-auto'),
+        ]);
+    }
+
+    private function events(): array
     {
         $sForce = new \Neon\View\Event(
             new \Neon\ViewModel\Event(new \Neon\Domain\Event(
@@ -60,37 +107,12 @@ readonly class Application
                 \Neon\Domain\EventKind::Hackaton,
             )));
 
-        $events = [
+        return [
             $sForce,
             $azureSummit,
             $_4developers,
             $hackingLeague,
             $foundersMind,
         ];
-
-        $view = new \Neon\View([
-            new Title($this->applicationName),
-            new Favicon('https://4programmers.net/img/favicon.png'),
-        ],
-            [
-                new Navigation(new \Neon\ViewModel\Navigation(
-                    [
-                        'Forum'      => '/Forum',
-                        'Microblogs' => '/Mikroblogi',
-                        'Jobs'       => '/Praca',
-                        'Wiki'       => '/Kategorie',
-                    ],
-                    'https://github.com/pradoslaw/coyote',
-                    'https://github.com/pradoslaw/coyote/stargazers',
-                    'Coyote',
-                    '14',
-                    [
-                        'Create account' => '/Register',
-                        'Login'          => '/Login',
-                    ],
-                )),
-                new Section($this->applicationName, 'Incoming events', $events),
-            ]);
-        return $view->html();
     }
 }

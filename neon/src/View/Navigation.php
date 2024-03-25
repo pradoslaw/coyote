@@ -21,7 +21,7 @@ readonly class Navigation implements Item
                     $this->githubButton($h, 'mr-4'),
                     $this->controls($h),
                 ], 'flex'),
-            ], 'container mx-auto flex text-[#4E5973] text-sm justify-between'),
+            ], 'container mx-auto flex text-[#4E5973] text-sm justify-between mb-4'),
         ];
     }
 
