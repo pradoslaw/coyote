@@ -55,42 +55,43 @@ class FirewallForm extends Form implements ValidatesWhenSubmitted
             ->add('name', 'text', [
                 'rules' => 'nullable|string|user_exist',
                 'label' => 'Nazwa użytkownika',
-                'attr' => [
-                    'id' => 'username',
-                    'autocomplete' => 'off'
-                ]
+                'attr'  => [
+                    'id'           => 'username',
+                    'autocomplete' => 'off',
+                ],
             ])
             ->add('ip', 'text', [
                 'label' => 'IP',
                 'rules' => 'nullable|string|min:2|max:100',
-                'help' => 'IP może zawierać znak *'
+                'help'  => 'IP może zawierać znak *',
             ])
             ->add('fingerprint', 'text', [
                 'label' => 'Fingerprint',
-                'rules' => 'nullable|string|max:255'
+                'rules' => 'nullable|string|max:255',
             ])
             ->add('reason', 'textarea', [
                 'label' => 'Powód',
-                'rules' => 'max:1000'
+                'rules' => 'max:1000',
             ])
             ->add('expire_at', 'text', [
                 'label' => 'Data wygaśnięcia',
                 'rules' => 'required_if:lifetime,0|date_format:Y-m-d',
-                'attr' => [
-                    'id' => 'expire-at'
-                ]
+                'attr'  => [
+                    'placeholder' => 'YYYY-MM-DD',
+                    'id'          => 'expire-at',
+                ],
             ])
             ->add('lifetime', 'checkbox', [
-                'label' => 'Bezterminowo',
-                'checked' => empty($this->data->expire_at)
+                'label'   => 'Bezterminowo',
+                'checked' => empty($this->data->expire_at),
             ])
             ->add('submit', 'submit_with_delete', [
-                'label' => 'Zapisz',
-                'attr' => [
-                    'data-submit-state' => 'Zapisywanie...'
+                'label'             => 'Zapisz',
+                'attr'              => [
+                    'data-submit-state' => 'Zapisywanie...',
                 ],
-                'delete_url' => empty($this->data->id) ? '' : route('adm.firewall.delete', [$this->data->id]),
-                'delete_visibility' => !empty($this->data->id)
+                'delete_url'        => empty($this->data->id) ? '' : route('adm.firewall.delete', [$this->data->id]),
+                'delete_visibility' => !empty($this->data->id),
             ]);
     }
 

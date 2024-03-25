@@ -39,8 +39,10 @@ function setBodyTheme(isDark: boolean): void {
 
 function setBootstrapNavigationBarTheme(isDark: boolean): void {
   const header: Element = document.getElementsByClassName('navbar')[0];
-  header.classList.toggle('navbar-dark', isDark);
-  header.classList.toggle('navbar-light', !isDark);
+  if (header) {
+    header.classList.toggle('navbar-dark', isDark);
+    header.classList.toggle('navbar-light', !isDark);
+  }
 }
 
 const isDarkTheme = document.body.classList.contains('theme-dark');
