@@ -43,11 +43,25 @@ readonly class Selector
 
     private function selector(string $selector): string
     {
-        if (\strPos($selector, '.') === false) {
-            return $selector;
+        if (\str_contains($selector, '.')) {
+            return $this->xPathByClass($selector);
         }
+        if ($selector[0] === '#') {
+            return $this->xPathById($selector);
+        }
+        return $selector;
+    }
+
+    private function xPathByClass(string $selector): string
+    {
         [$tag, $class] = \explode('.', $selector);
         $tag = $tag ?: '*';
         return "{$tag}[@class and contains(concat(' ', normalize-space(@class), ' '), ' $class ')]";
+    }
+
+    private function xPathById(string $selector): string
+    {
+        $id = \subStr($selector, 1);
+        return "*[@id='$id']";
     }
 }
