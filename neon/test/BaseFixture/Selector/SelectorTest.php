@@ -65,6 +65,37 @@ class SelectorTest extends TestCase
     /**
      * @test
      */
+    public function cssId(): void
+    {
+        $element = $this->find(
+            new Selector('#foo'),
+            '<div id="foo">Bar</div>');
+        $this->assertSame(['Bar'], $element);
+    }
+
+    /**
+     * @test
+     */
+    public function cssIdNotFound(): void
+    {
+        $this->assertSame(
+            [],
+            $this->find(new Selector('#foo'), '<div>other</div>'));
+    }
+
+    /**
+     * @test
+     */
+    public function cssIdInvalidId(): void
+    {
+        $this->assertSame(
+            [],
+            $this->find(new Selector('#foo'), '<div id="other">other</div>'));
+    }
+
+    /**
+     * @test
+     */
     public function cssClass(): void
     {
         $content = $this->find(
