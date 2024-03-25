@@ -22,7 +22,7 @@ class SectionViewTest extends TestCase
     {
         $this->assertSame(
             $expected,
-            $this->texts($view, new Selector('div.event', 'div', 'h2')));
+            $this->texts($view, new Selector('div.event', 'h2')));
     }
 
     private function viewWithEvents(array $titles): View

@@ -19,7 +19,7 @@ class EventViewTest extends TestCase
         $view = $this->view(['eventTitle' => 'Ours is the Fury']);
         $this->assertSame(
             'Ours is the Fury',
-            $this->text($view, new Selector('div.event', 'div', 'h2')));
+            $this->text($view, new Selector('div.event',  'h2')));
     }
 
     /**
@@ -41,7 +41,7 @@ class EventViewTest extends TestCase
         $view = $this->view(['eventTags' => ['rust', 'dart']]);
         $this->assertSame(
             ['rust', 'dart'],
-            $this->texts($view, new Selector('div.event', 'div', 'ul', 'li')));
+            $this->texts($view, new Selector('div.event', 'ul', 'li')));
     }
 
     /**
