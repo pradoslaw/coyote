@@ -19,7 +19,7 @@ class EventViewTest extends TestCase
         $view = $this->view(['eventTitle' => 'Ours is the Fury']);
         $this->assertSame(
             'Ours is the Fury',
-            $this->text($view, new Selector('html', 'body', 'div', 'div.event', 'div', 'h2')));
+            $this->text($view, new Selector('div.event', 'div', 'h2')));
     }
 
     /**
@@ -30,7 +30,7 @@ class EventViewTest extends TestCase
         $view = $this->view(['eventDate' => new Domain\Date(2024, 3, 18)]);
         $this->assertSame(
             ['03.18', '|', 'Mon'],
-            $this->texts($view, new Selector('html', 'body', 'div', 'div.event', 'div.date', 'span')));
+            $this->texts($view, new Selector('div.event', 'div.date', 'span')));
     }
 
     /**
@@ -41,7 +41,7 @@ class EventViewTest extends TestCase
         $view = $this->view(['eventTags' => ['rust', 'dart']]);
         $this->assertSame(
             ['rust', 'dart'],
-            $this->texts($view, new Selector('html', 'body', 'div', 'div.event', 'div', 'ul', 'li')));
+            $this->texts($view, new Selector('div.event', 'div', 'ul', 'li')));
     }
 
     /**
@@ -56,6 +56,6 @@ class EventViewTest extends TestCase
         ]);
         $this->assertSame(
             ['Winterfell', 'Hackaton', 'Paid'],
-            $this->texts($view, new Selector('html', 'body', 'div', 'div.event', 'div.details', 'span')));
+            $this->texts($view, new Selector('div.event', 'div.details', 'span')));
     }
 }

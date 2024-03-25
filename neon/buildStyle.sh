@@ -6,4 +6,4 @@ chown nginx:nginx runner/
 cd runner/
 yarn init --private -y
 yarn add --dev tailwindcss 
-yarn tailwindcss --content "../src/View/**/*.php"  -o "../../public/css/neon.css"
+yarn tailwindcss --content "../src/**/*.php"  -o "../../public/css/neon.css"
