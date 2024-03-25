@@ -10,22 +10,45 @@ class SelectorTest extends TestCase
     /**
      * @test
      */
-    public function absolutePath(): void
+    public function immediateChild(): void
     {
         $content = $this->find(
             new Selector('html', 'body', 'div'),
-            '<div>Foo</div> <div><div>Bar</div></div>');
+            '<div>Foo</div>');
         $this->assertSame(['Foo'], $content);
     }
 
     /**
      * @test
      */
-    public function relative(): void
+    public function nestedChild(): void
     {
-        $this->assertSame(['Cat'], $this->find(
+        $content = $this->find(
+            new Selector('html', 'body', 'div'),
+            '<div><div>Bar</div></div>');
+        $this->assertSame(['Bar'], $content);
+    }
+
+    /**
+     * @test
+     */
+    public function leafText(): void
+    {
+        $content = $this->find(
             new Selector('div'),
-            '<div>Cat</div>'));
+            '<div>Banana<span>Watermelon</span></div>');
+        $this->assertSame(['Banana'], $content);
+    }
+
+    /**
+     * @test
+     */
+    public function leafAttribute(): void
+    {
+        $content = $this->find(
+            new Selector('div', '@id'),
+            '<div id="apple"><span id="pear"></span></div>');
+        $this->assertSame(['apple'], $content);
     }
 
     /**
