@@ -2,6 +2,7 @@
 namespace Neon\Test\Unit\Http;
 
 use Neon\Application;
+use Neon\Domain\Attendance;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture;
 
@@ -20,7 +21,8 @@ class Test extends TestCase
 
     private function assertRendersView(string $uri): void
     {
-        $this->laravel->app->instance(Application::class, new Application('Ours is the fury'));
+        $this->laravel->app->instance(Application::class,
+            new Application('Ours is the fury', new Attendance(0, 0)));
         $response = $this->server->get($uri)
             ->assertSuccessful()
             ->getContent();

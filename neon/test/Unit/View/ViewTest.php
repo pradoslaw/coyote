@@ -1,6 +1,7 @@
 <?php
 namespace Neon\Test\Unit\View;
 
+use Neon\Domain\Attendance;
 use Neon\Test\BaseFixture\Selector\Selector;
 use Neon\Test\BaseFixture\View\ViewDom;
 use Neon\View\View;
@@ -114,7 +115,10 @@ class ViewTest extends TestCase
 
     private function dom(array $fields = []): ViewDom
     {
-        $view = new View($fields['applicationName'] ?? '', []);
+        $view = new View(
+            $fields['applicationName'] ?? '',
+            [],
+            new Attendance(0, 0));
         return new ViewDom($view->html());
     }
 }

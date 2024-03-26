@@ -1,6 +1,7 @@
 <?php
 namespace Neon;
 
+use Neon\Domain\Attendance;
 use Neon\Domain\Date;
 use Neon\Domain\Event;
 use Neon\Domain\EventKind;
@@ -10,9 +11,9 @@ readonly class Application
 {
     private View $view;
 
-    public function __construct(string $applicationName)
+    public function __construct(string $applicationName, Attendance $attendance)
     {
-        $this->view = new View($applicationName, $this->events());
+        $this->view = new View($applicationName, $this->events(), $attendance);
     }
 
     public function html(): string
