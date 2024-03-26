@@ -1,21 +1,19 @@
 <?php
-namespace Neon\Test\Unit;
+namespace Neon\Test\Unit\View;
 
 use Neon\Test\BaseFixture\Selector\Selector;
 use Neon\Test\BaseFixture\View\ViewDom;
+use Neon\View\View;
 use PHPUnit\Framework\TestCase;
-use Tests\Unit\BaseFixture;
 
-class ApplicationTest extends TestCase
+class ViewTest extends TestCase
 {
-    use BaseFixture\Server\Http;
-
     /**
      * @test
      */
     public function sectionTitle(): void
     {
-        $dom = $this->dom('/events');
+        $dom = $this->dom();
         $this->assertSame(
             'Incoming events',
             $dom->find('//main//h1/text()'));
@@ -88,25 +86,24 @@ class ApplicationTest extends TestCase
     {
         $this->assertSame(
             '<link rel="shortcut icon" href="https://4programmers.net/img/favicon.png" type="image/png">',
-            $this->dom('/events')
-                ->html('/html/head/link[@rel="shortcut icon"]'));
+            $this->dom()->html('/html/head/link[@rel="shortcut icon"]'));
     }
 
     private function findMany(string...$selectors): array
     {
         $selector = new Selector(...$selectors);
-        return $this->dom('/events')
-            ->findMany($selector->xPath());
+        return $this->dom()->findMany($selector->xPath());
     }
 
     private function find(string...$selectors): string
     {
         $selector = new Selector(...$selectors);
-        return $this->dom('/events')->find($selector->xPath());
+        return $this->dom()->find($selector->xPath());
     }
 
-    private function dom(string $uri): ViewDom
+    private function dom(): ViewDom
     {
-        return new ViewDom($this->server->get($uri)->assertSuccessful()->getContent());
+        $view = new View('', []);
+        return new ViewDom($view->html());
     }
 }
