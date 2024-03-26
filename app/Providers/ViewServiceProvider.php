@@ -34,19 +34,15 @@ class ViewServiceProvider extends ServiceProvider
         $view->composer(['layout', 'adm.home'], InitialStateComposer::class);
         $view->composer('layout', function (View $view) use ($clock, $cache) {
             $view->with([
-                '__master_menu'       => $this->buildMasterMenu(),
-                '__dark_theme'        => $this->initialDarkTheme() && !$this->wip(),
-                '__color_scheme'      => $this->colorScheme(),
-                '__dark_theme_wip'    => $this->wip(),
-                '__dark_theme_notice' => $this->wip() && $this->initialDarkTheme(),
-                'github_stars'        => $cache->remember('homepage:github_stars', 30 * 60, fn() => $this->githubStars()),
-
-                'gdpr' => [
+                '__master_menu'  => $this->buildMasterMenu(),
+                '__dark_theme'   => $this->initialDarkTheme(),
+                '__color_scheme' => $this->colorScheme(),
+                'github_stars'   => $cache->remember('homepage:github_stars', 30 * 60, fn() => $this->githubStars()),
+                'gdpr'           => [
                     'content'  => TwigLiteral::fromHtml((new UserSettings)->cookieAgreement()),
                     'accepted' => $this->gdprAccepted(),
                 ],
-
-                'year' => $clock->year(),
+                'year'           => $clock->year(),
             ]);
         });
     }
@@ -133,10 +129,5 @@ class ViewServiceProvider extends ServiceProvider
             return 'system';
         }
         return $legacyDarkTheme ? 'dark' : 'light';
-    }
-
-    private function wip(): bool
-    {
-        return false;
     }
 }
