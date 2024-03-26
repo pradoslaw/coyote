@@ -2,6 +2,7 @@
 namespace Neon\View;
 
 use Neon\Domain;
+use Neon\Domain\Attendance;
 use Neon\View\Html\Head\Favicon;
 use Neon\View\Html\Head\Title;
 use Neon\View\Html\Item;
@@ -12,7 +13,7 @@ readonly class View
 {
     private HtmlView $view;
 
-    public function __construct(string $applicationName, array $events)
+    public function __construct(string $applicationName, array $events, Attendance $attendance)
     {
         $this->view = new HtmlView([
             new Title($applicationName),
@@ -20,7 +21,7 @@ readonly class View
         ], [
             new Navigation($this->navigation()),
             $this->asideMain(
-                $this->attendance(),
+                $this->attendance($attendance),
                 $this->eventsSection($applicationName, $events)),
         ]);
     }
@@ -60,10 +61,11 @@ readonly class View
         ]);
     }
 
-    private function attendance(): Html\Attendance
+    private function attendance(Attendance $attendance): Html\Attendance
     {
+        $vm = new ViewModel\Attendance($attendance);
         return new Html\Attendance(
-            '116.408', '124',
+            $vm->totalUsers, $vm->onlineUsers,
             'Users', 'Online');
     }
 
