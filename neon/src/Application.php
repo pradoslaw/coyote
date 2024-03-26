@@ -1,12 +1,13 @@
 <?php
 namespace Neon;
 
-use Neon\View\Attendance;
-use Neon\View\Head\Favicon;
-use Neon\View\Head\Title;
-use Neon\View\Item;
-use Neon\View\Navigation;
-use Neon\View\Section;
+use Neon\View\Html\Attendance;
+use Neon\View\Html\Head\Favicon;
+use Neon\View\Html\Head\Title;
+use Neon\View\Html\Item;
+use Neon\View\Html\Navigation;
+use Neon\View\Html\Section;
+use Neon\View\Html\UntypedItem;
 
 readonly class Application
 {
@@ -16,12 +17,12 @@ readonly class Application
 
     public function html(): string
     {
-        $view = new \Neon\HtmlView([
+        $view = new View\HtmlView([
             new Title($this->applicationName),
             new Favicon('https://4programmers.net/img/favicon.png'),
         ],
             [
-                new Navigation(new \Neon\ViewModel\Navigation(
+                new Navigation(new View\ViewModel\Navigation(
                     [
                         'Forum'      => '/Forum',
                         'Microblogs' => '/Mikroblogi',
@@ -61,8 +62,8 @@ readonly class Application
 
     private function events(): array
     {
-        $_4developers = new \Neon\View\Event(
-            new \Neon\ViewModel\Event(new \Neon\Domain\Event(
+        $_4developers = new View\Html\Event(
+            new View\ViewModel\Event(new \Neon\Domain\Event(
                 '4DEVELOPERS',
                 'Warszawa',
                 false,
@@ -70,8 +71,8 @@ readonly class Application
                 new \Neon\Domain\Date(2024, 4, 16),
                 \Neon\Domain\EventKind::Conference,
             )));
-        $foundersMind = new \Neon\View\Event(
-            new \Neon\ViewModel\Event(new \Neon\Domain\Event(
+        $foundersMind = new View\Html\Event(
+            new View\ViewModel\Event(new \Neon\Domain\Event(
                 'Founders Mind VII',
                 'Warszawa',
                 false,
@@ -79,8 +80,8 @@ readonly class Application
                 new \Neon\Domain\Date(2024, 5, 14),
                 \Neon\Domain\EventKind::Conference,
             )));
-        $hackingLeague = new \Neon\View\Event(
-            new \Neon\ViewModel\Event(new \Neon\Domain\Event(
+        $hackingLeague = new View\Html\Event(
+            new View\ViewModel\Event(new \Neon\Domain\Event(
                 'Best Hacking League',
                 'Warszawa',
                 true,

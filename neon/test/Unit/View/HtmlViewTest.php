@@ -2,8 +2,8 @@
 namespace Neon\Test\Unit\View;
 
 use Neon\Test\BaseFixture\View\ViewDom;
-use Neon\HtmlView;
-use Neon\View\Head\Title;
+use Neon\View\Html\Head\Title;
+use Neon\View\HtmlView;
 use PHPUnit\Framework\TestCase;
 
 class HtmlViewTest extends TestCase

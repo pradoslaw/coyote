@@ -2,8 +2,8 @@
 namespace Neon\Test\Unit\Event;
 
 use Neon\Test\BaseFixture\Selector\Selector;
-use Neon\HtmlView;
 use Neon\View;
+use Neon\View\HtmlView;
 use PHPUnit\Framework\TestCase;
 
 class SectionViewTest extends TestCase
@@ -29,9 +29,9 @@ class SectionViewTest extends TestCase
     private function viewWithEvents(array $titles): HtmlView
     {
         return new HtmlView([], [
-            new View\Section('', '',
+            new View\Html\Section('', '',
                 \array_map(
-                    fn(string $title) => new View\Event(
+                    fn(string $title) => new View\Html\Event(
                         $this->viewEvent(['eventTitle' => $title])),
                     $titles)),
         ]);

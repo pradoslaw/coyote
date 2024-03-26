@@ -36,14 +36,14 @@ class PageViewTest extends TestCase
      */
     public function twoSections(): void
     {
-        $view = new Neon\HtmlView([], [
-            new Neon\View\Section('', 'Foo', []),
-            new Neon\View\Section('', 'Bar', []),
+        $view = new Neon\View\HtmlView([], [
+            new Neon\View\Html\Section('', 'Foo', []),
+            new Neon\View\Html\Section('', 'Bar', []),
         ]);
         $this->assertSectionTitles(['Foo', 'Bar'], $view);
     }
 
-    private function assertSectionTitles(array $array, Neon\HtmlView $view): void
+    private function assertSectionTitles(array $array, Neon\View\HtmlView $view): void
     {
         $dom = new ViewDom($view->html());
         $this->assertSame($array, $dom->findMany('/html/body//h1/text()'));

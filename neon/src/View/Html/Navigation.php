@@ -1,7 +1,7 @@
 <?php
-namespace Neon\View;
+namespace Neon\View\Html;
 
-use Neon\ViewModel;
+use Neon\View\ViewModel;
 
 readonly class Navigation implements Item
 {

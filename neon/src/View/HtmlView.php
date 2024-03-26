@@ -1,8 +1,8 @@
 <?php
-namespace Neon;
+namespace Neon\View;
 
-use Neon\View\Page;
-use Neon\View\Render;
+use Neon\View\Html\Page;
+use Neon\View\Html\Render;
 
 class HtmlView
 {

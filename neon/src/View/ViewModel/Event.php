@@ -1,5 +1,5 @@
 <?php
-namespace Neon\ViewModel;
+namespace Neon\View\ViewModel;
 
 use Neon\Domain;
 

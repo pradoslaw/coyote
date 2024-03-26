@@ -1,5 +1,5 @@
 <?php
-namespace Neon\ViewModel;
+namespace Neon\View\ViewModel;
 
 readonly class Navigation
 {
