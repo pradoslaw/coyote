@@ -31,7 +31,7 @@ readonly class Application
                     'https://github.com/pradoslaw/coyote',
                     'https://github.com/pradoslaw/coyote/stargazers',
                     'Coyote',
-                    '14',
+                    '111',
                     [
                         'Create account' => '/Register',
                         'Login'          => '/Login',

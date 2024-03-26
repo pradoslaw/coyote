@@ -67,7 +67,7 @@ class ApplicationTest extends TestCase
     public function githubStars(): void
     {
         $this->assertSame(
-            '14',
+            '111',
             $this->find('.github', '.stars'));
     }
 
