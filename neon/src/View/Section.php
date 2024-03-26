@@ -22,11 +22,9 @@ readonly class Section implements Item
                         $h('li', ['Events'], 'inline'),
                     ], 'text-xs font-[Arial]'),
                 ]),
-                $h('div', [], [
-                    'style' => 'width:580px; height:580px; border-radius:580px; background:rgba(0, 165, 56, 0.60); filter:blur(50px); position:absolute; right:-290px; bottom:50%;',
-                ]),
+                $this->topRightHighlight($h),
                 $h('h1', [$this->sectionTitle], 'font-semibold text-2xl'),
-            ], 'bg-white rounded-lg py-5 p-4 mb-8 relative overflow-hidden'),
+            ], 'bg-white rounded-lg py-5 p-4 mb-8'),
 
             $h('div',
                 ['Events with our patronage'],
@@ -36,5 +34,13 @@ readonly class Section implements Item
                 fn(Event $event) => $event->html($h),
                 $this->children),
         ];
+    }
+
+    private function topRightHighlight(callable $h): Tag
+    {
+        return $h('div', [], [
+            'style'       => 'width:580px; height:580px; border-radius:580px; background:rgba(0, 165, 56, 0.60); filter:blur(50px); position:absolute; right:-290px; bottom:50%;',
+            'parentClass' => 'relative overflow-hidden',
+        ]);
     }
 }

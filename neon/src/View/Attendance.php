@@ -33,21 +33,9 @@ readonly class Attendance implements Item
                     $h('div', [$this->onlineUsers], ['class' => $number, 'id' => 'onlineAmount']),
                 ], 'z-[3] px-6 w-1/2'),
 
-                $h('div', [], [
-                    'class' => 'top-6 z-[2]',
-                    'style' => \implode('', [
-                        'width:580px;',
-                        'height:580px;',
-                        'border-radius:580px;',
-                        'background:rgba(0, 165, 56, 0.3);',
-                        'filter:blur(50px);',
-                        'position:absolute;',
-                        'left:50%;',
-                        'transform:translate(-50%)',
-                    ]),
-                ]),
+                $this->bottomCenterHighlight($h),
             ], [
-                'class' => 'flex align-center bg-black rounded-lg py-7 relative z-[1] overflow-hidden',
+                'class' => 'flex align-center bg-black rounded-lg py-7',
                 'id'    => 'attendance',
             ]),
         ];
@@ -56,5 +44,23 @@ readonly class Attendance implements Item
     private function diode(callable $h): string
     {
         return $h('div', [], 'size-2 bg-[#80ff00] rounded');
+    }
+
+    private function bottomCenterHighlight(callable $h): Tag
+    {
+        return $h('div', [], [
+            'class'       => 'top-6 z-[2]',
+            'style'       => \implode('', [
+                'width:580px;',
+                'height:580px;',
+                'border-radius:580px;',
+                'background:rgba(0, 165, 56, 0.3);',
+                'filter:blur(50px);',
+                'position:absolute;',
+                'left:50%;',
+                'transform:translateX(-50%)',
+            ]),
+            'parentClass' => 'relative overflow-hidden',
+        ]);
     }
 }
