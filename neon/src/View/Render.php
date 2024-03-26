@@ -3,12 +3,20 @@ namespace Neon\View;
 
 class Render
 {
-    public function __invoke(string $tag, array $children, string|array $classNameOrAttributes = null): string
+    public function __invoke(string $tag, array $children, string|array $classNameOrAttributes = null): Tag
     {
-        return $this->renderElement(
-            $tag,
-            $this->attributes($classNameOrAttributes),
-            \implode('', $children));
+        $attributes = $this->attributes($classNameOrAttributes);
+        $childClasses = $this->elevatedClass($children);
+        if (!empty($childClasses)) {
+            $attributes['class'] = \trim(($attributes['class'] ?? '') . ' ' . $childClasses);
+        }
+        return new Tag(
+            $this->renderElement(
+                $tag,
+                $attributes,
+                \implode('', $children)),
+            $attributes['parentClass'] ?? null,
+        );
     }
 
     private function attributes(string|array|null $classNameOrAttributes): array
@@ -34,5 +42,25 @@ class Render
             \array_map(
                 fn(string $key) => $key . '="' . $attributes[$key] . '"',
                 \array_keys($attributes)));
+    }
+
+    private function elevatedClass(array $children): string
+    {
+        return \implode(' ',
+            \array_unique(
+                $this->elevatedClasses($children)));
+    }
+
+    private function elevatedClasses(array $children): array
+    {
+        $classes = [];
+        foreach ($children as $child) {
+            if ($child instanceof Tag) {
+                if ($child->parentClass != null) {
+                    $classes[] = $child->parentClass;
+                }
+            }
+        }
+        return $classes;
     }
 }
