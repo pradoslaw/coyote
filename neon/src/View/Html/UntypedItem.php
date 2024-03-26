@@ -1,7 +1,5 @@
 <?php
-namespace Neon;
-
-use Neon\View\Item;
+namespace Neon\View\Html;
 
 class UntypedItem implements Item
 {

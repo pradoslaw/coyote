@@ -7,35 +7,34 @@ use Neon\Domain\EventKind;
 use Neon\Test\BaseFixture\Selector\Selector;
 use Neon\Test\BaseFixture\View\ViewDom;
 use Neon\View;
-use Neon\ViewModel;
 
 trait ViewFixture
 {
-    function view(array $fields): Neon\HtmlView
+    function view(array $fields): Neon\View\HtmlView
     {
-        return new Neon\HtmlView([], [
-            new View\Section(
+        return new Neon\View\HtmlView([], [
+            new View\Html\Section(
                 '',
                 $fields['sectionTitle'] ?? '',
-                [new View\Event($this->viewEvent($fields))]),
+                [new View\Html\Event($this->viewEvent($fields))]),
         ]);
     }
 
-    function text(Neon\HtmlView $view, Selector $selector): string
+    function text(Neon\View\HtmlView $view, Selector $selector): string
     {
         $dom = new ViewDom($view->html());
         return $dom->find($selector->xPath());
     }
 
-    function texts(Neon\HtmlView $view, Selector $selector): array
+    function texts(Neon\View\HtmlView $view, Selector $selector): array
     {
         $dom = new ViewDom($view->html());
         return $dom->findMany($selector->xPath());
     }
 
-    function viewEvent(array $fields): ViewModel\Event
+    function viewEvent(array $fields): Neon\View\ViewModel\Event
     {
-        return new ViewModel\Event(new Domain\Event(
+        return new Neon\View\ViewModel\Event(new Domain\Event(
             $fields['eventTitle'] ?? '',
             $fields['eventCity'] ?? '',
             $fields['eventFree'] ?? true,

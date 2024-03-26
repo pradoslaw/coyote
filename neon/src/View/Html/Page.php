@@ -1,8 +1,8 @@
 <?php
-namespace Neon\View;
+namespace Neon\View\Html;
 
-use Neon\View\Head\Head;
-use Neon\View\Head\Style;
+use Neon\View\Html\Head\Head;
+use Neon\View\Html\Head\Style;
 
 readonly class Page
 {

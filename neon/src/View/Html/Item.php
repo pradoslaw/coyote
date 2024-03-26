@@ -1,5 +1,5 @@
 <?php
-namespace Neon\View;
+namespace Neon\View\Html;
 
 interface Item
 {

@@ -1,5 +1,5 @@
 <?php
-namespace Neon\View\Head;
+namespace Neon\View\Html\Head;
 
 interface Head
 {

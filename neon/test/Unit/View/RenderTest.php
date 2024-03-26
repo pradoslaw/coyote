@@ -1,11 +1,11 @@
 <?php
 namespace Neon\Test\Unit\View;
 
-use Neon\HtmlView;
 use Neon\Test\BaseFixture\View\ViewDom;
-use Neon\UntypedItem;
-use Neon\View;
-use Neon\View\Render;
+use Neon\View\Html;
+use Neon\View\Html\Render;
+use Neon\View\Html\UntypedItem;
+use Neon\View\HtmlView;
 use PHPUnit\Framework\TestCase;
 
 class RenderTest extends TestCase
@@ -66,7 +66,7 @@ class RenderTest extends TestCase
         $this->assertClass('foo bar', $parent);
     }
 
-    private function assertClass(string $expectedClass, View\Tag $tag): void
+    private function assertClass(string $expectedClass, Html\Tag $tag): void
     {
         $view = new HtmlView([], [
             new UntypedItem(fn(Render $h): array => [$tag]),
@@ -77,7 +77,7 @@ class RenderTest extends TestCase
             $dom->find('//div/@class'));
     }
 
-    private function child(Render $h, string $parentClass): View\Tag
+    private function child(Render $h, string $parentClass): Html\Tag
     {
         return $h('span', [], ['parentClass' => $parentClass]);
     }

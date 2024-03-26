@@ -2,8 +2,8 @@
 namespace Neon\Test\Unit\View;
 
 use Neon\Test\BaseFixture\View\ViewDom;
-use Neon\HtmlView;
-use Neon\View\Head\Favicon;
+use Neon\View\Html\Head\Favicon;
+use Neon\View\HtmlView;
 use PHPUnit\Framework\TestCase;
 
 class FaviconTest extends TestCase
