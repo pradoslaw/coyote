@@ -9,20 +9,20 @@ use Neon\ViewModel;
 
 trait ViewFixture
 {
-    function navigationView(array $fields): Neon\View
+    function navigationView(array $fields): Neon\HtmlView
     {
-        return new Neon\View([], [
+        return new Neon\HtmlView([], [
             new Navigation($this->viewModel($fields)),
         ]);
     }
 
-    function text(Neon\View $view, Selector $selector): string
+    function text(Neon\HtmlView $view, Selector $selector): string
     {
         $dom = new ViewDom($view->html());
         return $dom->find($selector->xPath());
     }
 
-    function texts(Neon\View $view, Selector $selector): array
+    function texts(Neon\HtmlView $view, Selector $selector): array
     {
         $dom = new ViewDom($view->html());
         return $dom->findMany($selector->xPath());

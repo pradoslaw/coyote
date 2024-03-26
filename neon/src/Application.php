@@ -16,7 +16,7 @@ readonly class Application
 
     public function html(): string
     {
-        $view = new \Neon\View([
+        $view = new \Neon\HtmlView([
             new Title($this->applicationName),
             new Favicon('https://4programmers.net/img/favicon.png'),
         ],

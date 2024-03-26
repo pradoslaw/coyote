@@ -2,6 +2,7 @@
 namespace Neon\Test\Unit\Event;
 
 use Neon\Test\BaseFixture\Selector\Selector;
+use Neon\HtmlView;
 use Neon\View;
 use PHPUnit\Framework\TestCase;
 
@@ -18,16 +19,16 @@ class SectionViewTest extends TestCase
         $this->assertEventTitles(['Hear me roar', 'Ours is the fury'], $view);
     }
 
-    private function assertEventTitles(array $expected, View $view): void
+    private function assertEventTitles(array $expected, HtmlView $view): void
     {
         $this->assertSame(
             $expected,
             $this->texts($view, new Selector('div.event', 'h2')));
     }
 
-    private function viewWithEvents(array $titles): View
+    private function viewWithEvents(array $titles): HtmlView
     {
-        return new View([], [
+        return new HtmlView([], [
             new View\Section('', '',
                 \array_map(
                     fn(string $title) => new View\Event(
