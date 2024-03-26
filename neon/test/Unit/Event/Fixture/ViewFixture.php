@@ -11,9 +11,9 @@ use Neon\ViewModel;
 
 trait ViewFixture
 {
-    function view(array $fields): Neon\View
+    function view(array $fields): Neon\HtmlView
     {
-        return new Neon\View([], [
+        return new Neon\HtmlView([], [
             new View\Section(
                 '',
                 $fields['sectionTitle'] ?? '',
@@ -21,13 +21,13 @@ trait ViewFixture
         ]);
     }
 
-    function text(Neon\View $view, Selector $selector): string
+    function text(Neon\HtmlView $view, Selector $selector): string
     {
         $dom = new ViewDom($view->html());
         return $dom->find($selector->xPath());
     }
 
-    function texts(Neon\View $view, Selector $selector): array
+    function texts(Neon\HtmlView $view, Selector $selector): array
     {
         $dom = new ViewDom($view->html());
         return $dom->findMany($selector->xPath());

@@ -56,7 +56,7 @@ class AttendanceViewTest extends TestCase
 
     private function view(array $fields): ViewDom
     {
-        $view = new Neon\View([], [
+        $view = new Neon\HtmlView([], [
             new Neon\View\Attendance(
                 $fields['totalAmount'] ?? '',
                 $fields['onlineAmount'] ?? '',

@@ -1,6 +1,7 @@
 <?php
 namespace Neon\Test\Unit\View;
 
+use Neon\HtmlView;
 use Neon\Test\BaseFixture\View\ViewDom;
 use Neon\UntypedItem;
 use Neon\View;
@@ -67,7 +68,7 @@ class RenderTest extends TestCase
 
     private function assertClass(string $expectedClass, View\Tag $tag): void
     {
-        $view = new View([], [
+        $view = new HtmlView([], [
             new UntypedItem(fn(Render $h): array => [$tag]),
         ]);
         $dom = new ViewDom($view->html());

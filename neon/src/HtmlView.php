@@ -4,7 +4,7 @@ namespace Neon;
 use Neon\View\Page;
 use Neon\View\Render;
 
-class View
+class HtmlView
 {
     private Page $page;
 
