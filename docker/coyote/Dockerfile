@@ -12,6 +12,7 @@ COPY resources /app/resources
 RUN true
 COPY public /app/public
 RUN true
+COPY neon /app/neon
 
 RUN ls /app -lsa
 
