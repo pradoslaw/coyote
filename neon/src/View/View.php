@@ -8,13 +8,17 @@ use Neon\View\Html\Head\Title;
 use Neon\View\Html\Item;
 use Neon\View\Html\Navigation;
 use Neon\View\Html\UntypedItem;
+use Neon\View\Language\Language;
+use Neon\View\Language\Polish;
 
 readonly class View
 {
+    private Language $lang;
     private HtmlView $view;
 
     public function __construct(string $applicationName, array $events, Attendance $attendance)
     {
+        $this->lang = new Polish();
         $this->view = new HtmlView([
             new Title($applicationName),
             new Favicon('https://4programmers.net/img/favicon.png'),
@@ -76,7 +80,7 @@ readonly class View
             'Incoming events',
             \array_map(
                 fn(Domain\Event $event) => new Html\Event(
-                    new ViewModel\Event($event)),
+                    new ViewModel\Event($this->lang, $event)),
                 $events,
             ));
     }

@@ -2,6 +2,7 @@
 namespace Neon\View\ViewModel;
 
 use Neon\Domain;
+use Neon\View\Language\Language;
 
 readonly class Event
 {
@@ -13,12 +14,12 @@ readonly class Event
     public string $date;
     public string $dayShortName;
 
-    public function __construct(Domain\Event $event)
+    public function __construct(Language $language, Domain\Event $event)
     {
         $this->title = $event->title;
         $this->city = $event->city;
         $this->tags = $event->tags;
-        $this->pricing = $event->free ? 'Free' : 'Paid';
+        $this->pricing = $language->t($event->free ? 'Free' : 'Paid');
         $this->kind = $event->kind->name;
         $this->date = $this->date($event);
         $this->dayShortName = $this->dayShortName($event->date);

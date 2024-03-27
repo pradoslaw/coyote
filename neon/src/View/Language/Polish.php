@@ -1,7 +1,7 @@
 <?php
-namespace Neon\View;
+namespace Neon\View\Language;
 
-class Language
+class Polish implements Language
 {
     private array $phrases = [
         'Free' => 'Bezpłatne',

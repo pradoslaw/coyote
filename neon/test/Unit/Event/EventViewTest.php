@@ -56,6 +56,6 @@ class EventViewTest extends TestCase
         ]);
         $this->assertSame(
             ['Winterfell', 'Hackaton', 'Paid'],
-            $this->texts($view, new Selector('div.event', 'div.details', 'span')));
+            $this->eventDetails($view));
     }
 }

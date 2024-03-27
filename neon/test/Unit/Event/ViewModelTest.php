@@ -3,6 +3,7 @@ namespace Neon\Test\Unit\Event;
 
 use Neon\Domain;
 use Neon\Domain\Date;
+use Neon\View\Language\English;
 use PHPUnit\Framework\TestCase;
 
 class ViewModelTest extends TestCase
@@ -121,7 +122,9 @@ class ViewModelTest extends TestCase
 
     private function viewEvent(array $fields): \Neon\View\ViewModel\Event
     {
-        return new \Neon\View\ViewModel\Event($this->domainEvent($fields));
+        return new \Neon\View\ViewModel\Event(
+            new English(),
+            $this->domainEvent($fields));
     }
 
     private function domainEvent(array $fields): Domain\Event
