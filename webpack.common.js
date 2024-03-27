@@ -188,10 +188,11 @@ module.exports = {
     {
       apply(compiler) {
         compiler.hooks.afterEmit.tap('AfterEmitPlugin', (compilation) => {
-          exec('./neon/buildStyle.sh', (err, stdout, stderr) => {
-            if (stdout) process.stdout.write(stdout);
-            if (stderr) process.stderr.write(stderr);
-          });
+          exec(path.join(__dirname, './neon/buildStyle.sh'),
+            (err, stdout, stderr) => {
+              if (stdout) process.stdout.write(stdout);
+              if (stderr) process.stderr.write(stderr);
+            });
         });
       },
     },
