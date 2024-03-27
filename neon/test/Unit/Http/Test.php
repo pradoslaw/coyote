@@ -22,7 +22,8 @@ class Test extends TestCase
     private function assertRendersView(string $uri): void
     {
         $this->laravel->app->instance(Application::class,
-            new Application('Ours is the fury', new Attendance(0, 0)));
+            new Application('Ours is the fury',
+                fn() => new Attendance(0, 0)));
         $response = $this->server->get($uri)
             ->assertSuccessful()
             ->getContent();
