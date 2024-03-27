@@ -1,27 +1,30 @@
 <?php
 namespace Neon;
 
-use Neon\Domain\Attendance;
 use Neon\Domain\Date;
 use Neon\Domain\Event;
 use Neon\Domain\EventKind;
 use Neon\View\Language\Polish;
 use Neon\View\View;
 
-readonly class Application
+class Application
 {
-    private View $view;
+    /** @var callable */
+    private $attendance;
 
-    public function __construct(string $applicationName, Attendance $attendance)
+    public function __construct(readonly private string $applicationName, callable $attendance)
     {
-        $this->view = new View(
-            new Polish(),
-            $applicationName, $this->events(), $attendance);
+        $this->attendance = $attendance;
     }
 
     public function html(): string
     {
-        return $this->view->html();
+        $view = new View(
+            new Polish(),
+            $this->applicationName,
+            $this->events(),
+            ($this->attendance)());
+        return $view->html();
     }
 
     /**

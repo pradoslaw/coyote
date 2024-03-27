@@ -15,7 +15,7 @@ class ServiceProvider extends RouteServiceProvider
         $this->app->instance(
             Application::class,
             new Application('4programmers.net',
-                $this->fetchAttendance()));
+                fn() => $this->fetchAttendance()));
     }
 
     public function loadRoutes(): void
