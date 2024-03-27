@@ -22,6 +22,17 @@ class ViewTest extends TestCase
     /**
      * @test
      */
+    public function breadcrumbs(): void
+    {
+        $dom = $this->dom(['applicationName' => 'Greyjoy']);
+        $this->assertSame(
+            ['Greyjoy', 'Events'],
+            $dom->findMany('/html/body//nav/ul/li/text()'));
+    }
+
+    /**
+     * @test
+     */
     public function navigationItems(): void
     {
         $this->assertSame(
@@ -101,9 +112,9 @@ class ViewTest extends TestCase
         return $this->dom()->find($selector->xPath());
     }
 
-    private function dom(): ViewDom
+    private function dom(array $fields = []): ViewDom
     {
-        $view = new View('', []);
+        $view = new View($fields['applicationName'] ?? '', []);
         return new ViewDom($view->html());
     }
 }
