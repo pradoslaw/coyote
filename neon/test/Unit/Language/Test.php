@@ -1,7 +1,7 @@
 <?php
 namespace Neon\Test\Unit\Language;
 
-use Neon\View\Language;
+use Neon\View\Language\Polish;
 use PHPUnit\Framework\TestCase;
 use function Neon\Test\BaseFixture\Caught\caught;
 
@@ -12,7 +12,7 @@ class Test extends TestCase
      */
     public function free(): void
     {
-        $language = new Language();
+        $language = new Polish();
         $this->assertSame('Bezpłatne', $language->t('Free'));
     }
 
@@ -21,7 +21,7 @@ class Test extends TestCase
      */
     public function paid(): void
     {
-        $language = new Language();
+        $language = new Polish();
         $this->assertSame('Płatne', $language->t('Paid'));
     }
 
@@ -30,7 +30,7 @@ class Test extends TestCase
      */
     public function missing(): void
     {
-        $language = new Language();
+        $language = new Polish();
         $exception = caught(fn() => $language->t('foo'));
         $this->assertSame(
             "Failed to translate phrase: 'foo'.",
