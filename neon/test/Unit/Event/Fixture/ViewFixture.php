@@ -18,6 +18,16 @@ trait ViewFixture
         return $this->texts($view, new Selector('div.event', 'div.details', 'span'));
     }
 
+    function eventDetailsPricing(HtmlView $view): string
+    {
+        return $this->text($view, new Selector('div.event', 'div.details', 'span[last()]'));
+    }
+
+    function eventDetailsKind(HtmlView $view): string
+    {
+        return $this->text($view, new Selector('div.event', 'div.details', 'span[2]'));
+    }
+
     function view(array $fields, Language $lang = null): HtmlView
     {
         return new HtmlView([], [

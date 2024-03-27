@@ -20,7 +20,7 @@ readonly class Event
         $this->city = $event->city;
         $this->tags = $event->tags;
         $this->pricing = $language->t($event->free ? 'Free' : 'Paid');
-        $this->kind = $event->kind->name;
+        $this->kind = $language->t($event->kind->name);
         $this->date = $this->date($event);
         $this->dayShortName = $this->dayShortName($event->date);
     }

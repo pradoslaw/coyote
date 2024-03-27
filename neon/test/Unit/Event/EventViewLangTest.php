@@ -13,15 +13,49 @@ class EventViewLangTest extends TestCase
     /**
      * @test
      */
-    public function details(): void
+    public function detailsKindConference(): void
     {
-        $view = $this->view([
-            'eventCity' => 'Winterfell',
-            'eventKind' => EventKind::Hackaton,
-            'eventFree' => false,
-        ], new Polish());
+        $view = $this->polishView(['eventKind' => EventKind::Conference]);
         $this->assertSame(
-            ['Winterfell', 'Hackaton', 'Płatne'],
-            $this->eventDetails($view));
+            'Konferencja',
+            $this->eventDetailsKind($view));
+    }
+
+    /**
+     * @test
+     */
+    public function detailsKindHackaton(): void
+    {
+        $view = $this->polishView(['eventKind' => EventKind::Hackaton]);
+        $this->assertSame(
+            'Hackaton',
+            $this->eventDetailsKind($view));
+    }
+
+    /**
+     * @test
+     */
+    public function detailsKindWorkshop(): void
+    {
+        $view = $this->polishView(['eventKind' => EventKind::Workshop]);
+        $this->assertSame(
+            'Warsztaty',
+            $this->eventDetailsKind($view));
+    }
+
+    /**
+     * @test
+     */
+    public function detailsPricing(): void
+    {
+        $view = $this->polishView(['eventFree' => false]);
+        $this->assertSame(
+            'Płatne',
+            $this->eventDetailsPricing($view));
+    }
+
+    private function polishView(array $fields): \Neon\View\HtmlView
+    {
+        return $this->view($fields, new Polish());
     }
 }
