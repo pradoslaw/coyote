@@ -5,6 +5,7 @@ use Neon\Domain\Attendance;
 use Neon\Domain\Date;
 use Neon\Domain\Event;
 use Neon\Domain\EventKind;
+use Neon\View\Language\Polish;
 use Neon\View\View;
 
 readonly class Application
@@ -13,7 +14,9 @@ readonly class Application
 
     public function __construct(string $applicationName, Attendance $attendance)
     {
-        $this->view = new View($applicationName, $this->events(), $attendance);
+        $this->view = new View(
+            new Polish(),
+            $applicationName, $this->events(), $attendance);
     }
 
     public function html(): string
