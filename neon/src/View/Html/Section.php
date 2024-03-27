@@ -4,8 +4,10 @@ namespace Neon\View\Html;
 readonly class Section implements Item
 {
     public function __construct(
-        private string $rootBreadcrumb,
+        private string $breadcrumbRoot,
+        private string $breadcrumbItem,
         private string $sectionTitle,
+        private string $subsectionTitle,
         private array  $children,
     )
     {
@@ -17,17 +19,17 @@ readonly class Section implements Item
             $h('div', [
                 $h('nav', [
                     $h('ul', [
-                        $h('li', [$this->rootBreadcrumb], 'inline'),
+                        $h('li', [$this->breadcrumbRoot], 'inline'),
                         $h('span', ['/'], 'mx-1 text-[#00A538]'),
-                        $h('li', ['Events'], 'inline'),
+                        $h('li', [$this->breadcrumbItem], 'inline'),
                     ], 'text-xs font-[Arial]'),
                 ]),
                 $this->topRightHighlight($h),
                 $h('h1', [$this->sectionTitle], 'font-semibold text-2xl'),
             ], 'bg-white rounded-lg py-5 p-4 mb-8'),
 
-            $h('div',
-                ['Events with our patronage'],
+            $h('h2',
+                [$this->subsectionTitle],
                 'text-xs text-[#053B00] mb-4 tracking-tight'),
 
             ...\array_map(

@@ -29,7 +29,7 @@ class SectionViewTest extends TestCase
     private function viewWithEvents(array $titles): HtmlView
     {
         return new HtmlView([], [
-            new View\Html\Section('', '',
+            new View\Html\Section('', '', '', '',
                 \array_map(
                     fn(string $title) => new View\Html\Event(
                         $this->viewEvent(['eventTitle' => $title])),

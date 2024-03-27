@@ -33,7 +33,9 @@ trait ViewFixture
         return new HtmlView([], [
             new View\Html\Section(
                 '',
+                '',
                 $fields['sectionTitle'] ?? '',
+                '',
                 [new View\Html\Event($this->viewEvent($fields, $lang))]),
         ]);
     }

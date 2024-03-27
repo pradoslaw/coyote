@@ -3,21 +3,32 @@ namespace Neon\Test\Unit\View;
 
 use Neon\Domain\Attendance;
 use Neon\Test\BaseFixture\Selector\Selector;
-use Neon\Test\BaseFixture\View\ViewDom;
+use Neon\View\Language\English;
 use Neon\View\View;
 use PHPUnit\Framework\TestCase;
 
 class ViewTest extends TestCase
 {
+    use Fixture\ViewFixture;
+
     /**
      * @test
      */
     public function sectionTitle(): void
     {
-        $dom = $this->dom();
         $this->assertSame(
             'Incoming events',
-            $dom->find('//main//h1/text()'));
+            $this->viewSectionTitle($this->view()));
+    }
+
+    /**
+     * @test
+     */
+    public function subsectionTitle(): void
+    {
+        $this->assertSame(
+            'Events with our patronage',
+            $this->viewSubsectionTitle($this->view()));
     }
 
     /**
@@ -25,10 +36,10 @@ class ViewTest extends TestCase
      */
     public function breadcrumbs(): void
     {
-        $dom = $this->dom(['applicationName' => 'Greyjoy']);
+        $view = $this->view(['applicationName' => 'Greyjoy']);
         $this->assertSame(
             ['Greyjoy', 'Events'],
-            $dom->findMany('/html/body//nav/ul/li/text()'));
+            $this->viewSectionBreadcrumbs($view));
     }
 
     /**
@@ -38,7 +49,7 @@ class ViewTest extends TestCase
     {
         $this->assertSame(
             ['Forum', 'Microblogs', 'Jobs', 'Wiki',],
-            $this->findMany('nav', 'ul.menu-items', 'li', 'a'));
+            $this->findMany($this->view(), 'nav', 'ul.menu-items', 'li', 'a'));
     }
 
     /**
@@ -48,7 +59,7 @@ class ViewTest extends TestCase
     {
         $this->assertSame(
             ['/Forum', '/Mikroblogi', '/Praca', '/Kategorie'],
-            $this->findMany('nav', 'ul.menu-items', 'li', 'a', '@href'));
+            $this->findMany($this->view(), 'nav', 'ul.menu-items', 'li', 'a', '@href'));
     }
 
     /**
@@ -58,7 +69,7 @@ class ViewTest extends TestCase
     {
         $this->assertSame(
             'Coyote',
-            $this->find('.github', '.name'));
+            $this->find($this->view(), '.github', '.name'));
     }
 
     /**
@@ -68,7 +79,7 @@ class ViewTest extends TestCase
     {
         $this->assertSame(
             'https://github.com/pradoslaw/coyote',
-            $this->find('.github', '.name', '@href'));
+            $this->find($this->view(), '.github', '.name', '@href'));
     }
 
     /**
@@ -78,7 +89,7 @@ class ViewTest extends TestCase
     {
         $this->assertSame(
             '111',
-            $this->find('.github', '.stars'));
+            $this->find($this->view(), '.github', '.stars'));
     }
 
     /**
@@ -88,7 +99,17 @@ class ViewTest extends TestCase
     {
         $this->assertSame(
             ['Create account', 'Login'],
-            $this->findMany('ul.controls', 'li', 'a'));
+            $this->findMany($this->view(), 'ul.controls', 'li', 'a'));
+    }
+
+    /**
+     * @test
+     */
+    public function attendanceTotalTitle(): void
+    {
+        $this->assertSame(
+            'Users',
+            $this->find($this->view(), '#attendance', '#totalTitle'));
     }
 
     /**
@@ -98,27 +119,21 @@ class ViewTest extends TestCase
     {
         $this->assertSame(
             '<link rel="shortcut icon" href="https://4programmers.net/img/favicon.png" type="image/png">',
-            $this->dom()->html('/html/head/link[@rel="shortcut icon"]'));
+            $this->dom($this->view())->html('/html/head/link[@rel="shortcut icon"]'));
     }
 
-    private function findMany(string...$selectors): array
+    function view(array $fields = []): View
     {
-        $selector = new Selector(...$selectors);
-        return $this->dom()->findMany($selector->xPath());
-    }
-
-    private function find(string...$selectors): string
-    {
-        $selector = new Selector(...$selectors);
-        return $this->dom()->find($selector->xPath());
-    }
-
-    private function dom(array $fields = []): ViewDom
-    {
-        $view = new View(
+        return new View(
+            new English(),
             $fields['applicationName'] ?? '',
             [],
             new Attendance(0, 0));
-        return new ViewDom($view->html());
+    }
+
+    private function find(View $view, string...$selectors): string
+    {
+        $selector = new Selector(...$selectors);
+        return $this->dom($view)->find($selector->xPath());
     }
 }
