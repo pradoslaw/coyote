@@ -4,6 +4,10 @@ namespace Neon\View\Language;
 class Polish implements Language
 {
     private array $phrases = [
+        'Conference' => 'Konferencja',
+        'Hackaton'   => 'Hackaton',
+        'Workshop'   => 'Warsztaty',
+
         'Free' => 'Bezpłatne',
         'Paid' => 'Płatne',
     ];
