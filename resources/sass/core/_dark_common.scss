@@ -83,4 +83,15 @@ body.theme-dark {
       background-color: unset;
     }
   }
+
+  .auto-complete {
+    background: black;
+    color: #acacac;
+    border-color: #2f2f2f;
+
+    .hover {
+      background: #202020;
+      color: #c0c0c0;
+    }
+  }
 }
