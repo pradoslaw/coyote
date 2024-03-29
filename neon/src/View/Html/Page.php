@@ -33,7 +33,7 @@ readonly class Page
                     \array_merge(...\array_map(
                         fn(Item $item) => $item->html($h),
                         $this->body)),
-                    'bg-[#F0F2F5] font-[Switzer]'),
+                    'bg-[#F0F2F5] font-[Switzer] px-2 lg:px-4'),
             ]);
     }
 }
