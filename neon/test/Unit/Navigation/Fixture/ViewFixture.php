@@ -30,6 +30,7 @@ trait ViewFixture
     function viewModel(array $fields): Neon\View\ViewModel\Navigation
     {
         return new Neon\View\ViewModel\Navigation(
+            $fields['homepageUrl'] ?? '',
             $fields['items'] ?? [],
             $fields['githubUrl'] ?? '',
             $fields['githubStarsUrl'] ?? '',

@@ -11,6 +11,18 @@ class NavigationViewTest extends TestCase
     /**
      * @test
      */
+    public function homepage(): void
+    {
+        $view = $this->navigationView(['homepageUrl' => 'http://homepage/']);
+        $this->assertSame(
+            'http://homepage/',
+            $this->text($view,
+                new Selector('#homepage', '@href')));
+    }
+
+    /**
+     * @test
+     */
     public function menuItems(): void
     {
         $view = $this->navigationView(['items' => ['Foo' => '', 'Bar' => '']]);

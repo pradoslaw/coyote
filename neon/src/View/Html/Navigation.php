@@ -14,7 +14,9 @@ readonly class Navigation implements Item
         return [
             $h('header', [
                 $h('div', [
-                    $this->logo('self-center mr-3.5'),
+                    $h('a',
+                        [$this->logo(''),],
+                        ['id' => 'homepage', 'href' => $this->navigation->homepageUrl, 'class' => 'self-center mr-3.5']),
                     $this->menuItems($h),
                 ], 'flex'),
                 $h('div', [

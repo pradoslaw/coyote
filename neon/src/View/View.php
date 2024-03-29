@@ -39,6 +39,7 @@ readonly class View
     private function navigation(): ViewModel\Navigation
     {
         return new ViewModel\Navigation(
+            '/',
             [
                 $this->lang->t('Forum')      => '/Forum',
                 $this->lang->t('Microblogs') => '/Mikroblogi',
