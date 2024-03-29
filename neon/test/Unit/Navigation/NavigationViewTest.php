@@ -151,4 +151,15 @@ class NavigationViewTest extends TestCase
         $classAttribute = $this->text($view, new Selector(...$xPathSelectors));
         return \explode(' ', $classAttribute);
     }
+
+    /**
+     * @test
+     */
+    public function userAvatar(): void
+    {
+        $view = $this->navigationView(['loggedInAvatarUrl' => '/avatar.png']);
+        $this->assertSame('/avatar.png',
+            $this->text($view,
+                new Selector('header', '#userAvatar', '@src')));
+    }
 }

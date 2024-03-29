@@ -23,6 +23,10 @@ readonly class Navigation implements Item
                 $h('div', [
                     $this->githubButton($h, 'mr-4'),
                     $this->controls($h),
+                    $h('img', [], [
+                        'src'   => $this->navigation->avatarUrl,
+                        'class' => 'size-8 self-center',
+                        'id'    => 'userAvatar']),
                 ], 'flex'),
             ], 'container mx-auto flex text-[#4E5973] text-sm justify-between mb-4'),
         ];

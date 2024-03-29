@@ -54,6 +54,7 @@ readonly class View
                 $this->lang->t('Create account') => '/Register',
                 $this->lang->t('Login')          => '/Login',
             ],
+            '',
         );
     }
 

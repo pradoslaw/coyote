@@ -14,6 +14,7 @@ readonly class Navigation
         public string $githubName,
         public string $githubStars,
         array         $controls,
+        public string $avatarUrl,
     )
     {
         if (empty($controls)) {
