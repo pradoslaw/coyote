@@ -35,7 +35,10 @@ class Kernel extends Foundation\Http\Kernel
 
     /** @var array */
     protected $middlewareGroups = [
-        'web' => [
+        'neon' => [
+            Middleware\EncryptCookies::class,
+        ],
+        'web'  => [
             Middleware\EncryptCookies::class,
             AddQueuedCookiesToResponse::class,
             StartSession::class,
@@ -48,7 +51,7 @@ class Kernel extends Foundation\Http\Kernel
             Middleware\SurveilRoutes::class,
             Middleware\RedirectToCanonicalUrl::class,
         ],
-        'api' => [
+        'api'  => [
             'throttle:60,1',
             SubstituteBindings::class,
             Middleware\DefaultBindings::class,

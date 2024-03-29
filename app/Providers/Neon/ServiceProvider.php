@@ -4,7 +4,7 @@ namespace Coyote\Providers\Neon;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
 use Neon\Application;
-use Neon\Domain\Visitor;
+use Neon\Laravel\AppVisitor;
 use Neon\Persistence;
 
 class ServiceProvider extends RouteServiceProvider
@@ -16,12 +16,7 @@ class ServiceProvider extends RouteServiceProvider
             Application::class,
             new Application('4programmers.net',
                 $this->attendance(),
-                new class implements Visitor {
-                    public function loggedInUserAvatarUrl(): ?string
-                    {
-                        return null;
-                    }
-                }));
+                new AppVisitor($this->app)));
     }
 
     public function loadRoutes(): void
@@ -32,7 +27,7 @@ class ServiceProvider extends RouteServiceProvider
                 $application = $this->app->get(Application::class);
                 return $application->html();
             },
-        ]);
+        ])->middleware('neon');
     }
 
     private function attendance(): Persistence\Attendance
