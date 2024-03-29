@@ -2,11 +2,11 @@
 namespace Neon\Test\Unit\Attendance;
 
 use Illuminate\Database\DatabaseManager;
-use Neon\Persistence\Attendance;
+use Neon\Persistence\DatabaseAttendance;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture\Server\Laravel\Application;
 
-class AttendancePersistenceTest extends TestCase
+class DatabaseAttendanceTest extends TestCase
 {
     use Application;
 
@@ -19,7 +19,7 @@ class AttendancePersistenceTest extends TestCase
         $usersTable = $database->table('users');
         $users = $usersTable->count();
         $id = $usersTable->insertGetId(['name' => uniqid(), 'email' => '']);
-        $attendance = (new Attendance($database))->fetchAttendance();
+        $attendance = (new DatabaseAttendance($database))->fetchAttendance();
         $usersTable->delete($id);
         $this->assertSame($users + 1, $attendance->totalUsers);
     }

@@ -7,14 +7,12 @@ use Neon\Domain\EventKind;
 use Neon\View\Language\Polish;
 use Neon\View\View;
 
-class Application
+readonly class Application
 {
-    /** @var callable */
-    private $attendance;
-
-    public function __construct(readonly private string $applicationName, callable $attendance)
+    public function __construct(
+        private string                 $applicationName,
+        private Persistence\Attendance $attendance)
     {
-        $this->attendance = $attendance;
     }
 
     public function html(): string
@@ -23,7 +21,7 @@ class Application
             new Polish(),
             $this->applicationName,
             $this->events(),
-            ($this->attendance)());
+            $this->attendance->fetchAttendance());
         return $view->html();
     }
 

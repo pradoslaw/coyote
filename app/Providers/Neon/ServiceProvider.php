@@ -4,7 +4,6 @@ namespace Coyote\Providers\Neon;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
 use Neon\Application;
-use Neon\Domain;
 use Neon\Persistence;
 
 class ServiceProvider extends RouteServiceProvider
@@ -15,7 +14,7 @@ class ServiceProvider extends RouteServiceProvider
         $this->app->instance(
             Application::class,
             new Application('4programmers.net',
-                fn() => $this->fetchAttendance()));
+                $this->attendance()));
     }
 
     public function loadRoutes(): void
@@ -29,11 +28,10 @@ class ServiceProvider extends RouteServiceProvider
         ]);
     }
 
-    private function fetchAttendance(): Domain\Attendance
+    private function attendance(): Persistence\Attendance
     {
         /** @var DatabaseManager $database */
         $database = $this->app->get(DatabaseManager::class);
-        $attendance = new Persistence\Attendance($database);
-        return $attendance->fetchAttendance();
+        return new Persistence\DatabaseAttendance($database);
     }
 }
