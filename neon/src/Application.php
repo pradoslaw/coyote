@@ -4,6 +4,7 @@ namespace Neon;
 use Neon\Domain\Date;
 use Neon\Domain\Event;
 use Neon\Domain\EventKind;
+use Neon\Domain\Visitor;
 use Neon\View\Language\Polish;
 use Neon\View\View;
 
@@ -11,7 +12,9 @@ readonly class Application
 {
     public function __construct(
         private string                 $applicationName,
-        private Persistence\Attendance $attendance)
+        private Persistence\Attendance $attendance,
+        private Visitor                $visitor,
+    )
     {
     }
 
@@ -21,7 +24,8 @@ readonly class Application
             new Polish(),
             $this->applicationName,
             $this->events(),
-            $this->attendance->fetchAttendance());
+            $this->attendance->fetchAttendance(),
+            $this->visitor);
         return $view->html();
     }
 

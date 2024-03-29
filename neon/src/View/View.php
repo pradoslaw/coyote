@@ -3,6 +3,7 @@ namespace Neon\View;
 
 use Neon\Domain;
 use Neon\Domain\Attendance;
+use Neon\Domain\Visitor;
 use Neon\View\Html\Head\Favicon;
 use Neon\View\Html\Head\Title;
 use Neon\View\Html\Item;
@@ -18,13 +19,14 @@ readonly class View
         private Language $lang,
         string           $applicationName,
         array            $events,
-        Attendance       $attendance)
+        Attendance       $attendance,
+        Visitor          $visitor)
     {
         $this->view = new HtmlView([
             new Title($applicationName),
             new Favicon('https://4programmers.net/img/favicon.png'),
         ], [
-            new Navigation($this->navigation()),
+            new Navigation($this->navigation($visitor)),
             $this->asideMain(
                 $this->attendance($attendance),
                 $this->eventsSection($applicationName, $events)),
@@ -36,7 +38,7 @@ readonly class View
         return $this->view->html();
     }
 
-    private function navigation(): ViewModel\Navigation
+    private function navigation(Visitor $visitor): ViewModel\Navigation
     {
         return new ViewModel\Navigation(
             '/',
@@ -54,7 +56,7 @@ readonly class View
                 $this->lang->t('Create account') => '/Register',
                 $this->lang->t('Login')          => '/Login',
             ],
-            '',
+            $visitor->loggedInUserAvatarUrl(),
         );
     }
 

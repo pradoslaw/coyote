@@ -5,6 +5,7 @@ readonly class Navigation
 {
     /** @var Link[] */
     public array $links;
+    public string $avatarUrl;
 
     public function __construct(
         public string $homepageUrl,
@@ -14,7 +15,7 @@ readonly class Navigation
         public string $githubName,
         public string $githubStars,
         array         $controls,
-        public string $avatarUrl,
+        ?string       $loggedInUserAvatarUrl,
     )
     {
         if (empty($controls)) {
@@ -26,5 +27,6 @@ readonly class Navigation
                 new Link($small, $controls[$small], false),
             ];
         }
+        $this->avatarUrl = $loggedInUserAvatarUrl ?? '/neon/avatarPlaceholder.png';
     }
 }

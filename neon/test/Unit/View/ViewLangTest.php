@@ -2,6 +2,7 @@
 namespace Neon\Test\Unit\View;
 
 use Neon\Domain\Attendance;
+use Neon\Test\Unit\Navigation\Fixture\LoggedInUser;
 use Neon\View\Language\Polish;
 use Neon\View\View;
 use PHPUnit\Framework\TestCase;
@@ -78,6 +79,7 @@ class ViewLangTest extends TestCase
             new Polish(),
             $fields['applicationName'] ?? '',
             [],
-            new Attendance(0, 0));
+            new Attendance(0, 0),
+            LoggedInUser::guest());
     }
 }

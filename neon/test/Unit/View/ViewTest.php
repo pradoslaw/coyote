@@ -3,6 +3,7 @@ namespace Neon\Test\Unit\View;
 
 use Neon\Domain\Attendance;
 use Neon\Test\BaseFixture\Selector\Selector;
+use Neon\Test\Unit\Navigation\Fixture\LoggedInUser;
 use Neon\View\Language\English;
 use Neon\View\View;
 use PHPUnit\Framework\TestCase;
@@ -128,7 +129,8 @@ class ViewTest extends TestCase
             new English(),
             $fields['applicationName'] ?? '',
             [],
-            new Attendance(0, 0));
+            new Attendance(0, 0),
+            LoggedInUser::guest());
     }
 
     private function find(View $view, string...$selectors): string

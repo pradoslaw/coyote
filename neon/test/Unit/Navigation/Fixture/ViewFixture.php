@@ -37,7 +37,7 @@ trait ViewFixture
             $fields['githubName'] ?? '',
             $fields['githubStars'] ?? -1,
             $fields['controls'] ?? [],
-            $fields['loggedInAvatarUrl'] ?? '',
+            $fields['loggedInAvatarUrl'] ?? null,
         );
     }
 }
