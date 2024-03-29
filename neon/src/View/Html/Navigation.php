@@ -85,7 +85,7 @@ starIcon;
         return $h('ul', [
             $h('li', [
                 $h('a', [$big], ['href' => $controls[$big]]),
-            ], 'px-2 py-1.5 self-center rounded bg-[#00A538] text-white'),
+            ], 'px-2 py-1.5 self-center rounded bg-[#00A538] text-white whitespace-nowrap'),
             $h('li', [
                 $h('a', [$small], ['href' => $controls[$small]]),
             ], 'px-2 py-1.5 self-center'),
