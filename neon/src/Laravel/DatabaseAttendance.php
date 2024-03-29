@@ -1,8 +1,9 @@
 <?php
-namespace Neon\Persistence;
+namespace Neon\Laravel;
 
 use Illuminate\Database\DatabaseManager;
 use Neon\Domain;
+use Neon\Persistence\Attendance;
 
 readonly class DatabaseAttendance implements Attendance
 {

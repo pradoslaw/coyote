@@ -2,7 +2,7 @@
 namespace Neon\Test\Unit\Attendance;
 
 use Illuminate\Database\DatabaseManager;
-use Neon\Persistence\DatabaseAttendance;
+use Neon\Laravel\DatabaseAttendance;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture\Server\Laravel\Application;
 

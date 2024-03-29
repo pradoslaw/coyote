@@ -39,6 +39,6 @@ class ServiceProvider extends RouteServiceProvider
     {
         /** @var DatabaseManager $database */
         $database = $this->app->get(DatabaseManager::class);
-        return new Persistence\DatabaseAttendance($database);
+        return new \Neon\Laravel\DatabaseAttendance($database);
     }
 }
