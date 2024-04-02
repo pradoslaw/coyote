@@ -18,22 +18,23 @@ class AvatarTest extends TestCase
     /**
      * @test
      */
-    public function guestAvatar(): void
+    public function userLoggedIn(): void
     {
+        $this->publicImageBaseUrl('http://cdn.com/public');
+        $this->loggedInUserWithAvatar('foo.png');
         $this->assertSame(
-            '/neon/avatarPlaceholder.png',
+            'http://cdn.com/public/foo.png',
             $this->renderedAvatarUrl());
     }
 
     /**
      * @test
      */
-    public function loggedIn(): void
+    public function userLoggedInNoAvatar(): void
     {
-        $this->publicImageBaseUrl('http://cdn.com/public');
-        $this->loggedInUserWithAvatar('foo.png');
+        $this->loggedInUser();
         $this->assertSame(
-            'http://cdn.com/public/foo.png',
+            '/neon/avatarPlaceholder.png',
             $this->renderedAvatarUrl());
     }
 

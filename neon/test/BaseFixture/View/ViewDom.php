@@ -20,6 +20,11 @@ readonly class ViewDom
         return $this->document->saveHTML($this->first($this->query($xPath), $xPath));
     }
 
+    public function exists(string $xPath): bool
+    {
+        return $this->query($xPath)->count() > 0;
+    }
+
     public function findMany(string $xPath): array
     {
         $texts = [];

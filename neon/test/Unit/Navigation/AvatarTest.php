@@ -13,7 +13,7 @@ class AvatarTest extends TestCase
     /**
      * @test
      */
-    public function loggedInUser(): void
+    public function userShouldSeeHisAvatar(): void
     {
         $this->assertSame(
             'face.png',
@@ -23,11 +23,26 @@ class AvatarTest extends TestCase
     /**
      * @test
      */
-    public function guest(): void
+    public function userShouldSeePlaceholderAvatar(): void
     {
         $this->assertSame(
             '/neon/avatarPlaceholder.png',
-            $this->renderedAvatarUrl(LoggedInUser::guest()));
+            $this->renderedAvatarUrl(LoggedInUser::withoutAvatar()));
+    }
+
+    /**
+     * @test
+     */
+    public function guestShouldNotSeeAvatar(): void
+    {
+        $this->assertFalse($this->isAvatarRendered(LoggedInUser::guest()));
+    }
+
+    private function isAvatarRendered(LoggedInUser $visitor): bool
+    {
+        $application = new Application('', new NoneAttendance(), $visitor);
+        $dom = new ViewDom($application->html());
+        return $dom->exists('//header//img[@id="userAvatar"]');
     }
 
     private function renderedAvatarUrl(LoggedInUser $visitor): string

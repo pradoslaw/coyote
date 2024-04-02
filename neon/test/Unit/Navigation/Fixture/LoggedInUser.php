@@ -5,23 +5,31 @@ use Neon\Domain\Visitor;
 
 readonly class LoggedInUser implements Visitor
 {
-    private function __construct(private ?string $avatarUrl)
+    private function __construct(
+        private bool    $loggedIn,
+        private ?string $avatarUrl,
+    )
     {
     }
 
     public static function guest(): self
     {
-        return new LoggedInUser(null);
+        return new LoggedInUser(false, null);
     }
 
     public static function withAvatar(string $avatarUrl): self
     {
-        return new LoggedInUser($avatarUrl);
+        return new LoggedInUser(true, $avatarUrl);
+    }
+
+    public static function withoutAvatar(): self
+    {
+        return new LoggedInUser(true, null);
     }
 
     public function loggedIn(): bool
     {
-        return $this->avatarUrl !== null;
+        return $this->loggedIn;
     }
 
     public function loggedInUserAvatarUrl(): ?string

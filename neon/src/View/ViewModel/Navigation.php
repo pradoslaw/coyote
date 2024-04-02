@@ -8,6 +8,7 @@ readonly class Navigation
     /** @var Link[] */
     public array $links;
     public string $avatarUrl;
+    public bool $avatarVisible;
 
     public function __construct(
         public string $homepageUrl,
@@ -29,6 +30,7 @@ readonly class Navigation
                 new Link($small, $controls[$small], false),
             ];
         }
+        $this->avatarVisible = $visitor->loggedIn();
         $this->avatarUrl = $visitor->loggedInUserAvatarUrl() ?? '/neon/avatarPlaceholder.png';
     }
 }
