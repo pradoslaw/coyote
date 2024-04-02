@@ -18,7 +18,7 @@ readonly class Navigation
         ?string       $loggedInUserAvatarUrl,
     )
     {
-        if (empty($controls)) {
+        if (empty($controls) || $loggedInUserAvatarUrl) {
             $this->links = [];
         } else {
             [$big, $small] = \array_keys($controls);

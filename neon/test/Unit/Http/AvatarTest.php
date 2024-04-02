@@ -37,16 +37,38 @@ class AvatarTest extends TestCase
             $this->renderedAvatarUrl());
     }
 
-    private function loggedInUserWithAvatar(string $avatarUrl): User
+    /**
+     * @test
+     */
+    public function noControlsUserWithAvatar(): void
+    {
+        $this->loggedInUserWithAvatar();
+        $this->assertSame([], $this->controls());
+    }
+
+    private function loggedInUserWithAvatar(string $avatarUrl = null): User
+    {
+        $user = $this->loggedInUser();
+        $user->photo->setFilename($avatarUrl ?? 'avatar.png');
+        return $user;
+    }
+
+    private function loggedInUser(): User
     {
         $user = new User();
         $user->name = \uniqid();
         $user->email = '';
-        $user->photo->setFilename($avatarUrl);
         /** @var AuthManager $auth */
         $auth = $this->laravel->app->get(AuthManager::class);
         $auth->login($user);
         return $user;
+    }
+
+    private function controls(): array
+    {
+        $dom = new ViewDom($this->htmlView('/events'));
+        $selector = new Selector('header', '.controls', 'a');
+        return $dom->findMany($selector->xPath());
     }
 
     private function renderedAvatarUrl(): string
