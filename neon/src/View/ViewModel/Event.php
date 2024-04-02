@@ -22,7 +22,7 @@ readonly class Event
         $this->pricing = $language->t($event->free ? 'Free' : 'Paid');
         $this->kind = $language->t($event->kind->name);
         $this->date = $this->date($event);
-        $this->dayShortName = $this->dayShortName($event->date);
+        $this->dayShortName = $language->t($this->dayShortName($event->date));
     }
 
     private function date(Domain\Event $event): string

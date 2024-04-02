@@ -1,12 +1,13 @@
 <?php
 namespace Neon\Test\Unit\Event;
 
+use Neon\Domain\Date;
 use Neon\Domain\EventKind;
 use Neon\Test\Unit\Event;
 use Neon\View\Language\Polish;
 use PHPUnit\Framework\TestCase;
 
-class EventViewLangTest extends TestCase
+class EventViewLangPlTest extends TestCase
 {
     use Event\Fixture\ViewFixture;
 
@@ -52,6 +53,34 @@ class EventViewLangTest extends TestCase
         $this->assertSame(
             'Płatne',
             $this->eventDetailsPricing($view));
+    }
+
+    /**
+     * @test
+     * @dataProvider shortNames
+     */
+    public function detailsDayShortName(int $index, string $expectedName): void
+    {
+        $this->assertSame($expectedName, $this->dayShortName($index));
+    }
+
+    public function shortNames(): array
+    {
+        return [
+            [0, 'Pn'],
+            [1, 'Wt'],
+            [2, 'Śr'],
+            [3, 'Cz'],
+            [4, 'Pt'],
+            [5, 'Sb'],
+            [6, 'Nd'],
+        ];
+    }
+
+    private function dayShortName(int $i): string
+    {
+        $view = $this->polishView(['eventDate' => new Date(2024, 1, $i + 1)]);
+        return $this->eventDayShortName($view);
     }
 
     private function polishView(array $fields): \Neon\View\HtmlView

@@ -23,6 +23,11 @@ trait ViewFixture
         return $this->text($view, new Selector('div.event', 'div.details', 'span[last()]'));
     }
 
+    function eventDayShortName(HtmlView $view): string
+    {
+        return $this->text($view, new Selector('div.event', 'div.date', 'span[last()]'));
+    }
+
     function eventDetailsKind(HtmlView $view): string
     {
         return $this->text($view, new Selector('div.event', 'div.details', 'span[2]'));

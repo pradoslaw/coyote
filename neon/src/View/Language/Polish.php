@@ -24,6 +24,14 @@ class Polish implements Language
 
         'Free' => 'Bezpłatne',
         'Paid' => 'Płatne',
+
+        'Mon' => 'Pn',
+        'Tue' => 'Wt',
+        'Wed' => 'Śr',
+        'Thu' => 'Cz',
+        'Fri' => 'Pt',
+        'Sat' => 'Sb',
+        'Sun' => 'Nd',
     ];
 
     public function t(string $phrase): string
