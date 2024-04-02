@@ -1,6 +1,8 @@
 <?php
 namespace Neon\View\ViewModel;
 
+use Neon\Domain\Visitor;
+
 readonly class Navigation
 {
     /** @var Link[] */
@@ -15,10 +17,10 @@ readonly class Navigation
         public string $githubName,
         public string $githubStars,
         array         $controls,
-        ?string       $loggedInUserAvatarUrl,
+        Visitor       $visitor,
     )
     {
-        if (empty($controls) || $loggedInUserAvatarUrl) {
+        if (empty($controls) || $visitor->loggedIn()) {
             $this->links = [];
         } else {
             [$big, $small] = \array_keys($controls);
@@ -27,6 +29,6 @@ readonly class Navigation
                 new Link($small, $controls[$small], false),
             ];
         }
-        $this->avatarUrl = $loggedInUserAvatarUrl ?? '/neon/avatarPlaceholder.png';
+        $this->avatarUrl = $visitor->loggedInUserAvatarUrl() ?? '/neon/avatarPlaceholder.png';
     }
 }

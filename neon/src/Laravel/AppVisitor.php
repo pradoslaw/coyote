@@ -12,6 +12,13 @@ readonly class AppVisitor implements Visitor
     {
     }
 
+    public function loggedIn(): bool
+    {
+        /** @var AuthManager $auth */
+        $auth = $this->application->get(AuthManager::class);
+        return $auth->check();
+    }
+
     public function loggedInUserAvatarUrl(): ?string
     {
         /** @var AuthManager $auth */

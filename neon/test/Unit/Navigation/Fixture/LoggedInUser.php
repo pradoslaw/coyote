@@ -19,6 +19,11 @@ readonly class LoggedInUser implements Visitor
         return new LoggedInUser($avatarUrl);
     }
 
+    public function loggedIn(): bool
+    {
+        return $this->avatarUrl !== null;
+    }
+
     public function loggedInUserAvatarUrl(): ?string
     {
         return $this->avatarUrl;

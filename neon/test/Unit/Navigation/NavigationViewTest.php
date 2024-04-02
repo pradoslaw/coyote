@@ -77,6 +77,21 @@ class NavigationViewTest extends TestCase
     /**
      * @test
      */
+    public function noControlsLinksLoggedIn(): void
+    {
+        $view = $this->navigationView([
+            'controls'          => ['Control' => '/'],
+            'loggedInAvatarUrl' => 'foo.png',
+        ]);
+        $this->assertSame(
+            [],
+            $this->texts($view,
+                new Selector('ul.controls', 'li', 'a', '@href')));
+    }
+
+    /**
+     * @test
+     */
     public function githubName(): void
     {
         $view = $this->navigationView(['githubName' => 'Joe']);

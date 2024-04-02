@@ -37,7 +37,9 @@ trait ViewFixture
             $fields['githubName'] ?? '',
             $fields['githubStars'] ?? -1,
             $fields['controls'] ?? [],
-            $fields['loggedInAvatarUrl'] ?? null,
+            isset($fields['loggedInAvatarUrl'])
+                ? LoggedInUser::withAvatar($fields['loggedInAvatarUrl'])
+                : LoggedInUser::guest(),
         );
     }
 }

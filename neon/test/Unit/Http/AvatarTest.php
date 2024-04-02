@@ -40,9 +40,26 @@ class AvatarTest extends TestCase
     /**
      * @test
      */
+    public function controlsUserGuest(): void
+    {
+        $this->assertSame(['Utwórz konto', 'Logowanie'], $this->controls());
+    }
+
+    /**
+     * @test
+     */
     public function noControlsUserWithAvatar(): void
     {
         $this->loggedInUserWithAvatar();
+        $this->assertSame([], $this->controls());
+    }
+
+    /**
+     * @test
+     */
+    public function noControlsUserWithoutAvatar(): void
+    {
+        $this->loggedInUser();
         $this->assertSame([], $this->controls());
     }
 
