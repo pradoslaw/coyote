@@ -19,7 +19,8 @@ readonly class AppVisitor implements Visitor
         if ($auth->check()) {
             /** @var User $user */
             $user = $auth->user();
-            return $user->photo->getFilename();
+            $url = (string)$user->photo->url();
+            return $url ?: null;
         }
         return null;
     }

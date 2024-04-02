@@ -3,15 +3,17 @@ namespace Neon\Test\Unit\Http;
 
 use Coyote\User;
 use Illuminate\Auth\AuthManager;
+use Neon\Test\BaseFixture;
 use Neon\Test\BaseFixture\Selector\Selector;
 use Neon\Test\BaseFixture\View\ViewDom;
 use PHPUnit\Framework\TestCase;
-use Tests\Unit\BaseFixture;
+use Tests\Unit\BaseFixture\Server;
 
 class AvatarTest extends TestCase
 {
-    use BaseFixture\Server\Laravel\Application;
-    use BaseFixture\Server\Http;
+    use Server\Laravel\Application;
+    use Server\Http;
+    use BaseFixture\PublicImageUrl;
 
     /**
      * @test
@@ -28,9 +30,10 @@ class AvatarTest extends TestCase
      */
     public function loggedIn(): void
     {
+        $this->publicImageBaseUrl('http://cdn.com/public');
         $this->loggedInUserWithAvatar('foo.png');
         $this->assertSame(
-            'foo.png',
+            'http://cdn.com/public/foo.png',
             $this->renderedAvatarUrl());
     }
 
