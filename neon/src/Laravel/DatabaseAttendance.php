@@ -14,7 +14,9 @@ readonly class DatabaseAttendance implements Attendance
     public function fetchAttendance(): Domain\Attendance
     {
         $count = $this->database->query()->from('users')->count();
-        $online = $this->database->query()->from('sessions')->count();
+        $online = \max($this->database->query()->from('sessions')
+            ->where('robot', '') // TODO this is untested
+            ->count(), 1);
         return new Domain\Attendance($count, $online);
     }
 }
