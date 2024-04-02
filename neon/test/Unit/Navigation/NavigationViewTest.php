@@ -2,6 +2,7 @@
 namespace Neon\Test\Unit\Navigation;
 
 use Neon\Test\BaseFixture\Selector\Selector;
+use Neon\View\HtmlView;
 use PHPUnit\Framework\TestCase;
 
 class NavigationViewTest extends TestCase
@@ -116,5 +117,38 @@ class NavigationViewTest extends TestCase
         $this->assertSame('http://github.com/Bar',
             $this->text($view,
                 new Selector('.github', 'a.stars', '@href')));
+    }
+
+    /**
+     * @test
+     */
+    public function registerButtonBold(): void
+    {
+        $view = $this->navigationView(['controls' => [
+            'Register' => '/account',
+            'Login'    => '/login',
+        ]]);
+        $this->assertContains('rounded',
+            $this->cssClasses($view, ['ul.controls', 'li[1]']));
+    }
+
+    /**
+     * @test
+     */
+    public function loginButtonRegular(): void
+    {
+        $view = $this->navigationView(['controls' => [
+            'Register' => '/account',
+            'Login'    => '/login',
+        ]]);
+        $this->assertNotContains('rounded',
+            $this->cssClasses($view, ['ul.controls', 'li[2]']));
+    }
+
+    private function cssClasses(HtmlView $view, array $selectors): array
+    {
+        $xPathSelectors = \array_merge($selectors, ['@class']);
+        $classAttribute = $this->text($view, new Selector(...$xPathSelectors));
+        return \explode(' ', $classAttribute);
     }
 }

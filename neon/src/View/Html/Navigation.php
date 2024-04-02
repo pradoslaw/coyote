@@ -2,6 +2,7 @@
 namespace Neon\View\Html;
 
 use Neon\View\ViewModel;
+use Neon\View\ViewModel\Link;
 
 readonly class Navigation implements Item
 {
@@ -77,21 +78,20 @@ starIcon;
                     'class' => 'stars px-2.5 py-1.5 inline-block',
                     'href'  => $this->navigation->githubStarsUrl,
                 ]),
-        ], 'github flex border border-solid border-[#E2E2E2] rounded divide-x font-[Helvetica] font-bold text-xs self-center ' . $className);
+        ], "github flex border border-solid border-[#E2E2E2] rounded divide-x font-[Helvetica] font-bold text-xs self-center $className");
     }
 
     private function controls(callable $h): string
     {
-        $controls = $this->navigation->controls + ['', ''];
-        [$big, $small] = \array_keys($controls);
-        return $h('ul', [
-            $h('li', [
-                $h('a', [$big], ['href' => $controls[$big]]),
-            ], 'px-2 py-1.5 self-center rounded bg-[#00A538] text-white whitespace-nowrap'),
-            $h('li', [
-                $h('a', [$small], ['href' => $controls[$small]]),
-            ], 'px-2 py-1.5 self-center'),
-        ],
+        return $h('ul',
+            \array_map(fn(Link $link) => $this->controlItem($h, $link), $this->navigation->links),
             'controls flex');
+    }
+
+    private function controlItem(callable $h, Link $link): string
+    {
+        return $h('li', [
+            $h('a', [$link->title], ['href' => $link->href]),
+        ], 'px-2 py-1.5 self-center ' . ($link->bold ? 'rounded bg-[#00A538] text-white whitespace-nowrap' : ''));
     }
 }
