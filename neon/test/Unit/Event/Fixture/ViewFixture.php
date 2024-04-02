@@ -3,7 +3,7 @@ namespace Neon\Test\Unit\Event\Fixture;
 
 use Neon;
 use Neon\Domain;
-use Neon\Domain\EventKind;
+use Neon\Domain\Event\EventKind;
 use Neon\Test\BaseFixture\Selector\Selector;
 use Neon\Test\BaseFixture\View\ViewDom;
 use Neon\View;
@@ -61,12 +61,12 @@ trait ViewFixture
     {
         return new Neon\View\ViewModel\Event(
             $lang ?? new English(),
-            new Domain\Event(
+            new Domain\Event\Event(
                 $fields['eventTitle'] ?? '',
                 $fields['eventCity'] ?? '',
                 $fields['eventFree'] ?? true,
                 $fields['eventTags'] ?? [],
-                $fields['eventDate'] ?? new Domain\Date(0, 0, 0),
+                $fields['eventDate'] ?? new Domain\Event\Date(0, 0, 0),
                 $fields['eventKind'] ?? EventKind::Conference,
             ));
     }

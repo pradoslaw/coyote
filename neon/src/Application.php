@@ -1,9 +1,9 @@
 <?php
 namespace Neon;
 
-use Neon\Domain\Date;
-use Neon\Domain\Event;
-use Neon\Domain\EventKind;
+use Neon\Domain\Event\Date;
+use Neon\Domain\Event\Event;
+use Neon\Domain\Event\EventKind;
 use Neon\Domain\Visitor;
 use Neon\View\Language\Polish;
 use Neon\View\View;
@@ -30,7 +30,7 @@ readonly class Application
     }
 
     /**
-     * @return Domain\Event[]
+     * @return \Neon\Domain\Event\Event[]
      */
     private function events(): array
     {

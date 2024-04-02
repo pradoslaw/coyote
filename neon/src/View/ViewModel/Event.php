@@ -14,7 +14,7 @@ readonly class Event
     public string $date;
     public string $dayShortName;
 
-    public function __construct(Language $language, Domain\Event $event)
+    public function __construct(Language $language, Domain\Event\Event $event)
     {
         $this->title = $event->title;
         $this->city = $event->city;
@@ -25,7 +25,7 @@ readonly class Event
         $this->dayShortName = $language->t($this->dayShortName($event->date));
     }
 
-    private function date(Domain\Event $event): string
+    private function date(Domain\Event\Event $event): string
     {
         $day = $this->leadingZero($event->date->day);
         $month = $this->leadingZero($event->date->month);
@@ -40,7 +40,7 @@ readonly class Event
         return $string;
     }
 
-    private function dayShortName(Domain\Date $date): string
+    private function dayShortName(Domain\Event\Date $date): string
     {
         return date('D', \mkTime(
             hour:0,

@@ -2,7 +2,7 @@
 namespace Neon\Test\Unit\Event;
 
 use Neon\Domain;
-use Neon\Domain\EventKind;
+use Neon\Domain\Event\EventKind;
 use Neon\Test\BaseFixture\Selector\Selector;
 use Neon\Test\Unit\Event;
 use PHPUnit\Framework\TestCase;
@@ -27,7 +27,7 @@ class EventViewTest extends TestCase
      */
     public function date(): void
     {
-        $view = $this->view(['eventDate' => new Domain\Date(2024, 3, 18)]);
+        $view = $this->view(['eventDate' => new Domain\Event\Date(2024, 3, 18)]);
         $this->assertSame(
             ['03.18', '|', 'Mon'],
             $this->texts($view, new Selector('div.event', 'div.date', 'span')));

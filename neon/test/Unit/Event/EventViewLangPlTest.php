@@ -1,8 +1,8 @@
 <?php
 namespace Neon\Test\Unit\Event;
 
-use Neon\Domain\Date;
-use Neon\Domain\EventKind;
+use Neon\Domain\Event\Date;
+use Neon\Domain\Event\EventKind;
 use Neon\Test\Unit\Event;
 use Neon\View\Language\Polish;
 use PHPUnit\Framework\TestCase;

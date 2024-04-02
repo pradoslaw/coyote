@@ -86,7 +86,7 @@ readonly class View
             $this->lang->t('Incoming events'),
             $this->lang->t('Events with our patronage'),
             \array_map(
-                fn(Domain\Event $event) => new Html\Event(
+                fn(Domain\Event\Event $event) => new Html\Event(
                     new ViewModel\Event($this->lang, $event)),
                 $events,
             ));

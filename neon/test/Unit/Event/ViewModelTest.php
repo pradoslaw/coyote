@@ -2,7 +2,7 @@
 namespace Neon\Test\Unit\Event;
 
 use Neon\Domain;
-use Neon\Domain\Date;
+use Neon\Domain\Event\Date;
 use Neon\View\Language\English;
 use PHPUnit\Framework\TestCase;
 
@@ -58,7 +58,7 @@ class ViewModelTest extends TestCase
      */
     public function kindWorkshop(): void
     {
-        $event = $this->viewEvent(['kind' => Domain\EventKind::Workshop]);
+        $event = $this->viewEvent(['kind' => Domain\Event\EventKind::Workshop]);
         $this->assertSame('Workshop', $event->kind);
     }
 
@@ -67,7 +67,7 @@ class ViewModelTest extends TestCase
      */
     public function kindConference(): void
     {
-        $event = $this->viewEvent(['kind' => Domain\EventKind::Conference]);
+        $event = $this->viewEvent(['kind' => Domain\Event\EventKind::Conference]);
         $this->assertSame('Conference', $event->kind);
     }
 
@@ -76,7 +76,7 @@ class ViewModelTest extends TestCase
      */
     public function kindHackaton(): void
     {
-        $event = $this->viewEvent(['kind' => Domain\EventKind::Hackaton]);
+        $event = $this->viewEvent(['kind' => Domain\Event\EventKind::Hackaton]);
         $this->assertSame('Hackaton', $event->kind);
     }
 
@@ -127,15 +127,15 @@ class ViewModelTest extends TestCase
             $this->domainEvent($fields));
     }
 
-    private function domainEvent(array $fields): Domain\Event
+    private function domainEvent(array $fields): Domain\Event\Event
     {
-        return new Domain\Event(
+        return new Domain\Event\Event(
             $fields['title'] ?? 'irrelevant',
             $fields['city'] ?? 'irrelevant',
             $fields['free'] ?? false,
             $fields['tags'] ?? [],
             $fields['date'] ?? new Date(130, 2, 4),
-            $fields['kind'] ?? Domain\EventKind::Conference,
+            $fields['kind'] ?? Domain\Event\EventKind::Conference,
         );
     }
 }

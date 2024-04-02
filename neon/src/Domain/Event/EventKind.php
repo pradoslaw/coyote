@@ -1,5 +1,5 @@
 <?php
-namespace Neon\Domain;
+namespace Neon\Domain\Event;
 
 enum EventKind
 {

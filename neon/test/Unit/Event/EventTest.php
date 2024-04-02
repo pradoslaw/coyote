@@ -1,9 +1,9 @@
 <?php
 namespace Neon\Test\Unit\Event;
 
-use Neon\Domain\Date;
-use Neon\Domain\Event;
-use Neon\Domain\EventKind;
+use Neon\Domain\Event\Date;
+use Neon\Domain\Event\Event;
+use Neon\Domain\Event\EventKind;
 use PHPUnit\Framework\TestCase;
 
 class EventTest extends TestCase
