@@ -26,7 +26,7 @@ readonly class Section implements Item
                 ]),
                 $this->topRightHighlight($h),
                 $h('h1', [$this->sectionTitle], 'font-semibold text-2xl'),
-            ], 'bg-white rounded-lg py-5 p-4 mb-8'),
+            ], 'bg-white rounded-lg py-[26px] p-4 mb-8'),
 
             $h('h2',
                 [$this->subsectionTitle],
