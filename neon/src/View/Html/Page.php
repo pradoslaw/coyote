@@ -16,6 +16,7 @@ readonly class Page
             // new Script('https://cdn.tailwindcss.com'), // for debug
             new Style('css/neon.css'),
             new Style('fonts/switzer/switzer.css'),
+            new Style('fonts/inter/inter.css'),
         ];
     }
 

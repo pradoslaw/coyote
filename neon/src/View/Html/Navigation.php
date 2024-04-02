@@ -57,7 +57,7 @@ readonly class Navigation implements Item
                 \array_keys($this->navigation->items),
                 $this->navigation->items,
             ),
-                'menu-items flex font-semibold'),
+                'menu-items flex font-medium font-[Inter]'),
         ]);
     }
 
