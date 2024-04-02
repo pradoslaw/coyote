@@ -25,7 +25,8 @@ readonly class Navigation implements Item
                     $this->controls($h),
                     $h('img', [], [
                         'src'   => $this->navigation->avatarUrl,
-                        'class' => 'size-8 self-center',
+                        'class' => 'size-[30px] self-center rounded',
+                        'style' => 'border: 1px solid rgb(226, 226, 226);',
                         'id'    => 'userAvatar']),
                 ], 'flex'),
             ], 'container mx-auto flex text-[#4E5973] text-sm justify-between mb-4'),
