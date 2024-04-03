@@ -4,8 +4,7 @@ namespace Neon\View;
 use Neon\Domain;
 use Neon\Domain\Attendance;
 use Neon\Domain\Visitor;
-use Neon\View\Html\Body\JobOffers;
-use Neon\View\Html\Body\Navigation;
+use Neon\View\Html\Body;
 use Neon\View\Html\Head\Favicon;
 use Neon\View\Html\Head\Title;
 use Neon\View\Html\Render;
@@ -28,12 +27,12 @@ readonly class View
             new Title($applicationName),
             new Favicon('https://4programmers.net/img/favicon.png'),
         ], [
-            new Navigation($this->navigation($visitor)),
+            new Body\Navigation($this->navigation($visitor)),
             new UntypedItem(fn(Render $h): array => [
                 $h->tag('div', ['class' => 'lg:flex container mx-auto'], [
                     $h->tag('aside', ['class' => 'lg:w-1/4 lg:pr-2 mb-4 lg:mb-0'], [
                         ...$this->attendance($attendance)->html($h),
-                        ...(new JobOffers('Search for jobs', $offers))->html($h),
+                        ...(new Body\JobOffers('Search for jobs', $offers))->html($h),
                     ]),
                     $h->tag('main',
                         ['class' => 'lg:w-3/4 lg:pl-2'],
