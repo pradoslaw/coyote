@@ -9,7 +9,7 @@ use Neon\Test\BaseFixture\View\ViewDom;
 use Neon\Test\Unit\Navigation\Fixture\LoggedInUser;
 use PHPUnit\Framework\TestCase;
 
-class AvatarTest extends TestCase
+class NavigationViewAvatarTest extends TestCase
 {
     /**
      * @test
