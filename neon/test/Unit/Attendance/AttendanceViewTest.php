@@ -12,9 +12,9 @@ class AttendanceViewTest extends TestCase
      */
     public function totalUsers(): void
     {
-        $this->assertFieldRenderedIn(
-            'totalAmount',
-            '//*[@id="attendance"]//*[@id="totalAmount"]/text()');
+        $this->assertSame('14', $this
+            ->view(['totalAmount' => 14])
+            ->find('//*[@id="attendance"]//*[@id="totalAmount"]/text()'));
     }
 
     /**
@@ -22,9 +22,9 @@ class AttendanceViewTest extends TestCase
      */
     public function onlineUsers(): void
     {
-        $this->assertFieldRenderedIn(
-            'onlineAmount',
-            '//*[@id="attendance"]//*[@id="onlineAmount"]/text()');
+        $this->assertSame('54', $this
+            ->view(['onlineAmount' => 54])
+            ->find('//*[@id="attendance"]//*[@id="onlineAmount"]/text()'));
     }
 
     /**
@@ -32,9 +32,9 @@ class AttendanceViewTest extends TestCase
      */
     public function totalUsersTitle(): void
     {
-        $this->assertFieldRenderedIn(
-            'totalTitle',
-            '//*[@id="attendance"]//*[@id="totalTitle"]/text()');
+        $this->assertSame('magic value', $this
+            ->view(['totalTitle' => 'magic value'])
+            ->find('//*[@id="attendance"]//*[@id="totalTitle"]/text()'));
     }
 
     /**
@@ -42,24 +42,20 @@ class AttendanceViewTest extends TestCase
      */
     public function onlineUsersTitle(): void
     {
-        $this->assertFieldRenderedIn(
-            'onlineTitle',
-            '//*[@id="attendance"]//*[@id="onlineTitle"]/text()');
-    }
-
-    private function assertFieldRenderedIn(string $fieldName, string $xPath): void
-    {
         $this->assertSame('magic value', $this
-            ->view([$fieldName => 'magic value'])
-            ->find($xPath));
+            ->view(['onlineTitle' => 'magic value'])
+            ->find('//*[@id="attendance"]//*[@id="onlineTitle"]/text()'));
     }
 
     private function view(array $fields): ViewDom
     {
         $view = new Neon\View\HtmlView([], [
             new Neon\View\Html\Body\Attendance(
-                $fields['totalAmount'] ?? '',
-                $fields['onlineAmount'] ?? '',
+                new Neon\View\ViewModel\Attendance(
+                    new Neon\Domain\Attendance(
+                        $fields['totalAmount'] ?? 0,
+                        $fields['onlineAmount'] ?? 0,
+                    )),
                 $fields['totalTitle'] ?? '',
                 $fields['onlineTitle'] ?? '',
             ),

@@ -4,14 +4,14 @@ namespace Neon\View\Html\Body;
 use Neon\View\Html\Item;
 use Neon\View\Html\Render;
 use Neon\View\Html\Tag;
+use Neon\View\ViewModel;
 
 readonly class Attendance implements Item
 {
     public function __construct(
-        private string $totalUsers,
-        private string $onlineUsers,
-        private string $totalUsersTitle,
-        private string $onlineUsersTitle,
+        private ViewModel\Attendance $vm,
+        private string               $totalUsersTitle,
+        private string               $onlineUsersTitle,
     )
     {
     }
@@ -29,7 +29,7 @@ readonly class Attendance implements Item
             ], [
                 $h->tag('div', ['class' => "z-[3] px-6 w-1/2 $separator"], [
                     $h->tag('div', ['class' => $title, 'id' => 'totalTitle'], [$this->totalUsersTitle]),
-                    $h->tag('div', ['class' => $number, 'id' => 'totalAmount'], [$this->totalUsers]),
+                    $h->tag('div', ['class' => $number, 'id' => 'totalAmount'], [$this->vm->totalUsers]),
                 ]),
 
                 $h->tag('div', ['class' => 'z-[3] px-6 w-1/2'], [
@@ -37,7 +37,7 @@ readonly class Attendance implements Item
                         $this->diode($h),
                         $h->tag('div', ['class' => "$title ml-1", 'id' => 'onlineTitle'], [$this->onlineUsersTitle]),
                     ]),
-                    $h->tag('div', ['class' => $number, 'id' => 'onlineAmount'], [$this->onlineUsers]),
+                    $h->tag('div', ['class' => $number, 'id' => 'onlineAmount'], [$this->vm->onlineUsers]),
                 ]),
 
                 $this->bottomCenterHighlight($h),

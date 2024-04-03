@@ -72,9 +72,8 @@ readonly class View
 
     private function attendance(Attendance $attendance): Html\Body\Attendance
     {
-        $vm = new ViewModel\Attendance($attendance);
         return new Html\Body\Attendance(
-            $vm->totalUsers, $vm->onlineUsers,
+            new ViewModel\Attendance($attendance),
             $this->lang->t('Users'), 'Online');
     }
 
