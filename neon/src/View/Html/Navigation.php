@@ -10,7 +10,7 @@ readonly class Navigation implements Item
     {
     }
 
-    public function html(callable $h): array
+    public function html(Render $h): array
     {
         return [
             $h('header', [
@@ -44,7 +44,7 @@ readonly class Navigation implements Item
             logo;
     }
 
-    private function menuItems(callable $h): string
+    private function menuItems(Render $h): string
     {
         return $h('nav', [
             $h('ul', \array_map(
@@ -61,7 +61,7 @@ readonly class Navigation implements Item
         ]);
     }
 
-    private function githubButton(callable $h, string $className): string
+    private function githubButton(Render $h, string $className): string
     {
         $icon = function (string $class): string {
             return <<<starIcon
@@ -88,14 +88,14 @@ starIcon;
         ], "github flex border border-solid border-[#E2E2E2] rounded divide-x font-[Helvetica] font-bold text-xs self-center $className");
     }
 
-    private function controls(callable $h): string
+    private function controls(Render $h): string
     {
         return $h('ul',
             \array_map(fn(Link $link) => $this->controlItem($h, $link), $this->navigation->links),
             'controls flex');
     }
 
-    private function controlItem(callable $h, Link $link): string
+    private function controlItem(Render $h, Link $link): string
     {
         return $h('li', [
             $h('a', [$link->title], ['href' => $link->href]),

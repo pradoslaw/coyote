@@ -13,7 +13,7 @@ readonly class Section implements Item
     {
     }
 
-    public function html(callable $h): array
+    public function html(Render $h): array
     {
         return [
             $h('div', [
@@ -38,7 +38,7 @@ readonly class Section implements Item
         ];
     }
 
-    private function topRightHighlight(callable $h): Tag
+    private function topRightHighlight(Render $h): Tag
     {
         return $h('div', [], [
             'style'       => 'width:580px; height:580px; border-radius:580px; background:rgba(0, 165, 56, 0.60); filter:blur(50px); position:absolute; right:-290px; bottom:50%;',

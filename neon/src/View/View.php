@@ -8,6 +8,7 @@ use Neon\View\Html\Head\Favicon;
 use Neon\View\Html\Head\Title;
 use Neon\View\Html\JobOffers;
 use Neon\View\Html\Navigation;
+use Neon\View\Html\Render;
 use Neon\View\Html\UntypedItem;
 use Neon\View\Language\Language;
 
@@ -28,7 +29,7 @@ readonly class View
             new Favicon('https://4programmers.net/img/favicon.png'),
         ], [
             new Navigation($this->navigation($visitor)),
-            new UntypedItem(fn(callable $h): array => [
+            new UntypedItem(fn(Render $h): array => [
                 $h('div', [
                     $h('aside', [
                         ...$this->attendance($attendance)->html($h),

@@ -20,7 +20,7 @@ readonly class Page
         ];
     }
 
-    public function html(callable $h): string
+    public function html(Render $h): string
     {
         return '<!DOCTYPE html>' .
             $h('html', [

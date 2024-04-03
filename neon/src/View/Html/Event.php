@@ -9,7 +9,7 @@ readonly class Event
     {
     }
 
-    public function html(callable $h): string
+    public function html(Render $h): string
     {
         $border = 'border-solid border-l-4 border-[#00A538]';
         return $h('div', [

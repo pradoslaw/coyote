@@ -1,13 +1,15 @@
 <?php
 namespace Neon\View\Html\Head;
 
+use Neon\View\Html\Render;
+
 readonly class Script implements Head
 {
     public function __construct(private string $url)
     {
     }
 
-    public function headHtml(callable $h): string
+    public function headHtml(Render $h): string
     {
         return $h('script', [], ['src' => $this->url]);
     }

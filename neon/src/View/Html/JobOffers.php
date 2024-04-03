@@ -12,7 +12,7 @@ readonly class JobOffers implements Item
     {
     }
 
-    public function html(callable $h): array
+    public function html(Render $h): array
     {
         return [
             $h('section', [

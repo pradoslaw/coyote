@@ -12,7 +12,7 @@ readonly class Attendance implements Item
     {
     }
 
-    public function html(callable $h): array
+    public function html(Render $h): array
     {
         $title = 'text-[#a2b7a0] text-xs';
         $number = 'text-[#f2f2f2] text-2xl leading-5 font-semibold mt-1';
@@ -41,12 +41,12 @@ readonly class Attendance implements Item
         ];
     }
 
-    private function diode(callable $h): string
+    private function diode(Render $h): string
     {
         return $h('div', [], 'size-2 bg-[#80ff00] rounded');
     }
 
-    private function bottomCenterHighlight(callable $h): Tag
+    private function bottomCenterHighlight(Render $h): Tag
     {
         return $h('div', [], [
             'class'       => 'top-6 z-[2]',
