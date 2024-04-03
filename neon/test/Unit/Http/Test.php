@@ -2,6 +2,7 @@
 namespace Neon\Test\Unit\Http;
 
 use Neon\Application;
+use Neon\Test\BaseFixture\NoJobOffers;
 use Neon\Test\BaseFixture\NoneAttendance;
 use Neon\Test\Unit\Navigation\Fixture\LoggedInUser;
 use PHPUnit\Framework\TestCase;
@@ -25,6 +26,7 @@ class Test extends TestCase
         $this->laravel->app->instance(Application::class,
             new Application('Ours is the fury',
                 new NoneAttendance(),
+                new NoJobOffers(),
                 LoggedInUser::guest()));
         $response = $this->server->get($uri)
             ->assertSuccessful()

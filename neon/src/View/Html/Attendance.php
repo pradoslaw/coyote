@@ -35,7 +35,7 @@ readonly class Attendance implements Item
 
                 $this->bottomCenterHighlight($h),
             ], [
-                'class' => 'flex align-center bg-black rounded-lg py-[30px]',
+                'class' => 'flex align-center bg-black rounded-lg py-[30px] mb-8',
                 'id'    => 'attendance',
             ]),
         ];

@@ -6,7 +6,7 @@ use Neon\Domain\Attendance;
 use Neon\Domain\Visitor;
 use Neon\View\Html\Head\Favicon;
 use Neon\View\Html\Head\Title;
-use Neon\View\Html\Item;
+use Neon\View\Html\JobOffers;
 use Neon\View\Html\Navigation;
 use Neon\View\Html\UntypedItem;
 use Neon\View\Language\Language;
@@ -20,6 +20,7 @@ readonly class View
         string           $applicationName,
         array            $events,
         Attendance       $attendance,
+        array            $offers,
         Visitor          $visitor)
     {
         $this->view = new HtmlView([
@@ -27,9 +28,16 @@ readonly class View
             new Favicon('https://4programmers.net/img/favicon.png'),
         ], [
             new Navigation($this->navigation($visitor)),
-            $this->asideMain(
-                $this->attendance($attendance),
-                $this->eventsSection($applicationName, $events)),
+            new UntypedItem(fn(callable $h): array => [
+                $h('div', [
+                    $h('aside', [
+                        ...$this->attendance($attendance)->html($h),
+                        ...(new JobOffers('Search for jobs', $offers))->html($h),
+                    ],
+                        'lg:w-1/4 lg:pr-2 mb-4 lg:mb-0'),
+                    $h('main', $this->eventsSection($applicationName, $events)->html($h), 'lg:w-3/4 lg:pl-2'),
+                ], 'lg:flex container mx-auto'),
+            ]),
         ]);
     }
 
@@ -58,16 +66,6 @@ readonly class View
             ],
             $visitor,
         );
-    }
-
-    private function asideMain(Item $aside, Item $main): Item
-    {
-        return new UntypedItem(fn(callable $h): array => [
-            $h('div', [
-                $h('aside', $aside->html($h), 'lg:w-1/4 lg:pr-2 mb-4 lg:mb-0'),
-                $h('main', $main->html($h), 'lg:w-3/4 lg:pl-2'),
-            ], 'lg:flex container mx-auto'),
-        ]);
     }
 
     private function attendance(Attendance $attendance): Html\Attendance

@@ -130,6 +130,7 @@ class ViewTest extends TestCase
             $fields['applicationName'] ?? '',
             [],
             new Attendance(0, 0),
+            [],
             LoggedInUser::guest());
     }
 

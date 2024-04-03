@@ -13,6 +13,7 @@ readonly class Application
     public function __construct(
         private string                 $applicationName,
         private Persistence\Attendance $attendance,
+        private Persistence\JobOffers  $jobOffers,
         private Visitor                $visitor,
     )
     {
@@ -25,6 +26,7 @@ readonly class Application
             $this->applicationName,
             $this->events(),
             $this->attendance->fetchAttendance(),
+            $this->jobOffers->fetchJobOffers(), // todo this is untested
             $this->visitor);
         return $view->html();
     }

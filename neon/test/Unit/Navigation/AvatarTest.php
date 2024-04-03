@@ -2,6 +2,7 @@
 namespace Neon\Test\Unit\Navigation;
 
 use Neon\Application;
+use Neon\Test\BaseFixture\NoJobOffers;
 use Neon\Test\BaseFixture\NoneAttendance;
 use Neon\Test\BaseFixture\Selector\Selector;
 use Neon\Test\BaseFixture\View\ViewDom;
@@ -40,14 +41,14 @@ class AvatarTest extends TestCase
 
     private function isAvatarRendered(LoggedInUser $visitor): bool
     {
-        $application = new Application('', new NoneAttendance(), $visitor);
+        $application = new Application('', new NoneAttendance(), new NoJobOffers(), $visitor);
         $dom = new ViewDom($application->html());
         return $dom->exists('//header//img[@id="userAvatar"]');
     }
 
     private function renderedAvatarUrl(LoggedInUser $visitor): string
     {
-        $application = new Application('', new NoneAttendance(), $visitor);
+        $application = new Application('', new NoneAttendance(), new NoJobOffers(), $visitor);
         return $this->text($application, new Selector('header', '#userAvatar', '@src'));
     }
 
