@@ -1,6 +1,7 @@
 <?php
-namespace Neon\View\Html;
+namespace Neon\View\Html\Body;
 
+use Neon\View\Html\Render;
 use Neon\View\ViewModel;
 
 readonly class Event

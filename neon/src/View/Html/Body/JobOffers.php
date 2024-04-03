@@ -1,7 +1,9 @@
 <?php
-namespace Neon\View\Html;
+namespace Neon\View\Html\Body;
 
 use Neon\Domain\Offer;
+use Neon\View\Html\Item;
+use Neon\View\Html\Render;
 
 readonly class JobOffers implements Item
 {

@@ -4,7 +4,7 @@ namespace Neon\Test\Unit\Jobs;
 use Neon\Domain\Offer;
 use Neon\Test\BaseFixture\Selector\Selector;
 use Neon\Test\BaseFixture\View\ViewDom;
-use Neon\View\Html\JobOffers;
+use Neon\View\Html\Body\JobOffers;
 use Neon\View\HtmlView;
 use PHPUnit\Framework\TestCase;
 

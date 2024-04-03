@@ -36,12 +36,12 @@ trait ViewFixture
     function view(array $fields, Language $lang = null): HtmlView
     {
         return new HtmlView([], [
-            new View\Html\Section(
+            new View\Html\Body\Section(
                 '',
                 '',
                 $fields['sectionTitle'] ?? '',
                 '',
-                [new View\Html\Event($this->viewEvent($fields, $lang))]),
+                [new View\Html\Body\Event($this->viewEvent($fields, $lang))]),
         ]);
     }
 

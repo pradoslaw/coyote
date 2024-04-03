@@ -4,10 +4,10 @@ namespace Neon\View;
 use Neon\Domain;
 use Neon\Domain\Attendance;
 use Neon\Domain\Visitor;
+use Neon\View\Html\Body\JobOffers;
+use Neon\View\Html\Body\Navigation;
 use Neon\View\Html\Head\Favicon;
 use Neon\View\Html\Head\Title;
-use Neon\View\Html\JobOffers;
-use Neon\View\Html\Navigation;
 use Neon\View\Html\Render;
 use Neon\View\Html\UntypedItem;
 use Neon\View\Language\Language;
@@ -70,23 +70,23 @@ readonly class View
         );
     }
 
-    private function attendance(Attendance $attendance): Html\Attendance
+    private function attendance(Attendance $attendance): Html\Body\Attendance
     {
         $vm = new ViewModel\Attendance($attendance);
-        return new Html\Attendance(
+        return new Html\Body\Attendance(
             $vm->totalUsers, $vm->onlineUsers,
             $this->lang->t('Users'), 'Online');
     }
 
-    private function eventsSection(string $applicationName, array $events): Html\Section
+    private function eventsSection(string $applicationName, array $events): Html\Body\Section
     {
-        return new Html\Section(
+        return new Html\Body\Section(
             $applicationName,
             $this->lang->t('Events'),
             $this->lang->t('Incoming events'),
             $this->lang->t('Events with our patronage'),
             \array_map(
-                fn(Domain\Event\Event $event) => new Html\Event(
+                fn(Domain\Event\Event $event) => new Html\Body\Event(
                     new ViewModel\Event($this->lang, $event)),
                 $events,
             ));

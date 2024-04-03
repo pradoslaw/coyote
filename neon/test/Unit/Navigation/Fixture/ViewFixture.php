@@ -4,7 +4,7 @@ namespace Neon\Test\Unit\Navigation\Fixture;
 use Neon;
 use Neon\Test\BaseFixture\Selector\Selector;
 use Neon\Test\BaseFixture\View\ViewDom;
-use Neon\View\Html\Navigation;
+use Neon\View\Html\Body\Navigation;
 
 trait ViewFixture
 {

@@ -1,6 +1,8 @@
 <?php
-namespace Neon\View\Html;
+namespace Neon\View\Html\Body;
 
+use Neon\View\Html\Item;
+use Neon\View\Html\Render;
 use Neon\View\ViewModel;
 use Neon\View\ViewModel\Link;
 
