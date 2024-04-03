@@ -6,7 +6,7 @@ use Neon\Domain\Event\Date;
 use Neon\View\Language\English;
 use PHPUnit\Framework\TestCase;
 
-class ViewModelTest extends TestCase
+class EventViewModelTest extends TestCase
 {
     /**
      * @test
