@@ -9,7 +9,7 @@ use Neon\Test\BaseFixture\View\ViewDom;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture\Server;
 
-class AvatarTest extends TestCase
+class SessionAvatarTest extends TestCase
 {
     use Server\Laravel\Application;
     use Server\Http;
