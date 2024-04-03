@@ -56,28 +56,6 @@ class ViewDomFindTest extends TestCase
     /**
      * @test
      */
-    public function structureNotFound(): void
-    {
-        $throwable = $this->listItemException('<title>Foo</title> <p>Bar</p>');
-        $this->assertStringEndsWith(
-            'html(head(title),body(p))',
-            $throwable->getMessage());
-    }
-
-    /**
-     * @test
-     */
-    public function structureMany(): void
-    {
-        $throwable = $this->listItemException('<ul><li>One</li><li>Two</li></ul>');
-        $this->assertStringEndsWith(
-            'html(body(ul(li,li)))',
-            $throwable->getMessage());
-    }
-
-    /**
-     * @test
-     */
     public function throwForElement(): void
     {
         $dom = new ViewDom('<ul></ul>');
@@ -93,10 +71,5 @@ class ViewDomFindTest extends TestCase
         $dom = new ViewDom('<a href="foo"></a>');
         $attribute = $dom->find('/html/body/a/@href');
         $this->assertSame('foo', $attribute);
-    }
-
-    private function listItemException(string $html): \Throwable
-    {
-        return caught(fn() => (new ViewDom($html))->find('/html/body/ul/li'));
     }
 }

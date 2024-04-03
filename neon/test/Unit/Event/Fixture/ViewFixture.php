@@ -6,6 +6,7 @@ use Neon\Domain;
 use Neon\Domain\Event\EventKind;
 use Neon\Test\BaseFixture\ItemView;
 use Neon\View;
+use Neon\View\Html;
 use Neon\View\Html\Body\Section;
 use Neon\View\Language\English;
 use Neon\View\Language\Language;
@@ -40,6 +41,18 @@ trait ViewFixture
             $fields['sectionTitle'] ?? '',
             '',
             [new View\Html\Body\Event($this->viewEvent($fields, $lang))]));
+    }
+
+    function eventSectionEvents(array $titles): ItemView
+    {
+        return new ItemView(new Html\Body\Section(
+            '',
+            '',
+            '',
+            '',
+            \array_map(fn(string $title) => new Html\Body\Event(
+                $this->viewEvent(['eventTitle' => $title])),
+                $titles)));
     }
 
     function viewEvent(array $fields, Language $lang = null): Neon\View\ViewModel\Event

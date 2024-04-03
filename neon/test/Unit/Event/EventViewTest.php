@@ -70,12 +70,4 @@ class EventViewTest extends TestCase
             ['Hear me roar', 'Ours is the fury'],
             $view->findMany('div.event', 'h2'));
     }
-
-    private function eventSectionEvents(array $titles): ItemView
-    {
-        return new ItemView(new Html\Body\Section('', '', '', '',
-            \array_map(fn(string $title) => new Html\Body\Event(
-                $this->viewEvent(['eventTitle' => $title])),
-                $titles)));
-    }
 }

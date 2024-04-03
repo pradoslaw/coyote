@@ -74,8 +74,7 @@ readonly class ViewDom
 
     private function exception(string $summary, string $xPath): \Exception
     {
-        $structure = new ViewDomStructure($this->document);
-        return new \Exception("$summary: $xPath\n\n" . $structure->structure());
+        return new \Exception("$summary: $xPath");
     }
 
     public function docType(): string
