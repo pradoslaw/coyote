@@ -11,7 +11,7 @@ readonly class Style implements Head
 
     public function headHtml(Render $h): string
     {
-        return $h('link', [], [
+        return $h->tag('link', [], [
             'rel'  => 'stylesheet',
             'type' => 'text/css',
             'href' => $this->url,

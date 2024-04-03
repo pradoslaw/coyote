@@ -23,14 +23,14 @@ readonly class Page
     public function html(Render $h): string
     {
         return '<!DOCTYPE html>' .
-            $h('html', [
-                $h('head', [
-                    $h('meta', [], ['charset' => 'utf-8']),
+            $h->tag('html', [
+                $h->tag('head', [
+                    $h->tag('meta', [], ['charset' => 'utf-8']),
                     ...\array_map(
                         fn(Head $head) => $head->headHtml($h),
                         $this->heads),
                 ], []),
-                $h('body',
+                $h->tag('body',
                     \array_merge(...\array_map(
                         fn(Item $item) => $item->html($h),
                         $this->body)),

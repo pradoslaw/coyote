@@ -11,7 +11,7 @@ readonly class Favicon implements Head
 
     public function headHtml(Render $h): string
     {
-        return $h('link',
+        return $h->tag('link',
             [],
             ['rel' => 'shortcut icon', 'href' => $this->faviconUrl, 'type' => 'image/png']);
     }

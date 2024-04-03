@@ -11,6 +11,6 @@ readonly class Title implements Head
 
     public function headHtml(Render $h): string
     {
-        return $h('title', [$this->title], []);
+        return $h->tag('title', [$this->title], []);
     }
 }

@@ -30,13 +30,13 @@ readonly class View
         ], [
             new Navigation($this->navigation($visitor)),
             new UntypedItem(fn(Render $h): array => [
-                $h('div', [
-                    $h('aside', [
+                $h->tag('div', [
+                    $h->tag('aside', [
                         ...$this->attendance($attendance)->html($h),
                         ...(new JobOffers('Search for jobs', $offers))->html($h),
                     ],
                         'lg:w-1/4 lg:pr-2 mb-4 lg:mb-0'),
-                    $h('main', $this->eventsSection($applicationName, $events)->html($h), 'lg:w-3/4 lg:pl-2'),
+                    $h->tag('main', $this->eventsSection($applicationName, $events)->html($h), 'lg:w-3/4 lg:pl-2'),
                 ], 'lg:flex container mx-auto'),
             ]),
         ]);

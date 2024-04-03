@@ -3,7 +3,7 @@ namespace Neon\View\Html;
 
 class Render
 {
-    public function __invoke(string $tag, array $children, string|array $classNameOrAttributes): Tag
+    public function tag(string $tag, array $children, string|array $classNameOrAttributes): Tag
     {
         $attributes = $this->attributes($classNameOrAttributes);
         $childClasses = $this->elevatedClass($children);

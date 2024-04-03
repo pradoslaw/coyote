@@ -19,18 +19,18 @@ readonly class Attendance implements Item
         $separator = 'border-r border-white border-opacity-20';
 
         return [
-            $h('div', [
-                $h('div', [
-                    $h('div', [$this->totalUsersTitle], ['class' => $title, 'id' => 'totalTitle']),
-                    $h('div', [$this->totalUsers], ['class' => $number, 'id' => 'totalAmount']),
+            $h->tag('div', [
+                $h->tag('div', [
+                    $h->tag('div', [$this->totalUsersTitle], ['class' => $title, 'id' => 'totalTitle']),
+                    $h->tag('div', [$this->totalUsers], ['class' => $number, 'id' => 'totalAmount']),
                 ], "z-[3] px-6 w-1/2 $separator"),
 
-                $h('div', [
-                    $h('div', [
+                $h->tag('div', [
+                    $h->tag('div', [
                         $this->diode($h),
-                        $h('div', [$this->onlineUsersTitle], ['class' => "$title ml-1", 'id' => 'onlineTitle']),
+                        $h->tag('div', [$this->onlineUsersTitle], ['class' => "$title ml-1", 'id' => 'onlineTitle']),
                     ], 'flex items-center'),
-                    $h('div', [$this->onlineUsers], ['class' => $number, 'id' => 'onlineAmount']),
+                    $h->tag('div', [$this->onlineUsers], ['class' => $number, 'id' => 'onlineAmount']),
                 ], 'z-[3] px-6 w-1/2'),
 
                 $this->bottomCenterHighlight($h),
@@ -43,12 +43,12 @@ readonly class Attendance implements Item
 
     private function diode(Render $h): string
     {
-        return $h('div', [], 'size-2 bg-[#80ff00] rounded');
+        return $h->tag('div', [], 'size-2 bg-[#80ff00] rounded');
     }
 
     private function bottomCenterHighlight(Render $h): Tag
     {
-        return $h('div', [], [
+        return $h->tag('div', [], [
             'class'       => 'top-6 z-[2]',
             'style'       => \implode('', [
                 'width:580px;',
