@@ -11,6 +11,6 @@ readonly class Script implements Head
 
     public function headHtml(Render $h): string
     {
-        return $h->tag('script', [], ['src' => $this->url]);
+        return $h->tag('script', ['src' => $this->url], []);
     }
 }

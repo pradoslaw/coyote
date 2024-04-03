@@ -16,7 +16,7 @@ class RenderTest extends TestCase
     public function childClass(): void
     {
         $h = new Render();
-        $parent = $h->tag('div', [$this->child($h, 'foo')], []);
+        $parent = $h->tag('div', [], [$this->child($h, 'foo')]);
         $this->assertClass('foo', $parent);
     }
 
@@ -27,7 +27,7 @@ class RenderTest extends TestCase
     {
         $h = new Render();
         $child = $this->child($h, 'foo cat');
-        $parent = $h->tag('div', [$child], ['class' => 'bar dor']);
+        $parent = $h->tag('div', ['class' => 'bar dor'], [$child]);
         $this->assertClass('bar dor foo cat', $parent);
     }
 
@@ -38,7 +38,7 @@ class RenderTest extends TestCase
     {
         $h = new Render();
         $child = $this->child($h, 'bar');
-        $parent = $h->tag('div', ['first', $child],[]);
+        $parent = $h->tag('div', [], ['first', $child]);
         $this->assertClass('bar', $parent);
     }
 
@@ -50,7 +50,7 @@ class RenderTest extends TestCase
         $h = new Render();
         $first = $this->child($h, 'bar');
         $second = $this->child($h, 'bar');
-        $parent = $h->tag('div', [$first, $second],[]);
+        $parent = $h->tag('div', [], [$first, $second]);
         $this->assertClass('bar', $parent);
     }
 
@@ -62,7 +62,7 @@ class RenderTest extends TestCase
         $h = new Render();
         $first = $this->child($h, 'foo');
         $second = $this->child($h, 'bar');
-        $parent = $h->tag('div', [$first, $second],[]);
+        $parent = $h->tag('div', [], [$first, $second]);
         $this->assertClass('foo bar', $parent);
     }
 
@@ -79,6 +79,6 @@ class RenderTest extends TestCase
 
     private function child(Render $h, string $parentClass): Html\Tag
     {
-        return $h->tag('span', [], ['parentClass' => $parentClass]);
+        return $h->tag('span', ['parentClass' => $parentClass], []);
     }
 }

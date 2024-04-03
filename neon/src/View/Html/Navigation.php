@@ -13,25 +13,23 @@ readonly class Navigation implements Item
     public function html(Render $h): array
     {
         return [
-            $h->tag('header', [
-                $h->tag('div', [
-                    $h->tag('a',
-                        [$this->logo(''),],
-                        ['id' => 'homepage', 'href' => $this->navigation->homepageUrl, 'class' => 'self-center mr-3.5']),
+            $h->tag('header', 'container mx-auto flex text-[#4E5973] text-sm justify-between mb-4', [
+                $h->tag('div', 'flex', [
+                    $h->tag('a', ['id' => 'homepage', 'href' => $this->navigation->homepageUrl, 'class' => 'self-center mr-3.5'], [$this->logo(''),]),
                     $this->menuItems($h),
-                ], 'flex'),
-                $h->tag('div', [
+                ]),
+                $h->tag('div', 'flex', [
                     $this->githubButton($h, 'mr-4'),
                     $this->controls($h),
                     $this->navigation->avatarVisible ?
-                        $h->tag('img', [], [
+                        $h->tag('img', [
                             'src'   => $this->navigation->avatarUrl,
                             'class' => 'size-[30px] self-center rounded',
                             'style' => 'border: 1px solid rgb(226, 226, 226);',
-                            'id'    => 'userAvatar'])
+                            'id' => 'userAvatar'], [])
                         : null,
-                ], 'flex'),
-            ], 'container mx-auto flex text-[#4E5973] text-sm justify-between mb-4'),
+                ]),
+            ]),
         ];
     }
 
@@ -46,19 +44,18 @@ readonly class Navigation implements Item
 
     private function menuItems(Render $h): string
     {
-        return $h->tag('nav', [
-            $h->tag('ul', \array_map(
-                fn(string $item, string $href) => $h->tag('li', [
-                    $h->tag('a', [$item], [
+        return $h->tag('nav', [], [
+            $h->tag('ul', 'menu-items flex font-medium font-[Inter]', \array_map(
+                fn(string $item, string $href) => $h->tag('li', [], [
+                    $h->tag('a', [
                         'href'  => $href,
                         'class' => 'px-2 py-4 inline-block',
-                    ]),
-                ], []),
+                    ], [$item]),
+                ]),
                 \array_keys($this->navigation->items),
                 $this->navigation->items,
-            ),
-                'menu-items flex font-medium font-[Inter]'),
-        ], []);
+            )),
+        ]);
     }
 
     private function githubButton(Render $h, string $className): string
@@ -71,34 +68,30 @@ readonly class Navigation implements Item
 starIcon;
         };
 
-        return $h->tag('div', [
+        return $h->tag('div', "github flex border border-solid border-[#E2E2E2] rounded divide-x font-[Helvetica] font-bold text-xs self-center $className", [
             $h->tag('a', [
-                $icon('w-4 h-4'),
-                $this->navigation->githubName,
-            ], [
                 'class' => 'name px-2.5 py-1.5 flex gap-x-2',
                 'href'  => $this->navigation->githubUrl,
+            ], [
+                $icon('w-4 h-4'),
+                $this->navigation->githubName,
             ]),
-            $h->tag('a',
-                [$this->navigation->githubStars],
-                [
-                    'class' => 'stars px-2.5 py-1.5 inline-block',
-                    'href'  => $this->navigation->githubStarsUrl,
-                ]),
-        ], "github flex border border-solid border-[#E2E2E2] rounded divide-x font-[Helvetica] font-bold text-xs self-center $className");
+            $h->tag('a', [
+                'class' => 'stars px-2.5 py-1.5 inline-block',
+                'href'  => $this->navigation->githubStarsUrl,
+            ], [$this->navigation->githubStars]),
+        ]);
     }
 
     private function controls(Render $h): string
     {
-        return $h->tag('ul',
-            \array_map(fn(Link $link) => $this->controlItem($h, $link), $this->navigation->links),
-            'controls flex');
+        return $h->tag('ul', 'controls flex', \array_map(fn(Link $link) => $this->controlItem($h, $link), $this->navigation->links));
     }
 
     private function controlItem(Render $h, Link $link): string
     {
-        return $h->tag('li', [
-            $h->tag('a', [$link->title], ['href' => $link->href]),
-        ], 'px-2 py-1.5 self-center ' . ($link->bold ? 'rounded bg-[#00A538] text-white whitespace-nowrap' : ''));
+        return $h->tag('li', 'px-2 py-1.5 self-center ' . ($link->bold ? 'rounded bg-[#00A538] text-white whitespace-nowrap' : ''), [
+            $h->tag('a', ['href' => $link->href], [$link->title]),
+        ]);
     }
 }
