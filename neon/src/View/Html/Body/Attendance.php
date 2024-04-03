@@ -8,11 +8,7 @@ use Neon\View\ViewModel;
 
 readonly class Attendance implements Item
 {
-    public function __construct(
-        private ViewModel\Attendance $vm,
-        private string               $totalUsersTitle,
-        private string               $onlineUsersTitle,
-    )
+    public function __construct(private ViewModel\Attendance $vm)
     {
     }
 
@@ -28,14 +24,14 @@ readonly class Attendance implements Item
                 'id'    => 'attendance',
             ], [
                 $h->tag('div', ['class' => "z-[3] px-6 w-1/2 $separator"], [
-                    $h->tag('div', ['class' => $title, 'id' => 'totalTitle'], [$this->totalUsersTitle]),
+                    $h->tag('div', ['class' => $title, 'id' => 'totalTitle'], [$this->vm->totalUsersTitle]),
                     $h->tag('div', ['class' => $number, 'id' => 'totalAmount'], [$this->vm->totalUsers]),
                 ]),
 
                 $h->tag('div', ['class' => 'z-[3] px-6 w-1/2'], [
                     $h->tag('div', ['class' => 'flex items-center'], [
                         $this->diode($h),
-                        $h->tag('div', ['class' => "$title ml-1", 'id' => 'onlineTitle'], [$this->onlineUsersTitle]),
+                        $h->tag('div', ['class' => "$title ml-1", 'id' => 'onlineTitle'], [$this->vm->onlineUsersTitle]),
                     ]),
                     $h->tag('div', ['class' => $number, 'id' => 'onlineAmount'], [$this->vm->onlineUsers]),
                 ]),

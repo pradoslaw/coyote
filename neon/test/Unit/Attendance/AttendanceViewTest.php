@@ -32,8 +32,7 @@ class AttendanceViewTest extends TestCase
      */
     public function totalUsersTitle(): void
     {
-        $this->assertSame('magic value', $this
-            ->view(['totalTitle' => 'magic value'])
+        $this->assertSame('Users', $this->view([])
             ->find('//*[@id="attendance"]//*[@id="totalTitle"]/text()'));
     }
 
@@ -42,8 +41,7 @@ class AttendanceViewTest extends TestCase
      */
     public function onlineUsersTitle(): void
     {
-        $this->assertSame('magic value', $this
-            ->view(['onlineTitle' => 'magic value'])
+        $this->assertSame('Online', $this->view([])
             ->find('//*[@id="attendance"]//*[@id="onlineTitle"]/text()'));
     }
 
@@ -52,12 +50,10 @@ class AttendanceViewTest extends TestCase
         $view = new Neon\View\HtmlView([], [
             new Neon\View\Html\Body\Attendance(
                 new Neon\View\ViewModel\Attendance(
+                    new Neon\View\Language\English(),
                     new Neon\Domain\Attendance(
                         $fields['totalAmount'] ?? 0,
-                        $fields['onlineAmount'] ?? 0,
-                    )),
-                $fields['totalTitle'] ?? '',
-                $fields['onlineTitle'] ?? '',
+                            $fields['onlineAmount'] ?? 0)),
             ),
         ]);
         return new ViewDom($view->html());

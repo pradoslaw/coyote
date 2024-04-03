@@ -72,9 +72,7 @@ readonly class View
 
     private function attendance(Attendance $attendance): Html\Body\Attendance
     {
-        return new Html\Body\Attendance(
-            new ViewModel\Attendance($attendance),
-            $this->lang->t('Users'), 'Online');
+        return new Html\Body\Attendance(new ViewModel\Attendance($this->lang, $attendance));
     }
 
     private function eventsSection(string $applicationName, array $events): Html\Body\Section
