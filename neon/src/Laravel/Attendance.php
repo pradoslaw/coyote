@@ -3,9 +3,8 @@ namespace Neon\Laravel;
 
 use Illuminate\Database\DatabaseManager;
 use Neon\Domain;
-use Neon\Persistence\Attendance;
 
-readonly class DatabaseAttendance implements Attendance
+readonly class Attendance implements \Neon\Persistence\Attendance
 {
     public function __construct(private DatabaseManager $database)
     {

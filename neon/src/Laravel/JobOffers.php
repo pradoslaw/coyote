@@ -12,8 +12,8 @@ readonly class JobOffers implements \Neon\Persistence\JobOffers
     public function fetchJobOffers(): array
     {
         $jobs = Job::query()
-            ->orderBy('updated_at', 'DESC')
-            ->limit(3)
+            ->orderBy('updated_at', 'DESC') // todo this is not tested
+            ->limit(3) // todo this is not tested
             ->get()
             ->all();
 

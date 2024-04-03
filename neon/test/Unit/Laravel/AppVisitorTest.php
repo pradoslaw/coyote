@@ -3,7 +3,7 @@ namespace Neon\Test\Unit\Laravel;
 
 use Coyote\User;
 use Illuminate\Auth\AuthManager;
-use Neon\Laravel\AppVisitor;
+use Neon\Laravel\LaravelVisitor;
 use Neon\Test\BaseFixture;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture\Server\Laravel;
@@ -20,7 +20,7 @@ class AppVisitorTest extends TestCase
     {
         $this->publicImageBaseUrl('http://cdn.com/public');
         $this->loginUser($this->userWithAvatar('foo.png'));
-        $visitor = new AppVisitor($this->laravel->app);
+        $visitor = new LaravelVisitor($this->laravel->app);
         $this->assertSame('http://cdn.com/public/foo.png', $visitor->loggedInUserAvatarUrl());
     }
 
@@ -30,7 +30,7 @@ class AppVisitorTest extends TestCase
     public function missingAvatar(): void
     {
         $this->loginUser($this->userWithoutAvatar());
-        $visitor = new AppVisitor($this->laravel->app);
+        $visitor = new LaravelVisitor($this->laravel->app);
         $this->assertNull($visitor->loggedInUserAvatarUrl());
     }
 
@@ -40,7 +40,7 @@ class AppVisitorTest extends TestCase
     public function guest(): void
     {
         $this->loginGuest();
-        $visitor = new AppVisitor($this->laravel->app);
+        $visitor = new LaravelVisitor($this->laravel->app);
         $this->assertNull($visitor->loggedInUserAvatarUrl());
     }
 

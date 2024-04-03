@@ -6,7 +6,7 @@ use Illuminate\Auth\AuthManager;
 use Illuminate\Foundation\Application;
 use Neon\Domain\Visitor;
 
-readonly class AppVisitor implements Visitor
+readonly class LaravelVisitor implements Visitor
 {
     public function __construct(private Application $application)
     {
