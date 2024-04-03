@@ -3,7 +3,7 @@ namespace Neon\View\Html;
 
 class Render
 {
-    public function __invoke(string $tag, array $children, string|array $classNameOrAttributes = null): Tag
+    public function __invoke(string $tag, array $children, string|array $classNameOrAttributes): Tag
     {
         $attributes = $this->attributes($classNameOrAttributes);
         $childClasses = $this->elevatedClass($children);
@@ -19,12 +19,12 @@ class Render
         );
     }
 
-    private function attributes(string|array|null $classNameOrAttributes): array
+    private function attributes(string|array $classNameOrAttributes): array
     {
         if (\is_string($classNameOrAttributes)) {
             return ['class' => $classNameOrAttributes];
         }
-        return $classNameOrAttributes ?? [];
+        return $classNameOrAttributes;
     }
 
     private function renderElement(string $tag, array $attributes, string $innerHtml): string

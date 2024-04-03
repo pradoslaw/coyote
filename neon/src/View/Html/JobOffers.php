@@ -27,7 +27,7 @@ readonly class JobOffers implements Item
                                 $h('span', [
                                     $this->pinIcon('h-[14px] w-[11px]'),
                                     $h('div', \array_map(
-                                        fn(string $city): string => $h('span', [$city]),
+                                        fn(string $city): string => $h('span', [$city], []),
                                         $offer->cities,
                                     ), ['id' => 'cities', 'class' => 'flex text-sm',]),
                                 ], ['class' => 'flex items-center', 'style' => 'color:#777;']),

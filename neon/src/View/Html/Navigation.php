@@ -53,12 +53,12 @@ readonly class Navigation implements Item
                         'href'  => $href,
                         'class' => 'px-2 py-4 inline-block',
                     ]),
-                ]),
+                ], []),
                 \array_keys($this->navigation->items),
                 $this->navigation->items,
             ),
                 'menu-items flex font-medium font-[Inter]'),
-        ]);
+        ], []);
     }
 
     private function githubButton(Render $h, string $className): string

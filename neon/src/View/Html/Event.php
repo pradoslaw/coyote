@@ -22,7 +22,7 @@ readonly class Event
                 $h('h2', [$this->event->title], 'font-medium text-base mb-1'),
                 $h('ul', \array_map(
                     fn($tag) => $h('li', [$tag], 'inline-block mr-2 py-px px-1.5 text-xs leading-5 text-[#22488C] bg-[#E3E8F1] rounded-md font-[Arial]'),
-                    $this->event->tags)),
+                    $this->event->tags), []),
             ], 'self-center w-1/2'),
             $h('div', [
                 $h('span', [$this->event->city], 'text-[#4E5973] self-center text-sm w-1/3'),

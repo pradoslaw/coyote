@@ -16,7 +16,7 @@ class RenderTest extends TestCase
     public function childClass(): void
     {
         $h = new Render();
-        $parent = $h('div', [$this->child($h, 'foo')]);
+        $parent = $h('div', [$this->child($h, 'foo')], []);
         $this->assertClass('foo', $parent);
     }
 
@@ -38,7 +38,7 @@ class RenderTest extends TestCase
     {
         $h = new Render();
         $child = $this->child($h, 'bar');
-        $parent = $h('div', ['first', $child]);
+        $parent = $h('div', ['first', $child],[]);
         $this->assertClass('bar', $parent);
     }
 
@@ -50,7 +50,7 @@ class RenderTest extends TestCase
         $h = new Render();
         $first = $this->child($h, 'bar');
         $second = $this->child($h, 'bar');
-        $parent = $h('div', [$first, $second]);
+        $parent = $h('div', [$first, $second],[]);
         $this->assertClass('bar', $parent);
     }
 
@@ -62,7 +62,7 @@ class RenderTest extends TestCase
         $h = new Render();
         $first = $this->child($h, 'foo');
         $second = $this->child($h, 'bar');
-        $parent = $h('div', [$first, $second]);
+        $parent = $h('div', [$first, $second],[]);
         $this->assertClass('foo bar', $parent);
     }
 

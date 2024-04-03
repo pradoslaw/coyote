@@ -23,7 +23,7 @@ readonly class Section implements Item
                         $h('span', ['/'], 'mx-1 text-[#00A538]'),
                         $h('li', [$this->breadcrumbItem], 'inline'),
                     ], 'text-xs font-[Arial]'),
-                ]),
+                ],[]),
                 $this->topRightHighlight($h),
                 $h('h1', [$this->sectionTitle], 'font-semibold text-2xl'),
             ], 'bg-white rounded-lg py-[26px] p-4 mb-8'),
