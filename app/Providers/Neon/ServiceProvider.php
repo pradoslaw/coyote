@@ -7,6 +7,7 @@ use Neon\Application;
 use Neon\Laravel\JobOffers;
 use Neon\Laravel\LaravelVisitor;
 use Neon\Persistence;
+use Neon\StaticEvents;
 
 class ServiceProvider extends RouteServiceProvider
 {
@@ -18,6 +19,7 @@ class ServiceProvider extends RouteServiceProvider
             new Application('4programmers.net',
                 $this->attendance(),
                 new JobOffers(),
+                new StaticEvents(),
                 new LaravelVisitor($this->app),
             ));
     }

@@ -2,6 +2,7 @@
 namespace Neon\Test\Unit\Http;
 
 use Neon\Application;
+use Neon\Test\BaseFixture\NoEvents;
 use Neon\Test\BaseFixture\NoJobOffers;
 use Neon\Test\BaseFixture\NoneAttendance;
 use Neon\Test\BaseFixture\View\ViewDom;
@@ -43,6 +44,7 @@ class HttpTest extends TestCase
             new Application($applicationName,
                 new NoneAttendance(),
                 new NoJobOffers(),
+                new NoEvents(),
                 LoggedInUser::guest()));
     }
 
