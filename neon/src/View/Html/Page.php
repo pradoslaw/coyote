@@ -30,9 +30,11 @@ readonly class Page
                         fn(Head $head) => $head->headHtml($h),
                         $this->heads),
                 ]),
-                $h->tag('body', 'bg-[#F0F2F5] font-[Switzer] px-2 lg:px-4', \array_merge(...\array_map(
-                    fn(Item $item) => $item->html($h),
-                    $this->body))),
+                $h->tag('body',
+                    ['class' => 'bg-[#F0F2F5] font-[Switzer] px-2 lg:px-4'],
+                    \array_merge(...\array_map(
+                        fn(Item $item) => $item->html($h),
+                        $this->body))),
             ]);
     }
 }

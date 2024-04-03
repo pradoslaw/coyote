@@ -16,14 +16,17 @@ readonly class JobOffers implements Item
     {
         return [
             $h->tag('section', ['id' => 'jobs'], [
-                $h->tag('h2', 'text-xs text-[#053B00] mb-4 tracking-tight', [$this->sectionTitle]),
+                $h->tag('h2',
+                    ['class' => 'text-xs text-[#053B00] mb-4 tracking-tight'],
+                    [$this->sectionTitle]),
+
                 $h->tag('div', ['class' => 'space-y-4'], \array_map(
                     function (Offer $offer) use ($h): string {
-                        return $h->tag('div', 'flex space-x-4', [
+                        return $h->tag('div', ['class' => 'flex space-x-4'], [
                             $h->tag('img', ['src' => $offer->imageUrl, 'class' => 'size-8'], []),
-                            $h->tag('div', 'flex flex-col space-y-1', [
-                                $h->tag('h3', 'font-[Inter] text-[#4E5973] text-xs font-bold', [$offer->title]),
-                                $h->tag('div', 'flex space-x-4', [
+                            $h->tag('div', ['class' => 'flex flex-col space-y-1'], [
+                                $h->tag('h3', ['class' => 'font-[Inter] text-[#4E5973] text-xs font-bold'], [$offer->title]),
+                                $h->tag('div', ['class' => 'flex space-x-4'], [
                                     $h->tag('span', ['id' => 'company', 'style' => 'color:#777;', 'class' => 'text-sm'], [$offer->company]),
                                     $h->tag('span', ['class' => 'flex items-center', 'style' => 'color:#777;'], [
                                         $this->pinIcon('h-[14px] w-[11px]'),
@@ -35,7 +38,9 @@ readonly class JobOffers implements Item
                                 ]),
 
                                 $h->tag('div', ['id' => 'tags', 'class' => 'flex'], \array_map(
-                                    fn(string $tag): string => $h->tag('span', 'inline-block mr-2 py-px px-1.5 text-xs leading-5 text-[#22488C] bg-[#E3E8F1] rounded-md font-[Arial]', [$tag]),
+                                    fn(string $tag): string => $h->tag('span',
+                                        ['class' => 'inline-block mr-2 py-px px-1.5 text-xs leading-5 text-[#22488C] bg-[#E3E8F1] rounded-md font-[Arial]'],
+                                        [$tag]),
                                     $offer->tags)),
                             ]),
                         ]);

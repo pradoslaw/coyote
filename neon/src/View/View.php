@@ -30,12 +30,14 @@ readonly class View
         ], [
             new Navigation($this->navigation($visitor)),
             new UntypedItem(fn(Render $h): array => [
-                $h->tag('div', 'lg:flex container mx-auto', [
-                    $h->tag('aside', 'lg:w-1/4 lg:pr-2 mb-4 lg:mb-0', [
+                $h->tag('div', ['class' => 'lg:flex container mx-auto'], [
+                    $h->tag('aside', ['class' => 'lg:w-1/4 lg:pr-2 mb-4 lg:mb-0'], [
                         ...$this->attendance($attendance)->html($h),
                         ...(new JobOffers('Search for jobs', $offers))->html($h),
                     ]),
-                    $h->tag('main', 'lg:w-3/4 lg:pl-2', $this->eventsSection($applicationName, $events)->html($h)),
+                    $h->tag('main',
+                        ['class' => 'lg:w-3/4 lg:pl-2'],
+                        $this->eventsSection($applicationName, $events)->html($h)),
                 ]),
             ]),
         ]);

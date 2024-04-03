@@ -3,12 +3,11 @@ namespace Neon\View\Html;
 
 class Render
 {
-    public function tag(string $tag, string|array $classNameOrAttributes, array $children): Tag
+    public function tag(string $tag, array $attributes, array $children): Tag
     {
-        $attributes = $this->attributes($classNameOrAttributes);
-        $childClasses = $this->elevatedClass($children);
-        if (!empty($childClasses)) {
-            $attributes['class'] = \trim(($attributes['class'] ?? '') . ' ' . $childClasses);
+        $elevatedClass = $this->elevatedClass($children);
+        if (!empty($elevatedClass)) {
+            $attributes['class'] = \trim(($attributes['class'] ?? '') . ' ' . $elevatedClass);
         }
         return new Tag(
             $this->renderElement(
@@ -17,14 +16,6 @@ class Render
                 \implode('', $children)),
             $attributes['parentClass'] ?? null,
         );
-    }
-
-    private function attributes(string|array $classNameOrAttributes): array
-    {
-        if (\is_string($classNameOrAttributes)) {
-            return ['class' => $classNameOrAttributes];
-        }
-        return $classNameOrAttributes;
     }
 
     private function renderElement(string $tag, array $attributes, string $innerHtml): string

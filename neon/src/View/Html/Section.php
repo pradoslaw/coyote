@@ -16,19 +16,21 @@ readonly class Section implements Item
     public function html(Render $h): array
     {
         return [
-            $h->tag('div', 'bg-white rounded-lg py-[26px] p-4 mb-8', [
+            $h->tag('div', ['class' => 'bg-white rounded-lg py-[26px] p-4 mb-8'], [
                 $h->tag('nav', [], [
-                    $h->tag('ul', 'text-xs font-[Arial]', [
-                        $h->tag('li', 'inline', [$this->breadcrumbRoot]),
-                        $h->tag('span', 'mx-1 text-[#00A538]', ['/']),
-                        $h->tag('li', 'inline', [$this->breadcrumbItem]),
+                    $h->tag('ul', ['class' => 'text-xs font-[Arial]'], [
+                        $h->tag('li', ['class' => 'inline'], [$this->breadcrumbRoot]),
+                        $h->tag('span', ['class' => 'mx-1 text-[#00A538]'], ['/']),
+                        $h->tag('li', ['class' => 'inline'], [$this->breadcrumbItem]),
                     ]),
                 ]),
                 $this->topRightHighlight($h),
-                $h->tag('h1', 'font-semibold text-2xl', [$this->sectionTitle]),
+                $h->tag('h1', ['class' => 'font-semibold text-2xl'], [$this->sectionTitle]),
             ]),
 
-            $h->tag('h2', 'text-xs text-[#053B00] mb-4 tracking-tight', [$this->subsectionTitle]),
+            $h->tag('h2',
+                ['class' => 'text-xs text-[#053B00] mb-4 tracking-tight'],
+                [$this->subsectionTitle]),
 
             ...\array_map(
                 fn(Event $event) => $event->html($h),

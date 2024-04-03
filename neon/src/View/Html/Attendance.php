@@ -23,13 +23,13 @@ readonly class Attendance implements Item
                 'class' => 'flex align-center bg-black rounded-lg py-[30px] mb-8',
                 'id'    => 'attendance',
             ], [
-                $h->tag('div', "z-[3] px-6 w-1/2 $separator", [
+                $h->tag('div', ['class' => "z-[3] px-6 w-1/2 $separator"], [
                     $h->tag('div', ['class' => $title, 'id' => 'totalTitle'], [$this->totalUsersTitle]),
                     $h->tag('div', ['class' => $number, 'id' => 'totalAmount'], [$this->totalUsers]),
                 ]),
 
-                $h->tag('div', 'z-[3] px-6 w-1/2', [
-                    $h->tag('div', 'flex items-center', [
+                $h->tag('div', ['class' => 'z-[3] px-6 w-1/2'], [
+                    $h->tag('div', ['class' => 'flex items-center'], [
                         $this->diode($h),
                         $h->tag('div', ['class' => "$title ml-1", 'id' => 'onlineTitle'], [$this->onlineUsersTitle]),
                     ]),
@@ -43,7 +43,7 @@ readonly class Attendance implements Item
 
     private function diode(Render $h): string
     {
-        return $h->tag('div', 'size-2 bg-[#80ff00] rounded', []);
+        return $h->tag('div', ['class' => 'size-2 bg-[#80ff00] rounded'], []);
     }
 
     private function bottomCenterHighlight(Render $h): Tag
