@@ -1,5 +1,5 @@
 <?php
-namespace Neon\Test\Unit\Jobs;
+namespace Neon\Test\Unit\JobOffers;
 
 use Neon\Domain\Offer;
 use Neon\Test\BaseFixture\Selector\Selector;

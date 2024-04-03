@@ -1,5 +1,5 @@
 <?php
-namespace Neon\Test\Unit\Jobs;
+namespace Neon\Test\Unit\JobOffers;
 
 use Coyote\Firm;
 use Coyote\Job;
@@ -11,7 +11,7 @@ use Neon\Test\BaseFixture;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture\Server\Laravel;
 
-class JobsPersistenceTest extends TestCase
+class JobOffersLaravelTest extends TestCase
 {
     use Laravel\Application;
     use Laravel\Transactional;

@@ -1,5 +1,5 @@
 <?php
-namespace Neon\Test\Unit\Laravel;
+namespace Neon\Test\Unit\Visitor;
 
 use Coyote\User;
 use Illuminate\Auth\AuthManager;
@@ -8,7 +8,7 @@ use Neon\Test\BaseFixture;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture\Server\Laravel;
 
-class AppVisitorTest extends TestCase
+class VisitorLaravelTest extends TestCase
 {
     use Laravel\Application;
     use BaseFixture\PublicImageUrl;

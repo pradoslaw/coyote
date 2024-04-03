@@ -6,7 +6,7 @@ use Neon\Laravel\Attendance;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture\Server\Laravel\Application;
 
-class DatabaseAttendanceTest extends TestCase
+class AttendanceLaravelTest extends TestCase
 {
     use Application;
 
