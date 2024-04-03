@@ -3,6 +3,7 @@ namespace Neon\Test\Unit\Event;
 
 use Neon\Domain\Event\Date;
 use Neon\Domain\Event\EventKind;
+use Neon\Test\BaseFixture\ItemView;
 use Neon\Test\Unit\Event;
 use Neon\View\Language\English;
 use PHPUnit\Framework\TestCase;
@@ -83,8 +84,8 @@ class EventViewLangEngTest extends TestCase
         return $this->eventDayShortName($view);
     }
 
-    private function englishView(array $fields): \Neon\View\HtmlView
+    private function englishView(array $fields): ItemView
     {
-        return $this->view($fields, new English());
+        return $this->eventsSection($fields, new English());
     }
 }

@@ -4,57 +4,42 @@ namespace Neon\Test\Unit\Event\Fixture;
 use Neon;
 use Neon\Domain;
 use Neon\Domain\Event\EventKind;
-use Neon\Test\BaseFixture\Selector\Selector;
-use Neon\Test\BaseFixture\View\ViewDom;
+use Neon\Test\BaseFixture\ItemView;
 use Neon\View;
-use Neon\View\HtmlView;
+use Neon\View\Html\Body\Section;
 use Neon\View\Language\English;
 use Neon\View\Language\Language;
 
 trait ViewFixture
 {
-    function eventDetails(HtmlView $view): array
+    function eventDetails(ItemView $view): array
     {
-        return $this->texts($view, new Selector('div.event', 'div.details', 'span'));
+        return $view->findMany('div.event', 'div.details', 'span');
     }
 
-    function eventDetailsPricing(HtmlView $view): string
+    function eventDetailsPricing(ItemView $view): string
     {
-        return $this->text($view, new Selector('div.event', 'div.details', 'span[last()]'));
+        return $view->find('div.event', 'div.details', 'span[last()]');
     }
 
-    function eventDayShortName(HtmlView $view): string
+    function eventDayShortName(ItemView $view): string
     {
-        return $this->text($view, new Selector('div.event', 'div.date', 'span[last()]'));
+        return $view->find('div.event', 'div.date', 'span[last()]');
     }
 
-    function eventDetailsKind(HtmlView $view): string
+    function eventDetailsKind(ItemView $view): string
     {
-        return $this->text($view, new Selector('div.event', 'div.details', 'span[2]'));
+        return $view->find('div.event', 'div.details', 'span[2]');
     }
 
-    function view(array $fields, Language $lang = null): HtmlView
+    function eventsSection(array $fields, Language $lang = null): ItemView
     {
-        return new HtmlView([], [
-            new View\Html\Body\Section(
-                '',
-                '',
-                $fields['sectionTitle'] ?? '',
-                '',
-                [new View\Html\Body\Event($this->viewEvent($fields, $lang))]),
-        ]);
-    }
-
-    function text(HtmlView $view, Selector $selector): string
-    {
-        $dom = new ViewDom($view->html());
-        return $dom->find($selector->xPath());
-    }
-
-    function texts(HtmlView $view, Selector $selector): array
-    {
-        $dom = new ViewDom($view->html());
-        return $dom->findMany($selector->xPath());
+        return new ItemView(new Section(
+            '',
+            '',
+            $fields['sectionTitle'] ?? '',
+            '',
+            [new View\Html\Body\Event($this->viewEvent($fields, $lang))]));
     }
 
     function viewEvent(array $fields, Language $lang = null): Neon\View\ViewModel\Event

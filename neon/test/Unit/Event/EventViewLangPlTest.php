@@ -3,6 +3,7 @@ namespace Neon\Test\Unit\Event;
 
 use Neon\Domain\Event\Date;
 use Neon\Domain\Event\EventKind;
+use Neon\Test\BaseFixture\ItemView;
 use Neon\Test\Unit\Event;
 use Neon\View\Language\Polish;
 use PHPUnit\Framework\TestCase;
@@ -83,8 +84,8 @@ class EventViewLangPlTest extends TestCase
         return $this->eventDayShortName($view);
     }
 
-    private function polishView(array $fields): \Neon\View\HtmlView
+    private function polishView(array $fields): ItemView
     {
-        return $this->view($fields, new Polish());
+        return $this->eventsSection($fields, new Polish());
     }
 }

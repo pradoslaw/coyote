@@ -2,10 +2,8 @@
 namespace Neon\Test\Unit\JobOffers;
 
 use Neon\Domain\Offer;
-use Neon\Test\BaseFixture\Selector\Selector;
-use Neon\Test\BaseFixture\View\ViewDom;
+use Neon\Test\BaseFixture\ItemView;
 use Neon\View\Html\Body\JobOffers;
-use Neon\View\HtmlView;
 use PHPUnit\Framework\TestCase;
 
 class JobOffersViewTest extends TestCase
@@ -15,9 +13,9 @@ class JobOffersViewTest extends TestCase
      */
     public function sectionTitle(): void
     {
-        $jobs = new JobOffers('title', []);
-        $this->assertSame('title',
-            $this->text($jobs, ['#jobs', 'h2']));
+        $view = $this->jobOffer(['sectionTitle' => 'Hear me roar']);
+        $this->assertSame('Hear me roar',
+            $view->find('#jobs', 'h2'));
     }
 
     /**
@@ -25,9 +23,9 @@ class JobOffersViewTest extends TestCase
      */
     public function jobOfferTitle(): void
     {
-        $jobs = new JobOffers('', [new Offer('job offer', '', [], [], '')]);
-        $this->assertSame('job offer',
-            $this->text($jobs, ['#jobs', 'h3']));
+        $view = $this->jobOffer(['offerTitle' => 'The Lannisters send their regards']);
+        $this->assertSame('The Lannisters send their regards',
+            $view->find('#jobs', 'h3'));
     }
 
     /**
@@ -35,9 +33,9 @@ class JobOffersViewTest extends TestCase
      */
     public function jobOfferCompany(): void
     {
-        $jobs = new JobOffers('', [new Offer('', 'company', [], [], '')]);
-        $this->assertSame('company',
-            $this->text($jobs, ['#jobs', '#company']));
+        $jobs = $this->jobOffer(['offerCompany' => 'Iron bank']);
+        $this->assertSame('Iron bank',
+            $jobs->find('#jobs', '#company'));
     }
 
     /**
@@ -45,9 +43,10 @@ class JobOffersViewTest extends TestCase
      */
     public function jobOfferCities(): void
     {
-        $jobs = new JobOffers('', [new Offer('', '', ['city'], [], '')]);
-        $this->assertSame('city',
-            $this->text($jobs, ['#jobs', '#cities', 'span']));
+        $view = $this->jobOffer(['offerCities' => ['Braavos', 'Lorath', 'Norvos']]);
+        $this->assertSame(
+            ['Braavos', 'Lorath', 'Norvos'],
+            $view->findMany('#jobs', '#cities', 'span'));
     }
 
     /**
@@ -55,10 +54,10 @@ class JobOffersViewTest extends TestCase
      */
     public function jobOfferTags(): void
     {
-        $jobs = new JobOffers('', [new Offer('', '', [], ['foo', 'bar'], '')]);
+        $view = $this->jobOffer(['offerTags' => ['foo', 'bar']]);
         $this->assertSame(
             ['foo', 'bar'],
-            $this->texts($jobs, ['#jobs', '#tags', 'span']));
+            $view->findMany('#jobs', '#tags', 'span'));
     }
 
     /**
@@ -66,10 +65,10 @@ class JobOffersViewTest extends TestCase
      */
     public function jobOfferImage(): void
     {
-        $jobs = new JobOffers('', [new Offer('', '', [], [], 'image.png')]);
+        $view = $this->jobOffer(['offerImage' => 'ice.and.fire.png']);
         $this->assertSame(
-            'image.png',
-            $this->text($jobs, ['#jobs', 'img', '@src']));
+            'ice.and.fire.png',
+            $view->find('#jobs', 'img', '@src'));
     }
 
     /**
@@ -77,30 +76,24 @@ class JobOffersViewTest extends TestCase
      */
     public function jobOffers(): void
     {
-        $jobs = new JobOffers('', [
+        $view = new ItemView(new JobOffers('', [
             new Offer('foo', '', [], [], ''),
             new Offer('bar', '', [], [], ''),
-        ]);
+        ]));
         $this->assertSame(
             ['foo', 'bar'],
-            $this->texts($jobs, ['#jobs', 'h3']));
+            $view->findMany('#jobs', 'h3'));
     }
 
-    private function texts(JobOffers $jobs, array $selectors): array
+    private function jobOffer(array $fields): ItemView
     {
-        $selector = new Selector(...$selectors);
-        return $this->viewDom($jobs)->findMany($selector->xPath());
-    }
-
-    private function text(JobOffers $jobs, array $selectors): string
-    {
-        $selector = new Selector(...$selectors);
-        return $this->viewDom($jobs)->find($selector->xPath());
-    }
-
-    private function viewDom(JobOffers $jobs): ViewDom
-    {
-        $view = new HtmlView([], [$jobs]);
-        return new ViewDom($view->html());
+        return new ItemView(new JobOffers(
+            $fields['sectionTitle'] ?? '', [
+            new Offer(
+                $fields['offerTitle'] ?? '',
+                $fields['offerCompany'] ?? '',
+                $fields['offerCities'] ?? [],
+                $fields['offerTags'] ?? [],
+                $fields['offerImage'] ?? '')]));
     }
 }

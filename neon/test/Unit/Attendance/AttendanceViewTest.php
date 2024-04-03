@@ -1,8 +1,11 @@
 <?php
 namespace Neon\Test\Unit\Attendance;
 
-use Neon;
-use Neon\Test\BaseFixture\View\ViewDom;
+use Neon\Domain;
+use Neon\Test\BaseFixture\ItemView;
+use Neon\View\Html\Body;
+use Neon\View\Language\English;
+use Neon\View\ViewModel;
 use PHPUnit\Framework\TestCase;
 
 class AttendanceViewTest extends TestCase
@@ -12,9 +15,10 @@ class AttendanceViewTest extends TestCase
      */
     public function totalUsers(): void
     {
-        $this->assertSame('14', $this
-            ->view(['totalAmount' => 14])
-            ->find('//*[@id="attendance"]//*[@id="totalAmount"]/text()'));
+        $view = $this->attendance(['totalAmount' => 14]);
+        $this->assertSame(
+            '14',
+            $view->find('#attendance', '#totalAmount'));
     }
 
     /**
@@ -22,9 +26,10 @@ class AttendanceViewTest extends TestCase
      */
     public function onlineUsers(): void
     {
-        $this->assertSame('54', $this
-            ->view(['onlineAmount' => 54])
-            ->find('//*[@id="attendance"]//*[@id="onlineAmount"]/text()'));
+        $view = $this->attendance(['onlineAmount' => 54]);
+        $this->assertSame(
+            '54',
+            $view->find('#attendance', '#onlineAmount'));
     }
 
     /**
@@ -32,8 +37,10 @@ class AttendanceViewTest extends TestCase
      */
     public function totalUsersTitle(): void
     {
-        $this->assertSame('Users', $this->view([])
-            ->find('//*[@id="attendance"]//*[@id="totalTitle"]/text()'));
+        $view = $this->attendance([]);
+        $this->assertSame(
+            'Users',
+            $view->find('#attendance', '#totalTitle'));
     }
 
     /**
@@ -41,21 +48,21 @@ class AttendanceViewTest extends TestCase
      */
     public function onlineUsersTitle(): void
     {
-        $this->assertSame('Online', $this->view([])
-            ->find('//*[@id="attendance"]//*[@id="onlineTitle"]/text()'));
+        $view = $this->attendance([]);
+        $this->assertSame(
+            'Online',
+            $view->find('#attendance', '#onlineTitle'));
     }
 
-    private function view(array $fields): ViewDom
+    private function attendance(array $fields): ItemView
     {
-        $view = new Neon\View\HtmlView([], [
-            new Neon\View\Html\Body\Attendance(
-                new Neon\View\ViewModel\Attendance(
-                    new Neon\View\Language\English(),
-                    new Neon\Domain\Attendance(
+        return new ItemView(
+            new Body\Attendance(
+                new ViewModel\Attendance(
+                    new English(),
+                    new Domain\Attendance(
                         $fields['totalAmount'] ?? 0,
-                            $fields['onlineAmount'] ?? 0)),
-            ),
-        ]);
-        return new ViewDom($view->html());
+                        $fields['onlineAmount'] ?? 0)),
+            ));
     }
 }

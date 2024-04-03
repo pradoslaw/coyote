@@ -4,6 +4,7 @@ namespace Coyote\Providers\Neon;
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
 use Neon\Application;
+use Neon\Laravel;
 use Neon\Laravel\JobOffers;
 use Neon\Laravel\LaravelVisitor;
 use Neon\Persistence;
@@ -26,19 +27,21 @@ class ServiceProvider extends RouteServiceProvider
 
     public function loadRoutes(): void
     {
-        $this->get('/events', [
-            'uses' => function () {
-                /** @var Application $application */
-                $application = $this->app->get(Application::class);
-                return $application->html();
-            },
-        ])->middleware('neon');
+        $this
+            ->get('/events', [
+                'uses' => function () {
+                    /** @var Application $application */
+                    $application = $this->app->get(Application::class);
+                    return $application->html();
+                },
+            ])
+            ->middleware('neon');
     }
 
     private function attendance(): Persistence\Attendance
     {
         /** @var DatabaseManager $database */
         $database = $this->app->get(DatabaseManager::class);
-        return new \Neon\Laravel\Attendance($database);
+        return new Laravel\Attendance($database);
     }
 }

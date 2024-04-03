@@ -1,8 +1,6 @@
 <?php
 namespace Neon\Test\Unit\Navigation;
 
-use Neon\Test\BaseFixture\Selector\Selector;
-use Neon\View\HtmlView;
 use PHPUnit\Framework\TestCase;
 
 class NavigationViewTest extends TestCase
@@ -14,11 +12,10 @@ class NavigationViewTest extends TestCase
      */
     public function homepage(): void
     {
-        $view = $this->navigationView(['homepageUrl' => 'http://homepage/']);
+        $view = $this->navigation(['homepageUrl' => 'http://homepage/']);
         $this->assertSame(
             'http://homepage/',
-            $this->text($view,
-                new Selector('#homepage', '@href')));
+            $view->find('#homepage', '@href'));
     }
 
     /**
@@ -26,11 +23,10 @@ class NavigationViewTest extends TestCase
      */
     public function menuItems(): void
     {
-        $view = $this->navigationView(['items' => ['Foo' => '', 'Bar' => '']]);
+        $view = $this->navigation(['items' => ['Foo' => '', 'Bar' => '']]);
         $this->assertSame(
             ['Foo', 'Bar'],
-            $this->texts($view,
-                new Selector('nav', 'ul.menu-items', 'li', 'a')));
+            $view->findMany('nav', 'ul.menu-items', 'li', 'a'));
     }
 
     /**
@@ -38,13 +34,12 @@ class NavigationViewTest extends TestCase
      */
     public function menuItemLinks(): void
     {
-        $view = $this->navigationView(['items' => [
+        $view = $this->navigation(['items' => [
             'Foo' => 'foo.png', 'Bar' => 'bar.jpg',
         ]]);
         $this->assertSame(
             ['foo.png', 'bar.jpg'],
-            $this->texts($view,
-                new Selector('nav', 'ul.menu-items', 'li', 'a', '@href')));
+            $view->findMany('nav', 'ul.menu-items', 'li', 'a', '@href'));
     }
 
     /**
@@ -52,11 +47,10 @@ class NavigationViewTest extends TestCase
      */
     public function controls(): void
     {
-        $view = $this->navigationView(['controls' => ['Register' => '', 'Login' => '']]);
+        $view = $this->navigation(['controls' => ['Register' => '', 'Login' => '']]);
         $this->assertSame(
             ['Register', 'Login'],
-            $this->texts($view,
-                new Selector('ul.controls', 'li', 'a')));
+            $view->findMany('ul.controls', 'li', 'a'));
     }
 
     /**
@@ -64,14 +58,13 @@ class NavigationViewTest extends TestCase
      */
     public function controlsLinks(): void
     {
-        $view = $this->navigationView(['controls' => [
+        $view = $this->navigation(['controls' => [
             'Register' => '/account',
             'Login'    => '/login',
         ]]);
         $this->assertSame(
             ['/account', '/login'],
-            $this->texts($view,
-                new Selector('ul.controls', 'li', 'a', '@href')));
+            $view->findMany('ul.controls', 'li', 'a', '@href'));
     }
 
     /**
@@ -79,14 +72,13 @@ class NavigationViewTest extends TestCase
      */
     public function noControlsLinksLoggedIn(): void
     {
-        $view = $this->navigationView([
+        $view = $this->navigation([
             'controls'          => ['Control' => '/'],
             'loggedInAvatarUrl' => 'foo.png',
         ]);
         $this->assertSame(
             [],
-            $this->texts($view,
-                new Selector('ul.controls', 'li', 'a', '@href')));
+            $view->findMany('ul.controls', 'li', 'a', '@href'));
     }
 
     /**
@@ -94,10 +86,10 @@ class NavigationViewTest extends TestCase
      */
     public function githubName(): void
     {
-        $view = $this->navigationView(['githubName' => 'Joe']);
-        $this->assertSame('Joe',
-            $this->text($view,
-                new Selector('.github', '.name')));
+        $view = $this->navigation(['githubName' => 'Joe']);
+        $this->assertSame(
+            'Joe',
+            $view->find('.github', '.name'));
     }
 
     /**
@@ -105,10 +97,10 @@ class NavigationViewTest extends TestCase
      */
     public function githubUrl(): void
     {
-        $view = $this->navigationView(['githubUrl' => 'http://github.com/Foo']);
-        $this->assertSame('http://github.com/Foo',
-            $this->text($view,
-                new Selector('.github', 'a.name', '@href')));
+        $view = $this->navigation(['githubUrl' => 'http://github.com/Foo']);
+        $this->assertSame(
+            'http://github.com/Foo',
+            $view->find('.github', 'a.name', '@href'));
     }
 
     /**
@@ -116,11 +108,10 @@ class NavigationViewTest extends TestCase
      */
     public function githubStars(): void
     {
-        $view = $this->navigationView(['githubStars' => '4']);
+        $view = $this->navigation(['githubStars' => '4']);
         $this->assertSame(
             '4',
-            $this->text($view,
-                new Selector('.github', '.stars')));
+            $view->find('.github', '.stars'));
     }
 
     /**
@@ -128,10 +119,10 @@ class NavigationViewTest extends TestCase
      */
     public function githubStarsUrl(): void
     {
-        $view = $this->navigationView(['githubStarsUrl' => 'http://github.com/Bar']);
-        $this->assertSame('http://github.com/Bar',
-            $this->text($view,
-                new Selector('.github', 'a.stars', '@href')));
+        $view = $this->navigation(['githubStarsUrl' => 'http://github.com/Bar']);
+        $this->assertSame(
+            'http://github.com/Bar',
+            $view->find('.github', 'a.stars', '@href'));
     }
 
     /**
@@ -139,12 +130,13 @@ class NavigationViewTest extends TestCase
      */
     public function registerButtonBold(): void
     {
-        $view = $this->navigationView(['controls' => [
+        $view = $this->navigation(['controls' => [
             'Register' => '/account',
             'Login'    => '/login',
         ]]);
-        $this->assertContains('rounded',
-            $this->cssClasses($view, ['ul.controls', 'li[1]']));
+        $this->assertContains(
+            'rounded',
+            $view->cssClasses('ul.controls', 'li[1]'));
     }
 
     /**
@@ -152,19 +144,13 @@ class NavigationViewTest extends TestCase
      */
     public function loginButtonRegular(): void
     {
-        $view = $this->navigationView(['controls' => [
+        $view = $this->navigation(['controls' => [
             'Register' => '/account',
             'Login'    => '/login',
         ]]);
-        $this->assertNotContains('rounded',
-            $this->cssClasses($view, ['ul.controls', 'li[2]']));
-    }
-
-    private function cssClasses(HtmlView $view, array $selectors): array
-    {
-        $xPathSelectors = \array_merge($selectors, ['@class']);
-        $classAttribute = $this->text($view, new Selector(...$xPathSelectors));
-        return \explode(' ', $classAttribute);
+        $this->assertNotContains(
+            'rounded',
+            $view->cssClasses('ul.controls', 'li[2]'));
     }
 
     /**
@@ -172,9 +158,9 @@ class NavigationViewTest extends TestCase
      */
     public function userAvatar(): void
     {
-        $view = $this->navigationView(['loggedInAvatarUrl' => '/avatar.png']);
-        $this->assertSame('/avatar.png',
-            $this->text($view,
-                new Selector('header', '#userAvatar', '@src')));
+        $view = $this->navigation(['loggedInAvatarUrl' => '/avatar.png']);
+        $this->assertSame(
+            '/avatar.png',
+            $view->find('header', '#userAvatar', '@src'));
     }
 }

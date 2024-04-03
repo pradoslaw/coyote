@@ -2,29 +2,14 @@
 namespace Neon\Test\Unit\Navigation\Fixture;
 
 use Neon;
-use Neon\Test\BaseFixture\Selector\Selector;
-use Neon\Test\BaseFixture\View\ViewDom;
+use Neon\Test\BaseFixture\ItemView;
 use Neon\View\Html\Body\Navigation;
 
 trait ViewFixture
 {
-    function navigationView(array $fields): Neon\View\HtmlView
+    function navigation(array $fields): ItemView
     {
-        return new Neon\View\HtmlView([], [
-            new Navigation($this->viewModel($fields)),
-        ]);
-    }
-
-    function text(Neon\View\HtmlView $view, Selector $selector): string
-    {
-        $dom = new ViewDom($view->html());
-        return $dom->find($selector->xPath());
-    }
-
-    function texts(Neon\View\HtmlView $view, Selector $selector): array
-    {
-        $dom = new ViewDom($view->html());
-        return $dom->findMany($selector->xPath());
+        return new ItemView(new Navigation($this->viewModel($fields)));
     }
 
     function viewModel(array $fields): Neon\View\ViewModel\Navigation
