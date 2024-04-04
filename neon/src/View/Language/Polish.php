@@ -18,6 +18,8 @@ class Polish implements Language
         'Incoming events'           => 'Nadchodzące wydarzenia',
         'Events with our patronage' => 'Wydarzenia z naszym patronatem',
 
+        'Search for jobs' => 'Szukaj pracy',
+
         'Conference' => 'Konferencja',
         'Hackaton'   => 'Hackaton',
         'Workshop'   => 'Warsztaty',

@@ -32,7 +32,7 @@ readonly class View
                 $h->tag('div', ['class' => 'lg:flex container mx-auto'], [
                     $h->tag('aside', ['class' => 'lg:w-1/4 lg:pr-2 mb-4 lg:mb-0'], [
                         ...$this->attendance($attendance)->html($h),
-                        ...(new Body\JobOffers('Search for jobs', $offers))->html($h),
+                        ...(new Body\JobOffers($this->lang->t('Search for jobs'), $offers))->html($h),
                     ]),
                     $h->tag('main',
                         ['class' => 'lg:w-3/4 lg:pl-2'],
