@@ -12,7 +12,7 @@ readonly class Attendance implements Item
     {
     }
 
-    public function html(Render $h): array
+    public function render(Render $h): array
     {
         $title = 'text-[#a2b7a0] text-xs';
         $number = 'text-[#f2f2f2] text-2xl leading-5 font-semibold mt-1';
@@ -41,7 +41,7 @@ readonly class Attendance implements Item
         ];
     }
 
-    private function diode(Render $h): string
+    private function diode(Render $h): Tag
     {
         return $h->tag('div', ['class' => 'size-2 bg-[#80ff00] rounded'], []);
     }

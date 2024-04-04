@@ -11,7 +11,7 @@ class UntypedItem implements Item
         $this->children = $children;
     }
 
-    public function html(Render $h): array
+    public function render(Render $h): array
     {
         return ($this->children)($h);
     }

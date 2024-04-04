@@ -2,6 +2,7 @@
 namespace Neon\View\Html\Head;
 
 use Neon\View\Html\Render;
+use Neon\View\Html\Tag;
 
 readonly class Style implements Head
 {
@@ -9,7 +10,7 @@ readonly class Style implements Head
     {
     }
 
-    public function headHtml(Render $h): string
+    public function render(Render $h): Tag
     {
         return $h->tag('link', [
             'rel'  => 'stylesheet',

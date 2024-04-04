@@ -13,9 +13,14 @@ class Render
             $this->renderElement(
                 $tag,
                 $attributes,
-                \implode('', $children)),
+                $this->childrenToString($children)),
             $attributes['parentClass'] ?? null,
         );
+    }
+
+    public function html(string $string): Tag
+    {
+        return new Tag($string, null);
     }
 
     private function renderElement(string $tag, array $attributes, string $innerHtml): string
@@ -53,5 +58,22 @@ class Render
             }
         }
         return $classes;
+    }
+
+    private function childrenToString(array $children): string
+    {
+        $html = '';
+        foreach ($children as $child) {
+            if ($child === null) {
+                continue;
+            }
+            if (\is_string($child)) {
+                $html .= \htmlSpecialChars($child);
+            } else {
+                /** @var Tag $child */
+                $html .= $child->html();
+            }
+        }
+        return $html;
     }
 }

@@ -6,5 +6,5 @@ interface Item
     /**
      * @return string[]
      */
-    public function html(Render $h): array;
+    public function render(Render $h): array;
 }

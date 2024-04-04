@@ -17,7 +17,7 @@ readonly class Section implements Item
     {
     }
 
-    public function html(Render $h): array
+    public function render(Render $h): array
     {
         return [
             $h->tag('div', ['class' => 'bg-white rounded-lg py-[26px] p-4 mb-8'], [
@@ -37,7 +37,7 @@ readonly class Section implements Item
                 [$this->subsectionTitle]),
 
             ...\array_map(
-                fn(Event $event) => $event->html($h),
+                fn(Event $event) => $event->render($h),
                 $this->children),
         ];
     }

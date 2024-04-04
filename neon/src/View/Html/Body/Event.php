@@ -2,6 +2,7 @@
 namespace Neon\View\Html\Body;
 
 use Neon\View\Html\Render;
+use Neon\View\Html\Tag;
 use Neon\View\ViewModel;
 
 readonly class Event
@@ -10,7 +11,7 @@ readonly class Event
     {
     }
 
-    public function html(Render $h): string
+    public function render(Render $h): Tag
     {
         $border = 'border-solid border-l-4 border-[#00A538]';
         return $h->tag('div', ['class' => "event bg-white rounded-lg p-4 mb-4 flex justify-between $border"], [

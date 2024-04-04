@@ -10,7 +10,7 @@ readonly class Tag
     {
     }
 
-    public function __toString(): string
+    public function html(): string
     {
         return $this->html;
     }
