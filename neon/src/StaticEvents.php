@@ -28,6 +28,14 @@ class StaticEvents implements Events
                 EventKind::Hackaton,
             ),
             new Event(
+                'SForce Summit 2024',
+                'Online',
+                true,
+                ['Salesforce'],
+                new Date(2024, 4, 23),
+                EventKind::Conference,
+            ),
+            new Event(
                 'Founders Mind VII',
                 'Warszawa',
                 false,
