@@ -18,6 +18,7 @@ class StaticEvents implements Events
                 ['Software', 'Hardware'],
                 new Date(2024, 4, 16),
                 EventKind::Conference,
+                'https://4developers.org.pl/',
             ),
             new Event(
                 'Best Hacking League',
@@ -26,6 +27,7 @@ class StaticEvents implements Events
                 ['Software', 'Hardware', 'AI', 'Cybersecurity'],
                 new Date(2024, 4, 20),
                 EventKind::Hackaton,
+                'https://besthackingleague.pl/',
             ),
             new Event(
                 'SForce Summit 2024',
@@ -34,6 +36,7 @@ class StaticEvents implements Events
                 ['Salesforce'],
                 new Date(2024, 4, 23),
                 EventKind::Conference,
+                'https://sforcesummit.pl/',
             ),
             new Event(
                 'Founders Mind VII',
@@ -42,6 +45,7 @@ class StaticEvents implements Events
                 ['Biznes', 'Networking'],
                 new Date(2024, 5, 14),
                 EventKind::Conference,
+                'https://foundersmind.pl/#bilety',
             ),
         ];
     }

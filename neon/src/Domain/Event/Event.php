@@ -10,6 +10,7 @@ readonly class Event
         public array     $tags,
         public Date      $date,
         public EventKind $kind,
+        public string    $url,
     )
     {
     }

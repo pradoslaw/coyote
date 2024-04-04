@@ -20,7 +20,11 @@ readonly class Event
                 $h->tag('span', ['class' => 'font-bold'], [$this->event->dayShortName]),
             ]),
             $h->tag('div', ['class' => 'self-center w-1/2'], [
-                $h->tag('h2', ['class' => 'font-medium text-base mb-1'], [$this->event->title]),
+                $h->tag('h2', ['class' => 'font-medium text-base mb-1'], [
+                    $h->tag('a', ['href' => $this->event->titleUrl], [
+                        $this->event->title,
+                    ]),
+                ]),
                 $h->tag('ul', [], \array_map(
                     fn($tag) => $h->tag('li',
                         ['class' => 'inline-block mr-2 py-px px-1.5 text-xs leading-5 text-[#22488C] bg-[#E3E8F1] rounded-md font-[Arial]'],

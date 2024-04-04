@@ -103,6 +103,7 @@ class EventTest extends TestCase
             $fields['tags'] ?? [],
             $fields['date'] ?? new Date(0, 0, 0),
             $fields['kind'] ?? EventKind::Workshop,
+            '',
         );
     }
 }

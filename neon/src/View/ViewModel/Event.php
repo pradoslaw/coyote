@@ -7,6 +7,7 @@ use Neon\View\Language\Language;
 readonly class Event
 {
     public string $title;
+    public string $titleUrl;
     public string $city;
     public array $tags;
     public string $pricing;
@@ -17,6 +18,7 @@ readonly class Event
     public function __construct(Language $language, Domain\Event\Event $event)
     {
         $this->title = $event->title;
+        $this->titleUrl = $event->url;
         $this->city = $event->city;
         $this->tags = $event->tags;
         $this->pricing = $language->t($event->free ? 'Free' : 'Paid');

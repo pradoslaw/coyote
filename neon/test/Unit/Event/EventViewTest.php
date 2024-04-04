@@ -2,10 +2,7 @@
 namespace Neon\Test\Unit\Event;
 
 use Neon\Domain;
-use Neon\Domain\Event\EventKind;
-use Neon\Test\BaseFixture\ItemView;
 use Neon\Test\Unit\Event;
-use Neon\View\Html;
 use PHPUnit\Framework\TestCase;
 
 class EventViewTest extends TestCase
@@ -20,7 +17,7 @@ class EventViewTest extends TestCase
         $view = $this->eventsSection(['eventTitle' => 'Ours is the Fury']);
         $this->assertSame(
             'Ours is the Fury',
-            $view->find('div.event', 'h2'));
+            $view->find('div.event', 'h2', 'a'));
     }
 
     /**
@@ -48,16 +45,14 @@ class EventViewTest extends TestCase
     /**
      * @test
      */
-    public function details(): void
+    public function titleLink(): void
     {
         $view = $this->eventsSection([
-            'eventCity' => 'Winterfell',
-            'eventKind' => EventKind::Hackaton,
-            'eventFree' => false,
+            'eventLink' => 'link.com/',
         ]);
         $this->assertSame(
-            ['Winterfell', 'Hackaton', 'Paid'],
-            $this->eventDetails($view));
+            'link.com/',
+            $view->find('div.event', 'h2', 'a', '@href'));
     }
 
     /**
@@ -68,6 +63,6 @@ class EventViewTest extends TestCase
         $view = $this->eventSectionEvents(['Hear me roar', 'Ours is the fury']);
         $this->assertSame(
             ['Hear me roar', 'Ours is the fury'],
-            $view->findMany('div.event', 'h2'));
+            $view->findMany('div.event', 'h2', 'a'));
     }
 }
