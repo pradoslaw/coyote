@@ -22,7 +22,7 @@ readonly class Event
             ]),
             $h->tag('div', ['class' => 'self-center w-1/2'], [
                 $h->tag('h2', ['class' => 'font-medium text-base mb-1'], [
-                    $h->tag('a', ['href' => $this->event->titleUrl], [
+                    $h->tag('a', ['href' => $this->event->titleUrl, 'class'=>'hover:text-[#00A538]'], [
                         $this->event->title,
                     ]),
                 ]),
