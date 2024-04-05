@@ -2,12 +2,12 @@
 namespace Neon\Laravel;
 
 use Coyote\Job;
-use Neon\Domain\Offer;
+use Neon\Domain\JobOffer;
 
 readonly class JobOffers implements \Neon\Persistence\JobOffers
 {
     /**
-     * @return Offer[]
+     * @return JobOffer[]
      */
     public function fetchJobOffers(): array
     {
@@ -19,7 +19,7 @@ readonly class JobOffers implements \Neon\Persistence\JobOffers
 
         return \array_map(
             function (Job $job) {
-                return new Offer(
+                return new JobOffer(
                     $job->title,
                     $job->firm->name,
                     $job->locations->map(fn(Job\Location $location) => $location->city)->all(),

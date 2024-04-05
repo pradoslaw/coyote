@@ -7,6 +7,7 @@ use Neon\Domain\Visitor;
 use Neon\View\Html\Body;
 use Neon\View\Html\Head\Favicon;
 use Neon\View\Html\Head\Title;
+use Neon\View\Html\Item;
 use Neon\View\Html\Render;
 use Neon\View\Html\UntypedItem;
 use Neon\View\Language\Language;
@@ -32,7 +33,7 @@ readonly class View
                 $h->tag('div', ['class' => 'lg:flex container mx-auto'], [
                     $h->tag('aside', ['class' => 'lg:w-1/4 lg:pr-2 mb-4 lg:mb-0'], [
                         ...$this->attendance($attendance)->render($h),
-                        ...(new Body\JobOffers($this->lang->t('Search for jobs'), $offers))->render($h),
+                        ...($this->jobOffers($offers))->render($h),
                     ]),
                     $h->tag('main',
                         ['class' => 'lg:w-3/4 lg:pl-2'],
@@ -86,5 +87,12 @@ readonly class View
                     new ViewModel\Event($this->lang, $event)),
                 $events,
             ));
+    }
+
+    private function jobOffers(array $offers): Item
+    {
+        return new Body\JobOffers($this->lang->t('Search for jobs'),
+            \array_map(fn(Domain\JobOffer $offer) => new ViewModel\JobOffer($offer),
+                $offers));
     }
 }

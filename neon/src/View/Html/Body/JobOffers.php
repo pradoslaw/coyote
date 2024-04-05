@@ -1,10 +1,10 @@
 <?php
 namespace Neon\View\Html\Body;
 
-use Neon\Domain\Offer;
 use Neon\View\Html\Item;
 use Neon\View\Html\Render;
 use Neon\View\Html\Tag;
+use Neon\View\ViewModel\JobOffer;
 
 readonly class JobOffers implements Item
 {
@@ -24,7 +24,7 @@ readonly class JobOffers implements Item
                     [$this->sectionTitle]),
 
                 $h->tag('div', ['class' => 'space-y-4'], \array_map(
-                    function (Offer $offer) use ($h): Tag {
+                    function (JobOffer $offer) use ($h): Tag {
                         return $h->tag('div', ['class' => 'flex space-x-4'], [
                             $h->tag('img', ['src' => $offer->imageUrl, 'class' => 'size-8'], []),
                             $h->tag('div', ['class' => 'flex flex-col space-y-1'], [
@@ -32,11 +32,8 @@ readonly class JobOffers implements Item
                                 $h->tag('div', ['class' => 'flex space-x-4'], [
                                     $h->tag('span', ['id' => 'company', 'style' => 'color:#777;', 'class' => 'text-sm'], [$offer->company]),
                                     $h->tag('span', ['class' => 'flex items-center', 'style' => 'color:#777;'], [
-                                        $this->pinIcon($h, 'h-[14px] w-[11px]'),
-                                        $h->tag('div', ['id' => 'cities', 'class' => 'flex text-sm',], \array_map(
-                                            fn(string $city): Tag => $h->tag('span', [], [$city]),
-                                            $offer->cities,
-                                        )),
+                                        $this->pinIcon($h, 'h-[14px] w-[11px] mr-1'),
+                                        $h->tag('div', ['id' => 'cities', 'class' => 'text-sm'], [$offer->city]),
                                     ]),
                                 ]),
                                 $h->tag('div', ['id' => 'tags', 'class' => 'flex'], \array_map(

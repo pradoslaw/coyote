@@ -1,7 +1,7 @@
 <?php
 namespace Neon\Domain;
 
-readonly class Offer
+readonly class JobOffer
 {
     public function __construct(
         public string  $title,

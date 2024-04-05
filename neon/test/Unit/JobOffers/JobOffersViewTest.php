@@ -1,9 +1,11 @@
 <?php
 namespace Neon\Test\Unit\JobOffers;
 
-use Neon\Domain\Offer;
+use Neon\Domain;
+use Neon\Domain\JobOffer;
 use Neon\Test\BaseFixture\ItemView;
 use Neon\View\Html\Body\JobOffers;
+use Neon\View\ViewModel;
 use PHPUnit\Framework\TestCase;
 
 class JobOffersViewTest extends TestCase
@@ -45,8 +47,8 @@ class JobOffersViewTest extends TestCase
     {
         $view = $this->jobOffer(['offerCities' => ['Braavos', 'Lorath', 'Norvos']]);
         $this->assertSame(
-            ['Braavos', 'Lorath', 'Norvos'],
-            $view->findMany('#jobs', '#cities', 'span'));
+            '3 cities',
+            $view->find('#jobs', '#cities'));
     }
 
     /**
@@ -77,8 +79,8 @@ class JobOffersViewTest extends TestCase
     public function jobOffers(): void
     {
         $view = new ItemView(new JobOffers('', [
-            new Offer('foo', '', [], [], ''),
-            new Offer('bar', '', [], [], ''),
+            new ViewModel\JobOffer(new JobOffer('foo', '', [], [], '')),
+            new ViewModel\JobOffer(new JobOffer('bar', '', [], [], '')),
         ]));
         $this->assertSame(
             ['foo', 'bar'],
@@ -89,11 +91,11 @@ class JobOffersViewTest extends TestCase
     {
         return new ItemView(new JobOffers(
             $fields['sectionTitle'] ?? '', [
-            new Offer(
+            new ViewModel\JobOffer(new Domain\JobOffer(
                 $fields['offerTitle'] ?? '',
                 $fields['offerCompany'] ?? '',
                 $fields['offerCities'] ?? [],
                 $fields['offerTags'] ?? [],
-                $fields['offerImage'] ?? '')]));
+                $fields['offerImage'] ?? ''))]));
     }
 }

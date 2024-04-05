@@ -5,7 +5,7 @@ use Coyote\Firm;
 use Coyote\Job;
 use Coyote\Plan;
 use Coyote\User;
-use Neon\Domain\Offer;
+use Neon\Domain\JobOffer;
 use Neon\Laravel\JobOffers;
 use Neon\Test\BaseFixture;
 use PHPUnit\Framework\TestCase;
@@ -59,7 +59,7 @@ class JobOffersLaravelTest extends TestCase
         $this->assertSame('/foo/image.png', $offer->imageUrl);
     }
 
-    private function jobOffer(array $fields): Offer
+    private function jobOffer(array $fields): JobOffer
     {
         $this->createJobOffer($fields);
         $offers = (new JobOffers())->fetchJobOffers();
