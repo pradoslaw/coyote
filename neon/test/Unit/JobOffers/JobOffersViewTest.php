@@ -43,12 +43,23 @@ class JobOffersViewTest extends TestCase
     /**
      * @test
      */
-    public function jobOfferCities(): void
+    public function jobOfferCitiesSummary(): void
     {
         $view = $this->jobOffer(['offerCities' => ['Braavos', 'Lorath', 'Norvos']]);
         $this->assertSame(
             '3 cities',
             $view->find('#jobs', '#cities'));
+    }
+
+    /**
+     * @test
+     */
+    public function jobOfferCitiesTitle(): void
+    {
+        $view = $this->jobOffer(['offerCities' => ['Braavos', 'Lorath', 'Norvos']]);
+        $this->assertSame(
+            'Braavos, Lorath, Norvos',
+            $view->find('#jobs', '#cities', '@title'));
     }
 
     /**

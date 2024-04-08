@@ -33,7 +33,9 @@ readonly class JobOffers implements Item
                                     $h->tag('span', ['id' => 'company', 'style' => 'color:#777;', 'class' => 'text-sm'], [$offer->company]),
                                     $h->tag('span', ['class' => 'flex items-center', 'style' => 'color:#777;'], [
                                         $this->pinIcon($h, 'h-[14px] w-[11px] mr-1'),
-                                        $h->tag('div', ['id' => 'cities', 'class' => 'text-sm'], [$offer->city]),
+                                        $h->tag('div',
+                                            ['id' => 'cities', 'class' => 'text-sm', 'title' => $offer->citiesTitle],
+                                            [$offer->citiesSummary]),
                                     ]),
                                 ]),
                                 $h->tag('div', ['id' => 'tags', 'class' => 'flex'], \array_map(
