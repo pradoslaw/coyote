@@ -22,34 +22,36 @@ readonly class JobOffers implements Item
                 $h->tag('h2',
                     ['class' => 'text-xs text-[#053B00] mb-4 tracking-tight'],
                     [$this->sectionTitle]),
-
                 $h->tag('div', ['class' => 'space-y-4'], \array_map(
-                    function (JobOffer $offer) use ($h): Tag {
-                        return $h->tag('div', ['class' => 'flex space-x-4'], [
-                            $h->tag('img', ['src' => $offer->imageUrl, 'class' => 'size-8'], []),
-                            $h->tag('div', ['class' => 'flex flex-col space-y-1'], [
-                                $h->tag('h3', ['class' => 'font-[Inter] text-[#4E5973] text-xs font-bold'], [$offer->title]),
-                                $h->tag('div', ['class' => 'flex space-x-4'], [
-                                    $h->tag('span', ['id' => 'company', 'style' => 'color:#777;', 'class' => 'text-sm'], [$offer->company]),
-                                    $h->tag('span', ['class' => 'flex items-center', 'style' => 'color:#777;'], [
-                                        $this->pinIcon($h, 'h-[14px] w-[11px] mr-1'),
-                                        $h->tag('div',
-                                            ['id' => 'cities', 'class' => 'text-sm', 'title' => $offer->citiesTitle],
-                                            [$offer->citiesSummary]),
-                                    ]),
-                                ]),
-                                $h->tag('div', ['id' => 'tags', 'class' => 'flex'], \array_map(
-                                    fn(string $tag): Tag => $h->tag('span',
-                                        ['class' => 'inline-block mr-2 py-px px-1.5 text-xs leading-5 text-[#22488C] bg-[#E3E8F1] rounded-md font-[Arial]'],
-                                        [$tag]),
-                                    $offer->tags)),
-                            ]),
-                        ]);
-                    },
+                    fn(JobOffer $offer): Tag => $this->jobOffer($h, $offer),
                     $this->offers,
                 )),
             ]),
         ];
+    }
+
+    private function jobOffer(Render $h, JobOffer $offer): Tag
+    {
+        return $h->tag('div', ['class' => 'flex space-x-4'], [
+            $h->tag('img', ['src' => $offer->imageUrl, 'class' => 'size-8'], []),
+            $h->tag('div', ['class' => 'flex flex-col space-y-1'], [
+                $h->tag('h3', ['class' => 'font-[Inter] text-[#4E5973] text-xs font-bold'], [$offer->title]),
+                $h->tag('div', ['class' => 'flex space-x-4'], [
+                    $h->tag('span', ['id' => 'company', 'style' => 'color:#777;', 'class' => 'text-sm'], [$offer->company]),
+                    $h->tag('span', ['class' => 'flex items-center', 'style' => 'color:#777;'], [
+                        $this->pinIcon($h, 'h-[14px] w-[11px] mr-1'),
+                        $h->tag('div',
+                            ['id' => 'cities', 'class' => 'text-sm', 'title' => $offer->citiesTitle],
+                            [$offer->citiesSummary]),
+                    ]),
+                ]),
+                $h->tag('div', ['id' => 'tags', 'class' => 'flex'], \array_map(
+                    fn(string $tag): Tag => $h->tag('span',
+                        ['class' => 'inline-block mr-2 py-px px-1.5 text-xs leading-5 text-[#22488C] bg-[#E3E8F1] rounded-md font-[Arial]'],
+                        [$tag]),
+                    $offer->tags)),
+            ]),
+        ]);
     }
 
     private function pinIcon(Render $h, string $class): Tag
