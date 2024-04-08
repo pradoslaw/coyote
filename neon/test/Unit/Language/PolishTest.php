@@ -5,7 +5,7 @@ use Neon\View\Language\Polish;
 use PHPUnit\Framework\TestCase;
 use function Neon\Test\BaseFixture\Caught\caught;
 
-class Test extends TestCase
+class PolishTest extends TestCase
 {
     /**
      * @test
@@ -35,5 +35,32 @@ class Test extends TestCase
         $this->assertSame(
             "Failed to translate phrase: 'foo'.",
             $exception->getMessage());
+    }
+
+    /**
+     * @test
+     */
+    public function declinationSingularNominative(): void
+    {
+        $language = new Polish();
+        $this->assertSame('miasto', $language->dec(1, 'cities'));
+    }
+
+    /**
+     * @test
+     */
+    public function declinationPluralNominative(): void
+    {
+        $language = new Polish();
+        $this->assertSame('miasta', $language->dec(2, 'cities'));
+    }
+
+    /**
+     * @test
+     */
+    public function declinationPluralGenitive(): void
+    {
+        $language = new Polish();
+        $this->assertSame('miast', $language->dec(5, 'cities'));
     }
 }

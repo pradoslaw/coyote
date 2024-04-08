@@ -35,6 +35,6 @@ readonly class JobOffer
         if ($count === 1) {
             return $offer->cities[0];
         }
-        return $count . ' ' . $this->lang->t('cities');
+        return $count . ' ' . $this->lang->dec($count, 'cities');
     }
 }

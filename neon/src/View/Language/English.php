@@ -7,4 +7,9 @@ class English implements Language
     {
         return $phrase;
     }
+
+    public function dec(int $plurality, string $noun): string
+    {
+        return $noun;
+    }
 }

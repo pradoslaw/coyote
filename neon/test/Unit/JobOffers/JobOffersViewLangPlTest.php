@@ -13,11 +13,24 @@ class JobOffersViewLangPlTest extends TestCase
     /**
      * @test
      */
-    public function jobOfferCitiesSummary(): void
+    public function jobOfferCitiesSummaryPluralNominative(): void
     {
-        $view = $this->jobOffer(['offerCities' => ['Braavos', 'Lorath', 'Norvos']]);
+        $view = $this->jobOffer(['offerCities' => ['Light', 'Dark']]);
         $this->assertSame(
-            '3 miast',
+            '2 miasta',
+            $view->find('#jobs', '#cities'));
+    }
+
+    /**
+     * @test
+     */
+    public function jobOfferCitiesSummaryPluralGenitive(): void
+    {
+        $view = $this->jobOffer(['offerCities' => [
+            'Father', 'Mother', 'Maiden', 'Crone', 'Warrior', 'Smith', 'Stranger',
+        ]]);
+        $this->assertSame(
+            '7 miast',
             $view->find('#jobs', '#cities'));
     }
 

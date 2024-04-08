@@ -46,4 +46,15 @@ class Polish implements Language
         }
         throw new \Exception("Failed to translate phrase: '$phrase'.");
     }
+
+    public function dec(int $plurality, string $noun): string
+    {
+        if ($plurality === 1) {
+            return 'miasto';
+        }
+        if ($plurality > 4) {
+            return 'miast';
+        }
+        return 'miasta';
+    }
 }
