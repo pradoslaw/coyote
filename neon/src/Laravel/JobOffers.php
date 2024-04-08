@@ -22,7 +22,10 @@ readonly class JobOffers implements \Neon\Persistence\JobOffers
                 return new JobOffer(
                     $job->title,
                     $job->firm->name,
-                    $job->locations->map(fn(Job\Location $location) => $location->city)->all(),
+                    $job->locations
+                        ->filter(fn(Job\Location $location): bool => $location->city)
+                        ->map(fn(Job\Location $location): string => $location->city)
+                        ->all(),
                     ['Java', 'Spring'],
                     $job->firm->logo->url() ?? '');
             },
