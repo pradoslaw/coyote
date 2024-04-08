@@ -24,6 +24,9 @@ readonly class JobOffer
 
     private function citiesSummary(Domain\JobOffer $offer): string
     {
+        if ($offer->remoteWork) {
+            return 'Remote work';
+        }
         $count = \count($offer->cities);
         if ($count === 0) {
             return 'Not provided';

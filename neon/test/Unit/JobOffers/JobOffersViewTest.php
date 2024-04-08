@@ -65,6 +65,17 @@ class JobOffersViewTest extends TestCase
     /**
      * @test
      */
+    public function jobOfferRemoteWork(): void
+    {
+        $view = $this->jobOffer(['offerRemoteWork' => true]);
+        $this->assertSame(
+            'Remote work',
+            $view->find('#jobs', '#cities'));
+    }
+
+    /**
+     * @test
+     */
     public function jobOfferCitiesTitle(): void
     {
         $view = $this->jobOffer(['offerCities' => ['Braavos', 'Lorath', 'Norvos']]);
@@ -101,8 +112,8 @@ class JobOffersViewTest extends TestCase
     public function jobOffers(): void
     {
         $view = new ItemView(new JobOffers('', [
-            new ViewModel\JobOffer(new JobOffer('foo', '', [], [], '')),
-            new ViewModel\JobOffer(new JobOffer('bar', '', [], [], '')),
+            new ViewModel\JobOffer(new JobOffer('foo', '', [], false, [], '')),
+            new ViewModel\JobOffer(new JobOffer('bar', '', [], false, [], '')),
         ]));
         $this->assertSame(
             ['foo', 'bar'],
@@ -117,6 +128,7 @@ class JobOffersViewTest extends TestCase
                 $fields['offerTitle'] ?? '',
                 $fields['offerCompany'] ?? '',
                 $fields['offerCities'] ?? [],
+                $fields['offerRemoteWork'] ?? false,
                 $fields['offerTags'] ?? [],
                 $fields['offerImage'] ?? ''))]));
     }
