@@ -21,6 +21,7 @@ readonly class JobOffers implements \Neon\Persistence\JobOffers
             function (Job $job) {
                 return new JobOffer(
                     $job->title,
+                    route('job.offer', [$job->id, $job->slug]),
                     $job->firm->name,
                     $job->locations
                         ->filter(fn(Job\Location $location): bool => $location->city)

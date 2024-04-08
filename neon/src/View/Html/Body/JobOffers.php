@@ -35,7 +35,9 @@ readonly class JobOffers implements Item
         return $h->tag('div', ['class' => 'flex space-x-4'], [
             $h->tag('img', ['src' => $offer->imageUrl, 'class' => 'size-8'], []),
             $h->tag('div', ['class' => 'flex flex-col space-y-1'], [
-                $h->tag('h3', ['class' => 'font-[Inter] text-[#4E5973] text-xs font-bold'], [$offer->title]),
+                $h->tag('h3', ['class' => 'font-[Inter] text-[#4E5973] text-xs font-bold'], [
+                    $h->tag('a', ['href' => $offer->url], [$offer->title]),
+                ]),
                 $h->tag('div', ['class' => 'flex space-x-4'], [
                     $h->tag('span', ['id' => 'company', 'style' => 'color:#777;', 'class' => 'text-sm'], [$offer->company]),
                     $h->tag('span', ['class' => 'flex items-center', 'style' => 'color:#777;'], [

@@ -7,6 +7,7 @@ use Neon\View\Language\Language;
 readonly class JobOffer
 {
     public string $title;
+    public string $url;
     public ?string $company;
     public string $citiesSummary;
     public string $citiesTitle;
@@ -16,6 +17,7 @@ readonly class JobOffer
     public function __construct(private Language $lang, Domain\JobOffer $offer)
     {
         $this->title = $offer->title;
+        $this->url = $offer->url;
         $this->company = $offer->company;
         $this->tags = $offer->tags;
         $this->imageUrl = $offer->imageUrl;

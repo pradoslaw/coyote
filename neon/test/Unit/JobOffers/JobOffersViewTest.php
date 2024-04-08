@@ -28,7 +28,18 @@ class JobOffersViewTest extends TestCase
     {
         $view = $this->jobOffer(['offerTitle' => 'The Lannisters send their regards']);
         $this->assertSame('The Lannisters send their regards',
-            $view->find('#jobs', 'h3'));
+            $view->find('#jobs', 'h3', 'a'));
+    }
+
+    /**
+     * @test
+     */
+    public function jobOfferLink(): void
+    {
+        $view = $this->jobOffer(['offerLink' => '/foo']);
+        $this->assertSame(
+            '/foo',
+            $view->find('#jobs', 'h3', 'a', '@href'));
     }
 
     /**
@@ -116,7 +127,7 @@ class JobOffersViewTest extends TestCase
         $view = $this->jobOffersWithTitles($titles);
         $this->assertSame(
             ['foo', 'bar'],
-            $view->findMany('#jobs', 'h3'));
+            $view->findMany('#jobs', 'h3', 'a'));
     }
 
     private function jobOffer(array $fields): ItemView
@@ -127,6 +138,7 @@ class JobOffersViewTest extends TestCase
                 new English(),
                 new Domain\JobOffer(
                     $fields['offerTitle'] ?? '',
+                    $fields['offerLink'] ?? '',
                     $fields['offerCompany'] ?? '',
                     $fields['offerCities'] ?? [],
                     $fields['offerRemoteWork'] ?? false,
@@ -139,7 +151,7 @@ class JobOffersViewTest extends TestCase
         return new ItemView(new JobOffers('', \array_map(
             fn(string $title) => new ViewModel\JobOffer(
                 new English(),
-                new JobOffer($title, '', [], false, [], '')),
+                new JobOffer($title, '', '', [], false, [], '')),
             $titles,
         )));
     }

@@ -5,6 +5,7 @@ readonly class JobOffer
 {
     public function __construct(
         public string  $title,
+        public string  $url,
         public ?string $company,
         public array   $cities,
         public bool    $remoteWork,

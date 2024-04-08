@@ -62,6 +62,7 @@ class JobOffersViewLangPlTest extends TestCase
             new ViewModel\JobOffer(new Polish(), new Domain\JobOffer(
                 '',
                 '',
+                '',
                 $fields['offerCities'] ?? [],
                 $fields['offerRemoteWork'] ?? false,
                 [],
