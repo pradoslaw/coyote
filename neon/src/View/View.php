@@ -92,7 +92,7 @@ readonly class View
     private function jobOffers(array $offers): Item
     {
         return new Body\JobOffers($this->lang->t('Search for jobs'),
-            \array_map(fn(Domain\JobOffer $offer) => new ViewModel\JobOffer($offer),
+            \array_map(fn(Domain\JobOffer $offer) => new ViewModel\JobOffer($this->lang, $offer),
                 $offers));
     }
 }

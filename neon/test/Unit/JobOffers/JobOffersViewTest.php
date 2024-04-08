@@ -5,6 +5,7 @@ use Neon\Domain;
 use Neon\Domain\JobOffer;
 use Neon\Test\BaseFixture\ItemView;
 use Neon\View\Html\Body\JobOffers;
+use Neon\View\Language\English;
 use Neon\View\ViewModel;
 use PHPUnit\Framework\TestCase;
 
@@ -111,10 +112,8 @@ class JobOffersViewTest extends TestCase
      */
     public function jobOffers(): void
     {
-        $view = new ItemView(new JobOffers('', [
-            new ViewModel\JobOffer(new JobOffer('foo', '', [], false, [], '')),
-            new ViewModel\JobOffer(new JobOffer('bar', '', [], false, [], '')),
-        ]));
+        $titles = ['foo', 'bar'];
+        $view = $this->jobOffersWithTitles($titles);
         $this->assertSame(
             ['foo', 'bar'],
             $view->findMany('#jobs', 'h3'));
@@ -124,12 +123,24 @@ class JobOffersViewTest extends TestCase
     {
         return new ItemView(new JobOffers(
             $fields['sectionTitle'] ?? '', [
-            new ViewModel\JobOffer(new Domain\JobOffer(
-                $fields['offerTitle'] ?? '',
-                $fields['offerCompany'] ?? '',
-                $fields['offerCities'] ?? [],
-                $fields['offerRemoteWork'] ?? false,
-                $fields['offerTags'] ?? [],
-                $fields['offerImage'] ?? ''))]));
+            new ViewModel\JobOffer(
+                new English(),
+                new Domain\JobOffer(
+                    $fields['offerTitle'] ?? '',
+                    $fields['offerCompany'] ?? '',
+                    $fields['offerCities'] ?? [],
+                    $fields['offerRemoteWork'] ?? false,
+                    $fields['offerTags'] ?? [],
+                    $fields['offerImage'] ?? ''))]));
+    }
+
+    private function jobOffersWithTitles(array $titles): ItemView
+    {
+        return new ItemView(new JobOffers('', \array_map(
+            fn(string $title) => new ViewModel\JobOffer(
+                new English(),
+                new JobOffer($title, '', [], false, [], '')),
+            $titles,
+        )));
     }
 }

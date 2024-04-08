@@ -19,6 +19,9 @@ class Polish implements Language
         'Events with our patronage' => 'Wydarzenia z naszym patronatem',
 
         'Search for jobs' => 'Szukaj pracy',
+        'Not provided'    => 'Nie podano',
+        'Remote work'     => 'Praca zdalna',
+        'cities'          => 'miast',
 
         'Conference' => 'Konferencja',
         'Hackaton'   => 'Hackaton',
