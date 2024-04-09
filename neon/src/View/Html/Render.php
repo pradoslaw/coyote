@@ -60,7 +60,7 @@ class Render
         return $classes;
     }
 
-    private function childrenToString(array $children): string
+    public function childrenToString(array $children): string
     {
         $html = '';
         foreach ($children as $child) {
