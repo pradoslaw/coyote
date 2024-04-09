@@ -24,6 +24,7 @@ readonly class NavigationHtml implements Item
                 $h->tag('div', ['class' => 'flex'], [
                     $this->githubButton($h, 'mr-4'),
                     $this->controls($h),
+                    $this->logoutButton($h),
                     $this->navigation->avatarVisible ?
                         $h->tag('img', [
                             'src'   => $this->navigation->avatarUrl,
@@ -102,5 +103,15 @@ starIcon,);
             [
                 $h->tag('a', ['href' => $link->href], [$link->title]),
             ]);
+    }
+
+    private function logoutButton(Render $h): Tag
+    {
+        if ($this->navigation->canLogout) {
+            return $h->tag('span',
+                ['class' => 'px-2 py-1.5 self-center cursor-pointer', 'id' => 'logout'],
+                ['Logout']);
+        }
+        return $h->tag('span', [], []);
     }
 }

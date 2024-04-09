@@ -163,4 +163,26 @@ class NavigationViewTest extends TestCase
             '/avatar.png',
             $view->find('header', '#userAvatar', '@src'));
     }
+
+    /**
+     * @test
+     */
+    public function logoutButtonUser(): void
+    {
+        $view = $this->navigation(['loggedIn' => true]);
+        $this->assertSame(
+            'Logout',
+            $view->find('#logout'));
+    }
+
+    /**
+     * @test
+     */
+    public function logoutButtonGuest(): void
+    {
+        $view = $this->navigation([]);
+        $this->assertSame(
+            [],
+            $view->findMany('#logout'));
+    }
 }

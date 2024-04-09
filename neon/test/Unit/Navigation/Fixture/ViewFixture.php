@@ -22,9 +22,18 @@ trait ViewFixture
             $fields['githubName'] ?? '',
             $fields['githubStars'] ?? -1,
             $fields['controls'] ?? [],
-            isset($fields['loggedInAvatarUrl'])
-                ? LoggedInUser::withAvatar($fields['loggedInAvatarUrl'])
-                : LoggedInUser::guest(),
+            $this->loggedIn($fields),
         );
+    }
+
+    private function loggedIn(array $fields): LoggedInUser
+    {
+        if (isset($fields['loggedInAvatarUrl'])) {
+            return LoggedInUser::withAvatar($fields['loggedInAvatarUrl']);
+        }
+        if (isset($fields['loggedIn'])) {
+            return LoggedInUser::withoutAvatar();
+        }
+        return LoggedInUser::guest();
     }
 }
