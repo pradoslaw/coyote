@@ -1,13 +1,11 @@
 <?php
 namespace Neon\Test\Unit\Event\Fixture;
 
-use Neon;
 use Neon\Domain;
 use Neon\Domain\Event\EventKind;
 use Neon\Test\BaseFixture\ItemView;
 use Neon\View;
-use Neon\View\Html;
-use Neon\View\Html\Body\Section;
+use Neon\View\Components\SectionHtml;
 use Neon\View\Language\English;
 use Neon\View\Language\Language;
 
@@ -35,29 +33,29 @@ trait ViewFixture
 
     function eventsSection(array $fields, Language $lang = null): ItemView
     {
-        return new ItemView(new Section(
+        return new ItemView(new SectionHtml(
             '',
             '',
             $fields['sectionTitle'] ?? '',
             '',
-            [new View\Html\Body\Event($this->viewEvent($fields, $lang))]));
+            [new View\Components\Event\EventHtml($this->viewEvent($fields, $lang))]));
     }
 
     function eventSectionEvents(array $titles): ItemView
     {
-        return new ItemView(new Html\Body\Section(
+        return new ItemView(new View\Components\SectionHtml(
             '',
             '',
             '',
             '',
-            \array_map(fn(string $title) => new Html\Body\Event(
+            \array_map(fn(string $title) => new View\Components\Event\EventHtml(
                 $this->viewEvent(['eventTitle' => $title])),
                 $titles)));
     }
 
-    function viewEvent(array $fields, Language $lang = null): Neon\View\ViewModel\Event
+    function viewEvent(array $fields, Language $lang = null): View\Components\Event\Event
     {
-        return new Neon\View\ViewModel\Event(
+        return new View\Components\Event\Event(
             $lang ?? new English(),
             new Domain\Event\Event(
                 $fields['eventTitle'] ?? '',

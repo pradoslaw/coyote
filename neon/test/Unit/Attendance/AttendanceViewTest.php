@@ -3,9 +3,7 @@ namespace Neon\Test\Unit\Attendance;
 
 use Neon\Domain;
 use Neon\Test\BaseFixture\ItemView;
-use Neon\View\Html\Body;
 use Neon\View\Language\English;
-use Neon\View\ViewModel;
 use PHPUnit\Framework\TestCase;
 
 class AttendanceViewTest extends TestCase
@@ -57,8 +55,8 @@ class AttendanceViewTest extends TestCase
     private function attendance(array $fields): ItemView
     {
         return new ItemView(
-            new Body\Attendance(
-                new ViewModel\Attendance(
+            new \Neon\View\Components\Attendance\AttendanceHtml(
+                new \Neon\View\Components\Attendance\Attendance(
                     new English(),
                     new Domain\Attendance(
                         $fields['totalAmount'] ?? 0,

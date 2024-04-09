@@ -120,9 +120,9 @@ class EventViewModelTest extends TestCase
         $this->assertSame($expected, $event->dayShortName);
     }
 
-    private function viewEvent(array $fields): \Neon\View\ViewModel\Event
+    private function viewEvent(array $fields): \Neon\View\Components\Event\Event
     {
-        return new \Neon\View\ViewModel\Event(
+        return new \Neon\View\Components\Event\Event(
             new English(),
             $this->domainEvent($fields));
     }

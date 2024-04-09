@@ -1,11 +1,12 @@
 <?php
-namespace Neon\View\Html\Body;
+namespace Neon\View\Components;
 
+use Neon\View\Components\Event\EventHtml;
 use Neon\View\Html\Item;
 use Neon\View\Html\Render;
 use Neon\View\Html\Tag;
 
-readonly class Section implements Item
+readonly class SectionHtml implements Item
 {
     public function __construct(
         private string $breadcrumbRoot,
@@ -37,7 +38,7 @@ readonly class Section implements Item
                 [$this->subsectionTitle]),
 
             ...\array_map(
-                fn(Event $event) => $event->render($h),
+                fn(EventHtml $event) => $event->render($h),
                 $this->children),
         ];
     }

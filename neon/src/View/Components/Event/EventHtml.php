@@ -1,13 +1,12 @@
 <?php
-namespace Neon\View\Html\Body;
+namespace Neon\View\Components\Event;
 
 use Neon\View\Html\Render;
 use Neon\View\Html\Tag;
-use Neon\View\ViewModel;
 
-readonly class Event
+readonly class EventHtml
 {
-    public function __construct(private ViewModel\Event $event)
+    public function __construct(private \Neon\View\Components\Event\Event $event)
     {
     }
 

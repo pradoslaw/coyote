@@ -4,7 +4,6 @@ namespace Neon\View;
 use Neon\Domain;
 use Neon\Domain\Attendance;
 use Neon\Domain\Visitor;
-use Neon\View\Html\Body;
 use Neon\View\Html\Head\Favicon;
 use Neon\View\Html\Head\Title;
 use Neon\View\Html\Item;
@@ -28,7 +27,7 @@ readonly class View
             new Title($applicationName),
             new Favicon('https://4programmers.net/img/favicon.png'),
         ], [
-            new Body\Navigation($this->navigation($visitor)),
+            new Components\Navigation\NavigationHtml($this->navigation($visitor)),
             new UntypedItem(fn(Render $h): array => [
                 $h->tag('div', ['class' => 'lg:flex container mx-auto'], [
                     $h->tag('aside', ['class' => 'lg:w-1/4 lg:pr-2 mb-4 lg:mb-0'], [
@@ -48,9 +47,9 @@ readonly class View
         return $this->view->html();
     }
 
-    private function navigation(Visitor $visitor): ViewModel\Navigation
+    private function navigation(Visitor $visitor): Components\Navigation\Navigation
     {
-        return new ViewModel\Navigation(
+        return new Components\Navigation\Navigation(
             '/',
             [
                 $this->lang->t('Forum')      => '/Forum',
@@ -70,29 +69,29 @@ readonly class View
         );
     }
 
-    private function attendance(Attendance $attendance): Html\Body\Attendance
+    private function attendance(Attendance $attendance): Components\Attendance\AttendanceHtml
     {
-        return new Html\Body\Attendance(new ViewModel\Attendance($this->lang, $attendance));
+        return new Components\Attendance\AttendanceHtml(new Components\Attendance\Attendance($this->lang, $attendance));
     }
 
-    private function eventsSection(string $applicationName, array $events): Html\Body\Section
+    private function eventsSection(string $applicationName, array $events): Components\SectionHtml
     {
-        return new Html\Body\Section(
+        return new Components\SectionHtml(
             $applicationName,
             $this->lang->t('Events'),
             $this->lang->t('Incoming events'),
             $this->lang->t('Events with our patronage'),
             \array_map(
-                fn(Domain\Event\Event $event) => new Html\Body\Event(
-                    new ViewModel\Event($this->lang, $event)),
+                fn(Domain\Event\Event $event) => new Components\Event\EventHtml(
+                    new Components\Event\Event($this->lang, $event)),
                 $events,
             ));
     }
 
     private function jobOffers(array $offers): Item
     {
-        return new Body\JobOffers($this->lang->t('Search for jobs'),
-            \array_map(fn(Domain\JobOffer $offer) => new ViewModel\JobOffer($this->lang, $offer),
+        return new Components\JobOffer\JobOffersHtml($this->lang->t('Search for jobs'),
+            \array_map(fn(Domain\JobOffer $offer) => new Components\JobOffer\JobOffer($this->lang, $offer),
                 $offers));
     }
 }

@@ -1,14 +1,13 @@
 <?php
-namespace Neon\View\Html\Body;
+namespace Neon\View\Components\Attendance;
 
 use Neon\View\Html\Item;
 use Neon\View\Html\Render;
 use Neon\View\Html\Tag;
-use Neon\View\ViewModel;
 
-readonly class Attendance implements Item
+readonly class AttendanceHtml implements Item
 {
-    public function __construct(private ViewModel\Attendance $vm)
+    public function __construct(private \Neon\View\Components\Attendance\Attendance $vm)
     {
     }
 

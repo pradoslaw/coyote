@@ -3,18 +3,18 @@ namespace Neon\Test\Unit\Navigation\Fixture;
 
 use Neon;
 use Neon\Test\BaseFixture\ItemView;
-use Neon\View\Html\Body\Navigation;
+use Neon\View\Components\Navigation\NavigationHtml;
 
 trait ViewFixture
 {
     function navigation(array $fields): ItemView
     {
-        return new ItemView(new Navigation($this->viewModel($fields)));
+        return new ItemView(new NavigationHtml($this->viewModel($fields)));
     }
 
-    function viewModel(array $fields): Neon\View\ViewModel\Navigation
+    function viewModel(array $fields): Neon\View\Components\Navigation\Navigation
     {
-        return new Neon\View\ViewModel\Navigation(
+        return new Neon\View\Components\Navigation\Navigation(
             $fields['homepageUrl'] ?? '',
             $fields['items'] ?? [],
             $fields['githubUrl'] ?? '',

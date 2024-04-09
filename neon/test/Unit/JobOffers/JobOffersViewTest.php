@@ -4,9 +4,8 @@ namespace Neon\Test\Unit\JobOffers;
 use Neon\Domain;
 use Neon\Domain\JobOffer;
 use Neon\Test\BaseFixture\ItemView;
-use Neon\View\Html\Body\JobOffers;
+use Neon\View\Components\JobOffer\JobOffersHtml;
 use Neon\View\Language\English;
-use Neon\View\ViewModel;
 use PHPUnit\Framework\TestCase;
 
 class JobOffersViewTest extends TestCase
@@ -132,9 +131,9 @@ class JobOffersViewTest extends TestCase
 
     private function jobOffer(array $fields): ItemView
     {
-        return new ItemView(new JobOffers(
+        return new ItemView(new JobOffersHtml(
             $fields['sectionTitle'] ?? '', [
-            new ViewModel\JobOffer(
+            new \Neon\View\Components\JobOffer\JobOffer(
                 new English(),
                 new Domain\JobOffer(
                     $fields['offerTitle'] ?? '',
@@ -148,8 +147,8 @@ class JobOffersViewTest extends TestCase
 
     private function jobOffersWithTitles(array $titles): ItemView
     {
-        return new ItemView(new JobOffers('', \array_map(
-            fn(string $title) => new ViewModel\JobOffer(
+        return new ItemView(new JobOffersHtml('', \array_map(
+            fn(string $title) => new \Neon\View\Components\JobOffer\JobOffer(
                 new English(),
                 new JobOffer($title, '', '', [], false, [], '')),
             $titles,

@@ -1,15 +1,13 @@
 <?php
-namespace Neon\View\Html\Body;
+namespace Neon\View\Components\Navigation;
 
 use Neon\View\Html\Item;
 use Neon\View\Html\Render;
 use Neon\View\Html\Tag;
-use Neon\View\ViewModel;
-use Neon\View\ViewModel\Link;
 
-readonly class Navigation implements Item
+readonly class NavigationHtml implements Item
 {
-    public function __construct(private ViewModel\Navigation $navigation)
+    public function __construct(private Navigation $navigation)
     {
     }
 

@@ -2,8 +2,8 @@
 namespace Neon\Test\Unit\Attendance;
 
 use Neon\Domain;
+use Neon\View\Components\Attendance\Attendance;
 use Neon\View\Language\English;
-use Neon\View\ViewModel\Attendance;
 use PHPUnit\Framework\TestCase;
 
 class AttendanceViewModelTest extends TestCase

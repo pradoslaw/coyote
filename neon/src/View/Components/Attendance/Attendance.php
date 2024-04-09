@@ -1,5 +1,5 @@
 <?php
-namespace Neon\View\ViewModel;
+namespace Neon\View\Components\Attendance;
 
 use Neon\Domain;
 use Neon\View\Language\Language;

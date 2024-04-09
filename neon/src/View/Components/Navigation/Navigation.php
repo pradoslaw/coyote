@@ -1,5 +1,5 @@
 <?php
-namespace Neon\View\ViewModel;
+namespace Neon\View\Components\Navigation;
 
 use Neon\Domain\Visitor;
 

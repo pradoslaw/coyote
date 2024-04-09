@@ -1,12 +1,11 @@
 <?php
-namespace Neon\View\Html\Body;
+namespace Neon\View\Components\JobOffer;
 
 use Neon\View\Html\Item;
 use Neon\View\Html\Render;
 use Neon\View\Html\Tag;
-use Neon\View\ViewModel\JobOffer;
 
-readonly class JobOffers implements Item
+readonly class JobOffersHtml implements Item
 {
     public function __construct(
         private string $sectionTitle,

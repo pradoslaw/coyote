@@ -3,9 +3,8 @@ namespace Neon\Test\Unit\JobOffers;
 
 use Neon\Domain;
 use Neon\Test\BaseFixture\ItemView;
-use Neon\View\Html\Body\JobOffers;
+use Neon\View\Components\JobOffer\JobOffersHtml;
 use Neon\View\Language\Polish;
-use Neon\View\ViewModel;
 use PHPUnit\Framework\TestCase;
 
 class JobOffersViewLangPlTest extends TestCase
@@ -58,8 +57,8 @@ class JobOffersViewLangPlTest extends TestCase
 
     private function jobOffer(array $fields): ItemView
     {
-        return new ItemView(new JobOffers('', [
-            new ViewModel\JobOffer(new Polish(), new Domain\JobOffer(
+        return new ItemView(new JobOffersHtml('', [
+            new \Neon\View\Components\JobOffer\JobOffer(new Polish(), new Domain\JobOffer(
                 '',
                 '',
                 '',
