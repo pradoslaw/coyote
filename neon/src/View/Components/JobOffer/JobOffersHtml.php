@@ -37,12 +37,14 @@ readonly class JobOffersHtml implements Item
                 $h->tag('h3', ['class' => 'font-[Inter] text-[#4E5973] text-xs font-bold'], [
                     $h->tag('a', ['href' => $offer->url], [$offer->title]),
                 ]),
-                $h->tag('div', ['class' => 'flex space-x-4'], [
-                    $h->tag('span', ['id' => 'company', 'style' => 'color:#777;', 'class' => 'text-sm'], [$offer->company]),
+                $h->tag('div', ['class' => 'flex flex-wrap'], [
+                    $h->tag('span',
+                        ['id' => 'company', 'style' => 'color:#777;', 'class' => 'text-sm whitespace-nowrap mr-4'],
+                        [$offer->company]),
                     $h->tag('span', ['class' => 'flex items-center', 'style' => 'color:#777;'], [
                         $this->pinIcon($h, 'h-[14px] w-[11px] mr-1'),
                         $h->tag('div',
-                            ['id' => 'cities', 'class' => 'text-sm', 'title' => $offer->citiesTitle],
+                            ['id' => 'cities', 'class' => 'text-sm whitespace-nowrap', 'title' => $offer->citiesTitle],
                             [$offer->citiesSummary]),
                     ]),
                 ]),
