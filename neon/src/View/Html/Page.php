@@ -14,7 +14,7 @@ readonly class Page implements Item
         $this->heads = [
             ...$head,
             // new Script('https://cdn.tailwindcss.com'), // for debug
-            new Style('css/neon.css'),
+            new Style('css/neon.css?v6'),
             new Style('fonts/switzer/switzer.css'),
             new Style('fonts/inter/inter.css'),
         ];
