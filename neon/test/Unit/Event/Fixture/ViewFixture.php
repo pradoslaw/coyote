@@ -65,6 +65,7 @@ trait ViewFixture
                 $fields['eventDate'] ?? new Domain\Event\Date(0, 0, 0),
                 $fields['eventKind'] ?? EventKind::Conference,
                 $fields['eventLink'] ?? '',
+                '',
             ));
     }
 }

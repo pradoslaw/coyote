@@ -1,0 +1,60 @@
+section#events {
+  .card-events {
+    border: 1px solid #80a41a;
+    border-left-width: 5px;
+    border-radius: 8px;
+
+    .card-body {
+      padding: 0.75rem 1.25rem;
+      overflow: hidden;
+
+      .event-date {
+        font-weight: bold;
+        @include media-breakpoint-only(md) {
+          font-size: 12px;
+          font-weight: normal;
+        }
+      }
+    }
+  }
+
+  body.theme-dark & .tag-clouds li a {
+    color: #acacac;
+    background: #252525;
+
+    &:hover {
+      color: #a2775d;
+    }
+  }
+
+  .card-add-event {
+    border: 2px solid #80a41a;
+  }
+
+  a.event-link {
+    color: #333;
+
+    &:hover {
+      text-decoration: none;
+      color: #5e7813;
+    }
+
+    body.theme-dark & {
+      color: #dedede;
+
+      &:hover {
+        color: #80a41a;
+      }
+
+      hr {
+        border-top: 1px solid rgba(255, 255, 255, .1);
+      }
+    }
+  }
+
+  body.theme-dark & {
+    hr {
+      border-top: 1px solid rgba(255, 255, 255, .1);
+    }
+  }
+}

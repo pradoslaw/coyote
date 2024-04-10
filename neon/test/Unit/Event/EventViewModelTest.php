@@ -137,6 +137,7 @@ class EventViewModelTest extends TestCase
             $fields['date'] ?? new Date(130, 2, 4),
             $fields['kind'] ?? Domain\Event\EventKind::Conference,
             '',
+            '',
         );
     }
 }

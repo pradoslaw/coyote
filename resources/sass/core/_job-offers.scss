@@ -34,12 +34,6 @@
   .media {
     &:last-child {
       padding: 10px 0 0 0;
-
-      a {
-        color: darken($primary, 10%);
-        font-weight: bold;
-        font-size: $font-size-sm;
-      }
     }
   }
 

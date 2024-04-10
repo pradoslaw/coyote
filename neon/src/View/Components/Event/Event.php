@@ -14,6 +14,7 @@ readonly class Event
     public string $kind;
     public string $date;
     public string $dayShortName;
+    public string $microblogUrl;
 
     public function __construct(Language $language, Domain\Event\Event $event)
     {
@@ -25,6 +26,7 @@ readonly class Event
         $this->kind = $language->t($event->kind->name);
         $this->date = $this->date($event);
         $this->dayShortName = $language->t($this->dayShortName($event->date));
+        $this->microblogUrl = $event->microblogUrl;
     }
 
     private function date(Domain\Event\Event $event): string

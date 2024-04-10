@@ -19,6 +19,10 @@ use Coyote\Services\Widgets\Patronage;
 use Coyote\Services\Widgets\WhatsNew;
 use Illuminate\Contracts\Cache;
 use Illuminate\View\View;
+use Neon\Domain;
+use Neon\StaticEvents;
+use Neon\View\Components;
+use Neon\View\Language\Polish;
 
 class HomeController extends Controller
 {
@@ -48,6 +52,10 @@ class HomeController extends Controller
                 'year'  => $this->reputation->yearly(),
                 'total' => $this->reputation->total(),
             ]),
+            'events'      => \array_map(
+                fn(Domain\Event\Event $event) => new Components\Event\Event(new Polish(), $event),
+                \array_slice((new StaticEvents())->fetchEvents(), 0, 3),
+            ),
         ])
             ->with('settings', $this->getSettings())
             ->with('whats_new', resolve(WhatsNew::class)->render())

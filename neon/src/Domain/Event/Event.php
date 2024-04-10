@@ -11,6 +11,7 @@ readonly class Event
         public Date      $date,
         public EventKind $kind,
         public string    $url,
+        public string    $microblogUrl,
     )
     {
     }

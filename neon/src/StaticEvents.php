@@ -19,6 +19,7 @@ class StaticEvents implements Events
                 new Date(2024, 4, 16),
                 EventKind::Conference,
                 'https://4developers.org.pl/',
+                'https://4programmers.net/Mikroblogi/View/140933',
             ),
             new Event(
                 'Best Hacking League',
@@ -28,6 +29,7 @@ class StaticEvents implements Events
                 new Date(2024, 4, 20),
                 EventKind::Hackaton,
                 'https://besthackingleague.pl/',
+                'https://4programmers.net/Mikroblogi/View/141082/',
             ),
             new Event(
                 '18 Sesja Linuksowa',
@@ -37,6 +39,7 @@ class StaticEvents implements Events
                 new Date(2024, 4, 20),
                 EventKind::Conference,
                 'https://18.sesja.linuksowa.pl/',
+                'https://4programmers.net/Mikroblogi/View/141364/',
             ),
             new Event(
                 'SForce Summit 2024',
@@ -46,6 +49,7 @@ class StaticEvents implements Events
                 new Date(2024, 4, 23),
                 EventKind::Conference,
                 'https://sforcesummit.pl/',
+                'https://4programmers.net/Mikroblogi/View/141331',
             ),
             new Event(
                 'Founders Mind VII',
@@ -55,6 +59,7 @@ class StaticEvents implements Events
                 new Date(2024, 5, 14),
                 EventKind::Conference,
                 'https://foundersmind.pl/#bilety',
+                'https://4programmers.net/Mikroblogi/View/141058/',
             ),
             new Event(
                 'Code Europe',
@@ -64,6 +69,7 @@ class StaticEvents implements Events
                 new Date(2024, 6, 10),
                 EventKind::Conference,
                 'https://www.codeeurope.pl/pl/',
+                'https://4programmers.net/Mikroblogi/View/141355',
             ),
         ];
     }

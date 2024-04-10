@@ -156,11 +156,70 @@
     <div class="col-md-4 position-relative">
       <aside class="sticky-aside">
         {{ render_block('homepage_banner_side') }}
-        
+
         <div class="mb-4">
           {{ viewers|raw }}
         </div>
+
+        <section class="box mt-4" id="events">
+          <h4 class="mb-3">
+            <i class="fas fa-calendar-day fa-fw"></i>
+            Wydarzenia z naszym patronatem
+          </h4>
+          {% for event in events %}
+            <div class="card card-default card-events">
+              <div class="card-body p-2">
+                <div class="d-flex d-md-block d-lg-flex">
+                  <p class="m-0 mr-3 text-nowrap align-self-center event-date">
+                    {{ event.date }} | {{ event.dayShortName }}
+                  </p>
+                  <div>
+                    <a href="{{ event.microblogUrl }}" class="event-link">
+                      <strong style="white-space:nowrap;">
+                        {{ event.title }}
+                      </strong>
+                    </a>
+                    <ul class="d-flex tag-clouds tag-clouds-xs">
+                      {% for tag in event.tags %}
+                        <li>
+                          <a class="tag" href="/Forum/Tag/{{ tag | url_encode(true) }}">
+                            {{ tag }}
+                          </a>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+
+          <p class="text-center">
+            <a href="/events" class="homepage-link">
+              Zobacz więcej wydarzeń
+            </a>
+          </p>
+
+          <div class="card card-default card-add-events" style="">
+            <div class="card-header" style="background-color:#80a41a;">
+              <h4 class="m-0 text-center" style="color:white; font-weight:400;">
+                Organizujesz wydarzenie?
+              </h4>
+            </div>
+            <div class="card-body" style="padding:10px;">
+              Zarejestruj je w naszym kalendarzu, a z radością udzielimy mu wsparcia medialnego.
+              <hr class="my-2">
+              <p class="mt-3 mb-1 text-center">
+                <a href="https://4programmers.net/Patronat" class="homepage-link">
+                  Dowiedz się więcej
+                </a>
+              </p>
+            </div>
+          </div>
+        </section>
+
         {{ render_block('job_ads') }}
+
         <section class="box mt-4">
           <h4>
             <i class="fas fa-star fa-fw"></i>
