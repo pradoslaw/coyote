@@ -110,7 +110,7 @@ starIcon,);
         if ($this->navigation->canLogout) {
             return $h->tag('span',
                 ['class' => 'px-2 py-1.5 self-center cursor-pointer', 'id' => 'logout'],
-                ['Logout']);
+                [$this->navigation->logoutTitle]);
         }
         return $h->tag('span', [], []);
     }

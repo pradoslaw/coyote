@@ -1,20 +1,23 @@
 <?php
 namespace Neon\Test\Unit\Navigation\Fixture;
 
-use Neon;
 use Neon\Test\BaseFixture\ItemView;
+use Neon\View\Components\Navigation\Navigation;
 use Neon\View\Components\Navigation\NavigationHtml;
+use Neon\View\Language\English;
+use Neon\View\Language\Language;
 
 trait ViewFixture
 {
     function navigation(array $fields): ItemView
     {
-        return new ItemView(new NavigationHtml($this->viewModel($fields)));
+        return new ItemView(new NavigationHtml($this->viewModel($fields, new English())));
     }
 
-    function viewModel(array $fields): Neon\View\Components\Navigation\Navigation
+    function viewModel(array $fields, Language $language): Navigation
     {
-        return new Neon\View\Components\Navigation\Navigation(
+        return new Navigation(
+            $language,
             $fields['homepageUrl'] ?? '',
             $fields['items'] ?? [],
             $fields['githubUrl'] ?? '',

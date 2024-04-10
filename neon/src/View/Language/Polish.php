@@ -11,6 +11,7 @@ class Polish implements Language
 
         'Create account' => 'Utwórz konto',
         'Login'          => 'Logowanie',
+        'Logout'         => 'Wyloguj',
 
         'Users' => 'Użytkowników',
 

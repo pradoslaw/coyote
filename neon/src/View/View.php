@@ -50,6 +50,7 @@ readonly class View
     private function navigation(Visitor $visitor): Components\Navigation\Navigation
     {
         return new Components\Navigation\Navigation(
+            $this->lang,
             '/',
             [
                 $this->lang->t('Forum')      => '/Forum',

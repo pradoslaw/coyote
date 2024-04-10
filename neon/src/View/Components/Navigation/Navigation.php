@@ -2,6 +2,7 @@
 namespace Neon\View\Components\Navigation;
 
 use Neon\Domain\Visitor;
+use Neon\View\Language\Language;
 
 readonly class Navigation
 {
@@ -10,8 +11,10 @@ readonly class Navigation
     public string $avatarUrl;
     public bool $avatarVisible;
     public bool $canLogout;
+    public string $logoutTitle;
 
     public function __construct(
+        Language      $language,
         public string $homepageUrl,
         public array  $items,
         public string $githubUrl,
@@ -34,5 +37,6 @@ readonly class Navigation
         $this->avatarVisible = $visitor->loggedIn();
         $this->canLogout = $visitor->loggedIn();
         $this->avatarUrl = $visitor->loggedInUserAvatarUrl() ?? '/neon/avatarPlaceholder.png';
+        $this->logoutTitle = $language->t('Logout');
     }
 }
