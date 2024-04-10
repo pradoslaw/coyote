@@ -191,32 +191,6 @@
   }
 }
 
-.patronage-body {
-  display: flex;
-  flex-direction: column;
-  max-height: 160px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin: 1.25rem;
-  padding: 0;
-  position: relative;
-
-  &:after {
-    display: block;
-    content: '';
-    width: 100%;
-    height: 40px;
-    position: absolute;
-    bottom: 0;
-    z-index: 2;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0, white 65%);
-  }
-
-  .patronage-text {
-    color: #454545;
-  }
-}
-
 .reputation-username {
   color: #333;
 }

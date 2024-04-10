@@ -15,7 +15,6 @@ use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess as OnlyThoseTopicsWit
 use Coyote\Services\Flags;
 use Coyote\Services\Microblogs\Builder;
 use Coyote\Services\Session\Renderer;
-use Coyote\Services\Widgets\Patronage;
 use Coyote\Services\Widgets\WhatsNew;
 use Illuminate\Contracts\Cache;
 use Illuminate\View\View;
@@ -58,8 +57,7 @@ class HomeController extends Controller
             ),
         ])
             ->with('settings', $this->getSettings())
-            ->with('whats_new', resolve(WhatsNew::class)->render())
-            ->with('patronage', resolve(Patronage::class)->render());
+            ->with('whats_new', resolve(WhatsNew::class)->render());
     }
 
     private function getMicroblogs(): array
