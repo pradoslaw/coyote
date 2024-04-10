@@ -54,7 +54,7 @@ class HomeController extends Controller
             ]),
             'events'      => \array_map(
                 fn(Domain\Event\Event $event) => new Components\Event\Event(new Polish(), $event),
-                \array_slice((new StaticEvents())->fetchEvents(), 0, 3),
+                (new StaticEvents())->fetchEvents(),
             ),
         ])
             ->with('settings', $this->getSettings())

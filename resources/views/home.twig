@@ -166,8 +166,15 @@
             <i class="fas fa-calendar-day fa-fw"></i>
             Wydarzenia z naszym patronatem
           </h4>
+          <style>
+              .card-event:nth-of-type(1),
+              .card-event:nth-of-type(2),
+              .card-event:nth-of-type(3) {
+                  display: block !important;
+              }
+          </style>
           {% for event in events %}
-            <div class="card card-default card-events">
+            <div class="card card-default card-event" style="display:none;">
               <div class="card-body p-2">
                 <div class="d-flex d-md-block d-lg-flex">
                   <p class="m-0 mr-3 text-nowrap align-self-center event-date">
@@ -195,12 +202,25 @@
           {% endfor %}
 
           <p class="text-center">
-            <a href="/events" class="homepage-link">
+            <span id="showAllEvents">
               Zobacz więcej wydarzeń
-            </a>
+            </span>
+            <script>
+              (function () {
+                const button = document.getElementById("showAllEvents");
+                button.addEventListener('click', () => {
+                  Array.from(document.querySelectorAll(".card-event"))
+                    .forEach(event => event.style.display = 'block');
+                  button.style.display = 'none';
+                  if (window.stickyAsideReposition) {
+                    window.stickyAsideReposition();
+                  }
+                });
+              })();
+            </script>
           </p>
 
-          <div class="card card-default card-add-events" style="">
+          <div class="card card-default card-add-event" style="">
             <div class="card-header" style="background-color:#80a41a;">
               <h4 class="m-0 text-center" style="color:white; font-weight:400;">
                 Organizujesz wydarzenie?
@@ -210,7 +230,7 @@
               Zarejestruj je w naszym kalendarzu, a z radością udzielimy mu wsparcia medialnego.
               <hr class="my-2">
               <p class="mt-3 mb-1 text-center">
-                <a href="https://4programmers.net/Patronat" class="homepage-link">
+                <a href="https://4programmers.net/Patronat">
                   Dowiedz się więcej
                 </a>
               </p>
@@ -324,7 +344,8 @@
 
         window.addEventListener("resize", reposition, {passive: true});
         reposition();
-        [0, 1000, 4000, 6000, 1000].forEach(time => setTimeout(reposition, time));
+        window.stickyAsideReposition = reposition;
+        [0, 1000, 4000, 6000, 10000].forEach(time => setTimeout(reposition, time));
       })();
     </script>
   </div>

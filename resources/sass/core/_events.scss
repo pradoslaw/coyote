@@ -1,5 +1,5 @@
 section#events {
-  .card-events {
+  .card-event {
     border: 1px solid #80a41a;
     border-left-width: 5px;
     border-radius: 8px;
@@ -24,6 +24,16 @@ section#events {
 
     &:hover {
       color: #a2775d;
+    }
+  }
+
+  #showAllEvents {
+    color: #80a41a;
+    cursor: pointer;
+
+    &:hover {
+      color: #4c6210;
+      text-decoration: underline;
     }
   }
 
