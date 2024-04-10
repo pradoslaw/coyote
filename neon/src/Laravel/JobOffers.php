@@ -28,7 +28,7 @@ readonly class JobOffers implements \Neon\Persistence\JobOffers
                         ->map(fn(Job\Location $location): string => $location->city)
                         ->all(),
                     $job->is_remote && $job->remote_range === 100,
-                    ['Java', 'Spring'],
+                    [],
                     $job->firm->logo->url() ?? '');
             },
             $jobs);
