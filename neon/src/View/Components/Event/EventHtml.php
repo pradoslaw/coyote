@@ -13,15 +13,15 @@ readonly class EventHtml
     public function render(Render $h): Tag
     {
         $border = 'border-solid border-l-4 border-[#00A538]';
-        return $h->tag('div', ['class' => "event bg-white rounded-lg p-4 mb-4 flex justify-between $border"], [
-            $h->tag('div', ['class' => 'date self-center w-2/12 ml-1'], [
+        return $h->tag('div', ['class' => "event bg-white rounded-lg p-4 mb-4 flex  $border"], [
+            $h->tag('div', ['class' => 'date self-center ml-1 mr-6'], [
                 $h->tag('span', ['class' => 'font-bold'], [$this->event->date]),
                 $h->tag('span', ['class' => 'mx-2'], ['|']),
                 $h->tag('span', ['class' => 'font-bold'], [$this->event->dayShortName]),
             ]),
-            $h->tag('div', ['class' => 'self-center w-1/2'], [
+            $h->tag('div', ['class' => 'self-center '], [
                 $h->tag('h2', ['class' => 'font-medium text-base mb-1'], [
-                    $h->tag('a', ['href' => $this->event->titleUrl, 'class'=>'hover:text-[#00A538]'], [
+                    $h->tag('a', ['href' => $this->event->titleUrl, 'class' => 'hover:text-[#00A538]'], [
                         $this->event->title,
                     ]),
                 ]),
@@ -31,10 +31,10 @@ readonly class EventHtml
                         [$tag]),
                     $this->event->tags)),
             ]),
-            $h->tag('div', ['class' => 'details w-5/12 flex text-center'], [
-                $h->tag('span', ['class' => 'text-[#4E5973] self-center text-sm w-1/3'], [$this->event->city]),
-                $h->tag('span', ['class' => 'text-[#4E5973]  self-center text-sm w-1/3'], [$this->event->kind]),
-                $h->tag('span', ['class' => 'text-[#4E5973]  self-center text-sm w-1/3'], [$this->event->pricing]),
+            $h->tag('div', ['class' => 'details flex text-center ml-auto'], [
+                $h->tag('span', ['class' => 'text-[#4E5973] self-center text-sm mx-2'], [$this->event->city]),
+                $h->tag('span', ['class' => 'text-[#4E5973] self-center text-sm mx-2'], [$this->event->kind]),
+                $h->tag('span', ['class' => 'text-[#4E5973] self-center text-sm mx-2'], [$this->event->pricing]),
             ]),
         ]);
     }
