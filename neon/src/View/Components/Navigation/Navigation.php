@@ -23,6 +23,7 @@ readonly class Navigation
         public string $githubStars,
         array         $controls,
         Visitor       $visitor,
+        public string $csrf,
     )
     {
         if (empty($controls) || $visitor->loggedIn()) {

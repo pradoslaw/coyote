@@ -21,13 +21,14 @@ readonly class View
         array            $events,
         Attendance       $attendance,
         array            $offers,
-        Visitor          $visitor)
+        Visitor          $visitor,
+        string           $csrf)
     {
         $this->view = new HtmlView([
             new Title($applicationName),
             new Favicon('https://4programmers.net/img/favicon.png'),
         ], [
-            new Components\Navigation\NavigationHtml($this->navigation($visitor)),
+            new Components\Navigation\NavigationHtml($this->navigation($visitor, $csrf)),
             new UntypedItem(fn(Render $h): array => [
                 $h->tag('div', ['class' => 'lg:flex container mx-auto'], [
                     $h->tag('aside', ['class' => 'lg:w-1/4 lg:pr-2 mb-4 lg:mb-0'], [
@@ -47,7 +48,7 @@ readonly class View
         return $this->view->html();
     }
 
-    private function navigation(Visitor $visitor): Components\Navigation\Navigation
+    private function navigation(Visitor $visitor, string $csrf): Components\Navigation\Navigation
     {
         return new Components\Navigation\Navigation(
             $this->lang,
@@ -67,6 +68,7 @@ readonly class View
                 $this->lang->t('Login')          => '/Login',
             ],
             $visitor,
+            $csrf,
         );
     }
 

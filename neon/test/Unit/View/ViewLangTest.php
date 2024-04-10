@@ -81,6 +81,7 @@ class ViewLangTest extends TestCase
             [],
             new Attendance(0, 0),
             [],
-            LoggedInUser::guest());
+            LoggedInUser::guest(),
+            '');
     }
 }

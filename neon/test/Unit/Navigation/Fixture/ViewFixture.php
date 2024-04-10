@@ -26,6 +26,7 @@ trait ViewFixture
             $fields['githubStars'] ?? -1,
             $fields['controls'] ?? [],
             $this->loggedIn($fields),
+            '',
         );
     }
 

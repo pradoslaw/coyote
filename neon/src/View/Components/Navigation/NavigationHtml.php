@@ -107,11 +107,25 @@ starIcon,);
 
     private function logoutButton(Render $h): Tag
     {
-        if ($this->navigation->canLogout) {
-            return $h->tag('span',
-                ['class' => 'px-2 py-1.5 self-center cursor-pointer', 'id' => 'logout'],
-                [$this->navigation->logoutTitle]);
+        if (!$this->navigation->canLogout) {
+            return $h->many([]);
         }
-        return $h->tag('span', [], []);
+        return $h->many([
+            $h->tag('span',
+                ['class' => 'px-2 py-1.5 self-center cursor-pointer', 'id' => 'logout'],
+                [
+                    $this->navigation->logoutTitle,
+                ]),
+
+            $h->html(<<<javaScript
+                <script>
+                    const logout = document.querySelector('#logout');
+                    logout.addEventListener('click', () => {
+                        fetch('/Logout', {method:'POST', headers:{'X-CSRF-TOKEN':'{$this->navigation->csrf}'}})
+                            .then(r => window.location.reload());
+                    });
+                </script>
+                javaScript,),
+        ]);
     }
 }

@@ -16,6 +16,7 @@ class HtmlView
     public function html(): string
     {
         $h = new Render();
-        return $h->childrenToString($this->page->render($h));
+        $pageTag = $h->many($this->page->render($h));
+        return $pageTag->html();
     }
 }

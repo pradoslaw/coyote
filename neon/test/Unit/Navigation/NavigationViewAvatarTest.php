@@ -43,7 +43,7 @@ class NavigationViewAvatarTest extends TestCase
     private function isAvatarRendered(LoggedInUser $visitor): bool
     {
         $application = new Application('', new NoneAttendance(), new NoJobOffers(), new NoEvents(), $visitor);
-        $dom = new ViewDom($application->html());
+        $dom = new ViewDom($application->html(''));
         return $dom->exists('//header//img[@id="userAvatar"]');
     }
 
@@ -55,7 +55,7 @@ class NavigationViewAvatarTest extends TestCase
 
     private function text(Application $application, Selector $selector): string
     {
-        $dom = new ViewDom($application->html());
+        $dom = new ViewDom($application->html(''));
         return $dom->find($selector->xPath());
     }
 }

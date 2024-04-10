@@ -3,6 +3,9 @@ namespace Coyote\Providers\Neon;
 
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Session\Middleware\StartSession;
 use Neon\Application;
 use Neon\Laravel;
 use Neon\Laravel\JobOffers;
@@ -29,10 +32,10 @@ class ServiceProvider extends RouteServiceProvider
     {
         $this
             ->get('/events', [
-                'uses' => function () {
+                'uses' => function (Request $request) {
                     /** @var Application $application */
                     $application = $this->app->get(Application::class);
-                    return $application->html();
+                    return $application->html($this->startSessionGetCsrf($request));
                 },
             ])
             ->middleware('neon');
@@ -43,5 +46,13 @@ class ServiceProvider extends RouteServiceProvider
         /** @var DatabaseManager $database */
         $database = $this->app->get(DatabaseManager::class);
         return new Laravel\Attendance($database);
+    }
+
+    private function startSessionGetCsrf(Request $request): string
+    {
+        /** @var StartSession $middleware */
+        $middleware = $this->app->get(StartSession::class);
+        $middleware->handle($request, fn() => new Response(''));
+        return session()->token() ?? '';
     }
 }

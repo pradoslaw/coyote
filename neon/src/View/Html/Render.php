@@ -18,6 +18,11 @@ class Render
         );
     }
 
+    public function many(array $children): Tag
+    {
+        return new Tag($this->childrenToString($children), null);
+    }
+
     public function html(string $string): Tag
     {
         return new Tag($string, null);
@@ -60,7 +65,7 @@ class Render
         return $classes;
     }
 
-    public function childrenToString(array $children): string
+    private function childrenToString(array $children): string
     {
         $html = '';
         foreach ($children as $child) {

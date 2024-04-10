@@ -16,7 +16,7 @@ readonly class Application
     {
     }
 
-    public function html(): string
+    public function html(string $csrf): string
     {
         $view = new View(
             new Polish(),
@@ -24,7 +24,8 @@ readonly class Application
             $this->events->fetchEvents(),
             $this->attendance->fetchAttendance(),
             $this->jobOffers->fetchJobOffers(), // todo this is untested
-            $this->visitor);
+            $this->visitor,
+            $csrf);
         return $view->html();
     }
 }
