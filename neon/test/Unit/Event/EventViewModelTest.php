@@ -86,7 +86,7 @@ class EventViewModelTest extends TestCase
     public function date(): void
     {
         $event = $this->viewEvent(['date' => new Date(2023, 11, 15)]);
-        $this->assertSame('11.15', $event->date);
+        $this->assertSame('15.11.2023', $event->date);
     }
 
     /**
@@ -95,7 +95,7 @@ class EventViewModelTest extends TestCase
     public function dateLeadingZero(): void
     {
         $event = $this->viewEvent(['date' => new Date(2023, 2, 1)]);
-        $this->assertSame('02.01', $event->date);
+        $this->assertSame('01.02.2023', $event->date);
     }
 
     /**

@@ -31,7 +31,7 @@ readonly class Event
     {
         $day = $this->leadingZero($event->date->day);
         $month = $this->leadingZero($event->date->month);
-        return "$month.$day";
+        return "$day.$month.{$event->date->year}";
     }
 
     private function leadingZero(string $string): string

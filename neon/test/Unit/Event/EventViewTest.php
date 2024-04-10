@@ -27,7 +27,7 @@ class EventViewTest extends TestCase
     {
         $view = $this->eventsSection(['eventDate' => new Domain\Event\Date(2024, 3, 18)]);
         $this->assertSame(
-            ['03.18', '|', 'Mon'],
+            ['18.03.2024', '|', 'Mon'],
             $view->findMany('div.event', 'div.date', 'span'));
     }
 
