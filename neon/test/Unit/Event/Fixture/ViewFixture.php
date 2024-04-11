@@ -38,7 +38,7 @@ trait ViewFixture
             '',
             $fields['sectionTitle'] ?? '',
             '',
-            [new View\Components\Event\EventHtml($this->viewEvent($fields, $lang))]));
+            [new View\Components\Event\EventHtml($this->viewEvent($fields, $lang), '')]));
     }
 
     function eventSectionEvents(array $titles): ItemView
@@ -49,7 +49,7 @@ trait ViewFixture
             '',
             '',
             \array_map(fn(string $title) => new View\Components\Event\EventHtml(
-                $this->viewEvent(['eventTitle' => $title])),
+                $this->viewEvent(['eventTitle' => $title]), ''),
                 $titles)));
     }
 

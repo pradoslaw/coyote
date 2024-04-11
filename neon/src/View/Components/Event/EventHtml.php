@@ -6,7 +6,10 @@ use Neon\View\Html\Tag;
 
 readonly class EventHtml
 {
-    public function __construct(private \Neon\View\Components\Event\Event $event)
+    public function __construct(
+        private Event  $event,
+        private string $csrf,
+    )
     {
     }
 
@@ -21,9 +24,27 @@ readonly class EventHtml
             ]),
             $h->tag('div', ['class' => 'self-center '], [
                 $h->tag('h2', ['class' => 'font-medium text-base mb-1'], [
-                    $h->tag('a', ['href' => $this->event->titleUrl, 'class' => 'hover:text-[#00A538]'], [
+                    $h->tag('a', ['href' => $this->event->titleUrl, 'class' => 'hover:text-[#00A538]', 'id' => $this->event->key], [
                         $this->event->title,
                     ]),
+                    $h->html(<<<script
+                        <script>
+                            (function () {
+                              const link = document.getElementById('{$this->event->key}');
+                              link.addEventListener('click', () => {
+                                fetch('/Settings/Ajax', {
+                                  method:'POST', 
+                                  headers: {
+                                    'X-CSRF-TOKEN': '{$this->csrf}',
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json'
+                                  },
+                                  body: JSON.stringify({key: 'event.click.neon.{$this->event->key}'})
+                                });
+                              });
+                            })();
+                        </script>
+                        script,),
                 ]),
                 $h->tag('ul', [], \array_map(
                     fn($tag) => $h->tag('li',

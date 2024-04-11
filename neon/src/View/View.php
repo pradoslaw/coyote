@@ -37,7 +37,7 @@ readonly class View
                     ]),
                     $h->tag('main',
                         ['class' => 'lg:w-3/4 lg:pl-2'],
-                        $this->eventsSection($applicationName, $events)->render($h)),
+                        $this->eventsSection($applicationName, $events, $csrf)->render($h)),
                 ]),
             ]),
         ]);
@@ -77,7 +77,7 @@ readonly class View
         return new Components\Attendance\AttendanceHtml(new Components\Attendance\Attendance($this->lang, $attendance));
     }
 
-    private function eventsSection(string $applicationName, array $events): Components\SectionHtml
+    private function eventsSection(string $applicationName, array $events, string $csrf): Components\SectionHtml
     {
         return new Components\SectionHtml(
             $applicationName,
@@ -86,7 +86,8 @@ readonly class View
             $this->lang->t('Events with our patronage'),
             \array_map(
                 fn(Domain\Event\Event $event) => new Components\Event\EventHtml(
-                    new Components\Event\Event($this->lang, $event)),
+                    new Components\Event\Event($this->lang, $event),
+                    $csrf),
                 $events,
             ));
     }
