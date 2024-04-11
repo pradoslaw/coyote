@@ -1,8 +1,18 @@
 import axios from 'axios';
 
 function incrementSetting(key: string): void {
-  axios.post('/Settings/Ajax', {key});
+  axios.post('/Settings/Ajax', {key, clickCount: 1423});
 }
+
+Array
+  .from(document.querySelectorAll('a.event-link'))
+  .forEach((element: Element): void => {
+    element.addEventListener('click', (x) => {
+      const event = element as HTMLElement;
+      const eventKey: string = event.dataset['key']!;
+      incrementSetting('event.click.coyote.' + eventKey);
+    });
+  });
 
 Array
   .from(document.querySelectorAll('.homepage-ads > img'))

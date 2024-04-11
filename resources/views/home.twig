@@ -181,7 +181,7 @@
                     {{ event.date }} | {{ event.dayShortName }}
                   </p>
                   <div>
-                    <a href="{{ event.microblogUrl }}" class="event-link">
+                    <a href="{{ event.microblogUrl }}" class="event-link" data-key="{{ event.key }}">
                       <strong style="white-space:nowrap;">
                         {{ event.title }}
                       </strong>
@@ -304,7 +304,7 @@
             {% endfor %}
           </div>
         </section>
-        
+
         {{ whats_new|raw }}
       </aside>
     </div>

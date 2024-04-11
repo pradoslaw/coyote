@@ -6,6 +6,7 @@ use Neon\View\Language\Language;
 
 readonly class Event
 {
+    public string $key;
     public string $title;
     public string $titleUrl;
     public string $city;
@@ -18,6 +19,7 @@ readonly class Event
 
     public function __construct(Language $language, Domain\Event\Event $event)
     {
+        $this->key = $event->key;
         $this->title = $event->title;
         $this->titleUrl = $event->url;
         $this->city = $event->city;
