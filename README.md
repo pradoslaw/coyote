@@ -164,7 +164,17 @@ docker-compose exec php php vendor/bin/phpunit
    APP_DEBUG=false
    ```
 
-5. Różnice w środowiskach
+5. Problem z uruchomieniem `docker compose` na Windows:
+   ```
+   Error response from daemon: Ports are not available: exposing port TCP 0.0.0.0:8025 -> 0.0.0.0:0: listen tcp 0.0.0.0:8025: bind: Została podjęta próba uzyskania dostępu do gniazda w sposób zabroniony przez przypisane do niego uprawnienia dostępu.
+   ```
+   Rozwiązanie:
+   1. Otwórz PowerShell jako administrator
+   2. ```
+      net stop winnat
+      ```
+
+6. Różnice w środowiskach
 
    Pamiętaj, że uruchomienie `docker compose up` (bez przekazania `-f`) domyślnie
    skorzysta z plików `docker-compose.yaml` **oraz** `docker-compose.override.yaml`.
