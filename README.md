@@ -174,7 +174,20 @@ docker-compose exec php php vendor/bin/phpunit
       net stop winnat
       ```
 
-6. Różnice w środowiskach
+6. Brak połączenia z internetem z WSL:
+   1. `wsl --shutdown`
+   2. ```
+      netsh winsock reset 
+      netsh int ip reset all
+      netsh winhttp reset proxy
+      ipconfig /flushdns
+      ```
+   3. Reboot
+   4. Start `wsl`
+   
+   If the steps didn't work, repeat the steps, but also run `netsh winsock reset` after `ipconfig /flushdns`.
+
+7. Różnice w środowiskach
 
    Pamiętaj, że uruchomienie `docker compose up` (bez przekazania `-f`) domyślnie
    skorzysta z plików `docker-compose.yaml` **oraz** `docker-compose.override.yaml`.
