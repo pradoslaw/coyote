@@ -39,34 +39,11 @@ readonly class Xenon
 
     private function ssrView(): string
     {
-        return \implode('', \array_map($this->ssrItem(...), $this->view));
-    }
-
-    private function ssrItem(ViewItem $tag): string
-    {
-        if ($tag instanceof TagField || $tag instanceof Text) {
-            return $tag->ssrHtml($this->state);
-        }
-        if ($tag instanceof Tag) {
-            return "<$tag->htmlTag>" .
-                \implode('', \array_map($this->ssrItem(...), $tag->children)) .
-                "</$tag->htmlTag>";
-        }
+        return \implode('', \array_map(fn(ViewItem $item) => $item->ssrHtml($this->state), $this->view));
     }
 
     private function spaVNodes(): string
     {
-        return \implode(',', \array_map($this->spaItem(...), $this->view));
-    }
-
-    private function spaItem(ViewItem $tag): string
-    {
-        if ($tag instanceof TagField || $tag instanceof Text) {
-            return $tag->spaNode();
-        }
-        if ($tag instanceof Tag) {
-            $children = \implode(',', \array_map($this->spaItem(...), $tag->children));
-            return "h('$tag->htmlTag', {}, [$children])";
-        }
+        return \implode(',', \array_map(fn(ViewItem $item) => $item->spaNode(), $this->view));
     }
 }
