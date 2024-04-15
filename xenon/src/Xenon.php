@@ -14,7 +14,15 @@ readonly class Xenon
     {
         $body = \implode('', \array_map($this->item(...), $this->view));
         return <<<html
-            <head></head>
+            <head>
+            <script>
+                const xenon = {
+                    setState: function(key, value) {
+                        document.querySelector('i').innerHTML = value;
+                    }
+                };
+            </script>
+            </head>
             <body>$body</body>
             html;
     }
