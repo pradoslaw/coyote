@@ -44,16 +44,13 @@ readonly class Xenon
 
     private function ssrItem(ViewItem $tag): string
     {
-        if ($tag instanceof TagField) {
-            return "<$tag->htmlTag>" . \htmlSpecialChars($this->state[$tag->fieldName]) . "</$tag->htmlTag>";
+        if ($tag instanceof TagField || $tag instanceof Text) {
+            return $tag->ssrHtml($this->state);
         }
         if ($tag instanceof Tag) {
             return "<$tag->htmlTag>" .
                 \implode('', \array_map($this->ssrItem(...), $tag->children)) .
                 "</$tag->htmlTag>";
-        }
-        if ($tag instanceof Text) {
-            return \htmlspecialchars($tag->text);
         }
     }
 
@@ -64,15 +61,12 @@ readonly class Xenon
 
     private function spaItem(ViewItem $tag): string
     {
-        if ($tag instanceof TagField) {
-            return "h('$tag->htmlTag', {}, [store['$tag->fieldName']])";
+        if ($tag instanceof TagField || $tag instanceof Text) {
+            return $tag->spaNode();
         }
         if ($tag instanceof Tag) {
             $children = \implode(',', \array_map($this->spaItem(...), $tag->children));
             return "h('$tag->htmlTag', {}, [$children])";
-        }
-        if ($tag instanceof Text) {
-            return \json_encode($tag->text);
         }
     }
 }
