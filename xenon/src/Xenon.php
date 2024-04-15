@@ -52,6 +52,9 @@ readonly class Xenon
                 \implode('', \array_map($this->ssrItem(...), $tag->children)) .
                 "</$tag->htmlTag>";
         }
+        if ($tag instanceof Text) {
+            return \htmlspecialchars($tag->text);
+        }
     }
 
     private function spaVNodes(): string
@@ -67,6 +70,9 @@ readonly class Xenon
         if ($tag instanceof Tag) {
             $children = \implode(',', \array_map($this->spaItem(...), $tag->children));
             return "h('$tag->htmlTag', {}, [$children])";
+        }
+        if ($tag instanceof Text) {
+            return \json_encode($tag->text);
         }
     }
 }
