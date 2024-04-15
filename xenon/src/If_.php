@@ -12,15 +12,15 @@ readonly class If_ implements ViewItem
     public function ssrHtml(array $state): string
     {
         if ($state[$this->conditionField]) {
-            return $this->ssrConditionBody();
+            return $this->ssrConditionBody($state);
         }
         return '';
     }
 
-    private function ssrConditionBody(): string
+    private function ssrConditionBody(array $state): string
     {
         return \implode('', \array_map(
-            fn(ViewItem $item) => $item->ssrHtml([]),
+            fn(ViewItem $item) => $item->ssrHtml($state),
             $this->body));
     }
 

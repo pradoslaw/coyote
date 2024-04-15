@@ -4,6 +4,7 @@ namespace Xenon\Test\Unit\ViewItem;
 use PHPUnit\Framework\TestCase;
 use Xenon\If_;
 use Xenon\Tag;
+use Xenon\TagField;
 use Xenon\Test\Unit\Fixture;
 use Xenon\Text;
 use Xenon\Xenon;
@@ -61,5 +62,16 @@ class IfTest extends TestCase
             $this->xenonCondition(true),
             "xenon.setState('condition', false);",
             '<div></div>');
+    }
+
+    /**
+     * @test
+     */
+    public function ssrStateInChildren(): void
+    {
+        $xenon = new Xenon(
+            [new If_('always', [new TagField('b', 'foo')])],
+            ['always' => true, 'foo' => 'bar']);
+        $this->assertHtml($xenon, '<b>bar</b>');
     }
 }
