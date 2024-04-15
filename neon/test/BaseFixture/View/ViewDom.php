@@ -20,6 +20,17 @@ readonly class ViewDom
         return $this->document->saveHTML($this->first($this->query($xPath), $xPath));
     }
 
+    public function innerHtml(string $xPath): string
+    {
+        /** @var \DOMElement $node */
+        $node = $this->first($this->query($xPath), $xPath);
+        return \trim(
+            \implode('',
+                \array_map(
+                    $this->document->saveHTML(...),
+                    \iterator_to_array($node->childNodes))));
+    }
+
     public function exists(string $xPath): bool
     {
         return $this->query($xPath)->count() > 0;

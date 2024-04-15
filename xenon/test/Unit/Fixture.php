@@ -25,7 +25,7 @@ trait Fixture
         $viewDom = new ViewDom($html);
         Assert::assertSame(
             $expectedBody,
-            $viewDom->html('/html/body'));
+            $viewDom->innerHtml('/html/body'));
     }
 
     function __runtimeHtml(Xenon $xenon, string $script): string

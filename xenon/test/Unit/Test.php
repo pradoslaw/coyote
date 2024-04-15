@@ -20,7 +20,7 @@ class Test extends TestCase
                 new TagField('p', 'title'),
                 new TagField('span', 'text')])],
             ['title' => 'foo', 'text' => 'bar']);
-        $this->assertHtml($xenon, '<body><div><p>foo</p><span>bar</span></div></body>');
+        $this->assertHtml($xenon, '<div><p>foo</p><span>bar</span></div>');
     }
 
     /**
@@ -35,6 +35,6 @@ class Test extends TestCase
         $this->assertHtmlRuntime(
             $xenon,
             "xenon.setState('favouriteColour', 'green');",
-            '<body><i>green</i></body>');
+            '<i>green</i>');
     }
 }
