@@ -12,7 +12,7 @@ readonly class Field implements ViewItem
 
     public function ssrHtml(array $state): string
     {
-        return \htmlSpecialChars($state[$this->field->name]);
+        return \htmlSpecialChars($this->field->ssrValue($state));
     }
 
     public function spaNode(): string

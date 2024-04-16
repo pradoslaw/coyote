@@ -17,4 +17,12 @@ readonly class FieldName
         }
         return "store.$this->name";
     }
+
+    public function ssrValue(array $state): string
+    {
+        foreach (\explode('.', $this->name) as $key) {
+            $state = $state[$key];
+        }
+        return $state;
+    }
 }
