@@ -1,8 +1,9 @@
 <?php
-namespace Xenon\Test\Unit;
+namespace Xenon\Test\Unit\ViewItem;
 
 use PHPUnit\Framework\TestCase;
 use Xenon\Tag;
+use Xenon\Test\Unit\Fixture;
 use Xenon\Text;
 use Xenon\Xenon;
 
