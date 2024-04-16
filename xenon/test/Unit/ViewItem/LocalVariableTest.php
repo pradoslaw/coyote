@@ -2,6 +2,7 @@
 namespace Xenon\Test\Unit\ViewItem;
 
 use PHPUnit\Framework\TestCase;
+use Xenon\Field;
 use Xenon\ForEach_;
 use Xenon\If_;
 use Xenon\Test\Unit\Fixture;
@@ -60,5 +61,19 @@ class LocalVariableTest extends TestCase
                 ]),
             ])],
             ['key' => [$items]]);
+    }
+
+    /**
+     * @test
+     */
+    public function ssrPrecedence(): void
+    {
+        $xenon = new Xenon([
+            new ForEach_('colours', [
+                new ForEach_('animals',
+                    [new Field('$index'), new Text('.'), new Field('$item'), new Text(', '),]),
+            ])],
+            ['colours' => ['red'], 'animals' => ['cat', 'dog']]);
+        $this->assertHtml($xenon, '0.cat, 1.dog,');
     }
 }
