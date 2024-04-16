@@ -13,11 +13,11 @@ readonly class Xenon
     public function html(): string
     {
         return <<<html
-            <head>
+            <body id="app">
+              {$this->ssrView()}
               <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
               <script>{$this->spaView()}</script>
-            </head>
-            <body id="app">{$this->ssrView()}</body>
+            </body>
             html;
     }
 

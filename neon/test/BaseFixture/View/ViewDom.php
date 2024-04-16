@@ -20,6 +20,15 @@ readonly class ViewDom
         return $this->document->saveHTML($this->first($this->query($xPath), $xPath));
     }
 
+    public function collectionHtml(string $xPath): array
+    {
+        $html = [];
+        foreach ($this->query($xPath) as $element) {
+            $html[] = \trim($this->document->saveHTML($element));
+        }
+        return $html;
+    }
+
     public function innerHtml(string $xPath): string
     {
         /** @var \DOMElement $node */

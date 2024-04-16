@@ -30,7 +30,9 @@ trait Fixture
         $viewDom = new ViewDom($html);
         Assert::assertSame(
             $expectedBody,
-            $viewDom->innerHtml('/html/body'));
+            \implode('',
+                $viewDom->collectionHtml(
+                    "/html/body/*[not(name()='script')] | /html/body/text()")));
     }
 
     function __runtimeHtml(Xenon $xenon, ?string $script): string
