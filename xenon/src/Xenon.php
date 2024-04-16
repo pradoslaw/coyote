@@ -45,7 +45,7 @@ readonly class Xenon
     private function ssrItem(ViewItem $tag): string
     {
         if ($tag instanceof TagField) {
-            return "<$tag->htmlTag>" . $this->state[$tag->fieldName] . "</$tag->htmlTag>";
+            return "<$tag->htmlTag>" . \htmlSpecialChars($this->state[$tag->fieldName]) . "</$tag->htmlTag>";
         }
         if ($tag instanceof Tag) {
             return "<$tag->htmlTag>" .
