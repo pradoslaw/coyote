@@ -40,4 +40,25 @@ class LocalVariableTest extends TestCase
             ])],
             ['key' => [$value]]);
     }
+
+    /**
+     * @test
+     */
+    public function spaIteration(): void
+    {
+        $this->assertHtmlRuntime(
+            $this->xenonIteration(['one', 'two']),
+            'iterated,iterated,');
+    }
+
+    private function xenonIteration(array $items): Xenon
+    {
+        return new Xenon([
+            new ForEach_('key', [
+                new ForEach_('$item', [
+                    new Text('iterated,'),
+                ]),
+            ])],
+            ['key' => [$items]]);
+    }
 }

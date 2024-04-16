@@ -29,6 +29,14 @@ readonly class ForEach_ implements ViewItem
 
     public function spaNode(): string
     {
-        return "store.$this->listField.map((\$item, \$index) => {$this->listItem->spaExpression()})";
+        return "{$this->spaListVariable()}.map((\$item, \$index) => {$this->listItem->spaExpression()})";
+    }
+
+    private function spaListVariable(): string
+    {
+        if ($this->listField[0] === '$') {
+            return $this->listField;
+        }
+        return "store.$this->listField";
     }
 }
