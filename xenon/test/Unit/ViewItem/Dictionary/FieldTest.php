@@ -1,12 +1,12 @@
 <?php
-namespace Xenon\Test\Unit\ViewItem;
+namespace Xenon\Test\Unit\ViewItem\Dictionary;
 
 use PHPUnit\Framework\TestCase;
 use Xenon\Field;
 use Xenon\Test\Unit\Fixture;
 use Xenon\Xenon;
 
-class DictionaryTest extends TestCase
+class FieldTest extends TestCase
 {
     use Fixture;
 

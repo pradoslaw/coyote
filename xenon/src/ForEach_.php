@@ -19,7 +19,7 @@ readonly class ForEach_ implements ViewItem
     public function ssrHtml(array $state): string
     {
         $html = '';
-        foreach ($state[$this->list->name] as $index => $item) {
+        foreach ($this->list->ssrValue($state) as $index => $item) {
             $html .= $this->listItem->ssrHtml([
                 ...$state,
                 '$index' => $index,

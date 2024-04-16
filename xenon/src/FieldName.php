@@ -5,7 +5,7 @@ readonly class FieldName
 {
     public string $spaVariable;
 
-    public function __construct(public string $name)
+    public function __construct(private string $name)
     {
         $this->spaVariable = $this->spaVariable();
     }
@@ -18,7 +18,7 @@ readonly class FieldName
         return "store.$this->name";
     }
 
-    public function ssrValue(array $state): string
+    public function ssrValue(array $state): array|string|null
     {
         foreach (\explode('.', $this->name) as $key) {
             $state = $state[$key];

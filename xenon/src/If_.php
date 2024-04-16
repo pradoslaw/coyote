@@ -14,7 +14,7 @@ readonly class If_ implements ViewItem
 
     public function ssrHtml(array $state): string
     {
-        if ($state[$this->condition->name]) {
+        if ($this->condition->ssrValue($state)) {
             return $this->conditionBody->ssrHtml($state);
         }
         return '';
