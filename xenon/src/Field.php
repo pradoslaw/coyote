@@ -14,6 +14,9 @@ readonly class Field implements ViewItem
 
     public function spaNode(): string
     {
+        if ($this->fieldName[0] === '$') {
+            return $this->fieldName;
+        }
         return "store.$this->fieldName";
     }
 }

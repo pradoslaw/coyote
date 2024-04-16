@@ -17,14 +17,18 @@ readonly class ForEach_ implements ViewItem
     public function ssrHtml(array $state): string
     {
         $html = '';
-        foreach ($state[$this->listField] as $_) {
-            $html .= $this->listItem->ssrHtml($state);
+        foreach ($state[$this->listField] as $index => $item) {
+            $html .= $this->listItem->ssrHtml([
+                '$index' => $index,
+                '$item'  => $item,
+                ...$state,
+            ]);
         }
         return $html;
     }
 
     public function spaNode(): string
     {
-        return "store.$this->listField.map(() => {$this->listItem->spaExpression()})";
+        return "store.$this->listField.map((\$item, \$index) => {$this->listItem->spaExpression()})";
     }
 }

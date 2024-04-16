@@ -1,14 +1,13 @@
 <?php
 namespace Xenon\Test\Unit\ViewItem\ForEach;
 
-use PHPUnit\Framework\TestCase;
+use Tests\Legacy\TestCase;
 use Xenon\ForEach_;
-use Xenon\Tag;
+use Xenon\TagField;
 use Xenon\Test\Unit\Fixture;
-use Xenon\Text;
 use Xenon\Xenon;
 
-class ChildrenTest extends TestCase
+class IndexItemTest extends TestCase
 {
     use Fixture;
 
@@ -17,14 +16,14 @@ class ChildrenTest extends TestCase
     /**
      * @before
      */
-    public function collection(): void
+    public function iterationIndexItem(): void
     {
         $this->xenon = new Xenon([
             new ForEach_('values', [
-                new Tag('b', [new Text('foo')]),
-                new Text('bar'),
+                new TagField('i', '$index'),
+                new TagField('b', '$item'),
             ])],
-            ['values' => [null, null]]);
+            ['values' => ['foo', 'bar']]);
     }
 
     /**
@@ -32,7 +31,7 @@ class ChildrenTest extends TestCase
      */
     public function ssr(): void
     {
-        $this->assertHtml($this->xenon, '<b>foo</b>bar<b>foo</b>bar');
+        $this->assertHtml($this->xenon, '<i>0</i><b>foo</b><i>1</i><b>bar</b>');
     }
 
     /**
@@ -40,6 +39,6 @@ class ChildrenTest extends TestCase
      */
     public function spa(): void
     {
-        $this->assertHtmlRuntime($this->xenon, '<b>foo</b>bar<b>foo</b>bar');
+        $this->assertHtmlRuntime($this->xenon, '<i>0</i><b>foo</b><i>1</i><b>bar</b>');
     }
 }
