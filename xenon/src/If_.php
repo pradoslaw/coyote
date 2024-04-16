@@ -12,18 +12,28 @@ readonly class If_ implements ViewItem
     public function ssrHtml(array $state): string
     {
         if ($state[$this->conditionField]) {
-            return \implode('', \array_map(fn(ViewItem $item) => $item->ssrHtml([]), $this->body));
+            return $this->ssrConditionBody();
         }
         return '';
     }
 
+    private function ssrConditionBody(): string
+    {
+        return \implode('', \array_map(
+            fn(ViewItem $item) => $item->ssrHtml([]),
+            $this->body));
+    }
+
     public function spaNode(): string
     {
-        return "store.$this->conditionField ? {$this->spaConditionBody()} : ''";
+        return "store.$this->conditionField ? {$this->spaConditionBody()} : []";
     }
 
     private function spaConditionBody(): string
     {
-        return \implode(',', \array_map(fn(ViewItem $item) => $item->spaNode(), $this->body));
+        $vNodes = \implode(',', \array_map(
+            fn(ViewItem $item) => $item->spaNode(),
+            $this->body));
+        return "[$vNodes]";
     }
 }

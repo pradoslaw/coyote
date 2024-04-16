@@ -17,7 +17,8 @@ class IfTest extends TestCase
         return new Xenon([
             new Tag('div', [
                 new If_('condition', [
-                    new Tag('p', [new Text('Condition true')]),
+                    new Text('Condition is'),
+                    new Tag('b', [new Text('true')]),
                 ]),
             ]),
         ],
@@ -29,7 +30,7 @@ class IfTest extends TestCase
      */
     public function ssrIfTrue(): void
     {
-        $this->assertHtml($this->xenonCondition(true), '<div><p>Condition true</p></div>');
+        $this->assertHtml($this->xenonCondition(true), '<div>Condition is<b>true</b></div>');
     }
 
     /**
@@ -48,7 +49,7 @@ class IfTest extends TestCase
         $this->executeAndAssertHtmlRuntime(
             $this->xenonCondition(false),
             "xenon.setState('condition', true);",
-            '<div><p>Condition true</p></div>');
+            '<div>Condition is<b>true</b></div>');
     }
 
     /**
