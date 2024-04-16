@@ -3,37 +3,23 @@ namespace Xenon;
 
 readonly class If_ implements ViewItem
 {
-    public function __construct(
-        private string $conditionField,
-        private array  $body)
+    private Fragment $conditionBody;
+
+    public function __construct(private string $conditionField, array $body)
     {
+        $this->conditionBody = new Fragment($body);
     }
 
     public function ssrHtml(array $state): string
     {
         if ($state[$this->conditionField]) {
-            return $this->ssrConditionBody($state);
+            return $this->conditionBody->ssrHtml($state);
         }
         return '';
     }
 
-    private function ssrConditionBody(array $state): string
-    {
-        return \implode('', \array_map(
-            fn(ViewItem $item) => $item->ssrHtml($state),
-            $this->body));
-    }
-
     public function spaNode(): string
     {
-        return "store.$this->conditionField ? {$this->spaConditionBody()} : []";
-    }
-
-    private function spaConditionBody(): string
-    {
-        $vNodes = \implode(',', \array_map(
-            fn(ViewItem $item) => $item->spaNode(),
-            $this->body));
-        return "[$vNodes]";
+        return "store.$this->conditionField ? {$this->conditionBody->spaExpression()} : []";
     }
 }

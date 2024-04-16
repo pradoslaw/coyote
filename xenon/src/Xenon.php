@@ -3,11 +3,11 @@ namespace Xenon;
 
 readonly class Xenon
 {
-    public function __construct(
-        private array $view,
-        private array $state,
-    )
+    private Fragment $view;
+
+    public function __construct(array $view, private array $state)
     {
+        $this->view = new Fragment($view);
     }
 
     public function html(): string
@@ -21,12 +21,17 @@ readonly class Xenon
             html;
     }
 
+    private function ssrView(): string
+    {
+        return $this->view->ssrHtml($this->state);
+    }
+
     private function spaView(): string
     {
         $spaState = \json_encode($this->state);
         return "
             const h = Vue.h;
-            const app = Vue.createApp(() => {$this->spaVNodes()});
+            const app = Vue.createApp(() => {$this->view->spaExpression()});
             const store = Vue.reactive($spaState);
             const xenon = {
                 setState(key, value) {
@@ -35,15 +40,5 @@ readonly class Xenon
             };
             window.addEventListener('load', () => app.mount('#app'));
         ";
-    }
-
-    private function ssrView(): string
-    {
-        return \implode('', \array_map(fn(ViewItem $item) => $item->ssrHtml($this->state), $this->view));
-    }
-
-    private function spaVNodes(): string
-    {
-        return '[' . \implode(',', \array_map(fn(ViewItem $item) => $item->spaNode(), $this->view)) . ']';
     }
 }
