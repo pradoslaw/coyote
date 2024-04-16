@@ -5,6 +5,6 @@ readonly class TagField extends Tag
 {
     public function __construct(string $htmlTag, string $fieldName)
     {
-        parent::__construct($htmlTag, [new Field($fieldName)]);
+        parent::__construct($htmlTag, [], [new Field($fieldName)]);
     }
 }

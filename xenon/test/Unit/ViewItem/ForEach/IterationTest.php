@@ -21,7 +21,7 @@ class IterationTest extends TestCase
     {
         $this->xenon = new Xenon([
             new ForEach_('values', [
-                new Tag('b', [new Text('foo')]),
+                new Tag('b', [], [new Text('foo')]),
                 new Text('bar'),
             ])],
             ['values' => [null, null]]);
