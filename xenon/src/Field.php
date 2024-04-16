@@ -3,20 +3,20 @@ namespace Xenon;
 
 readonly class Field implements ViewItem
 {
-    public function __construct(private string $fieldName)
+    private FieldName $field;
+
+    public function __construct(string $fieldName)
     {
+        $this->field = new FieldName($fieldName);
     }
 
     public function ssrHtml(array $state): string
     {
-        return \htmlSpecialChars($state[$this->fieldName]);
+        return \htmlSpecialChars($state[$this->field->name]);
     }
 
     public function spaNode(): string
     {
-        if ($this->fieldName[0] === '$') {
-            return $this->fieldName;
-        }
-        return "store.$this->fieldName";
+        return $this->field->spaVariable;
     }
 }

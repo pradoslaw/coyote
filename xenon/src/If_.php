@@ -3,16 +3,18 @@ namespace Xenon;
 
 readonly class If_ implements ViewItem
 {
+    private FieldName $condition;
     private Fragment $conditionBody;
 
-    public function __construct(private string $conditionField, array $body)
+    public function __construct(string $conditionField, array $body)
     {
+        $this->condition = new FieldName($conditionField);
         $this->conditionBody = new Fragment($body);
     }
 
     public function ssrHtml(array $state): string
     {
-        if ($state[$this->conditionField]) {
+        if ($state[$this->condition->name]) {
             return $this->conditionBody->ssrHtml($state);
         }
         return '';
@@ -20,14 +22,6 @@ readonly class If_ implements ViewItem
 
     public function spaNode(): string
     {
-        return "{$this->conditionVariable()} ? {$this->conditionBody->spaExpression()} : []";
-    }
-
-    private function conditionVariable(): string
-    {
-        if ($this->conditionField[0] === '$') {
-            return $this->conditionField;
-        }
-        return "store.$this->conditionField";
+        return "{$this->condition->spaVariable} ? {$this->conditionBody->spaExpression()} : []";
     }
 }
