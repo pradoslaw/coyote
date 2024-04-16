@@ -36,4 +36,13 @@ class TextTest extends TestCase
     {
         $this->assertHtmlRuntime($this->xenon, '<div>3 &lt;script&gt; 2</div>');
     }
+
+    /**
+     * @test
+     */
+    public function spaTopLevel(): void
+    {
+        $this->xenon = new Xenon([new Text('car'), new Text('pet')], []);
+        $this->assertHtmlRuntime($this->xenon, 'carpet');
+    }
 }

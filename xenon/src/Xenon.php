@@ -44,6 +44,6 @@ readonly class Xenon
 
     private function spaVNodes(): string
     {
-        return \implode(',', \array_map(fn(ViewItem $item) => $item->spaNode(), $this->view));
+        return '[' . \implode(',', \array_map(fn(ViewItem $item) => $item->spaNode(), $this->view)) . ']';
     }
 }
