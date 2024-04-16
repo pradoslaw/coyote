@@ -107,4 +107,35 @@ class RuntimeTest extends TestCase
             "<head></head><body>'#foo';</body>",
             $this->runtime->getDocumentHtml());
     }
+
+    /**
+     * @test
+     */
+    public function clearPendingLogs(): void
+    {
+        $this->runtimeWithPendingLogs();
+        $this->runtime->close();
+        $this->assertSame([], $this->runtime->consoleLogs());
+    }
+
+    /**
+     * @test
+     */
+    public function clearMaterializedLogs(): void
+    {
+        $this->runtimeWithMaterializedLogs();
+        $this->runtime->close();
+        $this->assertSame([], $this->runtime->consoleLogs());
+    }
+
+    private function runtimeWithPendingLogs(): void
+    {
+        $this->runtime->executeScript("console.log('foo');");
+    }
+
+    private function runtimeWithMaterializedLogs(): void
+    {
+        $this->runtime->executeScript("console.log('foo');");
+        $this->runtime->consoleLogs();
+    }
 }

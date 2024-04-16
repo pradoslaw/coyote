@@ -18,4 +18,10 @@ class Logger
         \array_push($this->logs, ...$logs);
         return $this->logs;
     }
+
+    public function clear(): void
+    {
+        $this->driver->manage()->getLog('browser');
+        $this->logs = [];
+    }
 }

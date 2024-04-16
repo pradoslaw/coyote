@@ -13,8 +13,17 @@ readonly class Runtime
 
     public function __construct()
     {
-        $this->driver = $this->createWebDriver();
+        $this->driver = $this->cachedWebDriver();
         $this->logger = new Logger($this->driver);
+    }
+
+    private function cachedWebDriver(): mixed
+    {
+        static $cachedDriver;
+        if ($cachedDriver === null) {
+            $cachedDriver = $this->createWebDriver();
+        }
+        return $cachedDriver;
     }
 
     private function createWebDriver(): RemoteWebDriver
@@ -112,6 +121,7 @@ readonly class Runtime
 
     public function close(): void
     {
-        $this->driver->close();
+        $this->logger->clear();
+        $this->loadHtmlSource('');
     }
 }
