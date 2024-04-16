@@ -32,9 +32,24 @@ class Test extends TestCase
             [new TagField('i', 'favouriteColour')],
             ['favouriteColour' => 'red'],
         );
-        $this->assertHtmlRuntime(
+        $this->executeAndAssertHtmlRuntime(
             $xenon,
             "xenon.setState('favouriteColour', 'green');",
             '<i>green</i>');
+    }
+
+    /**
+     * @test
+     */
+    public function spaHtmlView(): void
+    {
+        $xenon = new Xenon([
+            new Tag('div', [
+                new TagField('p', 'favouriteColour'),
+                new TagField('p', 'leastFavouriteColour'),
+            ])],
+            ['favouriteColour' => 'red', 'leastFavouriteColour' => 'pink'],
+        );
+        $this->assertHtmlRuntime($xenon, '<div><p>red</p><p>pink</p></div>');
     }
 }
