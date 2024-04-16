@@ -20,6 +20,14 @@ readonly class If_ implements ViewItem
 
     public function spaNode(): string
     {
-        return "store.$this->conditionField ? {$this->conditionBody->spaExpression()} : []";
+        return "{$this->conditionVariable()} ? {$this->conditionBody->spaExpression()} : []";
+    }
+
+    private function conditionVariable(): string
+    {
+        if ($this->conditionField[0] === '$') {
+            return $this->conditionField;
+        }
+        return "store.$this->conditionField";
     }
 }
