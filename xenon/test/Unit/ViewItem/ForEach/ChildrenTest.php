@@ -1,5 +1,5 @@
 <?php
-namespace Xenon\Test\Unit\ViewItem;
+namespace Xenon\Test\Unit\ViewItem\ForEach;
 
 use PHPUnit\Framework\TestCase;
 use Xenon\ForEach_;
@@ -8,7 +8,7 @@ use Xenon\Test\Unit\Fixture;
 use Xenon\Text;
 use Xenon\Xenon;
 
-class ForEachTest extends TestCase
+class ChildrenTest extends TestCase
 {
     use Fixture;
 

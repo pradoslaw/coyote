@@ -18,7 +18,7 @@ readonly class ForEach_ implements ViewItem
     {
         $html = '';
         foreach ($state[$this->listField] as $_) {
-            $html .= $this->listItem->ssrHtml([]);
+            $html .= $this->listItem->ssrHtml($state);
         }
         return $html;
     }
