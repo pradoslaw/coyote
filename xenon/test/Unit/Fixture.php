@@ -27,7 +27,7 @@ trait Fixture
 
     function _assertHtmlBody(string $html, string $expectedBody): void
     {
-        $viewDom = new ViewDom($html);
+        $viewDom = new ViewDom("<html><body>$html</body></html>");
         Assert::assertSame(
             $expectedBody,
             \implode('',
@@ -38,7 +38,7 @@ trait Fixture
     function __runtimeHtml(Xenon $xenon, ?string $script): string
     {
         $runtime = new Runtime();
-        $runtime->setHtmlSource($xenon->html());
+        $runtime->setHtmlSource("<html><body>{$xenon->html()}</body></html>");
         if ($script) {
             $runtime->executeScript($script);
         }

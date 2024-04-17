@@ -12,13 +12,11 @@ readonly class Xenon
 
     public function html(): string
     {
-        return <<<html
-            <body>
-              {$this->ssrView()}
-              <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-              <script>{$this->spaView()}</script>
-            </body>
-            html;
+        return \implode('', [
+            $this->ssrView(),
+            '<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>',
+            "<script>{$this->spaView()}</script>",
+        ]);
     }
 
     private function ssrView(): string
