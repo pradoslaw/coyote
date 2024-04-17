@@ -6,6 +6,7 @@ use Neon\View\Language\Language;
 
 readonly class Navigation
 {
+    public array $items;
     /** @var Link[] */
     public array $links;
     public string $avatarUrl;
@@ -15,16 +16,16 @@ readonly class Navigation
     public string $searchBarTitle;
 
     public function __construct(
-        Language      $language,
-        public string $homepageUrl,
-        public array  $items,
-        public string $githubUrl,
-        public string $githubStarsUrl,
-        public string $githubName,
-        public string $githubStars,
-        array         $controls,
-        Visitor       $visitor,
-        public string $csrf,
+        private Language $language,
+        public string    $homepageUrl,
+        array            $items,
+        public string    $githubUrl,
+        public string    $githubStarsUrl,
+        public string    $githubName,
+        public string    $githubStars,
+        array            $controls,
+        Visitor          $visitor,
+        public string    $csrf,
     )
     {
         if (empty($controls) || $visitor->loggedIn()) {
@@ -32,14 +33,23 @@ readonly class Navigation
         } else {
             [$big, $small] = \array_keys($controls);
             $this->links = [
-                new Link($big, $controls[$big], true),
-                new Link($small, $controls[$small], false),
+                new Link($this->language->t($big), $controls[$big], true),
+                new Link($this->language->t($small), $controls[$small], false),
             ];
         }
+        $this->items = $this->translateKeys($items);
         $this->avatarVisible = $visitor->loggedIn();
         $this->canLogout = $visitor->loggedIn();
         $this->avatarUrl = $visitor->loggedInUserAvatarUrl() ?? '/neon/avatarPlaceholder.png';
         $this->logoutTitle = $language->t('Logout');
         $this->searchBarTitle = $language->t('Search threads, posts or users');
+    }
+
+    private function translateKeys(array $items): array
+    {
+        return \array_combine(
+            \array_map($this->language->t(...), \array_keys($items)),
+            $items,
+        );
     }
 }
