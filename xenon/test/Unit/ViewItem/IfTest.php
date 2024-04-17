@@ -17,10 +17,14 @@ class IfTest extends TestCase
     {
         return new Xenon([
             new Tag('div', [], [
-                new If_('condition', [
-                    new Text('Condition is'),
-                    new Tag('b', [], [new Text('true')],),
-                ]),
+                new If_('condition',
+                    [
+                        new Text('Condition is'),
+                        new Tag('b', [], [new Text('true')]),
+                    ], [
+                        new Text('Condition is'),
+                        new Tag('b', [], [new Text('false')]),
+                    ]),
             ]),
         ],
             ['condition' => $condition]);
@@ -39,7 +43,7 @@ class IfTest extends TestCase
      */
     public function ssrIfFalse(): void
     {
-        $this->assertHtml($this->xenonCondition(false), '<div></div>');
+        $this->assertHtml($this->xenonCondition(false), '<div>Condition is<b>false</b></div>');
     }
 
     /**
@@ -61,17 +65,28 @@ class IfTest extends TestCase
         $this->executeAndAssertHtmlRuntime(
             $this->xenonCondition(true),
             "xenon.setState('condition', false);",
-            '<div></div>');
+            '<div>Condition is<b>false</b></div>');
     }
 
     /**
      * @test
      */
-    public function ssrStateInChildren(): void
+    public function ssrStateInChildrenBody(): void
     {
         $xenon = new Xenon(
-            [new If_('always', [new TagField('b', 'foo')])],
+            [new If_('always', [new TagField('b', 'foo')], [])],
             ['always' => true, 'foo' => 'bar']);
+        $this->assertHtml($xenon, '<b>bar</b>');
+    }
+
+    /**
+     * @test
+     */
+    public function ssrStateInChildrenElse(): void
+    {
+        $xenon = new Xenon(
+            [new If_('never', [], [new TagField('b', 'foo')])],
+            ['never' => false, 'foo' => 'bar']);
         $this->assertHtml($xenon, '<b>bar</b>');
     }
 }

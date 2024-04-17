@@ -37,7 +37,7 @@ class LocalVariableTest extends TestCase
     {
         return new Xenon([
             new ForEach_('key', [
-                new If_('$item', [new Text('accepted')]),
+                new If_('$item', [new Text('accepted')], []),
             ])],
             ['key' => [$value]]);
     }

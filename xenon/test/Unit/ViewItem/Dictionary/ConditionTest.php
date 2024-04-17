@@ -19,7 +19,7 @@ class ConditionTest extends TestCase
     public function dictionary(): void
     {
         $this->xenon = new Xenon(
-            [new If_('dict.key.nest', [new Text('accepted')])],
+            [new If_('dict.key.nest', [new Text('accepted')], [])],
             ['dict' => ['key' => ['nest' => 'value']]]);
     }
 
