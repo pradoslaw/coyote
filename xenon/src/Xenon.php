@@ -13,7 +13,7 @@ readonly class Xenon
     public function html(): string
     {
         return <<<html
-            <body id="app">
+            <body>
               {$this->ssrView()}
               <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
               <script>{$this->spaView()}</script>
@@ -38,7 +38,7 @@ readonly class Xenon
                     store[key] = value;
                 }
             };
-            window.addEventListener('load', () => app.mount('#app'));
+            window.addEventListener('load', () => app.mount('body'));
         ";
     }
 }
