@@ -8,11 +8,13 @@ readonly class Tag implements ViewItem
     /**
      * @param string $htmlTag
      * @param string[] $attributes
+     * @param array $events
      * @param ViewItem[] $children
      */
     public function __construct(
         private string $htmlTag,
         private array  $attributes,
+        private array  $events,
         array          $children)
     {
         $this->children = new Fragment($children);
@@ -37,7 +39,21 @@ readonly class Tag implements ViewItem
 
     public function spaNode(): string
     {
+        return "h('$this->htmlTag', {$this->spaAttributes()}, {$this->children->spaExpression()})";
+    }
+
+    private function spaAttributes(): string
+    {
         $attributes = \json_encode($this->attributes);
-        return "h('$this->htmlTag', $attributes, {$this->children->spaExpression()})";
+        return "{...$attributes, {$this->eventsCode()}}";
+    }
+
+    private function eventsCode(): string
+    {
+        return \implode(',', \array_map(
+            fn(string $name, $code) => "on{$name}() {{$code}}",
+            \array_keys($this->events),
+            $this->events,
+        ));
     }
 }

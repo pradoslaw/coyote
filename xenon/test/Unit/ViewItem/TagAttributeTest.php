@@ -18,7 +18,7 @@ class TagAttributeTest extends TestCase
     public function childTag(): void
     {
         $this->xenon = new Xenon([
-            new Tag('div', ['class' => 'container', 'id' => 'foo'], []),
+            new Tag('div', ['class' => 'container', 'id' => 'foo'], [], []),
         ], []);
     }
 

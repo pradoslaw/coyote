@@ -5,6 +5,7 @@ use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Exception\JavascriptErrorException;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
+use Facebook\WebDriver\WebDriverBy;
 
 readonly class Runtime
 {
@@ -102,6 +103,16 @@ readonly class Runtime
         } catch (JavascriptErrorException $exception) {
             throw new ScriptException($this->jsExecutionErrorMessage($exception->getMessage()));
         }
+    }
+
+    public function clearConsoleLogs(): void
+    {
+        $this->logger->clear();
+    }
+
+    public function click(string $xPath): void
+    {
+        $this->driver->findElement(WebDriverBy::xpath($xPath))->click();
     }
 
     private function jsExecutionErrorMessage(string $message): string

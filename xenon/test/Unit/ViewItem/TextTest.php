@@ -18,7 +18,9 @@ class TextTest extends TestCase
      */
     public function plainText(): void
     {
-        $this->xenon = new Xenon([new Tag('div', [], [new Text('3 <script> 2')])], []);
+        $this->xenon = new Xenon([
+            new Tag('div', [], [], [new Text('3 <script> 2')])],
+            []);
     }
 
     /**

@@ -18,7 +18,7 @@ class HtmlViewTest extends TestCase
     public function htmlView(): void
     {
         $this->xenon = new Xenon([
-            new Tag('div', [], [
+            new Tag('div', [], [], [
                 new TagField('p', 'favouriteColour'),
                 new TagField('p', 'leastFavouriteColour'),
             ])],

@@ -19,7 +19,7 @@ class FieldTest extends TestCase
     public function state(): void
     {
         $this->xenon = new Xenon(
-            [new Tag('div', [], [new Field('lorem')])],
+            [new Tag('div', [], [], [new Field('lorem')])],
             ['lorem' => 'ipsum']);
     }
 

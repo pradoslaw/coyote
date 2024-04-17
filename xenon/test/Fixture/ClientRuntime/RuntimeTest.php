@@ -128,6 +128,32 @@ class RuntimeTest extends TestCase
         $this->assertSame([], $this->runtime->consoleLogs());
     }
 
+    /**
+     * @test
+     */
+    public function clearConsoleLogs(): void
+    {
+        $this->runtime->executeScript("console.log('log');");
+        $this->runtime->clearConsoleLogs();
+        $this->assertSame([], $this->runtime->consoleLogs());
+    }
+
+    /**
+     * @test
+     */
+    public function click(): void
+    {
+        $this->runtime->setHtmlSource(<<<'html'
+            <button onClick="console.log('clicked')">
+                Click me
+            </button>
+            html,);
+        $this->runtime->click('//button');
+        $this->assertSame(
+            ['"clicked"'],
+            $this->runtime->consoleLogs());
+    }
+
     private function runtimeWithPendingLogs(): void
     {
         $this->runtime->executeScript("console.log('foo');");

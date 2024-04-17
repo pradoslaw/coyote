@@ -16,14 +16,14 @@ class IfTest extends TestCase
     private function xenonCondition(bool $condition): Xenon
     {
         return new Xenon([
-            new Tag('div', [], [
+            new Tag('div', [], [], [
                 new If_('condition',
                     [
                         new Text('Condition is'),
-                        new Tag('b', [], [new Text('true')]),
+                        new Tag('b', [], [], [new Text('true')]),
                     ], [
                         new Text('Condition is'),
-                        new Tag('b', [], [new Text('false')]),
+                        new Tag('b', [], [], [new Text('false')]),
                     ]),
             ]),
         ],
