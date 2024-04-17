@@ -11,6 +11,11 @@ readonly class Render
 
     public function tag(string $tag, array $attributes, array $children): Tag
     {
+        return $this->tagWithElevatedClass($tag, $attributes, $this->childrenTags($children));
+    }
+
+    private function tagWithElevatedClass(string $tag, array $attributes, array $children): Tag
+    {
         $elevatedClass = $this->elevatedClass($children);
         if (!empty($elevatedClass)) {
             $attributes['class'] = \trim(($attributes['class'] ?? '') . ' ' . $elevatedClass);
@@ -21,6 +26,19 @@ readonly class Render
             $attributes,
             $children,
         );
+    }
+
+    private function childrenTags(array $children): array
+    {
+        return \array_map($this->childTag(...), \array_filter($children));
+    }
+
+    private function childTag(Tag|string $tagOrText): Tag
+    {
+        if (\is_string($tagOrText)) {
+            return $this->tags->text($tagOrText);
+        }
+        return $tagOrText;
     }
 
     public function many(array $children): Tag
@@ -44,10 +62,8 @@ readonly class Render
     {
         $classes = [];
         foreach ($children as $child) {
-            if ($child instanceof Tag) {
-                if ($child->parentClass != null) {
-                    $classes[] = $child->parentClass;
-                }
+            if ($child->parentClass != null) {
+                $classes[] = $child->parentClass;
             }
         }
         return $classes;

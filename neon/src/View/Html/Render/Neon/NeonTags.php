@@ -20,4 +20,9 @@ class NeonTags implements Tags
     {
         return new HtmlTag($html);
     }
+
+    public function text(string $text): Tag
+    {
+        return new HtmlTag(\htmlSpecialChars($text));
+    }
 }

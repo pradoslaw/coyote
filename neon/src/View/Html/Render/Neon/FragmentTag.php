@@ -19,12 +19,8 @@ readonly class FragmentTag implements Tag
             if ($child === null) {
                 continue;
             }
-            if (\is_string($child)) {
-                $html .= \htmlSpecialChars($child);
-            } else {
-                /** @var Tag $child */
-                $html .= $child->html();
-            }
+            /** @var Tag $child */
+            $html .= $child->html();
         }
         return $html;
     }

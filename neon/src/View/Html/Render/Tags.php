@@ -16,4 +16,6 @@ interface Tags
     public function many(array $children): Tag;
 
     public function html(string $html): Tag;
+
+    public function text(string $text): Tag;
 }
