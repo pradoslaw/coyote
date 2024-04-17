@@ -12,16 +12,6 @@ class StaticEvents implements Events
     {
         return [
             new Event(
-                '4DEVELOPERS',
-                'Warszawa',
-                false,
-                ['software', 'hardware'],
-                new Date(2024, 4, 16),
-                EventKind::Conference,
-                'https://4developers.org.pl/',
-                'https://4programmers.net/Mikroblogi/View/140933',
-            ),
-            new Event(
                 'Best Hacking League',
                 'Warszawa',
                 true,

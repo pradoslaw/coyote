@@ -89,7 +89,7 @@ class ViewTest extends TestCase
     public function githubStars(): void
     {
         $this->assertSame(
-            '111',
+            '112',
             $this->find($this->view(), '.github', '.stars'));
     }
 

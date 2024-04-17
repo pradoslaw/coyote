@@ -62,7 +62,7 @@ readonly class View
             'https://github.com/pradoslaw/coyote',
             'https://github.com/pradoslaw/coyote/stargazers',
             'Coyote',
-            '111',
+            '112',
             [
                 $this->lang->t('Create account') => '/Register',
                 $this->lang->t('Login')          => '/Login',
