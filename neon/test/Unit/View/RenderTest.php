@@ -4,6 +4,7 @@ namespace Neon\Test\Unit\View;
 use Neon\Test\BaseFixture\View\ViewDom;
 use Neon\View\Html;
 use Neon\View\Html\Render;
+use Neon\View\Html\Render\Neon\NeonTags;
 use PHPUnit\Framework\TestCase;
 
 class RenderTest extends TestCase
@@ -13,7 +14,7 @@ class RenderTest extends TestCase
      */
     public function childClass(): void
     {
-        $h = new Render();
+        $h = new Render(new NeonTags());
         $parent = $h->tag('div', [], [$this->child($h, 'foo')]);
         $this->assertClass('foo', $parent);
     }
@@ -23,7 +24,7 @@ class RenderTest extends TestCase
      */
     public function joinedClass(): void
     {
-        $h = new Render();
+        $h = new Render(new NeonTags());
         $child = $this->child($h, 'foo cat');
         $parent = $h->tag('div', ['class' => 'bar dor'], [$child]);
         $this->assertClass('bar dor foo cat', $parent);
@@ -34,7 +35,7 @@ class RenderTest extends TestCase
      */
     public function secondChild(): void
     {
-        $h = new Render();
+        $h = new Render(new NeonTags());
         $child = $this->child($h, 'bar');
         $parent = $h->tag('div', [], ['first', $child]);
         $this->assertClass('bar', $parent);
@@ -45,7 +46,7 @@ class RenderTest extends TestCase
      */
     public function childrenDuplicateClass(): void
     {
-        $h = new Render();
+        $h = new Render(new NeonTags());
         $first = $this->child($h, 'bar');
         $second = $this->child($h, 'bar');
         $parent = $h->tag('div', [], [$first, $second]);
@@ -57,7 +58,7 @@ class RenderTest extends TestCase
      */
     public function childrenDifferentClass(): void
     {
-        $h = new Render();
+        $h = new Render(new NeonTags());
         $first = $this->child($h, 'foo');
         $second = $this->child($h, 'bar');
         $parent = $h->tag('div', [], [$first, $second]);

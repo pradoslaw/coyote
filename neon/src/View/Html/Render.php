@@ -1,19 +1,21 @@
 <?php
 namespace Neon\View\Html;
 
-use Neon\View\Html\Render\Neon\FragmentTag;
-use Neon\View\Html\Render\Neon\HtmlTag;
-use Neon\View\Html\Render\Neon\StandardTag;
+use Neon\View\Html\Render\Tags;
 
-class Render
+readonly class Render
 {
+    public function __construct(private Tags $tags)
+    {
+    }
+
     public function tag(string $tag, array $attributes, array $children): Tag
     {
         $elevatedClass = $this->elevatedClass($children);
         if (!empty($elevatedClass)) {
             $attributes['class'] = \trim(($attributes['class'] ?? '') . ' ' . $elevatedClass);
         }
-        return new StandardTag(
+        return $this->tags->tag(
             $attributes['parentClass'] ?? null,
             $tag,
             $attributes,
@@ -23,12 +25,12 @@ class Render
 
     public function many(array $children): Tag
     {
-        return new FragmentTag($children);
+        return $this->tags->many($children);
     }
 
     public function html(string $html): Tag
     {
-        return new HtmlTag($html);
+        return $this->tags->html($html);
     }
 
     private function elevatedClass(array $children): string

@@ -5,6 +5,7 @@ use Neon\View\Html\Head\Head;
 use Neon\View\Html\Head\Style;
 use Neon\View\Html\Item;
 use Neon\View\Html\Render;
+use Neon\View\Html\Render\Neon\NeonTags;
 
 readonly class HtmlView
 {
@@ -14,7 +15,7 @@ readonly class HtmlView
 
     public function html(): string
     {
-        $h = new Render();
+        $h = new Render(new NeonTags());
         $heads = [
             ...$this->head,
             // new Script('https://cdn.tailwindcss.com'), // for debug

@@ -4,6 +4,7 @@ namespace Neon\Test\Unit\View;
 use Neon\Test\BaseFixture\View\ViewDom;
 use Neon\View\Html\Head\Title;
 use Neon\View\Html\Render;
+use Neon\View\Html\Render\Neon\NeonTags;
 use Neon\View\Html\Tag;
 use Neon\View\HtmlView;
 use PHPUnit\Framework\TestCase;
@@ -58,7 +59,7 @@ class HtmlViewTest extends TestCase
     {
         $this->assertSame(
             '<span>&lt;foo&gt;</span>',
-            $this->rendered(new Render(), '<foo>'));
+            $this->rendered(new Render(new NeonTags()), '<foo>'));
     }
 
     /**
@@ -66,7 +67,7 @@ class HtmlViewTest extends TestCase
      */
     public function htmlLiteral(): void
     {
-        $h = new Render();
+        $h = new Render(new NeonTags());
         $this->assertSame(
             '<span><foo></span>',
             $this->rendered($h, $h->html('<foo>')));
