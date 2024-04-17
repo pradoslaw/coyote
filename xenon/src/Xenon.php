@@ -38,7 +38,7 @@ readonly class Xenon
                     store[key] = value;
                 }
             };
-            window.addEventListener('load', () => app.mount('body'));
+            app.mount('body');
         ";
     }
 }
