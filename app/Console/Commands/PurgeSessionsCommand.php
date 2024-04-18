@@ -16,53 +16,20 @@ ini_set('memory_limit', '3G');
 
 class PurgeSessionsCommand extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
+    /** @var string */
     protected $signature = 'session:purge';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
+    /** @var string */
     protected $description = 'Purge old sessions.';
 
-    /**
-     * @var SessionRepository
-     */
-    private $session;
-
-    /**
-     * @var Db
-     */
-    private $db;
-
-    /**
-     * @var UserRepository
-     */
-    private $user;
-
-    /**
-     * @param Db $db
-     * @param SessionRepository $session
-     * @param UserRepository $user
-     */
-    public function __construct(Db $db, SessionRepository $session, UserRepository $user)
+    public function __construct(
+        readonly private Db                $db,
+        readonly private SessionRepository $session,
+        readonly private UserRepository    $user)
     {
         parent::__construct();
-
-        $this->db = $db;
-        $this->session = $session;
-        $this->user = $user;
     }
 
-    /**
-     * @throws \Throwable
-     */
-    public function handle()
+    public function handle(): int
     {
         $result = $this->session->all();
         // convert minutes to seconds
@@ -83,7 +50,7 @@ class PurgeSessionsCommand extends Command
 
                     $values[] = array_merge(
                         array_only($session->toArray(), ['id', 'user_id', 'robot']),
-                        ['path' => mb_strtolower($path)]
+                        ['path' => mb_strtolower($path)],
                     );
                 }
             } catch (\Exception $e) {
@@ -105,10 +72,7 @@ class PurgeSessionsCommand extends Command
         return 0;
     }
 
-    /**
-     * @param Session $session
-     */
-    private function extend($session)
+    private function extend(Session $session): void
     {
         if (empty($session->userId)) {
             return;
@@ -131,10 +95,7 @@ class PurgeSessionsCommand extends Command
         $user->save();
     }
 
-    /**
-     * @param Session $session
-     */
-    private function signout(Session $session)
+    private function signout(Session $session): void
     {
         if (!empty($session->guestId)) {
             /** @var Guest $guest */
