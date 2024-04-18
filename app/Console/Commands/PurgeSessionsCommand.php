@@ -10,7 +10,8 @@ use Coyote\Repositories\Criteria\WithTrashed;
 use Coyote\Services\Elasticsearch\Crawler;
 use Coyote\Session;
 use Illuminate\Console\Command;
-use Illuminate\Database\Connection as Db;
+use Illuminate\Database\Connection;
+use Illuminate\Support;
 
 ini_set('memory_limit', '3G');
 
@@ -22,7 +23,7 @@ class PurgeSessionsCommand extends Command
     protected $description = 'Purge old sessions.';
 
     public function __construct(
-        readonly private Db                $db,
+        readonly private Connection        $db,
         readonly private SessionRepository $session,
         readonly private UserRepository    $user)
     {
@@ -31,7 +32,10 @@ class PurgeSessionsCommand extends Command
 
     public function handle(): int
     {
+        /** @var Support\Collection $result */
         $result = $this->session->all();
+        $this->storeSessionSnapshot($result->toArray());
+
         // convert minutes to seconds
         $lifetime = config('session.lifetime') * 60;
 
@@ -127,5 +131,35 @@ class PurgeSessionsCommand extends Command
         dispatch_sync(function () use ($user) {
             (new Crawler())->index($user);
         });
+    }
+
+    /**
+     * @param Session[] $sessions
+     */
+    private function storeSessionSnapshot(array $sessions): void
+    {
+        $lifetime = config('session.lifetime') * 60;
+        
+        $guests = [];
+        $users = [];
+        foreach ($sessions as $session) {
+            if ($session['updated_at'] < time() - $lifetime) {
+                continue;
+            }
+            if ($session['robot']) {
+                continue;
+            }
+            if ($session['user_id']) {
+                $users[] = $session['user_id'];
+                continue;
+            }
+            $guests[] = $session['guest_id'];
+        }
+
+        $settings = $this->db->table('settings_key_value');
+        $date = date_format(now(), 'c');
+        $settings->insert(['key' => "analytics.session.snapshot.$date", 'value' => \json_encode([
+            'users' => $users, 'guests' => $guests,
+        ])]);
     }
 }
