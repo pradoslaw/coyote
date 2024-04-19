@@ -3,6 +3,7 @@ namespace Neon\Test\Unit\JobOffers;
 
 use Neon\Domain;
 use Neon\Domain\JobOffer;
+use Neon\Domain\Tag;
 use Neon\Test\BaseFixture\ItemView;
 use Neon\View\Components\JobOffer\JobOffersHtml;
 use Neon\View\Language\English;
@@ -98,12 +99,38 @@ class JobOffersViewTest extends TestCase
     /**
      * @test
      */
-    public function jobOfferTags(): void
+    public function jobOfferTagsTitle(): void
     {
-        $view = $this->jobOffer(['offerTags' => ['foo', 'bar']]);
+        $view = $this->jobOffer(['offerTags' => [
+            ['title' => 'foo'],
+            ['title' => 'bar'],
+        ]]);
         $this->assertSame(
             ['foo', 'bar'],
             $view->findTextMany('#jobs', '#tags', 'span'));
+    }
+
+    /**
+     * @test
+     */
+    public function jobOfferTagsImage(): void
+    {
+        $view = $this->jobOffer(['offerTags' => [
+            ['image' => 'foo'],
+            ['image' => 'bar'],
+        ]]);
+        $this->assertSame(
+            ['foo', 'bar'],
+            $view->findMany('#jobs', '#tags', 'img', '@src'));
+    }
+
+    /**
+     * @test
+     */
+    public function jobOfferTagNoImage(): void
+    {
+        $view = $this->jobOffer(['offerTags' => [['title' => 'foo']]]);
+        $this->assertFalse($view->exists('#jobs', '#tags', 'img'));
     }
 
     /**
@@ -141,8 +168,15 @@ class JobOffersViewTest extends TestCase
                     $fields['offerCompany'] ?? '',
                     $fields['offerCities'] ?? [],
                     $fields['offerRemoteWork'] ?? false,
-                    $fields['offerTags'] ?? [],
+                    $this->mapJobOfferTags($fields['offerTags'] ?? []),
                     $fields['offerImage'] ?? ''))]));
+    }
+
+    private function mapJobOfferTags(array $tags): array
+    {
+        return \array_map(
+            fn(array $tag) => new Tag($tag['title'] ?? '', $tag['image'] ?? null),
+            $tags);
     }
 
     private function jobOffersWithTitles(array $titles): ItemView

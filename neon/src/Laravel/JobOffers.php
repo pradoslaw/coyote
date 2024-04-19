@@ -1,7 +1,9 @@
 <?php
 namespace Neon\Laravel;
 
+use Coyote;
 use Coyote\Job;
+use Neon\Domain;
 use Neon\Domain\JobOffer;
 
 readonly class JobOffers implements \Neon\Persistence\JobOffers
@@ -28,7 +30,12 @@ readonly class JobOffers implements \Neon\Persistence\JobOffers
                         ->map(fn(Job\Location $location): string => $location->city)
                         ->all(),
                     $job->is_remote && $job->remote_range === 100,
-                    [],
+                    $job->tags
+                        ->map(fn(Coyote\Tag $tag) => new Domain\Tag(
+                            $tag->real_name ?? $tag->name,
+                            $tag->logo->url(),
+                        ))
+                        ->toArray(),
                     $job->firm->logo->url() ?? '');
             },
             $jobs);

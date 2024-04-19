@@ -18,7 +18,7 @@ readonly class HtmlView
         $heads = [
             ...$this->head,
             // new Script('https://cdn.tailwindcss.com'), // for debug
-            new Style('css/neon.css?v6'),
+            new Style('css/neon.css?v7'),
             new Style('fonts/switzer/switzer.css'),
             new Style('fonts/inter/inter.css'),
         ];

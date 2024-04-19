@@ -46,6 +46,12 @@ class ItemView
         return $this->viewDom->findStrings($selector->xPath());
     }
 
+    public function exists(string ...$selectors): bool
+    {
+        $selector = new Selector(...$selectors);
+        return $this->viewDom->exists($selector->xPath());
+    }
+
     public function cssClasses(string ...$selectors): array
     {
         $classAttribute = $this->find(...\array_merge($selectors, ['@class']));

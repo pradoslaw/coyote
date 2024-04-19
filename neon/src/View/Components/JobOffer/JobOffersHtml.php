@@ -1,6 +1,7 @@
 <?php
 namespace Neon\View\Components\JobOffer;
 
+use Neon\Domain;
 use Neon\View\Html\Item;
 use Neon\View\Html\Render;
 use Neon\View\Html\Tag;
@@ -32,7 +33,7 @@ readonly class JobOffersHtml implements Item
     private function jobOffer(Render $h, JobOffer $offer): Tag
     {
         return $h->tag('div', ['class' => 'flex space-x-4'], [
-            $h->tag('img', ['src' => $offer->imageUrl, 'class' => 'size-8'], []),
+            $h->tag('img', ['src' => $offer->imageUrl, 'class' => 'size-8 shrink-0'], []),
             $h->tag('div', ['class' => 'flex flex-col space-y-1'], [
                 $h->tag('h3', ['class' => 'font-[Inter] text-[#4E5973] text-xs font-bold'], [
                     $h->tag('a', ['href' => $offer->url], [$offer->title]),
@@ -48,11 +49,7 @@ readonly class JobOffersHtml implements Item
                             [$offer->citiesSummary]),
                     ]),
                 ]),
-                $h->tag('div', ['id' => 'tags', 'class' => 'flex'], \array_map(
-                    fn(string $tag): Tag => $h->tag('span',
-                        ['class' => 'inline-block mr-2 py-px px-1.5 text-xs leading-5 text-[#22488C] bg-[#E3E8F1] rounded-md font-[Arial]'],
-                        [$tag]),
-                    $offer->tags)),
+                $this->jobOfferTags($h, $offer),
             ]),
         ]);
     }
@@ -67,5 +64,26 @@ readonly class JobOffersHtml implements Item
             </svg>
             pinIcon,
         );
+    }
+
+    private function jobOfferTags(Render $h, JobOffer $offer): Tag
+    {
+        return $h->tag('div',
+            ['id' => 'tags', 'class' => 'flex flex-wrap'],
+            \array_map(
+                fn(Domain\Tag $tag): Tag => $this->jobOfferTag($h, $tag),
+                $offer->tags));
+    }
+
+    function jobOfferTag(Render $h, Domain\Tag $tag): Tag
+    {
+        return $h->tag('span',
+            ['class' => 'inline-flex shrink-0 mr-1 mb-1 py-px px-1.5 text-xs leading-5 text-[#22488C] bg-[#E3E8F1] rounded-md font-[Arial] items-center whitespace-nowrap'],
+            [
+                $tag->imageUrl
+                    ? $h->tag('img', ['class' => 'size-3 mr-1', 'src' => $tag->imageUrl], [])
+                    : null,
+                $tag->name,
+            ]);
     }
 }
