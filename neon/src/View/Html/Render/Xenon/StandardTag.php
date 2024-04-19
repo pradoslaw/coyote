@@ -6,9 +6,9 @@ use Xenon\ViewItem;
 
 readonly class StandardTag extends \Xenon\Tag implements Tag, ViewItem
 {
-    public function __construct(private ?string $parentClass, string $tag, array $attributes, array $children)
+    public function __construct(private ?string $parentClass, string $tag, array $attributes, array $events, array $children)
     {
-        parent::__construct($tag, $attributes, [], $children);
+        parent::__construct($tag, $attributes, $events, $children);
     }
 
     public function parentClass(): ?string

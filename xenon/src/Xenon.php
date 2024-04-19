@@ -3,11 +3,13 @@ namespace Xenon;
 
 readonly class Xenon
 {
+    private State $state;
     private Fragment $view;
 
-    public function __construct(array $view, private array $state)
+    public function __construct(array $view, State|array $state)
     {
         $this->view = new Fragment($view);
+        $this->state = \is_array($state) ? new State($state) : $state;
     }
 
     public function html(): string
@@ -21,12 +23,12 @@ readonly class Xenon
 
     private function ssrView(): string
     {
-        return $this->view->ssrHtml($this->state);
+        return $this->view->ssrHtml($this->state->toArray());
     }
 
     private function spaView(): string
     {
-        $spaState = \json_encode($this->state);
+        $spaState = \json_encode($this->state->toArray());
         return "
             const h = Vue.h;
             const app = Vue.createApp(() => {$this->view->spaExpression()});

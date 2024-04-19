@@ -8,6 +8,7 @@ use Neon\View\Html\Render;
 use Neon\View\Html\Render\Neon\NeonTag;
 use Neon\View\Html\Render\Neon\NeonTags;
 use Neon\View\Html\Render\Xenon\XenonTags;
+use Xenon\State;
 use Xenon\Xenon;
 
 readonly class HtmlView
@@ -44,12 +45,13 @@ readonly class HtmlView
 
     private function bodyHtml(): string
     {
-        $h = new Render(new XenonTags());
+        $state = new State([]);
+        $h = new Render(new XenonTags($state));
         $xenon = new Xenon(
             \array_merge(...\array_map(
                 fn(Item $item) => $item->render($h),
                 $this->body)),
-            []);
+            $state);
         return $xenon->html();
     }
 }

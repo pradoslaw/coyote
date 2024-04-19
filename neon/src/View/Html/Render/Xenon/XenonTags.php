@@ -3,12 +3,17 @@ namespace Neon\View\Html\Render\Xenon;
 
 use Neon\View\Html\Render\Tags;
 use Neon\View\Html\Tag;
+use Xenon\State;
 
-class XenonTags implements Tags
+readonly class XenonTags implements Tags
 {
-    public function tag(?string $parentClass, string $tag, array $attributes, array $children): Tag
+    public function __construct(private State $state)
     {
-        return new StandardTag($parentClass, $tag, $attributes, $children);
+    }
+
+    public function tag(?string $parentClass, string $tag, array $attributes, array $events, array $children): Tag
+    {
+        return new StandardTag($parentClass, $tag, $attributes, $events, $children);
     }
 
     public function many(array $children): Tag
@@ -24,5 +29,15 @@ class XenonTags implements Tags
     public function text(string $text): Tag
     {
         return new TextTag($text);
+    }
+
+    public function if(string $conditionField, array $body, array $else): Tag
+    {
+        return new IfTag($conditionField, $body, $else);
+    }
+
+    public function setState(string $field, string $value): void
+    {
+        $this->state->setState($field, $value);
     }
 }

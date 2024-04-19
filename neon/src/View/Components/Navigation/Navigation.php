@@ -28,7 +28,7 @@ readonly class Navigation
         public string    $csrf,
     )
     {
-        if (empty($controls) || $visitor->loggedIn()) {
+        if (\count($controls) !== 2) {
             $this->links = [];
         } else {
             [$big, $small] = \array_keys($controls);

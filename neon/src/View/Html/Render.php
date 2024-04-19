@@ -9,12 +9,12 @@ readonly class Render
     {
     }
 
-    public function tag(string $tag, array $attributes, array $children): Tag
+    public function tag(string $tag, array $attributes, array $children, array $events = []): Tag
     {
-        return $this->tagWithElevatedClass($tag, $attributes, $this->childrenTags($children));
+        return $this->tagWithElevatedClass($tag, $attributes, $events, $this->childrenTags($children));
     }
 
-    private function tagWithElevatedClass(string $tag, array $attributes, array $children): Tag
+    private function tagWithElevatedClass(string $tag, array $attributes, array $events, array $children): Tag
     {
         $elevatedClass = $this->elevatedClass($children);
         if (!empty($elevatedClass)) {
@@ -24,6 +24,7 @@ readonly class Render
             $attributes['parentClass'] ?? null,
             $tag,
             $attributes,
+            $events,
             $children,
         );
     }
@@ -31,6 +32,11 @@ readonly class Render
     private function childrenTags(array $children): array
     {
         return \array_map($this->childTag(...), \array_filter($children));
+    }
+
+    public function createField(string $field, string $initialValue): void
+    {
+        $this->tags->setState($field, $initialValue);
     }
 
     private function childTag(Tag|string $tagOrText): Tag
@@ -44,6 +50,13 @@ readonly class Render
     public function many(array $children): Tag
     {
         return $this->tags->many($children);
+    }
+
+    public function if(string $conditionField, array $body, array $else = []): Tag
+    {
+        return $this->tags->if($conditionField, 
+            $this->childrenTags($body), 
+            $this->childrenTags($else));
     }
 
     public function html(string $html): Tag

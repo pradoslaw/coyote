@@ -13,6 +13,9 @@ readonly class NavigationHtml implements Item
 
     public function render(Render $h): array
     {
+        $h->createField('canLogout', $this->navigation->canLogout);
+        $h->createField('logoutInProgress', false);
+
         return [
             $h->tag('header', ['class' => 'container mx-auto flex text-[#4E5973] text-sm mb-4'], [
                 $h->tag('div', ['class' => 'flex'], [
@@ -46,15 +49,17 @@ readonly class NavigationHtml implements Item
 
                 $h->tag('div', ['class' => 'flex'], [
                     $this->githubButton($h, 'mr-4'),
-                    $this->controls($h),
+                    $h->if('canLogout', [], [
+                        $this->controls($h),
+                    ]),
                     $this->logoutButton($h),
-                    $this->navigation->avatarVisible ?
+                    $h->if('canLogout', [
                         $h->tag('img', [
                             'src'   => $this->navigation->avatarUrl,
                             'class' => 'size-[30px] self-center rounded',
                             'style' => 'border: 1px solid rgb(226, 226, 226);',
-                            'id'    => 'userAvatar'], [])
-                        : null,
+                            'id'    => 'userAvatar'], []),
+                    ]),
                 ]),
             ]),
         ];
@@ -144,25 +149,25 @@ starIcon,);
 
     private function logoutButton(Render $h): Tag
     {
-        if (!$this->navigation->canLogout) {
-            return $h->many([]);
-        }
-        return $h->many([
-            $h->tag('span',
-                ['class' => 'px-2 py-1.5 self-center cursor-pointer', 'id' => 'logout'],
-                [
-                    $this->navigation->logoutTitle,
-                ]),
-
-            $h->html(<<<javaScript
-                <script>
-                    const logout = document.querySelector('#logout');
-                    logout.addEventListener('click', () => {
-                        fetch('/Logout', {method:'POST', headers:{'X-CSRF-TOKEN':'{$this->navigation->csrf}'}})
-                            .then(r => window.location.reload());
-                    });
-                </script>
-                javaScript,),
+        return $h->if('canLogout', [
+            $h->many([
+                $h->tag('span',
+                    ['class' => 'px-2 py-1.5 self-center cursor-pointer', 'id' => 'logout'],
+                    [
+                        $h->if('logoutInProgress',
+                            ['Wylogowanie...'],
+                            [$this->navigation->logoutTitle]),
+                    ],
+                    ['click' => "
+                      console.log('click');
+                      xenon.setState('logoutInProgress', true);
+                      setTimeout(function () {
+                        xenon.setState('canLogout', false);
+                      }, 1000);
+                      // fetch('/Logout', {method:'POST', headers:{'X-CSRF-TOKEN':'{$this->navigation->csrf}'}})
+                       //     .then(r => window.location.reload());
+                   "]),
+            ]),
         ]);
     }
 
