@@ -51,6 +51,9 @@ readonly class Render
         return $this->tags->html($html);
     }
 
+    /**
+     * @param Tag[] $children
+     */
     private function elevatedClass(array $children): string
     {
         return \implode(' ',
@@ -62,8 +65,9 @@ readonly class Render
     {
         $classes = [];
         foreach ($children as $child) {
-            if ($child->parentClass != null) {
-                $classes[] = $child->parentClass;
+            $class = $child->parentClass();
+            if ($class != null) {
+                $classes[] = $class;
             }
         }
         return $classes;

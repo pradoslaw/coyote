@@ -8,10 +8,10 @@ readonly class StandardTag implements Tag
     private FragmentTag $children;
 
     public function __construct(
-        public ?string $parentClass,
-        private string $tag,
-        private array  $attributes,
-        array          $children,
+        private ?string $parentClass,
+        private string  $tag,
+        private array   $attributes,
+        array           $children,
     )
     {
         $this->children = new FragmentTag($children);
@@ -31,5 +31,10 @@ readonly class StandardTag implements Tag
                 \array_map(
                     fn(string $key) => $key . '="' . \htmlSpecialChars($this->attributes[$key]) . '"',
                     \array_keys($this->attributes)));
+    }
+
+    public function parentClass(): ?string
+    {
+        return $this->parentClass;
     }
 }

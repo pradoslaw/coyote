@@ -5,11 +5,8 @@ use Neon\View\Html\Tag;
 
 readonly class FragmentTag implements Tag
 {
-    public ?string $parentClass;
-
     public function __construct(private array $children)
     {
-        $this->parentClass = null;
     }
 
     public function html(): string
@@ -23,5 +20,10 @@ readonly class FragmentTag implements Tag
             $html .= $child->html();
         }
         return $html;
+    }
+
+    public function parentClass(): ?string
+    {
+        return null;
     }
 }
