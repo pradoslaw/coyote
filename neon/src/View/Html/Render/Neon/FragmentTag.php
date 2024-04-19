@@ -1,9 +1,7 @@
 <?php
 namespace Neon\View\Html\Render\Neon;
 
-use Neon\View\Html\Tag;
-
-readonly class FragmentTag implements Tag
+readonly class FragmentTag implements NeonTag
 {
     public function __construct(private array $children)
     {
@@ -16,7 +14,7 @@ readonly class FragmentTag implements Tag
             if ($child === null) {
                 continue;
             }
-            /** @var Tag $child */
+            /** @var NeonTag $child */
             $html .= $child->html();
         }
         return $html;

@@ -5,7 +5,10 @@ use Neon\View\Html\Head\Head;
 use Neon\View\Html\Head\Style;
 use Neon\View\Html\Item;
 use Neon\View\Html\Render;
+use Neon\View\Html\Render\Neon\NeonTag;
 use Neon\View\Html\Render\Neon\NeonTags;
+use Neon\View\Html\Render\Xenon\XenonTags;
+use Xenon\Xenon;
 
 readonly class HtmlView
 {
@@ -23,6 +26,7 @@ readonly class HtmlView
             new Style('fonts/switzer/switzer.css'),
             new Style('fonts/inter/inter.css'),
         ];
+        /** @var NeonTag $page */
         $page = $h->many([
             $h->html('<!DOCTYPE html>'),
             $h->tag('html', [], [
@@ -32,11 +36,20 @@ readonly class HtmlView
                 ]),
                 $h->tag('body',
                     ['class' => 'bg-[#F0F2F5] font-[Switzer] px-2 lg:px-4'],
-                    \array_merge(...\array_map(
-                        fn(Item $item) => $item->render($h),
-                        $this->body))),
+                    [$h->html($this->bodyHtml())]),
             ]),
         ]);
         return $page->html();
+    }
+
+    private function bodyHtml(): string
+    {
+        $h = new Render(new XenonTags());
+        $xenon = new Xenon(
+            \array_merge(...\array_map(
+                fn(Item $item) => $item->render($h),
+                $this->body)),
+            []);
+        return $xenon->html();
     }
 }

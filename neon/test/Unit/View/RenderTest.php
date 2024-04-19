@@ -77,6 +77,7 @@ class RenderTest extends TestCase
 
     private function assertClass(string $expectedClass, Html\Tag $tag): void
     {
+        /** @var Render\Neon\NeonTag $tag */
         $dom = new ViewDom($tag->html());
         $this->assertSame(
             $expectedClass,

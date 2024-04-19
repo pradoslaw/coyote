@@ -2,26 +2,25 @@
 namespace Neon\View\Html\Render\Neon;
 
 use Neon\View\Html\Render\Tags;
-use Neon\View\Html\Tag;
 
 class NeonTags implements Tags
 {
-    public function tag(?string $parentClass, string $tag, array $attributes, array $children): Tag
+    public function tag(?string $parentClass, string $tag, array $attributes, array $children): NeonTag
     {
         return new StandardTag($parentClass, $tag, $attributes, $children);
     }
 
-    public function many(array $children): Tag
+    public function many(array $children): NeonTag
     {
         return new FragmentTag($children);
     }
 
-    public function html(string $html): Tag
+    public function html(string $html): NeonTag
     {
         return new HtmlTag($html);
     }
 
-    public function text(string $text): Tag
+    public function text(string $text): NeonTag
     {
         return new HtmlTag(\htmlSpecialChars($text));
     }

@@ -1,9 +1,7 @@
 <?php
 namespace Neon\View\Html\Render\Neon;
 
-use Neon\View\Html\Tag;
-
-readonly class StandardTag implements Tag
+readonly class StandardTag implements NeonTag
 {
     private FragmentTag $children;
 

@@ -1,9 +1,7 @@
 <?php
 namespace Neon\View\Html\Render\Neon;
 
-use Neon\View\Html\Tag;
-
-readonly class HtmlTag implements Tag
+readonly class HtmlTag implements NeonTag
 {
     public function __construct(private string $html)
     {
