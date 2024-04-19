@@ -69,7 +69,7 @@ class RenderTest extends TestCase
         $dom = new ViewDom($tag->html());
         $this->assertSame(
             $expectedClass,
-            $dom->findText('//div/@class'));
+            $dom->findString('//div/@class'));
     }
 
     private function child(Render $h, string $parentClass): Html\Tag

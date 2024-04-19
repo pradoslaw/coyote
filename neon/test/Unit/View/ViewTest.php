@@ -138,12 +138,12 @@ class ViewTest extends TestCase
     private function find(View $view, string...$selectors): string
     {
         $selector = new Selector(...$selectors);
-        return $this->dom($view)->findText($selector->xPath());
+        return $this->dom($view)->findString($selector->xPath());
     }
 
     private function findText(View $view, string...$selectors): string
     {
         $selector = new Selector(...\array_merge($selectors, ['text()']));
-        return $this->dom($view)->findText($selector->xPath());
+        return $this->dom($view)->findString($selector->xPath());
     }
 }

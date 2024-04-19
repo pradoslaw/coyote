@@ -25,18 +25,18 @@ readonly class ViewDom
         return $this->query($xPath)->count() > 0;
     }
 
-    public function findTextMany(string $xPath): array
+    public function findStrings(string $xPath): array
     {
         $texts = [];
         foreach ($this->query($xPath) as $child) {
-            $texts[] = $this->text($child);
+            $texts[] = $this->string($child);
         }
         return $texts;
     }
 
-    public function findText(string $xPath): string
+    public function findString(string $xPath): string
     {
-        return $this->text($this->first($this->query($xPath), $xPath));
+        return $this->string($this->first($this->query($xPath), $xPath));
     }
 
     private function query(string $xPath): \DOMNodeList
@@ -48,7 +48,7 @@ readonly class ViewDom
         return $result;
     }
 
-    private function text(\DOMText|\DOMElement|\DOMAttr $node): string
+    private function string(\DOMText|\DOMElement|\DOMAttr $node): string
     {
         if ($node->nodeType === \XML_ATTRIBUTE_NODE) {
             return $node->textContent;
@@ -56,8 +56,7 @@ readonly class ViewDom
         if ($node->nodeType === \XML_TEXT_NODE) {
             return $node->textContent;
         }
-        $tagName = $node->tagName;
-        throw new \Exception("Failed to get text of element: <$tagName>");
+        throw new \Exception("Failed to get element as string: <$node->tagName>");
     }
 
     private function first(\DOMNodeList $nodes, string $xPath): \DOMElement|\DOMText|\DOMAttr

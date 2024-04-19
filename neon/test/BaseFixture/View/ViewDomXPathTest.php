@@ -12,7 +12,7 @@ class ViewDomXPathTest extends TestCase
     public function invalid(): void
     {
         $dom = new ViewDom('<p>');
-        $exception = caught(fn() => $dom->findText('.invalid'));
+        $exception = caught(fn() => $dom->findString('.invalid'));
         $this->assertSame('Failed to execute malformed xPath: .invalid', $exception->getMessage());
     }
 }

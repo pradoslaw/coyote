@@ -177,7 +177,7 @@ class SelectorTest extends TestCase
     private function find(Selector $selector, string $html): array
     {
         $dom = new ViewDom($html);
-        return $dom->findTextMany($selector->xPath());
+        return $dom->findStrings($selector->xPath());
     }
 
     private function exists(Selector $selector, string $html): bool

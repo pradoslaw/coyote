@@ -86,14 +86,14 @@ class SessionAvatarTest extends TestCase
     {
         $dom = new ViewDom($this->htmlView('/events'));
         $selector = new Selector('header', '.controls', 'a', 'text()');
-        return $dom->findTextMany($selector->xPath());
+        return $dom->findStrings($selector->xPath());
     }
 
     private function renderedAvatarUrl(): string
     {
         $dom = new ViewDom($this->htmlView('/events'));
         $selector = new Selector('header', '#userAvatar', '@src');
-        return $dom->findText($selector->xPath());
+        return $dom->findString($selector->xPath());
     }
 
     private function htmlView(string $uri): string

@@ -56,6 +56,6 @@ class NavigationViewAvatarTest extends TestCase
     private function text(Application $application, Selector $selector): string
     {
         $dom = new ViewDom($application->html(''));
-        return $dom->findText($selector->xPath());
+        return $dom->findString($selector->xPath());
     }
 }

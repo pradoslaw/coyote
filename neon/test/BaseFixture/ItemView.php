@@ -19,7 +19,7 @@ class ItemView
     public function find(string ...$selectors): string
     {
         $selector = new Selector(...$selectors);
-        return $this->viewDom->findText($selector->xPath());
+        return $this->viewDom->findString($selector->xPath());
     }
 
     /**
@@ -28,13 +28,13 @@ class ItemView
     public function findMany(string ...$selectors): array
     {
         $selector = new Selector(...$selectors);
-        return $this->viewDom->findTextMany($selector->xPath());
+        return $this->viewDom->findStrings($selector->xPath());
     }
 
     public function findText(string ...$selectors): string
     {
         $selector = new Selector(...\array_merge($selectors, ['text()']));
-        return $this->viewDom->findText($selector->xPath());
+        return $this->viewDom->findString($selector->xPath());
     }
 
     /**
@@ -43,7 +43,7 @@ class ItemView
     public function findTextMany(string ...$selectors): array
     {
         $selector = new Selector(...\array_merge($selectors, ['text()']));
-        return $this->viewDom->findTextMany($selector->xPath());
+        return $this->viewDom->findStrings($selector->xPath());
     }
 
     public function cssClasses(string ...$selectors): array
