@@ -4,8 +4,6 @@ namespace Neon\Test\Unit\View;
 use Neon\Test\BaseFixture\View\ViewDom;
 use Neon\View\Html;
 use Neon\View\Html\Render;
-use Neon\View\Html\UntypedItem;
-use Neon\View\HtmlView;
 use PHPUnit\Framework\TestCase;
 
 class RenderTest extends TestCase
@@ -68,10 +66,7 @@ class RenderTest extends TestCase
 
     private function assertClass(string $expectedClass, Html\Tag $tag): void
     {
-        $view = new HtmlView([], [
-            new UntypedItem(fn(Render $h): array => [$tag]),
-        ]);
-        $dom = new ViewDom($view->html());
+        $dom = new ViewDom($tag->html());
         $this->assertSame(
             $expectedClass,
             $dom->find('//div/@class'));
