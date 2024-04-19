@@ -25,7 +25,7 @@ readonly class ViewDom
         return $this->query($xPath)->count() > 0;
     }
 
-    public function findMany(string $xPath): array
+    public function findTextMany(string $xPath): array
     {
         $texts = [];
         foreach ($this->query($xPath) as $child) {
@@ -34,7 +34,7 @@ readonly class ViewDom
         return $texts;
     }
 
-    public function find(string $xPath): string
+    public function findText(string $xPath): string
     {
         return $this->text($this->first($this->query($xPath), $xPath));
     }

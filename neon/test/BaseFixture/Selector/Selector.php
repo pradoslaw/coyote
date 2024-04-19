@@ -13,32 +13,28 @@ readonly class Selector
                 throw new \Exception('Failed to accept empty string selector.');
             }
         }
-        $this->selectors = $this->selectorOrText($selectors);
-    }
-
-    private function selectorOrText(array $selectors): array
-    {
-        if ($this->isAttribute($this->last($selectors))) {
-            return $selectors;
-        }
-        return [...$selectors, 'text()'];
-    }
-
-    private function last(array $array): string
-    {
-        return \end($array);
-    }
-
-    private function isAttribute(string $selector): bool
-    {
-        return $selector[0] === '@';
+        $this->selectors = $selectors;
     }
 
     public function xPath(): string
     {
         $selectors = \array_map($this->selector(...), $this->selectors);
-        $leaf = \array_pop($selectors);
-        return '//' . \implode('//', $selectors) . '/' . $leaf;
+        if ($this->hasLeaf()) {
+            $last = \array_pop($selectors);
+            return '//' . \implode('//', $selectors) . '/' . $last;
+        }
+        return '//' . \implode('//', $selectors);
+    }
+
+    private function hasLeaf(): bool
+    {
+        $last = $this->lastSelector();
+        return $last === 'text()' || $last[0] === '@';
+    }
+
+    private function lastSelector(): string
+    {
+        return $this->selectors[\array_key_last($this->selectors)];
     }
 
     private function selector(string $selector): string

@@ -23,7 +23,7 @@ class HttpTest extends TestCase
         $dom = $this->dom('/events');
         $this->assertSame(
             '4programmers.net',
-            $dom->find('//main//nav/ul/li[1]/text()'));
+            $dom->findText('//main//nav/ul/li[1]/text()'));
     }
 
     /**
@@ -35,7 +35,7 @@ class HttpTest extends TestCase
         $dom = $this->dom('/events');
         $this->assertSame(
             'Ours is the fury',
-            $dom->find('/html/head/title/text()'));
+            $dom->findText('/html/head/title/text()'));
     }
 
     private function setApplicationTitle(string $applicationName): void

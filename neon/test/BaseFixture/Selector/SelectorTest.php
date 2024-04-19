@@ -13,7 +13,7 @@ class SelectorTest extends TestCase
     public function immediateChild(): void
     {
         $content = $this->find(
-            new Selector('html', 'body', 'div'),
+            new Selector('html', 'body', 'div', 'text()'),
             '<div>Foo</div>');
         $this->assertSame(['Foo'], $content);
     }
@@ -24,7 +24,7 @@ class SelectorTest extends TestCase
     public function nestedChild(): void
     {
         $content = $this->find(
-            new Selector('html', 'body', 'div'),
+            new Selector('html', 'body', 'div', 'text()'),
             '<div><div>Bar</div></div>');
         $this->assertSame(['Bar'], $content);
     }
@@ -35,7 +35,7 @@ class SelectorTest extends TestCase
     public function leafText(): void
     {
         $content = $this->find(
-            new Selector('div'),
+            new Selector('div', 'text()'),
             '<div>Banana<span>Watermelon</span></div>');
         $this->assertSame(['Banana'], $content);
     }
@@ -54,9 +54,19 @@ class SelectorTest extends TestCase
     /**
      * @test
      */
+    public function nonLeafElement(): void
+    {
+        $this->assertTrue($this->exists(
+            new Selector('div', 'img'),
+            '<div><span><img/></span></div>'));
+    }
+
+    /**
+     * @test
+     */
     public function blank(): void
     {
-        $exception = caught(fn() => new Selector('html', ' ', 'body'));
+        $exception = caught(fn() => new Selector('html', ' ', 'body', 'text()'));
         $this->assertSame(
             'Failed to accept empty string selector.',
             $exception->getMessage());
@@ -68,7 +78,7 @@ class SelectorTest extends TestCase
     public function cssId(): void
     {
         $element = $this->find(
-            new Selector('#foo'),
+            new Selector('#foo', 'text()'),
             '<div id="foo">Bar</div>');
         $this->assertSame(['Bar'], $element);
     }
@@ -99,7 +109,7 @@ class SelectorTest extends TestCase
     public function cssClass(): void
     {
         $content = $this->find(
-            new Selector('html', 'body', '.foo'),
+            new Selector('html', 'body', '.foo', 'text()'),
             '<div class="foo">Valar</div>
             <p class="foo">Morghulis</p>');
         $this->assertSame(['Valar', 'Morghulis'], $content);
@@ -111,7 +121,7 @@ class SelectorTest extends TestCase
     public function cssElementClass(): void
     {
         $content = $this->find(
-            new Selector('html', 'body', 'div.foo'),
+            new Selector('html', 'body', 'div.foo', 'text()'),
             '<div class="foo">Match</div>
             <p class="foo">Other</p>');
         $this->assertSame(['Match'], $content);
@@ -123,7 +133,7 @@ class SelectorTest extends TestCase
     public function cssClassMany(): void
     {
         $content = $this->find(
-            new Selector('html', 'body', '.two'),
+            new Selector('html', 'body', '.two', 'text()'),
             '<div class="one two three">Match</div>');
         $this->assertSame(['Match'], $content);
     }
@@ -154,7 +164,7 @@ class SelectorTest extends TestCase
     public function cssClassNewline(): void
     {
         $content = $this->find(
-            new Selector('html', 'body', '.foo'),
+            new Selector('html', 'body', '.foo', 'text()'),
             "<div class='\nfoo\n'>Match</div>");
         $this->assertSame(['Match'], $content);
     }
@@ -167,6 +177,12 @@ class SelectorTest extends TestCase
     private function find(Selector $selector, string $html): array
     {
         $dom = new ViewDom($html);
-        return $dom->findMany($selector->xPath());
+        return $dom->findTextMany($selector->xPath());
+    }
+
+    private function exists(Selector $selector, string $html): bool
+    {
+        $dom = new ViewDom($html);
+        return $dom->exists($selector->xPath());
     }
 }

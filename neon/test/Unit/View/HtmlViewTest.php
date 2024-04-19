@@ -27,7 +27,7 @@ class HtmlViewTest extends TestCase
         $dom = new ViewDom($this->viewHtml('Winter is coming'));
         $this->assertSame(
             'Winter is coming',
-            $dom->find('/html/head/title/text()'));
+            $dom->findText('/html/head/title/text()'));
     }
 
     /**
@@ -38,7 +38,7 @@ class HtmlViewTest extends TestCase
         $dom = new ViewDom($this->viewHtml('€ść'));
         $this->assertSame(
             '€ść',
-            $dom->find('/html/head/title/text()'));
+            $dom->findText('/html/head/title/text()'));
     }
 
     /**

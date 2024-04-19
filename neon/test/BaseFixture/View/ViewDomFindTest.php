@@ -12,7 +12,7 @@ class ViewDomFindTest extends TestCase
     public function textContent(): void
     {
         $dom = new ViewDom('<ul><li>Winter is coming</li><ul>');
-        $this->assertSame('Winter is coming', $dom->find('/html/body/ul/li/text()'));
+        $this->assertSame('Winter is coming', $dom->findText('/html/body/ul/li/text()'));
     }
 
     /**
@@ -21,7 +21,7 @@ class ViewDomFindTest extends TestCase
     public function notFound(): void
     {
         $dom = new ViewDom('<p>Missing</p>');
-        $throwable = caught(fn() => $dom->find('/html/body/ul/li'));
+        $throwable = caught(fn() => $dom->findText('/html/body/ul/li'));
         $this->assertStringStartsWith('Failed to find element: /html/body/ul/li', $throwable->getMessage());
     }
 
@@ -31,7 +31,7 @@ class ViewDomFindTest extends TestCase
     public function many(): void
     {
         $dom = new ViewDom('<p>One</p><p>Two</p>');
-        $throwable = caught(fn() => $dom->find('//p'));
+        $throwable = caught(fn() => $dom->findText('//p'));
         $this->assertStringStartsWith('Failed to find unique element (found 2): //p', $throwable->getMessage());
     }
 
@@ -41,7 +41,7 @@ class ViewDomFindTest extends TestCase
     public function textNode(): void
     {
         $dom = new ViewDom('<p>We do not sow</p>');
-        $this->assertSame('We do not sow', $dom->find('//p/text()'));
+        $this->assertSame('We do not sow', $dom->findText('//p/text()'));
     }
 
     /**
@@ -50,7 +50,7 @@ class ViewDomFindTest extends TestCase
     public function htmlEntity(): void
     {
         $dom = new ViewDom('<p>&gt;</p>');
-        $this->assertSame('>', $dom->find('//p/text()'));
+        $this->assertSame('>', $dom->findText('//p/text()'));
     }
 
     /**
@@ -59,7 +59,7 @@ class ViewDomFindTest extends TestCase
     public function throwForElement(): void
     {
         $dom = new ViewDom('<ul></ul>');
-        $exception = caught(fn() => $dom->find('/html/body/ul'));
+        $exception = caught(fn() => $dom->findText('/html/body/ul'));
         $this->assertSame('Failed to get text of element: <ul>', $exception->getMessage());
     }
 
@@ -69,7 +69,7 @@ class ViewDomFindTest extends TestCase
     public function attribute(): void
     {
         $dom = new ViewDom('<a href="foo"></a>');
-        $attribute = $dom->find('/html/body/a/@href');
+        $attribute = $dom->findText('/html/body/a/@href');
         $this->assertSame('foo', $attribute);
     }
 }

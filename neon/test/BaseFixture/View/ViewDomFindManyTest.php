@@ -16,7 +16,7 @@ class ViewDomFindManyTest extends TestCase
             <li>We do not sow</li>
         <ul>');
         $this->assertThat(
-            $dom->findMany('/html/body/ul/li/text()'),
+            $dom->findTextMany('/html/body/ul/li/text()'),
             $this->equalTo([
                 'Ours is the fury',
                 'We do not sow',
@@ -30,7 +30,7 @@ class ViewDomFindManyTest extends TestCase
     public function throwForElement(): void
     {
         $dom = new ViewDom('<ul></ul>');
-        $exception = caught(fn() => $dom->findMany('/html/body/ul'));
+        $exception = caught(fn() => $dom->findTextMany('/html/body/ul'));
         $this->assertSame('Failed to get text of element: <ul>', $exception->getMessage());
     }
 }

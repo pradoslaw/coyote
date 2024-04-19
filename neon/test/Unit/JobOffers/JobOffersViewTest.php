@@ -17,7 +17,7 @@ class JobOffersViewTest extends TestCase
     {
         $view = $this->jobOffer(['sectionTitle' => 'Hear me roar']);
         $this->assertSame('Hear me roar',
-            $view->find('#jobs', 'h2'));
+            $view->findText('#jobs', 'h2'));
     }
 
     /**
@@ -27,7 +27,7 @@ class JobOffersViewTest extends TestCase
     {
         $view = $this->jobOffer(['offerTitle' => 'The Lannisters send their regards']);
         $this->assertSame('The Lannisters send their regards',
-            $view->find('#jobs', 'h3', 'a'));
+            $view->findText('#jobs', 'h3', 'a'));
     }
 
     /**
@@ -48,7 +48,7 @@ class JobOffersViewTest extends TestCase
     {
         $jobs = $this->jobOffer(['offerCompany' => 'Iron bank']);
         $this->assertSame('Iron bank',
-            $jobs->find('#jobs', '#company'));
+            $jobs->findText('#jobs', '#company'));
     }
 
     /**
@@ -59,7 +59,7 @@ class JobOffersViewTest extends TestCase
         $view = $this->jobOffer(['offerCities' => ['Braavos', 'Lorath', 'Norvos']]);
         $this->assertSame(
             '3 cities',
-            $view->find('#jobs', '#cities'));
+            $view->findText('#jobs', '#cities'));
     }
 
     /**
@@ -70,7 +70,7 @@ class JobOffersViewTest extends TestCase
         $view = $this->jobOffer(['offerCities' => []]);
         $this->assertSame(
             'Not provided',
-            $view->find('#jobs', '#cities'));
+            $view->findText('#jobs', '#cities'));
     }
 
     /**
@@ -81,7 +81,7 @@ class JobOffersViewTest extends TestCase
         $view = $this->jobOffer(['offerRemoteWork' => true]);
         $this->assertSame(
             'Remote work',
-            $view->find('#jobs', '#cities'));
+            $view->findText('#jobs', '#cities'));
     }
 
     /**
@@ -103,7 +103,7 @@ class JobOffersViewTest extends TestCase
         $view = $this->jobOffer(['offerTags' => ['foo', 'bar']]);
         $this->assertSame(
             ['foo', 'bar'],
-            $view->findMany('#jobs', '#tags', 'span'));
+            $view->findTextMany('#jobs', '#tags', 'span'));
     }
 
     /**
@@ -126,7 +126,7 @@ class JobOffersViewTest extends TestCase
         $view = $this->jobOffersWithTitles($titles);
         $this->assertSame(
             ['foo', 'bar'],
-            $view->findMany('#jobs', 'h3', 'a'));
+            $view->findTextMany('#jobs', 'h3', 'a'));
     }
 
     private function jobOffer(array $fields): ItemView

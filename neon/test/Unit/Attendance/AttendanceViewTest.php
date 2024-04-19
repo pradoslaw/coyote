@@ -16,7 +16,7 @@ class AttendanceViewTest extends TestCase
         $view = $this->attendance(['totalAmount' => 14]);
         $this->assertSame(
             '14',
-            $view->find('#attendance', '#totalAmount'));
+            $view->findText('#attendance', '#totalAmount'));
     }
 
     /**
@@ -27,7 +27,7 @@ class AttendanceViewTest extends TestCase
         $view = $this->attendance(['onlineAmount' => 54]);
         $this->assertSame(
             '54',
-            $view->find('#attendance', '#onlineAmount'));
+            $view->findText('#attendance', '#onlineAmount'));
     }
 
     /**
@@ -38,7 +38,7 @@ class AttendanceViewTest extends TestCase
         $view = $this->attendance([]);
         $this->assertSame(
             'Users',
-            $view->find('#attendance', '#totalTitle'));
+            $view->findText('#attendance', '#totalTitle'));
     }
 
     /**
@@ -49,7 +49,7 @@ class AttendanceViewTest extends TestCase
         $view = $this->attendance([]);
         $this->assertSame(
             'Online',
-            $view->find('#attendance', '#onlineTitle'));
+            $view->findText('#attendance', '#onlineTitle'));
     }
 
     private function attendance(array $fields): ItemView

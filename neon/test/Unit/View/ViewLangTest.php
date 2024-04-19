@@ -70,7 +70,7 @@ class ViewLangTest extends TestCase
     {
         $this->assertSame(
             ['Użytkowników'],
-            $this->findMany($this->view(), '#attendance', '#totalTitle'));
+            $this->findTextMany($this->view(), '#attendance', '#totalTitle'));
     }
 
     function view(array $fields = []): View

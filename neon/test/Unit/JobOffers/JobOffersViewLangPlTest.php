@@ -17,7 +17,7 @@ class JobOffersViewLangPlTest extends TestCase
         $view = $this->jobOffer(['offerCities' => ['Light', 'Dark']]);
         $this->assertSame(
             '2 miasta',
-            $view->find('#jobs', '#cities'));
+            $view->findText('#jobs', '#cities'));
     }
 
     /**
@@ -30,7 +30,7 @@ class JobOffersViewLangPlTest extends TestCase
         ]]);
         $this->assertSame(
             '7 miast',
-            $view->find('#jobs', '#cities'));
+            $view->findText('#jobs', '#cities'));
     }
 
     /**
@@ -41,7 +41,7 @@ class JobOffersViewLangPlTest extends TestCase
         $view = $this->jobOffer(['offerCities' => []]);
         $this->assertSame(
             'Nie podano',
-            $view->find('#jobs', '#cities'));
+            $view->findText('#jobs', '#cities'));
     }
 
     /**
@@ -52,7 +52,7 @@ class JobOffersViewLangPlTest extends TestCase
         $view = $this->jobOffer(['offerRemoteWork' => true]);
         $this->assertSame(
             'Praca zdalna',
-            $view->find('#jobs', '#cities'));
+            $view->findText('#jobs', '#cities'));
     }
 
     private function jobOffer(array $fields): ItemView

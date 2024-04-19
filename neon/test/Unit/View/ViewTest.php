@@ -50,7 +50,7 @@ class ViewTest extends TestCase
     {
         $this->assertSame(
             ['Forum', 'Microblogs', 'Jobs', 'Wiki',],
-            $this->findMany($this->view(), 'nav', 'ul.menu-items', 'li', 'a'));
+            $this->findTextMany($this->view(), 'nav', 'ul.menu-items', 'li', 'a'));
     }
 
     /**
@@ -70,7 +70,7 @@ class ViewTest extends TestCase
     {
         $this->assertSame(
             'Coyote',
-            $this->find($this->view(), '.github', '.name'));
+            $this->findText($this->view(), '.github', '.name'));
     }
 
     /**
@@ -90,7 +90,7 @@ class ViewTest extends TestCase
     {
         $this->assertSame(
             '112',
-            $this->find($this->view(), '.github', '.stars'));
+            $this->findText($this->view(), '.github', '.stars'));
     }
 
     /**
@@ -100,7 +100,7 @@ class ViewTest extends TestCase
     {
         $this->assertSame(
             ['Create account', 'Login'],
-            $this->findMany($this->view(), 'ul.controls', 'li', 'a'));
+            $this->findTextMany($this->view(), 'ul.controls', 'li', 'a'));
     }
 
     /**
@@ -110,7 +110,7 @@ class ViewTest extends TestCase
     {
         $this->assertSame(
             'Users',
-            $this->find($this->view(), '#attendance', '#totalTitle'));
+            $this->findText($this->view(), '#attendance', '#totalTitle'));
     }
 
     /**
@@ -138,6 +138,12 @@ class ViewTest extends TestCase
     private function find(View $view, string...$selectors): string
     {
         $selector = new Selector(...$selectors);
-        return $this->dom($view)->find($selector->xPath());
+        return $this->dom($view)->findText($selector->xPath());
+    }
+
+    private function findText(View $view, string...$selectors): string
+    {
+        $selector = new Selector(...\array_merge($selectors, ['text()']));
+        return $this->dom($view)->findText($selector->xPath());
     }
 }

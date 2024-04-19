@@ -13,22 +13,22 @@ trait ViewFixture
 {
     function eventDetails(ItemView $view): array
     {
-        return $view->findMany('div.event', 'div.details', 'span');
+        return $view->findTextMany('div.event', 'div.details', 'span');
     }
 
     function eventDetailsPricing(ItemView $view): string
     {
-        return $view->find('div.event', 'div.details', 'span[last()]');
+        return $view->findText('div.event', 'div.details', 'span[last()]');
     }
 
     function eventDayShortName(ItemView $view): string
     {
-        return $view->find('div.event', 'div.date', 'span[last()]');
+        return $view->findText('div.event', 'div.date', 'span[last()]');
     }
 
     function eventDetailsKind(ItemView $view): string
     {
-        return $view->find('div.event', 'div.details', 'span[2]');
+        return $view->findText('div.event', 'div.details', 'span[2]');
     }
 
     function eventsSection(array $fields, Language $lang = null): ItemView

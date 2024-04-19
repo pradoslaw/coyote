@@ -9,33 +9,39 @@ trait ViewFixture
 {
     function viewSectionTitle(View $view): string
     {
-        return $this->dom($view)->find('//main//h1/text()');
+        return $this->dom($view)->findText('//main//h1/text()');
     }
 
     function viewSubsectionTitle(View $view): string
     {
-        return $this->dom($view)->find('//main//h2/text()');
+        return $this->dom($view)->findText('//main//h2/text()');
     }
 
     function viewSectionBreadcrumbs(View $view): array
     {
-        return $this->dom($view)->findMany('/html/body//nav/ul/li/text()');
+        return $this->dom($view)->findTextMany('/html/body//nav/ul/li/text()');
     }
 
     function viewNavigationItems(View $view): array
     {
-        return $this->findMany($view, 'nav', 'ul.menu-items', 'li', 'a');
+        return $this->findTextMany($view, 'nav', 'ul.menu-items', 'li', 'a');
     }
 
     function viewHeaderControls(View $view): array
     {
-        return $this->findMany($view, 'ul.controls', 'li', 'a');
+        return $this->findTextMany($view, 'ul.controls', 'li', 'a');
+    }
+
+    function findTextMany(View $view, string...$selectors): array
+    {
+        $selector = new Selector(...\array_merge($selectors, ['text()']));
+        return $this->dom($view)->findTextMany($selector->xPath());
     }
 
     function findMany(View $view, string...$selectors): array
     {
         $selector = new Selector(...$selectors);
-        return $this->dom($view)->findMany($selector->xPath());
+        return $this->dom($view)->findTextMany($selector->xPath());
     }
 
     function dom(View $view): ViewDom

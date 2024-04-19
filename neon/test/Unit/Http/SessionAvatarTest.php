@@ -85,15 +85,15 @@ class SessionAvatarTest extends TestCase
     private function controls(): array
     {
         $dom = new ViewDom($this->htmlView('/events'));
-        $selector = new Selector('header', '.controls', 'a');
-        return $dom->findMany($selector->xPath());
+        $selector = new Selector('header', '.controls', 'a', 'text()');
+        return $dom->findTextMany($selector->xPath());
     }
 
     private function renderedAvatarUrl(): string
     {
         $dom = new ViewDom($this->htmlView('/events'));
         $selector = new Selector('header', '#userAvatar', '@src');
-        return $dom->find($selector->xPath());
+        return $dom->findText($selector->xPath());
     }
 
     private function htmlView(string $uri): string

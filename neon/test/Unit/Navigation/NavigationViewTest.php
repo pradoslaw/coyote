@@ -26,7 +26,7 @@ class NavigationViewTest extends TestCase
         $view = $this->navigation(['items' => ['Foo' => '', 'Bar' => '']]);
         $this->assertSame(
             ['Foo', 'Bar'],
-            $view->findMany('nav', 'ul.menu-items', 'li', 'a'));
+            $view->findTextMany('nav', 'ul.menu-items', 'li', 'a'));
     }
 
     /**
@@ -50,7 +50,7 @@ class NavigationViewTest extends TestCase
         $view = $this->navigation(['controls' => ['Register' => '', 'Login' => '']]);
         $this->assertSame(
             ['Register', 'Login'],
-            $view->findMany('ul.controls', 'li', 'a'));
+            $view->findTextMany('ul.controls', 'li', 'a'));
     }
 
     /**
@@ -78,7 +78,7 @@ class NavigationViewTest extends TestCase
         ]);
         $this->assertSame(
             [],
-            $view->findMany('ul.controls', 'li', 'a', '@href'));
+            $view->findTextMany('ul.controls', 'li', 'a', '@href'));
     }
 
     /**
@@ -89,7 +89,7 @@ class NavigationViewTest extends TestCase
         $view = $this->navigation(['githubName' => 'Joe']);
         $this->assertSame(
             'Joe',
-            $view->find('.github', '.name'));
+            $view->findText('.github', '.name'));
     }
 
     /**
@@ -111,7 +111,7 @@ class NavigationViewTest extends TestCase
         $view = $this->navigation(['githubStars' => '4']);
         $this->assertSame(
             '4',
-            $view->find('.github', '.stars'));
+            $view->findText('.github', '.stars'));
     }
 
     /**
@@ -172,7 +172,7 @@ class NavigationViewTest extends TestCase
         $view = $this->navigation(['loggedIn' => true]);
         $this->assertSame(
             'Logout',
-            $view->find('#logout'));
+            $view->findText('#logout'));
     }
 
     /**
@@ -183,6 +183,6 @@ class NavigationViewTest extends TestCase
         $view = $this->navigation([]);
         $this->assertSame(
             [],
-            $view->findMany('#logout'));
+            $view->findTextMany('#logout'));
     }
 }
