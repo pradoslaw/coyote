@@ -58,12 +58,12 @@ class PaymentController extends Controller
 
         $firm = $payment->job->firm ?? new Firm();
 
-        if (empty($firm->country_id)) {
-            $geoIp = app('geo-ip');
-            $result = $geoIp->ip($this->request->ip());
-
-            $firm->country = $result->country_code ?? null;
-        }
+//        if (empty($firm->country_id)) {
+//            $geoIp = app('geo-ip');
+//            $result = $geoIp->ip($this->request->ip());
+//
+//            $firm->country = $result->country_code ?? null;
+//        }
 
         $calculator = CalculatorFactory::payment($payment);
 
