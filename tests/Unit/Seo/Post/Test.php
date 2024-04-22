@@ -16,10 +16,10 @@ class Test extends TestCase
      */
     function canonicalLink()
     {
-        $id = $this->newPost('papaya-slug', 'Papaya topic');
+        [$topicId, $postId] = $this->newPostInTopic('papaya-slug', 'Papaya topic');
         $this->assertRendered(
-            $this->markdownLink("/Forum/$id"),
-            $this->htmlLink("/Forum/papaya-slug/$id-papaya_topic"));
+            $this->markdownLink("/Forum/$postId"),
+            $this->htmlLink("/Forum/papaya-slug/$topicId-papaya_topic?p=$postId#id$postId"));
     }
 
     /**
@@ -105,10 +105,10 @@ class Test extends TestCase
      */
     function acceptsQueryString()
     {
-        $id = $this->newPost('guava-slug', 'Guava topic');
+        [$topicId, $postId] = $this->newPostInTopic('guava-slug', 'Guava topic');
         $this->assertRendered(
-            $this->markdownLink("/Forum/$id?foo=bar"),
-            $this->htmlLink("/Forum/guava-slug/$id-guava_topic"));
+            $this->markdownLink("/Forum/$postId?foo=bar"),
+            $this->htmlLink("/Forum/guava-slug/$topicId-guava_topic?p=$postId#id$postId"));
     }
 
     private function assertLinkUnchanged(string $uri): void
@@ -130,7 +130,15 @@ class Test extends TestCase
         return (new Post(['text' => $markdown]))->html;
     }
 
-    private function newPost(string $forumSlug = null, string $topicTitle = null): int
+    private function newPostInTopic(string $forumSlug = null, string $topicTitle = null): array
+    {
+        $topic = $this->storeThread(
+            new Forum(['slug' => $forumSlug]),
+            new Topic(['title' => $topicTitle]));
+        return [$topic->id, $topic->first_post_id];
+    }
+
+    private function newPost(string $forumSlug = null, string $topicTitle = null): string
     {
         $topic = $this->storeThread(
             new Forum(['slug' => $forumSlug]),

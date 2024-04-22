@@ -63,14 +63,15 @@ readonly class InternalLinkProcessor
         /** @var Post $post */
         $post = Post::query()->find($id);
         if ($post) {
-            return $this->canonicalLink($post, $id);
+            return $this->canonicalLink($post);
         }
         return null;
     }
 
-    private function canonicalLink(Post $post, int $id): string
+    private function canonicalLink(Post $post): string
     {
-        return "/Forum/{$post->forum->slug}/$id-{$post->topic->slug}";
+        $url = route('forum.topic', [$post->forum->slug, $post->topic->id, $post->topic->slug], absolute:false);
+        return "{$url}?p={$post->id}#id{$post->id}";
     }
 
     private function setInternalLinkTitle(Link $link, string $host, string $path): void
