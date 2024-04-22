@@ -134,7 +134,7 @@ class NotificationsController extends BaseController
 
     private function isUuid(string $uuid): bool
     {
-        return \preg_match("/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i", $uuid);
+        return \preg_match("/^[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}$/i", $uuid);
     }
 
     public function redirectToUrl(): RedirectResponse
