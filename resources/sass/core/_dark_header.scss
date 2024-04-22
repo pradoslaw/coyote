@@ -99,7 +99,8 @@ body.theme-dark {
           color: #bcbcbc;
         }
 
-        &:hover {
+        &:hover,
+        &:focus {
           background-color: #404040;
         }
       }
