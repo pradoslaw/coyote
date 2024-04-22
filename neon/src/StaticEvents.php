@@ -12,36 +12,6 @@ class StaticEvents implements Events
     {
         return [
             new Event(
-                'Best Hacking League',
-                'Warszawa',
-                true,
-                ['software', 'hardware', 'ai', 'cybersecurity'],
-                new Date(2024, 4, 20),
-                EventKind::Hackaton,
-                'https://besthackingleague.pl/',
-                'https://4programmers.net/Mikroblogi/View/141082/',
-            ),
-            new Event(
-                '18 Sesja Linuksowa',
-                'Wrocław',
-                true,
-                ['linux', 'opensource'],
-                new Date(2024, 4, 20),
-                EventKind::Conference,
-                'https://18.sesja.linuksowa.pl/',
-                'https://4programmers.net/Mikroblogi/View/141364/',
-            ),
-            new Event(
-                'SForce Summit 2024',
-                'Online',
-                true,
-                ['salesforce'],
-                new Date(2024, 4, 23),
-                EventKind::Conference,
-                'https://sforcesummit.pl/',
-                'https://4programmers.net/Mikroblogi/View/141331',
-            ),
-            new Event(
                 'Founders Mind VII',
                 'Warszawa',
                 false,
