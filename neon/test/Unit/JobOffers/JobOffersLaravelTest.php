@@ -86,6 +86,7 @@ class JobOffersLaravelTest extends TestCase
         $job->user_id = $user->id;
         $job->plan_id = $plan->id;
         $job->firm_id = $firm->id;
+        $job->is_publish = true;
         $job->save();
         $location = new Job\Location();
         $location->city = $fields['city'] ?? '';
