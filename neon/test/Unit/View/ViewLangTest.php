@@ -49,7 +49,7 @@ class ViewLangTest extends TestCase
     public function navigationItems(): void
     {
         $this->assertSame(
-            ['Forum', 'Mikroblogi', 'Praca', 'Kompendium'],
+            ['Forum', 'Mikroblogi', 'Praca', 'Kompendium', 'Wydarzenia'],
             $this->viewNavigationItems($this->view()));
     }
 

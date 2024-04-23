@@ -62,6 +62,7 @@ readonly class View
                 $this->lang->t('Microblogs') => '/Mikroblogi',
                 $this->lang->t('Jobs')       => '/Praca',
                 $this->lang->t('Wiki')       => '/Kategorie',
+                $this->lang->t('Events')     => '/events',
             ],
             'https://github.com/pradoslaw/coyote',
             'https://github.com/pradoslaw/coyote/stargazers',

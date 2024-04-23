@@ -49,7 +49,7 @@ class ViewTest extends TestCase
     public function navigationItems(): void
     {
         $this->assertSame(
-            ['Forum', 'Microblogs', 'Jobs', 'Wiki',],
+            ['Forum', 'Microblogs', 'Jobs', 'Wiki', 'Events'],
             $this->findTextMany($this->view(), 'nav', 'ul.menu-items', 'li', 'a'));
     }
 
@@ -59,7 +59,7 @@ class ViewTest extends TestCase
     public function navigationItemsLinks(): void
     {
         $this->assertSame(
-            ['/Forum', '/Mikroblogi', '/Praca', '/Kategorie'],
+            ['/Forum', '/Mikroblogi', '/Praca', '/Kategorie', '/events'],
             $this->findMany($this->view(), 'nav', 'ul.menu-items', 'li', 'a', '@href'));
     }
 
