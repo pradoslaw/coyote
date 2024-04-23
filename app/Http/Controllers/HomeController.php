@@ -14,6 +14,7 @@ use Coyote\Repositories\Criteria\Forum\SkipHiddenCategories;
 use Coyote\Repositories\Criteria\Topic\OnlyThoseWithAccess as OnlyThoseTopicsWithAccess;
 use Coyote\Services\Flags;
 use Coyote\Services\Microblogs\Builder;
+use Coyote\Services\Parser\Extensions\Emoji;
 use Coyote\Services\Session\Renderer;
 use Coyote\Services\Widgets\WhatsNew;
 use Illuminate\Contracts\Cache;
@@ -51,6 +52,7 @@ class HomeController extends Controller
                 'year'  => $this->reputation->yearly(),
                 'total' => $this->reputation->total(),
             ]),
+            'emojis'      => Emoji::all(),
             'events'      => \array_map(
                 fn(Domain\Event\Event $event) => new Components\Event\Event(new Polish(), $event),
                 (new StaticEvents())->fetchEvents(),
