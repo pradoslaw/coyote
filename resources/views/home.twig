@@ -201,24 +201,26 @@
             </div>
           {% endfor %}
 
-          <p class="text-center">
-            <span id="showAllEvents">
-              Zobacz więcej wydarzeń
-            </span>
-            <script>
-              (function () {
-                const button = document.getElementById("showAllEvents");
-                button.addEventListener('click', () => {
-                  Array.from(document.querySelectorAll(".card-event"))
-                    .forEach(event => event.style.display = 'block');
-                  button.style.display = 'none';
-                  if (window.stickyAsideReposition) {
-                    window.stickyAsideReposition();
-                  }
-                });
-              })();
-            </script>
-          </p>
+          {% if events|length > 3 %}
+            <p class="text-center">
+              <span id="showAllEvents">
+                Zobacz więcej wydarzeń
+              </span>
+              <script>
+                (function () {
+                  const button = document.getElementById("showAllEvents");
+                  button.addEventListener('click', () => {
+                    Array.from(document.querySelectorAll(".card-event"))
+                      .forEach(event => event.style.display = 'block');
+                    button.style.display = 'none';
+                    if (window.stickyAsideReposition) {
+                      window.stickyAsideReposition();
+                    }
+                  });
+                })();
+              </script>
+            </p>
+          {% endif %}
 
           <div class="card card-default card-add-event" style="">
             <div class="card-header" style="background-color:#80a41a;">
