@@ -4,6 +4,7 @@ namespace Neon\View;
 use Neon\Domain;
 use Neon\Domain\Attendance;
 use Neon\Domain\Visitor;
+use Neon\View\Components\AddEventHtml;
 use Neon\View\Html\Head\Favicon;
 use Neon\View\Html\Head\Title;
 use Neon\View\Html\Item;
@@ -34,6 +35,9 @@ readonly class View
                     $h->tag('aside', ['class' => 'lg:w-1/4 lg:pr-2 mb-4 lg:mb-0'], [
                         ...$this->attendance($attendance)->render($h),
                         ...$this->jobOffers($offers)->render($h),
+                        $h->tag('div', ['class' => 'mt-4'], [
+                            ...$this->eventPrompt()->render($h),
+                        ]),
                     ]),
                     $h->tag('main',
                         ['class' => 'lg:w-3/4 lg:pl-2'],
@@ -97,5 +101,10 @@ readonly class View
         return new Components\JobOffer\JobOffersHtml($this->lang->t('Search for jobs'),
             \array_map(fn(Domain\JobOffer $offer) => new Components\JobOffer\JobOffer($this->lang, $offer),
                 $offers));
+    }
+
+    private function eventPrompt(): Item
+    {
+        return new AddEventHtml($this->lang, 'https://wydarzenia.4programmers.net/');
     }
 }

@@ -38,6 +38,13 @@ class Polish implements Language
         'Fri' => 'Pt',
         'Sat' => 'Sb',
         'Sun' => 'Nd',
+
+        'Are you hosting an event?'                                               =>
+            'Organizujesz wydarzenie?',
+        "Add your event to our calendar and we'll gladly provide media support." =>
+            'Zarejestruj je w naszym kalendarzu, a z radością udzielimy mu wsparcia medialnego.',
+        'Learn more'                                                              =>
+            'Dowiedz się więcej',
     ];
 
     public function t(string $phrase): string

@@ -18,7 +18,7 @@ readonly class JobOffersHtml implements Item
     public function render(Render $h): array
     {
         return [
-            $h->tag('section', ['id' => 'jobs'], [
+            $h->tag('section', ['id' => 'jobs', 'class' => 'mb-8'], [
                 $h->tag('h2',
                     ['class' => 'text-xs text-[#053B00] mb-4 tracking-tight'],
                     [$this->sectionTitle]),
