@@ -67,6 +67,16 @@ class RenderTest extends TestCase
     /**
      * @test
      */
+    public function fragmentWithParentClass(): void
+    {
+        $h = new Render();
+        $parent = $h->tag('div', [], [$h->many([$h->tag('span', ['parentClass' => 'foo'], [])])]);
+        $this->assertHtml('<div class="foo"><span></span></div>', $parent);
+    }
+
+    /**
+     * @test
+     */
     public function javaScriptEvents(): void
     {
         $h = new Render();

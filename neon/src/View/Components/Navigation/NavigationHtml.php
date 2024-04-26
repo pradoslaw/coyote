@@ -47,13 +47,8 @@ readonly class NavigationHtml implements Item
                 $h->tag('div', ['class' => 'flex'], [
                     $this->githubButton($h, 'mr-4'),
                     $this->controls($h),
-                    $this->logoutButton($h),
                     $this->navigation->avatarVisible ?
-                        $h->tag('img', [
-                            'src'   => $this->navigation->avatarUrl,
-                            'class' => 'size-[30px] self-center rounded',
-                            'style' => 'border: 1px solid rgb(226, 226, 226);',
-                            'id'    => 'userAvatar'], [])
+                        $this->userAvatar($h)
                         : null,
                 ]),
             ]),
@@ -142,30 +137,6 @@ starIcon,);
             ]);
     }
 
-    private function logoutButton(Render $h): Tag
-    {
-        if (!$this->navigation->canLogout) {
-            return $h->many([]);
-        }
-        return $h->many([
-            $h->tag('span',
-                ['class' => 'px-2 py-1.5 self-center cursor-pointer', 'id' => 'logout'],
-                [
-                    $this->navigation->logoutTitle,
-                ]),
-
-            $h->html(<<<javaScript
-                <script>
-                    const logout = document.querySelector('#logout');
-                    logout.addEventListener('click', () => {
-                        fetch('/Logout', {method:'POST', headers:{'X-CSRF-TOKEN':'{$this->navigation->csrf}'}})
-                            .then(r => window.location.reload());
-                    });
-                </script>
-                javaScript,),
-        ]);
-    }
-
     private function cssStylePlaceholder(Render $h, string $cssSelector, string $placeholderColor): Tag
     {
         $line = [
@@ -183,5 +154,38 @@ starIcon,);
     private function javaScript(Render $h, string $sourceCode): Tag
     {
         return $h->html("<script>$sourceCode</script>");
+    }
+
+    private function userAvatar(Render $h): Tag
+    {
+        return $h->tag('div', ['class' => 'self-center'], [
+            $h->tag('img', [
+                'src'     => $this->navigation->avatarUrl,
+                'class'   => 'size-[30px] self-center rounded',
+                'style'   => 'border: 1px solid rgb(226, 226, 226);',
+                'onClick' => 'toggleDropdown(event)',
+                'id'      => 'userAvatar'], []),
+            $h->tag('span',
+                [
+                    'parentClass' => 'relative',
+                    'class'       => 'px-6 py-1.5 inline-block cursor-pointer absolute z-[1] border border-solid border-[#E2E2E2] bg-[#F0F2F5] rounded top-9 right-0 hidden',
+                    'onClick'     => 'logout()',
+                    'id'          => 'logout',
+                ],
+                [$this->navigation->logoutTitle]),
+            $this->javaScript($h, "
+                const avatar = document.querySelector('#userAvatar');
+                const logoutButton = document.querySelector('#logout');
+                
+                function toggleDropdown(event) {
+                    logoutButton.classList.toggle('hidden');
+                }
+                
+                function logout() {
+                  fetch('/Logout', {method:'POST', headers:{'X-CSRF-TOKEN':'{$this->navigation->csrf}'}})
+                    .then(r => window.location.reload());
+                }
+                "),
+        ]);
     }
 }

@@ -9,7 +9,7 @@ readonly class FragmentTag implements Tag
 
     public function __construct(private array $children)
     {
-        $this->parentClass = null;
+        $this->parentClass = $this->parentClass($this->children);
     }
 
     public function html(): string
@@ -27,5 +27,17 @@ readonly class FragmentTag implements Tag
             }
         }
         return $html;
+    }
+
+    private function parentClass(array $children): ?string
+    {
+        foreach ($children as $child) {
+            if ($child instanceof Tag) {
+                if ($child->parentClass) {
+                    return $child->parentClass;
+                }
+            }
+        }
+        return null;
     }
 }
