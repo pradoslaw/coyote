@@ -21,7 +21,7 @@ class EmojiRenderer implements NodeRendererInterface
         if (Emoji::exists($emoji->code)) {
             return self::htmlElement(new Emoji($emoji->code));
         }
-        return '';
+        return ":$emoji->code:";
     }
 
     public static function htmlElement(Emoji $emoji): HtmlElement
