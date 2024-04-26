@@ -14,13 +14,36 @@ readonly class NavigationHtml implements Item
     public function render(Render $h): array
     {
         return [
-            $h->tag('header', ['class' => 'container mx-auto flex text-[#4E5973] text-sm justify-between mb-4'], [
+            $h->tag('header', ['class' => 'container mx-auto flex text-[#4E5973] text-sm mb-4'], [
                 $h->tag('div', ['class' => 'flex'], [
                     $h->tag('a',
                         ['id' => 'homepage', 'href' => $this->navigation->homepageUrl, 'class' => 'self-center mr-3.5'],
                         [$this->logo($h, ''),]),
                     $this->menuItems($h),
                 ]),
+                $h->tag('div',
+                    [
+                        'id'               => 'search-bar',
+                        'class'            => 'grow ml-10 text-[#4e5973] whitespace-nowrap items-center hidden lg:flex',
+                        'style'            => 'font-family:Arial;',
+                        'content-editable' => 'true',
+                    ],
+                    [
+                        $this->magnifyingGlass($h, 'size-3.5 fill-current mr-2'),
+                        $this->cssStylePlaceholder($h, '#search-bar input', '#4e5973'),
+                        $this->javaScript($h, 'function searchInputKeyPress(event) {
+                            if (event.keyCode === 13) {
+                                const url = "/Search?q=" + encodeURIComponent(event.target.value);
+                                window.location.href = url;
+                            }
+                        }'),
+                        $h->tag('input', [
+                            'class'       => 'outline-none bg-transparent text-black w-full',
+                            'placeholder' => $this->navigation->searchBarTitle,
+                            'onKeyPress'  => 'searchInputKeyPress(event)',
+                        ], []),
+                    ]),
+
                 $h->tag('div', ['class' => 'flex'], [
                     $this->githubButton($h, 'mr-4'),
                     $this->controls($h),
@@ -35,6 +58,20 @@ readonly class NavigationHtml implements Item
                 ]),
             ]),
         ];
+    }
+
+    private function magnifyingGlass(Render $h, string $className): Tag
+    {
+        return $h->html(<<<magnifyingGlass
+            <?xml version="1.0" encoding="iso-8859-1"?>
+            <svg class="$className" height="14px" width="14px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 490.4 490.4" xml:space="preserve">
+              <g>
+                <path d="M484.1,454.796l-110.5-110.6c29.8-36.3,47.6-82.8,47.6-133.4c0-116.3-94.3-210.6-210.6-210.6S0,94.496,0,210.796
+                    s94.3,210.6,210.6,210.6c50.8,0,97.4-18,133.8-48l110.5,110.5c12.9,11.8,25,4.2,29.2,0C492.5,475.596,492.5,463.096,484.1,454.796z
+                    M41.1,210.796c0-93.6,75.9-169.5,169.5-169.5s169.6,75.9,169.6,169.5s-75.9,169.5-169.5,169.5S41.1,304.396,41.1,210.796z"/>
+              </g>
+            </svg>
+            magnifyingGlass,);
     }
 
     private function logo(Render $h, string $className): Tag
@@ -127,5 +164,24 @@ starIcon,);
                 </script>
                 javaScript,),
         ]);
+    }
+
+    private function cssStylePlaceholder(Render $h, string $cssSelector, string $placeholderColor): Tag
+    {
+        $line = [
+            "$cssSelector:-moz-placeholder           {color:$placeholderColor; opacity: 1;}",
+            "$cssSelector::-moz-placeholder          {color:$placeholderColor; opacity: 1;}",
+            "$cssSelector::-ms-input-placeholder     {color:$placeholderColor;}",
+            "$cssSelector::-webkit-input-placeholder {color:$placeholderColor;}",
+            "$cssSelector::placeholder               {color:$placeholderColor; opacity: 1;}",
+            "$cssSelector:placeholder-shown          {text-overflow:ellipsis;}",
+        ];
+        $styleSheet = \implode("\n", $line);
+        return $h->html("<style>$styleSheet</style>");
+    }
+
+    private function javaScript(Render $h, string $sourceCode): Tag
+    {
+        return $h->html("<script>$sourceCode</script>");
     }
 }

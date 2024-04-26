@@ -185,4 +185,15 @@ class NavigationViewTest extends TestCase
             [],
             $view->findTextMany('#logout'));
     }
+
+    /**
+     * @test
+     */
+    public function searchBar(): void
+    {
+        $view = $this->navigation([]);
+        $this->assertSame(
+            'Search threads, posts or users',
+            $view->find('header', '#search-bar', 'input', '@placeholder'));
+    }
 }

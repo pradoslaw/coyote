@@ -30,4 +30,15 @@ class NavigationViewModelLangTest extends TestCase
             'Wyloguj',
             $view->logoutTitle);
     }
+
+    /**
+     * @test
+     */
+    public function searchBarPl(): void
+    {
+        $view = $this->viewModel([], new Polish());
+        $this->assertSame(
+            'Wyszukaj wątki, posty lub użytkowników',
+            $view->searchBarTitle);
+    }
 }

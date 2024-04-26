@@ -29,7 +29,7 @@ readonly class StandardTag implements Tag
         }
         return ' ' . \implode(' ',
                 \array_map(
-                    fn(string $key) => $key . '="' . $this->attributes[$key] . '"',
+                    fn(string $key) => $key . '="' . \htmlSpecialChars($this->attributes[$key]) . '"',
                     \array_keys($this->attributes)));
     }
 }

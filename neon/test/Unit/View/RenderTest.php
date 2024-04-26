@@ -64,12 +64,29 @@ class RenderTest extends TestCase
         $this->assertClass('foo bar', $parent);
     }
 
+    /**
+     * @test
+     */
+    public function javaScriptEvents(): void
+    {
+        $h = new Render();
+        $parent = $h->tag('div', ['onKeyPress' => 'console.log("foo");'], []);
+        $this->assertHtml('<div onKeyPress="console.log(&quot;foo&quot;);"></div>', $parent);
+    }
+
     private function assertClass(string $expectedClass, Html\Tag $tag): void
     {
         $dom = new ViewDom($tag->html());
         $this->assertSame(
             $expectedClass,
             $dom->findString('//div/@class'));
+    }
+
+    private function assertHtml(string $expectedHtml, Html\Tag $tag): void
+    {
+        $this->assertSame(
+            $expectedHtml,
+            $tag->html());
     }
 
     private function child(Render $h, string $parentClass): Html\Tag

@@ -45,6 +45,7 @@ class Polish implements Language
             'Zarejestruj je w naszym kalendarzu, a z radością udzielimy mu wsparcia medialnego.',
         'Learn more'                                                              =>
             'Dowiedz się więcej',
+        'Search threads, posts or users' => 'Wyszukaj wątki, posty lub użytkowników'
     ];
 
     public function t(string $phrase): string

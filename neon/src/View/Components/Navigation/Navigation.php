@@ -12,6 +12,7 @@ readonly class Navigation
     public bool $avatarVisible;
     public bool $canLogout;
     public string $logoutTitle;
+    public string $searchBarTitle;
 
     public function __construct(
         Language      $language,
@@ -39,5 +40,6 @@ readonly class Navigation
         $this->canLogout = $visitor->loggedIn();
         $this->avatarUrl = $visitor->loggedInUserAvatarUrl() ?? '/neon/avatarPlaceholder.png';
         $this->logoutTitle = $language->t('Logout');
+        $this->searchBarTitle = $language->t('Search threads, posts or users');
     }
 }
