@@ -5,6 +5,7 @@ use Neon\Application;
 use Neon\Test\BaseFixture\NoEvents;
 use Neon\Test\BaseFixture\NoJobOffers;
 use Neon\Test\BaseFixture\NoneAttendance;
+use Neon\Test\BaseFixture\NoSystem;
 use Neon\Test\BaseFixture\View\ViewDom;
 use Neon\Test\Unit\Navigation\Fixture\LoggedInUser;
 use PHPUnit\Framework\TestCase;
@@ -71,7 +72,7 @@ class ThemeSsrTest extends TestCase
                 new NoJobOffers(),
                 new NoEvents(),
                 LoggedInUser::guest(),
-                $darkTheme));
+                new NoSystem($darkTheme)));
     }
 
     private function dom(string $uri): ViewDom

@@ -5,6 +5,7 @@ use Neon\Application;
 use Neon\Test\BaseFixture\NoEvents;
 use Neon\Test\BaseFixture\NoJobOffers;
 use Neon\Test\BaseFixture\NoneAttendance;
+use Neon\Test\BaseFixture\NoSystem;
 use Neon\Test\BaseFixture\View\ViewDom;
 use Neon\Test\Unit\Navigation\Fixture\LoggedInUser;
 use PHPUnit\Framework\TestCase;
@@ -46,7 +47,8 @@ class HttpTest extends TestCase
                 new NoJobOffers(),
                 new NoEvents(),
                 LoggedInUser::guest(),
-                false));
+                new NoSystem(),
+            ));
     }
 
     private function dom(string $uri): ViewDom
