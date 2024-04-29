@@ -8,8 +8,15 @@ use Neon\View\Html\Render;
 
 readonly class HtmlView
 {
-    public function __construct(private array $head, private array $body)
+    private Theme $theme;
+
+    public function __construct(
+        private array $head,
+        private array $body,
+        bool          $darkTheme,
+    )
     {
+        $this->theme = new Theme($darkTheme);
     }
 
     public function html(): string
@@ -18,7 +25,7 @@ readonly class HtmlView
         $heads = [
             ...$this->head,
             // new Script('https://cdn.tailwindcss.com'), // for debug
-            new Style('css/neon.css?v8'),
+            new Style('css/neon.css?v10'),
             new Style('fonts/switzer/switzer.css'),
             new Style('fonts/inter/inter.css'),
         ];
@@ -30,7 +37,7 @@ readonly class HtmlView
                     ...\array_map(fn(Head $head) => $head->render($h), $heads),
                 ]),
                 $h->tag('body',
-                    ['class' => 'bg-[#F0F2F5] font-[Switzer] px-2 lg:px-4'],
+                    ['class' => "font-[Switzer] px-2 lg:px-4 {$this->theme->bodyBackground}"],
                     \array_merge(...\array_map(
                         fn(Item $item) => $item->render($h),
                         $this->body))),

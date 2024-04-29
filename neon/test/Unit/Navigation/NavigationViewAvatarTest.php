@@ -42,14 +42,14 @@ class NavigationViewAvatarTest extends TestCase
 
     private function isAvatarRendered(LoggedInUser $visitor): bool
     {
-        $application = new Application('', new NoneAttendance(), new NoJobOffers(), new NoEvents(), $visitor);
+        $application = new Application('', new NoneAttendance(), new NoJobOffers(), new NoEvents(), $visitor, false);
         $dom = new ViewDom($application->html(''));
         return $dom->exists('//header//img[@id="userAvatar"]');
     }
 
     private function renderedAvatarUrl(LoggedInUser $visitor): string
     {
-        $application = new Application('', new NoneAttendance(), new NoJobOffers(), new NoEvents(), $visitor);
+        $application = new Application('', new NoneAttendance(), new NoJobOffers(), new NoEvents(), $visitor, false);
         return $this->text($application, new Selector('header', '#userAvatar', '@src'));
     }
 

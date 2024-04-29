@@ -5,12 +5,14 @@ use Neon\Domain;
 use Neon\View\Html\Item;
 use Neon\View\Html\Render;
 use Neon\View\Html\Tag;
+use Neon\View\Theme;
 
 readonly class JobOffersHtml implements Item
 {
     public function __construct(
         private string $sectionTitle,
         private array  $offers,
+        private Theme  $theme,
     )
     {
     }
@@ -18,9 +20,9 @@ readonly class JobOffersHtml implements Item
     public function render(Render $h): array
     {
         return [
-            $h->tag('section', ['id' => 'jobs', 'class' => 'mb-8'], [
+            $h->tag('section', ['id' => 'jobs', 'class' => "mb-8 {$this->theme->jobOffersSection}"], [
                 $h->tag('h2',
-                    ['class' => 'text-xs text-[#053B00] mb-4 tracking-tight'],
+                    ['class' => "text-xs {$this->theme->jobOffersHeading} mb-4 tracking-tight"],
                     [$this->sectionTitle]),
                 $h->tag('div', ['class' => 'space-y-4'], \array_map(
                     fn(JobOffer $offer): Tag => $this->jobOffer($h, $offer),
@@ -35,7 +37,7 @@ readonly class JobOffersHtml implements Item
         return $h->tag('div', ['class' => 'flex space-x-4'], [
             $h->tag('img', ['src' => $offer->imageUrl, 'class' => 'size-8 shrink-0'], []),
             $h->tag('div', ['class' => 'flex flex-col space-y-1'], [
-                $h->tag('h3', ['class' => 'font-[Inter] text-[#4E5973] text-xs font-bold'], [
+                $h->tag('h3', ['class' => "font-[Inter] {$this->theme->jobOfferHeading} text-xs font-bold"], [
                     $h->tag('a', ['href' => $offer->url], [$offer->title]),
                 ]),
                 $h->tag('div', ['class' => 'flex flex-wrap'], [
@@ -78,7 +80,7 @@ readonly class JobOffersHtml implements Item
     function jobOfferTag(Render $h, Domain\Tag $tag): Tag
     {
         return $h->tag('span',
-            ['class' => 'inline-flex shrink-0 mr-1 mb-1 py-px px-1.5 text-xs leading-5 text-[#22488C] bg-[#E3E8F1] rounded-md font-[Arial] items-center whitespace-nowrap'],
+            ['class' => "inline-flex shrink-0 mr-1 mb-1 py-px px-1.5 text-xs leading-5 {$this->theme->jobOfferTag} rounded-md font-[Arial] items-center whitespace-nowrap"],
             [
                 $tag->imageUrl
                     ? $h->tag('img', ['class' => 'size-3 mr-1', 'src' => $tag->imageUrl], [])

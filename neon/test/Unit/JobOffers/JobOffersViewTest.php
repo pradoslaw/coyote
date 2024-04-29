@@ -7,6 +7,7 @@ use Neon\Domain\Tag;
 use Neon\Test\BaseFixture\ItemView;
 use Neon\View\Components\JobOffer\JobOffersHtml;
 use Neon\View\Language\English;
+use Neon\View\Theme;
 use PHPUnit\Framework\TestCase;
 
 class JobOffersViewTest extends TestCase
@@ -169,7 +170,8 @@ class JobOffersViewTest extends TestCase
                     $fields['offerCities'] ?? [],
                     $fields['offerRemoteWork'] ?? false,
                     $this->mapJobOfferTags($fields['offerTags'] ?? []),
-                    $fields['offerImage'] ?? ''))]));
+                    $fields['offerImage'] ?? ''))],
+            new Theme(false)));
     }
 
     private function mapJobOfferTags(array $tags): array
@@ -186,6 +188,6 @@ class JobOffersViewTest extends TestCase
                 new English(),
                 new JobOffer($title, '', '', [], false, [], '')),
             $titles,
-        )));
+        ), new Theme(false)));
     }
 }

@@ -8,6 +8,7 @@ use Neon\View;
 use Neon\View\Components\SectionHtml;
 use Neon\View\Language\English;
 use Neon\View\Language\Language;
+use Neon\View\Theme;
 
 trait ViewFixture
 {
@@ -33,24 +34,28 @@ trait ViewFixture
 
     function eventsSection(array $fields, Language $lang = null): ItemView
     {
+        $theme = new Theme(false);
         return new ItemView(new SectionHtml(
             '',
             '',
             $fields['sectionTitle'] ?? '',
             '',
-            [new View\Components\Event\EventHtml($this->viewEvent($fields, $lang), '')]));
+            [new View\Components\Event\EventHtml($this->viewEvent($fields, $lang), '', $theme)],
+            $theme));
     }
 
     function eventSectionEvents(array $titles): ItemView
     {
+        $theme = new Theme(false);
         return new ItemView(new View\Components\SectionHtml(
             '',
             '',
             '',
             '',
             \array_map(fn(string $title) => new View\Components\Event\EventHtml(
-                $this->viewEvent(['eventTitle' => $title]), ''),
-                $titles)));
+                $this->viewEvent(['eventTitle' => $title]), '', $theme),
+                $titles),
+            $theme));
     }
 
     function viewEvent(array $fields, Language $lang = null): View\Components\Event\Event

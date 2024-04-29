@@ -6,12 +6,13 @@ use Neon\View\Components\Navigation\Navigation;
 use Neon\View\Components\Navigation\NavigationHtml;
 use Neon\View\Language\English;
 use Neon\View\Language\Language;
+use Neon\View\Theme;
 
 trait ViewFixture
 {
     function navigation(array $fields): ItemView
     {
-        return new ItemView(new NavigationHtml($this->viewModel($fields, new English())));
+        return new ItemView(new NavigationHtml($this->viewModel($fields, new English()), new Theme(false)));
     }
 
     function viewModel(array $fields, Language $language): Navigation

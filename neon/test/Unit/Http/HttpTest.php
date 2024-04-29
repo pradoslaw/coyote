@@ -45,7 +45,8 @@ class HttpTest extends TestCase
                 new NoneAttendance(),
                 new NoJobOffers(),
                 new NoEvents(),
-                LoggedInUser::guest()));
+                LoggedInUser::guest(),
+                false));
     }
 
     private function dom(string $uri): ViewDom

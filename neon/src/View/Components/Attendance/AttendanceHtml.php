@@ -4,10 +4,11 @@ namespace Neon\View\Components\Attendance;
 use Neon\View\Html\Item;
 use Neon\View\Html\Render;
 use Neon\View\Html\Tag;
+use Neon\View\Theme;
 
 readonly class AttendanceHtml implements Item
 {
-    public function __construct(private \Neon\View\Components\Attendance\Attendance $vm)
+    public function __construct(private Attendance $vm, private Theme $theme)
     {
     }
 
@@ -48,18 +49,30 @@ readonly class AttendanceHtml implements Item
     private function bottomCenterHighlight(Render $h): Tag
     {
         return $h->tag('div', [
-            'class'       => 'top-6 z-[2]',
+            'class'       => "absolute top-6 z-[2] {$this->theme->attendanceHighlightBackground}",
             'style'       => \implode('', [
                 'width:580px;',
                 'height:580px;',
                 'border-radius:580px;',
-                'background:rgba(0, 165, 56, 0.3);',
                 'filter:blur(50px);',
-                'position:absolute;',
-                'left:50%;',
-                'transform:translateX(-50%)',
+                ...$this->highlightPosition(),
             ]),
             'parentClass' => 'relative overflow-hidden',
         ], []);
+    }
+
+    private function highlightPosition(): array
+    {
+        if ($this->theme->dark) {
+            return [
+                'right:50%;',
+                'top:50%;',
+                'transform:translateY(-25%)',
+            ];
+        }
+        return [
+            'left:50%;',
+            'transform:translateX(-50%)',
+        ];
     }
 }

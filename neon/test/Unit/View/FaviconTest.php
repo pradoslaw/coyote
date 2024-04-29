@@ -14,7 +14,7 @@ class FaviconTest extends TestCase
     public function test(): void
     {
         $view = new HtmlView([new Favicon('https://host/favicon.png')],
-            []);
+            [], false);
 
         $this->assertSame(
             '<link rel="shortcut icon" href="https://host/favicon.png" type="image/png">',

@@ -132,7 +132,8 @@ class ViewTest extends TestCase
             new Attendance(0, 0),
             [],
             LoggedInUser::guest(),
-            '');
+            '',
+            false);
     }
 
     private function find(View $view, string...$selectors): string

@@ -25,6 +25,7 @@ class ServiceProvider extends RouteServiceProvider
                 new JobOffers(),
                 new StaticEvents(),
                 new LaravelVisitor($this->app),
+                true,
             ));
     }
 

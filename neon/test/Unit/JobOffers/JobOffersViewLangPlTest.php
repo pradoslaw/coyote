@@ -5,6 +5,7 @@ use Neon\Domain;
 use Neon\Test\BaseFixture\ItemView;
 use Neon\View\Components\JobOffer\JobOffersHtml;
 use Neon\View\Language\Polish;
+use Neon\View\Theme;
 use PHPUnit\Framework\TestCase;
 
 class JobOffersViewLangPlTest extends TestCase
@@ -66,6 +67,7 @@ class JobOffersViewLangPlTest extends TestCase
                 $fields['offerRemoteWork'] ?? false,
                 [],
                 ''),
-            )]));
+            )],
+            new Theme(false)));
     }
 }

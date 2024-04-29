@@ -4,6 +4,7 @@ namespace Neon\Test\Unit\Attendance;
 use Neon\Domain;
 use Neon\Test\BaseFixture\ItemView;
 use Neon\View\Language\English;
+use Neon\View\Theme;
 use PHPUnit\Framework\TestCase;
 
 class AttendanceViewTest extends TestCase
@@ -61,6 +62,7 @@ class AttendanceViewTest extends TestCase
                     new Domain\Attendance(
                         $fields['totalAmount'] ?? 0,
                         $fields['onlineAmount'] ?? 0)),
+                new Theme(false),
             ));
     }
 }

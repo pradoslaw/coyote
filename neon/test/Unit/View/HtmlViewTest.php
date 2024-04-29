@@ -74,7 +74,7 @@ class HtmlViewTest extends TestCase
 
     private function viewHtml(string $title): string
     {
-        return (new HtmlView([new Title($title)], []))->html();
+        return (new HtmlView([new Title($title)], [],false))->html();
     }
 
     private function rendered(Render $h, string|Tag $str): string

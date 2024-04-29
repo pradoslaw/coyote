@@ -12,7 +12,7 @@ class ItemView
 
     public function __construct(Item $item)
     {
-        $view = new HtmlView([], [$item]);
+        $view = new HtmlView([], [$item], false);
         $this->viewDom = new ViewDom($view->html());
     }
 

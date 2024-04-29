@@ -12,6 +12,7 @@ readonly class Application
         private Persistence\JobOffers  $jobOffers,
         private Persistence\Events     $events,
         private Domain\Visitor         $visitor,
+        private bool                   $darkTheme,
     )
     {
     }
@@ -25,7 +26,8 @@ readonly class Application
             $this->attendance->fetchAttendance(),
             $this->jobOffers->fetchJobOffers(), // todo this is untested
             $this->visitor,
-            $csrf);
+            $csrf,
+            $this->darkTheme);
         return $view->html();
     }
 }

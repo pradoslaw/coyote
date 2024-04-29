@@ -4,17 +4,20 @@ namespace Neon\View\Components\Navigation;
 use Neon\View\Html\Item;
 use Neon\View\Html\Render;
 use Neon\View\Html\Tag;
+use Neon\View\Theme;
 
 readonly class NavigationHtml implements Item
 {
-    public function __construct(private Navigation $navigation)
+    public function __construct(
+        private Navigation $navigation,
+        private Theme      $theme)
     {
     }
 
     public function render(Render $h): array
     {
         return [
-            $h->tag('header', ['class' => 'container mx-auto flex text-[#4E5973] text-sm mb-4'], [
+            $h->tag('header', ['class' => "container mx-auto flex {$this->theme->navigationColor} text-sm mb-4"], [
                 $h->tag('div', ['class' => 'flex'], [
                     $h->tag('a',
                         ['id' => 'homepage', 'href' => $this->navigation->homepageUrl, 'class' => 'self-center mr-3.5'],
@@ -24,13 +27,13 @@ readonly class NavigationHtml implements Item
                 $h->tag('div',
                     [
                         'id'               => 'search-bar',
-                        'class'            => 'grow ml-10 text-[#4e5973] whitespace-nowrap items-center hidden lg:flex',
+                        'class'            => "grow ml-10 {$this->theme->searchBarColor} whitespace-nowrap items-center hidden lg:flex",
                         'style'            => 'font-family:Arial;',
                         'content-editable' => 'true',
                     ],
                     [
-                        $this->magnifyingGlass($h, 'size-3.5 fill-current mr-2'),
-                        $this->cssStylePlaceholder($h, '#search-bar input', '#4e5973'),
+                        $this->magnifyingGlass($h, "size-3.5 fill-current mr-2"),
+                        $this->cssStylePlaceholder($h, '#search-bar input'),
                         $this->javaScript($h, 'function searchInputKeyPress(event) {
                             if (event.keyCode === 13) {
                                 const url = "/Search?q=" + encodeURIComponent(event.target.value);
@@ -38,7 +41,7 @@ readonly class NavigationHtml implements Item
                             }
                         }'),
                         $h->tag('input', [
-                            'class'       => 'outline-none bg-transparent text-black w-full',
+                            'class'       => "outline-none bg-transparent w-full {$this->theme->searchBarActiveColor}",
                             'placeholder' => $this->navigation->searchBarTitle,
                             'onKeyPress'  => 'searchInputKeyPress(event)',
                         ], []),
@@ -100,14 +103,14 @@ readonly class NavigationHtml implements Item
     {
         $icon = function (string $class) use ($h): Tag {
             return $h->html(<<<starIcon
-<svg xmlns="http://www.w3.org/2000/svg" fill="none" width="16" height="16" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="$class">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
-</svg>
-starIcon,);
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" width="16" height="16" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="$class">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
+                </svg>
+                starIcon,);
         };
 
         return $h->tag('div',
-            ['class' => "github flex border border-solid border-[#E2E2E2] rounded divide-x font-[Helvetica] font-bold text-xs self-center $className"],
+            ['class' => "github flex {$this->theme->githubButtonBorder} {$this->theme->githubButtonDivideX} rounded font-[Helvetica] font-bold text-xs self-center $className"],
             [
                 $h->tag('a', [
                     'class' => 'name px-2.5 py-1.5 flex gap-x-2',
@@ -131,14 +134,15 @@ starIcon,);
     private function controlItem(Render $h, Link $link): Tag
     {
         return $h->tag('li',
-            ['class' => 'px-2 py-1.5 self-center ' . ($link->bold ? 'rounded bg-[#00A538] text-white whitespace-nowrap' : '')],
+            ['class' => 'px-2 py-1.5 self-center ' . ($link->bold ? "rounded whitespace-nowrap {$this->theme->navigationControlItem}" : '')],
             [
                 $h->tag('a', ['href' => $link->href], [$link->title]),
             ]);
     }
 
-    private function cssStylePlaceholder(Render $h, string $cssSelector, string $placeholderColor): Tag
+    private function cssStylePlaceholder(Render $h, string $cssSelector): Tag
     {
+        $placeholderColor = $this->theme->searchBarColor;
         $line = [
             "$cssSelector:-moz-placeholder           {color:$placeholderColor; opacity: 1;}",
             "$cssSelector::-moz-placeholder          {color:$placeholderColor; opacity: 1;}",
@@ -151,24 +155,18 @@ starIcon,);
         return $h->html("<style>$styleSheet</style>");
     }
 
-    private function javaScript(Render $h, string $sourceCode): Tag
-    {
-        return $h->html("<script>$sourceCode</script>");
-    }
-
     private function userAvatar(Render $h): Tag
     {
         return $h->tag('div', ['class' => 'self-center'], [
             $h->tag('img', [
                 'src'     => $this->navigation->avatarUrl,
-                'class'   => 'size-[30px] self-center rounded',
-                'style'   => 'border: 1px solid rgb(226, 226, 226);',
+                'class'   => "size-[30px] self-center rounded {$this->theme->navigationUserAvatarBorder}",
                 'onClick' => 'toggleDropdown(event)',
                 'id'      => 'userAvatar'], []),
             $h->tag('span',
                 [
                     'parentClass' => 'relative',
-                    'class'       => 'px-6 py-1.5 inline-block cursor-pointer absolute z-[1] border border-solid border-[#E2E2E2] bg-[#F0F2F5] rounded top-9 right-0 hidden',
+                    'class'       => "px-6 py-1.5 inline-block cursor-pointer absolute z-[1] {$this->theme->navigationUserAvatarBorder} {$this->theme->navigationDropdownStyle} rounded top-9 right-0 hidden",
                     'onClick'     => 'logout()',
                     'id'          => 'logout',
                 ],
@@ -187,5 +185,10 @@ starIcon,);
                 }
                 "),
         ]);
+    }
+
+    private function javaScript(Render $h, string $sourceCode): Tag
+    {
+        return $h->html("<script>$sourceCode</script>");
     }
 }

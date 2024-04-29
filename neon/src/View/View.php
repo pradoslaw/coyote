@@ -15,6 +15,7 @@ use Neon\View\Language\Language;
 readonly class View
 {
     private HtmlView $view;
+    private Theme $theme;
 
     public function __construct(
         private Language $lang,
@@ -23,13 +24,16 @@ readonly class View
         Attendance       $attendance,
         array            $offers,
         Visitor          $visitor,
-        string           $csrf)
+        string           $csrf,
+        bool             $darkTheme,
+    )
     {
+        $this->theme = new Theme($darkTheme);
         $this->view = new HtmlView([
             new Title($applicationName),
             new Favicon('https://4programmers.net/img/favicon.png'),
         ], [
-            new Components\Navigation\NavigationHtml($this->navigation($visitor, $csrf)),
+            new Components\Navigation\NavigationHtml($this->navigation($visitor, $csrf), $this->theme),
             new UntypedItem(fn(Render $h): array => [
                 $h->tag('div', ['class' => 'lg:flex container mx-auto'], [
                     $h->tag('aside', ['class' => 'lg:w-1/4 lg:pr-2 mb-4 lg:mb-0'], [
@@ -44,7 +48,8 @@ readonly class View
                         $this->eventsSection($applicationName, $events, $csrf)->render($h)),
                 ]),
             ]),
-        ]);
+        ],
+            $darkTheme);
     }
 
     public function html(): string
@@ -79,7 +84,10 @@ readonly class View
 
     private function attendance(Attendance $attendance): Components\Attendance\AttendanceHtml
     {
-        return new Components\Attendance\AttendanceHtml(new Components\Attendance\Attendance($this->lang, $attendance));
+        return new Components\Attendance\AttendanceHtml(
+            new Components\Attendance\Attendance($this->lang, $attendance),
+            $this->theme,
+        );
     }
 
     private function eventsSection(string $applicationName, array $events, string $csrf): Components\SectionHtml
@@ -92,20 +100,25 @@ readonly class View
             \array_map(
                 fn(Domain\Event\Event $event) => new Components\Event\EventHtml(
                     new Components\Event\Event($this->lang, $event),
-                    $csrf),
+                    $csrf,
+                    $this->theme),
                 $events,
-            ));
+            ),
+            $this->theme);
     }
 
     private function jobOffers(array $offers): Item
     {
-        return new Components\JobOffer\JobOffersHtml($this->lang->t('Search for jobs'),
-            \array_map(fn(Domain\JobOffer $offer) => new Components\JobOffer\JobOffer($this->lang, $offer),
-                $offers));
+        return new Components\JobOffer\JobOffersHtml(
+            $this->lang->t('Search for jobs'),
+            \array_map(
+                fn(Domain\JobOffer $offer) => new Components\JobOffer\JobOffer($this->lang, $offer),
+                $offers),
+            $this->theme);
     }
 
     private function eventPrompt(): Item
     {
-        return new AddEventHtml($this->lang, 'https://wydarzenia.4programmers.net/');
+        return new AddEventHtml($this->lang, 'https://wydarzenia.4programmers.net/', $this->theme);
     }
 }
