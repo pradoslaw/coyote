@@ -2,10 +2,7 @@
 namespace Neon\Test\Unit\Navigation;
 
 use Neon\Application;
-use Neon\Test\BaseFixture\NoEvents;
-use Neon\Test\BaseFixture\NoJobOffers;
-use Neon\Test\BaseFixture\NoneAttendance;
-use Neon\Test\BaseFixture\NoSystem;
+use Neon\Test\BaseFixture\Domain\TestApplication;
 use Neon\Test\BaseFixture\Selector\Selector;
 use Neon\Test\BaseFixture\View\ViewDom;
 use Neon\Test\Unit\Navigation\Fixture\LoggedInUser;
@@ -43,14 +40,14 @@ class NavigationViewAvatarTest extends TestCase
 
     private function isAvatarRendered(LoggedInUser $visitor): bool
     {
-        $application = new Application('', new NoneAttendance(), new NoJobOffers(), new NoEvents(), $visitor, new NoSystem());
+        $application = TestApplication::application(visitor:$visitor);
         $dom = new ViewDom($application->html(''));
         return $dom->exists('//header//img[@id="userAvatar"]');
     }
 
     private function renderedAvatarUrl(LoggedInUser $visitor): string
     {
-        $application = new Application('', new NoneAttendance(), new NoJobOffers(), new NoEvents(), $visitor, new NoSystem());
+        $application = TestApplication::application(visitor:$visitor);
         return $this->text($application, new Selector('header', '#userAvatar', '@src'));
     }
 

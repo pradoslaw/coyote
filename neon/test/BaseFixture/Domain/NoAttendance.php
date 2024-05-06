@@ -1,10 +1,10 @@
 <?php
-namespace Neon\Test\BaseFixture;
+namespace Neon\Test\BaseFixture\Domain;
 
 use Neon\Domain;
 use Neon\Persistence\Attendance;
 
-readonly class NoneAttendance implements Attendance
+readonly class NoAttendance implements Attendance
 {
     public function fetchAttendance(): Domain\Attendance
     {

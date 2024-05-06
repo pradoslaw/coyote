@@ -2,12 +2,8 @@
 namespace Neon\Test\Unit\Theme;
 
 use Neon\Application;
-use Neon\Test\BaseFixture\NoEvents;
-use Neon\Test\BaseFixture\NoJobOffers;
-use Neon\Test\BaseFixture\NoneAttendance;
-use Neon\Test\BaseFixture\NoSystem;
+use Neon\Test\BaseFixture\Domain\TestApplication;
 use Neon\Test\BaseFixture\View\ViewDom;
-use Neon\Test\Unit\Navigation\Fixture\LoggedInUser;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture;
 
@@ -66,13 +62,7 @@ class ThemeSsrTest extends TestCase
 
     private function setDarkTheme(bool $darkTheme): void
     {
-        $this->laravel->app->instance(Application::class,
-            new Application('',
-                new NoneAttendance(),
-                new NoJobOffers(),
-                new NoEvents(),
-                LoggedInUser::guest(),
-                new NoSystem($darkTheme)));
+        $this->laravel->app->instance(Application::class, TestApplication::application(darkTheme:$darkTheme));
     }
 
     private function dom(string $uri): ViewDom

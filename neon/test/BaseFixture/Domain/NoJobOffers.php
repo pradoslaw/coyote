@@ -1,5 +1,5 @@
 <?php
-namespace Neon\Test\BaseFixture;
+namespace Neon\Test\BaseFixture\Domain;
 
 use Neon\Persistence\JobOffers;
 
