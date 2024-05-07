@@ -1,7 +1,7 @@
 @extends('errors.503')
 
 @section('title')
-    You are banned!
+    You are banned
 @endsection
 
 @section('content')
