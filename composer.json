@@ -48,7 +48,7 @@
     "paylane/client": "^1.1",
     "predis/predis": "^1.0",
     "rawr/t-regx": "^v0.17.0",
-    "rcrowe/twigbridge": "^0.14.1",
+    "rcrowe/twigbridge": "^0.14.3",
     "sentry/sentry-laravel": "4.2.0",
     "stripe/stripe-php": "^7.66",
     "symfony/http-client": "^6.2",
