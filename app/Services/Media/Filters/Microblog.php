@@ -4,13 +4,6 @@ namespace Coyote\Services\Media\Filters;
 
 class Microblog extends Thumbnail
 {
-    /**
-     * @var int
-     */
-    protected $width = 180;
-
-    /**
-     * @var int
-     */
-    protected $height = 180;
+    public ?int $width = 180;
+    public int $height = 180;
 }

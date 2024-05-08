@@ -1,34 +1,15 @@
 <?php
-
 namespace Coyote\Services\Media;
-
-use Intervention\Image\ImageManager;
 
 class Url
 {
-    /**
-     * @var ImageManager
-     */
-    protected $imageManager;
-
-    /**
-     * @var File
-     */
-    protected $file;
-
     /**
      * @var null|bool
      */
     protected $secure;
 
-    /**
-     * @param ImageManager $imageManager
-     * @param File $file
-     */
-    public function __construct(ImageManager $imageManager, File $file)
+    public function __construct(private File $file)
     {
-        $this->imageManager = $imageManager;
-        $this->file = $file;
     }
 
     /**

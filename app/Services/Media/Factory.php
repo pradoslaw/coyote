@@ -27,15 +27,13 @@ class Factory
     public function make(string $type, array $options = []): MediaInterface
     {
         $class = $this->getClass($type);
-
         if (!class_exists($class, true)) {
             throw new \InvalidArgumentException("Can't find $class class in media factory.");
         }
-
-        return $this->setDefaultOptions(
-            new $class($this->app['filesystem']->disk(config('filesystems.default')), $this->app['image']),
-            $options
-        );
+        $fileSystem = $this->app['filesystem']->disk(config('filesystems.default'));
+        $imageWizard = $this->app[ImageWizard::class];
+        $media = new $class($fileSystem, $imageWizard);
+        return $this->setDefaultOptions($media, $options);
     }
 
     /**

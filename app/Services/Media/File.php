@@ -6,7 +6,6 @@ use Coyote\Services\Media\Filters\Thumbnail;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\File as LaravelFile;
 use Illuminate\Support\Str;
-use Intervention\Image\ImageManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mime\MimeTypes;
 
@@ -27,7 +26,7 @@ abstract class File implements MediaInterface
      */
     protected $filename;
 
-    public function __construct(private Filesystem $filesystem, private ImageManager $imageManager)
+    public function __construct(private Filesystem $filesystem, private ImageWizard $wizard)
     {
         if (empty($this->directory)) {
             $this->directory = strtolower(class_basename($this));
@@ -77,7 +76,7 @@ abstract class File implements MediaInterface
      */
     public function url($secure = null)
     {
-        return (new Url($this->imageManager, $this))->secure($secure);
+        return (new Url($this))->secure($secure);
     }
 
     /**
@@ -174,8 +173,7 @@ abstract class File implements MediaInterface
 
     protected function applyFilter(Thumbnail $thumbnail): void
     {
-        $image = $this->imageManager->make($this->get());
-        $this->filesystem->put($this->path(), $image->filter($thumbnail)->encode());
+        $this->filesystem->put($this->path(), $this->wizard->resizedImage($thumbnail, $this->get()));
     }
 
     /**

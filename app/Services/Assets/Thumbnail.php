@@ -2,8 +2,8 @@
 
 namespace Coyote\Services\Assets;
 
+use Coyote\Services\Media\ImageWizard;
 use Illuminate\Contracts\Filesystem\Filesystem;
-use Intervention\Image\ImageManager;
 
 class Thumbnail
 {
@@ -11,8 +11,8 @@ class Thumbnail
     private string $path;
 
     public function __construct(
-        private ImageManager $imageManager,
-        private Filesystem   $filesystem,
+        private ImageWizard $wizard,
+        private Filesystem  $filesystem,
     )
     {
     }
@@ -31,7 +31,8 @@ class Thumbnail
 
     public function store(string $path): void
     {
-        $image = $this->imageManager->make($this->filesystem->get($this->path));
-        $this->filesystem->put($path, $image->filter($this->filter)->encode());
+        $data = $this->filesystem->get($this->path);
+        $image = $this->wizard->resizedImage($this->filter, $data);
+        $this->filesystem->put($path, $image);
     }
 }

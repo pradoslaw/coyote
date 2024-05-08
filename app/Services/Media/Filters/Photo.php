@@ -4,13 +4,6 @@ namespace Coyote\Services\Media\Filters;
 
 class Photo extends Thumbnail
 {
-    /**
-     * @var int
-     */
-    protected $width = 120;
-
-    /**
-     * @var int
-     */
-    protected $height = 120;
+    public ?int $width = 120;
+    public int $height = 120;
 }
