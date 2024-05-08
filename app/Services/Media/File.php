@@ -3,25 +3,15 @@
 namespace Coyote\Services\Media;
 
 use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Http\File as LaravelFile;
 use Illuminate\Support\Str;
 use Intervention\Image\Filters\FilterInterface;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Intervention\Image\ImageManager;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mime\MimeTypes;
-use Illuminate\Http\File as LaravelFile;
 
 abstract class File implements MediaInterface
 {
-    /**
-     * @var Filesystem
-     */
-    protected $filesystem;
-
-    /**
-     * @var ImageManager
-     */
-    protected $imageManager;
-
     /**
      * @var string
      */
@@ -37,15 +27,8 @@ abstract class File implements MediaInterface
      */
     protected $filename;
 
-    /**
-     * @param Filesystem $filesystem
-     * @param ImageManager $imageManager
-     */
-    public function __construct(Filesystem $filesystem, ImageManager $imageManager)
+    public function __construct(private Filesystem $filesystem, private ImageManager $imageManager)
     {
-        $this->filesystem = $filesystem;
-        $this->imageManager = $imageManager;
-
         if (empty($this->directory)) {
             $this->directory = strtolower(class_basename($this));
         }
@@ -57,7 +40,7 @@ abstract class File implements MediaInterface
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getFilename()
     {
@@ -105,7 +88,7 @@ abstract class File implements MediaInterface
      */
     public function path($filename = null)
     {
-        return ($filename ?: $this->filename);
+        return $filename ?: $this->filename;
     }
 
     /**
@@ -154,7 +137,7 @@ abstract class File implements MediaInterface
         $path = $this->filesystem->putFile(
             $this->directory,
             $tmpFile,
-            'public'
+            'public',
         );
 
         $this->setFilename($path);
@@ -162,12 +145,9 @@ abstract class File implements MediaInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
-        return (string) $this->getFilename();
+        return (string)$this->getFilename();
     }
 
     /**
@@ -192,17 +172,10 @@ abstract class File implements MediaInterface
         return $this->{camel_case($name)}();
     }
 
-    /**
-     * @param FilterInterface $filter
-     * @return \Intervention\Image\Image
-     */
-    protected function applyFilter(FilterInterface $filter)
+    protected function applyFilter(FilterInterface $filter): \Intervention\Image\Image
     {
         $image = $this->imageManager->make($this->get());
-
-        // save new image
         $this->filesystem->put($this->path(), $image->filter($filter)->encode());
-
         return $image;
     }
 
