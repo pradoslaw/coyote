@@ -2,10 +2,10 @@
 
 namespace Coyote\Services\Media;
 
+use Coyote\Services\Media\Filters\Thumbnail;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\File as LaravelFile;
 use Illuminate\Support\Str;
-use Intervention\Image\Filters\FilterInterface;
 use Intervention\Image\ImageManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mime\MimeTypes;
@@ -172,10 +172,10 @@ abstract class File implements MediaInterface
         return $this->{camel_case($name)}();
     }
 
-    protected function applyFilter(FilterInterface $filter): \Intervention\Image\Image
+    protected function applyFilter(Thumbnail $thumbnail): \Intervention\Image\Image
     {
         $image = $this->imageManager->make($this->get());
-        $this->filesystem->put($this->path(), $image->filter($filter)->encode());
+        $this->filesystem->put($this->path(), $image->filter($thumbnail)->encode());
         return $image;
     }
 

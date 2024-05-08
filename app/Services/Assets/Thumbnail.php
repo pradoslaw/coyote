@@ -3,12 +3,11 @@
 namespace Coyote\Services\Assets;
 
 use Illuminate\Contracts\Filesystem\Filesystem;
-use Intervention\Image\Filters\FilterInterface;
 use Intervention\Image\ImageManager;
 
 class Thumbnail
 {
-    private FilterInterface $filter;
+    private \Coyote\Services\Media\Filters\Thumbnail $filter;
     private string $path;
 
     public function __construct(
@@ -18,7 +17,7 @@ class Thumbnail
     {
     }
 
-    public function setFilter(FilterInterface $filter): Thumbnail
+    public function setFilter(\Coyote\Services\Media\Filters\Thumbnail $filter): Thumbnail
     {
         $this->filter = $filter;
         return $this;

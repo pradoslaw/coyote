@@ -4,7 +4,6 @@ namespace Coyote\Services\Assets;
 
 use Coyote\Models\Asset;
 use Illuminate\Contracts\Filesystem\Filesystem;
-use Intervention\Image\Filters\FilterInterface;
 
 class Url
 {
@@ -29,14 +28,12 @@ class Url
         return $this->asset->isImage() ? $this->imageUrl($this->asset->path) : $this->downloadUrl($this->asset);
     }
 
-    public function thumbnail(FilterInterface $filter): string
+    public function thumbnail(\Coyote\Services\Media\Filters\Thumbnail $thumbnail): string
     {
-        $thumbnailPath = $this->thumbnailPath($filter);
-
+        $thumbnailPath = $this->thumbnailPath($thumbnail);
         if (!$this->filesystem->exists($thumbnailPath)) {
-            $this->thumbnail->setFilter($filter)->open($this->asset->path)->store($thumbnailPath);
+            $this->thumbnail->setFilter($thumbnail)->open($this->asset->path)->store($thumbnailPath);
         }
-
         return $this->imageUrl($thumbnailPath);
     }
 
@@ -50,9 +47,9 @@ class Url
         return route('assets.download', ['asset' => $asset->id, 'name' => basename($asset->path)]);
     }
 
-    protected function thumbnailPath(FilterInterface $filter): string
+    protected function thumbnailPath(\Coyote\Services\Media\Filters\Thumbnail $thumbnail): string
     {
-        $template = strtolower(class_basename($filter));
+        $template = strtolower(class_basename($thumbnail));
         $pathInfo = pathinfo($this->asset->path);
 
         return ltrim($pathInfo['dirname'] . '/' . $pathInfo['filename'] . '-' . $template . '.' . $pathInfo['extension'], '/');

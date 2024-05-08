@@ -2,6 +2,7 @@
 
 namespace Coyote\Http\Resources;
 
+use Coyote\Microblog;
 use Coyote\Services\Assets\Url;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -15,18 +16,21 @@ class AssetsResource extends JsonResource
         return array_merge(
             array_except($this->resource->toArray(), ['content_id', 'content_type']),
             [
-                'url' => (string) $url,
+                'url'       => (string)$url,
                 'thumbnail' => $this->when(
-                    // thumbnail only for images
-                    $this->resource->isImage() && class_exists($filter, true),
-                    fn () => $url->thumbnail(new $filter)
-                )
-            ]
+                // thumbnail only for images
+                    $this->resource->isImage() && class_exists($filter),
+                    fn() => $url->thumbnail(new $filter),
+                ),
+            ],
         );
     }
 
-    private function guessThumbnailFilter(string $content): string
+    private function guessThumbnailFilter(string $resourceClassName): string
     {
-        return "\\Coyote\\Services\\Media\\Filters\\" . ucfirst(class_basename($content));
+        if ($resourceClassName === Microblog::class) {
+            return \Coyote\Services\Media\Filters\Microblog::class;
+        }
+        return '';
     }
 }

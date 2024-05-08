@@ -3,7 +3,6 @@
 namespace Coyote\Services\Media;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Coyote\Services\Media\Filters\Logo as Filter;
 
 class Photo extends File
 {
@@ -15,7 +14,7 @@ class Photo extends File
     {
         parent::upload($uploadedFile);
 
-        $this->applyFilter(new Filter());
+        $this->applyFilter(new \Coyote\Services\Media\Filters\Logo());
 
         return $this;
     }
@@ -28,7 +27,7 @@ class Photo extends File
     {
         parent::put($content);
 
-        $this->applyFilter(new Filter());
+        $this->applyFilter(new \Coyote\Services\Media\Filters\Logo());
 
         return $this;
     }
