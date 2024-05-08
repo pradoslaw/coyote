@@ -172,11 +172,10 @@ abstract class File implements MediaInterface
         return $this->{camel_case($name)}();
     }
 
-    protected function applyFilter(Thumbnail $thumbnail): \Intervention\Image\Image
+    protected function applyFilter(Thumbnail $thumbnail): void
     {
         $image = $this->imageManager->make($this->get());
         $this->filesystem->put($this->path(), $image->filter($thumbnail)->encode());
-        return $image;
     }
 
     /**
