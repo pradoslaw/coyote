@@ -6,7 +6,7 @@ use Boduch\Grid\Decorators\DecoratorInterface;
 use Boduch\Grid\Decorators\Link;
 use Boduch\Grid\Decorators\Html;
 use Boduch\Grid\Decorators\Placeholder;
-use Boduch\Grid\Filters\FilterInterface;
+use Boduch\Grid\Filters\Field;
 
 class Column
 {
@@ -36,7 +36,7 @@ class Column
     protected $decorators = [];
 
     /**
-     * @var FilterInterface
+     * @var Field
      */
     protected $filter;
 
@@ -200,10 +200,10 @@ class Column
     }
 
     /**
-     * @param FilterInterface $filter
+     * @param Field $filter
      * @return $this
      */
-    public function setFilter(FilterInterface $filter)
+    public function setFilter(Field $filter)
     {
         $filter->setColumn($this);
         $this->filter = $filter;
@@ -212,7 +212,7 @@ class Column
     }
 
     /**
-     * @return FilterInterface
+     * @return Field
      */
     public function getFilter()
     {

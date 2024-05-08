@@ -5,7 +5,7 @@ namespace Boduch\Grid\Filters;
 use Boduch\Grid\Column;
 use Illuminate\Foundation\Application;
 
-abstract class Filter implements FilterInterface
+abstract class Filter implements Field
 {
     /**
      * @var string

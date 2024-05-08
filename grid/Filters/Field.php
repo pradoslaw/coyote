@@ -4,7 +4,7 @@ namespace Boduch\Grid\Filters;
 
 use Boduch\Grid\Column;
 
-interface FilterInterface
+interface Field
 {
     /**
      * @return Column
