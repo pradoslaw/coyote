@@ -22,6 +22,16 @@ class StaticEvents implements Events
                 'https://4programmers.net/Mikroblogi/View/141058/',
             ),
             new Event(
+                'Warsaw Salesforce Meetup #5',
+                'Warszawa',
+                true,
+                ['salesforce'],
+                new Date(2024, 5, 15),
+                EventKind::Conference,
+                'https://evenea.pl/pl/wydarzenie/sforcewarsaw5',
+                'https://4programmers.net/Mikroblogi/View/141687',
+            ),
+            new Event(
                 'Code Europe',
                 'Kraków',
                 false,
