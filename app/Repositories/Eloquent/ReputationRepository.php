@@ -34,12 +34,12 @@ class ReputationRepository extends Repository implements ReputationRepositoryInt
     public function history($userId, $offset = 0, $limit = 10)
     {
         return $this->model->select()
-                    ->join('reputation_types', 'reputation_types.id', '=', $this->raw('reputations.type_id'))
-                    ->where('user_id', $userId)
-                    ->orderBy('reputations.id', 'DESC')
-                    ->skip($offset)
-                    ->limit($limit)
-                    ->get();
+            ->join('reputation_types', 'reputation_types.id', '=', $this->raw('reputations.type_id'))
+            ->where('user_id', $userId)
+            ->orderBy('reputations.id', 'DESC')
+            ->skip($offset)
+            ->limit($limit)
+            ->get();
     }
 
     /**
@@ -56,7 +56,7 @@ class ReputationRepository extends Repository implements ReputationRepositoryInt
         $sql = $this
             ->model
             ->selectRaw(
-                'extract(MONTH FROM created_at) AS month, extract(YEAR FROM created_at) AS year, SUM(value) AS value'
+                'extract(MONTH FROM created_at) AS month, extract(YEAR FROM created_at) AS year, SUM(value) AS value',
             )
             ->whereRaw("user_id = $userId")
             ->whereRaw("created_at >= '$dt'")
@@ -72,10 +72,10 @@ class ReputationRepository extends Repository implements ReputationRepositoryInt
         }
 
         $rowset = [];
-
+        $months = ['styczeń', 'luty', 'marzec', 'kwiecień', 'maj', 'czerwiec', 'lipiec', 'sierpień', 'wrzesień', 'październik', 'listopad', 'grudzień'];
         for ($i = 0; $i <= $interval; $i++) {
             $key = $dt->format('Y-m');
-            $label = $dt->formatLocalized('%B %Y');
+            $label = $months[$dt->month - 1] . ' ' . $dt->format('Y');
 
             if (!isset($result[$key])) {
                 $rowset[] = ['value' => 0, 'year' => $dt->format('Y'), 'month' => $dt->format('n'), 'label' => $label];

@@ -1,6 +1,7 @@
 <?php
 namespace Coyote\Services\Widgets;
 
+use Carbon\Carbon;
 use Coyote\Microblog;
 use Coyote\Repositories\Criteria\Microblog\OnlyMine;
 use Coyote\Repositories\Criteria\Microblog\WithTag;
@@ -34,7 +35,7 @@ class WhatsNew
                 'id'      => $microblog->id,
                 'summary' => excerpt($microblog->html),
                 'href'    => route('microblog.view', [$microblog->id]),
-                'date'    => $microblog->created_at->formatLocalized('%d %b %y'),
+                'date'    => $this->dateFormat($microblog->created_at),
             ]),
         ]);
     }
@@ -51,5 +52,11 @@ class WhatsNew
     {
         $user = User::query()->where('name', '=', $name)->first(['id']);
         return $user->id ?? null;
+    }
+
+    private function dateFormat(Carbon $createdAt): string
+    {
+        $months = ['sty', 'lut', 'mar', 'kwi', 'maj', 'cze', 'lip', 'sie', 'wrz', 'paź', 'lis', 'gru'];
+        return $createdAt->format('d') . ' ' . $months[$createdAt->month - 1] . ' ' . $createdAt->format('y');
     }
 }

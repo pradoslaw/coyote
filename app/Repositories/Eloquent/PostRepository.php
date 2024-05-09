@@ -39,22 +39,22 @@ class PostRepository extends Repository implements PostRepositoryInterface
             })
             ->with(['user' => function ($builder) {
                 return $builder->select([
-                        'users.id',
-                        'users.name',
-                        'users.group_name',
-                        'photo',
-                        'posts',
-                        'sig',
-                        'location',
-                        'users.created_at',
-                        'visited_at',
-                        'deleted_at',
-                        'is_blocked',
-                        'allow_smilies',
-                        'allow_count',
-                        'allow_sig',
-                        'is_online'
-                    ]);
+                    'users.id',
+                    'users.name',
+                    'users.group_name',
+                    'photo',
+                    'posts',
+                    'sig',
+                    'location',
+                    'users.created_at',
+                    'visited_at',
+                    'deleted_at',
+                    'is_blocked',
+                    'allow_smilies',
+                    'allow_count',
+                    'allow_sig',
+                    'is_online',
+                ]);
             }])
             ->with(['editor:id,name,is_blocked,deleted_at', 'comments.user', 'assets'])
             ->get();
@@ -80,7 +80,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
             return $this
                 ->model
                 ->where('topic_id', $topicId)
-                ->where('posts.created_at', '<', fn ($builder) => $builder->select('created_at')->from('posts')->where('id', $postId))
+                ->where('posts.created_at', '<', fn($builder) => $builder->select('created_at')->from('posts')->where('id', $postId))
                 ->count();
         });
 
@@ -98,7 +98,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
             ->model
             ->select(['id'])
             ->where('topic_id', $topicId)
-                ->where('created_at', '>', $markTime)
+            ->where('created_at', '>', $markTime)
             ->orderBy('id')
             ->limit(1)
             ->value('id');
@@ -117,13 +117,13 @@ class PostRepository extends Repository implements PostRepositoryInterface
         $text = join("\n\n", [$previous->text, $post->text]);
 
         $data = [
-            'text'      => $text,
-            'title'     => $post->topic->title,
-            'tags'      => [],
-            'user_id'   => $userId,
-            'ip'        => request()->ip(),
-            'browser'   => request()->browser(),
-            'host'      => request()->getClientHost()
+            'text'    => $text,
+            'title'   => $post->topic->title,
+            'tags'    => [],
+            'user_id' => $userId,
+            'ip'      => request()->ip(),
+            'browser' => request()->browser(),
+            'host'    => request()->getClientHost(),
         ];
 
         if ($previous->id == $post->topic->first_post_id) {
@@ -165,7 +165,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
                 'topics.slug AS topic_slug',
                 'forums.slug AS forum_slug',
                 'users.id AS user_id',
-                'users.name AS user_name'
+                'users.name AS user_name',
             ])
             ->join('post_votes', 'post_votes.post_id', '=', 'posts.id')
             ->join('topics', 'topics.id', '=', 'posts.topic_id')
@@ -191,7 +191,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
                 'topics.slug AS topic_slug',
                 'forums.slug AS forum_slug',
                 'users.id AS user_id',
-                'users.name AS user_name'
+                'users.name AS user_name',
             ])
             ->join('post_accepts', 'post_accepts.post_id', '=', 'posts.id')
             ->join('topics', 'topics.id', '=', 'posts.topic_id')
@@ -215,7 +215,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
                 'forums.slug',
                 'forums.name',
                 $this->raw('COUNT(posts.id) AS posts_count'),
-                $this->raw('SUM(score) AS votes_count')
+                $this->raw('SUM(score) AS votes_count'),
             ])
             ->join('forums', 'forums.id', '=', 'posts.forum_id')
             ->where('posts.user_id', $userId)
@@ -261,9 +261,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
 
         $sql = $this
             ->model
-            ->selectRaw(
-                'extract(MONTH FROM created_at) AS month, extract(YEAR FROM created_at) AS year, COUNT(*) AS count'
-            )
+            ->selectRaw('extract(MONTH FROM created_at) AS month, extract(YEAR FROM created_at) AS year, COUNT(*) AS count')
             ->whereRaw("user_id = $userId")
             ->whereRaw("created_at >= '$dt'")
             ->groupBy('year')
@@ -281,7 +279,8 @@ class PostRepository extends Repository implements PostRepositoryInterface
 
         for ($i = 0; $i <= $interval; $i++) {
             $key = $dt->format('Y-m');
-            $label = $dt->formatLocalized('%B %Y');
+            $months = ['styczeń', 'luty', 'marzec', 'kwiecień', 'maj', 'czerwiec', 'lipiec', 'sierpień', 'wrzesień', 'październik', 'listopad', 'grudzień'];
+            $label = $months[$dt->month - 1] . ' ' . $dt->format('Y');
 
             if (!isset($result[$key])) {
                 $rowset[] = ['count' => 0, 'year' => $dt->format('Y'), 'month' => $dt->format('n'), 'label' => $label];
@@ -345,7 +344,7 @@ class PostRepository extends Repository implements PostRepositoryInterface
             ->model
             ->addSelect([// addSelect() instead of select() to retrieve extra columns in criteria
                 'posts.*',
-                'pa.user_id AS is_accepted'
+                'pa.user_id AS is_accepted',
             ])
             ->from($this->raw("($sub) AS posts"))
             ->leftJoin('post_accepts AS pa', 'pa.post_id', '=', 'posts.id')

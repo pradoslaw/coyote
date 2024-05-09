@@ -3,15 +3,13 @@
 namespace Boduch\Grid\Decorators;
 
 use Carbon\Carbon;
+use Coyote\Services\Helper\DateDifference;
 
 class DateTimeLocalized extends DateTime
 {
-    /**
-     * @param $dateTime
-     * @return string
-     */
     protected function formatDateTime($dateTime)
     {
-        return Carbon::parse($dateTime)->formatLocalized($this->format);
+        $dif = new DateDifference($this->format, false);
+        return $dif->format(Carbon::parse($dateTime));
     }
 }
