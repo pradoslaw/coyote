@@ -26,7 +26,7 @@ class PredictionsTest extends TestCase
 
         $requestMock = $this->mock(Request::class, function (MockInterface $mock) use ($user) {
             $mock->shouldReceive('user')->andReturn($user);
-            $mock->headers = new ParameterBag();
+            $mock->headers = new HeaderBag();
         });
 
         $tagRepositoryMock = $this->mock(TagRepositoryInterface::class, function (MockInterface $mock) use ($tag) {

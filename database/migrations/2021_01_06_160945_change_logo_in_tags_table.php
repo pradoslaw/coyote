@@ -14,7 +14,7 @@ class ChangeLogoInTagsTable extends Migration
     public function up()
     {
         Schema::table('tags', function (Blueprint $table) {
-            $table->string('logo', 100)->change();
+            $table->string('logo', 100)->nullable()->change();
         });
     }
 

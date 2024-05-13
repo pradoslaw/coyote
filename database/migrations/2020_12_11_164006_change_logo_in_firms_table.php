@@ -14,7 +14,7 @@ class ChangeLogoInFirmsTable extends Migration
     public function up()
     {
         Schema::table('firms', function (Blueprint $table) {
-            $table->string('logo', 100)->change();
+            $table->string('logo', 100)->nullable()->change();
         });
     }
 

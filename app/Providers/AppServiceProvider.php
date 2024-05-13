@@ -3,27 +3,27 @@
 namespace Coyote\Providers;
 
 use Carbon\Carbon;
-use Coyote\Laravel\SocialiteOAuth;
 use Coyote\Domain\OAuth\OAuth;
 use Coyote\Forum;
+use Coyote\Laravel\SocialiteOAuth;
 use Coyote\Models\Asset;
 use Coyote\Services\Elasticsearch\Api as EsApi;
 use Coyote\Services\FormBuilder\FormBuilder;
 use Coyote\Services\FormBuilder\FormInterface;
 use Coyote\Services\FormBuilder\ValidatesWhenSubmitted;
-use Coyote\Services\Guest;
 use Coyote\Services\Forum\Tracker;
+use Coyote\Services\Guest;
 use Coyote\Services\Invoice;
 use Coyote\User;
 use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Support\Collection;
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Routing\Events\RouteMatched;
 use Illuminate\Routing\Redirector;
-use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
-use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -37,7 +37,7 @@ class AppServiceProvider extends ServiceProvider
         // force HTTPS according to cloudflare HTTP_X_FORWARDED_PROTO header
         $this->app['request']->server->set(
             'HTTPS',
-            $this->app['request']->server('HTTP_X_FORWARDED_PROTO') === 'https'
+            $this->app['request']->server('HTTP_X_FORWARDED_PROTO') === 'https',
         );
 
         $this->app['validator']->extend('username', 'Coyote\Http\Validators\UserValidator@validateName');
@@ -97,7 +97,9 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(Guest::class, function ($app) {
-            return (new Guest($app['session.store']->get('guest_id')))->setDefaultSessionTime(Carbon::createFromTimestamp($app['session.store']->get('created_at')));
+            $guest = new Guest($app['session.store']->get('guest_id'));
+            $createdAt = $app['session.store']->get('created_at');
+            return $guest->setDefaultSessionTime(Carbon::createFromTimestamp($createdAt ?? ''));
         });
 
         $this->app->bind(EsApi::class, function ($app) {
@@ -124,7 +126,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->resolving(Invoice\Pdf::class, function (Invoice\Pdf $pdf, $app) {
             $pdf->setVendor($app['config']->get('vendor'));
         });
-        
+
         $this->app->singleton(OAuth::class, SocialiteOAuth::class);
     }
 
@@ -154,7 +156,7 @@ class AppServiceProvider extends ServiceProvider
             }
 
             return $this->filter(function (User $user) use ($others) {
-                return ! $others->contains('id', $user->id);
+                return !$others->contains('id', $user->id);
             });
         });
 
@@ -216,7 +218,7 @@ class AppServiceProvider extends ServiceProvider
             /** @var \Coyote\Post|\Coyote\Pm|\Coyote\Microblog|\Coyote\Firm $parent */
             $parent = $this->getParent();
 
-            $assets = collect($assets)->map(fn ($attributes) => Asset::find($attributes['id']))->keyBy('id');
+            $assets = collect($assets)->map(fn($attributes) => Asset::find($attributes['id']))->keyBy('id');
 
             $ids = $assets->pluck('id')->toArray();
             $current = $parent->assets->keyBy('id');

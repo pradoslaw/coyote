@@ -15,7 +15,7 @@ class ChangePageStatsTable extends Migration
     public function up()
     {
         $this->schema->table('page_stats', function (Blueprint $table) {
-            $table->integer('visits')->change();
+            $table->integer('visits')->default(0)->change();
         });
     }
 

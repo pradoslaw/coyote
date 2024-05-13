@@ -15,7 +15,7 @@ class ChangeJobReferersTable extends Migration
     public function up()
     {
         $this->schema->table('job_referers', function (Blueprint $table) {
-            $table->integer('count')->change();
+            $table->integer('count')->default(1)->change();
         });
     }
 

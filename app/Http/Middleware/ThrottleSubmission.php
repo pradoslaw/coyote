@@ -6,9 +6,9 @@ use Closure;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Routing\Route;
 use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Routing\Middleware\ThrottleRequests;
 
 class ThrottleSubmission extends ThrottleRequests
 {
@@ -35,12 +35,12 @@ class ThrottleSubmission extends ThrottleRequests
 
         if ($this->isAttemptsLimited($request, $response)) {
             foreach ($limits as $limit) {
-                $this->limiter->hit($limit->key, $limit->decayMinutes * 60);
+                $this->limiter->hit($limit->key, $limit->decaySeconds * 60 * 60);
 
                 $response = $this->addHeaders(
                     $response,
                     $limit->maxAttempts,
-                    $this->calculateRemainingAttempts($limit->key, $limit->maxAttempts)
+                    $this->calculateRemainingAttempts($limit->key, $limit->maxAttempts),
                 );
             }
         }
@@ -67,7 +67,7 @@ class ThrottleSubmission extends ThrottleRequests
     private function isOptionalFilled(Route $route): bool
     {
         $routeValues = collect($route->parameters())
-            ->map(fn ($parameter) => !($parameter instanceof Model && !$parameter->exists) && !empty($parameter))
+            ->map(fn($parameter) => !($parameter instanceof Model && !$parameter->exists) && !empty($parameter))
             ->filter()
             ->keys()
             ->toArray();

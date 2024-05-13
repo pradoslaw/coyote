@@ -48,6 +48,6 @@ trait OverridesSymfonyRequest
         if ($this->followRedirects) {
             $response = $this->followRedirects($response);
         }
-        return $this->createTestResponse($response);
+        return $this->createTestResponse($response, $request);
     }
 }
