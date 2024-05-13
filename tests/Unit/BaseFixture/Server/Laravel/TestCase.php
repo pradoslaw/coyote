@@ -8,7 +8,6 @@ use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Bootstrap\LoadConfiguration;
 use Symfony\Component\HttpFoundation;
-use Tests\Unit\BaseFixture\Server\Laravel\PhpUnit\TestRun;
 
 class TestCase extends \Illuminate\Foundation\Testing\TestCase
 {
@@ -16,10 +15,13 @@ class TestCase extends \Illuminate\Foundation\Testing\TestCase
 
     /** @var Application */
     public $app;
+    /** @var callable */
+    private $beforeBoot;
 
-    public function __construct(private TestRun $run)
+    public function __construct(callable $beforeBoot)
     {
         parent::__construct();
+        $this->beforeBoot = $beforeBoot;
     }
 
     public function setUp(): void
@@ -36,7 +38,7 @@ class TestCase extends \Illuminate\Foundation\Testing\TestCase
     {
         /** @var Application $app */
         $app = require __DIR__ . '/../../../../../bootstrap/app.php';
-        $this->run->beforeBoot($app);
+        ($this->beforeBoot)($app);
         /** @var Kernel $kernel */
         $kernel = $app->make(Kernel::class);
         $this->beforeBoot($app);

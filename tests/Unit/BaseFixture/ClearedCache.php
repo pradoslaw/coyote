@@ -13,8 +13,8 @@ trait ClearedCache
      */
     function clearCache(): void
     {
-        /** @var Cache\Repository $cache */
-        $cache = $this->laravel->app[Cache\Repository::class];
+        $laravel = Laravel\StaticLaravel::get($this);
+        $cache = $laravel->app[Cache\Repository::class];
         $cache->clear();
     }
 }

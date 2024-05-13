@@ -1,6 +1,8 @@
 <?php
 namespace Tests\Unit\BaseFixture\Server;
 
+use Tests\Unit\BaseFixture\Server\Laravel\StaticLaravel;
+
 trait Http
 {
     use Laravel\Application;
@@ -12,6 +14,6 @@ trait Http
      */
     function initializeServer(): void
     {
-        $this->server = new Server($this->laravel);
+        $this->server = new Server(StaticLaravel::get($this));
     }
 }
