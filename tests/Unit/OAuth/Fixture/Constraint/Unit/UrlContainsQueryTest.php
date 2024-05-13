@@ -56,9 +56,9 @@ class UrlContainsQueryTest extends TestCase
         $this->assertRejectsMessage(
             new UrlContainsQuery(['foo' => 'bar']),
             'http://actual/',
-            "Failed asserting that 'http://actual/' has query params Array &0 (
-    'foo' => 'bar'
-).");
+            "Failed asserting that 'http://actual/' has query params Array &0 [
+    'foo' => 'bar',
+].");
     }
 
     /**

@@ -18,9 +18,9 @@ class TestCase extends \Illuminate\Foundation\Testing\TestCase
     /** @var callable */
     private $beforeBoot;
 
-    public function __construct(callable $beforeBoot)
+    public function __construct(string $name, callable $beforeBoot)
     {
-        parent::__construct();
+        parent::__construct($name);
         $this->beforeBoot = $beforeBoot;
     }
 

@@ -29,7 +29,7 @@ class Test extends TestCase
             $this->relativeUri("/Forum/apple-forum/$topicId-banana_topic"));
     }
 
-    public function fields(): DataProvider
+    public static function fields(): DataProvider
     {
         return DataProvider::list('@id', 'url');
     }

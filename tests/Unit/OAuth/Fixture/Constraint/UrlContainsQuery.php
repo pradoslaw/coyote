@@ -40,7 +40,7 @@ class UrlContainsQuery extends Constraint
         return 'has query params ' . $this->exporter()->export($this->query);
     }
 
-    protected function fail($other, $description, ComparisonFailure $comparisonFailure = null): void
+    protected function fail($other, $description, ComparisonFailure $comparisonFailure = null): never
     {
         parent::fail($other, $description,
             new ComparisonFailure(null, null,

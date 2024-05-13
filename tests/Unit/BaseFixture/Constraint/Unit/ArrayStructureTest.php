@@ -106,9 +106,9 @@ In fact, keys ['one', 'three'] are not even present.");
         ]);
 
         $this->assertRejectsMessage($this->logicalAnd($constraint), ['key' => 'other'],
-            "Failed asserting that Array &0 (
-    'key' => 'other'
-) value at 'key' is identical to 'value' and value at 'foo' is identical to 'bar'.");
+            "Failed asserting that Array &0 [
+    'key' => 'other',
+] value at 'key' is identical to 'value' and value at 'foo' is identical to 'bar'.");
     }
 
     /**
@@ -121,11 +121,11 @@ In fact, keys ['one', 'three'] are not even present.");
         $this->assertRejectsActual(
             $constraint,
             ['one' => '11x1', 'two' => '222', 'three' => '333'],
-            "Array &0 (
-    'one' => '11x1'
-    'two' => '222'
-    'three' => '333'
-)");
+            "Array &0 [
+    'one' => '11x1',
+    'two' => '222',
+    'three' => '333',
+]");
     }
 
     /**

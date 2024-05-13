@@ -37,7 +37,7 @@ class UrlBasepath extends Constraint
         return 'has basepath ' . $this->exporter()->export($this->basePath);
     }
 
-    protected function fail($other, $description, ComparisonFailure $comparisonFailure = null): void
+    protected function fail($other, $description, ComparisonFailure $comparisonFailure = null): never
     {
         parent::fail($other, $description,
             new ComparisonFailure(null, null,

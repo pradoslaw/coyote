@@ -17,11 +17,6 @@ class JobOffersLaravelTest extends TestCase
     use Laravel\Transactional;
     use BaseFixture\PublicImageUrl;
 
-    protected function setUp(): void
-    {
-        $this->markAsRisky();
-    }
-
     /**
      * @test
      */

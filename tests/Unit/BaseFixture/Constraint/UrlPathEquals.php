@@ -37,7 +37,7 @@ class UrlPathEquals extends Constraint
     }
 
     #[Override]
-    protected function fail($other, $description, ComparisonFailure $comparisonFailure = null): void
+    protected function fail($other, $description, ComparisonFailure $comparisonFailure = null): never
     {
         parent::fail($other, $description,
             new ComparisonFailure(null, null,

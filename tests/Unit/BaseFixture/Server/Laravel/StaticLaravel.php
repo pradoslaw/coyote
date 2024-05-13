@@ -16,20 +16,20 @@ class StaticLaravel
         }
         if (self::$laravel === null) {
             $transactional = self::isTransactional($testCase);
-            self::$laravel = self::getInstance($transactional, self::bootTest($testCase));
+            self::$laravel = self::getInstance($testCase->name(), $transactional, self::bootTest($testCase));
             self::$laravel->setUp();
         }
         return self::$laravel;
     }
 
-    private static function getInstance(bool $transactional, callable $beforeBoot): Laravel\TestCase
+    private static function getInstance(string $name, bool $transactional, callable $beforeBoot): Laravel\TestCase
     {
         if ($transactional) {
-            return new class ($beforeBoot) extends Laravel\TestCase {
+            return new class ($name, $beforeBoot) extends Laravel\TestCase {
                 use DatabaseTransactions;
             };
         }
-        return new Laravel\TestCase($beforeBoot);
+        return new Laravel\TestCase($name, $beforeBoot);
     }
 
     public static function destroy(): void

@@ -24,7 +24,7 @@ class DateDifferenceTest extends \PHPUnit\Framework\TestCase
             $date->format(new Carbon('2016-01-23 11:53:20')));
     }
 
-    public function formats(): array
+    public static function formats(): array
     {
         return [
             ['%d-%m-%Y %H:%M', '23-01-2016 11:53'],

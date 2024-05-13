@@ -57,7 +57,7 @@
     "fakerphp/faker": "^1.15",
     "laravel/dusk": "^v7.12.1",
     "mockery/mockery": "^1.4",
-    "phpunit/phpunit": "^9.0",
+    "phpunit/phpunit": "^10.5.20",
     "rawr/phpunit-data-provider": "^3.3"
   },
   "autoload": {

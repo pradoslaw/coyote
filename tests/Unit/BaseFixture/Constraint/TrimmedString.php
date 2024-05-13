@@ -23,7 +23,7 @@ class TrimmedString extends Constraint
         return 'trimmed is ' . $this->exporter()->export($this->value);
     }
 
-    protected function fail($other, $description, ComparisonFailure $comparisonFailure = null): void
+    protected function fail($other, $description, ComparisonFailure $comparisonFailure = null): never
     {
         parent::fail($other, $description,
             new ComparisonFailure(null, null,
