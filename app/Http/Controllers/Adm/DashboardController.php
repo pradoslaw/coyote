@@ -3,7 +3,7 @@
 namespace Coyote\Http\Controllers\Adm;
 
 use Coyote\View\Twig\TwigLiteral;
-use Illuminate\Redis\RedisManager;
+use Illuminate\Foundation\Application;
 use Illuminate\View\View;
 
 class DashboardController extends BaseController
@@ -16,19 +16,18 @@ class DashboardController extends BaseController
                 $this->directoryWritable('uploads/', \public_path()),
                 [
                     'label' => 'Redis włączony',
-                    'value' => \config('cache.default')
+                    'value' => \config('cache.default'),
                 ],
                 [
-                    'label' => 'Redis aktywny',
-                    'value' => $this->redisActive()
+                    'label' => new TwigLiteral('PHP - <code>' . \PHP_VERSION . '</code>'),
+                    'value' => true,
                 ],
-            ]
+                [
+                    'label' => new TwigLiteral('Laravel - <code>' . Application::VERSION . '</code>'),
+                    'value' => true,
+                ],
+            ],
         ]);
-    }
-
-    private function redisActive(): bool
-    {
-        return false;
     }
 
     public function directoryWritable(string $basePath, string $path): array
@@ -36,7 +35,7 @@ class DashboardController extends BaseController
         $permission = \decOct(\filePerms($path) & 0777);
         return [
             'label' => new TwigLiteral("Katalog <code>$basePath</code> ma prawa do zapisu - <code>$permission</code>"),
-            'value' => \is_writeable(\storage_path())
+            'value' => \is_writeable(\storage_path()),
         ];
     }
 }
