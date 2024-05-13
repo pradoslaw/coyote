@@ -1,5 +1,5 @@
 <?php
-namespace ElasticSearch;
+namespace Tests\Unit\ElasticSearch;
 
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture\Server\Laravel;
