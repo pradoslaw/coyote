@@ -25,7 +25,7 @@ class Test extends TestCase
      * @test
      * @depends organization
      */
-    public function name(array $organization): void
+    public function organizationName(array $organization): void
     {
         $this->assertThat($organization['name'],
             $this->identicalTo('Makana Sp. z o.o.'));
