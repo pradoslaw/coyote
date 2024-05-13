@@ -7,7 +7,7 @@ $this->post('Logout', ['uses' => 'Auth\LoginController@logout', 'as' => 'logout'
 
 // rejestracja uzytkownika
 $this->get('Register', ['uses' => 'Auth\RegisterController@index', 'as' => 'register']);
-$this->post('Register', 'Auth\RegisterController@signup')->middleware('throttle.submission:registration,1,1440');
+$this->post('Register', 'Auth\RegisterController@signup')->middleware('throttle.submission:1,1440');
 
 // potwierdzenie adresu e-mail
 $this->get('Confirm', 'Auth\ConfirmController@index')->name('confirm');
@@ -24,4 +24,3 @@ $this->get('OAuth/{provider}/Login', ['uses' => 'Auth\OAuthController@login'])->
 $this->get('OAuth/{provider}/Callback', 'Auth\OAuthController@callback');
 
 $this->get('token', ['uses' => 'User\SessionTokenController@generateToken']);
-
