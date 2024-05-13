@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-  "content-hash": "8ce2e7ae386385cd8da4830e39bd760c",
+    "content-hash": "8ce2e7ae386385cd8da4830e39bd760c",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -62,16 +62,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-          "version": "3.306.1",
+            "version": "3.306.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-              "reference": "99e13a3647edffba9110948acc85052e3169e46a"
+                "reference": "f50ff987dbe6d3e60d68794970422eae71ffb525"
             },
             "dist": {
                 "type": "zip",
-              "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/99e13a3647edffba9110948acc85052e3169e46a",
-              "reference": "99e13a3647edffba9110948acc85052e3169e46a",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/f50ff987dbe6d3e60d68794970422eae71ffb525",
+                "reference": "f50ff987dbe6d3e60d68794970422eae71ffb525",
                 "shasum": ""
             },
             "require": {
@@ -151,9 +151,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-              "source": "https://github.com/aws/aws-sdk-php/tree/3.306.1"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.306.4"
             },
-          "time": "2024-05-07T18:11:42+00:00"
+            "time": "2024-05-10T18:23:57+00:00"
         },
         {
             "name": "barryvdh/laravel-debugbar",
@@ -2665,102 +2665,32 @@
             "time": "2023-10-20T13:53:22+00:00"
         },
         {
-          "name": "intervention/gif",
-          "version": "4.1.0",
-          "source": {
-            "type": "git",
-            "url": "https://github.com/Intervention/gif.git",
-            "reference": "3a2b5f8a8856e8877cdab5c47e51aab2d4cb23a3"
-          },
-          "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/Intervention/gif/zipball/3a2b5f8a8856e8877cdab5c47e51aab2d4cb23a3",
-            "reference": "3a2b5f8a8856e8877cdab5c47e51aab2d4cb23a3",
-            "shasum": ""
-          },
-          "require": {
-            "php": "^8.1"
-          },
-          "require-dev": {
-            "phpstan/phpstan": "^1",
-            "phpunit/phpunit": "^10.0",
-            "slevomat/coding-standard": "~8.0",
-            "squizlabs/php_codesniffer": "^3.8"
-          },
-          "type": "library",
-          "autoload": {
-            "psr-4": {
-              "Intervention\\Gif\\": "src"
-            }
-          },
-          "notification-url": "https://packagist.org/downloads/",
-          "license": [
-            "MIT"
-          ],
-          "authors": [
-            {
-              "name": "Oliver Vogel",
-              "email": "oliver@intervention.io",
-              "homepage": "https://intervention.io/"
-            }
-          ],
-          "description": "Native PHP GIF Encoder/Decoder",
-          "homepage": "https://github.com/intervention/gif",
-          "keywords": [
-            "animation",
-            "gd",
-            "gif",
-            "image"
-          ],
-          "support": {
-            "issues": "https://github.com/Intervention/gif/issues",
-            "source": "https://github.com/Intervention/gif/tree/4.1.0"
-          },
-          "funding": [
-            {
-              "url": "https://paypal.me/interventionio",
-              "type": "custom"
-            },
-            {
-              "url": "https://github.com/Intervention",
-              "type": "github"
-            }
-          ],
-          "time": "2024-03-26T17:23:47+00:00"
-        },
-      {
-            "name": "intervention/image",
-        "version": "3.6.3",
+            "name": "intervention/gif",
+            "version": "4.1.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Intervention/image.git",
-              "reference": "2dbfb53bf8909257e710cf6091d10a9ca7500742"
+                "url": "https://github.com/Intervention/gif.git",
+                "reference": "3a2b5f8a8856e8877cdab5c47e51aab2d4cb23a3"
             },
             "dist": {
                 "type": "zip",
-              "url": "https://api.github.com/repos/Intervention/image/zipball/2dbfb53bf8909257e710cf6091d10a9ca7500742",
-              "reference": "2dbfb53bf8909257e710cf6091d10a9ca7500742",
+                "url": "https://api.github.com/repos/Intervention/gif/zipball/3a2b5f8a8856e8877cdab5c47e51aab2d4cb23a3",
+                "reference": "3a2b5f8a8856e8877cdab5c47e51aab2d4cb23a3",
                 "shasum": ""
             },
             "require": {
-              "ext-mbstring": "*",
-              "intervention/gif": "^4.1",
-              "php": "^8.1"
+                "php": "^8.1"
             },
             "require-dev": {
-              "mockery/mockery": "^1.6",
-              "phpstan/phpstan": "^1",
-              "phpunit/phpunit": "^10.0",
-              "slevomat/coding-standard": "~8.0",
-              "squizlabs/php_codesniffer": "^3.8"
-            },
-            "suggest": {
-              "ext-exif": "Recommended to be able to read EXIF data properly."
+                "phpstan/phpstan": "^1",
+                "phpunit/phpunit": "^10.0",
+                "slevomat/coding-standard": "~8.0",
+                "squizlabs/php_codesniffer": "^3.8"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                  "Intervention\\Image\\": "src"
+                    "Intervention\\Gif\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -2774,19 +2704,17 @@
                     "homepage": "https://intervention.io/"
                 }
             ],
-        "description": "PHP image manipulation",
-        "homepage": "https://image.intervention.io/",
+            "description": "Native PHP GIF Encoder/Decoder",
+            "homepage": "https://github.com/intervention/gif",
             "keywords": [
+                "animation",
                 "gd",
-                "image",
-                "imagick",
-              "resize",
-                "thumbnail",
-                "watermark"
+                "gif",
+                "image"
             ],
             "support": {
-                "issues": "https://github.com/Intervention/image/issues",
-              "source": "https://github.com/Intervention/image/tree/3.6.3"
+                "issues": "https://github.com/Intervention/gif/issues",
+                "source": "https://github.com/Intervention/gif/tree/4.1.0"
             },
             "funding": [
                 {
@@ -2798,7 +2726,79 @@
                     "type": "github"
                 }
             ],
-        "time": "2024-05-02T09:03:18+00:00"
+            "time": "2024-03-26T17:23:47+00:00"
+        },
+        {
+            "name": "intervention/image",
+            "version": "3.6.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Intervention/image.git",
+                "reference": "193324ec88bc5ad4039e57ce9b926ae28dfde813"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Intervention/image/zipball/193324ec88bc5ad4039e57ce9b926ae28dfde813",
+                "reference": "193324ec88bc5ad4039e57ce9b926ae28dfde813",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "intervention/gif": "^4.1",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.6",
+                "phpstan/phpstan": "^1",
+                "phpunit/phpunit": "^10.0",
+                "slevomat/coding-standard": "~8.0",
+                "squizlabs/php_codesniffer": "^3.8"
+            },
+            "suggest": {
+                "ext-exif": "Recommended to be able to read EXIF data properly."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Intervention\\Image\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Oliver Vogel",
+                    "email": "oliver@intervention.io",
+                    "homepage": "https://intervention.io/"
+                }
+            ],
+            "description": "PHP image manipulation",
+            "homepage": "https://image.intervention.io/",
+            "keywords": [
+                "gd",
+                "image",
+                "imagick",
+                "resize",
+                "thumbnail",
+                "watermark"
+            ],
+            "support": {
+                "issues": "https://github.com/Intervention/image/issues",
+                "source": "https://github.com/Intervention/image/tree/3.6.4"
+            },
+            "funding": [
+                {
+                    "url": "https://paypal.me/interventionio",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/Intervention",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-05-08T13:53:15+00:00"
         },
         {
             "name": "jaybizzle/crawler-detect",
@@ -3570,16 +3570,16 @@
         },
         {
             "name": "laravel/socialite",
-          "version": "v5.14.0",
+            "version": "v5.14.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/socialite.git",
-              "reference": "c7b0193a3753a29aff8ce80aa2f511917e6ed68a"
+                "reference": "c7b0193a3753a29aff8ce80aa2f511917e6ed68a"
             },
             "dist": {
                 "type": "zip",
-              "url": "https://api.github.com/repos/laravel/socialite/zipball/c7b0193a3753a29aff8ce80aa2f511917e6ed68a",
-              "reference": "c7b0193a3753a29aff8ce80aa2f511917e6ed68a",
+                "url": "https://api.github.com/repos/laravel/socialite/zipball/c7b0193a3753a29aff8ce80aa2f511917e6ed68a",
+                "reference": "c7b0193a3753a29aff8ce80aa2f511917e6ed68a",
                 "shasum": ""
             },
             "require": {
@@ -3638,7 +3638,7 @@
                 "issues": "https://github.com/laravel/socialite/issues",
                 "source": "https://github.com/laravel/socialite"
             },
-          "time": "2024-05-03T20:31:38+00:00"
+            "time": "2024-05-03T20:31:38+00:00"
         },
         {
             "name": "laravel/ui",
@@ -5831,16 +5831,16 @@
         },
         {
             "name": "paragonie/constant_time_encoding",
-          "version": "v2.7.0",
+            "version": "v2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/constant_time_encoding.git",
-              "reference": "52a0d99e69f56b9ec27ace92ba56897fe6993105"
+                "reference": "52a0d99e69f56b9ec27ace92ba56897fe6993105"
             },
             "dist": {
                 "type": "zip",
-              "url": "https://api.github.com/repos/paragonie/constant_time_encoding/zipball/52a0d99e69f56b9ec27ace92ba56897fe6993105",
-              "reference": "52a0d99e69f56b9ec27ace92ba56897fe6993105",
+                "url": "https://api.github.com/repos/paragonie/constant_time_encoding/zipball/52a0d99e69f56b9ec27ace92ba56897fe6993105",
+                "reference": "52a0d99e69f56b9ec27ace92ba56897fe6993105",
                 "shasum": ""
             },
             "require": {
@@ -5894,7 +5894,7 @@
                 "issues": "https://github.com/paragonie/constant_time_encoding/issues",
                 "source": "https://github.com/paragonie/constant_time_encoding"
             },
-          "time": "2024-05-08T12:18:48+00:00"
+            "time": "2024-05-08T12:18:48+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -6774,20 +6774,20 @@
         },
         {
             "name": "psr/http-factory",
-            "version": "1.0.2",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/http-factory.git",
-                "reference": "e616d01114759c4c489f93b099585439f795fe35"
+                "reference": "2b4765fddfe3b508ac62f829e852b1501d3f6e8a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/http-factory/zipball/e616d01114759c4c489f93b099585439f795fe35",
-                "reference": "e616d01114759c4c489f93b099585439f795fe35",
+                "url": "https://api.github.com/repos/php-fig/http-factory/zipball/2b4765fddfe3b508ac62f829e852b1501d3f6e8a",
+                "reference": "2b4765fddfe3b508ac62f829e852b1501d3f6e8a",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.0.0",
+                "php": ">=7.1",
                 "psr/http-message": "^1.0 || ^2.0"
             },
             "type": "library",
@@ -6811,7 +6811,7 @@
                     "homepage": "https://www.php-fig.org/"
                 }
             ],
-            "description": "Common interfaces for PSR-7 HTTP message factories",
+            "description": "PSR-17: Common interfaces for PSR-7 HTTP message factories",
             "keywords": [
                 "factory",
                 "http",
@@ -6823,9 +6823,9 @@
                 "response"
             ],
             "support": {
-                "source": "https://github.com/php-fig/http-factory/tree/1.0.2"
+                "source": "https://github.com/php-fig/http-factory"
             },
-            "time": "2023-04-10T20:10:41+00:00"
+            "time": "2024-04-15T12:06:14+00:00"
         },
         {
             "name": "psr/http-message",
@@ -7351,78 +7351,67 @@
             "time": "2024-04-24T08:52:10+00:00"
         },
         {
-          "name": "rdx/laravelcollective-html",
-          "version": "v6.4.1",
-          "source": {
-            "type": "git",
-            "url": "https://github.com/rudiedirkx/laravelcollective-html.git",
-            "reference": "64ddfdcaeeb8d332bd98bef442bef81e39c3910b"
-          },
-          "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/rudiedirkx/laravelcollective-html/zipball/64ddfdcaeeb8d332bd98bef442bef81e39c3910b",
-            "reference": "64ddfdcaeeb8d332bd98bef442bef81e39c3910b",
-            "shasum": ""
-          },
-          "require": {
-            "illuminate/http": "^6.0|^7.0|^8.0|^9.0|^10.0",
-            "illuminate/routing": "^6.0|^7.0|^8.0|^9.0|^10.0",
-            "illuminate/session": "^6.0|^7.0|^8.0|^9.0|^10.0",
-            "illuminate/support": "^6.0|^7.0|^8.0|^9.0|^10.0",
-            "illuminate/view": "^6.0|^7.0|^8.0|^9.0|^10.0",
-            "php": ">=7.2.5"
-          },
-          "require-dev": {
-            "illuminate/database": "^6.0|^7.0|^8.0|^9.0|^10.0",
-            "mockery/mockery": "~1.0",
-            "phpunit/phpunit": "~8.5|^9.5.10"
-          },
-          "type": "library",
-          "extra": {
-            "branch-alias": {
-              "dev-master": "6.x-dev"
+            "name": "rdx/laravelcollective-html",
+            "version": "6.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rudiedirkx/laravelcollective-html.git",
+                "reference": "3cc4bd1cb86e6296e4f8a824854d11c4dcec6fa6"
             },
-            "laravel": {
-              "providers": [
-                "Collective\\Html\\HtmlServiceProvider"
-              ],
-              "aliases": {
-                "Form": "Collective\\Html\\FormFacade",
-                "Html": "Collective\\Html\\HtmlFacade"
-              }
-            }
-          },
-          "autoload": {
-            "files": [
-              "src/helpers.php"
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rudiedirkx/laravelcollective-html/zipball/3cc4bd1cb86e6296e4f8a824854d11c4dcec6fa6",
+                "reference": "3cc4bd1cb86e6296e4f8a824854d11c4dcec6fa6",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/http": "^6.0 || ^7.0 || ^8.0 || ^9.0 || ^10.0 || ^11.0",
+                "illuminate/routing": "^6.0 || ^7.0 || ^8.0 || ^9.0 || ^10.0 || ^11.0",
+                "illuminate/session": "^6.0 || ^7.0 || ^8.0 || ^9.0 || ^10.0 || ^11.0",
+                "illuminate/support": "^6.0 || ^7.0 || ^8.0 || ^9.0 || ^10.0 || ^11.0",
+                "illuminate/view": "^6.0 || ^7.0 || ^8.0 || ^9.0 || ^10.0 || ^11.0",
+                "php": "^7.2 || ^8.0"
+            },
+            "replace": {
+                "laravelcollective/html": "self.version"
+            },
+            "require-dev": {
+                "illuminate/database": "^6.0 || ^7.0 || ^8.0 || ^9.0 || ^10.0 || ^11.0",
+                "mockery/mockery": "~1.0",
+                "phpunit/phpunit": "~8.5 || ^9.5.10"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Collective\\Html\\HtmlServiceProvider"
+                    ],
+                    "aliases": {
+                        "Form": "Collective\\Html\\FormFacade",
+                        "Html": "Collective\\Html\\HtmlFacade"
+                    }
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "Collective\\Html\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
             ],
-            "psr-4": {
-              "Collective\\Html\\": "src/"
-            }
-          },
-          "notification-url": "https://packagist.org/downloads/",
-          "license": [
-            "MIT"
-          ],
-          "authors": [
-            {
-              "name": "Adam Engebretson",
-              "email": "adam@laravelcollective.com"
+            "description": "HTML and Form Builders for the Laravel Framework",
+            "support": {
+                "issues": "https://github.com/rudiedirkx/laravelcollective-html/issues",
+                "source": "https://github.com/rudiedirkx/laravelcollective-html"
             },
-            {
-              "name": "Taylor Otwell",
-              "email": "taylorotwell@gmail.com"
-            }
-          ],
-          "description": "HTML and Form Builders for the Laravel Framework",
-          "homepage": "https://laravelcollective.com",
-          "support": {
-            "issues": "https://github.com/LaravelCollective/html/issues",
-            "source": "https://github.com/LaravelCollective/html"
-          },
-          "time": "2023-04-25T02:46:11+00:00"
+            "time": "2024-03-20T15:08:15+00:00"
         },
-      {
+        {
             "name": "react/promise",
             "version": "v2.11.0",
             "source": {
@@ -10731,16 +10720,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v3.9.3",
+            "version": "v3.10.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "a842d75fed59cdbcbd3a3ad7fb9eb768fc350d58"
+                "reference": "3af5ab2e52279e5e23dc192b1a26db3b8cffa4e7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/a842d75fed59cdbcbd3a3ad7fb9eb768fc350d58",
-                "reference": "a842d75fed59cdbcbd3a3ad7fb9eb768fc350d58",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/3af5ab2e52279e5e23dc192b1a26db3b8cffa4e7",
+                "reference": "3af5ab2e52279e5e23dc192b1a26db3b8cffa4e7",
                 "shasum": ""
             },
             "require": {
@@ -10794,7 +10783,7 @@
             ],
             "support": {
                 "issues": "https://github.com/twigphp/Twig/issues",
-                "source": "https://github.com/twigphp/Twig/tree/v3.9.3"
+                "source": "https://github.com/twigphp/Twig/tree/v3.10.1"
             },
             "funding": [
                 {
@@ -10806,7 +10795,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-04-18T11:59:33+00:00"
+            "time": "2024-05-12T06:16:18+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
