@@ -31,6 +31,16 @@ class StaticEvents implements Events
                 'https://evenea.pl/pl/wydarzenie/sforcewarsaw5',
                 'https://4programmers.net/Mikroblogi/View/141687',
             ),
+            new Domain\Event\Event(
+                'Kościuszkon',
+                'Kraków',
+                true,
+                ['hackaton', 'studenci'],
+                new Date(2024, 6, 8),
+                EventKind::Hackaton,
+                'https://kosciuszkon.pk.edu.pl/',
+                'https://4programmers.net/Mikroblogi/View/141749',
+            ),
             new Event(
                 'Code Europe',
                 'Kraków',
