@@ -40,6 +40,11 @@ class Server
         return $this->post($uri, $body);
     }
 
+    public function login(User $user): void
+    {
+        $this->laravel->actingAs($user);
+    }
+
     public function post(string $uri, array $body): TestResponse
     {
         return $this->laravel->json(
