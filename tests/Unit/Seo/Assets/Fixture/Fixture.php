@@ -38,6 +38,11 @@ trait Fixture
 
     function newUser(): User
     {
+        /** @var User $first */
+        $first = User::query()->where('name', 'irrelevant')->first();
+        if ($first) {
+            return $first;
+        }
         $user = new User();
         $user->name = 'irrelevant';
         $user->email = 'irrelevant';
