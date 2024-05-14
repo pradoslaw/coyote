@@ -54,4 +54,18 @@ class Test extends TestCase
     {
         return DataProvider::list('Car', 'pet');
     }
+
+    /**
+     * @test
+     */
+    public function wildcardInPlace(): void
+    {
+        // given
+        $this->existingUsers(['Home', 'Meow']);
+        $this->userInAdministratorDashboard();
+        // when
+        $response = $this->searchByUsername('me*');
+        // then
+        $this->assertUsersPresented($response, ['Meow']);
+    }
 }
