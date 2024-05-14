@@ -14,6 +14,8 @@
               <li class="list-group-item col-sm-6">Komentarzy: <strong>{{ comments }}</strong></li>
               <li class="list-group-item col-sm-6">Głosów oddanych: <strong>{{ given_votes }}</strong></li>
               <li class="list-group-item col-sm-6">Głosów otrzymanych: <strong>{{ received_votes }}</strong></li>
+              <li class="list-group-item col-sm-6">Wpisów na mikroblogu: <strong>{{ user_microblogs }}</strong></li>
+              <li class="list-group-item col-sm-6">Odpowiedzi zaakceptowanych: <strong>{{ user_posts_accepted }}</strong></li>
             </ul>
 
             <canvas id="line-chart"></canvas>
@@ -49,13 +51,13 @@
             'rgba(100, 100, 102, 0.7)',
             'rgba(255, 159, 64, 0.2)',
             'rgba(128, 164, 26, 0.2)',
-            'rgba(91, 192, 222, 0.2)'
-          ]
-        }]
+            'rgba(91, 192, 222, 0.2)',
+          ],
+        }],
       },
       options: {
         responsive: true,
-      }
+      },
     });
 
     new Chart(document.getElementById("line-chart"), {
@@ -75,9 +77,9 @@
           ],
           backgroundColor: 'rgba(255, 159, 64, 0.2)',
           borderColor: 'rgba(255, 159, 64, 1)',
-          borderWidth: 1
-        }]
-      }
+          borderWidth: 1,
+        }],
+      },
     });
 
   </script>

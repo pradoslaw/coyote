@@ -34,6 +34,22 @@ readonly class ViewDom
         return $texts;
     }
 
+    public function findElementsFlatTexts(string $xPath): array
+    {
+        $text = [];
+        foreach ($this->query($xPath) as $child) {
+            if ($child->nodeType === \XML_TEXT_NODE) {
+                throw new \Exception("Failed to get element as flat string: received a text node.");
+            }
+            if ($child->nodeType === \XML_ATTRIBUTE_NODE) {
+                throw new \Exception("Failed to get element as flat string: received an attribute node.");
+            }
+            /** @var \DOMElement $child */
+            $text[] = $child->textContent;
+        }
+        return $text;
+    }
+
     public function findString(string $xPath): string
     {
         return $this->string($this->first($this->query($xPath), $xPath));

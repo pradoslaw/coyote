@@ -7,6 +7,8 @@ use Coyote\Http\Requests\SkillsRequest;
 use Coyote\Http\Resources\MicroblogCollection;
 use Coyote\Http\Resources\TagResource;
 use Coyote\Http\Resources\UserResource;
+use Coyote\Microblog;
+use Coyote\Post;
 use Coyote\Repositories\Contracts\PostRepositoryInterface as PostRepository;
 use Coyote\Repositories\Contracts\ReputationRepositoryInterface as ReputationRepository;
 use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
@@ -26,7 +28,7 @@ class HomeController extends Controller
         private UserRepository       $user,
         private ReputationRepository $reputation,
         private PostRepository       $post,
-        private MicroblogRepository  $microblog
+        private MicroblogRepository  $microblog,
     )
     {
         parent::__construct();
@@ -85,13 +87,19 @@ class HomeController extends Controller
         $pieChart = $this->post->pieChart($user->id);
 
         return view('profile.partials.posts', [
-            'user'           => $user,
-            'pie'            => $pieChart,
-            'posts'          => array_sum($pieChart),
-            'line'           => $this->post->lineChart($user->id),
-            'comments'       => $this->post->countComments($user->id),
-            'given_votes'    => $this->post->countGivenVotes($user->id),
-            'received_votes' => $this->post->countReceivedVotes($user->id),
+            'user'                => $user,
+            'pie'                 => $pieChart,
+            'posts'               => array_sum($pieChart),
+            'line'                => $this->post->lineChart($user->id),
+            'comments'            => $this->post->countComments($user->id),
+            'given_votes'         => $this->post->countGivenVotes($user->id),
+            'received_votes'      => $this->post->countReceivedVotes($user->id),
+            'user_microblogs'     => Microblog::query()->where('user_id', $user->id)->count(),
+            'user_posts_accepted' => Post::query()
+                ->join('post_accepts', 'post_accepts.post_id', '=', 'posts.id')
+                ->join('users', 'users.id', '=', 'post_accepts.user_id')
+                ->where('posts.user_id', $user->id)
+                ->count(),
         ]);
     }
 
