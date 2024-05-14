@@ -66,7 +66,23 @@ trait AdministratorPanel
     function grantAdministrator(User $user): void
     {
         /** @var Group $group */
-        $group = Group::query()->where(['name' => 'Administrator'])->first();
+        $group = Group::query()->where(['name' => 'Administrator'])->firstOrFail();
         $user->groups()->attach($group->id);
+    }
+
+    function userInAdministratorDashboard(): void
+    {
+        $this->userIsAdministrator();
+        $this->userPassesLoginPrompt();
+    }
+
+    function existingUsers(array $array): void
+    {
+        foreach ($array as $name) {
+            if (User::query()->where('name', $name)->exists()) {
+                continue;
+            }
+            User::query()->forceCreate(['name' => $name, 'email' => 'irrelevant']);
+        }
     }
 }

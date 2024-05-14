@@ -74,7 +74,7 @@ class EloquentSource implements SourceInterface
             $this->source = $this->source->where(
                 $name,
                 $column->getFilter()->getOperator(),
-                $this->normalizeValue($input, $column->getFilter()->getOperator())
+                $this->normalizeValue($input, $column->getFilter()->getOperator()),
             );
         }
     }
@@ -91,7 +91,7 @@ class EloquentSource implements SourceInterface
         }
 
         if ($operator == FilterOperator::OPERATOR_LIKE || $operator == FilterOperator::OPERATOR_ILIKE) {
-            $value = str_replace('*', '%', $value);
+            $value = '%' . str_replace('*', '%', $value) . '%';
         }
 
         return $value;

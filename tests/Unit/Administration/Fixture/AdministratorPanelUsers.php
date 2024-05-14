@@ -1,0 +1,28 @@
+<?php
+namespace Tests\Unit\Administration\Fixture;
+
+use Illuminate\Testing\TestResponse;
+use Neon\Test\BaseFixture\View\ViewDom;
+use PHPUnit\Framework\Assert;
+use Tests\Unit\BaseFixture\Server;
+
+trait AdministratorPanelUsers
+{
+    use Server\Http;
+
+    function assertUsersPresented(TestResponse $response, array $expectedUsernames): void
+    {
+        Assert::assertSame($expectedUsernames, $this->userNames($response));
+    }
+
+    function userNames(TestResponse $response): array
+    {
+        $dom = new ViewDom($response->content());
+        return $dom->findStrings('//table//tr/td[2]/a/text()');
+    }
+
+    function searchByUsername(string $username): TestResponse
+    {
+        return $this->server->get('/Adm/Users?name=' . $username);
+    }
+}
