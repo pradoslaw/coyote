@@ -2,8 +2,8 @@
 
 namespace Boduch\Grid\Source;
 
-use Boduch\Grid\Order;
 use Boduch\Grid\Column;
+use Boduch\Grid\Order;
 
 interface SourceInterface
 {
@@ -12,16 +12,7 @@ interface SourceInterface
      */
     public function applyFilters($columns);
 
-    /**
-     * @param int $perPage
-     * @param int $currentPage
-     * @param Order $order
-     * @return mixed
-     */
-    public function execute($perPage, $currentPage, Order $order);
+    public function execute(?int $perPage, ?int $currentPage, Order $order);
 
-    /**
-     * @return int
-     */
-    public function total();
+    public function total(): int;
 }

@@ -3,97 +3,72 @@
 namespace Boduch\Grid\Source;
 
 use Boduch\Grid\Column;
+use Boduch\Grid\Filters\Field;
 use Boduch\Grid\Filters\FilterOperator;
 use Boduch\Grid\Order;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 
 class EloquentSource implements SourceInterface
 {
     /**
-     * @var \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
+     * @param Builder|Model $source
      */
-    protected $source;
-
-    /**
-     * @param \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model $source
-     */
-    public function __construct($source)
+    public function __construct(private $source)
     {
-        $this->source = $source;
     }
 
     /**
      * @param Column[] $columns
      */
-    public function applyFilters($columns)
+    public function applyFilters($columns): void
     {
         foreach ($columns as $column) {
-            /** @var \Boduch\Grid\Column $column */
-            if ($column->isFilterable() && !$column->getFilter()->isEmpty()) {
-                $this->buildQuery($column);
+            $field = $column->getFilter();
+            if ($column->isFilterable() && !$field->isEmpty()) {
+                $this->buildQuery($field);
             }
         }
     }
 
-    /**
-     * @param int $perPage
-     * @param int $currentPage
-     * @param Order $order
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
-     */
-    public function execute($perPage, $currentPage, Order $order)
+    public function execute(?int $perPage, ?int $currentPage, Order $order)
     {
         return $this
             ->source
-            ->when($order->getColumn(), function (Builder $builder) use ($order) {
-                return $builder->orderBy($order->getColumn(), $order->getDirection());
-            })
+            ->when($order->getColumn(), fn(Builder $builder) => $builder->orderBy($order->getColumn(), $order->getDirection()))
             ->forPage($currentPage, $perPage)
             ->get();
     }
 
-    /**
-     * @return int
-     */
-    public function total()
+    public function total(): int
     {
         return $this->source->count();
     }
 
-    /**
-     * @param Column $column
-     */
-    protected function buildQuery(Column $column)
+    private function buildQuery(Field $field): void
     {
-        $name = $column->getFilter()->getName();
-        $input = $column->getFilter()->getInput();
+        $name = $field->getName();
+        $input = $field->getInput();
 
-        if ($column->getFilter()->getOperator() == FilterOperator::OPERATOR_BETWEEN) {
+        if ($field->getOperator() == FilterOperator::OPERATOR_BETWEEN) {
             $this->source = $this->source->whereBetween($name, $input);
         } else {
             $this->source = $this->source->where(
                 $name,
-                $column->getFilter()->getOperator(),
-                $this->normalizeValue($input, $column->getFilter()->getOperator()),
+                $field->getOperator(),
+                $this->normalizeValue($input, $field->getOperator()),
             );
         }
     }
 
-    /**
-     * @param string|string[] $value
-     * @param string $operator
-     * @return mixed
-     */
-    protected function normalizeValue($value, $operator)
+    private function normalizeValue(array|string $value, string $operator): array|string
     {
-        if (is_array($value)) {
-            $value = array_filter($value);
+        if (\is_array($value)) {
+            $value = \array_filter($value);
         }
-
         if ($operator == FilterOperator::OPERATOR_LIKE || $operator == FilterOperator::OPERATOR_ILIKE) {
-            $value = '%' . str_replace('*', '%', $value) . '%';
+            return '%' . \str_replace('*', '%', $value) . '%';
         }
-
         return $value;
     }
 }

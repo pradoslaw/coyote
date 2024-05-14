@@ -33,7 +33,7 @@ class CollectionSource implements SourceInterface
                 $this->filterValue(
                     $column->getFilter()->getName(),
                     $column->getFilter()->getInput(),
-                    $column->getFilter()->getOperator()
+                    $column->getFilter()->getOperator(),
                 );
             }
         }
@@ -45,7 +45,7 @@ class CollectionSource implements SourceInterface
      * @param Order $order
      * @return Collection
      */
-    public function execute($perPage, $currentPage, Order $order)
+    public function execute(?int $perPage, ?int $currentPage, Order $order)
     {
         if ($order->getDirection()) {
             $direction = $order->getDirection() == 'desc' ? 'sortByDesc' : 'sortBy';
@@ -57,10 +57,7 @@ class CollectionSource implements SourceInterface
             ->forPage($currentPage, $perPage);
     }
 
-    /**
-     * @return int
-     */
-    public function total()
+    public function total(): int
     {
         return $this->collection->count();
     }
