@@ -18,7 +18,7 @@
               <li class="list-group-item col-sm-6">Odpowiedzi zaakceptowanych: <strong>{{ user_posts_accepted }}</strong></li>
             </ul>
 
-            <canvas id="line-chart"></canvas>
+            <canvas id="posts-chart"></canvas>
           </div>
         </div>
       </div>
@@ -26,9 +26,8 @@
   </div>
 
   <script>
-
     new Chart(document.getElementById("pie-chart"), {
-      type: 'pie',
+      type: 'doughnut',
       data: {
         labels: [
           {% for name, count in pie %}
@@ -60,8 +59,8 @@
       },
     });
 
-    new Chart(document.getElementById("line-chart"), {
-      type: 'line',
+    new Chart(document.getElementById("posts-chart"), {
+      type: 'bar',
       data: {
         labels: [
           {% for item in line %}

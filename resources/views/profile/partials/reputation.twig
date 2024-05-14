@@ -48,7 +48,7 @@
 <script>
   {% if user.reputation > 0 %}
   new Chart(document.getElementById("chart"), {
-    type: 'line',
+    type: 'bar',
     data: {
       labels: [
         {% for item in chart %}
