@@ -2,52 +2,56 @@
 {% block title %}Użytkownicy :: {{ user.name }} :: {{ parent() }}{% endblock %}
 
 {% block container %}
-    {{ form_start(form) }}
+  {{ form_start(form) }}
 
-    <ul class="nav nav-tabs">
-        <li class="nav-item">
-            <a href="#settings" class="nav-link active" data-bs-toggle="tab">Ustawienia</a>
-        </li>
-        <li class="nav-item">
-            <a href="#groups" class="nav-link" role="tab" data-bs-toggle="tab">Grupy użytkownika</a>
-        </li>
-    </ul>
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a href="#settings" class="nav-link active" data-bs-toggle="tab">
+        Ustawienia konta
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="#groups" class="nav-link" role="tab" data-bs-toggle="tab">
+        Przynależenie do grup
+      </a>
+    </li>
+  </ul>
 
 
-    <div class="card card-default tab-content">
-        <div id="settings" class="card-body tab-pane active">
-            {{ form_row(form.name) }}
-            {{ form_row(form.email) }}
-            {{ form_row(form.group_id) }}
-            {{ form_row(form.is_confirm) }}
-            {{ form_row(form.is_active) }}
-            {{ form_row(form.is_sponsor) }}
-            {{ form_row(form.date_format) }}
-            {{ form_row(form.website) }}
-            {{ form_row(form.github) }}
-            {{ form_row(form.allow_smilies) }}
-            {{ form_row(form.allow_subscribe) }}
-            {{ form_row(form.allow_sticky_header) }}
-            {{ form_row(form.marketing_agreement) }}
-            {{ form_row(form.newsletter_agreement) }}
-            {{ form_row(form.delete_photo) }}
-            {{ form_row(form.firm) }}
-            {{ form_row(form.position) }}
-            {{ form_row(form.bio) }}
-            {{ form_row(form.birthyear) }}
-            {{ form_row(form.location) }}
-            {{ form_row(form.allow_count) }}
-            {{ form_row(form.allow_sig) }}
-            {{ form_row(form.sig) }}
-            {{ form_row(form.submit) }}
-        </div>
-
-        <div id="groups" class="card-body tab-pane">
-            {{ form_row(form.groups) }}
-            {{ form_row(form.submit) }}
-        </div>
+  <div class="card card-default tab-content">
+    <div id="settings" class="card-body tab-pane active">
+      {{ form_row(form.name) }}
+      {{ form_row(form.email) }}
+      {{ form_row(form.group_id) }}
+      {{ form_row(form.is_confirm) }}
+      {{ form_row(form.is_active) }}
+      {{ form_row(form.is_sponsor) }}
+      {{ form_row(form.date_format) }}
+      {{ form_row(form.website) }}
+      {{ form_row(form.github) }}
+      {{ form_row(form.allow_smilies) }}
+      {{ form_row(form.allow_subscribe) }}
+      {{ form_row(form.allow_sticky_header) }}
+      {{ form_row(form.marketing_agreement) }}
+      {{ form_row(form.newsletter_agreement) }}
+      {{ form_row(form.delete_photo) }}
+      {{ form_row(form.firm) }}
+      {{ form_row(form.position) }}
+      {{ form_row(form.bio) }}
+      {{ form_row(form.birthyear) }}
+      {{ form_row(form.location) }}
+      {{ form_row(form.allow_count) }}
+      {{ form_row(form.allow_sig) }}
+      {{ form_row(form.sig) }}
+      {{ form_row(form.submit) }}
     </div>
 
-    {{ form_end(form) }}
+    <div id="groups" class="card-body tab-pane">
+      {{ form_row(form.groups) }}
+      {{ form_row(form.submit) }}
+    </div>
+  </div>
+
+  {{ form_end(form) }}
 
 {% endblock %}
