@@ -35,7 +35,7 @@ class ThrottleSubmission extends ThrottleRequests
 
         if ($this->isAttemptsLimited($request, $response)) {
             foreach ($limits as $limit) {
-                $this->limiter->hit($limit->key, $limit->decaySeconds * 60 * 60);
+                $this->limiter->hit($limit->key, $limit->decaySeconds);
 
                 $response = $this->addHeaders(
                     $response,
