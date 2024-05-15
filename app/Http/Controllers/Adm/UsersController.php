@@ -2,6 +2,7 @@
 namespace Coyote\Http\Controllers\Adm;
 
 use Boduch\Grid\Source\EloquentSource;
+use Coyote\Domain\Administrator\Activity\Navigation;
 use Coyote\Events\UserDeleted;
 use Coyote\Events\UserSaved;
 use Coyote\Http\Forms\User\AdminForm;
@@ -32,12 +33,22 @@ class UsersController extends BaseController
         return $this->view('adm.users.home', ['grid' => $grid]);
     }
 
+    public function show(User $user): View
+    {
+        $this->breadcrumb->push($user->name, route('adm.users.show', [$user->id]));
+        return $this->view('adm.users.show', [
+            'navigation' => new Navigation($user),
+        ]);
+    }
+
     public function edit(User $user): View
     {
-        $this->breadcrumb->push($user->name, route('adm.users.save', [$user->id]));
+        $this->breadcrumb->push($user->name, route('adm.users.show', [$user->id]));
+        $this->breadcrumb->push('Ustawienia konta', route('adm.users.save', [$user->id]));
         return $this->view('adm.users.save', [
-            'user' => $user,
-            'form' => $this->getForm($user),
+            'user'       => $user,
+            'form'       => $this->getForm($user),
+            'navigation' => new Navigation($user),
         ]);
     }
 

@@ -1,0 +1,144 @@
+{% extends 'adm.base' %}
+{% block title %}Użytkownicy :: {{ user.name }} :: {{ parent() }}{% endblock %}
+
+{% block container %}
+  {{ activity.chartLibrarySourceHtml }}
+
+  <div class="card card-default">
+    <div class="card-header">
+      Moderacja aktywności
+    </div>
+
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        <b>Użyszkodnik</b>: {{ activity.mention }}
+      </li>
+      <li class="list-group-item d-flex justify-content-between">
+        <span><b>Utworzenie konta</b>: {{ activity.accountCreatedAt }}</span>
+        <span class="text-muted">{{ activity.createdAgo }}</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="card card-default">
+    <div class="card-header">
+      Histogram
+    </div>
+
+    <div class="card-body">
+      {% if activity.hasAnyPosts %}
+        <div style="height:300px;">
+          {{ activity.postsChart }}
+        </div>
+      {% else %}
+        Użytkownik darmozjad nie dodał <b>żadnych</b> postów.
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="mt-3 mb-4">
+    <a class="btn btn-secondary" href="{{ navigation.settings }}">
+      Powrót
+    </a>
+  </div>
+
+  {% if activity.hasAnyPosts %}
+    <div class="card card-default">
+      <div class="card-header">
+        Posty {{ activity.mention }}
+      </div>
+      <ul class="list-group table-list-group list-group-flush">
+        {% for post in activity.posts %}
+          <li class="list-group-item post-list-item" style="overflow:visible;">
+            <div class="d-flex justify-content-between">
+              <i class="far fa-comment"></i>
+              <p class="mb-0 text-right">
+                <a href="{{ post.forumUrl }}" class="text-nowrap">
+                  {{ post.forumName }}
+                </a>
+              </p>
+            </div>
+            <a href="#">{{ post.topicTitle }}</a>
+            <small class="text-muted d-block">
+              {{ post.dateString }}
+            </small>
+            {% if not post.isLong %}
+              <div class="d-inline-block post-content-excerpt mt-1 rounded p-2" style="background-color: #eee; border: 1px solid #ccc">
+                {{ post.html }}
+              </div>
+            {% else %}
+              <div class="d-flex mt-1">
+                <div class="flex-grow-1 post-content-excerpt rounded p-2" style="background-color: #eee; border: 1px solid #ccc">
+                  <i class="text-muted">Treść zwinięta ze względu na długość</i>
+                </div>
+                <div>
+                  <button class="btn btn-secondary text-nowrap ml-2 btn-show-preview">
+                    <i class="fas fa-eye"></i>
+                    Rozwiń
+                  </button>
+                </div>
+              </div>
+              <div class="position-relative">
+                <div class="full-preview position-absolute d-none" style="top:4px; z-index:10;">
+                  <div class="rounded p-2" style="background-color: #eee; border: 1px solid #ccc">
+                    {{ post.html }}
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <a class="mt-2 mb-4 btn btn-secondary" href="{{ navigation.settings }}">
+      Powrót
+    </a>
+  {% endif %}
+
+  <style>
+      small {
+          font-size: 0.75em;
+      }
+
+      img.img-smile {
+          height: 1em;
+      }
+
+      .post-content-excerpt p {
+          margin: 0;
+      }
+  </style>
+
+  <script>
+    (function () {
+      const list = document.querySelector('.table-list-group');
+
+      Array.from(document.querySelectorAll('.btn-show-preview'))
+        .forEach(button => {
+          button.addEventListener('click', function (event) {
+            const button = event.target;
+
+            const listItem = button.closest('li.post-list-item');
+            const wasVisible = previewVisible(listItem);
+
+            Array.from(list.querySelectorAll('li.post-list-item'))
+              .forEach(listItem => togglePreview(listItem, false))
+
+            togglePreview(listItem, !wasVisible);
+          });
+        })
+
+      function togglePreview(listItem, visible) {
+        const preview = listItem.querySelector('.full-preview');
+        if (preview) {
+          preview.classList.toggle('d-none', !visible);
+        }
+      }
+
+      function previewVisible(listItem) {
+        const preview = listItem.querySelector('.full-preview');
+        return !preview.classList.contains('d-none');
+      }
+    })();
+  </script>
+{% endblock %}

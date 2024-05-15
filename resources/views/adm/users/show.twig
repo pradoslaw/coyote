@@ -1,0 +1,68 @@
+{% extends 'adm.base' %}
+{% block title %}Użytkownicy :: {{ user.name }} :: {{ parent() }}{% endblock %}
+
+{% block container %}
+  <div class="card card-default">
+    <div class="card-header">
+      Użytkownik: {{ navigation.mention }}
+    </div>
+
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        <p class="mb-2">Wyświetl na forum:</p>
+        <div>
+          <a class="btn btn-secondary" href="{{ navigation.profile }}">
+            <i class="fa fa-user fa-fw"></i>
+            Pokaż profil
+          </a>
+          <a class="btn btn-secondary" href="{{ navigation.posts }}">
+            <i class="fa fa-comments fa-fw"></i>
+            Pokaż posty
+          </a>
+          <a class="btn btn-secondary" href="{{ navigation.microblogs }}">
+            <i class="fa fa-comments fa-fw"></i>
+            Pokaż mikroblogi
+          </a>
+        </div>
+      </li>
+      <li class="list-group-item">
+        <p class="mb-2">Aktywność i logowanie użytkownika:</p>
+        <div>
+          <a class="btn btn-secondary" href="{{ navigation.stream }}">
+            <i class="fa fa-newspaper fa-fw"></i>
+            Dziennik zdarzeń
+          </a>
+          <button class="btn btn-secondary" disabled title="Funkcjonalność jeszcze nie jest gotowe">
+            <i class="fas fa-fingerprint fa-fw"></i>
+            Znajdź fingerprinty
+          </button>
+          <a class="btn btn-secondary" href="{{ navigation.activity }}">
+            <i class="fas fa-eye fa-fw"></i>
+            Moderuj aktywność
+          </a>
+        </div>
+      </li>
+      <li class="list-group-item">
+        <p class="mb-2">Wykonaj twarde akcje:</p>
+        <div>
+          <a class="btn btn-secondary" href="{{ navigation.settings }}">
+            <i class="fa fa-user fa-fw"></i>
+            Ustawienia konta
+          </a>
+          <button class="btn btn-secondary" disabled title="Przekierowanie jeszcze nie jest gotowe">
+            <i class="fa fa-users fa-fw"></i>
+            Dołącz lub usuń z grupy
+          </button>
+          <button class="btn btn-secondary" disabled title="Przekierowanie jeszcze nie jest gotowe">
+            <i class="fa fa-user-slash fa-fw"></i>
+            Wlep bana
+          </button>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <a class="btn btn-secondary" href="{{ navigation.users }}">
+    Powrót
+  </a>
+{% endblock %}

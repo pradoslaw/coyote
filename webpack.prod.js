@@ -53,6 +53,7 @@ const plugins = [
         'fa-minus',
         'fa-columns',
         'fa-user-slash',
+        'fa-fingerprint',
         'pre',
         'kbd',
         'code',

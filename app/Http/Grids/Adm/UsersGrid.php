@@ -31,7 +31,7 @@ class UsersGrid extends Grid
             ->addColumn('name', [
                 'title'     => 'Nazwa użytkownika',
                 'sortable'  => true,
-                'clickable' => fn(User $user) => link_to_route('adm.users.save', $user->name, [$user->id]),
+                'clickable' => fn(User $user) => link_to_route('adm.users.show', $user->name, [$user->id]),
                 'filter'    => new Text(['operator' => FilterOperator::OPERATOR_ILIKE]),
             ])
             ->addColumn('email', [
