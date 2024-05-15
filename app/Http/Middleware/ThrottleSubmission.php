@@ -25,7 +25,6 @@ class ThrottleSubmission extends ThrottleRequests
             // 1. has the user reached the request limit?
             // 2. whether the optional parameters are filled in (that can suggest that the user is editing existing an resource)
             if ($this->limiter->tooManyAttempts($limit->key, $limit->maxAttempts) && !$this->isOptionalFilled($request->route())) {
-//            if ($this->limiter->tooManyAttempts($limit->key, $limit->maxAttempts) && !$this->isOptionalFilled($request->route())) {
                 throw $this->buildException($request, $limit->key, $limit->maxAttempts, $limit->responseCallback);
             }
         }
