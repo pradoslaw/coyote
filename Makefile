@@ -4,7 +4,7 @@ up:
 	docker-compose up -d
 
 bash:
-	docker-compose exec php bash
+	docker-compose exec -u nginx php bash
 
 composer-install:
 	docker-compose exec -T -u nginx php composer install
