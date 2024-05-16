@@ -48,6 +48,17 @@ class EventViewLangEngTest extends TestCase
     /**
      * @test
      */
+    public function detailsKindMeetup(): void
+    {
+        $view = $this->englishView(['eventKind' => EventKind::Meetup]);
+        $this->assertSame(
+            'Meetup',
+            $this->eventDetailsKind($view));
+    }
+
+    /**
+     * @test
+     */
     public function detailsPricing(): void
     {
         $view = $this->englishView(['eventFree' => false]);

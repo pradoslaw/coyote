@@ -27,6 +27,7 @@ class Polish implements Language
         'Conference' => 'Konferencja',
         'Hackaton'   => 'Hackaton',
         'Workshop'   => 'Warsztaty',
+        'Meetup'     => 'Meetup',
 
         'Free' => 'Bezpłatne',
         'Paid' => 'Płatne',
@@ -39,13 +40,13 @@ class Polish implements Language
         'Sat' => 'Sb',
         'Sun' => 'Nd',
 
-        'Are you hosting an event?'                                               =>
+        'Are you hosting an event?'                                              =>
             'Organizujesz wydarzenie?',
         "Add your event to our calendar and we'll gladly provide media support." =>
             'Zarejestruj je w naszym kalendarzu, a z radością udzielimy mu wsparcia medialnego.',
-        'Learn more'                                                              =>
+        'Learn more'                                                             =>
             'Dowiedz się więcej',
-        'Search threads, posts or users' => 'Wyszukaj wątki, posty lub użytkowników'
+        'Search threads, posts or users'                                         => 'Wyszukaj wątki, posty lub użytkowników',
     ];
 
     public function t(string $phrase): string

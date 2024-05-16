@@ -48,6 +48,17 @@ class EventViewLangPlTest extends TestCase
     /**
      * @test
      */
+    public function detailsKindMeetup(): void
+    {
+        $view = $this->polishView(['eventKind' => EventKind::Meetup]);
+        $this->assertSame(
+            'Meetup',
+            $this->eventDetailsKind($view));
+    }
+
+    /**
+     * @test
+     */
     public function detailsPricing(): void
     {
         $view = $this->polishView(['eventFree' => false]);

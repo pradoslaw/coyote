@@ -6,4 +6,5 @@ enum EventKind
     case Workshop;
     case Conference;
     case Hackaton;
+    case Meetup;
 }
