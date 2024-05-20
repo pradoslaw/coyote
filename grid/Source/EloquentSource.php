@@ -67,6 +67,9 @@ class EloquentSource implements SourceInterface
             $value = \array_filter($value);
         }
         if ($operator == FilterOperator::OPERATOR_LIKE || $operator == FilterOperator::OPERATOR_ILIKE) {
+            if ($value[0] === '"' && \subStr($value, -1) === '"') {
+                return \subStr($value, 1, \strLen($value) - 2);
+            }
             if (!\str_contains($value, '*')) {
                 $value = '*' . $value . '*';
             }

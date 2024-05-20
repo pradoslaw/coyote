@@ -68,4 +68,18 @@ class Test extends TestCase
         // then
         $this->assertUsersPresented($response, ['Meow']);
     }
+
+    /**
+     * @test
+     */
+    public function exactSearch(): void
+    {
+        // given
+        $this->existingUsers(['Food', 'Foo']);
+        $this->userInAdministratorDashboard();
+        // when
+        $response = $this->searchByUsername('"Foo"');
+        // then
+        $this->assertUsersPresented($response, ['Foo']);
+    }
 }
