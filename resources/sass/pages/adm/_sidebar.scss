@@ -1,5 +1,4 @@
 #adm-menu {
-  background: url('/img/background.png') repeat;
   border-right: 1px solid lighten($card-border-color, 2%);
   position: absolute;
   left: 0;
@@ -21,7 +20,7 @@
         display: block;
         padding: 10px 20px;
         transition: all .15s linear;
-        color: #3C3C3C;
+        color: unset;
         font-family: "Open Sans", Arial, sans-serif;
         font-size: 12px;
 

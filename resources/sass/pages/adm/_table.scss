@@ -6,7 +6,7 @@
 
 .table th a.sort {
   display: block;
-  color: $gray;
+  color: unset;
 
   &:hover {
     text-decoration: none;

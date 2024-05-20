@@ -20,7 +20,6 @@ body.padding-top {
 }
 
 #adm-header {
-  background-color: #fff;
   border-bottom: 1px solid $card-border-color;
 
   > .col-12 {
@@ -33,12 +32,11 @@ abbr {
   border-bottom: 1px dotted $gray-light;
 }
 
-// Sidebar
-// ----------------------
-
 @import "adm/sidebar";
-
-// Table (sorting)
-// --------------------
-
 @import "adm/table";
+
+body.theme-dark {
+  .administrator-panel .btn {
+    color: unset;
+  }
+}
