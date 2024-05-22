@@ -63,12 +63,12 @@
               {{ post.dateString }}
             </small>
             {% if not post.isLong %}
-              <div class="d-inline-block post-content-excerpt mt-1 rounded p-2" style="background-color: #eee; border: 1px solid #ccc">
+              <div class="d-inline-block post-content-excerpt mt-1 rounded p-2 post-preview">
                 {{ post.html }}
               </div>
             {% else %}
               <div class="d-flex mt-1">
-                <div class="flex-grow-1 post-content-excerpt rounded p-2" style="background-color: #eee; border: 1px solid #ccc">
+                <div class="flex-grow-1 post-content-excerpt rounded p-2 post-preview">
                   <i class="text-muted">Treść zwinięta ze względu na długość</i>
                 </div>
                 <div>
@@ -80,7 +80,7 @@
               </div>
               <div class="position-relative">
                 <div class="full-preview position-absolute d-none" style="top:4px; z-index:10;">
-                  <div class="rounded p-2" style="background-color: #eee; border: 1px solid #ccc">
+                  <div class="rounded p-2 post-preview">
                     {{ post.html }}
                   </div>
                 </div>
@@ -106,6 +106,16 @@
 
       .post-content-excerpt p {
           margin: 0;
+      }
+
+      body.theme-dark .post-preview {
+          background-color: #111111;
+          border-color: #333333;
+      }
+
+      .post-preview {
+          background-color: #eee;
+          border: 1px solid #ccc;
       }
   </style>
 
