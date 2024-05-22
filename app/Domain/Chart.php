@@ -43,7 +43,7 @@ class Chart
         return <<<html
             <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
             <canvas id="chart"></canvas>
-            <script>const chart = new Chart(document.getElementById("chart"), {$this->options()});</script>
+            <script>new Chart(document.getElementById("chart"), {$this->options()});</script>
             html;
     }
 

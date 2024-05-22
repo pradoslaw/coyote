@@ -30,7 +30,12 @@ trait AssertsRender
     {
         $browser = new Browser();
         $browser->setHtmlSource("<html><body>$chart</body></html>");
-        return $this->binaryImage($browser->execute("return chart.toBase64Image('image/png', 1);"));
+        return $this->binaryImage($this->chartAsHtmlBase64($browser));
+    }
+
+    function chartAsHtmlBase64(Browser $browser): mixed
+    {
+        return $browser->execute("return Chart.getChart('chart').toBase64Image('image/png', 1);");
     }
 
     function binaryImage(string $htmlBase64): string
