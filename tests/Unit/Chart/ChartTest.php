@@ -44,4 +44,18 @@ class ChartTest extends TestCase
             ['#ff9f40', '#ff6384'],
         ));
     }
+
+    /**
+     * @test
+     */
+    public function horizontal()
+    {
+        $this->assertExpectedImage(new Chart(
+            'Valar morghulis',
+            ['Foo', 'Bar'],
+            [20, 30],
+            ['#ff9f40', '#ff6384'],
+            horizontal:true,
+        ));
+    }
 }

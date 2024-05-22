@@ -10,6 +10,7 @@ class Chart
         array  $labels,
         array  $values,
         array  $hexColors,
+        bool   $horizontal = false,
     )
     {
         [$fillColors, $borderColors] = $this->colors($hexColors);
@@ -30,6 +31,7 @@ class Chart
             'options' => [
                 'animation'           => false,
                 'maintainAspectRatio' => false,
+                'indexAxis'           => $horizontal ? 'y' : 'x',
             ],
         ];
     }
