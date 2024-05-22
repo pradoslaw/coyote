@@ -41,7 +41,7 @@ class Chart
     public function __toString(): string
     {
         return <<<html
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
             <canvas id="chart"></canvas>
             <script>new Chart(document.getElementById("chart"), {$this->options()});</script>
             html;
