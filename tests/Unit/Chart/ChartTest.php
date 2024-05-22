@@ -13,7 +13,7 @@ class ChartTest extends TestCase
      */
     public function empty()
     {
-        $this->assertExpectedImage(new Chart('', [], []));
+        $this->assertExpectedImage(new Chart('', [], [], '#000000'));
     }
 
     /**
@@ -21,7 +21,7 @@ class ChartTest extends TestCase
      */
     public function title()
     {
-        $this->assertExpectedImage(new Chart('Valar morghulis', [], []));
+        $this->assertExpectedImage(new Chart('Valar morghulis', [], [], '#000000'));
     }
 
     /**
@@ -29,6 +29,19 @@ class ChartTest extends TestCase
      */
     public function chart()
     {
-        $this->assertExpectedImage(new Chart('Valar morghulis', ['Foo', 'Bar'], [20, 30]));
+        $this->assertExpectedImage(new Chart('Valar morghulis', ['Foo', 'Bar'], [20, 30], '#000000'));
+    }
+
+    /**
+     * @test
+     */
+    public function color()
+    {
+        $this->assertExpectedImage(new Chart(
+            'Valar morghulis',
+            ['Foo', 'Bar'],
+            [20, 30],
+            '#ff9f40',
+        ));
     }
 }
