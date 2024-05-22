@@ -1,6 +1,7 @@
 <?php
 namespace Coyote\Http\Controllers\Profile;
 
+use Coyote\Domain\Chart;
 use Coyote\Http\Controllers\Controller;
 use Coyote\Http\Controllers\User\Menu\ProfileNavigation;
 use Coyote\Http\Requests\SkillsRequest;
@@ -17,6 +18,7 @@ use Coyote\Repositories\Eloquent\MicroblogRepository;
 use Coyote\Services\Microblogs\Builder;
 use Coyote\Services\Parser\Extensions\Emoji;
 use Coyote\User;
+use Coyote\View\Twig\TwigLiteral;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -76,8 +78,19 @@ class HomeController extends Controller
             'rank'        => $this->user->rank($user->id),
             'total_users' => $this->user->countUsersWithReputation(),
             'reputation'  => $this->reputation->history($user->id),
-            'chart'       => $this->reputation->chart($user->id),
+            'chart'       => new TwigLiteral($this->chart($user)),
         ]);
+    }
+
+    private function chart(User $user): Chart
+    {
+        $chart = $this->reputation->chart($user->id);
+        return new Chart(
+            'Reputacja zyskana w miesiącu',
+            \array_map(fn(array $item) => $item['label'], $chart),
+            \array_map(fn(array $rec) => $rec['value'], $chart),
+            '#ff9f40',
+        );
     }
 
     private function post(User $user): View
