@@ -9,10 +9,10 @@ class Chart
         string $chartTitle,
         array  $labels,
         array  $values,
-        string $hexColor,
+        array  $hexColors,
     )
     {
-        [$r, $g, $b] = $this->rgb($hexColor);
+        [$fillColors, $borderColors] = $this->colors($hexColors);
         $this->options = [
             'type'    => 'bar',
             'data'    => [
@@ -21,8 +21,8 @@ class Chart
                     [
                         'label'           => $chartTitle,
                         'data'            => $values,
-                        'backgroundColor' => "rgba($r, $g, $b, 0.2)",
-                        'borderColor'     => "rgb($r, $g, $b)",
+                        'backgroundColor' => $fillColors,
+                        'borderColor'     => $borderColors,
                         'borderWidth'     => 1,
                     ],
                 ],
@@ -32,6 +32,18 @@ class Chart
                 'maintainAspectRatio' => false,
             ],
         ];
+    }
+
+    private function colors(array $hexColors): array
+    {
+        $fillColors = [];
+        $borderColors = [];
+        foreach ($hexColors as $hexColor) {
+            [$r, $g, $b] = $this->rgb($hexColor);
+            $fillColors[] = "rgba($r, $g, $b, 0.2)";
+            $borderColors[] = "rgb($r, $g, $b)";
+        }
+        return [$fillColors, $borderColors];
     }
 
     private function rgb(string $hexColor): array
