@@ -6,11 +6,11 @@ readonly class ViewDom
     private \DOMDocument $document;
     private \DOMXPath $xPath;
 
-    public function __construct(private string $html)
+    public function __construct(string $html)
     {
         $this->document = new \DOMDocument();
         \libxml_use_internal_errors(true);
-        $this->document->loadHTML($this->html);
+        $this->document->loadHTML($html);
         \libxml_clear_errors();
         $this->xPath = new \DOMXPath($this->document);
     }
