@@ -5,13 +5,13 @@
       <div class="row">
         {% if user.reputation > 0 %}
           <div class="col-sm-6">
-            {{ chart }}
+            <div style="height:280px;">
+              {{ chart }}
+            </div>
 
             <div class="chart-bar">
               <div class="progress">
-
                 <div class="progress-bar" role="progressbar" aria-valuenow="{{ rank.percentage }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ rank.percentage }}%;">
-
                 </div>
 
                 <span class="rep"><strong>{{ user.reputation }}</strong> <small>{{ declination(user.reputation, ['punkt', 'punkty', 'punktów'], true) }}</small></span>

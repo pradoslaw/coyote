@@ -28,7 +28,8 @@ class Chart
                 ],
             ],
             'options' => [
-                'animation' => false,
+                'animation'           => false,
+                'maintainAspectRatio' => false,
             ],
         ];
     }
@@ -42,7 +43,9 @@ class Chart
     {
         return <<<html
             <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-            <canvas id="chart"></canvas>
+            <div style="height:inherit;">
+                <canvas id="chart"></canvas>
+            </div>
             <script>new Chart(document.getElementById("chart"), {$this->options()});</script>
             html;
     }
