@@ -86,7 +86,6 @@ class HomeController extends Controller
     {
         $chart = $this->reputation->chart($user->id);
         return new Chart(
-            'Reputacja zyskana w miesiącu',
             \array_map(fn(array $item) => $item['label'], $chart),
             \array_map(fn(array $rec) => $rec['value'], $chart),
             ['#ff9f40'],

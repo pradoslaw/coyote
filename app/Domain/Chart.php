@@ -6,7 +6,6 @@ class Chart
     private array $options;
 
     public function __construct(
-        string         $chartTitle,
         array          $labels,
         array          $values,
         array          $hexColors,
@@ -21,7 +20,6 @@ class Chart
                 'labels'   => $labels,
                 'datasets' => [
                     [
-                        'label'           => $chartTitle,
                         'data'            => $values,
                         'backgroundColor' => $fillColors,
                         'borderColor'     => $borderColors,
@@ -30,6 +28,11 @@ class Chart
                 ],
             ],
             'options' => [
+                'plugins'             => [
+                    'legend' => [
+                        'display' => false,
+                    ],
+                ],
                 'animation'           => false,
                 'maintainAspectRatio' => false,
                 'indexAxis'           => $horizontal ? 'y' : 'x',

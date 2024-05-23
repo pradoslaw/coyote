@@ -33,7 +33,6 @@ readonly class Activity
         $this->mention = new Mention($user);
 
         $postsChart = new Chart(
-            'Posty',
             $segments->dates(),
             $segments->peeks(),
             ['#ff9f40'],
@@ -45,7 +44,6 @@ readonly class Activity
 
         $hexColors = ['#ff6384', '#ff9f40', '#ffcd56', '#4bc0c0', '#36a2eb', '#9966ff', '#c9cbcf'];
         $categoriesChart = new Chart(
-            'Posty w kategoriach',
             $this->extracted($this->categories, 'forumName'),
             $this->extracted($this->categories, 'posts'),
             $hexColors,
@@ -54,7 +52,6 @@ readonly class Activity
         );
 
         $deleteReasonsChart = new Chart(
-            'Powody usunięć postów',
             \array_map(
                 fn(?string $reason) => $reason ?? '(nie podano powodu)',
                 $this->extracted($this->deleteReasons, 'reason'),
