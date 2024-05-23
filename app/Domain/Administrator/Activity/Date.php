@@ -7,7 +7,7 @@ class Date implements \JsonSerializable
 {
     private Carbon $date;
 
-    public function __construct(private string $dateString)
+    public function __construct(private string $dateString, private string $scale)
     {
         $this->date = new Carbon($dateString);
     }
@@ -29,7 +29,56 @@ class Date implements \JsonSerializable
 
     public function toString(): string
     {
-        $months = ['styczeń', 'luty', 'marzec', 'kwiecień', 'maj', 'czerwiec', 'lipiec', 'sierpień', 'wrzesień', 'październik', 'listopad', 'grudzień'];
-        return $months[$this->date->month - 1] . ' ' . $this->date->format('Y');
+        if ($this->scale === 'hour') {
+            return $this->genitiveMonths($this->date->format('d F, H:i'));
+        }
+        if ($this->scale === 'day') {
+            return $this->genitiveMonths($this->date->format('d F Y'));
+        }
+        if ($this->scale == 'month') {
+            return $this->nominativeMonths($this->date->format('F Y'));
+        }
+        return 'rok ' . $this->date->format('Y');
+    }
+
+    private function nominativeMonths(string $dateFormat): string
+    {
+        return $this->translate($dateFormat, [
+            'January'   => 'styczeń',
+            'February'  => 'luty',
+            'March'     => 'marzec',
+            'April'     => 'kwiecień',
+            'May'       => 'maj',
+            'June'      => 'czerwiec',
+            'July'      => 'lipiec',
+            'August'    => 'sierpień',
+            'September' => 'wrzesień',
+            'October'   => 'październik',
+            'November'  => 'listopad',
+            'December'  => 'grudzień',
+        ]);
+    }
+
+    private function genitiveMonths(string $dateFormat): string
+    {
+        return $this->translate($dateFormat, [
+            'January'   => 'stycznia',
+            'February'  => 'lutego',
+            'March'     => 'marca',
+            'April'     => 'kwietnia',
+            'May'       => 'maja',
+            'June'      => 'czerwca',
+            'July'      => 'lipca',
+            'August'    => 'sierpnia',
+            'September' => 'września',
+            'October'   => 'października',
+            'November'  => 'listopada',
+            'December'  => 'grudnia',
+        ]);
+    }
+
+    private function translate(string $string, array $map): string
+    {
+        return \str_replace(\array_keys($map), \array_values($map), $string);
     }
 }

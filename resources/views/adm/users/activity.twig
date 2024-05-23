@@ -6,77 +6,105 @@
 
   <div class="card card-default">
     <div class="card-header">
-      Moderacja aktywności
+      <div class="d-flex justify-content-between">
+        <span>Użytkownik: {{ activity.mention }}</span>
+        <span>
+          <i class="fas fa-eye fa-fw"></i>
+          Moderacja aktywności
+        </span>
+      </div>
     </div>
 
     <ul class="list-group list-group-flush">
-      <li class="list-group-item">
-        <b>Użyszkodnik</b>: {{ activity.mention }}
-      </li>
       <li class="list-group-item d-flex justify-content-between">
         <span><b>Utworzenie konta</b>: {{ activity.accountCreatedAt }}</span>
-        <span class="text-muted">{{ activity.createdAgo }}</span>
+        <div>
+          <b>{{ activity.createdAgoMajor }}</b>
+          <span class="text-muted">{{ activity.createdAgoMinor }}</span>
+        </div>
       </li>
     </ul>
   </div>
 
   <div class="card card-default">
     <div class="card-header">
-      Histogram
+      Okres
     </div>
 
     <div class="card-body">
-      {% if activity.hasAnyPosts %}
-        <div style="height:300px;">
-          {{ activity.postsChart }}
-        </div>
-      {% else %}
-        Użytkownik darmozjad nie dodał <b>żadnych</b> postów.
-      {% endif %}
+      <div class="btn-group">
+        <a href="?" class="btn btn-secondary">
+          <i class="far fa-calendar-check"></i>
+          Wszystko
+        </a>
+        <a href="?last=year" type="button" class="btn btn-secondary">
+          <i class="far fa-calendar fa-fw"></i>
+          Ostatnie 365 dni
+        </a>
+        <a href="?last=month" type="button" class="btn btn-secondary">
+          <i class="fas fa-calendar-alt fa-fw"></i>
+          Ostatnie 31 dni
+        </a>
+        <a href="?last=week" type="button" class="btn btn-secondary">
+          <i class="fas fa-calendar-week fa-fw"></i>
+          Ostatnie 7 dni
+        </a>
+        <a href="?last=day" type="button" class="btn btn-secondary">
+          <i class="fas fa-calendar-day fa-fw"></i>
+          Ostatnie 24h
+        </a>
+      </div>
     </div>
-  </div>
-
-  <div class="mt-3 mb-4">
-    <a class="btn btn-secondary" href="{{ navigation.settings }}">
-      Powrót
-    </a>
   </div>
 
   {% if activity.hasAnyPosts %}
     <div class="card card-default">
       <div class="card-header">
-        Posty {{ activity.mention }}
+        Posty i wątki {{ activity.mention }}
       </div>
       <ul class="list-group table-list-group list-group-flush">
         {% for post in activity.posts %}
-          <li class="list-group-item post-list-item" style="overflow:visible;">
+          <li class="list-group-item post-list-item {{ post.deleted ? 'deleted' : '' }}" style="overflow:visible;">
             <div class="d-flex justify-content-between">
-              <i class="far fa-comment"></i>
+              <p class="mb-0">
+                {% if post.isThread %}
+                  <i class="far fa-comments"></i>
+                  <span class="ml-1 badge badge-secondary">Wątek</span>
+                {% else %}
+                  <i class="far fa-comment"></i>
+                  <span class="ml-1 badge badge-secondary">Post</span>
+                {% endif %}
+                {% if post.deleted %}
+                  <span class="ml-1 badge badge-secondary">Usunięty</span>
+                {% endif %}
+                <small class="text-muted ml-1">
+                  {{ post.dateString }}
+                </small>
+              </p>
               <p class="mb-0 text-right">
                 <a href="{{ post.forumUrl }}" class="text-nowrap">
                   {{ post.forumName }}
                 </a>
               </p>
             </div>
-            <a href="#">{{ post.topicTitle }}</a>
-            <small class="text-muted d-block">
-              {{ post.dateString }}
-            </small>
+            <a href="{{ post.postUrl }}">
+              <b>{{ post.topicTitle }}</b>
+            </a>
             {% if not post.isLong %}
-              <div class="d-inline-block post-content-excerpt mt-1 rounded p-2 post-preview">
-                {{ post.html }}
+              <div>
+                <div class="d-inline-block post-content-excerpt mt-1 rounded p-2 post-preview">
+                  {{ post.html }}
+                </div>
               </div>
             {% else %}
               <div class="d-flex mt-1">
                 <div class="flex-grow-1 post-content-excerpt rounded p-2 post-preview">
-                  <i class="text-muted">Treść zwinięta ze względu na długość</i>
+                  {{ post.previewHtml }}
                 </div>
-                <div>
-                  <button class="btn btn-secondary text-nowrap ml-2 btn-show-preview">
-                    <i class="fas fa-eye"></i>
-                    Rozwiń
-                  </button>
-                </div>
+                <button class="btn btn-secondary text-nowrap ml-2 btn-show-preview align-self-start">
+                  <i class="fas fa-eye"></i>
+                  Rozwiń
+                </button>
               </div>
               <div class="position-relative">
                 <div class="full-preview position-absolute d-none" style="top:4px; z-index:10;">
@@ -90,10 +118,35 @@
         {% endfor %}
       </ul>
     </div>
-    <a class="mt-2 mb-4 btn btn-secondary" href="{{ navigation.settings }}">
-      Powrót
-    </a>
   {% endif %}
+
+  {% if activity.hasAnyPosts %}
+    <div class="card card-default">
+      <div class="card-header">
+        Kategorie
+      </div>
+      <div class="card-body">
+        <div style="width:100%; height:300px;">
+          {{ activity.categoriesChart }}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="card card-default">
+    <div class="card-header">
+      Histogram
+    </div>
+    <div class="card-body">
+      {% if activity.hasAnyPosts %}
+        <div style="height:300px;">
+          {{ activity.postsChart }}
+        </div>
+      {% else %}
+        Użytkownik darmozjad nie dodał <b>żadnych</b> postów.
+      {% endif %}
+    </div>
+  </div>
 
   <style>
       small {
@@ -106,6 +159,14 @@
 
       .post-content-excerpt p {
           margin: 0;
+      }
+
+      .deleted {
+          opacity: 0.5;
+      }
+
+      .deleted:hover {
+          opacity: 0.9;
       }
 
       body.theme-dark .post-preview {
