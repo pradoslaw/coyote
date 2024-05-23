@@ -6,11 +6,12 @@ class Chart
     private array $options;
 
     public function __construct(
-        string $chartTitle,
-        array  $labels,
-        array  $values,
-        array  $hexColors,
-        bool   $horizontal = false,
+        string         $chartTitle,
+        array          $labels,
+        array          $values,
+        array          $hexColors,
+        private string $id,
+        bool           $horizontal = false,
     )
     {
         [$fillColors, $borderColors] = $this->colors($hexColors);
@@ -53,14 +54,18 @@ class Chart
         return \sScanF($hexColor, '#%02x%02x%02x');
     }
 
+    public function librarySourceHtml(): string
+    {
+        return '<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>';
+    }
+
     public function __toString(): string
     {
         return <<<html
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
             <div style="height:inherit;">
-                <canvas id="chart"></canvas>
+                <canvas id="$this->id"></canvas>
             </div>
-            <script>new Chart(document.getElementById("chart"), {$this->options()});</script>
+            <script>new Chart(document.getElementById("$this->id"), {$this->options()});</script>
             html;
     }
 

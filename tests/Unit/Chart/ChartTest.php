@@ -13,7 +13,7 @@ class ChartTest extends TestCase
      */
     public function empty()
     {
-        $this->assertExpectedImage(new Chart('', [], [], []));
+        $this->assertExpectedImage(new Chart('', [], [], [], 'chart'));
     }
 
     /**
@@ -21,7 +21,7 @@ class ChartTest extends TestCase
      */
     public function title()
     {
-        $this->assertExpectedImage(new Chart('Valar morghulis', [], [], []));
+        $this->assertExpectedImage(new Chart('Valar morghulis', [], [], [], 'chart'));
     }
 
     /**
@@ -29,7 +29,7 @@ class ChartTest extends TestCase
      */
     public function chart()
     {
-        $this->assertExpectedImage(new Chart('Valar morghulis', ['Foo', 'Bar'], [20, 30], []));
+        $this->assertExpectedImage(new Chart('Valar morghulis', ['Foo', 'Bar'], [20, 30], [], 'chart'));
     }
 
     /**
@@ -42,6 +42,7 @@ class ChartTest extends TestCase
             ['Foo', 'Bar'],
             [20, 30],
             ['#ff9f40', '#ff6384'],
+            'chart',
         ));
     }
 
@@ -55,7 +56,21 @@ class ChartTest extends TestCase
             ['Foo', 'Bar'],
             [20, 30],
             ['#ff9f40', '#ff6384'],
+            'chart',
             horizontal:true,
         ));
+    }
+
+    /**
+     * @test
+     */
+    public function multipleCharts(): void
+    {
+        $browser = $this->newBrowserWithRenderedCharts([
+            new Chart('', [], [], [], id:'first'),
+            new Chart('', [], [], [], id:'second'),
+        ]);
+        $this->assertTrue($this->chartExists($browser, 'first'));
+        $this->assertTrue($this->chartExists($browser, 'second'));
     }
 }

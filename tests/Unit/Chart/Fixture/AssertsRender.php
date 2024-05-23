@@ -28,14 +28,32 @@ trait AssertsRender
 
     function renderChart(Chart $chart): string
     {
-        $browser = new Browser();
-        $browser->setHtmlSource("<html><body>$chart</body></html>");
-        return $this->binaryImage($this->chartAsHtmlBase64($browser));
+        return $this->binaryImage($this->renderChartToHtmlBase64($chart));
     }
 
-    function chartAsHtmlBase64(Browser $browser): mixed
+    private function renderChartToHtmlBase64(Chart $chart): string
     {
-        return $browser->execute("return Chart.getChart('chart').toBase64Image('image/png', 1);");
+        $browser = $this->newBrowserWithRenderedCharts([$chart]);
+        return $this->chartAsHtmlBase64($browser, 'chart');
+    }
+
+    function chartAsHtmlBase64(Browser $browser, string $id): mixed
+    {
+        return $browser->execute("return Chart.getChart('$id').toBase64Image('image/png', 1);");
+    }
+
+    function chartExists(Browser $browser, string $id): bool
+    {
+        return $browser->execute("return typeof Chart.getChart('$id') !== 'undefined';");
+    }
+
+    function newBrowserWithRenderedCharts(array $charts): Browser
+    {
+        $first = $charts[0];
+        $charts = \implode($charts);
+        $browser = new Browser();
+        $browser->setHtmlSource("<html><body>{$first->librarySourceHtml()}$charts</body></html>");
+        return $browser;
     }
 
     function binaryImage(string $htmlBase64): string

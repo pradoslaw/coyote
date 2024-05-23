@@ -89,7 +89,8 @@ class HomeController extends Controller
             'Reputacja zyskana w miesiącu',
             \array_map(fn(array $item) => $item['label'], $chart),
             \array_map(fn(array $rec) => $rec['value'], $chart),
-            '#ff9f40',
+            ['#ff9f40'],
+            'reputation-chart',
         );
     }
 
