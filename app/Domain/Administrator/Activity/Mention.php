@@ -16,7 +16,7 @@ class Mention
         return new TwigLiteral('<a class="mention" href="' . \htmlSpecialChars($url) . '">' . $this->mentionString() . '</a>');
     }
 
-    private function mentionString(): string
+    public function mentionString(): string
     {
         $username = $this->user->name;
         if ($this->containsAnyOf($username, '. ()')) {
