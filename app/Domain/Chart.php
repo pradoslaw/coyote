@@ -6,11 +6,11 @@ class Chart
     private array $options;
 
     public function __construct(
-        array          $labels,
+        private array  $labels,
         array          $values,
         array          $hexColors,
         private string $id,
-        bool           $horizontal = false,
+        private bool   $horizontal = false,
     )
     {
         [$fillColors, $borderColors] = $this->colors($hexColors);
@@ -68,11 +68,24 @@ class Chart
     public function __toString(): string
     {
         return <<<html
-            <div style="height:inherit;">
+            <div style="height:{$this->canvasHeight()}px;">
                 <canvas id="$this->id"></canvas>
             </div>
             <script>new Chart(document.getElementById("$this->id"), {$this->options()});</script>
             html;
+    }
+
+    private function canvasHeight(): int
+    {
+        if ($this->horizontal) {
+            return $this->horizontalItems() * 32;
+        }
+        return 280;
+    }
+
+    private function horizontalItems(): int
+    {
+        return \count($this->labels) + 1;
     }
 
     private function options(): string
