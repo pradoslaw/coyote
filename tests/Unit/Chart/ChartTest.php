@@ -71,4 +71,18 @@ class ChartTest extends TestCase
         $this->assertTrue($this->chartExists($browser, 'first'));
         $this->assertTrue($this->chartExists($browser, 'second'));
     }
+
+    /**
+     * @test
+     */
+    public function overflowingLabels()
+    {
+        $this->assertExpectedImage(new Chart(
+            ['Father', 'Mother', 'Maiden', 'Crone', 'Warrior', 'Smith', 'Stranger'],
+            [20, 30, 40, 50, 60, 70, 80],
+            ['#ff9f40', '#ff6384'],
+            'chart',
+            horizontal:true,
+        ));
+    }
 }

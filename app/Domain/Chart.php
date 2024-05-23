@@ -36,6 +36,9 @@ class Chart
                 'animation'           => false,
                 'maintainAspectRatio' => false,
                 'indexAxis'           => $horizontal ? 'y' : 'x',
+                'scales'              => [
+                    'y' => ['ticks' => ['autoSkip' => false]],
+                ],
             ],
         ];
     }
