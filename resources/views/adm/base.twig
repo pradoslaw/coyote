@@ -45,14 +45,16 @@
         </div>
       {% endif %}
 
-      {% block container %}
-        <div class="card card-default">
-          <div class="card-body">
-            {% block card %}
-            {% endblock %}
+      <div class="container-xxl">
+        {% block container %}
+          <div class="card card-default">
+            <div class="card-body">
+              {% block card %}
+              {% endblock %}
+            </div>
           </div>
-        </div>
-      {% endblock %}
+        {% endblock %}
+      </div>
     </main>
   </div>
 
