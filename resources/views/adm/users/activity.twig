@@ -126,7 +126,11 @@
             Powody usunięcia
           </div>
           <div class="card-body">
-            {{ activity.deleteReasonsChart }}
+            {% if activity.hasDeleteReasons %}
+              {{ activity.deleteReasonsChart }}
+            {% else %}
+              Użytkownik <b>nie ma</b> usuniętych postów.
+            {% endif %}
           </div>
         </div>
         <div class="card card-default">

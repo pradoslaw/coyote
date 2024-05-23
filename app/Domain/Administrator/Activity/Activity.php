@@ -72,6 +72,11 @@ readonly class Activity
         $this->chartLibrarySourceHtml = new TwigLiteral($postsChart->librarySourceHtml());
     }
 
+    public function hasDeleteReasons(): bool
+    {
+        return \count($this->deleteReasons) > 0;
+    }
+
     public function hasAnyPosts(): bool
     {
         return \count($this->posts) > 0;
