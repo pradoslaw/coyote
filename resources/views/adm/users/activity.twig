@@ -58,69 +58,70 @@
   </div>
 
   {% if activity.hasAnyPosts %}
-    <div class="d-flex">
-      <div class="card card-default w-50 align-self-start">
-        <div class="card-header">
-          Posty i wątki {{ activity.mention }}
-        </div>
-        <ul class="list-group table-list-group list-group-flush">
-          {% for post in activity.posts %}
-            <li class="list-group-item post-list-item {{ post.deleted ? 'deleted' : '' }}" style="overflow:visible;">
-              <div class="d-flex justify-content-between">
-                <p class="mb-0">
-                  {% if post.isThread %}
-                    <i class="far fa-comments"></i>
-                    <span class="ml-1 badge badge-secondary">Wątek</span>
-                  {% else %}
-                    <i class="far fa-comment"></i>
-                    <span class="ml-1 badge badge-secondary">Post</span>
-                  {% endif %}
-                  {% if post.deleted %}
-                    <span class="ml-1 badge badge-secondary">Usunięty</span>
-                  {% endif %}
-                  <small class="text-muted ml-1">
-                    {{ post.dateString }}
-                  </small>
-                </p>
-                <p class="mb-0 text-right">
-                  <a href="{{ post.forumUrl }}" class="text-nowrap">
-                    {{ post.forumName }}
-                  </a>
-                </p>
-              </div>
-              <a href="{{ post.postUrl }}">
-                <b>{{ post.topicTitle }}</b>
-              </a>
-              {% if not post.isLong %}
-                <div>
-                  <div class="d-inline-block post-content-excerpt mt-1 rounded p-2 post-preview">
-                    {{ post.html }}
-                  </div>
+    <div class="d-xl-flex">
+      <div class="col-xl-6 px-0">
+        <div class="card card-default align-self-start">
+          <div class="card-header">
+            Posty i wątki {{ activity.mention }}
+          </div>
+          <ul class="list-group table-list-group list-group-flush">
+            {% for post in activity.posts %}
+              <li class="list-group-item post-list-item {{ post.deleted ? 'deleted' : '' }}" style="overflow:visible;">
+                <div class="d-flex justify-content-between">
+                  <p class="mb-0">
+                    {% if post.isThread %}
+                      <i class="far fa-comments"></i>
+                      <span class="ml-1 badge badge-secondary">Wątek</span>
+                    {% else %}
+                      <i class="far fa-comment"></i>
+                      <span class="ml-1 badge badge-secondary">Post</span>
+                    {% endif %}
+                    {% if post.deleted %}
+                      <span class="ml-1 badge badge-secondary">Usunięty</span>
+                    {% endif %}
+                    <small class="text-muted ml-1">
+                      {{ post.dateString }}
+                    </small>
+                  </p>
+                  <p class="mb-0 text-right">
+                    <a href="{{ post.forumUrl }}" class="text-nowrap">
+                      {{ post.forumName }}
+                    </a>
+                  </p>
                 </div>
-              {% else %}
-                <div class="d-flex mt-1">
-                  <div class="flex-grow-1 post-content-excerpt rounded p-2 post-preview">
-                    {{ post.previewHtml }}
-                  </div>
-                  <button class="btn btn-secondary text-nowrap ml-2 btn-show-preview align-self-start">
-                    <i class="fas fa-eye"></i>
-                    Pokaż całość
-                  </button>
-                </div>
-                <div class="position-relative">
-                  <div class="full-preview position-absolute d-none" style="top:4px; z-index:10;">
-                    <div class="rounded p-2 post-preview">
+                <a href="{{ post.postUrl }}">
+                  <b>{{ post.topicTitle }}</b>
+                </a>
+                {% if not post.isLong %}
+                  <div>
+                    <div class="d-inline-block post-content-excerpt mt-1 rounded p-2 post-preview">
                       {{ post.html }}
                     </div>
                   </div>
-                </div>
-              {% endif %}
-            </li>
-          {% endfor %}
-        </ul>
+                {% else %}
+                  <div class="d-flex mt-1">
+                    <div class="flex-grow-1 post-content-excerpt rounded p-2 post-preview">
+                      {{ post.previewHtml }}
+                    </div>
+                    <button class="btn btn-secondary text-nowrap ml-2 btn-show-preview align-self-start">
+                      <i class="fas fa-eye"></i>
+                      Pokaż całość
+                    </button>
+                  </div>
+                  <div class="position-relative">
+                    <div class="full-preview position-absolute d-none" style="top:4px; z-index:10;">
+                      <div class="rounded p-2 post-preview">
+                        {{ post.html }}
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
       </div>
-
-      <div class="w-50 pl-3">
+      <div class="col-xl-6 px-0 pl-xl-3">
         <div class="card card-default">
           <div class="card-header">
             Powody usunięcia

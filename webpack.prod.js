@@ -74,14 +74,14 @@ const plugins = [
         'tox-notifications-container',
         'fa-arrow-down',
         'fa-arrow-up',
-        'editor-4play'
+        'editor-4play',
       ],
       deep: [
         /^logo/,
         /^language/,
         /^badge/,
         /^depth/,
-        /^cm/
+        /^cm/,
       ],
       greedy: [
         /hire-me$/,
@@ -94,12 +94,12 @@ const plugins = [
         /:not/,
         /^pre/,
         /^flatpickr/,
-        /revive/
-      ]
-    }
+        /revive/,
+      ],
+    },
   }),
 
-  new webpack.EnvironmentPlugin(['FRONTEND_SENTRY_DSN', 'VAPID_PUBLIC_KEY', 'RELEASE'])
+  new webpack.EnvironmentPlugin(['FRONTEND_SENTRY_DSN', 'VAPID_PUBLIC_KEY', 'RELEASE']),
 ];
 
 if (process.env.RELEASE) {
@@ -109,7 +109,7 @@ if (process.env.RELEASE) {
     release: process.env.RELEASE,
     ignore: ["node_modules"],
     org: "coyote",
-    project: "frontend"
+    project: "frontend",
   }));
 }
 
@@ -125,11 +125,11 @@ module.exports = merge(common, {
         terserOptions: {
           output: {
             comments: false,
-          }
-        }
+          },
+        },
       }),
-      new OptimizeCSSAssetsPlugin({})
-    ]
+      new OptimizeCSSAssetsPlugin({}),
+    ],
   },
-  plugins
+  plugins,
 });
