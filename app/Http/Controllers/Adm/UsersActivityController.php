@@ -5,6 +5,7 @@ use Carbon\Carbon;
 use Coyote\Domain\Administrator\Activity\Activity;
 use Coyote\Domain\Administrator\Activity\Category;
 use Coyote\Domain\Administrator\Activity\Date;
+use Coyote\Domain\Administrator\Activity\DeleteReason;
 use Coyote\Domain\Administrator\Activity\Post;
 use Coyote\User;
 use Illuminate\Http\Request;
@@ -31,6 +32,7 @@ class UsersActivityController extends BaseController
                 $this->postDates($user, $daysAgo, $sqlDateTrunc),
                 $this->posts($user, $daysAgo),
                 $this->postsCategoriesStatistic($user, $daysAgo),
+                $this->deleteReasons($user, $daysAgo),
             ),
         ]);
     }
@@ -78,6 +80,19 @@ class UsersActivityController extends BaseController
                 $post->deleted_at !== null,
                 $post->topic->first_post_id === $post->id,
             ))
+            ->all();
+    }
+
+    private function deleteReasons(User $user, int $daysAgo): array
+    {
+        return DB::table('posts')
+            ->select('posts.delete_reason', DB::raw('COUNT(*) as count'))
+            ->where('posts.user_id', $user->id)
+            ->whereNotNull('deleted_at')
+            ->whereDate('posts.created_at', '>=', Carbon::now()->subDays($daysAgo))
+            ->groupBy('posts.delete_reason')
+            ->get()
+            ->map(fn(\stdClass $record) => new DeleteReason($record->delete_reason, $record->count))
             ->all();
     }
 

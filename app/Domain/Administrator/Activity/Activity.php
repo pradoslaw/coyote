@@ -10,6 +10,7 @@ readonly class Activity
 {
     public TwigLiteral $postsChart;
     public TwigLiteral $categoriesChart;
+    public TwigLiteral $deleteReasonsChart;
 
     public TwigLiteral $chartLibrarySourceHtml;
 
@@ -25,6 +26,7 @@ readonly class Activity
         array        $postDates,
         public array $posts,
         array        $categories,
+        public array $deleteReasons,
     )
     {
         $segments = new Segments($postDates);
@@ -41,17 +43,31 @@ readonly class Activity
         \uSort($categories, fn(Category $a, Category $b): int => $b->posts - $a->posts);
         $this->categories = $categories;
 
+        $hexColors = ['#ff6384', '#ff9f40', '#ffcd56', '#4bc0c0', '#36a2eb', '#9966ff', '#c9cbcf'];
         $categoriesChart = new Chart(
             'Posty w kategoriach',
-            $this->categoryNames(),
-            $this->categoryStats(),
-            ['#ff6384', '#ff9f40', '#ffcd56', '#4bc0c0', '#36a2eb', '#9966ff', '#c9cbcf'],
+            $this->extracted($this->categories, 'forumName'),
+            $this->extracted($this->categories, 'posts'),
+            $hexColors,
             'categories-chart',
+            horizontal:true,
+        );
+
+        $deleteReasonsChart = new Chart(
+            'Powody usunięć postów',
+            \array_map(
+                fn(?string $reason) => $reason ?? '(nie podano powodu)',
+                $this->extracted($this->deleteReasons, 'reason'),
+            ),
+            $this->extracted($this->deleteReasons, 'posts'),
+            $hexColors,
+            'reasons-chart',
             horizontal:true,
         );
 
         $this->postsChart = new TwigLiteral($postsChart);
         $this->categoriesChart = new TwigLiteral($categoriesChart);
+        $this->deleteReasonsChart = new TwigLiteral($deleteReasonsChart);
 
         $this->chartLibrarySourceHtml = new TwigLiteral($postsChart->librarySourceHtml());
     }
@@ -76,24 +92,13 @@ readonly class Activity
         return $this->user->created_at->format('Y-m-d H:i:s');
     }
 
-    public function categoryNames(): array
+    public function extracted(array $array, string $field): array
     {
-        $names = [];
-        /** @var Category $category */
-        foreach ($this->categories as $category) {
-            $names[] = $category->forumName;
+        $values = [];
+        foreach ($array as $category) {
+            $values[] = $category->$field;
         }
-        return $names;
-    }
-
-    public function categoryStats(): array
-    {
-        $posts = [];
-        /** @var Category $category */
-        foreach ($this->categories as $category) {
-            $posts[] = $category->posts;
-        }
-        return $posts;
+        return $values;
     }
 
     public function createdAgoMajor(): string
