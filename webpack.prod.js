@@ -57,6 +57,7 @@ const plugins = [
         'fa-key',
         'fa-minus',
         'fa-columns',
+        'fa-user-cog',
         'fa-user-slash',
         'fa-user-lock',
         'fa-fingerprint',
