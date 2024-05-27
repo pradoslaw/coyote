@@ -44,11 +44,11 @@ readonly class Activity
         \uSort($categories, fn(Category $a, Category $b): int => $b->posts - $a->posts);
         $this->categories = $categories;
 
-        $hexColors = ['#ff6384', '#ff9f40', '#ffcd56', '#4bc0c0', '#36a2eb', '#9966ff', '#c9cbcf'];
+        $forumNames = $this->extracted($this->categories, 'forumName');
         $categoriesChart = new Chart(
-            $this->extracted($this->categories, 'forumName'),
+            $forumNames,
             $this->extracted($this->categories, 'posts'),
-            $hexColors,
+            \array_map($this->categoryColor(...), $forumNames),
             'categories-chart',
             baseline:40,
             horizontal:true,
@@ -60,7 +60,7 @@ readonly class Activity
                 $this->extracted($this->deleteReasons, 'reason'),
             ),
             $this->extracted($this->deleteReasons, 'posts'),
-            $hexColors,
+            ['#ff6384'],
             'reasons-chart',
             baseline:10,
             horizontal:true,
@@ -128,5 +128,25 @@ readonly class Activity
     {
         $pieces = \explode(' ', $interval);
         return \implode(' ', \array_slice($pieces, 0, $words));
+    }
+
+    private function categoryColor(string $forumName): string
+    {
+        if (\in_array($forumName, ['Flame', 'Off-Topic', 'Kosz', 'Spolecznosc', 'Spolecznosc/Perełki', 'Moderatorzy/Kapownik'])) {
+            return '#ff6384'; // red
+        }
+        if (\in_array($forumName, ['Kadra', 'Moderatorzy', 'Moderatorzy/Administracja', 'Moderatorzy/Kartoteka'])) {
+            return '#9966ff'; // purple
+        }
+        if (\in_array($forumName, ['Kariera', 'Opinie_o_pracodawcach', 'CV_do_oceny'])) {
+            return '#4bc0c0'; // cyan
+        }
+        if (\in_array($forumName, ['Archiwum', 'Archiwum/Yosemite', 'Archiwum/RoadRunner', 'Coyote', 'Coyote/Test', 'Spolecznosc/Projekty', 'Moderatorzy/Zapomniane'])) {
+            return '#c9cbcf'; // gray
+        }
+        if ($forumName === 'Ogłoszenia_drobne') {
+            return '#36a2eb'; // blue
+        }
+        return '#ff9f40'; // orange
     }
 }
