@@ -13,7 +13,7 @@ class Mention
     public function mention(): TwigLiteral
     {
         $url = route('profile', [$this->user->id]);
-        return new TwigLiteral('<a class="mention" href="' . \htmlSpecialChars($url) . '">' . $this->mentionString() . '</a>');
+        return new TwigLiteral('<a class="mention" href="' . \htmlSpecialChars($url) . '">' . '@' . $this->user->name . '</a>');
     }
 
     public function mentionString(): string
