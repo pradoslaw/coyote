@@ -4,6 +4,7 @@ namespace Coyote;
 
 use Coyote\Wiki\Page as Wiki_Page;
 use Coyote\Wiki\Subscriber;
+use Illuminate\Database\Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -22,7 +23,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $template
  * @property Wiki\Comment[] $comments
  * @property Wiki\Attachment[] $attachments
- * @property Wiki\Log[] $logs
+ * @property Wiki\Log[]|Eloquent\Collection $logs
  */
 class Wiki extends Model
 {

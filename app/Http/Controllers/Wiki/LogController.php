@@ -4,16 +4,13 @@ namespace Coyote\Http\Controllers\Wiki;
 
 use Boduch\Grid\Source\EloquentSource;
 use Coyote\Http\Grids\Wiki\LogGrid;
+use Coyote\Wiki;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class LogController extends BaseController
 {
-    /**
-     * @param \Coyote\Wiki $wiki
-     * @param Request $request
-     * @return \Illuminate\View\View
-     */
-    public function index($wiki, Request $request)
+    public function index(Wiki $wiki, Request $request): View
     {
         $this->breadcrumb->push('Historia zmian', route('wiki.log', [$wiki->id]));
 
@@ -35,28 +32,33 @@ class LogController extends BaseController
 
         $diff = $this->diff($wiki, $request);
 
-        return $this->view('wiki.log')
-            ->with([
-                'grid' => $grid,
-                'wiki' => $wiki,
-                'diff' => $diff,
-            ]);
+        return $this->view('wiki.log')->with([
+            'grid' => $grid,
+            'wiki' => $wiki,
+            'diff' => $diff,
+        ]);
     }
 
-    /**
-     * @param \Coyote\Wiki $wiki
-     * @param Request $request
-     * @return array
-     */
-    private function diff($wiki, Request $request)
+    private function diff(Wiki $wiki, Request $request): array
     {
-        if (!$request->filled('r1') || !$request->filled('r2')) {
-            return [];
+        if ($request->filled('r1') && $request->filled('r2')) {
+            return $this->diffBetween($wiki,
+                $request->get('r1'),
+                $request->get('r2'));
         }
+        return [];
+    }
 
-        return [
-            'before' => htmlspecialchars($wiki->logs->find($request->get('r1'), ['text'])->text),
-            'after'  => htmlspecialchars($wiki->logs->find($request->get('r2'), ['text'])->text),
-        ];
+    private function diffBetween(Wiki $wiki, string $beforeLogId, string $afterLogId): array
+    {
+        $before = $wiki->logs->find($beforeLogId);
+        $after = $wiki->logs->find($afterLogId);
+        if ($before && $after) {
+            return [
+                'before' => \htmlSpecialChars($before->text),
+                'after'  => \htmlSpecialChars($after->text),
+            ];
+        }
+        return [];
     }
 }
