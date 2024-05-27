@@ -30,7 +30,7 @@ class BaseController extends Controller
             $menu->add('Strona główna', ['route' => 'adm.dashboard'])->prepend($fa('fa-desktop fa-fw'));
             $menu->add('Użytkownicy', ['route' => 'adm.users'])->prepend($fa('fa-user fa-fw'));
             $menu->add('Grupy', ['route' => 'adm.groups'])->prepend($fa('fa-users fa-fw'))->data('permission', 'adm-group');
-            $menu->add('Bany', ['route' => 'adm.firewall'])->prepend($fa('fa-user-slash fa-fw'));
+            $menu->add('Bany', ['route' => 'adm.firewall'])->prepend($fa('fa-user-lock fa-fw'));
             $menu->add('Kto jest online', ['route' => 'adm.sessions'])->prepend($fa('fa-eye fa-fw'));
 
             $forum = $menu->add('Forum', ['class' => 'list-unstyled collapse']);

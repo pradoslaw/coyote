@@ -67,7 +67,7 @@
 
       {% if can('adm-access') %}
         <a href="{{ route('adm.firewall.save') }}?user={{ user.id }}" title="Zbanuj tego użytkownika" class="btn btn-sm btn-secondary float-right ml-1">
-          <i class="fas fa-user-slash fa-fw"></i>
+          <i class="fas fa-user-lock fa-fw"></i>
         </a>
 
         <a href="{{ route('adm.users.save', [user.id]) }}" title="Przejdź do panelu administracyjnego" class="btn btn-sm btn-secondary float-right">
