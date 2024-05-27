@@ -8,5 +8,8 @@ class DeleteReason
         public int     $posts,
     )
     {
+        if ($reason === '(użytkownik nie podał powodu)') {
+            $this->reason = null;
+        }
     }
 }
