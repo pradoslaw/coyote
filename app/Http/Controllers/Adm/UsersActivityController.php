@@ -91,6 +91,7 @@ class UsersActivityController extends BaseController
             ->select('posts.delete_reason', DB::raw('COUNT(*) as count'))
             ->where('posts.user_id', $user->id)
             ->whereNotNull('deleted_at')
+            ->whereNot('posts.deleter_id', $user->id)
             ->whereDate('posts.created_at', '>=', Carbon::now()->subDays($daysAgo))
             ->groupBy('posts.delete_reason')
             ->get()

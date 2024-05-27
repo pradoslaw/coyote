@@ -124,13 +124,16 @@
       <div class="col-xl-6 px-0 pl-xl-3">
         <div class="card card-default">
           <div class="card-header">
-            Powody usunięcia
+            Posty usunięte przez moderatora
           </div>
           <div class="card-body">
             {% if activity.hasDeleteReasons %}
               {{ activity.deleteReasonsChart }}
+              <p class="mb-0 mt-4 text-right">
+                Posty usunięte <b>przez siebie</b> nie są brane pod uwagę.
+              </p>
             {% else %}
-              Użytkownik <b>nie ma</b> usuniętych postów.
+              Żaden post nie został usunięty przez moderatora w zadanym zakresie.
             {% endif %}
           </div>
         </div>
