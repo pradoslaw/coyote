@@ -8,6 +8,7 @@ use Coyote\Domain\Administrator\Activity\Date;
 use Coyote\Domain\Administrator\Activity\DeleteReason;
 use Coyote\Domain\Administrator\Activity\Mention;
 use Coyote\Domain\Administrator\Activity\Post;
+use Coyote\Domain\PostStatistic;
 use Coyote\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -35,6 +36,7 @@ class UsersActivityController extends BaseController
                 $this->posts($user, $daysAgo),
                 $this->postsCategoriesStatistic($user, $daysAgo),
                 $this->deleteReasons($user, $daysAgo),
+                $this->postStats($user, $daysAgo),
             ),
         ]);
     }
@@ -137,5 +139,18 @@ class UsersActivityController extends BaseController
             ->get()
             ->map(fn(\stdClass $record) => new Category($record->slug, $record->count))
             ->all();
+    }
+
+    private function postStats(User $user, int $daysAgo): PostStatistic
+    {
+        $query = DB::table('posts')
+            ->where('posts.user_id', $user->id)
+            ->whereDate('posts.created_at', '>=', Carbon::now()->subDays($daysAgo));
+
+        return new PostStatistic(
+            $query->clone()->count(),
+            $query->clone()->where('posts.deleter_id', $user->id)->count(),
+            $query->clone()->whereNot('posts.deleter_id', $user->id)->count(),
+        );
     }
 }

@@ -4,6 +4,7 @@ namespace Coyote\Domain\Administrator\Activity;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use Coyote\Domain\Chart;
+use Coyote\Domain\PostStatistic;
 use Coyote\User;
 use Coyote\View\Twig\TwigLiteral;
 
@@ -23,11 +24,12 @@ readonly class Activity
      * @param Category[] $categories
      */
     public function __construct(
-        private User $user,
-        array        $postDates,
-        public array $posts,
-        array        $categories,
-        public array $deleteReasons,
+        private User         $user,
+        array                $postDates,
+        public array         $posts,
+        array                $categories,
+        public array         $deleteReasons,
+        public PostStatistic $postsStatistic,
     )
     {
         $segments = new Segments($postDates);
