@@ -30,8 +30,10 @@ class Chart
             ],
             'options' => [
                 'plugins'             => [
-                    'legend' => [
-                        'display' => false,
+                    'legend'     => ['display' => false],
+                    'datalabels' => [
+                        'anchor' => 'end',
+                        'align'  => $horizontal ? 'right' : 'top',
                     ],
                 ],
                 'animation'           => false,
@@ -69,7 +71,8 @@ class Chart
 
     public function librarySourceHtml(): string
     {
-        return '<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>';
+        return '<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>' .
+            '<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>';
     }
 
     public function __toString(): string
@@ -78,7 +81,7 @@ class Chart
             <div style="height:{$this->canvasHeight()}px;">
                 <canvas id="$this->id"></canvas>
             </div>
-            <script>new Chart(document.getElementById("$this->id"), {$this->options()});</script>
+            <script>new Chart(document.getElementById("$this->id"), {...{$this->options()}, plugins:[ChartDataLabels]});</script>
             html;
     }
 
