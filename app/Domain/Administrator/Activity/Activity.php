@@ -164,6 +164,12 @@ readonly class Activity
         if ($reason->reason === null) {
             return '#c9cbcf'; // gray
         }
-        return '#ff6384'; // red
+        if (\in_array($reason->reason, [
+            'Spam', 'Trolling', 'Wulgaryzmy', 'Omijanie bana',
+            'Wycieczki osobiste i/lub obrażanie innych użytkowników',
+        ])) {
+            return '#ff6384'; // red 
+        }
+        return '#ff9f40'; // orange
     }
 }
