@@ -10,7 +10,6 @@ use Coyote\View\Twig\TwigLiteral;
 
 readonly class Activity
 {
-    public TwigLiteral $postsChart;
     public TwigLiteral $categoriesChart;
     public TwigLiteral $deleteReasonsChart;
 
@@ -20,28 +19,18 @@ readonly class Activity
     public array $categories;
 
     /**
-     * @param Post[] $posts
      * @param Category[] $categories
+     * @param Post[] $posts
      */
     public function __construct(
         private User         $user,
-        array                $postDates,
         public array         $posts,
         array                $categories,
         public array         $deleteReasons,
         public PostStatistic $postsStatistic,
     )
     {
-        $segments = new Segments($postDates);
         $this->mention = new Mention($user);
-
-        $postsChart = new Chart(
-            $segments->dates(),
-            $segments->peeks(),
-            ['#ff9f40'],
-            'posts-chart',
-            baseline:40,
-        );
 
         \uSort($categories, fn(Category $a, Category $b): int => $b->posts - $a->posts);
         $this->categories = $categories;
@@ -68,11 +57,10 @@ readonly class Activity
             horizontal:true,
         );
 
-        $this->postsChart = new TwigLiteral($postsChart);
         $this->categoriesChart = new TwigLiteral($categoriesChart);
         $this->deleteReasonsChart = new TwigLiteral($deleteReasonsChart);
 
-        $this->chartLibrarySourceHtml = new TwigLiteral($postsChart->librarySourceHtml());
+        $this->chartLibrarySourceHtml = new TwigLiteral($deleteReasonsChart->librarySourceHtml());
     }
 
     public function hasDeleteReasons(): bool

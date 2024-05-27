@@ -4,7 +4,6 @@ namespace Coyote\Http\Controllers\Adm;
 use Carbon\Carbon;
 use Coyote\Domain\Administrator\Activity\Activity;
 use Coyote\Domain\Administrator\Activity\Category;
-use Coyote\Domain\Administrator\Activity\Date;
 use Coyote\Domain\Administrator\Activity\DeleteReason;
 use Coyote\Domain\Administrator\Activity\Mention;
 use Coyote\Domain\Administrator\Activity\Post;
@@ -27,35 +26,17 @@ class UsersActivityController extends BaseController
         $mention = new Mention($user);
         $this->breadcrumb->push($mention->mentionString(), route('adm.users.show', [$user->id]));
         $this->breadcrumb->push('Aktywność użytkownika', route('adm.users.activity', [$user->id]));
-        [$daysAgo, $sqlDateTrunc] = $this->daysAgo($request);
+        $daysAgo = $this->daysAgo($request);
         return $this->view('adm.users.activity', [
             'user'     => $user,
             'activity' => new Activity(
                 $user,
-                $this->postDates($user, $daysAgo, $sqlDateTrunc),
                 $this->posts($user, $daysAgo),
                 $this->postsCategoriesStatistic($user, $daysAgo),
                 $this->deleteReasons($user, $daysAgo),
                 $this->postStats($user, $daysAgo),
             ),
         ]);
-    }
-
-    private function postDates(User $user, int $daysAgo, string $sqlDateTrunc): array
-    {
-        return $this->tableSegments($user, 'posts', $daysAgo, $sqlDateTrunc);
-    }
-
-    private function tableSegments(User $user, string $table, int $daysAgo, string $sqlDateTrunc): array
-    {
-        return $this->segments(Db::table($table)
-            ->where('user_id', $user->id)
-            ->whereDate('posts.created_at', '>=', Carbon::now()->subDays($daysAgo))
-            ->selectRaw("Date_Trunc('$sqlDateTrunc', created_at) AS date, Count(id) AS count")
-            ->groupByRaw('date')
-            ->orderByRaw('date')
-            ->get()
-            ->all(), $sqlDateTrunc);
     }
 
     private function posts(User $user, int $daysAgo): array
@@ -107,22 +88,15 @@ class UsersActivityController extends BaseController
         return "{$url}?p={$post->id}#id{$post->id}";
     }
 
-    private function segments(array $records, string $scale): array
-    {
-        return \array_map(
-            fn(\stdClass $segment): array => [new Date($segment->date, $scale), $segment->count],
-            $records);
-    }
-
-    private function daysAgo(Request $request): array
+    private function daysAgo(Request $request): int
     {
         $key = $request->query('last') ?? 'default';
         $map = [
-            'day'     => [1, 'hour'],
-            'week'    => [7, 'day'],
-            'month'   => [31, 'day'],
-            'year'    => [365, 'month'],
-            'default' => [40 * 365, 'year'],
+            'day'     => 1,
+            'week'    => 7,
+            'month'   => 31,
+            'year'    => 365,
+            'default' => 40 * 365,
         ];
         return $map[$key] ?? $map['default'];
     }
