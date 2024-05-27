@@ -16,8 +16,6 @@ readonly class Activity
     public TwigLiteral $chartLibrarySourceHtml;
 
     private Mention $mention;
-    public array $categories;
-    public array $deleteReasons;
 
     /**
      * @param Category[] $categories
@@ -27,42 +25,14 @@ readonly class Activity
         private User         $user,
         public array         $posts,
         array                $categories,
-        array                $deleteReasons,
+        private array        $deleteReasons,
         public PostStatistic $postsStatistic,
     )
     {
         $this->mention = new Mention($user);
-
-        \uSort($categories, fn(Category $a, Category $b): int => $b->posts - $a->posts);
-        $this->categories = $categories;
-        $this->deleteReasons = $this->sorted($deleteReasons);
-
-        $forumNames = $this->extracted($this->categories, 'forumName');
-        $categoriesChart = new Chart(
-            $forumNames,
-            $this->extracted($this->categories, 'posts'),
-            \array_map($this->categoryColor(...), $forumNames),
-            'categories-chart',
-            baseline:40,
-            horizontal:true,
-        );
-
-        $deleteReasonsChart = new Chart(
-            \array_map(
-                fn(?string $reason) => $reason ?? '(nie podano powodu)',
-                $this->extracted($this->deleteReasons, 'reason'),
-            ),
-            $this->extracted($this->deleteReasons, 'posts'),
-            \array_map($this->deleteReasonColor(...), $this->deleteReasons),
-            'reasons-chart',
-            baseline:10,
-            horizontal:true,
-        );
-
-        $this->categoriesChart = new TwigLiteral($categoriesChart);
-        $this->deleteReasonsChart = new TwigLiteral($deleteReasonsChart);
-
-        $this->chartLibrarySourceHtml = new TwigLiteral($deleteReasonsChart->librarySourceHtml());
+        $this->categoriesChart = new TwigLiteral($this->categoriesChart($this->categoriesSliced($this->categoriesSorted($categories), 10)));
+        $this->deleteReasonsChart = new TwigLiteral($this->deleteReasonsChart($this->reasonsSorted($deleteReasons)));
+        $this->chartLibrarySourceHtml = new TwigLiteral(Chart::librarySourceHtml());
     }
 
     public function hasDeleteReasons(): bool
@@ -90,15 +60,6 @@ readonly class Activity
         return $this->user->created_at->format('Y-m-d H:i:s');
     }
 
-    public function extracted(array $array, string $field): array
-    {
-        $values = [];
-        foreach ($array as $category) {
-            $values[] = $category->$field;
-        }
-        return $values;
-    }
-
     public function createdAgoMajor(): string
     {
         [$number, $unit] = \explode(' ', $this->createdAgo(), 3);
@@ -118,12 +79,45 @@ readonly class Activity
 
     private function firstWords(CarbonInterval $interval, int $words): string
     {
-        $pieces = \explode(' ', $interval);
-        return \implode(' ', \array_slice($pieces, 0, $words));
+        return \implode(' ',
+            \array_slice(
+                \explode(' ', $interval),
+                0, $words));
     }
 
-    private function categoryColor(string $forumName): string
+    private function deleteReasonsChart(array $array): Chart
     {
+        return new Chart(
+            \array_map(
+                fn(?string $reason) => $reason ?? '(nie podano powodu)',
+                array_map(fn($object) => $object->reason, $array),
+            ),
+            array_map(fn($object) => $object->posts, $array),
+            \array_map($this->deleteReasonColor(...), $array),
+            'reasons-chart',
+            baseline:40,
+            horizontal:true,
+        );
+    }
+
+    private function categoriesChart(array $categories): Chart
+    {
+        return new Chart(
+            array_map(fn($category) => $category->forumName ?? '(pozostałe)', $categories),
+            array_map(fn($category) => $category->posts, $categories),
+            \array_map($this->categoryColor(...), $categories),
+            'categories-chart',
+            baseline:40,
+            horizontal:true,
+        );
+    }
+
+    private function categoryColor(Category $category): string
+    {
+        if ($category->forumName === null) {
+            return '#c9cbcf'; // gray
+        }
+        $forumName = $category->forumName;
         if (\in_array($forumName, ['Flame', 'Off-Topic', 'Kosz', 'Spolecznosc', 'Spolecznosc/Perełki', 'Moderatorzy/Kapownik'])) {
             return '#ff6384'; // red
         }
@@ -134,7 +128,7 @@ readonly class Activity
             return '#4bc0c0'; // cyan
         }
         if (\in_array($forumName, ['Archiwum', 'Archiwum/Yosemite', 'Archiwum/RoadRunner', 'Coyote', 'Coyote/Test', 'Spolecznosc/Projekty', 'Moderatorzy/Zapomniane'])) {
-            return '#c9cbcf'; // gray
+            return '#80a41a'; // gray
         }
         if ($forumName === 'Ogłoszenia_drobne') {
             return '#36a2eb'; // blue
@@ -145,7 +139,7 @@ readonly class Activity
     /**
      * @param DeleteReason[] $reasons
      */
-    private function sorted(array $reasons): array
+    private function reasonsSorted(array $reasons): array
     {
         \uSort($reasons, function (DeleteReason $a, DeleteReason $b): int {
             if ($a->reason === null) {
@@ -171,5 +165,26 @@ readonly class Activity
             return '#ff6384'; // red 
         }
         return '#ff9f40'; // orange
+    }
+
+    private function categoriesSorted(array $categories): array
+    {
+        \uSort($categories, fn(Category $a, Category $b): int => $b->posts - $a->posts);
+        return $categories;
+    }
+
+    private function categoriesSliced(array $categories, int $importantAmount): array
+    {
+        if (\count($categories) < $importantAmount + 2) {
+            return $categories;
+        }
+        $dumped = \array_slice($categories, $importantAmount);
+        $remaining = 0;
+        foreach ($dumped as $category) {
+            $remaining += $category->posts;
+        }
+        $important = \array_slice($categories, 0, $importantAmount);
+        $important[] = new Category(null, $remaining);
+        return $important;
     }
 }

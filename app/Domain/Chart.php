@@ -69,7 +69,7 @@ class Chart
         return \sScanF($hexColor, '#%02x%02x%02x');
     }
 
-    public function librarySourceHtml(): string
+    public static function librarySourceHtml(): string
     {
         return '<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>' .
             '<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>';
