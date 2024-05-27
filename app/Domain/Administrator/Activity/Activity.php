@@ -2,6 +2,7 @@
 namespace Coyote\Domain\Administrator\Activity;
 
 use Carbon\Carbon;
+use Carbon\CarbonInterval;
 use Coyote\Domain\Chart;
 use Coyote\User;
 use Coyote\View\Twig\TwigLiteral;
@@ -117,6 +118,12 @@ readonly class Activity
     private function createdAgo(): string
     {
         $carbonInterval = $this->user->created_at->diff(Carbon::now());
-        return "$carbonInterval temu";
+        return $this->firstWords($carbonInterval, 6) . " temu";
+    }
+
+    private function firstWords(CarbonInterval $interval, int $words): string
+    {
+        $pieces = \explode(' ', $interval);
+        return \implode(' ', \array_slice($pieces, 0, $words));
     }
 }
