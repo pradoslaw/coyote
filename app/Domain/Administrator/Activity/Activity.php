@@ -17,6 +17,7 @@ readonly class Activity
 
     private Mention $mention;
     public array $categories;
+    public array $deleteReasons;
 
     /**
      * @param Category[] $categories
@@ -26,7 +27,7 @@ readonly class Activity
         private User         $user,
         public array         $posts,
         array                $categories,
-        public array         $deleteReasons,
+        array                $deleteReasons,
         public PostStatistic $postsStatistic,
     )
     {
@@ -34,6 +35,7 @@ readonly class Activity
 
         \uSort($categories, fn(Category $a, Category $b): int => $b->posts - $a->posts);
         $this->categories = $categories;
+        $this->deleteReasons = $this->sorted($deleteReasons);
 
         $forumNames = $this->extracted($this->categories, 'forumName');
         $categoriesChart = new Chart(
@@ -51,7 +53,7 @@ readonly class Activity
                 $this->extracted($this->deleteReasons, 'reason'),
             ),
             $this->extracted($this->deleteReasons, 'posts'),
-            ['#ff6384'],
+            \array_map($this->deleteReasonColor(...), $this->deleteReasons),
             'reasons-chart',
             baseline:10,
             horizontal:true,
@@ -138,5 +140,30 @@ readonly class Activity
             return '#36a2eb'; // blue
         }
         return '#ff9f40'; // orange
+    }
+
+    /**
+     * @param DeleteReason[] $reasons
+     */
+    private function sorted(array $reasons): array
+    {
+        \uSort($reasons, function (DeleteReason $a, DeleteReason $b): int {
+            if ($a->reason === null) {
+                return 1;
+            }
+            if ($b->reason === null) {
+                return -1;
+            }
+            return $b->posts - $a->posts;
+        });
+        return $reasons;
+    }
+
+    private function deleteReasonColor(DeleteReason $reason): string
+    {
+        if ($reason->reason === null) {
+            return '#c9cbcf'; // gray
+        }
+        return '#ff6384'; // red
     }
 }
