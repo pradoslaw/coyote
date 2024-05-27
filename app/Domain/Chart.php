@@ -10,6 +10,7 @@ class Chart
         array          $values,
         array          $hexColors,
         private string $id,
+        int            $baseline = 1,
         private bool   $horizontal = false,
     )
     {
@@ -37,7 +38,13 @@ class Chart
                 'maintainAspectRatio' => false,
                 'indexAxis'           => $horizontal ? 'y' : 'x',
                 'scales'              => [
-                    'y' => ['ticks' => ['autoSkip' => false]],
+                    'y' => [
+                        'ticks'        => ['autoSkip' => false],
+                        'suggestedMax' => $baseline,
+                    ],
+                    'x' => [
+                        'suggestedMax' => $baseline,
+                    ],
                 ],
             ],
         ];

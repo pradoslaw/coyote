@@ -85,4 +85,20 @@ class ChartTest extends TestCase
             horizontal:true,
         ));
     }
+
+    /**
+     * @test
+     */
+    public function baselineVertical()
+    {
+        $this->assertExpectedImage(new Chart(['Foo'], [20], ['#ff9f40'], 'chart', baseline:200));
+    }
+
+    /**
+     * @test
+     */
+    public function baselineHorizontal()
+    {
+        $this->assertExpectedImage(new Chart(['Foo'], [20], ['#ff9f40'], 'chart', baseline:200, horizontal:true));
+    }
 }

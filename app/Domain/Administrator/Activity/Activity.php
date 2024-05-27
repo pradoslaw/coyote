@@ -38,6 +38,7 @@ readonly class Activity
             $segments->peeks(),
             ['#ff9f40'],
             'posts-chart',
+            baseline:40,
         );
 
         \uSort($categories, fn(Category $a, Category $b): int => $b->posts - $a->posts);
@@ -49,6 +50,7 @@ readonly class Activity
             $this->extracted($this->categories, 'posts'),
             $hexColors,
             'categories-chart',
+            baseline:40,
             horizontal:true,
         );
 
@@ -60,6 +62,7 @@ readonly class Activity
             $this->extracted($this->deleteReasons, 'posts'),
             $hexColors,
             'reasons-chart',
+            baseline:10,
             horizontal:true,
         );
 
