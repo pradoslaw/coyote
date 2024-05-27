@@ -1,58 +1,41 @@
 <?php
-
 namespace Coyote\Http\Grids\Adm;
 
-use Boduch\Grid\Decorators\DateTimeLocalized;
 use Boduch\Grid\Decorators\StrLimit;
-use Boduch\Grid\Decorators\Url;
-use Boduch\Grid\Filters\FilterOperator;
-use Boduch\Grid\Filters\Text;
-use Coyote\Flag;
-use Coyote\Services\Grid\Grid;
 use Boduch\Grid\Order;
 use Boduch\Grid\Row;
+use Coyote\Flag;
+use Coyote\Services\Grid\Grid;
 
 class FlagsGrid extends Grid
 {
     public function buildGrid()
     {
         $this
-            ->setDefaultOrder(new Order('id', 'desc'))
-            ->addColumn('id', [
-                'title' => 'ID',
-                'sortable' => true
-            ])
+            ->setDefaultOrder(new Order('created_at', 'DESC'))
+            ->addColumn('created_at', ['title' => 'Data zgłoszenia'])
             ->addColumn('flag_type', [
                 'placeholder' => '--',
-                'title' => 'Typ'
-            ])
-            ->addColumn('user_name', [
-                'title' => 'Nazwa użytkownika',
-                'sortable' => true,
-                'placeholder' => '--',
-                'clickable' => function (Flag $row) {
-                    return link_to_route('adm.users.save', $row->user_name, [$row->user_id]);
-                },
-                'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE])
-            ])
-            ->addColumn('url', [
-                'title' => 'URL',
-                'filter' => new Text(['operator' => FilterOperator::OPERATOR_ILIKE]),
-                'decorators' => [new Url()]
+                'title'       => 'Typ',
             ])
             ->addColumn('text', [
-                'title' => 'Opis',
-                'decorators' => [new StrLimit()]
+                'title'      => 'Treść raportu',
+                'decorators' => [new StrLimit()],
+                'clickable'  => fn(Flag $flag) => link_to($flag->url, $flag->text),
             ])
-            ->addColumn('created_at', [
-                'title' => 'Data utworzenia'
+            ->addColumn('user_name', [
+                'title'       => 'Zgłaszający',
+                'sortable'    => true,
+                'placeholder' => '--',
+                'clickable'   => fn(Flag $flag) => link_to_route('adm.users.save', $flag->user_name, [$flag->user_id]),
             ])
             ->addColumn('moderator_name', [
-                'title' => 'Zamknięty przez',
-                'clickable' => function (Flag $row) {
-                    return link_to_route('adm.users.save', $row->moderator_name, [$row->moderator_id]);
-                },
-                'placeholder' => '--'
+                'title'       => 'Zamknięty przez',
+                'clickable'   => fn(Flag $flag) => link_to_route(
+                    'adm.users.save',
+                    $flag->moderator_name,
+                    [$flag->moderator_id]),
+                'placeholder' => '--',
             ])
             ->after(function (Row $row) {
                 if (!empty($row->raw('deleted_at'))) {
