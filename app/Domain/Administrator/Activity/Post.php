@@ -3,10 +3,11 @@ namespace Coyote\Domain\Administrator\Activity;
 
 use Carbon\Carbon;
 use Coyote\View\Twig\TwigLiteral;
-use DOMElement;
 
 class Post
 {
+    private PostPreview $preview;
+
     public function __construct(
         public string  $text,
         public string  $forumName,
@@ -18,61 +19,26 @@ class Post
         public bool    $isThread,
     )
     {
+        $this->preview = new PostPreview($text);
     }
 
     public function html(): TwigLiteral
     {
-        return new TwigLiteral($this->htmlString());
+        return $this->preview->html();
     }
 
-    private function htmlString()
+    public function previewHtml(): ?TwigLiteral
     {
-        return app('parser.post')->parse($this->text);
+        return $this->preview->previewHtml();
     }
 
     public function isLong(): bool
     {
-        return \str_contains($this->text, "\n");
+        return $this->preview->hasPreview();
     }
 
     public function dateString(): string
     {
         return $this->createdAt->format('Y-m-d H:i:s');
-    }
-
-    public function previewHtml(): ?TwigLiteral
-    {
-        $content = $this->previewString($this->htmlString());
-        if ($content) {
-            return new TwigLiteral($content);
-        }
-        return null;
-    }
-
-    private function previewString(string $html): ?string
-    {
-        if ($html === '') {
-            return '';
-        }
-        $document = new \DOMDocument();
-        $document->loadHTML("<html><head><meta charset='utf-8'></head><body>$html</body></html>");
-        return $this->htmlWithoutBlockQuotes($document);
-    }
-
-    private function htmlWithoutBlockQuotes(\DOMDocument $document): ?string
-    {
-        $xPath = new \DOMXPath($document);
-        /** @var DOMElement $item */
-        foreach ($xPath->query('/html/body/*') as $item) {
-            if ($item->tagName === 'p') {
-                return $this->toHtml($item);
-            }
-        }
-        return null;
-    }
-
-    private function toHtml(DOMElement $element): string
-    {
-        return $element->ownerDocument->saveHTML($element);
     }
 }
