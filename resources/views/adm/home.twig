@@ -1,40 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Logowanie do panelu administracyjnego :: 4programmers.net</title>
+  <title>Logowanie do panelu administracyjnego :: 4programmers.net</title>
 
-    <link rel="stylesheet" href="{{ cdn('css/core.css') }}">
+  <link rel="stylesheet" href="{{ cdn('css/core.css') }}">
 
-    <link rel="apple-touch-icon" href="{{ cdn('img/apple-touch.png') }}">
-    <link rel="shortcut icon" href="{{ cdn('img/favicon.png') }}" type="image/png">
-  </head>
-  <body>
-    <div id="container">
-      {% import 'components/forms.twig' as forms %}
+  <link rel="apple-touch-icon" href="{{ cdn('img/apple-touch.png') }}">
+  <link rel="shortcut icon" href="{{ cdn('img/favicon.png') }}" type="image/png">
+</head>
+<body>
+<div id="container">
+  {% import 'components/forms.twig' as forms %}
 
-      <div class="row no-gutters mt-5">
-        <div class="col-6 mx-auto">
-          {% if errors.any %}
-            <div class="alert alert-danger">Podano nieprawidłowe hasło.</div>
-          {% endif %}
+  <div class="row no-gutters mt-5">
+    <div class="col-8 col-sm-6 col-md-4 col-lg-3 col-xl-2 mx-auto">
+      {% if errors.any %}
+        <div class="alert alert-danger">Nie udane logowanie.</div>
+      {% endif %}
 
-          {{ form_open({'url': route('adm.home'), 'method': 'POST'}) }}
-            <div class="form-group">
-              {{ form_password('password', {'class': 'form-control', 'placeholder': 'Hasło', 'autofocus': 'autofocus'}) }}
-            </div>
-
-            <div class="form-group">
-              <button type="submit" class="btn btn-primary col-12" data-submit-state="Logowanie...">
-                Logowanie
-              </button>
-            </div>
-          {{ form_close() }}
-        </div>
+      <div class="d-flex flex-column align-items-center mb-4">
+        <img class="img-thumbnail" src="{{ user.avatar }}" alt="User avatar" style="width:75px; height:75px;">
+        <b>{{ user.name }}</b>
       </div>
+
+      {{ form_open({'url': route('adm.home'), 'method': 'POST'}) }}
+      <div class="form-group">
+        <p class="mb-1">Podaj swoje hasło:</p>
+        {{ form_password('password', {'class': 'form-control', 'placeholder': 'Hasło', 'autofocus': 'autofocus'}) }}
+      </div>
+
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary col-12" data-submit-state="Logowanie...">
+          Logowanie
+        </button>
+      </div>
+      {{ form_close() }}
     </div>
-  </body>
+  </div>
+</div>
+</body>
 </html>
