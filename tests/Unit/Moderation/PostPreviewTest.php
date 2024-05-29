@@ -69,7 +69,7 @@ class PostPreviewTest extends TestCase
 
     private function assertPreviewNone(string $postContent): void
     {
-        $this->assertNull($this->newPost($postContent)->previewHtml());
+        $this->assertSame('', (string)$this->newPost($postContent)->previewHtml());
     }
 
     private function assertPreview(string $postContent, string $expectedPreview): void

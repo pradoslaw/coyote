@@ -92,7 +92,7 @@
                 {% if not post.isLong %}
                   <div>
                     <div class="d-inline-block post-content-excerpt mt-1 rounded p-2 post-preview">
-                      {{ post.html }}
+                      {{ post.contentHtml }}
                     </div>
                   </div>
                 {% else %}
@@ -110,7 +110,7 @@
                     </div>
                     <div class="content-full" style="display:none;">
                       <div class="flex-grow-1 post-content-excerpt rounded p-2 post-preview">
-                        {{ post.html }}
+                        {{ post.contentHtml }}
                       </div>
                     </div>
                   </div>
