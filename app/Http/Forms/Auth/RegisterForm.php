@@ -5,7 +5,6 @@ namespace Coyote\Http\Forms\Auth;
 use Coyote\Domain\User\UserSettings;
 use Coyote\Services\FormBuilder\Form;
 use Coyote\Services\FormBuilder\ValidatesWhenSubmitted;
-use Coyote\View\Twig\TwigLiteral;
 use Illuminate\Contracts\Validation\Validator;
 
 class RegisterForm extends Form implements ValidatesWhenSubmitted
@@ -20,27 +19,27 @@ class RegisterForm extends Form implements ValidatesWhenSubmitted
             ->add('name', 'text', [
                 'rules' => 'required|min:2|max:28|username|user_unique',
                 'label' => 'Nazwa użytkownika',
-                'attr'  => ['autofocus' => 'autofocus']
+                'attr' => ['autofocus' => 'autofocus'],
             ])
             ->add('password', 'password', [
                 'rules' => 'required|confirmed|min:3',
-                'label' => 'Hasło'
+                'label' => 'Hasło',
             ])
             ->add('password_confirmation', 'password', [
                 'rules' => 'required',
-                'label' => 'Hasło (powtórnie)'
+                'label' => 'Hasło (powtórnie)',
             ])
             ->add('email', 'text', [
                 'rules' => 'required|email|max:255|email_unique',
                 'label' => 'E-mail',
-                'help'  => 'Nie wysyłamy reklam. Twój e-mail nie zostanie nikomu udostępniony.'
+                'help' => 'Nie wysyłamy reklam. Twój e-mail nie zostanie nikomu udostępniony.',
             ])
             ->add('terms', 'checkbox', [
                 'rules' => 'accepted',
-                'label' => TwigLiteral::fromHtml((new UserSettings)->termsAndPrivacyPolicyAgreement())
+                'label' => (new UserSettings)->termsAndPrivacyPolicyAgreement(),
             ])
             ->add('marketing_agreement', 'checkbox', [
-                'label' => TwigLiteral::fromHtml((new UserSettings)->marketingAgreement())
+                'label' => (new UserSettings)->marketingAgreement(),
             ])
             ->add('email_confirmation', 'honeypot')
             ->add('submit', 'submit', [
@@ -49,8 +48,8 @@ class RegisterForm extends Form implements ValidatesWhenSubmitted
                     'class'             => 'g-recaptcha btn btn-primary',
                     'data-sitekey'      => config('services.recaptcha.key'),
                     'data-callback'     => 'onSubmit',
-                    'data-submit-state' => 'Rejestracja...'
-                ]
+                    'data-submit-state' => 'Rejestracja...',
+                ],
             ]);
     }
 
@@ -86,7 +85,7 @@ class RegisterForm extends Form implements ValidatesWhenSubmitted
         return \file_get_contents('https://www.google.com/recaptcha/api/siteverify' . '?' . http_build_query([
                 'secret'   => config('services.recaptcha.secret'),
                 'remoteip' => $this->request->ip(),
-                'response' => $recaptcha
+                'response' => $recaptcha,
             ]));
     }
 }

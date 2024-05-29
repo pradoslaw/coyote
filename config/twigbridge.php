@@ -35,7 +35,7 @@ return [
         ],
 
         'safe_classes' => [
-            \Coyote\View\Twig\TwigLiteral::class => ['html'],
+            \Coyote\Domain\Html::class => ['html'],
         ],
     ],
     'extensions' => [

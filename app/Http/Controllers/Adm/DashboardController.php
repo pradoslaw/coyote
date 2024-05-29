@@ -1,8 +1,7 @@
 <?php
-
 namespace Coyote\Http\Controllers\Adm;
 
-use Coyote\View\Twig\TwigLiteral;
+use Coyote\Domain\StringHtml;
 use Illuminate\Foundation\Application;
 use Illuminate\View\View;
 
@@ -19,11 +18,11 @@ class DashboardController extends BaseController
                     'value' => \config('cache.default'),
                 ],
                 [
-                    'label' => new TwigLiteral('PHP - <code>' . \PHP_VERSION . '</code>'),
+                    'label' => new StringHtml('PHP - <code>' . \PHP_VERSION . '</code>'),
                     'value' => true,
                 ],
                 [
-                    'label' => new TwigLiteral('Laravel - <code>' . Application::VERSION . '</code>'),
+                    'label' => new StringHtml('Laravel - <code>' . Application::VERSION . '</code>'),
                     'value' => true,
                 ],
             ],
@@ -34,7 +33,7 @@ class DashboardController extends BaseController
     {
         $permission = \decOct(\filePerms($path) & 0777);
         return [
-            'label' => new TwigLiteral("Katalog <code>$basePath</code> ma prawa do zapisu - <code>$permission</code>"),
+            'label' => new StringHtml("Katalog <code>$basePath</code> ma prawa do zapisu - <code>$permission</code>"),
             'value' => \is_writeable(\storage_path()),
         ];
     }

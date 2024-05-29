@@ -2,6 +2,7 @@
 namespace Coyote\Domain\User;
 
 use Coyote\Domain\Html;
+use Coyote\Domain\StringHtml;
 
 class UserSettings
 {
@@ -10,7 +11,7 @@ class UserSettings
         $gdpr = '<a href="mailto:gdpr@4programmers.net">gdpr@4programmers.net</a>';
         $_4programmers = '<a href="/">4programmers.net</a>';
 
-        return new Html("Wyrażam zgodę na otrzymywanie, na podany przeze mnie adres e-mail, informacji handlowych
+        return new StringHtml("Wyrażam zgodę na otrzymywanie, na podany przeze mnie adres e-mail, informacji handlowych
             kierowanych do mnie przez 4programmers.net (tj. Makana sp. z o.o., z siedzibą przy ul. Krupniczej 13, 50-075
             Wrocław). Informacje handlowe dotyczyć będą produktów, usług i działalności realizowanej przez
             4programmers.net i jej kontrahentów. Rozumiem, że zgodę mogę wycofać w dowolnym momencie, jednak nie będzie
@@ -21,20 +22,20 @@ class UserSettings
 
     public function newsletterAgreement(): Html
     {
-        return new Html('Zgadzam się na otrzymywanie newslettera.');
+        return new StringHtml('Zgadzam się na otrzymywanie newslettera.');
     }
 
     public function termsAndPrivacyPolicyAgreement(): Html
     {
         $terms = '<a href="/Regulamin">regulamin</a>';
         $privacyPolicy = '<a href="/Polityka_prywatności">politykę prywatności</a>';
-        return new Html("Akceptuję $terms oraz $privacyPolicy.<b>*</b>");
+        return new StringHtml("Akceptuję $terms oraz $privacyPolicy.<b>*</b>");
     }
 
     public function informationClause(): Html
     {
         $privacyPolicy = '<a href="/Polityka_prywatności">polityce prywatności</a>';
-        return new Html(
+        return new StringHtml(
             "Uzupełnieniając pola oznaczone jako dobrowolne oraz klikając \"Zapisz\" wyrażasz swoją dobrowolną
             zgodę na przetwarzanie wpisanych w nich danych osobowych w celu umieszczenia ich w Twoim profilu. Zgodę
             można wycofać w każdej chwili poprzez usunięcie danych w koncie, co nie wpływa na zgodność z prawem
@@ -47,7 +48,7 @@ class UserSettings
         $_4programmers = '<a href="/">4programmers.net</a>';
         $privacyPolicy = '<a href="/Polityka_prywatności">polityce prywatności</a>';
 
-        return new Html(
+        return new StringHtml(
             "Na forum $_4programmers korzystamy z plików cookies. Część z nich jest niezbędna do funkcjonowania
              naszego forum, natomiast wykorzystanie pozostałych zależy od Twojej dobrowolnej zgody, którą możesz 
              wyrazić poniżej. Klikając „Zaakceptuj Wszystkie” zgadzasz się na wykorzystywanie przez nas plików cookies 

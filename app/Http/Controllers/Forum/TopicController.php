@@ -22,7 +22,6 @@ use Coyote\Services\Forum\TreeBuilder\JsonDecorator;
 use Coyote\Services\Forum\TreeBuilder\ListDecorator;
 use Coyote\Services\Parser\Extensions\Emoji;
 use Coyote\Topic;
-use Coyote\View\Twig\TwigLiteral;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -133,7 +132,7 @@ class TopicController extends BaseController
                 'user_forums'  => $userForums,
                 'description'  => excerpt($post['text'], 100),
                 'flags'        => $this->flags($forum),
-                'schema_topic' => TwigLiteral::fromHtml($this->discussionForumPosting($topic, $post['html'])),
+                'schema_topic' => $this->discussionForumPosting($topic, $post['html']),
             ]);
     }
 

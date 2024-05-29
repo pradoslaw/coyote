@@ -11,7 +11,6 @@ use Coyote\Mail\EmailConfirmation;
 use Coyote\Services\FormBuilder\Form;
 use Coyote\Services\Stream\Activities\Update;
 use Coyote\Services\Stream\Objects\Person;
-use Coyote\View\Twig\TwigLiteral;
 use Illuminate\Contracts\Mail\MailQueue;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -35,7 +34,7 @@ class SettingsController extends BaseController
         return $this->view('user.settings', [
             'email'             => $email,
             'form'              => $form,
-            'informationClause' => TwigLiteral::fromHtml((new UserSettings())->informationClause()),
+            'informationClause' => (new UserSettings())->informationClause(),
         ]);
     }
 

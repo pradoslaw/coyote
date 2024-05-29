@@ -4,18 +4,16 @@ namespace Coyote\Domain\Administrator\Activity;
 use Coyote\Domain\Administrator\View\Date;
 use Coyote\Domain\Administrator\View\Mention;
 use Coyote\Domain\Chart;
+use Coyote\Domain\Html;
 use Coyote\Domain\PostStatistic;
 use Coyote\User;
-use Coyote\View\Twig\TwigLiteral;
 
 readonly class Activity
 {
-    public TwigLiteral $categoriesChart;
-    public TwigLiteral $deleteReasonsChart;
-
-    public TwigLiteral $chartLibrarySourceHtml;
-
-    private Mention $mention;
+    public Chart $categoriesChart;
+    public Chart $deleteReasonsChart;
+    public Html $chartLibrarySource;
+    public Mention $mention;
 
     /**
      * @param Category[] $categories
@@ -30,9 +28,9 @@ readonly class Activity
     )
     {
         $this->mention = Mention::of($user);
-        $this->categoriesChart = new TwigLiteral($this->categoriesChart($this->categoriesSliced($this->categoriesSorted($categories), 10)));
-        $this->deleteReasonsChart = new TwigLiteral($this->deleteReasonsChart($this->reasonsSorted($deleteReasons)));
-        $this->chartLibrarySourceHtml = new TwigLiteral(Chart::librarySourceHtml());
+        $this->categoriesChart = $this->categoriesChart($this->categoriesSliced($this->categoriesSorted($categories), 10));
+        $this->deleteReasonsChart = $this->deleteReasonsChart($this->reasonsSorted($deleteReasons));
+        $this->chartLibrarySource = Chart::librarySourceHtml();
     }
 
     public function hasDeleteReasons(): bool
@@ -48,11 +46,6 @@ readonly class Activity
     public function username(): string
     {
         return $this->user->name;
-    }
-
-    public function mention(): TwigLiteral
-    {
-        return $this->mention->mention();
     }
 
     public function accountCreatedAt(): string

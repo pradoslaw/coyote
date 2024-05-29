@@ -9,7 +9,6 @@ use Coyote\Http\Factories\CacheFactory;
 use Coyote\Services\Forum\UserDefined;
 use Coyote\Services\Guest;
 use Coyote\User;
-use Coyote\View\Twig\TwigLiteral;
 use Illuminate\Contracts\Cache;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -39,7 +38,7 @@ class ViewServiceProvider extends ServiceProvider
                 '__color_scheme' => $this->colorScheme(),
                 'github_stars'   => $cache->remember('homepage:github_stars', 30 * 60, fn() => $this->githubStars()),
                 'gdpr'           => [
-                    'content'  => TwigLiteral::fromHtml((new UserSettings)->cookieAgreement()),
+                    'content' => (new UserSettings)->cookieAgreement(),
                     'accepted' => $this->gdprAccepted(),
                 ],
                 'year'           => $clock->year(),

@@ -6,12 +6,14 @@ use Coyote\Domain\Seo\Schema\Thing;
 
 class Schema extends Html
 {
-    public function __construct(Thing $thing)
+    public function __construct(private Thing $thing)
     {
-        parent::__construct(
-            '<script type="application/ld+json">' .
-            \json_encode($thing->schema()) .
-            '</script>'
-        );
+    }
+
+    protected function toHtml(): string
+    {
+        return '<script type="application/ld+json">' .
+            \json_encode($this->thing->schema()) .
+            '</script>';
     }
 }

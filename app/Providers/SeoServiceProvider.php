@@ -2,7 +2,6 @@
 namespace Coyote\Providers;
 
 use Coyote\Domain\Seo\Schema;
-use Coyote\View\Twig\TwigLiteral;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
@@ -16,7 +15,7 @@ class SeoServiceProvider extends ServiceProvider
         $view = $this->app['view'];
         $view->composer('layout', function (View $view): void {
             $view->with([
-                'schema_organization' => TwigLiteral::fromHtml(new Schema(new Schema\Organization())),
+                'schema_organization' => new Schema(new Schema\Organization()),
                 'meta_robots'         => $this->metaRobots(),
                 'meta_canonical'      => $this->metaCanonicalForRequest(),
             ]);

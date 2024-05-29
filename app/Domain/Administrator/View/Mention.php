@@ -1,10 +1,10 @@
 <?php
 namespace Coyote\Domain\Administrator\View;
 
+use Coyote\Domain\Html;
 use Coyote\User;
-use Coyote\View\Twig\TwigLiteral;
 
-class Mention
+class Mention extends Html
 {
     public static function of(User $user): Mention
     {
@@ -15,9 +15,9 @@ class Mention
     {
     }
 
-    public function mention(): TwigLiteral
+    protected function toHtml(): string
     {
         $url = route('profile', [$this->user->id]);
-        return new TwigLiteral('<a class="mention" href="' . \htmlSpecialChars($url) . '">' . '@' . $this->user->name . '</a>');
+        return '<a class="mention" href="' . \htmlSpecialChars($url) . '">' . '@' . $this->user->name . '</a>';
     }
 }

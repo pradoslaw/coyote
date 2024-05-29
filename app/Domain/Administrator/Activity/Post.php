@@ -3,7 +3,7 @@ namespace Coyote\Domain\Administrator\Activity;
 
 use Carbon\Carbon;
 use Coyote\Domain\Administrator\View\PostPreview;
-use Coyote\View\Twig\TwigLiteral;
+use Coyote\Domain\Html;
 
 class Post
 {
@@ -23,12 +23,12 @@ class Post
         $this->preview = new PostPreview($text);
     }
 
-    public function html(): TwigLiteral
+    public function html(): Html
     {
         return $this->preview->html();
     }
 
-    public function previewHtml(): ?TwigLiteral
+    public function previewHtml(): ?Html
     {
         return $this->preview->previewHtml();
     }

@@ -1,7 +1,8 @@
 <?php
 namespace Coyote\Domain\Administrator\View;
 
-use Coyote\View\Twig\TwigLiteral;
+use Coyote\Domain\Html;
+use Coyote\Domain\StringHtml;
 use DOMElement;
 
 class PostPreview
@@ -15,18 +16,22 @@ class PostPreview
         return \str_contains($this->contentMarkdown, "\n");
     }
 
-    public function previewHtml(): ?TwigLiteral
+    public function previewHtml(): ?Html
     {
-        $content = $this->previewString($this->htmlString());
+        $html = $this->htmlString();
+        if ($html === '') {
+            return null;
+        }
+        $content = $this->previewString($html);
         if ($content) {
-            return new TwigLiteral($content);
+            return new StringHtml($content);
         }
         return null;
     }
 
-    public function html(): TwigLiteral
+    public function html(): Html
     {
-        return new TwigLiteral($this->htmlString());
+        return new StringHtml($this->htmlString());
     }
 
     private function htmlString(): string
@@ -34,11 +39,8 @@ class PostPreview
         return app('parser.post')->parse($this->contentMarkdown);
     }
 
-    private function previewString(string $html): ?string
+    private function previewString(string $html): string
     {
-        if ($html === '') {
-            return '';
-        }
         $document = new \DOMDocument();
         $document->loadHTML("<html><head><meta charset='utf-8'></head><body>$html</body></html>");
         return $this->htmlWithoutBlockQuotes($document);

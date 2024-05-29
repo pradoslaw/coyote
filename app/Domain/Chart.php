@@ -1,7 +1,7 @@
 <?php
 namespace Coyote\Domain;
 
-class Chart
+class Chart extends Html
 {
     private array $options;
 
@@ -69,13 +69,14 @@ class Chart
         return \sScanF($hexColor, '#%02x%02x%02x');
     }
 
-    public static function librarySourceHtml(): string
+    public static function librarySourceHtml(): Html
     {
-        return '<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>' .
-            '<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>';
+        return new StringHtml(
+            '<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>' .
+            '<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>');
     }
 
-    public function __toString(): string
+    protected function toHtml(): string
     {
         return <<<html
             <div style="height:{$this->canvasHeight()}px;">

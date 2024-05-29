@@ -18,7 +18,6 @@ use Coyote\Repositories\Eloquent\MicroblogRepository;
 use Coyote\Services\Microblogs\Builder;
 use Coyote\Services\Parser\Extensions\Emoji;
 use Coyote\User;
-use Coyote\View\Twig\TwigLiteral;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -78,7 +77,7 @@ class HomeController extends Controller
             'rank'        => $this->user->rank($user->id),
             'total_users' => $this->user->countUsersWithReputation(),
             'reputation'  => $this->reputation->history($user->id),
-            'chart'       => new TwigLiteral($this->chart($user)),
+            'chart' => $this->chart($user),
         ]);
     }
 

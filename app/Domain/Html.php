@@ -1,9 +1,12 @@
 <?php
 namespace Coyote\Domain;
 
-class Html
+abstract class Html
 {
-    public function __construct(public string $content)
+    protected abstract function toHtml(): string;
+
+    public function __toString(): string
     {
+        return $this->toHtml();
     }
 }

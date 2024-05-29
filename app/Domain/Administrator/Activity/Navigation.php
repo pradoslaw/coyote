@@ -3,7 +3,6 @@ namespace Coyote\Domain\Administrator\Activity;
 
 use Coyote\Domain\Administrator\View\Mention;
 use Coyote\User;
-use Coyote\View\Twig\TwigLiteral;
 
 readonly class Navigation
 {
@@ -15,7 +14,7 @@ readonly class Navigation
     public string $posts;
     public string $microblogs;
     public string $activity;
-    private Mention $mention;
+    public Mention $mention;
 
     public function __construct(User $user)
     {
@@ -28,10 +27,5 @@ readonly class Navigation
         $this->microblogs = route('profile', [$user->id, 'tab' => 'Microblog']);
         $this->activity = route('adm.users.activity', [$user->id]);
         $this->mention = Mention::of($user);
-    }
-
-    public function mention(): TwigLiteral
-    {
-        return $this->mention->mention();
     }
 }
