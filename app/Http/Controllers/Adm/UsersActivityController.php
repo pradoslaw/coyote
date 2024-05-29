@@ -23,7 +23,7 @@ class UsersActivityController extends BaseController
 
     public function show(Request $request, User $user): View
     {
-        $mention = new Mention($user);
+        $mention = Mention::of($user);
         $this->breadcrumb->push($mention->mentionString(), route('adm.users.show', [$user->id]));
         $this->breadcrumb->push('Aktywność użytkownika', route('adm.users.activity', [$user->id]));
         $daysAgo = $this->daysAgo($request);

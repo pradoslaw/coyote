@@ -36,7 +36,7 @@ class UsersController extends BaseController
 
     public function show(User $user): View
     {
-        $mention = new Mention($user);
+        $mention = Mention::of($user);
         $this->breadcrumb->push($mention->mentionString(), route('adm.users.show', [$user->id]));
         return $this->view('adm.users.show', [
             'navigation' => new Navigation($user),
@@ -45,7 +45,7 @@ class UsersController extends BaseController
 
     public function edit(User $user): View
     {
-        $mention = new Mention($user);
+        $mention = Mention::of($user);
         $this->breadcrumb->push($mention->mentionString(), route('adm.users.show', [$user->id]));
         $this->breadcrumb->push('Ustawienia konta', route('adm.users.save', [$user->id]));
         return $this->view('adm.users.save', [

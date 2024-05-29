@@ -26,7 +26,7 @@ readonly class Navigation
         $this->posts = route('forum.user', [$user->id]);
         $this->microblogs = route('profile', [$user->id, 'tab' => 'Microblog']);
         $this->activity = route('adm.users.activity', [$user->id]);
-        $this->mention = new Mention($user);
+        $this->mention = Mention::of($user);
     }
 
     public function mention(): TwigLiteral

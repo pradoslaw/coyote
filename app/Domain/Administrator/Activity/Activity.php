@@ -29,7 +29,7 @@ readonly class Activity
         public PostStatistic $postsStatistic,
     )
     {
-        $this->mention = new Mention($user);
+        $this->mention = Mention::of($user);
         $this->categoriesChart = new TwigLiteral($this->categoriesChart($this->categoriesSliced($this->categoriesSorted($categories), 10)));
         $this->deleteReasonsChart = new TwigLiteral($this->deleteReasonsChart($this->reasonsSorted($deleteReasons)));
         $this->chartLibrarySourceHtml = new TwigLiteral(Chart::librarySourceHtml());

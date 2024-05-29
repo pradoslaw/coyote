@@ -6,7 +6,12 @@ use Coyote\View\Twig\TwigLiteral;
 
 class Mention
 {
-    public function __construct(private User $user)
+    public static function of(User $user): Mention
+    {
+        return new Mention($user);
+    }
+
+    private function __construct(private User $user)
     {
     }
 
