@@ -1,8 +1,7 @@
 <?php
 namespace Coyote\Domain\Administrator\Activity;
 
-use Carbon\Carbon;
-use Carbon\CarbonInterval;
+use Coyote\Domain\Administrator\View\Date;
 use Coyote\Domain\Administrator\View\Mention;
 use Coyote\Domain\Chart;
 use Coyote\Domain\PostStatistic;
@@ -61,29 +60,10 @@ readonly class Activity
         return $this->user->created_at->format('Y-m-d H:i:s');
     }
 
-    public function createdAgoMajor(): string
+    public function createdAgo(): string
     {
-        [$number, $unit] = \explode(' ', $this->createdAgo(), 3);
-        return "$number $unit";
-    }
-
-    public function createdAgoMinor(): string
-    {
-        return \subStr($this->createdAgo(), \strLen($this->createdAgoMajor()));
-    }
-
-    private function createdAgo(): string
-    {
-        $carbonInterval = $this->user->created_at->diff(Carbon::now());
-        return $this->firstWords($carbonInterval, 6) . " temu";
-    }
-
-    private function firstWords(CarbonInterval $interval, int $words): string
-    {
-        return \implode(' ',
-            \array_slice(
-                \explode(' ', $interval),
-                0, $words));
+        $createdAt = new Date($this->user->created_at);
+        return $createdAt->timeAgo();
     }
 
     private function deleteReasonsChart(array $array): Chart

@@ -18,10 +18,7 @@
     <ul class="list-group list-group-flush">
       <li class="list-group-item d-flex justify-content-between">
         <span><b>Utworzenie konta</b>: {{ activity.accountCreatedAt }}</span>
-        <div>
-          <b>{{ activity.createdAgoMajor }}</b>
-          <span class="text-muted">{{ activity.createdAgoMinor }}</span>
-        </div>
+        <span class="text-muted">{{ activity.createdAgo }}</span>
       </li>
     </ul>
   </div>
