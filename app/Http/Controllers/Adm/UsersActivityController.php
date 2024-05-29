@@ -6,7 +6,6 @@ use Coyote\Domain\Administrator\Activity\Activity;
 use Coyote\Domain\Administrator\Activity\Category;
 use Coyote\Domain\Administrator\Activity\DeleteReason;
 use Coyote\Domain\Administrator\Activity\Post;
-use Coyote\Domain\Administrator\Mention;
 use Coyote\Domain\PostStatistic;
 use Coyote\User;
 use Illuminate\Http\Request;
@@ -23,8 +22,7 @@ class UsersActivityController extends BaseController
 
     public function show(Request $request, User $user): View
     {
-        $mention = Mention::of($user);
-        $this->breadcrumb->push($mention->mentionString(), route('adm.users.show', [$user->id]));
+        $this->breadcrumb->push("@$user->name", route('adm.users.show', [$user->id]));
         $this->breadcrumb->push('Aktywność użytkownika', route('adm.users.activity', [$user->id]));
         $daysAgo = $this->daysAgo($request);
         return $this->view('adm.users.activity', [

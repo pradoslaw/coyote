@@ -3,7 +3,6 @@ namespace Coyote\Http\Controllers\Adm;
 
 use Boduch\Grid\Source\EloquentSource;
 use Coyote\Domain\Administrator\Activity\Navigation;
-use Coyote\Domain\Administrator\Mention;
 use Coyote\Events\UserDeleted;
 use Coyote\Events\UserSaved;
 use Coyote\Http\Forms\User\AdminForm;
@@ -36,8 +35,7 @@ class UsersController extends BaseController
 
     public function show(User $user): View
     {
-        $mention = Mention::of($user);
-        $this->breadcrumb->push($mention->mentionString(), route('adm.users.show', [$user->id]));
+        $this->breadcrumb->push("@$user->name", route('adm.users.show', [$user->id]));
         return $this->view('adm.users.show', [
             'navigation' => new Navigation($user),
         ]);
@@ -45,8 +43,7 @@ class UsersController extends BaseController
 
     public function edit(User $user): View
     {
-        $mention = Mention::of($user);
-        $this->breadcrumb->push($mention->mentionString(), route('adm.users.show', [$user->id]));
+        $this->breadcrumb->push("@$user->name", route('adm.users.show', [$user->id]));
         $this->breadcrumb->push('Ustawienia konta', route('adm.users.save', [$user->id]));
         return $this->view('adm.users.save', [
             'user'       => $user,

@@ -3,7 +3,7 @@ namespace Coyote\Domain\Administrator\Activity;
 
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
-use Coyote\Domain\Administrator\Mention;
+use Coyote\Domain\Administrator\View\Mention;
 use Coyote\Domain\Chart;
 use Coyote\Domain\PostStatistic;
 use Coyote\User;
