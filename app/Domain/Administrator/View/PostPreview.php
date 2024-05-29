@@ -1,5 +1,5 @@
 <?php
-namespace Coyote\Domain\Administrator\Activity;
+namespace Coyote\Domain\Administrator\View;
 
 use Coyote\View\Twig\TwigLiteral;
 use DOMElement;

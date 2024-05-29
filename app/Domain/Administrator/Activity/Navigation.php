@@ -1,6 +1,7 @@
 <?php
 namespace Coyote\Domain\Administrator\Activity;
 
+use Coyote\Domain\Administrator\Mention;
 use Coyote\User;
 use Coyote\View\Twig\TwigLiteral;
 

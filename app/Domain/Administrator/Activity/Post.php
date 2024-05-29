@@ -2,6 +2,7 @@
 namespace Coyote\Domain\Administrator\Activity;
 
 use Carbon\Carbon;
+use Coyote\Domain\Administrator\View\PostPreview;
 use Coyote\View\Twig\TwigLiteral;
 
 class Post

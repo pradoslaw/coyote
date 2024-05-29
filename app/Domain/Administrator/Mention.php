@@ -1,5 +1,5 @@
 <?php
-namespace Coyote\Domain\Administrator\Activity;
+namespace Coyote\Domain\Administrator;
 
 use Coyote\User;
 use Coyote\View\Twig\TwigLiteral;

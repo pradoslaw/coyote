@@ -2,8 +2,8 @@
 namespace Coyote\Http\Controllers\Adm;
 
 use Boduch\Grid\Source\EloquentSource;
-use Coyote\Domain\Administrator\Activity\Mention;
 use Coyote\Domain\Administrator\Activity\Navigation;
+use Coyote\Domain\Administrator\Mention;
 use Coyote\Events\UserDeleted;
 use Coyote\Events\UserSaved;
 use Coyote\Http\Forms\User\AdminForm;
