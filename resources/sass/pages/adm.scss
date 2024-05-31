@@ -40,3 +40,19 @@ body.theme-dark {
     color: unset;
   }
 }
+
+body.theme-dark .post-preview {
+  background-color: #111111;
+  border-color: #333333;
+}
+
+.post-preview {
+  background-color: #eee;
+  border: 1px solid #ccc;
+  padding: .5em;
+  border-radius: .25em;
+}
+
+.post-preview p {
+  margin: 0;
+}

@@ -6,6 +6,11 @@ use Carbon\CarbonInterval;
 
 class Date
 {
+    public static function parse(string $dateTimeFormat): Date
+    {
+        return new Date(new Carbon($dateTimeFormat));
+    }
+
     public function __construct(private Carbon $date)
     {
     }
