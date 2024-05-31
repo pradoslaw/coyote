@@ -1,56 +1,34 @@
 <?php
-
 namespace Coyote\Http\Controllers;
 
 use Carbon\Carbon;
 use Coyote\Flag;
 use Coyote\Flag\Type;
 use Coyote\Notifications\FlagCreatedNotification;
-use Coyote\Repositories\Contracts\ForumRepositoryInterface as ForumRepository;
-use Coyote\Repositories\Contracts\UserRepositoryInterface as UserRepository;
 use Coyote\Repositories\Criteria\HasPermission;
+use Coyote\Repositories\Eloquent\UserRepository;
 use Coyote\Services\Stream\Activities\Create as Stream_Create;
 use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
 use Coyote\Services\Stream\Objects\Flag as Stream_Flag;
+use Coyote\User;
 use Illuminate\Contracts\Auth\Access\Gate;
+use Illuminate\Database\Eloquent;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class FlagController extends Controller
 {
-    /**
-     * @var ForumRepository
-     */
-    private $forum;
-
-    /**
-     * @var UserRepository
-     */
-    private $user;
-
-    /**
-     * @param ForumRepository $forum
-     * @param UserRepository $user
-     */
-    public function __construct(ForumRepository $forum, UserRepository $user)
+    public function __construct(private UserRepository $user)
     {
         parent::__construct();
-
-        $this->forum = $forum;
-        $this->user = $user;
     }
 
-    /**
-     * @return Type[]|\Illuminate\Database\Eloquent\Collection
-     */
-    public function index()
+    public function index(): Eloquent\Collection
     {
-        return Type::orderBy('order')->get();
+        return Type::query()->orderBy('order')->get();
     }
 
-    /**
-     * @param Request $request
-     */
-    public function save(Request $request)
+    public function save(Request $request): void
     {
         $this->validate($request, [
             'url'      => 'required|string',
@@ -64,52 +42,48 @@ class FlagController extends Controller
         $models = $permissions = [];
 
         foreach ($metadata as $resource => $id) {
-            $model = strtolower(class_basename($resource));
+            $model = \strToLower(class_basename($resource));
             $permissions[] = "$model-delete";
-
             $models[$model] = $id;
         }
 
         $flag = $this->transaction(function () use ($request, $models) {
             $data = $request->all() + ['user_id' => $this->userId];
-
             /** @var Flag $flag */
-            $flag = Flag::create($data);
-
+            $flag = Flag::query()->create($data);
             foreach ($models as $model => $id) {
                 $relation = str_plural($model);
-
                 $flag->$relation()->attach($id);
             }
-
             stream(Stream_Create::class, (new Stream_Flag())->map($flag));
-
             return $flag;
         });
 
         $this->user->pushCriteria(new HasPermission($permissions));
-
         $users = $this
             ->user
             ->all()
-            ->sortByDesc(function ($user) {
-                /** @var \Coyote\User $user */
-                return $user->id == $this->userId ? -1
-                    : ($user->is_online ? Carbon::now()->timestamp : $user->visited_at->timestamp);
+            ->sortByDesc(function (User $user): int {
+                if ($user->id === $this->userId) {
+                    return -2;
+                }
+                if ($user->is_online) {
+                    return Carbon::now()->timestamp;
+                }
+                if ($user->visited_at) {
+                    return $user->visited_at->timestamp;
+                }
+                return -1;
             })
             ->splice(0, 5);
 
-        /** @var \Coyote\User $user */
+        /** @var User $user */
         foreach ($users as $user) {
             $user->notify(new FlagCreatedNotification($flag));
         }
     }
 
-    /**
-     * @param Flag $flag
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
-     */
-    public function delete(Flag $flag)
+    public function delete(Flag $flag): ?Response
     {
         $object = new Stream_Flag(['id' => $flag->id]);
 
@@ -125,6 +99,7 @@ class FlagController extends Controller
 
             stream(Stream_Delete::class, $object);
         });
+        return null;
     }
 
     private function isAuthorized(Flag $flag): bool
