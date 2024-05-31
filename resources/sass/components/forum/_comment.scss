@@ -36,7 +36,9 @@
     }
   }
 
-  @include link-color-darker();
+  a {
+    color: $link-color-darker;
+  }
 
   span > a {
     text-decoration: underline;

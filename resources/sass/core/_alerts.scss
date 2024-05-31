@@ -11,10 +11,14 @@
 // Kolor linkow w komunikacie bledow
 // ------------------------------------------------------------------------------------
 
-.alert-danger {
+.alert.alert-danger {
   a {
     color: darken($danger, 10%);
     font-weight: bold;
+  }
+
+  .post-comment & {
+    margin-bottom: 0.25rem;
   }
 }
 

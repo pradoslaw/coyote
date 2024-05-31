@@ -17,7 +17,8 @@ export interface Flag {
   text: string;
   created_at: Date;
   user: User;
-  resources: FlagResource;
+  resources: FlagResource[];
+  url: string;
 }
 
 export interface FlagType {
@@ -152,6 +153,7 @@ export interface PostComment {
   is_read?: boolean;
   is_editing?: boolean;
   url: string;
+  metadata: string;
 }
 
 export interface Post {
