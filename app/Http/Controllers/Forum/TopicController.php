@@ -75,13 +75,16 @@ class TopicController extends BaseController
         $userForums = $treeDecorator->build();
 
         // important: load topic owner so we can highlight user's login
-        $page === 1 ? $topic->setRelation('firstPost', $paginate->first()) : $topic->load('firstPost');
+        if ($page === 1) {
+            $topic->setRelation('firstPost', $paginate->first());
+        } else {
+            $topic->load('firstPost');
+        }
 
         $tracker = Tracker::make($topic);
 
         if ($gate->allows('delete', $forum) || $gate->allows('move', $forum)) {
-            $reasons = Reason::pluck('name', 'id')->toArray();
-
+            $reasons = Reason::query()->pluck('name', 'id')->toArray();
             $this->forum->resetCriteria();
             $this->pushForumCriteria(false);
 
