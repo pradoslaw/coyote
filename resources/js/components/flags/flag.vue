@@ -5,7 +5,8 @@
     </button>
 
     <vue-username :user="flag.user" class="alert-link"></vue-username>
-    zgłosił {{ elementNameAccusative }}
+    zgłosił
+    <a :href="flag.url">{{ elementNameAccusative }}</a>
     z powodu <strong>{{ flag.name }}</strong>
     dnia
     <vue-timeago :datetime="flag.created_at"></vue-timeago>
@@ -48,6 +49,11 @@ export default class VueFlag extends Vue {
   }
 
   get elementNameAccusative(): string {
+    for (const resource of this.flag.resources) {
+      if (resource.resource_type === 'Coyote\\Comment') {
+        return 'komentarz';
+      }
+    }
     for (const resource of this.flag.resources) {
       if (resource.resource_type === 'Coyote\\Post') {
         return 'post';
