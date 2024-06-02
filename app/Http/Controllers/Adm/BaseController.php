@@ -44,7 +44,7 @@ class BaseController extends Controller
             $forum->add('Powody moderacji', ['route' => 'adm.forum.reasons']);
 
             $menu->add('Dziennik zdarzeń', ['route' => 'adm.stream'])->prepend($fa('fa-newspaper fa-fw'));
-            $menu->add('Raporty', ['route' => 'adm.flag'])->prepend($fa('fa-flag fa-fw'));
+            $menu->add('Zgłoszone posty', ['route' => 'adm.flag'])->prepend($fa('fa-flag fa-fw'));
             $menu->add('Cenzura', ['route' => 'adm.words'])->prepend($fa('fa-ban fa-fw'));
             $menu->add('Bloki statyczne', ['route' => 'adm.blocks'])->prepend($fa('fa-columns fa-fw'));
 

@@ -1,0 +1,109 @@
+{% extends 'adm.base' %}
+{% block title %}Sprawy {{ parent() }}{% endblock %}
+
+{% block container %}
+  <div class="col-lg-6 col-xl-5 px-0">
+    <div class="card">
+      <div class="card-header">
+        <i class="far fa-flag"></i>
+        Zgłoszony post
+      </div>
+      <div class="list-group list-group-flush">
+        <div class="list-group-item">
+          Status zgłoszenia:
+          <span class="badge badge-primary">Nowe</span>
+        </div>
+        <div class="list-group-item">
+          Ostatnia aktywność:
+          <span title="Ostatnia aktywność w sprawie: {{ post.updatedAt }}">
+            <i class="fas fa-history"></i>
+            {{ post.updatedAgo }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h4 class="mt-4 mb-2">Aktywność</h4>
+  <div class="mb-4">
+    {% for report in reports %}
+      <div class="d-flex mb-2">
+        <i class="fas fa-fw fa-flag mt-1 mr-2"></i>
+        <div>
+          {{ report.reporterMention }}
+          zgłosił
+
+          <span class="badge badge-secondary">
+            <i class="far fa-flag"></i>
+            {{ report.reportType }}
+          </span>
+
+          {% if report.reportNote %}
+            z dopiskiem <code>{{ report.reportNote }}</code>.
+          {% endif %}
+
+          <small class="d-block text-muted">
+            {{ report.reportedAt }}, {{ report.reportedAgo }}
+          </small>
+        </div>
+      </div>
+    {% endfor %}
+    <div>
+      <div class="d-flex">
+        <i class="fas fa-fw fa-user-edit mt-1 mr-2"></i>
+        <div>
+          {{ post.authorMention }} dodał
+
+          <span class="badge badge-secondary">
+            <i class="far fa-comment"></i>
+            Post
+          </span>
+          <small class="d-block text-muted">
+            {{ post.createdAt }}, {{ post.createdAgo }}
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h4 class="mt-4 mb-2">Podgląd</h4>
+  <p class="mb-2">
+    Forum / <a href="{{ post.forumUrl }}">{{ post.forumSlug }}</a>:
+  </p>
+  <div class="col-lg-10 col-xl-8 px-0">
+    <div class="card card-post">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-2">{{ post.authorMention }}</div>
+          <div class="col-10"><small>{{ post.createdAgo }}</small></div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-2">
+            <img
+                class="post-avatar img-thumbnail"
+                src="{{ post.authorAvatar }}"
+                alt="{{ post.authorName }}"
+            />
+          </div>
+          <div class="col-10">{{ post.html }}</div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="row">
+          <div class="col-2"></div>
+          <div class="col-10 text-right text-muted">
+            <i class="fas fa-ellipsis-h mr-2"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <a href="{{ backUrl }}" class="btn btn-secondary">
+      Powrót
+    </a>
+  </div>
+{% endblock %}

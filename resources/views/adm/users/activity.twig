@@ -91,14 +91,14 @@
                 </a>
                 {% if not post.isLong %}
                   <div>
-                    <div class="d-inline-block post-content-excerpt mt-1 rounded p-2 post-preview">
+                    <div class="d-inline-block mt-1 post-preview">
                       {{ post.contentHtml }}
                     </div>
                   </div>
                 {% else %}
                   <div class="content-parent">
                     <div class="content-preview" style="display:block;">
-                      <div class="flex-grow-1 post-content-excerpt rounded p-2 post-preview">
+                      <div class="flex-grow-1 post-preview">
                         {{ post.previewHtml }}
                       </div>
                       <div class="text-right">
@@ -109,7 +109,7 @@
                       </div>
                     </div>
                     <div class="content-full" style="display:none;">
-                      <div class="flex-grow-1 post-content-excerpt rounded p-2 post-preview">
+                      <div class="flex-grow-1 post-preview">
                         {{ post.contentHtml }}
                       </div>
                     </div>
@@ -193,26 +193,12 @@
           height: 1em;
       }
 
-      .post-content-excerpt p {
-          margin: 0;
-      }
-
       .deleted {
           opacity: 0.5;
       }
 
       .deleted:hover {
           opacity: 0.9;
-      }
-
-      body.theme-dark .post-preview {
-          background-color: #111111;
-          border-color: #333333;
-      }
-
-      .post-preview {
-          background-color: #eee;
-          border: 1px solid #ccc;
       }
   </style>
 

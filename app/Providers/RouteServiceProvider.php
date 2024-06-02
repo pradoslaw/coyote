@@ -4,6 +4,7 @@ namespace Coyote\Providers;
 
 use Coyote\Guide;
 use Coyote\Microblog;
+use Coyote\Post;
 use Coyote\Repositories\Contracts\BlockRepositoryInterface;
 use Coyote\Repositories\Contracts\FirewallRepositoryInterface;
 use Coyote\Repositories\Contracts\ForumRepositoryInterface;
@@ -91,10 +92,13 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         // we use model instead of repository to avoid putting global criteria to all methods in repository
-        $this->router->bind('user_trashed', fn ($id) => User::withTrashed()->findOrFail($id));
+        $this->router->bind('user_trashed', fn($id) => User::withTrashed()->findOrFail($id));
 
         // we use model instead of repository to avoid putting global criteria to all methods in repository
-        $this->router->bind('topic_trashed', fn ($id) => Topic::withTrashed()->findOrFail($id));
+        $this->router->bind('post_trashed', fn($id) => Post::withTrashed()->findOrFail($id));
+
+        // we use model instead of repository to avoid putting global criteria to all methods in repository
+        $this->router->bind('topic_trashed', fn($id) => Topic::withTrashed()->findOrFail($id));
 
         $this->router->bind('topic', function ($id) {
             $user = $this->getCurrentRequest()->user();
@@ -106,7 +110,7 @@ class RouteServiceProvider extends ServiceProvider
             return Topic::findOrFail($id);
         });
 
-        $this->router->bind('any_microblog', fn ($id) => Microblog::withoutGlobalScopes()->findOrFail($id));
+        $this->router->bind('any_microblog', fn($id) => Microblog::query()->withoutGlobalScopes()->findOrFail($id));
 
         parent::boot();
     }
@@ -171,7 +175,9 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapApiRoutes()
     {
         $this->router->group([
-            'namespace' => $this->namespace, 'middleware' => 'api', 'domain' => !$this->app->runningUnitTests() ? config('services.api.host') : ''
+            'namespace'  => $this->namespace,
+            'middleware' => 'api',
+            'domain'     => !$this->app->runningUnitTests() ? config('services.api.host') : '',
         ], function () {
             require base_path('routes/api.php');
         });
