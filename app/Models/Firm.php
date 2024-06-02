@@ -5,6 +5,7 @@ namespace Coyote;
 use Coyote\Models\Asset;
 use Coyote\Services\Eloquent\HasMany;
 use Coyote\Services\Media\Factory as MediaFactory;
+use Coyote\Services\Media\File;
 use Coyote\Services\Media\Logo;
 use Coyote\Services\Media\SerializeClass;
 use Illuminate\Database\Eloquent\Model;
@@ -58,7 +59,7 @@ class Firm extends Model
         'is_private',
         'youtube_url',
         'benefits',
-        'country'
+        'country',
     ];
 
     /**
@@ -72,11 +73,11 @@ class Firm extends Model
      * @var array
      */
     protected $attributes = [
-        'is_agency' => false
+        'is_agency' => false,
     ];
 
     protected $casts = [
-        'is_agency' => 'bool'
+        'is_agency' => 'bool',
     ];
 
     /**
@@ -85,17 +86,17 @@ class Firm extends Model
     public static function getEmployeesList()
     {
         return [
-            1 => '1-5',
-            2 => '6-10',
-            3 => '11-20',
-            4 => '21-30',
-            5 => '31-50',
-            6 => '51-100',
-            7 => '101-200',
-            8 => '201-500',
-            9 => '501-1000',
+            1  => '1-5',
+            2  => '6-10',
+            3  => '11-20',
+            4  => '21-30',
+            5  => '31-50',
+            6  => '51-100',
+            7  => '101-200',
+            8  => '201-500',
+            9  => '501-1000',
             10 => '1001-5000',
-            11 => '5000+'
+            11 => '5000+',
         ];
     }
 
@@ -136,17 +137,12 @@ class Firm extends Model
         $this->attributes['slug'] = str_slug($name, '_');
     }
 
-    /**
-     * @param string $value
-     * @return \Coyote\Services\Media\MediaInterface
-     */
-    public function getLogoAttribute($value)
+    public function getLogoAttribute($value): File
     {
-        if (!($value instanceof Logo)) {
+        if (!$value instanceof Logo) {
             $logo = app(MediaFactory::class)->make('logo', ['file_name' => $value]);
             $this->attributes['logo'] = $logo;
         }
-
         return $this->attributes['logo'];
     }
 
@@ -186,7 +182,7 @@ class Firm extends Model
     {
         $this->setAttribute(
             'country_id',
-            $country ? (new Country())->where('name', $country)->orWhere('code', $country)->value('id') : null
+            $country ? (new Country())->where('name', $country)->orWhere('code', $country)->value('id') : null,
         );
     }
 

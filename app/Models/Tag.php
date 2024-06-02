@@ -1,10 +1,9 @@
 <?php
-
 namespace Coyote;
 
 use Coyote\Services\Media\Factory as MediaFactory;
+use Coyote\Services\Media\File;
 use Coyote\Services\Media\Logo;
-use Coyote\Services\Media\MediaInterface;
 use Coyote\Services\Media\SerializeClass;
 use Coyote\Tag\Category;
 use Illuminate\Database\Eloquent\Model;
@@ -17,7 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $text
  * @property int $category_id
  * @property Category $category
- * @property MediaInterface $logo
+ * @property File $logo
  * @property int $topics
  * @property int $jobs
  * @property int $microblogs
@@ -57,17 +56,12 @@ class Tag extends Model
         return $this->belongsTo(Category::class);
     }
 
-    /**
-     * @param string $value
-     * @return \Coyote\Services\Media\MediaInterface
-     */
-    public function getLogoAttribute($value)
+    public function getLogoAttribute($value): File
     {
         if (!($value instanceof Logo)) {
             $logo = app(MediaFactory::class)->make('logo', ['file_name' => $value]);
             $this->attributes['logo'] = $logo;
         }
-
         return $this->attributes['logo'];
     }
 

@@ -1,9 +1,8 @@
 <?php
-
 namespace Coyote\Services\TwigBridge\Extensions;
 
 use Coyote\Http\Factories\MediaFactory;
-use Coyote\Services\Media\MediaInterface;
+use Coyote\Services\Media\File;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -54,13 +53,15 @@ class Media extends AbstractExtension
         if (!$filename) {
             return cdn($placeholder, $secure);
         }
-
         if (is_string($filename)) {
             return $this->getMediaFactory()->make($factory, ['file_name' => $filename])->url($secure);
-        } else if ($filename instanceof MediaInterface) {
-            return $filename->getFilename() ? $filename->url($secure) : cdn($placeholder, $secure);
-        } else {
-            throw new \Exception('Parameter needs to be either string or MediaInterface object.');
         }
+        if ($filename instanceof File) {
+            if ($filename->getFilename()) {
+                return $filename->url($secure);
+            }
+            return cdn($placeholder, $secure);
+        }
+        throw new \Exception('Parameter needs to be either string or MediaInterface object.');
     }
 }

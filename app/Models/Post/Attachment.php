@@ -2,6 +2,8 @@
 
 namespace Coyote\Post;
 
+use Coyote\Post;
+use Coyote\Services\Media\File;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -12,8 +14,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $size
  * @property int $count
  * @property int $post_id
- * @property \Coyote\Services\Media\MediaInterface $file
- * @property \Coyote\Post $post
+ * @property File $file
+ * @property Post $post
  */
 class Attachment extends Model
 {

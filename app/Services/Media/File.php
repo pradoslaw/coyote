@@ -1,5 +1,4 @@
 <?php
-
 namespace Coyote\Services\Media;
 
 use Coyote\Services\Media\Filters\Thumbnail;
@@ -9,7 +8,7 @@ use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mime\MimeTypes;
 
-abstract class File implements MediaInterface
+abstract class File
 {
     /**
      * @var string
@@ -106,10 +105,6 @@ abstract class File implements MediaInterface
         return $this->filesystem->size($this->filename);
     }
 
-    /**
-     * @param UploadedFile $uploadedFile
-     * @return MediaInterface
-     */
     public function upload(UploadedFile $uploadedFile)
     {
         $this->setName($uploadedFile->getClientOriginalName());
@@ -120,10 +115,6 @@ abstract class File implements MediaInterface
         return $this;
     }
 
-    /**
-     * @param mixed $content
-     * @return MediaInterface
-     */
     public function put($content)
     {
         $tmpFilePath = sys_get_temp_dir() . '/' . Str::uuid()->toString();

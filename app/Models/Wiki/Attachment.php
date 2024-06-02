@@ -1,9 +1,9 @@
 <?php
-
 namespace Coyote\Wiki;
 
+use Coyote\Services\Media;
 use Illuminate\Database\Eloquent\Model;
-use Coyote\Services\Media\Factory as MediaFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property int $id
@@ -11,7 +11,7 @@ use Coyote\Services\Media\Factory as MediaFactory;
  * @property string $mim
  * @property int $size
  * @property int $wiki_id
- * @property \Coyote\Services\Media\MediaInterface $file
+ * @property Media\File $file
  */
 class Attachment extends Model
 {
@@ -39,29 +39,20 @@ class Attachment extends Model
      */
     public $timestamps = false;
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function wiki()
+    public function wiki(): BelongsTo
     {
         return $this->belongsTo('Coyote\Wiki\Page');
     }
 
-    /**
-     * @return \Coyote\Services\Media\MediaInterface
-     */
-    public function getFileAttribute($value)
+    public function getFileAttribute($value): Media\File
     {
-        if (!($value instanceof \Coyote\Services\Media\Attachment)) {
-            $photo = app(MediaFactory::class)->make('attachment', [
+        if (!$value instanceof \Coyote\Services\Media\Attachment) {
+            $photo = app(Media\Factory::class)->make('attachment', [
                 'file_name' => $value,
                 'name' => $this->attributes['name'],
-//                'download_url' => $this->wiki_id ? route('wiki.download', [$this->wiki_id, $this->id], false) : ''
             ]);
-
             $this->attributes['file'] = $photo;
         }
-
         return $this->attributes['file'];
     }
 }

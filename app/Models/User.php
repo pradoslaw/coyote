@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Coyote\Models\Scopes\ExcludeBlocked;
 use Coyote\Notifications\ResetPasswordNotification;
 use Coyote\Services\Media\Factory as MediaFactory;
+use Coyote\Services\Media\File;
 use Coyote\Services\Media\Photo;
 use Coyote\User\Relation;
 use Illuminate\Auth\Authenticatable;
@@ -17,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\RoutesNotifications;
+use Illuminate\Support\Collection;
 use Laravel\Passport\HasApiTokens;
 use NotificationChannels\WebPush\HasPushSubscriptions;
 use Ramsey\Uuid\Uuid;
@@ -64,11 +66,11 @@ use Ramsey\Uuid\Uuid;
  * @property string $position
  * @property string $access_ip
  * @property string $sig
- * @property \Coyote\Services\Media\MediaInterface $photo
+ * @property File $photo
  * @property bool $is_online
  * @property bool $alert_login
  * @property \Coyote\Notification\Setting $notificationSettings[]
- * @property Group[]|\Illuminate\Support\Collection $groups
+ * @property Group[]|Collection $groups
  * @property Group $group
  * @property Relation $relations
  * @property bool $is_sponsor
@@ -280,17 +282,12 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->hasMany(Notification\Setting::class);
     }
 
-    /**
-     * @param string $value
-     * @return \Coyote\Services\Media\MediaInterface
-     */
-    public function getPhotoAttribute($value)
+    public function getPhotoAttribute($value): File
     {
-        if (!($value instanceof Photo)) {
+        if (!$value instanceof Photo) {
             $photo = app(MediaFactory::class)->make('photo', ['file_name' => $value]);
             $this->attributes['photo'] = $photo;
         }
-
         return $this->attributes['photo'];
     }
 

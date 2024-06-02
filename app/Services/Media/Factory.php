@@ -1,33 +1,18 @@
 <?php
-
 namespace Coyote\Services\Media;
 
-use Illuminate\Contracts\Container\Container as App;
+use Illuminate\Contracts\Container\Container;
 
 class Factory
 {
-    /**
-     * @var App
-     */
-    protected $app;
-
-    /**
-     * @param App $app
-     */
-    public function __construct(App $app)
+    public function __construct(private Container $app)
     {
-        $this->app = $app;
     }
 
-    /**
-     * @param string $type
-     * @param array $options
-     * @return MediaInterface
-     */
-    public function make(string $type, array $options = []): MediaInterface
+    public function make(string $type, array $options = []): File
     {
         $class = $this->getClass($type);
-        if (!class_exists($class, true)) {
+        if (!class_exists($class)) {
             throw new \InvalidArgumentException("Can't find $class class in media factory.");
         }
         $fileSystem = $this->app['filesystem']->disk(config('filesystems.default'));
@@ -36,30 +21,19 @@ class Factory
         return $this->setDefaultOptions($media, $options);
     }
 
-    /**
-     * @param MediaInterface $media
-     * @param array $options
-     * @return MediaInterface
-     */
-    protected function setDefaultOptions(MediaInterface $media, array $options = []): MediaInterface
+    protected function setDefaultOptions(File $media, array $options = []): File
     {
         if ($options) {
             foreach ($options as $name => $value) {
                 $method = camel_case('set_' . $name);
-
                 if (method_exists($media, $method)) {
                     $media->$method($value);
                 }
             }
         }
-
         return $media;
     }
 
-    /**
-     * @param string $type
-     * @return string
-     */
     private function getClass(string $type): string
     {
         return __NAMESPACE__ . '\\' . ucfirst($type);
