@@ -50,6 +50,9 @@ export default class VueFlag extends Vue {
 
   get elementNameAccusative(): string {
     for (const resource of this.flag.resources) {
+      if (resource.resource_type === 'Coyote\\Post\\Comment') {
+        return 'komentarz';
+      }
       if (resource.resource_type === 'Coyote\\Comment') {
         return 'komentarz';
       }

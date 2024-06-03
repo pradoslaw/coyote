@@ -2,7 +2,6 @@
 namespace Coyote\Http\Resources;
 
 use Carbon\Carbon;
-use Coyote\Comment;
 use Coyote\Forum;
 use Coyote\Post;
 use Coyote\Services\UrlBuilder;
@@ -49,10 +48,10 @@ class PostCommentResource extends JsonResource
     private function metadata(): array
     {
         return [
-            Comment::class => $this->id,
-            Post::class    => $this->post_id,
-            Topic::class   => $this->post->topic->id,
-            Forum::class   => $this->post->forum->id,
+            Post\Comment::class => $this->id,
+            Post::class         => $this->post_id,
+            Topic::class        => $this->post->topic->id,
+            Forum::class        => $this->post->forum->id,
         ];
     }
 }

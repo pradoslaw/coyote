@@ -108,7 +108,10 @@ export default class VueComment extends Vue {
   }
 
   get flags() {
-    return store.getters['flags/filter'](this.comment.id, 'Coyote\\Comment');
+    return [
+      ...store.getters['flags/filter'](this.comment.id, 'Coyote\\Comment'),
+      ...store.getters['flags/filter'](this.comment.id, 'Coyote\\Post\\Comment'),
+    ];
   }
 }
 </script>

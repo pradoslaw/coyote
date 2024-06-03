@@ -88,16 +88,16 @@
 </template>
 
 <script>
-  import VueModal from '../modal.vue';
-  import VueAvatar from '../avatar.vue';
-  import VueUserName from '../user-name.vue';
-  import VueButton from '../forms/button.vue';
-  import VueFlag from '../flags/flag.vue';
-  import VueMarkdown from '../forms/markdown.vue';
-  import { default as mixins } from '../mixins/user';
-  import { mapGetters } from 'vuex';
+import {mapGetters} from 'vuex';
+import VueAvatar from '../avatar.vue';
+import VueFlag from '../flags/flag.vue';
+import VueButton from '../forms/button.vue';
+import VueMarkdown from '../forms/markdown.vue';
+import {default as mixins} from '../mixins/user';
+import VueModal from '../modal.vue';
+import VueUserName from '../user-name.vue';
 
-  export default {
+export default {
     name: 'vue-comment', // required with recursive component
     props: ['comment', 'nested'],
     components: {
@@ -168,7 +168,10 @@
       ...mapGetters('user', ['isAuthorized']),
 
       flags() {
-        return this.$store.getters['flags/filter'](this.comment.id, 'Coyote\\Comment');
+        return [
+          ...this.store.getters['flags/filter'](this.comment.id, 'Coyote\\Comment'),
+          ...this.store.getters['flags/filter'](this.comment.id, 'Coyote\\Post\\Comment'),
+        ];
       }
     }
   }
