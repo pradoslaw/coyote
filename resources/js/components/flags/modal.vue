@@ -1,7 +1,7 @@
 <template>
   <vue-modal ref="modal">
     <template v-slot:title>
-      Chcę zgłosić ten materiał w związku z...
+      Zgłoś materiał
     </template>
     <slot>
       <div v-for="(type, index) in types" :key="index" class="media">
@@ -9,6 +9,7 @@
           <vue-radio name="type_id" v-model="selectedType" :checked-value="type.id" :id="`type-${type.id}`"></vue-radio>
         </div>
         <div class="media-body">
+          <i :class="icon(type.name)" class="mr-1"/>
           <label :for="`type-${type.id}`" class="font-weight-bold">{{ type.name }}</label>
           <p>{{ type.description }}</p>
         </div>
@@ -84,6 +85,18 @@ export default class FlagModal extends Vue {
         this.closeModal();
       })
       .finally(() => this.isProcessing = false);
+  }
+
+  icon(name: string): string {
+    const icons = {
+      'Spam': 'fas fa-mail-bulk',
+      'Wulgaryzmy': 'fas fa-book-dead',
+      'Off-Topic': 'fas fa-wave-square',
+      'Nieprawidłowa kategoria': 'fas fa-th-list',
+      'Próba wyłudzenia gotowca': 'fas fa-user-graduate',
+      'Inne': "far fa-flag",
+    };
+    return icons[name];
   }
 }
 </script>
