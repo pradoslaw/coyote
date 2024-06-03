@@ -2,10 +2,12 @@
 namespace Tests\Unit\Administration;
 
 use PHPUnit\Framework\TestCase;
+use Tests\Unit\BaseFixture;
 use TRegx\PhpUnit\DataProviders\DataProvider;
 
 class Test extends TestCase
 {
+    use BaseFixture\Server\Laravel\Transactional;
     use Fixture\AdministratorPanel;
     use Fixture\AdministratorPanelUsers;
 
