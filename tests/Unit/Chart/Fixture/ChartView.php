@@ -5,11 +5,15 @@ use Tests\Unit\BaseFixture\Browser\Browser;
 
 class ChartView
 {
+    private static ?Browser $cached = null;
     private Browser $browser;
 
     public function __construct()
     {
-        $this->browser = new Browser();
+        if (self::$cached === null) {
+            self::$cached = new Browser();
+        }
+        $this->browser = self::$cached;
     }
 
     public function renderCharts(array $charts): void
