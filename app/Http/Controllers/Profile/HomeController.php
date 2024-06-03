@@ -54,12 +54,13 @@ class HomeController extends Controller
         }
 
         return $this->view('profile.home')->with([
-            'top_menu'    => $menu,
-            'user'        => new UserResource($user),
-            'skills'      => TagResource::collection($user->skills->load('category')),
-            'rate_labels' => SkillsRequest::RATE_LABELS,
-            'tab'         => strtolower($tab),
-            'module'      => $this->$tab($user),
+            'top_menu'           => $menu,
+            'user'               => new UserResource($user),
+            'skills'             => TagResource::collection($user->skills->load('category')),
+            'rate_labels'        => SkillsRequest::RATE_LABELS,
+            'tab'                => strtolower($tab),
+            'module'             => $this->$tab($user),
+            'chartLibraryScript' => Chart::librarySourceHtml(),
         ]);
     }
 
