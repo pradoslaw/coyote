@@ -64,12 +64,12 @@ class ChartTest extends TestCase
      */
     public function multipleCharts(): void
     {
-        $browser = $this->newBrowserWithRenderedCharts([
+        $view = $this->renderedCharts([
             new Chart([], [], [], id:'first'),
             new Chart([], [], [], id:'second'),
         ]);
-        $this->assertTrue($this->chartExists($browser, 'first'));
-        $this->assertTrue($this->chartExists($browser, 'second'));
+        $this->assertTrue($view->chartExists('first'));
+        $this->assertTrue($view->chartExists('second'));
     }
 
     /**

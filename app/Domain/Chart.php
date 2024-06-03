@@ -6,12 +6,12 @@ class Chart extends Html
     private array $options;
 
     public function __construct(
-        private array  $labels,
-        array          $values,
-        array          $hexColors,
-        private string $id,
-        int            $baseline = 1,
-        private bool   $horizontal = false,
+        private array $labels,
+        array         $values,
+        array         $hexColors,
+        public string $id,
+        int           $baseline = 1,
+        private bool  $horizontal = false,
     )
     {
         [$fillColors, $borderColors] = $this->colors($hexColors);

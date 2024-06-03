@@ -3,7 +3,6 @@ namespace Tests\Unit\Chart\Fixture;
 
 use Coyote\Domain\Chart;
 use PHPUnit\Framework\Assert;
-use Tests\Unit\BaseFixture\Browser\Browser;
 
 trait AssertsRender
 {
@@ -11,9 +10,11 @@ trait AssertsRender
 
     function assertExpectedImage(Chart $chart): void
     {
+        $view = new ChartView();
+        $view->renderCharts([$chart]);
         $this->assertImageEquals(
             "/expected/{$this->name()}.png",
-            $this->renderChart($chart));
+            $view->chartImage($chart->id));
     }
 
     function assertImageEquals(string $expectedImage, string $actualImage): void
@@ -26,44 +27,11 @@ trait AssertsRender
         }
     }
 
-    function renderChart(Chart $chart): string
+    function renderedCharts(array $charts): ChartView
     {
-        return $this->binaryImage($this->renderChartToHtmlBase64($chart));
-    }
-
-    private function renderChartToHtmlBase64(Chart $chart): string
-    {
-        $browser = $this->newBrowserWithRenderedCharts([$chart]);
-        return $this->chartAsHtmlBase64($browser, 'chart');
-    }
-
-    function chartAsHtmlBase64(Browser $browser, string $id): mixed
-    {
-        return $browser->execute("return Chart.getChart('$id').toBase64Image('image/png', 1);");
-    }
-
-    function chartExists(Browser $browser, string $id): bool
-    {
-        return $browser->execute("return typeof Chart.getChart('$id') !== 'undefined';");
-    }
-
-    function newBrowserWithRenderedCharts(array $charts): Browser
-    {
-        $first = $charts[0];
-        $charts = \implode($charts);
-        $browser = new Browser();
-        $browser->setHtmlSource("<html><body>{$first->librarySourceHtml()}$charts</body></html>");
-        return $browser;
-    }
-
-    function binaryImage(string $htmlBase64): string
-    {
-        return \base64_decode($this->substringAfter($htmlBase64, ','));
-    }
-
-    function substringAfter(string $string, string $separator): string
-    {
-        return \subStr($string, \strPos($string, $separator) + 1);
+        $view = new ChartView();
+        $view->renderCharts($charts);
+        return $view;
     }
 
     function readExpectedImage(string $filename): string
