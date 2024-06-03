@@ -42,10 +42,10 @@ class Chart extends Html
                 'scales'              => [
                     'y' => [
                         'ticks'        => ['autoSkip' => false],
-                        'suggestedMax' => $baseline,
+                        'suggestedMax' => $this->baseline($baseline, $values),
                     ],
                     'x' => [
-                        'suggestedMax' => $baseline,
+                        'suggestedMax' => $this->baseline($baseline, $values),
                     ],
                 ],
             ],
@@ -102,5 +102,14 @@ class Chart extends Html
     private function options(): string
     {
         return \json_encode($this->options);
+    }
+
+    private function baseline(int $baseline, array $values): int
+    {
+        if (empty($values)) {
+            return $baseline;
+        }
+        $max = \max($values) * 1.1;
+        return \max($max, $baseline);
     }
 }
