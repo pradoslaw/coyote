@@ -23,7 +23,7 @@
         <i class="fas fa-compress"></i>
       </a>
 
-      <a :data-metadata="comment.metadata" :data-url="comment.url" href="javascript:" class="btn-comment">
+      <a :data-metadata="comment.metadata" :data-url="comment.url" title="Zgłoś ten komentarz" href="javascript:" class="btn-comment">
         <i class="fas fa-flag"></i>
       </a>
     </template>
