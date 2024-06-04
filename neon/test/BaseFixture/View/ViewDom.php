@@ -17,7 +17,7 @@ readonly class ViewDom
 
     public function html(string $xPath): string
     {
-        return $this->document->saveHTML($this->first($this->query($xPath), $xPath));
+        return $this->document->saveHTML($this->first($xPath));
     }
 
     public function exists(string $xPath): bool
@@ -52,7 +52,7 @@ readonly class ViewDom
 
     public function findString(string $xPath): string
     {
-        return $this->string($this->first($this->query($xPath), $xPath));
+        return $this->string($this->first($xPath));
     }
 
     private function query(string $xPath): \DOMNodeList
@@ -75,7 +75,7 @@ readonly class ViewDom
         throw new \Exception("Failed to get element as string: <$node->tagName>");
     }
 
-    private function first(\DOMNodeList $nodes, string $xPath): \DOMElement|\DOMText|\DOMAttr
+    private function firstElement(\DOMNodeList $nodes, string $xPath): \DOMElement|\DOMText|\DOMAttr
     {
         $count = $nodes->count();
         if ($count === 0) {
@@ -96,5 +96,15 @@ readonly class ViewDom
     {
         $node = $this->document->getRootNode();
         return \strStr($this->document->saveHTML($node), "\n", true);
+    }
+
+    public function find(string $xPath): ViewDomElement
+    {
+        return new ViewDomElement($this->first($xPath));
+    }
+
+    private function first(string $xPath): \DOMAttr|\DOMElement|\DOMText
+    {
+        return $this->firstElement($this->query($xPath), $xPath);
     }
 }
