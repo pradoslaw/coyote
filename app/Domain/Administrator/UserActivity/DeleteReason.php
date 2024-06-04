@@ -1,5 +1,5 @@
 <?php
-namespace Coyote\Domain\Administrator\Activity;
+namespace Coyote\Domain\Administrator\UserActivity;
 
 class DeleteReason
 {

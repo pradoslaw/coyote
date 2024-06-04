@@ -2,7 +2,7 @@
 namespace Tests\Unit\Moderation;
 
 use Carbon\Carbon;
-use Coyote\Domain\Administrator\Activity\Post;
+use Coyote\Domain\Administrator\UserActivity\Post;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture\Server\Laravel\Application;
 

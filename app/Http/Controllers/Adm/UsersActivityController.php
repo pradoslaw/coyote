@@ -2,10 +2,10 @@
 namespace Coyote\Http\Controllers\Adm;
 
 use Carbon\Carbon;
-use Coyote\Domain\Administrator\Activity\Activity;
-use Coyote\Domain\Administrator\Activity\Category;
-use Coyote\Domain\Administrator\Activity\DeleteReason;
-use Coyote\Domain\Administrator\Activity\Post;
+use Coyote\Domain\Administrator\UserActivity\Activity;
+use Coyote\Domain\Administrator\UserActivity\Category;
+use Coyote\Domain\Administrator\UserActivity\DeleteReason;
+use Coyote\Domain\Administrator\UserActivity\Post;
 use Coyote\Domain\PostStatistic;
 use Coyote\User;
 use Illuminate\Http\Request;
