@@ -3,7 +3,7 @@ namespace Neon\Test\BaseFixture\View;
 
 use PHPUnit\Framework\TestCase;
 
-class ViewDomRootTest extends TestCase
+class ViewDomDocTypeTest extends TestCase
 {
     /**
      * @test

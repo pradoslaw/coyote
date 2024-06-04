@@ -4,7 +4,7 @@ namespace Neon\Test\BaseFixture\View;
 use PHPUnit\Framework\TestCase;
 use function Neon\Test\BaseFixture\Caught\caught;
 
-class ViewDomFindManyTest extends TestCase
+class ViewDomFindStringsTest extends TestCase
 {
     /**
      * @test
