@@ -47,11 +47,32 @@ By skorzystać z xdebug, w pliku `.env` należy dodać ustawienia xdebug:
 
 ```
 ENABLE_XDEBUG=1
-XDEBUG_HOST=
-XDEBUG_PORT=
+XDEBUG_HOST=host.docker.internal
+XDEBUG_PORT=9003
 ```
 
-Nastepnie należy zrestartować wszystkie kontenery.
+Nastepnie należy zrestartować wszystkie kontenery (a dokładniej kontener `php`, żeby `./entrypoint.sh` został uruchomiony ponownie).
+
+Skonfiguruj IDE by łączyło się do istniejącego kontenera, a nie tworzyło nowy.
+
+#### IDE od JetBrains
+
+Jeśli korzystasz z PhpStorm, konieczne może być ustawienie zmiennej środowiskowej:
+
+```bash
+# from /bin/bash
+export PHP_IDE_CONFIG="serverName=your_server_name"
+```
+```cmd
+REM from cmd.exe
+set PHP_IDE_CONFIG="serverName=your_server_name"
+```
+```ps
+# from powershell.exe
+$env:PHP_IDE_CONFIG = 'serverName=your_server_name'
+```
+
+Nazwa `your_server_name` powinna odpowiadać nazwie servera w sekcji "path mappings".
 
 ### Praca z CSS oraz JS
 
