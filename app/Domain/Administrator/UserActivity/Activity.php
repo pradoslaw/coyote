@@ -1,6 +1,7 @@
 <?php
 namespace Coyote\Domain\Administrator\UserActivity;
 
+use Carbon\Carbon;
 use Coyote\Domain\Administrator\View\Date;
 use Coyote\Domain\Administrator\View\Mention;
 use Coyote\Domain\Chart;
@@ -55,7 +56,7 @@ readonly class Activity
 
     public function createdAgo(): string
     {
-        $createdAt = new Date($this->user->created_at);
+        $createdAt = new Date($this->user->created_at, Carbon::now());
         return $createdAt->timeAgo();
     }
 

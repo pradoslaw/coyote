@@ -4,9 +4,9 @@ namespace Coyote\Domain\Administrator\View;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
 
-class Date
+readonly class Date
 {
-    public function __construct(private Carbon $date)
+    public function __construct(private Carbon $date, private Carbon $now)
     {
     }
 
@@ -30,6 +30,6 @@ class Date
 
     private function interval(): CarbonInterval
     {
-        return $this->date->diff(Carbon::now());
+        return $this->date->diff($this->now);
     }
 }
