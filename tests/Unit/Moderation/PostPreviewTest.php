@@ -24,10 +24,7 @@ class PostPreviewTest extends TestCase
      */
     public function test(): void
     {
-        $this->assertPreview(
-            'Short text.',
-            '<p>Short text.</p>',
-        );
+        $this->assertPreview('Short text.', 'Short text.');
     }
 
     /**
@@ -35,10 +32,7 @@ class PostPreviewTest extends TestCase
      */
     public function ignoreQuote(): void
     {
-        $this->assertPreview(
-            "> quote\n\ntext",
-            '<p>text</p>',
-        );
+        $this->assertPreview("> quote\n\ntext", 'text');
     }
 
     /**
@@ -46,10 +40,7 @@ class PostPreviewTest extends TestCase
      */
     public function firstParagraph(): void
     {
-        $this->assertPreview(
-            '<p>One</p> <p>Two</p>',
-            '<p>One</p>',
-        );
+        $this->assertPreview('<p>One</p> <p>Two</p>', 'One');
     }
 
     /**
@@ -65,7 +56,7 @@ class PostPreviewTest extends TestCase
      */
     public function unicode(): void
     {
-        $this->assertPreview('Łódź.', '<p>Łódź.</p>');
+        $this->assertPreview('Łódź.', 'Łódź.');
     }
 
     /**

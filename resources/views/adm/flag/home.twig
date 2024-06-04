@@ -1,71 +1,30 @@
 {% extends 'adm.base' %}
-{% block title %}Sprawy {{ parent() }}{% endblock %}
+{% block title %}Dodane treści {{ parent() }}{% endblock %}
 
 {% block container %}
-  <div class="alert alert-info">
-    Na potrzeby rozwoju funkcjonalności,
-    wyświetlanych jest tylko 20 najświeższych postów.
+  <div class="mb-3 d-flex justify-content-center">
+    {{ pagination }}
   </div>
-
-  {% for post in posts %}
-    <div class="card card-default">
-      <div class="card-header">
-        <div class="d-flex justify-content-between">
-          <div>
-            <p class="mb-0 text-right">
-              <a href="{{ post.url }}">
-                Zgłoszony post
-              </a>
-              <span class="badge badge-primary ml-1">
-                Nowe
-              </span>
-            </p>
-          </div>
-          <div>
-            <span class="text-muted" title="Ostatnia aktywność w sprawie: {{ post.updatedAt }}">
-              <i class="fas fa-history"></i>
-              {{ post.updatedAgo }}
-            </span>
-          </div>
-        </div>
-      </div>
-      <div class="list-group list-group-flush">
-        <div class="list-group-item">
-          <div class="d-flex justify-content-between">
-            <div>
-              <i class="far fa-user fa-fw"></i>
-              Zgłaszający:
-              {% for reporterMention in post.reporterMentions %}
-                {{ reporterMention }}
-              {% endfor %}
-            </div>
-            <div>
-              {% for type in post.reportTypes %}
-                <span class="ml-2">
-                  <i class="far fa-flag fa-fw"></i>
-                  {{ type }}
-                </span>
-              {% endfor %}
-            </div>
-          </div>
-        </div>
-        <div class="list-group-item">
-          <div class="d-flex">
-            <i class="fas fa-user-edit fa-fw"></i>
-            <div class="ml-1" style="font-size:0.75em;">
-              <div>
-                {{ post.authorMention }} napisał(a) w <a href="{{ post.forumUrl }}">{{ post.forumSlug }}</a>,
-                <small class="text-muted" title="Post napisany: {{ post.createdAt }}">
-                  {{ post.createdAgo }}
-                </small>
-              </div>
-              <div class="d-inline-block post-preview" style="margin: 0.15rem 0;">
-                {{ post.preview }}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  <div class="card card-default">
+    <div class="card-header">
+      Materiały ({{ materials.total }})
     </div>
-  {% endfor %}
+    <div class="list-group list-group-flush">
+      {% for material in materials.items %}
+        <div class="list-group-item">
+          <div>
+            <span class="badge badge-dark">{{ material.type }}</span>
+          </div>
+          <div>
+            {{ material.preview }}
+          </div>
+          <div>
+            <small class="text-muted" title="{{ material.createdAt }}">
+              {{ material.createdAgo }}
+            </small>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
 {% endblock %}
