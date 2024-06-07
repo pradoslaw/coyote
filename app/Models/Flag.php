@@ -2,8 +2,12 @@
 
 namespace Coyote;
 
+use Carbon\Carbon;
 use Coyote\Models\Flag\Resource;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -14,8 +18,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $url
  * @property mixed $metadata
  * @property string $text
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  * @property Flag\Type $type
  * @property User $user
  * @property Forum[] $forums
@@ -30,72 +34,51 @@ class Flag extends Model
 
     const UPDATED_AT = null;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = ['type_id', 'user_id', 'url', 'text', 'moderator_id'];
-
-    /**
-     * @var string
-     */
     protected $dateFormat = 'Y-m-d H:i:se';
-
-    /**
-     * Related to Laravel 5.8. deleted_at has different date format that created_at and carbon throws exception
-     *
-     * @var string[]
-     */
     protected $casts = ['deleted_at' => 'string', 'created_at' => 'datetime'];
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function type()
+    public function type(): BelongsTo
     {
-        return $this->belongsTo('Coyote\Flag\Type');
+        return $this->belongsTo(Flag\Type::class);
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function user()
+    public function user(): BelongsTo
     {
-        return $this->belongsTo('Coyote\User')->withTrashed();
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
-    public function resources()
+    public function resources(): HasMany
     {
         return $this->hasMany(Resource::class);
     }
 
-    public function posts()
+    public function posts(): MorphToMany
     {
         return $this->morphedByMany(Post::class, 'resource', 'flag_resources');
     }
 
-    public function topics()
+    public function topics(): MorphToMany
     {
         return $this->morphedByMany(Topic::class, 'resource', 'flag_resources');
     }
 
-    public function forums()
+    public function forums(): MorphToMany
     {
         return $this->morphedByMany(Forum::class, 'resource', 'flag_resources');
     }
 
-    public function microblogs()
+    public function microblogs(): MorphToMany
     {
         return $this->morphedByMany(Microblog::class, 'resource', 'flag_resources');
     }
 
-    public function jobs()
+    public function jobs(): MorphToMany
     {
         return $this->morphedByMany(Job::class, 'resource', 'flag_resources');
     }
 
-    public function comments()
+    public function comments(): MorphToMany
     {
         return $this->morphedByMany(Comment::class, 'resource', 'flag_resources');
     }
