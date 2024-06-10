@@ -46,21 +46,20 @@
                 >
               </div>
               <div>
-                <div>
+                <p class="m-0">
                   <span class="badge badge-secondary">{{ material.type }}</span>
-                  <small class="text-muted">
-                    napisany
-                    <b title="{{ material.createdAt }}">{{ material.createdAgo }}</b>
-                    przez
+                  <small>
                     <b>@{{ material.authorUsername }}</b>
+                    napisał
+                    <b class="text-muted" title="{{ material.createdAt }}">{{ material.createdAgo }}</b>
                     {% if material.deleted %}
-                      (usunięty <b title="{{ material.deletedAt }}">{{ material.deletedAgo }}</b>)
+                      (usunięto <b title="{{ material.deletedAt }}">{{ material.deletedAgo }}</b>)
                     {% endif %}
                   </small>
-                </div>
-                <div>
+                </p>
+                <p class="text-muted">
                   {{ material.preview }}
-                </div>
+                </p>
               </div>
             </div>
           </div>
