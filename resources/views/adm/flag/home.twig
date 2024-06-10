@@ -28,25 +28,32 @@
       {% endfor %}
     </div>
 
+    <style>
+        a.material-list-item {
+            color: inherit;
+        }
+
+        a.material-list-item:hover {
+            text-decoration: none;
+            background-color: rgb(128, 128, 128, 0.03);
+        }
+    </style>
+
     <div class="card card-default mb-3">
       <div class="card-header">
         Treści ({{ materials.total }})
       </div>
       <div class="list-group list-group-flush">
         {% for material in materials.items %}
-          <div class="list-group-item">
+          <a href="{{ material.adminUrl }}" class="list-group-item material-list-item">
             <div class="d-flex" style="opacity:{{ material.deleted ? '0.4' : '1.0' }};">
-              <div>
-                <img
-                    class="img-thumbnail mr-2"
-                    style="width:40px;"
-                    src="{{ material.authorImageUrl }}"
-                    alt="{{ material.authorUsername }}"
-                    title="{{ material.authorUsername }}"
-                >
-              </div>
+              <img class="img-thumbnail mr-2" style="width:40px;" src="{{ material.authorImageUrl }}" alt="{{ material.authorUsername }}" title="{{ material.authorUsername }}">
               <div>
                 <p class="m-0">
+                  {{ material.preview }}
+                  &nbsp;
+                </p>
+                <p class="m-0 text-muted">
                   <span class="badge badge-secondary">{{ material.type }}</span>
                   <small>
                     <b>@{{ material.authorUsername }}</b>
@@ -57,9 +64,6 @@
                     {% endif %}
                   </small>
                 </p>
-                <p class="text-muted">
-                  {{ material.preview }}
-                </p>
               </div>
               <div class="flex-grow-1 text-right">
                 {% if material.reported %}
@@ -67,7 +71,7 @@
                 {% endif %}
               </div>
             </div>
-          </div>
+          </a>
         {% endfor %}
         {% if materials.items is empty %}
           <div class="list-group-item text-center">

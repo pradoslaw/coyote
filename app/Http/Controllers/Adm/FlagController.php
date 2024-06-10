@@ -3,12 +3,12 @@ namespace Coyote\Http\Controllers\Adm;
 
 use Carbon\Carbon;
 use Coyote\Domain\Administrator\AvatarCdn;
-use Coyote\Domain\Administrator\Report\EloquentStore;
 use Coyote\Domain\Administrator\UserMaterial\List\Store\MaterialRequest;
 use Coyote\Domain\Administrator\UserMaterial\List\Store\MaterialStore;
 use Coyote\Domain\Administrator\UserMaterial\List\View\MarkdownRender;
 use Coyote\Domain\Administrator\UserMaterial\List\View\MaterialVo;
 use Coyote\Domain\Administrator\UserMaterial\List\View\Time;
+use Coyote\Domain\Administrator\UserMaterial\Show\MaterialPresenter;
 use Coyote\Domain\View\Filter\Filter;
 use Coyote\Domain\View\Pagination\BootstrapPagination;
 use Coyote\Post;
@@ -47,28 +47,13 @@ class FlagController extends BaseController
         ]);
     }
 
-    public function show(Post $post, EloquentStore $store): View
+    public function show(Post $post, MaterialPresenter $presenter): View
     {
         $this->breadcrumb->push('Dodane treści', route('adm.flag'));
-        $this->breadcrumb->push('#' . $post->id, route('adm.flag.show', [$post->id]));
+        $this->breadcrumb->push('Post #' . $post->id, route('adm.flag.show', [$post->id]));
 
         return $this->view('adm.flag.show')->with([
-            'post' => [
-                'createdAgo' => '',
-                'forumUrl'   => '',
-                'forumSlug'  => '',
-                'author'     => [
-                    'avatarUrl' => '',
-                    'mention'   => '',
-                    'name'      => '',
-                    'id'        => '',
-                ],
-                'content'    => '',
-                'history'    => [
-                    ['authorMention' => '', 'createdAt' => '', 'createdAgo' => '', 'type' => 'flag', 'note' => 'wulg'],
-                    ['authorMention' => '', 'createdAt' => '', 'createdAgo' => '', 'type' => 'create', 'note' => null],
-                ],
-            ],
+            'post' => $presenter->post($post->id),
             'backUrl' => route('adm.flag'),
         ]);
     }

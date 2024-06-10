@@ -10,15 +10,20 @@ readonly class Time
     {
     }
 
+    public function date(Carbon $date): Date
+    {
+        return new Date($date, $this->now);
+    }
+
     public function format(Carbon $carbon): string
     {
         $date = new Date($carbon, Carbon::now());
-        return "$date";
+        return $date->format();
     }
 
     public function ago(Carbon $time): string
     {
         $date = new Date($time, $this->now);
-        return $date->timeAgo();
+        return $date->ago();
     }
 }

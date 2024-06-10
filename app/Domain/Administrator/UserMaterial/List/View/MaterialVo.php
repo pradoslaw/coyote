@@ -25,11 +25,7 @@ readonly class MaterialVo
 
     public function items(): array
     {
-        $items = [];
-        foreach ($this->materials->materials as $material) {
-            $items[] = $this->viewObject($material);
-        }
-        return $items;
+        return \array_map($this->viewObject(...), $this->materials->materials);
     }
 
     private function viewObject(Material $material): MaterialItem
@@ -48,6 +44,7 @@ readonly class MaterialVo
             $content,
             new PostPreview((string)$content),
             $material->reported,
+            $this->adminUrl($material),
         );
     }
 
@@ -55,5 +52,13 @@ readonly class MaterialVo
     {
         $types = ['post' => 'post', 'comment' => 'komentarz', 'microblog' => 'mikroblog'];
         return $types[$material->type];
+    }
+
+    private function adminUrl(Material $material): ?string
+    {
+        if ($material->type === 'post') {
+            return route('adm.flag.show', [$material->id]);
+        }
+        return null;
     }
 }

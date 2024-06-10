@@ -181,13 +181,14 @@ class ViewMaterialsTest extends TestCase
     ): Material
     {
         return new Material(
+            0,
             $type ?? 'post',
             $createdAt,
-                $deletedAt,
-                $authorUsername ?? '',
-                null,
+            $deletedAt,
+            $authorUsername ?? '',
+            null,
             $markdown ?? '',
-                false,
+            false,
         );
     }
 

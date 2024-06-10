@@ -12,10 +12,15 @@ readonly class Date
 
     public function __toString(): string
     {
+        return $this->format();
+    }
+
+    public function format(): string
+    {
         return $this->date->format('Y-m-d H:i:s');
     }
 
-    public function timeAgo(): string
+    public function ago(): string
     {
         return $this->firstWords($this->interval(), 4) . ' temu';
     }

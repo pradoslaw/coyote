@@ -44,6 +44,7 @@ class MaterialStore
             ->orderBy('id', 'DESC')
             ->get()
             ->map(fn(Post|Microblog|Post\Comment $material) => new Material(
+                $material->id,
                 $request->type,
                 $material->created_at,
                 $this->deletedAt($material),

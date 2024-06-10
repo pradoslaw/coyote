@@ -16,7 +16,8 @@ class MaterialItem
         public ?string $authorImageUrl,
         public Html    $content,
         public Html    $preview,
-        public bool $reported,
+        public bool    $reported,
+        public ?string $adminUrl,
     )
     {
     }

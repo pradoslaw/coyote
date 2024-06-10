@@ -57,7 +57,7 @@ readonly class Activity
     public function createdAgo(): string
     {
         $createdAt = new Date($this->user->created_at, Carbon::now());
-        return $createdAt->timeAgo();
+        return $createdAt->ago();
     }
 
     private function deleteReasonsChart(array $array): Chart
