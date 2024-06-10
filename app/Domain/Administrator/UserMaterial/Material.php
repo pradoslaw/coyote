@@ -6,9 +6,12 @@ use Carbon\Carbon;
 readonly class Material
 {
     public function __construct(
-        public string $type,
-        public Carbon $createdAt,
-        public string $contentMarkdown,
+        public string  $type,
+        public Carbon  $createdAt,
+        public ?Carbon $deletedAt,
+        public string  $authorUsername,
+        public ?string $authorImageUrl,
+        public string  $contentMarkdown,
     )
     {
     }

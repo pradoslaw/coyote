@@ -1,6 +1,8 @@
 <?php
 namespace Coyote\Domain\Administrator\UserMaterial\View;
 
+use Carbon\Carbon;
+use Coyote\Domain\Administrator\AvatarCdn;
 use Coyote\Domain\Administrator\UserMaterial\Material;
 use Coyote\Domain\Administrator\UserMaterial\Store\MaterialResult;
 use Coyote\Domain\Administrator\View\PostPreview;
@@ -10,7 +12,9 @@ readonly class MaterialVo
     public function __construct(
         private MarkdownRender $render,
         private Time           $time,
-        private MaterialResult $materials)
+        private MaterialResult $materials,
+        private AvatarCdn      $cdn,
+    )
     {
     }
 
@@ -36,8 +40,13 @@ readonly class MaterialVo
             $this->type($material),
             $this->time->format($material->createdAt),
             $this->time->ago($material->createdAt),
+            $material->deletedAt !== null,
+            $this->time->format($material->deletedAt ?? new Carbon()),
+            $this->time->ago($material->deletedAt ?? new Carbon()),
+            $material->authorUsername,
+            $this->cdn->avatar($material->authorImageUrl),
             $content,
-            new PostPreview((string)$content)
+            new PostPreview((string)$content),
         );
     }
 

@@ -2,6 +2,7 @@
 namespace Tests\Unit\AdministratorUserMaterial\UserMaterial;
 
 use Carbon\Carbon;
+use Coyote\Domain\Administrator\AvatarCdn;
 use Coyote\Domain\Administrator\UserMaterial\Material;
 use Coyote\Domain\Administrator\UserMaterial\Store\MaterialResult;
 use Coyote\Domain\Administrator\UserMaterial\View\MarkdownRender;
@@ -100,9 +101,54 @@ class ViewMaterialsTest extends TestCase
     /**
      * @test
      */
+    public function deleted(): void
+    {
+        $vo = $this->item($this->material(deletedAt:new Carbon('2002-01-23 21:37:00')));
+        $this->assertTrue($vo->deleted);
+    }
+
+    /**
+     * @test
+     */
+    public function existing(): void
+    {
+        $vo = $this->item($this->material(deletedAt:null));
+        $this->assertFalse($vo->deleted);
+    }
+
+    /**
+     * @test
+     */
+    public function deletedAt(): void
+    {
+        $vo = $this->item($this->material(deletedAt:new Carbon('2002-01-23 21:37:00')));
+        $this->assertSame('2002-01-23 21:37:00', $vo->deletedAt);
+    }
+
+    /**
+     * @test
+     */
+    public function deletedAgo(): void
+    {
+        $vo = $this->item($this->material(deletedAt:new Carbon('2023-06-04 13:42:00')));
+        $this->assertSame('101 lat 5 miesięcy temu', $vo->deletedAgo);
+    }
+
+    /**
+     * @test
+     */
+    public function username(): void
+    {
+        $vo = $this->item($this->material(authorUsername:'Mark'));
+        $this->assertSame('Mark', $vo->authorUsername);
+    }
+
+    /**
+     * @test
+     */
     public function total(): void
     {
-        $vo = $this->materialVo(new MaterialResult([], 4), 0);
+        $vo = $this->materialVo(new MaterialResult([], 4));
         $this->assertSame(4, $vo->total());
     }
 
@@ -114,26 +160,32 @@ class ViewMaterialsTest extends TestCase
     private function item(Material $material): MaterialItem
     {
         $result = new MaterialResult([$material], 0);
-        return $this->materialVo($result, 0)->items()[0];
+        return $this->materialVo($result)->items()[0];
     }
 
-    private function materialVo(MaterialResult $materials, int $pageSize): MaterialVo
+    private function materialVo(MaterialResult $materials): MaterialVo
     {
         return new MaterialVo(
             app(MarkdownRender::class),
             new Time(new Carbon('2124-11-04 13:42:00')),
-            $materials);
+            $materials,
+            new AvatarCdn());
     }
 
     private function material(
-        string $type = null,
-        string $markdown = null,
-        Carbon $createdAt = new Carbon(),
+        string  $type = null,
+        string  $markdown = null,
+        Carbon  $createdAt = new Carbon(),
+        ?Carbon $deletedAt = null,
+        string  $authorUsername = null,
     ): Material
     {
         return new Material(
             $type ?? 'post',
             $createdAt,
+                $deletedAt,
+                $authorUsername ?? '',
+                null,
             $markdown ?? '',
         );
     }

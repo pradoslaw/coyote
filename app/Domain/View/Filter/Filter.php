@@ -14,6 +14,7 @@ readonly class Filter
             $this->integer($array, $format, 'reporter');
             $this->integer($array, $format, 'author');
             $this->boolean($array, $format, 'reported');
+            $this->boolean($array, $format, 'deleted');
             $this->choice($array, $format, 'type', ['post', 'comment', 'microblog']);
         }
         return $array;

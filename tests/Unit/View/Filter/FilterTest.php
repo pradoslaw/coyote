@@ -33,6 +33,14 @@ class FilterTest extends TestCase
     /**
      * @test
      */
+    public function filterByDeleted(): void
+    {
+        $this->assertFilter('is:deleted', ['deleted' => true]);
+    }
+
+    /**
+     * @test
+     */
     public function filterByAuthor(): void
     {
         $this->assertFilter('author:123', ['author' => 123]);

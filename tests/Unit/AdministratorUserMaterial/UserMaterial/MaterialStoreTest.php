@@ -69,7 +69,7 @@ class MaterialStoreTest extends TestCase
     public function type(): void
     {
         $this->newComment('comment');
-        [$material] = $this->fetch($this->request(1, 1, 'comment'));
+        [$material] = $this->fetch($this->request(type:'comment'));
         $this->assertSame('comment', $material->type);
     }
 
@@ -79,8 +79,70 @@ class MaterialStoreTest extends TestCase
     public function createdAt(): void
     {
         $this->newPostCreatedAt('2185-01-23 21:37:00');
-        [$material] = $this->fetch($this->request(1, 1, 'post'));
+        [$material] = $this->fetch($this->request(type:'post'));
         $this->assertDateTime('2185-01-23 21:37:00', $material->createdAt);
+    }
+
+    /**
+     * @test
+     */
+    public function includeDeleted(): void
+    {
+        $this->newPostDeleted('deleted');
+        [$material] = $this->fetch($this->request(type:'post'));
+        $this->assertSame('deleted', $material->contentMarkdown);
+    }
+
+    /**
+     * @test
+     */
+    public function existingIsNotDeleted(): void
+    {
+        $this->newPost('content');
+        [$material] = $this->fetch($this->request(type:'post'));
+        $this->assertNull($material->deletedAt);
+    }
+
+    /**
+     * @test
+     */
+    public function deletedIsDeletedPost(): void
+    {
+        $this->newPostDeletedAt('content', '2185-01-23 21:37:00');
+        [$material] = $this->fetch($this->request(type:'post'));
+        $this->assertDateTime('2185-01-23 21:37:00', $material->deletedAt);
+    }
+
+    /**
+     * @test
+     */
+    public function deletedIsDeletedMicroblog(): void
+    {
+        $this->newMicroblogDeletedAt('content', '2186-01-23 21:37:00');
+        [$material] = $this->fetch($this->request(type:'microblog'));
+        $this->assertDateTime('2186-01-23 21:37:00', $material->deletedAt);
+    }
+
+    /**
+     * @test
+     */
+    public function filterByDeleted(): void
+    {
+        $this->newPostDeleted('deleted');
+        $this->newPost('existing');
+        [$material] = $this->fetch($this->request(type:'post', deleted:true));
+        $this->assertSame('deleted', $material->contentMarkdown);
+    }
+
+    /**
+     * @test
+     */
+    public function filterByNotDeleted(): void
+    {
+        $this->newPost('existing');
+        $this->newPostDeleted('deleted');
+        [$material] = $this->fetch($this->request(type:'post', deleted:false));
+        $this->assertSame('existing', $material->contentMarkdown);
     }
 
     /**
@@ -94,6 +156,26 @@ class MaterialStoreTest extends TestCase
         $this->assertSame('integer', \getType($total));
     }
 
+    /**
+     * @test
+     */
+    public function authorUsername(): void
+    {
+        $this->newPostAuthor('Mark');
+        [$material] = $this->fetch($this->request(type:'post'));
+        $this->assertSame('Mark', $material->authorUsername);
+    }
+
+    /**
+     * @test
+     */
+    public function authorPhoto(): void
+    {
+        $this->newPostAuthorImage('image.jpg');
+        [$material] = $this->fetch($this->request(type:'post'));
+        $this->assertSame('image.jpg', $material->authorImageUrl);
+    }
+
     private function newPosts(array $contents): void
     {
         \array_walk($contents, $this->newPost(...));
@@ -102,6 +184,48 @@ class MaterialStoreTest extends TestCase
     private function newPost(string $content): void
     {
         $this->storeThread(new Forum, new Topic, new Post(['text' => $content]));
+    }
+
+    private function newPostDeleted(string $content): void
+    {
+        $post = new Post(['text' => $content]);
+        $post->deleted_at = new Carbon();
+        $this->storeThread(new Forum, new Topic, $post);
+    }
+
+    private function newPostDeletedAt(string $content, string $deletedAt): void
+    {
+        $post = new Post(['text' => $content]);
+        $post->deleted_at = new Carbon($deletedAt, 'UTC');
+        $this->storeThread(new Forum, new Topic, $post);
+    }
+
+    private function newPostAuthor(string $username): void
+    {
+        $user = new User();
+        $user->name = $username;
+        $user->email = 'irrelevant';
+        $user->save();
+        $this->storeThread(new Forum, new Topic, new Post(['user_id' => $user->id]));
+    }
+
+    private function newPostAuthorImage(string $image): void
+    {
+        $user = new User();
+        $user->name = 'irrelevant';
+        $user->email = 'irrelevant';
+        $user->photo = $image;
+        $user->save();
+        $this->storeThread(new Forum, new Topic, new Post(['user_id' => $user->id]));
+    }
+
+    private function newMicroblogDeletedAt(string $content, string $deletedAt): void
+    {
+        $microblog = new Microblog();
+        $microblog->user_id = $this->newUser()->id;
+        $microblog->deleted_at = new Carbon($deletedAt, 'UTC');
+        $microblog->text = $content;
+        $microblog->save();
     }
 
     private function newPostCreatedAt(string $time): void
@@ -165,9 +289,14 @@ class MaterialStoreTest extends TestCase
             $this->request($page, $pageSize, 'post'));
     }
 
-    private function request(int $page, int $pageSize, string $type): MaterialRequest
+    private function request(int $page = 1, int $pageSize = 1, string $type = null, ?bool $deleted = null): MaterialRequest
     {
-        return new MaterialRequest($page, $pageSize, $type);
+        return new MaterialRequest(
+            $page,
+            $pageSize,
+            $type ?? 'post',
+            $deleted,
+        );
     }
 
     private function assertMaterialContent(array $expectedTexts, MaterialRequest $request): void

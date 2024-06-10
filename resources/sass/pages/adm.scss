@@ -66,9 +66,18 @@ body.theme-dark {
   }
 }
 
-body.theme-dark .post-preview {
-  background-color: #111111;
-  border-color: #333333;
+body.theme-dark {
+  .post-preview {
+    background-color: #111111;
+    border-color: #333333;
+  }
+
+  .input-group {
+    input.form-control {
+      border-color: #2f2f2f;
+      background-color: #101010;
+    }
+  }
 }
 
 .post-preview {

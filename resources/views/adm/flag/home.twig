@@ -2,29 +2,71 @@
 {% block title %}Dodane treści {{ parent() }}{% endblock %}
 
 {% block container %}
-  <div class="mb-3 d-flex justify-content-center">
-    {{ pagination }}
-  </div>
-  <div class="card card-default">
-    <div class="card-header">
-      Materiały ({{ materials.total }})
-    </div>
-    <div class="list-group list-group-flush">
-      {% for material in materials.items %}
-        <div class="list-group-item">
-          <div>
-            <span class="badge badge-dark">{{ material.type }}</span>
+  <div class="container mt-4">
+    <div class="col-md-10 col-lg-7 px-0">
+      <form class="d-flex">
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <span class="input-group-text">
+              <i class="fas fa-search"></i>
+            </span>
           </div>
-          <div>
-            {{ material.preview }}
-          </div>
-          <div>
-            <small class="text-muted" title="{{ material.createdAt }}">
-              {{ material.createdAgo }}
-            </small>
-          </div>
+          <input name="filter" class="form-control" value="{{ filter }}">
         </div>
-      {% endfor %}
+        <div class="ml-2">
+          <button class="btn btn-secondary">
+            Szukaj
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card card-default mb-3">
+      <div class="card-header">
+        Treści ({{ materials.total }})
+      </div>
+      <div class="list-group list-group-flush">
+        {% for material in materials.items %}
+          <div class="list-group-item d-flex">
+            <div>
+              <img
+                  class="img-thumbnail mr-2"
+                  style="width:40px;"
+                  src="{{ material.authorImageUrl }}"
+                  alt="{{ material.authorUsername }}"
+                  title="{{ material.authorUsername }}"
+              >
+            </div>
+            <div>
+              <div>
+                <span class="badge badge-secondary">{{ material.type }}</span>
+                <small class="text-muted">
+                  napisany
+                  <b title="{{ material.createdAt }}">{{ material.createdAgo }}</b>
+                  przez
+                  <b>@{{ material.authorUsername }}</b>
+                  {% if material.deleted %}
+                    (usunięty <b title="{{ material.deletedAt }}">{{ material.deletedAgo }}</b>)
+                  {% endif %}
+                </small>
+              </div>
+              <div>
+                {{ material.preview }}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+        {% if materials.items is empty %}
+          <div class="list-group-item text-center">
+            <span class="text-muted">
+              Nie znaleziono treści spełniających podane kryteria.
+            </span>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+    <div class="mb-4 d-flex justify-content-center">
+      {{ pagination }}
     </div>
   </div>
 {% endblock %}
