@@ -34,31 +34,33 @@
       </div>
       <div class="list-group list-group-flush">
         {% for material in materials.items %}
-          <div class="list-group-item d-flex">
-            <div>
-              <img
-                  class="img-thumbnail mr-2"
-                  style="width:40px;"
-                  src="{{ material.authorImageUrl }}"
-                  alt="{{ material.authorUsername }}"
-                  title="{{ material.authorUsername }}"
-              >
-            </div>
-            <div>
+          <div class="list-group-item">
+            <div class="d-flex" style="opacity:{{ material.deleted ? '0.4' : '1.0' }};">
               <div>
-                <span class="badge badge-secondary">{{ material.type }}</span>
-                <small class="text-muted">
-                  napisany
-                  <b title="{{ material.createdAt }}">{{ material.createdAgo }}</b>
-                  przez
-                  <b>@{{ material.authorUsername }}</b>
-                  {% if material.deleted %}
-                    (usunięty <b title="{{ material.deletedAt }}">{{ material.deletedAgo }}</b>)
-                  {% endif %}
-                </small>
+                <img
+                    class="img-thumbnail mr-2"
+                    style="width:40px;"
+                    src="{{ material.authorImageUrl }}"
+                    alt="{{ material.authorUsername }}"
+                    title="{{ material.authorUsername }}"
+                >
               </div>
               <div>
-                {{ material.preview }}
+                <div>
+                  <span class="badge badge-secondary">{{ material.type }}</span>
+                  <small class="text-muted">
+                    napisany
+                    <b title="{{ material.createdAt }}">{{ material.createdAgo }}</b>
+                    przez
+                    <b>@{{ material.authorUsername }}</b>
+                    {% if material.deleted %}
+                      (usunięty <b title="{{ material.deletedAt }}">{{ material.deletedAgo }}</b>)
+                    {% endif %}
+                  </small>
+                </div>
+                <div>
+                  {{ material.preview }}
+                </div>
               </div>
             </div>
           </div>
