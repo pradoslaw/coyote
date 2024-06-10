@@ -21,6 +21,13 @@
       </form>
     </div>
 
+    <div class="mb-4">
+      Dostępne filtry:
+      {% for filter in availableFilters %}
+        <code>{{ filter }}</code>{% if loop.last == false %},{% endif %}
+      {% endfor %}
+    </div>
+
     <div class="card card-default mb-3">
       <div class="card-header">
         Treści ({{ materials.total }})
