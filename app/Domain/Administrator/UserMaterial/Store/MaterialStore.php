@@ -4,6 +4,7 @@ namespace Coyote\Domain\Administrator\UserMaterial\Store;
 use Carbon\Carbon;
 use Coyote\Domain\Administrator\UserMaterial\Material;
 use Coyote\Microblog;
+use Coyote\Models\Flag\Resource;
 use Coyote\Post;
 use Illuminate\Database\Eloquent;
 
@@ -37,7 +38,12 @@ class MaterialStore
                 $this->deletedAt($material),
                 $material->username ?? '',
                 $material->user_photo,
-                $material->text))
+                $material->text,
+                Resource::query()
+                    ->where('resource_type', \get_class($material))
+                    ->where('resource_id', $material->id)
+                    ->exists(),
+            ))
             ->toArray();
 
         return new MaterialResult(

@@ -5,6 +5,7 @@ use Carbon\Carbon;
 use Coyote\Domain\Administrator\UserMaterial\Material;
 use Coyote\Domain\Administrator\UserMaterial\Store\MaterialRequest;
 use Coyote\Domain\Administrator\UserMaterial\Store\MaterialStore;
+use Coyote\Flag;
 use Coyote\Forum;
 use Coyote\Microblog;
 use Coyote\Post;
@@ -174,6 +175,37 @@ class MaterialStoreTest extends TestCase
         $this->newPostAuthorImage('image.jpg');
         [$material] = $this->fetch($this->request(type:'post'));
         $this->assertSame('image.jpg', $material->authorImageUrl);
+    }
+
+    /**
+     * @test
+     */
+    public function postNotReported(): void
+    {
+        $this->newPost('');
+        [$material] = $this->fetch($this->request(type:'post'));
+        $this->assertFalse($material->reported);
+    }
+
+    /**
+     * @test
+     */
+    public function postReported(): void
+    {
+        $this->newPostReported();
+        [$material] = $this->fetch($this->request(type:'post'));
+        $this->assertTrue($material->reported);
+    }
+
+    private function newPostReported(): void
+    {
+        $post = new Post();
+        $this->storeThread(new Forum, new Topic, $post);
+        $user = $this->newUser();
+        /** @var Flag $flag */
+        $flag = Flag::query()->create(['type_id' => Flag\Type::query()->first()->id, 'user_id' => $user->id, 'url' => '']);
+        $flag->posts()->attach($post->id);
+        $flag->save();
     }
 
     private function newPosts(array $contents): void

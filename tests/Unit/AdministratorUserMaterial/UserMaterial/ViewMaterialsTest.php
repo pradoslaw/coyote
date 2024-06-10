@@ -187,6 +187,7 @@ class ViewMaterialsTest extends TestCase
                 $authorUsername ?? '',
                 null,
             $markdown ?? '',
+                false,
         );
     }
 

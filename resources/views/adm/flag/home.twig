@@ -61,6 +61,11 @@
                   {{ material.preview }}
                 </p>
               </div>
+              <div class="flex-grow-1 text-right">
+                {% if material.reported %}
+                  <i class="far fa-flag" title="Materiał został zgłoszony"></i>
+                {% endif %}
+              </div>
             </div>
           </div>
         {% endfor %}

@@ -47,6 +47,7 @@ readonly class MaterialVo
             $this->cdn->avatar($material->authorImageUrl),
             $content,
             new PostPreview((string)$content),
+            $material->reported,
         );
     }
 

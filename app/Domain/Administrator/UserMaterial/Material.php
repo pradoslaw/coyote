@@ -12,6 +12,7 @@ readonly class Material
         public string  $authorUsername,
         public ?string $authorImageUrl,
         public string  $contentMarkdown,
+        public bool $reported,
     )
     {
     }
