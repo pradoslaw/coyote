@@ -3,6 +3,7 @@ namespace Tests\Unit\Moderation;
 
 use Carbon\Carbon;
 use Coyote\Domain\Administrator\UserActivity\Post;
+use Coyote\Domain\Administrator\View\PostPreview;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture\Server\Laravel\Application;
 
@@ -56,7 +57,7 @@ class PostPreviewTest extends TestCase
      */
     public function paragraphInList(): void
     {
-        $this->assertPreviewNone("> - one\n    two");
+        $this->assertPreviewNone("- one\n    two");
     }
 
     /**
@@ -65,6 +66,15 @@ class PostPreviewTest extends TestCase
     public function unicode(): void
     {
         $this->assertPreview('Łódź.', '<p>Łódź.</p>');
+    }
+
+    /**
+     * @test
+     */
+    public function acceptHtmlView(): void
+    {
+        $preview = new PostPreview('<video>Foo</video>Bar');
+        $this->assertSame('', "$preview");
     }
 
     private function assertPreviewNone(string $postContent): void

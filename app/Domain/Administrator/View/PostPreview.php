@@ -38,6 +38,7 @@ class PostPreview extends Html
     private function document(string $html): \DOMDocument
     {
         $document = new \DOMDocument();
+        \libxml_use_internal_errors(true);
         $document->loadHTML("<html><head><meta charset='utf-8'></head><body>$html</body></html>");
         return $document;
     }
