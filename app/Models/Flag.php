@@ -3,6 +3,7 @@
 namespace Coyote;
 
 use Carbon\Carbon;
+use Coyote;
 use Coyote\Models\Flag\Resource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -80,6 +81,11 @@ class Flag extends Model
 
     public function comments(): MorphToMany
     {
-        return $this->morphedByMany(Comment::class, 'resource', 'flag_resources');
+        return $this->morphedByMany(Coyote\Comment::class, 'resource', 'flag_resources');
+    }
+
+    public function postComments(): MorphToMany
+    {
+        return $this->morphedByMany(Coyote\Post\Comment::class, 'resource', 'flag_resources');
     }
 }
