@@ -7,6 +7,7 @@ use Coyote\Microblog;
 use Coyote\Models\Flag\Resource;
 use Coyote\Post;
 use Illuminate\Database\Eloquent;
+use Illuminate\Database\Query;
 
 class MaterialStore
 {
@@ -22,10 +23,20 @@ class MaterialStore
             $query->withoutTrashed();
         }
 
+        $materialTable = $query->getModel()->getTable();
+        $flagResourceTable = (new Resource)->getTable();
+
+        if ($request->reported !== null) {
+            $query->whereExists(
+                callback:fn(Query\Builder $query) => $query
+                    ->from($flagResourceTable)
+                    ->whereColumn("$flagResourceTable.resource_id", "$materialTable.id")
+                    ->where("$flagResourceTable.resource_type", $this->resourceClassByType($request->type)),
+                not:!$request->reported);
+        }
         $builder = $query->clone();
-        $table = $query->getModel()->getTable();
         $materials = $query
-            ->select("$table.*", 'users.name AS username', 'users.photo AS user_photo')
+            ->select("$materialTable.*", 'users.name AS username', 'users.photo AS user_photo')
             ->offset(($request->page - 1) * $request->pageSize)
             ->leftJoin('users', 'users.id', '=', 'user_id')
             ->limit($request->pageSize)
@@ -61,6 +72,17 @@ class MaterialStore
             return Post::query();
         }
         return Microblog::query();
+    }
+
+    private function resourceClassByType(string $type): string
+    {
+        if ($type === 'comment') {
+            return Post\Comment::class;
+        }
+        if ($type === 'post') {
+            return Post::class;
+        }
+        return Microblog::class;
     }
 
     private function deletedAt(Post|Post\Comment|Microblog $material): ?Carbon

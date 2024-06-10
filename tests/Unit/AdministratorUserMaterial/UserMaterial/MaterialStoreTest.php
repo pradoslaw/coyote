@@ -197,13 +197,39 @@ class MaterialStoreTest extends TestCase
         $this->assertTrue($material->reported);
     }
 
-    private function newPostReported(): void
+    /**
+     * @test
+     */
+    public function filterByReported(): void
     {
-        $post = new Post();
+        $this->newPostReported('reported');
+        $this->newPost('regular');
+        [$material] = $this->fetch($this->request(type:'post', reported:true));
+        $this->assertSame('reported', $material->contentMarkdown);
+    }
+
+    /**
+     * @test
+     */
+    public function filterByNotReported(): void
+    {
+        $this->newPost('regular');
+        $this->newPostReported('reported');
+        [$material] = $this->fetch($this->request(type:'post', reported:false));
+        $this->assertSame('regular', $material->contentMarkdown);
+    }
+
+    private function newPostReported(string $content = ''): void
+    {
+        $post = new Post(['text' => $content]);
         $this->storeThread(new Forum, new Topic, $post);
         $user = $this->newUser();
         /** @var Flag $flag */
-        $flag = Flag::query()->create(['type_id' => Flag\Type::query()->first()->id, 'user_id' => $user->id, 'url' => '']);
+        $flag = Flag::query()->create([
+            'type_id' => Flag\Type::query()->first()->id,
+            'user_id' => $user->id,
+            'url'     => '',
+        ]);
         $flag->posts()->attach($post->id);
         $flag->save();
     }
@@ -321,13 +347,19 @@ class MaterialStoreTest extends TestCase
             $this->request($page, $pageSize, 'post'));
     }
 
-    private function request(int $page = 1, int $pageSize = 1, string $type = null, ?bool $deleted = null): MaterialRequest
+    private function request(int    $page = 1,
+                             int    $pageSize = 1,
+                             string $type = null,
+                             ?bool  $deleted = null,
+                             ?bool  $reported = null,
+    ): MaterialRequest
     {
         return new MaterialRequest(
             $page,
             $pageSize,
             $type ?? 'post',
             $deleted,
+            $reported,
         );
     }
 

@@ -32,13 +32,18 @@ class FlagController extends BaseController
             10,
             $filterParams['type'] ?? 'post',
             $filterParams['deleted'] ?? null,
+            $filterParams['reported'] ?? null,
         ));
 
         return $this->view('adm.flag.home', [
             'materials'        => new MaterialVo($render, new Time(Carbon::now()), $materials, new AvatarCdn()),
             'pagination'       => new BootstrapPagination($page, 10, $materials->total, ['filter' => $paramFilterString]),
             'filter'           => $effectiveFilterString,
-            'availableFilters' => ['type:post', 'type:comment', 'type:microblog', 'is:deleted', 'not:deleted'],
+            'availableFilters' => [
+                'type:post', 'type:comment', 'type:microblog',
+                'is:deleted', 'not:deleted',
+                'is:reported', 'not:reported',
+            ],
         ]);
     }
 
