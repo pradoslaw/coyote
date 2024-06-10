@@ -15,6 +15,7 @@ readonly class Material
     public function __construct(
         public Link   $forum,
         public Link   $topic,
+        public string $url,
         public Date   $createdAt,
         public Person $author,
         string        $contentMarkdown,

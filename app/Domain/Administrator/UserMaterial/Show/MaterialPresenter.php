@@ -25,6 +25,7 @@ class MaterialPresenter
     {
         /** @var Post $post */
         $post = Post::query()->withTrashed()->findOrFail($postId);
+        $postId = $post->id;
         $forumSlug = $post->forum->slug;
         $createdAt = $post->created_at;
         $contentMarkdown = $post->text;
@@ -61,6 +62,7 @@ class MaterialPresenter
                 route('forum.topic', [$forumSlug, $topicId, $topicSlug]),
                 $topicTitle,
             ),
+            route('forum.topic', [$forumSlug, $topicId, $topicSlug]) . '?p=' . $postId . '#id' . $postId,
             $this->time->date($createdAt),
             new Person(
                 $userId,

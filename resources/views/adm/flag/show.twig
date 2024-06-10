@@ -2,16 +2,16 @@
 {% block title %}Sprawy {{ parent() }}{% endblock %}
 
 {% block container %}
-  <h4 class="my-2">Podgląd</h4>
+  <h4 class="mt-2 mb-3">Podgląd</h4>
   <p class="mb-2 d-flex justify-content-between">
-    <a href="{{ post.topic.href }}">{{ post.topic.label }}</a>
-    <a href="{{ post.forum.href }}">{{ post.forum.label }}</a>
+    <span>Wątek: <a href="{{ post.topic.href }}">{{ post.topic.label }}</a></span>
+    <span>Kategoria: <a href="{{ post.forum.href }}">{{ post.forum.label }}</a></span>
   </p>
 
-  <div class="card card-post">
+  <div class="card card-post mb-3">
     <div class="card-header">
       <div class="row">
-        <div class="col-2">{{ post.authorMention }}</div>
+        <div class="col-2">{{ post.author.mention }}</div>
         <div class="col-10"><small>{{ post.createdAt.ago }}</small></div>
       </div>
     </div>
@@ -37,37 +37,45 @@
     </div>
   </div>
 
-  <h4 class="my-2">
-    Historia
-  </h4>
-  <div class="mb-4">
-    {% for item in post.history %}
-      <div class="d-flex mb-2">
-        <i class="{{ item.icon }} fa-fw mt-1 mr-2"></i>
-        <div>
-          {{ item.authorMention }}
-          {{ item.actionVerbPastTense }}
-
-          <span class="badge badge-secondary">
-            <i class="{{ item.icon }}"></i>
-            {{ item.kind }}
-          </span>
-
-          {% if item.note %}
-            z dopiskiem <code>{{ item.note }}</code>.
-          {% endif %}
-
-          <small class="d-block text-muted">
-            {{ item.createdAt.format }}, {{ item.createdAt.ago }}
-          </small>
-        </div>
-      </div>
-    {% endfor %}
-  </div>
-
-  <div>
-    <a href="{{ backUrl }}" class="btn btn-secondary">
-      Powrót
+  <div class="d-flex justify-content-end">
+    <a class="btn btn-secondary" href="{{ post.url }}">
+      <i class="fas fa-arrow-right"></i>
+      Przejdź do postu
     </a>
   </div>
+
+  {% if post.history|length > 1 %}
+    <h4 class="mt-4 my-2">
+      Historia
+    </h4>
+    <div class="mb-4">
+      {% for item in post.history %}
+        <div class="d-flex mb-2">
+          <i class="{{ item.icon }} fa-fw mt-1 mr-2"></i>
+          <div>
+            {{ item.authorMention }}
+            {{ item.actionVerbPastTense }}
+
+            <span class="badge badge-secondary">
+              <i class="{{ item.icon }}"></i>
+              {{ item.kind }}
+            </span>
+
+            {% if item.note %}
+              z dopiskiem <code>{{ item.note }}</code>.
+            {% endif %}
+
+            <small class="d-block text-muted">
+              {{ item.createdAt.format }}, {{ item.createdAt.ago }}
+            </small>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <a href="{{ backUrl }}" class="btn btn-secondary">
+    <i class="fas fa-arrow-left"></i>
+    Powrót
+  </a>
 {% endblock %}
