@@ -7,9 +7,7 @@ use Coyote\Flag\Type;
 use Coyote\Notifications\FlagCreatedNotification;
 use Coyote\Repositories\Criteria\HasPermission;
 use Coyote\Repositories\Eloquent\UserRepository;
-use Coyote\Services\Stream\Activities\Create as Stream_Create;
-use Coyote\Services\Stream\Activities\Delete as Stream_Delete;
-use Coyote\Services\Stream\Objects\Flag as Stream_Flag;
+use Coyote\Services\Stream;
 use Coyote\User;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Database\Eloquent;
@@ -55,7 +53,7 @@ class FlagController extends Controller
                 $relation = str_plural($model);
                 $flag->$relation()->attach($id);
             }
-            stream(Stream_Create::class, (new Stream_Flag())->map($flag));
+            stream(Stream\Activities\Create::class, (new Stream\Objects\Flag())->map($flag));
             return $flag;
         });
 
@@ -85,7 +83,7 @@ class FlagController extends Controller
 
     public function delete(Flag $flag): ?Response
     {
-        $object = new Stream_Flag(['id' => $flag->id]);
+        $object = new Stream\Objects\Flag(['id' => $flag->id]);
 
         if (!$this->isAuthorized($flag)) {
             return response('Unauthorized.', 401);
@@ -94,10 +92,8 @@ class FlagController extends Controller
         $this->transaction(function () use ($flag, $object) {
             $flag->moderator_id = $this->userId;
             $flag->save();
-
             $flag->delete();
-
-            stream(Stream_Delete::class, $object);
+            stream(Stream\Activities\Delete::class, $object);
         });
         return null;
     }
