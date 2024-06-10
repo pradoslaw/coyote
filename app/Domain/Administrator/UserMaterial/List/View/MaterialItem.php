@@ -1,5 +1,5 @@
 <?php
-namespace Coyote\Domain\Administrator\UserMaterial\View;
+namespace Coyote\Domain\Administrator\UserMaterial\List\View;
 
 use Coyote\Domain\Html;
 

@@ -1,5 +1,5 @@
 <?php
-namespace Coyote\Domain\Administrator\UserMaterial\Store;
+namespace Coyote\Domain\Administrator\UserMaterial\List\Store;
 
 class MaterialRequest
 {

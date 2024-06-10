@@ -1,10 +1,10 @@
 <?php
-namespace Coyote\Domain\Administrator\UserMaterial\View;
+namespace Coyote\Domain\Administrator\UserMaterial\List\View;
 
 use Carbon\Carbon;
 use Coyote\Domain\Administrator\AvatarCdn;
+use Coyote\Domain\Administrator\UserMaterial\List\Store\MaterialResult;
 use Coyote\Domain\Administrator\UserMaterial\Material;
-use Coyote\Domain\Administrator\UserMaterial\Store\MaterialResult;
 use Coyote\Domain\Administrator\View\PostPreview;
 
 readonly class MaterialVo

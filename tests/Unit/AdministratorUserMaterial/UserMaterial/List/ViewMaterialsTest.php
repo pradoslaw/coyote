@@ -1,14 +1,14 @@
 <?php
-namespace Tests\Unit\AdministratorUserMaterial\UserMaterial;
+namespace Tests\Unit\AdministratorUserMaterial\UserMaterial\List;
 
 use Carbon\Carbon;
 use Coyote\Domain\Administrator\AvatarCdn;
+use Coyote\Domain\Administrator\UserMaterial\List\Store\MaterialResult;
+use Coyote\Domain\Administrator\UserMaterial\List\View\MarkdownRender;
+use Coyote\Domain\Administrator\UserMaterial\List\View\MaterialItem;
+use Coyote\Domain\Administrator\UserMaterial\List\View\MaterialVo;
+use Coyote\Domain\Administrator\UserMaterial\List\View\Time;
 use Coyote\Domain\Administrator\UserMaterial\Material;
-use Coyote\Domain\Administrator\UserMaterial\Store\MaterialResult;
-use Coyote\Domain\Administrator\UserMaterial\View\MarkdownRender;
-use Coyote\Domain\Administrator\UserMaterial\View\MaterialItem;
-use Coyote\Domain\Administrator\UserMaterial\View\MaterialVo;
-use Coyote\Domain\Administrator\UserMaterial\View\Time;
 use Coyote\Domain\Html;
 use PHPUnit\Framework\TestCase;
 use Tests\Unit\BaseFixture\Server\Laravel\Application;

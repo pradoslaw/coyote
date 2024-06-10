@@ -1,10 +1,10 @@
 <?php
-namespace Tests\Unit\AdministratorUserMaterial\UserMaterial;
+namespace Tests\Unit\AdministratorUserMaterial\UserMaterial\List;
 
 use Carbon\Carbon;
+use Coyote\Domain\Administrator\UserMaterial\List\Store\MaterialRequest;
+use Coyote\Domain\Administrator\UserMaterial\List\Store\MaterialStore;
 use Coyote\Domain\Administrator\UserMaterial\Material;
-use Coyote\Domain\Administrator\UserMaterial\Store\MaterialRequest;
-use Coyote\Domain\Administrator\UserMaterial\Store\MaterialStore;
 use Coyote\Flag;
 use Coyote\Forum;
 use Coyote\Microblog;
